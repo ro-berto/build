@@ -23,7 +23,7 @@ DATA_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 # Bump each time there is an incompatible change in build_db.
-BUILD_DB_VERSION = 1
+BUILD_DB_VERSION = 2
 
 
 _BuildDB = collections.namedtuple('BuildDB', [
@@ -34,8 +34,8 @@ _BuildDB = collections.namedtuple('BuildDB', [
 
 
 _BuildDBBuild = collections.namedtuple('BuildDBBuild', [
-    'finished',  # Whether the build has finished or not.
-    'triggered',  # What gatekeeper sections, if any, have triggered.
+    'finished',  # True if the build has finished, False otherwise.
+    'triggered',  # {section: [steps which triggered the section]}
 ])
 
 
@@ -81,7 +81,7 @@ def gen_db(**kwargs):
 def gen_build(**kwargs):
   """Helper function to generate a default build."""
   defaults = [('finished', False),
-              ('triggered', [])]
+              ('triggered', {})]
 
   for key, default in defaults:
     kwargs.setdefault(key, default)

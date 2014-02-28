@@ -719,9 +719,9 @@ class GatekeeperTest(unittest.TestCase):
     _, finished_new_builds = self.process_build_db(
         self.masters[0].url, 'mybuilder')
     self.assertEquals(finished_new_builds,
-                      {2: gatekeeper_ng_db.gen_build(finished=True, triggered=[
+                      {2: gatekeeper_ng_db.gen_build(finished=True, triggered={
                           '0e321975189099b8f623a4dc29602e76'
-                          'f33fd8f5bacf3c7018d0499214372e5b'])})
+                          'f33fd8f5bacf3c7018d0499214372e5b': ['step1']})})
 
     # Check that gatekeeper indeed sent an email.
     self.assertEquals(self.url_calls[-1]['url'], self.mailer_url)
@@ -997,16 +997,16 @@ class GatekeeperTest(unittest.TestCase):
                      '--set-status', '--password-file', self.status_secret_file
                      ])
 
-    new_build = self.create_generic_build(2,
-                                          ['a_second_committer@chromium.org'])
+    new_build = self.create_generic_build(
+        2, ['a_second_committer@chromium.org'])
     self.masters[0].builders[0].builds.append(new_build)
 
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_steps': ['step1', 'step2']})
 
-    self.masters[0].builders[0].builds[1].steps[1].results = [2, None]
+    self.masters[0].builders[0].builds[1].steps[2].results = [2, None]
 
     urls = self.call_gatekeeper()
     self.assertEquals(urls.count(self.status_url), 1)
@@ -1029,8 +1029,8 @@ class GatekeeperTest(unittest.TestCase):
                      '--set-status', '--password-file', self.status_secret_file
                      ])
 
-    new_build = self.create_generic_build(2,
-                                          ['a_second_committer@chromium.org'])
+    new_build = self.create_generic_build(
+        2, ['a_second_committer@chromium.org'])
     self.masters[0].builders[0].builds.append(new_build)
 
     self.add_gatekeeper_section(self.masters[0].url,
@@ -1127,8 +1127,8 @@ class GatekeeperTest(unittest.TestCase):
                 0: gatekeeper_ng_db.gen_build(finished=True)},
             }})
 
-    new_build = self.create_generic_build(2,
-                                          ['a_second_committer@chromium.org'])
+    new_build = self.create_generic_build(
+        2, ['a_second_committer@chromium.org'])
     self.masters[0].builders.append(Builder('mybuilder2', [new_build]))
 
     self.add_gatekeeper_section(self.masters[0].url,
@@ -1168,8 +1168,8 @@ class GatekeeperTest(unittest.TestCase):
                 0: gatekeeper_ng_db.gen_build(finished=True)},
             }})
 
-    new_build = self.create_generic_build(2,
-                                          ['a_second_committer@chromium.org'])
+    new_build = self.create_generic_build(
+        2, ['a_second_committer@chromium.org'])
     self.masters[0].builders.append(Builder('mybuilder2', [new_build]))
 
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
@@ -1309,9 +1309,9 @@ class GatekeeperTest(unittest.TestCase):
     self.assertEquals(finished_new_builds,
                       {1: gatekeeper_ng_db.gen_build(finished=True)})
     self.assertEquals(unfinished_new_builds,
-                      {2: gatekeeper_ng_db.gen_build(triggered=[
+                      {2: gatekeeper_ng_db.gen_build(triggered={
                           '0e321975189099b8f623a4dc29602e76'
-                          'f33fd8f5bacf3c7018d0499214372e5b'])})
+                          'f33fd8f5bacf3c7018d0499214372e5b': ['step1']})})
 
     self.assertIn(self.status_url, urls)
 
@@ -1364,9 +1364,9 @@ class GatekeeperTest(unittest.TestCase):
     self.assertEquals(finished_new_builds,
                       {0: gatekeeper_ng_db.gen_build(finished=True)})
     self.assertEquals(unfinished_new_builds,
-                      {1: gatekeeper_ng_db.gen_build(triggered=[
+                      {1: gatekeeper_ng_db.gen_build(triggered={
                           '0e321975189099b8f623a4dc29602e76'
-                          'f33fd8f5bacf3c7018d0499214372e5b'])})
+                          'f33fd8f5bacf3c7018d0499214372e5b': ['step1']})})
     self.assertEquals(1, len([u for u in urls if u == self.status_url]))
 
   def testTriggeringOneHashDoesntStopAnother(self):
@@ -1400,13 +1400,159 @@ class GatekeeperTest(unittest.TestCase):
     self.assertEquals(finished_new_builds,
                       {1: gatekeeper_ng_db.gen_build(finished=True)})
     self.assertEquals(unfinished_new_builds,
-                      {2: gatekeeper_ng_db.gen_build(triggered=[
+                      {2: gatekeeper_ng_db.gen_build(triggered={
                           '0e321975189099b8f623a4dc29602e76'
-                          'f33fd8f5bacf3c7018d0499214372e5b',
+                          'f33fd8f5bacf3c7018d0499214372e5b': ['step1'],
 
                           'fbe3ad95b8cb242309b17896ad2c3ba0'
-                          '2999a22ca5f7b8c7887878b611679cd5'])})
+                          '2999a22ca5f7b8c7887878b611679cd5': ['step2']})})
     self.assertEquals(2, len([u for u in urls if u == self.status_url]))
+
+  def testTriggerIsRemovedIfNoFailure(self):
+    """Test that build_db triggers aren't present if a step hasn't failed."""
+    sys.argv.extend([m.url for m in self.masters])
+    sys.argv.extend(['--email-app-secret-file=%s' % self.email_secret_file,
+                     '--set-status', '--password-file', self.status_secret_file
+                    ])
+
+    self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
+    self.add_gatekeeper_section(self.masters[0].url,
+                                self.masters[0].builders[0].name,
+                                {'closing_steps': ['step1']})
+
+    urls = self.call_gatekeeper()
+    self.assertEquals(urls.count(self.status_url), 1)
+
+    new_build = self.create_generic_build(
+        2, ['a_second_committer@chromium.org'])
+    self.masters[0].builders[0].builds.append(new_build)
+    build_db = gatekeeper_ng_db.get_build_db(self.build_db_file)
+    urls += self.call_gatekeeper(build_db=build_db)
+    self.assertEquals(urls.count(self.status_url), 1)
+    _, finished_new_builds = self.process_build_db(
+        self.masters[0].url, 'mybuilder')
+    self.assertEquals(finished_new_builds,
+                      {2: gatekeeper_ng_db.gen_build(finished=True)})
+
+  def testOnlyFireOnNewFailures(self):
+    """Test that the tree isn't closed if only an old test failed."""
+    sys.argv.extend([m.url for m in self.masters])
+    sys.argv.extend(['--email-app-secret-file=%s' % self.email_secret_file,
+                     '--set-status', '--password-file', self.status_secret_file
+                    ])
+
+    self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
+    self.add_gatekeeper_section(self.masters[0].url,
+                                self.masters[0].builders[0].name,
+                                {'closing_steps': ['step1']})
+
+    urls = self.call_gatekeeper()
+    self.assertEquals(urls.count(self.status_url), 1)
+
+    new_build = self.create_generic_build(
+        2, ['a_second_committer@chromium.org'])
+    self.masters[0].builders[0].builds.append(new_build)
+    self.masters[0].builders[0].builds[1].steps[1].results = [2, None]
+
+    build_db = gatekeeper_ng_db.get_build_db(self.build_db_file)
+    urls += self.call_gatekeeper(build_db=build_db)
+    self.assertEquals(urls.count(self.status_url), 1)
+
+  def testTriggerDoesntPersistOldFailures(self):
+    """Test that gatekeeper doesn't persist old failing tests."""
+    sys.argv.extend([m.url for m in self.masters])
+    sys.argv.extend(['--email-app-secret-file=%s' % self.email_secret_file,
+                     '--set-status', '--password-file', self.status_secret_file
+                    ])
+
+    self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
+    self.masters[0].builders[0].builds[0].steps[2].results = [2, None]
+    self.add_gatekeeper_section(self.masters[0].url,
+                                self.masters[0].builders[0].name,
+                                {'closing_steps': ['step1', 'step2']})
+
+    urls = self.call_gatekeeper()
+    self.assertEquals(urls.count(self.status_url), 1)
+
+    new_build = self.create_generic_build(
+        2, ['a_second_committer@chromium.org'])
+    self.masters[0].builders[0].builds.append(new_build)
+    self.masters[0].builders[0].builds[1].steps[1].results = [2, None]
+
+    build_db = gatekeeper_ng_db.get_build_db(self.build_db_file)
+    urls += self.call_gatekeeper(build_db=build_db)
+    self.assertEquals(urls.count(self.status_url), 1)
+
+    unfinished_new_builds, finished_new_builds = self.process_build_db(
+        self.masters[0].url, 'mybuilder')
+    self.assertEquals(finished_new_builds,
+                      {2: gatekeeper_ng_db.gen_build(finished=True, triggered={
+                          '46d698c94742f1578471bd52a26053f6'
+                          'ff0083a441560fdb029647945d5032dc': ['step1'],
+                          })})
+    self.assertEquals(unfinished_new_builds, {})
+
+  def testFireOnNewAndOldTests(self):
+    """Test that build_db triggers when new steps go green and red."""
+    sys.argv.extend([m.url for m in self.masters])
+    sys.argv.extend(['--email-app-secret-file=%s' % self.email_secret_file,
+                     '--set-status', '--password-file', self.status_secret_file
+                    ])
+
+    self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
+    self.add_gatekeeper_section(self.masters[0].url,
+                                self.masters[0].builders[0].name,
+                                {'closing_steps': ['step1', 'step2']})
+
+    urls = self.call_gatekeeper()
+    self.assertEquals(urls.count(self.status_url), 1)
+
+    new_build = self.create_generic_build(
+        2, ['a_second_committer@chromium.org'])
+    self.masters[0].builders[0].builds.append(new_build)
+
+    self.masters[0].builders[0].builds[1].steps[2].results = [2, None]
+
+    build_db = gatekeeper_ng_db.get_build_db(self.build_db_file)
+    urls += self.call_gatekeeper(build_db=build_db)
+    self.assertEquals(urls.count(self.status_url), 2)
+    unfinished_new_builds, finished_new_builds = self.process_build_db(
+        self.masters[0].url, 'mybuilder')
+    self.assertEquals(finished_new_builds,
+                      {2: gatekeeper_ng_db.gen_build(finished=True, triggered={
+                          '46d698c94742f1578471bd52a26053f6'
+                          'ff0083a441560fdb029647945d5032dc': [u'step2']})})
+    self.assertEquals(unfinished_new_builds, {})
+
+  def testRecordsAllFailuresInBuild(self):
+    """Test that all failures are recorded, even after initial trigger."""
+    sys.argv.extend([m.url for m in self.masters])
+    sys.argv.extend(['--email-app-secret-file=%s' % self.email_secret_file,
+                     '--set-status', '--password-file', self.status_secret_file
+                    ])
+
+    self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
+    self.add_gatekeeper_section(self.masters[0].url,
+                                self.masters[0].builders[0].name,
+                                {'closing_steps': ['step1', 'step2']})
+
+    self.masters[0].builders[0].builds[0].finished = False
+
+    urls = self.call_gatekeeper()
+    self.assertEquals(urls.count(self.status_url), 1)
+
+    self.masters[0].builders[0].builds[0].steps[2].results = [2, None]
+
+    build_db = gatekeeper_ng_db.get_build_db(self.build_db_file)
+    urls += self.call_gatekeeper(build_db=build_db)
+    self.assertEquals(urls.count(self.status_url), 1)
+    unfinished_new_builds, _ = self.process_build_db(
+        self.masters[0].url, 'mybuilder')
+    self.assertEquals(unfinished_new_builds,
+                      {1: gatekeeper_ng_db.gen_build(triggered={
+                          '46d698c94742f1578471bd52a26053f6'
+                          'ff0083a441560fdb029647945d5032dc': [
+                              'step1', 'step2']})})
 
   ### JSON config file tests.
 

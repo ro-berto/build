@@ -11,7 +11,7 @@ if so closes the tree and emails appropriate parties. Configuration for which
 steps to close and which parties to notify are in a local gatekeeper.json file.
 """
 
-from contextlib import closing
+from contextlib import closing, contextmanager
 import getpass
 import hashlib
 import hmac
@@ -252,31 +252,64 @@ def check_builds(master_builds, master_jsons, gatekeeper_config):
 
 def debounce_failures(failed_builds, build_db):
   """Using trigger information in build_db, make sure we don't double-fire."""
+
+  @contextmanager
+  def log_section(url, builder, buildnum, section_hash):
+    """Wraps each build with a log."""
+    logging.debug('%sbuilders/%s/builds/%d ----', url, builder, buildnum)
+    logging.debug('  section hash: %s', section_hash)
+    yield
+    logging.debug('----')
+
+  @contextmanager
+  def save_build_failures(master_url, builder, buildnum, section_hash,
+                          unsatisfied):
+    yield
+    build_db.masters[master_url][builder][buildnum].triggered[
+        section_hash] = unsatisfied
+
   true_failed_builds = []
   for build, master_url, builder, buildnum, section_hash in failed_builds:
-    logging.debug('%sbuilders/%s/builds/%d ----', build['base_url'],
-                  builder, buildnum)
+    with log_section(build['base_url'], builder, buildnum, section_hash):
+      with save_build_failures(master_url, builder, buildnum, section_hash,
+                               build['unsatisfied']):
+        build_db_builder = build_db.masters[master_url][builder]
 
-    build_db_builder = build_db.masters[master_url][builder]
-    triggered = build_db_builder[buildnum].triggered
-    if section_hash in triggered:
-      logging.debug('  section has already been triggered for this build, '
-                    'skipping...')
-    else:
-      # Propagates since the dictionary is the same as in build_db.
-      triggered.append(section_hash)
-      true_failed_builds.append(build)
+        # Determine what the current and previous failing steps are.
+        prev_triggered = []
+        if buildnum-1 in build_db_builder:
+          prev_triggered = build_db_builder[buildnum-1].triggered.get(
+              section_hash, [])
 
-      logging.debug('  section hash: %s', section_hash)
-      logging.debug('  build steps: %s', ', '.join(
-          s['name'] for s in build['build']['steps']))
-      logging.debug('  build complete: %s', bool(
-          build['build'].get('results', None) is not None))
-      logging.debug('  unsatisfied steps: %s', ', '.join(build['unsatisfied']))
-      logging.debug('  set to close tree: %s', build['close_tree'])
-      logging.debug('  build failed: %s', bool(build['unsatisfied']))
+        logging.debug('  previous failing tests: %s', ','.join(
+            sorted(prev_triggered)))
+        logging.debug('  current failing tests: %s', ','.join(
+            sorted(build['unsatisfied'])))
 
-    logging.debug('----')
+        # Skip build if we already fired (or if the failing tests aren't new).
+        if section_hash in build_db_builder[buildnum].triggered:
+          logging.debug('  section has already been triggered for this build, '
+                        'skipping...')
+          continue
+
+        new_tests = set(build['unsatisfied']) - set(prev_triggered)
+        if not new_tests:
+          logging.debug('  no new steps failed since previous build %d',
+                        buildnum-1)
+          continue
+
+        logging.debug('  new failing steps since build %d: %s', buildnum-1,
+                      ','.join(sorted(new_tests)))
+
+        # If we're here it's a legit failing build.
+        true_failed_builds.append(build)
+
+        logging.debug('  build steps: %s', ', '.join(
+            s['name'] for s in build['build']['steps']))
+        logging.debug('  build complete: %s', bool(
+            build['build'].get('results', None) is not None))
+        logging.debug('  set to close tree: %s', build['close_tree'])
+        logging.debug('  build failed: %s', bool(build['unsatisfied']))
 
   return true_failed_builds
 
