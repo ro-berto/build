@@ -113,10 +113,10 @@ def find_new_builds(master_url, root_json, build_db):
         # builds yet.) In this state all the finished builds will be loaded in,
         # firing off an email storm any time the build_db changes or a new
         # builder is added. We set the last finished build here to prevent that.
-        if builder['cachedBuilds']:
-          max_build = max(builder['cachedBuilds'])
+        finished = set(builder['cachedBuilds']) - set(builder['currentBuilds'])
+        if finished:
           build_db.masters[master_url].setdefault(buildername, {})[
-              max_build] = gatekeeper_ng_db.gen_build(finished=True)
+              max(finished)] = gatekeeper_ng_db.gen_build(finished=True)
 
         new_builds[buildername] = builder['currentBuilds']
 
