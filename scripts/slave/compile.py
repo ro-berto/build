@@ -871,9 +871,12 @@ def main_ninja(options, args):
     goma_jobs = determine_goma_jobs()
     command.append('-j%d' % goma_jobs)
 
-    if chromium_utils.IsMac() and options.clobber:
-      # Enabling this while attempting to solve crbug.com/257467
-      env['GOMA_USE_LOCAL'] = '1'
+    if chromium_utils.IsMac():
+      # Work around for crbug.com/347918
+      env['GOMA_HERMETIC'] = 'fallback'
+      if options.clobber:
+        # Enabling this while attempting to solve crbug.com/257467
+        env['GOMA_USE_LOCAL'] = '1'
 
   if orig_compiler == 'goma-clang' and options.compiler == 'clang':
     # goma setup failed, fallback to local clang.
