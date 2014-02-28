@@ -160,11 +160,13 @@ class AndroidApi(recipe_api.RecipeApi):
                        self.m.path.checkout] + repos,
                       allow_subannotations=False)
 
-  def runhooks(self):
+  def runhooks(self, extra_env=None):
     run_hooks_env = self.get_env()
     if self.c.INTERNAL:
       run_hooks_env['EXTRA_LANDMINES_SCRIPT'] = self.c.internal_dir(
         'build', 'get_internal_landmines.py')
+    if extra_env:
+      run_hooks_env.update(extra_env)
     return self.m.chromium.runhooks(env=run_hooks_env)
 
   def apply_svn_patch(self):
@@ -207,7 +209,9 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def upload_build(self):
     # TODO(luqui) remove dependency on property
-    upload_tag = self.m.properties.get('upload_tag') or self.m.properties.get('revision')
+    upload_tag = (
+        self.m.properties.get('upload_tag') or
+        self.m.properties.get('revision'))
     zipfile = self.m.path.checkout('out', 'build_product_%s.zip' % upload_tag)
     self._cleanup_list.append(zipfile)
     yield self.make_zip_archive(

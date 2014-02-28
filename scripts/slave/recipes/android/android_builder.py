@@ -24,7 +24,13 @@ def GenSteps(api):
   yield droid.clean_local_files()
   if internal and droid.c.run_tree_truth:
     yield droid.run_tree_truth()
-  yield droid.runhooks()
+
+  # TODO(iannucci): Remove when dartium syncs chromium to >= crrev.com/252649
+  extra_env = {}
+  if bot_id == 'dartium_builder':
+    extra_env = {'GYP_CROSSCOMPILE': "1"}
+  yield droid.runhooks(extra_env)
+
   if droid.c.apply_svn_patch:
     yield droid.apply_svn_patch()
   yield droid.compile()
