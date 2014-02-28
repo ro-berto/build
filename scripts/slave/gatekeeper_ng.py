@@ -100,10 +100,24 @@ def find_new_builds(master_url, root_json, build_db):
           if buildnum > last_finished_build[buildername]]
     else:
       if buildername in build_db.masters[master_url]:
+        # We've seen this builder before, but haven't seen a finished build.
         # Scan finished builds as well as unfinished.
         new_builds[buildername] = candidate_builds
       else:
-        # New builder or master, ignore past builds.
+        # We've never seen this builder before, only scan unfinished builds.
+
+        # We're explicitly only dealing with current builds since we haven't
+        # seen this builder before. Thus, the next time gatekeeper_ng is run,
+        # only unfinished builds will be in the build_db. This immediately drops
+        # us into the section above (builder is in the db, but no finished
+        # builds yet.) In this state all the finished builds will be loaded in,
+        # firing off an email storm any time the build_db changes or a new
+        # builder is added. We set the last finished build here to prevent that.
+        if builder['cachedBuilds']:
+          max_build = max(builder['cachedBuilds'])
+          build_db.masters[master_url].setdefault(buildername, {})[
+              max_build] = gatekeeper_ng_db.gen_build(finished=True)
+
         new_builds[buildername] = builder['currentBuilds']
 
   return new_builds

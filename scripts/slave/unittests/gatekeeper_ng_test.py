@@ -694,6 +694,45 @@ class GatekeeperTest(unittest.TestCase):
 
   #### BuildDB operation.
 
+  def testIgnorePastFailures(self):
+    """If the build_db is nonexistent, don't fail on past builds."""
+    sys.argv.extend([m.url for m in self.masters])
+    sys.argv.extend(['--email-app-secret-file=%s' % self.email_secret_file])
+
+    new_build = self.create_generic_build(
+        2, ['a_second_committer@chromium.org'])
+    self.masters[0].builders[0].builds.append(new_build)
+
+    self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
+    self.masters[0].builders[0].builds[1].steps[1].results = [2, None]
+    self.masters[0].builders[0].builds[1].finished = False
+
+    self.add_gatekeeper_section(self.masters[0].url,
+                                self.masters[0].builders[0].name,
+                                {'closing_steps': ['step1']})
+
+    build_db = gatekeeper_ng_db.gen_db()
+    urls = self.call_gatekeeper(build_db=build_db)
+    build_db = gatekeeper_ng_db.get_build_db(self.build_db_file)
+    urls += self.call_gatekeeper(build_db=build_db)
+    self.assertEquals(1, urls.count(self.mailer_url))
+
+  def testHonorNewFailures(self):
+    """If the build_db is nonexistent, fail on current builds."""
+    sys.argv.extend([m.url for m in self.masters])
+    sys.argv.extend(['--no-email-app', '--set-status',
+                     '--password-file', self.status_secret_file])
+
+    self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
+    self.masters[0].builders[0].builds[0].finished = False
+    self.add_gatekeeper_section(self.masters[0].url,
+                                self.masters[0].builders[0].name,
+                                {'closing_steps': ['step1']})
+
+    build_db = gatekeeper_ng_db.gen_db()
+    urls = self.call_gatekeeper(build_db=build_db)
+    self.assertIn(self.status_url, urls)
+
   def testIncrementalScanning(self):
     """Test that builds in the build DB are skipped."""
     build_db = gatekeeper_ng_db.gen_db(masters={
