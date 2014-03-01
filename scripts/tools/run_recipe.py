@@ -9,20 +9,20 @@ without buildbot.
 This is currently useful for testing recipes locally while developing them.
 
 Example:
-  ./run_recipe.py run_presubmit repo_name=tools_build -- issue=12345 \
+  ./run_recipe.py run_presubmit repo_name=tools_build issue=12345 \
       patchset=1 description="this is a cool description" \
       blamelist=['dude@chromium.org'] \
       rietveld=https://codereview.chromium.org
 
   This would execute the run_presubmit recipe, passing
-  {'repo_name':'tools_build'} as factory_properties, and {'issue':'12345' ...}
-  as build_properties.
+  {'repo_name':'tools_build', 'issue':'12345' ...} as properties.
 
 This script can be run from any directory.
 
 See scripts/slave/annotated_run.py for more information about recipes.
 """
 
+import ast
 import json
 import os
 import subprocess
@@ -42,55 +42,35 @@ def usage(msg=None):
 
   print(
 """
-usage: %s <recipe_name> [<factory_property=value>*] [-- <build_property=value>*]
+usage: %s <recipe_name> [<property=value>*]
 """ % os.path.basename(sys.argv[0]))
   sys.exit(bool(msg))
 
 
-def type_scrub_factory_properties(fp):
-  """Specially 'eval' certain keys in factory_properties."""
-  fp['tests'] = eval(fp.get('tests', '[]'))
-  return fp
-
-
-def type_scrub_build_properties(bp):
-  """Specially 'eval' certain keys in build_properties."""
-  bp['use_mirror'] = eval(bp.get('use_mirror', 'False'))
-  bp['blamelist'] = eval(bp.get('blamelist', '[]'))
-  if 'swarm_hashes' in bp:
-    bp['swarm_hashes'] = eval(bp['swarm_hashes'])
-  if 'TARGET_BITS' in bp:
-    bp['TARGET_BITS'] = eval(bp['TARGET_BITS'])
-  return bp
-
-
 def parse_args(argv):
   """Parses the commandline arguments and returns type-scrubbed
-  build_properties and factory_properties.
-
-  (See the type_scrub_*_properties functions)"""
+  properties."""
   if len(argv) <= 1:
     usage('Must specify a recipe.')
   bad_parms = [x for x in argv[2:] if ('=' not in x and x != '--')]
   if bad_parms:
     usage('Got bad arguments %s (expecting key=value pairs)' % bad_parms)
 
-  recipe = argv[1]
+  props = dict(x.split('=', 1) for x in argv[2:])
 
-  separator = argv.index('--') if '--' in argv else len(argv)+1
-  fp = dict(x.split('=', 1) for x in argv[2:separator])
-  fp['recipe'] = recipe
+  for key, val in props.iteritems():
+    try:
+      props[key] = ast.literal_eval(val)
+    except ValueError:
+      pass
 
-  bp = {}
-  if separator > 0:
-    bp = dict(x.split('=', 1) for x in argv[separator+1:])
+  props['recipe'] = argv[1]
 
-  return (type_scrub_factory_properties(fp),
-          type_scrub_build_properties(bp))
+  return props
 
 
 def main(argv):
-  fp, bp = parse_args(argv)
+  props = parse_args(argv)
 
   if not os.path.exists(SLAVE_DIR):
     os.makedirs(SLAVE_DIR)
@@ -101,8 +81,8 @@ def main(argv):
   return subprocess.call(
       ['python', '-u', RUNIT, 'python', '-u', ANNOTATED_RUN,
        '--keep-stdin',  # so that pdb works for local execution
-       '--factory-properties', json.dumps(fp),
-       '--build-properties',   json.dumps(bp)],
+       '--factory-properties', json.dumps(props),
+       '--build-properties', json.dumps(props)],
       cwd=SLAVE_DIR,
       env=env)
 
