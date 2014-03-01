@@ -105,11 +105,13 @@ class _RietveldPoller(base.PollingChangeSource):
   users to be tried.  If so, send them to the trybots.
   """
 
-  def __init__(self, get_pending_endpoint, interval):
+  def __init__(self, get_pending_endpoint, interval, cachepath=None):
     """
     Args:
       get_pending_endpoint: Rietveld URL string used to retrieve jobs to try.
       interval: Interval used to poll Rietveld, in seconds.
+      cachepath: Path to file where state to persist between master restarts
+                 will be stored.
     """
     # Set interval time in base class.
     self.pollInterval = interval
@@ -123,6 +125,16 @@ class _RietveldPoller(base.PollingChangeSource):
 
     # Try job parent of this poller.
     self._try_job_rietveld = None
+
+    self._cachepath = cachepath
+
+    if self._cachepath:
+      if os.path.exists(self._cachepath):
+        with open(self._cachepath) as f:
+          # Using JSON allows us to be flexible and extend the format
+          # in a compatible way.
+          data = json.load(f)
+          self._cursor = data.get('cursor').encode('utf-8')
 
   # base.PollingChangeSource overrides:
   def poll(self):
@@ -170,6 +182,11 @@ class _RietveldPoller(base.PollingChangeSource):
     def success_callback(value):
       self._cursor = str(data['cursor'])
       self._try_job_rietveld.processed_keys.clear()
+
+      if self._cachepath:
+        with open(self._cachepath, 'w') as f:
+          json.dump({'cursor': self._cursor}, f)
+
       return value
     d.addCallback(success_callback)
     return d
@@ -179,7 +196,8 @@ class TryJobRietveld(TryJobBase):
   """A try job source that gets jobs from pending Rietveld patch sets."""
 
   def __init__(self, name, pools, properties=None, last_good_urls=None,
-               code_review_sites=None, project=None, filter_master=False):
+               code_review_sites=None, project=None, filter_master=False,
+               cachepath=None):
     """Creates a try job source for Rietveld patch sets.
 
     Args:
@@ -200,7 +218,7 @@ class TryJobRietveld(TryJobBase):
     endpoint = self._GetRietveldEndPointForProject(
         code_review_sites, project, filter_master)
 
-    self._poller = _RietveldPoller(endpoint, interval=10)
+    self._poller = _RietveldPoller(endpoint, interval=10, cachepath=cachepath)
     self._valid_users = _ValidUserPoller(interval=12 * 60 * 60)
     self._project = project
 
