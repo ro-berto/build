@@ -8,7 +8,10 @@
       "[SLAVE_BUILD]/boom",
       "gs://chromium-recipe-test/some/random/path/to/boom"
     ],
-    "name": "gsutil upload"
+    "name": "gsutil upload",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-recipe-test/some/random/path/to/boom@@@"
+    ]
   },
   {
     "cmd": [

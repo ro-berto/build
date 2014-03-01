@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 from slave import recipe_api
+from slave import recipe_util
 
 class GSUtilApi(recipe_api.RecipeApi):
   def __call__(self, cmd, name=None, **kwargs):
@@ -29,11 +30,21 @@ class GSUtilApi(recipe_api.RecipeApi):
 
     return self.m.python(full_name, gsutil_path, cmd, **kwargs)
 
-  def upload(self, source, bucket, dest, args=None, **kwargs):
+  def upload(self, source, bucket, dest, args=None, add_link=True, **kwargs):
     args = args or []
     full_dest = 'gs://%s/%s' % (bucket, dest)
     cmd = ['cp'] + args + [source, full_dest]
     name = kwargs.pop('name', 'upload')
+
+    if add_link:
+      @recipe_util.wrap_followup(kwargs)
+      def inline_followup(step_result):
+        step_result.presentation.links['gsutil.upload'] = (
+          'https://storage.cloud.google.com/%s/%s' % (bucket, dest)
+        )
+
+      kwargs['followup_fn'] = inline_followup
+
     return self(cmd, name, **kwargs)
 
   def download(self, bucket, source, dest, args=None, **kwargs):

@@ -179,7 +179,10 @@
       "[SLAVE_BUILD]/src/out/build_product_4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00.zip",
       "gs://build-bucket/builder_name"
     ],
-    "name": "gsutil upload_build_product"
+    "name": "gsutil upload_build_product",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/build-bucket/builder_name@@@"
+    ]
   },
   {
     "always_run": true,
