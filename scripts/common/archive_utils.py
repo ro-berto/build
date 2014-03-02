@@ -31,8 +31,8 @@ class Config(object):
       'icudt38.dll', 'icudt42.dll', 'icudt46.dll', 'icudt.dll', 'rlz.dll',
       'avcodec-53.dll', 'avcodec-54.dll', 'avformat-53.dll', 'avformat-54.dll',
       'avutil-51.dll', 'd3dx9_42.dll', 'd3dx9_43.dll', 'D3DCompiler_42.dll',
-      'D3DCompiler_43.dll', 'd3dcompiler_46.dll', 'xinput1_3.dll',
-      'widevinecdm.dll', 'FlashPlayerApp.exe',]
+      'D3DCompiler_43.dll', 'd3dcompiler_46.dll', 'msvcp120.dll',
+      'msvcr120.dll', 'xinput1_3.dll', 'widevinecdm.dll', 'FlashPlayerApp.exe',]
 
   if os.environ.get('CHROMIUM_BUILD', '') == '_google_chrome':
     exes_to_skip_entirely = []
