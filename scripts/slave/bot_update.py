@@ -6,7 +6,6 @@
 import codecs
 import copy
 import cStringIO
-import ctypes
 import json
 import optparse
 import os
@@ -128,10 +127,6 @@ if sys.platform.startswith('win'):
   PATCH_TOOL = path.join(BUILD_INTERNAL_DIR, 'tools', 'patch.EXE')
 else:
   PATCH_TOOL = '/usr/bin/patch'
-
-# If there is less than 100GB of disk space on the system, then we do
-# a shallow checkout.
-SHALLOW_CLONE_THRESHOLD = 100 * 1024 * 1024 * 1024
 
 
 class SubprocessFailed(Exception):
@@ -391,7 +386,7 @@ def get_git_hash(revision, dir_name):
                   revision)
 
 
-def deps2git(sln_dirs, shallow):
+def deps2git(sln_dirs):
   for sln_dir in sln_dirs:
     deps_file = path.join(os.getcwd(), sln_dir, 'DEPS')
     deps_git_file = path.join(os.getcwd(), sln_dir, '.DEPS.git')
@@ -399,47 +394,18 @@ def deps2git(sln_dirs, shallow):
       return
     # Do we have a better way of doing this....?
     repo_type = 'internal' if 'internal' in sln_dir else 'public'
-    cmd = [sys.executable, DEPS2GIT_PATH,
-           '-t', repo_type,
-           '--cache_dir=%s' % CACHE_DIR,
-           '--deps=%s' % deps_file,
-           '--out=%s' % deps_git_file]
-    if shallow:
-      cmd.append('--shallow')
-    call(*cmd)
+    call(sys.executable, DEPS2GIT_PATH,
+         '-t', repo_type,
+         '--cache_dir=%s' % CACHE_DIR,
+         '--shallow',
+         '--deps=%s' % deps_file,
+         '--out=%s' % deps_git_file)
 
 
 def emit_got_revision(revision):
   print '@@@SET_BUILD_PROPERTY@got_revision@"%s"@@@' % revision
 
-
-# Derived from:
-# http://code.activestate.com/recipes/577972-disk-usage/?in=user-4178764
-def get_total_disk_space():
-  cwd = os.getcwd()
-  # Windows is the only platform that doesn't support os.statvfs, so
-  # we need to special case this.
-  if sys.platform.startswith('win'):
-    _, total, free = (ctypes.c_ulonglong(), ctypes.c_ulonglong(), \
-                      ctypes.c_ulonglong())
-    if sys.version_info >= (3,) or isinstance(path, unicode):
-      fn = ctypes.windll.kernel32.GetDiskFreeSpaceExW
-    else:
-      fn = ctypes.windll.kernel32.GetDiskFreeSpaceExA
-    ret = fn(path, ctypes.byref(_), ctypes.byref(total), ctypes.byref(free))
-    if ret == 0:
-      # WinError() will fetch the last error code.
-      raise ctypes.WinError()
-    return (total.value, free.value)
-
-  else:
-    st = os.statvfs(cwd)
-    free = st.f_bavail * st.f_frsize
-    total = st.f_blocks * st.f_frsize
-    return (total, free)
-
-
-def git_checkout(solutions, revision, shallow):
+def git_checkout(solutions, revision):
   build_dir = os.getcwd()
   # Before we do anything, break all git_cache locks.
   if path.isdir(CACHE_DIR):
@@ -454,10 +420,7 @@ def git_checkout(solutions, revision, shallow):
     name = sln['name']
     url = sln['url']
     sln_dir = path.join(build_dir, name)
-    s = ['--shallow'] if shallow else []
-    populate_cmd = (['cache', 'populate', '-v', '--cache-dir', CACHE_DIR]
-                 + s + [url])
-    git(*populate_cmd)
+    git('cache', 'populate', '-v', '--cache-dir', CACHE_DIR, '--shallow', url)
     mirror_dir = git('cache', 'exists', '--cache-dir', CACHE_DIR, url).strip()
     if not path.isdir(sln_dir):
       git('clone', mirror_dir, sln_dir)
@@ -553,16 +516,6 @@ def emit_flag(flag_file):
 def parse_args():
   parse = optparse.OptionParser()
 
-  # We only need to calculate this like, once.
-  total_disk_space, free_disk_space = get_total_disk_space()
-  total_disk_space_gb = int(total_disk_space / (1024 * 1024 * 1024))
-  used_disk_space_gb = int((total_disk_space - free_disk_space)
-                           / (1024 * 1024 * 1024))
-  percent_used = int(used_disk_space_gb * 100 / total_disk_space_gb)
-  print '@@@STEP_TEXT@[%dGB/%dGB used (%d%%)]@@@' % (used_disk_space_gb,
-                                                     total_disk_space_gb,
-                                                     percent_used)
-
   parse.add_option('--issue', help='Issue number to patch from.')
   parse.add_option('--patchset',
                    help='Patchset from issue to patch from, if applicable.')
@@ -586,10 +539,7 @@ def parse_args():
                    'used for determining whether or not to activate.')
   parse.add_option('--build_dir', default=os.getcwd())
   parse.add_option('--flag_file', default=path.join(os.getcwd(),
-                                                    'update.flag'))
-  parse.add_option('--shallow', action='store_true',
-                   default=total_disk_space < SHALLOW_CLONE_THRESHOLD,
-                   help='Use shallow clones for cache repositories.')
+                                                          'update.flag'))
 
   return parse.parse_args()
 
@@ -636,7 +586,7 @@ def main():
   # Calling git directory because there is no way to run Gclient without
   # invoking DEPS.
   print 'Fetching Git checkout'
-  got_revision = git_checkout(git_solutions, options.revision, options.shallow)
+  got_revision = git_checkout(git_solutions, options.revision)
 
   options.root =  options.root or dir_names[0]
   if options.patch_url:
@@ -648,7 +598,7 @@ def main():
 
   # Magic to get deps2git to work with internal DEPS.
   shutil.copyfile(S2G_INTERNAL_FROM_PATH, S2G_INTERNAL_DEST_PATH)
-  deps2git(dir_names, options.shallow)
+  deps2git(dir_names)
 
   gclient_configure(git_solutions)
   gclient_sync()
