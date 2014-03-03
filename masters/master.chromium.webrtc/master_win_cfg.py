@@ -40,6 +40,7 @@ F('win_rel_factory', win().ChromiumWebRTCFactory(
     slave_type='Builder',
     target='Release',
     project='all.sln;chromium_builder_webrtc',
+    compile_timeout=2400,
     factory_properties={'trigger': 'win_rel_trigger',
                         'build_url': chromium_rel_archive,}))
 

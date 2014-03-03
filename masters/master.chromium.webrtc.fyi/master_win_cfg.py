@@ -39,6 +39,7 @@ F('win_webrtc_factory', win().ChromiumWebRTCLatestFactory(
     target='Release',
     project=project,
     tests=tests,
+    compile_timeout=2400,
     factory_properties={
         'virtual_webcam': True,
         'show_perf_results': True,
