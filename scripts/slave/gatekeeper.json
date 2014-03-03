@@ -104,6 +104,8 @@
           "tonyg@chromium.org"
         ],
 
+        "sheriff_classes": ["sheriff_perf"],
+
         "forgive_all": "true",
 
         "subject_template": "%(project_name)s %(builder_name)s %(result)s",
