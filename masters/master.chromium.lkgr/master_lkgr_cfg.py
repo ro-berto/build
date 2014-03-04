@@ -163,6 +163,62 @@ F('linux_asan_dbg', linux().ChromiumASANFactory(
        'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': asan_debug_gyp}}))
 
+asan_ia32_v8_arm = ('asan=1 linux_use_tcmalloc=0 disable_nacl=1 '
+                    'v8_target_arch=arm host_arch=x86_64 target_arch=ia32 '
+                    'sysroot=/var/lib/chroot/precise32bit chroot_cmd=precise32 '
+                    'v8_enable_verify_heap=1 enable_ipc_fuzzer=1 ')
+
+asan_ia32_v8_arm_rel_sym = ('%s release_extra_cflags="-gline-tables-only -O1 '
+                            '-fno-inline-functions -fno-inline"' %
+                            asan_ia32_v8_arm)
+asan_ia32_v8_arm_rel = ('%s release_extra_cflags="-gline-tables-only' %
+                        asan_ia32_v8_arm)
+
+# The build process is described at
+# https://sites.google.com/a/chromium.org/dev/developers/testing/addresssanitizer#TOC-Building-with-v8_target_arch-arm
+B('ASan Debug (32-bit x86 with V8-ARM)',
+  'linux_asan_dbg_ia32_v8_arm',
+  'compile', 'chromium_lkgr')
+F('linux_asan_dbg_ia32_v8_arm', linux().ChromiumASANFactory(
+    clobber=True,
+    target='Debug',
+    options=['--compiler=goma-clang', 'chromium_builder_asan'],
+    factory_properties={
+       'cf_archive_build': ActiveMaster.is_production_host,
+       'cf_archive_subdir_suffix': 'v8-arm',
+       'cf_archive_name': 'asan-v8-arm',
+       'gs_bucket': 'gs://chromium-browser-asan',
+       'gs_acl': 'public-read',
+       'gclient_env': {'GYP_DEFINES': asan_ia32_v8_arm}}))
+
+B('ASan Release (32-bit x86 with V8-ARM)',
+  'linux_asan_rel_ia32_v8_arm',
+  'compile', 'chromium_lkgr')
+F('linux_asan_rel_ia32_v8_arm', linux().ChromiumASANFactory(
+    clobber=True,
+    options=['--compiler=goma-clang', 'chromium_builder_asan'],
+    factory_properties={
+       'cf_archive_build': ActiveMaster.is_production_host,
+       'cf_archive_subdir_suffix': 'v8-arm',
+       'cf_archive_name': 'asan-v8-arm',
+       'gs_bucket': 'gs://chromium-browser-asan',
+       'gs_acl': 'public-read',
+       'gclient_env': {'GYP_DEFINES': asan_ia32_v8_arm_rel}}))
+
+B('ASan Release (32-bit x86 with V8-ARM, symbolized)',
+  'linux_asan_rel_sym_ia32_v8_arm',
+  'compile', 'chromium_lkgr')
+F('linux_asan_rel_sym_ia32_v8_arm', linux().ChromiumASANFactory(
+    clobber=True,
+    options=['--compiler=goma-clang', 'chromium_builder_asan'],
+    factory_properties={
+       'cf_archive_build': ActiveMaster.is_production_host,
+       'cf_archive_subdir_suffix': 'v8-arm',
+       'cf_archive_name': 'asan-symbolized-v8-arm',
+       'gs_bucket': 'gs://chromium-browser-asan',
+       'gs_acl': 'public-read',
+       'gclient_env': {'GYP_DEFINES': asan_ia32_v8_arm_rel_sym}}))
+
 # The build process for TSan is described at
 # http://dev.chromium.org/developers/testing/threadsanitizer-tsan-v2
 tsan_gyp = ('tsan=1 linux_use_tcmalloc=0 disable_nacl=1 '
