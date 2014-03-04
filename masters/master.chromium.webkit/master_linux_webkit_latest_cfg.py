@@ -145,6 +145,9 @@ F('f_webkit_linux_oilpan_dbg', linux().ChromiumFactory(
         'blink_tests',
     ],
     factory_properties={
+        'additional_expectations': [
+            ['third_party', 'WebKit', 'LayoutTests', 'OilpanExpectations' ],
+        ],
         'archive_webkit_results': ActiveMaster.is_production_host,
         'gclient_env': {
           'GYP_DEFINES': 'enable_oilpan=1',
