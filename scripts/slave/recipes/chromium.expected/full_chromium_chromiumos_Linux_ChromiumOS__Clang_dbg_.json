@@ -126,6 +126,7 @@
       "crypto_unittests",
       "dbus_unittests",
       "device_unittests",
+      "gcm_unit_tests",
       "google_apis_unittests",
       "gpu_unittests",
       "interactive_ui_tests",
