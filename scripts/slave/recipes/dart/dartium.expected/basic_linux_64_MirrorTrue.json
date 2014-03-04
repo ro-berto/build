@@ -19,6 +19,7 @@
       "sync",
       "--nohooks",
       "--delete_unversioned_trees",
+      "--force",
       "--revision",
       "dartium.deps@12345",
       "--output-json",

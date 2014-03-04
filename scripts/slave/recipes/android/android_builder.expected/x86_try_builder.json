@@ -30,6 +30,7 @@
       "sync",
       "--nohooks",
       "--delete_unversioned_trees",
+      "--force",
       "--revision",
       "src/repo@refs/remotes/origin/master",
       "--output-json",

@@ -23,6 +23,7 @@
       "sync",
       "--nohooks",
       "--delete_unversioned_trees",
+      "--force",
       "--output-json",
       "/path/to/tmp/json"
     ],

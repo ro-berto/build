@@ -19,6 +19,7 @@
       "sync",
       "--nohooks",
       "--delete_unversioned_trees",
+      "--force",
       "--revision",
       "src@204787",
       "--output-json",

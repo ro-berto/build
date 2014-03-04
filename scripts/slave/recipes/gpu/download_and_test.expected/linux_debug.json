@@ -38,6 +38,7 @@
       "sync",
       "--nohooks",
       "--delete_unversioned_trees",
+      "--force",
       "--revision",
       "src@160000",
       "--output-json",

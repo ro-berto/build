@@ -19,6 +19,7 @@
       "sync",
       "--nohooks",
       "--delete_unversioned_trees",
+      "--force",
       "--revision",
       "polymer-dev@origin/master",
       "--output-json",

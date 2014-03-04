@@ -111,7 +111,8 @@ class GclientApi(recipe_api.RecipeApi):
     step_test_data = lambda: (
       self.test_api.output_json(cfg.got_revision_mapping.keys(), cfg.GIT_MODE))
     if not cfg.GIT_MODE:
-      yield self('sync', ['sync', '--nohooks', '--delete_unversioned_trees'] +
+      yield self('sync', ['sync', '--nohooks', '--delete_unversioned_trees',
+                 '--force'] +
                  revisions + ['--output-json', self.m.json.output()],
                  followup_fn=parse_got_revision, step_test_data=step_test_data,
                  **kwargs)
