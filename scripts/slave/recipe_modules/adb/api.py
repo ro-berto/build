@@ -51,8 +51,9 @@ class AdbApi(recipe_api.RecipeApi):
   def root_devices(self):
     yield self.list_devices()
     yield self.m.python.inline(
-        'Root devives',
+        'Root devices',
         """
+        import subprocess
         import sys
         adb_path = sys.argv[1]
         for device in sys.argv[2:]:

@@ -160,13 +160,14 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys\nadb_path = sys.argv[1]\nfor device in sys.argv[2:]:\n  subprocess.check_call([adb_path, '-s', device, 'root'])\n  subprocess.check_call([adb_path, '-s', device, 'wait-for-device'])\n",
+      "\nimport subprocess\nimport sys\nadb_path = sys.argv[1]\nfor device in sys.argv[2:]:\n  subprocess.check_call([adb_path, '-s', device, 'root'])\n  subprocess.check_call([adb_path, '-s', device, 'wait-for-device'])\n",
       "[BUILD_INTERNAL]/scripts/slave/android/adb",
       "014E1F310401C009"
     ],
-    "name": "Root devives",
+    "name": "Root devices",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import subprocess@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
       "@@@STEP_LOG_LINE@python.inline@adb_path = sys.argv[1]@@@",
       "@@@STEP_LOG_LINE@python.inline@for device in sys.argv[2:]:@@@",
