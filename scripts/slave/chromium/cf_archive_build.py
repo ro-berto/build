@@ -71,13 +71,12 @@ def archive(options, args):
   zip_file_list = [f for f in os.listdir(build_dir)
                    if ShouldPackageFile(f, options.target)]
 
-  subdir = None
-
-  # TODO(nsylvain): We need to move linux to a subdir as well, but aarya is not
-  # ready with the server-side change.
-  if chromium_utils.IsMac():
-    subdir = '%s-%s' % (chromium_utils.PlatformName(),
-                        options.target.lower())
+  subdir_suffix = options.factory_properties.get('cf_archive_subdir_suffix',
+                                                 '')
+  pieces = [chromium_utils.PlatformName(), options.target.lower()]
+  if subdir_suffix:
+    pieces.append(subdir_suffix)
+  subdir = '-'.join(pieces)
 
   # Components like v8 get a <name>-v8-component-<revision> infix.
   component = ''
