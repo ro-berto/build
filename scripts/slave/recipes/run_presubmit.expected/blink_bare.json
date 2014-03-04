@@ -8,12 +8,7 @@
       "--spec",
       "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'blink', 'url': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}]"
     ],
-    "name": "gclient setup",
-    "seed_steps": [
-      "gclient setup",
-      "gclient revert",
-      "gclient sync"
-    ]
+    "name": "gclient setup"
   },
   {
     "abort_on_failure": true,

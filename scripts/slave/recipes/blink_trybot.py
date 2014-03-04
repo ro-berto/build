@@ -240,8 +240,8 @@ def GenSteps(api):
 
   root = api.rietveld.calculate_issue_root()
 
+  yield api.gclient.checkout(revert=True)
   steps = [
-    api.gclient.checkout(revert=True),
     api.rietveld.apply_issue(root),
     api.chromium.runhooks(),
     api.chromium.compile(),

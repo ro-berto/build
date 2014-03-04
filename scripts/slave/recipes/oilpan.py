@@ -53,8 +53,9 @@ def GenSteps(api):
 
   patch_exe = api.path.slave_build('src', 'third_party', 'WebKit',
                                    'Source', 'apply_oilpan_patches.py')
+
+  yield api.gclient.checkout(revert=True)
   yield (
-    api.gclient.checkout(revert=True),
     api.chromium.runhooks(),
     api.chromium.m.python('apply oilpan patches', patch_exe),
     api.chromium.compile(),

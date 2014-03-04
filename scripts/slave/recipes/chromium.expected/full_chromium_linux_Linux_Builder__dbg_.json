@@ -11,10 +11,7 @@
     "name": "gclient setup",
     "seed_steps": [
       "gclient setup",
-      "gclient sync",
-      "gclient runhooks",
-      "read test spec",
-      "cleanup_temp"
+      "gclient sync"
     ]
   },
   {
@@ -72,7 +69,10 @@
     "env": {
       "GYP_DEFINES": "component=shared_library gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
     },
-    "name": "gclient runhooks"
+    "name": "gclient runhooks",
+    "seed_steps": [
+      "gclient runhooks"
+    ]
   },
   {
     "cmd": [
@@ -83,6 +83,9 @@
       "/path/to/tmp/json"
     ],
     "name": "read test spec",
+    "seed_steps": [
+      "read test spec"
+    ],
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"

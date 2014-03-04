@@ -8,11 +8,7 @@
       "--spec",
       "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'dartium.deps', 'url': 'https://dart.googlecode.com/svn/branches/bleeding_edge/deps/dartium.deps'}]"
     ],
-    "name": "gclient setup",
-    "seed_steps": [
-      "gclient setup",
-      "gclient sync"
-    ]
+    "name": "gclient setup"
   },
   {
     "abort_on_failure": true,

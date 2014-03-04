@@ -221,8 +221,8 @@ def GenSteps(api):
   api.gclient.set_config('chromium')
   api.step.auto_resolve_conflicts = True
 
+  yield api.gclient.checkout(revert=True)
   yield (
-    api.gclient.checkout(revert=True),
     api.rietveld.apply_issue(),
     api.json.read(
       'read test spec',
@@ -252,12 +252,11 @@ def GenSteps(api):
     # can still override this.
     api.gclient.set_config('chromium_lkcr')
 
+    # Since we're likely to switch to an earlier revision, revert the patch,
+    # sync with the new config, and apply issue again.
+    yield api.gclient.checkout(revert=True)
     yield (
-      # Since we're likely to switch to an earlier revision, revert the patch,
-      # sync with the new config, and apply issue again.
-      api.gclient.checkout(revert=True),
       api.rietveld.apply_issue(),
-
       api.chromium.compile(compile_targets,
                            name='compile (with patch, lkcr, clobber)',
                            force_clobber=True)

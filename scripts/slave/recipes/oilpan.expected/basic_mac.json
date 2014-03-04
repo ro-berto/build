@@ -8,15 +8,7 @@
       "--spec",
       "cache_dir = None\nsolutions = [{'custom_deps': {'src/chrome/tools/test/reference_build/chrome_linux': 'svn://svn-mirror.golo.chromium.org/blink/branches/oilpan/Tools/reference_build/chrome_linux'}, 'custom_vars': {'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_revision': 'HEAD', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/branches/oilpan'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]"
     ],
-    "name": "gclient setup",
-    "seed_steps": [
-      "gclient setup",
-      "gclient revert",
-      "gclient sync",
-      "gclient runhooks",
-      "apply oilpan patches",
-      "compile"
-    ]
+    "name": "gclient setup"
   },
   {
     "abort_on_failure": true,
@@ -86,7 +78,12 @@
     "env": {
       "GYP_DEFINES": "clang=1 component=static_library gomadir='[BUILD]/goma' linux_strip_binary=1 target_arch=x64 use_goma=1"
     },
-    "name": "gclient runhooks"
+    "name": "gclient runhooks",
+    "seed_steps": [
+      "gclient runhooks",
+      "apply oilpan patches",
+      "compile"
+    ]
   },
   {
     "cmd": [

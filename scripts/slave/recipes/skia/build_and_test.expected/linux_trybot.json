@@ -8,12 +8,7 @@
       "--spec",
       "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]"
     ],
-    "name": "gclient setup",
-    "seed_steps": [
-      "gclient setup",
-      "gclient revert",
-      "gclient sync"
-    ]
+    "name": "gclient setup"
   },
   {
     "abort_on_failure": true,

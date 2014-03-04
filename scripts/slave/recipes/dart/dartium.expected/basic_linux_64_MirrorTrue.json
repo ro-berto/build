@@ -8,11 +8,7 @@
       "--spec",
       "cache_dir = None\nsolutions = [{'custom_vars': {'dartium_base': 'svn://svn-mirror.golo.chromium.org', 'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'dartium.deps', 'url': 'svn://svn-mirror.golo.chromium.org/dart/branches/bleeding_edge/deps/dartium.deps'}]"
     ],
-    "name": "gclient setup",
-    "seed_steps": [
-      "gclient setup",
-      "gclient sync"
-    ]
+    "name": "gclient setup"
   },
   {
     "abort_on_failure": true,

@@ -111,10 +111,10 @@ class GclientApi(recipe_api.RecipeApi):
     step_test_data = lambda: (
       self.test_api.output_json(cfg.got_revision_mapping.keys(), cfg.GIT_MODE))
     if not cfg.GIT_MODE:
-      return self('sync', ['sync', '--nohooks', '--delete_unversioned_trees'] +
-                  revisions + ['--output-json', self.m.json.output()],
-                  followup_fn=parse_got_revision, step_test_data=step_test_data,
-                  **kwargs)
+      yield self('sync', ['sync', '--nohooks', '--delete_unversioned_trees'] +
+                 revisions + ['--output-json', self.m.json.output()],
+                 followup_fn=parse_got_revision, step_test_data=step_test_data,
+                 **kwargs)
     else:
       # clean() isn't used because the gclient sync flags passed in checkout()
       # do much the same thing, and they're more correct than doing a separate
@@ -130,13 +130,13 @@ class GclientApi(recipe_api.RecipeApi):
       # git-based builds (e.g. maybe some combination of 'git reset/clean -fx'
       # and removing the 'out' directory).
       j = '-j2' if self.m.platform.is_win else '-j8'
-      return self('sync',
-                  ['sync', '--verbose', '--with_branch_heads', '--nohooks', j,
-                   '--reset', '--delete_unversioned_trees', '--force',
-                   '--upstream', '--no-nag-max'] + revisions +
-                  ['--output-json', self.m.json.output()],
-                  followup_fn=parse_got_revision, step_test_data=step_test_data,
-                  **kwargs)
+      yield self('sync',
+                 ['sync', '--verbose', '--with_branch_heads', '--nohooks', j,
+                  '--reset', '--delete_unversioned_trees', '--force',
+                  '--upstream', '--no-nag-max'] + revisions +
+                 ['--output-json', self.m.json.output()],
+                 followup_fn=parse_got_revision, step_test_data=step_test_data,
+                 **kwargs)
 
   def inject_parent_got_revision(self, gclient_config=None, override=False):
     """Match gclient config to build revisions obtained from build_properties.
@@ -174,16 +174,14 @@ class GclientApi(recipe_api.RecipeApi):
 
     spec_string = jsonish_to_python(cfg.as_jsonish(), True)
 
-    steps = [
-      self('setup', ['config', '--spec', spec_string], **kwargs)
-    ]
+    yield self('setup', ['config', '--spec', spec_string], **kwargs)
 
     if not cfg.GIT_MODE:
       if revert:
-        steps.append(self.revert(**kwargs))
-      steps.append(self.sync(cfg, **kwargs))
+        yield self.revert(**kwargs)
+      yield self.sync(cfg, **kwargs)
     else:
-      steps.append(self.sync(cfg, **kwargs))
+      yield self.sync(cfg, **kwargs)
 
       cfg_cmds = [
         ('user.name', 'local_bot'),
@@ -191,15 +189,12 @@ class GclientApi(recipe_api.RecipeApi):
       ]
       for var, val in cfg_cmds:
         name = 'recurse (git config %s)' % var
-        steps.append(self(name, ['recurse', 'git', 'config', var, val],
-                          **kwargs))
+        yield self(name, ['recurse', 'git', 'config', var, val], **kwargs)
 
     cwd = kwargs.get('cwd', self.m.path.slave_build)
     self.m.path.set_dynamic_path(
       'checkout', cwd(*cfg.solutions[0].name.split(self.m.path.sep)),
       overwrite=False)
-
-    return steps
 
   def revert(self, **kwargs):
     """Return a gclient_safe_revert step."""

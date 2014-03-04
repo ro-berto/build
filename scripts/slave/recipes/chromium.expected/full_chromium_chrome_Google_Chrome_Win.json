@@ -11,10 +11,7 @@
     "name": "gclient setup",
     "seed_steps": [
       "gclient setup",
-      "gclient sync",
-      "gclient runhooks",
-      "read test spec",
-      "cleanup_temp"
+      "gclient sync"
     ]
   },
   {
@@ -73,7 +70,10 @@
       "GYP_DEFINES": "branding=Chrome buildtype=Official chromium_win_pch=0 component=static_library fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 use_goma=1",
       "GYP_MSVS_VERSION": "2010"
     },
-    "name": "gclient runhooks"
+    "name": "gclient runhooks",
+    "seed_steps": [
+      "gclient runhooks"
+    ]
   },
   {
     "cmd": [
@@ -84,6 +84,9 @@
       "/path/to/tmp/json"
     ],
     "name": "read test spec",
+    "seed_steps": [
+      "read test spec"
+    ],
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"

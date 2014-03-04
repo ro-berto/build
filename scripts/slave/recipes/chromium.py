@@ -666,15 +666,13 @@ def GenSteps(api):
   for c in recipe_config.get('gclient_apply_config', []):
     api.gclient.apply_config(c)
 
-  yield (
-    api.gclient.checkout(),
-    api.chromium.runhooks(),
-    api.json.read(
+  yield api.gclient.checkout(),
+  yield api.chromium.runhooks(),
+  yield api.json.read(
       'read test spec',
       api.path.checkout('testing', 'buildbot', '%s.json' % mastername),
       step_test_data=lambda: api.json.test_api.output({})),
-    api.chromium.cleanup_temp(),
-  )
+  yield api.chromium.cleanup_temp()
 
   # For non-trybot recipes we should know (seed) all steps in advance,
   # once we read the test spec. Instead of yielding single steps

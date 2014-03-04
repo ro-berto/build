@@ -8,12 +8,7 @@
       "--spec",
       "cache_dir = None\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': '', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]"
     ],
-    "name": "[spec: empty_deps] gclient setup",
-    "seed_steps": [
-      "[spec: empty_deps] gclient setup",
-      "[spec: empty_deps] gclient revert",
-      "[spec: empty_deps] gclient sync"
-    ]
+    "name": "[spec: empty_deps] gclient setup"
   },
   {
     "abort_on_failure": true,
@@ -103,12 +98,7 @@
       "--spec",
       "cache_dir = None\nsolutions = [{'custom_deps': {'src/blacklist/project/1': None, 'src/blacklist/project/2': None}, 'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]\ntarget_os = ['android']"
     ],
-    "name": "[spec: trimmed] gclient setup",
-    "seed_steps": [
-      "[spec: trimmed] gclient setup",
-      "[spec: trimmed] gclient revert",
-      "[spec: trimmed] gclient sync"
-    ]
+    "name": "[spec: trimmed] gclient setup"
   },
   {
     "abort_on_failure": true,

@@ -52,10 +52,8 @@ def _CheckoutSteps(api):
       'submodule update', api.path.depot_tools('gclient.py'),
       ['recurse', 'git', 'submodule', 'update', '--init', '--recursive'])
 
-  return (
-      api.gclient.checkout(cfg),
-      submodule_command
-  )
+  yield api.gclient.checkout(cfg)
+  yield submodule_command
 
 
 def GenSteps(api):
