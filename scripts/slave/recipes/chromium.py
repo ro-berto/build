@@ -604,6 +604,276 @@ BUILDERS = {
       },
     },
   },
+  'chromium.mac': {
+    'settings': {
+      'build_gs_bucket': 'chromium-mac-archive',
+    },
+    'builders': {
+      'Mac Builder': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'compile_targets': [
+          'chromium_builder_tests',
+        ],
+        'testing': {
+          'platform': 'mac',
+        }
+      },
+      'Mac10.6 Tests (1)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'tests': [
+          DynamicGTestTests('Mac10.6 Tests (1)'),
+          NaclIntegrationTest(),
+        ],
+        'bot_type': 'tester',
+        'parent_buildername': 'Mac Builder',
+        'testing': {
+          'platform': 'mac',
+        }
+      },
+      'Mac10.6 Tests (2)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'tests': [
+          DynamicGTestTests('Mac10.6 Tests (2)'),
+        ],
+        'bot_type': 'tester',
+        'parent_buildername': 'Mac Builder',
+        'testing': {
+          'platform': 'mac',
+        }
+      },
+      'Mac10.6 Tests (3)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'tests': [
+          DynamicGTestTests('Mac10.6 Tests (3)'),
+          TelemetryTest('telemetry_unittests'),
+          TelemetryTest('telemetry_perf_unittests'),
+        ],
+        'bot_type': 'tester',
+        'parent_buildername': 'Mac Builder',
+        'testing': {
+          'platform': 'mac',
+        }
+      },
+      'Mac10.7 Tests (1)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'tests': [
+          DynamicGTestTests('Mac10.7 Tests (1)'),
+          NaclIntegrationTest(),
+        ],
+        'bot_type': 'tester',
+        'parent_buildername': 'Mac Builder',
+        'testing': {
+          'platform': 'mac',
+        }
+      },
+      'Mac10.7 Tests (2)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'tests': [
+          DynamicGTestTests('Mac10.7 Tests (2)'),
+        ],
+        'bot_type': 'tester',
+        'parent_buildername': 'Mac Builder',
+        'testing': {
+          'platform': 'mac',
+        }
+      },
+      'Mac10.7 Tests (3)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'tests': [
+          DynamicGTestTests('Mac10.7 Tests (3)'),
+          TelemetryTest('telemetry_unittests'),
+          TelemetryTest('telemetry_perf_unittests'),
+        ],
+        'bot_type': 'tester',
+        'parent_buildername': 'Mac Builder',
+        'testing': {
+          'platform': 'mac',
+        }
+      },
+      'Mac10.6 Sync': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'tests': [
+          GTestTest('sync_integration_tests', args=[
+              '--ui-test-action-max-timeout=120000'
+          ]),
+        ],
+        'bot_type': 'tester',
+        'parent_buildername': 'Mac Builder',
+        'testing': {
+          'platform': 'mac',
+        }
+      },
+      'Mac Builder (dbg)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'compile_targets': [
+          'chromium_builder_tests',
+        ],
+        'testing': {
+          'platform': 'mac',
+        }
+      },
+      'Mac 10.6 Tests (dbg)(1)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'tests': [
+          DynamicGTestTests('Mac 10.6 Tests (dbg)(1)'),
+          NaclIntegrationTest(),
+        ],
+        'bot_type': 'tester',
+        'parent_buildername': 'Mac Builder (dbg)',
+        'testing': {
+          'platform': 'mac',
+        }
+      },
+      'Mac 10.6 Tests (dbg)(2)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'tests': [
+          DynamicGTestTests('Mac 10.6 Tests (dbg)(2)'),
+        ],
+        'bot_type': 'tester',
+        'parent_buildername': 'Mac Builder (dbg)',
+        'testing': {
+          'platform': 'mac',
+        }
+      },
+      'Mac 10.6 Tests (dbg)(3)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'tests': [
+          DynamicGTestTests('Mac 10.6 Tests (dbg)(3)'),
+        ],
+        'bot_type': 'tester',
+        'parent_buildername': 'Mac Builder (dbg)',
+        'testing': {
+          'platform': 'mac',
+        }
+      },
+      'Mac 10.6 Tests (dbg)(4)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'tests': [
+          DynamicGTestTests('Mac 10.6 Tests (dbg)(4)'),
+        ],
+        'bot_type': 'tester',
+        'parent_buildername': 'Mac Builder (dbg)',
+        'testing': {
+          'platform': 'mac',
+        }
+      },
+      'Mac 10.7 Tests (dbg)(1)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'tests': [
+          DynamicGTestTests('Mac 10.7 Tests (dbg)(1)'),
+          NaclIntegrationTest(),
+        ],
+        'bot_type': 'tester',
+        'parent_buildername': 'Mac Builder (dbg)',
+        'testing': {
+          'platform': 'mac',
+        }
+      },
+      'Mac 10.7 Tests (dbg)(2)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'tests': [
+          DynamicGTestTests('Mac 10.7 Tests (dbg)(2)'),
+        ],
+        'bot_type': 'tester',
+        'parent_buildername': 'Mac Builder (dbg)',
+        'testing': {
+          'platform': 'mac',
+        }
+      },
+      'Mac 10.7 Tests (dbg)(3)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'tests': [
+          DynamicGTestTests('Mac 10.7 Tests (dbg)(3)'),
+        ],
+        'bot_type': 'tester',
+        'parent_buildername': 'Mac Builder (dbg)',
+        'testing': {
+          'platform': 'mac',
+        }
+      },
+      'Mac 10.7 Tests (dbg)(4)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'tests': [
+          DynamicGTestTests('Mac 10.7 Tests (dbg)(4)'),
+        ],
+        'bot_type': 'tester',
+        'parent_buildername': 'Mac Builder (dbg)',
+        'testing': {
+          'platform': 'mac',
+        }
+      },
+    },
+  },
 }
 
 
