@@ -136,11 +136,21 @@ def chromium(c):
 
 @config_ctx(includes=['chromium'])
 def chromium_lkcr(c):
-  # TODO(phajdan.jr): Add git hashes for LKCR.
+  # TODO(phajdan.jr): Add git hashes for LKCR crbug.com/349277.
   if c.GIT_MODE:
-    raise BadConf('LKCR is not ready for git yet')
+    raise BadConf('Git has problems with safesync_url and LKCR, '
+                  'crbug.com/349277 crbug.com/109191')
   s = c.solutions[0]
   s.safesync_url = 'https://build.chromium.org/p/chromium/lkcr-status/lkgr'
+
+@config_ctx(includes=['chromium'])
+def chromium_lkgr(c):
+  s = c.solutions[0]
+  safesync_url = 'https://chromium-status.appspot.com/lkgr'
+  if c.GIT_MODE:
+    safesync_url = 'https://chromium-status.appspot.com/git-lkgr'
+    raise BadConf('Git has problems with safesync_url, crbug.com/109191.')
+  s.safesync_url = safesync_url
 
 @config_ctx()
 def android_bare(c):
