@@ -141,7 +141,7 @@ class SyzygyCommands(commands.FactoryCommands):
     self.AddTestStep(shell.ShellCommand, 'smoke_test', command)
 
   def AddArchival(self):
-    '''Adds steps to archive the build output for official builds.'''
+    """Adds steps to archive the build output for official builds."""
     # Store every file in the "archive" subdir of our build directory."
     archive_dir = self.PathJoin(self._build_dir, self._target, 'archive')
     dst_gs_url = WithProperties(

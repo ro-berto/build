@@ -655,7 +655,7 @@ class HTMLStatusGenerator(StatusGenerator):
       blinkrevs = [(-1, '?', '?')]
     else:
       blinkrevs = list(self.blink_revisions)
-    html_chunks = ['''
+    html_chunks = ["""
 <html>
 <head>
 <style type="text/css">
@@ -674,7 +674,7 @@ td, th { text-align: center; }
 </style>
 </head>
 <body><table>
-''']
+"""]
     master_headers = ['<tr class="header"><th></th><th></th>\n']
     builder_headers = ['<tr class="header">']
     builder_headers.append('<th>blink revision</th>\n')
