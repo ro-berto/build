@@ -14,12 +14,14 @@ class V8Api(recipe_api.RecipeApi):
   def compile(self):
     return self.m.chromium.compile()
 
-  def runtest(self, name, tests):
+  def _runtest(self, name, tests, flaky_tests=None):
     full_args = [
       '--target', self.m.chromium.c.build_config_fs,
       '--arch', self.m.chromium.c.gyp_env.GYP_DEFINES['target_arch'],
       '--testname', tests,
     ]
+    if flaky_tests:
+      full_args += ['--flaky-tests', flaky_tests]
 
     return self.m.python(
       name,
@@ -27,3 +29,16 @@ class V8Api(recipe_api.RecipeApi):
       full_args,
       cwd=self.m.path.checkout(),
     )
+
+  def runtest(self, test):
+    if test['flaky_step']:
+      return [
+        self._runtest(test['name'],
+                      test['tests'],
+                      flaky_tests='skip'),
+        self._runtest(test['name'] + ' - flaky',
+                      test['tests'],
+                      flaky_tests='run'),
+      ]
+    else:
+      return self._runtest(test['name'], test['tests'])

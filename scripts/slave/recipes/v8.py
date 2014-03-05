@@ -13,7 +13,26 @@ DEPS = [
 
 
 V8_TEST_CONFIGS = {
-  'v8testing': ('Check', 'mjsunit cctest message preparser'),
+  'mozilla': {
+    'name': 'Mozilla',
+    'tests': 'mozilla',
+    'flaky_step': False,
+  },
+  'test262': {
+    'name': 'Test262',
+    'tests': 'test262',
+    'flaky_step': False,
+  },
+  'v8testing': {
+    'name': 'Check',
+    'tests': 'mjsunit cctest message preparser',
+    'flaky_step': True,
+  },
+  'webkit': {
+    'name': 'Webkit',
+    'tests': 'webkit',
+    'flaky_step': True,
+  },
 }
 
 
@@ -22,9 +41,7 @@ class V8Test(object):
     self.name = name
 
   def run(self, api):
-    step_name = V8_TEST_CONFIGS[self.name][0]
-    tests = V8_TEST_CONFIGS[self.name][1]
-    return api.v8.runtest(step_name, tests)
+    return api.v8.runtest(V8_TEST_CONFIGS[self.name])
 
 
 BUILDERS = {
@@ -33,12 +50,15 @@ BUILDERS = {
       'V8 Linux - recipe': {
         'recipe_config': 'v8',
         'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
+          'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
         'tests': [
           V8Test('v8testing'),
+          V8Test('webkit'),
+          V8Test('test262'),
+          V8Test('mozilla'),
         ],
         'testing': {
           'platform': 'linux',
@@ -73,13 +93,12 @@ def GenSteps(api):
                     **bot_config.get('v8_config_kwargs', {}))
 
   yield api.v8.checkout()
+
   steps = [
     api.v8.runhooks(),
     api.v8.compile(),
   ]
-
   steps.extend([t.run(api) for t in bot_config.get('tests', [])])
-
   yield steps
 
 
