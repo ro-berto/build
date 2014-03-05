@@ -5,16 +5,6 @@
 from slave import recipe_api
 
 class V8Api(recipe_api.RecipeApi):
-  def get_config_defaults(self):
-    ret = {}
-    if 'target_arch' in self.m.properties:
-      ret['TARGET_ARCH'] = self.m.properties['target_arch']
-    if 'bits' in self.m.properties:
-      ret['TARGET_BITS'] = self.m.properties['bits']
-    if 'build_config' in self.m.properties:
-      ret['BUILD_CONFIG'] = self.m.properties['build_config']
-    return ret
-
   def checkout(self):
     return self.m.gclient.checkout()
 
@@ -23,3 +13,17 @@ class V8Api(recipe_api.RecipeApi):
 
   def compile(self):
     return self.m.chromium.compile()
+
+  def runtest(self, name, tests):
+    full_args = [
+      '--target', self.m.chromium.c.build_config_fs,
+      '--arch', self.m.chromium.c.gyp_env.GYP_DEFINES['target_arch'],
+      '--testname', tests,
+    ]
+
+    return self.m.python(
+      name,
+      self.m.path.build('scripts', 'slave', 'v8', 'v8testing.py'),
+      full_args,
+      cwd=self.m.path.checkout(),
+    )
