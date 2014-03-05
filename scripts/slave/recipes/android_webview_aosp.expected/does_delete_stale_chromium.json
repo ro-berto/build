@@ -272,10 +272,7 @@
       "[SLAVE_BUILD]/src",
       "[SLAVE_BUILD]/android-src/external/chromium_org"
     ],
-    "name": "symlink chromium_org",
-    "seed_steps": [
-      "symlink chromium_org"
-    ]
+    "name": "symlink chromium_org"
   },
   {
     "cmd": [
