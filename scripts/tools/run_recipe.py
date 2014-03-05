@@ -61,7 +61,7 @@ def parse_args(argv):
   for key, val in props.iteritems():
     try:
       props[key] = ast.literal_eval(val)
-    except ValueError:
+    except (ValueError, SyntaxError):
       pass
 
   props['recipe'] = argv[1]
