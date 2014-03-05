@@ -17,9 +17,10 @@ class Channel(object):
 # The channel names are replicated in the slave.cfg files for all
 # dart waterfalls. If you change anything here please also change it there.
 CHANNELS = [
-  Channel('be', 'branches/bleeding_edge', 0, '', 3),
+  Channel('be', 'branches/bleeding_edge', 0, '', 4),
   Channel('dev', 'trunk', 1, '-dev', 2),
   Channel('stable', 'branches/1.2', 2, '-stable', 1),
+  Channel('integration', 'branches/dartium_integration', 3, '-integration', 3),
 ]
 
 CHANNELS_BY_NAME = {}
