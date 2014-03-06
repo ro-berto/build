@@ -97,7 +97,8 @@ def Update(config, active_master, c):
         'factory': m_annotator.BaseFactory(
             'chromium',
             factory_properties=spec.get('factory_properties'),
-            triggers=spec.get('triggers')),
+            triggers=spec.get('triggers'),
+            timeout=2400),
         'notify_on_missing': True,
         'category': '2windows',
       } for spec in specs
