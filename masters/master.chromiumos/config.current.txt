@@ -502,7 +502,7 @@ config = {
                 'chromiumos-sdk',
               ],
               'description': 'cbuildbot',
-              'maxTime': 36000,
+              'maxTime': 79200,
               'name': 'cbuildbot',
               'timeout': 9000,
               'usePTY': False,
