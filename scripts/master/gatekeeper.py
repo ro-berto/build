@@ -23,6 +23,7 @@ from buildbot.status.builder import FAILURE
 from twisted.python import log
 from twisted.web import client
 
+from common import git_helper
 from master import build_utils
 from master import chromium_notifier
 from master import get_password
@@ -36,7 +37,8 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
 
 
   def __init__(self, tree_status_url, tree_message=None,
-               check_revisions=True, throttle=False, **kwargs):
+               check_revisions=True, throttle=False,
+               gitpoller_path=None, **kwargs):
     """Constructor with following specific arguments (on top of base class').
 
     @type tree_status_url: String.
@@ -50,6 +52,10 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
 
     @type throttle: Boolean, default to False.
     @param throttle: Set the tree to 'throttled' rather than 'closed'.
+
+    @type gitpoller_path: String.
+    @param gitpoller_path: Path to the git checkout(s) used by the GitPoller.
+                  Implies that this GateKeeper will be operating in git mode.
 
     @type password: String.
     @param password: Password for service.  If None, look in .status_password.
@@ -75,6 +81,11 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
         'Tree is ' + adjective + ' (Automatic: "%(steps)s" on '
         '"%(builder)s"%(blame)s)')
     self._last_closure_revision = 0
+
+    # Set up variables for operating on commits in a Git repository.
+    self.git_mode = bool(gitpoller_path)
+    self.gitpoller_path = gitpoller_path
+    self.checkouts = {}
 
     self.password = None
     if tree_status_url:
@@ -128,10 +139,23 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
     if not self.check_revisions:
       return True
 
+    # For the rest of the checks, we care about revision numbers, so we need to
+    # be aware of if we're operating in Git- or SVN-mode.
+    git_repo = None
+    if self.git_mode:
+      repository_url = build_status.getProperty('repository')
+      git_repo = self.checkouts.get(repository_url)
+      if not git_repo:
+        repository_name = repository_url.rsplit('/', 1)[-1].replace('.git', '')
+        repository_path = os.path.join(self.gitpoller_path, repository_name)
+        git_repo = git_helper.GitHelper('file://' + repository_path)
+        self.checkouts[repository_url] = git_repo
+
+    latest_revision = build_utils.getLatestRevision(build_status, git_repo)
+
     # If we don't have a version stamp nor a blame list, then this is most
     # likely a build started manually, and we don't want to close the
     # tree.
-    latest_revision = build_utils.getLatestRevision(build_status)
     if not latest_revision or not build_status.getResponsibleUsers():
       log.msg('[gatekeeper] Slave %s failed, but no version stamp, '
               'so skipping.' % slave_name)
@@ -140,8 +164,13 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
     # If the tree is open, we don't want to close it again for the same
     # revision, or an earlier one in case the build that just finished is a
     # slow one and we already fixed the problem and manually opened the tree.
-    # TODO(maruel): This is not git-friendly.
-    if latest_revision <= self._last_closure_revision:
+    if self.git_mode:
+      this_rev, last_rev = git_repo.number(
+          latest_revision, self._last_closure_revision)
+    else:
+      this_rev = latest_revision
+      last_rev = self._last_closure_revision
+    if this_rev <= last_rev:
       log.msg('[gatekeeper] Slave %s failed, but we already closed it '
               'for a previous revision (old=%s, new=%s)' % (
                   slave_name, str(self._last_closure_revision),
