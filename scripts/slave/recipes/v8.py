@@ -47,8 +47,8 @@ class V8Test(object):
 BUILDERS = {
   'client.v8': {
     'builders': {
-      'V8 Linux - recipe': {
-        'recipe_config': 'v8',
+      'V8 Linux - shared': {
+        'recipe_config': 'v8_shared_library',
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -56,7 +56,24 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'tests': [
           V8Test('v8testing'),
-          V8Test('webkit'),
+          V8Test('test262'),
+          V8Test('mozilla'),
+        ],
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      # This builder is used as a staging area for builders on the main
+      # waterfall to be switched to recipes.
+      'V8 Linux - recipe': {
+        'recipe_config': 'v8_shared_library',
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'tests': [
+          V8Test('v8testing'),
           V8Test('test262'),
           V8Test('mozilla'),
         ],
@@ -71,6 +88,10 @@ BUILDERS = {
 RECIPE_CONFIGS = {
   'v8': {
     'v8_config': 'v8',
+  },
+  'v8_shared_library': {
+    'v8_config': 'v8',
+    'chromium_apply_config': ['shared_library'],
   },
 }
 
@@ -91,6 +112,9 @@ def GenSteps(api):
   api.v8.set_config(recipe_config['v8_config'],
                     optional=True,
                     **bot_config.get('v8_config_kwargs', {}))
+
+  for c in recipe_config.get('chromium_apply_config', []):
+    api.chromium.apply_config(c)
 
   yield api.v8.checkout()
 
