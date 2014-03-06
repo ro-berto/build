@@ -17,12 +17,6 @@ def win():
   return syzygy_factory.SyzygyFactory('src/build',
                                       target_platform='win32')
 
-msvs_2013_factory_property = {
-  'gclient_env': {
-    'GYP_MSVS_VERSION': '2013',
-  },
-}
-
 #
 # Continous build scheduler for Syzygy
 #
@@ -34,8 +28,7 @@ S('syzygy_cont', branch='trunk', treeStableTimer=60)
 #
 B('Syzygy Release', 'f_syzygy_win_rel', scheduler='syzygy_cont',
   auto_reboot=False)
-F('f_syzygy_win_rel', win().SyzygyFactory(
-    factory_properties=msvs_2013_factory_property))
+F('f_syzygy_win_rel', win().SyzygyFactory())
 
 
 #
@@ -43,8 +36,7 @@ F('f_syzygy_win_rel', win().SyzygyFactory(
 #
 B('Syzygy Debug', 'f_syzygy_win_dbg', scheduler='syzygy_cont',
   auto_reboot=False)
-F('f_syzygy_win_dbg', win().SyzygyFactory(target='debug',
-    factory_properties=msvs_2013_factory_property))
+F('f_syzygy_win_dbg', win().SyzygyFactory(target='debug'))
 
 
 #
