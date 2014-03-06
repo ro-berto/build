@@ -3279,3 +3279,398 @@ Change minimum cache size to 50 to prevent waterfall and console view bustage.
 +                max_size = max(self.autoBuildCacheRatio * slavecount, 50)
                  builder_status.buildCache.set_max_size(max_size)
                  builder_status.buildCacheSize = max_size
+
+
+Cherry-pick ANSI color codes in logs from upstream buildbot.  These commits were manually
+resolved.
+
+  ** https://github.com/buildbot/buildbot/commit/3a563189374737aa2ebf3f6467bf461bc3ec5443
+commit 3a563189374737aa2ebf3f6467bf461bc3ec5443
+Author: Pierre Tardy <pierre.tardy@intel.com>
+Date:   Mon Jul 15 18:48:35 2013 +0200
+
+    logs: implement on the fly parsing of ansi code
+    
+    grunt and js tools have the habit of using ansi
+    code a lot, which are ugly inside python log window.
+    http://en.wikipedia.org/wiki/ANSI_escape_code
+    
+    This is a simple enough implementation of ansicode parser
+    which integrates well into buildbot's way of displaying logs
+    
+    Signed-off-by: Pierre Tardy <pierre.tardy@intel.com>
+
+diff --git a/master/buildbot/status/web/files/default.css b/master/buildbot/status/web/files/default.css
+index d109be1..2d24c2b 100644
+--- a/master/buildbot/status/web/files/default.css
++++ b/master/buildbot/status/web/files/default.css
+@@ -564,6 +564,30 @@ span.stderr {
+ span.header {
+ 	color: blue;
+ }
++span.ansi30 {
++	color: black;
++}
++span.ansi31 {
++	color: red;
++}
++span.ansi32 {
++	color: green;
++}
++span.ansi33 {
++	color: orange;
++}
++span.ansi34 {
++	color: yellow;
++}
++span.ansi35 {
++	color: purple;
++}
++span.ansi36 {
++	color: blue;
++}
++span.ansi37 {
++	color: white;
++}
+ 
+ /* revision & email */
+ .revision .full {
+diff --git a/master/buildbot/status/web/logs.py b/master/buildbot/status/web/logs.py
+index d7da811..b883dc2 100644
+--- a/master/buildbot/status/web/logs.py
++++ b/master/buildbot/status/web/logs.py
+@@ -24,6 +24,9 @@ from buildbot import interfaces
+ from buildbot.status import logfile
+ from buildbot.status.web.base import IHTMLLog, HtmlResource, path_to_root
+ 
++import re
++
++
+ class ChunkConsumer:
+     implements(interfaces.IStatusLogConsumer)
+ 
+@@ -46,6 +49,7 @@ class ChunkConsumer:
+     def finish(self):
+         self.textlog.finished()
+ 
++ANSI_RE = re.compile(r"^(\d*)(;(\d+))?([a-zA-Z])")
+ 
+ # /builders/$builder/builds/$buildnum/steps/$stepname/logs/$logname
+ class TextLog(Resource):
+@@ -80,9 +84,26 @@ class TextLog(Resource):
+                 # jinja only works with unicode, or pure ascii, so assume utf-8 in logs
+                 if not isinstance(entry, unicode):
+                     entry = unicode(entry, 'utf-8', 'replace')
+-                html_entries.append(dict(type = logfile.ChunkTypes[type], 
+-                                         text = entry,
+-                                         is_header = is_header))
++                first_entry = True
++                _type = logfile.ChunkTypes[type]
++                for ansi_entry in entry.split("\033["):
++                    code = ""
++                    if not first_entry:
++                        res = ANSI_RE.search(ansi_entry)
++                        if res:
++                            mode = res.group(4)
++                            ansi_entry = ansi_entry[len(res.group(0)):]
++                            if mode == 'm':
++                                code = " ansi" + res.group(1)
++                        else:
++                            # illegal code, restore the CSI
++                            ansi_entry = "\033[" + ansi_entry
++
++                    html_entries.append(dict(type=_type + code,
++                                             text=ansi_entry,
++                                             is_header=is_header))
++                    first_entry = False
++
+             elif not is_header:
+                 text_data += entry
+
+  ** https://github.com/buildbot/buildbot/commit/c451dd5c7cd377e774c4bf5c5d16d53986a9ccbf
+commit c451dd5c7cd377e774c4bf5c5d16d53986a9ccbf
+Author: Pierre Tardy <pierre.tardy@intel.com>
+Date:   Thu Aug 22 11:48:31 2013 +0200
+
+    ansi codes: add support for multiple sgr classes
+    
+    Add some unit tests and factorize for potencial reuse
+    
+    nine plan is to reuse the regex and overall idea, but probably
+    rewrite this client side.
+    
+    Signed-off-by: Pierre Tardy <pierre.tardy@intel.com>
+
+diff --git a/master/buildbot/status/web/logs.py b/master/buildbot/status/web/logs.py
+index b883dc2..37eaf29 100644
+--- a/master/buildbot/status/web/logs.py
++++ b/master/buildbot/status/web/logs.py
+@@ -23,9 +23,7 @@ from twisted.web.resource import Resource, NoResource
+ from buildbot import interfaces
+ from buildbot.status import logfile
+ from buildbot.status.web.base import IHTMLLog, HtmlResource, path_to_root
+-
+-import re
+-
++from buildbot.util.ansicodes import parse_ansi_sgr
+ 
+ class ChunkConsumer:
+     implements(interfaces.IStatusLogConsumer)
+@@ -49,8 +47,6 @@ class ChunkConsumer:
+     def finish(self):
+         self.textlog.finished()
+ 
+-ANSI_RE = re.compile(r"^(\d*)(;(\d+))?([a-zA-Z])")
+-
+ # /builders/$builder/builds/$buildnum/steps/$stepname/logs/$logname
+ class TextLog(Resource):
+     # a new instance of this Resource is created for each client who views
+@@ -77,7 +73,7 @@ class TextLog(Resource):
+             if type >= len(logfile.ChunkTypes) or type < 0:
+                 # non-std channel, don't display
+                 continue
+-            
++
+             is_header = type == logfile.HEADER
+ 
+             if not self.asText:
+@@ -89,16 +85,9 @@ class TextLog(Resource):
+                 for ansi_entry in entry.split("\033["):
+                     code = ""
+                     if not first_entry:
+-                        res = ANSI_RE.search(ansi_entry)
+-                        if res:
+-                            mode = res.group(4)
+-                            ansi_entry = ansi_entry[len(res.group(0)):]
+-                            if mode == 'm':
+-                                code = " ansi" + res.group(1)
+-                        else:
+-                            # illegal code, restore the CSI
+-                            ansi_entry = "\033[" + ansi_entry
+-
++                        ansi_entry, ansi_classes = parse_ansi_sgr(ansi_entry)
++                        if ansi_classes:
++                            code = "".join([" ansi" + i for i in ansi_classes])
+                     html_entries.append(dict(type=_type + code,
+                                              text=ansi_entry,
+                                              is_header=is_header))
+diff --git a/master/buildbot/test/unit/test_util_ansi_codes.py b/master/buildbot/test/unit/test_util_ansi_codes.py
+new file mode 100644
+index 0000000..f9ca02c
+--- /dev/null
++++ b/master/buildbot/test/unit/test_util_ansi_codes.py
+@@ -0,0 +1,39 @@
++# This file is part of Buildbot.  Buildbot is free software: you can
++# redistribute it and/or modify it under the terms of the GNU General Public
++# License as published by the Free Software Foundation, version 2.
++#
++# This program is distributed in the hope that it will be useful, but WITHOUT
++# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
++# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
++# details.
++#
++# You should have received a copy of the GNU General Public License along with
++# this program; if not, write to the Free Software Foundation, Inc., 51
++# Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
++#
++# Copyright Buildbot Team Members
++
++from twisted.trial import unittest
++from buildbot.util.ansicodes import parse_ansi_sgr
++
++
++class TestAnsiCodes(unittest.TestCase):
++
++    def runTest(self, string, expected):
++        ret = parse_ansi_sgr(string)
++        self.assertEqual(ret, expected)
++
++    def test_ansi1m(self):
++        self.runTest("33mfoo", ("foo", ["33"]))
++
++    def test_ansi2m(self):
++        self.runTest("1;33mfoo", ("foo", ["1", "33"]))
++
++    def test_ansi5m(self):
++        self.runTest("1;2;3;4;33mfoo", ("foo", ["1", "2", "3", "4", "33"]))
++
++    def test_ansi_notm(self):
++        self.runTest("33xfoo", ("foo", []))
++
++    def test_ansi_invalid(self):
++        self.runTest("<>foo", ("\033[<>foo", []))
+diff --git a/master/buildbot/util/ansicodes.py b/master/buildbot/util/ansicodes.py
+new file mode 100644
+index 0000000..bc58066
+--- /dev/null
++++ b/master/buildbot/util/ansicodes.py
+@@ -0,0 +1,36 @@
++# This file is part of Buildbot.  Buildbot is free software: you can
++# redistribute it and/or modify it under the terms of the GNU General Public
++# License as published by the Free Software Foundation, version 2.
++#
++# This program is distributed in the hope that it will be useful, but WITHOUT
++# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
++# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
++# details.
++#
++# You should have received a copy of the GNU General Public License along with
++# this program; if not, write to the Free Software Foundation, Inc., 51
++# Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
++#
++# Copyright Buildbot Team Members
++
++import re
++
++ANSI_RE = re.compile(r"^((\d*)(;\d+)*)([a-zA-Z])")
++
++
++def parse_ansi_sgr(ansi_entry):
++    """simple utility to extract ansi sgr (Select Graphic Rendition) codes,
++    and ignore other codes.
++    Invalid codes are restored
++    """
++    classes = []
++    res = ANSI_RE.search(ansi_entry)
++    if res:
++        mode = res.group(4)
++        ansi_entry = ansi_entry[len(res.group(0)):]
++        if mode == 'm':
++            classes = res.group(1).split(";")
++    else:
++        # illegal code, restore the CSI
++        ansi_entry = "\033[" + ansi_entry
++    return ansi_entry, classes
+
+  ** https://github.com/buildbot/buildbot/commit/94e11e9888ad3933cd5c3fc61d7e78ed3d0d79d1
+commit 94e11e9888ad3933cd5c3fc61d7e78ed3d0d79d1
+Author: Dustin J. Mitchell <dustin@mozilla.com>
+Date:   Thu Sep 26 08:34:36 2013 -0400
+
+    render '\e[m' as a class-less SGR; fixes #2565
+
+diff --git a/master/buildbot/test/unit/test_util_ansi_codes.py b/master/buildbot/test/unit/test_util_ansi_codes.py
+deleted file mode 100644
+index bde441f..0000000
+--- a/master/buildbot/test/unit/test_util_ansi_codes.py
++++ /dev/null
+@@ -1,42 +0,0 @@
+-# This file is part of Buildbot.  Buildbot is free software: you can
+-# redistribute it and/or modify it under the terms of the GNU General Public
+-# License as published by the Free Software Foundation, version 2.
+-#
+-# This program is distributed in the hope that it will be useful, but WITHOUT
+-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+-# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+-# details.
+-#
+-# You should have received a copy of the GNU General Public License along with
+-# this program; if not, write to the Free Software Foundation, Inc., 51
+-# Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+-#
+-# Copyright Buildbot Team Members
+-
+-from twisted.trial import unittest
+-from buildbot.util.ansicodes import parse_ansi_sgr
+-
+-
+-class TestAnsiCodes(unittest.TestCase):
+-
+-    def runTest(self, string, expected):
+-        ret = parse_ansi_sgr(string)
+-        self.assertEqual(ret, expected)
+-
+-    def test_ansi1m(self):
+-        self.runTest("33mfoo", ("foo", ["33"]))
+-
+-    def test_ansi2m(self):
+-        self.runTest("1;33mfoo", ("foo", ["1", "33"]))
+-
+-    def test_ansi5m(self):
+-        self.runTest("1;2;3;4;33mfoo", ("foo", ["1", "2", "3", "4", "33"]))
+-
+-    def test_ansi_notm(self):
+-        self.runTest("33xfoo", ("foo", []))
+-
+-    def test_ansi_invalid(self):
+-        self.runTest("<>foo", ("\033[<>foo", []))
+-
+-    def test_ansi_invalid_start_by_semicolon(self):
+-        self.runTest(";3m", ("\033[;3m", []))
+diff --git a/master/buildbot/test/unit/test_util_ansicodes.py b/master/buildbot/test/unit/test_util_ansicodes.py
+new file mode 100644
+index 0000000..e0d1926
+--- /dev/null
++++ b/master/buildbot/test/unit/test_util_ansicodes.py
+@@ -0,0 +1,45 @@
++# This file is part of Buildbot.  Buildbot is free software: you can
++# redistribute it and/or modify it under the terms of the GNU General Public
++# License as published by the Free Software Foundation, version 2.
++#
++# This program is distributed in the hope that it will be useful, but WITHOUT
++# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
++# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
++# details.
++#
++# You should have received a copy of the GNU General Public License along with
++# this program; if not, write to the Free Software Foundation, Inc., 51
++# Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
++#
++# Copyright Buildbot Team Members
++
++from twisted.trial import unittest
++from buildbot.util.ansicodes import parse_ansi_sgr
++
++
++class TestAnsiCodes(unittest.TestCase):
++
++    def runTest(self, string, expected):
++        ret = parse_ansi_sgr(string)
++        self.assertEqual(ret, expected)
++
++    def test_ansi0m(self):
++        self.runTest("mfoo", ("foo", []))
++
++    def test_ansi1m(self):
++        self.runTest("33mfoo", ("foo", ["33"]))
++
++    def test_ansi2m(self):
++        self.runTest("1;33mfoo", ("foo", ["1", "33"]))
++
++    def test_ansi5m(self):
++        self.runTest("1;2;3;4;33mfoo", ("foo", ["1", "2", "3", "4", "33"]))
++
++    def test_ansi_notm(self):
++        self.runTest("33xfoo", ("foo", []))
++
++    def test_ansi_invalid(self):
++        self.runTest("<>foo", ("\033[<>foo", []))
++
++    def test_ansi_invalid_start_by_semicolon(self):
++        self.runTest(";3m", ("\033[;3m", []))
+diff --git a/master/buildbot/util/ansicodes.py b/master/buildbot/util/ansicodes.py
+index ebcf95f..01054ae 100644
+--- a/master/buildbot/util/ansicodes.py
++++ b/master/buildbot/util/ansicodes.py
+@@ -15,7 +15,7 @@
+ 
+ import re
+ 
+-ANSI_RE = re.compile(r"^((\d+)(;\d+)*)([a-zA-Z])")
++ANSI_RE = re.compile(r"^((\d+)(;\d+)*)?([a-zA-Z])")
+ 
+ 
+ def parse_ansi_sgr(ansi_entry):
+@@ -29,7 +29,11 @@ def parse_ansi_sgr(ansi_entry):
+         mode = res.group(4)
+         ansi_entry = ansi_entry[len(res.group(0)):]
+         if mode == 'm':
+-            classes = res.group(1).split(";")
++            classes = res.group(1)
++            if classes:
++                classes = res.group(1).split(";")
++            else:
++                classes = []
+     else:
+         # illegal code, restore the CSI
+         ansi_entry = "\033[" + ansi_entry
