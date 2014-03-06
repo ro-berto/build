@@ -58,11 +58,11 @@ F('ios_dbg', ios().ChromiumFactory(
     'content_unittests',
     'crypto_unittests',
     'gfx_unittests',
-    'googleurl',
     'net',
     'ui_unittests',
     'unit_sql',
     'unit_sync',
+    'url_unittests',
   ],
   options = [
     '--', '-project', '../build/all.xcodeproj', '-sdk',
