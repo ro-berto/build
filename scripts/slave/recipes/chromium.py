@@ -874,6 +874,444 @@ BUILDERS = {
       },
     },
   },
+  'chromium.win': {
+    'settings': {
+      'build_gs_bucket': 'chromium-win-archive',
+    },
+    'builders': {
+      'Win Builder': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'compile_targets': [
+          'chromium_builder_tests',
+        ],
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'XP Tests (1)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'tests': [
+          DynamicGTestTests('XP Tests (1)'),
+        ],
+        'parent_buildername': 'Win Builder',
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'XP Tests (2)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'tests': [
+          DynamicGTestTests('XP Tests (2)'),
+          TelemetryTest('telemetry_unittests'),
+          TelemetryTest('telemetry_perf_unittests'),
+        ],
+        'parent_buildername': 'Win Builder',
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'XP Tests (3)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'tests': [
+          DynamicGTestTests('XP Tests (3)'),
+        ],
+        'parent_buildername': 'Win Builder',
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'Vista Tests (1)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'tests': [
+          DynamicGTestTests('Vista Tests (1)'),
+        ],
+        'parent_buildername': 'Win Builder',
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'Vista Tests (2)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'tests': [
+          DynamicGTestTests('Vista Tests (2)'),
+          TelemetryTest('telemetry_unittests'),
+          TelemetryTest('telemetry_perf_unittests'),
+        ],
+        'parent_buildername': 'Win Builder',
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'Vista Tests (3)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'tests': [
+          DynamicGTestTests('Vista Tests (3)'),
+        ],
+        'parent_buildername': 'Win Builder',
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'Win7 Tests (1)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'tests': [
+          DynamicGTestTests('Win7 Tests (1)'),
+        ],
+        'parent_buildername': 'Win Builder',
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'Win7 Tests (2)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'tests': [
+          DynamicGTestTests('Win7 Tests (2)'),
+          TelemetryTest('telemetry_unittests'),
+          TelemetryTest('telemetry_perf_unittests'),
+        ],
+        'parent_buildername': 'Win Builder',
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'Win7 Tests (3)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'tests': [
+          DynamicGTestTests('Win7 Tests (3)'),
+        ],
+        'parent_buildername': 'Win Builder',
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'Win7 Sync': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'tests': [
+          GTestTest('sync_integration_tests', args=[
+              '--ui-test-action-max-timeout=120000'
+          ]),
+        ],
+        'parent_buildername': 'Win Builder',
+        'testing': {
+          'platform': 'win',
+        },
+      },
+
+      'Win x64 Builder': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'compile_targets': [
+          'chromium_builder_tests',
+        ],
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'Win 7 Tests x64 (1)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'tests': [
+          DynamicGTestTests('Win 7 Tests x64 (1)'),
+        ],
+        'parent_buildername': 'Win x64 Builder',
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'Win 7 Tests x64 (2)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'tests': [
+          DynamicGTestTests('Win 7 Tests x64 (2)'),
+        ],
+        'parent_buildername': 'Win x64 Builder',
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'Win 7 Tests x64 (3)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'tests': [
+          DynamicGTestTests('Win 7 Tests x64 (3)'),
+          TelemetryTest('telemetry_unittests'),
+        ],
+        'parent_buildername': 'Win x64 Builder',
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'Win7 Sync x64': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'tests': [
+          GTestTest('sync_integration_tests', args=[
+              '--ui-test-action-max-timeout=120000'
+          ]),
+        ],
+        'parent_buildername': 'Win x64 Builder',
+        'testing': {
+          'platform': 'win',
+        },
+      },
+
+      'NaCl Tests (x86-32)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'tests': [
+          NaclIntegrationTest(),
+        ],
+        'parent_buildername': 'Win Builder',
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'NaCl Tests (x86-64)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'tests': [
+          NaclIntegrationTest(),
+        ],
+        'parent_buildername': 'Win Builder',
+        'testing': {
+          'platform': 'win',
+        },
+      },
+
+      'Win x64 Builder (dbg)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'compile_targets': [
+          'chromium_builder_tests',
+        ],
+        'testing': {
+          'platform': 'win',
+        },
+      },
+
+      'Win Builder (dbg)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'compile_targets': [
+          'chromium_builder_tests',
+        ],
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'Win7 Tests (dbg)(1)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'tests': [
+          DynamicGTestTests('Win7 Tests (dbg)(1)'),
+        ],
+        'parent_buildername': 'Win Builder (dbg)',
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'Win7 Tests (dbg)(2)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'tests': [
+          DynamicGTestTests('Win7 Tests (dbg)(2)'),
+        ],
+        'parent_buildername': 'Win Builder (dbg)',
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'Win7 Tests (dbg)(3)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'tests': [
+          DynamicGTestTests('Win7 Tests (dbg)(3)'),
+        ],
+        'parent_buildername': 'Win Builder (dbg)',
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'Win7 Tests (dbg)(4)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'tests': [
+          DynamicGTestTests('Win7 Tests (dbg)(4)'),
+        ],
+        'parent_buildername': 'Win Builder (dbg)',
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'Win7 Tests (dbg)(5)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'tests': [
+          DynamicGTestTests('Win7 Tests (dbg)(5)'),
+        ],
+        'parent_buildername': 'Win Builder (dbg)',
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'Win7 Tests (dbg)(6)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'tests': [
+          DynamicGTestTests('Win7 Tests (dbg)(6)'),
+        ],
+        'parent_buildername': 'Win Builder (dbg)',
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'Interactive Tests (dbg)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'tests': [
+          DynamicGTestTests('Interactive Tests (dbg)'),
+        ],
+        'parent_buildername': 'Win Builder (dbg)',
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'Win8 Aura': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'tests': [
+          DynamicGTestTests('Win8 Aura'),
+        ],
+        'parent_buildername': 'Win Builder (dbg)',
+        'testing': {
+          'platform': 'win',
+        },
+      },
+    },
+  },
 }
 
 
@@ -994,8 +1432,21 @@ def GenSteps(api):
       # TODO(phajdan.jr): Move abort_on_failure to archive recipe module.
       abort_on_failure=True))
 
-  if bot_type in ['tester', 'builder_tester']:
-    steps.extend([t.run(api) for t in bot_config.get('tests', [])])
+  if bot_type in ['tester', 'builder_tester'] and bot_config.get('tests'):
+    if api.platform.is_win:
+      steps.append(api.python(
+        'start_crash_service',
+        api.path.build('scripts', 'slave', 'chromium',
+                       'run_crash_handler.py'),
+        ['--target', api.chromium.c.build_config_fs]))
+
+    steps.extend([t.run(api) for t in bot_config['tests']])
+
+    if api.platform.is_win:
+      steps.append(api.python(
+        'process_dumps',
+        api.path.build('scripts', 'slave', 'process_dumps.py'),
+        ['--target', api.chromium.c.build_config_fs]))
 
   # For non-trybot recipes we should know (seed) all steps in advance,
   # at the beginning of each build. Instead of yielding single steps
