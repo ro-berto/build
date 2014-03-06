@@ -284,19 +284,19 @@ def ensure_no_checkout(dir_names, scm_dirname):
       path.join(os.getcwd(), dir_name, scm_dirname)), dir_names))
 
   if has_checkout or scm_dirname == '*':
-    # cd .. && rm -rf ./build && mkdir ./build && cd build
     build_dir = os.getcwd()
-
-    os.chdir(path.dirname(os.getcwd()))
     prefix = ''
     if scm_dirname != '*':
       prefix = '%s detected in checkout, ' % scm_dirname
-    print '%sdeleting %s...' % (prefix, build_dir),
-    chromium_utils.RemoveDirectory(build_dir)
-    print 'done'
-    os.mkdir(build_dir)
-    os.chdir(build_dir)
 
+    for filename in os.listdir(build_dir):
+      deletion_target = path.join(build_dir, filename)
+      print '%sdeleting %s...' % (prefix, deletion_target),
+      if path.isdir(deletion_target):
+        chromium_utils.RemoveDirectory(deletion_target)
+      else:
+        chromium_utils.RemoveFile(deletion_target)
+      print 'done'
 
 
 def gclient_configure(solutions):
