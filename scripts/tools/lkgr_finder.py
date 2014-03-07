@@ -164,7 +164,6 @@ CHROMIUM_LKGR_STEPS = {
     ],
     'Mac 10.6 Tests (dbg)(2)': [
       'browser_tests',
-      'check_deps',
       'media_unittests',
       'net_unittests',
     ],
