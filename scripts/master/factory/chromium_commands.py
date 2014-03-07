@@ -467,6 +467,12 @@ class ChromiumCommands(commands.FactoryCommands):
                               step_name='media_perftests',
                               factory_properties=factory_properties)
 
+  def AddLoadLibraryPerfTests(self, factory_properties=None):
+    self.AddAnnotatedPerfStep('load_library_perf_tests', None, 'graphing',
+                              cmd_name='load_library_perf_tests',
+                              step_name='load_library_perf_tests',
+                              factory_properties=factory_properties)
+
   def AddMemoryTests(self, factory_properties=None):
     self.AddAnnotatedPerfStep('memory', 'GeneralMix*MemoryTest.*', 'graphing',
                               factory_properties=factory_properties)

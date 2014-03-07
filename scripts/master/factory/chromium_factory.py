@@ -798,6 +798,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddCCPerfTests(fp)
     if R('media_perftests'):
       f.AddMediaPerfTests(fp)
+    if R('load_library_perf_tests'):
+      f.AddLoadLibraryPerfTests(fp)
 
     if R('sync_integration'):
       f.AddSyncIntegrationTests(fp)
