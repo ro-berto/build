@@ -64,6 +64,7 @@
       "runhooks"
     ],
     "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN": "0",
       "GYP_DEFINES": "chromium_win_pch=0 component=shared_library fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 use_goma=1",
       "GYP_MSVS_VERSION": "2010"
     },

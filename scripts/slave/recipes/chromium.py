@@ -1375,7 +1375,14 @@ def GenSteps(api):
     api.gclient.apply_config(c)
 
   yield api.gclient.checkout(),
-  yield api.chromium.runhooks(),
+
+  bot_type = bot_config.get('bot_type', 'builder_tester')
+
+  runhooks_env = {}
+  if bot_type not in ['builder', 'builder_tester'] and api.platform.is_win:
+    runhooks_env['DEPOT_TOOLS_WIN_TOOLCHAIN'] = 0
+  yield api.chromium.runhooks(env=runhooks_env),
+
   yield api.json.read(
       'read test spec',
       api.path.checkout('testing', 'buildbot', '%s.json' % mastername),
@@ -1386,8 +1393,6 @@ def GenSteps(api):
   # once we read the test spec. Instead of yielding single steps
   # or groups of steps, yield all of them at the end.
   steps = []
-
-  bot_type = bot_config.get('bot_type', 'builder_tester')
 
   if bot_type in ['builder', 'builder_tester']:
     compile_targets = set(bot_config.get('compile_targets', []))
