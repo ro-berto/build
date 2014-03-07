@@ -27,7 +27,7 @@ class NativeClientPortsFactory(gclient_factory.GClientFactory):
   }
 
   def __init__(self, build_dir, target_platform=None, use_supplement=False,
-               alternate_url=None):
+               alternate_url=None, name=None):
     solutions = []
     self.target_platform = target_platform
     nacl_ports_url = config.Master.nacl_ports_url
@@ -35,6 +35,7 @@ class NativeClientPortsFactory(gclient_factory.GClientFactory):
       nacl_ports_url = alternate_url
     main = gclient_factory.GClientSolution(
         nacl_ports_url,
+        name=name,
         needed_components=self.NEEDED_COMPONENTS)
     solutions.append(main)
 
