@@ -1398,6 +1398,9 @@ def GenSteps(api):
   for c in recipe_config.get('gclient_apply_config', []):
     api.gclient.apply_config(c)
 
+  if api.platform.is_win:
+    yield api.chromium.taskkill()
+
   yield api.gclient.checkout(),
 
   bot_type = bot_config.get('bot_type', 'builder_tester')

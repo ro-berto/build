@@ -226,6 +226,11 @@ class ChromiumApi(recipe_api.RecipeApi):
     kwargs['env'] = env
     return self.m.gclient.runhooks(**kwargs)
 
+  def taskkill(self):
+    return self.m.python(
+      'taskkill',
+      self.m.path.build('scripts', 'slave', 'kill_processes.py'))
+
   def cleanup_temp(self):
     return self.m.python(
       'cleanup_temp',

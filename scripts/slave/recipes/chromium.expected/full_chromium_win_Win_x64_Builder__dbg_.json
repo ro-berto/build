@@ -3,6 +3,14 @@
     "cmd": [
       "python",
       "-u",
+      "[BUILD]\\scripts\\slave\\kill_processes.py"
+    ],
+    "name": "taskkill"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[DEPOT_TOOLS]\\gclient.py",
       "config",
       "--spec",
