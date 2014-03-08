@@ -900,6 +900,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'tester',
+        'disable_runhooks': True,
         'tests': [
           DynamicGTestTests('XP Tests (1)'),
         ],
@@ -915,6 +916,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'tester',
+        'disable_runhooks': True,
         'tests': [
           DynamicGTestTests('XP Tests (2)'),
           TelemetryTest('telemetry_unittests'),
@@ -932,6 +934,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'tester',
+        'disable_runhooks': True,
         'tests': [
           DynamicGTestTests('XP Tests (3)'),
         ],
@@ -947,6 +950,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'tester',
+        'disable_runhooks': True,
         'tests': [
           DynamicGTestTests('Vista Tests (1)'),
         ],
@@ -962,6 +966,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'tester',
+        'disable_runhooks': True,
         'tests': [
           DynamicGTestTests('Vista Tests (2)'),
           TelemetryTest('telemetry_unittests'),
@@ -979,6 +984,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'tester',
+        'disable_runhooks': True,
         'tests': [
           DynamicGTestTests('Vista Tests (3)'),
         ],
@@ -994,6 +1000,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'tester',
+        'disable_runhooks': True,
         'tests': [
           DynamicGTestTests('Win7 Tests (1)'),
         ],
@@ -1009,6 +1016,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'tester',
+        'disable_runhooks': True,
         'tests': [
           DynamicGTestTests('Win7 Tests (2)'),
           TelemetryTest('telemetry_unittests'),
@@ -1026,6 +1034,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'tester',
+        'disable_runhooks': True,
         'tests': [
           DynamicGTestTests('Win7 Tests (3)'),
         ],
@@ -1041,6 +1050,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'tester',
+        'disable_runhooks': True,
         'tests': [
           GTestTest('sync_integration_tests', args=[
               '--ui-test-action-max-timeout=120000'
@@ -1073,6 +1083,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'tester',
+        'disable_runhooks': True,
         'tests': [
           DynamicGTestTests('Win 7 Tests x64 (1)'),
         ],
@@ -1088,6 +1099,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'tester',
+        'disable_runhooks': True,
         'tests': [
           DynamicGTestTests('Win 7 Tests x64 (2)'),
         ],
@@ -1103,6 +1115,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'tester',
+        'disable_runhooks': True,
         'tests': [
           DynamicGTestTests('Win 7 Tests x64 (3)'),
           TelemetryTest('telemetry_unittests'),
@@ -1119,6 +1132,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'tester',
+        'disable_runhooks': True,
         'tests': [
           GTestTest('sync_integration_tests', args=[
               '--ui-test-action-max-timeout=120000'
@@ -1137,6 +1151,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'tester',
+        'disable_runhooks': True,
         'tests': [
           NaclIntegrationTest(),
         ],
@@ -1152,6 +1167,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'tester',
+        'disable_runhooks': True,
         'tests': [
           NaclIntegrationTest(),
         ],
@@ -1197,6 +1213,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'tester',
+        'disable_runhooks': True,
         'tests': [
           DynamicGTestTests('Win7 Tests (dbg)(1)'),
         ],
@@ -1212,6 +1229,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'tester',
+        'disable_runhooks': True,
         'tests': [
           DynamicGTestTests('Win7 Tests (dbg)(2)'),
         ],
@@ -1227,6 +1245,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'tester',
+        'disable_runhooks': True,
         'tests': [
           DynamicGTestTests('Win7 Tests (dbg)(3)'),
         ],
@@ -1242,6 +1261,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'tester',
+        'disable_runhooks': True,
         'tests': [
           DynamicGTestTests('Win7 Tests (dbg)(4)'),
         ],
@@ -1257,6 +1277,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'tester',
+        'disable_runhooks': True,
         'tests': [
           DynamicGTestTests('Win7 Tests (dbg)(5)'),
         ],
@@ -1272,6 +1293,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'tester',
+        'disable_runhooks': True,
         'tests': [
           DynamicGTestTests('Win7 Tests (dbg)(6)'),
         ],
@@ -1287,6 +1309,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'tester',
+        'disable_runhooks': True,
         'tests': [
           DynamicGTestTests('Interactive Tests (dbg)'),
         ],
@@ -1302,6 +1325,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'tester',
+        'disable_runhooks': True,
         'tests': [
           DynamicGTestTests('Win8 Aura'),
         ],
@@ -1378,10 +1402,8 @@ def GenSteps(api):
 
   bot_type = bot_config.get('bot_type', 'builder_tester')
 
-  runhooks_env = {}
-  if bot_type not in ['builder', 'builder_tester'] and api.platform.is_win:
-    runhooks_env['DEPOT_TOOLS_WIN_TOOLCHAIN'] = 0
-  yield api.chromium.runhooks(env=runhooks_env),
+  if not bot_config.get('disable_runhooks'):
+    yield api.chromium.runhooks()
 
   yield api.json.read(
       'read test spec',
