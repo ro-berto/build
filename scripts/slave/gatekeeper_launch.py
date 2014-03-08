@@ -21,6 +21,7 @@ def main():
   master_urls = ['http://build.chromium.org/p/chromium',
                  'http://build.chromium.org/p/chromium.lkgr',
                  'http://build.chromium.org/p/chromium.perf',
+                 'http://build.chromium.org/p/client.libvpx',
                 ]
 
   json = os.path.join(SLAVE_DIR, 'gatekeeper.json')

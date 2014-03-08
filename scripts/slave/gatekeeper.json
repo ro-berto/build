@@ -119,6 +119,24 @@
           "*": {}
         }
       }
+    ],
+    "http://build.chromium.org/p/client.libvpx": [
+      {
+        "tree_notify": [
+          "stip@chromium.org",
+          "vpx-eng@google.com"
+        ],
+
+        "forgive_all": "true",
+
+        "builders": {
+          "*": {
+            "closing_optional": [
+              "*"
+            ]
+          }
+        }
+      }
     ]
   },
 
