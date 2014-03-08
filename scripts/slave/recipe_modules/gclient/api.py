@@ -108,8 +108,10 @@ class GclientApi(recipe_api.RecipeApi):
           propname = cfg.got_revision_mapping[path]
           step_result.presentation.properties[propname] = info['revision']
 
+    test_data_paths = set(cfg.got_revision_mapping.keys() +
+                          [s.name for s in cfg.solutions])
     step_test_data = lambda: (
-      self.test_api.output_json(cfg.got_revision_mapping.keys(), cfg.GIT_MODE))
+      self.test_api.output_json(test_data_paths, cfg.GIT_MODE))
     if not cfg.GIT_MODE:
       yield self('sync', ['sync', '--nohooks', '--delete_unversioned_trees',
                  '--force'] +

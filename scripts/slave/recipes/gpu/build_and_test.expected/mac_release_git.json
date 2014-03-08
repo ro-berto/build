@@ -43,6 +43,9 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"solutions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src-internal/\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"22e29375e81155a74a3217e770ee1ce27091b499\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"src/\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",

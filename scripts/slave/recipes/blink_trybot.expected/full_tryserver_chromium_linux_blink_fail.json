@@ -40,6 +40,9 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"solutions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src-internal/\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": 274229@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"src/\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"revision\": 170242@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",

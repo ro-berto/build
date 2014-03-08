@@ -27,6 +27,9 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"solutions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": 170242@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"webrtc/\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"revision\": 229524@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",

@@ -29,6 +29,9 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"solutions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"dartium.deps/\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": 10382@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"src/dart/\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"revision\": 58622@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
