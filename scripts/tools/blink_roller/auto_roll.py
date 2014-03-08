@@ -48,7 +48,7 @@ class SheriffCalendar(object):
     # FIXME: We should be more careful trusting the emails which
     # we pulled from an http url and are passing to the shell!
     sheriff_js = urllib2.urlopen(sheriff_url).read()
-    return map(self.complete_email, self._names_from_sheriff_js(sheriff_js))
+    return map(self.complete_email, self.names_from_sheriff_js(sheriff_js))
 
   def current_gardener_emails(self):
     return self._emails_from_url(self.BLINK_SHERIFF_URL)
