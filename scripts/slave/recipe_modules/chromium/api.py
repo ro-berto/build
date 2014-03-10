@@ -209,13 +209,23 @@ class ChromiumApi(recipe_api.RecipeApi):
         master_class_name=master_class_name,
         env=env)
 
-  def run_telemetry_unittests(self, name):
+  def run_telemetry_unittests(self):
     return self.runtest(
         self.m.path.checkout('tools', 'telemetry', 'run_tests'),
         args=['--browser=%s' % self.c.BUILD_CONFIG.lower()],
         annotate='gtest',
-        name=name,
-        test_type=name,
+        name='telemetry_unittests',
+        test_type='telemetry_unittests',
+        python_mode=True,
+        xvfb=True)
+
+  def run_telemetry_perf_unittests(self):
+    return self.runtest(
+        self.m.path.checkout('tools', 'perf', 'run_tests'),
+        args=['--browser=%s' % self.c.BUILD_CONFIG.lower()],
+        annotate='gtest',
+        name='telemetry_perf_unittests',
+        test_type='telemetry_perf_unittests',
         python_mode=True,
         xvfb=True)
 

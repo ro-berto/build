@@ -105,12 +105,19 @@ class DynamicGTestTests(object):
     return [t['test'] for t in self._get_tests(api)]
 
 
-class TelemetryTest(object):
-  def __init__(self, name):
-    self.name = name
+class TelemetryUnitTests(object):
+  @staticmethod
+  def run(api):
+    return api.chromium.run_telemetry_unittests()
 
-  def run(self, api):
-    return api.chromium.run_telemetry_unittests(self.name)
+  @staticmethod
+  def compile_targets(_):
+    return ['chrome']
+
+class TelemetryPerfUnitTests(object):
+  @staticmethod
+  def run(api):
+    return api.chromium.run_telemetry_perf_unittests()
 
   @staticmethod
   def compile_targets(_):
@@ -437,8 +444,8 @@ BUILDERS = {
         'bot_type': 'tester',
         'tests': [
           DynamicGTestTests('Linux Tests'),
-          TelemetryTest('telemetry_unittests'),
-          TelemetryTest('telemetry_perf_unittests'),
+          TelemetryUnitTests(),
+          TelemetryPerfUnitTests(),
         ],
         'parent_buildername': 'Linux Builder',
         'testing': {
@@ -662,8 +669,8 @@ BUILDERS = {
         },
         'tests': [
           DynamicGTestTests('Mac10.6 Tests (3)'),
-          TelemetryTest('telemetry_unittests'),
-          TelemetryTest('telemetry_perf_unittests'),
+          TelemetryUnitTests(),
+          TelemetryPerfUnitTests(),
         ],
         'bot_type': 'tester',
         'parent_buildername': 'Mac Builder',
@@ -710,8 +717,8 @@ BUILDERS = {
         },
         'tests': [
           DynamicGTestTests('Mac10.7 Tests (3)'),
-          TelemetryTest('telemetry_unittests'),
-          TelemetryTest('telemetry_perf_unittests'),
+          TelemetryUnitTests(),
+          TelemetryPerfUnitTests(),
         ],
         'bot_type': 'tester',
         'parent_buildername': 'Mac Builder',
@@ -919,8 +926,8 @@ BUILDERS = {
         'disable_runhooks': True,
         'tests': [
           DynamicGTestTests('XP Tests (2)'),
-          TelemetryTest('telemetry_unittests'),
-          TelemetryTest('telemetry_perf_unittests'),
+          TelemetryUnitTests(),
+          TelemetryPerfUnitTests(),
         ],
         'parent_buildername': 'Win Builder',
         'testing': {
@@ -969,8 +976,8 @@ BUILDERS = {
         'disable_runhooks': True,
         'tests': [
           DynamicGTestTests('Vista Tests (2)'),
-          TelemetryTest('telemetry_unittests'),
-          TelemetryTest('telemetry_perf_unittests'),
+          TelemetryUnitTests(),
+          TelemetryPerfUnitTests(),
         ],
         'parent_buildername': 'Win Builder',
         'testing': {
@@ -1019,8 +1026,8 @@ BUILDERS = {
         'disable_runhooks': True,
         'tests': [
           DynamicGTestTests('Win7 Tests (2)'),
-          TelemetryTest('telemetry_unittests'),
-          TelemetryTest('telemetry_perf_unittests'),
+          TelemetryUnitTests(),
+          TelemetryPerfUnitTests(),
         ],
         'parent_buildername': 'Win Builder',
         'testing': {
@@ -1118,7 +1125,7 @@ BUILDERS = {
         'disable_runhooks': True,
         'tests': [
           DynamicGTestTests('Win 7 Tests x64 (3)'),
-          TelemetryTest('telemetry_unittests'),
+          TelemetryUnitTests(),
         ],
         'parent_buildername': 'Win x64 Builder',
         'testing': {
