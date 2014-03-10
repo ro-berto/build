@@ -214,6 +214,11 @@ class AndroidApi(recipe_api.RecipeApi):
         self.m.properties.get('revision'))
     zipfile = self.m.path.checkout('out', 'build_product_%s.zip' % upload_tag)
     self._cleanup_list.append(zipfile)
+    bucket=self._internal_names['BUILD_BUCKET']
+    dest=self.m.properties['buildername']
+    if self.c.storage_dest.bucket and self.c.storage_dest.dest:
+      bucket=self.c.storage_dest.bucket
+      dest=self.c.storage_dest.dest
     yield self.make_zip_archive(
         'zip_build_product',
          zipfile,
@@ -223,8 +228,8 @@ class AndroidApi(recipe_api.RecipeApi):
     yield self.m.gsutil.upload(
         name='upload_build_product',
         source=zipfile,
-        bucket=self._internal_names['BUILD_BUCKET'],
-        dest=self.m.properties['buildername']
+        bucket=bucket,
+        dest=dest
     )
 
   def download_build(self):

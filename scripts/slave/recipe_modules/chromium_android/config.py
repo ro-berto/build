@@ -31,6 +31,10 @@ def BaseConfig(INTERNAL, REPO_NAME, REPO_URL, BUILD_CONFIG='Debug', **_kwargs):
     cr_build_android = Static(Path('[CHECKOUT]', 'build', 'android')),
     internal_dir = Single(Path),
     gclient_custom_deps = Single(Dict(value_type=basestring)), # possibly wrong
+    storage_dest = ConfigGroup(
+      bucket = Single(basestring),
+      dest = Single(basestring)
+    )
   )
 
 
@@ -66,6 +70,11 @@ def clang_builder(c):
     c.run_findbugs = True
     c.run_lint = True
     c.run_checkdeps = True
+
+@config_ctx(config_vars={'BUILD_CONFIG': 'Release'})
+def clang_release_builder(c):
+  c.storage_dest.bucket = 'chrome-test-builds'
+  c.storage_dest.dest = 'android'
 
 @config_ctx()
 def component_builder(c):

@@ -32,6 +32,10 @@ def main_builder(c):
 def clang_builder(c):
   pass
 
+@CONFIG_CTX(includes=['base_config', 'clang', 'goma'])
+def clang_release_builder(c):
+  pass
+
 @CONFIG_CTX(includes=['main_builder'])
 def component_builder(c):
   c.gyp_env.GYP_DEFINES['component'] = 'shared_library'
