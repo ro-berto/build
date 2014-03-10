@@ -71,6 +71,7 @@ def parse_args(argv):
 
 def main(argv):
   props = parse_args(argv)
+  props.setdefault('use_mirror', False)
 
   if not os.path.exists(SLAVE_DIR):
     os.makedirs(SLAVE_DIR)
