@@ -216,9 +216,9 @@ class AndroidApi(recipe_api.RecipeApi):
     self._cleanup_list.append(zipfile)
     bucket=self._internal_names['BUILD_BUCKET']
     dest=self.m.properties['buildername']
-    if self.c.storage_dest.bucket and self.c.storage_dest.dest:
-      bucket=self.c.storage_dest.bucket
-      dest=self.c.storage_dest.dest
+    if self.c.storage_bucket:
+      bucket=self.c.storage_bucket
+      dest='asan-android-release-' + self.m.properties.get('revision') + '.zip'
     yield self.make_zip_archive(
         'zip_build_product',
          zipfile,
