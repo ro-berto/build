@@ -11,3 +11,4 @@ class ChromiumPerf(Master.Master1):
   master_port = 8013
   slave_port = 8113
   master_port_alt = 8213
+  buildbot_url = 'http://build.chromium.org/p/chromium.perf/'
