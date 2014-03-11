@@ -246,6 +246,7 @@ def main(argv):
       'master.experimental': 'Experimental',
       'master.push.canary': 'PushCanary',
       'master.tryserver.chromium': 'TryServer',
+      'master.tryserver.blink': 'BlinkTryServer',
       'master.tryserver.libyuv': 'LibyuvTryServer',
       'master.tryserver.nacl': 'NativeClientTryServer',
       'master.tryserver.v8': 'V8TryServer',
