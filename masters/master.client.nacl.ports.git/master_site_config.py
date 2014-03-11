@@ -8,9 +8,9 @@ from config_bootstrap import Master
 
 class NativeClientPortsGit(Master.NaClBase):
   project_name = 'NativeClientPortsGit'
-  master_port = 8036
-  slave_port = 8136
-  master_port_alt = 8236
+  master_port = 8039
+  slave_port = 8139
+  master_port_alt = 8239
   base_app_url = 'https://naclports-status.appspot.com'
   tree_status_url = base_app_url + '/status'
   store_revisions_url = base_app_url + '/revisions'
