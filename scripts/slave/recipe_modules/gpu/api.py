@@ -251,6 +251,14 @@ class GpuApi(recipe_api.RecipeApi):
     yield self._maybe_run_isolated_telemetry_gpu_test('gpu_process',
                                                       name='gpu_process_launch')
 
+    # Smoke test for gpu rasterization of web content.
+    yield self._maybe_run_isolated_telemetry_gpu_test(
+      'gpu_rasterization',
+      args=[
+        '--build-revision', str(self._build_revision),
+        '--test-machine-name', self.m.properties['buildername']
+      ])
+
     # Only run the performance tests on Release builds.
     if self.m.chromium.is_release_build:
       # Former tab_capture_performance_tests_step
