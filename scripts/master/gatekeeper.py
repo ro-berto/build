@@ -92,6 +92,18 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
       self.password = get_password.Password('.status_password').GetPassword()
 
 
+  def getGitRepo(self, repository_url):
+    git_repo = self.checkouts.get(repository_url)
+    if git_repo:
+      return git_repo
+
+    repository_name = repository_url.rsplit('/', 1)[-1].replace('.git', '')
+    repository_path = os.path.join(self.gitpoller_path, repository_name)
+    git_repo = git_helper.GitHelper('file://' + repository_path)
+    self.checkouts[repository_url] = git_repo
+    return git_repo
+
+
   def isInterestingStep(self, build_status, step_status, results):
     """Look at most cases that could make us ignore the step results.
 
@@ -144,12 +156,7 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
     git_repo = None
     if self.git_mode:
       repository_url = build_status.getProperty('repository')
-      git_repo = self.checkouts.get(repository_url)
-      if not git_repo:
-        repository_name = repository_url.rsplit('/', 1)[-1].replace('.git', '')
-        repository_path = os.path.join(self.gitpoller_path, repository_name)
-        git_repo = git_helper.GitHelper('file://' + repository_path)
-        self.checkouts[repository_url] = git_repo
+      git_repo = self.getGitRepo(repository_url)
 
     latest_revision = build_utils.getLatestRevision(build_status, git_repo)
 
@@ -213,8 +220,12 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
     log.msg(
         '[gatekeeper] Trying to close the tree at %s.' % self.tree_status_url)
 
+    git_repo = None
+    if self.git_mode:
+      repository_url = build_status.getProperty('repository')
+      git_repo = self.getGitRepo(repository_url)
     # isInterestingStep verified that latest_revision has expected properties.
-    latest_revision = build_utils.getLatestRevision(build_status)
+    latest_revision = build_utils.getLatestRevision(build_status, git_repo)
 
     if not self.tree_status_url:
       self._last_closure_revision = latest_revision
