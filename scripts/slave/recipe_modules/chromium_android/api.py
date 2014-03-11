@@ -66,7 +66,7 @@ class AndroidApi(recipe_api.RecipeApi):
     spec = self.m.gclient.make_config('android_bare')
     spec.target_os = ['android']
     s = spec.solutions[0]
-    s.name = self.c.REPO_NAME
+    s.name = self.c.deps_dir
     s.url = self.c.REPO_URL
     s.custom_deps = self.c.gclient_custom_deps or {}
     s.deps_file = self.c.deps_file

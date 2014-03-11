@@ -23,6 +23,8 @@ def BaseConfig(INTERNAL, REPO_NAME, REPO_URL, BUILD_CONFIG='Debug', **_kwargs):
     get_app_manifest_vars = Single(bool, required=False, empty_val=True),
     run_tree_truth = Single(bool, required=False, empty_val=True),
     deps_file = Single(basestring, required=False, empty_val='.DEPS.git'),
+    # deps_dir: where to checkout the gclient deps file
+    deps_dir = Single(basestring, required=False, empty_val=REPO_NAME),
     managed = Single(bool, required=False, empty_val=True),
     extra_deploy_opts = List(inner_type=basestring),
     tests = List(inner_type=basestring),
