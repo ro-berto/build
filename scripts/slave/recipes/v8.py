@@ -17,6 +17,7 @@ V8_TEST_CONFIGS = {
     'name': 'Mozilla',
     'tests': 'mozilla',
     'flaky_step': False,
+    'gclient_apply_config': ['mozilla_tests'],
   },
   'test262': {
     'name': 'Test262',
@@ -42,6 +43,9 @@ class V8Test(object):
 
   def run(self, api):
     return api.v8.runtest(V8_TEST_CONFIGS[self.name])
+
+  def gclient_apply_config(self):
+    return V8_TEST_CONFIGS[self.name].get('gclient_apply_config', [])
 
 
 BUILDERS = {
@@ -115,6 +119,11 @@ def GenSteps(api):
 
   for c in recipe_config.get('chromium_apply_config', []):
     api.chromium.apply_config(c)
+
+  # Test-specific configurations.
+  for t in bot_config.get('tests', []):
+    for c in t.gclient_apply_config():
+      api.gclient.apply_config(c)
 
   yield api.v8.checkout()
 
