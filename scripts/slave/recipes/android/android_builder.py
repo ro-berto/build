@@ -48,8 +48,8 @@ def GenSteps(api):
 
   if api.properties.get('android_bot_id') == "dartium_builder":
     yield api.python('dartium_test',
-        api.path.slave_build('src', 'dart', 'tools',
-                             'bots', 'dartium_android.py'),
+                     api.path['slave_build'].join('src', 'dart', 'tools',
+                                                  'bots', 'dartium_android.py'),
         args = ['--build-products-dir',
                 api.chromium.c.build_dir(api.chromium.c.build_config_fs)]
     )

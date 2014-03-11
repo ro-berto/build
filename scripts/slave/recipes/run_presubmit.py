@@ -35,8 +35,8 @@ def GenSteps(api):
   yield api.rietveld.apply_issue(root)
 
   yield api.step('presubmit', [
-    api.path.depot_tools('presubmit_support.py'),
-    '--root', api.path.checkout(root),
+    api.path['depot_tools'].join('presubmit_support.py'),
+    '--root', api.path['checkout'].join(root),
     '--commit',
     '--verbose', '--verbose',
     '--issue', api.properties['issue'],

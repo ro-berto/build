@@ -62,26 +62,26 @@ def GenTests(api):
     api.test('uses_android_repo') +
     api.properties.scheduled() +
     api.path.exists(
-      api.path.slave_build('android-src', '.repo', 'repo', 'repo'))
+      api.path['slave_build'].join('android-src', '.repo', 'repo', 'repo'))
   )
 
   yield (
     api.test('doesnt_sync_if_android_present') +
     api.properties.scheduled() +
-    api.path.exists(api.path.slave_build('android-src'))
+    api.path.exists(api.path['slave_build'].join('android-src'))
   )
 
   yield (
     api.test('does_delete_stale_chromium') +
     api.properties.scheduled() +
     api.path.exists(
-      api.path.slave_build('android-src', 'external', 'chromium_org'))
+      api.path['slave_build'].join('android-src', 'external', 'chromium_org'))
   )
 
   yield (
     api.test('uses_goma_test') +
     api.properties.scheduled() +
-    api.path.exists(api.path.build('goma'))
+    api.path.exists(api.path['build'].join('goma'))
   )
 
   yield api.test('works_if_revision_not_present') + api.properties.generic()

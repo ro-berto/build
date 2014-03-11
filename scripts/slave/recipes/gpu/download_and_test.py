@@ -43,7 +43,7 @@ def GenSteps(api):
     if not api.properties.get('skip_checkout', False):
       yield api.gpu.checkout_steps()
     else:
-      api.path.set_dynamic_path('checkout', api.path.slave_build('src'))
+      api.path.set_dynamic_path('checkout', api.path['slave_build'].join('src'))
     yield api.gpu.download_steps()
   yield api.gpu.test_steps()
 

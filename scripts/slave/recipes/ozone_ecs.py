@@ -71,7 +71,7 @@ def GenSteps(api):
   yield api.chromium.runhooks()
   yield api.chromium.compile(['content_shell'], name='compile content_shell')
 
-  yield api.python('check ecs deps', api.path.checkout('tools',
+  yield api.python('check ecs deps', api.path['checkout'].join('tools',
       'check_ecs_deps', 'check_ecs_deps.py'),
       can_fail_build=False,
       cwd=api.chromium.c.build_dir(api.chromium.c.build_config_fs))

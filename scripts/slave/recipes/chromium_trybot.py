@@ -197,7 +197,7 @@ def GenSteps(api):
       ]
       return api.python(
           self._step_name(suffix),
-          api.path.checkout('chrome',
+          api.path['checkout'].join('chrome',
                             'test',
                             'nacl_test_injection',
                             'buildbot_nacl_integration.py'),
@@ -226,7 +226,7 @@ def GenSteps(api):
     api.rietveld.apply_issue(),
     api.json.read(
       'read test spec',
-      api.path.checkout('testing', 'buildbot', 'chromium_trybot.json'),
+      api.path['checkout'].join('testing', 'buildbot', 'chromium_trybot.json'),
       step_test_data=lambda: api.json.test_api.output([])),
     api.chromium.runhooks(),
   )

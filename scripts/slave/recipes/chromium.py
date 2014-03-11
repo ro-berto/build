@@ -132,10 +132,10 @@ class NaclIntegrationTest(object):
     ]
     return api.python(
         'nacl_integration',
-        api.path.checkout('chrome',
-                          'test',
-                          'nacl_test_injection',
-                          'buildbot_nacl_integration.py'),
+        api.path['checkout'].join('chrome',
+                                  'test',
+                                  'nacl_test_injection',
+                                  'buildbot_nacl_integration.py'),
         args)
 
   @staticmethod
@@ -1417,7 +1417,7 @@ def GenSteps(api):
 
   yield api.json.read(
       'read test spec',
-      api.path.checkout('testing', 'buildbot', '%s.json' % mastername),
+      api.path['checkout'].join('testing', 'buildbot', '%s.json' % mastername),
       step_test_data=lambda: api.json.test_api.output({})),
   yield api.chromium.cleanup_temp()
 
@@ -1473,8 +1473,8 @@ def GenSteps(api):
     if api.platform.is_win:
       steps.append(api.python(
         'start_crash_service',
-        api.path.build('scripts', 'slave', 'chromium',
-                       'run_crash_handler.py'),
+        api.path['build'].join('scripts', 'slave', 'chromium',
+                               'run_crash_handler.py'),
         ['--target', api.chromium.c.build_config_fs]))
 
     steps.extend([t.run(api) for t in bot_config['tests']])
@@ -1482,7 +1482,7 @@ def GenSteps(api):
     if api.platform.is_win:
       steps.append(api.python(
         'process_dumps',
-        api.path.build('scripts', 'slave', 'process_dumps.py'),
+        api.path['build'].join('scripts', 'slave', 'process_dumps.py'),
         ['--target', api.chromium.c.build_config_fs]))
 
   # For non-trybot recipes we should know (seed) all steps in advance,

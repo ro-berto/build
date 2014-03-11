@@ -28,7 +28,7 @@ def GenSteps(api):
   api.step.auto_resolve_conflicts = True
 
   # Paths and other constants
-  build_root = api.path.slave_build()
+  build_root = api.path['slave_build']
 
   # Android tools DEPS
   android_tools_root = build_root('android_tools')
@@ -88,7 +88,8 @@ def GenSteps(api):
 
   yield api.python(
       'transfer_files',
-      api.path.build('scripts', 'slave', 'android', 'transfer_files.py'),
+      api.path['build'].join('scripts', 'slave', 'android',
+                             'transfer_files.py'),
       args=[adb, DEVICE_ROOT, test_data])
 
   lib_root = build_root('libs', 'armeabi-v7a')

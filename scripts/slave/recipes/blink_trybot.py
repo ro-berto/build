@@ -151,8 +151,8 @@ def GenSteps(api):
     name = 'webkit_tests'
 
     def __init__(self):
-      self.results_dir = api.path.slave_build('layout-test-results')
-      self.layout_test_wrapper = api.path.build(
+      self.results_dir = api.path['slave_build'].join('layout-test-results')
+      self.layout_test_wrapper = api.path['build'].join(
           'scripts', 'slave', 'chromium', 'layout_test_wrapper.py')
 
     def run(self, suffix):
@@ -190,15 +190,15 @@ def GenSteps(api):
         buildnumber = api.properties['buildnumber']
         def archive_webkit_tests_results_followup(step_result):
           base = (
-              "https://storage.googleapis.com/chromium-layout-test-archives/%s/%s" %
-              (buildername, buildnumber))
+            "https://storage.googleapis.com/chromium-layout-test-archives/%s/%s"
+            % (buildername, buildnumber))
 
           step_result.presentation.links['layout_test_results'] = (
               base + '/layout-test-results/results.html')
           step_result.presentation.links['(zip)'] = (
               base + '/layout-test-results.zip')
 
-        archive_layout_test_results = api.path.build(
+        archive_layout_test_results = api.path['build'].join(
             'scripts', 'slave', 'chromium', 'archive_layout_test_results.py')
 
         yield api.python(
@@ -233,10 +233,10 @@ def GenSteps(api):
   api.gclient.set_config('blink_internal')
   api.step.auto_resolve_conflicts = True
 
-  webkit_lint = api.path.build('scripts', 'slave', 'chromium',
-                               'lint_test_files_wrapper.py')
-  webkit_python_tests = api.path.build('scripts', 'slave', 'chromium',
-                                       'test_webkitpy_wrapper.py')
+  webkit_lint = api.path['build'].join('scripts', 'slave', 'chromium',
+                                       'lint_test_files_wrapper.py')
+  webkit_python_tests = api.path['build'].join('scripts', 'slave', 'chromium',
+                                               'test_webkitpy_wrapper.py')
 
   root = api.rietveld.calculate_issue_root()
 
@@ -250,11 +250,11 @@ def GenSteps(api):
   if not bot_config['compile_only']:
     steps.extend([
       api.python('webkit_lint', webkit_lint, [
-        '--build-dir', api.path.checkout('out'),
+        '--build-dir', api.path['checkout'].join('out'),
         '--target', api.chromium.c.BUILD_CONFIG
       ]),
       api.python('webkit_python_tests', webkit_python_tests, [
-        '--build-dir', api.path.checkout('out'),
+        '--build-dir', api.path['checkout'].join('out'),
         '--target', api.chromium.c.BUILD_CONFIG,
       ]),
       api.chromium.runtest('webkit_unit_tests', xvfb=True),

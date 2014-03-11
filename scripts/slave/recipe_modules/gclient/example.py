@@ -25,7 +25,7 @@ def GenSteps(api):
   bl_cfg.got_revision_mapping['src/blatley'] = 'got_blatley_revision'
   yield api.gclient.checkout(
       gclient_config=bl_cfg,
-      cwd=api.path.slave_build('src', 'third_party'))
+      cwd=api.path['slave_build'].join('src', 'third_party'))
 
 
 def GenTests(api):

@@ -11,7 +11,8 @@ DEPS = [
 
 def GenSteps(api):
   yield api.step('gatekeeper_launch',
-                 [api.path.build('scripts', 'slave', 'gatekeeper_launch.py')])
+                 [api.path['build'].join('scripts', 'slave',
+                                         'gatekeeper_launch.py')])
 
 def GenTests(api):
   yield api.test('basic')

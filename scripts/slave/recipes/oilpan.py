@@ -51,7 +51,7 @@ def GenSteps(api):
   api.chromium.c.gyp_env.GYP_DEFINES['linux_strip_binary'] = 1
   api.chromium.c.gyp_env.GYP_DEFINES['target_arch'] = 'x64'
 
-  patch_exe = api.path.slave_build('src', 'third_party', 'WebKit',
+  patch_exe = api.path['slave_build'].join('src', 'third_party', 'WebKit',
                                    'Source', 'apply_oilpan_patches.py')
 
   yield api.gclient.checkout(revert=True)
@@ -64,7 +64,7 @@ def GenSteps(api):
   if api.chromium.c.HOST_PLATFORM == 'linux':
     build_exe = api.chromium.c.build_dir(api.chromium.c.build_config_fs,
                                          platform_ext={'win': '.exe'})
-    test_dir = api.path.slave_build('test')
+    test_dir = api.path['slave_build'].join('test')
     api.gclient.set_config('oilpan_internal', **config_vals)
     api.gclient.spec_alias = 'test_checkout'
     api.gclient.c.solutions[0].revision = 'HEAD'
@@ -84,13 +84,13 @@ def GenSteps(api):
       args=[build_exe('minidump_stackwalk'), test_out_dir]
     )
 
-    results_dir = api.path.slave_build('layout-test-results')
-    test = api.path.build('scripts', 'slave', 'chromium',
+    results_dir = api.path['slave_build'].join('layout-test-results')
+    test = api.path['build'].join('scripts', 'slave', 'chromium',
                           'layout_test_wrapper.py')
     args = ['--target', api.chromium.c.BUILD_CONFIG,
             '-o', results_dir,
             '--additional-expectations',
-            api.path.checkout('third_party', 'WebKit', 'LayoutTests',
+            api.path['checkout'].join('third_party', 'WebKit', 'LayoutTests',
                               'OilpanExpectations'),
             '--build-dir', api.chromium.c.build_dir]
     yield api.chromium.runtest(test, args, name='webkit_tests')

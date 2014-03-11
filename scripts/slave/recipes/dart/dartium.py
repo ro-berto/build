@@ -72,16 +72,16 @@ def GenSteps(api):
 
   # gclient api incorrectly sets Path('[CHECKOUT]') to build/src/dartium.deps
   # because Dartium has its DEPS file in dartium.deps, not directly in src.
-  api.path.set_dynamic_path('checkout', api.path.slave_build(('src')))
+  api.path.set_dynamic_path('checkout', api.path['slave_build'].join(('src')))
 
   yield api.chromium.runhooks()
   yield api.python('fetch_reference_build',
-                   api.path.checkout('dart', 'tools', 'bots',
+                   api.path['checkout'].join('dart', 'tools', 'bots',
                                      'fetch_reference_build.py'))
   yield api.chromium.compile()
 
-  results_dir = api.path.slave_build('layout-test-results')
-  test = api.path.build('scripts', 'slave', 'chromium',
+  results_dir = api.path['slave_build'].join('layout-test-results')
+  test = api.path['build'].join('scripts', 'slave', 'chromium',
                         'layout_test_wrapper.py')
   args = ['--target', api.chromium.c.BUILD_CONFIG,
           '-o', results_dir,
@@ -107,7 +107,7 @@ def GenSteps(api):
     'target':  'Release',
     'target_os':  None,
     'target_platform':  target_platform,
-    'tools_dir':  str(api.path.slave_build('src', 'tools')),
+    'tools_dir':  str(api.path['slave_build'].join('src', 'tools')),
   }
   if 'reference_build_executable' in api.properties:
     factory_properties['reference_build_executable'] = api.properties[
