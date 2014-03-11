@@ -39,3 +39,15 @@ def GenTests(api):
           buildnumber=571) +
         api.platform.name(plat)
       )
+
+  # Test one configuration where it's expected that top-of-tree ANGLE
+  # will be used.
+  yield (
+    api.test('win_release_tot_angle') +
+    api.properties.scheduled(
+      build_config='Release',
+      mastername='chromium.gpu.fyi',
+      buildername='win release tot angle builder',
+      buildnumber=572) +
+    api.platform.name('win')
+  )

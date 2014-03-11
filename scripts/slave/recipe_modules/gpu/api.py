@@ -64,6 +64,11 @@ class GpuApi(recipe_api.RecipeApi):
     if self._use_isolates:
       self.m.isolate.set_isolate_environment(self.m.chromium.c)
 
+    # The FYI waterfall is being used to test top-of-tree ANGLE with
+    # Chromium on all platforms.
+    if self._is_fyi_waterfall:
+      self.m.gclient.c.solutions[0].custom_vars['angle_revision'] = 'HEAD'
+
   @property
   def _build_revision(self):
     """Returns the revision of the current build. The pixel and maps
@@ -120,6 +125,11 @@ class GpuApi(recipe_api.RecipeApi):
     results. See the documentation of the --master-class-name argument
     to runtest.py for full documentation."""
     return self.m.properties.get('master_class_name_for_testing')
+
+  @property
+  def _is_fyi_waterfall(self):
+    """Indicates whether the recipe is running on the GPU FYI waterfall."""
+    return self.m.properties['mastername'] == 'chromium.gpu.fyi'
 
   @property
   def using_isolates(self):
