@@ -67,7 +67,8 @@ class GpuApi(recipe_api.RecipeApi):
     # The FYI waterfall is being used to test top-of-tree ANGLE with
     # Chromium on all platforms.
     if self._is_fyi_waterfall:
-      self.m.gclient.c.solutions[0].custom_vars['angle_revision'] = 'HEAD'
+      self.m.gclient.c.solutions[0].custom_vars['angle_revision'] = (
+          'refs/remotes/origin/master')
 
   @property
   def _build_revision(self):
