@@ -596,9 +596,12 @@ def RemoveChromeTemporaryFiles():
 
 
 def WriteLogLines(logname, lines, perf=None):
+  logname = logname.rstrip()
+  lines = [line.rstrip() for line in lines]
   for line in lines:
     print '@@@STEP_LOG_LINE@%s@%s@@@' % (logname, line)
   if perf:
+    perf = perf.rstrip()
     print '@@@STEP_LOG_END_PERF@%s@%s@@@' % (logname, perf)
   else:
     print '@@@STEP_LOG_END@%s@@@' % logname
