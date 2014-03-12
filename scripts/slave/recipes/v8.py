@@ -52,7 +52,8 @@ BUILDERS = {
   'client.v8': {
     'builders': {
       'V8 Linux - shared': {
-        'recipe_config': 'v8_shared_library',
+        'recipe_config': 'v8',
+        'chromium_apply_config': ['shared_library'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -70,16 +71,16 @@ BUILDERS = {
       # This builder is used as a staging area for builders on the main
       # waterfall to be switched to recipes.
       'V8 Linux - recipe': {
-        'recipe_config': 'v8_shared_library',
+        'recipe_config': 'v8',
+        'gclient_apply_config': ['clang'],
+        'chromium_apply_config': ['clang'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
         'tests': [
           V8Test('v8testing'),
-          V8Test('test262'),
-          V8Test('mozilla'),
         ],
         'testing': {
           'platform': 'linux',
@@ -92,10 +93,6 @@ BUILDERS = {
 RECIPE_CONFIGS = {
   'v8': {
     'v8_config': 'v8',
-  },
-  'v8_shared_library': {
-    'v8_config': 'v8',
-    'chromium_apply_config': ['shared_library'],
   },
 }
 
@@ -117,7 +114,9 @@ def GenSteps(api):
                     optional=True,
                     **bot_config.get('v8_config_kwargs', {}))
 
-  for c in recipe_config.get('chromium_apply_config', []):
+  for c in bot_config.get('gclient_apply_config', []):
+    api.gclient.apply_config(c)
+  for c in bot_config.get('chromium_apply_config', []):
     api.chromium.apply_config(c)
 
   # Test-specific configurations.
@@ -126,11 +125,12 @@ def GenSteps(api):
       api.gclient.apply_config(c)
 
   yield api.v8.checkout()
+  steps = [api.v8.runhooks()]
 
-  steps = [
-    api.v8.runhooks(),
-    api.v8.compile(),
-  ]
+  if 'clang' in bot_config.get('gclient_apply_config', []):
+    steps.append(api.v8.update_clang())
+
+  steps.append(api.v8.compile())
   steps.extend([t.run(api) for t in bot_config.get('tests', [])])
   yield steps
 

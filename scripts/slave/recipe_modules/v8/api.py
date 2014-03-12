@@ -4,12 +4,29 @@
 
 from slave import recipe_api
 
+
+# TODO(machenbach): This is copied from gclient's config.py and should be
+# unified somehow.
+def ChromiumSvnSubURL(c, *pieces):
+  BASES = ('https://src.chromium.org',
+           'svn://svn-mirror.golo.chromium.org')
+  return '/'.join((BASES[c.USE_MIRROR],) + pieces)
+
+
 class V8Api(recipe_api.RecipeApi):
   def checkout(self):
     return self.m.gclient.checkout()
 
   def runhooks(self, **kwargs):
     return self.m.chromium.runhooks(**kwargs)
+
+  def update_clang(self):
+    # TODO(machenbach): Implement this for windows or unify with chromium's
+    # update clang step as soon as it exists.
+    return self.m.step(
+        'update clang',
+        [self.m.path.checkout('tools', 'clang', 'scripts', 'update.sh')],
+        env={'LLVM_URL': ChromiumSvnSubURL(self.m.gclient.c, 'llvm-project')})
 
   def compile(self):
     return self.m.chromium.compile()
