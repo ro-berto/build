@@ -99,7 +99,6 @@ mac_asan_tests_1 = [
   'content_browsertests',
   'content_unittests',
   'crypto_unittests',
-  'googleurl',
   'gpu_unittests',
   'ipc_tests',
   'jingle',
@@ -108,6 +107,7 @@ mac_asan_tests_1 = [
   'printing',
   'remoting',
   'unit_sql',
+  'url_unittests',
 ]
 
 mac_asan_tests_2 = [

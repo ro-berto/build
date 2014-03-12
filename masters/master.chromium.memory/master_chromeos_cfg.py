@@ -133,13 +133,13 @@ asan_tests_1 = [
   'content_browsertests',
   'crypto_unittests',
   'events',
-  'googleurl',
   'gpu',
   'jingle',
   'media',
   'ppapi_unittests',
   'printing',
   'remoting',
+  'url_unittests',
   'views',
 ]
 

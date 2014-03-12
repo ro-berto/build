@@ -140,12 +140,12 @@ F('linux_asan_rel_tests_2', linux().ChromiumASANFactory(
     build_url=linux_asan_archive,
     tests=[
       'browser_tests',
-      'googleurl',
       'media',
       'ppapi_unittests',
       'printing',
       'remoting',
       'unit',
+      'url_unittests',
     ],
     factory_properties={
       'asan': True,
