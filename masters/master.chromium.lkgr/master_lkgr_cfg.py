@@ -171,7 +171,7 @@ asan_ia32_v8_arm = ('asan=1 linux_use_tcmalloc=0 disable_nacl=1 '
 asan_ia32_v8_arm_rel_sym = ('%s release_extra_cflags="-gline-tables-only -O1 '
                             '-fno-inline-functions -fno-inline"' %
                             asan_ia32_v8_arm)
-asan_ia32_v8_arm_rel = ('%s release_extra_cflags="-gline-tables-only' %
+asan_ia32_v8_arm_rel = ('%s release_extra_cflags="-gline-tables-only"' %
                         asan_ia32_v8_arm)
 
 # The build process is described at
