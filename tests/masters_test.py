@@ -61,7 +61,8 @@ def test_master(master, path, name, ports):
     return False
   logging.info('%s Starting', master)
   start = time.time()
-  with BackupPaths(path, ['twistd.log', 'twistd.log.?', 'git_poller_*.git']):
+  with BackupPaths(path, ['twistd.log', 'twistd.log.?', 'git_poller_*.git',
+                          'state.sqlite']):
     try:
       if not masters_util.start_master(master, path, dry_run=True):
         return False

@@ -3692,3 +3692,40 @@ result, it parsed a file with a space in the name as separate files.
          d.addCallback(process)
          return d
 
+
+Cherry-pick change to allow serialization of sqlite access to de-flake unittests.
+See https://github.com/buildbot/buildbot/commit/2c58b952ae93c45ee5bfe37f6cf70043da8b5d70.
+
+diff --git a/third_party/buildbot_8_4p1/buildbot/db/enginestrategy.py b/third_party/buildbot_8_4p1/buildbot/db/enginestrategy.py
+index 3d05cb6..cb711ce 100644
+--- a/third_party/buildbot_8_4p1/buildbot/db/enginestrategy.py
++++ b/third_party/buildbot_8_4p1/buildbot/db/enginestrategy.py
+@@ -82,6 +82,11 @@ class BuildbotEngineStrategy(strategies.ThreadLocalEngineStrategy):
+             kwargs['pool_size'] = 1
+             max_conns = 1
+
++        # allow serializing access to the db
++        if 'serialize_access' in u.query:
++            u.query.pop('serialize_access')
++            max_conns = 1
++
+         return u, kwargs, max_conns
+
+     def set_up_sqlite_engine(self, u, engine):
+
+Enable serialized access from the above patch.
+
+diff --git a/third_party/buildbot_8_4p1/buildbot/master.py b/third_party/buildbot_8_4p1/buildbot/master.py
+index cbebc0f..9a1b6d0 100644
+--- a/third_party/buildbot_8_4p1/buildbot/master.py
++++ b/third_party/buildbot_8_4p1/buildbot/master.py
+@@ -315,7 +315,8 @@ class BuildMaster(service.MultiService):
+                 #change_source = config['change_source']
+
+                 # optional
+-                db_url = config.get("db_url", "sqlite:///state.sqlite")
++                db_url = config.get("db_url",
++                                    "sqlite:///state.sqlite?serialize_access=1")
+                 db_poll_interval = config.get("db_poll_interval", None)
+                 debugPassword = config.get('debugPassword')
+                 manhole = config.get('manhole')

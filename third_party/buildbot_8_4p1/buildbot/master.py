@@ -315,7 +315,8 @@ class BuildMaster(service.MultiService):
                 #change_source = config['change_source']
 
                 # optional
-                db_url = config.get("db_url", "sqlite:///state.sqlite")
+                db_url = config.get("db_url",
+                                    "sqlite:///state.sqlite?serialize_access=1")
                 db_poll_interval = config.get("db_poll_interval", None)
                 debugPassword = config.get('debugPassword')
                 manhole = config.get('manhole')
