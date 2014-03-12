@@ -30,16 +30,17 @@ class GSUtilApi(recipe_api.RecipeApi):
 
     return self.m.python(full_name, gsutil_path, cmd, **kwargs)
 
-  def upload(self, source, bucket, dest, args=None, add_link=True, **kwargs):
+  def upload(self, source, bucket, dest, args=None, link_name='gsutil.upload',
+             **kwargs):
     args = args or []
     full_dest = 'gs://%s/%s' % (bucket, dest)
     cmd = ['cp'] + args + [source, full_dest]
     name = kwargs.pop('name', 'upload')
 
-    if add_link:
+    if link_name:
       @recipe_util.wrap_followup(kwargs)
       def inline_followup(step_result):
-        step_result.presentation.links['gsutil.upload'] = (
+        step_result.presentation.links[link_name] = (
           'https://storage.cloud.google.com/%s/%s' % (bucket, dest)
         )
 
