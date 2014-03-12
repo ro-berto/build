@@ -19,6 +19,130 @@ DEPS = [
 
 
 BUILDERS = {
+  'tryserver.blink': {
+    'builders': {
+      'linux_blink_dbg': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'compile_only': False,
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'linux_blink_rel': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'compile_only': False,
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'linux_blink_compile_dbg': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'compile_only': True,
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'linux_blink_compile_rel': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'compile_only': True,
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'mac_blink_dbg': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'compile_only': False,
+        'testing': {
+          'platform': 'mac',
+        },
+      },
+      'mac_blink_rel': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'compile_only': False,
+        'testing': {
+          'platform': 'mac',
+        },
+      },
+      'mac_blink_compile_dbg': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'compile_only': True,
+        'testing': {
+          'platform': 'mac',
+        },
+      },
+      'mac_blink_compile_rel': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'compile_only': True,
+        'testing': {
+          'platform': 'mac',
+        },
+      },
+      'win_blink_dbg': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'compile_only': False,
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'win_blink_rel': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'compile_only': False,
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'win_blink_compile_dbg': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'compile_only': True,
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'win_blink_compile_rel': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'compile_only': True,
+        'testing': {
+          'platform': 'win',
+        },
+      },
+    },
+  },
   'tryserver.chromium': {
     'builders': {
       'linux_blink': {
