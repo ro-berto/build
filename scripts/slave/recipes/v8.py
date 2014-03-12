@@ -68,6 +68,22 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
+      'V8 Linux64 clang': {
+        'recipe_config': 'v8',
+        'gclient_apply_config': ['clang'],
+        'chromium_apply_config': ['clang'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': [
+          V8Test('v8testing'),
+        ],
+        'testing': {
+          'platform': 'linux',
+        },
+      },
       # This builder is used as a staging area for builders on the main
       # waterfall to be switched to recipes.
       'V8 Linux - recipe': {
