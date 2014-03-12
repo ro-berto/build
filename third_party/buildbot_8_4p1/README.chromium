@@ -3674,3 +3674,21 @@ index ebcf95f..01054ae 100644
      else:
          # illegal code, restore the CSI
          ansi_entry = "\033[" + ansi_entry
+         ]
+
+
+GitPoller used .split() instead of .split('\n') to split files. As a
+result, it parsed a file with a space in the name as separate files.
+
+--- a/third_party/buildbot_8_4p1/buildbot/changes/gitpoller.py
++++ b/third_party/buildbot_8_4p1/buildbot/changes/gitpoller.py
+@@ -200,7 +200,7 @@ class GitPoller(base.PollingChangeSource):
+         args = ['log', rev, '--name-only', '--no-walk', r'--format=%n']
+         d = utils.getProcessOutput(self.gitbin, args, path=self.workdir, env=os.environ, errortoo=False )
+         def process(git_output):
+-            fileList = git_output.split()
++            fileList = git_output.splitlines()
+             return fileList
+         d.addCallback(process)
+         return d
+
