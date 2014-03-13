@@ -731,15 +731,17 @@ class AnnotationObserver(buildstep.LogLineObserver):
 
   def headerReceived(self, data):
     if self.sections:
-      self.ensureStepIsStarted(self.cursor)
-      if self.cursor['log'].finished:
+      preamble = self.sections[0]
+      self.ensureStepIsStarted(preamble)
+      if preamble['log'].finished:
         # Silently discard message when a log is marked as finished.
         # TODO(maruel): Fix race condition?
         log.msg(
             'Received data unexpectedly on a finished build step log: %r' %
             data)
       else:
-        self.cursor['log'].addHeader(data)
+        preamble['log'].addHeader(data)
+
 
   def updateStepStatus(self, status):
     """Update current step status and annotation status based on a new event."""
