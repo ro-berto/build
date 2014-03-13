@@ -1435,6 +1435,19 @@ class ChromiumCommands(commands.FactoryCommands):
                      halt_on_failure=True, timeout=600,
                      do_step_if=self.TestStepFilter)
 
+  def AddBuildrunnerMiniInstallerTestStep(self, factory_properties,
+          target=None, buildbot_preset=None, timeout=1200):
+    target = target or self._target
+    cmd = [self._python, self._mini_installer_tests_tool,
+           '--target', target]
+    if buildbot_preset is not None:
+      cmd.extend(['--buildbot', buildbot_preset])
+
+    self.AddBuildrunnerTestStep(chromium_step.AnnotatedCommand,
+                                'test_mini_installer', cmd,
+                                halt_on_failure=True, timeout=timeout,
+                                do_step_if=self.TestStepFilter)
+
   def AddTriggerSwarmingTests(self, run_default_swarm_tests,
                               factory_properties):
     """Prepares a build to be run on the builder specified by
