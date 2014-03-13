@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import os
+
 from slave import recipe_api
 
 class AndroidApi(recipe_api.RecipeApi):
@@ -41,15 +43,21 @@ class AndroidApi(recipe_api.RecipeApi):
 
     self.set_config(config_name, **kwargs)
 
-  def make_zip_archive(self, step_name, zip_file, paths, **kwargs):
-    assert isinstance(paths, list)
-    assert len(paths)
+  def make_zip_archive(self, step_name, zip_file, files, keep_dirs=True,
+      **kwargs):
+    assert isinstance(files, list)
+    assert len(files)
+
+    zip_vars = '-yr1'
+    if not keep_dirs:
+      zip_vars += 'j'
+
     # We want to store symbolic links as links, recurse into directories,
     # and compress fast. Hence we pass -yr1 options to zip which are indicative
     # of these requirements.
     yield self.m.step(
         step_name,
-        ['zip', '-yr1', zip_file] + paths,
+        ['zip', zip_vars, zip_file] + files,
         **kwargs
     )
 
@@ -219,11 +227,20 @@ class AndroidApi(recipe_api.RecipeApi):
     if self.c.storage_bucket:
       bucket=self.c.storage_bucket
       dest='asan-android-release-' + self.m.properties.get('revision') + '.zip'
+
+    path = self.m.chromium.c.BUILD_CONFIG
+    files = [path]
+    keep_dirs = True
+    if (self.c.archive_clusterfuzz):
+      files = [os.path.join(path, 'apks'), os.path.join(path, 'lib/*.so')]
+      keep_dirs = False
+
     yield self.make_zip_archive(
-        'zip_build_product',
-         zipfile,
-         [self.m.chromium.c.BUILD_CONFIG],
-         cwd=self.m.path.checkout('out')
+      'zip_build_product',
+      zipfile,
+      files,
+      keep_dirs,
+      cwd=self.m.path.checkout('out')
     )
     yield self.m.gsutil.upload(
         name='upload_build_product',

@@ -34,6 +34,7 @@ def BaseConfig(INTERNAL, REPO_NAME, REPO_URL, BUILD_CONFIG='Debug', **_kwargs):
     internal_dir = Single(Path),
     gclient_custom_deps = Single(Dict(value_type=basestring)), # possibly wrong
     storage_bucket = Single(basestring),
+    archive_clusterfuzz = Single(bool, required=False, empty_val=False),
   )
 
 
@@ -73,6 +74,7 @@ def clang_builder(c):
 @config_ctx(config_vars={'BUILD_CONFIG': 'Release'})
 def clang_release_builder(c):
   c.storage_bucket = 'chrome-test-builds/android'
+  c.archive_clusterfuzz = True
 
 @config_ctx()
 def component_builder(c):
