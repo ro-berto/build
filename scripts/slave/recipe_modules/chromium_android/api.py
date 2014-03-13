@@ -239,7 +239,7 @@ class AndroidApi(recipe_api.RecipeApi):
     files = [path]
     keep_dirs = True
     if (self.c.archive_clusterfuzz):
-      files = [os.path.join(path, 'apks'), os.path.join(path, 'lib/*.so')]
+      files = [os.path.join(path, 'apks'), os.path.join(path, 'lib')]
       keep_dirs = False
 
     yield self.make_zip_archive(
