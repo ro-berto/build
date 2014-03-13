@@ -3729,3 +3729,18 @@ index cbebc0f..9a1b6d0 100644
                  db_poll_interval = config.get("db_poll_interval", None)
                  debugPassword = config.get('debugPassword')
                  manhole = config.get('manhole')
+
+Fix to file parsing. GitPoller produced blank lines
+
+--- a/third_party/buildbot_8_4p1/buildbot/changes/gitpoller.py
++++ b/third_party/buildbot_8_4p1/buildbot/changes/gitpoller.py
+@@ -200,7 +200,8 @@ class GitPoller(base.PollingChangeSource):
+         args = ['log', rev, '--name-only', '--no-walk', r'--format=%n']
+         d = utils.getProcessOutput(self.gitbin, args, path=self.workdir, env=os.environ, errortoo=False )
+         def process(git_output):
+-            fileList = git_output.splitlines()
++            fileList = [f.strip() for f in git_output.splitlines()]
++            fileList = [f for f in fileList if f]
+             return fileList
+         d.addCallback(process)
+         return d

@@ -200,7 +200,8 @@ class GitPoller(base.PollingChangeSource):
         args = ['log', rev, '--name-only', '--no-walk', r'--format=%n']
         d = utils.getProcessOutput(self.gitbin, args, path=self.workdir, env=os.environ, errortoo=False )
         def process(git_output):
-            fileList = git_output.splitlines()
+            fileList = [f.strip() for f in git_output.splitlines()]
+            fileList = [f for f in fileList if f]
             return fileList
         d.addCallback(process)
         return d
