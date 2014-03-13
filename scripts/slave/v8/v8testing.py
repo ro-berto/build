@@ -29,6 +29,9 @@ def main():
 
   option_parser = optparse.OptionParser()
 
+  option_parser.add_option("--asan",
+                           help="Regard test expectations for ASAN",
+                           default=False, action="store_true")
   option_parser.add_option('', '--testname',
                            default=None,
                            help='The test to run'
@@ -101,6 +104,8 @@ def main():
       cmd.extend(options.testname)
     else:
       options.testname = []
+    if options.asan:
+      cmd.extend(['--asan'])
     if options.buildbot == 'True':
       cmd.extend(['--buildbot'])
     if options.no_presubmit:

@@ -32,6 +32,7 @@ class V8Api(recipe_api.RecipeApi):
     return self.m.chromium.compile()
 
   def _runtest(self, name, tests, flaky_tests=None):
+    env = {}
     full_args = [
       '--target', self.m.chromium.c.build_config_fs,
       '--arch', self.m.chromium.c.gyp_env.GYP_DEFINES['target_arch'],
@@ -40,11 +41,19 @@ class V8Api(recipe_api.RecipeApi):
     if flaky_tests:
       full_args += ['--flaky-tests', flaky_tests]
 
+    # Arguments and environment for asan builds:
+    if self.m.chromium.c.gyp_env.GYP_DEFINES.get('asan') == 1:
+      full_args.append('--asan')
+      env['ASAN_SYMBOLIZER_PATH'] = self.m.path.checkout(
+          'third_party', 'llvm-build', 'Release+Asserts', 'bin',
+          'llvm-symbolizer')
+
     return self.m.python(
       name,
       self.m.path.build('scripts', 'slave', 'v8', 'v8testing.py'),
       full_args,
       cwd=self.m.path.checkout(),
+      env=env,
     )
 
   def runtest(self, test):

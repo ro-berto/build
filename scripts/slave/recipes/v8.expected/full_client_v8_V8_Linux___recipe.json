@@ -44,7 +44,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "clang=1 target_arch=x64 v8_target_arch=x64"
+      "GYP_DEFINES": "asan=1 clang=1 linux_use_tcmalloc=0 lsan=0 target_arch=x64 v8_target_arch=x64"
     },
     "name": "gclient runhooks",
     "seed_steps": [
@@ -94,9 +94,13 @@
       "--testname",
       "mjsunit cctest message preparser",
       "--flaky-tests",
-      "skip"
+      "skip",
+      "--asan"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
+    "env": {
+      "ASAN_SYMBOLIZER_PATH": "[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+    },
     "name": "Check"
   },
   {
@@ -111,9 +115,13 @@
       "--testname",
       "mjsunit cctest message preparser",
       "--flaky-tests",
-      "run"
+      "run",
+      "--asan"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
+    "env": {
+      "ASAN_SYMBOLIZER_PATH": "[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+    },
     "name": "Check - flaky"
   }
 ]

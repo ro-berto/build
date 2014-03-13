@@ -17,3 +17,8 @@ def v8(c):
   c.build_dir = Path('[CHECKOUT]')
 
   c.compile_py.build_tool = 'make'
+
+
+@CONFIG_CTX(includes=['v8'])
+def no_lsan(c):
+  c.gyp_env.GYP_DEFINES['lsan'] = 0
