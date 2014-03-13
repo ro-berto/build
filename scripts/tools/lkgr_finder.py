@@ -453,6 +453,7 @@ V8_LKGR_STEPS = {
     'V8 Arm - debug': V8_CHECK + ['OptimizeForSize', 'Webkit'],
     'V8 Linux - arm - sim': V8_CHECK + ['Test262', 'Mozilla'],
     'V8 Linux - arm - sim - debug': V8_CHECK + ['Test262', 'Mozilla'],
+    'V8 Linux - a64 - sim': V8_CHECK + ['Webkit', 'Test262', 'Mozilla'],
     'V8 GC Stress - 1': V8_GC,
     'V8 GC Stress - 2': V8_GC,
     'V8 GC Stress - 3': V8_GC,
