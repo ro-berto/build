@@ -21,7 +21,7 @@ class ChromiteApi(recipe_api.RecipeApi):
   def cros_sdk(self, name, cmd, flags=None, chromite_path=None, **kwargs):
     """Return a step to run a command inside the cros_sdk."""
     chromite_path = (chromite_path or
-                     self.m.path.slave_build(self.chromite_subpath))
+                     self.m.path['slave_build'].join(self.chromite_subpath))
 
     chroot_cmd = self.m.path.join(chromite_path, 'bin', 'cros_sdk')
 

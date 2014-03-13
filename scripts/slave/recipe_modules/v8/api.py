@@ -50,10 +50,10 @@ class V8Api(recipe_api.RecipeApi):
 
     return self.m.python(
       name,
-      self.m.path.build('scripts', 'slave', 'v8', 'v8testing.py'),
+      self.m.path['build'].join('scripts', 'slave', 'v8', 'v8testing.py'),
       full_args,
-      cwd=self.m.path.checkout(),
-      env=env,
+      cwd=self.m.path['checkout'],
+      env=env
     )
 
   def runtest(self, test):

@@ -16,7 +16,7 @@ class ArchiveApi(recipe_api.RecipeApi):
     args.extend(self.m.json.property_args())
     return self.m.python(
       step_name,
-      self.m.path.build('scripts', 'slave', 'zip_build.py'),
+      self.m.path['build'].join('scripts', 'slave', 'zip_build.py'),
       args,
       **kwargs
     )
@@ -30,7 +30,7 @@ class ArchiveApi(recipe_api.RecipeApi):
     args.extend(self.m.json.property_args())
     return self.m.python(
       step_name,
-      self.m.path.build('scripts', 'slave', 'extract_build.py'),
+      self.m.path['build'].join('scripts', 'slave', 'extract_build.py'),
       args,
       **kwargs
     )

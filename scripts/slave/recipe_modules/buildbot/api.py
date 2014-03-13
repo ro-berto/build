@@ -10,7 +10,7 @@ class BuildbotApi(recipe_api.RecipeApi):
     # TODO(iannucci): Also do taskkill?
     return self.m.python(
       'cleanup temp',
-      self.m.path.build('scripts', 'slave', 'cleanup_temp.py')
+      self.m.path['build'].join('scripts', 'slave', 'cleanup_temp.py')
     )
 
   def copy_parent_got_revision_to_got_revision(self):

@@ -16,9 +16,10 @@ class BaseAndroidApi(recipe_api.RecipeApi):
     exception for the GYP_* variables, which are excluded to avoid confusion
     with settings in the chromium recipe module config.
     """
-    envsetup_cmd = [self.m.path.checkout('build', 'android', 'envsetup.sh')]
+    envsetup_cmd = [self.m.path['checkout'].join('build', 'android',
+                                                 'envsetup.sh')]
 
-    cmd = ([self.m.path.build('scripts', 'slave', 'env_dump.py'),
+    cmd = ([self.m.path['build'].join('scripts', 'slave', 'env_dump.py'),
             '--output-json', self.m.json.output()] + envsetup_cmd)
     yield self.m.step('envsetup', cmd, env=self._env)
 
@@ -33,7 +34,7 @@ class BaseAndroidApi(recipe_api.RecipeApi):
     return self.m.chromium.compile(env=self._env)
 
   def test_runner(self, test):
-    script = self.m.path.checkout('build', 'android', 'test_runner.py')
+    script = self.m.path['checkout'].join('build', 'android', 'test_runner.py')
     args = ['gtest', '-s', test, '--verbose']
     if self.m.chromium.c.BUILD_CONFIG == 'Release':
       args += ['--release']

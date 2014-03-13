@@ -10,7 +10,8 @@ class AdbApi(recipe_api.RecipeApi):
     self._devices = None
 
   def _adb_path(self):
-    return str(self.m.path.build_internal('scripts', 'slave', 'android', 'adb'))
+    return str(self.m.path['build_internal'].join('scripts', 'slave',
+                                                  'android', 'adb'))
 
   def list_devices(self):
     cmd = [

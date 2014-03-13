@@ -26,7 +26,9 @@ class GSUtilApi(recipe_api.RecipeApi):
       name = (t for t in cmd if not t.startswith('-')).next()
     full_name = 'gsutil ' + name
 
-    gsutil_path = self.m.path.depot_tools('third_party', 'gsutil', 'gsutil')
+    gsutil_path = self.m.path['depot_tools'].join('third_party',
+                                                  'gsutil',
+                                                  'gsutil')
 
     return self.m.python(full_name, gsutil_path, cmd, **kwargs)
 

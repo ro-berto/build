@@ -12,10 +12,10 @@ class GitApi(recipe_api.RecipeApi):
     if args[0] == 'config' and not args[1].startswith('-'):
       name += ' ' + args[1]
     if 'cwd' not in kwargs:
-      kwargs.setdefault('cwd', self.m.path.checkout)
+      kwargs.setdefault('cwd', self.m.path['checkout'])
     git_cmd = 'git'
     if self.m.platform.is_win:
-      git_cmd = self.m.path.depot_tools('git.bat')
+      git_cmd = self.m.path['depot_tools'].join('git.bat')
     return self.m.step(name, [git_cmd] + list(args), **kwargs)
 
   def checkout(self, url, ref='master', dir_path=None, recursive=False,
@@ -38,7 +38,7 @@ class GitApi(recipe_api.RecipeApi):
       # ex: ssh://host:repo/foobar/.git
       dir_path = dir_path or dir_path.rsplit('/', 1)[-1]
 
-      dir_path = self.m.path.slave_build(dir_path)
+      dir_path = self.m.path['slave_build'].join(dir_path)
     self.m.path.set_dynamic_path('checkout', dir_path, overwrite=False)
 
     # git_setup.py always sets the repo at the given url as remote 'origin'.
@@ -51,11 +51,13 @@ class GitApi(recipe_api.RecipeApi):
 
     git_setup_args = ['--path', dir_path, '--url', url]
     if self.m.platform.is_win:
-      git_setup_args += ['--git_cmd_path', self.m.path.depot_tools('git.bat')]
+      git_setup_args += ['--git_cmd_path',
+                         self.m.path['depot_tools'].join('git.bat')]
 
     steps = [
       self.m.python('git setup',
-                    self.m.path.build('scripts', 'slave', 'git_setup.py'),
+                    self.m.path['build'].join('scripts', 'slave',
+                                              'git_setup.py'),
                     git_setup_args),
       self('fetch', remote, '%s:refs/remotes/%s' % (ref, remote_ref),
            *fetch_args, cwd=dir_path),

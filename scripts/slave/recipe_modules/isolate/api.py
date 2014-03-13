@@ -57,7 +57,8 @@ class IsolateApi(recipe_api.RecipeApi):
         self._manifest_hashes)
     return self.m.python(
       'manifest_to_hash',
-      self.m.path.build('scripts', 'slave', 'swarming', 'manifest_to_hash.py'),
+      self.m.path['build'].join('scripts', 'slave', 'swarming',
+                                'manifest_to_hash.py'),
       ['--target', self.m.chromium.c.build_config_fs,
        '--output-json', self.m.json.output(),
       ] + targets,
@@ -75,9 +76,10 @@ class IsolateApi(recipe_api.RecipeApi):
   def _run_isolated_path(self):
     """Returns the path to run_isolated.py."""
     if self._using_separate_swarming_client:
-      return self.m.path.checkout('run_isolated.py')
+      return self.m.path['checkout'].join('run_isolated.py')
     else:
-      return self.m.path.checkout('tools', 'swarming_client', 'run_isolated.py')
+      return self.m.path['checkout'].join('tools', 'swarming_client',
+                                          'run_isolated.py')
 
   def runtest_args_list(self, test, args=None):
     """Returns the array of arguments for running the given test which has

@@ -16,8 +16,8 @@ class RietveldApi(recipe_api.RecipeApi):
 
   def apply_issue(self, *root_pieces):
     return self.m.python('apply_issue',
-        self.m.path.depot_tools('apply_issue.py'), [
-        '-r', self.m.path.checkout(*root_pieces),
+        self.m.path['depot_tools'].join('apply_issue.py'), [
+        '-r', self.m.path['checkout'].join(*root_pieces),
         '-i', self.m.properties['issue'],
         '-p', self.m.properties['patchset'],
         '-s', self.m.properties['rietveld'],

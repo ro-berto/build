@@ -13,7 +13,8 @@ class AOSPApi(recipe_api.RecipeApi):
 
   @property
   def with_lunch_command(self):
-    return [self.m.path.build('scripts', 'slave', 'android', 'with_lunch'),
+    return [self.m.path['build'].join('scripts', 'slave',
+                                      'android', 'with_lunch'),
             self.c.build_path,
             self.c.lunch_flavor]
 
@@ -30,10 +31,10 @@ class AOSPApi(recipe_api.RecipeApi):
     yield self.m.step(
       'calculate trimmed deps',
       [
-        self.m.path.checkout('android_webview', 'buildbot',
-                             'deps_whitelist.py'),
+        self.m.path['checkout'].join('android_webview', 'buildbot',
+                                     'deps_whitelist.py'),
         '--method', 'android_build',
-        '--path-to-deps', self.m.path.checkout('DEPS'),
+        '--path-to-deps', self.m.path['checkout'].join('DEPS'),
         '--output-json', self.m.json.output()
       ],
       step_test_data=self.test_api.calculate_trimmed_deps
@@ -51,16 +52,17 @@ class AOSPApi(recipe_api.RecipeApi):
     yield self.m.gclient.runhooks(env={'GYP_CHROMIUM_NO_ACTION': 1})
 
   def lastchange_steps(self):
-    lastchange_command = self.m.path.checkout('build', 'util', 'lastchange.py')
+    lastchange_command = self.m.path['checkout'].join('build', 'util',
+                                                      'lastchange.py')
     yield (
       self.m.step('Chromium LASTCHANGE', [
         lastchange_command,
-        '-o', self.m.path.checkout('build', 'util', 'LASTCHANGE'),
-        '-s', self.m.path.checkout]),
+        '-o', self.m.path['checkout'].join('build', 'util', 'LASTCHANGE'),
+        '-s', self.m.path['checkout']]),
       self.m.step('Blink LASTCHANGE', [
         lastchange_command,
-        '-o', self.m.path.checkout('build', 'util', 'LASTCHANGE.blink'),
-        '-s', self.m.path.checkout('third_party', 'WebKit')])
+        '-o', self.m.path['checkout'].join('build', 'util', 'LASTCHANGE.blink'),
+        '-s', self.m.path['checkout'].join('third_party', 'WebKit')])
     )
 
   # TODO(iannucci): Refactor repo stuff into another module?
@@ -85,8 +87,8 @@ class AOSPApi(recipe_api.RecipeApi):
     # The copy of repo from depot_tools is only used to bootstrap the Android
     # tree checkout.
     repo_in_android_path = self.c.build_path('.repo', 'repo', 'repo')
-    repo_copy_dir = self.m.path.slave_build('repo_copy')
-    repo_copy_path = self.m.path.slave_build('repo_copy', 'repo')
+    repo_copy_dir = self.m.path['slave_build'].join('repo_copy')
+    repo_copy_path = self.m.path['slave_build'].join('repo_copy', 'repo')
     if self.m.path.exists(repo_in_android_path):
       yield self.m.path.makedirs('repo copy dir', repo_copy_dir)
       yield self.m.step('copy repo from Android', [
@@ -100,8 +102,8 @@ class AOSPApi(recipe_api.RecipeApi):
   def generate_local_manifest_step(self):
     yield self.m.step(
         'generate local manifest', [
-          self.m.path.checkout('android_webview', 'buildbot',
-                               'generate_local_manifest.py'),
+          self.m.path['checkout'].join('android_webview', 'buildbot',
+                                       'generate_local_manifest.py'),
           self.c.build_path,
           self.c.chromium_in_android_subpath])
 
@@ -131,17 +133,17 @@ class AOSPApi(recipe_api.RecipeApi):
                       ['rm', '-rf', self.c.slave_chromium_in_android_path])
     yield self.m.step('symlink chromium_org', [
       'ln', '-s',
-      self.m.path.checkout,
+      self.m.path['checkout'],
       self.c.slave_chromium_in_android_path]),
 
   def gyp_webview_step(self):
     yield self.m.step('gyp_webview', self.with_lunch_command + [
       self.c.slave_chromium_in_android_path('android_webview', 'tools',
                                             'gyp_webview')],
-      cwd=self.m.path.checkout)
+      cwd=self.m.path['checkout'])
 
   def incompatible_directories_check_step(self):
-    webview_license_tool_path = self.m.path.checkout(
+    webview_license_tool_path = self.m.path['checkout'].join(
         'android_webview', 'tools', 'webview_licenses.py')
     yield self.m.python('incompatible directories', webview_license_tool_path,
                         ['incompatible_directories'])
@@ -158,18 +160,19 @@ class AOSPApi(recipe_api.RecipeApi):
       targets.insert(0, defines_str)
 
     compiler_option = []
-    compile_script = [self.m.path.build('scripts', 'slave', 'compile.py')]
-    if use_goma and self.m.path.exists(self.m.path.build('goma')):
+    compile_script = [self.m.path['build'].join('scripts', 'slave',
+                                                'compile.py')]
+    if use_goma and self.m.path.exists(self.m.path['build'].join('goma')):
       compiler_option = ['--compiler', 'goma',
-                         '--goma-dir', self.m.path.build('goma')]
+                         '--goma-dir', self.m.path['build'].join('goma')]
     yield self.m.step(step_name,
                       envsetup +
                       compile_script +
                       targets +
-                      ['--build-dir', self.m.path.slave_build] +
+                      ['--build-dir', self.m.path['slave_build']] +
                       ['--src-dir', src_dir] +
                       ['--build-tool', build_tool] +
                       ['--verbose'] +
                       compiler_option,
-                      cwd=self.m.path.slave_build)
+                      cwd=self.m.path['slave_build'])
 

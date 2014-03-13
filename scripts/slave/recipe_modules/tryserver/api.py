@@ -51,7 +51,7 @@ class TryserverApi(recipe_api.RecipeApi):
 
       patch_cmd = [
         'patch',
-        '--dir', cwd or self.m.path.checkout(),
+        '--dir', cwd or self.m.path['checkout'],
         '--force',
         '--forward',
         '--input', patch_content,

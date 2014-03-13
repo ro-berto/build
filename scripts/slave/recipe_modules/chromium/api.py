@@ -59,7 +59,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     args = [
       '--target', self.c.build_config_fs,
-      '--src-dir', self.m.path.checkout,
+      '--src-dir', self.m.path['checkout'],
     ]
     if self.c.compile_py.build_tool:
       args += ['--build-tool', self.c.compile_py.build_tool]
@@ -76,7 +76,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     args.append('--')
     args.extend(targets)
     return self.m.python(name or 'compile',
-                         self.m.path.build('scripts', 'slave', 'compile.py'),
+                         self.m.path['build'].join('scripts', 'slave',
+                                                   'compile.py'),
                          args, abort_on_failure=abort_on_failure, **kwargs)
 
   @recipe_util.returns_placeholder
@@ -149,7 +150,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     return self.m.python(
       name or t_name,
-      self.m.path.build('scripts', 'slave', 'runtest.py'),
+      self.m.path['build'].join('scripts', 'slave', 'runtest.py'),
       full_args,
       **kwargs
     )
@@ -171,7 +172,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     env = {}
     if self.m.platform.is_linux:
       env['CHROME_DEVEL_SANDBOX'] = self.m.path.join(
-          '/opt', 'chromium', 'chrome_sandbox')
+        '/opt', 'chromium', 'chrome_sandbox')
 
     if not name:
       name = test
@@ -192,7 +193,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       test_args.extend(args)
 
     if not results_directory:
-      results_directory = self.m.path.slave_build('gtest-results', name)
+      results_directory = self.m.path['slave_build'].join('gtest-results', name)
 
     return self.runtest(
         runner,
@@ -211,7 +212,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
   def run_telemetry_unittests(self):
     return self.runtest(
-        self.m.path.checkout('tools', 'telemetry', 'run_tests'),
+        self.m.path['checkout'].join('tools', 'telemetry', 'run_tests'),
         args=['--browser=%s' % self.c.BUILD_CONFIG.lower()],
         annotate='gtest',
         name='telemetry_unittests',
@@ -221,7 +222,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
   def run_telemetry_perf_unittests(self):
     return self.runtest(
-        self.m.path.checkout('tools', 'perf', 'run_tests'),
+        self.m.path['checkout'].join('tools', 'perf', 'run_tests'),
         args=['--browser=%s' % self.c.BUILD_CONFIG.lower()],
         annotate='gtest',
         name='telemetry_perf_unittests',
@@ -239,12 +240,12 @@ class ChromiumApi(recipe_api.RecipeApi):
   def taskkill(self):
     return self.m.python(
       'taskkill',
-      self.m.path.build('scripts', 'slave', 'kill_processes.py'))
+      self.m.path['build'].join('scripts', 'slave', 'kill_processes.py'))
 
   def cleanup_temp(self):
     return self.m.python(
       'cleanup_temp',
-      self.m.path.build('scripts', 'slave', 'cleanup_temp.py'))
+      self.m.path['build'].join('scripts', 'slave', 'cleanup_temp.py'))
 
   def archive_build(self, step_name, gs_bucket, **kwargs):
     """Returns a step invoking archive_build.py to archive a Chromium build."""
@@ -262,7 +263,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     ]
     return self.m.python(
       step_name,
-      self.m.path.build('scripts', 'slave', 'chromium', 'archive_build.py'),
+      self.m.path['build'].join('scripts', 'slave', 'chromium',
+                                'archive_build.py'),
       args,
       **kwargs)
 
@@ -272,15 +274,15 @@ class ChromiumApi(recipe_api.RecipeApi):
       name += ' (%s)' % suffix
     return self.m.python(
         name,
-        self.m.path.checkout('tools', 'checkdeps', 'checkdeps.py'),
+        self.m.path['checkout'].join('tools', 'checkdeps', 'checkdeps.py'),
         args=['--json', self.m.json.output()],
         **kwargs)
 
   def checkperms(self, **kwargs):
     return self.m.python(
         'checkperms',
-        self.m.path.checkout('tools', 'checkperms', 'checkperms.py'),
-        args=['--root', self.m.path.checkout()],
+        self.m.path['checkout'].join('tools', 'checkperms', 'checkperms.py'),
+        args=['--root', self.m.path['checkout']],
         **kwargs)
 
   def deps2git(self, suffix=None, **kwargs):
@@ -289,9 +291,9 @@ class ChromiumApi(recipe_api.RecipeApi):
       name += ' (%s)' % suffix
     return self.m.python(
         name,
-        self.m.path.checkout('tools', 'deps2git', 'deps2git.py'),
-        args=['-d', self.m.path.checkout('DEPS'),
-              '-o', self.m.path.checkout('.DEPS.git'),
+        self.m.path['checkout'].join('tools', 'deps2git', 'deps2git.py'),
+        args=['-d', self.m.path['checkout'].join('DEPS'),
+              '-o', self.m.path['checkout'].join('.DEPS.git'),
               '--verify',
               '--json', self.m.json.output()],
         step_test_data=lambda: self.m.json.test_api.output([]),
@@ -300,6 +302,6 @@ class ChromiumApi(recipe_api.RecipeApi):
   def deps2submodules(self, **kwargs):
     return self.m.python(
         'deps2submodules',
-        self.m.path.checkout('tools', 'deps2git', 'deps2submodules.py'),
-        args=['--gitless', self.m.path.checkout('.DEPS.git')],
+        self.m.path['checkout'].join('tools', 'deps2git', 'deps2submodules.py'),
+        args=['--gitless', self.m.path['checkout'].join('.DEPS.git')],
         **kwargs)

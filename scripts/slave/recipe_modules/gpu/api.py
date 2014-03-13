@@ -40,7 +40,8 @@ class GpuApi(recipe_api.RecipeApi):
       # Force dcheck on in try server builds.
       self.m.chromium.apply_config('dcheck')
 
-    # Use the default Ash and Aura settings on all bots (specifically Blink bots).
+    # Use the default Ash and Aura settings on all bots (specifically Blink
+    # bots).
     self.m.chromium.c.gyp_env.GYP_DEFINES.pop('use_ash', None)
     self.m.chromium.c.gyp_env.GYP_DEFINES.pop('use_aura', None)
 
@@ -191,8 +192,8 @@ class GpuApi(recipe_api.RecipeApi):
     if self.m.platform.is_win and not self._use_isolates:
       yield self.m.python(
         'start_crash_service',
-        self.m.path.build('scripts', 'slave', 'chromium',
-                          'run_crash_handler.py'),
+        self.m.path['build'].join('scripts', 'slave', 'chromium',
+                                  'run_crash_handler.py'),
         ['--target', self.m.chromium.c.build_config_fs])
 
     # Note: --no-xvfb is the default.
@@ -294,7 +295,7 @@ class GpuApi(recipe_api.RecipeApi):
     if self.m.platform.is_win and not self._use_isolates:
       yield self.m.python(
         'process_dumps',
-        self.m.path.build('scripts', 'slave', 'process_dumps.py'),
+        self.m.path['build'].join('scripts', 'slave', 'process_dumps.py'),
         ['--target', self.m.chromium.c.build_config_fs])
 
   def _maybe_run_isolate(self, test, **kwargs):
@@ -347,7 +348,8 @@ class GpuApi(recipe_api.RecipeApi):
       test_args.extend(args)
 
     return self.m.chromium.run_telemetry_test(
-        str(self.m.path.checkout('content', 'test', 'gpu', 'run_gpu_test.py')),
+        str(self.m.path['checkout'].join('content', 'test', 'gpu',
+                                         'run_gpu_test.py')),
         test, name, test_args, results_directory, spawn_dbus=True,
         revision=self._build_revision, webkit_revision=self._webkit_revision,
         master_class_name=self._master_class_name_for_testing)

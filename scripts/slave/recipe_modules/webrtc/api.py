@@ -63,14 +63,15 @@ class WebRTCApi(recipe_api.RecipeApi):
                         path.checkout('resources/speech_and_misc_wb.pcm'),
                         'isac_speech_and_misc_wb.pcm']),
         c.runtest('libjingle_peerconnection_java_unittest',
-                  env={'LD_PRELOAD': '/usr/lib/x86_64-linux-gnu/libpulse.so.0'}),
+                  env={'LD_PRELOAD':
+                       '/usr/lib/x86_64-linux-gnu/libpulse.so.0'}),
         c.runtest('vie_auto_test', args=vie_auto_test_args),
         c.runtest('video_capture_tests'),
         c.runtest('voe_auto_test', args=['--automated']),
       )
 
   def apply_svn_patch(self):
-    script = self.m.path.build('scripts', 'slave', 'apply_svn_patch.py')
+    script = self.m.path['build'].join('scripts', 'slave', 'apply_svn_patch.py')
     # Use the SVN mirror as the slaves only have authentication setup for that.
     patch_url = self.m.properties['patch_url'].replace(
         'svn://svn.chromium.org', 'svn://svn-mirror.golo.chromium.org')

@@ -86,7 +86,8 @@ class AndroidApi(recipe_api.RecipeApi):
     # TODO(sivachandra): Manufacture gclient spec such that it contains "src"
     # solution + repo_name solution. Then checkout will be automatically
     # correctly set by gclient.checkout
-    self.m.path.set_dynamic_path('checkout', self.m.path.slave_build('src'))
+    self.m.path.set_dynamic_path('checkout',
+                                 self.m.path['slave_build'].join('src'))
 
     gyp_defs = self.m.chromium.c.gyp_env.GYP_DEFINES
 
@@ -95,7 +96,7 @@ class AndroidApi(recipe_api.RecipeApi):
           'get app_manifest_vars',
           [self.c.internal_dir('build', 'dump_app_manifest_vars.py'),
            '-b', self.m.properties['buildername'],
-           '-v', self.m.path.checkout('chrome', 'VERSION'),
+           '-v', self.m.path['checkout'].join('chrome', 'VERSION'),
            '--output-json', self.m.json.output()]
       )
 
@@ -119,9 +120,11 @@ class AndroidApi(recipe_api.RecipeApi):
     return app_manifest_vars.json.output['version_name']
 
   def envsetup(self):
-    envsetup_cmd = [self.m.path.checkout('build', 'android', 'envsetup.sh')]
+    envsetup_cmd = [self.m.path['checkout'].join('build',
+                                                 'android',
+                                                 'envsetup.sh')]
 
-    cmd = ([self.m.path.build('scripts', 'slave', 'env_dump.py'),
+    cmd = ([self.m.path['build'].join('scripts', 'slave', 'env_dump.py'),
             '--output-json', self.m.json.output()] + envsetup_cmd)
 
     def update_self_env(step_result):
@@ -139,8 +142,10 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def clean_local_files(self):
     target = self.c.BUILD_CONFIG
-    debug_info_dumps = self.m.path.checkout('out', target, 'debug_info_dumps')
-    test_logs = self.m.path.checkout('out', target, 'test_logs')
+    debug_info_dumps = self.m.path['checkout'].join('out',
+                                                    target,
+                                                    'debug_info_dumps')
+    test_logs = self.m.path['checkout'].join('out', target, 'test_logs')
     return self.m.python.inline(
         'clean local files',
         """
@@ -152,7 +157,7 @@ class AndroidApi(recipe_api.RecipeApi):
               if f.endswith('.pyc'):
                 os.remove(os.path.join(base, f))
         """,
-        args=[debug_info_dumps, test_logs, self.m.path.checkout],
+        args=[debug_info_dumps, test_logs, self.m.path['checkout']],
     )
 
   def run_tree_truth(self):
@@ -164,8 +169,8 @@ class AndroidApi(recipe_api.RecipeApi):
     # TODO(sivachandra): Disable subannottations after cleaning up
     # tree_truth.sh.
     yield self.m.step('tree truth steps',
-                      [self.m.path.checkout('build', 'tree_truth.sh'),
-                       self.m.path.checkout] + repos,
+                      [self.m.path['checkout'].join('build', 'tree_truth.sh'),
+                       self.m.path['checkout']] + repos,
                       allow_subannotations=False)
 
   def runhooks(self, extra_env=None):
@@ -182,7 +187,7 @@ class AndroidApi(recipe_api.RecipeApi):
     # (maybe a 'tryserver' module) at some point.
     return self.m.step(
         'apply_patch',
-        [self.m.path.build('scripts', 'slave', 'apply_svn_patch.py'),
+        [self.m.path['build'].join('scripts', 'slave', 'apply_svn_patch.py'),
          '-p', self.m.properties['patch_url'],
          '-r', self.c.internal_dir()])
 
@@ -193,7 +198,7 @@ class AndroidApi(recipe_api.RecipeApi):
     return self.m.chromium.compile(**kwargs)
 
   def findbugs(self):
-    cmd = [self.m.path.checkout('build', 'android', 'findbugs_diff.py')]
+    cmd = [self.m.path['checkout'].join('build', 'android', 'findbugs_diff.py')]
     if self.c.INTERNAL:
       cmd.extend(
           ['-b', self.c.internal_dir('bin', 'findbugs_filter'),
@@ -204,7 +209,7 @@ class AndroidApi(recipe_api.RecipeApi):
     if self.c.INTERNAL:
       yield self.m.step(
         'checkdeps',
-        [self.m.path.checkout('tools', 'checkdeps', 'checkdeps.py'),
+        [self.m.path['checkout'].join('tools', 'checkdeps', 'checkdeps.py'),
          '--root=%s' % self.c.internal_dir()],
         env=self.get_env())
 
@@ -220,13 +225,15 @@ class AndroidApi(recipe_api.RecipeApi):
     upload_tag = (
         self.m.properties.get('upload_tag') or
         self.m.properties.get('revision'))
-    zipfile = self.m.path.checkout('out', 'build_product_%s.zip' % upload_tag)
+    zipfile = self.m.path['checkout'].join('out',
+                                           'build_product_%s.zip' % upload_tag)
     self._cleanup_list.append(zipfile)
-    bucket=self._internal_names['BUILD_BUCKET']
-    dest=self.m.properties['buildername']
+    bucket = self._internal_names['BUILD_BUCKET']
+    dest = self.m.properties['buildername']
     if self.c.storage_bucket:
-      bucket=self.c.storage_bucket
-      dest='asan-android-release-' + self.m.properties.get('revision') + '.zip'
+      bucket = self.c.storage_bucket
+      dest = ('asan-android-release-'
+              + self.m.properties.get('revision') + '.zip')
 
     path = self.m.chromium.c.BUILD_CONFIG
     files = [path]
@@ -240,7 +247,7 @@ class AndroidApi(recipe_api.RecipeApi):
       zipfile,
       files,
       keep_dirs,
-      cwd=self.m.path.checkout('out')
+      cwd=self.m.path['checkout'].join('out')
     )
     yield self.m.gsutil.upload(
         name='upload_build_product',
@@ -253,7 +260,8 @@ class AndroidApi(recipe_api.RecipeApi):
     # TODO(luqui) remove dependency on property
     revision = (self.m.properties.get('parent_buildnumber') or
                 self.m.properties.get('revision'))
-    zipfile = self.m.path.checkout('out', 'build_product_%s.zip' % revision)
+    zipfile = self.m.path['checkout'].join('out',
+                                           'build_product_%s.zip' % revision)
     self._cleanup_list.append(zipfile)
     yield self.m.gsutil.download(
         name='download_build_product',
@@ -261,18 +269,18 @@ class AndroidApi(recipe_api.RecipeApi):
         # TODO(luqui) remove property
         source='%s/%s' % (self.m.properties['parent_buildername'],
                           'build_product_%s.zip' % revision),
-        dest=self.m.path.checkout('out')
+        dest=self.m.path['checkout'].join('out')
     )
     yield self.unzip_archive(
         'unzip_build_product',
         zipfile,
-        cwd=self.m.path.checkout('out')
+        cwd=self.m.path['checkout'].join('out')
     )
 
   def spawn_logcat_monitor(self):
     return self.m.step(
         'spawn_logcat_monitor',
-        [self.m.path.build('scripts', 'slave', 'daemonizer.py'),
+        [self.m.path['build'].join('scripts', 'slave', 'daemonizer.py'),
          '--', self.c.cr_build_android('adb_logcat_monitor.py'),
          self.m.chromium.c.build_dir('logcat')],
         env=self.get_env(), can_fail_build=False)
@@ -280,7 +288,7 @@ class AndroidApi(recipe_api.RecipeApi):
   def device_status_check(self):
     yield self.m.step(
         'device_status_check',
-        [self.m.path.checkout('build', 'android', 'buildbot',
+        [self.m.path['checkout'].join('build', 'android', 'buildbot',
                               'bb_device_status_check.py')],
         env=self.get_env())
 
@@ -312,7 +320,9 @@ class AndroidApi(recipe_api.RecipeApi):
       setup_success = deploy_step and deploy_step.retcode == 0
     if setup_success:
       install_cmd = [
-          self.m.path.checkout('build', 'android', 'adb_install_apk.py'),
+          self.m.path['checkout'].join('build',
+                                       'android',
+                                       'adb_install_apk.py'),
           '--apk', 'ChromeTest.apk',
           '--apk_package', 'com.google.android.apps.chrome.tests'
       ]
@@ -322,7 +332,7 @@ class AndroidApi(recipe_api.RecipeApi):
                         env=self.get_env(),  always_run=True)
       if self.m.step_history.last_step().retcode == 0:
         args = (['--test=%s' % s for s in self.c.tests] +
-                ['--checkout-dir', self.m.path.checkout(),
+                ['--checkout-dir', self.m.path['checkout'],
                  '--target', self.m.chromium.c.BUILD_CONFIG])
         yield self.m.generator_script(
             self.c.internal_dir('build', 'buildbot', 'tests_generator.py'),
@@ -333,7 +343,7 @@ class AndroidApi(recipe_api.RecipeApi):
   def monkey_test(self):
     yield self.m.python(
         'Monkey Test',
-        str(self.m.path.checkout('build', 'android', 'test_runner.py')),
+        str(self.m.path['checkout'].join('build', 'android', 'test_runner.py')),
         [ 'monkey', '-v', '--package=chrome', '--event-count=50000' ],
         env={'BUILDTYPE': self.c.BUILD_CONFIG},
         always_run=True)
@@ -342,30 +352,34 @@ class AndroidApi(recipe_api.RecipeApi):
     if self.m.step_history.get('spawn_logcat_monitor'):
       return self.m.python(
           'logcat_dump',
-          self.m.path.build('scripts', 'slave', 'tee.py'),
+          self.m.path['build'].join('scripts', 'slave', 'tee.py'),
           [self.m.chromium.output_dir('full_log'),
            '--',
-           self.m.path.checkout('build', 'android', 'adb_logcat_printer.py'),
-           self.m.path.checkout('out', 'logcat')],
+           self.m.path['checkout'].join('build', 'android',
+                                        'adb_logcat_printer.py'),
+           self.m.path['checkout'].join('out', 'logcat')],
           always_run=True)
 
   def stack_tool_steps(self):
     if self.c.run_stack_tool_steps:
-      log_file = self.m.path.checkout('out', self.m.chromium.c.BUILD_CONFIG,
-                                      'full_log')
+      log_file = self.m.path['checkout'].join('out',
+                                              self.m.chromium.c.BUILD_CONFIG,
+                                              'full_log')
       yield self.m.step(
           'stack_tool_with_logcat_dump',
-          [self.m.path.checkout('third_party', 'android_platform',
+          [self.m.path['checkout'].join('third_party', 'android_platform',
                                 'development', 'scripts', 'stack'),
            '--more-info', log_file], always_run=True, env=self.get_env())
       yield self.m.step(
           'stack_tool_for_tombstones',
-          [self.m.path.checkout('build', 'android', 'tombstones.py'),
+          [self.m.path['checkout'].join('build', 'android', 'tombstones.py'),
            '-a', '-s', '-w'], always_run=True, env=self.get_env())
       if self.c.asan_symbolize:
         yield self.m.step(
             'stack_tool_for_asan',
-            [self.m.path.checkout('build', 'android', 'asan_symbolize.py'),
+            [self.m.path['checkout'].join('build',
+                                          'android',
+                                          'asan_symbolize.py'),
              '-l', log_file], always_run=True, env=self.get_env())
 
   def test_report(self):
@@ -379,8 +393,10 @@ class AndroidApi(recipe_api.RecipeApi):
                   print l
               os.remove(report)
          """,
-         args=[self.m.path.checkout('out', self.m.chromium.c.BUILD_CONFIG,
-                                    'test_logs', '*.log')],
+         args=[self.m.path['checkout'].join('out',
+                                            self.m.chromium.c.BUILD_CONFIG,
+                                            'test_logs',
+                                            '*.log')],
          always_run=True
     )
 

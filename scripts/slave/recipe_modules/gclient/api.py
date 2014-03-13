@@ -45,8 +45,10 @@ class GclientApi(recipe_api.RecipeApi):
     if self.spec_alias:
       prefix = ('[spec: %s] ' % self.spec_alias) + prefix
 
-    return self.m.python(
-        prefix + name, self.m.path.depot_tools('gclient.py'), cmd, **kwargs)
+    return self.m.python(prefix + name,
+                         self.m.path['depot_tools'].join('gclient.py'),
+                         cmd,
+                         **kwargs)
 
   @property
   def use_mirror(self):
@@ -76,7 +78,7 @@ class GclientApi(recipe_api.RecipeApi):
     ret = {
       'USE_MIRROR': self.use_mirror
     }
-    ret['CACHE_DIR'] = self.m.path.root('git_cache')
+    ret['CACHE_DIR'] = self.m.path['root'].join('git_cache')
     return ret
 
   def sync(self, cfg, **kwargs):
@@ -194,7 +196,7 @@ class GclientApi(recipe_api.RecipeApi):
         name = 'recurse (git config %s)' % var
         yield self(name, ['recurse', 'git', 'config', var, val], **kwargs)
 
-    cwd = kwargs.get('cwd', self.m.path.slave_build)
+    cwd = kwargs.get('cwd', self.m.path['slave_build'])
     self.m.path.set_dynamic_path(
       'checkout', cwd(*cfg.solutions[0].name.split(self.m.path.sep)),
       overwrite=False)
@@ -208,8 +210,9 @@ class GclientApi(recipe_api.RecipeApi):
     kwargs.setdefault('abort_on_failure', True)
 
     return self.m.python(prefix + 'revert',
-        self.m.path.build('scripts', 'slave', 'gclient_safe_revert.py'),
-        ['.', self.m.path.depot_tools('gclient', platform_ext={'win': '.bat'})],
+        self.m.path['build'].join('scripts', 'slave', 'gclient_safe_revert.py'),
+        ['.', self.m.path['depot_tools'].join('gclient',
+                                              platform_ext={'win': '.bat'})],
         **kwargs
     )
 

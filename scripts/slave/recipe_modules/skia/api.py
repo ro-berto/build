@@ -27,17 +27,19 @@ class SkiaApi(recipe_api.RecipeApi):
     """
     # Optionally clean before building.
     if clobber or self.m.tryserver.is_tryserver:
-      yield self.m.step('clean', ['make', 'clean'], cwd=self.m.path.checkout)
+      yield self.m.step('clean',
+                        ['make', 'clean'],
+                        cwd=self.m.path['checkout'])
 
     # Run GYP to generate project files.
     env = dict(self.c.gyp_env.as_jsonish())
     yield self.m.python(name='gyp_skia', script='gyp_skia', env=env,
-                        cwd=self.m.path.checkout, abort_on_failure=True)
+                        cwd=self.m.path['checkout'], abort_on_failure=True)
 
     # Compile each target.
     for target in ['most']:
       yield self.m.step('build %s' % target, ['make', target],
-                        cwd=self.m.path.checkout, abort_on_failure=True)
+                        cwd=self.m.path['checkout'], abort_on_failure=True)
 
   def test_steps(self):
     """Run all Skia test executables."""

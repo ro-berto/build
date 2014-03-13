@@ -21,7 +21,7 @@ class RepoApi(recipe_api.RecipeApi):
   @property
   def repo_path(self):
     if not self._repo_path:
-      self._repo_path = self.m.path.depot_tools('repo')
+      self._repo_path = self.m.path['depot_tools'].join('repo')
     return self._repo_path
 
   @repo_path.setter
@@ -36,7 +36,7 @@ class RepoApi(recipe_api.RecipeApi):
 
   def sync(self, *args, **kwargs):
     """Sync an already-init'd repo."""
-    # NOTE: This does not set self.m.path.checkout.
+    # NOTE: This does not set self.m.path['checkout']
     return self.m.step('repo sync',
                        [self.repo_path, 'sync'] + list(args),
                        **kwargs)
