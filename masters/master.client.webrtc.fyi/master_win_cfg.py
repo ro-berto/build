@@ -44,19 +44,6 @@ dr_memory_factory_properties = {
    'gclient_env': {'GYP_DEFINES': 'build_for_tool=drmemory'},
    'needs_drmemory': True,
 }
-win_msvs_2013_factory_properties = {
-    'gclient_env': {
-        'GYP_GENERATORS': 'ninja',
-        'GYP_MSVS_VERSION': '2013',
-    },
-}
-win_msvs_2013_x64_factory_properties = {
-    'gclient_env': {
-        'GYP_DEFINES': 'target_arch=x64',
-        'GYP_GENERATORS': 'ninja',
-        'GYP_MSVS_VERSION': '2013',
-    },
-}
 
 defaults['category'] = 'win'
 
@@ -102,37 +89,6 @@ F('win_tsan_factory', win().WebRTCFactory(
         'gclient_env': { 'GYP_DEFINES' : 'build_for_tool=tsan' },
     }))
 
-B('Win32 Debug (VS2013)', 'win32_2013_debug_factory', scheduler=scheduler,
-  slavebuilddir='win')
-F('win32_2013_debug_factory', win().WebRTCFactory(
-    target='Debug',
-    options=ninja_options,
-    tests=tests,
-    factory_properties=win_msvs_2013_factory_properties))
-
-B('Win32 Release (VS2013)', 'win32_2013_release_factory', scheduler=scheduler,
-  slavebuilddir='win')
-F('win32_2013_release_factory', win().WebRTCFactory(
-    target='Release',
-    options=ninja_options,
-    tests=tests,
-    factory_properties=win_msvs_2013_factory_properties))
-
-B('Win64 Debug (VS2013)', 'win64_2013_debug_factory', scheduler=scheduler,
-  slavebuilddir='win')
-F('win64_2013_debug_factory', win().WebRTCFactory(
-    target='Debug_x64',
-    options=ninja_options,
-    tests=tests,
-    factory_properties=win_msvs_2013_x64_factory_properties))
-
-B('Win64 Release (VS2013)', 'win64_2013_release_factory', scheduler=scheduler,
-  slavebuilddir='win')
-F('win64_2013_release_factory', win().WebRTCFactory(
-    target='Release_x64',
-    options=ninja_options,
-    tests=tests,
-    factory_properties=win_msvs_2013_x64_factory_properties))
 
 def Update(c):
   helper.Update(c)
