@@ -269,6 +269,12 @@ def GenSteps(api):
   if recipe_config['compile_only']:
     return
 
+  # TODO(phajdan.jr): Make it possible to retry telemtry tests (add JSON).
+  yield (
+    api.chromium.run_telemetry_unittests(),
+    api.chromium.run_telemetry_perf_unittests(),
+  )
+
   def deapply_patch_fn(failing_tests):
     yield (
       api.gclient.revert(),
