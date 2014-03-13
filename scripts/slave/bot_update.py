@@ -391,22 +391,56 @@ def get_git_hash(revision, dir_name):
                   revision)
 
 
-def deps2git(sln_dirs, shallow):
-  for sln_dir in sln_dirs:
-    deps_file = path.join(os.getcwd(), sln_dir, 'DEPS')
-    deps_git_file = path.join(os.getcwd(), sln_dir, '.DEPS.git')
-    if not path.isfile(deps_file):
-      return
-    # Do we have a better way of doing this....?
-    repo_type = 'internal' if 'internal' in sln_dir else 'public'
-    cmd = [sys.executable, DEPS2GIT_PATH,
-           '-t', repo_type,
-           '--cache_dir=%s' % CACHE_DIR,
-           '--deps=%s' % deps_file,
-           '--out=%s' % deps_git_file]
-    if shallow:
-      cmd.append('--shallow')
-    call(*cmd)
+def _last_commit_for_file(filename, repo_base):
+  cmd = ['log', '--format=%H', '--max-count=1', '--', filename]
+  return git(*cmd, cwd=repo_base).strip()
+
+
+def need_to_run_deps2git(repo_base, deps_file, deps_git_file):
+  """Checks to see if we need to run deps2git.
+
+  Returns True if there was a DEPS change after the last .DEPS.git update.
+  """
+  if not path.isfile(deps_git_file):
+    # .DEPS.git doesn't exist but DEPS does? We probably want to generate one.
+    return True
+
+  last_known_deps_ref = _last_commit_for_file(deps_file, repo_base)
+  last_known_deps_git_ref = _last_commit_for_file(deps_git_file, repo_base)
+  merge_base_ref = git('merge-base', last_known_deps_ref,
+                       last_known_deps_git_ref, cwd=repo_base).strip()
+
+  # If the merge base of the last DEPS and last .DEPS.git file is not
+  # equivilent to the hash of the last DEPS file, that means the DEPS file
+  # was committed after the last .DEPS.git file.
+  return last_known_deps_ref != merge_base_ref
+
+
+def ensure_deps2git(sln_dir, shallow):
+  repo_base = path.join(os.getcwd(), sln_dir)
+  deps_file = path.join(repo_base, 'DEPS')
+  deps_git_file = path.join(repo_base, '.DEPS.git')
+  if not path.isfile(deps_file):
+    return
+
+  if not need_to_run_deps2git(repo_base, deps_file, deps_git_file):
+    return
+
+  print '===DEPS file modified, need to run deps2git==='
+  # Magic to get deps2git to work with internal DEPS.
+  shutil.copyfile(S2G_INTERNAL_FROM_PATH, S2G_INTERNAL_DEST_PATH)
+
+  # TODO(hinoka): This might need to be smarter if we need to deal with
+  #               DEPS changes that are in an internal repository.
+  repo_type = 'internal' if 'internal' in sln_dir else 'public'
+  cmd = [sys.executable, DEPS2GIT_PATH,
+         '-t', repo_type,
+         '--cache_dir=%s' % CACHE_DIR,
+         '--deps=%s' % deps_file,
+         '--out=%s' % deps_git_file]
+  if shallow:
+    cmd.append('--shallow')
+  call(*cmd)
 
 
 def emit_got_revision(revision):
@@ -647,9 +681,8 @@ def main():
                          options.rietveld_server, options.revision_mapping,
                          got_revision)
 
-  # Magic to get deps2git to work with internal DEPS.
-  shutil.copyfile(S2G_INTERNAL_FROM_PATH, S2G_INTERNAL_DEST_PATH)
-  deps2git(dir_names, options.shallow)
+  # Run deps2git if there is a DEPS commit after the last .DEPS.git commit.
+  ensure_deps2git(options.root, options.shallow)
 
   gclient_configure(git_solutions)
   gclient_sync()
