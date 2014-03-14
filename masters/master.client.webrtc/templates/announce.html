@@ -171,9 +171,9 @@
               document.write([
                 a("../client.webrtc/waterfall", "WebRTC", ""),
                 aView("../client.webrtc.fyi", "", "WebRTC FYI"),
-                aView("../chromium.webrtc", "", "Chromium WebRTC"),
-                aView("../chromium.webrtc.fyi", "", "Chromium WebRTC FYI"),
-                aView("../tryserver.webrtc", "", "Try Server"),
+                aView("../chromium.webrtc", "", "Chromium"),
+                aView("../chromium.webrtc.fyi", "", "Chromium FYI"),
+                aView("../tryserver.webrtc", "", "Try WebRTC"),
               ].join('&nbsp;&nbsp;&nbsp;'));
               </script>
             </td>
@@ -219,8 +219,7 @@
              * @returns {String} The URL.
              */
             function BarUrl(x) {
-              return 'http://build.chromium.org/p/' + x +
-                     '/horizontal_one_box_per_builder';
+              return '/p/' + x + '/horizontal_one_box_per_builder';
             }
             c.bar_webrtc = BarUrl('client.webrtc')
             c.bar_webrtc_fyi = BarUrl('client.webrtc.fyi')
