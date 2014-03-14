@@ -1,0 +1,381 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]\\gclient.py",
+      "config",
+      "--spec",
+      "cache_dir = None\nsolutions = [{'custom_vars': {'root_dir': 'src'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/webrtc/trunk'}, {'custom_vars': {'root_dir': 'src'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'webrtc-limited', 'url': 'svn://svn-mirror.golo.chromium.org/chrome-internal/trunk/webrtc-limited'}]"
+    ],
+    "name": "gclient setup"
+  },
+  {
+    "abort_on_failure": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]\\gclient.py",
+      "sync",
+      "--nohooks",
+      "--delete_unversioned_trees",
+      "--force",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "name": "gclient sync",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"solutions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": 170242@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"webrtc-limited/\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": 24644@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"webrtc/\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": 229524@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision@229524@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]\\gclient.py",
+      "runhooks"
+    ],
+    "env": {
+      "GYP_DEFINES": "component=static_library target_arch=x64",
+      "GYP_MSVS_VERSION": "2012"
+    },
+    "name": "gclient runhooks"
+  },
+  {
+    "abort_on_failure": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\compile.py",
+      "--target",
+      "Release_x64",
+      "--src-dir",
+      "[SLAVE_BUILD]\\src",
+      "--build-tool",
+      "ninja",
+      "--",
+      "All"
+    ],
+    "name": "compile"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\runtest.py",
+      "--target",
+      "Release_x64",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/normal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/normal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--builder-name=buildbot",
+      "--slave-name=slavename",
+      "audio_decoder_unittests.exe"
+    ],
+    "name": "audio_decoder_unittests"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\runtest.py",
+      "--target",
+      "Release_x64",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/normal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/normal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--builder-name=buildbot",
+      "--slave-name=slavename",
+      "common_audio_unittests.exe"
+    ],
+    "name": "common_audio_unittests"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\runtest.py",
+      "--target",
+      "Release_x64",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/normal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/normal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--builder-name=buildbot",
+      "--slave-name=slavename",
+      "common_video_unittests.exe"
+    ],
+    "name": "common_video_unittests"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\runtest.py",
+      "--target",
+      "Release_x64",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/normal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/normal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--builder-name=buildbot",
+      "--slave-name=slavename",
+      "libjingle_media_unittest.exe"
+    ],
+    "name": "libjingle_media_unittest"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\runtest.py",
+      "--target",
+      "Release_x64",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/normal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/normal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--builder-name=buildbot",
+      "--slave-name=slavename",
+      "libjingle_p2p_unittest.exe"
+    ],
+    "name": "libjingle_p2p_unittest"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\runtest.py",
+      "--target",
+      "Release_x64",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/normal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/normal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--builder-name=buildbot",
+      "--slave-name=slavename",
+      "libjingle_peerconnection_unittest.exe"
+    ],
+    "name": "libjingle_peerconnection_unittest"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\runtest.py",
+      "--target",
+      "Release_x64",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/normal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/normal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--builder-name=buildbot",
+      "--slave-name=slavename",
+      "libjingle_sound_unittest.exe"
+    ],
+    "name": "libjingle_sound_unittest"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\runtest.py",
+      "--target",
+      "Release_x64",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/normal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/normal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--builder-name=buildbot",
+      "--slave-name=slavename",
+      "libjingle_unittest.exe"
+    ],
+    "name": "libjingle_unittest"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\runtest.py",
+      "--target",
+      "Release_x64",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/normal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/normal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--builder-name=buildbot",
+      "--slave-name=slavename",
+      "modules_tests.exe"
+    ],
+    "name": "modules_tests"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\runtest.py",
+      "--target",
+      "Release_x64",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/normal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/normal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--builder-name=buildbot",
+      "--slave-name=slavename",
+      "modules_unittests.exe"
+    ],
+    "name": "modules_unittests"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\runtest.py",
+      "--target",
+      "Release_x64",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/normal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/normal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--builder-name=buildbot",
+      "--slave-name=slavename",
+      "neteq_unittests.exe"
+    ],
+    "name": "neteq_unittests"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\runtest.py",
+      "--target",
+      "Release_x64",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/normal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/normal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--builder-name=buildbot",
+      "--slave-name=slavename",
+      "system_wrappers_unittests.exe"
+    ],
+    "name": "system_wrappers_unittests"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\runtest.py",
+      "--target",
+      "Release_x64",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/normal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/normal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--builder-name=buildbot",
+      "--slave-name=slavename",
+      "test_support_unittests.exe"
+    ],
+    "name": "test_support_unittests"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\runtest.py",
+      "--target",
+      "Release_x64",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/normal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/normal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--builder-name=buildbot",
+      "--slave-name=slavename",
+      "tools_unittests.exe"
+    ],
+    "name": "tools_unittests"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\runtest.py",
+      "--target",
+      "Release_x64",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/normal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/normal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--builder-name=buildbot",
+      "--slave-name=slavename",
+      "video_engine_core_unittests.exe"
+    ],
+    "name": "video_engine_core_unittests"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\runtest.py",
+      "--target",
+      "Release_x64",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/normal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/normal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--builder-name=buildbot",
+      "--slave-name=slavename",
+      "video_engine_tests.exe"
+    ],
+    "name": "video_engine_tests"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\runtest.py",
+      "--target",
+      "Release_x64",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/normal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/normal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--builder-name=buildbot",
+      "--slave-name=slavename",
+      "voice_engine_unittests.exe"
+    ],
+    "name": "voice_engine_unittests"
+  }
+]

@@ -25,6 +25,26 @@ class WebRTCApi(recipe_api.RecipeApi):
 
   ANDROID_APK_TESTS = COMMON_TESTS
 
+  NORMAL_TESTS = sorted(COMMON_TESTS + [
+    'libjingle_media_unittest',
+    'libjingle_p2p_unittest',
+    'libjingle_peerconnection_unittest',
+    'libjingle_sound_unittest',
+    'libjingle_unittest',
+    'video_engine_tests',
+  ])
+
+  def add_normal_tests(self):
+    c = self.m.chromium
+
+    for test in self.NORMAL_TESTS:
+      yield c.runtest(test)
+
+    if self.m.platform.is_mac and self.m.platform.bits == 64:
+      yield c.runtest(('libjingle_peerconnection_objc_test.app/Contents/MacOS/'
+                       'libjingle_peerconnection_objc_test'),
+                      name='libjingle_peerconnection_objc_test'),
+
   def add_baremetal_tests(self):
     """Adds baremetal tests, which are different depending on the platform."""
     c = self.m.chromium

@@ -2,6 +2,10 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+# Recipe for building and running the suite of tests that require a baremetal
+# machine (i.e. they will run properly on a VM since it lacks physical audio
+# and video devices).
+
 DEPS = [
   'chromium',
   'gclient',
