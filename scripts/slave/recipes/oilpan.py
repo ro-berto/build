@@ -62,8 +62,8 @@ def GenSteps(api):
   )
 
   if api.chromium.c.HOST_PLATFORM == 'linux':
-    build_exe = api.chromium.c.build_dir(api.chromium.c.build_config_fs,
-                                         platform_ext={'win': '.exe'})
+    build_exe = api.chromium.c.build_dir.join(api.chromium.c.build_config_fs,
+                                              platform_ext={'win': '.exe'})
     test_dir = api.path['slave_build'].join('test')
     api.gclient.set_config('oilpan_internal', **config_vals)
     api.gclient.spec_alias = 'test_checkout'
@@ -72,7 +72,7 @@ def GenSteps(api):
     yield api.path.makedirs('test_checkout', test_dir)
     yield api.gclient.checkout(cwd=test_dir)
 
-    test_out_dir = test_dir('src', 'out', api.chromium.c.build_config_fs)
+    test_out_dir = test_dir.join('src', 'out', api.chromium.c.build_config_fs)
     yield api.path.makedirs('test_out_dir', test_out_dir)
     yield api.python.inline(
       'copy minidump_stackwalk',
@@ -81,7 +81,7 @@ def GenSteps(api):
       import sys
       shutil.copy(sys.argv[1], sys.argv[2])
       """,
-      args=[build_exe('minidump_stackwalk'), test_out_dir]
+      args=[build_exe.join('minidump_stackwalk'), test_out_dir]
     )
 
     results_dir = api.path['slave_build'].join('layout-test-results')
@@ -97,7 +97,7 @@ def GenSteps(api):
 
     factory_properties = {
       'blink_config':  'chromium',
-      'browser_exe':  str(build_exe('chrome')),
+      'browser_exe':  str(build_exe.join('chrome')),
       'build_dir':  'src/out',
       'expectations':  True,
       'halt_on_missing_build':  True,
@@ -105,7 +105,7 @@ def GenSteps(api):
       'target':  'Release',
       'target_os':  None,
       'target_platform':  'linux2',
-      'tools_dir':  str(test_dir('src', 'tools'))
+      'tools_dir':  str(test_dir.join('src', 'tools'))
     }
 
     for test in PERF_TESTS:
@@ -113,7 +113,7 @@ def GenSteps(api):
       factory_properties['step_name'] = test
       fp = "--factory-properties=%s" % json.dumps(factory_properties)
       yield api.chromium.runtest(
-          api.chromium.m.path.build('scripts', 'slave', 'telemetry.py'),
+          api.chromium.m.path['build'].join('scripts', 'slave', 'telemetry.py'),
           [fp], name=test, python_mode=True,
           results_url=dashboard_upload_url,
           annotate='graphing', perf_dashboard_id=test, test_type=test

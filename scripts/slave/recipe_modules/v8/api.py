@@ -25,7 +25,8 @@ class V8Api(recipe_api.RecipeApi):
     # update clang step as soon as it exists.
     return self.m.step(
         'update clang',
-        [self.m.path.checkout('tools', 'clang', 'scripts', 'update.sh')],
+        [self.m.path['checkout'].join('tools', 'clang',
+                                      'scripts', 'update.sh')],
         env={'LLVM_URL': ChromiumSvnSubURL(self.m.gclient.c, 'llvm-project')})
 
   def compile(self):
@@ -44,7 +45,7 @@ class V8Api(recipe_api.RecipeApi):
     # Arguments and environment for asan builds:
     if self.m.chromium.c.gyp_env.GYP_DEFINES.get('asan') == 1:
       full_args.append('--asan')
-      env['ASAN_SYMBOLIZER_PATH'] = self.m.path.checkout(
+      env['ASAN_SYMBOLIZER_PATH'] = self.m.path['checkout'].join(
           'third_party', 'llvm-build', 'Release+Asserts', 'bin',
           'llvm-symbolizer')
 

@@ -89,7 +89,7 @@ def GenSteps(api):
   yield api.chromium.runtest(test, args, name='webkit_tests')
 
   dashboard_upload_url = 'https://chromeperf.appspot.com'
-  build_exe = api.chromium.c.build_dir(api.chromium.c.build_config_fs)
+  build_exe = api.chromium.c.build_dir.join(api.chromium.c.build_config_fs)
   target_platform = {'linux': 'linux2',
                      'mac': 'darwin',
                      'win': 'win32'}[api.platform.name]
@@ -98,7 +98,7 @@ def GenSteps(api):
                  'win': 'chrome.exe'}[api.platform.name]
   factory_properties = {
     'blink_config':  'chromium',
-    'browser_exe':  str(build_exe(browser_exe)),
+    'browser_exe':  str(build_exe.join(browser_exe)),
     'build_dir':  'src/out',
     'expectations':  True,
     'halt_on_missing_build':  True,
@@ -118,7 +118,7 @@ def GenSteps(api):
     factory_properties['step_name'] = test
     fp = "--factory-properties=%s" % json.dumps(factory_properties)
     yield api.chromium.runtest(
-        api.chromium.m.path.build('scripts', 'slave', 'telemetry.py'),
+        api.chromium.m.path['build'].join('scripts', 'slave', 'telemetry.py'),
         [fp], name=test, python_mode=True,
         results_url=dashboard_upload_url,
         annotate='graphing', perf_dashboard_id=test, test_type=test,

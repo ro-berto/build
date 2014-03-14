@@ -48,7 +48,6 @@ class WebRTCApi(recipe_api.RecipeApi):
   def add_baremetal_tests(self):
     """Adds baremetal tests, which are different depending on the platform."""
     c = self.m.chromium
-    path = self.m.path
 
     if self.m.platform.is_win or self.m.platform.is_mac:
       yield c.runtest('audio_device_tests')
@@ -56,13 +55,15 @@ class WebRTCApi(recipe_api.RecipeApi):
       yield (
         c.runtest('audioproc', name='audioproc_perf',
                   args=['-aecm', '-ns', '-agc', '--fixed_digital', '--perf',
-                        '-pb', path.checkout('resources/audioproc.aecdump')]),
+                        '-pb', self.m.path['checkout'].join(
+                          'resources/audioproc.aecdump')]),
         c.runtest('iSACFixtest', name='isac_fixed_perf',
-                  args=['32000',
-                        path.checkout('resources/speech_and_misc_wb.pcm'),
+                  args=['32000', self.m.path['checkout'].join(
+                          'resources/speech_and_misc_wb.pcm'),
                         'isac_speech_and_misc_wb.pcm']),
         c.runtest('libjingle_peerconnection_java_unittest',
-                  env={'LD_PRELOAD': '/usr/lib/x86_64-linux-gnu/libpulse.so.0'}),
+                  env={'LD_PRELOAD':
+                       '/usr/lib/x86_64-linux-gnu/libpulse.so.0'}),
       )
 
     yield (

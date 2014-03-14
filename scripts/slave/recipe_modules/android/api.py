@@ -78,7 +78,7 @@ class AOSPApi(recipe_api.RecipeApi):
         if os.path.exists(to_delete):
           os.unlink(to_delete)
       """,
-      args=[self.c.build_path('.repo', 'local_manifest.xml')]
+      args=[self.c.build_path.join('.repo', 'local_manifest.xml')]
     )
     # The version of repo checked into depot_tools doesn't support switching
     # between branches correctly due to
@@ -86,7 +86,7 @@ class AOSPApi(recipe_api.RecipeApi):
     # the copy of repo from the Android tree.
     # The copy of repo from depot_tools is only used to bootstrap the Android
     # tree checkout.
-    repo_in_android_path = self.c.build_path('.repo', 'repo', 'repo')
+    repo_in_android_path = self.c.build_path.join('.repo', 'repo', 'repo')
     repo_copy_dir = self.m.path['slave_build'].join('repo_copy')
     repo_copy_path = self.m.path['slave_build'].join('repo_copy', 'repo')
     if self.m.path.exists(repo_in_android_path):
@@ -138,8 +138,8 @@ class AOSPApi(recipe_api.RecipeApi):
 
   def gyp_webview_step(self):
     yield self.m.step('gyp_webview', self.with_lunch_command + [
-      self.c.slave_chromium_in_android_path('android_webview', 'tools',
-                                            'gyp_webview')],
+      self.c.slave_chromium_in_android_path.join('android_webview', 'tools',
+                                                 'gyp_webview')],
       cwd=self.m.path['checkout'])
 
   def incompatible_directories_check_step(self):

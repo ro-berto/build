@@ -13,7 +13,7 @@ class DefaultFlavorUtils(base_flavor.BaseFlavorUtils):
 
   def step(self, name, cmd, **kwargs):
     """Wrapper for the Step API; runs a step as appropriate for this flavor."""
-    path_to_app = self._skia_api.m.chromium.output_dir(cmd[0])
+    path_to_app = self._skia_api.m.chromium.output_dir.join(cmd[0])
     if (self._skia_api.m.platform.is_linux and
         'x86_64' in self._skia_api.builder_name and
         not 'TSAN' in self._skia_api.builder_name):

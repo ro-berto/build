@@ -49,7 +49,7 @@ class ChromiumApi(recipe_api.RecipeApi):
   @property
   def output_dir(self):
     """Return the path to the built executable directory."""
-    return self.c.build_dir(self.c.build_config_fs)
+    return self.c.build_dir.join(self.c.build_config_fs)
 
   def compile(self, targets=None, name=None, abort_on_failure=True,
               force_clobber=False, **kwargs):

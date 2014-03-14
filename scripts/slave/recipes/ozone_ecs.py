@@ -74,7 +74,7 @@ def GenSteps(api):
   yield api.python('check ecs deps', api.path['checkout'].join('tools',
       'check_ecs_deps', 'check_ecs_deps.py'),
       can_fail_build=False,
-      cwd=api.chromium.c.build_dir(api.chromium.c.build_config_fs))
+      cwd=api.chromium.c.build_dir.join(api.chromium.c.build_config_fs))
 
   tests_to_compile = list(set(OZONE_TESTS) - set(tests_that_do_not_compile))
   tests_to_compile.sort()

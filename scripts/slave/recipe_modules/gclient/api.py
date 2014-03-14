@@ -198,7 +198,7 @@ class GclientApi(recipe_api.RecipeApi):
 
     cwd = kwargs.get('cwd', self.m.path['slave_build'])
     self.m.path.set_dynamic_path(
-      'checkout', cwd(*cfg.solutions[0].name.split(self.m.path.sep)),
+      'checkout', cwd.join(*cfg.solutions[0].name.split(self.m.path.sep)),
       overwrite=False)
 
   def revert(self, **kwargs):

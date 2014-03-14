@@ -1458,7 +1458,7 @@ def GenSteps(api):
     # remove it.
     steps.append(api.path.rmtree(
       'build directory',
-      api.chromium.c.build_dir(api.chromium.c.build_config_fs)))
+      api.chromium.c.build_dir.join(api.chromium.c.build_config_fs)))
 
     steps.append(api.archive.download_and_unzip_build(
       'extract build',

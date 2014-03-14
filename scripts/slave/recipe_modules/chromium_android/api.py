@@ -94,7 +94,7 @@ class AndroidApi(recipe_api.RecipeApi):
     if self.c.INTERNAL and self.c.get_app_manifest_vars:
       yield self.m.step(
           'get app_manifest_vars',
-          [self.c.internal_dir('build', 'dump_app_manifest_vars.py'),
+          [self.c.internal_dir.join('build', 'dump_app_manifest_vars.py'),
            '-b', self.m.properties['buildername'],
            '-v', self.m.path['checkout'].join('chrome', 'VERSION'),
            '--output-json', self.m.json.output()]
@@ -108,7 +108,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
       yield self.m.step(
           'get_internal_names',
-          [self.c.internal_dir('build', 'dump_internal_names.py'),
+          [self.c.internal_dir.join('build', 'dump_internal_names.py'),
            '--output-json', self.m.json.output()]
       )
 
@@ -176,7 +176,7 @@ class AndroidApi(recipe_api.RecipeApi):
   def runhooks(self, extra_env=None):
     run_hooks_env = self.get_env()
     if self.c.INTERNAL:
-      run_hooks_env['EXTRA_LANDMINES_SCRIPT'] = self.c.internal_dir(
+      run_hooks_env['EXTRA_LANDMINES_SCRIPT'] = self.c.internal_dir.join(
         'build', 'get_internal_landmines.py')
     if extra_env:
       run_hooks_env.update(extra_env)
@@ -189,7 +189,7 @@ class AndroidApi(recipe_api.RecipeApi):
         'apply_patch',
         [self.m.path['build'].join('scripts', 'slave', 'apply_svn_patch.py'),
          '-p', self.m.properties['patch_url'],
-         '-r', self.c.internal_dir()])
+         '-r', self.c.internal_dir])
 
   def compile(self, **kwargs):
     assert 'env' not in kwargs, (
@@ -201,7 +201,7 @@ class AndroidApi(recipe_api.RecipeApi):
     cmd = [self.m.path['checkout'].join('build', 'android', 'findbugs_diff.py')]
     if self.c.INTERNAL:
       cmd.extend(
-          ['-b', self.c.internal_dir('bin', 'findbugs_filter'),
+          ['-b', self.c.internal_dir.join('bin', 'findbugs_filter'),
            '-o', 'com.google.android.apps.chrome.-,org.chromium.-'])
       yield self.m.step('findbugs internal', cmd, env=self.get_env())
 
@@ -210,14 +210,14 @@ class AndroidApi(recipe_api.RecipeApi):
       yield self.m.step(
         'checkdeps',
         [self.m.path['checkout'].join('tools', 'checkdeps', 'checkdeps.py'),
-         '--root=%s' % self.c.internal_dir()],
+         '--root=%s' % self.c.internal_dir],
         env=self.get_env())
 
   def lint(self):
     if self.c.INTERNAL:
       yield self.m.step(
           'lint',
-          [self.c.internal_dir('bin', 'lint.py')],
+          [self.c.internal_dir.join('bin', 'lint.py')],
           env=self.get_env())
 
   def upload_build(self):
@@ -281,8 +281,8 @@ class AndroidApi(recipe_api.RecipeApi):
     return self.m.step(
         'spawn_logcat_monitor',
         [self.m.path['build'].join('scripts', 'slave', 'daemonizer.py'),
-         '--', self.c.cr_build_android('adb_logcat_monitor.py'),
-         self.m.chromium.c.build_dir('logcat')],
+         '--', self.c.cr_build_android.join('adb_logcat_monitor.py'),
+         self.m.chromium.c.build_dir.join('logcat')],
         env=self.get_env(), can_fail_build=False)
 
   def device_status_check(self):
@@ -295,7 +295,7 @@ class AndroidApi(recipe_api.RecipeApi):
   def detect_and_setup_devices(self):
     yield self.m.step(
         'provision_devices',
-        [self.c.cr_build_android('provision_devices.py'),
+        [self.c.cr_build_android.join('provision_devices.py'),
          '-t', self.m.chromium.c.BUILD_CONFIG],
         env=self.get_env(), can_fail_build=False)
     yield self.device_status_check()
@@ -303,10 +303,10 @@ class AndroidApi(recipe_api.RecipeApi):
     if self.c.INTERNAL:
       yield self.m.step(
           'setup_devices_for_testing',
-          [self.c.internal_dir('build',  'setup_device_testing.py')],
+          [self.c.internal_dir.join('build',  'setup_device_testing.py')],
           env=self.get_env(), can_fail_build=False)
       deploy_cmd = [
-          self.c.internal_dir('build', 'full_deploy.py'),
+          self.c.internal_dir.join('build', 'full_deploy.py'),
           '-v', '--%s' % self.m.chromium.c.BUILD_CONFIG.lower()]
       if self.c.extra_deploy_opts:
         deploy_cmd.extend(self.c.extra_deploy_opts)
@@ -335,7 +335,7 @@ class AndroidApi(recipe_api.RecipeApi):
                 ['--checkout-dir', self.m.path['checkout'],
                  '--target', self.m.chromium.c.BUILD_CONFIG])
         yield self.m.generator_script(
-            self.c.internal_dir('build', 'buildbot', 'tests_generator.py'),
+            self.c.internal_dir.join('build', 'buildbot', 'tests_generator.py'),
             *args,
             env=self.get_env()
         )
@@ -353,7 +353,7 @@ class AndroidApi(recipe_api.RecipeApi):
       return self.m.python(
           'logcat_dump',
           self.m.path['build'].join('scripts', 'slave', 'tee.py'),
-          [self.m.chromium.output_dir('full_log'),
+          [self.m.chromium.output_dir.join('full_log'),
            '--',
            self.m.path['checkout'].join('build', 'android',
                                         'adb_logcat_printer.py'),

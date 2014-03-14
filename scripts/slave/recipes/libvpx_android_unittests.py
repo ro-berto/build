@@ -31,14 +31,14 @@ def GenSteps(api):
   build_root = api.path['slave_build']
 
   # Android tools DEPS
-  android_tools_root = build_root('android_tools')
-  adb = android_tools_root('sdk', 'platform-tools', 'adb')
-  ndk_root = android_tools_root('ndk')
+  android_tools_root = build_root.join('android_tools')
+  adb = android_tools_root.join('sdk', 'platform-tools', 'adb')
+  ndk_root = android_tools_root.join('ndk')
 
   # libvpx paths
   libvpx_git_url = api.properties['libvpx_git_url']
-  libvpx_root = build_root('libvpx')
-  test_data = build_root('test_data')
+  libvpx_root = build_root.join('libvpx')
+  test_data = build_root.join('test_data')
 
   yield api.python.inline(
       'clean_build', r"""
@@ -72,18 +72,18 @@ def GenSteps(api):
   # NDK requires NDK_PROJECT_PATH environment variable to be defined
   yield api.step(
       'ndk-build', [
-          ndk_root('ndk-build'),
+          ndk_root.join('ndk-build'),
           'APP_BUILD_SCRIPT=%s'
-              % libvpx_root('test', 'android', 'Android.mk'),
+              % libvpx_root.join('test', 'android', 'Android.mk'),
           'APP_ABI=armeabi-v7a', 'APP_PLATFORM=android-14',
           'APP_OPTIM=release', 'APP_STL=gnustl_static'],
       env={'NDK_PROJECT_PATH' : build_root})
 
-  test_root = libvpx_root('test')
+  test_root = libvpx_root.join('test')
   yield api.python(
-      'get_files', test_root('android', 'get_files.py'),
+      'get_files', test_root.join('android', 'get_files.py'),
       args=[
-          '-i', test_root('test-data.sha1'),
+          '-i', test_root.join('test-data.sha1'),
           '-o', test_data, '-u', TEST_FILES_URL])
 
   yield api.python(
@@ -92,7 +92,7 @@ def GenSteps(api):
                              'transfer_files.py'),
       args=[adb, DEVICE_ROOT, test_data])
 
-  lib_root = build_root('libs', 'armeabi-v7a')
+  lib_root = build_root.join('libs', 'armeabi-v7a')
   yield api.step('push_so', [ adb, 'push', lib_root, DEVICE_ROOT])
 
   yield api.step(
