@@ -87,9 +87,8 @@ cache_dir = %(cache_dir)s
 
 ENABLED_MASTERS = ['chromium.git']
 ENABLED_BUILDERS = {
-    # Experimental builders used by slave101-c4, which has no other builders
-    # and isn't used by anyone else.
-    'tryserver.chromium': ['linux_rel_alt'],
+    'tryserver.chromium': ['linux_rel_alt', 'linux_clang',
+                           'linux_rel_naclmore', 'blink_bare_presubmit'],
 }
 ENABLED_SLAVES = {}
 
