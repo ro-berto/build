@@ -30,7 +30,7 @@ B('iOS Device', 'ios_rel', gatekeeper='ios_rel', scheduler='ios',
 F('ios_rel', ios().ChromiumFactory(
   # TODO(lliabraa): Need to upstream support for running tests on devices
   # before we can actually run any tests.
-  clobber=True,
+  clobber=False,
   tests=[],
   options = [
     '--', '-project', '../build/all.xcodeproj',
@@ -85,7 +85,7 @@ B('iOS Device (ninja)', 'ios_rel_ninja', gatekeeper='ios_rel_ninja',
 F('ios_rel_ninja', ios().ChromiumFactory(
   # TODO(lliabraa): Need to upstream support for running tests on devices
   # before we can actually run any tests.
-  clobber=True,
+  clobber=False,
   tests=[],
   options = ['--build-tool=ninja'],
   factory_properties={
