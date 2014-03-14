@@ -1411,7 +1411,7 @@ class ChromiumCommands(commands.FactoryCommands):
                               cmd_name='content_unittests')
 
   def AddWebRtcPerfManualContentBrowserTests(self, factory_properties=None):
-    cmd_options = ['--run-manual']
+    cmd_options = ['--run-manual', '--test-launcher-print-test-stdio=always']
     self.AddAnnotatedPerfStep(test_name='webrtc_manual_content_browsertests',
                               gtest_filter="WebRtc*",
                               log_type='graphing',
@@ -1420,7 +1420,11 @@ class ChromiumCommands(commands.FactoryCommands):
                               cmd_options=cmd_options)
 
   def AddWebRtcPerfManualBrowserTests(self, factory_properties=None):
-    cmd_options = ['--run-manual', '--ui-test-action-max-timeout=300000']
+    # These tests needs --test-launcher-jobs=1 since some of them are not able
+    # to run in parallel (due to the usage of the peerconnection server).
+    cmd_options = ['--run-manual', '--ui-test-action-max-timeout=300000',
+                   '--test-launcher-jobs=1',
+                   '--test-launcher-print-test-stdio=always']
     self.AddAnnotatedPerfStep(test_name='webrtc_manual_browser_tests',
                               gtest_filter="WebRtc*",
                               log_type='graphing',
