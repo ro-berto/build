@@ -8,16 +8,12 @@ from slave.recipe_modules.gclient.config import ChromeSvnSubURL,\
   ChromiumSvnSubURL
 
 
-@CONFIG_CTX()
+@CONFIG_CTX(includes=['webrtc', '_webrtc_limited'])
 def webrtc_standalone(c):
-  s = c.solutions.add()
-  s.name = 'src'
-  s.url = 'http://webrtc.googlecode.com/svn/trunk'
-  s.custom_vars['root_dir'] = 'src'
   c.got_revision_mapping['webrtc'] = 'got_revision'
 
 
-@CONFIG_CTX(includes=['chromium', '_webrtc_additional_solutions'])
+@CONFIG_CTX(includes=['chromium', '_webrtc_limited'])
 def webrtc_android_apk(c):
   c.target_os = ['android']
 
@@ -25,7 +21,14 @@ def webrtc_android_apk(c):
   # as soon we've switched over to use the trunk branch instead of the stable
   # branch (which is about to be retired).
   c.solutions[0].custom_deps['src/third_party/webrtc'] = (
-       'http://webrtc.googlecode.com/svn/trunk/webrtc')
+       WebRTCSvnURL(c, 'trunk', 'webrtc'))
+
+  # The webrtc.DEPS solution pulls in additional resources needed for running
+  # WebRTC-specific test setups in Chrome.
+  s = c.solutions.add()
+  s.name = 'webrtc.DEPS'
+  s.url = ChromiumSvnSubURL(c, 'chrome', 'trunk', 'deps', 'third_party',
+                            'webrtc', 'webrtc.DEPS')
 
 
 @CONFIG_CTX(includes=['webrtc_android_apk'])
@@ -34,12 +37,18 @@ def webrtc_android_apk_try_builder(c):
 
 
 @CONFIG_CTX()
-def _webrtc_additional_solutions(c):
-  """Helper config for loading additional solutions.
+def webrtc(c):
+  s = c.solutions.add()
+  s.name = 'src'
+  s.url = WebRTCSvnURL(c, 'trunk')
+  s.custom_vars['root_dir'] = 'src'
+
+
+@CONFIG_CTX()
+def _webrtc_limited(c):
+  """Helper config for loading the webrtc-limited solution.
 
   The webrtc-limited solution contains non-redistributable code.
-  The webrtc.DEPS solution pulls in additional resources needed for running
-  WebRTC-specific test setups.
   """
   if c.GIT_MODE:
     raise BadConf('WebRTC only supports svn')
@@ -47,8 +56,10 @@ def _webrtc_additional_solutions(c):
   s = c.solutions.add()
   s.name = 'webrtc-limited'
   s.url = ChromeSvnSubURL(c, 'chrome-internal', 'trunk', 'webrtc-limited')
+  s.custom_vars['root_dir'] = 'src'
 
-  s = c.solutions.add()
-  s.name = 'webrtc.DEPS'
-  s.url = ChromiumSvnSubURL(c, 'chrome', 'trunk', 'deps', 'third_party',
-                            'webrtc', 'webrtc.DEPS')
+
+def WebRTCSvnURL(c, *pieces):
+  BASES = ('http://webrtc.googlecode.com/svn',
+           'svn://svn-mirror.golo.chromium.org/webrtc')
+  return '/'.join((BASES[c.USE_MIRROR],) + pieces)

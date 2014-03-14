@@ -6,7 +6,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = None\nsolutions = [{'custom_vars': {'root_dir': 'src'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'http://webrtc.googlecode.com/svn/trunk'}]"
+      "cache_dir = None\nsolutions = [{'custom_vars': {'root_dir': 'src'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/webrtc/trunk'}, {'custom_vars': {'root_dir': 'src'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'webrtc-limited', 'url': 'svn://svn-mirror.golo.chromium.org/chrome-internal/trunk/webrtc-limited'}]"
     ],
     "name": "gclient setup"
   },
@@ -42,6 +42,9 @@
       "@@@STEP_LOG_LINE@json.output@  \"solutions\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src/\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"revision\": 170242@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"webrtc-limited/\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": 24644@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"webrtc/\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"revision\": 229524@@@",
@@ -103,10 +106,10 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"trybot builder\", \"mastername\": \"mastername\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/baremetal\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"trybot\", \"mastername\": \"mastername\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/baremetal\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"trybot builder\", \"mastername\": \"mastername\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/baremetal\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--builder-name=trybot builder",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"trybot\", \"mastername\": \"mastername\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/baremetal\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--builder-name=trybot",
       "--slave-name=slavename",
       "audioproc",
       "-aecm",
@@ -121,10 +124,7 @@
     "seed_steps": [
       "audioproc_perf",
       "isac_fixed_perf",
-      "libjingle_peerconnection_java_unittest",
-      "vie_auto_test",
-      "video_capture_tests",
-      "voe_auto_test"
+      "libjingle_peerconnection_java_unittest"
     ]
   },
   {
@@ -137,10 +137,10 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"trybot builder\", \"mastername\": \"mastername\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/baremetal\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"trybot\", \"mastername\": \"mastername\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/baremetal\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"trybot builder\", \"mastername\": \"mastername\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/baremetal\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--builder-name=trybot builder",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"trybot\", \"mastername\": \"mastername\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/baremetal\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--builder-name=trybot",
       "--slave-name=slavename",
       "iSACFixtest",
       "32000",
@@ -159,10 +159,10 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"trybot builder\", \"mastername\": \"mastername\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/baremetal\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"trybot\", \"mastername\": \"mastername\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/baremetal\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"trybot builder\", \"mastername\": \"mastername\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/baremetal\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--builder-name=trybot builder",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"trybot\", \"mastername\": \"mastername\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/baremetal\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--builder-name=trybot",
       "--slave-name=slavename",
       "libjingle_peerconnection_java_unittest"
     ],
@@ -181,16 +181,22 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"trybot builder\", \"mastername\": \"mastername\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/baremetal\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"trybot\", \"mastername\": \"mastername\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/baremetal\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"trybot builder\", \"mastername\": \"mastername\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/baremetal\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--builder-name=trybot builder",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"trybot\", \"mastername\": \"mastername\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/baremetal\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--builder-name=trybot",
       "--slave-name=slavename",
       "vie_auto_test",
       "--automated",
       "--capture_test_ensure_resolution_alignment_in_capture_device=false"
     ],
-    "name": "vie_auto_test"
+    "name": "vie_auto_test",
+    "seed_steps": [
+      "vie_auto_test",
+      "voe_auto_test",
+      "video_capture_tests",
+      "webrtc_perf_tests"
+    ]
   },
   {
     "always_run": true,
@@ -202,10 +208,30 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"trybot builder\", \"mastername\": \"mastername\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/baremetal\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"trybot\", \"mastername\": \"mastername\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/baremetal\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"trybot builder\", \"mastername\": \"mastername\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/baremetal\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--builder-name=trybot builder",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"trybot\", \"mastername\": \"mastername\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/baremetal\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--builder-name=trybot",
+      "--slave-name=slavename",
+      "voe_auto_test",
+      "--automated"
+    ],
+    "name": "voe_auto_test"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"trybot\", \"mastername\": \"mastername\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/baremetal\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"trybot\", \"mastername\": \"mastername\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/baremetal\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--builder-name=trybot",
       "--slave-name=slavename",
       "video_capture_tests"
     ],
@@ -221,14 +247,13 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"trybot builder\", \"mastername\": \"mastername\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/baremetal\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"trybot\", \"mastername\": \"mastername\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/baremetal\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"trybot builder\", \"mastername\": \"mastername\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/baremetal\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--builder-name=trybot builder",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"trybot\", \"mastername\": \"mastername\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/baremetal\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--builder-name=trybot",
       "--slave-name=slavename",
-      "voe_auto_test",
-      "--automated"
+      "webrtc_perf_tests"
     ],
-    "name": "voe_auto_test"
+    "name": "webrtc_perf_tests"
   }
 ]

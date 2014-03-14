@@ -5,11 +5,8 @@
 DEPS = [
   'chromium',
   'gclient',
-  'path',
   'platform',
   'properties',
-  'python',
-  'step',
   'tryserver',
   'webrtc',
 ]
@@ -21,7 +18,6 @@ def GenSteps(api):
     dict((str(k),v) for k,v in api.properties.iteritems() if k.isupper())
   )
   api.webrtc.set_config('webrtc_standalone', **config_vals)
-  api.step.auto_resolve_conflicts = True
 
   yield api.gclient.checkout()
   yield api.chromium.runhooks()
@@ -33,30 +29,32 @@ def GenSteps(api):
 
 
 def GenTests(api):
-  for plat in ('win', 'mac', 'linux'):
-    for bits in (32, 64):
-      for build_config in ('Debug', 'Release'):
-        yield (
-          api.test('buildbot_%s%s_%s' % (plat, bits, build_config)) +
-          api.properties(BUILD_CONFIG=build_config,
-                         TARGET_BITS=bits,
-                         buildername='buildbot builder',
-                         slavename='slavename',
-                         mastername='mastername') +
-          api.platform(plat, bits)
-        )
 
-  for plat in ('win', 'mac', 'linux'):
-    for bits in (32, 64):
-      for build_config in ('Debug', 'Release'):
-        yield (
-          api.test('trybot_%s%s_%s' % (plat, bits, build_config)) +
-          api.properties(BUILD_CONFIG=build_config,
+  def props(build_config, bits, buildername, revision=None, patch_url=None):
+    return api.properties(BUILD_CONFIG=build_config,
                          TARGET_BITS=bits,
-                         buildername='trybot builder',
+                         buildername=buildername,
                          slavename='slavename',
                          mastername='mastername',
-                         revision='12345',
-                         patch_url='try_job_svn_patch') +
-          api.platform(plat, bits)
-        )
+                         revision=revision,
+                         patch_url=patch_url)
+
+  for kind in ['buildbot', 'trybot']:
+    revision = '12345' if kind == 'trybot' else None
+    patch_url = 'try_job_svn_patch' if kind == 'trybot' else None
+
+    yield (
+      api.test('%s_win32_Release' % kind) +
+      props('Release', 32, kind, revision=revision, patch_url=patch_url) +
+      api.platform('win', 64)
+    )
+    yield (
+      api.test('%s_mac32_Release' % kind) +
+      props('Release', 32, kind, revision=revision, patch_url=patch_url) +
+      api.platform('mac', 64)
+    )
+    yield (
+      api.test('%s_linux64_Release' % kind) +
+      props('Release', 64, kind, revision=revision, patch_url=patch_url) +
+      api.platform('linux', 64)
+    )

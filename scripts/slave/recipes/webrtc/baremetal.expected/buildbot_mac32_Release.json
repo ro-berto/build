@@ -6,7 +6,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = None\nsolutions = [{'custom_vars': {'root_dir': 'src'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'http://webrtc.googlecode.com/svn/trunk'}]"
+      "cache_dir = None\nsolutions = [{'custom_vars': {'root_dir': 'src'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/webrtc/trunk'}, {'custom_vars': {'root_dir': 'src'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'webrtc-limited', 'url': 'svn://svn-mirror.golo.chromium.org/chrome-internal/trunk/webrtc-limited'}]"
     ],
     "name": "gclient setup"
   },
@@ -29,6 +29,9 @@
       "@@@STEP_LOG_LINE@json.output@  \"solutions\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src/\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"revision\": 170242@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"webrtc-limited/\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": 24644@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"webrtc/\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"revision\": 229524@@@",
@@ -77,20 +80,39 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 32, \"buildername\": \"buildbot builder\", \"mastername\": \"mastername\", \"recipe\": \"webrtc/baremetal\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 32, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/baremetal\", \"revision\": null, \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 32, \"buildername\": \"buildbot builder\", \"mastername\": \"mastername\", \"recipe\": \"webrtc/baremetal\", \"slavename\": \"slavename\"}",
-      "--builder-name=buildbot builder",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 32, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/baremetal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--builder-name=buildbot",
       "--slave-name=slavename",
       "audio_device_tests"
     ],
-    "name": "audio_device_tests",
-    "seed_steps": [
-      "audio_device_tests",
-      "libjingle_peerconnection_objc_test",
+    "name": "audio_device_tests"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 32, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/baremetal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 32, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/baremetal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--builder-name=buildbot",
+      "--slave-name=slavename",
       "vie_auto_test",
+      "--automated",
+      "--capture_test_ensure_resolution_alignment_in_capture_device=false"
+    ],
+    "name": "vie_auto_test",
+    "seed_steps": [
+      "vie_auto_test",
+      "voe_auto_test",
       "video_capture_tests",
-      "voe_auto_test"
+      "webrtc_perf_tests"
     ]
   },
   {
@@ -102,16 +124,15 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 32, \"buildername\": \"buildbot builder\", \"mastername\": \"mastername\", \"recipe\": \"webrtc/baremetal\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 32, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/baremetal\", \"revision\": null, \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 32, \"buildername\": \"buildbot builder\", \"mastername\": \"mastername\", \"recipe\": \"webrtc/baremetal\", \"slavename\": \"slavename\"}",
-      "--builder-name=buildbot builder",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 32, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/baremetal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--builder-name=buildbot",
       "--slave-name=slavename",
-      "libjingle_peerconnection_objc_test.app/Contents/MacOS/libjingle_peerconnection_objc_test",
-      "--automated",
-      "--capture_test_ensure_resolution_alignment_in_capture_device=false"
+      "voe_auto_test",
+      "--automated"
     ],
-    "name": "libjingle_peerconnection_objc_test"
+    "name": "voe_auto_test"
   },
   {
     "always_run": true,
@@ -122,30 +143,10 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 32, \"buildername\": \"buildbot builder\", \"mastername\": \"mastername\", \"recipe\": \"webrtc/baremetal\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 32, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/baremetal\", \"revision\": null, \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 32, \"buildername\": \"buildbot builder\", \"mastername\": \"mastername\", \"recipe\": \"webrtc/baremetal\", \"slavename\": \"slavename\"}",
-      "--builder-name=buildbot builder",
-      "--slave-name=slavename",
-      "vie_auto_test",
-      "--automated",
-      "--capture_test_ensure_resolution_alignment_in_capture_device=false"
-    ],
-    "name": "vie_auto_test"
-  },
-  {
-    "always_run": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Release",
-      "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 32, \"buildername\": \"buildbot builder\", \"mastername\": \"mastername\", \"recipe\": \"webrtc/baremetal\", \"slavename\": \"slavename\"}",
-      "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 32, \"buildername\": \"buildbot builder\", \"mastername\": \"mastername\", \"recipe\": \"webrtc/baremetal\", \"slavename\": \"slavename\"}",
-      "--builder-name=buildbot builder",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 32, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/baremetal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--builder-name=buildbot",
       "--slave-name=slavename",
       "video_capture_tests"
     ],
@@ -160,14 +161,13 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 32, \"buildername\": \"buildbot builder\", \"mastername\": \"mastername\", \"recipe\": \"webrtc/baremetal\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 32, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/baremetal\", \"revision\": null, \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 32, \"buildername\": \"buildbot builder\", \"mastername\": \"mastername\", \"recipe\": \"webrtc/baremetal\", \"slavename\": \"slavename\"}",
-      "--builder-name=buildbot builder",
+      "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 32, \"buildername\": \"buildbot\", \"mastername\": \"mastername\", \"patch_url\": null, \"recipe\": \"webrtc/baremetal\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "--builder-name=buildbot",
       "--slave-name=slavename",
-      "voe_auto_test",
-      "--automated"
+      "webrtc_perf_tests"
     ],
-    "name": "voe_auto_test"
+    "name": "webrtc_perf_tests"
   }
 ]

@@ -27,32 +27,11 @@ class WebRTCApi(recipe_api.RecipeApi):
 
   def add_baremetal_tests(self):
     """Adds baremetal tests, which are different depending on the platform."""
-    vie_auto_test_args = [
-      '--automated',
-      '--capture_test_ensure_resolution_alignment_in_capture_device=false',
-    ]
-
     c = self.m.chromium
     path = self.m.path
 
-    if self.m.platform.is_win:
-      yield (
-        c.runtest('audio_device_tests'),
-        c.runtest('vie_auto_test', args=vie_auto_test_args),
-        c.runtest('video_capture_tests'),
-        c.runtest('voe_auto_test', args=['--automated']),
-      )
-    elif self.m.platform.is_mac:
-      yield (
-        c.runtest('audio_device_tests'),
-        c.runtest(('libjingle_peerconnection_objc_test.app/Contents/MacOS/'
-                   'libjingle_peerconnection_objc_test'),
-                  name='libjingle_peerconnection_objc_test',
-                  args=vie_auto_test_args),
-        c.runtest('vie_auto_test', args=vie_auto_test_args),
-        c.runtest('video_capture_tests'),
-        c.runtest('voe_auto_test', args=['--automated']),
-      )
+    if self.m.platform.is_win or self.m.platform.is_mac:
+      yield c.runtest('audio_device_tests')
     elif self.m.platform.is_linux:
       yield (
         c.runtest('audioproc', name='audioproc_perf',
@@ -63,12 +42,17 @@ class WebRTCApi(recipe_api.RecipeApi):
                         path.checkout('resources/speech_and_misc_wb.pcm'),
                         'isac_speech_and_misc_wb.pcm']),
         c.runtest('libjingle_peerconnection_java_unittest',
-                  env={'LD_PRELOAD':
-                       '/usr/lib/x86_64-linux-gnu/libpulse.so.0'}),
-        c.runtest('vie_auto_test', args=vie_auto_test_args),
-        c.runtest('video_capture_tests'),
-        c.runtest('voe_auto_test', args=['--automated']),
+                  env={'LD_PRELOAD': '/usr/lib/x86_64-linux-gnu/libpulse.so.0'}),
       )
+
+    yield (
+      c.runtest('vie_auto_test', args=[
+        '--automated',
+        '--capture_test_ensure_resolution_alignment_in_capture_device=false']),
+      c.runtest('voe_auto_test', args=['--automated']),
+      c.runtest('video_capture_tests'),
+      c.runtest('webrtc_perf_tests'),
+    )
 
   def apply_svn_patch(self):
     script = self.m.path['build'].join('scripts', 'slave', 'apply_svn_patch.py')
