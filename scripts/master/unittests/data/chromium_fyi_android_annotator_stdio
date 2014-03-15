@@ -1662,7 +1662,7 @@ Full Staging in /mnt/data/b/build/slave/Android_Builder__dbg_/chrome_staging
 Build Directory /mnt/data/b/build/slave/Android_Builder__dbg_/build/src/out/Debug
 Zip rules
   Inclusions: []
-  Exclusions: ['lib.target', 'gen', 'android_webview', 'jingle_unittests', 'appcache', 'glue', 'googleurl', 'lib', 'lib.host', 'obj', 'obj.host', 'obj.target', 'src', '.deps', '.sconsign.dblite', 'mksnapshot']
+  Exclusions: ['lib.target', 'gen', 'android_webview', 'jingle_unittests', 'appcache', 'glue', 'url_unittests', 'lib', 'lib.host', 'obj', 'obj.host', 'obj.target', 'src', '.deps', '.sconsign.dblite', 'mksnapshot']
   Whitelist regex: '$NO_FILTER^'
   Blacklist regex: '^.+\.(o|a|d)$'
 

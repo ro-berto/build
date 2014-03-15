@@ -169,7 +169,7 @@ def FileExclusions():
   if chromium_utils.IsLinux():
     return all_platforms + [
       # intermediate build directories (full of .o, .d, etc.).
-      'appcache', 'glue', 'googleurl', 'lib.host', 'obj.host',
+      'appcache', 'glue', 'lib.host', 'obj.host',
       'obj.target', 'src', '.deps',
       # scons build cruft
       '.sconsign.dblite',
