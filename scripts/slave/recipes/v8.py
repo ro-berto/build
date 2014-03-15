@@ -68,10 +68,10 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
-      'V8 Linux64 clang': {
+      'V8 Linux64 ASAN': {
         'recipe_config': 'v8',
         'gclient_apply_config': ['clang'],
-        'chromium_apply_config': ['clang'],
+        'chromium_apply_config': ['clang', 'asan', 'no_lsan'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,

@@ -423,6 +423,7 @@ V8_LKGR_STEPS = {
     'V8 Linux64': ['Check', 'OptimizeForSize', 'Test262', 'Mozilla',
                    'Static-Initializers'],
     'V8 Linux64 - debug': ['Check', 'Webkit', 'Test262', 'Mozilla'],
+    'V8 Linux64 ASAN': ['Check'],
     'V8 Linux - nosnap': ['Check', 'Test262', 'Mozilla'],
     'V8 Linux - nosnap - debug': ['Check', 'Test262', 'Mozilla'],
     'V8 Linux - isolates': ['Check'],
