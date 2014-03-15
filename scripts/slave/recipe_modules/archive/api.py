@@ -22,11 +22,13 @@ class ArchiveApi(recipe_api.RecipeApi):
     )
 
   def download_and_unzip_build(
-      self, step_name, target, build_url, **kwargs):
+      self, step_name, target, build_url, src_dir=None, **kwargs):
     """Returns a step invoking extract_build.py to download and unzip
        a Chromium build."""
     args = ['--target', target,
             '--build-url', build_url]
+    if src_dir:
+      args.extend(['--src-dir', src_dir])
     args.extend(self.m.json.property_args())
     return self.m.python(
       step_name,

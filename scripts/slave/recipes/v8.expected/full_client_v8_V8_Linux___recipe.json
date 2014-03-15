@@ -6,7 +6,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = None\nsolutions = [{'custom_deps': {'v8/tools/clang/scripts': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src/tools/clang/scripts'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'http://v8.googlecode.com/svn/branches/bleeding_edge'}]"
+      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'http://v8.googlecode.com/svn/branches/bleeding_edge'}]"
     ],
     "name": "gclient setup"
   },
@@ -44,43 +44,50 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "asan=1 clang=1 linux_use_tcmalloc=0 lsan=0 target_arch=x64 v8_target_arch=x64"
+      "GYP_DEFINES": "target_arch=ia32 v8_target_arch=ia32"
     },
     "name": "gclient runhooks",
     "seed_steps": [
       "gclient runhooks",
-      "update clang",
-      "compile",
+      "rmtree build directory",
+      "extract build",
       "Check",
       "Check - flaky"
     ]
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/v8/tools/clang/scripts/update.sh"
+      "python",
+      "-u",
+      "\nimport shutil, sys\nshutil.rmtree(sys.argv[1])\n",
+      "[SLAVE_BUILD]/v8/Release"
     ],
-    "env": {
-      "LLVM_URL": "svn://svn-mirror.golo.chromium.org/llvm-project"
-    },
-    "name": "update clang"
+    "name": "rmtree build directory",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import shutil, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
   },
   {
     "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/compile.py",
+      "[BUILD]/scripts/slave/extract_build.py",
       "--target",
       "Release",
+      "--build-url",
+      "gs://chromium-v8/v8-linux-rel",
       "--src-dir",
-      "[SLAVE_BUILD]/v8",
-      "--build-tool",
-      "make",
-      "--compiler",
-      "clang",
-      "--"
+      "v8",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8 Linux - recipe\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": \"V8 Linux - builder\", \"recipe\": \"v8\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8 Linux - recipe\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": \"V8 Linux - builder\", \"recipe\": \"v8\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
-    "name": "compile"
+    "name": "extract build"
   },
   {
     "cmd": [
@@ -90,17 +97,13 @@
       "--target",
       "Release",
       "--arch",
-      "x64",
+      "ia32",
       "--testname",
       "mjsunit cctest message preparser",
       "--flaky-tests",
-      "skip",
-      "--asan"
+      "skip"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "env": {
-      "ASAN_SYMBOLIZER_PATH": "[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
-    },
     "name": "Check"
   },
   {
@@ -111,17 +114,13 @@
       "--target",
       "Release",
       "--arch",
-      "x64",
+      "ia32",
       "--testname",
       "mjsunit cctest message preparser",
       "--flaky-tests",
-      "run",
-      "--asan"
+      "run"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "env": {
-      "ASAN_SYMBOLIZER_PATH": "[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
-    },
     "name": "Check - flaky"
   }
 ]

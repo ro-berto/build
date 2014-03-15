@@ -3,9 +3,11 @@
 # found in the LICENSE file.
 
 DEPS = [
+  'archive',
   'chromium',
   'gclient',
   'json',
+  'path',
   'platform',
   'properties',
   'v8',
@@ -48,6 +50,11 @@ class V8Test(object):
     return V8_TEST_CONFIGS[self.name].get('gclient_apply_config', [])
 
 
+# Map of GS archive names to urls.
+GS_ARCHIVES = {
+  'linux_rel_archive': 'gs://chromium-v8/v8-linux-rel',
+}
+
 BUILDERS = {
   'client.v8': {
     'builders': {
@@ -88,13 +95,13 @@ BUILDERS = {
       # waterfall to be switched to recipes.
       'V8 Linux - recipe': {
         'recipe_config': 'v8',
-        'gclient_apply_config': ['clang'],
-        'chromium_apply_config': ['clang', 'asan', 'no_lsan'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
+          'TARGET_BITS': 32,
         },
-        'bot_type': 'builder_tester',
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux - builder',
+        'build_gs_archive': 'linux_rel_archive',
         'tests': [
           V8Test('v8testing'),
         ],
@@ -146,8 +153,25 @@ def GenSteps(api):
   if 'clang' in bot_config.get('gclient_apply_config', []):
     steps.append(api.v8.update_clang())
 
-  steps.append(api.v8.compile())
-  steps.extend([t.run(api) for t in bot_config.get('tests', [])])
+  bot_type = bot_config.get('bot_type', 'builder_tester')
+
+  if bot_type in ['builder', 'builder_tester']:
+    steps.append(api.v8.compile())
+
+  if bot_type == 'tester':
+    steps.append(api.path.rmtree(
+        'build directory',
+        api.chromium.c.build_dir.join(api.chromium.c.build_config_fs)))
+
+    steps.append(api.archive.download_and_unzip_build(
+        'extract build',
+        api.chromium.c.build_config_fs,
+        GS_ARCHIVES[bot_config['build_gs_archive']],
+        abort_on_failure=True,
+        src_dir='v8'))
+
+  if bot_type in ['tester', 'builder_tester']:
+    steps.extend([t.run(api) for t in bot_config.get('tests', [])])
   yield steps
 
 
@@ -167,8 +191,10 @@ def GenTests(api):
       test = (
         api.test('full_%s_%s' % (_sanitize_nonalpha(mastername),
                                  _sanitize_nonalpha(buildername))) +
-        api.properties(mastername=mastername,
-                       buildername=buildername) +
+        api.properties.generic(mastername=mastername,
+                               buildername=buildername,
+                               parent_buildername=bot_config.get(
+                                   'parent_buildername')) +
         api.platform(bot_config['testing']['platform'],
                      v8_config_kwargs.get('TARGET_BITS', 64))
       )
