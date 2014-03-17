@@ -26,7 +26,6 @@ tests = [
     'webrtc_manual_browser_tests',
     # 'webrtc_manual_content_browsertests',  Disabled: crbug.com/281492.
     # 'webrtc_content_unittests',  # Disabled: crbug.com/310115.
-    # 'webrtc_perf_content_unittests',  # Disabled: crbug.com/310115.
 ]
 
 defaults['category'] = 'linux'

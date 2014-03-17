@@ -1403,13 +1403,6 @@ class ChromiumCommands(commands.FactoryCommands):
                           maxTime=maxTime,
                           factory_properties=factory_properties)
 
-  def AddWebRtcPerfContentUnittests(self, factory_properties=None):
-    self.AddAnnotatedPerfStep(test_name='webrtc_perf_content_unittests',
-                              gtest_filter="WebRTCAudioDeviceTest*",
-                              log_type='graphing',
-                              factory_properties=factory_properties,
-                              cmd_name='content_unittests')
-
   def AddWebRtcPerfManualContentBrowserTests(self, factory_properties=None):
     cmd_options = ['--run-manual', '--test-launcher-print-test-stdio=always']
     self.AddAnnotatedPerfStep(test_name='webrtc_manual_content_browsertests',

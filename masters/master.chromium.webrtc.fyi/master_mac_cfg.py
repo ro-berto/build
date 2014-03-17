@@ -25,7 +25,6 @@ tests = [
     'webrtc_manual_browser_tests',
     'webrtc_manual_content_browsertests',
     'webrtc_content_unittests',
-    'webrtc_perf_content_unittests',
     'sizes',
 ]
 
