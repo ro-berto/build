@@ -397,8 +397,7 @@ def GenSteps(api):
         api.chromium.compile(),
       )
 
-    yield api.test_utils.determine_new_failures([BlinkTest()], deapply_patch_fn,
-                                                max_failures=75)
+    yield api.test_utils.determine_new_failures([BlinkTest()], deapply_patch_fn)
 
 
 def _sanitize_nonalpha(text):
