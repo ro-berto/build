@@ -68,7 +68,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
       """Helper to uniformly combine tests's name with a suffix."""
       return '%s (%s)' % (self.name, suffix)
 
-  def determine_new_failures(self, tests, deapply_patch_fn):
+  def determine_new_failures(self, tests, deapply_patch_fn, max_failures=None):
     """
     Utility function for running steps with a patch applied, and retrying failing
     steps without the patch. Failures from the run without patch are ignored.
@@ -128,7 +128,10 @@ class TestUtilsApi(recipe_api.RecipeApi):
           ['ignored:', ignored_failures]
       ])
 
-      if new_failures:
+      if (max_failures is not None and
+          len(test.failures('with path') > max_failures):
+        p.status = 'FAILURE'
+      elif new_failures:
         p.status = 'FAILURE'
       elif ignored_failures:
         p.status = 'WARNING'
