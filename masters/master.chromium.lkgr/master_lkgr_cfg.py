@@ -163,7 +163,6 @@ F('linux_asan_dbg', linux().ChromiumASANFactory(
        'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': asan_debug_gyp}}))
 
-# Using component=static_library to work around http://crbug.com/351672.
 asan_ia32_v8_arm = ('asan=1 linux_use_tcmalloc=0 disable_nacl=1 '
                     'v8_target_arch=arm host_arch=x86_64 target_arch=ia32 '
                     'sysroot=/var/lib/chroot/precise32bit chroot_cmd=precise32 '
