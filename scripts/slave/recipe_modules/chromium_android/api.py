@@ -340,13 +340,14 @@ class AndroidApi(recipe_api.RecipeApi):
             env=self.get_env()
         )
 
-  def monkey_test(self):
+  def monkey_test(self, **kwargs):
     yield self.m.python(
         'Monkey Test',
         str(self.m.path['checkout'].join('build', 'android', 'test_runner.py')),
         [ 'monkey', '-v', '--package=chrome', '--event-count=50000' ],
         env={'BUILDTYPE': self.c.BUILD_CONFIG},
-        always_run=True)
+        always_run=True,
+        **kwargs)
 
   def logcat_dump(self):
     if self.m.step_history.get('spawn_logcat_monitor'):
