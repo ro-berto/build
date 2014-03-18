@@ -84,6 +84,7 @@ class V8CheckInitializers(object):
 # Map of GS archive names to urls.
 GS_ARCHIVES = {
   'linux_rel_archive': 'gs://chromium-v8/v8-linux-rel',
+  'linux_rel_archive_tmp': 'gs://chromium-v8/v8-linux-rel-tmp',
   'linux64_rel_archive': 'gs://chromium-v8/v8-linux64-rel',
   'linux64_dbg_archive': 'gs://chromium-v8/v8-linux64-dbg',
 }
@@ -195,19 +196,8 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
-        'bot_type': 'tester',
-        'parent_buildername': 'V8 Linux - builder',
-        'build_gs_archive': 'linux_rel_archive',
-        'tests': [
-          V8Presubmit(),
-          V8CheckInitializers(),
-          V8Test('v8testing'),
-          V8Test('optimize_for_size'),
-          V8Test('webkit'),
-          V8Test('benchmarks'),
-          V8Test('test262'),
-          V8Test('mozilla'),
-        ],
+        'bot_type': 'builder',
+        'build_gs_archive': 'linux_rel_archive_tmp',
         'testing': {
           'platform': 'linux',
         },
@@ -260,6 +250,13 @@ def GenSteps(api):
 
   if bot_type in ['builder', 'builder_tester']:
     steps.append(api.v8.compile())
+
+  if bot_type == 'builder':
+    steps.append(api.archive.zip_and_upload_build(
+        'package build',
+        api.chromium.c.build_config_fs,
+        GS_ARCHIVES[bot_config['build_gs_archive']],
+        src_dir='v8'))
 
   if bot_type == 'tester':
     steps.append(api.path.rmtree(
