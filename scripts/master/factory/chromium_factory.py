@@ -162,8 +162,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
   # dependencies that are not needed when this test is not run.
   NEEDED_COMPONENTS = {
     '^(webkit)$':
-      [('src/webkit/data/layout_tests/LayoutTests', None),
-       ('src/third_party/WebKit/LayoutTests', None),],
+      [('src/third_party/WebKit/LayoutTests', None)],
   }
 
   NEEDED_COMPONENTS_INTERNAL = {
