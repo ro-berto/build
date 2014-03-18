@@ -68,7 +68,8 @@ class NativeClientFactory(gclient_factory.GClientFactory):
     # Initialize the factory with the basic steps.
     factory = self.BaseFactory(gclient_spec,
                                official_release=official_release,
-                               factory_properties=factory_properties)
+                               factory_properties=factory_properties,
+                               slave_type=slave_type)
     # Get the factory command object to create new steps to the factory.
     nacl_cmd_obj = nacl_commands.NativeClientCommands(factory,
                                                       self._build_dir,
