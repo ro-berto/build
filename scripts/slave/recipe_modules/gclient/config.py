@@ -130,9 +130,7 @@ def chromium_empty(c):
 @config_ctx(includes=['chromium_bare'])
 def chromium(c):
   s = c.solutions[0]
-  s.custom_deps = mirror_only(c, {
-    'src/third_party/WebKit/LayoutTests': None,
-    'src/webkit/data/layout_tests/LayoutTests': None})
+  s.custom_deps = mirror_only(c, {})
 
 @config_ctx(includes=['chromium'])
 def chromium_lkcr(c):
