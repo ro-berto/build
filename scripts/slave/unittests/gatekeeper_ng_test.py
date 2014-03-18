@@ -27,7 +27,7 @@ import urlparse
 import test_env  # pylint: disable=W0403,W0611
 
 from slave import gatekeeper_ng
-from slave import gatekeeper_ng_db
+from slave import build_scan_db
 
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -239,16 +239,16 @@ class GatekeeperTest(unittest.TestCase):
     json = json or self.gatekeeper_file
     self._gatekeeper_config = self._gatekeeper_config or {}
     if not build_db:
-      build_db = gatekeeper_ng_db.gen_db(masters={
+      build_db = build_scan_db.gen_db(masters={
           self.masters[0].url: {
               'mybuilder': {
-                  0: gatekeeper_ng_db.gen_build(finished=True)
+                  0: build_scan_db.gen_build(finished=True)
               }
           }
       })
 
     with open(self.build_db_file, 'w') as f:
-      gatekeeper_ng_db.convert_db_to_json(build_db, self._gatekeeper_config, f)
+      build_scan_db.convert_db_to_json(build_db, self._gatekeeper_config, f)
 
     old_argv = sys.argv[:]
     sys.argv.extend(['--build-db=%s' % self.build_db_file,
@@ -268,7 +268,7 @@ class GatekeeperTest(unittest.TestCase):
 
   def process_build_db(self, master, builder):
     """Reads the build_db from a file and splits out finished/unfinished."""
-    new_build_db = gatekeeper_ng_db.get_build_db(self.build_db_file)
+    new_build_db = build_scan_db.get_build_db(self.build_db_file)
     builds = new_build_db.masters[master][builder]
     finished_new_builds = dict(
         (k, v) for k, v in builds.iteritems() if v.finished)
@@ -711,9 +711,9 @@ class GatekeeperTest(unittest.TestCase):
                                 self.masters[0].builders[0].name,
                                 {'closing_steps': ['step1']})
 
-    build_db = gatekeeper_ng_db.gen_db()
+    build_db = build_scan_db.gen_db()
     urls = self.call_gatekeeper(build_db=build_db)
-    build_db = gatekeeper_ng_db.get_build_db(self.build_db_file)
+    build_db = build_scan_db.get_build_db(self.build_db_file)
     urls += self.call_gatekeeper(build_db=build_db)
     self.assertEquals(1, urls.count(self.mailer_url))
 
@@ -729,16 +729,16 @@ class GatekeeperTest(unittest.TestCase):
                                 self.masters[0].builders[0].name,
                                 {'closing_steps': ['step1']})
 
-    build_db = gatekeeper_ng_db.gen_db()
+    build_db = build_scan_db.gen_db()
     urls = self.call_gatekeeper(build_db=build_db)
     self.assertIn(self.status_url, urls)
 
   def testIncrementalScanning(self):
     """Test that builds in the build DB are skipped."""
-    build_db = gatekeeper_ng_db.gen_db(masters={
+    build_db = build_scan_db.gen_db(masters={
         self.masters[0].url: {
             'mybuilder': {
-                1: gatekeeper_ng_db.gen_build(finished=True)}}})
+                1: build_scan_db.gen_build(finished=True)}}})
 
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--email-app-secret-file=%s' % self.email_secret_file])
@@ -758,7 +758,7 @@ class GatekeeperTest(unittest.TestCase):
     _, finished_new_builds = self.process_build_db(
         self.masters[0].url, 'mybuilder')
     self.assertEquals(finished_new_builds,
-                      {2: gatekeeper_ng_db.gen_build(finished=True, triggered={
+                      {2: build_scan_db.gen_build(finished=True, triggered={
                           '0e321975189099b8f623a4dc29602e76'
                           'f33fd8f5bacf3c7018d0499214372e5b': ['step1']})})
 
@@ -1158,12 +1158,12 @@ class GatekeeperTest(unittest.TestCase):
                      '--set-status', '--password-file', self.status_secret_file
                      ])
 
-    build_db = gatekeeper_ng_db.gen_db(masters={
+    build_db = build_scan_db.gen_db(masters={
         self.masters[0].url: {
             'mybuilder': {
-                0: gatekeeper_ng_db.gen_build(finished=True)},
+                0: build_scan_db.gen_build(finished=True)},
             'mybuilder2': {
-                0: gatekeeper_ng_db.gen_build(finished=True)},
+                0: build_scan_db.gen_build(finished=True)},
             }})
 
     new_build = self.create_generic_build(
@@ -1199,12 +1199,12 @@ class GatekeeperTest(unittest.TestCase):
                      '--set-status', '--password-file', self.status_secret_file
                      ])
 
-    build_db = gatekeeper_ng_db.gen_db(masters={
+    build_db = build_scan_db.gen_db(masters={
         self.masters[0].url: {
             'mybuilder': {
-                0: gatekeeper_ng_db.gen_build(finished=True)},
+                0: build_scan_db.gen_build(finished=True)},
             'mybuilder2': {
-                0: gatekeeper_ng_db.gen_build(finished=True)},
+                0: build_scan_db.gen_build(finished=True)},
             }})
 
     new_build = self.create_generic_build(
@@ -1246,14 +1246,14 @@ class GatekeeperTest(unittest.TestCase):
                      '--set-status', '--password-file', self.status_secret_file
                      ])
 
-    build_db = gatekeeper_ng_db.gen_db(masters={
+    build_db = build_scan_db.gen_db(masters={
         self.masters[0].url: {
             'mybuilder': {
-                0: gatekeeper_ng_db.gen_build(finished=True)},
+                0: build_scan_db.gen_build(finished=True)},
         },
         self.masters[1].url: {
             'mybuilder': {
-                0: gatekeeper_ng_db.gen_build(finished=True)},
+                0: build_scan_db.gen_build(finished=True)},
         },
     })
 
@@ -1324,10 +1324,10 @@ class GatekeeperTest(unittest.TestCase):
 
   def testUpdateBuildDBNotCompletedButFailed(self):
     """Test that partial builds increment the DB if they failed."""
-    build_db = gatekeeper_ng_db.gen_db(masters={
+    build_db = build_scan_db.gen_db(masters={
         self.masters[0].url: {
             'mybuilder': {
-                1: gatekeeper_ng_db.gen_build(finished=True)}}})
+                1: build_scan_db.gen_build(finished=True)}}})
 
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--no-email-app', '--set-status',
@@ -1346,9 +1346,9 @@ class GatekeeperTest(unittest.TestCase):
         self.masters[0].url, 'mybuilder')
 
     self.assertEquals(finished_new_builds,
-                      {1: gatekeeper_ng_db.gen_build(finished=True)})
+                      {1: build_scan_db.gen_build(finished=True)})
     self.assertEquals(unfinished_new_builds,
-                      {2: gatekeeper_ng_db.gen_build(triggered={
+                      {2: build_scan_db.gen_build(triggered={
                           '0e321975189099b8f623a4dc29602e76'
                           'f33fd8f5bacf3c7018d0499214372e5b': ['step1']})})
 
@@ -1356,11 +1356,11 @@ class GatekeeperTest(unittest.TestCase):
 
   def testDontUpdateBuildDBIfNotCompleted(self):
     """Test that partial builds aren't marked as finished."""
-    build_db = gatekeeper_ng_db.gen_db(masters={
+    build_db = build_scan_db.gen_db(masters={
         self.masters[0].url: {
             'mybuilder': {
-                1: gatekeeper_ng_db.gen_build(finished=True),
-                2: gatekeeper_ng_db.gen_build()}}})
+                1: build_scan_db.gen_build(finished=True),
+                2: build_scan_db.gen_build()}}})
 
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--no-email-app', '--set-status',
@@ -1378,9 +1378,9 @@ class GatekeeperTest(unittest.TestCase):
         self.masters[0].url, 'mybuilder')
 
     self.assertEquals(finished_new_builds,
-                      {1: gatekeeper_ng_db.gen_build(finished=True)})
+                      {1: build_scan_db.gen_build(finished=True)})
     self.assertEquals(unfinished_new_builds,
-                      {2: gatekeeper_ng_db.gen_build()})
+                      {2: build_scan_db.gen_build()})
     self.assertNotIn(self.status_url, urls)
 
   def testTriggeringDoesntTriggerOnSameBuild(self):
@@ -1396,24 +1396,24 @@ class GatekeeperTest(unittest.TestCase):
                                 {'closing_steps': ['step1']})
 
     urls = self.call_gatekeeper()
-    build_db = gatekeeper_ng_db.get_build_db(self.build_db_file)
+    build_db = build_scan_db.get_build_db(self.build_db_file)
     urls += self.call_gatekeeper(build_db=build_db)
     unfinished_new_builds, finished_new_builds = self.process_build_db(
         self.masters[0].url, 'mybuilder')
     self.assertEquals(finished_new_builds,
-                      {0: gatekeeper_ng_db.gen_build(finished=True)})
+                      {0: build_scan_db.gen_build(finished=True)})
     self.assertEquals(unfinished_new_builds,
-                      {1: gatekeeper_ng_db.gen_build(triggered={
+                      {1: build_scan_db.gen_build(triggered={
                           '0e321975189099b8f623a4dc29602e76'
                           'f33fd8f5bacf3c7018d0499214372e5b': ['step1']})})
     self.assertEquals(1, len([u for u in urls if u == self.status_url]))
 
   def testTriggeringOneHashDoesntStopAnother(self):
     """Test that firing on one hash doesn't prevent another hash triggering."""
-    build_db = gatekeeper_ng_db.gen_db(masters={
+    build_db = build_scan_db.gen_db(masters={
         self.masters[0].url: {
             'mybuilder': {
-                1: gatekeeper_ng_db.gen_build(finished=True)}}})
+                1: build_scan_db.gen_build(finished=True)}}})
 
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--no-email-app', '--set-status',
@@ -1432,14 +1432,14 @@ class GatekeeperTest(unittest.TestCase):
                                 self.masters[0].builders[0].name,
                                 {'closing_steps': ['step2']})
     self.masters[0].builders[0].builds[1].steps[2].results = [2, None]
-    build_db = gatekeeper_ng_db.get_build_db(self.build_db_file)
+    build_db = build_scan_db.get_build_db(self.build_db_file)
     urls += self.call_gatekeeper(build_db=build_db)
     unfinished_new_builds, finished_new_builds = self.process_build_db(
         self.masters[0].url, 'mybuilder')
     self.assertEquals(finished_new_builds,
-                      {1: gatekeeper_ng_db.gen_build(finished=True)})
+                      {1: build_scan_db.gen_build(finished=True)})
     self.assertEquals(unfinished_new_builds,
-                      {2: gatekeeper_ng_db.gen_build(triggered={
+                      {2: build_scan_db.gen_build(triggered={
                           '0e321975189099b8f623a4dc29602e76'
                           'f33fd8f5bacf3c7018d0499214372e5b': ['step1'],
 
@@ -1465,13 +1465,13 @@ class GatekeeperTest(unittest.TestCase):
     new_build = self.create_generic_build(
         2, ['a_second_committer@chromium.org'])
     self.masters[0].builders[0].builds.append(new_build)
-    build_db = gatekeeper_ng_db.get_build_db(self.build_db_file)
+    build_db = build_scan_db.get_build_db(self.build_db_file)
     urls += self.call_gatekeeper(build_db=build_db)
     self.assertEquals(urls.count(self.status_url), 1)
     _, finished_new_builds = self.process_build_db(
         self.masters[0].url, 'mybuilder')
     self.assertEquals(finished_new_builds,
-                      {2: gatekeeper_ng_db.gen_build(finished=True)})
+                      {2: build_scan_db.gen_build(finished=True)})
 
   def testOnlyFireOnNewFailures(self):
     """Test that the tree isn't closed if only an old test failed."""
@@ -1493,7 +1493,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds.append(new_build)
     self.masters[0].builders[0].builds[1].steps[1].results = [2, None]
 
-    build_db = gatekeeper_ng_db.get_build_db(self.build_db_file)
+    build_db = build_scan_db.get_build_db(self.build_db_file)
     urls += self.call_gatekeeper(build_db=build_db)
     self.assertEquals(urls.count(self.status_url), 1)
 
@@ -1518,14 +1518,14 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds.append(new_build)
     self.masters[0].builders[0].builds[1].steps[1].results = [2, None]
 
-    build_db = gatekeeper_ng_db.get_build_db(self.build_db_file)
+    build_db = build_scan_db.get_build_db(self.build_db_file)
     urls += self.call_gatekeeper(build_db=build_db)
     self.assertEquals(urls.count(self.status_url), 1)
 
     unfinished_new_builds, finished_new_builds = self.process_build_db(
         self.masters[0].url, 'mybuilder')
     self.assertEquals(finished_new_builds,
-                      {2: gatekeeper_ng_db.gen_build(finished=True, triggered={
+                      {2: build_scan_db.gen_build(finished=True, triggered={
                           '46d698c94742f1578471bd52a26053f6'
                           'ff0083a441560fdb029647945d5032dc': ['step1'],
                           })})
@@ -1552,13 +1552,13 @@ class GatekeeperTest(unittest.TestCase):
 
     self.masters[0].builders[0].builds[1].steps[2].results = [2, None]
 
-    build_db = gatekeeper_ng_db.get_build_db(self.build_db_file)
+    build_db = build_scan_db.get_build_db(self.build_db_file)
     urls += self.call_gatekeeper(build_db=build_db)
     self.assertEquals(urls.count(self.status_url), 2)
     unfinished_new_builds, finished_new_builds = self.process_build_db(
         self.masters[0].url, 'mybuilder')
     self.assertEquals(finished_new_builds,
-                      {2: gatekeeper_ng_db.gen_build(finished=True, triggered={
+                      {2: build_scan_db.gen_build(finished=True, triggered={
                           '46d698c94742f1578471bd52a26053f6'
                           'ff0083a441560fdb029647945d5032dc': [u'step2']})})
     self.assertEquals(unfinished_new_builds, {})
@@ -1582,13 +1582,13 @@ class GatekeeperTest(unittest.TestCase):
 
     self.masters[0].builders[0].builds[0].steps[2].results = [2, None]
 
-    build_db = gatekeeper_ng_db.get_build_db(self.build_db_file)
+    build_db = build_scan_db.get_build_db(self.build_db_file)
     urls += self.call_gatekeeper(build_db=build_db)
     self.assertEquals(urls.count(self.status_url), 1)
     unfinished_new_builds, _ = self.process_build_db(
         self.masters[0].url, 'mybuilder')
     self.assertEquals(unfinished_new_builds,
-                      {1: gatekeeper_ng_db.gen_build(triggered={
+                      {1: build_scan_db.gen_build(triggered={
                           '46d698c94742f1578471bd52a26053f6'
                           'ff0083a441560fdb029647945d5032dc': [
                               'step1', 'step2']})})

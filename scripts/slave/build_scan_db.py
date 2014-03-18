@@ -3,7 +3,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-"""Contains configuration and setup of gatekeeper build database.
+"""Contains configuration and setup of a build scan database.
 
 The databse is a versioned JSON file built of NamedTuples.
 """

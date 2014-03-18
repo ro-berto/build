@@ -28,9 +28,9 @@ import time
 import urllib
 import urllib2
 
-from common import chromium_utils
+from slave import build_scan
+from slave import build_scan_db
 from slave import gatekeeper_ng_config
-from slave import gatekeeper_ng_db
 
 SCRIPTS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                            '..', '..')
@@ -58,131 +58,6 @@ def update_status(tree_message, tree_status_url, username, password):
   f = urllib2.urlopen(tree_status_url, params)
   f.close()
   logging.info('success')
-
-
-def get_root_json(master_url):
-  """Pull down root JSON which contains builder and build info."""
-  logging.info('opening %s' % (master_url + '/json'))
-  with closing(urllib2.urlopen(master_url + '/json')) as f:
-    return json.load(f)
-
-
-def find_new_builds(master_url, root_json, build_db):
-  """Given a dict of previously-seen builds, find new builds on each builder.
-
-  Note that we use the 'cachedBuilds' here since it should be faster, and this
-  script is meant to be run frequently enough that it shouldn't skip any builds.
-
-  'Frequently enough' means 1 minute in the case of Buildbot or cron, so the
-  only way for gatekeeper_ng to be overwhelmed is if > cachedBuilds builds
-  complete within 1 minute. As cachedBuilds is scaled per number of slaves per
-  builder, the only way for this to really happen is if a build consistently
-  takes < 1 minute to complete.
-  """
-  new_builds = {}
-  build_db.masters[master_url] = build_db.masters.get(master_url, {})
-
-  last_finished_build = {}
-  for builder, builds in build_db.masters[master_url].iteritems():
-    finished = [int(y[0]) for y in filter(
-        lambda x: x[1].finished, builds.iteritems())]
-    if finished:
-      last_finished_build[builder] = max(finished)
-
-  for buildername, builder in root_json['builders'].iteritems():
-    # cachedBuilds are the builds in the cache, while currentBuilds are the
-    # currently running builds. Thus cachedBuilds can be unfinished or finished,
-    # while currentBuilds are always unfinished.
-    candidate_builds = set(builder['cachedBuilds'] + builder['currentBuilds'])
-    if buildername in last_finished_build:
-      new_builds[buildername] = [
-          buildnum for buildnum in candidate_builds
-          if buildnum > last_finished_build[buildername]]
-    else:
-      if buildername in build_db.masters[master_url]:
-        # We've seen this builder before, but haven't seen a finished build.
-        # Scan finished builds as well as unfinished.
-        new_builds[buildername] = candidate_builds
-      else:
-        # We've never seen this builder before, only scan unfinished builds.
-
-        # We're explicitly only dealing with current builds since we haven't
-        # seen this builder before. Thus, the next time gatekeeper_ng is run,
-        # only unfinished builds will be in the build_db. This immediately drops
-        # us into the section above (builder is in the db, but no finished
-        # builds yet.) In this state all the finished builds will be loaded in,
-        # firing off an email storm any time the build_db changes or a new
-        # builder is added. We set the last finished build here to prevent that.
-        finished = set(builder['cachedBuilds']) - set(builder['currentBuilds'])
-        if finished:
-          build_db.masters[master_url].setdefault(buildername, {})[
-              max(finished)] = gatekeeper_ng_db.gen_build(finished=True)
-
-        new_builds[buildername] = builder['currentBuilds']
-
-  return new_builds
-
-
-def find_new_builds_per_master(masters, build_db):
-  """Given a list of masters, find new builds and collect them under a dict."""
-  builds = {}
-  master_jsons = {}
-  for master in masters:
-    root_json = get_root_json(master)
-    master_jsons[master] = root_json
-    builds[master] = find_new_builds(master, root_json, build_db)
-  return builds, master_jsons
-
-
-def get_build_json(url_tuple):
-  """Downloads the json of a specific build."""
-  url, master, builder, buildnum = url_tuple
-  logging.debug('opening %s...' % url)
-  with closing(urllib2.urlopen(url)) as f:
-    return json.load(f), master, builder, buildnum
-
-
-def get_build_jsons(master_builds, processes):
-  """Get all new builds on specified masters.
-
-  This takes a dict in the form of [master][builder][build], formats that URL
-  and appends that to url_list. Then, it forks out and queries each build_url
-  for build information.
-  """
-  url_list = []
-  for master, builder_dict in master_builds.iteritems():
-    for builder, new_builds in builder_dict.iteritems():
-      for buildnum in new_builds:
-        safe_builder = urllib.quote(builder)
-        url = master + '/json/builders/%s/builds/%s' % (safe_builder,
-                                                        buildnum)
-        url_list.append((url, master, builder, buildnum))
-
-  # Prevent map from hanging, see http://bugs.python.org/issue12157.
-  if url_list:
-    # The async/get is so that ctrl-c can interrupt the scans.
-    # See http://stackoverflow.com/questions/1408356/
-    # keyboard-interrupts-with-pythons-multiprocessing-pool
-    with chromium_utils.MultiPool(processes) as pool:
-      builds = filter(bool, pool.map_async(get_build_json, url_list).get(
-          9999999))
-  else:
-    builds = []
-
-  return builds
-
-
-def propagate_build_json_to_db(build_db, builds):
-  """Propagates build status changes from build_json to build_db."""
-  for build_json, master, builder, buildnum in builds:
-    build = build_db.masters[master].setdefault(builder, {}).get(buildnum)
-    if not build:
-      build = gatekeeper_ng_db.gen_build()
-
-    if build_json.get('results', None) is not None:
-      build = build._replace(finished=True)  # pylint: disable=W0212
-
-    build_db.masters[master][builder][buildnum] = build
 
 
 def check_builds(master_builds, master_jsons, gatekeeper_config):
@@ -608,18 +483,17 @@ def main():
 
   if options.clear_build_db:
     build_db = {}
-    gatekeeper_ng_db.save_build_db(build_db, gatekeeper_config,
-                                   options.build_db)
+    build_scan_db.save_build_db(build_db, gatekeeper_config,
+                                options.build_db)
   else:
-    build_db = gatekeeper_ng_db.get_build_db(options.build_db)
+    build_db = build_scan_db.get_build_db(options.build_db)
 
-  new_builds, master_jsons = find_new_builds_per_master(masters, build_db)
-  build_jsons = get_build_jsons(new_builds, options.parallelism)
-  propagate_build_json_to_db(build_db, build_jsons)
+  master_jsons, build_jsons = build_scan.get_updated_builds(
+      masters, build_db, options.parallelism)
 
   if options.sync_build_db:
-    gatekeeper_ng_db.save_build_db(build_db, gatekeeper_config,
-                                   options.build_db)
+    build_scan_db.save_build_db(build_db, gatekeeper_config,
+                             options.build_db)
     return 0
 
   failed_builds = check_builds(build_jsons, master_jsons, gatekeeper_config)
@@ -633,8 +507,8 @@ def main():
                         options.disable_domain_filter)
 
   if not options.skip_build_db_update:
-    gatekeeper_ng_db.save_build_db(build_db, gatekeeper_config,
-                                   options.build_db)
+    build_scan_db.save_build_db(build_db, gatekeeper_config,
+                             options.build_db)
 
   return 0
 
