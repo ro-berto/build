@@ -122,4 +122,4 @@ class GitHelper(object):
   def number(self, *refs):
     cmd = ['number'] + list(refs)
     out = self._run(cmd)
-    return out.splitlines()
+    return map(int, out.splitlines())
