@@ -73,6 +73,7 @@ def clang_builder(c):
 
 @config_ctx(config_vars={'BUILD_CONFIG': 'Release'})
 def clang_release_builder(c):
+  c.asan_symbolize = True
   c.storage_bucket = 'chrome-test-builds/android'
   c.archive_clusterfuzz = True
 

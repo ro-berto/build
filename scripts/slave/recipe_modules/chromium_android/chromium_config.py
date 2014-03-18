@@ -28,13 +28,13 @@ def main_builder(c):
     raise recipe_config.BadConf(
       'Cannot target arm with TARGET_ARCH == %s' % c.TARGET_ARCH)
 
-@CONFIG_CTX(includes=['base_config', 'clang', 'goma'])
+@CONFIG_CTX(includes=['base_config', 'clang', 'goma', 'asan'])
 def clang_builder(c):
-  pass
+  c.gyp_env.GYP_DEFINES['component'] = 'shared_library'
 
-@CONFIG_CTX(includes=['base_config', 'clang', 'goma'])
+@CONFIG_CTX(includes=['base_config', 'clang', 'goma', 'asan'])
 def clang_release_builder(c):
-  pass
+  c.gyp_env.GYP_DEFINES['component'] = 'shared_library'
 
 @CONFIG_CTX(includes=['main_builder'])
 def component_builder(c):
