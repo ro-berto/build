@@ -28,13 +28,19 @@ def main_builder(c):
     raise recipe_config.BadConf(
       'Cannot target arm with TARGET_ARCH == %s' % c.TARGET_ARCH)
 
-@CONFIG_CTX(includes=['base_config', 'clang', 'goma', 'asan'])
+@CONFIG_CTX(includes=['base_config', 'clang', 'goma'])
 def clang_builder(c):
   c.gyp_env.GYP_DEFINES['component'] = 'shared_library'
+  c.gyp_env.GYP_DEFINES['asan'] = 1
+  c.gyp_env.GYP_DEFINES['linux_use_tcmalloc'] = 0
+  c.gyp_env.GYP_DEFINES['use_allocator'] = 'none'
 
-@CONFIG_CTX(includes=['base_config', 'clang', 'goma', 'asan'])
+@CONFIG_CTX(includes=['base_config', 'clang', 'goma'])
 def clang_release_builder(c):
   c.gyp_env.GYP_DEFINES['component'] = 'shared_library'
+  c.gyp_env.GYP_DEFINES['asan'] = 1
+  c.gyp_env.GYP_DEFINES['linux_use_tcmalloc'] = 0
+  c.gyp_env.GYP_DEFINES['use_allocator'] = 'none'
 
 @CONFIG_CTX(includes=['main_builder'])
 def component_builder(c):
