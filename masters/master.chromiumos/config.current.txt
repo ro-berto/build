@@ -633,7 +633,7 @@ config = {
     {
       'auto_reboot': False,
       'builddir': 'amd64-generic-ASAN',
-      'category': '1release full|closer',
+      'category': '1release full|info',
       'factory': BuildFactory {
         steps: [
           (
