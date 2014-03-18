@@ -5,6 +5,14 @@
 from slave import recipe_api
 
 class ArchiveApi(recipe_api.RecipeApi):
+  """Chromium specific module for zipping, uploading and downloading build
+  artifacts implemented as a wrapper around zip_build.py script.
+
+  If you need to upload or download build artifacts (or any other files) for
+  something other than Chromium flavor, consider using 'zip' + 'gsutil' or
+  'isolate' modules instead.
+  """
+
   def zip_and_upload_build(
       self, step_name, target, build_url=None, **kwargs):
     """Returns a step invoking zip_build.py to zip up a Chromium build.
