@@ -53,6 +53,7 @@ categories_steps = {
     'start_crash_handler',
     'sync_integration_tests',
     'sync_unit_tests',
+    'ui_unittests',
     'unit_tests',
     'url_unittests',
     'views_unittests',
