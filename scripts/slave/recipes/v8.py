@@ -15,11 +15,22 @@ DEPS = [
 
 
 V8_TEST_CONFIGS = {
+  'benchmarks': {
+    'name': 'Benchmarks',
+    'tests': 'benchmarks',
+    'flaky_step': False,
+  },
   'mozilla': {
     'name': 'Mozilla',
     'tests': 'mozilla',
     'flaky_step': False,
     'gclient_apply_config': ['mozilla_tests'],
+  },
+  'optimize_for_size': {
+    'name': 'OptimizeForSize',
+    'tests': 'cctest mjsunit webkit',
+    'flaky_step': True,
+    'test_args': ['--no-variants', '--shell_flags="--optimize-for-size"'],
   },
   'test262': {
     'name': 'Test262',
@@ -48,6 +59,26 @@ class V8Test(object):
 
   def gclient_apply_config(self):
     return V8_TEST_CONFIGS[self.name].get('gclient_apply_config', [])
+
+
+class V8Presubmit(object):
+  @staticmethod
+  def run(api):
+    return api.v8.presubmit()
+
+  @staticmethod
+  def gclient_apply_config():
+    return []
+
+
+class V8CheckInitializers(object):
+  @staticmethod
+  def run(api):
+    return api.v8.check_initializers()
+
+  @staticmethod
+  def gclient_apply_config():
+    return []
 
 
 # Map of GS archive names to urls.
@@ -103,7 +134,14 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - builder',
         'build_gs_archive': 'linux_rel_archive',
         'tests': [
+          V8Presubmit(),
+          V8CheckInitializers(),
           V8Test('v8testing'),
+          V8Test('optimize_for_size'),
+          V8Test('webkit'),
+          V8Test('benchmarks'),
+          V8Test('test262'),
+          V8Test('mozilla'),
         ],
         'testing': {
           'platform': 'linux',

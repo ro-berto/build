@@ -32,13 +32,33 @@ class V8Api(recipe_api.RecipeApi):
   def compile(self):
     return self.m.chromium.compile()
 
-  def _runtest(self, name, tests, flaky_tests=None):
+  def presubmit(self):
+    return self.m.python(
+      'Presubmit',
+      self.m.path['build'].join('scripts', 'slave', 'v8', 'v8testing.py'),
+      ['--testname', 'presubmit'],
+      cwd=self.m.path['checkout'],
+    )
+
+  def check_initializers(self):
+    return self.m.step(
+      'Static-Initializers',
+      ['bash',
+       self.m.path['checkout'].join('tools', 'check-static-initializers.sh'),
+       self.m.path.join(self.m.path.basename(self.m.chromium.c.build_dir),
+                        self.m.chromium.c.build_config_fs,
+                        'd8')],
+      cwd=self.m.path['checkout'],
+    )
+
+  def _runtest(self, name, test, flaky_tests=None):
     env = {}
     full_args = [
       '--target', self.m.chromium.c.build_config_fs,
       '--arch', self.m.chromium.c.gyp_env.GYP_DEFINES['target_arch'],
-      '--testname', tests,
+      '--testname', test['tests'],
     ]
+    full_args += test.get('test_args', [])
     if flaky_tests:
       full_args += ['--flaky-tests', flaky_tests]
 
@@ -60,12 +80,8 @@ class V8Api(recipe_api.RecipeApi):
   def runtest(self, test):
     if test['flaky_step']:
       return [
-        self._runtest(test['name'],
-                      test['tests'],
-                      flaky_tests='skip'),
-        self._runtest(test['name'] + ' - flaky',
-                      test['tests'],
-                      flaky_tests='run'),
+        self._runtest(test['name'], test, flaky_tests='skip'),
+        self._runtest(test['name'] + ' - flaky', test, flaky_tests='run'),
       ]
     else:
-      return self._runtest(test['name'], test['tests'])
+      return self._runtest(test['name'], test)
