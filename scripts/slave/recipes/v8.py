@@ -84,6 +84,8 @@ class V8CheckInitializers(object):
 # Map of GS archive names to urls.
 GS_ARCHIVES = {
   'linux_rel_archive': 'gs://chromium-v8/v8-linux-rel',
+  'linux64_rel_archive': 'gs://chromium-v8/v8-linux64-rel',
+  'linux64_dbg_archive': 'gs://chromium-v8/v8-linux64-dbg',
 }
 
 BUILDERS = {
@@ -122,6 +124,46 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'tests': [
           V8Test('v8testing'),
+          V8Test('test262'),
+          V8Test('mozilla'),
+        ],
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'V8 Linux64': {
+        'recipe_config': 'v8',
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux64 - builder',
+        'build_gs_archive': 'linux64_rel_archive',
+        'tests': [
+          V8CheckInitializers(),
+          V8Test('v8testing'),
+          V8Test('optimize_for_size'),
+          V8Test('webkit'),
+          V8Test('test262'),
+          V8Test('mozilla'),
+        ],
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'V8 Linux64 - debug': {
+        'recipe_config': 'v8',
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux64 - debug builder',
+        'build_gs_archive': 'linux64_dbg_archive',
+        'tests': [
+          V8Test('v8testing'),
+          V8Test('webkit'),
           V8Test('test262'),
           V8Test('mozilla'),
         ],
