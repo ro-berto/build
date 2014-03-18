@@ -340,7 +340,9 @@ def GenSteps(api):
 
     def has_valid_results(self, suffix):
       sn = self._step_name(suffix)
-      return api.step_history[sn].json.test_results.valid
+      results = api.step_history[sn].json.test_results
+      return (results.valid and
+              results.num_regressions < results.MAX_FAILURES_EXIT_STATUS)
 
     def failures(self, suffix):
       sn = self._step_name(suffix)
@@ -463,4 +465,11 @@ def GenTests(api):
     api.test('bad_sync_bails') +
     properties('tryserver.chromium', 'linux_blink_rel') +
     api.step_data('gclient sync', retcode=1)
+  )
+
+  yield (
+    api.test('too_many_failures') +
+    properties('tryserver.chromium', 'linux_blink_rel') +
+    api.override_step_data(with_patch, canned_test(passing=False,
+                                                   num_additional_failures=125))
   )

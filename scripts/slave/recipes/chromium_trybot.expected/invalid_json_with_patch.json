@@ -814,13 +814,13 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys\nprint 'FAILED TO READ TEST RESULTS'\nsys.exit(1)\n"
+      "\nimport sys\nprint 'TEST RESULTS WERE INVALID'\nsys.exit(1)\n"
     ],
     "name": "checkdeps",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@print 'FAILED TO READ TEST RESULTS'@@@",
+      "@@@STEP_LOG_LINE@python.inline@print 'TEST RESULTS WERE INVALID'@@@",
       "@@@STEP_LOG_LINE@python.inline@sys.exit(1)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
@@ -830,13 +830,13 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys\nprint 'FAILED TO READ TEST RESULTS'\nsys.exit(1)\n"
+      "\nimport sys\nprint 'TEST RESULTS WERE INVALID'\nsys.exit(1)\n"
     ],
     "name": "deps2git",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@print 'FAILED TO READ TEST RESULTS'@@@",
+      "@@@STEP_LOG_LINE@python.inline@print 'TEST RESULTS WERE INVALID'@@@",
       "@@@STEP_LOG_LINE@python.inline@sys.exit(1)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
@@ -1158,13 +1158,13 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys\nprint 'FAILED TO READ TEST RESULTS'\nsys.exit(1)\n"
+      "\nimport sys\nprint 'TEST RESULTS WERE INVALID'\nsys.exit(1)\n"
     ],
     "name": "nacl_integration",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@print 'FAILED TO READ TEST RESULTS'@@@",
+      "@@@STEP_LOG_LINE@python.inline@print 'TEST RESULTS WERE INVALID'@@@",
       "@@@STEP_LOG_LINE@python.inline@sys.exit(1)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]

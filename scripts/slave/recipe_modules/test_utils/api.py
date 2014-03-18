@@ -87,7 +87,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
           t.name,
           r"""
           import sys
-          print 'FAILED TO READ TEST RESULTS'
+          print 'TEST RESULTS WERE INVALID'
           sys.exit(1)
           """,
           always_run=True)
@@ -112,7 +112,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
         test.name,
         r"""
         import sys
-        print 'FAILED TO READ TEST RESULTS'
+        print 'TEST RESULTS WERE INVALID'
         sys.exit(1)
         """,
         always_run=True)
