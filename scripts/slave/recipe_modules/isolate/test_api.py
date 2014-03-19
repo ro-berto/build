@@ -5,14 +5,9 @@
 from slave import recipe_test_api
 
 class IsolateTestApi(recipe_test_api.RecipeTestApi):
-  def output_json(self, targets=None):
-    """Mocked output or find_isolated_tests.py script.
-
-    Deterministically synthesized json.output test data for the given targets.
-    If |targets| is None, will emit test data with some dummy targets instead,
-    emulating find_isolated_tests.py finding some files.
-    """
-    if targets is None:  # pragma: no cover
-      targets = ['dummy_target_1', 'dummy_target_2']
+  def output_json(self, targets):
+    """Deterministically synthesize json.output test data for the given
+    targets."""
+    # Hash the target's name to get a bogus but deterministic value.
     return self.m.json.output(dict(
         (target, '[dummy hash for %s]' % target) for target in targets))
