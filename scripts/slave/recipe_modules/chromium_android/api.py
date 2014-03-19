@@ -221,6 +221,16 @@ class AndroidApi(recipe_api.RecipeApi):
           [self.c.internal_dir.join('bin', 'lint.py')],
           env=self.get_env())
 
+  def git_number(self):
+    yield self.m.step(
+        'git_number',
+        [self.m.path['depot_tools'].join('git_number.py')],
+        stdout = self.m.raw_io.output(),
+        step_test_data=(
+          lambda:
+            self.m.raw_io.test_api.stream_output('3000\n')
+        ))
+
   def upload_build(self):
     # TODO(luqui) remove dependency on property
     upload_tag = (
@@ -232,9 +242,10 @@ class AndroidApi(recipe_api.RecipeApi):
     bucket = self._internal_names['BUILD_BUCKET']
     dest = self.m.properties['buildername']
     if self.c.storage_bucket:
+      yield self.git_number()
       bucket = self.c.storage_bucket
-      dest = ('asan-android-release-'
-              + self.m.properties.get('revision') + '.zip')
+      revision = str.strip(self.m.step_history['git_number'].stdout)
+      dest = ('asan-android-release-' + revision + '.zip')
 
     path = self.m.chromium.c.BUILD_CONFIG
     files = [path]
