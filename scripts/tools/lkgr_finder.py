@@ -520,8 +520,6 @@ WEBRTC_LKGR_STEPS = {
     'Mac64 Debug': WEBRTC_NORMAL_STEPS,
     'Mac64 Release': WEBRTC_NORMAL_STEPS,
     'Mac Asan': WEBRTC_NORMAL_STEPS,
-    'iOS Debug': ['compile'],
-    'iOS Release': ['compile'],
     'Linux32 Debug': WEBRTC_NORMAL_STEPS,
     'Linux32 Release': WEBRTC_NORMAL_STEPS,
     'Linux64 Debug': WEBRTC_NORMAL_STEPS,
