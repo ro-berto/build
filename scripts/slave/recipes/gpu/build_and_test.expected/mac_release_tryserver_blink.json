@@ -141,19 +141,13 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/swarming/manifest_to_hash.py",
-      "--target",
+      "[BUILD]/scripts/slave/recipe_modules/isolate/resources/find_isolated_tests.py",
+      "--build-dir",
       "Release",
       "--output-json",
-      "/path/to/tmp/json",
-      "angle_unittests",
-      "content_gl_tests",
-      "gles2_conform_test",
-      "gl_tests",
-      "tab_capture_performance_tests",
-      "telemetry_gpu_test"
+      "/path/to/tmp/json"
     ],
-    "name": "manifest_to_hash",
+    "name": "find isolated tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"angle_unittests\": \"[dummy hash for angle_unittests]\", @@@",
