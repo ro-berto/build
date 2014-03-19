@@ -229,7 +229,8 @@ class AndroidApi(recipe_api.RecipeApi):
         step_test_data=(
           lambda:
             self.m.raw_io.test_api.stream_output('3000\n')
-        ))
+        ),
+        cwd=self.m.path['checkout'])
 
   def upload_build(self):
     # TODO(luqui) remove dependency on property
