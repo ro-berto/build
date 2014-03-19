@@ -43,14 +43,15 @@ class AndroidApi(recipe_api.RecipeApi):
 
     self.set_config(config_name, **kwargs)
 
-  def make_zip_archive(self, step_name, zip_file, files, keep_dirs=True,
+  def make_zip_archive(self, step_name, zip_file, files,
+      include_subfolders=True,
       **kwargs):
     assert isinstance(files, list)
     assert len(files)
 
-    zip_vars = '-yr1'
-    if not keep_dirs:
-      zip_vars += 'j'
+    zip_vars = '-y1'
+    if include_subfolders:
+      zip_vars += 'r'
 
     # We want to store symbolic links as links, recurse into directories,
     # and compress fast. Hence we pass -yr1 options to zip which are indicative
@@ -237,16 +238,16 @@ class AndroidApi(recipe_api.RecipeApi):
 
     path = self.m.chromium.c.BUILD_CONFIG
     files = [path]
-    keep_dirs = True
+    include_subfolders = True
     if (self.c.archive_clusterfuzz):
       files = [os.path.join(path, 'apks'), os.path.join(path, 'lib')]
-      keep_dirs = False
+      include_subfolders = False
 
     yield self.make_zip_archive(
       'zip_build_product',
       zipfile,
       files,
-      keep_dirs,
+      include_subfolders,
       cwd=self.m.path['checkout'].join('out')
     )
     yield self.m.gsutil.upload(

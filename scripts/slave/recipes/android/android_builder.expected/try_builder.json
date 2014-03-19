@@ -211,7 +211,7 @@
   {
     "cmd": [
       "zip",
-      "-yr1",
+      "-y1r",
       "[SLAVE_BUILD]/src/out/build_product_1337.zip",
       "Debug"
     ],
