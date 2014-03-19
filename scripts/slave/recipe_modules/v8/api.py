@@ -51,6 +51,19 @@ class V8Api(recipe_api.RecipeApi):
       cwd=self.m.path['checkout'],
     )
 
+  def simple_leak_check(self):
+    # TODO(machenbach): Add task kill step for windows.
+    relative_d8_path = self.m.path.join(
+        self.m.path.basename(self.m.chromium.c.build_dir),
+        self.m.chromium.c.build_config_fs,
+        'd8')
+    return self.m.step(
+      'Simple Leak Check',
+      ['valgrind', '--leak-check=full', '--show-reachable=yes',
+       '--num-callers=20', relative_d8_path, '-e', '"print(1+2)"'],
+      cwd=self.m.path['checkout'],
+    )
+
   def _runtest(self, name, test, flaky_tests=None):
     env = {}
     full_args = [

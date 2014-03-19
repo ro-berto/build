@@ -6,7 +6,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'http://v8.googlecode.com/svn/branches/bleeding_edge'}]"
+      "cache_dir = None\nsolutions = [{'custom_deps': {'v8/test/mozilla/data': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/deps/third_party/mozilla-tests'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'http://v8.googlecode.com/svn/branches/bleeding_edge'}]"
     ],
     "name": "gclient setup"
   },
@@ -49,8 +49,29 @@
     "name": "gclient runhooks",
     "seed_steps": [
       "gclient runhooks",
-      "compile",
-      "package build"
+      "rmtree build directory",
+      "extract build",
+      "Check",
+      "Check - flaky",
+      "Benchmarks",
+      "Test262",
+      "Mozilla",
+      "Simple Leak Check"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil, sys\nshutil.rmtree(sys.argv[1])\n",
+      "[SLAVE_BUILD]/v8/out/Debug"
+    ],
+    "name": "rmtree build directory",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import shutil, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
     ]
   },
   {
@@ -58,33 +79,110 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/compile.py",
+      "[BUILD]/scripts/slave/extract_build.py",
       "--target",
-      "Release",
+      "Debug",
+      "--build-url",
+      "gs://chromium-v8/v8-linux-dbg",
       "--src-dir",
-      "[SLAVE_BUILD]/v8",
-      "--build-tool",
-      "make",
-      "--"
+      "v8",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8 Linux - recipe\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": \"V8 Linux - debug builder\", \"recipe\": \"v8\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8 Linux - recipe\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": \"V8 Linux - debug builder\", \"recipe\": \"v8\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
-    "name": "compile"
+    "name": "extract build"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/zip_build.py",
+      "[BUILD]/scripts/slave/v8/v8testing.py",
       "--target",
-      "Release",
-      "--build-url",
-      "gs://chromium-v8/v8-linux-rel-tmp",
-      "--src-dir",
-      "v8",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8 Linux - recipe\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": null, \"recipe\": \"v8\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8 Linux - recipe\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": null, \"recipe\": \"v8\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "Debug",
+      "--arch",
+      "ia32",
+      "--testname",
+      "mjsunit cctest message preparser",
+      "--flaky-tests",
+      "skip"
     ],
-    "name": "package build"
+    "cwd": "[SLAVE_BUILD]/v8",
+    "name": "Check"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/v8/v8testing.py",
+      "--target",
+      "Debug",
+      "--arch",
+      "ia32",
+      "--testname",
+      "mjsunit cctest message preparser",
+      "--flaky-tests",
+      "run"
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "name": "Check - flaky"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/v8/v8testing.py",
+      "--target",
+      "Debug",
+      "--arch",
+      "ia32",
+      "--testname",
+      "benchmarks"
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "name": "Benchmarks"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/v8/v8testing.py",
+      "--target",
+      "Debug",
+      "--arch",
+      "ia32",
+      "--testname",
+      "test262"
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "name": "Test262"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/v8/v8testing.py",
+      "--target",
+      "Debug",
+      "--arch",
+      "ia32",
+      "--testname",
+      "mozilla"
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "name": "Mozilla"
+  },
+  {
+    "cmd": [
+      "valgrind",
+      "--leak-check=full",
+      "--show-reachable=yes",
+      "--num-callers=20",
+      "out/Debug/d8",
+      "-e",
+      "\"print(1+2)\""
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "name": "Simple Leak Check"
   }
 ]

@@ -57,8 +57,9 @@ class V8Test(object):
   def run(self, api):
     return api.v8.runtest(V8_TEST_CONFIGS[self.name])
 
-  def gclient_apply_config(self):
-    return V8_TEST_CONFIGS[self.name].get('gclient_apply_config', [])
+  def gclient_apply_config(self, api):
+    for c in V8_TEST_CONFIGS[self.name].get('gclient_apply_config', []):
+      api.gclient.apply_config(c)
 
 
 class V8Presubmit(object):
@@ -67,8 +68,8 @@ class V8Presubmit(object):
     return api.v8.presubmit()
 
   @staticmethod
-  def gclient_apply_config():
-    return []
+  def gclient_apply_config(_):
+    pass
 
 
 class V8CheckInitializers(object):
@@ -77,17 +78,28 @@ class V8CheckInitializers(object):
     return api.v8.check_initializers()
 
   @staticmethod
-  def gclient_apply_config():
-    return []
+  def gclient_apply_config(_):
+    pass
+
+
+class V8SimpleLeakCheck(object):
+  @staticmethod
+  def run(api):
+    return api.v8.simple_leak_check()
+
+  @staticmethod
+  def gclient_apply_config(_):
+    pass
 
 
 V8_NON_STANDARD_TESTS = {
   'presubmit': V8Presubmit,
+  'simpleleak': V8SimpleLeakCheck,
   'v8initializers': V8CheckInitializers,
 }
 
 
-def MakeTest(test):
+def CreateTest(test):
   """Wrapper that allows to shortcut common tests with their names.
   Returns a runnable test instance.
   """
@@ -100,7 +112,7 @@ def MakeTest(test):
 # Map of GS archive names to urls.
 GS_ARCHIVES = {
   'linux_rel_archive': 'gs://chromium-v8/v8-linux-rel',
-  'linux_rel_archive_tmp': 'gs://chromium-v8/v8-linux-rel-tmp',
+  'linux_dbg_archive': 'gs://chromium-v8/v8-linux-dbg',
   'linux64_rel_archive': 'gs://chromium-v8/v8-linux64-rel',
   'linux64_dbg_archive': 'gs://chromium-v8/v8-linux64-dbg',
 }
@@ -199,11 +211,19 @@ BUILDERS = {
       'V8 Linux - recipe': {
         'recipe_config': 'v8',
         'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
+          'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
         },
-        'bot_type': 'builder',
-        'build_gs_archive': 'linux_rel_archive_tmp',
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux - debug builder',
+        'build_gs_archive': 'linux_dbg_archive',
+        'tests': [
+          'v8testing',
+          'benchmarks',
+          'test262',
+          'mozilla',
+          'simpleleak',
+        ],
         'testing': {'platform': 'linux'},
       },
     },
@@ -241,8 +261,7 @@ def GenSteps(api):
 
   # Test-specific configurations.
   for t in bot_config.get('tests', []):
-    for c in MakeTest(t).gclient_apply_config():
-      api.gclient.apply_config(c)
+    CreateTest(t).gclient_apply_config(api)
 
   yield api.v8.checkout()
   steps = [api.v8.runhooks()]
@@ -275,7 +294,7 @@ def GenSteps(api):
         src_dir='v8'))
 
   if bot_type in ['tester', 'builder_tester']:
-    steps.extend([MakeTest(t).run(api) for t in bot_config.get('tests', [])])
+    steps.extend([CreateTest(t).run(api) for t in bot_config.get('tests', [])])
   yield steps
 
 
