@@ -34,47 +34,6 @@ class WebRTCApi(recipe_api.RecipeApi):
     'video_engine_tests',
   ])
 
-  def add_normal_tests(self):
-    c = self.m.chromium
-
-    for test in self.NORMAL_TESTS:
-      yield c.runtest(test)
-
-    if self.m.platform.is_mac and self.m.platform.bits == 64:
-      yield c.runtest(('libjingle_peerconnection_objc_test.app/Contents/MacOS/'
-                       'libjingle_peerconnection_objc_test'),
-                      name='libjingle_peerconnection_objc_test'),
-
-  def add_baremetal_tests(self):
-    """Adds baremetal tests, which are different depending on the platform."""
-    c = self.m.chromium
-
-    if self.m.platform.is_win or self.m.platform.is_mac:
-      yield c.runtest('audio_device_tests')
-    elif self.m.platform.is_linux:
-      yield (
-        c.runtest('audioproc', name='audioproc_perf',
-                  args=['-aecm', '-ns', '-agc', '--fixed_digital', '--perf',
-                        '-pb', self.m.path['checkout'].join(
-                          'resources/audioproc.aecdump')]),
-        c.runtest('iSACFixtest', name='isac_fixed_perf',
-                  args=['32000', self.m.path['checkout'].join(
-                          'resources/speech_and_misc_wb.pcm'),
-                        'isac_speech_and_misc_wb.pcm']),
-        c.runtest('libjingle_peerconnection_java_unittest',
-                  env={'LD_PRELOAD':
-                       '/usr/lib/x86_64-linux-gnu/libpulse.so.0'}),
-      )
-
-    yield (
-      c.runtest('vie_auto_test', args=[
-        '--automated',
-        '--capture_test_ensure_resolution_alignment_in_capture_device=false']),
-      c.runtest('voe_auto_test', args=['--automated']),
-      c.runtest('video_capture_tests'),
-      c.runtest('webrtc_perf_tests'),
-    )
-
   def apply_svn_patch(self):
     script = self.m.path['build'].join('scripts', 'slave', 'apply_svn_patch.py')
     # Use the SVN mirror as the slaves only have authentication setup for that.
