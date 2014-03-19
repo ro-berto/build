@@ -81,6 +81,22 @@ class V8CheckInitializers(object):
     return []
 
 
+V8_NON_STANDARD_TESTS = {
+  'presubmit': V8Presubmit,
+  'v8initializers': V8CheckInitializers,
+}
+
+
+def MakeTest(test):
+  """Wrapper that allows to shortcut common tests with their names.
+  Returns a runnable test instance.
+  """
+  if test in V8_NON_STANDARD_TESTS:
+    return V8_NON_STANDARD_TESTS[test]()
+  else:
+    return V8Test(test)
+
+
 # Map of GS archive names to urls.
 GS_ARCHIVES = {
   'linux_rel_archive': 'gs://chromium-v8/v8-linux-rel',
@@ -102,18 +118,16 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - builder',
         'build_gs_archive': 'linux_rel_archive',
         'tests': [
-          V8Presubmit(),
-          V8CheckInitializers(),
-          V8Test('v8testing'),
-          V8Test('optimize_for_size'),
-          V8Test('webkit'),
-          V8Test('benchmarks'),
-          V8Test('test262'),
-          V8Test('mozilla'),
+          'presubmit',
+          'v8initializers',
+          'v8testing',
+          'optimize_for_size',
+          'webkit',
+          'benchmarks',
+          'test262',
+          'mozilla',
         ],
-        'testing': {
-          'platform': 'linux',
-        },
+        'testing': {'platform': 'linux'},
       },
       'V8 Linux - shared': {
         'recipe_config': 'v8',
@@ -123,14 +137,8 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': [
-          V8Test('v8testing'),
-          V8Test('test262'),
-          V8Test('mozilla'),
-        ],
-        'testing': {
-          'platform': 'linux',
-        },
+        'tests': ['v8testing', 'test262', 'mozilla'],
+        'testing': {'platform': 'linux'},
       },
       'V8 Linux64': {
         'recipe_config': 'v8',
@@ -142,16 +150,14 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux64 - builder',
         'build_gs_archive': 'linux64_rel_archive',
         'tests': [
-          V8CheckInitializers(),
-          V8Test('v8testing'),
-          V8Test('optimize_for_size'),
-          V8Test('webkit'),
-          V8Test('test262'),
-          V8Test('mozilla'),
+          'v8initializers',
+          'v8testing',
+          'optimize_for_size',
+          'webkit',
+          'test262',
+          'mozilla',
         ],
-        'testing': {
-          'platform': 'linux',
-        },
+        'testing': {'platform': 'linux'},
       },
       'V8 Linux64 - debug': {
         'recipe_config': 'v8',
@@ -162,15 +168,8 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux64 - debug builder',
         'build_gs_archive': 'linux64_dbg_archive',
-        'tests': [
-          V8Test('v8testing'),
-          V8Test('webkit'),
-          V8Test('test262'),
-          V8Test('mozilla'),
-        ],
-        'testing': {
-          'platform': 'linux',
-        },
+        'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
+        'testing': {'platform': 'linux'},
       },
       'V8 Linux64 ASAN': {
         'recipe_config': 'v8',
@@ -181,12 +180,8 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': [
-          V8Test('v8testing'),
-        ],
-        'testing': {
-          'platform': 'linux',
-        },
+        'tests': ['v8testing'],
+        'testing': {'platform': 'linux'},
       },
       # This builder is used as a staging area for builders on the main
       # waterfall to be switched to recipes.
@@ -198,9 +193,7 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'build_gs_archive': 'linux_rel_archive_tmp',
-        'testing': {
-          'platform': 'linux',
-        },
+        'testing': {'platform': 'linux'},
       },
     },
   },
@@ -237,7 +230,7 @@ def GenSteps(api):
 
   # Test-specific configurations.
   for t in bot_config.get('tests', []):
-    for c in t.gclient_apply_config():
+    for c in MakeTest(t).gclient_apply_config():
       api.gclient.apply_config(c)
 
   yield api.v8.checkout()
@@ -271,7 +264,7 @@ def GenSteps(api):
         src_dir='v8'))
 
   if bot_type in ['tester', 'builder_tester']:
-    steps.extend([t.run(api) for t in bot_config.get('tests', [])])
+    steps.extend([MakeTest(t).run(api) for t in bot_config.get('tests', [])])
   yield steps
 
 
