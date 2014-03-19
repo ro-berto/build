@@ -108,6 +108,17 @@ GS_ARCHIVES = {
 BUILDERS = {
   'client.v8': {
     'builders': {
+      'V8 Linux - builder': {
+        'recipe_config': 'v8',
+        'chromium_apply_config': ['verify_heap'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'build_gs_archive': 'linux_rel_archive',
+        'testing': {'platform': 'linux'},
+      },
       'V8 Linux': {
         'recipe_config': 'v8',
         'v8_config_kwargs': {

@@ -22,3 +22,8 @@ def v8(c):
 @CONFIG_CTX(includes=['v8'])
 def no_lsan(c):
   c.gyp_env.GYP_DEFINES['lsan'] = 0
+
+
+@CONFIG_CTX(includes=['v8'])
+def verify_heap(c):
+  c.gyp_env.GYP_DEFINES['v8_enable_verify_heap'] = 1
