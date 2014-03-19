@@ -130,6 +130,7 @@ F('linux_asan_rel_tests_1', linux().ChromiumASANFactory(
       'browser_total_shards': 3,
       'browser_shard_index': 1,
       'lsan': True,
+      'lsan_run_all_tests': True,
       'sharded_tests': sharded_tests,
     }))
 
@@ -153,6 +154,7 @@ F('linux_asan_rel_tests_2', linux().ChromiumASANFactory(
       'browser_total_shards': 3,
       'browser_shard_index': 2,
       'lsan': True,
+      'lsan_run_all_tests': True,
       'sharded_tests': sharded_tests,
     }))
 
@@ -173,6 +175,27 @@ F('linux_asan_rel_tests_3', linux().ChromiumASANFactory(
       'browser_total_shards': 3,
       'browser_shard_index': 3,
       'lsan': True,
+      'lsan_run_all_tests': True,
+      'sharded_tests': sharded_tests,
+    }))
+
+# LSan is not sandbox-compatible, which is why testers 1-3 have the sandbox
+# disabled. This tester runs the same tests again with the sandbox on and LSan
+# disabled. This only affects browser tests. See http://crbug.com/336218
+B('Linux ASan Tests (sandboxed)', 'linux_asan_rel_tests_sandboxed', 'testers',
+  'linux_asan_rel_trigger', notify_on_missing=True)
+F('linux_asan_rel_tests_sandboxed', linux().ChromiumASANFactory(
+    slave_type='Tester',
+    build_url=linux_asan_archive,
+    tests=[
+      'browser_tests',
+      'content_browsertests',
+      'interactive_ui_tests',
+    ],
+    factory_properties={
+      'asan': True,
+      'cluster_size': 1,
+      'lsan': False,
       'sharded_tests': sharded_tests,
     }))
 
