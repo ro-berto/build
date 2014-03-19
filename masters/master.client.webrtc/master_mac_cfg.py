@@ -127,14 +127,14 @@ F('mac_largetests_factory', mac().WebRTCFactory(
     }))
 
 # iOS.
-B('iOS Debug', 'ios_debug_factory', 'compile|ios', scheduler,
+B('iOS Debug', 'ios_debug_factory', 'ios', scheduler,
   slavebuilddir='mac64')
 F('ios_debug_factory', mac().WebRTCFactory(
     target='Debug-iphoneos',
     options=options,
     factory_properties=mac_ios_factory_properties))
 
-B('iOS Release', 'ios_release_factory', 'compile|ios', scheduler,
+B('iOS Release', 'ios_release_factory', 'ios', scheduler,
   slavebuilddir='mac64')
 F('ios_release_factory', mac().WebRTCFactory(
     target='Release-iphoneos',
