@@ -83,8 +83,6 @@
           "wfh@chromium.org"
         ],
 
-        "forgive_all": "true",
-
         "builders": {
           "Win x64": {
             "categories": [
