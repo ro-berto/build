@@ -634,7 +634,7 @@ def upload_profiling_data(options, args):
   if (gtest_filter is None):
     return 0
   gtest_name = ''
-  if (gtest_filter.find('StartupTest.*:ShutdownTest.*') > -1):
+  if (gtest_filter.find('StartupTest.*') > -1):
     gtest_name = 'StartupTest'
   else:
     return 0

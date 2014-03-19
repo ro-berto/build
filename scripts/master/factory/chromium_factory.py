@@ -744,8 +744,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddTabCapturePerformanceTests(fp)
     if R('indexeddb_perf'):
       f.AddTelemetryTest('indexeddb_perf', factory_properties=fp)
-    if R('shutdown'):
-      f.AddShutdownTests(fp)
     if R('startup_cold'):
       f.AddTelemetryTest('startup.cold.blank_page', factory_properties=fp)
       f.AddTelemetryTest('start_with_url.cold.startup_pages',
