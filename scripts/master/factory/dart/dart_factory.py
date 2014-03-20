@@ -440,7 +440,6 @@ class DartUtils(object):
       'dartium-win-full' + postfix: F_WIN_CH(
           target='Release',
           project=DartUtils.win_project,
-          clobber=True,
           tests=['annotated_steps'],
           factory_properties=DartUtils.win_rel_factory_properties),
       'dartium-win-inc' + postfix: F_WIN_CH(
