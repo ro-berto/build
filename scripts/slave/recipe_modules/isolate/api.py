@@ -70,11 +70,6 @@ class IsolateApi(recipe_api.RecipeApi):
         found = set(step_result.json.output)
         expected = set(targets)
         if found >= expected:
-          # Found some extra? Issue warning.
-          if found != expected:
-            step_result.presentation.status = 'WARNING'
-            step_result.presentation.logs['unexpected.isolates'] = (
-              ['Found unexpected *.isolated files:'] + list(found - expected))
           # Limit result only to |expected|.
           self._isolated_tests = {
             target: step_result.json.output[target] for target in expected
