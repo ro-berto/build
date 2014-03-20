@@ -8,9 +8,14 @@ from slave.recipe_modules.gclient.config import ChromeSvnSubURL,\
   ChromiumSvnSubURL
 
 
-@CONFIG_CTX(includes=['webrtc', '_webrtc_limited'])
-def webrtc_standalone(c):
-  c.got_revision_mapping['webrtc'] = 'got_revision'
+@CONFIG_CTX(includes=['_webrtc', '_webrtc_limited'])
+def webrtc(c):
+  pass
+
+
+@CONFIG_CTX(includes=['_webrtc', '_webrtc_limited'])
+def webrtc_asan(c):
+  pass
 
 
 @CONFIG_CTX(includes=['chromium', '_webrtc_limited'])
@@ -37,11 +42,18 @@ def webrtc_android_apk_try_builder(c):
 
 
 @CONFIG_CTX()
-def webrtc(c):
+def _webrtc(c):
+  """Add the main solution for WebRTC standalone builds.
+
+  This needs to be in it's own configuration that is added first in the
+  dependency chain. Otherwise the webrtc-limited solution will end up as the
+  first solution in the gclient spec, which doesn't work.
+  """
   s = c.solutions.add()
   s.name = 'src'
   s.url = WebRTCSvnURL(c, 'trunk')
   s.custom_vars['root_dir'] = 'src'
+  c.got_revision_mapping['webrtc'] = 'got_revision'
 
 
 @CONFIG_CTX()

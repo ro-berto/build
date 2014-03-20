@@ -498,16 +498,10 @@ BUILDERS = {
 
 RECIPE_CONFIGS = {
   'webrtc': {
-    'webrtc_config': 'webrtc_standalone',
-    'gclient_config': 'webrtc_standalone',
-    'chromium_config': 'webrtc_standalone',
+    'webrtc_config': 'webrtc',
   },
   'webrtc_asan': {
-    'webrtc_config': 'webrtc_standalone',
-    'gclient_config': 'webrtc_standalone',
-    'gclient_apply_config': ['clang'],
-    'chromium_config': 'webrtc_standalone',
-    'chromium_apply_config': ['clang', 'asan'],
+    'webrtc_config': 'webrtc_asan',
   },
 }
 
@@ -527,16 +521,7 @@ def GenSteps(api):
   recipe_config = RECIPE_CONFIGS[recipe_config_name]
 
   api.webrtc.set_config(recipe_config['webrtc_config'],
-                        optional=True,
                         **bot_config.get('webrtc_config_kwargs', {}))
-
-  api.gclient.set_config(recipe_config['gclient_config'])
-  for c in recipe_config.get('gclient_apply_config', []):
-    api.gclient.apply_config(c)
-
-  api.chromium.set_config(recipe_config['chromium_config'])
-  for c in recipe_config.get('chromium_apply_config', []):
-    api.chromium.apply_config(c)
 
   if api.tryserver.is_tryserver:
     api.chromium.apply_config('trybot_flavor')

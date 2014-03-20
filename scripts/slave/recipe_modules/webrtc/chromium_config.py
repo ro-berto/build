@@ -10,8 +10,13 @@ from RECIPE_MODULES.chromium import CONFIG_CTX
 SUPPORTED_TARGET_ARCHS = ('intel', 'arm')
 
 
-@CONFIG_CTX(includes=['ninja'])
-def webrtc_standalone(c):
+@CONFIG_CTX(includes=['ninja', 'default_compiler'])
+def webrtc(c):
+  c.compile_py.default_targets = ['All']
+
+
+@CONFIG_CTX(includes=['ninja', 'clang', 'asan'])
+def webrtc_asan(c):
   c.compile_py.default_targets = ['All']
 
 

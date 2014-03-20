@@ -27,7 +27,12 @@ config_ctx = config_item_context(BaseConfig, VAR_TEST_MAP, TEST_NAME_FORMAT)
 
 
 @config_ctx()
-def webrtc_standalone(c):
+def webrtc(c):
+  pass
+
+
+@config_ctx()
+def webrtc_asan(c):
   pass
 
 
