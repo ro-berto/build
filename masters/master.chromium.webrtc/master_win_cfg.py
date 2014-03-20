@@ -38,7 +38,7 @@ B('Win Builder', 'win_rel_factory', scheduler='win_rel_scheduler',
 F('win_rel_factory', win().ChromiumWebRTCFactory(
     slave_type='Builder',
     target='Release',
-    project='all.sln;chromium_builder_webrtc',
+    options=['--compiler=goma', '--', 'chromium_builder_webrtc'],
     compile_timeout=2400,
     factory_properties={'trigger': 'win_rel_trigger',
                         'build_url': chromium_rel_archive,}))
@@ -55,7 +55,6 @@ F('win_xp_tester_factory', winXpTester().ChromiumWebRTCFactory(
         'perf_id': 'chromium-webrtc-rel-xp',
         'process_dumps': True,
         'start_crash_handler': True,
-        'gclient_env': {'DEPOT_TOOLS_PYTHON_275': '1'},
     }))
 
 B('Win7 Tester', 'win_7_tester_factory', scheduler='win_rel_trigger')
@@ -70,7 +69,6 @@ F('win_7_tester_factory', win().ChromiumWebRTCFactory(
         'perf_id': 'chromium-webrtc-rel-7',
         'process_dumps': True,
         'start_crash_handler': True,
-        'gclient_env': {'DEPOT_TOOLS_PYTHON_275': '1'},
     }))
 
 B('Win8 Tester', 'win_8_tester_factory', scheduler='win_rel_trigger')

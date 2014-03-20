@@ -20,8 +20,6 @@ def linux():
 S('linux_webrtc_scheduler', branch='trunk', treeStableTimer=0)
 P('linux_periodic_scheduler', periodicBuildTimer=60*60)
 
-options = ['--compiler=goma',  '--build-tool=ninja', '--',
-           'chromium_builder_webrtc']
 tests = [
     'webrtc_manual_browser_tests',
     'webrtc_manual_content_browsertests',
@@ -37,7 +35,7 @@ B('Linux', 'linux_webrtc_factory',
 F('linux_webrtc_factory', linux().ChromiumWebRTCLatestFactory(
     slave_type='BuilderTester',
     target='Release',
-    options=options,
+    options=['--compiler=goma', '--', 'chromium_builder_webrtc'],
     tests=tests,
     factory_properties={
         'virtual_webcam': True,

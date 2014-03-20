@@ -35,8 +35,7 @@ B('Linux Builder', 'linux_rel_factory', scheduler='linux_rel_scheduler',
 F('linux_rel_factory', linux().ChromiumWebRTCFactory(
     slave_type='Builder',
     target='Release',
-    options=['--compiler=goma', '--build-tool=ninja', '--',
-             'chromium_builder_webrtc'],
+    options=['--compiler=goma', '--', 'chromium_builder_webrtc'],
     factory_properties={
         'trigger': 'linux_rel_trigger',
         'build_url': chromium_rel_archive,

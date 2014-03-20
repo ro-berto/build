@@ -20,7 +20,6 @@ def win():
 S('win_webrtc_scheduler', branch='trunk', treeStableTimer=0)
 P('win_periodic_scheduler', periodicBuildTimer=4*60*60)
 
-project = 'all.sln;chromium_builder_webrtc'
 tests = [
     'webrtc_manual_browser_tests',
     'webrtc_manual_content_browsertests',
@@ -36,7 +35,7 @@ B('Win', 'win_webrtc_factory',
 F('win_webrtc_factory', win().ChromiumWebRTCLatestFactory(
     slave_type='BuilderTester',
     target='Release',
-    project=project,
+    options=['--compiler=goma', '--', 'chromium_builder_webrtc'],
     tests=tests,
     compile_timeout=2400,
     factory_properties={
@@ -46,7 +45,6 @@ F('win_webrtc_factory', win().ChromiumWebRTCLatestFactory(
         'perf_config': {'a_default_rev': 'r_webrtc_rev'},
         'process_dumps': True,
         'start_crash_handler': True,
-        'gclient_env': {'DEPOT_TOOLS_PYTHON_275': '1'},
     }))
 
 
