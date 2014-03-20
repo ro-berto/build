@@ -180,6 +180,11 @@ def clang(c):
   _clang_common(c)
 
 @config_ctx(group='compiler')
+def jsonclang(c):
+  c.compile_py.compiler = 'jsonclang'
+  c.gyp_env.GYP_DEFINES['clang'] = 1
+
+@config_ctx(group='compiler')
 def default_compiler(c):
   if c.TARGET_PLATFORM == 'mac':
     _clang_common(c)
@@ -319,3 +324,9 @@ def android(c):
   gyp_defs = c.gyp_env.GYP_DEFINES
   gyp_defs['fastbuild'] = 1
   gyp_defs['OS'] = c.TARGET_PLATFORM
+
+@config_ctx(includes=['ninja', 'shared_library', 'jsonclang'])
+def codesearch(c):
+  gyp_defs = c.gyp_env.GYP_DEFINES
+  gyp_defs['fastbuild'] = 1
+
