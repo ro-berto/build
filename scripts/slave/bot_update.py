@@ -87,8 +87,7 @@ cache_dir = %(cache_dir)s
 
 ENABLED_MASTERS = ['chromium.git']
 ENABLED_BUILDERS = {
-    'tryserver.chromium': ['linux_rel_alt', 'linux_clang',
-                           'linux_rel_naclmore', 'blink_bare_presubmit'],
+    'tryserver.chromium': ['linux_rel_alt'],
 }
 ENABLED_SLAVES = {}
 
