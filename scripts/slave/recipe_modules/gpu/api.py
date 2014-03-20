@@ -159,7 +159,12 @@ class GpuApi(recipe_api.RecipeApi):
     yield self.m.chromium.compile(
         targets=['chromium_gpu_%sbuilder' % build_tag] + [
           '%s_run' % test for test in common.GPU_ISOLATES])
-    yield self.m.isolate.manifest_to_hash(common.GPU_ISOLATES)
+    # Component build doesn't produce all expected *.isolated files yet. So do
+    # not try to find them if using_isolated is False: the step will just fail.
+    if self._use_isolates:
+      yield self.m.isolate.find_isolated_tests(
+          self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs),
+          common.GPU_ISOLATES)
 
   def upload_steps(self):
     if not self._use_isolates:
