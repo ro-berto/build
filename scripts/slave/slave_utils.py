@@ -345,11 +345,12 @@ def GSUtilSetup():
   return gsutil
 
 
-def GSUtilCopy(source, dest, mimetype=None, gs_acl=None):
+def GSUtilCopy(source, dest, mimetype=None, gs_acl=None, cache_control=None):
   """Copy a file to Google Storage.
 
   Runs the following command:
     gsutil -h Content-Type:<mimetype> \
+           -h Cache-Control:<cache_control> \
         cp -a <gs_acl> file://<filename> <gs_base>/<subdir>/<filename w/o path>
 
   Args:
@@ -357,6 +358,7 @@ def GSUtilCopy(source, dest, mimetype=None, gs_acl=None):
     dest: the destination URI
     mimetype: optional value to add as a Content-Type header
     gs_acl: optional value to add as a canned-acl
+    cache_control: optional value to set Cache-Control header
   Returns:
     The status code returned from running the generated gsutil command.
   """
@@ -371,6 +373,8 @@ def GSUtilCopy(source, dest, mimetype=None, gs_acl=None):
   command = [gsutil]
   if mimetype:
     command.extend(['-h', 'Content-Type:%s' % mimetype])
+  if cache_control:
+    command.extend(['-h', 'Cache-Control:%s' % cache_control])
   command.extend(['cp'])
   if gs_acl:
     command.extend(['-a', gs_acl])
@@ -378,11 +382,13 @@ def GSUtilCopy(source, dest, mimetype=None, gs_acl=None):
   return chromium_utils.RunCommand(command)
 
 
-def GSUtilCopyFile(filename, gs_base, subdir=None, mimetype=None, gs_acl=None):
+def GSUtilCopyFile(filename, gs_base, subdir=None, mimetype=None, gs_acl=None,
+                   cache_control=None):
   """Copy a file to Google Storage.
 
   Runs the following command:
     gsutil -h Content-Type:<mimetype> \
+        -h Cache-Control:<cache_control> \
         cp -a <gs_acl> file://<filename> <gs_base>/<subdir>/<filename w/o path>
 
   Args:
@@ -405,17 +411,21 @@ def GSUtilCopyFile(filename, gs_base, subdir=None, mimetype=None, gs_acl=None):
     else:
       dest = '/'.join([gs_base, subdir])
   dest = '/'.join([dest, os.path.basename(filename)])
-  return GSUtilCopy(source, dest, mimetype, gs_acl)
+  return GSUtilCopy(source, dest, mimetype, gs_acl, cache_control)
 
 
-def GSUtilCopyDir(src_dir, gs_base, dest_dir=None, gs_acl=None):
+def GSUtilCopyDir(src_dir, gs_base, dest_dir=None, gs_acl=None,
+                  cache_control=None):
   """Upload the directory and its contents to Google Storage."""
 
   if os.path.isfile(src_dir):
     assert os.path.isdir(src_dir), '%s must be a directory' % src_dir
 
   gsutil = GSUtilSetup()
-  command = [gsutil, '-m', 'cp', '-R']
+  command = [gsutil, '-m']
+  if cache_control:
+    command.extend(['-h', 'Cache-Control:%s' % cache_control])
+  command.extend(['cp', '-R'])
   if gs_acl:
     command.extend(['-a', gs_acl])
   if dest_dir:

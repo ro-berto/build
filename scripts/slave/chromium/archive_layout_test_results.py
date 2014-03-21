@@ -191,18 +191,26 @@ def archive_layout(options, args):
     # Copy the results to a directory archived by build number.
     gs_base = '/'.join([options.gs_bucket, build_name, build_number])
     gs_acl = options.gs_acl
-    slave_utils.GSUtilCopyFile(zip_file, gs_base, gs_acl=gs_acl)
-    slave_utils.GSUtilCopyDir(options.results_dir, gs_base, gs_acl=gs_acl)
+    # These files never change, cache for a year.
+    cache_control = "public, max-age=31556926"
+    slave_utils.GSUtilCopyFile(zip_file, gs_base, gs_acl=gs_acl,
+      cache_control=cache_control)
+    slave_utils.GSUtilCopyDir(options.results_dir, gs_base, gs_acl=gs_acl,
+      cache_control=cache_control)
 
     # TODO(dpranke): Remove these two lines once clients are fetching the
     # files from the layout-test-results dir.
-    slave_utils.GSUtilCopyFile(full_results_json, gs_base, gs_acl=gs_acl)
-    slave_utils.GSUtilCopyFile(failing_results_json, gs_base, gs_acl=gs_acl)
+    slave_utils.GSUtilCopyFile(full_results_json, gs_base, gs_acl=gs_acl,
+      cache_control=cache_control)
+    slave_utils.GSUtilCopyFile(failing_results_json, gs_base, gs_acl=gs_acl,
+      cache_control=cache_control)
 
     # And also to the 'results' directory to provide the 'latest' results.
     gs_base = '/'.join([options.gs_bucket, build_name, 'results'])
-    slave_utils.GSUtilCopyFile(zip_file, gs_base, gs_base, gs_acl=gs_acl)
-    slave_utils.GSUtilCopyDir(options.results_dir, gs_base, gs_acl=gs_acl)
+    slave_utils.GSUtilCopyFile(zip_file, gs_base, gs_base, gs_acl=gs_acl,
+      cache_control=cache_control)
+    slave_utils.GSUtilCopyDir(options.results_dir, gs_base, gs_acl=gs_acl,
+      cache_control=cache_control)
   else:
     _MaybeMakeDirectoryOnArchiveHost(dest_dir)
     _CopyFileToArchiveHost(zip_file, dest_dir)

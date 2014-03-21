@@ -9,7 +9,7 @@ import unittest
 
 import test_env  # pylint: disable=W0403,W0611
 
-
+import mock
 import slave.slave_utils as slave_utils
 from common import chromium_utils
 
@@ -79,6 +79,22 @@ class TestGetBuildRevisions(unittest.TestCase):
         _BUILD_DIR, revision_dir=_BUILD_DIR)
     self.assertTrue(build_revision > 0)
     self.assertEquals(None, webkit_revision)
+
+
+class TestGSUtil(unittest.TestCase):
+  @mock.patch('__main__.slave_utils.GSUtilSetup', return_value='/mock/gsutil')
+  @mock.patch('__main__.chromium_utils.RunCommand')
+  def testGSUtilCopyCacheControl(self, # pylint: disable=R0201
+                                 run_command_mock, gs_util_setup_mock):
+    slave_utils.GSUtilCopyFile('foo', 'bar',
+      cache_control='mock_cache')
+    run_command_mock.assert_called_with(['/mock/gsutil', '-h',
+      'Cache-Control:mock_cache', 'cp', 'file://foo',
+      'file://bar/foo'])
+    slave_utils.GSUtilCopyDir('foo', 'bar',
+      cache_control='mock_cache')
+    run_command_mock.assert_called_with(['/mock/gsutil', '-m', '-h',
+      'Cache-Control:mock_cache', 'cp', '-R', 'foo', 'bar'])
 
 
 if __name__ == '__main__':
