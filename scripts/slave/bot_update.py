@@ -89,7 +89,16 @@ ENABLED_MASTERS = ['chromium.git']
 ENABLED_BUILDERS = {
     'tryserver.chromium': ['linux_rel_alt'],
 }
-ENABLED_SLAVES = {}
+ENABLED_SLAVES = {
+    # This is enabled on a bot-to-bot basis to ensure that we don't have
+    # bots that have mixed configs.
+    'chromium.fyi': [
+        'build1-m1',  # Chromium Builder / Chromium Builder (dbg)
+        'vm928-m1',   # Chromium Linux Buildrunner
+        'vm859-m1',   # Chromium Linux Redux
+        'vm933-m1',   # ChromiumOS Linux Tests
+    ]
+}
 
 # Disabled filters get run AFTER enabled filters, so for example if a builder
 # config is enabled, but a bot on that builder is disabled, that bot will
