@@ -221,7 +221,19 @@ def GenSteps(api):
   api.gclient.set_config('chromium')
   api.step.auto_resolve_conflicts = True
 
-  yield api.gclient.checkout(revert=True)
+  # TODO(phajdan.jr): Extend to all platforms, http://crbug.com/354731 .
+  if api.platform.is_linux:
+    yield api.gclient.checkout(
+        revert=True, can_fail_build=False, abort_on_failure=False)
+    for step in api.step_history.values():
+      if step.retcode != 0:
+        yield (
+          api.path.rmcontents('slave build directory', api.path['slave_build']),
+          api.gclient.checkout(),
+        )
+        break
+  else:
+    yield api.gclient.checkout(revert=True)
   yield (
     api.rietveld.apply_issue(),
     api.json.read(
@@ -507,6 +519,38 @@ def GenTests(api):
       api.platform.name('win') +
       api.step_data(step, retcode=1)
     )
+
+  # TODO(phajdan.jr): Provide default test data for test steps.
+  yield (
+    api.test('gclient_sync_no_data') +
+    props() +
+    api.platform.name('linux') +
+    api.override_step_data('gclient sync', api.json.output(None)) +
+    api.step_data('checkdeps (with patch)', api.json.output(None)) +
+    api.override_step_data('deps2git (with patch)', api.json.output(None)) +
+    api.step_data('nacl_integration (with patch)', api.json.output(None)) +
+    reduce(
+      lambda a, b: a + b,
+      (api.step_data('%s (with patch)' % name, canned_test(passing=True))
+       for name in GTEST_TESTS)
+    )
+  )
+
+  # TODO(phajdan.jr): Provide default test data for test steps.
+  yield (
+    api.test('gclient_revert_nuke') +
+    props() +
+    api.platform.name('linux') +
+    api.step_data('gclient revert', retcode=1) +
+    api.step_data('checkdeps (with patch)', api.json.output(None)) +
+    api.override_step_data('deps2git (with patch)', api.json.output(None)) +
+    api.step_data('nacl_integration (with patch)', api.json.output(None)) +
+    reduce(
+      lambda a, b: a + b,
+      (api.step_data('%s (with patch)' % name, canned_test(passing=True))
+       for name in GTEST_TESTS)
+    )
+  )
 
   yield (
     api.test('compile_failure') +
