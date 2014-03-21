@@ -152,6 +152,24 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
       },
+      'V8 Linux - debug': {
+        'recipe_config': 'v8',
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux - debug builder',
+        'build_gs_archive': 'linux_dbg_archive',
+        'tests': [
+          'v8testing',
+          'benchmarks',
+          'test262',
+          'mozilla',
+          'simpleleak',
+        ],
+        'testing': {'platform': 'linux'},
+      },
       'V8 Linux - shared': {
         'recipe_config': 'v8',
         'chromium_apply_config': ['shared_library'],
