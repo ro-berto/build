@@ -3,11 +3,9 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'chromium',
   'git',
-  'json',
   'path',
   'properties',
   'python',
-  'swarming_client',
+  'raw_io',
 ]

@@ -17,6 +17,7 @@ DEPS = [
   'path',
   'platform',
   'properties',
+  'swarming_client',
 ]
 
 def GenSteps(api):
@@ -37,7 +38,7 @@ def GenSteps(api):
   # must have been done previously.
 
   if api.gpu.using_isolates:
-    yield api.isolate.checkout_swarming_client()
+    yield api.swarming_client.checkout()
     yield api.buildbot.copy_parent_got_revision_to_got_revision()
   else:
     if not api.properties.get('skip_checkout', False):

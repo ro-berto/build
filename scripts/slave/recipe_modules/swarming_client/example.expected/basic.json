@@ -1,0 +1,87 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/git_setup.py",
+      "--path",
+      "[SLAVE_BUILD]/swarming.client",
+      "--url",
+      "https://chromium.googlesource.com/external/swarming.client.git"
+    ],
+    "name": "git setup",
+    "seed_steps": [
+      "git setup",
+      "git fetch",
+      "git clean",
+      "git checkout",
+      "submodule sync",
+      "submodule update"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "fetch",
+      "origin",
+      "master:refs/remotes/origin/master"
+    ],
+    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "name": "git fetch"
+  },
+  {
+    "cmd": [
+      "git",
+      "clean",
+      "-f",
+      "-d",
+      "-x"
+    ],
+    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "name": "git clean"
+  },
+  {
+    "cmd": [
+      "git",
+      "checkout",
+      "-f",
+      "origin/master"
+    ],
+    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "name": "git checkout"
+  },
+  {
+    "cmd": [
+      "git",
+      "submodule",
+      "sync"
+    ],
+    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "name": "submodule sync"
+  },
+  {
+    "cmd": [
+      "git",
+      "submodule",
+      "update",
+      "--init",
+      "--recursive"
+    ],
+    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "name": "submodule update"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/swarming.client/swarming.py",
+      "--version"
+    ],
+    "name": "swarming.py --version",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@0.4.4@@@",
+      "@@@STEP_SUMMARY_TEXT@0.4.4@@@"
+    ]
+  }
+]
