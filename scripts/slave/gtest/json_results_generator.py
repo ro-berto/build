@@ -242,7 +242,7 @@ class JSONResultsGenerator(object):
                     'Not uploading JSON files.')
       return
 
-    logging.info('Uploading JSON files for builder: %s', self._builder_name)
+    print 'Uploading JSON files for builder: %s' % self._builder_name
     attrs = [('builder', self._builder_name),
              ('testtype', self._test_type),
              ('master', self._master_name)]
@@ -254,7 +254,7 @@ class JSONResultsGenerator(object):
     # 120 seconds are more than enough to upload test results.
     uploader.upload(attrs, files, 120)
 
-    logging.info('JSON files uploaded.')
+    print 'JSON files uploaded.'
 
   def _write_json(self, json_object, file_path):
     # Specify separators in order to get compact encoding.
