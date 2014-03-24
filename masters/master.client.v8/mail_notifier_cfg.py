@@ -48,6 +48,7 @@ exclusions = {
   'NaCl V8 Linux64 - canary': ['Check'],
   'Webkit - dbg': ['webkit_tests'],
   'Webkit Mac - dbg': ['webkit_tests'],
+  'V8 Win32 - nosnap - shared': [],
 }
 
 forgiving_steps = ['update_scripts', 'update', 'svnkill', 'taskkill',
