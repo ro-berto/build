@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 from master import master_config
+from master.factory import annotator_factory
 from master.factory import chromium_factory
 
 import master_site_config
@@ -22,6 +23,8 @@ def linux(): return chromium_factory.ChromiumFactory('src/build', 'linux2')
 def mac(): return chromium_factory.ChromiumFactory('src/build', 'darwin')
 def linux_android(): return chromium_factory.ChromiumFactory(
     'src/out', 'linux2', nohooks_on_update=True, target_os='android')
+
+m_annotator = annotator_factory.AnnotatorFactory()
 
 defaults['category'] = '1lkgr'
 
@@ -249,6 +252,11 @@ F('linux_tsan_dbg', linux().ChromiumFactory(
        'gs_acl': 'public-read',
        'tsan': True,
        'gclient_env': {'GYP_DEFINES': tsan_gyp}}))
+
+# This is a bot that uploads LKGR telemetry harnesses to Google Storage.
+B('Telemetry Harness Upload', 'telemetry_harness_upload', None, 'chromium_lkgr')
+F('telemetry_harness_upload',
+  m_annotator.BaseFactory('perf/telemetry_harness_upload'))
 
 ################################################################################
 ## Android
