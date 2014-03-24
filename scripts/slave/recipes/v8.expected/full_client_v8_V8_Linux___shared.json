@@ -49,12 +49,21 @@
     "name": "gclient runhooks",
     "seed_steps": [
       "gclient runhooks",
+      "cleanup_temp",
       "compile",
       "Check",
       "Check - flaky",
       "Test262",
       "Mozilla"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/cleanup_temp.py"
+    ],
+    "name": "cleanup_temp"
   },
   {
     "abort_on_failure": true,

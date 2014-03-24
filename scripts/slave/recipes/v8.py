@@ -282,7 +282,7 @@ def GenSteps(api):
     CreateTest(t).gclient_apply_config(api)
 
   yield api.v8.checkout()
-  steps = [api.v8.runhooks()]
+  steps = [api.v8.runhooks(), api.chromium.cleanup_temp()]
 
   if 'clang' in bot_config.get('gclient_apply_config', []):
     steps.append(api.v8.update_clang())
