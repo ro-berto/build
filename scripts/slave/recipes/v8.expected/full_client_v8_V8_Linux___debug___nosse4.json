@@ -111,7 +111,7 @@
       "ia32",
       "--testname",
       "mjsunit cctest message preparser",
-      "shell_flags=\"--noenable-sse4-1\"",
+      "--shell_flags=\"--noenable-sse4-1\"",
       "--flaky-tests",
       "skip"
     ],
@@ -129,7 +129,7 @@
       "ia32",
       "--testname",
       "mjsunit cctest message preparser",
-      "shell_flags=\"--noenable-sse4-1\"",
+      "--shell_flags=\"--noenable-sse4-1\"",
       "--flaky-tests",
       "run"
     ],
@@ -147,7 +147,7 @@
       "ia32",
       "--testname",
       "test262",
-      "shell_flags=\"--noenable-sse4-1\""
+      "--shell_flags=\"--noenable-sse4-1\""
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Test262"
@@ -163,7 +163,7 @@
       "ia32",
       "--testname",
       "mozilla",
-      "shell_flags=\"--noenable-sse4-1\""
+      "--shell_flags=\"--noenable-sse4-1\""
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Mozilla"

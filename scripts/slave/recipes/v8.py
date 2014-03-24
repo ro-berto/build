@@ -241,7 +241,7 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - builder',
         'build_gs_archive': 'linux_rel_archive',
         'tests': ['v8testing', 'test262', 'mozilla', 'gcmole'],
-        'test_args': ['shell_flags="--noenable-sse2"'],
+        'test_args': ['--shell_flags="--noenable-sse2"'],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - nosse3': {
@@ -254,7 +254,7 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - builder',
         'build_gs_archive': 'linux_rel_archive',
         'tests': ['v8testing', 'test262', 'mozilla'],
-        'test_args': ['shell_flags="--noenable-sse3"'],
+        'test_args': ['--shell_flags="--noenable-sse3"'],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - nosse4': {
@@ -267,7 +267,7 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - builder',
         'build_gs_archive': 'linux_rel_archive',
         'tests': ['v8testing', 'test262', 'mozilla'],
-        'test_args': ['shell_flags="--noenable-sse4-1"'],
+        'test_args': ['--shell_flags="--noenable-sse4-1"'],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - debug - isolates': {
@@ -293,7 +293,7 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
         'tests': ['v8testing', 'test262', 'mozilla'],
-        'test_args': ['shell_flags="--noenable-sse2"'],
+        'test_args': ['--shell_flags="--noenable-sse2"'],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - debug - nosse3': {
@@ -306,7 +306,7 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
         'tests': ['v8testing', 'test262', 'mozilla'],
-        'test_args': ['shell_flags="--noenable-sse3"'],
+        'test_args': ['--shell_flags="--noenable-sse3"'],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - debug - nosse4': {
@@ -319,7 +319,7 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
         'tests': ['v8testing', 'test262', 'mozilla'],
-        'test_args': ['shell_flags="--noenable-sse4-1"'],
+        'test_args': ['--shell_flags="--noenable-sse4-1"'],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64': {
