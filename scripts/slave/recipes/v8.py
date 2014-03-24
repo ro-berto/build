@@ -54,8 +54,8 @@ class V8Test(object):
   def __init__(self, name):
     self.name = name
 
-  def run(self, api):
-    return api.v8.runtest(V8_TEST_CONFIGS[self.name])
+  def run(self, api, **kwargs):
+    return api.v8.runtest(V8_TEST_CONFIGS[self.name], **kwargs)
 
   def gclient_apply_config(self, api):
     for c in V8_TEST_CONFIGS[self.name].get('gclient_apply_config', []):
@@ -64,7 +64,7 @@ class V8Test(object):
 
 class V8Presubmit(object):
   @staticmethod
-  def run(api):
+  def run(api, **kwargs):
     return api.v8.presubmit()
 
   @staticmethod
@@ -74,8 +74,18 @@ class V8Presubmit(object):
 
 class V8CheckInitializers(object):
   @staticmethod
-  def run(api):
+  def run(api, **kwargs):
     return api.v8.check_initializers()
+
+  @staticmethod
+  def gclient_apply_config(_):
+    pass
+
+
+class V8GCMole(object):
+  @staticmethod
+  def run(api, **kwargs):
+    return api.v8.gc_mole()
 
   @staticmethod
   def gclient_apply_config(_):
@@ -84,7 +94,7 @@ class V8CheckInitializers(object):
 
 class V8SimpleLeakCheck(object):
   @staticmethod
-  def run(api):
+  def run(api, **kwargs):
     return api.v8.simple_leak_check()
 
   @staticmethod
@@ -93,6 +103,7 @@ class V8SimpleLeakCheck(object):
 
 
 V8_NON_STANDARD_TESTS = {
+  'gcmole': V8GCMole,
   'presubmit': V8Presubmit,
   'simpleleak': V8SimpleLeakCheck,
   'v8initializers': V8CheckInitializers,
@@ -113,6 +124,8 @@ def CreateTest(test):
 GS_ARCHIVES = {
   'linux_rel_archive': 'gs://chromium-v8/v8-linux-rel',
   'linux_dbg_archive': 'gs://chromium-v8/v8-linux-dbg',
+  'linux_nosnap_rel_archive': 'gs://chromium-v8/v8-linux-nosnap-rel',
+  'linux_nosnap_dbg_archive': 'gs://chromium-v8/v8-linux-nosnap-dbg',
   'linux64_rel_archive': 'gs://chromium-v8/v8-linux64-rel',
   'linux64_dbg_archive': 'gs://chromium-v8/v8-linux64-dbg',
 }
@@ -179,6 +192,134 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'tests': ['v8testing', 'test262', 'mozilla'],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - nosnap': {
+        'recipe_config': 'v8',
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux - nosnap builder',
+        'build_gs_archive': 'linux_nosnap_rel_archive',
+        'tests': ['v8testing', 'test262', 'mozilla'],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - nosnap - debug': {
+        'recipe_config': 'v8',
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux - nosnap debug builder',
+        'build_gs_archive': 'linux_nosnap_dbg_archive',
+        'tests': ['v8testing', 'test262', 'mozilla'],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - isolates': {
+        'recipe_config': 'v8',
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux - builder',
+        'build_gs_archive': 'linux_rel_archive',
+        'tests': ['v8testing'],
+        'test_args': ['--isolates', 'on'],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - nosse2': {
+        'recipe_config': 'v8',
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux - builder',
+        'build_gs_archive': 'linux_rel_archive',
+        'tests': ['v8testing', 'test262', 'mozilla', 'gcmole'],
+        'test_args': ['shell_flags="--noenable-sse2"'],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - nosse3': {
+        'recipe_config': 'v8',
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux - builder',
+        'build_gs_archive': 'linux_rel_archive',
+        'tests': ['v8testing', 'test262', 'mozilla'],
+        'test_args': ['shell_flags="--noenable-sse3"'],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - nosse4': {
+        'recipe_config': 'v8',
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux - builder',
+        'build_gs_archive': 'linux_rel_archive',
+        'tests': ['v8testing', 'test262', 'mozilla'],
+        'test_args': ['shell_flags="--noenable-sse4-1"'],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - debug - isolates': {
+        'recipe_config': 'v8',
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux - debug builder',
+        'build_gs_archive': 'linux_dbg_archive',
+        'tests': ['v8testing'],
+        'test_args': ['--isolates', 'on'],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - debug - nosse2': {
+        'recipe_config': 'v8',
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux - debug builder',
+        'build_gs_archive': 'linux_dbg_archive',
+        'tests': ['v8testing', 'test262', 'mozilla'],
+        'test_args': ['shell_flags="--noenable-sse2"'],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - debug - nosse3': {
+        'recipe_config': 'v8',
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux - debug builder',
+        'build_gs_archive': 'linux_dbg_archive',
+        'tests': ['v8testing', 'test262', 'mozilla'],
+        'test_args': ['shell_flags="--noenable-sse3"'],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - debug - nosse4': {
+        'recipe_config': 'v8',
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux - debug builder',
+        'build_gs_archive': 'linux_dbg_archive',
+        'tests': ['v8testing', 'test262', 'mozilla'],
+        'test_args': ['shell_flags="--noenable-sse4-1"'],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64': {
@@ -311,8 +452,10 @@ def GenSteps(api):
         abort_on_failure=True,
         src_dir='v8'))
 
+  test_args = bot_config.get('test_args', [])
   if bot_type in ['tester', 'builder_tester']:
-    steps.extend([CreateTest(t).run(api) for t in bot_config.get('tests', [])])
+    steps.extend([CreateTest(t).run(api, test_args=test_args)
+                  for t in bot_config.get('tests', [])])
   yield steps
 
 

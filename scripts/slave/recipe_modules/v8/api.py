@@ -51,6 +51,24 @@ class V8Api(recipe_api.RecipeApi):
       cwd=self.m.path['checkout'],
     )
 
+  def gc_mole(self):
+    # TODO(machenbach): Make gcmole work with absolute paths. Currently, a
+    # particular clang version is installed on one slave in '/b'.
+    env = {
+      'CLANG_BIN': (
+        self.m.path.join('..', '..', '..', '..', '..', 'gcmole', 'bin')
+      ),
+      'CLANG_PLUGINS': (
+        self.m.path.join('..', '..', '..', '..', '..', 'gcmole')
+      ),
+    }
+    return self.m.step(
+      'GCMole',
+      ['lua', self.m.path.join('tools', 'gcmole', 'gcmole.lua')],
+      cwd=self.m.path['checkout'],
+      env=env,
+    )
+
   def simple_leak_check(self):
     # TODO(machenbach): Add task kill step for windows.
     relative_d8_path = self.m.path.join(
@@ -64,13 +82,15 @@ class V8Api(recipe_api.RecipeApi):
       cwd=self.m.path['checkout'],
     )
 
-  def _runtest(self, name, test, flaky_tests=None):
+  def _runtest(self, name, test, flaky_tests=None, test_args=None):
+    test_args = test_args or []
     env = {}
     full_args = [
       '--target', self.m.chromium.c.build_config_fs,
       '--arch', self.m.chromium.c.gyp_env.GYP_DEFINES['target_arch'],
       '--testname', test['tests'],
     ]
+    full_args += test_args
     full_args += test.get('test_args', [])
     if flaky_tests:
       full_args += ['--flaky-tests', flaky_tests]
@@ -90,11 +110,12 @@ class V8Api(recipe_api.RecipeApi):
       env=env
     )
 
-  def runtest(self, test):
+  def runtest(self, test, **kwargs):
     if test['flaky_step']:
       return [
-        self._runtest(test['name'], test, flaky_tests='skip'),
-        self._runtest(test['name'] + ' - flaky', test, flaky_tests='run'),
+        self._runtest(test['name'], test, flaky_tests='skip', **kwargs),
+        self._runtest(test['name'] + ' - flaky', test, flaky_tests='run',
+                      **kwargs),
       ]
     else:
-      return self._runtest(test['name'], test)
+      return self._runtest(test['name'], test, **kwargs)
