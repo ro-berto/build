@@ -86,8 +86,7 @@
     "name": "apply_issue",
     "seed_steps": [
       "apply_issue",
-      "read test spec",
-      "gclient runhooks"
+      "read test spec"
     ]
   },
   {

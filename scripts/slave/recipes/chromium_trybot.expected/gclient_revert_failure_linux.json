@@ -119,53 +119,7 @@
     "env": {
       "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
     },
-    "name": "gclient runhooks"
-  },
-  {
-    "abort_on_failure": false,
-    "can_fail_build": false,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/compile.py",
-      "--target",
-      "Release",
-      "--src-dir",
-      "[SLAVE_BUILD]/src",
-      "--build-tool",
-      "ninja",
-      "--compiler",
-      "goma",
-      "--goma-dir",
-      "[BUILD]/goma",
-      "--",
-      "base_unittests",
-      "cacheinvalidation_unittests",
-      "cc_unittests",
-      "chromedriver_unittests",
-      "components_unittests",
-      "content_unittests",
-      "crypto_unittests",
-      "google_apis_unittests",
-      "gpu_unittests",
-      "ipc_tests",
-      "jingle_unittests",
-      "media_unittests",
-      "net_unittests",
-      "ppapi_unittests",
-      "printing_unittests",
-      "remoting_unittests",
-      "sql_unittests",
-      "sync_unit_tests",
-      "ui_unittests",
-      "unit_tests",
-      "browser_tests",
-      "content_browsertests",
-      "interactive_ui_tests",
-      "sync_integration_tests",
-      "chrome"
-    ],
-    "name": "compile (with patch)",
+    "name": "gclient runhooks",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
       "@@@STEP_FAILURE@@@"
@@ -263,46 +217,13 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/compile.py",
-      "--target",
-      "Release",
-      "--src-dir",
-      "[SLAVE_BUILD]/src",
-      "--build-tool",
-      "ninja",
-      "--compiler",
-      "goma",
-      "--goma-dir",
-      "[BUILD]/goma",
-      "--clobber",
-      "--",
-      "base_unittests",
-      "cacheinvalidation_unittests",
-      "cc_unittests",
-      "chromedriver_unittests",
-      "components_unittests",
-      "content_unittests",
-      "crypto_unittests",
-      "google_apis_unittests",
-      "gpu_unittests",
-      "ipc_tests",
-      "jingle_unittests",
-      "media_unittests",
-      "net_unittests",
-      "ppapi_unittests",
-      "printing_unittests",
-      "remoting_unittests",
-      "sql_unittests",
-      "sync_unit_tests",
-      "ui_unittests",
-      "unit_tests",
-      "browser_tests",
-      "content_browsertests",
-      "interactive_ui_tests",
-      "sync_integration_tests",
-      "chrome"
+      "[DEPOT_TOOLS]/gclient.py",
+      "runhooks"
     ],
-    "name": "compile (with patch, lkcr, clobber)",
+    "env": {
+      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
+    },
+    "name": "gclient runhooks (2)",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
       "@@@STEP_FAILURE@@@"
@@ -418,8 +339,7 @@
     "name": "apply_issue (3)",
     "seed_steps": [
       "apply_issue (3)",
-      "gclient runhooks (2)",
-      "compile (with patch, lkcr, clobber, nuke)"
+      "gclient runhooks (3)"
     ]
   },
   {
@@ -432,7 +352,256 @@
     "env": {
       "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
     },
-    "name": "gclient runhooks (2)"
+    "name": "gclient runhooks (3)",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "abort_on_failure": false,
+    "can_fail_build": false,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/compile.py",
+      "--target",
+      "Release",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
+      "--build-tool",
+      "ninja",
+      "--compiler",
+      "goma",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "--",
+      "base_unittests",
+      "cacheinvalidation_unittests",
+      "cc_unittests",
+      "chromedriver_unittests",
+      "components_unittests",
+      "content_unittests",
+      "crypto_unittests",
+      "google_apis_unittests",
+      "gpu_unittests",
+      "ipc_tests",
+      "jingle_unittests",
+      "media_unittests",
+      "net_unittests",
+      "ppapi_unittests",
+      "printing_unittests",
+      "remoting_unittests",
+      "sql_unittests",
+      "sync_unit_tests",
+      "ui_unittests",
+      "unit_tests",
+      "browser_tests",
+      "content_browsertests",
+      "interactive_ui_tests",
+      "sync_integration_tests",
+      "chrome"
+    ],
+    "name": "compile (with patch)",
+    "skip": true
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/gclient.py",
+      "config",
+      "--spec",
+      "cache_dir = None\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'safesync_url': 'https://build.chromium.org/p/chromium/lkcr-status/lkgr', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]"
+    ],
+    "name": "gclient setup (4)",
+    "skip": true
+  },
+  {
+    "abort_on_failure": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/gclient_safe_revert.py",
+      ".",
+      "[DEPOT_TOOLS]/gclient"
+    ],
+    "name": "gclient revert (4)",
+    "skip": true
+  },
+  {
+    "abort_on_failure": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/gclient.py",
+      "sync",
+      "--nohooks",
+      "--delete_unversioned_trees",
+      "--force",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "name": "gclient sync (4)",
+    "skip": true
+  },
+  {
+    "abort_on_failure": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/apply_issue.py",
+      "-r",
+      "[SLAVE_BUILD]/src",
+      "-i",
+      "12853011",
+      "-p",
+      "1",
+      "-s",
+      "https://codereview.chromium.org",
+      "--no-auth"
+    ],
+    "name": "apply_issue (4)",
+    "skip": true
+  },
+  {
+    "abort_on_failure": false,
+    "can_fail_build": false,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/compile.py",
+      "--target",
+      "Release",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
+      "--build-tool",
+      "ninja",
+      "--compiler",
+      "goma",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "--clobber",
+      "--",
+      "base_unittests",
+      "cacheinvalidation_unittests",
+      "cc_unittests",
+      "chromedriver_unittests",
+      "components_unittests",
+      "content_unittests",
+      "crypto_unittests",
+      "google_apis_unittests",
+      "gpu_unittests",
+      "ipc_tests",
+      "jingle_unittests",
+      "media_unittests",
+      "net_unittests",
+      "ppapi_unittests",
+      "printing_unittests",
+      "remoting_unittests",
+      "sql_unittests",
+      "sync_unit_tests",
+      "ui_unittests",
+      "unit_tests",
+      "browser_tests",
+      "content_browsertests",
+      "interactive_ui_tests",
+      "sync_integration_tests",
+      "chrome"
+    ],
+    "name": "compile (with patch, lkcr, clobber)",
+    "skip": true
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport os, shutil, sys\nfor p in [os.path.join(sys.argv[1], x) for x in os.listdir(sys.argv[1])]:\n  if os.path.isdir(p):\n    shutil.rmtree(p)\n  else:\n    os.unlink(p)\n",
+      "[SLAVE_BUILD]"
+    ],
+    "name": "rmcontents slave build directory (2)",
+    "seed_steps": [
+      "rmcontents slave build directory (2)",
+      "gclient setup (5)"
+    ],
+    "skip": true
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/gclient.py",
+      "config",
+      "--spec",
+      "cache_dir = None\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'safesync_url': 'https://build.chromium.org/p/chromium/lkcr-status/lkgr', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]"
+    ],
+    "name": "gclient setup (5)",
+    "skip": true
+  },
+  {
+    "abort_on_failure": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/gclient_safe_revert.py",
+      ".",
+      "[DEPOT_TOOLS]/gclient"
+    ],
+    "name": "gclient revert (5)",
+    "skip": true
+  },
+  {
+    "abort_on_failure": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/gclient.py",
+      "sync",
+      "--nohooks",
+      "--delete_unversioned_trees",
+      "--force",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "name": "gclient sync (5)",
+    "skip": true
+  },
+  {
+    "abort_on_failure": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/apply_issue.py",
+      "-r",
+      "[SLAVE_BUILD]/src",
+      "-i",
+      "12853011",
+      "-p",
+      "1",
+      "-s",
+      "https://codereview.chromium.org",
+      "--no-auth"
+    ],
+    "name": "apply_issue (5)",
+    "seed_steps": [
+      "apply_issue (5)",
+      "gclient runhooks (4)",
+      "compile (with patch, lkcr, clobber, nuke)"
+    ],
+    "skip": true
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/gclient.py",
+      "runhooks"
+    ],
+    "env": {
+      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
+    },
+    "name": "gclient runhooks (4)",
+    "skip": true
   },
   {
     "abort_on_failure": true,
@@ -479,9 +648,6 @@
       "chrome"
     ],
     "name": "compile (with patch, lkcr, clobber, nuke)",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_FAILURE@@@"
-    ]
+    "skip": true
   }
 ]

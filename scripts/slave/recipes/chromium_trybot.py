@@ -240,8 +240,30 @@ def GenSteps(api):
       'read test spec',
       api.path['checkout'].join('testing', 'buildbot', 'chromium_trybot.json'),
       step_test_data=lambda: api.json.test_api.output([])),
-    api.chromium.runhooks(),
   )
+
+  # TODO(phajdan.jr): Extend to all platforms, http://crbug.com/354731 .
+  if api.platform.is_linux:
+    yield api.chromium.runhooks(abort_on_failure=False, can_fail_build=False)
+    if api.step_history.last_step().retcode != 0:
+      # Before removing the checkout directory try just using LKCR.
+      api.gclient.set_config('chromium_lkcr')
+
+      # Since we're likely to switch to an earlier revision, revert the patch,
+      # sync with the new config, and apply issue again.
+      yield api.gclient.checkout(revert=True)
+      yield api.rietveld.apply_issue()
+
+      yield api.chromium.runhooks(abort_on_failure=False, can_fail_build=False)
+      if api.step_history.last_step().retcode != 0:
+        yield (
+          api.path.rmcontents('slave build directory', api.path['slave_build']),
+          api.gclient.checkout(),
+          api.rietveld.apply_issue(),
+          api.chromium.runhooks(),
+        )
+  else:
+    yield api.chromium.runhooks()
 
   test_spec = api.step_history['read test spec'].json.output
   test_spec = [s.encode('utf-8') for s in test_spec]
@@ -536,6 +558,15 @@ def GenTests(api):
       api.platform.name('win') +
       api.step_data(step, retcode=1)
     )
+
+  yield (
+    api.test('gclient_revert_failure_linux') +
+    props() +
+    api.platform.name('linux') +
+    api.step_data('gclient runhooks', retcode=1) +
+    api.step_data('gclient runhooks (2)', retcode=1) +
+    api.step_data('gclient runhooks (3)', retcode=1)
+  )
 
   # TODO(phajdan.jr): Provide default test data for test steps.
   yield (

@@ -64,8 +64,7 @@
     "name": "apply_issue",
     "seed_steps": [
       "apply_issue",
-      "read test spec",
-      "gclient runhooks"
+      "read test spec"
     ]
   },
   {
@@ -83,6 +82,8 @@
     ]
   },
   {
+    "abort_on_failure": false,
+    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
