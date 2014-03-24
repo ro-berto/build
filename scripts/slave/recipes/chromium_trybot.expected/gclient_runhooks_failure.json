@@ -225,10 +225,6 @@
       "--no-auth"
     ],
     "name": "apply_issue (2)",
-    "seed_steps": [
-      "apply_issue (2)",
-      "compile (with patch, lkcr, clobber)"
-    ],
     "skip": true
   },
   {

@@ -267,12 +267,27 @@ def GenSteps(api):
     # Since we're likely to switch to an earlier revision, revert the patch,
     # sync with the new config, and apply issue again.
     yield api.gclient.checkout(revert=True)
-    yield (
-      api.rietveld.apply_issue(),
-      api.chromium.compile(compile_targets,
-                           name='compile (with patch, lkcr, clobber)',
-                           force_clobber=True)
-    )
+    yield api.rietveld.apply_issue()
+
+    # TODO(phajdan.jr): Extend to all platforms, http://crbug.com/354731 .
+    if api.platform.is_linux:
+      yield api.chromium.compile(compile_targets,
+                                 name='compile (with patch, lkcr, clobber)',
+                                 force_clobber=True,
+                                 abort_on_failure=False,
+                                 can_fail_build=False)
+      if api.step_history['compile (with patch, lkcr, clobber)'].retcode != 0:
+        yield (
+          api.path.rmcontents('slave build directory', api.path['slave_build']),
+          api.gclient.checkout(),
+          api.chromium.compile(compile_targets,
+                               name='compile (with patch, lkcr, clobber, nuke)',
+                               force_clobber=True)
+        )
+    else:
+      yield api.chromium.compile(compile_targets,
+                                 name='compile (with patch, lkcr, clobber)',
+                                 force_clobber=True)
 
   # Do not run tests if the build is already in a failed state.
   if api.step_history.failed:
@@ -558,4 +573,13 @@ def GenTests(api):
     api.platform.name('win') +
     api.step_data('compile (with patch)', retcode=1) +
     api.step_data('compile (with patch, lkcr, clobber)', retcode=1)
+  )
+
+  yield (
+    api.test('compile_failure_linux') +
+    props() +
+    api.platform.name('linux') +
+    api.step_data('compile (with patch)', retcode=1) +
+    api.step_data('compile (with patch, lkcr, clobber)', retcode=1) +
+    api.step_data('compile (with patch, lkcr, clobber, nuke)', retcode=1)
   )
