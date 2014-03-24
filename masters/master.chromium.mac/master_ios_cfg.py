@@ -86,6 +86,7 @@ F('ios_rel_ninja', ios().ChromiumFactory(
   # TODO(lliabraa): Need to upstream support for running tests on devices
   # before we can actually run any tests.
   clobber=False,
+  target='Release-iphoneos',
   tests=[],
   options = ['--build-tool=ninja'],
   factory_properties={
