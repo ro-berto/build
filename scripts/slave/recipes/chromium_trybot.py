@@ -280,6 +280,8 @@ def GenSteps(api):
         yield (
           api.path.rmcontents('slave build directory', api.path['slave_build']),
           api.gclient.checkout(),
+          api.rietveld.apply_issue(),
+          api.chromium.runhooks(),
           api.chromium.compile(compile_targets,
                                name='compile (with patch, lkcr, clobber, nuke)',
                                force_clobber=True)

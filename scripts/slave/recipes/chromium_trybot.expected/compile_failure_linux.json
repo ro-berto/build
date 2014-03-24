@@ -403,6 +403,41 @@
     "cmd": [
       "python",
       "-u",
+      "[DEPOT_TOOLS]/apply_issue.py",
+      "-r",
+      "[SLAVE_BUILD]/src",
+      "-i",
+      "12853011",
+      "-p",
+      "1",
+      "-s",
+      "https://codereview.chromium.org",
+      "--no-auth"
+    ],
+    "name": "apply_issue (3)",
+    "seed_steps": [
+      "apply_issue (3)",
+      "gclient runhooks (2)",
+      "compile (with patch, lkcr, clobber, nuke)"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/gclient.py",
+      "runhooks"
+    ],
+    "env": {
+      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
+    },
+    "name": "gclient runhooks (2)"
+  },
+  {
+    "abort_on_failure": true,
+    "cmd": [
+      "python",
+      "-u",
       "[BUILD]/scripts/slave/compile.py",
       "--target",
       "Release",
