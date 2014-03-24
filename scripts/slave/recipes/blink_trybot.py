@@ -366,7 +366,19 @@ def GenSteps(api):
 
   root = api.rietveld.calculate_issue_root()
 
-  yield api.gclient.checkout(revert=True)
+  # TODO(phajdan.jr): Extend to all platforms, http://crbug.com/354731 .
+  if api.platform.is_linux:
+    yield api.gclient.checkout(
+        revert=True, can_fail_build=False, abort_on_failure=False)
+    for step in api.step_history.values():
+      if step.retcode != 0:
+        yield (
+          api.path.rmcontents('slave build directory', api.path['slave_build']),
+          api.gclient.checkout(),
+        )
+        break
+  else:
+    yield api.gclient.checkout(revert=True)
   steps = [
     api.rietveld.apply_issue(root),
     api.chromium.runhooks(),
@@ -456,15 +468,10 @@ def GenTests(api):
   )
 
   yield (
-    api.test('bad_revert_bails') +
+    api.test('gclient_revert_nuke') +
     properties('tryserver.chromium', 'linux_blink_rel') +
-    api.step_data('gclient revert', retcode=1)
-  )
-
-  yield (
-    api.test('bad_sync_bails') +
-    properties('tryserver.chromium', 'linux_blink_rel') +
-    api.step_data('gclient sync', retcode=1)
+    api.step_data('gclient revert', retcode=1) +
+    api.override_step_data(with_patch, canned_test(passing=True, minimal=True))
   )
 
   yield (
