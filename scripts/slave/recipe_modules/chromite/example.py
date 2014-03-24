@@ -15,6 +15,8 @@ def GenSteps(api):
     api.chromite.checkout(),
     api.chromite.setup_board(board, flags={'cache-dir': '.cache'}),
     api.chromite.build_packages(board),
+    api.chromite.cros_sdk('cros_sdk', ['echo', 'hello'],
+                          environ={ 'var1': 'value' }),
   )
 
 

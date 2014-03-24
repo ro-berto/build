@@ -18,7 +18,8 @@ class ChromiteApi(recipe_api.RecipeApi):
       self.m.repo.sync(),
     )
 
-  def cros_sdk(self, name, cmd, flags=None, chromite_path=None, **kwargs):
+  def cros_sdk(self, name, cmd, flags=None, environ=None, chromite_path=None,
+                 **kwargs):
     """Return a step to run a command inside the cros_sdk."""
     chromite_path = (chromite_path or
                      self.m.path['slave_build'].join(self.chromite_subpath))
@@ -28,6 +29,8 @@ class ChromiteApi(recipe_api.RecipeApi):
     arg_list = []
     for k, v in sorted((flags or {}).items()):
       arg_list.extend(['--%s' % k, v])
+    for t in sorted((environ or {}).items()):
+      arg_list.append('%s=%s' % t)
     arg_list.append('--')
     arg_list.extend(cmd)
 

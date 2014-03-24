@@ -13,7 +13,8 @@
       "repo init",
       "repo sync",
       "setup board",
-      "build packages"
+      "build packages",
+      "cros_sdk"
     ]
   },
   {
@@ -48,5 +49,17 @@
       "amd64-generic"
     ],
     "name": "build packages"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/chromite/bin/cros_sdk",
+      "var1=value",
+      "--",
+      "echo",
+      "hello"
+    ],
+    "name": "cros_sdk"
   }
 ]
