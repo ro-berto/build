@@ -174,12 +174,18 @@
     "stdout": "/path/to/tmp/"
   },
   {
+    "always_run": true,
     "cmd": [
-      "zip",
-      "-y1",
-      "[SLAVE_BUILD]/src/out/build_product_4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00.zip",
-      "Release/apks",
-      "Release/lib"
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/android/archive_build.py",
+      "--target",
+      "Release",
+      "--name",
+      "build_product_4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00.zip",
+      "--files",
+      "apks/*,lib/*.so",
+      "--remove_dirs"
     ],
     "cwd": "[SLAVE_BUILD]/src/out",
     "name": "zip_build_product"

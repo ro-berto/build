@@ -209,11 +209,15 @@
     "name": "lint"
   },
   {
+    "always_run": true,
     "cmd": [
-      "zip",
-      "-y1r",
-      "[SLAVE_BUILD]/src/out/build_product_1337.zip",
-      "Debug"
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/android/archive_build.py",
+      "--target",
+      "Debug",
+      "--name",
+      "build_product_1337.zip"
     ],
     "cwd": "[SLAVE_BUILD]/src/out",
     "name": "zip_build_product"

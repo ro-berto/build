@@ -43,23 +43,33 @@ class AndroidApi(recipe_api.RecipeApi):
 
     self.set_config(config_name, **kwargs)
 
-  def make_zip_archive(self, step_name, zip_file, files,
+  def make_zip_archive(self, step_name, archive_name, files=None,
       include_subfolders=True,
       **kwargs):
-    assert isinstance(files, list)
-    assert len(files)
+    """Creates and stores the archive file.
 
-    zip_vars = '-y1'
-    if include_subfolders:
-      zip_vars += 'r'
+    Args:
+      step_name: Name of the step.
+      archive_name: Name of the archive file.
+      files: List of files. Files can be glob's or file paths. If no files
+        are provided, everything in the target directory will be included.
+      include_subfolders: If True, files will be stored using the subdolders
+        in the archive.
+    """
+    archive_args = ['--target', self.m.chromium.c.BUILD_CONFIG,
+                    '--name', archive_name]
+    if files:
+       archive_args.extend(['--files', ','.join(files)])
+    if not include_subfolders:
+      archive_args.append('--remove_dirs')
 
-    # We want to store symbolic links as links, recurse into directories,
-    # and compress fast. Hence we pass -yr1 options to zip which are indicative
-    # of these requirements.
-    yield self.m.step(
-        step_name,
-        ['zip', zip_vars, zip_file] + files,
-        **kwargs
+    yield self.m.python(
+      step_name,
+      str(self.m.path['build'].join(
+          'scripts', 'slave', 'android', 'archive_build.py')),
+      archive_args,
+      always_run=True,
+      **kwargs
     )
 
   def unzip_archive(self, step_name, zip_file, **kwargs):
@@ -237,8 +247,8 @@ class AndroidApi(recipe_api.RecipeApi):
     upload_tag = (
         self.m.properties.get('upload_tag') or
         self.m.properties.get('revision'))
-    zipfile = self.m.path['checkout'].join('out',
-                                           'build_product_%s.zip' % upload_tag)
+    archive_name = 'build_product_%s.zip' % upload_tag
+    zipfile = self.m.path['checkout'].join('out', archive_name)
     self._cleanup_list.append(zipfile)
     bucket = self._internal_names['BUILD_BUCKET']
     dest = self.m.properties['buildername']
@@ -248,16 +258,15 @@ class AndroidApi(recipe_api.RecipeApi):
       revision = str.strip(self.m.step_history['git_number'].stdout)
       dest = ('asan-android-release-' + revision + '.zip')
 
-    path = self.m.chromium.c.BUILD_CONFIG
-    files = [path]
+    files = None
     include_subfolders = True
     if (self.c.archive_clusterfuzz):
-      files = [os.path.join(path, 'apks'), os.path.join(path, 'lib')]
+      files = ['apks/*', 'lib/*.so']
       include_subfolders = False
 
     yield self.make_zip_archive(
       'zip_build_product',
-      zipfile,
+      archive_name,
       files,
       include_subfolders,
       cwd=self.m.path['checkout'].join('out')
