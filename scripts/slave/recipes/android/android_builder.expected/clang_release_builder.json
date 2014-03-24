@@ -185,7 +185,7 @@
       "build_product_4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00.zip",
       "--files",
       "apks/*,lib/*.so",
-      "--remove_dirs"
+      "--ignore-subfolder-names"
     ],
     "cwd": "[SLAVE_BUILD]/src/out",
     "name": "zip_build_product"

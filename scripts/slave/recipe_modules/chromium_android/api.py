@@ -61,7 +61,7 @@ class AndroidApi(recipe_api.RecipeApi):
     if files:
        archive_args.extend(['--files', ','.join(files)])
     if not include_subfolders:
-      archive_args.append('--remove_dirs')
+      archive_args.append('--ignore-subfolder-names')
 
     yield self.m.python(
       step_name,
