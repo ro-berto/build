@@ -53,8 +53,6 @@
     ],
     "env": {
       "GYP_DEFINES": "component=shared_library target_arch=ia32 v8_target_arch=ia32 v8_use_snapshot=false",
-      "GYP_GENERATORS": "msvs",
-      "GYP_GENERATOR_FLAGS": "msvs_error_on_missing_sources=1",
       "GYP_MSVS_VERSION": "2010"
     },
     "name": "gclient runhooks",
@@ -85,7 +83,7 @@
       "--src-dir",
       "[SLAVE_BUILD]\\v8",
       "--build-tool",
-      "msvs",
+      "vs",
       "--"
     ],
     "name": "compile"

@@ -387,7 +387,7 @@ BUILDERS = {
       },
       'V8 Win32 - nosnap - shared': {
         'recipe_config': 'v8',
-        'chromium_apply_config': ['msvs', 'shared_library', 'no_snapshot'],
+        'chromium_apply_config': ['vs', 'shared_library', 'no_snapshot'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
