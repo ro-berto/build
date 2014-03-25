@@ -366,19 +366,16 @@ def GenSteps(api):
 
   root = api.rietveld.calculate_issue_root()
 
-  # TODO(phajdan.jr): Extend to all platforms, http://crbug.com/354731 .
-  if api.platform.is_linux:
-    yield api.gclient.checkout(
-        revert=True, can_fail_build=False, abort_on_failure=False)
-    for step in api.step_history.values():
-      if step.retcode != 0:
-        yield (
-          api.path.rmcontents('slave build directory', api.path['slave_build']),
-          api.gclient.checkout(),
-        )
-        break
-  else:
-    yield api.gclient.checkout(revert=True)
+  yield api.gclient.checkout(
+      revert=True, can_fail_build=False, abort_on_failure=False)
+  for step in api.step_history.values():
+    if step.retcode != 0:
+      yield (
+        api.path.rmcontents('slave build directory', api.path['slave_build']),
+        api.gclient.checkout(),
+      )
+      break
+
   steps = [
     api.rietveld.apply_issue(root),
     api.chromium.runhooks(),
