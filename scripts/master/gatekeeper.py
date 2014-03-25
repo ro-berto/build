@@ -18,6 +18,7 @@ it and also reuse some of its methods to send emails.
 
 import os
 import urllib
+import logging
 
 from buildbot.status.builder import FAILURE
 from twisted.python import log
@@ -92,6 +93,10 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
       self.password = get_password.Password('.status_password').GetPassword()
 
 
+  @staticmethod
+  def msg(message, **kwargs):
+    log.msg('[gatekeeper] ' + message, **kwargs)
+
   def getGitRepo(self, repository_url):
     git_repo = self.checkouts.get(repository_url)
     if git_repo:
@@ -122,7 +127,7 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
       # @rtype getSlave(): L{buildbot.status.builder.SlaveStatus}
       slave_status = self.master_status.getSlave(slave_name)
       if slave_status and not slave_status.isConnected():
-        log.msg('[gatekeeper] Slave %s was disconnected, '
+        GateKeeper.msg('Slave %s was disconnected, '
                 'not closing the tree' % slave_name)
         return False
 
@@ -137,12 +142,12 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
       if len(previous_steps) == 1:
         if previous_steps[0].getResults()[0] == FAILURE:
           # The previous same step failed on the previous build. Ignore.
-          log.msg('[gatekeeper] Slave %s failed, but previously failed on '
+          GateKeeper.msg('Slave %s failed, but previously failed on '
                   'the same step (%s). So not closing tree.' % (
                       (step_name, slave_name)))
           return False
       else:
-        log.msg('[gatekeeper] len(previous_steps) == %d which is weird' %
+        GateKeeper.msg('len(previous_steps) == %d which is weird' %
                 len(previous_steps))
 
     # If check_revisions=False that means that the tree closure request is
@@ -164,7 +169,7 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
     # likely a build started manually, and we don't want to close the
     # tree.
     if not latest_revision or not build_status.getResponsibleUsers():
-      log.msg('[gatekeeper] Slave %s failed, but no version stamp, '
+      GateKeeper.msg('Slave %s failed, but no version stamp, '
               'so skipping.' % slave_name)
       return False
 
@@ -174,17 +179,21 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
     if self.git_mode:
       this_rev, last_rev = git_repo.number(
           latest_revision, self._last_closure_revision)
+      dbg = lambda m: GateKeeper.msg(m, logLevel=logging.DEBUG)
+      dbg('Git mode. Hash mapping:')
+      dbg('%s -> %s' % (latest_revision, this_rev))
+      dbg('%s -> %s' % (self._last_closure_revision, last_rev))
     else:
       this_rev = latest_revision
       last_rev = self._last_closure_revision
     if this_rev <= last_rev:
-      log.msg('[gatekeeper] Slave %s failed, but we already closed it '
+      GateKeeper.msg('Slave %s failed, but we already closed it '
               'for a previous revision (old=%s, new=%s)' % (
                   slave_name, str(self._last_closure_revision),
                   str(latest_revision)))
       return False
 
-    log.msg('[gatekeeper] Decided to close tree because of slave %s '
+    GateKeeper.msg('Decided to close tree because of slave %s '
             'on revision %s' % (slave_name, str(latest_revision)))
 
     # Up to here, in theory we'd check if the tree is closed but this is too
@@ -217,9 +226,7 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
 
   def getFinishedMessage(self, result, builder_name, build_status, step_name):
     """Closes the tree."""
-    log.msg(
-        '[gatekeeper] Trying to close the tree at %s.' % self.tree_status_url)
-
+    GateKeeper.msg('Trying to close the tree at %s.' % self.tree_status_url)
     git_repo = None
     if self.git_mode:
       repository_url = build_status.getProperty('repository')
@@ -232,7 +239,7 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
       return
 
     if os.path.exists('.suppress_gatekeeper'):
-      log.msg('[gatekeeper] Suppression file is in place, will not close for '
+      GateKeeper.msg('Suppression file is in place, will not close for '
               'rev %s' % str(latest_revision))
       self._last_closure_revision = latest_revision
       return
@@ -258,12 +265,12 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
         })
 
     def success(result):
-      log.msg('[gatekeeper] Tree closed successfully at rev %s' %
+      GateKeeper.msg('Tree closed successfully at rev %s' %
               str(latest_revision))
       self._last_closure_revision = latest_revision
 
     def failure(result):
-      log.msg('[gatekeeper] Failed to close the tree at rev %s' %
+      GateKeeper.msg('Failed to close the tree at rev %s' %
               str(latest_revision))
 
     # Trigger the HTTP POST request to update the tree status.
