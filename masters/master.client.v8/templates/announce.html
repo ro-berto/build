@@ -37,34 +37,34 @@
       }
     };
 
-    var lkgrPath = "http://v8-status.appspot.com/revisions?format=json";
+    var lkgrPath = "https://v8-status.appspot.com/revisions?format=json";
     xmlHttp.open('GET', lkgrPath, true);
     xmlHttp.send(null);
   }
 
-  branches_url = "http://build.chromium.org/p/client.v8.branches/horizontal_one_box_per_builder"
+  branches_url = "https://build.chromium.org/p/client.v8.branches/horizontal_one_box_per_builder"
 </script>
 
 <div class="Announcement">
 
-<iframe width="100%" height="44" frameborder="0" scrolling="no" src="http://v8-status.appspot.com/current" ></iframe>
+<iframe width="100%" height="44" frameborder="0" scrolling="no" src="https://v8-status.appspot.com/current" ></iframe>
 
 <center style="padding: 0 7px">
   <table width="100%" valign="top" bgcolor="#efefef" style="border-bottom-left-radius: 24px; border-bottom-right-radius: 24px; box-shadow: 2px 2px 6px rgba(0,0,0,0.6);">
     <tr>
       <td width="50%" style="text-align: right;">
         <b>Sheriff: </b>
-        <script src='http://chromium-build.appspot.com/p/chromium/sheriff_v8.js'></script>
+        <script src='https://chromium-build.appspot.com/p/chromium/sheriff_v8.js'></script>
         &nbsp;&nbsp;
         <b>Masters: </b>
         <a id="master_v8" href="../client.v8">client.v8</a> |
         <a id="master_v8_branches" href="../client.v8.branches">client.v8.branches</a>
         &nbsp;&nbsp;
         <b>Controls: </b>
-        <a id="tree_status_link" href="http://v8-status.appspot.com">tree status</a>
+        <a id="tree_status_link" href="https://v8-status.appspot.com">tree status</a>
         &nbsp;&nbsp;
         <b>LKGR: </b>
-        <a id="lkgr_link" href="http://v8-status.appspot.com/lkgr">lkgr</a>
+        <a id="lkgr_link" href="https://v8-status.appspot.com/lkgr">lkgr</a>
         <script language="javascript">
           setTimeout('DisplayLKGR()', 100);
         </script>
