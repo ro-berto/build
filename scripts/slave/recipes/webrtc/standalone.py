@@ -306,6 +306,45 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
+      'Android': {
+        'recipe_config': 'webrtc_android',
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'Android (dbg)': {
+        'recipe_config': 'webrtc_android',
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'Android Clang': {
+        'recipe_config': 'webrtc_android_clang',
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'testing': {
+          'platform': 'linux',
+        },
+      },
     },
   },
   'tryserver.webrtc': {
@@ -492,6 +531,45 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
+      'android': {
+        'recipe_config': 'webrtc_android',
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'android_rel': {
+        'recipe_config': 'webrtc_android',
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'android_clang': {
+        'recipe_config': 'webrtc_android_clang',
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'testing': {
+          'platform': 'linux',
+        },
+      },
     },
   },
 }
@@ -502,6 +580,12 @@ RECIPE_CONFIGS = {
   },
   'webrtc_asan': {
     'webrtc_config': 'webrtc_asan',
+  },
+  'webrtc_android': {
+    'webrtc_config': 'webrtc_android',
+  },
+  'webrtc_android_clang': {
+    'webrtc_config': 'webrtc_android_clang',
   },
 }
 

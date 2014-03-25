@@ -321,6 +321,13 @@ def blink_clang(c):
 
 @config_ctx(includes=['ninja', 'static_library', 'default_compiler', 'goma'])
 def android(c):
+  _android_common(c)
+
+@config_ctx(includes=['ninja', 'static_library', 'clang', 'goma'])
+def android_clang(c):
+  _android_common(c)
+
+def _android_common(c):
   gyp_defs = c.gyp_env.GYP_DEFINES
   gyp_defs['fastbuild'] = 1
   gyp_defs['OS'] = c.TARGET_PLATFORM

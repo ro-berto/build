@@ -21,6 +21,16 @@ def webrtc_asan(c):
 
 
 @CONFIG_CTX(includes=['android'])
+def webrtc_android(c):
+  pass
+
+
+@CONFIG_CTX(includes=['android_clang'])
+def webrtc_android_clang(c):
+  pass
+
+
+@CONFIG_CTX(includes=['android'])
 def webrtc_android_apk(c):
   if c.TARGET_PLATFORM != 'android':
     raise BadConf('Only "android" platform is supported (got: "%s")' %

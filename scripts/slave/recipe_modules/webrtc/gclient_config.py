@@ -12,9 +12,18 @@ from slave.recipe_modules.gclient.config import ChromeSvnSubURL,\
 def webrtc(c):
   pass
 
-
-@CONFIG_CTX(includes=['_webrtc', '_webrtc_limited'])
+@CONFIG_CTX(includes=['webrtc'])
 def webrtc_asan(c):
+  pass
+
+
+@CONFIG_CTX(includes=['webrtc'])
+def webrtc_android(c):
+  pass
+
+
+@CONFIG_CTX(includes=['webrtc'])
+def webrtc_android_clang(c):
   pass
 
 
