@@ -25,10 +25,7 @@ def GenSteps(api):
   s.revision = 'refs/remotes/origin/master'
   yield api.gclient.checkout(spec)
   # Many following steps depends on checkout being set as 'src'
-  api.path.set_dynamic_path('checkout',
-                            api.path['slave_build'].join('src'),
-                            overwrite=True)
-
+  api.path['checkout'] = api.path['slave_build'].join('src')
   api.chromium.set_config('codesearch')
   yield api.chromium.runhooks()
 

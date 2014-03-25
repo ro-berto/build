@@ -97,8 +97,7 @@ class AndroidApi(recipe_api.RecipeApi):
     # TODO(sivachandra): Manufacture gclient spec such that it contains "src"
     # solution + repo_name solution. Then checkout will be automatically
     # correctly set by gclient.checkout
-    self.m.path.set_dynamic_path('checkout',
-                                 self.m.path['slave_build'].join('src'))
+    self.m.path['checkout'] = self.m.path['slave_build'].join('src')
 
     gyp_defs = self.m.chromium.c.gyp_env.GYP_DEFINES
 

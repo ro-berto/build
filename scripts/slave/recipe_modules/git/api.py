@@ -39,7 +39,9 @@ class GitApi(recipe_api.RecipeApi):
       dir_path = dir_path or dir_path.rsplit('/', 1)[-1]
 
       dir_path = self.m.path['slave_build'].join(dir_path)
-    self.m.path.set_dynamic_path('checkout', dir_path, overwrite=False)
+
+    if 'checkout' not in self.m.path:
+      self.m.path['checkout'] = dir_path
 
     # git_setup.py always sets the repo at the given url as remote 'origin'.
     remote = 'origin'

@@ -200,9 +200,9 @@ class GclientApi(recipe_api.RecipeApi):
         yield self(name, ['recurse', 'git', 'config', var, val], **kwargs)
 
     cwd = kwargs.get('cwd', self.m.path['slave_build'])
-    self.m.path.set_dynamic_path(
-      'checkout', cwd.join(*cfg.solutions[0].name.split(self.m.path.sep)),
-      overwrite=False)
+    if 'checkout' not in self.m.path:
+      self.m.path['checkout'] = cwd.join(
+        *cfg.solutions[0].name.split(self.m.path.sep))
 
   def revert(self, **kwargs):
     """Return a gclient_safe_revert step."""

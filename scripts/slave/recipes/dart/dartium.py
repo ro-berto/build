@@ -72,7 +72,7 @@ def GenSteps(api):
 
   # gclient api incorrectly sets Path('[CHECKOUT]') to build/src/dartium.deps
   # because Dartium has its DEPS file in dartium.deps, not directly in src.
-  api.path.set_dynamic_path('checkout', api.path['slave_build'].join(('src')))
+  api.path['checkout'] = api.path['slave_build'].join('src')
 
   yield api.chromium.runhooks()
   yield api.python('fetch_reference_build',

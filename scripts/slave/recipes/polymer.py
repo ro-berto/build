@@ -59,7 +59,7 @@ def _CheckoutSteps(api):
 def GenSteps(api):
   yield _CheckoutSteps(api)
   this_repo = api.properties['buildername'].split()[0]
-  api.path.set_dynamic_path('checkout', api.path['slave_build'].join(this_repo))
+  api.path['checkout'] = api.path['slave_build'].join(this_repo)
 
   tmp_path = ''
   tmp_args = []
