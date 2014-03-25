@@ -127,16 +127,14 @@ F('mac_largetests_factory', mac().WebRTCFactory(
     }))
 
 # iOS.
-# TODO(kjellander): Reenable gatekeeper 'ios|compile' when webrtc:3073 is fixed.
-B('iOS Debug', 'ios_debug_factory', None, scheduler,
+B('iOS Debug', 'ios_debug_factory', 'ios|compile', scheduler,
   slavebuilddir='mac64')
 F('ios_debug_factory', mac().WebRTCFactory(
     target='Debug-iphoneos',
     options=options,
     factory_properties=mac_ios_factory_properties))
 
-# TODO(kjellander): Reenable gatekeeper 'ios|compile' when webrtc:3073 is fixed.
-B('iOS Release', 'ios_release_factory', None, scheduler,
+B('iOS Release', 'ios_release_factory', 'ios|compile', scheduler,
   slavebuilddir='mac64')
 F('ios_release_factory', mac().WebRTCFactory(
     target='Release-iphoneos',
