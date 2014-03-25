@@ -44,8 +44,7 @@ B('Linux Tsan v2', 'linux_tsan2_factory', scheduler=scheduler)
 F('linux_tsan2_factory', linux().WebRTCFactory(
     target='Release',
     tests=tests,
-    options=['--compiler=clang',
-             '--build-tool=ninja'],
+    options=['--compiler=goma-clang'],
     factory_properties={
         'tsan': True,
         'tsan_suppressions_file':
@@ -59,6 +58,7 @@ B('Linux TsanRV', 'linux_tsan_rv_factory', scheduler=scheduler)
 F('linux_tsan_rv_factory', linux().WebRTCFactory(
     target='Release',
     tests=['tsan_rv_' + test for test in tests],
+    options=['--compiler=goma'],
     factory_properties={
         'needs_valgrind': True,
         'gclient_env': {'GYP_DEFINES': 'build_for_tool=tsan'}}))
@@ -67,8 +67,7 @@ B('Linux LSan (and ASan)', 'linux_lsan_factory', scheduler=scheduler)
 F('linux_lsan_factory', linux().WebRTCFactory(
     target='Release',
     tests=tests,
-    options=['--compiler=clang',
-             '--build-tool=ninja'],
+    options=['--compiler=goma-clang'],
     factory_properties={
         'lsan': True,
         'asan': True,

@@ -50,14 +50,12 @@ valgrind_mac_factory_properties = {
 B('Mac 10.6 Memcheck', 'mac_memcheck_factory', scheduler=scheduler)
 F('mac_memcheck_factory', mac().WebRTCFactory(
     target='Debug',
-    options=['--build-tool=ninja'],
     tests=['memcheck_' + test for test in tests],
     factory_properties=valgrind_mac_factory_properties))
 
 B('Mac 10.6 TSan', 'mac_tsan_factory', scheduler=scheduler)
 F('mac_tsan_factory', mac().WebRTCFactory(
     target='Debug',
-    options=['--build-tool=ninja'],
     tests=['tsan_' + test for test in tests],
     factory_properties=valgrind_mac_factory_properties))
 

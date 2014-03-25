@@ -50,7 +50,7 @@ baremetal_tests = [
     'webrtc_perf_tests',
 ]
 
-ninja_options = ['--build-tool=ninja']
+options=['--compiler=goma']
 
 defaults['category'] = 'linux'
 
@@ -58,7 +58,7 @@ B('Linux32 Debug', 'linux32_debug_factory', 'compile|testers', scheduler,
   slavebuilddir='linux32')
 F('linux32_debug_factory', linux().WebRTCFactory(
     target='Debug',
-    options=ninja_options,
+    options=options,
     tests=tests,
     factory_properties={
         'sharded_tests': tests,
@@ -70,7 +70,7 @@ B('Linux32 Release', 'linux32_release_factory', 'compile|testers', scheduler,
   slavebuilddir='linux32')
 F('linux32_release_factory', linux().WebRTCFactory(
     target='Release',
-    options=ninja_options,
+    options=options,
     tests=tests,
     factory_properties={
         'sharded_tests': tests,
@@ -82,7 +82,7 @@ B('Linux64 Debug', 'linux64_debug_factory', 'compile|testers', scheduler,
   slavebuilddir='linux64')
 F('linux64_debug_factory', linux().WebRTCFactory(
     target='Debug',
-    options=ninja_options,
+    options=options,
     tests=tests,
     factory_properties={
         'sharded_tests': tests,
@@ -93,7 +93,7 @@ B('Linux64 Release', 'linux64_release_factory', 'compile|testers', scheduler,
   slavebuilddir='linux64')
 F('linux64_release_factory', linux().WebRTCFactory(
     target='Release',
-    options=ninja_options,
+    options=options,
     tests=tests,
     factory_properties={
         'sharded_tests': tests,
@@ -103,7 +103,7 @@ F('linux64_release_factory', linux().WebRTCFactory(
 B('Linux Clang', 'linux_clang_factory', 'compile|testers', scheduler)
 F('linux_clang_factory', linux().WebRTCFactory(
     target='Debug',
-    options=ninja_options,
+    options=options,
     tests=tests,
     factory_properties={
         'sharded_tests': tests,
@@ -114,7 +114,7 @@ F('linux_clang_factory', linux().WebRTCFactory(
 B('Linux Memcheck', 'linux_memcheck_factory', 'compile', scheduler)
 F('linux_memcheck_factory', linux().WebRTCFactory(
     target='Release',
-    options=ninja_options,
+    options=options,
     tests=['memcheck_' + test for test in tests],
     factory_properties={
         'needs_valgrind': True,
@@ -124,7 +124,7 @@ F('linux_memcheck_factory', linux().WebRTCFactory(
 B('Linux Tsan', 'linux_tsan_factory', 'compile', scheduler)
 F('linux_tsan_factory', linux().WebRTCFactory(
     target='Release',
-    options=ninja_options,
+    options=options,
     tests=['tsan_' + test for test in tests],
     factory_properties={
         'needs_valgrind': True,
@@ -134,7 +134,7 @@ F('linux_tsan_factory', linux().WebRTCFactory(
 B('Linux Asan', 'linux_asan_factory', 'compile|testers', scheduler)
 F('linux_asan_factory', linux().WebRTCFactory(
     target='Release',
-    options=ninja_options,
+    options=['--compiler=goma-clang'],
     tests=tests,
     factory_properties={
         'asan': True,
@@ -149,7 +149,7 @@ B('Linux64 Release [large tests]', 'linux_largetests_factory',
   'compile|baremetal', scheduler)
 F('linux_largetests_factory', linux().WebRTCFactory(
     target='Release',
-    options=ninja_options,
+    options=options,
     tests=baremetal_tests,
     factory_properties={
         'virtual_webcam': True,
@@ -174,7 +174,7 @@ F('linux_largetests_factory', linux().WebRTCFactory(
 B('Chrome OS', 'chromeos_factory', 'compile|testers', scheduler)
 F('chromeos_factory', linux().WebRTCFactory(
     target='Debug',
-    options=ninja_options,
+    options=options,
     tests=tests,
     factory_properties={
         'gclient_env': {'GYP_DEFINES': 'chromeos=1'},

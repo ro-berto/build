@@ -47,7 +47,7 @@ baremetal_tests = [
     'voe_auto_test',
     'webrtc_perf_tests',
 ]
-options = ['--build-tool=ninja']
+options=['--compiler=goma-clang']
 
 mac_ios_factory_properties = {
     'gclient_env': {

@@ -39,7 +39,7 @@ tests = [
     'voice_engine_unittests',
 ]
 
-ninja_options = ['--build-tool=ninja']
+options=['--compiler=goma']
 dr_memory_factory_properties = {
    'gclient_env': {'GYP_DEFINES': 'build_for_tool=drmemory'},
    'needs_drmemory': True,
@@ -50,28 +50,28 @@ defaults['category'] = 'win'
 B('Win DrMemory Light', 'win_drmemory_light_factory', scheduler=scheduler)
 F('win_drmemory_light_factory', win().WebRTCFactory(
     target='Debug',
-    options=ninja_options,
+    options=options,
     tests=['drmemory_light_' + test for test in tests],
     factory_properties=dr_memory_factory_properties))
 
 B('Win DrMemory Full', 'win_drmemory_full_factory', scheduler=scheduler)
 F('win_drmemory_full_factory', win().WebRTCFactory(
     target='Debug',
-    options=ninja_options,
+    options=options,
     tests=['drmemory_full_' + test for test in tests],
     factory_properties=dr_memory_factory_properties))
 
 B('Win DrMemory Pattern', 'win_drmemory_pattern_factory', scheduler=scheduler)
 F('win_drmemory_pattern_factory', win().WebRTCFactory(
     target='Debug',
-    options=ninja_options,
+    options=options,
     tests=['drmemory_pattern_' + test for test in tests],
     factory_properties=dr_memory_factory_properties))
 
 B('Win SyzyASan', 'win_asan_factory', scheduler=scheduler)
 F('win_asan_factory', win().WebRTCFactory(
     target='Release',
-    options=ninja_options,
+    options=options,
     tests=tests,
     factory_properties={
         'asan': True,
@@ -85,7 +85,7 @@ F('win_asan_factory', win().WebRTCFactory(
 B('Win Tsan', 'win_tsan_factory', scheduler=scheduler)
 F('win_tsan_factory', win().WebRTCFactory(
     target='Debug',
-    options=ninja_options,
+    options=options,
     tests=['tsan_' + test for test in tests],
     factory_properties={
         'needs_tsan_win': True,
