@@ -10,6 +10,7 @@ DEPS = [
   'path',
   'platform',
   'properties',
+  'tryserver',
   'v8',
 ]
 
@@ -41,6 +42,12 @@ V8_TEST_CONFIGS = {
     'name': 'Check',
     'tests': 'mjsunit cctest message preparser',
     'flaky_step': True,
+  },
+  'v8testing_try': {
+    'name': 'Check',
+    'tests': 'mjsunit cctest message preparser',
+    'flaky_step': False,
+    'test_args': ['--quickcheck'],
   },
   'webkit': {
     'name': 'Webkit',
@@ -398,6 +405,20 @@ BUILDERS = {
       },
     },
   },
+  'tryserver.v8': {
+    'builders': {
+      'v8_linux_rel': {
+        'recipe_config': 'v8',
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['v8testing_try'],
+        'testing': {'platform': 'linux'},
+      },
+    },
+  },
 }
 
 RECIPE_CONFIGS = {
@@ -433,10 +454,17 @@ def GenSteps(api):
   for t in bot_config.get('tests', []):
     CreateTest(t).gclient_apply_config(api)
 
+  if api.tryserver.is_tryserver:
+    api.chromium.apply_config('trybot_flavor')
+
   if api.platform.is_win:
     yield api.chromium.taskkill()
 
   yield api.v8.checkout()
+
+  if api.tryserver.is_tryserver:
+    yield api.tryserver.maybe_apply_issue()
+
   steps = [api.v8.runhooks(), api.chromium.cleanup_temp()]
 
   if 'clang' in bot_config.get('gclient_apply_config', []):
@@ -496,5 +524,9 @@ def GenTests(api):
         api.platform(bot_config['testing']['platform'],
                      v8_config_kwargs.get('TARGET_BITS', 64))
       )
+
+      if mastername.startswith('tryserver'):
+        test += (api.properties(revision='12345',
+                                patch_url='try_job_svn_patch'))
 
       yield test
