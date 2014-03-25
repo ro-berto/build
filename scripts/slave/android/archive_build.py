@@ -23,12 +23,12 @@ def archive_build(target='Debug', name='archive.zip', location='out',
   out_dir = 'out'
   target_dir = os.path.join(out_dir, target)
   zip_file = os.path.join(location, name)
-  files = []
+  expanded_files = []
   if files:
     for f in files:
-      files.append(os.path.join(target_dir, f))
+      expanded_files.append(os.path.join(target_dir, f))
   else:
-    files = [target_dir]
+    expanded_files = [target_dir]
 
   saved_dir = os.getcwd()
   os.chdir(os.path.dirname(os.path.join(saved_dir, out_dir)))
@@ -36,7 +36,7 @@ def archive_build(target='Debug', name='archive.zip', location='out',
   if ignore_subfolder_names:
     zip_args += 'j'
   command = ['zip', zip_args, zip_file]
-  command.extend(files)
+  command.extend(expanded_files)
   subprocess.call(' '.join(command), shell=True)
   os.chdir(saved_dir)
 
