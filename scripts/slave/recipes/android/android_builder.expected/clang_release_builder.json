@@ -187,7 +187,7 @@
       "apks/*,lib/*.so",
       "--ignore-subfolder-names"
     ],
-    "cwd": "[SLAVE_BUILD]/src/out",
+    "cwd": "[SLAVE_BUILD]/src",
     "name": "zip_build_product"
   },
   {

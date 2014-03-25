@@ -219,7 +219,7 @@
       "--name",
       "build_product_1337.zip"
     ],
-    "cwd": "[SLAVE_BUILD]/src/out",
+    "cwd": "[SLAVE_BUILD]/src",
     "name": "zip_build_product"
   },
   {

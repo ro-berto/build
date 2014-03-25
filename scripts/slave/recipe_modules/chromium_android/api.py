@@ -269,7 +269,7 @@ class AndroidApi(recipe_api.RecipeApi):
       archive_name,
       files,
       include_subfolders,
-      cwd=self.m.path['checkout'].join('out')
+      cwd=self.m.path['checkout']
     )
     yield self.m.gsutil.upload(
         name='upload_build_product',
