@@ -390,8 +390,8 @@ def create_less_than_or_equal_regex(number):
 
 def get_git_hash(revision, dir_name):
   match = "^git-svn-id: [^ ]*@%s " % create_less_than_or_equal_regex(revision)
-  cmd = ['git', 'log', '-E', '--grep', match, '--format=%H', '--max-count=1']
-  results = call(*cmd, cwd=dir_name).strip().splitlines()
+  cmd = ['log', '-E', '--grep', match, '--format=%H', '--max-count=1']
+  results = git(*cmd, cwd=dir_name).strip().splitlines()
   if results:
     return results[0]
   raise Exception('We can\'t resolve svn revision %s into a git hash' %
