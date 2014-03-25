@@ -63,9 +63,11 @@ lets everything else continue as though nothing has changed. Eventually, when
 everything is stable enough, this step will replace them entirely.
 
 Debugging information:
+(master/builder/slave may be unspecified on recipes)
 master: %(master)s
 builder: %(builder)s
 slave: %(slave)s
+forced by recipes: %(recipe)s
 bot_update.py is:"""
 
 ACTIVATED_MESSAGE = """ACTIVE.
@@ -85,6 +87,8 @@ GCLIENT_TEMPLATE = """solutions = %(solutions)s
 cache_dir = %(cache_dir)s
 """
 
+# IMPORTANT: If you're trying to enable a RECIPE bot, you'll need to
+# edit recipe_modules/bot_update/api.py instead.
 ENABLED_MASTERS = ['chromium.git']
 ENABLED_BUILDERS = {
     'tryserver.chromium': ['linux_rel_alt'],
@@ -480,7 +484,7 @@ def get_total_disk_space():
     return (total, free)
 
 
-def git_checkout(solutions, revision, shallow):
+def git_checkout(solutions, revision, shallow, sub_annotations):
   build_dir = os.getcwd()
   # Before we do anything, break all git_cache locks.
   if path.isdir(CACHE_DIR):
@@ -522,7 +526,8 @@ def git_checkout(solutions, revision, shallow):
     git('pull', 'origin', 'master', cwd=sln_dir)
     # TODO(hinoka): We probably have to make use of revision mapping.
     if first_solution and revision and revision.lower() != 'head':
-      emit_got_revision(revision)
+      if sub_annotations:
+        emit_got_revision(revision)
       if revision and revision.isdigit() and len(revision) < 40:
         # rev_num is really a svn revision number, convert it into a git hash.
         git_ref = get_git_hash(int(revision), name)
@@ -591,6 +596,15 @@ def emit_flag(flag_file):
     f.write('Success!')
 
 
+def ensure_emit_json(out_file, did_run, **kwargs):
+  """Write run information into a JSON file."""
+  if out_file:
+    output = {'did_run': did_run}
+    output.update(kwargs)
+    with open(out_file, 'wb') as f:
+      f.write(json.dumps(output))
+
+
 def parse_args():
   parse = optparse.OptionParser()
 
@@ -620,6 +634,9 @@ def parse_args():
                                                     'update.flag'))
   parse.add_option('--shallow', action='store_true',
                    help='Use shallow clones for cache repositories.')
+  parse.add_option('-o', '--output_json',
+                   help='Output JSON information into a specified file')
+
 
   return parse.parse_args()
 
@@ -632,13 +649,23 @@ def main():
   master = options.master
 
   # Check if this script should activate or not.
-  active = check_valid_host(master, builder, slave) or options.force
+  active = check_valid_host(master, builder, slave) or options.force or False
 
   # Print helpful messages to tell devs whats going on.
+  if options.force and options.output_json:
+    recipe_force = 'Forced on by recipes'
+  elif active and options.output_json:
+    recipe_force = 'Off by recipes, but forced on by bot update'
+  elif not active and options.output_json:
+    recipe_force = 'Forced off by recipes'
+  else:
+    recipe_force = 'N/A. Was not called by recipes'
+
   print BOT_UPDATE_MESSAGE % {
-    'master': master,
-    'builder': builder,
-    'slave': slave,
+    'master': master or 'Not specified',
+    'builder': builder or 'Not specified',
+    'slave': slave or 'Not specified',
+    'recipe': recipe_force,
   },
   # Print to stderr so that it shows up red on win/mac.
   print ACTIVATED_MESSAGE if active else NOT_ACTIVATED_MESSAGE
@@ -655,6 +682,7 @@ def main():
   # run) or vice versa, blow away all checkouts.
   if bool(active) != bool(check_flag(options.flag_file)):
     ensure_no_checkout(dir_names, '*')
+  ensure_emit_json(options.output_json, did_run=active)
   if active:
     ensure_no_checkout(dir_names, '.svn')
     emit_flag(options.flag_file)
@@ -668,9 +696,11 @@ def main():
   used_disk_space_gb = int((total_disk_space - free_disk_space)
                            / (1024 * 1024 * 1024))
   percent_used = int(used_disk_space_gb * 100 / total_disk_space_gb)
-  print '@@@STEP_TEXT@[%dGB/%dGB used (%d%%)]@@@' % (used_disk_space_gb,
-                                                     total_disk_space_gb,
-                                                     percent_used)
+  step_text = '[%dGB/%dGB used (%d%%)]' % (used_disk_space_gb,
+                                           total_disk_space_gb,
+                                           percent_used)
+  if not options.output_json:
+    print '@@@STEP_TEXT@%s@@@' % step_text
   if not options.shallow:
     options.shallow = total_disk_space < SHALLOW_CLONE_THRESHOLD
 
@@ -678,7 +708,8 @@ def main():
   # Calling git directory because there is no way to run Gclient without
   # invoking DEPS.
   print 'Fetching Git checkout'
-  got_revision = git_checkout(git_solutions, options.revision, options.shallow)
+  got_revision = git_checkout(git_solutions, options.revision, options.shallow,
+                              options.output_json is None)
 
   options.root =  options.root or dir_names[0]
   if options.patch_url:
@@ -693,6 +724,16 @@ def main():
 
   gclient_configure(git_solutions)
   gclient_sync()
+
+  # Tell recipes information such as root, got_revision, etc.
+  properties = {
+      'got_revision': got_revision
+  }
+  ensure_emit_json(options.output_json,
+                   did_run=True,
+                   root=options.root,
+                   step_text=step_text,
+                   properties=properties)
 
 
 if __name__ == '__main__':

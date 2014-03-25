@@ -4,6 +4,7 @@
 
 DEPS = [
   'archive',
+  'bot_update',
   'chromium',
   'gclient',
   'json',
@@ -415,6 +416,30 @@ BUILDERS = {
         },
       },
     },
+  },
+  'chromium.git': {
+    'builders': {
+      'WinGit': {
+          'recipe_config': 'chromium',
+          'testing': {'platform': 'win'},
+      },
+      'WinGitXP': {
+          'recipe_config': 'chromium',
+          'testing': {'platform': 'win'},
+      },
+      'MacGit': {
+          'recipe_config': 'chromium',
+          'testing': {'platform': 'mac'},
+      },
+      'LinuxGit': {
+          'recipe_config': 'chromium',
+          'testing': {'platform': 'linux'},
+      },
+      'LinuxGit x64': {
+          'recipe_config': 'chromium',
+          'testing': {'platform': 'linux'},
+      },
+    }
   },
   'chromium.linux': {
     'settings': {
@@ -1408,7 +1433,10 @@ def GenSteps(api):
   if api.platform.is_win:
     yield api.chromium.taskkill()
 
-  yield api.gclient.checkout(),
+  # Bot Update re-uses the gclient configs.
+  yield api.bot_update.ensure_checkout(),
+  if not api.step_history['bot_update'].json.output['did_run']:
+    yield api.gclient.checkout(),
 
   bot_type = bot_config.get('bot_type', 'builder_tester')
 
