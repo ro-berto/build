@@ -385,6 +385,17 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
       },
+      'V8 Win32 - nosnap - shared': {
+        'recipe_config': 'v8',
+        'chromium_apply_config': ['msvs', 'shared_library', 'no_snapshot'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['v8testing'],
+        'testing': {'platform': 'win'},
+      },
     },
   },
 }
@@ -421,6 +432,9 @@ def GenSteps(api):
   # Test-specific configurations.
   for t in bot_config.get('tests', []):
     CreateTest(t).gclient_apply_config(api)
+
+  if api.platform.is_win:
+    yield api.chromium.taskkill()
 
   yield api.v8.checkout()
   steps = [api.v8.runhooks(), api.chromium.cleanup_temp()]

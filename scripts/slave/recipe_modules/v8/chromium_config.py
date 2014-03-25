@@ -25,5 +25,10 @@ def no_lsan(c):
 
 
 @CONFIG_CTX(includes=['v8'])
+def no_snapshot(c):
+  c.gyp_env.GYP_DEFINES['v8_use_snapshot'] = 'false'
+
+
+@CONFIG_CTX(includes=['v8'])
 def verify_heap(c):
   c.gyp_env.GYP_DEFINES['v8_enable_verify_heap'] = 1
