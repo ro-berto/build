@@ -1562,11 +1562,14 @@ def main():
       suppressions_file = options.factory_properties.get(
           'tsan_suppressions_file',
           'src/tools/valgrind/tsan_v2/suppressions.txt')
+      # TODO(glider): enable die_after_fork back once http://crbug.com/356758
+      # is fixed.
       tsan_options = ('suppressions=%s '
                       'print_suppressions=1 '
                       'report_signal_unsafe=0 '
                       'report_thread_leaks=0 '
                       'history_size=7 '
+                      'die_after_fork=0 '
                       'external_symbolizer_path=%s '
                       'strip_path_prefix=%s ' % (suppressions_file,
                                                  symbolizer_path,
