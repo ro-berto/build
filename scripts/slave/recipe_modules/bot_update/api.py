@@ -142,5 +142,4 @@ class BotUpdateApi(recipe_api.RecipeApi):
     if bot_update_step.json.output['did_run']:
       co_root = bot_update_step.json.output['root']
       cwd = kwargs.get('cwd', self.m.path['slave_build'])
-      self.m.path.set_dynamic_path(
-          'checkout', cwd.join(*co_root.split(self.m.path.sep)))
+      self.m.path['checkout'] = cwd.join(*co_root.split(self.m.path.sep))
