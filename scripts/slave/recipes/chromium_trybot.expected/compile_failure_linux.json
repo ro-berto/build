@@ -347,17 +347,6 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/gclient_safe_revert.py",
-      ".",
-      "[DEPOT_TOOLS]/gclient"
-    ],
-    "name": "gclient revert (3)"
-  },
-  {
-    "abort_on_failure": true,
-    "cmd": [
-      "python",
-      "-u",
       "[DEPOT_TOOLS]/gclient.py",
       "sync",
       "--nohooks",

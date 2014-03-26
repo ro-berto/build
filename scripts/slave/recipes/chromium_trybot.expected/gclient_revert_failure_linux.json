@@ -268,17 +268,6 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/gclient_safe_revert.py",
-      ".",
-      "[DEPOT_TOOLS]/gclient"
-    ],
-    "name": "gclient revert (3)"
-  },
-  {
-    "abort_on_failure": true,
-    "cmd": [
-      "python",
-      "-u",
       "[DEPOT_TOOLS]/gclient.py",
       "sync",
       "--nohooks",
@@ -426,7 +415,7 @@
       ".",
       "[DEPOT_TOOLS]/gclient"
     ],
-    "name": "gclient revert (4)",
+    "name": "gclient revert (3)",
     "skip": true
   },
   {
@@ -536,18 +525,6 @@
       "cache_dir = None\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'safesync_url': 'https://build.chromium.org/p/chromium/lkcr-status/lkgr', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]"
     ],
     "name": "gclient setup (5)",
-    "skip": true
-  },
-  {
-    "abort_on_failure": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/gclient_safe_revert.py",
-      ".",
-      "[DEPOT_TOOLS]/gclient"
-    ],
-    "name": "gclient revert (5)",
     "skip": true
   },
   {

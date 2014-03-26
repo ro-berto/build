@@ -224,19 +224,16 @@ def GenSteps(api):
   api.gclient.set_config('chromium')
   api.step.auto_resolve_conflicts = True
 
-  # TODO(phajdan.jr): Extend to all platforms, http://crbug.com/354731 .
-  if api.platform.is_linux:
-    yield api.gclient.checkout(
-        revert=True, can_fail_build=False, abort_on_failure=False)
-    for step in api.step_history.values():
-      if step.retcode != 0:
-        yield (
-          api.path.rmcontents('slave build directory', api.path['slave_build']),
-          api.gclient.checkout(),
-        )
-        break
-  else:
-    yield api.gclient.checkout(revert=True)
+  yield api.gclient.checkout(
+      revert=True, can_fail_build=False, abort_on_failure=False)
+  for step in api.step_history.values():
+    if step.retcode != 0:
+      yield (
+        api.path.rmcontents('slave build directory', api.path['slave_build']),
+        api.gclient.checkout(revert=False),
+      )
+      break
+
   yield (
     api.rietveld.apply_issue(),
     api.json.read(
@@ -245,28 +242,24 @@ def GenSteps(api):
       step_test_data=lambda: api.json.test_api.output([])),
   )
 
-  # TODO(phajdan.jr): Extend to all platforms, http://crbug.com/354731 .
-  if api.platform.is_linux:
+  yield api.chromium.runhooks(abort_on_failure=False, can_fail_build=False)
+  if api.step_history.last_step().retcode != 0:
+    # Before removing the checkout directory try just using LKCR.
+    api.gclient.set_config('chromium_lkcr')
+
+    # Since we're likely to switch to an earlier revision, revert the patch,
+    # sync with the new config, and apply issue again.
+    yield api.gclient.checkout(revert=True)
+    yield api.rietveld.apply_issue()
+
     yield api.chromium.runhooks(abort_on_failure=False, can_fail_build=False)
     if api.step_history.last_step().retcode != 0:
-      # Before removing the checkout directory try just using LKCR.
-      api.gclient.set_config('chromium_lkcr')
-
-      # Since we're likely to switch to an earlier revision, revert the patch,
-      # sync with the new config, and apply issue again.
-      yield api.gclient.checkout(revert=True)
-      yield api.rietveld.apply_issue()
-
-      yield api.chromium.runhooks(abort_on_failure=False, can_fail_build=False)
-      if api.step_history.last_step().retcode != 0:
-        yield (
-          api.path.rmcontents('slave build directory', api.path['slave_build']),
-          api.gclient.checkout(),
-          api.rietveld.apply_issue(),
-          api.chromium.runhooks(),
-        )
-  else:
-    yield api.chromium.runhooks()
+      yield (
+        api.path.rmcontents('slave build directory', api.path['slave_build']),
+        api.gclient.checkout(revert=False),
+        api.rietveld.apply_issue(),
+        api.chromium.runhooks(),
+      )
 
   test_spec = api.step_history['read test spec'].json.output
   test_spec = [s.encode('utf-8') for s in test_spec]
@@ -294,27 +287,21 @@ def GenSteps(api):
     yield api.gclient.checkout(revert=True)
     yield api.rietveld.apply_issue()
 
-    # TODO(phajdan.jr): Extend to all platforms, http://crbug.com/354731 .
-    if api.platform.is_linux:
-      yield api.chromium.compile(compile_targets,
-                                 name='compile (with patch, lkcr, clobber)',
-                                 force_clobber=True,
-                                 abort_on_failure=False,
-                                 can_fail_build=False)
-      if api.step_history['compile (with patch, lkcr, clobber)'].retcode != 0:
-        yield (
-          api.path.rmcontents('slave build directory', api.path['slave_build']),
-          api.gclient.checkout(),
-          api.rietveld.apply_issue(),
-          api.chromium.runhooks(),
-          api.chromium.compile(compile_targets,
-                               name='compile (with patch, lkcr, clobber, nuke)',
-                               force_clobber=True)
-        )
-    else:
-      yield api.chromium.compile(compile_targets,
-                                 name='compile (with patch, lkcr, clobber)',
-                                 force_clobber=True)
+    yield api.chromium.compile(compile_targets,
+                               name='compile (with patch, lkcr, clobber)',
+                               force_clobber=True,
+                               abort_on_failure=False,
+                               can_fail_build=False)
+    if api.step_history['compile (with patch, lkcr, clobber)'].retcode != 0:
+      yield (
+        api.path.rmcontents('slave build directory', api.path['slave_build']),
+        api.gclient.checkout(revert=False),
+        api.rietveld.apply_issue(),
+        api.chromium.runhooks(),
+        api.chromium.compile(compile_targets,
+                             name='compile (with patch, lkcr, clobber, nuke)',
+                             force_clobber=True)
+      )
 
   # Do not run tests if the build is already in a failed state.
   if api.step_history.failed:
@@ -448,7 +435,8 @@ def GenTests(api):
     props() +
     api.platform.name('win') +
     api.step_data('compile (with patch)', retcode=1) +
-    api.step_data('compile (with patch, lkcr, clobber)', retcode=1)
+    api.step_data('compile (with patch, lkcr, clobber)', retcode=1) +
+    api.step_data('compile (with patch, lkcr, clobber, nuke)', retcode=1)
   )
 
   yield (
