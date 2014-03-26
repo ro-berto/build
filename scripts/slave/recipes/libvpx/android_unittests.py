@@ -1,4 +1,4 @@
-# Copyright 2013 The Chromium Authors. All rights reserved.
+# Copyright 2014 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -77,7 +77,7 @@ def GenSteps(api):
               % libvpx_root.join('test', 'android', 'Android.mk'),
           'APP_ABI=armeabi-v7a', 'APP_PLATFORM=android-14',
           'APP_OPTIM=release', 'APP_STL=gnustl_static'],
-      env={'NDK_PROJECT_PATH' : build_root})
+      env={'NDK_PROJECT_PATH' : build_root}, abort_on_failure=True)
 
   test_root = libvpx_root.join('test')
   yield api.python(
@@ -98,7 +98,8 @@ def GenSteps(api):
   yield api.step(
       'shell', [
           adb, 'shell', 'LD_LIBRARY_PATH=' + DEVICE_ROOT,
-          'LIBVPX_TEST_DATA_PATH=' + DEVICE_ROOT, DEVICE_ROOT + '/vpx_test'])
+          'LIBVPX_TEST_DATA_PATH=' + DEVICE_ROOT, DEVICE_ROOT + '/vpx_test'],
+          can_fail_build=True)
 
 def GenTests(api):
   # Right now we just support linux, but one day we will have mac and windows
