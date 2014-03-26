@@ -39,7 +39,7 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
 
   def __init__(self, tree_status_url, tree_message=None,
                check_revisions=True, throttle=False,
-               gitpoller_path=None, **kwargs):
+               gitpoller_paths=None, **kwargs):
     """Constructor with following specific arguments (on top of base class').
 
     @type tree_status_url: String.
@@ -54,9 +54,11 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
     @type throttle: Boolean, default to False.
     @param throttle: Set the tree to 'throttled' rather than 'closed'.
 
-    @type gitpoller_path: String.
-    @param gitpoller_path: Path to the git checkout(s) used by the GitPoller.
-                  Implies that this GateKeeper will be operating in git mode.
+    @type gitpoller_paths: dict(string -> string)
+    @param gitpoller_path: A map { repository url -> path to the git checkout }
+                           used by the GitPoller(s). Implies that this
+                           GateKeeper will be operating in git mode for a given
+                           repository url.
 
     @type password: String.
     @param password: Password for service.  If None, look in .status_password.
@@ -84,8 +86,7 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
     self._last_closure_revision = 0
 
     # Set up variables for operating on commits in a Git repository.
-    self.git_mode = bool(gitpoller_path)
-    self.gitpoller_path = gitpoller_path
+    self.gitpoller_paths = gitpoller_paths
     self.checkouts = {}
 
     self.password = None
@@ -98,15 +99,18 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
     log.msg('[gatekeeper] ' + message, **kwargs)
 
   def getGitRepo(self, repository_url):
+    """Returns a GitHelper object if the repository at the given url
+    is mapped to a gitpoller path.
+    """
     git_repo = self.checkouts.get(repository_url)
     if git_repo:
       return git_repo
 
-    repository_name = repository_url.rsplit('/', 1)[-1].replace('.git', '')
-    repository_path = os.path.join(self.gitpoller_path, repository_name)
-    git_repo = git_helper.GitHelper('file://' + repository_path)
-    self.checkouts[repository_url] = git_repo
-    return git_repo
+    repository_path = self.gitpoller_paths.get(repository_url)
+    if repository_path:
+      git_repo = git_helper.GitHelper('file://' + repository_path)
+      self.checkouts[repository_url] = git_repo
+      return git_repo
 
 
   def isInterestingStep(self, build_status, step_status, results):
@@ -157,11 +161,10 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
       return True
 
     # For the rest of the checks, we care about revision numbers, so we need to
-    # be aware of if we're operating in Git- or SVN-mode.
-    git_repo = None
-    if self.git_mode:
-      repository_url = build_status.getProperty('repository')
-      git_repo = self.getGitRepo(repository_url)
+    # be aware of if we're operating in Git- or SVN-mode. getGitRepo returns
+    # a GitHelper instance if the repository is Git.
+    repository_url = build_status.getProperty('repository')
+    git_repo = self.getGitRepo(repository_url)
 
     latest_revision = build_utils.getLatestRevision(build_status, git_repo)
 
@@ -176,7 +179,7 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
     # If the tree is open, we don't want to close it again for the same
     # revision, or an earlier one in case the build that just finished is a
     # slow one and we already fixed the problem and manually opened the tree.
-    if self.git_mode:
+    if git_repo:
       this_rev, last_rev = git_repo.number(
           latest_revision, self._last_closure_revision)
       dbg = lambda m: GateKeeper.msg(m, logLevel=logging.DEBUG)
@@ -227,10 +230,8 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
   def getFinishedMessage(self, result, builder_name, build_status, step_name):
     """Closes the tree."""
     GateKeeper.msg('Trying to close the tree at %s.' % self.tree_status_url)
-    git_repo = None
-    if self.git_mode:
-      repository_url = build_status.getProperty('repository')
-      git_repo = self.getGitRepo(repository_url)
+    repository_url = build_status.getProperty('repository')
+    git_repo = self.getGitRepo(repository_url)
     # isInterestingStep verified that latest_revision has expected properties.
     latest_revision = build_utils.getLatestRevision(build_status, git_repo)
 
