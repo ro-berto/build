@@ -95,7 +95,7 @@ F('ios_rel_ninja', ios().ChromiumFactory(
     'gclient_env': {
       'GYP_CROSSCOMPILE': '1',
       'GYP_GENERATORS': 'ninja',
-      'GYP_DEFINES': 'component=static_library OS=ios',
+      'GYP_DEFINES': 'component=static_library OS=ios target_subarch=both',
     },
   }))
 
