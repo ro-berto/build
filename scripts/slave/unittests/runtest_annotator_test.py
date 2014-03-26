@@ -93,27 +93,6 @@ class LogProcessorTest(unittest.TestCase):
           'expectations.' % filename)
 
 
-class BenchpressPerformanceTestStepTest(LogProcessorTest):
-  def testOutputsSummaryBenchpress(self):
-    input_files = ['benchpress_log']
-    output_files = ['summary.dat']
-
-    self._ConstructParseAndCheckLogfiles(input_files, output_files,
-        process_log_utils.BenchpressLogProcessor)
-
-  def testBenchpressSummary(self):
-    input_files = ['benchpress_log']
-    summary_file = 'summary.dat'
-    output_files = [summary_file]
-
-    logs = self._ConstructParseAndCheckLogfiles(input_files, output_files,
-        process_log_utils.BenchpressLogProcessor)
-
-    actual = logs[summary_file][0]
-    expected = '12345 469 165 1306 64 676 38 372 120 232 294 659 1157 397\n'
-    self.assertEqual(expected, actual)
-
-
 class GraphingLogProcessorTest(LogProcessorTest):
   """Test case for basic functionality of GraphingLogProcessor class."""
 
@@ -125,28 +104,6 @@ class GraphingLogProcessorTest(LogProcessorTest):
 
     self._ConstructParseAndCheckJSON(input_files, output_files, None,
         process_log_utils.GraphingLogProcessor)
-
-  def testFrameRateSummary(self):
-    input_files = ['frame_rate_graphing_processor.log']
-    output_files = ['%s-summary.dat' % g for g in ('blank', 'googleblog')]
-
-    self._ConstructParseAndCheckJSON(input_files, output_files, 'frame_rate',
-        process_log_utils.GraphingFrameRateLogProcessor)
-
-  def testFrameRateGestureList(self):
-    input_files = ['frame_rate_graphing_processor.log']
-    output_files = ['%s_%s_%s.dat' % (self._revision, g, t)
-                    for g in ('blank','googleblog') for t in ('fps', 'fps_ref')]
-
-    logs = self._ConstructParseAndCheckLogfiles(input_files, output_files,
-        process_log_utils.GraphingFrameRateLogProcessor)
-
-    for filename in output_files:
-      actual = ''.join(logs[filename])
-      expected = open(os.path.join(test_env.DATA_PATH, 'frame_rate',
-                                   filename)).read()
-      self.assertEqual(actual, expected, 'Filename %s did not contain expected '
-          'data.' % filename)
 
   def testGraphList(self):
     input_files = ['graphing_processor.log']

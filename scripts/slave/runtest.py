@@ -428,13 +428,12 @@ def using_gtest_json(options):
 
 def get_parsers():
   """Returns a dictionary mapping strings to log parser classes."""
-  parsers = {'gtest': gtest_utils.GTestLogParser,
-             'benchpress': process_log_utils.BenchpressLogProcessor,
-             'playback': process_log_utils.PlaybackLogProcessor,
-             'graphing': process_log_utils.GraphingLogProcessor,
-             'endure': process_log_utils.GraphingEndureLogProcessor,
-             'framerate': process_log_utils.GraphingFrameRateLogProcessor,
-             'pagecycler': process_log_utils.GraphingPageCyclerLogProcessor}
+  parsers = {
+      'gtest': gtest_utils.GTestLogParser,
+      'graphing': process_log_utils.GraphingLogProcessor,
+      'endure': process_log_utils.GraphingEndureLogProcessor,
+      'pagecycler': process_log_utils.GraphingPageCyclerLogProcessor,
+  }
   return parsers
 
 
