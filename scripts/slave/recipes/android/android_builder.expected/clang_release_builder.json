@@ -158,7 +158,8 @@
       "goma-clang",
       "--goma-dir",
       "[BUILD]/goma",
-      "--"
+      "--",
+      "chrome_apk"
     ],
     "env": {
       "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"

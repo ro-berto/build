@@ -41,6 +41,7 @@ def clang_release_builder(c):
   c.gyp_env.GYP_DEFINES['asan'] = 1
   c.gyp_env.GYP_DEFINES['linux_use_tcmalloc'] = 0
   c.gyp_env.GYP_DEFINES['use_allocator'] = 'none'
+  c.compile_py.default_targets = ['chrome_apk']
 
 @CONFIG_CTX(includes=['main_builder'])
 def component_builder(c):
