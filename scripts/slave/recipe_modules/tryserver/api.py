@@ -35,11 +35,16 @@ class TryserverApi(recipe_api.RecipeApi):
         step_result.presentation.logs['patch.diff'] = (
           step_result.raw_io.output.split('\n'))
 
+      patch_url = self.m.properties['patch_url']
+      if self.m.properties.get('use_mirror', True):
+        patch_url = patch_url.replace('svn://svn.chromium.org',
+                                      'svn://svn-mirror.golo.chromium.org')
+
       svn_cmd = [
         'svn',
         'export',
         '--force',
-        self.m.properties['patch_url'],
+        patch_url,
         self.m.raw_io.output('.diff'),
       ]
 

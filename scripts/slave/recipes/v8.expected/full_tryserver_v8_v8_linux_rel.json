@@ -54,7 +54,7 @@
       "svn",
       "export",
       "--force",
-      "try_job_svn_patch",
+      "svn://svn-mirror.golo.chromium.org/patch",
       "/path/to/tmp/diff"
     ],
     "name": "download patch",

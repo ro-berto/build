@@ -527,6 +527,6 @@ def GenTests(api):
 
       if mastername.startswith('tryserver'):
         test += (api.properties(revision='12345',
-                                patch_url='try_job_svn_patch'))
+                                patch_url='svn://svn.chromium.org/patch'))
 
       yield test
