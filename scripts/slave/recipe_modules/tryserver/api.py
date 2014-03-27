@@ -24,10 +24,14 @@ class TryserverApi(recipe_api.RecipeApi):
     """Returns true iff the properties exist to patch from a patch URL."""
     return self.m.properties.get('patch_url')
 
-  def maybe_apply_issue(self, cwd=None):
+  def maybe_apply_issue(self, cwd=None, authentication=None):
     """If we're a trybot, apply a codereview issue.
 
-    cwd: If specified, apply the patch from the specified directory.
+    Args:
+      cwd: If specified, apply the patch from the specified directory.
+      authentication: authentication scheme whenever apply_issue.py is called.
+        This is only used if the patch comes from Rietveld. Possible values:
+        None, 'oauth2' (see also api.rietveld.apply_issue.)
     """
     if self.can_patch:
       def link_patch(step_result):
@@ -60,5 +64,8 @@ class TryserverApi(recipe_api.RecipeApi):
       ]
 
       yield self.m.step('apply patch', patch_cmd)
+
     elif self.can_apply_issue:
-      yield self.m.rietveld.apply_issue(self.m.rietveld.calculate_issue_root())
+      yield self.m.rietveld.apply_issue(
+        self.m.rietveld.calculate_issue_root(),
+        authentication=authentication)
