@@ -13,8 +13,8 @@
     "seed_steps": [
       "git setup",
       "git fetch",
-      "git clean",
       "git checkout",
+      "git clean",
       "submodule sync",
       "submodule update"
     ]
@@ -24,10 +24,20 @@
       "git",
       "fetch",
       "origin",
-      "master:refs/remotes/origin/master"
+      "master"
     ],
     "cwd": "[SLAVE_BUILD]/swarming.client",
     "name": "git fetch"
+  },
+  {
+    "cmd": [
+      "git",
+      "checkout",
+      "-f",
+      "FETCH_HEAD"
+    ],
+    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "name": "git checkout"
   },
   {
     "cmd": [
@@ -39,16 +49,6 @@
     ],
     "cwd": "[SLAVE_BUILD]/swarming.client",
     "name": "git clean"
-  },
-  {
-    "cmd": [
-      "git",
-      "checkout",
-      "-f",
-      "origin/master"
-    ],
-    "cwd": "[SLAVE_BUILD]/swarming.client",
-    "name": "git checkout"
   },
   {
     "cmd": [

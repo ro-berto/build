@@ -24,7 +24,7 @@
       "git",
       "fetch",
       "origin",
-      "master",
+      "refs/foo/bar",
       "--recurse-submodules"
     ],
     "cwd": "[SLAVE_BUILD]/src",

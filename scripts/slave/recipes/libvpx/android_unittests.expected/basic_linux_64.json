@@ -38,8 +38,8 @@
     "seed_steps": [
       "git setup",
       "git fetch",
-      "git clean",
       "git checkout",
+      "git clean",
       "submodule sync",
       "submodule update"
     ]
@@ -49,11 +49,21 @@
       "git",
       "fetch",
       "origin",
-      "master:refs/remotes/origin/master",
+      "master",
       "--recurse-submodules"
     ],
     "cwd": "[SLAVE_BUILD]/android_tools",
     "name": "git fetch"
+  },
+  {
+    "cmd": [
+      "git",
+      "checkout",
+      "-f",
+      "FETCH_HEAD"
+    ],
+    "cwd": "[SLAVE_BUILD]/android_tools",
+    "name": "git checkout"
   },
   {
     "cmd": [
@@ -65,16 +75,6 @@
     ],
     "cwd": "[SLAVE_BUILD]/android_tools",
     "name": "git clean"
-  },
-  {
-    "cmd": [
-      "git",
-      "checkout",
-      "-f",
-      "origin/master"
-    ],
-    "cwd": "[SLAVE_BUILD]/android_tools",
-    "name": "git checkout"
   },
   {
     "cmd": [
@@ -110,8 +110,8 @@
     "seed_steps": [
       "git setup (2)",
       "git fetch (2)",
-      "git clean (2)",
       "git checkout (2)",
+      "git clean (2)",
       "submodule sync (2)",
       "submodule update (2)"
     ]
@@ -121,11 +121,21 @@
       "git",
       "fetch",
       "origin",
-      "master:refs/remotes/origin/master",
+      "master",
       "--recurse-submodules"
     ],
     "cwd": "[SLAVE_BUILD]/libvpx",
     "name": "git fetch (2)"
+  },
+  {
+    "cmd": [
+      "git",
+      "checkout",
+      "-f",
+      "FETCH_HEAD"
+    ],
+    "cwd": "[SLAVE_BUILD]/libvpx",
+    "name": "git checkout (2)"
   },
   {
     "cmd": [
@@ -137,16 +147,6 @@
     ],
     "cwd": "[SLAVE_BUILD]/libvpx",
     "name": "git clean (2)"
-  },
-  {
-    "cmd": [
-      "git",
-      "checkout",
-      "-f",
-      "origin/master"
-    ],
-    "cwd": "[SLAVE_BUILD]/libvpx",
-    "name": "git checkout (2)"
   },
   {
     "cmd": [
