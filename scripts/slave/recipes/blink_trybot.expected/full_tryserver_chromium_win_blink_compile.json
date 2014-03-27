@@ -92,12 +92,7 @@
       "https://codereview.chromium.org",
       "--no-auth"
     ],
-    "name": "apply_issue",
-    "seed_steps": [
-      "apply_issue",
-      "gclient runhooks",
-      "compile"
-    ]
+    "name": "apply_issue"
   },
   {
     "cmd": [
@@ -110,7 +105,11 @@
       "GYP_DEFINES": "chromium_win_pch=0 component=shared_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 use_goma=1",
       "GYP_MSVS_VERSION": "2010"
     },
-    "name": "gclient runhooks"
+    "name": "gclient runhooks",
+    "seed_steps": [
+      "gclient runhooks",
+      "compile"
+    ]
   },
   {
     "abort_on_failure": true,

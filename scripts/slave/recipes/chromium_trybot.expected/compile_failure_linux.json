@@ -87,11 +87,7 @@
       "https://codereview.chromium.org",
       "--no-auth"
     ],
-    "name": "apply_issue",
-    "seed_steps": [
-      "apply_issue",
-      "read test spec"
-    ]
+    "name": "apply_issue"
   },
   {
     "cmd": [
@@ -404,12 +400,7 @@
       "https://codereview.chromium.org",
       "--no-auth"
     ],
-    "name": "apply_issue (3)",
-    "seed_steps": [
-      "apply_issue (3)",
-      "gclient runhooks (2)",
-      "compile (with patch, lkcr, clobber, nuke)"
-    ]
+    "name": "apply_issue (3)"
   },
   {
     "cmd": [
@@ -421,7 +412,11 @@
     "env": {
       "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
     },
-    "name": "gclient runhooks (2)"
+    "name": "gclient runhooks (2)",
+    "seed_steps": [
+      "gclient runhooks (2)",
+      "compile (with patch, lkcr, clobber, nuke)"
+    ]
   },
   {
     "abort_on_failure": true,

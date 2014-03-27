@@ -11,10 +11,10 @@ DEPS = [
   'properties',
   'python',
   'raw_io',
-  'rietveld',
   'step',
   'step_history',
   'test_utils',
+  'tryserver',
 ]
 
 
@@ -364,8 +364,6 @@ def GenSteps(api):
   webkit_python_tests = api.path['build'].join('scripts', 'slave', 'chromium',
                                                'test_webkitpy_wrapper.py')
 
-  root = api.rietveld.calculate_issue_root()
-
   yield api.gclient.checkout(
       revert=True, can_fail_build=False, abort_on_failure=False)
   for step in api.step_history.values():
@@ -377,7 +375,7 @@ def GenSteps(api):
       break
 
   steps = [
-    api.rietveld.apply_issue(root),
+    api.tryserver.maybe_apply_issue(),
     api.chromium.runhooks(),
     api.chromium.compile(),
   ]
