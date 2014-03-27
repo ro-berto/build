@@ -698,7 +698,7 @@
       "--enable-gpu",
       "--test-launcher-jobs=1",
       "--test-launcher-print-test-stdio=always",
-      "--gtest_filter=TabCapturePerformanceTest*"
+      "--gtest_filter=TabCapturePerformanceTest*,CastV2PerformanceTest*"
     ],
     "name": "tab_capture_performance_tests"
   }
