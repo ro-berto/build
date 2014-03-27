@@ -689,24 +689,66 @@ def upload_gtest_json_summary(json_path, build_properties, test_exe):
   # (build metadata should be different from build to build).
   target_name = hashlib.sha1(target_json_serialized).hexdigest()
 
+  # Use a directory structure that makes it easy to filter by year,
+  # month, week and day based just on the file path.
+  raw_json_gs_path = 'gs://chrome-gtest-results/raw/%d/%d/%d/%d/%s.json.gz' % (
+      weekly_timestamp.year,
+      weekly_timestamp.month,
+      weekly_timestamp.day,
+      today.day,
+      target_name)
+
   fd, target_json_path = tempfile.mkstemp()
   try:
     with os.fdopen(fd, 'w') as f:
       with gzip.GzipFile(fileobj=f, compresslevel=9) as gzipf:
         gzipf.write(target_json_serialized)
 
-    slave_utils.GSUtilCopy(
-        target_json_path,
-        # Use a directory structure that makes it easy to filter by year,
-        # month, week and day based just on the file path.
-        'gs://chrome-gtest-results/%d/%d/%d/%d/%s.json.gz' % (
-            weekly_timestamp.year,
-            weekly_timestamp.month,
-            weekly_timestamp.day,
-            today.day,
-            target_name))
+    slave_utils.GSUtilCopy(target_json_path, raw_json_gs_path)
   finally:
     os.remove(target_json_path)
+
+  if target_json['gtest_results'] == 'invalid':
+    return
+
+  # Use a directory structure that makes it easy to filter by year,
+  # month, week and day based just on the file path.
+  bigquery_json_gs_path = (
+      'gs://chrome-gtest-results/bigquery/%d/%d/%d/%d/%s.json.gz' % (
+          weekly_timestamp.year,
+          weekly_timestamp.month,
+          weekly_timestamp.day,
+          today.day,
+          target_name))
+
+  fd, bigquery_json_path = tempfile.mkstemp()
+  try:
+    with os.fdopen(fd, 'w') as f:
+      with gzip.GzipFile(fileobj=f, compresslevel=9) as gzipf:
+        for iteration_data in (
+            target_json['gtest_results']['per_iteration_data']):
+          for test_name, test_runs in iteration_data.iteritems():
+            for run_index, run_data in enumerate(test_runs):
+              row = {
+                'test_name': test_name,
+                'run_index': run_index,
+                'elapsed_time_ms': run_data['elapsed_time_ms'],
+                'status': run_data['status'],
+                'test_exe': target_json['test_exe'],
+                'global_tags': target_json['gtest_results']['global_tags'],
+                'slavename':
+                    target_json['build_properties'].get('slavename', ''),
+                'buildername':
+                    target_json['build_properties'].get('buildername', ''),
+                'mastername':
+                    target_json['build_properties'].get('mastername', ''),
+                'raw_json_gs_path': raw_json_gs_path,
+              }
+              gzipf.write(json.dumps(row) + '\n')
+
+    slave_utils.GSUtilCopy(bigquery_json_path, bigquery_json_gs_path)
+  finally:
+    os.remove(bigquery_json_path)
 
 
 def generate_run_isolated_command(build_dir, test_exe_path, options, command):
