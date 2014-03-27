@@ -192,7 +192,18 @@
       "https://codereview.chromium.org",
       "--no-auth"
     ],
-    "name": "apply_issue"
+    "name": "apply_issue",
+    "seed_steps": [
+      "apply_issue",
+      "gclient runhooks",
+      "compile",
+      "webkit_lint",
+      "webkit_python_tests",
+      "webkit_unit_tests",
+      "blink_platform_unittests",
+      "blink_heap_unittests",
+      "wtf_unittests"
+    ]
   },
   {
     "cmd": [
@@ -204,17 +215,7 @@
     "env": {
       "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
     },
-    "name": "gclient runhooks",
-    "seed_steps": [
-      "gclient runhooks",
-      "compile",
-      "webkit_lint",
-      "webkit_python_tests",
-      "webkit_unit_tests",
-      "blink_platform_unittests",
-      "blink_heap_unittests",
-      "wtf_unittests"
-    ]
+    "name": "gclient runhooks"
   },
   {
     "abort_on_failure": true,
