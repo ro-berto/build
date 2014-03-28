@@ -66,11 +66,17 @@ HTTPD_CONF = {
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
-def should_enable_sandbox(sandbox_path):
+def _ShouldEnableSandbox(sandbox_path):
   """Checks whether the current slave should use the sandbox.
 
-  This should return True iff the slave is a Linux host with the sandbox file
-  present and configured correctly.
+  This is based on should_enable_sandbox in src/testing/test_env.py.
+
+  Args:
+    sandbox_path: Path to sandbox file.
+
+  Returns:
+    True iff the slave is a Linux host with the sandbox file both present and
+    configured correctly.
   """
   if not (sys.platform.startswith('linux') and
           os.path.exists(sandbox_path)):
@@ -84,7 +90,7 @@ def should_enable_sandbox(sandbox_path):
   return False
 
 
-def get_temp_count():
+def _GetTempCount():
   """Returns the number of files and directories inside the temporary dir."""
   return len(os.listdir(tempfile.gettempdir()))
 
@@ -101,8 +107,8 @@ def _LaunchDBus():
   DBUS_SESSION_BUS_ADDRESS environment variable set, but it does happen on the
   bots. See crbug.com/309093 for more details.
 
-
-  Returns True if it actually spawned DBus.
+  Returns:
+    True if it actually spawned DBus.
   """
   import platform
   import subprocess
@@ -120,6 +126,7 @@ def _LaunchDBus():
     except (subprocess.CalledProcessError, OSError), e:
       print 'Exception while running dbus_launch: %s' % e
   return False
+
 
 def _ShutdownDBus():
   """Manually kills the previously-launched DBus daemon.
@@ -146,6 +153,7 @@ def _ShutdownDBus():
   if 'DBUS_SESSION_BUS_ADDRESS' in os.environ:
     del os.environ['DBUS_SESSION_BUS_ADDRESS']
     print ' cleared DBUS_SESSION_BUS_ADDRESS environment variable'
+
 
 def _RunGTestCommand(command, results_tracker=None, pipes=None,
                      extra_env=None):
@@ -174,7 +182,7 @@ def _GetMasterString(master):
   return '[Running for master: "%s"]' % master
 
 
-def _is_git_directory(dir_path):
+def _IsGitDirectory(dir_path):
   """Returns true if the given directory is in a git repository.
 
   Args:
@@ -185,7 +193,7 @@ def _is_git_directory(dir_path):
   parent = os.path.dirname(dir_path)
   if parent == dir_path:
     return False
-  return _is_git_directory(parent)
+  return _IsGitDirectory(parent)
 
 
 def _GetSvnRevision(in_directory):
@@ -197,8 +205,8 @@ def _GetSvnRevision(in_directory):
   import subprocess
   import xml.dom.minidom
   if not os.path.exists(os.path.join(in_directory, '.svn')):
-    if _is_git_directory(in_directory):
-      return _get_git_revision(in_directory)
+    if _IsGitDirectory(in_directory):
+      return _GetGitRevision(in_directory)
     else:
       return ''
 
@@ -215,11 +223,13 @@ def _GetSvnRevision(in_directory):
   return ''
 
 
-def _get_git_revision(in_directory):
+def _GetGitRevision(in_directory):
   """Returns the git hash tag for the given directory.
 
   Args:
     in_directory: The directory where git is to be run.
+
+  Returns the git SHA1 hash string.
   """
   import subprocess
   command_line = ['git', 'log', '-1', '--pretty=oneline']
@@ -249,11 +259,11 @@ def _GenerateJSONForTestResults(options, results_tracker):
   results_map = None
   try:
     if (os.path.exists(options.test_output_xml) and
-        not using_gtest_json(options)):
+        not _UsingGtestJson(options)):
       results_map = gtest_slave_utils.GetResultsMapFromXML(
           options.test_output_xml)
     else:
-      if using_gtest_json(options):
+      if _UsingGtestJson(options):
         sys.stderr.write('using JSON summary output instead of gtest XML\n')
       else:
         sys.stderr.write(
@@ -323,7 +333,18 @@ def _GenerateJSONForTestResults(options, results_tracker):
 
   return True
 
+
 def _BuildParallelCommand(build_dir, test_exe_path, options):
+  """Builds a command to run a command in a parallel manner.
+
+  Args:
+    build_dir: Path to the tools/build directory.
+    test_exe_path: Path to test command binary.
+    options: Options passed this invocation of runtest.py.
+
+  Returns:
+    A command, represented as a list of command parts.
+  """
   # TODO(phajdan.jr): Remove sharding_supervisor.py fallback in May 2014.
   supervisor_path = os.path.join(build_dir, '..', 'tools',
                                  'sharding_supervisor',
@@ -376,7 +397,7 @@ def _BuildParallelCommand(build_dir, test_exe_path, options):
   return command
 
 
-def start_http_server(platform, build_dir, test_exe_path, document_root):
+def _StartHttpServer(platform, build_dir, test_exe_path, document_root):
   # pylint: disable=F0401
   import google.httpd_utils
   import google.platform_utils
@@ -419,14 +440,14 @@ def start_http_server(platform, build_dir, test_exe_path, document_root):
   return http_server
 
 
-def using_gtest_json(options):
+def _UsingGtestJson(options):
   """Returns true if we're using gtest JSON summary."""
   return (options.annotate == 'gtest' and
           not options.run_python_script and
           not options.run_shell_script)
 
 
-def get_parsers():
+def _GetParsers():
   """Returns a dictionary mapping strings to log parser classes."""
   parsers = {
       'gtest': gtest_utils.GTestLogParser,
@@ -437,13 +458,13 @@ def get_parsers():
   return parsers
 
 
-def list_parsers(selection):
+def _ListParsers(selection):
   """Prints a list of available log parser classes iff the input is 'list'.
 
   Returns:
     True iff the input is 'list' (meaning that a list was printed).
   """
-  parsers = get_parsers()
+  parsers = _GetParsers()
   shouldlist = selection and selection == 'list'
   if shouldlist:
     print
@@ -454,7 +475,7 @@ def list_parsers(selection):
   return shouldlist
 
 
-def select_results_tracker(options):
+def _SelectResultsTracker(options):
   """Returns a log parser class (aka results tracker class).
 
   Args:
@@ -463,10 +484,10 @@ def select_results_tracker(options):
   Returns:
     A log parser class (aka results tracker class), or None.
   """
-  if (using_gtest_json(options)):
+  if (_UsingGtestJson(options)):
     return gtest_utils.GTestJSONParser
 
-  parsers = get_parsers()
+  parsers = _GetParsers()
   if options.annotate:
     if options.annotate in parsers:
       if options.generate_json_file and options.annotate != 'gtest':
@@ -482,7 +503,7 @@ def select_results_tracker(options):
   return None
 
 
-def create_results_tracker(tracker_class, options):
+def _CreateResultsTracker(tracker_class, options):
   """Instantiate a log parser (aka results tracker).
 
   Args:
@@ -527,7 +548,7 @@ def create_results_tracker(tracker_class, options):
   return tracker_obj
 
 
-def _get_supplemental_columns(build_dir, supplemental_colummns_file_name):
+def _GetSupplementalColumns(build_dir, supplemental_colummns_file_name):
   """Reads supplemental columns data from a file.
 
   Args:
@@ -548,10 +569,14 @@ def _get_supplemental_columns(build_dir, supplemental_colummns_file_name):
   return supplemental_columns
 
 
-def send_results_to_dashboard(results_tracker, system, test, url, build_dir,
-                              masterid, buildername, buildnumber,
-                              supplemental_columns_file, extra_columns=None):
+def _SendResultsToDashboard(results_tracker, system, test, url, build_dir,
+                            mastername, buildername, buildnumber,
+                            supplemental_columns_file, extra_columns=None):
   """Sends results from a results tracker (aka log parser) to the dashboard.
+
+  TODO(qyearsley): Change this function and results_dashboard.SendResults so
+  that only one request is made per test run (instead of one per graph name).
+  Also, maybe refactor this function to take fewer arguments.
 
   Args:
     results_tracker: An instance of a log parser class, which has been used to
@@ -560,7 +585,9 @@ def send_results_to_dashboard(results_tracker, system, test, url, build_dir,
     test: Test "suite" name string.
     url: Dashboard URL.
     build_dir: Build dir name (used for cache file by results_dashboard).
-    masterid: ID of buildbot master, e.g. 'chromium.perf'
+    mastername: Buildbot master name, e.g. 'chromium.perf'.
+        WARNING! This is incorrectly called "masterid" in some parts of the
+        dashboard code.
     buildername: Builder name, e.g. 'Linux QA Perf (1)'
     buildnumber: Build number (as a string).
     supplemental_columns_file: Filename for JSON supplemental columns file.
@@ -570,21 +597,21 @@ def send_results_to_dashboard(results_tracker, system, test, url, build_dir,
   if system is None:
     # perf_id not specified in factory-properties
     return
-  supplemental_columns = _get_supplemental_columns(build_dir,
-                                                   supplemental_columns_file)
+  supplemental_columns = _GetSupplementalColumns(build_dir,
+                                                 supplemental_columns_file)
   if extra_columns:
     supplemental_columns.update(extra_columns)
   for logname, log in results_tracker.PerformanceLogs().iteritems():
     lines = [str(l).rstrip() for l in log]
     try:
-      results_dashboard.SendResults(logname, lines, system, test, url, masterid,
-                                    buildername, buildnumber, build_dir,
-                                    supplemental_columns)
+      results_dashboard.SendResults(logname, lines, system, test, url,
+                                    mastername, buildername, buildnumber,
+                                    build_dir, supplemental_columns)
     except NotImplementedError as e:
       print 'Did not submit to results dashboard: %s' % e
 
 
-def build_coverage_gtest_exclusions(options, args):
+def _BuildCoverageGtestExclusions(options, args):
   gtest_exclusions = {
     'win32': {
       'browser_tests': (
@@ -616,7 +643,7 @@ def build_coverage_gtest_exclusions(options, args):
   args.append('--gtest_filter=-' + ':'.join(gtest_exclusion_filters))
 
 
-def upload_profiling_data(options, args):
+def _UploadProfilingData(options, args):
   """Archives profiling data to Google Storage."""
   # args[1] has --gtest-filter argument.
   if len(args) < 2:
@@ -658,7 +685,7 @@ def upload_profiling_data(options, args):
   return chromium_utils.RunCommand(cmd)
 
 
-def upload_gtest_json_summary(json_path, build_properties, test_exe):
+def _UploadGtestJsonSummary(json_path, build_properties, test_exe):
   """Archives gtest results to Google Storage."""
   if not os.path.exists(json_path):
     return
@@ -751,7 +778,7 @@ def upload_gtest_json_summary(json_path, build_properties, test_exe):
     os.remove(bigquery_json_path)
 
 
-def generate_run_isolated_command(build_dir, test_exe_path, options, command):
+def _GenerateRunIsolatedCommand(build_dir, test_exe_path, options, command):
   """Convert the command to run through the run isolate script.
 
   All commands are sent through the run isolated script, in case
@@ -771,7 +798,7 @@ def generate_run_isolated_command(build_dir, test_exe_path, options, command):
   return isolate_command
 
 
-def main_parse(options, _args):
+def _MainParse(options, _args):
   """Run input through annotated test parser.
 
   This doesn't execute a test, but reads test input from a file and runs it
@@ -783,11 +810,11 @@ def main_parse(options, _args):
                                          'without --annotate.')
 
   # If --annotate=list was passed, list the log parser classes and exit.
-  if list_parsers(options.annotate):
+  if _ListParsers(options.annotate):
     return 0
 
-  tracker_class = select_results_tracker(options)
-  results_tracker = create_results_tracker(tracker_class, options)
+  tracker_class = _SelectResultsTracker(options)
+  results_tracker = _CreateResultsTracker(tracker_class, options)
 
   if options.generate_json_file:
     if os.path.exists(options.test_output_xml):
@@ -821,7 +848,7 @@ def main_parse(options, _args):
   return options.parse_result
 
 
-def main_mac(options, args):
+def _MainMac(options, args):
   if len(args) < 1:
     raise chromium_utils.MissingArgument('Usage: %s' % USAGE)
 
@@ -850,10 +877,10 @@ def main_mac(options, args):
   command.extend(args[1:])
 
   # If --annotate=list was passed, list the log parser classes and exit.
-  if list_parsers(options.annotate):
+  if _ListParsers(options.annotate):
     return 0
-  tracker_class = select_results_tracker(options)
-  results_tracker = create_results_tracker(tracker_class, options)
+  tracker_class = _SelectResultsTracker(options)
+  results_tracker = _CreateResultsTracker(tracker_class, options)
 
   if options.generate_json_file:
     if os.path.exists(options.test_output_xml):
@@ -863,11 +890,11 @@ def main_mac(options, args):
   try:
     http_server = None
     if options.document_root:
-      http_server = start_http_server('mac', build_dir=build_dir,
+      http_server = _StartHttpServer('mac', build_dir=build_dir,
                                       test_exe_path=test_exe_path,
                                       document_root=options.document_root)
 
-    if using_gtest_json(options):
+    if _UsingGtestJson(options):
       json_file_name = results_tracker.PrepareJSONFile(
           options.test_launcher_summary_output)
       command.append('--test-launcher-summary-output=%s' % json_file_name)
@@ -878,17 +905,17 @@ def main_mac(options, args):
                                                'asan', 'asan_symbolize.py'))
       pipes = [[sys.executable, symbolize], ['c++filt']]
 
-    command = generate_run_isolated_command(build_dir, test_exe_path, options,
-                                            command)
+    command = _GenerateRunIsolatedCommand(build_dir, test_exe_path, options,
+                                          command)
     result = _RunGTestCommand(command, pipes=pipes,
                               results_tracker=results_tracker)
   finally:
     if http_server:
       http_server.StopServer()
-    if using_gtest_json(options):
-      upload_gtest_json_summary(json_file_name,
-                                options.build_properties,
-                                test_exe)
+    if _UsingGtestJson(options):
+      _UploadGtestJsonSummary(json_file_name,
+                              options.build_properties,
+                              test_exe)
       results_tracker.ProcessJSONFile()
 
   if options.generate_json_file:
@@ -905,7 +932,7 @@ def main_mac(options, args):
     perf_id = options.factory_properties.get('perf_id')
     if options.factory_properties.get('add_perf_id_suffix'):
       perf_id += options.build_properties.get('perf_id_suffix')
-    send_results_to_dashboard(
+    _SendResultsToDashboard(
         results_tracker, perf_id,
         options.test_type, options.results_url, options.build_dir,
         options.build_properties.get('mastername'),
@@ -917,7 +944,7 @@ def main_mac(options, args):
   return result
 
 
-def main_ios(options, args):
+def _MainIOS(options, args):
   if len(args) < 1:
     raise chromium_utils.MissingArgument('Usage: %s' % USAGE)
 
@@ -969,9 +996,9 @@ def main_ios(options, args):
   command.extend(args[1:])
 
   # If --annotate=list was passed, list the log parser classes and exit.
-  if list_parsers(options.annotate):
+  if _ListParsers(options.annotate):
     return 0
-  results_tracker = create_results_tracker(get_parsers()['gtest'], options)
+  results_tracker = _CreateResultsTracker(_GetParsers()['gtest'], options)
 
   # Make sure the simulator isn't running.
   kill_simulator()
@@ -1014,7 +1041,7 @@ def main_ios(options, args):
   return result
 
 
-def main_linux(options, args):
+def _MainLinux(options, args):
   if len(args) < 1:
     raise chromium_utils.MissingArgument('Usage: %s' % USAGE)
 
@@ -1064,7 +1091,7 @@ def main_linux(options, args):
     print 'Deleted HTTPS_PROXY environment variable.'
 
   # Decide whether to enable the suid sandbox for Chrome.
-  if (should_enable_sandbox(CHROME_SANDBOX_PATH) and
+  if (_ShouldEnableSandbox(CHROME_SANDBOX_PATH) and
       not options.factory_properties.get('tsan', False) and
       not options.enable_lsan):
     print 'Enabling sandbox.  Setting environment variable:'
@@ -1105,10 +1132,10 @@ def main_linux(options, args):
   command.extend(args[1:])
 
   # If --annotate=list was passed, list the log parser classes and exit.
-  if list_parsers(options.annotate):
+  if _ListParsers(options.annotate):
     return 0
-  tracker_class = select_results_tracker(options)
-  results_tracker = create_results_tracker(tracker_class, options)
+  tracker_class = _SelectResultsTracker(options)
+  results_tracker = _CreateResultsTracker(tracker_class, options)
 
   if options.generate_json_file:
     if os.path.exists(options.test_output_xml):
@@ -1119,7 +1146,7 @@ def main_linux(options, args):
     start_xvfb = False
     http_server = None
     if options.document_root:
-      http_server = start_http_server('linux', build_dir=build_dir,
+      http_server = _StartHttpServer('linux', build_dir=build_dir,
                                       test_exe_path=test_exe_path,
                                       document_root=options.document_root)
 
@@ -1137,7 +1164,7 @@ def main_linux(options, args):
                    'True'),
           server_dir=special_xvfb_dir)
 
-    if using_gtest_json(options):
+    if _UsingGtestJson(options):
       json_file_name = results_tracker.PrepareJSONFile(
           options.test_launcher_summary_output)
       command.append('--test-launcher-summary-output=%s' % json_file_name)
@@ -1151,8 +1178,8 @@ def main_linux(options, args):
                                                'asan', 'asan_symbolize.py'))
       pipes = [[sys.executable, symbolize], ['c++filt']]
 
-    command = generate_run_isolated_command(build_dir, test_exe_path, options,
-                                            command)
+    command = _GenerateRunIsolatedCommand(build_dir, test_exe_path, options,
+                                          command)
     result = _RunGTestCommand(command, pipes=pipes,
                               results_tracker=results_tracker,
                               extra_env=extra_env)
@@ -1161,10 +1188,10 @@ def main_linux(options, args):
       http_server.StopServer()
     if start_xvfb:
       xvfb.StopVirtualX(slave_name)
-    if using_gtest_json(options):
-      upload_gtest_json_summary(json_file_name,
-                                options.build_properties,
-                                test_exe)
+    if _UsingGtestJson(options):
+      _UploadGtestJsonSummary(json_file_name,
+                              options.build_properties,
+                              test_exe)
       results_tracker.ProcessJSONFile()
 
   if options.generate_json_file:
@@ -1181,7 +1208,7 @@ def main_linux(options, args):
     perf_id = options.factory_properties.get('perf_id')
     if options.factory_properties.get('add_perf_id_suffix'):
       perf_id += options.build_properties.get('perf_id_suffix')
-    send_results_to_dashboard(
+    _SendResultsToDashboard(
         results_tracker, perf_id,
         options.test_type, options.results_url, options.build_dir,
         options.build_properties.get('mastername'),
@@ -1193,7 +1220,7 @@ def main_linux(options, args):
   return result
 
 
-def main_win(options, args):
+def _MainWin(options, args):
   """Runs tests on windows.
 
   Using the target build configuration, run the executable given in the
@@ -1247,10 +1274,10 @@ def main_win(options, args):
   slave_utils.RemoveChromeTemporaryFiles()
 
   # If --annotate=list was passed, list the log parser classes and exit.
-  if list_parsers(options.annotate):
+  if _ListParsers(options.annotate):
     return 0
-  tracker_class = select_results_tracker(options)
-  results_tracker = create_results_tracker(tracker_class, options)
+  tracker_class = _SelectResultsTracker(options)
+  results_tracker = _CreateResultsTracker(tracker_class, options)
 
   if options.generate_json_file:
     if os.path.exists(options.test_output_xml):
@@ -1260,25 +1287,25 @@ def main_win(options, args):
   try:
     http_server = None
     if options.document_root:
-      http_server = start_http_server('win', build_dir=build_dir,
+      http_server = _StartHttpServer('win', build_dir=build_dir,
                                       test_exe_path=test_exe_path,
                                       document_root=options.document_root)
 
-    if using_gtest_json(options):
+    if _UsingGtestJson(options):
       json_file_name = results_tracker.PrepareJSONFile(
           options.test_launcher_summary_output)
       command.append('--test-launcher-summary-output=%s' % json_file_name)
 
-    command = generate_run_isolated_command(build_dir, test_exe_path, options,
-                                            command)
+    command = _GenerateRunIsolatedCommand(build_dir, test_exe_path, options,
+                                          command)
     result = _RunGTestCommand(command, results_tracker)
   finally:
     if http_server:
       http_server.StopServer()
-    if using_gtest_json(options):
-      upload_gtest_json_summary(json_file_name,
-                                options.build_properties,
-                                test_exe)
+    if _UsingGtestJson(options):
+      _UploadGtestJsonSummary(json_file_name,
+                              options.build_properties,
+                              test_exe)
       results_tracker.ProcessJSONFile()
 
   if options.enable_pageheap:
@@ -1298,7 +1325,7 @@ def main_win(options, args):
     perf_id = options.factory_properties.get('perf_id')
     if options.factory_properties.get('add_perf_id_suffix'):
       perf_id += options.build_properties.get('perf_id_suffix')
-    send_results_to_dashboard(
+    _SendResultsToDashboard(
         results_tracker, perf_id,
         options.test_type, options.results_url, options.build_dir,
         options.build_properties.get('mastername'),
@@ -1310,7 +1337,7 @@ def main_win(options, args):
   return result
 
 
-def main_android(options, args):
+def _MainAndroid(options, args):
   """Runs tests on android.
 
   Running GTest-based tests is different than on linux as it requires
@@ -1318,15 +1345,15 @@ def main_android(options, args):
   Python scripts are the same as with linux.
   """
   if options.run_python_script:
-    return main_linux(options, args)
+    return _MainLinux(options, args)
 
   if len(args) < 1:
     raise chromium_utils.MissingArgument('Usage: %s' % USAGE)
 
-  if list_parsers(options.annotate):
+  if _ListParsers(options.annotate):
     return 0
-  tracker_class = select_results_tracker(options)
-  results_tracker = create_results_tracker(tracker_class, options)
+  tracker_class = _SelectResultsTracker(options)
+  results_tracker = _CreateResultsTracker(tracker_class, options)
 
   if options.generate_json_file:
     if os.path.exists(options.test_output_xml):
@@ -1356,7 +1383,7 @@ def main_android(options, args):
     perf_id = options.factory_properties.get('perf_id')
     if options.factory_properties.get('add_perf_id_suffix'):
       perf_id += options.build_properties.get('perf_id_suffix')
-    send_results_to_dashboard(
+    _SendResultsToDashboard(
         results_tracker, perf_id,
         options.test_type, options.results_url, options.build_dir,
         options.build_properties.get('mastername'),
@@ -1674,31 +1701,31 @@ def main():
       return 1
 
     if options.factory_properties.get('coverage_gtest_exclusions', False):
-      build_coverage_gtest_exclusions(options, args)
+      _BuildCoverageGtestExclusions(options, args)
 
-    temp_files = get_temp_count()
+    temp_files = _GetTempCount()
     if options.parse_input:
-      result = main_parse(options, args)
+      result = _MainParse(options, args)
     elif sys.platform.startswith('darwin'):
       test_platform = options.factory_properties.get('test_platform', '')
       if test_platform in ('ios-simulator',):
-        result = main_ios(options, args)
+        result = _MainIOS(options, args)
       else:
-        result = main_mac(options, args)
+        result = _MainMac(options, args)
     elif sys.platform == 'win32':
-      result = main_win(options, args)
+      result = _MainWin(options, args)
     elif sys.platform == 'linux2':
       if options.factory_properties.get('test_platform', '') == 'android':
-        result = main_android(options, args)
+        result = _MainAndroid(options, args)
       else:
-        result = main_linux(options, args)
+        result = _MainLinux(options, args)
     else:
       sys.stderr.write('Unknown sys.platform value %s\n' % repr(sys.platform))
       return 1
 
-    upload_profiling_data(options, args)
+    _UploadProfilingData(options, args)
 
-    new_temp_files = get_temp_count()
+    new_temp_files = _GetTempCount()
     if temp_files > new_temp_files:
       print >> sys.stderr, (
           'Confused: %d files were deleted from %s during the test run') % (
@@ -1717,6 +1744,7 @@ def main():
       # isn't working to clean up the spawned dbus-daemon. Kill it
       # manually.
       _ShutdownDBus()
+
 
 if '__main__' == __name__:
   sys.exit(main())
