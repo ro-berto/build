@@ -43,9 +43,6 @@ categories_steps = {
 }
 
 exclusions = {
-  # TODO(kjellander): Remove these two when webrtc:3073 is fixed.
-  'iOS Debug': ['compile'],
-  'iOS Release': ['compile'],
 }
 
 forgiving_steps = ['update_scripts', 'update', 'svnkill', 'taskkill',
