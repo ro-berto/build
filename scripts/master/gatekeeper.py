@@ -86,7 +86,7 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
     self._last_closure_revision = 0
 
     # Set up variables for operating on commits in a Git repository.
-    self.gitpoller_paths = gitpoller_paths
+    self.gitpoller_paths = gitpoller_paths or {}
     self.checkouts = {}
 
     self.password = None
