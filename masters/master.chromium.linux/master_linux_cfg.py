@@ -20,6 +20,7 @@ def Update(_config, active_master, c):
           'Linux Builder (dbg)(32)',
           'Linux Builder (dbg)',
           'Linux Clang (dbg)',
+          'Linux GN (dbg)',
       ]),
       Triggerable(name='linux_rel_trigger', builderNames=[
           'Linux Tests',
@@ -53,13 +54,14 @@ def Update(_config, active_master, c):
     {'name': 'Linux Tests (dbg)(1)'},
     {'name': 'Linux Tests (dbg)(2)'},
     {'name': 'Linux Clang (dbg)'},
+    {'name': 'Linux GN (dbg)', 'recipe': 'chromium_gn'},
   ]
 
   c['builders'].extend([
       {
         'name': spec['name'],
         'factory': m_annotator.BaseFactory(
-            'chromium',
+            spec.get('recipe', 'chromium'),
             factory_properties=spec.get('factory_properties'),
             triggers=spec.get('triggers')),
         'notify_on_missing': True,

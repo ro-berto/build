@@ -39,6 +39,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
     ),
     gyp_env = ConfigGroup(
       GYP_CROSSCOMPILE = Single(int, jsonish_fn=str, required=False),
+      GYP_CHROMIUM_NO_ACTION = Single(int, jsonish_fn=str, required=False),
       GYP_DEFINES = Dict(equal_fn, ' '.join, (basestring,int,Path)),
       GYP_GENERATORS = Set(basestring, ','.join),
       GYP_GENERATOR_FLAGS = Dict(equal_fn, ' '.join, (basestring,int)),
