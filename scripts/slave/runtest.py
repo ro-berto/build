@@ -930,7 +930,7 @@ def main_ios(options, args):
 
   # Set defaults in case the device family and iOS version can't be parsed out
   # of |args|
-  device = 'iphone'
+  device = '"iPhone Retina (4-inch)"'
   ios_version = '7.0'
 
   # Parse the test_name and device from the test display name.
