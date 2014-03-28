@@ -61,7 +61,7 @@ class GitApi(recipe_api.RecipeApi):
 
     # There are five kinds of refs we can be handed:
     # 0) None. In this case, we default to properties['branch'].
-    # 1) A 40-character SHA1 hash. Must be reachable from properties['branch'].
+    # 1) A 40-character SHA1 hash.
     # 2) A fully-qualifed arbitrary ref, e.g. 'refs/foo/bar/baz'.
     # 3) A fully qualified branch name, e.g. 'refs/heads/master'.
     #    Chop off 'refs/heads' and now it matches case (4).
@@ -73,7 +73,7 @@ class GitApi(recipe_api.RecipeApi):
       fetch_ref = self.m.properties.get('branch') or 'master'
       checkout_ref = 'FETCH_HEAD'
     elif self._GIT_HASH_RE.match(ref):        # Case 1.
-      fetch_ref = self.m.properties.get('branch') or 'master'
+      fetch_ref = ref
       checkout_ref = ref
     elif ref.startswith('refs/heads/'):       # Case 3.
       fetch_ref = ref[len('refs/heads/'):]
