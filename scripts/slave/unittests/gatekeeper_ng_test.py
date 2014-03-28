@@ -128,10 +128,17 @@ class GatekeeperTest(unittest.TestCase):
 
     self.url_calls = []
 
-    self.status_url = 'https://chromium-status.appspot.com/status'
+    self.get_status_url = \
+      'https://chromium-status.appspot.com/current?format=json'
+    self.set_status_url = 'https://chromium-status.appspot.com/status'
+    self.handle_url_json(self.get_status_url, {
+      'message': 'automatic closed',
+      'general_state': 'closed',
+    })
+    self.handle_url_str(self.set_status_url, '0')
+
     self.mailer_url = 'https://chromium-build.appspot.com/mailer/email'
     self.handle_url_str(self.mailer_url, '')
-    self.handle_url_str(self.status_url, 'the status')
 
     self.master_url_root = 'http://build.chromium.org/p/'
     self.masters = [self.create_generic_build_tree('Chromium FYI',
@@ -521,7 +528,7 @@ class GatekeeperTest(unittest.TestCase):
 
     self.call_gatekeeper()
     urls = self.call_gatekeeper()
-    self.assertNotIn(self.status_url, urls)
+    self.assertNotIn(self.set_status_url, urls)
     self.assertNotIn(self.mailer_url, urls)
 
   def testStepForgivingOmissionOptional(self):
@@ -537,7 +544,7 @@ class GatekeeperTest(unittest.TestCase):
     self.call_gatekeeper()
 
     urls = self.call_gatekeeper()
-    self.assertNotIn(self.status_url, urls)
+    self.assertNotIn(self.set_status_url, urls)
     self.assertNotIn(self.mailer_url, urls)
 
   def testStepNotStarted(self):
@@ -596,7 +603,7 @@ class GatekeeperTest(unittest.TestCase):
                                 {'closing_steps': ['step1']})
 
     urls = self.call_gatekeeper()
-    self.assertIn(self.status_url, urls)
+    self.assertIn(self.set_status_url, urls)
 
   def testIgnoredStepsDontCloseTree(self):
     """Test that ignored steps don't call to the status app."""
@@ -610,10 +617,41 @@ class GatekeeperTest(unittest.TestCase):
                                 self.masters[0].builders[0].name,
                                 {'closing_steps': ['step2']})
 
-    self.handle_url_str(self.status_url, 'the status')
-
     urls = self.call_gatekeeper()
-    self.assertNotIn(self.status_url, urls)
+    self.assertNotIn(self.set_status_url, urls)
+
+  def testOpenTree(self):
+    sys.argv.extend([m.url for m in self.masters])
+    sys.argv.extend(['--skip-build-db-update',
+                     '--no-email-app', '--set-status',
+                     '--open-tree',
+                     '--password-file', self.status_secret_file])
+
+    self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
+    self.add_gatekeeper_section(self.masters[0].url,
+                                self.masters[0].builders[0].name,
+                                {'closing_steps': ['step2']})
+
+    self.call_gatekeeper()
+    self.assertEquals(self.url_calls[-1]['url'], self.set_status_url)
+    status_data = urlparse.parse_qs(self.url_calls[-1]['params'])
+    self.assertEquals(status_data['message'][0], "Tree is open (Automatic)")
+
+    # However, don't touch the tree status if a human set it.
+    self.handle_url_json(self.get_status_url, {
+      'message': 'closed, world is on fire',
+      'general_state': 'closed',
+    })
+    urls = self.call_gatekeeper()
+    self.assertNotIn(self.set_status_url, urls)
+
+    # Only change the tree status if it's currently 'closed'
+    self.handle_url_json(self.get_status_url, {
+      'message': 'come on in, we\'re open',
+      'general_state': 'open',
+    })
+    urls = self.call_gatekeeper()
+    self.assertNotIn(self.set_status_url, urls)
 
   def testDefaultSubjectTemplate(self):
     """Test that the subject template is set by default."""
@@ -731,7 +769,7 @@ class GatekeeperTest(unittest.TestCase):
 
     build_db = build_scan_db.gen_db()
     urls = self.call_gatekeeper(build_db=build_db)
-    self.assertIn(self.status_url, urls)
+    self.assertIn(self.set_status_url, urls)
 
   def testIncrementalScanning(self):
     """Test that builds in the build DB are skipped."""
@@ -954,7 +992,7 @@ class GatekeeperTest(unittest.TestCase):
     urls = self.call_gatekeeper()
 
     self.assertNotIn(self.mailer_url, urls)
-    self.assertIn(self.status_url, urls)
+    self.assertIn(self.set_status_url, urls)
 
   def testForgivingOptional(self):
     """Test that forgiving_optional steps set status but don't email."""
@@ -971,7 +1009,7 @@ class GatekeeperTest(unittest.TestCase):
     urls = self.call_gatekeeper()
 
     self.assertNotIn(self.mailer_url, urls)
-    self.assertIn(self.status_url, urls)
+    self.assertIn(self.set_status_url, urls)
 
   def testForgivingOptionalStar(self):
     """Test that forgiving_optional * sets status but doesn't email."""
@@ -988,7 +1026,7 @@ class GatekeeperTest(unittest.TestCase):
     urls = self.call_gatekeeper()
 
     self.assertNotIn(self.mailer_url, urls)
-    self.assertIn(self.status_url, urls)
+    self.assertIn(self.set_status_url, urls)
 
   def testForgiveAllSteps(self):
     """Test that setting forgive_all prevents emailing the blamelist."""
@@ -1006,7 +1044,7 @@ class GatekeeperTest(unittest.TestCase):
     urls = self.call_gatekeeper()
 
     self.assertNotIn(self.mailer_url, urls)
-    self.assertIn(self.status_url, urls)
+    self.assertIn(self.set_status_url, urls)
 
   def testForgiveAllOptionalSteps(self):
     """Test that setting forgive_all prevents emailing the blamelist."""
@@ -1024,7 +1062,7 @@ class GatekeeperTest(unittest.TestCase):
     urls = self.call_gatekeeper()
 
     self.assertNotIn(self.mailer_url, urls)
-    self.assertIn(self.status_url, urls)
+    self.assertIn(self.set_status_url, urls)
 
   #### Multiple failures.
 
@@ -1048,7 +1086,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[1].steps[2].results = [2, None]
 
     urls = self.call_gatekeeper()
-    self.assertEquals(urls.count(self.status_url), 1)
+    self.assertEquals(urls.count(self.set_status_url), 1)
 
     self.assertEquals(self.url_calls[-2]['url'], self.mailer_url)
     self.assertEquals(self.url_calls[-1]['url'], self.mailer_url)
@@ -1079,7 +1117,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[1].steps[1].results = [2, None]
 
     urls = self.call_gatekeeper()
-    self.assertEquals(urls.count(self.status_url), 1)
+    self.assertEquals(urls.count(self.set_status_url), 1)
     self.assertEquals(urls.count(self.mailer_url), 1)
 
     self.assertEquals(self.url_calls[-1]['url'], self.mailer_url)
@@ -1181,7 +1219,7 @@ class GatekeeperTest(unittest.TestCase):
                                 idx=0)
 
     urls = self.call_gatekeeper(build_db=build_db)
-    self.assertEquals(urls.count(self.status_url), 1)
+    self.assertEquals(urls.count(self.set_status_url), 1)
     self.assertEquals(urls.count(self.mailer_url), 1)
 
     self.assertEquals(self.url_calls[-1]['url'], self.mailer_url)
@@ -1223,7 +1261,7 @@ class GatekeeperTest(unittest.TestCase):
                                 idx=0)
 
     urls = self.call_gatekeeper(build_db=build_db)
-    self.assertEquals(urls.count(self.status_url), 1)
+    self.assertEquals(urls.count(self.set_status_url), 1)
 
     self.assertEquals(self.url_calls[-2]['url'], self.mailer_url)
     self.assertEquals(self.url_calls[-1]['url'], self.mailer_url)
@@ -1270,7 +1308,7 @@ class GatekeeperTest(unittest.TestCase):
                                 {'closing_steps': ['step1']})
 
     urls = self.call_gatekeeper(build_db)
-    self.assertEquals(urls.count(self.status_url), 1)
+    self.assertEquals(urls.count(self.set_status_url), 1)
 
     self.assertEquals(urls[-1], self.mailer_url)
     self.assertEquals(urls[-1], self.mailer_url)
@@ -1302,7 +1340,7 @@ class GatekeeperTest(unittest.TestCase):
                                 {'closing_steps': ['step4']})
 
     urls = self.call_gatekeeper()
-    self.assertNotIn(self.status_url, urls)
+    self.assertNotIn(self.set_status_url, urls)
 
   def testFailedBuildInProgress(self):
     """Test that a still-running build can close the tree."""
@@ -1320,7 +1358,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds.append(mybuild)
 
     urls = self.call_gatekeeper()
-    self.assertIn(self.status_url, urls)
+    self.assertIn(self.set_status_url, urls)
 
   def testUpdateBuildDBNotCompletedButFailed(self):
     """Test that partial builds increment the DB if they failed."""
@@ -1352,7 +1390,7 @@ class GatekeeperTest(unittest.TestCase):
                           '0e321975189099b8f623a4dc29602e76'
                           'f33fd8f5bacf3c7018d0499214372e5b': ['step1']})})
 
-    self.assertIn(self.status_url, urls)
+    self.assertIn(self.set_status_url, urls)
 
   def testDontUpdateBuildDBIfNotCompleted(self):
     """Test that partial builds aren't marked as finished."""
@@ -1381,7 +1419,7 @@ class GatekeeperTest(unittest.TestCase):
                       {1: build_scan_db.gen_build(finished=True)})
     self.assertEquals(unfinished_new_builds,
                       {2: build_scan_db.gen_build()})
-    self.assertNotIn(self.status_url, urls)
+    self.assertNotIn(self.set_status_url, urls)
 
   def testTriggeringDoesntTriggerOnSameBuild(self):
     """Test that a section won't fire twice on a build."""
@@ -1406,7 +1444,7 @@ class GatekeeperTest(unittest.TestCase):
                       {1: build_scan_db.gen_build(triggered={
                           '0e321975189099b8f623a4dc29602e76'
                           'f33fd8f5bacf3c7018d0499214372e5b': ['step1']})})
-    self.assertEquals(1, len([u for u in urls if u == self.status_url]))
+    self.assertEquals(1, len([u for u in urls if u == self.set_status_url]))
 
   def testTriggeringOneHashDoesntStopAnother(self):
     """Test that firing on one hash doesn't prevent another hash triggering."""
@@ -1445,7 +1483,7 @@ class GatekeeperTest(unittest.TestCase):
 
                           'fbe3ad95b8cb242309b17896ad2c3ba0'
                           '2999a22ca5f7b8c7887878b611679cd5': ['step2']})})
-    self.assertEquals(2, len([u for u in urls if u == self.status_url]))
+    self.assertEquals(2, len([u for u in urls if u == self.set_status_url]))
 
   def testTriggerIsRemovedIfNoFailure(self):
     """Test that build_db triggers aren't present if a step hasn't failed."""
@@ -1460,14 +1498,14 @@ class GatekeeperTest(unittest.TestCase):
                                 {'closing_steps': ['step1']})
 
     urls = self.call_gatekeeper()
-    self.assertEquals(urls.count(self.status_url), 1)
+    self.assertEquals(urls.count(self.set_status_url), 1)
 
     new_build = self.create_generic_build(
         2, ['a_second_committer@chromium.org'])
     self.masters[0].builders[0].builds.append(new_build)
     build_db = build_scan_db.get_build_db(self.build_db_file)
     urls += self.call_gatekeeper(build_db=build_db)
-    self.assertEquals(urls.count(self.status_url), 1)
+    self.assertEquals(urls.count(self.set_status_url), 1)
     _, finished_new_builds = self.process_build_db(
         self.masters[0].url, 'mybuilder')
     self.assertEquals(finished_new_builds,
@@ -1486,7 +1524,7 @@ class GatekeeperTest(unittest.TestCase):
                                 {'closing_steps': ['step1']})
 
     urls = self.call_gatekeeper()
-    self.assertEquals(urls.count(self.status_url), 1)
+    self.assertEquals(urls.count(self.set_status_url), 1)
 
     new_build = self.create_generic_build(
         2, ['a_second_committer@chromium.org'])
@@ -1495,7 +1533,7 @@ class GatekeeperTest(unittest.TestCase):
 
     build_db = build_scan_db.get_build_db(self.build_db_file)
     urls += self.call_gatekeeper(build_db=build_db)
-    self.assertEquals(urls.count(self.status_url), 1)
+    self.assertEquals(urls.count(self.set_status_url), 1)
 
   def testTriggerDoesntPersistOldFailures(self):
     """Test that gatekeeper doesn't persist old failing tests."""
@@ -1511,7 +1549,7 @@ class GatekeeperTest(unittest.TestCase):
                                 {'closing_steps': ['step1', 'step2']})
 
     urls = self.call_gatekeeper()
-    self.assertEquals(urls.count(self.status_url), 1)
+    self.assertEquals(urls.count(self.set_status_url), 1)
 
     new_build = self.create_generic_build(
         2, ['a_second_committer@chromium.org'])
@@ -1520,7 +1558,7 @@ class GatekeeperTest(unittest.TestCase):
 
     build_db = build_scan_db.get_build_db(self.build_db_file)
     urls += self.call_gatekeeper(build_db=build_db)
-    self.assertEquals(urls.count(self.status_url), 1)
+    self.assertEquals(urls.count(self.set_status_url), 1)
 
     unfinished_new_builds, finished_new_builds = self.process_build_db(
         self.masters[0].url, 'mybuilder')
@@ -1544,7 +1582,7 @@ class GatekeeperTest(unittest.TestCase):
                                 {'closing_steps': ['step1', 'step2']})
 
     urls = self.call_gatekeeper()
-    self.assertEquals(urls.count(self.status_url), 1)
+    self.assertEquals(urls.count(self.set_status_url), 1)
 
     new_build = self.create_generic_build(
         2, ['a_second_committer@chromium.org'])
@@ -1554,7 +1592,7 @@ class GatekeeperTest(unittest.TestCase):
 
     build_db = build_scan_db.get_build_db(self.build_db_file)
     urls += self.call_gatekeeper(build_db=build_db)
-    self.assertEquals(urls.count(self.status_url), 2)
+    self.assertEquals(urls.count(self.set_status_url), 2)
     unfinished_new_builds, finished_new_builds = self.process_build_db(
         self.masters[0].url, 'mybuilder')
     self.assertEquals(finished_new_builds,
@@ -1578,13 +1616,13 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].finished = False
 
     urls = self.call_gatekeeper()
-    self.assertEquals(urls.count(self.status_url), 1)
+    self.assertEquals(urls.count(self.set_status_url), 1)
 
     self.masters[0].builders[0].builds[0].steps[2].results = [2, None]
 
     build_db = build_scan_db.get_build_db(self.build_db_file)
     urls += self.call_gatekeeper(build_db=build_db)
-    self.assertEquals(urls.count(self.status_url), 1)
+    self.assertEquals(urls.count(self.set_status_url), 1)
     unfinished_new_builds, _ = self.process_build_db(
         self.masters[0].url, 'mybuilder')
     self.assertEquals(unfinished_new_builds,
@@ -1867,13 +1905,11 @@ class GatekeeperTest(unittest.TestCase):
                                 self.masters[0].builders[0].name,
                                 {'closing_steps': ['step1']})
 
-    self.handle_url_str(self.status_url, 'the status')
-
     self.add_gatekeeper_master_section(self.masters[0].url, -1,
                                        {'close_tree': False})
 
     urls = self.call_gatekeeper()
-    self.assertNotIn(self.status_url, urls)
+    self.assertNotIn(self.set_status_url, urls)
 
   def testInvalidConfigIsCaught(self):
     sys.argv.extend(['--verify'])

@@ -45,7 +45,7 @@ def get_pwd(password_file):
   return getpass.getpass()
 
 
-def update_status(tree_message, tree_status_url, username, password):
+def update_status(tree_message, status_url_root, username, password):
   """Connects to chromium-status and closes the tree."""
   #TODO(xusydoc): append status if status is already closed.
   params = urllib.urlencode({
@@ -55,9 +55,14 @@ def update_status(tree_message, tree_status_url, username, password):
   })
 
   # Standard urllib doesn't raise an exception on 403, urllib2 does.
-  f = urllib2.urlopen(tree_status_url, params)
+  f = urllib2.urlopen(status_url_root + "/status", params)
   f.close()
   logging.info('success')
+
+
+def get_tree_status(status_url_root):
+  status_url = status_url_root + "/current?format=json"
+  return json.load(urllib2.urlopen(status_url))
 
 
 def check_builds(master_builds, master_jsons, gatekeeper_config):
@@ -257,32 +262,64 @@ def submit_email(email_app, build_data, secret):
           code, response))
 
 
-def close_tree_if_failure(failed_builds, username, password, tree_status_url,
-                          set_status, sheriff_url, default_from_email,
-                          email_app_url, secret, domain, filter_domain,
-                          disable_domain_filter):
-  """Given a list of failed builds, close the tree and email tree watchers."""
-  if not failed_builds:
-    logging.info( 'no failed builds!')
+def open_tree_if_possible(failed_builds, username, password, status_url_root,
+                          set_status):
+  status = get_tree_status(status_url_root)
+  # Don't change the status unless the tree is currently closed.
+  if status['general_state'] != 'closed':
+    return
+
+  # Don't override human closures.
+  # FIXME: We could check that we closed the tree instead?
+  if not re.search(r"automatic", status['message'], re.IGNORECASE):
+    return
+
+  closing_builds = [b for b in failed_builds if b['close_tree']]
+  if closing_builds:
+    return
+
+  logging.info('All builders are green, opening the tree...')
+
+  tree_status = 'Tree is open (Automatic)'
+  logging.info('Opening tree with message: \'%s\'' % tree_status)
+  if set_status:
+    update_status(tree_status, status_url_root, username, password)
+  else:
+    logging.info('set-status not set, not connecting to chromium-status!')
+
+
+def close_tree_if_necessary(failed_builds, username, password, status_url_root,
+                            set_status):
+  """Given a list of failed builds, close the tree if necessary."""
+
+  closing_builds = [b for b in failed_builds if b['close_tree']]
+  if not closing_builds:
+    logging.info('no tree-closing failures!')
     return
 
   logging.info('%d failed builds found, closing the tree...' %
-               len(failed_builds))
-  closing_builds = [b for b in failed_builds if b['close_tree']]
-  if closing_builds:
-    # Close on first failure seen.
-    msg = 'Tree is closed (Automatic: "%(steps)s" on "%(builder)s" %(blame)s)'
-    tree_status = msg % {'steps': ','.join(closing_builds[0]['unsatisfied']),
-                         'builder': failed_builds[0]['build']['builderName'],
-                         'blame':
-                         ','.join(failed_builds[0]['build']['blame'])
-                        }
+               len(closing_builds))
+  if not closing_builds:
+    return
 
-    logging.info('closing the tree with message: \'%s\'' % tree_status)
-    if set_status:
-      update_status(tree_status, tree_status_url, username, password)
-    else:
-      logging.info('set-status not set, not connecting to chromium-status!')
+  # Close on first failure seen.
+  msg = 'Tree is closed (Automatic: "%(steps)s" on "%(builder)s" %(blame)s)'
+  tree_status = msg % {'steps': ','.join(closing_builds[0]['unsatisfied']),
+                       'builder': failed_builds[0]['build']['builderName'],
+                       'blame':
+                       ','.join(failed_builds[0]['build']['blame'])
+                      }
+
+  logging.info('closing the tree with message: \'%s\'' % tree_status)
+  if set_status:
+    update_status(tree_status, status_url_root, username, password)
+  else:
+    logging.info('set-status not set, not connecting to chromium-status!')
+
+
+def notify_failures(failed_builds, sheriff_url, default_from_email,
+                    email_app_url, secret, domain, filter_domain,
+                    disable_domain_filter):
   # Email everyone that should be notified.
   emails_to_send = []
   for failed_build in failed_builds:
@@ -383,9 +420,11 @@ def get_options():
                     help='password file to update chromium-status')
   parser.add_option('-s', '--set-status', action='store_true',
                     help='close the tree by connecting to chromium-status')
+  parser.add_option('--open-tree', action='store_true',
+                    help='open the tree by connecting to chromium-status')
   parser.add_option('--status-url',
-                    default='https://chromium-status.appspot.com/status',
-                    help='URL for the status app')
+                    default='https://chromium-status.appspot.com',
+                    help='URL for root of the status app')
   parser.add_option('--status-user', default='buildbot@chromium.org',
                     help='username for the status app')
   parser.add_option('--disable-domain-filter', action='store_true',
@@ -496,15 +535,26 @@ def main():
                              options.build_db)
     return 0
 
-  failed_builds = check_builds(build_jsons, master_jsons, gatekeeper_config)
-  failed_builds = debounce_failures(failed_builds, build_db)
+  failure_tuples = check_builds(build_jsons, master_jsons, gatekeeper_config)
+  # opening is an option, mostly to keep the unittests working which
+  # assume that any setting of status is negative.
+  if options.open_tree:
+    # failures are actually tuples, we only care about the build part.
+    failing_builds = [b[0] for b in failure_tuples]
+    open_tree_if_possible(failing_builds, options.status_user, options.password,
+                          options.status_url, options.set_status)
 
-  close_tree_if_failure(failed_builds, options.status_user, options.password,
-                        options.status_url, options.set_status,
-                        options.sheriff_url, options.default_from_email,
-                        options.email_app_url, options.email_app_secret,
-                        options.email_domain, options.filter_domain,
-                        options.disable_domain_filter)
+  # debounce_failures does 3 things:
+  # 1. Groups logging by builder
+  # 2. Selects out the "build" part from the failure tuple.
+  # 3. Rejects builds we've already warned about (and logs).
+  new_failures = debounce_failures(failure_tuples, build_db)
+  close_tree_if_necessary(new_failures, options.status_user, options.password,
+                          options.status_url, options.set_status)
+  notify_failures(new_failures, options.sheriff_url, options.default_from_email,
+                  options.email_app_url, options.email_app_secret,
+                  options.email_domain, options.filter_domain,
+                  options.disable_domain_filter)
 
   if not options.skip_build_db_update:
     build_scan_db.save_build_db(build_db, gatekeeper_config,
