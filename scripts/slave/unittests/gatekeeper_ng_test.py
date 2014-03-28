@@ -11,7 +11,7 @@ close the tree.
 """
 
 # Needs to be at the top, otherwise coverage will spit nonsense.
-import utils
+import utils  # "relative import" pylint: disable=W0403
 
 import contextlib
 import json
