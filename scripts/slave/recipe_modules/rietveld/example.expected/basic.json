@@ -14,7 +14,7 @@
       "-s",
       "http://review_tool.url/bots",
       "-E",
-      "[BUILD]/site_config/.rietveld_client_id",
+      "[BUILD]/site_config/.rietveld_client_email",
       "-k",
       "[BUILD]/site_config/.rietveld_secret_key"
     ],

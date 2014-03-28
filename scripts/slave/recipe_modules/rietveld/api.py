@@ -34,7 +34,8 @@ class RietveldApi(recipe_api.RecipeApi):
           '-i', self.m.properties['issue'],
           '-p', self.m.properties['patchset'],
           '-s', self.m.properties['rietveld'].strip('/') + '/bots',
-          '-E', self.m.path['build'].join('site_config', '.rietveld_client_id'),
+          '-E', self.m.path['build'].join('site_config', 
+                                          '.rietveld_client_email'),
           '-k', self.m.path['build'].join('site_config',
                                           '.rietveld_secret_key')
           ],
