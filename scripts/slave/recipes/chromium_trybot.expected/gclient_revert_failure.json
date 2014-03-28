@@ -79,6 +79,14 @@
     "cmd": [
       "python",
       "-u",
+      "[BUILD]\\scripts\\slave\\kill_processes.py"
+    ],
+    "name": "taskkill"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport os, shutil, sys\nfor p in [os.path.join(sys.argv[1], x) for x in os.listdir(sys.argv[1])]:\n  if os.path.isdir(p):\n    shutil.rmtree(p)\n  else:\n    os.unlink(p)\n",
       "[SLAVE_BUILD]"
     ],

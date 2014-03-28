@@ -228,6 +228,8 @@ def GenSteps(api):
       revert=True, can_fail_build=False, abort_on_failure=False)
   for step in api.step_history.values():
     if step.retcode != 0:
+      if api.platform.is_win:
+        yield api.chromium.taskkill()
       yield (
         api.path.rmcontents('slave build directory', api.path['slave_build']),
         api.gclient.checkout(revert=False),
@@ -254,6 +256,8 @@ def GenSteps(api):
 
     yield api.chromium.runhooks(abort_on_failure=False, can_fail_build=False)
     if api.step_history.last_step().retcode != 0:
+      if api.platform.is_win:
+        yield api.chromium.taskkill()
       yield (
         api.path.rmcontents('slave build directory', api.path['slave_build']),
         api.gclient.checkout(revert=False),
@@ -293,6 +297,8 @@ def GenSteps(api):
                                abort_on_failure=False,
                                can_fail_build=False)
     if api.step_history['compile (with patch, lkcr, clobber)'].retcode != 0:
+      if api.platform.is_win:
+        yield api.chromium.taskkill()
       yield (
         api.path.rmcontents('slave build directory', api.path['slave_build']),
         api.gclient.checkout(revert=False),
@@ -411,6 +417,15 @@ def GenTests(api):
     api.test('gclient_revert_failure_linux') +
     props() +
     api.platform.name('linux') +
+    api.step_data('gclient runhooks', retcode=1) +
+    api.step_data('gclient runhooks (2)', retcode=1) +
+    api.step_data('gclient runhooks (3)', retcode=1)
+  )
+
+  yield (
+    api.test('gclient_revert_failure_win') +
+    props() +
+    api.platform.name('win') +
     api.step_data('gclient runhooks', retcode=1) +
     api.step_data('gclient runhooks (2)', retcode=1) +
     api.step_data('gclient runhooks (3)', retcode=1)
