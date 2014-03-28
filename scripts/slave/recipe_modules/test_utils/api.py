@@ -70,14 +70,22 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
   def determine_new_failures(self, tests, deapply_patch_fn):
     """
-    Utility function for running steps with a patch applied, and retrying failing
-    steps without the patch. Failures from the run without patch are ignored.
+    Utility function for running steps with a patch applied, and retrying
+    failing steps without the patch. Failures from the run without the patch are
+    ignored.
 
     Args:
       tests - iterable of objects implementing the Test interface above
       deapply_patch_fn - function that takes a list of failing tests
                          and undoes any effect of the previously applied patch
     """
+    if self.m.step_history.failed:
+      yield self.m.python.inline(
+        'Aborting due to failed build state.',
+        "import sys; sys.exit(1)",
+        always_run=True, abort_on_failure=True)
+      return  # won't actually hit this, but be explicit
+
     yield (t.run('with patch') for t in tests)
 
     failing_tests = []

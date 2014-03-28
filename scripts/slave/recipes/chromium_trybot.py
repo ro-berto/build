@@ -357,8 +357,8 @@ def GenSteps(api):
 
   def deapply_patch_fn(failing_tests):
     yield (
-      api.gclient.revert(),
-      api.chromium.runhooks(),
+      api.gclient.revert(always_run=True),
+      api.chromium.runhooks(always_run=True),
     )
     compile_targets = list(api.itertools.chain(
                                *[t.compile_targets() for t in failing_tests]))
@@ -366,11 +366,13 @@ def GenSteps(api):
       yield api.chromium.compile(compile_targets,
                                  name='compile (without patch)',
                                  abort_on_failure=False,
-                                 can_fail_build=False)
+                                 can_fail_build=False,
+                                 always_run=True)
       if api.step_history['compile (without patch)'].retcode != 0:
         yield api.chromium.compile(compile_targets,
                                    name='compile (without patch, clobber)',
-                                   force_clobber=True)
+                                   force_clobber=True,
+                                   always_run=True)
 
   yield api.test_utils.determine_new_failures(tests, deapply_patch_fn)
 
@@ -494,6 +496,15 @@ def GenTests(api):
     api.step_data('compile (with patch)', retcode=1) +
     api.step_data('compile (with patch, lkcr, clobber)', retcode=1) +
     api.step_data('compile (with patch, lkcr, clobber, nuke)', retcode=1)
+  )
+
+  yield (
+    api.test('deapply_compile_failure_linux') +
+    props() +
+    api.platform.name('linux') +
+    api.override_step_data('media_unittests (with patch)',
+                           canned_test(passing=False)) +
+    api.step_data('compile (without patch)', retcode=1)
   )
 
   # TODO(dpranke): crbug.com/353690.

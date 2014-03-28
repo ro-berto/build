@@ -335,6 +335,7 @@
   },
   {
     "abort_on_failure": true,
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -350,6 +351,7 @@
     ]
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -364,6 +366,7 @@
   },
   {
     "abort_on_failure": true,
+    "always_run": true,
     "cmd": [
       "python",
       "-u",

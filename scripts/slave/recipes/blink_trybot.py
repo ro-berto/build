@@ -401,11 +401,11 @@ def GenSteps(api):
   yield steps
 
   if not bot_config['compile_only']:
-    def deapply_patch_fn(failing_steps):
+    def deapply_patch_fn(_failing_steps):
       yield (
-        api.gclient.revert(),
-        api.chromium.runhooks(),
-        api.chromium.compile(),
+        api.gclient.revert(always_run=True),
+        api.chromium.runhooks(always_run=True),
+        api.chromium.compile(always_run=True),
       )
 
     yield api.test_utils.determine_new_failures([BlinkTest()], deapply_patch_fn)
@@ -469,6 +469,12 @@ def GenTests(api):
     properties('tryserver.chromium', 'linux_blink_rel') +
     api.step_data('gclient revert', retcode=1) +
     api.override_step_data(with_patch, canned_test(passing=True, minimal=True))
+  )
+
+  yield (
+    api.test('preamble_test_failure') +
+    properties('tryserver.chromium', 'linux_blink_rel') +
+    api.step_data('webkit_unit_tests', retcode=1)
   )
 
   yield (
