@@ -10,6 +10,7 @@ DEPS = [
   'properties',
   'rietveld',
   'step',
+  'step_history',
 ]
 
 def GenSteps(api):
@@ -22,7 +23,17 @@ def GenSteps(api):
     root = ''
 
   api.gclient.set_config(repo_name)
-  yield api.gclient.checkout(revert=True)
+  api.step.auto_resolve_conflicts = True
+
+  yield api.gclient.checkout(
+      revert=True, can_fail_build=False, abort_on_failure=False)
+  for step in api.step_history.values():
+    if step.retcode != 0:
+      yield (
+        api.path.rmcontents('slave build directory', api.path['slave_build']),
+        api.gclient.checkout(revert=False),
+      )
+      break
 
   spec = api.gclient.c
   if spec.solutions[0].url.endswith('.git'):
@@ -61,3 +72,10 @@ def GenTests(api):
       api.properties.tryserver(repo_name=repo_name, **extra) +
       api.step_data('presubmit', api.json.output([['linux_rel', ['compile']]]))
     )
+
+  yield (
+    api.test('gclient_retry') +
+    api.properties.tryserver(repo_name='chromium') +
+    api.step_data('gclient revert', retcode=1) +
+    api.step_data('presubmit', api.json.output([['linux_rel', ['compile']]]))
+  )
