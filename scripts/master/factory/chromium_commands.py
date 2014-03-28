@@ -442,10 +442,12 @@ class ChromiumCommands(commands.FactoryCommands):
                      cmd)
 
   def AddMachPortsTests(self, factory_properties=None):
-    self.AddAnnotatedPerfStep('mach_ports', 'MachPortsTest.*', 'graphing',
-                              cmd_name='performance_browser_tests',
-                              step_name='mach_ports',
-                              factory_properties=factory_properties)
+    self.AddAnnotatedPerfStep(
+        'mach_ports', 'MachPortsTest.*', 'graphing',
+        cmd_name='performance_browser_tests',
+        cmd_options=['--test-launcher-print-test-stdio=always'],
+        step_name='mach_ports',
+        factory_properties=factory_properties)
 
   def AddCCPerfTests(self, factory_properties=None):
     self.AddAnnotatedPerfStep('cc_perftests', None, 'graphing',
