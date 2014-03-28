@@ -282,7 +282,7 @@ class GpuApi(recipe_api.RecipeApi):
       args = ['--enable-gpu',
               '--test-launcher-jobs=1',
               '--test-launcher-print-test-stdio=always',
-              '--gtest_filter=TabCapturePerformanceTest*:CastV2PerformanceTest*']
+              '--gtest_filter=TabCapturePerformanceTest*,CastV2PerformanceTest*']
       yield self._maybe_run_isolate('performance_browser_tests',
                                     args=args,
                                     name='tab_capture_performance_tests',
