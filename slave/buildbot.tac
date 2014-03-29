@@ -54,5 +54,5 @@ if basedir is None:
 
 application = service.Application('buildslave')
 s = BuildSlave(host, port, slavename, password, basedir, keepalive, usepty,
-               umask=umask)
+               umask=umask, allow_shutdown='file')
 s.setServiceParent(application)
