@@ -172,8 +172,8 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
     # likely a build started manually, and we don't want to close the
     # tree.
     if not latest_revision or not build_status.getResponsibleUsers():
-      GateKeeper.msg('Slave %s failed, but no version stamp, '
-              'so skipping.' % slave_name)
+      GateKeeper.msg('Slave %s failed, but no version stamp or responsible '
+                     'users, so skipping.' % slave_name)
       return False
 
     # If the tree is open, we don't want to close it again for the same
