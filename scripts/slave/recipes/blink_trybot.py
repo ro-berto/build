@@ -339,10 +339,16 @@ def GenSteps(api):
         )
 
     def has_valid_results(self, suffix):
-      sn = self._step_name(suffix)
-      results = api.step_history[sn].json.test_results
-      return (results.valid and
-              results.num_regressions < results.MAX_FAILURES_EXIT_STATUS)
+      step = api.step_history[self._step_name(suffix)]
+      # TODO(dpranke): crbug.com/357866 - note that all comparing against
+      # MAX_FAILURES_EXIT_STATUS tells us is that we did not exit early
+      # or abnormally; it does not tell us how many failures there actually
+      # were, which might be much higher (up to 5000 diffs, where we
+      # would bail out early with --exit-after-n-failures) or lower
+      # if we bailed out after 100 crashes w/ -exit-after-n-crashes, in
+      # which case the retcode is actually 130
+      return (step.json.test_results.valid and
+              step.retcode <= step.json.test_results.MAX_FAILURES_EXIT_STATUS)
 
     def failures(self, suffix):
       sn = self._step_name(suffix)
@@ -477,9 +483,40 @@ def GenTests(api):
     api.step_data('webkit_unit_tests', retcode=1)
   )
 
+  # This tests what happens if something goes horribly wrong in
+  # run-webkit-tests and we return an internal error; the step should
+  # be considered a hard failure and we shouldn't try to compare the
+  # lists of failing tests.
+  # 255 == test_run_results.UNEXPECTED_ERROR_EXIT_STATUS in run-webkit-tests.
   yield (
-    api.test('too_many_failures') +
+    api.test('webkit_tests_unexpected_error') +
     properties('tryserver.chromium', 'linux_blink_rel') +
     api.override_step_data(with_patch, canned_test(passing=False,
-                                                   num_additional_failures=125))
+                                                   retcode=255))
+  )
+
+  # TODO(dpranke): crbug.com/357866 . This tests what happens if we exceed the
+  # number of failures specified with --exit-after-n-crashes-or-times or
+  # --exit-after-n-failures; the step should be considered a hard failure and
+  # we shouldn't try to compare the lists of failing tests.
+  # 130 == test_run_results.INTERRUPTED_EXIT_STATUS in run-webkit-tests.
+  yield (
+    api.test('webkit_tests_interrupted') +
+    properties('tryserver.chromium', 'linux_blink_rel') +
+    api.override_step_data(with_patch, canned_test(passing=False,
+                                                   retcode=130))
+  )
+
+  # This tests what happens if we don't trip the thresholds listed
+  # above, but fail more tests than we can safely fit in a return code.
+  # (this should be a soft failure and we can still retry w/o the patch
+  # and compare the lists of failing tests).
+  yield (
+    api.test('too_many_failures_for_retcode') +
+    properties('tryserver.chromium', 'linux_blink_rel') +
+    api.override_step_data(with_patch,
+                           canned_test(passing=False,
+                                       num_additional_failures=125)) +
+    api.override_step_data(without_patch,
+                           canned_test(passing=True, minimal=True))
   )
