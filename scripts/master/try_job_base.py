@@ -213,6 +213,9 @@ class TryJobBase(TryBase):
     optional_keys = (
       'clobber',
       'issue',
+      'patch_ref',
+      'patch_repo_url',
+      'patch_storage',
       'patch_url',
       'patchset',
       'requester',

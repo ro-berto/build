@@ -3744,3 +3744,48 @@ Fix to file parsing. GitPoller produced blank lines
              return fileList
          d.addCallback(process)
          return d
+
+GitPoller: made self.master.addChange call overridable, so it can be used in
+TryJobGit.
+
+diff --git a/third_party/buildbot_8_4p1/buildbot/changes/gitpoller.py b/third_party/buildbot_8_4p1/buildbot/changes/gitpoller.py
+index 0b6d388..d5c18ba 100644
+--- a/third_party/buildbot_8_4p1/buildbot/changes/gitpoller.py
++++ b/third_party/buildbot_8_4p1/buildbot/changes/gitpoller.py
+@@ -282,21 +282,31 @@ class GitPoller(base.PollingChangeSource):
+               revlink = self.revlinktmpl % urllib.quote_plus(rev)
+ 
+             timestamp, name, files, comments = [ r[1] for r in results ]
+-            d = self.master.addChange(
++            d = self.add_change(
+                    author=name,
+                    revision=rev,
+                    files=files,
+                    comments=comments,
+                    when_timestamp=epoch2datetime(timestamp),
+-                   branch=self.branch,
+-                   category=self.category,
+-                   project=self.project,
+-                   repository=self.repourl,
+                    revlink=revlink)
+             wfd = defer.waitForDeferred(d)
+             yield wfd
+             results = wfd.getResult()
+ 
++    def add_change(self, author, revision, files, comments, when_timestamp,
++                   revlink):
++        return self.master.addChange(
++                author=author,
++                revision=revision,
++                files=files,
++                comments=comments,
++                when_timestamp=when_timestamp,
++                branch=self.branch,
++                category=self.category,
++                project=self.project,
++                repository=self.repourl,
++                revlink=revlink)
++
+     def _process_changes_failure(self, f):
+         log.msg('gitpoller: repo poll failed')
+         log.err(f)

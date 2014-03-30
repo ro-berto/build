@@ -282,20 +282,30 @@ class GitPoller(base.PollingChangeSource):
               revlink = self.revlinktmpl % urllib.quote_plus(rev)
 
             timestamp, name, files, comments = [ r[1] for r in results ]
-            d = self.master.addChange(
+            d = self.add_change(
                    author=name,
                    revision=rev,
                    files=files,
                    comments=comments,
                    when_timestamp=epoch2datetime(timestamp),
-                   branch=self.branch,
-                   category=self.category,
-                   project=self.project,
-                   repository=self.repourl,
                    revlink=revlink)
             wfd = defer.waitForDeferred(d)
             yield wfd
             results = wfd.getResult()
+
+    def add_change(self, author, revision, files, comments, when_timestamp,
+                   revlink):
+        return self.master.addChange(
+               author=author,
+               revision=revision,
+               files=files,
+               comments=comments,
+               when_timestamp=when_timestamp,
+               branch=self.branch,
+               category=self.category,
+               project=self.project,
+               repository=self.repourl,
+               revlink=revlink)
 
     def _process_changes_failure(self, f):
         log.msg('gitpoller: repo poll failed')
