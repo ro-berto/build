@@ -500,6 +500,7 @@ class TestMatchAnnotation(unittest.TestCase):
     annotator.MatchAnnotation('@@@also not really an annotation@@', self.c)
     annotator.MatchAnnotation('#@@@totally not an annotation@@@', self.c)
     annotator.MatchAnnotation('###clearly not an annotation###', self.c)
+    annotator.MatchAnnotation('@@@', self.c)
     self.assertEqual(self.c.called, [])
 
   def testZeroAnnotated(self):
