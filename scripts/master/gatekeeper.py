@@ -176,25 +176,28 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
                      'users, so skipping.' % slave_name)
       return False
 
-    # If the tree is open, we don't want to close it again for the same
-    # revision, or an earlier one in case the build that just finished is a
-    # slow one and we already fixed the problem and manually opened the tree.
-    if git_repo:
-      this_rev, last_rev = git_repo.number(
-          latest_revision, self._last_closure_revision)
-      dbg = lambda m: GateKeeper.msg(m, logLevel=logging.DEBUG)
-      dbg('Git mode. Hash mapping:')
-      dbg('%s -> %s' % (latest_revision, this_rev))
-      dbg('%s -> %s' % (self._last_closure_revision, last_rev))
-    else:
-      this_rev = latest_revision
-      last_rev = self._last_closure_revision
-    if this_rev <= last_rev:
-      GateKeeper.msg('Slave %s failed, but we already closed it '
-              'for a previous revision (old=%s, new=%s)' % (
-                  slave_name, str(self._last_closure_revision),
-                  str(latest_revision)))
-      return False
+    # self._last_closure_revision can be a number (svn revision)
+    # or a string (git hash). Check for non-zero or non-empty value.
+    if self._last_closure_revision:
+      # If the tree is open, we don't want to close it again for the same
+      # revision, or an earlier one in case the build that just finished is a
+      # slow one and we already fixed the problem and manually opened the tree.
+      if git_repo:
+        this_rev, last_rev = git_repo.number(
+            latest_revision, self._last_closure_revision)
+        dbg = lambda m: GateKeeper.msg(m, logLevel=logging.DEBUG)
+        dbg('Git mode. Hash mapping:')
+        dbg('%s -> %s' % (latest_revision, this_rev))
+        dbg('%s -> %s' % (self._last_closure_revision, last_rev))
+      else:
+        this_rev = latest_revision
+        last_rev = self._last_closure_revision
+      if this_rev <= last_rev:
+        GateKeeper.msg('Slave %s failed, but we already closed it '
+                'for a previous revision (old=%s, new=%s)' % (
+                    slave_name, str(self._last_closure_revision),
+                    str(latest_revision)))
+        return False
 
     GateKeeper.msg('Decided to close tree because of slave %s '
             'on revision %s' % (slave_name, str(latest_revision)))
