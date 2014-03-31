@@ -135,11 +135,14 @@ GS_ARCHIVES = {
   'linux_nosnap_dbg_archive': 'gs://chromium-v8/v8-linux-nosnap-dbg',
   'linux64_rel_archive': 'gs://chromium-v8/v8-linux64-rel',
   'linux64_dbg_archive': 'gs://chromium-v8/v8-linux64-dbg',
+  'win32_rel_archive': 'gs://chromium-v8/v8-win32-rel',
+  'win32_dbg_archive': 'gs://chromium-v8/v8-win32-dbg',
 }
 
 BUILDERS = {
   'client.v8': {
     'builders': {
+####### Category: Linux
       'V8 Linux - builder': {
         'recipe_config': 'v8',
         'chromium_apply_config': ['verify_heap'],
@@ -329,6 +332,7 @@ BUILDERS = {
         'test_args': ['--shell_flags="--noenable-sse4-1"'],
         'testing': {'platform': 'linux'},
       },
+####### Category: Linux64
       'V8 Linux64': {
         'recipe_config': 'v8',
         'v8_config_kwargs': {
@@ -360,6 +364,73 @@ BUILDERS = {
         'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
         'testing': {'platform': 'linux'},
       },
+####### Category: Windows
+      'V8 Win32 - 1': {
+        'recipe_config': 'v8',
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Win32 - builder',
+        'build_gs_archive': 'win32_rel_archive',
+        'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
+        'test_args': ['--shard_count=2', '--shard_run=1'],
+        'testing': {'platform': 'win'},
+      },
+      'V8 Win32 - 2': {
+        'recipe_config': 'v8',
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Win32 - builder',
+        'build_gs_archive': 'win32_rel_archive',
+        'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
+        'test_args': ['--shard_count=2', '--shard_run=2'],
+        'testing': {'platform': 'win'},
+      },
+      'V8 Win32 - debug - 1': {
+        'recipe_config': 'v8',
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Win32 - debug builder',
+        'build_gs_archive': 'win32_dbg_archive',
+        'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
+        'test_args': ['--shard_count=3', '--shard_run=1'],
+        'testing': {'platform': 'win'},
+      },
+      'V8 Win32 - debug - 2': {
+        'recipe_config': 'v8',
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Win32 - debug builder',
+        'build_gs_archive': 'win32_dbg_archive',
+        'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
+        'test_args': ['--shard_count=3', '--shard_run=2'],
+        'testing': {'platform': 'win'},
+      },
+      'V8 Win32 - debug - 3': {
+        'recipe_config': 'v8',
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Win32 - debug builder',
+        'build_gs_archive': 'win32_dbg_archive',
+        'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
+        'test_args': ['--shard_count=3', '--shard_run=3'],
+        'testing': {'platform': 'win'},
+      },
+####### Category: Misc
       'V8 Linux64 ASAN': {
         'recipe_config': 'v8',
         'gclient_apply_config': ['clang'],
@@ -392,6 +463,7 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
       },
+####### Category: FYI
       'V8 Win32 - nosnap - shared': {
         'recipe_config': 'v8',
         'chromium_apply_config': ['vs', 'shared_library', 'no_snapshot'],
