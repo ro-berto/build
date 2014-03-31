@@ -574,10 +574,6 @@ def _SendResultsToDashboard(results_tracker, system, test, url, build_dir,
                             supplemental_columns_file, extra_columns=None):
   """Sends results from a results tracker (aka log parser) to the dashboard.
 
-  TODO(qyearsley): Change this function and results_dashboard.SendResults so
-  that only one request is made per test run (instead of one per graph name).
-  Also, maybe refactor this function to take fewer arguments.
-
   Args:
     results_tracker: An instance of a log parser class, which has been used to
         process the test output, so it contains the test results.
@@ -601,14 +597,11 @@ def _SendResultsToDashboard(results_tracker, system, test, url, build_dir,
                                                  supplemental_columns_file)
   if extra_columns:
     supplemental_columns.update(extra_columns)
-  for logname, log in results_tracker.PerformanceLogs().iteritems():
-    lines = [str(l).rstrip() for l in log]
-    try:
-      results_dashboard.SendResults(logname, lines, system, test, url,
-                                    mastername, buildername, buildnumber,
-                                    build_dir, supplemental_columns)
-    except NotImplementedError as e:
-      print 'Did not submit to results dashboard: %s' % e
+
+  logs_dict = results_tracker.PerformanceLogs()
+  results_dashboard.SendResults(logs_dict, system, test, url, mastername,
+                                buildername, buildername, buildnumber,
+                                build_dir, supplemental_columns)
 
 
 def _BuildCoverageGtestExclusions(options, args):
