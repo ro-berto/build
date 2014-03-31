@@ -490,6 +490,29 @@ BUILDERS = {
         'tests': ['v8testing'],
         'testing': {'platform': 'linux'},
       },
+      'v8_win_rel': {
+        'recipe_config': 'v8',
+        'chromium_apply_config': ['vs'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['v8testing'],
+        'testing': {'platform': 'win'},
+      },
+      'v8_mac_rel': {
+        'recipe_config': 'v8',
+        # TODO(machenbach): Pull applying xcode and vs to the configs.
+        'chromium_apply_config': ['xcode'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['v8testing'],
+        'testing': {'platform': 'mac'},
+      },
     },
   },
 }
@@ -548,6 +571,7 @@ def GenSteps(api):
 
   bot_type = bot_config.get('bot_type', 'builder_tester')
 
+  # TODO(machenbach): Implement --clobber-post-fail in the recipe.
   if bot_type in ['builder', 'builder_tester']:
     steps.append(api.v8.compile())
 

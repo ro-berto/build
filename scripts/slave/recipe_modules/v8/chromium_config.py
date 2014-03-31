@@ -34,9 +34,17 @@ def no_snapshot(c):
 def verify_heap(c):
   c.gyp_env.GYP_DEFINES['v8_enable_verify_heap'] = 1
 
+
 @CONFIG_CTX(includes=['v8'])
 def vs(c):
   if c.HOST_PLATFORM != 'win':  # pragma: no cover
     raise BadConf('can not use vs on "%s"' % c.HOST_PLATFORM)
   c.compile_py.build_tool = 'vs'
   c.build_dir = Path('[CHECKOUT]', 'build')
+
+
+@CONFIG_CTX(includes=['v8'])
+def xcode(c):
+  if c.HOST_PLATFORM != 'mac':
+    raise BadConf('can not use xcode on "%s"' % c.HOST_PLATFORM)
+  c.compile_py.build_tool = 'xcode'
