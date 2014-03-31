@@ -82,7 +82,7 @@
       "python",
       "-u",
       "\nimport shutil, sys\nshutil.rmtree(sys.argv[1])\n",
-      "[SLAVE_BUILD]\\v8\\out\\Release"
+      "[SLAVE_BUILD]\\v8\\build\\Release"
     ],
     "name": "rmtree build directory",
     "~followup_annotations": [

@@ -358,6 +358,7 @@ BUILDERS = {
 ####### Category: Windows
       'V8 Win32 - 1': {
         'recipe_config': 'v8',
+        'chromium_apply_config': ['vs'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -372,6 +373,7 @@ BUILDERS = {
       },
       'V8 Win32 - 2': {
         'recipe_config': 'v8',
+        'chromium_apply_config': ['vs'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -386,6 +388,7 @@ BUILDERS = {
       },
       'V8 Win32 - debug - 1': {
         'recipe_config': 'v8',
+        'chromium_apply_config': ['vs'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -400,6 +403,7 @@ BUILDERS = {
       },
       'V8 Win32 - debug - 2': {
         'recipe_config': 'v8',
+        'chromium_apply_config': ['vs'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -414,6 +418,7 @@ BUILDERS = {
       },
       'V8 Win32 - debug - 3': {
         'recipe_config': 'v8',
+        'chromium_apply_config': ['vs'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
