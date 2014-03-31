@@ -106,6 +106,7 @@
     "name": "Check"
   },
   {
+    "abort_on_failure": false,
     "cmd": [
       "python",
       "-u",

@@ -82,7 +82,7 @@ class V8Api(recipe_api.RecipeApi):
       cwd=self.m.path['checkout'],
     )
 
-  def _runtest(self, name, test, flaky_tests=None, test_args=None):
+  def _runtest(self, name, test, flaky_tests=None, test_args=None, **kwargs):
     test_args = test_args or []
     env = {}
     full_args = [
@@ -107,7 +107,8 @@ class V8Api(recipe_api.RecipeApi):
       self.m.path['build'].join('scripts', 'slave', 'v8', 'v8testing.py'),
       full_args,
       cwd=self.m.path['checkout'],
-      env=env
+      env=env,
+      **kwargs
     )
 
   def runtest(self, test, **kwargs):
@@ -115,7 +116,7 @@ class V8Api(recipe_api.RecipeApi):
       return [
         self._runtest(test['name'], test, flaky_tests='skip', **kwargs),
         self._runtest(test['name'] + ' - flaky', test, flaky_tests='run',
-                      **kwargs),
+                      abort_on_failure=False, **kwargs),
       ]
     else:
       return self._runtest(test['name'], test, **kwargs)

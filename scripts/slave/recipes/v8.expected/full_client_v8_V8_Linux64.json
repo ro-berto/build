@@ -132,6 +132,7 @@
     "name": "Check"
   },
   {
+    "abort_on_failure": false,
     "cmd": [
       "python",
       "-u",
@@ -168,6 +169,7 @@
     "name": "OptimizeForSize"
   },
   {
+    "abort_on_failure": false,
     "cmd": [
       "python",
       "-u",
@@ -204,6 +206,7 @@
     "name": "Webkit"
   },
   {
+    "abort_on_failure": false,
     "cmd": [
       "python",
       "-u",
