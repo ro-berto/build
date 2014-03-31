@@ -96,13 +96,7 @@
     "seed_steps": [
       "apply_issue",
       "gclient runhooks",
-      "compile",
-      "webkit_lint",
-      "webkit_python_tests",
-      "webkit_unit_tests",
-      "blink_platform_unittests",
-      "blink_heap_unittests",
-      "wtf_unittests"
+      "compile"
     ]
   },
   {
@@ -118,7 +112,8 @@
     "name": "gclient runhooks"
   },
   {
-    "abort_on_failure": true,
+    "abort_on_failure": false,
+    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -148,7 +143,15 @@
       "--target",
       "Debug"
     ],
-    "name": "webkit_lint"
+    "name": "webkit_lint",
+    "seed_steps": [
+      "webkit_lint",
+      "webkit_python_tests",
+      "webkit_unit_tests",
+      "blink_platform_unittests",
+      "blink_heap_unittests",
+      "wtf_unittests"
+    ]
   },
   {
     "cmd": [
