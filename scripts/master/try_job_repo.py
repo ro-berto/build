@@ -46,4 +46,3 @@ class TryJobRepoBase(TryJobBase):
     change = wfd.getResult()
 
     self.SubmitJob(options, [change.number])
-

@@ -32,6 +32,7 @@ class GitPoller(gitpoller.GitPoller):
     """
     return self.try_job.process_commit(**kwargs)
 
+
 class TryJobGit(TryJobRepoBase):
   """Poll a Git server to grab patches to try."""
   def __init__(self, name, pools, git_url, properties=None, workdir=None,

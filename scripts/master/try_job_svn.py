@@ -13,6 +13,7 @@ from common import chromium_utils
 from master.try_job_base import text_to_dict
 from master.try_job_repo import TryJobRepoBase
 
+
 class SVNPoller(svnpoller.SVNPoller):
   """A hook in svnpoller.SVNPoller for TryJobSubversion.
 
@@ -74,7 +75,6 @@ def findSingleDiff(files):
   # Implicitly skips over non-files like directories.
   diffs = [f for f in files if f.endswith(".diff")]
   if len(diffs) != 1:
-          # We only accept changes with 1 diff file.
+    # We only accept changes with 1 diff file.
     log.msg("Try job with too many files %s" % (','.join(files)))
   return diffs[0]
-
