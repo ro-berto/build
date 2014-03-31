@@ -10,15 +10,11 @@ all the tests always isolated even when not run on Swarming. This will take a
 while.
 """
 
-import json
 import logging
 import optparse
 import os
-import re
 import subprocess
 import sys
-
-from slave import build_directory
 
 
 USAGE = ('%s [options] /full/path/to/test.exe -- [original test command]' %
@@ -88,63 +84,6 @@ def run_command(command):
   return subprocess.call(command)
 
 
-def sanitize_build_dir(s, build_dir_basename):
-  """Replaces references to build directory in s with references to build_dir"""
-  return re.sub(r'\b(?:out|build|xcodebuild)([\\/](?:Debug|Release))',
-                build_dir_basename + r'\1', s)
-
-
-def sanitize_isolated_file(isolated_file, build_dir_basename):
-  """Crack open .isolated file and fix embedded paths, if necessary.
-
-  isolates assume that they can embed the build directory at build time and
-  still used that directory at test time. With a builder/tester setup, this
-  isn't generally true, so rewrite the paths in the isolated file. See
-  http://crbug.com/311622 for details. This can go away once all bots using
-  isolates are using ninja.
-
-  TODO(maruel): Do not forget to delete this code once the Windows incremental
-  builder is switched to ninja.
-  """
-  # See the isolates file format description at:
-  # https://code.google.com/p/swarming/wiki/IsolatedDesign#.isolated_file_format
-  with open(isolated_file) as f:
-    isolated_data = json.load(f)
-
-  # 1. check version
-  if isolated_data['version'].split('.', 1)[0] != '1':
-    logging.error('Unexpected isolate version %s', isolated_data['version'])
-    return 1
-
-  # 2. fix command, print it
-  for i in range(len(isolated_data['command'])):
-    arg = isolated_data['command'][i]
-    isolated_data['command'][i] = sanitize_build_dir(arg, build_dir_basename)
-
-  # 3. fix files
-  sanitized_files = {}
-  for key, value in isolated_data['files'].iteritems():
-    # a) fix key
-    key = sanitize_build_dir(key, build_dir_basename)
-    sanitized_files[key] = value
-    # b) fix 'l' entry
-    if 'l' in value:
-      value['l'] = sanitize_build_dir(value['l'], build_dir_basename)
-  isolated_data['files'] = sanitized_files
-
-  # 4. Fix variables->PRODUCT_DIR if necessary (only present in the .state file)
-  for name in ('path_variables', 'variables'):
-    variables = isolated_data.get(name, {})
-    if 'PRODUCT_DIR' in variables:
-      variables['PRODUCT_DIR'] = sanitize_build_dir(variables['PRODUCT_DIR'],
-                                                    build_dir_basename)
-
-  # TODO(thakis): fix 'includes' if necessary.
-
-  with open(isolated_file, 'w') as f:
-    json.dump(isolated_data, f)
-
-
 def run_test_isolated(isolate_script, test_exe, original_command):
   """Runs the test under isolate.py run.
 
@@ -159,16 +98,6 @@ def run_test_isolated(isolate_script, test_exe, original_command):
   if not os.path.exists(isolated_file):
     logging.error('No isolate file %s', isolated_file)
     return 1
-
-  # '/path/to/src/out' -> 'out'
-  build_dir_basename = os.path.basename(
-      build_directory.GetBuildOutputDirectory())
-  sanitize_isolated_file(isolated_file, build_dir_basename)
-
-  # Update the .isolated.state cache too.
-  cache_file = isolated_file + '.state'
-  if os.path.exists(cache_file):
-    sanitize_isolated_file(cache_file, build_dir_basename)
 
   isolate_command = [sys.executable, isolate_script,
                      'run', '--isolated', isolated_file,
