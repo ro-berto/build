@@ -109,8 +109,7 @@
       "ia32",
       "--testname",
       "mjsunit cctest message preparser",
-      "--isolates",
-      "on",
+      "--isolates=on",
       "--flaky-tests",
       "skip"
     ],
@@ -129,8 +128,7 @@
       "ia32",
       "--testname",
       "mjsunit cctest message preparser",
-      "--isolates",
-      "on",
+      "--isolates=on",
       "--flaky-tests",
       "run"
     ],

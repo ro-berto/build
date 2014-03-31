@@ -19,12 +19,10 @@ V8_TEST_CONFIGS = {
   'benchmarks': {
     'name': 'Benchmarks',
     'tests': 'benchmarks',
-    'flaky_step': False,
   },
   'mozilla': {
     'name': 'Mozilla',
     'tests': 'mozilla',
-    'flaky_step': False,
     'gclient_apply_config': ['mozilla_tests'],
   },
   'optimize_for_size': {
@@ -36,18 +34,11 @@ V8_TEST_CONFIGS = {
   'test262': {
     'name': 'Test262',
     'tests': 'test262',
-    'flaky_step': False,
   },
   'v8testing': {
     'name': 'Check',
     'tests': 'mjsunit cctest message preparser',
     'flaky_step': True,
-  },
-  'v8testing_try': {
-    'name': 'Check',
-    'tests': 'mjsunit cctest message preparser',
-    'flaky_step': False,
-    'test_args': ['--quickcheck'],
   },
   'webkit': {
     'name': 'Webkit',
@@ -230,6 +221,7 @@ BUILDERS = {
       },
       'V8 Linux - isolates': {
         'recipe_config': 'v8',
+        'v8_apply_config': ['isolates'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -238,11 +230,11 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - builder',
         'build_gs_archive': 'linux_rel_archive',
         'tests': ['v8testing'],
-        'test_args': ['--isolates', 'on'],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - nosse2': {
         'recipe_config': 'v8',
+        'v8_apply_config': ['nosse2'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -251,11 +243,11 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - builder',
         'build_gs_archive': 'linux_rel_archive',
         'tests': ['v8testing', 'test262', 'mozilla', 'gcmole'],
-        'test_args': ['--shell_flags="--noenable-sse2"'],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - nosse3': {
         'recipe_config': 'v8',
+        'v8_apply_config': ['nosse3'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -264,11 +256,11 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - builder',
         'build_gs_archive': 'linux_rel_archive',
         'tests': ['v8testing', 'test262', 'mozilla'],
-        'test_args': ['--shell_flags="--noenable-sse3"'],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - nosse4': {
         'recipe_config': 'v8',
+        'v8_apply_config': ['nosse4'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -277,11 +269,11 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - builder',
         'build_gs_archive': 'linux_rel_archive',
         'tests': ['v8testing', 'test262', 'mozilla'],
-        'test_args': ['--shell_flags="--noenable-sse4-1"'],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - debug - isolates': {
         'recipe_config': 'v8',
+        'v8_apply_config': ['isolates'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -290,11 +282,11 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
         'tests': ['v8testing'],
-        'test_args': ['--isolates', 'on'],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - debug - nosse2': {
         'recipe_config': 'v8',
+        'v8_apply_config': ['nosse2'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -303,11 +295,11 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
         'tests': ['v8testing', 'test262', 'mozilla'],
-        'test_args': ['--shell_flags="--noenable-sse2"'],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - debug - nosse3': {
         'recipe_config': 'v8',
+        'v8_apply_config': ['nosse3'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -316,11 +308,11 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
         'tests': ['v8testing', 'test262', 'mozilla'],
-        'test_args': ['--shell_flags="--noenable-sse3"'],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - debug - nosse4': {
         'recipe_config': 'v8',
+        'v8_apply_config': ['nosse4'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -329,7 +321,6 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
         'tests': ['v8testing', 'test262', 'mozilla'],
-        'test_args': ['--shell_flags="--noenable-sse4-1"'],
         'testing': {'platform': 'linux'},
       },
 ####### Category: Linux64
@@ -370,12 +361,13 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
+          'SHARD_COUNT': 2,
+          'SHARD_RUN': 1,
         },
         'bot_type': 'tester',
         'parent_buildername': 'V8 Win32 - builder',
         'build_gs_archive': 'win32_rel_archive',
         'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
-        'test_args': ['--shard_count=2', '--shard_run=1'],
         'testing': {'platform': 'win'},
       },
       'V8 Win32 - 2': {
@@ -383,12 +375,13 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
+          'SHARD_COUNT': 2,
+          'SHARD_RUN': 2,
         },
         'bot_type': 'tester',
         'parent_buildername': 'V8 Win32 - builder',
         'build_gs_archive': 'win32_rel_archive',
         'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
-        'test_args': ['--shard_count=2', '--shard_run=2'],
         'testing': {'platform': 'win'},
       },
       'V8 Win32 - debug - 1': {
@@ -396,12 +389,13 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
+          'SHARD_COUNT': 3,
+          'SHARD_RUN': 1,
         },
         'bot_type': 'tester',
         'parent_buildername': 'V8 Win32 - debug builder',
         'build_gs_archive': 'win32_dbg_archive',
         'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
-        'test_args': ['--shard_count=3', '--shard_run=1'],
         'testing': {'platform': 'win'},
       },
       'V8 Win32 - debug - 2': {
@@ -409,12 +403,13 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
+          'SHARD_COUNT': 3,
+          'SHARD_RUN': 2,
         },
         'bot_type': 'tester',
         'parent_buildername': 'V8 Win32 - debug builder',
         'build_gs_archive': 'win32_dbg_archive',
         'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
-        'test_args': ['--shard_count=3', '--shard_run=2'],
         'testing': {'platform': 'win'},
       },
       'V8 Win32 - debug - 3': {
@@ -422,12 +417,13 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
+          'SHARD_COUNT': 3,
+          'SHARD_RUN': 3,
         },
         'bot_type': 'tester',
         'parent_buildername': 'V8 Win32 - debug builder',
         'build_gs_archive': 'win32_dbg_archive',
         'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
-        'test_args': ['--shard_count=3', '--shard_run=3'],
         'testing': {'platform': 'win'},
       },
 ####### Category: Misc
@@ -486,7 +482,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing_try'],
+        'tests': ['v8testing'],
         'testing': {'platform': 'linux'},
       },
     },
@@ -521,6 +517,8 @@ def GenSteps(api):
     api.gclient.apply_config(c)
   for c in bot_config.get('chromium_apply_config', []):
     api.chromium.apply_config(c)
+  for c in bot_config.get('v8_apply_config', []):
+    api.v8.apply_config(c)
 
   # Test-specific configurations.
   for t in bot_config.get('tests', []):
@@ -528,6 +526,7 @@ def GenSteps(api):
 
   if api.tryserver.is_tryserver:
     api.chromium.apply_config('trybot_flavor')
+    api.v8.apply_config('trybot_flavor')
 
   if api.platform.is_win:
     yield api.chromium.taskkill()
@@ -566,10 +565,8 @@ def GenSteps(api):
         abort_on_failure=True,
         src_dir='v8'))
 
-  test_args = bot_config.get('test_args', [])
   if bot_type in ['tester', 'builder_tester']:
-    steps.extend([CreateTest(t).run(api, test_args=test_args)
-                  for t in bot_config.get('tests', [])])
+    steps.extend([CreateTest(t).run(api) for t in bot_config.get('tests', [])])
   yield steps
 
 

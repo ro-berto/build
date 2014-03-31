@@ -82,16 +82,26 @@ class V8Api(recipe_api.RecipeApi):
       cwd=self.m.path['checkout'],
     )
 
-  def _runtest(self, name, test, flaky_tests=None, test_args=None, **kwargs):
-    test_args = test_args or []
+  def _runtest(self, name, test, flaky_tests=None, **kwargs):
     env = {}
     full_args = [
       '--target', self.m.chromium.c.build_config_fs,
       '--arch', self.m.chromium.c.gyp_env.GYP_DEFINES['target_arch'],
       '--testname', test['tests'],
     ]
-    full_args += test_args
+
+    # Add test-specific test arguments.
     full_args += test.get('test_args', [])
+
+    # Add builder-specific test arguments.
+    full_args += self.c.testing.test_args
+
+    if self.c.testing.SHARD_COUNT > 1:
+      full_args += [
+        '--shard_count=%d' % self.c.testing.SHARD_COUNT,
+        '--shard_run=%d' % self.c.testing.SHARD_RUN,
+      ]
+
     if flaky_tests:
       full_args += ['--flaky-tests', flaky_tests]
 
@@ -112,7 +122,14 @@ class V8Api(recipe_api.RecipeApi):
     )
 
   def runtest(self, test, **kwargs):
-    if test['flaky_step']:
+    # Get the flaky-step configuration default per test.
+    flaky_step = test.get('flaky_step', False)
+
+    # Overwrite the flaky-step configuration on a per builder basis as some
+    # types of builders (e.g. branch, try) don't have any flaky steps.
+    if self.c.testing.flaky_step is not None:
+      flaky_step = self.c.testing.flaky_step
+    if flaky_step:
       return [
         self._runtest(test['name'], test, flaky_tests='skip', **kwargs),
         self._runtest(test['name'] + ' - flaky', test, flaky_tests='run',
