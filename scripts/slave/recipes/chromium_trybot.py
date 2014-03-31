@@ -164,7 +164,6 @@ def GenSteps(api):
       return api.chromium.runtest(
           self.name,
           args,
-          annotate='gtest',
           xvfb=True,
           name=self._step_name(suffix),
           parallel=True,
