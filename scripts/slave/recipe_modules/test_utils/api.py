@@ -101,11 +101,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
           always_run=True)
       elif t.failures('with patch'):
         failing_tests.append(t)
-      else:
-        yield self.m.python.inline(
-          t.name,
-          'print "ALL IS WELL"',
-          always_run=True)
     if not failing_tests:
       return
 

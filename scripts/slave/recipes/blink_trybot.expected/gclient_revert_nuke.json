@@ -432,18 +432,5 @@
       "@@@STEP_LINK@layout_test_results@https://storage.googleapis.com/chromium-layout-test-archives/linux_blink_rel/571/layout-test-results/results.html@@@",
       "@@@STEP_LINK@(zip)@https://storage.googleapis.com/chromium-layout-test-archives/linux_blink_rel/571/layout-test-results.zip@@@"
     ]
-  },
-  {
-    "always_run": true,
-    "cmd": [
-      "python",
-      "-u",
-      "print \"ALL IS WELL\""
-    ],
-    "name": "webkit_tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@print \"ALL IS WELL\"@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
   }
 ]
