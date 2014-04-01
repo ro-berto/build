@@ -20,6 +20,8 @@ def GenSteps(api):
   assert isinstance(version_name, basestring) and version_name, (
       'Could not get a valid version name.')
 
+  yield api.chromium_android.dump_version()
+
   yield api.chromium_android.envsetup()
   yield api.chromium_android.runhooks()
   yield api.chromium_android.compile()

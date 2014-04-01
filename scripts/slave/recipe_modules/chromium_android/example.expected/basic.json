@@ -77,6 +77,12 @@
   },
   {
     "cmd": [
+      "true"
+    ],
+    "name": "Version: some_builder_1234"
+  },
+  {
+    "cmd": [
       "[BUILD]/scripts/slave/env_dump.py",
       "--output-json",
       "/path/to/tmp/json",

@@ -129,6 +129,9 @@ class AndroidApi(recipe_api.RecipeApi):
     app_manifest_vars = self.m.step_history['get app_manifest_vars']
     return app_manifest_vars.json.output['version_name']
 
+  def dump_version(self):
+    yield self.m.step('Version: %s' % str(self.version_name), ['true'])
+
   def envsetup(self):
     envsetup_cmd = [self.m.path['checkout'].join('build',
                                                  'android',
