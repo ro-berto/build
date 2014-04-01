@@ -25,20 +25,43 @@ scheduler_name = 'libyuv_scheduler'
 S(scheduler_name, branch='trunk', treeStableTimer=60)
 
 test_targets = ['libyuv_unittest']
-ninja_options = ['--build-tool=ninja']
-win_msvs_missing_files_factory_properties = {
-    'gclient_env': {'GYP_GENERATOR_FLAGS': 'msvs_error_on_missing_sources=1'}}
+win_msvs_2010_factory_properties = {
+    'gclient_env': {
+        'GYP_MSVS_VERSION': '2010',
+        'GYP_GENERATOR_FLAGS': 'msvs_error_on_missing_sources=1',
+    },
+}
+win_msvs_2010_x64_factory_properties = {
+    'gclient_env': {
+        'GYP_DEFINES': 'target_arch=x64',
+        'GYP_MSVS_VERSION': '2010',
+        'GYP_GENERATOR_FLAGS': 'msvs_error_on_missing_sources=1',
+    },
+}
 win_msvs_2012_factory_properties = {
     'gclient_env': {
-        'GYP_GENERATORS': 'ninja',
         'GYP_MSVS_VERSION': '2012',
+        'GYP_GENERATOR_FLAGS': 'msvs_error_on_missing_sources=1',
     },
 }
 win_msvs_2012_x64_factory_properties = {
     'gclient_env': {
         'GYP_DEFINES': 'target_arch=x64',
-        'GYP_GENERATORS': 'ninja',
         'GYP_MSVS_VERSION': '2012',
+        'GYP_GENERATOR_FLAGS': 'msvs_error_on_missing_sources=1',
+    },
+}
+win_msvs_2013_factory_properties = {
+    'gclient_env': {
+        'GYP_MSVS_VERSION': '2013',
+        'GYP_GENERATOR_FLAGS': 'msvs_error_on_missing_sources=1',
+    },
+}
+win_msvs_2013_x64_factory_properties = {
+    'gclient_env': {
+        'GYP_DEFINES': 'target_arch=x64',
+        'GYP_MSVS_VERSION': '2013',
+        'GYP_GENERATOR_FLAGS': 'msvs_error_on_missing_sources=1',
     },
 }
 
@@ -55,42 +78,36 @@ asan_gclient_env = {
 # Windows.
 defaults['category'] = 'win'
 
-B('Win32 Debug', 'win32_debug_factory', scheduler=scheduler_name)
-F('win32_debug_factory', win().LibyuvFactory(
+B('Win32 Debug (VS2010)', 'win32_2010_debug_factory',
+  scheduler=scheduler_name)
+F('win32_2010_debug_factory', win().LibyuvFactory(
     target='Debug',
-    options=ninja_options,
     tests=test_targets,
-    factory_properties=win_msvs_missing_files_factory_properties))
+    factory_properties=win_msvs_2010_factory_properties))
 
-B('Win32 Release', 'win32_release_factory', scheduler=scheduler_name)
-F('win32_release_factory', win().LibyuvFactory(
+B('Win32 Release (VS2010)', 'win32_2010_release_factory',
+  scheduler=scheduler_name)
+F('win32_2010_release_factory', win().LibyuvFactory(
     target='Release',
-    options=ninja_options,
     tests=test_targets,
-    factory_properties=win_msvs_missing_files_factory_properties))
+    factory_properties=win_msvs_2010_factory_properties))
 
-B('Win64 Debug', 'win64_debug_factory', scheduler=scheduler_name)
-F('win64_debug_factory', win().LibyuvFactory(
+B('Win64 Debug (VS2010)', 'win64_2010_debug_factory', scheduler=scheduler_name)
+F('win64_2010_debug_factory', win().LibyuvFactory(
     target='Debug_x64',
-    options=ninja_options,
     tests=test_targets,
-    factory_properties={
-        'gclient_env': {'GYP_DEFINES': 'target_arch=x64'},
-    }))
+    factory_properties=win_msvs_2010_x64_factory_properties))
 
-B('Win64 Release', 'win64_release_factory', scheduler=scheduler_name)
-F('win64_release_factory', win().LibyuvFactory(
+B('Win64 Release (VS2010)', 'win64_2010_release_factory',
+  scheduler=scheduler_name)
+F('win64_2010_release_factory', win().LibyuvFactory(
     target='Release_x64',
-    options=ninja_options,
     tests=test_targets,
-    factory_properties={
-        'gclient_env': {'GYP_DEFINES': 'target_arch=x64'},
-    }))
+    factory_properties=win_msvs_2010_x64_factory_properties))
 
 B('Win32 Debug (VS2012)', 'win32_2012_debug_factory', scheduler=scheduler_name)
 F('win32_2012_debug_factory', win().LibyuvFactory(
     target='Debug',
-    options=ninja_options,
     tests=test_targets,
     factory_properties=win_msvs_2012_factory_properties))
 
@@ -98,15 +115,12 @@ B('Win32 Release (VS2012)', 'win32_2012_release_factory',
   scheduler=scheduler_name)
 F('win32_2012_release_factory', win().LibyuvFactory(
     target='Release',
-    options=ninja_options,
     tests=test_targets,
     factory_properties=win_msvs_2012_factory_properties))
 
-B('Win64 Debug (VS2012)', 'win64_2012_debug_factory',
-  scheduler=scheduler_name)
+B('Win64 Debug (VS2012)', 'win64_2012_debug_factory', scheduler=scheduler_name)
 F('win64_2012_debug_factory', win().LibyuvFactory(
     target='Debug_x64',
-    options=ninja_options,
     tests=test_targets,
     factory_properties=win_msvs_2012_x64_factory_properties))
 
@@ -114,9 +128,34 @@ B('Win64 Release (VS2012)', 'win64_2012_release_factory',
   scheduler=scheduler_name)
 F('win64_2012_release_factory', win().LibyuvFactory(
     target='Release_x64',
-    options=ninja_options,
     tests=test_targets,
     factory_properties=win_msvs_2012_x64_factory_properties))
+
+B('Win32 Debug (VS2013)', 'win32_2013_debug_factory', scheduler=scheduler_name)
+F('win32_2013_debug_factory', win().LibyuvFactory(
+    target='Debug',
+    tests=test_targets,
+    factory_properties=win_msvs_2013_factory_properties))
+
+B('Win32 Release (VS2013)', 'win32_2013_release_factory',
+  scheduler=scheduler_name)
+F('win32_2013_release_factory', win().LibyuvFactory(
+    target='Release',
+    tests=test_targets,
+    factory_properties=win_msvs_2013_factory_properties))
+
+B('Win64 Debug (VS2013)', 'win64_2013_debug_factory', scheduler=scheduler_name)
+F('win64_2013_debug_factory', win().LibyuvFactory(
+    target='Debug_x64',
+    tests=test_targets,
+    factory_properties=win_msvs_2013_x64_factory_properties))
+
+B('Win64 Release (VS2013)', 'win64_2013_release_factory',
+  scheduler=scheduler_name)
+F('win64_2013_release_factory', win().LibyuvFactory(
+    target='Release_x64',
+    tests=test_targets,
+    factory_properties=win_msvs_2013_x64_factory_properties))
 
 # Mac.
 defaults['category'] = 'mac'
@@ -124,19 +163,16 @@ defaults['category'] = 'mac'
 B('Mac32 Debug', 'mac32_debug_factory', scheduler=scheduler_name)
 F('mac32_debug_factory', mac().LibyuvFactory(
     target='Debug',
-    options=ninja_options,
     tests=test_targets))
 
 B('Mac32 Release', 'mac32_release_factory', scheduler=scheduler_name)
 F('mac32_release_factory', mac().LibyuvFactory(
     target='Release',
-    options=ninja_options,
     tests=test_targets))
 
 B('Mac64 Debug', 'mac64_debug_factory', scheduler=scheduler_name)
 F('mac64_debug_factory', mac().LibyuvFactory(
     target='Debug',
-    options=ninja_options,
     tests=test_targets,
     factory_properties={
         'gclient_env': {'GYP_DEFINES': 'host_arch=x64 target_arch=x64'},
@@ -145,7 +181,6 @@ F('mac64_debug_factory', mac().LibyuvFactory(
 B('Mac64 Release', 'mac64_release_factory', scheduler=scheduler_name)
 F('mac64_release_factory', mac().LibyuvFactory(
     target='Release',
-    options=ninja_options,
     tests=test_targets,
     factory_properties={
         'gclient_env': {'GYP_DEFINES': 'host_arch=x64 target_arch=x64'},
@@ -154,7 +189,6 @@ F('mac64_release_factory', mac().LibyuvFactory(
 B('Mac Asan', 'mac_asan_factory', scheduler=scheduler_name)
 F('mac_asan_factory', mac().LibyuvFactory(
     target='Release',
-    options=ninja_options,
     tests=test_targets,
     factory_properties={
         'asan': True,
@@ -164,13 +198,11 @@ F('mac_asan_factory', mac().LibyuvFactory(
 B('iOS Debug', 'ios_debug_factory', scheduler=scheduler_name)
 F('ios_debug_factory', mac_ios().LibyuvFactory(
     target='Debug-iphoneos',
-    options=ninja_options,
     factory_properties=mac_ios_factory_properties))
 
 B('iOS Release', 'ios_release_factory', scheduler=scheduler_name)
 F('ios_release_factory', mac_ios().LibyuvFactory(
     target='Release-iphoneos',
-    options=ninja_options,
     factory_properties=mac_ios_factory_properties))
 
 # Linux.
@@ -179,40 +211,35 @@ defaults['category'] = 'linux'
 B('Linux32 Debug', 'linux32_debug_factory', scheduler=scheduler_name)
 F('linux32_debug_factory', linux().LibyuvFactory(
     target='Debug',
-    options=ninja_options,
     tests=test_targets,
     factory_properties={'gclient_env': {'GYP_DEFINES': 'target_arch=ia32'}}))
 
 B('Linux32 Release', 'linux32_release_factory', scheduler=scheduler_name)
 F('linux32_release_factory', linux().LibyuvFactory(
     target='Release',
-    options=ninja_options,
     tests=test_targets,
     factory_properties={'gclient_env': {'GYP_DEFINES': 'target_arch=ia32'}}))
 
 B('Linux64 Debug', 'linux64_debug_factory', scheduler=scheduler_name)
 F('linux64_debug_factory', linux().LibyuvFactory(
     target='Debug',
-    options=ninja_options,
     tests=test_targets))
 
 B('Linux64 Release', 'linux64_release_factory', scheduler=scheduler_name)
 F('linux64_release_factory', linux().LibyuvFactory(
     target='Release',
-    options=ninja_options,
     tests=test_targets))
 
 B('Linux Clang', 'linux_clang_factory', scheduler=scheduler_name)
 F('linux_clang_factory', linux().LibyuvFactory(
     target='Debug',
-    options=ninja_options + ['--compiler=clang'],
+    options=['--compiler=clang'],
     tests=test_targets,
     factory_properties={'gclient_env': {'GYP_DEFINES': 'clang=1'}}))
 
 B('Linux Memcheck', 'linux_memcheck_factory', scheduler=scheduler_name)
 F('linux_memcheck_factory', linux().LibyuvFactory(
     target='Release',
-    options=ninja_options,
     tests=test_targets,
     factory_properties={
         'needs_valgrind': True,
@@ -222,7 +249,6 @@ F('linux_memcheck_factory', linux().LibyuvFactory(
 B('Linux Tsan', 'linux_tsan_factory', scheduler=scheduler_name)
 F('linux_tsan_factory', linux().LibyuvFactory(
     target='Release',
-    options=ninja_options,
     tests=test_targets,
     factory_properties={
         'needs_valgrind': True,
@@ -232,7 +258,7 @@ F('linux_tsan_factory', linux().LibyuvFactory(
 B('Linux Asan', 'linux_asan_factory', scheduler=scheduler_name)
 F('linux_asan_factory', linux().LibyuvFactory(
     target='Release',
-    options=ninja_options,
+    options=['--compiler=clang'],
     tests=test_targets,
     factory_properties={
         'asan': True,
@@ -260,7 +286,6 @@ F('android_release_factory', android().ChromiumAnnotationFactory(
 B('Chrome OS', 'chromeos_factory', scheduler=scheduler_name)
 F('chromeos_factory', linux().LibyuvFactory(
     target='Debug',
-    options=ninja_options,
     tests=test_targets,
     factory_properties={'gclient_env': {'GYP_DEFINES': 'chromeos=1'}}))
 
