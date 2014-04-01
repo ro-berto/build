@@ -485,6 +485,48 @@ BUILDERS = {
         'tests': ['v8testing'],
         'testing': {'platform': 'linux'},
       },
+      'v8_linux_dbg': {
+        'recipe_config': 'v8',
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['v8testing'],
+        'testing': {'platform': 'linux'},
+      },
+      'v8_linux_nosnap_rel': {
+        'recipe_config': 'v8',
+        'chromium_apply_config': ['no_snapshot'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['v8testing'],
+        'testing': {'platform': 'linux'},
+      },
+      'v8_linux_nosnap_dbg': {
+        'recipe_config': 'v8',
+        'chromium_apply_config': ['no_snapshot'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['v8testing'],
+        'testing': {'platform': 'linux'},
+      },
+      'v8_linux64_rel': {
+        'recipe_config': 'v8',
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['v8testing'],
+        'testing': {'platform': 'linux'},
+      },
       'v8_win_rel': {
         'recipe_config': 'v8',
         'v8_config_kwargs': {
@@ -504,6 +546,28 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'tests': ['v8testing'],
         'testing': {'platform': 'mac'},
+      },
+      'v8_linux_arm_dbg': {
+        'recipe_config': 'v8',
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['v8testing'],
+        'testing': {'platform': 'linux'},
+      },
+      'v8_linux_arm64_rel': {
+        'recipe_config': 'v8',
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['v8testing'],
+        'testing': {'platform': 'linux'},
       },
     },
   },

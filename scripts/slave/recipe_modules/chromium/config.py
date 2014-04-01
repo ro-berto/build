@@ -135,7 +135,7 @@ def BASE(c):
     ('intel', 32): 'ia32',
     ('intel', 64): 'x64',
     ('arm',   32): 'arm',
-    ('arm',   64): 'arm',
+    ('arm',   64): 'arm64',
     ('mipsel',  32): 'mipsel',
     ('mipsel',  64): 'mipsel',
   }.get((c.TARGET_ARCH, c.TARGET_BITS))
