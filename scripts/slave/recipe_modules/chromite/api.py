@@ -18,6 +18,26 @@ class ChromiteApi(recipe_api.RecipeApi):
       self.m.repo.sync(),
     )
 
+  def cbuildbot(self, name, config, flags=None, chromite_path=None, **kwargs):
+    """Return a step to run a command inside the cros_sdk."""
+    chromite_path = (chromite_path or
+                     self.m.path['slave_build'].join(self.chromite_subpath))
+    arg_list = []
+    for k, v in sorted((flags or {}).items()):
+      if v is not None:
+        arg_list.append('--%s=%s' % (k, v))
+      else:
+        arg_list.append('--%s' % k)
+
+    arg_list.append(config)
+
+    cmd = self.m.path.join(chromite_path, 'bin', 'cbuildbot')
+
+    # TODO(petermayo): Wrap this nested annotation in a stabilizing wrapper.
+    return self.m.python(name, cmd, arg_list, allow_subannotations=True,
+                         **kwargs)
+
+
   def cros_sdk(self, name, cmd, flags=None, environ=None, chromite_path=None,
                  **kwargs):
     """Return a step to run a command inside the cros_sdk."""

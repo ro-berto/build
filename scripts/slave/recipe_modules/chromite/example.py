@@ -17,6 +17,8 @@ def GenSteps(api):
     api.chromite.build_packages(board),
     api.chromite.cros_sdk('cros_sdk', ['echo', 'hello'],
                           environ={ 'var1': 'value' }),
+    api.chromite.cbuildbot('cbuildbot', board + '-release',
+                           flags={'clobber': None, 'build-dir': '/here/there'}),
   )
 
 

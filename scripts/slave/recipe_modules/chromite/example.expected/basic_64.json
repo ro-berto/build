@@ -14,7 +14,8 @@
       "repo sync",
       "setup board",
       "build packages",
-      "cros_sdk"
+      "cros_sdk",
+      "cbuildbot"
     ]
   },
   {
@@ -61,5 +62,17 @@
       "hello"
     ],
     "name": "cros_sdk"
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/chromite/bin/cbuildbot",
+      "--build-dir=/here/there",
+      "--clobber",
+      "amd64-generic-release"
+    ],
+    "name": "cbuildbot"
   }
 ]
