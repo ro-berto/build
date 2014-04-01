@@ -332,6 +332,7 @@ def GenSteps(api):
       )
 
     if should_run_gn:
+      yield api.path.makedirs('slave gn build directory', gn_output_dir)
       yield api.path.rmcontents('slave gn build directory', gn_output_dir)
       yield api.chromium.run_gn(gn_output_arg)
       yield api.chromium.compile_with_ninja(
