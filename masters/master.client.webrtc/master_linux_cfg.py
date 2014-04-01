@@ -142,7 +142,7 @@ F('linux_asan_factory', linux().WebRTCFactory(
         'force_isolated': True,
         'gclient_env': {
             'GYP_DEFINES': ('asan=1 release_extra_cflags=-g '
-                            'linux_use_tcmalloc=0 ')},
+                            'use_allocator=none ')},
     }))
 
 B('Linux64 Release [large tests]', 'linux_largetests_factory',

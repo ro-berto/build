@@ -102,11 +102,10 @@ F('mac_asan_factory', mac().WebRTCFactory(
     target='Release',
     options=options,
     tests=tests,
-    factory_properties={'asan': True,
-                        'gclient_env':
-                        {'GYP_DEFINES': ('asan=1'
-                                         ' release_extra_cflags=-g '
-                                         ' linux_use_tcmalloc=0 ')}}))
+    factory_properties={
+        'asan': True,
+        'gclient_env': {'GYP_DEFINES': 'asan=1 release_extra_cflags=-g'},
+    }))
 
 B('Mac32 Release [large tests]', 'mac_largetests_factory',
   'compile|baremetal', scheduler)

@@ -72,9 +72,6 @@ mac_ios_factory_properties = {
     }
 }
 
-asan_gclient_env = {
-    'GYP_DEFINES': ('asan=1 release_extra_cflags=-g linux_use_tcmalloc=0 ')}
-
 # Windows.
 defaults['category'] = 'win'
 
@@ -192,7 +189,7 @@ F('mac_asan_factory', mac().LibyuvFactory(
     tests=test_targets,
     factory_properties={
         'asan': True,
-        'gclient_env': asan_gclient_env.copy(),
+        'gclient_env': {'GYP_DEFINES': 'asan=1 release_extra_cflags=-g'},
     }))
 
 B('iOS Debug', 'ios_debug_factory', scheduler=scheduler_name)
@@ -262,7 +259,9 @@ F('linux_asan_factory', linux().LibyuvFactory(
     tests=test_targets,
     factory_properties={
         'asan': True,
-        'gclient_env': asan_gclient_env.copy(),
+        'gclient_env': {
+            'GYP_DEFINES': 'asan=1 release_extra_cflags=-g use_allocator=none',
+        },
     }))
 
 # Android.

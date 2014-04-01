@@ -50,8 +50,7 @@ F('linux_tsan2_factory', linux().WebRTCFactory(
         'tsan_suppressions_file':
             'src/tools/valgrind-webrtc/tsan_v2/suppressions.txt',
         'gclient_env': {
-            'GYP_DEFINES': ('tsan=1 linux_use_tcmalloc=0 '
-                            'release_extra_cflags="-gline-tables-only"'),
+            'GYP_DEFINES': 'tsan=1 use_allocator=none release_extra_cflags=-g',
     }}))
 
 B('Linux TsanRV', 'linux_tsan_rv_factory', scheduler=scheduler)
@@ -74,8 +73,8 @@ F('linux_lsan_factory', linux().WebRTCFactory(
         'gclient_env': {
             'GYP_DEFINES': ('asan=1 '
                             'lsan=1 '
-                            'linux_use_tcmalloc=0 '
-                            'release_extra_cflags="-gline-tables-only" ')}}))
+                            'use_allocator=none '
+                            'release_extra_cflags=-g ')}}))
 
 
 def Update(c):
