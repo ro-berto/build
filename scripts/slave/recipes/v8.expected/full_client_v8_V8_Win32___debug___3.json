@@ -52,7 +52,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "target_arch=ia32 v8_target_arch=ia32",
+      "GYP_DEFINES": "target_arch=ia32 v8_optimized_debug=1 v8_target_arch=ia32",
       "GYP_MSVS_VERSION": "2010"
     },
     "name": "gclient runhooks",

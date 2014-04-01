@@ -426,6 +426,47 @@ BUILDERS = {
         'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
         'testing': {'platform': 'win'},
       },
+####### Category: Mac
+      'V8 Mac': {
+        'recipe_config': 'v8',
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
+        'testing': {'platform': 'mac'},
+      },
+      'V8 Mac - debug': {
+        'recipe_config': 'v8',
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
+        'testing': {'platform': 'mac'},
+      },
+      'V8 Mac64': {
+        'recipe_config': 'v8',
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
+        'testing': {'platform': 'mac'},
+      },
+      'V8 Mac64 - debug': {
+        'recipe_config': 'v8',
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
+        'testing': {'platform': 'mac'},
+      },
 ####### Category: Misc
       'V8 Linux64 ASAN': {
         'recipe_config': 'v8',
@@ -470,6 +511,17 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'tests': ['v8testing'],
         'testing': {'platform': 'win'},
+      },
+      'V8 Mac - full debug': {
+        'recipe_config': 'v8',
+        'chromium_apply_config': ['no_optimized_debug'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['v8testing', 'webkit', 'mozilla'],
+        'testing': {'platform': 'mac'},
       },
     },
   },
@@ -610,6 +662,7 @@ def GenSteps(api):
 
   if api.tryserver.is_tryserver:
     api.chromium.apply_config('trybot_flavor')
+    api.chromium.apply_config('optimized_debug')
     api.v8.apply_config('trybot_flavor')
 
   if api.platform.is_win:

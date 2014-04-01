@@ -44,19 +44,17 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "target_arch=x64 v8_optimized_debug=1 v8_target_arch=x64"
+      "GYP_DEFINES": "target_arch=ia32 v8_optimized_debug=0 v8_target_arch=ia32"
     },
     "name": "gclient runhooks",
     "seed_steps": [
       "gclient runhooks",
       "cleanup_temp",
-      "rmtree build directory",
-      "extract build",
+      "compile",
       "Check",
       "Check - flaky",
       "Webkit",
       "Webkit - flaky",
-      "Test262",
       "Mozilla"
     ]
   },
@@ -69,38 +67,20 @@
     "name": "cleanup_temp"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil, sys\nshutil.rmtree(sys.argv[1])\n",
-      "[SLAVE_BUILD]/v8/out/Debug"
-    ],
-    "name": "rmtree build directory",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import shutil, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
     "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/extract_build.py",
+      "[BUILD]/scripts/slave/compile.py",
       "--target",
       "Debug",
-      "--build-url",
-      "gs://chromium-v8/v8-linux64-dbg",
       "--src-dir",
-      "v8",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8 Linux64 - debug\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": \"V8 Linux64 - debug builder\", \"recipe\": \"v8\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8 Linux64 - debug\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": \"V8 Linux64 - debug builder\", \"recipe\": \"v8\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "[SLAVE_BUILD]/v8",
+      "--build-tool",
+      "xcode",
+      "--"
     ],
-    "name": "extract build"
+    "name": "compile"
   },
   {
     "cmd": [
@@ -110,7 +90,7 @@
       "--target",
       "Debug",
       "--arch",
-      "x64",
+      "ia32",
       "--testname",
       "mjsunit cctest message preparser",
       "--flaky-tests",
@@ -128,7 +108,7 @@
       "--target",
       "Debug",
       "--arch",
-      "x64",
+      "ia32",
       "--testname",
       "mjsunit cctest message preparser",
       "--flaky-tests",
@@ -145,7 +125,7 @@
       "--target",
       "Debug",
       "--arch",
-      "x64",
+      "ia32",
       "--testname",
       "webkit",
       "--flaky-tests",
@@ -163,7 +143,7 @@
       "--target",
       "Debug",
       "--arch",
-      "x64",
+      "ia32",
       "--testname",
       "webkit",
       "--flaky-tests",
@@ -180,22 +160,7 @@
       "--target",
       "Debug",
       "--arch",
-      "x64",
-      "--testname",
-      "test262"
-    ],
-    "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Test262"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/v8/v8testing.py",
-      "--target",
-      "Debug",
-      "--arch",
-      "x64",
+      "ia32",
       "--testname",
       "mozilla"
     ],

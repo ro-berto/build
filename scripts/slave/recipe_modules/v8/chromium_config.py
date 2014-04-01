@@ -17,12 +17,15 @@ def v8(c):
   del c.gyp_env.GYP_DEFINES['component']
   c.build_dir = Path('[CHECKOUT]', 'out')
   c.compile_py.build_tool = 'make'
-  
+
   if c.HOST_PLATFORM == 'mac':
     c.compile_py.build_tool = 'xcode'
   elif c.HOST_PLATFORM == 'win':
     c.compile_py.build_tool = 'vs'
     c.build_dir = Path('[CHECKOUT]', 'build')
+
+  if c.BUILD_CONFIG == 'Debug':
+    c.gyp_env.GYP_DEFINES['v8_optimized_debug'] = 1
 
 
 @CONFIG_CTX(includes=['v8'])
@@ -33,6 +36,18 @@ def no_lsan(c):
 @CONFIG_CTX(includes=['v8'])
 def no_snapshot(c):
   c.gyp_env.GYP_DEFINES['v8_use_snapshot'] = 'false'
+
+
+@CONFIG_CTX(includes=['v8'])
+def no_optimized_debug(c):
+  if c.BUILD_CONFIG == 'Debug':
+    c.gyp_env.GYP_DEFINES['v8_optimized_debug'] = 0
+
+
+@CONFIG_CTX(includes=['v8'])
+def optimized_debug(c):
+  if c.BUILD_CONFIG == 'Debug':
+    c.gyp_env.GYP_DEFINES['v8_optimized_debug'] = 2
 
 
 @CONFIG_CTX(includes=['v8'])
