@@ -3,27 +3,9 @@
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  * */
-div.april-fools {
-  -webkit-text-stroke-color: rgb(255, 255, 255);
-  -webkit-text-stroke-width: 2px;
-  color: rgb(239, 78, 145);
-  font-family: "Comic Sans MS" !important;
-  font-size: 40px;
-  font-style: normal;
-  font-variant: normal;
-  font-weight: bold;
-  height: 180px;
-  letter-spacing: 2px;
-  line-height: normal;
-  text-align: center;
-}
 
 body {
   margin-bottom:50px;
-  background: linear-gradient(#EE4035 50px, #F37737 60px, #F37737 110px, #F9E97A
-  120px, #F9E97A 170px, #7AC043 180px, #7AC043 230px, #7AC043 240px, #9ED9F7
-  250px);
-  background-attachment: fixed;
 }
 
 body, td {
@@ -128,7 +110,7 @@ td.Time {
 
 td.Activity, td.Change, td.Builder {
   color: #333333;
-  background-color: #68b3ff;
+  background-color: #CCCCCC;
 }
 
 td.Change.webkit {
@@ -190,7 +172,7 @@ td.DevRev {
   border-top-left-radius: 5px;
   -webkit-border-top-left-radius: 5px;
   -moz-border-radius-topleft: 5px;
-  background-color: #ffb4d9;
+  background-color: #eee;
   width: 1%;
 }
 
@@ -203,7 +185,7 @@ td.DevRevCollapse {
 td.DevName {
   padding: 4px 8px 4px 8px;
   color: #333333;
-  background-color: #ffb4d9;
+  background-color: #eee;
   width: 1%;
   text-align: left;
 }
@@ -211,13 +193,13 @@ td.DevName {
 td.DevStatus {
   padding: 4px 4px 4px 4px;
   color: #333333;
-  background-color: #ffb4d9;
+  background-color: #eee;
 }
 
 td.DevSlave {
   padding: 4px 4px 4px 4px;
   color: #333333;
-  background-color: #ffb4d9;
+  background-color: #eee;
 }
 
 td.first {
@@ -250,7 +232,7 @@ td.DevDetails {
   font-weight: normal;
   padding: 8px 8px 8px 8px;
   color: #333333;
-  background-color: #ffb4d9;
+  background-color: #eee;
   text-align: left;
 }
 
@@ -264,12 +246,12 @@ td.DevComment {
   border-bottom-left-radius: 5px;
   -webkit-border-bottom-left-radius: 5px;
   -moz-border-radius-bottomleft: 5px;
-  background-color: #ffb4d9;
+  background-color: #eee;
   text-align: left;
 }
 
 td.Alt {
-  background-color: #ff69b4;
+  background-color: #CCCCCC;
 }
 
 .legend {
@@ -554,7 +536,7 @@ table.info td.left {
 }
 
 .alt {
-  background-color: #ffb4d9;
+  background-color: #eee;
 }
 
 li {
