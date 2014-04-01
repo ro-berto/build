@@ -170,8 +170,8 @@ class AutoRoller(object):
 
   def _start_roll(self, new_roll_revision):
     safely_roll_path = \
-      self._path_from_chromium_root('tools', 'safely-roll-blink.py')
-    safely_roll_args = [safely_roll_path, new_roll_revision]
+      self._path_from_chromium_root('tools', 'safely-roll-deps.py')
+    safely_roll_args = [safely_roll_path, 'blink', new_roll_revision]
 
     emails = self._emails_to_cc_on_rolls()
     if emails:
@@ -179,8 +179,8 @@ class AutoRoller(object):
     subprocess.check_call(map(str, safely_roll_args))
 
     # FIXME: It's easier to pull the issue id from rietveld rather than
-    # parse it from the safely-roll-blink output.  Once we inline
-    # safely-roll-blink into this script this can go away.
+    # parse it from the safely-roll-deps output.  Once we inline
+    # safely-roll-deps into this script this can go away.
     search_result = self._search_for_active_roll()
     self._rietveld.add_comment(search_result['issue'],
       self.ROLL_BOT_INSTRUCTIONS)
