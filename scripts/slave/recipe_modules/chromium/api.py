@@ -89,7 +89,7 @@ class ChromiumApi(recipe_api.RecipeApi):
               generate_json_file=False, results_directory=None,
               python_mode=False, spawn_dbus=True, parallel=False,
               revision=None, webkit_revision=None, master_class_name=None,
-              **kwargs):
+              test_launcher_summary_output=None, **kwargs):
     """Return a runtest.py invocation."""
     args = args or []
     assert isinstance(args, list)
@@ -117,6 +117,11 @@ class ChromiumApi(recipe_api.RecipeApi):
       full_args.append('--generate-json-file')
     if results_directory:
       full_args.append('--results-directory=%s' % results_directory)
+    if test_launcher_summary_output:
+      full_args.extend([
+        '--test-launcher-summary-output',
+        test_launcher_summary_output
+      ])
     # These properties are specified on every bot, so pass them down
     # unconditionally.
     full_args.append('--builder-name=%s' % self.m.properties['buildername'])

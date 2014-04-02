@@ -155,7 +155,7 @@ def GenSteps(api):
               ['failures:', r.failures]
           ])
 
-      args = [api.json.gtest_results(add_json_log=False)]
+      args = []
 
       if suffix == 'without patch':
         args.append(api.chromium.test_launcher_filter(
@@ -164,6 +164,9 @@ def GenSteps(api):
       return api.chromium.runtest(
           self.name,
           args,
+          annotate='gtest',
+          test_launcher_summary_output=api.json.gtest_results(
+              add_json_log=False),
           xvfb=True,
           name=self._step_name(suffix),
           parallel=True,
