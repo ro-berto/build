@@ -3,8 +3,10 @@
 # found in the LICENSE file.
 
 DEPS = [
+  'git',
   'path',
   'properties',
+  'python',
   'raw_io',
   'rietveld',
   'step',

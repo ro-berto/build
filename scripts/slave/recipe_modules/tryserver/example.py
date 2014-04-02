@@ -16,7 +16,15 @@ def GenSteps(api):
 
 def GenTests(api):
   yield (api.test('with_svn_patch') +
-    api.properties(patch_url='svn://checkout.url'))
+         api.properties(patch_url='svn://checkout.url'))
+
+  yield (api.test('with_git_patch') +
+         api.properties(
+              patch_storage='git',
+              patch_repo_url='http://patch.url/',
+              patch_ref='johndoe#123.diff'))
 
   yield (api.test('with_rietveld_patch') +
-    api.properties.tryserver())
+         api.properties.tryserver())
+
+  yield (api.test('with_wrong_patch'))
