@@ -11,10 +11,12 @@ import json
 import optparse
 import os
 import pprint
+import re
 import shutil
 import socket
 import subprocess
 import sys
+import tempfile
 import time
 import urllib2
 import urlparse
@@ -30,6 +32,18 @@ RECOGNIZED_PATHS = {
         'https://chromium.googlesource.com/chromium/src.git',
     '/chrome-internal/trunk/src-internal':
         'https://chrome-internal.googlesource.com/chrome/src-internal.git'
+}
+
+# Copied from scripts/recipes/chromium.py.
+GOT_REVISION_MAPPINGS = {
+    '/chrome/trunk/src': {
+        'src/': 'got_revision',
+        'src/native_client/': 'got_nacl_revision',
+        'src/tools/swarm_client/': 'got_swarm_client_revision',
+        'src/tools/swarming_client/': 'got_swarming_client_revision',
+        'src/third_party/WebKit/': 'got_webkit_revision',
+        'src/third_party/webrtc/': 'got_webrtc_revision',
+    }
 }
 
 
@@ -270,12 +284,20 @@ def solutions_printer(solutions):
 
 
 def solutions_to_git(input_solutions):
-  """Modifies urls in solutions to point at Git repos."""
+  """Modifies urls in solutions to point at Git repos.
+
+  returns: (git solution, svn root of first solution) tuple.
+  """
+  assert input_solutions
   solutions = copy.deepcopy(input_solutions)
+  first_solution = True
   for solution in solutions:
     original_url = solution['url']
     parsed_url = urlparse.urlparse(original_url)
     parsed_path = parsed_url.path
+    if first_solution:
+      root = parsed_path
+      first_solution = False
     if parsed_path in RECOGNIZED_PATHS:
       solution['url'] = RECOGNIZED_PATHS[parsed_path]
     else:
@@ -283,7 +305,7 @@ def solutions_to_git(input_solutions):
     if solution.get('deps_file', 'DEPS') == 'DEPS':
       solution['deps_file'] = '.DEPS.git'
     solution['managed'] = False
-  return solutions
+  return solutions, root
 
 
 def ensure_no_checkout(dir_names, scm_dirname):
@@ -321,10 +343,12 @@ def gclient_configure(solutions):
     f.write(get_gclient_spec(solutions))
 
 
-def gclient_sync():
+def gclient_sync(output_json):
   gclient_bin = 'gclient.bat' if sys.platform.startswith('win') else 'gclient'
   call(gclient_bin, 'sync', '--verbose', '--reset', '--force',
-       '--nohooks', '--noprehooks')
+       '--nohooks', '--noprehooks', '--output-json', output_json)
+  with open(output_json) as f:
+    return json.load(f)
 
 
 def create_less_than_or_equal_regex(number):
@@ -397,6 +421,15 @@ def create_less_than_or_equal_regex(number):
   return regex
 
 
+def get_svn_rev(git_hash, dir_name):
+  pattern = r'^\s*git-svn-id: [^ ]*@(\d+) '
+  log = git('log', '-1', git_hash, cwd=dir_name)
+  match = re.search(pattern, log, re.M)
+  if not match:
+    return None
+  return int(match.group(1))
+
+
 def get_git_hash(revision, dir_name):
   match = "^git-svn-id: [^ ]*@%s " % create_less_than_or_equal_regex(revision)
   cmd = ['log', '-E', '--grep', match, '--format=%H', '--max-count=1']
@@ -405,6 +438,15 @@ def get_git_hash(revision, dir_name):
     return results[0]
   raise Exception('We can\'t resolve svn revision %s into a git hash' %
                   revision)
+
+
+def get_revision_mapping(root, addl_rev_map):
+  result = {}
+  if root in GOT_REVISION_MAPPINGS:
+    result.update(GOT_REVISION_MAPPINGS[root])
+  if addl_rev_map:
+    result.update(addl_rev_map)
+  return result
 
 
 def _last_commit_for_file(filename, repo_base):
@@ -459,8 +501,9 @@ def ensure_deps2git(sln_dir, shallow):
   call(*cmd)
 
 
-def emit_got_revision(revision):
-  print '@@@SET_BUILD_PROPERTY@got_revision@"%s"@@@' % revision
+def emit_properties(properties):
+  for property_name, property_value in properties.iteritems():
+    print '@@@SET_BUILD_PROPERTY@%s@"%s"@@@' % (property_name, property_value)
 
 
 # Derived from:
@@ -489,7 +532,7 @@ def get_total_disk_space():
     return (total, free)
 
 
-def git_checkout(solutions, revision, shallow, sub_annotations):
+def git_checkout(solutions, revision, shallow):
   build_dir = os.getcwd()
   # Before we do anything, break all git_cache locks.
   if path.isdir(CACHE_DIR):
@@ -531,8 +574,6 @@ def git_checkout(solutions, revision, shallow, sub_annotations):
     git('pull', 'origin', 'master', cwd=sln_dir)
     # TODO(hinoka): We probably have to make use of revision mapping.
     if first_solution and revision and revision.lower() != 'head':
-      if sub_annotations:
-        emit_got_revision(revision)
       if revision and revision.isdigit() and len(revision) < 40:
         # rev_num is really a svn revision number, convert it into a git hash.
         git_ref = get_git_hash(int(revision), name)
@@ -569,16 +610,13 @@ def apply_issue_svn(root, patch_url):
 def apply_issue_rietveld(issue, patchset, root, server, rev_map, revision):
   apply_issue_bin = ('apply_issue.bat' if sys.platform.startswith('win')
                      else 'apply_issue')
-  rev_map = json.loads(rev_map)
-  if root in rev_map and rev_map[root] == 'got_revision':
-    rev_map[root] = revision
   call(apply_issue_bin,
        '--root_dir', root,
        '--issue', issue,
        '--patchset', patchset,
        '--no-auth',
        '--server', server,
-       '--revision-mapping', json.dumps(rev_map),
+       '--revision-mapping', rev_map,
        '--base_ref', revision,
        '--force')
 
@@ -601,13 +639,40 @@ def emit_flag(flag_file):
     f.write('Success!')
 
 
-def ensure_emit_json(out_file, did_run, **kwargs):
+def parse_got_revision(gclient_output, got_revision_mapping, use_svn_revs):
+  """Translate git gclient revision mapping to build properties.
+
+  If use_svn_revs is True, then translate git hashes in the revision mapping
+  to svn revision numbers.
+  """
+  properties = {}
+  solutions_output = gclient_output['solutions']
+  for dir_name, property_name in got_revision_mapping.iteritems():
+    if dir_name not in solutions_output:
+      continue
+    solution_output = solutions_output[dir_name]
+    assert solution_output.get('scm') == 'git'
+    git_revision = solution_output['revision']
+    if use_svn_revs:
+      revision = get_svn_rev(git_revision, dir_name)
+      if not revision:
+        revision = git_revision
+    else:
+      revision = git_revision
+
+    properties[property_name] = revision
+
+  return properties
+
+
+def emit_json(out_file, did_run, gclient_output=None, **kwargs):
   """Write run information into a JSON file."""
-  if out_file:
-    output = {'did_run': did_run}
-    output.update(kwargs)
-    with open(out_file, 'wb') as f:
-      f.write(json.dumps(output))
+  output = {}
+  output.update(gclient_output if gclient_output else {})
+  output.update({'did_run': did_run})
+  output.update(kwargs)
+  with open(out_file, 'wb') as f:
+    f.write(json.dumps(output))
 
 
 def parse_args():
@@ -679,7 +744,7 @@ def main():
   specs = {}
   exec(options.specs, specs)
   svn_solutions = specs.get('solutions', [])
-  git_solutions = solutions_to_git(svn_solutions)
+  git_solutions, svn_root = solutions_to_git(svn_solutions)
   solutions_printer(git_solutions)
 
   dir_names = [sln.get('name') for sln in svn_solutions if 'name' in sln]
@@ -687,7 +752,9 @@ def main():
   # run) or vice versa, blow away all checkouts.
   if bool(active) != bool(check_flag(options.flag_file)):
     ensure_no_checkout(dir_names, '*')
-  ensure_emit_json(options.output_json, did_run=active)
+  if options.output_json:
+    # Make sure we tell recipes that we didn't run if the script exits here.
+    emit_json(options.output_json, did_run=active)
   if active:
     ensure_no_checkout(dir_names, '.svn')
     emit_flag(options.flag_file)
@@ -713,32 +780,53 @@ def main():
   # Calling git directory because there is no way to run Gclient without
   # invoking DEPS.
   print 'Fetching Git checkout'
-  got_revision = git_checkout(git_solutions, options.revision, options.shallow,
-                              options.output_json is None)
+  git_ref = git_checkout(git_solutions, options.revision, options.shallow)
 
+  # By default, the root should be the name of the first solution, but
+  # also make it overridable.
   options.root =  options.root or dir_names[0]
+
+  # If either patch_url or issue is passed in, then we need to apply a patch.
   if options.patch_url:
+    # patch_url takes precidence since its only passed in on gcl try/git try.
     apply_issue_svn(options.root, options.patch_url)
   elif options.issue:
     apply_issue_rietveld(options.issue, options.patchset, options.root,
                          options.rietveld_server, options.revision_mapping,
-                         got_revision)
+                         git_ref)
 
   # Run deps2git if there is a DEPS commit after the last .DEPS.git commit.
   ensure_deps2git(options.root, options.shallow)
 
+  # Ensure our build/ directory is set up with the correct .gclient file.
   gclient_configure(git_solutions)
-  gclient_sync()
 
-  # Tell recipes information such as root, got_revision, etc.
-  properties = {
-      'got_revision': got_revision
-  }
-  ensure_emit_json(options.output_json,
-                   did_run=True,
-                   root=options.root,
-                   step_text=step_text,
-                   properties=properties)
+  # Let gclient do the DEPS syncing.  Also we can get "got revision" data
+  # from gclient by passing in --output-json.  In our case, we can just reuse
+  # the temp file that
+  _, gclient_output_file = tempfile.mkstemp(suffix='.json')
+  gclient_output = gclient_sync(gclient_output_file)
+
+  # If we're fed an svn revision number as --revision, then our got_revision
+  # output should be in svn revs.  Otherwise it'll be in git hashes.
+  use_svn_rev = (options.revision and options.revision.isdigit() and
+                 len(options.revision) < 40)
+  # Take care of got_revisions outputs.
+  revision_mapping = get_revision_mapping(svn_root,
+                                          json.loads(options.revision_mapping))
+  got_revisions = parse_got_revision(gclient_output, revision_mapping,
+                                     use_svn_rev)
+
+  if options.output_json:
+    # Tell recipes information such as root, got_revision, etc.
+    emit_json(options.output_json,
+              did_run=True,
+              root=options.root,
+              step_text=step_text,
+              properties=got_revisions)
+  else:
+    # If we're not on recipes, tell annotator about our got_revisions.
+    emit_properties(got_revisions)
 
 
 if __name__ == '__main__':
