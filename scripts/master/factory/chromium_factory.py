@@ -198,52 +198,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       [('src/data/mozilla_js_tests', None)],
   }
 
-  # Minimal deps for running PyAuto.
-  # http://dev.chromium.org/developers/pyauto
-  PYAUTO_DEPS = \
-      [('src/chrome/test/data',
-        config.Master.trunk_url + '/src/chrome/test/data'),
-       ('src/chrome/test/pyautolib',
-        config.Master.trunk_url + '/src/chrome/test/pyautolib'),
-       ('src/chrome/test/functional',
-        config.Master.trunk_url + '/src/chrome/test/functional'),
-       ('src/content/test/data',
-        config.Master.trunk_url + '/src/content/test/data'),
-       ('src/third_party/simplejson',
-        config.Master.trunk_url + '/src/third_party/simplejson'),
-       ('src/net/data/ssl/certificates',
-        config.Master.trunk_url + '/src/net/data/ssl/certificates'),
-       ('src/net/tools/testserver',
-        config.Master.trunk_url + '/src/net/tools/testserver'),
-       # It would be better to use config.Master.googlecode_url here.
-       # But it causes QA buildbot failures on Mac beta and stable.
-       # See http://crbug.com/155918#c21 .
-       ('src/third_party/pyftpdlib/src',
-        'http://pyftpdlib.googlecode.com/svn/trunk'),
-       ('src/third_party/pywebsocket/src',
-        'http://pywebsocket.googlecode.com/svn/trunk/src'),
-       ('src/third_party/tlslite',
-        config.Master.trunk_url + '/src/third_party/tlslite'),
-       ('src/third_party/python_26',
-        config.Master.trunk_url + '/tools/third_party/python_26'),
-       ('src/chrome/test/data/media/avperf',
-        config.Master.trunk_url + '/deps/avperf'),
-       ('webdriver.DEPS',
-        config.Master.trunk_url + '/src/chrome/test/pyautolib/' +
-            'webdriver.DEPS'),
-        ]
-  # Extend if we can.
   # pylint: disable=E1101
   if config.Master.trunk_internal_url:
-    PYAUTO_DEPS.append(('src/content/test/data/plugin',
-                        config.Master.trunk_internal_url +
-                        '/data/chrome_plugin_tests'))
-    PYAUTO_DEPS.append(('src/chrome/test/data/pyauto_private',
-                        config.Master.trunk_internal_url +
-                        '/data/pyauto_private'))
-    PYAUTO_DEPS.append(('src/data/page_cycler',
-                        config.Master.trunk_internal_url +
-                        '/data/page_cycler'))
     CUSTOM_DEPS_DEVTOOLS_PERF.append(('src/data/devtools_test_pages',
                                       config.Master.trunk_internal_url +
                                       '/data/devtools_test_pages'))
