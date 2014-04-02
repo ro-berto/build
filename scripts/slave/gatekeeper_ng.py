@@ -79,14 +79,24 @@ def check_builds(master_builds, master_jsons, gatekeeper_config):
       elif '*' in gatekeeper_section:
         gatekeeper = gatekeeper_section['*']
       else:
-        gatekeeper = {}
+        continue
+
+      # Check if the buildername is in the excluded builder list and disable if
+      # so.
+      if build_json['builderName'] in gatekeeper.get('excluded_builders', []):
+        continue
 
       steps = build_json['steps']
-      forgiving = set(gatekeeper.get('forgiving_steps', []))
-      forgiving_optional = set(gatekeeper.get('forgiving_optional', []))
-      closing_steps = set(gatekeeper.get('closing_steps', [])) | forgiving
-      closing_optional = set(
-          gatekeeper.get('closing_optional', [])) | forgiving_optional
+      excluded_steps = set(gatekeeper.get('excluded_steps', []))
+      forgiving = set(gatekeeper.get('forgiving_steps', [])) - excluded_steps
+      forgiving_optional = (
+          set(gatekeeper.get('forgiving_optional', [])) - excluded_steps)
+      closing_steps = (
+          set(gatekeeper.get('closing_steps', [])) | forgiving) - excluded_steps
+      closing_optional = (
+          (set(gatekeeper.get('closing_optional', [])) | forgiving_optional) -
+          excluded_steps
+      )
       tree_notify = set(gatekeeper.get('tree_notify', []))
       sheriff_classes = set(gatekeeper.get('sheriff_classes', []))
       subject_template = gatekeeper.get('subject_template',
@@ -103,9 +113,9 @@ def check_builds(master_builds, master_jsons, gatekeeper_config):
       finished_steps = set(s['name'] for s in finished)
 
       if '*' in forgiving_optional:
-        forgiving_optional = finished_steps
+        forgiving_optional = (finished_steps - excluded_steps)
       if '*' in closing_optional:
-        closing_optional = finished_steps
+        closing_optional = (finished_steps - excluded_steps)
 
       unsatisfied_steps = closing_steps - successful_steps
       failed_steps = finished_steps - successful_steps

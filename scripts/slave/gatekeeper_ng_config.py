@@ -130,19 +130,25 @@ def load_gatekeeper_config(filename):
   """Loads and verifies config json, constructs builder config dict."""
 
   # Keys which are allowed in a master or builder section.
-  master_keys = ['forgive_all',
-                 'tree_notify',
+  master_keys = ['excluded_builders',
+                 'excluded_steps',
+                 'forgive_all',
                  'sheriff_classes',
-                 'subject_template']
+                 'subject_template',
+                 'tree_notify',
+  ]
 
   builder_keys = ['closing_optional',
                   'closing_steps',
+                  'excluded_builders',
+                  'excluded_steps',
+                  'forgive_all',
                   'forgiving_optional',
                   'forgiving_steps',
-                  'forgive_all',
                   'sheriff_classes',
                   'subject_template',
-                  'tree_notify']
+                  'tree_notify',
+  ]
 
   # These keys are strings instead of sets. Strings can't be merged,
   # so more specific (master -> category -> builder) strings clobber

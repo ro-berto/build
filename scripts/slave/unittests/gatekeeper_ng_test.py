@@ -620,6 +620,39 @@ class GatekeeperTest(unittest.TestCase):
     urls = self.call_gatekeeper()
     self.assertNotIn(self.set_status_url, urls)
 
+  def testExcludedStepsDontCloseTree(self):
+    """Test that excluded steps don't call to the status app."""
+    sys.argv.extend([m.url for m in self.masters])
+    sys.argv.extend(['--skip-build-db-update',
+                     '--no-email-app', '--set-status',
+                     '--password-file', self.status_secret_file])
+
+    self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
+    self.add_gatekeeper_section(self.masters[0].url,
+                                self.masters[0].builders[0].name,
+                                {'closing_steps': ['step1'],
+                                 'excluded_steps': ['step1']})
+
+    urls = self.call_gatekeeper()
+    self.assertNotIn(self.set_status_url, urls)
+
+  def testExcludedBuildersDontCloseTree(self):
+    """Test that excluded steps don't call to the status app."""
+    sys.argv.extend([m.url for m in self.masters])
+    sys.argv.extend(['--skip-build-db-update',
+                     '--no-email-app', '--set-status',
+                     '--password-file', self.status_secret_file])
+
+    self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
+    self.add_gatekeeper_section(self.masters[0].url,
+                                self.masters[0].builders[0].name,
+                                {'closing_steps': ['step1'],
+                                 'excluded_builders': [
+                                     self.masters[0].builders[0].name]})
+
+    urls = self.call_gatekeeper()
+    self.assertNotIn(self.set_status_url, urls)
+
   def testOpenTree(self):
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
@@ -797,8 +830,8 @@ class GatekeeperTest(unittest.TestCase):
         self.masters[0].url, 'mybuilder')
     self.assertEquals(finished_new_builds,
                       {2: build_scan_db.gen_build(finished=True, triggered={
-                          '0e321975189099b8f623a4dc29602e76'
-                          'f33fd8f5bacf3c7018d0499214372e5b': ['step1']})})
+                          'a1bd1970bea6d5842d437e745a9cb701'
+                          '8383103b7219c31480283bd4f9d7abc5': ['step1']})})
 
     # Check that gatekeeper indeed sent an email.
     self.assertEquals(self.url_calls[-1]['url'], self.mailer_url)
@@ -1387,8 +1420,8 @@ class GatekeeperTest(unittest.TestCase):
                       {1: build_scan_db.gen_build(finished=True)})
     self.assertEquals(unfinished_new_builds,
                       {2: build_scan_db.gen_build(triggered={
-                          '0e321975189099b8f623a4dc29602e76'
-                          'f33fd8f5bacf3c7018d0499214372e5b': ['step1']})})
+                          'a1bd1970bea6d5842d437e745a9cb701'
+                          '8383103b7219c31480283bd4f9d7abc5': ['step1']})})
 
     self.assertIn(self.set_status_url, urls)
 
@@ -1442,8 +1475,8 @@ class GatekeeperTest(unittest.TestCase):
                       {0: build_scan_db.gen_build(finished=True)})
     self.assertEquals(unfinished_new_builds,
                       {1: build_scan_db.gen_build(triggered={
-                          '0e321975189099b8f623a4dc29602e76'
-                          'f33fd8f5bacf3c7018d0499214372e5b': ['step1']})})
+                          'a1bd1970bea6d5842d437e745a9cb701'
+                          '8383103b7219c31480283bd4f9d7abc5': ['step1']})})
     self.assertEquals(1, len([u for u in urls if u == self.set_status_url]))
 
   def testTriggeringOneHashDoesntStopAnother(self):
@@ -1478,11 +1511,11 @@ class GatekeeperTest(unittest.TestCase):
                       {1: build_scan_db.gen_build(finished=True)})
     self.assertEquals(unfinished_new_builds,
                       {2: build_scan_db.gen_build(triggered={
-                          '0e321975189099b8f623a4dc29602e76'
-                          'f33fd8f5bacf3c7018d0499214372e5b': ['step1'],
+                          'a1bd1970bea6d5842d437e745a9cb701'
+                          '8383103b7219c31480283bd4f9d7abc5': ['step1'],
 
-                          'fbe3ad95b8cb242309b17896ad2c3ba0'
-                          '2999a22ca5f7b8c7887878b611679cd5': ['step2']})})
+                          'cd2f7fdc2777964cf9bc9b170288ad45'
+                          'ece8dd81a5d16b1e2110e5e260038f21': ['step2']})})
     self.assertEquals(2, len([u for u in urls if u == self.set_status_url]))
 
   def testTriggerIsRemovedIfNoFailure(self):
@@ -1564,8 +1597,8 @@ class GatekeeperTest(unittest.TestCase):
         self.masters[0].url, 'mybuilder')
     self.assertEquals(finished_new_builds,
                       {2: build_scan_db.gen_build(finished=True, triggered={
-                          '46d698c94742f1578471bd52a26053f6'
-                          'ff0083a441560fdb029647945d5032dc': ['step1'],
+                          'b7f70fbea8581aa38b2b42d3f6973f9b'
+                          'dd1e2c8fa01ecc257261b3b3f6ab6d85': ['step1'],
                           })})
     self.assertEquals(unfinished_new_builds, {})
 
@@ -1597,8 +1630,8 @@ class GatekeeperTest(unittest.TestCase):
         self.masters[0].url, 'mybuilder')
     self.assertEquals(finished_new_builds,
                       {2: build_scan_db.gen_build(finished=True, triggered={
-                          '46d698c94742f1578471bd52a26053f6'
-                          'ff0083a441560fdb029647945d5032dc': [u'step2']})})
+                          'b7f70fbea8581aa38b2b42d3f6973f9b'
+                          'dd1e2c8fa01ecc257261b3b3f6ab6d85': [u'step2']})})
     self.assertEquals(unfinished_new_builds, {})
 
   def testRecordsAllFailuresInBuild(self):
@@ -1627,8 +1660,8 @@ class GatekeeperTest(unittest.TestCase):
         self.masters[0].url, 'mybuilder')
     self.assertEquals(unfinished_new_builds,
                       {1: build_scan_db.gen_build(triggered={
-                          '46d698c94742f1578471bd52a26053f6'
-                          'ff0083a441560fdb029647945d5032dc': [
+                          'b7f70fbea8581aa38b2b42d3f6973f9b'
+                          'dd1e2c8fa01ecc257261b3b3f6ab6d85': [
                               'step1', 'step2']})})
 
   ### JSON config file tests.
