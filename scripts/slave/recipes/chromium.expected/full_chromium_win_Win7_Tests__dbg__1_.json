@@ -108,7 +108,7 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil, sys\nshutil.rmtree(sys.argv[1])\n",
+      "\nimport os, shutil, sys\nif os.path.exists(sys.argv[1]):\n  shutil.rmtree(sys.argv[1])\n",
       "[SLAVE_BUILD]\\src\\out\\Debug"
     ],
     "name": "rmtree build directory",
@@ -120,8 +120,9 @@
     ],
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import shutil, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[1])@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, shutil, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  shutil.rmtree(sys.argv[1])@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
   },
