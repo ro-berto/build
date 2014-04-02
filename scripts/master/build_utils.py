@@ -55,7 +55,7 @@ def getLatestRevision(build, git_repo=None):
     return None
 
   if git_repo:
-    with_numbers = zip(revisions, git_repo.number(revisions))
+    with_numbers = zip(revisions, git_repo.number(*revisions))
     return max(with_numbers, lambda t: t[1])[0]
   else:
     return max(revisions)

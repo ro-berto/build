@@ -92,7 +92,7 @@ class GitHelper(object):
   def _run(self, cmd, **kwargs):
     """Runs a git command and returns its output."""
     kwargs.setdefault('cwd', self.dir)
-    cmd = ['git'] + cmd
+    cmd = ['git'] + map(str, cmd)
     logging.debug('Running %s', ' '.join(repr(tok) for tok in cmd))
     out = subprocess.check_output(
         cmd, stderr=subprocess.STDOUT, **kwargs)
