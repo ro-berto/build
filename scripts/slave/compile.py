@@ -121,7 +121,7 @@ def goma_setup(options, env):
   # this feature can improve compile performance.
   # If this experiment succeeds, I'll enable this in all Win/Mac platforms.
   if hostname.lower() in ['build28-m1', 'build58-m1']:
-    patterns = 'win_toolchain\\vs2013_files,third_party'
+    patterns = r'win_toolchain\vs2013_files,third_party,src\chrome,src\content'
     env['GOMA_GLOBAL_FILEID_CACHE_PATTERNS'] = patterns
 
   # goma is requested.
