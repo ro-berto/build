@@ -104,7 +104,7 @@ def goma_setup(options, env):
   # Goma, as doing so is currently overloading machines and hurting the
   # waterfall. Remove this as soon as that is fixed. (12 June, 2013).
   env['NO_NACL_GOMA'] = 'true'
-  hostname = socket.gethostname().split('.')[0]
+  hostname = socket.gethostname().split('.')[0].lower()
   # Linux
   if hostname in ['slave%d-c4' % i for i in range(300, 400)]:
     del env['NO_NACL_GOMA']
