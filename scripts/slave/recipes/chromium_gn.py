@@ -11,17 +11,18 @@ DEPS = [
 
 
 def GenSteps(api):
-  api.gclient.set_config('chromium')
-  yield api.gclient.checkout(revert=True)
-
-  # TODO(dpranke): The build_config should probably be a property passed
-  # in from slaves.cfg, but that doesn't exist today, so we need a lookup
-  # mechanism to map bot name to build_config.
+  # TODO: crbug.com/358481 . The build_config should probably be a property
+  # passed in from slaves.cfg, but that doesn't exist today, so we need a
+  # lookup mechanism to map bot name to build_config.
   build_config = {
     'Linux GN (dbg)': 'Debug',
   }[api.properties.get('buildername')]
 
+  api.gclient.set_config('chromium')
   api.chromium.set_config('chromium', BUILD_CONFIG=build_config)
+
+  yield api.gclient.checkout(revert=True)
+
   yield api.chromium.runhooks(run_gyp=False)
 
   yield api.chromium.run_gn('//out/' + build_config)
@@ -34,16 +35,13 @@ def GenSteps(api):
 
 def GenTests(api):
   yield (
-      api.test('unittest_basic') +
+      api.test('unittest_success') +
       api.properties.generic(buildername='Linux GN (dbg)') +
       api.platform.name('linux')
   )
 
-  # TODO(dpranke): This test should actually produce the same result
-  # as the previous test, but it specifically matches what is run
-  # on the "Linux GN (dbg)" bot. We should have one 'simulation' test
-  # for each bot config. Ideally this should live somewhere else
-  # closer to the master tests.
+  # TODO: crbug.com/354674. Figure out where to put "simulation"
+  # tests. We should have one test for each bot this recipe runs on.
   yield (
       api.test('full_chromium_linux_Linux_GN__dbg_') +
       api.properties.generic(buildername='Linux GN (dbg)') +
