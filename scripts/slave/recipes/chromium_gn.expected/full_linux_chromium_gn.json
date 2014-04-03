@@ -35,6 +35,8 @@
       "--nohooks",
       "--delete_unversioned_trees",
       "--force",
+      "--revision",
+      "src@HEAD",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -72,6 +74,26 @@
     ]
   },
   {
+    "abort_on_failure": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/apply_issue.py",
+      "-r",
+      "[SLAVE_BUILD]/src",
+      "-i",
+      "12853011",
+      "-p",
+      "1",
+      "-s",
+      "https://codereview.chromium.org",
+      "--no-auth"
+    ],
+    "name": "apply_issue"
+  },
+  {
+    "abort_on_failure": false,
+    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
