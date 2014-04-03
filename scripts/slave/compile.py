@@ -11,6 +11,7 @@
   For a list of command-line options, call this script with '--help'.
 """
 
+import binascii
 import datetime
 import errno
 import multiprocessing
@@ -105,14 +106,8 @@ def goma_setup(options, env):
   # waterfall. Remove this as soon as that is fixed. (12 June, 2013).
   env['NO_NACL_GOMA'] = 'true'
   hostname = socket.gethostname().split('.')[0].lower()
-  # Linux
-  if hostname in ['slave%d-c4' % i for i in range(300, 400)]:
-    del env['NO_NACL_GOMA']
-  # Mac
-  if hostname in ['vm%d-m4' % i for i in range(700, 710)]:
-    del env['NO_NACL_GOMA']
-  # Win
-  if hostname in ['vm%d-m4' % i for i in range(300, 310)]:
+  # roughly 10% experiment on removing the env.
+  if binascii.crc32(hostname) % 100 <= 10:
     del env['NO_NACL_GOMA']
 
   # HACK(shinyak, goma): Enable GLOBAL_FILEID_CACHE_PATTERNS only in
