@@ -103,7 +103,7 @@ F('linux64_release_factory', linux().WebRTCFactory(
 B('Linux Clang', 'linux_clang_factory', 'compile|testers', scheduler)
 F('linux_clang_factory', linux().WebRTCFactory(
     target='Debug',
-    options=options,
+    options=['--compiler=goma-clang'],
     tests=tests,
     factory_properties={
         'sharded_tests': tests,
@@ -130,6 +130,19 @@ F('linux_tsan_factory', linux().WebRTCFactory(
         'needs_valgrind': True,
         'gclient_env': {'GYP_DEFINES': 'build_for_tool=memcheck'},
     }))
+
+B('Linux Tsan v2', 'linux_tsan2_factory', 'compile', scheduler)
+F('linux_tsan2_factory', linux().WebRTCFactory(
+    target='Release',
+    tests=tests,
+    options=['--compiler=goma-clang'],
+    factory_properties={
+        'tsan': True,
+        'tsan_suppressions_file':
+            'src/tools/valgrind-webrtc/tsan_v2/suppressions.txt',
+        'gclient_env': {
+            'GYP_DEFINES': 'tsan=1 use_allocator=none release_extra_cflags=-g',
+    }}))
 
 B('Linux Asan', 'linux_asan_factory', 'compile|testers', scheduler)
 F('linux_asan_factory', linux().WebRTCFactory(

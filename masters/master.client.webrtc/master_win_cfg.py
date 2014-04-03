@@ -101,6 +101,19 @@ F('win32_largetests_factory', win().WebRTCFactory(
                                   'voe_auto_test'],
     }))
 
+B('Win SyzyASan', 'win_asan_factory', 'compile|testers|windows', scheduler)
+F('win_asan_factory', win().WebRTCFactory(
+    target='Release',
+    options=options,
+    tests=tests,
+    factory_properties={
+        'asan': True,
+        'gclient_env': {
+            'GYP_DEFINES': ('syzyasan=1 win_z7=1 chromium_win_pch=0 '
+                            'component=static_library'),
+            'GYP_USE_SEPARATE_MSPDBSRV': '1',
+        },
+    }))
 
 def Update(c):
   helper.Update(c)

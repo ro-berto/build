@@ -40,19 +40,6 @@ tests = [
 
 defaults['category'] = 'linux'
 
-B('Linux Tsan v2', 'linux_tsan2_factory', scheduler=scheduler)
-F('linux_tsan2_factory', linux().WebRTCFactory(
-    target='Release',
-    tests=tests,
-    options=['--compiler=goma-clang'],
-    factory_properties={
-        'tsan': True,
-        'tsan_suppressions_file':
-            'src/tools/valgrind-webrtc/tsan_v2/suppressions.txt',
-        'gclient_env': {
-            'GYP_DEFINES': 'tsan=1 use_allocator=none release_extra_cflags=-g',
-    }}))
-
 B('Linux TsanRV', 'linux_tsan_rv_factory', scheduler=scheduler)
 F('linux_tsan_rv_factory', linux().WebRTCFactory(
     target='Release',

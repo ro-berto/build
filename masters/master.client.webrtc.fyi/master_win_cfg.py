@@ -68,20 +68,6 @@ F('win_drmemory_pattern_factory', win().WebRTCFactory(
     tests=['drmemory_pattern_' + test for test in tests],
     factory_properties=dr_memory_factory_properties))
 
-B('Win SyzyASan', 'win_asan_factory', scheduler=scheduler)
-F('win_asan_factory', win().WebRTCFactory(
-    target='Release',
-    options=options,
-    tests=tests,
-    factory_properties={
-        'asan': True,
-        'gclient_env': {
-            'GYP_DEFINES': ('syzyasan=1 win_z7=1 chromium_win_pch=0 '
-                            'component=static_library'),
-            'GYP_USE_SEPARATE_MSPDBSRV': '1',
-        },
-    }))
-
 B('Win Tsan', 'win_tsan_factory', scheduler=scheduler)
 F('win_tsan_factory', win().WebRTCFactory(
     target='Debug',
