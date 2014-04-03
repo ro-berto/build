@@ -20,7 +20,7 @@ class AnnotatorCommands(commands.FactoryCommands):
     # Set self._script_dir and self._python, among other things.
     commands.FactoryCommands.__init__(self, factory)
 
-  def AddAnnotatedScript(self, factory_properties, timeout=1200):
+  def AddAnnotatedScript(self, factory_properties, timeout, max_time):
     call_count = self._call_counts.setdefault('AddAnnotatedScript', 0)
     if call_count != 0:
       raise Exception("AnnotatorCommands.AddAnnotatedScript called twice.")
@@ -34,5 +34,6 @@ class AnnotatorCommands(commands.FactoryCommands):
                           name='steps',
                           description='running steps via annotated script',
                           timeout=timeout,
+                          maxTime=max_time,
                           haltOnFailure=True,
                           command=cmd)

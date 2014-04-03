@@ -21,7 +21,7 @@ class AnnotatorFactory(object):
     self._factory_properties = None
 
   def BaseFactory(self, recipe, factory_properties=None, triggers=None,
-                  timeout=1200):
+                  timeout=1200, max_time=None):
     """The primary input for the factory is the |recipe|, which specifies the
     name of a recipe file to search for. The recipe file will fill in the rest
     of the |factory_properties|. This setup allows for major changes to factory
@@ -31,13 +31,22 @@ class AnnotatorFactory(object):
     this method. Ideally, you will pass none, and that will be sufficient in the
     vast majority of cases. Think very carefully before adding any
     |factory_properties| here, as changing them will require a master restart.
+
+    |timeout| refers to the maximum number of seconds a step should be allowed
+    to run without output. After no output for |timeout| seconds, the step is
+    forcibly killed.
+
+    |max_time| refers to the maximum number of seconds a step should be allowed
+    to run, regardless of output. After |max_time| seconds, the step is forcibly
+    killed.
     """
     factory_properties = factory_properties or {}
     factory_properties.update({'recipe': recipe})
     self._factory_properties = factory_properties
     factory = BuildFactory()
     cmd_obj = annotator_commands.AnnotatorCommands(factory)
-    cmd_obj.AddAnnotatedScript(factory_properties, timeout=timeout)
+    cmd_obj.AddAnnotatedScript(
+      factory_properties, timeout=timeout, max_time=max_time)
 
     for t in (triggers or []):
       factory.addStep(commands.CreateTriggerStep(
