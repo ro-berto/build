@@ -46,31 +46,28 @@ baremetal_tests = [
     'voe_auto_test',
     'webrtc_perf_tests',
 ]
-
+options=['--compiler=goma']
 defaults['category'] = 'win'
 
 B('Win32 Debug', 'win32_debug_factory', 'compile|testers|windows', scheduler,
   slavebuilddir='win')
 F('win32_debug_factory', win().WebRTCFactory(
     target='Debug',
+    options=options,
     tests=tests))
 
 B('Win32 Release', 'win32_release_factory', 'compile|testers|windows',
   scheduler, slavebuilddir='win')
 F('win32_release_factory', win().WebRTCFactory(
     target='Release',
-    tests=tests,
-    # No point having more than one bot complaining about missing sources.
-    factory_properties={
-        'gclient_env': {
-            'GYP_GENERATOR_FLAGS': 'msvs_error_on_missing_sources=1',
-        },
-    }))
+    options=options,
+    tests=tests))
 
 B('Win64 Debug', 'win64_debug_factory', 'compile|testers|windows', scheduler,
   slavebuilddir='win')
 F('win64_debug_factory', win().WebRTCFactory(
     target='Debug_x64',
+    options=options,
     tests=tests,
     factory_properties={
         'gclient_env': {'GYP_DEFINES': 'target_arch=x64'},
@@ -80,6 +77,7 @@ B('Win64 Release', 'win64_release_factory', 'compile|testers|windows',
   scheduler, slavebuilddir='win')
 F('win64_release_factory', win().WebRTCFactory(
     target='Release_x64',
+    options=options,
     tests=tests,
     factory_properties={
         'gclient_env': {'GYP_DEFINES': 'target_arch=x64'},
@@ -89,6 +87,7 @@ B('Win32 Release [large tests]', 'win32_largetests_factory',
   'compile|baremetal|windows', scheduler)
 F('win32_largetests_factory', win().WebRTCFactory(
     target='Release',
+    options=options,
     tests=baremetal_tests,
     factory_properties={
         'virtual_webcam': True,

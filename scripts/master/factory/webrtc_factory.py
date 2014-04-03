@@ -63,6 +63,12 @@ class WebRTCFactory(chromium_factory.ChromiumFactory):
     options = options or ''
     tests = tests or []
     factory_properties = factory_properties or {}
+    factory_properties['gclient_env'] = \
+        factory_properties.get('gclient_env', {}).copy()
+
+    if self._target_platform == 'win32':
+      chromium_factory.FixForGomaWin(options, target,
+                                     factory_properties['gclient_env'])
 
     if factory_properties.get('needs_valgrind'):
       self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_VALGRIND]
@@ -74,6 +80,9 @@ class WebRTCFactory(chromium_factory.ChromiumFactory):
             config.Master.trunk_url +
             '/deps/third_party/drmemory/drmemory.DEPS',
             'drmemory.DEPS'))
+
+    # Ensure GYP errors out if files referenced in .gyp files are missing.
+    self.ForceMissingFilesToBeFatal(project, factory_properties['gclient_env'])
 
     factory = self.BuildFactory(target, clobber, tests, mode, slave_type,
                                 options, compile_timeout, build_url, project,
