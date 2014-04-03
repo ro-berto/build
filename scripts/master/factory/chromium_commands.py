@@ -284,7 +284,7 @@ class ChromiumCommands(commands.FactoryCommands):
                           command=cmd)
 
   def GetAnnotatedPerfCmd(self, gtest_filter, log_type, test_name,
-                          cmd_name='performance_ui_tests', tool_opts=None,
+                          cmd_name, tool_opts=None,
                           options=None, factory_properties=None,
                           py_script=False, dashboard_url=None):
     """Return a runtest command suitable for most perf test steps."""
@@ -325,7 +325,7 @@ class ChromiumCommands(commands.FactoryCommands):
                                  factory_properties=factory_properties)
 
   def AddAnnotatedPerfStep(self, test_name, gtest_filter, log_type,
-                           factory_properties, cmd_name='performance_ui_tests',
+                           factory_properties, cmd_name,
                            tool_opts=None, cmd_options=None, step_name=None,
                            timeout=1200, py_script=False, dashboard_url=None,
                            addmethod=None, alwaysRun=False):
@@ -342,7 +342,7 @@ class ChromiumCommands(commands.FactoryCommands):
       log_type: one of the log parsers in runtest.py --annotate=list, such
         as 'graphing' or 'framerate'.
 
-      cmd_name: command to run, by default 'performance_ui_tests'.
+      cmd_name: command to run.
 
       tool_opts: additional options for runtest.py.
 
@@ -465,17 +465,6 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddAnnotatedPerfStep('load_library_perf_tests', None, 'graphing',
                               cmd_name='load_library_perf_tests',
                               step_name='load_library_perf_tests',
-                              factory_properties=factory_properties)
-
-  def AddMemoryTests(self, factory_properties=None):
-    self.AddAnnotatedPerfStep('memory', 'GeneralMix*MemoryTest.*', 'graphing',
-                              factory_properties=factory_properties)
-
-  def AddSyncPerfTests(self, factory_properties=None):
-    options = ['--ui-test-action-max-timeout=120000']
-
-    self.AddAnnotatedPerfStep('sync', '*SyncPerfTest.*', 'graphing',
-                              cmd_options=options, step_name='sync',
                               factory_properties=factory_properties)
 
   def AddSizesTests(self, factory_properties=None):
@@ -728,36 +717,6 @@ class ChromiumCommands(commands.FactoryCommands):
                              description, options,
                              total_shards=total_shards,
                              shard_index=shard_index)
-
-  def AddDomCheckerTests(self):
-    cmd = [self._python, self._test_tool,
-           '--target', self._target]
-
-    cmd.extend(['--with-httpd',
-                self.PathJoin('src', 'chrome', 'test', 'data')])
-
-    cmd.extend([self.GetExecutableName('performance_ui_tests'),
-                '--gtest_filter=DomCheckerTest.*',
-                '--gtest_print_time',
-                '--run-dom-checker-test'])
-
-    self.AddTestStep(shell.ShellCommand, 'dom_checker_tests', cmd,
-                     do_step_if=self.TestStepFilter)
-
-  def AddBuildrunnerDomCheckerTests(self):
-    cmd = [self._python, self._test_tool,
-           '--target', self._target]
-
-    cmd.extend(['--with-httpd',
-                self.PathJoin('src', 'chrome', 'test', 'data')])
-
-    cmd.extend([self.GetExecutableName('performance_ui_tests'),
-                '--gtest_filter=DomCheckerTest.*',
-                '--gtest_print_time',
-                '--run-dom-checker-test'])
-
-    self.AddBuildrunnerTestStep(shell.ShellCommand, 'dom_checker_tests', cmd,
-                                do_step_if=self.TestStepFilter)
 
   def AddMemoryTest(self, test_name, tool_name, timeout=1200,
                     factory_properties=None,

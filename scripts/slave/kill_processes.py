@@ -198,7 +198,6 @@ processes = [
     'page_cycler_tests.exe',
     'peerconnection_server.exe',
     'perf_tests.exe',
-    'performance_ui_tests.exe',
     'printing_unittests.exe',
     'reliability_tests.exe',
     'sel_ldr.exe',

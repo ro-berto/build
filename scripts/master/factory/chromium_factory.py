@@ -534,12 +534,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       ash_fp['browser_tests_extra_options'] = ['--ash-browsertests']
       f.AddBuildrunnerBrowserTests(ash_fp)
 
-    # Big, UI tests:
-    if R('dom_checker'):
-      f.AddDomCheckerTests()
-    if R('dom_checker_br'):
-      f.AddBuildrunnerDomCheckerTests()
-
     if self._target_platform == 'win32':
       if R('installer_util_unittests'):
         f.AddGTestTestStep('installer_util_unittests', fp)
@@ -694,8 +688,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       Telemetry(test_name)
 
     # Other benchmarks:
-    if R('memory'):
-      f.AddMemoryTests(fp)
     if R('tab_capture_performance'):
       f.AddTabCapturePerformanceTests(fp)
     if R('indexeddb_perf'):
@@ -750,8 +742,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddSizesTests(fp)
     if R('sizes_br'):
       f.AddBuildrunnerSizesTests(fp)
-    if R('sync'):
-      f.AddSyncPerfTests(fp)
     if R('mach_ports'):
       f.AddMachPortsTests(fp)
     if R('cc_perftests'):
