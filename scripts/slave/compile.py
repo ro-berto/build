@@ -458,7 +458,6 @@ def maybe_set_official_build_envvars(options, env):
 
   if options.mode == 'official':
     # Official builds are always Google Chrome.
-    env['OFFICIAL_BUILD'] = '1'
     env['CHROME_BUILD_TYPE'] = '_official'
 
 
