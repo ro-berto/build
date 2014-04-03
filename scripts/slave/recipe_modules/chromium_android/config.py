@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import types
+
 from slave.recipe_config import config_item_context, ConfigGroup
 from slave.recipe_config import ConfigList, Dict, List, Single, Static
 from slave.recipe_config_types import Path
@@ -32,7 +34,7 @@ def BaseConfig(INTERNAL, REPO_NAME, REPO_URL, BUILD_CONFIG='Debug', **_kwargs):
                                          'scripts', 'slave', 'android')),
     cr_build_android = Static(Path('[CHECKOUT]', 'build', 'android')),
     internal_dir = Single(Path),
-    gclient_custom_deps = Single(Dict(value_type=basestring)), # possibly wrong
+    gclient_custom_deps = Dict(value_type=(basestring, types.NoneType)),
     storage_bucket = Single(basestring),
     archive_clusterfuzz = Single(bool, required=False, empty_val=False),
   )
