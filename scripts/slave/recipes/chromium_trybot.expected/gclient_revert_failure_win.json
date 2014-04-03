@@ -87,7 +87,11 @@
       "https://codereview.chromium.org",
       "--no-auth"
     ],
-    "name": "apply_issue"
+    "name": "apply_issue",
+    "seed_steps": [
+      "apply_issue",
+      "read test spec"
+    ]
   },
   {
     "cmd": [
@@ -331,7 +335,11 @@
       "https://codereview.chromium.org",
       "--no-auth"
     ],
-    "name": "apply_issue (3)"
+    "name": "apply_issue (3)",
+    "seed_steps": [
+      "apply_issue (3)",
+      "gclient runhooks (3)"
+    ]
   },
   {
     "cmd": [
@@ -572,6 +580,11 @@
       "--no-auth"
     ],
     "name": "apply_issue (5)",
+    "seed_steps": [
+      "apply_issue (5)",
+      "gclient runhooks (4)",
+      "compile (with patch, lkcr, clobber, nuke)"
+    ],
     "skip": true
   },
   {
@@ -586,10 +599,6 @@
       "GYP_MSVS_VERSION": "2010"
     },
     "name": "gclient runhooks (4)",
-    "seed_steps": [
-      "gclient runhooks (4)",
-      "compile (with patch, lkcr, clobber, nuke)"
-    ],
     "skip": true
   },
   {

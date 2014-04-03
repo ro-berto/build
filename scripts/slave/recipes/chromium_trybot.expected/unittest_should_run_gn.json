@@ -89,7 +89,11 @@
       "https://codereview.chromium.org",
       "--no-auth"
     ],
-    "name": "apply_issue"
+    "name": "apply_issue",
+    "seed_steps": [
+      "apply_issue",
+      "read test spec"
+    ]
   },
   {
     "cmd": [

@@ -12,10 +12,10 @@ DEPS = [
   'properties',
   'python',
   'raw_io',
+  'rietveld',
   'step',
   'step_history',
   'test_utils',
-  'tryserver',
 ]
 
 
@@ -240,7 +240,7 @@ def GenSteps(api):
       break
 
   yield (
-    api.tryserver.maybe_apply_issue(),
+    api.rietveld.apply_issue(),
     api.json.read(
       'read test spec',
       api.path['checkout'].join('testing', 'buildbot', 'chromium_trybot.json'),
@@ -255,7 +255,7 @@ def GenSteps(api):
     # Since we're likely to switch to an earlier revision, revert the patch,
     # sync with the new config, and apply issue again.
     yield api.gclient.checkout(revert=True)
-    yield api.tryserver.maybe_apply_issue()
+    yield api.rietveld.apply_issue()
 
     yield api.chromium.runhooks(abort_on_failure=False, can_fail_build=False)
     if api.step_history.last_step().retcode != 0:
@@ -264,7 +264,7 @@ def GenSteps(api):
       yield (
         api.path.rmcontents('slave build directory', api.path['slave_build']),
         api.gclient.checkout(revert=False),
-        api.tryserver.maybe_apply_issue(),
+        api.rietveld.apply_issue(),
         api.chromium.runhooks(),
       )
 
@@ -314,7 +314,7 @@ def GenSteps(api):
     # Since we're likely to switch to an earlier revision, revert the patch,
     # sync with the new config, and apply issue again.
     yield api.gclient.checkout(revert=True)
-    yield api.tryserver.maybe_apply_issue()
+    yield api.rietveld.apply_issue()
 
     yield api.chromium.compile(compile_targets,
                                name='compile (with patch, lkcr, clobber)',
@@ -327,7 +327,7 @@ def GenSteps(api):
       yield (
         api.path.rmcontents('slave build directory', api.path['slave_build']),
         api.gclient.checkout(revert=False),
-        api.tryserver.maybe_apply_issue(),
+        api.rietveld.apply_issue(),
         api.chromium.runhooks(),
         api.chromium.compile(compile_targets,
                              name='compile (with patch, lkcr, clobber, nuke)',
