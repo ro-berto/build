@@ -445,7 +445,7 @@ def get_revision_mapping(root, addl_rev_map):
   if root in GOT_REVISION_MAPPINGS:
     result.update(GOT_REVISION_MAPPINGS[root])
   if addl_rev_map:
-    result.update(addl_rev_map)
+    result.update(json.loads(addl_rev_map))
   return result
 
 
@@ -812,8 +812,7 @@ def main():
   use_svn_rev = (options.revision and options.revision.isdigit() and
                  len(options.revision) < 40)
   # Take care of got_revisions outputs.
-  revision_mapping = get_revision_mapping(svn_root,
-                                          json.loads(options.revision_mapping))
+  revision_mapping = get_revision_mapping(svn_root, options.revision_mapping)
   got_revisions = parse_got_revision(gclient_output, revision_mapping,
                                      use_svn_rev)
 
