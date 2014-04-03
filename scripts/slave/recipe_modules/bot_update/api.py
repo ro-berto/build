@@ -16,9 +16,6 @@ ENABLED_MASTERS = ['chromium.git']
 ENABLED_BUILDERS = {
     'tryserver.chromium': [
         'linux_rel_alt',
-    ],
-    'chromium.linux': [
-        'Linux Builder',
     ]
 }
 ENABLED_SLAVES = {}
