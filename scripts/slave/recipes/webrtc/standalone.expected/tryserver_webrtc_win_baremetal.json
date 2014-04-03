@@ -59,17 +59,16 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]\\gclient.py",
-      "runhooks"
+      "[BUILD]\\scripts\\slave\\apply_svn_patch.py",
+      "-p",
+      "try_job_svn_patch",
+      "-r",
+      "[SLAVE_BUILD]\\src"
     ],
-    "env": {
-      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 target_arch=ia32",
-      "GYP_MSVS_VERSION": "2010"
-    },
-    "name": "gclient runhooks",
+    "name": "apply_patch",
     "seed_steps": [
-      "gclient runhooks",
       "apply_patch",
+      "gclient runhooks",
       "compile",
       "audio_device_tests",
       "vie_auto_test",
@@ -82,13 +81,14 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\apply_svn_patch.py",
-      "-p",
-      "try_job_svn_patch",
-      "-r",
-      "[SLAVE_BUILD]\\src"
+      "[DEPOT_TOOLS]\\gclient.py",
+      "runhooks"
     ],
-    "name": "apply_patch"
+    "env": {
+      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 target_arch=ia32",
+      "GYP_MSVS_VERSION": "2010"
+    },
+    "name": "gclient runhooks"
   },
   {
     "abort_on_failure": true,

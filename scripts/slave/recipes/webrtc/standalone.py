@@ -611,10 +611,11 @@ def GenSteps(api):
     api.chromium.apply_config('trybot_flavor')
 
   yield api.gclient.checkout()
-  steps = [api.chromium.runhooks()]
+  steps = []
   if api.tryserver.is_tryserver:
     steps.append(api.webrtc.apply_svn_patch())
 
+  steps.append(api.chromium.runhooks())
   steps.append(api.chromium.compile())
   steps.extend([t.run(api) for t in bot_config.get('tests', [])])
   yield steps
