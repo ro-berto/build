@@ -20,7 +20,8 @@ def GenSteps(api):
   # lookup mechanism to map bot name to build_config.
   build_config = {
     'Linux GN (dbg)': 'Debug',
-    'linux_chromium_gn': 'Debug',
+    'linux_chromium_gn_dbg': 'Debug',
+    'linux_chromium_gn_rel': 'Release',
   }[api.properties.get('buildername')]
 
   is_tryserver = api.tryserver.is_tryserver
@@ -72,7 +73,7 @@ def GenTests(api):
 
   yield (
       api.test('unittest_sync_fails') +
-      api.properties.tryserver(buildername='linux_chromium_gn') +
+      api.properties.tryserver(buildername='linux_chromium_gn_dbg') +
       api.platform.name('linux') +
       api.step_data('gclient revert', retcode=1)
   )
@@ -80,7 +81,7 @@ def GenTests(api):
   # This test should abort before running GN and trying to compile.
   yield (
       api.test('unittest_second_sync_fails') +
-      api.properties.tryserver(buildername='linux_chromium_gn') +
+      api.properties.tryserver(buildername='linux_chromium_gn_dbg') +
       api.platform.name('linux') +
       api.step_data('gclient revert', retcode=1) +
       api.step_data('gclient sync (2)', retcode=1)
@@ -89,11 +90,15 @@ def GenTests(api):
   # TODO: crbug.com/354674. Figure out where to put "simulation"
   # tests. We should have one test for each bot this recipe runs on.
   yield (
-      api.test('full_linux_chromium_gn') +
-      api.properties.tryserver(buildername='linux_chromium_gn') +
+      api.test('full_linux_chromium_gn_dbg') +
+      api.properties.tryserver(buildername='linux_chromium_gn_dbg') +
       api.platform.name('linux')
   )
-
+  yield (
+      api.test('full_linux_chromium_gn_rel') +
+      api.properties.tryserver(buildername='linux_chromium_gn_rel') +
+      api.platform.name('linux')
+  )
   yield (
       api.test('full_chromium_linux_Linux_GN__dbg_') +
       api.properties.generic(buildername='Linux GN (dbg)') +
