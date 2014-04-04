@@ -13,3 +13,4 @@ Local Modifications:
  * Added .gitignore
  * Modified setup.py to bail if the extension is not compilable, instead of
    automatically building an egg without it.
+ * Remove auto-generated coverage.egg-info folder
