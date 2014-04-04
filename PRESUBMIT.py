@@ -34,7 +34,7 @@ def CommonChecks(input_api, output_api):
         join('third_party'),
         join('third_party', 'buildbot_8_4p1'),
         join('third_party', 'buildbot_slave_8_4'),
-        join('third_party', 'coverage-3.6'),
+        join('third_party', 'coverage-3.7.1'),
         join('third_party', 'decorator_3_3_1'),
         join('third_party', 'jinja2'),
         join('third_party', 'mock-1.0.1'),
