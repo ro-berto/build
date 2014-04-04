@@ -19,4 +19,4 @@ class TryServer(Master.Master4):
   store_revisions_url = base_app_url + '/revisions'
   last_good_url = base_app_url + '/lkgr'
   last_good_blink_url = 'http://blink-status.appspot.com/lkgr'
-  svn_url = 'svn://svn.chromium.org/chrome-try/try'
+  svn_url = 'svn://svn-mirror.golo.chromium.org/chrome-try/try'
