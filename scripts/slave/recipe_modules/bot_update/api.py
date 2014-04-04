@@ -18,10 +18,7 @@ ENABLED_BUILDERS = {
         'linux_rel_alt',
     ],
     'chromium.linux': [
-        # TODO(hinoka): This is here to make recipes test happy about a config
-        #               that uses bot_update and is fed svn revision numbers.
-        #               Remove this when we turn on "Linux Builder"
-        'Linux Builder Bot Update',
+        'Linux Builder',
     ]
 }
 ENABLED_SLAVES = {}

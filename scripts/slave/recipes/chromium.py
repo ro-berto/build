@@ -462,21 +462,6 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
-      # TODO(hinoka): Remove this when bot_update is enabled on Linux Builder.
-      'Linux Builder Bot Update': {
-        'recipe_config': 'chromium',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder',
-        'compile_targets': [
-          'chromium_swarm_tests',
-        ],
-        'testing': {
-          'platform': 'linux',
-        },
-      },
       'Linux Tests': {
         'recipe_config': 'chromium',
         'chromium_config_kwargs': {
