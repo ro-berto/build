@@ -57,7 +57,7 @@ def main():
       return 2
 
   with stream.step('blink_gatekeeper') as s:
-    status_url = 'https://blink-status.appspot.com/status'
+    status_url = 'https://blink-status.appspot.com'
 
     master_urls = ['http://build.chromium.org/p/chromium.webkit']
 
