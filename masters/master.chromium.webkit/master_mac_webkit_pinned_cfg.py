@@ -53,6 +53,7 @@ F('f_webkit_mac_rel', mac_out().ChromiumFactory(
     factory_properties={
         'trigger': 's2_chromium_rel_trigger',
         'gclient_env': {
+            'GYP_DEFINES': 'fastbuild=1',
             'GYP_GENERATORS':'ninja',
         },
     }))

@@ -42,7 +42,6 @@ F('f_webkit_linux_rel', linux().ChromiumFactory(
         ],
         'archive_webkit_results': ActiveMaster.is_production_host,
         'gclient_env': {
-            'GYP_DEFINES': 'use_ash=0 use_aura=0',
             'GYP_GENERATORS':'ninja',
         },
         'generate_gtest_json': True,
