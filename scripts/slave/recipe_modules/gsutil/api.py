@@ -6,7 +6,7 @@ from slave import recipe_api
 from slave import recipe_util
 
 class GSUtilApi(recipe_api.RecipeApi):
-  def __call__(self, cmd, name=None, **kwargs):
+  def __call__(self, cmd, name=None, use_retry_wrapper=False, **kwargs):
     """A step to run arbitrary gsutil commands.
 
     Note that this assumes that gsutil authentication environment variables
@@ -29,8 +29,17 @@ class GSUtilApi(recipe_api.RecipeApi):
     gsutil_path = self.m.path['depot_tools'].join('third_party',
                                                   'gsutil',
                                                   'gsutil')
+    cmd_prefix = []
 
-    return self.m.python(full_name, gsutil_path, cmd, **kwargs)
+    # TODO(luqui): use_retry_wrapper is canarying; eventually make standard.
+    # crbug.com/360219
+    if use_retry_wrapper:
+      # We pass the real gsutil_path to the wrapper so it doesn't have to do
+      # brittle path logic.
+      cmd_prefix = [gsutil_path]
+      gsutil_path = self.resource('gsutil_wrapper.py')
+
+    return self.m.python(full_name, gsutil_path, cmd_prefix + cmd, **kwargs)
 
   def upload(self, source, bucket, dest, args=None, link_name='gsutil.upload',
              **kwargs):

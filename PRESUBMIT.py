@@ -20,7 +20,6 @@ def CommonChecks(input_api, output_api):
       r'.*depot_tools/.*',
       r'.*scripts/release/.*',
       r'.*scripts/slave/recipe_modules/.*',
-      r'.*scripts/command_wrapper/bin/.*',
       r'.*scripts/gsd_generate_index/.*',
       r'.*masters/.*/templates/.*\.html$',
       r'.*masters/.*/templates/.*\.css$',

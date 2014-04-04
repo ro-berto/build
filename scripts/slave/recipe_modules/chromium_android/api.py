@@ -273,11 +273,13 @@ class AndroidApi(recipe_api.RecipeApi):
       include_subfolders,
       cwd=self.m.path['checkout']
     )
+
     yield self.m.gsutil.upload(
         name='upload_build_product',
         source=zipfile,
         bucket=bucket,
-        dest=dest
+        dest=dest,
+        use_retry_wrapper=True
     )
 
   def download_build(self):

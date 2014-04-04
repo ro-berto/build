@@ -1,7 +1,4 @@
 deps = {
-  "build/scripts/command_wrapper/bin":
-    "/trunk/tools/command_wrapper/bin",
-
   "build/scripts/gsd_generate_index":
     "/trunk/tools/gsd_generate_index",
 
