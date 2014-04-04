@@ -46,22 +46,7 @@
     "env": {
       "GYP_DEFINES": "target_arch=x64 v8_target_arch=x64"
     },
-    "name": "gclient runhooks",
-    "seed_steps": [
-      "gclient runhooks",
-      "cleanup_temp",
-      "rmtree build directory",
-      "extract build",
-      "Static-Initializers",
-      "Check",
-      "Check - flaky",
-      "OptimizeForSize",
-      "OptimizeForSize - flaky",
-      "Webkit",
-      "Webkit - flaky",
-      "Test262",
-      "Mozilla"
-    ]
+    "name": "gclient runhooks"
   },
   {
     "cmd": [
@@ -113,7 +98,18 @@
       "out/Release/d8"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Static-Initializers"
+    "name": "Static-Initializers",
+    "seed_steps": [
+      "Static-Initializers",
+      "Check",
+      "Check - flaky",
+      "OptimizeForSize",
+      "OptimizeForSize - flaky",
+      "Webkit",
+      "Webkit - flaky",
+      "Test262",
+      "Mozilla"
+    ]
   },
   {
     "cmd": [

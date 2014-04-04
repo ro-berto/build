@@ -10,6 +10,8 @@ DEPS = [
   'path',
   'platform',
   'properties',
+  'step',
+  'step_history',
   'tryserver',
   'v8',
 ]
@@ -665,6 +667,8 @@ def GenSteps(api):
     api.chromium.apply_config('optimized_debug')
     api.v8.apply_config('trybot_flavor')
 
+  api.step.auto_resolve_conflicts = True
+
   if api.platform.is_win:
     yield api.chromium.taskkill()
 
@@ -673,36 +677,50 @@ def GenSteps(api):
   if api.tryserver.is_tryserver:
     yield api.tryserver.maybe_apply_issue()
 
-  steps = [api.v8.runhooks(), api.chromium.cleanup_temp()]
+  yield api.v8.runhooks()
+  yield api.chromium.cleanup_temp()
 
   if 'clang' in bot_config.get('gclient_apply_config', []):
-    steps.append(api.v8.update_clang())
+    yield api.v8.update_clang()
 
   bot_type = bot_config.get('bot_type', 'builder_tester')
-
-  # TODO(machenbach): Implement --clobber-post-fail in the recipe.
   if bot_type in ['builder', 'builder_tester']:
-    steps.append(api.v8.compile())
+    if api.tryserver.is_tryserver:
+      yield api.v8.compile(name='compile (with patch)',
+                           abort_on_failure=False,
+                           can_fail_build=False)
+      if api.step_history['compile (with patch)'].retcode != 0:
+        api.gclient.apply_config('v8_lkgr')
+        yield (
+          api.v8.checkout(revert=True),
+          api.tryserver.maybe_apply_issue(),
+          api.v8.runhooks(),
+          api.v8.compile(name='compile (with patch, lkgr, clobber)',
+                         force_clobber=True)
+        )
+    else:
+      yield api.v8.compile()
 
   if bot_type == 'builder':
-    steps.append(api.archive.zip_and_upload_build(
-        'package build',
-        api.chromium.c.build_config_fs,
-        GS_ARCHIVES[bot_config['build_gs_archive']],
-        src_dir='v8'))
+    yield(api.archive.zip_and_upload_build(
+          'package build',
+          api.chromium.c.build_config_fs,
+          GS_ARCHIVES[bot_config['build_gs_archive']],
+          src_dir='v8'))
 
   if bot_type == 'tester':
-    steps.append(api.path.rmtree(
-        'build directory',
-        api.chromium.c.build_dir.join(api.chromium.c.build_config_fs)))
+    yield(api.path.rmtree(
+          'build directory',
+          api.chromium.c.build_dir.join(api.chromium.c.build_config_fs)))
 
-    steps.append(api.archive.download_and_unzip_build(
-        'extract build',
-        api.chromium.c.build_config_fs,
-        GS_ARCHIVES[bot_config['build_gs_archive']],
-        abort_on_failure=True,
-        src_dir='v8'))
+    yield(api.archive.download_and_unzip_build(
+          'extract build',
+          api.chromium.c.build_config_fs,
+          GS_ARCHIVES[bot_config['build_gs_archive']],
+          abort_on_failure=True,
+          src_dir='v8'))
 
+  steps = []
   if bot_type in ['tester', 'builder_tester']:
     steps.extend([CreateTest(t).run(api) for t in bot_config.get('tests', [])])
   yield steps
@@ -738,3 +756,12 @@ def GenTests(api):
             patch_url='svn://svn-mirror.golo.chromium.org/patch'))
 
       yield test
+
+  yield (
+    api.test('try_compile_failure') +
+    api.properties.tryserver(mastername='tryserver.v8',
+                             buildername='v8_win_rel',
+                             revision=None) +
+    api.platform('win', 32) +
+    api.step_data('compile (with patch)', retcode=1)
+  )

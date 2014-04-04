@@ -46,15 +46,7 @@
     "env": {
       "GYP_DEFINES": "asan=1 clang=1 linux_use_tcmalloc=0 lsan=0 target_arch=x64 v8_target_arch=x64"
     },
-    "name": "gclient runhooks",
-    "seed_steps": [
-      "gclient runhooks",
-      "cleanup_temp",
-      "update clang",
-      "compile",
-      "Check",
-      "Check - flaky"
-    ]
+    "name": "gclient runhooks"
   },
   {
     "cmd": [
@@ -110,7 +102,11 @@
     "env": {
       "ASAN_SYMBOLIZER_PATH": "[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
     },
-    "name": "Check"
+    "name": "Check",
+    "seed_steps": [
+      "Check",
+      "Check - flaky"
+    ]
   },
   {
     "abort_on_failure": false,

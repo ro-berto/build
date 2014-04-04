@@ -22,7 +22,15 @@ def mozilla_tests(c):
   c.solutions[0].custom_deps['v8/test/mozilla/data'] = ChromiumSvnSubURL(
       c, 'chrome', 'trunk', 'deps', 'third_party', 'mozilla-tests')
 
+
 @CONFIG_CTX(includes=['v8'])
 def clang(c):
   c.solutions[0].custom_deps['v8/tools/clang/scripts'] = ChromiumSvnSubURL(
       c, 'chrome', 'trunk', 'src', 'tools', 'clang', 'scripts')
+
+
+@CONFIG_CTX(includes=['v8'])
+def v8_lkgr(c):
+  if c.GIT_MODE:
+    raise BadConf('Git has problems with safesync_url.')
+  c.solutions[0].safesync_url = 'https://v8-status.appspot.com/lkgr'

@@ -14,8 +14,8 @@ def ChromiumSvnSubURL(c, *pieces):
 
 
 class V8Api(recipe_api.RecipeApi):
-  def checkout(self):
-    return self.m.gclient.checkout()
+  def checkout(self, **kwargs):
+    return self.m.gclient.checkout(**kwargs)
 
   def runhooks(self, **kwargs):
     return self.m.chromium.runhooks(**kwargs)
@@ -29,8 +29,8 @@ class V8Api(recipe_api.RecipeApi):
                                       'scripts', 'update.sh')],
         env={'LLVM_URL': ChromiumSvnSubURL(self.m.gclient.c, 'llvm-project')})
 
-  def compile(self):
-    return self.m.chromium.compile()
+  def compile(self, **kwargs):
+    return self.m.chromium.compile(**kwargs)
 
   def presubmit(self):
     return self.m.python(

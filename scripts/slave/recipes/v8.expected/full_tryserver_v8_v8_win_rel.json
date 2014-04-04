@@ -97,13 +97,7 @@
       "GYP_DEFINES": "dcheck_always_on=1 fastbuild=1 target_arch=ia32 v8_target_arch=ia32",
       "GYP_MSVS_VERSION": "2010"
     },
-    "name": "gclient runhooks",
-    "seed_steps": [
-      "gclient runhooks",
-      "cleanup_temp",
-      "compile",
-      "Check"
-    ]
+    "name": "gclient runhooks"
   },
   {
     "cmd": [
@@ -114,7 +108,8 @@
     "name": "cleanup_temp"
   },
   {
-    "abort_on_failure": true,
+    "abort_on_failure": false,
+    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -127,7 +122,7 @@
       "vs",
       "--"
     ],
-    "name": "compile"
+    "name": "compile (with patch)"
   },
   {
     "cmd": [

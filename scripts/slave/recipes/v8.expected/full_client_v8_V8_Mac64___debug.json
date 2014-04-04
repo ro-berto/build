@@ -46,18 +46,7 @@
     "env": {
       "GYP_DEFINES": "target_arch=x64 v8_optimized_debug=1 v8_target_arch=x64"
     },
-    "name": "gclient runhooks",
-    "seed_steps": [
-      "gclient runhooks",
-      "cleanup_temp",
-      "compile",
-      "Check",
-      "Check - flaky",
-      "Webkit",
-      "Webkit - flaky",
-      "Test262",
-      "Mozilla"
-    ]
+    "name": "gclient runhooks"
   },
   {
     "cmd": [
@@ -98,7 +87,15 @@
       "skip"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Check"
+    "name": "Check",
+    "seed_steps": [
+      "Check",
+      "Check - flaky",
+      "Webkit",
+      "Webkit - flaky",
+      "Test262",
+      "Mozilla"
+    ]
   },
   {
     "abort_on_failure": false,

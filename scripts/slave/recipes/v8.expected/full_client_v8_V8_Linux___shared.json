@@ -46,16 +46,7 @@
     "env": {
       "GYP_DEFINES": "component=shared_library target_arch=ia32 v8_target_arch=ia32"
     },
-    "name": "gclient runhooks",
-    "seed_steps": [
-      "gclient runhooks",
-      "cleanup_temp",
-      "compile",
-      "Check",
-      "Check - flaky",
-      "Test262",
-      "Mozilla"
-    ]
+    "name": "gclient runhooks"
   },
   {
     "cmd": [
@@ -96,7 +87,13 @@
       "skip"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Check"
+    "name": "Check",
+    "seed_steps": [
+      "Check",
+      "Check - flaky",
+      "Test262",
+      "Mozilla"
+    ]
   },
   {
     "abort_on_failure": false,

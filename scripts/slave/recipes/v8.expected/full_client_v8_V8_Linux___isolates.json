@@ -46,15 +46,7 @@
     "env": {
       "GYP_DEFINES": "target_arch=ia32 v8_target_arch=ia32"
     },
-    "name": "gclient runhooks",
-    "seed_steps": [
-      "gclient runhooks",
-      "cleanup_temp",
-      "rmtree build directory",
-      "extract build",
-      "Check",
-      "Check - flaky"
-    ]
+    "name": "gclient runhooks"
   },
   {
     "cmd": [
@@ -115,7 +107,11 @@
       "skip"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Check"
+    "name": "Check",
+    "seed_steps": [
+      "Check",
+      "Check - flaky"
+    ]
   },
   {
     "abort_on_failure": false,

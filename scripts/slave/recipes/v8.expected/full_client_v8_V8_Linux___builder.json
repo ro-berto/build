@@ -46,13 +46,7 @@
     "env": {
       "GYP_DEFINES": "target_arch=ia32 v8_enable_verify_heap=1 v8_target_arch=ia32"
     },
-    "name": "gclient runhooks",
-    "seed_steps": [
-      "gclient runhooks",
-      "cleanup_temp",
-      "compile",
-      "package build"
-    ]
+    "name": "gclient runhooks"
   },
   {
     "cmd": [
