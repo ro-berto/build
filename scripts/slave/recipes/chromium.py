@@ -460,6 +460,21 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
+      # TODO(hinoka): Remove this when bot_update is enabled on Linux Builder.
+      'Linux Builder Bot Update': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'compile_targets': [
+          'chromium_swarm_tests',
+        ],
+        'testing': {
+          'platform': 'linux',
+        },
+      },
       'Linux Tests': {
         'recipe_config': 'chromium',
         'chromium_config_kwargs': {
@@ -1437,6 +1452,9 @@ def GenSteps(api):
   yield api.bot_update.ensure_checkout(),
   if not api.step_history['bot_update'].json.output['did_run']:
     yield api.gclient.checkout(),
+  # Whatever step is run right before this line needs to emit got_revision.
+  update_step = api.step_history.last_step()
+  got_revision = update_step.presentation.properties['got_revision']
 
   bot_type = bot_config.get('bot_type', 'builder_tester')
 
@@ -1473,7 +1491,8 @@ def GenSteps(api):
         api.chromium.c.build_config_fs,
         api.archive.legacy_upload_url(
           master_config.get('build_gs_bucket'),
-          extra_url_components=api.properties['mastername'])))
+          extra_url_components=api.properties['mastername']),
+        build_revision=got_revision))
 
   if bot_type == 'tester':
     # Protect against hard to debug mismatches between directory names
@@ -1493,7 +1512,8 @@ def GenSteps(api):
       api.chromium.c.build_config_fs,
       api.archive.legacy_download_url(
         master_config.get('build_gs_bucket'),
-        extra_url_components=api.properties['mastername']),
+        extra_url_components=api.properties['mastername'],),
+      build_revision=got_revision,
       # TODO(phajdan.jr): Move abort_on_failure to archive recipe module.
       abort_on_failure=True))
 

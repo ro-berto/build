@@ -330,8 +330,12 @@ def Archive(options):
   staging_dir = slave_utils.GetStagingDir(options.src_dir)
   chromium_utils.MakeParentDirectoriesWorldReadable(staging_dir)
 
-  (build_revision, webkit_revision) = slave_utils.GetBuildRevisions(
-      options.src_dir, options.webkit_dir, options.revision_dir)
+  if not options.build_revision:
+    (build_revision, webkit_revision) = slave_utils.GetBuildRevisions(
+        options.src_dir, options.webkit_dir, options.revision_dir)
+  else:
+    build_revision = options.build_revision
+    webkit_revision = options.webkit_revision
 
   unversioned_base_name, version_suffix = slave_utils.GetZipFileNames(
       options.build_properties, build_revision, webkit_revision)
@@ -423,6 +427,12 @@ def main(argv):
                            help='Directory path that shall be used to decide '
                                 'the revision number for the archive, '
                                 'relative to --src-dir')
+  option_parser.add_option('--build_revision',
+                           help='The revision the archive should be at. '
+                                'Overrides the revision found on disk.')
+  option_parser.add_option('--webkit_revision',
+                           help='The revision of webkit the build is at. '
+                                'Overrides the revision found on disk.')
   option_parser.add_option('--path-filter',
                            help='Filter to use to transform build zip '
                                 '(avail: %r).' % list(PATH_FILTERS.keys()))

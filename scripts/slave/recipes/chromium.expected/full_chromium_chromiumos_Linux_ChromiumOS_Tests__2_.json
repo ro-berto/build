@@ -138,6 +138,8 @@
       "Release",
       "--build-url",
       "gs://chromium-chromiumos-archive/chromium.chromiumos/Linux ChromiumOS Builder/full-build-linux.zip",
+      "--build_revision",
+      "170242",
       "--factory-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux ChromiumOS Tests (2)\", \"buildnumber\": 571, \"mastername\": \"chromium.chromiumos\", \"parent_buildername\": \"Linux ChromiumOS Builder\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",

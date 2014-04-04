@@ -139,6 +139,8 @@
       "Release",
       "--build-url",
       "gs://chromium-linux-archive/chromium.linux/Linux Builder/full-build-linux.zip",
+      "--build_revision",
+      "170242",
       "--factory-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux Sync\", \"buildnumber\": 571, \"mastername\": \"chromium.linux\", \"parent_buildername\": \"Linux Builder\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",

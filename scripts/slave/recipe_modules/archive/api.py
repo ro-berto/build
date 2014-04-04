@@ -14,14 +14,16 @@ class ArchiveApi(recipe_api.RecipeApi):
   """
 
   def zip_and_upload_build(
-      self, step_name, target, build_url=None, src_dir=None, **kwargs):
+      self, step_name, target, build_url=None, src_dir=None,
+      build_revision=None, **kwargs):
     """Returns a step invoking zip_build.py to zip up a Chromium build.
        If build_url is specified, also uploads the build."""
     args = ['--target', target]
     if build_url:
-      args.append('--build-url')
-      args.append(build_url)
-    if src_dir:
+      args.extend(['--build-url', build_url])
+    if build_revision:
+      args.extend(['--build_revision', build_revision])
+    elif src_dir:
       args.extend(['--src-dir', src_dir])
     args.extend(self.m.json.property_args())
     return self.m.python(
@@ -32,12 +34,15 @@ class ArchiveApi(recipe_api.RecipeApi):
     )
 
   def download_and_unzip_build(
-      self, step_name, target, build_url, src_dir=None, **kwargs):
+      self, step_name, target, build_url, src_dir=None,
+      build_revision=None, **kwargs):
     """Returns a step invoking extract_build.py to download and unzip
        a Chromium build."""
     args = ['--target', target,
             '--build-url', build_url]
-    if src_dir:
+    if build_revision:
+      args.extend(['--build_revision', build_revision])
+    elif src_dir:
       args.extend(['--src-dir', src_dir])
     args.extend(self.m.json.property_args())
     return self.m.python(

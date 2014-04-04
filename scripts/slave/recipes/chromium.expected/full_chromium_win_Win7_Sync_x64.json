@@ -137,6 +137,8 @@
       "Release_x64",
       "--build-url",
       "gs://chromium-win-archive/chromium.win/Win x64 Builder/full-build-win32.zip",
+      "--build_revision",
+      "170242",
       "--factory-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Win7 Sync x64\", \"buildnumber\": 571, \"mastername\": \"chromium.win\", \"parent_buildername\": \"Win x64 Builder\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",

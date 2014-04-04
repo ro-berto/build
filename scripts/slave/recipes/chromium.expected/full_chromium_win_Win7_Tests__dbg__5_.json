@@ -136,6 +136,8 @@
       "Debug",
       "--build-url",
       "gs://chromium-win-archive/chromium.win/Win Builder (dbg)/full-build-win32.zip",
+      "--build_revision",
+      "170242",
       "--factory-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Win7 Tests (dbg)(5)\", \"buildnumber\": 571, \"mastername\": \"chromium.win\", \"parent_buildername\": \"Win Builder (dbg)\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",

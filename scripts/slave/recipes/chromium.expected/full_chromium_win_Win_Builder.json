@@ -168,6 +168,8 @@
       "Release",
       "--build-url",
       "gs://chromium-win-archive/chromium.win/Win Builder",
+      "--build_revision",
+      "170242",
       "--factory-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Win Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.win\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",

@@ -138,6 +138,8 @@
       "Release",
       "--build-url",
       "gs://chromium-mac-archive/chromium.mac/Mac Builder/full-build-mac.zip",
+      "--build_revision",
+      "170242",
       "--factory-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac10.6 Tests (2)\", \"buildnumber\": 571, \"mastername\": \"chromium.mac\", \"parent_buildername\": \"Mac Builder\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",

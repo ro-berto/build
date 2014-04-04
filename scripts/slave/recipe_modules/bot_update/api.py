@@ -16,9 +16,20 @@ ENABLED_MASTERS = ['chromium.git']
 ENABLED_BUILDERS = {
     'tryserver.chromium': [
         'linux_rel_alt',
+    ],
+    'chromium.linux': [
+        # TODO(hinoka): This is here to make recipes test happy about a config
+        #               that uses bot_update and is fed svn revision numbers.
+        #               Remove this when we turn on "Linux Builder"
+        'Linux Builder Bot Update',
     ]
 }
 ENABLED_SLAVES = {}
+
+
+# This is just for testing, to indicate if a master is using a Git scheduler
+# or not.
+GIT_MASTERS = ['chromium.git']
 
 
 def jsonish_to_python(spec, is_top=False):
@@ -82,6 +93,7 @@ class BotUpdateApi(recipe_api.RecipeApi):
     issue = self.m.properties.get('issue')
     patchset = self.m.properties.get('patchset')
     patch_url = self.m.properties.get('patch_url')
+    revision = self.m.properties.get('revision')
     # Issue and patchset must come together.
     if issue:
       assert patchset
@@ -95,7 +107,7 @@ class BotUpdateApi(recipe_api.RecipeApi):
         # 1. What do we want to check out (spec/root/rev/rev_map).
         ['--spec', spec_string],
         ['--root', root],
-        ['--revision', self.m.properties.get('revision')],
+        ['--revision', revision],
         ['--revision_mapping', self.m.properties.get('revision_mapping')],
 
         # 2. How to find the patch, if any (issue/patchset/patch_url).
@@ -115,7 +127,12 @@ class BotUpdateApi(recipe_api.RecipeApi):
       cmd.append('--force')
 
     # Inject Json output for testing.
-    step_test_data = lambda : self.test_api.output_json(active, root)
+    revision_map_data = self.m.gclient.c.got_revision_mapping
+    git_mode = self.m.properties.get('mastername') in GIT_MASTERS
+    step_test_data = lambda : self.test_api.output_json(active,
+                                                        root,
+                                                        revision_map_data,
+                                                        git_mode)
 
     def followup_fn(step_result):
       # Set properties such as got_revision.

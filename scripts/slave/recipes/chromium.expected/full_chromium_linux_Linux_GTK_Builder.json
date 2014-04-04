@@ -160,6 +160,8 @@
       "Release",
       "--build-url",
       "gs://chromium-linux-archive/chromium.linux/Linux GTK Builder",
+      "--build_revision",
+      "170242",
       "--factory-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux GTK Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.linux\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",

@@ -107,8 +107,12 @@ def real_main(options):
   output_dir = os.path.join(abs_build_dir, archive_name.replace('.zip', ''))
 
   src_dir = os.path.dirname(abs_build_dir)
-  (build_revision, webkit_revision) = slave_utils.GetBuildRevisions(
-      src_dir, options.webkit_dir, options.revision_dir)
+  if not options.build_revision:
+    (build_revision, webkit_revision) = slave_utils.GetBuildRevisions(
+        src_dir, options.webkit_dir, options.revision_dir)
+  else:
+    build_revision = options.build_revision
+    webkit_revision = options.webkit_revision
   base_url, url = GetBuildUrl(options, build_revision, webkit_revision)
   archive_name = os.path.basename(base_url)
 
@@ -208,6 +212,14 @@ def main():
   #            to not use this argument.
   option_parser.add_option('--halt-on-missing-build', action='store_true',
                            help='whether to halt on a missing build')
+  option_parser.add_option('--build_revision',
+                           help='Revision of the build that is being '
+                                'archived. Overrides the revision found on '
+                                'the local disk')
+  option_parser.add_option('--webkit_revision',
+                           help='Webkit revision of the build that is being '
+                                'archived. Overrides the revision found on '
+                                'the local disk')
   option_parser.add_option('--webkit-dir', help='WebKit directory path, '
                                                 'relative to the src/ dir.')
   option_parser.add_option('--revision-dir',
