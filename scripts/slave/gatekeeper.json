@@ -131,13 +131,6 @@
 
         "subject_template": "%(project_name)s %(builder_name)s %(result)s",
 
-        "comment": ["We should close on test failures, but we don't",
-                    "currently."],
-        "categories": [
-          "chromium_compile",
-          "gclient"
-        ],
-
         "comment": ["Would be nice to use a regexp  here: /Oilpan/i, etc."],
         "excluded_builders" : [
             "WebKit Linux Oilpan",
@@ -149,11 +142,83 @@
         ],
 
         "builders": {
-          "*": {},
+          "GPU Win Builder": {
+            "categories": [
+                "recipes"
+            ]
+          },
+          "GPU Win Builder (dbg)": {
+            "categories": [
+                "recipes"
+            ]
+          },
+          "GPU Win7 (NVIDIA)": {
+            "categories": [
+                "recipes"
+            ]
+          },
+          "GPU Win7 (dbg) (NVIDIA)": {
+            "categories": [
+                "recipes"
+            ]
+          },
+          "GPU Mac Builder": {
+            "categories": [
+                "recipes"
+            ]
+          },
+          "GPU Mac Builder (dbg)": {
+            "categories": [
+                "recipes"
+            ]
+          },
+          "GPU Mac10.7": {
+            "categories": [
+                "recipes"
+            ]
+          },
+          "GPU Mac10.7 (dbg)": {
+            "categories": [
+                "recipes"
+            ]
+          },
+          "GPU Linux Builder": {
+            "categories": [
+                "recipes"
+            ]
+          },
+          "GPU Linux Builder (dbg)": {
+            "categories": [
+                "recipes"
+            ]
+          },
+          "GPU Linux (NVIDIA)": {
+            "categories": [
+                "recipes"
+            ]
+          },
+          "GPU Linux (dbg) (NVIDIA)": {
+            "categories": [
+                "recipes"
+            ]
+          },
+
+          "*": {
+            "comment": ["We should close on test failures, but we don't",
+                        "currently."],
+            "categories": [
+              "chromium_compile",
+              "gclient"
+            ]
+          },
 
           "WebKit XP": {
             "excluded_steps": [
               "runhooks"
+            ],
+            "categories": [
+              "chromium_compile",
+              "gclient"
             ]
           }
         }
@@ -231,6 +296,12 @@
     "chromium_perf_steps": {
       "closing_optional": [
         "*"
+      ]
+    },
+
+    "recipes": {
+      "closing_steps": [
+        "steps"
       ]
     }
   }
