@@ -207,7 +207,7 @@
             "comment": ["We should close on test failures, but we don't",
                         "currently."],
             "categories": [
-              "chromium_compile",
+              "chromium_compile_optional",
               "gclient"
             ]
           },
@@ -217,7 +217,7 @@
               "runhooks"
             ],
             "categories": [
-              "chromium_compile",
+              "chromium_compile_optional",
               "gclient"
             ]
           }
@@ -283,6 +283,12 @@
 
     "chromium_compile": {
       "closing_steps": [
+        "compile"
+      ]
+    },
+
+    "chromium_compile_optional": {
+      "closing_optional": [
         "compile"
       ]
     },
