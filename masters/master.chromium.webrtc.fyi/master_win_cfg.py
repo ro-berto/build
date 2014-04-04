@@ -48,7 +48,6 @@ F('win_webrtc_factory', Win().ChromiumWebRTCLatestFactory(
     slave_type='Builder',
     target='Release',
     options=['--compiler=goma', '--', 'chromium_builder_webrtc'],
-    tests=tests,
     compile_timeout=2400,
     factory_properties={
         'trigger': 'win_rel_trigger',
