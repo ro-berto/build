@@ -125,7 +125,8 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "aura_builder"
+      "aura_builder",
+      "chrome"
     ],
     "name": "compile",
     "seed_steps": [
