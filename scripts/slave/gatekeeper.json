@@ -118,6 +118,47 @@
         }
       }
     ],
+    "http://build.chromium.org/p/chromium.webkit": [
+      {
+        "tree_notify": [
+          "eseidel@chromium.org",
+          "stip@chromium.org"
+        ],
+
+        "sheriff_classes": ["sheriff_webkit"],
+
+        "forgive_all": "true",
+
+        "subject_template": "%(project_name)s %(builder_name)s %(result)s",
+
+        "comment": ["We should close on test failures, but we don't",
+                    "currently."],
+        "categories": [
+          "chromium_compile",
+          "gclient"
+        ],
+
+        "comment": ["Would be nice to use a regexp  here: /Oilpan/i, etc."],
+        "excluded_builders" : [
+            "WebKit Linux Oilpan",
+            "WebKit Linux Oilpan (dbg)",
+            "WebKit Mac Oilpan",
+            "WebKit Mac Oilpan (dbg)",
+            "WebKit Win Oilpan",
+            "WebKit Win Oilpan (dbg)"
+        ],
+
+        "builders": {
+          "*": {},
+
+          "WebKit XP": {
+            "excluded_steps": [
+              "runhooks"
+            ]
+          }
+        }
+      }
+    ],
     "http://build.chromium.org/p/client.libvpx": [
       {
         "tree_notify": [
