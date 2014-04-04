@@ -105,6 +105,8 @@ builder_factory_properties = {
 B('Win SyzyASAN Builder', 'win_syzyasan_rel', 'compile_noclose',
   'win_syzyasan_rel', auto_reboot=False, notify_on_missing=True)
 F('win_syzyasan_rel', win().ChromiumASANFactory(
+    # This slow down the build but this is necessary due to crbug.com/359183.
+    clobber=True,
     slave_type='Builder',
     target='Release',
     options=['--build-tool=ninja', '--', 'chromium_builder_tests'],
