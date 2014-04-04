@@ -56,3 +56,10 @@ class GSUtilApi(recipe_api.RecipeApi):
     cmd = ['cp'] + args + [full_source, dest]
     name = kwargs.pop('name', 'download')
     return self(cmd, name, **kwargs)
+
+  def download_url(self, url, dest, args=None, **kwargs):
+    args = args or []
+    url = url.replace('https://storage.cloud.google.com/', 'gs://')
+    cmd = ['cp'] + args + [url, dest]
+    name = kwargs.pop('name', 'download')
+    return self(cmd, name, **kwargs)

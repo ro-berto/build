@@ -19,6 +19,11 @@ def GenSteps(api):
                     'gs://chromium-recipe-test/some/random/path/**',
                     'gs://chromium-recipe-test/staging'])
 
+  yield api.gsutil.download_url(
+      'http://storage.cloud.google.com/' + bucket + '/' + cloud_file,
+      local_file,
+      name='gsutil download url')
+
   new_cloud_file = 'staging/to/boom'
   new_local_file = api.path['slave_build'].join('erang')
   yield api.gsutil.download(bucket, new_cloud_file, new_local_file)
