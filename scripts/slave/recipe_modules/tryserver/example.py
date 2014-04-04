@@ -18,6 +18,9 @@ def GenTests(api):
   yield (api.test('with_svn_patch') +
          api.properties(patch_url='svn://checkout.url'))
 
+  yield (api.test('with_svn_patch_and_mirror') +
+         api.properties(patch_url='svn://svn.chromium.org', use_mirror=True))
+
   yield (api.test('with_git_patch') +
          api.properties(
               patch_storage='git',

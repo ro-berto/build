@@ -12,6 +12,32 @@ PATCH_STORAGE_SVN = 'svn'
 
 
 class TryserverApi(recipe_api.RecipeApi):
+  def __init__(self, **kwargs):
+    super(TryserverApi, self).__init__(**kwargs)
+    self.USE_MIRROR = None
+
+  @property
+  def use_mirror(self):
+    """Indicates if tryserver will use mirrors in its configuration."""
+    value = self.USE_MIRROR
+    if value is None:
+      value = self.m.properties.get('use_mirror')
+    return value
+
+  @use_mirror.setter
+  def use_mirror(self, val):  # pragma: no cover
+    self.USE_MIRROR = val
+
+  @property
+  def patch_url(self):
+    """Reads patch_url property and corrects it if needed."""
+    url = self.m.properties.get('patch_url')
+    if url and self.use_mirror:
+      url = url.replace(
+          'svn.chromium.org',
+          'svn-mirror.golo.chromium.org')
+    return url
+
   @property
   def is_tryserver(self):
     """Returns true iff we can apply_issue or patch."""
@@ -27,7 +53,7 @@ class TryserverApi(recipe_api.RecipeApi):
   @property
   def is_patch_in_svn(self):
     """Returns true iff the properties exist to patch from a patch URL."""
-    return self.m.properties.get('patch_url')
+    return self.patch_url
 
   @property
   def is_patch_in_git(self):
@@ -50,7 +76,7 @@ class TryserverApi(recipe_api.RecipeApi):
   def apply_from_svn(self, cwd):
     """Downloads patch from patch_url using svn-export and applies it"""
     # TODO(nodir): accept these properties as parameters
-    patch_url = self.m.properties['patch_url']
+    patch_url = self.patch_url
 
     def link_patch(step_result):
       """Links the patch.diff file on the waterfall."""
