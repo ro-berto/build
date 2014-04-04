@@ -21,7 +21,7 @@ class TryserverApi(recipe_api.RecipeApi):
     """Indicates if tryserver will use mirrors in its configuration."""
     value = self.USE_MIRROR
     if value is None:
-      value = self.m.properties.get('use_mirror')
+      value = self.m.properties.get('use_mirror', True)
     return value
 
   @use_mirror.setter
