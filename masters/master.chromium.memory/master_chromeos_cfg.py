@@ -31,7 +31,7 @@ T('chromeos_asan_rel_trigger')
 
 chromeos_asan_archive = master_config.GetArchiveUrl(
     'ChromiumMemory',
-    'Linux Chromium OS ASan+LSan Builder',
+    'Linux Chromium OS ASan LSan Builder',
     'Linux_Chromium_OS_ASan_LSan_Builder',
     'linux')
 
@@ -66,7 +66,7 @@ sharded_tests = [
 ]
 
 #
-# CrOS ASan+LSan Rel Builder
+# CrOS ASan LSan Rel Builder
 #
 linux_aura_options = [
   'aura_builder',
@@ -107,7 +107,7 @@ fp_chromeos_asan = {
     'sharded_tests': sharded_tests,
 }
 
-B('Linux Chromium OS ASan+LSan Builder', 'chromeos_asan_rel', 'compile',
+B('Linux Chromium OS ASan LSan Builder', 'chromeos_asan_rel', 'compile',
   'chromeos_asan_rel', auto_reboot=False, notify_on_missing=True)
 F('chromeos_asan_rel', linux().ChromiumASANFactory(
     slave_type='Builder',
@@ -119,7 +119,7 @@ F('chromeos_asan_rel', linux().ChromiumASANFactory(
                             trigger='chromeos_asan_rel_trigger')))
 
 #
-# CrOS ASan+LSan Rel testers
+# CrOS ASan LSan Rel testers
 #
 
 asan_tests_1 = [
@@ -154,7 +154,7 @@ asan_tests_3 = [
   'unit',
 ]
 
-B('Linux Chromium OS ASan+LSan Tests (1)', 'chromeos_asan_rel_tests_1',
+B('Linux Chromium OS ASan LSan Tests (1)', 'chromeos_asan_rel_tests_1',
   'testers', 'chromeos_asan_rel_trigger', notify_on_missing=True)
 F('chromeos_asan_rel_tests_1', linux().ChromiumASANFactory(
     slave_type='Tester',
@@ -164,7 +164,7 @@ F('chromeos_asan_rel_tests_1', linux().ChromiumASANFactory(
                             browser_total_shards='3',
                             browser_shard_index='1')))
 
-B('Linux Chromium OS ASan+LSan Tests (2)', 'chromeos_asan_rel_tests_2',
+B('Linux Chromium OS ASan LSan Tests (2)', 'chromeos_asan_rel_tests_2',
   'testers', 'chromeos_asan_rel_trigger', notify_on_missing=True)
 F('chromeos_asan_rel_tests_2', linux().ChromiumASANFactory(
     slave_type='Tester',
@@ -174,7 +174,7 @@ F('chromeos_asan_rel_tests_2', linux().ChromiumASANFactory(
                             browser_total_shards='3',
                             browser_shard_index='2')))
 
-B('Linux Chromium OS ASan+LSan Tests (3)', 'chromeos_asan_rel_tests_3',
+B('Linux Chromium OS ASan LSan Tests (3)', 'chromeos_asan_rel_tests_3',
   'testers', 'chromeos_asan_rel_trigger', notify_on_missing=True)
 F('chromeos_asan_rel_tests_3', linux().ChromiumASANFactory(
     slave_type='Tester',

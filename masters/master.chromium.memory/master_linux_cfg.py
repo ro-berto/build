@@ -28,7 +28,7 @@ S('linux_asan_rel', branch='src', treeStableTimer=60)
 T('linux_asan_rel_trigger')
 
 linux_asan_archive = master_config.GetArchiveUrl('ChromiumMemory',
-                                                 'Linux ASan+LSan Builder',
+                                                 'Linux ASan LSan Builder',
                                                  'Linux_ASan_LSan_Builder',
                                                  'linux')
 
@@ -62,9 +62,9 @@ sharded_tests = [
 ]
 
 #
-# Linux ASan+LSan Rel Builder
+# Linux ASan LSan Rel Builder
 #
-B('Linux ASan+LSan Builder', 'linux_asan_rel', 'compile', 'linux_asan_rel',
+B('Linux ASan LSan Builder', 'linux_asan_rel', 'compile', 'linux_asan_rel',
   auto_reboot=False, notify_on_missing=True)
 # Please do not add release_extra_cflags=-g here until the debug info section
 # produced by Clang on Linux is small enough.
@@ -106,9 +106,9 @@ F('linux_asan_rel', linux().ChromiumASANFactory(
         'trigger': 'linux_asan_rel_trigger' }))
 
 #
-# Linux ASan+LSan Rel testers
+# Linux ASan LSan Rel testers
 #
-B('Linux ASan+LSan Tests (1)', 'linux_asan_rel_tests_1', 'testers',
+B('Linux ASan LSan Tests (1)', 'linux_asan_rel_tests_1', 'testers',
   'linux_asan_rel_trigger', notify_on_missing=True)
 F('linux_asan_rel_tests_1', linux().ChromiumASANFactory(
     slave_type='Tester',
@@ -134,7 +134,7 @@ F('linux_asan_rel_tests_1', linux().ChromiumASANFactory(
       'sharded_tests': sharded_tests,
     }))
 
-B('Linux ASan+LSan Tests (2)', 'linux_asan_rel_tests_2', 'testers',
+B('Linux ASan LSan Tests (2)', 'linux_asan_rel_tests_2', 'testers',
   'linux_asan_rel_trigger', notify_on_missing=True)
 F('linux_asan_rel_tests_2', linux().ChromiumASANFactory(
     slave_type='Tester',
@@ -158,7 +158,7 @@ F('linux_asan_rel_tests_2', linux().ChromiumASANFactory(
       'sharded_tests': sharded_tests,
     }))
 
-B('Linux ASan+LSan Tests (3)', 'linux_asan_rel_tests_3', 'testers',
+B('Linux ASan LSan Tests (3)', 'linux_asan_rel_tests_3', 'testers',
   'linux_asan_rel_trigger', notify_on_missing=True)
 F('linux_asan_rel_tests_3', linux().ChromiumASANFactory(
     slave_type='Tester',
