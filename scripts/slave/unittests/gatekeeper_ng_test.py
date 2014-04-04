@@ -13,6 +13,7 @@ close the tree.
 # Needs to be at the top, otherwise coverage will spit nonsense.
 import utils  # "relative import" pylint: disable=W0403
 
+import copy
 import contextlib
 import json
 import mock
@@ -131,9 +132,10 @@ class GatekeeperTest(unittest.TestCase):
     self.get_status_url = \
       'https://chromium-status.appspot.com/current?format=json'
     self.set_status_url = 'https://chromium-status.appspot.com/status'
+    # Default to "open" to break fewer unittests.
     self.handle_url_json(self.get_status_url, {
-      'message': 'automatic closed',
-      'general_state': 'closed',
+      'message': 'tree is open',
+      'general_state': 'open',
     })
     self.handle_url_str(self.set_status_url, '0')
 
@@ -341,7 +343,7 @@ class GatekeeperTest(unittest.TestCase):
     self.url_calls.append(call)
 
     if url in self.urls:
-      return self.urls[url]
+      return copy.copy(self.urls[url])
     else:
       raise urllib2.HTTPError(url, 404, 'Not Found: %s' % url,
                               None, StringIO.StringIO(''))
@@ -665,6 +667,11 @@ class GatekeeperTest(unittest.TestCase):
                                 self.masters[0].builders[0].name,
                                 {'closing_steps': ['step2']})
 
+    # Open the tree if it was previously automaticly closed.
+    self.handle_url_json(self.get_status_url, {
+      'message': 'closed (automatic)',
+      'general_state': 'closed',
+    })
     self.call_gatekeeper()
     self.assertEquals(self.url_calls[-1]['url'], self.set_status_url)
     status_data = urlparse.parse_qs(self.url_calls[-1]['params'])

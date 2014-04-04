@@ -274,6 +274,10 @@ def submit_email(email_app, build_data, secret):
 
 def open_tree_if_possible(failed_builds, username, password, status_url_root,
                           set_status):
+  closing_builds = [b for b in failed_builds if b['close_tree']]
+  if closing_builds:
+    return
+
   status = get_tree_status(status_url_root)
   # Don't change the status unless the tree is currently closed.
   if status['general_state'] != 'closed':
@@ -282,10 +286,6 @@ def open_tree_if_possible(failed_builds, username, password, status_url_root,
   # Don't override human closures.
   # FIXME: We could check that we closed the tree instead?
   if not re.search(r"automatic", status['message'], re.IGNORECASE):
-    return
-
-  closing_builds = [b for b in failed_builds if b['close_tree']]
-  if closing_builds:
     return
 
   logging.info('All builders are green, opening the tree...')
@@ -307,10 +307,13 @@ def close_tree_if_necessary(failed_builds, username, password, status_url_root,
     logging.info('no tree-closing failures!')
     return
 
+  status = get_tree_status(status_url_root)
+  # Don't change the status unless the tree is currently open.
+  if status['general_state'] != 'open':
+    return
+
   logging.info('%d failed builds found, closing the tree...' %
                len(closing_builds))
-  if not closing_builds:
-    return
 
   # Close on first failure seen.
   msg = 'Tree is closed (Automatic: "%(steps)s" on "%(builder)s" %(blame)s)'
