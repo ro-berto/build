@@ -209,6 +209,10 @@
             "categories": [
               "chromium_compile_optional",
               "gclient"
+            ],
+
+            "closing_optional": [
+              "runhooks"
             ]
           },
 
