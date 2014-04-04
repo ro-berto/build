@@ -17,13 +17,7 @@ from common import annotator
 from common import chromium_utils
 
 
-def main():
-  master_urls = ['http://build.chromium.org/p/chromium',
-                 'http://build.chromium.org/p/chromium.lkgr',
-                 'http://build.chromium.org/p/chromium.perf',
-                 'http://build.chromium.org/p/client.libvpx',
-                ]
-
+def gen_gatekeeper_cmd(master_urls, extra_args=None):
   json = os.path.join(SLAVE_DIR, 'gatekeeper.json')
   args = ['-v', '--json=%s' % json]
 
@@ -31,15 +25,47 @@ def main():
   cmd = [sys.executable, script]
 
   cmd.extend(args)
+
+  if extra_args:
+    cmd.extend(extra_args)
+
   cmd.extend(master_urls)
+  return cmd
 
-  stream = annotator.StructuredAnnotationStream(seed_steps=['gatekeeper_ng'])
+
+def run_gatekeeper(master_urls, extra_args=None):
+  env = {}
+  env['PYTHONPATH'] = os.pathsep.join(sys.path)
+
+  cmd = gen_gatekeeper_cmd(master_urls, extra_args=extra_args)
+
+  return chromium_utils.RunCommand(cmd, env=env)
+
+
+def main():
+  stream = annotator.StructuredAnnotationStream(seed_steps=['gatekeeper_ng',
+                                                            'blink_gatekeeper'])
   with stream.step('gatekeeper_ng') as s:
-    env = {}
-    env['PYTHONPATH'] = os.pathsep.join(sys.path)
+    master_urls = ['http://build.chromium.org/p/chromium',
+                   'http://build.chromium.org/p/chromium.lkgr',
+                   'http://build.chromium.org/p/chromium.perf',
+                   'http://build.chromium.org/p/client.libvpx',
+    ]
 
-    result = chromium_utils.RunCommand(cmd, env=env)
-    if result != 0:
+    if run_gatekeeper(master_urls) != 0:
+      s.step_failure()
+      return 2
+
+  with stream.step('blink_gatekeeper') as s:
+    status_url = 'https://blink-status.appspot.com/status'
+
+    master_urls = ['http://build.chromium.org/p/chromium.webkit']
+
+    extra_args = ['--build-db=blink_build_db.json', '-s', '--open-tree',
+                  '--status-url=%s' % status_url,
+                  '--password-file=.blink_status_password']
+
+    if run_gatekeeper(master_urls, extra_args=extra_args) != 0:
       s.step_failure()
       return 2
   return 0
