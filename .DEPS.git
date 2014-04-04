@@ -11,8 +11,6 @@ vars = {
 }
 
 deps = {
-    'build/scripts/command_wrapper/bin':
-        Var('git_url') + '/chromium/tools/command_wrapper/bin.git',
     'build/scripts/gsd_generate_index':
         Var('git_url') + '/chromium/tools/gsd_generate_index.git',
     'build/scripts/private/data/reliability':
