@@ -16,11 +16,8 @@ DEPS = [
 def GenSteps(api):
   root = api.rietveld.calculate_issue_root()
 
-  # FIXME: Remove the blink_bare repository type.
   # TODO(iannucci): Pass the build repo info directly via properties
   repo_name = api.properties['repo_name']
-  if repo_name == 'blink_bare':
-    root = ''
 
   api.gclient.set_config(repo_name)
   api.step.auto_resolve_conflicts = True
@@ -62,7 +59,7 @@ def GenSteps(api):
 
 
 def GenTests(api):
-  for repo_name in ['blink', 'blink_bare', 'tools_build', 'chromium']:
+  for repo_name in ['blink', 'tools_build', 'chromium']:
     extra = {}
     if 'blink' in repo_name:
       extra['root'] = 'src/third_party/WebKit'

@@ -155,12 +155,6 @@ def android_bare(c):
   s = c.solutions.add()
   s.deps_file = '.DEPS.git'
 
-@config_ctx()
-def blink_bare(c):
-  s = c.solutions.add()
-  s.name = 'blink'
-  s.url = BlinkURL(c)
-
 # TODO(iannucci,vadimsh): Switch this to src-limited
 @config_ctx()
 def chrome_internal(c):
