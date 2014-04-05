@@ -19,9 +19,6 @@ ENABLED_BUILDERS = {
     ],
     'chromium.linux': [
         'Linux Builder',
-        'Linux GTK Builder',
-        'Linux Builder (dbg)(32)',
-        'Linux Builder (dbg)',
     ]
 }
 ENABLED_SLAVES = {}
