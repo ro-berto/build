@@ -133,12 +133,17 @@
 
         "comment": ["Would be nice to use a regexp  here: /Oilpan/i, etc."],
         "excluded_builders" : [
-            "WebKit Linux Oilpan",
+            "WebKit Linux (deps)",
             "WebKit Linux Oilpan (dbg)",
-            "WebKit Mac Oilpan",
+            "WebKit Linux Oilpan",
+            "WebKit Mac Builder (deps)",
             "WebKit Mac Oilpan (dbg)",
+            "WebKit Mac Oilpan",
+            "WebKit Mac10.6 (deps)",
+            "WebKit Win Builder (deps)",
+            "WebKit Win Oilpan (dbg)",
             "WebKit Win Oilpan",
-            "WebKit Win Oilpan (dbg)"
+            "WebKit XP (deps)"
         ],
 
         "builders": {
