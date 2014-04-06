@@ -28,6 +28,7 @@ import urlparse
 import test_env  # pylint: disable=W0403,W0611
 
 from slave import gatekeeper_ng
+from slave import gatekeeper_ng_config
 from slave import build_scan_db
 
 
@@ -301,6 +302,15 @@ class GatekeeperTest(unittest.TestCase):
     else:
       yield self._gatekeeper_config
 
+  @contextlib.contextmanager
+  def gatekeeper_config_reader(self):
+    """Wrapper to read the flattened gatekeeper_config."""
+    if not self._gatekeeper_config:
+      config = gatekeeper_ng_config.load_gatekeeper_config(self.gatekeeper_file)
+      yield config
+    else:
+      self.fail('Unable to read self._gatekeeper_config while writing to it.')
+
   def add_gatekeeper_master_config(self, master_url, data):
     """Adds a gatekeeper category to a build."""
     with self.gatekeeper_config_editor() as gatekeeper_config:
@@ -328,6 +338,16 @@ class GatekeeperTest(unittest.TestCase):
         gatekeeper_config['masters'][master_url].append({})
       gatekeeper_config['masters'][master_url][idx].setdefault('builders', {})
       gatekeeper_config['masters'][master_url][idx]['builders'][builder] = data
+
+  def get_gatekeeper_section_shas(self):
+    """Return the SHAs of all the gatekeeper sections."""
+    sections = {}
+    with self.gatekeeper_config_reader() as gatekeeper_config:
+      for master_url, master in gatekeeper_config.iteritems():
+        sections[master_url] = [
+            gatekeeper_ng_config.gatekeeper_section_hash(section)
+            for section in master]
+    return sections
 
   def _url_handler(self, req, params=None):
     """Used by the mocked urlopen to respond to different URLs."""
@@ -835,10 +855,10 @@ class GatekeeperTest(unittest.TestCase):
     self.call_gatekeeper(build_db=build_db)
     _, finished_new_builds = self.process_build_db(
         self.masters[0].url, 'mybuilder')
+    shas = self.get_gatekeeper_section_shas()[self.masters[0].url]
     self.assertEquals(finished_new_builds,
                       {2: build_scan_db.gen_build(finished=True, triggered={
-                          'a1bd1970bea6d5842d437e745a9cb701'
-                          '8383103b7219c31480283bd4f9d7abc5': ['step1']})})
+                          shas[0]: ['step1']})})
 
     # Check that gatekeeper indeed sent an email.
     self.assertEquals(self.url_calls[-1]['url'], self.mailer_url)
@@ -1423,12 +1443,13 @@ class GatekeeperTest(unittest.TestCase):
     unfinished_new_builds, finished_new_builds = self.process_build_db(
         self.masters[0].url, 'mybuilder')
 
+    shas = self.get_gatekeeper_section_shas()[self.masters[0].url]
+
     self.assertEquals(finished_new_builds,
                       {1: build_scan_db.gen_build(finished=True)})
     self.assertEquals(unfinished_new_builds,
                       {2: build_scan_db.gen_build(triggered={
-                          'a1bd1970bea6d5842d437e745a9cb701'
-                          '8383103b7219c31480283bd4f9d7abc5': ['step1']})})
+                          shas[0]: ['step1']})})
 
     self.assertIn(self.set_status_url, urls)
 
@@ -1478,12 +1499,12 @@ class GatekeeperTest(unittest.TestCase):
     urls += self.call_gatekeeper(build_db=build_db)
     unfinished_new_builds, finished_new_builds = self.process_build_db(
         self.masters[0].url, 'mybuilder')
+    shas = self.get_gatekeeper_section_shas()[self.masters[0].url]
     self.assertEquals(finished_new_builds,
                       {0: build_scan_db.gen_build(finished=True)})
     self.assertEquals(unfinished_new_builds,
                       {1: build_scan_db.gen_build(triggered={
-                          'a1bd1970bea6d5842d437e745a9cb701'
-                          '8383103b7219c31480283bd4f9d7abc5': ['step1']})})
+                          shas[0]: ['step1']})})
     self.assertEquals(1, len([u for u in urls if u == self.set_status_url]))
 
   def testTriggeringOneHashDoesntStopAnother(self):
@@ -1514,15 +1535,13 @@ class GatekeeperTest(unittest.TestCase):
     urls += self.call_gatekeeper(build_db=build_db)
     unfinished_new_builds, finished_new_builds = self.process_build_db(
         self.masters[0].url, 'mybuilder')
+    shas = self.get_gatekeeper_section_shas()[self.masters[0].url]
     self.assertEquals(finished_new_builds,
                       {1: build_scan_db.gen_build(finished=True)})
     self.assertEquals(unfinished_new_builds,
                       {2: build_scan_db.gen_build(triggered={
-                          'a1bd1970bea6d5842d437e745a9cb701'
-                          '8383103b7219c31480283bd4f9d7abc5': ['step1'],
-
-                          'cd2f7fdc2777964cf9bc9b170288ad45'
-                          'ece8dd81a5d16b1e2110e5e260038f21': ['step2']})})
+                          shas[0]: ['step1'],
+                          shas[1]: ['step2']})})
     self.assertEquals(2, len([u for u in urls if u == self.set_status_url]))
 
   def testTriggerIsRemovedIfNoFailure(self):
@@ -1602,10 +1621,10 @@ class GatekeeperTest(unittest.TestCase):
 
     unfinished_new_builds, finished_new_builds = self.process_build_db(
         self.masters[0].url, 'mybuilder')
+    shas = self.get_gatekeeper_section_shas()[self.masters[0].url]
     self.assertEquals(finished_new_builds,
                       {2: build_scan_db.gen_build(finished=True, triggered={
-                          'b7f70fbea8581aa38b2b42d3f6973f9b'
-                          'dd1e2c8fa01ecc257261b3b3f6ab6d85': ['step1'],
+                          shas[0]: ['step1'],
                           })})
     self.assertEquals(unfinished_new_builds, {})
 
@@ -1635,10 +1654,10 @@ class GatekeeperTest(unittest.TestCase):
     self.assertEquals(urls.count(self.set_status_url), 2)
     unfinished_new_builds, finished_new_builds = self.process_build_db(
         self.masters[0].url, 'mybuilder')
+    shas = self.get_gatekeeper_section_shas()[self.masters[0].url]
     self.assertEquals(finished_new_builds,
                       {2: build_scan_db.gen_build(finished=True, triggered={
-                          'b7f70fbea8581aa38b2b42d3f6973f9b'
-                          'dd1e2c8fa01ecc257261b3b3f6ab6d85': [u'step2']})})
+                          shas[0]: [u'step2']})})
     self.assertEquals(unfinished_new_builds, {})
 
   def testRecordsAllFailuresInBuild(self):
@@ -1665,10 +1684,10 @@ class GatekeeperTest(unittest.TestCase):
     self.assertEquals(urls.count(self.set_status_url), 1)
     unfinished_new_builds, _ = self.process_build_db(
         self.masters[0].url, 'mybuilder')
+    shas = self.get_gatekeeper_section_shas()[self.masters[0].url]
     self.assertEquals(unfinished_new_builds,
                       {1: build_scan_db.gen_build(triggered={
-                          'b7f70fbea8581aa38b2b42d3f6973f9b'
-                          'dd1e2c8fa01ecc257261b3b3f6ab6d85': [
+                          shas[0]: [
                               'step1', 'step2']})})
 
   ### JSON config file tests.
