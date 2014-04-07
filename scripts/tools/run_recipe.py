@@ -79,7 +79,7 @@ def main(argv):
   env = os.environ.copy()
   env['RUN_SLAVE_UPDATED_SCRIPTS'] = '1'
   env['PYTHONUNBUFFERED'] = '1'
-  env['PYTHONIOENCODING'] = 'UTF-8',
+  env['PYTHONIOENCODING'] = 'UTF-8'
   return subprocess.call(
       ['python', '-u', RUNIT, 'python', '-u', ANNOTATED_RUN,
        '--keep-stdin',  # so that pdb works for local execution
