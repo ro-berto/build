@@ -126,6 +126,7 @@ asan_rel_gyp = ('asan=1 lsan=1 asan_coverage=1 linux_use_tcmalloc=0 '
 
 B('ASAN Release', 'linux_asan_rel', 'compile', 'chromium_lkgr')
 F('linux_asan_rel', linux().ChromiumASANFactory(
+    compile_timeout=2400,  # We started seeing 29 minute links, bug 360158
     clobber=True,
     options=['--compiler=clang', 'chromium_builder_asan'],
     factory_properties={
