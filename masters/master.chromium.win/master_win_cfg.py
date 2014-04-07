@@ -210,8 +210,7 @@ F('rel_x64', win_out().ChromiumFactory(
     compile_timeout=2400,
     slave_type='Builder',
     target='Release_x64',
-    options=['--compiler=goma',
-             '--', 'chromium_builder_tests'],
+    options=['--compiler=goma', '--', 'all'],
     factory_properties={
       'trigger': 'win_x64_rel_trigger',
       'gclient_env': {
@@ -351,7 +350,7 @@ F('dbg_x64', win_out().ChromiumFactory(
     slave_type='Builder',
     target='Debug_x64',
     options=['--compiler=goma',
-             '--', 'chromium_builder_tests'],
+             '--', 'all'],
     factory_properties={
       'gclient_env': {
         'GYP_DEFINES': 'component=shared_library fastbuild=1 target_arch=x64',
