@@ -798,6 +798,8 @@ class FactoryCommands(object):
                           timeout=60,
                           workdir='',  # Doesn't really matter where we are.
                           alwaysRun=True,  # Run this even on update failures
+                          flunkOnFailure=False,
+                          warnOnFailure=True,
                           command=['python', self._cleanup_temp_tool])
 
   def AddGClientRevertStep(self):
