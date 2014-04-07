@@ -18,12 +18,45 @@ DEPS = [
 ]
 
 
+
+BUILDERS = {
+  'tryserver.webrtc': {
+    'builders': {
+      'android_apk': {
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
+      },
+      'android_apk_rel': {
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
+      },
+    },
+  },
+}
+
+
 def GenSteps(api):
-  config_vals = {}
-  config_vals.update(
-    dict((str(k),v) for k,v in api.properties.iteritems() if k.isupper())
-  )
-  api.webrtc.set_config('webrtc_android_apk', **config_vals)
+  mastername = api.properties.get('mastername')
+  buildername = api.properties.get('buildername')
+  master_dict = BUILDERS.get(mastername, {})
+  bot_config = master_dict.get('builders', {}).get(buildername)
+  assert bot_config, ('Unrecognized builder name %r for master %r.' %
+                      (buildername, mastername))
+
+  api.webrtc.set_config('webrtc_android_apk',
+                        **bot_config.get('webrtc_config_kwargs', {}))
   if api.tryserver.is_tryserver:
     api.webrtc.apply_config('webrtc_android_apk_try_builder')
 
@@ -39,6 +72,7 @@ def GenSteps(api):
   api.step.auto_resolve_conflicts = True
 
   yield api.gclient.checkout()
+
   if api.tryserver.is_tryserver:
     yield api.webrtc.apply_svn_patch()
   yield api.base_android.envsetup()
@@ -54,43 +88,42 @@ def GenSteps(api):
   yield api.chromium_android.common_tests_final_steps()
 
 
-def GenTests(api):
-  for build_config in ('Debug', 'Release'):
-    for target_arch in ('intel', 'arm'):
-      # Buildbots.
-      props = api.properties(
-        TARGET_PLATFORM='android',
-        TARGET_ARCH=target_arch,
-        TARGET_BITS=32,
-        BUILD_CONFIG=build_config,
-      )
-      yield (
-        api.test('buildbot_%s_%s' % (build_config, target_arch)) +
-        props +
-        api.platform('linux', 64) +
-        api.step_data('envsetup',
-            api.json.output({
-                'FOO': 'bar',
-                'GYP_DEFINES': 'my_new_gyp_def=aaa',
-            }))
-      )
+def _sanitize_nonalpha(text):
+  return ''.join(c if c.isalnum() else '_' for c in text)
 
-      # Trybots.
-      props = api.properties(
-        TARGET_PLATFORM='android',
-        TARGET_ARCH=target_arch,
-        TARGET_BITS=32,
-        BUILD_CONFIG=build_config,
-        revision='12345',
-        patch_url='try_job_svn_patch'
-      )
-      yield (
-        api.test('trybot_%s_%s' % (build_config, target_arch)) +
-        props +
-        api.platform('linux', 64) +
+
+def GenTests(api):
+  for mastername, master_config in BUILDERS.iteritems():
+    for buildername, bot_config in master_config['builders'].iteritems():
+      bot_type = bot_config.get('bot_type', 'builder_tester')
+
+      if bot_type in ['builder', 'builder_tester']:
+        assert bot_config.get('parent_buildername') is None, (
+            'Unexpected parent_buildername for builder %r on master %r.' %
+                (buildername, mastername))
+
+      webrtc_config_kwargs = bot_config.get('webrtc_config_kwargs', {})
+      test = (
+        api.test('%s_%s' % (_sanitize_nonalpha(mastername),
+                            _sanitize_nonalpha(buildername))) +
+        api.properties(mastername=mastername,
+                       buildername=buildername,
+                       parent_buildername=bot_config.get('parent_buildername'),
+                       TARGET_PLATFORM=webrtc_config_kwargs['TARGET_PLATFORM'],
+                       TARGET_ARCH=webrtc_config_kwargs['TARGET_ARCH'],
+                       TARGET_BITS=webrtc_config_kwargs['TARGET_BITS'],
+                       BUILD_CONFIG=webrtc_config_kwargs['BUILD_CONFIG']) +
+        api.platform(bot_config['testing']['platform'],
+                     webrtc_config_kwargs.get('TARGET_BITS', 64)) +
         api.step_data('envsetup',
             api.json.output({
                 'FOO': 'bar',
                 'GYP_DEFINES': 'my_new_gyp_def=aaa',
             }))
       )
+      if mastername.startswith('tryserver'):
+        test += api.properties(revision='12345',
+                               patch_url='try_job_svn_patch')
+
+      yield test
+
