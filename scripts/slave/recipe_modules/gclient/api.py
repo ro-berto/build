@@ -60,7 +60,6 @@ class GclientApi(recipe_api.RecipeApi):
   @use_mirror.setter
   def use_mirror(self, val):  # pragma: no cover
     self.USE_MIRROR = val
-    self.m.tryserver.use_mirror = val
 
   @property
   def spec_alias(self):

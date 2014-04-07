@@ -12,30 +12,10 @@ PATCH_STORAGE_SVN = 'svn'
 
 
 class TryserverApi(recipe_api.RecipeApi):
-  def __init__(self, **kwargs):
-    super(TryserverApi, self).__init__(**kwargs)
-    self.USE_MIRROR = None
-
-  @property
-  def use_mirror(self):
-    """Indicates if tryserver will use mirrors in its configuration."""
-    value = self.USE_MIRROR
-    if value is None:
-      value = self.m.properties.get('use_mirror', True)
-    return value
-
-  @use_mirror.setter
-  def use_mirror(self, val):  # pragma: no cover
-    self.USE_MIRROR = val
-
   @property
   def patch_url(self):
     """Reads patch_url property and corrects it if needed."""
     url = self.m.properties.get('patch_url')
-    if url and self.use_mirror:
-      url = url.replace(
-          'svn.chromium.org',
-          'svn-mirror.golo.chromium.org')
     return url
 
   @property
