@@ -147,87 +147,28 @@
         ],
 
         "builders": {
-          "GPU Win Builder": {
-            "categories": [
-                "recipes"
-            ]
-          },
-          "GPU Win Builder (dbg)": {
-            "categories": [
-                "recipes"
-            ]
-          },
-          "GPU Win7 (NVIDIA)": {
-            "categories": [
-                "recipes"
-            ]
-          },
-          "GPU Win7 (dbg) (NVIDIA)": {
-            "categories": [
-                "recipes"
-            ]
-          },
-          "GPU Mac Builder": {
-            "categories": [
-                "recipes"
-            ]
-          },
-          "GPU Mac Builder (dbg)": {
-            "categories": [
-                "recipes"
-            ]
-          },
-          "GPU Mac10.7": {
-            "categories": [
-                "recipes"
-            ]
-          },
-          "GPU Mac10.7 (dbg)": {
-            "categories": [
-                "recipes"
-            ]
-          },
-          "GPU Linux Builder": {
-            "categories": [
-                "recipes"
-            ]
-          },
-          "GPU Linux Builder (dbg)": {
-            "categories": [
-                "recipes"
-            ]
-          },
-          "GPU Linux (NVIDIA)": {
-            "categories": [
-                "recipes"
-            ]
-          },
-          "GPU Linux (dbg) (NVIDIA)": {
-            "categories": [
-                "recipes"
-            ]
-          },
-
           "*": {
             "comment": ["We should close on test failures, but we don't",
                         "currently."],
             "categories": [
-              "chromium_compile_optional",
-              "gclient"
+              "chromium_compile_optional"
             ],
 
             "closing_optional": [
-              "runhooks"
+              "compile",
+              "runhooks",
+              "update"
             ]
           },
 
           "WebKit XP": {
-            "excluded_steps": [
-              "runhooks"
-            ],
             "categories": [
-              "chromium_compile_optional",
-              "gclient"
+              "chromium_compile_optional"
+            ],
+
+            "closing_optional": [
+              "compile",
+              "update"
             ]
           }
         }
@@ -311,12 +252,6 @@
     "chromium_perf_steps": {
       "closing_optional": [
         "*"
-      ]
-    },
-
-    "recipes": {
-      "closing_steps": [
-        "steps"
       ]
     }
   }
