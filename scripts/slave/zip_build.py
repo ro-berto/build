@@ -9,12 +9,10 @@
 
 import csv
 import glob
-import hashlib
 import optparse
 import os
 import re
 import shutil
-import subprocess
 import stat
 import sys
 import tempfile
@@ -343,17 +341,13 @@ def Archive(options):
   append_deps_patch_sha = options.factory_properties.get(
       'append_deps_patch_sha')
   if append_deps_patch_sha:
-    diff = subprocess.check_output(['git', 'diff',
-                                    '--src-prefix=src/',
-                                    '--dst-prefix=src/',
-                                    '--no-ext-diff',
-                                    os.path.join('src', '.DEPS.git')])
-    if diff:
-      sha = hashlib.sha256(diff).hexdigest()
-      version_suffix = '%s_%s' % (version_suffix, sha)
-      print 'Appending sha256 of the patch: %s' % sha
+    deps_sha = os.path.join('src', 'DEPS.sha')
+    if os.path.exists(deps_sha):
+      sha = open(deps_sha).read()
+      version_suffix = '%s_%s' % (version_suffix, sha.strip())
+      print 'Appending sha of the patch: %s' % sha
     else:
-      print 'No diff on .DEPS.git, not appending sha256.'
+      print 'DEPS.sha file not found, not appending sha.'
 
   print 'Full Staging in %s' % staging_dir
   print 'Build Directory %s' % build_dir
