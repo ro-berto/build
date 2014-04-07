@@ -5,6 +5,7 @@
 DEPS = [
   'base_android',
   'chromium',
+  'chromium_android',
   'gclient',
   'json',
   'path',
@@ -22,8 +23,9 @@ def GenSteps(api):
   config_vals.update(
     dict((str(k),v) for k,v in api.properties.iteritems() if k.isupper())
   )
+  api.webrtc.set_config('webrtc_android_apk', **config_vals)
   if api.tryserver.is_tryserver:
-    api.webrtc.set_config('webrtc_android_apk_try_builder', **config_vals)
+    api.webrtc.apply_config('webrtc_android_apk_try_builder')
 
     # Replace src/third_party/webrtc with a WebRTC ToT checkout and force the
     # Chromium code to sync ToT.
@@ -33,8 +35,6 @@ def GenSteps(api):
     # branch (which is about to be retired).
     api.gclient.c.solutions[0].custom_deps['src/third_party/webrtc'] += (
         '@' + api.properties.get('revision'))
-  else:
-    api.webrtc.set_config('webrtc_android_apk', **config_vals)
 
   api.step.auto_resolve_conflicts = True
 
@@ -46,8 +46,12 @@ def GenSteps(api):
   yield api.chromium.cleanup_temp()
   yield api.base_android.compile()
 
+  yield api.chromium_android.common_tests_setup_steps()
+
   for test in api.webrtc.ANDROID_APK_TESTS:
     yield api.base_android.test_runner(test)
+
+  yield api.chromium_android.common_tests_final_steps()
 
 
 def GenTests(api):

@@ -129,6 +129,40 @@
     "name": "compile"
   },
   {
+    "can_fail_build": false,
+    "cmd": [
+      "[BUILD]/scripts/slave/daemonizer.py",
+      "--",
+      "[SLAVE_BUILD]/src/build/android/adb_logcat_monitor.py",
+      "[SLAVE_BUILD]/src/out/logcat"
+    ],
+    "env": {
+      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:%(PATH)s"
+    },
+    "name": "spawn_logcat_monitor"
+  },
+  {
+    "can_fail_build": false,
+    "cmd": [
+      "[SLAVE_BUILD]/src/build/android/provision_devices.py",
+      "-t",
+      "Release"
+    ],
+    "env": {
+      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:%(PATH)s"
+    },
+    "name": "provision_devices"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/build/android/buildbot/bb_device_status_check.py"
+    ],
+    "env": {
+      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:%(PATH)s"
+    },
+    "name": "device_status_check"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -336,5 +370,46 @@
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },
     "name": "voice_engine_unittests"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/tee.py",
+      "[SLAVE_BUILD]/src/out/Release/full_log",
+      "--",
+      "[SLAVE_BUILD]/src/build/android/adb_logcat_printer.py",
+      "[SLAVE_BUILD]/src/out/logcat"
+    ],
+    "name": "logcat_dump"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
+      "[SLAVE_BUILD]/src/out/Release/test_logs/*.log"
+    ],
+    "name": "test_report",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import glob, os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@for report in glob.glob(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  with open(report, 'r') as f:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    for l in f.readlines():@@@",
+      "@@@STEP_LOG_LINE@python.inline@      print l@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.remove(report)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "rm",
+      "-rf"
+    ],
+    "name": "cleanup_build"
   }
 ]

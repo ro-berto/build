@@ -45,11 +45,6 @@ def webrtc_android_apk(c):
                             'webrtc', 'webrtc.DEPS')
 
 
-@CONFIG_CTX(includes=['webrtc_android_apk'])
-def webrtc_android_apk_try_builder(c):
-  pass
-
-
 @CONFIG_CTX()
 def _webrtc(c):
   """Add the main solution for WebRTC standalone builds.

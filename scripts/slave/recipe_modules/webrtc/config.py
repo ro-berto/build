@@ -48,12 +48,13 @@ def webrtc_android_clang(c):
 
 @config_ctx()
 def webrtc_android_apk(c):
+  """ Build WebRTC native tests for Android as APKs."""
   pass
 
 
-@config_ctx(includes=['webrtc_android_apk'])
+@config_ctx()
 def webrtc_android_apk_try_builder(c):
-  """ Trybot building WebRTC native tests for Android as APKs."""
+  """ Configure patch manipulation for WebRTC Android APK trybots."""
   c.patch_root_dir = Path('[CHECKOUT]', 'third_party', 'webrtc')
   c.patch_filter_script = Path('[BUILD]', 'scripts', 'slave',
                                'patch_path_filter.py')

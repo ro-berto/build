@@ -42,8 +42,3 @@ def webrtc_android_apk(c):
   c.compile_py.default_targets = ['android_builder_webrtc']
   c.gyp_env.GYP_GENERATOR_FLAGS['default_target'] = 'android_builder_webrtc'
   c.gyp_env.GYP_DEFINES['include_tests'] = 1
-
-
-@CONFIG_CTX(includes=['webrtc_android_apk'])
-def webrtc_android_apk_try_builder(c):
-  pass

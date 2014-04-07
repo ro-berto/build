@@ -8,7 +8,8 @@ from slave.recipe_config import config_item_context, ConfigGroup
 from slave.recipe_config import ConfigList, Dict, List, Single, Static
 from slave.recipe_config_types import Path
 
-def BaseConfig(INTERNAL, REPO_NAME, REPO_URL, BUILD_CONFIG='Debug', **_kwargs):
+def BaseConfig(INTERNAL=False, REPO_NAME=None, REPO_URL=None,
+               BUILD_CONFIG='Debug', **_kwargs):
   return ConfigGroup(
     INTERNAL = Static(INTERNAL),
     REPO_NAME = Static(REPO_NAME),
