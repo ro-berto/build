@@ -331,7 +331,6 @@ CHROMIUM_LKCR_STEPS = {
     'Linux Builder': [
       'compile',
       'gclient runhooks',
-      'gclient sync',
     ],
     'Linux Builder (dbg)': [
       'compile',
