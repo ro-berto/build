@@ -89,6 +89,11 @@ def CommonChecks(input_api, output_api):
       output_api,
       input_api.os_path.join('scripts', 'tools', 'unittests'),
       whitelist))
+  tests.extend(input_api.canned_checks.GetUnitTestsInDirectory(
+      input_api,
+      output_api,
+      input_api.os_path.join('scripts', 'tools', 'blink_roller'),
+      whitelist))
 
   try:
     sys.path = [join('scripts', 'common')] + sys.path

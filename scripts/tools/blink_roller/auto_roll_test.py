@@ -46,7 +46,6 @@ class AutoRollTest(SuperMoxTestBase):
   TEST_PROJECT = 'test_project'
   TEST_AUTHOR = 'test_author@chromium.org'
   PATH_TO_CHROME = '.'
-  PATH_TO_PROJECT = '.'
 
   DATETIME_FORMAT = '%d-%d-%d %d:%d:%d.%d'
   CURRENT_DATETIME = (2014, 4, 1, 14, 57, 21, 01)
@@ -86,8 +85,7 @@ class AutoRollTest(SuperMoxTestBase):
     auto_roll.rietveld.upload.HttpRpcServer = self.MockHttpRpcServer
     self._arb = auto_roll.AutoRoller(self.TEST_PROJECT,
                                      self.TEST_AUTHOR,
-                                     self.PATH_TO_CHROME,
-                                     self.PATH_TO_PROJECT)
+                                     self.PATH_TO_CHROME)
 
   def _make_issue(self, created_datetime=None):
     return {
@@ -192,7 +190,8 @@ vars = {
 '''
     auto_roll.subprocess.check_output(
         ['svn', 'cat', self._arb.CHROMIUM_SVN_DEPS_URL]).AndReturn(deps_content)
-    auto_roll.subprocess.check_call(['git', '--git-dir', '././.git', 'fetch'])
+    auto_roll.subprocess.check_call(
+        ['git', '--git-dir', './third_party/test_project/.git', 'fetch'])
     git_log = '''
 commit abcde
 Author: Test Author <test_author@example.com>
@@ -203,8 +202,8 @@ Date:   Wed Apr 2 14:00:14 2014 -0400
     git-svn-id: svn://svn.url/trunk@1231 abcdefgh-abcd-abcd-abcd-abcdefghijkl
 '''
     auto_roll.subprocess.check_output(
-        ['git', '--git-dir', '././.git', 'show', '-s', 'origin/master']
-        ).AndReturn(git_log)
+        ['git', '--git-dir', './third_party/test_project/.git', 'show', '-s',
+         'origin/master']).AndReturn(git_log)
     self.mox.ReplayAll()
     self.assertEquals(self._arb.main(), 1)
     self.checkstdout('ERROR: Already at 1234 refusing to roll backwards to '
@@ -219,7 +218,8 @@ vars = {
 '''
     auto_roll.subprocess.check_output(
         ['svn', 'cat', self._arb.CHROMIUM_SVN_DEPS_URL]).AndReturn(deps_content)
-    auto_roll.subprocess.check_call(['git', '--git-dir', '././.git', 'fetch'])
+    auto_roll.subprocess.check_call(
+        ['git', '--git-dir', './third_party/test_project/.git', 'fetch'])
     git_log = '''
 commit abcde
 Author: Test Author <test_author@example.com>
@@ -230,15 +230,15 @@ Date:   Wed Apr 2 14:00:14 2014 -0400
     git-svn-id: svn://svn.url/trunk@1236 abcdefgh-abcd-abcd-abcd-abcdefghijkl
 '''
     auto_roll.subprocess.check_output(
-        ['git', '--git-dir', '././.git', 'show', '-s', 'origin/master']
-        ).AndReturn(git_log)
+        ['git', '--git-dir', './third_party/test_project/.git', 'show', '-s',
+         'origin/master']).AndReturn(git_log)
     sheriff_webkit_contents = 'document.write(\'test_sheriff@example.com\')'
     auto_roll.urllib2.urlopen(
         'http://build.chromium.org/p/chromium.webkit/sheriff_webkit.js'
         ).AndReturn(self.MockFile(sheriff_webkit_contents))
     auto_roll.subprocess.check_call(
-        ['./tools/safely-roll-deps.py', self.TEST_PROJECT, '1236', '--cc',
-         'test_sheriff@example.com'])
+        ['./tools/safely-roll-deps.py', self.TEST_PROJECT, '1236', '--message',
+         'Test_Project roll 1234:1236', '--cc', 'test_sheriff@example.com'])
     issue = self._make_issue(self.CURRENT_DATETIME_STR)
     self._arb._rietveld.search(owner=self.TEST_AUTHOR,
                                closed=2).AndReturn([issue])
