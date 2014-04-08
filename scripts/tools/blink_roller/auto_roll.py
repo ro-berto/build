@@ -3,7 +3,24 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+
+"""Automates creation and management of DEPS roll CLs.
+
+This script is designed to be run in a loop (eg. with auto_roll_wrapper.sh) or
+on a timer. It may take one of several actions, depending on the state of
+in-progress DEPS roll CLs and the state of the repository:
+
+- If there is already a DEPS roll CL in the Commit Queue, just exit.
+- If there is an open DEPS roll CL which is not in the Commit Queue:
+    - If there's a comment containing the "STOP" keyword, just exit.
+    - Otherwise, close the issue.
+- If there is no open DEPS roll CL, create one using the
+    src/tools/safely-roll-deps.py script.
+"""
+
+
 import datetime
+import optparse
 import os.path
 import re
 import subprocess
@@ -22,11 +39,29 @@ from common import find_depot_tools
 import rietveld
 
 
+PROJECT_CONFIGS = {
+  'blink': {
+    'path_to_project': os.path.join('third_party', 'WebKit'),
+    'project_alias': 'webkit',
+    'revision_link_fn': lambda before_rev, after_rev: (
+        'http://build.chromium.org/f/chromium/perf/dashboard/ui/'
+        'changelog_blink.html?url=/trunk&range=%s:%s&mode=html') % (
+            before_rev, after_rev),
+  },
+  'skia': {
+    'path_to_project': os.path.join('third_party', 'skia', 'src'),
+    'revision_link_fn': lambda before_rev, after_rev: (
+        'https://code.google.com/p/skia/source/list?num=%d&start=%s') % (
+            int(after_rev) - int(before_rev) - 1, after_rev)
+  },
+}
+
+
 class SheriffCalendar(object):
-  BLINK_SHERIFF_URL = \
-    'http://build.chromium.org/p/chromium.webkit/sheriff_webkit.js'
-  CHROMIUM_SHERIFF_URL = \
-    'http://build.chromium.org/p/chromium.webkit/sheriff.js'
+  BLINK_SHERIFF_URL = (
+    'http://build.chromium.org/p/chromium.webkit/sheriff_webkit.js')
+  CHROMIUM_SHERIFF_URL = (
+    'http://build.chromium.org/p/chromium.webkit/sheriff.js')
 
   # FIXME: This is only @classmethod and not private to appease pylint.
   @classmethod
@@ -65,9 +100,12 @@ class AutoRoller(object):
   STOP_NAG_TIME_LIMIT = datetime.timedelta(hours=12)
   ADMIN_EMAIL = 'eseidel@chromium.org'
 
-  # FIXME: These regexps are not ready for Git revisions:
-  ROLL_DESCRIPTION_REGEXP = \
-    r'%s roll (?P<from_revision>\d+):(?P<to_revision>\d+)'
+  ROLL_DESCRIPTION_STR = '%(project)s roll %(from_revision)s:%(to_revision)s'
+  ROLL_DESCRIPTION_REGEXP = ROLL_DESCRIPTION_STR % {
+      'project': '%(project)s',
+      'from_revision': r'(?P<from_revision>[0-9a-fA-F]+)',
+      'to_revision': r'(?P<to_revision>[0-9a-fA-F]+)'
+  }
 
   # FIXME: These are taken from gardeningserver.py and should be shared.
   CHROMIUM_SVN_DEPS_URL = 'http://src.chromium.org/chrome/trunk/src/DEPS'
@@ -86,14 +124,21 @@ class AutoRoller(object):
     Please email (%(admin)s) if the Rollbot is causing trouble.
     ''' % {'admin': ADMIN_EMAIL, 'stop_nag_timeout': STOP_NAG_TIME_LIMIT})
 
-  def __init__(self, project, author, path_to_chrome, path_to_project):
+  def __init__(self, project, author, path_to_chrome):
     self._author = author
     self._project = project
     self._path_to_chrome = path_to_chrome
-    self._path_to_project = path_to_project
     self._rietveld = rietveld.Rietveld(
       self.RIETVELD_URL, self._author, None)
     self._cached_last_roll_revision = None
+
+    project_config = PROJECT_CONFIGS.get(self._project, {
+      'path_to_project': os.path.join('third_party', self._project),
+      'revision_link_fn': lambda before_rev, after_ref: '',
+    })
+    self._project_alias = project_config.get('project_alias', self._project)
+    self._path_to_project = project_config['path_to_project']
+    self._get_revision_link = project_config['revision_link_fn']
 
   def _parse_time(self, time_string):
     return datetime.datetime.strptime(time_string, self.RIETVELD_TIME_FORMAT)
@@ -107,8 +152,9 @@ class AutoRoller(object):
     # to that search translates it correctly to closed=3 internally.
     # https://code.google.com/p/chromium/issues/detail?id=242628
     for result in self._rietveld.search(owner=self._author, closed=2):
-      if re.search(self.ROLL_DESCRIPTION_REGEXP % self._project.title(),
-                   result['subject']):
+      if re.search(
+          self.ROLL_DESCRIPTION_REGEXP % {'project': self._project.title()},
+          result['subject']):
         return result
     return None
 
@@ -141,8 +187,8 @@ class AutoRoller(object):
     if not self._cached_last_roll_revision:
       deps_contents = subprocess.check_output([
         'svn', 'cat', self.CHROMIUM_SVN_DEPS_URL])
-      match = re.search(self.REVISION_REGEXP % self._project, deps_contents,
-                        re.MULTILINE)
+      pattern = self.REVISION_REGEXP % self._project_alias
+      match = re.search(pattern, deps_contents, re.MULTILINE)
       self._cached_last_roll_revision = int(match.group('revision'))
     return self._cached_last_roll_revision
 
@@ -168,10 +214,11 @@ class AutoRoller(object):
     #     emails.extend(sheriff_emails)
     return emails
 
-  def _start_roll(self, new_roll_revision):
+  def _start_roll(self, new_roll_revision, commit_msg):
     safely_roll_path = \
       self._path_from_chromium_root('tools', 'safely-roll-deps.py')
-    safely_roll_args = [safely_roll_path, self._project, new_roll_revision]
+    safely_roll_args = [safely_roll_path, self._project_alias,
+                        new_roll_revision, '--message', commit_msg]
 
     emails = self._emails_to_cc_on_rolls()
     if emails:
@@ -241,18 +288,39 @@ class AutoRoller(object):
         last_roll_revision, new_roll_revision)
       return 1  # Would sleep here.
 
-    self._start_roll(new_roll_revision)
+    commit_msg = self.ROLL_DESCRIPTION_STR % {
+        'project': self._project.title(),
+        'from_revision': last_roll_revision,
+        'to_revision': new_roll_revision
+    }
+    revlink = self._get_revision_link(last_roll_revision, new_roll_revision)
+    if revlink:
+      commit_msg += '\n\n' + revlink
+
+    self._start_roll(new_roll_revision, commit_msg)
     return 0  # Would sleep here.
 
 
 def main():
-  if len(sys.argv) != 5:
-    print >> sys.stderr, ('Usage: %s <project_name> <author> '
-                          '<path to chromium/src> '
-                          '<path to project within chrome>')
+  usage = 'Usage: %prog project_name author path_to_chromium'
+
+  # The default HelpFormatter causes the docstring to display improperly.
+  class VanillaHelpFormatter(optparse.IndentedHelpFormatter):
+    def format_description(self, description):
+      if description:
+        return description
+      else:
+        return ''
+
+  parser = optparse.OptionParser(usage=usage,
+                                 description=sys.modules[__name__].__doc__,
+                                 formatter=VanillaHelpFormatter())
+  _, args = parser.parse_args()
+  if len(args) != 3:
+    parser.print_usage()
     return 1
 
-  AutoRoller(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]).main()
+  AutoRoller(*args).main()
 
 
 if __name__ == '__main__':
