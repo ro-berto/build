@@ -26,6 +26,7 @@ categories_steps = {
     'courgette_unittests',
     'crypto_unittests',
     'device_unittests',
+    'gcm_unit_tests',
     'gpu_unittests',
     'installer_util_unittests',
     'ipc_tests',
