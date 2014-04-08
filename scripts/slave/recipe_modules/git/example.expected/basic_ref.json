@@ -74,6 +74,16 @@
   {
     "cmd": [
       "git",
+      "fetch",
+      "origin",
+      "--tags"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "git fetch tags"
+  },
+  {
+    "cmd": [
+      "git",
       "status"
     ],
     "cwd": "[SLAVE_BUILD]/src",

@@ -16,7 +16,9 @@ def GenSteps(api):
   # You can use api.git.checkout to perform all the steps of a safe checkout.
   yield api.git.checkout(url, ref=api.properties.get('revision'), recursive=True)
 
-  # You can also check out specific 
+  # You can use api.git.fetch_tags to fetch all tags from the origin
+  yield api.git.fetch_tags()
+
   # If you need to run more arbitrary git commands, you can use api.git itself,
   # which behaves like api.step(), but automatically sets the name of the step.
   yield api.git('status', cwd=api.path['checkout'])

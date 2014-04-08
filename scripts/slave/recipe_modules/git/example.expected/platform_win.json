@@ -76,6 +76,16 @@
   {
     "cmd": [
       "[DEPOT_TOOLS]\\git.bat",
+      "fetch",
+      "origin",
+      "--tags"
+    ],
+    "cwd": "[SLAVE_BUILD]\\src",
+    "name": "git fetch tags"
+  },
+  {
+    "cmd": [
+      "[DEPOT_TOOLS]\\git.bat",
       "status"
     ],
     "cwd": "[SLAVE_BUILD]\\src",

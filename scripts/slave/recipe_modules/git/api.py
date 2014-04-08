@@ -22,6 +22,11 @@ class GitApi(recipe_api.RecipeApi):
       git_cmd = self.m.path['depot_tools'].join('git.bat')
     return self.m.step(name, [git_cmd] + list(args), **kwargs)
 
+  def fetch_tags(self, **kwargs):
+    """Fetches all tags from the origin."""
+    kwargs.setdefault('name', 'git fetch tags')
+    return self('fetch', 'origin', '--tags', **kwargs)
+
   def checkout(self, url, ref=None, dir_path=None, recursive=False,
                submodules=True, keep_paths=None):
     """Returns an iterable of steps to perform a full git checkout.
