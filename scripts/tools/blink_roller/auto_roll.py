@@ -12,12 +12,13 @@ import textwrap
 import urllib2
 
 
-# FIXME: This happens to be where my checkouts are. Since this script
-# lives in build, I don't know of a good way to find these automatically.
-DEPOT_TOOLS_ROOT = '/src/depot_tools'
-CHROMIUM_ROOT = '/src/chromium/src'
+SCRIPTS_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__),
+                                            os.pardir, os.pardir))
+sys.path.insert(0, SCRIPTS_DIR)
 
-sys.path.insert(0, DEPOT_TOOLS_ROOT)
+# pylint: disable=W0611
+from common import find_depot_tools
+
 import rietveld
 
 
@@ -59,7 +60,6 @@ class SheriffCalendar(object):
 
 class AutoRoller(object):
   RIETVELD_URL = 'https://codereview.chromium.org'
-  RIETVELD_EMAIL = 'eseidel@chromium.org'
   RIETVELD_TIME_FORMAT = '%Y-%m-%d %H:%M:%S.%f'
   ROLL_TIME_LIMIT = datetime.timedelta(hours=24)
   STOP_NAG_TIME_LIMIT = datetime.timedelta(hours=12)
@@ -67,13 +67,12 @@ class AutoRoller(object):
 
   # FIXME: These regexps are not ready for Git revisions:
   ROLL_DESCRIPTION_REGEXP = \
-    r'Blink roll (?P<from_revision>\d+):(?P<to_revision>\d+)'
+    r'%s roll (?P<from_revision>\d+):(?P<to_revision>\d+)'
 
   # FIXME: These are taken from gardeningserver.py and should be shared.
   CHROMIUM_SVN_DEPS_URL = 'http://src.chromium.org/chrome/trunk/src/DEPS'
   # 'webkit_revision': '149598',
-  BLINK_REVISION_REGEXP = \
-    re.compile(r'^  "webkit_revision": "(?P<revision>\d+)",$', re.MULTILINE)
+  REVISION_REGEXP = r'^  "%s_revision": "(?P<revision>\d+)",$'
 
   ROLL_BOT_INSTRUCTIONS = textwrap.dedent(
     '''This roll was created by the Blink AutoRollBot.
@@ -87,9 +86,13 @@ class AutoRoller(object):
     Please email (%(admin)s) if the Rollbot is causing trouble.
     ''' % {'admin': ADMIN_EMAIL, 'stop_nag_timeout': STOP_NAG_TIME_LIMIT})
 
-  def __init__(self):
+  def __init__(self, project, author, path_to_chrome, path_to_project):
+    self._author = author
+    self._project = project
+    self._path_to_chrome = path_to_chrome
+    self._path_to_project = path_to_project
     self._rietveld = rietveld.Rietveld(
-      self.RIETVELD_URL, self.RIETVELD_EMAIL, None)
+      self.RIETVELD_URL, self._author, None)
     self._cached_last_roll_revision = None
 
   def _parse_time(self, time_string):
@@ -103,8 +106,9 @@ class AutoRoller(object):
     # but that sends closed=1, we want closed=3.  Using closed=2
     # to that search translates it correctly to closed=3 internally.
     # https://code.google.com/p/chromium/issues/detail?id=242628
-    for result in self._rietveld.search(owner=self.RIETVELD_EMAIL, closed=2):
-      if result['subject'].startswith('Blink roll'):
+    for result in self._rietveld.search(owner=self._author, closed=2):
+      if re.search(self.ROLL_DESCRIPTION_REGEXP % self._project.title(),
+                   result['subject']):
         return result
     return None
 
@@ -129,28 +133,24 @@ class AutoRoller(object):
       self._rietveld.add_comment(issue_number, message)
     self._rietveld.close_issue(issue_number)
 
-  @classmethod
-  def _path_from_chromium_root(cls, *components):
+  def _path_from_chromium_root(self, *components):
     assert os.pardir not in components
-    return os.path.join(CHROMIUM_ROOT, *components)
+    return os.path.join(self._path_to_chrome, *components)
 
   def _last_roll_revision(self):
     if not self._cached_last_roll_revision:
       deps_contents = subprocess.check_output([
         'svn', 'cat', self.CHROMIUM_SVN_DEPS_URL])
-      match = re.search(self.BLINK_REVISION_REGEXP, deps_contents)
+      match = re.search(self.REVISION_REGEXP % self._project, deps_contents,
+                        re.MULTILINE)
       self._cached_last_roll_revision = int(match.group('revision'))
     return self._cached_last_roll_revision
 
-  # FIXME: This is largely taken from scm/git.py:
   def _current_svn_revision(self):
-    # We use '--grep=' + foo rather than '--grep', foo because
-    # git 1.7.0.4 (and earlier) didn't support the separate arg.
-    blink_git_dir = \
-      self._path_from_chromium_root('third_party', 'WebKit', '.git')
-    git_log_args = \
-      ['git', '--git-dir', blink_git_dir, 'log', '-1', '--grep=git-svn-id:']
-    git_log = subprocess.check_output(git_log_args)
+    git_dir = self._path_from_chromium_root(self._path_to_project, '.git')
+    subprocess.check_call(['git', '--git-dir', git_dir, 'fetch'])
+    git_show_cmd = ['git', '--git-dir', git_dir, 'show', '-s', 'origin/master']
+    git_log = subprocess.check_output(git_show_cmd)
     match = re.search('^\s*git-svn-id:.*@(?P<svn_revision>\d+)\ ',
       git_log, re.MULTILINE)
     return int(match.group('svn_revision'))
@@ -171,7 +171,7 @@ class AutoRoller(object):
   def _start_roll(self, new_roll_revision):
     safely_roll_path = \
       self._path_from_chromium_root('tools', 'safely-roll-deps.py')
-    safely_roll_args = [safely_roll_path, 'blink', new_roll_revision]
+    safely_roll_args = [safely_roll_path, self._project, new_roll_revision]
 
     emails = self._emails_to_cc_on_rolls()
     if emails:
@@ -205,7 +205,8 @@ class AutoRoller(object):
       return False
 
     last_roll_revision = self._last_roll_revision()
-    match = re.match(self.ROLL_DESCRIPTION_REGEXP, issue['description'])
+    match = re.match(self.ROLL_DESCRIPTION_REGEXP % self._project.title(),
+                     issue['description'])
     if int(match.group('from_revision')) != last_roll_revision:
       self._close_issue(issue_number,
         'DEPS has already rolled to %s. Closing, will open a new roll.' %
@@ -244,5 +245,16 @@ class AutoRoller(object):
     return 0  # Would sleep here.
 
 
+def main():
+  if len(sys.argv) != 5:
+    print >> sys.stderr, ('Usage: %s <project_name> <author> '
+                          '<path to chromium/src> '
+                          '<path to project within chrome>')
+    return 1
+
+  AutoRoller(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]).main()
+
+
 if __name__ == '__main__':
-  sys.exit(AutoRoller().main())
+  sys.exit(main())
+

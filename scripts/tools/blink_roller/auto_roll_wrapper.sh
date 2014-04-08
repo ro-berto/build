@@ -21,18 +21,13 @@ do
     git checkout origin/master -f  > /dev/null 2>&1
     git checkout origin/master -b master > /dev/null 2>&1
 
-    # Make sure WebKit is up to date.
-    # FIXME: This should not be needed, auto_roll.py should just pull
-    # the blink revision from the server directly w/o needing a local copy.
-    cd /src/chromium/src/third_party/WebKit
-    git pull --rebase
-
     # Make sure auto-roll is up to date.
     cd /src/build/scripts/tools/blink_roller
     git pull --rebase
 
     # FIXME: We should probably remove any stale pyc files.
-    ./auto_roll.py
+    ./auto_roll.py blink eseidel@chromium.org /src/chromium/src \
+        third_party/WebKit
 
     echo 'Waiting 5 minutes between checks...'
     sleep 300
