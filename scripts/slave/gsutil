@@ -1,6 +1,4 @@
 #!/bin/bash
 
-echo 'gsutil wrapper is DEPRECATED, please use recipe module (luqui@)' 1>&2
-
 SCRIPT_DIR=$(cd $(dirname $0) ; pwd)
 $SCRIPT_DIR/../../../depot_tools/third_party/gsutil/gsutil "$@"
