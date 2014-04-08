@@ -150,7 +150,7 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport os, shutil, sys\nfor p in [os.path.join(sys.argv[1], x) for x in os.listdir(sys.argv[1])]:\n  if os.path.isdir(p):\n    shutil.rmtree(p)\n  else:\n    os.unlink(p)\n",
+      "\nimport os, sys\nfrom common import chromium_utils\n\nfor p in [os.path.join(sys.argv[1], x) for x in os.listdir(sys.argv[1])]:\n  if os.path.isdir(p):\n    chromium_utils.RemoveDirectory(p)\n  else:\n    os.unlink(p)\n",
       "[SLAVE_BUILD]"
     ],
     "name": "rmcontents slave build directory",
@@ -160,10 +160,12 @@
     ],
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os, shutil, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@for p in [os.path.join(sys.argv[1], x) for x in os.listdir(sys.argv[1])]:@@@",
       "@@@STEP_LOG_LINE@python.inline@  if os.path.isdir(p):@@@",
-      "@@@STEP_LOG_LINE@python.inline@    shutil.rmtree(p)@@@",
+      "@@@STEP_LOG_LINE@python.inline@    chromium_utils.RemoveDirectory(p)@@@",
       "@@@STEP_LOG_LINE@python.inline@  else:@@@",
       "@@@STEP_LOG_LINE@python.inline@    os.unlink(p)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
