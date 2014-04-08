@@ -244,7 +244,10 @@ def GenSteps(api):
     api.json.read(
       'read test spec',
       api.path['checkout'].join('testing', 'buildbot', 'chromium_trybot.json'),
-      step_test_data=lambda: api.json.test_api.output([])),
+      step_test_data=lambda: api.json.test_api.output([
+        'base_unittests',
+        {'test': 'mojo_common_unittests', 'platforms': ['linux', 'mac']},
+      ])),
   )
 
   yield api.chromium.runhooks(abort_on_failure=False, can_fail_build=False)
@@ -278,13 +281,34 @@ def GenSteps(api):
   should_run_gn = api.properties.get('buildername') in ('linux_chromium',
                                                         'linux_chromium_rel')
 
+  # Copy the global list - otherwise the state may be carried over between
+  # tests.
+  gtest_tests = GTEST_TESTS[:]
+
   test_spec = api.step_history['read test spec'].json.output
-  test_spec = [s.encode('utf-8') for s in test_spec]
+  for test in test_spec:
+    test_name = None
+    if isinstance(test, unicode):
+      test_name = test.encode('utf-8')
+    elif isinstance(test, dict):
+      if 'platforms' in test:
+        if api.platform.name not in test['platforms']:
+          continue
+
+      if 'test' not in test:  # pragma: no cover
+        raise ValueError('Invalid entry in test spec: %r' % test)
+
+      test_name = test['test'].encode('utf-8')
+    else:  # pragma: no cover
+      raise ValueError('Unrecognized entry in test spec: %r' % test)
+
+    if test_name and test_name not in gtest_tests:
+      gtest_tests.append(test_name)
 
   tests = []
   tests.append(CheckdepsTest())
   tests.append(Deps2GitTest())
-  for name in GTEST_TESTS + test_spec:
+  for name in gtest_tests:
     tests.append(GTestTest(name))
   tests.append(NaclIntegrationTest())
 

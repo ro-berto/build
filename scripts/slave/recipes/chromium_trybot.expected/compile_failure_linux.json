@@ -99,7 +99,16 @@
     ],
     "name": "read test spec",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[]@@@",
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_unittests\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"platforms\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"linux\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"mac\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ], @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test\": \"mojo_common_unittests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
@@ -159,6 +168,7 @@
       "content_browsertests",
       "interactive_ui_tests",
       "sync_integration_tests",
+      "mojo_common_unittests",
       "chrome"
     ],
     "name": "compile (with patch)",
@@ -296,6 +306,7 @@
       "content_browsertests",
       "interactive_ui_tests",
       "sync_integration_tests",
+      "mojo_common_unittests",
       "chrome"
     ],
     "name": "compile (with patch, lkcr, clobber)",
@@ -460,6 +471,7 @@
       "content_browsertests",
       "interactive_ui_tests",
       "sync_integration_tests",
+      "mojo_common_unittests",
       "chrome"
     ],
     "name": "compile (with patch, lkcr, clobber, nuke)",
