@@ -252,8 +252,9 @@ class AutoRoller(object):
       return False
 
     last_roll_revision = self._last_roll_revision()
-    match = re.match(self.ROLL_DESCRIPTION_REGEXP % self._project.title(),
-                     issue['description'])
+    match = re.match(
+        self.ROLL_DESCRIPTION_REGEXP % {'project': self._project.title()},
+        issue['description'])
     if int(match.group('from_revision')) != last_roll_revision:
       self._close_issue(issue_number,
         'DEPS has already rolled to %s. Closing, will open a new roll.' %
