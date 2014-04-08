@@ -39,6 +39,11 @@ def no_snapshot(c):
 
 
 @CONFIG_CTX(includes=['v8'])
+def novfp3(c):
+  c.gyp_env.GYP_DEFINES['v8_can_use_vfp3_instructions'] = 'false'
+
+
+@CONFIG_CTX(includes=['v8'])
 def no_optimized_debug(c):
   if c.BUILD_CONFIG == 'Debug':
     c.gyp_env.GYP_DEFINES['v8_optimized_debug'] = 0

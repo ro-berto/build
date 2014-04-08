@@ -22,6 +22,11 @@ V8_TEST_CONFIGS = {
     'name': 'Benchmarks',
     'tests': 'benchmarks',
   },
+  'mjsunit': {
+    'name': 'Mjsunit',
+    'tests': 'mjsunit',
+    'flaky_step': True,
+  },
   'mozilla': {
     'name': 'Mozilla',
     'tests': 'mozilla',
@@ -468,6 +473,118 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
         'testing': {'platform': 'mac'},
+      },
+####### Category: Simulators
+      'V8 Linux - arm - sim': {
+        'recipe_config': 'v8',
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['v8testing', 'test262', 'mozilla'],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - arm - sim - debug': {
+        'recipe_config': 'v8',
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['v8testing', 'test262', 'mozilla'],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - arm - sim - novfp3': {
+        'recipe_config': 'v8',
+        # TODO(machenbach): Can these configs be reduced to one?
+        'chromium_apply_config': ['novfp3'],
+        'v8_apply_config': ['novfp3'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['v8testing', 'test262', 'mozilla'],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - arm - sim - debug - novfp3': {
+        'recipe_config': 'v8',
+        'chromium_apply_config': ['novfp3'],
+        'v8_apply_config': ['novfp3'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['v8testing', 'test262', 'mozilla'],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - arm64 - sim': {
+        'recipe_config': 'v8',
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - arm64 - sim - debug': {
+        'recipe_config': 'v8',
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - arm64 - sim - nosnap - debug - 1': {
+        'recipe_config': 'v8',
+        'chromium_apply_config': ['no_snapshot'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 64,
+          'SHARD_COUNT': 2,
+          'SHARD_RUN': 1,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - arm64 - sim - nosnap - debug - 2': {
+        'recipe_config': 'v8',
+        'chromium_apply_config': ['no_snapshot'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 64,
+          'SHARD_COUNT': 2,
+          'SHARD_RUN': 2,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - arm64 - sim - gc stress': {
+        'recipe_config': 'v8',
+        'v8_apply_config': ['gc_stress'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['mjsunit', 'webkit'],
+        'testing': {'platform': 'linux'},
       },
 ####### Category: Misc
       'V8 Linux64 ASAN': {

@@ -35,6 +35,11 @@ def v8(c):
 
 
 @config_ctx()
+def gc_stress(c):
+  c.testing.test_args.add('--gc-stress')
+
+
+@config_ctx()
 def isolates(c):
   c.testing.test_args.add('--isolates=on')
 
@@ -52,6 +57,11 @@ def nosse3(c):
 @config_ctx()
 def nosse4(c):
   c.testing.test_args.add('--shell_flags="--noenable-sse4-1"')
+
+
+@config_ctx()
+def novfp3(c):
+  c.testing.test_args.add('shell_flags="--noenable-vfp3"')
 
 
 @config_ctx()
