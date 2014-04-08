@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+  'archive',
   'base_android',
   'chromium',
   'chromium_android',
@@ -17,9 +18,89 @@ DEPS = [
   'webrtc',
 ]
 
-
+# Map of GS archive names to urls.
+GS_ARCHIVES = {
+  'android_dbg_archive': 'gs://chromium-webrtc/android_dbg',
+  'android_rel_archive': 'gs://chromium-webrtc/android_rel',
+}
 
 BUILDERS = {
+  'client.webrtc': {
+    'builders': {
+      # Builders.
+      'Android Chromium-APK Builder (dbg)': {
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'build_gs_archive': 'android_dbg_archive',
+        'testing': {'platform': 'linux'},
+      },
+      'Android Chromium-APK Builder': {
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'build_gs_archive': 'android_rel_archive',
+        'testing': {'platform': 'linux'},
+      },
+      # Testers.
+      'Android Chromium-APK Tests (JB GalaxyNexus)(dbg)': {
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'Android Chromium-APK Builder (dbg)',
+        'build_gs_archive': 'android_dbg_archive',
+        'testing': {'platform': 'linux'},
+      },
+      'Android Chromium-APK Tests (JB GalaxyNexus)': {
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'Android Chromium-APK Builder',
+        'build_gs_archive': 'android_rel_archive',
+        'testing': {'platform': 'linux'},
+      },
+      'Android Chromium-APK Tests (JB Nexus7.2)(dbg)': {
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'Android Chromium-APK Builder (dbg)',
+        'build_gs_archive': 'android_dbg_archive',
+        'testing': {'platform': 'linux'},
+      },
+      'Android Chromium-APK Tests (JB Nexus7.2)': {
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'Android Chromium-APK Builder',
+        'build_gs_archive': 'android_rel_archive',
+        'testing': {'platform': 'linux'},
+      },
+    },
+  },
   'tryserver.webrtc': {
     'builders': {
       'android_apk': {
@@ -73,19 +154,39 @@ def GenSteps(api):
 
   yield api.gclient.checkout()
 
-  if api.tryserver.is_tryserver:
-    yield api.webrtc.apply_svn_patch()
-  yield api.base_android.envsetup()
+  bot_type = bot_config.get('bot_type', 'builder_tester')
+  if bot_type in ['builder', 'builder_tester']:
+    if api.tryserver.is_tryserver:
+      yield api.webrtc.apply_svn_patch()
+    yield api.base_android.envsetup()
+
+  # WebRTC Android APK testers also have to run the runhooks, since test
+  # resources are currently downloaded during this step.
   yield api.base_android.runhooks()
+
   yield api.chromium.cleanup_temp()
-  yield api.base_android.compile()
+  if bot_type in ['builder', 'builder_tester']:
+    yield api.base_android.compile()
 
-  yield api.chromium_android.common_tests_setup_steps()
+  if bot_type == 'builder':
+    yield(api.archive.zip_and_upload_build(
+          'package build',
+          api.chromium.c.build_config_fs,
+          GS_ARCHIVES[bot_config['build_gs_archive']]))
 
-  for test in api.webrtc.ANDROID_APK_TESTS:
-    yield api.base_android.test_runner(test)
+  if bot_type == 'tester':
+    yield(api.archive.download_and_unzip_build(
+          'extract build',
+          api.chromium.c.build_config_fs,
+          GS_ARCHIVES[bot_config['build_gs_archive']],
+          abort_on_failure=True))
 
-  yield api.chromium_android.common_tests_final_steps()
+  if bot_type in ['tester', 'builder_tester']:
+    yield api.chromium_android.common_tests_setup_steps()
+    for test in api.webrtc.ANDROID_APK_TESTS:
+      yield api.base_android.test_runner(test)
+
+    yield api.chromium_android.common_tests_final_steps()
 
 
 def _sanitize_nonalpha(text):
@@ -114,13 +215,15 @@ def GenTests(api):
                        TARGET_BITS=webrtc_config_kwargs['TARGET_BITS'],
                        BUILD_CONFIG=webrtc_config_kwargs['BUILD_CONFIG']) +
         api.platform(bot_config['testing']['platform'],
-                     webrtc_config_kwargs.get('TARGET_BITS', 64)) +
-        api.step_data('envsetup',
+                     webrtc_config_kwargs.get('TARGET_BITS', 64))
+      )
+      if bot_type in ['builder', 'builder_tester']:
+        test += api.step_data('envsetup',
             api.json.output({
                 'FOO': 'bar',
                 'GYP_DEFINES': 'my_new_gyp_def=aaa',
-            }))
-      )
+             }))
+
       if mastername.startswith('tryserver'):
         test += api.properties(revision='12345',
                                patch_url='try_job_svn_patch')
