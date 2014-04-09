@@ -42,6 +42,19 @@ F('android_builder_dbg_factory', android().ChromiumWebRTCAndroidLatestFactory(
     }))
 
 # Testers.
+B('Android Tests (dbg) (KK Nexus5)', 'android_tests_n5_dbg_factory',
+  scheduler='android_trigger_dbg', notify_on_missing=True)
+F('android_tests_n5_dbg_factory', android().ChromiumWebRTCAndroidLatestFactory(
+    target='Debug',
+    annotation_script='src/build/android/buildbot/bb_run_bot.py',
+    factory_properties={
+      'android_bot_id': 'webrtc-chromium-tests-dbg',
+      'build_url': android_dbg_archive,
+      'perf_id': 'chromium-webrtc-trunk-tot-dbg-android-nexus5',
+      'show_perf_results': True,
+      'test_platform': 'android',
+    }))
+
 B('Android Tests (dbg) (JB Nexus7.2)', 'android_tests_dbg_factory',
   scheduler='android_trigger_dbg', notify_on_missing=True)
 F('android_tests_dbg_factory', android().ChromiumWebRTCAndroidLatestFactory(
