@@ -497,39 +497,6 @@ BUILDERS = {
         },
       },
 
-      'Linux GTK Builder': {
-        'recipe_config': 'chromium_gtk',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder',
-        'compile_targets': [
-          'chrome',
-          'chromium_swarm_tests',
-          'compositor_unittests',
-          'sync_integration_tests',
-        ],
-        'testing': {
-          'platform': 'linux',
-        },
-      },
-      'Linux GTK Tests': {
-        'recipe_config': 'chromium_gtk',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'tester',
-        'tests': [
-          DynamicGTestTests('Linux GTK Tests'),
-        ],
-        'parent_buildername': 'Linux GTK Builder',
-        'testing': {
-          'platform': 'linux',
-        },
-      },
-
       'Linux Builder (dbg)(32)': {
         'recipe_config': 'chromium',
         'chromium_config_kwargs': {
@@ -1387,11 +1354,6 @@ RECIPE_CONFIGS = {
   },
   'chromium_clang': {
     'chromium_config': 'chromium_clang',
-    'gclient_config': 'chromium',
-  },
-  'chromium_gtk': {
-    'chromium_config': 'chromium',
-    'chromium_apply_config': ['gtk'],
     'gclient_config': 'chromium',
   },
   'chromium_chromeos': {

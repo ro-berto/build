@@ -16,7 +16,6 @@ def Update(_config, active_master, c):
                             treeStableTimer=60,
                             builderNames=[
           'Linux Builder',
-          'Linux GTK Builder',
           'Linux Builder (dbg)(32)',
           'Linux Builder (dbg)',
           'Linux Clang (dbg)',
@@ -25,9 +24,6 @@ def Update(_config, active_master, c):
       Triggerable(name='linux_rel_trigger', builderNames=[
           'Linux Tests',
           'Linux Sync',
-      ]),
-      Triggerable(name='linux_gtk_trigger', builderNames=[
-          'Linux GTK Tests',
       ]),
       Triggerable(name='linux_dbg_32_trigger', builderNames=[
           'Linux Tests (dbg)(1)(32)',
@@ -45,8 +41,6 @@ def Update(_config, active_master, c):
     },
     {'name': 'Linux Tests'},
     {'name': 'Linux Sync'},
-    {'name': 'Linux GTK Builder', 'triggers': ['linux_gtk_trigger']},
-    {'name': 'Linux GTK Tests'},
     {'name': 'Linux Builder (dbg)(32)', 'triggers': ['linux_dbg_32_trigger']},
     {'name': 'Linux Tests (dbg)(1)(32)'},
     {'name': 'Linux Tests (dbg)(2)(32)'},

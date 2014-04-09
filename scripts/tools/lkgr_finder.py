@@ -323,11 +323,6 @@ CHROMIUM_LKCR_STEPS = {
     ],
   },  # chromium.mac
   'chromium.linux': {
-    'Linux GTK Builder': [
-      'compile',
-      'gclient runhooks',
-      'gclient sync',
-    ],
     'Linux Builder': [
       'compile',
       'gclient runhooks',
