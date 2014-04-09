@@ -104,6 +104,7 @@
       "ia32",
       "--testname",
       "mjsunit cctest message preparser",
+      "--no-snap",
       "--flaky-tests",
       "skip"
     ],
@@ -128,6 +129,7 @@
       "ia32",
       "--testname",
       "mjsunit cctest message preparser",
+      "--no-snap",
       "--flaky-tests",
       "run"
     ],
@@ -144,7 +146,8 @@
       "--arch",
       "ia32",
       "--testname",
-      "test262"
+      "test262",
+      "--no-snap"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Test262"
@@ -159,7 +162,8 @@
       "--arch",
       "ia32",
       "--testname",
-      "mozilla"
+      "mozilla",
+      "--no-snap"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Mozilla"

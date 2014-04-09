@@ -92,6 +92,7 @@
       "ia32",
       "--testname",
       "mjsunit cctest message preparser",
+      "--no-snap",
       "--flaky-tests",
       "skip"
     ],
@@ -114,6 +115,7 @@
       "ia32",
       "--testname",
       "mjsunit cctest message preparser",
+      "--no-snap",
       "--flaky-tests",
       "run"
     ],

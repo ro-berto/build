@@ -71,6 +71,9 @@ def main():
   option_parser.add_option("--no-i18n", "--noi18n",
                            default=False, action='store_true',
                            help='Skip internationalization tests')
+  option_parser.add_option("--no-snap", "--nosnap",
+                           default=False, action="store_true",
+                           help='Test a build compiled without snapshot.')
   option_parser.add_option("--no-variants",
                            default=False, action='store_true',
                            help='Skip testing variants')
@@ -112,6 +115,8 @@ def main():
       cmd.extend(['--no-presubmit'])
     if options.no_i18n:
       cmd.extend(['--no-i18n'])
+    if options.no_snap:
+      cmd.extend(['--no-snap'])
     if options.no_variants:
       cmd.extend(['--no-variants'])
     if 'benchmarks' in options.testname:

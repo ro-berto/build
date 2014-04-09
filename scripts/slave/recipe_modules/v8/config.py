@@ -45,6 +45,11 @@ def isolates(c):
 
 
 @config_ctx()
+def no_snapshot(c):
+  c.testing.test_args.add('--no-snap')
+
+
+@config_ctx()
 def nosse2(c):
   c.testing.test_args.add('--shell_flags="--noenable-sse2"')
 

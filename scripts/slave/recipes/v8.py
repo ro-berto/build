@@ -204,6 +204,7 @@ BUILDERS = {
       },
       'V8 Linux - nosnap': {
         'recipe_config': 'v8',
+        'v8_apply_config': ['no_snapshot'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -215,6 +216,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - nosnap - debug': {
+        'v8_apply_config': ['no_snapshot'],
         'recipe_config': 'v8',
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -548,6 +550,7 @@ BUILDERS = {
       },
       'V8 Linux - arm64 - sim - nosnap - debug - 1': {
         'recipe_config': 'v8',
+        'v8_apply_config': ['no_snapshot'],
         'chromium_apply_config': ['no_snapshot'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -562,6 +565,7 @@ BUILDERS = {
       },
       'V8 Linux - arm64 - sim - nosnap - debug - 2': {
         'recipe_config': 'v8',
+        'v8_apply_config': ['no_snapshot'],
         'chromium_apply_config': ['no_snapshot'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -622,6 +626,7 @@ BUILDERS = {
 ####### Category: FYI
       'V8 Win32 - nosnap - shared': {
         'recipe_config': 'v8',
+        'v8_apply_config': ['no_snapshot'],
         'chromium_apply_config': ['shared_library', 'no_snapshot'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
