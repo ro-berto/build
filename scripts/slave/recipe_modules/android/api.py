@@ -150,11 +150,12 @@ class AOSPApi(recipe_api.RecipeApi):
 
   def compile_step(self, build_tool, step_name='compile', targets=None,
                    use_goma=True, src_dir=None, target_out_dir=None,
-                   envsetup=None, defines=None):
+                   envsetup=None, defines=None, env=None):
     src_dir = src_dir or self.c.build_path
     target_out_dir = target_out_dir or self.c.slave_android_out_path
     envsetup = envsetup or self.with_lunch_command
     targets = targets or []
+    env = env or {}
     if defines:
       defines_str = ' '.join('%s=%s' % kv for kv in defines.iteritems())
       targets.insert(0, defines_str)
@@ -174,5 +175,6 @@ class AOSPApi(recipe_api.RecipeApi):
                       ['--build-tool', build_tool] +
                       ['--verbose'] +
                       compiler_option,
-                      cwd=self.m.path['slave_build'])
+                      cwd=self.m.path['slave_build'],
+                      env=env)
 
