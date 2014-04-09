@@ -185,12 +185,7 @@ def call(*args, **kwargs):
     # produce out of order output.
     while True:
       buf = proc.stdout.read(1)
-      if buf == '\r' and not sys.platform.startswith('win'):
-        # We want to make sure the git status message, which are normally
-        # printed with just a carriage return (\r) without the newline (\n)
-        # are printed with newlines instead.
-        # However, on Windows all the newlines are \r\n, so this ends up
-        # double spacing the lines.
+      if buf == '\r':
         buf = '\n'
       if not buf:
         break
