@@ -218,7 +218,7 @@ class AutoRoller(object):
     safely_roll_path = \
       self._path_from_chromium_root('tools', 'safely-roll-deps.py')
     safely_roll_args = [safely_roll_path, self._project_alias,
-                        new_roll_revision, '--message', commit_msg]
+                        new_roll_revision, '--message', commit_msg, '--force']
 
     emails = self._emails_to_cc_on_rolls()
     if emails:

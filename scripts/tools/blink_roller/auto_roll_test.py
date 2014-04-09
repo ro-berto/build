@@ -238,7 +238,8 @@ Date:   Wed Apr 2 14:00:14 2014 -0400
         ).AndReturn(self.MockFile(sheriff_webkit_contents))
     auto_roll.subprocess.check_call(
         ['./tools/safely-roll-deps.py', self.TEST_PROJECT, '1236', '--message',
-         'Test_Project roll 1234:1236', '--cc', 'test_sheriff@example.com'])
+         'Test_Project roll 1234:1236', '--force', '--cc',
+         'test_sheriff@example.com'])
     issue = self._make_issue(self.CURRENT_DATETIME_STR)
     self._arb._rietveld.search(owner=self.TEST_AUTHOR,
                                closed=2).AndReturn([issue])
