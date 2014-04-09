@@ -25,7 +25,7 @@ V8_TEST_CONFIGS = {
   'mjsunit': {
     'name': 'Mjsunit',
     'tests': 'mjsunit',
-    'flaky_step': True,
+    'add_flaky_step': True,
   },
   'mozilla': {
     'name': 'Mozilla',
@@ -35,7 +35,7 @@ V8_TEST_CONFIGS = {
   'optimize_for_size': {
     'name': 'OptimizeForSize',
     'tests': 'cctest mjsunit webkit',
-    'flaky_step': True,
+    'add_flaky_step': True,
     'test_args': ['--no-variants', '--shell_flags="--optimize-for-size"'],
   },
   'test262': {
@@ -45,12 +45,12 @@ V8_TEST_CONFIGS = {
   'v8testing': {
     'name': 'Check',
     'tests': 'mjsunit cctest message preparser',
-    'flaky_step': True,
+    'add_flaky_step': True,
   },
   'webkit': {
     'name': 'Webkit',
     'tests': 'webkit',
-    'flaky_step': True,
+    'add_flaky_step': True,
   },
 }
 
@@ -142,7 +142,6 @@ BUILDERS = {
     'builders': {
 ####### Category: Linux
       'V8 Linux - builder': {
-        'recipe_config': 'v8',
         'chromium_apply_config': ['verify_heap'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -153,7 +152,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux': {
-        'recipe_config': 'v8',
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -174,7 +172,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - debug': {
-        'recipe_config': 'v8',
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -192,7 +189,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - shared': {
-        'recipe_config': 'v8',
         'chromium_apply_config': ['shared_library'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -203,7 +199,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - nosnap': {
-        'recipe_config': 'v8',
         'v8_apply_config': ['no_snapshot'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -217,7 +212,6 @@ BUILDERS = {
       },
       'V8 Linux - nosnap - debug': {
         'v8_apply_config': ['no_snapshot'],
-        'recipe_config': 'v8',
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -229,7 +223,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - isolates': {
-        'recipe_config': 'v8',
         'v8_apply_config': ['isolates'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -242,7 +235,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - nosse2': {
-        'recipe_config': 'v8',
         'v8_apply_config': ['nosse2'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -255,7 +247,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - nosse3': {
-        'recipe_config': 'v8',
         'v8_apply_config': ['nosse3'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -268,7 +259,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - nosse4': {
-        'recipe_config': 'v8',
         'v8_apply_config': ['nosse4'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -281,7 +271,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - debug - isolates': {
-        'recipe_config': 'v8',
         'v8_apply_config': ['isolates'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -294,7 +283,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - debug - nosse2': {
-        'recipe_config': 'v8',
         'v8_apply_config': ['nosse2'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -307,7 +295,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - debug - nosse3': {
-        'recipe_config': 'v8',
         'v8_apply_config': ['nosse3'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -320,7 +307,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - debug - nosse4': {
-        'recipe_config': 'v8',
         'v8_apply_config': ['nosse4'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -334,7 +320,6 @@ BUILDERS = {
       },
 ####### Category: Linux64
       'V8 Linux64': {
-        'recipe_config': 'v8',
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -353,7 +338,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 - debug': {
-        'recipe_config': 'v8',
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -366,7 +350,6 @@ BUILDERS = {
       },
 ####### Category: Windows
       'V8 Win32 - 1': {
-        'recipe_config': 'v8',
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -380,7 +363,6 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'V8 Win32 - 2': {
-        'recipe_config': 'v8',
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -394,7 +376,6 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'V8 Win32 - debug - 1': {
-        'recipe_config': 'v8',
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -408,7 +389,6 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'V8 Win32 - debug - 2': {
-        'recipe_config': 'v8',
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -422,7 +402,6 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'V8 Win32 - debug - 3': {
-        'recipe_config': 'v8',
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -437,7 +416,6 @@ BUILDERS = {
       },
 ####### Category: Mac
       'V8 Mac': {
-        'recipe_config': 'v8',
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -447,7 +425,6 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'V8 Mac - debug': {
-        'recipe_config': 'v8',
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -457,7 +434,6 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'V8 Mac64': {
-        'recipe_config': 'v8',
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -467,7 +443,6 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'V8 Mac64 - debug': {
-        'recipe_config': 'v8',
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -478,7 +453,6 @@ BUILDERS = {
       },
 ####### Category: Simulators
       'V8 Linux - arm - sim': {
-        'recipe_config': 'v8',
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_ARCH': 'arm',
@@ -489,7 +463,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm - sim - debug': {
-        'recipe_config': 'v8',
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_ARCH': 'arm',
@@ -500,7 +473,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm - sim - novfp3': {
-        'recipe_config': 'v8',
         # TODO(machenbach): Can these configs be reduced to one?
         'chromium_apply_config': ['novfp3'],
         'v8_apply_config': ['novfp3'],
@@ -514,7 +486,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm - sim - debug - novfp3': {
-        'recipe_config': 'v8',
         'chromium_apply_config': ['novfp3'],
         'v8_apply_config': ['novfp3'],
         'v8_config_kwargs': {
@@ -527,7 +498,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm64 - sim': {
-        'recipe_config': 'v8',
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_ARCH': 'arm',
@@ -538,7 +508,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm64 - sim - debug': {
-        'recipe_config': 'v8',
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_ARCH': 'arm',
@@ -549,7 +518,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm64 - sim - nosnap - debug - 1': {
-        'recipe_config': 'v8',
         'v8_apply_config': ['no_snapshot'],
         'chromium_apply_config': ['no_snapshot'],
         'v8_config_kwargs': {
@@ -564,7 +532,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm64 - sim - nosnap - debug - 2': {
-        'recipe_config': 'v8',
         'v8_apply_config': ['no_snapshot'],
         'chromium_apply_config': ['no_snapshot'],
         'v8_config_kwargs': {
@@ -579,7 +546,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm64 - sim - gc stress': {
-        'recipe_config': 'v8',
         'v8_apply_config': ['gc_stress'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -592,7 +558,6 @@ BUILDERS = {
       },
 ####### Category: Misc
       'V8 Linux64 ASAN': {
-        'recipe_config': 'v8',
         'gclient_apply_config': ['clang'],
         'chromium_apply_config': ['clang', 'asan', 'no_lsan'],
         'v8_config_kwargs': {
@@ -606,7 +571,6 @@ BUILDERS = {
       # This builder is used as a staging area for builders on the main
       # waterfall to be switched to recipes.
       'V8 Linux - recipe': {
-        'recipe_config': 'v8',
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -625,7 +589,6 @@ BUILDERS = {
       },
 ####### Category: FYI
       'V8 Win32 - nosnap - shared': {
-        'recipe_config': 'v8',
         'v8_apply_config': ['no_snapshot'],
         'chromium_apply_config': ['shared_library', 'no_snapshot'],
         'v8_config_kwargs': {
@@ -637,7 +600,6 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'V8 Mac - full debug': {
-        'recipe_config': 'v8',
         'chromium_apply_config': ['no_optimized_debug'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -652,7 +614,6 @@ BUILDERS = {
   'tryserver.v8': {
     'builders': {
       'v8_linux_rel': {
-        'recipe_config': 'v8',
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -662,7 +623,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_dbg': {
-        'recipe_config': 'v8',
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -672,7 +632,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_nosnap_rel': {
-        'recipe_config': 'v8',
         'chromium_apply_config': ['no_snapshot'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -683,7 +642,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_nosnap_dbg': {
-        'recipe_config': 'v8',
         'chromium_apply_config': ['no_snapshot'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -694,7 +652,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_rel': {
-        'recipe_config': 'v8',
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -704,7 +661,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_win_rel': {
-        'recipe_config': 'v8',
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -714,7 +670,6 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'v8_mac_rel': {
-        'recipe_config': 'v8',
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -724,7 +679,6 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'v8_linux_arm_dbg': {
-        'recipe_config': 'v8',
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_ARCH': 'arm',
@@ -735,7 +689,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm64_rel': {
-        'recipe_config': 'v8',
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_ARCH': 'arm',
@@ -749,11 +702,6 @@ BUILDERS = {
   },
 }
 
-RECIPE_CONFIGS = {
-  'v8': {
-    'v8_config': 'v8',
-  },
-}
 
 def GenSteps(api):
   mastername = api.properties.get('mastername')
@@ -763,16 +711,10 @@ def GenSteps(api):
   assert bot_config, (
       'Unrecognized builder name %r for master %r.' % (
           buildername, mastername))
-  recipe_config_name = bot_config['recipe_config']
-  assert recipe_config_name, (
-      'Unrecognized builder name %r for master %r.' % (
-          buildername, mastername))
-  recipe_config = RECIPE_CONFIGS[recipe_config_name]
 
-  api.v8.set_config(recipe_config['v8_config'],
+  api.v8.set_config('v8',
                     optional=True,
                     **bot_config.get('v8_config_kwargs', {}))
-
   for c in bot_config.get('gclient_apply_config', []):
     api.gclient.apply_config(c)
   for c in bot_config.get('chromium_apply_config', []):

@@ -123,13 +123,13 @@ class V8Api(recipe_api.RecipeApi):
 
   def runtest(self, test, **kwargs):
     # Get the flaky-step configuration default per test.
-    flaky_step = test.get('flaky_step', False)
+    add_flaky_step = test.get('add_flaky_step', False)
 
     # Overwrite the flaky-step configuration on a per builder basis as some
     # types of builders (e.g. branch, try) don't have any flaky steps.
-    if self.c.testing.flaky_step is not None:
-      flaky_step = self.c.testing.flaky_step
-    if flaky_step:
+    if self.c.testing.add_flaky_step is not None:
+      add_flaky_step = self.c.testing.add_flaky_step
+    if add_flaky_step:
       return [
         self._runtest(test['name'], test, flaky_tests='skip', **kwargs),
         self._runtest(test['name'] + ' - flaky', test, flaky_tests='run',

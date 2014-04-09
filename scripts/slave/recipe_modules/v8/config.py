@@ -17,7 +17,7 @@ def BaseConfig(**_kwargs):
     # Test configuration that is the equal for all tests of a builder. It
     # might be refined later in the test runner for distinct tests.
     testing = ConfigGroup(
-      flaky_step = Single(bool, required=False),
+      add_flaky_step = Single(bool, required=False),
       test_args = Set(basestring),
 
       SHARD_COUNT = Static(shard_count),
@@ -71,5 +71,5 @@ def novfp3(c):
 
 @config_ctx()
 def trybot_flavor(c):
-  c.testing.flaky_step = False
+  c.testing.add_flaky_step = False
   c.testing.test_args.add('--quickcheck')
