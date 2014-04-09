@@ -116,7 +116,7 @@ F('f_android_apk_rel', android_apk_builder().ChromiumWebRTCAndroidLatestFactory(
   }))
 
 # WebRTC native test APKs: device testers.
-B('Android Chromium-APK Tests (JB GalaxyNexus)(dbg)',
+B('Android Chromium-APK Tests (KK Nexus5)(dbg)',
   'f_android_ics_galaxynexus_dbg_tests', 'android', 'android_trigger_dbg',
   notify_on_missing=True, slavebuilddir='android')
 F('f_android_ics_galaxynexus_dbg_tests', f_dbg_android_tests('jb-gn'))
@@ -126,7 +126,7 @@ B('Android Chromium-APK Tests (JB Nexus7.2)(dbg)',
   notify_on_missing=True, slavebuilddir='android')
 F('f_android_jb_nexus7.2_dbg_tests', f_dbg_android_tests('jb-n72'))
 
-B('Android Chromium-APK Tests (JB GalaxyNexus)',
+B('Android Chromium-APK Tests (KK Nexus5)',
   'f_android_ics_galaxynexus_rel_tests', 'android', 'android_trigger_rel',
   notify_on_missing=True, slavebuilddir='android')
 F('f_android_ics_galaxynexus_rel_tests', f_rel_android_tests('jb-gn'))
