@@ -2,140 +2,60 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from master import master_config
-from master.factory import chromium_factory
-from master.factory import webrtc_factory
+from buildbot.scheduler import Triggerable
+from buildbot.schedulers.basic import SingleBranchScheduler
 
-defaults = {}
+from master.factory import annotator_factory
 
-helper = master_config.Helper(defaults)
-B = helper.Builder
-F = helper.Factory
-S = helper.Scheduler
-T = helper.Triggerable
-
-
-def android_apk_builder():
-  return chromium_factory.ChromiumFactory('', 'linux2', nohooks_on_update=True,
-                                          target_os='android')
-def android_apk_tester():
-  return chromium_factory.ChromiumFactory('', 'linux2', nohooks_on_update=False,
-                                          target_os='android')
-def android_webrtc():
-  return webrtc_factory.WebRTCFactory('', 'linux2', nohooks_on_update=True,
-                                      target_os='android')
-
-defaults['category'] = 'android'
-
-android_dbg_archive = master_config.GetGSUtilUrl('chromium-webrtc',
-                                                 'android_dbg')
-android_rel_archive = master_config.GetGSUtilUrl('chromium-webrtc',
-                                                 'android_rel')
-
-scheduler = 'webrtc_android_scheduler'
-S(scheduler, branch='trunk', treeStableTimer=0)
-
-T('android_trigger_dbg')
-T('android_trigger_rel')
-
-
-def f_dbg_android_tests(bot_id_suffix):
-  return android_apk_tester().ChromiumWebRTCAndroidLatestFactory(
-    target='Debug',
-    annotation_script='src/build/android/buildbot/bb_run_bot.py',
-    factory_properties={
-      'android_bot_id': 'webrtc-native-tests-dbg-%s' % bot_id_suffix,
-      'build_url': android_dbg_archive,
-      'perf_id': 'webrtc-android-native-tests-dbg-%s' % bot_id_suffix,
-      'show_perf_results': True,
-      'test_platform': 'android',
-    })
-
-
-def f_rel_android_tests(bot_id_suffix):
-  return android_apk_tester().ChromiumWebRTCAndroidLatestFactory(
-    target='Release',
-    annotation_script='src/build/android/buildbot/bb_run_bot.py',
-    factory_properties={
-      'android_bot_id': 'webrtc-native-tests-rel-%s' % bot_id_suffix,
-      'build_url': android_rel_archive,
-      'perf_id': 'webrtc-android-native-tests-rel-%s' % bot_id_suffix,
-      'show_perf_results': True,
-      'test_platform': 'android',
-    })
-
-# WebRTC standalone builders (no tests).
-B('Android (dbg)', 'f_android_dbg', 'android', scheduler,
-  notify_on_missing=True, slavebuilddir='android')
-F('f_android_dbg', android_webrtc().ChromiumAnnotationFactory(
-  target='Debug',
-  annotation_script='src/build/android/buildbot/bb_run_bot.py',
-  factory_properties={
-      'android_bot_id': 'webrtc-main-clobber',
-  }))
-
-B('Android', 'f_android_rel', 'android', scheduler, notify_on_missing=True,
-  slavebuilddir='android')
-F('f_android_rel', android_webrtc().ChromiumAnnotationFactory(
-  target='Release',
-  annotation_script='src/build/android/buildbot/bb_run_bot.py',
-  factory_properties={
-      'android_bot_id': 'webrtc-main-clobber',
-  }))
-
-B('Android Clang (dbg)', 'f_android_clang_dbg', 'android', scheduler,
-  notify_on_missing=True)
-F('f_android_clang_dbg', android_webrtc().ChromiumAnnotationFactory(
-  target='Debug',
-  annotation_script='src/build/android/buildbot/bb_run_bot.py',
-  factory_properties={
-    'android_bot_id': 'webrtc-main-clang-builder-dbg',
-  }))
-
-# WebRTC native test APKs: builders.
-B('Android Chromium-APK Builder (dbg)', 'f_android_apk_dbg', 'android',
-  scheduler, notify_on_missing=True, slavebuilddir='android_apk')
-F('f_android_apk_dbg', android_apk_builder().ChromiumWebRTCAndroidLatestFactory(
-  target='Debug',
-  annotation_script='src/build/android/buildbot/bb_run_bot.py',
-  factory_properties={
-      'android_bot_id': 'webrtc-native-builder-dbg',
-      'build_url': android_dbg_archive,
-      'trigger': 'android_trigger_dbg',
-  }))
-
-B('Android Chromium-APK Builder', 'f_android_apk_rel', 'android', scheduler,
-  notify_on_missing=True, slavebuilddir='android_apk')
-F('f_android_apk_rel', android_apk_builder().ChromiumWebRTCAndroidLatestFactory(
-  target='Release',
-  annotation_script='src/build/android/buildbot/bb_run_bot.py',
-  factory_properties={
-      'android_bot_id': 'webrtc-native-builder-rel',
-      'build_url': android_rel_archive,
-      'trigger': 'android_trigger_rel',
-  }))
-
-# WebRTC native test APKs: device testers.
-B('Android Chromium-APK Tests (KK Nexus5)(dbg)',
-  'f_android_ics_galaxynexus_dbg_tests', 'android', 'android_trigger_dbg',
-  notify_on_missing=True, slavebuilddir='android')
-F('f_android_ics_galaxynexus_dbg_tests', f_dbg_android_tests('jb-gn'))
-
-B('Android Chromium-APK Tests (JB Nexus7.2)(dbg)',
-  'f_android_jb_nexus7.2_dbg_tests', 'android', 'android_trigger_dbg',
-  notify_on_missing=True, slavebuilddir='android')
-F('f_android_jb_nexus7.2_dbg_tests', f_dbg_android_tests('jb-n72'))
-
-B('Android Chromium-APK Tests (KK Nexus5)',
-  'f_android_ics_galaxynexus_rel_tests', 'android', 'android_trigger_rel',
-  notify_on_missing=True, slavebuilddir='android')
-F('f_android_ics_galaxynexus_rel_tests', f_rel_android_tests('jb-gn'))
-
-B('Android Chromium-APK Tests (JB Nexus7.2)',
-  'f_android_jb_nexus7.2_rel_tests', 'android', 'android_trigger_rel',
-  notify_on_missing=True, slavebuilddir='android')
-F('f_android_jb_nexus7.2_rel_tests', f_rel_android_tests('jb-n72'))
-
+m_annotator = annotator_factory.AnnotatorFactory()
 
 def Update(c):
-  return helper.Update(c)
+  c['schedulers'].extend([
+      SingleBranchScheduler(name='webrtc_android_scheduler',
+                            branch='trunk',
+                            treeStableTimer=0,
+                            builderNames=[
+          'Android',
+          'Android (dbg)',
+          'Android Clang (dbg)',
+          'Android Chromium-APK Builder',
+          'Android Chromium-APK Builder (dbg)',
+      ]),
+      Triggerable(name='android_trigger_dbg', builderNames=[
+          'Android Chromium-APK Tests (KK Nexus5)(dbg)',
+          'Android Chromium-APK Tests (JB Nexus7.2)(dbg)',
+      ]),
+      Triggerable(name='android_trigger_rel', builderNames=[
+          'Android Chromium-APK Tests (KK Nexus5)',
+          'Android Chromium-APK Tests (JB Nexus7.2)',
+      ]),
+  ])
+  specs = [
+    {'name': 'Android', 'recipe': 'webrtc/standalone'},
+    {'name': 'Android (dbg)', 'recipe': 'webrtc/standalone'},
+    {'name': 'Android Clang (dbg)', 'recipe': 'webrtc/standalone'},
+    {
+      'name': 'Android Chromium-APK Builder',
+      'triggers': ['android_trigger_rel'],
+    },
+    {
+      'name': 'Android Chromium-APK Builder (dbg)',
+      'triggers': ['android_trigger_dbg'],
+    },
+    {'name': 'Android Chromium-APK Tests (KK Nexus5)(dbg)'},
+    {'name': 'Android Chromium-APK Tests (JB Nexus7.2)(dbg)'},
+    {'name': 'Android Chromium-APK Tests (KK Nexus5)'},
+    {'name': 'Android Chromium-APK Tests (JB Nexus7.2)'},
+  ]
+
+  c['builders'].extend([
+      {
+        'name': spec['name'],
+        'factory': m_annotator.BaseFactory(
+            spec.get('recipe', 'webrtc/android_apk'),
+            factory_properties=spec.get('factory_properties'),
+            triggers=spec.get('triggers')),
+        'notify_on_missing': True,
+        'category': 'android',
+      } for spec in specs
+  ])

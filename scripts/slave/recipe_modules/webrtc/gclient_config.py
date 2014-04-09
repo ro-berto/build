@@ -44,6 +44,10 @@ def webrtc_android_apk(c):
   s.url = ChromiumSvnSubURL(c, 'chrome', 'trunk', 'deps', 'third_party',
                             'webrtc', 'webrtc.DEPS')
 
+  # Have the WebRTC revision appear in the web UI instead of Chromium's.
+  del c.got_revision_mapping['src']
+  c.got_revision_mapping['src/third_party/webrtc'] = 'got_revision'
+
 
 @CONFIG_CTX()
 def _webrtc(c):

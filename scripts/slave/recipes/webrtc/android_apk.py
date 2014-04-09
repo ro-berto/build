@@ -14,6 +14,7 @@ DEPS = [
   'properties',
   'python',
   'step',
+  'step_history',
   'tryserver',
   'webrtc',
 ]
@@ -51,7 +52,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       # Testers.
-      'Android Chromium-APK Tests (JB GalaxyNexus)(dbg)': {
+      'Android Chromium-APK Tests (KK Nexus5)(dbg)': {
         'webrtc_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'android',
@@ -63,7 +64,7 @@ BUILDERS = {
         'build_gs_archive': 'android_dbg_archive',
         'testing': {'platform': 'linux'},
       },
-      'Android Chromium-APK Tests (JB GalaxyNexus)': {
+      'Android Chromium-APK Tests (KK Nexus5)': {
         'webrtc_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
@@ -153,6 +154,9 @@ def GenSteps(api):
   api.step.auto_resolve_conflicts = True
 
   yield api.gclient.checkout()
+  # Get the synced WebRTC revision (of the src/third_party/webrtc).
+  update_step = api.step_history.last_step()
+  got_revision = update_step.presentation.properties['got_revision']
 
   bot_type = bot_config.get('bot_type', 'builder_tester')
   if bot_type in ['builder', 'builder_tester']:
@@ -172,13 +176,15 @@ def GenSteps(api):
     yield(api.archive.zip_and_upload_build(
           'package build',
           api.chromium.c.build_config_fs,
-          GS_ARCHIVES[bot_config['build_gs_archive']]))
+          GS_ARCHIVES[bot_config['build_gs_archive']],
+          build_revision=got_revision))
 
   if bot_type == 'tester':
     yield(api.archive.download_and_unzip_build(
           'extract build',
           api.chromium.c.build_config_fs,
           GS_ARCHIVES[bot_config['build_gs_archive']],
+          build_revision=got_revision,
           abort_on_failure=True))
 
   if bot_type in ['tester', 'builder_tester']:
