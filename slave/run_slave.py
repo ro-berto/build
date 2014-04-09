@@ -400,6 +400,7 @@ def main():
         os.path.dirname(sys.executable),
         os.path.join(os.environ['SYSTEMROOT'], 'system32'),
         os.path.join(os.environ['SYSTEMROOT'], 'system32', 'WBEM'),
+        os.path.join(os.environ['SYSTEMDRIVE'], 'Program Files', '7-Zip'),
     ]
     # build_internal/tools contains tools we can't redistribute.
     tools = os.path.join(ROOT_DIR, 'build_internal', 'tools')
