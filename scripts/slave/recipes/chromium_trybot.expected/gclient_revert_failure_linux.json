@@ -107,6 +107,15 @@
       "@@@STEP_LOG_LINE@json.output@      \"mac\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ], @@@",
       "@@@STEP_LOG_LINE@json.output@    \"test\": \"mojo_common_unittests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"args\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"--test-launcher-print-test-stdio=always\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ], @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"platforms\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"linux\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ], @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test\": \"sandbox_linux_unittests\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -370,6 +379,7 @@
       "--",
       "base_unittests",
       "mojo_common_unittests",
+      "sandbox_linux_unittests",
       "chrome"
     ],
     "name": "compile (with patch)",
@@ -455,6 +465,7 @@
       "--",
       "base_unittests",
       "mojo_common_unittests",
+      "sandbox_linux_unittests",
       "chrome"
     ],
     "name": "compile (with patch, lkcr, clobber)",
@@ -558,6 +569,7 @@
       "--",
       "base_unittests",
       "mojo_common_unittests",
+      "sandbox_linux_unittests",
       "chrome"
     ],
     "name": "compile (with patch, lkcr, clobber, nuke)",

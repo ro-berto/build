@@ -107,6 +107,15 @@
       "@@@STEP_LOG_LINE@json.output@      \"mac\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ], @@@",
       "@@@STEP_LOG_LINE@json.output@    \"test\": \"mojo_common_unittests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"args\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"--test-launcher-print-test-stdio=always\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ], @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"platforms\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"linux\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ], @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test\": \"sandbox_linux_unittests\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -146,6 +155,7 @@
       "--",
       "base_unittests",
       "mojo_common_unittests",
+      "sandbox_linux_unittests",
       "chrome"
     ],
     "name": "compile (with patch)"
@@ -304,6 +314,33 @@
       "mojo_common_unittests"
     ],
     "name": "mojo_common_unittests (with patch)"
+  },
+  {
+    "allow_subannotations": true,
+    "always_run": true,
+    "can_fail_build": false,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--xvfb",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"build_config\": \"Release\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"chromium.testing.master\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"chromium_trybot\", \"recipe_config\": \"asan\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": null, \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"build_config\": \"Release\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"chromium.testing.master\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"chromium_trybot\", \"recipe_config\": \"asan\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": null, \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--annotate=gtest",
+      "--test-launcher-summary-output",
+      "/path/to/tmp/json",
+      "--builder-name=TestBuilder",
+      "--slave-name=TestSlavename",
+      "--build-number=571",
+      "--parallel",
+      "sandbox_linux_unittests",
+      "--test-launcher-print-test-stdio=always"
+    ],
+    "name": "sandbox_linux_unittests (with patch)"
   },
   {
     "can_fail_build": false,

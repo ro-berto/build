@@ -103,9 +103,10 @@ def GenSteps(api):
 
 
   class GTestTest(api.test_utils.Test):
-    def __init__(self, name):
+    def __init__(self, name, args=None):
       api.test_utils.Test.__init__(self)
       self._name = name
+      self._args = args or []
 
     @property
     def name(self):
@@ -124,7 +125,9 @@ def GenSteps(api):
               ['failures:', r.failures]
           ])
 
-      args = []
+      # Copy the list because run can be invoked multiple times and we modify
+      # the local copy.
+      args = self._args[:]
 
       if suffix == 'without patch':
         args.append(api.chromium.test_launcher_filter(
@@ -215,7 +218,15 @@ def GenSteps(api):
       api.path['checkout'].join('testing', 'buildbot', 'chromium_trybot.json'),
       step_test_data=lambda: api.json.test_api.output([
         'base_unittests',
-        {'test': 'mojo_common_unittests', 'platforms': ['linux', 'mac']},
+        {
+          'test': 'mojo_common_unittests',
+          'platforms': ['linux', 'mac'],
+        },
+        {
+          'test': 'sandbox_linux_unittests',
+          'platforms': ['linux'],
+          'args': ['--test-launcher-print-test-stdio=always'],
+        },
       ])),
   )
 
@@ -254,12 +265,16 @@ def GenSteps(api):
   test_spec = api.step_history['read test spec'].json.output
   for test in test_spec:
     test_name = None
+    test_args = None
+
     if isinstance(test, unicode):
       test_name = test.encode('utf-8')
     elif isinstance(test, dict):
       if 'platforms' in test:
         if api.platform.name not in test['platforms']:
           continue
+
+      test_args = test.get('args')
 
       if 'test' not in test:  # pragma: no cover
         raise ValueError('Invalid entry in test spec: %r' % test)
@@ -268,14 +283,14 @@ def GenSteps(api):
     else:  # pragma: no cover
       raise ValueError('Unrecognized entry in test spec: %r' % test)
 
-    if test_name and test_name not in gtest_tests:
-      gtest_tests.append(test_name)
+    if test_name:
+      gtest_tests.append(GTestTest(test_name, test_args))
 
   tests = []
   tests.append(CheckdepsTest())
   tests.append(Deps2GitTest())
   for test in gtest_tests:
-    tests.append(GTestTest(test))
+    tests.append(test)
   tests.append(NaclIntegrationTest())
 
   compile_targets = list(api.itertools.chain(
