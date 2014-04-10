@@ -5,6 +5,7 @@
 
 """Clean up acculumated cruft, including tmp directory."""
 
+import contextlib
 import ctypes
 import getpass
 import glob
@@ -62,11 +63,21 @@ def cleanup_directory(directory_to_clean):
     print 'Exception removing %s: %s' % (directory_to_clean, e)
 
 
+@contextlib.contextmanager
+def function_logger(header):
+  print '%s...' % header.capitalize()
+  try:
+    yield
+  finally:
+    print 'Done %s!' % header
+
+
 def remove_old_isolate_directories(slave_path):
   """Removes all the old isolate directories."""
-  for path in glob.iglob(os.path.join(slave_path, '*', 'build', 'isolate*')):
-    print 'Removing %s' % path
-    cleanup_directory(path)
+  with function_logger('removing any old isolate directories'):
+    for path in glob.iglob(os.path.join(slave_path, '*', 'build', 'isolate*')):
+      print 'Removing %s' % path
+      cleanup_directory(path)
 
 
 def remove_old_isolate_execution_directories_impl_(directory):
@@ -78,15 +89,17 @@ def remove_old_isolate_execution_directories_impl_(directory):
 
 def remove_old_isolate_execution_directories(slave_path):
   """Removes all the old directories from past isolate executions."""
-  remove_old_isolate_execution_directories_impl_(tempfile.gettempdir())
-  remove_old_isolate_execution_directories_impl_(slave_path)
+  with function_logger('removing any old isolate execution directories'):
+    remove_old_isolate_execution_directories_impl_(tempfile.gettempdir())
+    remove_old_isolate_execution_directories_impl_(slave_path)
 
 
 def remove_build_dead(slave_path):
   """Removes all the build.dead directories."""
-  for path in glob.iglob(os.path.join(slave_path, '*', 'build.dead')):
-    print 'Removing %s' % path
-    cleanup_directory(path)
+  with function_logger('removing any build.dead directories'):
+    for path in glob.iglob(os.path.join(slave_path, '*', 'build.dead')):
+      print 'Removing %s' % path
+      cleanup_directory(path)
 
 
 def get_free_space(path):
@@ -112,7 +125,8 @@ def check_free_space_path(path, min_free_space=1024*1024*1024):
 
 def main_win():
   """Main function for Windows platform."""
-  slave_utils.RemoveChromeTemporaryFiles()
+  with function_logger('removing any Chrome temporary files'):
+    slave_utils.RemoveChromeTemporaryFiles()
   if os.path.isdir('e:\\'):
     slave_path = 'e:\\b\\build\\slave'
   else:
@@ -129,20 +143,22 @@ def main_win():
   # Do not add the following cleanup in slaves_utils.py since we don't want to
   # clean them between each test, as the crash dumps may be processed by
   # 'process build' step.
-  if 'LOCALAPPDATA' in os.environ:
-    crash_reports = os.path.join(
-        os.environ['LOCALAPPDATA'], 'Chromium', 'User Data', 'Crash Reports')
-    if os.path.isdir(crash_reports):
-      for filename in os.listdir(crash_reports):
-        filepath = os.path.join(crash_reports, filename)
-        if os.path.isfile(filepath):
-          os.remove(filepath)
+  with function_logger('removing any crash reports'):
+    if 'LOCALAPPDATA' in os.environ:
+      crash_reports = os.path.join(
+          os.environ['LOCALAPPDATA'], 'Chromium', 'User Data', 'Crash Reports')
+      if os.path.isdir(crash_reports):
+        for filename in os.listdir(crash_reports):
+          filepath = os.path.join(crash_reports, filename)
+          if os.path.isfile(filepath):
+            os.remove(filepath)
   return 0
 
 
 def main_mac():
   """Main function for Mac platform."""
-  slave_utils.RemoveChromeTemporaryFiles()
+  with function_logger('removing any Chrome temporary files'):
+    slave_utils.RemoveChromeTemporaryFiles()
   remove_build_dead('/b/build/slave')
   remove_old_isolate_directories('/b/build/slave')
   remove_old_isolate_execution_directories('/b/build/slave')
@@ -157,7 +173,8 @@ def main_mac():
 
 def main_linux():
   """Main function for linux platform."""
-  slave_utils.RemoveChromeTemporaryFiles()
+  with function_logger('removing any Chrome temporary files'):
+    slave_utils.RemoveChromeTemporaryFiles()
   remove_build_dead('/b/build/slave')
   remove_old_isolate_directories('/b/build/slave')
   remove_old_isolate_execution_directories('/b/build/slave')
