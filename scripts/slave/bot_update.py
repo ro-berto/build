@@ -26,10 +26,12 @@ import os.path as path
 from common import chromium_utils
 
 
+CHROMIUM_SRC_URL = 'https://chromium.googlesource.com/chromium/src.git'
+
 RECOGNIZED_PATHS = {
     # If SVN path matches key, the entire URL is rewritten to the Git url.
     '/chrome/trunk/src':
-        'https://chromium.googlesource.com/chromium/src.git',
+       CHROMIUM_SRC_URL,
     '/chrome-internal/trunk/src-internal':
         'https://chrome-internal.googlesource.com/chrome/src-internal.git'
 }
@@ -553,6 +555,10 @@ def git_checkout(solutions, revision, shallow):
   for sln in solutions:
     name = sln['name']
     url = sln['url']
+    if url == CHROMIUM_SRC_URL or url + '.git' == CHROMIUM_SRC_URL:
+      # Experiments show there's little to be gained from
+      # a shallow clone of src.
+      shallow = False
     sln_dir = path.join(build_dir, name)
     s = ['--shallow'] if shallow else []
     populate_cmd = (['cache', 'populate', '-v', '--cache-dir', CACHE_DIR]
