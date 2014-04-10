@@ -148,6 +148,8 @@ if sys.platform.startswith('win'):
 # Find the patch tool.
 ROOT_BUILD_DIR = path.dirname(SLAVE_DIR)
 ROOT_B_DIR = path.dirname(ROOT_BUILD_DIR)
+DEPOT_TOOLS_DIR = path.join(ROOT_B_DIR, 'depot_tools')
+GIT_CACHE_PATH = path.join(DEPOT_TOOLS_DIR, 'git_cache.py')
 BUILD_INTERNAL_DIR = path.join(ROOT_B_DIR, 'build_internal')
 if sys.platform.startswith('win'):
   PATCH_TOOL = path.join(BUILD_INTERNAL_DIR, 'tools', 'patch.EXE')
@@ -206,12 +208,16 @@ def call(*args, **kwargs):
 
 def git(*args, **kwargs):
   """Wrapper around call specifically for Git commands."""
-  git_executable = 'git'
-  # On windows, subprocess doesn't fuzzy-match 'git' to 'git.bat', so we
-  # have to do it explicitly. This is better than passing shell=True.
-  if sys.platform.startswith('win'):
-    git_executable += '.bat'
-  cmd = (git_executable,) + args
+  if args and args[0] == 'cache':
+    # Rewrite "git cache" calls into "python git_cache.py".
+    cmd = (sys.executable, '-u', GIT_CACHE_PATH) + args[1:]
+  else:
+    git_executable = 'git'
+    # On windows, subprocess doesn't fuzzy-match 'git' to 'git.bat', so we
+    # have to do it explicitly. This is better than passing shell=True.
+    if sys.platform.startswith('win'):
+      git_executable += '.bat'
+    cmd = (git_executable,) + args
   return call(*cmd, **kwargs)
 
 
