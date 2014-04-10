@@ -185,10 +185,16 @@ def call(*args, **kwargs):
       proc.stdin.close()
     # This is here because passing 'sys.stdout' into stdout for proc will
     # produce out of order output.
+    last_was_cr = False
     while True:
       buf = proc.stdout.read(1)
       if buf == '\r':
         buf = '\n'
+        last_was_cr = True
+      elif last_was_cr:
+        last_was_cr = False
+        if buf == '\n':
+          continue
       if not buf:
         break
       sys.stdout.write(buf)
