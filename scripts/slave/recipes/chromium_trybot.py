@@ -19,37 +19,6 @@ DEPS = [
 ]
 
 
-GTEST_TESTS = [
-  # Small and medium tests. Sort alphabetically.
-  'base_unittests',
-  'cacheinvalidation_unittests',
-  'cc_unittests',
-  'chromedriver_unittests',
-  'components_unittests',
-  'content_unittests',
-  'crypto_unittests',
-  'google_apis_unittests',
-  'gpu_unittests',
-  'ipc_tests',
-  'jingle_unittests',
-  'media_unittests',
-  'net_unittests',
-  'ppapi_unittests',
-  'printing_unittests',
-  'remoting_unittests',
-  'sql_unittests',
-  'sync_unit_tests',
-  'ui_unittests',
-  'unit_tests',
-
-  # Large tests. Sort alphabetically.
-  'browser_tests',
-  'content_browsertests',
-  'interactive_ui_tests',
-  'sync_integration_tests',
-]
-
-
 # Make it easy to change how different configurations of this recipe
 # work without making buildbot-side changes. Each builder will only
 # have a tag specifying a config/flavor (adding, removing or changing
@@ -281,10 +250,7 @@ def GenSteps(api):
   should_run_gn = api.properties.get('buildername') in ('linux_chromium',
                                                         'linux_chromium_rel')
 
-  # Copy the global list - otherwise the state may be carried over between
-  # tests.
-  gtest_tests = GTEST_TESTS[:]
-
+  gtest_tests = []
   test_spec = api.step_history['read test spec'].json.output
   for test in test_spec:
     test_name = None
@@ -308,8 +274,8 @@ def GenSteps(api):
   tests = []
   tests.append(CheckdepsTest())
   tests.append(Deps2GitTest())
-  for name in gtest_tests:
-    tests.append(GTestTest(name))
+  for test in gtest_tests:
+    tests.append(GTestTest(test))
   tests.append(NaclIntegrationTest())
 
   compile_targets = list(api.itertools.chain(
@@ -451,9 +417,9 @@ def GenTests(api):
     api.test('persistent_failure_and_runhooks_2_fail_test') +
     props() +
     api.platform.name('linux') +
-    api.override_step_data('media_unittests (with patch)',
+    api.override_step_data('base_unittests (with patch)',
                            canned_test(passing=False)) +
-    api.override_step_data('media_unittests (without patch)',
+    api.override_step_data('base_unittests (without patch)',
                            canned_test(passing=False)) +
     api.step_data('gclient runhooks (2)', retcode=1)
   )
@@ -530,7 +496,7 @@ def GenTests(api):
     api.test('deapply_compile_failure_linux') +
     props() +
     api.platform.name('linux') +
-    api.override_step_data('media_unittests (with patch)',
+    api.override_step_data('base_unittests (with patch)',
                            canned_test(passing=False)) +
     api.step_data('compile (without patch)', retcode=1)
   )
