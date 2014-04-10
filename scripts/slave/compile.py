@@ -106,8 +106,8 @@ def goma_setup(options, env):
   # waterfall. Remove this as soon as that is fixed. (12 June, 2013).
   env['NO_NACL_GOMA'] = 'true'
   hostname = socket.gethostname().split('.')[0].lower()
-  # roughly 25% experiment on removing the env.
-  if binascii.crc32(hostname) % 100 <= 25:
+  # roughly 50% experiment on removing the env.
+  if binascii.crc32(hostname) % 100 <= 50:
     del env['NO_NACL_GOMA']
 
   # HACK(shinyak, goma): Enable GLOBAL_FILEID_CACHE_PATTERNS only in
