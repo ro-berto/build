@@ -553,8 +553,9 @@ def git_checkout(solutions, revision, shallow):
                  + s + [url])
     git(*populate_cmd)
     mirror_dir = git('cache', 'exists', '--cache-dir', CACHE_DIR, url).strip()
+    clone_cmd = ('clone', '--local', '--shared', mirror_dir, sln_dir)
     if not path.isdir(sln_dir):
-      git('clone', mirror_dir, sln_dir)
+      git(*clone_cmd)
     try:
       # Make sure we start on a known branch first, and not where ever
       # apply_issue left us at before.
@@ -565,7 +566,7 @@ def git_checkout(solutions, revision, shallow):
         # Exited abnormally, theres probably something wrong with the checkout.
         # Lets wipe the checkout and try again.
         chromium_utils.RemoveDirectory(sln_dir)
-        git('clone', mirror_dir, sln_dir)
+        git(*clone_cmd)
         git('checkout', '--force', 'origin/master', cwd=sln_dir)
         git('reset', '--hard', cwd=sln_dir)
       else:
