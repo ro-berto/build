@@ -217,7 +217,6 @@ F('rel_x64', win_out().ChromiumFactory(
       'trigger': 'win_x64_rel_trigger',
       'gclient_env': {
         'GYP_DEFINES': 'component=shared_library target_arch=x64',
-        'GYP_MSVS_VERSION': '2012',
       }}))
 
 B('Win 7 Tests x64 (1)', 'rel_x64_unit_1', 'windows',
@@ -357,7 +356,6 @@ F('dbg_x64', win_out().ChromiumFactory(
     factory_properties={
       'gclient_env': {
         'GYP_DEFINES': 'component=shared_library fastbuild=1 target_arch=x64',
-        'GYP_MSVS_VERSION': '2012',
       }}))
 
 

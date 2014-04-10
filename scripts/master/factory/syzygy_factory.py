@@ -89,9 +89,6 @@ class SyzygyFactory(gclient_factory.GClientFactory):
       gclient_env.setdefault('GYP_DEFINES', '')
       gclient_env['GYP_DEFINES'] += ' official_build=1'
 
-    gclient_env.setdefault('GYP_MSVS_VERSION', '')
-    gclient_env['GYP_MSVS_VERSION'] = '2013'
-
     factory = self.BaseFactory(factory_properties=factory_properties,
                                official_release=official_release)
 

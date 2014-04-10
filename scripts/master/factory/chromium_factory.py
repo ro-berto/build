@@ -984,9 +984,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
     factory_properties['gclient_env'] = \
         factory_properties.get('gclient_env', {}).copy()
-    # Defaults gyp to VS2010.
     if self._target_platform == 'win32':
-      factory_properties['gclient_env'].setdefault('GYP_MSVS_VERSION', '2010')
       FixForGomaWin(options, target, factory_properties['gclient_env'])
     tests = tests or []
 

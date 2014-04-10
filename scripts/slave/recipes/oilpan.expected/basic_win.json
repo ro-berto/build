@@ -80,8 +80,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "chromium_win_pch=0 component=static_library fastbuild=1 gomadir='[BUILD]\\goma' linux_strip_binary=1 target_arch=x64 use_goma=1",
-      "GYP_MSVS_VERSION": "2012"
+      "GYP_DEFINES": "chromium_win_pch=0 component=static_library fastbuild=1 gomadir='[BUILD]\\goma' linux_strip_binary=1 target_arch=x64 use_goma=1"
     },
     "name": "gclient runhooks",
     "seed_steps": [

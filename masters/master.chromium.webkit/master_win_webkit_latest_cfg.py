@@ -84,7 +84,6 @@ F('f_webkit_win_rel_x64', win().ChromiumFactory(
         'gclient_env': {
             'GYP_GENERATORS':'ninja',
             'GYP_DEFINES': 'component=shared_library target_arch=x64',
-            'GYP_MSVS_VERSION': '2012',
         },
     }))
 
@@ -191,7 +190,6 @@ F('f_webkit_win_dbg_x64', win().ChromiumFactory(
         'gclient_env': {
           'GYP_GENERATORS':'ninja',
           'GYP_DEFINES': 'component=shared_library fastbuild=1 target_arch=x64',
-          'GYP_MSVS_VERSION': '2012',
         },
     }))
 

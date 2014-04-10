@@ -97,8 +97,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 target_arch=x64",
-      "GYP_MSVS_VERSION": "2012"
+      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 target_arch=x64"
     },
     "name": "gclient runhooks"
   },

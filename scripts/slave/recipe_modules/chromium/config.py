@@ -43,7 +43,6 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       GYP_DEFINES = Dict(equal_fn, ' '.join, (basestring,int,Path)),
       GYP_GENERATORS = Set(basestring, ','.join),
       GYP_GENERATOR_FLAGS = Dict(equal_fn, ' '.join, (basestring,int)),
-      GYP_MSVS_VERSION = Single(basestring, required=False),
     ),
     build_dir = Single(Path),
 
@@ -127,9 +126,6 @@ def BASE(c):
     if c.TARGET_BITS == 64:
       # Windows requires 64-bit builds to be in <dir>_x64.
       c.build_config_fs = c.BUILD_CONFIG + '_x64'
-      c.gyp_env.GYP_MSVS_VERSION = '2012'
-    else:
-      c.gyp_env.GYP_MSVS_VERSION = '2010'
 
   gyp_arch = {
     ('intel', 32): 'ia32',
