@@ -434,6 +434,7 @@ V8_LKGR_STEPS = {
     'V8 Win32 - builder': ['compile'],
     'V8 Win32 - 1': ['Check', 'Test262', 'Mozilla', 'Webkit'],
     'V8 Win32 - 2': ['Check', 'Test262', 'Mozilla', 'Webkit'],
+    'V8 Win32 - nosnap - shared': ['compile', 'Check'],
     'V8 Win32 - debug builder': ['compile'],
     'V8 Win32 - debug - 1': ['Check', 'Webkit', 'Test262', 'Mozilla'],
     'V8 Win32 - debug - 2': ['Check', 'Webkit', 'Test262', 'Mozilla'],

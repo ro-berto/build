@@ -375,6 +375,17 @@ BUILDERS = {
         'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
         'testing': {'platform': 'win'},
       },
+      'V8 Win32 - nosnap - shared': {
+        'v8_apply_config': ['no_snapshot'],
+        'chromium_apply_config': ['shared_library', 'no_snapshot'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['v8testing'],
+        'testing': {'platform': 'win'},
+      },
       'V8 Win32 - debug - 1': {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -588,17 +599,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
 ####### Category: FYI
-      'V8 Win32 - nosnap - shared': {
-        'v8_apply_config': ['no_snapshot'],
-        'chromium_apply_config': ['shared_library', 'no_snapshot'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'tests': ['v8testing'],
-        'testing': {'platform': 'win'},
-      },
       'V8 Mac - full debug': {
         'chromium_apply_config': ['no_optimized_debug'],
         'v8_config_kwargs': {
