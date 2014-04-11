@@ -19,6 +19,7 @@ ENABLED_BUILDERS = {
     ],
     'chromium.linux': [
         'Linux Builder',
+        'Android Webview AOSP Builder Bot Update',
     ]
 }
 ENABLED_SLAVES = {}
@@ -69,7 +70,7 @@ class BotUpdateApi(recipe_api.RecipeApi):
         'scripts', 'slave', 'bot_update.py')
     return self.m.python(name, bot_update_path, cmd, **kwargs)
 
-  def ensure_checkout(self, gclient_config=None, **kwargs):
+  def ensure_checkout(self, gclient_config=None, suffix=None, **kwargs):
     # We can re-use the gclient spec from the gclient module, since all the
     # data bot_update needs is already configured into the gclient spec.
     cfg = gclient_config or self.m.gclient.c
@@ -124,7 +125,10 @@ class BotUpdateApi(recipe_api.RecipeApi):
       cmd.append('--force')
 
     # Inject Json output for testing.
-    revision_map_data = self.m.gclient.c.got_revision_mapping
+    try:
+      revision_map_data = self.m.gclient.c.got_revision_mapping
+    except AttributeError:
+      revision_map_data = {}
     git_mode = self.m.properties.get('mastername') in GIT_MASTERS
     step_test_data = lambda : self.test_api.output_json(active,
                                                         root,
@@ -142,15 +146,20 @@ class BotUpdateApi(recipe_api.RecipeApi):
         step_text = step_result.json.output['step_text']
         step_result.presentation.step_text = step_text
 
+    # Add a suffix to the step name, if specified.
+    if suffix:
+      name = 'bot_update - %s' % suffix
+    else:
+      name = 'bot_update'
 
     # Ah hah! Now that everything is in place, lets run bot_update!
-    yield self('bot_update', cmd, followup_fn=followup_fn,
+    yield self(name, cmd, followup_fn=followup_fn,
                step_test_data=step_test_data, **kwargs),
 
     # Set the "checkout" path for the main solution.
     # This is used by the Chromium module to figure out where to look for
     # the checkout.
-    bot_update_step = self.m.step_history['bot_update']
+    bot_update_step = self.m.step_history.last_step()
     # bot_update actually just sets root to be either the passed in "root"
     # property, or the folder name of the first solution.
     if bot_update_step.json.output['did_run']:

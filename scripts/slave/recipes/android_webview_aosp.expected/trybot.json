@@ -3,6 +3,32 @@
     "cmd": [
       "python",
       "-u",
+      "[BUILD]/scripts/slave/bot_update.py",
+      "--spec",
+      "cache_dir = None\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': '', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]",
+      "--root",
+      "src",
+      "--revision",
+      "HEAD",
+      "--issue",
+      "12853011",
+      "--patchset",
+      "1",
+      "--output_json",
+      "/path/to/tmp/json"
+    ],
+    "name": "bot_update - empty_deps",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"did_run\": false@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[DEPOT_TOOLS]/gclient.py",
       "config",
       "--spec",
@@ -86,6 +112,32 @@
       "@@@STEP_LOG_LINE@json.output@    \"src/blacklist/project/1\": null, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"src/blacklist/project/2\": null@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/bot_update.py",
+      "--spec",
+      "cache_dir = None\nsolutions = [{'custom_deps': {'src/blacklist/project/1': None, 'src/blacklist/project/2': None}, 'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]\ntarget_os = ['android']",
+      "--root",
+      "src",
+      "--revision",
+      "HEAD",
+      "--issue",
+      "12853011",
+      "--patchset",
+      "1",
+      "--output_json",
+      "/path/to/tmp/json"
+    ],
+    "name": "bot_update - trimmed",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"did_run\": false@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]

@@ -26,7 +26,11 @@ class AOSPApi(recipe_api.RecipeApi):
     spec = self.m.gclient.make_config('chromium_empty')
     spec.solutions[0].revision = svn_revision
     self.m.gclient.spec_alias = 'empty_deps'
-    yield self.m.gclient.checkout(spec)
+
+    # Bot Update re-uses the gclient configs.
+    yield self.m.bot_update.ensure_checkout(spec, suffix='empty_deps')
+    if not self.m.step_history.last_step().json.output['did_run']:
+      yield self.m.gclient.checkout(spec)
 
     yield self.m.step(
       'calculate trimmed deps',
@@ -46,7 +50,9 @@ class AOSPApi(recipe_api.RecipeApi):
     spec.solutions[0].revision = svn_revision
     spec.target_os = ['android']
     self.m.gclient.spec_alias = 'trimmed'
-    yield self.m.gclient.checkout(spec)
+    yield self.m.bot_update.ensure_checkout(spec, suffix='trimmed')
+    if not self.m.step_history.last_step().json.output['did_run']:
+      yield self.m.gclient.checkout(spec)
     del self.m.gclient.spec_alias
 
     yield self.m.gclient.runhooks(env={'GYP_CHROMIUM_NO_ACTION': 1})

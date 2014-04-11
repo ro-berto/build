@@ -665,14 +665,19 @@ def parse_got_revision(gclient_output, got_revision_mapping, use_svn_revs):
     if dir_name not in solutions_output:
       continue
     solution_output = solutions_output[dir_name]
-    assert solution_output.get('scm') == 'git'
-    git_revision = solution_output['revision']
-    if use_svn_revs:
-      revision = get_svn_rev(git_revision, dir_name)
-      if not revision:
-        revision = git_revision
+    if solution_output.get('scm') is None:
+      # This is an ignored DEPS, so the output got_revision should be 'None'.
+      revision = None
     else:
-      revision = git_revision
+      # Since we are using .DEPS.git, everything had better be git.
+      assert solution_output.get('scm') == 'git'
+      git_revision = solution_output['revision']
+      if use_svn_revs:
+        revision = get_svn_rev(git_revision, dir_name)
+        if not revision:
+          revision = git_revision
+      else:
+        revision = git_revision
 
     properties[property_name] = revision
 
