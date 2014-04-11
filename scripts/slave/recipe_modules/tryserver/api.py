@@ -96,7 +96,7 @@ class TryserverApi(recipe_api.RecipeApi):
                    name='patch fetch', cwd=patch_dir),
         self.m.git('clean', '-f', '-d', '-x',
                    name='patch clean', cwd=patch_dir),
-        self.m.git('checkout', '-f', patch_ref,
+        self.m.git('checkout', '-f', 'FETCH_HEAD',
                    name='patch git checkout', cwd=patch_dir),
         self._apply_patch_step(patch_path, cwd),
         self.m.step('remove patch', ['rm', '-rf', patch_dir]),

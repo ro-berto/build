@@ -44,7 +44,7 @@
       "git",
       "checkout",
       "-f",
-      "johndoe#123.diff"
+      "FETCH_HEAD"
     ],
     "cwd": "[TMP_BASE]/patch_tmp_1",
     "name": "patch git checkout"
