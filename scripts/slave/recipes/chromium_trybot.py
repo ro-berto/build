@@ -19,40 +19,230 @@ DEPS = [
 ]
 
 
-# Make it easy to change how different configurations of this recipe
-# work without making buildbot-side changes. Each builder will only
-# have a tag specifying a config/flavor (adding, removing or changing
-# builders requires a buildbot-side change anyway), but we can change
-# everything about what that config means in the recipe.
-RECIPE_CONFIGS = {
-  # Default config.
-  None: {
-    'chromium_config': 'chromium',
-    'compile_only': False,
-  },
-  'asan': {
-    'chromium_config': 'chromium_asan',
-    'compile_only': False,
-  },
-  'chromeos': {
-    'chromium_config': 'chromium_chromeos',
-    'compile_only': False,
-  },
-  'chromeos_asan': {
-    'chromium_config': 'chromium_chromeos_asan',
-    'compile_only': False,
-  },
-  'chromeos_clang': {
-    'chromium_config': 'chromium_chromeos_clang',
-    'compile_only': True,
-  },
-  'clang': {
-    'chromium_config': 'chromium_clang',
-    'compile_only': True,
-  },
-  'compile': {
-    'chromium_config': 'chromium',
-    'compile_only': True,
+BUILDERS = {
+  'tryserver.chromium': {
+    'builders': {
+      'linux_chromium_dbg': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'chromium_config': 'chromium',
+        'compile_only': False,
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'linux_chromium_rel': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'chromium_config': 'chromium',
+        'compile_only': False,
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'linux_chromium_compile_dbg': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'chromium_config': 'chromium',
+        'compile_only': True,
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'linux_chromium_compile_rel': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'chromium_config': 'chromium',
+        'compile_only': True,
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'linux_chromium_clang_dbg': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'chromium_config': 'chromium_clang',
+        'compile_only': True,
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'linux_chromium_clang_rel': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'chromium_config': 'chromium_clang',
+        'compile_only': True,
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'linux_chromium_chromeos_dbg': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'chromium_config': 'chromium_chromeos',
+        'compile_only': False,
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'linux_chromium_chromeos_rel': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'chromium_config': 'chromium_chromeos',
+        'compile_only': False,
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'linux_chromium_chromeos_clang_dbg': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'chromium_config': 'chromium_chromeos_clang',
+        'compile_only': True,
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'linux_chromium_chromeos_clang_rel': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'chromium_config': 'chromium_chromeos_clang',
+        'compile_only': True,
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'mac_chromium_dbg': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'chromium_config': 'chromium',
+        'compile_only': False,
+        'testing': {
+          'platform': 'mac',
+        },
+      },
+      'mac_chromium_rel': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'chromium_config': 'chromium',
+        'compile_only': False,
+        'testing': {
+          'platform': 'mac',
+        },
+      },
+      'mac_chromium_compile_dbg': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'chromium_config': 'chromium',
+        'compile_only': True,
+        'testing': {
+          'platform': 'mac',
+        },
+      },
+      'mac_chromium_compile_rel': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'chromium_config': 'chromium',
+        'compile_only': True,
+        'testing': {
+          'platform': 'mac',
+        },
+      },
+      'win_chromium_dbg': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'chromium_config': 'chromium',
+        'compile_only': False,
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'win_chromium_rel': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'chromium_config': 'chromium',
+        'compile_only': False,
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'win_chromium_compile_dbg': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'chromium_config': 'chromium',
+        'compile_only': True,
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'win_chromium_compile_rel': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'chromium_config': 'chromium',
+        'compile_only': True,
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'win_chromium_x64_dbg': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'chromium_config': 'chromium',
+        'compile_only': False,
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'win_chromium_x64_rel': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'chromium_config': 'chromium',
+        'compile_only': False,
+        'testing': {
+          'platform': 'win',
+        },
+      },
+    },
   },
 }
 
@@ -189,12 +379,19 @@ def GenSteps(api):
       failures = api.step_history[self._step_name(suffix)].json.output
       return [f['raw_name'] for f in failures]
 
-  recipe_config_name = api.properties.get('recipe_config')
-  if recipe_config_name not in RECIPE_CONFIGS:  # pragma: no cover
-    raise ValueError('Unsupported recipe_config "%s"' % recipe_config_name)
-  recipe_config = RECIPE_CONFIGS[recipe_config_name]
+  mastername = api.properties.get('mastername')
+  buildername = api.properties.get('buildername')
+  master_dict = BUILDERS.get(mastername, {})
+  bot_config = master_dict.get('builders', {}).get(buildername)
+  assert bot_config, (
+      'Unrecognized builder name %r for master %r.' % (
+          buildername, mastername))
 
-  api.chromium.set_config(recipe_config['chromium_config'])
+  # Make sure tests and the recipe specify correct and matching platform.
+  assert api.platform.name == bot_config.get('testing', {}).get('platform')
+
+  api.chromium.set_config(bot_config['chromium_config'],
+                          **bot_config.get('chromium_config_kwargs', {}))
   api.chromium.apply_config('trybot_flavor')
   api.gclient.set_config('chromium')
   api.step.auto_resolve_conflicts = True
@@ -350,7 +547,7 @@ def GenSteps(api):
   if api.step_history.failed:
     return
 
-  if recipe_config['compile_only']:
+  if bot_config['compile_only']:
     return
 
   # TODO(dpranke): crbug.com/353690. It would be good to run gn_unittests
@@ -386,6 +583,10 @@ def GenSteps(api):
   yield api.test_utils.determine_new_failures(tests, deapply_patch_fn)
 
 
+def _sanitize_nonalpha(text):
+  return ''.join(c if c.isalnum() else '_' for c in text)
+
+
 def GenTests(api):
   canned_checkdeps = {
     True: [],
@@ -399,30 +600,26 @@ def GenTests(api):
     ],
   }
   canned_test = api.json.canned_gtest_output
-  def props(config='Release', **kwargs):
+  def props(config='Release', mastername='tryserver.chromium',
+            buildername='linux_chromium_rel', **kwargs):
     kwargs.setdefault('revision', None)
     return api.properties.tryserver(
       build_config=config,
+      mastername=mastername,
+      buildername=buildername,
       **kwargs
     )
 
-  for build_config in ['Release', 'Debug']:
-    for plat in ('win', 'mac', 'linux'):
-      name = '%s_%s' % (plat, build_config.lower())
+  for mastername, master_config in BUILDERS.iteritems():
+    for buildername, bot_config in master_config['builders'].iteritems():
+      test_name = 'full_%s_%s' % (_sanitize_nonalpha(mastername),
+                                  _sanitize_nonalpha(buildername))
       yield (
-        api.test(name) +
-        props(build_config) +
-        api.platform.name(plat)
-      )
-
-  # While not strictly required for coverage, record expectations for each
-  # of the configs so we can see when and how they change.
-  for config in RECIPE_CONFIGS:
-    if config:
-      yield (
-        api.test(config) +
-        props(recipe_config=config) +
-        api.platform.name('linux')
+        api.test(test_name) +
+        api.platform(bot_config['testing']['platform'],
+                     bot_config.get(
+                         'chromium_config_kwargs', {}).get('TARGET_BITS', 64)) +
+        props(mastername=mastername, buildername=buildername)
       )
 
   # It is important that even when steps related to deapplying the patch
@@ -441,7 +638,7 @@ def GenTests(api):
 
   yield (
     api.test('invalid_json_without_patch') +
-    props() +
+    props(buildername='win_chromium_rel') +
     api.platform.name('win') +
     api.override_step_data('checkdeps (with patch)',
                            api.json.output(canned_checkdeps[False])) +
@@ -452,7 +649,7 @@ def GenTests(api):
   for step in ('gclient revert', 'gclient runhooks'):
     yield (
       api.test(step.replace(' ', '_') + '_failure') +
-      props() +
+      props(buildername='win_chromium_rel') +
       api.platform.name('win') +
       api.step_data(step, retcode=1)
     )
@@ -468,7 +665,7 @@ def GenTests(api):
 
   yield (
     api.test('gclient_revert_failure_win') +
-    props() +
+    props(buildername='win_chromium_rel') +
     api.platform.name('win') +
     api.step_data('gclient runhooks', retcode=1) +
     api.step_data('gclient runhooks (2)', retcode=1) +
@@ -491,7 +688,7 @@ def GenTests(api):
 
   yield (
     api.test('compile_failure') +
-    props() +
+    props(buildername='win_chromium_rel') +
     api.platform.name('win') +
     api.step_data('compile (with patch)', retcode=1) +
     api.step_data('compile (with patch, lkcr, clobber)', retcode=1) +
@@ -514,22 +711,4 @@ def GenTests(api):
     api.override_step_data('base_unittests (with patch)',
                            canned_test(passing=False)) +
     api.step_data('compile (without patch)', retcode=1)
-  )
-
-  # TODO(dpranke): crbug.com/353690.
-  # Remove this when we make GN a standalone recipe.
-  yield (
-    api.test('unittest_should_run_gn') +
-    api.properties.tryserver(buildername='linux_chromium',
-                             build_config='Debug') +
-    api.platform.name('linux') +
-    api.step_data('compile (gn with patch)')
-  )
-
-  yield (
-    api.test('unittest_should_run_gn_compile_failure') +
-    api.properties.tryserver(buildername='linux_chromium',
-                             build_config='Debug') +
-    api.platform.name('linux') +
-    api.step_data('compile (gn with patch)', retcode=1)
   )
