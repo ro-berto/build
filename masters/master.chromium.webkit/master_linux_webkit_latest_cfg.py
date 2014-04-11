@@ -103,6 +103,29 @@ F('f_webkit_linux_rel_asan', linux().ChromiumFactory(
         'time_out_ms': '48000',  # ASAN is roughly 8x slower than Release.
     }))
 
+B('WebKit Linux Leak', 'f_webkit_linux_leak_rel', scheduler='global_scheduler')
+F('f_webkit_linux_leak_rel', linux().ChromiumFactory(
+    tests=chromium_factory.blink_tests,
+    options=[
+        '--build-tool=ninja',
+        '--compiler=goma',
+        '--',
+        'blink_tests',
+    ],
+    factory_properties={
+        'additional_expectations': [
+            ['third_party', 'WebKit', 'LayoutTests', 'LeakExpectations' ],
+        ],
+        'archive_webkit_results': ActiveMaster.is_production_host,
+        'gclient_env': {
+          'GYP_GENERATORS': 'ninja',
+        },
+        'generate_gtest_json': True,
+        'test_results_server': 'test-results.appspot.com',
+        'blink_config': 'blink',
+        'webkit_test_options': ['--enable-leak-detection'],
+    }))
+
 
 ################################################################################
 ## Debug
@@ -156,6 +179,31 @@ F('f_webkit_linux_oilpan_dbg', linux().ChromiumFactory(
         'generate_gtest_json': True,
         'test_results_server': 'test-results.appspot.com',
         'blink_config': 'blink',
+    }))
+
+B('WebKit Linux Leak (dbg)', 'f_webkit_linux_leak_dbg',
+    scheduler='global_scheduler', auto_reboot=False)
+F('f_webkit_linux_leak_dbg', linux().ChromiumFactory(
+    target='Debug',
+    tests=chromium_factory.blink_tests,
+    options=[
+        '--build-tool=ninja',
+        '--compiler=goma',
+        '--',
+        'blink_tests',
+    ],
+    factory_properties={
+        'additional_expectations': [
+            ['third_party', 'WebKit', 'LayoutTests', 'LeakExpectations' ],
+        ],
+        'archive_webkit_results': ActiveMaster.is_production_host,
+        'generate_gtest_json': True,
+        'test_results_server': 'test-results.appspot.com',
+        'gclient_env': {
+            'GYP_GENERATORS':'ninja',
+        },
+        'blink_config': 'blink',
+        'webkit_test_options': ['--enable-leak-detection'],
     }))
 
 

@@ -128,6 +128,9 @@ def layout_test(options, args):
   for test_list in options.test_list:
     command += ['--test-list', test_list]
 
+  if options.enable_leak_detection:
+    command.append('--enable-leak-detection')
+
   # The list of tests is given as arguments.
   command.extend(options.options.split(' '))
   command.extend(args)
@@ -236,6 +239,8 @@ def main():
   option_parser.add_option('--test-list', action='append', metavar='FILE',
                            default=[],
                            help='Read list of tests to run from file.')
+  option_parser.add_option('--enable-leak-detection', action='store_true',
+                           default=False, help='Enable the leak detection')
   options, args = option_parser.parse_args()
   options.build_dir = build_directory.GetBuildOutputDirectory()
 
