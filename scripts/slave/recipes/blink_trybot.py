@@ -61,6 +61,26 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
+      'linux_blink_oilpan_dbg': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'compile_only': False,
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'linux_blink_oilpan_rel': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'compile_only': False,
+        'testing': {
+          'platform': 'linux',
+        },
+      },
       'mac_blink_dbg': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -101,6 +121,26 @@ BUILDERS = {
           'platform': 'mac',
         },
       },
+      'mac_blink_oilpan_dbg': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'compile_only': False,
+        'testing': {
+          'platform': 'mac',
+        },
+      },
+      'mac_blink_oilpan_rel': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'compile_only': False,
+        'testing': {
+          'platform': 'mac',
+        },
+      },
       'win_blink_dbg': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -137,6 +177,26 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'compile_only': True,
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'win_blink_oilpan_dbg': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'compile_only': False,
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'win_blink_oilpan_rel': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'compile_only': False,
         'testing': {
           'platform': 'win',
         },
@@ -288,6 +348,12 @@ def GenSteps(api):
         test_list = "\n".join(self.failures('with patch'))
         args.extend(['--test-list', api.raw_io.input(test_list)])
 
+      if 'oilpan' in api.properties['buildername']:
+        args.extend(['--additional-expectations',
+                     api.path['checkout'].join('third_party', 'WebKit',
+                                               'LayoutTests',
+                                               'OilpanExpectations')])
+
       def followup_fn(step_result):
         r = step_result.json.test_results
         p = step_result.presentation
@@ -364,6 +430,9 @@ def GenSteps(api):
   api.chromium.apply_config('trybot_flavor')
   api.gclient.set_config('blink_internal')
   api.step.auto_resolve_conflicts = True
+
+  if 'oilpan' in buildername:
+    api.chromium.apply_config('oilpan')
 
   webkit_lint = api.path['build'].join('scripts', 'slave', 'chromium',
                                        'lint_test_files_wrapper.py')

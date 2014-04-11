@@ -245,6 +245,10 @@ def chromeos(c):
   ffmpeg_branding(c, branding='ChromeOS')
   proprietary_codecs(c)
 
+@config_ctx()
+def oilpan(c):
+  c.gyp_env.GYP_DEFINES['enable_oilpan'] = 1
+
 @config_ctx(includes=['static_library'])
 def official(c):
   c.gyp_env.GYP_DEFINES['branding'] = 'Chrome'
