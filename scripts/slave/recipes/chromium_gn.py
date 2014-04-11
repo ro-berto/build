@@ -19,6 +19,7 @@ def GenSteps(api):
   # passed in from slaves.cfg, but that doesn't exist today, so we need a
   # lookup mechanism to map bot name to build_config.
   build_config = {
+    'Linux GN': 'Release',
     'Linux GN (dbg)': 'Debug',
     'linux_chromium_gn_dbg': 'Debug',
     'linux_chromium_gn_rel': 'Release',
@@ -97,6 +98,11 @@ def GenTests(api):
   yield (
       api.test('full_linux_chromium_gn_rel') +
       api.properties.tryserver(buildername='linux_chromium_gn_rel') +
+      api.platform.name('linux')
+  )
+  yield (
+      api.test('full_chromium_linux_Linux_GN') +
+      api.properties.generic(buildername='Linux GN') +
       api.platform.name('linux')
   )
   yield (
