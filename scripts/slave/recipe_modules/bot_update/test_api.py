@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import hashlib
+import struct
 
 from slave import recipe_test_api
 
@@ -18,12 +19,20 @@ class BotUpdateTestApi(recipe_test_api.RecipeTestApi):
 
     # Add in extra json output if active.
     if active:
+      properties = {
+          property_name: self.gen_revision(project_name, git_mode)
+          for project_name, property_name in revision_mapping.iteritems()
+      }
+      # We also want to simulate outputting "got_revision_git": ...
+      # when git mode is off to match what bot_update.py does.
+      if not git_mode:
+        properties.update({
+            '%s_git' % property_name: self.gen_revision(project_name, True)
+            for project_name, property_name in revision_mapping.iteritems()
+        })
       output.update({
           'root': root or 'src',
-          'properties': {
-              property_name: self.gen_revision(project_name, git_mode)
-              for project_name, property_name in revision_mapping.iteritems()
-          },
+          'properties': properties,
           'step_text': 'Some step text'
       })
     return self.m.json.output(output)
@@ -36,5 +45,4 @@ class BotUpdateTestApi(recipe_test_api.RecipeTestApi):
     if GIT_MODE:
       return h.hexdigest()
     else:
-      import struct
       return struct.unpack('!I', h.digest()[:4])[0] % 300000

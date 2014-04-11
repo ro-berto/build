@@ -680,6 +680,8 @@ def parse_got_revision(gclient_output, got_revision_mapping, use_svn_revs):
         revision = git_revision
 
     properties[property_name] = revision
+    if revision != git_revision:
+      properties['%s_git' % property_name] = git_revision
 
   return properties
 
