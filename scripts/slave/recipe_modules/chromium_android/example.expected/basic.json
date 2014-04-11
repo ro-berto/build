@@ -269,5 +269,23 @@
       "-rf"
     ],
     "name": "cleanup_build"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/tools/prepare-bisect-perf-regression.py",
+      "-w",
+      "[SLAVE_BUILD]"
+    ],
+    "name": "prepare bisect perf regression"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/tools/run-bisect-perf-regression.py",
+      "-w",
+      "[SLAVE_BUILD]",
+      "--extra_src",
+      "test.py"
+    ],
+    "name": "run bisect perf regression"
   }
 ]
