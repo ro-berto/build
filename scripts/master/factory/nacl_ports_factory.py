@@ -44,7 +44,7 @@ class NativeClientPortsFactory(gclient_factory.GClientFactory):
 
   def NativeClientPortsFactory(self, slave_type='BuilderTester',
                                timeout=1200, target='Release',
-                               factory_properties=None, official_release=True):
+                               factory_properties=None, official_release=False):
     factory_properties = factory_properties or {}
     # Create the spec for the solutions
     gclient_spec = self.BuildGClientSpec()
