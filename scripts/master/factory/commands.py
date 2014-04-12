@@ -795,7 +795,7 @@ class FactoryCommands(object):
     self._factory.addStep(retcode_command.ReturnCodeCommand,
                           name='cleanup_temp',
                           description='cleanup_temp',
-                          timeout=300,
+                          timeout=1500,
                           workdir='',  # Doesn't really matter where we are.
                           alwaysRun=True,  # Run this even on update failures
                           flunkOnFailure=False,
