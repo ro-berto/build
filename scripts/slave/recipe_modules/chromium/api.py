@@ -216,9 +216,12 @@ class ChromiumApi(recipe_api.RecipeApi):
         env=env)
 
   def run_telemetry_unittests(self):
+    browser = self.c.BUILD_CONFIG.lower()
+    if self.m.platform.is_win and self.c.TARGET_BITS == 64:
+      browser += '_x64'
     return self.runtest(
         self.m.path['checkout'].join('tools', 'telemetry', 'run_tests'),
-        args=['--browser=%s' % self.c.BUILD_CONFIG.lower()],
+        args=['--browser=%s' % browser],
         annotate='gtest',
         name='telemetry_unittests',
         test_type='telemetry_unittests',
@@ -226,9 +229,12 @@ class ChromiumApi(recipe_api.RecipeApi):
         xvfb=True)
 
   def run_telemetry_perf_unittests(self):
+    browser = self.c.BUILD_CONFIG.lower()
+    if self.m.platform.is_win and self.c.TARGET_BITS == 64:
+      browser += '_x64'
     return self.runtest(
         self.m.path['checkout'].join('tools', 'perf', 'run_tests'),
-        args=['--browser=%s' % self.c.BUILD_CONFIG.lower()],
+        args=['--browser=%s' % browser],
         annotate='gtest',
         name='telemetry_perf_unittests',
         test_type='telemetry_perf_unittests',
