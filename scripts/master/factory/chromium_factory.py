@@ -671,6 +671,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         'rasterize_and_record_micro.key_mobile_sites',
         'rasterize_and_record_micro.key_silk_cases',
         'rasterize_and_record_micro.top_25',
+        'repaint.key_mobile_sites',
+        'repaint.gpu_rasterization.key_mobile_sites',
         'smoothness.gpu_rasterization.key_mobile_sites',
         'smoothness.gpu_rasterization.top_25',
         'smoothness.key_mobile_sites',
