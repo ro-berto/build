@@ -61,13 +61,6 @@ F('win_drmemory_full_factory', win().WebRTCFactory(
     tests=['drmemory_full_' + test for test in tests],
     factory_properties=dr_memory_factory_properties))
 
-B('Win DrMemory Pattern', 'win_drmemory_pattern_factory', scheduler=scheduler)
-F('win_drmemory_pattern_factory', win().WebRTCFactory(
-    target='Debug',
-    options=options,
-    tests=['drmemory_pattern_' + test for test in tests],
-    factory_properties=dr_memory_factory_properties))
-
 B('Win Tsan', 'win_tsan_factory', scheduler=scheduler)
 F('win_tsan_factory', win().WebRTCFactory(
     target='Debug',
