@@ -47,6 +47,11 @@ baremetal_tests = [
     'webrtc_perf_tests',
 ]
 options=['--compiler=goma']
+dr_memory_factory_properties = {
+   'gclient_env': {'GYP_DEFINES': 'build_for_tool=drmemory'},
+   'needs_drmemory': True,
+}
+
 defaults['category'] = 'win'
 
 B('Win32 Debug', 'win32_debug_factory', 'compile|testers|windows', scheduler,
@@ -101,6 +106,20 @@ F('win32_largetests_factory', win().WebRTCFactory(
                                   'voe_auto_test'],
     }))
 
+B('Win DrMemory Light', 'win_drmemory_light_factory', 'compile', scheduler)
+F('win_drmemory_light_factory', win().WebRTCFactory(
+    target='Debug',
+    options=options,
+    tests=['drmemory_light_' + test for test in tests],
+    factory_properties=dr_memory_factory_properties))
+
+B('Win DrMemory Full', 'win_drmemory_full_factory', 'compile', scheduler)
+F('win_drmemory_full_factory', win().WebRTCFactory(
+    target='Debug',
+    options=options,
+    tests=['drmemory_full_' + test for test in tests],
+    factory_properties=dr_memory_factory_properties))
+
 B('Win SyzyASan', 'win_asan_factory', 'compile|testers|windows', scheduler)
 F('win_asan_factory', win().WebRTCFactory(
     target='Release',
@@ -114,6 +133,7 @@ F('win_asan_factory', win().WebRTCFactory(
             'GYP_USE_SEPARATE_MSPDBSRV': '1',
         },
     }))
+
 
 def Update(c):
   helper.Update(c)

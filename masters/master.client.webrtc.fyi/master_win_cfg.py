@@ -40,26 +40,8 @@ tests = [
 ]
 
 options=['--compiler=goma']
-dr_memory_factory_properties = {
-   'gclient_env': {'GYP_DEFINES': 'build_for_tool=drmemory'},
-   'needs_drmemory': True,
-}
 
 defaults['category'] = 'win'
-
-B('Win DrMemory Light', 'win_drmemory_light_factory', scheduler=scheduler)
-F('win_drmemory_light_factory', win().WebRTCFactory(
-    target='Debug',
-    options=options,
-    tests=['drmemory_light_' + test for test in tests],
-    factory_properties=dr_memory_factory_properties))
-
-B('Win DrMemory Full', 'win_drmemory_full_factory', scheduler=scheduler)
-F('win_drmemory_full_factory', win().WebRTCFactory(
-    target='Debug',
-    options=options,
-    tests=['drmemory_full_' + test for test in tests],
-    factory_properties=dr_memory_factory_properties))
 
 B('Win Tsan', 'win_tsan_factory', scheduler=scheduler)
 F('win_tsan_factory', win().WebRTCFactory(
