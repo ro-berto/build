@@ -96,10 +96,24 @@
     "name": "gn"
   },
   {
+    "abort_on_failure": true,
     "cmd": [
-      "[DEPOT_TOOLS]/ninja",
-      "-C",
-      "[SLAVE_BUILD]/src/out/Debug"
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/compile.py",
+      "--target",
+      "Debug",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
+      "--build-tool",
+      "ninja",
+      "--compiler",
+      "goma",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "--",
+      "All",
+      "chromium_builder_tests"
     ],
     "name": "compile"
   }
