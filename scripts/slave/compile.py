@@ -11,7 +11,6 @@
   For a list of command-line options, call this script with '--help'.
 """
 
-import binascii
 import datetime
 import errno
 import multiprocessing
@@ -101,20 +100,12 @@ def goma_setup(options, env):
     options.goma_dir = None
     return False
 
-  # HACK(agable,goma): This prevents native-client's build_nexe.py from using
-  # Goma, as doing so is currently overloading machines and hurting the
-  # waterfall. Remove this as soon as that is fixed. (12 June, 2013).
-  env['NO_NACL_GOMA'] = 'true'
-  hostname = socket.gethostname().split('.')[0].lower()
-  # roughly 50% experiment on removing the env.
-  if binascii.crc32(hostname) % 100 <= 50:
-    del env['NO_NACL_GOMA']
-
   # HACK(shinyak, goma): Enable GLOBAL_FILEID_CACHE_PATTERNS only in
   # Chromium Win Ninja Goma and Chromium Win Ninja Goma (shared) builders,
   # so that we can check whether this feature is not harmful and how much
   # this feature can improve compile performance.
   # If this experiment succeeds, I'll enable this in all Win/Mac platforms.
+  hostname = socket.gethostname().split('.')[0].lower()
   if hostname.lower() in ['build28-m1', 'build58-m1']:
     patterns = r'win_toolchain\vs2013_files,third_party,src\chrome,src\content'
     env['GOMA_GLOBAL_FILEID_CACHE_PATTERNS'] = patterns
