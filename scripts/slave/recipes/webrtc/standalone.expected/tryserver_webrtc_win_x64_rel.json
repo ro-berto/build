@@ -97,7 +97,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 target_arch=x64"
+      "GYP_DEFINES": "chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=x64 use_goma=1"
     },
     "name": "gclient runhooks"
   },
@@ -113,6 +113,10 @@
       "[SLAVE_BUILD]\\src",
       "--build-tool",
       "ninja",
+      "--compiler",
+      "goma",
+      "--goma-dir",
+      "[BUILD]\\goma",
       "--",
       "All"
     ],

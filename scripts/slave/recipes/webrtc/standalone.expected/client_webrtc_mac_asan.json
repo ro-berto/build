@@ -50,7 +50,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "asan=1 clang=1 component=static_library lsan=1 target_arch=ia32"
+      "GYP_DEFINES": "asan=1 clang=1 component=static_library gomadir='[BUILD]/goma' lsan=1 target_arch=ia32 use_goma=1"
     },
     "name": "gclient runhooks",
     "seed_steps": [
@@ -88,7 +88,9 @@
       "--build-tool",
       "ninja",
       "--compiler",
-      "clang",
+      "goma-clang",
+      "--goma-dir",
+      "[BUILD]/goma",
       "--",
       "All"
     ],
