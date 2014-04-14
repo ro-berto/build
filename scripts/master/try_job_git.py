@@ -4,24 +4,23 @@
 
 import os
 
-from buildbot.changes import gitpoller
 from twisted.internet import defer, utils
 from twisted.python import log
 
 from common import chromium_utils
 
+from master.chromium_git_poller_bb8 import ChromiumGitPoller
 from master.try_job_base import text_to_dict
 from master.try_job_repo import TryJobRepoBase
 
-
-class GitPoller(gitpoller.GitPoller):
+class GitPoller(ChromiumGitPoller):
   """A hook in gitpoller.GitPoller for TryJobGit.
 
   This class is intentionally minimalistic. It does nothing but delegates
   change processing to TryJobGit.
   """
   def __init__(self, try_job, **kwargs):
-    gitpoller.GitPoller.__init__(self, **kwargs)
+    ChromiumGitPoller.__init__(self, **kwargs)
     self.try_job = try_job
 
   def add_change(self, **kwargs):
