@@ -251,19 +251,15 @@ class ChromiumApi(recipe_api.RecipeApi):
     kwargs['env'] = env
     return self.m.gclient.runhooks(**kwargs)
 
-  def compile_with_ninja(self, name, output_dir, **kwargs):
-    ninja_path = self.m.path['depot_tools'].join('ninja',
-                                                 platform_ext={'win': '.exe'})
-    return self.m.step(name=name, cmd=[ninja_path, '-C', output_dir], **kwargs)
-
-  def run_gn(self, output_arg, **kwargs):
+  def run_gn(self, **kwargs):
     config = self.c.BUILD_CONFIG
     gn_wrapper_script_path = self.m.path['depot_tools'].join('gn.py')
     gn_build_config_specific_args = {
         'Debug': ['--args=is_debug=true'],
         'Release': ['--args=is_debug=false'],
     }
-    gn_args = ['--root=' + str(self.m.path['checkout']), 'gen', output_arg]
+    gn_args = ['--root=' + str(self.m.path['checkout']), 'gen',
+               '//out/' + config]
     gn_args += gn_build_config_specific_args[config]
     return self.m.python('gn', gn_wrapper_script_path, args=gn_args, **kwargs)
 

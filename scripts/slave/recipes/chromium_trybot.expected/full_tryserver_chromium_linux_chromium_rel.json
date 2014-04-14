@@ -161,30 +161,6 @@
     "name": "compile (with patch)"
   },
   {
-    "abort_on_failure": false,
-    "can_fail_build": false,
-    "cmd": [
-      "python",
-      "-u",
-      "[DEPOT_TOOLS]/gn.py",
-      "--root=[SLAVE_BUILD]/src",
-      "gen",
-      "//out/Release_gn",
-      "--args=is_debug=false"
-    ],
-    "name": "gn"
-  },
-  {
-    "abort_on_failure": false,
-    "can_fail_build": false,
-    "cmd": [
-      "[DEPOT_TOOLS]/ninja",
-      "-C",
-      "[SLAVE_BUILD]/src/out/Release_gn"
-    ],
-    "name": "compile (gn with patch)"
-  },
-  {
     "allow_subannotations": true,
     "always_run": true,
     "cmd": [

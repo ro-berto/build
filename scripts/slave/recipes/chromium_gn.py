@@ -57,9 +57,9 @@ def GenSteps(api):
   else:
     yield api.chromium.runhooks(run_gyp=False)
 
-  yield api.chromium.run_gn('//out/' + build_config)
+  yield api.chromium.run_gn()
 
-  yield api.chromium.compile_with_ninja('compile', api.chromium.output_dir)
+  yield api.chromium.compile(targets=['all'])
 
   # TODO(dpranke): crbug.com/353854. Run gn_unittests and other tests
   # when they are also being run as part of the try jobs.

@@ -448,17 +448,8 @@ def GenSteps(api):
         api.chromium.runhooks(),
       )
 
-  # TODO(dpranke): crbug.com/353690. Remove the gn-specific steps from this
-  # recipe and stand up a dedicated GN bot when the GN steps take up enough
-  # resources to be worth it. For now, we run GN and generate files into a new
-  # Debug_gn / Release_gn dir, and then run a compile in that dir.
-  gn_build_config_dir = str(api.chromium.c.BUILD_CONFIG) + '_gn'
-  gn_output_arg = '//out/' + gn_build_config_dir
-  gn_output_dir = api.path['checkout'].join('out', gn_build_config_dir)
-  should_run_gn = api.properties.get('buildername') in ('linux_chromium',
-                                                        'linux_chromium_rel')
-
   gtest_tests = []
+
   test_spec = api.step_history['read test spec'].json.output
   for test in test_spec:
     test_name = None
@@ -496,19 +487,7 @@ def GenSteps(api):
                              name='compile (with patch)',
                              abort_on_failure=False,
                              can_fail_build=False)
-  retry_at_lkcr = api.step_history['compile (with patch)'].retcode != 0
-
-  if not retry_at_lkcr and should_run_gn:
-    yield api.chromium.run_gn(gn_output_arg, abort_on_failure=False,
-                              can_fail_build=False)
-    yield api.chromium.compile_with_ninja('compile (gn with patch)',
-                                          gn_output_dir,
-                                          abort_on_failure=False,
-                                          can_fail_build=False)
-    retry_at_lkcr = (api.step_history['gn'].retcode != 0 or
-                     api.step_history['compile (gn with patch)'].retcode != 0)
-
-  if retry_at_lkcr:
+  if api.step_history['compile (with patch)'].retcode != 0:
     # Only use LKCR when compile fails. Note that requested specific revision
     # can still override this.
     api.gclient.set_config('chromium_lkcr')
@@ -536,24 +515,12 @@ def GenSteps(api):
                              force_clobber=True)
       )
 
-    if should_run_gn:
-      yield api.path.makedirs('slave gn build directory', gn_output_dir)
-      yield api.path.rmcontents('slave gn build directory', gn_output_dir)
-      yield api.chromium.run_gn(gn_output_arg)
-      yield api.chromium.compile_with_ninja(
-          'compile (gn with patch, lkcr, clobber)', gn_output_dir)
-
   # Do not run tests if the build is already in a failed state.
   if api.step_history.failed:
     return
 
   if bot_config['compile_only']:
     return
-
-  # TODO(dpranke): crbug.com/353690. It would be good to run gn_unittests
-  # out of the gn build dir, but we can't use runtest()
-  # because of the different output directory; this means
-  # we don't get annotations and don't get retry of the tests for free :( .
 
   # TODO(phajdan.jr): Make it possible to retry telemetry tests (add JSON).
   yield (

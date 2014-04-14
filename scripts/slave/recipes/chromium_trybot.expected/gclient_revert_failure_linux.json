@@ -574,48 +574,5 @@
     ],
     "name": "compile (with patch, lkcr, clobber, nuke)",
     "skip": true
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/src/out/Release_gn",
-      "511"
-    ],
-    "name": "makedirs slave gn build directory",
-    "skip": true
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport os, sys\nfrom common import chromium_utils\n\nfor p in [os.path.join(sys.argv[1], x) for x in os.listdir(sys.argv[1])]:\n  if os.path.isdir(p):\n    chromium_utils.RemoveDirectory(p)\n  else:\n    os.unlink(p)\n",
-      "[SLAVE_BUILD]/src/out/Release_gn"
-    ],
-    "name": "rmcontents slave gn build directory",
-    "skip": true
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[DEPOT_TOOLS]/gn.py",
-      "--root=[SLAVE_BUILD]/src",
-      "gen",
-      "//out/Release_gn",
-      "--args=is_debug=false"
-    ],
-    "name": "gn",
-    "skip": true
-  },
-  {
-    "cmd": [
-      "[DEPOT_TOOLS]/ninja",
-      "-C",
-      "[SLAVE_BUILD]/src/out/Release_gn"
-    ],
-    "name": "compile (gn with patch, lkcr, clobber)",
-    "skip": true
   }
 ]
