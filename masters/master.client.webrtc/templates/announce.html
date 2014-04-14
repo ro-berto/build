@@ -204,12 +204,10 @@
         <table width="100%">
           <script language="javascript">
             c.webrtc = '';
-            c.webrtc_fyi = '';
             c.chromium = '';
             c.chromium_fyi = '';
 
             c.status_webrtc = '../client.webrtc';
-            c.status_webrtc_fyi = '../client.webrtc.fyi';
             c.status_chromium = '../chromium.webrtc';
             c.status_chromium_fyi = '../chromium.webrtc.fyi';
 
@@ -222,7 +220,6 @@
               return '/p/' + x + '/horizontal_one_box_per_builder';
             }
             c.bar_webrtc = BarUrl('client.webrtc')
-            c.bar_webrtc_fyi = BarUrl('client.webrtc.fyi')
             c.bar_chromium = BarUrl('chromium.webrtc');
             c.bar_chromium_fyi = BarUrl('chromium.webrtc.fyi');
 
@@ -303,9 +300,7 @@
                 table('width="100%"',
                   tr(
                      HTMLBaseBar(c.status_webrtc, c.bar_webrtc, c.webrtc,
-                                 'WebRTC', 'width="80%"') +
-                     HTMLBaseBar(c.status_webrtc_fyi, c.bar_webrtc_fyi,
-                                 c.webrtc_fyi, 'WebRTC FYI', 'width="20%"')
+                                 'WebRTC', 'width="100%"')
                   )
                 ) +
                 table('width="100%"',
