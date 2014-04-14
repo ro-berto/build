@@ -4,11 +4,15 @@
 
 DEPS = [
     'git',
+    'json',
     'path',
+    'perf_dashboard',
     'platform',
     'properties',
     'python',
+    'raw_io',
     'step',
+    'step_history'
 ]
 
 # Constants
@@ -23,6 +27,11 @@ DEVICE_ROOT = "/data/local/tmp"
 # path.  Essentially, it must be using argv[0] when invoking some of the
 # scripts in the libvpx directory
 CONFIGURE_PATH_REL = './libvpx/configure'
+
+BUILDER_TO_DEVICE = {
+  "Nexus 5 Builder" : "nexus_5",
+  "Nexus 7 Builder" : "nexus_7"
+}
 
 def GenSteps(api):
   api.step.auto_resolve_conflicts = True
@@ -99,7 +108,31 @@ def GenSteps(api):
       'shell', [
           adb, 'shell', 'LD_LIBRARY_PATH=' + DEVICE_ROOT,
           'LIBVPX_TEST_DATA_PATH=' + DEVICE_ROOT, DEVICE_ROOT + '/vpx_test'],
-          can_fail_build=True)
+          can_fail_build=True, stdout=api.raw_io.output())
+
+  yield api.python(
+      'scrape_logs',
+      libvpx_root.join('test', 'android', 'scrape_gtest_log.py'),
+      args=['--output-json', api.json.output()],
+      stdin=api.raw_io.input(api.step_history.last_step().stdout))
+
+  data = api.step_history.last_step().json.output
+  # Data is json array in the format as follows:
+  # videoName: name
+  # threadCount: #ofthreads
+  # framesPerSecond: fps
+  points = []
+  device = BUILDER_TO_DEVICE[api.properties["buildername"]]
+  testname = "libvpx/decode/perf_test/" + device + "/"
+  for i in data:
+    p = api.perf_dashboard.get_skeleton_point( testname + i["videoName"] +
+        "_" + str(i["threadCount"]), api.properties['buildnumber'],
+        i["framesPerSecond"])
+    p['units'] = "fps"
+    points.append(p)
+
+  api.perf_dashboard.set_default_config()
+  yield api.perf_dashboard.post(points)
 
 def GenTests(api):
   # Right now we just support linux, but one day we will have mac and windows
@@ -107,4 +140,27 @@ def GenTests(api):
   yield (
     api.test('basic_linux_64') +
     api.properties(
-        libvpx_git_url='https://chromium.googlesource.com/webm/libvpx'))
+        libvpx_git_url='https://chromium.googlesource.com/webm/libvpx',
+        master='Libvpx', bot='libvpx-bot', buildername='Nexus 5 Builder',
+        mastername='client.libvpx', buildnumber='75') +
+    api.step_data('shell',
+        stdout=api.raw_io.output("This is text with json inside normally")) +
+    api.step_data('scrape_logs', api.json.output(
+            [
+                {
+                    "decodeTimeSecs": 29.344307,
+                    "framesPerSecond": 609.82868,
+                    "threadCount": 1,
+                    "totalFrames": 17895,
+                    "version": "v1.3.0-2045-g38c2d37",
+                    "videoName": "vp90-2-bbb_426x240_tile_1x1_180kbps.webm"
+                },
+                {
+                    "decodeTimeSecs": 56.277676,
+                    "framesPerSecond": 317.976883,
+                    "threadCount": 2,
+                    "totalFrames": 17895,
+                    "version": "v1.3.0-2045-g38c2d37",
+                    "videoName": "vp90-2-bbb_640x360_tile_1x2_337kbps.webm"
+                 }
+            ])))

@@ -244,6 +244,48 @@
       "LIBVPX_TEST_DATA_PATH=/data/local/tmp",
       "/data/local/tmp/vpx_test"
     ],
-    "name": "shell"
+    "name": "shell",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/libvpx/test/android/scrape_gtest_log.py",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "name": "scrape_logs",
+    "stdin": "This is text with json inside normally",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"decodeTimeSecs\": 29.344307, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"framesPerSecond\": 609.82868, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"threadCount\": 1, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"totalFrames\": 17895, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"version\": \"v1.3.0-2045-g38c2d37\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"videoName\": \"vp90-2-bbb_426x240_tile_1x1_180kbps.webm\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"decodeTimeSecs\": 56.277676, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"framesPerSecond\": 317.976883, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"threadCount\": 2, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"totalFrames\": 17895, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"version\": \"v1.3.0-2045-g38c2d37\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"videoName\": \"vp90-2-bbb_640x360_tile_1x2_337kbps.webm\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/perf_dashboard/resources/post_json.py"
+    ],
+    "name": "perf dashboard post",
+    "stdin": "{\"data\": [{\"bot\": \"libvpx-bot\", \"buildername\": \"Nexus 5 Builder\", \"buildnumber\": \"75\", \"master\": \"Libvpx\", \"masterid\": \"client.libvpx\", \"revision\": \"75\", \"test\": \"libvpx/decode/perf_test/nexus_5/vp90-2-bbb_426x240_tile_1x1_180kbps.webm_1\", \"units\": \"fps\", \"value\": 609.82868}, {\"bot\": \"libvpx-bot\", \"buildername\": \"Nexus 5 Builder\", \"buildnumber\": \"75\", \"master\": \"Libvpx\", \"masterid\": \"client.libvpx\", \"revision\": \"75\", \"test\": \"libvpx/decode/perf_test/nexus_5/vp90-2-bbb_640x360_tile_1x2_337kbps.webm_2\", \"units\": \"fps\", \"value\": 317.976883}], \"url\": \"https://chrome-perf.googleplex.com/add_point\"}"
   }
 ]
