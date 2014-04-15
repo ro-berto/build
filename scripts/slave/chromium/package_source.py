@@ -160,7 +160,8 @@ def main():
                        '!', '-regex', '^src/out/.*', ')', '-a',
                   # Exclude all .svn directories, the native client toolchain
                   # and the llvm build directory, and perf/data files.
-                  '!', '-regex', r'.*\.svn.*', '-a',
+                  '!', '-regex', r'.*/\.svn/.*', '-a',
+                  '!', '-regex', r'.*/\.git/.*', '-a',
                   '!', '-regex', '^src/native_client/toolchain/.*', '-a',
                   '!', '-regex', '^src/third_party/llvm-build/.*', '-a',
                   '!', '-regex', '^src/chrome/tools/test/reference_build/.*',
