@@ -25,14 +25,17 @@ class AdbApi(recipe_api.RecipeApi):
         import subprocess
         import sys
         import json
+        import re
 
         cmd = eval(sys.argv[1])
         outFileName = sys.argv[2]
 
         output = subprocess.check_output(cmd)
-        devices = [line.split()[0] for line in output.splitlines()
-                                   if line
-                                   if 'List of devices attached' not in line]
+        devices = []
+        for line in output.splitlines():
+          m = re.match('^([0-9A-F]+)\s+device$', line)
+          if m:
+            devices.append(m.group(1))
 
         with open(outFileName, 'w') as outFile:
           json.dump(devices, outFile)
