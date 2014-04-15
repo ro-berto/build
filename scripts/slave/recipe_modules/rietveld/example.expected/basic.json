@@ -12,7 +12,7 @@
       "-p",
       "1",
       "-s",
-      "http://review_tool.url/bots",
+      "http://review_tool.url",
       "-E",
       "[BUILD]/site_config/.rietveld_client_email",
       "-k",
