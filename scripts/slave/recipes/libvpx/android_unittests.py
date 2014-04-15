@@ -104,17 +104,27 @@ def GenSteps(api):
   lib_root = build_root.join('libs', 'armeabi-v7a')
   yield api.step('push_so', [ adb, 'push', lib_root, DEVICE_ROOT])
 
-  yield api.step(
-      'shell', [
-          adb, 'shell', 'LD_LIBRARY_PATH=' + DEVICE_ROOT,
-          'LIBVPX_TEST_DATA_PATH=' + DEVICE_ROOT, DEVICE_ROOT + '/vpx_test'],
-          can_fail_build=True, stdout=api.raw_io.output())
+  yield api.python.inline(
+      'adb_wrap', r"""
+          import sys, subprocess, time
+          out = open(sys.argv[1], "w")
+          p = subprocess.Popen(sys.argv[2:], stdout=out)
+          while p.poll() is None:
+              print "Still working"
+              time.sleep(60)
+          print "done"
+          sys.exit(p.returncode)
+      """, args=[api.raw_io.output(), adb, 'shell',
+          'LD_LIBRARY_PATH=' + DEVICE_ROOT,
+          'LIBVPX_TEST_DATA_PATH=' + DEVICE_ROOT, DEVICE_ROOT +
+          '/vpx_test'],
+          can_fail_build=True)
 
   yield api.python(
       'scrape_logs',
       libvpx_root.join('test', 'android', 'scrape_gtest_log.py'),
       args=['--output-json', api.json.output()],
-      stdin=api.raw_io.input(api.step_history.last_step().stdout))
+      stdin=api.raw_io.input(api.step_history.last_step().raw_io.output))
 
   data = api.step_history.last_step().json.output
   # Data is json array in the format as follows:
@@ -143,8 +153,8 @@ def GenTests(api):
         libvpx_git_url='https://chromium.googlesource.com/webm/libvpx',
         master='Libvpx', bot='libvpx-bot', buildername='Nexus 5 Builder',
         mastername='client.libvpx', buildnumber='75') +
-    api.step_data('shell',
-        stdout=api.raw_io.output("This is text with json inside normally")) +
+    api.step_data('adb_wrap',
+        api.raw_io.output("This is text with json inside normally")) +
     api.step_data('scrape_logs', api.json.output(
             [
                 {

@@ -238,14 +238,29 @@
   {
     "can_fail_build": true,
     "cmd": [
+      "python",
+      "-u",
+      "\nimport sys, subprocess, time\nout = open(sys.argv[1], \"w\")\np = subprocess.Popen(sys.argv[2:], stdout=out)\nwhile p.poll() is None:\n    print \"Still working\"\n    time.sleep(60)\nprint \"done\"\nsys.exit(p.returncode)\n",
+      "/path/to/tmp/",
       "[SLAVE_BUILD]/android_tools/sdk/platform-tools/adb",
       "shell",
       "LD_LIBRARY_PATH=/data/local/tmp",
       "LIBVPX_TEST_DATA_PATH=/data/local/tmp",
       "/data/local/tmp/vpx_test"
     ],
-    "name": "shell",
-    "stdout": "/path/to/tmp/"
+    "name": "adb_wrap",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, subprocess, time@@@",
+      "@@@STEP_LOG_LINE@python.inline@out = open(sys.argv[1], \"w\")@@@",
+      "@@@STEP_LOG_LINE@python.inline@p = subprocess.Popen(sys.argv[2:], stdout=out)@@@",
+      "@@@STEP_LOG_LINE@python.inline@while p.poll() is None:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"Still working\"@@@",
+      "@@@STEP_LOG_LINE@python.inline@    time.sleep(60)@@@",
+      "@@@STEP_LOG_LINE@python.inline@print \"done\"@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.exit(p.returncode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
   },
   {
     "cmd": [
