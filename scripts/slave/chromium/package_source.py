@@ -165,7 +165,7 @@ def main():
                          # ... but none of the NaCL stuff.
                          '!', '-regex', '^src/out/[^/]*/gen/lib[^/]*/.*', '-a',
                          '!', '-regex', '^src/out/[^/]*/gen/sdk/.*', '-a',
-                         '!', '-regex', '^src/out/[^/]*/gen/tc_.*', '-a',
+                         '!', '-regex', '^src/out/[^/]*/gen/tc_.*',
                        ')', '-o',
                        '!', '-regex', '^src/out/.*', ')', '-a',
                   # Exclude all .svn directories, the native client toolchain
