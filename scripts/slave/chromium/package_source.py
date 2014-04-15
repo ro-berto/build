@@ -154,15 +154,26 @@ def main():
   packaging_successful = True
   find_command = ['find', 'src/', 'tools/', '/usr/include/', '-type', 'f',
                   # The only files under src/out we want to package up
-                  # are index files and generated sources.
+                  # are index files....
                   '(', '-regex', '^src/out/.*index$', '-o',
-                       '-regex', '^src/out/[^/]*/gen/.*', '-o',
+                      '(',
+                         # ... and generated sources...
+                         '-regex', '^src/out/.*/gen/.*', '-a',
+                         '(', '-name', '*.h', '-o', '-name', '*.cc', '-o',
+                              '-name', '*.cpp', '-o', '-name', '*.js',
+                              ')', '-a',
+                         # ... but none of the NaCL stuff.
+                         '!', '-regex', '^src/out/[^/]*/gen/lib[^/]*/.*', '-a',
+                         '!', '-regex', '^src/out/[^/]*/gen/sdk/.*', '-a',
+                         '!', '-regex', '^src/out/[^/]*/gen/tc_.*', '-a',
+                       ')', '-o',
                        '!', '-regex', '^src/out/.*', ')', '-a',
                   # Exclude all .svn directories, the native client toolchain
                   # and the llvm build directory, and perf/data files.
                   '!', '-regex', r'.*/\.svn/.*', '-a',
                   '!', '-regex', r'.*/\.git/.*', '-a',
                   '!', '-regex', '^src/native_client/toolchain/.*', '-a',
+                  '!', '-regex', '^src/native_client/.*/testdata/.*', '-a',
                   '!', '-regex', '^src/third_party/llvm-build/.*', '-a',
                   '!', '-regex', '^src/chrome/tools/test/reference_build/.*',
                   '-a',
