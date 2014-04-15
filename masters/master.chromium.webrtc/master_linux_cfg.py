@@ -47,7 +47,6 @@ F('linux_tester_factory', linux().ChromiumWebRTCFactory(
     build_url=chromium_rel_archive,
     tests=tests,
     factory_properties={
-        'virtual_webcam': True,
         'use_xvfb_on_linux': True,
         'show_perf_results': True,
         'halt_on_missing_build': True,

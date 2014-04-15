@@ -62,7 +62,6 @@ F('win_xp_tester_factory', WinXpTester().ChromiumWebRTCLatestFactory(
     build_url=chromium_rel_archive,
     tests=tests,
     factory_properties={
-        'virtual_webcam': True,
         'show_perf_results': True,
         'halt_on_missing_build': True,
         'perf_id': 'chromium-webrtc-trunk-tot-rel-winxp',
@@ -79,7 +78,6 @@ F('win_7_tester_factory', Win().ChromiumWebRTCLatestFactory(
     build_url=chromium_rel_archive,
     tests=tests,
     factory_properties={
-        'virtual_webcam': True,
         'show_perf_results': True,
         'halt_on_missing_build': True,
         'perf_id': 'chromium-webrtc-trunk-tot-rel-win7',

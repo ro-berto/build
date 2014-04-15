@@ -39,7 +39,6 @@ F('mac_webrtc_factory', mac().ChromiumWebRTCLatestFactory(
     options=options,
     tests=tests,
     factory_properties={
-        'virtual_webcam': True,
         'show_perf_results': True,
         'perf_id': 'chromium-webrtc-trunk-tot-rel-mac',
         'perf_config': {'a_default_rev': 'r_webrtc_rev'},

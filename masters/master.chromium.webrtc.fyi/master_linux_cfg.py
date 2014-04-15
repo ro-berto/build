@@ -38,7 +38,6 @@ F('linux_webrtc_factory', linux().ChromiumWebRTCLatestFactory(
     options=['--compiler=goma', '--', 'chromium_builder_webrtc'],
     tests=tests,
     factory_properties={
-        'virtual_webcam': True,
         'use_xvfb_on_linux': True,
         'show_perf_results': True,
         'perf_id': 'chromium-webrtc-trunk-tot-rel-linux',
