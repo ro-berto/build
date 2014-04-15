@@ -987,6 +987,11 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
     # stderr pipes).
     thread.join()
 
+    # Check whether any of the sub commands has failed.
+    for handle in proc_handles:
+      if handle.returncode:
+        return handle.returncode
+
   # Wait for the command to terminate.
   proc.wait()
   return proc.returncode
