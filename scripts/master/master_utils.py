@@ -205,6 +205,7 @@ def GetMastername():
 
 
 def AutoSetupMaster(c, active_master, mail_notifier=False,
+                    mail_notifier_mode=None,
                     public_html=None, templates=None,
                     order_console_by_time=False,
                     tagComparator=None,
@@ -236,7 +237,7 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
     # pylint: disable=E1101
     c['status'].append(mail.MailNotifier(
         fromaddr=active_master.from_address,
-        mode='problem',
+        mode=mail_notifier_mode or 'problem',
         relayhost=config.Master.smtp,
         lookup=FilterDomain()))
 
