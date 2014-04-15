@@ -332,10 +332,10 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
-      'Android Clang': {
+      'Android Clang (dbg)': {
         'recipe_config': 'webrtc_android_clang',
         'webrtc_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
+          'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
