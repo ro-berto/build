@@ -450,14 +450,16 @@ class AndroidApi(recipe_api.RecipeApi):
     yield self.test_report()
     yield self.cleanup_build()
 
-  def run_bisect_script(self, extra_src=''):
+  def run_bisect_script(self, extra_src='', path_to_config=''):
     yield self.m.step('prepare bisect perf regression',
         [self.m.path['checkout'].join('tools',
                                       'prepare-bisect-perf-regression.py'),
          '-w', self.m.path['slave_build']])
     args = []
     if extra_src:
-      args = ['--extra_src', extra_src]
+      args = args + ['--extra_src', extra_src]
+    if path_to_config:
+      args = args + ['--path_to_config', path_to_config]
     yield self.m.step('run bisect perf regression',
         [self.m.path['checkout'].join('tools',
                                       'run-bisect-perf-regression.py'),

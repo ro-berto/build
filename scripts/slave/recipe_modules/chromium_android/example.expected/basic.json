@@ -284,6 +284,8 @@
       "-w",
       "[SLAVE_BUILD]",
       "--extra_src",
+      "test.py",
+      "--path_to_config",
       "test.py"
     ],
     "name": "run bisect perf regression"
