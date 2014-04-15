@@ -116,6 +116,13 @@
       "@@@STEP_LOG_LINE@json.output@      \"linux\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ], @@@",
       "@@@STEP_LOG_LINE@json.output@    \"test\": \"sandbox_linux_unittests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"chromium_configs\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"chromium_chromeos\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"chromium_chromeos_clang\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ], @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test\": \"app_shell_browsertests\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -156,6 +163,7 @@
       "base_unittests",
       "mojo_common_unittests",
       "sandbox_linux_unittests",
+      "app_shell_browsertests",
       "chrome"
     ],
     "name": "compile (with patch)"

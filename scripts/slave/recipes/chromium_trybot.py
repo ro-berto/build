@@ -424,6 +424,10 @@ def GenSteps(api):
           'platforms': ['linux'],
           'args': ['--test-launcher-print-test-stdio=always'],
         },
+        {
+          'test': 'app_shell_browsertests',
+          'chromium_configs': ['chromium_chromeos', 'chromium_chromeos_clang'],
+        },
       ])),
   )
 
@@ -460,6 +464,10 @@ def GenSteps(api):
     elif isinstance(test, dict):
       if 'platforms' in test:
         if api.platform.name not in test['platforms']:
+          continue
+
+      if 'chromium_configs' in test:
+        if bot_config['chromium_config'] not in test['chromium_configs']:
           continue
 
       test_args = test.get('args')
