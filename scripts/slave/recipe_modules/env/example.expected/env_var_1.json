@@ -1,0 +1,16 @@
+[
+  {
+    "cmd": [
+      "command",
+      "0"
+    ],
+    "name": "step 0"
+  },
+  {
+    "cmd": [
+      "command",
+      "1"
+    ],
+    "name": "step 1"
+  }
+]
