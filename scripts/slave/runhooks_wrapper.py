@@ -42,7 +42,8 @@ def main():
     os.environ['GYP_DEFINES'] = gyp_defines
     print 'Changed GYP_DEFINES to', os.environ['GYP_DEFINES']
 
-  return chromium_utils.RunCommand(['gclient', 'runhooks'])
+  return chromium_utils.RunCommand([chromium_utils.GetGClientCommand(),
+                                    'runhooks'])
 
 
 if '__main__' == __name__:
