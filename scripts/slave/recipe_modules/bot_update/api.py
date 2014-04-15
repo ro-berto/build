@@ -19,6 +19,8 @@ ENABLED_BUILDERS = {
     ],
     'chromium.linux': [
         'Linux Builder',
+        'Linux Builder (dbg)(32)',
+        'Linux Builder (dbg)',
         'Android Webview AOSP Builder Bot Update',
     ]
 }
