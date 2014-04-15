@@ -291,7 +291,7 @@
       "-u",
       "[SLAVE_BUILD]\\src\\chrome\\test\\nacl_test_injection\\buildbot_nacl_integration.py",
       "--mode",
-      "Release",
+      "Release_x64",
       "--json_build_results_output_file",
       "/path/to/tmp/json"
     ],

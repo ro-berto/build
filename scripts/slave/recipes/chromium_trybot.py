@@ -359,7 +359,7 @@ def GenSteps(api):
 
     def run(self, suffix):
       args = [
-        '--mode', api.chromium.c.BUILD_CONFIG,
+        '--mode', api.chromium.c.build_config_fs,
         '--json_build_results_output_file', api.json.output(),
       ]
       return api.python(
