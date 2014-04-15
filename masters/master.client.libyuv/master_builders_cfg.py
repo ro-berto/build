@@ -66,6 +66,7 @@ win_msvs_2013_x64_factory_properties = {
 }
 
 mac_ios_factory_properties = {
+    'gclient_deps': 'ios',
     'gclient_env': {
         'GYP_CROSSCOMPILE': '1',
         'GYP_DEFINES': 'OS=ios target_arch=armv7',
