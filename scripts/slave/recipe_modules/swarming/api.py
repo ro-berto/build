@@ -146,7 +146,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     """
     return PLATFORM_TO_OS_DIMENSION[platform]
 
-  def task(self, title, isolated_hash, make_unique=False):
+  def task(self, title, isolated_hash, make_unique=False, shards=None):
     """Returns SwarmingTask instance that represents some isolated test.
 
     It can be customized if necessary (see SwarmingTask class below). Pass it
@@ -161,6 +161,8 @@ class SwarmingApi(recipe_api.RecipeApi):
       make_unique: if True, will ensure task is run even if given isolated_hash
           in given configuration was already tested. Does that by appending
           current timestamp to task ID.
+      shards: if defined, the number of shards to use for the task. By default
+          this value is either 1 or based on the title.
     """
     return SwarmingTask(
         title=title,
@@ -168,7 +170,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         dimensions={'os': self.task_os_dimension},
         env={},
         priority=self.task_priority,
-        shards=TESTS_SHARDS.get(title, 1),
+        shards=shards or TESTS_SHARDS.get(title, 1),
         builder=self.m.properties.get('buildername', 'local'),
         build_number=self.m.properties.get('buildnumber', 0),
         profile=self.profile,
