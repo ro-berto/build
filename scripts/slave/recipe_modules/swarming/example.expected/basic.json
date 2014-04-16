@@ -193,9 +193,6 @@
       "hash_for_linux"
     ],
     "name": "trigger: hello_world on Linux",
-    "seed_steps": [
-      "swarming: hello_world on Linux"
-    ],
     "~followup_annotations": [
       "@@@STEP_TEXT@hello_world/Linux/hash_for_linux/local/0/1337000003000@@@"
     ]
@@ -227,9 +224,6 @@
       "hash_for_mac"
     ],
     "name": "trigger: hello_world on Mac",
-    "seed_steps": [
-      "swarming: hello_world on Mac"
-    ],
     "~followup_annotations": [
       "@@@STEP_TEXT@hello_world/Mac/hash_for_mac/local/0/1337000004500@@@"
     ]

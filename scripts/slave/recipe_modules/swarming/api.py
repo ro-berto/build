@@ -218,7 +218,6 @@ class SwarmingApi(recipe_api.RecipeApi):
           name='trigger: %s on %s' % (task.title, task.dimensions['os']),
           script=self.m.swarming_client.path.join('swarming.py'),
           args=args,
-          seed_steps=[self._get_collect_step_name(task)],
           followup_fn=functools.partial(update_presentation, task)))
 
     return steps
@@ -248,15 +247,10 @@ class SwarmingApi(recipe_api.RecipeApi):
         args.append('--verbose')
       args.append(task.task_id)
       steps.append(self.m.python(
-          name=self._get_collect_step_name(task),
+          name='swarming: %s on %s' % (task.title, task.dimensions['os']),
           script=self.m.swarming_client.path.join('swarming.py'),
           args=args))
     return steps
-
-  @staticmethod
-  def _get_collect_step_name(task):
-    """Name of a step to collect swarming task result."""
-    return 'swarming: %s on %s' % (task.title, task.dimensions['os'])
 
 
 class SwarmingTask(object):
