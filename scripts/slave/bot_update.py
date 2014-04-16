@@ -316,6 +316,12 @@ def solutions_to_git(input_solutions):
     if solution.get('deps_file', 'DEPS') == 'DEPS':
       solution['deps_file'] = '.DEPS.git'
     solution['managed'] = False
+    # We don't want gclient to be using a safesync URL. Instead it should
+    # using the lkgr/lkcr branch/tags.
+    if 'safesync_url' in solution:
+      print 'Removing safesync url %s from %s' % (solution['safesync_url'],
+                                                  parsed_path)
+      del solution['safesync_url']
   return solutions, root
 
 
@@ -716,7 +722,9 @@ def parse_args():
                         'Should ONLY be used locally.')
   parse.add_option('--revision_mapping')
   parse.add_option('--revision-mapping')  # Backwards compatability.
-  parse.add_option('--revision')
+  parse.add_option('--revision',
+                   help='Revision to check out. Can be an SVN revision number, '
+                        'git hash, or any form of git ref.')
   parse.add_option('--slave_name', default=socket.getfqdn().split('.')[0],
                    help='Hostname of the current machine, '
                    'used for determining whether or not to activate.')

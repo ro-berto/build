@@ -1,5 +1,29 @@
 [
   {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\bot_update.py",
+      "--spec",
+      "cache_dir = None\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]",
+      "--root",
+      "src",
+      "--issue",
+      "12853011",
+      "--patchset",
+      "1",
+      "--output_json",
+      "/path/to/tmp/json"
+    ],
+    "name": "bot_update",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"did_run\": false@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
     "abort_on_failure": false,
     "can_fail_build": false,
     "cmd": [
@@ -499,10 +523,6 @@
       "[SLAVE_BUILD]"
     ],
     "name": "rmcontents slave build directory (2)",
-    "seed_steps": [
-      "rmcontents slave build directory (2)",
-      "gclient setup (5)"
-    ],
     "skip": true
   },
   {
@@ -563,10 +583,6 @@
       "GYP_DEFINES": "chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 use_goma=1"
     },
     "name": "gclient runhooks (4)",
-    "seed_steps": [
-      "gclient runhooks (4)",
-      "compile (with patch, lkcr, clobber, nuke)"
-    ],
     "skip": true
   },
   {

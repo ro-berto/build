@@ -22,7 +22,7 @@ ENABLED_BUILDERS = {
         'Linux Builder (dbg)(32)',
         'Linux Builder (dbg)',
         'Android Webview AOSP Builder Bot Update',
-    ]
+    ],
 }
 ENABLED_SLAVES = {}
 
@@ -72,7 +72,8 @@ class BotUpdateApi(recipe_api.RecipeApi):
         'scripts', 'slave', 'bot_update.py')
     return self.m.python(name, bot_update_path, cmd, **kwargs)
 
-  def ensure_checkout(self, gclient_config=None, suffix=None, **kwargs):
+  def ensure_checkout(self, gclient_config=None, suffix=None,
+                      patch=True, ref=None, **kwargs):
     # We can re-use the gclient spec from the gclient module, since all the
     # data bot_update needs is already configured into the gclient spec.
     cfg = gclient_config or self.m.gclient.c
@@ -90,10 +91,15 @@ class BotUpdateApi(recipe_api.RecipeApi):
     # Construct our bot_update command.  This basically be inclusive of
     # everything required for bot_update to know:
     root = self.m.properties.get('root')
-    issue = self.m.properties.get('issue')
-    patchset = self.m.properties.get('patchset')
-    patch_url = self.m.properties.get('patch_url')
-    revision = self.m.properties.get('revision')
+    if patch:
+      issue = self.m.properties.get('issue')
+      patchset = self.m.properties.get('patchset')
+      patch_url = self.m.properties.get('patch_url')
+    else:
+      # The trybot recipe sometimes wants to de-apply the patch. In which case
+      # we pretend the issue/patchset/patch_url never existed.
+      issue = patchset = patch_url = None
+    revision = ref or self.m.properties.get('revision')
     # Issue and patchset must come together.
     if issue:
       assert patchset
@@ -148,11 +154,12 @@ class BotUpdateApi(recipe_api.RecipeApi):
         step_text = step_result.json.output['step_text']
         step_result.presentation.step_text = step_text
 
-    # Add a suffix to the step name, if specified.
+    # Add suffixes to the step name, if specified.
+    name = 'bot_update'
+    if not patch:
+      name += ' (without patch)'
     if suffix:
-      name = 'bot_update - %s' % suffix
-    else:
-      name = 'bot_update'
+      name += ' - %s' % suffix
 
     # Ah hah! Now that everything is in place, lets run bot_update!
     yield self(name, cmd, followup_fn=followup_fn,
