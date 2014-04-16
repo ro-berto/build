@@ -108,7 +108,7 @@ cache_dir = %(cache_dir)s
 # edit recipe_modules/bot_update/api.py instead.
 ENABLED_MASTERS = ['chromium.git']
 ENABLED_BUILDERS = {
-    'tryserver.chromium': ['linux_rel_alt'],
+    'tryserver.chromium': ['linux_rel_alt', 'linux_arm_tester'],
 }
 ENABLED_SLAVES = {
     # This is enabled on a bot-to-bot basis to ensure that we don't have
