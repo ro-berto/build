@@ -8,6 +8,8 @@
     "name": "cleanup temp"
   },
   {
+    "abort_on_failure": false,
+    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -19,7 +21,8 @@
     "name": "gclient setup"
   },
   {
-    "abort_on_failure": true,
+    "abort_on_failure": false,
+    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -30,7 +33,8 @@
     "name": "gclient revert"
   },
   {
-    "abort_on_failure": true,
+    "abort_on_failure": false,
+    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",

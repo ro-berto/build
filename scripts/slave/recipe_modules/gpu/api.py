@@ -71,6 +71,11 @@ class GpuApi(recipe_api.RecipeApi):
       self.m.gclient.c.solutions[0].custom_vars['angle_revision'] = (
           'refs/remotes/origin/master')
 
+    # This is part of the workaround for flakiness during gclient
+    # revert, below.
+    # TODO(phajdan.jr): Remove the workaround, http://crbug.com/357767 .
+    self.m.step.auto_resolve_conflicts = True
+
   @property
   def _build_revision(self):
     """Returns the revision of the current build. The pixel and maps
@@ -143,7 +148,18 @@ class GpuApi(recipe_api.RecipeApi):
     # Always force a gclient-revert in order to avoid problems when
     # directories are added to, removed from, and re-added to the repo.
     # crbug.com/329577
-    yield self.m.gclient.checkout(revert=True)
+    yield self.m.gclient.checkout(revert=True,
+                                  can_fail_build=False, abort_on_failure=False)
+
+    # Workaround for flakiness during gclient revert.
+    if any(step.retcode != 0 for step in self.m.step_history.values()):
+      # TODO(phajdan.jr): Remove the workaround, http://crbug.com/357767 .
+      yield (
+        self.m.path.rmcontents('slave build directory',
+                               self.m.path['slave_build']),
+        self.m.gclient.checkout(),
+      )
+
     # If being run as a try server, apply the CL.
     yield self.m.tryserver.maybe_apply_issue()
 
