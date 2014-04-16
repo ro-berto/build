@@ -101,6 +101,7 @@ This step does nothing. You actually want to look at the "update" step.
 GCLIENT_TEMPLATE = """solutions = %(solutions)s
 
 cache_dir = %(cache_dir)s
+%(target_os)s
 """
 
 # IMPORTANT: If you're trying to enable a RECIPE bot, you'll need to
@@ -229,10 +230,11 @@ def git(*args, **kwargs):
   return call(*cmd, **kwargs)
 
 
-def get_gclient_spec(solutions):
+def get_gclient_spec(solutions, target_os):
   return GCLIENT_TEMPLATE % {
       'solutions': pprint.pformat(solutions, indent=4),
-      'cache_dir': '"%s"' % CACHE_DIR
+      'cache_dir': '"%s"' % CACHE_DIR,
+      'target_os': ('\ntarget_os=%s' % target_os) if target_os else ''
   }
 
 
@@ -346,10 +348,10 @@ def ensure_no_checkout(dir_names, scm_dirname):
       print 'done'
 
 
-def gclient_configure(solutions):
+def gclient_configure(solutions, target_os):
   """Should do the same thing as gclient --spec='...'."""
   with codecs.open('.gclient', mode='w', encoding='utf-8') as f:
-    f.write(get_gclient_spec(solutions))
+    f.write(get_gclient_spec(solutions, target_os))
 
 
 def gclient_sync(output_json):
@@ -667,7 +669,7 @@ def parse_got_revision(gclient_output, got_revision_mapping, use_svn_revs):
     solution_output = solutions_output[dir_name]
     if solution_output.get('scm') is None:
       # This is an ignored DEPS, so the output got_revision should be 'None'.
-      revision = None
+      git_revision = revision = None
     else:
       # Since we are using .DEPS.git, everything had better be git.
       assert solution_output.get('scm') == 'git'
@@ -820,7 +822,7 @@ def main():
   ensure_deps2git(options.root, options.shallow)
 
   # Ensure our build/ directory is set up with the correct .gclient file.
-  gclient_configure(git_solutions)
+  gclient_configure(git_solutions, specs.get('target_os', []))
 
   # Let gclient do the DEPS syncing.  Also we can get "got revision" data
   # from gclient by passing in --output-json.  In our case, we can just reuse
