@@ -18,11 +18,14 @@ ENABLED_BUILDERS = {
         'linux_rel_alt',
     ],
     'chromium.linux': [
-        'Linux Builder',
-        'Linux Builder (dbg)(32)',
+        'Android Builder (dbg)',
+        'Android Builder',
+        'Android Clang Builder (dbg)',
+        'Android Webview AOSP Builder',
         'Linux Builder (dbg)',
-        'Android Webview AOSP Builder Bot Update',
-    ],
+        'Linux Builder (dbg)(32)',
+        'Linux Builder',
+    ]
 }
 ENABLED_SLAVES = {}
 
