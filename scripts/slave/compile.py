@@ -1143,21 +1143,21 @@ def real_main():
                            help='specify alternative compiler (e.g. clang)')
   if chromium_utils.IsWindows():
     # Windows only.
-    option_parser.add_option('--no-ib', action='store_true', default=False,
+    option_parser.add_option('', '--no-ib', action='store_true', default=False,
                              help='use Visual Studio instead of IncrediBuild')
-    option_parser.add_option('--msvs_version',
+    option_parser.add_option('', '--msvs_version',
                              help='VisualStudio version to use')
   # For linux to arm cross compile.
-  option_parser.add_option('--crosstool', default=None,
+  option_parser.add_option('', '--crosstool', default=None,
                            help='optional path to crosstool toolset')
-  option_parser.add_option('--llvm-tsan', action='store_true',
+  option_parser.add_option('', '--llvm-tsan', action='store_true',
                            default=False,
                            help='build with LLVM\'s ThreadSanitizer')
   if chromium_utils.IsMac():
     # Mac only.
-    option_parser.add_option('--xcode-target', default=None,
+    option_parser.add_option('', '--xcode-target', default=None,
                              help='Target from the xcodeproj file')
-  option_parser.add_option('--goma-dir',
+  option_parser.add_option('', '--goma-dir',
                            default=os.path.join(BUILD_DIR, 'goma'),
                            help='specify goma directory')
   option_parser.add_option('--verbose', action='store_true')
