@@ -344,6 +344,7 @@ class FactoryCommands(object):
     self._repository_root = repository_root
 
     self._kill_tool = self.PathJoin(self._script_dir, 'kill_processes.py')
+    self._runhooks_tool = self.PathJoin(self._script_dir, 'runhooks_wrapper.py')
     self._compile_tool = self.PathJoin(self._script_dir, 'compile.py')
     self._test_tool = self.PathJoin(self._script_dir, 'runtest.py')
     self._zip_tool = self.PathJoin(self._script_dir, 'zip_build.py')
@@ -964,7 +965,7 @@ class FactoryCommands(object):
         command=cmd)
 
 
-  def AddRunHooksStep(self, env=None, timeout=None):
+  def AddRunHooksStep(self, env=None, timeout=None, options=None):
     """Adds a step to the factory to run the gclient hooks."""
     env = env or {}
     env['LANDMINES_VERBOSE'] = '1'
@@ -972,6 +973,12 @@ class FactoryCommands(object):
     env['CHROMIUM_GYP_SYNTAX_CHECK'] = '1'
     if timeout is None:
       timeout = 60*10
+    cmd = [self._python, self._runhooks_tool]
+
+    options = options or {}
+    if ('--compiler=goma' in options or '--compiler=goma-clang' in options):
+      cmd.append('--use-goma')
+
     self._factory.addStep(
         RunHooksShell,
         haltOnFailure=True,
@@ -980,7 +987,7 @@ class FactoryCommands(object):
         env=env,
         locks=[self.slave_exclusive_lock],
         timeout=timeout,
-        command=['gclient', 'runhooks'])
+        command=cmd)
 
   def AddClobberTreeStep(self, gclient_spec, env=None, timeout=None,
                          gclient_deps=None, gclient_nohooks=False,

@@ -154,7 +154,7 @@ class GClientFactory(object):
   def BaseFactory(self, gclient_spec=None, official_release=False,
                   factory_properties=None, build_properties=None,
                   delay_compile_step=False, sudo_for_remove=False,
-                  gclient_deps=None, slave_type=None):
+                  gclient_deps=None, slave_type=None, options=None):
     if gclient_spec is None:
       gclient_spec = self.BuildGClientSpec()
     factory_properties = factory_properties or {}
@@ -214,7 +214,7 @@ class GClientFactory(object):
       if not delay_compile_step:
         self.AddUpdateStep(gclient_spec, factory_properties, factory,
                            slave_type, sudo_for_remove,
-                           gclient_deps=gclient_deps)
+                           gclient_deps=gclient_deps, options=options)
     return factory
 
   def BuildFactory(self, target='Release', clobber=False, tests=None, mode=None,
@@ -228,10 +228,6 @@ class GClientFactory(object):
     gclient_env = factory_properties['gclient_env']
     if options and '--build-tool=ninja' in options:
       gclient_env['GYP_GENERATORS'] = 'ninja'
-    if options and '--compiler=goma-clang' in options:
-      # Ninja needs CC and CXX set at gyp time.
-      gclient_env['CC'] = 'clang'
-      gclient_env['CXX'] = 'clang++'
 
     # Create the spec for the solutions
     gclient_spec = self.BuildGClientSpec(tests)
@@ -240,7 +236,7 @@ class GClientFactory(object):
     factory = self.BaseFactory(gclient_spec,
                                factory_properties=factory_properties,
                                slave_type=slave_type,
-                               gclient_deps=gclient_deps)
+                               gclient_deps=gclient_deps, options=options)
 
     # Optional repository root (default: 'src').
     repository_root = factory_properties.get('repository_root', 'src')
@@ -321,7 +317,8 @@ class GClientFactory(object):
         trigger_set_properties=set_properties))
 
   def AddUpdateStep(self, gclient_spec, factory_properties, factory,
-                    slave_type, sudo_for_remove=False, gclient_deps=None):
+                    slave_type, sudo_for_remove=False, gclient_deps=None,
+                    options=None):
     if gclient_spec is None:
       gclient_spec = self.BuildGClientSpec()
     factory_properties = factory_properties or {}
@@ -369,4 +366,4 @@ class GClientFactory(object):
           revision_mapping=self._revision_mapping)
 
     if not self._nohooks_on_update:
-      factory_cmd_obj.AddRunHooksStep(env=env, timeout=timeout)
+      factory_cmd_obj.AddRunHooksStep(env=env, timeout=timeout, options=options)
