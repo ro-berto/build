@@ -60,6 +60,32 @@ def ForceComponent(target, project, gclient_env):
     gclient_env['GYP_DEFINES'] = gyp_defines + ' component=' + component
 
 
+def FixForGomaWin(options, target, gclient_env):
+  """Fix gyp variables required for goma on Windows,
+  unless it is already set.
+
+  Args:
+    options: a list of string for factory options.
+    target: a string of build target (e.g. Debug, Release).
+    gclient_env: a dict for gclient_env.
+  """
+  options = options or {}
+  if (not '--compiler=goma' in options and
+      not '--compiler=goma-clang' in options):
+    return
+  gyp_defines = gclient_env.get('GYP_DEFINES', '')
+  # goma couldn't work with pdbserv.
+  if 'fastbuild=1' not in gyp_defines and 'win_z7=1' not in gyp_defines:
+    if target.startswith('Debug'):
+      gyp_defines += ' win_z7=1'
+    else:
+      gyp_defines += ' fastbuild=1'
+  # goma couldn't handle precompiled headers.
+  if 'chromium_win_pch=0' not in gyp_defines:
+    gyp_defines += ' chromium_win_pch=0'
+  gclient_env['GYP_DEFINES'] = gyp_defines
+
+
 class ChromiumFactory(gclient_factory.GClientFactory):
   """Encapsulates data and methods common to the chromium master.cfg files."""
 
@@ -957,6 +983,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
     factory_properties['gclient_env'] = \
         factory_properties.get('gclient_env', {}).copy()
+    if self._target_platform == 'win32':
+      FixForGomaWin(options, target, factory_properties['gclient_env'])
     tests = tests or []
 
     if factory_properties.get('needs_valgrind'):
