@@ -67,10 +67,10 @@ def dartium_builder(c):
 @CONFIG_CTX(includes=['main_builder'])
 def arm_builder(c):
   gyp_defs = c.gyp_env.GYP_DEFINES
-  gyp_defs['android_sdk_build_tools_version'] = 'android-4.4'
-  gyp_defs['android_sdk_version'] = '4.4'
+  gyp_defs['android_sdk_build_tools_version'] = '19.0.0'
+  gyp_defs['android_sdk_version'] = '19'
   gyp_defs['android_sdk_root'] = Path(
-    '[CHECKOUT]', 'third_party', 'android_tools_internal', 'sdk')
+    '[CHECKOUT]', 'third_party', 'android_tools', 'sdk')
 
 @CONFIG_CTX(includes=['main_builder'])
 def try_builder(c):
