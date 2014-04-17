@@ -44,7 +44,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "asan=1 clang=1 linux_use_tcmalloc=0 lsan=0 target_arch=x64 v8_target_arch=x64"
+      "GYP_DEFINES": "asan=1 clang=1 lsan=0 target_arch=x64 use_allocator=none v8_target_arch=x64"
     },
     "name": "gclient runhooks"
   },

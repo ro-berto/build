@@ -73,7 +73,7 @@ F('f_webkit_linux_oilpan_rel', linux().ChromiumFactory(
         'blink_config': 'blink',
     }))
 
-asan_gyp = ('asan=1 linux_use_tcmalloc=0 '
+asan_gyp = ('asan=1 use_allocator=none '
             'release_extra_cflags="-g -O1 -fno-inline-functions -fno-inline"')
 
 B('WebKit Linux ASAN', 'f_webkit_linux_rel_asan', scheduler='global_scheduler',

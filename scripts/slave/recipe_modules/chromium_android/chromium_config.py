@@ -32,14 +32,12 @@ def main_builder(c):
 def clang_builder(c):
   c.gyp_env.GYP_DEFINES['component'] = 'shared_library'
   c.gyp_env.GYP_DEFINES['asan'] = 1
-  c.gyp_env.GYP_DEFINES['linux_use_tcmalloc'] = 0
   c.gyp_env.GYP_DEFINES['use_allocator'] = 'none'
 
 @CONFIG_CTX(includes=['base_config', 'clang', 'goma'])
 def clang_release_builder(c):
   c.gyp_env.GYP_DEFINES['component'] = 'shared_library'
   c.gyp_env.GYP_DEFINES['asan'] = 1
-  c.gyp_env.GYP_DEFINES['linux_use_tcmalloc'] = 0
   c.gyp_env.GYP_DEFINES['use_allocator'] = 'none'
   c.compile_py.default_targets = ['chrome_apk']
 

@@ -137,7 +137,7 @@
     ],
     "env": {
       "EXTRA_LANDMINES_SCRIPT": "[SLAVE_BUILD]/src/repo/build/get_internal_landmines.py",
-      "GYP_DEFINES": "OS=android app_manifest_version_code=10 app_manifest_version_name=some_builder_1234 asan=1 chrome_build_id=3333 clang=1 component=shared_library fastbuild=1 gomadir='[BUILD]/goma' linux_use_tcmalloc=0 target_arch=arm use_allocator=none use_goma=1",
+      "GYP_DEFINES": "OS=android app_manifest_version_code=10 app_manifest_version_name=some_builder_1234 asan=1 chrome_build_id=3333 clang=1 component=shared_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_allocator=none use_goma=1",
       "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
     },
     "name": "gclient runhooks"

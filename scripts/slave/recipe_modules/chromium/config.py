@@ -262,7 +262,7 @@ def asan(c):
     raise BadConf('asan requires clang')
 
   if c.TARGET_PLATFORM == 'linux':
-    c.gyp_env.GYP_DEFINES['linux_use_tcmalloc'] = 0
+    c.gyp_env.GYP_DEFINES['use_allocator'] = 'none'
 
   c.gyp_env.GYP_DEFINES['asan'] = 1
   c.gyp_env.GYP_DEFINES['lsan'] = 1
@@ -330,4 +330,3 @@ def _android_common(c):
 def codesearch(c):
   gyp_defs = c.gyp_env.GYP_DEFINES
   gyp_defs['fastbuild'] = 1
-

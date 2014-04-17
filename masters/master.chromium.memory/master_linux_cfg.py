@@ -103,7 +103,7 @@ F('linux_asan_rel', linux().ChromiumASANFactory(
         'gclient_env': {
             'GYP_DEFINES': ('asan=1 '
                             'lsan=1 '
-                            'linux_use_tcmalloc=0 '),
+                            'use_allocator=none '),
             'GYP_GENERATORS': 'ninja', },
         'trigger': 'linux_asan_rel_trigger' }))
 
