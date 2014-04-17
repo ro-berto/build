@@ -38,6 +38,7 @@ def BaseConfig(INTERNAL=False, REPO_NAME=None, REPO_URL=None,
     gclient_custom_deps = Dict(value_type=(basestring, types.NoneType)),
     storage_bucket = Single(basestring),
     archive_clusterfuzz = Single(bool, required=False, empty_val=False),
+    channel = Single(basestring, empty_val='chrome'),
   )
 
 

@@ -367,10 +367,16 @@ class AndroidApi(recipe_api.RecipeApi):
         )
 
   def monkey_test(self, **kwargs):
+    args = [
+        'monkey', 
+        '-v',
+        '--package=%s' % self.c.channel,
+        '--event-count=50000'
+    ]
     yield self.m.python(
         'Monkey Test',
         str(self.m.path['checkout'].join('build', 'android', 'test_runner.py')),
-        [ 'monkey', '-v', '--package=chrome', '--event-count=50000' ],
+        args,
         env={'BUILDTYPE': self.c.BUILD_CONFIG},
         always_run=True,
         **kwargs)
