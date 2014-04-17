@@ -1,5 +1,5 @@
 from RECIPE_MODULES.gclient import CONFIG_CTX
-
+from slave.recipe_config import BadConf
 
 @CONFIG_CTX()
 def v8(c):
