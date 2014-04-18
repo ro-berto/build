@@ -191,6 +191,10 @@ def blink(c):
   del c.solutions[0].custom_deps
   c.solutions[0].custom_vars['webkit_revision'] = 'HEAD'
 
+@config_ctx()
+def android(c):
+  c.target_os.add('android')
+
 @config_ctx(includes=['chromium'])
 def oilpan(c):
   if c.GIT_MODE:
