@@ -343,7 +343,7 @@ def GenSteps(api):
       args = ['--target', api.chromium.c.BUILD_CONFIG,
               '-o', self.results_dir,
               '--build-dir', api.chromium.c.build_dir,
-              '--json-test-results', api.json.test_results()]
+              '--json-test-results', api.json.test_results(add_json_log=False)]
       if suffix == 'without patch':
         test_list = "\n".join(self.failures('with patch'))
         args.extend(['--test-list', api.raw_io.input(test_list)])
