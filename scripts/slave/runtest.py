@@ -565,25 +565,23 @@ def _GetSupplementalColumns(build_dir, supplemental_colummns_file_name):
                                            supplemental_colummns_file_name)
   if os.path.exists(supplemental_columns_file):
     with file(supplemental_columns_file, 'r') as f:
-      supplemental_columns = json.loads(f.read())
+      supplemental_columns_from_file = json.loads(f.read())
+      if type(supplemental_columns_from_file) is dict:
+        supplemental_columns.update(supplemental_columns_from_file)
   return supplemental_columns
 
 
-def _SendResultsToDashboard(results_tracker, system, test, url, build_dir,
+def _SendResultsToDashboard(results_tracker, perf_id, test, url, build_dir,
                             mastername, buildername, buildnumber,
                             supplemental_columns_file, extra_columns=None):
   """Sends results from a results tracker (aka log parser) to the dashboard.
 
-  TODO(qyearsley): Change this function and results_dashboard.SendResults so
-  that only one request is made per test run (instead of one per graph name).
-  Also, maybe refactor this function to take fewer arguments.
-
   Args:
     results_tracker: An instance of a log parser class, which has been used to
         process the test output, so it contains the test results.
-    system: A string such as 'linux-release', which comes from perf_id.
-    test: Test "suite" name string.
-    url: Dashboard URL.
+    perf_id: A string such as 'linux-release'.
+    test: Test suite name.
+    url: Dashboard URL without the path part.
     build_dir: Build dir name (used for cache file by results_dashboard).
     mastername: Buildbot master name, e.g. 'chromium.perf'.
         WARNING! This is incorrectly called "masterid" in some parts of the
@@ -594,21 +592,23 @@ def _SendResultsToDashboard(results_tracker, system, test, url, build_dir,
     extra_columns: A dict of extra values to add to the supplemental columns
         dict.
   """
-  if system is None:
+  if perf_id is None:
     # perf_id not specified in factory-properties
     return
   supplemental_columns = _GetSupplementalColumns(build_dir,
                                                  supplemental_columns_file)
   if extra_columns:
     supplemental_columns.update(extra_columns)
-  for logname, log in results_tracker.PerformanceLogs().iteritems():
-    lines = [str(l).rstrip() for l in log]
-    try:
-      results_dashboard.SendResults(logname, lines, system, test, url,
-                                    mastername, buildername, buildnumber,
-                                    build_dir, supplemental_columns)
-    except NotImplementedError as e:
-      print 'Did not submit to results dashboard: %s' % e
+
+  logs_dict = results_tracker.PerformanceLogs()
+  # The first two arguments of SendResults should be ignored as long as
+  # logs_dict is given. SendResults still takes those arguments because it's
+  # possible that for now something is still using the first two arguments
+  # and not passing logs_dict.
+  results_dashboard.SendResults('', [], perf_id, test, url,
+                                mastername, buildername, buildername,
+                                buildnumber, build_dir, supplemental_columns,
+                                logs_dict=logs_dict)
 
 
 def _BuildCoverageGtestExclusions(options, args):

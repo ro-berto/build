@@ -3,7 +3,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-"""Functions for adding results to perf dashboard."""
+"""Functions for adding results to the Performance Dashboard."""
 
 import calendar
 import datetime
@@ -18,53 +18,65 @@ from slave import slave_utils
 # The paths in the results dashboard URLs for sending and viewing results.
 SEND_RESULTS_PATH = '/add_point'
 RESULTS_LINK_PATH = '/report?masters=%s&bots=%s&tests=%s&rev=%s'
+
 # CACHE_DIR/CACHE_FILENAME will be created in options.build_dir to cache
 # results which need to be retried.
 CACHE_DIR = 'results_dashboard'
 CACHE_FILENAME = 'results_to_retry'
 
 
-#TODO(xusydoc): set fail_hard to True when bots stabilize. See crbug.com/222607.
-def SendResults(logname, lines, system, test_name, url, masterid,
-                buildername, buildnumber, build_dir, supplemental_columns,
-                fail_hard=False):
-  """Send results to the Chrome Performance Dashboard.
+# TODO(xusydoc): Set fail_hard to True when bots stabilize. crbug.com/222607.
+# TODO(qyearsley): Replace this function with a more reasonable function
+# that takes fewer arguments.
+def SendResults(logname, lines, perf_id, test, url, mastername, buildername,
+                buildnumber, build_dir, supplemental_columns, fail_hard=False,
+                logs_dict=None):
+  """Takes data in the old log format, and sends it to the dashboard.
 
-  Try to send any data from the cache file (which contains any data that wasn't
-  successfully sent in a previous run), as well as the data from the arguments
-  provided in this run.
+  This function tries to send any data from the cache file (which contains any
+  data that wasn't successfully sent in a previous run), as well as the data
+  from the arguments provided in this run.
 
   Args:
-    logname: Summary log file name. Contains the chart name.
-    lines: List of log-file lines. Each line should be valid JSON, and should
-        include the properties 'traces' and 'rev'.
-    system: A string such as 'linux-release', which comes from perf_id. This
-        is used to identify the bot in the Chrome Performance Dashboard.
-    test_name: Test name, which will be used as the first part of the slash
-        -separated test path on the Dashboard. (Note: If there are no slashes
-        in this name, then this is the test suite name. If you want to have
-        nested tests under one test suite, you could use a slash here.)
-    url: Performance Dashboard URL (including schema).
-    masterid: ID of buildbot master, e.g. 'chromium.perf'
-    buildername: Builder name, e.g. 'Linux QA Perf (1)'
-    buildnumber: Build number (a string containing the number).
+    logname: Summary log file name. Ignored if logs_dict is given.
+    lines: List of log-file lines. Ignored if logs_dict is given.
+    perf_id: A string such as 'linux-release'. This is the bot name used on
+        the dashboard.
+    test: Test suite name (Note: you can also provide nested subtests
+        under the top-level test by separating names with a slash.
+    url: Performance Dashboard URL.
+    mastername: Buildbot master name, e.g. 'chromium.perf'. Note that this is
+        *not* necessarily the same as the "master name" used on the dashboard.
+        This was previously incorrectly called the "master id".
+    buildername: Builder name.
+    buildnumber: Build number as a string.
     build_dir: Directory name, where the cache dir shall be.
-    supplemental_columns: Dict of supplemental data to upload.
+    supplemental_columns: Dictionary of supplemental data to upload.
     fail_hard: Whether a fatal error will cause this step of the buildbot
         run to be annotated with "@@@STEP_EXCEPTION@@@".
-
-  Returns: None
+    logs_dict: Map of log filename (which contains the chart name) to a list of
+        log file lines. Each one of these lines should be valid JSON and should
+        include the properties 'traces' and 'rev'.
   """
-  if not logname.endswith('-summary.dat'):
-    return
+  if type(supplemental_columns) is not dict:
+    supplemental_columns = {}
+    print 'Non-dictionary supplemental_columns: %s' % str(supplemental_columns)
+    print '@@@STEP_WARNINGS@@@'
 
-  new_results_line = _GetResultsJson(logname, lines, system, test_name, url,
-                                     masterid, buildername, buildnumber,
-                                     supplemental_columns)
+  if not logs_dict:
+    logs_dict = {logname: lines}
+    print 'The logs_dict argument was not passed to SendResults.'
+    print '@@@STEP_WARNINGS@@@'
+
+  new_results_lines = _GetResultsJson(logs_dict, perf_id, test, url,
+                                      mastername, buildername, buildnumber,
+                                      supplemental_columns)
+
   # Write the new request line to the cache, in case of errors.
   cache_filename = _GetCacheFileName(build_dir)
   cache = open(cache_filename, 'ab')
-  cache.write('\n' + new_results_line)
+  for line in new_results_lines:
+    cache.write('\n' + line)
   cache.close()
 
   # Send all the results from this run and the previous cache to the dashboard.
@@ -122,72 +134,101 @@ def _GetCacheFileName(build_dir):
   return cache_filename
 
 
-def _GetResultsJson(logname, lines, system, test_name, url, masterid,
-                    buildername, buildnumber, supplemental_columns):
+def _GetResultsJson(logs_dict, perf_id, test_name, url, mastername, buildername,
+                    buildnumber, supplemental_columns):
   """Prepare JSON to send from the data in the given arguments.
 
   Args:
-    logname: Summary log file name.
-    lines: List of log-file lines. Each line is valid JSON which, when
-        deserialized, is a dict containing the keys 'traces' and 'rev'.
-    system: A string such as 'linux-release', which comes from perf_id.
+    log_dict: A dictionary mapping summary log file names to lists of log-file
+        lines. Each line is valid JSON which when parsed is a dictionary that
+        has the keys 'traces' and 'rev'.
+    perf_id: A string such as 'linux-release'.
     test_name: Test name.
     url: Chrome Performance Dashboard URL.
-    masterid: Buildbot master ID.
+    mastername: Buildbot master name (this is lowercase with dots, and is not
+        necessarily the same as the "master" sent to the dashboard).
     buildername: Builder name.
     buildnumber: Build number.
-    supplemental_columns: Dict of supplemental data to add.
+    supplemental_columns: Dictionary of supplemental data to add.
 
   Returns:
-    JSON that shall be sent to the Chrome Performance Dashboard.
+    A list JSON strings that shall be sent to the dashboard.
   """
   results_to_add = []
+  # Note that this master string is not the same as "mastername"!
   master = slave_utils.GetActiveMaster()
-  bot = system
-  chart_name = logname.replace('-summary.dat', '')
-  for line in lines:
-    data = json.loads(line)
-    revision, revision_columns = _RevisionNumberColumns(data, master)
+  revision = None
 
-    for (trace_name, trace_values) in data['traces'].iteritems():
-      is_important = trace_name in data.get('important', [])
-      test_path = _TestPath(test_name, chart_name, trace_name)
-      result = {
-          'master': master,
-          'bot': system,
-          'test': test_path,
-          'revision': revision,
-          'masterid': masterid,
-          'buildername': buildername,
-          'buildnumber': buildnumber,
-          'supplemental_columns': {}
-      }
-      # Add the supplemental_columns values that were passed in after the
-      # calculated revision column values so that these can be overwritten.
-      result['supplemental_columns'].update(revision_columns)
-      result['supplemental_columns'].update(supplemental_columns)
-      # Test whether we have x/y data.
-      have_multi_value_data = False
-      for value in trace_values:
-        if isinstance(value, list):
-          have_multi_value_data = True
-      if have_multi_value_data:
-        result['data'] = trace_values
-      else:
-        result['value'] = trace_values[0]
-        result['error'] = trace_values[1]
+  for logname, log in logs_dict.iteritems():
+    if not logname.endswith('-summary.dat'):
+      continue
+    lines = [str(l).rstrip() for l in log]
+    chart_name = logname.replace('-summary.dat', '')
 
-      if data.get('units'):
-        result['units'] = data['units']
-      if data.get('units_x'):
-        result['units_x'] = data['units_x']
-      if data.get('stack'):
-        result['stack'] = data['stack']
-      if is_important:
-        result['important'] = True
-      results_to_add.append(result)
-  _PrintLinkStep(url, master, bot, test_name, revision)
-  return json.dumps(results_to_add)
+    for line in lines:
+      data = json.loads(line)
+      revision, revision_columns = _RevisionNumberColumns(data, master)
+
+      for (trace_name, trace_values) in data['traces'].iteritems():
+        is_important = trace_name in data.get('important', [])
+        test_path = _TestPath(test_name, chart_name, trace_name)
+        result = {
+            'master': master,
+            'bot': perf_id,
+            'test': test_path,
+            'revision': revision,
+            'masterid': mastername,
+            'buildername': buildername,
+            'buildnumber': buildnumber,
+            'supplemental_columns': {}
+        }
+        # Add the supplemental_columns values that were passed in after the
+        # calculated revision column values so that these can be overwritten.
+        result['supplemental_columns'].update(revision_columns)
+        result['supplemental_columns'].update(supplemental_columns)
+        # Check whether we have x/y data.
+        have_multi_value_data = False
+        for value in trace_values:
+          if isinstance(value, list):
+            have_multi_value_data = True
+        if have_multi_value_data:
+          result['data'] = trace_values
+        else:
+          result['value'] = trace_values[0]
+          result['error'] = trace_values[1]
+
+        if data.get('units'):
+          result['units'] = data['units']
+        if data.get('units_x'):
+          result['units_x'] = data['units_x']
+        if is_important:
+          result['important'] = True
+        results_to_add.append(result)
+
+  _PrintLinkStep(url, master, perf_id, test_name, revision)
+
+  # It was experimentally determined that 512 points takes about 7.5 seconds
+  # to handle, and App Engine times out after about 60 seconds.
+  results_lists = _ChunkList(results_to_add, 500)
+  return map(json.dumps, results_lists)
+
+
+def _ChunkList(items, chunk_size):
+  """Divides a list into a list of sublists no longer than the given size.
+
+  Args:
+    items: The original list of items. Can be very long.
+    chunk_size: The maximum size of sublists in the results returned.
+
+  Returns:
+    A list of sublists (which contain the original items, in order).
+  """
+  chunks = []
+  items_left = items[:]
+  while items_left:
+    chunks.append(items_left[:chunk_size])
+    items_left = items_left[chunk_size:]
+  return chunks
 
 
 def _RevisionNumberColumns(data, master):
