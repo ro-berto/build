@@ -113,7 +113,7 @@
       "--root=[SLAVE_BUILD]/src",
       "gen",
       "//out/Debug",
-      "--args='is_debug=true'"
+      "--args=is_debug=true"
     ],
     "name": "gn"
   },

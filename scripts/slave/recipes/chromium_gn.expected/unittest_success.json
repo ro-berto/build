@@ -8,7 +8,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = None\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]\ntarget_os = ['android']"
+      "cache_dir = None\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]"
     ],
     "name": "gclient setup"
   },
@@ -35,8 +35,6 @@
       "--nohooks",
       "--delete_unversioned_trees",
       "--force",
-      "--revision",
-      "src@HEAD",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -74,26 +72,6 @@
     ]
   },
   {
-    "abort_on_failure": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[DEPOT_TOOLS]/apply_issue.py",
-      "-r",
-      "[SLAVE_BUILD]/src",
-      "-i",
-      "12853011",
-      "-p",
-      "1",
-      "-s",
-      "https://codereview.chromium.org",
-      "--no-auth"
-    ],
-    "name": "apply_issue"
-  },
-  {
-    "abort_on_failure": false,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -112,8 +90,8 @@
       "[DEPOT_TOOLS]/gn.py",
       "--root=[SLAVE_BUILD]/src",
       "gen",
-      "//out/Release",
-      "--args='is_debug=false os=\"android\" cpu_arch=\"arm\"'"
+      "//out/Debug",
+      "--args=is_debug=true"
     ],
     "name": "gn"
   },
@@ -124,7 +102,7 @@
       "-u",
       "[BUILD]/scripts/slave/compile.py",
       "--target",
-      "Release",
+      "Debug",
       "--src-dir",
       "[SLAVE_BUILD]/src",
       "--build-tool",

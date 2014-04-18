@@ -91,7 +91,7 @@
       "--root=[SLAVE_BUILD]/src",
       "gen",
       "//out/Release",
-      "--args='is_debug=false'"
+      "--args=is_debug=false"
     ],
     "name": "gn"
   },

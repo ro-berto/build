@@ -245,26 +245,17 @@ class ChromiumApi(recipe_api.RecipeApi):
     kwargs['env'] = env
     return self.m.gclient.runhooks(**kwargs)
 
-  def run_gn(self):
-    gn_args = []
-    if self.c.BUILD_CONFIG == 'Debug':
-      gn_args.append('is_debug=true')
-    if self.c.BUILD_CONFIG == 'Release':
-      gn_args.append('is_debug=false')
-    if self.c.TARGET_PLATFORM == 'android':
-      gn_args.append('os="android"')
-    if self.c.TARGET_ARCH == 'arm':
-      gn_args.append('cpu_arch="arm"')
-
-    return self.m.python(
-        name='gn',
-        script=self.m.path['depot_tools'].join('gn.py'),
-        args=[
-            '--root=%s' % str(self.m.path['checkout']),
-            'gen',
-            '//out/%s' % self.c.BUILD_CONFIG,
-            "--args='%s'" % ' '.join(gn_args),
-        ])
+  def run_gn(self, **kwargs):
+    config = self.c.BUILD_CONFIG
+    gn_wrapper_script_path = self.m.path['depot_tools'].join('gn.py')
+    gn_build_config_specific_args = {
+        'Debug': ['--args=is_debug=true'],
+        'Release': ['--args=is_debug=false'],
+    }
+    gn_args = ['--root=' + str(self.m.path['checkout']), 'gen',
+               '//out/' + config]
+    gn_args += gn_build_config_specific_args[config]
+    return self.m.python('gn', gn_wrapper_script_path, args=gn_args, **kwargs)
 
   def taskkill(self):
     return self.m.python(
