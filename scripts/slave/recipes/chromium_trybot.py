@@ -572,7 +572,7 @@ def GenSteps(api):
     if bot_update_mode:
       yield api.bot_update.ensure_checkout(patch=False, always_run=True)
     else:
-      yield api.gclient.revert(always_run=True),
+      yield api.gclient.checkout(revert=True, always_run=True),
     yield api.chromium.runhooks(always_run=True),
     compile_targets = list(api.itertools.chain(
                                *[t.compile_targets() for t in failing_tests]))
