@@ -110,17 +110,20 @@
       "@@@STEP_LOG_LINE@json.output@    \"args\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      \"--test-launcher-print-test-stdio=always\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ], @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"chromium_configs\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"chromium_chromeos\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"chromium_chromeos_clang\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ], @@@",
       "@@@STEP_LOG_LINE@json.output@    \"platforms\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      \"linux\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ], @@@",
       "@@@STEP_LOG_LINE@json.output@    \"test\": \"sandbox_linux_unittests\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"chromium_configs\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"chromium_chromeos\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"chromium_chromeos_clang\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"exclude_builders\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"tryserver.chromium:win_chromium_x64_rel\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ], @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"test\": \"app_shell_browsertests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test\": \"browser_tests\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -160,7 +163,7 @@
       "--",
       "base_unittests",
       "mojo_common_unittests",
-      "sandbox_linux_unittests",
+      "browser_tests",
       "chrome"
     ],
     "name": "compile (with patch)"
@@ -342,10 +345,9 @@
       "--slave-name=TestSlavename",
       "--build-number=571",
       "--parallel",
-      "sandbox_linux_unittests",
-      "--test-launcher-print-test-stdio=always"
+      "browser_tests"
     ],
-    "name": "sandbox_linux_unittests (with patch)"
+    "name": "browser_tests (with patch)"
   },
   {
     "can_fail_build": false,

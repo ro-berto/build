@@ -440,11 +440,12 @@ def GenSteps(api):
         {
           'test': 'sandbox_linux_unittests',
           'platforms': ['linux'],
+          'chromium_configs': ['chromium_chromeos', 'chromium_chromeos_clang'],
           'args': ['--test-launcher-print-test-stdio=always'],
         },
         {
-          'test': 'app_shell_browsertests',
-          'chromium_configs': ['chromium_chromeos', 'chromium_chromeos_clang'],
+          'test': 'browser_tests',
+          'exclude_builders': ['tryserver.chromium:win_chromium_x64_rel'],
         },
       ]))
 
@@ -491,6 +492,10 @@ def GenSteps(api):
 
       if 'chromium_configs' in test:
         if bot_config['chromium_config'] not in test['chromium_configs']:
+          continue
+
+      if 'exclude_builders' in test:
+        if '%s:%s' % (mastername, buildername) in test['exclude_builders']:
           continue
 
       test_args = test.get('args')
