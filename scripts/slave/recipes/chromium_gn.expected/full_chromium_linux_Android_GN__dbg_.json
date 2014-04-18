@@ -8,7 +8,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = None\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]"
+      "cache_dir = None\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]\ntarget_os = ['android']"
     ],
     "name": "gclient setup"
   },
@@ -90,8 +90,8 @@
       "[DEPOT_TOOLS]/gn.py",
       "--root=[SLAVE_BUILD]/src",
       "gen",
-      "//out/Release",
-      "--args='is_debug=false'"
+      "//out/Debug",
+      "--args='is_debug=true os=\"android\" cpu_arch=\"arm\"'"
     ],
     "name": "gn"
   },
@@ -102,7 +102,7 @@
       "-u",
       "[BUILD]/scripts/slave/compile.py",
       "--target",
-      "Release",
+      "Debug",
       "--src-dir",
       "[SLAVE_BUILD]/src",
       "--build-tool",
