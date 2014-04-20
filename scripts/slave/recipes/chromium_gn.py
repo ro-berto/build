@@ -45,30 +45,19 @@ def GenSteps(api):
   # out the retry and recovery logic from the rest of the recipe.
 
   yield api.gclient.checkout(revert=True,
-                             abort_on_failure=False,
-                             can_fail_build=False)
+                             abort_on_failure=(not is_tryserver),
+                             can_fail_build=(not is_tryserver))
 
   if is_tryserver:
-    # maybe_apply_issue should work fine even w/o a patch, but this
-    # is a little more explicit.
-    yield api.tryserver.maybe_apply_issue()
-    yield api.chromium.runhooks(run_gyp=False,
-                                abort_on_failure=False,
-                                can_fail_build=False)
-
     if any(step.retcode != 0 for step in api.step_history.values()):
-      # Nuke the whole slave checkout and try again.
       yield api.path.rmcontents('slave build directory',
                                 api.path['slave_build'])
       yield api.gclient.checkout(revert=False,
                                  abort_on_failure=True,
                                  can_fail_build=True)
-      yield api.tryserver.maybe_apply_issue()
-      yield api.chromium.runhooks(run_gyp=False,
-                                  abort_on_failure=True,
-                                  can_fail_build=True)
-  else:
-    yield api.chromium.runhooks(run_gyp=False)
+    yield api.tryserver.maybe_apply_issue()
+
+  yield api.chromium.runhooks(run_gyp=False)
 
   yield api.chromium.run_gn()
 
@@ -96,19 +85,29 @@ def GenTests(api):
       api.platform.name('linux')
   )
 
+  # api.gclient.checkout() actually contains a revert call and a sync call,
+  # so we test that either of them failing is handled correctly.
   yield (
       api.test('unittest_sync_fails') +
       api.properties.tryserver(buildername='unittest_fake_trybotname') +
       api.platform.name('linux') +
+      api.step_data('gclient sync', retcode=1)
+  )
+
+  yield (
+      api.test('unittest_revert_fails') +
+      api.properties.tryserver(buildername='linux_chromium_gn_dbg') +
+      api.platform.name('linux') +
       api.step_data('gclient revert', retcode=1)
   )
 
-  # This test should abort before running GN and trying to compile.
+  # Here both checkout/syncs fail, so we should abort before every trying
+  # to apply the patch.
   yield (
       api.test('unittest_second_sync_fails') +
       api.properties.tryserver(buildername='unittest_fake_trybotname') +
       api.platform.name('linux') +
-      api.step_data('gclient revert', retcode=1) +
+      api.step_data('gclient sync', retcode=1) +
       api.step_data('gclient sync (2)', retcode=1)
   )
 
