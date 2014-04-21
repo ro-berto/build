@@ -27,9 +27,10 @@ REPOS = (
   'NodeBind',
   'TemplateBinding',
   'polymer-expressions',
-  'PointerGestures',
+  'polymer-gestures',
   'PointerEvents',
-  'tools'
+  'tools',
+  'URL',
 )
 
 

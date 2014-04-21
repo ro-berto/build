@@ -13,7 +13,7 @@ REPOS = (
   'NodeBind',
   'TemplateBinding',
   'polymer-expressions',
-  'PointerGestures',
+  'polymer-gestures',
   'PointerEvents',
 )
 
@@ -21,7 +21,7 @@ REPO_DEPS = {
   'polymer-dev': [
     'platform-dev',
     'CustomElements',
-    'PointerGestures',
+    'polymer-gestures',
     'PointerEvents',
     'ShadowDOM',
     'HTMLImports',
@@ -32,7 +32,7 @@ REPO_DEPS = {
   ],
   'platform-dev': [
     'CustomElements',
-    'PointerGestures',
+    'polymer-gestures',
     'PointerEvents',
     'ShadowDOM',
     'HTMLImports',
@@ -40,6 +40,7 @@ REPO_DEPS = {
     'NodeBind',
     'TemplateBinding',
     'polymer-expressions',
+    'URL',
   ],
   'NodeBind': [
     'observe-js'
@@ -53,7 +54,7 @@ REPO_DEPS = {
     'NodeBind',
     'TemplateBinding',
   ],
-  'PointerGestures': [
+  'polymer-gestures': [
     'PointerEvents',
   ],
 }
