@@ -26,6 +26,9 @@ class AdbApi(recipe_api.RecipeApi):
         import sys
         import json
         import re
+        import logging
+
+        logging.basicConfig(level=0)
 
         cmd = eval(sys.argv[1])
         outFileName = sys.argv[2]
@@ -33,7 +36,8 @@ class AdbApi(recipe_api.RecipeApi):
         output = subprocess.check_output(cmd)
         devices = []
         for line in output.splitlines():
-          m = re.match('^([0-9A-F]+)\s+device$', line)
+          logging.info(line)
+          m = re.match('^([0-9A-Fa-f]+)\s+device$', line)
           if m:
             devices.append(m.group(1))
 
