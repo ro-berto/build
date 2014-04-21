@@ -11,7 +11,7 @@ DEPS = [
 ]
 
 # To run, pass these options into properties:
-# master="DartFYI", bot="multivm-windows-release", 
+# slavename="multivm-windows-release", 
 # buildername="multivm-windows-perf-be", 
 # mastername="client.dart.fyi", buildnumber=75
 
@@ -41,7 +41,7 @@ def GenTests(api):
       yield (
           api.test("%s%s" % (platform, '_use_mirror' if production else '')) +
           api.platform.name(platform) + 
-          api.properties(use_mirror=production, master="DartFYI",
-              bot="multivm-windows-release",
+          api.properties(use_mirror=production,
+              slavename="multivm-windows-release",
               buildername="multivm-windows-perf-be",
               buildnumber=75, mastername="client.dart.fyi"))

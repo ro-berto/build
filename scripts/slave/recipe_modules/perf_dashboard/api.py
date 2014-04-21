@@ -14,8 +14,8 @@ class PerfDashboardApi(recipe_api.RecipeApi):
     assert(revision != '')
     assert(value != '')
     return {
-      "master": self.m.properties['master'],
-      "bot" : self.m.properties['bot'],
+      "master": self.m.properties['mastername'],
+      "bot" : self.m.properties['slavename'],
       "test" : test,
       "revision" : revision,
       "value" : value,

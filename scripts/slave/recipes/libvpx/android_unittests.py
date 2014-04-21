@@ -151,7 +151,7 @@ def GenTests(api):
     api.test('basic_linux_64') +
     api.properties(
         libvpx_git_url='https://chromium.googlesource.com/webm/libvpx',
-        master='Libvpx', bot='libvpx-bot', buildername='Nexus 5 Builder',
+        slavename='libvpx-bot', buildername='Nexus 5 Builder',
         mastername='client.libvpx', buildnumber='75') +
     api.step_data('adb_wrap',
         api.raw_io.output("This is text with json inside normally")) +
