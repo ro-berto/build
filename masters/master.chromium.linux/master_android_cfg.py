@@ -6,6 +6,8 @@ from master import master_config
 from master.factory import annotator_factory
 from master.factory import chromium_factory
 
+m_annotator = annotator_factory.AnnotatorFactory()
+
 defaults = {}
 
 helper = master_config.Helper(defaults)
@@ -95,8 +97,24 @@ F('f_android_clang_dbg', linux_android().ChromiumAnnotationFactory(
 B('Android Webview AOSP Builder', 'f_android_webview_aosp_rel', 'android',
   'android', notify_on_missing=True)
 F('f_android_webview_aosp_rel',
-  annotator_factory.AnnotatorFactory().BaseFactory('android_webview_aosp'))
+  m_annotator.BaseFactory('android_webview_aosp'))
 
 
 def Update(_config_arg, _active_master, c):
-  return helper.Update(c)
+  helper.Update(c)
+
+  specs = [
+    {'name': 'Android GN', 'recipe': 'chromium_gn'},
+  ]
+
+  c['builders'].extend([
+      {
+        'name': spec['name'],
+        'factory': m_annotator.BaseFactory(
+              spec.get('recipe', 'chromium'),
+              factory_properties=spec.get('factory_properties'),
+              triggers=spec.get('triggers')),
+        'notify_on_missing': True,
+        'category': '5android',
+      } for spec in specs
+  ])
