@@ -319,12 +319,12 @@ class AndroidApi(recipe_api.RecipeApi):
         env=self.get_env())
 
   def detect_and_setup_devices(self):
+    yield self.device_status_check()
     yield self.m.step(
         'provision_devices',
         [self.c.cr_build_android.join('provision_devices.py'),
          '-t', self.m.chromium.c.BUILD_CONFIG],
         env=self.get_env(), can_fail_build=False)
-    yield self.device_status_check()
 
     if self.c.INTERNAL:
       yield self.m.step(

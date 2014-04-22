@@ -162,18 +162,6 @@
     "name": "spawn_logcat_monitor"
   },
   {
-    "can_fail_build": false,
-    "cmd": [
-      "[SLAVE_BUILD]/src/build/android/provision_devices.py",
-      "-t",
-      "Debug"
-    ],
-    "env": {
-      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
-    },
-    "name": "provision_devices"
-  },
-  {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/buildbot/bb_device_status_check.py"
     ],
@@ -185,6 +173,19 @@
       "step returned non-zero exit code: 1",
       "@@@STEP_FAILURE@@@"
     ]
+  },
+  {
+    "can_fail_build": false,
+    "cmd": [
+      "[SLAVE_BUILD]/src/build/android/provision_devices.py",
+      "-t",
+      "Debug"
+    ],
+    "env": {
+      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
+    },
+    "name": "provision_devices",
+    "skip": true
   },
   {
     "can_fail_build": false,
