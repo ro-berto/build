@@ -31,10 +31,21 @@ CHROMIUM_SRC_URL = 'https://chromium.googlesource.com/chromium/src.git'
 RECOGNIZED_PATHS = {
     # If SVN path matches key, the entire URL is rewritten to the Git url.
     '/chrome/trunk/src':
-       CHROMIUM_SRC_URL,
+        CHROMIUM_SRC_URL,
     '/chrome-internal/trunk/src-internal':
-        'https://chrome-internal.googlesource.com/chrome/src-internal.git'
+        'https://chrome-internal.googlesource.com/chrome/src-internal.git',
 }
+
+# Official builds use buildspecs, so this is a special case.
+BUILDSPEC_RE = r'^/chrome-internal/trunk/tools/buildspec/build/(.*)$'
+GIT_BUILDSPEC_PATH = ('https://chrome-internal.googlesource.com/chrome/tools/'
+                      'buildspec')
+
+# This is the repository that the buildspecs2git cron job mirrors
+# all buildspecs into. When we see an svn buildspec, we rely on the
+# buildspecs2git cron job to produce the git version of the buildspec.
+GIT_BUILDSPEC_REPO = (
+    'https://chrome-internal.googlesource.com/chrome/tools/git_buildspecs')
 
 # Copied from scripts/recipes/chromium.py.
 GOT_REVISION_MAPPINGS = {
@@ -47,7 +58,6 @@ GOT_REVISION_MAPPINGS = {
         'src/third_party/webrtc/': 'got_webrtc_revision',
     }
 }
-
 
 
 BOT_UPDATE_MESSAGE = """
@@ -106,7 +116,7 @@ cache_dir = %(cache_dir)s
 
 # IMPORTANT: If you're trying to enable a RECIPE bot, you'll need to
 # edit recipe_modules/bot_update/api.py instead.
-ENABLED_MASTERS = ['chromium.git']
+ENABLED_MASTERS = ['chromium.git', 'chrome_git']
 ENABLED_BUILDERS = {
     'tryserver.chromium': ['linux_rel_alt'],
 }
@@ -315,19 +325,32 @@ def solutions_to_git(input_solutions):
   assert input_solutions
   solutions = copy.deepcopy(input_solutions)
   first_solution = True
+  buildspec_name = False
   for solution in solutions:
     original_url = solution['url']
     parsed_url = urlparse.urlparse(original_url)
     parsed_path = parsed_url.path
-    if first_solution:
-      root = parsed_path
-      first_solution = False
-    if parsed_path in RECOGNIZED_PATHS:
+
+    # Rewrite SVN urls into Git urls.
+    buildspec_m = re.match(BUILDSPEC_RE, parsed_path)
+    if first_solution and buildspec_m:
+      solution['url'] = GIT_BUILDSPEC_PATH
+      buildspec_name = buildspec_m.group(1)
+      solution['deps_file'] = path.join('build', buildspec_name, 'DEPS')
+    elif parsed_path in RECOGNIZED_PATHS:
       solution['url'] = RECOGNIZED_PATHS[parsed_path]
     else:
       print 'Warning: path %s not recognized' % parsed_path
-    if solution.get('deps_file', 'DEPS') == 'DEPS':
-      solution['deps_file'] = '.DEPS.git'
+
+    # Point .DEPS.git is the git version of the DEPS file.
+    solution['deps_file'] = '.DEPS.git'.join(
+        solution.get('deps_file', 'DEPS').rsplit('DEPS', 1))
+
+    if first_solution:
+      root = parsed_path
+      first_solution = False
+
+
     solution['managed'] = False
     # We don't want gclient to be using a safesync URL. Instead it should
     # using the lkgr/lkcr branch/tags.
@@ -335,7 +358,7 @@ def solutions_to_git(input_solutions):
       print 'Removing safesync url %s from %s' % (solution['safesync_url'],
                                                   parsed_path)
       del solution['safesync_url']
-  return solutions, root
+  return solutions, root, buildspec_name
 
 
 def ensure_no_checkout(dir_names, scm_dirname):
@@ -373,10 +396,15 @@ def gclient_configure(solutions, target_os):
     f.write(get_gclient_spec(solutions, target_os))
 
 
-def gclient_sync(output_json):
+def gclient_sync(output_json, buildspec_name):
   gclient_bin = 'gclient.bat' if sys.platform.startswith('win') else 'gclient'
-  call(gclient_bin, 'sync', '--verbose', '--reset', '--force',
-       '--nohooks', '--noprehooks', '--output-json', output_json)
+  cmd = [gclient_bin, 'sync', '--verbose', '--reset', '--force',
+         '--output-json', output_json]
+  if buildspec_name:
+    cmd += ['--with_branch_heads']
+  else:
+    cmd += ['--nohooks', '--noprehooks']
+  call(*cmd)
   with open(output_json) as f:
     return json.load(f)
 
@@ -497,8 +525,10 @@ def need_to_run_deps2git(repo_base, deps_file, deps_git_file):
 
   Returns True if there was a DEPS change after the last .DEPS.git update.
   """
+  print 'Checking if %s exists' % deps_git_file
   if not path.isfile(deps_git_file):
     # .DEPS.git doesn't exist but DEPS does? We probably want to generate one.
+    print 'it exists!'
     return True
 
   last_known_deps_ref = _last_commit_for_file(deps_file, repo_base)
@@ -512,10 +542,61 @@ def need_to_run_deps2git(repo_base, deps_file, deps_git_file):
   return last_known_deps_ref != merge_base_ref
 
 
+def get_git_buildspec(version):
+  """Get the git buildspec of a version, return its contents.
+
+  The contents are returned instead of the file so that we can check the
+  repository into a temp directory and confine the cleanup logic here.
+  """
+  git('cache', 'populate', '-v', '--cache-dir', CACHE_DIR, GIT_BUILDSPEC_REPO)
+  mirror_dir = git(
+      'cache', 'exists', '--cache-dir', CACHE_DIR, GIT_BUILDSPEC_REPO).strip()
+  TOTAL_TRIES = 30
+  for tries in range(TOTAL_TRIES):
+    try:
+      return git('show', 'master:%s/DEPS' % version, cwd=mirror_dir)
+    except SubprocessFailed:
+      if tries < TOTAL_TRIES - 1:
+        print 'Buildspec for %s not committed yet, waiting 5 seconds...'
+        time.sleep(5)
+        git('cache', 'populate', '-v', '--cache-dir',
+            CACHE_DIR, GIT_BUILDSPEC_REPO)
+      else:
+        print >> sys.stderr, '%s not found, ' % version,
+        print >> sys.stderr, 'the buildspec2git cron job probably is not ',
+        print >> sys.stderr, 'running correctly, please contact mmoss@.'
+        raise
+
+
+def buildspecs2git(sln_dir, buildspec_name):
+  """This is like deps2git, but for buildspecs.
+
+  Because buildspecs are vastly different than normal DEPS files, we cannot
+  use deps2git.py to generate git versions of the git DEPS.  Fortunately
+  we don't have buildspec trybots, and there is already a service that
+  generates git DEPS for every buildspec commit already, so we can leverage
+  that service so that we don't need to run buildspec2git.py serially.
+
+  This checks the commit message of the current DEPS file for the release
+  number, waits in a busy loop for the coorisponding .DEPS.git file to be
+  committed into the git_buildspecs repository.
+  """
+  repo_base = path.join(os.getcwd(), sln_dir)
+  deps_file = path.join(repo_base, 'build', buildspec_name, 'DEPS')
+  deps_git_file = path.join(repo_base, 'build', buildspec_name, '.DEPS.git')
+  deps_log = git('log', '-1', '--format=%B', deps_file, cwd=repo_base)
+  m = re.search(r'Buildspec for\s+version (\d+\.\d+\.\d+\.\d+)', deps_log)
+  version = m.group(1)
+  git_buildspec = get_git_buildspec(version)
+  with open(deps_git_file, 'wb') as f:
+    f.write(git_buildspec)
+
+
 def ensure_deps2git(sln_dir, shallow):
   repo_base = path.join(os.getcwd(), sln_dir)
   deps_file = path.join(repo_base, 'DEPS')
   deps_git_file = path.join(repo_base, '.DEPS.git')
+  print 'Checking if %s is newer than %s' % (deps_file, deps_git_file)
   if not path.isfile(deps_file):
     return
 
@@ -528,7 +609,9 @@ def ensure_deps2git(sln_dir, shallow):
 
   # TODO(hinoka): This might need to be smarter if we need to deal with
   #               DEPS changes that are in an internal repository.
-  repo_type = 'internal' if 'internal' in sln_dir else 'public'
+  repo_type = 'public'
+  if sln_dir in ['src-internal']:
+    repo_type = 'internal'
   cmd = [sys.executable, DEPS2GIT_PATH,
          '-t', repo_type,
          '--cache_dir=%s' % CACHE_DIR,
@@ -796,7 +879,7 @@ def main():
   specs = {}
   exec(options.specs, specs)
   svn_solutions = specs.get('solutions', [])
-  git_solutions, svn_root = solutions_to_git(svn_solutions)
+  git_solutions, svn_root, buildspec_name = solutions_to_git(svn_solutions)
   solutions_printer(git_solutions)
 
   dir_names = [sln.get('name') for sln in svn_solutions if 'name' in sln]
@@ -848,7 +931,10 @@ def main():
                          git_ref)
 
   # Run deps2git if there is a DEPS commit after the last .DEPS.git commit.
-  ensure_deps2git(options.root, options.shallow)
+  if buildspec_name:
+    buildspecs2git(options.root, buildspec_name)
+  else:
+    ensure_deps2git(options.root, options.shallow)
 
   # Ensure our build/ directory is set up with the correct .gclient file.
   gclient_configure(git_solutions, specs.get('target_os', []))
@@ -857,7 +943,7 @@ def main():
   # from gclient by passing in --output-json.  In our case, we can just reuse
   # the temp file that
   _, gclient_output_file = tempfile.mkstemp(suffix='.json')
-  gclient_output = gclient_sync(gclient_output_file)
+  gclient_output = gclient_sync(gclient_output_file, buildspec_name)
 
   # If we're fed an svn revision number as --revision, then our got_revision
   # output should be in svn revs.  Otherwise it'll be in git hashes.
