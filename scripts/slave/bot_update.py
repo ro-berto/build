@@ -128,7 +128,16 @@ ENABLED_SLAVES = {
 # Disabled filters get run AFTER enabled filters, so for example if a builder
 # config is enabled, but a bot on that builder is disabled, that bot will
 # be disabled.
-DISABLED_BUILDERS = {}
+DISABLED_BUILDERS = {
+    'tryserver.chromium': [
+        # Disabled because it uses cros.DEPS.
+        'linux_chromeos_clang',
+        # While these work, its disabled because it shares folders with
+        # linux_chromeos_clang.
+        'linux_chromium_chromeos_clang_rel',
+        'linux_chromium_chromeos_clang_dbg',
+    ]
+}
 DISABLED_SLAVES = {}
 
 # How many times to retry failed subprocess calls.
