@@ -28,7 +28,7 @@ ENABLED_BUILDERS = {
     ]
 }
 ENABLED_SLAVES = {
-    'tryserver.chromium': ['slave%d-c4' % i for i in range(250, 256)]
+    'tryserver.chromium': ['slave%d-c4' % i for i in range(250, 300)]
 }
 
 
