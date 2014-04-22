@@ -13,7 +13,7 @@ in-progress DEPS roll CLs and the state of the repository:
 - If there is already a DEPS roll CL in the Commit Queue, just exit.
 - If there is an open DEPS roll CL which is not in the Commit Queue:
     - If there's a comment containing the "STOP" keyword, just exit.
-    - Otherwise, close the issue.
+    - Otherwise, close the issue and continue.
 - If there is no open DEPS roll CL, create one using the
     src/tools/safely-roll-deps.py script.
 """
@@ -232,36 +232,39 @@ class AutoRoller(object):
     self._rietveld.add_comment(search_result['issue'],
       self.ROLL_BOT_INSTRUCTIONS)
 
-  def _validate_active_roll(self, issue):
+  def _maybe_close_active_roll(self, issue):
     issue_number = issue['issue']
 
     # If the CQ failed, this roll is DOA.
     if not issue['commit']:
-      self._close_issue(issue_number,
-        'No longer marked for the CQ. Closing, will open a new roll.')
-      return False
+      self._close_issue(
+          issue_number,
+          'No longer marked for the CQ. Closing, will open a new roll.')
+      return True
 
     create_time = self._parse_time(issue['created'])
     time_since_roll = datetime.datetime.utcnow() - create_time
     print '%s started %s ago' % (
       self._url_for_issue(issue_number), time_since_roll)
     if time_since_roll > self.ROLL_TIME_LIMIT:
-      self._close_issue(issue_number,
-        'Giving up on this roll after %s. Closing, will open a new roll.' %
-        self.ROLL_TIME_LIMIT)
-      return False
+      self._close_issue(
+          issue_number,
+          'Giving up on this roll after %s. Closing, will open a new roll.' %
+          self.ROLL_TIME_LIMIT)
+      return True
 
     last_roll_revision = self._last_roll_revision()
     match = re.match(
         self.ROLL_DESCRIPTION_REGEXP % {'project': self._project.title()},
         issue['description'])
     if int(match.group('from_revision')) != last_roll_revision:
-      self._close_issue(issue_number,
-        'DEPS has already rolled to %s. Closing, will open a new roll.' %
-        last_roll_revision)
-      return False
+      self._close_issue(
+          issue_number,
+          'DEPS has already rolled to %s. Closing, will open a new roll.' %
+          last_roll_revision)
+      return True
 
-    return True
+    return False
 
   def main(self):
     search_result = self._search_for_active_roll()
@@ -273,21 +276,18 @@ class AutoRoller(object):
 
     if issue:
       if self._rollbot_should_stop(issue):
-        return 1  # Should sleep here.
-      if not self._validate_active_roll(issue):
-        # Don't need to sleep here, but need to return to let the outer script
-        # update the checkout.
         return 1
-      print '%s is still active, nothing to do.' % \
-        self._url_for_issue(issue_number)
-      return 0
+      if not self._maybe_close_active_roll(issue):
+        print '%s is still active, nothing to do.' % \
+            self._url_for_issue(issue_number)
+        return 0
 
     last_roll_revision = self._last_roll_revision()
     new_roll_revision = self._current_svn_revision()
     if new_roll_revision <= last_roll_revision:
       print 'ERROR: Already at %d refusing to roll backwards to %d.' % (
         last_roll_revision, new_roll_revision)
-      return 1  # Would sleep here.
+      return 1
 
     commit_msg = self.ROLL_DESCRIPTION_STR % {
         'project': self._project.title(),
@@ -299,7 +299,7 @@ class AutoRoller(object):
       commit_msg += '\n\n' + revlink
 
     self._start_roll(new_roll_revision, commit_msg)
-    return 0  # Would sleep here.
+    return 0
 
 
 def main():

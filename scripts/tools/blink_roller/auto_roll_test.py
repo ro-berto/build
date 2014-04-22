@@ -99,6 +99,42 @@ class AutoRollTest(SuperMoxTestBase):
         'subject': 'Test_Project roll 1234:1235',
     }
 
+  def _upload_issue(self):
+    deps_content = '''
+vars = {
+  "test_project_revision": "1234",
+}
+'''
+    auto_roll.subprocess.check_output(
+        ['svn', 'cat', self._arb.CHROMIUM_SVN_DEPS_URL]).AndReturn(deps_content)
+    auto_roll.subprocess.check_call(
+        ['git', '--git-dir', './third_party/test_project/.git', 'fetch'])
+    git_log = '''
+commit abcde
+Author: Test Author <test_author@example.com>
+Date:   Wed Apr 2 14:00:14 2014 -0400
+
+    Make some changes.
+
+    git-svn-id: svn://svn.url/trunk@1236 abcdefgh-abcd-abcd-abcd-abcdefghijkl
+'''
+    auto_roll.subprocess.check_output(
+        ['git', '--git-dir', './third_party/test_project/.git', 'show', '-s',
+         'origin/master']).AndReturn(git_log)
+    sheriff_webkit_contents = 'document.write(\'test_sheriff@example.com\')'
+    auto_roll.urllib2.urlopen(
+        'http://build.chromium.org/p/chromium.webkit/sheriff_webkit.js'
+        ).AndReturn(self.MockFile(sheriff_webkit_contents))
+    auto_roll.subprocess.check_call(
+        ['./tools/safely-roll-deps.py', self.TEST_PROJECT, '1236', '--message',
+         'Test_Project roll 1234:1236', '--force', '--cc',
+         'test_sheriff@example.com'])
+    issue = self._make_issue(self.CURRENT_DATETIME_STR)
+    self._arb._rietveld.search(owner=self.TEST_AUTHOR,
+                               closed=2).AndReturn([issue])
+    self._arb._rietveld.add_comment(issue['issue'],
+                                    self._arb.ROLL_BOT_INSTRUCTIONS)
+
   def test_should_stop(self):
     issue = self._make_issue(created_datetime=self.OLD_ISSUE_CREATED_STR)
     issue['messages'].append({
@@ -157,8 +193,9 @@ vars = {
                    'open a new roll.')
     self._arb._rietveld.add_comment(issue['issue'], comment_str)
     self._arb._rietveld.close_issue(issue['issue'])
+    self._upload_issue()
     self.mox.ReplayAll()
-    self.assertEquals(self._arb.main(), 1)
+    self.assertEquals(self._arb.main(), 0)
     self.checkstdout('https://codereview.chromium.org/%d/ started %s ago\n'
                      'Closing https://codereview.chromium.org/%d/ with message:'
                      ' \'%s\'\n'
@@ -176,8 +213,9 @@ vars = {
     comment_str = 'No longer marked for the CQ. Closing, will open a new roll.'
     self._arb._rietveld.add_comment(issue['issue'], comment_str)
     self._arb._rietveld.close_issue(issue['issue'])
+    self._upload_issue()
     self.mox.ReplayAll()
-    self.assertEquals(self._arb.main(), 1)
+    self.assertEquals(self._arb.main(), 0)
     self.checkstdout('Closing https://codereview.chromium.org/%d/ with message:'
                      ' \'%s\'\n' % (issue['issue'], comment_str))
 
@@ -211,40 +249,7 @@ Date:   Wed Apr 2 14:00:14 2014 -0400
 
   def test_upload_issue(self):
     self._arb._rietveld.search(owner=self.TEST_AUTHOR, closed=2).AndReturn([])
-    deps_content = '''
-vars = {
-  "test_project_revision": "1234",
-}
-'''
-    auto_roll.subprocess.check_output(
-        ['svn', 'cat', self._arb.CHROMIUM_SVN_DEPS_URL]).AndReturn(deps_content)
-    auto_roll.subprocess.check_call(
-        ['git', '--git-dir', './third_party/test_project/.git', 'fetch'])
-    git_log = '''
-commit abcde
-Author: Test Author <test_author@example.com>
-Date:   Wed Apr 2 14:00:14 2014 -0400
-
-    Make some changes.
-
-    git-svn-id: svn://svn.url/trunk@1236 abcdefgh-abcd-abcd-abcd-abcdefghijkl
-'''
-    auto_roll.subprocess.check_output(
-        ['git', '--git-dir', './third_party/test_project/.git', 'show', '-s',
-         'origin/master']).AndReturn(git_log)
-    sheriff_webkit_contents = 'document.write(\'test_sheriff@example.com\')'
-    auto_roll.urllib2.urlopen(
-        'http://build.chromium.org/p/chromium.webkit/sheriff_webkit.js'
-        ).AndReturn(self.MockFile(sheriff_webkit_contents))
-    auto_roll.subprocess.check_call(
-        ['./tools/safely-roll-deps.py', self.TEST_PROJECT, '1236', '--message',
-         'Test_Project roll 1234:1236', '--force', '--cc',
-         'test_sheriff@example.com'])
-    issue = self._make_issue(self.CURRENT_DATETIME_STR)
-    self._arb._rietveld.search(owner=self.TEST_AUTHOR,
-                               closed=2).AndReturn([issue])
-    self._arb._rietveld.add_comment(issue['issue'],
-                                    self._arb.ROLL_BOT_INSTRUCTIONS)
+    self._upload_issue()
     self.mox.ReplayAll()
     self.assertEquals(self._arb.main(), 0)
 
