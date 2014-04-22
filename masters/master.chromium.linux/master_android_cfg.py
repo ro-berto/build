@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from buildbot.schedulers.basic import SingleBranchScheduler
+
 from master import master_config
 from master.factory import annotator_factory
 from master.factory import chromium_factory
@@ -107,6 +109,12 @@ def Update(_config_arg, _active_master, c):
     {'name': 'Android GN', 'recipe': 'chromium_gn'},
   ]
 
+  c['schedulers'].extend([
+      SingleBranchScheduler(name='android_gn',
+                            branch='src',
+                            treeStableTimer=60,
+                            builderNames=['Android GN']),
+  ])
   c['builders'].extend([
       {
         'name': spec['name'],
