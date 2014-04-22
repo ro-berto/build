@@ -440,10 +440,18 @@ def create_less_than_or_equal_regex(number):
 
 def get_svn_rev(git_hash, dir_name):
   pattern = r'^\s*git-svn-id: [^ ]*@(\d+) '
+  lkcr_pattern = r'^\s*LK[CG]R w/ DEPS up to revision (\d+)'
   log = git('log', '-1', git_hash, cwd=dir_name)
   match = re.search(pattern, log, re.M)
   if not match:
-    return None
+    # This might be a patched checkout, try the parent commit.
+    log = git('log', '-1', '%s^' % git_hash, cwd=dir_name)
+    match = re.search(pattern, log, re.M)
+    if not match:
+      # Might be patched on top of LKCR, which has a special message.
+      match = re.search(lkcr_pattern, log, re.M)
+      if not match:
+        return None
   return int(match.group(1))
 
 
@@ -638,9 +646,9 @@ def apply_issue_rietveld(issue, patchset, root, server, rev_map, revision):
        '--patchset', patchset,
        '--no-auth',
        '--server', server,
-       '--revision-mapping', rev_map,
        '--base_ref', revision,
-       '--force')
+       '--force',
+       '--ignore_deps')
 
 
 def check_flag(flag_file):
@@ -840,8 +848,10 @@ def main():
 
   # If we're fed an svn revision number as --revision, then our got_revision
   # output should be in svn revs.  Otherwise it'll be in git hashes.
-  use_svn_rev = (options.revision and options.revision.isdigit() and
+  use_svn_rev = ((options.revision and options.revision.isdigit() and
                  len(options.revision) < 40)
+                 # TODO(hinoka): HACK - Remove this follow bit on flag day.
+                 or options.revision == 'origin/lkcr')
   # Take care of got_revisions outputs.
   revision_mapping = get_revision_mapping(svn_root, options.revision_mapping)
   got_revisions = parse_got_revision(gclient_output, revision_mapping,
