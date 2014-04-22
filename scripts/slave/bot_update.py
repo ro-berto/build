@@ -118,7 +118,11 @@ ENABLED_SLAVES = {
         'vm928-m1',   # Chromium Linux Buildrunner
         'vm859-m1',   # Chromium Linux Redux
         'vm933-m1',   # ChromiumOS Linux Tests
-    ]
+    ],
+
+    # Tryserver bots need to be enabled on a bot basis to make sure checkouts
+    # on the same bot do not conflict.
+    'tryserver.chromium': ['slave%d-c4' % i for i in range(250, 256)],
 }
 
 # Disabled filters get run AFTER enabled filters, so for example if a builder
