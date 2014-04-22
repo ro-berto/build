@@ -243,7 +243,6 @@ def main(argv):
       'master.client.v8.branches': 'V8Branches',
       'master.client.webrtc': 'WebRTC',
       'master.client.webrtc.fyi': 'WebRTCFYI',
-      'master.devtools': 'DevTools',
       'master.experimental': 'Experimental',
       'master.push.canary': 'PushCanary',
       'master.tryserver.chromium': 'TryServer',

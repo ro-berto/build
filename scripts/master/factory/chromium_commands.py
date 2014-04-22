@@ -66,7 +66,6 @@ class ChromiumCommands(commands.FactoryCommands):
     self._layout_test_tool = J(s_dir, 'layout_test_wrapper.py')
     self._lint_test_files_tool = J(s_dir, 'lint_test_files_wrapper.py')
     self._test_webkitpy_tool = J(s_dir, 'test_webkitpy_wrapper.py')
-    self._devtools_perf_test_tool = J(s_dir, 'devtools_perf_test_wrapper.py')
     self._archive_coverage = J(s_dir, 'archive_coverage.py')
     self._gpu_archive_tool = J(s_dir, 'archive_gpu_pixel_test_results.py')
     self._cf_archive_tool = J(s_dir, 'cf_archive_build.py')
@@ -845,18 +844,6 @@ class ChromiumCommands(commands.FactoryCommands):
                               step_name=step_name, timeout=timeout,
                               tool_opts=tool_options, py_script=True,
                               dashboard_url=dashboard_url)
-
-  def AddDevToolsTests(self, factory_properties=None):
-    factory_properties = factory_properties or {}
-
-    args = ['--target', self._target]
-
-    self.AddAnnotatedPerfStep('devtools_perf', None, 'graphing',
-                              step_name='DevTools.PerfTest',
-                              cmd_name = self._devtools_perf_test_tool,
-                              cmd_options=args,
-                              py_script=True,
-                              factory_properties=factory_properties)
 
   def AddBisectTest(self):
     """Adds a step to the factory to run a bisection on a range of revisions
