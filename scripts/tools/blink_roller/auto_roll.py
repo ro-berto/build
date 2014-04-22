@@ -20,6 +20,7 @@ in-progress DEPS roll CLs and the state of the repository:
 
 
 import datetime
+import json
 import optparse
 import os.path
 import re
@@ -49,12 +50,19 @@ PROJECT_CONFIGS = {
             before_rev, after_rev),
   },
   'skia': {
+    'extra_emails_fn': lambda: [get_skia_sheriff()],
     'path_to_project': os.path.join('third_party', 'skia', 'src'),
     'revision_link_fn': lambda before_rev, after_rev: (
         'https://code.google.com/p/skia/source/list?num=%d&start=%s') % (
-            int(after_rev) - int(before_rev) - 1, after_rev)
+            int(after_rev) - int(before_rev) - 1, after_rev),
   },
 }
+
+
+def get_skia_sheriff():
+  """Find and return the current Skia sheriff."""
+  skia_sheriff_url = 'https://skia-tree-status.appspot.com/current-sheriff'
+  return json.load(urllib2.urlopen(skia_sheriff_url))['username']
 
 
 class SheriffCalendar(object):
@@ -139,6 +147,7 @@ class AutoRoller(object):
     self._project_alias = project_config.get('project_alias', self._project)
     self._path_to_project = project_config['path_to_project']
     self._get_revision_link = project_config['revision_link_fn']
+    self._get_extra_emails = project_config.get('extra_emails_fn', lambda: [])
 
   def _parse_time(self, time_string):
     return datetime.datetime.strptime(time_string, self.RIETVELD_TIME_FORMAT)
@@ -201,22 +210,18 @@ class AutoRoller(object):
       git_log, re.MULTILINE)
     return int(match.group('svn_revision'))
 
-  @classmethod
-  def _emails_to_cc_on_rolls(cls):
+  def _emails_to_cc_on_rolls(self):
     calendar = SheriffCalendar()
     emails = []
     gardener_emails = calendar.current_gardener_emails()
     if gardener_emails:
       emails.extend(gardener_emails)
-    # We could CC the chromium sheriffs if they would like.
-    # sheriff_emails = calendar.current_sheriff_emails()
-    # if sheriff_emails:
-    #     emails.extend(sheriff_emails)
+    emails.extend(self._get_extra_emails())
     return emails
 
   def _start_roll(self, new_roll_revision, commit_msg):
-    safely_roll_path = \
-      self._path_from_chromium_root('tools', 'safely-roll-deps.py')
+    safely_roll_path = (
+        self._path_from_chromium_root('tools', 'safely-roll-deps.py'))
     safely_roll_args = [safely_roll_path, self._project_alias,
                         new_roll_revision, '--message', commit_msg, '--force']
 
