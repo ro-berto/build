@@ -18,9 +18,6 @@ def base_config(c):
 
   if c.HOST_PLATFORM != 'linux':
     raise recipe_config.BadConf('Can only build android on linux.')
-  if c.TARGET_BITS != 32:
-    raise recipe_config.BadConf('Android cannot target %d bits' % c.TARGET_BITS)
-
 
 @CONFIG_CTX(includes=['base_config', 'default_compiler', 'goma'])
 def main_builder(c):
@@ -69,6 +66,14 @@ def arm_builder(c):
   gyp_defs['android_sdk_version'] = '19'
   gyp_defs['android_sdk_root'] = Path(
     '[CHECKOUT]', 'third_party', 'android_tools', 'sdk')
+
+@CONFIG_CTX(includes=['base_config', 'default_compiler', 'goma'],
+            config_vars={'TARGET_ARCH': 'intel', 'TARGET_BITS': 64})
+def x64_builder(c):
+  if c.TARGET_ARCH != 'intel' or c.TARGET_BITS != 64:
+    raise recipe_config.BadConf(
+      'Cannot target x64 with TARGET_ARCH == %s, TARGET_BITS == %d'
+       % (c.TARGET_ARCH, c.TARGET_BITS))
 
 @CONFIG_CTX(includes=['main_builder'])
 def try_builder(c):

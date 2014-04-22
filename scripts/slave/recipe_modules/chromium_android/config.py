@@ -113,6 +113,14 @@ def arm_builder(c):
   pass
 
 @config_ctx()
+def x64_base(c):
+  pass
+
+@config_ctx(includes=['x64_base'])
+def x64_builder(c):
+  pass
+
+@config_ctx()
 def try_base(c):
   if c.INTERNAL:
     c.apply_svn_patch = True

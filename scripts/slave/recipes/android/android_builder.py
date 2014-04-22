@@ -58,7 +58,7 @@ def GenTests(api):
   bot_ids = ['main_builder', 'component_builder', 'clang_builder',
              'clang_release_builder', 'x86_builder', 'arm_builder',
              'try_builder', 'x86_try_builder', 'dartium_builder',
-             'mipsel_builder']
+             'mipsel_builder', 'x64_builder']
 
   for bot_id in bot_ids:
     props = api.properties(
