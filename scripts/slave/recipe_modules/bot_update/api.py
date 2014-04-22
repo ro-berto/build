@@ -27,7 +27,9 @@ ENABLED_BUILDERS = {
         'Linux Builder',
     ]
 }
-ENABLED_SLAVES = {}
+ENABLED_SLAVES = {
+    'tryserver.chromium': ['slave%d-c4' % i for i in range(250, 256)]
+}
 
 
 # This is just for testing, to indicate if a master is using a Git scheduler
