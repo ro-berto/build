@@ -308,6 +308,13 @@ class GpuApi(recipe_api.RecipeApi):
                                     test_type='tab_capture_performance_tests',
                                     spawn_dbus=True)
 
+    yield self._maybe_run_isolate(
+        'browser_tests',
+        args=['--enable-gpu',
+              '--gtest_filter=TabCaptureApiTest.EndToEnd'],
+        name='tab_capture_end2end_tests',
+        spawn_dbus=True)
+
     # TODO(kbr): after the conversion to recipes, add all GPU related
     # steps from the main waterfall, like gpu_unittests.
 
