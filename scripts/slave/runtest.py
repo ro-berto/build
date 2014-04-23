@@ -3,10 +3,10 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-"""A tool to run a chrome test executable, used by the buildbot slaves.
+"""A tool used to run a Chrome test executable and process the output.
 
-When this is run, the current directory (cwd) should be the outer build
-directory (e.g., chrome-release/build/).
+This script is used by the buildbot slaves. It must be run from the outer
+build directory, e.g. chrome-release/build/.
 
 For a list of command-line options, call this script with '--help'.
 """
@@ -24,6 +24,8 @@ import stat
 import sys
 import tempfile
 
+# The following note was added in 2010 by nsylvain:
+#
 # sys.path needs to be modified here because python2.6 automatically adds the
 # system "google" module (/usr/lib/pymodules/python2.6/google) to sys.modules
 # when we import "chromium_config" (I don't know why it does this). This causes
@@ -36,9 +38,6 @@ import tempfile
 # which I really don't understand).
 sys.path.insert(0, os.path.abspath('src/tools/python'))
 
-# Because of this dependency on a chromium checkout, we need to disable some
-# pylint checks (no modules httpd_utils, platform_utils in module 'google').
-# pylint: disable=E0611
 from common import chromium_utils
 from common import gtest_utils
 import config
@@ -55,14 +54,17 @@ USAGE = '%s [options] test.exe [test args]' % os.path.basename(sys.argv[0])
 
 CHROME_SANDBOX_PATH = '/opt/chromium/chrome_sandbox'
 
+# Directory to write JSON for test results into.
 DEST_DIR = 'gtest_results'
 
+# Names of httpd configuration file under different platforms.
 HTTPD_CONF = {
     'linux': 'httpd2_linux.conf',
     'mac': 'httpd2_mac.conf',
     'win': 'httpd.conf'
 }
 
+# The directory that this script is in.
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -118,12 +120,12 @@ def _LaunchDBus():
       print 'DBUS_SESSION_BUS_ADDRESS env var not found, starting dbus-launch'
       dbus_output = subprocess.check_output(['dbus-launch']).split('\n')
       for line in dbus_output:
-        m = re.match(r"([^=]+)\=(.+)", line)
+        m = re.match(r'([^=]+)\=(.+)', line)
         if m:
           os.environ[m.group(1)] = m.group(2)
           print ' setting %s to %s' % (m.group(1), m.group(2))
       return True
-    except (subprocess.CalledProcessError, OSError), e:
+    except (subprocess.CalledProcessError, OSError) as e:
       print 'Exception while running dbus_launch: %s' % e
   return False
 
@@ -145,7 +147,7 @@ def _ShutdownDBus():
     try:
       os.kill(int(dbus_pid), signal.SIGTERM)
       print ' killed dbus-daemon with PID %s' % dbus_pid
-    except OSError, e:
+    except OSError as e:
       print ' error killing dbus-daemon with PID %s: %s' % (dbus_pid, e)
   # Try to clean up any stray DBUS_SESSION_BUS_ADDRESS environment
   # variable too. Some of the bots seem to re-invoke runtest.py in a
@@ -155,8 +157,18 @@ def _ShutdownDBus():
     print ' cleared DBUS_SESSION_BUS_ADDRESS environment variable'
 
 
-def _RunGTestCommand(command, results_tracker=None, pipes=None,
-                     extra_env=None):
+def _RunGTestCommand(command, results_tracker=None, pipes=None, extra_env=None):
+  """Runs a test, printing and possibly processing the output.
+
+  Args:
+    command: A list of strings in a command (the command and its arguments).
+    results_tracker: A "log processor" class which has the ProcessLine method.
+    pipes: A list of command string lists which the output will be piped to.
+    extra_env: A dictionary of extra environment variables to set.
+
+  Returns:
+    The process return code.
+  """
   env = os.environ.copy()
   env.update(extra_env or {})
 
@@ -175,32 +187,43 @@ def _RunGTestCommand(command, results_tracker=None, pipes=None,
 
 
 def _GetMaster():
+  """Returns a master name as listed in the slaves.cfg file."""
   return slave_utils.GetActiveMaster()
 
 
 def _GetMasterString(master):
+  """Returns a message describing what the master is."""
   return '[Running for master: "%s"]' % master
 
 
 def _IsGitDirectory(dir_path):
-  """Returns true if the given directory is in a git repository.
+  """Checks whether the given directory is in a git repository.
 
   Args:
     dir_path: The directory path to be tested.
+
+  Returns:
+    True if given directory is in a git repository, False otherwise.
   """
   if os.path.exists(os.path.join(dir_path, '.git')):
     return True
   parent = os.path.dirname(dir_path)
+  # The parent path of / is /. Stop if we've reached the root.
   if parent == dir_path:
     return False
   return _IsGitDirectory(parent)
 
 
 def _GetSvnRevision(in_directory):
-  """Returns the svn revision for the given directory.
+  """Returns the SVN revision (or git SHA1 hash) for the given directory.
 
   Args:
-    in_directory: The directory where svn is to be run.
+    in_directory: A directory in the repository to be checked.
+
+  Returns:
+    An SVN revision as a string if the given directory is in a SVN repository,
+    a git SHA1 hash if the given directory is in a git repository, or an empty
+    string if the revision number couldn't be found.
   """
   import subprocess
   import xml.dom.minidom
@@ -229,7 +252,8 @@ def _GetGitRevision(in_directory):
   Args:
     in_directory: The directory where git is to be run.
 
-  Returns the git SHA1 hash string.
+  Returns:
+    The git SHA1 hash string.
   """
   import subprocess
   command_line = ['git', 'log', '-1', '--pretty=oneline']
@@ -241,21 +265,20 @@ def _GetGitRevision(in_directory):
 
 
 def _GenerateJSONForTestResults(options, results_tracker):
-  """Generate (update) a JSON file from the gtest results XML and
-  upload the file to the archive server.
-  The archived JSON file will be placed at:
-  www-dir/DEST_DIR/buildname/testname/results.json
-  on the archive server (NOTE: this is to be deprecated).
-  Note that it adds slave's WebKit/Tools/Scripts to the PYTHONPATH
-  to run the JSON generator.
+  """Generates or updates a JSON file from the gtest results XML and upload the
+  file to the archive server.
 
-  Returns True upon success, False upon failure.
+  The archived JSON file will be placed at:
+    www-dir/DEST_DIR/buildname/testname/results.json
+  on the archive server. NOTE: This will be deprecated.
 
   Args:
     options: command-line options that are supposed to have build_dir,
         results_directory, builder_name, build_name and test_output_xml values.
+
+  Returns:
+    True upon success, False upon failure.
   """
-  # pylint: disable=W0703
   results_map = None
   try:
     if (os.path.exists(options.test_output_xml) and
@@ -272,7 +295,7 @@ def _GenerateJSONForTestResults(options, results_tracker):
       # The file did not get generated. See if we can generate a results map
       # from the log output.
       results_map = gtest_slave_utils.GetResultsMap(results_tracker)
-  except Exception, e:
+  except Exception as e:
     # This error will be caught by the following 'not results_map' statement.
     print 'Error: ', e
 
@@ -315,7 +338,7 @@ def _GenerateJSONForTestResults(options, results_tracker):
     generator = gtest_slave_utils.GenerateJSONResults(
         results_map, generate_json_options)
 
-  except Exception, e:  # pylint: disable=W0702
+  except Exception as e:
     print 'Unexpected error while generating JSON: %s' % e
     return False
 
@@ -327,7 +350,7 @@ def _GenerateJSONForTestResults(options, results_tracker):
   try:
     # Upload results JSON file to the appspot server.
     gtest_slave_utils.UploadJSONResults(generator)
-  except Exception, e:  # pylint: disable=W0702
+  except Exception as e:
     # Consider this non-fatal for the moment.
     print 'Unexpected error while uploading JSON: %s' % e
 
@@ -340,7 +363,7 @@ def _BuildParallelCommand(build_dir, test_exe_path, options):
   Args:
     build_dir: Path to the tools/build directory.
     test_exe_path: Path to test command binary.
-    options: Options passed this invocation of runtest.py.
+    options: Options passed for this invocation of runtest.py.
 
   Returns:
     A command, represented as a list of command parts.
@@ -398,9 +421,24 @@ def _BuildParallelCommand(build_dir, test_exe_path, options):
 
 
 def _StartHttpServer(platform, build_dir, test_exe_path, document_root):
-  # pylint: disable=F0401
+  """Starts an Apache HTTP server instance.
+
+  Args:
+    platform: A string describing the platform: linux, mac or win.
+    build_dir: Path of build directory.
+    test_exe_path: Path to the test executable file.
+    document_root: Document root to use for the HTTP server.
+
+  Returns:
+    The google.http_utils.ApacheHttpd instance that was created.
+  """
+  # The following warnings are related to the fact that another module named
+  # "google" is in the module search path. See the note at the top of this file.
+  # E0611: No name in module. F0401: Unable to import.
+  # pylint: disable=E0611,F0401
   import google.httpd_utils
   import google.platform_utils
+  # pylint: enable=E0611,F0401
   platform_util = google.platform_utils.PlatformUtility(build_dir)
 
   # Name the output directory for the exe, without its path or suffix.
@@ -434,14 +472,14 @@ def _StartHttpServer(platform, build_dir, test_exe_path, document_root):
   http_server = google.httpd_utils.ApacheHttpd(start_cmd, stop_cmd, [8000])
   try:
     http_server.StartServer()
-  except google.httpd_utils.HttpdNotStarted, e:
+  except google.httpd_utils.HttpdNotStarted as e:
     raise google.httpd_utils.HttpdNotStarted('%s. See log file in %s' %
                                              (e, output_dir))
   return http_server
 
 
 def _UsingGtestJson(options):
-  """Returns true if we're using gtest JSON summary."""
+  """Returns True if we're using GTest JSON summary."""
   return (options.annotate == 'gtest' and
           not options.run_python_script and
           not options.run_shell_script)
@@ -461,8 +499,11 @@ def _GetParsers():
 def _ListParsers(selection):
   """Prints a list of available log parser classes iff the input is 'list'.
 
+  Args:
+    selection: A log parser name, or the string "list".
+
   Returns:
-    True iff the input is 'list' (meaning that a list was printed).
+    True if a list was printed, False otherwise.
   """
   parsers = _GetParsers()
   shouldlist = selection and selection == 'list'
@@ -484,19 +525,19 @@ def _SelectResultsTracker(options):
   Returns:
     A log parser class (aka results tracker class), or None.
   """
-  if (_UsingGtestJson(options)):
+  if _UsingGtestJson(options):
     return gtest_utils.GTestJSONParser
 
   parsers = _GetParsers()
   if options.annotate:
     if options.annotate in parsers:
       if options.generate_json_file and options.annotate != 'gtest':
-        raise NotImplementedError("'%s' doesn't make sense with "
-                                  "options.generate_json_file")
+        raise NotImplementedError('"%s" doesn\'t make sense with '
+                                  'options.generate_json_file.')
       else:
         return parsers[options.annotate]
     else:
-      raise KeyError("'%s' is not a valid GTest parser!!" % options.annotate)
+      raise KeyError('"%s" is not a valid GTest parser!' % options.annotate)
   elif options.generate_json_file:
     return parsers['gtest']
 
@@ -528,7 +569,7 @@ def _CreateResultsTracker(tracker_class, options):
         webkit_dir = chromium_utils.FindUpward(
             build_dir, 'third_party', 'WebKit', 'Source')
         webkit_revision = _GetSvnRevision(webkit_dir)
-      except:  # pylint: disable=W0702
+      except Exception:
         webkit_revision = 'undefined'
 
     if options.revision:
@@ -612,6 +653,7 @@ def _SendResultsToDashboard(results_tracker, system, test, url, build_dir,
 
 
 def _BuildCoverageGtestExclusions(options, args):
+  """Appends a list of GTest exclusion filters to the args list."""
   gtest_exclusions = {
     'win32': {
       'browser_tests': (
@@ -657,10 +699,10 @@ def _UploadProfilingData(options, args):
     return 0
 
   gtest_filter = args[1]
-  if (gtest_filter is None):
+  if gtest_filter is None:
     return 0
   gtest_name = ''
-  if (gtest_filter.find('StartupTest.*') > -1):
+  if gtest_filter.find('StartupTest.*') > -1:
     gtest_name = 'StartupTest'
   else:
     return 0
@@ -686,7 +728,7 @@ def _UploadProfilingData(options, args):
 
 
 def _UploadGtestJsonSummary(json_path, build_properties, test_exe):
-  """Archives gtest results to Google Storage."""
+  """Archives GTest results to Google Storage."""
   if not os.path.exists(json_path):
     return
 
@@ -779,7 +821,7 @@ def _UploadGtestJsonSummary(json_path, build_properties, test_exe):
 
 
 def _GenerateRunIsolatedCommand(build_dir, test_exe_path, options, command):
-  """Convert the command to run through the run isolate script.
+  """Converts the command to run through the run isolate script.
 
   All commands are sent through the run isolated script, in case
   they need to be run in isolate mode.
@@ -804,7 +846,6 @@ def _MainParse(options, _args):
   This doesn't execute a test, but reads test input from a file and runs it
   through the specified annotation parser.
   """
-
   if not options.annotate:
     raise chromium_utils.MissingArgument('--parse-input doesn\'t make sense '
                                          'without --annotate.')
@@ -849,6 +890,7 @@ def _MainParse(options, _args):
 
 
 def _MainMac(options, args):
+  """Runs the test on mac."""
   if len(args) < 1:
     raise chromium_utils.MissingArgument('Usage: %s' % USAGE)
 
@@ -945,6 +987,7 @@ def _MainMac(options, args):
 
 
 def _MainIOS(options, args):
+  """Runs the test on iOS."""
   if len(args) < 1:
     raise chromium_utils.MissingArgument('Usage: %s' % USAGE)
 
@@ -1034,7 +1077,7 @@ def _MainIOS(options, args):
   for a_dir in dirs_to_cleanup:
     try:
       chromium_utils.RemoveDirectory(a_dir)
-    except OSError, e:
+    except OSError as e:
       print >> sys.stderr, e
       # Don't fail.
 
@@ -1042,6 +1085,7 @@ def _MainIOS(options, args):
 
 
 def _MainLinux(options, args):
+  """Runs the test on Linux."""
   if len(args) < 1:
     raise chromium_utils.MissingArgument('Usage: %s' % USAGE)
 
@@ -1226,6 +1270,13 @@ def _MainWin(options, args):
   Using the target build configuration, run the executable given in the
   first non-option argument, passing any following arguments to that
   executable.
+
+  Args:
+    options: Command-line options for this invocation of runtest.py.
+    args: Command and arguments for the test.
+
+  Returns:
+    Exit status code.
   """
   if len(args) < 1:
     raise chromium_utils.MissingArgument('Usage: %s' % USAGE)
@@ -1340,9 +1391,16 @@ def _MainWin(options, args):
 def _MainAndroid(options, args):
   """Runs tests on android.
 
-  Running GTest-based tests is different than on linux as it requires
+  Running GTest-based tests on android is different than on Linux as it requires
   src/build/android/test_runner.py to deploy and communicate with the device.
-  Python scripts are the same as with linux.
+  Python scripts are the same as with Linux.
+
+  Args:
+    options: Command-line options for this invocation of runtest.py.
+    args: Command and arguments for the test.
+
+  Returns:
+    Exit status code.
   """
   if options.run_python_script:
     return _MainLinux(options, args)
@@ -1402,6 +1460,9 @@ def main():
     (1) Sets up the command-line options.
     (2) Sets environment variables based on those options.
     (3) Delegates to the platform-specific main functions.
+
+  Returns:
+    Exit code for this script.
   """
   import platform
 
@@ -1494,12 +1555,13 @@ def main():
                            help='The name of the slave running this script.')
   option_parser.add_option('--master-class-name', default=None,
                            help='The class name of the buildbot master running '
-                           'this script: examples include "Chromium", '
-                           '"ChromiumWebkit", and "ChromiumGPU". The flakiness '
-                           'dashboard uses this value to categorize results. '
-                           'See buildershandler.py in the flakiness dashboard '
-                           'code (use codesearch) for the known values. '
-                           'Defaults to fetching it from slaves.cfg.')
+                                'this script: examples include "Chromium", '
+                                '"ChromiumWebkit", and "ChromiumGPU". The '
+                                'flakiness dashboard uses this value to '
+                                'categorize results. See buildershandler.py '
+                                'in the flakiness dashboard code '
+                                '(use codesearch) for the known values. '
+                                'Defaults to fetching it from slaves.cfg.')
   option_parser.add_option('--build-number', default=None,
                            help=('The build number of the builder running'
                                  'this script.'))
