@@ -144,6 +144,7 @@ DISABLED_BUILDERS = {
     'tryserver.chromium': [
         # Disabled because it uses cros.DEPS.
         'linux_chromeos_clang',
+        'linux_chromeos_asan',
         # While these work, its disabled because it shares folders with
         # linux_chromeos_clang.
         'linux_chromium_chromeos_clang_rel',
