@@ -15,7 +15,6 @@ class WebRTCApi(recipe_api.RecipeApi):
       'common_video_unittests',
       'modules_tests',
       'modules_unittests',
-      'neteq_unittests',
       'system_wrappers_unittests',
       'test_support_unittests',
       'tools_unittests',

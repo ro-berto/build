@@ -80,7 +80,6 @@
       "libjingle_unittest",
       "modules_tests",
       "modules_unittests",
-      "neteq_unittests",
       "system_wrappers_unittests",
       "test_support_unittests",
       "tools_unittests",
@@ -311,25 +310,6 @@
       "modules_unittests"
     ],
     "name": "modules_unittests"
-  },
-  {
-    "always_run": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Release",
-      "--no-xvfb",
-      "--factory-properties",
-      "{\"buildername\": \"linux_asan\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--build-properties",
-      "{\"buildername\": \"linux_asan\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--builder-name=linux_asan",
-      "--slave-name=slavename",
-      "neteq_unittests"
-    ],
-    "name": "neteq_unittests"
   },
   {
     "always_run": true,

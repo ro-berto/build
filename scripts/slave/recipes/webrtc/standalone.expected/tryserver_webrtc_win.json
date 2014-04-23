@@ -80,7 +80,6 @@
       "libjingle_unittest",
       "modules_tests",
       "modules_unittests",
-      "neteq_unittests",
       "system_wrappers_unittests",
       "test_support_unittests",
       "tools_unittests",
@@ -301,24 +300,6 @@
       "modules_unittests.exe"
     ],
     "name": "modules_unittests"
-  },
-  {
-    "always_run": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]\\scripts\\slave\\runtest.py",
-      "--target",
-      "Debug",
-      "--factory-properties",
-      "{\"buildername\": \"win\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--build-properties",
-      "{\"buildername\": \"win\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--builder-name=win",
-      "--slave-name=slavename",
-      "neteq_unittests.exe"
-    ],
-    "name": "neteq_unittests"
   },
   {
     "always_run": true,

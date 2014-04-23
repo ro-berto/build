@@ -66,7 +66,6 @@
       "libjingle_unittest",
       "modules_tests",
       "modules_unittests",
-      "neteq_unittests",
       "system_wrappers_unittests",
       "test_support_unittests",
       "tools_unittests",
@@ -285,25 +284,6 @@
       "modules_unittests"
     ],
     "name": "modules_unittests"
-  },
-  {
-    "always_run": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Release",
-      "--no-xvfb",
-      "--factory-properties",
-      "{\"buildername\": \"Linux32 Release\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
-      "--build-properties",
-      "{\"buildername\": \"Linux32 Release\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
-      "--builder-name=Linux32 Release",
-      "--slave-name=slavename",
-      "neteq_unittests"
-    ],
-    "name": "neteq_unittests"
   },
   {
     "always_run": true,

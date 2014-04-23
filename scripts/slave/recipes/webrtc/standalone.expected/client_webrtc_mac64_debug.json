@@ -66,7 +66,6 @@
       "libjingle_unittest",
       "modules_tests",
       "modules_unittests",
-      "neteq_unittests",
       "system_wrappers_unittests",
       "test_support_unittests",
       "tools_unittests",
@@ -276,24 +275,6 @@
       "modules_unittests"
     ],
     "name": "modules_unittests"
-  },
-  {
-    "always_run": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Debug",
-      "--factory-properties",
-      "{\"buildername\": \"Mac64 Debug\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
-      "--build-properties",
-      "{\"buildername\": \"Mac64 Debug\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
-      "--builder-name=Mac64 Debug",
-      "--slave-name=slavename",
-      "neteq_unittests"
-    ],
-    "name": "neteq_unittests"
   },
   {
     "always_run": true,
