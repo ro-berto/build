@@ -1296,11 +1296,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                         mode=None, slave_type='BuilderTester', options=None,
                         compile_timeout=1200, build_url=None, project=None,
                         factory_properties=None):
-    # Make sure the solution is not already there.
-    if 'cros_deps' not in [s.name for s in self._solutions]:
-      self._solutions.append(gclient_factory.GClientSolution(
-          config.Master.trunk_url + '/src/tools/cros.DEPS', name='cros_deps'))
-
     return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
                                 options, compile_timeout, build_url, project,
                                 factory_properties)
@@ -1354,10 +1349,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                             mode=None, slave_type='BuilderTester', options=None,
                             compile_timeout=1200, build_url=None, project=None,
                             factory_properties=None):
-    # Make sure the solution is not already there.
-    if 'cros_deps' not in [s.name for s in self._solutions]:
-      self._solutions.append(gclient_factory.GClientSolution(
-          config.Master.trunk_url + '/src/tools/cros.DEPS', name='cros_deps'))
     return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
                                 options, compile_timeout, build_url, project,
                                 factory_properties)
