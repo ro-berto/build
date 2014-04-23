@@ -297,12 +297,9 @@ class TryJobBase(TryBase):
       return defer.succeed(0)
 
     def Success(result):
-      try:
-        new_value = int(result.strip())
-      except (TypeError, ValueError):
-        new_value = None
+      new_value = result.strip()
       if new_value and (not self._last_lkgr[project] or
-                        new_value > self._last_lkgr[project]):
+                        new_value != self._last_lkgr[project]):
         self._last_lkgr[project] = new_value
       options['revision'] = self._last_lkgr[project] or 'HEAD'
 
