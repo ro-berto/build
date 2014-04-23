@@ -3789,3 +3789,30 @@ index 0b6d388..d5c18ba 100644
      def _process_changes_failure(self, f):
          log.msg('gitpoller: repo poll failed')
          log.err(f)
+
+
+Fix broken links to step names with '/' characters in them.
+
+diff --git a/third_party/buildbot_8_4p1/buildbot/status/web/build.py b/third_party/buildbot_8_4p1/buildbot/status/web/build.py
+index c634060..711d36a 100644
+--- a/third_party/buildbot_8_4p1/buildbot/status/web/build.py
++++ b/third_party/buildbot_8_4p1/buildbot/status/web/build.py
+@@ -115,7 +115,8 @@ class StatusResourceBuild(HtmlResource):
+ 
+             cxt['steps'].append(step)
+ 
+-            step['link'] = req.childLink("steps/%s" % urllib.quote(s.getName()))
++            step['link'] = req.childLink("steps/%s" % urllib.quote(s.getName(),
++                                                                   safe=''))
+             step['text'] = " ".join(s.getText())
+             step['urls'] = map(lambda x:dict(url=x[1],logname=x[0]), s.getURLs().items())
+ 
+@@ -123,7 +124,7 @@ class StatusResourceBuild(HtmlResource):
+             for l in s.getLogs():
+                 logname = l.getName()
+                 step['logs'].append({ 'link': req.childLink("steps/%s/logs/%s" %
+-                                           (urllib.quote(s.getName()),
++                                           (urllib.quote(s.getName(), safe=''),
+                                             urllib.quote(logname))), 
+                                       'name': logname })
+ 
