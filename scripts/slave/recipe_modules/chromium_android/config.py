@@ -129,6 +129,10 @@ def x64_builder(c):
   pass
 
 @config_ctx()
+def arm64_builder(c):
+  pass
+
+@config_ctx()
 def try_base(c):
   if c.INTERNAL:
     c.apply_svn_patch = True

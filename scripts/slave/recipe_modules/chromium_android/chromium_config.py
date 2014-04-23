@@ -86,6 +86,12 @@ def x64_builder(c):
        % (c.TARGET_ARCH, c.TARGET_BITS))
 
 @CONFIG_CTX(includes=['main_builder'])
+def arm64_builder(c):
+  gyp_defs = c.gyp_env.GYP_DEFINES
+  gyp_defs['OS'] = 'android'
+  gyp_defs['target_arch'] = 'arm64'
+
+@CONFIG_CTX(includes=['main_builder'])
 def try_builder(c):
   pass
 
