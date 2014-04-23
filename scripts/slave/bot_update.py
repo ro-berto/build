@@ -25,6 +25,8 @@ import os.path as path
 
 from common import chromium_utils
 
+# Set this to true on flag day.
+FLAG_DAY = False
 
 CHROMIUM_SRC_URL = 'https://chromium.googlesource.com/chromium/src.git'
 
@@ -152,6 +154,10 @@ DISABLED_BUILDERS = {
     ]
 }
 DISABLED_SLAVES = {}
+
+# These masters work only in Git, meaning for got_revision, always output
+# a git hash rather than a SVN rev. This goes away if flag_day is True.
+GIT_MASTERS = ['chromium.git', 'chrome_git']
 
 # How many times to retry failed subprocess calls.
 RETRIES = 3
@@ -949,11 +955,15 @@ def main():
   gclient_output = gclient_sync(gclient_output_file, buildspec_name)
 
   # If we're fed an svn revision number as --revision, then our got_revision
-  # output should be in svn revs.  Otherwise it'll be in git hashes.
-  use_svn_rev = ((options.revision and options.revision.isdigit() and
-                 len(options.revision) < 40)
-                 # TODO(hinoka): HACK - Remove this follow bit on flag day.
-                 or options.revision == 'origin/lkcr')
+  # output should be in svn revs.  Otherwise it'll be in git hashes, unless
+  # its a git master or past flag day, in which case we always assume git.
+  if master in GIT_MASTERS or FLAG_DAY:
+    use_svn_rev = False
+  else:
+    # Try to detect if the passed in revision is a git hash.
+    use_svn_rev = ((options.revision and options.revision.isdigit() and
+                    len(options.revision) < 40)
+                   or options.revision.lower() in ['head', 'origin/lkcr'])
   # Take care of got_revisions outputs.
   revision_mapping = get_revision_mapping(svn_root, options.revision_mapping)
   got_revisions = parse_got_revision(gclient_output, revision_mapping,
