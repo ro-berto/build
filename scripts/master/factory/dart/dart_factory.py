@@ -552,9 +552,8 @@ class DartUtils(object):
             'arch': v['arch'],
             'name': v['name'],
             'vm_options': v.get('vm_options', None),
+            'checked_config': v.get('checked_config', None),
         }
-        # TODO(ricow) Remove shards from here when we move dart2dart
-        # to annotated.
         if 'shards' in v and 'shard' in v:
           options['shards'] = v['shards']
           options['shard'] = v['shard']

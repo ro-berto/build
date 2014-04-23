@@ -200,27 +200,30 @@ class DartCommands(commands.FactoryCommands):
       cmd += ' --vm-options=%s' % vm_options
     if options.get('flags') != None:
       cmd += options.get('flags')
-    self._factory.addStep(shell.ShellCommand,
-                          name='tests',
-                          description='tests',
-                          timeout=timeout,
-                          env = self._custom_env,
-                          haltOnFailure=False,
-                          workdir=self._dart_build_dir,
-                          command=cmd,
-                          logfiles=self.logfiles,
-                          lazylogfiles=True)
-    cmd += ' --checked'
-    self._factory.addStep(shell.ShellCommand,
-                          name='checked_tests',
-                          description='checked_tests',
-                          timeout=timeout,
-                          env = self._custom_env,
-                          haltOnFailure=False,
-                          workdir=self._dart_build_dir,
-                          command=cmd,
-                          logfiles=self.logfiles,
-                          lazylogfiles=True)
+    checked_config = options.get('checked_config', 'both')
+    if checked_config == 'unchecked' or checked_config == 'both':
+      self._factory.addStep(shell.ShellCommand,
+                            name='tests',
+                            description='tests',
+                            timeout=timeout,
+                            env = self._custom_env,
+                            haltOnFailure=False,
+                            workdir=self._dart_build_dir,
+                            command=cmd,
+                            logfiles=self.logfiles,
+                            lazylogfiles=True)
+    if checked_config == 'checked' or checked_config == 'both':
+      cmd += ' --checked'
+      self._factory.addStep(shell.ShellCommand,
+                            name='checked_tests',
+                            description='checked_tests',
+                            timeout=timeout,
+                            env = self._custom_env,
+                            haltOnFailure=False,
+                            workdir=self._dart_build_dir,
+                            command=cmd,
+                            logfiles=self.logfiles,
+                            lazylogfiles=True)
 
   def AddTests(self, options=None, timeout=1200, channel=None):
     options = options or {}
