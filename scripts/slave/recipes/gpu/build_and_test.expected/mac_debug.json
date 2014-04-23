@@ -118,7 +118,6 @@
       "content_gl_tests_run",
       "gles2_conform_test_run",
       "gl_tests_run",
-      "tab_capture_end2end_tests_run",
       "tab_capture_performance_tests_run",
       "telemetry_gpu_test_run"
     ],
@@ -517,28 +516,5 @@
       "TestBuilder"
     ],
     "name": "gpu_rasterization_tests"
-  },
-  {
-    "always_run": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Debug",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"TestBranch\", \"build_config\": \"Debug\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"mastername\": \"chromium.testing.master\", \"project\": \"\", \"recipe\": \"gpu/build_and_test\", \"repository\": \"svn://svn-mirror.golo.chromium.org/chrome/trunk\", \"revision\": \"204787\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"TestBranch\", \"build_config\": \"Debug\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"mastername\": \"chromium.testing.master\", \"project\": \"\", \"recipe\": \"gpu/build_and_test\", \"repository\": \"svn://svn-mirror.golo.chromium.org/chrome/trunk\", \"revision\": \"204787\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--builder-name=TestBuilder",
-      "--slave-name=TestSlavename",
-      "--build-number=571",
-      "--revision=170242",
-      "--webkit-revision=124383",
-      "browser_tests",
-      "--enable-gpu",
-      "--gtest_filter=TabCaptureApiTest.EndToEnd"
-    ],
-    "name": "tab_capture_end2end_tests"
   }
 ]
