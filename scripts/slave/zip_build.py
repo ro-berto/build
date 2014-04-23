@@ -335,11 +335,13 @@ def Archive(options):
     build_revision = options.build_revision
     webkit_revision = options.webkit_revision
 
-  unversioned_base_name, version_suffix = slave_utils.GetZipFileNames(
-      options.build_properties, build_revision, webkit_revision)
-
   append_deps_patch_sha = options.factory_properties.get(
       'append_deps_patch_sha')
+
+  unversioned_base_name, version_suffix = slave_utils.GetZipFileNames(
+      options.build_properties, build_revision, webkit_revision,
+      use_try_buildnumber=(not append_deps_patch_sha))
+
   if append_deps_patch_sha:
     deps_sha = os.path.join('src', 'DEPS.sha')
     if os.path.exists(deps_sha):
