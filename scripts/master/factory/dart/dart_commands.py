@@ -14,7 +14,6 @@ from buildbot.process.properties import WithProperties
 from master import chromium_step
 from master.factory import commands
 
-
 class DartCommands(commands.FactoryCommands):
   """Encapsulates methods to add dart commands to a buildbot factory."""
 
@@ -23,6 +22,8 @@ class DartCommands(commands.FactoryCommands):
     "debuglog": ".debug.log",
     "testoutcomelog": ".test-outcome.log",
   }
+
+  standard_flags = "--write-debug-log --write-test-outcome-log"
 
   def __init__(self, factory=None, target=None, build_dir=None,
                target_platform=None, env=None):
@@ -137,122 +138,103 @@ class DartCommands(commands.FactoryCommands):
                             workdir=self._dart_build_dir,
                             command=cmd)
 
+  def AddAnalyzerTests(self, options, name, timeout):
+    compiler = 'dartanalyzer'
+    if name.startswith('analyzer_experimental'):
+      compiler = 'dart2analyzer'
+    cmd = ('python ' + self._tools_dir + '/test.py '
+           ' --progress=line --report --time --mode=%s --arch=%s '
+           ' --compiler=%s --runtime=none --failure-summary %s'
+           ) % (options['mode'], options['arch'], compiler,
+                self.standard_flags)
+    self._factory.addStep(shell.ShellCommand,
+                          name='tests',
+                          description='tests',
+                          timeout=timeout,
+                          env = self._custom_env,
+                          haltOnFailure=False,
+                          workdir=self._dart_build_dir,
+                          command=cmd,
+                          logfiles=self.logfiles,
+                          lazylogfiles=True)
+
+  def AddDart2dartTests(self, options, timeout):
+    shards = options.get('shards') or 1
+    shard = options.get('shard') or 1
+    cmd = ('python ' + self._tools_dir + '/test.py '
+           ' --progress=buildbot --report --time --mode=%s --arch=%s '
+           ' --compiler=dart2dart --shards=%s --shard=%s %s'
+           ) % (options['mode'], options['arch'], shards, shard,
+                self.standard_flags)
+    self._factory.addStep(shell.ShellCommand,
+                          name='tests',
+                          description='tests',
+                          timeout=timeout,
+                          env = self._custom_env,
+                          haltOnFailure=False,
+                          workdir=self._dart_build_dir,
+                          command=cmd,
+                          logfiles=self.logfiles,
+                          lazylogfiles=True)
+    cmd += ' --minified'
+    self._factory.addStep(shell.ShellCommand,
+                          name='minified tests',
+                          description='minified tests',
+                          timeout=timeout,
+                          env = self._custom_env,
+                          haltOnFailure=False,
+                          workdir=self._dart_build_dir,
+                          command=cmd,
+                          logfiles=self.logfiles,
+                          lazylogfiles=True)
+
+  def AddVMTests(self, options, timeout):
+    cmd = ('python ' + self._tools_dir + '/test.py '
+           ' --progress=line --report --time --mode=%s --arch=%s '
+           '--compiler=none --runtime=vm --failure-summary %s '
+           '--copy-coredumps'
+           ) % (options['mode'], options['arch'], self.standard_flags)
+
+    vm_options = options.get('vm_options')
+    if vm_options:
+      cmd += ' --vm-options=%s' % vm_options
+    if options.get('flags') != None:
+      cmd += options.get('flags')
+    self._factory.addStep(shell.ShellCommand,
+                          name='tests',
+                          description='tests',
+                          timeout=timeout,
+                          env = self._custom_env,
+                          haltOnFailure=False,
+                          workdir=self._dart_build_dir,
+                          command=cmd,
+                          logfiles=self.logfiles,
+                          lazylogfiles=True)
+    cmd += ' --checked'
+    self._factory.addStep(shell.ShellCommand,
+                          name='checked_tests',
+                          description='checked_tests',
+                          timeout=timeout,
+                          env = self._custom_env,
+                          haltOnFailure=False,
+                          workdir=self._dart_build_dir,
+                          command=cmd,
+                          logfiles=self.logfiles,
+                          lazylogfiles=True)
+
   def AddTests(self, options=None, timeout=1200, channel=None):
     options = options or {}
-    is_dart2dart = (options.get('name') != None and
-                    options.get('name').startswith('dart2dart'))
-    is_new_analyzer = (options.get('name') != None and
-                       options.get('name').startswith('new_analyzer'))
-    is_analyzer_experimental = (options.get('name') != None and
-                                options.get('name')
-                                .startswith('analyzer_experimental'))
-    arch = options.get('arch')
-    if is_new_analyzer or is_analyzer_experimental:
-      compiler = 'dartc'
-      if is_new_analyzer:
-        compiler = 'dartanalyzer'
-      if is_analyzer_experimental:
-        compiler = 'dart2analyzer'
-      runtime = 'none'
-      configuration = (options['mode'], arch, compiler, runtime)
-      base_cmd = ('python ' + self._tools_dir + '/test.py '
-                  ' --progress=line --report --time --mode=%s --arch=%s '
-                  ' --compiler=%s --runtime=%s --failure-summary'
-                 ) % configuration
-    elif is_dart2dart:
-      compiler = 'dart2dart'
-      runtime = 'vm'
-      # TODO(ricow): Remove shard functionality when we move to annotated.
-      shards = 1
-      shard = 1
-      if options.get('shards') != None and options.get('shard') != None:
-        shards = options['shards']
-        shard = options['shard']
-      configuration = (options['mode'], arch, compiler, shards, shard)
-      base_cmd = ('python ' + self._tools_dir + '/test.py '
-                  ' --progress=buildbot --report --time --mode=%s --arch=%s '
-                  ' --compiler=%s --shards=%s --shard=%s') % configuration
-    else:
-      compiler = 'none'
-      runtime = 'vm'
-      configuration = (options['mode'], arch, compiler, runtime)
-      base_cmd = ('python ' + self._tools_dir + '/test.py '
-                  ' --progress=line --report --time --mode=%s --arch=%s '
-                  '--compiler=%s --runtime=%s --failure-summary'
-                 ) % configuration
-      vm_options = options.get('vm_options', None)
-      # Currently we only do this on bleeding since scripts have not landed
-      # on trunk/stable yet.
-      if channel and channel.name == 'be':
-        base_cmd += ' --copy-coredumps'
-      if vm_options:
-        base_cmd += ' --vm-options=%s' % vm_options
+    name = options.get('name') or ''
+    is_dart2dart = name.startswith('dart2dart')
+    is_analyzer = (name.startswith('new_analyzer') or
+                   name.startswith('analyzer_experimental'))
 
-    base_cmd = base_cmd + " --write-debug-log"
-    if channel and channel.name == 'be':
-      base_cmd = base_cmd + " --write-test-outcome-log"
-
-    if is_new_analyzer or is_analyzer_experimental:
-      cmd = base_cmd
-      self._factory.addStep(shell.ShellCommand,
-                            name='tests',
-                            description='tests',
-                            timeout=timeout,
-                            env = self._custom_env,
-                            haltOnFailure=False,
-                            workdir=self._dart_build_dir,
-                            command=cmd,
-                            logfiles=self.logfiles,
-                            lazylogfiles=True)
+    if is_analyzer:
+      self.AddAnalyzerTests(options, name, timeout)
     elif is_dart2dart:
-      cmd = base_cmd
-      self._factory.addStep(shell.ShellCommand,
-                            name='tests',
-                            description='tests',
-                            timeout=timeout,
-                            env = self._custom_env,
-                            haltOnFailure=False,
-                            workdir=self._dart_build_dir,
-                            command=cmd,
-                            logfiles=self.logfiles,
-                            lazylogfiles=True)
-      cmd = base_cmd + ' --minified'
-      self._factory.addStep(shell.ShellCommand,
-                            name='minified tests',
-                            description='minified tests',
-                            timeout=timeout,
-                            env = self._custom_env,
-                            haltOnFailure=False,
-                            workdir=self._dart_build_dir,
-                            command=cmd,
-                            logfiles=self.logfiles,
-                            lazylogfiles=True)
+      self.AddDart2dartTests(options, timeout)
     else:
-      if options.get('flags') != None:
-        base_cmd += options.get('flags')
-      cmd = base_cmd
-      self._factory.addStep(shell.ShellCommand,
-                            name='tests',
-                            description='tests',
-                            timeout=timeout,
-                            env = self._custom_env,
-                            haltOnFailure=False,
-                            workdir=self._dart_build_dir,
-                            command=cmd,
-                            logfiles=self.logfiles,
-                            lazylogfiles=True)
-      # Rerun all tests in checked mode (assertions and type tests).
-      cmd = base_cmd + ' --checked'
-      self._factory.addStep(shell.ShellCommand,
-                            name='checked_tests',
-                            description='checked_tests',
-                            timeout=timeout,
-                            env = self._custom_env,
-                            haltOnFailure=False,
-                            workdir=self._dart_build_dir,
-                            command=cmd,
-                            logfiles=self.logfiles,
-                            lazylogfiles=True)
+      self.AddVMTests(options, timeout)
 
   def AddAnnotatedSteps(self, python_script, timeout=1200, run=1):
     name = 'annotated_steps'
