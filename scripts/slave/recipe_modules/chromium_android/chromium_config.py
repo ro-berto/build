@@ -60,6 +60,16 @@ def dartium_builder(c):
   c.compile_py.default_targets=['chrome_apk', 'content_shell_apk']
 
 @CONFIG_CTX(includes=['main_builder'])
+def cronet_builder(c):
+  c.gyp_env.GYP_DEFINES['icu_use_data_file_flag'] = 0
+  c.compile_py.default_targets=['cronet_sample_apk', 'cronet_sample_test_apk']
+
+@CONFIG_CTX(includes=['cronet_builder'],
+            config_vars={'BUILD_CONFIG': 'Release'})
+def cronet_rel(c):
+  pass
+
+@CONFIG_CTX(includes=['main_builder'])
 def arm_builder(c):
   gyp_defs = c.gyp_env.GYP_DEFINES
   gyp_defs['android_sdk_build_tools_version'] = '19.0.0'

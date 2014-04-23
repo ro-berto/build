@@ -108,6 +108,14 @@ def dartium_builder(c):
   c.deps_file = 'DEPS'
   c.managed = True
 
+@config_ctx(includes=['main_builder'])
+def cronet_builder(c):
+  pass
+
+@config_ctx(includes=['cronet_builder'])
+def cronet_rel(c):
+  pass
+
 @config_ctx()
 def arm_builder(c):
   pass
