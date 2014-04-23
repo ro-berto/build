@@ -200,7 +200,10 @@ class DartCommands(commands.FactoryCommands):
       cmd += ' --vm-options=%s' % vm_options
     if options.get('flags') != None:
       cmd += options.get('flags')
-    checked_config = options.get('checked_config', 'both')
+
+    checked_config = options.get('checked_config')
+    if not checked_config:
+      checked_config = 'both'
     if checked_config == 'unchecked' or checked_config == 'both':
       self._factory.addStep(shell.ShellCommand,
                             name='tests',
