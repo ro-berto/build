@@ -132,7 +132,7 @@ ENABLED_SLAVES = {
 
     # Tryserver bots need to be enabled on a bot basis to make sure checkouts
     # on the same bot do not conflict.
-    'tryserver.chromium': ['slave%d-c4' % i for i in range(250, 300)] +
+    'tryserver.chromium': ['slave%d-c4' % i for i in range(250, 350)] +
                           ['vm%d-m4' % i for i in range(800, 810)] +
                           ['vm%d-m4' % i for i in range(666, 671)]
 }
