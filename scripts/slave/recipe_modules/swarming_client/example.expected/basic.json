@@ -9,14 +9,14 @@
       "--url",
       "https://chromium.googlesource.com/external/swarming.client.git"
     ],
-    "name": "git setup",
+    "name": "git setup (swarming_client)",
     "seed_steps": [
-      "git setup",
-      "git fetch",
-      "git checkout",
-      "git clean",
-      "submodule sync",
-      "submodule update"
+      "git setup (swarming_client)",
+      "git fetch (swarming_client)",
+      "git checkout (swarming_client)",
+      "git clean (swarming_client)",
+      "submodule sync (swarming_client)",
+      "submodule update (swarming_client)"
     ]
   },
   {
@@ -27,7 +27,7 @@
       "master"
     ],
     "cwd": "[SLAVE_BUILD]/swarming.client",
-    "name": "git fetch"
+    "name": "git fetch (swarming_client)"
   },
   {
     "cmd": [
@@ -37,7 +37,7 @@
       "FETCH_HEAD"
     ],
     "cwd": "[SLAVE_BUILD]/swarming.client",
-    "name": "git checkout"
+    "name": "git checkout (swarming_client)"
   },
   {
     "cmd": [
@@ -48,7 +48,7 @@
       "-x"
     ],
     "cwd": "[SLAVE_BUILD]/swarming.client",
-    "name": "git clean"
+    "name": "git clean (swarming_client)"
   },
   {
     "cmd": [
@@ -57,7 +57,7 @@
       "sync"
     ],
     "cwd": "[SLAVE_BUILD]/swarming.client",
-    "name": "submodule sync"
+    "name": "submodule sync (swarming_client)"
   },
   {
     "cmd": [
@@ -68,7 +68,7 @@
       "--recursive"
     ],
     "cwd": "[SLAVE_BUILD]/swarming.client",
-    "name": "submodule update"
+    "name": "submodule update (swarming_client)"
   },
   {
     "cmd": [

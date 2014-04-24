@@ -42,7 +42,8 @@ class SwarmingClientApi(recipe_api.RecipeApi):
     return self.m.git.checkout(
         url='https://chromium.googlesource.com/external/swarming.client.git',
         ref=revision,
-        dir_path=self._client_path)
+        dir_path=self._client_path,
+        step_suffix='swarming_client')
 
   @property
   def path(self):

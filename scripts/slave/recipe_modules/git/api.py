@@ -28,7 +28,7 @@ class GitApi(recipe_api.RecipeApi):
     return self('fetch', 'origin', '--tags', **kwargs)
 
   def checkout(self, url, ref=None, dir_path=None, recursive=False,
-               submodules=True, keep_paths=None):
+               submodules=True, keep_paths=None, step_suffix=None):
     """Returns an iterable of steps to perform a full git checkout.
     Args:
       url (string): url of remote repo to use as upstream
@@ -38,6 +38,8 @@ class GitApi(recipe_api.RecipeApi):
       submodules (bool): whether to sync and update submodules or not
       keep_paths (iterable of strings): paths to ignore during git-clean;
           paths are gitignore-style patterns relative to checkout_path.
+      add_path (string): add path to stepname; this is required if multiple
+          checkout() calls are made by a single recipe
     """
     if not dir_path:
       dir_path = url.rsplit('/', 1)[-1]
@@ -57,9 +59,10 @@ class GitApi(recipe_api.RecipeApi):
       git_setup_args += ['--git_cmd_path',
                          self.m.path['depot_tools'].join('git.bat')]
 
+    step_suffix = '' if step_suffix is  None else ' (%s)' % step_suffix
     steps = [
         self.m.python(
-            'git setup',
+            'git setup%s' % step_suffix,
             self.m.path['build'].join('scripts', 'slave', 'git_setup.py'),
             git_setup_args),
     ]
@@ -90,22 +93,25 @@ class GitApi(recipe_api.RecipeApi):
     fetch_args = ['--recurse-submodules'] if recursive else []
 
     steps.append([
-      self('fetch', 'origin', fetch_ref, *fetch_args, cwd=dir_path),
-      self('checkout', '-f', checkout_ref, cwd=dir_path),
+      self('fetch', 'origin', fetch_ref, *fetch_args, cwd=dir_path,
+           name='git fetch%s' % step_suffix),
+      self('checkout', '-f', checkout_ref, cwd=dir_path,
+           name='git checkout%s' % step_suffix),
     ])
 
     clean_args = list(self.m.itertools.chain(
         *[('-e', path) for path in keep_paths or []]))
 
     steps.append([
-      self('clean', '-f', '-d', '-x', *clean_args, cwd=dir_path),
+      self('clean', '-f', '-d', '-x', *clean_args, cwd=dir_path,
+           name='git clean%s' % step_suffix),
     ])
 
     if submodules:
       steps.append([
-        self('submodule', 'sync', name='submodule sync', cwd=dir_path),
+        self('submodule', 'sync', name='submodule sync%s' % step_suffix, cwd=dir_path),
         self('submodule', 'update', '--init', '--recursive',
-             name='submodule update', cwd=dir_path),
+             name='submodule update%s' % step_suffix, cwd=dir_path),
       ])
 
     return steps
