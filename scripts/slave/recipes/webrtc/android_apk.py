@@ -137,26 +137,26 @@ def GenSteps(api):
   assert bot_config, ('Unrecognized builder name %r for master %r.' %
                       (buildername, mastername))
 
+  # The infrastructure team has recommended not to use git yet on the
+  # bots, but it's very nice to have when testing locally.
+  # To use, pass "use_git=True" as an argument to run_recipe.py.
+  use_git = api.properties.get('use_git', False)
+
   api.webrtc.set_config('webrtc_android_apk',
+                        GIT_MODE=use_git,
                         **bot_config.get('webrtc_config_kwargs', {}))
   if api.tryserver.is_tryserver:
     api.webrtc.apply_config('webrtc_android_apk_try_builder')
 
-    # Replace src/third_party/webrtc with a WebRTC ToT checkout and force the
-    # Chromium code to sync ToT.
-    api.gclient.c.solutions[0].revision = 'HEAD'
-    # TODO(kjellander): Switch to use the webrtc_revision gyp variable in DEPS
-    # as soon we've switched over to use the trunk branch instead of the stable
-    # branch (which is about to be retired).
-    api.gclient.c.solutions[0].custom_deps['src/third_party/webrtc'] += (
-        '@' + api.properties.get('revision'))
+  revision = api.properties.get('revision')
+  assert revision, 'WebRTC revision must be specified as "revision" property"'
 
-  api.step.auto_resolve_conflicts = True
-
+  # Replace src/third_party/webrtc with the specified revision and force the
+  # Chromium code to sync ToT.
+  s = api.gclient.c.solutions
+  s[0].revision = 'HEAD'
+  s[0].custom_vars['webrtc_revision'] = revision
   yield api.gclient.checkout()
-  # Get the synced WebRTC revision (of the src/third_party/webrtc).
-  update_step = api.step_history.last_step()
-  got_revision = update_step.presentation.properties['got_revision']
 
   bot_type = bot_config.get('bot_type', 'builder_tester')
   if bot_type in ['builder', 'builder_tester']:
@@ -177,14 +177,14 @@ def GenSteps(api):
           'package build',
           api.chromium.c.build_config_fs,
           GS_ARCHIVES[bot_config['build_gs_archive']],
-          build_revision=got_revision))
+          build_revision=revision))
 
   if bot_type == 'tester':
     yield(api.archive.download_and_unzip_build(
           'extract build',
           api.chromium.c.build_config_fs,
           GS_ARCHIVES[bot_config['build_gs_archive']],
-          build_revision=got_revision,
+          build_revision=revision,
           abort_on_failure=True))
 
   if bot_type in ['tester', 'builder_tester']:
@@ -219,7 +219,8 @@ def GenTests(api):
                        TARGET_PLATFORM=webrtc_config_kwargs['TARGET_PLATFORM'],
                        TARGET_ARCH=webrtc_config_kwargs['TARGET_ARCH'],
                        TARGET_BITS=webrtc_config_kwargs['TARGET_BITS'],
-                       BUILD_CONFIG=webrtc_config_kwargs['BUILD_CONFIG']) +
+                       BUILD_CONFIG=webrtc_config_kwargs['BUILD_CONFIG'],
+                       revision='12345') +
         api.platform(bot_config['testing']['platform'],
                      webrtc_config_kwargs.get('TARGET_BITS', 64))
       )
@@ -231,8 +232,7 @@ def GenTests(api):
              }))
 
       if mastername.startswith('tryserver'):
-        test += api.properties(revision='12345',
-                               patch_url='try_job_svn_patch')
+        test += api.properties(patch_url='try_job_svn_patch')
 
       yield test
 

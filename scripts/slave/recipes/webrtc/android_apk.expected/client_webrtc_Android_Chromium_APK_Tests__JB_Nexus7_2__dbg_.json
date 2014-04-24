@@ -6,7 +6,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = None\nsolutions = [{'custom_deps': {'src/third_party/webrtc': 'svn://svn-mirror.golo.chromium.org/webrtc/trunk/webrtc'}, 'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}, {'custom_vars': {'root_dir': 'src'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'webrtc-limited', 'url': 'svn://svn-mirror.golo.chromium.org/chrome-internal/trunk/webrtc-limited'}, {'deps_file': 'DEPS', 'managed': True, 'name': 'webrtc.DEPS', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/deps/third_party/webrtc/webrtc.DEPS'}]\ntarget_os = ['android']"
+      "cache_dir = None\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk', 'webrtc_revision': '12345'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}, {'custom_vars': {'root_dir': 'src'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'webrtc-limited', 'url': 'svn://svn-mirror.golo.chromium.org/chrome-internal/trunk/webrtc-limited'}, {'deps_file': 'DEPS', 'managed': True, 'name': 'webrtc.DEPS', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/deps/third_party/webrtc/webrtc.DEPS'}]\ntarget_os = ['android']"
     ],
     "name": "gclient setup"
   },
@@ -20,6 +20,8 @@
       "--nohooks",
       "--delete_unversioned_trees",
       "--force",
+      "--revision",
+      "src@HEAD",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -94,11 +96,11 @@
       "--build-url",
       "gs://chromium-webrtc/android_dbg",
       "--build_revision",
-      "120644",
+      "12345",
       "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"TARGET_ARCH\": \"arm\", \"TARGET_BITS\": 32, \"TARGET_PLATFORM\": \"android\", \"buildername\": \"Android Chromium-APK Tests (JB Nexus7.2)(dbg)\", \"mastername\": \"client.webrtc\", \"parent_buildername\": \"Android Chromium-APK Builder (dbg)\", \"recipe\": \"webrtc/android_apk\"}",
+      "{\"BUILD_CONFIG\": \"Debug\", \"TARGET_ARCH\": \"arm\", \"TARGET_BITS\": 32, \"TARGET_PLATFORM\": \"android\", \"buildername\": \"Android Chromium-APK Tests (JB Nexus7.2)(dbg)\", \"mastername\": \"client.webrtc\", \"parent_buildername\": \"Android Chromium-APK Builder (dbg)\", \"recipe\": \"webrtc/android_apk\", \"revision\": \"12345\"}",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"TARGET_ARCH\": \"arm\", \"TARGET_BITS\": 32, \"TARGET_PLATFORM\": \"android\", \"buildername\": \"Android Chromium-APK Tests (JB Nexus7.2)(dbg)\", \"mastername\": \"client.webrtc\", \"parent_buildername\": \"Android Chromium-APK Builder (dbg)\", \"recipe\": \"webrtc/android_apk\"}"
+      "{\"BUILD_CONFIG\": \"Debug\", \"TARGET_ARCH\": \"arm\", \"TARGET_BITS\": 32, \"TARGET_PLATFORM\": \"android\", \"buildername\": \"Android Chromium-APK Tests (JB Nexus7.2)(dbg)\", \"mastername\": \"client.webrtc\", \"parent_buildername\": \"Android Chromium-APK Builder (dbg)\", \"recipe\": \"webrtc/android_apk\", \"revision\": \"12345\"}"
     ],
     "name": "extract build"
   },
