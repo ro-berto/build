@@ -34,6 +34,7 @@ ENABLED_BUILDERS = {
 ENABLED_SLAVES = {
     'tryserver.chromium': ['slave%d-c4' % i for i in range(250, 350)] +
                           ['slave%d-c4' % i for i in range(102, 121)] +
+                          ['vm%d-m4' % i for i in [468, 469, 497, 502, 503]] +
                           ['vm%d-m4' % i for i in range(800, 810)] +
                           ['vm%d-m4' % i for i in range(666, 671)]
 }
