@@ -136,6 +136,7 @@ ENABLED_SLAVES = {
     # on the same bot do not conflict.
     'tryserver.chromium': ['slave%d-c4' % i for i in range(250, 400)] +
                           ['slave%d-c4' % i for i in range(102, 121)] +
+                          ['vm%d-m4' % i for i in [468, 469, 497, 502, 503]] +
                           ['vm%d-m4' % i for i in range(800, 810)] +
                           ['vm%d-m4' % i for i in range(666, 671)]
 }
