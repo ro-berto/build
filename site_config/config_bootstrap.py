@@ -56,7 +56,7 @@ class Master(config_private.Master):
 
   syzygy_url = 'http://sawbuck.googlecode.com/svn/'
 
-  webrtc_url = 'http://webrtc.googlecode.com/svn'
+  webrtc_url = config_private.Master.googlecode_url % 'webrtc'
   libyuv_url = 'http://libyuv.googlecode.com/svn'
 
   # Default target platform if none was given to the factory.
