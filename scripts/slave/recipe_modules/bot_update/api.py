@@ -25,6 +25,7 @@ ENABLED_BUILDERS = {
         'Linux Builder (dbg)',
         'Linux Builder (dbg)(32)',
         'Linux Builder',
+        'Linux Sync',
     ],
     'chromium.mac': [
         'Mac Builder',
