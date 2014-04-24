@@ -147,6 +147,7 @@ DISABLED_BUILDERS = {
         # Disabled because it uses cros.DEPS.
         'linux_chromeos_clang',
         'linux_chromeos_asan',
+        'linux_chromeos_browser_asan',
         # While these work, its disabled because it shares folders with
         # linux_chromeos_clang.
         'linux_chromium_chromeos_clang_rel',
