@@ -778,6 +778,14 @@ def emit_flag(flag_file):
     f.write('Success!')
 
 
+def get_real_git_hash(git_hash, dir_name):
+  """Return git_hash or the parent of git_hash if its a patched hash."""
+  log = git('log', '-1', '--format=%B', cwd=dir_name).strip()
+  if 'committed patch' in log.lower():
+    return git('log', '-1', '--format=%H', 'HEAD^', cwd=dir_name).strip()
+  return git_hash
+
+
 def parse_got_revision(gclient_output, got_revision_mapping, use_svn_revs):
   """Translate git gclient revision mapping to build properties.
 
@@ -796,7 +804,7 @@ def parse_got_revision(gclient_output, got_revision_mapping, use_svn_revs):
     else:
       # Since we are using .DEPS.git, everything had better be git.
       assert solution_output.get('scm') == 'git'
-      git_revision = solution_output['revision']
+      git_revision = get_real_git_hash(solution_output['revision'], dir_name)
       if use_svn_revs:
         revision = get_svn_rev(git_revision, dir_name)
         if not revision:
