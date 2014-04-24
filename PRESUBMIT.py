@@ -17,6 +17,7 @@ def CommonChecks(input_api, output_api):
 
   black_list = list(input_api.DEFAULT_BLACK_LIST) + [
       r'.*slave/.*/build.*/.*',
+      r'.*slave/.*/isolate.*/.*',
       r'.*depot_tools/.*',
       r'.*scripts/release/.*',
       r'.*scripts/slave/recipe_modules/.*',
