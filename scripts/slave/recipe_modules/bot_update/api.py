@@ -25,6 +25,9 @@ ENABLED_BUILDERS = {
         'Linux Builder (dbg)',
         'Linux Builder (dbg)(32)',
         'Linux Builder',
+    ],
+    'chromium.mac': [
+        'Mac Builder',
     ]
 }
 ENABLED_SLAVES = {
