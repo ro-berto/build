@@ -125,10 +125,8 @@ def annotate(test_name, result, results_tracker, full_name=False,
 
   if hasattr(results_tracker, 'PerformanceLogs'):
     if not perf_dashboard_id:
-      print 'runtest.py error: perf step specified but',
-      print 'no test_id in factory_properties!'
-      print '@@@STEP_EXCEPTION@@@'
-      return
+      raise Exception('runtest.py error: perf step specified but'
+                      'no test_id in factory_properties!')
     for logname, log in results_tracker.PerformanceLogs().iteritems():
       lines = [str(l).rstrip() for l in log]
       slave_utils.WriteLogLines(logname, lines, perf=perf_dashboard_id)
