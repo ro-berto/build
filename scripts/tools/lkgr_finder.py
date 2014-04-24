@@ -312,9 +312,9 @@ CHROMIUM_LKCR_STEPS = {
   },  # chromium.win
   'chromium.mac': {
     'Mac Builder': [
+      'bot_update',
       'compile',
       'gclient runhooks',
-      'gclient sync',
     ],
     'Mac Builder (dbg)': [
       'compile',
