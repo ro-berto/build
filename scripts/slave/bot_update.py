@@ -207,6 +207,10 @@ class SubprocessFailed(Exception):
     self.code = code
 
 
+class SVNRevisionNotFound(Exception):
+  pass
+
+
 def call(*args, **kwargs):
   """Interactive subprocess call."""
   kwargs['stdout'] = subprocess.PIPE
@@ -698,55 +702,75 @@ def git_checkout(solutions, revision, shallow):
   # Revision only applies to the first solution.
   first_solution = True
   for sln in solutions:
-    name = sln['name']
-    url = sln['url']
-    if url == CHROMIUM_SRC_URL or url + '.git' == CHROMIUM_SRC_URL:
-      # Experiments show there's little to be gained from
-      # a shallow clone of src.
-      shallow = False
-    sln_dir = path.join(build_dir, name)
-    s = ['--shallow'] if shallow else []
-    populate_cmd = (['cache', 'populate', '-v', '--cache-dir', CACHE_DIR]
-                 + s + [url])
-    git(*populate_cmd)
-    mirror_dir = git('cache', 'exists', '--cache-dir', CACHE_DIR, url).strip()
-    clone_cmd = ('clone', '--local', '--shared', mirror_dir, sln_dir)
-    if not path.isdir(sln_dir):
-      git(*clone_cmd)
-    try:
-      # Make sure we start on a known branch first, and not where ever
-      # apply_issue left us at before.
-      git('checkout', '--force', 'origin/master', cwd=sln_dir)
-      git('reset', '--hard', cwd=sln_dir)
-    except SubprocessFailed as e:
-      if e.code == 128:
-        # Exited abnormally, theres probably something wrong with the checkout.
-        # Lets wipe the checkout and try again.
-        chromium_utils.RemoveDirectory(sln_dir)
+    # This is so we can loop back and try again if we need to wait for the
+    # git mirrors to update from SVN.
+    done = False
+    tries_left = 60
+    while not done:
+      done = True
+      name = sln['name']
+      url = sln['url']
+      if url == CHROMIUM_SRC_URL or url + '.git' == CHROMIUM_SRC_URL:
+        # Experiments show there's little to be gained from
+        # a shallow clone of src.
+        shallow = False
+      sln_dir = path.join(build_dir, name)
+      s = ['--shallow'] if shallow else []
+      populate_cmd = (['cache', 'populate', '-v', '--cache-dir', CACHE_DIR]
+                      + s + [url])
+      git(*populate_cmd)
+      mirror_dir = git('cache', 'exists', '--cache-dir', CACHE_DIR, url).strip()
+      clone_cmd = ('clone', '--local', '--shared', mirror_dir, sln_dir)
+      if not path.isdir(sln_dir):
         git(*clone_cmd)
+      try:
+        # Make sure we start on a known branch first, and not whereever
+        # apply_issue left us at before.
         git('checkout', '--force', 'origin/master', cwd=sln_dir)
         git('reset', '--hard', cwd=sln_dir)
-      else:
-        raise
+      except SubprocessFailed as e:
+        if e.code == 128:
+          # Exited abnormally, theres probably something wrong.
+          # Lets wipe the checkout and try again.
+          chromium_utils.RemoveDirectory(sln_dir)
+          git(*clone_cmd)
+          git('checkout', '--force', 'origin/master', cwd=sln_dir)
+          git('reset', '--hard', cwd=sln_dir)
+        else:
+          raise
 
-    git('clean', '-df', cwd=sln_dir)
-    git('pull', 'origin', 'master', cwd=sln_dir)
-    # TODO(hinoka): We probably have to make use of revision mapping.
-    if first_solution and revision and revision.lower() != 'head':
-      if revision and revision.isdigit() and len(revision) < 40:
-        # rev_num is really a svn revision number, convert it into a git hash.
-        git_ref = get_git_hash(int(revision), name)
+      git('clean', '-df', cwd=sln_dir)
+      git('pull', 'origin', 'master', cwd=sln_dir)
+      # TODO(hinoka): We probably have to make use of revision mapping.
+      if first_solution and revision and revision.lower() != 'head':
+        if revision and revision.isdigit() and len(revision) < 40:
+          # rev_num is really a svn revision number, convert it into a git hash.
+          git_ref = get_git_hash(int(revision), name)
+          # Lets make sure our checkout has the correct revision number.
+          got_revision = get_svn_rev(git_ref, sln_dir)
+          if not got_revision or int(got_revision) != int(revision):
+            tries_left -= 1
+            if tries_left > 0:
+              # If we don't have the correct revision, wait and try again.
+              print 'We want revision %s, but got revision %s.' % (
+                  revision, got_revision)
+              print 'The svn to git replicator is probably falling behind.'
+              print 'waiting 5 seconds and trying again...'
+              time.sleep(5)
+              done = False
+              continue
+            raise SVNRevisionNotFound
+        else:
+          # rev_num is actually a git hash or ref, we can just use it.
+          git_ref = revision
+        git('checkout', git_ref, cwd=sln_dir)
       else:
-        # rev_num is actually a git hash or ref, we can just use it.
-        git_ref = revision
-      git('checkout', git_ref, cwd=sln_dir)
-    else:
-      git('checkout', 'origin/master', cwd=sln_dir)
-      if first_solution:
-        git_ref = git('log', '--format=%H', '--max-count=1',
-                      cwd=sln_dir).strip()
+        git('checkout', 'origin/master', cwd=sln_dir)
+        if first_solution:
+          git_ref = git('log', '--format=%H', '--max-count=1',
+                        cwd=sln_dir).strip()
 
-    first_solution = False
+      first_solution = False
   return git_ref
 
 
@@ -867,6 +891,7 @@ def parse_args():
                         'Should ONLY be used locally.')
   parse.add_option('--revision_mapping')
   parse.add_option('--revision-mapping')  # Backwards compatability.
+  # TODO(hinoka): Support root@revision format.
   parse.add_option('--revision',
                    help='Revision to check out. Can be an SVN revision number, '
                         'git hash, or any form of git ref.')
