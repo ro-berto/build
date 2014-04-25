@@ -214,8 +214,17 @@ def call(*args, **kwargs):
   if stdin_data:
     kwargs['stdin'] = subprocess.PIPE
   out = cStringIO.StringIO()
+  env = copy.copy(os.environ)
+  new_env = kwargs.get('env', None)
+  if new_env:
+    env.update(kwargs['env'])
+    kwargs['env'] = env
   for attempt in xrange(RETRIES):
     attempt_msg = ' (retry #%d)' % attempt if attempt else ''
+    if new_env:
+      print '===Injecting Environment Variables==='
+      for k, v in sorted(new_env.items()):
+        print '%s: %s' % (k, v)
     print '===Running %s%s===' % (' '.join(args), attempt_msg)
     start_time = time.time()
     proc = subprocess.Popen(args, **kwargs)
@@ -412,14 +421,18 @@ def gclient_configure(solutions, target_os):
 def gclient_sync(output_json, buildspec_name):
   gclient_bin = 'gclient.bat' if sys.platform.startswith('win') else 'gclient'
   cmd = [gclient_bin, 'sync', '--verbose', '--reset', '--force',
-         '--output-json', output_json]
+         '--output-json', output_json, '--nohooks', '--noprehooks']
   if buildspec_name:
     cmd += ['--with_branch_heads']
-  else:
-    cmd += ['--nohooks', '--noprehooks']
   call(*cmd)
   with open(output_json) as f:
     return json.load(f)
+
+
+def gclient_runhooks(gyp_envs):
+  gclient_bin = 'gclient.bat' if sys.platform.startswith('win') else 'gclient'
+  env = dict([env_var.split('=', 1) for env_var in gyp_envs])
+  call(gclient_bin, 'runhooks', env=env)
 
 
 def create_less_than_or_equal_regex(number):
@@ -860,6 +873,8 @@ def parse_args():
                                                     'update.flag'))
   parse.add_option('--shallow', action='store_true',
                    help='Use shallow clones for cache repositories.')
+  parse.add_option('--gyp_env', action='append',
+                   help='Environment variables to pass into gclient runhooks.')
   parse.add_option('-o', '--output_json',
                    help='Output JSON information into a specified file')
 
@@ -965,6 +980,11 @@ def main():
   # the temp file that
   _, gclient_output_file = tempfile.mkstemp(suffix='.json')
   gclient_output = gclient_sync(gclient_output_file, buildspec_name)
+  if buildspec_name:
+    # Run gclient runhooks if we're on an official builder.
+    # TODO(hinoka): Remove this when the official builders run their own
+    #               runhooks step.
+    gclient_runhooks(options.gyp_env)
 
   # If we're fed an svn revision number as --revision, then our got_revision
   # output should be in svn revs.  Otherwise it'll be in git hashes, unless

@@ -931,6 +931,12 @@ class FactoryCommands(object):
     This is meant to replace all gclient revert/sync steps.
     """
     cmd = ['python', '-u', self._bot_update_tool, '--specs', gclient_specs]
+    # TODO(hinoka): Remove this when official builders have their own
+    #               gclient runhooks step.
+    for env_key, env_value in env.iteritems():
+      # Extract out gyp envs.
+      if 'gyp' in env_key.lower():
+        cmd.extend(['--gyp_env', '%s=%s' % (env_key, env_value)])
 
     PROPERTIES = {
         'root': '%(root:-)s',
