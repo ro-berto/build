@@ -12,7 +12,7 @@ from slave import recipe_api
 # To allow us to enable masters/builders/slaves independently.
 # This list override the bot_update version and recipe bots can only be
 # enabled here rather than in bot_update.py.
-ENABLED_MASTERS = ['chromium.git', 'chromium.linux']
+ENABLED_MASTERS = ['chromium.git', 'chromium.linux', 'chromium.mac']
 ENABLED_BUILDERS = {
     'tryserver.chromium': [
         'linux_rel_alt',
@@ -21,9 +21,6 @@ ENABLED_BUILDERS = {
         'linux_chromium_gn_dbg',
         'linux_chromium_gn_rel',
     ],
-    'chromium.mac': [
-        'Mac Builder',
-    ]
 }
 ENABLED_SLAVES = {
                           # GCE linux bots.
