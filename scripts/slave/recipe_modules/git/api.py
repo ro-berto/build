@@ -38,8 +38,7 @@ class GitApi(recipe_api.RecipeApi):
       submodules (bool): whether to sync and update submodules or not
       keep_paths (iterable of strings): paths to ignore during git-clean;
           paths are gitignore-style patterns relative to checkout_path.
-      add_path (string): add path to stepname; this is required if multiple
-          checkout() calls are made by a single recipe
+      step_suffix (string): suffix to add to a each step name
     """
     if not dir_path:
       dir_path = url.rsplit('/', 1)[-1]
