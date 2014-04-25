@@ -12,20 +12,10 @@ from slave import recipe_api
 # To allow us to enable masters/builders/slaves independently.
 # This list override the bot_update version and recipe bots can only be
 # enabled here rather than in bot_update.py.
-ENABLED_MASTERS = ['chromium.git']
+ENABLED_MASTERS = ['chromium.git', 'chromium.linux']
 ENABLED_BUILDERS = {
     'tryserver.chromium': [
         'linux_rel_alt',
-    ],
-    'chromium.linux': [
-        'Android Builder (dbg)',
-        'Android Builder',
-        'Android Clang Builder (dbg)',
-        'Android Webview AOSP Builder',
-        'Linux Builder (dbg)',
-        'Linux Builder (dbg)(32)',
-        'Linux Builder',
-        'Linux Sync',
     ],
     'chromium.mac': [
         'Mac Builder',
