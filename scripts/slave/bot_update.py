@@ -114,6 +114,7 @@ GCLIENT_TEMPLATE = """solutions = %(solutions)s
 
 cache_dir = %(cache_dir)s
 %(target_os)s
+%(target_os_only)s
 """
 
 # IMPORTANT: If you're trying to enable a RECIPE bot, you'll need to
@@ -275,11 +276,12 @@ def git(*args, **kwargs):
   return call(*cmd, **kwargs)
 
 
-def get_gclient_spec(solutions, target_os):
+def get_gclient_spec(solutions, target_os, target_os_only):
   return GCLIENT_TEMPLATE % {
       'solutions': pprint.pformat(solutions, indent=4),
       'cache_dir': '"%s"' % CACHE_DIR,
-      'target_os': ('\ntarget_os=%s' % target_os) if target_os else ''
+      'target_os': ('\ntarget_os=%s' % target_os) if target_os else '',
+      'target_os_only': '\ntarget_os_only=%s' % target_os_only
   }
 
 
@@ -336,6 +338,12 @@ def solutions_printer(solutions):
           print '    %s -> %s' % (deps_name, deps_value)
         else:
           print '    %s: Ignore' % deps_name
+    for k, v in solution.iteritems():
+      # Print out all the keys we don't know about.
+      if k in ['name', 'url', 'deps_file', 'custom_vars', 'custom_deps',
+               'managed']:
+        continue
+      print '  %s is %s' % (k, v)
     print
 
 
@@ -371,7 +379,6 @@ def solutions_to_git(input_solutions):
     if first_solution:
       root = parsed_path
       first_solution = False
-
 
     solution['managed'] = False
     # We don't want gclient to be using a safesync URL. Instead it should
@@ -412,10 +419,10 @@ def ensure_no_checkout(dir_names, scm_dirname):
       print 'done'
 
 
-def gclient_configure(solutions, target_os):
+def gclient_configure(solutions, target_os, target_os_only):
   """Should do the same thing as gclient --spec='...'."""
   with codecs.open('.gclient', mode='w', encoding='utf-8') as f:
-    f.write(get_gclient_spec(solutions, target_os))
+    f.write(get_gclient_spec(solutions, target_os, target_os_only))
 
 
 def gclient_sync(output_json, buildspec_name):
@@ -973,7 +980,8 @@ def main():
     ensure_deps2git(options.root, options.shallow)
 
   # Ensure our build/ directory is set up with the correct .gclient file.
-  gclient_configure(git_solutions, specs.get('target_os', []))
+  gclient_configure(git_solutions, specs.get('target_os', []),
+                    specs.get('target_os_only', False))
 
   # Let gclient do the DEPS syncing.  Also we can get "got revision" data
   # from gclient by passing in --output-json.  In our case, we can just reuse
