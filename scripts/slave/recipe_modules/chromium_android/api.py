@@ -250,15 +250,18 @@ class AndroidApi(recipe_api.RecipeApi):
         self.m.properties.get('upload_tag') or
         self.m.properties.get('revision'))
     archive_name = 'build_product_%s.zip' % upload_tag
-    zipfile = self.m.path['checkout'].join('out', archive_name)
-    self._cleanup_list.append(zipfile)
-    bucket = self._internal_names['BUILD_BUCKET']
-    dest = self.m.properties['buildername']
     if self.c.storage_bucket:
       yield self.git_number()
-      bucket = self.c.storage_bucket
-      revision = str.strip(self.m.step_history['git_number'].stdout)
-      dest = ('asan-android-release-' + revision + '.zip')
+      upload_tag = str.strip(self.m.step_history['git_number'].stdout)
+
+    bucket = self.c.storage_bucket or self._internal_names['BUILD_BUCKET']
+    if self.c.upload_dest_prefix:
+      dest = (self.c.upload_dest_prefix + upload_tag + '.zip')
+    else:
+      dest = self.m.properties['buildername']
+
+    zipfile = self.m.path['checkout'].join('out', archive_name)
+    self._cleanup_list.append(zipfile)
 
     files = None
     include_subfolders = True
@@ -368,7 +371,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def monkey_test(self, **kwargs):
     args = [
-        'monkey', 
+        'monkey',
         '-v',
         '--package=%s' % self.c.channel,
         '--event-count=50000'

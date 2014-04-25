@@ -25,6 +25,7 @@ def GenSteps(api):
   yield droid.clean_local_files()
   yield droid.runhooks()
   yield droid.compile()
+  yield droid.upload_build()
   yield droid.cleanup_build()
 
 def GenTests(api):
@@ -33,5 +34,6 @@ def GenTests(api):
   for bot_id in bot_ids:
     props = api.properties(
       buildername=bot_id,
+      revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
     )
     yield api.test(bot_id) + props

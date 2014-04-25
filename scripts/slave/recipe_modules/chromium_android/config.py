@@ -39,6 +39,7 @@ def BaseConfig(INTERNAL=False, REPO_NAME=None, REPO_URL=None,
     storage_bucket = Single(basestring),
     archive_clusterfuzz = Single(bool, required=False, empty_val=False),
     channel = Single(basestring, empty_val='chrome'),
+    upload_dest_prefix = Single(basestring)
   )
 
 
@@ -79,6 +80,7 @@ def clang_builder(c):
 def clang_release_builder(c):
   c.asan_symbolize = True
   c.storage_bucket = 'chrome-test-builds/android'
+  c.upload_dest_prefix = 'asan-android-release-'
   c.archive_clusterfuzz = True
 
 @config_ctx()
@@ -110,7 +112,8 @@ def dartium_builder(c):
 
 @config_ctx(includes=['main_builder'])
 def cronet_builder(c):
-  pass
+  c.storage_bucket='chromium-cronet/android'
+  c.upload_dest_prefix='cronet-'
 
 @config_ctx(includes=['cronet_builder'])
 def cronet_rel(c):
