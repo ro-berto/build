@@ -39,6 +39,7 @@ categories_steps = {
     'media_unittests',
     'mini_installer_test',
     'nacl_integration',
+    'nacl_loader_unittests',
     'net_unittests',
     'ppapi_unittests',
     'printing_unittests',

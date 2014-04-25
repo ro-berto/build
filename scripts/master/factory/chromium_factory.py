@@ -384,6 +384,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddGTestTestStep('media_unittests', fp)
     if R('media_br'):
       f.AddBuildrunnerGTest('media_unittests', fp)
+    if R('nacl_loader_unittests'):
+      f.AddGTestTestStep('nacl_loader_unittests', fp)
+    if R('nacl_loader_unittests_br'):
+      f.AddBuildrunnerGTest('nacl_loader_unittests', fp)
     if R('net', 'net_unittests'):
       f.AddGTestTestStep('net_unittests', fp)
     if R('net_br'):

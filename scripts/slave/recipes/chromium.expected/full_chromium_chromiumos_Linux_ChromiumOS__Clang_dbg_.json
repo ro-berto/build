@@ -146,6 +146,7 @@
       "jingle_unittests",
       "media_unittests",
       "message_center_unittests",
+      "nacl_loader_unittests",
       "net_unittests",
       "ppapi_unittests",
       "printing_unittests",
