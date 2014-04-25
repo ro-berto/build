@@ -11,3 +11,4 @@ class ChromiumLKGR(Master.Master1):
   master_port = 8018
   slave_port = 8118
   master_port_alt = 8218
+  poll_url = 'https://chromium-status.appspot.com/lkgr'

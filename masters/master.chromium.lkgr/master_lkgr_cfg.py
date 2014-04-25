@@ -15,7 +15,7 @@ defaults = {}
 helper = master_config.Helper(defaults)
 B = helper.Builder
 F = helper.Factory
-S = helper.Scheduler
+S = helper.URLScheduler
 
 def win(): return chromium_factory.ChromiumFactory('src/build', 'win32')
 def win_out(): return chromium_factory.ChromiumFactory('src/out', 'win32')
@@ -29,7 +29,7 @@ m_annotator = annotator_factory.AnnotatorFactory()
 defaults['category'] = '1lkgr'
 
 # Global scheduler
-S('chromium_lkgr', branch='src', treeStableTimer=1, categories=['lkgr'])
+S(name='chromium_lkgr', url=ActiveMaster.poll_url, include_revision=True)
 
 ################################################################################
 ## Windows

@@ -66,9 +66,9 @@ class URLPoller(base.PollingChangeSource):
       extra = {}
       if self.include_revision:
         extra['revision'] = change.strip()
-      self.master.addChange(who='committer',
+      self.master.addChange(author='urlpoller',
                             files=[],
-                            comments='comment',
+                            comments='Polled from %s' % self.changeurl,
                             category=self.category,
                             **extra)
     self.last_change = change
