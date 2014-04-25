@@ -11,13 +11,45 @@ DEPS = [
   'python',
 ]
 
+BUILDERS = {
+  'Android ARM64 Builder (dbg)': {
+    'recipe_config': 'arm64_builder',
+    'kwargs': {
+      'BUILD_CONFIG': 'Debug'
+    }
+  },
+  'Android x64 Builder (dbg)': {
+    'recipe_config': 'x64_builder',
+    'kwargs': {
+      'BUILD_CONFIG': 'Debug'
+    }
+  }
+}
+
 def GenSteps(api):
+  buildername = api.properties.get('buildername')
+  bot_config = BUILDERS.get(buildername)
   droid = api.chromium_android
 
-  bot_id = api.properties['android_bot_id']
-  droid.configure_from_properties(bot_id)
-
-  internal = api.properties.get('internal')
+  bot_id = ''
+  internal = False
+  if bot_config:
+    repo_url = api.properties.get('repository')
+    default_kwargs = {
+      'REPO_URL': repo_url,
+      'INTERNAL': False,
+      'REPO_NAME': 'src',
+      'BUILD_CONFIG': 'Debug',
+      'deps_file': repo_url.startswith('svn://') and 'DEPS' or '.DEPS.git'
+    }
+    kwargs = bot_config.get('kwargs', {})
+    droid.configure_from_properties(bot_config['recipe_config'],
+      **dict(default_kwargs.items() + kwargs.items()))
+  else:
+    # Bots that don't belong to BUILDERS. We want to move away from this.
+    internal = api.properties.get('internal')
+    bot_id = api.properties['android_bot_id']
+    droid.configure_from_properties(bot_id)
 
   yield droid.init_and_sync()
   yield droid.envsetup()
@@ -54,11 +86,15 @@ def GenSteps(api):
                 api.chromium.c.build_dir.join(api.chromium.c.build_config_fs)]
     )
 
+def _sanitize_nonalpha(text):
+  return ''.join(c if c.isalnum() else '_' for c in text)
+
 def GenTests(api):
+  # non BUILDER bots
   bot_ids = ['main_builder', 'component_builder', 'clang_builder',
              'clang_release_builder', 'x86_builder', 'arm_builder',
              'try_builder', 'x86_try_builder', 'dartium_builder',
-             'mipsel_builder', 'x64_builder']
+             'mipsel_builder']
 
   for bot_id in bot_ids:
     props = api.properties(
@@ -84,3 +120,12 @@ def GenTests(api):
       add_step_data = lambda p: p + api.chromium_android.default_step_data(api)
 
     yield add_step_data(api.test(bot_id) + props)
+
+  # tests bots in BUILDERS
+  for buildername in BUILDERS:
+    test = (
+      api.test('full_%s' % _sanitize_nonalpha(buildername)) +
+      api.properties.generic(buildername=buildername,
+          repository='svn://svn.chromium.org/chrome/trunk/src')
+    )
+    yield test
