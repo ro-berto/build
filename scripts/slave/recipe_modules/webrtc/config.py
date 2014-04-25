@@ -60,3 +60,8 @@ def webrtc_android_apk_try_builder(c):
                                'patch_path_filter.py')
   c.patch_path_filter = 'webrtc/'
   c.patch_strip_level = 1
+
+
+@config_ctx()
+def webrtc_ios(c):
+  pass

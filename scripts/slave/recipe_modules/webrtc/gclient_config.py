@@ -42,6 +42,11 @@ def webrtc_android_apk(c):
   c.got_revision_mapping['src/third_party/webrtc'] = 'got_revision'
 
 
+@CONFIG_CTX(includes=['webrtc'])
+def webrtc_ios(c):
+  pass
+
+
 @CONFIG_CTX()
 def _webrtc(c):
   """Add the main solution for WebRTC standalone builds.

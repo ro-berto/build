@@ -183,7 +183,7 @@ def jsonclang(c):
 
 @config_ctx(group='compiler')
 def default_compiler(c):
-  if c.TARGET_PLATFORM == 'mac':
+  if c.TARGET_PLATFORM in ('mac', 'ios'):
     _clang_common(c)
 
 @config_ctx(deps=['compiler', 'builder'], group='distributor')

@@ -222,6 +222,32 @@ BUILDERS = {
           'platform': 'mac',
         },
       },
+      'iOS Debug': {
+        'recipe_config': 'webrtc_ios',
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+          'TARGET_ARCH': 'arm',
+          'TARGET_PLATFORM': 'ios',
+        },
+        'bot_type': 'builder',
+        'testing': {
+          'platform': 'mac',
+        },
+      },
+      'iOS Release': {
+        'recipe_config': 'webrtc_ios',
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+          'TARGET_ARCH': 'arm',
+          'TARGET_PLATFORM': 'ios',
+        },
+        'bot_type': 'builder',
+        'testing': {
+          'platform': 'mac',
+        },
+      },
       'Linux32 Debug': {
         'recipe_config': 'webrtc',
         'webrtc_config_kwargs': {
@@ -475,6 +501,32 @@ BUILDERS = {
           'platform': 'mac',
         },
       },
+      'ios': {
+        'recipe_config': 'webrtc_ios',
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+          'TARGET_ARCH': 'arm',
+          'TARGET_PLATFORM': 'ios',
+        },
+        'bot_type': 'builder',
+        'testing': {
+          'platform': 'mac',
+        },
+      },
+      'ios_rel': {
+        'recipe_config': 'webrtc_ios',
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+          'TARGET_ARCH': 'arm',
+          'TARGET_PLATFORM': 'ios',
+        },
+        'bot_type': 'builder',
+        'testing': {
+          'platform': 'mac',
+        },
+      },
       'linux': {
         'recipe_config': 'webrtc',
         'webrtc_config_kwargs': {
@@ -586,6 +638,9 @@ RECIPE_CONFIGS = {
   },
   'webrtc_android_clang': {
     'webrtc_config': 'webrtc_android_clang',
+  },
+  'webrtc_ios': {
+    'webrtc_config': 'webrtc_ios',
   },
 }
 

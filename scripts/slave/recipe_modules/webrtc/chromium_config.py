@@ -42,3 +42,23 @@ def webrtc_android_apk(c):
   c.compile_py.default_targets = ['android_builder_webrtc']
   c.gyp_env.GYP_GENERATOR_FLAGS['default_target'] = 'android_builder_webrtc'
   c.gyp_env.GYP_DEFINES['include_tests'] = 1
+
+
+@CONFIG_CTX(includes=['chromium', 'static_library'])
+def webrtc_ios(c):
+  if c.HOST_PLATFORM != 'mac':
+    raise BadConf('Only "mac" host platform is supported for iOS (got: "%s")' %
+                  c.HOST_PLATFORM)
+  if c.TARGET_PLATFORM != 'ios':
+    raise BadConf('Only "ios" target platform is supported (got: "%s")' %
+                  c.TARGET_PLATFORM)
+  c.build_config_fs = c.BUILD_CONFIG + '-iphoneos'
+
+  gyp_defs = c.gyp_env.GYP_DEFINES
+  gyp_defs['build_with_libjingle'] = 1
+  gyp_defs['chromium_ios_signing'] = 0
+  gyp_defs['key_id'] = ''
+  gyp_defs['target_arch'] = 'armv7'
+  gyp_defs['OS'] = c.TARGET_PLATFORM
+
+  c.compile_py.default_targets = ['All']
