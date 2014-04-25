@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+  'bot_update',
   'chromium',
   'gclient',
   'path',
@@ -44,18 +45,20 @@ def GenSteps(api):
   # TODO(dpranke): crbug.com/358435. We need to figure out how to separate
   # out the retry and recovery logic from the rest of the recipe.
 
-  yield api.gclient.checkout(revert=True,
-                             abort_on_failure=(not is_tryserver),
-                             can_fail_build=(not is_tryserver))
+  yield api.bot_update.ensure_checkout()
+  if not api.step_history.last_step().json.output['did_run']:
+    yield api.gclient.checkout(revert=True,
+                               abort_on_failure=(not is_tryserver),
+                               can_fail_build=(not is_tryserver))
 
-  if is_tryserver:
-    if any(step.retcode != 0 for step in api.step_history.values()):
-      yield api.path.rmcontents('slave build directory',
-                                api.path['slave_build'])
-      yield api.gclient.checkout(revert=False,
-                                 abort_on_failure=True,
-                                 can_fail_build=True)
-    yield api.tryserver.maybe_apply_issue()
+    if is_tryserver:
+      if any(step.retcode != 0 for step in api.step_history.values()):
+        yield api.path.rmcontents('slave build directory',
+                                  api.path['slave_build'])
+        yield api.gclient.checkout(revert=False,
+                                   abort_on_failure=True,
+                                   can_fail_build=True)
+      yield api.tryserver.maybe_apply_issue()
 
   yield api.chromium.runhooks(run_gyp=False)
 
@@ -74,7 +77,8 @@ def _sanitize_nonalpha(text):
 def GenTests(api):
   yield (
       api.test('unittest_linux_rel_success') +
-      api.properties.generic(buildername='unittest_fake_buildername') +
+      api.properties.generic(buildername='unittest_fake_buildername',
+                             mastername='chromium.linux') +
       api.platform.name('linux')
   )
 
@@ -123,7 +127,8 @@ def GenTests(api):
   for buildername in trybot_names:
     yield (
         api.test('full_%s' % buildername) +
-        api.properties.tryserver(buildername=buildername) +
+        api.properties.tryserver(buildername=buildername,
+                                 mastername='tryserver.chromium') +
         api.platform.name('linux')
     )
 
@@ -136,6 +141,7 @@ def GenTests(api):
   for buildername in buildbot_names:
     yield (
         api.test('full_chromium_linux_%s' % _sanitize_nonalpha(buildername)) +
-        api.properties.generic(buildername=buildername) +
+        api.properties.generic(buildername=buildername,
+                               mastername='chromium.linux') +
         api.platform.name('linux')
     )

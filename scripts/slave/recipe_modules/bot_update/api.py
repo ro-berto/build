@@ -16,6 +16,10 @@ ENABLED_MASTERS = ['chromium.git', 'chromium.linux']
 ENABLED_BUILDERS = {
     'tryserver.chromium': [
         'linux_rel_alt',
+        'android_chromium_gn_compile_dbg',
+        'android_chromium_gn_compile_rel',
+        'linux_chromium_gn_dbg',
+        'linux_chromium_gn_rel',
     ],
     'chromium.mac': [
         'Mac Builder',
