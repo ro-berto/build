@@ -144,6 +144,50 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
+      'linux_chromium_trusty_dbg': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'chromium_config': 'chromium',
+        'compile_only': False,
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'linux_chromium_trusty_rel': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'chromium_config': 'chromium',
+        'compile_only': False,
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'linux_chromium_trusty32_dbg': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'chromium_config': 'chromium',
+        'compile_only': False,
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'linux_chromium_trusty32_rel': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'chromium_config': 'chromium',
+        'compile_only': False,
+        'testing': {
+          'platform': 'linux',
+        },
+      },
       'mac_chromium_dbg': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',

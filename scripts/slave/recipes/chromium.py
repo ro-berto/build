@@ -445,6 +445,86 @@ BUILDERS = {
       },
     }
   },
+  'chromium.fyi': {
+    'builders': {
+      'Linux Trusty': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'compile_targets': [
+          'all',
+        ],
+        'tests': [
+          DynamicGTestTests('Linux Trusty'),
+          TelemetryUnitTests(),
+          TelemetryPerfUnitTests(),
+        ],
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'Linux Trusty (32)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'compile_targets': [
+          'all',
+        ],
+        'tests': [
+          DynamicGTestTests('Linux Trusty (32)'),
+          TelemetryUnitTests(),
+          TelemetryPerfUnitTests(),
+        ],
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'Linux Trusty (dbg)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'compile_targets': [
+          'all',
+        ],
+        'tests': [
+          DynamicGTestTests('Linux Trusty (dbg)'),
+          TelemetryUnitTests(),
+          TelemetryPerfUnitTests(),
+        ],
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'Linux Trusty (dbg)(32)': {
+        'recipe_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'compile_targets': [
+          'all',
+        ],
+        'tests': [
+          DynamicGTestTests('Linux Trusty (dbg)(32)'),
+          TelemetryUnitTests(),
+          TelemetryPerfUnitTests(),
+        ],
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+    },
+  },
   'chromium.linux': {
     'settings': {
       'build_gs_bucket': 'chromium-linux-archive',
