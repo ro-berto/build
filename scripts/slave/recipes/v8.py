@@ -599,6 +599,15 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
 ####### Category: FYI
+      'V8 Linux - vtunejit': {
+        'chromium_apply_config': ['vtunejit'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
+      },
       'V8 Mac - full debug': {
         'chromium_apply_config': ['no_optimized_debug'],
         'v8_config_kwargs': {
