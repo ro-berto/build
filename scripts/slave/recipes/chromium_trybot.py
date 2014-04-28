@@ -599,10 +599,11 @@ def GenSteps(api):
         yield api.gclient.checkout(revert=False)
         yield api.tryserver.maybe_apply_issue()
 
-    yield api.chromium.runhooks()
-    yield api.chromium.compile(compile_targets,
-                               name='compile (with patch, lkcr, clobber, nuke)',
-                               force_clobber=True)
+      yield api.chromium.runhooks()
+      yield api.chromium.compile(compile_targets,
+                                 name='compile '
+                                      '(with patch, lkcr, clobber, nuke)',
+                                 force_clobber=True)
 
   # Do not run tests if the build is already in a failed state.
   if api.step_history.failed:
@@ -792,6 +793,14 @@ def GenTests(api):
     api.step_data('compile (with patch)', retcode=1) +
     api.step_data('compile (with patch, lkcr, clobber)', retcode=1) +
     api.step_data('compile (with patch, lkcr, clobber, nuke)', retcode=1)
+  )
+
+  yield (
+    api.test('compile_first_failure_linux') +
+    props() +
+    api.platform.name('linux') +
+    api.step_data('compile (with patch)', retcode=1) +
+    api.step_data('compile (with patch, lkcr, clobber)', retcode=0)
   )
 
   yield (
