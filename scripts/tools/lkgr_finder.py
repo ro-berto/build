@@ -317,9 +317,9 @@ CHROMIUM_LKCR_STEPS = {
       'gclient runhooks',
     ],
     'Mac Builder (dbg)': [
+      'bot_update',
       'compile',
       'gclient runhooks',
-      'gclient sync',
     ],
   },  # chromium.mac
   'chromium.linux': {
@@ -336,9 +336,9 @@ CHROMIUM_LKCR_STEPS = {
       'gclient runhooks',
     ],
     'Linux Clang (dbg)': [
+      'bot_update',
       'compile',
       'gclient runhooks',
-      'gclient sync',
     ],
     'Android Builder (dbg)': [
       'compile',
