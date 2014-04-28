@@ -119,6 +119,36 @@
   },
   {
     "cmd": [
+      "[SLAVE_BUILD]/src/build/android/buildbot/bb_device_status_check.py"
+    ],
+    "env": {
+      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
+    },
+    "name": "device_status_check"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "--apk",
+      "CronetSample.apk"
+    ],
+    "name": "install CronetSample"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "instrumentation",
+      "--test-apk",
+      "CronetSampleTest"
+    ],
+    "name": "test CronetSample"
+  },
+  {
+    "cmd": [
       "[DEPOT_TOOLS]/git_number.py"
     ],
     "cwd": "[SLAVE_BUILD]/src",

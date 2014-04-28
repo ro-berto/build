@@ -11,10 +11,20 @@ DEPS = [
   'python',
 ]
 
+BUILDERS = {
+  'cronet_builder': {
+    'run_tests': True,
+  },
+  'cronet_rel': {
+    'run_tests': False,
+  },
+}
+
 def GenSteps(api):
   droid = api.chromium_android
 
   buildername = api.properties['buildername']
+  builder_config = BUILDERS.get(buildername, {})
   droid.set_config(buildername,
       REPO_NAME='src',
       REPO_URL='https://chromium.googlesource.com/chromium/src.git',
@@ -25,6 +35,19 @@ def GenSteps(api):
   yield droid.clean_local_files()
   yield droid.runhooks()
   yield droid.compile()
+
+  if builder_config['run_tests']:
+    yield droid.device_status_check()
+    install_cmd = api.path['checkout'].join('build',
+                                            'android',
+                                            'adb_install_apk.py')
+    yield api.python('install CronetSample', install_cmd,
+        args = ['--apk', 'CronetSample.apk'])
+    test_cmd = api.path['checkout'].join('build',
+                                         'android',
+                                         'test_runner.py')
+    yield api.python('test CronetSample', test_cmd,
+        args = ['instrumentation', '--test-apk', 'CronetSampleTest'])
   yield droid.upload_build()
   yield droid.cleanup_build()
 
