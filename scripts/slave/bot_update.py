@@ -119,7 +119,12 @@ cache_dir = %(cache_dir)s
 
 # IMPORTANT: If you're trying to enable a RECIPE bot, you'll need to
 # edit recipe_modules/bot_update/api.py instead.
-ENABLED_MASTERS = ['chromium.git', 'chrome_git', 'chromium.mac']
+ENABLED_MASTERS = [
+    'chrome_git',
+    'chromium.git',
+    'chromium.linux',
+    'chromium.mac',
+]
 ENABLED_BUILDERS = {
     'tryserver.chromium': ['linux_rel_alt'],
 }
