@@ -265,8 +265,12 @@ class AndroidApi(recipe_api.RecipeApi):
 
     files = None
     include_subfolders = True
+    # When unpacking, ".." will be stripped from the path and the library will
+    # end up in ./third_party/llvm-build/...
     if (self.c.archive_clusterfuzz):
-      files = ['apks/*', 'lib/*.so']
+      files = ['apks/*', 'lib/*.so',
+               '../third_party/llvm-build/Release+Asserts/lib/clang/*/lib/' +
+               'linux/libclang_rt.asan-arm-android.so']
       include_subfolders = False
 
     yield self.make_zip_archive(
