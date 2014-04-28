@@ -307,9 +307,13 @@ class AndroidApi(recipe_api.RecipeApi):
       )
 
   def download_build(self):
-    # TODO(luqui) remove dependency on property
-    revision = (self.m.properties.get('parent_buildnumber') or
-                self.m.properties.get('revision'))
+    # TODO(luqui) remove this hack post haste!
+    if (self.m.properties['buildername']
+        == 'instrumentation-occam-svelte-clankium'):
+      revision = self.m.properties.get('revision') # pragma: no cover
+    else:
+      revision = (self.m.properties.get('parent_buildnumber') or
+                  self.m.properties.get('revision'))
     zipfile = self.m.path['checkout'].join('out',
                                            'build_product_%s.zip' % revision)
     self._cleanup_list.append(zipfile)
