@@ -245,6 +245,7 @@ class AndroidApi(recipe_api.RecipeApi):
         cwd=self.m.path['checkout'])
 
   def upload_build(self):
+    revision = self.m.properties.get('revision')
     # TODO(luqui) remove dependency on property
     upload_tag = (
         self.m.properties.get('upload_tag') or
@@ -288,6 +289,22 @@ class AndroidApi(recipe_api.RecipeApi):
         dest=dest,
         use_retry_wrapper=True
     )
+
+    if self.c.archive_clusterfuzz and self.c.storage_bucket:
+      yield self.m.python(
+          'git_revisions',
+          self.m.path['checkout'].join('clank', 'build',
+                                       'clusterfuzz_generate_revision.py'),
+          ['--file', revision],
+          always_run=True,
+      )
+      yield self.m.gsutil.upload(
+          name='upload_revision_data',
+          source=self.m.path['checkout'].join('out', revision),
+          bucket='%s/revisions' % bucket,
+          dest=revision,
+          use_retry_wrapper=True
+      )
 
   def download_build(self):
     # TODO(luqui) remove dependency on property
