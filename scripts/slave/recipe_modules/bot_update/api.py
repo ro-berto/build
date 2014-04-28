@@ -81,7 +81,8 @@ class BotUpdateApi(recipe_api.RecipeApi):
     return self.m.python(name, bot_update_path, cmd, **kwargs)
 
   def ensure_checkout(self, gclient_config=None, suffix=None,
-                      patch=True, ref=None, **kwargs):
+                      patch=True, ref=None, update_presentation=True,
+                      **kwargs):
     # We can re-use the gclient spec from the gclient module, since all the
     # data bot_update needs is already configured into the gclient spec.
     cfg = gclient_config or self.m.gclient.c
@@ -152,11 +153,12 @@ class BotUpdateApi(recipe_api.RecipeApi):
                                                         git_mode)
 
     def followup_fn(step_result):
-      # Set properties such as got_revision.
-      if 'properties' in step_result.json.output:
-        properties = step_result.json.output['properties']
-        for prop_name, prop_value in properties.iteritems():
-          step_result.presentation.properties[prop_name] = prop_value
+      if update_presentation:
+        # Set properties such as got_revision.
+        if 'properties' in step_result.json.output:
+          properties = step_result.json.output['properties']
+          for prop_name, prop_value in properties.iteritems():
+            step_result.presentation.properties[prop_name] = prop_value
       # Add helpful step description in the step UI.
       if 'step_text' in step_result.json.output:
         step_text = step_result.json.output['step_text']

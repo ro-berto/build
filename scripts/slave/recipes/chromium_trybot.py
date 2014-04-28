@@ -619,7 +619,9 @@ def GenSteps(api):
 
   def deapply_patch_fn(failing_tests):
     if bot_update_mode:
-      yield api.bot_update.ensure_checkout(patch=False, always_run=True)
+      yield api.bot_update.ensure_checkout(patch=False,
+                                           always_run=True,
+                                           update_presentation=False)
     else:
       yield api.gclient.checkout(revert=True, always_run=True),
     yield api.chromium.runhooks(always_run=True),
