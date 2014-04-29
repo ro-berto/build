@@ -183,7 +183,7 @@
       "--target",
       "Release",
       "--name",
-      "build_product_4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00.zip",
+      "build_product_3000.zip",
       "--files",
       "apks/*,lib/*.so,../third_party/llvm-build/Release+Asserts/lib/clang/*/lib/linux/libclang_rt.asan-arm-android.so",
       "--ignore-subfolder-names"
@@ -198,7 +198,7 @@
       "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
       "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
       "cp",
-      "[SLAVE_BUILD]/src/out/build_product_4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00.zip",
+      "[SLAVE_BUILD]/src/out/build_product_3000.zip",
       "gs://chrome-test-builds/android/asan-android-release-3000.zip"
     ],
     "name": "gsutil upload_build_product",
@@ -213,7 +213,7 @@
       "-u",
       "[SLAVE_BUILD]/src/clank/build/clusterfuzz_generate_revision.py",
       "--file",
-      "4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00"
+      "3000"
     ],
     "name": "git_revisions"
   },
@@ -224,12 +224,12 @@
       "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
       "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
       "cp",
-      "[SLAVE_BUILD]/src/out/4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00",
-      "gs://chrome-test-builds/android/revisions/4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00"
+      "[SLAVE_BUILD]/src/out/3000",
+      "gs://chrome-test-builds/android/revisions/3000"
     ],
     "name": "gsutil upload_revision_data",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-test-builds/android/revisions/4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-test-builds/android/revisions/3000@@@"
     ]
   },
   {
@@ -237,7 +237,7 @@
     "cmd": [
       "rm",
       "-rf",
-      "[SLAVE_BUILD]/src/out/build_product_4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00.zip"
+      "[SLAVE_BUILD]/src/out/build_product_3000.zip"
     ],
     "name": "cleanup_build"
   }

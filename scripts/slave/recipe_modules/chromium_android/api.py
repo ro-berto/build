@@ -245,15 +245,14 @@ class AndroidApi(recipe_api.RecipeApi):
         cwd=self.m.path['checkout'])
 
   def upload_build(self):
-    revision = self.m.properties.get('revision')
     # TODO(luqui) remove dependency on property
-    upload_tag = (
-        self.m.properties.get('upload_tag') or
-        self.m.properties.get('revision'))
-    archive_name = 'build_product_%s.zip' % upload_tag
+    revision = self.m.properties.get('revision')
     if self.c.storage_bucket:
       yield self.git_number()
-      upload_tag = str.strip(self.m.step_history['git_number'].stdout)
+      revision = str.strip(self.m.step_history['git_number'].stdout)
+
+    upload_tag = self.m.properties.get('upload_tag') or revision
+    archive_name = 'build_product_%s.zip' % upload_tag
 
     bucket = self.c.storage_bucket or self._internal_names['BUILD_BUCKET']
     if self.c.upload_dest_prefix:
@@ -268,7 +267,7 @@ class AndroidApi(recipe_api.RecipeApi):
     include_subfolders = True
     # When unpacking, ".." will be stripped from the path and the library will
     # end up in ./third_party/llvm-build/...
-    if (self.c.archive_clusterfuzz):
+    if self.c.archive_clusterfuzz:
       files = ['apks/*', 'lib/*.so',
                '../third_party/llvm-build/Release+Asserts/lib/clang/*/lib/' +
                'linux/libclang_rt.asan-arm-android.so']
