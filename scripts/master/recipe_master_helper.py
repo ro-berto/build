@@ -102,11 +102,16 @@ def AddRecipeBasedBuilders(buildmaster_config=None,
         factory_properties['show_perf_results'] = True
         factory_properties['perf_id'] = slave['perf_id']
       name = slave['builder']
-      builders.append({
+      builder = {
         'name': name,
         'factory': annotator.BaseFactory(
           slave['recipe'],
           factory_properties,
           [trigger_name_map[name]] if name in trigger_name_map else None)
-        })
+      }
+      # Don't specify auto_reboot unless slaves.cfg does, to let
+      # master_utils' default take effect.
+      if 'auto_reboot' in slave:
+        builder['auto_reboot'] = slave['auto_reboot']
+      builders.append(builder)
   buildmaster_config['builders'] = builders

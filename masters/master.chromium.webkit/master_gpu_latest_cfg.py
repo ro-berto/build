@@ -37,6 +37,7 @@ gpu_slave_info = [
     'build_config': 'Release',
     'perf_id': 'gpu-webkit-win7-nvidia',
     'triggered_by': 'GPU Win Builder',
+    'auto_reboot': False,
   },
   {
     'builder': 'GPU Win7 (dbg) (NVIDIA)',
@@ -44,6 +45,7 @@ gpu_slave_info = [
     'recipe': 'gpu/download_and_test',
     'build_config': 'Debug',
     'triggered_by': 'GPU Win Builder (dbg)',
+    'auto_reboot': False,
   },
   {
     'builder': 'GPU Mac Builder',
@@ -64,6 +66,7 @@ gpu_slave_info = [
     'build_config': 'Release',
     'perf_id': 'gpu-webkit-mac',
     'triggered_by': 'GPU Mac Builder',
+    'auto_reboot': False,
   },
   {
     'builder': 'GPU Mac10.7 (dbg)',
@@ -71,6 +74,7 @@ gpu_slave_info = [
     'recipe': 'gpu/download_and_test',
     'build_config': 'Debug',
     'triggered_by': 'GPU Mac Builder (dbg)',
+    'auto_reboot': False,
   },
   {
     'builder': 'GPU Linux Builder',
@@ -91,6 +95,7 @@ gpu_slave_info = [
     'build_config': 'Release',
     'perf_id': 'gpu-webkit-linux-nvidia',
     'triggered_by': 'GPU Linux Builder',
+    'auto_reboot': False,
   },
   {
     'builder': 'GPU Linux (dbg) (NVIDIA)',
@@ -98,6 +103,7 @@ gpu_slave_info = [
     'recipe': 'gpu/download_and_test',
     'build_config': 'Debug',
     'triggered_by': 'GPU Linux Builder (dbg)',
+    'auto_reboot': False,
   },
 ]
 
@@ -151,7 +157,10 @@ for slave in gpu_slave_info:
   scheduler = 'global_scheduler'
   if 'triggered_by' in slave:
     scheduler = trigger_name_map[slave['triggered_by']]
-  B(name, slave['factory_id'], scheduler=scheduler)
+  # The default for auto_reboot should match the setting in
+  # master_config.py.
+  auto_reboot = slave.get('auto_reboot', True)
+  B(name, slave['factory_id'], scheduler=scheduler, auto_reboot=auto_reboot)
   F(slave['factory_id'], m_annotator.BaseFactory(
     slave['recipe'],
     factory_properties,
