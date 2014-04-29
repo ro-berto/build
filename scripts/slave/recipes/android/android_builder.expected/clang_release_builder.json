@@ -185,7 +185,7 @@
       "--name",
       "build_product_3000.zip",
       "--files",
-      "apks/*,lib/*.so,../third_party/llvm-build/Release+Asserts/lib/clang/*/lib/linux/libclang_rt.asan-arm-android.so",
+      "apks/*,lib/*.so,../../third_party/llvm-build/Release+Asserts/lib/clang/*/lib/linux/libclang_rt.asan-arm-android.so",
       "--ignore-subfolder-names"
     ],
     "cwd": "[SLAVE_BUILD]/src",

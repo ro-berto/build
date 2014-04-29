@@ -269,7 +269,7 @@ class AndroidApi(recipe_api.RecipeApi):
     # end up in ./third_party/llvm-build/...
     if self.c.archive_clusterfuzz:
       files = ['apks/*', 'lib/*.so',
-               '../third_party/llvm-build/Release+Asserts/lib/clang/*/lib/' +
+               '../../third_party/llvm-build/Release+Asserts/lib/clang/*/lib/' +
                'linux/libclang_rt.asan-arm-android.so']
       include_subfolders = False
 
