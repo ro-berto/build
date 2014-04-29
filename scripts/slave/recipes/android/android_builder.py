@@ -15,13 +15,21 @@ BUILDERS = {
   'Android ARM64 Builder (dbg)': {
     'recipe_config': 'arm64_builder',
     'kwargs': {
-      'BUILD_CONFIG': 'Debug'
+      'BUILD_CONFIG': 'Debug',
+      'REPO_NAME': 'src',
+      'INTERNAL': False,
+      'REPO_URL': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src',
+      'deps_file': 'DEPS'
     }
   },
   'Android x64 Builder (dbg)': {
     'recipe_config': 'x64_builder',
     'kwargs': {
-      'BUILD_CONFIG': 'Debug'
+      'BUILD_CONFIG': 'Debug',
+      'REPO_NAME': 'src',
+      'INTERNAL': False,
+      'REPO_URL': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src',
+      'deps_file': 'DEPS'
     }
   }
 }
@@ -34,13 +42,11 @@ def GenSteps(api):
   bot_id = ''
   internal = False
   if bot_config:
-    repo_url = api.properties.get('repository')
     default_kwargs = {
-      'REPO_URL': repo_url,
+      'REPO_URL': 'https://chromium.googlesource.com/chromium/src.git',
       'INTERNAL': False,
       'REPO_NAME': 'src',
-      'BUILD_CONFIG': 'Debug',
-      'deps_file': repo_url.startswith('svn://') and 'DEPS' or '.DEPS.git'
+      'BUILD_CONFIG': 'Debug'
     }
     kwargs = bot_config.get('kwargs', {})
     droid.configure_from_properties(bot_config['recipe_config'],
