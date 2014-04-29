@@ -15,6 +15,8 @@ from common.gerrit_agent import GerritAgent
 class GerritPoller(base.PollingChangeSource):
   """A poller which queries a gerrit server for new changes and patchsets."""
 
+  change_category = 'patchset-created'
+
   def __init__(self, gerrit_host, gerrit_projects=None, pollInterval=None):
     if isinstance(gerrit_projects, basestring):
       gerrit_projects = [gerrit_projects]
@@ -34,10 +36,13 @@ class GerritPoller(base.PollingChangeSource):
     self.initLastTimeStamp()
     base.PollingChangeSource.startService(self)
 
+  def getChangeQuery(self):  # pylint: disable=R0201
+    return 'status:open'
+
   @deferredLocked('initLock')
   def initLastTimeStamp(self):
     log.msg('GerritPoller: Getting latest timestamp from gerrit server.')
-    path = '/changes/?q=status:open&n=1'
+    path = '/changes/?q=%s&n=1' % self.getChangeQuery()
     d = self.agent.request('GET', path)
     def _get_timestamp(j):
       if len(j) == 0:
@@ -48,10 +53,13 @@ class GerritPoller(base.PollingChangeSource):
     return d
 
   def getChanges(self, sortkey=None):
-    path = '/changes/?q=status:open&n=10'
+    path = '/changes/?q=%s&n=10' % self.getChangeQuery()
     if sortkey:
       path += '&N=%s' % sortkey
     return self.agent.request('GET', path)
+
+  def _is_interesting_message(self, message):  # pylint: disable=R0201
+    return message['message'].startswith('Uploaded patch set ')
 
   def checkForNewPatchset(self, change, since):
     o_params = '&'.join('o=%s' % x for x in (
@@ -64,12 +72,12 @@ class GerritPoller(base.PollingChangeSource):
       for m in reversed(j['messages']):
         if self._parse_timestamp(m['date']) <= since:
           break
-        if m['message'].startswith('Uploaded patch set '):
-          return j
+        if self._is_interesting_message(m):
+          return j, m
     d.addCallback(_parse_messages)
     return d
 
-  def createBuildbotChange(self, change):
+  def addBuildbotChange(self, change, message):
     revision = change['revisions'].values()[0]
     commit = revision['commit']
     properties = {'event.change.number': change['_number']}
@@ -87,7 +95,7 @@ class GerritPoller(base.PollingChangeSource):
         'revision': change['current_revision'],
         'comments': commit['subject'],
         'files': commit['files'].keys() if 'files' in commit else ['UNKNOWN'],
-        'category': 'patchset-created',
+        'category': self.change_category,
         'when_timestamp': self._parse_timestamp(commit['committer']['date']),
         'revlink': '%s://%s/#/c/%s' % (
             self.agent.gerrit_protocol, self.agent.gerrit_host,
@@ -95,11 +103,15 @@ class GerritPoller(base.PollingChangeSource):
         'repository': '%s://%s/%s' % (
             self.agent.gerrit_protocol, self.agent.gerrit_host,
             change['project']),
-        'properties': properties}
+        'properties': properties,
+    }
     d = self.master.addChange(**chdict)
     d.addErrback(log.err, 'GerritPoller: Could not add buildbot change for '
                  'gerrit change %s.' % revision['_number'])
     return d
+
+  def addChange(self, change, message):
+    return self.addBuildbotChange(change, message)
 
   def processChanges(self, j, since):
     need_more = bool(j)
@@ -111,7 +123,7 @@ class GerritPoller(base.PollingChangeSource):
       if self.gerrit_projects and change['project'] not in self.gerrit_projects:
         continue
       d = self.checkForNewPatchset(change, since)
-      d.addCallback(lambda x: self.createBuildbotChange(x) if x else None)
+      d.addCallback(lambda x: self.addChange(*x) if x else None)
     if need_more and j[-1].get('_more_changes'):
       d = self.getChanges(sortkey=j[-1]['_sortkey'])
       d.addCallback(self.processChanges, since=since)
