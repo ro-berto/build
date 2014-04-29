@@ -1415,13 +1415,14 @@ def ReadJsonAsUtf8(filename=None, text=None):
     return json.loads(text, object_hook=_decode_dict)
 
 
-def GetMasterDevParameters(filename='dev_config.json'):
-  """Look for dev_config.json in the master directory,
+def GetMasterDevParameters(filename='master_cfg_params.json'):
+  """Look for master development parameter files in the master directory.
 
   Return the parsed content if the file exists, as a dictionary.
   Every string value in the dictionary is utf8-encoded str.
 
-  If the file is not found, returns an empty dict.
+  If the file is not found, returns an empty dict. This is on purpose, to
+  make the file optional.
   """
   if os.path.isfile(filename):
     return ReadJsonAsUtf8(filename=filename)
