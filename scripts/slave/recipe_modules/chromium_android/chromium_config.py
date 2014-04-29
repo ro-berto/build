@@ -62,7 +62,7 @@ def dartium_builder(c):
 @CONFIG_CTX(includes=['main_builder'])
 def cronet_builder(c):
   c.gyp_env.GYP_DEFINES['icu_use_data_file_flag'] = 0
-  c.compile_py.default_targets=['cronet_sample_apk', 'cronet_sample_test_apk']
+  c.compile_py.default_targets=['cronet_package', 'cronet_sample_test_apk']
 
 @CONFIG_CTX(includes=['cronet_builder'],
             config_vars={'BUILD_CONFIG': 'Release'})

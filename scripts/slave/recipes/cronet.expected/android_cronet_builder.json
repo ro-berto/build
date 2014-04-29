@@ -99,7 +99,7 @@
       "-u",
       "[BUILD]/scripts/slave/compile.py",
       "--target",
-      "Debug",
+      "Release",
       "--src-dir",
       "[SLAVE_BUILD]/src",
       "--build-tool",
@@ -109,43 +109,13 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "cronet_sample_apk",
+      "cronet_package",
       "cronet_sample_test_apk"
     ],
     "env": {
       "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
     },
     "name": "compile"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/src/build/android/buildbot/bb_device_status_check.py"
-    ],
-    "env": {
-      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
-    },
-    "name": "device_status_check"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "--apk",
-      "CronetSample.apk"
-    ],
-    "name": "install CronetSample"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--test-apk",
-      "CronetSampleTest"
-    ],
-    "name": "test CronetSample"
   },
   {
     "cmd": [
@@ -162,7 +132,7 @@
       "-u",
       "[BUILD]/scripts/slave/android/archive_build.py",
       "--target",
-      "Debug",
+      "Release",
       "--name",
       "build_product_3000.zip"
     ],

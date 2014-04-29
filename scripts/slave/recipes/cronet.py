@@ -12,10 +12,12 @@ DEPS = [
 ]
 
 BUILDERS = {
-  'cronet_builder': {
+  'Android Cronet Builder (dbg)': {
+    'recipe_config': 'cronet_builder',
     'run_tests': True,
   },
-  'cronet_rel': {
+  'Android Cronet Builder': {
+    'recipe_config': 'cronet_rel',
     'run_tests': False,
   },
 }
@@ -25,7 +27,7 @@ def GenSteps(api):
 
   buildername = api.properties['buildername']
   builder_config = BUILDERS.get(buildername, {})
-  droid.set_config(buildername,
+  droid.set_config(builder_config['recipe_config'],
       REPO_NAME='src',
       REPO_URL='https://chromium.googlesource.com/chromium/src.git',
       INTERNAL=False)
@@ -51,12 +53,15 @@ def GenSteps(api):
   yield droid.upload_build()
   yield droid.cleanup_build()
 
+def _sanitize_nonalpha(text):
+  return ''.join(c if c.isalnum() else '_' for c in text.lower())
+
 def GenTests(api):
-  bot_ids = ['cronet_builder', 'cronet_rel']
+  bot_ids = ['Android Cronet Builder (dbg)', 'Android Cronet Builder']
 
   for bot_id in bot_ids:
     props = api.properties(
       buildername=bot_id,
       revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
     )
-    yield api.test(bot_id) + props
+    yield api.test(_sanitize_nonalpha(bot_id)) + props
