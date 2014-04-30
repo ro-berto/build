@@ -18,7 +18,8 @@ import os
 import subprocess
 import sys
 
-import chromium_utils
+from common import chromium_utils
+
 
 def archive_build(target='Debug', name='archive.zip', location='out',
                   files=None, ignore_subfolder_names=False):
