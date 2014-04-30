@@ -79,6 +79,8 @@
       "--rietveld_email",
       "",
       "--rietveld_fetch",
+      "--upstream",
+      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--trybot-json",
       "/path/to/tmp/json"
     ],

@@ -24,7 +24,8 @@ def GenSteps(api):
   api.step.auto_resolve_conflicts = True
 
   yield api.bot_update.ensure_checkout()
-  bot_update_mode = api.step_history.last_step().json.output['did_run']
+  bot_update_step = api.step_history.last_step()
+  bot_update_mode = bot_update_step.json.output['did_run']
   if not bot_update_mode:
     yield api.gclient.checkout(
         revert=True, can_fail_build=False, abort_on_failure=False)
@@ -35,6 +36,10 @@ def GenSteps(api):
           api.gclient.checkout(revert=False),
         )
         break
+    upstream = ''
+  else:
+    upstream = bot_update_step.json.output['properties'].get(
+        'got_revision_git') or ''
 
   # Run this regardless of whether bot_update is on or off.
   spec = api.gclient.c
@@ -61,6 +66,7 @@ def GenSteps(api):
     '--rietveld_url', api.properties['rietveld'],
     '--rietveld_email', '',  # activates anonymous mode
     '--rietveld_fetch',
+    '--upstream', upstream,  # '' if not in bot_update mode.
     '--trybot-json', api.json.output()])
 
 

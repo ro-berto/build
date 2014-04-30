@@ -228,6 +228,8 @@
       "--rietveld_email",
       "",
       "--rietveld_fetch",
+      "--upstream",
+      "",
       "--trybot-json",
       "/path/to/tmp/json"
     ],
