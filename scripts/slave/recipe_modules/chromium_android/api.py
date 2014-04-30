@@ -44,8 +44,7 @@ class AndroidApi(recipe_api.RecipeApi):
     self.set_config(config_name, **kwargs)
 
   def make_zip_archive(self, step_name, archive_name, files=None,
-      include_subfolders=True,
-      **kwargs):
+                       preserve_paths=True, **kwargs):
     """Creates and stores the archive file.
 
     Args:
@@ -53,14 +52,14 @@ class AndroidApi(recipe_api.RecipeApi):
       archive_name: Name of the archive file.
       files: List of files. Files can be glob's or file paths. If no files
         are provided, everything in the target directory will be included.
-      include_subfolders: If True, files will be stored using the subdolders
+      preserve_paths: If True, files will be stored using the subdolders
         in the archive.
     """
     archive_args = ['--target', self.m.chromium.c.BUILD_CONFIG,
                     '--name', archive_name]
     if files:
-       archive_args.extend(['--files', ','.join(files)])
-    if not include_subfolders:
+      archive_args.extend(['--files', ','.join(files)])
+    if not preserve_paths:
       archive_args.append('--ignore-subfolder-names')
 
     yield self.m.python(
@@ -245,40 +244,16 @@ class AndroidApi(recipe_api.RecipeApi):
         ),
         cwd=self.m.path['checkout'])
 
-  def upload_build(self):
-    # TODO(luqui) remove dependency on property
-    revision = self.m.properties.get('revision')
-    if self.c.storage_bucket:
-      yield self.git_number()
-      revision = str.strip(self.m.step_history['git_number'].stdout)
-
-    upload_tag = self.m.properties.get('upload_tag') or revision
-    archive_name = 'build_product_%s.zip' % upload_tag
-
-    bucket = self.c.storage_bucket or self._internal_names['BUILD_BUCKET']
-    if self.c.upload_dest_prefix:
-      dest = (self.c.upload_dest_prefix + upload_tag + '.zip')
-    else:
-      dest = self.m.properties['buildername']
+  def _upload_build(self, bucket, path):
+    archive_name = 'build_product.zip'
 
     zipfile = self.m.path['checkout'].join('out', archive_name)
     self._cleanup_list.append(zipfile)
 
-    files = None
-    include_subfolders = True
-    # When unpacking, ".." will be stripped from the path and the library will
-    # end up in ./third_party/llvm-build/...
-    if self.c.archive_clusterfuzz:
-      files = ['apks/*', 'lib/*.so',
-               '../../third_party/llvm-build/Release+Asserts/lib/clang/*/lib/' +
-               'linux/libclang_rt.asan-arm-android.so']
-      include_subfolders = False
-
     yield self.make_zip_archive(
       'zip_build_product',
       archive_name,
-      files,
-      include_subfolders,
+      preserve_paths=True,
       cwd=self.m.path['checkout']
     )
 
@@ -286,50 +261,91 @@ class AndroidApi(recipe_api.RecipeApi):
         name='upload_build_product',
         source=zipfile,
         bucket=bucket,
-        dest=dest,
+        dest=path,
         use_retry_wrapper=True
     )
 
-    if self.c.archive_clusterfuzz and self.c.storage_bucket:
-      yield self.m.python(
-          'git_revisions',
-          self.m.path['checkout'].join('clank', 'build',
-                                       'clusterfuzz_generate_revision.py'),
-          ['--file', revision],
-          always_run=True,
-      )
-      yield self.m.gsutil.upload(
-          name='upload_revision_data',
-          source=self.m.path['checkout'].join('out', revision),
-          bucket='%s/revisions' % bucket,
-          dest=revision,
-          use_retry_wrapper=True
-      )
+  def upload_clusterfuzz(self):
+    revision = self.m.properties['revision']
+    # When unpacking, ".." will be stripped from the path and the library will
+    # end up in ./third_party/llvm-build/...
+    files = ['apks/*', 'lib/*.so',
+             '../../third_party/llvm-build/Release+Asserts/lib/clang/*/lib/' +
+             'linux/libclang_rt.asan-arm-android.so']
 
-  def download_build(self):
-    # TODO(luqui) remove this hack post haste!
-    if (self.m.properties['buildername']
-        == 'instrumentation-occam-svelte-clankium'):
-      revision = self.m.properties.get('revision') # pragma: no cover
-    else:
-      revision = (self.m.properties.get('parent_buildnumber') or
-                  self.m.properties.get('revision'))
-    zipfile = self.m.path['checkout'].join('out',
-                                           'build_product_%s.zip' % revision)
+    archive_name = 'clusterfuzz.zip'
+    zipfile = self.m.path['checkout'].join('out', archive_name)
+    self._cleanup_list.append(zipfile)
+
+    yield self.git_number()
+    git_number = str.strip(self.m.step_history['git_number'].stdout)
+
+    yield self.make_zip_archive(
+      'zip_clusterfuzz',
+      archive_name,
+      files=files,
+      preserve_paths=False,
+      cwd=self.m.path['checkout']
+    )
+    yield self.m.python(
+        'git_revisions',
+        self.m.path['checkout'].join('clank', 'build',
+                                     'clusterfuzz_generate_revision.py'),
+        ['--file', git_number],
+        always_run=True,
+    )
+    yield self.m.gsutil.upload(
+        name='upload_revision_data',
+        source=self.m.path['checkout'].join('out', git_number),
+        bucket='%s/revisions' % self.c.storage_bucket,
+        dest=git_number,
+        use_retry_wrapper=True
+    )
+    yield self.m.gsutil.upload(
+        name='upload_clusterfuzz',
+        source=zipfile,
+        bucket=self.c.storage_bucket,
+        dest='%s%s.zip' % (self.c.upload_dest_prefix, git_number),
+        use_retry_wrapper=True
+    )
+
+  def upload_build(self):
+    assert self.c.storage_bucket, 'upload_build needs storage bucket'
+    yield self.git_number()
+    upload_tag = str.strip(self.m.step_history['git_number'].stdout)
+    yield self._upload_build(
+        bucket=self.c.storage_bucket,
+        path='%s%s.zip' % (self.c.upload_dest_prefix, upload_tag))
+
+  def upload_build_for_tester(self):
+    return self._upload_build(
+        bucket=self._internal_names['BUILD_BUCKET'],
+        path='%s/build_product_%s.zip' % (
+            self.m.properties['buildername'], self.m.properties['revision']))
+
+  def _download_build(self, bucket, path):
+    base_path = path.split('/')[-1]
+    zipfile = self.m.path['checkout'].join('out', base_path)
     self._cleanup_list.append(zipfile)
     yield self.m.gsutil.download(
         name='download_build_product',
-        bucket=self._internal_names['BUILD_BUCKET'],
-        # TODO(luqui) remove property
-        source='%s/%s' % (self.m.properties['parent_buildername'],
-                          'build_product_%s.zip' % revision),
-        dest=self.m.path['checkout'].join('out')
+        bucket=bucket,
+        source=path,
+        dest=zipfile
     )
     yield self.unzip_archive(
         'unzip_build_product',
         zipfile,
         cwd=self.m.path['checkout'].join('out')
     )
+
+  def download_build(self):
+    return self._download_build(
+        bucket=self._internal_names['BUILD_BUCKET'],
+        path='%s/build_product_%s.zip' % (
+            self.m.properties['parent_buildername'],
+            self.m.properties['revision']))
+
 
   def spawn_logcat_monitor(self):
     return self.m.step(

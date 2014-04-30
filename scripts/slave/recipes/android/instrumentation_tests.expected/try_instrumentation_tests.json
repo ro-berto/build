@@ -32,7 +32,7 @@
       "--delete_unversioned_trees",
       "--force",
       "--revision",
-      "src/repo@refs/remotes/origin/master",
+      "src/repo@4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -155,8 +155,8 @@
       "-u",
       "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
       "cp",
-      "gs://build-bucket/parent_buildername/build_product_1357.zip",
-      "[SLAVE_BUILD]/src/out"
+      "gs://build-bucket/parent_buildername/build_product_4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00.zip",
+      "[SLAVE_BUILD]/src/out/build_product_4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00.zip"
     ],
     "name": "gsutil download_build_product"
   },
@@ -164,7 +164,7 @@
     "cmd": [
       "unzip",
       "-o",
-      "[SLAVE_BUILD]/src/out/build_product_1357.zip"
+      "[SLAVE_BUILD]/src/out/build_product_4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00.zip"
     ],
     "cwd": "[SLAVE_BUILD]/src/out",
     "name": "unzip_build_product"
@@ -343,7 +343,7 @@
     "cmd": [
       "rm",
       "-rf",
-      "[SLAVE_BUILD]/src/out/build_product_1357.zip"
+      "[SLAVE_BUILD]/src/out/build_product_4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00.zip"
     ],
     "name": "cleanup_build"
   }

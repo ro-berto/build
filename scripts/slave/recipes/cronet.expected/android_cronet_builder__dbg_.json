@@ -134,7 +134,7 @@
       "--target",
       "Debug",
       "--name",
-      "build_product_3000.zip"
+      "build_product.zip"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "zip_build_product"
@@ -146,7 +146,7 @@
       "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
       "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
       "cp",
-      "[SLAVE_BUILD]/src/out/build_product_3000.zip",
+      "[SLAVE_BUILD]/src/out/build_product.zip",
       "gs://chromium-cronet/android/cronet-3000.zip"
     ],
     "name": "gsutil upload_build_product",
@@ -247,7 +247,7 @@
     "cmd": [
       "rm",
       "-rf",
-      "[SLAVE_BUILD]/src/out/build_product_3000.zip"
+      "[SLAVE_BUILD]/src/out/build_product.zip"
     ],
     "name": "cleanup_build"
   }

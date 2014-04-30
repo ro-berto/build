@@ -38,9 +38,8 @@ def BaseConfig(INTERNAL=False, REPO_NAME=None, REPO_URL=None,
     internal_dir = Single(Path),
     gclient_custom_deps = Dict(value_type=(basestring, types.NoneType)),
     storage_bucket = Single(basestring),
-    archive_clusterfuzz = Single(bool, required=False, empty_val=False),
     channel = Single(basestring, empty_val='chrome'),
-    upload_dest_prefix = Single(basestring),
+    upload_dest_prefix = Single(basestring, empty_val=''),
     gclient_custom_vars = Dict(value_type=(basestring, types.NoneType))
   )
 
@@ -83,7 +82,6 @@ def clang_release_builder(c):
   c.asan_symbolize = True
   c.storage_bucket = 'chrome-test-builds/android'
   c.upload_dest_prefix = 'asan-android-release-'
-  c.archive_clusterfuzz = True
 
 @config_ctx()
 def component_builder(c):

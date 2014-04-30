@@ -47,13 +47,14 @@ def GenTests(api):
       android_bot_id=bot_id,
       buildername='test_buildername',
       parent_buildername='parent_buildername',
+      parent_buildnumber='1729',
       internal=True
     )
 
   for bot_id in bot_ids:
     p = props(bot_id)
     if 'try_instrumentation_tests' in bot_id:
-      p += api.properties(revision='refs/remotes/origin/master')
+      p += api.properties(revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00')
       p += api.properties(parent_buildnumber=1357)
       p += api.properties(patch_url='try_job_svn_patch')
 
