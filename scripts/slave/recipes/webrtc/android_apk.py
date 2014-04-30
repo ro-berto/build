@@ -231,6 +231,9 @@ def GenTests(api):
                 'GYP_DEFINES': 'my_new_gyp_def=aaa',
              }))
 
+      if bot_type == 'tester':
+        test += api.properties(parent_got_revision='12345')
+
       if mastername.startswith('tryserver'):
         test += api.properties(patch_url='try_job_svn_patch')
 

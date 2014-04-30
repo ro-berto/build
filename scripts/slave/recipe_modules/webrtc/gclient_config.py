@@ -36,10 +36,13 @@ def webrtc_android_apk(c):
   s.name = 'webrtc.DEPS'
   s.url = ChromiumSvnSubURL(c, 'chrome', 'trunk', 'deps', 'third_party',
                             'webrtc', 'webrtc.DEPS')
+  s.deps_file = 'DEPS'
 
   # Have the WebRTC revision appear in the web UI instead of Chromium's.
   del c.got_revision_mapping['src']
   c.got_revision_mapping['src/third_party/webrtc'] = 'got_revision'
+  # Needed to get the testers to properly sync the right revision.
+  c.parent_got_revision_mapping['parent_got_revision'] = 'got_revision'
 
 
 @CONFIG_CTX(includes=['webrtc'])
@@ -58,6 +61,7 @@ def _webrtc(c):
   s = c.solutions.add()
   s.name = 'src'
   s.url = WebRTCSvnURL(c, 'trunk')
+  s.deps_file = 'DEPS'
   s.custom_vars['root_dir'] = 'src'
   c.got_revision_mapping['webrtc'] = 'got_revision'
 
@@ -71,6 +75,7 @@ def _webrtc_limited(c):
   s = c.solutions.add()
   s.name = 'webrtc-limited'
   s.url = ChromeSvnSubURL(c, 'chrome-internal', 'trunk', 'webrtc-limited')
+  s.deps_file = 'DEPS'
   s.custom_vars['root_dir'] = 'src'
 
 
