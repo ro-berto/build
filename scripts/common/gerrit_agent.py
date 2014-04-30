@@ -26,6 +26,16 @@ DEBUG = False
 NETRC = netrc.netrc()
 
 
+class GerritError(RuntimeError):
+  def __init__(self, msg, http_code):
+    super(GerritError, self).__init__(msg)
+    self.http_code = http_code
+
+  def __str__(self):
+    s = super(GerritError, self).__str__()
+    return '[http_code=%d] %s' % (self.http_code, s)
+
+
 class JsonResponse(protocol.Protocol):
   """Receiver protocol to parse a json response from gerrit."""
 
@@ -66,6 +76,7 @@ class JsonResponse(protocol.Protocol):
     except ValueError:
       self.finished.errback(errmsg)
 
+
 class JsonBodyProducer:
 
   implements(iweb.IBodyProducer)
@@ -82,6 +93,7 @@ class JsonBodyProducer:
 
   def stopProducing(self):
     pass
+
 
 class GerritAgent(Agent):
 
@@ -103,34 +115,61 @@ class GerritAgent(Agent):
     Agent.__init__(self, reactor, *args, **kwargs)
 
   # pylint: disable=W0221
-  def request(self, method, path, headers=None, body=None, expected_code=200):
+  def request(self, method, path, headers=None, body=None, expected_code=200,
+              retry=0, delay=0):
     """
     Send an http request to the gerrit service for the given path.
 
+    If 'retry' is specified, transient errors (http response code 500-599) will
+    be retried after an exponentially-increasing delay.
+
     Returns a Deferred which will call back with the parsed json body of the
     gerrit server's response.
+
+    Args:
+      method: 'GET', 'POST', etc.
+      path: Path element of the url.
+      headers: dict of http request headers.
+      body: json-encodable body of http request.
+      expected_code: http response code expected in reply.
+      retry: How many times to retry transient errors.
+      delay: Wait this many seconds before sending the request.
     """
+    retry_delay = delay * 2 if delay else 0.5
+    retry_args = (
+        method, path, headers, body, expected_code, retry - 1, retry_delay)
     if not path.startswith('/'):
       path = '/' + path
     if not headers:
       headers = Headers()
+    else:
+      # Make a copy so mutations don't affect retry attempts.
+      headers = Headers(dict(headers.getAllRawHeaders()))
     if self.auth_token:
       if not path.startswith('/a/'):
         path = '/a' + path
-      headers.setRawHeaders('authorization', [self.auth_token])
+      headers.setRawHeaders('Authorization', [self.auth_token])
     url = '%s://%s%s' % (self.gerrit_protocol, self.gerrit_host, path)
     if body:
       body = JsonBodyProducer(json.dumps(body))
       headers.setRawHeaders('Content-Type', ['application/json'])
     if DEBUG:
       log.msg(url)
-    d = Agent.request(self, method, str(url), headers, body)
+    if delay:
+      d = defer.succeed(None)
+      d.addCallback(
+          reactor.callLater, delay, Agent.request, self, method, str(url),
+          headers, body)
+    else:
+      d = Agent.request(self, method, str(url), headers, body)
     def _check_code(response):
-      if response.code != expected_code:
-        msg = 'Failed gerrit request (code %s, expected %s): %s' % (
-            response.code, expected_code, url)
-        raise RuntimeError(msg)
-      return response
+      if response.code == expected_code:
+        return response
+      if retry > 0 and response.code >= 500 and response.code < 600:
+        return self.request(*retry_args)
+      msg = 'Failed gerrit request (code %s, expected %s): %s' % (
+          response.code, expected_code, url)
+      raise GerritError(msg, response.code)
     d.addCallback(_check_code)
     d.addCallback(JsonResponse.Get, url=url)
     return d
