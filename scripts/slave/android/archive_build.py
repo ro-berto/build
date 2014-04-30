@@ -18,6 +18,8 @@ import os
 import subprocess
 import sys
 
+import chromium_utils
+
 def archive_build(target='Debug', name='archive.zip', location='out',
                   files=None, ignore_subfolder_names=False):
   out_dir = 'out'
@@ -32,6 +34,8 @@ def archive_build(target='Debug', name='archive.zip', location='out',
 
   saved_dir = os.getcwd()
   os.chdir(os.path.dirname(os.path.join(saved_dir, out_dir)))
+  # Delete the zip file so we don't accidentally add to an existing archive.
+  chromium_utils.RemoveFile(zip_file)
   zip_args = '-yr1'
   if ignore_subfolder_names:
     zip_args += 'j'
