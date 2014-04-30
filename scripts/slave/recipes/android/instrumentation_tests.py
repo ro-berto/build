@@ -47,6 +47,7 @@ def GenTests(api):
       android_bot_id=bot_id,
       buildername='test_buildername',
       parent_buildername='parent_buildername',
+      parent_buildnumber='1729',
       internal=True
     )
 
