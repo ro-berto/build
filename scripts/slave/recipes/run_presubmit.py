@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+  'bot_update',
   'gclient',
   'git',
   'json',
@@ -22,16 +23,20 @@ def GenSteps(api):
   api.gclient.set_config(repo_name)
   api.step.auto_resolve_conflicts = True
 
-  yield api.gclient.checkout(
-      revert=True, can_fail_build=False, abort_on_failure=False)
-  for step in api.step_history.values():
-    if step.retcode != 0:
-      yield (
-        api.path.rmcontents('slave build directory', api.path['slave_build']),
-        api.gclient.checkout(revert=False),
-      )
-      break
+  yield api.bot_update.ensure_checkout()
+  bot_update_mode = api.step_history.last_step().json.output['did_run']
+  if not bot_update_mode:
+    yield api.gclient.checkout(
+        revert=True, can_fail_build=False, abort_on_failure=False)
+    for step in api.step_history.values():
+      if step.retcode != 0:
+        yield (
+          api.path.rmcontents('slave build directory', api.path['slave_build']),
+          api.gclient.checkout(revert=False),
+        )
+        break
 
+  # Run this regardless of whether bot_update is on or off.
   spec = api.gclient.c
   if spec.solutions[0].url.endswith('.git'):
     yield (
@@ -40,7 +45,8 @@ def GenSteps(api):
         api.git('clean', '-xfq')
     )
 
-  yield api.rietveld.apply_issue(root)
+  if not bot_update_mode:
+    yield api.rietveld.apply_issue(root)
 
   yield api.step('presubmit', [
     api.path['depot_tools'].join('presubmit_support.py'),
@@ -63,10 +69,14 @@ def GenTests(api):
     extra = {}
     if 'blink' in repo_name:
       extra['root'] = 'src/third_party/WebKit'
+    elif 'tools_build' in repo_name:
+      extra['root'] = 'build'
 
     yield (
       api.test(repo_name) +
-      api.properties.tryserver(repo_name=repo_name, **extra) +
+      api.properties.tryserver(mastername='tryserver.chromium',
+                               buildername='linux_rel',
+                               repo_name=repo_name, **extra) +
       api.step_data('presubmit', api.json.output([['linux_rel', ['compile']]]))
     )
 

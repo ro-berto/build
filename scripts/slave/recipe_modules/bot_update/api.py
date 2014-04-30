@@ -20,6 +20,7 @@ ENABLED_BUILDERS = {
         'android_chromium_gn_compile_rel',
         'linux_chromium_gn_dbg',
         'linux_chromium_gn_rel',
+        'linux_rel',
     ],
 }
 ENABLED_SLAVES = {
@@ -147,8 +148,10 @@ class BotUpdateApi(recipe_api.RecipeApi):
     except AttributeError:
       revision_map_data = {}
     git_mode = self.m.properties.get('mastername') in GIT_MASTERS
+    first_sln = cfg.solutions[0].name
     step_test_data = lambda : self.test_api.output_json(active,
                                                         root,
+                                                        first_sln,
                                                         revision_map_data,
                                                         git_mode)
 
@@ -179,8 +182,8 @@ class BotUpdateApi(recipe_api.RecipeApi):
     # This is used by the Chromium module to figure out where to look for
     # the checkout.
     bot_update_step = self.m.step_history.last_step()
-    # bot_update actually just sets root to be either the passed in "root"
-    # property, or the folder name of the first solution.
+    # bot_update actually just sets root to be the folder name of the
+    # first solution.
     if bot_update_step.json.output['did_run']:
       co_root = bot_update_step.json.output['root']
       cwd = kwargs.get('cwd', self.m.path['slave_build'])

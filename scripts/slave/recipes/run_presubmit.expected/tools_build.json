@@ -1,80 +1,35 @@
 [
   {
-    "abort_on_failure": false,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/gclient.py",
-      "config",
+      "[BUILD]/scripts/slave/bot_update.py",
       "--spec",
-      "cache_dir = '[ROOT]/git_cache'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'build', 'url': 'https://chromium.googlesource.com/chromium/tools/build.git'}]"
-    ],
-    "name": "gclient setup"
-  },
-  {
-    "abort_on_failure": false,
-    "can_fail_build": false,
-    "cmd": [
-      "python",
-      "-u",
-      "[DEPOT_TOOLS]/gclient.py",
-      "sync",
-      "--verbose",
-      "--with_branch_heads",
-      "--nohooks",
-      "-j8",
-      "--reset",
-      "--delete_unversioned_trees",
-      "--force",
-      "--upstream",
-      "--no-nag-max",
+      "cache_dir = '[ROOT]/git_cache'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'build', 'url': 'https://chromium.googlesource.com/chromium/tools/build.git'}]",
+      "--root",
+      "build",
       "--revision",
-      "build@HEAD",
-      "--output-json",
-      "/path/to/tmp/json"
+      "HEAD",
+      "--issue",
+      "12853011",
+      "--patchset",
+      "1",
+      "--output_json",
+      "/path/to/tmp/json",
+      "--force"
     ],
-    "name": "gclient sync",
+    "name": "bot_update",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Some step text@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"solutions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"build/\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"80754af91bfb6d1073585b046fe0a474ce868509\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"build\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"properties\": {}, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"root\": \"build\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
-  },
-  {
-    "abort_on_failure": false,
-    "can_fail_build": false,
-    "cmd": [
-      "python",
-      "-u",
-      "[DEPOT_TOOLS]/gclient.py",
-      "recurse",
-      "git",
-      "config",
-      "user.name",
-      "local_bot"
-    ],
-    "name": "gclient recurse (git config user.name)"
-  },
-  {
-    "abort_on_failure": false,
-    "can_fail_build": false,
-    "cmd": [
-      "python",
-      "-u",
-      "[DEPOT_TOOLS]/gclient.py",
-      "recurse",
-      "git",
-      "config",
-      "user.email",
-      "local_bot@example.com"
-    ],
-    "name": "gclient recurse (git config user.email)"
   },
   {
     "cmd": [
@@ -111,28 +66,10 @@
     "name": "git clean"
   },
   {
-    "abort_on_failure": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[DEPOT_TOOLS]/apply_issue.py",
-      "-r",
-      "[SLAVE_BUILD]/build",
-      "-i",
-      "12853011",
-      "-p",
-      "1",
-      "-s",
-      "https://codereview.chromium.org",
-      "--no-auth"
-    ],
-    "name": "apply_issue"
-  },
-  {
     "cmd": [
       "[DEPOT_TOOLS]/presubmit_support.py",
       "--root",
-      "[SLAVE_BUILD]/build",
+      "[SLAVE_BUILD]/build/build",
       "--commit",
       "--verbose",
       "--verbose",

@@ -986,8 +986,10 @@ def main():
   git_ref = git_checkout(git_solutions, options.revision, options.shallow)
 
   # By default, the root should be the name of the first solution, but
-  # also make it overridable.
+  # also make it overridable.  The root is where patches are applied on top of.
   options.root =  options.root or dir_names[0]
+  # The first solution is where the primary DEPS file resides.
+  first_sln = dir_names[0]
 
   # If either patch_url or issue is passed in, then we need to apply a patch.
   if options.patch_url:
@@ -998,10 +1000,13 @@ def main():
                          options.rietveld_server, options.revision_mapping,
                          git_ref)
 
-  # Run deps2git if there is a DEPS commit after the last .DEPS.git commit.
   if buildspec_name:
     buildspecs2git(options.root, buildspec_name)
-  else:
+  elif first_sln == options.root:
+    # Run deps2git if there is a DEPS commit after the last .DEPS.git commit.
+    # We only need to ensure deps2git if the root is not overridden, since
+    # if the root is overridden, it means we are working with a sub repository
+    # patch, which means its impossible for it to touch DEPS.
     ensure_deps2git(options.root, options.shallow)
 
   # Ensure our build/ directory is set up with the correct .gclient file.
@@ -1038,7 +1043,8 @@ def main():
     # Tell recipes information such as root, got_revision, etc.
     emit_json(options.output_json,
               did_run=True,
-              root=options.root,
+              root=first_sln,
+              patch_root=options.root,
               step_text=step_text,
               properties=got_revisions)
   else:

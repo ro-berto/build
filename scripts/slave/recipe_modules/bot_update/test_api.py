@@ -9,7 +9,7 @@ from slave import recipe_test_api
 
 
 class BotUpdateTestApi(recipe_test_api.RecipeTestApi):
-  def output_json(self, active, root, revision_mapping, git_mode):
+  def output_json(self, active, root, first_sln, revision_mapping, git_mode):
     """Deterministically synthesize json.output test data for gclient's
     --output-json option.
     """
@@ -31,7 +31,8 @@ class BotUpdateTestApi(recipe_test_api.RecipeTestApi):
             for project_name, property_name in revision_mapping.iteritems()
         })
       output.update({
-          'root': root or 'src',
+          'patch_root': root or first_sln,
+          'root': first_sln,
           'properties': properties,
           'step_text': 'Some step text'
       })
