@@ -156,6 +156,8 @@ DISABLED_BUILDERS = {
         # linux_chromeos_clang.
         'linux_chromium_chromeos_clang_rel',
         'linux_chromium_chromeos_clang_dbg',
+        'blink_android_compile_rel',
+        'blink_android_compile_dbg',
     ]
 }
 DISABLED_SLAVES = {}
