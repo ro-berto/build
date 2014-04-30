@@ -4,7 +4,10 @@
 
 DEPS = [
   'isolate',
+  'json',
   'path',
+  'step',
+  'step_history',
 ]
 
 
@@ -13,25 +16,32 @@ def GenSteps(api):
   api.isolate.isolate_server = 'https://isolateserver-dev.appspot.com'
   assert api.isolate.isolate_server == 'https://isolateserver-dev.appspot.com'
 
+  # That would read a list of files to search for, generated in GenTests.
+  yield api.step('read test spec', ['cat'], stdout=api.json.output())
+  expected_targets = api.step_history.last_step().stdout
+
   # Generates code coverage for find_isolated_tests corner cases.
   # TODO(vadimsh): This step doesn't actually make any sense when the recipe
   # is running for real via run_recipe.py.
-  yield api.isolate.find_isolated_tests(
-      api.path['build'], ['test1', 'test2'])
+  yield api.isolate.find_isolated_tests(api.path['build'], expected_targets)
 
 
 def GenTests(api):
+  def make_test(name, expected_targets, discovered_targets):
+    return (
+        api.test(name) +
+        api.step_data(
+            'read test spec', stdout=api.json.output(expected_targets)) +
+        api.override_step_data(
+            'find isolated tests', api.isolate.output_json(discovered_targets)))
+
   # Expected targets == found targets.
-  yield api.test('basic')
-
+  yield make_test('basic', ['test1', 'test2'], ['test1', 'test2'])
+  # No expectations, just discovering what's there returned by default mock.
+  yield make_test('discover', None, None)
   # Found more than expected.
-  yield (
-      api.test('extra') +
-      api.override_step_data('find isolated tests',
-          api.isolate.output_json(['test1', 'test2', 'extra_test'])))
-
+  yield make_test('extra', ['test1', 'test2'], ['test1', 'test2', 'extra_test'])
   # Didn't find something.
-  yield (
-      api.test('missing') +
-      api.override_step_data('find isolated tests',
-          api.isolate.output_json(['test1'])))
+  yield make_test('missing', ['test1', 'test2'], ['test1'])
+  # No expectations, and nothing has been found, produces warning.
+  yield make_test('none', None, [])

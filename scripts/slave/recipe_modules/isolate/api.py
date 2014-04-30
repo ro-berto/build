@@ -68,6 +68,10 @@ class IsolateApi(recipe_api.RecipeApi):
           step_result.presentation.logs['missing.isolates'] = (
               ['Failed to find *.isolated files:'] + list(expected - found))
       step_result.presentation.properties['swarm_hashes'] = self._isolated_tests
+      # No isolated files found? That looks suspicious, emit warning.
+      if (not self._isolated_tests and
+          step_result.presentation.status != 'FAILURE'):
+        step_result.presentation.status = 'WARNING'
     return self.m.python(
         'find isolated tests',
         self.resource('find_isolated_tests.py'),
@@ -86,7 +90,11 @@ class IsolateApi(recipe_api.RecipeApi):
     These come either from the incoming swarm_hashes build property,
     or from calling find_isolated_tests, above, at some point during the run.
     """
-    return self.m.properties.get('swarm_hashes', self._isolated_tests)
+    hashes = self.m.properties.get('swarm_hashes', self._isolated_tests)
+    return {
+      k.encode('ascii'): v.encode('ascii') 
+      for k, v in hashes.iteritems()
+    }
 
   @property
   def _run_isolated_path(self):

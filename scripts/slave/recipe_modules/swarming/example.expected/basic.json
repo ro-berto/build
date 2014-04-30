@@ -156,14 +156,14 @@
       "--verbose",
       "hash_for_win"
     ],
-    "name": "trigger: hello_world on Windows-6.1",
+    "name": "[trigger] hello_world on Windows-6.1",
     "seed_steps": [
-      "trigger: hello_world on Windows-6.1",
-      "trigger: hello_world on Linux",
-      "trigger: hello_world on Mac"
+      "[trigger] hello_world on Windows-6.1",
+      "[trigger] hello_world on Linux",
+      "[trigger] hello_world on Mac"
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@hello_world/Windows-6.1/hash_for_win/local/0/1337000001500@@@"
+      "@@@STEP_TEXT@<br/>hello_world/Windows-6.1/hash_for_win/local/0/1337000001500@@@"
     ]
   },
   {
@@ -192,9 +192,9 @@
       "--verbose",
       "hash_for_linux"
     ],
-    "name": "trigger: hello_world on Linux",
+    "name": "[trigger] hello_world on Linux",
     "~followup_annotations": [
-      "@@@STEP_TEXT@hello_world/Linux/hash_for_linux/local/0/1337000003000@@@"
+      "@@@STEP_TEXT@<br/>hello_world/Linux/hash_for_linux/local/0/1337000003000@@@"
     ]
   },
   {
@@ -223,9 +223,9 @@
       "--verbose",
       "hash_for_mac"
     ],
-    "name": "trigger: hello_world on Mac",
+    "name": "[trigger] hello_world on Mac",
     "~followup_annotations": [
-      "@@@STEP_TEXT@hello_world/Mac/hash_for_mac/local/0/1337000004500@@@"
+      "@@@STEP_TEXT@<br/>hello_world/Mac/hash_for_mac/local/0/1337000004500@@@"
     ]
   },
   {
@@ -236,6 +236,7 @@
     "name": "local step"
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -244,17 +245,19 @@
       "--swarming",
       "https://chromium-swarm-dev.appspot.com",
       "--decorate",
+      "--print-status-updates",
       "--verbose",
       "hello_world/Windows-6.1/hash_for_win/local/0/1337000001500"
     ],
-    "name": "swarming: hello_world on Windows-6.1",
+    "name": "[swarming] hello_world on Windows-6.1",
     "seed_steps": [
-      "swarming: hello_world on Windows-6.1",
-      "swarming: hello_world on Linux",
-      "swarming: hello_world on Mac"
+      "[swarming] hello_world on Windows-6.1",
+      "[swarming] hello_world on Linux",
+      "[swarming] hello_world on Mac"
     ]
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -263,12 +266,14 @@
       "--swarming",
       "https://chromium-swarm-dev.appspot.com",
       "--decorate",
+      "--print-status-updates",
       "--verbose",
       "hello_world/Linux/hash_for_linux/local/0/1337000003000"
     ],
-    "name": "swarming: hello_world on Linux"
+    "name": "[swarming] hello_world on Linux"
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -277,10 +282,11 @@
       "--swarming",
       "https://chromium-swarm-dev.appspot.com",
       "--decorate",
+      "--print-status-updates",
       "--verbose",
       "hello_world/Mac/hash_for_mac/local/0/1337000004500"
     ],
-    "name": "swarming: hello_world on Mac"
+    "name": "[swarming] hello_world on Mac"
   },
   {
     "cmd": [

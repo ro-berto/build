@@ -12,7 +12,7 @@ class IsolateTestApi(recipe_test_api.RecipeTestApi):
     If |targets| is None, will emit test data with some dummy targets instead,
     emulating find_isolated_tests.py finding some files.
     """
-    if targets is None:  # pragma: no cover
+    if targets is None:
       targets = ['dummy_target_1', 'dummy_target_2']
     return self.m.json.output(dict(
         (target, '[dummy hash for %s]' % target) for target in targets))

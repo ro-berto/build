@@ -215,9 +215,9 @@ class SwarmingApi(recipe_api.RecipeApi):
 
       # Build corresponding step.
       def update_presentation(task, step_result):
-        step_result.presentation.step_text = task.task_id
+        step_result.presentation.step_text += '<br/>%s' % task.task_id
       steps.append(self.m.python(
-          name='trigger: %s on %s' % (task.title, task.dimensions['os']),
+          name='[trigger] %s on %s' % (task.title, task.dimensions['os']),
           script=self.m.swarming_client.path.join('swarming.py'),
           args=args,
           followup_fn=functools.partial(update_presentation, task)))
@@ -226,6 +226,10 @@ class SwarmingApi(recipe_api.RecipeApi):
 
   def collect(self, tasks):
     """Waits for a set of Swarming tasks to finish.
+
+    Always waits for all task results. Failed tasks will be marked as such
+    but would not abort the build (corresponds to always_run=True step 
+    property).
 
     Args:
       tasks: an enumerable of SwarmingTask instances. All of them should have
@@ -240,18 +244,24 @@ class SwarmingApi(recipe_api.RecipeApi):
       assert task.task_id in self._pending_tasks, (
           'Trying to collect a task that was not triggered: %s' % task.task_id)
       self._pending_tasks.remove(task.task_id)
+
       args = [
         'collect',
         '--swarming', self.swarming_server,
         '--decorate',
+        '--print-status-updates',
       ]
       if self.verbose:
         args.append('--verbose')
       args.append(task.task_id)
+
+      # Always wait for all tasks to finish even if some of them failed.
       steps.append(self.m.python(
-          name='swarming: %s on %s' % (task.title, task.dimensions['os']),
+          name='[swarming] %s on %s' % (task.title, task.dimensions['os']),
           script=self.m.swarming_client.path.join('swarming.py'),
-          args=args))
+          args=args,
+          always_run=True))
+
     return steps
 
 
