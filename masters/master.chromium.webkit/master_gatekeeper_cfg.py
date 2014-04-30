@@ -26,7 +26,7 @@ exclusions = {
   'WebKit Win Oilpan (dbg)': [],
 
   'WebKit Linux Leak': [],
-  'WebKit Linux Leak (dbg)': [],
+  'WebKit Linux Oilpan Leak': [],
 }
 
 forgiving_steps = ['update_scripts', 'update', 'gclient_revert']
