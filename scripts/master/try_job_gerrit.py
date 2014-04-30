@@ -64,7 +64,7 @@ class _TryJobGerritPoller(GerritPoller):
     self.scheduler = scheduler
 
   def _is_interesting_message(self, message):
-    return self.MESSAGE_REGEX_TRYJOB.match(message['message'])
+    return self.MESSAGE_REGEX_TRYJOB.search(message['message'])
 
   def getChangeQuery(self):
     query = GerritPoller.getChangeQuery(self)
@@ -74,7 +74,7 @@ class _TryJobGerritPoller(GerritPoller):
 
   def parseJob(self, message):
     """Parses a JobDefinition from a Gerrit message."""
-    tryjob_match = self.MESSAGE_REGEX_TRYJOB.match(message['message'])
+    tryjob_match = self.MESSAGE_REGEX_TRYJOB.search(message['message'])
     assert tryjob_match
     return JobDefinition.parse(tryjob_match.group(1))
 
