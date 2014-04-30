@@ -330,8 +330,8 @@ def main_android(options, args):
                             options.target)
 
   binaries = [
-      'chromium_testshell/libs/armeabi-v7a/libchromiumtestshell.so',
-      'lib/libchromiumtestshell.so',
+      'chrome_shell_apk/libs/armeabi-v7a/libchromeshell.cr.so',
+      'lib/libchromeshell.cr.so',
   ]
 
   return check_android_binaries(binaries, target_dir, options)
