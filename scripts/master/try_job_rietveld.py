@@ -309,6 +309,7 @@ class TryJobRietveld(TryJobBase):
             comments='')
         changeids = [c.number]
 
+        cleaned_job['patch_storage'] = 'rietveld'
         yield self.SubmitJob(cleaned_job, changeids)
 
         self.processed_keys.add(job['key'])
