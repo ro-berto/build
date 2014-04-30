@@ -258,10 +258,7 @@ class GpuApi(recipe_api.RecipeApi):
         name='pixel_test')
 
     # WebGL conformance tests.
-    yield self._maybe_run_isolated_telemetry_gpu_test('webgl_conformance',
-        args=[
-            '--webgl-conformance-version=1.0.2'
-        ])
+    yield self._maybe_run_isolated_telemetry_gpu_test('webgl_conformance')
 
     # Context lost tests.
     yield self._maybe_run_isolated_telemetry_gpu_test('context_lost')

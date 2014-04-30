@@ -347,8 +347,7 @@
       "--show-stdout",
       "--output-format=gtest",
       "--browser=debug",
-      "-v",
-      "--webgl-conformance-version=1.0.2"
+      "-v"
     ],
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
