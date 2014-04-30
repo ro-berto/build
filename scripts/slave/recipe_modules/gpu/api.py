@@ -208,14 +208,10 @@ class GpuApi(recipe_api.RecipeApi):
     # and the setting of these properties should happen in this recipe
     # instead.
 
-    # On Windows, start the crash service.
-    # TODO(kbr): figure out what to do with this when running via isolates.
-    if self.m.platform.is_win and not self._use_isolates:
-      yield self.m.python(
-        'start_crash_service',
-        self.m.path['build'].join('scripts', 'slave', 'chromium',
-                                  'run_crash_handler.py'),
-        ['--target', self.m.chromium.c.build_config_fs])
+    # Note: we do not run the crash_service on Windows any more now
+    # that these bots do not auto-reboot. There's no script which
+    # tears it down, and the fact that it's live prevents new builds
+    # from being unpacked correctly.
 
     # Note: --no-xvfb is the default.
     for test in SIMPLE_TESTS_TO_RUN:
@@ -310,14 +306,6 @@ class GpuApi(recipe_api.RecipeApi):
 
     # TODO(kbr): after the conversion to recipes, add all GPU related
     # steps from the main waterfall, like gpu_unittests.
-
-    # On Windows, process any crash dumps that may have occurred.
-    # TODO(kbr): figure out what to do with this when running via isolates.
-    if self.m.platform.is_win and not self._use_isolates:
-      yield self.m.python(
-        'process_dumps',
-        self.m.path['build'].join('scripts', 'slave', 'process_dumps.py'),
-        ['--target', self.m.chromium.c.build_config_fs])
 
   def _maybe_run_isolate(self, test, **kwargs):
     """Runs a test either from the extracted build or via an isolate,

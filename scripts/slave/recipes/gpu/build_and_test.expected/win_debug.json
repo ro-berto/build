@@ -124,16 +124,6 @@
     "name": "compile"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]\\scripts\\slave\\chromium\\run_crash_handler.py",
-      "--target",
-      "Debug"
-    ],
-    "name": "start_crash_service"
-  },
-  {
     "always_run": true,
     "cmd": [
       "python",
@@ -526,15 +516,5 @@
       "TestBuilder"
     ],
     "name": "gpu_rasterization_tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]\\scripts\\slave\\process_dumps.py",
-      "--target",
-      "Debug"
-    ],
-    "name": "process_dumps"
   }
 ]
