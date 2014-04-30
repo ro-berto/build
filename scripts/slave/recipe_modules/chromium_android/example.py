@@ -37,6 +37,7 @@ def GenSteps(api):
   yield api.chromium_android.cleanup_build()
   yield api.chromium_android.run_bisect_script(extra_src='test.py',
                                                path_to_config='test.py')
+  yield api.chromium_android.run_test_suite('unittests')
 
 def GenTests(api):
   yield (

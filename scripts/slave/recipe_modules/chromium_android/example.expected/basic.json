@@ -296,5 +296,20 @@
       "test.py"
     ],
     "name": "run bisect perf regression"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
+      "unittests"
+    ],
+    "env": {
+      "BUILDTYPE": "Debug"
+    },
+    "name": "unittests"
   }
 ]

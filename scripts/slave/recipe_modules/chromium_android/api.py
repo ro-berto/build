@@ -497,3 +497,11 @@ class AndroidApi(recipe_api.RecipeApi):
         [self.m.path['checkout'].join('tools',
                                       'run-bisect-perf-regression.py'),
          '-w', self.m.path['slave_build']] + args)
+
+  def run_test_suite(self, suite, args=[]):
+    yield self.m.python(
+        str(suite),
+        self.m.path['checkout'].join('build', 'android', 'test_runner.py'),
+        ['gtest', '-s', suite] + args,
+        env={'BUILDTYPE': self.c.BUILD_CONFIG},
+        always_run=True)
