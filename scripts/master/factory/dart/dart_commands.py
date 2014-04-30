@@ -188,11 +188,11 @@ class DartCommands(commands.FactoryCommands):
                           logfiles=self.logfiles,
                           lazylogfiles=True)
 
-  def AddVMTests(self, options, timeout):
+  def AddVMTests(self, options, timeout, channel):
     cmd = ('python ' + self._tools_dir + '/test.py '
            ' --progress=line --report --time --mode=%s --arch=%s '
            '--compiler=none --runtime=vm --failure-summary %s '
-           '--copy-coredumps --exclude_suite=pkg'
+           '--copy-coredumps'
            ) % (options['mode'], options['arch'], self.standard_flags)
 
     vm_options = options.get('vm_options')
@@ -200,6 +200,8 @@ class DartCommands(commands.FactoryCommands):
       cmd += ' --vm-options=%s' % vm_options
     if options.get('flags') != None:
       cmd += options.get('flags')
+    if channel and channel.name == 'be':
+      cmd += ' --exclude-suite=pkg'
 
     checked_config = options.get('checked_config')
     if not checked_config:
@@ -240,7 +242,7 @@ class DartCommands(commands.FactoryCommands):
     elif is_dart2dart:
       self.AddDart2dartTests(options, timeout)
     else:
-      self.AddVMTests(options, timeout)
+      self.AddVMTests(options, timeout, channel)
 
   def AddAnnotatedSteps(self, python_script, timeout=1200, run=1):
     name = 'annotated_steps'
