@@ -122,6 +122,7 @@ cache_dir = %(cache_dir)s
 ENABLED_MASTERS = ['chromium.git', 'chrome_git', 'chromium.mac']
 ENABLED_BUILDERS = {
     'tryserver.chromium': ['linux_rel_alt'],
+    'chromium.win': ['Win Builder'],
 }
 ENABLED_SLAVES = {
     # This is enabled on a bot-to-bot basis to ensure that we don't have
