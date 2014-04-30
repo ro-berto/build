@@ -666,6 +666,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         'smoothness.top_25',
         'smoothness.tough_canvas_cases',
         'smoothness.tough_pinch_zoom_cases',
+        'smoothness.tough_webgl_cases',
         'tab_switching.top_10',
         'thread_times.key_mobile_sites',
       ]
