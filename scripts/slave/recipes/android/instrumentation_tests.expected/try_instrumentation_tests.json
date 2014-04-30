@@ -156,7 +156,7 @@
       "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
       "cp",
       "gs://build-bucket/parent_buildername/build_product_1357.zip",
-      "[SLAVE_BUILD]/src/out/build_product_1357.zip"
+      "[SLAVE_BUILD]/src/out"
     ],
     "name": "gsutil download_build_product"
   },

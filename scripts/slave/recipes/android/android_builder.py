@@ -80,11 +80,8 @@ def GenSteps(api):
   if droid.c.run_checkdeps:
     yield droid.checkdeps()
 
-  if buildername == 'clang_release_builder':
-    yield droid.upload_clusterfuzz()
-  elif internal and droid.c.get_app_manifest_vars:
-    yield droid.upload_build_for_tester()
-
+  if internal and droid.c.get_app_manifest_vars:
+    yield droid.upload_build()
   yield droid.cleanup_build()
 
   if api.properties.get('android_bot_id') == "dartium_builder":
@@ -111,7 +108,7 @@ def GenTests(api):
       repo_url='svn://svn.chromium.org/chrome/trunk/src',
       revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
       android_bot_id=bot_id,
-      buildername=bot_id,
+      buildername='builder_name',
       buildnumber=1337,
       internal=True,
       deps_file='DEPS',
@@ -119,6 +116,7 @@ def GenTests(api):
     )
     if 'try_builder' in bot_id:
       props += api.properties(revision='refs/remotes/origin/master')
+      props += api.properties(upload_tag=1337)
       props += api.properties(patch_url='try_job_svn_patch')
 
     # dartium_builder does not use any step_data

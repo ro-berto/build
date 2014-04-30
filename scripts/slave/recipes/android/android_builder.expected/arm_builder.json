@@ -41,7 +41,7 @@
     "cmd": [
       "[SLAVE_BUILD]/src/repo/build/dump_app_manifest_vars.py",
       "-b",
-      "arm_builder",
+      "builder_name",
       "-v",
       "[SLAVE_BUILD]/src/chrome/VERSION",
       "--output-json",
@@ -174,7 +174,7 @@
       "--target",
       "Debug",
       "--name",
-      "build_product.zip"
+      "build_product_4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00.zip"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "zip_build_product"
@@ -186,12 +186,12 @@
       "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
       "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
       "cp",
-      "[SLAVE_BUILD]/src/out/build_product.zip",
-      "gs://build-bucket/arm_builder/build_product_1337.zip"
+      "[SLAVE_BUILD]/src/out/build_product_4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00.zip",
+      "gs://build-bucket/builder_name"
     ],
     "name": "gsutil upload_build_product",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/build-bucket/arm_builder/build_product_1337.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/build-bucket/builder_name@@@"
     ]
   },
   {
@@ -199,7 +199,7 @@
     "cmd": [
       "rm",
       "-rf",
-      "[SLAVE_BUILD]/src/out/build_product.zip"
+      "[SLAVE_BUILD]/src/out/build_product_4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00.zip"
     ],
     "name": "cleanup_build"
   }

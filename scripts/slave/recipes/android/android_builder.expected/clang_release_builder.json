@@ -41,7 +41,7 @@
     "cmd": [
       "[SLAVE_BUILD]/src/repo/build/dump_app_manifest_vars.py",
       "-b",
-      "clang_release_builder",
+      "builder_name",
       "-v",
       "[SLAVE_BUILD]/src/chrome/VERSION",
       "--output-json",
@@ -167,6 +167,14 @@
     "name": "compile"
   },
   {
+    "cmd": [
+      "[DEPOT_TOOLS]/git_number.py"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "git_number",
+    "stdout": "/path/to/tmp/"
+  },
+  {
     "always_run": true,
     "cmd": [
       "python",
@@ -175,13 +183,28 @@
       "--target",
       "Release",
       "--name",
-      "clusterfuzz.zip",
+      "build_product_3000.zip",
       "--files",
       "apks/*,lib/*.so,../../third_party/llvm-build/Release+Asserts/lib/clang/*/lib/linux/libclang_rt.asan-arm-android.so",
       "--ignore-subfolder-names"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "zip_clusterfuzz"
+    "name": "zip_build_product"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
+      "cp",
+      "[SLAVE_BUILD]/src/out/build_product_3000.zip",
+      "gs://chrome-test-builds/android/asan-android-release-3000.zip"
+    ],
+    "name": "gsutil upload_build_product",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-test-builds/android/asan-android-release-3000.zip@@@"
+    ]
   },
   {
     "always_run": true,
@@ -190,7 +213,7 @@
       "-u",
       "[SLAVE_BUILD]/src/clank/build/clusterfuzz_generate_revision.py",
       "--file",
-      "4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00"
+      "3000"
     ],
     "name": "git_revisions"
   },
@@ -201,34 +224,20 @@
       "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
       "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
       "cp",
-      "[SLAVE_BUILD]/src/out/4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00",
-      "gs://chrome-test-builds/android/revisions/4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00"
+      "[SLAVE_BUILD]/src/out/3000",
+      "gs://chrome-test-builds/android/revisions/3000"
     ],
     "name": "gsutil upload_revision_data",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-test-builds/android/revisions/4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
-      "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
-      "cp",
-      "[SLAVE_BUILD]/src/out/clusterfuzz.zip",
-      "gs://chrome-test-builds/android/4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00"
-    ],
-    "name": "gsutil upload_clusterfuzz",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-test-builds/android/4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-test-builds/android/revisions/3000@@@"
     ]
   },
   {
     "always_run": true,
     "cmd": [
       "rm",
-      "-rf"
+      "-rf",
+      "[SLAVE_BUILD]/src/out/build_product_3000.zip"
     ],
     "name": "cleanup_build"
   }
