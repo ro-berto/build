@@ -29,7 +29,7 @@ def GenSteps(api):
   builder_config = BUILDERS.get(buildername, {})
   droid.set_config(builder_config['recipe_config'],
       REPO_NAME='src',
-      REPO_URL='https://chromium.googlesource.com/chromium/src.git',
+      REPO_URL='svn://svn-mirror.golo.chromium.org/chrome/trunk/src',
       INTERNAL=False)
 
   yield droid.init_and_sync()
