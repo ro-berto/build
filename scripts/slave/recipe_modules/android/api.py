@@ -184,3 +184,9 @@ class AOSPApi(recipe_api.RecipeApi):
                       cwd=self.m.path['slave_build'],
                       env=env)
 
+  def update_defaut_props_step(self, extra_properties):
+    update_default_props_command = (
+        [self.resource('update_default_props.py')] +
+        ['%s=%s' % (k,v) for k,v in extra_properties.iteritems()])
+    return self.m.step('update /root/default.prop',
+                       self.with_lunch_command + update_default_props_command)

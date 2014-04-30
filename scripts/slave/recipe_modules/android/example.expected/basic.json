@@ -280,6 +280,16 @@
       "[BUILD]/scripts/slave/android/with_lunch",
       "[SLAVE_BUILD]/android-src",
       "nakasi-userdebug",
+      "[BUILD]/scripts/slave/recipe_modules/android/resources/update_default_props.py",
+      "ro.adb.secure=0"
+    ],
+    "name": "update /root/default.prop"
+  },
+  {
+    "cmd": [
+      "[BUILD]/scripts/slave/android/with_lunch",
+      "[SLAVE_BUILD]/android-src",
+      "nakasi-userdebug",
       "[BUILD]/scripts/slave/compile.py",
       "CC=foo CXX=bar",
       "droid",
