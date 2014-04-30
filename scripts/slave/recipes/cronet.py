@@ -38,9 +38,10 @@ def GenSteps(api):
   yield droid.clean_local_files()
   yield droid.runhooks()
   yield droid.compile()
+  yield droid.upload_build()
 
   if builder_config['run_tests']:
-    yield droid.device_status_check()
+    yield droid.common_tests_setup_steps()
     install_cmd = api.path['checkout'].join('build',
                                             'android',
                                             'adb_install_apk.py')
@@ -51,8 +52,9 @@ def GenSteps(api):
                                          'test_runner.py')
     yield api.python('test CronetSample', test_cmd,
         args = ['instrumentation', '--test-apk', 'CronetSampleTest'])
-  yield droid.upload_build()
-  yield droid.cleanup_build()
+    yield droid.common_tests_final_steps()
+  else:
+    yield droid.cleanup_build()
 
 def _sanitize_nonalpha(text):
   return ''.join(c if c.isalnum() else '_' for c in text.lower())
