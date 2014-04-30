@@ -26,6 +26,7 @@ def BaseConfig(INTERNAL=False, REPO_NAME=None, REPO_URL=None,
     get_app_manifest_vars = Single(bool, required=False, empty_val=True),
     run_tree_truth = Single(bool, required=False, empty_val=True),
     deps_file = Single(basestring, required=False, empty_val='.DEPS.git'),
+
     # deps_dir: where to checkout the gclient deps file
     deps_dir = Single(basestring, required=False, empty_val=REPO_NAME),
     managed = Single(bool, required=False, empty_val=True),
@@ -39,7 +40,8 @@ def BaseConfig(INTERNAL=False, REPO_NAME=None, REPO_URL=None,
     storage_bucket = Single(basestring),
     archive_clusterfuzz = Single(bool, required=False, empty_val=False),
     channel = Single(basestring, empty_val='chrome'),
-    upload_dest_prefix = Single(basestring)
+    upload_dest_prefix = Single(basestring),
+    gclient_custom_vars = Dict(value_type=(basestring, types.NoneType))
   )
 
 

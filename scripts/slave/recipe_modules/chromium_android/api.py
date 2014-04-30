@@ -89,6 +89,7 @@ class AndroidApi(recipe_api.RecipeApi):
     s.url = self.c.REPO_URL
     s.custom_deps = self.c.gclient_custom_deps or {}
     s.deps_file = self.c.deps_file
+    s.custom_vars = self.c.gclient_custom_vars or {}
     s.managed = self.c.managed
     s.revision = self.m.properties.get('revision') or self.c.revision
 
