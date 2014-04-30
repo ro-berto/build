@@ -31,6 +31,7 @@ def GenSteps(api):
       REPO_NAME='src',
       REPO_URL='svn://svn-mirror.golo.chromium.org/chrome/trunk/src',
       INTERNAL=False)
+  droid.c.deps_file = 'DEPS'
 
   yield droid.init_and_sync()
   yield droid.envsetup()
