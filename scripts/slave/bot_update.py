@@ -964,7 +964,7 @@ def parse_args():
                                                     'update.flag'))
   parse.add_option('--shallow', action='store_true',
                    help='Use shallow clones for cache repositories.')
-  parse.add_option('--gyp_env', action='append',
+  parse.add_option('--gyp_env', action='append', default=[],
                    help='Environment variables to pass into gclient runhooks.')
   parse.add_option('-o', '--output_json',
                    help='Output JSON information into a specified file')
