@@ -134,11 +134,11 @@ class TryJobGerritScheduler(BaseScheduler):
     defer.returnValue(bsid)
 
 
-class GerritTryJobStatus(StatusReceiverMultiService):
+class TryJobGerritStatus(StatusReceiverMultiService):
   """Posts results of a try job back to a Gerrit change."""
 
   def __init__(self, gerrit_host, review_factory=None):
-    """Creates a GerritTryJobStatus.
+    """Creates a TryJobGerritStatus.
 
     Args:
       gerrit_host: a URL of the Gerrit instance.
