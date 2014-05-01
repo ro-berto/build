@@ -652,7 +652,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         'memory.reload.2012Q3',
         'memory.top_25',
         'memory.tough_dom_memory_cases',
-        'rasterize_and_record_micro.fast_path.key_silk_cases',
+        'rasterize_and_record_micro.fast_path_gpu_rasterization.key_silk_cases',
         'rasterize_and_record_micro.fast_path.polymer',
         'rasterize_and_record_micro.key_mobile_sites',
         'rasterize_and_record_micro.key_silk_cases',
