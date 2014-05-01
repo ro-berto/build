@@ -760,7 +760,7 @@ def git_checkout(solutions, revision, shallow):
           raise
 
       git('clean', '-df', cwd=sln_dir)
-      git('pull', 'origin', 'master', cwd=sln_dir)
+      git('fetch', 'origin', cwd=sln_dir)
       # TODO(hinoka): We probably have to make use of revision mapping.
       if first_solution and revision and revision.lower() != 'head':
         if revision and revision.isdigit() and len(revision) < 40:
