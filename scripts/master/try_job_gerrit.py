@@ -55,7 +55,7 @@ class _TryJobGerritPoller(GerritPoller):
 
   change_category = 'tryjob'
 
-  MESSAGE_REGEX_TRYJOB = re.compile('!tryjob(.*)$', re.I)
+  MESSAGE_REGEX_TRYJOB = re.compile('^!tryjob(.*)$', re.I | re.M)
 
   def __init__(self, scheduler, gerrit_host, gerrit_projects=None,
                pollInterval=None):
