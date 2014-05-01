@@ -210,6 +210,12 @@ class SubprocessFailed(Exception):
     self.code = code
 
 
+class GclientSyncFailed(SubprocessFailed):
+  def __init__(self, message, code):
+    SubprocessFailed.__init__(self, message)
+    self.code = code
+
+
 class SVNRevisionNotFound(Exception):
   pass
 
@@ -432,15 +438,26 @@ def gclient_configure(solutions, target_os, target_os_only):
     f.write(get_gclient_spec(solutions, target_os, target_os_only))
 
 
-def gclient_sync(output_json, buildspec_name):
+def gclient_sync(buildspec_name):
+  # We just need to allocate a filename.
+  fd, gclient_output_file = tempfile.mkstemp(suffix='.json')
+  os.close(fd)
   gclient_bin = 'gclient.bat' if sys.platform.startswith('win') else 'gclient'
   cmd = [gclient_bin, 'sync', '--verbose', '--reset', '--force',
-         '--output-json', output_json, '--nohooks', '--noprehooks']
+         '--output-json', gclient_output_file , '--nohooks', '--noprehooks']
   if buildspec_name:
     cmd += ['--with_branch_heads']
-  call(*cmd)
-  with open(output_json) as f:
-    return json.load(f)
+
+  try:
+    call(*cmd)
+  except SubprocessFailed as e:
+    # Throw a GclientSyncFailed exception so we can catch this independently.
+    raise GclientSyncFailed(e.message, e.code)
+  else:
+    with open(gclient_output_file) as f:
+      return json.load(f)
+  finally:
+    os.remove(gclient_output_file)
 
 
 def gclient_runhooks(gyp_envs):
@@ -876,6 +893,45 @@ def emit_json(out_file, did_run, gclient_output=None, **kwargs):
     f.write(json.dumps(output))
 
 
+def ensure_checkout(solutions, revision, first_sln, target_os, target_os_only,
+                    root, issue, patchset, patch_url, rietveld_server,
+                    revision_mapping, buildspec_name, gyp_env, shallow):
+  # Get a checkout of each solution, without DEPS or hooks.
+  # Calling git directly because there is no way to run Gclient without
+  # invoking DEPS.
+  print 'Fetching Git checkout'
+  git_ref = git_checkout(solutions, revision, shallow)
+
+  # If either patch_url or issue is passed in, then we need to apply a patch.
+  if patch_url:
+    # patch_url takes precidence since its only passed in on gcl try/git try.
+    apply_issue_svn(root, patch_url)
+  elif issue:
+    apply_issue_rietveld(issue, patchset, root, rietveld_server,
+                         revision_mapping, git_ref)
+
+  if buildspec_name:
+    buildspecs2git(root, buildspec_name)
+  elif first_sln == root:
+    # Run deps2git if there is a DEPS commit after the last .DEPS.git commit.
+    # We only need to ensure deps2git if the root is not overridden, since
+    # if the root is overridden, it means we are working with a sub repository
+    # patch, which means its impossible for it to touch DEPS.
+    ensure_deps2git(root, shallow)
+
+  # Ensure our build/ directory is set up with the correct .gclient file.
+  gclient_configure(solutions, target_os, target_os_only)
+
+  # Let gclient do the DEPS syncing.
+  gclient_output = gclient_sync(buildspec_name)
+  if buildspec_name:
+    # Run gclient runhooks if we're on an official builder.
+    # TODO(hinoka): Remove this when the official builders run their own
+    #               runhooks step.
+    gclient_runhooks(gyp_env)
+  return gclient_output
+
+
 def parse_args():
   parse = optparse.OptionParser()
 
@@ -982,50 +1038,42 @@ def main():
   if not options.shallow:
     options.shallow = total_disk_space < SHALLOW_CLONE_THRESHOLD
 
-  # Get a checkout of each solution, without DEPS or hooks.
-  # Calling git directory because there is no way to run Gclient without
-  # invoking DEPS.
-  print 'Fetching Git checkout'
-  git_ref = git_checkout(git_solutions, options.revision, options.shallow)
-
   # By default, the root should be the name of the first solution, but
-  # also make it overridable.  The root is where patches are applied on top of.
+  # also make it overridable. The root is where patches are applied on top of.
   options.root =  options.root or dir_names[0]
   # The first solution is where the primary DEPS file resides.
   first_sln = dir_names[0]
 
-  # If either patch_url or issue is passed in, then we need to apply a patch.
-  if options.patch_url:
-    # patch_url takes precidence since its only passed in on gcl try/git try.
-    apply_issue_svn(options.root, options.patch_url)
-  elif options.issue:
-    apply_issue_rietveld(options.issue, options.patchset, options.root,
-                         options.rietveld_server, options.revision_mapping,
-                         git_ref)
+  try:
+    checkout_parameters = dict(
+        # First, pass in the base of what we want to check out.
+        solutions=git_solutions,
+        revision=options.revision,
+        first_sln=first_sln,
 
-  if buildspec_name:
-    buildspecs2git(options.root, buildspec_name)
-  elif first_sln == options.root:
-    # Run deps2git if there is a DEPS commit after the last .DEPS.git commit.
-    # We only need to ensure deps2git if the root is not overridden, since
-    # if the root is overridden, it means we are working with a sub repository
-    # patch, which means its impossible for it to touch DEPS.
-    ensure_deps2git(options.root, options.shallow)
+        # Also, target os variables for gclient.
+        target_os=specs.get('target_os', []),
+        target_os_only=specs.get('target_os_only', False),
 
-  # Ensure our build/ directory is set up with the correct .gclient file.
-  gclient_configure(git_solutions, specs.get('target_os', []),
-                    specs.get('target_os_only', False))
+        # Then, pass in information about how to patch on top of the checkout.
+        root=options.root,
+        issue=options.issue,
+        patchset=options.patchset,
+        patch_url=options.patch_url,
+        rietveld_server=options.rietveld_server,
+        revision_mapping=options.revision_mapping,
 
-  # Let gclient do the DEPS syncing.  Also we can get "got revision" data
-  # from gclient by passing in --output-json.  In our case, we can just reuse
-  # the temp file that
-  _, gclient_output_file = tempfile.mkstemp(suffix='.json')
-  gclient_output = gclient_sync(gclient_output_file, buildspec_name)
-  if buildspec_name:
-    # Run gclient runhooks if we're on an official builder.
-    # TODO(hinoka): Remove this when the official builders run their own
-    #               runhooks step.
-    gclient_runhooks(options.gyp_env)
+        # For official builders.
+        buildspec_name=buildspec_name,
+        gyp_env=options.gyp_env,
+
+        # Finally, extra configurations such as shallowness of the clone.
+        shallow=options.shallow)
+    gclient_output = ensure_checkout(**checkout_parameters)
+  except GclientSyncFailed:
+    print 'We failed gclient sync, lets delete the checkout and retry.'
+    ensure_no_checkout(dir_names, '*')
+    gclient_output = ensure_checkout(**checkout_parameters)
 
   # If we're fed an svn revision number as --revision, then our got_revision
   # output should be in svn revs.  Otherwise it'll be in git hashes, unless
