@@ -118,14 +118,6 @@
     "name": "compile"
   },
   {
-    "cmd": [
-      "[DEPOT_TOOLS]/git_number.py"
-    ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "git_number",
-    "stdout": "/path/to/tmp/"
-  },
-  {
     "always_run": true,
     "cmd": [
       "python",
@@ -147,11 +139,11 @@
       "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
       "cp",
       "[SLAVE_BUILD]/src/out/build_product.zip",
-      "gs://chromium-cronet/android/cronet-3000.zip"
+      "gs://chromium-cronet/android/cronet-4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00.zip"
     ],
     "name": "gsutil upload_build_product",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-cronet/android/cronet-3000.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-cronet/android/cronet-4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00.zip@@@"
     ]
   },
   {
