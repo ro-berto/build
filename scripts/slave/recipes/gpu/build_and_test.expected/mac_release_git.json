@@ -122,6 +122,7 @@
   },
   {
     "abort_on_failure": true,
+    "can_fail_build": true,
     "cmd": [
       "python",
       "-u",
