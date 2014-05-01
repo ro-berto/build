@@ -384,6 +384,26 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddGTestTestStep('media_unittests', fp)
     if R('media_br'):
       f.AddBuildrunnerGTest('media_unittests', fp)
+    if R('mojo_apps_js_unittests'):
+      f.AddBuildrunnerGTest('mojo_apps_js_unittests', fp)
+    if R('mojo_common_unittests'):
+      f.AddBuildrunnerGTest('mojo_common_unittests', fp)
+    if R('mojo_js_unittests'):
+      f.AddBuildrunnerGTest('mojo_js_unittests', fp)
+    if R('mojo_public_bindings_unittests'):
+      f.AddBuildrunnerGTest('mojo_public_bindings_unittests', fp)
+    if R('mojo_public_environment_unittests'):
+      f.AddBuildrunnerGTest('mojo_public_environment_unittests', fp)
+    if R('mojo_public_system_unittests'):
+      f.AddBuildrunnerGTest('mojo_public_system_unittests', fp)
+    if R('mojo_public_utility_unittests'):
+      f.AddBuildrunnerGTest('mojo_public_utility_unittests', fp)
+    if R('mojo_service_manager_unittests'):
+      f.AddBuildrunnerGTest('mojo_service_manager_unittests', fp)
+    if R('mojo_system_unittests'):
+      f.AddBuildrunnerGTest('mojo_system_unittests', fp)
+    if R('mojo_view_manager_unittests'):
+      f.AddBuildrunnerGTest('mojo_view_manager_unittests', fp)
     if R('nacl_loader_unittests'):
       f.AddGTestTestStep('nacl_loader_unittests', fp)
     if R('nacl_loader_unittests_br'):
