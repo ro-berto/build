@@ -106,7 +106,7 @@ class GerritPoller(base.PollingChangeSource):
         'branch': change['branch'],
         'revision': change['current_revision'],
         'comments': commit['subject'],
-        'files': commit['files'].keys() if 'files' in commit else ['UNKNOWN'],
+        'files': revision.get('files', {'UNKNOWN': None}).keys(),
         'category': self.change_category,
         'when_timestamp': self._parse_timestamp(commit['committer']['date']),
         'revlink': '%s://%s/#/c/%s' % (
