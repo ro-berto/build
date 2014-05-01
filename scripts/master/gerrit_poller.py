@@ -77,10 +77,22 @@ class GerritPoller(base.PollingChangeSource):
     d.addCallback(_parse_messages)
     return d
 
+  def getChangeUrl(self, change):
+    """Generates a URL for a Gerrit change."""
+    # GerritAgent stores its URL as protocol and host.
+    return '%s://%s/#/c/%s' % (self.agent.gerrit_protocol,
+                               self.agent.gerrit_host,
+                               change['_number'])
+
   def addBuildbotChange(self, change, message):
     revision = change['revisions'].values()[0]
     commit = revision['commit']
-    properties = {'event.change.number': change['_number']}
+
+    properties = {
+        'event.change.number': change['_number'],
+        'event.change.id': change['id'],
+        'event.change.url': self.getChangeUrl(change),
+    }
     if change['status'] == 'NEW':
       ref = revision.get('fetch', {}).get('http', {}).get('ref')
       if ref:

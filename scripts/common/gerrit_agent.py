@@ -6,6 +6,7 @@ import base64
 from cStringIO import StringIO
 import json
 import netrc
+import urlparse
 
 from twisted.internet import defer, protocol, reactor
 from twisted.python import log
@@ -100,12 +101,11 @@ class GerritAgent(Agent):
   gerrit_protocol = 'https'
 
   def __init__(self, gerrit_host, *args, **kwargs):
-    proto, _, host = gerrit_host.partition('://')
-    if host:
-      self.gerrit_protocol = proto
-      self.gerrit_host = host
-    else:
-      self.gerrit_host = gerrit_host
+    url_parts = urlparse.urlparse(gerrit_host)
+    if url_parts.scheme:
+      self.gerrit_protocol = url_parts.scheme
+    self.gerrit_host = url_parts.netloc
+
     auth_entry = NETRC.authenticators(self.gerrit_host.partition(':')[0])
     if auth_entry:
       self.auth_token = 'Basic %s' % (

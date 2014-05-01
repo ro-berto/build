@@ -9,7 +9,10 @@ from twisted.internet import defer
 from twisted.python import log
 
 from buildbot.schedulers.base import BaseScheduler
+from buildbot.status.base import StatusReceiverMultiService
+from buildbot.status.builder import Results
 
+from common.gerrit_agent import GerritAgent
 from master.gerrit_poller import GerritPoller
 
 
@@ -129,3 +132,68 @@ class TryJobGerritScheduler(BaseScheduler):
     log.msg('Successfully submitted a Gerrit try job for %s: %s.' %
             (change.who, job))
     defer.returnValue(bsid)
+
+
+class GerritTryJobStatus(StatusReceiverMultiService):
+  """Posts results of a try job back to a Gerrit change."""
+
+  def __init__(self, gerrit_host, review_factory=None):
+    """Creates a GerritTryJobStatus.
+
+    Args:
+      gerrit_host: a URL of the Gerrit instance.
+      review_factory: a function (builder_name, build, result) => review,
+        where review is a dict described in Gerrit docs:
+        https://gerrit-review.googlesource.com/Documentation/rest-api-changes.html#review-input
+    """
+    StatusReceiverMultiService.__init__(self)
+    self.review_factory = review_factory or self.createReview
+    self.agent = GerritAgent(gerrit_host)
+    self.status = None
+
+  def createReview(self, builder_name, build, result):
+    review = {}
+    if result is not None:
+      message = ('A try job has finished on builder %s: %s' %
+                 (builder_name, Results[result].upper()))
+    else:
+      message = 'A try job has started on builder %s' % builder_name
+      # Do not send email about this.
+      review['notify'] = 'NONE'
+
+    # Append build url.
+    # A line break in a Gerrit message is \n\n.
+    assert self.status
+    build_url = self.status.getURLForThing(build)
+    message = '%s\n\n%s' % (message, build_url)
+
+    review['message'] = message
+    return review
+
+  def sendUpdate(self, builder_name, build, result):
+    """Posts a message and labels, if any, on a Gerrit change."""
+    props = build.properties
+    change_id = (props.getProperty('event.change.id') or
+                 props.getProperty('parent_event.change.id'))
+    revision = props.getProperty('revision')
+    if change_id and revision:
+      review = self.review_factory(builder_name, build, result)
+      if review:
+        log.msg('Sending a revew for change %s: %s' % (change_id, review))
+        path = '/changes/%s/revisions/%s/review' % (change_id, revision)
+        return self.agent.request('POST', path, body=review)
+
+  def startService(self):
+    StatusReceiverMultiService.startService(self)
+    self.status = self.parent.getStatus()
+    self.status.subscribe(self)
+
+  def builderAdded(self, name, builder):
+    # Subscribe to this builder.
+    return self
+
+  def buildStarted(self, builder_name, build):
+    self.sendUpdate(builder_name, build, None)
+
+  def buildFinished(self, builder_name, build, result):
+    self.sendUpdate(builder_name, build, result)
