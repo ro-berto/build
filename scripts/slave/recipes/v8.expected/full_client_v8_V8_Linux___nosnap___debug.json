@@ -103,7 +103,7 @@
       "--arch",
       "ia32",
       "--testname",
-      "mjsunit cctest message preparser",
+      "mjsunit fuzz-natives cctest message preparser",
       "--no-snap",
       "--flaky-tests",
       "skip"
@@ -128,7 +128,7 @@
       "--arch",
       "ia32",
       "--testname",
-      "mjsunit cctest message preparser",
+      "mjsunit fuzz-natives cctest message preparser",
       "--no-snap",
       "--flaky-tests",
       "run"

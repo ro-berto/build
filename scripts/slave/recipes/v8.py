@@ -44,7 +44,7 @@ V8_TEST_CONFIGS = {
   },
   'v8testing': {
     'name': 'Check',
-    'tests': 'mjsunit cctest message preparser',
+    'tests': 'mjsunit fuzz-natives cctest message preparser',
     'add_flaky_step': True,
   },
   'webkit': {

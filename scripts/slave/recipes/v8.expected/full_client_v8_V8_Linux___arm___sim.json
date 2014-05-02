@@ -82,7 +82,7 @@
       "--arch",
       "arm",
       "--testname",
-      "mjsunit cctest message preparser",
+      "mjsunit fuzz-natives cctest message preparser",
       "--flaky-tests",
       "skip"
     ],
@@ -106,7 +106,7 @@
       "--arch",
       "arm",
       "--testname",
-      "mjsunit cctest message preparser",
+      "mjsunit fuzz-natives cctest message preparser",
       "--flaky-tests",
       "run"
     ],

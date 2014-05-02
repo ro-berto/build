@@ -223,7 +223,7 @@
       "--arch",
       "ia32",
       "--testname",
-      "mjsunit cctest message preparser",
+      "mjsunit fuzz-natives cctest message preparser",
       "--quickcheck"
     ],
     "cwd": "[SLAVE_BUILD]\\v8",

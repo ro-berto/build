@@ -56,9 +56,9 @@ class V8Factory(gclient_factory.GClientFactory):
     if R('presubmit'): f.AddPresubmitTest()
     if R('v8initializers'): f.AddV8Initializers()
     if R('v8testing'):
-      f.AddV8TestTC('mjsunit cctest message preparser', 'Check')
+      f.AddV8TestTC('mjsunit fuzz-natives cctest message preparser', 'Check')
     if R('v8try'):
-      f.AddV8Test('mjsunit cctest message preparser', 'Check',
+      f.AddV8Test('mjsunit fuzz-natives cctest message preparser', 'Check',
                   options=['--quickcheck'])
     if R('experimental_parser'):
       f.AddV8TestTC('', 'CheckParser')

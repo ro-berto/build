@@ -103,7 +103,7 @@
       "--arch",
       "ia32",
       "--testname",
-      "mjsunit cctest message preparser",
+      "mjsunit fuzz-natives cctest message preparser",
       "--shell_flags=\"--noenable-sse4-1\"",
       "--flaky-tests",
       "skip"
@@ -128,7 +128,7 @@
       "--arch",
       "ia32",
       "--testname",
-      "mjsunit cctest message preparser",
+      "mjsunit fuzz-natives cctest message preparser",
       "--shell_flags=\"--noenable-sse4-1\"",
       "--flaky-tests",
       "run"
