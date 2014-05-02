@@ -19,6 +19,8 @@ BUILDERS = {
       'REPO_NAME': 'src',
       'INTERNAL': False,
       'REPO_URL': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src',
+    },
+    'custom': {
       'deps_file': 'DEPS'
     }
   },
@@ -28,7 +30,9 @@ BUILDERS = {
       'BUILD_CONFIG': 'Debug',
       'REPO_NAME': 'src',
       'INTERNAL': False,
-      'REPO_URL': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src',
+      'REPO_URL': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'
+    },
+    'custom': {
       'deps_file': 'DEPS'
     }
   }
@@ -51,6 +55,7 @@ def GenSteps(api):
     kwargs = bot_config.get('kwargs', {})
     droid.configure_from_properties(bot_config['recipe_config'],
       **dict(default_kwargs.items() + kwargs.items()))
+    droid.c.set_val(bot_config.get('custom', {}))
   else:
     # Bots that don't belong to BUILDERS. We want to move away from this.
     internal = api.properties.get('internal')
