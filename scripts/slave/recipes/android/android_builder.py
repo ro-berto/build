@@ -134,6 +134,8 @@ def GenTests(api):
     test = (
       api.test('full_%s' % _sanitize_nonalpha(buildername)) +
       api.properties.generic(buildername=buildername,
-          repository='svn://svn.chromium.org/chrome/trunk/src')
-    )
+          repository='svn://svn.chromium.org/chrome/trunk/src',
+          buildnumber=257,
+          mastername='chromium.fyi master',
+          revision='267739'))
     yield test

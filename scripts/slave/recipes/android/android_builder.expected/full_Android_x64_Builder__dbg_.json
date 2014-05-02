@@ -21,7 +21,7 @@
       "--delete_unversioned_trees",
       "--force",
       "--revision",
-      "src@refs/remotes/origin/master",
+      "src@267739",
       "--output-json",
       "/path/to/tmp/json"
     ],
