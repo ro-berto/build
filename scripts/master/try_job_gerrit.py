@@ -3,7 +3,6 @@
 # found in the LICENSE file.
 
 import json
-import os
 import re
 
 from twisted.internet import defer
@@ -62,7 +61,7 @@ class _TryJobGerritPoller(GerritPoller):
   MESSAGE_REGEX_TRYJOB = re.compile('^!tryjob(.*)$', re.I | re.M)
 
   def __init__(self, scheduler, gerrit_host, gerrit_projects=None,
-               pollInterval=None, dry_run=False):
+               pollInterval=None, dry_run=None):
     assert scheduler
     GerritPoller.__init__(self, gerrit_host, gerrit_projects, pollInterval,
                           dry_run)
@@ -111,9 +110,6 @@ class TryJobGerritScheduler(BaseScheduler):
         gerrit_projects: Gerrit projects to filter issues.
         pollInterval: frequency of polling.
     """
-    if dry_run is None:
-      dry_run = 'POLLER_DRY_RUN' in os.environ
-
     BaseScheduler.__init__(self, name,
                            builderNames=default_builder_names,
                            properties={})

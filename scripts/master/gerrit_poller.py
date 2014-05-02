@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import datetime
+import os
 
 from buildbot.changes import base
 from buildbot.util import deferredLocked
@@ -18,7 +19,7 @@ class GerritPoller(base.PollingChangeSource):
   change_category = 'patchset-created'
 
   def __init__(self, gerrit_host, gerrit_projects=None, pollInterval=None,
-               dry_run=False):
+               dry_run=None):
     if isinstance(gerrit_projects, basestring):
       gerrit_projects = [gerrit_projects]
     self.gerrit_projects = gerrit_projects
@@ -27,6 +28,10 @@ class GerritPoller(base.PollingChangeSource):
     self.initLock = defer.DeferredLock()
     self.last_timestamp = None
     self.agent = GerritAgent(gerrit_host)
+    self.dry_run = dry_run
+
+    if dry_run is None:
+      dry_run = 'POLLER_DRY_RUN' in os.environ
     self.dry_run = dry_run
 
   @staticmethod
