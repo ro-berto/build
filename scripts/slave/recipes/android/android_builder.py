@@ -80,7 +80,7 @@ def GenSteps(api):
   if droid.c.run_checkdeps:
     yield droid.checkdeps()
 
-  if buildername == 'clang_release_builder':
+  if bot_id == 'clang_release_builder':
     yield droid.upload_clusterfuzz()
   elif internal and droid.c.get_app_manifest_vars:
     yield droid.upload_build_for_tester()
@@ -111,7 +111,7 @@ def GenTests(api):
       repo_url='svn://svn.chromium.org/chrome/trunk/src',
       revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
       android_bot_id=bot_id,
-      buildername=bot_id,
+      buildername=bot_id, # TODO(luqui): fix buildername to match master
       buildnumber=1337,
       internal=True,
       deps_file='DEPS',
