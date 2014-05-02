@@ -211,9 +211,7 @@ class SubprocessFailed(Exception):
 
 
 class GclientSyncFailed(SubprocessFailed):
-  def __init__(self, message, code):
-    SubprocessFailed.__init__(self, message)
-    self.code = code
+  pass
 
 
 class SVNRevisionNotFound(Exception):
