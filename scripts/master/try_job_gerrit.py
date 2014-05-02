@@ -86,9 +86,10 @@ class _TryJobGerritPoller(GerritPoller):
     """Parses a job, adds a change and calls self.scheduler.submitJob."""
     try:
       job = self.parseJob(message)
-      buildbotChange = yield self.addBuildbotChange(change, message)
-      yield self.scheduler.submitJob(buildbotChange, job)
-      defer.returnValue(buildbotChange)
+      revision = self.findRevisionShaForMessage(change, message)
+      buildbot_change = yield self.addBuildbotChange(change, revision)
+      yield self.scheduler.submitJob(buildbot_change, job)
+      defer.returnValue(buildbot_change)
     except Exception as e:
       log.err('TryJobGerritPoller failed: %s' % e)
       raise

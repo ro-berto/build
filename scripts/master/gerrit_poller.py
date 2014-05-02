@@ -63,7 +63,7 @@ class GerritPoller(base.PollingChangeSource):
 
   def checkForNewPatchset(self, change, since):
     o_params = '&'.join('o=%s' % x for x in (
-        'MESSAGES', 'CURRENT_REVISION', 'CURRENT_COMMIT', 'ALL_FILES'))
+        'MESSAGES', 'ALL_REVISIONS', 'ALL_COMMITS', 'ALL_FILES'))
     path = '/changes/%s?%s' % (change['_number'], o_params)
     d = self.agent.request('GET', path)
     def _parse_messages(j):
@@ -84,9 +84,20 @@ class GerritPoller(base.PollingChangeSource):
                                self.agent.gerrit_host,
                                change['_number'])
 
-  def addBuildbotChange(self, change, message):
-    revision = change['revisions'].values()[0]
-    commit = revision['commit']
+  def addBuildbotChange(self, change, revision=None):
+    """Adds a buildbot change into the database.
+
+    Args:
+      change: ChangeInfo Gerrit object. Documentation:
+        https://gerrit-review.googlesource.com/Documentation/rest-api-changes.html#change-info
+      revision: the sha of the buildbot change revision to use. Defaults to the
+        value of change['current_revision']
+
+    Returns the new buildbot change as Deferred.
+    """
+    revision = revision or change['current_revision']
+    revision_details = change['revisions'][revision]
+    commit = revision_details['commit']
 
     properties = {
         'event.change.number': change['_number'],
@@ -94,19 +105,19 @@ class GerritPoller(base.PollingChangeSource):
         'event.change.url': self.getChangeUrl(change),
     }
     if change['status'] == 'NEW':
-      ref = revision.get('fetch', {}).get('http', {}).get('ref')
+      ref = revision_details.get('fetch', {}).get('http', {}).get('ref')
       if ref:
         properties['event.patchSet.ref'] = ref
     elif change['status'] in ('SUBMITTED', 'MERGED'):
-      properties['event.refUpdate.newRev'] = change['current_revision']
+      properties['event.refUpdate.newRev'] = revision
     chdict = {
         'author': '%s <%s>' % (
             commit['author']['name'], commit['author']['email']),
         'project': change['project'],
         'branch': change['branch'],
-        'revision': change['current_revision'],
+        'revision': revision,
         'comments': commit['subject'],
-        'files': revision.get('files', {'UNKNOWN': None}).keys(),
+        'files': revision_details.get('files', {'UNKNOWN': None}).keys(),
         'category': self.change_category,
         'when_timestamp': self._parse_timestamp(commit['committer']['date']),
         'revlink': '%s://%s/#/c/%s' % (
@@ -119,11 +130,27 @@ class GerritPoller(base.PollingChangeSource):
     }
     d = self.master.addChange(**chdict)
     d.addErrback(log.err, 'GerritPoller: Could not add buildbot change for '
-                 'gerrit change %s.' % revision['_number'])
+                 'gerrit change %s.' % revision_details['_number'])
     return d
 
+  @staticmethod
+  def findRevisionShaForMessage(change, message):
+    def warn(text):
+      log.msg('GerritPoller warning: %s. Change: %s, message: %s' %
+              (text, change['id'], message['message']))
+
+    revision_number = message.get('_revision_number')
+    if revision_number is None:
+      warn('A message doesn\'t have a _revision_number')
+      return None
+    for sha, revision in change['revisions'].iteritems():
+      if revision['_number'] == revision_number:
+        return sha
+    warn('a revision wasn\'t found for message')
+
   def addChange(self, change, message):
-    return self.addBuildbotChange(change, message)
+    revision = self.findRevisionShaForMessage(change, message)
+    return self.addBuildbotChange(change, revision)
 
   def processChanges(self, j, since):
     need_more = bool(j)
