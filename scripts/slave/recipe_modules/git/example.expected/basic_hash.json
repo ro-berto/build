@@ -24,7 +24,6 @@
       "git",
       "fetch",
       "origin",
-      "abcdef0123456789abcdef0123456789abcdef01",
       "--recurse-submodules"
     ],
     "cwd": "[SLAVE_BUILD]/src",

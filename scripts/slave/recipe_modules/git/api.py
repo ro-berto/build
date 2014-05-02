@@ -76,23 +76,30 @@ class GitApi(recipe_api.RecipeApi):
     # Note that 'FETCH_HEAD' can be many things (and therefore not a valid
     # checkout target) if many refs are fetched, but we only explicitly fetch
     # one ref here, so this is safe.
+    fetch_args = []
     if not ref:                                  # Case 0
+      fetch_remote = 'origin'
       fetch_ref = self.m.properties.get('branch') or 'master'
       checkout_ref = 'FETCH_HEAD'
     elif self._GIT_HASH_RE.match(ref):        # Case 1.
-      fetch_ref = ref
+      fetch_remote = 'origin'
+      fetch_ref = ''
       checkout_ref = ref
     elif ref.startswith('refs/heads/'):       # Case 3.
+      fetch_remote = 'origin'
       fetch_ref = ref[len('refs/heads/'):]
       checkout_ref = 'FETCH_HEAD'
     else:                                     # Cases 2 and 4.
+      fetch_remote = 'origin'
       fetch_ref = ref
       checkout_ref = 'FETCH_HEAD'
 
-    fetch_args = ['--recurse-submodules'] if recursive else []
+    fetch_args = [x for x in (fetch_remote, fetch_ref) if x]
+    if recursive:
+      fetch_args.append('--recurse-submodules')
 
     steps.append([
-      self('fetch', 'origin', fetch_ref, *fetch_args, cwd=dir_path,
+      self('fetch', *fetch_args, cwd=dir_path,
            name='git fetch%s' % step_suffix),
       self('checkout', '-f', checkout_ref, cwd=dir_path,
            name='git checkout%s' % step_suffix),
