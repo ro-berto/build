@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import json
+import os
 import re
 
 from twisted.internet import defer
@@ -61,9 +62,10 @@ class _TryJobGerritPoller(GerritPoller):
   MESSAGE_REGEX_TRYJOB = re.compile('^!tryjob(.*)$', re.I | re.M)
 
   def __init__(self, scheduler, gerrit_host, gerrit_projects=None,
-               pollInterval=None):
+               pollInterval=None, dry_run=False):
     assert scheduler
-    GerritPoller.__init__(self, gerrit_host, gerrit_projects, pollInterval)
+    GerritPoller.__init__(self, gerrit_host, gerrit_projects, pollInterval,
+                          dry_run)
     self.scheduler = scheduler
 
   def _is_interesting_message(self, message):
@@ -98,7 +100,7 @@ class _TryJobGerritPoller(GerritPoller):
 class TryJobGerritScheduler(BaseScheduler):
   """Polls try jobs on Gerrit and creates buildsets."""
   def __init__(self, name, default_builder_names, gerrit_host,
-               gerrit_projects=None, pollInterval=None):
+               gerrit_projects=None, pollInterval=None, dry_run=None):
     """Creates a new TryJobGerritScheduler.
 
     Args:
@@ -109,11 +111,14 @@ class TryJobGerritScheduler(BaseScheduler):
         gerrit_projects: Gerrit projects to filter issues.
         pollInterval: frequency of polling.
     """
+    if dry_run is None:
+      dry_run = 'POLLER_DRY_RUN' in os.environ
+
     BaseScheduler.__init__(self, name,
                            builderNames=default_builder_names,
                            properties={})
     self.poller = _TryJobGerritPoller(self, gerrit_host, gerrit_projects,
-                                      pollInterval)
+                                      pollInterval, dry_run)
 
   def setServiceParent(self, parent):
     BaseScheduler.setServiceParent(self, parent)

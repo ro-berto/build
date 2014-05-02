@@ -17,7 +17,8 @@ class GerritPoller(base.PollingChangeSource):
 
   change_category = 'patchset-created'
 
-  def __init__(self, gerrit_host, gerrit_projects=None, pollInterval=None):
+  def __init__(self, gerrit_host, gerrit_projects=None, pollInterval=None,
+               dry_run=False):
     if isinstance(gerrit_projects, basestring):
       gerrit_projects = [gerrit_projects]
     self.gerrit_projects = gerrit_projects
@@ -26,6 +27,7 @@ class GerritPoller(base.PollingChangeSource):
     self.initLock = defer.DeferredLock()
     self.last_timestamp = None
     self.agent = GerritAgent(gerrit_host)
+    self.dry_run = dry_run
 
   @staticmethod
   def _parse_timestamp(tm):
@@ -172,6 +174,9 @@ class GerritPoller(base.PollingChangeSource):
 
   @deferredLocked('initLock')
   def poll(self):
+    if self.dry_run:
+      return
+
     log.msg('GerritPoller: getting latest changes...')
     since = self.last_timestamp
     d = self.getChanges()
