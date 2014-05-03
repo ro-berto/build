@@ -60,24 +60,27 @@ class Deps2SubmodulesTest(object):
 
 
 class GTestTest(object):
-  def __init__(self, name, args=None):
+  def __init__(self, name, args=None, flakiness_dash=False):
     self.name = name
     self.args = args or []
+    self.flakiness_dash = flakiness_dash
 
   def run(self, api):
     return api.chromium.runtest(self.name,
                                 args=self.args,
                                 annotate='gtest',
                                 xvfb=True,
-                                parallel=True)
+                                parallel=True,
+                                flakiness_dash=self.flakiness_dash)
 
   def compile_targets(self, _):
     return [self.name]
 
 
 class DynamicGTestTests(object):
-  def __init__(self, buildername):
+  def __init__(self, buildername, flakiness_dash=True):
     self.buildername = buildername
+    self.flakiness_dash = flakiness_dash
 
   @staticmethod
   def _canonicalize_test(test):
@@ -98,7 +101,8 @@ class DynamicGTestTests(object):
         args.extend(['--test-launcher-shard-index=%d' % test['shard_index'],
                      '--test-launcher-total-shards=%d' % test['total_shards']])
       steps.append(api.chromium.runtest(
-          test['test'], args=args, annotate='gtest', xvfb=True, parallel=True))
+          test['test'], args=args, annotate='gtest', xvfb=True, parallel=True,
+          flakiness_dash=self.flakiness_dash))
 
     return steps
 

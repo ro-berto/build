@@ -89,7 +89,7 @@ class ChromiumApi(recipe_api.RecipeApi):
               generate_json_file=False, results_directory=None,
               python_mode=False, spawn_dbus=True, parallel=False,
               revision=None, webkit_revision=None, master_class_name=None,
-              test_launcher_summary_output=None, **kwargs):
+              test_launcher_summary_output=None, flakiness_dash=None, **kwargs):
     """Return a runtest.py invocation."""
     args = args or []
     assert isinstance(args, list)
@@ -106,6 +106,10 @@ class ChromiumApi(recipe_api.RecipeApi):
     if annotate:
       full_args.append('--annotate=%s' % annotate)
       kwargs['allow_subannotations'] = True
+
+    if annotate != 'gtest':
+      assert not flakiness_dash
+
     if results_url:
       full_args.append('--results-url=%s' % results_url)
     if perf_dashboard_id:
@@ -122,6 +126,13 @@ class ChromiumApi(recipe_api.RecipeApi):
         '--test-launcher-summary-output',
         test_launcher_summary_output
       ])
+    if flakiness_dash:
+      full_args.extend([
+        '--generate-json-file',
+        '-o', 'gtest-results/%s' % test,
+      ])
+      # The flakiness dashboard needs the buildnumber, so we assert it here.
+      assert self.m.properties.get('buildnumber')
     # These properties are specified on every bot, so pass them down
     # unconditionally.
     full_args.append('--builder-name=%s' % self.m.properties['buildername'])
