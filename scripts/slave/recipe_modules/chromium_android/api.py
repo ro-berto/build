@@ -13,6 +13,11 @@ class AndroidApi(recipe_api.RecipeApi):
     self._internal_names = dict()
     self._cleanup_list = []
 
+  def get_config_defaults(self):
+    return {
+      'REVISION': self.m.properties.get('revision', '')
+    }
+
   def get_env(self):
     env_dict = dict(self._env)
     internal_path = None
@@ -90,7 +95,7 @@ class AndroidApi(recipe_api.RecipeApi):
     s.deps_file = self.c.deps_file
     s.custom_vars = self.c.gclient_custom_vars or {}
     s.managed = self.c.managed
-    s.revision = self.m.properties.get('revision') or self.c.revision
+    s.revision = self.c.revision
 
     yield self.m.gclient.checkout(spec)
 

@@ -9,13 +9,13 @@ from slave.recipe_config import ConfigList, Dict, List, Single, Static
 from slave.recipe_config_types import Path
 
 def BaseConfig(INTERNAL=False, REPO_NAME=None, REPO_URL=None,
-               BUILD_CONFIG='Debug', **_kwargs):
+               BUILD_CONFIG='Debug', REVISION='', **_kwargs):
   return ConfigGroup(
     INTERNAL = Static(INTERNAL),
     REPO_NAME = Static(REPO_NAME),
     REPO_URL = Static(REPO_URL),
     BUILD_CONFIG = Static(BUILD_CONFIG),
-    revision = Single(basestring),
+    revision = Single(basestring, empty_val=REVISION),
     extra_env = Dict(value_type=(basestring,int,Path)),
     run_findbugs = Single(bool, required=False, empty_val=False),
     run_lint = Single(bool, required=False, empty_val=False),
@@ -64,7 +64,6 @@ config_ctx = config_item_context(BaseConfig, VAR_TEST_MAP, TEST_NAME_FORMAT)
 def base_config(c):
   if c.INTERNAL:
     c.internal_dir = Path('[CHECKOUT]', c.REPO_NAME.split('/', 1)[-1])
-  c.revision = 'refs/remotes/origin/master'
 
 @config_ctx()
 def main_builder(c):
