@@ -13,12 +13,16 @@ DEPS = [
 
 
 def GenSteps(api):
-  api.chromium.set_config('chromium')
+  kwargs = {}
+  kwargs['TARGET_PLATFORM'] = 'android'
+  kwargs['TARGET_ARCH'] = 'arm'
+  api.chromium.set_config('chromium', **kwargs)
   yield api.gclient.checkout()
 
-  harness_file = 'telemetry-%s.zip' % (
-      api.step_history['gclient sync'].json.output[
-          'solutions']['src/']['revision'],)
+  revision_number = api.step_history['gclient sync'].json.output[
+      'solutions']['src/']['revision']
+
+  harness_file = 'telemetry-%s.zip' % revision_number
   harness_path = api.path.mkdtemp('telemetry-harness')
 
   yield api.step('create harness archive', [
@@ -31,7 +35,10 @@ def GenSteps(api):
 
   bucket = 'chromium-telemetry'
   cloud_file = 'snapshots/%s' % harness_file
-  yield api.gsutil.upload(harness_path.join(harness_file), bucket, cloud_file)
+  yield api.gsutil.upload(harness_path.join(harness_file), bucket, cloud_file,
+                          link_name='Telemetry r%s' % revision_number)
+  yield api.gsutil.copy(bucket, cloud_file, bucket, 'snapshots/telemetry.zip',
+                        link_name='Telemetry latest')
   yield api.path.rmtree('remove harness temp directory', harness_path)
 
 

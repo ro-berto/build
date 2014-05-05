@@ -72,3 +72,22 @@ class GSUtilApi(recipe_api.RecipeApi):
     cmd = ['cp'] + args + [url, dest]
     name = kwargs.pop('name', 'download')
     return self(cmd, name, **kwargs)
+
+  def copy(self, source_bucket, source, dest_bucket, dest, args=None,
+           link_name='gsutil.copy', **kwargs):
+    args = args or []
+    full_source = 'gs://%s/%s' % (source_bucket, source)
+    full_dest = 'gs://%s/%s' % (dest_bucket, dest)
+    cmd = ['cp'] + args + [full_source, full_dest]
+    name = kwargs.pop('name', 'copy')
+
+    if link_name:
+      @recipe_util.wrap_followup(kwargs)
+      def inline_followup(step_result):
+        step_result.presentation.links[link_name] = (
+          'https://storage.cloud.google.com/%s/%s' % (dest_bucket, dest)
+        )
+
+      kwargs['followup_fn'] = inline_followup
+
+    return self(cmd, name, **kwargs)
