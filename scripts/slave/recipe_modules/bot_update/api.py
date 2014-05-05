@@ -14,6 +14,12 @@ from slave import recipe_api
 # enabled here rather than in bot_update.py.
 ENABLED_MASTERS = ['chromium.git', 'chromium.linux', 'chromium.mac']
 ENABLED_BUILDERS = {
+    'chromium.fyi': [
+        'Linux Trusty (32)',
+        'Linux Trusty (dbg)',
+        'Linux Trusty (dbg)(32)',
+        'Linux Trusty',
+    ],
     'tryserver.chromium': [
         'linux_rel_alt',
         'android_chromium_gn_compile_dbg',
