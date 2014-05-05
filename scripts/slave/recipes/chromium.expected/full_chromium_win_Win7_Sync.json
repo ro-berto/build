@@ -172,6 +172,7 @@
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Win7 Sync\", \"buildnumber\": 571, \"mastername\": \"chromium.win\", \"parent_buildername\": \"Win Builder\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=gtest",
+      "--test-type=sync_integration_tests",
       "--builder-name=Win7 Sync",
       "--slave-name=TestSlavename",
       "--build-number=571",

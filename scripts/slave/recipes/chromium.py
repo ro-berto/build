@@ -67,6 +67,7 @@ class GTestTest(object):
 
   def run(self, api):
     return api.chromium.runtest(self.name,
+                                test_type=self.name,
                                 args=self.args,
                                 annotate='gtest',
                                 xvfb=True,
@@ -101,8 +102,8 @@ class DynamicGTestTests(object):
         args.extend(['--test-launcher-shard-index=%d' % test['shard_index'],
                      '--test-launcher-total-shards=%d' % test['total_shards']])
       steps.append(api.chromium.runtest(
-          test['test'], args=args, annotate='gtest', xvfb=True, parallel=True,
-          flakiness_dash=self.flakiness_dash))
+          test['test'], test_type=test['test'], args=args, annotate='gtest',
+          xvfb=True, parallel=True, flakiness_dash=self.flakiness_dash))
 
     return steps
 

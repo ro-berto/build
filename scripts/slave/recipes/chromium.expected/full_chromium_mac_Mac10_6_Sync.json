@@ -138,6 +138,7 @@
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac10.6 Sync\", \"buildnumber\": 571, \"mastername\": \"chromium.mac\", \"parent_buildername\": \"Mac Builder\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=gtest",
+      "--test-type=sync_integration_tests",
       "--builder-name=Mac10.6 Sync",
       "--slave-name=TestSlavename",
       "--build-number=571",
