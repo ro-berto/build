@@ -17,6 +17,7 @@ def GenSteps(api):
   kwargs['TARGET_PLATFORM'] = 'android'
   kwargs['TARGET_ARCH'] = 'arm'
   api.chromium.set_config('chromium', **kwargs)
+  api.gclient.apply_config('android')
   yield api.gclient.checkout()
 
   revision_number = api.step_history['gclient sync'].json.output[
