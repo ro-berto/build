@@ -226,11 +226,10 @@ def call(*args, **kwargs):
   if stdin_data:
     kwargs['stdin'] = subprocess.PIPE
   out = cStringIO.StringIO()
+  new_env = kwargs.get('env', {})
   env = copy.copy(os.environ)
-  new_env = kwargs.get('env', None)
-  if new_env:
-    env.update(kwargs['env'])
-    kwargs['env'] = env
+  env.update(new_env)
+  kwargs['env'] = env
   for attempt in xrange(RETRIES):
     attempt_msg = ' (retry #%d)' % attempt if attempt else ''
     if new_env:
