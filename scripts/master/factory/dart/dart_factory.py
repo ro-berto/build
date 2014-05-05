@@ -688,12 +688,23 @@ class DartUtils(object):
       extra_recipients = mail_notifier['extraRecipients']
       send_to_interested_useres = mail_notifier.get('sendToInterestedUsers',
                                                     False)
-      statuses.append(
-          MailNotifier(fromaddr=self._active_master.from_address,
-                       mode='problem',
-                       sendToInterestedUsers=send_to_interested_useres,
-                       extraRecipients=extra_recipients,
-                       lookup=master_utils.FilterDomain(),
-                       builders=notifying_builders))
+      subject = mail_notifier.get('subject')
+      if subject:
+        statuses.append(
+            MailNotifier(fromaddr=self._active_master.from_address,
+                         mode='problem',
+                         subject=subject,
+                         sendToInterestedUsers=send_to_interested_useres,
+                         extraRecipients=extra_recipients,
+                         lookup=master_utils.FilterDomain(),
+                         builders=notifying_builders))
+      else:
+        statuses.append(
+            MailNotifier(fromaddr=self._active_master.from_address,
+                         mode='problem',
+                         sendToInterestedUsers=send_to_interested_useres,
+                         extraRecipients=extra_recipients,
+                         lookup=master_utils.FilterDomain(),
+                         builders=notifying_builders))
     return statuses
 
