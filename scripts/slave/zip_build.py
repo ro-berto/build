@@ -8,6 +8,7 @@
 """
 
 import csv
+import fnmatch
 import glob
 import optparse
 import os
@@ -178,6 +179,30 @@ def FileExclusions():
     ]
 
   return all_platforms
+
+
+def MojomJSFiles(build_dir):
+  """Lists all mojom JavaScript files that need to be included in the archive.
+
+  Args:
+    build_dir: The build directory.
+
+  Returns:
+    A list of mojom JavaScript file paths which are relative to the build
+    directory.
+  """
+  walk_dirs = [
+    'gen/mojo',
+    'gen/content/test/data',
+  ]
+  mojom_js_files = []
+  for walk_dir in walk_dirs:
+    walk_dir = os.path.join(build_dir, walk_dir)
+    for path, _, files in os.walk(walk_dir):
+      rel_path = os.path.relpath(path, build_dir)
+      for mojom_js_file in fnmatch.filter(files, '*.mojom.js'):
+        mojom_js_files.append(os.path.join(rel_path, mojom_js_file))
+  return mojom_js_files
 
 
 def WriteRevisionFile(dirname, build_revision):
@@ -381,6 +406,13 @@ def Archive(options):
          [f for f in root_files if not path_filter.Match(f)])
 
   zip_file_list = [f for f in root_files if path_filter.Match(f)]
+
+  # TODO(yzshen): Once we have swarming support ready, we could use it to
+  # archive run time dependencies of tests and remove this step.
+  mojom_js_files = MojomJSFiles(build_dir)
+  print 'Include mojom JavaScript files: %s' % mojom_js_files
+  zip_file_list.extend(mojom_js_files)
+
   zip_file = MakeUnversionedArchive(build_dir, staging_dir, zip_file_list,
                                     unversioned_base_name, options.path_filter)
 
