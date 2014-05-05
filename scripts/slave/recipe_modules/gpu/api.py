@@ -308,22 +308,29 @@ class GpuApi(recipe_api.RecipeApi):
       yield self._maybe_run_isolate('performance_browser_tests',
                                     args=args,
                                     name='tab_capture_performance_tests',
+                                    isolate_name='tab_capture_performance_tests',
                                     annotate='graphing',
                                     results_url=self._dashboard_upload_url,
                                     perf_dashboard_id='tab_capture_performance',
                                     test_type='tab_capture_performance_tests',
                                     spawn_dbus=True)
 
+    yield self._maybe_run_isolate(
+        'browser_tests',
+        args=['--enable-gpu',
+              '--gtest_filter=TabCaptureApiPixelTest.*'],
+        name='tab_capture_end2end_tests',
+        spawn_dbus=True)
+
     # TODO(kbr): after the conversion to recipes, add all GPU related
     # steps from the main waterfall, like gpu_unittests.
 
-  def _maybe_run_isolate(self, test, **kwargs):
+  def _maybe_run_isolate(self, test, isolate_name=None, **kwargs):
     """Runs a test either from the extracted build or via an isolate,
     depending on whether isolates are in use for this build."""
     if self._use_isolates:
-      # If the name is supplied, treat that as the name of the isolate.
       yield self.m.isolate.runtest(
-        kwargs.get('name', test),
+        isolate_name or test,
         self._build_revision,
         self._webkit_revision,
         master_class_name=self._master_class_name_for_testing,
