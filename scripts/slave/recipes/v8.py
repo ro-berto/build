@@ -128,6 +128,7 @@ def CreateTest(test):
 # Map of GS archive names to urls.
 GS_ARCHIVES = {
   'linux_rel_archive': 'gs://chromium-v8/v8-linux-rel',
+  'linux_rel_archive_exp': 'gs://chromium-v8/v8-linux-rel-exp',
   'linux_dbg_archive': 'gs://chromium-v8/v8-linux-dbg',
   'linux_nosnap_rel_archive': 'gs://chromium-v8/v8-linux-nosnap-rel',
   'linux_nosnap_dbg_archive': 'gs://chromium-v8/v8-linux-nosnap-dbg',
@@ -149,6 +150,16 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'build_gs_archive': 'linux_rel_archive',
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - builder - experimental': {
+        'chromium_apply_config': ['verify_heap'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'build_gs_archive': 'linux_rel_archive_exp',
         'testing': {'platform': 'linux'},
       },
       'V8 Linux': {
@@ -583,19 +594,13 @@ BUILDERS = {
       # waterfall to be switched to recipes.
       'V8 Linux - recipe': {
         'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
+          'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
         'bot_type': 'tester',
-        'parent_buildername': 'V8 Linux - debug builder',
-        'build_gs_archive': 'linux_dbg_archive',
-        'tests': [
-          'v8testing',
-          'benchmarks',
-          'test262',
-          'mozilla',
-          'simpleleak',
-        ],
+        'parent_buildername': 'V8 Linux - builder - experimental',
+        'build_gs_archive': 'linux_rel_archive_exp',
+        'tests': ['v8testing'],
         'testing': {'platform': 'linux'},
       },
 ####### Category: FYI
