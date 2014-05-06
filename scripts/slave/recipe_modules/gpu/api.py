@@ -315,12 +315,16 @@ class GpuApi(recipe_api.RecipeApi):
                                     test_type='tab_capture_performance_tests',
                                     spawn_dbus=True)
 
-    yield self._maybe_run_isolate(
-        'browser_tests',
-        args=['--enable-gpu',
-              '--gtest_filter=TabCaptureApiPixelTest.*'],
-        name='tab_capture_end2end_tests',
-        spawn_dbus=True)
+    # browser_tests.isolate unconditionally invokes Xvfb, which is not
+    # workable on the GPU bots. Disable this test on Linux when using
+    # isolates for the moment. crbug.com/365927
+    if not (self.m.platform.is_linux and self._use_isolates):
+      yield self._maybe_run_isolate(
+          'browser_tests',
+          args=['--enable-gpu',
+                '--gtest_filter=TabCaptureApiPixelTest.*'],
+          name='tab_capture_end2end_tests',
+          spawn_dbus=True)
 
     # TODO(kbr): after the conversion to recipes, add all GPU related
     # steps from the main waterfall, like gpu_unittests.
