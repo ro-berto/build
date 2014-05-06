@@ -168,7 +168,7 @@
       "-o",
       "[SLAVE_BUILD]/src/out/build_product_4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00.zip"
     ],
-    "cwd": "[SLAVE_BUILD]/src/out",
+    "cwd": "[SLAVE_BUILD]/src",
     "name": "unzip_build_product"
   },
   {

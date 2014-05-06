@@ -76,13 +76,6 @@ class AndroidApi(recipe_api.RecipeApi):
       **kwargs
     )
 
-  def unzip_archive(self, step_name, zip_file, **kwargs):
-    yield self.m.step(
-      step_name,
-      ['unzip', '-o', zip_file],
-      **kwargs
-    )
-
   def init_and_sync(self):
     # TODO(sivachandra): Move the setting of the gclient spec below to an
     # internal config extension when they are supported by the recipe system.
@@ -338,10 +331,10 @@ class AndroidApi(recipe_api.RecipeApi):
         dest=zipfile,
         use_retry_wrapper=True
     )
-    yield self.unzip_archive(
-        'unzip_build_product',
-        zipfile,
-        cwd=self.m.path['checkout'].join('out')
+    yield self.m.step(
+      'unzip_build_product',
+      ['unzip', '-o', zipfile],
+      cwd=self.m.path['checkout']
     )
 
   def download_build(self):
