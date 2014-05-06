@@ -42,7 +42,7 @@
     "cmd": [
       "[SLAVE_BUILD]/src/repo/build/dump_app_manifest_vars.py",
       "-b",
-      "tehbuilder",
+      "basic_builder",
       "-v",
       "[SLAVE_BUILD]/src/chrome/VERSION",
       "--output-json",

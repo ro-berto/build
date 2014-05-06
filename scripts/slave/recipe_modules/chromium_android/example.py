@@ -9,7 +9,18 @@ DEPS = [
     'properties',
 ]
 
+BUILDERS = {
+    'basic_builder': {
+        'restart_usb': False,
+    },
+    'restart_usb_builder': {
+        'restart_usb': True,
+    }
+}
+
 def GenSteps(api):
+  config = BUILDERS[api.properties['buildername']]
+
   api.chromium_android.configure_from_properties('base_config', INTERNAL=True)
   api.chromium_android.c.get_app_manifest_vars = True
   api.chromium_android.c.run_stack_tool_steps = True
@@ -28,7 +39,8 @@ def GenSteps(api):
 
   yield api.adb.root_devices()
   yield api.chromium_android.spawn_logcat_monitor()
-  yield api.chromium_android.device_status_check()
+  yield api.chromium_android.device_status_check(
+      restart_usb=config['restart_usb'])
 
   yield api.chromium_android.monkey_test()
 
@@ -40,13 +52,14 @@ def GenSteps(api):
   yield api.chromium_android.run_test_suite('unittests')
 
 def GenTests(api):
-  yield (
-      api.test('basic') +
-      api.properties(
-        buildername='tehbuilder',
-        repo_name='src/repo',
-        repo_url='svn://svn.chromium.org/chrome/trunk/src',
-        revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
-        internal=True,
-      ) +
-      api.chromium_android.default_step_data(api))
+  for buildername in BUILDERS:
+    yield (
+        api.test('%s_basic' % buildername) +
+        api.properties(
+          buildername=buildername,
+          repo_name='src/repo',
+          repo_url='svn://svn.chromium.org/chrome/trunk/src',
+          revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
+          internal=True,
+        ) +
+        api.chromium_android.default_step_data(api))
