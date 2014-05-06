@@ -63,6 +63,7 @@
       "--nohooks",
       "--delete_unversioned_trees",
       "--force",
+      "--verbose",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -145,6 +146,7 @@
       "--nohooks",
       "--delete_unversioned_trees",
       "--force",
+      "--verbose",
       "--output-json",
       "/path/to/tmp/json"
     ],

@@ -35,6 +35,7 @@
       "--nohooks",
       "--delete_unversioned_trees",
       "--force",
+      "--verbose",
       "--revision",
       "src@HEAD",
       "--output-json",

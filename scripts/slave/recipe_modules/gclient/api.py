@@ -119,7 +119,7 @@ class GclientApi(recipe_api.RecipeApi):
       self.test_api.output_json(test_data_paths, cfg.GIT_MODE))
     if not cfg.GIT_MODE:
       yield self('sync', ['sync', '--nohooks', '--delete_unversioned_trees',
-                 '--force'] +
+                 '--force', '--verbose'] +
                  revisions + ['--output-json', self.m.json.output()],
                  followup_fn=parse_got_revision, step_test_data=step_test_data,
                  **kwargs)

@@ -20,6 +20,7 @@
       "--nohooks",
       "--delete_unversioned_trees",
       "--force",
+      "--verbose",
       "--revision",
       "src@267739",
       "--output-json",

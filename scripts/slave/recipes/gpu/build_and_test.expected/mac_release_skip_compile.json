@@ -43,6 +43,7 @@
       "--nohooks",
       "--delete_unversioned_trees",
       "--force",
+      "--verbose",
       "--revision",
       "src@c14d891d44f0afff64e56ed7c9702df1d807b1ee",
       "--output-json",
