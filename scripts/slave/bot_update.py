@@ -159,7 +159,8 @@ DISABLED_BUILDERS = {
         'linux_chromium_chromeos_clang_dbg',
         'blink_android_compile_rel',
         'blink_android_compile_dbg',
-    ]
+    ],
+    'chromium.win': ['Win Builder'],  # crbug.com/370473
 }
 DISABLED_SLAVES = {}
 
