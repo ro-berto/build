@@ -1438,10 +1438,7 @@ def _MainAndroid(options, args):
         perf_dashboard_id=options.perf_dashboard_id)
 
   if options.results_url:
-    if options.perf_id:
-      perf_id = options.perf_id
-    else:
-      perf_id = options.factory_properties.get('perf_id')
+    perf_id = options.factory_properties.get('perf_id')
     if options.factory_properties.get('add_perf_id_suffix'):
       perf_id += options.build_properties.get('perf_id_suffix')
     _SendResultsToDashboard(

@@ -359,14 +359,11 @@ class AndroidApi(recipe_api.RecipeApi):
          self.m.chromium.c.build_dir.join('logcat')],
         env=self.get_env(), can_fail_build=False)
 
-  def device_status_check(self, restart_usb=False):
-    args = []
-    if restart_usb:
-      args = ['--restart-usb']
+  def device_status_check(self):
     yield self.m.step(
         'device_status_check',
         [self.m.path['checkout'].join('build', 'android', 'buildbot',
-                              'bb_device_status_check.py')] + args,
+                              'bb_device_status_check.py')],
         env=self.get_env())
 
   def detect_and_setup_devices(self):
