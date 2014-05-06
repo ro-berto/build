@@ -840,6 +840,16 @@ def _GenerateRunIsolatedCommand(build_dir, test_exe_path, options, command):
   return isolate_command
 
 
+def _GetPerfID(options):
+  if options.perf_id:
+    perf_id = options.perf_id
+  else:
+    perf_id = options.factory_properties.get('perf_id')
+    if options.factory_properties.get('add_perf_id_suffix'):
+      perf_id += options.build_properties.get('perf_id_suffix')
+  return perf_id
+
+
 def _MainParse(options, _args):
   """Run input through annotated test parser.
 
@@ -971,11 +981,8 @@ def _MainMac(options, args):
         perf_dashboard_id=options.perf_dashboard_id)
 
   if options.results_url:
-    perf_id = options.factory_properties.get('perf_id')
-    if options.factory_properties.get('add_perf_id_suffix'):
-      perf_id += options.build_properties.get('perf_id_suffix')
     _SendResultsToDashboard(
-        results_tracker, perf_id,
+        results_tracker, _GetPerfID(options),
         options.test_type, options.results_url, options.build_dir,
         options.build_properties.get('mastername'),
         options.build_properties.get('buildername'),
@@ -1249,11 +1256,8 @@ def _MainLinux(options, args):
         perf_dashboard_id=options.perf_dashboard_id)
 
   if options.results_url:
-    perf_id = options.factory_properties.get('perf_id')
-    if options.factory_properties.get('add_perf_id_suffix'):
-      perf_id += options.build_properties.get('perf_id_suffix')
     _SendResultsToDashboard(
-        results_tracker, perf_id,
+        results_tracker, _GetPerfID(options),
         options.test_type, options.results_url, options.build_dir,
         options.build_properties.get('mastername'),
         options.build_properties.get('buildername'),
@@ -1373,11 +1377,8 @@ def _MainWin(options, args):
         perf_dashboard_id=options.perf_dashboard_id)
 
   if options.results_url:
-    perf_id = options.factory_properties.get('perf_id')
-    if options.factory_properties.get('add_perf_id_suffix'):
-      perf_id += options.build_properties.get('perf_id_suffix')
     _SendResultsToDashboard(
-        results_tracker, perf_id,
+        results_tracker, _GetPerfID(options),
         options.test_type, options.results_url, options.build_dir,
         options.build_properties.get('mastername'),
         options.build_properties.get('buildername'),
@@ -1438,14 +1439,8 @@ def _MainAndroid(options, args):
         perf_dashboard_id=options.perf_dashboard_id)
 
   if options.results_url:
-    if options.perf_id:
-      perf_id = options.perf_id
-    else:
-      perf_id = options.factory_properties.get('perf_id')
-    if options.factory_properties.get('add_perf_id_suffix'):
-      perf_id += options.build_properties.get('perf_id_suffix')
     _SendResultsToDashboard(
-        results_tracker, perf_id,
+        results_tracker, _GetPerfID(options),
         options.test_type, options.results_url, options.build_dir,
         options.build_properties.get('mastername'),
         options.build_properties.get('buildername'),
@@ -1592,7 +1587,7 @@ def main():
   option_parser.add_option('--perf-dashboard-id', default='',
                            help='The ID on the perf dashboard to add results '
                                 'to.')
-  option_parser.add_option('--perf_id', default='',
+  option_parser.add_option('--perf-id', default='',
                            help='The perf builder id')
   option_parser.add_option('--supplemental-columns-file',
                            default='supplemental_columns',
