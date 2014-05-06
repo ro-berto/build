@@ -14,8 +14,8 @@ Prerequisites:
 * Mac: ManyCam must be installed in the default location and be preconfigured
   to auto-play the test clip.
 * Linux: The v4l2loopback kernel module must be compiled and loaded to the
-  kernel already (with the devices=2 argument) and the v4l2_file_player
-  application must be compiled and put in the location specified below.
+  kernel already and the v4l2_file_player application must be compiled and put
+  in the location specified below.
 
 NOTICE: When running this script as a buildbot step, make sure to set
 usePTY=False for the build step when adding it, or the subprocess will die as
@@ -36,7 +36,7 @@ E = os.path.expandvars
 WEBCAM_LINUX = [
     E('$HOME/fake-webcam-driver/linux/v4l2_file_player/v4l2_file_player'),
     E('$HOME/webrtc_video_quality/reference_video.yuv'),
-    '640', '480', '/dev/video1']
+    '640', '480', '/dev/video0']
 
 
 def IsWebCamRunning():
