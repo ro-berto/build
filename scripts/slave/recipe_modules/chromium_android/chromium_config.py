@@ -77,6 +77,11 @@ def arm_builder(c):
   gyp_defs['android_sdk_root'] = Path(
     '[CHECKOUT]', 'third_party', 'android_tools', 'sdk')
 
+@CONFIG_CTX(includes=['arm_builder'],
+            config_vars={'BUILD_CONFIG': 'Release'})
+def arm_builder_rel(c):
+  pass
+
 @CONFIG_CTX(includes=['base_config', 'default_compiler'],
             config_vars={'TARGET_ARCH': 'intel', 'TARGET_BITS': 64})
 def x64_builder(c):
