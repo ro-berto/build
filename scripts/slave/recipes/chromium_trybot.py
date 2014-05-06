@@ -561,8 +561,8 @@ def GenSteps(api):
     tests.append(test)
   tests.append(NaclIntegrationTest())
 
-  compile_targets = list(api.itertools.chain(
-                             *[t.compile_targets() for t in tests]))
+  compile_targets = ['all'] + list(api.itertools.chain(
+      *[t.compile_targets() for t in tests]))
   yield api.chromium.compile(compile_targets,
                              name='compile (with patch)',
                              abort_on_failure=False,

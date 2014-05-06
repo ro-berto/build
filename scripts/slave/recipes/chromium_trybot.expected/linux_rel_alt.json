@@ -122,6 +122,7 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
+      "all",
       "base_unittests",
       "mojo_common_unittests",
       "browser_tests",

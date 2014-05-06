@@ -293,6 +293,7 @@
       "--goma-dir",
       "[BUILD]\\goma",
       "--",
+      "all",
       "base_unittests",
       "browser_tests",
       "chrome"
