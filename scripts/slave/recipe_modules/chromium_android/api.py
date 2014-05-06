@@ -335,7 +335,8 @@ class AndroidApi(recipe_api.RecipeApi):
         name='download_build_product',
         bucket=bucket,
         source=path,
-        dest=zipfile
+        dest=zipfile,
+        use_retry_wrapper=True
     )
     yield self.unzip_archive(
         'unzip_build_product',
