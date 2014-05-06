@@ -27,6 +27,7 @@ import os
 import psutil  # pylint: disable=F0401
 import subprocess
 import sys
+import time
 
 
 WEBCAM_WIN = ['schtasks', '/run', '/tn', 'ManyCam']
@@ -76,7 +77,15 @@ def Main():
       process = subprocess.Popen(WEBCAM_LINUX, stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
                                  stdin=subprocess.PIPE)
-      print 'Successfully launched virtual webcam with PID %s' % process.pid
+      # If the v4l2loopback module is not loaded or incorrectly configured,
+      # the process will still launch but will die immediately.
+      # Wait for a second and then check for aliveness to catch such errors.
+      time.sleep(1)
+      if process.poll() is None:
+        print 'Successfully launched virtual webcam with PID %s' % process.pid
+      else:
+        print 'Failed to launch virtual webcam.'
+        return 1
 
     return 0
 
