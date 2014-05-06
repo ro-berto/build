@@ -115,7 +115,8 @@ class BotUpdateApi(recipe_api.RecipeApi):
       # The trybot recipe sometimes wants to de-apply the patch. In which case
       # we pretend the issue/patchset/patch_url never existed.
       issue = patchset = patch_url = None
-    revision = ref or self.m.properties.get('revision')
+    revision = (ref or self.m.properties.get('parent_got_revision') or
+                self.m.properties.get('revision'))
     # Issue and patchset must come together.
     if issue:
       assert patchset
