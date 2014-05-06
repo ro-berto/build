@@ -321,7 +321,8 @@
       "[BUILD]/scripts/slave/android/with_lunch",
       "[SLAVE_BUILD]/android-src",
       "full-eng",
-      "[SLAVE_BUILD]/android-src/external/chromium_org/android_webview/tools/gyp_webview"
+      "[SLAVE_BUILD]/android-src/external/chromium_org/android_webview/tools/gyp_webview",
+      "all"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "gyp_webview"

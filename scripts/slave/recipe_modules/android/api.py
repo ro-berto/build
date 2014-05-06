@@ -145,7 +145,7 @@ class AOSPApi(recipe_api.RecipeApi):
   def gyp_webview_step(self):
     yield self.m.step('gyp_webview', self.with_lunch_command + [
       self.c.slave_chromium_in_android_path.join('android_webview', 'tools',
-                                                 'gyp_webview')],
+                                                 'gyp_webview'), 'all'],
       cwd=self.m.path['checkout'])
 
   def incompatible_directories_check_step(self):
