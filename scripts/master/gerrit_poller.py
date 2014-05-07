@@ -28,7 +28,6 @@ class GerritPoller(base.PollingChangeSource):
     self.initLock = defer.DeferredLock()
     self.last_timestamp = None
     self.agent = GerritAgent(gerrit_host)
-    self.dry_run = dry_run
 
     if dry_run is None:
       dry_run = 'POLLER_DRY_RUN' in os.environ
@@ -40,7 +39,8 @@ class GerritPoller(base.PollingChangeSource):
     return datetime.datetime.strptime(tm, '%Y-%m-%d %H:%M:%S.%f')
 
   def startService(self):
-    self.initLastTimeStamp()
+    if not self.dry_run:
+      self.initLastTimeStamp()
     base.PollingChangeSource.startService(self)
 
   def getChangeQuery(self):  # pylint: disable=R0201
