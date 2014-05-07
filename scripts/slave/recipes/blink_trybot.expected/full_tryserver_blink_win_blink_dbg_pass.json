@@ -84,7 +84,7 @@
       "-u",
       "[DEPOT_TOOLS]\\apply_issue.py",
       "-r",
-      "[SLAVE_BUILD]\\src\\third_party/WebKit",
+      "[SLAVE_BUILD]\\src\\third_party\\WebKit",
       "-i",
       "12853011",
       "-p",

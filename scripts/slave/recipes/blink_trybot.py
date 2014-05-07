@@ -327,6 +327,22 @@ BUILDERS = {
       },
     },
   },
+  'tryserver.v8': {
+    'builders': {
+      'v8_linux_layout_dbg': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'compile_only': False,
+        'v8_blink_flavor': True,
+        'root_override': 'v8',
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+    },
+  },
 }
 
 
@@ -429,6 +445,11 @@ def GenSteps(api):
                           **bot_config.get('chromium_config_kwargs', {}))
   api.chromium.apply_config('trybot_flavor')
   api.gclient.set_config('blink_internal')
+  if bot_config.get('v8_blink_flavor'):
+    api.gclient.apply_config('v8_blink_flavor')
+    if api.properties['revision']:
+      custom_vars = api.gclient.c.solutions[0].custom_vars
+      custom_vars['v8_revision'] = api.properties['revision']
   api.step.auto_resolve_conflicts = True
 
   if 'oilpan' in buildername:

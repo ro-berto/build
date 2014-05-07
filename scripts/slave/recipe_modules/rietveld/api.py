@@ -12,7 +12,8 @@ class RietveldApi(recipe_api.RecipeApi):
     #        api.checkout_path. :(
     if root.startswith('src'):
       root = root[3:].lstrip('/')
-    return root
+    # Make remaining slashes platform independent.
+    return self.m.path.join(*root.split('/'))
 
   def apply_issue(self, *root_pieces, **kwargs):
     """Call apply_issue from depot_tools.

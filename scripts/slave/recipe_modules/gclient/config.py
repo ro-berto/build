@@ -195,6 +195,12 @@ def blink(c):
 def android(c):
   c.target_os.add('android')
 
+@config_ctx(includes=['blink'])
+def v8_blink_flavor(c):
+    del c.solutions[0].custom_vars['webkit_revision']
+    c.solutions[0].custom_vars['v8_branch'] = 'branches/bleeding_edge'
+    c.solutions[0].custom_vars['v8_revision'] = 'HEAD'
+
 @config_ctx(includes=['chromium'])
 def oilpan(c):
   if c.GIT_MODE:
