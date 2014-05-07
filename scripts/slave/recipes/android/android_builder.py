@@ -35,6 +35,18 @@ BUILDERS = {
     'custom': {
       'deps_file': 'DEPS'
     }
+  },
+  'Android MIPS Builder (dbg)': {
+    'recipe_config': 'mipsel_builder',
+    'kwargs': {
+      'BUILD_CONFIG': 'Debug',
+      'REPO_NAME': 'src',
+      'INTERNAL': False,
+      'REPO_URL': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'
+    },
+    'custom': {
+      'deps_file': 'DEPS'
+    }
   }
 }
 
