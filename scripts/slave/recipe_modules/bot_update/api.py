@@ -26,6 +26,10 @@ ENABLED_BUILDERS = {
         'android_chromium_gn_compile_rel',
         'linux_chromium_gn_dbg',
         'linux_chromium_gn_rel',
+        'linux_chromium_trusty32_dbg',
+        'linux_chromium_trusty32_rel',
+        'linux_chromium_trusty_dbg',
+        'linux_chromium_trusty_rel',
         'linux_rel',
     ],
 }
