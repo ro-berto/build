@@ -1221,9 +1221,9 @@ def _MainLinux(options, args):
       command.append('--test-launcher-summary-output=%s' % json_file_name)
 
     pipes = []
-    # Plain ASan bots use a symbolizer script, whereas ASan+LSan and LSan bots
-    # use a built-in symbolizer.
-    if (options.factory_properties.get('asan', False) and
+    # See the comment in main() regarding offline symbolization.
+    if ((options.factory_properties.get('asan', False) or
+        options.factory_properties.get('msan', False)) and
         not options.enable_lsan):
       symbolize = os.path.abspath(os.path.join('src', 'tools', 'valgrind',
                                                'asan', 'asan_symbolize.py'))
@@ -1642,9 +1642,11 @@ def main():
     if options.pass_build_dir:
       args.extend(['--build-dir', options.build_dir])
 
-
-    # Some test suites are not yet green under LSan, so do not enable LSan for
-    # them by default. Bots can override this behavior with lsan_run_all_tests.
+    # Leak detection will be forced off for the following binaries, unless
+    # lsan_run_all_tests is True. This mechanism was originally used to
+    # gradually roll out leak detection on existing ASan bots. We no longer
+    # need it.
+    # TODO(earthdok): remove it.
     lsan_blacklist = [
         'browser_tests',
         'content_browsertests',
@@ -1675,8 +1677,9 @@ def main():
     options.extra_sharding_args = ' '.join(extra_sharding_args_list)
 
     if (options.factory_properties.get('asan', False) or
-        options.factory_properties.get('tsan', False) or options.enable_lsan):
-      # Instruct GTK to use malloc while running ASan, TSan or LSan tests.
+        options.factory_properties.get('tsan', False) or
+        options.factory_properties.get('msan', False) or options.enable_lsan):
+      # Instruct GTK to use malloc while running ASan, TSan, MSan or LSan tests.
       os.environ['G_SLICE'] = 'always-malloc'
       os.environ['NSS_DISABLE_ARENA_FREE_LIST'] = '1'
       os.environ['NSS_DISABLE_UNLOAD'] = '1'
@@ -1687,6 +1690,22 @@ def main():
         'llvm-build', 'Release+Asserts', 'bin', 'llvm-symbolizer'))
     strip_path_prefix = 'build/src/out/Release/../../'
 
+    # Symbolization of sanitizer reports.
+    if options.factory_properties.get('tsan', False) or options.enable_lsan:
+      # TSan and LSan are not sandbox-compatible, so we can use online
+      # symbolization. In fact, they need symbolization to be able to apply
+      # suppressions.
+      symbolization_options = ['symbolize=1',
+                               'external_symbolizer_path=%s' % symbolizer_path,
+                               'strip_path_prefix=%s' %  strip_path_prefix]
+    else:
+      # ASan and MSan use a script for offline symbolization.
+      # Important note: when running ASan or MSan with leak detection enabled,
+      # we must use the LSan symbolization options above.
+      symbolization_options = ['symbolize=0']
+      # Set the path to llvm-symbolizer to be used by asan_symbolize.py
+      os.environ['LLVM_SYMBOLIZER_PATH'] = symbolizer_path
+
     # ThreadSanitizer
     if options.factory_properties.get('tsan', False):
       suppressions_file = options.factory_properties.get(
@@ -1694,59 +1713,47 @@ def main():
           'src/tools/valgrind/tsan_v2/suppressions.txt')
       # TODO(glider): enable die_after_fork back once http://crbug.com/356758
       # is fixed.
-      tsan_options = ('suppressions=%s '
-                      'print_suppressions=1 '
-                      'report_signal_unsafe=0 '
-                      'report_thread_leaks=0 '
-                      'history_size=7 '
-                      'die_after_fork=0 '
-                      'external_symbolizer_path=%s '
-                      'strip_path_prefix=%s ' % (suppressions_file,
-                                                 symbolizer_path,
-                                                 strip_path_prefix))
-      os.environ['TSAN_OPTIONS'] = tsan_options
+      tsan_options = symbolization_options + \
+                     ['suppressions=%s' % suppressions_file,
+                      'print_suppressions=1',
+                      'report_signal_unsafe=0',
+                      'report_thread_leaks=0',
+                      'history_size=7',
+                      'die_after_fork=0']
+      os.environ['TSAN_OPTIONS'] = ' '.join(tsan_options)
       # Disable sandboxing under TSan for now. http://crbug.com/223602.
       args.append('--no-sandbox')
-      symbolizer_dir = os.path.dirname(symbolizer_path)
-      # TODO(glider): this is a workaround for http://crbug.com/310479.
-      os.environ['PATH'] = '%s:%s' % (os.environ['PATH'], symbolizer_dir)
 
     # LeakSanitizer
     if options.enable_lsan:
-      # Set verbosity=1 so LSan would always print suppression statistics.
-      os.environ['LSAN_OPTIONS'] = (
-          'suppressions=src/tools/lsan/suppressions.txt '
-          'verbosity=1 '
-          'strip_path_prefix=%s ' % strip_path_prefix)
-      os.environ['LSAN_SYMBOLIZER_PATH'] = symbolizer_path
+      # Symbolization options set here take effect only for standalone LSan.
+      suppressions_file = 'src/tools/lsan/suppressions.txt'
+      lsan_options = symbolization_options + \
+                     ['suppressions=%s' % suppressions_file,
+                      'print_suppressions=1']
+      os.environ['LSAN_OPTIONS'] = ' '.join(lsan_options)
       # Disable sandboxing under LSan.
       args.append('--no-sandbox')
 
     # AddressSanitizer
     if options.factory_properties.get('asan', False):
-      # Set the path to llvm-symbolizer to be used by asan_symbolize.py
-      os.environ['LLVM_SYMBOLIZER_PATH'] = symbolizer_path
       # Avoid aggressive memcmp checks until http://crbug.com/178677 is
       # fixed.  Also do not replace memcpy/memmove/memset to suppress a
       # report in OpenCL, see http://crbug.com/162461.
-      common_asan_options = ('strict_memcmp=0 replace_intrin=0 '
-                             'strip_path_prefix=%s ' % strip_path_prefix)
+      asan_options = symbolization_options + \
+                     ['strict_memcmp=0',
+                      'replace_intrin=0',
+                      'strip_path_prefix=%s ' % strip_path_prefix]
       if options.enable_lsan:
-        # On ASan+LSan bots we enable leak detection. Also, since sandbox is
-        # disabled under LSan, we can symbolize.
-        os.environ['ASAN_OPTIONS'] = (common_asan_options +
-                                      'detect_leaks=1 ' +
-                                      'symbolize=true ')
-        os.environ['ASAN_SYMBOLIZER_PATH'] = symbolizer_path
-      else:
-        # Disable the builtin online symbolizer, see http://crbug.com/243255.
-        os.environ['ASAN_OPTIONS'] = (common_asan_options + 'symbolize=false')
+        asan_options += ['detect_leaks=1']
+      os.environ['ASAN_OPTIONS'] = ' '.join(asan_options)
 
     # MemorySanitizer
     if options.factory_properties.get('msan', False):
-      os.environ['MSAN_SYMBOLIZER_PATH'] = symbolizer_path
-      os.environ['MSAN_OPTIONS'] = ('symbolize=true '
-                                    'strip_path_prefix=%s ' % strip_path_prefix)
+      msan_options = symbolization_options
+      if options.enable_lsan:
+        msan_options += ['detect_leaks=1']
+      os.environ['MSAN_OPTIONS'] = ' '.join(msan_options)
 
     # Set the number of shards environement variables.
     if options.total_shards and options.shard_index:
