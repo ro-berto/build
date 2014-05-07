@@ -460,7 +460,7 @@ def GenSteps(api):
   webkit_python_tests = api.path['build'].join('scripts', 'slave', 'chromium',
                                                'test_webkitpy_wrapper.py')
 
-  root = api.rietveld.calculate_issue_root()
+  root = bot_config.get('root_override', api.rietveld.calculate_issue_root())
 
   yield api.gclient.checkout(
       revert=True, can_fail_build=False, abort_on_failure=False)
