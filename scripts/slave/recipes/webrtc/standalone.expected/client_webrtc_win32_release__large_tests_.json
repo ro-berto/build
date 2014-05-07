@@ -21,6 +21,8 @@
       "--delete_unversioned_trees",
       "--force",
       "--verbose",
+      "--revision",
+      "src@12345",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -58,8 +60,10 @@
       "gclient runhooks",
       "compile",
       "audio_device_tests",
+      "webcam_check",
       "vie_auto_test",
       "voe_auto_test",
+      "webcam_check (2)",
       "video_capture_tests",
       "webrtc_perf_tests"
     ]
@@ -86,6 +90,7 @@
     "name": "compile"
   },
   {
+    "allow_subannotations": true,
     "always_run": true,
     "cmd": [
       "python",
@@ -94,16 +99,30 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"buildername\": \"Win32 Release [large tests]\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win32 Release [large tests]\", \"mastername\": \"client.webrtc\", \"perf_config\": {\"a_default_rev\": \"r_webrtc_rev\"}, \"perf_id\": \"win32_release__large_tests_\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"show_perf_results\": true, \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win32 Release [large tests]\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win32 Release [large tests]\", \"mastername\": \"client.webrtc\", \"perf_config\": {\"a_default_rev\": \"r_webrtc_rev\"}, \"perf_id\": \"win32_release__large_tests_\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"show_perf_results\": true, \"slavename\": \"slavename\"}",
+      "--annotate=graphing",
+      "--results-url=https://chromeperf.appspot.com",
+      "--perf-dashboard-id=audio_device_tests",
+      "--test-type=audio_device_tests",
       "--builder-name=Win32 Release [large tests]",
       "--slave-name=slavename",
+      "--revision=12345",
       "audio_device_tests.exe"
     ],
     "name": "audio_device_tests"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\webrtc\\ensure_webcam_is_running.py"
+    ],
+    "name": "webcam_check"
+  },
+  {
+    "allow_subannotations": true,
     "always_run": true,
     "cmd": [
       "python",
@@ -112,11 +131,16 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"buildername\": \"Win32 Release [large tests]\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win32 Release [large tests]\", \"mastername\": \"client.webrtc\", \"perf_config\": {\"a_default_rev\": \"r_webrtc_rev\"}, \"perf_id\": \"win32_release__large_tests_\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"show_perf_results\": true, \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win32 Release [large tests]\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win32 Release [large tests]\", \"mastername\": \"client.webrtc\", \"perf_config\": {\"a_default_rev\": \"r_webrtc_rev\"}, \"perf_id\": \"win32_release__large_tests_\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"show_perf_results\": true, \"slavename\": \"slavename\"}",
+      "--annotate=graphing",
+      "--results-url=https://chromeperf.appspot.com",
+      "--perf-dashboard-id=vie_auto_test",
+      "--test-type=vie_auto_test",
       "--builder-name=Win32 Release [large tests]",
       "--slave-name=slavename",
+      "--revision=12345",
       "vie_auto_test.exe",
       "--automated",
       "--capture_test_ensure_resolution_alignment_in_capture_device=false"
@@ -124,6 +148,7 @@
     "name": "vie_auto_test"
   },
   {
+    "allow_subannotations": true,
     "always_run": true,
     "cmd": [
       "python",
@@ -132,17 +157,31 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"buildername\": \"Win32 Release [large tests]\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win32 Release [large tests]\", \"mastername\": \"client.webrtc\", \"perf_config\": {\"a_default_rev\": \"r_webrtc_rev\"}, \"perf_id\": \"win32_release__large_tests_\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"show_perf_results\": true, \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win32 Release [large tests]\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win32 Release [large tests]\", \"mastername\": \"client.webrtc\", \"perf_config\": {\"a_default_rev\": \"r_webrtc_rev\"}, \"perf_id\": \"win32_release__large_tests_\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"show_perf_results\": true, \"slavename\": \"slavename\"}",
+      "--annotate=graphing",
+      "--results-url=https://chromeperf.appspot.com",
+      "--perf-dashboard-id=voe_auto_test",
+      "--test-type=voe_auto_test",
       "--builder-name=Win32 Release [large tests]",
       "--slave-name=slavename",
+      "--revision=12345",
       "voe_auto_test.exe",
       "--automated"
     ],
     "name": "voe_auto_test"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\webrtc\\ensure_webcam_is_running.py"
+    ],
+    "name": "webcam_check (2)"
+  },
+  {
+    "allow_subannotations": true,
     "always_run": true,
     "cmd": [
       "python",
@@ -151,16 +190,22 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"buildername\": \"Win32 Release [large tests]\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win32 Release [large tests]\", \"mastername\": \"client.webrtc\", \"perf_config\": {\"a_default_rev\": \"r_webrtc_rev\"}, \"perf_id\": \"win32_release__large_tests_\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"show_perf_results\": true, \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win32 Release [large tests]\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win32 Release [large tests]\", \"mastername\": \"client.webrtc\", \"perf_config\": {\"a_default_rev\": \"r_webrtc_rev\"}, \"perf_id\": \"win32_release__large_tests_\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"show_perf_results\": true, \"slavename\": \"slavename\"}",
+      "--annotate=graphing",
+      "--results-url=https://chromeperf.appspot.com",
+      "--perf-dashboard-id=video_capture_tests",
+      "--test-type=video_capture_tests",
       "--builder-name=Win32 Release [large tests]",
       "--slave-name=slavename",
+      "--revision=12345",
       "video_capture_tests.exe"
     ],
     "name": "video_capture_tests"
   },
   {
+    "allow_subannotations": true,
     "always_run": true,
     "cmd": [
       "python",
@@ -169,11 +214,16 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"buildername\": \"Win32 Release [large tests]\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win32 Release [large tests]\", \"mastername\": \"client.webrtc\", \"perf_config\": {\"a_default_rev\": \"r_webrtc_rev\"}, \"perf_id\": \"win32_release__large_tests_\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"show_perf_results\": true, \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win32 Release [large tests]\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win32 Release [large tests]\", \"mastername\": \"client.webrtc\", \"perf_config\": {\"a_default_rev\": \"r_webrtc_rev\"}, \"perf_id\": \"win32_release__large_tests_\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"show_perf_results\": true, \"slavename\": \"slavename\"}",
+      "--annotate=graphing",
+      "--results-url=https://chromeperf.appspot.com",
+      "--perf-dashboard-id=webrtc_perf_tests",
+      "--test-type=webrtc_perf_tests",
       "--builder-name=Win32 Release [large tests]",
       "--slave-name=slavename",
+      "--revision=12345",
       "webrtc_perf_tests.exe"
     ],
     "name": "webrtc_perf_tests"

@@ -47,3 +47,9 @@ class WebRTCApi(recipe_api.RecipeApi):
                '--strip-level', self.c.patch_strip_level,
                '--', '--path-filter', self.c.patch_path_filter]
     return self.m.python('apply_patch', script, args)
+
+  def virtual_webcam_check(self):
+    return self.m.python(
+      'webcam_check',
+      self.m.path['build'].join('scripts', 'slave', 'webrtc',
+                                'ensure_webcam_is_running.py'))

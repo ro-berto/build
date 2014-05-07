@@ -21,6 +21,8 @@
       "--delete_unversioned_trees",
       "--force",
       "--verbose",
+      "--revision",
+      "src@12345",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -97,6 +99,7 @@
     "name": "compile"
   },
   {
+    "allow_subannotations": true,
     "always_run": true,
     "cmd": [
       "python",
@@ -105,9 +108,10 @@
       "--target",
       "Debug_x64",
       "--factory-properties",
-      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
       "--builder-name=Win64 Debug",
       "--slave-name=slavename",
       "audio_decoder_unittests.exe"
@@ -115,6 +119,7 @@
     "name": "audio_decoder_unittests"
   },
   {
+    "allow_subannotations": true,
     "always_run": true,
     "cmd": [
       "python",
@@ -123,9 +128,10 @@
       "--target",
       "Debug_x64",
       "--factory-properties",
-      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
       "--builder-name=Win64 Debug",
       "--slave-name=slavename",
       "common_audio_unittests.exe"
@@ -133,6 +139,7 @@
     "name": "common_audio_unittests"
   },
   {
+    "allow_subannotations": true,
     "always_run": true,
     "cmd": [
       "python",
@@ -141,9 +148,10 @@
       "--target",
       "Debug_x64",
       "--factory-properties",
-      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
       "--builder-name=Win64 Debug",
       "--slave-name=slavename",
       "common_video_unittests.exe"
@@ -151,6 +159,7 @@
     "name": "common_video_unittests"
   },
   {
+    "allow_subannotations": true,
     "always_run": true,
     "cmd": [
       "python",
@@ -159,9 +168,10 @@
       "--target",
       "Debug_x64",
       "--factory-properties",
-      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
       "--builder-name=Win64 Debug",
       "--slave-name=slavename",
       "libjingle_media_unittest.exe"
@@ -169,6 +179,7 @@
     "name": "libjingle_media_unittest"
   },
   {
+    "allow_subannotations": true,
     "always_run": true,
     "cmd": [
       "python",
@@ -177,9 +188,10 @@
       "--target",
       "Debug_x64",
       "--factory-properties",
-      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
       "--builder-name=Win64 Debug",
       "--slave-name=slavename",
       "libjingle_p2p_unittest.exe"
@@ -187,6 +199,7 @@
     "name": "libjingle_p2p_unittest"
   },
   {
+    "allow_subannotations": true,
     "always_run": true,
     "cmd": [
       "python",
@@ -195,9 +208,10 @@
       "--target",
       "Debug_x64",
       "--factory-properties",
-      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
       "--builder-name=Win64 Debug",
       "--slave-name=slavename",
       "libjingle_peerconnection_unittest.exe"
@@ -205,6 +219,7 @@
     "name": "libjingle_peerconnection_unittest"
   },
   {
+    "allow_subannotations": true,
     "always_run": true,
     "cmd": [
       "python",
@@ -213,9 +228,10 @@
       "--target",
       "Debug_x64",
       "--factory-properties",
-      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
       "--builder-name=Win64 Debug",
       "--slave-name=slavename",
       "libjingle_sound_unittest.exe"
@@ -223,6 +239,7 @@
     "name": "libjingle_sound_unittest"
   },
   {
+    "allow_subannotations": true,
     "always_run": true,
     "cmd": [
       "python",
@@ -231,9 +248,10 @@
       "--target",
       "Debug_x64",
       "--factory-properties",
-      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
       "--builder-name=Win64 Debug",
       "--slave-name=slavename",
       "libjingle_unittest.exe"
@@ -241,6 +259,7 @@
     "name": "libjingle_unittest"
   },
   {
+    "allow_subannotations": true,
     "always_run": true,
     "cmd": [
       "python",
@@ -249,9 +268,10 @@
       "--target",
       "Debug_x64",
       "--factory-properties",
-      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
       "--builder-name=Win64 Debug",
       "--slave-name=slavename",
       "modules_tests.exe"
@@ -259,6 +279,7 @@
     "name": "modules_tests"
   },
   {
+    "allow_subannotations": true,
     "always_run": true,
     "cmd": [
       "python",
@@ -267,9 +288,10 @@
       "--target",
       "Debug_x64",
       "--factory-properties",
-      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
       "--builder-name=Win64 Debug",
       "--slave-name=slavename",
       "modules_unittests.exe"
@@ -277,6 +299,7 @@
     "name": "modules_unittests"
   },
   {
+    "allow_subannotations": true,
     "always_run": true,
     "cmd": [
       "python",
@@ -285,9 +308,10 @@
       "--target",
       "Debug_x64",
       "--factory-properties",
-      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
       "--builder-name=Win64 Debug",
       "--slave-name=slavename",
       "system_wrappers_unittests.exe"
@@ -295,6 +319,7 @@
     "name": "system_wrappers_unittests"
   },
   {
+    "allow_subannotations": true,
     "always_run": true,
     "cmd": [
       "python",
@@ -303,9 +328,10 @@
       "--target",
       "Debug_x64",
       "--factory-properties",
-      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
       "--builder-name=Win64 Debug",
       "--slave-name=slavename",
       "test_support_unittests.exe"
@@ -313,6 +339,7 @@
     "name": "test_support_unittests"
   },
   {
+    "allow_subannotations": true,
     "always_run": true,
     "cmd": [
       "python",
@@ -321,9 +348,10 @@
       "--target",
       "Debug_x64",
       "--factory-properties",
-      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
       "--builder-name=Win64 Debug",
       "--slave-name=slavename",
       "tools_unittests.exe"
@@ -331,6 +359,7 @@
     "name": "tools_unittests"
   },
   {
+    "allow_subannotations": true,
     "always_run": true,
     "cmd": [
       "python",
@@ -339,9 +368,10 @@
       "--target",
       "Debug_x64",
       "--factory-properties",
-      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
       "--builder-name=Win64 Debug",
       "--slave-name=slavename",
       "video_engine_core_unittests.exe"
@@ -349,6 +379,7 @@
     "name": "video_engine_core_unittests"
   },
   {
+    "allow_subannotations": true,
     "always_run": true,
     "cmd": [
       "python",
@@ -357,9 +388,10 @@
       "--target",
       "Debug_x64",
       "--factory-properties",
-      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
       "--builder-name=Win64 Debug",
       "--slave-name=slavename",
       "video_engine_tests.exe"
@@ -367,6 +399,7 @@
     "name": "video_engine_tests"
   },
   {
+    "allow_subannotations": true,
     "always_run": true,
     "cmd": [
       "python",
@@ -375,9 +408,10 @@
       "--target",
       "Debug_x64",
       "--factory-properties",
-      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"patch_url\": null, \"recipe\": \"webrtc/standalone\", \"revision\": null, \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
       "--builder-name=Win64 Debug",
       "--slave-name=slavename",
       "voice_engine_unittests.exe"

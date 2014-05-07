@@ -73,9 +73,12 @@
       "compile",
       "audioproc_perf",
       "isac_fixed_perf",
+      "webcam_check",
       "libjingle_peerconnection_java_unittest",
+      "webcam_check (2)",
       "vie_auto_test",
       "voe_auto_test",
+      "webcam_check (3)",
       "video_capture_tests",
       "webrtc_perf_tests"
     ]
@@ -114,6 +117,7 @@
     "name": "compile"
   },
   {
+    "allow_subannotations": true,
     "always_run": true,
     "cmd": [
       "python",
@@ -121,11 +125,13 @@
       "[BUILD]/scripts/slave/runtest.py",
       "--target",
       "Release",
-      "--no-xvfb",
+      "--xvfb",
       "--factory-properties",
       "{\"buildername\": \"linux_baremetal\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"buildername\": \"linux_baremetal\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
+      "--test-type=audioproc",
       "--builder-name=linux_baremetal",
       "--slave-name=slavename",
       "audioproc",
@@ -140,6 +146,7 @@
     "name": "audioproc_perf"
   },
   {
+    "allow_subannotations": true,
     "always_run": true,
     "cmd": [
       "python",
@@ -147,11 +154,13 @@
       "[BUILD]/scripts/slave/runtest.py",
       "--target",
       "Release",
-      "--no-xvfb",
+      "--xvfb",
       "--factory-properties",
       "{\"buildername\": \"linux_baremetal\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"buildername\": \"linux_baremetal\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
+      "--test-type=iSACFixtest",
       "--builder-name=linux_baremetal",
       "--slave-name=slavename",
       "iSACFixtest",
@@ -162,6 +171,15 @@
     "name": "isac_fixed_perf"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/webrtc/ensure_webcam_is_running.py"
+    ],
+    "name": "webcam_check"
+  },
+  {
+    "allow_subannotations": true,
     "always_run": true,
     "cmd": [
       "python",
@@ -169,11 +187,13 @@
       "[BUILD]/scripts/slave/runtest.py",
       "--target",
       "Release",
-      "--no-xvfb",
+      "--xvfb",
       "--factory-properties",
       "{\"buildername\": \"linux_baremetal\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"buildername\": \"linux_baremetal\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
+      "--test-type=libjingle_peerconnection_java_unittest",
       "--builder-name=linux_baremetal",
       "--slave-name=slavename",
       "libjingle_peerconnection_java_unittest"
@@ -184,6 +204,15 @@
     "name": "libjingle_peerconnection_java_unittest"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/webrtc/ensure_webcam_is_running.py"
+    ],
+    "name": "webcam_check (2)"
+  },
+  {
+    "allow_subannotations": true,
     "always_run": true,
     "cmd": [
       "python",
@@ -191,11 +220,13 @@
       "[BUILD]/scripts/slave/runtest.py",
       "--target",
       "Release",
-      "--no-xvfb",
+      "--xvfb",
       "--factory-properties",
       "{\"buildername\": \"linux_baremetal\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"buildername\": \"linux_baremetal\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
+      "--test-type=vie_auto_test",
       "--builder-name=linux_baremetal",
       "--slave-name=slavename",
       "vie_auto_test",
@@ -205,6 +236,7 @@
     "name": "vie_auto_test"
   },
   {
+    "allow_subannotations": true,
     "always_run": true,
     "cmd": [
       "python",
@@ -212,11 +244,13 @@
       "[BUILD]/scripts/slave/runtest.py",
       "--target",
       "Release",
-      "--no-xvfb",
+      "--xvfb",
       "--factory-properties",
       "{\"buildername\": \"linux_baremetal\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"buildername\": \"linux_baremetal\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
+      "--test-type=voe_auto_test",
       "--builder-name=linux_baremetal",
       "--slave-name=slavename",
       "voe_auto_test",
@@ -225,6 +259,15 @@
     "name": "voe_auto_test"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/webrtc/ensure_webcam_is_running.py"
+    ],
+    "name": "webcam_check (3)"
+  },
+  {
+    "allow_subannotations": true,
     "always_run": true,
     "cmd": [
       "python",
@@ -232,11 +275,13 @@
       "[BUILD]/scripts/slave/runtest.py",
       "--target",
       "Release",
-      "--no-xvfb",
+      "--xvfb",
       "--factory-properties",
       "{\"buildername\": \"linux_baremetal\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"buildername\": \"linux_baremetal\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
+      "--test-type=video_capture_tests",
       "--builder-name=linux_baremetal",
       "--slave-name=slavename",
       "video_capture_tests"
@@ -244,6 +289,7 @@
     "name": "video_capture_tests"
   },
   {
+    "allow_subannotations": true,
     "always_run": true,
     "cmd": [
       "python",
@@ -251,11 +297,13 @@
       "[BUILD]/scripts/slave/runtest.py",
       "--target",
       "Release",
-      "--no-xvfb",
+      "--xvfb",
       "--factory-properties",
       "{\"buildername\": \"linux_baremetal\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"buildername\": \"linux_baremetal\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
+      "--test-type=webrtc_perf_tests",
       "--builder-name=linux_baremetal",
       "--slave-name=slavename",
       "webrtc_perf_tests"

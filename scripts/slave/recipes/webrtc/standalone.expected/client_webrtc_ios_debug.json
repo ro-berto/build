@@ -21,6 +21,8 @@
       "--delete_unversioned_trees",
       "--force",
       "--verbose",
+      "--revision",
+      "src@12345",
       "--output-json",
       "/path/to/tmp/json"
     ],

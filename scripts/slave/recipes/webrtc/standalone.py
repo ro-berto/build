@@ -10,9 +10,12 @@ DEPS = [
   'path',
   'platform',
   'properties',
+  'step',
   'tryserver',
   'webrtc',
 ]
+
+DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
 
 class WebRTCNormalTests(object):
   @staticmethod
@@ -20,47 +23,63 @@ class WebRTCNormalTests(object):
     c = api.chromium
     steps = []
     for test in api.webrtc.NORMAL_TESTS:
-      steps.append(c.runtest(test))
+      steps.append(c.runtest(test, annotate='gtest', xvfb=True))
 
     if api.platform.is_mac and api.platform.bits == 64:
       test = api.path.join('libjingle_peerconnection_objc_test.app', 'Contents',
                            'MacOS', 'libjingle_peerconnection_objc_test')
-      steps.append(c.runtest(test, name='libjingle_peerconnection_objc_test'))
+      steps.append(c.runtest(test, name='libjingle_peerconnection_objc_test',
+                             annotate='gtest', xvfb=True))
     return steps
 
 
 class WebRTCBaremetalTests(object):
-  @staticmethod
-  def run(api):
+  def __init__(self, measure_perf=False):
+    self._measure_perf = measure_perf
+
+  def run(self, api):
     """Adds baremetal tests, which are different depending on the platform."""
-    c = api.chromium
-    path = api.path
+
     steps = []
 
-    if api.platform.is_win or api.platform.is_mac:
-      steps.append(c.runtest('audio_device_tests'))
-    elif api.platform.is_linux:
-      steps.append(c.runtest(
-          'audioproc', name='audioproc_perf',
-          args=['-aecm', '-ns', '-agc', '--fixed_digital', '--perf', '-pb',
-                path['checkout'].join('resources', 'audioproc.aecdump')]))
-      steps.append(c.runtest(
-          'iSACFixtest', name='isac_fixed_perf',
-          args=['32000', path['checkout'].join('resources',
-                                               'speech_and_misc_wb.pcm'),
-                'isac_speech_and_misc_wb.pcm']))
-      steps.append(c.runtest(
-          'libjingle_peerconnection_java_unittest',
-          env={'LD_PRELOAD': '/usr/lib/x86_64-linux-gnu/libpulse.so.0'}))
+    def add_test(test, name=None, args=None, env=None):
+      args = args or []
+      env = env or {}
 
-    steps.append(c.runtest(
-        'vie_auto_test',
+      if self._measure_perf:
+        assert api.properties.get('revision'), 'Revision must be specified.'
+        steps.append(api.chromium.runtest(
+            test=test, args=args, name=name, results_url=DASHBOARD_UPLOAD_URL,
+            annotate='graphing', xvfb=True, perf_dashboard_id=test,
+            test_type=test, env=env, revision=api.properties['revision']))
+      else:
+        steps.append(api.chromium.runtest(
+            test=test, args=args, name=name, annotate='gtest', xvfb=True,
+            test_type=test, env=env))
+
+    if api.platform.is_win or api.platform.is_mac:
+      add_test('audio_device_tests')
+    elif api.platform.is_linux:
+      f = api.path['checkout'].join
+      add_test('audioproc', name='audioproc_perf',
+               args=['-aecm', '-ns', '-agc', '--fixed_digital', '--perf', '-pb',
+                     f('resources', 'audioproc.aecdump')])
+      add_test('iSACFixtest', name='isac_fixed_perf',
+               args=['32000', f('resources', 'speech_and_misc_wb.pcm'),
+                     'isac_speech_and_misc_wb.pcm'])
+      steps.append(api.webrtc.virtual_webcam_check())
+      add_test('libjingle_peerconnection_java_unittest',
+               env={'LD_PRELOAD': '/usr/lib/x86_64-linux-gnu/libpulse.so.0'})
+
+    steps.append(api.webrtc.virtual_webcam_check())
+    add_test('vie_auto_test',
         args=['--automated',
               '--capture_test_ensure_resolution_alignment_in_capture_device='
-              'false']))
-    steps.append(c.runtest('voe_auto_test', args=['--automated']))
-    steps.append(c.runtest('video_capture_tests'))
-    steps.append(c.runtest('webrtc_perf_tests'))
+              'false'])
+    add_test('voe_auto_test', args=['--automated'])
+    steps.append(api.webrtc.virtual_webcam_check())
+    add_test('video_capture_tests')
+    add_test('webrtc_perf_tests')
     return steps
 
 
@@ -132,7 +151,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'tests': [
-          WebRTCBaremetalTests(),
+          WebRTCBaremetalTests(measure_perf=True),
         ],
         'testing': {
           'platform': 'win',
@@ -216,7 +235,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'tests': [
-          WebRTCBaremetalTests(),
+          WebRTCBaremetalTests(measure_perf=True),
         ],
         'testing': {
           'platform': 'mac',
@@ -326,7 +345,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'tests': [
-          WebRTCBaremetalTests(),
+          WebRTCBaremetalTests(measure_perf=True),
         ],
         'testing': {
           'platform': 'linux',
@@ -662,6 +681,9 @@ def GenSteps(api):
   api.webrtc.set_config(recipe_config['webrtc_config'],
                         **bot_config.get('webrtc_config_kwargs', {}))
 
+  # Needed for the multiple webcam check steps to get unique names.
+  api.step.auto_resolve_conflicts = True
+
   if api.tryserver.is_tryserver:
     api.chromium.apply_config('trybot_flavor')
 
@@ -690,22 +712,24 @@ def GenTests(api):
             'Unexpected parent_buildername for builder %r on master %r.' %
                 (buildername, mastername))
 
-      # Trybots get these properties set.
-      revision = None
-      patch_url = None
-      if mastername.startswith('tryserver'):
-        revision = '12345'
-        patch_url = 'try_job_svn_patch'
-
       webrtc_config_kwargs = bot_config.get('webrtc_config_kwargs', {})
-      yield (
+      test = (
         api.test('%s_%s' % (_sanitize_nonalpha(mastername),
                             _sanitize_nonalpha(buildername))) +
         api.properties(mastername=mastername,
                        buildername=buildername,
                        slavename='slavename',
-                       revision=revision,
-                       patch_url=patch_url) +
+                       revision='12345') +
         api.platform(bot_config['testing']['platform'],
                      webrtc_config_kwargs.get('TARGET_BITS', 64))
       )
+
+      if mastername.startswith('tryserver'):
+        test += api.properties(patch_url='try_job_svn_patch')
+
+      if buildername.endswith('[large tests]'):
+        test += api.properties(perf_id=_sanitize_nonalpha(buildername),
+                               perf_config={'a_default_rev': 'r_webrtc_rev'},
+                               show_perf_results=True)
+
+      yield test
