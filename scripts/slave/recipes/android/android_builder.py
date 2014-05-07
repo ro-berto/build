@@ -120,8 +120,8 @@ def GenTests(api):
              'try_builder', 'x86_try_builder', 'dartium_builder',
              'mipsel_builder', 'arm_builder_rel']
 
-  for bot_id in bot_ids:
-    props = api.properties(
+  def old_properties(bot_id):
+    return api.properties(
       repo_name='src/repo',
       repo_url='svn://svn.chromium.org/chrome/trunk/src',
       revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
@@ -132,6 +132,9 @@ def GenTests(api):
       deps_file='DEPS',
       managed=True,
     )
+
+  for bot_id in bot_ids:
+    props = old_properties(bot_id)
     if 'try_builder' in bot_id:
       props += api.properties(revision='refs/remotes/origin/master')
       props += api.properties(patch_url='try_job_svn_patch')
@@ -143,6 +146,11 @@ def GenTests(api):
       add_step_data = lambda p: p + api.chromium_android.default_step_data(api)
 
     yield add_step_data(api.test(bot_id) + props)
+
+  yield (api.test('clang_builder_findbugs_failure') +
+         old_properties('clang_builder') +
+         api.step_data('findbugs internal', retcode=1) +
+         api.chromium_android.default_step_data(api))
 
   # tests bots in BUILDERS
   for buildername in BUILDERS:

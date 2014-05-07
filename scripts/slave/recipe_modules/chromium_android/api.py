@@ -199,6 +199,14 @@ class AndroidApi(recipe_api.RecipeApi):
     ]
     yield self.m.step('findbugs internal', cmd, env=self.get_env())
 
+    # If findbugs fails, there could be stale class files. Delete them, and
+    # next run maybe we'll do better.
+    if self.m.step_history.last_step().retcode != 0:
+      yield self.m.path.rmwildcard(
+          '*.class',
+          self.m.path['checkout'].join('out'),
+          always_run=True)
+
   def checkdeps(self):
     assert self.c.INTERNAL, 'checkdeps is only available on internal builds'
     yield self.m.step(
