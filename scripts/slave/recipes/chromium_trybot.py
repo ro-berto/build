@@ -561,8 +561,12 @@ def GenSteps(api):
     tests.append(test)
   tests.append(NaclIntegrationTest())
 
-  compile_targets = ['all'] + list(api.itertools.chain(
+  compile_targets = list(api.itertools.chain(
       *[t.compile_targets() for t in tests]))
+  # TODO(phajdan.jr): Also compile 'all' on win, http://crbug.com/368831 .
+  # Disabled for now because it takes too long and/or fails on Windows.
+  if not api.platform.is_win:
+    compile_targets = ['all'] + compile_targets
   yield api.chromium.compile(compile_targets,
                              name='compile (with patch)',
                              abort_on_failure=False,
