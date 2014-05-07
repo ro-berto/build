@@ -1073,16 +1073,8 @@ def main():
     ensure_no_checkout(dir_names, '*')
     gclient_output = ensure_checkout(**checkout_parameters)
 
-  # If we're fed an svn revision number as --revision, then our got_revision
-  # output should be in svn revs.  Otherwise it'll be in git hashes, unless
-  # its a git master or past flag day, in which case we always assume git.
-  if master in GIT_MASTERS or FLAG_DAY:
-    use_svn_rev = False
-  else:
-    # Try to detect if the passed in revision is a git hash.
-    use_svn_rev = ((options.revision and options.revision.isdigit() and
-                    len(options.revision) < 40)
-                   or options.revision.lower() in ['head', 'origin/lkcr'])
+  # Revision is an svn revision, unless its a git master or past flag day.
+  use_svn_rev = master not in GIT_MASTERS and not FLAG_DAY
   # Take care of got_revisions outputs.
   revision_mapping = get_revision_mapping(svn_root, options.revision_mapping)
   got_revisions = parse_got_revision(gclient_output, revision_mapping,
