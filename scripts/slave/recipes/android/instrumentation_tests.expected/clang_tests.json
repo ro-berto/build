@@ -40,7 +40,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/repo/build/dump_app_manifest_vars.py",
+      "[SLAVE_BUILD]/src/blank/build/dump_app_manifest_vars.py",
       "-b",
       "test_buildername",
       "-v",
@@ -61,7 +61,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/repo/build/dump_internal_names.py",
+      "[SLAVE_BUILD]/src/blank/build/dump_internal_names.py",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -72,26 +72,6 @@
       "@@@STEP_LOG_LINE@json.output@  \"FLAKINESS_DASHBOARD_SERVER\": \"test-results.appspot.com\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"INSTRUMENTATION_TEST_DATA\": \"a:b/test/data/android/device_files\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"SCREENSHOT_BUCKET\": \"screenshot-archive\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[BUILD]/scripts/slave/env_dump.py",
-      "--output-json",
-      "/path/to/tmp/json",
-      "[SLAVE_BUILD]/src/build/android/envsetup.sh"
-    ],
-    "env": {
-      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:%(PATH)s"
-    },
-    "name": "envsetup",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"GYP_DEFINES\": \"my_new_gyp_def=aaa\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"GYP_SOMETHING\": \"gyp_something_value\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"PATH\": \"./\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -159,7 +139,7 @@
       "[SLAVE_BUILD]/src/out/logcat"
     ],
     "env": {
-      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "spawn_logcat_monitor"
   },
@@ -168,40 +148,39 @@
       "[SLAVE_BUILD]/src/build/android/buildbot/bb_device_status_check.py"
     ],
     "env": {
-      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "device_status_check"
   },
   {
     "can_fail_build": false,
     "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/build/android/provision_devices.py",
       "-t",
       "Debug"
     ],
-    "env": {
-      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
-    },
     "name": "provision_devices"
   },
   {
     "can_fail_build": false,
     "cmd": [
-      "[SLAVE_BUILD]/src/repo/build/setup_device_testing.py"
+      "[SLAVE_BUILD]/src/blank/build/setup_device_testing.py"
     ],
     "env": {
-      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "setup_devices_for_testing"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/repo/build/full_deploy.py",
+      "[SLAVE_BUILD]/src/blank/build/full_deploy.py",
       "-v",
       "--debug"
     ],
     "env": {
-      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "deploy_on_devices"
   },
@@ -215,7 +194,7 @@
       "com.google.android.apps.chrome.tests"
     ],
     "env": {
-      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "install ChromeTest.apk"
   },
@@ -223,7 +202,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/repo/build/buildbot/tests_generator.py",
+      "[SLAVE_BUILD]/src/blank/build/buildbot/tests_generator.py",
       "--test=smoke_instrumentation_tests",
       "--checkout-dir",
       "[SLAVE_BUILD]/src",
@@ -251,7 +230,7 @@
       "path/to/test_script.py"
     ],
     "env": {
-      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "test_step",
     "seed_steps": [
@@ -279,7 +258,7 @@
       "[SLAVE_BUILD]/src/out/Debug/full_log"
     ],
     "env": {
-      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "stack_tool_with_logcat_dump"
   },
@@ -292,7 +271,7 @@
       "-w"
     ],
     "env": {
-      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "stack_tool_for_tombstones"
   },
@@ -304,7 +283,7 @@
       "[SLAVE_BUILD]/src/out/Debug/full_log"
     ],
     "env": {
-      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "stack_tool_for_asan"
   },

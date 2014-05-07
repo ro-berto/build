@@ -16,26 +16,18 @@ def BaseConfig(INTERNAL=False, REPO_NAME=None, REPO_URL=None,
     REPO_URL = Static(REPO_URL),
     BUILD_CONFIG = Static(BUILD_CONFIG),
     revision = Single(basestring, empty_val=REVISION),
-    extra_env = Dict(value_type=(basestring,int,Path)),
-    run_findbugs = Single(bool, required=False, empty_val=False),
-    run_lint = Single(bool, required=False, empty_val=False),
-    run_checkdeps = Single(bool, required=False, empty_val=False),
-    apply_svn_patch = Single(bool, required=False, empty_val=False),
     run_stack_tool_steps = Single(bool, required=False, empty_val=False),
     asan_symbolize = Single(bool, required=False, empty_val=False),
     get_app_manifest_vars = Single(bool, required=False, empty_val=True),
     run_tree_truth = Single(bool, required=False, empty_val=True),
     deps_file = Single(basestring, required=False, empty_val='.DEPS.git'),
-
+    internal_dir_name = Single(basestring, required=False),
     # deps_dir: where to checkout the gclient deps file
     deps_dir = Single(basestring, required=False, empty_val=REPO_NAME),
     managed = Single(bool, required=False, empty_val=True),
     extra_deploy_opts = List(inner_type=basestring),
     tests = List(inner_type=basestring),
-    build_internal_android = Static(Path('[BUILD_INTERNAL]',
-                                         'scripts', 'slave', 'android')),
     cr_build_android = Static(Path('[CHECKOUT]', 'build', 'android')),
-    internal_dir = Single(Path),
     gclient_custom_deps = Dict(value_type=(basestring, types.NoneType)),
     storage_bucket = Single(basestring),
     channel = Single(basestring, empty_val='chrome'),
@@ -46,7 +38,7 @@ def BaseConfig(INTERNAL=False, REPO_NAME=None, REPO_URL=None,
 
 VAR_TEST_MAP = {
   'INTERNAL': [True, False],
-  'REPO_NAME': ['src/clank'],
+  'REPO_NAME': ['src/blank'],
   'REPO_URL': ['<hidden>'],  # supplied in build properties
   'BUILD_CONFIG': ['Debug', 'Release'],
 }
@@ -62,8 +54,7 @@ config_ctx = config_item_context(BaseConfig, VAR_TEST_MAP, TEST_NAME_FORMAT)
 
 @config_ctx(is_root=True)
 def base_config(c):
-  if c.INTERNAL:
-    c.internal_dir = Path('[CHECKOUT]', c.REPO_NAME.split('/', 1)[-1])
+  c.internal_dir_name = 'blank'
 
 @config_ctx()
 def main_builder(c):
@@ -71,10 +62,7 @@ def main_builder(c):
 
 @config_ctx()
 def clang_builder(c):
-  if c.INTERNAL:
-    c.run_findbugs = True
-    c.run_lint = True
-    c.run_checkdeps = True
+  pass
 
 @config_ctx(config_vars={'BUILD_CONFIG': 'Release'})
 def clang_release_builder(c):
@@ -140,14 +128,11 @@ def arm64_builder(c):
 
 @config_ctx()
 def try_base(c):
-  if c.INTERNAL:
-    c.apply_svn_patch = True
+  pass
 
 @config_ctx(includes=['try_base'])
 def try_builder(c):
-  if c.INTERNAL:
-    c.run_findbugs = True
-    c.run_lint = True
+  pass
 
 @config_ctx(includes=['x86_builder', 'try_builder'])
 def x86_try_builder(c):

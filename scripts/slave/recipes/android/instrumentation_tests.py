@@ -14,7 +14,7 @@ def GenSteps(api):
   bot_id = api.properties['android_bot_id']
   droid.configure_from_properties(bot_id)
   yield droid.common_tree_setup_steps()
-  if droid.c.apply_svn_patch:
+  if bot_id in ['try_instrumentation_tests', 'x86_try_instrumentation_tests']:
     yield droid.apply_svn_patch()
   yield droid.download_build()
   yield droid.common_tests_setup_steps()

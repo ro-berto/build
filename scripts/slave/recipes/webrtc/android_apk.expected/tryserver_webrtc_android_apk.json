@@ -169,7 +169,7 @@
       "[SLAVE_BUILD]/src/out/logcat"
     ],
     "env": {
-      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "spawn_logcat_monitor"
   },
@@ -178,20 +178,19 @@
       "[SLAVE_BUILD]/src/build/android/buildbot/bb_device_status_check.py"
     ],
     "env": {
-      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "device_status_check"
   },
   {
     "can_fail_build": false,
     "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/build/android/provision_devices.py",
       "-t",
       "Debug"
     ],
-    "env": {
-      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:%(PATH)s"
-    },
     "name": "provision_devices"
   },
   {

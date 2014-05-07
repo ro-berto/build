@@ -63,7 +63,6 @@ def GenSteps(api):
     droid.configure_from_properties(bot_id)
 
   yield droid.init_and_sync()
-  yield droid.envsetup()
   yield droid.clean_local_files()
   if internal and droid.c.run_tree_truth:
     yield droid.run_tree_truth()
@@ -74,15 +73,14 @@ def GenSteps(api):
     extra_env = {'GYP_CROSSCOMPILE': "1"}
   yield droid.runhooks(extra_env)
 
-  if droid.c.apply_svn_patch:
+  if bot_id in ['try_builder', 'x86_try_builder']:
     yield droid.apply_svn_patch()
   yield droid.compile()
 
-  if droid.c.run_findbugs:
+  if bot_id in ['clang_builder', 'try_builder', 'x86_try_builder']:
     yield droid.findbugs()
-  if droid.c.run_lint:
     yield droid.lint()
-  if droid.c.run_checkdeps:
+  if bot_id == 'clang_builder':
     yield droid.checkdeps()
 
   if bot_id == 'clang_release_builder':

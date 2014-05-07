@@ -40,7 +40,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/repo/build/dump_app_manifest_vars.py",
+      "[SLAVE_BUILD]/src/blank/build/dump_app_manifest_vars.py",
       "-b",
       "restart_usb_builder",
       "-v",
@@ -61,7 +61,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/repo/build/dump_internal_names.py",
+      "[SLAVE_BUILD]/src/blank/build/dump_internal_names.py",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -84,35 +84,15 @@
   },
   {
     "cmd": [
-      "[BUILD]/scripts/slave/env_dump.py",
-      "--output-json",
-      "/path/to/tmp/json",
-      "[SLAVE_BUILD]/src/build/android/envsetup.sh"
-    ],
-    "env": {
-      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:%(PATH)s"
-    },
-    "name": "envsetup",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"GYP_DEFINES\": \"my_new_gyp_def=aaa\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"GYP_SOMETHING\": \"gyp_something_value\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"PATH\": \"./\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
     "env": {
-      "EXTRA_LANDMINES_SCRIPT": "[SLAVE_BUILD]/src/repo/build/get_internal_landmines.py",
+      "EXTRA_LANDMINES_SCRIPT": "[SLAVE_BUILD]/src/blank/build/get_internal_landmines.py",
       "GYP_DEFINES": "OS=android app_manifest_version_code=10 app_manifest_version_name=some_builder_1234 chrome_build_id=3333 component=static_library fastbuild=1 target_arch=arm",
-      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "gclient runhooks"
   },
@@ -123,7 +103,7 @@
       "-u",
       "[BUILD]/scripts/slave/compile.py",
       "--target",
-      "Debug",
+      "Release",
       "--src-dir",
       "[SLAVE_BUILD]/src",
       "--build-tool",
@@ -131,7 +111,7 @@
       "--"
     ],
     "env": {
-      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "compile"
   },
@@ -180,7 +160,7 @@
       "[SLAVE_BUILD]/src/out/logcat"
     ],
     "env": {
-      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "spawn_logcat_monitor"
   },
@@ -190,7 +170,7 @@
       "--restart-usb"
     ],
     "env": {
-      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "device_status_check"
   },
@@ -206,9 +186,126 @@
       "--event-count=50000"
     ],
     "env": {
-      "BUILDTYPE": "Debug"
+      "BUILDTYPE": "Release"
     },
     "name": "Monkey Test"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "perf",
+      "--release",
+      "--verbose",
+      "--steps",
+      "fake_config.json",
+      "--flaky-steps",
+      "flake_fakes.json"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "Sharded Perf Tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "fake_config.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "Read test config fake_config.json",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"perf-test-1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"tools/perf/run_benchmark -v perf-test-1\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"perf-test-2\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"tools/perf/run_benchmark -v perf-test-2\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "allow_subannotations": true,
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"buildername\": \"restart_usb_builder\", \"internal\": true, \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\"}",
+      "--build-properties",
+      "{\"buildername\": \"restart_usb_builder\", \"internal\": true, \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\"}",
+      "--annotate=graphing",
+      "--results-url=https://chromeperf.appspot.com",
+      "--perf-dashboard-id=perf-test-1",
+      "--test-type=perf-test-1",
+      "--builder-name=restart_usb_builder",
+      "--slave-name=tehslave",
+      "--run-python-script",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "perf",
+      "--print-step",
+      "perf-test-1",
+      "--verbose"
+    ],
+    "name": "perf-test-1"
+  },
+  {
+    "allow_subannotations": true,
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"buildername\": \"restart_usb_builder\", \"internal\": true, \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\"}",
+      "--build-properties",
+      "{\"buildername\": \"restart_usb_builder\", \"internal\": true, \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\"}",
+      "--annotate=graphing",
+      "--results-url=https://chromeperf.appspot.com",
+      "--perf-dashboard-id=perf-test-2",
+      "--test-type=perf-test-2",
+      "--builder-name=restart_usb_builder",
+      "--slave-name=tehslave",
+      "--run-python-script",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "perf",
+      "--print-step",
+      "perf-test-2",
+      "--verbose"
+    ],
+    "name": "perf-test-2"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "instrumentation",
+      "--test-apk",
+      "AndroidWebViewTest",
+      "--test_data",
+      "webview:android_webview/test/data/device_files",
+      "--flakiness-dashboard-server",
+      "test-results.appspot.com",
+      "-A",
+      "SmallTest",
+      "--screenshot",
+      "--release"
+    ],
+    "name": "Instrumentation test SmallTest"
   },
   {
     "always_run": true,
@@ -216,7 +313,7 @@
       "python",
       "-u",
       "[BUILD]/scripts/slave/tee.py",
-      "[SLAVE_BUILD]/src/out/Debug/full_log",
+      "[SLAVE_BUILD]/src/out/Release/full_log",
       "--",
       "[SLAVE_BUILD]/src/build/android/adb_logcat_printer.py",
       "[SLAVE_BUILD]/src/out/logcat"
@@ -228,10 +325,10 @@
     "cmd": [
       "[SLAVE_BUILD]/src/third_party/android_platform/development/scripts/stack",
       "--more-info",
-      "[SLAVE_BUILD]/src/out/Debug/full_log"
+      "[SLAVE_BUILD]/src/out/Release/full_log"
     ],
     "env": {
-      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "stack_tool_with_logcat_dump"
   },
@@ -244,7 +341,7 @@
       "-w"
     ],
     "env": {
-      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "stack_tool_for_tombstones"
   },
@@ -287,7 +384,7 @@
       "unittests"
     ],
     "env": {
-      "BUILDTYPE": "Debug"
+      "BUILDTYPE": "Release"
     },
     "name": "unittests"
   }

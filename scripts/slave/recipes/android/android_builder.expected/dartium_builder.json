@@ -40,26 +40,6 @@
   },
   {
     "cmd": [
-      "[BUILD]/scripts/slave/env_dump.py",
-      "--output-json",
-      "/path/to/tmp/json",
-      "[SLAVE_BUILD]/src/build/android/envsetup.sh"
-    ],
-    "env": {
-      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:%(PATH)s"
-    },
-    "name": "envsetup",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"GYP_DEFINES\": \"my_new_gyp_def=aaa\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"GYP_SOMETHING\": \"gyp_something_value\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"PATH\": \"./\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "\nimport shutil, sys, os\nshutil.rmtree(sys.argv[1], True)\nshutil.rmtree(sys.argv[2], True)\nfor base, _dirs, files in os.walk(sys.argv[3]):\n  for f in files:\n    if f.endswith('.pyc'):\n      os.remove(os.path.join(base, f))\n",
@@ -88,10 +68,10 @@
       "runhooks"
     ],
     "env": {
-      "EXTRA_LANDMINES_SCRIPT": "[SLAVE_BUILD]/src/repo/build/get_internal_landmines.py",
+      "EXTRA_LANDMINES_SCRIPT": "[SLAVE_BUILD]/src/blank/build/get_internal_landmines.py",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1",
-      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "gclient runhooks"
   },
@@ -116,7 +96,7 @@
       "content_shell_apk"
     ],
     "env": {
-      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "compile"
   },

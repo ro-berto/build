@@ -34,7 +34,6 @@ def GenSteps(api):
   droid.c.deps_file = 'DEPS'
 
   yield droid.init_and_sync()
-  yield droid.envsetup()
   yield droid.clean_local_files()
   yield droid.runhooks()
   yield droid.compile()

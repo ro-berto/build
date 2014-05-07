@@ -21,7 +21,11 @@ BUILDERS = {
 def GenSteps(api):
   config = BUILDERS[api.properties['buildername']]
 
-  api.chromium_android.configure_from_properties('base_config', INTERNAL=True)
+  api.chromium_android.configure_from_properties(
+      'base_config',
+      INTERNAL=True,
+      BUILD_CONFIG='Release')
+
   api.chromium_android.c.get_app_manifest_vars = True
   api.chromium_android.c.run_stack_tool_steps = True
 
@@ -43,6 +47,15 @@ def GenSteps(api):
       restart_usb=config['restart_usb'])
 
   yield api.chromium_android.monkey_test()
+  yield api.chromium_android.run_sharded_perf_tests(
+      config='fake_config.json',
+      flaky_config='flake_fakes.json')
+  yield api.chromium_android.run_instrumentation_suite(
+      test_apk='AndroidWebViewTest',
+      test_data='webview:android_webview/test/data/device_files',
+      flakiness_dashboard='test-results.appspot.com',
+      annotation='SmallTest',
+      screenshot=True)
 
   yield api.chromium_android.logcat_dump()
   yield api.chromium_android.stack_tool_steps()
@@ -57,6 +70,7 @@ def GenTests(api):
         api.test('%s_basic' % buildername) +
         api.properties(
           buildername=buildername,
+          slavename='tehslave',
           repo_name='src/repo',
           repo_url='svn://svn.chromium.org/chrome/trunk/src',
           revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',

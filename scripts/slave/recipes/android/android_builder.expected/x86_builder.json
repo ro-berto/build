@@ -40,7 +40,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/repo/build/dump_app_manifest_vars.py",
+      "[SLAVE_BUILD]/src/blank/build/dump_app_manifest_vars.py",
       "-b",
       "x86_builder",
       "-v",
@@ -61,7 +61,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/repo/build/dump_internal_names.py",
+      "[SLAVE_BUILD]/src/blank/build/dump_internal_names.py",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -72,26 +72,6 @@
       "@@@STEP_LOG_LINE@json.output@  \"FLAKINESS_DASHBOARD_SERVER\": \"test-results.appspot.com\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"INSTRUMENTATION_TEST_DATA\": \"a:b/test/data/android/device_files\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"SCREENSHOT_BUCKET\": \"screenshot-archive\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[BUILD]/scripts/slave/env_dump.py",
-      "--output-json",
-      "/path/to/tmp/json",
-      "[SLAVE_BUILD]/src/build/android/envsetup.sh"
-    ],
-    "env": {
-      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:%(PATH)s"
-    },
-    "name": "envsetup",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"GYP_DEFINES\": \"my_new_gyp_def=aaa\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"GYP_SOMETHING\": \"gyp_something_value\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"PATH\": \"./\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -137,9 +117,9 @@
       "runhooks"
     ],
     "env": {
-      "EXTRA_LANDMINES_SCRIPT": "[SLAVE_BUILD]/src/repo/build/get_internal_landmines.py",
+      "EXTRA_LANDMINES_SCRIPT": "[SLAVE_BUILD]/src/blank/build/get_internal_landmines.py",
       "GYP_DEFINES": "OS=android app_manifest_version_code=10 app_manifest_version_name=some_builder_1234 chrome_build_id=3333 component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=ia32 use_goma=1",
-      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "gclient runhooks"
   },
@@ -162,7 +142,7 @@
       "--"
     ],
     "env": {
-      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "compile"
   },
