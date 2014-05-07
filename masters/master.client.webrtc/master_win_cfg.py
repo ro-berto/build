@@ -2,24 +2,53 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from master import master_config
-from master.factory import webrtc_factory
+from buildbot.schedulers.basic import SingleBranchScheduler
 
-defaults = {}
+from master.factory import annotator_factory
 
+m_annotator = annotator_factory.AnnotatorFactory()
 
-def win():
-  return webrtc_factory.WebRTCFactory('src/out', 'win32')
+def Update(c):
+  c['schedulers'].extend([
+      SingleBranchScheduler(name='webrtc_windows_scheduler',
+                            branch='trunk',
+                            treeStableTimer=0,
+                            builderNames=[
+          'Win32 Debug',
+          'Win32 Release',
+          'Win64 Debug',
+          'Win64 Release',
+          'Win32 Release [large tests]',
+          'Win DrMemory Light',
+          'Win DrMemory Full',
+          'Win SyzyASan',
+      ]),
+  ])
 
-helper = master_config.Helper(defaults)
-B = helper.Builder
-F = helper.Factory
-S = helper.Scheduler
+  # Recipe based builders.
+  specs = [
+    {'name': 'Win32 Debug'},
+    {'name': 'Win32 Release'},
+    {'name': 'Win64 Debug'},
+    {'name': 'Win64 Release'},
+  ]
 
-scheduler = 'webrtc_win_scheduler'
-S(scheduler, branch='trunk', treeStableTimer=0)
+  c['builders'].extend([
+      {
+        'name': spec['name'],
+        'factory': m_annotator.BaseFactory('webrtc/standalone'),
+        'notify_on_missing': True,
+        'category': 'compile|testers|windows',
+        'slavebuilddir': 'win',
+      } for spec in specs
+  ])
 
-tests = [
+  # Builders not-yet-switched to recipes.
+  from master.factory import webrtc_factory
+  def win():
+    return webrtc_factory.WebRTCFactory('src/out', 'win32')
+
+  tests = [
     'audio_decoder_unittests',
     'common_audio_unittests',
     'common_video_unittests',
@@ -36,64 +65,27 @@ tests = [
     'video_engine_core_unittests',
     'video_engine_tests',
     'voice_engine_unittests',
-]
+  ]
 
-baremetal_tests = [
+  baremetal_tests = [
     'audio_device_tests',
     'video_capture_tests',
     'vie_auto_test',
     'voe_auto_test',
     'webrtc_perf_tests',
-]
-options=['--compiler=goma']
-dr_memory_factory_properties = {
-   'gclient_env': {'GYP_DEFINES': 'build_for_tool=drmemory'},
-   'needs_drmemory': True,
-}
+  ]
 
-defaults['category'] = 'win'
+  options=['--compiler=goma']
+  dr_memory_factory_properties = {
+    'gclient_env': {'GYP_DEFINES': 'build_for_tool=drmemory'},
+    'needs_drmemory': True,
+  }
 
-B('Win32 Debug', 'win32_debug_factory', 'compile|testers|windows', scheduler,
-  slavebuilddir='win')
-F('win32_debug_factory', win().WebRTCFactory(
-    target='Debug',
-    options=options,
-    tests=tests))
-
-B('Win32 Release', 'win32_release_factory', 'compile|testers|windows',
-  scheduler, slavebuilddir='win')
-F('win32_release_factory', win().WebRTCFactory(
-    target='Release',
-    options=options,
-    tests=tests))
-
-B('Win64 Debug', 'win64_debug_factory', 'compile|testers|windows', scheduler,
-  slavebuilddir='win')
-F('win64_debug_factory', win().WebRTCFactory(
-    target='Debug_x64',
-    options=options,
-    tests=tests,
-    factory_properties={
-        'gclient_env': {'GYP_DEFINES': 'target_arch=x64'},
-    }))
-
-B('Win64 Release', 'win64_release_factory', 'compile|testers|windows',
-  scheduler, slavebuilddir='win')
-F('win64_release_factory', win().WebRTCFactory(
-    target='Release_x64',
-    options=options,
-    tests=tests,
-    factory_properties={
-        'gclient_env': {'GYP_DEFINES': 'target_arch=x64'},
-    }))
-
-B('Win32 Release [large tests]', 'win32_largetests_factory',
-  'compile|baremetal|windows', scheduler)
-F('win32_largetests_factory', win().WebRTCFactory(
-    target='Release',
-    options=options,
-    tests=baremetal_tests,
-    factory_properties={
+  f_win32_largetests = win().WebRTCFactory(
+      target='Release',
+      options=options,
+      tests=baremetal_tests,
+      factory_properties={
         'virtual_webcam': True,
         'show_perf_results': True,
         'expectations': True,
@@ -103,25 +95,43 @@ F('win32_largetests_factory', win().WebRTCFactory(
                                  'webrtc_perf_tests'],
         'custom_cmd_line_tests': ['vie_auto_test',
                                   'voe_auto_test'],
-    }))
+      })
+  b_win32_largetests = {
+    'name': 'Win32 Release [large tests]',
+    'factory': f_win32_largetests,
+    'category': 'compile|baremetal|windows',
+    'slavebuilddir': 'win',
+    'auto_reboot' : True,
+  }
 
-B('Win DrMemory Light', 'win_drmemory_light_factory', 'compile', scheduler)
-F('win_drmemory_light_factory', win().WebRTCFactory(
+  f_win_drmemory_light = win().WebRTCFactory(
     target='Debug',
     options=options,
     tests=['drmemory_light_' + test for test in tests],
-    factory_properties=dr_memory_factory_properties))
+    factory_properties=dr_memory_factory_properties)
+  b_win_drmemory_light = {
+    'name': 'Win DrMemory Light',
+    'factory': f_win_drmemory_light,
+    'category': 'compile',
+    'slavebuilddir': 'win-drmem',
+    'auto_reboot' : True,
+  }
 
-B('Win DrMemory Full', 'win_drmemory_full_factory', 'compile', scheduler)
-F('win_drmemory_full_factory', win().WebRTCFactory(
+  f_win_drmemory_full = win().WebRTCFactory(
     target='Debug',
     options=options,
     tests=['drmemory_full_' + test for test in tests],
-    factory_properties=dr_memory_factory_properties))
+    factory_properties=dr_memory_factory_properties)
+  b_win_drmemory_full = {
+    'name': 'Win DrMemory Full',
+    'factory': f_win_drmemory_full,
+    'category': 'compile',
+    'slavebuilddir': 'win-drmem',
+    'auto_reboot' : True,
+  }
 
-B('Win SyzyASan', 'win_asan_factory', 'compile|testers|windows', scheduler)
-F('win_asan_factory', win().WebRTCFactory(
-    target='Release',
+  f_win_syzy_asan = win().WebRTCFactory(
+    target='Debug',
     options=options,
     tests=tests,
     factory_properties={
@@ -131,8 +141,17 @@ F('win_asan_factory', win().WebRTCFactory(
                             'component=static_library'),
             'GYP_USE_SEPARATE_MSPDBSRV': '1',
         },
-    }))
+    })
+  b_win_syzy_asan = {
+    'name': 'Win SyzyASan',
+    'factory': f_win_syzy_asan,
+    'category': 'compile|testers|windows',
+    'auto_reboot' : True,
+  }
 
-
-def Update(c):
-  helper.Update(c)
+  c['builders'].extend([
+      b_win32_largetests,
+      b_win_drmemory_light,
+      b_win_drmemory_full,
+      b_win_syzy_asan,
+   ])
