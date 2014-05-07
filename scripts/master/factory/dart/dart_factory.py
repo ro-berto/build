@@ -260,7 +260,7 @@ class DartFactory(gclient_factory.GClientFactory):
     if slave_type in ['BuilderTester', 'Trybot', 'Tester']:
       # Currently we only do this on bleeding since scripts have not landed
       # on trunk/stable yet.
-      if self.channel == 'be':
+      if self.channel.name == 'be':
         dart_cmd_obj.AddArchiveCoredumps(options=options)
 
     for trigger_instance in triggers:
