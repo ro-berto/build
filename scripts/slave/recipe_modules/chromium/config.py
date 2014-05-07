@@ -273,6 +273,10 @@ def trybot_flavor(c):
   dcheck(c, optional=True)
 
 #### 'Full' configurations
+@config_ctx(includes=['ninja', 'default_compiler'])
+def chromium_no_goma(c):
+  c.compile_py.default_targets = ['All', 'chromium_builder_tests']
+
 @config_ctx(includes=['ninja', 'default_compiler', 'goma'])
 def chromium(c):
   c.compile_py.default_targets = ['All', 'chromium_builder_tests']

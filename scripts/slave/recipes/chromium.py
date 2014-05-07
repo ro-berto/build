@@ -453,7 +453,8 @@ BUILDERS = {
   'chromium.fyi': {
     'builders': {
       'Linux Trusty': {
-        'recipe_config': 'chromium',
+        # TODO(phajdan.jr): Re-enable goma, http://crbug.com/349236 .
+        'recipe_config': 'chromium_no_goma',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -472,7 +473,8 @@ BUILDERS = {
         },
       },
       'Linux Trusty (32)': {
-        'recipe_config': 'chromium',
+        # TODO(phajdan.jr): Re-enable goma, http://crbug.com/349236 .
+        'recipe_config': 'chromium_no_goma',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -491,7 +493,8 @@ BUILDERS = {
         },
       },
       'Linux Trusty (dbg)': {
-        'recipe_config': 'chromium',
+        # TODO(phajdan.jr): Re-enable goma, http://crbug.com/349236 .
+        'recipe_config': 'chromium_no_goma',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -510,7 +513,8 @@ BUILDERS = {
         },
       },
       'Linux Trusty (dbg)(32)': {
-        'recipe_config': 'chromium',
+        # TODO(phajdan.jr): Re-enable goma, http://crbug.com/349236 .
+        'recipe_config': 'chromium_no_goma',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -1451,6 +1455,10 @@ RECIPE_CONFIGS = {
   'chromium_chromeos_clang': {
     'chromium_config': 'chromium_clang',
     'chromium_apply_config': ['chromeos'],
+    'gclient_config': 'chromium',
+  },
+  'chromium_no_goma': {
+    'chromium_config': 'chromium_no_goma',
     'gclient_config': 'chromium',
   },
   'official': {

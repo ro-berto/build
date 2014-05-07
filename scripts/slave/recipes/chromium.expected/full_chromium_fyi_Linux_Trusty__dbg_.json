@@ -56,7 +56,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "component=shared_library gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
+      "GYP_DEFINES": "component=shared_library target_arch=x64"
     },
     "name": "gclient runhooks"
   },
@@ -94,10 +94,6 @@
       "[SLAVE_BUILD]/src",
       "--build-tool",
       "ninja",
-      "--compiler",
-      "goma",
-      "--goma-dir",
-      "[BUILD]/goma",
       "--",
       "all",
       "chrome"
