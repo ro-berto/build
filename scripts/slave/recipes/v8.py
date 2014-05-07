@@ -281,6 +281,18 @@ BUILDERS = {
         'tests': ['v8testing', 'test262', 'mozilla'],
         'testing': {'platform': 'linux'},
       },
+      'V8 Linux - deadcode': {
+        'v8_apply_config': ['deadcode'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux - builder',
+        'build_gs_archive': 'linux_rel_archive',
+        'tests': ['v8testing', 'test262', 'mozilla'],
+        'testing': {'platform': 'linux'},
+      },
       'V8 Linux - debug - isolates': {
         'v8_apply_config': ['isolates'],
         'v8_config_kwargs': {
@@ -327,6 +339,27 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
         'tests': ['v8testing', 'test262', 'mozilla'],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - interpreted regexp': {
+        'chromium_apply_config': ['interpreted_regexp'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['v8testing'],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - noi18n - debug': {
+        'v8_apply_config': ['no_i18n'],
+        'chromium_apply_config': ['no_i18n'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['v8testing', 'webkit', 'mozilla', 'test262'],
         'testing': {'platform': 'linux'},
       },
 ####### Category: Linux64
@@ -436,6 +469,15 @@ BUILDERS = {
         'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
         'testing': {'platform': 'win'},
       },
+      'V8 Win64': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['v8testing', 'test262', 'mozilla'],
+        'testing': {'platform': 'win'},
+      },
 ####### Category: Mac
       'V8 Mac': {
         'v8_config_kwargs': {
@@ -472,6 +514,33 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
         'testing': {'platform': 'mac'},
+      },
+####### Category: Arm
+# TODO(machenbach): Enable i18n as soon as icu dynamically ensures the -m32
+# compilation option.
+      'V8 Arm': {
+        'v8_apply_config': ['no_i18n'],
+        'chromium_apply_config': ['no_i18n'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['v8testing', 'webkit', 'optimize_for_size'],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Arm - debug': {
+        'v8_apply_config': ['no_i18n'],
+        'chromium_apply_config': ['no_i18n'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['v8testing', 'webkit', 'optimize_for_size'],
+        'testing': {'platform': 'linux'},
       },
 ####### Category: Simulators
       'V8 Linux - arm - sim': {
@@ -578,7 +647,107 @@ BUILDERS = {
         'tests': ['mjsunit', 'webkit'],
         'testing': {'platform': 'linux'},
       },
+      'V8 Linux - mips - sim': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_ARCH': 'mipsel',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['v8testing', 'test262'],
+        'testing': {'platform': 'linux'},
+      },
 ####### Category: Misc
+      'V8 GC Stress - 1': {
+        'v8_apply_config': ['gc_stress'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+          'SHARD_COUNT': 3,
+          'SHARD_RUN': 1,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux - debug builder',
+        'build_gs_archive': 'linux_dbg_archive',
+        'tests': ['mjsunit', 'webkit'],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 GC Stress - 2': {
+        'v8_apply_config': ['gc_stress'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+          'SHARD_COUNT': 3,
+          'SHARD_RUN': 2,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux - debug builder',
+        'build_gs_archive': 'linux_dbg_archive',
+        'tests': ['mjsunit', 'webkit'],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 GC Stress - 3': {
+        'v8_apply_config': ['gc_stress'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+          'SHARD_COUNT': 3,
+          'SHARD_RUN': 3,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux - debug builder',
+        'build_gs_archive': 'linux_dbg_archive',
+        'tests': ['mjsunit', 'webkit'],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Mac GC Stress - 1': {
+        'v8_apply_config': ['gc_stress'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+          'SHARD_COUNT': 3,
+          'SHARD_RUN': 1,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['mjsunit', 'webkit'],
+        'testing': {'platform': 'mac'},
+      },
+      'V8 Mac GC Stress - 2': {
+        'v8_apply_config': ['gc_stress'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+          'SHARD_COUNT': 3,
+          'SHARD_RUN': 2,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['mjsunit', 'webkit'],
+        'testing': {'platform': 'mac'},
+      },
+      'V8 Mac GC Stress - 3': {
+        'v8_apply_config': ['gc_stress'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+          'SHARD_COUNT': 3,
+          'SHARD_RUN': 3,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['mjsunit', 'webkit'],
+        'testing': {'platform': 'mac'},
+      },
+      'V8 Arm GC Stress': {
+        'v8_apply_config': ['gc_stress', 'no_i18n'],
+        'chromium_apply_config': ['no_i18n'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['mjsunit', 'webkit'],
+        'testing': {'platform': 'linux'},
+      },
       'V8 Linux64 ASAN': {
         'gclient_apply_config': ['clang'],
         'chromium_apply_config': ['clang', 'asan', 'no_lsan'],

@@ -38,6 +38,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       mode = Single(basestring, required=False),
       goma_dir = Single(Path, required=False),
       clobber = Single(bool, empty_val=False, required=False, hidden=False),
+      pass_arch_flag = Single(bool, empty_val=False, required=False),
     ),
     gyp_env = ConfigGroup(
       GYP_CROSSCOMPILE = Single(int, jsonish_fn=str, required=False),

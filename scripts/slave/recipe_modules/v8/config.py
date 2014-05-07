@@ -35,6 +35,11 @@ def v8(c):
 
 
 @config_ctx()
+def deadcode(c):
+  c.testing.test_args.add('--shell_flags="--dead-code-elimination"')
+
+
+@config_ctx()
 def gc_stress(c):
   c.testing.test_args.add('--gc-stress')
 
@@ -42,6 +47,11 @@ def gc_stress(c):
 @config_ctx()
 def isolates(c):
   c.testing.test_args.add('--isolates=on')
+
+
+@config_ctx()
+def no_i18n(c):
+  c.testing.test_args.add('--noi18n')
 
 
 @config_ctx()

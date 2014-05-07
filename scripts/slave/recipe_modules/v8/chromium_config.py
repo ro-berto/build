@@ -27,6 +27,22 @@ def v8(c):
   if c.BUILD_CONFIG == 'Debug':
     c.gyp_env.GYP_DEFINES['v8_optimized_debug'] = 1
 
+  # Chromium adds '_x64' to the output folder, which is neither needed nor
+  # understood when compiling v8 standalone.
+  if c.HOST_PLATFORM == 'win' and c.TARGET_BITS == 64:
+    c.build_config_fs = c.BUILD_CONFIG
+    c.compile_py.pass_arch_flag = True
+
+
+@CONFIG_CTX(includes=['v8'])
+def interpreted_regexp(c):
+  c.gyp_env.GYP_DEFINES['v8_interpreted_regexp'] = 1
+
+
+@CONFIG_CTX(includes=['v8'])
+def no_i18n(c):
+  c.gyp_env.GYP_DEFINES['v8_enable_i18n_support'] = 0
+
 
 @CONFIG_CTX(includes=['v8'])
 def no_lsan(c):

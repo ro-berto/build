@@ -73,6 +73,8 @@ class ChromiumApi(recipe_api.RecipeApi):
         self.c.compile_py.clobber or
         force_clobber):
       args.append('--clobber')
+    if self.c.compile_py.pass_arch_flag:
+      args += ['--arch', self.c.gyp_env.GYP_DEFINES['target_arch']]
     args.append('--')
     args.extend(targets)
     return self.m.python(name or 'compile',
