@@ -90,7 +90,7 @@ else:
 # Windows SyzyASAN Rel Builder
 #
 builder_factory_properties = {
-  'asan': True,
+  'syzyasan': True,
   'code_tally_upload_url': code_tally_upload_url,
   'gclient_env': {
     'GYP_DEFINES': (
@@ -123,7 +123,7 @@ F('win_syzyasan_rel_tests_1', win().ChromiumASANFactory(
     build_url=win_syzyasan_archive,
     tests=tests_1,
     factory_properties={
-        'asan': True,
+        'syzyasan': True,
         'browser_shard_index': 1,
         'browser_total_shards': 2,
         'testing_env': {
@@ -144,7 +144,7 @@ F('win_syzyasan_rel_tests_2', win().ChromiumASANFactory(
     build_url=win_syzyasan_archive,
     tests=tests_2,
     factory_properties={
-        'asan': True,
+        'syzyasan': True,
         'browser_shard_index': 2,
         'browser_total_shards': 2,
         'testing_env': {

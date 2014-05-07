@@ -95,8 +95,9 @@ class WebRTCFactory(chromium_factory.ChromiumFactory):
     cmds._win_memory_tests_runner = cmds.PathJoin(valgrind_script_path,
                                                   'webrtc_tests.bat')
 
-    if self._target_platform == 'win32' and factory_properties.get('asan'):
-      cmds.AddWindowsASANStep()
+    if (self._target_platform == 'win32' and factory_properties.get(
+        'syzyasan')):
+      cmds.AddWindowsSyzyASanStep()
 
     # Add check/start step for virtual webcams, if needed.
     if factory_properties.get('virtual_webcam'):

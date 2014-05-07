@@ -1312,9 +1312,9 @@ def _MainWin(options, args):
       command.extend(['--brave-new-test-launcher', '--test-launcher-bot-mode'])
 
   # The ASan tests needs to run under agent_logger in order to get the stack
-  # traces. The win ASan builder is responsible to put it in the
+  # traces. The win SyzyASan builder is responsible to put it in the
   # build_dir/target/ directory.
-  if options.factory_properties.get('asan'):
+  if options.factory_properties.get('syzyasan') or options.use_syzyasan_logger:
     logfile = test_exe_path + '.asan_log'
     command = ['%s' % os.path.join(build_dir,
                                    options.target,
@@ -1610,6 +1610,9 @@ def main():
                            default=False,
                            help='Disable GLib DBus bug workaround: '
                                 'manually spawning dbus-launch')
+  option_parser.add_option('--use-syzyasan-logger', action='store_true',
+                           default=False,
+                           help='Run the tests under the SyzyASan logger.')
   option_parser.add_option('--test-launcher-summary-output',
                            help='Path to test results file with all the info '
                                 'from the test launcher')

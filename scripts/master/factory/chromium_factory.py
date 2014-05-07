@@ -1029,12 +1029,12 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     #       them and put them in a zip file for the test bots.
     #     - The Chromium LKGR builder, which build the All_syzygy target of the
     #       Chromium project with the 'asan' gyp define set. There's no need to
-    #       call a script to do the instrumentation for this target (it' already
-    #       in the build steps). This builder should archive the builds for
-    #       Clusterfuzz, it need to have the 'cf_archive_build' property.
+    #       call a script to do the instrumentation for this target (it's
+    #       already in the build steps). This builder should archive the builds
+    #       for Clusterfuzz, it need to have the 'cf_archive_build' property.
     is_win_syzyasan_tests_builder = (slave_type == 'Builder' and
                                      self._target_platform == 'win32' and
-                                     factory_properties.get('asan') and
+                                     factory_properties.get('syzyasan') and
                                  not factory_properties.get('cf_archive_build'))
 
     factory = self.BuildFactory(target, clobber, tests_for_build, mode,
@@ -1062,7 +1062,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
           chromium_cmd_obj.AddUploadConvertedCodeTally(
               dll, factory_properties.get('code_tally_upload_url'))
 
-      chromium_cmd_obj.AddWindowsASANStep()
+      chromium_cmd_obj.AddWindowsSyzyASanStep()
       # Need to add the Zip Build step back
       chromium_cmd_obj.AddZipBuild(halt_on_failure=True,
                                    factory_properties=factory_properties)

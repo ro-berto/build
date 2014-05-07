@@ -135,7 +135,7 @@ def Update(c):
     options=options,
     tests=tests,
     factory_properties={
-        'asan': True,
+        'syzyasan': True,
         'gclient_env': {
             'GYP_DEFINES': ('syzyasan=1 win_z7=1 chromium_win_pch=0 '
                             'component=static_library'),

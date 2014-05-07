@@ -25,7 +25,7 @@ from slave import slave_utils
 class StagingError(Exception): pass
 
 
-class ASANWinFilter():
+class SyzyASanWinFilter():
   def __init__(self, build_dir, target):
     self.root = os.path.abspath(os.path.join(build_dir, target))
 
@@ -46,7 +46,7 @@ class ASANWinFilter():
 
 
 PATH_FILTERS = {
-    'asan_win': ASANWinFilter,
+    'syzyasan_win': SyzyASanWinFilter,
 }
 
 
@@ -489,9 +489,9 @@ def main(argv):
     print 'Warning -- unknown arguments' % args[1:]
 
   if (options.path_filter is None
-      and options.factory_properties.get('asan')
+      and options.factory_properties.get('syzyasan')
       and chromium_utils.IsWindows()):
-    options.path_filter = 'asan_win'
+    options.path_filter = 'syzyasan_win'
 
   if options.path_filter:
     options.path_filter = PATH_FILTERS[options.path_filter](
