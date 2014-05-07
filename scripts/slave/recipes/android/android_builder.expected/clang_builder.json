@@ -40,7 +40,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/blank/build/dump_app_manifest_vars.py",
+      "[SLAVE_BUILD]/src/clank/build/dump_app_manifest_vars.py",
       "-b",
       "clang_builder",
       "-v",
@@ -61,7 +61,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/blank/build/dump_internal_names.py",
+      "[SLAVE_BUILD]/src/clank/build/dump_internal_names.py",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -117,7 +117,7 @@
       "runhooks"
     ],
     "env": {
-      "EXTRA_LANDMINES_SCRIPT": "[SLAVE_BUILD]/src/blank/build/get_internal_landmines.py",
+      "EXTRA_LANDMINES_SCRIPT": "[SLAVE_BUILD]/src/clank/build/get_internal_landmines.py",
       "GYP_DEFINES": "OS=android app_manifest_version_code=10 app_manifest_version_name=some_builder_1234 asan=1 chrome_build_id=3333 clang=1 component=shared_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_allocator=none use_goma=1",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
@@ -150,7 +150,7 @@
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/findbugs_diff.py",
       "-b",
-      "[SLAVE_BUILD]/src/blank/bin/findbugs_filter",
+      "[SLAVE_BUILD]/src/clank/bin/findbugs_filter",
       "-o",
       "com.google.android.apps.chrome.-,org.chromium.-"
     ],
@@ -161,7 +161,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/blank/bin/lint.py"
+      "[SLAVE_BUILD]/src/clank/bin/lint.py"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -171,7 +171,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/tools/checkdeps/checkdeps.py",
-      "--root=[SLAVE_BUILD]/src/blank"
+      "--root=[SLAVE_BUILD]/src/clank"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"

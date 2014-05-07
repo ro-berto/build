@@ -38,7 +38,7 @@ def BaseConfig(INTERNAL=False, REPO_NAME=None, REPO_URL=None,
 
 VAR_TEST_MAP = {
   'INTERNAL': [True, False],
-  'REPO_NAME': ['src/blank'],
+  'REPO_NAME': ['src/clank'],
   'REPO_URL': ['<hidden>'],  # supplied in build properties
   'BUILD_CONFIG': ['Debug', 'Release'],
 }
@@ -54,7 +54,7 @@ config_ctx = config_item_context(BaseConfig, VAR_TEST_MAP, TEST_NAME_FORMAT)
 
 @config_ctx(is_root=True)
 def base_config(c):
-  c.internal_dir_name = 'blank'
+  c.internal_dir_name = 'clank'
 
 @config_ctx()
 def main_builder(c):

@@ -51,7 +51,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/blank/build/dump_app_manifest_vars.py",
+      "[SLAVE_BUILD]/src/clank/build/dump_app_manifest_vars.py",
       "-b",
       "test_buildername",
       "-v",
@@ -72,7 +72,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/blank/build/dump_internal_names.py",
+      "[SLAVE_BUILD]/src/clank/build/dump_internal_names.py",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -126,7 +126,7 @@
       "-p",
       "try_job_svn_patch",
       "-r",
-      "[SLAVE_BUILD]/src/blank"
+      "[SLAVE_BUILD]/src/clank"
     ],
     "name": "apply_patch"
   },
@@ -187,7 +187,7 @@
   {
     "can_fail_build": false,
     "cmd": [
-      "[SLAVE_BUILD]/src/blank/build/setup_device_testing.py"
+      "[SLAVE_BUILD]/src/clank/build/setup_device_testing.py"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -196,7 +196,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/blank/build/full_deploy.py",
+      "[SLAVE_BUILD]/src/clank/build/full_deploy.py",
       "-v",
       "--debug",
       "--non-rooted"
@@ -224,7 +224,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/blank/build/buildbot/tests_generator.py",
+      "[SLAVE_BUILD]/src/clank/build/buildbot/tests_generator.py",
       "--test=smoke_instrumentation_tests",
       "--test=small_instrumentation_tests",
       "--test=medium_instrumentation_tests",
