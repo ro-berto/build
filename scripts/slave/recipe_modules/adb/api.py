@@ -19,31 +19,9 @@ class AdbApi(recipe_api.RecipeApi):
         'devices',
     ]
 
-    yield self.m.python.inline(
+    yield self.m.python(
         'List adb devices',
-        """
-        import subprocess
-        import sys
-        import json
-        import re
-        import logging
-
-        logging.basicConfig(level=0)
-
-        cmd = eval(sys.argv[1])
-        outFileName = sys.argv[2]
-
-        output = subprocess.check_output(cmd)
-        devices = []
-        for line in output.splitlines():
-          logging.info(line)
-          m = re.match('^([0-9A-Fa-f]+)\s+device$', line)
-          if m:
-            devices.append(m.group(1))
-
-        with open(outFileName, 'w') as outFile:
-          json.dump(devices, outFile)
-        """,
+        self.resource('list_devices.py'),
         args=[ repr(cmd), self.m.json.output() ],
         step_test_data=self.test_api.device_list)
 

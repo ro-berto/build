@@ -139,7 +139,7 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport subprocess\nimport sys\nimport json\nimport re\nimport logging\n\nlogging.basicConfig(level=0)\n\ncmd = eval(sys.argv[1])\noutFileName = sys.argv[2]\n\noutput = subprocess.check_output(cmd)\ndevices = []\nfor line in output.splitlines():\n  logging.info(line)\n  m = re.match('^([0-9A-Fa-f]+)\\s+device$', line)\n  if m:\n    devices.append(m.group(1))\n\nwith open(outFileName, 'w') as outFile:\n  json.dump(devices, outFile)\n",
+      "[BUILD]/scripts/slave/recipe_modules/adb/resources/list_devices.py",
       "['[BUILD_INTERNAL]/scripts/slave/android/adb', 'devices']",
       "/path/to/tmp/json"
     ],
@@ -148,30 +148,7 @@
       "@@@STEP_LOG_LINE@json.output@[@@@",
       "@@@STEP_LOG_LINE@json.output@  \"014E1F310401C009\"@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import subprocess@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@import json@@@",
-      "@@@STEP_LOG_LINE@python.inline@import re@@@",
-      "@@@STEP_LOG_LINE@python.inline@import logging@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@logging.basicConfig(level=0)@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@cmd = eval(sys.argv[1])@@@",
-      "@@@STEP_LOG_LINE@python.inline@outFileName = sys.argv[2]@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@output = subprocess.check_output(cmd)@@@",
-      "@@@STEP_LOG_LINE@python.inline@devices = []@@@",
-      "@@@STEP_LOG_LINE@python.inline@for line in output.splitlines():@@@",
-      "@@@STEP_LOG_LINE@python.inline@  logging.info(line)@@@",
-      "@@@STEP_LOG_LINE@python.inline@  m = re.match('^([0-9A-Fa-f]+)\\s+device$', line)@@@",
-      "@@@STEP_LOG_LINE@python.inline@  if m:@@@",
-      "@@@STEP_LOG_LINE@python.inline@    devices.append(m.group(1))@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@with open(outFileName, 'w') as outFile:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  json.dump(devices, outFile)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
