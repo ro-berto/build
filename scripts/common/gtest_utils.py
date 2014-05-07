@@ -468,14 +468,14 @@ class GTestJSONParser(object):
         if json_output:
           self.parsing_errors = json_output.split('\n')
       else:
-        self._ProcessJSONData(json_data)
+        self.ProcessJSONData(json_data)
 
     if self.delete_json_file:
       os.remove(self.json_file_path)
 
-  def _ProcessJSONData(self, json_data):
+  def ProcessJSONData(self, json_data):
     # TODO(phajdan.jr): Require disabled_tests to be present (May 2014).
-    self.disabled_tests = set(json_data.get('disabled_tests', []))
+    self.disabled_tests.update(json_data.get('disabled_tests', []))
 
     for iteration_data in json_data['per_iteration_data']:
       for test_name, test_runs in iteration_data.iteritems():

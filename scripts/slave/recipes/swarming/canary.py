@@ -47,6 +47,9 @@ def GenSteps(api):
   # Checkout chromium + deps (including 'master' of swarming_client).
   yield api.gclient.checkout()
 
+  # Ensure swarming_client version is fresh enough.
+  yield api.swarming.check_client_version()
+
   # Build all supported tests, isolate them to the server. Set ISOLATE_DEBUG so
   # that isolate scripts invoked by ninja produce more information. Corresponds
   # to --profile flag.
@@ -61,7 +64,7 @@ def GenSteps(api):
 
   # Make swarming tasks that run isolated tests.
   tasks = [
-    api.swarming.task(test, isolated_hash)
+    api.swarming.gtest_task(test, isolated_hash)
     for test, isolated_hash in sorted(api.isolate.isolated_tests.iteritems())
   ]
 

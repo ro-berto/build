@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 from slave import recipe_api
+from slave import recipe_util
 
 
 class SwarmingClientApi(recipe_api.RecipeApi):
@@ -59,22 +60,36 @@ class SwarmingClientApi(recipe_api.RecipeApi):
     # Chromium checkout.
     return self.m.path['checkout'].join('tools', 'swarming_client')
 
-  def query_script_version(self, script):
-    """Returns a step to query a swarming script for its version.
+  def query_script_version(self, script, step_test_data=None):
+    """Yields a step to query a swarming script for its version.
 
-    Version tuple later is accessible via 'get_script_version' method.
+    Version tuple is later accessible via 'get_script_version' method. If
+    |step_test_data| is given, it is a tuple with version to use in expectation
+    tests by default.
+
+    Does nothing if script's version is already known.
     """
-    def followup_fn(step_result):
-      version = step_result.stdout.strip()
-      step_result.presentation.step_text = version
-      step_result.presentation.step_summary_text = version
-      self._script_version[script] = tuple(map(int, version.split('.')))
-    return self.m.python(
-        name='%s --version' % script,
-        script=self.path.join(script),
-        args=['--version'],
-        stdout=self.m.raw_io.output(),
-        followup_fn=followup_fn)
+    # Convert |step_test_data| from tuple of ints back to a version string.
+    if step_test_data:
+      assert isinstance(step_test_data, tuple)
+      assert all(isinstance(x, int) for x in step_test_data)
+      as_text = '.'.join(map(str, step_test_data))
+      step_test_data_cb = lambda: self.m.raw_io.test_api.stream_output(as_text)
+    else:
+      step_test_data_cb = None
+
+    if script not in self._script_version:
+      def followup_fn(step_result):
+        version = step_result.stdout.strip()
+        step_result.presentation.step_text = version
+        self._script_version[script] = tuple(map(int, version.split('.')))
+      yield self.m.python(
+          name='%s --version' % script,
+          script=self.path.join(script),
+          args=['--version'],
+          stdout=self.m.raw_io.output(),
+          followup_fn=followup_fn,
+          step_test_data=step_test_data_cb)
 
   def get_script_version(self, script):
     """Returns a version of some swarming script as a tuple (Major, Minor, Rev).
@@ -84,3 +99,27 @@ class SwarmingClientApi(recipe_api.RecipeApi):
     """
     assert script in self._script_version, script
     return self._script_version[script]
+
+  def ensure_script_version(self, script, min_version):
+    """Yields steps to ensure a script version is not older than |min_version|.
+
+    Will abort recipe execution if it is.
+    """
+    yield self.query_script_version(script, step_test_data=min_version)
+    version = self.get_script_version(script)
+    if version < min_version:
+      # Gross hack to abort the recipe execution with a message.
+      def followup_fn(step_result):
+        expecting = '.'.join(map(str, min_version))
+        got = '.'.join(map(str, version))
+        abort_reason = 'Expecting at least v%s, got v%s' % (expecting, got)
+        step_result.presentation.status == 'FAILURE'
+        step_result.presentation.step_text = abort_reason
+        raise recipe_util.RecipeAbort(abort_reason)
+      yield self.m.python.inline(
+          '%s is too old' % script,
+          'import sys; sys.exit(1)',
+          add_python_log=False,
+          always_run=True,
+          abort_on_failure=False,
+          followup_fn=followup_fn)

@@ -80,8 +80,33 @@
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@0.4.4@@@",
-      "@@@STEP_SUMMARY_TEXT@0.4.4@@@"
+      "@@@STEP_TEXT@0.4.4@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/swarming.client/isolate.py",
+      "--version"
+    ],
+    "name": "isolate.py --version",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@0.3.1@@@"
+    ]
+  },
+  {
+    "abort_on_failure": false,
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(1)"
+    ],
+    "name": "swarming.py is too old",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Expecting at least v0.5.0, got v0.4.4@@@"
     ]
   }
 ]

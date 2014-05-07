@@ -641,7 +641,7 @@ class TestGTestLogParserTests(unittest.TestCase):
 class TestGTestJSONParserTests(unittest.TestCase):
   def testPassedTests(self):
     parser = gtest_utils.GTestJSONParser()
-    parser._ProcessJSONData({  # pylint: disable=W0212
+    parser.ProcessJSONData({
       'disabled_tests': [],
       'per_iteration_data': [
         {
@@ -658,7 +658,7 @@ class TestGTestJSONParserTests(unittest.TestCase):
 
   def testFailedTests(self):
     parser = gtest_utils.GTestJSONParser()
-    parser._ProcessJSONData({  # pylint: disable=W0212
+    parser.ProcessJSONData({
       'disabled_tests': [],
       'per_iteration_data': [
         {
@@ -675,7 +675,7 @@ class TestGTestJSONParserTests(unittest.TestCase):
 
   def testFlakyTests(self):
     parser = gtest_utils.GTestJSONParser()
-    parser._ProcessJSONData({  # pylint: disable=W0212
+    parser.ProcessJSONData({
       'disabled_tests': [],
       'per_iteration_data': [
         {
@@ -695,7 +695,7 @@ class TestGTestJSONParserTests(unittest.TestCase):
 
   def testDisabledTests(self):
     parser = gtest_utils.GTestJSONParser()
-    parser._ProcessJSONData({  # pylint: disable=W0212
+    parser.ProcessJSONData({
       'disabled_tests': ['Test.Two'],
       'per_iteration_data': [
         {

@@ -18,6 +18,9 @@ def GenSteps(api):
   # Checkout swarming client.
   yield api.swarming_client.checkout('master')
 
+  # Ensure swarming_client version is fresh enough.
+  yield api.swarming.check_client_version()
+
   # Configure isolate & swarming modules (this is optional).
   api.isolate.isolate_server = 'https://isolateserver-dev.appspot.com'
   api.swarming.swarming_server = 'https://chromium-swarm-dev.appspot.com'

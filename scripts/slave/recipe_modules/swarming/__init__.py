@@ -4,6 +4,7 @@
 
 DEPS = [
   'isolate',
+  'path',
   'platform',
   'properties',
   'python',

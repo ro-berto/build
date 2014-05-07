@@ -63,6 +63,19 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]\\src\\tools\\swarming_client\\swarming.py",
+      "--version"
+    ],
+    "name": "swarming.py --version",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@0.4.7@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[DEPOT_TOOLS]\\gclient.py",
       "runhooks"
     ],
@@ -141,15 +154,14 @@
       "Windows-6.1",
       "--profile",
       "--verbose",
-      "[dummy hash for dummy_target_1]"
+      "[dummy hash for dummy_target_1]",
+      "--",
+      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] dummy_target_1 on Windows-6.1",
+    "name": "[trigger] dummy_target_1",
     "seed_steps": [
-      "[trigger] dummy_target_1 on Windows-6.1",
-      "[trigger] dummy_target_2 on Windows-6.1"
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>dummy_target_1/Windows-6.1/[dummy hash for dummy_target_1]/TestBuilder/571@@@"
+      "[trigger] dummy_target_1",
+      "[trigger] dummy_target_2"
     ]
   },
   {
@@ -173,19 +185,24 @@
       "Windows-6.1",
       "--profile",
       "--verbose",
-      "[dummy hash for dummy_target_2]"
+      "[dummy hash for dummy_target_2]",
+      "--",
+      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] dummy_target_2 on Windows-6.1",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>dummy_target_2/Windows-6.1/[dummy hash for dummy_target_2]/TestBuilder/571@@@"
-    ]
+    "name": "[trigger] dummy_target_2"
   },
   {
+    "allow_subannotations": true,
     "always_run": true,
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\swarming_client\\swarming.py",
+      "[BUILD]\\scripts\\slave\\recipe_modules\\swarming\\resources\\collect_gtest_task.py",
+      "--swarming-client-dir",
+      "[SLAVE_BUILD]\\src\\tools\\swarming_client",
+      "--temp-root-dir",
+      "[TMP_BASE]",
+      "--",
       "collect",
       "--swarming",
       "https://chromium-swarm-dev.appspot.com",
@@ -194,18 +211,24 @@
       "--verbose",
       "dummy_target_1/Windows-6.1/[dummy hash for dummy_target_1]/TestBuilder/571"
     ],
-    "name": "[swarming] dummy_target_1 on Windows-6.1",
+    "name": "[swarming] dummy_target_1",
     "seed_steps": [
-      "[swarming] dummy_target_1 on Windows-6.1",
-      "[swarming] dummy_target_2 on Windows-6.1"
+      "[swarming] dummy_target_1",
+      "[swarming] dummy_target_2"
     ]
   },
   {
+    "allow_subannotations": true,
     "always_run": true,
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\swarming_client\\swarming.py",
+      "[BUILD]\\scripts\\slave\\recipe_modules\\swarming\\resources\\collect_gtest_task.py",
+      "--swarming-client-dir",
+      "[SLAVE_BUILD]\\src\\tools\\swarming_client",
+      "--temp-root-dir",
+      "[TMP_BASE]",
+      "--",
       "collect",
       "--swarming",
       "https://chromium-swarm-dev.appspot.com",
@@ -214,6 +237,6 @@
       "--verbose",
       "dummy_target_2/Windows-6.1/[dummy hash for dummy_target_2]/TestBuilder/571"
     ],
-    "name": "[swarming] dummy_target_2 on Windows-6.1"
+    "name": "[swarming] dummy_target_2"
   }
 ]
