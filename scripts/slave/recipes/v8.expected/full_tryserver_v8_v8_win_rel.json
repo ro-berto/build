@@ -60,7 +60,7 @@
   },
   {
     "cmd": [
-      "svn",
+      "svn.bat",
       "export",
       "--force",
       "svn://svn-mirror.golo.chromium.org/patch",

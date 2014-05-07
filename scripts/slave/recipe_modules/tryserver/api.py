@@ -64,13 +64,8 @@ class TryserverApi(recipe_api.RecipeApi):
           step_result.raw_io.output.split('\n'))
 
     patch_file = self.m.raw_io.output('.diff')
-    svn_cmd = [
-        'svn',
-        'export',
-        '--force',
-        patch_url,
-        patch_file,
-    ]
+    ext = '.bat' if self.m.platform.is_win else ''
+    svn_cmd = ['svn' + ext, 'export', '--force', patch_url, patch_file]
 
     yield self.m.step('download patch', svn_cmd, followup_fn=link_patch,
                       step_test_data=self.test_api.download_patch)
