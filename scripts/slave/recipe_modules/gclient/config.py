@@ -279,3 +279,11 @@ def tools_build(c):
   s.url = ChromiumGitURL(c, 'chromium', 'tools', 'build.git')
   m = c.got_revision_mapping
   m['build'] = 'got_revision'
+
+@config_ctx()
+def drmemory(c):
+  s = c.solutions.add()
+  s.name = 'drmemory.DEPS'
+  s.deps_file = 'DEPS'
+  s.url = ChromiumSvnSubURL(c, 'chrome', 'trunk', 'deps', 'third_party',
+                            'drmemory', 'drmemory.DEPS')

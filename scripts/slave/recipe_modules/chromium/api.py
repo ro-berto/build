@@ -137,6 +137,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       ])
       # The flakiness dashboard needs the buildnumber, so we assert it here.
       assert self.m.properties.get('buildnumber')
+
     # These properties are specified on every bot, so pass them down
     # unconditionally.
     full_args.append('--builder-name=%s' % self.m.properties['buildername'])
@@ -162,7 +163,18 @@ class ChromiumApi(recipe_api.RecipeApi):
     if master_class_name:
       full_args.append('--master-class-name=%s' % master_class_name)
 
-    full_args.append(test)
+    if self.c.memory_tool:
+      full_args.extend([
+        '--pass-build-dir',
+        '--pass-target',
+        '--run-shell-script',
+        self.c.memory_tests_runner,
+        '--test', test,
+        '--tool', self.c.memory_tool,
+      ])
+    else:
+      full_args.append(test)
+
     full_args.extend(args)
 
     # By default, always run the tests.

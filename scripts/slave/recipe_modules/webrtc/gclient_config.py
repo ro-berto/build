@@ -11,8 +11,9 @@ from slave.recipe_modules.gclient.config import ChromeSvnSubURL,\
 def webrtc(c):
   pass
 
+
 @CONFIG_CTX(includes=['webrtc'])
-def webrtc_asan(c):
+def webrtc_clang(c):
   pass
 
 
@@ -49,6 +50,17 @@ def webrtc_android_apk(c):
 def webrtc_ios(c):
   pass
 
+
+@CONFIG_CTX(includes=['webrtc'])
+def valgrind(c):
+  """Add Valgrind binaries dependency for WebRTC.
+
+  Since WebRTC DEPS is using relative paths, it it not possible to use a generic
+  valgrind config in the gclient recipe module.
+  """
+  c.solutions[0].custom_deps['third_party/valgrind'] = \
+      ChromiumSvnSubURL(c, 'chrome', 'trunk', 'deps', 'third_party', 'valgrind',
+                        'binaries')
 
 @CONFIG_CTX()
 def _webrtc(c):

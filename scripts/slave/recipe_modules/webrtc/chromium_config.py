@@ -5,6 +5,7 @@
 from slave.recipe_config import BadConf
 
 from RECIPE_MODULES.chromium import CONFIG_CTX
+from slave.recipe_config_types import Path
 
 
 SUPPORTED_TARGET_ARCHS = ('intel', 'arm')
@@ -14,9 +15,19 @@ SUPPORTED_TARGET_ARCHS = ('intel', 'arm')
 def webrtc(c):
   c.compile_py.default_targets = ['All']
 
+  c.memory_tests_runner = Path('[CHECKOUT]', 'tools', 'valgrind-webrtc',
+                               'webrtc_tests', platform_ext={'win': '.bat',
+                                                             'mac': '.sh',
+                                                             'linux': '.sh'})
 
-@CONFIG_CTX(includes=['chromium_asan'])
-def webrtc_asan(c):
+
+@CONFIG_CTX(includes=['chromium_clang'])
+def webrtc_clang(c):
+  c.compile_py.default_targets = ['All']
+
+
+@CONFIG_CTX(includes=['chromium_tsan2'])
+def webrtc_tsan2(c):
   c.compile_py.default_targets = ['All']
 
 

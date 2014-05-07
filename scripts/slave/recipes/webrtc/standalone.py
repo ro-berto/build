@@ -23,13 +23,13 @@ class WebRTCNormalTests(object):
     c = api.chromium
     steps = []
     for test in api.webrtc.NORMAL_TESTS:
-      steps.append(c.runtest(test, annotate='gtest', xvfb=True))
+      steps.append(c.runtest(test, annotate='gtest', xvfb=True, test_type=test))
 
     if api.platform.is_mac and api.platform.bits == 64:
       test = api.path.join('libjingle_peerconnection_objc_test.app', 'Contents',
                            'MacOS', 'libjingle_peerconnection_objc_test')
       steps.append(c.runtest(test, name='libjingle_peerconnection_objc_test',
-                             annotate='gtest', xvfb=True))
+                             annotate='gtest', xvfb=True, test_type=test))
     return steps
 
 
@@ -157,6 +157,38 @@ BUILDERS = {
           'platform': 'win',
         },
       },
+      'Win Dr Memory Full': {
+        'recipe_config': 'webrtc',
+        'chromium_apply_config': ['drmemory_full'],
+        'gclient_apply_config': ['drmemory'],
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': [
+          WebRTCNormalTests(),
+        ],
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'Win Dr Memory Light': {
+        'recipe_config': 'webrtc',
+        'chromium_apply_config': ['drmemory_light'],
+        'gclient_apply_config': ['drmemory'],
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': [
+          WebRTCNormalTests(),
+        ],
+        'testing': {
+          'platform': 'win',
+        },
+      },
       'Mac32 Debug': {
         'recipe_config': 'webrtc',
         'webrtc_config_kwargs': {
@@ -214,7 +246,8 @@ BUILDERS = {
         },
       },
       'Mac Asan': {
-        'recipe_config': 'webrtc_asan',
+        'recipe_config': 'webrtc',
+        'chromium_apply_config': ['asan'],
         'webrtc_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -324,7 +357,55 @@ BUILDERS = {
         },
       },
       'Linux Asan': {
-        'recipe_config': 'webrtc_asan',
+        'recipe_config': 'webrtc_clang',
+        'chromium_apply_config': ['asan'],
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': [
+          WebRTCNormalTests(),
+        ],
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'Linux Memcheck': {
+        'recipe_config': 'webrtc',
+        'chromium_apply_config': ['memcheck'],
+        'gclient_apply_config': ['valgrind'],
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': [
+          WebRTCNormalTests(),
+        ],
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'Linux TSan': {
+        'recipe_config': 'webrtc',
+        'chromium_apply_config': ['tsan'],
+        'gclient_apply_config': ['valgrind'],
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': [
+          WebRTCNormalTests(),
+        ],
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'Linux TSan v2': {
+        'recipe_config': 'webrtc_clang',
+        'chromium_apply_config': ['tsan2'],
         'webrtc_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -392,6 +473,26 @@ BUILDERS = {
       },
     },
   },
+  'client.webrtc.fyi': {
+    'builders': {
+      'Linux TsanRV': {
+        'recipe_config': 'webrtc',
+        'chromium_apply_config': ['tsan_race_verifier'],
+        'gclient_apply_config': ['valgrind'],
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': [
+          WebRTCNormalTests(),
+        ],
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+    },
+  },
   'tryserver.webrtc': {
     'builders': {
       'win': {
@@ -450,6 +551,22 @@ BUILDERS = {
           'platform': 'win',
         },
       },
+      'win_drmemory_light': {
+        'recipe_config': 'webrtc',
+        'chromium_apply_config': ['drmemory_light'],
+        'gclient_apply_config': ['drmemory'],
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': [
+          WebRTCNormalTests(),
+        ],
+        'testing': {
+          'platform': 'win',
+        },
+      },
       'mac': {
         'recipe_config': 'webrtc',
         'webrtc_config_kwargs': {
@@ -493,7 +610,8 @@ BUILDERS = {
         },
       },
       'mac_asan': {
-        'recipe_config': 'webrtc_asan',
+        'recipe_config': 'webrtc',
+        'chromium_apply_config': ['asan'],
         'webrtc_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -575,7 +693,55 @@ BUILDERS = {
         },
       },
       'linux_asan': {
-        'recipe_config': 'webrtc_asan',
+        'recipe_config': 'webrtc_clang',
+        'chromium_apply_config': ['asan'],
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': [
+          WebRTCNormalTests(),
+        ],
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'linux_memcheck': {
+        'recipe_config': 'webrtc',
+        'chromium_apply_config': ['memcheck'],
+        'gclient_apply_config': ['valgrind'],
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': [
+          WebRTCNormalTests(),
+        ],
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'linux_tsan': {
+        'recipe_config': 'webrtc',
+        'chromium_apply_config': ['tsan'],
+        'gclient_apply_config': ['valgrind'],
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': [
+          WebRTCNormalTests(),
+        ],
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'linux_tsan2': {
+        'recipe_config': 'webrtc_clang',
+        'chromium_apply_config': ['tsan2'],
         'webrtc_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -649,8 +815,8 @@ RECIPE_CONFIGS = {
   'webrtc': {
     'webrtc_config': 'webrtc',
   },
-  'webrtc_asan': {
-    'webrtc_config': 'webrtc_asan',
+  'webrtc_clang': {
+    'webrtc_config': 'webrtc_clang',
   },
   'webrtc_android': {
     'webrtc_config': 'webrtc_android',
@@ -680,6 +846,10 @@ def GenSteps(api):
 
   api.webrtc.set_config(recipe_config['webrtc_config'],
                         **bot_config.get('webrtc_config_kwargs', {}))
+  for c in bot_config.get('gclient_apply_config', []):
+    api.gclient.apply_config(c)
+  for c in bot_config.get('chromium_apply_config', []):
+    api.chromium.apply_config(c)
 
   # Needed for the multiple webcam check steps to get unique names.
   api.step.auto_resolve_conflicts = True

@@ -137,6 +137,7 @@
       "--build-properties",
       "{\"buildername\": \"mac_x64_rel\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
+      "--test-type=audio_decoder_unittests",
       "--builder-name=mac_x64_rel",
       "--slave-name=slavename",
       "audio_decoder_unittests"
@@ -157,6 +158,7 @@
       "--build-properties",
       "{\"buildername\": \"mac_x64_rel\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
+      "--test-type=common_audio_unittests",
       "--builder-name=mac_x64_rel",
       "--slave-name=slavename",
       "common_audio_unittests"
@@ -177,6 +179,7 @@
       "--build-properties",
       "{\"buildername\": \"mac_x64_rel\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
+      "--test-type=common_video_unittests",
       "--builder-name=mac_x64_rel",
       "--slave-name=slavename",
       "common_video_unittests"
@@ -197,6 +200,7 @@
       "--build-properties",
       "{\"buildername\": \"mac_x64_rel\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
+      "--test-type=libjingle_media_unittest",
       "--builder-name=mac_x64_rel",
       "--slave-name=slavename",
       "libjingle_media_unittest"
@@ -217,6 +221,7 @@
       "--build-properties",
       "{\"buildername\": \"mac_x64_rel\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
+      "--test-type=libjingle_p2p_unittest",
       "--builder-name=mac_x64_rel",
       "--slave-name=slavename",
       "libjingle_p2p_unittest"
@@ -237,6 +242,7 @@
       "--build-properties",
       "{\"buildername\": \"mac_x64_rel\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
+      "--test-type=libjingle_peerconnection_unittest",
       "--builder-name=mac_x64_rel",
       "--slave-name=slavename",
       "libjingle_peerconnection_unittest"
@@ -257,6 +263,7 @@
       "--build-properties",
       "{\"buildername\": \"mac_x64_rel\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
+      "--test-type=libjingle_sound_unittest",
       "--builder-name=mac_x64_rel",
       "--slave-name=slavename",
       "libjingle_sound_unittest"
@@ -277,6 +284,7 @@
       "--build-properties",
       "{\"buildername\": \"mac_x64_rel\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
+      "--test-type=libjingle_unittest",
       "--builder-name=mac_x64_rel",
       "--slave-name=slavename",
       "libjingle_unittest"
@@ -297,6 +305,7 @@
       "--build-properties",
       "{\"buildername\": \"mac_x64_rel\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
+      "--test-type=modules_tests",
       "--builder-name=mac_x64_rel",
       "--slave-name=slavename",
       "modules_tests"
@@ -317,6 +326,7 @@
       "--build-properties",
       "{\"buildername\": \"mac_x64_rel\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
+      "--test-type=modules_unittests",
       "--builder-name=mac_x64_rel",
       "--slave-name=slavename",
       "modules_unittests"
@@ -337,6 +347,7 @@
       "--build-properties",
       "{\"buildername\": \"mac_x64_rel\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
+      "--test-type=system_wrappers_unittests",
       "--builder-name=mac_x64_rel",
       "--slave-name=slavename",
       "system_wrappers_unittests"
@@ -357,6 +368,7 @@
       "--build-properties",
       "{\"buildername\": \"mac_x64_rel\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
+      "--test-type=test_support_unittests",
       "--builder-name=mac_x64_rel",
       "--slave-name=slavename",
       "test_support_unittests"
@@ -377,6 +389,7 @@
       "--build-properties",
       "{\"buildername\": \"mac_x64_rel\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
+      "--test-type=tools_unittests",
       "--builder-name=mac_x64_rel",
       "--slave-name=slavename",
       "tools_unittests"
@@ -397,6 +410,7 @@
       "--build-properties",
       "{\"buildername\": \"mac_x64_rel\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
+      "--test-type=video_engine_core_unittests",
       "--builder-name=mac_x64_rel",
       "--slave-name=slavename",
       "video_engine_core_unittests"
@@ -417,6 +431,7 @@
       "--build-properties",
       "{\"buildername\": \"mac_x64_rel\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
+      "--test-type=video_engine_tests",
       "--builder-name=mac_x64_rel",
       "--slave-name=slavename",
       "video_engine_tests"
@@ -437,6 +452,7 @@
       "--build-properties",
       "{\"buildername\": \"mac_x64_rel\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
+      "--test-type=voice_engine_unittests",
       "--builder-name=mac_x64_rel",
       "--slave-name=slavename",
       "voice_engine_unittests"
@@ -457,6 +473,7 @@
       "--build-properties",
       "{\"buildername\": \"mac_x64_rel\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
+      "--test-type=libjingle_peerconnection_objc_test.app/Contents/MacOS/libjingle_peerconnection_objc_test",
       "--builder-name=mac_x64_rel",
       "--slave-name=slavename",
       "libjingle_peerconnection_objc_test.app/Contents/MacOS/libjingle_peerconnection_objc_test"

@@ -3,7 +3,7 @@
 # found in the LICENSE file.
 
 from slave.recipe_config import config_item_context, ConfigGroup
-from slave.recipe_config import Single, Static
+from slave.recipe_config import Single, Static, BadConf
 from slave.recipe_config_types import Path
 
 
@@ -32,7 +32,7 @@ def webrtc(c):
 
 
 @config_ctx()
-def webrtc_asan(c):
+def webrtc_clang(c):
   pass
 
 
@@ -65,3 +65,4 @@ def webrtc_android_apk_try_builder(c):
 @config_ctx()
 def webrtc_ios(c):
   pass
+

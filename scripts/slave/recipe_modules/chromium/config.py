@@ -18,6 +18,8 @@ HOST_TARGET_BITS = (32, 64)
 HOST_ARCHS = ('intel',)
 TARGET_ARCHS = HOST_ARCHS + ('arm', 'mipsel')
 BUILD_CONFIGS = ('Release', 'Debug')
+MEMORY_TOOLS = ('memcheck', 'tsan', 'tsan_rv', 'drmemory_full',
+                'drmemory_light')
 
 def check(val, potentials):
   assert val in potentials
@@ -45,6 +47,9 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       GYP_GENERATOR_FLAGS = Dict(equal_fn, ' '.join, (basestring,int)),
     ),
     build_dir = Single(Path),
+
+    memory_tool = Single(basestring, required=False),
+    memory_tests_runner = Single(Path),
 
     # Some platforms do not have a 1:1 correlation of BUILD_CONFIG to what is
     # passed as --target on the command line.
@@ -127,6 +132,10 @@ def BASE(c):
       # Windows requires 64-bit builds to be in <dir>_x64.
       c.build_config_fs = c.BUILD_CONFIG + '_x64'
 
+  c.memory_tests_runner = Path('[CHECKOUT]', 'tools', 'valgrind',
+                               'chrome_tests', platform_ext={'win': '.bat',
+                                                             'mac': '.sh',
+                                                             'linux': '.sh'})
   gyp_arch = {
     ('intel', 32): 'ia32',
     ('intel', 64): 'x64',
@@ -267,6 +276,48 @@ def asan(c):
   c.gyp_env.GYP_DEFINES['asan'] = 1
   c.gyp_env.GYP_DEFINES['lsan'] = 1
 
+@config_ctx(group='memory_tool')
+def memcheck(c):
+  _memory_tool(c, 'memcheck')
+  c.gyp_env.GYP_DEFINES['build_for_tool'] = 'memcheck'
+
+@config_ctx(group='memory_tool')
+def tsan(c):
+  _memory_tool(c, 'tsan')
+  c.gyp_env.GYP_DEFINES['build_for_tool'] = 'tsan'
+
+@config_ctx(group='memory_tool')
+def tsan_race_verifier(c):
+  _memory_tool(c, 'tsan_rv')
+  c.gyp_env.GYP_DEFINES['build_for_tool'] = 'tsan'
+
+@config_ctx(deps=['compiler'], group='memory_tool')
+def tsan2(c):
+  if 'clang' not in c.compile_py.compiler:  # pragma: no cover
+    raise BadConf('tsan2 requires clang')
+  gyp_defs = c.gyp_env.GYP_DEFINES
+  gyp_defs['tsan'] = 1
+  gyp_defs['use_allocator'] = 'none'
+  gyp_defs['use_aura'] = 1
+  gyp_defs['release_extra_cflags'] = '-gline-tables-only'
+  gyp_defs['disable_nacl'] = 1
+
+@config_ctx(group='memory_tool')
+def drmemory_full(c):
+  _memory_tool(c, 'drmemory_full')
+  c.gyp_env.GYP_DEFINES['build_for_tool'] = 'drmemory'
+
+@config_ctx(group='memory_tool')
+def drmemory_light(c):
+  _memory_tool(c, 'drmemory_light')
+  c.gyp_env.GYP_DEFINES['build_for_tool'] = 'drmemory'
+
+def _memory_tool(c, tool):
+  if tool not in MEMORY_TOOLS:  # pragma: no cover
+    raise BadConf('"%s" is not a supported memory tool, the supported ones '
+                  'are: %s' % (c.memory_tool, ','.join(MEMORY_TOOLS)))
+  c.memory_tool = tool
+
 @config_ctx()
 def trybot_flavor(c):
   fastbuild(c, optional=True)
@@ -283,6 +334,10 @@ def chromium(c):
 
 @config_ctx(includes=['ninja', 'clang', 'goma', 'asan'])
 def chromium_asan(c):
+  c.compile_py.default_targets = ['All', 'chromium_builder_tests']
+
+@config_ctx(includes=['ninja', 'clang', 'goma', 'tsan2'])
+def chromium_tsan2(c):
   c.compile_py.default_targets = ['All', 'chromium_builder_tests']
 
 @config_ctx(includes=['ninja', 'default_compiler', 'goma', 'chromeos'])
