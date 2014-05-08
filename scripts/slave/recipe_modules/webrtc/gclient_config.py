@@ -75,7 +75,7 @@ def _webrtc(c):
   s.url = WebRTCSvnURL(c, 'trunk')
   s.deps_file = 'DEPS'
   s.custom_vars['root_dir'] = 'src'
-  c.got_revision_mapping['webrtc'] = 'got_revision'
+  c.got_revision_mapping['src'] = 'got_revision'
 
 
 @CONFIG_CTX()
