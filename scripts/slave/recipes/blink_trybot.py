@@ -447,6 +447,7 @@ def GenSteps(api):
   api.gclient.set_config('blink_internal')
   if bot_config.get('v8_blink_flavor'):
     api.gclient.apply_config('v8_blink_flavor')
+    api.gclient.apply_config('show_v8_revision')
     if api.properties['revision']:
       custom_vars = api.gclient.c.solutions[0].custom_vars
       custom_vars['v8_revision'] = api.properties['revision']

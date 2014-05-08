@@ -113,6 +113,7 @@ def chromium_bare(c):
   m['src/native_client'] = 'got_nacl_revision'
   m['src/tools/swarm_client'] = 'got_swarm_client_revision'
   m['src/tools/swarming_client'] = 'got_swarming_client_revision'
+  m['src/v8'] = 'got_v8_revision'
   m['src/third_party/WebKit'] = 'got_webkit_revision'
   m['src/third_party/webrtc'] = 'got_webrtc_revision'
 
@@ -120,6 +121,7 @@ def chromium_bare(c):
   p['parent_got_revision'] = None
   p['parent_got_nacl_revision'] = 'nacl_revision'
   p['parent_got_swarming_client_revision'] = 'swarming_revision'
+  p['parent_got_v8_revision'] = 'v8_revision'
   p['parent_got_webkit_revision'] = 'webkit_revision'
   p['parent_got_webrtc_revision'] = 'webrtc_revision'
 
@@ -194,6 +196,14 @@ def blink(c):
 @config_ctx()
 def android(c):
   c.target_os.add('android')
+
+@config_ctx(includes=['chromium'])
+def show_v8_revision(c):
+  # Have the V8 revision appear in the web UI instead of Chromium's.
+  del c.got_revision_mapping['src']
+  c.got_revision_mapping['src/v8'] = 'got_revision'
+  # Needed to get the testers to properly sync the right revision.
+  c.parent_got_revision_mapping['parent_got_revision'] = 'got_revision'
 
 @config_ctx(includes=['blink'])
 def v8_blink_flavor(c):
