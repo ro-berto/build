@@ -2,117 +2,66 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from master import master_config
-from master.factory import webrtc_factory
+from buildbot.schedulers.basic import SingleBranchScheduler
 
-defaults = {}
+from master.factory import annotator_factory
 
+m_annotator = annotator_factory.AnnotatorFactory()
 
-def mac():
-  return webrtc_factory.WebRTCFactory('src/out', 'darwin')
+def Update(c):
+  c['schedulers'].extend([
+      SingleBranchScheduler(name='webrtc_mac_scheduler',
+                            branch='trunk',
+                            treeStableTimer=0,
+                            builderNames=[
+          'Mac32 Debug',
+          'Mac32 Release',
+          'Mac64 Debug',
+          'Mac64 Release',
+          'Mac32 Release [large tests]',
+          'Mac Asan',
+          'iOS Debug',
+          'iOS Release',
+      ]),
+  ])
 
-helper = master_config.Helper(defaults)
-B = helper.Builder
-F = helper.Factory
-S = helper.Scheduler
+  # Recipe based builders.
+  specs = [
+    {'name': 'Mac32 Debug', 'slavebuilddir': 'mac32'},
+    {'name': 'Mac32 Release', 'slavebuilddir': 'mac32'},
+    {'name': 'Mac64 Debug', 'slavebuilddir': 'mac64'},
+    {'name': 'Mac64 Release', 'slavebuilddir': 'mac64'},
+    {'name': 'Mac Asan', 'slavebuilddir': 'mac_asan'},
+    {'name': 'iOS Debug', 'slavebuilddir': 'ios'},
+    {'name': 'iOS Release', 'slavebuilddir': 'ios'},
+  ]
 
-scheduler = 'webrtc_mac_scheduler'
-S(scheduler, branch='trunk', treeStableTimer=0)
+  c['builders'].extend([
+      {
+        'name': spec['name'],
+        'factory': m_annotator.BaseFactory('webrtc/standalone'),
+        'notify_on_missing': True,
+        'category': 'compile|testers',
+        'slavebuilddir': spec.get('slavebuilddir'),
+      } for spec in specs
+  ])
 
-tests = [
-    'audio_decoder_unittests',
-    'common_audio_unittests',
-    'common_video_unittests',
-    'libjingle_media_unittest',
-    'libjingle_p2p_unittest',
-    'libjingle_peerconnection_unittest',
-    'libjingle_sound_unittest',
-    'libjingle_unittest',
-    'modules_tests',
-    'modules_unittests',
-    'system_wrappers_unittests',
-    'test_support_unittests',
-    'tools_unittests',
-    'video_engine_core_unittests',
-    'video_engine_tests',
-    'voice_engine_unittests',
-]
-x64_tests = tests + ['libjingle_peerconnection_objc_test']
+  # Builders not-yet-switched to recipes.
+  from master.factory import webrtc_factory
+  def mac():
+    return webrtc_factory.WebRTCFactory('src/out', 'darwin')
 
-baremetal_tests = [
-    'audio_device_tests',
-    'video_capture_tests',
-    'vie_auto_test',
-    'voe_auto_test',
-    'webrtc_perf_tests',
-]
-options=['--compiler=goma-clang']
-
-mac_ios_factory_properties = {
-    'gclient_env': {
-        'GYP_CROSSCOMPILE': '1',
-        'GYP_DEFINES': ('build_with_libjingle=1 OS=ios target_arch=armv7 '
-                        'key_id="" chromium_ios_signing=0'),
-    }
-}
-
-defaults['category'] = 'mac'
-
-B('Mac32 Debug', 'mac_debug_factory', 'compile|testers', scheduler,
-  slavebuilddir='mac32')
-F('mac_debug_factory', mac().WebRTCFactory(
-    target='Debug',
-    options=options,
-    tests=tests))
-
-B('Mac32 Release', 'mac_release_factory', 'compile|testers', scheduler,
-  slavebuilddir='mac32')
-F('mac_release_factory', mac().WebRTCFactory(
-    target='Release',
-    options=options,
-    tests=tests))
-
-B('Mac64 Debug', 'mac64_debug_factory', 'compile|testers', scheduler,
-  slavebuilddir='mac64')
-F('mac64_debug_factory', mac().WebRTCFactory(
-    target='Debug',
-    options=options,
-    tests=x64_tests,
-    factory_properties={
-        'gclient_env': {
-            'GYP_DEFINES': 'host_arch=x64 target_arch=x64 mac_sdk=10.7'},
-        'custom_cmd_line_tests': ['libjingle_peerconnection_objc_test'],
-    }))
-
-B('Mac64 Release', 'mac64_release_factory', 'compile|testers', scheduler,
-  slavebuilddir='mac64')
-F('mac64_release_factory', mac().WebRTCFactory(
-    target='Release',
-    options=options,
-    tests=x64_tests,
-    factory_properties={
-        'gclient_env': {
-            'GYP_DEFINES': 'host_arch=x64 target_arch=x64 mac_sdk=10.7'},
-        'custom_cmd_line_tests': ['libjingle_peerconnection_objc_test'],
-    }))
-
-B('Mac Asan', 'mac_asan_factory', 'compile|testers', scheduler)
-F('mac_asan_factory', mac().WebRTCFactory(
-    target='Release',
-    options=options,
-    tests=tests,
-    factory_properties={
-        'asan': True,
-        'gclient_env': {'GYP_DEFINES': 'asan=1 release_extra_cflags=-g'},
-    }))
-
-B('Mac32 Release [large tests]', 'mac_largetests_factory',
-  'compile|baremetal', scheduler)
-F('mac_largetests_factory', mac().WebRTCFactory(
-    target='Release',
-    options=options,
-    tests=baremetal_tests,
-    factory_properties={
+  f_mac32_largetests = mac().WebRTCFactory(
+      target='Release',
+      options=['--compiler=goma-clang'],
+      tests=[
+        'audio_device_tests',
+        'video_capture_tests',
+        'vie_auto_test',
+        'voe_auto_test',
+        'webrtc_perf_tests',
+      ],
+      factory_properties={
         'virtual_webcam': True,
         'show_perf_results': True,
         'expectations': True,
@@ -122,23 +71,14 @@ F('mac_largetests_factory', mac().WebRTCFactory(
                                  'webrtc_perf_tests'],
         'custom_cmd_line_tests': ['vie_auto_test',
                                   'voe_auto_test'],
-    }))
+      })
+  b_mac32_largetests = {
+    'name': 'Mac32 Release [large tests]',
+    'factory': f_mac32_largetests,
+    'category': 'compile|baremetal',
+    'auto_reboot' : True,
+  }
 
-# iOS.
-B('iOS Debug', 'ios_debug_factory', 'ios|compile', scheduler,
-  slavebuilddir='mac64')
-F('ios_debug_factory', mac().WebRTCFactory(
-    target='Debug-iphoneos',
-    options=options,
-    factory_properties=mac_ios_factory_properties))
-
-B('iOS Release', 'ios_release_factory', 'ios|compile', scheduler,
-  slavebuilddir='mac64')
-F('ios_release_factory', mac().WebRTCFactory(
-    target='Release-iphoneos',
-    options=options,
-    factory_properties=mac_ios_factory_properties))
-
-
-def Update(c):
-  helper.Update(c)
+  c['builders'].extend([
+      b_mac32_largetests,
+  ])
