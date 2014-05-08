@@ -623,6 +623,8 @@ def GenSteps(api):
   )
 
   def deapply_patch_fn(failing_tests):
+    if api.platform.is_win:
+      yield api.chromium.taskkill()
     if bot_update_mode:
       yield api.bot_update.ensure_checkout(patch=False,
                                            always_run=True,

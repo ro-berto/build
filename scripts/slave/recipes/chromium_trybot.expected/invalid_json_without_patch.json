@@ -372,6 +372,14 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\kill_processes.py"
+    ],
+    "name": "taskkill"
+  },
+  {
     "always_run": true,
     "cmd": [
       "python",
