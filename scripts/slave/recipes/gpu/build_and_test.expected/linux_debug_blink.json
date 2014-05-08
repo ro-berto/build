@@ -131,6 +131,14 @@
     "name": "compile"
   },
   {
+    "cmd": [
+      "killall",
+      "-9",
+      "gnome-keyring-daemon"
+    ],
+    "name": "killall gnome-keyring-daemon"
+  },
+  {
     "always_run": true,
     "cmd": [
       "python",

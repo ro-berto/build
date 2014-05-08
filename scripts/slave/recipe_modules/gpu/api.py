@@ -226,6 +226,15 @@ class GpuApi(recipe_api.RecipeApi):
     # tears it down, and the fact that it's live prevents new builds
     # from being unpacked correctly.
 
+    # Until this is more fully tested, leave this cleanup step local
+    # to the GPU recipe.
+    if self.m.platform.is_linux:
+      def ignore_failure(step_result):
+        step_result.presentation.status = 'SUCCESS'
+      yield self.m.step('killall gnome-keyring-daemon',
+                        ['killall', '-9', 'gnome-keyring-daemon'],
+                        followup_fn=ignore_failure)
+
     # Note: --no-xvfb is the default.
     for test in SIMPLE_TESTS_TO_RUN:
       yield self._maybe_run_isolate(test, args=['--use-gpu-in-tests'])
