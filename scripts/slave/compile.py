@@ -729,6 +729,7 @@ def main_ninja(options, args):
 
   # Prepare environment.
   env = EchoDict(os.environ)
+  env.setdefault('NINJA_STATUS', '[%s/%t | %e] ')
   orig_compiler = options.compiler
   goma_ready = goma_setup(options, env)
   if not goma_ready:
