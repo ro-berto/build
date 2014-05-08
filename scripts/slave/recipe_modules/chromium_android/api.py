@@ -250,8 +250,7 @@ class AndroidApi(recipe_api.RecipeApi):
         name='upload_build_product',
         source=zipfile,
         bucket=bucket,
-        dest=path,
-        use_retry_wrapper=True
+        dest=path
     )
 
   def upload_clusterfuzz(self):
@@ -287,15 +286,13 @@ class AndroidApi(recipe_api.RecipeApi):
         name='upload_revision_data',
         source=self.m.path['checkout'].join('out', git_number),
         bucket='%s/revisions' % self.c.storage_bucket,
-        dest=git_number,
-        use_retry_wrapper=True
+        dest=git_number
     )
     yield self.m.gsutil.upload(
         name='upload_clusterfuzz',
         source=zipfile,
         bucket=self.c.storage_bucket,
-        dest='%s%s.zip' % (self.c.upload_dest_prefix, git_number),
-        use_retry_wrapper=True
+        dest='%s%s.zip' % (self.c.upload_dest_prefix, git_number)
     )
 
   def upload_build(self):
@@ -319,8 +316,7 @@ class AndroidApi(recipe_api.RecipeApi):
         name='download_build_product',
         bucket=bucket,
         source=path,
-        dest=zipfile,
-        use_retry_wrapper=True
+        dest=zipfile
     )
     yield self.m.step(
       'unzip_build_product',

@@ -6,7 +6,7 @@ from slave import recipe_api
 from slave import recipe_util
 
 class GSUtilApi(recipe_api.RecipeApi):
-  def __call__(self, cmd, name=None, use_retry_wrapper=False, **kwargs):
+  def __call__(self, cmd, name=None, use_retry_wrapper=True, **kwargs):
     """A step to run arbitrary gsutil commands.
 
     Note that this assumes that gsutil authentication environment variables
@@ -31,8 +31,6 @@ class GSUtilApi(recipe_api.RecipeApi):
                                                   'gsutil')
     cmd_prefix = []
 
-    # TODO(luqui): use_retry_wrapper is canarying; eventually make standard.
-    # crbug.com/360219
     if use_retry_wrapper:
       # We pass the real gsutil_path to the wrapper so it doesn't have to do
       # brittle path logic.
