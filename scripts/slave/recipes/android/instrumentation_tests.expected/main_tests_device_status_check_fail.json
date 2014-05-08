@@ -122,6 +122,7 @@
     "name": "gsutil download_build_product"
   },
   {
+    "abort_on_failure": true,
     "cmd": [
       "unzip",
       "-o",

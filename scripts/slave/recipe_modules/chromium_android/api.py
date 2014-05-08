@@ -325,7 +325,8 @@ class AndroidApi(recipe_api.RecipeApi):
     yield self.m.step(
       'unzip_build_product',
       ['unzip', '-o', zipfile],
-      cwd=self.m.path['checkout']
+      cwd=self.m.path['checkout'],
+      abort_on_failure=True
     )
 
   def download_build(self):
