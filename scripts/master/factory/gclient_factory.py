@@ -207,7 +207,7 @@ class GClientFactory(object):
       no_gclient_branch = factory_properties.get('no_gclient_branch', False)
       factory_cmd_obj.AddClobberTreeStep(gclient_spec, env, timeout,
           gclient_deps=gclient_deps, gclient_nohooks=self._nohooks_on_update,
-          no_gclient_branch=no_gclient_branch)
+          no_gclient_branch=no_gclient_branch, options=options)
     else:
       # Revert the tree to a clean (unmodified) state.
       factory_cmd_obj.AddGClientRevertStep()
