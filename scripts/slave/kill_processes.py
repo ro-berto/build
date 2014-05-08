@@ -166,9 +166,13 @@ processes = [
     # This process is also crashing once in a while during compile.
     'midlc.exe',
 
+    # goma compiler proxy.
+    'compiler_proxy.exe',
+
     # Things built by/for Chromium.
     'app_list_unittests.exe',
     'base_unittests.exe',
+    'browser_tests.exe',
     'cacheinvalidation_unittests.exe',
     'chrome.exe',
     'chromedriver.exe',
