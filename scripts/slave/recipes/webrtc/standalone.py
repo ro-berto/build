@@ -20,16 +20,17 @@ DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
 class WebRTCNormalTests(object):
   @staticmethod
   def run(api):
-    c = api.chromium
     steps = []
     for test in api.webrtc.NORMAL_TESTS:
-      steps.append(c.runtest(test, annotate='gtest', xvfb=True, test_type=test))
+      steps.append(api.chromium.runtest(test, annotate='gtest', xvfb=True,
+                                        test_type=test))
 
-    if api.platform.is_mac and api.platform.bits == 64:
+    if api.platform.is_mac and api.chromium.c.TARGET_BITS == 64:
       test = api.path.join('libjingle_peerconnection_objc_test.app', 'Contents',
                            'MacOS', 'libjingle_peerconnection_objc_test')
-      steps.append(c.runtest(test, name='libjingle_peerconnection_objc_test',
-                             annotate='gtest', xvfb=True, test_type=test))
+      steps.append(api.chromium.runtest(
+          test, name='libjingle_peerconnection_objc_test', annotate='gtest',
+          xvfb=True, test_type=test))
     return steps
 
 
