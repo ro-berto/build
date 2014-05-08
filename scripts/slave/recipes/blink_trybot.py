@@ -331,8 +331,8 @@ BUILDERS = {
     'builders': {
       'v8_linux_layout_dbg': {
         'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
         },
         'compile_only': False,
         'v8_blink_flavor': True,
