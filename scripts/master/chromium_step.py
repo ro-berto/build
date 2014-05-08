@@ -654,17 +654,36 @@ class AnnotationObserver(buildstep.LogLineObserver):
     """Mark any unfinished steps as failure (except for parent step)."""
     for section in self.sections[1:]:
       if section['step'].isStarted() and not section['step'].isFinished():
-        self.finishStep(section, status=builder.FAILURE)
+        reason = 'step was unfinished at finalization.'
+        self.finishStep(section, status=builder.FAILURE, reason=reason)
 
   def ensureStepIsStarted(self, section):
     if not section['step'].isStarted():
       self.startStep(section)
 
-  def finishStep(self, section, status=None):
+  def finishStep(self, section, status=None, reason=None):
     """Mark the specified step as 'finished.'"""
+
+    status_map = {
+        builder.SUCCESS: 'SUCCESS',
+        builder.WARNINGS: 'WARNINGS',
+        builder.FAILURE: 'FAILURE',
+        builder.EXCEPTION: 'EXCEPTION',
+        builder.RETRY: 'RETRY',
+        builder.SKIPPED: 'SKIPPED',
+    }
+
     # Update status if set as an argument.
     if status is not None:
       section['status'] = status
+    else:
+      # Wasn't set as an argument, so we know it came from annotations.
+      if not reason:
+        if section['status'] == builder.SUCCESS:
+          reason = 'step finished normally.'
+        else:
+          reason = 'parsed annotations marked step as %s.' % status_map[
+              section['status']]
 
     self.ensureStepIsStarted(section)
     # Final update of text.
@@ -679,6 +698,8 @@ class AnnotationObserver(buildstep.LogLineObserver):
         'started: %s' % time.ctime(started),
         'ended: %s' % time.ctime(ended),
         'duration: %s' % util.formatInterval(ended - started),
+        'status: %s' % status_map[section['status']],
+        'status reason: %s' % reason,
         '',  # So we get a final \n
     ])
     section['log'].addHeader(msg)
@@ -688,13 +709,13 @@ class AnnotationObserver(buildstep.LogLineObserver):
     # Finish log.
     section['log'].finish()
 
-  def finishCursor(self, status=None):
+  def finishCursor(self, status=None, reason=None):
     """Mark the step at the current cursor as finished."""
     # Potentially start initial section here, as initial section might have
     # no output at all.
     self.initialSection()
 
-    self.finishStep(self.cursor, status)
+    self.finishStep(self.cursor, status=status, reason=reason)
 
   def errLineReceived(self, line):
     self.handleOutputLine(line)
@@ -1024,7 +1045,8 @@ class AnnotationObserver(buildstep.LogLineObserver):
         self.annotate_status = builder.SUCCESS
     else:
       self.annotate_status = builder.FAILURE
-      self.finishCursor(builder.FAILURE)
+      self.finishCursor(builder.FAILURE,
+                        reason='return code was %d.' % return_code)
     self.cleanupSteps()
 
 
@@ -1093,7 +1115,8 @@ class AnnotatedCommand(ProcessLogShellStep):
                                x.name != 'preamble']
 
   def interrupt(self, reason):
-    self.script_observer.finishCursor(builder.EXCEPTION)
+    self.script_observer.finishCursor(builder.EXCEPTION,
+                                      reason='step was interrupted.')
     self.script_observer.cleanupSteps()
     self._removePreamble()
     return ProcessLogShellStep.interrupt(self, reason)
