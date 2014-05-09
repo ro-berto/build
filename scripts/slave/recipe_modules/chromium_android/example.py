@@ -11,10 +11,15 @@ DEPS = [
 
 BUILDERS = {
     'basic_builder': {
-        'restart_usb': False,
+        'target': 'Release',
     },
     'restart_usb_builder': {
         'restart_usb': True,
+        'target': 'Release',
+    },
+    'coverage_builder': {
+        'coverage': True,
+        'target': 'Debug',
     }
 }
 
@@ -28,6 +33,7 @@ def GenSteps(api):
 
   api.chromium_android.c.get_app_manifest_vars = True
   api.chromium_android.c.run_stack_tool_steps = True
+  api.chromium_android.c.coverage = config.get('coverage', False)
 
   yield api.chromium_android.init_and_sync()
 
@@ -44,7 +50,7 @@ def GenSteps(api):
   yield api.adb.root_devices()
   yield api.chromium_android.spawn_logcat_monitor()
   yield api.chromium_android.device_status_check(
-      restart_usb=config['restart_usb'])
+      restart_usb=config.get('restart_usb', False))
 
   yield api.chromium_android.monkey_test()
   yield api.chromium_android.run_sharded_perf_tests(
@@ -55,14 +61,17 @@ def GenSteps(api):
       test_data='webview:android_webview/test/data/device_files',
       flakiness_dashboard='test-results.appspot.com',
       annotation='SmallTest',
+      except_annotation='FlakyTest',
       screenshot=True)
+  yield api.chromium_android.run_test_suite('unittests')
+  yield api.chromium_android.run_bisect_script(extra_src='test.py',
+                                               path_to_config='test.py')
 
   yield api.chromium_android.logcat_dump()
   yield api.chromium_android.stack_tool_steps()
+  if config.get('coverage', False):
+    yield api.chromium_android.coverage_report()
   yield api.chromium_android.cleanup_build()
-  yield api.chromium_android.run_bisect_script(extra_src='test.py',
-                                               path_to_config='test.py')
-  yield api.chromium_android.run_test_suite('unittests')
 
 def GenTests(api):
   for buildername in BUILDERS:

@@ -302,10 +302,47 @@
       "test-results.appspot.com",
       "-A",
       "SmallTest",
+      "-E",
+      "FlakyTest",
       "--screenshot",
       "--release"
     ],
     "name": "Instrumentation test SmallTest"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
+      "unittests"
+    ],
+    "env": {
+      "BUILDTYPE": "Release"
+    },
+    "name": "unittests"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/tools/prepare-bisect-perf-regression.py",
+      "-w",
+      "[SLAVE_BUILD]"
+    ],
+    "name": "prepare bisect perf regression"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/tools/run-bisect-perf-regression.py",
+      "-w",
+      "[SLAVE_BUILD]",
+      "--extra_src",
+      "test.py",
+      "--path_to_config",
+      "test.py"
+    ],
+    "name": "run bisect perf regression"
   },
   {
     "always_run": true,
@@ -352,40 +389,5 @@
       "-rf"
     ],
     "name": "cleanup_build"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/src/tools/prepare-bisect-perf-regression.py",
-      "-w",
-      "[SLAVE_BUILD]"
-    ],
-    "name": "prepare bisect perf regression"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/src/tools/run-bisect-perf-regression.py",
-      "-w",
-      "[SLAVE_BUILD]",
-      "--extra_src",
-      "test.py",
-      "--path_to_config",
-      "test.py"
-    ],
-    "name": "run bisect perf regression"
-  },
-  {
-    "always_run": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "gtest",
-      "-s",
-      "unittests"
-    ],
-    "env": {
-      "BUILDTYPE": "Release"
-    },
-    "name": "unittests"
   }
 ]

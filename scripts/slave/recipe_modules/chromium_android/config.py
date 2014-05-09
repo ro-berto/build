@@ -32,7 +32,8 @@ def BaseConfig(INTERNAL=False, REPO_NAME=None, REPO_URL=None,
     storage_bucket = Single(basestring),
     channel = Single(basestring, empty_val='chrome'),
     upload_dest_prefix = Single(basestring, empty_val=''),
-    gclient_custom_vars = Dict(value_type=(basestring, types.NoneType))
+    gclient_custom_vars = Dict(value_type=(basestring, types.NoneType)),
+    coverage = Single(bool, required=False, empty_val=False)
   )
 
 
@@ -170,3 +171,7 @@ def try_instrumentation_tests(c):
 @config_ctx(includes=['x86_base', 'try_base', 'instrumentation_tests'])
 def x86_try_instrumentation_tests(c):
   c.extra_deploy_opts.append('--non-rooted')
+
+@config_ctx(includes=['main_builder'])
+def coverage_builder_tests(c):
+  pass

@@ -19,7 +19,17 @@ class AndroidApi(recipe_api.RecipeApi):
 
   @property
   def internal_dir(self):
+    assert self.c.INTERNAL, (
+        'Attempt to get internal_dir, but not internal build')
     return self.m.path['checkout'].join(self.c.internal_dir_name)
+
+  @property
+  def out_path(self):
+    return self.m.path['checkout'].join('out')
+
+  @property
+  def coverage_dir(self):
+    return self.out_path.join(self.c.BUILD_CONFIG, 'coverage')
 
   def get_env(self):
     return {
@@ -462,23 +472,30 @@ class AndroidApi(recipe_api.RecipeApi):
           test_type=test_name)
 
   def run_instrumentation_suite(self, test_apk, test_data, flakiness_dashboard,
-                                annotation=None, screenshot=False):
+                                annotation=None, except_annotation=None,
+                                screenshot=False):
     args = ['--test-apk', test_apk,
             '--test_data', test_data,
             '--flakiness-dashboard-server', flakiness_dashboard]
     if annotation:
       args.extend(['-A', annotation])
+    if except_annotation:
+      args.extend(['-E', except_annotation])
     if screenshot:
       args.append('--screenshot')
     if self.m.chromium.c.BUILD_CONFIG == 'Release':
       args.append('--release')
+    if self.c.coverage:
+      args.extend(['--coverage-dir', self.coverage_dir,
+                   '--python-only'])
+      if self.c.INTERNAL:
+        args.extend(['--host-driven-root', self.internal_dir.join('test')])
 
     yield self.m.python(
         'Instrumentation test %s' % (annotation or test_data),
         self.m.path['checkout'].join('build', 'android', 'test_runner.py'),
         args=['instrumentation'] + args,
         always_run=True)
-
 
   def logcat_dump(self):
     if self.m.step_history.get('spawn_logcat_monitor'):
@@ -577,3 +594,28 @@ class AndroidApi(recipe_api.RecipeApi):
         ['gtest', '-s', suite] + args,
         env={'BUILDTYPE': self.c.BUILD_CONFIG},
         always_run=True)
+
+  def coverage_report(self, **kwargs):
+    assert self.c.coverage, (
+        'Trying to generate coverage report but coverage is not enabled')
+    gs_dest = 'java/%s/%s' % (
+        self.m.properties['buildername'], self.m.properties['revision'])
+
+    yield self.m.python(
+        'Generate coverage report',
+        self.m.path['checkout'].join(
+            'build', 'android', 'generate_emma_html.py'),
+        args=['--coverage-dir', self.coverage_dir,
+              '--metadata-dir', self.out_path.join(self.c.BUILD_CONFIG),
+              '--cleanup',
+              '--output', self.coverage_dir.join('coverage_html',
+                                                 'index.html')])
+
+    yield self.m.gsutil.upload(
+        source=self.coverage_dir.join('coverage_html'),
+        bucket='chrome-code-coverage',
+        dest=gs_dest,
+        args=['-R'],
+        name='upload coverage report',
+        link_name='Coverage report',
+        **kwargs)

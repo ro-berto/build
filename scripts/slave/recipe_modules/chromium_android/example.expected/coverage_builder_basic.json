@@ -42,7 +42,7 @@
     "cmd": [
       "[SLAVE_BUILD]/src/clank/build/dump_app_manifest_vars.py",
       "-b",
-      "basic_builder",
+      "coverage_builder",
       "-v",
       "[SLAVE_BUILD]/src/chrome/VERSION",
       "--output-json",
@@ -239,14 +239,14 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"buildername\": \"basic_builder\", \"internal\": true, \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\"}",
+      "{\"buildername\": \"coverage_builder\", \"internal\": true, \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\"}",
       "--build-properties",
-      "{\"buildername\": \"basic_builder\", \"internal\": true, \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\"}",
+      "{\"buildername\": \"coverage_builder\", \"internal\": true, \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=perf-test-1",
       "--test-type=perf-test-1",
-      "--builder-name=basic_builder",
+      "--builder-name=coverage_builder",
       "--slave-name=tehslave",
       "--run-python-script",
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
@@ -268,14 +268,14 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"buildername\": \"basic_builder\", \"internal\": true, \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\"}",
+      "{\"buildername\": \"coverage_builder\", \"internal\": true, \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\"}",
       "--build-properties",
-      "{\"buildername\": \"basic_builder\", \"internal\": true, \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\"}",
+      "{\"buildername\": \"coverage_builder\", \"internal\": true, \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=perf-test-2",
       "--test-type=perf-test-2",
-      "--builder-name=basic_builder",
+      "--builder-name=coverage_builder",
       "--slave-name=tehslave",
       "--run-python-script",
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
@@ -304,7 +304,12 @@
       "-E",
       "FlakyTest",
       "--screenshot",
-      "--release"
+      "--release",
+      "--coverage-dir",
+      "[SLAVE_BUILD]/src/out/Release/coverage",
+      "--python-only",
+      "--host-driven-root",
+      "[SLAVE_BUILD]/src/clank/test"
     ],
     "name": "Instrumentation test SmallTest"
   },
@@ -380,6 +385,37 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "stack_tool_for_tombstones"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/generate_emma_html.py",
+      "--coverage-dir",
+      "[SLAVE_BUILD]/src/out/Release/coverage",
+      "--metadata-dir",
+      "[SLAVE_BUILD]/src/out/Release",
+      "--cleanup",
+      "--output",
+      "[SLAVE_BUILD]/src/out/Release/coverage/coverage_html/index.html"
+    ],
+    "name": "Generate coverage report"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
+      "cp",
+      "-R",
+      "[SLAVE_BUILD]/src/out/Release/coverage/coverage_html",
+      "gs://chrome-code-coverage/java/coverage_builder/4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00"
+    ],
+    "name": "gsutil upload coverage report",
+    "~followup_annotations": [
+      "@@@STEP_LINK@Coverage report@https://storage.cloud.google.com/chrome-code-coverage/java/coverage_builder/4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00@@@"
+    ]
   },
   {
     "always_run": true,
