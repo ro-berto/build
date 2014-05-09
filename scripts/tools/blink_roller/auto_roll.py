@@ -40,8 +40,69 @@ from common import find_depot_tools
 import rietveld
 
 
+BLINK_SHERIFF_URL = (
+  'http://build.chromium.org/p/chromium.webkit/sheriff_webkit.js')
+CHROMIUM_SHERIFF_URL = (
+  'http://build.chromium.org/p/chromium.webkit/sheriff.js')
+
+# Does not support unicode or special characters.
+VALID_EMAIL_REGEXP = re.compile(r'^[A-Za-z0-9\.&\'\+-/=_]+@'
+                                '[A-Za-z0-9\.-]+$')
+
+
+def _get_skia_sheriff():
+  """Finds and returns the current Skia sheriff."""
+  skia_sheriff_url = 'https://skia-tree-status.appspot.com/current-sheriff'
+  return json.load(urllib2.urlopen(skia_sheriff_url))['username']
+
+
+def _complete_email(name):
+  """If the name does not include '@', append '@chromium.org'."""
+  if '@' not in name:
+    return name + '@chromium.org'
+  return name
+
+
+def _names_from_sheriff_js(sheriff_js):
+  match = re.match(r'document.write\(\'(.*)\'\)', sheriff_js)
+  emails_string = match.group(1)
+  # Detect 'none (channel is sheriff)' text and ignore it.
+  if 'channel is sheriff' in emails_string.lower():
+    return []
+  return map(str.strip, emails_string.split(','))
+
+
+def _email_is_valid(email):
+  """Determines whether the given email address is valid."""
+  return VALID_EMAIL_REGEXP.match(email) is not None
+
+
+def _filter_emails(emails):
+  """Returns the given list with any invalid email addresses removed."""
+  rv = []
+  for email in emails:
+    if _email_is_valid(email):
+      rv.append(email)
+    else:
+      print 'WARNING: Not including %s (invalid email address)' % email
+
+
+def _emails_from_url(sheriff_url):
+  sheriff_js = urllib2.urlopen(sheriff_url).read()
+  return map(_complete_email, _names_from_sheriff_js(sheriff_js))
+
+
+def _current_gardener_emails():
+  return _emails_from_url(BLINK_SHERIFF_URL)
+
+
+def _current_sheriff_emails():
+  return _emails_from_url(CHROMIUM_SHERIFF_URL)
+
+
 PROJECT_CONFIGS = {
   'blink': {
+    'extra_emails_fn': _current_gardener_emails,
     'path_to_project': os.path.join('third_party', 'WebKit'),
     'project_alias': 'webkit',
     'revision_link_fn': lambda before_rev, after_rev: (
@@ -50,7 +111,7 @@ PROJECT_CONFIGS = {
             before_rev, after_rev),
   },
   'skia': {
-    'extra_emails_fn': lambda: [get_skia_sheriff()],
+    'extra_emails_fn': lambda: [_get_skia_sheriff()],
     'path_to_project': os.path.join('third_party', 'skia', 'src'),
     'revision_link_fn': lambda before_rev, after_rev: (
         'https://code.google.com/p/skia/source/list?num=%d&start=%s') % (
@@ -59,46 +120,8 @@ PROJECT_CONFIGS = {
 }
 
 
-def get_skia_sheriff():
-  """Find and return the current Skia sheriff."""
-  skia_sheriff_url = 'https://skia-tree-status.appspot.com/current-sheriff'
-  return json.load(urllib2.urlopen(skia_sheriff_url))['username']
-
-
-class SheriffCalendar(object):
-  BLINK_SHERIFF_URL = (
-    'http://build.chromium.org/p/chromium.webkit/sheriff_webkit.js')
-  CHROMIUM_SHERIFF_URL = (
-    'http://build.chromium.org/p/chromium.webkit/sheriff.js')
-
-  # FIXME: This is only @classmethod and not private to appease pylint.
-  @classmethod
-  def complete_email(cls, name):
-    if '@' not in name:
-      return name + '@chromium.org'
-    return name
-
-  # FIXME: This is only @classmethod and not private to appease pylint.
-  @classmethod
-  def names_from_sheriff_js(cls, sheriff_js):
-    match = re.match(r'document.write\(\'(.*)\'\)', sheriff_js)
-    emails_string = match.group(1)
-    # Detect 'none (channel is sheriff)' text and ignore it.
-    if 'channel is sheriff' in emails_string.lower():
-      return []
-    return map(str.strip, emails_string.split(','))
-
-  def _emails_from_url(self, sheriff_url):
-    # FIXME: We should be more careful trusting the emails which
-    # we pulled from an http url and are passing to the shell!
-    sheriff_js = urllib2.urlopen(sheriff_url).read()
-    return map(self.complete_email, self.names_from_sheriff_js(sheriff_js))
-
-  def current_gardener_emails(self):
-    return self._emails_from_url(self.BLINK_SHERIFF_URL)
-
-  def current_sheriff_emails(self):
-    return self._emails_from_url(self.CHROMIUM_SHERIFF_URL)
+class AutoRollException(Exception):
+  pass
 
 
 class AutoRoller(object):
@@ -211,13 +234,7 @@ class AutoRoller(object):
     return int(match.group('svn_revision'))
 
   def _emails_to_cc_on_rolls(self):
-    calendar = SheriffCalendar()
-    emails = []
-    gardener_emails = calendar.current_gardener_emails()
-    if gardener_emails:
-      emails.extend(gardener_emails)
-    emails.extend(self._get_extra_emails())
-    return emails
+    return _filter_emails(self._get_extra_emails())
 
   def _start_roll(self, new_roll_revision, commit_msg):
     safely_roll_path = (

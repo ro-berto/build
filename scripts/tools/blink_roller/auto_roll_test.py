@@ -19,26 +19,43 @@ from testing_support.super_mox import SuperMoxTestBase
 class SheriffCalendarTest(unittest.TestCase):
 
   def test_complete_email(self):
-    calendar = auto_roll.SheriffCalendar()
     expected_emails = ['foo@chromium.org', 'bar@google.com', 'baz@chromium.org']
     names = ['foo', 'bar@google.com', 'baz']
-    self.assertEqual(map(calendar.complete_email, names), expected_emails)
+    self.assertEqual(map(auto_roll._complete_email, names), expected_emails)
 
   def test_emails(self):
     expected_emails = ['foo@bar.com', 'baz@baz.com']
-    calendar = auto_roll.SheriffCalendar()
-    calendar._emails_from_url = lambda urls: expected_emails
-    self.assertEqual(calendar.current_gardener_emails(), expected_emails)
-    self.assertEqual(calendar.current_sheriff_emails(), expected_emails)
+    auto_roll._emails_from_url = lambda urls: expected_emails
+    self.assertEqual(auto_roll._current_gardener_emails(), expected_emails)
+    self.assertEqual(auto_roll._current_sheriff_emails(), expected_emails)
 
   def _assert_parse(self, js_string, expected_emails):
-    calendar = auto_roll.SheriffCalendar()
     self.assertEqual(
-      calendar.names_from_sheriff_js(js_string), expected_emails)
+      auto_roll._names_from_sheriff_js(js_string), expected_emails)
 
   def test_names_from_sheriff_js(self):
     self._assert_parse('document.write(\'none (channel is sheriff)\')', [])
     self._assert_parse('document.write(\'foo, bar\')', ['foo', 'bar'])
+
+  def test_email_regexp(self):
+    self.assertTrue(auto_roll._email_is_valid('somebody@example.com'))
+    self.assertTrue(auto_roll._email_is_valid('somebody@example.domain.com'))
+    self.assertTrue(auto_roll._email_is_valid('somebody@example-domain.com'))
+    self.assertTrue(auto_roll._email_is_valid('some.body@example.com'))
+    self.assertTrue(auto_roll._email_is_valid('some_body@example.com'))
+    self.assertTrue(auto_roll._email_is_valid('some+body@example.com'))
+    self.assertTrue(auto_roll._email_is_valid('some+body@com'))
+    self.assertTrue(auto_roll._email_is_valid('some/body@example.com'))
+    # These are valid according to the standard, but not supported here.
+    self.assertFalse(auto_roll._email_is_valid('some~body@example.com'))
+    self.assertFalse(auto_roll._email_is_valid('some!body@example.com'))
+    self.assertFalse(auto_roll._email_is_valid('some?body@example.com'))
+    self.assertFalse(auto_roll._email_is_valid('some" "body@example.com'))
+    self.assertFalse(auto_roll._email_is_valid('"{somebody}"@example.com'))
+    # Bogus.
+    self.assertFalse(auto_roll._email_is_valid('rm -rf /#@example.com'))
+    self.assertFalse(auto_roll._email_is_valid('some body@example.com'))
+    self.assertFalse(auto_roll._email_is_valid('[some body]@example.com'))
 
 
 class AutoRollTest(SuperMoxTestBase):
@@ -121,14 +138,9 @@ Date:   Wed Apr 2 14:00:14 2014 -0400
     auto_roll.subprocess.check_output(
         ['git', '--git-dir', './third_party/test_project/.git', 'show', '-s',
          'origin/master']).AndReturn(git_log)
-    sheriff_webkit_contents = 'document.write(\'test_sheriff@example.com\')'
-    auto_roll.urllib2.urlopen(
-        'http://build.chromium.org/p/chromium.webkit/sheriff_webkit.js'
-        ).AndReturn(self.MockFile(sheriff_webkit_contents))
     auto_roll.subprocess.check_call(
         ['./tools/safely-roll-deps.py', self.TEST_PROJECT, '1236', '--message',
-         'Test_Project roll 1234:1236', '--force', '--cc',
-         'test_sheriff@example.com'])
+         'Test_Project roll 1234:1236', '--force'])
     issue = self._make_issue(self.CURRENT_DATETIME_STR)
     self._arb._rietveld.search(owner=self.TEST_AUTHOR,
                                closed=2).AndReturn([issue])
