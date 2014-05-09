@@ -964,6 +964,8 @@ def parse_args():
                    help='Use shallow clones for cache repositories.')
   parse.add_option('--gyp_env', action='append', default=[],
                    help='Environment variables to pass into gclient runhooks.')
+  parse.add_option('--clobber', action='store_true',
+                   help='Delete checkout first, always')
   parse.add_option('-o', '--output_json',
                    help='Output JSON information into a specified file')
 
@@ -1010,7 +1012,7 @@ def main():
   dir_names = [sln.get('name') for sln in svn_solutions if 'name' in sln]
   # If we're active now, but the flag file doesn't exist (we weren't active last
   # run) or vice versa, blow away all checkouts.
-  if bool(active) != bool(check_flag(options.flag_file)):
+  if bool(active) != bool(check_flag(options.flag_file)) or options.clobber:
     ensure_no_checkout(dir_names, '*')
   if options.output_json:
     # Make sure we tell recipes that we didn't run if the script exits here.
