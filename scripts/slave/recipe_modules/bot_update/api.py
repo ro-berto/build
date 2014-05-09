@@ -87,6 +87,7 @@ class BotUpdateApi(recipe_api.RecipeApi):
   def __call__(self, name, cmd, **kwargs):
     """Wrapper for easy calling of bot_update."""
     assert isinstance(cmd, (list, tuple))
+    kwargs.setdefault('abort_on_failure', True)
     bot_update_path = self.m.path['build'].join(
         'scripts', 'slave', 'bot_update.py')
     return self.m.python(name, bot_update_path, cmd, **kwargs)
