@@ -17,6 +17,7 @@ import socket
 import subprocess
 import sys
 import tempfile
+import threading
 import time
 import urllib2
 import urlparse
@@ -236,6 +237,10 @@ if sys.platform.startswith('win'):
   PATCH_TOOL = path.join(BUILD_INTERNAL_DIR, 'tools', 'patch.EXE')
 else:
   PATCH_TOOL = '/usr/bin/patch'
+
+# For uploading some telemetry data.
+GS_BUCKET = 'chrome-bot-update'
+GSUTIL_BIN = path.join(DEPOT_TOOLS_DIR, 'third_party', 'gsutil', 'gsutil')
 
 # If there is less than 100GB of disk space on the system, then we do
 # a shallow checkout.
@@ -967,6 +972,56 @@ def ensure_checkout(solutions, revision, first_sln, target_os, target_os_only,
   return gclient_output
 
 
+class UploadTelemetryThread(threading.Thread):
+  def __init__(self, prefix, master, builder, slave, kwargs):
+    super(UploadTelemetryThread, self).__init__()
+    self.master = master
+    self.builder = builder
+    self.slave = slave
+    self.prefix = prefix
+    self.gs_url = 'gs://%s/%s/%s/%s/%s.json' % (
+        GS_BUCKET, master, builder, slave, prefix)
+    self.kwargs = kwargs or {}
+
+  def run(self):
+    # Disk space Code duplicated here to get it out of the critical path
+    # when bot_update is not activated.
+    data = {
+        'prefix': self.prefix,
+        'master': self.master,
+        'builder': self.builder,
+        'slave': self.slave,
+    }
+    data.update(self.kwargs)
+    try:
+      total_disk_space, free_disk_space = get_total_disk_space()
+      total_disk_space_gb = int(total_disk_space / (1024 * 1024 * 1024))
+      used_disk_space_gb = int((total_disk_space - free_disk_space)
+                              / (1024 * 1024 * 1024))
+      percent_used = int(used_disk_space_gb * 100 / total_disk_space_gb)
+      data['disk'] = {
+          'total': total_disk_space_gb,
+          'used': used_disk_space_gb,
+          'percent': percent_used,
+          'status': 'OK',
+      }
+    except Exception as e:
+      data['disk'] = {
+          'status': 'EXCEPTION',
+          'message': str(e),
+      }
+
+    call(sys.executable, '-u', GSUTIL_BIN, 'cp', '-', self.gs_url,
+          stdin_data=json.dumps(data))
+
+
+def upload_telemetry(prefix, master, builder, slave, **kwargs):
+  thr = UploadTelemetryThread(prefix, master, builder, slave, kwargs)
+  thr.daemon = True
+  thr.start()
+  return thr
+
+
 def parse_args():
   parse = optparse.OptionParser()
 
@@ -1046,6 +1101,18 @@ def main():
   git_solutions, svn_root, buildspec_name = solutions_to_git(svn_solutions)
   solutions_printer(git_solutions)
 
+  # Lets send some telemetry data about bot_update here. This returns a thread
+  # object so we can join on it later.
+  all_threads = []
+  thr = upload_telemetry(prefix='start',
+                         master=master,
+                         builder=builder,
+                         slave=slave,
+                         specs=options.specs,
+                         git_solutions=git_solutions,
+                         solutions=specs.get('solutions', []))
+  all_threads.append(thr)
+
   dir_names = [sln.get('name') for sln in svn_solutions if 'name' in sln]
   # If we're active now, but the flag file doesn't exist (we weren't active last
   # run) or vice versa, blow away all checkouts.
@@ -1059,6 +1126,7 @@ def main():
     emit_flag(options.flag_file)
   else:
     delete_flag(options.flag_file)
+    thr.join()
     return
 
   # Do a shallow checkout if the disk is less than 100GB.
@@ -1130,6 +1198,23 @@ def main():
   else:
     # If we're not on recipes, tell annotator about our got_revisions.
     emit_properties(got_revisions)
+
+  thr = upload_telemetry(prefix='end',
+                         master=master,
+                         builder=builder,
+                         slave=slave,
+                         gclient_output=gclient_output,
+                         got_revision=got_revisions,
+                         did_run=True,
+                         patch_root=options.root,
+                         solutions=specs['solutions'],
+                         git_solutions=git_solutions,
+                         specs=options.specs)
+  all_threads.append(thr)
+
+  # Sort of wait for all telemetry threads to finish.
+  for thr in all_threads:
+    thr.join(5)
 
 
 if __name__ == '__main__':
