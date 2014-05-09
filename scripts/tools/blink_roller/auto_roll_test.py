@@ -58,7 +58,7 @@ class SheriffCalendarTest(unittest.TestCase):
     self.assertFalse(auto_roll._email_is_valid('[some body]@example.com'))
 
 
-class AutoRollTest(SuperMoxTestBase):
+class AutoRollTestBase(SuperMoxTestBase):
 
   TEST_PROJECT = 'test_project'
   TEST_AUTHOR = 'test_author@chromium.org'
@@ -79,7 +79,7 @@ class AutoRollTest(SuperMoxTestBase):
   class MockDateTime(datetime.datetime):
     @classmethod
     def utcnow(cls):
-      return AutoRollTest.MockDateTime(*AutoRollTest.CURRENT_DATETIME)
+      return AutoRollTestBase.MockDateTime(*AutoRollTestBase.CURRENT_DATETIME)
 
   class MockFile(object):
     def __init__(self, contents):
@@ -95,8 +95,9 @@ class AutoRollTest(SuperMoxTestBase):
     self.mox.StubOutWithMock(auto_roll.rietveld.Rietveld,
                              'get_issue_properties')
     self.mox.StubOutWithMock(auto_roll.rietveld.Rietveld, 'search')
-    self.mox.StubOutWithMock(auto_roll.subprocess, 'check_call')
-    self.mox.StubOutWithMock(auto_roll.subprocess, 'check_output')
+    self.mox.StubOutWithMock(auto_roll.scm.GIT, 'Capture')
+    self.mox.StubOutWithMock(auto_roll.subprocess2, 'check_call')
+    self.mox.StubOutWithMock(auto_roll.subprocess2, 'check_output')
     self.mox.StubOutWithMock(auto_roll.urllib2, 'urlopen')
     auto_roll.datetime.datetime = self.MockDateTime
     auto_roll.rietveld.upload.HttpRpcServer = self.MockHttpRpcServer
@@ -104,50 +105,46 @@ class AutoRollTest(SuperMoxTestBase):
                                      self.TEST_AUTHOR,
                                      self.PATH_TO_CHROME)
 
-  def _make_issue(self, created_datetime=None):
+  def _make_issue(self, old_rev=None, new_rev=None, created_datetime=None):
     return {
         'author': self.TEST_AUTHOR,
         'commit': created_datetime or self.RECENT_ISSUE_CREATED_STR,
         'created': created_datetime or self.RECENT_ISSUE_CREATED_STR,
-        'description': 'Test_Project roll 1234:1235',
+        'description': 'Test_Project roll %s:%s' % (old_rev, new_rev),
         'issue': 1234567,
         'messages': [],
         'modified': created_datetime or self.RECENT_ISSUE_CREATED_STR,
-        'subject': 'Test_Project roll 1234:1235',
+        'subject': 'Test_Project roll %s:%s' % (old_rev, new_rev),
     }
 
   def _upload_issue(self):
-    deps_content = '''
-vars = {
-  "test_project_revision": "1234",
-}
-'''
-    auto_roll.subprocess.check_output(
-        ['svn', 'cat', self._arb.CHROMIUM_SVN_DEPS_URL]).AndReturn(deps_content)
-    auto_roll.subprocess.check_call(
+    auto_roll.subprocess2.check_call(
+        ['git', '--git-dir', './.git', 'fetch'])
+    auto_roll.subprocess2.check_output(
+        ['git', '--git-dir', './.git', 'show', 'origin/master:DEPS']
+        ).AndReturn(self.DEPS_CONTENT)
+    auto_roll.subprocess2.check_call(
         ['git', '--git-dir', './third_party/test_project/.git', 'fetch'])
-    git_log = '''
-commit abcde
-Author: Test Author <test_author@example.com>
-Date:   Wed Apr 2 14:00:14 2014 -0400
-
-    Make some changes.
-
-    git-svn-id: svn://svn.url/trunk@1236 abcdefgh-abcd-abcd-abcd-abcdefghijkl
-'''
-    auto_roll.subprocess.check_output(
+    auto_roll.subprocess2.check_output(
         ['git', '--git-dir', './third_party/test_project/.git', 'show', '-s',
-         'origin/master']).AndReturn(git_log)
-    auto_roll.subprocess.check_call(
-        ['./tools/safely-roll-deps.py', self.TEST_PROJECT, '1236', '--message',
-         'Test_Project roll 1234:1236', '--force'])
-    issue = self._make_issue(self.CURRENT_DATETIME_STR)
+         'origin/master']).AndReturn(self.GIT_LOG_UPDATED)
+
+    self._parse_origin_master(returnval=self.NEW_REV)
+    self._compare_revs(self.OLD_REV, self.NEW_REV)
+
+    auto_roll.subprocess2.check_call(
+        ['./tools/safely-roll-deps.py', self.TEST_PROJECT, str(self.NEW_REV),
+         '--message', 'Test_Project roll %s:%s' % (self.OLD_REV, self.NEW_REV),
+         '--force'])
+    issue = self._make_issue(created_datetime=self.CURRENT_DATETIME_STR)
     self._arb._rietveld.search(owner=self.TEST_AUTHOR,
                                closed=2).AndReturn([issue])
     self._arb._rietveld.add_comment(issue['issue'],
                                     self._arb.ROLL_BOT_INSTRUCTIONS)
 
   def test_should_stop(self):
+    if self.__class__.__name__ == 'AutoRollTestBase':
+      return
     issue = self._make_issue(created_datetime=self.OLD_ISSUE_CREATED_STR)
     issue['messages'].append({
         'text': 'STOP',
@@ -174,19 +171,19 @@ Please email (eseidel@chromium.org) if the Rollbot is causing trouble.
                      '13:57:21.01, waiting.\n' % issue['issue'])
 
   def test_already_rolling(self):
+    if self.__class__.__name__ == 'AutoRollTestBase':
+      return
     issue = self._make_issue()
     search_results = [issue]
     self._arb._rietveld.search(owner=self.TEST_AUTHOR,
                                closed=2).AndReturn(search_results)
     self._arb._rietveld.get_issue_properties(issue['issue'],
                                              messages=True).AndReturn(issue)
-    deps_content = '''
-vars = {
-  "test_project_revision": "1234",
-}
-'''
-    auto_roll.subprocess.check_output(
-        ['svn', 'cat', self._arb.CHROMIUM_SVN_DEPS_URL]).AndReturn(deps_content)
+    auto_roll.subprocess2.check_call(
+        ['git', '--git-dir', './.git', 'fetch'])
+    auto_roll.subprocess2.check_output(
+        ['git', '--git-dir', './.git', 'show', 'origin/master:DEPS']
+        ).AndReturn(self.DEPS_CONTENT)
     self.mox.ReplayAll()
     self.assertEquals(self._arb.main(), 0)
     self.checkstdout('https://codereview.chromium.org/%d/ started %s ago\n'
@@ -195,6 +192,8 @@ vars = {
                      % (issue['issue'], '0:59:59.900001', issue['issue']))
 
   def test_old_issue(self):
+    if self.__class__.__name__ == 'AutoRollTestBase':
+      return
     issue = self._make_issue(created_datetime=self.OLD_ISSUE_CREATED_STR)
     search_results = [issue]
     self._arb._rietveld.search(owner=self.TEST_AUTHOR,
@@ -215,6 +214,8 @@ vars = {
                         issue['issue'], comment_str))
 
   def test_failed_cq(self):
+    if self.__class__.__name__ == 'AutoRollTestBase':
+      return
     issue = self._make_issue()
     issue['commit'] = False
     search_results = [issue]
@@ -232,38 +233,138 @@ vars = {
                      ' \'%s\'\n' % (issue['issue'], comment_str))
 
   def test_no_roll_backwards(self):
+    if self.__class__.__name__ == 'AutoRollTestBase':
+      return
     self._arb._rietveld.search(owner=self.TEST_AUTHOR, closed=2).AndReturn([])
-    deps_content = '''
-vars = {
-  "test_project_revision": "1234",
-}
-'''
-    auto_roll.subprocess.check_output(
-        ['svn', 'cat', self._arb.CHROMIUM_SVN_DEPS_URL]).AndReturn(deps_content)
-    auto_roll.subprocess.check_call(
+    auto_roll.subprocess2.check_call(
+        ['git', '--git-dir', './.git', 'fetch'])
+    auto_roll.subprocess2.check_output(
+        ['git', '--git-dir', './.git', 'show', 'origin/master:DEPS']
+        ).AndReturn(self.DEPS_CONTENT)
+    auto_roll.subprocess2.check_call(
         ['git', '--git-dir', './third_party/test_project/.git', 'fetch'])
-    git_log = '''
+    auto_roll.subprocess2.check_output(
+        ['git', '--git-dir', './third_party/test_project/.git', 'show', '-s',
+         'origin/master']).AndReturn(self.GIT_LOG_TOO_OLD)
+
+    self._parse_origin_master(returnval=self.OLDER_REV)
+    self._compare_revs(self.OLD_REV, self.OLDER_REV)
+
+    self.mox.ReplayAll()
+    try:
+      self._arb.main()
+    except auto_roll.AutoRollException, e:
+      self.assertEquals(e.args[0], ('Already at %s refusing to roll backwards '
+                                    'to %s.') % (self.OLD_REV, self.OLDER_REV))
+
+
+  def test_upload_issue(self):
+    if self.__class__.__name__ == 'AutoRollTestBase':
+      return
+    self._arb._rietveld.search(owner=self.TEST_AUTHOR, closed=2).AndReturn([])
+    self._upload_issue()
+    self.mox.ReplayAll()
+    self.assertEquals(self._arb.main(), 0)
+
+
+class AutoRollTestSVN(AutoRollTestBase):
+
+  OLDER_REV = 1231
+  OLD_REV = 1234
+  NEW_REV = 1235
+
+  DEPS_CONTENT = '''
+vars = {
+  "test_project_revision": "%d",
+}
+''' % OLD_REV
+
+  _GIT_LOG = '''
 commit abcde
 Author: Test Author <test_author@example.com>
 Date:   Wed Apr 2 14:00:14 2014 -0400
 
     Make some changes.
 
-    git-svn-id: svn://svn.url/trunk@1231 abcdefgh-abcd-abcd-abcd-abcdefghijkl
+    git-svn-id: svn://svn.url/trunk@%d abcdefgh-abcd-abcd-abcd-abcdefghijkl
 '''
-    auto_roll.subprocess.check_output(
-        ['git', '--git-dir', './third_party/test_project/.git', 'show', '-s',
-         'origin/master']).AndReturn(git_log)
-    self.mox.ReplayAll()
-    self.assertEquals(self._arb.main(), 1)
-    self.checkstdout('ERROR: Already at 1234 refusing to roll backwards to '
-                     '1231.\n')
 
-  def test_upload_issue(self):
-    self._arb._rietveld.search(owner=self.TEST_AUTHOR, closed=2).AndReturn([])
-    self._upload_issue()
-    self.mox.ReplayAll()
-    self.assertEquals(self._arb.main(), 0)
+  GIT_LOG_UPDATED = _GIT_LOG % NEW_REV
+  GIT_LOG_TOO_OLD = _GIT_LOG % OLDER_REV
+
+  def _make_issue(self, old_rev=None, new_rev=None, created_datetime=None):
+    return AutoRollTestBase._make_issue(self,
+                                        old_rev=old_rev or self.OLD_REV,
+                                        new_rev=new_rev or self.NEW_REV,
+                                        created_datetime=created_datetime)
+
+  # pylint: disable=R0201
+  def _compare_revs(self, old_rev, new_rev):
+    auto_roll.scm.GIT.Capture(['rev-parse', str(old_rev)],
+                              cwd='./third_party/test_project/.git',
+                              ).AndRaise(
+                                  auto_roll.subprocess2.CalledProcessError(
+                                      1, '', '', '', ''))
+
+  # pylint: disable=R0201
+  def _parse_origin_master(self, returnval):
+    # Not required for SVN.
+    pass
+
+
+class AutoRollTestGit(AutoRollTestBase):
+
+  OLDER_REV = '4sdd23'
+  OLD_REV = 'def456'
+  NEW_REV = 'abc124'
+
+  DEPS_CONTENT = '''
+vars = {
+  "test_project_revision": "%s",
+}
+''' % OLD_REV
+
+  _GIT_LOG = '''
+commit %s
+Author: Test Author <test_author@example.com>
+Date:   Wed Apr 2 14:00:14 2014 -0400
+
+    Make some changes.
+'''
+  GIT_LOG_UPDATED = _GIT_LOG % NEW_REV
+  GIT_LOG_TOO_OLD = _GIT_LOG % OLDER_REV
+
+  _commit_timestamps = {
+    OLDER_REV: '1399573100',
+    OLD_REV: '1399573342',
+    NEW_REV: '1399598876',
+  }
+
+  def _make_issue(self, old_rev=None, new_rev=None, created_datetime=None):
+    return AutoRollTestBase._make_issue(self,
+                                        old_rev=old_rev or self.OLD_REV,
+                                        new_rev=new_rev or self.NEW_REV,
+                                        created_datetime=created_datetime)
+
+  def _compare_revs(self, old_rev, new_rev):
+    auto_roll.scm.GIT.Capture(['rev-parse', str(old_rev)],
+                              cwd='./third_party/test_project/.git',
+                              ).AndReturn(old_rev)
+    auto_roll.scm.GIT.Capture(['rev-parse', str(new_rev)],
+                              cwd='./third_party/test_project/.git',
+                              ).AndReturn(new_rev)
+    merge_base_cmd = ['git', 'merge-base', '--is-ancestor', new_rev, old_rev]
+    if self._commit_timestamps[old_rev] < self._commit_timestamps[new_rev]:
+      err = auto_roll.subprocess2.CalledProcessError(1, '', '', '', '')
+      auto_roll.subprocess2.check_call(merge_base_cmd).AndRaise(err)
+    else:
+      auto_roll.subprocess2.check_call(merge_base_cmd)
+
+  # pylint: disable=R0201
+  def _parse_origin_master(self, returnval):
+    auto_roll.subprocess2.check_output(
+        ['git', '--git-dir', './third_party/test_project/.git', 'rev-parse',
+         'origin/master']).AndReturn(returnval)
 
 
 if __name__ == '__main__':
