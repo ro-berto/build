@@ -13,6 +13,8 @@
       "totallyaslave-c4",
       "--spec",
       "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn.chromium.org/chrome/trunk/src'}]",
+      "--revision_mapping_file",
+      "{}",
       "--patch_url",
       "http://src.chromium.org/foo/bar",
       "--output_json",

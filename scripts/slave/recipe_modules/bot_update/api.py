@@ -90,6 +90,10 @@ class BotUpdateApi(recipe_api.RecipeApi):
       # If patch_url is present, bot_update will actually ignore issue/ps.
       issue = patchset = None
 
+    rev_map = {}
+    if self.m.gclient.c:
+      rev_map = self.m.gclient.c.got_revision_mapping.as_jsonish()
+
     flags = [
         # 1. Do we want to run? (master/builder/slave).
         ['--master', master],
@@ -100,7 +104,7 @@ class BotUpdateApi(recipe_api.RecipeApi):
         ['--spec', spec_string],
         ['--root', root],
         ['--revision', revision],
-        ['--revision_mapping', self.m.properties.get('revision_mapping')],
+        ['--revision_mapping_file', self.m.json.input(rev_map)],
 
         # 3. How to find the patch, if any (issue/patchset/patch_url).
         ['--issue', issue],
@@ -115,19 +119,10 @@ class BotUpdateApi(recipe_api.RecipeApi):
            for item in flag_set if flag_set[1] is not None]
 
     # Inject Json output for testing.
-    try:
-      revision_map_data = self.m.gclient.c.got_revision_mapping
-    except AttributeError:
-      revision_map_data = {}
     git_mode = self.m.properties.get('mastername') in GIT_MASTERS
     first_sln = cfg.solutions[0].name
-    step_test_data = lambda : self.test_api.output_json(master,
-                                                        builder,
-                                                        slave,
-                                                        root,
-                                                        first_sln,
-                                                        revision_map_data,
-                                                        git_mode)
+    step_test_data = lambda: self.test_api.output_json(
+        master, builder, slave, root, first_sln, rev_map, git_mode)
 
     def followup_fn(step_result):
       if update_presentation:
