@@ -17,8 +17,6 @@
       "build",
       "--revision",
       "HEAD",
-      "--revision_mapping_file",
-      "{\"build\": \"got_revision\"}",
       "--issue",
       "12853011",
       "--patchset",

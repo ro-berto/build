@@ -1038,13 +1038,8 @@ def parse_args():
   parse.add_option('-f', '--force', action='store_true',
                    help='Bypass check to see if we want to be run. '
                         'Should ONLY be used locally.')
-  parse.add_option('--revision_mapping',
-                   help='{"path/to/repo/": "property_name"}')
-  parse.add_option('--revision_mapping_file',
-                   help=('Same as revision_mapping, except its a path to a json'
-                         ' file containing that format.'))
-  parse.add_option('--revision-mapping', # Backwards compatability.
-                   help='DEPRECATED, use "revision_mapping" instead')
+  parse.add_option('--revision_mapping')
+  parse.add_option('--revision-mapping')  # Backwards compatability.
   # TODO(hinoka): Support root@revision format.
   parse.add_option('--revision',
                    help='Revision to check out. Can be an SVN revision number, '
@@ -1067,16 +1062,7 @@ def parse_args():
                    help='Output JSON information into a specified file')
 
 
-  options, args = parse.parse_args()
-
-  if options.revision_mapping_file is not None:
-    if options.revision_mapping is not None:
-      print ('WARNING: revision_mapping_file was set at the same '
-             'time as revision_mapping?')
-    with open(options.revision_mapping_file, 'r') as f:
-      options.revision_mapping = json.load(f)
-
-  return options, args
+  return parse.parse_args()
 
 
 def main():
