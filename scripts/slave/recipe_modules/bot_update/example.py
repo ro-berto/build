@@ -21,8 +21,15 @@ def GenSteps(api):
 
 
 def GenTests(api):
-  yield api.test('basic')
+  yield api.test('basic') + api.properties(
+      mastername='chromium.linux',
+      buildername='Linux Builder',
+      slavename='totallyaslave-m1',
+  )
   yield api.test('tryjob') + api.properties(
+      mastername='tryserver.chromium',
+      buildername='linux_rel',
+      slavename='totallyaslave-c4',
       issue=12345,
       patchset=654321,
       patch_url='http://src.chromium.org/foo/bar'

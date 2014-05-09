@@ -5,11 +5,16 @@
       "python",
       "-u",
       "[BUILD]/scripts/slave/bot_update.py",
+      "--master",
+      "chromium.linux",
+      "--builder",
+      "Linux GN (dbg)",
+      "--slave",
+      "TestSlavename",
       "--spec",
       "cache_dir = None\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]",
       "--output_json",
-      "/path/to/tmp/json",
-      "--force"
+      "/path/to/tmp/json"
     ],
     "name": "bot_update",
     "~followup_annotations": [

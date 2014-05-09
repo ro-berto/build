@@ -5,6 +5,12 @@
       "python",
       "-u",
       "[BUILD]/scripts/slave/bot_update.py",
+      "--master",
+      "tryserver.chromium",
+      "--builder",
+      "chromium_presubmit",
+      "--slave",
+      "TestSlavename",
       "--spec",
       "cache_dir = '[ROOT]/git_cache'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'build', 'url': 'https://chromium.googlesource.com/chromium/tools/build.git'}]",
       "--root",
@@ -16,8 +22,7 @@
       "--patchset",
       "1",
       "--output_json",
-      "/path/to/tmp/json",
-      "--force"
+      "/path/to/tmp/json"
     ],
     "name": "bot_update",
     "~followup_annotations": [
@@ -103,7 +108,7 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
       "@@@STEP_LOG_LINE@json.output@  [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"linux_rel\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"chromium_presubmit\", @@@",
       "@@@STEP_LOG_LINE@json.output@    [@@@",
       "@@@STEP_LOG_LINE@json.output@      \"compile\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",

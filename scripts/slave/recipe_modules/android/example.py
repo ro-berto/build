@@ -4,6 +4,7 @@
 
 DEPS = [
   'android',
+  'properties',
 ]
 
 def GenSteps(api):
@@ -28,4 +29,9 @@ def GenSteps(api):
       defines=make_vars)
 
 def GenTests(api):
-  yield api.test('basic')
+  yield api.test('basic') + api.properties(
+      mastername='chromium.linux',
+      buildername='Android Builder',
+      slavename='totallyanandroid-m1',
+  )
+

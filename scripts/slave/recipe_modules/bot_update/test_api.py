@@ -5,14 +5,18 @@
 import hashlib
 import struct
 
+from slave import bot_update
 from slave import recipe_test_api
 
 
 class BotUpdateTestApi(recipe_test_api.RecipeTestApi):
-  def output_json(self, active, root, first_sln, revision_mapping, git_mode):
+  def output_json(self, master, builder, slave, root, first_sln,
+                  revision_mapping, git_mode):
     """Deterministically synthesize json.output test data for gclient's
     --output-json option.
     """
+    active = bot_update.check_valid_host(master, builder, slave)
+
     output = {
         'did_run': active
     }

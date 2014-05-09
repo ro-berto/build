@@ -9,43 +9,6 @@
 from slave import recipe_api
 
 
-# To allow us to enable masters/builders/slaves independently.
-# This list override the bot_update version and recipe bots can only be
-# enabled here rather than in bot_update.py.
-ENABLED_MASTERS = ['chromium.git', 'chromium.linux', 'chromium.mac']
-ENABLED_BUILDERS = {
-    'chromium.fyi': [
-        'Linux Trusty (32)',
-        'Linux Trusty (dbg)',
-        'Linux Trusty (dbg)(32)',
-        'Linux Trusty',
-    ],
-    'tryserver.chromium': [
-        'linux_rel_alt',
-        'android_chromium_gn_compile_dbg',
-        'android_chromium_gn_compile_rel',
-        'linux_chromium_gn_dbg',
-        'linux_chromium_gn_rel',
-        'linux_chromium_trusty32_dbg',
-        'linux_chromium_trusty32_rel',
-        'linux_chromium_trusty_dbg',
-        'linux_chromium_trusty_rel',
-        'linux_rel',
-    ],
-}
-ENABLED_SLAVES = {
-                          # GCE linux bots.
-    'tryserver.chromium': ['slave%d-c4' % i for i in range(250, 350)] +
-                          ['slave%d-c4' % i for i in range(102, 121)] +
-                          ['vm%d-m4' % i for i in [468, 469, 497, 502, 503]] +
-                          # Mac bots.
-                          ['vm%d-m4' % i for i in range(800, 810)] +
-                          ['vm%d-m4' % i for i in range(666, 671)] +
-                          # android triggered test bots.
-                          ['build%d-a4' % i for i in range(100, 140)]
-}
-
-
 # This is just for testing, to indicate if a master is using a Git scheduler
 # or not.
 GIT_MASTERS = ['chromium.git']
@@ -100,14 +63,10 @@ class BotUpdateApi(recipe_api.RecipeApi):
     cfg = gclient_config or self.m.gclient.c
     spec_string = jsonish_to_python(cfg.as_jsonish(), True)
 
-    # Determine if we want to run or not.
-    master = self.m.properties.get('mastername')
-    builder = self.m.properties.get('buildername')
-    slave = self.m.properties.get('slavename')
-    active = (
-        master in ENABLED_MASTERS or
-        (master in ENABLED_BUILDERS and builder in ENABLED_BUILDERS[master]) or
-        (master in ENABLED_SLAVES and slave in ENABLED_SLAVES[master]))
+    # Used by bot_update to determine if we want to run or not.
+    master = self.m.properties['mastername']
+    builder = self.m.properties['buildername']
+    slave = self.m.properties['slavename']
 
     # Construct our bot_update command.  This basically be inclusive of
     # everything required for bot_update to know:
@@ -132,27 +91,28 @@ class BotUpdateApi(recipe_api.RecipeApi):
       issue = patchset = None
 
     flags = [
-        # 1. What do we want to check out (spec/root/rev/rev_map).
+        # 1. Do we want to run? (master/builder/slave).
+        ['--master', master],
+        ['--builder', builder],
+        ['--slave', slave],
+
+        # 2. What do we want to check out (spec/root/rev/rev_map).
         ['--spec', spec_string],
         ['--root', root],
         ['--revision', revision],
         ['--revision_mapping', self.m.properties.get('revision_mapping')],
 
-        # 2. How to find the patch, if any (issue/patchset/patch_url).
+        # 3. How to find the patch, if any (issue/patchset/patch_url).
         ['--issue', issue],
         ['--patchset', patchset],
         ['--patch_url', patch_url],
 
-        # 3. Hookups to JSON output back into recipes.
+        # 4. Hookups to JSON output back into recipes.
         ['--output_json', self.m.json.output()],]
 
     # Filter out flags that are None.
     cmd = [item for flag_set in flags
            for item in flag_set if flag_set[1] is not None]
-
-    # Add in the --force flag if we've enabled bot_update.
-    if active:
-      cmd.append('--force')
 
     # Inject Json output for testing.
     try:
@@ -161,7 +121,9 @@ class BotUpdateApi(recipe_api.RecipeApi):
       revision_map_data = {}
     git_mode = self.m.properties.get('mastername') in GIT_MASTERS
     first_sln = cfg.solutions[0].name
-    step_test_data = lambda : self.test_api.output_json(active,
+    step_test_data = lambda : self.test_api.output_json(master,
+                                                        builder,
+                                                        slave,
                                                         root,
                                                         first_sln,
                                                         revision_map_data,

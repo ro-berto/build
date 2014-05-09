@@ -117,12 +117,36 @@ cache_dir = %(cache_dir)s
 %(target_os_only)s
 """
 
-# IMPORTANT: If you're trying to enable a RECIPE bot, you'll need to
-# edit recipe_modules/bot_update/api.py instead.
-ENABLED_MASTERS = ['chromium.git', 'chrome_git', 'chromium.mac']
+ENABLED_MASTERS = [
+    'chrome_git',
+    'chromium.git',
+    'chromium.linux',
+    'chromium.mac',
+]
 ENABLED_BUILDERS = {
-    'tryserver.chromium': ['linux_rel_alt'],
-    'chromium.win': ['Win Builder'],
+    'chromium.fyi': [
+        'Linux Trusty (32)',
+        'Linux Trusty (dbg)',
+        'Linux Trusty (dbg)(32)',
+        'Linux Trusty',
+    ],
+    'tryserver.chromium': [
+        'linux_rel_alt',
+
+        # While these may look redundent, they're used to tell the
+        # recipe_simulation_test that these builders are active.
+        'android_chromium_gn_compile_dbg',
+        'android_chromium_gn_compile_rel',
+        'chromium_presubmit',
+        'linux_chromium_gn_dbg',
+        'linux_chromium_gn_rel',
+
+        # Experimental Trusty bots.
+        'linux_chromium_trusty32_dbg',
+        'linux_chromium_trusty32_rel',
+        'linux_chromium_trusty_dbg',
+        'linux_chromium_trusty_rel',
+    ]
 }
 ENABLED_SLAVES = {
     # This is enabled on a bot-to-bot basis to ensure that we don't have
@@ -157,10 +181,23 @@ DISABLED_BUILDERS = {
         # linux_chromeos_clang.
         'linux_chromium_chromeos_clang_rel',
         'linux_chromium_chromeos_clang_dbg',
+        # These are disable because they rely on blink style patches working.
         'blink_android_compile_rel',
         'blink_android_compile_dbg',
     ],
     'chromium.win': ['Win Builder'],  # crbug.com/370473
+    'chromium.linux': [
+        # These are non-recipe for checking out, but use bb_run_bot.py for
+        # testings and upload.  The zip_build/extract_build link needs to be
+        # made working before these can be enabled.
+        'Android Builder (dbg)',
+        'Android Builder',
+        'Android Tests (dbg)',
+        'Android Tests',
+        # This one is not a builder/tester split, but runs into issues because
+        # its a 40GB bot.
+        'Android Clang Builder (dbg)',
+    ]
 }
 DISABLED_SLAVES = {}
 
