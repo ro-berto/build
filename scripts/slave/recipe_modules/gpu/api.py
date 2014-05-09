@@ -233,7 +233,8 @@ class GpuApi(recipe_api.RecipeApi):
         step_result.presentation.status = 'SUCCESS'
       yield self.m.step('killall gnome-keyring-daemon',
                         ['killall', '-9', 'gnome-keyring-daemon'],
-                        followup_fn=ignore_failure)
+                        followup_fn=ignore_failure,
+                        can_fail_build=False)
 
     # Note: --no-xvfb is the default.
     for test in SIMPLE_TESTS_TO_RUN:

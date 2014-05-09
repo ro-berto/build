@@ -131,6 +131,7 @@
     "name": "compile"
   },
   {
+    "can_fail_build": false,
     "cmd": [
       "killall",
       "-9",
