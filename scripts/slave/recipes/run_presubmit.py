@@ -39,7 +39,13 @@ def GenSteps(api):
     upstream = ''
   else:
     upstream = bot_update_step.json.output['properties'].get(
-        'got_revision_git') or ''
+        'got_revision')
+    if (not upstream or
+        isinstance(upstream, int) or
+        (upstream.isdigit() and len(upstream) < 40)):
+      # If got_revision is an svn revision, then use got_revision_git.
+      upstream = bot_update_step.json.output['properties'].get(
+          'got_revision_git') or ''
 
   # Run this regardless of whether bot_update is on or off.
   spec = api.gclient.c
