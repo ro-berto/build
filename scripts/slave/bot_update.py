@@ -264,11 +264,16 @@ class SVNRevisionNotFound(Exception):
   pass
 
 
+class InvalidDiff(Exception):
+  pass
+
+
 def call(*args, **kwargs):
   """Interactive subprocess call."""
   kwargs['stdout'] = subprocess.PIPE
   kwargs['stderr'] = subprocess.STDOUT
   stdin_data = kwargs.pop('stdin_data', None)
+  tries = kwargs.pop('tries', RETRIES)
   if stdin_data:
     kwargs['stdin'] = subprocess.PIPE
   out = cStringIO.StringIO()
@@ -276,7 +281,7 @@ def call(*args, **kwargs):
   env = copy.copy(os.environ)
   env.update(new_env)
   kwargs['env'] = env
-  for attempt in xrange(RETRIES):
+  for attempt in range(tries):
     attempt_msg = ' (retry #%d)' % attempt if attempt else ''
     if new_env:
       print '===Injecting Environment Variables==='
@@ -314,7 +319,7 @@ def call(*args, **kwargs):
     print
 
   raise SubprocessFailed('%s failed with code %d in %s after %d attempts.' %
-                         (' '.join(args), code, os.getcwd(), RETRIES), code)
+                         (' '.join(args), code, os.getcwd(), tries), code)
 
 
 def git(*args, **kwargs):
@@ -550,12 +555,16 @@ def _last_commit_for_file(filename, repo_base):
 def need_to_run_deps2git(repo_base, deps_file, deps_git_file):
   """Checks to see if we need to run deps2git.
 
-  Returns True if there was a DEPS change after the last .DEPS.git update.
+  Returns True if there was a DEPS change after the last .DEPS.git update
+  or if DEPS has local modifications.
   """
   print 'Checking if %s exists' % deps_git_file
   if not path.isfile(deps_git_file):
     # .DEPS.git doesn't exist but DEPS does? We probably want to generate one.
-    print 'it exists!'
+    print 'it doesn\'t exist!'
+    return True
+
+  if git('diff', deps_file, cwd=repo_base).strip():
     return True
 
   last_known_deps_ref = _last_commit_for_file(deps_file, repo_base)
@@ -623,10 +632,10 @@ def ensure_deps2git(sln_dir, shallow):
   repo_base = path.join(os.getcwd(), sln_dir)
   deps_file = path.join(repo_base, 'DEPS')
   deps_git_file = path.join(repo_base, '.DEPS.git')
-  print 'Checking if %s is newer than %s' % (deps_file, deps_git_file)
   if not path.isfile(deps_file):
     return
 
+  print 'Checking if %s is newer than %s' % (deps_file, deps_git_file)
   if not need_to_run_deps2git(repo_base, deps_file, deps_git_file):
     return
 
@@ -786,24 +795,103 @@ def _download(url):
         raise
 
 
-def apply_issue_svn(root, patch_url):
+def parse_diff(diff):
+  """Takes a unified diff and returns a list of diffed files and their diffs.
+
+  The return format is a list of pairs of:
+    (<filename>, <diff contents>)
+  <diff contents> is inclusive of the diff line.
+  """
+  result = []
+  current_diff = ''
+  current_header = None
+  for line in diff.splitlines():
+    # "diff" is for git style patches, and "Index: " is for SVN style patches.
+    if line.startswith('diff') or line.startswith('Index: '):
+      if current_header:
+        # If we are in a diff portion, then save the diff.
+        result.append((current_header, '%s\n' % current_diff))
+      git_header_match = re.match(r'diff (?:--git )?(\S+) (\S+)', line)
+      svn_header_match = re.match(r'Index: (.*)', line)
+
+      if git_header_match:
+        # First, see if its a git style header.
+        from_file = git_header_match.group(1)
+        to_file = git_header_match.group(2)
+        if from_file != to_file and from_file.startswith('a/'):
+          # Sometimes git prepends 'a/' and 'b/' in front of file paths.
+          from_file = from_file[2:]
+        current_header = from_file
+
+      elif svn_header_match:
+        # Otherwise, check if its an SVN style header.
+        current_header = svn_header_match.group(1)
+
+      else:
+        # Otherwise... I'm not really sure what to do with this.
+        raise InvalidDiff('Can\'t process header: %s\nFull diff:\n%s' %
+                          (line, diff))
+
+      current_diff = ''
+    current_diff += '%s\n' % line
+  if current_header:
+    # We hit EOF, gotta save the last diff.
+    result.append((current_header, current_diff))
+  return result
+
+
+def get_svn_patch(patch_url):
+  """Fetch patch from patch_url, return list of (filename, diff)"""
   patch_data = call('svn', 'cat', patch_url)
-  call(PATCH_TOOL, '-p0', '--remove-empty-files', '--force', '--forward',
-       stdin_data=patch_data, cwd=root)
+  return parse_diff(patch_data)
 
 
-def apply_issue_rietveld(issue, patchset, root, server, rev_map, revision):
+def apply_svn_patch(patch_root, patches, whitelist=None, blacklist=None):
+  """Expects a list of (filename, diff), applies it on top of patch_root."""
+  if whitelist:
+    patches = [(name, diff) for name, diff in patches if name in whitelist]
+  elif blacklist:
+    patches = [(name, diff) for name, diff in patches if name not in blacklist]
+  diffs = [diff for _, diff in patches]
+  patch = ''.join(diffs)
+
+  if patch:
+    print '===Patching files==='
+    for filename, _ in patches:
+      print 'Patching %s' % filename
+    call(PATCH_TOOL, '-p0', '--remove-empty-files', '--force', '--forward',
+        stdin_data=patch, cwd=patch_root, tries=1)
+
+
+def apply_rietveld_issue(issue, patchset, root, server, rev_map, revision,
+                         whitelist=None, blacklist=None):
   apply_issue_bin = ('apply_issue.bat' if sys.platform.startswith('win')
                      else 'apply_issue')
-  call(apply_issue_bin,
-       '--root_dir', root,
-       '--issue', issue,
-       '--patchset', patchset,
-       '--no-auth',
-       '--server', server,
-       '--base_ref', revision,
-       '--force',
-       '--ignore_deps')
+  cmd = [apply_issue_bin,
+         # The patch will be applied on top of this directory.
+         '--root_dir', root,
+         # Tell apply_issue how to fetch the patch.
+         '--issue', issue,
+         '--patchset', patchset,
+         '--no-auth',
+         '--server', server,
+         # Always run apply_issue.py, otherwise it would see update.flag
+         # and then bail out.
+         '--force',
+         # Don't run gclient sync when it sees a DEPS change.
+         '--ignore_deps',
+         # Don't commit the patch or add it to the index.
+         '--no_commit',
+  ]
+  if whitelist:
+    for item in whitelist:
+      cmd.extend(['--whitelist', item])
+  elif blacklist:
+    for item in blacklist:
+      cmd.extend(['--blacklist', item])
+
+  # Only try once, since subsequent failures hide the real failure.
+  call(*cmd, tries=1)
 
 
 def check_flag(flag_file):
@@ -822,14 +910,6 @@ def emit_flag(flag_file):
   print 'Emitting flag file at %s' % flag_file
   with open(flag_file, 'wb') as f:
     f.write('Success!')
-
-
-def get_real_git_hash(git_hash, dir_name):
-  """Return git_hash or the parent of git_hash if its a patched hash."""
-  log = git('log', '-1', '--format=%B', cwd=dir_name).strip()
-  if 'committed patch' in log.lower():
-    return git('log', '-1', '--format=%H', 'HEAD^', cwd=dir_name).strip()
-  return git_hash
 
 
 def parse_got_revision(gclient_output, got_revision_mapping, use_svn_revs):
@@ -897,21 +977,23 @@ def ensure_checkout(solutions, revisions, first_sln, target_os, target_os_only,
   print 'Fetching Git checkout'
   git_ref = git_checkout(solutions, revisions, shallow)
 
-  # If either patch_url or issue is passed in, then we need to apply a patch.
+  patches = None
   if patch_url:
-    # patch_url takes precidence since its only passed in on gcl try/git try.
-    apply_issue_svn(root, patch_url)
-  elif issue:
-    apply_issue_rietveld(issue, patchset, root, rietveld_server,
-                         revision_mapping, git_ref)
+    patches = get_svn_patch(patch_url)
+
+  if root == first_sln:
+    # Only top level DEPS patching is supported right now.
+    if patches:
+      apply_svn_patch(root, patches, whitelist=['DEPS'])
+    elif issue:
+      apply_rietveld_issue(issue, patchset, root, rietveld_server,
+                          revision_mapping, git_ref, whitelist=['DEPS'])
+
 
   if buildspec_name:
     buildspecs2git(root, buildspec_name)
-  elif first_sln == root:
-    # Run deps2git if there is a DEPS commit after the last .DEPS.git commit.
-    # We only need to ensure deps2git if the root is not overridden, since
-    # if the root is overridden, it means we are working with a sub repository
-    # patch, which means its impossible for it to touch DEPS.
+  else:
+    # Run deps2git if there is a DEPS change after the last .DEPS.git commit.
     ensure_deps2git(root, shallow)
 
   # Ensure our build/ directory is set up with the correct .gclient file.
@@ -929,6 +1011,13 @@ def ensure_checkout(solutions, revisions, first_sln, target_os, target_os_only,
   dir_names = [sln['name'] for sln in solutions]
   ensure_deps_revisions(gclient_output.get('solutions', {}),
                         dir_names, revisions)
+  # Apply the rest of the patch here (sans DEPS)
+  if patches:
+    apply_svn_patch(root, patches, blacklist=['DEPS'])
+  elif issue:
+    apply_rietveld_issue(issue, patchset, root, rietveld_server,
+                         revision_mapping, git_ref, blacklist=['DEPS'])
+
   return gclient_output
 
 
