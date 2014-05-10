@@ -3,6 +3,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+# TODO(hinoka): Use logging.
+
 import codecs
 import copy
 import cStringIO
@@ -507,101 +509,28 @@ def gclient_runhooks(gyp_envs):
   call(gclient_bin, 'runhooks', env=env)
 
 
-def create_less_than_or_equal_regex(number):
-  """ Return a regular expression to test whether an integer less than or equal
-      to 'number' is present in a given string.
-  """
-
-  # In three parts, build a regular expression that match any numbers smaller
-  # than 'number'.
-  # For example, 78656 would give a regular expression that looks like:
-  # Part 1
-  # (78356|            # 78356
-  # Part 2
-  #  7835[0-5]|        # 78350-78355
-  #  783[0-4][0-9]|    # 78300-78349
-  #  78[0-2][0-9]{2}|  # 78000-78299
-  #  7[0-7][0-9]{3}|   # 70000-77999
-  #  [0-6][0-9]{4}|    # 10000-69999
-  # Part 3
-  #  [0-9]{1,4}        # 0-9999
-
-  # Part 1: Create an array with all the regexes, as described above.
-  # Prepopulate it with the number itself.
-  number = str(number)
-  expressions = [number]
-
-  # Convert the number to a list, so we can translate digits in it to
-  # expressions.
-  num_list = list(number)
-  num_len = len(num_list)
-
-  # Part 2: Go through all the digits in the number, starting from the end.
-  # Each iteration appends a line to 'expressions'.
-  for index in range (num_len - 1, -1, -1):
-    # Convert this digit back to an integer.
-    digit = int(num_list[index])
-
-    # Part 2.1: No processing if this digit is a zero.
-    if digit == 0:
-      continue
-
-    # Part 2.2: We switch the current digit X by a range "[0-(X-1)]".
-    if digit == 1:
-      num_list[index] = '0'
-    else:
-      num_list[index] = '[0-%d]' % (digit - 1)
-
-    # Part 2.3: We set all following digits to be "[0-9]".
-    # Since we just decrementented a digit in a most important position, all
-    # following digits don't matter. The possible numbers will always be smaller
-    # than before we decremented.
-    if (index + 1) < num_len:
-      if (num_len - (index + 1)) == 1:
-        num_list[index + 1] = '[0-9]'
-      else:
-        num_list[index + 1] = '[0-9]{%s}' % (num_len - (index + 1))
-
-    # Part 2.4: Add this new sub-expression to the list.
-    expressions.append(''.join(num_list[:min(index+2, num_len)]))
-
-  # Part 3: We add all the full ranges to match all numbers that are at least
-  # one order of magnitude smaller than the original numbers.
-  if num_len == 2:
-    expressions.append('[0-9]')
-  elif num_len > 2:
-    expressions.append('[0-9]{1,%s}' % (num_len - 1))
-
-  # All done. We now have our final regular expression.
-  regex = '(%s)' % ('|'.join(expressions))
-  return regex
-
-
 def get_svn_rev(git_hash, dir_name):
   pattern = r'^\s*git-svn-id: [^ ]*@(\d+) '
-  lkcr_pattern = r'^\s*LK[CG]R w/ DEPS up to revision (\d+)'
   log = git('log', '-1', git_hash, cwd=dir_name)
   match = re.search(pattern, log, re.M)
   if not match:
-    # This might be a patched checkout, try the parent commit.
-    log = git('log', '-1', '%s^' % git_hash, cwd=dir_name)
-    match = re.search(pattern, log, re.M)
-    if not match:
-      # Might be patched on top of LKCR, which has a special message.
-      match = re.search(lkcr_pattern, log, re.M)
-      if not match:
-        return None
+    return None
   return int(match.group(1))
 
 
-def get_git_hash(revision, dir_name):
-  match = "^git-svn-id: [^ ]*@%s " % create_less_than_or_equal_regex(revision)
-  cmd = ['log', '-E', '--grep', match, '--format=%H', '--max-count=1']
-  results = git(*cmd, cwd=dir_name).strip().splitlines()
-  if results:
-    return results[0]
-  raise Exception('We can\'t resolve svn revision %s into a git hash' %
-                  revision)
+def get_git_hash(revision, sln_dir):
+  """We want to search for the SVN revision on the git-svn branch.
+
+  Note that git will search backwards from origin/master.
+  """
+  match = "^git-svn-id: [^ ]*@%s " % revision
+  cmd = ['log', '-E', '--grep', match, '--format=%H', '--max-count=1',
+         'origin/master']
+  result = git(*cmd, cwd=sln_dir).strip()
+  if result:
+    return result
+  raise SVNRevisionNotFound('We can\'t resolve svn r%s into a git hash in %s' %
+                            (revision, sln_dir))
 
 
 def get_revision_mapping(root, addl_rev_map):
@@ -751,7 +680,30 @@ def get_total_disk_space():
     return (total, free)
 
 
-def git_checkout(solutions, revision, shallow):
+def get_revision(folder_name, git_url, revisions):
+  normalized_name = folder_name.strip('/')
+  if normalized_name in revisions:
+    return revisions[normalized_name]
+  if git_url in revisions:
+    return revisions[git_url]
+  return None
+
+
+def force_revision(folder_name, revision):
+  if revision and revision.upper() != 'HEAD':
+    if revision and revision.isdigit() and len(revision) < 40:
+      # rev_num is really a svn revision number, convert it into a git hash.
+      git_ref = get_git_hash(int(revision), folder_name)
+    else:
+      # rev_num is actually a git hash or ref, we can just use it.
+      git_ref = revision
+    git('checkout', git_ref, cwd=folder_name)
+  else:
+    # Revision is None or 'HEAD', we want ToT.
+    git('checkout', 'origin/master', cwd=folder_name)
+
+
+def git_checkout(solutions, revisions, shallow):
   build_dir = os.getcwd()
   # Before we do anything, break all git_cache locks.
   if path.isdir(CACHE_DIR):
@@ -760,7 +712,6 @@ def git_checkout(solutions, revision, shallow):
       filename = os.path.join(CACHE_DIR, item)
       if item.endswith('.lock'):
         raise Exception('%s exists after cache unlock' % filename)
-  # Revision only applies to the first solution.
   first_solution = True
   for sln in solutions:
     # This is so we can loop back and try again if we need to wait for the
@@ -802,35 +753,25 @@ def git_checkout(solutions, revision, shallow):
 
       git('clean', '-df', cwd=sln_dir)
       git('fetch', 'origin', cwd=sln_dir)
-      # TODO(hinoka): We probably have to make use of revision mapping.
-      if first_solution and revision and revision.lower() != 'head':
-        if revision and revision.isdigit() and len(revision) < 40:
-          # rev_num is really a svn revision number, convert it into a git hash.
-          git_ref = get_git_hash(int(revision), name)
-          # Lets make sure our checkout has the correct revision number.
-          got_revision = get_svn_rev(git_ref, sln_dir)
-          if not got_revision or int(got_revision) != int(revision):
-            tries_left -= 1
-            if tries_left > 0:
-              # If we don't have the correct revision, wait and try again.
-              print 'We want revision %s, but got revision %s.' % (
-                  revision, got_revision)
-              print 'The svn to git replicator is probably falling behind.'
-              print 'waiting 5 seconds and trying again...'
-              time.sleep(5)
-              done = False
-              continue
-            raise SVNRevisionNotFound
-        else:
-          # rev_num is actually a git hash or ref, we can just use it.
-          git_ref = revision
-        git('checkout', git_ref, cwd=sln_dir)
-      else:
-        git('checkout', 'origin/master', cwd=sln_dir)
-        if first_solution:
-          git_ref = git('log', '--format=%H', '--max-count=1',
-                        cwd=sln_dir).strip()
 
+      revision = get_revision(name, url, revisions) or 'HEAD'
+      try:
+        force_revision(sln_dir, revision)
+      except SVNRevisionNotFound:
+        tries_left -= 1
+        if tries_left > 0:
+          # If we don't have the correct revision, wait and try again.
+          print 'We can\'t find revision %s.' % revision
+          print 'The svn to git replicator is probably falling behind.'
+          print 'waiting 5 seconds and trying again...'
+          time.sleep(5)
+          done = False
+          continue
+        raise
+
+      if first_solution:
+        git_ref = git('log', '--format=%H', '--max-count=1',
+                      cwd=sln_dir).strip()
       first_solution = False
   return git_ref
 
@@ -909,7 +850,7 @@ def parse_got_revision(gclient_output, got_revision_mapping, use_svn_revs):
     else:
       # Since we are using .DEPS.git, everything had better be git.
       assert solution_output.get('scm') == 'git'
-      git_revision = get_real_git_hash(solution_output['revision'], dir_name)
+      git_revision = git('rev-parse', 'HEAD', cwd=dir_name).strip()
       if use_svn_revs:
         revision = get_svn_rev(git_revision, dir_name)
         if not revision:
@@ -934,14 +875,27 @@ def emit_json(out_file, did_run, gclient_output=None, **kwargs):
     f.write(json.dumps(output))
 
 
-def ensure_checkout(solutions, revision, first_sln, target_os, target_os_only,
+def ensure_deps_revisions(deps_url_mapping, solutions, revisions):
+  """Ensure correct DEPS revisions, ignores solutions."""
+  for deps_name, deps_data in sorted(deps_url_mapping.items()):
+    if deps_name.strip('/') in solutions:
+      # This has already been forced to the correct solution by git_checkout().
+      continue
+    revision = get_revision(deps_name, deps_data.get('url', None), revisions)
+    if not revision:
+      continue
+    # TODO(hinoka): Catch SVNRevisionNotFound error maybe?
+    force_revision(deps_name, revision)
+
+
+def ensure_checkout(solutions, revisions, first_sln, target_os, target_os_only,
                     root, issue, patchset, patch_url, rietveld_server,
                     revision_mapping, buildspec_name, gyp_env, shallow):
   # Get a checkout of each solution, without DEPS or hooks.
   # Calling git directly because there is no way to run Gclient without
   # invoking DEPS.
   print 'Fetching Git checkout'
-  git_ref = git_checkout(solutions, revision, shallow)
+  git_ref = git_checkout(solutions, revisions, shallow)
 
   # If either patch_url or issue is passed in, then we need to apply a patch.
   if patch_url:
@@ -970,6 +924,11 @@ def ensure_checkout(solutions, revision, first_sln, target_os, target_os_only,
     # TODO(hinoka): Remove this when the official builders run their own
     #               runhooks step.
     gclient_runhooks(gyp_env)
+
+  # Finally, ensure that all DEPS are pinned to the correct revision.
+  dir_names = [sln['name'] for sln in solutions]
+  ensure_deps_revisions(gclient_output.get('solutions', {}),
+                        dir_names, revisions)
   return gclient_output
 
 
@@ -1023,6 +982,49 @@ def upload_telemetry(prefix, master, builder, slave, **kwargs):
   return thr
 
 
+def parse_revisions(revisions, root):
+  """Turn a list of revision specs into a nice dictionary.
+
+  We will always return a dict with {root: something}.  By default if root
+  is unspecified, or if revisions is [], then revision will be assigned 'HEAD'
+  """
+  results = {root.strip('/'): 'HEAD'}
+  for revision in revisions:
+    split_revision = revision.split('@')
+    if len(split_revision) == 1:
+      # This is just a plain revision, set it as the revision for root.
+      results[root] = split_revision[0]
+    elif len(split_revision) == 2:
+      # This is an alt_root@revision argument.
+      current_root, current_rev = split_revision
+
+      # We want to normalize svn/git urls into .git urls.
+      parsed_root = urlparse.urlparse(current_root)
+      if parsed_root.scheme == 'svn':
+        if parsed_root.path in RECOGNIZED_PATHS:
+          normalized_root = RECOGNIZED_PATHS[parsed_root.path]
+        else:
+          print 'WARNING: SVN path %s not recognized, ignoring' % current_root
+          continue
+      elif parsed_root.scheme in ['http', 'https']:
+        normalized_root = 'https://%s/%s' % (parsed_root.netloc,
+                                             parsed_root.path)
+        if not normalized_root.endswith('.git'):
+          normalized_root = '%s.git' % normalized_root
+      elif parsed_root.scheme:
+        print 'WARNING: Unrecognized scheme %s, ignoring' % parsed_root.scheme
+        continue
+      else:
+        # This is probably a local path.
+        normalized_root = current_root.strip('/')
+
+      results[normalized_root] = current_rev
+    else:
+      print ('WARNING: %r is not recognized as a valid revision specification,'
+             'skipping' % revision)
+  return results
+
+
 def parse_args():
   parse = optparse.OptionParser()
 
@@ -1041,10 +1043,12 @@ def parse_args():
                         'Should ONLY be used locally.')
   parse.add_option('--revision_mapping')
   parse.add_option('--revision-mapping')  # Backwards compatability.
-  # TODO(hinoka): Support root@revision format.
-  parse.add_option('--revision',
+  parse.add_option('--revision', action='append', default=[],
                    help='Revision to check out. Can be an SVN revision number, '
-                        'git hash, or any form of git ref.')
+                        'git hash, or any form of git ref.  Can prepend '
+                        'root@<rev> to specify which repository, where root '
+                        'is either a filesystem path, git https url, or '
+                        'svn url. To specify Tip of Tree, set rev to HEAD.')
   parse.add_option('--slave_name', default=socket.getfqdn().split('.')[0],
                    help='Hostname of the current machine, '
                    'used for determining whether or not to activate.')
@@ -1150,11 +1154,18 @@ def main():
   # The first solution is where the primary DEPS file resides.
   first_sln = dir_names[0]
 
+  # Split all the revision specifications into a nice dict.
+  print 'Revisions: %s' % options.revision
+  revisions = parse_revisions(options.revision, options.root)
+  # This is meant to be just an alias to the revision of the main solution.
+  root_revision = revisions[options.root]
+  print 'Fetching Git checkout at %s@%s' % (options.root, root_revision)
+
   try:
     checkout_parameters = dict(
         # First, pass in the base of what we want to check out.
         solutions=git_solutions,
-        revision=options.revision,
+        revisions=revisions,
         first_sln=first_sln,
 
         # Also, target os variables for gclient.
