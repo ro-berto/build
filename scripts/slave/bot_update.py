@@ -59,6 +59,7 @@ GOT_REVISION_MAPPINGS = {
         'src/tools/swarming_client/': 'got_swarming_client_revision',
         'src/third_party/WebKit/': 'got_webkit_revision',
         'src/third_party/webrtc/': 'got_webrtc_revision',
+        'src/v8/': 'got_v8_revision',
     }
 }
 
