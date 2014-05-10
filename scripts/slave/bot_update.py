@@ -698,7 +698,7 @@ def get_revision(folder_name, git_url, revisions):
   return None
 
 
-def force_revision(folder_name, revision):
+def force_revision(folder_name, revision, git_svn=False):
   if revision and revision.upper() != 'HEAD':
     if revision and revision.isdigit() and len(revision) < 40:
       # rev_num is really a svn revision number, convert it into a git hash.
@@ -709,8 +709,10 @@ def force_revision(folder_name, revision):
     git('checkout', git_ref, cwd=folder_name)
   else:
     # Revision is None or 'HEAD', we want ToT.
-    git('checkout', 'origin/master', cwd=folder_name)
-
+    if git_svn and not FLAG_DAY:
+      git('checkout', 'origin/git-svn', cwd=folder_name)
+    else:
+      git('checkout', 'origin/master', cwd=folder_name)
 
 def git_checkout(solutions, revisions, shallow):
   build_dir = os.getcwd()
@@ -765,7 +767,7 @@ def git_checkout(solutions, revisions, shallow):
 
       revision = get_revision(name, url, revisions) or 'HEAD'
       try:
-        force_revision(sln_dir, revision)
+        force_revision(sln_dir, revision, url==CHROMIUM_SRC_URL)
       except SVNRevisionNotFound:
         tries_left -= 1
         if tries_left > 0:
