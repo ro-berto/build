@@ -880,8 +880,6 @@ def apply_rietveld_issue(issue, patchset, root, server, rev_map, revision,
          '--force',
          # Don't run gclient sync when it sees a DEPS change.
          '--ignore_deps',
-         # Don't commit the patch or add it to the index.
-         '--no_commit',
   ]
   if whitelist:
     for item in whitelist:
