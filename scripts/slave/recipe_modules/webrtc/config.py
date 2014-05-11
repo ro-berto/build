@@ -7,8 +7,10 @@ from slave.recipe_config import Single, Static, BadConf
 from slave.recipe_config_types import Path
 
 
-def BaseConfig(**_kwargs):
+def BaseConfig(MEASURE_PERF=False, **_kwargs):
   return ConfigGroup(
+    MEASURE_PERF = Static(MEASURE_PERF),
+
     patch_root_dir = Single(Path, required=False, empty_val=Path('[CHECKOUT]')),
 
     # Allow manipulating patches for try jobs.
@@ -18,6 +20,7 @@ def BaseConfig(**_kwargs):
   )
 
 VAR_TEST_MAP = {
+  'MEASURE_PERF': (True, False),
 }
 
 def TEST_NAME_FORMAT(kwargs):
