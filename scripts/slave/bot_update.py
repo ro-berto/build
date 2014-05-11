@@ -538,15 +538,6 @@ def get_git_hash(revision, sln_dir):
                             (revision, sln_dir))
 
 
-def get_revision_mapping(root, addl_rev_map):
-  result = {}
-  if root in GOT_REVISION_MAPPINGS:
-    result.update(GOT_REVISION_MAPPINGS[root])
-  if addl_rev_map:
-    result.update(json.loads(addl_rev_map))
-  return result
-
-
 def _last_commit_for_file(filename, repo_base):
   cmd = ['log', '--format=%H', '--max-count=1', '--', filename]
   return git(*cmd, cwd=repo_base).strip()
@@ -865,7 +856,7 @@ def apply_svn_patch(patch_root, patches, whitelist=None, blacklist=None):
         stdin_data=patch, cwd=patch_root, tries=1)
 
 
-def apply_rietveld_issue(issue, patchset, root, server, rev_map, revision,
+def apply_rietveld_issue(issue, patchset, root, server, _rev_map, _revision,
                          whitelist=None, blacklist=None):
   apply_issue_bin = ('apply_issue.bat' if sys.platform.startswith('win')
                      else 'apply_issue')
@@ -1130,8 +1121,13 @@ def parse_args():
   parse.add_option('-f', '--force', action='store_true',
                    help='Bypass check to see if we want to be run. '
                         'Should ONLY be used locally.')
-  parse.add_option('--revision_mapping')
-  parse.add_option('--revision-mapping')  # Backwards compatability.
+  parse.add_option('--revision_mapping',
+                   help='{"path/to/repo/": "property_name"}')
+  parse.add_option('--revision_mapping_file',
+                   help=('Same as revision_mapping, except its a path to a json'
+                         ' file containing that format.'))
+  parse.add_option('--revision-mapping', # Backwards compatability.
+                   help='DEPRECATED, use "revision_mapping" instead')
   parse.add_option('--revision', action='append', default=[],
                    help='Revision to check out. Can be an SVN revision number, '
                         'git hash, or any form of git ref.  Can prepend '
@@ -1156,7 +1152,24 @@ def parse_args():
                    help='Output JSON information into a specified file')
 
 
-  return parse.parse_args()
+  options, args = parse.parse_args()
+
+  try:
+    if options.revision_mapping_file:
+      if options.revision_mapping:
+        print ('WARNING: Ignoring --revision_mapping: --revision_mapping_file '
+               'was set at the same time as --revision_mapping?')
+      with open(options.revision_mapping_file, 'r') as f:
+        options.revision_mapping = json.load(f)
+    elif options.revision_mapping:
+      options.revision_mapping = json.loads(options.revision_mapping)
+  except Exception as e:
+    print (
+        'WARNING: Caught execption while parsing revision_mapping*: %s'
+        % (str(e),)
+    )
+
+  return options, args
 
 
 def main():
@@ -1284,7 +1297,10 @@ def main():
   # Revision is an svn revision, unless its a git master or past flag day.
   use_svn_rev = master not in GIT_MASTERS and not FLAG_DAY
   # Take care of got_revisions outputs.
-  revision_mapping = get_revision_mapping(svn_root, options.revision_mapping)
+  revision_mapping = dict(GOT_REVISION_MAPPINGS.get(svn_root, {}))
+  if options.revision_mapping:
+    revision_mapping.update(options.revision_mapping)
+
   got_revisions = parse_got_revision(gclient_output, revision_mapping,
                                      use_svn_rev)
 
