@@ -1022,11 +1022,28 @@ class UploadTelemetryThread(threading.Thread):
     self.builder = builder
     self.slave = slave
     self.prefix = prefix
-    self.gs_url = 'gs://%s/%s/%s/%s/%s.json' % (
-        GS_BUCKET, master, builder, slave, prefix)
     self.kwargs = kwargs or {}
 
+  def url(self, name=None):
+    return 'gs://%s/%s/%s/%s/%s.json' % (
+        GS_BUCKET, self.master, self.builder, self.slave, name or self.prefix)
+
+  @staticmethod
+  def _gsutil(*args, **kwargs):
+    return call(sys.executable, '-u', GSUTIL_BIN, *args, **kwargs)
+
   def run(self):
+    if self.prefix == 'start':
+      try:
+        self._gsutil('mv', self.url('start'), self.url('start_old'))
+      except Exception as e:
+        print 'Could not move start -> start_old! %r' % e
+
+      try:
+        self._gsutil('mv', self.url('end'), self.url('end_old'))
+      except Exception as e:
+        print 'Could not move end -> end_old! %r' % e
+
     # Disk space Code duplicated here to get it out of the critical path
     # when bot_update is not activated.
     data = {
@@ -1055,8 +1072,7 @@ class UploadTelemetryThread(threading.Thread):
           'message': str(e),
       }
 
-    call(sys.executable, '-u', GSUTIL_BIN, 'cp', '-', self.gs_url,
-          stdin_data=json.dumps(data))
+    self._gsutil('cp', '-', self.url(), stdin_data=json.dumps(data))
 
 
 def upload_telemetry(prefix, master, builder, slave, **kwargs):
