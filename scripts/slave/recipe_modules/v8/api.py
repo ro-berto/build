@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 from slave import recipe_api
+from slave.recipe_modules.v8 import builders
 
 
 # TODO(machenbach): This is copied from gclient's config.py and should be
@@ -14,6 +15,8 @@ def ChromiumSvnSubURL(c, *pieces):
 
 
 class V8Api(recipe_api.RecipeApi):
+  BUILDERS = builders.BUILDERS
+
   def checkout(self, **kwargs):
     return self.m.gclient.checkout(**kwargs)
 
