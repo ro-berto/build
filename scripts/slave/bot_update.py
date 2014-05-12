@@ -5,9 +5,9 @@
 
 # TODO(hinoka): Use logging.
 
+import cStringIO
 import codecs
 import copy
-import cStringIO
 import ctypes
 import json
 import optparse
@@ -23,6 +23,7 @@ import threading
 import time
 import urllib2
 import urlparse
+import uuid
 
 import os.path as path
 
@@ -1214,15 +1215,20 @@ def main():
   # Lets send some telemetry data about bot_update here. This returns a thread
   # object so we can join on it later.
   all_threads = []
-  thr = upload_telemetry(prefix='start',
-                         active=active,
-                         master=master,
-                         builder=builder,
-                         slave=slave,
-                         specs=options.specs,
-                         git_solutions=git_slns,
-                         conversion_warnings=warnings,
-                         solutions=specs.get('solutions', []))
+  run_id = uuid.uuid4().hex
+  thr = upload_telemetry(
+      active=active,
+      builder=builder,
+      conversion_warnings=warnings,
+      git_solutions=git_slns,
+      master=master,
+      prefix='start',
+      run_id=run_id,
+      slave=slave,
+      solutions=specs.get('solutions', []),
+      specs=options.specs,
+      unix_time=time.time(),
+  )
   all_threads.append(thr)
 
   dir_names = [sln.get('name') for sln in svn_solutions if 'name' in sln]
@@ -1321,19 +1327,23 @@ def main():
     # If we're not on recipes, tell annotator about our got_revisions.
     emit_properties(got_revisions)
 
-  thr = upload_telemetry(prefix='end',
-                         active=active,
-                         master=master,
-                         builder=builder,
-                         slave=slave,
-                         gclient_output=gclient_output,
-                         got_revision=got_revisions,
-                         did_run=True,
-                         patch_root=options.root,
-                         solutions=specs['solutions'],
-                         git_solutions=git_slns,
-                         conversion_warnings=warnings,
-                         specs=options.specs)
+  thr = upload_telemetry(
+      active=active,
+      builder=builder,
+      conversion_warnings=warnings,
+      did_run=True,
+      gclient_output=gclient_output,
+      git_solutions=git_slns,
+      got_revision=got_revisions,
+      master=master,
+      patch_root=options.root,
+      prefix='end',
+      run_id=run_id,
+      slave=slave,
+      solutions=specs['solutions'],
+      specs=options.specs,
+      unix_time=time.time(),
+  )
   all_threads.append(thr)
 
   # Sort of wait for all telemetry threads to finish.
