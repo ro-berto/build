@@ -123,6 +123,7 @@ def GenSteps(api):
         results_url=dashboard_upload_url,
         annotate='graphing', perf_dashboard_id=test, test_type=test,
         revision=s.revision,
+        perf_id='dartium-linux-release',
     )
 
 
