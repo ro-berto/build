@@ -1214,6 +1214,7 @@ def main():
   # object so we can join on it later.
   all_threads = []
   thr = upload_telemetry(prefix='start',
+                         active=active,
                          master=master,
                          builder=builder,
                          slave=slave,
@@ -1320,6 +1321,7 @@ def main():
     emit_properties(got_revisions)
 
   thr = upload_telemetry(prefix='end',
+                         active=active,
                          master=master,
                          builder=builder,
                          slave=slave,
