@@ -205,12 +205,11 @@ def archive_layout(options, args):
     slave_utils.GSUtilCopyFile(failing_results_json, gs_base, gs_acl=gs_acl,
       cache_control=cache_control)
 
-    # And also to the 'results' directory to provide the 'latest' results.
+    # And also to the 'results' directory to provide the 'latest' results
+    # (but do not set the cache-control headers for those!)
     gs_base = '/'.join([options.gs_bucket, build_name, 'results'])
-    slave_utils.GSUtilCopyFile(zip_file, gs_base, gs_base, gs_acl=gs_acl,
-      cache_control=cache_control)
-    slave_utils.GSUtilCopyDir(options.results_dir, gs_base, gs_acl=gs_acl,
-      cache_control=cache_control)
+    slave_utils.GSUtilCopyFile(zip_file, gs_base, gs_base, gs_acl=gs_acl)
+    slave_utils.GSUtilCopyDir(options.results_dir, gs_base, gs_acl=gs_acl)
   else:
     _MaybeMakeDirectoryOnArchiveHost(dest_dir)
     _CopyFileToArchiveHost(zip_file, dest_dir)
