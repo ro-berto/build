@@ -1046,6 +1046,7 @@ class UploadTelemetryThread(threading.Thread):
           'used': used_disk_space_gb,
           'percent': percent_used,
           'status': 'OK',
+          'small': total_disk_space < SHALLOW_CLONE_THRESHOLD,
       }
     except Exception as e:
       data['disk'] = {
