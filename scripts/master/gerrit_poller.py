@@ -16,6 +16,30 @@ from common.gerrit_agent import GerritAgent
 class GerritPoller(base.PollingChangeSource):
   """A poller which queries a gerrit server for new changes and patchsets."""
 
+  # TODO(szager): Due to the way query continuation works in gerrit (using
+  # the 'S=%d' URL parameter), there are two distinct error scenarios that
+  # are currently unhandled:
+  #
+  #   - A new patch set is uploaded.
+  #   - When the poller runs, the change is #11, meaning it doesn't come in
+  #     the first batch of query results.
+  #   - In between the first and second queries, another patch set is
+  #     uploaded to the same change, bumping the change up to #1 in the list.
+  #   - The second query skips ahead by 10, and never sees the change.
+  #
+  #   - A new patch set is uploaded.
+  #   - When the poller runs, the change is #10, and appears in the first set
+  #     of query results.
+  #   - In between the first and second queries, some other change gets a new
+  #     patch set and moves up to #1, bumping the current #10 to #11.
+  #   - The second query skips 10, getting changes 11-20.  So, the change that
+  #     was already processes is processed again.
+  #
+  # Both of these problems need the same solution: keep some state in poller of
+  # 'patch sets already processed'; and relax the 'since' parameter to
+  # processChanges so that it goes further back in time than the last polling
+  # event (maybe pollInterval*3).
+
   change_category = 'patchset-created'
 
   def __init__(self, gerrit_host, gerrit_projects=None, pollInterval=None,
@@ -59,10 +83,10 @@ class GerritPoller(base.PollingChangeSource):
     d.addCallback(_get_timestamp)
     return d
 
-  def getChanges(self, sortkey=None):
+  def getChanges(self, skip=None):
     path = '/changes/?q=%s&n=10' % self.getChangeQuery()
-    if sortkey:
-      path += '&N=%s' % sortkey
+    if skip:
+      path += '&S=%d' % skip
     return self.agent.request('GET', path)
 
   def _is_interesting_message(self, message):  # pylint: disable=R0201
@@ -159,9 +183,10 @@ class GerritPoller(base.PollingChangeSource):
     revision = self.findRevisionShaForMessage(change, message)
     return self.addBuildbotChange(change, revision)
 
-  def processChanges(self, j, since):
+  def processChanges(self, j, since, skip=0):
     need_more = bool(j)
     for change in j:
+      skip += 1
       tm = self._parse_timestamp(change['updated'])
       if tm <= since:
         need_more = False
@@ -171,8 +196,8 @@ class GerritPoller(base.PollingChangeSource):
       d = self.checkForNewPatchset(change, since)
       d.addCallback(lambda x: self.addChange(*x) if x else None)
     if need_more and j[-1].get('_more_changes'):
-      d = self.getChanges(sortkey=j[-1]['_sortkey'])
-      d.addCallback(self.processChanges, since=since)
+      d = self.getChanges(skip=skip)
+      d.addCallback(self.processChanges, since=since, skip=skip)
     else:
       d = defer.succeed(None)
     return d
