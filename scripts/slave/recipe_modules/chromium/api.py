@@ -117,7 +117,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       full_args.append('--results-url=%s' % results_url)
     if perf_dashboard_id:
       full_args.append('--perf-dashboard-id=%s' % perf_dashboard_id)
-    if perf_id:
+    if perf_id:  # pragma: no cover
       full_args.append('--perf-id=%s' % perf_id)
     # This replaces the step_name that used to be sent via factory_properties.
     if test_type:
