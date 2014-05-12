@@ -40,10 +40,10 @@ class WebRTCApi(recipe_api.RecipeApi):
 
   DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
 
-  def runtests(self, test_suite='default'):
+  def runtests(self, test_suite=None):
     """Generate a list of tests to run."""
     steps = []
-    if test_suite == 'default':
+    if test_suite == 'webrtc':
       for test in self.NORMAL_TESTS:
         steps.append(self.add_test(test))
 
@@ -52,8 +52,8 @@ class WebRTCApi(recipe_api.RecipeApi):
                                 'Contents', 'MacOS',
                                 'libjingle_peerconnection_objc_test')
         steps.append(self.add_test(test,
-                                    name='libjingle_peerconnection_objc_test'))
-    elif test_suite == 'baremetal':
+                                   name='libjingle_peerconnection_objc_test'))
+    elif test_suite == 'webrtc_baremetal':
       # Add baremetal tests, which are different depending on the platform.
       if self.m.platform.is_win or self.m.platform.is_mac:
         steps.append(self.add_test('audio_device_tests'))
@@ -62,11 +62,11 @@ class WebRTCApi(recipe_api.RecipeApi):
         steps.append(self.add_test(
             'audioproc', name='audioproc_perf',
             args=['-aecm', '-ns', '-agc', '--fixed_digital', '--perf', '-pb',
-                  f('resources', 'audioproc.aecdump')]))
+                  f('resources', 'audioproc.aecdump')], perf_test=True))
         steps.append(self.add_test(
             'iSACFixtest', name='isac_fixed_perf',
             args=['32000', f('resources', 'speech_and_misc_wb.pcm'),
-                  'isac_speech_and_misc_wb.pcm']))
+                  'isac_speech_and_misc_wb.pcm'], perf_test=True))
         steps.append(self.virtual_webcam_check())
         steps.append(self.add_test(
             'libjingle_peerconnection_java_unittest',
@@ -80,15 +80,15 @@ class WebRTCApi(recipe_api.RecipeApi):
       steps.append(self.add_test('voe_auto_test', args=['--automated']))
       steps.append(self.virtual_webcam_check())
       steps.append(self.add_test('video_capture_tests'))
-      steps.append(self.add_test('webrtc_perf_tests'))
+      steps.append(self.add_test('webrtc_perf_tests', perf_test=True))
 
     return steps
 
-  def add_test(self, test, name=None, args=None, env=None):
+  def add_test(self, test, name=None, args=None, env=None, perf_test=False):
     args = args or []
     env = env or {}
 
-    if self.c.MEASURE_PERF:
+    if self.c.MEASURE_PERF and perf_test:
       return self.m.chromium.runtest(
           test=test, args=args, name=name,
           results_url=self.DASHBOARD_UPLOAD_URL, annotate='graphing',

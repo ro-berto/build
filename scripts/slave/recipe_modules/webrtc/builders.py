@@ -8,15 +8,15 @@
 RECIPE_CONFIGS = {
   'webrtc': {
     'webrtc_config': 'webrtc',
-    'test_suite': 'default',
+    'test_suite': 'webrtc',
   },
   'webrtc_baremetal': {
     'webrtc_config': 'webrtc',
-    'test_suite': 'baremetal',
+    'test_suite': 'webrtc_baremetal',
   },
   'webrtc_clang': {
     'webrtc_config': 'webrtc_clang',
-    'test_suite': 'default',
+    'test_suite': 'webrtc',
   },
   'webrtc_android': {
     'webrtc_config': 'webrtc_android',
