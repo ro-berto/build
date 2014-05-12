@@ -3,11 +3,16 @@
 # found in the LICENSE file.
 
 from slave import recipe_api
+from slave.recipe_modules.webrtc import builders
+
 
 class WebRTCApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
     super(WebRTCApi, self).__init__(**kwargs)
     self._env = {}
+
+  BUILDERS = builders.BUILDERS
+  RECIPE_CONFIGS = builders.RECIPE_CONFIGS
 
   COMMON_TESTS = [
       'audio_decoder_unittests',

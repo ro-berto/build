@@ -4,8 +4,6 @@
 
 # Recipe for building and running tests for WebRTC stand-alone.
 
-from slave.recipe_modules.webrtc import builders
-
 DEPS = [
   'chromium',
   'gclient',
@@ -18,22 +16,10 @@ DEPS = [
 ]
 
 
-BUILDERS = {
-  'client.webrtc': {
-    'builders': builders.CLIENT_COMMIT_BUILDERS,
-  },
-  'client.webrtc.fyi': {
-    'builders': builders.CLIENT_FYI_COMMIT_BUILDERS,
-  },
-  'tryserver.webrtc': {
-    'builders': builders.CLIENT_TRY_BUILDERS,
-  },
-}
-
 def GenSteps(api):
   mastername = api.properties.get('mastername')
   buildername = api.properties.get('buildername')
-  master_dict = BUILDERS.get(mastername, {})
+  master_dict = api.webrtc.BUILDERS.get(mastername, {})
   bot_config = master_dict.get('builders', {}).get(buildername)
   assert bot_config, (
       'Unrecognized builder name %r for master %r.' % (
@@ -42,7 +28,7 @@ def GenSteps(api):
   assert recipe_config_name, (
       'Unrecognized builder name %r for master %r.' % (
           buildername, mastername))
-  recipe_config = builders.RECIPE_CONFIGS[recipe_config_name]
+  recipe_config = api.webrtc.RECIPE_CONFIGS[recipe_config_name]
 
   api.webrtc.set_config(recipe_config['webrtc_config'],
                         **bot_config.get('webrtc_config_kwargs', {}))
@@ -75,7 +61,7 @@ def _sanitize_nonalpha(text):
 
 
 def GenTests(api):
-  for mastername, master_config in BUILDERS.iteritems():
+  for mastername, master_config in api.webrtc.BUILDERS.iteritems():
     for buildername, bot_config in master_config['builders'].iteritems():
       bot_type = bot_config.get('bot_type', 'builder_tester')
 
