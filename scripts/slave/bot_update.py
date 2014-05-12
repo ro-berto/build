@@ -413,6 +413,7 @@ def solutions_to_git(input_solutions):
 
   returns: (git solution, svn root of first solution) tuple.
   """
+  warnings = []
   assert input_solutions
   solutions = copy.deepcopy(input_solutions)
   first_solution = True
@@ -431,7 +432,8 @@ def solutions_to_git(input_solutions):
     elif parsed_path in RECOGNIZED_PATHS:
       solution['url'] = RECOGNIZED_PATHS[parsed_path]
     else:
-      print 'Warning: path %s not recognized' % parsed_path
+      warnings.append('path %r not recognized' % parsed_path)
+      print 'Warning: %s' % (warnings[-1],)
 
     # Point .DEPS.git is the git version of the DEPS file.
     solution['deps_file'] = '.DEPS.git'.join(
@@ -448,7 +450,7 @@ def solutions_to_git(input_solutions):
       print 'Removing safesync url %s from %s' % (solution['safesync_url'],
                                                   parsed_path)
       del solution['safesync_url']
-  return solutions, root, buildspec_name
+  return solutions, root, buildspec_name, warnings
 
 
 def ensure_no_checkout(dir_names, scm_dirname):
@@ -1205,8 +1207,8 @@ def main():
   specs = {}
   exec(options.specs, specs)
   svn_solutions = specs.get('solutions', [])
-  git_solutions, svn_root, buildspec_name = solutions_to_git(svn_solutions)
-  solutions_printer(git_solutions)
+  git_slns, svn_root, buildspec_name, warnings = solutions_to_git(svn_solutions)
+  solutions_printer(git_slns)
 
   # Lets send some telemetry data about bot_update here. This returns a thread
   # object so we can join on it later.
@@ -1216,7 +1218,8 @@ def main():
                          builder=builder,
                          slave=slave,
                          specs=options.specs,
-                         git_solutions=git_solutions,
+                         git_solutions=git_slns,
+                         conversion_warnings=warnings,
                          solutions=specs.get('solutions', []))
   all_threads.append(thr)
 
@@ -1266,7 +1269,7 @@ def main():
   try:
     checkout_parameters = dict(
         # First, pass in the base of what we want to check out.
-        solutions=git_solutions,
+        solutions=git_slns,
         revisions=revisions,
         first_sln=first_sln,
 
@@ -1325,7 +1328,8 @@ def main():
                          did_run=True,
                          patch_root=options.root,
                          solutions=specs['solutions'],
-                         git_solutions=git_solutions,
+                         git_solutions=git_slns,
+                         conversion_warnings=warnings,
                          specs=options.specs)
   all_threads.append(thr)
 
