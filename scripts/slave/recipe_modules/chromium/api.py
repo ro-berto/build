@@ -305,6 +305,19 @@ class ChromiumApi(recipe_api.RecipeApi):
       'cleanup_temp',
       self.m.path['build'].join('scripts', 'slave', 'cleanup_temp.py'))
 
+  def crash_handler(self):
+    return self.m.python(
+        'start_crash_service',
+        self.m.path['build'].join('scripts', 'slave', 'chromium',
+                                  'run_crash_handler.py'),
+        ['--target', self.c.build_config_fs])
+
+  def process_dumps(self):
+    return self.m.python(
+        'process_dumps',
+        self.m.path['build'].join('scripts', 'slave', 'process_dumps.py'),
+        ['--target', self.c.build_config_fs])
+
   def archive_build(self, step_name, gs_bucket, **kwargs):
     """Returns a step invoking archive_build.py to archive a Chromium build."""
 

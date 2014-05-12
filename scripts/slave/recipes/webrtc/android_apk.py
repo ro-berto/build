@@ -173,19 +173,12 @@ def GenSteps(api):
     yield api.base_android.compile()
 
   if bot_type == 'builder':
-    yield(api.archive.zip_and_upload_build(
-          'package build',
-          api.chromium.c.build_config_fs,
-          GS_ARCHIVES[bot_config['build_gs_archive']],
-          build_revision=revision))
+    yield api.webrtc.package_build(GS_ARCHIVES[bot_config['build_gs_archive']],
+                                   revision)
 
   if bot_type == 'tester':
-    yield(api.archive.download_and_unzip_build(
-          'extract build',
-          api.chromium.c.build_config_fs,
-          GS_ARCHIVES[bot_config['build_gs_archive']],
-          build_revision=revision,
-          abort_on_failure=True))
+    yield api.webrtc.extract_build(GS_ARCHIVES[bot_config['build_gs_archive']],
+                                   revision)
 
   if bot_type in ['tester', 'builder_tester']:
     yield api.chromium_android.common_tests_setup_steps()

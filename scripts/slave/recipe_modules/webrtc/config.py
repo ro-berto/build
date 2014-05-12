@@ -69,3 +69,8 @@ def webrtc_android_apk_try_builder(c):
 def webrtc_ios(c):
   pass
 
+
+# Only exists to be able to set the MEASURE_PERF configuration.
+@config_ctx()
+def chromium(c):
+  pass

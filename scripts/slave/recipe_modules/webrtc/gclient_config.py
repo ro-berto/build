@@ -17,9 +17,9 @@ def webrtc_clang(c):
   pass
 
 
-@CONFIG_CTX(includes=['webrtc'])
+@CONFIG_CTX(includes=['webrtc', 'android'])
 def webrtc_android(c):
-  c.target_os = ['android']
+  pass
 
 
 @CONFIG_CTX(includes=['webrtc_android'])
@@ -27,23 +27,10 @@ def webrtc_android_clang(c):
   pass
 
 
-@CONFIG_CTX(includes=['chromium', '_webrtc_limited'])
+@CONFIG_CTX(includes=['chromium', 'android', '_webrtc_limited',
+                      '_webrtc_deps', '_webrtc_tot_in_chromium'])
 def webrtc_android_apk(c):
-  c.target_os = ['android']
-
-  # The webrtc.DEPS solution pulls in additional resources needed for running
-  # WebRTC-specific test setups in Chrome.
-  s = c.solutions.add()
-  s.name = 'webrtc.DEPS'
-  s.url = ChromiumSvnSubURL(c, 'chrome', 'trunk', 'deps', 'third_party',
-                            'webrtc', 'webrtc.DEPS')
-  s.deps_file = 'DEPS'
-
-  # Have the WebRTC revision appear in the web UI instead of Chromium's.
-  del c.got_revision_mapping['src']
-  c.got_revision_mapping['src/third_party/webrtc'] = 'got_revision'
-  # Needed to get the testers to properly sync the right revision.
-  c.parent_got_revision_mapping['parent_got_revision'] = 'got_revision'
+  pass
 
 
 @CONFIG_CTX(includes=['webrtc'])
@@ -62,6 +49,17 @@ def valgrind(c):
       ChromiumSvnSubURL(c, 'chrome', 'trunk', 'deps', 'third_party', 'valgrind',
                         'binaries')
 
+
+@CONFIG_CTX(includes=['chromium', '_webrtc_deps'])
+def chromium_webrtc(c):
+  pass
+
+
+@CONFIG_CTX(includes=['chromium', '_webrtc_deps', '_webrtc_tot_in_chromium'])
+def chromium_webrtc_tot(c):
+  pass
+
+
 @CONFIG_CTX()
 def _webrtc(c):
   """Add the main solution for WebRTC standalone builds.
@@ -76,6 +74,37 @@ def _webrtc(c):
   s.deps_file = 'DEPS'
   s.custom_vars['root_dir'] = 'src'
   c.got_revision_mapping['src'] = 'got_revision'
+
+
+@CONFIG_CTX()
+def _webrtc_deps(c):
+  """Add webrtc.DEPS solution for test resources and tools.
+
+  The webrtc.DEPS solution pulls in additional resources needed for running
+  WebRTC-specific test setups in Chromium.
+  """
+  s = c.solutions.add()
+  s.name = 'webrtc.DEPS'
+  s.url = ChromiumSvnSubURL(c, 'chrome', 'trunk', 'deps', 'third_party',
+                            'webrtc', 'webrtc.DEPS')
+  s.deps_file = 'DEPS'
+
+
+# Needs to depend on 'chromium' in order to pass recipe_configs_test.py.
+@CONFIG_CTX(includes=['chromium'])
+def _webrtc_tot_in_chromium(c):
+  """Configures src/third_party/webrtc to be the revision decider.
+
+  WebRTC's Android APK tests are built from a Chromium checkout with
+  src/third_party/webrtc replaced with ToT instead of the DEPS-pinned revision.
+  There are also similar Chromium builders and testers used to catch pre-roll
+  test failures for new WebRTC revisions.
+  """
+  # Have the WebRTC revision appear in the web UI instead of Chromium's.
+  del c.got_revision_mapping['src']
+  c.got_revision_mapping['src/third_party/webrtc'] = 'got_revision'
+  # Needed to get the testers to properly sync the right revision.
+  c.parent_got_revision_mapping['parent_got_revision'] = 'got_revision'
 
 
 @CONFIG_CTX()

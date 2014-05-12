@@ -21,6 +21,7 @@ def GenSteps(api):
   buildername = api.properties.get('buildername')
   master_dict = api.webrtc.BUILDERS.get(mastername, {})
   bot_config = master_dict.get('builders', {}).get(buildername)
+  bot_type = bot_config.get('bot_type', 'builder_tester')
   assert bot_config, (
       'Unrecognized builder name %r for master %r.' % (
           buildername, mastername))
@@ -50,9 +51,10 @@ def GenSteps(api):
 
   steps.append(api.chromium.runhooks())
   steps.append(api.chromium.compile())
-  if recipe_config.get('test_suite'):
-    steps.append(api.webrtc.runtests(
-        test_suite=recipe_config.get('test_suite')))
+
+  test_suite = recipe_config.get('test_suite')
+  if test_suite and bot_type in ['builder_tester', 'tester']:
+    steps.extend(api.webrtc.runtests(test_suite))
   yield steps
 
 
@@ -61,7 +63,8 @@ def _sanitize_nonalpha(text):
 
 
 def GenTests(api):
-  for mastername, master_config in api.webrtc.BUILDERS.iteritems():
+  for mastername in ('client.webrtc', 'client.webrtc.fyi', 'tryserver.webrtc'):
+    master_config = api.webrtc.BUILDERS[mastername]
     for buildername, bot_config in master_config['builders'].iteritems():
       bot_type = bot_config.get('bot_type', 'builder_tester')
 

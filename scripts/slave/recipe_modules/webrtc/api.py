@@ -38,6 +38,19 @@ class WebRTCApi(recipe_api.RecipeApi):
     'video_engine_tests',
   ])
 
+  # Map of GS archive names to urls.
+  # TODO(kjellander): Convert to use the auto-generated URLs once we've setup a
+  # separate bucket per master.
+  GS_ARCHIVES = {
+    'android_dbg_archive': 'gs://chromium-webrtc/android_chromium_dbg',
+    'android_dbg_archive_fyi': ('gs://chromium-webrtc/'
+                                'android_chromium_trunk_dbg'),
+    'win_rel_archive': 'gs://chromium-webrtc/Win Builder',
+    'win_rel_archive_fyi': 'gs://chromium-webrtc/win_rel-fyi',
+    'mac_rel_archive': 'gs://chromium-webrtc/Mac Builder',
+    'linux_rel_archive': 'gs://chromium-webrtc/Linux Builder',
+  }
+
   DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
 
   def runtests(self, test_suite=None):
@@ -81,6 +94,32 @@ class WebRTCApi(recipe_api.RecipeApi):
       steps.append(self.virtual_webcam_check())
       steps.append(self.add_test('video_capture_tests'))
       steps.append(self.add_test('webrtc_perf_tests', perf_test=True))
+    elif test_suite == 'chromium':
+      # Many of these tests run in the Chromium WebRTC waterfalls are not run in
+      # the main Chromium waterfalls as they are marked as MANUAL_. This is
+      # because they rely on physical audio and video devices, which are only
+      # available at bare-metal machines.
+      steps.append(self.add_test(
+          test='content_browsertests', name='content_browsertests (webrtc)',
+          args=['--gtest_filter=WebRtc*', '--run-manual',
+                '--test-launcher-print-test-stdio=always'],
+          perf_test=True))
+      steps.append(self.add_test(
+          test='browser_tests', name='browser_tests (webrtc)',
+          # These tests needs --test-launcher-jobs=1 since some of them are
+          # not able to run in parallel (due to the usage of the
+          # peerconnection server).
+          args = ['--gtest_filter=WebRtc*',
+                  '--run-manual', '--ui-test-action-max-timeout=300000',
+                  '--test-launcher-jobs=1',
+                  '--test-launcher-print-test-stdio=always'],
+          perf_test=True))
+      steps.append(self.add_test(
+          test='content_unittests', name='content_unittests (webrtc)',
+          args=['--gtest_filter=WebRTC*:RTC*:MediaStream*']))
+
+      if self.m.properties['mastername'].endswith('chromium.webrtc.fyi'):
+        steps.append(self.add_test('sizes'))
 
     return steps
 
@@ -98,6 +137,21 @@ class WebRTCApi(recipe_api.RecipeApi):
       return self.m.chromium.runtest(
           test=test, args=args, name=name, annotate='gtest', xvfb=True,
               test_type=test, env=env)
+
+  def package_build(self, gs_url, revision):
+    yield self.m.archive.zip_and_upload_build(
+        'package build',
+        self.m.chromium.c.build_config_fs,
+        gs_url,
+        build_revision=revision)
+
+  def extract_build(self, gs_url, revision):
+    yield self.m.archive.download_and_unzip_build(
+        'extract build',
+        self.m.chromium.c.build_config_fs,
+        gs_url,
+        build_revision=revision,
+        abort_on_failure=True)
 
   def apply_svn_patch(self):
     script = self.m.path['build'].join('scripts', 'slave', 'apply_svn_patch.py')

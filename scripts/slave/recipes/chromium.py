@@ -1563,19 +1563,12 @@ def GenSteps(api):
 
   if bot_type in ['tester', 'builder_tester'] and bot_config.get('tests'):
     if api.platform.is_win:
-      steps.append(api.python(
-        'start_crash_service',
-        api.path['build'].join('scripts', 'slave', 'chromium',
-                               'run_crash_handler.py'),
-        ['--target', api.chromium.c.build_config_fs]))
+      steps.append(api.chromium.crash_handler())
 
     steps.extend([t.run(api) for t in bot_config['tests']])
 
     if api.platform.is_win:
-      steps.append(api.python(
-        'process_dumps',
-        api.path['build'].join('scripts', 'slave', 'process_dumps.py'),
-        ['--target', api.chromium.c.build_config_fs]))
+      steps.append(api.chromium.process_dumps())
 
   # For non-trybot recipes we should know (seed) all steps in advance,
   # at the beginning of each build. Instead of yielding single steps
