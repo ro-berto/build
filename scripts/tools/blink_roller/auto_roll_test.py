@@ -16,7 +16,7 @@ from testing_support.super_mox import SuperMoxTestBase
 # pylint: disable=W0212
 
 
-class SheriffCalendarTest(unittest.TestCase):
+class SheriffCalendarTest(SuperMoxTestBase):
 
   def test_complete_email(self):
     expected_emails = ['foo@chromium.org', 'bar@google.com', 'baz@chromium.org']
@@ -57,6 +57,12 @@ class SheriffCalendarTest(unittest.TestCase):
     self.assertFalse(auto_roll._email_is_valid('some body@example.com'))
     self.assertFalse(auto_roll._email_is_valid('[some body]@example.com'))
 
+  def test_filter_emails(self):
+    input_emails = ['foo@bar.com', 'baz@baz.com', 'bogus email @ !!!']
+    expected_emails = ['foo@bar.com', 'baz@baz.com']
+    self.assertEquals(auto_roll._filter_emails(input_emails), expected_emails)
+    self.checkstdout('WARNING: Not including bogus email @ !!! '
+                     '(invalid email address)\n')
 
 class AutoRollTestBase(SuperMoxTestBase):
 

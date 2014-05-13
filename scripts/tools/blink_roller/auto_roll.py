@@ -87,6 +87,7 @@ def _filter_emails(emails):
       rv.append(email)
     else:
       print 'WARNING: Not including %s (invalid email address)' % email
+  return rv
 
 
 def _emails_from_url(sheriff_url):
@@ -382,4 +383,3 @@ def main():
 
 if __name__ == '__main__':
   sys.exit(main())
-
