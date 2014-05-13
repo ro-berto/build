@@ -1051,9 +1051,12 @@ class FactoryCommands(object):
   # Zip / Extract commands.
   def AddZipBuild(self, halt_on_failure=False, factory_properties=None):
     factory_properties = factory_properties or {}
+    revision = factory_properties.get('got_revision')
 
     cmd = [self._python, self._zip_tool,
            '--target', self._target]
+    if revision:
+      cmd.extend(['--build_revision', revision])
 
     if 'webkit_dir' in factory_properties:
       cmd += ['--webkit-dir', factory_properties['webkit_dir']]
@@ -1076,10 +1079,14 @@ class FactoryCommands(object):
     contains the actual build.
     """
     factory_properties = factory_properties or {}
+    revision = (factory_properties.get('parent_got_revision')
+                or factory_properties.get('got_revision'))
 
     cmd = [self._python, self._extract_tool,
            '--target', self._target,
            '--build-url', build_url]
+    if revision:
+      cmd.extend(['--build_revision', revision])
 
     if 'webkit_dir' in factory_properties:
       cmd += ['--webkit-dir', factory_properties['webkit_dir']]
