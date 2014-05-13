@@ -158,7 +158,7 @@ class DartCommands(commands.FactoryCommands):
                           logfiles=self.logfiles,
                           lazylogfiles=True)
 
-  def AddDart2dartTests(self, options, timeout):
+  def AddDart2dartTests(self, options, name, timeout):
     shards = options.get('shards') or 1
     shard = options.get('shard') or 1
     cmd = ('python ' + self._tools_dir + '/test.py '
@@ -166,6 +166,8 @@ class DartCommands(commands.FactoryCommands):
            ' --compiler=dart2dart --shards=%s --shard=%s %s'
            ) % (options['mode'], options['arch'], shards, shard,
                 self.standard_flags)
+    if 'backend' in name:
+      cmd += ' --builder-tag=new_backend'
     self._factory.addStep(shell.ShellCommand,
                           name='tests',
                           description='tests',
@@ -240,7 +242,7 @@ class DartCommands(commands.FactoryCommands):
     if is_analyzer:
       self.AddAnalyzerTests(options, name, timeout)
     elif is_dart2dart:
-      self.AddDart2dartTests(options, timeout)
+      self.AddDart2dartTests(options, name, timeout)
     else:
       self.AddVMTests(options, timeout, channel)
 
