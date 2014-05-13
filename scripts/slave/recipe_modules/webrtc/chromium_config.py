@@ -19,7 +19,8 @@ def webrtc(c):
                                'webrtc_tests', platform_ext={'win': '.bat',
                                                              'mac': '.sh',
                                                              'linux': '.sh'})
-
+  if c.TARGET_PLATFORM == 'mac' and c.TARGET_BITS == 64:
+    c.gyp_env.GYP_DEFINES['mac_sdk'] = '10.7'
 
 @CONFIG_CTX(includes=['chromium_clang'])
 def webrtc_clang(c):
