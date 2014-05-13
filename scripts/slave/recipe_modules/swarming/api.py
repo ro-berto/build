@@ -6,7 +6,7 @@ from slave import recipe_api
 
 
 # Minimally supported version of swarming.py script (reported by --version).
-MINIMAL_SWARMING_VERSION = (0, 4, 7)
+MINIMAL_SWARMING_VERSION = (0, 4, 8)
 
 
 # Platform name as provided by 'platform' module -> Swarming OS dimension.
@@ -346,6 +346,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     args = [
       'collect',
       '--swarming', self.swarming_server,
+      '--shards', str(task.shards),
       '--decorate',
       '--print-status-updates',
     ]

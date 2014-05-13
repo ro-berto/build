@@ -73,7 +73,7 @@
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@0.4.7@@@"
+      "@@@STEP_TEXT@0.4.8@@@"
     ]
   },
   {
@@ -210,6 +210,8 @@
       "collect",
       "--swarming",
       "https://chromium-swarm-dev.appspot.com",
+      "--shards",
+      "1",
       "--decorate",
       "--print-status-updates",
       "--verbose",
@@ -236,6 +238,8 @@
       "collect",
       "--swarming",
       "https://chromium-swarm-dev.appspot.com",
+      "--shards",
+      "1",
       "--decorate",
       "--print-status-updates",
       "--verbose",
