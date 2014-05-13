@@ -127,14 +127,9 @@ ENABLED_MASTERS = [
     'chromium.git',
     'chromium.linux',
     'chromium.mac',
+    'chromium.fyi',
 ]
 ENABLED_BUILDERS = {
-    'chromium.fyi': [
-        'Linux Trusty (32)',
-        'Linux Trusty (dbg)',
-        'Linux Trusty (dbg)(32)',
-        'Linux Trusty',
-    ],
     'tryserver.chromium': [
         'linux_rel_alt',
 
@@ -202,6 +197,27 @@ DISABLED_BUILDERS = {
         # This one is not a builder/tester split, but runs into issues because
         # its a 40GB bot.
         'Android Clang Builder (dbg)',
+    ],
+    'chromium.fyi': [
+        'Windows Browser (DrMemory light) (1)',
+        'Windows Browser (DrMemory light) (2)',
+        'Windows Builder (DrMemory)',
+        'Windows Tests (DrMemory XP)',
+        'Windows Content (DrMemory light)',
+        'Windows Content Unit (DrMemory full)',
+        'Windows Content Browser (DrMemory full) (1)',
+        'Windows Content Browser (DrMemory full) (2)',
+        'Windows Content Browser (DrMemory full) (3)',
+        'Windows Content Browser (DrMemory full) (4)',
+        'Windows Browser (DrMemory full) (1)',
+        'Windows Browser (DrMemory full) (2)',
+        'Windows Browser (DrMemory full) (3)',
+        'Windows Browser (DrMemory full) (4)',
+        'Windows Browser (DrMemory full) (5)',
+        'Windows Browser (DrMemory full) (6)',
+        'Windows Browser (DrMemory full) (7)',
+        'Windows Browser (DrMemory full) (8)',
+        'Windows Browser (DrMemory full) (9)',
     ]
 }
 DISABLED_SLAVES = {}
