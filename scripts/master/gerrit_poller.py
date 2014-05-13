@@ -3,7 +3,9 @@
 # found in the LICENSE file.
 
 import datetime
+import logging
 import os
+import urllib
 
 from buildbot.changes import base
 from buildbot.util import deferredLocked
@@ -67,14 +69,39 @@ class GerritPoller(base.PollingChangeSource):
       self.initLastTimeStamp()
     base.PollingChangeSource.startService(self)
 
+  @staticmethod
+  def buildQuery(terms, operator=None):
+    """Builds a Gerrit query from terms.
+
+    This function will go away once the new GerritAgent lands.
+    """
+    connective = ('+%s+' % operator) if operator else '+'
+    terms_with_parens = [('(%s)' % t) if ('+' in t) else t
+                         for t in terms]
+    return connective.join(terms_with_parens)
+
   def getChangeQuery(self):  # pylint: disable=R0201
-    return 'status:open'
+    # Fetch only open issues.
+    terms = ['status:open']
+
+    # Filter by projects.
+    if self.gerrit_projects:
+      project_terms = ['project:%s' % urllib.quote(p, safe='')
+                       for p in self.gerrit_projects]
+      terms.append(self.buildQuery(project_terms, 'OR'))
+
+    return self.buildQuery(terms)
+
+  def request(self, path, method='GET'):
+    log.msg('Gerrit request: %s' % path, logLevel=logging.DEBUG)
+    return self.agent.request(method, path)
 
   @deferredLocked('initLock')
   def initLastTimeStamp(self):
     log.msg('GerritPoller: Getting latest timestamp from gerrit server.')
-    path = '/changes/?q=%s&n=1' % self.getChangeQuery()
-    d = self.agent.request('GET', path)
+    query = self.getChangeQuery()
+    path = '/changes/?q=%s&n=1' % query
+    d = self.request(path)
     def _get_timestamp(j):
       if len(j) == 0:
         self.last_timestamp = datetime.datetime.now()
@@ -87,7 +114,7 @@ class GerritPoller(base.PollingChangeSource):
     path = '/changes/?q=%s&n=10' % self.getChangeQuery()
     if skip:
       path += '&S=%d' % skip
-    return self.agent.request('GET', path)
+    return self.request(path)
 
   def _is_interesting_message(self, message):  # pylint: disable=R0201
     return message['message'].startswith('Uploaded patch set ')
@@ -96,7 +123,7 @@ class GerritPoller(base.PollingChangeSource):
     o_params = '&'.join('o=%s' % x for x in (
         'MESSAGES', 'ALL_REVISIONS', 'ALL_COMMITS', 'ALL_FILES'))
     path = '/changes/%s?%s' % (change['_number'], o_params)
-    d = self.agent.request('GET', path)
+    d = self.request(path)
     def _parse_messages(j):
       if not j or 'messages' not in j:
         return
