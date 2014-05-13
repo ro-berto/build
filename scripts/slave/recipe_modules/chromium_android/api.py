@@ -473,7 +473,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def run_instrumentation_suite(self, test_apk, test_data, flakiness_dashboard,
                                 annotation=None, except_annotation=None,
-                                screenshot=False):
+                                screenshot=False, **kwargs):
     args = ['--test-apk', test_apk,
             '--test_data', test_data,
             '--flakiness-dashboard-server', flakiness_dashboard]
@@ -495,7 +495,8 @@ class AndroidApi(recipe_api.RecipeApi):
         'Instrumentation test %s' % (annotation or test_data),
         self.m.path['checkout'].join('build', 'android', 'test_runner.py'),
         args=['instrumentation'] + args,
-        always_run=True)
+        always_run=True,
+        **kwargs)
 
   def logcat_dump(self):
     if self.m.step_history.get('spawn_logcat_monitor'):
@@ -609,7 +610,9 @@ class AndroidApi(recipe_api.RecipeApi):
               '--metadata-dir', self.out_path.join(self.c.BUILD_CONFIG),
               '--cleanup',
               '--output', self.coverage_dir.join('coverage_html',
-                                                 'index.html')])
+                                                 'index.html')],
+        always_run=True,
+        **kwargs)
 
     yield self.m.gsutil.upload(
         source=self.coverage_dir.join('coverage_html'),
@@ -618,4 +621,5 @@ class AndroidApi(recipe_api.RecipeApi):
         args=['-R'],
         name='upload coverage report',
         link_name='Coverage report',
+        always_run=True,
         **kwargs)

@@ -387,6 +387,7 @@
     "name": "stack_tool_for_tombstones"
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -402,6 +403,7 @@
     "name": "Generate coverage report"
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
