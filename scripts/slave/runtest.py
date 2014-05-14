@@ -11,8 +11,10 @@ build directory, e.g. chrome-release/build/.
 For a list of command-line options, call this script with '--help'.
 """
 
+import ast
 import copy
 import datetime
+import exceptions
 import gzip
 import hashlib
 import json
@@ -988,7 +990,7 @@ def _MainMac(options, args):
         options.build_properties.get('buildername'),
         options.build_properties.get('buildnumber'),
         options.supplemental_columns_file,
-        options.factory_properties.get('perf_config'))
+        options.perf_config)
 
   return result
 
@@ -1261,7 +1263,7 @@ def _MainLinux(options, args):
         options.build_properties.get('buildername'),
         options.build_properties.get('buildnumber'),
         options.supplemental_columns_file,
-        options.factory_properties.get('perf_config'))
+        options.perf_config)
 
   return result
 
@@ -1382,7 +1384,7 @@ def _MainWin(options, args):
         options.build_properties.get('buildername'),
         options.build_properties.get('buildnumber'),
         options.supplemental_columns_file,
-        options.factory_properties.get('perf_config'))
+        options.perf_config)
 
   return result
 
@@ -1444,7 +1446,7 @@ def _MainAndroid(options, args):
         options.build_properties.get('buildername'),
         options.build_properties.get('buildnumber'),
         options.supplemental_columns_file,
-        options.factory_properties.get('perf_config'))
+        options.perf_config)
 
   return result
 
@@ -1587,6 +1589,12 @@ def main():
                                 'to.')
   option_parser.add_option('--perf-id', default='',
                            help='The perf builder id')
+  option_parser.add_option('--perf-config', default='',
+                           help='Perf configuration dictionary (as a string). '
+                                'This allows to specify custom revisions to be '
+                                'the main revision at the Perf dashboard. '
+                                'Example: --perf-config="{\'a_default_rev\': '
+                                '\'r_webrtc_rev\'}"')
   option_parser.add_option('--supplemental-columns-file',
                            default='supplemental_columns',
                            help='A file containing a JSON blob with a dict '
@@ -1787,6 +1795,19 @@ def main():
     if options.total_shards and options.shard_index:
       os.environ['GTEST_TOTAL_SHARDS'] = str(options.total_shards)
       os.environ['GTEST_SHARD_INDEX'] = str(options.shard_index - 1)
+
+    # If perf config is passed via command line, parse the string into a dict.
+    if options.perf_config:
+      try:
+        options.perf_config = ast.literal_eval(options.perf_config)
+      except (exceptions.SyntaxError, ValueError):
+        option_parser.error('Failed to parse --perf-config value into a dict: '
+                            '%s' % options.perf_config)
+        return 1
+
+    # Allow factory property 'perf_config' as well during a transition period.
+    options.perf_config = (options.perf_config or
+                           options.factory_properties.get('perf_config'))
 
     if options.results_directory:
       options.test_output_xml = os.path.normpath(os.path.abspath(os.path.join(
