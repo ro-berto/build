@@ -70,6 +70,21 @@
   },
   {
     "cmd": [
+      "git",
+      "-c",
+      "user.email=commit-bot@chromium.org",
+      "-c",
+      "user.name=The Commit Bot",
+      "commit",
+      "-a",
+      "-m",
+      "Committed patch"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "commit git patch"
+  },
+  {
+    "cmd": [
       "[DEPOT_TOOLS]/presubmit_support.py",
       "--root",
       "[SLAVE_BUILD]/src",
