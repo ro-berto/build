@@ -222,6 +222,7 @@
       "python",
       "-u",
       "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "--",
       "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
       "cp",
       "[SLAVE_BUILD]/src/out/build_product.zip",
