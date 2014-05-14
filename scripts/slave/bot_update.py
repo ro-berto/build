@@ -1266,13 +1266,16 @@ def main():
   dir_names = [sln.get('name') for sln in svn_solutions if 'name' in sln]
   # If we're active now, but the flag file doesn't exist (we weren't active last
   # run) or vice versa, blow away all checkouts.
-  if bool(active) != bool(check_flag(options.flag_file)) or options.clobber:
+  if bool(active) != bool(check_flag(options.flag_file)):
     ensure_no_checkout(dir_names, '*')
   if options.output_json:
     # Make sure we tell recipes that we didn't run if the script exits here.
     emit_json(options.output_json, did_run=active)
   if active:
-    ensure_no_checkout(dir_names, '.svn')
+    if options.clobber:
+      ensure_no_checkout(dir_names, '*')
+    else:
+      ensure_no_checkout(dir_names, '.svn')
     emit_flag(options.flag_file)
   else:
     delete_flag(options.flag_file)
