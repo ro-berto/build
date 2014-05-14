@@ -47,21 +47,6 @@
   {
     "cmd": [
       "git",
-      "commit",
-      "-c",
-      "user.email=commit-bot@chromium.org",
-      "-c",
-      "user.name=The Commit Bot",
-      "-a",
-      "-m",
-      "Committed patch"
-    ],
-    "cwd": "[SLAVE_BUILD]/build/build",
-    "name": "git commit"
-  },
-  {
-    "cmd": [
-      "git",
       "config",
       "user.email",
       "commit-bot@chromium.org"
