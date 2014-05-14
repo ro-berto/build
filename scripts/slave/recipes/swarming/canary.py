@@ -33,8 +33,9 @@ def GenSteps(api):
   # so that they take precedence over manually triggered tasks.
   api.swarming.task_priority = 20
 
-  # We are building simplest Chromium flavor possible, Release mode.
-  api.chromium.set_config('chromium', BUILD_CONFIG='Release')
+  # We are building simplest Chromium flavor possible.
+  api.chromium.set_config(
+      'chromium', BUILD_CONFIG=api.properties.get('configuration', 'Release'))
 
   # We are checking out Chromium with swarming_client dep unpinned and pointing
   # to ToT of swarming_client repo, see recipe_modules/gclient/config.py.
@@ -79,8 +80,10 @@ def GenSteps(api):
 
 def GenTests(api):
   for platform in ('linux', 'win', 'mac'):
-    yield (
-      api.test(platform) +
-      api.platform.name(platform) +
-      api.properties.scheduled()
-    )
+    for configuration in ('Debug', 'Release'):
+      yield (
+        api.test('%s_%s' % (platform, configuration)) +
+        api.platform.name(platform) +
+        api.properties.scheduled() +
+        api.properties(configuration=configuration)
+      )

@@ -35,8 +35,6 @@ class IsolateApi(recipe_api.RecipeApi):
     before calling this method if the default value (production instance of
     Isolate service) is not ok.
     """
-    assert config.gyp_env.GYP_DEFINES['component'] != 'shared_library', (
-      'isolates don\'t work with the component build yet; see crbug.com/333473')
     config.gyp_env.GYP_DEFINES['test_isolation_mode'] = 'archive'
     config.gyp_env.GYP_DEFINES['test_isolation_outdir'] = self._isolate_server
 
@@ -92,7 +90,7 @@ class IsolateApi(recipe_api.RecipeApi):
     """
     hashes = self.m.properties.get('swarm_hashes', self._isolated_tests)
     return {
-      k.encode('ascii'): v.encode('ascii') 
+      k.encode('ascii'): v.encode('ascii')
       for k, v in hashes.iteritems()
     }
 
