@@ -952,7 +952,7 @@ def _MainMac(options, args):
       command.append('--test-launcher-summary-output=%s' % json_file_name)
 
     pipes = []
-    if options.factory_properties.get('asan', False):
+    if options.enable_asan:
       symbolize = os.path.abspath(os.path.join('src', 'tools', 'valgrind',
                                                'asan', 'asan_symbolize.py'))
       pipes = [[sys.executable, symbolize], ['c++filt']]
@@ -1143,7 +1143,7 @@ def _MainLinux(options, args):
 
   # Decide whether to enable the suid sandbox for Chrome.
   if (_ShouldEnableSandbox(CHROME_SANDBOX_PATH) and
-      not options.factory_properties.get('tsan', False) and
+      not options.enable_tsan and
       not options.enable_lsan):
     print 'Enabling sandbox.  Setting environment variable:'
     print '  CHROME_DEVEL_SANDBOX="%s"' % CHROME_SANDBOX_PATH
@@ -1222,9 +1222,7 @@ def _MainLinux(options, args):
 
     pipes = []
     # See the comment in main() regarding offline symbolization.
-    if ((options.factory_properties.get('asan', False) or
-        options.factory_properties.get('msan', False)) and
-        not options.enable_lsan):
+    if (options.enable_asan or options.enable_msan) and not options.enable_lsan:
       symbolize = os.path.abspath(os.path.join('src', 'tools', 'valgrind',
                                                'asan', 'asan_symbolize.py'))
       pipes = [[sys.executable, symbolize], ['c++filt']]
@@ -1600,10 +1598,34 @@ def main():
                                 'is automatically extracted from the checkout.')
   option_parser.add_option('--webkit-revision',
                            help='See --revision.')
-  option_parser.add_option('--enable-lsan', default=False,
+  option_parser.add_option('--enable-asan', action='store_true', default=False,
+                           help='Enable fast memory error detection '
+                                '(AddressSanitizer). Can also enabled with the '
+                                'factory property "asan" (deprecated).')
+  option_parser.add_option('--enable-lsan', action='store_true', default=False,
                            help='Enable memory leak detection (LeakSanitizer). '
-                                'Also can be enabled with the factory '
-                                'properties "lsan" and "lsan_run_all_tests".')
+                                'Can also be enabled with the factory '
+                                'properties "lsan" and "lsan_run_all_tests" '
+                                '(deprecated).')
+  option_parser.add_option('--lsan-suppressions-file',
+                           default='src/tools/lsan/suppressions.txt',
+                           help='Suppression file for LeakSanitizer. '
+                                'Default: %default.')
+  option_parser.add_option('--enable-msan', action='store_true', default=False,
+                           help='Enable uninitialized memory reads detection '
+                                '(MemorySanitizer). Can also enabled with the '
+                                'factory property "msan" (deprecated).')
+  option_parser.add_option('--enable-tsan', action='store_true', default=False,
+                           help='Enable data race detection '
+                                '(ThreadSanitizer). Can also enabled with the '
+                                'factory property "tsan" (deprecated).')
+  option_parser.add_option('--tsan-suppressions-file',
+                           default=('src/tools/valgrind/tsan_v2/'
+                                    'suppressions.txt'),
+                           help='Suppression file for ThreadSanitizer. '
+                                'Default: %default. Can also be specified '
+                                'using the factory property '
+                                '"tsan_suppressions_file" (deprecated).')
   option_parser.add_option('--extra-sharding-args', default='',
                            help='Extra options for run_test_cases.py.')
   option_parser.add_option('--no-spawn-dbus', action='store_true',
@@ -1655,10 +1677,18 @@ def main():
         'content_browsertests',
         'interactive_ui_tests',
     ]
+    options.enable_asan = (options.enable_asan or
+                           options.factory_properties.get('asan', False))
+    options.enable_msan = (options.enable_msan or
+                           options.factory_properties.get('msan', False))
+    options.enable_tsan = (options.enable_tsan or
+                           options.factory_properties.get('tsan', False))
+    options.tsan_suppressions_file = (options.tsan_suppressions_file or
+        options.factory_properties.get('tsan_suppressions_file'))
     options.enable_lsan = (options.enable_lsan or
-       (options.factory_properties.get('lsan', False) and
+        (options.factory_properties.get('lsan', False) and
         (options.factory_properties.get('lsan_run_all_tests', False) or
-         args[0] not in lsan_blacklist)))
+        args[0] not in lsan_blacklist)))
 
     extra_sharding_args_list = options.extra_sharding_args.split()
 
@@ -1666,9 +1696,9 @@ def main():
     # enable verbose output. We support both.
     always_print_test_output = ['--verbose',
                                 '--test-launcher-print-test-stdio=always']
-    if options.factory_properties.get('asan', False):
+    if options.enable_asan:
       extra_sharding_args_list.extend(always_print_test_output)
-    if options.factory_properties.get('tsan', False):
+    if options.enable_tsan:
       # Print ThreadSanitizer reports; don't cluster the tests so that TSan exit
       # code denotes a test failure.
       extra_sharding_args_list.extend(always_print_test_output)
@@ -1679,9 +1709,8 @@ def main():
 
     options.extra_sharding_args = ' '.join(extra_sharding_args_list)
 
-    if (options.factory_properties.get('asan', False) or
-        options.factory_properties.get('tsan', False) or
-        options.factory_properties.get('msan', False) or options.enable_lsan):
+    if (options.enable_asan or options.enable_tsan or
+        options.enable_msan or options.enable_lsan):
       # Instruct GTK to use malloc while running ASan, TSan, MSan or LSan tests.
       os.environ['G_SLICE'] = 'always-malloc'
       os.environ['NSS_DISABLE_ARENA_FREE_LIST'] = '1'
@@ -1694,7 +1723,7 @@ def main():
     strip_path_prefix = 'build/src/out/Release/../../'
 
     # Symbolization of sanitizer reports.
-    if options.factory_properties.get('tsan', False) or options.enable_lsan:
+    if options.enable_tsan or options.enable_lsan:
       # TSan and LSan are not sandbox-compatible, so we can use online
       # symbolization. In fact, they need symbolization to be able to apply
       # suppressions.
@@ -1710,14 +1739,11 @@ def main():
       os.environ['LLVM_SYMBOLIZER_PATH'] = symbolizer_path
 
     # ThreadSanitizer
-    if options.factory_properties.get('tsan', False):
-      suppressions_file = options.factory_properties.get(
-          'tsan_suppressions_file',
-          'src/tools/valgrind/tsan_v2/suppressions.txt')
+    if options.enable_tsan:
       # TODO(glider): enable die_after_fork back once http://crbug.com/356758
       # is fixed.
       tsan_options = symbolization_options + \
-                     ['suppressions=%s' % suppressions_file,
+                     ['suppressions=%s' % options.tsan_suppressions_file,
                       'print_suppressions=1',
                       'report_signal_unsafe=0',
                       'report_thread_leaks=0',
@@ -1730,16 +1756,15 @@ def main():
     # LeakSanitizer
     if options.enable_lsan:
       # Symbolization options set here take effect only for standalone LSan.
-      suppressions_file = 'src/tools/lsan/suppressions.txt'
       lsan_options = symbolization_options + \
-                     ['suppressions=%s' % suppressions_file,
+                     ['suppressions=%s' % options.lsan_suppressions_file,
                       'print_suppressions=1']
       os.environ['LSAN_OPTIONS'] = ' '.join(lsan_options)
       # Disable sandboxing under LSan.
       args.append('--no-sandbox')
 
     # AddressSanitizer
-    if options.factory_properties.get('asan', False):
+    if options.enable_asan:
       # Avoid aggressive memcmp checks until http://crbug.com/178677 is
       # fixed.  Also do not replace memcpy/memmove/memset to suppress a
       # report in OpenCL, see http://crbug.com/162461.
@@ -1752,7 +1777,7 @@ def main():
       os.environ['ASAN_OPTIONS'] = ' '.join(asan_options)
 
     # MemorySanitizer
-    if options.factory_properties.get('msan', False):
+    if options.enable_msan:
       msan_options = symbolization_options
       if options.enable_lsan:
         msan_options += ['detect_leaks=1']
