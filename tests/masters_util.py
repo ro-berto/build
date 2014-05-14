@@ -16,7 +16,6 @@ BUILD_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(BUILD_DIR, 'scripts'))
 
 from common import find_depot_tools  # pylint: disable=W0611
-from tools import mastermap
 import subprocess2
 
 
@@ -257,7 +256,6 @@ def wait_for_start(master, name, path, ports):
 
 def check_for_no_masters():
   ports = range(8000, 8099) + range(8200, 8299) + range(9000, 9099)
-  ports = [x for x in ports if x not in mastermap.PORT_BLACKLIST]
   result = json_probe(True, ports)
   if result is None:
     return True
