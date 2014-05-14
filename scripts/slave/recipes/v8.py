@@ -192,7 +192,7 @@ def GenSteps(api):
       if api.step_history['compile (with patch)'].retcode != 0:
         api.gclient.apply_config('v8_lkgr')
         yield (
-          api.v8.checkout(revert=True),
+          api.v8.checkout(),
           api.tryserver.maybe_apply_issue(),
           api.v8.runhooks(),
           api.v8.compile(name='compile (with patch, lkgr, clobber)',

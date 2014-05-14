@@ -18,7 +18,20 @@ class V8Api(recipe_api.RecipeApi):
   BUILDERS = builders.BUILDERS
 
   def checkout(self, **kwargs):
-    return self.m.gclient.checkout(**kwargs)
+    if self.m.tryserver.is_tryserver:
+      yield self.m.gclient.checkout(
+          revert=True, can_fail_build=False, abort_on_failure=False, **kwargs)
+      for step in self.m.step_history.values():
+        if step.retcode != 0:
+          # TODO(phajdan.jr): Remove the workaround, http://crbug.com/357767 .
+          yield (
+            self.m.path.rmcontents('slave build directory',
+                                   self.m.path['slave_build']),
+            self.m.gclient.checkout(**kwargs),
+          )
+          break
+    else:
+      yield self.m.gclient.checkout(**kwargs)
 
   def runhooks(self, **kwargs):
     return self.m.chromium.runhooks(**kwargs)
