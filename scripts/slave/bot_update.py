@@ -199,6 +199,9 @@ DISABLED_BUILDERS = {
         'Android Clang Builder (dbg)',
     ],
     'chromium.fyi': [
+        'Chromium Linux Codesearch',
+        'ChromiumOS Codesearch',
+        'Chromium Linux Mojo',
         'Windows Browser (DrMemory light) (1)',
         'Windows Browser (DrMemory light) (2)',
         'Windows Builder (DrMemory)',
