@@ -207,6 +207,7 @@
     "name": "Sharded Perf Tests"
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",

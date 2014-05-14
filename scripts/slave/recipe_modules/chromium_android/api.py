@@ -448,7 +448,8 @@ class AndroidApi(recipe_api.RecipeApi):
         'Read test config %s' % config_name, config,
         step_test_data=lambda: self.m.json.test_api.output([
             [ "perf-test-1", "tools/perf/run_benchmark -v perf-test-1" ],
-            [ "perf-test-2", "tools/perf/run_benchmark -v perf-test-2" ] ]))
+            [ "perf-test-2", "tools/perf/run_benchmark -v perf-test-2" ] ]),
+        always_run=True)
     perf_tests = self.m.step_history.last_step().json.output
 
     for [test_name, test_cmd] in perf_tests:
@@ -462,7 +463,8 @@ class AndroidApi(recipe_api.RecipeApi):
           annotate='graphing',
           results_url='https://chromeperf.appspot.com',
           perf_id=perf_id,
-          test_type=test_name)
+          test_type=test_name,
+          always_run=True)
 
   def run_instrumentation_suite(self, test_apk, test_data, flakiness_dashboard,
                                 annotation=None, except_annotation=None,
