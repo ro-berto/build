@@ -511,7 +511,7 @@ def GenSteps(api):
   if not bot_config['compile_only']:
     def deapply_patch_fn(_failing_steps):
       yield (
-        api.gclient.revert(always_run=True),
+        api.gclient.checkout(revert=True, always_run=True),
         api.chromium.runhooks(always_run=True),
         api.chromium.compile(always_run=True),
       )
