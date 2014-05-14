@@ -6,7 +6,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]\ntarget_os = ['android']"
+      "cache_dir = None\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]\ntarget_os = ['android']"
     ],
     "name": "gclient setup"
   },
@@ -43,8 +43,8 @@
       "python",
       "-u",
       "\nimport shutil, sys, os\nshutil.rmtree(sys.argv[1], True)\nshutil.rmtree(sys.argv[2], True)\nfor base, _dirs, files in os.walk(sys.argv[3]):\n  for f in files:\n    if f.endswith('.pyc'):\n      os.remove(os.path.join(base, f))\n",
-      "[SLAVE_BUILD]/src/out/Release/debug_info_dumps",
-      "[SLAVE_BUILD]/src/out/Release/test_logs",
+      "[SLAVE_BUILD]/src/out/Debug/debug_info_dumps",
+      "[SLAVE_BUILD]/src/out/Debug/test_logs",
       "[SLAVE_BUILD]/src"
     ],
     "name": "clean local files",
@@ -80,7 +80,7 @@
       "-u",
       "[BUILD]/scripts/slave/compile.py",
       "--target",
-      "Release",
+      "Debug",
       "--src-dir",
       "[SLAVE_BUILD]/src",
       "--build-tool",
@@ -106,12 +106,107 @@
       "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
       "cp",
       "-R",
-      "[SLAVE_BUILD]/src/out/Release/cronet",
-      "gs://chromium-cronet/android/cronet-Release-4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00"
+      "[SLAVE_BUILD]/src/out/Debug/cronet",
+      "gs://chromium-cronet/android/cronet-Debug-4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00"
     ],
     "name": "gsutil upload_cronet_package",
     "~followup_annotations": [
-      "@@@STEP_LINK@Cronet package@https://storage.cloud.google.com/chromium-cronet/android/cronet-Release-4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00@@@"
+      "@@@STEP_LINK@Cronet package@https://storage.cloud.google.com/chromium-cronet/android/cronet-Debug-4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00@@@"
     ]
+  },
+  {
+    "can_fail_build": false,
+    "cmd": [
+      "[BUILD]/scripts/slave/daemonizer.py",
+      "--",
+      "[SLAVE_BUILD]/src/build/android/adb_logcat_monitor.py",
+      "[SLAVE_BUILD]/src/out/logcat"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "spawn_logcat_monitor"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/build/android/buildbot/bb_device_status_check.py"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "device_status_check"
+  },
+  {
+    "can_fail_build": false,
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/provision_devices.py",
+      "-t",
+      "Debug"
+    ],
+    "name": "provision_devices"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "--apk",
+      "CronetSample.apk"
+    ],
+    "name": "install CronetSample"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "instrumentation",
+      "--test-apk",
+      "CronetSampleTest"
+    ],
+    "name": "test CronetSample"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/tee.py",
+      "[SLAVE_BUILD]/src/out/Debug/full_log",
+      "--",
+      "[SLAVE_BUILD]/src/build/android/adb_logcat_printer.py",
+      "[SLAVE_BUILD]/src/out/logcat"
+    ],
+    "name": "logcat_dump"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
+      "[SLAVE_BUILD]/src/out/Debug/test_logs/*.log"
+    ],
+    "name": "test_report",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import glob, os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@for report in glob.glob(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  with open(report, 'r') as f:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    for l in f.readlines():@@@",
+      "@@@STEP_LOG_LINE@python.inline@      print l@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.remove(report)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "rm",
+      "-rf"
+    ],
+    "name": "cleanup_build"
   }
 ]

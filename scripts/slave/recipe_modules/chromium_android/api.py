@@ -305,13 +305,6 @@ class AndroidApi(recipe_api.RecipeApi):
         dest='%s%s.zip' % (self.c.upload_dest_prefix, git_number)
     )
 
-  def upload_build(self):
-    assert self.c.storage_bucket, 'upload_build needs storage bucket'
-    upload_tag = self.m.properties.get('revision')
-    yield self._upload_build(
-        bucket=self.c.storage_bucket,
-        path='%s%s.zip' % (self.c.upload_dest_prefix, upload_tag))
-
   def upload_build_for_tester(self):
     return self._upload_build(
         bucket=self._internal_names['BUILD_BUCKET'],
