@@ -46,6 +46,12 @@ def GenSteps(api):
       # If got_revision is an svn revision, then use got_revision_git.
       upstream = bot_update_step.json.output['properties'].get(
           'got_revision_git') or ''
+    # TODO(hinoka): Extract email/name from issue?
+    yield api.git('commit',
+                  '-c', 'user.email=commit-bot@chromium.org',
+                  '-c', 'user.name=The Commit Bot',
+                  '-a', '-m', 'Committed patch',
+                  cwd=api.path['checkout'].join(root))
 
   # Run this regardless of whether bot_update is on or off.
   spec = api.gclient.c
