@@ -85,7 +85,7 @@ def arm_builder(c):
 def arm_builder_rel(c):
   pass
 
-@CONFIG_CTX(includes=['base_config', 'default_compiler'],
+@CONFIG_CTX(includes=['base_config', 'default_compiler', 'goma'],
             config_vars={'TARGET_ARCH': 'intel', 'TARGET_BITS': 64})
 def x64_builder(c):
   if c.TARGET_ARCH != 'intel' or c.TARGET_BITS != 64:
@@ -93,7 +93,7 @@ def x64_builder(c):
       'Cannot target x64 with TARGET_ARCH == %s, TARGET_BITS == %d'
        % (c.TARGET_ARCH, c.TARGET_BITS))
 
-@CONFIG_CTX(includes=['base_config', 'default_compiler'])
+@CONFIG_CTX(includes=['base_config', 'default_compiler', 'goma'])
 def arm64_builder(c):
   gyp_defs = c.gyp_env.GYP_DEFINES
   gyp_defs['OS'] = 'android'

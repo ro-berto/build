@@ -68,7 +68,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 target_arch=arm64",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm64 use_goma=1",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "gclient runhooks"
@@ -85,6 +85,10 @@
       "[SLAVE_BUILD]/src",
       "--build-tool",
       "ninja",
+      "--compiler",
+      "goma",
+      "--goma-dir",
+      "[BUILD]/goma",
       "--"
     ],
     "env": {
