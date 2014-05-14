@@ -1,12 +1,9 @@
+# Copyright 2013 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
 from RECIPE_MODULES.gclient import CONFIG_CTX
 from slave.recipe_config import BadConf
-
-@CONFIG_CTX()
-def v8(c):
-  soln = c.solutions.add()
-  soln.name = 'v8'
-  soln.url = 'http://v8.googlecode.com/svn/branches/bleeding_edge'
-  c.got_revision_mapping['v8'] = 'got_revision'
 
 
 # TODO(machenbach): This is copied from gclient's config.py and should be
@@ -15,6 +12,22 @@ def ChromiumSvnSubURL(c, *pieces):
   BASES = ('https://src.chromium.org',
            'svn://svn-mirror.golo.chromium.org')
   return '/'.join((BASES[c.USE_MIRROR],) + pieces)
+
+
+# TODO(machenbach): Remove the method above in favor of this one.
+def ChromiumSvnTrunkURL(c, *pieces):
+  BASES = ('https://src.chromium.org/svn/trunk',
+           'svn://svn-mirror.golo.chromium.org/chrome/trunk')
+  return '/'.join((BASES[c.USE_MIRROR],) + pieces)
+
+
+@CONFIG_CTX()
+def v8(c):
+  soln = c.solutions.add()
+  soln.name = 'v8'
+  soln.url = 'http://v8.googlecode.com/svn/branches/bleeding_edge'
+  soln.custom_vars = {'chromium_trunk': ChromiumSvnTrunkURL(c)}
+  c.got_revision_mapping['v8'] = 'got_revision'
 
 
 @CONFIG_CTX(includes=['v8'])
