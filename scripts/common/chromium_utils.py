@@ -653,6 +653,10 @@ def ExtractZip(filename, output_dir, verbose=True):
       if verbose:
         print 'Extracting %s' % name
       zf.extract(name, output_dir)
+      if IsMac():
+        # Restore permission bits.
+        os.chmod(os.path.join(output_dir, name),
+                 zf.getinfo(name).external_attr >> 16L)
 
 
 def WindowsPath(path):
