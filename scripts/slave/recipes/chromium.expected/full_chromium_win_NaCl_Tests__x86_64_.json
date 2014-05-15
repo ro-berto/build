@@ -183,6 +183,7 @@
     "name": "nacl_integration"
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",

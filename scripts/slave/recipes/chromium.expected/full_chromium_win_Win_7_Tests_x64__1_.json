@@ -172,6 +172,7 @@
     "name": "start_crash_service"
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",

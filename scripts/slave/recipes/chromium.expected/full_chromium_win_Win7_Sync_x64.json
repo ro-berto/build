@@ -197,6 +197,7 @@
     "name": "sync_integration_tests"
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",

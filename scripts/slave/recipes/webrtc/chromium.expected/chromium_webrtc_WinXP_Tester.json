@@ -245,6 +245,7 @@
     "name": "content_unittests (webrtc)"
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",

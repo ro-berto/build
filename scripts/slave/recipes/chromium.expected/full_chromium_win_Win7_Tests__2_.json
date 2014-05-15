@@ -222,6 +222,7 @@
     "name": "telemetry_perf_unittests"
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",

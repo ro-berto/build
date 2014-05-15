@@ -312,11 +312,14 @@ class ChromiumApi(recipe_api.RecipeApi):
                                   'run_crash_handler.py'),
         ['--target', self.c.build_config_fs])
 
-  def process_dumps(self):
+  def process_dumps(self, **kwargs):
+    # Dumps are especially useful when other steps (e.g. tests) are failing.
+    kwargs.setdefault('always_run', True)
     return self.m.python(
         'process_dumps',
         self.m.path['build'].join('scripts', 'slave', 'process_dumps.py'),
-        ['--target', self.c.build_config_fs])
+        ['--target', self.c.build_config_fs],
+        **kwargs)
 
   def archive_build(self, step_name, gs_bucket, **kwargs):
     """Returns a step invoking archive_build.py to archive a Chromium build."""
