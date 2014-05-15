@@ -95,7 +95,6 @@ class PerformanceLogProcessor(object):
   so that methods such as PerformanceLogs return the right thing.
   """
 
-
   # The file perf_expectations.json holds performance expectations.
   # For more info, see: http://goo.gl/BhYvDa
   PERF_EXPECTATIONS_PATH = 'src/tools/perf_expectations/'
@@ -112,7 +111,6 @@ class PerformanceLogProcessor(object):
     """
     if factory_properties is None:
       factory_properties = {}
-
 
     # Performance regression/speedup alerts.
     self._read_expectations = False
@@ -430,24 +428,29 @@ class GraphingLogProcessor(PerformanceLogProcessor):
 
   For example,
     *RESULT vm_final_browser: OneTab= 8488 kb
-    RESULT startup: reference= [167.00,148.00,146.00,142.00] msec
+    RESULT startup: ref= [167.00,148.00,146.00,142.00] ms
+    RESULT TabCapturePerformance_foo: Capture= {30.7, 1.45} ms
 
-  The leading * is optional; if it's present, the data from that line will be
-  included in the waterfall display. If multiple values are given in [ ], their
-  mean and (sample) standard deviation will be written; if only one value is
-  given, that will be written. A trailing comma is permitted in the list of
-  values.
+  The leading * is optional; it indicates that the data from that line should
+  be considered "important", which may mean for example that it's graphed by
+  default.
+
+  If multiple values are given in [], their mean and (sample) standard
+  deviation will be written; if only one value is given, that will be written.
+  A trailing comma is permitted in the list of values.
+
+  NOTE: All lines except for RESULT lines are ignored, including the Avg and
+  Stddev lines output by Telemetry!
 
   Any of the <fields> except <value> may be empty, in which case the
   not-terribly-useful defaults will be used. The <graph_name> and <trace_name>
   should not contain any spaces, colons (:) nor equals-signs (=). Furthermore,
   the <trace_name> will be used on the waterfall display, so it should be kept
-  short.  If the trace_name ends with '_ref', it will be interpreted as a
+  short. If the trace_name ends with '_ref', it will be interpreted as a
   reference value, and shown alongside the corresponding main value on the
   waterfall.
 
-  Note: The terms graph are is used a lot here, whereas the term chart is
-  used in some parts of Telemetry. These two terms are interchangeable.
+  Semantic note: The terms graph and chart are used interchangeably here.
   """
 
   # The file into which the GraphingLogProcessor will save a list of graph
@@ -463,7 +466,7 @@ class GraphingLogProcessor(PerformanceLogProcessor):
                                '(?P<VALUE_JSON>{.*})(?P<UNITS>.+)?')
 
   class Trace(object):
-    """Encapsulates the data needed for one trace on a performance graph."""
+    """Encapsulates data for one trace. Here, this means one point."""
 
     def __init__(self):
       self.important = False
@@ -477,7 +480,7 @@ class GraphingLogProcessor(PerformanceLogProcessor):
       return result
 
   class Graph(object):
-    """Encapsulates the data in one performance graph."""
+    """Encapsulates a set of points that should appear on the same graph."""
 
     def __init__(self):
       self.units = None
@@ -489,6 +492,40 @@ class GraphingLogProcessor(PerformanceLogProcessor):
         if trace.important:
           return True
       return False
+
+    def BuildTracesDict(self):
+      """Makes an ordered dictionary of traces for the given graph."""
+      # TODO(qyearsley): Simplify this method if order doesn't matter.
+      traces_dict = collections.OrderedDict()
+      remaining_traces = self.traces.copy()
+
+      def AddTrace(name):
+        """Adds a trace to the traces dict if it exists and is remaining."""
+        if name in remaining_traces:
+          value = self.traces[name].value
+          stddev = self.traces[name].stddev
+          traces_dict[name] = [str(value), str(stddev)]
+          del remaining_traces[name]
+
+      # First pull out any important traces in alphabetical order, and their
+      # _ref traces even if not marked as important.
+      keys = [x for x in self.traces.keys() if self.traces[x].important]
+      for name in sorted(keys):
+        AddTrace(name)
+        AddTrace(name + '_ref')
+
+      # Now append any other traces that have corresponding _ref traces, in
+      # alphabetical order.
+      keys = [x for x in self.traces.keys() if x + '_ref' in remaining_traces]
+      for name in sorted(keys):
+        AddTrace(name)
+        AddTrace(name + '_ref')
+
+      # Finally, append any remaining traces, in alphabetical order.
+      for name in sorted(remaining_traces.keys()):
+        AddTrace(name)
+
+      return traces_dict
 
   def __init__(self, *args, **kwargs):
     """Initiates this log processor."""
@@ -668,66 +705,43 @@ class GraphingLogProcessor(PerformanceLogProcessor):
     return geom_mean, stddev
 
   def _BuildSummaryJson(self, graph):
-    """Sorts the traces and returns a summary JSON encoding of the graph.
+    """Returns JSON with the data in the given graph.
 
-    Although JS objects are not ordered, according to the spec, in practice
-    everyone iterates in order, since not doing so is a compatibility problem.
-    So we'll count on it here and produce an ordered list of traces.
+    The keys in the returned JSON are given in a particular order for historical
+    reasons; some JS that processed the output would iterate in a particular
+    order.
 
-    But since Python dicts are *not* ordered, we'll need to construct the JSON
-    manually so we don't lose the trace order.
+    TODO(qyearsley): Change this to ignore order.
+
+    Args:
+      graph: A GraphingLogProcessor.Graph object.
+
+    Returns:
+      The format output here is the "-summary.dat line" format; that is, it
+      is a JSON encoding of a dictionary that has the key "traces"
     """
-    traces = []
-    remaining_traces = graph.traces.copy()
-
-    def AddTrace(trace_name):
-      if trace_name in remaining_traces:
-        traces.append(trace_name)
-        del remaining_traces[trace_name]
-
-    # First pull out any important traces in alphabetical order, and their
-    # _ref traces even if not important.
-    keys = [x for x in graph.traces.keys() if graph.traces[x].important]
-    keys.sort()
-    for name in keys:
-      AddTrace(name)
-      AddTrace(name + '_ref')
-
-    # Now append any other traces that have corresponding _ref traces, in
-    # alphabetical order.
-    keys = [x for x in graph.traces.keys() if x + '_ref' in remaining_traces]
-    keys.sort()
-    for name in keys:
-      AddTrace(name)
-      AddTrace(name + '_ref')
-
-    # Finally, append any remaining traces, in alphabetical order.
-    keys = remaining_traces.keys()
-    keys.sort()
-    traces.extend(keys)
-
-    # Now build the JSON.
-    trace_json = ', '.join(['"%s": ["%s", "%s"]' %
-                            (x, graph.traces[x].value,
-                             graph.traces[x].stddev) for x in traces])
-    important = [x for x in traces if graph.traces[x].important]
-    if important:
-      important = ', "important": %s' % json.dumps(important)
-    else:
-      important = ''
     if not self._revision:
       raise Exception('revision is None')
-    return ('{"traces": {%s},'
-            ' "rev": "%s",'
-            ' "webkit_rev": "%s",'
-            ' "webrtc_rev": "%s",'
-            ' "v8_rev": "%s",'
-            ' "ver": "%s",'
-            ' "chan": "%s",'
-            ' "units": "%s"%s}'
-            % (trace_json, self._revision, self._webkit_revision,
-               self._webrtc_revision, self._v8_revision, self._version,
-               self._channel, graph.units, important))
+
+    traces = graph.BuildTracesDict()
+
+    graph_dict = collections.OrderedDict([
+        ('traces', traces),
+        ('rev', str(self._revision)),
+        ('webkit_rev', str(self._webkit_revision)),
+        ('webrtc_rev', str(self._webrtc_revision)),
+        ('v8_rev', str(self._v8_revision)),
+        ('ver', str(self._version)),
+        ('chan', str(self._channel)),
+        ('units', str(graph.units)),
+    ])
+
+    important = [t for t in traces.keys() if graph.traces[t].important]
+    if important:
+      graph_dict['important'] = important
+
+    # When given an OrderedDict, json.dumps will obey the order specified.
+    return json.dumps(graph_dict)
 
   def _FinalizeProcessing(self):
     self._CreateSummaryOutput()
