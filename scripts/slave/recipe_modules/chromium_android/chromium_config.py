@@ -59,18 +59,13 @@ def mipsel_builder(c):
 def dartium_builder(c):
   c.compile_py.default_targets=['chrome_apk', 'content_shell_apk']
 
-@CONFIG_CTX(includes=['main_builder'])
+@CONFIG_CTX()
 def cronet_builder(c):
   c.gyp_env.GYP_DEFINES['disable_file_support'] = 1
   c.gyp_env.GYP_DEFINES['disable_ftp_support'] = 1
   c.gyp_env.GYP_DEFINES['enable_websockets'] = 0
   c.gyp_env.GYP_DEFINES['use_icu_alternatives_on_android'] = 1
   c.compile_py.default_targets=['cronet_package', 'cronet_sample_test_apk']
-
-@CONFIG_CTX(includes=['cronet_builder'],
-            config_vars={'BUILD_CONFIG': 'Release'})
-def cronet_rel(c):
-  pass
 
 @CONFIG_CTX(includes=['main_builder'])
 def arm_builder(c):

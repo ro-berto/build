@@ -68,7 +68,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "OS=android component=static_library disable_file_support=1 disable_ftp_support=1 enable_websockets=0 fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1 use_icu_alternatives_on_android=1",
+      "GYP_DEFINES": "OS=android component=static_library disable_file_support=1 disable_ftp_support=1 enable_websockets=0 fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=0 use_icu_alternatives_on_android=1",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "gclient runhooks"
