@@ -577,7 +577,7 @@ def need_to_run_deps2git(repo_base, deps_file, deps_git_file):
     print 'it doesn\'t exist!'
     return True
 
-  if git('diff', deps_file, cwd=repo_base).strip():
+  if git('diff', '--staged', deps_file, cwd=repo_base).strip():
     return True
 
   last_known_deps_ref = _last_commit_for_file(deps_file, repo_base)
