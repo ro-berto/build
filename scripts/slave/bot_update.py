@@ -1014,6 +1014,12 @@ def ensure_checkout(solutions, revisions, first_sln, target_os, target_os_only,
 
   # Let gclient do the DEPS syncing.
   gclient_output = gclient_sync(buildspec_name)
+
+  # Now that gclient_sync has finished, we should revert any .DEPS.git so that
+  # presubmit doesn't complain about it being modified.
+  if not buildspec_name:
+    git('checkout', 'HEAD', '--', '.DEPS.git', cwd=root)
+
   if buildspec_name:
     # Run gclient runhooks if we're on an official builder.
     # TODO(hinoka): Remove this when the official builders run their own
