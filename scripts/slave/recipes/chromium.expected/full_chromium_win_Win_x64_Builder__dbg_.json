@@ -147,7 +147,7 @@
       "--goma-dir",
       "[BUILD]\\goma",
       "--",
-      "chromium_builder_tests"
+      "all"
     ],
     "name": "compile",
     "seed_steps": [

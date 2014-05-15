@@ -1162,7 +1162,7 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'compile_targets': [
-          'chromium_builder_tests',
+          'all',
         ],
         'testing': {
           'platform': 'win',
@@ -1277,7 +1277,7 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'compile_targets': [
-          'chromium_builder_tests',
+          'all',
         ],
         'testing': {
           'platform': 'win',

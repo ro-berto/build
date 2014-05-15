@@ -147,8 +147,8 @@
       "--goma-dir",
       "[BUILD]\\goma",
       "--",
+      "all",
       "chrome",
-      "chromium_builder_tests",
       "sync_integration_tests"
     ],
     "name": "compile",
