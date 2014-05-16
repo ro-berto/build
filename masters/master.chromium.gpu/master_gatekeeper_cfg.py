@@ -14,6 +14,10 @@ from master import master_utils
 # fly, this list of steps currently must be kept in sync with the
 # recipe manually, and the master must be restarted in order to pick
 # up changes to this list.
+# Note finally: when making changes to which builders are watched in
+# slaves.cfg in this directory, also update the list of tree closers
+# in 'c.bar_gpu_closers' in
+# masters/master.chromium/templates/announce.html .
 categories_steps = {
   # We remove the '' category because we want to selectively enable
   # the gatekeeper for certain builders, and want to assign categories
