@@ -238,7 +238,7 @@ class AutoRoller(object):
     match = re.search('^\s*git-svn-id:.*@(?P<svn_revision>\d+)\ ',
       git_log, re.MULTILINE)
     if match:
-      return int(match.group('svn_revision'))
+      return match.group('svn_revision')
     else:
       # If it's not git-svn, fall back on git.
       git_revparse_cmd = ['git', '--git-dir', git_dir, 'rev-parse',

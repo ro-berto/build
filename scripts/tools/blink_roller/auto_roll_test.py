@@ -123,19 +123,24 @@ class AutoRollTestBase(SuperMoxTestBase):
         'subject': 'Test_Project roll %s:%s' % (old_rev, new_rev),
     }
 
-  def _upload_issue(self):
+  def _get_last_revision(self):
     auto_roll.subprocess2.check_call(
         ['git', '--git-dir', './.git', 'fetch'])
     auto_roll.subprocess2.check_output(
         ['git', '--git-dir', './.git', 'show', 'origin/master:DEPS']
         ).AndReturn(self.DEPS_CONTENT)
+
+  def _get_current_revision(self):
     auto_roll.subprocess2.check_call(
         ['git', '--git-dir', './third_party/test_project/.git', 'fetch'])
     auto_roll.subprocess2.check_output(
         ['git', '--git-dir', './third_party/test_project/.git', 'show', '-s',
          'origin/master']).AndReturn(self.GIT_LOG_UPDATED)
-
     self._parse_origin_master(returnval=self.NEW_REV)
+
+  def _upload_issue(self):
+    self._get_last_revision()
+    self._get_current_revision()
     self._compare_revs(self.OLD_REV, self.NEW_REV)
 
     auto_roll.subprocess2.check_call(
@@ -271,6 +276,22 @@ Please email (eseidel@chromium.org) if the Rollbot is causing trouble.
     self._upload_issue()
     self.mox.ReplayAll()
     self.assertEquals(self._arb.main(), 0)
+
+  def test_last_revision(self):
+    # Verify that AutoRoll._last_roll_revision() returns a string.
+    if self.__class__.__name__ == 'AutoRollTestBase':
+      return
+    self._get_last_revision()
+    self.mox.ReplayAll()
+    self.assertEquals(type(self._arb._last_roll_revision()), str)
+
+  def test_current_revision(self):
+    # Verify that AutoRoll._current_revision() returns a string.
+    if self.__class__.__name__ == 'AutoRollTestBase':
+      return
+    self._get_current_revision()
+    self.mox.ReplayAll()
+    self.assertEquals(type(self._arb._current_revision()), str)
 
 
 class AutoRollTestSVN(AutoRollTestBase):
