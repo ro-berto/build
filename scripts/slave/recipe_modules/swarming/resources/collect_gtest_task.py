@@ -17,6 +17,15 @@ from slave import annotation_utils
 from slave import slave_utils
 
 
+MISSING_SHARDS_MSG = r"""Missing results from the following shard(s): %s
+
+It can happen in following cases:
+  * Test failed to start (missing *.dll/*.so dependency for example)
+  * Test crashed or hung
+  * Swarming service experiences problems
+"""
+
+
 def emit_warning(title, log=None):
   print '@@@STEP_WARNINGS@@@'
   print title
@@ -32,7 +41,8 @@ def process_gtest_json_output(exit_code, output_dir):
       summary = json.load(f)
   except (IOError, ValueError):
     emit_warning(
-        'summary.json is missing or can not be read', traceback.format_exc())
+        'summary.json is missing or can not be read',
+        'Something is seriously wrong with swarming_client/ or the bot.')
     return
 
   # For each shard load its JSON output if available and feed it to the parser.
@@ -52,8 +62,7 @@ def process_gtest_json_output(exit_code, output_dir):
   if missing_shards:
     as_str = ' ,'.join(map(str, missing_shards))
     emit_warning(
-        'missing results from some shards',
-        'Missing results from the following shard(s): %s' % as_str)
+        'some shards did not complete', MISSING_SHARDS_MSG % as_str)
 
   # Emit annotations with a summary of test execution.
   annotation_utils.annotate('', exit_code, parser)
@@ -64,8 +73,8 @@ def load_shard_json(output_dir, index):
     path = os.path.join(output_dir, str(index), 'output.json')
     with open(path) as f:
       return json.load(f)
-  except (OSError, ValueError):
-    print 'Missing or invalid gtest JSON file: %s' % path
+  except (IOError, ValueError):
+    print >> sys.stderr, 'Missing or invalid gtest JSON file: %s' % path
     return None
 
 

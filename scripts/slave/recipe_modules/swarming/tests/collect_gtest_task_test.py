@@ -260,18 +260,11 @@ class CollectGTestTaskTest(auto_stub.TestCase):
       'summary.json': {'shards': [None, {'dummy': 0}]},
       '1/output.json': GOOD_GTEST_JSON_1,
     })
-    self.assertEqual(
-        '@@@STEP_WARNINGS@@@\n'
-        'missing results from some shards\n'
-        '@@@STEP_LOG_LINE@missing results from some shards@'
-        'Missing results from the following shard(s): 0@@@\n'
-        '@@@STEP_LOG_END@missing results from some shards@@@\n'
-        'exit code (as seen by runtest.py): 1\n'
-        '@@@STEP_FAILURE@@@\n'
-        '@@@STEP_TEXT@@@@\n'
-        '@@@STEP_TEXT@3 disabled@@@\n'
-        '@@@STEP_TEXT@crashed or hung@@@',
-        self.call(1))
+    log = self.call(1)
+    self.assertIn('@@@STEP_WARNINGS@@@\nsome shards did not complete\n', log)
+    self.assertIn(
+        '@@@STEP_LOG_LINE@some shards did not complete@'
+        'Missing results from the following shard(s): 0@@@\n', log)
 
 
 if __name__ == '__main__':
