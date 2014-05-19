@@ -98,7 +98,7 @@ class AndroidApi(recipe_api.RecipeApi):
     s.custom_vars = self.c.gclient_custom_vars or {}
     s.managed = self.c.managed
     s.revision = self.c.revision
-
+    yield self.m.gclient.break_locks()
     yield self.m.gclient.checkout(spec)
 
     # TODO(sivachandra): Manufacture gclient spec such that it contains "src"
