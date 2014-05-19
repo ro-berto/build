@@ -148,20 +148,24 @@ class GpuApi(recipe_api.RecipeApi):
     # Always force a gclient-revert in order to avoid problems when
     # directories are added to, removed from, and re-added to the repo.
     # crbug.com/329577
-    yield self.m.gclient.checkout(revert=True,
-                                  can_fail_build=False, abort_on_failure=False)
+    yield self.m.bot_update.ensure_checkout()
+    bot_update_mode = self.m.step_history.last_step().json.output['did_run']
+    if not bot_update_mode:
+      yield self.m.gclient.checkout(revert=True,
+                                    can_fail_build=False,
+                                    abort_on_failure=False)
 
-    # Workaround for flakiness during gclient revert.
-    if any(step.retcode != 0 for step in self.m.step_history.values()):
-      # TODO(phajdan.jr): Remove the workaround, http://crbug.com/357767 .
-      yield (
-        self.m.path.rmcontents('slave build directory',
-                               self.m.path['slave_build']),
-        self.m.gclient.checkout(),
-      )
+      # Workaround for flakiness during gclient revert.
+      if any(step.retcode != 0 for step in self.m.step_history.values()):
+        # TODO(phajdan.jr): Remove the workaround, http://crbug.com/357767 .
+        yield (
+          self.m.path.rmcontents('slave build directory',
+                                self.m.path['slave_build']),
+          self.m.gclient.checkout(),
+        )
 
-    # If being run as a try server, apply the CL.
-    yield self.m.tryserver.maybe_apply_issue()
+      # If being run as a try server, apply the CL.
+      yield self.m.tryserver.maybe_apply_issue()
 
   def compile_steps(self):
     # We only need to runhooks if we're going to compile locally.
