@@ -14,7 +14,6 @@ from twisted.internet import defer
 
 from common.gerrit_agent import GerritAgent
 
-
 class GerritPoller(base.PollingChangeSource):
   """A poller which queries a gerrit server for new changes and patchsets."""
 
@@ -46,6 +45,19 @@ class GerritPoller(base.PollingChangeSource):
 
   def __init__(self, gerrit_host, gerrit_projects=None, pollInterval=None,
                dry_run=None):
+    """Constructs a new Gerrit poller.
+
+    Args:
+      gerrit_host: (str or GerritAgent) If supplied as a GerritAgent, the
+          Gerrit Agent to use when polling; otherwise, the host parameter to
+          use to construct the GerritAgent to poll through.
+      gerrit_projects: (list) A list of project names (str) to poll.
+      pollInterval: (int or datetime.timedelta) The amount of time to wait in
+          between polls.
+      dry_run: (bool) If 'True', then polls will not actually be executed.
+    """
+    if isinstance(pollInterval, datetime.timedelta):
+      pollInterval = pollInterval.total_seconds()
     if isinstance(gerrit_projects, basestring):
       gerrit_projects = [gerrit_projects]
     self.gerrit_projects = gerrit_projects
@@ -53,11 +65,14 @@ class GerritPoller(base.PollingChangeSource):
       self.pollInterval = pollInterval
     self.initLock = defer.DeferredLock()
     self.last_timestamp = None
-    self.agent = GerritAgent(gerrit_host)
 
     if dry_run is None:
       dry_run = 'POLLER_DRY_RUN' in os.environ
     self.dry_run = dry_run
+
+    self.agent = gerrit_host
+    if not isinstance(self.agent, GerritAgent):
+      self.agent = GerritAgent(self.agent)
 
   @staticmethod
   def _parse_timestamp(tm):
@@ -138,9 +153,13 @@ class GerritPoller(base.PollingChangeSource):
   def getChangeUrl(self, change):
     """Generates a URL for a Gerrit change."""
     # GerritAgent stores its URL as protocol and host.
-    return '%s://%s/#/c/%s' % (self.agent.gerrit_protocol,
-                               self.agent.gerrit_host,
-                               change['_number'])
+    return '%s/#/c/%s' % (self.agent.base_url,
+                          change['_number'])
+
+  def getRepositoryUrl(self, change):
+    """Generates a URL for a Gerrit repository containing a change"""
+    return '%s/%s' % (self.agent.base_url,
+                      change['project'])
 
   def addBuildbotChange(self, change, revision=None):
     """Adds a buildbot change into the database.
@@ -178,12 +197,8 @@ class GerritPoller(base.PollingChangeSource):
         'files': revision_details.get('files', {'UNKNOWN': None}).keys(),
         'category': self.change_category,
         'when_timestamp': self._parse_timestamp(commit['committer']['date']),
-        'revlink': '%s://%s/#/c/%s' % (
-            self.agent.gerrit_protocol, self.agent.gerrit_host,
-            change['_number']),
-        'repository': '%s://%s/%s' % (
-            self.agent.gerrit_protocol, self.agent.gerrit_host,
-            change['project']),
+        'revlink': self.getChangeUrl(change),
+        'repository': self.getRepositoryUrl(change),
         'properties': properties,
     }
     d = self.master.addChange(**chdict)
