@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+  'bot_update',
   'chromium',
   'gclient',
   'json',
@@ -22,6 +23,16 @@ BUILDERS = {
   'tryserver.blink': {
     'builders': {
       'linux_blink_dbg': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'compile_only': False,
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'linux_blink_bot_update': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -463,19 +474,23 @@ def GenSteps(api):
 
   root = bot_config.get('root_override', api.rietveld.calculate_issue_root())
 
-  yield api.gclient.checkout(
-      revert=True, can_fail_build=False, abort_on_failure=False)
-  for step in api.step_history.values():
-    if step.retcode != 0:
-      # TODO(phajdan.jr): Remove the workaround, http://crbug.com/357767 .
-      yield (
-        api.path.rmcontents('slave build directory', api.path['slave_build']),
-        api.gclient.checkout(),
-      )
-      break
+  yield api.bot_update.ensure_checkout()
+  # The first time we run bot update, remember if bot_update mode is on or off.
+  bot_update_mode = api.step_history.last_step().json.output['did_run']
+  if not bot_update_mode:
+    yield api.gclient.checkout(
+        revert=True, can_fail_build=False, abort_on_failure=False)
+    for step in api.step_history.values():
+      if step.retcode != 0:
+        # TODO(phajdan.jr): Remove the workaround, http://crbug.com/357767 .
+        yield (
+          api.path.rmcontents('slave build directory', api.path['slave_build']),
+          api.gclient.checkout(),
+        )
+        break
+    yield api.rietveld.apply_issue(root)
 
   yield (
-    api.rietveld.apply_issue(root),
     api.chromium.runhooks(),
     api.chromium.compile(abort_on_failure=False, can_fail_build=False),
   )
@@ -484,12 +499,17 @@ def GenSteps(api):
     # TODO(phajdan.jr): Remove the workaround, http://crbug.com/357767 .
     if api.platform.is_win:
       yield api.chromium.taskkill()
+    yield api.path.rmcontents('slave build directory', api.path['slave_build'])
+    if bot_update_mode:
+      yield api.bot_update.ensure_checkout()
+    else:
+      yield (
+        api.gclient.checkout(revert=False),
+        api.rietveld.apply_issue(root),
+      )
     yield (
-      api.path.rmcontents('slave build directory', api.path['slave_build']),
-      api.gclient.checkout(revert=False),
-      api.rietveld.apply_issue(root),
       api.chromium.runhooks(),
-      api.chromium.compile()
+      api.chromium.compile(),
     )
 
   if not bot_config['compile_only']:
@@ -510,8 +530,12 @@ def GenSteps(api):
 
   if not bot_config['compile_only']:
     def deapply_patch_fn(_failing_steps):
+      if bot_update_mode:
+        yield api.bot_update.ensure_checkout(patch=False, always_run=True)
+      else:
+        yield api.gclient.checkout(revert=True, always_run=True)
+
       yield (
-        api.gclient.checkout(revert=True, always_run=True),
         api.chromium.runhooks(always_run=True),
         api.chromium.compile(always_run=True),
       )
@@ -607,6 +631,14 @@ def GenTests(api):
     properties('tryserver.chromium', 'linux_blink_rel') +
     api.override_step_data(with_patch, canned_test(passing=False,
                                                    retcode=130))
+  )
+
+  yield (
+    api.test('compile_failure_bot_update') +
+    api.platform('linux', 64) +
+    properties('tryserver.blink', 'linux_blink_bot_update') +
+    api.step_data('compile', retcode=1) +
+    api.step_data(with_patch, canned_test(passing=True, minimal=True))
   )
 
   yield (

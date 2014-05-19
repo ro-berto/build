@@ -146,6 +146,9 @@ ENABLED_BUILDERS = {
         'linux_chromium_trusty32_rel',
         'linux_chromium_trusty_dbg',
         'linux_chromium_trusty_rel',
+    ],
+    'tryserver.blink': [
+      'linux_blink_bot_update',
     ]
 }
 ENABLED_SLAVES = {
