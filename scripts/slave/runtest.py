@@ -1613,8 +1613,7 @@ def main():
   option_parser.add_option('--enable-lsan', action='store_true', default=False,
                            help='Enable memory leak detection (LeakSanitizer). '
                                 'Can also be enabled with the factory '
-                                'properties "lsan" and "lsan_run_all_tests" '
-                                '(deprecated).')
+                                'property "lsan" (deprecated).')
   option_parser.add_option('--lsan-suppressions-file',
                            default='src/tools/lsan/suppressions.txt',
                            help='Suppression file for LeakSanitizer. '
@@ -1675,16 +1674,6 @@ def main():
     if options.pass_build_dir:
       args.extend(['--build-dir', options.build_dir])
 
-    # Leak detection will be forced off for the following binaries, unless
-    # lsan_run_all_tests is True. This mechanism was originally used to
-    # gradually roll out leak detection on existing ASan bots. We no longer
-    # need it.
-    # TODO(earthdok): remove it.
-    lsan_blacklist = [
-        'browser_tests',
-        'content_browsertests',
-        'interactive_ui_tests',
-    ]
     options.enable_asan = (options.enable_asan or
                            options.factory_properties.get('asan', False))
     options.enable_msan = (options.enable_msan or
@@ -1694,9 +1683,7 @@ def main():
     options.tsan_suppressions_file = (options.tsan_suppressions_file or
         options.factory_properties.get('tsan_suppressions_file'))
     options.enable_lsan = (options.enable_lsan or
-        (options.factory_properties.get('lsan', False) and
-        (options.factory_properties.get('lsan_run_all_tests', False) or
-        args[0] not in lsan_blacklist)))
+                           options.factory_properties.get('lsan', False))
 
     extra_sharding_args_list = options.extra_sharding_args.split()
 
