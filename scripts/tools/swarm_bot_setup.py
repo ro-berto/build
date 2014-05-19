@@ -193,7 +193,7 @@ def main():
 
   if options.raw:
     # Remove extra spaces and empty lines.
-    options.bot.extend(
+    options.bots.extend(
         filter(None, (s.strip() for s in open(options.raw, 'r'))))
   if not options.bots:
     parser.error('No bot to process.')
