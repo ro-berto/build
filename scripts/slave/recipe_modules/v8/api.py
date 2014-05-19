@@ -128,14 +128,50 @@ class V8Api(recipe_api.RecipeApi):
           'third_party', 'llvm-build', 'Release+Asserts', 'bin',
           'llvm-symbolizer')
 
-    return self.m.python(
+    if self.c.testing.show_test_results:
+      full_args += ['--json-test-results',
+                    self.m.json.output(add_json_log=False)]
+      def followup_fn(step_result):
+        r = step_result.json.output
+        p = step_result.presentation
+        # The output is expected to be a list of architecture dicts that
+        # each contain a results list. On buildbot, there is only one
+        # architecture.
+        if (r and isinstance(r, list) and isinstance(r[0], dict)
+            and r[0]['results']):
+          # Use test base name as UI label (without suite and directory names).
+          p.step_text += self.m.test_utils.format_step_text(
+              [[result['name'].split('/')[-1] for result in r[0]['results']]])
+
+    step_test_data = lambda: self.test_api.output_json(
+        self._test_data.get('test_failures', False),
+        self._test_data.get('wrong_results', False))
+
+    yield self.m.python(
       name,
       self.m.path['build'].join('scripts', 'slave', 'v8', 'v8testing.py'),
       full_args,
       cwd=self.m.path['checkout'],
       env=env,
+      followup_fn=followup_fn,
+      step_test_data=step_test_data,
       **kwargs
     )
+
+    if self.c.testing.show_test_results:
+      # Check integrity of the last output. The json list is expected to
+      # contain only one element for one (architecture, build config type)
+      # pair on the buildbot.
+      result = self.m.step_history.last_step().json.output
+      if result and len(result) > 1:
+        yield self.m.python.inline(
+            name,
+            r"""
+            import sys
+            print 'Unexpected results set present.'
+            sys.exit(1)
+            """,
+            always_run=True)
 
   def runtest(self, test, **kwargs):
     # Get the flaky-step configuration default per test.

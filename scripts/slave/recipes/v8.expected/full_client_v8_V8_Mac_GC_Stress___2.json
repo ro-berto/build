@@ -88,16 +88,12 @@
       "--shard_count=3",
       "--shard_run=2",
       "--flaky-tests",
-      "skip"
+      "skip",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Mjsunit",
-    "seed_steps": [
-      "Mjsunit",
-      "Mjsunit - flaky",
-      "Webkit",
-      "Webkit - flaky"
-    ]
+    "name": "Mjsunit"
   },
   {
     "abort_on_failure": false,
@@ -115,7 +111,9 @@
       "--shard_count=3",
       "--shard_run=2",
       "--flaky-tests",
-      "run"
+      "run",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Mjsunit - flaky"
@@ -135,7 +133,9 @@
       "--shard_count=3",
       "--shard_run=2",
       "--flaky-tests",
-      "skip"
+      "skip",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Webkit"
@@ -156,7 +156,9 @@
       "--shard_count=3",
       "--shard_run=2",
       "--flaky-tests",
-      "run"
+      "run",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Webkit - flaky"

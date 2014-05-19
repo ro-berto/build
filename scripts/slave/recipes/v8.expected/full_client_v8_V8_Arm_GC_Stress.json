@@ -87,16 +87,12 @@
       "--noi18n",
       "--gc-stress",
       "--flaky-tests",
-      "skip"
+      "skip",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Mjsunit",
-    "seed_steps": [
-      "Mjsunit",
-      "Mjsunit - flaky",
-      "Webkit",
-      "Webkit - flaky"
-    ]
+    "name": "Mjsunit"
   },
   {
     "abort_on_failure": false,
@@ -113,7 +109,9 @@
       "--noi18n",
       "--gc-stress",
       "--flaky-tests",
-      "run"
+      "run",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Mjsunit - flaky"
@@ -132,7 +130,9 @@
       "--noi18n",
       "--gc-stress",
       "--flaky-tests",
-      "skip"
+      "skip",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Webkit"
@@ -152,7 +152,9 @@
       "--noi18n",
       "--gc-stress",
       "--flaky-tests",
-      "run"
+      "run",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Webkit - flaky"

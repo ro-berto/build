@@ -86,18 +86,12 @@
       "mjsunit fuzz-natives cctest message preparser",
       "--noi18n",
       "--flaky-tests",
-      "skip"
+      "skip",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Check",
-    "seed_steps": [
-      "Check",
-      "Check - flaky",
-      "Webkit",
-      "Webkit - flaky",
-      "Mozilla",
-      "Test262"
-    ]
+    "name": "Check"
   },
   {
     "abort_on_failure": false,
@@ -113,7 +107,9 @@
       "mjsunit fuzz-natives cctest message preparser",
       "--noi18n",
       "--flaky-tests",
-      "run"
+      "run",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Check - flaky"
@@ -131,7 +127,9 @@
       "webkit",
       "--noi18n",
       "--flaky-tests",
-      "skip"
+      "skip",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Webkit"
@@ -150,7 +148,9 @@
       "webkit",
       "--noi18n",
       "--flaky-tests",
-      "run"
+      "run",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Webkit - flaky"
@@ -166,7 +166,9 @@
       "ia32",
       "--testname",
       "mozilla",
-      "--noi18n"
+      "--noi18n",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Mozilla"
@@ -182,7 +184,9 @@
       "ia32",
       "--testname",
       "test262",
-      "--noi18n"
+      "--noi18n",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Test262"

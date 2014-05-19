@@ -86,16 +86,12 @@
       "mjsunit fuzz-natives cctest message preparser",
       "--shell_flags=\"--noenable-vfp3\"",
       "--flaky-tests",
-      "skip"
+      "skip",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Check",
-    "seed_steps": [
-      "Check",
-      "Check - flaky",
-      "Test262",
-      "Mozilla"
-    ]
+    "name": "Check"
   },
   {
     "abort_on_failure": false,
@@ -111,7 +107,9 @@
       "mjsunit fuzz-natives cctest message preparser",
       "--shell_flags=\"--noenable-vfp3\"",
       "--flaky-tests",
-      "run"
+      "run",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Check - flaky"
@@ -127,7 +125,9 @@
       "arm",
       "--testname",
       "test262",
-      "--shell_flags=\"--noenable-vfp3\""
+      "--shell_flags=\"--noenable-vfp3\"",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Test262"
@@ -143,7 +143,9 @@
       "arm",
       "--testname",
       "mozilla",
-      "--shell_flags=\"--noenable-vfp3\""
+      "--shell_flags=\"--noenable-vfp3\"",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Mozilla"

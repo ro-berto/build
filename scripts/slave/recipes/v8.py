@@ -265,3 +265,24 @@ def GenTests(api):
     api.platform('win', 32) +
     api.step_data('compile (with patch)', retcode=1)
   )
+
+  mastername = 'client.v8'
+  buildername = 'V8 Linux - isolates'
+  bot_config = api.v8.BUILDERS[mastername]['builders'][buildername]
+  def TestFailures(wrong_results):
+    suffix = "_wrong_results" if wrong_results else ""
+    return (
+      api.test('full_%s_%s_test_failures%s' % (_sanitize_nonalpha(mastername),
+                                               _sanitize_nonalpha(buildername),
+                                               suffix)) +
+      api.properties.generic(mastername=mastername,
+                             buildername=buildername,
+                             parent_buildername=bot_config.get(
+                                 'parent_buildername')) +
+      api.platform(bot_config['testing']['platform'],
+                   v8_config_kwargs.get('TARGET_BITS', 64)) +
+      api.v8(test_failures=True, wrong_results=wrong_results)
+    )
+
+  yield TestFailures(wrong_results=False)
+  yield TestFailures(wrong_results=True)

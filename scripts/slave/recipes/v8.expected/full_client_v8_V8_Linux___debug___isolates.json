@@ -107,14 +107,12 @@
       "mjsunit fuzz-natives cctest message preparser",
       "--isolates=on",
       "--flaky-tests",
-      "skip"
+      "skip",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Check",
-    "seed_steps": [
-      "Check",
-      "Check - flaky"
-    ]
+    "name": "Check"
   },
   {
     "abort_on_failure": false,
@@ -130,7 +128,9 @@
       "mjsunit fuzz-natives cctest message preparser",
       "--isolates=on",
       "--flaky-tests",
-      "run"
+      "run",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Check - flaky"

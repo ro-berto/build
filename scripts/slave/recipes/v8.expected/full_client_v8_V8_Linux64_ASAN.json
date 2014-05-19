@@ -97,17 +97,15 @@
       "mjsunit fuzz-natives cctest message preparser",
       "--flaky-tests",
       "skip",
-      "--asan"
+      "--asan",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "env": {
       "ASAN_SYMBOLIZER_PATH": "[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
     },
-    "name": "Check",
-    "seed_steps": [
-      "Check",
-      "Check - flaky"
-    ]
+    "name": "Check"
   },
   {
     "abort_on_failure": false,
@@ -123,7 +121,9 @@
       "mjsunit fuzz-natives cctest message preparser",
       "--flaky-tests",
       "run",
-      "--asan"
+      "--asan",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "env": {

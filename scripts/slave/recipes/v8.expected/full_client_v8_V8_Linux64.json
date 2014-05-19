@@ -104,14 +104,7 @@
     "name": "Static-Initializers",
     "seed_steps": [
       "Static-Initializers",
-      "Check",
-      "Check - flaky",
-      "OptimizeForSize",
-      "OptimizeForSize - flaky",
-      "Webkit",
-      "Webkit - flaky",
-      "Test262",
-      "Mozilla"
+      "Check"
     ]
   },
   {
@@ -126,7 +119,9 @@
       "--testname",
       "mjsunit fuzz-natives cctest message preparser",
       "--flaky-tests",
-      "skip"
+      "skip",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Check"
@@ -144,7 +139,9 @@
       "--testname",
       "mjsunit fuzz-natives cctest message preparser",
       "--flaky-tests",
-      "run"
+      "run",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Check - flaky"
@@ -163,7 +160,9 @@
       "--no-variants",
       "--shell_flags=\"--optimize-for-size\"",
       "--flaky-tests",
-      "skip"
+      "skip",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "OptimizeForSize"
@@ -183,7 +182,9 @@
       "--no-variants",
       "--shell_flags=\"--optimize-for-size\"",
       "--flaky-tests",
-      "run"
+      "run",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "OptimizeForSize - flaky"
@@ -200,7 +201,9 @@
       "--testname",
       "webkit",
       "--flaky-tests",
-      "skip"
+      "skip",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Webkit"
@@ -218,7 +221,9 @@
       "--testname",
       "webkit",
       "--flaky-tests",
-      "run"
+      "run",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Webkit - flaky"
@@ -233,7 +238,9 @@
       "--arch",
       "x64",
       "--testname",
-      "test262"
+      "test262",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Test262"
@@ -248,7 +255,9 @@
       "--arch",
       "x64",
       "--testname",
-      "mozilla"
+      "mozilla",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Mozilla"

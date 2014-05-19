@@ -88,18 +88,12 @@
       "--shard_count=2",
       "--shard_run=1",
       "--flaky-tests",
-      "skip"
+      "skip",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Check",
-    "seed_steps": [
-      "Check",
-      "Check - flaky",
-      "Webkit",
-      "Webkit - flaky",
-      "Test262",
-      "Mozilla"
-    ]
+    "name": "Check"
   },
   {
     "abort_on_failure": false,
@@ -117,7 +111,9 @@
       "--shard_count=2",
       "--shard_run=1",
       "--flaky-tests",
-      "run"
+      "run",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Check - flaky"
@@ -137,7 +133,9 @@
       "--shard_count=2",
       "--shard_run=1",
       "--flaky-tests",
-      "skip"
+      "skip",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Webkit"
@@ -158,7 +156,9 @@
       "--shard_count=2",
       "--shard_run=1",
       "--flaky-tests",
-      "run"
+      "run",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Webkit - flaky"
@@ -176,7 +176,9 @@
       "test262",
       "--no-snap",
       "--shard_count=2",
-      "--shard_run=1"
+      "--shard_run=1",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Test262"
@@ -194,7 +196,9 @@
       "mozilla",
       "--no-snap",
       "--shard_count=2",
-      "--shard_run=1"
+      "--shard_run=1",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Mozilla"

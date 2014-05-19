@@ -18,6 +18,12 @@ def BaseConfig(**_kwargs):
     # might be refined later in the test runner for distinct tests.
     testing = ConfigGroup(
       add_flaky_step = Single(bool, required=False),
+
+      # Show test results on waterfall UI. Switch for backwards-compatibility
+      # with the stand-alone test driver on older branches.
+      # TODO(machenbach): Remove this switch when the feature is available on
+      # all branches.
+      show_test_results = Single(bool, empty_val=True, required=False),
       test_args = Set(basestring),
 
       SHARD_COUNT = Static(shard_count),

@@ -115,6 +115,22 @@
     "name": "Check"
   },
   {
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys\nprint 'Unexpected results set present.'\nsys.exit(1)\n"
+    ],
+    "name": "Check (2)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@print 'Unexpected results set present.'@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.exit(1)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
     "abort_on_failure": false,
     "cmd": [
       "python",
@@ -134,5 +150,21 @@
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Check - flaky"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys\nprint 'Unexpected results set present.'\nsys.exit(1)\n"
+    ],
+    "name": "Check - flaky (2)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@print 'Unexpected results set present.'@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.exit(1)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
   }
 ]
