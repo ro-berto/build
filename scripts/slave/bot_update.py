@@ -982,7 +982,7 @@ def ensure_deps_revisions(deps_url_mapping, solutions, revisions):
 
 
 def ensure_checkout(solutions, revisions, first_sln, target_os, target_os_only,
-                    root, issue, patchset, patch_url, rietveld_server,
+                    patch_root, issue, patchset, patch_url, rietveld_server,
                     revision_mapping, buildspec_name, gyp_env, shallow):
   # Get a checkout of each solution, without DEPS or hooks.
   # Calling git directly because there is no way to run Gclient without
@@ -994,20 +994,20 @@ def ensure_checkout(solutions, revisions, first_sln, target_os, target_os_only,
   if patch_url:
     patches = get_svn_patch(patch_url)
 
-  if root == first_sln:
+  if patch_root == first_sln:
     # Only top level DEPS patching is supported right now.
     if patches:
-      apply_svn_patch(root, patches, whitelist=['DEPS'])
+      apply_svn_patch(patch_root, patches, whitelist=['DEPS'])
     elif issue:
-      apply_rietveld_issue(issue, patchset, root, rietveld_server,
+      apply_rietveld_issue(issue, patchset, patch_root, rietveld_server,
                           revision_mapping, git_ref, whitelist=['DEPS'])
 
 
   if buildspec_name:
-    buildspecs2git(root, buildspec_name)
+    buildspecs2git(first_sln, buildspec_name)
   else:
     # Run deps2git if there is a DEPS change after the last .DEPS.git commit.
-    ensure_deps2git(root, shallow)
+    ensure_deps2git(first_sln, shallow)
 
   # Ensure our build/ directory is set up with the correct .gclient file.
   gclient_configure(solutions, target_os, target_os_only)
@@ -1018,7 +1018,7 @@ def ensure_checkout(solutions, revisions, first_sln, target_os, target_os_only,
   # Now that gclient_sync has finished, we should revert any .DEPS.git so that
   # presubmit doesn't complain about it being modified.
   if not buildspec_name:
-    git('checkout', 'HEAD', '--', '.DEPS.git', cwd=root)
+    git('checkout', 'HEAD', '--', '.DEPS.git', cwd=first_sln)
 
   if buildspec_name:
     # Run gclient runhooks if we're on an official builder.
@@ -1032,9 +1032,9 @@ def ensure_checkout(solutions, revisions, first_sln, target_os, target_os_only,
                         dir_names, revisions)
   # Apply the rest of the patch here (sans DEPS)
   if patches:
-    apply_svn_patch(root, patches, blacklist=['DEPS'])
+    apply_svn_patch(patch_root, patches, blacklist=['DEPS'])
   elif issue:
-    apply_rietveld_issue(issue, patchset, root, rietveld_server,
+    apply_rietveld_issue(issue, patchset, patch_root, rietveld_server,
                          revision_mapping, git_ref, blacklist=['DEPS'])
 
   return gclient_output
@@ -1157,7 +1157,9 @@ def parse_args():
   parse.add_option('--patchset',
                    help='Patchset from issue to patch from, if applicable.')
   parse.add_option('--patch_url', help='Optional URL to SVN patch.')
-  parse.add_option('--root', help='Repository root.')
+  parse.add_option('--root', dest='patch_root',
+                   help='DEPRECATED: Use --patch_root.')
+  parse.add_option('--patch_root', help='Directory to patch on top of.')
   parse.add_option('--rietveld_server',
                    default='codereview.chromium.org',
                    help='Rietveld server.')
@@ -1305,18 +1307,15 @@ def main():
   if not options.shallow:
     options.shallow = total_disk_space < SHALLOW_CLONE_THRESHOLD
 
-  # By default, the root should be the name of the first solution, but
-  # also make it overridable. The root is where patches are applied on top of.
-  options.root =  options.root or dir_names[0]
   # The first solution is where the primary DEPS file resides.
   first_sln = dir_names[0]
 
   # Split all the revision specifications into a nice dict.
   print 'Revisions: %s' % options.revision
-  revisions = parse_revisions(options.revision, options.root)
+  revisions = parse_revisions(options.revision, first_sln)
   # This is meant to be just an alias to the revision of the main solution.
-  root_revision = revisions[options.root]
-  print 'Fetching Git checkout at %s@%s' % (options.root, root_revision)
+  root_revision = revisions[first_sln]
+  print 'Fetching Git checkout at %s@%s' % (first_sln, root_revision)
 
   try:
     checkout_parameters = dict(
@@ -1330,7 +1329,7 @@ def main():
         target_os_only=specs.get('target_os_only', False),
 
         # Then, pass in information about how to patch on top of the checkout.
-        root=options.root,
+        patch_root=options.patch_root,
         issue=options.issue,
         patchset=options.patchset,
         patch_url=options.patch_url,
@@ -1364,7 +1363,7 @@ def main():
     emit_json(options.output_json,
               did_run=True,
               root=first_sln,
-              patch_root=options.root,
+              patch_root=options.patch_root,
               step_text=step_text,
               properties=got_revisions)
   else:
@@ -1380,7 +1379,7 @@ def main():
       git_solutions=git_slns,
       got_revision=got_revisions,
       master=master,
-      patch_root=options.root,
+      patch_root=options.patch_root,
       prefix='end',
       run_id=run_id,
       slave=slave,
