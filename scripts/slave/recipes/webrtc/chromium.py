@@ -95,15 +95,8 @@ def GenSteps(api):
     steps.append(api.webrtc.extract_build(
         api.webrtc.GS_ARCHIVES[bot_config['build_gs_archive']], revision))
 
-  test_suite = recipe_config.get('test_suite')
-  if test_suite and bot_type in ['builder_tester', 'tester']:
-    if api.platform.is_win:
-      steps.append(api.chromium.crash_handler())
-
-    steps.extend(api.webrtc.runtests(test_suite))
-
-    if api.platform.is_win:
-      steps.append(api.chromium.process_dumps())
+  test_steps = api.webrtc.runtests(recipe_config.get('test_suite'))
+  steps.extend(api.chromium.setup_tests(bot_type, test_steps))
 
   yield steps
 

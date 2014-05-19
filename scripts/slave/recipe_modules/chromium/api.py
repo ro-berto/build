@@ -380,3 +380,15 @@ class ChromiumApi(recipe_api.RecipeApi):
         self.m.path['checkout'].join('tools', 'deps2git', 'deps2submodules.py'),
         args=['--gitless', self.m.path['checkout'].join('.DEPS.git')],
         **kwargs)
+
+  def setup_tests(self, bot_type, test_steps):
+    steps = []
+    if bot_type in ['tester', 'builder_tester'] and test_steps:
+      if self.m.platform.is_win:
+        steps.append(self.crash_handler())
+
+      steps.extend(test_steps)
+
+      if self.m.platform.is_win:
+        steps.append(self.process_dumps())
+    return steps

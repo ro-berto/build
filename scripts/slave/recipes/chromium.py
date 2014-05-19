@@ -1561,14 +1561,8 @@ def GenSteps(api):
       # TODO(phajdan.jr): Move abort_on_failure to archive recipe module.
       abort_on_failure=True))
 
-  if bot_type in ['tester', 'builder_tester'] and bot_config.get('tests'):
-    if api.platform.is_win:
-      steps.append(api.chromium.crash_handler())
-
-    steps.extend([t.run(api) for t in bot_config['tests']])
-
-    if api.platform.is_win:
-      steps.append(api.chromium.process_dumps())
+  test_steps = [t.run(api) for t in bot_config.get('tests', [])]
+  steps.extend(api.chromium.setup_tests(bot_type, test_steps))
 
   # For non-trybot recipes we should know (seed) all steps in advance,
   # at the beginning of each build. Instead of yielding single steps
