@@ -8,9 +8,12 @@ import common
 
 SIMPLE_TESTS_TO_RUN = [
   'content_gl_tests',
-  'gles2_conform_test',
   'gl_tests',
   'angle_unittests'
+]
+
+SIMPLE_NON_OPEN_SOURCE_TESTS_TO_RUN = [
+  'gles2_conform_test',
 ]
 
 class GpuApi(recipe_api.RecipeApi):
@@ -241,7 +244,13 @@ class GpuApi(recipe_api.RecipeApi):
                         can_fail_build=False)
 
     # Note: --no-xvfb is the default.
-    for test in SIMPLE_TESTS_TO_RUN:
+    # Copy the test list to avoid mutating it.
+    basic_tests = list(SIMPLE_TESTS_TO_RUN)
+    # Only run tests on the tree closers and on the CQ which are
+    # available in the open-source repository.
+    if self._is_fyi_waterfall:
+      basic_tests += SIMPLE_NON_OPEN_SOURCE_TESTS_TO_RUN
+    for test in basic_tests:
       yield self._maybe_run_isolate(test, args=['--use-gpu-in-tests'])
 
     # Google Maps Pixel tests.
