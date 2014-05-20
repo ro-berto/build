@@ -39,6 +39,24 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         "name": "suite-name/dir/test-name",
         "command": "out/theMode/d8 --opt42 test/suite-name/dir/test-name.js",
         "exit_code": 1,
+      },
+      {
+        "flags": ["--other"],
+        "result": "FAIL",
+        "stdout": "Some output.",
+        "stderr": "Some errput.",
+        "name": "suite-name/dir/test-name",
+        "command": "out/theMode/d8 --other test/suite-name/dir/test-name.js",
+        "exit_code": 1,
+      },
+      {
+        "flags": ["--other"],
+        "result": "CRASH",
+        "stdout": "Some output\nwith\nmore\nlines.",
+        "stderr": "Some errput.",
+        "name": "other-suite/dir/other-test",
+        "command": "out/theMode/d8 --other test/other-suite/dir/other-test.js",
+        "exit_code": 1,
       }],
     }])
 

@@ -114,7 +114,7 @@
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Check",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>test-name<br/>@@@"
+      "@@@STEP_TEXT@<br/>Failures:<br/>test-name<br/>test-name<br/>other-test<br/>@@@"
     ]
   },
   {
@@ -138,7 +138,7 @@
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Check - flaky",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>test-name<br/>@@@"
+      "@@@STEP_TEXT@<br/>Failures:<br/>test-name<br/>test-name<br/>other-test<br/>@@@"
     ]
   }
 ]

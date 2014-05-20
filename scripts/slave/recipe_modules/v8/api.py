@@ -140,8 +140,10 @@ class V8Api(recipe_api.RecipeApi):
         if (r and isinstance(r, list) and isinstance(r[0], dict)
             and r[0]['results']):
           # Use test base name as UI label (without suite and directory names).
-          p.step_text += self.m.test_utils.format_step_text(
-              [[result['name'].split('/')[-1] for result in r[0]['results']]])
+          p.step_text += self.m.test_utils.format_step_text([[
+            "Failures:",
+            [res['name'].split('/')[-1] for res in r[0]['results']],
+          ]])
 
     step_test_data = lambda: self.test_api.output_json(
         self._test_data.get('test_failures', False),
