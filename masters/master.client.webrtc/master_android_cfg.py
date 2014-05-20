@@ -30,10 +30,15 @@ def Update(c):
           'Android Chromium-APK Tests (JB Nexus7.2)',
       ]),
   ])
+
   specs = [
     {'name': 'Android', 'recipe': 'webrtc/standalone'},
     {'name': 'Android (dbg)', 'recipe': 'webrtc/standalone'},
-    {'name': 'Android Clang (dbg)', 'recipe': 'webrtc/standalone'},
+    {
+      'name': 'Android Clang (dbg)',
+      'recipe': 'webrtc/standalone',
+      'slavebuilddir': 'android_clang',
+    },
     {
       'name': 'Android Chromium-APK Builder',
       'triggers': ['android_trigger_rel'],
@@ -56,5 +61,6 @@ def Update(c):
             triggers=spec.get('triggers')),
         'notify_on_missing': True,
         'category': 'android',
+        'slavebuilddir': spec.get('slavebuilddir', 'android'),
       } for spec in specs
   ])
