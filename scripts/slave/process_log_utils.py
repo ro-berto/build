@@ -494,37 +494,10 @@ class GraphingLogProcessor(PerformanceLogProcessor):
       return False
 
     def BuildTracesDict(self):
-      """Makes an ordered dictionary of traces for the given graph."""
-      # TODO(qyearsley): Simplify this method if order doesn't matter.
-      traces_dict = collections.OrderedDict()
-      remaining_traces = self.traces.copy()
-
-      def AddTrace(name):
-        """Adds a trace to the traces dict if it exists and is remaining."""
-        if name in remaining_traces:
-          value = self.traces[name].value
-          stddev = self.traces[name].stddev
-          traces_dict[name] = [str(value), str(stddev)]
-          del remaining_traces[name]
-
-      # First pull out any important traces in alphabetical order, and their
-      # _ref traces even if not marked as important.
-      keys = [x for x in self.traces.keys() if self.traces[x].important]
-      for name in sorted(keys):
-        AddTrace(name)
-        AddTrace(name + '_ref')
-
-      # Now append any other traces that have corresponding _ref traces, in
-      # alphabetical order.
-      keys = [x for x in self.traces.keys() if x + '_ref' in remaining_traces]
-      for name in sorted(keys):
-        AddTrace(name)
-        AddTrace(name + '_ref')
-
-      # Finally, append any remaining traces, in alphabetical order.
-      for name in sorted(remaining_traces.keys()):
-        AddTrace(name)
-
+      """Returns a dictionary mapping trace names to [value, stddev]."""
+      traces_dict = {}
+      for name, trace in self.traces.items():
+        traces_dict[name] = [str(trace.value), str(trace.stddev)]
       return traces_dict
 
   def __init__(self, *args, **kwargs):
@@ -705,13 +678,7 @@ class GraphingLogProcessor(PerformanceLogProcessor):
     return geom_mean, stddev
 
   def _BuildSummaryJson(self, graph):
-    """Returns JSON with the data in the given graph.
-
-    The keys in the returned JSON are given in a particular order for historical
-    reasons; some JS that processed the output would iterate in a particular
-    order.
-
-    TODO(qyearsley): Change this to ignore order.
+    """Returns JSON with the data in the given graph plus revision information.
 
     Args:
       graph: A GraphingLogProcessor.Graph object.
@@ -720,13 +687,10 @@ class GraphingLogProcessor(PerformanceLogProcessor):
       The format output here is the "-summary.dat line" format; that is, it
       is a JSON encoding of a dictionary that has the key "traces"
     """
-    if not self._revision:
-      raise Exception('revision is None')
-
-    traces = graph.BuildTracesDict()
+    assert self._revision, 'revision must always be present'
 
     graph_dict = collections.OrderedDict([
-        ('traces', traces),
+        ('traces', graph.BuildTracesDict()),
         ('rev', str(self._revision)),
         ('webkit_rev', str(self._webkit_revision)),
         ('webrtc_rev', str(self._webrtc_revision)),
@@ -736,11 +700,11 @@ class GraphingLogProcessor(PerformanceLogProcessor):
         ('units', str(graph.units)),
     ])
 
-    important = [t for t in traces.keys() if graph.traces[t].important]
+    # Include a sorted list of important trace names if there are any.
+    important = [t for t in graph.traces.keys() if graph.traces[t].important]
     if important:
-      graph_dict['important'] = important
+      graph_dict['important'] = sorted(important)
 
-    # When given an OrderedDict, json.dumps will obey the order specified.
     return json.dumps(graph_dict)
 
   def _FinalizeProcessing(self):
