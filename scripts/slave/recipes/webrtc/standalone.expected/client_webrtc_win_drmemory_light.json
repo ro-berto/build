@@ -108,12 +108,12 @@
       "--target",
       "Debug",
       "--factory-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win DrMemory Light\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win DrMemory Light\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=audio_decoder_unittests",
-      "--builder-name=Win Dr Memory Full",
+      "--builder-name=Win DrMemory Light",
       "--slave-name=slavename",
       "--pass-build-dir",
       "--pass-target",
@@ -122,7 +122,7 @@
       "--test",
       "audio_decoder_unittests.exe",
       "--tool",
-      "drmemory_full"
+      "drmemory_light"
     ],
     "name": "audio_decoder_unittests"
   },
@@ -136,12 +136,12 @@
       "--target",
       "Debug",
       "--factory-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win DrMemory Light\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win DrMemory Light\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=common_audio_unittests",
-      "--builder-name=Win Dr Memory Full",
+      "--builder-name=Win DrMemory Light",
       "--slave-name=slavename",
       "--pass-build-dir",
       "--pass-target",
@@ -150,7 +150,7 @@
       "--test",
       "common_audio_unittests.exe",
       "--tool",
-      "drmemory_full"
+      "drmemory_light"
     ],
     "name": "common_audio_unittests"
   },
@@ -164,12 +164,12 @@
       "--target",
       "Debug",
       "--factory-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win DrMemory Light\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win DrMemory Light\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=common_video_unittests",
-      "--builder-name=Win Dr Memory Full",
+      "--builder-name=Win DrMemory Light",
       "--slave-name=slavename",
       "--pass-build-dir",
       "--pass-target",
@@ -178,7 +178,7 @@
       "--test",
       "common_video_unittests.exe",
       "--tool",
-      "drmemory_full"
+      "drmemory_light"
     ],
     "name": "common_video_unittests"
   },
@@ -192,12 +192,12 @@
       "--target",
       "Debug",
       "--factory-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win DrMemory Light\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win DrMemory Light\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=libjingle_media_unittest",
-      "--builder-name=Win Dr Memory Full",
+      "--builder-name=Win DrMemory Light",
       "--slave-name=slavename",
       "--pass-build-dir",
       "--pass-target",
@@ -206,7 +206,7 @@
       "--test",
       "libjingle_media_unittest.exe",
       "--tool",
-      "drmemory_full"
+      "drmemory_light"
     ],
     "name": "libjingle_media_unittest"
   },
@@ -220,12 +220,12 @@
       "--target",
       "Debug",
       "--factory-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win DrMemory Light\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win DrMemory Light\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=libjingle_p2p_unittest",
-      "--builder-name=Win Dr Memory Full",
+      "--builder-name=Win DrMemory Light",
       "--slave-name=slavename",
       "--pass-build-dir",
       "--pass-target",
@@ -234,7 +234,7 @@
       "--test",
       "libjingle_p2p_unittest.exe",
       "--tool",
-      "drmemory_full"
+      "drmemory_light"
     ],
     "name": "libjingle_p2p_unittest"
   },
@@ -248,12 +248,12 @@
       "--target",
       "Debug",
       "--factory-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win DrMemory Light\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win DrMemory Light\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=libjingle_peerconnection_unittest",
-      "--builder-name=Win Dr Memory Full",
+      "--builder-name=Win DrMemory Light",
       "--slave-name=slavename",
       "--pass-build-dir",
       "--pass-target",
@@ -262,7 +262,7 @@
       "--test",
       "libjingle_peerconnection_unittest.exe",
       "--tool",
-      "drmemory_full"
+      "drmemory_light"
     ],
     "name": "libjingle_peerconnection_unittest"
   },
@@ -276,12 +276,12 @@
       "--target",
       "Debug",
       "--factory-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win DrMemory Light\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win DrMemory Light\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=libjingle_sound_unittest",
-      "--builder-name=Win Dr Memory Full",
+      "--builder-name=Win DrMemory Light",
       "--slave-name=slavename",
       "--pass-build-dir",
       "--pass-target",
@@ -290,7 +290,7 @@
       "--test",
       "libjingle_sound_unittest.exe",
       "--tool",
-      "drmemory_full"
+      "drmemory_light"
     ],
     "name": "libjingle_sound_unittest"
   },
@@ -304,12 +304,12 @@
       "--target",
       "Debug",
       "--factory-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win DrMemory Light\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win DrMemory Light\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=libjingle_unittest",
-      "--builder-name=Win Dr Memory Full",
+      "--builder-name=Win DrMemory Light",
       "--slave-name=slavename",
       "--pass-build-dir",
       "--pass-target",
@@ -318,7 +318,7 @@
       "--test",
       "libjingle_unittest.exe",
       "--tool",
-      "drmemory_full"
+      "drmemory_light"
     ],
     "name": "libjingle_unittest"
   },
@@ -332,12 +332,12 @@
       "--target",
       "Debug",
       "--factory-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win DrMemory Light\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win DrMemory Light\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=modules_tests",
-      "--builder-name=Win Dr Memory Full",
+      "--builder-name=Win DrMemory Light",
       "--slave-name=slavename",
       "--pass-build-dir",
       "--pass-target",
@@ -346,7 +346,7 @@
       "--test",
       "modules_tests.exe",
       "--tool",
-      "drmemory_full"
+      "drmemory_light"
     ],
     "name": "modules_tests"
   },
@@ -360,12 +360,12 @@
       "--target",
       "Debug",
       "--factory-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win DrMemory Light\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win DrMemory Light\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=modules_unittests",
-      "--builder-name=Win Dr Memory Full",
+      "--builder-name=Win DrMemory Light",
       "--slave-name=slavename",
       "--pass-build-dir",
       "--pass-target",
@@ -374,7 +374,7 @@
       "--test",
       "modules_unittests.exe",
       "--tool",
-      "drmemory_full"
+      "drmemory_light"
     ],
     "name": "modules_unittests"
   },
@@ -388,12 +388,12 @@
       "--target",
       "Debug",
       "--factory-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win DrMemory Light\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win DrMemory Light\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=system_wrappers_unittests",
-      "--builder-name=Win Dr Memory Full",
+      "--builder-name=Win DrMemory Light",
       "--slave-name=slavename",
       "--pass-build-dir",
       "--pass-target",
@@ -402,7 +402,7 @@
       "--test",
       "system_wrappers_unittests.exe",
       "--tool",
-      "drmemory_full"
+      "drmemory_light"
     ],
     "name": "system_wrappers_unittests"
   },
@@ -416,12 +416,12 @@
       "--target",
       "Debug",
       "--factory-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win DrMemory Light\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win DrMemory Light\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=test_support_unittests",
-      "--builder-name=Win Dr Memory Full",
+      "--builder-name=Win DrMemory Light",
       "--slave-name=slavename",
       "--pass-build-dir",
       "--pass-target",
@@ -430,7 +430,7 @@
       "--test",
       "test_support_unittests.exe",
       "--tool",
-      "drmemory_full"
+      "drmemory_light"
     ],
     "name": "test_support_unittests"
   },
@@ -444,12 +444,12 @@
       "--target",
       "Debug",
       "--factory-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win DrMemory Light\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win DrMemory Light\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=tools_unittests",
-      "--builder-name=Win Dr Memory Full",
+      "--builder-name=Win DrMemory Light",
       "--slave-name=slavename",
       "--pass-build-dir",
       "--pass-target",
@@ -458,7 +458,7 @@
       "--test",
       "tools_unittests.exe",
       "--tool",
-      "drmemory_full"
+      "drmemory_light"
     ],
     "name": "tools_unittests"
   },
@@ -472,12 +472,12 @@
       "--target",
       "Debug",
       "--factory-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win DrMemory Light\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win DrMemory Light\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=video_engine_core_unittests",
-      "--builder-name=Win Dr Memory Full",
+      "--builder-name=Win DrMemory Light",
       "--slave-name=slavename",
       "--pass-build-dir",
       "--pass-target",
@@ -486,7 +486,7 @@
       "--test",
       "video_engine_core_unittests.exe",
       "--tool",
-      "drmemory_full"
+      "drmemory_light"
     ],
     "name": "video_engine_core_unittests"
   },
@@ -500,12 +500,12 @@
       "--target",
       "Debug",
       "--factory-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win DrMemory Light\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win DrMemory Light\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=video_engine_tests",
-      "--builder-name=Win Dr Memory Full",
+      "--builder-name=Win DrMemory Light",
       "--slave-name=slavename",
       "--pass-build-dir",
       "--pass-target",
@@ -514,7 +514,7 @@
       "--test",
       "video_engine_tests.exe",
       "--tool",
-      "drmemory_full"
+      "drmemory_light"
     ],
     "name": "video_engine_tests"
   },
@@ -528,12 +528,12 @@
       "--target",
       "Debug",
       "--factory-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win DrMemory Light\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win DrMemory Light\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=voice_engine_unittests",
-      "--builder-name=Win Dr Memory Full",
+      "--builder-name=Win DrMemory Light",
       "--slave-name=slavename",
       "--pass-build-dir",
       "--pass-target",
@@ -542,7 +542,7 @@
       "--test",
       "voice_engine_unittests.exe",
       "--tool",
-      "drmemory_full"
+      "drmemory_light"
     ],
     "name": "voice_engine_unittests"
   }

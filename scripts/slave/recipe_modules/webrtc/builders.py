@@ -431,7 +431,7 @@ BUILDERS = {
           'platform': 'win',
         },
       },
-      'Win Dr Memory Full': {
+      'Win DrMemory Full': {
         'recipe_config': 'webrtc',
         'chromium_apply_config': ['drmemory_full'],
         'gclient_apply_config': ['drmemory'],
@@ -444,7 +444,7 @@ BUILDERS = {
           'platform': 'win',
         },
       },
-      'Win Dr Memory Light': {
+      'Win DrMemory Light': {
         'recipe_config': 'webrtc',
         'chromium_apply_config': ['drmemory_light'],
         'gclient_apply_config': ['drmemory'],
@@ -630,7 +630,7 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
-      'Linux TSan': {
+      'Linux Tsan': {
         'recipe_config': 'webrtc',
         'chromium_apply_config': ['tsan'],
         'gclient_apply_config': ['valgrind'],
@@ -643,7 +643,7 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
-      'Linux TSan v2': {
+      'Linux Tsan v2': {
         'recipe_config': 'webrtc_tsan2',
         'webrtc_config_kwargs': {
           'BUILD_CONFIG': 'Release',
