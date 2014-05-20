@@ -46,6 +46,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       GYP_DEFINES = Dict(equal_fn, ' '.join, (basestring,int,Path)),
       GYP_GENERATORS = Set(basestring, ','.join),
       GYP_GENERATOR_FLAGS = Dict(equal_fn, ' '.join, (basestring,int)),
+      GYP_USE_SEPARATE_MSPDBSRV = Single(int, jsonish_fn=str, required=False),
     ),
     build_dir = Single(Path),
     runtests = ConfigGroup(
@@ -308,6 +309,16 @@ def tsan2(c):
   gyp_defs['release_extra_cflags'] = '-gline-tables-only'
   gyp_defs['disable_nacl'] = 1
 
+@config_ctx(deps=['compiler'], group='memory_tool')
+def syzyasan(c):
+  if c.gyp_env.GYP_DEFINES['component'] != 'static_library':  # pragma: no cover
+    raise BadConf('SyzyASan requires component=static_library')
+  gyp_defs = c.gyp_env.GYP_DEFINES
+  gyp_defs['syzyasan'] = 1
+  gyp_defs['win_z7'] = 1
+  gyp_defs['chromium_win_pch'] = 0
+  c.gyp_env.GYP_USE_SEPARATE_MSPDBSRV = 1
+
 @config_ctx(group='memory_tool')
 def drmemory_full(c):
   _memory_tool(c, 'drmemory_full')
@@ -343,6 +354,10 @@ def chromium_asan(c):
   c.compile_py.default_targets = ['All', 'chromium_builder_tests']
   c.runtests.lsan_suppressions_file = Path('[CHECKOUT]', 'tools', 'lsan',
                                            'suppressions.txt')
+
+@config_ctx(includes=['ninja', 'clang', 'goma', 'syzyasan'])
+def chromium_syzyasan(c):
+  c.compile_py.default_targets = ['All', 'chromium_builder_tests']
 
 @config_ctx(includes=['ninja', 'clang', 'goma', 'tsan2'])
 def chromium_tsan2(c):

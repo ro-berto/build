@@ -6,7 +6,7 @@
       "[DEPOT_TOOLS]\\gclient.py",
       "config",
       "--spec",
-      "cache_dir = None\nsolutions = [{'custom_vars': {'root_dir': 'src'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/webrtc/trunk'}, {'custom_vars': {'root_dir': 'src'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'webrtc-limited', 'url': 'svn://svn-mirror.golo.chromium.org/chrome-internal/trunk/webrtc-limited'}, {'deps_file': 'DEPS', 'managed': True, 'name': 'drmemory.DEPS', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/deps/third_party/drmemory/drmemory.DEPS'}]"
+      "cache_dir = None\nsolutions = [{'custom_deps': {'third_party/tsan': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/deps/third_party/tsan'}, 'custom_vars': {'root_dir': 'src'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/webrtc/trunk'}, {'custom_vars': {'root_dir': 'src'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'webrtc-limited', 'url': 'svn://svn-mirror.golo.chromium.org/chrome-internal/trunk/webrtc-limited'}]"
     ],
     "name": "gclient setup"
   },
@@ -30,9 +30,6 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"solutions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"drmemory.DEPS/\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": 74515@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"src/\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"revision\": 170242@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
@@ -53,7 +50,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "build_for_tool=drmemory chromium_win_pch=0 component=shared_library fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 use_goma=1"
+      "GYP_DEFINES": "build_for_tool=tsan chromium_win_pch=0 component=shared_library fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 use_goma=1"
     },
     "name": "gclient runhooks",
     "seed_steps": [
@@ -108,12 +105,12 @@
       "--target",
       "Debug",
       "--factory-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win Tsan\", \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win Tsan\", \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=audio_decoder_unittests",
-      "--builder-name=Win Dr Memory Full",
+      "--builder-name=Win Tsan",
       "--slave-name=slavename",
       "--pass-build-dir",
       "--pass-target",
@@ -122,7 +119,7 @@
       "--test",
       "audio_decoder_unittests.exe",
       "--tool",
-      "drmemory_full"
+      "tsan"
     ],
     "name": "audio_decoder_unittests"
   },
@@ -136,12 +133,12 @@
       "--target",
       "Debug",
       "--factory-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win Tsan\", \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win Tsan\", \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=common_audio_unittests",
-      "--builder-name=Win Dr Memory Full",
+      "--builder-name=Win Tsan",
       "--slave-name=slavename",
       "--pass-build-dir",
       "--pass-target",
@@ -150,7 +147,7 @@
       "--test",
       "common_audio_unittests.exe",
       "--tool",
-      "drmemory_full"
+      "tsan"
     ],
     "name": "common_audio_unittests"
   },
@@ -164,12 +161,12 @@
       "--target",
       "Debug",
       "--factory-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win Tsan\", \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win Tsan\", \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=common_video_unittests",
-      "--builder-name=Win Dr Memory Full",
+      "--builder-name=Win Tsan",
       "--slave-name=slavename",
       "--pass-build-dir",
       "--pass-target",
@@ -178,7 +175,7 @@
       "--test",
       "common_video_unittests.exe",
       "--tool",
-      "drmemory_full"
+      "tsan"
     ],
     "name": "common_video_unittests"
   },
@@ -192,12 +189,12 @@
       "--target",
       "Debug",
       "--factory-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win Tsan\", \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win Tsan\", \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=libjingle_media_unittest",
-      "--builder-name=Win Dr Memory Full",
+      "--builder-name=Win Tsan",
       "--slave-name=slavename",
       "--pass-build-dir",
       "--pass-target",
@@ -206,7 +203,7 @@
       "--test",
       "libjingle_media_unittest.exe",
       "--tool",
-      "drmemory_full"
+      "tsan"
     ],
     "name": "libjingle_media_unittest"
   },
@@ -220,12 +217,12 @@
       "--target",
       "Debug",
       "--factory-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win Tsan\", \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win Tsan\", \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=libjingle_p2p_unittest",
-      "--builder-name=Win Dr Memory Full",
+      "--builder-name=Win Tsan",
       "--slave-name=slavename",
       "--pass-build-dir",
       "--pass-target",
@@ -234,7 +231,7 @@
       "--test",
       "libjingle_p2p_unittest.exe",
       "--tool",
-      "drmemory_full"
+      "tsan"
     ],
     "name": "libjingle_p2p_unittest"
   },
@@ -248,12 +245,12 @@
       "--target",
       "Debug",
       "--factory-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win Tsan\", \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win Tsan\", \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=libjingle_peerconnection_unittest",
-      "--builder-name=Win Dr Memory Full",
+      "--builder-name=Win Tsan",
       "--slave-name=slavename",
       "--pass-build-dir",
       "--pass-target",
@@ -262,7 +259,7 @@
       "--test",
       "libjingle_peerconnection_unittest.exe",
       "--tool",
-      "drmemory_full"
+      "tsan"
     ],
     "name": "libjingle_peerconnection_unittest"
   },
@@ -276,12 +273,12 @@
       "--target",
       "Debug",
       "--factory-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win Tsan\", \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win Tsan\", \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=libjingle_sound_unittest",
-      "--builder-name=Win Dr Memory Full",
+      "--builder-name=Win Tsan",
       "--slave-name=slavename",
       "--pass-build-dir",
       "--pass-target",
@@ -290,7 +287,7 @@
       "--test",
       "libjingle_sound_unittest.exe",
       "--tool",
-      "drmemory_full"
+      "tsan"
     ],
     "name": "libjingle_sound_unittest"
   },
@@ -304,12 +301,12 @@
       "--target",
       "Debug",
       "--factory-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win Tsan\", \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win Tsan\", \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=libjingle_unittest",
-      "--builder-name=Win Dr Memory Full",
+      "--builder-name=Win Tsan",
       "--slave-name=slavename",
       "--pass-build-dir",
       "--pass-target",
@@ -318,7 +315,7 @@
       "--test",
       "libjingle_unittest.exe",
       "--tool",
-      "drmemory_full"
+      "tsan"
     ],
     "name": "libjingle_unittest"
   },
@@ -332,12 +329,12 @@
       "--target",
       "Debug",
       "--factory-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win Tsan\", \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win Tsan\", \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=modules_tests",
-      "--builder-name=Win Dr Memory Full",
+      "--builder-name=Win Tsan",
       "--slave-name=slavename",
       "--pass-build-dir",
       "--pass-target",
@@ -346,7 +343,7 @@
       "--test",
       "modules_tests.exe",
       "--tool",
-      "drmemory_full"
+      "tsan"
     ],
     "name": "modules_tests"
   },
@@ -360,12 +357,12 @@
       "--target",
       "Debug",
       "--factory-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win Tsan\", \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win Tsan\", \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=modules_unittests",
-      "--builder-name=Win Dr Memory Full",
+      "--builder-name=Win Tsan",
       "--slave-name=slavename",
       "--pass-build-dir",
       "--pass-target",
@@ -374,7 +371,7 @@
       "--test",
       "modules_unittests.exe",
       "--tool",
-      "drmemory_full"
+      "tsan"
     ],
     "name": "modules_unittests"
   },
@@ -388,12 +385,12 @@
       "--target",
       "Debug",
       "--factory-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win Tsan\", \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win Tsan\", \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=system_wrappers_unittests",
-      "--builder-name=Win Dr Memory Full",
+      "--builder-name=Win Tsan",
       "--slave-name=slavename",
       "--pass-build-dir",
       "--pass-target",
@@ -402,7 +399,7 @@
       "--test",
       "system_wrappers_unittests.exe",
       "--tool",
-      "drmemory_full"
+      "tsan"
     ],
     "name": "system_wrappers_unittests"
   },
@@ -416,12 +413,12 @@
       "--target",
       "Debug",
       "--factory-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win Tsan\", \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win Tsan\", \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=test_support_unittests",
-      "--builder-name=Win Dr Memory Full",
+      "--builder-name=Win Tsan",
       "--slave-name=slavename",
       "--pass-build-dir",
       "--pass-target",
@@ -430,7 +427,7 @@
       "--test",
       "test_support_unittests.exe",
       "--tool",
-      "drmemory_full"
+      "tsan"
     ],
     "name": "test_support_unittests"
   },
@@ -444,12 +441,12 @@
       "--target",
       "Debug",
       "--factory-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win Tsan\", \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win Tsan\", \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=tools_unittests",
-      "--builder-name=Win Dr Memory Full",
+      "--builder-name=Win Tsan",
       "--slave-name=slavename",
       "--pass-build-dir",
       "--pass-target",
@@ -458,7 +455,7 @@
       "--test",
       "tools_unittests.exe",
       "--tool",
-      "drmemory_full"
+      "tsan"
     ],
     "name": "tools_unittests"
   },
@@ -472,12 +469,12 @@
       "--target",
       "Debug",
       "--factory-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win Tsan\", \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win Tsan\", \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=video_engine_core_unittests",
-      "--builder-name=Win Dr Memory Full",
+      "--builder-name=Win Tsan",
       "--slave-name=slavename",
       "--pass-build-dir",
       "--pass-target",
@@ -486,7 +483,7 @@
       "--test",
       "video_engine_core_unittests.exe",
       "--tool",
-      "drmemory_full"
+      "tsan"
     ],
     "name": "video_engine_core_unittests"
   },
@@ -500,12 +497,12 @@
       "--target",
       "Debug",
       "--factory-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win Tsan\", \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win Tsan\", \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=video_engine_tests",
-      "--builder-name=Win Dr Memory Full",
+      "--builder-name=Win Tsan",
       "--slave-name=slavename",
       "--pass-build-dir",
       "--pass-target",
@@ -514,7 +511,7 @@
       "--test",
       "video_engine_tests.exe",
       "--tool",
-      "drmemory_full"
+      "tsan"
     ],
     "name": "video_engine_tests"
   },
@@ -528,12 +525,12 @@
       "--target",
       "Debug",
       "--factory-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win Tsan\", \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Win Dr Memory Full\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"buildername\": \"Win Tsan\", \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=voice_engine_unittests",
-      "--builder-name=Win Dr Memory Full",
+      "--builder-name=Win Tsan",
       "--slave-name=slavename",
       "--pass-build-dir",
       "--pass-target",
@@ -542,7 +539,7 @@
       "--test",
       "voice_engine_unittests.exe",
       "--tool",
-      "drmemory_full"
+      "tsan"
     ],
     "name": "voice_engine_unittests"
   }

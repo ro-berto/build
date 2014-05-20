@@ -54,6 +54,9 @@ def GenSteps(api):
   steps.append(api.chromium.runhooks())
   steps.append(api.chromium.compile())
 
+  if api.chromium.c.gyp_env.GYP_DEFINES.get('syzyasan', 0) == 1:
+    steps.append(api.chromium.apply_syzyasan())
+
   test_suite = recipe_config.get('test_suite')
   if test_suite and bot_type in ['builder_tester', 'tester']:
     steps.extend(api.webrtc.runtests(test_suite))

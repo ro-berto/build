@@ -60,6 +60,17 @@ def valgrind(c):
                         'binaries')
 
 
+@CONFIG_CTX(includes=['webrtc'])
+def tsan_win(c):
+  """Add TSan Windows binaries dependency for WebRTC.
+
+  Since WebRTC DEPS is using relative paths, it it not possible to use a generic
+  tsan config in the gclient recipe module.
+  """
+  c.solutions[0].custom_deps['third_party/tsan'] = \
+      ChromiumSvnSubURL(c, 'chrome', 'trunk', 'deps', 'third_party', 'tsan')
+
+
 @CONFIG_CTX(includes=['chromium', '_webrtc_deps'])
 def chromium_webrtc(c):
   pass

@@ -177,6 +177,8 @@ class ChromiumApi(recipe_api.RecipeApi):
       full_args.append('--enable-tsan')
       full_args.append('--tsan-suppressions-file=%s' %
                        self.c.runtests.tsan_suppressions_file)
+    if self.c.gyp_env.GYP_DEFINES.get('syzyasan', 0) == 1:
+      full_args.append('--use-syzyasan-logger')
     if self.c.runtests.memory_tool:
       full_args.extend([
         '--pass-build-dir',
@@ -332,6 +334,14 @@ class ChromiumApi(recipe_api.RecipeApi):
         self.m.path['build'].join('scripts', 'slave', 'process_dumps.py'),
         ['--target', self.c.build_config_fs],
         **kwargs)
+
+  def apply_syzyasan(self):
+    args = ['--target', self.c.BUILD_CONFIG]
+    return self.m.python(
+      'apply_syzyasan',
+      self.m.path['build'].join('scripts', 'slave', 'chromium',
+                                'win_apply_syzyasan.py'),
+      args)
 
   def archive_build(self, step_name, gs_bucket, **kwargs):
     """Returns a step invoking archive_build.py to archive a Chromium build."""
