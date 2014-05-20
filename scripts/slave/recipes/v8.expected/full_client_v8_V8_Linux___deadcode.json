@@ -95,6 +95,7 @@
     "name": "extract build"
   },
   {
+    "abort_on_failure": false,
     "cmd": [
       "python",
       "-u",
@@ -136,6 +137,7 @@
     "name": "Check - flaky"
   },
   {
+    "abort_on_failure": false,
     "cmd": [
       "python",
       "-u",
@@ -154,6 +156,7 @@
     "name": "Test262"
   },
   {
+    "abort_on_failure": false,
     "cmd": [
       "python",
       "-u",

@@ -74,6 +74,7 @@
     "name": "compile"
   },
   {
+    "abort_on_failure": false,
     "cmd": [
       "python",
       "-u",
@@ -119,6 +120,7 @@
     "name": "Mjsunit - flaky"
   },
   {
+    "abort_on_failure": false,
     "cmd": [
       "python",
       "-u",

@@ -155,6 +155,7 @@ class V8Api(recipe_api.RecipeApi):
       full_args,
       cwd=self.m.path['checkout'],
       env=env,
+      abort_on_failure=False,
       followup_fn=followup_fn,
       step_test_data=step_test_data,
       **kwargs
@@ -172,8 +173,7 @@ class V8Api(recipe_api.RecipeApi):
             import sys
             print 'Unexpected results set present.'
             sys.exit(1)
-            """,
-            always_run=True)
+            """)
 
   def runtest(self, test, **kwargs):
     # Get the flaky-step configuration default per test.
@@ -186,8 +186,8 @@ class V8Api(recipe_api.RecipeApi):
     if add_flaky_step:
       return [
         self._runtest(test['name'], test, flaky_tests='skip', **kwargs),
-        self._runtest(test['name'] + ' - flaky', test, flaky_tests='run',
-                      abort_on_failure=False, **kwargs),
+        self._runtest(
+            test['name'] + ' - flaky', test, flaky_tests='run', **kwargs),
       ]
     else:
       return self._runtest(test['name'], test, **kwargs)

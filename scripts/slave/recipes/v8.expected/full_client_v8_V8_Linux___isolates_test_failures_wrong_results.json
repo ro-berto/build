@@ -95,6 +95,7 @@
     "name": "extract build"
   },
   {
+    "abort_on_failure": false,
     "cmd": [
       "python",
       "-u",
@@ -115,7 +116,6 @@
     "name": "Check"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -152,7 +152,6 @@
     "name": "Check - flaky"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
