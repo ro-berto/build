@@ -1787,6 +1787,8 @@ def main():
     if options.perf_config:
       try:
         options.perf_config = ast.literal_eval(options.perf_config)
+        assert type(options.perf_config) is dict, (
+            'Value of --perf-config couldn\'t be evaluated into a dict.')
       except (exceptions.SyntaxError, ValueError):
         option_parser.error('Failed to parse --perf-config value into a dict: '
                             '%s' % options.perf_config)
