@@ -106,7 +106,6 @@ fp_chromeos_asan = {
         'GYP_GENERATORS': 'ninja',
     },
     'lsan': True,
-    'lsan_run_all_tests': True,
     'sharded_tests': sharded_tests,
 }
 
