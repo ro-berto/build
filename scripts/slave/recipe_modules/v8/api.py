@@ -6,6 +6,10 @@ from slave import recipe_api
 from slave.recipe_modules.v8 import builders
 
 
+# With more than 23 letters, labels are to big for buildbot's popup boxes.
+MAX_LABEL_SIZE = 23
+
+
 # TODO(machenbach): This is copied from gclient's config.py and should be
 # unified somehow.
 def ChromiumSvnSubURL(c, *pieces):
@@ -98,6 +102,40 @@ class V8Api(recipe_api.RecipeApi):
       cwd=self.m.path['checkout'],
     )
 
+  def _update_test_presentation(self, results, presentation):
+    if not results:
+      return
+
+    unique_results = {}
+    for result in results:
+      # Use test base name as UI label (without suite and directory names).
+      label = result['name'].split('/')[-1]
+      # Truncate the label if it is still too long.
+      if len(label) > MAX_LABEL_SIZE:
+        label = label[:MAX_LABEL_SIZE - 2] + '..'
+      # Group tests with the same label (usually the same test that ran under
+      # different configurations).
+      unique_results.setdefault(label, []).append(result)
+
+    for label in sorted(unique_results):
+      lines = []
+      for result in unique_results[label]:
+        lines.append('Test: %s' % result['name'])
+        lines.append('Flags: %s' % " ".join(result['flags']))
+        lines.append('Exit code: %s' % result['exit_code'])
+        lines.append('Result: %s' % result['result'])
+        lines.append('Command: %s' % result['command'])
+        lines.append('')
+        if result['stdout']:
+          lines.append('Stdout:')
+          lines.extend(result['stdout'].splitlines())
+          lines.append('')
+        if result['stderr']:
+          lines.append('Stderr:')
+          lines.extend(result['stderr'].splitlines())
+          lines.append('')
+      presentation.logs[label] = lines
+
   def _runtest(self, name, test, flaky_tests=None, **kwargs):
     env = {}
     full_args = [
@@ -133,17 +171,12 @@ class V8Api(recipe_api.RecipeApi):
                     self.m.json.output(add_json_log=False)]
       def followup_fn(step_result):
         r = step_result.json.output
-        p = step_result.presentation
         # The output is expected to be a list of architecture dicts that
         # each contain a results list. On buildbot, there is only one
         # architecture.
-        if (r and isinstance(r, list) and isinstance(r[0], dict)
-            and r[0]['results']):
-          # Use test base name as UI label (without suite and directory names).
-          p.step_text += self.m.test_utils.format_step_text([[
-            "Failures:",
-            [res['name'].split('/')[-1] for res in r[0]['results']],
-          ]])
+        if (r and isinstance(r, list) and isinstance(r[0], dict)):
+          self._update_test_presentation(r[0]['results'],
+                                         step_result.presentation)
 
     step_test_data = lambda: self.test_api.output_json(
         self._test_data.get('test_failures', False),

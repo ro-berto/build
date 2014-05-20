@@ -54,8 +54,9 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         "result": "CRASH",
         "stdout": "Some output\nwith\nmore\nlines.",
         "stderr": "Some errput.",
-        "name": "other-suite/dir/other-test",
-        "command": "out/theMode/d8 --other test/other-suite/dir/other-test.js",
+        "name": "other-suite/dir/other-test-very-long-name",
+        "command": ("out/theMode/d8 --other "
+                    "test/other-suite/dir/other-test-very-long-name.js"),
         "exit_code": 1,
       }],
     }])
