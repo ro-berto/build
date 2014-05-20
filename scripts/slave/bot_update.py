@@ -27,8 +27,6 @@ import uuid
 
 import os.path as path
 
-from common import chromium_utils
-
 # Set this to true on flag day.
 FLAG_DAY = False
 
@@ -476,6 +474,14 @@ def solutions_to_git(input_solutions):
   return solutions, root, buildspec_name, warnings
 
 
+def remove(target):
+  """Remove a target by moving it into build.dead."""
+  dead_folder = path.join(BUILDER_DIR, 'build.dead')
+  if not path.exists(dead_folder):
+    os.makedirs(dead_folder)
+  os.rename(target, path.join(dead_folder, uuid.uuid4().hex))
+
+
 def ensure_no_checkout(dir_names, scm_dirname):
   """Ensure that there is no undesired checkout under build/.
 
@@ -498,10 +504,7 @@ def ensure_no_checkout(dir_names, scm_dirname):
     for filename in os.listdir(build_dir):
       deletion_target = path.join(build_dir, filename)
       print '%sdeleting %s...' % (prefix, deletion_target),
-      if path.isdir(deletion_target):
-        chromium_utils.RemoveDirectory(deletion_target)
-      else:
-        chromium_utils.RemoveFile(deletion_target)
+      remove(deletion_target)
       print 'done'
 
 
@@ -771,7 +774,7 @@ def git_checkout(solutions, revisions, shallow):
         if e.code == 128:
           # Exited abnormally, theres probably something wrong.
           # Lets wipe the checkout and try again.
-          chromium_utils.RemoveDirectory(sln_dir)
+          remove(sln_dir)
           git(*clone_cmd)
           git('checkout', '--force', 'origin/master', cwd=sln_dir)
           git('reset', '--hard', cwd=sln_dir)
