@@ -48,9 +48,12 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       GYP_GENERATOR_FLAGS = Dict(equal_fn, ' '.join, (basestring,int)),
     ),
     build_dir = Single(Path),
-
-    memory_tool = Single(basestring, required=False),
-    memory_tests_runner = Single(Path),
+    runtests = ConfigGroup(
+      memory_tool = Single(basestring, required=False),
+      memory_tests_runner = Single(Path),
+      lsan_suppressions_file = Single(Path),
+      tsan_suppressions_file = Single(Path),
+    ),
 
     # Some platforms do not have a 1:1 correlation of BUILD_CONFIG to what is
     # passed as --target on the command line.
@@ -133,10 +136,12 @@ def BASE(c):
       # Windows requires 64-bit builds to be in <dir>_x64.
       c.build_config_fs = c.BUILD_CONFIG + '_x64'
 
-  c.memory_tests_runner = Path('[CHECKOUT]', 'tools', 'valgrind',
-                               'chrome_tests', platform_ext={'win': '.bat',
-                                                             'mac': '.sh',
-                                                             'linux': '.sh'})
+  # Test runner memory tools that are not compile-time based.
+  c.runtests.memory_tests_runner = Path('[CHECKOUT]', 'tools', 'valgrind',
+                                        'chrome_tests',
+                                        platform_ext={'win': '.bat',
+                                                      'mac': '.sh',
+                                                      'linux': '.sh'})
   gyp_arch = {
     ('intel', 32): 'ia32',
     ('intel', 64): 'x64',
@@ -316,8 +321,8 @@ def drmemory_light(c):
 def _memory_tool(c, tool):
   if tool not in MEMORY_TOOLS:  # pragma: no cover
     raise BadConf('"%s" is not a supported memory tool, the supported ones '
-                  'are: %s' % (c.memory_tool, ','.join(MEMORY_TOOLS)))
-  c.memory_tool = tool
+                  'are: %s' % (tool, ','.join(MEMORY_TOOLS)))
+  c.runtests.memory_tool = tool
 
 @config_ctx()
 def trybot_flavor(c):
@@ -336,10 +341,14 @@ def chromium(c):
 @config_ctx(includes=['ninja', 'clang', 'goma', 'asan'])
 def chromium_asan(c):
   c.compile_py.default_targets = ['All', 'chromium_builder_tests']
+  c.runtests.lsan_suppressions_file = Path('[CHECKOUT]', 'tools', 'lsan',
+                                           'suppressions.txt')
 
 @config_ctx(includes=['ninja', 'clang', 'goma', 'tsan2'])
 def chromium_tsan2(c):
   c.compile_py.default_targets = ['All', 'chromium_builder_tests']
+  c.runtests.tsan_suppressions_file = Path('[CHECKOUT]', 'tools', 'valgrind',
+                                           'tsan_v2', 'suppressions.txt')
 
 @config_ctx(includes=['ninja', 'default_compiler', 'goma', 'chromeos'])
 def chromium_chromeos(c):

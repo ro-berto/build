@@ -17,6 +17,16 @@ def webrtc_clang(c):
   pass
 
 
+@CONFIG_CTX(includes=['webrtc'])
+def webrtc_asan(c):
+  pass
+
+
+@CONFIG_CTX(includes=['webrtc'])
+def webrtc_tsan2(c):
+  pass
+
+
 @CONFIG_CTX(includes=['webrtc', 'android'])
 def webrtc_android(c):
   pass

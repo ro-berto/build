@@ -165,14 +165,24 @@ class ChromiumApi(recipe_api.RecipeApi):
     if master_class_name:
       full_args.append('--master-class-name=%s' % master_class_name)
 
-    if self.c.memory_tool:
+    if self.c.gyp_env.GYP_DEFINES.get('asan', 0) == 1:
+      full_args.append('--enable-asan')
+    if self.c.gyp_env.GYP_DEFINES.get('lsan', 0) == 1:  # pragma: no cover
+      full_args.append('--enable-lsan')
+      full_args.append('--lsan-suppressions-file=%s' %
+                       self.c.runtests.lsan_suppressions_file)
+    if self.c.gyp_env.GYP_DEFINES.get('tsan', 0) == 1:
+      full_args.append('--enable-tsan')
+      full_args.append('--tsan-suppressions-file=%s' %
+                       self.c.runtests.tsan_suppressions_file)
+    if self.c.runtests.memory_tool:
       full_args.extend([
         '--pass-build-dir',
         '--pass-target',
         '--run-shell-script',
-        self.c.memory_tests_runner,
+        self.c.runtests.memory_tests_runner,
         '--test', test,
-        '--tool', self.c.memory_tool,
+        '--tool', self.c.runtests.memory_tool,
       ])
     else:
       full_args.append(test)
