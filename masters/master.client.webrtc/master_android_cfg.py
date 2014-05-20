@@ -31,9 +31,19 @@ def Update(c):
       ]),
   ])
 
+  # 'slavebuilddir' below is used to reduce the number of checkouts since some
+  # of the builders are pooled over multiple slave machines.
   specs = [
-    {'name': 'Android', 'recipe': 'webrtc/standalone'},
-    {'name': 'Android (dbg)', 'recipe': 'webrtc/standalone'},
+    {
+      'name': 'Android',
+      'recipe': 'webrtc/standalone',
+      'slavebuilddir': 'android',
+    },
+    {
+      'name': 'Android (dbg)',
+      'recipe': 'webrtc/standalone',
+      'slavebuilddir': 'android',
+    },
     {
       'name': 'Android Clang (dbg)',
       'recipe': 'webrtc/standalone',
@@ -61,6 +71,6 @@ def Update(c):
             triggers=spec.get('triggers')),
         'notify_on_missing': True,
         'category': 'android',
-        'slavebuilddir': spec.get('slavebuilddir', 'android'),
+        'slavebuilddir': spec.get('slavebuilddir', 'android_apk'),
       } for spec in specs
   ])
