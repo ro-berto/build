@@ -1227,7 +1227,10 @@ def _MainLinux(options, args):
     if (options.enable_asan or options.enable_msan) and not options.enable_lsan:
       symbolize = os.path.abspath(os.path.join('src', 'tools', 'valgrind',
                                                'asan', 'asan_symbolize.py'))
-      pipes = [[sys.executable, symbolize], ['c++filt']]
+      asan_symbolize = [sys.executable, symbolize]
+      if options.strip_path_prefix:
+        asan_symbolize.append(options.strip_path_prefix)
+      pipes = [asan_symbolize]
 
     command = _GenerateRunIsolatedCommand(build_dir, test_exe_path, options,
                                           command)
@@ -1633,6 +1636,11 @@ def main():
                                 'Default: %default. Can also be specified '
                                 'using the factory property '
                                 '"tsan_suppressions_file" (deprecated).')
+  option_parser.add_option('--strip-path-prefix',
+                           default='build/src/out/Release/../../',
+                           help='Source paths in stack traces will be stripped '
+                           'of prefixes ending with this substring. This '
+                           'option is used by sanitizer tools.')
   option_parser.add_option('--extra-sharding-args', default='',
                            help='Extra options for run_test_cases.py.')
   option_parser.add_option('--no-spawn-dbus', action='store_true',
@@ -1715,7 +1723,7 @@ def main():
     # https://code.google.com/p/address-sanitizer/issues/detail?id=134 is fixed.
     symbolizer_path = os.path.abspath(os.path.join('src', 'third_party',
         'llvm-build', 'Release+Asserts', 'bin', 'llvm-symbolizer'))
-    strip_path_prefix = 'build/src/out/Release/../../'
+    strip_path_prefix = options.strip_path_prefix
 
     # Symbolization of sanitizer reports.
     if options.enable_tsan or options.enable_lsan:
