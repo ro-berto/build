@@ -75,6 +75,8 @@ RECIPE_CONFIGS = {
   },
 }
 
+WEBRTC_REVISION_PERF_CONFIG = '{"a_default_rev": "r_webrtc_rev"}'
+
 BUILDERS = {
   'chromium.webrtc': {
     'builders': {
@@ -97,7 +99,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'webrtc_config_kwargs': {
-          'MEASURE_PERF': True,
+          'PERF_ID': 'chromium-webrtc-rel-xp',
         },
         'bot_type': 'tester',
         'build_gs_archive': 'win_rel_archive',
@@ -114,7 +116,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'webrtc_config_kwargs': {
-          'MEASURE_PERF': True,
+          'PERF_ID': 'chromium-webrtc-rel-7',
         },
         'bot_type': 'tester',
         'build_gs_archive': 'win_rel_archive',
@@ -145,7 +147,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'webrtc_config_kwargs': {
-          'MEASURE_PERF': True,
+          'PERF_ID': 'chromium-webrtc-rel-mac',
         },
         'bot_type': 'tester',
         'build_gs_archive': 'mac_rel_archive',
@@ -173,7 +175,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'webrtc_config_kwargs': {
-          'MEASURE_PERF': True,
+          'PERF_ID': 'chromium-webrtc-rel-linux',
         },
         'bot_type': 'tester',
         'build_gs_archive': 'linux_rel_archive',
@@ -206,7 +208,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'webrtc_config_kwargs': {
-          'MEASURE_PERF': True,
+          'PERF_ID': 'chromium-webrtc-dbg-android-nexus5',
         },
         'bot_type': 'tester',
         'build_gs_archive': 'android_dbg_archive',
@@ -224,7 +226,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'webrtc_config_kwargs': {
-          'MEASURE_PERF': True,
+          'PERF_ID': 'chromium-webrtc-dbg-android-nexus72',
         },
         'bot_type': 'tester',
         'build_gs_archive': 'android_dbg_archive',
@@ -236,6 +238,9 @@ BUILDERS = {
     },
   },
   'chromium.webrtc.fyi': {
+    'settings': {
+      'PERF_CONFIG': WEBRTC_REVISION_PERF_CONFIG,
+    },
     'builders': {
       'Win Builder': {
         'recipe_config': 'chromium_webrtc_tot',
@@ -256,7 +261,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'webrtc_config_kwargs': {
-          'MEASURE_PERF': True,
+          'PERF_ID': 'chromium-webrtc-trunk-tot-rel-winxp',
         },
         'bot_type': 'tester',
         'build_gs_archive': 'win_rel_archive_fyi',
@@ -273,7 +278,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'webrtc_config_kwargs': {
-          'MEASURE_PERF': True,
+          'PERF_ID': 'chromium-webrtc-trunk-tot-rel-win7',
         },
         'bot_type': 'tester',
         'build_gs_archive': 'win_rel_archive_fyi',
@@ -292,7 +297,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'webrtc_config_kwargs': {
-          'MEASURE_PERF': True,
+          'PERF_ID': 'chromium-webrtc-trunk-tot-rel-mac',
         },
         'bot_type': 'builder_tester',
         'testing': {
@@ -306,7 +311,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'webrtc_config_kwargs': {
-          'MEASURE_PERF': True,
+          'PERF_ID': 'chromium-webrtc-trunk-tot-rel-linux',
         },
         'bot_type': 'builder_tester',
         'testing': {
@@ -336,7 +341,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'webrtc_config_kwargs': {
-          'MEASURE_PERF': True,
+          'PERF_ID': 'chromium-webrtc-trunk-tot-dbg-android-nexus5',
         },
         'bot_type': 'tester',
         'build_gs_archive': 'android_dbg_archive_fyi',
@@ -354,7 +359,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'webrtc_config_kwargs': {
-          'MEASURE_PERF': True,
+          'PERF_ID': 'chromium-webrtc-trunk-tot-dbg-android-nexus72',
         },
         'bot_type': 'tester',
         'build_gs_archive': 'android_dbg_archive_fyi',
@@ -366,6 +371,9 @@ BUILDERS = {
     },
   },
   'client.webrtc': {
+    'settings': {
+      'PERF_CONFIG': WEBRTC_REVISION_PERF_CONFIG,
+    },
     'builders': {
       'Win32 Debug': {
         'recipe_config': 'webrtc',
@@ -416,7 +424,7 @@ BUILDERS = {
         'webrtc_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
-          'MEASURE_PERF': True,
+          'PERF_ID': 'webrtc-win-large-tests',
         },
         'bot_type': 'builder_tester',
         'testing': {
@@ -509,7 +517,7 @@ BUILDERS = {
         'webrtc_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
-          'MEASURE_PERF': True,
+          'PERF_ID': 'webrtc-mac-large-tests',
         },
         'bot_type': 'builder_tester',
         'testing': {
@@ -639,7 +647,7 @@ BUILDERS = {
         'webrtc_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
-          'MEASURE_PERF': True,
+          'PERF_ID': 'webrtc-linux-large-tests',
         },
         'bot_type': 'builder_tester',
         'testing': {

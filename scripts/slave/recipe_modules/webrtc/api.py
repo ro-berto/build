@@ -127,12 +127,13 @@ class WebRTCApi(recipe_api.RecipeApi):
     args = args or []
     env = env or {}
 
-    if self.c.MEASURE_PERF and perf_test:
+    if self.c.PERF_ID and perf_test:
       return self.m.chromium.runtest(
           test=test, args=args, name=name,
           results_url=self.DASHBOARD_UPLOAD_URL, annotate='graphing',
           xvfb=True, perf_dashboard_id=test, test_type=test, env=env,
-          revision=self.m.properties['revision'])
+          revision=self.m.properties['revision'], perf_id=self.c.PERF_ID,
+          perf_config=self.c.PERF_CONFIG)
     else:
       return self.m.chromium.runtest(
           test=test, args=args, name=name, annotate='gtest', xvfb=True,

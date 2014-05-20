@@ -92,7 +92,7 @@ class ChromiumApi(recipe_api.RecipeApi):
               python_mode=False, spawn_dbus=True, parallel=False,
               revision=None, webkit_revision=None, master_class_name=None,
               test_launcher_summary_output=None, flakiness_dash=None,
-              perf_id=None, **kwargs):
+              perf_id=None, perf_config=None, **kwargs):
     """Return a runtest.py invocation."""
     args = args or []
     assert isinstance(args, list)
@@ -117,8 +117,10 @@ class ChromiumApi(recipe_api.RecipeApi):
       full_args.append('--results-url=%s' % results_url)
     if perf_dashboard_id:
       full_args.append('--perf-dashboard-id=%s' % perf_dashboard_id)
-    if perf_id:  # pragma: no cover
+    if perf_id:
       full_args.append('--perf-id=%s' % perf_id)
+    if perf_config:
+      full_args.append('--perf-config="%s"' % perf_config)
     # This replaces the step_name that used to be sent via factory_properties.
     if test_type:
       full_args.append('--test-type=%s' % test_type)

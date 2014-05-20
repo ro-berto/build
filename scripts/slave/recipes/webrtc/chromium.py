@@ -27,6 +27,7 @@ def GenSteps(api):
   mastername = api.properties.get('mastername')
   buildername = api.properties.get('buildername')
   master_dict = api.webrtc.BUILDERS.get(mastername, {})
+  master_settings = master_dict.get('settings', {})
   bot_config = master_dict.get('builders', {}).get(buildername)
   assert bot_config, ('Unrecognized builder name "%r" for master "%r".' %
                       (buildername, mastername))
@@ -40,7 +41,9 @@ def GenSteps(api):
   # To use, pass "use_git=True" as an argument to run_recipe.py.
   use_git = api.properties.get('use_git', False)
 
-  api.webrtc.set_config(recipe_config['webrtc_config'])
+  api.webrtc.set_config(recipe_config['webrtc_config'],
+                        PERF_CONFIG=master_settings.get('PERF_CONFIG'),
+                        **bot_config.get('webrtc_config_kwargs', {}))
   api.chromium.set_config(recipe_config['chromium_config'],
                           **bot_config.get('chromium_config_kwargs', {}))
   api.gclient.set_config(recipe_config['gclient_config'], GIT_MODE=use_git)
@@ -116,7 +119,6 @@ def GenTests(api):
             'Unexpected parent_buildername for builder %r on master %r.' %
                 (buildername, mastername))
 
-      webrtc_config_kwargs = bot_config.get('webrtc_config_kwargs', {})
       revision = '321321'
       if mastername == 'chromium.webrtc.fyi':
         revision = '12345'
@@ -133,12 +135,4 @@ def GenTests(api):
                      bot_config.get(
                          'chromium_config_kwargs', {}).get('TARGET_BITS', 64))
       )
-      if webrtc_config_kwargs.get('MEASURE_PERF', False):
-        test += api.properties(perf_id=_sanitize_nonalpha(buildername),
-                               show_perf_results=True)
-        if mastername == 'chromium.webrtc.fyi':
-          # The WebRTC revision is the revision from the poller of this master
-          # and needs this to be displayed properly on the perf dashboard.
-          test += api.properties(perf_config={'a_default_rev': 'r_webrtc_rev'})
-
       yield test

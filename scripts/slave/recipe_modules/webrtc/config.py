@@ -7,9 +7,10 @@ from slave.recipe_config import Single, Static, BadConf
 from slave.recipe_config_types import Path
 
 
-def BaseConfig(MEASURE_PERF=False, **_kwargs):
+def BaseConfig(PERF_ID=None, PERF_CONFIG=None, **_kwargs):
   return ConfigGroup(
-    MEASURE_PERF = Static(MEASURE_PERF),
+    PERF_ID = Static(PERF_ID),
+    PERF_CONFIG = Static(PERF_CONFIG),
 
     patch_root_dir = Single(Path, required=False, empty_val=Path('[CHECKOUT]')),
 
@@ -20,7 +21,8 @@ def BaseConfig(MEASURE_PERF=False, **_kwargs):
   )
 
 VAR_TEST_MAP = {
-  'MEASURE_PERF': (True, False),
+  'PERF_ID': (None, 'perf-id'),
+  'PERF_CONFIG': (None, '{}', '{"a_default_rev": "r_webrtc_rev"}'),
 }
 
 def TEST_NAME_FORMAT(kwargs):

@@ -20,6 +20,7 @@ def GenSteps(api):
   mastername = api.properties.get('mastername')
   buildername = api.properties.get('buildername')
   master_dict = api.webrtc.BUILDERS.get(mastername, {})
+  master_settings = master_dict.get('settings', {})
   bot_config = master_dict.get('builders', {}).get(buildername)
   bot_type = bot_config.get('bot_type', 'builder_tester')
   assert bot_config, (
@@ -32,6 +33,7 @@ def GenSteps(api):
   recipe_config = api.webrtc.RECIPE_CONFIGS[recipe_config_name]
 
   api.webrtc.set_config(recipe_config['webrtc_config'],
+                        PERF_CONFIG=master_settings.get('PERF_CONFIG'),
                         **bot_config.get('webrtc_config_kwargs', {}))
   for c in bot_config.get('gclient_apply_config', []):
     api.gclient.apply_config(c)
@@ -87,10 +89,4 @@ def GenTests(api):
 
       if mastername.startswith('tryserver'):
         test += api.properties(patch_url='try_job_svn_patch')
-
-      if webrtc_config_kwargs.get('MEASURE_PERF', False):
-        test += api.properties(perf_id=_sanitize_nonalpha(buildername),
-                               perf_config={'a_default_rev': 'r_webrtc_rev'},
-                               show_perf_results=True)
-
       yield test
