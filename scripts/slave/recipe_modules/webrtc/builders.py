@@ -75,7 +75,7 @@ RECIPE_CONFIGS = {
   },
 }
 
-WEBRTC_REVISION_PERF_CONFIG = '{"a_default_rev": "r_webrtc_rev"}'
+WEBRTC_REVISION_PERF_CONFIG = '{\'a_default_rev\': \'r_webrtc_rev\'}'
 
 BUILDERS = {
   'chromium.webrtc': {

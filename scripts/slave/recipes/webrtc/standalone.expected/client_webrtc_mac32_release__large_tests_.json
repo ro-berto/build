@@ -206,7 +206,7 @@
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=webrtc_perf_tests",
       "--perf-id=webrtc-mac-large-tests",
-      "--perf-config=\"{\"a_default_rev\": \"r_webrtc_rev\"}\"",
+      "--perf-config=\"{'a_default_rev': 'r_webrtc_rev'}\"",
       "--test-type=webrtc_perf_tests",
       "--builder-name=Mac32 Release [large tests]",
       "--slave-name=slavename",
