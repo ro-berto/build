@@ -74,7 +74,7 @@
     "name": "compile"
   },
   {
-    "abort_on_failure": false,
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -97,7 +97,8 @@
     "name": "Mjsunit"
   },
   {
-    "abort_on_failure": false,
+    "always_run": true,
+    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -120,7 +121,7 @@
     "name": "Mjsunit - flaky"
   },
   {
-    "abort_on_failure": false,
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -143,7 +144,8 @@
     "name": "Webkit"
   },
   {
-    "abort_on_failure": false,
+    "always_run": true,
+    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",

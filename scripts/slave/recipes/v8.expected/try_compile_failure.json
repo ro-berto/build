@@ -298,7 +298,7 @@
     "name": "compile (with patch, lkgr, clobber)"
   },
   {
-    "abort_on_failure": false,
+    "always_run": true,
     "cmd": [
       "python",
       "-u",

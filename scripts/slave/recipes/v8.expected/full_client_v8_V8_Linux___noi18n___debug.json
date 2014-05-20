@@ -74,7 +74,7 @@
     "name": "compile"
   },
   {
-    "abort_on_failure": false,
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -95,7 +95,8 @@
     "name": "Check"
   },
   {
-    "abort_on_failure": false,
+    "always_run": true,
+    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -116,7 +117,7 @@
     "name": "Check - flaky"
   },
   {
-    "abort_on_failure": false,
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -137,7 +138,8 @@
     "name": "Webkit"
   },
   {
-    "abort_on_failure": false,
+    "always_run": true,
+    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -158,7 +160,7 @@
     "name": "Webkit - flaky"
   },
   {
-    "abort_on_failure": false,
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -177,7 +179,7 @@
     "name": "Mozilla"
   },
   {
-    "abort_on_failure": false,
+    "always_run": true,
     "cmd": [
       "python",
       "-u",

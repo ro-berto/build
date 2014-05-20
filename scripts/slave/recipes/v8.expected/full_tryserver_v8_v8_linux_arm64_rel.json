@@ -121,7 +121,7 @@
     "name": "compile (with patch)"
   },
   {
-    "abort_on_failure": false,
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
