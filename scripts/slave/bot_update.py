@@ -1173,7 +1173,7 @@ def parse_args():
   parse.add_option('--master', help='Master name.')
   parse.add_option('-f', '--force', action='store_true',
                    help='Bypass check to see if we want to be run. '
-                        'Should ONLY be used locally.')
+                        'Should ONLY be used locally or by smart recipes.')
   parse.add_option('--revision_mapping',
                    help='{"path/to/repo/": "property_name"}')
   parse.add_option('--revision_mapping_file',

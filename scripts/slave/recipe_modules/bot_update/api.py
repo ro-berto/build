@@ -57,8 +57,7 @@ class BotUpdateApi(recipe_api.RecipeApi):
 
   def ensure_checkout(self, gclient_config=None, suffix=None,
                       patch=True, ref=None, update_presentation=True,
-                      revisions=[],
-                      **kwargs):
+                      revisions=[], force=False, **kwargs):
     # We can re-use the gclient spec from the gclient module, since all the
     # data bot_update needs is already configured into the gclient spec.
     cfg = gclient_config or self.m.gclient.c
@@ -119,11 +118,14 @@ class BotUpdateApi(recipe_api.RecipeApi):
     cmd = [item for flag_set in flags
            for item in flag_set if flag_set[1] is not None]
 
+    if force:
+      cmd.append('--force')
+
     # Inject Json output for testing.
     git_mode = self.m.properties.get('mastername') in GIT_MASTERS
     first_sln = cfg.solutions[0].name
     step_test_data = lambda: self.test_api.output_json(
-        master, builder, slave, root, first_sln, rev_map, git_mode)
+        master, builder, slave, root, first_sln, rev_map, git_mode, force)
 
     def followup_fn(step_result):
       if update_presentation:
