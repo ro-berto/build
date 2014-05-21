@@ -957,8 +957,9 @@ class FactoryCommands(object):
     if server:
       cmd.extend(['--rietveld_server', server])
 
-    if WithProperties('%(bot_update_clobber:-)s'):
-      cmd.append('--bot_update_clobber')
+    # Add "--bot_update_clobber" flag to the command-line if the
+    # 'bot_update_clobber' property is set.
+    cmd.append(WithProperties('%s', 'bot_update_clobber:+--bot_update_clobber'))
 
     if revision_mapping:
       cmd.extend(['--revision_mapping=%s' % json.dumps(revision_mapping)])
