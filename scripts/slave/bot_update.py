@@ -147,6 +147,9 @@ ENABLED_BUILDERS = {
     ],
     'tryserver.blink': [
       'linux_blink_bot_update',
+    ],
+    'chromium.lkgr': [
+        'Telemetry Harness Upload (Bot Update)',
     ]
 }
 ENABLED_SLAVES = {
