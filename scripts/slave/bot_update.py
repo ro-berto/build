@@ -460,8 +460,9 @@ def solutions_to_git(input_solutions):
       print 'Warning: %s' % (warnings[-1],)
 
     # Point .DEPS.git is the git version of the DEPS file.
-    solution['deps_file'] = '.DEPS.git'.join(
-        solution.get('deps_file', 'DEPS').rsplit('DEPS', 1))
+    if not FLAG_DAY:
+      solution['deps_file'] = '.DEPS.git'.join(
+          solution.get('deps_file', 'DEPS').rsplit('DEPS', 1))
 
     if first_solution:
       root = parsed_path
@@ -730,11 +731,7 @@ def force_revision(folder_name, revision, git_svn=False):
       git_ref = revision
     git('checkout', git_ref, cwd=folder_name)
   else:
-    # Revision is None or 'HEAD', we want ToT.
-    if git_svn and not FLAG_DAY:
-      git('checkout', 'origin/git-svn', cwd=folder_name)
-    else:
-      git('checkout', 'origin/master', cwd=folder_name)
+    git('checkout', 'origin/master', cwd=folder_name)
 
 def git_checkout(solutions, revisions, shallow):
   build_dir = os.getcwd()
@@ -1208,9 +1205,16 @@ def parse_args():
                    help='(synonym for --clobber)')
   parse.add_option('-o', '--output_json',
                    help='Output JSON information into a specified file')
+  parse.add_option('--post-flag-day', action='store_true',
+                   help='Behave as if the chromium git migration has already '
+                   'happened')
 
 
   options, args = parse.parse_args()
+
+  if options.post_flag_day:
+    global FLAG_DAY
+    FLAG_DAY = True
 
   try:
     if options.revision_mapping_file:
