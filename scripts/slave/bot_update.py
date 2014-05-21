@@ -583,9 +583,10 @@ def need_to_run_deps2git(repo_base, deps_file, deps_git_file):
   """
   print 'Checking if %s exists' % deps_git_file
   if not path.isfile(deps_git_file):
-    # .DEPS.git doesn't exist but DEPS does? We probably want to generate one.
+    # .DEPS.git doesn't exist but DEPS does?  Generate one (unless we're past
+    # migration day, in which case we don't need .DEPS.git.
     print 'it doesn\'t exist!'
-    return True
+    return not FLAG_DAY
 
   if git('diff', '--staged', deps_file, cwd=repo_base).strip():
     return True
