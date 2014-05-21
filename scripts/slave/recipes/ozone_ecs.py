@@ -3,12 +3,14 @@
 # found in the LICENSE file.
 
 DEPS = [
+  'bot_update',
   'chromium',
   'gclient',
   'path',
   'properties',
   'python',
   'step',
+  'step_history',
   'tryserver',
 ]
 
@@ -62,9 +64,11 @@ def GenSteps(api):
 
   api.chromium.set_config('chromium', BUILD_CONFIG='Debug')
 
-  yield api.gclient.checkout()
+  yield api.bot_update.ensure_checkout()
+  if not api.step_history.last_step().json.output['did_run']:
+    yield api.gclient.checkout()
 
-  yield api.tryserver.maybe_apply_issue()
+    yield api.tryserver.maybe_apply_issue()
 
   api.chromium.c.gyp_env.GYP_DEFINES['embedded'] = 1
 
