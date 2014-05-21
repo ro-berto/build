@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+  'bot_update',
   'chromium',
   'chromite',
   'gclient',
@@ -64,18 +65,21 @@ def GenSteps(api):
   api.gclient.set_config('chromium')
   api.step.auto_resolve_conflicts = True
 
-  yield api.gclient.checkout(
-      revert=True, can_fail_build=False, abort_on_failure=False)
-  for step in api.step_history.values():
-    if step.retcode != 0:
-      yield (
-        api.path.rmcontents('slave build directory', api.path['slave_build']),
-        api.gclient.checkout(revert=False),
-      )
-      break
+  yield api.bot_update.ensure_checkout()
+  bot_update_mode = api.step_history.last_step().json.output['did_run']
+  if not bot_update_mode:
+    yield api.gclient.checkout(
+        revert=True, can_fail_build=False, abort_on_failure=False)
+    for step in api.step_history.values():
+      if step.retcode != 0:
+        yield (
+          api.path.rmcontents('slave build directory', api.path['slave_build']),
+          api.gclient.checkout(revert=False),
+        )
+        break
 
-  # Note: Bug(317809) lurks around here.
-  yield api.tryserver.maybe_apply_issue()
+    # Note: Bug(317809) lurks around here.
+    yield api.tryserver.maybe_apply_issue()
 
   yield api.chromite.cbuildbot(
       name='cbuildbot (with patch)',
@@ -91,8 +95,12 @@ def GenSteps(api):
 
     # Since we're likely to switch to an earlier revision, revert the patch,
     # sync with the new config, and apply issue again.
-    yield api.gclient.checkout(revert=True)
-    yield api.rietveld.apply_issue()
+    if bot_update_mode:
+      yield api.bot_update.ensure_checkout(ref='origin/lkcr',
+                                           suffix='lkcr clobber')
+    else:
+      yield api.gclient.checkout(revert=True)
+      yield api.rietveld.apply_issue()
 
     yield api.chromite.cbuildbot(
         name='cbuildbot (with patch, lkcr, clobber)',
@@ -102,16 +110,21 @@ def GenSteps(api):
         abort_on_failure=False,
         can_fail_build=False)
     if api.step_history['cbuildbot (with patch, lkcr, clobber)'].retcode != 0:
-      yield (
-        api.path.rmcontents('slave build directory', api.path['slave_build']),
-        api.gclient.checkout(revert=False),
-        api.rietveld.apply_issue(),
-        api.chromite.cbuildbot(
-            name='cbuildbot (with patch, lkcr, clobber, nuke)',
-            config=cbuildbot_config,
-            flags=cbuildbot_flags_clobber,
-            chromite_path=chromite_path)
+      yield api.path.rmcontents(
+          'slave build directory', api.path['slave_build'])
+      if bot_update_mode:
+        yield api.bot_update.ensure_checkout(ref='origin/lkcr',
+                                             suffix='lkcr clobber nuke')
+      else:
+        yield (
+            api.gclient.checkout(revert=False),
+            api.rietveld.apply_issue()
         )
+      yield api.chromite.cbuildbot(
+          name='cbuildbot (with patch, lkcr, clobber, nuke)',
+          config=cbuildbot_config,
+          flags=cbuildbot_flags_clobber,
+          chromite_path=chromite_path)
 
 
 def GenTests(api):
@@ -159,6 +172,14 @@ def GenTests(api):
     api.test('gclient_revert_nuke') +
     props() +
     api.step_data('gclient revert', retcode=1)
+  )
+
+  yield (
+    api.test('cbuildbot_failure_bot_update') +
+    props(mastername='tryserver.chromium', buildername='linux_rel_alt') +
+    api.step_data('cbuildbot (with patch)', retcode=1) +
+    api.step_data('cbuildbot (with patch, lkcr, clobber)', retcode=1) +
+    api.step_data('cbuildbot (with patch, lkcr, clobber, nuke)', retcode=1)
   )
 
   yield (
