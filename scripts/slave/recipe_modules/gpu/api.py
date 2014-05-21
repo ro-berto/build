@@ -338,14 +338,13 @@ class GpuApi(recipe_api.RecipeApi):
                                     test_type='tab_capture_performance_tests',
                                     spawn_dbus=True)
 
-    # browser_tests.isolate unconditionally invokes Xvfb, which is not
-    # workable on the GPU bots. Disable this test on Linux when using
-    # isolates for the moment. crbug.com/365927
-    if not (self.m.platform.is_linux and self._use_isolates):
+    # Tab capture end-to-end (correctness) tests.
+    # TODO(kbr): enable this test everywhere once the Debug bots have
+    # been switched to using isolates. It's not worth the effort to
+    # make this test work both in isolated and non-isolated mode.
+    if self.using_isolates:
       yield self._maybe_run_isolate(
-          'browser_tests',
-          args=['--enable-gpu',
-                '--gtest_filter=TabCaptureApiPixelTest.*'],
+          'tab_capture_end2end_tests',
           name='tab_capture_end2end_tests',
           spawn_dbus=True)
 

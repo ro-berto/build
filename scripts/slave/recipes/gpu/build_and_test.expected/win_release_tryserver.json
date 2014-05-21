@@ -174,10 +174,10 @@
       "--",
       "chromium_gpu_builder",
       "angle_unittests_run",
-      "browser_tests_run",
       "content_gl_tests_run",
       "gl_tests_run",
       "gles2_conform_test_run",
+      "tab_capture_end2end_tests_run",
       "tab_capture_performance_tests_run",
       "telemetry_gpu_test_run"
     ],
@@ -198,15 +198,15 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"angle_unittests\": \"[dummy hash for angle_unittests]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"browser_tests\": \"[dummy hash for browser_tests]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"gl_tests\": \"[dummy hash for gl_tests]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tab_capture_performance_tests\": \"[dummy hash for tab_capture_performance_tests]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"angle_unittests\": \"[dummy hash for angle_unittests]\", \"browser_tests\": \"[dummy hash for browser_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"tab_capture_performance_tests\": \"[dummy hash for tab_capture_performance_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}@@@"
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"angle_unittests\": \"[dummy hash for angle_unittests]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"tab_capture_performance_tests\": \"[dummy hash for tab_capture_performance_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}@@@"
     ]
   },
   {
@@ -699,12 +699,9 @@
       "--webkit-revision=124383",
       "[SLAVE_BUILD]\\src\\tools\\swarming_client\\run_isolated.py",
       "-H",
-      "[dummy hash for browser_tests]",
+      "[dummy hash for tab_capture_end2end_tests]",
       "-I",
-      "https://isolateserver.appspot.com",
-      "--",
-      "--enable-gpu",
-      "--gtest_filter=TabCaptureApiPixelTest.*"
+      "https://isolateserver.appspot.com"
     ],
     "name": "tab_capture_end2end_tests"
   }

@@ -150,10 +150,10 @@
       "--",
       "chromium_gpu_debug_builder",
       "angle_unittests_run",
-      "browser_tests_run",
       "content_gl_tests_run",
       "gl_tests_run",
       "gles2_conform_test_run",
+      "tab_capture_end2end_tests_run",
       "tab_capture_performance_tests_run",
       "telemetry_gpu_test_run"
     ],
