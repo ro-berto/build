@@ -23,28 +23,6 @@ DEPS = [
 BUILDERS = {
   'tryserver.chromium': {
     'builders': {
-      'linux_arm_cross_compile': {
-        'GYP_DEFINES': {
-          'target_arch': 'arm',
-          'arm_float_abi': 'hard',
-          'test_isolation_mode': 'archive',
-        },
-        'chromium_config': 'chromium',
-        'runhooks_env': {
-          'AR': 'arm-linux-gnueabihf-ar',
-          'AS': 'arm-linux-gnueabihf-as',
-          'CC': 'arm-linux-gnueabihf-gcc',
-          'CC_host': 'gcc',
-          'CXX': 'arm-linux-gnueabihf-g++',
-          'CXX_host': 'g++',
-          'RANLIB': 'arm-linux-gnueabihf-ranlib',
-        },
-        'compile_only': True,
-        'testing': {
-          'platform': 'linux',
-          'test_spec_file': 'chromium_arm.json',
-        },
-      },
       'linux_chromium_dbg': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -470,9 +448,6 @@ def GenSteps(api):
 
   api.chromium.set_config(bot_config['chromium_config'],
                           **bot_config.get('chromium_config_kwargs', {}))
-  # Settings GYP_DEFINES explicitly because chromium config constructor does
-  # not support that.
-  api.chromium.c.gyp_env.GYP_DEFINES.update(bot_config.get('GYP_DEFINES', {}))
   api.chromium.apply_config('trybot_flavor')
   api.gclient.set_config('chromium')
   api.step.auto_resolve_conflicts = True
@@ -495,14 +470,11 @@ def GenSteps(api):
         break
     yield api.tryserver.maybe_apply_issue()
 
-  test_spec_file = bot_config['testing'].get('test_spec_file',
-                                             'chromium_trybot.json')
-  test_spec_path = api.path.join('testing', 'buildbot', test_spec_file)
-  def test_spec_followup_fn(step_result):
-    step_result.presentation.step_text = 'path: %s' % test_spec_path
   yield api.json.read(
       'read test spec',
-      api.path['checkout'].join(test_spec_path),
+      api.path['checkout'].join('testing',
+                                'buildbot',
+                                'chromium_trybot.json'),
       step_test_data=lambda: api.json.test_api.output([
         'base_unittests',
         {
@@ -519,14 +491,9 @@ def GenSteps(api):
           'test': 'browser_tests',
           'exclude_builders': ['tryserver.chromium:win_chromium_x64_rel'],
         },
-      ]),
-      followup_fn=test_spec_followup_fn,
-  )
+      ]))
 
-  runhooks_env = bot_config.get('runhooks_env', {})
-
-  yield api.chromium.runhooks(env=runhooks_env, abort_on_failure=False,
-                              can_fail_build=False)
+  yield api.chromium.runhooks(abort_on_failure=False, can_fail_build=False)
   if api.step_history.last_step().retcode != 0:
     # Before removing the checkout directory try just using LKCR.
     api.gclient.set_config('chromium_lkcr')
@@ -537,14 +504,12 @@ def GenSteps(api):
       # TODO(hinoka): Once lkcr exists and is a tag, it should just be lkcr
       #               rather than origin/lkcr.
       yield api.bot_update.ensure_checkout(ref='origin/lkcr', suffix='lkcr')
-      yield api.chromium.runhooks(env=runhooks_env)
-
+      yield api.chromium.runhooks()
     else:
       yield api.gclient.checkout(revert=True)
       yield api.tryserver.maybe_apply_issue()
 
-      yield api.chromium.runhooks(env=runhooks_env, abort_on_failure=False,
-                                  can_fail_build=False)
+      yield api.chromium.runhooks(abort_on_failure=False, can_fail_build=False)
       if api.step_history.last_step().retcode != 0:
         if api.platform.is_win:
           yield api.chromium.taskkill()
@@ -552,7 +517,7 @@ def GenSteps(api):
           api.path.rmcontents('slave build directory', api.path['slave_build']),
           api.gclient.checkout(revert=False),
           api.tryserver.maybe_apply_issue(),
-          api.chromium.runhooks(env=runhooks_env)
+          api.chromium.runhooks()
         )
 
   gtest_tests = []

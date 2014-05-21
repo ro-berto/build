@@ -129,7 +129,6 @@ ENABLED_MASTERS = [
 ]
 ENABLED_BUILDERS = {
     'tryserver.chromium': [
-        'linux_arm_cross_compile',
         'linux_rel_alt',
 
         # While these may look redundent, they're used to tell the

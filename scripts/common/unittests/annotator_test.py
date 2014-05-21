@@ -488,9 +488,6 @@ class TestMatchAnnotation(unittest.TestCase):
     def STEP_CURSOR(self):  # pylint: disable=R0201
       assert False, 'STEP_CURSOR called'
 
-    def STEP_TRIGGER(self, spec):
-      self.called.append(('STEP_TRIGGER', [json.loads(spec)]))
-
     def SOME_OTHER_METHOD(self):  # pylint: disable=R0201
       assert False, 'SOME_OTHER_METHOD called'
 
@@ -586,22 +583,6 @@ class TestMatchAnnotation(unittest.TestCase):
     with self.assertRaisesRegexp(Exception, "does not implement"):
       annotator.MatchAnnotation('@@@SEED_STEP_TEXT@thingy@i like pie@@@',
                                 self.c)
-
-  def testTrigger(self):
-    annotator.MatchAnnotation(
-        '@@@STEP_TRIGGER {"builderNames": ["myBuilder"]}@@@',
-        self.c)
-    annotator.MatchAnnotation(
-        ('@@@STEP_TRIGGER {"builderNames": ["myBuilder"], "set_properties":'
-         '{"answer": 42}}@@@'),
-        self.c)
-    self.assertEqual(self.c.called, [
-        ('STEP_TRIGGER', [{u'builderNames': [u'myBuilder']}]),
-        ('STEP_TRIGGER', [{
-            u'builderNames': [u'myBuilder'],
-            u'set_properties': {u'answer': 42},
-        }]),
-    ])
 
 
 class TestMatchAnnotationImplementation(unittest.TestCase):
