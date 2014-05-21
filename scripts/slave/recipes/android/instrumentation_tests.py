@@ -40,7 +40,7 @@ def GenTests(api):
     return test_data
 
   def props(bot_id):
-    return api.properties(
+    return api.properties.generic(
       repo_name='src/repo',
       repo_url='svn://svn.chromium.org/chrome/trunk/src',
       revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',

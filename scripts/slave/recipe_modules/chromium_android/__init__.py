@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+  'bot_update',
   'chromium',
   'gclient',
   'generator_script',

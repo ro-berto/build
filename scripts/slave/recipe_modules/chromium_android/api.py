@@ -98,8 +98,11 @@ class AndroidApi(recipe_api.RecipeApi):
     s.custom_vars = self.c.gclient_custom_vars or {}
     s.managed = self.c.managed
     s.revision = self.c.revision
+
     yield self.m.gclient.break_locks()
-    yield self.m.gclient.checkout(spec)
+    yield self.m.bot_update.ensure_checkout(spec)
+    if not self.m.step_history.last_step().json.output['did_run']:
+      yield self.m.gclient.checkout(spec)
 
     # TODO(sivachandra): Manufacture gclient spec such that it contains "src"
     # solution + repo_name solution. Then checkout will be automatically

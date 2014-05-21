@@ -77,7 +77,7 @@ def GenTests(api):
   for buildername in BUILDERS:
     yield (
         api.test('%s_basic' % buildername) +
-        api.properties(
+        api.properties.generic(
           buildername=buildername,
           slavename='tehslave',
           repo_name='src/repo',

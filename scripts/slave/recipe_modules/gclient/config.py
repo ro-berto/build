@@ -152,8 +152,11 @@ def chromium_lkgr(c):
     raise BadConf('Git has problems with safesync_url, crbug.com/109191.')
   s.safesync_url = safesync_url
 
-@config_ctx()
+@config_ctx(includes=['chromium_bare'])
 def android_bare(c):
+  # We inherit from chromium_bare to get the got_revision mapping.
+  # NOTE: We don't set a specific got_revision mapping for src/repo.
+  del c.solutions[0]
   s = c.solutions.add()
   s.deps_file = '.DEPS.git'
 
