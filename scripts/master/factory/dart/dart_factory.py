@@ -27,7 +27,7 @@ from master import master_utils
 
 import config
 
-v8_stable_branch = '3.25'
+v8_stable_branch = '3.26'
 android_tools_rev = '@b12d410c0ee23385da78e6c9f353d28fd992e0bd'
 android_resources_rev = '@3855'
 
