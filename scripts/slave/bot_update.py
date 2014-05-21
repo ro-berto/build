@@ -1202,6 +1202,8 @@ def parse_args():
                    help='Environment variables to pass into gclient runhooks.')
   parse.add_option('--clobber', action='store_true',
                    help='Delete checkout first, always')
+  parse.add_option('--bot_update_clobber', action='store_true', dest='clobber',
+                   help='(synonym for --clobber)')
   parse.add_option('-o', '--output_json',
                    help='Output JSON information into a specified file')
 
