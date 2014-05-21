@@ -233,7 +233,6 @@ def main(argv):
       'master.client.nacl.sdk.addin': 'NativeClientSDKAddIn',
       'master.client.nacl.sdk.mono': 'NativeClientSDKMono',
       'master.client.nacl.toolchain': 'NativeClientToolchain',
-      'master.client.oilpan': 'Oilpan',
       'master.client.pagespeed': 'PageSpeed',
       'master.client.polymer': 'Polymer',
       'master.client.sfntly': 'Sfntly',
