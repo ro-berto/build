@@ -15,8 +15,6 @@
       "cache_dir = '[ROOT]/git_cache'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'build', 'url': 'https://chromium.googlesource.com/chromium/tools/build.git'}]",
       "--root",
       "build",
-      "--revision",
-      "HEAD",
       "--revision_mapping_file",
       "{\"build\": \"got_revision\"}",
       "--issue",
@@ -24,7 +22,9 @@
       "--patchset",
       "1",
       "--output_json",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--revision",
+      "HEAD"
     ],
     "name": "bot_update",
     "~followup_annotations": [

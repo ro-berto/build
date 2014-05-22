@@ -15,8 +15,6 @@
       "cache_dir = None\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': '', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]",
       "--root",
       "src",
-      "--revision",
-      "HEAD",
       "--revision_mapping_file",
       "{}",
       "--issue",
@@ -24,7 +22,9 @@
       "--patchset",
       "1",
       "--output_json",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--revision",
+      "HEAD"
     ],
     "name": "bot_update - empty_deps",
     "~followup_annotations": [
@@ -146,8 +146,6 @@
       "cache_dir = None\nsolutions = [{'custom_deps': {'src/blacklist/project/1': None, 'src/blacklist/project/2': None}, 'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]\ntarget_os = ['android']",
       "--root",
       "src",
-      "--revision",
-      "HEAD",
       "--revision_mapping_file",
       "{}",
       "--issue",
@@ -155,7 +153,9 @@
       "--patchset",
       "1",
       "--output_json",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--revision",
+      "HEAD"
     ],
     "name": "bot_update - trimmed",
     "~followup_annotations": [

@@ -57,7 +57,7 @@ class BotUpdateApi(recipe_api.RecipeApi):
 
   def ensure_checkout(self, gclient_config=None, suffix=None,
                       patch=True, ref=None, update_presentation=True,
-                      revisions=[], force=False, **kwargs):
+                      force=False, **kwargs):
     # We can re-use the gclient spec from the gclient module, since all the
     # data bot_update needs is already configured into the gclient spec.
     cfg = gclient_config or self.m.gclient.c
@@ -79,8 +79,6 @@ class BotUpdateApi(recipe_api.RecipeApi):
       # The trybot recipe sometimes wants to de-apply the patch. In which case
       # we pretend the issue/patchset/patch_url never existed.
       issue = patchset = patch_url = None
-    revision = (ref or self.m.properties.get('parent_got_revision') or
-                self.m.properties.get('revision'))
     # Issue and patchset must come together.
     if issue:
       assert patchset
@@ -103,7 +101,6 @@ class BotUpdateApi(recipe_api.RecipeApi):
         # 2. What do we want to check out (spec/root/rev/rev_map).
         ['--spec', spec_string],
         ['--root', root],
-        ['--revision', revision],
         ['--revision_mapping_file', self.m.json.input(rev_map)],
 
         # 3. How to find the patch, if any (issue/patchset/patch_url).
@@ -113,6 +110,11 @@ class BotUpdateApi(recipe_api.RecipeApi):
 
         # 4. Hookups to JSON output back into recipes.
         ['--output_json', self.m.json.output()],]
+
+
+    revision = (ref or self.m.properties.get('parent_got_revision') or
+                self.m.properties.get('revision'))
+    flags.append(['--revision', revision])
 
     # Filter out flags that are None.
     cmd = [item for flag_set in flags

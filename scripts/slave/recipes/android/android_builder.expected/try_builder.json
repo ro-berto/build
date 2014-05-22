@@ -36,14 +36,14 @@
       "TestSlavename",
       "--spec",
       "cache_dir = None\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src/repo', 'url': 'svn://svn.chromium.org/chrome/trunk/src'}]\ntarget_os = ['android']",
-      "--revision",
-      "refs/remotes/origin/master",
       "--revision_mapping_file",
       "{}",
       "--patch_url",
       "try_job_svn_patch",
       "--output_json",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--revision",
+      "refs/remotes/origin/master"
     ],
     "name": "bot_update",
     "~followup_annotations": [
