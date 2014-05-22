@@ -657,7 +657,7 @@ def ensure_deps2git(sln_dir, shallow):
   repo_base = path.join(os.getcwd(), sln_dir)
   deps_file = path.join(repo_base, 'DEPS')
   deps_git_file = path.join(repo_base, '.DEPS.git')
-  if not path.isfile(deps_file):
+  if not git('ls-files', '.DEPS.git', cwd=repo_base).strip():
     return
 
   print 'Checking if %s is newer than %s' % (deps_file, deps_git_file)
@@ -1025,7 +1025,8 @@ def ensure_checkout(solutions, revisions, first_sln, target_os, target_os_only,
 
   # Now that gclient_sync has finished, we should revert any .DEPS.git so that
   # presubmit doesn't complain about it being modified.
-  if not buildspec_name:
+  if (not buildspec_name and
+      git('ls-files', '.DEPS.git', cwd=first_sln).strip()):
     git('checkout', 'HEAD', '--', '.DEPS.git', cwd=first_sln)
 
   if buildspec_name:
