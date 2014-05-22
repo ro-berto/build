@@ -212,7 +212,6 @@ def ninja_clobber(build_output_dir):
       if (f.endswith('.ninja') or f.endswith('.manifest') or
           f.startswith('msvc') or  # VS runtime DLLs.
           f in ('gyp-mac-tool', 'gyp-win-tool',
-                '.landmines',  # See http://crbug.com/375459.
                 'environment.x86', 'environment.x64')):
         continue
       os.unlink(os.path.join(root, f))
