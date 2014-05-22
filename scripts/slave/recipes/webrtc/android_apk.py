@@ -5,6 +5,7 @@
 DEPS = [
   'archive',
   'base_android',
+  'bot_update',
   'chromium',
   'chromium_android',
   'gclient',
@@ -156,12 +157,21 @@ def GenSteps(api):
   s = api.gclient.c.solutions
   s[0].revision = 'HEAD'
   s[0].custom_vars['webrtc_revision'] = revision
-  yield api.gclient.checkout()
 
   bot_type = bot_config.get('bot_type', 'builder_tester')
-  if bot_type in ['builder', 'builder_tester']:
-    if api.tryserver.is_tryserver:
+  does_build = bot_type in ('builder', 'builder_tester')
+  does_test = bot_type in ('builder_tester', 'tester')
+
+  # TODO(iannucci): Support webrtc.apply_svn_patch with bot_update
+  # crbug.com/376122
+  yield api.bot_update.ensure_checkout()
+  if not api.step_history.last_step().json.output['did_run']:
+    yield api.gclient.checkout()
+
+    if does_build and api.tryserver.is_tryserver:
       yield api.webrtc.apply_svn_patch()
+
+  if does_build:
     yield api.base_android.envsetup()
 
   # WebRTC Android APK testers also have to run the runhooks, since test
@@ -169,7 +179,7 @@ def GenSteps(api):
   yield api.base_android.runhooks()
 
   yield api.chromium.cleanup_temp()
-  if bot_type in ['builder', 'builder_tester']:
+  if does_build:
     yield api.base_android.compile()
 
   if bot_type == 'builder':
@@ -180,7 +190,7 @@ def GenSteps(api):
     yield api.webrtc.extract_build(GS_ARCHIVES[bot_config['build_gs_archive']],
                                    revision)
 
-  if bot_type in ['tester', 'builder_tester']:
+  if does_test:
     yield api.chromium_android.common_tests_setup_steps()
     for test in api.webrtc.ANDROID_APK_TESTS:
       yield api.base_android.test_runner(test)
@@ -208,6 +218,7 @@ def GenTests(api):
                             _sanitize_nonalpha(buildername))) +
         api.properties(mastername=mastername,
                        buildername=buildername,
+                       slavename='fake_slavename',
                        parent_buildername=bot_config.get('parent_buildername'),
                        TARGET_PLATFORM=webrtc_config_kwargs['TARGET_PLATFORM'],
                        TARGET_ARCH=webrtc_config_kwargs['TARGET_ARCH'],
