@@ -56,7 +56,7 @@ class BotUpdateApi(recipe_api.RecipeApi):
     return self.m.python(name, bot_update_path, cmd, **kwargs)
 
   def ensure_checkout(self, gclient_config=None, suffix=None,
-                      patch=True, ref=None, update_presentation=True,
+                      patch=True, update_presentation=True,
                       force=False, **kwargs):
     # We can re-use the gclient spec from the gclient module, since all the
     # data bot_update needs is already configured into the gclient spec.
@@ -112,8 +112,10 @@ class BotUpdateApi(recipe_api.RecipeApi):
         ['--output_json', self.m.json.output()],]
 
 
-    revision = (ref or self.m.properties.get('parent_got_revision') or
-                self.m.properties.get('revision'))
+    revision = (
+      cfg.solutions[0].revision or
+      self.m.properties.get('parent_got_revision') or
+      self.m.properties.get('revision'))
     flags.append(['--revision', revision])
 
     # Filter out flags that are None.

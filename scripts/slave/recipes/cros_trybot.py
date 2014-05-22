@@ -96,8 +96,7 @@ def GenSteps(api):
     # Since we're likely to switch to an earlier revision, revert the patch,
     # sync with the new config, and apply issue again.
     if bot_update_mode:
-      yield api.bot_update.ensure_checkout(ref='origin/lkcr',
-                                           suffix='lkcr clobber')
+      yield api.bot_update.ensure_checkout(suffix='lkcr clobber')
     else:
       yield api.gclient.checkout(revert=True)
       yield api.rietveld.apply_issue()
@@ -113,8 +112,7 @@ def GenSteps(api):
       yield api.path.rmcontents(
           'slave build directory', api.path['slave_build'])
       if bot_update_mode:
-        yield api.bot_update.ensure_checkout(ref='origin/lkcr',
-                                             suffix='lkcr clobber nuke')
+        yield api.bot_update.ensure_checkout(suffix='lkcr clobber nuke')
       else:
         yield (
             api.gclient.checkout(revert=False),

@@ -16,7 +16,9 @@
       "--revision_mapping_file",
       "{}",
       "--output_json",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--revision",
+      "HEAD"
     ],
     "name": "bot_update - empty_deps",
     "~followup_annotations": [
@@ -128,7 +130,9 @@
       "--revision_mapping_file",
       "{}",
       "--output_json",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--revision",
+      "HEAD"
     ],
     "name": "bot_update - trimmed",
     "~followup_annotations": [

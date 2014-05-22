@@ -534,9 +534,7 @@ def GenSteps(api):
     # Since we're likely to switch to an earlier revision, revert the patch,
     # sync with the new config, and apply issue again.
     if bot_update_mode:
-      # TODO(hinoka): Once lkcr exists and is a tag, it should just be lkcr
-      #               rather than origin/lkcr.
-      yield api.bot_update.ensure_checkout(ref='origin/lkcr', suffix='lkcr')
+      yield api.bot_update.ensure_checkout(suffix='lkcr')
       yield api.chromium.runhooks(env=runhooks_env)
 
     else:
@@ -614,8 +612,7 @@ def GenSteps(api):
     # Since we're likely to switch to an earlier revision, revert the patch,
     # sync with the new config, and apply issue again.
     if bot_update_mode:
-      yield api.bot_update.ensure_checkout(ref='origin/lkcr',
-                                           suffix='lkcr clobber')
+      yield api.bot_update.ensure_checkout(suffix='lkcr clobber')
       yield api.chromium.runhooks()
     else:
       yield api.gclient.checkout(revert=True)
@@ -632,8 +629,7 @@ def GenSteps(api):
       yield api.path.rmcontents('slave build directory',
                                 api.path['slave_build']),
       if bot_update_mode:
-        yield api.bot_update.ensure_checkout(ref='origin/lkcr',
-                                             suffix='lkcr clobber nuke')
+        yield api.bot_update.ensure_checkout(suffix='lkcr clobber nuke')
       else:
         yield api.gclient.checkout(revert=False)
         yield api.tryserver.maybe_apply_issue()

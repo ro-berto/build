@@ -142,6 +142,9 @@ def chromium_lkcr(c):
                   'crbug.com/349277 crbug.com/109191')
   s = c.solutions[0]
   s.safesync_url = 'https://build.chromium.org/p/chromium/lkcr-status/lkgr'
+  # TODO(hinoka): Once lkcr exists and is a tag, it should just be lkcr
+  #               rather than origin/lkcr.
+  s.revision = 'origin/lkcr'
 
 @config_ctx(includes=['chromium'])
 def chromium_lkgr(c):
