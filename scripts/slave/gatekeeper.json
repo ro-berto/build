@@ -22,16 +22,6 @@
               "chromium_windows"
             ]
           },
-          "Win x64": {
-            "categories": [
-              "chromium_archive_build",
-              "chromium_checkdeps2git",
-              "chromium_compile",
-              "chromium_crash_handler",
-              "chromium_sizes",
-              "chromium_windows"
-            ]
-          },
           "Win Split": {
             "categories": [
               "chromium_compile",

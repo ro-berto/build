@@ -61,33 +61,6 @@ F('win_clobber', win().ChromiumFactory(
       },
     }))
 
-B('Win x64', 'win64_clobber', 'compile|windows', 'chromium',
-  notify_on_missing=True)
-F('win64_clobber', win().ChromiumFactory(
-    clobber=True,
-    project='all.sln',
-    tests=[
-      'check_bins',
-      'check_deps2git',
-      'sizes',
-    ],
-    options=['--compiler=goma'],
-    factory_properties={
-      'archive_build': ActiveMaster.is_production_host,
-      'gs_bucket': 'gs://chromium-browser-snapshots',
-      'gs_acl': 'public-read',
-      'show_perf_results': True,
-      'perf_id': 'chromium-rel-xp-x64',
-      'expectations': True,
-      'process_dumps': True,
-      'start_crash_handler': True,
-      'generate_gtest_json': ActiveMaster.is_production_host,
-      'gclient_env': {
-        'GYP_DEFINES': 'target_arch=x64 test_isolation_mode=noop',
-        'GYP_USE_SEPARATE_MSPDBSRV': '1',
-      },
-    }))
-
 ################################################################################
 ## Mac
 ################################################################################
