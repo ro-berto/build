@@ -30,6 +30,21 @@ import os.path as path
 # Set this to true on flag day.
 FLAG_DAY = False
 
+# Define a bunch of directory paths.
+# Relative to the current working directory.
+CURRENT_DIR = path.abspath(os.getcwd())
+BUILDER_DIR = path.dirname(CURRENT_DIR)
+SLAVE_DIR = path.dirname(BUILDER_DIR)
+
+# Relative to this script's filesystem path.
+THIS_DIR = path.dirname(path.abspath(__file__))
+SCRIPTS_DIR = path.dirname(THIS_DIR)
+BUILD_DIR = path.dirname(SCRIPTS_DIR)
+ROOT_DIR = path.dirname(BUILD_DIR)
+BUILD_INTERNAL_DIR = path.join(ROOT_DIR, 'build_internal')
+DEPOT_TOOLS_DIR = path.join(ROOT_DIR, 'depot_tools')
+
+
 CHROMIUM_SRC_URL = 'https://chromium.googlesource.com/chromium/src.git'
 
 RECOGNIZED_PATHS = {
@@ -120,6 +135,20 @@ cache_dir = %(cache_dir)s
 %(target_os_only)s
 """
 
+
+internal_data = {}
+if os.path.isdir(BUILD_INTERNAL_DIR):
+  local_vars = {}
+  try:
+    execfile(os.path.join(
+        BUILD_INTERNAL_DIR, 'scripts', 'slave', 'bot_update_cfg.py'),
+        local_vars)
+  except Exception:
+    # Same as if BUILD_INTERNAL_DIR didn't exist in the first place.
+    print 'Warning: unable to read internal configuration file.'
+    print 'If this is an internal bot, this step may be erroneously inactive.'
+  internal_data = local_vars
+
 ENABLED_MASTERS = [
     'chrome_git',
     'chromium.git',
@@ -127,6 +156,8 @@ ENABLED_MASTERS = [
     'chromium.mac',
     'chromium.fyi',
 ]
+ENABLED_MASTERS += internal_data.get('ENABLED_MASTERS', [])
+
 ENABLED_BUILDERS = {
     'tryserver.chromium': [
         'linux_arm_cross_compile',
@@ -153,6 +184,8 @@ ENABLED_BUILDERS = {
         'Telemetry Harness Upload (Bot Update)',
     ]
 }
+ENABLED_BUILDERS.update(internal_data.get('ENABLED_BUILDERS', {}))
+
 ENABLED_SLAVES = {
     # This is enabled on a bot-to-bot basis to ensure that we don't have
     # bots that have mixed configs.
@@ -172,6 +205,7 @@ ENABLED_SLAVES = {
                           ['vm%d-m4' % i for i in range(666, 671)] +
                           ['build%d-a4' % i for i in range(100, 140)]
 }
+ENABLED_SLAVES.update(internal_data.get('ENABLED_SLAVES', {}))
 
 # Disabled filters get run AFTER enabled filters, so for example if a builder
 # config is enabled, but a bot on that builder is disabled, that bot will
@@ -228,26 +262,28 @@ DISABLED_BUILDERS = {
         'Windows Browser (DrMemory full) (9)',
     ]
 }
+DISABLED_BUILDERS.update(internal_data.get('DISABLED_BUILDERS', {}))
+
 DISABLED_SLAVES = {}
+DISABLED_SLAVES.update(internal_data.get('DISABLED_SLAVES', {}))
 
 # These masters work only in Git, meaning for got_revision, always output
 # a git hash rather than a SVN rev. This goes away if flag_day is True.
-GIT_MASTERS = ['chromium.git', 'chrome_git']
+GIT_MASTERS = ['chromium.git']
+GIT_MASTERS += internal_data.get('GIT_MASTERS', [])
 
 # How many times to retry failed subprocess calls.
 RETRIES = 3
 
-SCRIPTS_PATH = path.dirname(path.dirname(path.abspath(__file__)))
-DEPS2GIT_DIR_PATH = path.join(SCRIPTS_PATH, 'tools', 'deps2git')
+# Find deps2git
+DEPS2GIT_DIR_PATH = path.join(SCRIPTS_DIR, 'tools', 'deps2git')
 DEPS2GIT_PATH = path.join(DEPS2GIT_DIR_PATH, 'deps2git.py')
-S2G_INTERNAL_FROM_PATH = path.join(SCRIPTS_PATH, 'tools', 'deps2git_internal',
+S2G_INTERNAL_FROM_PATH = path.join(SCRIPTS_DIR, 'tools', 'deps2git_internal',
                                    'svn_to_git_internal.py')
 S2G_INTERNAL_DEST_PATH = path.join(DEPS2GIT_DIR_PATH, 'svn_to_git_internal.py')
 
 # ../../cache_dir aka /b/build/slave/cache_dir
-THIS_DIR = path.abspath(os.getcwd())
-BUILDER_DIR = path.dirname(THIS_DIR)
-SLAVE_DIR = path.dirname(BUILDER_DIR)
+GIT_CACHE_PATH = path.join(DEPOT_TOOLS_DIR, 'git_cache.py')
 CACHE_DIR = path.join(SLAVE_DIR, 'cache_dir')
 # Because we print CACHE_DIR out into a .gclient file, and then later run
 # eval() on it, backslashes need to be escaped, otherwise "E:\b\build" gets
@@ -256,11 +292,6 @@ if sys.platform.startswith('win'):
   CACHE_DIR = CACHE_DIR.replace('\\', '\\\\')
 
 # Find the patch tool.
-ROOT_BUILD_DIR = path.dirname(SLAVE_DIR)
-ROOT_B_DIR = path.dirname(ROOT_BUILD_DIR)
-DEPOT_TOOLS_DIR = path.join(ROOT_B_DIR, 'depot_tools')
-GIT_CACHE_PATH = path.join(DEPOT_TOOLS_DIR, 'git_cache.py')
-BUILD_INTERNAL_DIR = path.join(ROOT_B_DIR, 'build_internal')
 if sys.platform.startswith('win'):
   PATCH_TOOL = path.join(BUILD_INTERNAL_DIR, 'tools', 'patch.EXE')
 else:
