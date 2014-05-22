@@ -157,6 +157,7 @@ def android_bare(c):
   # We inherit from chromium_bare to get the got_revision mapping.
   # NOTE: We don't set a specific got_revision mapping for src/repo.
   del c.solutions[0]
+  c.got_revision_mapping['src'] = 'got_src_revision'
   s = c.solutions.add()
   s.deps_file = '.DEPS.git'
 
