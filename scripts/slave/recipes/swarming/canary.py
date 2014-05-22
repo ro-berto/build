@@ -12,11 +12,13 @@ Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 """
 
 DEPS = [
+  'bot_update',
   'chromium',
   'gclient',
   'isolate',
   'platform',
   'properties',
+  'step_history',
   'swarming',
   'swarming_client',
 ]
@@ -46,7 +48,9 @@ def GenSteps(api):
   api.isolate.set_isolate_environment(api.chromium.c)
 
   # Checkout chromium + deps (including 'master' of swarming_client).
-  yield api.gclient.checkout()
+  yield api.bot_update.ensure_checkout()
+  if not api.step_history.last_step().json.output['did_run']:
+    yield api.gclient.checkout()
 
   # Ensure swarming_client version is fresh enough.
   yield api.swarming.check_client_version()
