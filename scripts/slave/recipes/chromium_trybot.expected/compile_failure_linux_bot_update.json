@@ -76,6 +76,7 @@
     ],
     "name": "read test spec",
     "~followup_annotations": [
+      "@@@STEP_TEXT@path: testing/buildbot/chromium_trybot.json@@@",
       "@@@STEP_LOG_LINE@json.output@[@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_unittests\", @@@",
       "@@@STEP_LOG_LINE@json.output@  {@@@",
