@@ -1105,7 +1105,10 @@ class UploadTelemetryThread(threading.Thread):
           'message': str(e),
       }
 
-    self._gsutil('cp', '-', self.url(), stdin_data=json.dumps(data))
+    try:
+      self._gsutil('cp', '-', self.url(), stdin_data=json.dumps(data))
+    except Exception:
+      print 'Telemetry upload failed.'
 
 
 def upload_telemetry(prefix, master, builder, slave, **kwargs):
