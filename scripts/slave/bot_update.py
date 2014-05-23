@@ -642,7 +642,8 @@ def get_git_buildspec(version):
   """
   git('cache', 'populate', '-v', '--cache-dir', CACHE_DIR, GIT_BUILDSPEC_REPO)
   mirror_dir = git(
-      'cache', 'exists', '--cache-dir', CACHE_DIR, GIT_BUILDSPEC_REPO).strip()
+      'cache', 'exists', '--quiet', '--cache-dir', CACHE_DIR,
+      GIT_BUILDSPEC_REPO).strip()
   TOTAL_TRIES = 30
   for tries in range(TOTAL_TRIES):
     try:
@@ -794,7 +795,8 @@ def git_checkout(solutions, revisions, shallow):
       populate_cmd = (['cache', 'populate', '-v', '--cache-dir', CACHE_DIR]
                       + s + [url])
       git(*populate_cmd)
-      mirror_dir = git('cache', 'exists', '--cache-dir', CACHE_DIR, url).strip()
+      mirror_dir = git(
+          'cache', 'exists', '--quiet', '--cache-dir', CACHE_DIR, url).strip()
       clone_cmd = ('clone', '--local', '--shared', mirror_dir, sln_dir)
       if not path.isdir(sln_dir):
         git(*clone_cmd)
