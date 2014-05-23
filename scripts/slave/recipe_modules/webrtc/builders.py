@@ -59,7 +59,7 @@ RECIPE_CONFIGS = {
     'gclient_config': 'chromium_webrtc',
     'gclient_apply_config': ['android'],
     'compile_targets': [
-      'android_builder_tests',
+      'android_builder_chromium_webrtc',
     ],
     'test_suite': 'chromium',
   },
@@ -69,7 +69,7 @@ RECIPE_CONFIGS = {
     'gclient_config': 'chromium_webrtc_tot',
     'gclient_apply_config': ['android'],
     'compile_targets': [
-      'android_builder_tests',
+      'android_builder_chromium_webrtc',
     ],
     'test_suite': 'chromium',
   },

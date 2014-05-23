@@ -133,7 +133,7 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "android_builder_tests"
+      "android_builder_chromium_webrtc"
     ],
     "name": "compile",
     "seed_steps": [
