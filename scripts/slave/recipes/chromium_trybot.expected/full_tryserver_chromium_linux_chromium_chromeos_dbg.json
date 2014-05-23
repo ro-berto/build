@@ -212,60 +212,6 @@
     "name": "compile (with patch)"
   },
   {
-    "allow_subannotations": true,
-    "always_run": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Debug",
-      "--xvfb",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"build_config\": \"Release\", \"buildername\": \"linux_chromium_chromeos_dbg\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"chromium_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": null, \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"build_config\": \"Release\", \"buildername\": \"linux_chromium_chromeos_dbg\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"chromium_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": null, \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--annotate=gtest",
-      "--test-type=telemetry_unittests",
-      "--builder-name=linux_chromium_chromeos_dbg",
-      "--slave-name=TestSlavename",
-      "--build-number=571",
-      "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/telemetry/run_tests",
-      "--browser=debug"
-    ],
-    "name": "telemetry_unittests",
-    "seed_steps": [
-      "telemetry_unittests",
-      "telemetry_perf_unittests"
-    ]
-  },
-  {
-    "allow_subannotations": true,
-    "always_run": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Debug",
-      "--xvfb",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"build_config\": \"Release\", \"buildername\": \"linux_chromium_chromeos_dbg\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"chromium_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": null, \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"build_config\": \"Release\", \"buildername\": \"linux_chromium_chromeos_dbg\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"chromium_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": null, \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--annotate=gtest",
-      "--test-type=telemetry_perf_unittests",
-      "--builder-name=linux_chromium_chromeos_dbg",
-      "--slave-name=TestSlavename",
-      "--build-number=571",
-      "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_tests",
-      "--browser=debug"
-    ],
-    "name": "telemetry_perf_unittests"
-  },
-  {
     "can_fail_build": false,
     "cmd": [
       "python",

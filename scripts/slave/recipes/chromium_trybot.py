@@ -647,11 +647,13 @@ def GenSteps(api):
   if bot_config['compile_only']:
     return
 
-  # TODO(phajdan.jr): Make it possible to retry telemetry tests (add JSON).
-  yield (
-    api.chromium.run_telemetry_unittests(),
-    api.chromium.run_telemetry_perf_unittests(),
-  )
+  if bot_config['chromium_config'] not in ['chromium_chromeos',
+                                           'chromium_chromeos_clang']:
+    # TODO(phajdan.jr): Make it possible to retry telemetry tests (add JSON).
+    yield (
+      api.chromium.run_telemetry_unittests(),
+      api.chromium.run_telemetry_perf_unittests(),
+    )
 
   def deapply_patch_fn(failing_tests):
     if api.platform.is_win:

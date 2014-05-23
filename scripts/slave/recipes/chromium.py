@@ -295,8 +295,6 @@ BUILDERS = {
         'bot_type': 'tester',
         'tests': [
           DynamicGTestTests('Linux ChromiumOS Tests (1)'),
-          TelemetryUnitTests(),
-          TelemetryPerfUnitTests(),
         ],
         'parent_buildername': 'Linux ChromiumOS Builder',
         'testing': {
