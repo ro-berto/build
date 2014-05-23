@@ -111,14 +111,14 @@ PROJECT_CONFIGS = {
     'revision_link_fn': lambda before_rev, after_rev: (
         'http://build.chromium.org/f/chromium/perf/dashboard/ui/'
         'changelog_blink.html?url=/trunk&range=%s:%s&mode=html') % (
-            before_rev, after_rev),
+            str(int(before_rev) + 1), after_rev),
   },
   'skia': {
     'extra_emails_fn': lambda: [_get_skia_sheriff()],
     'path_to_project': os.path.join('third_party', 'skia', 'src'),
     'revision_link_fn': lambda before_rev, after_rev: (
         'https://code.google.com/p/skia/source/list?num=%d&start=%s') % (
-            int(after_rev) - int(before_rev) - 1, after_rev),
+            int(after_rev) - int(before_rev), after_rev),
   },
 }
 

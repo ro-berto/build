@@ -16,6 +16,21 @@ from testing_support.super_mox import SuperMoxTestBase
 # pylint: disable=W0212
 
 
+class RevisionLinkTest(SuperMoxTestBase):
+  def test_blink(self):
+    revlink_fn = auto_roll.PROJECT_CONFIGS['blink']['revision_link_fn']
+    expected = ('http://build.chromium.org/f/chromium/perf/dashboard/ui/'
+                'changelog_blink.html?url=/trunk&range=%s:%s&mode=html') % (
+                    1235, 1256)
+    self.assertEqual(revlink_fn(1234, 1256), expected)
+
+  def test_skia(self):
+    revlink_fn = auto_roll.PROJECT_CONFIGS['skia']['revision_link_fn']
+    expected = 'https://code.google.com/p/skia/source/list?num=%d&start=%s' % (
+        22, '1256')
+    self.assertEqual(revlink_fn(1234, 1256), expected)
+
+
 class SheriffCalendarTest(SuperMoxTestBase):
 
   def test_complete_email(self):
