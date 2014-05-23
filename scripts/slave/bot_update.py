@@ -45,14 +45,20 @@ BUILD_INTERNAL_DIR = path.join(ROOT_DIR, 'build_internal')
 DEPOT_TOOLS_DIR = path.join(ROOT_DIR, 'depot_tools')
 
 
-CHROMIUM_SRC_URL = 'https://chromium.googlesource.com/chromium/src.git'
+CHROMIUM_GIT_HOST = 'https://chromium.googlesource.com'
+CHROME_INTERNAL_GIT_HOST = 'https:/chrome-internal.googlesource.com'
+CHROMIUM_SRC_URL = CHROMIUM_GIT_HOST + '/chromium/src.git'
 
 RECOGNIZED_PATHS = {
     # If SVN path matches key, the entire URL is rewritten to the Git url.
     '/chrome/trunk/src':
         CHROMIUM_SRC_URL,
     '/chrome-internal/trunk/src-internal':
-        'https://chrome-internal.googlesource.com/chrome/src-internal.git',
+        CHROME_INTERNAL_GIT_HOST + '/chrome/src-internal.git',
+    '/chrome/trunk/deps/third_party/webrtc/webrtc.DEPS':
+        CHROMIUM_GIT_HOST + '/chromium/deps/webrtc/webrtc.DEPS.git',
+    '/chrome-internal/trunk/webrtc-limited':
+        CHROME_INTERNAL_GIT_HOST + '/chrome/deps/webrtc-limited',
 }
 
 # Official builds use buildspecs, so this is a special case.
@@ -700,16 +706,11 @@ def ensure_deps2git(sln_dir, shallow):
   # Magic to get deps2git to work with internal DEPS.
   shutil.copyfile(S2G_INTERNAL_FROM_PATH, S2G_INTERNAL_DEST_PATH)
 
-  # TODO(hinoka): This might need to be smarter if we need to deal with
-  #               DEPS changes that are in an internal repository.
-  repo_type = 'public'
-  if sln_dir in ['src-internal']:
-    repo_type = 'internal'
   cmd = [sys.executable, DEPS2GIT_PATH,
-         '-t', repo_type,
-         '--cache_dir=%s' % CACHE_DIR,
-         '--deps=%s' % deps_file,
-         '--out=%s' % deps_git_file]
+         '--extra-rules', S2G_INTERNAL_DEST_PATH,
+         '--cache_dir', CACHE_DIR,
+         '--deps', deps_file,
+         '--out', deps_git_file]
   if shallow:
     cmd.append('--shallow')
   call(*cmd)
