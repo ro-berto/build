@@ -67,8 +67,10 @@ def CommonChecks(input_api, output_api):
     sys.path = sys_path_backup
 
   whitelist = [r'.+_test\.py$']
+  blacklist = [r'bot_update_test.py$']
   tests.extend(input_api.canned_checks.GetUnitTestsInDirectory(
-      input_api, output_api, 'tests', whitelist=whitelist))
+      input_api, output_api, 'tests', whitelist=whitelist,
+      blacklist=blacklist))
   tests.extend(input_api.canned_checks.GetUnitTestsInDirectory(
       input_api,
       output_api,
