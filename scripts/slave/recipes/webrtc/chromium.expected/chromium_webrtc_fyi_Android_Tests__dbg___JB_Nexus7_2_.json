@@ -157,122 +157,19 @@
     "name": "extract build"
   },
   {
-    "allow_subannotations": true,
     "always_run": true,
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Debug",
-      "--xvfb",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Tests (dbg) (JB Nexus7.2)\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc.fyi\", \"parent_buildername\": \"Android Builder (dbg)\", \"recipe\": \"webrtc/chromium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Tests (dbg) (JB Nexus7.2)\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc.fyi\", \"parent_buildername\": \"Android Builder (dbg)\", \"recipe\": \"webrtc/chromium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--annotate=graphing",
-      "--results-url=https://chromeperf.appspot.com",
-      "--perf-dashboard-id=content_browsertests",
-      "--perf-id=chromium-webrtc-trunk-tot-dbg-android-nexus72",
-      "--perf-config",
-      "{'a_default_rev': 'r_webrtc_rev'}",
-      "--test-type=content_browsertests",
-      "--builder-name=Android Tests (dbg) (JB Nexus7.2)",
-      "--slave-name=TestSlavename",
-      "--build-number=571",
-      "--revision=12345",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
       "content_browsertests",
-      "--gtest_filter=WebRtc*",
-      "--run-manual",
-      "--test-launcher-print-test-stdio=always"
+      "--gtest_filter=WebRtc*"
     ],
-    "name": "content_browsertests (webrtc)",
-    "seed_steps": [
-      "content_browsertests (webrtc)",
-      "browser_tests (webrtc)",
-      "content_unittests (webrtc)",
-      "sizes"
-    ]
-  },
-  {
-    "allow_subannotations": true,
-    "always_run": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Debug",
-      "--xvfb",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Tests (dbg) (JB Nexus7.2)\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc.fyi\", \"parent_buildername\": \"Android Builder (dbg)\", \"recipe\": \"webrtc/chromium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Tests (dbg) (JB Nexus7.2)\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc.fyi\", \"parent_buildername\": \"Android Builder (dbg)\", \"recipe\": \"webrtc/chromium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--annotate=graphing",
-      "--results-url=https://chromeperf.appspot.com",
-      "--perf-dashboard-id=browser_tests",
-      "--perf-id=chromium-webrtc-trunk-tot-dbg-android-nexus72",
-      "--perf-config",
-      "{'a_default_rev': 'r_webrtc_rev'}",
-      "--test-type=browser_tests",
-      "--builder-name=Android Tests (dbg) (JB Nexus7.2)",
-      "--slave-name=TestSlavename",
-      "--build-number=571",
-      "--revision=12345",
-      "browser_tests",
-      "--gtest_filter=WebRtc*",
-      "--run-manual",
-      "--ui-test-action-max-timeout=300000",
-      "--test-launcher-jobs=1",
-      "--test-launcher-print-test-stdio=always"
-    ],
-    "name": "browser_tests (webrtc)"
-  },
-  {
-    "allow_subannotations": true,
-    "always_run": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Debug",
-      "--xvfb",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Tests (dbg) (JB Nexus7.2)\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc.fyi\", \"parent_buildername\": \"Android Builder (dbg)\", \"recipe\": \"webrtc/chromium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Tests (dbg) (JB Nexus7.2)\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc.fyi\", \"parent_buildername\": \"Android Builder (dbg)\", \"recipe\": \"webrtc/chromium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--annotate=gtest",
-      "--test-type=content_unittests",
-      "--builder-name=Android Tests (dbg) (JB Nexus7.2)",
-      "--slave-name=TestSlavename",
-      "--build-number=571",
-      "content_unittests",
-      "--gtest_filter=WebRTC*:RTC*:MediaStream*"
-    ],
-    "name": "content_unittests (webrtc)"
-  },
-  {
-    "allow_subannotations": true,
-    "always_run": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Debug",
-      "--xvfb",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Tests (dbg) (JB Nexus7.2)\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc.fyi\", \"parent_buildername\": \"Android Builder (dbg)\", \"recipe\": \"webrtc/chromium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Tests (dbg) (JB Nexus7.2)\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc.fyi\", \"parent_buildername\": \"Android Builder (dbg)\", \"recipe\": \"webrtc/chromium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--annotate=gtest",
-      "--test-type=sizes",
-      "--builder-name=Android Tests (dbg) (JB Nexus7.2)",
-      "--slave-name=TestSlavename",
-      "--build-number=571",
-      "sizes"
-    ],
-    "name": "sizes"
+    "env": {
+      "BUILDTYPE": "Debug"
+    },
+    "name": "content_browsertests"
   }
 ]

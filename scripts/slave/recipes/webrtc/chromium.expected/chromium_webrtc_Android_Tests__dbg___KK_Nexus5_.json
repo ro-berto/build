@@ -158,94 +158,19 @@
     "name": "extract build"
   },
   {
-    "allow_subannotations": true,
     "always_run": true,
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Debug",
-      "--xvfb",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Tests (dbg) (KK Nexus5)\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc\", \"parent_buildername\": \"Android Builder (dbg)\", \"recipe\": \"webrtc/chromium\", \"revision\": \"321321\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Tests (dbg) (KK Nexus5)\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc\", \"parent_buildername\": \"Android Builder (dbg)\", \"recipe\": \"webrtc/chromium\", \"revision\": \"321321\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--annotate=graphing",
-      "--results-url=https://chromeperf.appspot.com",
-      "--perf-dashboard-id=content_browsertests",
-      "--perf-id=chromium-webrtc-dbg-android-nexus5",
-      "--test-type=content_browsertests",
-      "--builder-name=Android Tests (dbg) (KK Nexus5)",
-      "--slave-name=TestSlavename",
-      "--build-number=571",
-      "--revision=321321",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
       "content_browsertests",
-      "--gtest_filter=WebRtc*",
-      "--run-manual",
-      "--test-launcher-print-test-stdio=always"
+      "--gtest_filter=WebRtc*"
     ],
-    "name": "content_browsertests (webrtc)",
-    "seed_steps": [
-      "content_browsertests (webrtc)",
-      "browser_tests (webrtc)",
-      "content_unittests (webrtc)"
-    ]
-  },
-  {
-    "allow_subannotations": true,
-    "always_run": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Debug",
-      "--xvfb",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Tests (dbg) (KK Nexus5)\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc\", \"parent_buildername\": \"Android Builder (dbg)\", \"recipe\": \"webrtc/chromium\", \"revision\": \"321321\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Tests (dbg) (KK Nexus5)\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc\", \"parent_buildername\": \"Android Builder (dbg)\", \"recipe\": \"webrtc/chromium\", \"revision\": \"321321\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--annotate=graphing",
-      "--results-url=https://chromeperf.appspot.com",
-      "--perf-dashboard-id=browser_tests",
-      "--perf-id=chromium-webrtc-dbg-android-nexus5",
-      "--test-type=browser_tests",
-      "--builder-name=Android Tests (dbg) (KK Nexus5)",
-      "--slave-name=TestSlavename",
-      "--build-number=571",
-      "--revision=321321",
-      "browser_tests",
-      "--gtest_filter=WebRtc*",
-      "--run-manual",
-      "--ui-test-action-max-timeout=300000",
-      "--test-launcher-jobs=1",
-      "--test-launcher-print-test-stdio=always"
-    ],
-    "name": "browser_tests (webrtc)"
-  },
-  {
-    "allow_subannotations": true,
-    "always_run": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Debug",
-      "--xvfb",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Tests (dbg) (KK Nexus5)\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc\", \"parent_buildername\": \"Android Builder (dbg)\", \"recipe\": \"webrtc/chromium\", \"revision\": \"321321\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Tests (dbg) (KK Nexus5)\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc\", \"parent_buildername\": \"Android Builder (dbg)\", \"recipe\": \"webrtc/chromium\", \"revision\": \"321321\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--annotate=gtest",
-      "--test-type=content_unittests",
-      "--builder-name=Android Tests (dbg) (KK Nexus5)",
-      "--slave-name=TestSlavename",
-      "--build-number=571",
-      "content_unittests",
-      "--gtest_filter=WebRTC*:RTC*:MediaStream*"
-    ],
-    "name": "content_unittests (webrtc)"
+    "env": {
+      "BUILDTYPE": "Debug"
+    },
+    "name": "content_browsertests"
   }
 ]

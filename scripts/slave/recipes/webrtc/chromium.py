@@ -81,7 +81,7 @@ def GenSteps(api):
   # Instead of yielding single steps or groups of steps, yield all at the end.
   steps = []
 
-  if bot_type in ['builder', 'builder_tester']:
+  if bot_type in ('builder', 'builder_tester'):
     compile_targets = recipe_config.get('compile_targets', [])
     steps.append(api.chromium.compile(targets=compile_targets))
 
@@ -98,8 +98,13 @@ def GenSteps(api):
     steps.append(api.webrtc.extract_build(
         api.webrtc.GS_ARCHIVES[bot_config['build_gs_archive']], revision))
 
-  test_steps = api.webrtc.runtests(recipe_config.get('test_suite'))
-  steps.extend(api.chromium.setup_tests(bot_type, test_steps))
+  if bot_type in ('builder_tester', 'tester'):
+    if api.chromium.c.TARGET_PLATFORM == 'android':
+      steps.append(api.chromium_android.run_test_suite(
+          'content_browsertests', args=['--gtest_filter=WebRtc*']))
+    else:
+      test_steps = api.webrtc.runtests(recipe_config.get('test_suite'))
+      steps.extend(api.chromium.setup_tests(bot_type, test_steps))
 
   yield steps
 
