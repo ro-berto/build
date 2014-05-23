@@ -46,6 +46,8 @@ def GenSteps(api):
   yield api.chromium_android.envsetup()
   yield api.chromium_android.runhooks()
   yield api.chromium_android.compile()
+  yield api.chromium_android.git_number()
+  yield api.chromium_android.upload_build_for_tester()
 
   yield api.adb.root_devices()
   yield api.chromium_android.spawn_logcat_monitor()
