@@ -10,6 +10,104 @@ from slave.recipe_modules.v8 import builders
 MAX_LABEL_SIZE = 23
 
 
+TEST_CONFIGS = {
+  'benchmarks': {
+    'name': 'Benchmarks',
+    'tests': 'benchmarks',
+  },
+  'mjsunit': {
+    'name': 'Mjsunit',
+    'tests': 'mjsunit',
+    'add_flaky_step': True,
+  },
+  'mozilla': {
+    'name': 'Mozilla',
+    'tests': 'mozilla',
+    'gclient_apply_config': ['mozilla_tests'],
+  },
+  'optimize_for_size': {
+    'name': 'OptimizeForSize',
+    'tests': 'cctest mjsunit webkit',
+    'add_flaky_step': True,
+    'test_args': ['--no-variants', '--shell_flags="--optimize-for-size"'],
+  },
+  'test262': {
+    'name': 'Test262',
+    'tests': 'test262',
+  },
+  'v8testing': {
+    'name': 'Check',
+    'tests': 'mjsunit fuzz-natives cctest message preparser',
+    'add_flaky_step': True,
+  },
+  'webkit': {
+    'name': 'Webkit',
+    'tests': 'webkit',
+    'add_flaky_step': True,
+  },
+}
+
+
+class V8Test(object):
+  def __init__(self, name):
+    self.name = name
+
+  def run(self, api, **kwargs):
+    return api.v8.runtest(TEST_CONFIGS[self.name], **kwargs)
+
+  def gclient_apply_config(self, api):
+    for c in TEST_CONFIGS[self.name].get('gclient_apply_config', []):
+      api.gclient.apply_config(c)
+
+
+class V8Presubmit(object):
+  @staticmethod
+  def run(api, **kwargs):
+    return api.v8.presubmit()
+
+  @staticmethod
+  def gclient_apply_config(_):
+    pass
+
+
+class V8CheckInitializers(object):
+  @staticmethod
+  def run(api, **kwargs):
+    return api.v8.check_initializers()
+
+  @staticmethod
+  def gclient_apply_config(_):
+    pass
+
+
+class V8GCMole(object):
+  @staticmethod
+  def run(api, **kwargs):
+    return api.v8.gc_mole()
+
+  @staticmethod
+  def gclient_apply_config(_):
+    pass
+
+
+class V8SimpleLeakCheck(object):
+  @staticmethod
+  def run(api, **kwargs):
+    return api.v8.simple_leak_check()
+
+  @staticmethod
+  def gclient_apply_config(_):
+    pass
+
+
+V8_NON_STANDARD_TESTS = {
+  'gcmole': V8GCMole,
+  'presubmit': V8Presubmit,
+  'simpleleak': V8SimpleLeakCheck,
+  'v8initializers': V8CheckInitializers,
+}
+
+
 # TODO(machenbach): This is copied from gclient's config.py and should be
 # unified somehow.
 def ChromiumSvnSubURL(c, *pieces):
@@ -20,6 +118,19 @@ def ChromiumSvnSubURL(c, *pieces):
 
 class V8Api(recipe_api.RecipeApi):
   BUILDERS = builders.BUILDERS
+
+  # Map of GS archive names to urls.
+  GS_ARCHIVES = {
+    'linux_rel_archive': 'gs://chromium-v8/v8-linux-rel',
+    'linux_rel_archive_exp': 'gs://chromium-v8/v8-linux-rel-exp',
+    'linux_dbg_archive': 'gs://chromium-v8/v8-linux-dbg',
+    'linux_nosnap_rel_archive': 'gs://chromium-v8/v8-linux-nosnap-rel',
+    'linux_nosnap_dbg_archive': 'gs://chromium-v8/v8-linux-nosnap-dbg',
+    'linux64_rel_archive': 'gs://chromium-v8/v8-linux64-rel',
+    'linux64_dbg_archive': 'gs://chromium-v8/v8-linux64-dbg',
+    'win32_rel_archive': 'gs://chromium-v8/v8-win32-rel',
+    'win32_dbg_archive': 'gs://chromium-v8/v8-win32-dbg',
+  }
 
   def checkout(self, **kwargs):
     if self.m.tryserver.is_tryserver:
@@ -51,6 +162,17 @@ class V8Api(recipe_api.RecipeApi):
 
   def compile(self, **kwargs):
     return self.m.chromium.compile(**kwargs)
+
+  # TODO(machenbach): Pass api already in constructor to avoid redundant api
+  # parameter passing later.
+  def create_test(self, test):
+    """Wrapper that allows to shortcut common tests with their names.
+    Returns a runnable test instance.
+    """
+    if test in V8_NON_STANDARD_TESTS:
+      return V8_NON_STANDARD_TESTS[test]()
+    else:
+      return V8Test(test)
 
   def presubmit(self):
     return self.m.python(
