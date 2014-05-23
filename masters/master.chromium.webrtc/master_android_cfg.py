@@ -14,11 +14,7 @@ def Update(c):
       SingleBranchScheduler(name='android_webrtc_scheduler',
                             branch='src',
                             treeStableTimer=60,
-                            builderNames=[
-          'Android Builder (dbg)',
-          'Android Tests (dbg) (KK Nexus5)',
-          'Android Tests (dbg) (JB Nexus7.2)',
-      ]),
+                            builderNames=['Android Builder (dbg)']),
       Triggerable(name='android_trigger_dbg', builderNames=[
           'Android Tests (dbg) (KK Nexus5)',
           'Android Tests (dbg) (JB Nexus7.2)',

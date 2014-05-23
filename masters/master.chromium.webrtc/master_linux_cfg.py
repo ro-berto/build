@@ -14,10 +14,7 @@ def Update(c):
       SingleBranchScheduler(name='linux_rel_scheduler',
                             branch='src',
                             treeStableTimer=60,
-                            builderNames=[
-          'Linux Builder',
-          'Linux Tester',
-      ]),
+                            builderNames=['Linux Builder']),
       Triggerable(name='linux_rel_trigger',
                   builderNames=['Linux Tester']),
   ])

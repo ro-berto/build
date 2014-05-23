@@ -14,12 +14,7 @@ def Update(c):
       SingleBranchScheduler(name='win_rel_scheduler',
                             branch='src',
                             treeStableTimer=60,
-                            builderNames=[
-          'Win Builder',
-          'WinXP Tester',
-          'Win7 Tester',
-          'Win8 Tester',
-      ]),
+                            builderNames=['Win Builder']),
       Triggerable(name='win_rel_trigger', builderNames=[
           'WinXP Tester',
           'Win7 Tester',

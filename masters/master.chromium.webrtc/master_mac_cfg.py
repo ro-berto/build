@@ -14,10 +14,7 @@ def Update(c):
       SingleBranchScheduler(name='mac_rel_scheduler',
                             branch='src',
                             treeStableTimer=60,
-                            builderNames=[
-          'Mac Builder',
-          'Mac Tester',
-      ]),
+                            builderNames=['Mac Builder']),
       Triggerable(name='mac_rel_trigger',
                   builderNames=['Mac Tester']),
   ])
