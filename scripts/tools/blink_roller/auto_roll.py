@@ -256,7 +256,7 @@ class AutoRoller(object):
 
     emails = self._emails_to_cc_on_rolls()
     if emails:
-      safely_roll_args.extend(['--cc', ','.join(emails)])
+      safely_roll_args.extend(['--reviewers', ','.join(emails)])
     subprocess2.check_call(map(str, safely_roll_args))
 
     # FIXME: It's easier to pull the issue id from rietveld rather than
