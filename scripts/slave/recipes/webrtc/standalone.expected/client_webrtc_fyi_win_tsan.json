@@ -117,7 +117,7 @@
       "--run-shell-script",
       "[SLAVE_BUILD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
       "--test",
-      "audio_decoder_unittests.exe",
+      "audio_decoder_unittests",
       "--tool",
       "tsan"
     ],
@@ -145,7 +145,7 @@
       "--run-shell-script",
       "[SLAVE_BUILD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
       "--test",
-      "common_audio_unittests.exe",
+      "common_audio_unittests",
       "--tool",
       "tsan"
     ],
@@ -173,7 +173,7 @@
       "--run-shell-script",
       "[SLAVE_BUILD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
       "--test",
-      "common_video_unittests.exe",
+      "common_video_unittests",
       "--tool",
       "tsan"
     ],
@@ -201,7 +201,7 @@
       "--run-shell-script",
       "[SLAVE_BUILD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
       "--test",
-      "libjingle_media_unittest.exe",
+      "libjingle_media_unittest",
       "--tool",
       "tsan"
     ],
@@ -229,7 +229,7 @@
       "--run-shell-script",
       "[SLAVE_BUILD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
       "--test",
-      "libjingle_p2p_unittest.exe",
+      "libjingle_p2p_unittest",
       "--tool",
       "tsan"
     ],
@@ -257,7 +257,7 @@
       "--run-shell-script",
       "[SLAVE_BUILD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
       "--test",
-      "libjingle_peerconnection_unittest.exe",
+      "libjingle_peerconnection_unittest",
       "--tool",
       "tsan"
     ],
@@ -285,7 +285,7 @@
       "--run-shell-script",
       "[SLAVE_BUILD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
       "--test",
-      "libjingle_sound_unittest.exe",
+      "libjingle_sound_unittest",
       "--tool",
       "tsan"
     ],
@@ -313,7 +313,7 @@
       "--run-shell-script",
       "[SLAVE_BUILD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
       "--test",
-      "libjingle_unittest.exe",
+      "libjingle_unittest",
       "--tool",
       "tsan"
     ],
@@ -341,7 +341,7 @@
       "--run-shell-script",
       "[SLAVE_BUILD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
       "--test",
-      "modules_tests.exe",
+      "modules_tests",
       "--tool",
       "tsan"
     ],
@@ -369,7 +369,7 @@
       "--run-shell-script",
       "[SLAVE_BUILD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
       "--test",
-      "modules_unittests.exe",
+      "modules_unittests",
       "--tool",
       "tsan"
     ],
@@ -397,7 +397,7 @@
       "--run-shell-script",
       "[SLAVE_BUILD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
       "--test",
-      "system_wrappers_unittests.exe",
+      "system_wrappers_unittests",
       "--tool",
       "tsan"
     ],
@@ -425,7 +425,7 @@
       "--run-shell-script",
       "[SLAVE_BUILD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
       "--test",
-      "test_support_unittests.exe",
+      "test_support_unittests",
       "--tool",
       "tsan"
     ],
@@ -453,7 +453,7 @@
       "--run-shell-script",
       "[SLAVE_BUILD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
       "--test",
-      "tools_unittests.exe",
+      "tools_unittests",
       "--tool",
       "tsan"
     ],
@@ -481,7 +481,7 @@
       "--run-shell-script",
       "[SLAVE_BUILD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
       "--test",
-      "video_engine_core_unittests.exe",
+      "video_engine_core_unittests",
       "--tool",
       "tsan"
     ],
@@ -509,7 +509,7 @@
       "--run-shell-script",
       "[SLAVE_BUILD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
       "--test",
-      "video_engine_tests.exe",
+      "video_engine_tests",
       "--tool",
       "tsan"
     ],
@@ -537,7 +537,7 @@
       "--run-shell-script",
       "[SLAVE_BUILD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
       "--test",
-      "voice_engine_unittests.exe",
+      "voice_engine_unittests",
       "--tool",
       "tsan"
     ],

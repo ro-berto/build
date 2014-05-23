@@ -185,7 +185,7 @@ class ChromiumApi(recipe_api.RecipeApi):
         '--pass-target',
         '--run-shell-script',
         self.c.runtests.memory_tests_runner,
-        '--test', test,
+        '--test', t_name,
         '--tool', self.c.runtests.memory_tool,
       ])
     else:
