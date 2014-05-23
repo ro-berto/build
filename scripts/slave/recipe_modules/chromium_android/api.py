@@ -71,11 +71,9 @@ class AndroidApi(recipe_api.RecipeApi):
     """
     archive_args = ['--target', self.m.chromium.c.BUILD_CONFIG,
                     '--name', archive_name]
-
-    # These are covered by build_internal.  Bleh. -luqui
-    if files:              # pragma: no cover
+    if files:
       archive_args.extend(['--files', ','.join(files)])
-    if not preserve_paths: # pragma: no cover
+    if not preserve_paths:
       archive_args.append('--ignore-subfolder-names')
 
     yield self.m.python(
@@ -181,9 +179,14 @@ class AndroidApi(recipe_api.RecipeApi):
                        self.m.path['checkout']] + repos,
                       allow_subannotations=False)
 
-  def runhooks(self, extra_env={}):
-    return self.m.chromium.runhooks(env=dict(self.get_env().items() +
-                                             extra_env.items()))
+  def runhooks(self, extra_env=None):
+    run_hooks_env = self.get_env()
+    if self.c.INTERNAL:
+      run_hooks_env['EXTRA_LANDMINES_SCRIPT'] = self.internal_dir.join(
+        'build', 'get_internal_landmines.py')
+    if extra_env:
+      run_hooks_env.update(extra_env)
+    return self.m.chromium.runhooks(env=run_hooks_env)
 
   def apply_svn_patch(self):
     # TODO(sivachandra): We should probably pull this into its own module
@@ -200,6 +203,38 @@ class AndroidApi(recipe_api.RecipeApi):
     kwargs['env'] = self.get_env()
     return self.m.chromium.compile(**kwargs)
 
+  def findbugs(self):
+    assert self.c.INTERNAL, 'findbugs is only available on internal builds'
+    cmd = [
+        self.m.path['checkout'].join('build', 'android', 'findbugs_diff.py'),
+        '-b', self.internal_dir.join('bin', 'findbugs_filter'),
+        '-o', 'com.google.android.apps.chrome.-,org.chromium.-',
+    ]
+    yield self.m.step('findbugs internal', cmd, env=self.get_env())
+
+    # If findbugs fails, there could be stale class files. Delete them, and
+    # next run maybe we'll do better.
+    if self.m.step_history.last_step().retcode != 0:
+      yield self.m.path.rmwildcard(
+          '*.class',
+          self.m.path['checkout'].join('out'),
+          always_run=True)
+
+  def checkdeps(self):
+    assert self.c.INTERNAL, 'checkdeps is only available on internal builds'
+    yield self.m.step(
+      'checkdeps',
+      [self.m.path['checkout'].join('tools', 'checkdeps', 'checkdeps.py'),
+       '--root=%s' % self.internal_dir],
+      env=self.get_env())
+
+  def lint(self):
+    assert self.c.INTERNAL, 'lint is only available on internal builds'
+    yield self.m.step(
+        'lint',
+        [self.internal_dir.join('bin', 'lint.py')],
+        env=self.get_env())
+
   def git_number(self):
     yield self.m.step(
         'git_number',
@@ -211,7 +246,7 @@ class AndroidApi(recipe_api.RecipeApi):
         ),
         cwd=self.m.path['checkout'])
 
-  def upload_build(self, bucket, path):
+  def _upload_build(self, bucket, path):
     archive_name = 'build_product.zip'
 
     zipfile = self.m.path['checkout'].join('out', archive_name)
@@ -231,8 +266,50 @@ class AndroidApi(recipe_api.RecipeApi):
         dest=path
     )
 
+  def upload_clusterfuzz(self):
+    revision = self.m.properties['revision']
+    # When unpacking, ".." will be stripped from the path and the library will
+    # end up in ./third_party/llvm-build/...
+    files = ['apks/*', 'lib/*.so',
+             '../../third_party/llvm-build/Release+Asserts/lib/clang/*/lib/' +
+             'linux/libclang_rt.asan-arm-android.so']
+
+    archive_name = 'clusterfuzz.zip'
+    zipfile = self.m.path['checkout'].join('out', archive_name)
+    self._cleanup_list.append(zipfile)
+
+    yield self.git_number()
+    git_number = str.strip(self.m.step_history['git_number'].stdout)
+
+    yield self.make_zip_archive(
+      'zip_clusterfuzz',
+      archive_name,
+      files=files,
+      preserve_paths=False,
+      cwd=self.m.path['checkout']
+    )
+    yield self.m.python(
+        'git_revisions',
+        self.m.path['checkout'].join(self.c.internal_dir_name, 'build',
+                                     'clusterfuzz_generate_revision.py'),
+        ['--file', git_number],
+        always_run=True,
+    )
+    yield self.m.gsutil.upload(
+        name='upload_revision_data',
+        source=self.m.path['checkout'].join('out', git_number),
+        bucket='%s/revisions' % self.c.storage_bucket,
+        dest=git_number
+    )
+    yield self.m.gsutil.upload(
+        name='upload_clusterfuzz',
+        source=zipfile,
+        bucket=self.c.storage_bucket,
+        dest='%s%s.zip' % (self.c.upload_dest_prefix, git_number)
+    )
+
   def upload_build_for_tester(self):
-    return self.upload_build(
+    return self._upload_build(
         bucket=self._internal_names['BUILD_BUCKET'],
         path='%s/build_product_%s.zip' % (
             self.m.properties['buildername'], self.m.properties['revision']))
