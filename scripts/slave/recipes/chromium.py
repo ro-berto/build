@@ -450,6 +450,32 @@ BUILDERS = {
   },
   'chromium.fyi': {
     'builders': {
+      'Linux ARM Cross-Compile': {
+        # TODO(phajdan.jr): Re-enable goma, http://crbug.com/349236 .
+        'recipe_config': 'chromium_no_goma',
+        'GYP_DEFINES': {
+          'target_arch': 'arm',
+          'arm_float_abi': 'hard',
+          'test_isolation_mode': 'archive',
+        },
+        'chromium_config': 'chromium',
+        'runhooks_env': {
+          'AR': 'arm-linux-gnueabihf-ar',
+          'AS': 'arm-linux-gnueabihf-as',
+          'CC': 'arm-linux-gnueabihf-gcc',
+          'CC_host': 'gcc',
+          'CXX': 'arm-linux-gnueabihf-g++',
+          'CXX_host': 'g++',
+          'RANLIB': 'arm-linux-gnueabihf-ranlib',
+        },
+        'compile_targets': [
+            'all',
+        ],
+        'testing': {
+          'platform': 'linux',
+          'test_spec_file': 'chromium_arm.json',
+        },
+      },
       'Linux Trusty': {
         # TODO(phajdan.jr): Re-enable goma, http://crbug.com/349236 .
         'recipe_config': 'chromium_no_goma',
@@ -1481,6 +1507,9 @@ def GenSteps(api):
 
   api.chromium.set_config(recipe_config['chromium_config'],
                           **bot_config.get('chromium_config_kwargs', {}))
+  # Set GYP_DEFINES explicitly because chromium config constructor does
+  # not support that.
+  api.chromium.c.gyp_env.GYP_DEFINES.update(bot_config.get('GYP_DEFINES', {}))
   for c in recipe_config.get('chromium_apply_config', []):
     api.chromium.apply_config(c)
   api.gclient.set_config(recipe_config['gclient_config'])
@@ -1501,12 +1530,19 @@ def GenSteps(api):
   bot_type = bot_config.get('bot_type', 'builder_tester')
 
   if not bot_config.get('disable_runhooks'):
-    yield api.chromium.runhooks()
+    yield api.chromium.runhooks(env=bot_config.get('runhooks_env', {}))
 
+  test_spec_file = bot_config.get('testing', {}).get('test_spec_file',
+                                                     '%s.json' % mastername)
+  test_spec_path = api.path['checkout'].join('testing', 'buildbot',
+                                             test_spec_file)
+  def test_spec_followup_fn(step_result):
+    step_result.presentation.step_text = 'path: %s' % test_spec_path
   yield api.json.read(
       'read test spec',
-      api.path['checkout'].join('testing', 'buildbot', '%s.json' % mastername),
-      step_test_data=lambda: api.json.test_api.output({})),
+      test_spec_path,
+      step_test_data=lambda: api.json.test_api.output({}),
+      followup_fn=test_spec_followup_fn),
   yield api.chromium.cleanup_temp()
 
   # For non-trybot recipes we should know (seed) all steps in advance,
