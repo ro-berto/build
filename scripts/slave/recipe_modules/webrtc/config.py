@@ -82,7 +82,7 @@ def webrtc_ios(c):
   pass
 
 
-# Only exists to be able to set the MEASURE_PERF configuration.
+# Only exists to be able to set the PERF_ID and PERF_CONFIG configurations.
 @config_ctx()
 def chromium(c):
   pass

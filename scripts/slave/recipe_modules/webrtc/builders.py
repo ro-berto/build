@@ -54,7 +54,7 @@ RECIPE_CONFIGS = {
     'test_suite': 'chromium',
   },
   'chromium_webrtc_android': {
-    'chromium_config': 'chromium',
+    'chromium_config': 'android',
     'webrtc_config': 'chromium',
     'gclient_config': 'chromium_webrtc',
     'gclient_apply_config': ['android'],
@@ -64,7 +64,7 @@ RECIPE_CONFIGS = {
     'test_suite': 'chromium',
   },
   'chromium_webrtc_tot_android': {
-    'chromium_config': 'chromium',
+    'chromium_config': 'android',
     'webrtc_config': 'chromium',
     'gclient_config': 'chromium_webrtc_tot',
     'gclient_apply_config': ['android'],
