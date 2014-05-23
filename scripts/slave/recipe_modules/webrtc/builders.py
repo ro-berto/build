@@ -128,6 +128,25 @@ BUILDERS = {
           'platform': 'win',
         },
       },
+      'Win8 Tester': {
+        'recipe_config': 'chromium_webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'chromium-webrtc-rel-win8',
+        },
+        'bot_type': 'tester',
+        'build_gs_archive': 'win_rel_archive',
+        # TODO(kjellander): Disable the hooks on Win7 as soon we've moved away
+        # from downloading test resources in that step.
+        'disable_runhooks': False,
+        'parent_buildername': 'Win Builder',
+        'testing': {
+          'platform': 'win',
+        },
+      },
       'Mac Builder': {
         'recipe_config': 'chromium_webrtc',
         'chromium_config_kwargs': {
