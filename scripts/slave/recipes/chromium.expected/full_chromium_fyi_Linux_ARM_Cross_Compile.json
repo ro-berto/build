@@ -74,7 +74,7 @@
       "CC_host": "gcc",
       "CXX": "arm-linux-gnueabihf-g++",
       "CXX_host": "g++",
-      "GYP_DEFINES": "arm_float_abi=hard component=static_library target_arch=arm test_isolation_mode=archive",
+      "GYP_DEFINES": "arm_float_abi=hard component=static_library target_arch=arm test_isolation_mode=archive test_isolation_outdir=https://isolateserver.appspot.com",
       "RANLIB": "arm-linux-gnueabihf-ranlib"
     },
     "name": "gclient runhooks"

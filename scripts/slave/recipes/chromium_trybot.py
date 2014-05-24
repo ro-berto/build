@@ -6,6 +6,7 @@ DEPS = [
   'bot_update',
   'chromium',
   'gclient',
+  'isolate',
   'itertools',
   'json',
   'path',
@@ -44,6 +45,7 @@ BUILDERS = {
           'platform': 'linux',
           'test_spec_file': 'chromium_arm.json',
         },
+        'use_isolate': True,
       },
       'linux_chromium_dbg': {
         'chromium_config_kwargs': {
@@ -473,6 +475,8 @@ def GenSteps(api):
   # Settings GYP_DEFINES explicitly because chromium config constructor does
   # not support that.
   api.chromium.c.gyp_env.GYP_DEFINES.update(bot_config.get('GYP_DEFINES', {}))
+  if bot_config.get('use_isolate'):
+    api.isolate.set_isolate_environment(api.chromium.c)
   api.chromium.apply_config('trybot_flavor')
   api.gclient.set_config('chromium')
   api.step.auto_resolve_conflicts = True

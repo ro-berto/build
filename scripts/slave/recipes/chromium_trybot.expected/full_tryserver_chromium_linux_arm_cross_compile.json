@@ -125,7 +125,7 @@
       "CC_host": "gcc",
       "CXX": "arm-linux-gnueabihf-g++",
       "CXX_host": "g++",
-      "GYP_DEFINES": "arm_float_abi=hard component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm test_isolation_mode=archive use_goma=1",
+      "GYP_DEFINES": "arm_float_abi=hard component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm test_isolation_mode=archive test_isolation_outdir=https://isolateserver.appspot.com use_goma=1",
       "RANLIB": "arm-linux-gnueabihf-ranlib"
     },
     "name": "gclient runhooks"

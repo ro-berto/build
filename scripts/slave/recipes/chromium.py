@@ -7,6 +7,7 @@ DEPS = [
   'bot_update',
   'chromium',
   'gclient',
+  'isolate',
   'json',
   'path',
   'platform',
@@ -475,6 +476,7 @@ BUILDERS = {
           'platform': 'linux',
           'test_spec_file': 'chromium_arm.json',
         },
+        'use_isolate': True,
       },
       'Linux Trusty': {
         # TODO(phajdan.jr): Re-enable goma, http://crbug.com/349236 .
@@ -1510,6 +1512,8 @@ def GenSteps(api):
   # Set GYP_DEFINES explicitly because chromium config constructor does
   # not support that.
   api.chromium.c.gyp_env.GYP_DEFINES.update(bot_config.get('GYP_DEFINES', {}))
+  if bot_config.get('use_isolate'):
+    api.isolate.set_isolate_environment(api.chromium.c)
   for c in recipe_config.get('chromium_apply_config', []):
     api.chromium.apply_config(c)
   api.gclient.set_config(recipe_config['gclient_config'])
