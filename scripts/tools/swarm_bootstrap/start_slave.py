@@ -214,7 +214,7 @@ def SetupAutoStartupWin(command):
   # c:\\cygwin\\home.
   path = '%s\\%s\\run_swarm_bot.bat' % (
       os.environ.get('USERPROFILE', 'DUMMY, ONLY USED IN TESTS'), startup)
-  swarm_directory = BASE_DIR
+  swarming_directory = BASE_DIR
 
   # If we are running through cygwin, the path to write to must be changed to be
   # in the cywgin format, but we also need to change the commands to be in
@@ -222,7 +222,7 @@ def SetupAutoStartupWin(command):
   if sys.platform == 'cygwin':
     path = path.replace('\\', '/')
 
-    swarm_directory = ConvertCygwinPath(swarm_directory)
+    swarming_directory = ConvertCygwinPath(swarming_directory)
 
     # Convert all the cygwin paths in the command.
     for i in range(len(command)):
@@ -240,7 +240,7 @@ def SetupAutoStartupWin(command):
     else:
       raise Exception('Unable to find python.bat')
 
-  content = '@cd /d ' + swarm_directory + ' && ' + ' '.join(command)
+  content = '@cd /d ' + swarming_directory + ' && ' + ' '.join(command)
   return WriteToFile(path, content)
 
 
@@ -295,13 +295,12 @@ def SetupAutoStartupOSX(command):
   return WriteToFile(plistname, GenerateLaunchdPlist(command))
 
 
-def SetupAutoStartup(slave_machine, swarm_server, server_port, dimensionsfile):
+def SetupAutoStartup(swarming_server, server_port, dimensionsfile):
   logging.info('Generating AutoStartup')
-
   command = [
     sys.executable,
-    slave_machine,
-    '-a', swarm_server,
+    os.path.join(BASE_DIR, 'slave_machine.py'),
+    '-a', swarming_server,
     '-p', server_port,
     '-r', '400',
     '--keep_alive',
@@ -317,11 +316,11 @@ def SetupAutoStartup(slave_machine, swarm_server, server_port, dimensionsfile):
                  'conf file that handles their startup')
 
 
-def main():
+def main(args):
   parser = optparse.OptionParser(description=sys.modules[__name__].__doc__)
   parser.add_option('-s', '--swarm-server')
   parser.add_option('-p', '--port')
-  options, _args = parser.parse_args()
+  options, _args = parser.parse_args(args)
 
   # Setup up logging to a constant file.
   logging_rotating_file = logging.handlers.RotatingFileHandler(
@@ -341,10 +340,7 @@ def main():
     # correct dimensions file.
     GenerateAndWriteDimensions(dimensions_file)
 
-    slave_machine = os.path.join(BASE_DIR, 'slave_machine.py')
-
-    SetupAutoStartup(slave_machine, options.swarm_server, options.port,
-                     dimensions_file)
+    SetupAutoStartup(options.swarm_server, options.port, dimensions_file)
 
   logging.debug('Restarting machine')
   import slave_machine  # pylint: disable-msg=F0401
@@ -353,7 +349,7 @@ def main():
 
 if __name__ == '__main__':
   try:
-    sys.exit(main())
+    sys.exit(main(None))
   except Exception as e:
     logging.exception(e)
     sys.exit(1)

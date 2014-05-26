@@ -35,7 +35,7 @@ class MockOptParser(object):
   def add_option(self, _short_flag, _long_flag):
     pass
 
-  def parse_args(self):  # pylint:disable=R0201
+  def parse_args(self, _args):  # pylint:disable=R0201
     return Options(), []
 
 
@@ -138,7 +138,7 @@ class SwarmStartSlaveTest(auto_stub.TestCase):
     self.mock(start_slave.optparse, 'OptionParser', MockOptParser)
     self.mock(start_slave.sys, 'platform', platform)
 
-    start_slave.main()
+    start_slave.main(None)
 
   def test_main_linux(self):  # pylint: disable=R0201
     self.check_start_slave_main('linux2')
