@@ -48,12 +48,14 @@ TEST_CONFIGS = {
 }
 
 
+# TODO(machenbach): Clean up api indirection. "Run" needs the v8 api while
+# "gclient_apply_config" needs the general injection module.
 class V8Test(object):
   def __init__(self, name):
     self.name = name
 
   def run(self, api, **kwargs):
-    return api.v8.runtest(TEST_CONFIGS[self.name], **kwargs)
+    return api.runtest(TEST_CONFIGS[self.name], **kwargs)
 
   def gclient_apply_config(self, api):
     for c in TEST_CONFIGS[self.name].get('gclient_apply_config', []):
@@ -63,7 +65,7 @@ class V8Test(object):
 class V8Presubmit(object):
   @staticmethod
   def run(api, **kwargs):
-    return api.v8.presubmit()
+    return api.presubmit()
 
   @staticmethod
   def gclient_apply_config(_):
@@ -73,7 +75,7 @@ class V8Presubmit(object):
 class V8CheckInitializers(object):
   @staticmethod
   def run(api, **kwargs):
-    return api.v8.check_initializers()
+    return api.check_initializers()
 
   @staticmethod
   def gclient_apply_config(_):
@@ -83,7 +85,7 @@ class V8CheckInitializers(object):
 class V8GCMole(object):
   @staticmethod
   def run(api, **kwargs):
-    return api.v8.gc_mole()
+    return api.gc_mole()
 
   @staticmethod
   def gclient_apply_config(_):
@@ -93,7 +95,7 @@ class V8GCMole(object):
 class V8SimpleLeakCheck(object):
   @staticmethod
   def run(api, **kwargs):
-    return api.v8.simple_leak_check()
+    return api.simple_leak_check()
 
   @staticmethod
   def gclient_apply_config(_):
@@ -132,36 +134,131 @@ class V8Api(recipe_api.RecipeApi):
     'win32_dbg_archive': 'gs://chromium-v8/v8-win32-dbg',
   }
 
-  def checkout(self, **kwargs):
-    if self.m.tryserver.is_tryserver:
-      yield self.m.gclient.checkout(
-          revert=True, can_fail_build=False, abort_on_failure=False, **kwargs)
-      for step in self.m.step_history.values():
-        if step.retcode != 0:
-          # TODO(phajdan.jr): Remove the workaround, http://crbug.com/357767 .
-          yield (
-            self.m.path.rmcontents('slave build directory',
-                                   self.m.path['slave_build']),
-            self.m.gclient.checkout(**kwargs),
-          )
-          break
-    else:
-      yield self.m.gclient.checkout(**kwargs)
+  def apply_bot_config(self):
+    """Entry method for using the v8 api.
+
+    Requires the presence of a bot_config dict for any master/builder pair.
+    This bot_config will be used to refine other api methods.
+    """
+
+    self.m.step.auto_resolve_conflicts = True
+    mastername = self.m.properties.get('mastername')
+    buildername = self.m.properties.get('buildername')
+    master_dict = self.BUILDERS.get(mastername, {})
+    self.bot_config = master_dict.get('builders', {}).get(buildername)
+    assert self.bot_config, (
+        'Unrecognized builder name %r for master %r.' % (
+            buildername, mastername))
+    
+    self.set_config('v8',
+                    optional=True,
+                    **self.bot_config.get('v8_config_kwargs', {}))
+    for c in self.bot_config.get('gclient_apply_config', []):
+      self.m.gclient.apply_config(c)
+    for c in self.bot_config.get('chromium_apply_config', []):
+      self.m.chromium.apply_config(c)
+    for c in self.bot_config.get('v8_apply_config', []):
+      self.apply_config(c)
+    # Test-specific configurations.
+    for t in self.bot_config.get('tests', []):
+      self.create_test(t).gclient_apply_config(self.m)
+
+  def init_tryserver(self):
+    self.m.chromium.apply_config('trybot_flavor')
+    self.m.chromium.apply_config('optimized_debug')
+    self.apply_config('trybot_flavor')
+
+  # TODO(machenbach): Make this a step_history helper.
+  def has_failed_steps(self):
+    return any(s.retcode != 0 for s in self.m.step_history.values())
+
+  def tryserver_checkout(self):
+    yield self.m.gclient.checkout(
+        revert=True, can_fail_build=False, abort_on_failure=False)
+    if self.has_failed_steps():
+      # TODO(phajdan.jr): Remove the workaround, http://crbug.com/357767 .
+      yield (
+          self.m.path.rmcontents('slave build directory',
+                                 self.m.path['slave_build']),
+          self.m.gclient.checkout(),
+        )
 
   def runhooks(self, **kwargs):
     return self.m.chromium.runhooks(**kwargs)
 
+  @property
+  def needs_clang(self):
+    return 'clang' in self.bot_config.get('gclient_apply_config', [])
+
   def update_clang(self):
     # TODO(machenbach): Implement this for windows or unify with chromium's
     # update clang step as soon as it exists.
-    return self.m.step(
+    yield self.m.step(
         'update clang',
         [self.m.path['checkout'].join('tools', 'clang',
                                       'scripts', 'update.sh')],
-        env={'LLVM_URL': ChromiumSvnSubURL(self.m.gclient.c, 'llvm-project')})
+        env={'LLVM_URL': ChromiumSvnSubURL(self.m.gclient.c,
+                                           'llvm-project')})
+
+  def tryserver_lkgr_fallback(self):
+    self.m.gclient.apply_config('v8_lkgr')
+    yield (
+      self.tryserver_checkout(),
+      self.m.tryserver.maybe_apply_issue(),
+      self.runhooks(),
+    )
+
+  @property
+  def bot_type(self):
+    return self.bot_config.get('bot_type', 'builder_tester')
+
+  @property
+  def should_build(self):
+    return self.bot_type in ['builder', 'builder_tester']
+
+  @property
+  def should_test(self):
+    return self.bot_type in ['tester', 'builder_tester']
+
+  @property
+  def should_upload_build(self):
+    return self.bot_type == 'builder'
+
+  @property
+  def should_download_build(self):
+    return self.bot_type == 'tester'
 
   def compile(self, **kwargs):
-    return self.m.chromium.compile(**kwargs)
+    yield self.m.chromium.compile(**kwargs)
+
+  def tryserver_compile(self, fallback_fn, **kwargs):
+    yield self.compile(name='compile (with patch)',
+                       abort_on_failure=False,
+                       can_fail_build=False)
+    if self.m.step_history['compile (with patch)'].retcode != 0:
+      yield fallback_fn()
+      yield self.compile(name='compile (with patch, lkgr, clobber)',
+                         force_clobber=True)
+
+  def upload_build(self):
+    yield(self.m.archive.zip_and_upload_build(
+          'package build',
+          self.m.chromium.c.build_config_fs,
+          self.GS_ARCHIVES[self.bot_config['build_gs_archive']],
+          src_dir='v8'))
+
+  def download_build(self):
+    yield(self.m.path.rmtree(
+          'build directory',
+          self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs)))
+
+    yield(self.m.archive.download_and_unzip_build(
+          'extract build',
+          self.m.chromium.c.build_config_fs,
+          self.GS_ARCHIVES[self.bot_config['build_gs_archive']],
+          abort_on_failure=True,
+          src_dir='v8'))
+
 
   # TODO(machenbach): Pass api already in constructor to avoid redundant api
   # parameter passing later.
@@ -173,6 +270,10 @@ class V8Api(recipe_api.RecipeApi):
       return V8_NON_STANDARD_TESTS[test]()
     else:
       return V8Test(test)
+
+  def runtests(self):
+    yield [self.create_test(t).run(self)
+           for t in self.bot_config.get('tests', [])]
 
   def presubmit(self):
     return self.m.python(
