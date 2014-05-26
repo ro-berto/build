@@ -27,7 +27,9 @@ class WebRTCApi(recipe_api.RecipeApi):
       'voice_engine_unittests',
   ]
 
-  ANDROID_APK_TESTS = COMMON_TESTS
+  ANDROID_APK_TESTS = COMMON_TESTS + [
+      'video_capture_tests',
+  ]
 
   NORMAL_TESTS = sorted(COMMON_TESTS + [
     'libjingle_media_unittest',

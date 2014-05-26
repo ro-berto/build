@@ -352,6 +352,24 @@
     "name": "voice_engine_unittests"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
+      "video_capture_tests",
+      "--verbose",
+      "--release"
+    ],
+    "env": {
+      "GYP_CROSSCOMPILE": "1",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' include_tests=1 target_arch=arm use_goma=1",
+      "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
+    },
+    "name": "video_capture_tests"
+  },
+  {
     "always_run": true,
     "cmd": [
       "python",
