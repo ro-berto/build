@@ -120,7 +120,7 @@ class WebRTCApi(recipe_api.RecipeApi):
           # These tests needs --test-launcher-jobs=1 since some of them are
           # not able to run in parallel (due to the usage of the
           # peerconnection server).
-          args = ['--gtest_filter=WebRtc*',
+          args = ['--gtest_filter=WebRtc*:TabCapture*',
                   '--run-manual', '--ui-test-action-max-timeout=300000',
                   '--test-launcher-jobs=1',
                   '--test-launcher-print-test-stdio=always'],
@@ -128,7 +128,7 @@ class WebRTCApi(recipe_api.RecipeApi):
           perf_test=True))
       steps.append(self.add_test(
           test='content_unittests', name='content_unittests (webrtc)',
-          args=['--gtest_filter=WebRTC*:RTC*:MediaStream*']))
+          args=['--gtest_filter=WebRtc*:WebRTC*:RTC*:MediaStream*']))
 
       if self.m.properties['mastername'].endswith('chromium.webrtc.fyi'):
         steps.append(self.add_test('sizes'))

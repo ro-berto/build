@@ -198,7 +198,7 @@
       "--build-number=571",
       "--revision=120644",
       "browser_tests",
-      "--gtest_filter=WebRtc*",
+      "--gtest_filter=WebRtc*:TabCapture*",
       "--run-manual",
       "--ui-test-action-max-timeout=300000",
       "--test-launcher-jobs=1",
@@ -225,7 +225,7 @@
       "--slave-name=TestSlavename",
       "--build-number=571",
       "content_unittests",
-      "--gtest_filter=WebRTC*:RTC*:MediaStream*"
+      "--gtest_filter=WebRtc*:WebRTC*:RTC*:MediaStream*"
     ],
     "name": "content_unittests (webrtc)"
   },
