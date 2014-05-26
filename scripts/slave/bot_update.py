@@ -46,7 +46,7 @@ DEPOT_TOOLS_DIR = path.join(ROOT_DIR, 'depot_tools')
 
 
 CHROMIUM_GIT_HOST = 'https://chromium.googlesource.com'
-CHROME_INTERNAL_GIT_HOST = 'https:/chrome-internal.googlesource.com'
+CHROME_INTERNAL_GIT_HOST = 'https://chrome-internal.googlesource.com'
 CHROMIUM_SRC_URL = CHROMIUM_GIT_HOST + '/chromium/src.git'
 
 RECOGNIZED_PATHS = {
