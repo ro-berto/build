@@ -211,7 +211,7 @@
       "--test-type=webrtc_perf_tests",
       "--builder-name=Mac32 Release [large tests]",
       "--slave-name=slavename",
-      "--revision=12345",
+      "--revision=170242",
       "webrtc_perf_tests"
     ],
     "name": "webrtc_perf_tests"

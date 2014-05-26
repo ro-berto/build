@@ -149,14 +149,11 @@ def GenSteps(api):
   if api.tryserver.is_tryserver:
     api.webrtc.apply_config('webrtc_android_apk_try_builder')
 
-  revision = api.properties.get('revision')
-  assert revision, 'WebRTC revision must be specified as "revision" property"'
-
   # Replace src/third_party/webrtc with the specified revision and force the
   # Chromium code to sync ToT.
   s = api.gclient.c.solutions
   s[0].revision = 'HEAD'
-  s[0].custom_vars['webrtc_revision'] = revision
+  s[0].custom_vars['webrtc_revision'] = api.properties.get('revision', 'HEAD')
 
   bot_type = bot_config.get('bot_type', 'builder_tester')
   does_build = bot_type in ('builder', 'builder_tester')
@@ -165,9 +162,15 @@ def GenSteps(api):
   # TODO(iannucci): Support webrtc.apply_svn_patch with bot_update
   # crbug.com/376122
   yield api.bot_update.ensure_checkout()
-  if not api.step_history.last_step().json.output['did_run']:
+  bot_update_mode = api.step_history.last_step().json.output['did_run']
+  if not bot_update_mode:
     yield api.gclient.checkout()
 
+  # Whatever step is run right before this line needs to emit got_revision.
+  update_step = api.step_history.last_step()
+  got_revision = update_step.presentation.properties['got_revision']
+
+  if not bot_update_mode:
     if does_build and api.tryserver.is_tryserver:
       yield api.webrtc.apply_svn_patch()
 
@@ -184,11 +187,11 @@ def GenSteps(api):
 
   if bot_type == 'builder':
     yield api.webrtc.package_build(GS_ARCHIVES[bot_config['build_gs_archive']],
-                                   revision)
+                                   got_revision)
 
   if bot_type == 'tester':
     yield api.webrtc.extract_build(GS_ARCHIVES[bot_config['build_gs_archive']],
-                                   revision)
+                                   got_revision)
 
   if does_test:
     yield api.chromium_android.common_tests_setup_steps()

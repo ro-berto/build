@@ -112,7 +112,7 @@
       "--test-type=audioproc",
       "--builder-name=Linux64 Release [large tests]",
       "--slave-name=slavename",
-      "--revision=12345",
+      "--revision=170242",
       "audioproc",
       "-aecm",
       "-ns",
@@ -147,7 +147,7 @@
       "--test-type=iSACFixtest",
       "--builder-name=Linux64 Release [large tests]",
       "--slave-name=slavename",
-      "--revision=12345",
+      "--revision=170242",
       "iSACFixtest",
       "32000",
       "[SLAVE_BUILD]/src/resources/speech_and_misc_wb.pcm",
@@ -296,7 +296,7 @@
       "--test-type=webrtc_perf_tests",
       "--builder-name=Linux64 Release [large tests]",
       "--slave-name=slavename",
-      "--revision=12345",
+      "--revision=170242",
       "webrtc_perf_tests"
     ],
     "name": "webrtc_perf_tests"

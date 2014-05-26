@@ -53,8 +53,13 @@ class WebRTCApi(recipe_api.RecipeApi):
 
   DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
 
-  def runtests(self, test_suite=None):
-    """Generate a list of tests to run."""
+  def runtests(self, test_suite=None, revision=None):
+    """Generate a list of tests to run.
+
+    Args:
+      test_suite: The name of the test suite.
+      revision: Revision for the build. Mandatory for perf measuring tests.
+    """
     steps = []
     if test_suite == 'webrtc':
       for test in self.NORMAL_TESTS:
@@ -75,11 +80,15 @@ class WebRTCApi(recipe_api.RecipeApi):
         steps.append(self.add_test(
             'audioproc', name='audioproc_perf',
             args=['-aecm', '-ns', '-agc', '--fixed_digital', '--perf', '-pb',
-                  f('resources', 'audioproc.aecdump')], perf_test=True))
+                  f('resources', 'audioproc.aecdump')],
+            revision=revision,
+            perf_test=True))
         steps.append(self.add_test(
             'iSACFixtest', name='isac_fixed_perf',
             args=['32000', f('resources', 'speech_and_misc_wb.pcm'),
-                  'isac_speech_and_misc_wb.pcm'], perf_test=True))
+                  'isac_speech_and_misc_wb.pcm'],
+            revision=revision,
+            perf_test=True))
         steps.append(self.virtual_webcam_check())
         steps.append(self.add_test(
             'libjingle_peerconnection_java_unittest',
@@ -93,7 +102,8 @@ class WebRTCApi(recipe_api.RecipeApi):
       steps.append(self.add_test('voe_auto_test', args=['--automated']))
       steps.append(self.virtual_webcam_check())
       steps.append(self.add_test('video_capture_tests'))
-      steps.append(self.add_test('webrtc_perf_tests', perf_test=True))
+      steps.append(self.add_test('webrtc_perf_tests', revision=revision,
+                                 perf_test=True))
     elif test_suite == 'chromium':
       # Many of these tests run in the Chromium WebRTC waterfalls are not run in
       # the main Chromium waterfalls as they are marked as MANUAL_. This is
@@ -103,6 +113,7 @@ class WebRTCApi(recipe_api.RecipeApi):
           test='content_browsertests', name='content_browsertests (webrtc)',
           args=['--gtest_filter=WebRtc*', '--run-manual',
                 '--test-launcher-print-test-stdio=always'],
+          revision=revision,
           perf_test=True))
       steps.append(self.add_test(
           test='browser_tests', name='browser_tests (webrtc)',
@@ -113,6 +124,7 @@ class WebRTCApi(recipe_api.RecipeApi):
                   '--run-manual', '--ui-test-action-max-timeout=300000',
                   '--test-launcher-jobs=1',
                   '--test-launcher-print-test-stdio=always'],
+          revision=revision,
           perf_test=True))
       steps.append(self.add_test(
           test='content_unittests', name='content_unittests (webrtc)',
@@ -123,16 +135,19 @@ class WebRTCApi(recipe_api.RecipeApi):
 
     return steps
 
-  def add_test(self, test, name=None, args=None, env=None, perf_test=False):
+  def add_test(self, test, name=None, args=None, revision=None, env=None,
+               perf_test=False):
     args = args or []
     env = env or {}
 
     if self.c.PERF_ID and perf_test:
+      assert revision, ('Revision must be specified for perf tests as they '
+                        'upload data to the perf dashboard.')
       return self.m.chromium.runtest(
           test=test, args=args, name=name,
           results_url=self.DASHBOARD_UPLOAD_URL, annotate='graphing',
           xvfb=True, perf_dashboard_id=test, test_type=test, env=env,
-          revision=self.m.properties['revision'], perf_id=self.c.PERF_ID,
+          revision=revision, perf_id=self.c.PERF_ID,
           perf_config=self.c.PERF_CONFIG)
     else:
       return self.m.chromium.runtest(

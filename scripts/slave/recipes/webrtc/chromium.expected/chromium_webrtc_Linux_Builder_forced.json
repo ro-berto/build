@@ -8,17 +8,15 @@
       "--master",
       "chromium.webrtc",
       "--builder",
-      "Android Tests (dbg) (KK Nexus5)",
+      "Linux Builder",
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = None\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}, {'deps_file': 'DEPS', 'managed': True, 'name': 'webrtc.DEPS', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/deps/third_party/webrtc/webrtc.DEPS'}]\ntarget_os = ['android']",
+      "cache_dir = None\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}, {'deps_file': 'DEPS', 'managed': True, 'name': 'webrtc.DEPS', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/deps/third_party/webrtc/webrtc.DEPS'}]",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\", \"src/native_client\": \"got_nacl_revision\", \"src/third_party/WebKit\": \"got_webkit_revision\", \"src/third_party/webrtc\": \"got_webrtc_revision\", \"src/tools/swarm_client\": \"got_swarm_client_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_v8_revision\"}",
       "--output_json",
-      "/path/to/tmp/json",
-      "--revision",
-      "321321"
+      "/path/to/tmp/json"
     ],
     "name": "bot_update",
     "~followup_annotations": [
@@ -35,7 +33,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = None\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}, {'deps_file': 'DEPS', 'managed': True, 'name': 'webrtc.DEPS', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/deps/third_party/webrtc/webrtc.DEPS'}]\ntarget_os = ['android']"
+      "cache_dir = None\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}, {'deps_file': 'DEPS', 'managed': True, 'name': 'webrtc.DEPS', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/deps/third_party/webrtc/webrtc.DEPS'}]"
     ],
     "name": "gclient setup"
   },
@@ -50,8 +48,6 @@
       "--delete_unversioned_trees",
       "--force",
       "--verbose",
-      "--revision",
-      "src@321321",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -103,8 +99,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1"
+      "GYP_DEFINES": "component=static_library gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
     },
     "name": "gclient runhooks"
   },
@@ -117,60 +112,46 @@
     "name": "cleanup_temp"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/src/out/Debug"
-    ],
-    "name": "rmtree build directory",
-    "seed_steps": [
-      "rmtree build directory",
-      "extract build"
-    ],
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
     "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/extract_build.py",
+      "[BUILD]/scripts/slave/compile.py",
       "--target",
-      "Debug",
-      "--build-url",
-      "gs://chromium-webrtc/android_chromium_dbg",
-      "--build_revision",
-      "170242",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Tests (dbg) (KK Nexus5)\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc\", \"parent_buildername\": \"Android Builder (dbg)\", \"recipe\": \"webrtc/chromium\", \"revision\": \"321321\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Tests (dbg) (KK Nexus5)\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc\", \"parent_buildername\": \"Android Builder (dbg)\", \"recipe\": \"webrtc/chromium\", \"revision\": \"321321\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "Release",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
+      "--build-tool",
+      "ninja",
+      "--compiler",
+      "goma",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "--",
+      "chromium_builder_webrtc"
     ],
-    "name": "extract build"
+    "name": "compile",
+    "seed_steps": [
+      "compile",
+      "package build"
+    ]
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "gtest",
-      "-s",
-      "content_browsertests",
-      "--gtest_filter=WebRtc*"
+      "[BUILD]/scripts/slave/zip_build.py",
+      "--target",
+      "Release",
+      "--build-url",
+      "gs://chromium-webrtc/Linux Builder",
+      "--build_revision",
+      "170242",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc\", \"parent_buildername\": null, \"recipe\": \"webrtc/chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc\", \"parent_buildername\": null, \"recipe\": \"webrtc/chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
-    "env": {
-      "BUILDTYPE": "Debug"
-    },
-    "name": "content_browsertests"
+    "name": "package build"
   }
 ]

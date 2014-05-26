@@ -149,7 +149,7 @@
       "--build-url",
       "gs://chromium-webrtc/android_chromium_dbg",
       "--build_revision",
-      "321321",
+      "170242",
       "--factory-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Tests (dbg) (JB Nexus7.2)\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc\", \"parent_buildername\": \"Android Builder (dbg)\", \"recipe\": \"webrtc/chromium\", \"revision\": \"321321\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",

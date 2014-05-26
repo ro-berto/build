@@ -211,7 +211,7 @@
       "--test-type=webrtc_perf_tests",
       "--builder-name=Win32 Release [large tests]",
       "--slave-name=slavename",
-      "--revision=12345",
+      "--revision=170242",
       "webrtc_perf_tests.exe"
     ],
     "name": "webrtc_perf_tests"
