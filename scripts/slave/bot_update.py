@@ -46,20 +46,7 @@ DEPOT_TOOLS_DIR = path.join(ROOT_DIR, 'depot_tools')
 
 
 CHROMIUM_GIT_HOST = 'https://chromium.googlesource.com'
-CHROME_INTERNAL_GIT_HOST = 'https://chrome-internal.googlesource.com'
 CHROMIUM_SRC_URL = CHROMIUM_GIT_HOST + '/chromium/src.git'
-
-RECOGNIZED_PATHS = {
-    # If SVN path matches key, the entire URL is rewritten to the Git url.
-    '/chrome/trunk/src':
-        CHROMIUM_SRC_URL,
-    '/chrome-internal/trunk/src-internal':
-        CHROME_INTERNAL_GIT_HOST + '/chrome/src-internal.git',
-    '/chrome/trunk/deps/third_party/webrtc/webrtc.DEPS':
-        CHROMIUM_GIT_HOST + '/chromium/deps/webrtc/webrtc.DEPS.git',
-    '/chrome-internal/trunk/webrtc-limited':
-        CHROME_INTERNAL_GIT_HOST + '/chrome/deps/webrtc-limited',
-}
 
 # Official builds use buildspecs, so this is a special case.
 BUILDSPEC_RE = r'^/chrome-internal/trunk/tools/buildspec/build/(.*)$'
@@ -154,6 +141,16 @@ if os.path.isdir(BUILD_INTERNAL_DIR):
     print 'Warning: unable to read internal configuration file.'
     print 'If this is an internal bot, this step may be erroneously inactive.'
   internal_data = local_vars
+
+
+RECOGNIZED_PATHS = {
+    # If SVN path matches key, the entire URL is rewritten to the Git url.
+    '/chrome/trunk/src':
+        CHROMIUM_SRC_URL,
+    '/chrome/trunk/deps/third_party/webrtc/webrtc.DEPS':
+        CHROMIUM_GIT_HOST + '/chromium/deps/webrtc/webrtc.DEPS.git',
+}
+RECOGNIZED_PATHS.update(internal_data.get('RECOGNIZED_PATHS', {}))
 
 ENABLED_MASTERS = [
     'chrome_git',
