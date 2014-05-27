@@ -14,7 +14,6 @@ import optparse
 import os
 import pprint
 import re
-import shutil
 import socket
 import subprocess
 import sys
@@ -284,9 +283,8 @@ RETRIES = 3
 # Find deps2git
 DEPS2GIT_DIR_PATH = path.join(SCRIPTS_DIR, 'tools', 'deps2git')
 DEPS2GIT_PATH = path.join(DEPS2GIT_DIR_PATH, 'deps2git.py')
-S2G_INTERNAL_FROM_PATH = path.join(SCRIPTS_DIR, 'tools', 'deps2git_internal',
-                                   'svn_to_git_internal.py')
-S2G_INTERNAL_DEST_PATH = path.join(DEPS2GIT_DIR_PATH, 'svn_to_git_internal.py')
+S2G_INTERNAL_PATH = path.join(SCRIPTS_DIR, 'tools', 'deps2git_internal',
+                              'svn_to_git_internal.py')
 
 # ../../cache_dir aka /b/build/slave/cache_dir
 GIT_CACHE_PATH = path.join(DEPOT_TOOLS_DIR, 'git_cache.py')
@@ -702,8 +700,8 @@ def buildspecs2git(sln_dir, buildspec_name):
     f.write(git_buildspec)
 
 
-def ensure_deps2git(sln_dir, shallow):
-  repo_base = path.join(os.getcwd(), sln_dir)
+def ensure_deps2git(solution, shallow):
+  repo_base = path.join(os.getcwd(), solution['name'])
   deps_file = path.join(repo_base, 'DEPS')
   deps_git_file = path.join(repo_base, '.DEPS.git')
   if not git('ls-files', '.DEPS.git', cwd=repo_base).strip():
@@ -714,14 +712,12 @@ def ensure_deps2git(sln_dir, shallow):
     return
 
   print '===DEPS file modified, need to run deps2git==='
-  # Magic to get deps2git to work with internal DEPS.
-  shutil.copyfile(S2G_INTERNAL_FROM_PATH, S2G_INTERNAL_DEST_PATH)
-
   cmd = [sys.executable, DEPS2GIT_PATH,
-         '--extra-rules', S2G_INTERNAL_DEST_PATH,
          '--cache_dir', CACHE_DIR,
          '--deps', deps_file,
          '--out', deps_git_file]
+  if 'chrome-internal.googlesource' in solution['url']:
+    cmd.extend(['--extra-rules', S2G_INTERNAL_PATH])
   if shallow:
     cmd.append('--shallow')
   call(*cmd)
@@ -1047,20 +1043,22 @@ def ensure_checkout(solutions, revisions, first_sln, target_os, target_os_only,
   if patch_url:
     patches = get_svn_patch(patch_url)
 
-  if patch_root == first_sln:
-    # Only top level DEPS patching is supported right now.
-    if patches:
-      apply_svn_patch(patch_root, patches, whitelist=['DEPS'])
-    elif issue:
-      apply_rietveld_issue(issue, patchset, patch_root, rietveld_server,
-                          revision_mapping, git_ref, whitelist=['DEPS'])
-
+  for solution in solutions:
+    # At first, only patch top-level DEPS.
+    if patch_root == solution['name']:
+      if patches:
+        apply_svn_patch(patch_root, patches, whitelist=['DEPS'])
+      elif issue:
+        apply_rietveld_issue(issue, patchset, patch_root, rietveld_server,
+                            revision_mapping, git_ref, whitelist=['DEPS'])
+      break
 
   if buildspec_name:
     buildspecs2git(first_sln, buildspec_name)
   else:
     # Run deps2git if there is a DEPS change after the last .DEPS.git commit.
-    ensure_deps2git(first_sln, shallow)
+    for solution in solutions:
+      ensure_deps2git(solution, shallow)
 
   # Ensure our build/ directory is set up with the correct .gclient file.
   gclient_configure(solutions, target_os, target_os_only)
