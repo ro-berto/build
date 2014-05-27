@@ -264,6 +264,9 @@ DISABLED_BUILDERS = {
         'Windows Browser (DrMemory full) (7)',
         'Windows Browser (DrMemory full) (8)',
         'Windows Browser (DrMemory full) (9)',
+        # ClusterFuzz relies on svn revisions to do bisection checks.
+        # crbug.com/377963
+        'Win SyzyASAN LKGR',
     ]
 }
 DISABLED_BUILDERS.update(internal_data.get('DISABLED_BUILDERS', {}))
