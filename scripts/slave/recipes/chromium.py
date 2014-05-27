@@ -470,7 +470,7 @@ BUILDERS = {
           'RANLIB': 'arm-linux-gnueabihf-ranlib',
         },
         'compile_targets': [
-            'all',
+            'chromium_swarm_tests',
         ],
         'testing': {
           'platform': 'linux',
