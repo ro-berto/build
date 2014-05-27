@@ -330,10 +330,15 @@ class InvalidDiff(Exception):
   pass
 
 
+RETRY = object()
+OK = object()
+FAIL = object()
+
 def call(*args, **kwargs):
   """Interactive subprocess call."""
   kwargs['stdout'] = subprocess.PIPE
   kwargs['stderr'] = subprocess.STDOUT
+  result_fn = kwargs.pop('result_fn', lambda code, out: RETRY if code else OK)
   stdin_data = kwargs.pop('stdin_data', None)
   tries = kwargs.pop('tries', RETRIES)
   if stdin_data:
@@ -343,7 +348,8 @@ def call(*args, **kwargs):
   env = copy.copy(os.environ)
   env.update(new_env)
   kwargs['env'] = env
-  for attempt in range(tries):
+  attempt = 0
+  for attempt in range(1, tries + 1):
     attempt_msg = ' (retry #%d)' % attempt if attempt else ''
     if new_env:
       print '===Injecting Environment Variables==='
@@ -373,15 +379,20 @@ def call(*args, **kwargs):
       out.write(buf)
     code = proc.wait()
     elapsed_time = ((time.time() - start_time) / 60.0)
-    if not code:
+    outval = out.getvalue()
+    result = result_fn(code, outval)
+    if result in (FAIL, RETRY):
+      print '===Failed in %.1f mins===' % elapsed_time
+      print
+    else:
       print '===Succeeded in %.1f mins===' % elapsed_time
       print
-      return out.getvalue()
-    print '===Failed in %.1f mins===' % elapsed_time
-    print
+      return outval
+    if result is FAIL:
+      break
 
   raise SubprocessFailed('%s failed with code %d in %s after %d attempts.' %
-                         (' '.join(args), code, os.getcwd(), tries), code)
+                         (' '.join(args), code, os.getcwd(), attempt), code)
 
 
 def git(*args, **kwargs):
@@ -1098,19 +1109,48 @@ class UploadTelemetryThread(threading.Thread):
 
   @staticmethod
   def _gsutil(*args, **kwargs):
+    fail_gs_codes = kwargs.pop('fail_gs_codes', ())
+    fail_gs_msgs = kwargs.pop('fail_gs_msgs', ())
+    def gs_ok_fn(code, out):
+      if not code:
+        return OK
+      if not fail_gs_msgs and not fail_gs_codes:
+        return RETRY
+
+      lines = out.splitlines()
+      if fail_gs_codes:
+        status = re.match('GSResponseError.*status=(\d+)', lines[-1])
+        if status and int(status.group(1)) in fail_gs_codes:
+          return FAIL
+
+      if fail_gs_msgs:
+        if any(m in lines[0] for m in fail_gs_msgs):
+          return FAIL
+
+      return RETRY
+    kwargs.setdefault('is_ok_fn', gs_ok_fn)
+
     return call(sys.executable, '-u', GSUTIL_BIN, *args, **kwargs)
 
   def run(self):
     if self.prefix == 'start':
       try:
-        self._gsutil('mv', self.url('start'), self.url('start_old'))
+        self._gsutil('rm', self.url('start_old'), self.url('end_old'),
+                     fail_gs_codes={404})
       except Exception as e:
-        print 'Could not move start -> start_old! %r' % e
+        print 'INFO: Could not rm start_old, end_old. %r' % e
 
       try:
-        self._gsutil('mv', self.url('end'), self.url('end_old'))
+        self._gsutil('mv', self.url('start'), self.url('start_old'),
+                     fail_gs_msgs={'InvalidUriError'})
       except Exception as e:
-        print 'Could not move end -> end_old! %r' % e
+        print 'INFO: Could not move start -> start_old. %r' % e
+
+      try:
+        self._gsutil('mv', self.url('end'), self.url('end_old'),
+                     fail_gs_msgs={'InvalidUriError'})
+      except Exception as e:
+        print 'INFO: Could not move end -> end_old. %r' % e
 
     # Disk space Code duplicated here to get it out of the critical path
     # when bot_update is not activated.
