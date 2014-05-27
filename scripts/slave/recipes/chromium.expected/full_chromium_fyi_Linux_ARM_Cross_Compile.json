@@ -115,7 +115,7 @@
       "--build-tool",
       "ninja",
       "--",
-      "all"
+      "chromium_swarm_tests"
     ],
     "name": "compile",
     "seed_steps": [
