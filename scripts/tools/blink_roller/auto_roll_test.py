@@ -26,9 +26,8 @@ class RevisionLinkTest(SuperMoxTestBase):
 
   def test_skia(self):
     revlink_fn = auto_roll.PROJECT_CONFIGS['skia']['revision_link_fn']
-    expected = 'https://code.google.com/p/skia/source/list?num=%d&start=%s' % (
-        22, '1256')
-    self.assertEqual(revlink_fn(1234, 1256), expected)
+    expected = 'https://skia.googlesource.com/skia/+log/abc1234..def1256'
+    self.assertEqual(revlink_fn('abc1234', 'def1256'), expected)
 
 
 class SheriffCalendarTest(SuperMoxTestBase):
@@ -395,12 +394,20 @@ Date:   Wed Apr 2 14:00:14 2014 -0400
     auto_roll.scm.GIT.Capture(['rev-parse', str(new_rev)],
                               cwd='./third_party/test_project/.git',
                               ).AndReturn(new_rev)
-    merge_base_cmd = ['git', 'merge-base', '--is-ancestor', new_rev, old_rev]
+    merge_base_cmd = ['git', '--git-dir', './third_party/test_project/.git',
+                      'merge-base', '--is-ancestor', new_rev, old_rev]
     if self._commit_timestamps[old_rev] < self._commit_timestamps[new_rev]:
       err = auto_roll.subprocess2.CalledProcessError(1, '', '', '', '')
       auto_roll.subprocess2.check_call(merge_base_cmd).AndRaise(err)
     else:
       auto_roll.subprocess2.check_call(merge_base_cmd)
+      return
+    short_rev_cmd = ['git', '--git-dir', './third_party/test_project/.git',
+                     'rev-parse', '--short']
+    auto_roll.subprocess2.check_output(short_rev_cmd + [old_rev]
+                                       ).AndReturn(old_rev)
+    auto_roll.subprocess2.check_output(short_rev_cmd + [new_rev]
+                                       ).AndReturn(new_rev)
 
   # pylint: disable=R0201
   def _parse_origin_master(self, returnval):
