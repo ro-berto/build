@@ -142,7 +142,6 @@ if os.path.isdir(BUILD_INTERNAL_DIR):
     print 'If this is an internal bot, this step may be erroneously inactive.'
   internal_data = local_vars
 
-
 RECOGNIZED_PATHS = {
     # If SVN path matches key, the entire URL is rewritten to the Git url.
     '/chrome/trunk/src':
@@ -154,7 +153,6 @@ RECOGNIZED_PATHS.update(internal_data.get('RECOGNIZED_PATHS', {}))
 
 ENABLED_MASTERS = [
     'bot_update.always_on',
-    'chrome_git',
     'chromium.git',
     'chromium.linux',
     'chromium.mac',
@@ -182,7 +180,7 @@ ENABLED_BUILDERS = {
         'linux_chromium_trusty_rel',
     ],
     'tryserver.blink': [
-      'linux_blink_bot_update',
+        'linux_blink_bot_update',
     ],
     'chromium.lkgr': [
         'Telemetry Harness Upload (Bot Update)',
@@ -278,6 +276,7 @@ DISABLED_SLAVES.update(internal_data.get('DISABLED_SLAVES', {}))
 # a git hash rather than a SVN rev. This goes away if flag_day is True.
 GIT_MASTERS = ['chromium.git']
 GIT_MASTERS += internal_data.get('GIT_MASTERS', [])
+
 
 # How many times to retry failed subprocess calls.
 RETRIES = 3
