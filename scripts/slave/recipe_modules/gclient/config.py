@@ -214,6 +214,7 @@ def show_v8_revision(c):
 
 @config_ctx(includes=['chromium'])
 def v8_bleeding_edge(c):
+  c.solutions[0].revision = 'HEAD'
   c.solutions[0].custom_vars['v8_branch'] = 'branches/bleeding_edge'
   c.solutions[0].custom_vars['v8_revision'] = 'HEAD'
 
