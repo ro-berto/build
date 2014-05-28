@@ -1126,7 +1126,7 @@ class UploadTelemetryThread(threading.Thread):
           return FAIL
 
       return RETRY
-    kwargs.setdefault('is_ok_fn', gs_ok_fn)
+    kwargs.setdefault('result_fn', gs_ok_fn)
 
     return call(sys.executable, '-u', GSUTIL_BIN, *args, **kwargs)
 
