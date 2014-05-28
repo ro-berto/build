@@ -321,23 +321,6 @@ class GpuApi(recipe_api.RecipeApi):
         '--test-machine-name', self.m.properties['buildername']
       ])
 
-    # Only run the performance tests on Release builds.
-    if self.m.chromium.is_release_build:
-      # Former tab_capture_performance_tests_step
-      args = ['--enable-gpu',
-              '--test-launcher-jobs=1',
-              '--test-launcher-print-test-stdio=always',
-              '--gtest_filter=TabCapturePerformanceTest*']
-      yield self._maybe_run_isolate('performance_browser_tests',
-                                    args=args,
-                                    name='tab_capture_performance_tests',
-                                    isolate_name='tab_capture_performance_tests',
-                                    annotate='graphing',
-                                    results_url=self._dashboard_upload_url,
-                                    perf_dashboard_id='tab_capture_performance',
-                                    test_type='tab_capture_performance_tests',
-                                    spawn_dbus=True)
-
     # Tab capture end-to-end (correctness) tests.
     # TODO(kbr): enable this test everywhere once the Debug bots have
     # been switched to using isolates. It's not worth the effort to
