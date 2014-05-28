@@ -70,70 +70,19 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]\\gclient.py",
-      "runhooks"
-    ],
-    "env": {
-      "GYP_DEFINES": "chromium_win_pch=0 component=static_library fastbuild=1 gomadir='[BUILD]\\goma' linux_strip_binary=1 target_arch=x64 use_goma=1",
-      "GYP_GENERATORS": "ninja"
-    },
-    "name": "gclient runhooks"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[SLAVE_BUILD]\\src\\dart\\tools\\bots\\fetch_reference_build.py"
     ],
     "name": "fetch_reference_build"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\compile.py",
-      "--target",
-      "Release_x64",
-      "--src-dir",
-      "[SLAVE_BUILD]\\src",
-      "--build-tool",
-      "ninja",
-      "--compiler",
-      "goma",
-      "--goma-dir",
-      "[BUILD]\\goma",
-      "--",
-      "All",
-      "chromium_builder_tests"
+      "[SLAVE_BUILD]\\src\\dart\\tools\\dartium\\download_multivm.py",
+      "12345",
+      "[SLAVE_BUILD]\\src\\out\\Release_x64"
     ],
-    "name": "compile"
-  },
-  {
-    "always_run": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]\\scripts\\slave\\runtest.py",
-      "--target",
-      "Release_x64",
-      "--factory-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium_perf\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium_perf\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--builder-name=TestBuilder",
-      "--slave-name=TestSlavename",
-      "--build-number=571",
-      "--run-python-script",
-      "[BUILD]\\scripts\\slave\\chromium\\layout_test_wrapper.py",
-      "--target",
-      "Release",
-      "-o",
-      "[SLAVE_BUILD]\\layout-test-results",
-      "--build-dir",
-      "[SLAVE_BUILD]\\src\\out"
-    ],
-    "name": "webkit_tests"
+    "name": "download_archived_build"
   },
   {
     "allow_subannotations": true,
