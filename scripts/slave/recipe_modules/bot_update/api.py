@@ -112,11 +112,19 @@ class BotUpdateApi(recipe_api.RecipeApi):
         ['--output_json', self.m.json.output()],]
 
 
-    revision = (
-      cfg.solutions[0].revision or
-      self.m.properties.get('parent_got_revision') or
-      self.m.properties.get('revision'))
-    flags.append(['--revision', revision])
+    revisions = {}
+    for solution in cfg.solutions:
+      if solution.revision:
+        revisions[solution.name] = solution.revision
+      elif solution == cfg.solutions[0]:
+        revisions[solution.name] = (
+            self.m.properties.get('parent_got_revision') or
+            self.m.properties.get('revision') or
+            'HEAD')
+    if self.m.gclient.c and self.m.gclient.c.revisions:
+      revisions.update(self.m.gclient.c.revisions)
+    for name, revision in sorted(revisions.items()):
+      flags.append(['--revision', '%s@%s' % (name, revision)])
 
     # Filter out flags that are None.
     cmd = [item for flag_set in flags

@@ -34,6 +34,11 @@ def BaseConfig(USE_MIRROR=True, GIT_MODE=False, CACHE_DIR=None, **_kwargs):
     # Maps 'solution' -> build_property
     got_revision_mapping = Dict(hidden=True),
 
+    # Addition revisions we want to pass in.  For now theres a duplication
+    # of code here of setting custom vars AND passing in --revision. We hope
+    # to remove custom vars later.
+    revisions = Dict(value_type=basestring, hidden=True),
+
     # TODO(iannucci): HACK! The use of None here to indicate that we apply this
     #   to the solution.revision field is really terrible. I mostly blame
     #   gclient.
@@ -198,7 +203,7 @@ def chrome_internal(c):
 @config_ctx(includes=['chromium'])
 def blink(c):
   del c.solutions[0].custom_deps
-  c.solutions[0].custom_vars['webkit_revision'] = 'HEAD'
+  c.revisions['src/third_party/WebKit'] = 'HEAD'
 
 @config_ctx()
 def android(c):
@@ -216,11 +221,11 @@ def show_v8_revision(c):
 def v8_bleeding_edge(c):
   c.solutions[0].revision = 'HEAD'
   c.solutions[0].custom_vars['v8_branch'] = 'branches/bleeding_edge'
-  c.solutions[0].custom_vars['v8_revision'] = 'HEAD'
+  c.revisions['src/v8'] = 'HEAD'
 
 @config_ctx(includes=['blink', 'v8_bleeding_edge'])
 def v8_blink_flavor(c):
-  del c.solutions[0].custom_vars['webkit_revision']
+  del c.revisions['src/third_party/WebKit']
 
 @config_ctx(includes=['chromium'])
 def oilpan(c):
@@ -235,7 +240,7 @@ def oilpan(c):
     'svn://svn.chromium.org/%(repo)s'
   )
 
-  c.solutions[0].custom_vars['webkit_revision'] = 'HEAD'
+  c.revisions['src/third_party/WebKit'] = 'HEAD'
   c.solutions[0].revision = '197341'
 
   c.solutions[0].custom_deps = {

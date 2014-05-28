@@ -41,7 +41,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00"
+      "src@4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00"
     ],
     "name": "bot_update",
     "~followup_annotations": [

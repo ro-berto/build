@@ -24,7 +24,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "HEAD"
+      "src@HEAD"
     ],
     "name": "bot_update - empty_deps",
     "~followup_annotations": [
@@ -155,7 +155,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "HEAD"
+      "src@HEAD"
     ],
     "name": "bot_update - trimmed",
     "~followup_annotations": [

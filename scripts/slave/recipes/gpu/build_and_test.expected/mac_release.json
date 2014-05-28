@@ -26,7 +26,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "204787"
+      "src@204787"
     ],
     "name": "bot_update",
     "~followup_annotations": [

@@ -460,8 +460,7 @@ def GenSteps(api):
     api.gclient.apply_config('v8_blink_flavor')
     api.gclient.apply_config('show_v8_revision')
     if api.properties['revision']:
-      custom_vars = api.gclient.c.solutions[0].custom_vars
-      custom_vars['v8_revision'] = api.properties['revision']
+      api.gclient.c.revisions['src/v8'] = api.properties['revision']
   api.step.auto_resolve_conflicts = True
 
   if 'oilpan' in buildername:

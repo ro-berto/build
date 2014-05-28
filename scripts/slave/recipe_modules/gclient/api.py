@@ -103,6 +103,9 @@ class GclientApi(recipe_api.RecipeApi):
       if s.revision is not None and s.revision != '':
         revisions.extend(['--revision', '%s@%s' % (s.name, s.revision)])
 
+    for name, revision in sorted(cfg.revisions.items()):
+      revisions.extend(['--revision', '%s@%s' % (name, revision)])
+
     def parse_got_revision(step_result):
       data = step_result.json.output
       if not data:

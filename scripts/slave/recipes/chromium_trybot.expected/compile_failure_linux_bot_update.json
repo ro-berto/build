@@ -22,7 +22,9 @@
       "--patchset",
       "1",
       "--output_json",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--revision",
+      "src@HEAD"
     ],
     "name": "bot_update",
     "~followup_annotations": [
@@ -178,7 +180,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "origin/lkcr"
+      "src@origin/lkcr"
     ],
     "name": "bot_update - lkcr clobber",
     "~followup_annotations": [
@@ -311,7 +313,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "origin/lkcr"
+      "src@origin/lkcr"
     ],
     "name": "bot_update - lkcr clobber nuke",
     "~followup_annotations": [
