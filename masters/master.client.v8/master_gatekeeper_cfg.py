@@ -27,7 +27,7 @@ categories_steps = {
 
 exclusions = {
   'V8 Linux - mips - sim': ['compile'],
-  'V8 Linux - recipe': [],
+  'V8 Linux - x87 - nosnap - debug': [],
   'V8 Win32 - nosnap - shared': [],
 }
 

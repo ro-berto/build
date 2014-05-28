@@ -45,7 +45,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "target_arch=ia32 v8_enable_verify_heap=1 v8_target_arch=ia32"
+      "GYP_DEFINES": "target_arch=ia32 v8_optimized_debug=1 v8_target_arch=x87 v8_use_snapshot=false"
     },
     "name": "gclient runhooks"
   },
@@ -64,7 +64,7 @@
       "-u",
       "[BUILD]/scripts/slave/compile.py",
       "--target",
-      "Release",
+      "Debug",
       "--src-dir",
       "[SLAVE_BUILD]/v8",
       "--build-tool",
@@ -74,21 +74,46 @@
     "name": "compile"
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/zip_build.py",
+      "[BUILD]/scripts/slave/v8/v8testing.py",
       "--target",
-      "Release",
-      "--build-url",
-      "gs://chromium-v8/v8-linux-rel-exp",
-      "--src-dir",
-      "v8",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8 Linux - builder - experimental\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": null, \"recipe\": \"v8\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8 Linux - builder - experimental\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": null, \"recipe\": \"v8\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "Debug",
+      "--arch",
+      "x87",
+      "--testname",
+      "mjsunit fuzz-natives cctest message preparser",
+      "--no-snap",
+      "--flaky-tests",
+      "skip",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
-    "name": "package build"
+    "cwd": "[SLAVE_BUILD]/v8",
+    "name": "Check"
+  },
+  {
+    "always_run": true,
+    "can_fail_build": false,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/v8/v8testing.py",
+      "--target",
+      "Debug",
+      "--arch",
+      "x87",
+      "--testname",
+      "mjsunit fuzz-natives cctest message preparser",
+      "--no-snap",
+      "--flaky-tests",
+      "run",
+      "--json-test-results",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "name": "Check - flaky"
   }
 ]

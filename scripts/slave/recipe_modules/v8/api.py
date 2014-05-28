@@ -124,7 +124,6 @@ class V8Api(recipe_api.RecipeApi):
   # Map of GS archive names to urls.
   GS_ARCHIVES = {
     'linux_rel_archive': 'gs://chromium-v8/v8-linux-rel',
-    'linux_rel_archive_exp': 'gs://chromium-v8/v8-linux-rel-exp',
     'linux_dbg_archive': 'gs://chromium-v8/v8-linux-dbg',
     'linux_nosnap_rel_archive': 'gs://chromium-v8/v8-linux-nosnap-rel',
     'linux_nosnap_dbg_archive': 'gs://chromium-v8/v8-linux-nosnap-dbg',
@@ -363,7 +362,7 @@ class V8Api(recipe_api.RecipeApi):
     env = {}
     full_args = [
       '--target', self.m.chromium.c.build_config_fs,
-      '--arch', self.m.chromium.c.gyp_env.GYP_DEFINES['target_arch'],
+      '--arch', self.m.chromium.c.gyp_env.GYP_DEFINES['v8_target_arch'],
       '--testname', test['tests'],
     ]
 

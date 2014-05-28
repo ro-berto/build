@@ -19,16 +19,6 @@ BUILDERS = {
         'build_gs_archive': 'linux_rel_archive',
         'testing': {'platform': 'linux'},
       },
-      'V8 Linux - builder - experimental': {
-        'chromium_apply_config': ['verify_heap'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder',
-        'build_gs_archive': 'linux_rel_archive_exp',
-        'testing': {'platform': 'linux'},
-      },
       'V8 Linux': {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -626,19 +616,6 @@ BUILDERS = {
         'tests': ['v8testing'],
         'testing': {'platform': 'linux'},
       },
-      # This builder is used as a staging area for builders on the main
-      # waterfall to be switched to recipes.
-      'V8 Linux - recipe': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'tester',
-        'parent_buildername': 'V8 Linux - builder - experimental',
-        'build_gs_archive': 'linux_rel_archive_exp',
-        'tests': ['v8testing'],
-        'testing': {'platform': 'linux'},
-      },
 ####### Category: FYI
       'V8 Linux - vtunejit': {
         'chromium_apply_config': ['vtunejit'],
@@ -647,6 +624,17 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - x87 - nosnap - debug': {
+        'v8_apply_config': ['no_snapshot'],
+        'chromium_apply_config': ['no_snapshot', 'x87'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['v8testing'],
         'testing': {'platform': 'linux'},
       },
       'V8 Mac - full debug': {
