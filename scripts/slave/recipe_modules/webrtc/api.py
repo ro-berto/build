@@ -132,29 +132,44 @@ class WebRTCApi(recipe_api.RecipeApi):
           test='content_unittests', name='content_unittests (webrtc)',
           args=['--gtest_filter=WebRtc*:WebRTC*:RTC*:MediaStream*']))
 
-      if self.m.properties['mastername'].endswith('chromium.webrtc.fyi'):
-        steps.append(self.add_test('sizes'))
-
     return steps
 
   def add_test(self, test, name=None, args=None, revision=None, env=None,
-               perf_test=False):
+               perf_test=False, perf_dashboard_id=None):
     args = args or []
     env = env or {}
-
     if self.c.PERF_ID and perf_test:
+      perf_dashboard_id = perf_dashboard_id or test
       assert revision, ('Revision must be specified for perf tests as they '
                         'upload data to the perf dashboard.')
       return self.m.chromium.runtest(
           test=test, args=args, name=name,
           results_url=self.DASHBOARD_UPLOAD_URL, annotate='graphing',
-          xvfb=True, perf_dashboard_id=test, test_type=test, env=env,
-          revision=revision, perf_id=self.c.PERF_ID,
+          xvfb=True, perf_dashboard_id=perf_dashboard_id, test_type=test,
+          env=env, revision=revision, perf_id=self.c.PERF_ID,
           perf_config=self.c.PERF_CONFIG)
     else:
       return self.m.chromium.runtest(
           test=test, args=args, name=name, annotate='gtest', xvfb=True,
-              test_type=test, env=env)
+          test_type=test, env=env)
+
+  def sizes(self, revision):
+    # TODO(kjellander): Move this into a function of the chromium recipe
+    # module instead.
+    assert self.c.PERF_ID, ('You must specify PERF_ID for the builder that '
+                            'runs the sizes step.')
+    sizes_script = self.m.path['build'].join('scripts', 'slave', 'chromium',
+                                             'sizes.py')
+    args = ['--target', self.m.chromium.c.BUILD_CONFIG,
+            '--platform', self.m.chromium.c.TARGET_PLATFORM]
+    test_name = 'sizes'
+    yield self.add_test(
+        test=sizes_script,
+        name=test_name,
+        perf_dashboard_id=test_name,
+        args=args,
+        revision=revision,
+        perf_test=True)
 
   def package_build(self, gs_url, revision):
     yield self.m.archive.zip_and_upload_build(

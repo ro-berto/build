@@ -165,7 +165,6 @@
       "content_browsertests (webrtc)",
       "browser_tests (webrtc)",
       "content_unittests (webrtc)",
-      "sizes",
       "process_dumps"
     ]
   },
@@ -255,28 +254,6 @@
       "--gtest_filter=WebRtc*:WebRTC*:RTC*:MediaStream*"
     ],
     "name": "content_unittests (webrtc)"
-  },
-  {
-    "allow_subannotations": true,
-    "always_run": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]\\scripts\\slave\\runtest.py",
-      "--target",
-      "Release",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"WinXP Tester\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc.fyi\", \"parent_buildername\": \"Win Builder\", \"recipe\": \"webrtc/chromium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"WinXP Tester\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc.fyi\", \"parent_buildername\": \"Win Builder\", \"recipe\": \"webrtc/chromium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--annotate=gtest",
-      "--test-type=sizes",
-      "--builder-name=WinXP Tester",
-      "--slave-name=TestSlavename",
-      "--build-number=571",
-      "sizes.exe"
-    ],
-    "name": "sizes"
   },
   {
     "always_run": true,

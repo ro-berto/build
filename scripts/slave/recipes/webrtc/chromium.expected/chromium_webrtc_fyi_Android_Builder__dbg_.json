@@ -137,8 +137,42 @@
     "name": "compile",
     "seed_steps": [
       "compile",
-      "package build"
+      "sizes"
     ]
+  },
+  {
+    "allow_subannotations": true,
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Debug",
+      "--xvfb",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Builder (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc.fyi\", \"parent_buildername\": null, \"recipe\": \"webrtc/chromium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Builder (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc.fyi\", \"parent_buildername\": null, \"recipe\": \"webrtc/chromium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--annotate=graphing",
+      "--results-url=https://chromeperf.appspot.com",
+      "--perf-dashboard-id=sizes",
+      "--perf-id=chromium-webrtc-trunk-tot-dbg-android",
+      "--perf-config",
+      "{'a_default_rev': 'r_webrtc_rev'}",
+      "--test-type=[BUILD]/scripts/slave/chromium/sizes.py",
+      "--builder-name=Android Builder (dbg)",
+      "--slave-name=TestSlavename",
+      "--build-number=571",
+      "--run-python-script",
+      "--revision=120644",
+      "[BUILD]/scripts/slave/chromium/sizes.py",
+      "--target",
+      "Debug",
+      "--platform",
+      "android"
+    ],
+    "name": "sizes"
   },
   {
     "cmd": [

@@ -267,6 +267,9 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'chromium-webrtc-trunk-tot-rel-win',
+        },
         'bot_type': 'builder',
         'build_gs_archive': 'win_rel_archive_fyi',
         'testing': {
@@ -344,6 +347,9 @@ BUILDERS = {
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'chromium-webrtc-trunk-tot-dbg-android',
         },
         'bot_type': 'builder',
         'build_gs_archive': 'android_dbg_archive_fyi',

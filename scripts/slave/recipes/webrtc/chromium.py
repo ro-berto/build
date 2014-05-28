@@ -84,6 +84,8 @@ def GenSteps(api):
   if bot_type in ('builder', 'builder_tester'):
     compile_targets = recipe_config.get('compile_targets', [])
     steps.append(api.chromium.compile(targets=compile_targets))
+    if mastername == 'chromium.webrtc.fyi':
+      steps.append(api.webrtc.sizes(got_revision))
 
   if bot_type == 'builder':
     steps.append(api.webrtc.package_build(
