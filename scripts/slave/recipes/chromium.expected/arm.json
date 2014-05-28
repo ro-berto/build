@@ -90,7 +90,19 @@
     "name": "read test spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium_arm.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Linux ARM Cross-Compile\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"args\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"--gtest-filter\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"*NaCl*\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        ], @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"test\": \"browser_tests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
@@ -147,7 +159,9 @@
       "--build-dir",
       "[SLAVE_BUILD]/src/out/Release",
       "--output-json",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--extra-args-file",
+      "{\"browser_tests\": [\"--gtest-filter\", \"*NaCl*\"]}"
     ],
     "name": "find isolated tests",
     "~followup_annotations": [

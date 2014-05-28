@@ -6,9 +6,9 @@
       "-u",
       "[BUILD]/scripts/slave/bot_update.py",
       "--master",
-      "chromium.fyi",
+      "tryserver.chromium",
       "--builder",
-      "Linux ARM Cross-Compile",
+      "linux_arm_cross_compile",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -64,6 +64,29 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]/src/testing/buildbot/chromium_arm.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "read test spec",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@path: testing/buildbot/chromium_arm.json@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Linux Tests\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"browser_tests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "abort_on_failure": false,
+    "can_fail_build": false,
+    "cmd": [
+      "python",
+      "-u",
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
@@ -74,36 +97,14 @@
       "CC_host": "gcc",
       "CXX": "arm-linux-gnueabihf-g++",
       "CXX_host": "g++",
-      "GYP_DEFINES": "arm_float_abi=hard component=static_library target_arch=arm test_isolation_mode=archive test_isolation_outdir=https://isolateserver.appspot.com",
+      "GYP_DEFINES": "arm_float_abi=hard component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm test_isolation_mode=archive test_isolation_outdir=https://isolateserver.appspot.com use_goma=1",
       "RANLIB": "arm-linux-gnueabihf-ranlib"
     },
     "name": "gclient runhooks"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/testing/buildbot/chromium_arm.json",
-      "/path/to/tmp/json"
-    ],
-    "name": "read test spec",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium_arm.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/cleanup_temp.py"
-    ],
-    "name": "cleanup_temp"
-  },
-  {
-    "abort_on_failure": true,
+    "abort_on_failure": false,
+    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -114,29 +115,15 @@
       "[SLAVE_BUILD]/src",
       "--build-tool",
       "ninja",
+      "--compiler",
+      "goma",
+      "--goma-dir",
+      "[BUILD]/goma",
       "--",
-      "chromium_swarm_tests"
+      "Linux Tests",
+      "chrome"
     ],
-    "name": "compile",
-    "seed_steps": [
-      "compile",
-      "checkdeps",
-      "find isolated tests"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/tools/checkdeps/checkdeps.py",
-      "--json",
-      "/path/to/tmp/json"
-    ],
-    "name": "checkdeps",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
+    "name": "compile (with patch)"
   },
   {
     "abort_on_failure": true,

@@ -1571,6 +1571,19 @@ def GenSteps(api):
         api.chromium.checkdeps(),
     ])
 
+  if bot_config.get('use_isolate'):
+    test_args_map = {}
+    test_spec = api.step_history['read test spec'].json.output
+    gtests_tests = test_spec.get(buildername, {}).get('gtest_tests', [])
+    for test in gtests_tests:
+      if isinstance(test, dict):
+        test_args = test.get('args')
+        test_name = test.get('test')
+        if test_name and test_args:
+          test_args_map[test_name] = test_args
+    steps.append(api.isolate.find_isolated_tests(api.chromium.output_dir,
+                                                 extra_args_map=test_args_map))
+
   if bot_type == 'builder':
     steps.append(api.archive.zip_and_upload_build(
         'package build',
@@ -1655,6 +1668,21 @@ def GenTests(api):
           'base_unittests',
           {'test': 'browser_tests', 'shard_index': 0, 'total_shards': 2},
         ],
+      },
+    }))
+  )
+
+  yield (
+    api.test('arm') +
+    api.properties.generic(mastername='chromium.fyi',
+                           buildername='Linux ARM Cross-Compile') +
+    api.platform('linux', 64) +
+    api.override_step_data('read test spec', api.json.output({
+      'Linux ARM Cross-Compile': {
+        'gtest_tests': [{
+          'test': 'browser_tests',
+          'args': ['--gtest-filter', '*NaCl*'],
+        }],
       },
     }))
   )

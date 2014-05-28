@@ -559,6 +559,7 @@ def GenSteps(api):
         )
 
   gtest_tests = []
+  test_args_map = {}
 
   test_spec = api.step_history['read test spec'].json.output
   for test in test_spec:
@@ -586,6 +587,8 @@ def GenSteps(api):
         raise ValueError('Invalid entry in test spec: %r' % test)
 
       test_name = test['test'].encode('utf-8')
+      if test_args:
+        test_args_map[test_name] = test_args
     else:  # pragma: no cover
       raise ValueError('Unrecognized entry in test spec: %r' % test)
 
@@ -648,6 +651,10 @@ def GenSteps(api):
   # Do not run tests if the build is already in a failed state.
   if api.step_history.failed:
     return
+
+  if bot_config.get('use_isolate'):
+    yield api.isolate.find_isolated_tests(api.chromium.output_dir,
+                                          extra_args_map=test_args_map)
 
   if bot_config['compile_only']:
     return
@@ -866,4 +873,18 @@ def GenTests(api):
     api.override_step_data('base_unittests (with patch)',
                            canned_test(passing=False)) +
     api.step_data('compile (without patch)', retcode=1)
+  )
+
+  yield (
+    api.test('arm') +
+    api.properties.generic(mastername='tryserver.chromium',
+                           buildername='linux_arm_cross_compile') +
+    api.platform('linux', 64) +
+    api.override_step_data('read test spec', api.json.output({
+      'Linux Tests': {
+        'gtest_tests': [
+          'browser_tests',
+        ],
+      },
+    }))
   )
