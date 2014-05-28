@@ -5,8 +5,7 @@
 
 """Scans build output directory for .isolated files, calculates their SHA1
 hashes, stores final list in JSON document and then removes *.isolated files
-found (to ensure no stale *.isolated stay around on the next build). Optionally
-mutates *.isolated files by appending additional command line arguments.
+found (to ensure no stale *.isolated stay around on the next build).
 
 Used to figure out what tests were build in isolated mode to trigger these
 tests to run on swarming.
@@ -36,19 +35,6 @@ def hash_file(filepath):
   return digest.hexdigest()
 
 
-def mutate_isolated_file(filepath, extra_args):
-  assert isinstance(extra_args, list)
-
-  with open(filepath, 'r') as f:
-    content = json.load(f)
-
-  assert isinstance(content['command'], list)
-  content['command'].extend(map(str, extra_args))
-
-  with open(filepath, 'w') as f:
-    json.dump(content, f)
-
-
 def main():
   parser = optparse.OptionParser(
       usage='%prog --build-dir <path> --output-json <path>',
@@ -56,10 +42,6 @@ def main():
   parser.add_option(
       '--build-dir',
       help='Path to a directory to search for *.isolated files.')
-  parser.add_option(
-      '--extra-args-file',
-      help='Path to a JSON file with extra arguments for each isolated file. '
-           'The arguments will be injected directly into .isolated files.')
   parser.add_option(
       '--output-json',
       help='File to dump JSON results into.')
@@ -70,11 +52,6 @@ def main():
   if not options.output_json:
     parser.error('--output-json option is required')
 
-  extra_arguments = {}
-  if options.extra_arguments_file:
-    with open(options.extra_arguments_file, 'r') as f:
-      extra_arguments = json.load(f)
-
   result = {}
 
   # Get the file hash values and output the pair.
@@ -84,10 +61,6 @@ def main():
     if re.match(r'^.+?\.\d$', test_name):
       # It's a split .isolated file, e.g. foo.0.isolated. Ignore these.
       continue
-
-    extra_args = extra_arg_map.get(test_name)
-    if extra_args:
-      mutate_isolated_file(filepath, extra_args)
 
     # TODO(csharp): Remove deletion once the isolate tracked dependencies are
     # inputs for the isolated files.

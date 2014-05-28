@@ -38,7 +38,7 @@ class IsolateApi(recipe_api.RecipeApi):
     config.gyp_env.GYP_DEFINES['test_isolation_mode'] = 'archive'
     config.gyp_env.GYP_DEFINES['test_isolation_outdir'] = self._isolate_server
 
-  def find_isolated_tests(self, build_dir, targets=None, extra_args_map=None):
+  def find_isolated_tests(self, build_dir, targets=None):
     """Returns a step which finds all *.isolated files in a build directory.
 
     Assigns the dict {target name -> *.isolated file hash} to the swarm_hashes
@@ -48,10 +48,6 @@ class IsolateApi(recipe_api.RecipeApi):
     If |targets| is None, the step will use all *.isolated files it finds.
     Otherwise, it will verify that all |targets| are found and will use only
     them. If some expected targets are missing, will abort the build.
-
-    |extra_args_map|, a dict, for each test name specifies extra command-line
-    arguments (list) for an isolated test to run. The arguments will be injected
-    directly into .isolated files.
     """
     def followup_fn(step_result):
       assert isinstance(step_result.json.output, dict)
@@ -74,16 +70,13 @@ class IsolateApi(recipe_api.RecipeApi):
       if (not self._isolated_tests and
           step_result.presentation.status != 'FAILURE'):
         step_result.presentation.status = 'WARNING'
-    cmd_args = [
-      '--build-dir', build_dir,
-      '--output-json', self.m.json.output(),
-    ]
-    if extra_args_map:
-      cmd_args.extend(['--extra-args-file', self.m.json.input(extra_args_map)])
     return self.m.python(
         'find isolated tests',
         self.resource('find_isolated_tests.py'),
-        cmd_args,
+        [
+          '--build-dir', build_dir,
+          '--output-json', self.m.json.output(),
+        ],
         abort_on_failure=True,
         followup_fn=followup_fn,
         step_test_data=lambda: (self.test_api.output_json(targets)))
