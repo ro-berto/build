@@ -75,6 +75,7 @@ def GenSteps(api):
   # because Dartium has its DEPS file in dartium.deps, not directly in src.
   api.path['checkout'] = api.path['slave_build'].join('src')
 
+  yield api.chromium.runhooks()
   yield api.python('fetch_reference_build',
                    api.path['checkout'].join('dart', 'tools', 'bots',
                                      'fetch_reference_build.py'))
