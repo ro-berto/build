@@ -41,6 +41,11 @@ BUILDERS = {
           'RANLIB': 'arm-linux-gnueabihf-ranlib',
         },
         'compile_only': True,
+        'compile_targets': [
+            # TODO (nodir): Remove this after test spec file is committed.
+            # https://codereview.chromium.org/297303012
+            'browser_tests_run',
+        ],
         'exclude_compile_all': True,
         'testing': {
           'platform': 'linux',
@@ -374,17 +379,19 @@ def GenSteps(api):
 
 
   class GTestTest(api.test_utils.Test):
-    def __init__(self, name, args=None):
+    def __init__(self, name, args=None, compile_targets=None):
       api.test_utils.Test.__init__(self)
       self._name = name
       self._args = args or []
+      self._compile_targets = (compile_targets if compile_targets is not None
+                               else [name])
 
     @property
     def name(self):
       return self._name
 
     def compile_targets(self):
-      return [self.name]
+      return list(self._compile_targets)
 
     def run(self, suffix):
       def followup_fn(step_result):
@@ -565,6 +572,7 @@ def GenSteps(api):
   for test in test_spec:
     test_name = None
     test_args = None
+    test_compile_targets = None
 
     if isinstance(test, unicode):
       test_name = test.encode('utf-8')
@@ -582,6 +590,7 @@ def GenSteps(api):
           continue
 
       test_args = test.get('args')
+      test_compile_targets = test.get('compile_targets')
 
       if 'test' not in test:  # pragma: no cover
         raise ValueError('Invalid entry in test spec: %r' % test)
@@ -593,7 +602,7 @@ def GenSteps(api):
       raise ValueError('Unrecognized entry in test spec: %r' % test)
 
     if test_name:
-      gtest_tests.append(GTestTest(test_name, test_args))
+      gtest_tests.append(GTestTest(test_name, test_args, test_compile_targets))
 
   tests = []
   tests.append(CheckdepsTest())
@@ -602,7 +611,9 @@ def GenSteps(api):
     tests.append(test)
   tests.append(NaclIntegrationTest())
 
-  compile_targets = list(api.itertools.chain(
+  compile_targets = []
+  compile_targets.extend(bot_config.get('compile_targets', []))
+  compile_targets.extend(api.itertools.chain(
       *[t.compile_targets() for t in tests]))
   # TODO(phajdan.jr): Also compile 'all' on win, http://crbug.com/368831 .
   # Disabled for now because it takes too long and/or fails on Windows.
@@ -882,9 +893,10 @@ def GenTests(api):
     api.platform('linux', 64) +
     api.override_step_data('read test spec', api.json.output({
       'Linux Tests': {
-        'gtest_tests': [
-          'browser_tests',
-        ],
+        'gtest_tests': [{
+          'test': 'browser_tests',
+          'compile_targets': ['browser_tests_run'],
+        }],
       },
     }))
   )

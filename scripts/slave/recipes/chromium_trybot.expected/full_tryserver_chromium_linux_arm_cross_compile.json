@@ -150,6 +150,7 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
+      "browser_tests_run",
       "base_unittests",
       "mojo_common_unittests",
       "browser_tests",
