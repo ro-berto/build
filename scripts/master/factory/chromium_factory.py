@@ -402,6 +402,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddBuildrunnerGTest('mojo_service_manager_unittests', fp)
     if R('mojo_system_unittests'):
       f.AddBuildrunnerGTest('mojo_system_unittests', fp)
+    if R('mojo_view_manager_lib_unittests'):
+      f.AddBuildrunnerGTest('mojo_view_manager_lib_unittests', fp)
     if R('mojo_view_manager_unittests'):
       f.AddBuildrunnerGTest('mojo_view_manager_unittests', fp)
     if R('nacl_loader_unittests'):
