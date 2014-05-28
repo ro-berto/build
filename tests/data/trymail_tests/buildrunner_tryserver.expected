@@ -2,7 +2,7 @@ From nobody Wed Dec 31 16:00:01 1969
 Content-Type: multipart/mixed; boundary="===============7454617213454723890=="
 MIME-Version: 1.0
 Date: Wed, 31 Dec 1969 16:00:01 -0800
-Subject: try success for 11941002-33001: Rebase on win_rel @ rHEAD
+Subject: try success for 11941002-33001: Rebase on win_rel @ r178097
 From: from@example.org
 
 --===============7454617213454723890==
@@ -13,10 +13,10 @@ Content-Transfer-Encoding: quoted-printable
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html xmlns=3D"http://www.w3.org/1999/xhtml">
 <head>
-  <title>try success for 11941002-33001: Rebase on win_rel @ rHEAD</title>
+  <title>try success for 11941002-33001: Rebase on win_rel @ r178097</title>
 </head>
 <body style=3D"font-family: Verdana, Cursor; font-size: 10px;">
-  try success for 11941002-33001: Rebase on win_rel @ rHEAD<p>
+  try success for 11941002-33001: Rebase on win_rel @ r178097<p>
   <a href=3D"http://build.chromium.org/p/tryserver.chromium/">http://build.=
 chromium.org/p/tryserver.chromium/</a><p>
   You are awesome! Try succeeded!<p> =
