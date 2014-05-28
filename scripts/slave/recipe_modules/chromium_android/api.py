@@ -271,6 +271,16 @@ class AndroidApi(recipe_api.RecipeApi):
         env=self.get_env(), can_fail_build=False)
 
   def device_status_check(self, restart_usb=False):
+    def followup_fn(step_result):
+      if not step_result.retcode == 0:
+        step_result.presentation.links.update({
+          'report a bug': ('https://code.google.com/p/chromium/issues/entry?' +
+          ('summary=Device Offline&comment=Buildbot: %s%%0ABuild%%3A' %
+            self.m.properties['buildername']) +
+          (' %s%%0A(please don\'t change' % self.m.properties['buildnumber']) +
+          ' any labels)&labels=Restrict-View-Google,OS-Android,Infra')
+        })
+
     args = []
     if restart_usb:
       args = ['--restart-usb']
@@ -278,7 +288,8 @@ class AndroidApi(recipe_api.RecipeApi):
         'device_status_check',
         [self.m.path['checkout'].join('build', 'android', 'buildbot',
                               'bb_device_status_check.py')] + args,
-        env=self.get_env())
+        env=self.get_env(),
+        followup_fn=followup_fn)
 
   def provision_devices(self):
     yield self.m.python(
