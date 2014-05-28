@@ -45,6 +45,7 @@ class SwarmStartSlaveTest(auto_stub.TestCase):
 
     # Ensure that none of the tests try to actually write files.
     self.mock(start_slave, 'WriteToFile', mock.Mock())
+    self.mock(os, 'mkdir', lambda _: None)
 
   def test_dimensions(self):
     # These two require some logic that doesn't need to be tested here. Just

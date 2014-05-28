@@ -291,7 +291,10 @@ def GenerateLaunchdPlist(command):
 
 def SetupAutoStartupOSX(command):
   """Uses launchd with auto-login user."""
-  plistname = os.path.expanduser('~/Library/LaunchAgents/org.swarm.bot.plist')
+  base_dir = os.path.expanduser('~/Library/LaunchAgents')
+  if not os.path.isdir(base_dir):
+    os.mkdir(base_dir)
+  plistname = os.path.join(base_dir, 'org.swarm.bot.plist')
   return WriteToFile(plistname, GenerateLaunchdPlist(command))
 
 
@@ -299,7 +302,8 @@ def SetupAutoStartup(swarming_server, server_port, dimensionsfile):
   logging.info('Generating AutoStartup')
   command = [
     sys.executable,
-    os.path.join(BASE_DIR, 'slave_machine.py'),
+    os.path.join(BASE_DIR, 'swarming_bot.zip'),
+    'start_bot',
     '-a', swarming_server,
     '-p', server_port,
     '-r', '400',
