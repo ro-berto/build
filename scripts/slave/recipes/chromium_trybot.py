@@ -41,6 +41,7 @@ BUILDERS = {
           'RANLIB': 'arm-linux-gnueabihf-ranlib',
         },
         'compile_only': True,
+        'exclude_compile_all': True,
         'testing': {
           'platform': 'linux',
           'test_spec_file': 'chromium_arm.json',
@@ -602,7 +603,7 @@ def GenSteps(api):
       *[t.compile_targets() for t in tests]))
   # TODO(phajdan.jr): Also compile 'all' on win, http://crbug.com/368831 .
   # Disabled for now because it takes too long and/or fails on Windows.
-  if not api.platform.is_win:
+  if not api.platform.is_win and not bot_config.get('exclude_compile_all'):
     compile_targets = ['all'] + compile_targets
   yield api.chromium.compile(compile_targets,
                              name='compile (with patch)',
