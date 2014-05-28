@@ -19,11 +19,13 @@ from master import master_utils
 # in 'c.bar_gpu_closers' in
 # masters/master.chromium/templates/announce.html .
 categories_steps = {
-  # We remove the '' category because we want to selectively enable
+  # We leave the '' category empty because we want to selectively enable
   # the gatekeeper for certain builders, and want to assign categories
   # to specific builders to make them tree closers. Otherwise, the
   # entries in the '' category would close the tree for every builder
-  # and tester on the waterfall.
+  # and tester on the waterfall. Note that the '' category must be present
+  # for the gatekeeper logic to activate, see https://crbug.com/378100.
+  '': [],
 
   # We don't specify this category for any of the bots. If any of
   # these steps fail, just ignore them since there's nothing a user's
