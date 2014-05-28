@@ -23,7 +23,11 @@ def GenSteps(api):
   # Generates code coverage for find_isolated_tests corner cases.
   # TODO(vadimsh): This step doesn't actually make any sense when the recipe
   # is running for real via run_recipe.py.
-  yield api.isolate.find_isolated_tests(api.path['build'], expected_targets)
+  yield api.isolate.find_isolated_tests(api.path['build'], expected_targets,
+                                        extra_args_map = {
+                                            'test1': ['test1arg'],
+                                            'test2': ['test2arg'],
+                                        })
 
 
 def GenTests(api):
