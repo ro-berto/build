@@ -193,40 +193,17 @@ def GenTests(api):
   # TODO: crbug.com/354674. Figure out where to put "simulation"
   # tests. We should have one test for each bot this recipe runs on.
 
-  # TODO(machenbach): Prefix test names with try server name like in other bot
-  # specific tests. Get bot names from BUILDERS dict.
-  trybot_names = [
-    'android_chromium_gn_compile_dbg',
-    'android_chromium_gn_compile_rel',
-    'linux_chromium_gn_dbg',
-    'linux_chromium_gn_rel',
-  ]
-  for buildername in trybot_names:
-    yield (
-        api.test('full_%s' % buildername) +
-        api.properties.tryserver(buildername=buildername,
-                                 mastername='tryserver.chromium') +
-        api.platform.name('linux')
-    )
-
-  buildbot_names = [
-    'Android GN',
-    'Android GN (dbg)',
-    'Linux GN',
-    'Linux GN (dbg)',
-  ]
-  for buildername in buildbot_names:
-    yield (
-        api.test('full_chromium_linux_%s' % _sanitize_nonalpha(buildername)) +
-        api.properties.generic(buildername=buildername,
-                               mastername='chromium.linux') +
-        api.platform.name('linux')
-    )
-  for buildername in ['V8 Linux GN']:
-    yield (
-        api.test('full_client_v8_%s' % _sanitize_nonalpha(buildername)) +
-        api.properties.generic(buildername=buildername,
-                               mastername='client.v8') +
-        api.platform.name('linux')
-    )
-
+  for mastername in ('chromium.linux', 'tryserver.chromium', 'client.v8'):
+    for buildername in BUILDERS.get(mastername)['builders']:
+      test = (
+          api.test('full_%s_%s' % (_sanitize_nonalpha(mastername),
+                                   _sanitize_nonalpha(buildername))) +
+          api.platform.name('linux')
+      )
+      if mastername.startswith('tryserver'):
+        test += api.properties.tryserver(buildername=buildername,
+                                         mastername=mastername)
+      else:
+        test += api.properties.generic(buildername=buildername,
+                                       mastername=mastername)
+      yield test
