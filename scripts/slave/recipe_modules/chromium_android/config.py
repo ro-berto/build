@@ -16,7 +16,6 @@ def BaseConfig(INTERNAL=False, REPO_NAME=None, REPO_URL=None,
     REPO_URL = Static(REPO_URL),
     BUILD_CONFIG = Static(BUILD_CONFIG),
     revision = Single(basestring, empty_val=REVISION),
-    run_stack_tool_steps = Single(bool, required=False, empty_val=False),
     asan_symbolize = Single(bool, required=False, empty_val=False),
     get_app_manifest_vars = Single(bool, required=False, empty_val=True),
     run_tree_truth = Single(bool, required=False, empty_val=True),
@@ -132,7 +131,7 @@ def x86_try_builder(c):
 
 @config_ctx()
 def tests_base(c):
-  c.run_stack_tool_steps = True
+  pass
 
 @config_ctx(includes=['tests_base'])
 def instrumentation_tests(c):

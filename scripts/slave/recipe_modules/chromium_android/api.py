@@ -443,26 +443,25 @@ class AndroidApi(recipe_api.RecipeApi):
           always_run=True)
 
   def stack_tool_steps(self):
-    if self.c.run_stack_tool_steps:
-      log_file = self.m.path['checkout'].join('out',
-                                              self.m.chromium.c.BUILD_CONFIG,
-                                              'full_log')
+    log_file = self.m.path['checkout'].join('out',
+                                            self.m.chromium.c.BUILD_CONFIG,
+                                            'full_log')
+    yield self.m.step(
+        'stack_tool_with_logcat_dump',
+        [self.m.path['checkout'].join('third_party', 'android_platform',
+                              'development', 'scripts', 'stack'),
+         '--more-info', log_file], always_run=True, env=self.get_env())
+    yield self.m.step(
+        'stack_tool_for_tombstones',
+        [self.m.path['checkout'].join('build', 'android', 'tombstones.py'),
+         '-a', '-s', '-w'], always_run=True, env=self.get_env())
+    if self.c.asan_symbolize:
       yield self.m.step(
-          'stack_tool_with_logcat_dump',
-          [self.m.path['checkout'].join('third_party', 'android_platform',
-                                'development', 'scripts', 'stack'),
-           '--more-info', log_file], always_run=True, env=self.get_env())
-      yield self.m.step(
-          'stack_tool_for_tombstones',
-          [self.m.path['checkout'].join('build', 'android', 'tombstones.py'),
-           '-a', '-s', '-w'], always_run=True, env=self.get_env())
-      if self.c.asan_symbolize:
-        yield self.m.step(
-            'stack_tool_for_asan',
-            [self.m.path['checkout'].join('build',
-                                          'android',
-                                          'asan_symbolize.py'),
-             '-l', log_file], always_run=True, env=self.get_env())
+          'stack_tool_for_asan',
+          [self.m.path['checkout'].join('build',
+                                        'android',
+                                        'asan_symbolize.py'),
+           '-l', log_file], always_run=True, env=self.get_env())
 
   def test_report(self):
     return self.m.python.inline(

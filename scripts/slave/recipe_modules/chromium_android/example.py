@@ -32,7 +32,6 @@ def GenSteps(api):
       BUILD_CONFIG='Release')
 
   api.chromium_android.c.get_app_manifest_vars = True
-  api.chromium_android.c.run_stack_tool_steps = True
   api.chromium_android.c.coverage = config.get('coverage', False)
 
   yield api.chromium_android.init_and_sync()
