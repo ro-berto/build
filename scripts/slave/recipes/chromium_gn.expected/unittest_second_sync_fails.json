@@ -6,7 +6,7 @@
       "-u",
       "[BUILD]/scripts/slave/bot_update.py",
       "--master",
-      "chromium.testing.master",
+      "fake_tryserver",
       "--builder",
       "unittest_fake_trybotname",
       "--slave",

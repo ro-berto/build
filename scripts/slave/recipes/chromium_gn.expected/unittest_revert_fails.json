@@ -6,9 +6,9 @@
       "-u",
       "[BUILD]/scripts/slave/bot_update.py",
       "--master",
-      "chromium.testing.master",
+      "fake_tryserver",
       "--builder",
-      "linux_chromium_gn_dbg",
+      "unittest_fake_trybotname",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -242,8 +242,8 @@
       "[DEPOT_TOOLS]/gn.py",
       "--root=[SLAVE_BUILD]/src",
       "gen",
-      "//out/Debug",
-      "--args=is_debug=true"
+      "//out/Release",
+      "--args=is_debug=false"
     ],
     "name": "gn"
   },
@@ -254,7 +254,7 @@
       "-u",
       "[BUILD]/scripts/slave/compile.py",
       "--target",
-      "Debug",
+      "Release",
       "--src-dir",
       "[SLAVE_BUILD]/src",
       "--build-tool",
