@@ -212,11 +212,14 @@ def show_v8_revision(c):
   # Needed to get the testers to properly sync the right revision.
   c.parent_got_revision_mapping['parent_got_revision'] = 'got_revision'
 
-@config_ctx(includes=['blink'])
+@config_ctx(includes=['chromium'])
+def v8_bleeding_edge(c):
+  c.solutions[0].custom_vars['v8_branch'] = 'branches/bleeding_edge'
+  c.solutions[0].custom_vars['v8_revision'] = 'HEAD'
+
+@config_ctx(includes=['blink', 'v8_bleeding_edge'])
 def v8_blink_flavor(c):
-    del c.solutions[0].custom_vars['webkit_revision']
-    c.solutions[0].custom_vars['v8_branch'] = 'branches/bleeding_edge'
-    c.solutions[0].custom_vars['v8_revision'] = 'HEAD'
+  del c.solutions[0].custom_vars['webkit_revision']
 
 @config_ctx(includes=['chromium'])
 def oilpan(c):

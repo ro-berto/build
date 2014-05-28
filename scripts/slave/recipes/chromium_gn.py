@@ -76,6 +76,19 @@ BUILDERS = {
       },
     },
   },
+  'client.v8': {
+    'builders': {
+      'V8 Linux GN': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+        },
+        'gclient_apply_config': ['v8_bleeding_edge', 'show_v8_revision'],
+        'set_custom_vars': [{'var': 'v8_revision',
+                             'property': 'revision',
+                             'default': 'HEAD'}]
+      },
+    },
+  },
   'fake_tryserver': {
     'builders': {
       'unittest_fake_trybotname': {
@@ -108,6 +121,12 @@ def GenSteps(api):
   api.gclient.set_config('chromium')
   for c in bot_config.get('gclient_apply_config', []):
     api.gclient.apply_config(c)
+
+  # Overwrite custom deps variables based on build properties.
+  for custom in bot_config.get('set_custom_vars', []):
+    s = api.gclient.c.solutions
+    s[0].custom_vars[custom['var']] = api.properties.get(
+        custom['property'], custom['default'])
 
   # TODO(dpranke): crbug.com/358435. We need to figure out how to separate
   # out the retry and recovery logic from the rest of the recipe.
@@ -203,3 +222,11 @@ def GenTests(api):
                                mastername='chromium.linux') +
         api.platform.name('linux')
     )
+  for buildername in ['V8 Linux GN']:
+    yield (
+        api.test('full_client_v8_%s' % _sanitize_nonalpha(buildername)) +
+        api.properties.generic(buildername=buildername,
+                               mastername='client.v8') +
+        api.platform.name('linux')
+    )
+
