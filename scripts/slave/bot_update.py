@@ -230,9 +230,6 @@ DISABLED_BUILDERS = {
         'blink_android_compile_rel',
         'blink_android_compile_dbg',
     ],
-    'tryserver.blink': [
-        'blink_presubmit',  # Does not deal well with got_revision.
-    ],
     'chromium.win': ['Win Builder'],  # crbug.com/370473
     'chromium.linux': [
         # These are non-recipe for checking out, but use bb_run_bot.py for
