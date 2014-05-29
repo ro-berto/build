@@ -324,6 +324,10 @@ def main(args):
   parser = optparse.OptionParser(description=sys.modules[__name__].__doc__)
   parser.add_option('-s', '--swarm-server')
   parser.add_option('-p', '--port')
+  parser.add_option('--no-auto-start', action='store_true',
+                    help='Do not setup the swarm bot to auto start on boot.')
+  parser.add_option('--no-reboot', action='store_true',
+                    help='Do not reboot at the end of the setup.')
   options, _args = parser.parse_args(args)
 
   # Setup up logging to a constant file.
@@ -336,19 +340,20 @@ def main(args):
   logging.getLogger('').addHandler(logging_rotating_file)
   logging.getLogger('').setLevel(logging.DEBUG)
 
-  if options.swarm_server and options.port:
+  if options.swarm_server:
     dimensions_file = os.path.join(BASE_DIR, 'dimensions.in')
 
     # Only reset the dimensions if the server is given, because the auto
     # startup code needs to also be run to ensure the slave is reading the
     # correct dimensions file.
     GenerateAndWriteDimensions(dimensions_file)
+    if not options.no_auto_start:
+      SetupAutoStartup(options.swarm_server, options.port, dimensions_file)
 
-    SetupAutoStartup(options.swarm_server, options.port, dimensions_file)
-
-  logging.debug('Restarting machine')
-  import slave_machine  # pylint: disable-msg=F0401
-  slave_machine.Restart()
+  if not options.no_reboot:
+    logging.debug('Restarting machine')
+    import slave_machine  # pylint: disable-msg=F0401
+    slave_machine.Restart()
 
 
 if __name__ == '__main__':

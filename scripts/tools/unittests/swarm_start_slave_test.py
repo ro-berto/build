@@ -22,23 +22,6 @@ sys.path.insert(0, SWARM_BOOTSTRAP_DIR)
 import start_slave
 
 
-class Options(object):
-  def __init__(self):
-    self.swarm_server = 'http://dummy-swarm-server.com'
-    self.port = '443'
-
-
-class MockOptParser(object):
-  def __init__(self, description):
-    pass
-
-  def add_option(self, _short_flag, _long_flag):
-    pass
-
-  def parse_args(self, _args):  # pylint:disable=R0201
-    return Options(), []
-
-
 class SwarmStartSlaveTest(auto_stub.TestCase):
   def setUp(self):
     super(SwarmStartSlaveTest, self).setUp()
@@ -136,10 +119,8 @@ class SwarmStartSlaveTest(auto_stub.TestCase):
     """Calls start_slave main and ensure it doesn't crash for the given
     platform.
     """
-    self.mock(start_slave.optparse, 'OptionParser', MockOptParser)
     self.mock(start_slave.sys, 'platform', platform)
-
-    start_slave.main(None)
+    start_slave.main(['-s', 'https://localhost', '-p', '433'])
 
   def test_main_linux(self):  # pylint: disable=R0201
     self.check_start_slave_main('linux2')
