@@ -570,14 +570,15 @@ def gclient_configure(solutions, target_os, target_os_only):
     f.write(get_gclient_spec(solutions, target_os, target_os_only))
 
 
-def gclient_sync():
+def gclient_sync(buildspec_name):
   # We just need to allocate a filename.
   fd, gclient_output_file = tempfile.mkstemp(suffix='.json')
   os.close(fd)
   gclient_bin = 'gclient.bat' if sys.platform.startswith('win') else 'gclient'
   cmd = [gclient_bin, 'sync', '--verbose', '--reset', '--force',
-         '--output-json', gclient_output_file , '--nohooks', '--noprehooks',
-         '--with_branch_heads']
+         '--output-json', gclient_output_file , '--nohooks', '--noprehooks']
+  if buildspec_name:
+    cmd += ['--with_branch_heads']
 
   try:
     call(*cmd)
@@ -1068,7 +1069,7 @@ def ensure_checkout(solutions, revisions, first_sln, target_os, target_os_only,
   gclient_configure(solutions, target_os, target_os_only)
 
   # Let gclient do the DEPS syncing.
-  gclient_output = gclient_sync()
+  gclient_output = gclient_sync(buildspec_name)
 
   # Now that gclient_sync has finished, we should revert any .DEPS.git so that
   # presubmit doesn't complain about it being modified.
