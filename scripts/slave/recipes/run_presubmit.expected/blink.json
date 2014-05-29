@@ -109,7 +109,7 @@
       "",
       "--rietveld_fetch",
       "--upstream",
-      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "5e2293dffc3cd07d37fbedea3b500f0eb650614d",
       "--trybot-json",
       "/path/to/tmp/json"
     ],

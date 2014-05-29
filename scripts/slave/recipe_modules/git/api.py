@@ -12,9 +12,6 @@ class GitApi(recipe_api.RecipeApi):
   def __call__(self, *args, **kwargs):
     """Return a git command step."""
     name = kwargs.pop('name', 'git '+args[0])
-    # Distinguish 'git config' commands by the variable they are setting.
-    if args[0] == 'config' and not args[1].startswith('-'):
-      name += ' ' + args[1]
     if 'cwd' not in kwargs:
       kwargs.setdefault('cwd', self.m.path['checkout'])
     git_cmd = 'git'
