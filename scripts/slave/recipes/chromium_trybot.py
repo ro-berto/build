@@ -590,6 +590,8 @@ def GenSteps(api):
           continue
 
       test_args = test.get('args')
+      if isinstance(test_args, basestring):
+        test_args = [test_args]
       test_compile_targets = test.get('compile_targets')
 
       if 'test' not in test:  # pragma: no cover
@@ -895,6 +897,7 @@ def GenTests(api):
       'Linux Tests': {
         'gtest_tests': [{
           'test': 'browser_tests',
+          'args': '--gtest-filter: *NaCl*',
           'compile_targets': ['browser_tests_run'],
         }],
       },
