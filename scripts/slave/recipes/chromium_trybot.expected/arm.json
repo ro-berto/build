@@ -73,19 +73,21 @@
     "name": "read test spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: testing/buildbot/chromium_arm.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Linux Tests\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"args\": \"--gtest-filter: *NaCl*\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"browser_tests_run\"@@@",
-      "@@@STEP_LOG_LINE@json.output@        ], @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"test\": \"browser_tests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"args\": \"--gtest-filter: *NaCl*\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"compile_targets\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"browser_tests_run\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ], @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test\": \"browser_tests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"args\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"--gtest-filter: *NaCl*\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ], @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test\": \"base_tests\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
@@ -129,7 +131,8 @@
       "[BUILD]/goma",
       "--",
       "browser_tests_run",
-      "Linux Tests",
+      "browser_tests_run",
+      "base_tests",
       "chrome"
     ],
     "name": "compile (with patch)"
@@ -143,7 +146,9 @@
       "--build-dir",
       "[SLAVE_BUILD]/src/out/Release",
       "--output-json",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--extra-args-file",
+      "{\"base_tests\": [\"--gtest-filter: *NaCl*\"], \"browser_tests\": [\"--gtest-filter: *NaCl*\"]}"
     ],
     "name": "find isolated tests",
     "~followup_annotations": [

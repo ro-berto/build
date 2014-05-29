@@ -893,13 +893,13 @@ def GenTests(api):
     api.properties.generic(mastername='tryserver.chromium',
                            buildername='linux_arm_cross_compile') +
     api.platform('linux', 64) +
-    api.override_step_data('read test spec', api.json.output({
-      'Linux Tests': {
-        'gtest_tests': [{
-          'test': 'browser_tests',
-          'args': '--gtest-filter: *NaCl*',
-          'compile_targets': ['browser_tests_run'],
-        }],
-      },
-    }))
+    api.override_step_data('read test spec', api.json.output([{
+        'test': 'browser_tests',
+        'args': '--gtest-filter: *NaCl*',
+        'compile_targets': ['browser_tests_run'],
+      }, {
+        'test': 'base_tests',
+        'args': ['--gtest-filter: *NaCl*'],
+      }])
+    )
   )
