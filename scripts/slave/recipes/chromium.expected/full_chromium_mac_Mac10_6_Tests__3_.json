@@ -18,7 +18,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD"
+      "src@1111111"
     ],
     "name": "bot_update",
     "~followup_annotations": [
@@ -134,9 +134,9 @@
       "--build_revision",
       "170242",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac10.6 Tests (3)\", \"buildnumber\": 571, \"mastername\": \"chromium.mac\", \"parent_buildername\": \"Mac Builder\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac10.6 Tests (3)\", \"buildnumber\": 571, \"mastername\": \"chromium.mac\", \"parent_buildername\": \"Mac Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac10.6 Tests (3)\", \"buildnumber\": 571, \"mastername\": \"chromium.mac\", \"parent_buildername\": \"Mac Builder\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac10.6 Tests (3)\", \"buildnumber\": 571, \"mastername\": \"chromium.mac\", \"parent_buildername\": \"Mac Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "name": "extract build"
   },
@@ -150,9 +150,9 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac10.6 Tests (3)\", \"buildnumber\": 571, \"mastername\": \"chromium.mac\", \"parent_buildername\": \"Mac Builder\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac10.6 Tests (3)\", \"buildnumber\": 571, \"mastername\": \"chromium.mac\", \"parent_buildername\": \"Mac Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac10.6 Tests (3)\", \"buildnumber\": 571, \"mastername\": \"chromium.mac\", \"parent_buildername\": \"Mac Builder\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac10.6 Tests (3)\", \"buildnumber\": 571, \"mastername\": \"chromium.mac\", \"parent_buildername\": \"Mac Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=gtest",
       "--test-type=telemetry_unittests",
       "--builder-name=Mac10.6 Tests (3)",
@@ -174,9 +174,9 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac10.6 Tests (3)\", \"buildnumber\": 571, \"mastername\": \"chromium.mac\", \"parent_buildername\": \"Mac Builder\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac10.6 Tests (3)\", \"buildnumber\": 571, \"mastername\": \"chromium.mac\", \"parent_buildername\": \"Mac Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac10.6 Tests (3)\", \"buildnumber\": 571, \"mastername\": \"chromium.mac\", \"parent_buildername\": \"Mac Builder\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac10.6 Tests (3)\", \"buildnumber\": 571, \"mastername\": \"chromium.mac\", \"parent_buildername\": \"Mac Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=gtest",
       "--test-type=telemetry_perf_unittests",
       "--builder-name=Mac10.6 Tests (3)",

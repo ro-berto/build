@@ -1650,6 +1650,8 @@ def GenTests(api):
                      bot_config.get(
                          'chromium_config_kwargs', {}).get('TARGET_BITS', 64))
       )
+      if bot_config.get('parent_buildername'):
+        test += api.properties(parent_got_revision='1111111')
 
       if bot_type in ['builder', 'builder_tester']:
         test += api.step_data('checkdeps', api.json.output([]))

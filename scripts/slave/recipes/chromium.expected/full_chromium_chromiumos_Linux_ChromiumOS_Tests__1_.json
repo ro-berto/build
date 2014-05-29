@@ -18,7 +18,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD"
+      "src@1111111"
     ],
     "name": "bot_update",
     "~followup_annotations": [
@@ -50,6 +50,8 @@
       "--delete_unversioned_trees",
       "--force",
       "--verbose",
+      "--revision",
+      "src@1111111",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -160,9 +162,9 @@
       "--build_revision",
       "170242",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux ChromiumOS Tests (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.chromiumos\", \"parent_buildername\": \"Linux ChromiumOS Builder\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux ChromiumOS Tests (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.chromiumos\", \"parent_buildername\": \"Linux ChromiumOS Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux ChromiumOS Tests (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.chromiumos\", \"parent_buildername\": \"Linux ChromiumOS Builder\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux ChromiumOS Tests (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.chromiumos\", \"parent_buildername\": \"Linux ChromiumOS Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "name": "extract build"
   }
