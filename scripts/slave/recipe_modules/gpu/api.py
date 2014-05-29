@@ -61,12 +61,8 @@ class GpuApi(recipe_api.RecipeApi):
 
     self.m.chromium.c.gyp_env.GYP_DEFINES['internal_gles2_conform_tests'] = 1
 
-    # Isolates don't work with the component build yet.
-    # Fortunately, we can easily tell which GPU bots are using the
-    # component build -- all of those building or testing Debug.
-    self._use_isolates = self.m.chromium.is_release_build
-    if self._use_isolates:
-      self.m.isolate.set_isolate_environment(self.m.chromium.c)
+    # This recipe requires the use of isolates for running tests.
+    self.m.isolate.set_isolate_environment(self.m.chromium.c)
 
     # The FYI waterfall is being used to test top-of-tree ANGLE with
     # Chromium on all platforms.
@@ -141,12 +137,6 @@ class GpuApi(recipe_api.RecipeApi):
     """Indicates whether the recipe is running on the GPU FYI waterfall."""
     return self.m.properties['mastername'] == 'chromium.gpu.fyi'
 
-  @property
-  def using_isolates(self):
-    """Indicates whether this slave is prepared to use isolates. Querying
-    this is only really useful on testers, not builders."""
-    return self._use_isolates
-
   def checkout_steps(self):
     # Always force a gclient-revert in order to avoid problems when
     # directories are added to, removed from, and re-added to the repo.
@@ -195,30 +185,9 @@ class GpuApi(recipe_api.RecipeApi):
         targets=targets,
         name='compile (clobber)',
         force_clobber=True)
-    # Component build doesn't produce all expected *.isolated files yet. So do
-    # not try to find them if using_isolated is False: the step will just fail.
-    if self._use_isolates:
-      yield self.m.isolate.find_isolated_tests(
-          self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs),
-          common.GPU_ISOLATES)
-
-  def upload_steps(self):
-    if not self._use_isolates:
-      yield self.m.archive.zip_and_upload_build(
-        'package_build',
-        self.m.chromium.c.build_config_fs,
-        self.m.archive.legacy_upload_url(
-          self._gs_bucket_name,
-          extra_url_components=self.m.properties['mastername']))
-
-  def download_steps(self):
-    if not self._use_isolates:
-      yield self.m.archive.download_and_unzip_build(
-        'extract_build',
-        self.m.chromium.c.build_config_fs,
-        self.m.archive.legacy_download_url(
-          self._gs_bucket_name,
-          extra_url_components=self.m.properties['mastername']))
+    yield self.m.isolate.find_isolated_tests(
+        self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs),
+        common.GPU_ISOLATES)
 
   def test_steps(self):
     # TODO(kbr): currently some properties are passed to runtest.py via
@@ -251,10 +220,10 @@ class GpuApi(recipe_api.RecipeApi):
     if self._is_fyi_waterfall:
       basic_tests += SIMPLE_NON_OPEN_SOURCE_TESTS_TO_RUN
     for test in basic_tests:
-      yield self._maybe_run_isolate(test, args=['--use-gpu-in-tests'])
+      yield self._run_isolate(test, args=['--use-gpu-in-tests'])
 
     # Google Maps Pixel tests.
-    yield self._maybe_run_isolated_telemetry_gpu_test(
+    yield self._run_isolated_telemetry_gpu_test(
       'maps', name='maps_pixel_test',
       args=[
         '--build-revision',
@@ -279,7 +248,7 @@ class GpuApi(recipe_api.RecipeApi):
     if self.m.tryserver.is_tryserver:
       ref_img_arg = '--download-refimg-from-cloud-storage'
     cloud_storage_bucket = 'chromium-gpu-archive/reference-images'
-    yield self._maybe_run_isolated_telemetry_gpu_test('pixel',
+    yield self._run_isolated_telemetry_gpu_test('pixel',
         args=[
             '--build-revision',
             str(self._build_revision),
@@ -294,27 +263,27 @@ class GpuApi(recipe_api.RecipeApi):
         name='pixel_test')
 
     # WebGL conformance tests.
-    yield self._maybe_run_isolated_telemetry_gpu_test('webgl_conformance')
+    yield self._run_isolated_telemetry_gpu_test('webgl_conformance')
 
     # Context lost tests.
-    yield self._maybe_run_isolated_telemetry_gpu_test('context_lost')
+    yield self._run_isolated_telemetry_gpu_test('context_lost')
 
     # Memory tests.
-    yield self._maybe_run_isolated_telemetry_gpu_test('memory_test')
+    yield self._run_isolated_telemetry_gpu_test('memory_test')
 
     # Screenshot synchronization tests.
-    yield self._maybe_run_isolated_telemetry_gpu_test('screenshot_sync')
+    yield self._run_isolated_telemetry_gpu_test('screenshot_sync')
 
     # Hardware acceleration tests.
-    yield self._maybe_run_isolated_telemetry_gpu_test(
+    yield self._run_isolated_telemetry_gpu_test(
       'hardware_accelerated_feature')
 
     # GPU process launch tests.
-    yield self._maybe_run_isolated_telemetry_gpu_test('gpu_process',
-                                                      name='gpu_process_launch')
+    yield self._run_isolated_telemetry_gpu_test('gpu_process',
+                                                name='gpu_process_launch')
 
     # Smoke test for gpu rasterization of web content.
-    yield self._maybe_run_isolated_telemetry_gpu_test(
+    yield self._run_isolated_telemetry_gpu_test(
       'gpu_rasterization',
       args=[
         '--build-revision', str(self._build_revision),
@@ -322,69 +291,34 @@ class GpuApi(recipe_api.RecipeApi):
       ])
 
     # Tab capture end-to-end (correctness) tests.
-    # TODO(kbr): enable this test everywhere once the Debug bots have
-    # been switched to using isolates. It's not worth the effort to
-    # make this test work both in isolated and non-isolated mode.
-    if self.using_isolates:
-      yield self._maybe_run_isolate(
-          'tab_capture_end2end_tests',
-          name='tab_capture_end2end_tests',
-          spawn_dbus=True)
+    yield self._run_isolate(
+        'tab_capture_end2end_tests',
+        name='tab_capture_end2end_tests',
+        spawn_dbus=True)
 
     # TODO(kbr): after the conversion to recipes, add all GPU related
     # steps from the main waterfall, like gpu_unittests.
 
-  def _maybe_run_isolate(self, test, isolate_name=None, **kwargs):
-    """Runs a test either from the extracted build or via an isolate,
-    depending on whether isolates are in use for this build."""
-    if self._use_isolates:
-      yield self.m.isolate.runtest(
-        isolate_name or test,
-        self._build_revision,
-        self._webkit_revision,
-        master_class_name=self._master_class_name_for_testing,
-        **kwargs)
-    else:
-      yield self.m.chromium.runtest(
-        test,
-        revision=self._build_revision,
-        webkit_revision=self._webkit_revision,
-        master_class_name=self._master_class_name_for_testing,
-        **kwargs)
+  def _run_isolate(self, test, isolate_name=None, **kwargs):
+    yield self.m.isolate.runtest(
+      isolate_name or test,
+      self._build_revision,
+      self._webkit_revision,
+      master_class_name=self._master_class_name_for_testing,
+      **kwargs)
 
-  def _maybe_run_isolated_telemetry_gpu_test(self, test, args=None, name=None,
-                                             **kwargs):
-    """Runs a telemetry GPU test either from the extracted build or via an
-    isolate, depending on whether isolates are in use for this build."""
-    if self._use_isolates:
-      test_args = ['-v']
-      if args:
-        test_args.extend(args)
-      yield self.m.isolate.run_telemetry_test(
-        'telemetry_gpu_test',
-        test,
-        self._build_revision,
-        self._webkit_revision,
-        args=test_args,
-        name=name,
-        master_class_name=self._master_class_name_for_testing,
-        spawn_dbus=True,
-        **kwargs)
-    else:
-      yield self._run_telemetry_gpu_test(test, name, args)
-
-  def _run_telemetry_gpu_test(self, test, name='', args=None,
-                              results_directory=''):
-    """Returns a step which runs a Telemetry based GPU test (via
-    run_gpu_test.py)."""
-
+  def _run_isolated_telemetry_gpu_test(self, test, args=None, name=None,
+                                       **kwargs):
     test_args = ['-v']
     if args:
       test_args.extend(args)
-
-    return self.m.chromium.run_telemetry_test(
-        str(self.m.path['checkout'].join('content', 'test', 'gpu',
-                                         'run_gpu_test.py')),
-        test, name, test_args, results_directory, spawn_dbus=True,
-        revision=self._build_revision, webkit_revision=self._webkit_revision,
-        master_class_name=self._master_class_name_for_testing)
+    yield self.m.isolate.run_telemetry_test(
+      'telemetry_gpu_test',
+      test,
+      self._build_revision,
+      self._webkit_revision,
+      args=test_args,
+      name=name,
+      master_class_name=self._master_class_name_for_testing,
+      spawn_dbus=True,
+      **kwargs)
