@@ -41,11 +41,6 @@ BUILDERS = {
           'RANLIB': 'arm-linux-gnueabihf-ranlib',
         },
         'compile_only': True,
-        'compile_targets': [
-            # TODO (nodir): Remove this after test spec file is committed.
-            # https://codereview.chromium.org/297303012
-            'browser_tests_run',
-        ],
         'exclude_compile_all': True,
         'testing': {
           'platform': 'linux',
@@ -383,15 +378,13 @@ def GenSteps(api):
       api.test_utils.Test.__init__(self)
       self._name = name
       self._args = args or []
-      self._compile_targets = (compile_targets if compile_targets is not None
-                               else [name])
 
     @property
     def name(self):
       return self._name
 
     def compile_targets(self):
-      return list(self._compile_targets)
+      return [self._name]
 
     def run(self, suffix):
       def followup_fn(step_result):
@@ -566,13 +559,21 @@ def GenSteps(api):
         )
 
   gtest_tests = []
-  test_args_map = {}
-
+  compile_targets = []
   test_spec = api.step_history['read test spec'].json.output
-  for test in test_spec:
+
+  if isinstance(test_spec, dict):
+    compile_targets = test_spec.get('compile_targets', [])
+    gtest_tests_spec = test_spec.get('gtest_tests', [])
+  else:
+    # TODO (nodir): Remove this after
+    # https://codereview.chromium.org/297303012/#ps50001
+    # lands.
+    gtest_tests_spec = test_spec
+
+  for test in gtest_tests_spec:
     test_name = None
     test_args = None
-    test_compile_targets = None
 
     if isinstance(test, unicode):
       test_name = test.encode('utf-8')
@@ -592,19 +593,16 @@ def GenSteps(api):
       test_args = test.get('args')
       if isinstance(test_args, basestring):
         test_args = [test_args]
-      test_compile_targets = test.get('compile_targets')
 
       if 'test' not in test:  # pragma: no cover
         raise ValueError('Invalid entry in test spec: %r' % test)
 
       test_name = test['test'].encode('utf-8')
-      if test_args:
-        test_args_map[test_name] = test_args
     else:  # pragma: no cover
       raise ValueError('Unrecognized entry in test spec: %r' % test)
 
     if test_name:
-      gtest_tests.append(GTestTest(test_name, test_args, test_compile_targets))
+      gtest_tests.append(GTestTest(test_name, test_args))
 
   tests = []
   tests.append(CheckdepsTest())
@@ -613,7 +611,6 @@ def GenSteps(api):
     tests.append(test)
   tests.append(NaclIntegrationTest())
 
-  compile_targets = []
   compile_targets.extend(bot_config.get('compile_targets', []))
   compile_targets.extend(api.itertools.chain(
       *[t.compile_targets() for t in tests]))
@@ -892,13 +889,17 @@ def GenTests(api):
     api.properties.generic(mastername='tryserver.chromium',
                            buildername='linux_arm_cross_compile') +
     api.platform('linux', 64) +
-    api.override_step_data('read test spec', api.json.output([{
-        'test': 'browser_tests',
-        'args': '--gtest-filter: *NaCl*',
+    api.override_step_data('read test spec', api.json.output({
         'compile_targets': ['browser_tests_run'],
-      }, {
-        'test': 'base_tests',
-        'args': ['--gtest-filter: *NaCl*'],
-      }])
+        'gtest_tests': [
+          {
+            'test': 'browser_tests',
+            'args': '--gtest-filter: *NaCl*',
+          }, {
+            'test': 'base_tests',
+            'args': ['--gtest-filter: *NaCl*'],
+          },
+        ],
+      })
     )
   )

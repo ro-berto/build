@@ -90,10 +90,13 @@ class DynamicGTestTests(object):
       return {'test': test, 'shard_index': 0, 'total_shards': 1}
     return test
 
+  def _get_test_spec(self, api):
+    all_test_specs = api.step_history['read test spec'].json.output
+    return all_test_specs.get(self.buildername, {})
+
   def _get_tests(self, api):
-    test_spec = api.step_history['read test spec'].json.output
     return [self._canonicalize_test(t) for t in
-            test_spec.get(self.buildername, {}).get('gtest_tests', [])]
+            self._get_test_spec(api).get('gtest_tests', [])]
 
   def run(self, api):
     steps = []
@@ -109,7 +112,10 @@ class DynamicGTestTests(object):
     return steps
 
   def compile_targets(self, api):
-    return [t['test'] for t in self._get_tests(api)]
+    explicit_targets = self._get_test_spec(api).get('compile_targets', [])
+    test_targets = [t['test'] for t in self._get_tests(api)]
+    # Remove duplicates.
+    return sorted(set(explicit_targets + test_targets))
 
 
 class TelemetryUnitTests(object):
@@ -469,13 +475,14 @@ BUILDERS = {
           'CXX_host': 'g++',
           'RANLIB': 'arm-linux-gnueabihf-ranlib',
         },
-        'compile_targets': [
-            'chromium_swarm_tests',
+        'tests': [
+          DynamicGTestTests('Linux ARM Cross-Compile'),
         ],
         'testing': {
           'platform': 'linux',
           'test_spec_file': 'chromium_arm.json',
         },
+        'do_not_run_tests': True,
         'use_isolate': True,
       },
       'Linux Trusty': {
@@ -1615,8 +1622,9 @@ def GenSteps(api):
       # TODO(phajdan.jr): Move abort_on_failure to archive recipe module.
       abort_on_failure=True))
 
-  test_steps = [t.run(api) for t in bot_config.get('tests', [])]
-  steps.extend(api.chromium.setup_tests(bot_type, test_steps))
+  if not bot_config.get('do_not_run_tests'):
+    test_steps = [t.run(api) for t in bot_config.get('tests', [])]
+    steps.extend(api.chromium.setup_tests(bot_type, test_steps))
 
   # For non-trybot recipes we should know (seed) all steps in advance,
   # at the beginning of each build. Instead of yielding single steps
@@ -1680,9 +1688,12 @@ def GenTests(api):
     api.platform('linux', 64) +
     api.override_step_data('read test spec', api.json.output({
       'Linux ARM Cross-Compile': {
+        'compile_targets': ['browser_tests_run'],
         'gtest_tests': [{
           'test': 'browser_tests',
           'args': ['--gtest-filter', '*NaCl*'],
+          'shard_index': 0,
+          'total_shards': 1,
         }],
       },
     }))
