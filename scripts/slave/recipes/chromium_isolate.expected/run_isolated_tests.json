@@ -92,7 +92,9 @@
       "-H",
       "23f4ed98b3616e695602920b8d6c679091e8d8ce",
       "-I",
-      "https://isolateserver.appspot.com"
+      "https://isolateserver.appspot.com",
+      "--",
+      "--gtest-filter=\"*NaCl*\""
     ],
     "name": "browser_tests"
   }
