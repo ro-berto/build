@@ -941,7 +941,6 @@ def apply_rietveld_issue(issue, patchset, root, server, _rev_map, _revision,
          '--root_dir', root,
          # Tell apply_issue how to fetch the patch.
          '--issue', issue,
-         '--patchset', patchset,
          '--no-auth',
          '--server', server,
          # Always run apply_issue.py, otherwise it would see update.flag
@@ -950,6 +949,8 @@ def apply_rietveld_issue(issue, patchset, root, server, _rev_map, _revision,
          # Don't run gclient sync when it sees a DEPS change.
          '--ignore_deps',
   ]
+  if patchset:
+    cmd.extend(['--patchset', patchset])
   if whitelist:
     for item in whitelist:
       cmd.extend(['--whitelist', item])
