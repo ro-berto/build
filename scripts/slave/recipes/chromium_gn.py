@@ -11,7 +11,6 @@ DEPS = [
   'properties',
   'step',
   'step_history',
-  'tryserver',
 ]
 
 
@@ -108,9 +107,6 @@ def GenSteps(api):
   buildername = api.properties.get('buildername')
   master_dict = BUILDERS.get(mastername, {})
   bot_config = master_dict.get('builders', {}).get(buildername)
-  is_tryserver = api.tryserver.is_tryserver
-  if is_tryserver:
-    api.step.auto_resolve_conflicts = True
 
   api.chromium.set_config('chromium',
                           **bot_config.get('chromium_config_kwargs', {}))
@@ -128,23 +124,7 @@ def GenSteps(api):
     s[0].custom_vars[custom['var']] = api.properties.get(
         custom['property'], custom['default'])
 
-  # TODO(dpranke): crbug.com/358435. We need to figure out how to separate
-  # out the retry and recovery logic from the rest of the recipe.
-
-  yield api.bot_update.ensure_checkout()
-  if not api.step_history.last_step().json.output['did_run']:
-    yield api.gclient.checkout(revert=True,
-                               abort_on_failure=(not is_tryserver),
-                               can_fail_build=(not is_tryserver))
-
-    if is_tryserver:
-      if any(step.retcode != 0 for step in api.step_history.values()):
-        yield api.path.rmcontents('slave build directory',
-                                  api.path['slave_build'])
-        yield api.gclient.checkout(revert=False,
-                                   abort_on_failure=True,
-                                   can_fail_build=True)
-      yield api.tryserver.maybe_apply_issue()
+  yield api.bot_update.ensure_checkout(force=True)
 
   yield api.chromium.runhooks(run_gyp=False)
 
@@ -161,35 +141,6 @@ def _sanitize_nonalpha(text):
 
 
 def GenTests(api):
-  # api.gclient.checkout() actually contains a revert call and a sync call,
-  # so we test that either of them failing is handled correctly.
-  yield (
-      api.test('unittest_sync_fails') +
-      api.properties.tryserver(buildername='unittest_fake_trybotname',
-                               mastername='fake_tryserver') +
-      api.platform.name('linux') +
-      api.step_data('gclient sync', retcode=1)
-  )
-
-  yield (
-      api.test('unittest_revert_fails') +
-      api.properties.tryserver(buildername='unittest_fake_trybotname',
-                               mastername='fake_tryserver') +
-      api.platform.name('linux') +
-      api.step_data('gclient revert', retcode=1)
-  )
-
-  # Here both checkout/syncs fail, so we should abort before every trying
-  # to apply the patch.
-  yield (
-      api.test('unittest_second_sync_fails') +
-      api.properties.tryserver(buildername='unittest_fake_trybotname',
-                               mastername='fake_tryserver') +
-      api.platform.name('linux') +
-      api.step_data('gclient sync', retcode=1) +
-      api.step_data('gclient sync (2)', retcode=1)
-  )
-
   # TODO: crbug.com/354674. Figure out where to put "simulation"
   # tests. We should have one test for each bot this recipe runs on.
 
