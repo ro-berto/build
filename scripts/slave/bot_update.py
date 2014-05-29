@@ -29,6 +29,9 @@ import os.path as path
 # Set this to true on flag day.
 FLAG_DAY = False
 
+# Should we upload the status of this step?
+UPLOAD_TELEMETRY = True
+
 # Define a bunch of directory paths.
 # Relative to the current working directory.
 CURRENT_DIR = path.abspath(os.getcwd())
@@ -1132,6 +1135,9 @@ class UploadTelemetryThread(threading.Thread):
     return call(sys.executable, '-u', GSUTIL_BIN, *args, **kwargs)
 
   def run(self):
+    if not UPLOAD_TELEMETRY:
+      return
+
     if self.prefix == 'start':
       try:
         self._gsutil('rm', self.url('start_old'), self.url('end_old'),
