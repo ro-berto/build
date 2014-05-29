@@ -1581,8 +1581,7 @@ def GenSteps(api):
         test_name = test.get('test')
         if test_name and test_args:
           test_args_map[test_name] = test_args
-    steps.append(api.isolate.find_isolated_tests(api.chromium.output_dir,
-                                                 extra_args_map=test_args_map))
+    steps.append(api.isolate.find_isolated_tests(api.chromium.output_dir))
 
   if bot_type == 'builder':
     steps.append(api.archive.zip_and_upload_build(

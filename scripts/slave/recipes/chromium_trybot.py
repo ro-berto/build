@@ -666,8 +666,7 @@ def GenSteps(api):
     return
 
   if bot_config.get('use_isolate'):
-    yield api.isolate.find_isolated_tests(api.chromium.output_dir,
-                                          extra_args_map=test_args_map)
+    yield api.isolate.find_isolated_tests(api.chromium.output_dir)
 
   if bot_config['compile_only']:
     return

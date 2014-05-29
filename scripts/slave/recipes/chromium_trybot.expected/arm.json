@@ -146,9 +146,7 @@
       "--build-dir",
       "[SLAVE_BUILD]/src/out/Release",
       "--output-json",
-      "/path/to/tmp/json",
-      "--extra-args-file",
-      "{\"base_tests\": [\"--gtest-filter: *NaCl*\"], \"browser_tests\": [\"--gtest-filter: *NaCl*\"]}"
+      "/path/to/tmp/json"
     ],
     "name": "find isolated tests",
     "~followup_annotations": [

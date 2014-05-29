@@ -22,9 +22,7 @@
       "--build-dir",
       "[BUILD]",
       "--output-json",
-      "/path/to/tmp/json",
-      "--extra-args-file",
-      "{\"test1\": [\"test1arg\"], \"test2\": [\"test2arg\"]}"
+      "/path/to/tmp/json"
     ],
     "name": "find isolated tests",
     "~followup_annotations": [
