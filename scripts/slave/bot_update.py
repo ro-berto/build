@@ -204,7 +204,9 @@ ENABLED_SLAVES = {
                           ['vm%d-m4' % i for i in [468, 469, 497, 502, 503]] +
                           ['vm%d-m4' % i for i in range(800, 810)] +
                           ['vm%d-m4' % i for i in range(666, 671)] +
-                          ['build%d-a4' % i for i in range(100, 140)]
+                          ['build%d-a4' % i for i in range(100, 140)],
+
+    'tryserver.blink': ['slave%d-c4' % i for i in range(651, 661)],
 }
 ENABLED_SLAVES.update(internal_data.get('ENABLED_SLAVES', {}))
 
