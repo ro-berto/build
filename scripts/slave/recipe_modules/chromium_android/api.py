@@ -200,6 +200,34 @@ class AndroidApi(recipe_api.RecipeApi):
     kwargs['env'] = self.get_env()
     return self.m.chromium.compile(**kwargs)
 
+  def findbugs(self):
+    cmd = [self.m.path['checkout'].join('build', 'android', 'findbugs_diff.py')]
+    if self.m.chromium.c.BUILD_CONFIG == 'Release':
+      cmd.append('--release-build')
+    yield self.m.step('findbugs', cmd, env=self.get_env())
+
+    # If findbugs fails, there could be stale class files. Delete them, and
+    # next run maybe we'll do better.
+    if self.m.step_history.last_step().retcode != 0:
+      yield self.m.path.rmwildcard(
+          '*.class',
+          self.m.path['checkout'].join('out'),
+          always_run=True)
+
+    cmd = [self.m.path['checkout'].join('tools', 'android', 'findbugs_plugin',
+               'test', 'run_findbugs_plugin_tests.py')]
+    if self.m.chromium.c.BUILD_CONFIG == 'Release':
+      cmd.append('--release-build')
+    yield self.m.step('findbugs_tests', cmd, env=self.get_env())
+
+  def checklicenses(self):
+    yield self.m.step(
+      'check_licenses',
+      [self.m.path['checkout'].join('android_webview', 'tools',
+                                    'webview_licenses.py'),
+       'scan'],
+      env=self.get_env())
+
   def git_number(self):
     yield self.m.step(
         'git_number',
@@ -270,7 +298,7 @@ class AndroidApi(recipe_api.RecipeApi):
          self.m.chromium.c.build_dir.join('logcat')],
         env=self.get_env(), can_fail_build=False)
 
-  def device_status_check(self, restart_usb=False):
+  def device_status_check(self, restart_usb=False, **kwargs):
     def followup_fn(step_result):
       if not step_result.retcode == 0:
         step_result.presentation.links.update({
@@ -289,15 +317,17 @@ class AndroidApi(recipe_api.RecipeApi):
         [self.m.path['checkout'].join('build', 'android', 'buildbot',
                               'bb_device_status_check.py')] + args,
         env=self.get_env(),
-        followup_fn=followup_fn)
+        followup_fn=followup_fn,
+        **kwargs)
 
-  def provision_devices(self):
+  def provision_devices(self, **kwargs):
     yield self.m.python(
         'provision_devices',
         self.m.path['checkout'].join(
             'build', 'android', 'provision_devices.py'),
         args=['-t', self.m.chromium.c.BUILD_CONFIG],
-        can_fail_build=False)
+        can_fail_build=False,
+        **kwargs)
 
   def detect_and_setup_devices(self):
     yield self.device_status_check()

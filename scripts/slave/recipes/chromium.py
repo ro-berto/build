@@ -6,6 +6,7 @@ DEPS = [
   'archive',
   'bot_update',
   'chromium',
+  'chromium_android',
   'gclient',
   'isolate',
   'json',
@@ -67,6 +68,9 @@ class GTestTest(object):
     self.flakiness_dash = flakiness_dash
 
   def run(self, api):
+    if api.chromium.c.TARGET_PLATFORM == 'android':
+      return api.chromium_android.run_test_suite(self.name, self.args)
+
     return api.chromium.runtest(self.name,
                                 test_type=self.name,
                                 args=self.args,
@@ -75,7 +79,10 @@ class GTestTest(object):
                                 parallel=True,
                                 flakiness_dash=self.flakiness_dash)
 
-  def compile_targets(self, _):
+  def compile_targets(self, api):
+    if api.chromium.c.TARGET_PLATFORM == 'android':
+      return [self.name + '_apk']
+
     return [self.name]
 
 
@@ -722,6 +729,68 @@ BUILDERS = {
         ],
         'tests': [
           DynamicGTestTests('Linux Clang (dbg)'),
+        ],
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+
+      'Android Builder (dbg)': {
+        'recipe_config': 'chromium_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+          'TARGET_PLATFORM': 'android',
+        },
+        'android_config': 'main_builder',
+        'bot_type': 'builder',
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'Android Tests (dbg)': {
+        'recipe_config': 'chromium_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+          'TARGET_PLATFORM': 'android',
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'Android Builder (dbg)',
+        'android_config': 'tests_base',
+        'tests': [
+          GTestTest('base_unittests'),
+        ],
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+
+      'Android Builder': {
+        'recipe_config': 'chromium_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+          'TARGET_PLATFORM': 'android',
+        },
+        'android_config': 'main_builder',
+        'bot_type': 'builder',
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'Android Tests': {
+        'recipe_config': 'chromium_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+          'TARGET_PLATFORM': 'android',
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'Android Builder',
+        'android_config': 'tests_base',
+        'tests': [
+          GTestTest('base_unittests'),
         ],
         'testing': {
           'platform': 'linux',
@@ -1478,6 +1547,11 @@ RECIPE_CONFIGS = {
     'chromium_config': 'chromium',
     'gclient_config': 'chromium',
   },
+  'chromium_android': {
+    'chromium_config': 'android',
+    'gclient_config': 'chromium',
+    'gclient_apply_config': ['android'],
+  },
   'chromium_clang': {
     'chromium_config': 'chromium_clang',
     'gclient_config': 'chromium',
@@ -1531,6 +1605,11 @@ def GenSteps(api):
   for c in recipe_config.get('gclient_apply_config', []):
     api.gclient.apply_config(c)
 
+  if 'android_config' in bot_config:
+    api.chromium_android.set_config(
+        bot_config['android_config'],
+        **bot_config.get('chromium_config_kwargs', {}))
+
   if api.platform.is_win:
     yield api.chromium.taskkill()
 
@@ -1578,6 +1657,12 @@ def GenSteps(api):
         api.chromium.checkdeps(),
     ])
 
+    if api.chromium.c.TARGET_PLATFORM == 'android':
+      steps.extend([
+          api.chromium_android.checklicenses(),
+          api.chromium_android.findbugs(),
+      ])
+
   if bot_config.get('use_isolate'):
     test_args_map = {}
     test_spec = api.step_history['read test spec'].json.output
@@ -1621,6 +1706,13 @@ def GenSteps(api):
       build_revision=got_revision,
       # TODO(phajdan.jr): Move abort_on_failure to archive recipe module.
       abort_on_failure=True))
+
+  if (api.chromium.c.TARGET_PLATFORM == 'android' and
+      bot_type in ['tester', 'builder_tester']):
+    steps.extend([
+        api.chromium_android.device_status_check(abort_on_failure=True),
+        api.chromium_android.provision_devices(abort_on_failure=True),
+    ])
 
   if not bot_config.get('do_not_run_tests'):
     test_steps = [t.run(api) for t in bot_config.get('tests', [])]
@@ -1697,4 +1789,12 @@ def GenTests(api):
         }],
       },
     }))
+  )
+
+  yield (
+    api.test('findbugs_failure') +
+    api.properties.generic(mastername='chromium.linux',
+                           buildername='Android Builder (dbg)') +
+    api.platform('linux', 32) +
+    api.step_data('findbugs', retcode=1)
   )
