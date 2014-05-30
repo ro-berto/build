@@ -373,8 +373,7 @@ def GenSteps(api):
               '--json-test-results', api.json.test_results(add_json_log=False)]
       if suffix == 'without patch':
         test_list = "\n".join(self.failures('with patch'))
-        args.extend(['--test-list', api.raw_io.input(test_list),
-                     '--skipped', 'always'])
+        args.extend(['--test-list', api.raw_io.input(test_list)])
 
       if 'oilpan' in api.properties['buildername']:
         args.extend(['--additional-expectations',

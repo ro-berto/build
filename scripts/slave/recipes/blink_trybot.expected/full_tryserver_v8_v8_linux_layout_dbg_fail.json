@@ -497,9 +497,7 @@
       "--json-test-results",
       "/path/to/tmp/json",
       "--test-list",
-      "bad/totally-bad-probably.html\ntricky/totally-maybe-not-awesome.html",
-      "--skipped",
-      "always"
+      "bad/totally-bad-probably.html\ntricky/totally-maybe-not-awesome.html"
     ],
     "name": "webkit_tests (without patch)",
     "~followup_annotations": [

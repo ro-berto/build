@@ -502,8 +502,6 @@
       "/path/to/tmp/json",
       "--test-list",
       "bad/totally-bad-probably.html\ntricky/totally-maybe-not-awesome.html",
-      "--skipped",
-      "always",
       "--additional-expectations",
       "[SLAVE_BUILD]/src/third_party/WebKit/LayoutTests/OilpanExpectations"
     ],
