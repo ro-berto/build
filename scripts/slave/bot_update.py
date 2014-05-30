@@ -243,6 +243,10 @@ DISABLED_BUILDERS = {
         # its a 40GB bot.
         'Android Clang Builder (dbg)',
     ],
+    'chromium.perf': [
+        'Win 7 ATI GPU Perf',
+        'Win 7 Intel GPU Perf',
+    ],
     'chromium.fyi': [
         'Chromium Linux Codesearch',
         'ChromiumOS Codesearch',
