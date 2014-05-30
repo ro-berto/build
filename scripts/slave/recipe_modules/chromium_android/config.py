@@ -102,6 +102,10 @@ def arm_builder(c):
   pass
 
 @config_ctx()
+def arm_l_builder(c):
+  pass
+
+@config_ctx()
 def arm_builder_rel(c):
   pass
 

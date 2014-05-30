@@ -75,6 +75,15 @@ def arm_builder(c):
   gyp_defs['android_sdk_root'] = Path(
     '[CHECKOUT]', 'third_party', 'android_tools', 'sdk')
 
+@CONFIG_CTX(includes=['main_builder'])
+def arm_l_builder(c):
+  gyp_defs = c.gyp_env.GYP_DEFINES
+  gyp_defs['android_sdk_build_tools_version'] = 'android-L'
+  gyp_defs['android_sdk_version'] = 'L'
+  gyp_defs['android_sdk_root'] = Path(
+    '[CHECKOUT]', 'third_party', 'android_tools_internal', 'sdk')
+  gyp_defs['use_unpublished_apis'] = 1
+
 @CONFIG_CTX(includes=['arm_builder'],
             config_vars={'BUILD_CONFIG': 'Release'})
 def arm_builder_rel(c):
