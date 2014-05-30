@@ -774,6 +774,32 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
+      'Mac 10.6 Memcheck': {
+        'recipe_config': 'webrtc',
+        'chromium_apply_config': ['memcheck'],
+        'gclient_apply_config': ['valgrind'],
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {
+          'platform': 'mac',
+        },
+      },
+      'Mac 10.6 TSan': {
+        'recipe_config': 'webrtc',
+        'chromium_apply_config': ['tsan'],
+        'gclient_apply_config': ['valgrind'],
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {
+          'platform': 'mac',
+        },
+      },
       'Win Tsan': {
         'recipe_config': 'webrtc',
         'chromium_apply_config': ['tsan'],
