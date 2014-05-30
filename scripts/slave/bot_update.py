@@ -181,6 +181,10 @@ ENABLED_BUILDERS = {
         'linux_chromium_trusty_dbg',
         'linux_chromium_trusty_rel',
     ],
+    'chromium.perf': [
+        'Win 7 ATI GPU Perf',
+        'Win 7 Intel GPU Perf',
+    ],
     'tryserver.blink': [
         'linux_blink_bot_update',
     ],
@@ -242,10 +246,6 @@ DISABLED_BUILDERS = {
         # This one is not a builder/tester split, but runs into issues because
         # its a 40GB bot.
         'Android Clang Builder (dbg)',
-    ],
-    'chromium.perf': [
-        'Win 7 ATI GPU Perf',
-        'Win 7 Intel GPU Perf',
     ],
     'chromium.fyi': [
         'Chromium Linux Codesearch',
