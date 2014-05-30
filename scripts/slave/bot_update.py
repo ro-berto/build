@@ -230,6 +230,10 @@ DISABLED_BUILDERS = {
         'blink_android_compile_rel',
         'blink_android_compile_dbg',
     ],
+    'tryserver.blink': [
+        'linux_blink_dbg',
+        'linux_blink_rel',
+    ],
     'chromium.win': ['Win Builder'],  # crbug.com/370473
     'chromium.linux': [
         # These are non-recipe for checking out, but use bb_run_bot.py for
