@@ -617,21 +617,11 @@ class ChromiumCommands(commands.FactoryCommands):
     if self._target_platform == 'win32':
       self.AddGTestTestStep('installer_util_unittests',
                             factory_properties)
-      if (self._target == 'Release' and
-          not factory_properties.get('disable_mini_installer_test')):
-        self.AddGTestTestStep('mini_installer_test',
-                              factory_properties,
-                              arg_list=['-clean'])
 
   def AddBuildrunnerInstallerTests(self, factory_properties):
     if self._target_platform == 'win32':
       self.AddGTestTestStep('installer_util_unittests',
                             factory_properties)
-      if (self._target == 'Release' and
-          not factory_properties.get('disable_mini_installer_test')):
-        self.AddBuildrunnerGTest('mini_installer_test',
-                                 factory_properties,
-                                 arg_list=['-clean'])
 
   def AddChromeUnitTests(self, factory_properties):
     self.AddGTestTestStep('ipc_tests', factory_properties)
