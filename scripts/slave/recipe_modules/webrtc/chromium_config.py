@@ -40,6 +40,12 @@ def webrtc_asan(c):
   c.gyp_env.GYP_DEFINES['asan'] = 1
   c.compile_py.default_targets = ['All']
 
+@CONFIG_CTX(includes=['webrtc_clang', 'asan'])  # 'asan' config sets lsan=1 too.
+def webrtc_lsan(c):
+  c.compile_py.default_targets = ['All']
+  c.runtests.lsan_suppressions_file = Path('[CHECKOUT]', 'tools', 'lsan',
+                                           'suppressions.txt')
+
 @CONFIG_CTX(includes=['webrtc_clang', 'tsan2'])
 def webrtc_tsan2(c):
   c.compile_py.default_targets = ['All']

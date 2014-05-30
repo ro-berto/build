@@ -47,6 +47,11 @@ def webrtc_asan(c):
 
 
 @config_ctx()
+def webrtc_lsan(c):
+  pass
+
+
+@config_ctx()
 def webrtc_tsan2(c):
   pass
 

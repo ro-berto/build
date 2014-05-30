@@ -22,6 +22,10 @@ RECIPE_CONFIGS = {
     'webrtc_config': 'webrtc_asan',
     'test_suite': 'webrtc',
   },
+  'webrtc_lsan': {
+    'webrtc_config': 'webrtc_lsan',
+    'test_suite': 'webrtc',
+  },
   'webrtc_tsan2': {
     'webrtc_config': 'webrtc_tsan2',
     'test_suite': 'webrtc',
@@ -750,6 +754,17 @@ BUILDERS = {
         'recipe_config': 'webrtc',
         'chromium_apply_config': ['tsan_race_verifier'],
         'gclient_apply_config': ['valgrind'],
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'Linux ASan (and LSan)': {
+        'recipe_config': 'webrtc_lsan',
         'webrtc_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,

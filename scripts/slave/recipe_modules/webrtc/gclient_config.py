@@ -23,6 +23,11 @@ def webrtc_asan(c):
 
 
 @CONFIG_CTX(includes=['webrtc'])
+def webrtc_lsan(c):
+  pass
+
+
+@CONFIG_CTX(includes=['webrtc'])
 def webrtc_tsan2(c):
   pass
 
