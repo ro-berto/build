@@ -10,12 +10,12 @@ from master import master_utils
 # Note: don't include 'update scripts' since we can't do much about it when
 # it's failing and the tree is still technically fine.
 gardener_categories_steps = {
-  '':,
+  '': [],
   'pfq': ['cbuildbot'],
 }
 
 memory_categories_steps = {
-  '':,
+  '': [],
   'crosasantest': ['VMTest'],
 }
 
@@ -27,6 +27,10 @@ exclusions = {
 }
 
 forgiving_steps = ['update_scripts', 'update', 'gclient_revert']
+
+warning_header = ('Please look at failure in "%(steps)s" on "%(builder)s" '
+                  'and help out if you can')
+
 
 def Update(config, active_master, c):
   c['status'].append(chromium_notifier.ChromiumNotifier(
