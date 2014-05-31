@@ -62,8 +62,8 @@ def Update(config, active_master, c):
       sheriffs=['sheriff_memory'],
       use_getname=True))
   c['status'].append(chromium_notifier.ChromiumNotifier(
-      fromaddr=ActiveMaster.from_address,
-      categories_steps=categories_steps,
+      fromaddr=active_master.from_address,
+      categories_steps=trooper_categories_steps,
       relayhost=config.Master.smtp,
       status_header='%(steps)s failed on "%(builder)s"',
       subject='buildbot trooper alert on %(builder)s (%(projectName)s)',
