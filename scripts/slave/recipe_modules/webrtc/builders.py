@@ -763,7 +763,7 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
-      'Linux ASan (and LSan)': {
+      'Linux LSan (and ASan)': {
         'recipe_config': 'webrtc_lsan',
         'webrtc_config_kwargs': {
           'BUILD_CONFIG': 'Release',
