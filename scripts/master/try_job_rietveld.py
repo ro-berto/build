@@ -230,7 +230,7 @@ class _RietveldPollerWithCache(base.PollingChangeSource):
     pollDeferred = client.getPage(self._pending_jobs_url, agent='buildbot',
                                   timeout=2*60)
     pollDeferred.addCallback(self._ProcessResults)
-    pollDeferred.addErrback(log.err, 'error in RietveldPollerWithCache')
+    pollDeferred.addErrback(log.err, '[RPWC] error')
     return pollDeferred
 
   def setServiceParent(self, parent):
@@ -243,6 +243,8 @@ class _RietveldPollerWithCache(base.PollingChangeSource):
 
     # Get all BuildBot build requests.
     brdicts = yield self.master.db.buildrequests.getBuildRequests()
+
+    log.msg('[RPWC] Received build request dicts')
 
     def asNaiveUTC(dt):
       if dt is None:
@@ -262,6 +264,7 @@ class _RietveldPollerWithCache(base.PollingChangeSource):
     # Find jobs for each buildset and add them to the processed keys cache.
     self._processed_keys = {}
     for bsid in buildsets.keys():
+      log.msg('[RPWC] Loading properties of the buildset %d' % bsid)
       bsprops = yield self.master.db.buildsets.getBuildsetProperties(bsid)
       if 'try_job_key' in bsprops:
         key = bsprops['try_job_key'][0]
@@ -323,9 +326,15 @@ class _RietveldPollerWithCache(base.PollingChangeSource):
       parsed_timestamp = datetime.datetime.strptime(job['timestamp'],
                                                     '%Y-%m-%d %H:%M:%S.%f')
       new_processed_keys[job['key']] = parsed_timestamp
+    log.msg('[RPWC] Added %d new jobs to the cache.' % len(new_processed_keys))
+
+    num_removed = 0
     for processed_key, timestamp in self._processed_keys.iteritems():
       if timestamp > cutoff_timestamp:
         new_processed_keys[processed_key] = timestamp
+      else:
+        num_removed += 1
+    log.msg('[RPWC] Removed %d old jobs from the cache.' % num_removed)
     self._processed_keys = new_processed_keys
 
 
