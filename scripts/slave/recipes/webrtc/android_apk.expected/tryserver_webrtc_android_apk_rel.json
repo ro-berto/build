@@ -406,6 +406,25 @@
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "gtest",
       "-s",
+      "video_engine_tests",
+      "--verbose",
+      "--release"
+    ],
+    "env": {
+      "FOO": "bar",
+      "GYP_CROSSCOMPILE": "1",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' include_tests=1 target_arch=arm use_goma=1",
+      "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
+    },
+    "name": "video_engine_tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
       "voice_engine_unittests",
       "--verbose",
       "--release"
@@ -436,6 +455,25 @@
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },
     "name": "video_capture_tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
+      "webrtc_perf_tests",
+      "--verbose",
+      "--release"
+    ],
+    "env": {
+      "FOO": "bar",
+      "GYP_CROSSCOMPILE": "1",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' include_tests=1 target_arch=arm use_goma=1",
+      "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
+    },
+    "name": "webrtc_perf_tests"
   },
   {
     "always_run": true,

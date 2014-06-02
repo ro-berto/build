@@ -24,11 +24,13 @@ class WebRTCApi(recipe_api.RecipeApi):
       'test_support_unittests',
       'tools_unittests',
       'video_engine_core_unittests',
+      'video_engine_tests',
       'voice_engine_unittests',
   ]
 
   ANDROID_APK_TESTS = COMMON_TESTS + [
       'video_capture_tests',
+      'webrtc_perf_tests',
   ]
 
   NORMAL_TESTS = sorted(COMMON_TESTS + [
@@ -37,7 +39,6 @@ class WebRTCApi(recipe_api.RecipeApi):
     'libjingle_peerconnection_unittest',
     'libjingle_sound_unittest',
     'libjingle_unittest',
-    'video_engine_tests',
   ])
 
   # Map of GS archive names to urls.
