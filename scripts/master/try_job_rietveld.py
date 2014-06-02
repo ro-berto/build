@@ -244,7 +244,7 @@ class _RietveldPollerWithCache(base.PollingChangeSource):
     # Get all BuildBot build requests.
     brdicts = yield self.master.db.buildrequests.getBuildRequests()
 
-    log.msg('[RPWC] Received build request dicts')
+    log.msg('[RPWC] Received %d build request dicts' % len(brdicts))
 
     def asNaiveUTC(dt):
       if dt is None:
@@ -260,6 +260,8 @@ class _RietveldPollerWithCache(base.PollingChangeSource):
       bsid = brdict.get('buildsetid')
       if bsid is not None:
         buildsets[bsid] = asNaiveUTC(brdict.get('submitted_at'))
+
+    log.msg('[RPWC] Processing %d buildsets' % len(buildsets))
 
     # Find jobs for each buildset and add them to the processed keys cache.
     self._processed_keys = {}
