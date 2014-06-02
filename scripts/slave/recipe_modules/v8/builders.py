@@ -27,6 +27,9 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - builder',
         'build_gs_archive': 'linux_rel_archive',
+        # TODO(machenbach): This is an experimental performance test step.
+        # Remove as soon as development on this step has completed.
+        'perf': ['experimental'],
         'tests': [
           'presubmit',
           'v8initializers',

@@ -299,5 +299,20 @@
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Mozilla"
+  },
+  {
+    "always_run": true,
+    "can_fail_build": false,
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/v8/tools/run_benchmarks.py",
+      "--arch",
+      "ia32",
+      "--buildbot",
+      "benchmarks/v8.json"
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "name": "Experimental"
   }
 ]

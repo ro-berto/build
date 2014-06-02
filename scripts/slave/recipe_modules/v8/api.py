@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import os
+
 from slave import recipe_api
 from slave.recipe_modules.v8 import builders
 
@@ -45,6 +47,13 @@ TEST_CONFIGS = {
     'tests': 'webkit',
     'add_flaky_step': True,
   },
+}
+
+PERF_CONFIGS = {
+  'experimental': {
+    'name': 'Experimental',
+    'json': os.path.join('benchmarks', 'v8.json'),
+  }
 }
 
 
@@ -447,3 +456,23 @@ class V8Api(recipe_api.RecipeApi):
       ]
     else:
       return self._runtest(test['name'], test, **kwargs)
+
+  def _runperf(self, name):
+    full_args = [
+      '--arch', self.m.chromium.c.gyp_env.GYP_DEFINES['v8_target_arch'],
+      '--buildbot',
+      PERF_CONFIGS[name]['json'],
+    ]
+    # TODO(machenbach): Remove 'can_fail_build' as soon as performance tests
+    # are stable.
+    yield self.m.python(
+      PERF_CONFIGS[name]['name'],
+      self.m.path['checkout'].join('tools', 'run_benchmarks.py'),
+      full_args,
+      cwd=self.m.path['checkout'],
+      always_run=True,
+      can_fail_build=False
+    )
+
+  def runperf(self):
+    yield [self._runperf(t) for t in self.bot_config.get('perf', [])]
