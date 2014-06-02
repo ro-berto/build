@@ -52,7 +52,7 @@ def GenSteps(api):
 
   steps = []
   if api.tryserver.is_tryserver:
-    steps.append(api.webrtc.apply_svn_patch())
+    steps.append(api.tryserver.maybe_apply_issue())
 
   steps.append(api.chromium.runhooks())
   steps.append(api.chromium.compile())

@@ -190,6 +190,13 @@ class WebRTCApi(recipe_api.RecipeApi):
         abort_on_failure=True)
 
   def apply_svn_patch(self):
+    """Patch step for applying WebRTC patches to Chromium checkouts.
+
+    This step should only be used when patches are to be applied to WebRTC as a
+    part of a Chromium checkout. It is not supported on Windows.
+    """
+    assert self.m.chromium.c.TARGET_PLATFORM != "win", (
+        'This step is not supported on the Windows platform.')
     script = self.m.path['build'].join('scripts', 'slave', 'apply_svn_patch.py')
     # Use the SVN mirror as the slaves only have authentication setup for that.
     patch_url = self.m.properties['patch_url'].replace(
