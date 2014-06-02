@@ -940,6 +940,18 @@ BUILDERS = {
           'platform': 'win',
         },
       },
+      'win_asan': {
+        'recipe_config': 'webrtc',
+        'chromium_apply_config': ['syzyasan'],
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {
+          'platform': 'win',
+        },
+      },
       'win_drmemory_light': {
         'recipe_config': 'webrtc',
         'chromium_apply_config': ['drmemory_light'],
