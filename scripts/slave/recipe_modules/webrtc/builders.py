@@ -36,6 +36,9 @@ RECIPE_CONFIGS = {
   'webrtc_android_clang': {
     'webrtc_config': 'webrtc_android_clang',
   },
+  'webrtc_android_apk': {
+    'webrtc_config': 'webrtc_android_apk',
+  },
   'webrtc_ios': {
     'webrtc_config': 'webrtc_ios',
   },
@@ -746,6 +749,82 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
+      'Android Chromium-APK Builder (dbg)': {
+        'recipe_config': 'webrtc_android_apk',
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'build_gs_archive': 'android_apk_dbg_archive',
+        'testing': {'platform': 'linux'},
+      },
+      'Android Chromium-APK Builder': {
+        'recipe_config': 'webrtc_android_apk',
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'build_gs_archive': 'android_apk_rel_archive',
+        'testing': {'platform': 'linux'},
+      },
+      'Android Chromium-APK Tests (KK Nexus5)(dbg)': {
+        'recipe_config': 'webrtc_android_apk',
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'Android Chromium-APK Builder (dbg)',
+        'build_gs_archive': 'android_apk_dbg_archive',
+        'testing': {'platform': 'linux'},
+      },
+      'Android Chromium-APK Tests (KK Nexus5)': {
+        'recipe_config': 'webrtc_android_apk',
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'Android Chromium-APK Builder',
+        'build_gs_archive': 'android_apk_rel_archive',
+        'testing': {'platform': 'linux'},
+      },
+      'Android Chromium-APK Tests (JB Nexus7.2)(dbg)': {
+        'recipe_config': 'webrtc_android_apk',
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'Android Chromium-APK Builder (dbg)',
+        'build_gs_archive': 'android_apk_dbg_archive',
+        'testing': {'platform': 'linux'},
+      },
+      'Android Chromium-APK Tests (JB Nexus7.2)': {
+        'recipe_config': 'webrtc_android_apk',
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'Android Chromium-APK Builder',
+        'build_gs_archive': 'android_apk_rel_archive',
+        'testing': {'platform': 'linux'},
+      },
     },
   },
   'client.webrtc.fyi': {
@@ -1087,6 +1166,28 @@ BUILDERS = {
         'testing': {
           'platform': 'linux',
         },
+      },
+      'android_apk': {
+        'recipe_config': 'webrtc_android_apk',
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
+      },
+      'android_apk_rel': {
+        'recipe_config': 'webrtc_android_apk',
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
       },
     },
   },

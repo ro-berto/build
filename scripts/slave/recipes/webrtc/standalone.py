@@ -61,7 +61,7 @@ def GenSteps(api):
     steps.append(api.chromium.apply_syzyasan())
 
   test_suite = recipe_config.get('test_suite')
-  if test_suite and bot_type in ['builder_tester', 'tester']:
+  if test_suite and bot_type in ('builder_tester', 'tester'):
     steps.extend(api.webrtc.runtests(test_suite, got_revision))
   yield steps
 
@@ -75,7 +75,7 @@ def GenTests(api):
                        suffix=None):
     suffix = suffix or ''
     bot_type = bot_config.get('bot_type', 'builder_tester')
-    if bot_type in ['builder', 'builder_tester']:
+    if bot_type in ('builder', 'builder_tester'):
       assert bot_config.get('parent_buildername') is None, (
           'Unexpected parent_buildername for builder %r on master %r.' %
               (buildername, mastername))
@@ -99,6 +99,8 @@ def GenTests(api):
   for mastername in ('client.webrtc', 'client.webrtc.fyi', 'tryserver.webrtc'):
     master_config = api.webrtc.BUILDERS[mastername]
     for buildername, bot_config in master_config['builders'].iteritems():
+      if bot_config['recipe_config'] == 'webrtc_android_apk':
+        continue
       yield generate_builder(mastername, buildername, bot_config,
                              revision='12345')
 

@@ -121,7 +121,7 @@ def GenTests(api):
                        suffix=None):
     suffix = suffix or ''
     bot_type = bot_config.get('bot_type', 'builder_tester')
-    if bot_type in ['builder', 'builder_tester']:
+    if bot_type in ('builder', 'builder_tester'):
       assert bot_config.get('parent_buildername') is None, (
           'Unexpected parent_buildername for builder %r on master %r.' %
               (buildername, mastername))

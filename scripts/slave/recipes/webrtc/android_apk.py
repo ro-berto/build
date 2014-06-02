@@ -20,130 +20,25 @@ DEPS = [
   'webrtc',
 ]
 
-# Map of GS archive names to urls.
-GS_ARCHIVES = {
-  'android_dbg_archive': 'gs://chromium-webrtc/android_dbg',
-  'android_rel_archive': 'gs://chromium-webrtc/android_rel',
-}
-
-BUILDERS = {
-  'client.webrtc': {
-    'builders': {
-      # Builders.
-      'Android Chromium-APK Builder (dbg)': {
-        'webrtc_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder',
-        'build_gs_archive': 'android_dbg_archive',
-        'testing': {'platform': 'linux'},
-      },
-      'Android Chromium-APK Builder': {
-        'webrtc_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder',
-        'build_gs_archive': 'android_rel_archive',
-        'testing': {'platform': 'linux'},
-      },
-      # Testers.
-      'Android Chromium-APK Tests (KK Nexus5)(dbg)': {
-        'webrtc_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'tester',
-        'parent_buildername': 'Android Chromium-APK Builder (dbg)',
-        'build_gs_archive': 'android_dbg_archive',
-        'testing': {'platform': 'linux'},
-      },
-      'Android Chromium-APK Tests (KK Nexus5)': {
-        'webrtc_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'tester',
-        'parent_buildername': 'Android Chromium-APK Builder',
-        'build_gs_archive': 'android_rel_archive',
-        'testing': {'platform': 'linux'},
-      },
-      'Android Chromium-APK Tests (JB Nexus7.2)(dbg)': {
-        'webrtc_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'tester',
-        'parent_buildername': 'Android Chromium-APK Builder (dbg)',
-        'build_gs_archive': 'android_dbg_archive',
-        'testing': {'platform': 'linux'},
-      },
-      'Android Chromium-APK Tests (JB Nexus7.2)': {
-        'webrtc_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'tester',
-        'parent_buildername': 'Android Chromium-APK Builder',
-        'build_gs_archive': 'android_rel_archive',
-        'testing': {'platform': 'linux'},
-      },
-    },
-  },
-  'tryserver.webrtc': {
-    'builders': {
-      'android_apk': {
-        'webrtc_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'linux'},
-      },
-      'android_apk_rel': {
-        'webrtc_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'linux'},
-      },
-    },
-  },
-}
-
 
 def GenSteps(api):
   mastername = api.properties.get('mastername')
   buildername = api.properties.get('buildername')
-  master_dict = BUILDERS.get(mastername, {})
+  master_dict = api.webrtc.BUILDERS.get(mastername, {})
   bot_config = master_dict.get('builders', {}).get(buildername)
   assert bot_config, ('Unrecognized builder name %r for master %r.' %
                       (buildername, mastername))
+  recipe_config_name = bot_config['recipe_config']
+  recipe_config = api.webrtc.RECIPE_CONFIGS.get(recipe_config_name)
+  assert recipe_config, ('Cannot find recipe_config "%s" for builder "%r".' %
+                         (recipe_config_name, buildername))
 
   # The infrastructure team has recommended not to use git yet on the
   # bots, but it's very nice to have when testing locally.
   # To use, pass "use_git=True" as an argument to run_recipe.py.
   use_git = api.properties.get('use_git', False)
 
-  api.webrtc.set_config('webrtc_android_apk',
+  api.webrtc.set_config(recipe_config['webrtc_config'],
                         GIT_MODE=use_git,
                         **bot_config.get('webrtc_config_kwargs', {}))
   if api.tryserver.is_tryserver:
@@ -186,12 +81,16 @@ def GenSteps(api):
     yield api.base_android.compile()
 
   if bot_type == 'builder':
-    yield api.webrtc.package_build(GS_ARCHIVES[bot_config['build_gs_archive']],
-                                   got_revision)
+    yield api.webrtc.package_build(
+        api.webrtc.GS_ARCHIVES[bot_config['build_gs_archive']], got_revision)
 
   if bot_type == 'tester':
-    yield api.webrtc.extract_build(GS_ARCHIVES[bot_config['build_gs_archive']],
-                                   got_revision)
+    assert api.properties.get('revision'), (
+       'Testers cannot be forced without providing revision information. Please'
+       'select a previous build and click [Rebuild] or force a build for a '
+       'Builder instead (will trigger new runs for the testers).')
+    yield api.webrtc.extract_build(
+        api.webrtc.GS_ARCHIVES[bot_config['build_gs_archive']], got_revision)
 
   if does_test:
     yield api.chromium_android.common_tests_setup_steps()
@@ -206,43 +105,58 @@ def _sanitize_nonalpha(text):
 
 
 def GenTests(api):
-  for mastername, master_config in BUILDERS.iteritems():
-    for buildername, bot_config in master_config['builders'].iteritems():
-      bot_type = bot_config.get('bot_type', 'builder_tester')
+  def generate_builder(mastername, buildername, bot_config, revision,
+                       suffix=None):
+    suffix = suffix or ''
+    bot_type = bot_config.get('bot_type', 'builder_tester')
+    if bot_type in ('builder', 'builder_tester'):
+      assert bot_config.get('parent_buildername') is None, (
+          'Unexpected parent_buildername for builder %r on master %r.' %
+              (buildername, mastername))
 
-      if bot_type in ['builder', 'builder_tester']:
-        assert bot_config.get('parent_buildername') is None, (
-            'Unexpected parent_buildername for builder %r on master %r.' %
-                (buildername, mastername))
+    webrtc_config_kwargs = bot_config.get('webrtc_config_kwargs', {})
+    test = (
+      api.test('%s_%s%s' % (_sanitize_nonalpha(mastername),
+                            _sanitize_nonalpha(buildername), suffix)) +
+      api.properties(mastername=mastername,
+                     buildername=buildername,
+                     slavename='fake_slavename',
+                     parent_buildername=bot_config.get('parent_buildername'),
+                     TARGET_PLATFORM=webrtc_config_kwargs['TARGET_PLATFORM'],
+                     TARGET_ARCH=webrtc_config_kwargs['TARGET_ARCH'],
+                     TARGET_BITS=webrtc_config_kwargs['TARGET_BITS'],
+                     BUILD_CONFIG=webrtc_config_kwargs['BUILD_CONFIG']) +
+      api.platform(bot_config['testing']['platform'],
+                   webrtc_config_kwargs.get('TARGET_BITS', 64))
+    )
+    if bot_type in ('builder', 'builder_tester'):
+      test += api.step_data('envsetup',
+          api.json.output({
+              'FOO': 'bar',
+              'GYP_DEFINES': 'my_new_gyp_def=aaa',
+          }))
 
-      webrtc_config_kwargs = bot_config.get('webrtc_config_kwargs', {})
-      test = (
-        api.test('%s_%s' % (_sanitize_nonalpha(mastername),
-                            _sanitize_nonalpha(buildername))) +
-        api.properties(mastername=mastername,
-                       buildername=buildername,
-                       slavename='fake_slavename',
-                       parent_buildername=bot_config.get('parent_buildername'),
-                       TARGET_PLATFORM=webrtc_config_kwargs['TARGET_PLATFORM'],
-                       TARGET_ARCH=webrtc_config_kwargs['TARGET_ARCH'],
-                       TARGET_BITS=webrtc_config_kwargs['TARGET_BITS'],
-                       BUILD_CONFIG=webrtc_config_kwargs['BUILD_CONFIG'],
-                       revision='12345') +
-        api.platform(bot_config['testing']['platform'],
-                     webrtc_config_kwargs.get('TARGET_BITS', 64))
-      )
-      if bot_type in ['builder', 'builder_tester']:
-        test += api.step_data('envsetup',
-            api.json.output({
-                'FOO': 'bar',
-                'GYP_DEFINES': 'my_new_gyp_def=aaa',
-             }))
-
+    if revision:
+      test += api.properties(revision=revision)
       if bot_type == 'tester':
-        test += api.properties(parent_got_revision='12345')
+        test += api.properties(parent_got_revision=revision)
 
-      if mastername.startswith('tryserver'):
-        test += api.properties(patch_url='try_job_svn_patch')
+    if mastername.startswith('tryserver'):
+      test += api.properties(patch_url='try_job_svn_patch')
 
-      yield test
+    return test
 
+  for mastername in ('client.webrtc', 'tryserver.webrtc'):
+    master_config = api.webrtc.BUILDERS[mastername]
+    for buildername, bot_config in master_config['builders'].iteritems():
+      if bot_config['recipe_config'] != 'webrtc_android_apk':
+        continue
+      yield generate_builder(mastername, buildername, bot_config,
+                             revision='12345')
+
+  # Forced build (no revision information).
+  mastername = 'client.webrtc'
+  buildername = 'Android Chromium-APK Builder'
+  bot_config = api.webrtc.BUILDERS[mastername]['builders'][buildername]
+  yield generate_builder(mastername, buildername, bot_config, revision=None,
+                         suffix='_forced')
