@@ -487,7 +487,6 @@ BUILDERS = {
         ],
         'testing': {
           'platform': 'linux',
-          'test_spec_file': 'chromium_arm.json',
         },
         'do_not_run_tests': True,
         'use_isolate': True,
