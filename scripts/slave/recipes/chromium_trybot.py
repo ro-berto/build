@@ -81,6 +81,18 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
+      # Fake builder to provide testing coverage for non-bot_update.
+      'linux_no_bot_update': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'chromium_config': 'chromium',
+        'compile_only': False,
+        'testing': {
+          'platform': 'linux',
+        },
+      },
       'linux_chromium_compile_dbg': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -807,7 +819,7 @@ def GenTests(api):
 
   yield (
     api.test('gclient_revert_failure_linux') +
-    props() +
+    props(buildername='linux_no_bot_update') +
     api.platform.name('linux') +
     api.step_data('gclient runhooks', retcode=1) +
     api.step_data('gclient runhooks (2)', retcode=1) +
@@ -825,14 +837,14 @@ def GenTests(api):
 
   yield (
     api.test('gclient_sync_no_data') +
-    props() +
+    props(buildername='linux_no_bot_update') +
     api.platform.name('linux') +
     api.override_step_data('gclient sync', api.json.output(None))
   )
 
   yield (
     api.test('gclient_revert_nuke') +
-    props() +
+    props(buildername='linux_no_bot_update') +
     api.platform.name('linux') +
     api.step_data('gclient revert', retcode=1)
   )
@@ -848,7 +860,7 @@ def GenTests(api):
 
   yield (
     api.test('compile_failure_linux') +
-    props() +
+    props(buildername='linux_no_bot_update') +
     api.platform.name('linux') +
     api.step_data('compile (with patch)', retcode=1) +
     api.step_data('compile (with patch, lkcr, clobber)', retcode=1) +

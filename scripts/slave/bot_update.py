@@ -173,11 +173,19 @@ ENABLED_BUILDERS = {
 
         # linux/
         'chromium_presubmit',
+        'linux',
+        'linux_arm_cross_compile',
+        'linux_chromium_compile_dbg',
+        'linux_chromium_compile_rel',
+        'linux_chromium_dbg',
+        'linux_chromium_rel',
         'linux_chromium_trusty32_dbg',
         'linux_chromium_trusty32_rel',
         'linux_chromium_trusty_dbg',
         'linux_chromium_trusty_rel',
+        'linux_rel',
         'linux_rel_alt',
+        'linux_rel_naclmore',
 
         # linux_arm_cross_compile/
         'linux_arm_cross_compile',
