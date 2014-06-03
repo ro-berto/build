@@ -239,6 +239,15 @@ class AndroidApi(recipe_api.RecipeApi):
         ),
         cwd=self.m.path['checkout'])
 
+  def check_webview_licenses(self):
+    yield self.m.python(
+        'check licenses',
+        self.m.path['checkout'].join('android_webview',
+                                     'tools',
+                                     'webview_licenses.py'),
+        args=['scan'],
+        can_fail_build=False)
+
   def upload_build(self, bucket, path):
     archive_name = 'build_product.zip'
 

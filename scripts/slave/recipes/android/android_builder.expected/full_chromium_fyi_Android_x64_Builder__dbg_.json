@@ -31,13 +31,17 @@
       "--master",
       "chromium.fyi",
       "--builder",
-      "Android ARM64 Builder (dbg)",
+      "Android x64 Builder (dbg)",
       "--slave",
       "TestSlavename",
       "--spec",
       "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]\ntarget_os = ['android']",
       "--revision_mapping_file",
       "{}",
+      "--issue",
+      "8675309",
+      "--patchset",
+      "1",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -86,7 +90,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm64 use_goma=1",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 use_goma=1",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "gclient runhooks"
@@ -113,6 +117,34 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "compile"
+  },
+  {
+    "can_fail_build": false,
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/android_webview/tools/webview_licenses.py",
+      "scan"
+    ],
+    "name": "check licenses"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/build/android/findbugs_diff.py"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "findbugs"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/tools/android/findbugs_plugin/test/run_findbugs_plugin_tests.py"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "findbugs_tests"
   },
   {
     "always_run": true,

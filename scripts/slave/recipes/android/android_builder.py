@@ -5,23 +5,38 @@
 DEPS = [
   'chromium_android',
   'properties',
+  'tryserver',
 ]
 
 BUILDERS = {
-  'Android ARM64 Builder (dbg)': {
-    'recipe_config': 'arm64_builder',
+  'chromium.fyi': {
+    'Android ARM64 Builder (dbg)': {
+      'recipe_config': 'arm64_builder',
+    },
+    'Android x64 Builder (dbg)': {
+      'recipe_config': 'x64_builder',
+    },
+    'Android MIPS Builder (dbg)': {
+      'recipe_config': 'mipsel_builder',
+    }
   },
-  'Android x64 Builder (dbg)': {
-    'recipe_config': 'x64_builder',
+  'tryserver.chromium': {
+    'android_dbg': {
+      'recipe_config': 'arm_builder',
+      'try': True,
+      'upload': {
+        'bucket': 'chromium-android',
+        'path': lambda api: ('android_try_dbg/full-build-linux_%s.zip'
+                             % api.properties['buildnumber']),
+      },
+    }
   },
-  'Android MIPS Builder (dbg)': {
-    'recipe_config': 'mipsel_builder',
-  }
 }
 
 def GenSteps(api):
+  mastername = api.properties['mastername']
   buildername = api.properties['buildername']
-  bot_config = BUILDERS[buildername]
+  bot_config = BUILDERS[mastername][buildername]
   droid = api.chromium_android
 
   default_kwargs = {
@@ -36,7 +51,18 @@ def GenSteps(api):
   yield droid.init_and_sync()
   yield droid.clean_local_files()
   yield droid.runhooks()
+
+  if bot_config.get('try', False):
+    yield api.tryserver.maybe_apply_issue()
+
   yield droid.compile()
+  yield droid.check_webview_licenses()
+  yield droid.findbugs()
+
+  upload_config = bot_config.get('upload')
+  if upload_config:
+    yield droid.upload_build(upload_config['bucket'],
+                             upload_config['path'](api))
   yield droid.cleanup_build()
 
 
@@ -45,11 +71,15 @@ def _sanitize_nonalpha(text):
 
 def GenTests(api):
   # tests bots in BUILDERS
-  for buildername in BUILDERS:
-    yield (
-      api.test('full_%s' % _sanitize_nonalpha(buildername)) +
-      api.properties.generic(buildername=buildername,
-          repository='svn://svn.chromium.org/chrome/trunk/src',
-          buildnumber=257,
-          mastername='chromium.fyi',
-          revision='267739'))
+  for mastername, builders in BUILDERS.iteritems():
+    for buildername in builders:
+      yield (
+        api.test('full_%s_%s' % (_sanitize_nonalpha(mastername),
+                                 _sanitize_nonalpha(buildername))) +
+        api.properties.generic(buildername=buildername,
+            repository='svn://svn.chromium.org/chrome/trunk/src',
+            buildnumber=257,
+            mastername=mastername,
+            issue='8675309',
+            patchset='1',
+            revision='267739'))
