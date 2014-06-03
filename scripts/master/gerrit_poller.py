@@ -77,7 +77,10 @@ class GerritPoller(base.PollingChangeSource):
   @staticmethod
   def _parse_timestamp(tm):
     tm = tm[:tm.index('.')+7]
-    return datetime.datetime.strptime(tm, '%Y-%m-%d %H:%M:%S.%f')
+    try:
+      return datetime.datetime.strptime(tm, '%Y-%m-%d %H:%M:%S.%f')
+    except ValueError:
+      return datetime.datetime.strptime(tm, '%Y-%m-%d %H:%M:%S')
 
   def startService(self):
     if not self.dry_run:

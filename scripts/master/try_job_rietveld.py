@@ -27,6 +27,13 @@ from master.try_job_base import TryJobBase
 MAX_RECENT_BUILDSETS_TO_INIT_CACHE = 10000
 
 
+def str_to_datetime(text):
+  try:
+    return datetime.datetime.strptime(text, '%Y-%m-%d %H:%M:%S.%f')
+  except ValueError:
+    return datetime.datetime.strptime(text, '%Y-%m-%d %H:%M:%S')
+
+
 class _ValidUserPoller(internet.TimerService):
   """Check chromium-access for users allowed to send jobs from Rietveld.
   """
@@ -313,8 +320,7 @@ class _RietveldPollerWithCache(base.PollingChangeSource):
     # Find new jobs and put them into cache.
     new_jobs = []
     for job in all_jobs:
-      parsed_timestamp = datetime.datetime.strptime(job['timestamp'],
-                                                    '%Y-%m-%d %H:%M:%S.%f')
+      parsed_timestamp = str_to_datetime(job['timestamp'])
       # TODO(sergiyb): This logic relies on the assumption that we don't care
       # about jobs older than 6 hours. Once we stabilize Rietveld cursor, we
       # should get rid of this assumption. Also see, http://crbug.com/376537.
@@ -331,8 +337,7 @@ class _RietveldPollerWithCache(base.PollingChangeSource):
     # Update processed keys cache.
     new_processed_keys = {}
     for job in new_jobs:
-      parsed_timestamp = datetime.datetime.strptime(job['timestamp'],
-                                                    '%Y-%m-%d %H:%M:%S.%f')
+      parsed_timestamp = str_to_datetime(job['timestamp'])
       new_processed_keys[job['key']] = parsed_timestamp
     log.msg('[RPWC] Added %d new jobs to the cache.' % len(new_processed_keys))
 

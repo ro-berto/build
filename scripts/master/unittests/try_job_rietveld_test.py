@@ -26,13 +26,23 @@ from master import try_job_rietveld
 TEST_BASE_URL = ('https://codereview.chromium.org/get_pending_try_patchsets?'
                  'limit=1000&offset=1&master=tryserver.chromium')
 
+
+# Create timestamps both with microseconds=0 and !=0.
+# See http://crbug.com/380370.
+utcnow = datetime.datetime.utcnow()
+utcnow_rounded = datetime.datetime(
+    utcnow.year, utcnow.month, utcnow.day, utcnow.hour,
+    utcnow.minute, utcnow.second)
+utcnow_microsec = datetime.datetime(
+    utcnow.year, utcnow.month, utcnow.day, utcnow.hour,
+    utcnow.minute, utcnow.second, 123456)
+
+
 TEST_RIETVELD_PAGES = [
   [{'timestamp': datetime.datetime.utcnow(), 'key': 'test_key_1'}],
-  [{'timestamp': (datetime.datetime.utcnow() -
-                  datetime.timedelta(hours=5, minutes=59)),
+  [{'timestamp': (utcnow_rounded - datetime.timedelta(hours=5, minutes=59)),
     'key': 'test_key_2'},
-   {'timestamp': (datetime.datetime.utcnow() -
-                  datetime.timedelta(hours=6, minutes=1)),
+   {'timestamp': (utcnow_microsec - datetime.timedelta(hours=6, minutes=1)),
     'key': 'test_key_3'}]
 ]
 
