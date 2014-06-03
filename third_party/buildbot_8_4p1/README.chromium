@@ -3816,3 +3816,145 @@ index c634060..711d36a 100644
                                              urllib.quote(logname))),
                                        'name': logname })
 
+
+Backport BuildsetsConnectComponent.getRecentBuildsets from upstream
+(1ee6d421be2ea814c11757263eb43152f8c3928e).
+
+Index: third_party/buildbot_8_4p1/buildbot/db/buildsets.py
+diff --git a/third_party/buildbot_8_4p1/buildbot/db/buildsets.py b/third_party/buildbot_8_4p1/buildbot/db/buildsets.py
+index e70a51242ca09ba7ec7034e2092f4053c3d0332c..c90af5bec8eb57e5075858623fcc5d59a62eadd7 100644
+--- a/third_party/buildbot_8_4p1/buildbot/db/buildsets.py
++++ b/third_party/buildbot_8_4p1/buildbot/db/buildsets.py
+@@ -190,6 +190,35 @@ class BuildsetsConnectorComponent(base.DBConnectorComponent):
+             return [ self._row2dict(row) for row in res.fetchall() ]
+         return self.db.pool.do(thd)
+ 
++    def getRecentBuildsets(self, count, branch=None, repository=None,
++                           complete=None):
++        def thd(conn):
++            bs_tbl = self.db.model.buildsets
++            ch_tbl = self.db.model.changes
++            j = sa.join(self.db.model.buildsets,
++                        self.db.model.sourcestamps)
++            j = j.join(self.db.model.sourcestamp_changes)
++            j = j.join(ch_tbl)
++            q = sa.select(columns=[bs_tbl], from_obj=[j],
++                          distinct=True)
++            q = q.order_by(sa.desc(bs_tbl.c.id))
++            q = q.limit(count)
++
++            if complete is not None:
++                if complete:
++                    q = q.where(bs_tbl.c.complete != 0)
++                else:
++                    q = q.where((bs_tbl.c.complete == 0) |
++                                (bs_tbl.c.complete == None))
++            if branch:
++              q = q.where(ch_tbl.c.branch == branch)
++            if repository:
++              q = q.where(ch_tbl.c.repository == repository)
++            res = conn.execute(q)
++            return list(reversed([self._row2dict(row)
++                                  for row in res.fetchall()]))
++        return self.db.pool.do(thd)
++
+     def getBuildsetProperties(self, buildsetid):
+         """
+         Return the properties for a buildset, in the same format they were
+Index: third_party/buildbot_8_4p1/buildbot/test/unit/test_db_buildsets.py
+diff --git a/third_party/buildbot_8_4p1/buildbot/test/unit/test_db_buildsets.py b/third_party/buildbot_8_4p1/buildbot/test/unit/test_db_buildsets.py
+index a6d4253cae43572992eac8d73b24cead97f63d9e..d28bcc61a72fd875af51c533b4ae189172225041 100644
+--- a/third_party/buildbot_8_4p1/buildbot/test/unit/test_db_buildsets.py
++++ b/third_party/buildbot_8_4p1/buildbot/test/unit/test_db_buildsets.py
+@@ -441,3 +441,91 @@ class TestBuildsetsConnectorComponent(
+         d.addCallbacks(cb, eb)
+         return d
+ 
++    def insert_test_getRecentBuildsets_data(self):
++        return self.insertTestData([
++            fakedb.Change(changeid=91, branch='branch_a', repository='repo_a'),
++            fakedb.SourceStamp(id=91, branch='branch_a', repository='repo_a'),
++            fakedb.SourceStampChange(sourcestampid=91, changeid=91),
++
++            fakedb.Buildset(id=91, sourcestampid=91, complete=0,
++                    complete_at=298297875, results=-1, submitted_at=266761875,
++                    external_idstring='extid', reason='rsn1'),
++            fakedb.Buildset(id=92, sourcestampid=91, complete=1,
++                    complete_at=298297876, results=7, submitted_at=266761876,
++                    external_idstring='extid', reason='rsn2'),
++
++            # buildset unrelated to the change
++            fakedb.Buildset(id=93, sourcestampid=1, complete=1,
++                    complete_at=298297877, results=7, submitted_at=266761877,
++                    external_idstring='extid', reason='rsn2'),
++        ])
++
++    def test_getRecentBuildsets_all(self):
++        d = self.insert_test_getRecentBuildsets_data()
++        d.addCallback(lambda _ :
++                self.db.buildsets.getRecentBuildsets(2, branch='branch_a',
++                                                     repository='repo_a'))
++        def check(bsdictlist):
++            self.assertEqual(bsdictlist, [
++              dict(external_idstring='extid', reason='rsn1', sourcestampid=91,
++                submitted_at=datetime.datetime(1978, 6, 15, 12, 31, 15,
++                                               tzinfo=UTC),
++                complete_at=datetime.datetime(1979, 6, 15, 12, 31, 15,
++                                               tzinfo=UTC),
++                complete=False, results=-1, bsid=91),
++              dict(external_idstring='extid', reason='rsn2', sourcestampid=91,
++                submitted_at=datetime.datetime(1978, 6, 15, 12, 31, 16,
++                                               tzinfo=UTC),
++                complete_at=datetime.datetime(1979, 6, 15, 12, 31, 16,
++                                               tzinfo=UTC),
++                complete=True, results=7, bsid=92),
++            ])
++        d.addCallback(check)
++        return d
++
++    def test_getRecentBuildsets_one(self):
++        d = self.insert_test_getRecentBuildsets_data()
++        d.addCallback(lambda _ :
++                self.db.buildsets.getRecentBuildsets(1, branch='branch_a',
++                                                     repository='repo_a'))
++        def check(bsdictlist):
++            self.assertEqual(bsdictlist, [
++              dict(external_idstring='extid', reason='rsn2', sourcestampid=91,
++                submitted_at=datetime.datetime(1978, 6, 15, 12, 31, 16,
++                                               tzinfo=UTC),
++                complete_at=datetime.datetime(1979, 6, 15, 12, 31, 16,
++                                               tzinfo=UTC),
++                complete=True, results=7, bsid=92),
++            ])
++        d.addCallback(check)
++        return d
++
++    def test_getRecentBuildsets_zero(self):
++        d = self.insert_test_getRecentBuildsets_data()
++        d.addCallback(lambda _ :
++                self.db.buildsets.getRecentBuildsets(0, branch='branch_a',
++                                                     repository='repo_a'))
++        def check(bsdictlist):
++            self.assertEqual(bsdictlist, [])
++        d.addCallback(check)
++        return d
++
++    def test_getRecentBuildsets_noBranchMatch(self):
++        d = self.insert_test_getRecentBuildsets_data()
++        d.addCallback(lambda _ :
++                self.db.buildsets.getRecentBuildsets(2, branch='bad_branch',
++                                                     repository='repo_a'))
++        def check(bsdictlist):
++            self.assertEqual(bsdictlist, [])
++        d.addCallback(check)
++        return d
++
++    def test_getRecentBuildsets_noRepoMatch(self):
++          d = self.insert_test_getRecentBuildsets_data()
++          d.addCallback(lambda _ :
++                  self.db.buildsets.getRecentBuildsets(2, branch='branch_a',
++                                                       repository='bad_repo'))
++          def check(bsdictlist):
++              self.assertEqual(bsdictlist, [])
++          d.addCallback(check)
++          return d
