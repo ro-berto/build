@@ -16,11 +16,13 @@ DEPS = [
   'chromium',
   'gclient',
   'isolate',
+  'json',
   'platform',
   'properties',
   'step_history',
   'swarming',
   'swarming_client',
+  'test_utils',
 ]
 
 
@@ -69,7 +71,10 @@ def GenSteps(api):
 
   # Make swarming tasks that run isolated tests.
   tasks = [
-    api.swarming.gtest_task(test, isolated_hash)
+    api.swarming.gtest_task(
+        test,
+        isolated_hash,
+        test_launcher_summary_output=api.json.gtest_results(add_json_log=False))
     for test, isolated_hash in sorted(api.isolate.isolated_tests.iteritems())
   ]
 
@@ -78,8 +83,15 @@ def GenSteps(api):
   # to compile tests.
   yield api.swarming.trigger(tasks)
 
-  # And wait for them to finish.
-  yield api.swarming.collect(tasks)
+  # And wait for them to finish. Ensure JSON result collection is working.
+  def followup_fn(step_result):
+    r = step_result.json.gtest_results
+    p = step_result.presentation
+    if r.valid:
+      p.step_text += api.test_utils.format_step_text([
+          ['failures:', r.failures]
+      ])
+  yield api.swarming.collect(tasks, followup_fn=followup_fn)
 
 
 def GenTests(api):
