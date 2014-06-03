@@ -164,22 +164,30 @@ ENABLED_MASTERS += internal_data.get('ENABLED_MASTERS', [])
 
 ENABLED_BUILDERS = {
     'tryserver.chromium': [
-        'linux_arm_cross_compile',
-        'linux_rel_alt',
+        # Bots are added to this list such that builders which share
+        # a build directory are turned on at the same time.
 
-        # While these may look redundent, they're used to tell the
-        # recipe_simulation_test that these builders are active.
+        # android_chromium_gn/
         'android_chromium_gn_compile_dbg',
         'android_chromium_gn_compile_rel',
-        'chromium_presubmit',
-        'linux_chromium_gn_dbg',
-        'linux_chromium_gn_rel',
 
-        # Experimental Trusty bots.
+        # linux/
+        'chromium_presubmit',
         'linux_chromium_trusty32_dbg',
         'linux_chromium_trusty32_rel',
         'linux_chromium_trusty_dbg',
         'linux_chromium_trusty_rel',
+        'linux_rel_alt',
+
+        # linux_arm_cross_compile/
+        'linux_arm_cross_compile',
+
+        # linux_chromium_gn/
+        'linux_chromium_gn_dbg',
+        'linux_chromium_gn_rel',
+
+        # linux_precise32/
+        'linux_rel_precise32',
     ],
     'tryserver.blink': [
         'linux_blink_bot_update',
