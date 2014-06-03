@@ -33,7 +33,7 @@ chromium_utils = imp.load_source(
 
 
 def find_free_port():
-  '''Find an avaible port on localhost.'''
+  """Find an avaible port on localhost."""
   sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
   sock.bind(('', 0))
   port = sock.getsockname()[1]
@@ -42,7 +42,7 @@ def find_free_port():
 
 
 class LocalGitServer(object):
-  '''A git server daemon running on localhost.'''
+  """A git server daemon running on localhost."""
   def __init__(self, root):
     self.root = root
     self.port = find_free_port()
@@ -63,7 +63,7 @@ class LocalGitServer(object):
 
 
 class LocalSvnServer(object):
-  '''An svnserve daemon running on localhost.'''
+  """An svnserve daemon running on localhost."""
   def __init__(self, root):
     self.root = root
     self.pid_file = os.path.join(root, 'svnserve.pid')
@@ -100,7 +100,7 @@ class LocalSvnServer(object):
 
 class BotUpdateTest(unittest.TestCase):
 
-  '''
+  """
   POPULATE_DATA = {
     'TEST METHOD': [
       ('REPO NAME', [
@@ -150,7 +150,7 @@ class BotUpdateTest(unittest.TestCase):
   contents of files from previous commits, and there is no syntax for deletion.
   In the example, after MyRepo is processed, its tip-of-tree will contain two
   files: [file1.txt, file2.txt].
-  '''
+  """
 
   SVN_POPULATE_DATA = {
     'test_002_svn': [
@@ -232,7 +232,7 @@ class BotUpdateTest(unittest.TestCase):
 
   @staticmethod
   def dump_subproc(result):
-    '''Pretty-prints a SUBPROCESS_RESULT object.'''
+    """Pretty-prints a SUBPROCESS_RESULT object."""
     sep = '\n' + ('#' * 80) + '\n'
     print sep, 'Subprocess failed with status %d.\n' % result.status
     print result.cmd, '\n\n... in %s\n' % result.cwd
@@ -240,7 +240,7 @@ class BotUpdateTest(unittest.TestCase):
     print sep, '# stderr\n', sep, result.stderr, '\n', sep
 
   def subproc(self, cmd, cwd=None, stdin=None, timeout=15):
-    '''Runs a subprocess with a hard time limit.'''
+    """Runs a subprocess with a hard time limit."""
     if not cwd:
       cwd = self.workdir
     stdin_arg = PIPE if stdin else None
@@ -262,16 +262,16 @@ class BotUpdateTest(unittest.TestCase):
         cmd, cwd, p.returncode, thr.stdout, thr.stderr)
 
   def assertSubproc(self, cmd, cwd=None, stdin=None, timeout=15):
-    '''Runs a subprocess and asserts that it exits with zero status.'''
+    """Runs a subprocess and asserts that it exits with zero status."""
     result = self.subproc(cmd, cwd, stdin, timeout)
     self.assertEqual(result.status, 0)
     return result
 
   @staticmethod
   def get_files(d):
-    '''Walks a directory tree, skipping any .git directories, and return all
+    """Walks a directory tree, skipping any .git directories, and return all
     regular files in it.
-    '''
+    """
     result = []
     for dirpath, dirnames, filenames in os.walk(d):
       for f in filenames:
@@ -306,9 +306,9 @@ class BotUpdateTest(unittest.TestCase):
     chromium_utils.RemoveDirectory(cls.server_root)
 
   def _populate_svn_repo(self, repo):
-    '''Takes a repository described in SVN_POPULATE_DATA and instantiates it on
+    """Takes a repository described in SVN_POPULATE_DATA and instantiates it on
     the local svn server.
-    '''
+    """
     self.template_dict['%s_url' % repo.path] = repo.url
 
     # Create the top-level path for the repository.
@@ -344,7 +344,7 @@ class BotUpdateTest(unittest.TestCase):
       self.template_dict['%s_revision_%d' % (repo.path, i)] = svn_revision[0]
 
   def _populate_svn_git_mirror(self, repo, mirror):
-    '''Mirrors an svn repository in to a git repository.'''
+    """Mirrors an svn repository in to a git repository."""
     self.template_dict['%s_mirror_url' % repo.path] = mirror.url
 
     # Create and initialize the repository on the server
@@ -370,7 +370,7 @@ class BotUpdateTest(unittest.TestCase):
       self.template_dict['%s_git_revision_%d' % (repo.path, i)] = sha1
 
   def _populate_git_repo(self, repo):
-    '''Populates a pure-git repository as defined in GIT_POPULATE_DATA.'''
+    """Populates a pure-git repository as defined in GIT_POPULATE_DATA."""
     self.template_dict['%s_url' % repo.path] = repo.url + '.git'
 
     # Create and initialize the repository on the server
@@ -400,7 +400,7 @@ class BotUpdateTest(unittest.TestCase):
                         'HEAD:refs/heads/master'], repo.populate_dir)
 
   def populate_svn(self):
-    '''Populates the local svn server with the repositories described in
+    """Populates the local svn server with the repositories described in
     SVN_POPULATE_DATA for the current test method, and then creates git mirrors
     of the repositories on the local git server.
 
@@ -408,7 +408,7 @@ class BotUpdateTest(unittest.TestCase):
     name being run, for disambiguation.  For example, if the method
     BotUpdateTest.test_999_horse defines a repo named 'feathers', it will be
     instantiated as <svn root>/BotUpdateTest/test_999_horse/feathers.
-    '''
+    """
     test_prefix_parts = self.test_prefix.split('.')
     self.template_dict.update({
        'svn_server_url': self.svn_server.url,
@@ -432,14 +432,14 @@ class BotUpdateTest(unittest.TestCase):
       self._populate_svn_git_mirror(repo, mirror)
 
   def populate_git(self):
-    '''Populates the local git server with the repositories described in
+    """Populates the local git server with the repositories described in
     GIT_POPULATE_DATA for the current test method.
 
     The repository name is always prefixed with the test class and test method
     name being run, for disambiguation.  For example, if the method
     BotUpdateTest.test_999_horse defines a repo named 'feathers', it will be
     instantiated as <git root>/BotUpdateTest/test_999_horse/feathers.
-    '''
+    """
     test_prefix_parts = self.test_prefix.split('.')
     self.template_dict.update({
        'git_server_url': self.git_server.url,
@@ -476,8 +476,37 @@ class BotUpdateTest(unittest.TestCase):
   def tearDown(self):
     chromium_utils.RemoveDirectory(self.workdir)
 
+  @staticmethod
+  def capture_terminal(f, *args, **kwargs):
+    """Run f() with sys.stdout and sys.stderr reassigned to buffered pipes."""
+
+    old_std = (sys.stdout, sys.stderr)
+    (out_buf, err_buf) = (StringIO(), StringIO())
+    (out_pipe, err_pipe) = (os.pipe(), os.pipe())
+    def _thr_main(fd, buf):
+      with os.fdopen(fd) as fh:
+        buf.write(fh.read())
+    (out_thread, err_thread) = (
+        threading.Thread(target=_thr_main, args=(out_pipe[0], out_buf)),
+        threading.Thread(target=_thr_main, args=(err_pipe[0], err_buf)))
+    out_thread.start()
+    err_thread.start()
+    sys.stdout = os.fdopen(out_pipe[1], 'w')
+    sys.stderr = os.fdopen(err_pipe[1], 'w')
+    try:
+      result = f(*args, **kwargs)
+    except Exception as e:
+      sys.excepthook(*sys.exc_info())
+      result = e
+    sys.stdout.close()
+    sys.stderr.close()
+    out_thread.join()
+    err_thread.join()
+    (sys.stdout, sys.stderr) = old_std
+    return result, out_buf, err_buf
+
   def run_bot_update(self, tweak_module_func=None):
-    '''Runs the main() method of bot_update.py.
+    """Runs the main() method of bot_update.py.
 
     This emulates a subprocess call, without actually shelling out.  That makes
     it easier to debug tests, as a debugger can step directly into
@@ -486,31 +515,29 @@ class BotUpdateTest(unittest.TestCase):
     tweak_module_func can be used to modify the bot_udpate module before
     main() is invoked.  Since the module is unloaded at the end of this method,
     tweaks do not persist between invocations.
-    '''
-
-    old_sys = (sys.argv, sys.stdout, sys.stderr)
+    """
+    old_argv = sys.argv
     sys.argv = self.bu_args
-    sys.stdout = StringIO()
-    sys.stderr = StringIO()
+    old_cwd = os.getcwd()
     os.chdir(self.builddir)
-    bot_update = imp.load_source('bot_update', BOT_UPDATE_PATH)
+    mod = imp.load_source('bot_update', BOT_UPDATE_PATH)
+    mod.UPLOAD_TELEMETRY = False
     if tweak_module_func:
-      tweak_module_func(bot_update)
-    try:
-      status = bot_update.main()
-      if status is None:
-        status = 0
-    except Exception:
+      tweak_module_func(mod)
+    status, stdout, stderr = self.capture_terminal(mod.main)
+    if isinstance(status, Exception):
       status = 1
+    elif status is None:
+      status = 0
+    os.chdir(old_cwd)
+    sys.argv = old_argv
     del sys.modules['bot_update']
-    del bot_update
-    (stdout, stderr) = (sys.stdout, sys.stderr)
-    (sys.argv, sys.stdout, sys.stderr) = old_sys
+    del mod
     return self.SUBPROCESS_RESULT(self.bu_args, self.builddir, status,
                                   stdout.getvalue(), stderr.getvalue())
 
   def test_001_simple(self):
-    '''Tests a git solution with git-style DEPS, and no .DEPS.git.'''
+    """Tests a git solution with git-style DEPS, and no .DEPS.git."""
     solution = {
         'name': 'top',
         'url': '%s/BotUpdateTest/test_001_simple/top.git' % self.git_server.url,
@@ -545,7 +572,7 @@ class BotUpdateTest(unittest.TestCase):
     self.assertDictContainsSubset(expected_json, actual_json)
 
   def test_002_svn(self):
-    '''Tests an svn-based solution with svn DEPS and git .DEPS.git.'''
+    """Tests an svn-based solution with svn DEPS and git .DEPS.git."""
     solution = {
         'name': 'top',
         'url': '%s/BotUpdateTest/test_002_svn/top' % self.svn_server.url,
