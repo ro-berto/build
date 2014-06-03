@@ -159,7 +159,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/buildtools/checkdeps/checkdeps.py",
+      "[SLAVE_BUILD]/src/tools/checkdeps/checkdeps.py",
       "--json",
       "/path/to/tmp/json"
     ],
