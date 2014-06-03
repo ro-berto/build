@@ -223,6 +223,12 @@ class AutoRoller(object):
     return os.path.join(self._path_to_chrome, *components)
 
   def _last_roll_revision(self):
+    """Returns the revision of the last roll.
+
+    Returns:
+        revision of the last roll; either a 40-character Git commit hash or an
+        SVN revision number.
+    """
     if not self._cached_last_roll_revision:
       subprocess2.check_call(['git', '--git-dir', self._chromium_git_dir,
                               'fetch'])
@@ -232,6 +238,9 @@ class AutoRoller(object):
       pattern = self.REVISION_REGEXP % self._project_alias
       match = re.search(pattern, deps_contents, re.MULTILINE)
       self._cached_last_roll_revision = match.group('revision')
+    if scm.GIT.IsValidRevision(self._project_git_dir,
+                               self._cached_last_roll_revision):
+      assert len(self._cached_last_roll_revision) == 40
     return self._cached_last_roll_revision
 
   def _current_revision(self):
@@ -297,6 +306,8 @@ class AutoRoller(object):
       return True
 
     last_roll_revision = self._last_roll_revision()
+    if scm.GIT.IsValidRevision(self._project_git_dir, last_roll_revision):
+      last_roll_revision = self._short_rev(last_roll_revision)
     match = re.match(
         self.ROLL_DESCRIPTION_REGEXP % {'project': self._project.title()},
         issue['description'])
