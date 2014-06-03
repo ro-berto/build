@@ -33,6 +33,7 @@ OZONE_TESTS = [
     # 'jingle_unittests', Later.
     'media_unittests',
     'net_unittests',
+    'ozone_unittests',
     'ppapi_unittests',
     # 'printing_unittests', Not sensible.
     'sandbox_linux_unittests',
