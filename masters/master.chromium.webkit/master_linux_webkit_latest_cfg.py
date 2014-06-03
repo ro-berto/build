@@ -103,6 +103,33 @@ F('f_webkit_linux_rel_asan', linux().ChromiumFactory(
         'time_out_ms': '48000',  # ASAN is roughly 8x slower than Release.
     }))
 
+B('WebKit Linux Oilpan ASAN', 'f_webkit_linux_oilpan_rel_asan',
+    scheduler='global_scheduler', auto_reboot=False, category='oilpan')
+F('f_webkit_linux_oilpan_rel_asan', linux().ChromiumFactory(
+    tests=['webkit'],
+    options=[
+        '--build-tool=ninja',
+        '--compiler=goma-clang',
+        '--',
+        'blink_tests'
+    ],
+    factory_properties={
+        'additional_expectations': [
+            ['third_party', 'WebKit', 'LayoutTests', 'ASANExpectations' ],
+        ],
+        'archive_webkit_results': ActiveMaster.is_production_host,
+        'asan': True,
+        'blink_config': 'blink',
+        'gclient_env': {
+          'GYP_DEFINES': asan_gyp + ' enable_oilpan=1',
+          'GYP_GENERATORS': 'ninja',
+        },
+        'generate_gtest_json': True,
+        'gs_bucket': 'gs://webkit-asan',
+        'test_results_server': 'test-results.appspot.com',
+        'time_out_ms': '48000',  # ASAN is roughly 8x slower than Release.
+    }))
+
 B('WebKit Linux Leak', 'f_webkit_linux_leak_rel', scheduler='global_scheduler',
     category='oilpan')
 F('f_webkit_linux_leak_rel', linux().ChromiumFactory(
