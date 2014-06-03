@@ -594,6 +594,29 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
+      'Chromium Linux MSan': {
+        'recipe_config': 'chromium_clang',
+        'GYP_DEFINES': {
+          'msan': 1,
+          'use_allocator': 'none',
+          # See http://www.chromium.org/developers/testing/memorysanitizer for
+          # explanation of these flags.
+          'use_custom_libcxx': 1,
+          'use_instrumented_libraries': 1,
+          'v8_target_arch': 'arm64',
+        },
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': [
+          DynamicGTestTests('Chromium Linux MSan'),
+        ],
+        'testing': {
+          'platform': 'linux',
+        },
+      },
     },
   },
   'chromium.linux': {
