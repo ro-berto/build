@@ -198,6 +198,7 @@
       "crypto_unittests",
       "device_unittests",
       "events_unittests",
+      "gfx_unittests",
       "gpu_unittests",
       "ipc_tests",
       "media_unittests",
@@ -442,6 +443,27 @@
       "events_unittests"
     ],
     "name": "events_unittests"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Debug",
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"chromium.testing.master\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"ozone_ecs\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"chromium.testing.master\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"ozone_ecs\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--builder-name=TestBuilder",
+      "--slave-name=TestSlavename",
+      "--build-number=571",
+      "--no-spawn-dbus",
+      "gfx_unittests"
+    ],
+    "name": "gfx_unittests"
   },
   {
     "always_run": true,
