@@ -23,6 +23,10 @@ from master import master_utils
 from master.try_job_base import TryJobBase
 
 
+# Number of recent buildsets used to initialize RietveldPollerWithCache's cache.
+MAX_RECENT_BUILDSETS_TO_INIT_CACHE = 10000
+
+
 class _ValidUserPoller(internet.TimerService):
   """Check chromium-access for users allowed to send jobs from Rietveld.
   """
@@ -241,10 +245,12 @@ class _RietveldPollerWithCache(base.PollingChangeSource):
   def _InitProcessedKeysCache(self):
     log.msg('[RPWC] Initializing processed keys cache...')
 
-    # Get all BuildBot build requests.
-    brdicts = yield self.master.db.buildrequests.getBuildRequests()
+    # Get recent BuildBot buildsets. We limit the number of fetched buildsets
+    # as otherwise fetching properties of all of them would take days.
+    bsdicts = yield self.master.db.buildsets.getRecentBuildsets(
+        MAX_RECENT_BUILDSETS_TO_INIT_CACHE)
 
-    log.msg('[RPWC] Received %d build request dicts' % len(brdicts))
+    log.msg('[RPWC] Received %d buildset dicts' % len(bsdicts))
 
     def asNaiveUTC(dt):
       if dt is None:
@@ -256,10 +262,10 @@ class _RietveldPollerWithCache(base.PollingChangeSource):
 
     # Compose a map of buildset ids to the submission timestamp.
     buildsets = {}
-    for brdict in brdicts:
-      bsid = brdict.get('buildsetid')
+    for bsdict in bsdicts:
+      bsid = bsdict.get('bsid')
       if bsid is not None:
-        buildsets[bsid] = asNaiveUTC(brdict.get('submitted_at'))
+        buildsets[bsid] = asNaiveUTC(bsdict.get('submitted_at'))
 
     log.msg('[RPWC] Processing %d buildsets' % len(buildsets))
 

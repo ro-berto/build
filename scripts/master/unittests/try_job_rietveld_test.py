@@ -37,18 +37,6 @@ TEST_RIETVELD_PAGES = [
 ]
 
 
-class MockBuildRequestsDB(object):
-
-  def __init__(self):
-    self._build_requests = []
-
-  def addBuildRequest(self, build_request):
-    self._build_requests.append(build_request)
-
-  def getBuildRequests(self):
-    return self._build_requests
-
-
 class MockBuildSetsDB(object):
 
     def __init__(self):
@@ -60,14 +48,16 @@ class MockBuildSetsDB(object):
     def getBuildsetProperties(self, bsid):
       return self._buildset_props[bsid]
 
+    def getRecentBuildsets(self, count):
+      bsids_desc = sorted(self._buildset_props.keys(), reverse=True)
+      return [{'bsid': bsid} for bsid in bsids_desc][:count]
+
 
 class MockDBCollection(object):
 
-    buildrequests = None
     buildsets = None
 
     def __init__(self):
-      self.buildrequests = MockBuildRequestsDB()
       self.buildsets = MockBuildSetsDB()
 
 
@@ -164,7 +154,6 @@ class RietveldPollerWithCacheTest(auto_stub.TestCase):
 
   def testDoesNotResubmitJobsAlreadyOnMaster(self):
     poller = try_job_rietveld._RietveldPollerWithCache(TEST_BASE_URL, 60)
-    self._mockMaster.db.buildrequests.addBuildRequest({'buildsetid': 42})
     self._mockMaster.db.buildsets.addBuildSetProperties(
         42, {'try_job_key': ('test_key_1', 'Try bot')})
     poller.master = self._mockMaster
@@ -172,6 +161,19 @@ class RietveldPollerWithCacheTest(auto_stub.TestCase):
     poller.poll()
     self.assertEquals(len(self._mockTJR.submitted_jobs), 1)
     self.assertEquals(self._mockTJR.submitted_jobs[0]['key'], 'test_key_2')
+
+  def testShouldLimitNumberOfBuildsetsUsedForInit(self):
+    self.mock(try_job_rietveld, 'MAX_RECENT_BUILDSETS_TO_INIT_CACHE', 1)
+    poller = try_job_rietveld._RietveldPollerWithCache(TEST_BASE_URL, 60)
+    self._mockMaster.db.buildsets.addBuildSetProperties(
+        42, {'try_job_key': ('test_key_1', 'Try bot')})
+    self._mockMaster.db.buildsets.addBuildSetProperties(
+        55, {'try_job_key': ('test_key_2', 'Try bot')})
+    poller.master = self._mockMaster
+    poller.setServiceParent(self._mockTJR)
+    poller.poll()
+    self.assertEquals(len(self._mockTJR.submitted_jobs), 1)
+    self.assertEquals(self._mockTJR.submitted_jobs[0]['key'], 'test_key_1')
 
 
 if __name__ == '__main__':
