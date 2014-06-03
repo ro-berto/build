@@ -15,6 +15,42 @@ DEPS = [
 
 
 BUILDERS = {
+  'chromium.webkit': {
+    'builders': {
+      'Android GN': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+        },
+        'gclient_apply_config': ['android', 'blink'],
+      },
+      'Linux GN': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+        },
+        'gclient_apply_config': ['blink'],
+      },
+    },
+  },
+  'tryserver.blink': {
+    'builders': {
+      'android_chromium_gn_compile_rel': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+        },
+        'gclient_apply_config': ['android', 'blink'],
+      },
+      'linux_chromium_gn_rel': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+        },
+        'gclient_apply_config': ['blink'],
+      },
+    },
+  },
   'chromium.linux': {
     'builders': {
       'Android GN': {
@@ -88,15 +124,6 @@ BUILDERS = {
       },
     },
   },
-  'fake_tryserver': {
-    'builders': {
-      'unittest_fake_trybotname': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-        },
-      },
-    },
-  },
 }
 
 def GenSteps(api):
@@ -119,6 +146,7 @@ def GenSteps(api):
     api.gclient.apply_config(c)
 
   # Overwrite custom deps variables based on build properties.
+  # TODO: Figure out how to make this work generally for custom revisions.
   for custom in bot_config.get('set_custom_vars', []):
     s = api.gclient.c.solutions
     s[0].custom_vars[custom['var']] = api.properties.get(
@@ -144,8 +172,8 @@ def GenTests(api):
   # TODO: crbug.com/354674. Figure out where to put "simulation"
   # tests. We should have one test for each bot this recipe runs on.
 
-  for mastername in ('chromium.linux', 'tryserver.chromium', 'client.v8'):
-    for buildername in BUILDERS.get(mastername)['builders']:
+  for mastername in BUILDERS:
+    for buildername in BUILDERS[mastername]['builders']:
       test = (
           api.test('full_%s_%s' % (_sanitize_nonalpha(mastername),
                                    _sanitize_nonalpha(buildername))) +

@@ -202,6 +202,7 @@ def chrome_internal(c):
 
 @config_ctx(includes=['chromium'])
 def blink(c):
+  c.solutions[0].revision = 'HEAD'
   del c.solutions[0].custom_deps
   c.revisions['src/third_party/WebKit'] = 'HEAD'
 
