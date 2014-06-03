@@ -370,9 +370,6 @@
       "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "USE_LEGACY_COMMON_JAVAC": "false"
-    },
     "name": "compile"
   }
 ]
