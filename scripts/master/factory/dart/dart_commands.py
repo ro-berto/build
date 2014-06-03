@@ -202,7 +202,7 @@ class DartCommands(commands.FactoryCommands):
       cmd += ' --vm-options=%s' % vm_options
     if options.get('flags') != None:
       cmd += options.get('flags')
-    if channel and channel.name == 'be':
+    if channel and (channel.name == 'be' or channel.name == 'dev'):
       cmd += ' --exclude-suite=pkg'
 
     checked_config = options.get('checked_config')
