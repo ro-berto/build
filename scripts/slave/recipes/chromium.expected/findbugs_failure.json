@@ -143,7 +143,11 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "base_unittests_apk"
+      "android_webview_test_apk",
+      "base_unittests_apk",
+      "chrome_shell_test_apk",
+      "content_shell_test_apk",
+      "mojo_test_apk"
     ],
     "name": "compile",
     "seed_steps": [

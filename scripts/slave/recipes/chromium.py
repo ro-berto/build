@@ -163,6 +163,29 @@ class NaclIntegrationTest(object):
     return ['chrome']
 
 
+class AndroidInstrumentationTest(object):
+  def __init__(self, name, compile_target, test_data=None,
+               adb_install_apk=None):
+    self.name = name
+    self.compile_target = compile_target
+
+    self.test_data = test_data
+    self.adb_install_apk = adb_install_apk
+
+  def run(self, api):
+    assert api.chromium.c.TARGET_PLATFORM == 'android'
+    if self.adb_install_apk:
+      yield api.chromium_android.adb_install_apk(
+          self.adb_install_apk[0], self.adb_install_apk[1])
+    yield api.chromium_android.run_instrumentation_suite(
+        self.name, test_data=self.test_data,
+        flakiness_dashboard='test-results.appspot.com',
+        verbose=True)
+
+  def compile_targets(self, _):
+    return [self.compile_target]
+
+
 # Make it easy to change how different configurations of this recipe
 # work without making buildbot-side changes. This contains a dictionary
 # of buildbot masters, and each of these dictionaries maps a builder name
@@ -759,6 +782,22 @@ BUILDERS = {
         'android_config': 'tests_base',
         'tests': [
           GTestTest('base_unittests'),
+          AndroidInstrumentationTest('MojoTest', 'mojo_test_apk'),
+          AndroidInstrumentationTest(
+              'AndroidWebViewTest', 'android_webview_test_apk',
+              test_data='webview:android_webview/test/data/device_files',
+              adb_install_apk=(
+                  'AndroidWebView.apk', 'org.chromium.android_webview.shell')),
+          AndroidInstrumentationTest(
+              'ChromeShellTest', 'chrome_shell_test_apk',
+              test_data='chrome:chrome/test/data/android/device_files',
+              adb_install_apk=(
+                  'ChromeShell.apk', 'org.chromium.chrome.shell')),
+          AndroidInstrumentationTest(
+              'ContentShellTest', 'content_shell_test_apk',
+              test_data='content:content/test/data/android/device_files',
+              adb_install_apk=(
+                  'ContentShell.apk', 'org.chromium.content_shell_apk')),
         ],
         'testing': {
           'platform': 'linux',
@@ -790,6 +829,22 @@ BUILDERS = {
         'android_config': 'tests_base',
         'tests': [
           GTestTest('base_unittests'),
+          AndroidInstrumentationTest('MojoTest', 'mojo_test_apk'),
+          AndroidInstrumentationTest(
+              'AndroidWebViewTest', 'android_webview_test_apk',
+              test_data='webview:android_webview/test/data/device_files',
+              adb_install_apk=(
+                  'AndroidWebView.apk', 'org.chromium.android_webview.shell')),
+          AndroidInstrumentationTest(
+              'ChromeShellTest', 'chrome_shell_test_apk',
+              test_data='chrome:chrome/test/data/android/device_files',
+              adb_install_apk=(
+                  'ChromeShell.apk', 'org.chromium.chrome.shell')),
+          AndroidInstrumentationTest(
+              'ContentShellTest', 'content_shell_test_apk',
+              test_data='content:content/test/data/android/device_files',
+              adb_install_apk=(
+                  'ContentShell.apk', 'org.chromium.content_shell_apk')),
         ],
         'testing': {
           'platform': 'linux',
@@ -1708,14 +1763,15 @@ def GenSteps(api):
 
   if (api.chromium.c.TARGET_PLATFORM == 'android' and
       bot_type in ['tester', 'builder_tester']):
-    steps.extend([
-        api.chromium_android.device_status_check(abort_on_failure=True),
-        api.chromium_android.provision_devices(abort_on_failure=True),
-    ])
+    steps.append(api.chromium_android.common_tests_setup_steps())
 
   if not bot_config.get('do_not_run_tests'):
     test_steps = [t.run(api) for t in bot_config.get('tests', [])]
     steps.extend(api.chromium.setup_tests(bot_type, test_steps))
+
+  if (api.chromium.c.TARGET_PLATFORM == 'android' and
+      bot_type in ['tester', 'builder_tester']):
+    steps.append(api.chromium_android.common_tests_final_steps())
 
   # For non-trybot recipes we should know (seed) all steps in advance,
   # at the beginning of each build. Instead of yielding single steps

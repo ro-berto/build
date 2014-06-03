@@ -354,6 +354,19 @@ class AndroidApi(recipe_api.RecipeApi):
         deploy_cmd.extend(self.c.extra_deploy_opts)
       yield self.m.step('deploy_on_devices', deploy_cmd, env=self.get_env())
 
+  def adb_install_apk(self, apk, apk_package):
+    install_cmd = [
+        self.m.path['checkout'].join('build',
+                                     'android',
+                                     'adb_install_apk.py'),
+        '--apk', apk,
+        '--apk_package', apk_package
+    ]
+    if self.m.chromium.c.BUILD_CONFIG == 'Release':
+      install_cmd.append('--release')
+    yield self.m.step('install ' + apk, install_cmd,
+                      env=self.get_env(), always_run=True)
+
   def instrumentation_tests(self):
     dev_status_step = self.m.step_history.get('device_status_check')
     setup_success = dev_status_step and dev_status_step.retcode == 0
@@ -361,17 +374,8 @@ class AndroidApi(recipe_api.RecipeApi):
       deploy_step = self.m.step_history.get('deploy_on_devices')
       setup_success = deploy_step and deploy_step.retcode == 0
     if setup_success:
-      install_cmd = [
-          self.m.path['checkout'].join('build',
-                                       'android',
-                                       'adb_install_apk.py'),
-          '--apk', 'ChromeTest.apk',
-          '--apk_package', 'com.google.android.apps.chrome.tests'
-      ]
-      # TODO(sivachandra): Add --release option to install_cmd when those
-      # testers are added.
-      yield self.m.step('install ChromeTest.apk', install_cmd,
-                        env=self.get_env(),  always_run=True)
+      yield self.adb_install_apk(
+          'ChromeTest.apk', 'com.google.android.apps.chrome.tests')
       if self.m.step_history.last_step().retcode == 0:
         args = (['--test=%s' % s for s in self.c.tests] +
                 ['--checkout-dir', self.m.path['checkout'],
@@ -442,18 +446,23 @@ class AndroidApi(recipe_api.RecipeApi):
           test_type=test_name,
           always_run=True)
 
-  def run_instrumentation_suite(self, test_apk, test_data, flakiness_dashboard,
+  def run_instrumentation_suite(self, test_apk, test_data=None,
+                                flakiness_dashboard=None,
                                 annotation=None, except_annotation=None,
-                                screenshot=False, **kwargs):
-    args = ['--test-apk', test_apk,
-            '--test_data', test_data,
-            '--flakiness-dashboard-server', flakiness_dashboard]
+                                screenshot=False, verbose=False, **kwargs):
+    args = ['--test-apk', test_apk]
+    if test_data:
+      args.extend(['--test_data', test_data])
+    if flakiness_dashboard:
+      args.extend(['--flakiness-dashboard-server', flakiness_dashboard])
     if annotation:
       args.extend(['-A', annotation])
     if except_annotation:
       args.extend(['-E', except_annotation])
     if screenshot:
       args.append('--screenshot')
+    if verbose:
+      args.append('--verbose')
     if self.m.chromium.c.BUILD_CONFIG == 'Release':
       args.append('--release')
     if self.c.coverage:
