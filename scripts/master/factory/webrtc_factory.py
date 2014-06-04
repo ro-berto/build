@@ -77,9 +77,6 @@ class WebRTCFactory(chromium_factory.ChromiumFactory):
             '/deps/third_party/drmemory/drmemory.DEPS',
             'drmemory.DEPS'))
 
-    # Ensure GYP errors out if files referenced in .gyp files are missing.
-    self.ForceMissingFilesToBeFatal(project, factory_properties['gclient_env'])
-
     factory = self.BuildFactory(target, clobber, tests, mode, slave_type,
                                 options, compile_timeout, build_url, project,
                                 factory_properties, gclient_deps)

@@ -174,7 +174,6 @@ def msvs(c):
   if c.HOST_PLATFORM != 'win':
     raise BadConf('can not use msvs on "%s"' % c.HOST_PLATFORM)
   c.gyp_env.GYP_GENERATORS.add('msvs')
-  c.gyp_env.GYP_GENERATOR_FLAGS['msvs_error_on_missing_sources'] = 1
   c.compile_py.build_tool = 'msvs'
   c.build_dir = Path('[CHECKOUT]', 'build')
 

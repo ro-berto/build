@@ -968,14 +968,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # _AddTests() had the factory-specific tests stripped off.
     assert not tests, 'Did you make a typo? %s wasn\'t processed' % tests
 
-  def ForceMissingFilesToBeFatal(self, project, gclient_env):
-    """Force Windows bots to fail GYPing if referenced files do not exist."""
-    gyp_generator_flags = gclient_env.setdefault('GYP_GENERATOR_FLAGS', '')
-    if (self._target_platform == 'win32' and
-        'msvs_error_on_missing_sources=' not in gyp_generator_flags):
-      gclient_env['GYP_GENERATOR_FLAGS'] = (
-          gyp_generator_flags + ' msvs_error_on_missing_sources=1')
-
   def ChromiumFactory(self, target='Release', clobber=False, tests=None,
                       mode=None, slave_type='BuilderTester',
                       options=None, compile_timeout=1200, build_url=None,
@@ -1025,9 +1017,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
     # Ensure that component is set correctly in the gyp defines.
     ForceComponent(target, project, factory_properties['gclient_env'])
-
-    # Ensure GYP errors out if files referenced in .gyp files are missing.
-    self.ForceMissingFilesToBeFatal(project, factory_properties['gclient_env'])
 
     # There's 2 different windows SyzyASan builders:
     #     - The unittests builder, which build all the unittests, instrument
