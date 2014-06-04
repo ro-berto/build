@@ -51,7 +51,7 @@ class TryserverApi(recipe_api.RecipeApi):
         '--remove-empty-files',
         '--strip', '0',
     ]
-    yield self.m.step('apply patch', patch_cmd)
+    yield self.m.step('apply patch', patch_cmd, abort_on_failure=True)
 
   def apply_from_svn(self, cwd):
     """Downloads patch from patch_url using svn-export and applies it"""
@@ -68,7 +68,8 @@ class TryserverApi(recipe_api.RecipeApi):
     svn_cmd = ['svn' + ext, 'export', '--force', patch_url, patch_file]
 
     yield self.m.step('download patch', svn_cmd, followup_fn=link_patch,
-                      step_test_data=self.test_api.download_patch)
+                      step_test_data=self.test_api.download_patch,
+                      abort_on_failure=True)
 
     patch_content = self.m.raw_io.input(
         self.m.step_history.last_step().raw_io.output)
@@ -86,13 +87,15 @@ class TryserverApi(recipe_api.RecipeApi):
     patch_path = patch_dir.join('patch.diff')
 
     yield (
-        self.m.python('patch git setup', git_setup_py, git_setup_args),
+        self.m.python('patch git setup', git_setup_py, git_setup_args,
+                      abort_on_failure=True),
         self.m.git('fetch', 'origin', patch_ref,
-                   name='patch fetch', cwd=patch_dir),
+                   name='patch fetch', cwd=patch_dir, abort_on_failure=True),
         self.m.git('clean', '-f', '-d', '-x',
-                   name='patch clean', cwd=patch_dir),
+                   name='patch clean', cwd=patch_dir, abort_on_failure=True),
         self.m.git('checkout', '-f', 'FETCH_HEAD',
-                   name='patch git checkout', cwd=patch_dir),
+                   name='patch git checkout', cwd=patch_dir,
+                   abort_on_failure=True),
         self._apply_patch_step(patch_path, cwd),
         self.m.step('remove patch', ['rm', '-rf', patch_dir]),
     )

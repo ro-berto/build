@@ -1,5 +1,6 @@
 [
   {
+    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -19,6 +20,7 @@
     ]
   },
   {
+    "abort_on_failure": true,
     "cmd": [
       "git",
       "fetch",
@@ -29,6 +31,7 @@
     "name": "patch fetch"
   },
   {
+    "abort_on_failure": true,
     "cmd": [
       "git",
       "clean",
@@ -40,6 +43,7 @@
     "name": "patch clean"
   },
   {
+    "abort_on_failure": true,
     "cmd": [
       "git",
       "checkout",
@@ -50,6 +54,7 @@
     "name": "patch git checkout"
   },
   {
+    "abort_on_failure": true,
     "cmd": [
       "patch",
       "--dir",

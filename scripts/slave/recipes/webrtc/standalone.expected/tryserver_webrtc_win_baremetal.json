@@ -54,6 +54,7 @@
     ]
   },
   {
+    "abort_on_failure": true,
     "cmd": [
       "svn.bat",
       "export",
@@ -68,6 +69,7 @@
     ]
   },
   {
+    "abort_on_failure": true,
     "cmd": [
       "patch",
       "--dir",
