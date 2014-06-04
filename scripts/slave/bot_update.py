@@ -222,6 +222,12 @@ ENABLED_BUILDERS = {
         'linux_chromium_clang_dbg',
         'linux_chromium_clang_rel',
 
+        # linux_layout/
+        'linux_layout',
+        'linux_layout_asan',
+        'linux_layout_rel',
+        'linux_layout_rel_32',
+
         # linux_precise32/
         'linux_rel_precise32',
     ],
