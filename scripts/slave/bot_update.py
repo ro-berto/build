@@ -283,6 +283,11 @@ DISABLED_BUILDERS = {
         'Chromium Linux Codesearch',
         'ChromiumOS Codesearch',
         'Chromium Linux Mojo',
+        # Failing all builds due to Git being too slow.
+        'Chromium Win Clang (asan)',
+        'Chromium Win Clang (dbg)',
+        'Chromium Win Clang',
+        # Dr. Memory.
         'Windows Browser (DrMemory light) (1)',
         'Windows Browser (DrMemory light) (2)',
         'Windows Builder (DrMemory)',
