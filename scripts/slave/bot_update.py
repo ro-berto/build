@@ -271,6 +271,9 @@ ENABLED_SLAVES = {
                           ['vm%d-m4' % i for i in range(800, 810)] +
                           ['vm%d-m4' % i for i in range(666, 671)] +
                           ['build%d-a4' % i for i in range(100, 140)],
+
+    # Mac blink trybots.
+    'tryserver.blink': ['vm%d-m4' % i for i in range(644, 655)],
 }
 ENABLED_SLAVES.update(internal_data.get('ENABLED_SLAVES', {}))
 
