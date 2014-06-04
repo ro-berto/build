@@ -194,6 +194,10 @@ ENABLED_BUILDERS = {
         'linux_chromium_gn_dbg',
         'linux_chromium_gn_rel',
 
+        # linux_clang/
+        'linux_chromium_clang_dbg',
+        'linux_chromium_clang_rel',
+
         # linux_precise32/
         'linux_rel_precise32',
     ],
