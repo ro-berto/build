@@ -431,6 +431,7 @@ BUILDERS = {
       },
       'Win64 Debug': {
         'recipe_config': 'webrtc',
+        'chromium_apply_config': ['static_library'],
         'webrtc_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
