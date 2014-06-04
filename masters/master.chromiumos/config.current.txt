@@ -1,7 +1,7 @@
 config = {
   'buildCacheSize': 200,
   'buildHorizon': 1000,
-  'buildbotURL': 'http://build.chromium.org/buildbot/chromiumos/',
+  'buildbotURL': 'http://build.chromium.org/p/chromiumos/',
   'builders': [
     {
       'auto_reboot': False,
@@ -710,7 +710,7 @@ config = {
   'projectName': 'ChromiumOS',
   'projectURL': 'http://www.chromium.org',
   'properties': {
-    'buildbotURL': 'http://build.chromium.org/buildbot/chromiumos/',
+    'buildbotURL': 'http://build.chromium.org/p/chromiumos/',
     'mastername': 'chromiumos',
   },
   'schedulers': [
