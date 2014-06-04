@@ -13,53 +13,60 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
   def output_json(self, has_failures=False, wrong_results=False):
     if not has_failures:
       return self.m.json.output([{
-        "arch": "theArch",
-        "mode": "theMode",
-        "results": [],
+        'arch': 'theArch',
+        'mode': 'theMode',
+        'results': [],
       }])
     if wrong_results:
       return self.m.json.output([{
-        "arch": "theArch1",
-        "mode": "theMode1",
-        "results": [],
+        'arch': 'theArch1',
+        'mode': 'theMode1',
+        'results': [],
       },
       {
-        "arch": "theArch2",
-        "mode": "theMode2",
-        "results": [],
+        'arch': 'theArch2',
+        'mode': 'theMode2',
+        'results': [],
       }])
     return self.m.json.output([{
-      "arch": "theArch",
-      "mode": "theMode",
-      "results": [{
-        "flags": ["--opt42"],
-        "result": "FAIL",
-        "stdout": "Some output.",
-        "stderr": "Some errput.",
-        "name": "suite-name/dir/test-name",
-        "command": "out/theMode/d8 --opt42 test/suite-name/dir/test-name.js",
-        "exit_code": 1,
+      'arch': 'theArch',
+      'mode': 'theMode',
+      'results': [{
+        'flags': ['--opt42'],
+        'result': 'FAIL',
+        'stdout': 'Some output.',
+        'stderr': 'Some errput.',
+        'name': 'suite-name/dir/test-name',
+        'command': 'out/theMode/d8 --opt42 test/suite-name/dir/test-name.js',
+        'exit_code': 1,
       },
       {
-        "flags": ["--other"],
-        "result": "FAIL",
-        "stdout": "Some output.",
-        "stderr": "Some errput.",
-        "name": "suite-name/dir/test-name",
-        "command": "out/theMode/d8 --other test/suite-name/dir/test-name.js",
-        "exit_code": 1,
+        'flags': ['--other'],
+        'result': 'FAIL',
+        'stdout': 'Some output.',
+        'stderr': 'Some errput.',
+        'name': 'suite-name/dir/test-name',
+        'command': 'out/theMode/d8 --other test/suite-name/dir/test-name.js',
+        'exit_code': 1,
       },
       {
-        "flags": ["--other"],
-        "result": "CRASH",
-        "stdout": "Some output\nwith\nmore\nlines.",
-        "stderr": "Some errput.",
-        "name": "other-suite/dir/other-test-very-long-name",
-        "command": ("out/theMode/d8 --other "
-                    "test/other-suite/dir/other-test-very-long-name.js"),
-        "exit_code": 1,
+        'flags': ['--other'],
+        'result': 'CRASH',
+        'stdout': 'Some output\nwith\nmore\nlines.',
+        'stderr': 'Some errput.',
+        'name': 'other-suite/dir/other-test-very-long-name',
+        'command': ('out/theMode/d8 --other '
+                    'test/other-suite/dir/other-test-very-long-name.js'),
+        'exit_code': 1,
       }],
     }])
+
+  def perf_json(self, has_failures=False):
+    result = {'errors': [], 'traces':[]}
+    if has_failures:
+      result['errors'].extend(['Error line 1.',
+                               'Error line 2.'])
+    return self.m.json.output(result)
 
   @recipe_test_api.mod_test_data
   @staticmethod
@@ -71,6 +78,13 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
   def wrong_results(wrong_results):
     return wrong_results
 
-  def __call__(self, test_failures=False, wrong_results=False):
+  @recipe_test_api.mod_test_data
+  @staticmethod
+  def perf_failures(has_failures):
+    return has_failures
+
+  def __call__(self, test_failures=False, wrong_results=False,
+               perf_failures=False):
     return (self.test_failures(test_failures) +
-            self.wrong_results(wrong_results))
+            self.wrong_results(wrong_results) +
+            self.perf_failures(perf_failures))

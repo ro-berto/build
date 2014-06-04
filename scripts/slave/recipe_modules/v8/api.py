@@ -235,6 +235,10 @@ class V8Api(recipe_api.RecipeApi):
   def should_download_build(self):
     return self.bot_type == 'tester'
 
+  @property
+  def perf_tests(self):
+    return self.bot_config.get('perf', [])
+
   def compile(self, **kwargs):
     yield self.m.chromium.compile(**kwargs)
 
@@ -456,14 +460,29 @@ class V8Api(recipe_api.RecipeApi):
     else:
       return self._runtest(test['name'], test, **kwargs)
 
-
-  def runperf(self, perf_configs):
+  def runperf(self, tests, perf_configs):
     def run_single_perf_test(name, json_file):
+      """Call the v8 benchmark suite runner.
+
+      Performance results are saved in the json test results file as a dict with
+      'errors' for accumulated errors and 'traces' for the measurements.
+      """
       full_args = [
         '--arch', self.m.chromium.c.gyp_env.GYP_DEFINES['v8_target_arch'],
         '--buildbot',
+        '--json-test-results', self.m.json.output(add_json_log=False),
         json_file,
       ]
+
+      def followup_fn(step_result):
+        """Log accumulated errors."""
+        errors = step_result.json.output['errors']
+        if errors:
+          step_result.presentation.logs['Errors'] = errors
+
+      step_test_data = lambda: self.test_api.perf_json(
+          self._test_data.get('perf_failures', False))
+
       # TODO(machenbach): Remove 'can_fail_build' as soon as performance tests
       # are stable.
       yield self.m.python(
@@ -471,12 +490,16 @@ class V8Api(recipe_api.RecipeApi):
         self.m.path['checkout'].join('tools', 'run_benchmarks.py'),
         full_args,
         cwd=self.m.path['checkout'],
+        followup_fn=followup_fn,
+        step_test_data=step_test_data,
         always_run=True,
         can_fail_build=False
       )
 
-    for t in self.bot_config.get('perf', []):
+    for t in tests:
       assert perf_configs[t]
       assert perf_configs[t]['name']
       assert perf_configs[t]['json']
       yield run_single_perf_test(perf_configs[t]['name'], perf_configs[t]['json'])
+
+    # TODO(machenbach): Upload to perf dashboard.    

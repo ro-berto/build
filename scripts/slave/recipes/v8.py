@@ -55,7 +55,7 @@ def GenSteps(api):
 
   if v8.should_test:
     yield v8.runtests()
-    yield v8.runperf(v8.PERF_CONFIGS)
+    yield v8.runperf(v8.perf_tests, v8.PERF_CONFIGS)
 
 
 def _sanitize_nonalpha(text):
