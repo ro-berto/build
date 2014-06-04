@@ -248,6 +248,8 @@ ENABLED_BUILDERS = {
         'linux_blink_compile_dbg',
         'linux_blink_compile_rel',
         'linux_blink_dbg',
+        'linux_blink_oilpan_dbg',
+        'linux_blink_oilpan_rel',
         'linux_blink_rel',
     ]
 }
