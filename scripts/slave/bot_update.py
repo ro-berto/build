@@ -206,6 +206,14 @@ ENABLED_BUILDERS = {
         # linux_arm_cross_compile/
         'linux_arm_cross_compile',
 
+        # linux_chromeos/
+        'linux_chromium_chromeos_dbg',
+        'linux_chromium_chromeos_rel',
+
+        # linux_chromeos_clang/
+        'linux_chromium_chromeos_clang_dbg',
+        'linux_chromium_chromeos_clang_rel',
+
         # linux_chromium_gn/
         'linux_chromium_gn_dbg',
         'linux_chromium_gn_rel',
