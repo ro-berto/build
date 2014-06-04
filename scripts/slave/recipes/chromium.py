@@ -1893,3 +1893,16 @@ def GenTests(api):
     api.platform('linux', 32) +
     api.step_data('findbugs', retcode=1)
   )
+
+  yield (
+    api.test('msan') +
+    api.properties.generic(mastername='chromium.fyi',
+                           buildername='Chromium Linux MSan') +
+    api.platform('linux', 64) +
+    api.override_step_data('read test spec', api.json.output({
+      'Chromium Linux MSan': {
+        'compile_targets': ['base_unittests'],
+        'gtest_tests': ['base_unittests'],
+      },
+    }))
+  )
