@@ -137,7 +137,6 @@ class ChromiumApi(recipe_api.RecipeApi):
       full_args.extend([
         '--generate-json-file',
         '-o', 'gtest-results/%s' % test,
-        '--test-type', test,
       ])
       # The flakiness dashboard needs the buildnumber, so we assert it here.
       assert self.m.properties.get('buildnumber')

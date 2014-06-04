@@ -1852,6 +1852,23 @@ def GenTests(api):
   )
 
   yield (
+    api.test('dynamic_gtest_win') +
+    api.properties.generic(mastername='chromium.win',
+                           buildername='Win7 Tests (1)',
+                           parent_buildername='Win Builder') +
+    api.platform('win', 64) +
+    api.override_step_data('read test spec', api.json.output({
+      'Win7 Tests (1)': {
+        'gtest_tests': [
+          'aura_unittests',
+          {'test': 'browser_tests', 'shard_index': 0, 'total_shards': 2},
+        ],
+      },
+    }))
+  )
+
+
+  yield (
     api.test('arm') +
     api.properties.generic(mastername='chromium.fyi',
                            buildername='Linux ARM Cross-Compile') +
