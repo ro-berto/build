@@ -486,6 +486,9 @@ BUILDERS = {
     }
   },
   'chromium.fyi': {
+    'settings': {
+      'build_gs_bucket': 'chromium-fyi-archive',
+    },
     'builders': {
       'Linux ARM Cross-Compile': {
         # TODO(phajdan.jr): Re-enable goma, http://crbug.com/349236 .
@@ -613,6 +616,21 @@ BUILDERS = {
         'tests': [
           DynamicGTestTests('Chromium Linux MSan'),
         ],
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'Chromium Linux MSan (browser tests)': {
+        'recipe_config': 'chromium_clang',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'tests': [
+          DynamicGTestTests('Chromium Linux MSan'),
+        ],
+        'parent_buildername': 'Chromium Linux MSan',
         'testing': {
           'platform': 'linux',
         },
