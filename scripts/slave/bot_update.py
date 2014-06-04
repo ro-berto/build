@@ -167,6 +167,18 @@ ENABLED_BUILDERS = {
         # Bots are added to this list such that builders which share
         # a build directory are turned on at the same time.
 
+        # android/
+        'android_dbg',
+        'android_dbg_triggered_tests',
+        'android_fyi_dbg',
+        'android_fyi_dbg_triggered_tests',
+        'android_gn_perf_bisect',
+        'android_nexus10_perf_bisect',
+        'android_nexus4_perf_bisect',
+        'android_perf_bisect_builder',
+        'android_rel',
+        'android_rel_triggered_tests',
+
         # android_chromium_gn/
         'android_chromium_gn_compile_dbg',
         'android_chromium_gn_compile_rel',
