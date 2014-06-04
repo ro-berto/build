@@ -623,7 +623,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         'blink_perf',
         'dom_perf',
         'image_decoding.tough_decoding_cases',
-        'jsgamebench',
         'kraken',
         'media.android',
         'media.media_cns_cases',
