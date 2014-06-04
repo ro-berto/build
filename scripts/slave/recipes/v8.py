@@ -19,7 +19,7 @@ DEPS = [
 
 def GenSteps(api):
   v8 = api.v8
-  v8.apply_bot_config()
+  v8.apply_bot_config(v8.BUILDERS)
 
   if api.tryserver.is_tryserver:
     v8.init_tryserver()
@@ -55,7 +55,7 @@ def GenSteps(api):
 
   if v8.should_test:
     yield v8.runtests()
-    yield v8.runperf()
+    yield v8.runperf(v8.PERF_CONFIGS)
 
 
 def _sanitize_nonalpha(text):

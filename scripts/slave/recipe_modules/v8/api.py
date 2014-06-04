@@ -49,13 +49,6 @@ TEST_CONFIGS = {
   },
 }
 
-PERF_CONFIGS = {
-  'experimental': {
-    'name': 'Experimental',
-    'json': os.path.join('benchmarks', 'v8.json'),
-  }
-}
-
 
 # TODO(machenbach): Clean up api indirection. "Run" needs the v8 api while
 # "gclient_apply_config" needs the general injection module.
@@ -129,6 +122,12 @@ def ChromiumSvnSubURL(c, *pieces):
 
 class V8Api(recipe_api.RecipeApi):
   BUILDERS = builders.BUILDERS
+  PERF_CONFIGS = {
+    'experimental': {
+      'name': 'Experimental',
+      'json': os.path.join('benchmarks', 'v8.json'),
+    }
+  }
 
   # Map of GS archive names to urls.
   GS_ARCHIVES = {
@@ -142,7 +141,7 @@ class V8Api(recipe_api.RecipeApi):
     'win32_dbg_archive': 'gs://chromium-v8/v8-win32-dbg',
   }
 
-  def apply_bot_config(self):
+  def apply_bot_config(self, builders):
     """Entry method for using the v8 api.
 
     Requires the presence of a bot_config dict for any master/builder pair.
@@ -152,7 +151,7 @@ class V8Api(recipe_api.RecipeApi):
     self.m.step.auto_resolve_conflicts = True
     mastername = self.m.properties.get('mastername')
     buildername = self.m.properties.get('buildername')
-    master_dict = self.BUILDERS.get(mastername, {})
+    master_dict = builders.get(mastername, {})
     self.bot_config = master_dict.get('builders', {}).get(buildername)
     assert self.bot_config, (
         'Unrecognized builder name %r for master %r.' % (
@@ -457,22 +456,27 @@ class V8Api(recipe_api.RecipeApi):
     else:
       return self._runtest(test['name'], test, **kwargs)
 
-  def _runperf(self, name):
-    full_args = [
-      '--arch', self.m.chromium.c.gyp_env.GYP_DEFINES['v8_target_arch'],
-      '--buildbot',
-      PERF_CONFIGS[name]['json'],
-    ]
-    # TODO(machenbach): Remove 'can_fail_build' as soon as performance tests
-    # are stable.
-    yield self.m.python(
-      PERF_CONFIGS[name]['name'],
-      self.m.path['checkout'].join('tools', 'run_benchmarks.py'),
-      full_args,
-      cwd=self.m.path['checkout'],
-      always_run=True,
-      can_fail_build=False
-    )
 
-  def runperf(self):
-    yield [self._runperf(t) for t in self.bot_config.get('perf', [])]
+  def runperf(self, perf_configs):
+    def run_single_perf_test(name, json_file):
+      full_args = [
+        '--arch', self.m.chromium.c.gyp_env.GYP_DEFINES['v8_target_arch'],
+        '--buildbot',
+        json_file,
+      ]
+      # TODO(machenbach): Remove 'can_fail_build' as soon as performance tests
+      # are stable.
+      yield self.m.python(
+        name,
+        self.m.path['checkout'].join('tools', 'run_benchmarks.py'),
+        full_args,
+        cwd=self.m.path['checkout'],
+        always_run=True,
+        can_fail_build=False
+      )
+
+    for t in self.bot_config.get('perf', []):
+      assert perf_configs[t]
+      assert perf_configs[t]['name']
+      assert perf_configs[t]['json']
+      yield run_single_perf_test(perf_configs[t]['name'], perf_configs[t]['json'])
