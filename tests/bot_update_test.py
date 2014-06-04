@@ -26,11 +26,16 @@ BUILD_DIR = os.path.realpath(os.path.join(
 BOT_UPDATE_PATH = os.path.join(BUILD_DIR, 'scripts', 'slave', 'bot_update.py')
 SLAVE_DIR = os.path.join(BUILD_DIR, 'slave')
 CACHE_DIR = os.path.join(SLAVE_DIR, 'cache_dir')
+DEPOT_TOOLS = os.path.realpath(os.path.join(BUILD_DIR, '..', 'depot_tools'))
+GIT_CL_PATH = os.path.realpath(os.path.join(DEPOT_TOOLS, 'git_cl.py'))
 
 chromium_utils = imp.load_source(
     'chromium_utils',
     os.path.join(BUILD_DIR, 'scripts', 'common', 'chromium_utils.py'))
 
+local_rietveld = imp.load_source(
+    'local_rietveld',
+    os.path.join(DEPOT_TOOLS, 'testing_support', 'local_rietveld.py'))
 
 def find_free_port():
   """Find an avaible port on localhost."""
@@ -39,6 +44,9 @@ def find_free_port():
   port = sock.getsockname()[1]
   sock.close()
   return port
+
+# The implementation of find_free_port in local_rietveld is super janky.
+local_rietveld.find_free_port = lambda _: find_free_port()
 
 
 class LocalGitServer(object):
@@ -152,68 +160,73 @@ class BotUpdateTest(unittest.TestCase):
   files: [file1.txt, file2.txt].
   """
 
+  SVN_BOILERPLATE = [
+    ('dep1', [
+      ('First commit', { 'path1/file1.txt': 'dep1 file 1 line 1.' }),
+      ('Second commit', { 'path2/file2.txt': 'dep1 file 2 line 1.' }),
+    ]),
+    ('dep2', [
+      ('First commit', { 'path1/file1.txt': 'dep2 file 1 line 1.' }),
+      ('Second commit', { 'path2/file2.txt': 'dep2 file 2 line 1.' }),
+    ]),
+    ('top', [
+      ('DEPS commit', {
+        'file1.txt': 'top file 1 line 1.',
+        'DEPS': dedent('''\
+            vars = {
+              'dep1_revision': '%(dep1_revision_0)s',
+              'dep2_revision': '%(dep2_revision_1)s',
+            }
+            deps = {
+              'top/ext/dep1': '%(dep1_url)s@' + Var('dep1_revision'),
+              'top/ext/dep2': '%(dep2_url)s@' + Var('dep2_revision'),
+            }
+            ''') }),
+      ('.DEPS.git commit', { '.DEPS.git': dedent('''\
+           vars = {
+             'dep1_revision': '%(dep1_git_revision_0)s',
+             'dep2_revision': '%(dep2_git_revision_1)s',
+           }
+           deps = {
+             'top/ext/dep1': '%(dep1_mirror_url)s@' + Var('dep1_revision'),
+             'top/ext/dep2': '%(dep2_mirror_url)s@' + Var('dep2_revision'),
+           }
+           ''') }),
+    ]),
+  ]
+
+  GIT_BOILERPLATE = [
+    ('dep1', [
+      ('First commit', { 'path1/file1.txt': 'dep1 file 1 line 1.' }),
+      ('Second commit', { 'path2/file2.txt': 'dep1 file 2 line 1.' }),
+    ]),
+    ('dep2', [
+      ('First commit', { 'path1/file1.txt': 'dep2 file 1 line 1.' }),
+      ('Second commit', { 'path2/file2.txt': 'dep2 file 2 line 1.' }),
+    ]),
+    ('top', [
+      ('DEPS commit', {
+        'file1.txt': 'top file 1 line 1.',
+        'DEPS': dedent('''\
+            vars = {
+              'dep1_revision': '%(dep1_revision_0)s',
+              'dep2_revision': '%(dep2_revision_1)s',
+            }
+            deps = {
+              'top/ext/dep1': '%(dep1_url)s@' + Var('dep1_revision'),
+              'top/ext/dep2': '%(dep2_url)s@' + Var('dep2_revision'),
+            }
+            ''') }),
+    ]),
+  ]
+
   SVN_POPULATE_DATA = {
-    'test_002_svn': [
-      ('dep1', [
-        ('First commit', { 'path1/file1.txt': 'dep1 file 1 line 1.' }),
-        ('Second commit', { 'path2/file2.txt': 'dep1 file 2 line 1.' }),
-      ]),
-      ('dep2', [
-        ('First commit', { 'path1/file1.txt': 'dep2 file 1 line 1.' }),
-        ('Second commit', { 'path2/file2.txt': 'dep2 file 2 line 1.' }),
-      ]),
-      ('top', [
-        ('DEPS commit', {
-          'file1.txt': 'top file 1 line 1.',
-          'DEPS': dedent('''\
-              vars = {
-                'dep1_revision': '%(dep1_revision_0)s',
-                'dep2_revision': '%(dep2_revision_1)s',
-              }
-              deps = {
-                'top/ext/dep1': '%(dep1_url)s@' + Var('dep1_revision'),
-                'top/ext/dep2': '%(dep2_url)s@' + Var('dep2_revision'),
-              }
-              ''') }),
-        ('.DEPS.git commit', { '.DEPS.git': dedent('''\
-             vars = {
-               'dep1_revision': '%(dep1_git_revision_0)s',
-               'dep2_revision': '%(dep2_git_revision_1)s',
-             }
-             deps = {
-               'top/ext/dep1': '%(dep1_mirror_url)s@' + Var('dep1_revision'),
-               'top/ext/dep2': '%(dep2_mirror_url)s@' + Var('dep2_revision'),
-             }
-             ''') }),
-      ]),
-    ],
+    'test_002_svn': SVN_BOILERPLATE,
+    'test_003_patch': SVN_BOILERPLATE,
   }
 
   GIT_POPULATE_DATA = {
-    'test_001_simple': [
-      ('dep1', [
-        ('First commit', { 'path1/file1.txt': 'dep1 file 1 line 1.' }),
-        ('Second commit', { 'path2/file2.txt': 'dep1 file 2 line 1.' }),
-      ]),
-      ('dep2', [
-        ('First commit', { 'path1/file1.txt': 'dep2 file 1 line 1.' }),
-        ('Second commit', { 'path2/file2.txt': 'dep2 file 2 line 1.' }),
-      ]),
-      ('top', [
-        ('DEPS commit', {
-          'file1.txt': 'top file 1 line 1.',
-          'DEPS': dedent('''\
-              vars = {
-                'dep1_revision': '%(dep1_revision_0)s',
-                'dep2_revision': '%(dep2_revision_1)s',
-              }
-              deps = {
-                'top/ext/dep1': '%(dep1_url)s@' + Var('dep1_revision'),
-                'top/ext/dep2': '%(dep2_url)s@' + Var('dep2_revision'),
-              }
-              ''') }),
-      ]),
-    ],
+    'test_001_simple': GIT_BOILERPLATE,
   }
 
   # Used to store the result of a subprocess invocation.
@@ -288,6 +301,8 @@ class BotUpdateTest(unittest.TestCase):
     cls.server_root = tempfile.mkdtemp(prefix=cls.__name__)
     cls.git_server = LocalGitServer(os.path.join(cls.server_root, 'git'))
     cls.svn_server = LocalSvnServer(os.path.join(cls.server_root, 'svn'))
+    cls.rietveld = local_rietveld.LocalRietveld()
+    cls.rietveld.start_server()
 
   @classmethod
   def tearDownClass(cls):
@@ -303,6 +318,10 @@ class BotUpdateTest(unittest.TestCase):
       pass
     cls.git_server.stop()
     cls.svn_server.stop()
+    try:
+      cls.rietveld.stop_server()
+    except Exception:
+      pass
     chromium_utils.RemoveDirectory(cls.server_root)
 
   def _populate_svn_repo(self, repo):
@@ -425,11 +444,11 @@ class BotUpdateTest(unittest.TestCase):
       git_populate_dir = populate_dir + '-mirror'
       git_serve_dir = os.path.join(
           *([self.git_server.root] + test_prefix_parts + repo_parts)) + '.git'
-      repo = self.REPO(repo, url, populate_dir, None, revisions)
-      mirror = self.REPO(
+      svn_repo = self.REPO(repo, url, populate_dir, None, revisions)
+      git_repo = self.REPO(
           repo, git_url, git_populate_dir, git_serve_dir, revisions)
-      self._populate_svn_repo(repo)
-      self._populate_svn_git_mirror(repo, mirror)
+      self._populate_svn_repo(svn_repo)
+      self._populate_svn_git_mirror(svn_repo, git_repo)
 
   def populate_git(self):
     """Populates the local git server with the repositories described in
@@ -536,6 +555,30 @@ class BotUpdateTest(unittest.TestCase):
     return self.SUBPROCESS_RESULT(self.bu_args, self.builddir, status,
                                   stdout.getvalue(), stderr.getvalue())
 
+  def run_git_cl(self, argv, cwd, tweak_module_func=None):
+    cmd = [GIT_CL_PATH] + argv
+    old_cwd = os.getcwd()
+    os.chdir(cwd)
+    old_editor = os.environ.get('GIT_EDITOR')
+    os.environ['GIT_EDITOR'] = 'true'
+    mod = imp.load_source('git_cl', GIT_CL_PATH)
+    if tweak_module_func:
+      tweak_module_func(mod)
+    status, stdout, stderr = self.capture_terminal(mod.main, argv)
+    if isinstance(status, Exception):
+      status = 1
+    elif status is None:
+      status = 0
+    os.chdir(old_cwd)
+    if old_editor is not None:
+      os.environ['GIT_EDITOR'] = old_editor
+    else:
+      del os.environ['GIT_EDITOR']
+    del sys.modules['git_cl']
+    del mod
+    return self.SUBPROCESS_RESULT(
+        cmd, cwd, status, stdout.getvalue(), stderr.getvalue())
+
   def test_001_simple(self):
     """Tests a git solution with git-style DEPS, and no .DEPS.git."""
     solution = {
@@ -610,6 +653,68 @@ class BotUpdateTest(unittest.TestCase):
       actual_json = json.load(fh)
     self.assertDictContainsSubset(expected_json, actual_json)
 
+  def test_003_patch(self):
+    '''Git solution with rietveld issue applied.'''
+    top_workdir = os.path.join(self.workdir, 'top_patch')
+    self.assertSubproc(
+        ['git', 'clone', self.template_dict['top_mirror_url'],
+         top_workdir])
+    self.assertSubproc(
+        ['git', 'config', '--local', 'rietveld.server',
+         'localhost:%d' % self.rietveld.port], top_workdir)
+    patched_file = os.path.join(top_workdir, 'patched_file.txt')
+    with open(patched_file, 'w') as fh:
+      fh.write('Patched line.\n')
+    self.assertSubproc(['git', 'add', 'patched_file.txt'], top_workdir)
+    self.assertSubproc(
+        ['git', 'commit', '-m', 'Patch comment.'], top_workdir)
+    result = self.run_git_cl(
+        ['upload', '-m', 'Patch comment.', '-t', 'patch title',
+         '--bypass-hooks'], top_workdir)
+    if result.status:
+      self.dump_subproc(result)
+      self.fail('git cl upload failed.')
+    issue = self.assertSubproc(['git', 'config', 'branch.master.rietveldissue'],
+                               top_workdir).stdout.strip()
+    solution = {
+        'name': 'top',
+        'url': '%s/BotUpdateTest/test_003_patch/top' % self.svn_server.url,
+        'deps_file': 'DEPS'
+    }
+    gclient_spec = 'solutions=[%r]' % solution
+    self.bu_args.extend([
+        '--specs', gclient_spec,
+        '--issue', issue, '--patch_root', 'top',
+        '--rietveld_server', 'localhost:%d' % self.rietveld.port,
+        '--revision', self.template_dict['top_revision_1']])
+    def _tweak(mod):
+      repo_path = 'BotUpdateTest/test_003_patch/top'
+      mod.RECOGNIZED_PATHS['/svn/%s' % repo_path] = (
+          '/'.join((self.git_server.url, repo_path)) + '.git')
+    result = self.run_bot_update(_tweak)
+    if bool(result.status):
+      self.dump_subproc(result)
+      self.fail('bot_update.py failed')
+    expected_files = [
+        'DEPS',
+        '.DEPS.git',
+        'file1.txt',
+        'patched_file.txt',
+        'ext/dep1/path1/file1.txt',
+        'ext/dep2/path1/file1.txt',
+        'ext/dep2/path2/file2.txt',
+    ]
+    topdir = os.path.join(self.builddir, 'top')
+    self.assertItemsEqual(expected_files, self.get_files(topdir))
+    expected_json = {
+        'root': 'top',
+        'properties': {},
+        'did_run': True,
+        'patch_root': 'top'
+    }
+    with open(os.path.join(self.builddir, 'out.json')) as fh:
+      actual_json = json.load(fh)
+    self.assertDictContainsSubset(expected_json, actual_json)
 
 if __name__ == '__main__':
   unittest.main()
