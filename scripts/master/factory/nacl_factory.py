@@ -20,7 +20,7 @@ class NativeClientFactory(gclient_factory.GClientFactory):
   CUSTOM_VARS_WEBKIT_MIRROR = ('webkit_trunk', config.Master.webkit_trunk_url)
 
   def __init__(self, build_dir, target_platform,
-               alternate_url=None, custom_deps_list=None):
+               alternate_url=None, custom_deps_list=None, target_os=None):
     solutions = []
     self.target_platform = target_platform
     nacl_url = config.Master.nacl_url
@@ -34,7 +34,8 @@ class NativeClientFactory(gclient_factory.GClientFactory):
     solutions.append(main)
 
     gclient_factory.GClientFactory.__init__(self, build_dir, solutions,
-                                            target_platform=target_platform)
+                                            target_platform=target_platform,
+                                            target_os=target_os)
 
   @staticmethod
   def _AddTriggerTests(factory_cmd_obj, tests):
