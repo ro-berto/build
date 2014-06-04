@@ -641,6 +641,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         'smoothness.polymer',
         'smoothness.tough_animation_cases',
         'spaceport',
+        'speedometer',
         'sunspider',
         'thread_times.fast_path.key_silk_cases',
         'thread_times.fast_path.polymer',
