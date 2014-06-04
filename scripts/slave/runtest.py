@@ -1784,6 +1784,10 @@ def main():
         asan_options += ['detect_leaks=1']
       extra_env['ASAN_OPTIONS'] = ' '.join(asan_options)
 
+      # ASan is not yet sandbox-friendly on Windows.
+      if sys.platform == 'win32':
+        args.append('--no-sandbox')
+
     # MemorySanitizer
     if options.enable_msan:
       msan_options = symbolization_options
