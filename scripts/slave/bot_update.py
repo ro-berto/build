@@ -183,6 +183,10 @@ ENABLED_BUILDERS = {
         'android_chromium_gn_compile_dbg',
         'android_chromium_gn_compile_rel',
 
+        # blink_android/
+        'blink_android_compile_dbg',
+        'blink_android_compile_rel',
+
         # linux/
         'chromium_presubmit',
         'linux',
