@@ -230,6 +230,9 @@ ENABLED_BUILDERS = {
 
         # linux_precise32/
         'linux_rel_precise32',
+
+        # linux_valgrind/
+        'linux_tsan',
     ],
     'tryserver.blink': [
         'linux_blink_bot_update',
