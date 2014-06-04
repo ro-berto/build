@@ -152,7 +152,11 @@ def GenSteps(api):
     s[0].custom_vars[custom['var']] = api.properties.get(
         custom['property'], custom['default'])
 
-  yield api.bot_update.ensure_checkout(force=True)
+  # FIXME(machenbach): Remove this as soon as crbug.com/380053 is resolved.
+  if mastername == 'client.v8':
+    yield api.gclient.checkout(abort_on_failure=True)
+  else:
+    yield api.bot_update.ensure_checkout(force=True)
 
   yield api.chromium.runhooks(run_gyp=False)
 
