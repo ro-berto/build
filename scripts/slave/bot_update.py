@@ -237,11 +237,18 @@ ENABLED_BUILDERS = {
         # linux_valgrind/
         'linux_tsan',
     ],
-    'tryserver.blink': [
-        'linux_blink_bot_update',
-    ],
     'chromium.lkgr': [
         'Telemetry Harness Upload (Bot Update)',
+    ],
+    'tryserver.blink': [
+        'android_blink_compile_dbg',
+        'android_blink_compile_rel',
+        'blink_presubmit',
+        'linux_blink_bot_update',
+        'linux_blink_compile_dbg',
+        'linux_blink_compile_rel',
+        'linux_blink_dbg',
+        'linux_blink_rel',
     ]
 }
 ENABLED_BUILDERS.update(internal_data.get('ENABLED_BUILDERS', {}))
@@ -264,8 +271,6 @@ ENABLED_SLAVES = {
                           ['vm%d-m4' % i for i in range(800, 810)] +
                           ['vm%d-m4' % i for i in range(666, 671)] +
                           ['build%d-a4' % i for i in range(100, 140)],
-
-    'tryserver.blink': ['slave%d-c4' % i for i in range(651, 661)],
 }
 ENABLED_SLAVES.update(internal_data.get('ENABLED_SLAVES', {}))
 
