@@ -49,7 +49,6 @@ def setup_bot():
     os_utilities.setup_auto_startup_win(command, root_dir, 'run_swarm_bot.bat')
     # Because it was started in cygwin but we want only the bot to run on
     # native python, invariably force a reboot. #thisiswindows.
-    os_utilities.restart_and_return()
     return False
 
   elif sys.platform in 'win32':
@@ -65,7 +64,6 @@ def setup_bot():
 
     os_utilities.setup_auto_startup_win(command, root_dir, 'run_swarm_bot.bat')
     # Invariably force a reboot. #thisiswindows.
-    os_utilities.restart_and_return()
     return False
 
   elif sys.platform == 'darwin':
@@ -73,6 +71,7 @@ def setup_bot():
         command, root_dir, 'org.swarm.bot.plist')
     # Restart so it is properly started by launchd. setup_bot() could be run via
     # ssh, which would break tests requiring UI.
-    os_utilities.restart_and_return()
     return False
+
+  # No need to restart on Ubuntu since the bot is started via initd.
   return True
