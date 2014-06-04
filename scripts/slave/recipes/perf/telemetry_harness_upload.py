@@ -21,9 +21,6 @@ def GenSteps(api):
   api.chromium.set_config('chromium', **kwargs)
   api.gclient.apply_config('android')
   yield api.bot_update.ensure_checkout()
-  bot_update_json = api.step_history.last_step().json.output
-  if not bot_update_json['did_run']:
-    yield api.gclient.checkout()
   # Whatever step is run right before this line needs to emit got_revision.
   update_step = api.step_history.last_step()
   got_revision = update_step.presentation.properties['got_revision']
@@ -54,11 +51,4 @@ def GenTests(api):
       api.properties.generic(
           mastername='chromium.lkgr',
           buildername='Telemetry Harness Upload')
-  )
-
-  yield (
-      api.test('bot_update') +
-      api.properties.generic(
-          mastername='chromium.lkgr',
-          buildername='Telemetry Harness Upload (Bot Update)')
   )
