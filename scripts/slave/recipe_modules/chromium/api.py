@@ -369,7 +369,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       name += ' (%s)' % suffix
     return self.m.python(
         name,
-        self.m.path['checkout'].join('tools', 'checkdeps', 'checkdeps.py'),
+        self.m.path['checkout'].join('buildtools', 'checkdeps', 'checkdeps.py'),
         args=['--json', self.m.json.output()],
         step_test_data=lambda: self.m.json.test_api.output([]),
         **kwargs)

@@ -83,7 +83,7 @@ class ChromiumCommands(commands.FactoryCommands):
         p_dir, 'get_official_build.py')
 
     # These scripts should be move to the script dir.
-    self._check_deps_tool = J('src', 'tools', 'checkdeps', 'checkdeps.py')
+    self._check_deps_tool = J('src', 'buildtools', 'checkdeps', 'checkdeps.py')
     self._check_perms_tool = J('src', 'tools', 'checkperms', 'checkperms.py')
     self._check_licenses_tool = J('src', 'tools', 'checklicenses',
                                   'checklicenses.py')
