@@ -138,6 +138,7 @@
             "WebKit Linux Oilpan",
             "WebKit Linux Leak",
             "WebKit Linux Oilpan Leak",
+            "WebKit Linux Oilpan ASAN",
             "WebKit Mac Builder (deps)",
             "WebKit Mac Oilpan (dbg)",
             "WebKit Mac Oilpan",
