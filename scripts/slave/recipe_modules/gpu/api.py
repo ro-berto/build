@@ -98,8 +98,10 @@ class GpuApi(recipe_api.RecipeApi):
     # build_and_test recipe is being run locally and the checkout is being
     # skipped, then the 'parent_got_revision' property can be specified on
     # the command line as a workaround.
-    gclient_data = self.m.step_history['gclient sync'].json.output
-    return gclient_data['solutions']['src/']['revision']
+    update_step = self.m.step_history.get('gclient sync', None)
+    if not update_step:
+      update_step = self.m.step_history['bot_update']
+    return update_step.presentation.properties['got_revision']
 
   @property
   def _webkit_revision(self):
@@ -117,8 +119,10 @@ class GpuApi(recipe_api.RecipeApi):
     # build_and_test recipe is being run locally and the checkout is being
     # skipped, then the 'parent_got_webkit_revision' property can be
     # specified on the command line as a workaround.
-    gclient_data = self.m.step_history['gclient sync'].json.output
-    return gclient_data['solutions']['src/third_party/WebKit/']['revision']
+    update_step = self.m.step_history.get('gclient sync', None)
+    if not update_step:
+      update_step = self.m.step_history['bot_update']
+    return update_step.presentation.properties['got_webkit_revision']
 
   @property
   def _master_class_name_for_testing(self):

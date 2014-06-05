@@ -155,10 +155,11 @@ RECOGNIZED_PATHS.update(internal_data.get('RECOGNIZED_PATHS', {}))
 
 ENABLED_MASTERS = [
     'bot_update.always_on',
+    'chromium.fyi',
     'chromium.git',
+    'chromium.gpu.fyi',
     'chromium.linux',
     'chromium.mac',
-    'chromium.fyi',
 ]
 ENABLED_MASTERS += internal_data.get('ENABLED_MASTERS', [])
 
@@ -301,6 +302,14 @@ ENABLED_SLAVES.update(internal_data.get('ENABLED_SLAVES', {}))
 # config is enabled, but a bot on that builder is disabled, that bot will
 # be disabled.
 DISABLED_BUILDERS = {
+    'chromium.gpu.fyi': [
+        'GPU Win Builder (dbg)',
+        'GPU Win Builder',
+        'Win7 Audio',
+        'Win7 Debug (NVIDIA)',
+        'Win8 Debug (NVIDIA)',
+        'WinXP Debug (NVIDIA)',
+    ],
     'chromium.win': ['Win Builder'],  # crbug.com/370473
     'chromium.linux': [
         # These are non-recipe for checking out, but use bb_run_bot.py for
