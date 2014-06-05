@@ -318,6 +318,7 @@
       "--output-format=gtest",
       "--browser=debug",
       "-v",
+      "--use-devtools-active-port",
       "--build-revision",
       "170242",
       "--test-machine-name",
@@ -363,6 +364,7 @@
       "--output-format=gtest",
       "--browser=debug",
       "-v",
+      "--use-devtools-active-port",
       "--build-revision",
       "170242",
       "--upload-refimg-to-cloud-storage",
@@ -412,7 +414,8 @@
       "--show-stdout",
       "--output-format=gtest",
       "--browser=debug",
-      "-v"
+      "-v",
+      "--use-devtools-active-port"
     ],
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
@@ -453,7 +456,8 @@
       "--show-stdout",
       "--output-format=gtest",
       "--browser=debug",
-      "-v"
+      "-v",
+      "--use-devtools-active-port"
     ],
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
@@ -494,7 +498,8 @@
       "--show-stdout",
       "--output-format=gtest",
       "--browser=debug",
-      "-v"
+      "-v",
+      "--use-devtools-active-port"
     ],
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
@@ -535,7 +540,8 @@
       "--show-stdout",
       "--output-format=gtest",
       "--browser=debug",
-      "-v"
+      "-v",
+      "--use-devtools-active-port"
     ],
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
@@ -576,7 +582,8 @@
       "--show-stdout",
       "--output-format=gtest",
       "--browser=debug",
-      "-v"
+      "-v",
+      "--use-devtools-active-port"
     ],
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
@@ -617,7 +624,8 @@
       "--show-stdout",
       "--output-format=gtest",
       "--browser=debug",
-      "-v"
+      "-v",
+      "--use-devtools-active-port"
     ],
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
@@ -659,6 +667,7 @@
       "--output-format=gtest",
       "--browser=debug",
       "-v",
+      "--use-devtools-active-port",
       "--build-revision",
       "170242",
       "--test-machine-name",
