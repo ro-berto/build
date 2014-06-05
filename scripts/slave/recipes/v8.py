@@ -30,7 +30,7 @@ def GenSteps(api):
   if api.tryserver.is_tryserver:
     yield v8.tryserver_checkout()
   else:
-    yield api.gclient.checkout()
+    yield v8.checkout()
 
   if api.tryserver.is_tryserver:
     yield api.tryserver.maybe_apply_issue()
@@ -77,7 +77,8 @@ def GenTests(api):
         api.properties.generic(mastername=mastername,
                                buildername=buildername,
                                parent_buildername=bot_config.get(
-                                   'parent_buildername')) +
+                                   'parent_buildername'),
+                               revision='20123') +
         api.platform(bot_config['testing']['platform'],
                      v8_config_kwargs.get('TARGET_BITS', 64))
       )

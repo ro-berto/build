@@ -4,6 +4,7 @@ DEPS = [
   'gclient',
   'json',
   'path',
+  'perf_dashboard',
   'platform',
   'properties',
   'python',

@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import math
 import os
 
 from slave import recipe_api
@@ -169,6 +170,10 @@ class V8Api(recipe_api.RecipeApi):
     # Test-specific configurations.
     for t in self.bot_config.get('tests', []):
       self.create_test(t).gclient_apply_config(self.m)
+    # Initialize perf_dashboard api if any perf test should run.
+    # TODO(machenbach): Set to default config as soon as the experimental
+    # development on the performance runner is finished.
+    self.m.perf_dashboard.set_config('testing')
 
   def init_tryserver(self):
     self.m.chromium.apply_config('trybot_flavor')
@@ -178,6 +183,12 @@ class V8Api(recipe_api.RecipeApi):
   # TODO(machenbach): Make this a step_history helper.
   def has_failed_steps(self):
     return any(s.retcode != 0 for s in self.m.step_history.values())
+
+  def checkout(self):
+    yield self.m.gclient.checkout()
+    # Whatever step is run right before this line needs to emit got_revision.
+    update_step = self.m.step_history.last_step()
+    self.revision = update_step.presentation.properties['got_revision']
 
   def tryserver_checkout(self):
     yield self.m.gclient.checkout(
@@ -496,10 +507,50 @@ class V8Api(recipe_api.RecipeApi):
         can_fail_build=False
       )
 
+    def mean(values):
+      return float(sum(values)) / len(values)
+
+    def variance(values, average):
+      return map(lambda x: (x - average) ** 2, values)
+
+    def standard_deviation(values, average):
+      return math.sqrt(mean(variance(values, average)))
+
     for t in tests:
       assert perf_configs[t]
       assert perf_configs[t]['name']
       assert perf_configs[t]['json']
-      yield run_single_perf_test(perf_configs[t]['name'], perf_configs[t]['json'])
+      yield run_single_perf_test(perf_configs[t]['name'],
+                                 perf_configs[t]['json'])
 
-    # TODO(machenbach): Upload to perf dashboard.    
+    # Make sure that bots that run perf tests have a revision property.
+    if tests:
+      assert self.revision, ('Revision must be specified for perf tests as '
+                             'they upload data to the perf dashboard.')
+
+    # Collect all perf data of the previous steps.
+    points = []
+    for t in tests:
+      name = perf_configs[t]['name']
+      for trace in self.m.step_history[name].json.output['traces']:
+        # Make 'v8' the root of all standalone v8 performance tests.
+        test_path = '/'.join(['v8'] + trace['graphs'])
+
+        # Ignore empty traces.
+        # TODO(machenbach): Show some kind of failure on the waterfall on empty
+        # traces without skipping to upload.
+        if not trace['results']:
+          continue
+
+        values = map(float, trace['results'])
+        average = mean(values)
+
+        p = self.m.perf_dashboard.get_skeleton_point(
+            test_path, self.revision, str(average))
+        p['error'] = str(standard_deviation(values, average))
+        p['units'] = trace['units']
+        points.append(p)
+
+    # Send all perf data to the perf dashboard in one step.
+    if points:
+      yield self.m.perf_dashboard.post(points)

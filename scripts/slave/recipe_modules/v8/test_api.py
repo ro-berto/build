@@ -62,10 +62,28 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     }])
 
   def perf_json(self, has_failures=False):
-    result = {'errors': [], 'traces':[]}
+    result = {
+      'errors': [],
+      'traces':[
+        {
+          'units': 'score',
+          'graphs': ['v8', 'Richards'],
+          'results': ['30', '10', '20'],
+        },
+        {
+          'units': 'ms',
+          'graphs': ['v8', 'DeltaBlue'],
+          'results': ['1.2', '1.2'],
+        },
+        {
+          'units': 'score',
+          'graphs': ['v8', 'Empty'],
+          'results': [],
+        },
+      ],
+    }
     if has_failures:
-      result['errors'].extend(['Error line 1.',
-                               'Error line 2.'])
+      result['errors'].extend(['Error line 1.', 'Error line 2.'])
     return self.m.json.output(result)
 
   @recipe_test_api.mod_test_data
