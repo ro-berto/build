@@ -18,6 +18,7 @@ def Update(c):
           'Android',
           'Android (dbg)',
           'Android Clang (dbg)',
+          'Android x64 (dbg)',
           'Android Chromium-APK Builder',
           'Android Chromium-APK Builder (dbg)',
       ]),
@@ -48,6 +49,11 @@ def Update(c):
       'name': 'Android Clang (dbg)',
       'recipe': 'webrtc/standalone',
       'slavebuilddir': 'android_clang',
+    },
+    {
+      'name': 'Android x64 (dbg)',
+      'recipe': 'webrtc/standalone',
+      'slavebuilddir': 'android_x64',
     },
     {
       'name': 'Android Chromium-APK Builder',
