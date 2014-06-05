@@ -11,6 +11,7 @@ DEPS = [
   'properties',
   'step',
   'step_history',
+  'tryserver',
 ]
 
 
@@ -152,6 +153,9 @@ def GenSteps(api):
     s[0].custom_vars[custom['var']] = api.properties.get(
         custom['property'], custom['default'])
 
+  if api.tryserver.is_tryserver:
+    api.step.auto_resolve_conflicts = True
+
   # FIXME(machenbach): Remove this as soon as crbug.com/380053 is resolved.
   if mastername == 'client.v8':
     yield api.gclient.checkout(abort_on_failure=True)
@@ -162,7 +166,18 @@ def GenSteps(api):
 
   yield api.chromium.run_gn()
 
-  yield api.chromium.compile(targets=['all'])
+  if api.tryserver.is_tryserver:
+    yield api.chromium.compile(
+        targets=['all'], abort_on_failure=False, can_fail_build=False)
+    if api.step_history.last_step().retcode != 0:
+      api.gclient.set_config('chromium_lkcr')
+
+      yield api.bot_update.ensure_checkout(suffix='lkcr')
+      yield api.chromium.runhooks(run_gyp=False)
+      yield api.chromium.run_gn()
+      yield api.chromium.compile(targets=['all'], force_clobber=True)
+  else:
+    yield api.chromium.compile(targets=['all'])
 
   # TODO(dpranke): crbug.com/353854. Run gn_unittests and other tests
   # when they are also being run as part of the try jobs.
@@ -190,3 +205,11 @@ def GenTests(api):
         test += api.properties.generic(buildername=buildername,
                                        mastername=mastername)
       yield test
+
+  yield (
+    api.test('compile_failure') +
+    api.platform.name('linux') +
+    api.properties.tryserver(
+        buildername='linux_chromium_gn_rel', mastername='tryserver.chromium') +
+    api.step_data('compile', retcode=1)
+  )
