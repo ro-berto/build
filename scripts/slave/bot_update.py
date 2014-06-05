@@ -906,7 +906,6 @@ def git_checkout(solutions, revisions, shallow):
         # Make sure we start on a known branch first, and not whereever
         # apply_issue left us at before.
         git('checkout', '--force', 'origin/master', cwd=sln_dir)
-        git('reset', '--hard', cwd=sln_dir)
       except SubprocessFailed as e:
         if e.code == 128:
           # Exited abnormally, theres probably something wrong.
@@ -914,7 +913,6 @@ def git_checkout(solutions, revisions, shallow):
           remove(sln_dir)
           git(*clone_cmd)
           git('checkout', '--force', 'origin/master', cwd=sln_dir)
-          git('reset', '--hard', cwd=sln_dir)
         else:
           raise
 
