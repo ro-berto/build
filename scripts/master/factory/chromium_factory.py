@@ -695,6 +695,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         'smoothness.tough_webgl_cases',
         'tab_switching.top_10',
         'thread_times.key_mobile_sites',
+        'thread_times.tough_compositor_cases',
       ]
     for test_name in real_world_benchmarks:
       Telemetry(test_name)
