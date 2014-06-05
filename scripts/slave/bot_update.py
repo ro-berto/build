@@ -255,6 +255,7 @@ ENABLED_BUILDERS = {
         'Telemetry Harness Upload',
     ],
     'tryserver.blink': [
+        # Linux
         'android_blink_compile_dbg',
         'android_blink_compile_rel',
         'blink_presubmit',
@@ -265,6 +266,12 @@ ENABLED_BUILDERS = {
         'linux_blink_oilpan_dbg',
         'linux_blink_oilpan_rel',
         'linux_blink_rel',
+
+        # Mac
+        'mac_blink_compile_dbg',
+        'mac_blink_compile_rel',
+        'mac_blink_dbg',
+        'mac_blink_rel',
     ]
 }
 ENABLED_BUILDERS.update(internal_data.get('ENABLED_BUILDERS', {}))
@@ -287,9 +294,6 @@ ENABLED_SLAVES = {
                           ['vm%d-m4' % i for i in range(800, 810)] +
                           ['vm%d-m4' % i for i in range(666, 671)] +
                           ['build%d-a4' % i for i in range(100, 140)],
-
-    # Mac blink trybots.
-    'tryserver.blink': ['vm%d-m4' % i for i in range(644, 655)],
 }
 ENABLED_SLAVES.update(internal_data.get('ENABLED_SLAVES', {}))
 
