@@ -225,6 +225,40 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]/src/tools/checkperms/checkperms.py",
+      "--root",
+      "[SLAVE_BUILD]/src",
+      "--json",
+      "/path/to/tmp/json"
+    ],
+    "name": "checkperms (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "can_fail_build": false,
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/tools/checklicenses/checklicenses.py",
+      "--root",
+      "[SLAVE_BUILD]/src",
+      "--json",
+      "/path/to/tmp/json"
+    ],
+    "name": "checklicenses (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "can_fail_build": false,
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/tools/deps2git/deps2git.py",
       "-d",
       "[SLAVE_BUILD]/src/DEPS",

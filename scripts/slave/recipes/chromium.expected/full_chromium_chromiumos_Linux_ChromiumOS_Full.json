@@ -247,8 +247,14 @@
       "-u",
       "[SLAVE_BUILD]/src/tools/checkperms/checkperms.py",
       "--root",
-      "[SLAVE_BUILD]/src"
+      "[SLAVE_BUILD]/src",
+      "--json",
+      "/path/to/tmp/json"
     ],
-    "name": "checkperms"
+    "name": "checkperms",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   }
 ]

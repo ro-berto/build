@@ -376,11 +376,33 @@ class ChromiumApi(recipe_api.RecipeApi):
         step_test_data=lambda: self.m.json.test_api.output([]),
         **kwargs)
 
-  def checkperms(self, **kwargs):
+  def checkperms(self, suffix=None, **kwargs):
+    name = 'checkperms'
+    if suffix:
+      name += ' (%s)' % suffix
     return self.m.python(
-        'checkperms',
+        name,
         self.m.path['checkout'].join('tools', 'checkperms', 'checkperms.py'),
-        args=['--root', self.m.path['checkout']],
+        args=[
+            '--root', self.m.path['checkout'],
+            '--json', self.m.json.output(),
+        ],
+        step_test_data=lambda: self.m.json.test_api.output([]),
+        **kwargs)
+
+  def checklicenses(self, suffix=None, **kwargs):
+    name = 'checklicenses'
+    if suffix:
+      name += ' (%s)' % suffix
+    return self.m.python(
+        name,
+        self.m.path['checkout'].join(
+            'tools', 'checklicenses', 'checklicenses.py'),
+        args=[
+            '--root', self.m.path['checkout'],
+            '--json', self.m.json.output(),
+        ],
+        step_test_data=lambda: self.m.json.test_api.output([]),
         **kwargs)
 
   def deps2git(self, suffix=None, **kwargs):

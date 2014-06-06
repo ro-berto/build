@@ -364,6 +364,50 @@ def GenSteps(api):
       return ['%s: %s' % (r[0], r[1]) for r in result_set]
 
 
+  class CheckpermsTest(api.test_utils.Test):  # pylint: disable=W0232
+    name = 'checkperms'
+
+    @staticmethod
+    def compile_targets():
+      return []
+
+    @staticmethod
+    def run(suffix):
+      return api.chromium.checkperms(suffix, can_fail_build=False)
+
+    def has_valid_results(self, suffix):
+      return api.step_history[self._step_name(suffix)].json.output is not None
+
+    def failures(self, suffix):
+      results = api.step_history[self._step_name(suffix)].json.output
+      result_set = set()
+      for result in results:
+        result_set.add((result['rel_path'], result['error']))
+      return ['%s: %s' % (r[0], r[1]) for r in result_set]
+
+
+  class ChecklicensesTest(api.test_utils.Test):  # pylint: disable=W0232
+    name = 'checklicenses'
+
+    @staticmethod
+    def compile_targets():
+      return []
+
+    @staticmethod
+    def run(suffix):
+      return api.chromium.checklicenses(suffix, can_fail_build=False)
+
+    def has_valid_results(self, suffix):
+      return api.step_history[self._step_name(suffix)].json.output is not None
+
+    def failures(self, suffix):
+      results = api.step_history[self._step_name(suffix)].json.output
+      result_set = set()
+      for result in results:
+        result_set.add((result['filename'], result['license']))
+      return ['%s: %s' % (r[0], r[1]) for r in result_set]
+
+
   class Deps2GitTest(api.test_utils.Test):  # pylint: disable=W0232
     name = 'deps2git'
 
@@ -618,6 +662,11 @@ def GenSteps(api):
 
   tests = []
   tests.append(CheckdepsTest())
+  if api.platform.is_linux:
+    tests.extend([
+        CheckpermsTest(),
+        ChecklicensesTest(),
+    ])
   tests.append(Deps2GitTest())
   for test in gtest_tests:
     tests.append(test)
@@ -914,4 +963,32 @@ def GenTests(api):
         ],
       })
     )
+  )
+
+  yield (
+    api.test('checkperms_failure') +
+    props() +
+    api.platform.name('linux') +
+    api.override_step_data(
+        'checkperms (with patch)',
+        api.json.output([
+            {
+                'error': 'Must not have executable bit set',
+                'rel_path': 'base/basictypes.h',
+            },
+        ]))
+  )
+
+  yield (
+    api.test('checklicenses_failure') +
+    props() +
+    api.platform.name('linux') +
+    api.override_step_data(
+        'checklicenses (with patch)',
+        api.json.output([
+            {
+                'filename': 'base/basictypes.h',
+                'license': 'UNKNOWN',
+            },
+        ]))
   )
