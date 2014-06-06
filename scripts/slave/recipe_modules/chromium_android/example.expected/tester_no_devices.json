@@ -255,7 +255,7 @@
     "name": "device_status_check",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
-      "@@@STEP_LINK@report a bug@https://code.google.com/p/chromium/issues/entry?summary=Device Offline&comment=Buildbot: tester%0ABuild%3A 571%0A(please don't change any labels)&labels=Restrict-View-Google,OS-Android,Infra@@@",
+      "@@@STEP_LINK@report a bug@https://code.google.com/p/chromium/issues/entry?comment=Buildbot%3A+tester%0A%28Please+do+not+change+any+labels%29&labels=Restrict-View-Google%2COS-Android%2CInfra%2CInfra-Labs&summary=Device+Offline+on+chromium.testing.master+tehslave@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },

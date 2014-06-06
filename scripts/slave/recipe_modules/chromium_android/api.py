@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import os
+import urllib
 
 from slave import recipe_api
 
@@ -263,12 +264,17 @@ class AndroidApi(recipe_api.RecipeApi):
   def device_status_check(self, restart_usb=False, **kwargs):
     def followup_fn(step_result):
       if not step_result.retcode == 0:
+        params = {
+          'summary': ('Device Offline on %s %s' %
+            (self.m.properties['mastername'], self.m.properties['slavename'])),
+          'comment': ('Buildbot: %s\n(Please do not change any labels)' %
+            self.m.properties['buildername']),
+          'labels': 'Restrict-View-Google,OS-Android,Infra,Infra-Labs',
+        }
+        link = ('https://code.google.com/p/chromium/issues/entry?%s' %
+          urllib.urlencode(params))
         step_result.presentation.links.update({
-          'report a bug': ('https://code.google.com/p/chromium/issues/entry?' +
-          ('summary=Device Offline&comment=Buildbot: %s%%0ABuild%%3A' %
-            self.m.properties['buildername']) +
-          (' %s%%0A(please don\'t change' % self.m.properties['buildnumber']) +
-          ' any labels)&labels=Restrict-View-Google,OS-Android,Infra')
+          'report a bug': link
         })
 
     args = []
