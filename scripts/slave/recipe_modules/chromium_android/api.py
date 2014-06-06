@@ -111,39 +111,6 @@ class AndroidApi(recipe_api.RecipeApi):
     # correctly set by gclient.checkout
     self.m.path['checkout'] = self.m.path['slave_build'].join('src')
 
-    gyp_defs = self.m.chromium.c.gyp_env.GYP_DEFINES
-
-    if self.c.INTERNAL and self.c.get_app_manifest_vars:
-      yield self.m.step(
-          'get app_manifest_vars',
-          [self.internal_dir.join('build', 'dump_app_manifest_vars.py'),
-           '-b', self.m.properties['buildername'],
-           '-v', self.m.path['checkout'].join('chrome', 'VERSION'),
-           '--output-json', self.m.json.output()]
-      )
-
-      app_manifest_vars = self.m.step_history.last_step().json.output
-      gyp_defs = self.m.chromium.c.gyp_env.GYP_DEFINES
-      gyp_defs['app_manifest_version_code'] = app_manifest_vars['version_code']
-      gyp_defs['app_manifest_version_name'] = app_manifest_vars['version_name']
-      gyp_defs['chrome_build_id'] = app_manifest_vars['build_id']
-
-      yield self.m.step(
-          'get_internal_names',
-          [self.internal_dir.join('build', 'dump_internal_names.py'),
-           '--output-json', self.m.json.output()]
-      )
-
-      self._internal_names = self.m.step_history.last_step().json.output
-
-  @property
-  def version_name(self):
-    app_manifest_vars = self.m.step_history['get app_manifest_vars']
-    return app_manifest_vars.json.output['version_name']
-
-  def dump_version(self):
-    yield self.m.step('Version: %s' % str(self.version_name), ['true'])
-
   def envsetup(self):
     # TODO(luqui): remove once no recipes call anymore
     return []
@@ -268,13 +235,7 @@ class AndroidApi(recipe_api.RecipeApi):
         dest=path
     )
 
-  def upload_build_for_tester(self):
-    return self.upload_build(
-        bucket=self._internal_names['BUILD_BUCKET'],
-        path='%s/build_product_%s.zip' % (
-            self.m.properties['buildername'], self.m.properties['revision']))
-
-  def _download_build(self, bucket, path):
+  def download_build(self, bucket, path):
     base_path = path.split('/')[-1]
     zipfile = self.m.path['checkout'].join('out', base_path)
     self._cleanup_list.append(zipfile)
@@ -290,14 +251,6 @@ class AndroidApi(recipe_api.RecipeApi):
       cwd=self.m.path['checkout'],
       abort_on_failure=True
     )
-
-  def download_build(self):
-    return self._download_build(
-        bucket=self._internal_names['BUILD_BUCKET'],
-        path='%s/build_product_%s.zip' % (
-            self.m.properties['parent_buildername'],
-            self.m.properties['revision']))
-
 
   def spawn_logcat_monitor(self):
     return self.m.step(
@@ -342,18 +295,6 @@ class AndroidApi(recipe_api.RecipeApi):
     yield self.device_status_check()
     yield self.provision_devices()
 
-    if self.c.INTERNAL:
-      yield self.m.step(
-          'setup_devices_for_testing',
-          [self.internal_dir.join('build',  'setup_device_testing.py')],
-          env=self.get_env(), can_fail_build=False)
-      deploy_cmd = [
-          self.internal_dir.join('build', 'full_deploy.py'),
-          '-v', '--%s' % self.m.chromium.c.BUILD_CONFIG.lower()]
-      if self.c.extra_deploy_opts:
-        deploy_cmd.extend(self.c.extra_deploy_opts)
-      yield self.m.step('deploy_on_devices', deploy_cmd, env=self.get_env())
-
   def adb_install_apk(self, apk, apk_package):
     install_cmd = [
         self.m.path['checkout'].join('build',
@@ -366,25 +307,6 @@ class AndroidApi(recipe_api.RecipeApi):
       install_cmd.append('--release')
     yield self.m.step('install ' + apk, install_cmd,
                       env=self.get_env(), always_run=True)
-
-  def instrumentation_tests(self):
-    dev_status_step = self.m.step_history.get('device_status_check')
-    setup_success = dev_status_step and dev_status_step.retcode == 0
-    if self.c.INTERNAL:
-      deploy_step = self.m.step_history.get('deploy_on_devices')
-      setup_success = deploy_step and deploy_step.retcode == 0
-    if setup_success:
-      yield self.adb_install_apk(
-          'ChromeTest.apk', 'com.google.android.apps.chrome.tests')
-      if self.m.step_history.last_step().retcode == 0:
-        args = (['--test=%s' % s for s in self.c.tests] +
-                ['--checkout-dir', self.m.path['checkout'],
-                 '--target', self.m.chromium.c.BUILD_CONFIG])
-        yield self.m.generator_script(
-            self.internal_dir.join('build', 'buildbot', 'tests_generator.py'),
-            *args,
-            env=self.get_env()
-        )
 
   def monkey_test(self, **kwargs):
     args = [
@@ -534,13 +456,6 @@ class AndroidApi(recipe_api.RecipeApi):
         'cleanup_build',
         ['rm', '-rf'] + self._cleanup_list,
         always_run=True)
-
-  def common_tree_setup_steps(self):
-    yield self.init_and_sync()
-    yield self.envsetup()
-    yield self.clean_local_files()
-    if self.c.INTERNAL and self.c.run_tree_truth:
-      yield self.run_tree_truth()
 
   def common_tests_setup_steps(self):
     yield self.spawn_logcat_monitor()

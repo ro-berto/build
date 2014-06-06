@@ -38,6 +38,8 @@
       "cache_dir = None\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src/repo', 'url': 'svn://svn.chromium.org/chrome/trunk/src'}]\ntarget_os = ['android']",
       "--revision_mapping_file",
       "{}",
+      "--patch_url",
+      "https://the.patch.url/the.patch",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -61,6 +63,17 @@
       "cache_dir = None\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src/repo', 'url': 'svn://svn.chromium.org/chrome/trunk/src'}]\ntarget_os = ['android']"
     ],
     "name": "gclient setup"
+  },
+  {
+    "abort_on_failure": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/gclient_safe_revert.py",
+      ".",
+      "[DEPOT_TOOLS]/gclient"
+    ],
+    "name": "gclient revert"
   },
   {
     "abort_on_failure": true,
@@ -120,60 +133,37 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/clank/build/dump_app_manifest_vars.py",
-      "-b",
-      "basic_builder",
-      "-v",
-      "[SLAVE_BUILD]/src/chrome/VERSION",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "name": "get app_manifest_vars",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"build_id\": 3333, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"date_string\": 6001, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"version_code\": 10, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"version_name\": \"some_builder_1234\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/src/clank/build/dump_internal_names.py",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "name": "get_internal_names",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"BUILD_BUCKET\": \"build-bucket\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"FLAKINESS_DASHBOARD_SERVER\": \"test-results.appspot.com\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"INSTRUMENTATION_TEST_DATA\": \"a:b/test/data/android/device_files\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"SCREENSHOT_BUCKET\": \"screenshot-archive\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "true"
-    ],
-    "name": "Version: some_builder_1234"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "OS=android app_manifest_version_code=10 app_manifest_version_name=some_builder_1234 chrome_build_id=3333 component=static_library fastbuild=1 target_arch=arm",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 target_arch=arm",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "gclient runhooks"
+  },
+  {
+    "cmd": [
+      "[BUILD]/scripts/slave/apply_svn_patch.py",
+      "-p",
+      "https://the.patch.url/the.patch",
+      "-r",
+      "[SLAVE_BUILD]/src/clank"
+    ],
+    "name": "apply_patch"
+  },
+  {
+    "allow_subannotations": false,
+    "cmd": [
+      "[SLAVE_BUILD]/src/build/tree_truth.sh",
+      "[SLAVE_BUILD]/src",
+      "src",
+      "src-internal",
+      "src/repo"
+    ],
+    "name": "tree truth steps"
   },
   {
     "abort_on_failure": true,
@@ -201,36 +191,6 @@
     "cwd": "[SLAVE_BUILD]/src",
     "name": "git_number",
     "stdout": "/path/to/tmp/"
-  },
-  {
-    "always_run": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/android/archive_build.py",
-      "--target",
-      "Release",
-      "--name",
-      "build_product.zip"
-    ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "zip_build_product"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
-      "cp",
-      "[SLAVE_BUILD]/src/out/build_product.zip",
-      "gs://build-bucket/basic_builder/build_product_4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00.zip"
-    ],
-    "name": "gsutil upload_build_product",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/build-bucket/basic_builder/build_product_4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00.zip@@@"
-    ]
   },
   {
     "cmd": [
@@ -357,9 +317,9 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"basic_builder\", \"buildnumber\": 571, \"internal\": true, \"mastername\": \"chromium.testing.master\", \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"basic_builder\", \"buildnumber\": 571, \"internal\": true, \"mastername\": \"chromium.testing.master\", \"patch_url\": \"https://the.patch.url/the.patch\", \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"basic_builder\", \"buildnumber\": 571, \"internal\": true, \"mastername\": \"chromium.testing.master\", \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"basic_builder\", \"buildnumber\": 571, \"internal\": true, \"mastername\": \"chromium.testing.master\", \"patch_url\": \"https://the.patch.url/the.patch\", \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=perf-test-1",
@@ -387,9 +347,9 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"basic_builder\", \"buildnumber\": 571, \"internal\": true, \"mastername\": \"chromium.testing.master\", \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"basic_builder\", \"buildnumber\": 571, \"internal\": true, \"mastername\": \"chromium.testing.master\", \"patch_url\": \"https://the.patch.url/the.patch\", \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"basic_builder\", \"buildnumber\": 571, \"internal\": true, \"mastername\": \"chromium.testing.master\", \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"basic_builder\", \"buildnumber\": 571, \"internal\": true, \"mastername\": \"chromium.testing.master\", \"patch_url\": \"https://the.patch.url/the.patch\", \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=perf-test-2",
@@ -504,9 +464,20 @@
   {
     "always_run": true,
     "cmd": [
+      "[SLAVE_BUILD]/src/build/android/asan_symbolize.py",
+      "-l",
+      "[SLAVE_BUILD]/src/out/Release/full_log"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "stack_tool_for_asan"
+  },
+  {
+    "always_run": true,
+    "cmd": [
       "rm",
-      "-rf",
-      "[SLAVE_BUILD]/src/out/build_product.zip"
+      "-rf"
     ],
     "name": "cleanup_build"
   }

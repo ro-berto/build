@@ -12,14 +12,20 @@ DEPS = [
 BUILDERS = {
     'basic_builder': {
         'target': 'Release',
+        'build': True,
     },
     'restart_usb_builder': {
         'restart_usb': True,
         'target': 'Release',
+        'build': True,
     },
     'coverage_builder': {
         'coverage': True,
         'target': 'Debug',
+        'build': True,
+    },
+    'tester': {
+        'build': False,
     }
 }
 
@@ -33,20 +39,20 @@ def GenSteps(api):
 
   api.chromium_android.c.get_app_manifest_vars = True
   api.chromium_android.c.coverage = config.get('coverage', False)
+  api.chromium_android.c.asan_symbolize = True
 
   yield api.chromium_android.init_and_sync()
 
-  version_name = api.chromium_android.version_name
-  assert isinstance(version_name, basestring) and version_name, (
-      'Could not get a valid version name.')
-
-  yield api.chromium_android.dump_version()
-
   yield api.chromium_android.envsetup()
   yield api.chromium_android.runhooks()
-  yield api.chromium_android.compile()
+  yield api.chromium_android.apply_svn_patch()
+  yield api.chromium_android.run_tree_truth()
+  if config['build']:
+    yield api.chromium_android.compile()
+  else:
+    yield api.chromium_android.download_build('build-bucket',
+                                              'build_product.zip')
   yield api.chromium_android.git_number()
-  yield api.chromium_android.upload_build_for_tester()
 
   yield api.adb.root_devices()
   yield api.chromium_android.spawn_logcat_monitor()
@@ -75,15 +81,19 @@ def GenSteps(api):
   yield api.chromium_android.cleanup_build()
 
 def GenTests(api):
+  def properties_for(buildername):
+    return api.properties.generic(
+        buildername=buildername,
+        slavename='tehslave',
+        repo_name='src/repo',
+        patch_url='https://the.patch.url/the.patch',
+        repo_url='svn://svn.chromium.org/chrome/trunk/src',
+        revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
+        internal=True)
+
   for buildername in BUILDERS:
-    yield (
-        api.test('%s_basic' % buildername) +
-        api.properties.generic(
-          buildername=buildername,
-          slavename='tehslave',
-          repo_name='src/repo',
-          repo_url='svn://svn.chromium.org/chrome/trunk/src',
-          revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
-          internal=True,
-        ) +
-        api.chromium_android.default_step_data(api))
+    yield api.test('%s_basic' % buildername) + properties_for(buildername)
+
+  yield (api.test('tester_no_devices') +
+         properties_for('tester') +
+         api.step_data('device_status_check', retcode=1))

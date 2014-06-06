@@ -31,7 +31,7 @@
       "--master",
       "chromium.testing.master",
       "--builder",
-      "restart_usb_builder",
+      "tester",
       "--slave",
       "tehslave",
       "--spec",
@@ -166,23 +166,27 @@
     "name": "tree truth steps"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/compile.py",
-      "--target",
-      "Release",
-      "--src-dir",
-      "[SLAVE_BUILD]/src",
-      "--build-tool",
-      "ninja",
-      "--"
+      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
+      "cp",
+      "gs://build-bucket/build_product.zip",
+      "[SLAVE_BUILD]/src/out/build_product.zip"
     ],
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "compile"
+    "name": "gsutil download_build_product"
+  },
+  {
+    "abort_on_failure": true,
+    "cmd": [
+      "unzip",
+      "-o",
+      "[SLAVE_BUILD]/src/out/build_product.zip"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "unzip_build_product"
   },
   {
     "cmd": [
@@ -243,13 +247,17 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/build/android/buildbot/bb_device_status_check.py",
-      "--restart-usb"
+      "[SLAVE_BUILD]/src/build/android/buildbot/bb_device_status_check.py"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "device_status_check"
+    "name": "device_status_check",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_LINK@report a bug@https://code.google.com/p/chromium/issues/entry?summary=Device Offline&comment=Buildbot: tester%0ABuild%3A 571%0A(please don't change any labels)&labels=Restrict-View-Google,OS-Android,Infra@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "always_run": true,
@@ -281,7 +289,8 @@
       "flake_fakes.json"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "Sharded Perf Tests"
+    "name": "Sharded Perf Tests",
+    "skip": true
   },
   {
     "always_run": true,
@@ -318,14 +327,14 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"restart_usb_builder\", \"buildnumber\": 571, \"internal\": true, \"mastername\": \"chromium.testing.master\", \"patch_url\": \"https://the.patch.url/the.patch\", \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"tester\", \"buildnumber\": 571, \"internal\": true, \"mastername\": \"chromium.testing.master\", \"patch_url\": \"https://the.patch.url/the.patch\", \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"restart_usb_builder\", \"buildnumber\": 571, \"internal\": true, \"mastername\": \"chromium.testing.master\", \"patch_url\": \"https://the.patch.url/the.patch\", \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"tester\", \"buildnumber\": 571, \"internal\": true, \"mastername\": \"chromium.testing.master\", \"patch_url\": \"https://the.patch.url/the.patch\", \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=perf-test-1",
       "--test-type=perf-test-1",
-      "--builder-name=restart_usb_builder",
+      "--builder-name=tester",
       "--slave-name=tehslave",
       "--build-number=571",
       "--run-python-script",
@@ -348,14 +357,14 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"restart_usb_builder\", \"buildnumber\": 571, \"internal\": true, \"mastername\": \"chromium.testing.master\", \"patch_url\": \"https://the.patch.url/the.patch\", \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"tester\", \"buildnumber\": 571, \"internal\": true, \"mastername\": \"chromium.testing.master\", \"patch_url\": \"https://the.patch.url/the.patch\", \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"restart_usb_builder\", \"buildnumber\": 571, \"internal\": true, \"mastername\": \"chromium.testing.master\", \"patch_url\": \"https://the.patch.url/the.patch\", \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"tester\", \"buildnumber\": 571, \"internal\": true, \"mastername\": \"chromium.testing.master\", \"patch_url\": \"https://the.patch.url/the.patch\", \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=perf-test-2",
       "--test-type=perf-test-2",
-      "--builder-name=restart_usb_builder",
+      "--builder-name=tester",
       "--slave-name=tehslave",
       "--build-number=571",
       "--run-python-script",
@@ -410,7 +419,8 @@
       "-w",
       "[SLAVE_BUILD]"
     ],
-    "name": "prepare bisect perf regression"
+    "name": "prepare bisect perf regression",
+    "skip": true
   },
   {
     "cmd": [
@@ -422,7 +432,8 @@
       "--path_to_config",
       "test.py"
     ],
-    "name": "run bisect perf regression"
+    "name": "run bisect perf regression",
+    "skip": true
   },
   {
     "always_run": true,
@@ -478,7 +489,8 @@
     "always_run": true,
     "cmd": [
       "rm",
-      "-rf"
+      "-rf",
+      "[SLAVE_BUILD]/src/out/build_product.zip"
     ],
     "name": "cleanup_build"
   }
