@@ -482,7 +482,20 @@ class AndroidApi(recipe_api.RecipeApi):
                                       'run-bisect-perf-regression.py'),
          '-w', self.m.path['slave_build']] + args)
 
-  def run_test_suite(self, suite, args=[]):
+  def run_test_suite(self, suite, verbose=True, isolate_file_path=None,
+                     gtest_filter=None, tool=None):
+    args = []
+    if verbose:
+      args.append('--verbose')
+    if self.c.BUILD_CONFIG == 'Release':
+      args.append('--release')
+    if isolate_file_path:
+      args.append('--isolate_file_path=%s' % isolate_file_path)
+    if gtest_filter:
+      args.append('--gtest_filter=%s' % gtest_filter)
+    if tool:
+      args.append('--tool=%s' % tool)
+
     yield self.m.python(
         str(suite),
         self.m.path['checkout'].join('build', 'android', 'test_runner.py'),

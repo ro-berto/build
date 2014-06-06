@@ -6,6 +6,7 @@ DEPS = [
     'adb',
     'chromium_android',
     'json',
+    'path',
     'properties',
 ]
 
@@ -70,7 +71,11 @@ def GenSteps(api):
       annotation='SmallTest',
       except_annotation='FlakyTest',
       screenshot=True)
-  yield api.chromium_android.run_test_suite('unittests')
+  yield api.chromium_android.run_test_suite(
+      'unittests',
+      isolate_file_path=api.path['checkout'].join('some_file.isolate'),
+      gtest_filter='WebRtc*',
+      tool='asan')
   yield api.chromium_android.run_bisect_script(extra_src='test.py',
                                                path_to_config='test.py')
 

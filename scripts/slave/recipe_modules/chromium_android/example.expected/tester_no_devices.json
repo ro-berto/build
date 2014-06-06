@@ -406,7 +406,12 @@
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "gtest",
       "-s",
-      "unittests"
+      "unittests",
+      "--verbose",
+      "--release",
+      "--isolate_file_path=[SLAVE_BUILD]/src/some_file.isolate",
+      "--gtest_filter=WebRtc*",
+      "--tool=asan"
     ],
     "env": {
       "BUILDTYPE": "Release"

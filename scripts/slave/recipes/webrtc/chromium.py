@@ -104,7 +104,8 @@ def GenSteps(api):
     if api.chromium.c.TARGET_PLATFORM == 'android':
       steps.append(api.chromium_android.common_tests_setup_steps())
       steps.append(api.chromium_android.run_test_suite(
-          'content_browsertests', args=['--gtest_filter=WebRtc*']))
+          'content_browsertests',
+          gtest_filter='WebRtc*'))
       steps.append(api.chromium_android.common_tests_final_steps())
     else:
       test_steps = api.webrtc.runtests(recipe_config.get('test_suite'),

@@ -211,7 +211,8 @@
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "gtest",
       "-s",
-      "base_unittests"
+      "base_unittests",
+      "--release"
     ],
     "env": {
       "BUILDTYPE": "Release"

@@ -199,6 +199,7 @@
       "gtest",
       "-s",
       "content_browsertests",
+      "--verbose",
       "--gtest_filter=WebRtc*"
     ],
     "env": {
