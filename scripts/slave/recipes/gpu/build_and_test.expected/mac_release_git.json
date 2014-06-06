@@ -324,7 +324,6 @@
       "--output-format=gtest",
       "--browser=release",
       "-v",
-      "--use-devtools-active-port",
       "--build-revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--test-machine-name",
@@ -366,7 +365,6 @@
       "--output-format=gtest",
       "--browser=release",
       "-v",
-      "--use-devtools-active-port",
       "--build-revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--upload-refimg-to-cloud-storage",
@@ -412,8 +410,7 @@
       "--show-stdout",
       "--output-format=gtest",
       "--browser=release",
-      "-v",
-      "--use-devtools-active-port"
+      "-v"
     ],
     "name": "webgl_conformance_tests"
   },
@@ -450,8 +447,7 @@
       "--show-stdout",
       "--output-format=gtest",
       "--browser=release",
-      "-v",
-      "--use-devtools-active-port"
+      "-v"
     ],
     "name": "context_lost_tests"
   },
@@ -488,8 +484,7 @@
       "--show-stdout",
       "--output-format=gtest",
       "--browser=release",
-      "-v",
-      "--use-devtools-active-port"
+      "-v"
     ],
     "name": "memory_test"
   },
@@ -526,8 +521,7 @@
       "--show-stdout",
       "--output-format=gtest",
       "--browser=release",
-      "-v",
-      "--use-devtools-active-port"
+      "-v"
     ],
     "name": "screenshot_sync_tests"
   },
@@ -564,8 +558,7 @@
       "--show-stdout",
       "--output-format=gtest",
       "--browser=release",
-      "-v",
-      "--use-devtools-active-port"
+      "-v"
     ],
     "name": "hardware_accelerated_feature_tests"
   },
@@ -602,8 +595,7 @@
       "--show-stdout",
       "--output-format=gtest",
       "--browser=release",
-      "-v",
-      "--use-devtools-active-port"
+      "-v"
     ],
     "name": "gpu_process_launch_tests"
   },
@@ -641,7 +633,6 @@
       "--output-format=gtest",
       "--browser=release",
       "-v",
-      "--use-devtools-active-port",
       "--build-revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--test-machine-name",

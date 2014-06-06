@@ -313,7 +313,7 @@ class GpuApi(recipe_api.RecipeApi):
 
   def _run_isolated_telemetry_gpu_test(self, test, args=None, name=None,
                                        **kwargs):
-    test_args = ['-v', '--use-devtools-active-port']
+    test_args = ['-v']
     if args:
       test_args.extend(args)
     yield self.m.isolate.run_telemetry_test(

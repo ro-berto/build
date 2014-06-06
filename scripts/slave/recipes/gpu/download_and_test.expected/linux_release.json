@@ -226,7 +226,6 @@
       "--output-format=gtest",
       "--browser=release",
       "-v",
-      "--use-devtools-active-port",
       "--build-revision",
       "160000",
       "--test-machine-name",
@@ -273,7 +272,6 @@
       "--output-format=gtest",
       "--browser=release",
       "-v",
-      "--use-devtools-active-port",
       "--build-revision",
       "160000",
       "--upload-refimg-to-cloud-storage",
@@ -324,8 +322,7 @@
       "--show-stdout",
       "--output-format=gtest",
       "--browser=release",
-      "-v",
-      "--use-devtools-active-port"
+      "-v"
     ],
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
@@ -367,8 +364,7 @@
       "--show-stdout",
       "--output-format=gtest",
       "--browser=release",
-      "-v",
-      "--use-devtools-active-port"
+      "-v"
     ],
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
@@ -410,8 +406,7 @@
       "--show-stdout",
       "--output-format=gtest",
       "--browser=release",
-      "-v",
-      "--use-devtools-active-port"
+      "-v"
     ],
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
@@ -453,8 +448,7 @@
       "--show-stdout",
       "--output-format=gtest",
       "--browser=release",
-      "-v",
-      "--use-devtools-active-port"
+      "-v"
     ],
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
@@ -496,8 +490,7 @@
       "--show-stdout",
       "--output-format=gtest",
       "--browser=release",
-      "-v",
-      "--use-devtools-active-port"
+      "-v"
     ],
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
@@ -539,8 +532,7 @@
       "--show-stdout",
       "--output-format=gtest",
       "--browser=release",
-      "-v",
-      "--use-devtools-active-port"
+      "-v"
     ],
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
@@ -583,7 +575,6 @@
       "--output-format=gtest",
       "--browser=release",
       "-v",
-      "--use-devtools-active-port",
       "--build-revision",
       "160000",
       "--test-machine-name",
