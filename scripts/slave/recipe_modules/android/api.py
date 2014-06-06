@@ -18,6 +18,7 @@ class AOSPApi(recipe_api.RecipeApi):
             self.c.build_path,
             self.c.lunch_flavor]
 
+  # TODO(hjd): Remove after rsync refactor complete.
   def chromium_with_trimmed_deps(self, use_revision=True):
     svn_revision = 'HEAD'
     if use_revision and 'revision' in self.m.properties:
@@ -54,6 +55,31 @@ class AOSPApi(recipe_api.RecipeApi):
     if not self.m.step_history.last_step().json.output['did_run']:
       yield self.m.gclient.checkout(spec)
     del self.m.gclient.spec_alias
+
+    yield self.m.gclient.runhooks(env={'GYP_CHROMIUM_NO_ACTION': 1})
+
+  # TODO(hjd): Remove after rsync refactor complete.
+  def symlink_chromium_into_android_tree_step(self):
+    if self.m.path.exists(self.c.slave_chromium_in_android_path):
+      yield self.m.step('remove chromium_org',
+                          ['rm', '-rf', self.c.slave_chromium_in_android_path])
+    yield self.m.step('symlink chromium_org', [
+      'ln', '-s',
+      self.m.path['checkout'],
+      self.c.slave_chromium_in_android_path]),
+
+  def sync_chromium(self, use_revision=True):
+    svn_revision = 'HEAD'
+    if use_revision and 'revision' in self.m.properties:
+      svn_revision = str(self.m.properties['revision'])
+
+    spec = self.m.gclient.make_config('chromium')
+    spec.solutions[0].revision = svn_revision
+    spec.target_os = ['android']
+
+    yield self.m.bot_update.ensure_checkout(spec)
+    if not self.m.step_history.last_step().json.output['did_run']:
+      yield self.m.gclient.checkout(spec)
 
     yield self.m.gclient.runhooks(env={'GYP_CHROMIUM_NO_ACTION': 1})
 
@@ -114,6 +140,7 @@ class AOSPApi(recipe_api.RecipeApi):
           self.c.chromium_in_android_subpath])
 
   def repo_sync_steps(self):
+    # TODO(hjd): remove after buildbot has moved to rsyncing
     # If external/chromium_org is a symlink this prevents repo from trying to
     # update the symlink's target (which might be an svn checkout).
     yield self.m.python.inline(
@@ -133,20 +160,50 @@ class AOSPApi(recipe_api.RecipeApi):
       sync_flags.extend(['-m', self.c.sync_manifest_override])
     yield self.m.repo.sync(*sync_flags, cwd=self.c.build_path)
 
-  def symlink_chromium_into_android_tree_step(self):
-    if self.m.path.exists(self.c.slave_chromium_in_android_path):
-      yield self.m.step('remove chromium_org',
-                      ['rm', '-rf', self.c.slave_chromium_in_android_path])
-    yield self.m.step('symlink chromium_org', [
-      'ln', '-s',
-      self.m.path['checkout'],
-      self.c.slave_chromium_in_android_path]),
+  def rsync_chromium_into_android_tree_step(self):
+    # Calculate the blacklist of files to not copy across.
+    yield self.m.step(
+      'calculate blacklist',
+      [
+        self.m.path['checkout'].join('android_webview', 'buildbot',
+                                     'deps_whitelist.py'),
+        '--method', 'android_build',
+        '--path-to-deps', self.m.path['checkout'].join('DEPS'),
+        '--output-json', self.m.json.output()
+      ],
+      step_test_data=self.test_api.calculate_trimmed_deps
+    )
+
+    blacklist = self.m.step_history.last_step().json.output['blacklist']
+    # TODO(hjd): Remove once deps_whitelist.py refactor is complete.
+    # For now we adjust the output to not have leading a 'src/'
+    blacklist = [b.replace('src/', '', 1) for b in blacklist]
+
+    chrome_checkout = str(self.m.path['checkout'])
+    android_chrome_checkout = self.c.slave_chromium_in_android_path
+
+    # rsync expects the from path to end in a / otherwise it copies
+    # the source folder into the destination folder instead of over
+    # it.
+    if chrome_checkout[-1] != '/':
+      chrome_checkout += '/'
+
+    # rsync command format: rsync -ra --exclude=dont/copy/me from/ to
+    # r = recurse
+    # a = 'archive', ensures that symbolic links etc. survive
+    vcs_excludes = ["--exclude='*.svn*'", "--exclude='*.git*'"]
+    excludes =  vcs_excludes + ['--exclude=' + proj for proj in blacklist]
+    command = ['rsync', '-ra'] + excludes + [
+        chrome_checkout, android_chrome_checkout]
+    yield self.m.step('rsync chromium_org', command)
 
   def gyp_webview_step(self):
-    yield self.m.step('gyp_webview', self.with_lunch_command + [
-      self.c.slave_chromium_in_android_path.join('android_webview', 'tools',
-                                                 'gyp_webview'), 'all'],
-      cwd=self.c.slave_chromium_in_android_path)
+    gyp_webview_path = self.c.slave_chromium_in_android_path.join(
+        'android_webview', 'tools', 'gyp_webview')
+    yield self.m.step(
+        'gyp_webview',
+        self.with_lunch_command + [gyp_webview_path, 'all'],
+        cwd=self.c.slave_chromium_in_android_path)
 
   def incompatible_directories_check_step(self):
     webview_license_tool_path = self.c.slave_chromium_in_android_path.join(
