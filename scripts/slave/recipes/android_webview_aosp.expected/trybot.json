@@ -394,14 +394,14 @@
       "[SLAVE_BUILD]/android-src/external/chromium_org/android_webview/tools/gyp_webview",
       "all"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[SLAVE_BUILD]/android-src/external/chromium_org",
     "name": "gyp_webview"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/android_webview/tools/webview_licenses.py",
+      "[SLAVE_BUILD]/android-src/external/chromium_org/android_webview/tools/webview_licenses.py",
       "incompatible_directories"
     ],
     "name": "incompatible directories"
