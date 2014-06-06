@@ -843,7 +843,7 @@ def get_total_disk_space():
     return (total, free)
 
 
-def get_revision(folder_name, git_url, revisions):
+def get_target_revision(folder_name, git_url, revisions):
   normalized_name = folder_name.strip('/')
   if normalized_name in revisions:
     return revisions[normalized_name]
@@ -853,6 +853,7 @@ def get_revision(folder_name, git_url, revisions):
 
 
 def force_revision(folder_name, revision, git_svn=False):
+  git('fetch', 'origin', cwd=folder_name)
   if revision and revision.upper() != 'HEAD':
     if revision and revision.isdigit() and len(revision) < 40:
       # rev_num is really a svn revision number, convert it into a git hash.
@@ -912,9 +913,8 @@ def git_checkout(solutions, revisions, shallow):
           raise
 
       git('clean', '-df', cwd=sln_dir)
-      git('fetch', 'origin', cwd=sln_dir)
 
-      revision = get_revision(name, url, revisions) or 'HEAD'
+      revision = get_target_revision(name, url, revisions) or 'HEAD'
       try:
         force_revision(sln_dir, revision, url==CHROMIUM_SRC_URL)
       except SVNRevisionNotFound:
@@ -1111,7 +1111,8 @@ def ensure_deps_revisions(deps_url_mapping, solutions, revisions):
     if deps_name.strip('/') in solutions:
       # This has already been forced to the correct solution by git_checkout().
       continue
-    revision = get_revision(deps_name, deps_data.get('url', None), revisions)
+    revision = get_target_revision(deps_name, deps_data.get('url', None),
+                                   revisions)
     if not revision:
       continue
     # TODO(hinoka): Catch SVNRevisionNotFound error maybe?
