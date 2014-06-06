@@ -346,6 +346,8 @@ DISABLED_BUILDERS = {
         'Windows Content Browser (DrMemory full) (2)',
         'Windows Content Browser (DrMemory full) (3)',
         'Windows Content Browser (DrMemory full) (4)',
+        'Windows Content Browser (DrMemory full) (5)',
+        'Windows Content Browser (DrMemory full) (6)',
         'Windows Browser (DrMemory full) (1)',
         'Windows Browser (DrMemory full) (2)',
         'Windows Browser (DrMemory full) (3)',
@@ -355,6 +357,9 @@ DISABLED_BUILDERS = {
         'Windows Browser (DrMemory full) (7)',
         'Windows Browser (DrMemory full) (8)',
         'Windows Browser (DrMemory full) (9)',
+        'Windows Browser (DrMemory full) (10)',
+        'Windows Browser (DrMemory full) (11)',
+        'Windows Browser (DrMemory full) (12)',
         # ClusterFuzz relies on svn revisions to do bisection checks.
         # crbug.com/377963
         'Win SyzyASAN LKGR',
