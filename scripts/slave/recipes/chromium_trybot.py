@@ -350,7 +350,8 @@ def GenSteps(api):
 
     @staticmethod
     def run(suffix):
-      return api.chromium.checkdeps(suffix, can_fail_build=False)
+      return api.chromium.checkdeps(
+          suffix, can_fail_build=False, always_run=True)
 
     def has_valid_results(self, suffix):
       return api.step_history[self._step_name(suffix)].json.output is not None
@@ -373,7 +374,8 @@ def GenSteps(api):
 
     @staticmethod
     def run(suffix):
-      return api.chromium.checkperms(suffix, can_fail_build=False)
+      return api.chromium.checkperms(
+          suffix, can_fail_build=False, always_run=True)
 
     def has_valid_results(self, suffix):
       return api.step_history[self._step_name(suffix)].json.output is not None
@@ -395,7 +397,8 @@ def GenSteps(api):
 
     @staticmethod
     def run(suffix):
-      return api.chromium.checklicenses(suffix, can_fail_build=False)
+      return api.chromium.checklicenses(
+          suffix, can_fail_build=False, always_run=True)
 
     def has_valid_results(self, suffix):
       return api.step_history[self._step_name(suffix)].json.output is not None

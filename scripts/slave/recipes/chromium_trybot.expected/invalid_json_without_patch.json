@@ -263,6 +263,7 @@
     "name": "telemetry_perf_unittests"
   },
   {
+    "always_run": true,
     "can_fail_build": false,
     "cmd": [
       "python",
@@ -485,6 +486,7 @@
     "name": "gclient runhooks (2)"
   },
   {
+    "always_run": true,
     "can_fail_build": false,
     "cmd": [
       "python",
