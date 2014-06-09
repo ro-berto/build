@@ -188,12 +188,16 @@ class AOSPApi(recipe_api.RecipeApi):
     if chrome_checkout[-1] != '/':
       chrome_checkout += '/'
 
-    # rsync command format: rsync -ra --exclude=dont/copy/me from/ to
-    # r = recurse
-    # a = 'archive', ensures that symbolic links etc. survive
-    vcs_excludes = ["--exclude='*.svn*'", "--exclude='*.git*'"]
-    excludes =  vcs_excludes + ['--exclude=' + proj for proj in blacklist]
-    command = ['rsync', '-ra'] + excludes + [
+    # rsync command format: rsync [options] from/ to
+    # -r  recurse
+    # -a  'archive', ensures that symbolic links etc. survive
+    # -v  Show files being copied
+    # --delete  Delete destination files not present in source directory
+    # --exclude=dont/copy/me  Don't sync directory.
+    vcs_excludes = ["--exclude=.svn", "--exclude=.git"]
+    excludes = vcs_excludes + ['--exclude=' + proj for proj in blacklist]
+    options = ['-rav', '--delete']
+    command = ['rsync'] + options + excludes + [
         chrome_checkout, android_chrome_checkout]
     yield self.m.step('rsync chromium_org', command)
 

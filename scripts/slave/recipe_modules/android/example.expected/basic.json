@@ -227,9 +227,10 @@
   {
     "cmd": [
       "rsync",
-      "-ra",
-      "--exclude='*.svn*'",
-      "--exclude='*.git*'",
+      "-rav",
+      "--delete",
+      "--exclude=.svn",
+      "--exclude=.git",
       "--exclude=blacklist/project/2",
       "--exclude=blacklist/project/1",
       "[SLAVE_BUILD]/src/",
