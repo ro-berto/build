@@ -467,7 +467,6 @@ BUILDERS = {
       'Win DrMemory Full': {
         'recipe_config': 'webrtc',
         'chromium_apply_config': ['drmemory_full'],
-        'gclient_apply_config': ['drmemory'],
         'webrtc_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -480,7 +479,6 @@ BUILDERS = {
       'Win DrMemory Light': {
         'recipe_config': 'webrtc',
         'chromium_apply_config': ['drmemory_light'],
-        'gclient_apply_config': ['drmemory'],
         'webrtc_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -969,7 +967,6 @@ BUILDERS = {
       'win_drmemory_light': {
         'recipe_config': 'webrtc',
         'chromium_apply_config': ['drmemory_light'],
-        'gclient_apply_config': ['drmemory'],
         'webrtc_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -982,7 +979,6 @@ BUILDERS = {
       'win_drmemory_full': {
         'recipe_config': 'webrtc',
         'chromium_apply_config': ['drmemory_full'],
-        'gclient_apply_config': ['drmemory'],
         'webrtc_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
