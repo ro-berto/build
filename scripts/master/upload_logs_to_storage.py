@@ -273,6 +273,7 @@ class GCStorage(object):
         # This is not supposed to be reachable, but leaving it just in case.
         raise ValueError('Invalid value for source_type: %s' % source_type)
 
+      out_f.flush()
       logger.debug('Done uncompressing/copying.')
       _, _, returncode = call_gsutil(
         ['cp', out_f.name, self._get_gs_url(builder_name,
