@@ -3828,7 +3828,7 @@ index e70a51242ca09ba7ec7034e2092f4053c3d0332c..c90af5bec8eb57e5075858623fcc5d59
 @@ -190,6 +190,35 @@ class BuildsetsConnectorComponent(base.DBConnectorComponent):
              return [ self._row2dict(row) for row in res.fetchall() ]
          return self.db.pool.do(thd)
- 
+
 +    def getRecentBuildsets(self, count, branch=None, repository=None,
 +                           complete=None):
 +        def thd(conn):
@@ -3869,7 +3869,7 @@ index a6d4253cae43572992eac8d73b24cead97f63d9e..d28bcc61a72fd875af51c533b4ae1891
 @@ -441,3 +441,91 @@ class TestBuildsetsConnectorComponent(
          d.addCallbacks(cb, eb)
          return d
- 
+
 +    def insert_test_getRecentBuildsets_data(self):
 +        return self.insertTestData([
 +            fakedb.Change(changeid=91, branch='branch_a', repository='repo_a'),
@@ -3958,3 +3958,26 @@ index a6d4253cae43572992eac8d73b24cead97f63d9e..d28bcc61a72fd875af51c533b4ae1891
 +              self.assertEqual(bsdictlist, [])
 +          d.addCallback(check)
 +          return d
+
+Date:   Mon Jun 9 15:17:46 2014 -0700
+
+Buildbot fix in triggerable.py
+
+The _waiters field is a dictionary, but it is treated as a list.
+
+R=agable@chromium.org
+BUG=382693
+
+diff --git a/third_party/buildbot_8_4p1/buildbot/schedulers/triggerable.py b/third_party/buildbot_8_4p1/buildbot/schedulers/triggerable.py
+index 0619977..19d6c4d 100644
+--- a/third_party/buildbot_8_4p1/buildbot/schedulers/triggerable.py
++++ b/third_party/buildbot_8_4p1/buildbot/schedulers/triggerable.py
+@@ -62,7 +62,7 @@ class Triggerable(base.BaseScheduler):
+         # and errback any outstanding deferreds
+         if self._waiters:
+             msg = 'Triggerable scheduler stopped before build was complete'
+-            for d in self._waiters:
++            for d in self._waiters.itervalues():
+                 d.errback(failure.Failure(RuntimeError(msg)))
+             self._waiters = {}
+
