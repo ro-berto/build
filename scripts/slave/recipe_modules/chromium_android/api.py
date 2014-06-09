@@ -276,6 +276,9 @@ class AndroidApi(recipe_api.RecipeApi):
         step_result.presentation.links.update({
           'report a bug': link
         })
+      # Purple this step if no online device is found.
+      if step_result.retcode == 1:
+        step_result.presentation.status = 'EXCEPTION'
 
     args = []
     if restart_usb:

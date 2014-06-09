@@ -102,3 +102,7 @@ def GenTests(api):
   yield (api.test('tester_no_devices') +
          properties_for('tester') +
          api.step_data('device_status_check', retcode=1))
+
+  yield (api.test('tester_other_device_failure') +
+         properties_for('tester') +
+         api.step_data('device_status_check', retcode=2))
