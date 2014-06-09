@@ -63,6 +63,22 @@ F('win_x64_full', win_out().ChromiumFactory(
       'gs_acl': 'public-read',
     }))
 
+# ASan/Win supports neither the component build nor NaCL at the moment.
+asan_win_gyp = 'clang=1 asan=1 component=static_library disable_nacl=1'
+
+# Clang is not stable enough on Windows to use a gatekeeper yet.
+B('Win ASan Release', 'win_asan_rel', scheduler='chromium_lkgr')
+F('win_asan_rel', win_out().ChromiumASANFactory(
+    compile_timeout=8*3600,  # We currently use a VM, which is extremely slow.
+    clobber=True,
+    options=['--build-tool=ninja', '--', 'chromium_builder_asan'],
+    factory_properties={
+       'cf_archive_build': ActiveMaster.is_production_host,
+       'cf_archive_name': 'asan',
+       'gs_bucket': 'gs://chromium-browser-asan',
+       'gs_acl': 'public-read',
+       'gclient_env': {'GYP_DEFINES': asan_win_gyp}}))
+
 ################################################################################
 ## Mac
 ################################################################################
