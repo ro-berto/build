@@ -101,6 +101,7 @@ F('f_webkit_linux_rel_asan', linux().ChromiumFactory(
         'gs_bucket': 'gs://webkit-asan',
         'test_results_server': 'test-results.appspot.com',
         'time_out_ms': '48000',  # ASAN is roughly 8x slower than Release.
+        'webkit_test_options': ['--enable-sanitizer'],
     }))
 
 B('WebKit Linux Oilpan ASAN', 'f_webkit_linux_oilpan_rel_asan',
@@ -128,6 +129,7 @@ F('f_webkit_linux_oilpan_rel_asan', linux().ChromiumFactory(
         'gs_bucket': 'gs://webkit-asan',
         'test_results_server': 'test-results.appspot.com',
         'time_out_ms': '48000',  # ASAN is roughly 8x slower than Release.
+        'webkit_test_options': ['--enable-sanitizer'],
     }))
 
 B('WebKit Linux Leak', 'f_webkit_linux_leak_rel', scheduler='global_scheduler',
