@@ -352,6 +352,14 @@ DISABLED_BUILDERS = {
         'Win SyzyASAN LKGR',
     ],
     'chromium.perf': [
+        # Update step isn't respecting update.flag for some reason.
+        'Linux Builder',
+        'Linux Perf (1)',
+        'Linux Perf (2)',
+        'Linux Perf (3)',
+        'Linux Perf (4)',
+        'Linux Perf (5)',
+
         # Android builder has small disk space.
         'Android Builder',
         'Android Nexus4 Perf',
