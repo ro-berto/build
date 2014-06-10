@@ -208,7 +208,7 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"gclient_env\": {\"GYP_DEFINES\": \"chromeos=1 component=static_library ffmpeg_branding=ChromeOS gomadir='[BUILD]/goma' proprietary_codecs=1 target_arch=x64 use_goma=1\"}, \"gs_bucket\": \"gs://chromium-browser-snapshots\"}"
+      "{\"gclient_env\": {\"GYP_DEFINES\": \"chromeos=1 component=static_library ffmpeg_branding=ChromeOS gomadir='[BUILD]/goma' proprietary_codecs=1 target_arch=x64 use_goma=1\"}, \"gs_acl\": \"public-read\", \"gs_bucket\": \"gs://chromium-browser-snapshots\"}"
     ],
     "name": "archive build"
   },

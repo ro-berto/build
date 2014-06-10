@@ -366,7 +366,7 @@ class ChromiumApi(recipe_api.RecipeApi):
                                 'win_apply_syzyasan.py'),
       args)
 
-  def archive_build(self, step_name, gs_bucket, **kwargs):
+  def archive_build(self, step_name, gs_bucket, gs_acl=None, **kwargs):
     """Returns a step invoking archive_build.py to archive a Chromium build."""
 
     # archive_build.py insists on inspecting factory properties. For now just
@@ -375,6 +375,8 @@ class ChromiumApi(recipe_api.RecipeApi):
         'gclient_env': self.c.gyp_env.as_jsonish(),
         'gs_bucket': 'gs://%s' % gs_bucket,
     }
+    if gs_acl is not None:
+      fake_factory_properties['gs_acl'] = gs_acl
 
     args = [
         '--target', self.c.BUILD_CONFIG,

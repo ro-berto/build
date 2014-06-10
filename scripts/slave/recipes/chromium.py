@@ -19,12 +19,16 @@ DEPS = [
 
 
 class ArchiveBuildStep(object):
-  def __init__(self, gs_bucket):
+  def __init__(self, gs_bucket, gs_acl=None):
     self.gs_bucket = gs_bucket
+    self.gs_acl = gs_acl
 
   def run(self, api):
     return api.chromium.archive_build(
-        'archive build', self.gs_bucket)
+        'archive build',
+        self.gs_bucket,
+        gs_acl=self.gs_acl,
+    )
 
   @staticmethod
   def compile_targets(_):
@@ -299,7 +303,10 @@ BUILDERS = {
           'views_unittests',
         ],
         'tests': [
-          ArchiveBuildStep('chromium-browser-snapshots'),
+          ArchiveBuildStep(
+              'chromium-browser-snapshots',
+              gs_acl='public-read',
+          ),
           Deps2GitTest(),
           Deps2SubmodulesTest(),
           CheckpermsTest(),
