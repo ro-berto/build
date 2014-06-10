@@ -453,6 +453,7 @@ def call(*args, **kwargs):
   """Interactive subprocess call."""
   kwargs['stdout'] = subprocess.PIPE
   kwargs['stderr'] = subprocess.STDOUT
+  cwd = kwargs.get('cwd', os.getcwd())
   result_fn = kwargs.pop('result_fn', lambda code, out: RETRY if code else OK)
   stdin_data = kwargs.pop('stdin_data', None)
   tries = kwargs.pop('tries', RETRIES)
@@ -507,7 +508,7 @@ def call(*args, **kwargs):
       break
 
   raise SubprocessFailed('%s failed with code %d in %s after %d attempts.' %
-                         (' '.join(args), code, os.getcwd(), attempt), code)
+                         (' '.join(args), code, cwd, attempt), code)
 
 
 def git(*args, **kwargs):
@@ -930,15 +931,12 @@ def git_checkout(solutions, revisions, shallow):
         # Make sure we start on a known branch first, and not whereever
         # apply_issue left us at before.
         git('checkout', '--force', 'origin/master', cwd=sln_dir)
-      except SubprocessFailed as e:
-        if e.code == 128:
-          # Exited abnormally, theres probably something wrong.
-          # Lets wipe the checkout and try again.
-          remove(sln_dir)
-          git(*clone_cmd)
-          git('checkout', '--force', 'origin/master', cwd=sln_dir)
-        else:
-          raise
+      except SubprocessFailed:
+        # Exited abnormally, theres probably something wrong.
+        # Lets wipe the checkout and try again.
+        remove(sln_dir)
+        git(*clone_cmd)
+        git('checkout', '--force', 'origin/master', cwd=sln_dir)
 
       git('clean', '-df', cwd=sln_dir)
 
