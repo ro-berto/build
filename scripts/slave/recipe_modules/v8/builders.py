@@ -19,6 +19,16 @@ BUILDERS = {
         'build_gs_archive': 'linux_rel_archive',
         'testing': {'platform': 'linux'},
       },
+      'V8 Linux - nosnap debug builder': {
+        'chromium_apply_config': ['no_snapshot'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'build_gs_archive': 'linux_nosnap_dbg_archive',
+        'testing': {'platform': 'linux'},
+      },
       'V8 Linux': {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -223,6 +233,24 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
 ####### Category: Linux64
+      'V8 Linux64 - builder': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'build_gs_archive': 'linux64_rel_archive',
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux64 - debug builder': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'build_gs_archive': 'linux64_dbg_archive',
+        'testing': {'platform': 'linux'},
+      },
       'V8 Linux64': {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
