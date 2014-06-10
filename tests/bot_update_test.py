@@ -3,23 +3,18 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import atexit
 import collections
 import imp
 import json
 import os
 import re
-import signal
-import socket
 import sys
 import tempfile
 import threading
 import unittest
 
-from cStringIO import StringIO
-from subprocess import check_call, Popen, PIPE
+from subprocess import Popen, PIPE
 from textwrap import dedent
-
 
 BUILD_DIR = os.path.realpath(os.path.join(
     os.path.dirname(__file__), '..'))
@@ -29,6 +24,10 @@ CACHE_DIR = os.path.join(SLAVE_DIR, 'cache_dir')
 DEPOT_TOOLS = os.path.realpath(os.path.join(BUILD_DIR, '..', 'depot_tools'))
 GIT_CL_PATH = os.path.realpath(os.path.join(DEPOT_TOOLS, 'git_cl.py'))
 
+test_util = imp.load_source(
+    'test_util',
+    os.path.join(os.path.dirname(__file__), 'test_util.py'))
+
 chromium_utils = imp.load_source(
     'chromium_utils',
     os.path.join(BUILD_DIR, 'scripts', 'common', 'chromium_utils.py'))
@@ -37,73 +36,8 @@ local_rietveld = imp.load_source(
     'local_rietveld',
     os.path.join(DEPOT_TOOLS, 'testing_support', 'local_rietveld.py'))
 
-def find_free_port():
-  """Find an avaible port on localhost."""
-  sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-  sock.bind(('', 0))
-  port = sock.getsockname()[1]
-  sock.close()
-  return port
-
 # The implementation of find_free_port in local_rietveld is super janky.
-local_rietveld.find_free_port = lambda _: find_free_port()
-
-
-class LocalGitServer(object):
-  """A git server daemon running on localhost."""
-  def __init__(self, root):
-    self.root = root
-    self.port = find_free_port()
-    self.url = 'git://localhost:%s' % self.port
-    self.devnull = open(os.devnull, 'w')
-    os.makedirs(root)
-    self.proc = Popen(
-        ['git', 'daemon', '--export-all', '--reuseaddr', '--listen=localhost',
-         '--port=%d' % self.port, '--base-path=%s' % root,  root],
-        stdout=self.devnull, stderr=self.devnull)
-
-  def stop(self):
-    try:
-      self.proc.terminate()
-      self.devnull.close()
-    except Exception:
-      pass
-
-
-class LocalSvnServer(object):
-  """An svnserve daemon running on localhost."""
-  def __init__(self, root):
-    self.root = root
-    self.pid_file = os.path.join(root, 'svnserve.pid')
-    self.port = find_free_port()
-    self.url = 'svn://localhost:%d/svn' % self.port
-    self.devnull = open(os.devnull, 'w')
-    os.makedirs(self.root)
-    check_call(
-        ['svnadmin', 'create', root], stdout=self.devnull, stderr=self.devnull)
-    with open(os.path.join(root, 'conf', 'svnserve.conf'), 'w') as fh:
-      fh.write(dedent('''\
-          [general]
-          anon-access = write
-          '''))
-    check_call(
-        ['svnserve', '-d', '-r', self.root, '--listen-port=%d' % self.port,
-         '--pid-file=%s' % self.pid_file],
-        stdout=self.devnull, stderr=self.devnull)
-    with open(self.pid_file) as fh:
-      self.pid = int(fh.read().strip())
-    atexit.register(self.stop)
-
-  def stop(self):
-    try:
-      if self.pid:
-        os.kill(self.pid, signal.SIGKILL)
-        self.pid = None
-      if self.devnull:
-        self.devnull.close()
-        self.devnull = None
-    except Exception:
-      pass
+local_rietveld.find_free_port = lambda _: test_util.find_free_port()
 
 
 class BotUpdateTest(unittest.TestCase):
@@ -299,8 +233,10 @@ class BotUpdateTest(unittest.TestCase):
   @classmethod
   def setUpClass(cls):
     cls.server_root = tempfile.mkdtemp(prefix=cls.__name__)
-    cls.git_server = LocalGitServer(os.path.join(cls.server_root, 'git'))
-    cls.svn_server = LocalSvnServer(os.path.join(cls.server_root, 'svn'))
+    cls.git_server = test_util.LocalGitServer(
+        os.path.join(cls.server_root, 'git'))
+    cls.svn_server = test_util.LocalSvnServer(
+        os.path.join(cls.server_root, 'svn'))
     cls.rietveld = local_rietveld.LocalRietveld()
     cls.rietveld.start_server()
 
@@ -495,35 +431,6 @@ class BotUpdateTest(unittest.TestCase):
   def tearDown(self):
     chromium_utils.RemoveDirectory(self.workdir)
 
-  @staticmethod
-  def capture_terminal(f, *args, **kwargs):
-    """Run f() with sys.stdout and sys.stderr reassigned to buffered pipes."""
-
-    old_std = (sys.stdout, sys.stderr)
-    (out_buf, err_buf) = (StringIO(), StringIO())
-    (out_pipe, err_pipe) = (os.pipe(), os.pipe())
-    def _thr_main(fd, buf):
-      with os.fdopen(fd) as fh:
-        buf.write(fh.read())
-    (out_thread, err_thread) = (
-        threading.Thread(target=_thr_main, args=(out_pipe[0], out_buf)),
-        threading.Thread(target=_thr_main, args=(err_pipe[0], err_buf)))
-    out_thread.start()
-    err_thread.start()
-    sys.stdout = os.fdopen(out_pipe[1], 'w')
-    sys.stderr = os.fdopen(err_pipe[1], 'w')
-    try:
-      result = f(*args, **kwargs)
-    except Exception as e:
-      sys.excepthook(*sys.exc_info())
-      result = e
-    sys.stdout.close()
-    sys.stderr.close()
-    out_thread.join()
-    err_thread.join()
-    (sys.stdout, sys.stderr) = old_std
-    return result, out_buf, err_buf
-
   def run_bot_update(self, tweak_module_func=None):
     """Runs the main() method of bot_update.py.
 
@@ -543,7 +450,7 @@ class BotUpdateTest(unittest.TestCase):
     mod.UPLOAD_TELEMETRY = False
     if tweak_module_func:
       tweak_module_func(mod)
-    status, stdout, stderr = self.capture_terminal(mod.main)
+    status, stdout, stderr = test_util.capture_terminal(mod.main)
     if isinstance(status, Exception):
       status = 1
     elif status is None:
@@ -564,7 +471,7 @@ class BotUpdateTest(unittest.TestCase):
     mod = imp.load_source('git_cl', GIT_CL_PATH)
     if tweak_module_func:
       tweak_module_func(mod)
-    status, stdout, stderr = self.capture_terminal(mod.main, argv)
+    status, stdout, stderr = test_util.capture_terminal(mod.main, argv)
     if isinstance(status, Exception):
       status = 1
     elif status is None:
