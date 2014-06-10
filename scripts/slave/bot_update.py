@@ -352,6 +352,14 @@ DISABLED_BUILDERS = {
         'Win SyzyASAN LKGR',
     ],
     'chromium.perf': [
+        # Android builder has small disk space.
+        'Android Builder',
+        'Android Nexus4 Perf',
+        'Android Nexus5 Perf',
+        'Android Nexus7v2 Perf',
+        'Android Nexus10 Perf',
+
+        # Windows disabled for performance reasons.
         'Win Builder',
         'Win x64 Builder',
         'Win 8 Perf (1)',
