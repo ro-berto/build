@@ -80,7 +80,8 @@ def GenSteps(api):
       flakiness_dashboard='test-results.appspot.com',
       annotation='SmallTest',
       except_annotation='FlakyTest',
-      screenshot=True)
+      screenshot=True,
+      host_driven_root=api.path['checkout'].join('chrome', 'test'))
   yield api.chromium_android.run_test_suite(
       'unittests',
       isolate_file_path=api.path['checkout'].join('some_file.isolate'),

@@ -297,7 +297,7 @@
       "[SLAVE_BUILD]/src/out/Release/coverage",
       "--python-only",
       "--host-driven-root",
-      "[SLAVE_BUILD]/src/clank/test"
+      "[SLAVE_BUILD]/src/chrome/test"
     ],
     "name": "Instrumentation test SmallTest"
   },

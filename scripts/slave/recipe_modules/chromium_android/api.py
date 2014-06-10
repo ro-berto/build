@@ -392,7 +392,8 @@ class AndroidApi(recipe_api.RecipeApi):
   def run_instrumentation_suite(self, test_apk, test_data=None,
                                 flakiness_dashboard=None,
                                 annotation=None, except_annotation=None,
-                                screenshot=False, verbose=False, **kwargs):
+                                screenshot=False, verbose=False, 
+                                host_driven_root=None, **kwargs):
     args = ['--test-apk', test_apk]
     if test_data:
       args.extend(['--test_data', test_data])
@@ -411,8 +412,8 @@ class AndroidApi(recipe_api.RecipeApi):
     if self.c.coverage:
       args.extend(['--coverage-dir', self.coverage_dir,
                    '--python-only'])
-      if self.c.INTERNAL:
-        args.extend(['--host-driven-root', self.internal_dir.join('test')])
+    if host_driven_root:
+      args.extend(['--host-driven-root', host_driven_root])
 
     yield self.m.python(
         'Instrumentation test %s' % (annotation or test_data),

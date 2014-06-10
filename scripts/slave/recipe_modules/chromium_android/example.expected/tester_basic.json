@@ -296,7 +296,9 @@
       "-E",
       "FlakyTest",
       "--screenshot",
-      "--release"
+      "--release",
+      "--host-driven-root",
+      "[SLAVE_BUILD]/src/chrome/test"
     ],
     "name": "Instrumentation test SmallTest"
   },
