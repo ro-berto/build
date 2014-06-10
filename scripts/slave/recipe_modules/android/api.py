@@ -223,6 +223,7 @@ class AOSPApi(recipe_api.RecipeApi):
     envsetup = envsetup or self.with_lunch_command
     targets = targets or []
     env = env or {}
+    env['USE_LEGACY_COMMON_JAVAC'] = 'false'
     if defines:
       defines_str = ' '.join('%s=%s' % kv for kv in defines.iteritems())
       targets.insert(0, defines_str)
