@@ -4,6 +4,7 @@
 
 DEPS = [
     'adb',
+    'chromium',
     'chromium_android',
     'json',
     'path',
@@ -52,6 +53,9 @@ def GenSteps(api):
   yield api.chromium_android.runhooks()
   yield api.chromium_android.apply_svn_patch()
   yield api.chromium_android.run_tree_truth()
+  yield api.chromium.get_version()
+  assert 'MAJOR' in api.chromium.version
+
   if config['build']:
     yield api.chromium_android.compile()
   else:

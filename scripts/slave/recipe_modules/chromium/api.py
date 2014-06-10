@@ -51,6 +51,28 @@ class ChromiumApi(recipe_api.RecipeApi):
     """Return the path to the built executable directory."""
     return self.c.build_dir.join(self.c.build_config_fs)
 
+  @property
+  def version(self):
+    """Returns a version dictionary (after get_version()), e.g.
+
+    { 'MAJOR'": '37', 'MINOR': '0', 'BUILD': '2021', 'PATCH': '0' }
+    """
+    text = self.m.step_history['get version'].stdout
+    output = {}
+    for line in text.splitlines():
+      [k,v] = line.split('=', 1)
+      output[k] = v
+    return output
+
+  def get_version(self):
+    yield self.m.step(
+        'get version',
+        ['cat', self.m.path['checkout'].join('chrome', 'VERSION')],
+        stdout=self.m.raw_io.output('version'),
+        step_test_data=(
+            lambda: self.m.raw_io.test_api.stream_output(
+                "MAJOR=37\nMINOR=0\nBUILD=2021\nPATCH=0\n")))
+
   def compile(self, targets=None, name=None, abort_on_failure=True,
               force_clobber=False, **kwargs):
     """Return a compile.py invocation."""

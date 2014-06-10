@@ -167,6 +167,14 @@
   },
   {
     "cmd": [
+      "cat",
+      "[SLAVE_BUILD]/src/chrome/VERSION"
+    ],
+    "name": "get version",
+    "stdout": "/path/to/tmp/version"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
