@@ -27,6 +27,10 @@ BUILDERS = {
     },
     'tester': {
         'build': False,
+    },
+    'perf_runner': {
+        'perf_config': 'sharded_perf_tests.json',
+        'build': False,
     }
 }
 
@@ -61,9 +65,11 @@ def GenSteps(api):
       restart_usb=config.get('restart_usb', False))
 
   yield api.chromium_android.monkey_test()
-  yield api.chromium_android.run_sharded_perf_tests(
-      config='fake_config.json',
-      flaky_config='flake_fakes.json')
+
+  if config.get('perf_config'):
+    yield api.chromium_android.run_sharded_perf_tests(
+        config='fake_config.json',
+        flaky_config='flake_fakes.json')
   yield api.chromium_android.run_instrumentation_suite(
       test_apk='AndroidWebViewTest',
       test_data='webview:android_webview/test/data/device_files',

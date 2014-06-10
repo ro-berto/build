@@ -353,19 +353,19 @@ class AndroidApi(recipe_api.RecipeApi):
     yield self._run_sharded_tests(config=config, flaky_config=flaky_config,
                                   **kwargs)
 
-    # now we run runtest.py on each test to cat and upload its result
-    config_name = str(config).split('/')[-1]
-    yield self.m.json.read(
-        'Read test config %s' % config_name, config,
+    # now obtain the list of tests that were executed.
+    yield self.m.step(
+        'get perf test list',
+        [self.m.path['checkout'].join('build', 'android', 'test_runner.py'),
+         'perf', '--steps', config, '--output-json-list', self.m.json.output()],
         step_test_data=lambda: self.m.json.test_api.output([
-            [ "perf-test-1", "tools/perf/run_benchmark -v perf-test-1" ],
-            [ "perf-test-2", "tools/perf/run_benchmark -v perf-test-2" ] ]),
-        always_run=True)
+            'perf-test-1', 'perf-test-2']),
+        always_run=True
+    )
     perf_tests = self.m.step_history.last_step().json.output
 
-    for [test_name, test_cmd] in perf_tests:
+    for test_name in perf_tests:
       test_name = str(test_name)  # un-unicode
-      test_cmd = str(test_cmd)
       yield self.m.chromium.runtest(
           self.m.path['checkout'].join('build', 'android', 'test_runner.py'),
           ['perf', '--print-step', test_name, '--verbose'],
