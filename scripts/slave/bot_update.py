@@ -160,6 +160,7 @@ ENABLED_MASTERS = [
     'chromium.gpu.fyi',
     'chromium.linux',
     'chromium.mac',
+    'chromium.perf',
 ]
 ENABLED_MASTERS += internal_data.get('ENABLED_MASTERS', [])
 
@@ -313,10 +314,6 @@ DISABLED_BUILDERS = {
         # its a 40GB bot.
         'Android Clang Builder (dbg)',
     ],
-    'chromium.perf': [
-        'Win 7 ATI GPU Perf',
-        'Win 7 Intel GPU Perf',
-    ],
     'chromium.fyi': [
         'Chromium Linux Codesearch',
         'ChromiumOS Codesearch',
@@ -353,7 +350,30 @@ DISABLED_BUILDERS = {
         # ClusterFuzz relies on svn revisions to do bisection checks.
         # crbug.com/377963
         'Win SyzyASAN LKGR',
-    ]
+    ],
+    'chromium.perf': [
+        'Win Builder',
+        'Win x64 Builder',
+        'Win 8 Perf (1)',
+        'Win 8 Perf (2)',
+        'Win 7 Perf (1)',
+        'Win 7 Perf (2)',
+        'Win 7 Perf (3)',
+        'Win 7 Perf (4)',
+        'Win 7 Perf (5)',
+        'Win 7 x64 Perf (1)',
+        'Win 7 x64 Perf (2)',
+        'Win 7 ATI GPU Perf',
+        'Win 7 Intel GPU Perf',
+        'Win 7 Nvidia GPU Perf',
+        'Win 7 Low-End Perf (1)',
+        'Win 7 Low-End Perf (2)',
+        'Win XP Perf (1)',
+        'Win XP Perf (2)',
+        'Win XP Perf (3)',
+        'Win XP Perf (4)',
+        'Win XP Perf (5)',
+    ],
 }
 DISABLED_BUILDERS.update(internal_data.get('DISABLED_BUILDERS', {}))
 
