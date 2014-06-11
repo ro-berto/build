@@ -247,6 +247,7 @@ ENABLED_BUILDERS = {
     ],
     'tryserver.chromium.gpu': [
         'linux_gpu',
+        'mac_gpu',
     ],
     'chromium.lkgr': [
         'Android',
