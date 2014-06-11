@@ -432,6 +432,8 @@
       "--delete_unversioned_trees",
       "--force",
       "--verbose",
+      "--revision",
+      "src@170242",
       "--output-json",
       "/path/to/tmp/json"
     ],

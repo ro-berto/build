@@ -413,7 +413,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD"
+      "src@170242"
     ],
     "name": "bot_update (without patch)",
     "~followup_annotations": [
