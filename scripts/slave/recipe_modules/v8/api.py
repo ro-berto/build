@@ -85,6 +85,16 @@ class V8CheckInitializers(object):
     pass
 
 
+class V8Fuzzer(object):
+  @staticmethod
+  def run(api, **kwargs):
+    return api.fuzz()
+
+  @staticmethod
+  def gclient_apply_config(_):
+    pass
+
+
 class V8GCMole(object):
   @staticmethod
   def run(api, **kwargs):
@@ -106,6 +116,7 @@ class V8SimpleLeakCheck(object):
 
 
 V8_NON_STANDARD_TESTS = {
+  'fuzz': V8Fuzzer,
   'gcmole': V8GCMole,
   'presubmit': V8Presubmit,
   'simpleleak': V8SimpleLeakCheck,
@@ -310,6 +321,18 @@ class V8Api(recipe_api.RecipeApi):
       'Static-Initializers',
       ['bash',
        self.m.path['checkout'].join('tools', 'check-static-initializers.sh'),
+       self.m.path.join(self.m.path.basename(self.m.chromium.c.build_dir),
+                        self.m.chromium.c.build_config_fs,
+                        'd8')],
+      cwd=self.m.path['checkout'],
+    )
+
+  def fuzz(self):
+    assert self.m.chromium.c.HOST_PLATFORM == 'linux'
+    return self.m.step(
+      'Fuzz',
+      ['bash',
+       self.m.path['checkout'].join('tools', 'fuzz-harness.sh'),
        self.m.path.join(self.m.path.basename(self.m.chromium.c.build_dir),
                         self.m.chromium.c.build_config_fs,
                         'd8')],
