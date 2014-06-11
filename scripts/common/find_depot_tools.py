@@ -22,6 +22,7 @@ def add_depot_tools_to_path():
     if i.rstrip(os.sep).endswith('depot_tools'):
       if directory_really_is_depot_tools(i):
         return i
+
   # Then look if depot_tools is in PATH, common case.
   for i in os.environ['PATH'].split(os.pathsep):
     if i.rstrip(os.sep).endswith('depot_tools'):

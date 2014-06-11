@@ -23,14 +23,16 @@ ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(SCRIPT_DIR)))
 assert os.path.isdir(os.path.join(ROOT_DIR, 'build')), \
                      'Script may have moved in the hierarchy'
 
-GSUTIL_BIN = os.path.join(ROOT_DIR,
-                          'depot_tools', 'third_party', 'gsutil', 'gsutil')
-
 sys.path.insert(0, os.path.join(ROOT_DIR, 'build', 'scripts', 'tools'))
 import runit  # pylint: disable=F0401
 runit.add_build_paths(sys.path)
 import requests
 import pytz
+
+from common import find_depot_tools
+DEPOT_TOOLS_DIR = find_depot_tools.add_depot_tools_to_path()
+GSUTIL_BIN = os.path.join(DEPOT_TOOLS_DIR, 'third_party', 'gsutil', 'gsutil')
+assert os.path.isfile(GSUTIL_BIN), 'gsutil may have moved in the hierarchy'
 
 # Define logger as root logger by default. Modified by set_logging() below.
 logger = logging
