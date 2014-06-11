@@ -335,6 +335,28 @@ BUILDERS = {
           'platform': 'win',
         },
       },
+      'win8_chromium_dbg': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'chromium_config': 'chromium',
+        'compile_only': False,
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'win8_chromium_rel': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'chromium_config': 'chromium',
+        'compile_only': False,
+        'testing': {
+          'platform': 'win',
+        },
+      },
     },
   },
 }
