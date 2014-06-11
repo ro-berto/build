@@ -14,6 +14,7 @@ categories_steps = {
   '': [
     'update',
     'runhooks',
+    'gn',
     'compile',
     'Presubmit',
     'Static-Initializers',
@@ -48,7 +49,6 @@ exclusions = {
   'NaCl V8 Linux64 - canary': ['Check'],
   'Webkit - dbg': ['webkit_tests'],
   'Webkit Mac - dbg': ['webkit_tests'],
-  'V8 Win32 - nosnap - shared': [],
 }
 
 forgiving_steps = ['update_scripts', 'update', 'svnkill', 'taskkill',
@@ -78,7 +78,7 @@ def Update(config, active_master, c):
       exclusions={},
       relayhost=config.Master.smtp,
       sendToInterestedUsers=False,
-      extraRecipients=["weiliang.lin@intel.com"],
+      extraRecipients=['weiliang.lin@intel.com', 'chunyang.dai@intel.com'],
       status_header='buildbot failure in %(project)s on %(builder)s, %(steps)s',
       lookup=master_utils.FilterDomain(),
       forgiving_steps=forgiving_steps))

@@ -11,7 +11,7 @@ from master import master_utils
 # Note: don't include 'update scripts' since we can't do much about it when
 # it's failing and the tree is still technically fine.
 categories_steps = {
-  '': ['update', 'runhooks', 'compile'],
+  '': ['update', 'runhooks', 'gn', 'compile'],
   'testers': [
     'Presubmit',
     'Static-Initializers',
@@ -28,7 +28,6 @@ categories_steps = {
 exclusions = {
   'V8 Linux - mips - sim': ['compile'],
   'V8 Linux - x87 - nosnap - debug': [],
-  'V8 Win32 - nosnap - shared': [],
 }
 
 forgiving_steps = ['update_scripts', 'update', 'svnkill', 'taskkill',
