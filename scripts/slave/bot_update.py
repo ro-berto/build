@@ -162,6 +162,7 @@ ENABLED_MASTERS = [
     'chromium.linux',
     'chromium.mac',
     'chromium.perf',
+    'chromium.swarm',
 ]
 ENABLED_MASTERS += internal_data.get('ENABLED_MASTERS', [])
 
@@ -389,6 +390,10 @@ DISABLED_BUILDERS = {
         'Win XP Perf (4)',
         'Win XP Perf (5)',
     ],
+    'chromium.swarm': [
+        'Windows Swarm Tests',
+        'Windows Swarm Tests (dbg)',
+    ]
 }
 DISABLED_BUILDERS.update(internal_data.get('DISABLED_BUILDERS', {}))
 
