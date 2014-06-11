@@ -172,7 +172,7 @@ def GenSteps(api):
     if api.step_history.last_step().retcode != 0:
       api.gclient.set_config('chromium_lkcr')
 
-      yield api.bot_update.ensure_checkout(suffix='lkcr')
+      yield api.bot_update.ensure_checkout(force=True, suffix='lkcr')
       yield api.chromium.runhooks(run_gyp=False)
       yield api.chromium.run_gn()
       yield api.chromium.compile(targets=['all'], force_clobber=True)

@@ -144,7 +144,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@origin/lkcr"
+      "src@origin/lkcr",
+      "--force"
     ],
     "name": "bot_update - lkcr",
     "~followup_annotations": [
