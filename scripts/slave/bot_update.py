@@ -158,6 +158,7 @@ ENABLED_MASTERS = [
     'chromium.endure',
     'chromium.fyi',
     'chromium.git',
+    'chromium.gpu',
     'chromium.gpu.fyi',
     'chromium.linux',
     'chromium.mac',
@@ -301,6 +302,10 @@ ENABLED_SLAVES.update(internal_data.get('ENABLED_SLAVES', {}))
 # config is enabled, but a bot on that builder is disabled, that bot will
 # be disabled.
 DISABLED_BUILDERS = {
+    'chromium.gpu': [
+        'GPU Win Builder',
+        'GPU Win Builder (dbg)',
+    ],
     'chromium.gpu.fyi': [
         'GPU Win Builder (dbg)',
         'GPU Win Builder',
