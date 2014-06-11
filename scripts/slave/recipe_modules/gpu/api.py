@@ -304,10 +304,25 @@ class GpuApi(recipe_api.RecipeApi):
     # steps from the main waterfall, like gpu_unittests.
 
   def _run_isolate(self, test, isolate_name=None, **kwargs):
+    test_name = isolate_name or test
+    # The test_type must end in 'test' or 'tests' in order for the results to
+    # automatically show up on the flakiness dashboard.
+    #
+    # Currently all tests on the GPU bots follow this rule, so we can't add
+    # code like in chromium/api.py, run_telemetry_test.
+    assert test_name.endswith('test') or test_name.endswith('tests')
+    # TODO(kbr): turn this into a temporary path. There were problems
+    # with the recipe simulation test in doing so and cleaning it up.
+    results_directory = self.m.path['slave_build'].join(
+      'gtest-results', test_name)
     yield self.m.isolate.runtest(
       isolate_name or test,
       self._build_revision,
       self._webkit_revision,
+      annotate='gtest',
+      test_type=test_name,
+      generate_json_file=True,
+      results_directory=results_directory,
       master_class_name=self._master_class_name_for_testing,
       **kwargs)
 

@@ -118,6 +118,8 @@ class IsolateApi(recipe_api.RecipeApi):
     return full_args
 
   def runtest(self, test, revision, webkit_revision, args=None, name=None,
+              annotate=None, results_url=None, perf_dashboard_id=None,
+              test_type=None, generate_json_file=False, results_directory=None,
               master_class_name=None, **runtest_kwargs):
     """Runs a test which has previously been isolated to the server.
 
@@ -129,6 +131,12 @@ class IsolateApi(recipe_api.RecipeApi):
         # We must use the name of the test as the name in order to avoid
         # duplicate steps called "run_isolated".
         name=name or test,
+        annotate=annotate,
+        results_url=results_url,
+        perf_dashboard_id=perf_dashboard_id,
+        test_type=test_type,
+        generate_json_file=generate_json_file,
+        results_directory=results_directory,
         revision=revision,
         webkit_revision=webkit_revision,
         master_class_name=master_class_name,
