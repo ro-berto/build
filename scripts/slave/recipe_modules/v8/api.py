@@ -434,6 +434,10 @@ class V8Api(recipe_api.RecipeApi):
           'third_party', 'llvm-build', 'Release+Asserts', 'bin',
           'llvm-symbolizer')
 
+    # Default callbacks if the show_test_results feature is turned off.
+    followup_fn = None
+    step_test_data = None
+
     if self.c.testing.show_test_results:
       full_args += ['--json-test-results',
                     self.m.json.output(add_json_log=False)]
@@ -445,10 +449,10 @@ class V8Api(recipe_api.RecipeApi):
         if (r and isinstance(r, list) and isinstance(r[0], dict)):
           self._update_test_presentation(r[0]['results'],
                                          step_result.presentation)
-
-    step_test_data = lambda: self.test_api.output_json(
-        self._test_data.get('test_failures', False),
-        self._test_data.get('wrong_results', False))
+      def step_test_data():
+        return self.test_api.output_json(
+            self._test_data.get('test_failures', False),
+            self._test_data.get('wrong_results', False))
 
     yield self.m.python(
       name,

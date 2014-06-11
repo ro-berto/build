@@ -82,6 +82,11 @@ def nosse4(c):
 
 
 @config_ctx()
+def no_test_results(c):
+  c.testing.show_test_results = False
+
+
+@config_ctx()
 def novfp3(c):
   c.testing.test_args.add('--shell_flags="--noenable-vfp3"')
 

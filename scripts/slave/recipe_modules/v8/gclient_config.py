@@ -5,6 +5,10 @@
 from RECIPE_MODULES.gclient import CONFIG_CTX
 from slave.recipe_config import BadConf
 
+# TODO(machenbach): Move this to an external configuration file.
+STABLE_BRANCH = '3.25'
+BETA_BRANCH = '3.26'
+
 
 # TODO(machenbach): This is copied from gclient's config.py and should be
 # unified somehow.
@@ -21,11 +25,15 @@ def ChromiumSvnTrunkURL(c, *pieces):
   return '/'.join((BASES[c.USE_MIRROR],) + pieces)
 
 
+def _V8URL(branch):
+  return 'http://v8.googlecode.com/svn/%s' % branch
+
+
 @CONFIG_CTX()
 def v8(c):
   soln = c.solutions.add()
   soln.name = 'v8'
-  soln.url = 'http://v8.googlecode.com/svn/branches/bleeding_edge'
+  soln.url = _V8URL('branches/bleeding_edge')
   soln.custom_vars = {'chromium_trunk': ChromiumSvnTrunkURL(c)}
   c.got_revision_mapping['v8'] = 'got_revision'
 
@@ -40,6 +48,21 @@ def mozilla_tests(c):
 def clang(c):
   c.solutions[0].custom_deps['v8/tools/clang/scripts'] = ChromiumSvnSubURL(
       c, 'chrome', 'trunk', 'src', 'tools', 'clang', 'scripts')
+
+
+@CONFIG_CTX(includes=['v8'])
+def beta_branch(c):
+  c.solutions[0].url = _V8URL('branches/%s' % BETA_BRANCH)
+
+
+@CONFIG_CTX(includes=['v8'])
+def stable_branch(c):
+  c.solutions[0].url = _V8URL('branches/%s' % STABLE_BRANCH)
+
+
+@CONFIG_CTX(includes=['v8'])
+def trunk(c):
+  c.solutions[0].url = _V8URL('trunk')
 
 
 @CONFIG_CTX(includes=['v8'])

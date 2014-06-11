@@ -6,6 +6,7 @@
 # from multiple recipes.
 
 BUILDERS = {
+####### Waterfall: client.v8
   'client.v8': {
     'builders': {
 ####### Category: Linux
@@ -691,6 +692,7 @@ BUILDERS = {
       },
     },
   },
+####### Waterfall: tryserver.v8
   'tryserver.v8': {
     'builders': {
       'v8_linux_rel': {
@@ -781,3 +783,43 @@ BUILDERS = {
     },
   },
 }
+
+####### Waterfall: client.v8.branches
+BRANCH_BUILDERS = {}
+
+def AddBranchBuilder(branch_config, build_config, arch, bits, presubmit=False):
+  tests = ['v8testing', 'webkit', 'test262', 'mozilla']
+  if presubmit:
+    tests.append('presubmit')
+  return {
+    'gclient_apply_config': [branch_config],
+    'chromium_apply_config': ['no_optimized_debug'],
+    # TODO(machenbach): Switch on test results presentation for branch builders
+    # as soon as stable branch passes v8 revision 21358, where the feature was
+    # introduced.
+    'v8_apply_config': ['no_test_results'],
+    'v8_config_kwargs': {
+      'BUILD_CONFIG': build_config,
+      'TARGET_ARCH': arch,
+      'TARGET_BITS': bits,
+    },
+    'bot_type': 'builder_tester',
+    'tests': tests,
+    'testing': {'platform': 'linux'},
+  }
+
+for build_config, name_suffix in (('Release', ''), ('Debug', ' - debug')):
+  for branch_name, branch_config in (('stable branch', 'stable_branch'),
+                                     ('beta branch', 'beta_branch'),
+                                     ('trunk', 'trunk')):
+    name = 'V8 Linux - %s%s' % (branch_name, name_suffix)
+    BRANCH_BUILDERS[name] = AddBranchBuilder(
+        branch_config, build_config, 'intel', 32, presubmit=True)
+    name = 'V8 Linux64 - %s%s' % (branch_name, name_suffix)
+    BRANCH_BUILDERS[name] = AddBranchBuilder(
+        branch_config, build_config, 'intel', 64)
+    name = 'V8 arm - sim - %s%s' % (branch_name, name_suffix)
+    BRANCH_BUILDERS[name] = AddBranchBuilder(
+        branch_config, build_config, 'arm', 32)
+
+BUILDERS['client.v8.branches'] = {'builders': BRANCH_BUILDERS}
