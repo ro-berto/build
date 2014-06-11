@@ -155,6 +155,7 @@ RECOGNIZED_PATHS.update(internal_data.get('RECOGNIZED_PATHS', {}))
 
 ENABLED_MASTERS = [
     'bot_update.always_on',
+    'chromium.endure',
     'chromium.fyi',
     'chromium.git',
     'chromium.gpu.fyi',
