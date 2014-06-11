@@ -170,6 +170,8 @@ ENABLED_BUILDERS = {
         # a build directory are turned on at the same time.
 
         # android/
+        'android_clang',
+        'android_clang_dbg',
         'android_dbg',
         'android_dbg_triggered_tests',
         'android_fyi_dbg',
