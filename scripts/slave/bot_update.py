@@ -241,6 +241,9 @@ ENABLED_BUILDERS = {
         # linux_valgrind/
         'linux_tsan',
     ],
+    'tryserver.chromium.gpu': [
+        'linux_gpu',
+    ],
     'chromium.lkgr': [
         'Android',
         'Linux x64',
