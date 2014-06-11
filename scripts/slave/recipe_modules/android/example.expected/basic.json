@@ -256,6 +256,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "ALTERNATE_JAVAC": "/usr/lib/jvm/java-7-openjdk-amd64/bin/javac",
       "USE_LEGACY_COMMON_JAVAC": "false"
     },
     "name": "compile android"

@@ -224,6 +224,7 @@ class AOSPApi(recipe_api.RecipeApi):
     targets = targets or []
     env = env or {}
     env['USE_LEGACY_COMMON_JAVAC'] = 'false'
+    env['ALTERNATE_JAVAC'] = '/usr/lib/jvm/java-7-openjdk-amd64/bin/javac'
     if defines:
       defines_str = ' '.join('%s=%s' % kv for kv in defines.iteritems())
       targets.insert(0, defines_str)
