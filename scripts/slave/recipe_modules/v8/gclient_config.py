@@ -36,6 +36,10 @@ def v8(c):
   soln.url = _V8URL('branches/bleeding_edge')
   soln.custom_vars = {'chromium_trunk': ChromiumSvnTrunkURL(c)}
   c.got_revision_mapping['v8'] = 'got_revision'
+  # Needed to get the testers to properly sync the right revision.
+  # TODO(infra): Upload full buildspecs for every build to isolate and then use
+  # them instead of this gclient garbage.
+  c.parent_got_revision_mapping['parent_got_revision'] = 'got_revision'
 
 
 @CONFIG_CTX(includes=['v8'])
