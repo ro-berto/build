@@ -96,7 +96,7 @@ GOOD_GTEST_JSON_1 = {
 
 
 # GOOD_GTEST_JSON_0 and GOOD_GTEST_JSON_1 merged.
-GOODGTEST_JSON_MERGED = {
+GOOD_GTEST_JSON_MERGED = {
   'all_tests': [
     'AlignedMemoryTest.DynamicAllocation',
     'AlignedMemoryTest.ScopedDynamicAllocation',
@@ -125,6 +125,46 @@ GOODGTEST_JSON_MERGED = {
       'output_snippet_base64': 'YmxhaAo=',
       'status': 'SUCCESS',
     }],
+    'AlignedMemoryTest.StackAlignment': [{
+      'elapsed_time_ms': 0,
+      'losless_snippet': True,
+      'output_snippet': 'blah\\n',
+      'output_snippet_base64': 'YmxhaAo=',
+      'status': 'SUCCESS',
+    }],
+    'AlignedMemoryTest.StaticAlignment': [{
+      'elapsed_time_ms': 0,
+      'losless_snippet': True,
+      'output_snippet': 'blah\\n',
+      'output_snippet_base64': 'YmxhaAo=',
+      'status': 'SUCCESS',
+    }],
+  }],
+}
+
+
+# Only shard #1 finished. UNRELIABLE_RESULTS is set.
+BAD_GTEST_JSON_ONLY_1_SHARD = {
+  'all_tests': [
+    'AlignedMemoryTest.DynamicAllocation',
+    'AlignedMemoryTest.ScopedDynamicAllocation',
+    'AlignedMemoryTest.StackAlignment',
+    'AlignedMemoryTest.StaticAlignment',
+  ],
+  'disabled_tests': [
+    'ConditionVariableTest.TimeoutAcrossSetTimeOfDay',
+    'FileTest.TouchGetInfo',
+    'MessageLoopTestTypeDefault.EnsureDeletion',
+  ],
+  'global_tags': [
+    'CPU_64_BITS',
+    'MODE_DEBUG',
+    'OS_LINUX',
+    'OS_POSIX',
+    'UNRELIABLE_RESULTS',
+  ],
+  'missing_shards': [0],
+  'per_iteration_data': [{
     'AlignedMemoryTest.StackAlignment': [{
       'elapsed_time_ms': 0,
       'losless_snippet': True,
@@ -284,7 +324,7 @@ class MergeShardResultsTest(auto_stub.TestCase):
       '1/output.json': GOOD_GTEST_JSON_1,
     })
     merged, stdout = self.call()
-    self.assertEqual(GOODGTEST_JSON_MERGED, merged)
+    self.assertEqual(GOOD_GTEST_JSON_MERGED, merged)
     self.assertEqual('', stdout)
 
   def test_missing_summary_json(self):
@@ -301,9 +341,7 @@ class MergeShardResultsTest(auto_stub.TestCase):
       '1/output.json': GOOD_GTEST_JSON_1,
     })
     merged, stdout = self.call(1)
-    expected = GOOD_GTEST_JSON_1.copy()
-    expected['missing_shards'] = [0]
-    self.assertEqual(expected, merged)
+    self.assertEqual(BAD_GTEST_JSON_ONLY_1_SHARD, merged)
     self.assertIn('@@@STEP_WARNINGS@@@\nsome shards did not complete\n', stdout)
     self.assertIn(
         '@@@STEP_LOG_LINE@some shards did not complete@'
@@ -320,7 +358,7 @@ class EmitTestAnnotationsTest(auto_stub.TestCase):
     return stdout.getvalue().strip()
 
   def test_it(self):
-    stdout = self.call(0, GOODGTEST_JSON_MERGED)
+    stdout = self.call(0, GOOD_GTEST_JSON_MERGED)
     self.assertEqual(
         'exit code (as seen by runtest.py): 0\n'
         '@@@STEP_TEXT@@@@\n'

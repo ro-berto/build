@@ -81,6 +81,8 @@ def merge_shard_results(output_dir):
     as_str = ' ,'.join(map(str, merged['missing_shards']))
     emit_warning(
         'some shards did not complete', MISSING_SHARDS_MSG % as_str)
+    # Not all tests run, combined JSON summary can not be trusted.
+    merged['global_tags'].add('UNRELIABLE_RESULTS')
 
   # Convert to jsonish dict.
   for key in ('all_tests', 'disabled_tests', 'global_tags'):
