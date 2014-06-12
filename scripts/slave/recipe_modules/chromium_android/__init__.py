@@ -14,5 +14,6 @@ DEPS = [
   'python',
   'raw_io',
   'step',
-  'step_history'
+  'step_history',
+  'test_utils',
 ]
