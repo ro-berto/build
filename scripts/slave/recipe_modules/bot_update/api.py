@@ -137,7 +137,8 @@ class BotUpdateApi(recipe_api.RecipeApi):
     git_mode = self.m.properties.get('mastername') in GIT_MASTERS
     first_sln = cfg.solutions[0].name
     step_test_data = lambda: self.test_api.output_json(
-        master, builder, slave, root, first_sln, rev_map, git_mode, force)
+        master, builder, slave, root, first_sln, rev_map, git_mode, force,
+        self.m.properties.get('fail_patch', False))
 
     def followup_fn(step_result):
       if update_presentation:
@@ -150,6 +151,10 @@ class BotUpdateApi(recipe_api.RecipeApi):
       if 'step_text' in step_result.json.output:
         step_text = step_result.json.output['step_text']
         step_result.presentation.step_text = step_text
+      # Add log line output.
+      if 'log_lines' in step_result.json.output:
+        for log_name, log_lines in step_result.json.output['log_lines']:
+          step_result.presentation.logs[log_name] = log_lines.splitlines()
 
     # Add suffixes to the step name, if specified.
     name = 'bot_update'

@@ -35,6 +35,15 @@ def GenTests(api):
       patchset=654321,
       patch_url='http://src.chromium.org/foo/bar'
   )
+  yield api.test('tryjob_fail_patch') + api.properties(
+      mastername='tryserver.chromium',
+      buildername='linux_rel',
+      slavename='totallyaslave-c4',
+      issue=12345,
+      patchset=654321,
+      patch_url='http://src.chromium.org/foo/bar',
+      fail_patch=True,
+  )
   yield api.test('forced') + api.properties(
       mastername='experimental',
       buildername='Experimental Builder',

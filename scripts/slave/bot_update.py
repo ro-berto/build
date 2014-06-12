@@ -407,9 +407,13 @@ SHALLOW_CLONE_THRESHOLD = 100 * 1024 * 1024 * 1024
 
 
 class SubprocessFailed(Exception):
-  def __init__(self, message, code):
-    Exception.__init__(self, message)
+  def __init__(self, message, code, output):
+    Exception.__init__(self, message, output)
     self.code = code
+
+
+class PatchFailed(SubprocessFailed):
+  pass
 
 
 class GclientSyncFailed(SubprocessFailed):
@@ -487,7 +491,8 @@ def call(*args, **kwargs):
       break
 
   raise SubprocessFailed('%s failed with code %d in %s after %d attempts.' %
-                         (' '.join(args), code, cwd, attempt), code)
+                         (' '.join(args), code, cwd, attempt),
+                         code, outval)
 
 
 def git(*args, **kwargs):
@@ -820,6 +825,12 @@ def ensure_deps2git(solution, shallow):
   call(*cmd)
 
 
+def emit_log_lines(name, lines):
+  for line in lines.splitlines():
+    print '@@@STEP_LOG_LINE@%s@%s@@@' % (name, line)
+  print '@@@STEP_LOG_END@%s@@@' % name
+
+
 def emit_properties(properties):
   for property_name, property_value in properties.iteritems():
     print '@@@SET_BUILD_PROPERTY@%s@"%s"@@@' % (property_name, property_value)
@@ -1015,8 +1026,11 @@ def apply_svn_patch(patch_root, patches, whitelist=None, blacklist=None):
     print '===Patching files==='
     for filename, _ in patches:
       print 'Patching %s' % filename
-    call(PATCH_TOOL, '-p0', '--remove-empty-files', '--force', '--forward',
-        stdin_data=patch, cwd=patch_root, tries=1)
+    try:
+      call(PATCH_TOOL, '-p0', '--remove-empty-files', '--force', '--forward',
+          stdin_data=patch, cwd=patch_root, tries=1)
+    except SubprocessFailed as e:
+      raise PatchFailed(e.message, e.code, e.output)
 
 
 def apply_rietveld_issue(issue, patchset, root, server, _rev_map, _revision,
@@ -1046,7 +1060,10 @@ def apply_rietveld_issue(issue, patchset, root, server, _rev_map, _revision,
       cmd.extend(['--blacklist', item])
 
   # Only try once, since subsequent failures hide the real failure.
-  call(*cmd, tries=1)
+  try:
+    call(*cmd, tries=1)
+  except SubprocessFailed as e:
+    raise PatchFailed(e.message, e.code, e.output)
 
 
 def check_flag(flag_file):
@@ -1508,35 +1525,51 @@ def main():
   print 'Fetching Git checkout at %s@%s' % (first_sln, root_revision)
 
   try:
-    checkout_parameters = dict(
-        # First, pass in the base of what we want to check out.
-        solutions=git_slns,
-        revisions=revisions,
-        first_sln=first_sln,
+    # Outer try is for catching patch failures and exiting gracefully.
+    # Inner try is for catching gclient failures and retrying gracefully.
+    try:
+      checkout_parameters = dict(
+          # First, pass in the base of what we want to check out.
+          solutions=git_slns,
+          revisions=revisions,
+          first_sln=first_sln,
 
-        # Also, target os variables for gclient.
-        target_os=specs.get('target_os', []),
-        target_os_only=specs.get('target_os_only', False),
+          # Also, target os variables for gclient.
+          target_os=specs.get('target_os', []),
+          target_os_only=specs.get('target_os_only', False),
 
-        # Then, pass in information about how to patch on top of the checkout.
-        patch_root=options.patch_root,
-        issue=options.issue,
-        patchset=options.patchset,
-        patch_url=options.patch_url,
-        rietveld_server=options.rietveld_server,
-        revision_mapping=options.revision_mapping,
+          # Then, pass in information about how to patch on top of the checkout.
+          patch_root=options.patch_root,
+          issue=options.issue,
+          patchset=options.patchset,
+          patch_url=options.patch_url,
+          rietveld_server=options.rietveld_server,
+          revision_mapping=options.revision_mapping,
 
-        # For official builders.
-        buildspec_name=buildspec_name,
-        gyp_env=options.gyp_env,
+          # For official builders.
+          buildspec_name=buildspec_name,
+          gyp_env=options.gyp_env,
 
-        # Finally, extra configurations such as shallowness of the clone.
-        shallow=options.shallow)
-    gclient_output = ensure_checkout(**checkout_parameters)
-  except GclientSyncFailed:
-    print 'We failed gclient sync, lets delete the checkout and retry.'
-    ensure_no_checkout(dir_names, '*')
-    gclient_output = ensure_checkout(**checkout_parameters)
+          # Finally, extra configurations such as shallowness of the clone.
+          shallow=options.shallow)
+      gclient_output = ensure_checkout(**checkout_parameters)
+    except GclientSyncFailed:
+      print 'We failed gclient sync, lets delete the checkout and retry.'
+      ensure_no_checkout(dir_names, '*')
+      gclient_output = ensure_checkout(**checkout_parameters)
+  except PatchFailed as e:
+    if options.output_json:
+      # Tell recipes information such as root, got_revision, etc.
+      emit_json(options.output_json,
+                did_run=True,
+                root=first_sln,
+                log_lines=[('patch error', e.output),],
+                patch_root=options.patch_root,
+                step_text='%s PATCH FAILED' % step_text)
+    else:
+      # If we're not on recipes, tell annotator about our got_revisions.
+      emit_log_lines('patch error', e.output)
+      print '@@@STEP_TEXT@%s PATCH FAILED@@@' % step_text
 
   # Revision is an svn revision, unless its a git master or past flag day.
   use_svn_rev = master not in GIT_MASTERS and not FLAG_DAY
