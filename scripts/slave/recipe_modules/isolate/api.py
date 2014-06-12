@@ -111,13 +111,19 @@ class IsolateApi(recipe_api.RecipeApi):
       self.isolated_tests[test],
       '-I',
       self._isolate_server,
+      # Always append '--' to the argument list. api.chromium.runtest
+      # will add any flags like --gtest_output to the end of the command
+      # line. run_isolated.py must treat these as extra arguments to the
+      # isolate.
+      '--'
     ]
     if args:
-      full_args.append('--')
       full_args.extend(args)
     return full_args
 
   def runtest(self, test, revision, webkit_revision, args=None, name=None,
+              annotate=None, results_url=None, perf_dashboard_id=None,
+              test_type=None, generate_json_file=False, results_directory=None,
               master_class_name=None, **runtest_kwargs):
     """Runs a test which has previously been isolated to the server.
 
@@ -129,6 +135,12 @@ class IsolateApi(recipe_api.RecipeApi):
         # We must use the name of the test as the name in order to avoid
         # duplicate steps called "run_isolated".
         name=name or test,
+        annotate=annotate,
+        results_url=results_url,
+        perf_dashboard_id=perf_dashboard_id,
+        test_type=test_type,
+        generate_json_file=generate_json_file,
+        results_directory=results_directory,
         revision=revision,
         webkit_revision=webkit_revision,
         master_class_name=master_class_name,
@@ -149,7 +161,7 @@ class IsolateApi(recipe_api.RecipeApi):
         # When running the Telemetry test via an isolate we need to tell
         # run_isolated.py the hash and isolate server first, and then give
         # the isolate the test name and other arguments separately.
-        prefix_args=self.runtest_args_list(isolate_name) + ['--'],
+        prefix_args=self.runtest_args_list(isolate_name),
         args=args,
         name=name,
         revision=revision,
