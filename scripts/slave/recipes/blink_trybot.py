@@ -42,6 +42,16 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
+      'linux_blink_no_bot_update': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'compile_only': False,
+        'testing': {
+          'platform': 'linux',
+        },
+      },
       'linux_blink_rel': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -208,130 +218,6 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'compile_only': False,
-        'testing': {
-          'platform': 'win',
-        },
-      },
-    },
-  },
-  'tryserver.chromium': {
-    'builders': {
-      'linux_blink': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'compile_only': False,
-        'testing': {
-          'platform': 'linux',
-        },
-      },
-      'linux_blink_rel': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'compile_only': False,
-        'testing': {
-          'platform': 'linux',
-        },
-      },
-      'linux_blink_compile': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'compile_only': True,
-        'testing': {
-          'platform': 'linux',
-        },
-      },
-      'linux_blink_compile_rel': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'compile_only': True,
-        'testing': {
-          'platform': 'linux',
-        },
-      },
-      'mac_blink': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'compile_only': False,
-        'testing': {
-          'platform': 'mac',
-        },
-      },
-      'mac_blink_rel': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'compile_only': False,
-        'testing': {
-          'platform': 'mac',
-        },
-      },
-      'mac_blink_compile': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'compile_only': True,
-        'testing': {
-          'platform': 'mac',
-        },
-      },
-      'mac_blink_compile_rel': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'compile_only': True,
-        'testing': {
-          'platform': 'mac',
-        },
-      },
-      'win_blink': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'compile_only': False,
-        'testing': {
-          'platform': 'win',
-        },
-      },
-      'win_blink_rel': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'compile_only': False,
-        'testing': {
-          'platform': 'win',
-        },
-      },
-      'win_blink_compile': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'compile_only': True,
-        'testing': {
-          'platform': 'win',
-        },
-      },
-      'win_blink_compile_rel': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'compile_only': True,
         'testing': {
           'platform': 'win',
         },
@@ -590,7 +476,7 @@ def GenTests(api):
   # that we fail the whole build.
   yield (
     api.test('minimal_pass_continues') +
-    properties('tryserver.chromium', 'linux_blink_rel') +
+    properties('tryserver.blink', 'linux_blink_rel') +
     api.override_step_data(with_patch, canned_test(passing=False)) +
     api.override_step_data(without_patch,
                            canned_test(passing=True, minimal=True))
@@ -598,14 +484,14 @@ def GenTests(api):
 
   yield (
     api.test('gclient_revert_nuke') +
-    properties('tryserver.chromium', 'linux_blink_rel') +
+    properties('tryserver.blink', 'linux_blink_no_bot_update') +
     api.step_data('gclient revert', retcode=1) +
     api.override_step_data(with_patch, canned_test(passing=True, minimal=True))
   )
 
   yield (
     api.test('preamble_test_failure') +
-    properties('tryserver.chromium', 'linux_blink_rel') +
+    properties('tryserver.blink', 'linux_blink_rel') +
     api.step_data('webkit_unit_tests', retcode=1)
   )
 
@@ -616,7 +502,7 @@ def GenTests(api):
   # 255 == test_run_results.UNEXPECTED_ERROR_EXIT_STATUS in run-webkit-tests.
   yield (
     api.test('webkit_tests_unexpected_error') +
-    properties('tryserver.chromium', 'linux_blink_rel') +
+    properties('tryserver.blink', 'linux_blink_rel') +
     api.override_step_data(with_patch, canned_test(passing=False,
                                                    retcode=255))
   )
@@ -628,7 +514,7 @@ def GenTests(api):
   # 130 == test_run_results.INTERRUPTED_EXIT_STATUS in run-webkit-tests.
   yield (
     api.test('webkit_tests_interrupted') +
-    properties('tryserver.chromium', 'linux_blink_rel') +
+    properties('tryserver.blink', 'linux_blink_rel') +
     api.override_step_data(with_patch, canned_test(passing=False,
                                                    retcode=130))
   )
@@ -644,7 +530,7 @@ def GenTests(api):
   yield (
     api.test('compile_failure_win') +
     api.platform('win', 32) +
-    properties('tryserver.chromium', 'win_blink_rel') +
+    properties('tryserver.blink', 'win_blink_rel') +
     api.step_data('compile', retcode=1) +
     api.step_data(with_patch, canned_test(passing=True, minimal=True))
   )
@@ -655,7 +541,7 @@ def GenTests(api):
   # and compare the lists of failing tests).
   yield (
     api.test('too_many_failures_for_retcode') +
-    properties('tryserver.chromium', 'linux_blink_rel') +
+    properties('tryserver.blink', 'linux_blink_rel') +
     api.override_step_data(with_patch,
                            canned_test(passing=False,
                                        num_additional_failures=125)) +

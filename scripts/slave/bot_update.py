@@ -155,9 +155,9 @@ RECOGNIZED_PATHS.update(internal_data.get('RECOGNIZED_PATHS', {}))
 
 ENABLED_MASTERS = [
     'bot_update.always_on',
-    'chromium.endure',
     'chromium.chromedriver',
     'chromium.chromiumos',
+    'chromium.endure',
     'chromium.fyi',
     'chromium.git',
     'chromium.gpu',
@@ -167,87 +167,11 @@ ENABLED_MASTERS = [
     'chromium.memory',
     'chromium.perf',
     'chromium.swarm',
+    'tryserver.chromium',
 ]
 ENABLED_MASTERS += internal_data.get('ENABLED_MASTERS', [])
 
 ENABLED_BUILDERS = {
-    'tryserver.chromium': [
-        # Bots are added to this list such that builders which share
-        # a build directory are turned on at the same time.
-
-        # android/
-        'android_aosp',
-        'android_clang',
-        'android_clang_dbg',
-        'android_dbg',
-        'android_dbg_triggered_tests',
-        'android_fyi_dbg',
-        'android_fyi_dbg_triggered_tests',
-        'android_gn_perf_bisect',
-        'android_nexus10_perf_bisect',
-        'android_nexus4_perf_bisect',
-        'android_perf_bisect_builder',
-        'android_rel',
-        'android_rel_triggered_tests',
-
-        # android_chromium_gn/
-        'android_chromium_gn_compile_dbg',
-        'android_chromium_gn_compile_rel',
-
-        # android_x86/
-        'android_x86_dbg',
-
-        # blink_android/
-        'blink_android_compile_dbg',
-        'blink_android_compile_rel',
-
-        # linux/
-        'chromium_presubmit',
-        'linux',
-        'linux_arm_cross_compile',
-        'linux_chromium_compile_dbg',
-        'linux_chromium_compile_rel',
-        'linux_chromium_dbg',
-        'linux_chromium_rel',
-        'linux_chromium_trusty32_dbg',
-        'linux_chromium_trusty32_rel',
-        'linux_chromium_trusty_dbg',
-        'linux_chromium_trusty_rel',
-        'linux_rel',
-        'linux_rel_alt',
-        'linux_rel_naclmore',
-
-        # linux_arm_cross_compile/
-        'linux_arm_cross_compile',
-
-        # linux_chromeos/
-        'linux_chromium_chromeos_dbg',
-        'linux_chromium_chromeos_rel',
-
-        # linux_chromeos_clang/
-        'linux_chromium_chromeos_clang_dbg',
-        'linux_chromium_chromeos_clang_rel',
-
-        # linux_chromium_gn/
-        'linux_chromium_gn_dbg',
-        'linux_chromium_gn_rel',
-
-        # linux_clang/
-        'linux_chromium_clang_dbg',
-        'linux_chromium_clang_rel',
-
-        # linux_layout/
-        'linux_layout',
-        'linux_layout_asan',
-        'linux_layout_rel',
-        'linux_layout_rel_32',
-
-        # linux_precise32/
-        'linux_rel_precise32',
-
-        # linux_valgrind/
-        'linux_tsan',
-    ],
     'tryserver.chromium.gpu': [
         'linux_gpu',
         'mac_gpu',
@@ -405,7 +329,38 @@ DISABLED_BUILDERS = {
     'chromium.swarm': [
         'Windows Swarm Tests',
         'Windows Swarm Tests (dbg)',
-    ]
+    ],
+    'tryserver.chromium': [
+        # These don't exist, but are just here to satisfy recipes.
+        'linux_no_bot_update',
+        'win8_chromium_dbg',
+        'win8_chromium_rel',
+        'win_blink',
+        'win_blink_compile',
+        'win_blink_compile_rel',
+
+        # Disable Win bots until performance is okay.
+        'win',
+        'win_blink_rel',
+        'win8_aura',
+        'win_8_perf_bisect',
+        'win_chromium_compile_dbg',
+        'win_chromium_compile_rel',
+        'win_chromium_dbg',
+        'win_chromium_rel',
+        'win_chromium_x64_dbg',
+        'win_chromium_x64_rel',
+        'win_drmemory',
+        'win_nacl_sdk',
+        'win_nacl_sdk_build',
+        'win_perf_bisect',
+        'win_perf_bisect_builder',
+        'win_rel',
+        'win_rel_naclmore',
+        'win_tsan',
+        'win_x64_rel',
+        'win_xp_perf_bisect',
+    ],
 }
 DISABLED_BUILDERS.update(internal_data.get('DISABLED_BUILDERS', {}))
 
