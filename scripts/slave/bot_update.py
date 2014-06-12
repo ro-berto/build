@@ -163,6 +163,7 @@ ENABLED_MASTERS = [
     'chromium.gpu.fyi',
     'chromium.linux',
     'chromium.mac',
+    'chromium.memory',
     'chromium.perf',
     'chromium.swarm',
 ]
