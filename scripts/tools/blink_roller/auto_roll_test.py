@@ -116,7 +116,6 @@ class AutoRollTestBase(SuperMoxTestBase):
                              'get_issue_properties')
     self.mox.StubOutWithMock(auto_roll.rietveld.Rietveld, 'search')
     self.mox.StubOutWithMock(auto_roll.scm.GIT, 'Capture')
-    self.mox.StubOutWithMock(auto_roll.scm.GIT, 'IsValidRevision')
     self.mox.StubOutWithMock(auto_roll.subprocess2, 'check_call')
     self.mox.StubOutWithMock(auto_roll.subprocess2, 'check_output')
     self.mox.StubOutWithMock(auto_roll.urllib2, 'urlopen')
@@ -149,10 +148,12 @@ class AutoRollTestBase(SuperMoxTestBase):
   def _get_current_revision(self):
     auto_roll.subprocess2.check_call(
         ['git', '--git-dir', './third_party/test_project/.git', 'fetch'])
-    auto_roll.subprocess2.check_output(
-        ['git', '--git-dir', './third_party/test_project/.git', 'show', '-s',
-         'origin/master']).AndReturn(self.GIT_LOG_UPDATED)
-    self._parse_origin_master(returnval=self.NEW_REV)
+    if self._arb._git_mode:
+      self._parse_origin_master(returnval=self.NEW_REV)
+    else:
+      auto_roll.subprocess2.check_output(
+          ['git', '--git-dir', './third_party/test_project/.git', 'show', '-s',
+           'origin/master']).AndReturn(self.GIT_LOG_UPDATED)
 
   def _upload_issue(self):
     self._get_last_revision()
@@ -209,13 +210,12 @@ Please email (eseidel@chromium.org) if the Rollbot is causing trouble.
                                closed=2).AndReturn(search_results)
     self._arb._rietveld.get_issue_properties(issue['issue'],
                                              messages=True).AndReturn(issue)
-    self._is_valid_git_rev(self.OLD_REV)
     auto_roll.subprocess2.check_call(
         ['git', '--git-dir', './.git', 'fetch'])
     auto_roll.subprocess2.check_output(
         ['git', '--git-dir', './.git', 'show', 'origin/master:DEPS']
         ).AndReturn(self.DEPS_CONTENT)
-    if self._is_valid_git_rev(self.OLD_REV):
+    if self._arb._git_mode:
       self._short_rev(self.OLD_REV)
     self.mox.ReplayAll()
     self.assertEquals(self._arb.main(), 0)
@@ -233,7 +233,6 @@ Please email (eseidel@chromium.org) if the Rollbot is causing trouble.
                                closed=2).AndReturn(search_results)
     self._arb._rietveld.get_issue_properties(issue['issue'],
                                              messages=True).AndReturn(issue)
-    self._is_valid_git_rev(self.OLD_REV)
     comment_str = ('Giving up on this roll after 1 day, 0:00:00. Closing, will '
                    'open a new roll.')
     self._arb._rietveld.add_comment(issue['issue'], comment_str)
@@ -257,7 +256,6 @@ Please email (eseidel@chromium.org) if the Rollbot is causing trouble.
                                closed=2).AndReturn(search_results)
     self._arb._rietveld.get_issue_properties(issue['issue'],
                                              messages=True).AndReturn(issue)
-    self._is_valid_git_rev(self.OLD_REV)
     comment_str = 'No longer marked for the CQ. Closing, will open a new roll.'
     self._arb._rietveld.add_comment(issue['issue'], comment_str)
     self._arb._rietveld.close_issue(issue['issue'])
@@ -271,7 +269,6 @@ Please email (eseidel@chromium.org) if the Rollbot is causing trouble.
     if self.__class__.__name__ == 'AutoRollTestBase':
       return
     self._arb._rietveld.search(owner=self.TEST_AUTHOR, closed=2).AndReturn([])
-    self._is_valid_git_rev(self.OLD_REV)
     auto_roll.subprocess2.check_call(
         ['git', '--git-dir', './.git', 'fetch'])
     auto_roll.subprocess2.check_output(
@@ -279,11 +276,14 @@ Please email (eseidel@chromium.org) if the Rollbot is causing trouble.
         ).AndReturn(self.DEPS_CONTENT)
     auto_roll.subprocess2.check_call(
         ['git', '--git-dir', './third_party/test_project/.git', 'fetch'])
-    auto_roll.subprocess2.check_output(
-        ['git', '--git-dir', './third_party/test_project/.git', 'show', '-s',
-         'origin/master']).AndReturn(self.GIT_LOG_TOO_OLD)
-
-    self._parse_origin_master(returnval=self.OLDER_REV)
+    if self._arb._git_mode:
+      auto_roll.subprocess2.check_output(
+          ['git', '--git-dir', './third_party/test_project/.git', 'rev-parse',
+           'origin/master']).AndReturn(self.OLDER_REV)
+    else:
+      auto_roll.subprocess2.check_output(
+          ['git', '--git-dir', './third_party/test_project/.git', 'show', '-s',
+           'origin/master']).AndReturn(self.GIT_LOG_TOO_OLD)
     self._compare_revs(self.OLD_REV, self.OLDER_REV)
 
     self.mox.ReplayAll()
@@ -293,12 +293,10 @@ Please email (eseidel@chromium.org) if the Rollbot is causing trouble.
       self.assertEquals(e.args[0], ('Already at %s refusing to roll backwards '
                                     'to %s.') % (self.OLD_REV, self.OLDER_REV))
 
-
   def test_upload_issue(self):
     if self.__class__.__name__ == 'AutoRollTestBase':
       return
     self._arb._rietveld.search(owner=self.TEST_AUTHOR, closed=2).AndReturn([])
-    self._is_valid_git_rev(self.OLD_REV)
     self._upload_issue()
     self.mox.ReplayAll()
     self.assertEquals(self._arb.main(), 0)
@@ -308,7 +306,6 @@ Please email (eseidel@chromium.org) if the Rollbot is causing trouble.
     if self.__class__.__name__ == 'AutoRollTestBase':
       return
     self._get_last_revision()
-    self._is_valid_git_rev(self.OLD_REV)
     self.mox.ReplayAll()
     self.assertEquals(type(self._arb._last_roll_revision()), str)
 
@@ -357,15 +354,9 @@ Date:   Wed Apr 2 14:00:14 2014 -0400
     return str(rev)
 
   # pylint: disable=R0201
-  def _is_valid_git_rev(self, rev):
-    auto_roll.scm.GIT.IsValidRevision('./third_party/test_project/.git',
-                                      str(rev)).AndReturn(False)
-    return False
-
-
-  # pylint: disable=R0201
   def _compare_revs(self, old_rev, new_rev):
-    self._is_valid_git_rev(old_rev)
+    # Just an integer compare for SVN.
+    pass
 
   # pylint: disable=R0201
   def _parse_origin_master(self, returnval):
@@ -401,6 +392,10 @@ Date:   Wed Apr 2 14:00:14 2014 -0400
     NEW_REV: '1399598876',
   }
 
+  def setUp(self):
+    AutoRollTestBase.setUp(self)
+    self._arb._git_mode = True
+
   def _make_issue(self, old_rev=None, new_rev=None, created_datetime=None):
     return AutoRollTestBase._make_issue(self,
                                         old_rev=old_rev or self.OLD_REV,
@@ -418,14 +413,7 @@ Date:   Wed Apr 2 14:00:14 2014 -0400
                                         'rev-parse', '--short', rev]
                                        ).AndReturn(self._display_rev(rev))
 
-  def _is_valid_git_rev(self, rev):
-    auto_roll.scm.GIT.IsValidRevision('./third_party/test_project/.git',
-                                      rev).AndReturn(True)
-    return True
-
   def _compare_revs(self, old_rev, new_rev):
-    self._is_valid_git_rev(old_rev)
-    self._is_valid_git_rev(new_rev)
     merge_base_cmd = ['git', '--git-dir', './third_party/test_project/.git',
                       'merge-base', '--is-ancestor', new_rev, old_rev]
     if self._commit_timestamps[old_rev] < self._commit_timestamps[new_rev]:

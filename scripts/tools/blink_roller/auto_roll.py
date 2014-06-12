@@ -115,6 +115,7 @@ PROJECT_CONFIGS = {
   },
   'skia': {
     'extra_emails_fn': lambda: [_get_skia_sheriff()],
+    'git_mode': True,
     'path_to_project': os.path.join('third_party', 'skia'),
     'revision_link_fn': lambda before_rev, after_rev: (
         'https://skia.googlesource.com/skia/+log/%s..%s' % (
@@ -174,6 +175,7 @@ class AutoRoller(object):
     self._path_to_project = project_config['path_to_project']
     self._get_revision_link = project_config['revision_link_fn']
     self._get_extra_emails = project_config.get('extra_emails_fn', lambda: [])
+    self._git_mode = project_config.get('git_mode', False)
 
     self._chromium_git_dir = self._path_from_chromium_root('.git')
     self._project_git_dir = self._path_from_chromium_root(
@@ -238,29 +240,27 @@ class AutoRoller(object):
       pattern = self.REVISION_REGEXP % self._project_alias
       match = re.search(pattern, deps_contents, re.MULTILINE)
       self._cached_last_roll_revision = match.group('revision')
-    if scm.GIT.IsValidRevision(self._project_git_dir,
-                               self._cached_last_roll_revision):
+    if self._git_mode:
       assert len(self._cached_last_roll_revision) == 40
     return self._cached_last_roll_revision
 
   def _current_revision(self):
     subprocess2.check_call(['git', '--git-dir', self._project_git_dir,
                             'fetch'])
-    git_show_cmd = ['git', '--git-dir', self._project_git_dir, 'show', '-s',
-                    'origin/master']
-    git_log = subprocess2.check_output(git_show_cmd)
-    match = re.search('^\s*git-svn-id:.*@(?P<svn_revision>\d+)\ ',
-      git_log, re.MULTILINE)
-    # TODO(borenet): "not self._project == 'skia'" is a hack needed while
-    # Skia's DEPS are being synced from Git but the source of truth is still an
-    # SVN repository. Remove this once Skia has fully switched to Git.
-    if match and not self._project == 'skia':
-      return match.group('svn_revision')
-    else:
-      # If it's not git-svn, fall back on git.
+    if self._git_mode:
       git_revparse_cmd = ['git', '--git-dir', self._project_git_dir,
                           'rev-parse', 'origin/master']
       return subprocess2.check_output(git_revparse_cmd).rstrip()
+    else:
+      git_show_cmd = ['git', '--git-dir', self._project_git_dir, 'show', '-s',
+                      'origin/master']
+      git_log = subprocess2.check_output(git_show_cmd)
+      match = re.search('^\s*git-svn-id:.*@(?P<svn_revision>\d+)\ ',
+                        git_log, re.MULTILINE)
+      if match:
+        return match.group('svn_revision')
+      else:
+        raise AutoRollException('Could not determine the current SVN revision.')
 
   def _emails_to_cc_on_rolls(self):
     return _filter_emails(self._get_extra_emails())
@@ -306,7 +306,7 @@ class AutoRoller(object):
       return True
 
     last_roll_revision = self._last_roll_revision()
-    if scm.GIT.IsValidRevision(self._project_git_dir, last_roll_revision):
+    if self._git_mode:
       last_roll_revision = self._short_rev(last_roll_revision)
     match = re.match(
         self.ROLL_DESCRIPTION_REGEXP % {'project': self._project.title()},
@@ -320,14 +320,14 @@ class AutoRoller(object):
 
     return False
 
-  def _compare_revisions(self, last_roll_revision, new_roll_revision, is_git):
+  def _compare_revisions(self, last_roll_revision, new_roll_revision):
     """Ensure that new_roll_revision is newer than last_roll_revision.
 
     Raises:
         AutoRollException if new_roll_revision is not newer than than
         last_roll_revision.
     """
-    if is_git:
+    if self._git_mode:
       # Ensure that new_roll_revision is not an ancestor of old_roll_revision.
       try:
         subprocess2.check_call(['git', '--git-dir', self._project_git_dir,
@@ -368,16 +368,14 @@ class AutoRoller(object):
 
     last_roll_revision = self._last_roll_revision()
     new_roll_revision = self._current_revision()
-    is_git = (
-        scm.GIT.IsValidRevision(self._project_git_dir, last_roll_revision) and
-        scm.GIT.IsValidRevision(self._project_git_dir, new_roll_revision)
-    )
-    self._compare_revisions(last_roll_revision, new_roll_revision, is_git)
+    self._compare_revisions(last_roll_revision, new_roll_revision)
 
     display_from_rev = (
-        self._short_rev(last_roll_revision) if is_git else last_roll_revision)
+        self._short_rev(last_roll_revision) if self._git_mode
+        else last_roll_revision)
     display_to_rev = (
-        self._short_rev(new_roll_revision) if is_git else new_roll_revision)
+        self._short_rev(new_roll_revision) if self._git_mode
+        else new_roll_revision)
     commit_msg = self.ROLL_DESCRIPTION_STR % {
         'project': self._project.title(),
         'from_revision': display_from_rev,
