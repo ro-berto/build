@@ -156,6 +156,7 @@ RECOGNIZED_PATHS.update(internal_data.get('RECOGNIZED_PATHS', {}))
 ENABLED_MASTERS = [
     'bot_update.always_on',
     'chromium.endure',
+    'chromium.chromedriver',
     'chromium.fyi',
     'chromium.git',
     'chromium.gpu',
@@ -306,6 +307,9 @@ DISABLED_BUILDERS = {
     'chromium.gpu': [
         'GPU Win Builder',
         'GPU Win Builder (dbg)',
+    ],
+    'chromium.chromedriver': [
+        'Win7',
     ],
     'chromium.gpu.fyi': [
         'GPU Win Builder (dbg)',
