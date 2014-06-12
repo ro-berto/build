@@ -11,7 +11,6 @@ BUILDERS = {
     'builders': {
 ####### Category: Linux
       'V8 Linux - builder': {
-        'chromium_apply_config': ['verify_heap'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -90,7 +89,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - shared': {
-        'chromium_apply_config': ['shared_library'],
+        'chromium_apply_config': ['shared_library', 'verify_heap'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,

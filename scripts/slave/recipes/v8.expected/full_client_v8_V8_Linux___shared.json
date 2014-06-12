@@ -47,7 +47,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "component=shared_library target_arch=ia32 v8_target_arch=ia32"
+      "GYP_DEFINES": "component=shared_library target_arch=ia32 v8_enable_verify_heap=1 v8_target_arch=ia32"
     },
     "name": "gclient runhooks"
   },
