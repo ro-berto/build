@@ -157,6 +157,7 @@ ENABLED_MASTERS = [
     'bot_update.always_on',
     'chromium.endure',
     'chromium.chromedriver',
+    'chromium.chromiumos',
     'chromium.fyi',
     'chromium.git',
     'chromium.gpu',
