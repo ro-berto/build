@@ -18,7 +18,9 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@204787"
+      "src@204787",
+      "--revision",
+      "src/tools/swarming_client@HEAD"
     ],
     "name": "bot_update",
     "~followup_annotations": [
@@ -52,6 +54,8 @@
       "--verbose",
       "--revision",
       "src@204787",
+      "--revision",
+      "src/tools/swarming_client@HEAD",
       "--output-json",
       "/path/to/tmp/json"
     ],

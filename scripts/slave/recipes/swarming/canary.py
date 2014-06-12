@@ -45,6 +45,7 @@ def GenSteps(api):
   # to ToT of swarming_client repo, see recipe_modules/gclient/config.py.
   api.gclient.set_config('chromium')
   api.gclient.c.solutions[0].custom_vars['swarming_revision'] = ''
+  api.gclient.c.revisions['src/tools/swarming_client'] = 'HEAD'
 
   # Enable test isolation. Modifies GYP_DEFINES used in 'runhooks' below.
   api.isolate.set_isolate_environment(api.chromium.c)
