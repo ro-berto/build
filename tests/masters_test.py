@@ -21,6 +21,9 @@ import time
 BUILD_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(BUILD_DIR, 'scripts'))
 
+from tools import runit
+runit.add_build_paths(sys.path)
+
 import masters_util
 from common import chromium_utils
 from common import master_cfg_utils
