@@ -116,6 +116,7 @@ class AutoRollTestBase(SuperMoxTestBase):
                              'get_issue_properties')
     self.mox.StubOutWithMock(auto_roll.rietveld.Rietveld, 'search')
     self.mox.StubOutWithMock(auto_roll.scm.GIT, 'Capture')
+    self.mox.StubOutWithMock(auto_roll.scm.GIT, 'IsValidRevision')
     self.mox.StubOutWithMock(auto_roll.subprocess2, 'check_call')
     self.mox.StubOutWithMock(auto_roll.subprocess2, 'check_output')
     self.mox.StubOutWithMock(auto_roll.urllib2, 'urlopen')
@@ -357,11 +358,8 @@ Date:   Wed Apr 2 14:00:14 2014 -0400
 
   # pylint: disable=R0201
   def _is_valid_git_rev(self, rev):
-    auto_roll.scm.GIT.Capture(['rev-parse', str(rev)],
-                              cwd='./third_party/test_project/.git',
-                              ).AndRaise(
-                                  auto_roll.subprocess2.CalledProcessError(
-                                      1, '', '', '', ''))
+    auto_roll.scm.GIT.IsValidRevision('./third_party/test_project/.git',
+                                      str(rev)).AndReturn(False)
     return False
 
 
@@ -421,9 +419,8 @@ Date:   Wed Apr 2 14:00:14 2014 -0400
                                        ).AndReturn(self._display_rev(rev))
 
   def _is_valid_git_rev(self, rev):
-    auto_roll.scm.GIT.Capture(['rev-parse', rev[:-1]],
-                              cwd='./third_party/test_project/.git',
-                              ).AndReturn(rev)
+    auto_roll.scm.GIT.IsValidRevision('./third_party/test_project/.git',
+                                      rev).AndReturn(True)
     return True
 
   def _compare_revs(self, old_rev, new_rev):
