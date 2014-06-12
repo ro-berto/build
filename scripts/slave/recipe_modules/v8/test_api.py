@@ -28,37 +28,44 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         'mode': 'theMode2',
         'results': [],
       }])
-    return self.m.json.output([{
-      'arch': 'theArch',
-      'mode': 'theMode',
-      'results': [{
+
+    # Add enough failures to exceed the maximum number of shown failures
+    # (test-name9 will be cut off).
+    results = []
+    for i in range(0, 10):
+      results.append({
         'flags': ['--opt42'],
         'result': 'FAIL',
         'stdout': 'Some output.',
         'stderr': 'Some errput.',
-        'name': 'suite-name/dir/test-name',
+        'name': 'suite-name/dir/test-name%d' % i,
         'command': 'out/theMode/d8 --opt42 test/suite-name/dir/test-name.js',
         'exit_code': 1,
-      },
-      {
+      })
+      results.append({
         'flags': ['--other'],
         'result': 'FAIL',
         'stdout': 'Some output.',
         'stderr': 'Some errput.',
-        'name': 'suite-name/dir/test-name',
+        'name': 'suite-name/dir/test-name%d' % i,
         'command': 'out/theMode/d8 --other test/suite-name/dir/test-name.js',
         'exit_code': 1,
-      },
-      {
+      })
+      results.append({
         'flags': ['--other'],
         'result': 'CRASH',
         'stdout': 'Some output\nwith\nmore\nlines.',
         'stderr': 'Some errput.',
-        'name': 'other-suite/dir/other-test-very-long-name',
+        'name': 'other-suite/dir/other-test-very-long-name%d' % i,
         'command': ('out/theMode/d8 --other '
                     'test/other-suite/dir/other-test-very-long-name.js'),
         'exit_code': 1,
-      }],
+      })
+
+    return self.m.json.output([{
+      'arch': 'theArch',
+      'mode': 'theMode',
+      'results': results,
     }])
 
   def perf_json(self, has_failures=False):

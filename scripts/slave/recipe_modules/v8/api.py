@@ -12,6 +12,8 @@ from slave.recipe_modules.v8 import builders
 # With more than 23 letters, labels are to big for buildbot's popup boxes.
 MAX_LABEL_SIZE = 23
 
+# Make sure that a step is not flooded with log lines.
+MAX_FAILURE_LOGS = 10
 
 TEST_CONFIGS = {
   'benchmarks': {
@@ -168,7 +170,7 @@ class V8Api(recipe_api.RecipeApi):
     assert self.bot_config, (
         'Unrecognized builder name %r for master %r.' % (
             buildername, mastername))
-    
+
     self.set_config('v8',
                     optional=True,
                     **self.bot_config.get('v8_config_kwargs', {}))
@@ -385,7 +387,7 @@ class V8Api(recipe_api.RecipeApi):
       # different configurations).
       unique_results.setdefault(label, []).append(result)
 
-    for label in sorted(unique_results):
+    for label in sorted(unique_results.keys()[:MAX_FAILURE_LOGS]):
       lines = []
       for result in unique_results[label]:
         lines.append('Test: %s' % result['name'])
