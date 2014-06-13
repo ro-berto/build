@@ -1571,6 +1571,7 @@ def main():
       # If we're not on recipes, tell annotator about our got_revisions.
       emit_log_lines('patch error', e.output)
       print '@@@STEP_TEXT@%s PATCH FAILED@@@' % step_text
+    raise
 
   # Revision is an svn revision, unless its a git master or past flag day.
   use_svn_rev = master not in GIT_MASTERS and not FLAG_DAY
