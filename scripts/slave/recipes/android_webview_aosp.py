@@ -57,7 +57,7 @@ def GenSteps(api):
 
   # This check is in place to detect incompatibly-licensed new code that's
   # checked into the main Chromium repository.
-  yield droid.incompatible_directories_check_step()
+  yield droid.all_incompatible_directories_check_step()
 
   # TODO(android): use api.chromium.compile for this
   yield droid.compile_step(

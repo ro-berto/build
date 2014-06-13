@@ -117,7 +117,7 @@ class AOSPApi(recipe_api.RecipeApi):
       [
         self.m.path['checkout'].join('android_webview', 'buildbot',
                                      'deps_whitelist.py'),
-        '--method', 'android_build',
+        '--method', 'android_rsync_build',
         '--path-to-deps', self.m.path['checkout'].join('DEPS'),
         '--output-json', self.m.json.output()
       ],
@@ -143,10 +143,12 @@ class AOSPApi(recipe_api.RecipeApi):
     # -a  'archive', ensures that symbolic links etc. survive
     # -v  Show files being copied
     # --delete  Delete destination files not present in source directory
+    # --delete-excluded  Delete destination files we've excluded
     # --exclude=dont/copy/me  Don't sync directory.
     options = []
     options.append('-rav')
     options.append('--delete')
+    options.append('--delete-excluded')
     # TODO: Remove after https://code.google.com/p/angleproject/issues/detail?id=669
     # is resolved. Must come before "--exclude=.git".
     options.append('--include=third_party/angle/.git')
@@ -164,11 +166,11 @@ class AOSPApi(recipe_api.RecipeApi):
         self.with_lunch_command + [gyp_webview_path, 'all'],
         cwd=self.c.slave_chromium_in_android_path)
 
-  def incompatible_directories_check_step(self):
+  def all_incompatible_directories_check_step(self):
     webview_license_tool_path = self.c.slave_chromium_in_android_path.join(
         'android_webview', 'tools', 'webview_licenses.py')
     yield self.m.python('incompatible directories', webview_license_tool_path,
-                        ['incompatible_directories'])
+                        ['all_incompatible_directories'])
 
   def compile_step(self, build_tool, step_name='compile', targets=None,
                    use_goma=True, src_dir=None, target_out_dir=None,

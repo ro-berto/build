@@ -250,7 +250,7 @@
     "cmd": [
       "[SLAVE_BUILD]/src/android_webview/buildbot/deps_whitelist.py",
       "--method",
-      "android_build",
+      "android_rsync_build",
       "--path-to-deps",
       "[SLAVE_BUILD]/src/DEPS",
       "--output-json",
@@ -259,10 +259,10 @@
     "name": "calculate blacklist",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"blacklist\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/blacklist/project/1\": null, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/blacklist/project/2\": null@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"blacklist\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/blacklist/project/1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/blacklist/project/2\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -272,11 +272,12 @@
       "rsync",
       "-rav",
       "--delete",
+      "--delete-excluded",
       "--include=third_party/angle/.git",
       "--exclude=.svn",
       "--exclude=.git",
-      "--exclude=blacklist/project/2",
       "--exclude=blacklist/project/1",
+      "--exclude=blacklist/project/2",
       "[SLAVE_BUILD]/src/",
       "[SLAVE_BUILD]/android-src/external/chromium_org"
     ],
@@ -298,7 +299,7 @@
       "python",
       "-u",
       "[SLAVE_BUILD]/android-src/external/chromium_org/android_webview/tools/webview_licenses.py",
-      "incompatible_directories"
+      "all_incompatible_directories"
     ],
     "name": "incompatible directories"
   },
