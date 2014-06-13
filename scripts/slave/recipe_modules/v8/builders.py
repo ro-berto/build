@@ -818,7 +818,7 @@ BRANCH_BUILDERS = {}
 def AddBranchBuilder(branch_config, build_config, arch, bits, presubmit=False):
   tests = ['v8testing', 'webkit', 'test262', 'mozilla']
   if presubmit:
-    tests.append('presubmit')
+    tests = ['presubmit'] + tests
   return {
     'gclient_apply_config': [branch_config],
     'chromium_apply_config': ['no_optimized_debug'],

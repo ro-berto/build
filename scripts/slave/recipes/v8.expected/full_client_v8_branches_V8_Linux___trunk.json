@@ -76,6 +76,21 @@
     "name": "compile"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/v8/v8testing.py",
+      "--testname",
+      "presubmit"
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "name": "Presubmit",
+    "seed_steps": [
+      "Presubmit",
+      "Check"
+    ]
+  },
+  {
     "always_run": true,
     "cmd": [
       "python",
@@ -180,16 +195,5 @@
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Mozilla"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/v8/v8testing.py",
-      "--testname",
-      "presubmit"
-    ],
-    "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Presubmit"
   }
 ]
