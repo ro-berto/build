@@ -414,8 +414,9 @@ SHALLOW_CLONE_THRESHOLD = 100 * 1024 * 1024 * 1024
 
 class SubprocessFailed(Exception):
   def __init__(self, message, code, output):
-    Exception.__init__(self, message, output)
+    Exception.__init__(self, message)
     self.code = code
+    self.output = output
 
 
 class PatchFailed(SubprocessFailed):
