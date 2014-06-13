@@ -340,8 +340,8 @@ class DrCommands(object):
     """Add a test of a single drmemory config on the tsan tests."""
     app_cmd = [('..\\tsan\\unittest\\bin\\'
                 'racecheck_unittest-windows-x86-O0.exe'),
-               ('--gtest_filter="-PositiveTests.FreeVsRead'
-                ':NegativeTests.WaitForMultiple*"'),
+               ('--gtest_filter=-PositiveTests.FreeVsRead'
+                ':NegativeTests.WaitForMultiple*'),
                '-147']
     # Pick exe from build mode.
     if self.IsWindows():
