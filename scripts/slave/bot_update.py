@@ -167,7 +167,6 @@ ENABLED_MASTERS = [
     'chromium.memory',
     'chromium.perf',
     'chromium.swarm',
-    'chromium.webrtc.fyi',
     'tryserver.chromium',
 ]
 ENABLED_MASTERS += internal_data.get('ENABLED_MASTERS', [])
@@ -326,11 +325,6 @@ DISABLED_BUILDERS = {
         'Win XP Perf (3)',
         'Win XP Perf (4)',
         'Win XP Perf (5)',
-    ],
-    'chromium.webrtc.fyi': [
-        'Win Builder',
-        'Win7 Tester',
-        'WinXP Tester',
     ],
     'chromium.swarm': [
         'Windows Swarm Tests',
