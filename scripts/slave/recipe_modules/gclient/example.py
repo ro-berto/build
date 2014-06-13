@@ -28,6 +28,7 @@ def GenSteps(api):
       cwd=api.path['slave_build'].join('src', 'third_party'))
 
   yield api.gclient.break_locks()
+  del api.gclient.spec_alias
 
 def GenTests(api):
   yield api.test('basic')

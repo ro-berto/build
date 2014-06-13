@@ -18,56 +18,6 @@ class AOSPApi(recipe_api.RecipeApi):
             self.c.build_path,
             self.c.lunch_flavor]
 
-  # TODO(hjd): Remove after rsync refactor complete.
-  def chromium_with_trimmed_deps(self, use_revision=True):
-    svn_revision = 'HEAD'
-    if use_revision and 'revision' in self.m.properties:
-      svn_revision = str(self.m.properties['revision'])
-
-    spec = self.m.gclient.make_config('chromium_empty')
-    spec.solutions[0].revision = svn_revision
-    self.m.gclient.spec_alias = 'empty_deps'
-
-    # Bot Update re-uses the gclient configs.
-    yield self.m.bot_update.ensure_checkout(spec, suffix='empty_deps')
-    if not self.m.step_history.last_step().json.output['did_run']:
-      yield self.m.gclient.checkout(spec)
-
-    yield self.m.step(
-      'calculate trimmed deps',
-      [
-        self.m.path['checkout'].join('android_webview', 'buildbot',
-                                     'deps_whitelist.py'),
-        '--method', 'android_build',
-        '--path-to-deps', self.m.path['checkout'].join('DEPS'),
-        '--output-json', self.m.json.output()
-      ],
-      step_test_data=self.test_api.calculate_trimmed_deps
-    )
-
-    spec = self.m.gclient.make_config('chromium_bare')
-    deps_blacklist = self.m.step_history.last_step().json.output['blacklist']
-    spec.solutions[0].custom_deps = deps_blacklist
-    spec.solutions[0].revision = svn_revision
-    spec.target_os = ['android']
-    self.m.gclient.spec_alias = 'trimmed'
-    yield self.m.bot_update.ensure_checkout(spec, suffix='trimmed')
-    if not self.m.step_history.last_step().json.output['did_run']:
-      yield self.m.gclient.checkout(spec)
-    del self.m.gclient.spec_alias
-
-    yield self.m.gclient.runhooks(env={'GYP_CHROMIUM_NO_ACTION': 1})
-
-  # TODO(hjd): Remove after rsync refactor complete.
-  def symlink_chromium_into_android_tree_step(self):
-    if self.m.path.exists(self.c.slave_chromium_in_android_path):
-      yield self.m.step('remove chromium_org',
-                          ['rm', '-rf', self.c.slave_chromium_in_android_path])
-    yield self.m.step('symlink chromium_org', [
-      'ln', '-s',
-      self.m.path['checkout'],
-      self.c.slave_chromium_in_android_path]),
-
   def sync_chromium(self, use_revision=True):
     svn_revision = 'HEAD'
     if use_revision and 'revision' in self.m.properties:
@@ -171,7 +121,7 @@ class AOSPApi(recipe_api.RecipeApi):
         '--path-to-deps', self.m.path['checkout'].join('DEPS'),
         '--output-json', self.m.json.output()
       ],
-      step_test_data=self.test_api.calculate_trimmed_deps
+      step_test_data=self.test_api.calculate_blacklist
     )
 
     blacklist = self.m.step_history.last_step().json.output['blacklist']
@@ -194,11 +144,16 @@ class AOSPApi(recipe_api.RecipeApi):
     # -v  Show files being copied
     # --delete  Delete destination files not present in source directory
     # --exclude=dont/copy/me  Don't sync directory.
-    vcs_excludes = ["--exclude=.svn", "--exclude=.git"]
-    excludes = vcs_excludes + ['--exclude=' + proj for proj in blacklist]
-    options = ['-rav', '--delete']
-    command = ['rsync'] + options + excludes + [
-        chrome_checkout, android_chrome_checkout]
+    options = []
+    options.append('-rav')
+    options.append('--delete')
+    # TODO: Remove after https://code.google.com/p/angleproject/issues/detail?id=669
+    # is resolved. Must come before "--exclude=.git".
+    options.append('--include=third_party/angle/.git')
+    options.append('--exclude=.svn')
+    options.append('--exclude=.git')
+    options.extend(['--exclude=' + proj for proj in blacklist])
+    command = ['rsync'] + options + [chrome_checkout, android_chrome_checkout]
     yield self.m.step('rsync chromium_org', command)
 
   def gyp_webview_step(self):
