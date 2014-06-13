@@ -16,6 +16,7 @@ DEPS = [
   'raw_io',
   'step',
   'step_history',
+  'swarming',
   'test_utils',
   'tryserver',
 ]
@@ -362,6 +363,21 @@ BUILDERS = {
 }
 
 
+def add_swarming_builder(original, swarming, server='tryserver.chromium'):
+  """Duplicates builder config on |server|, adding 'enable_swarming: True'."""
+  assert server in BUILDERS
+  assert original in BUILDERS[server]['builders']
+  assert swarming not in BUILDERS[server]['builders']
+  conf = BUILDERS[server]['builders'][original].copy()
+  conf['enable_swarming'] = True
+  BUILDERS[server]['builders'][swarming] = conf
+
+
+add_swarming_builder('linux_chromium_rel', 'linux_chromium_rel_swarming')
+add_swarming_builder('win_chromium_rel', 'win_chromium_rel_swarming')
+add_swarming_builder('mac_chromium_rel', 'mac_chromium_rel_swarming')
+
+
 def GenSteps(api):
   class CheckdepsTest(api.test_utils.Test):  # pylint: disable=W0232
     name = 'checkdeps'
@@ -506,10 +522,117 @@ def GenSteps(api):
       global_tags = gtest_results.raw.get('global_tags', [])
       return 'UNRELIABLE_RESULTS' not in global_tags
 
-
     def failures(self, suffix):
       step_name = self._step_name(suffix)
       return api.step_history[step_name].json.gtest_results.failures
+
+
+  class SwarmingGTestTest(api.test_utils.Test):
+    def __init__(self, name, args=None):
+      api.test_utils.Test.__init__(self)
+      self._name = name
+      self._args = args or []
+      self._tasks = {}
+      self._results = {}
+
+    @property
+    def name(self):
+      return self._name
+
+    def compile_targets(self):
+      # <X>_run target depends on <X>, and then isolates it invoking isolate.py.
+      # It is a convention, not a hard coded rule.
+      return [self._name + '_run']
+
+    def pre_run(self, suffix):
+      """Launches the test on Swarming."""
+      assert suffix not in self._tasks, (
+          'Test %s was already triggered' % self._step_name(suffix))
+
+      # *.isolated may be missing if *_run target is misconfigured. It's a error
+      # in gyp, not a recipe failure. So carry on with recipe execution.
+      isolated_hash = api.isolate.isolated_tests.get(self._name)
+      if not isolated_hash:
+        return api.python.inline(
+            '[error] %s' % self._step_name(suffix),
+            r"""
+            import sys
+            print '*.isolated file for target %s is missing' % sys.argv[1]
+            sys.exit(1)
+            """,
+            args=[self._name],
+            always_run=True)
+
+      # If rerunning without a patch, run only tests that failed.
+      args = self._args[:]
+      if suffix == 'without patch':
+        failed_tests = sorted(self.failures('with patch'))
+        args.append('--gtest_filter=%s' % ':'.join(failed_tests))
+
+      # Trigger the test on swarming.
+      self._tasks[suffix] = api.swarming.gtest_task(
+          title=self._step_name(suffix),
+          isolated_hash=isolated_hash,
+          test_launcher_summary_output=api.json.gtest_results(
+              add_json_log=False),
+          extra_args=args)
+      return api.swarming.trigger([self._tasks[suffix]], always_run=True)
+
+    def run(self, suffix):  # pylint: disable=R0201
+      """Not used. All logic in pre_run, post_run."""
+      return []
+
+    def post_run(self, suffix):
+      """Waits for launched test to finish and collect the results."""
+      assert suffix not in self._results, (
+          'Results of %s were already collected' % self._step_name(suffix))
+
+      # Emit error if test wasn't triggered. This happens if *.isolated is not
+      # found. (The build is already red by this moment anyway).
+      if suffix not in self._tasks:
+        return api.python.inline(
+            '[collect error] %s' % self._step_name(suffix),
+            r"""
+            import sys
+            print '%s wasn\'t triggered' % sys.argv[1]
+            sys.exit(1)
+            """,
+            args=[self._name],
+            always_run=True)
+
+      # Update step presentation, store step results in self._results.
+      def followup_fn(step_result):
+        r = step_result.json.gtest_results
+        p = step_result.presentation
+        if r.valid:
+          p.step_text += api.test_utils.format_step_text([
+              ['failures:', r.failures]
+          ])
+        self._results[suffix] = r
+
+      # Wait for test on swarming to finish. If swarming infrastructure is
+      # having issues, this step produces no valid *.json test summary, and
+      # 'has_valid_results' returns False.
+      return api.swarming.collect(
+          [self._tasks[suffix]],
+          always_run=True,
+          can_fail_build=False,
+          followup_fn=followup_fn)
+
+    def has_valid_results(self, suffix):
+      # Test wasn't triggered or wasn't collected.
+      if suffix not in self._tasks or not suffix in self._results:
+        return False
+      # Test ran, but failed to produce valid *.json.
+      gtest_results = self._results[suffix]
+      if not gtest_results.valid:  # pragma: no cover
+        return False
+      global_tags = gtest_results.raw.get('global_tags', [])
+      return 'UNRELIABLE_RESULTS' not in global_tags
+
+    def failures(self, suffix):
+      assert self.has_valid_results(suffix)
+      return self._results[suffix].failures
 
 
   class NaclIntegrationTest(api.test_utils.Test):  # pylint: disable=W0232
@@ -541,6 +664,71 @@ def GenSteps(api):
       failures = api.step_history[self._step_name(suffix)].json.output
       return [f['raw_name'] for f in failures]
 
+
+  def parse_test_spec(test_spec, enable_swarming, should_use_test):
+    """Returns a list of tests to run and additional targets to compile.
+
+    Uses 'should_use_test' callback to figure out what tests should be skipped.
+
+    Returns triple (compile_targets, gtest_tests, swarming_tests) where
+      gtest_tests is a list of GTestTest
+      swarming_tests is a list of SwarmingGTestTest.
+    """
+    compile_targets = []
+    gtest_tests_spec = []
+    if isinstance(test_spec, dict):
+      compile_targets = test_spec.get('compile_targets', [])
+      gtest_tests_spec = test_spec.get('gtest_tests', [])
+    else:
+      # TODO(nodir): Remove this after
+      # https://codereview.chromium.org/297303012/#ps50001
+      # lands.
+      gtest_tests_spec = test_spec
+
+    gtest_tests = []
+    swarming_tests = []
+    for test in gtest_tests_spec:
+      test_name = None
+      test_dict = None
+
+      # Read test_dict for the test, it defines where test can run.
+      if isinstance(test, unicode):
+        test_name = test.encode('utf-8')
+        test_dict = {}
+      elif isinstance(test, dict):
+        if 'test' not in test:  # pragma: no cover
+          raise ValueError('Invalid entry in test spec: %r' % test)
+        test_name = test['test'].encode('utf-8')
+        test_dict = test
+      else:  # pragma: no cover
+        raise ValueError('Unrecognized entry in test spec: %r' % test)
+
+      # Should skip it completely?
+      if not test_name or not should_use_test(test_dict):
+        continue
+
+      # If test can run on swarming, test_dict has a section that defines when
+      # swarming should be used, in same format as main test dict.
+      use_swarming = False
+      if enable_swarming:
+        swarming_spec = test_dict.get('swarming') or {}
+        if not isinstance(swarming_spec, dict):  # pragma: no cover
+          raise ValueError('\'swarming\' entry in test spec should be a dict')
+        if swarming_spec.get('can_use_on_swarming_builders'):
+          use_swarming = should_use_test(swarming_spec)
+
+      test_args = test_dict.get('args')
+      if isinstance(test_args, basestring):
+        test_args = [test_args]
+
+      if use_swarming:
+        swarming_tests.append(SwarmingGTestTest(test_name, test_args))
+      else:
+        gtest_tests.append(GTestTest(test_name, test_args))
+
+    return compile_targets, gtest_tests, swarming_tests
+
+
   mastername = api.properties.get('mastername')
   buildername = api.properties.get('buildername')
   master_dict = BUILDERS.get(mastername, {})
@@ -557,8 +745,6 @@ def GenSteps(api):
   # Settings GYP_DEFINES explicitly because chromium config constructor does
   # not support that.
   api.chromium.c.gyp_env.GYP_DEFINES.update(bot_config.get('GYP_DEFINES', {}))
-  if bot_config.get('use_isolate'):
-    api.isolate.set_isolate_environment(api.chromium.c)
   api.chromium.apply_config('trybot_flavor')
   api.gclient.set_config('chromium')
   api.step.auto_resolve_conflicts = True
@@ -609,6 +795,31 @@ def GenSteps(api):
       followup_fn=test_spec_followup_fn,
   )
 
+  def should_use_test(test):
+    """Given a test dict from test spec returns True or False."""
+    if 'platforms' in test:
+      if api.platform.name not in test['platforms']:
+        return False
+    if 'chromium_configs' in test:
+      if bot_config['chromium_config'] not in test['chromium_configs']:
+        return False
+    if 'exclude_builders' in test:
+      if '%s:%s' % (mastername, buildername) in test['exclude_builders']:
+        return False
+    return True
+
+  # Parse test spec file into list of Test instances.
+  compile_targets, gtest_tests, swarming_tests = parse_test_spec(
+      api.step_history['read test spec'].json.output,
+      bot_config.get('enable_swarming'),
+      should_use_test)
+
+  # Swarming uses Isolate to transfer files to swarming bots.
+  # set_isolate_environment modifies GYP_DEFINES to enable test isolation.
+  use_isolate = swarming_tests or bot_config.get('use_isolate')
+  if use_isolate:
+    api.isolate.set_isolate_environment(api.chromium.c)
+
   runhooks_env = bot_config.get('runhooks_env', {})
 
   yield api.chromium.runhooks(env=runhooks_env, abort_on_failure=False,
@@ -639,51 +850,10 @@ def GenSteps(api):
           api.chromium.runhooks(env=runhooks_env)
         )
 
-  gtest_tests = []
-  compile_targets = []
-  test_spec = api.step_history['read test spec'].json.output
-
-  if isinstance(test_spec, dict):
-    compile_targets = test_spec.get('compile_targets', [])
-    gtest_tests_spec = test_spec.get('gtest_tests', [])
-  else:
-    # TODO (nodir): Remove this after
-    # https://codereview.chromium.org/297303012/#ps50001
-    # lands.
-    gtest_tests_spec = test_spec
-
-  for test in gtest_tests_spec:
-    test_name = None
-    test_args = None
-
-    if isinstance(test, unicode):
-      test_name = test.encode('utf-8')
-    elif isinstance(test, dict):
-      if 'platforms' in test:
-        if api.platform.name not in test['platforms']:
-          continue
-
-      if 'chromium_configs' in test:
-        if bot_config['chromium_config'] not in test['chromium_configs']:
-          continue
-
-      if 'exclude_builders' in test:
-        if '%s:%s' % (mastername, buildername) in test['exclude_builders']:
-          continue
-
-      test_args = test.get('args')
-      if isinstance(test_args, basestring):
-        test_args = [test_args]
-
-      if 'test' not in test:  # pragma: no cover
-        raise ValueError('Invalid entry in test spec: %r' % test)
-
-      test_name = test['test'].encode('utf-8')
-    else:  # pragma: no cover
-      raise ValueError('Unrecognized entry in test spec: %r' % test)
-
-    if test_name:
-      gtest_tests.append(GTestTest(test_name, test_args))
+  # If going to use swarming_client (pinned in src/DEPS), ensure it is
+  # compatible with what recipes expect.
+  if swarming_tests:
+    yield api.swarming.check_client_version()
 
   tests = []
   tests.append(CheckdepsTest())
@@ -693,8 +863,8 @@ def GenSteps(api):
         ChecklicensesTest(),
     ])
   tests.append(Deps2GitTest())
-  for test in gtest_tests:
-    tests.append(test)
+  tests.extend(gtest_tests)
+  tests.extend(swarming_tests)
   tests.append(NaclIntegrationTest())
 
   compile_targets.extend(bot_config.get('compile_targets', []))
@@ -748,7 +918,9 @@ def GenSteps(api):
   if api.step_history.failed:
     return
 
-  if bot_config.get('use_isolate'):
+  # Collect *.isolated hashes for all isolated targets, used when triggering
+  # tests on swarming.
+  if use_isolate:
     yield api.isolate.find_isolated_tests(api.chromium.output_dir)
 
   if bot_config['compile_only']:
@@ -757,6 +929,7 @@ def GenSteps(api):
   if bot_config['chromium_config'] not in ['chromium_chromeos',
                                            'chromium_chromeos_clang']:
     # TODO(phajdan.jr): Make it possible to retry telemetry tests (add JSON).
+    # TODO(vadimsh): Trigger swarming tests before telemetry tests.
     yield (
       api.chromium.run_telemetry_unittests(),
       api.chromium.run_telemetry_perf_unittests(),
@@ -791,6 +964,9 @@ def GenSteps(api):
                                    name='compile (without patch, clobber)',
                                    force_clobber=True,
                                    always_run=True)
+      if use_isolate:
+        yield api.isolate.find_isolated_tests(api.chromium.output_dir,
+                                              always_run=True)
 
   yield api.test_utils.determine_new_failures(tests, deapply_patch_fn)
 
@@ -1022,4 +1198,82 @@ def GenTests(api):
                 'license': 'UNKNOWN',
             },
         ]))
+  )
+
+  # Successfully compiling, isolating and running two targets on swarming.
+  yield (
+    api.test('swarming_basic') +
+    props(buildername='linux_chromium_rel_swarming') +
+    api.platform.name('linux') +
+    api.override_step_data('read test spec', api.json.output({
+        'gtest_tests': [
+          {
+            'test': 'base_unittests',
+            'swarming': {'can_use_on_swarming_builders': True},
+          },
+          {
+            'test': 'browser_tests',
+            'swarming': {
+              'can_use_on_swarming_builders': True,
+              'platforms': ['linux'],
+            },
+          },
+        ],
+      })
+    ) +
+    api.override_step_data(
+        'find isolated tests',
+        api.isolate.output_json(['base_unittests', 'browser_tests']))
+  )
+
+  # One target (browser_tests) failed to produce *.isolated file.
+  yield (
+    api.test('swarming_missing_isolated') +
+    props(buildername='linux_chromium_rel_swarming') +
+    api.platform.name('linux') +
+    api.override_step_data('read test spec', api.json.output({
+        'gtest_tests': [
+          {
+            'test': 'base_unittests',
+            'swarming': {'can_use_on_swarming_builders': True},
+          },
+          {
+            'test': 'browser_tests',
+            'swarming': {'can_use_on_swarming_builders': True},
+          },
+        ],
+      })
+    ) +
+    api.override_step_data(
+        'find isolated tests',
+        api.isolate.output_json(['base_unittests']))
+  )
+
+  # One test (base_unittest) failed on swarming. It is retried with
+  # deapplied patch.
+  yield (
+    api.test('swarming_deapply_patch') +
+    props(buildername='linux_chromium_rel_swarming') +
+    api.platform.name('linux') +
+    api.override_step_data('read test spec', api.json.output({
+        'gtest_tests': [
+          {
+            'test': 'base_unittests',
+            'swarming': {'can_use_on_swarming_builders': True},
+          },
+          {
+            'test': 'browser_tests',
+            'swarming': {'can_use_on_swarming_builders': True},
+          },
+        ],
+      })
+    ) +
+    api.override_step_data(
+        'find isolated tests',
+        api.isolate.output_json(['base_unittests', 'browser_tests'])) +
+    api.override_step_data('[swarming] base_unittests (with patch)',
+                           canned_test(passing=False)) +
+    api.override_step_data(
+        'find isolated tests (2)',
+        api.isolate.output_json(['base_unittests']))
   )
