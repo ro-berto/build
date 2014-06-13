@@ -103,7 +103,9 @@ class WebRTCApi(recipe_api.RecipeApi):
       steps.append(self.add_test('vie_auto_test',
           args=['--automated',
                 '--capture_test_ensure_resolution_alignment_in_capture_device='
-                'false']))
+                'false'],
+          revision=revision,
+          perf_test=True))
       steps.append(self.add_test('voe_auto_test', args=['--automated']))
       steps.append(self.virtual_webcam_check())
       steps.append(self.add_test('video_capture_tests'))
