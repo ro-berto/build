@@ -544,6 +544,10 @@ class DrMemoryTest(Test):
         failed_tests.append(m.groups()[0])  # Append failed test name.
 
       DRM_PREFIX = '~~[Dr\.M0-9]+~~ '
+      # Only count non-ignored errors.
+      m = re.match(DRM_PREFIX + 'ERRORS IGNORED:', line)
+      if m:
+        break
       m = re.match(DRM_PREFIX + '(.*)', line)
       if m:
         summary.append(m.groups()[0])
