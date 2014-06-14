@@ -682,7 +682,7 @@ def gclient_sync(buildspec_name):
     call(*cmd)
   except SubprocessFailed as e:
     # Throw a GclientSyncFailed exception so we can catch this independently.
-    raise GclientSyncFailed(e.message, e.code)
+    raise GclientSyncFailed(e.message, e.code, e.output)
   else:
     with open(gclient_output_file) as f:
       return json.load(f)
