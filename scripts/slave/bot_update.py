@@ -738,7 +738,10 @@ def need_to_run_deps2git(repo_base, deps_file, deps_git_file):
     print 'it doesn\'t exist!'
     return not FLAG_DAY
 
-  if git('diff', '--staged', deps_file, cwd=repo_base).strip():
+  # See if DEPS is dirty
+  deps_file_status = git(
+      'status', '--porcelain', deps_file, cwd=repo_base).strip()
+  if deps_file_status and deps_file_status.startswith('M '):
     return True
 
   last_known_deps_ref = _last_commit_for_file(deps_file, repo_base)
@@ -873,7 +876,6 @@ def get_target_revision(folder_name, git_url, revisions):
 
 
 def force_revision(folder_name, revision, git_svn=False):
-  git('fetch', 'origin', cwd=folder_name)
   if revision and revision.upper() != 'HEAD':
     if revision and revision.isdigit() and len(revision) < 40:
       # rev_num is really a svn revision number, convert it into a git hash.
@@ -881,9 +883,9 @@ def force_revision(folder_name, revision, git_svn=False):
     else:
       # rev_num is actually a git hash or ref, we can just use it.
       git_ref = revision
-    git('checkout', git_ref, cwd=folder_name)
+    git('checkout', '--force', git_ref, cwd=folder_name)
   else:
-    git('checkout', 'origin/master', cwd=folder_name)
+    git('checkout', '--force', 'origin/master', cwd=folder_name)
 
 def git_checkout(solutions, revisions, shallow):
   build_dir = os.getcwd()
@@ -901,7 +903,6 @@ def git_checkout(solutions, revisions, shallow):
     done = False
     tries_left = 60
     while not done:
-      done = True
       name = sln['name']
       url = sln['url']
       if url == CHROMIUM_SRC_URL or url + '.git' == CHROMIUM_SRC_URL:
@@ -915,25 +916,22 @@ def git_checkout(solutions, revisions, shallow):
       git(*populate_cmd)
       mirror_dir = git(
           'cache', 'exists', '--quiet', '--cache-dir', CACHE_DIR, url).strip()
-      clone_cmd = ('clone', '--local', '--shared', mirror_dir, sln_dir)
+      clone_cmd = (
+          'clone', '--no-checkout', '--local', '--shared', mirror_dir, sln_dir)
       if not path.isdir(sln_dir):
         git(*clone_cmd)
+      else:
+        git('fetch', 'origin', cwd=sln_dir)
+
+      revision = get_target_revision(name, url, revisions) or 'HEAD'
       try:
-        # Make sure we start on a known branch first, and not whereever
-        # apply_issue left us at before.
-        git('checkout', '--force', 'origin/master', cwd=sln_dir)
+        force_revision(sln_dir, revision, url==CHROMIUM_SRC_URL)
+        done = True
       except SubprocessFailed:
         # Exited abnormally, theres probably something wrong.
         # Lets wipe the checkout and try again.
         remove(sln_dir)
         git(*clone_cmd)
-        git('checkout', '--force', 'origin/master', cwd=sln_dir)
-
-      git('clean', '-df', cwd=sln_dir)
-
-      revision = get_target_revision(name, url, revisions) or 'HEAD'
-      try:
-        force_revision(sln_dir, revision, url==CHROMIUM_SRC_URL)
       except SVNRevisionNotFound:
         tries_left -= 1
         if tries_left > 0:
@@ -942,14 +940,15 @@ def git_checkout(solutions, revisions, shallow):
           print 'The svn to git replicator is probably falling behind.'
           print 'waiting 5 seconds and trying again...'
           time.sleep(5)
-          done = False
-          continue
-        raise
+        else:
+          raise
 
-      if first_solution:
-        git_ref = git('log', '--format=%H', '--max-count=1',
-                      cwd=sln_dir).strip()
-      first_solution = False
+    git('clean', '-df', cwd=sln_dir)
+
+    if first_solution:
+      git_ref = git('log', '--format=%H', '--max-count=1',
+                    cwd=sln_dir).strip()
+    first_solution = False
   return git_ref
 
 
@@ -1139,6 +1138,7 @@ def ensure_deps_revisions(deps_url_mapping, solutions, revisions):
     if not revision:
       continue
     # TODO(hinoka): Catch SVNRevisionNotFound error maybe?
+    git('fetch', 'origin', cwd=deps_name)
     force_revision(deps_name, revision)
 
 
