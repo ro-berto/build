@@ -158,6 +158,7 @@ ENABLED_MASTERS = [
     'chromium.chromedriver',
     'chromium.chromiumos',
     'chromium.endure',
+    'chromium',
     'chromium.fyi',
     'chromium.git',
     'chromium.gpu',
@@ -236,6 +237,9 @@ DISABLED_BUILDERS = {
     ],
     'chromium.chromedriver': [
         'Win7',
+    ],
+    'chromium': [
+        'Win',
     ],
     'chromium.gpu.fyi': [
         'GPU Win Builder (dbg)',
