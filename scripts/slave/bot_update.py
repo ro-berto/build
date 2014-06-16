@@ -1024,9 +1024,11 @@ def apply_svn_patch(patch_root, patches, whitelist=None, blacklist=None):
     try:
       call(PATCH_TOOL, '-p0', '--remove-empty-files', '--force', '--forward',
           stdin_data=patch, cwd=patch_root, tries=1)
+      for filename, _ in patches:
+        full_filename = path.abspath(path.join(patch_root, filename))
+        git('add', full_filename, cwd=path.dirname(full_filename))
     except SubprocessFailed as e:
       raise PatchFailed(e.message, e.code, e.output)
-
 
 def apply_rietveld_issue(issue, patchset, root, server, _rev_map, _revision,
                          whitelist=None, blacklist=None):
