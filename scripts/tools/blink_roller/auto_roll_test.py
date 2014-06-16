@@ -155,7 +155,7 @@ class AutoRollTestBase(SuperMoxTestBase):
           ['git', '--git-dir', './third_party/test_project/.git', 'show', '-s',
            'origin/master']).AndReturn(self.GIT_LOG_UPDATED)
 
-  def _upload_issue(self):
+  def _upload_issue(self, custom_message=None):
     self._get_last_revision()
     self._get_current_revision()
     self._compare_revs(self.OLD_REV, self.NEW_REV)
@@ -163,10 +163,11 @@ class AutoRollTestBase(SuperMoxTestBase):
     from_rev = self._display_rev(self.OLD_REV)
     to_rev = self._display_rev(self.NEW_REV)
 
+    message = custom_message or 'Test_Project roll %s:%s' % (from_rev, to_rev)
+
     auto_roll.subprocess2.check_call(
         ['./tools/safely-roll-deps.py', self.TEST_PROJECT, str(self.NEW_REV),
-         '--message', 'Test_Project roll %s:%s' % (from_rev, to_rev),
-         '--force'])
+         '--message', message, '--force'])
     issue = self._make_issue(created_datetime=self.CURRENT_DATETIME_STR)
     self._arb._rietveld.search(owner=self.TEST_AUTHOR,
                                closed=2).AndReturn([issue])
@@ -316,6 +317,18 @@ Please email (eseidel@chromium.org) if the Rollbot is causing trouble.
     self._get_current_revision()
     self.mox.ReplayAll()
     self.assertEquals(type(self._arb._current_revision()), str)
+
+  def test_extra_trybots(self):
+    if self.__class__.__name__ == 'AutoRollTestBase':
+      return
+    self._arb._cq_extra_trybots = ['sometrybot']
+    self._arb._rietveld.search(owner=self.TEST_AUTHOR, closed=2).AndReturn([])
+    commit_msg = ('Test_Project roll %s:%s\n\nCQ_EXTRA_TRYBOTS=sometrybot' %
+                  (self._display_rev(self.OLD_REV),
+                   self._display_rev(self.NEW_REV)))
+    self._upload_issue(custom_message=commit_msg)
+    self.mox.ReplayAll()
+    self.assertEquals(self._arb.main(), 0)
 
 
 class AutoRollTestSVN(AutoRollTestBase):

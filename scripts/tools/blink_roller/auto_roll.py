@@ -46,6 +46,7 @@ BLINK_SHERIFF_URL = (
 CHROMIUM_SHERIFF_URL = (
   'http://build.chromium.org/p/chromium.webkit/sheriff.js')
 
+CQ_EXTRA_TRYBOTS = 'CQ_EXTRA_TRYBOTS='
 
 # Does not support unicode or special characters.
 VALID_EMAIL_REGEXP = re.compile(r'^[A-Za-z0-9\.&\'\+-/=_]+@'
@@ -114,6 +115,7 @@ PROJECT_CONFIGS = {
             str(int(before_rev) + 1), after_rev),
   },
   'skia': {
+    'cq_extra_trybots': ['tryserver.chromium:linux_layout_rel'],
     'extra_emails_fn': lambda: [_get_skia_sheriff()],
     'git_mode': True,
     'path_to_project': os.path.join('third_party', 'skia'),
@@ -176,6 +178,7 @@ class AutoRoller(object):
     self._get_revision_link = project_config['revision_link_fn']
     self._get_extra_emails = project_config.get('extra_emails_fn', lambda: [])
     self._git_mode = project_config.get('git_mode', False)
+    self._cq_extra_trybots = project_config.get('cq_extra_trybots', [])
 
     self._chromium_git_dir = self._path_from_chromium_root('.git')
     self._project_git_dir = self._path_from_chromium_root(
@@ -384,6 +387,9 @@ class AutoRoller(object):
     revlink = self._get_revision_link(last_roll_revision, new_roll_revision)
     if revlink:
       commit_msg += '\n\n' + revlink
+
+    if self._cq_extra_trybots:
+      commit_msg += '\n\n' + CQ_EXTRA_TRYBOTS + ','.join(self._cq_extra_trybots)
 
     self._start_roll(new_roll_revision, commit_msg)
     return 0
