@@ -291,12 +291,15 @@ class AndroidApi(recipe_api.RecipeApi):
         followup_fn=followup_fn,
         **kwargs)
 
-  def provision_devices(self, **kwargs):
+  def provision_devices(self, skip_wipe=False, **kwargs):
+    args = ['-t', self.m.chromium.c.BUILD_CONFIG]
+    if skip_wipe:
+      args.append('--skip-wipe')
     yield self.m.python(
         'provision_devices',
         self.m.path['checkout'].join(
             'build', 'android', 'provision_devices.py'),
-        args=['-t', self.m.chromium.c.BUILD_CONFIG],
+        args=args,
         can_fail_build=False,
         **kwargs)
 

@@ -15,23 +15,33 @@ BUILDERS = {
     'basic_builder': {
         'target': 'Release',
         'build': True,
+        'skip_wipe': False,
     },
     'restart_usb_builder': {
         'restart_usb': True,
         'target': 'Release',
         'build': True,
+        'skip_wipe': False,
     },
     'coverage_builder': {
         'coverage': True,
         'target': 'Debug',
         'build': True,
+        'skip_wipe': False,
     },
     'tester': {
         'build': False,
+        'skip_wipe': False,
     },
     'perf_runner': {
         'perf_config': 'sharded_perf_tests.json',
         'build': False,
+        'skip_wipe': False,
+    },
+    'perf_runner_user_build': {
+        'perf_config': 'sharded_perf_tests.json',
+        'build': False,
+        'skip_wipe': True,
     }
 }
 
@@ -67,6 +77,8 @@ def GenSteps(api):
   yield api.chromium_android.spawn_logcat_monitor()
   yield api.chromium_android.device_status_check(
       restart_usb=config.get('restart_usb', False))
+
+  yield api.chromium_android.provision_devices(skip_wipe=config['skip_wipe'])
 
   yield api.chromium_android.monkey_test()
 

@@ -263,6 +263,17 @@
     "name": "device_status_check"
   },
   {
+    "can_fail_build": false,
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/provision_devices.py",
+      "-t",
+      "Release"
+    ],
+    "name": "provision_devices"
+  },
+  {
     "always_run": true,
     "cmd": [
       "python",
