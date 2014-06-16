@@ -528,10 +528,11 @@ def GenSteps(api):
 
 
   class SwarmingGTestTest(api.test_utils.Test):
-    def __init__(self, name, args=None):
+    def __init__(self, name, args=None, shards=1):
       api.test_utils.Test.__init__(self)
       self._name = name
       self._args = args or []
+      self._shards = shards
       self._tasks = {}
       self._results = {}
 
@@ -573,6 +574,7 @@ def GenSteps(api):
       self._tasks[suffix] = api.swarming.gtest_task(
           title=self._step_name(suffix),
           isolated_hash=isolated_hash,
+          shards=self._shards,
           test_launcher_summary_output=api.json.gtest_results(
               add_json_log=False),
           extra_args=args)
@@ -710,19 +712,22 @@ def GenSteps(api):
       # If test can run on swarming, test_dict has a section that defines when
       # swarming should be used, in same format as main test dict.
       use_swarming = False
+      swarming_shards = 1
       if enable_swarming:
         swarming_spec = test_dict.get('swarming') or {}
         if not isinstance(swarming_spec, dict):  # pragma: no cover
           raise ValueError('\'swarming\' entry in test spec should be a dict')
         if swarming_spec.get('can_use_on_swarming_builders'):
           use_swarming = should_use_test(swarming_spec)
+        swarming_shards = swarming_spec.get('shards', 1)
 
       test_args = test_dict.get('args')
       if isinstance(test_args, basestring):
         test_args = [test_args]
 
       if use_swarming:
-        swarming_tests.append(SwarmingGTestTest(test_name, test_args))
+        swarming_tests.append(
+            SwarmingGTestTest(test_name, test_args, swarming_shards))
       else:
         gtest_tests.append(GTestTest(test_name, test_args))
 
@@ -816,8 +821,7 @@ def GenSteps(api):
 
   # Swarming uses Isolate to transfer files to swarming bots.
   # set_isolate_environment modifies GYP_DEFINES to enable test isolation.
-  use_isolate = swarming_tests or bot_config.get('use_isolate')
-  if use_isolate:
+  if bot_config.get('use_isolate') or swarming_tests:
     api.isolate.set_isolate_environment(api.chromium.c)
 
   runhooks_env = bot_config.get('runhooks_env', {})
@@ -920,7 +924,7 @@ def GenSteps(api):
 
   # Collect *.isolated hashes for all isolated targets, used when triggering
   # tests on swarming.
-  if use_isolate:
+  if bot_config.get('use_isolate') or swarming_tests:
     yield api.isolate.find_isolated_tests(api.chromium.output_dir)
 
   if bot_config['compile_only']:
@@ -964,7 +968,10 @@ def GenSteps(api):
                                    name='compile (without patch, clobber)',
                                    force_clobber=True,
                                    always_run=True)
-      if use_isolate:
+      # Search for *.isolated only if enabled in bot config or if some swarming
+      # test is being recompiled.
+      failing_swarming_tests = set(failing_tests) & set(swarming_tests)
+      if bot_config.get('use_isolate') or failing_swarming_tests:
         yield api.isolate.find_isolated_tests(api.chromium.output_dir,
                                               always_run=True)
 
@@ -1215,6 +1222,7 @@ def GenTests(api):
             'test': 'browser_tests',
             'swarming': {
               'can_use_on_swarming_builders': True,
+              'shards': 5,
               'platforms': ['linux'],
             },
           },

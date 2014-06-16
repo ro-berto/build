@@ -24,7 +24,8 @@ PLATFORM_TO_OS_DIMENSION = {
 # being downloading the executable files. While it can be lowered, it'll stay in
 # the "few seconds" range due to the sheer size of the executables to map.
 # Anything not listed defaults to 1 shard.
-# TODO(vadimsh): Move this mapping somewhere else?
+# TODO(vadimsh): Get rid of this. chromium_trybot.py recipe is reading sharding
+# config from test spec in src/. Swarming canary builder should do the same.
 TESTS_SHARDS = {
   'browser_tests': 5,
   'interactive_ui_tests': 3,
