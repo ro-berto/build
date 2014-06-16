@@ -41,17 +41,23 @@ class TryserverApi(recipe_api.RecipeApi):
             self.m.properties.get('patch_repo_url') and
             self.m.properties.get('patch_ref'))
 
-  def _apply_patch_step(self, patch_content, root):
+  def _apply_patch_step(self, patch_file=None, patch_content=None, root=None):
+    assert not (patch_file and patch_content), (
+        'Please only specify either patch_file or patch_content, not both!')
     patch_cmd = [
         'patch',
         '--dir', root or self.m.path['checkout'],
         '--force',
         '--forward',
-        '--input', patch_content,
         '--remove-empty-files',
         '--strip', '0',
     ]
-    yield self.m.step('apply patch', patch_cmd, abort_on_failure=True)
+    if patch_file:
+      patch_cmd.extend(['--input', patch_file])
+
+    yield self.m.step('apply patch', patch_cmd,
+                      stdin=patch_content,
+                      abort_on_failure=True)
 
   def apply_from_svn(self, cwd):
     """Downloads patch from patch_url using svn-export and applies it"""
@@ -68,12 +74,30 @@ class TryserverApi(recipe_api.RecipeApi):
     svn_cmd = ['svn' + ext, 'export', '--force', patch_url, patch_file]
 
     yield self.m.step('download patch', svn_cmd, followup_fn=link_patch,
-                      step_test_data=self.test_api.download_patch,
+                      step_test_data=self.test_api.patch_content,
                       abort_on_failure=True)
+
+    if self.m.platform.is_win:
+      patch_content = self.m.raw_io.input(
+        self.m.step_history.last_step().raw_io.output)
+      yield self.m.python.inline(
+          'convert line endings (win32)',
+          r"""
+            import sys
+            out = open(sys.argv[1], "w")
+            for line in sys.stdin:
+              out.write(line)
+          """,
+          args=[self.m.raw_io.output()],
+          stdin=patch_content,
+          followup_fn=link_patch,
+          step_test_data=self.test_api.patch_content_windows,
+          abort_on_failure=True,
+      )
 
     patch_content = self.m.raw_io.input(
         self.m.step_history.last_step().raw_io.output)
-    yield self._apply_patch_step(patch_content, cwd)
+    yield self._apply_patch_step(patch_content=patch_content, root=cwd)
 
   def apply_from_git(self, cwd):
     """Downloads patch from given git repo and ref and applies it"""
@@ -96,7 +120,7 @@ class TryserverApi(recipe_api.RecipeApi):
         self.m.git('checkout', '-f', 'FETCH_HEAD',
                    name='patch git checkout', cwd=patch_dir,
                    abort_on_failure=True),
-        self._apply_patch_step(patch_path, cwd),
+        self._apply_patch_step(patch_file=patch_path, root=cwd),
         self.m.step('remove patch', ['rm', '-rf', patch_dir]),
     )
 

@@ -61,11 +61,11 @@
       "[SLAVE_BUILD]",
       "--force",
       "--forward",
-      "--input",
-      "[TMP_BASE]/patch_tmp_1/patch.diff",
       "--remove-empty-files",
       "--strip",
-      "0"
+      "0",
+      "--input",
+      "[TMP_BASE]/patch_tmp_1/patch.diff"
     ],
     "name": "apply patch"
   },

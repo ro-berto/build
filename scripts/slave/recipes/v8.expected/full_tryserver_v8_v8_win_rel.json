@@ -73,7 +73,34 @@
     ],
     "name": "download patch",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@patch.diff@fake patch.diff contents@@@",
+      "@@@STEP_LOG_LINE@patch.diff@fake patch.diff content (line 1)@@@",
+      "@@@STEP_LOG_LINE@patch.diff@fake patch.diff content (line 2)@@@",
+      "@@@STEP_LOG_LINE@patch.diff@@@@",
+      "@@@STEP_LOG_END@patch.diff@@@"
+    ]
+  },
+  {
+    "abort_on_failure": true,
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys\nout = open(sys.argv[1], \"w\")\nfor line in sys.stdin:\n  out.write(line)\n",
+      "/path/to/tmp/"
+    ],
+    "name": "convert line endings (win32)",
+    "stdin": "fake patch.diff content (line 1)\nfake patch.diff content (line 2)\n",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@out = open(sys.argv[1], \"w\")@@@",
+      "@@@STEP_LOG_LINE@python.inline@for line in sys.stdin:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  out.write(line)@@@",
+      "@@@STEP_LOG_END@python.inline@@@",
+      "@@@STEP_LOG_LINE@patch.diff@fake patch.diff content for Windows (line 1)",
+      "@@@",
+      "@@@STEP_LOG_LINE@patch.diff@fake patch.diff content for Windows (line 2)",
+      "@@@",
+      "@@@STEP_LOG_LINE@patch.diff@@@@",
       "@@@STEP_LOG_END@patch.diff@@@"
     ]
   },
@@ -85,13 +112,12 @@
       "[SLAVE_BUILD]\\v8",
       "--force",
       "--forward",
-      "--input",
-      "fake patch.diff contents",
       "--remove-empty-files",
       "--strip",
       "0"
     ],
-    "name": "apply patch"
+    "name": "apply patch",
+    "stdin": "fake patch.diff content for Windows (line 1)\r\nfake patch.diff content for Windows (line 2)\r\n"
   },
   {
     "cmd": [
