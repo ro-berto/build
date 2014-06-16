@@ -246,18 +246,6 @@ DISABLED_BUILDERS = {
         'WinXP Debug (NVIDIA)',
     ],
     'chromium.win': ['Win Builder'],  # crbug.com/370473
-    'chromium.linux': [
-        # These are non-recipe for checking out, but use bb_run_bot.py for
-        # testings and upload.  The zip_build/extract_build link needs to be
-        # made working before these can be enabled.
-        'Android Builder (dbg)',
-        'Android Builder',
-        'Android Tests (dbg)',
-        'Android Tests',
-        # This one is not a builder/tester split, but runs into issues because
-        # its a 40GB bot.
-        'Android Clang Builder (dbg)',
-    ],
     'chromium.fyi': [
         'Chromium Linux Codesearch',
         'ChromiumOS Codesearch',
