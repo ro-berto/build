@@ -111,100 +111,6 @@ class _ValidUserPoller(internet.TimerService):
     log.msg('Found %d users' % len(self._users))
 
 
-class _RietveldPoller(base.PollingChangeSource):
-  """Polls Rietveld for any pending patch sets to build.
-
-  Periodically polls Rietveld to see if any patch sets have been marked by
-  users to be tried.  If so, send them to the trybots.
-  """
-
-  def __init__(self, get_pending_endpoint, interval, cachepath=None):
-    """
-    Args:
-      get_pending_endpoint: Rietveld URL string used to retrieve jobs to try.
-      interval: Interval used to poll Rietveld, in seconds.
-      cachepath: Path to file where state to persist between master restarts
-                 will be stored.
-    """
-    # Set interval time in base class.
-    self.pollInterval = interval
-
-    # A string URL for the Rietveld endpoint to query for pending try jobs.
-    self._get_pending_endpoint = get_pending_endpoint
-
-    # Cursor used to keep track of next patchset(s) to try.  If the cursor
-    # is None, then try from the beginning.
-    self._cursor = None
-
-    # Try job parent of this poller.
-    self._try_job_rietveld = None
-
-    self._cachepath = cachepath
-
-    if self._cachepath:
-      if os.path.exists(self._cachepath):
-        with open(self._cachepath) as f:
-          # Using JSON allows us to be flexible and extend the format
-          # in a compatible way.
-          data = json.load(f)
-          self._cursor = data.get('cursor').encode('utf-8')
-
-  # base.PollingChangeSource overrides:
-  def poll(self):
-    """Polls Rietveld for any pending try jobs and submit them.
-
-    Returns:
-      A deferred objects to be called once the operation completes.
-    """
-    log.msg('RietveldPoller.poll')
-    d = defer.succeed(None)
-    d.addCallback(self._OpenUrl)
-    d.addCallback(self._ParseJson)
-    d.addErrback(log.err, 'error in RietveldPoller')  # eat errors
-    return d
-
-  def setServiceParent(self, parent):
-    base.PollingChangeSource.setServiceParent(self, parent)
-    self._try_job_rietveld = parent
-
-  def _OpenUrl(self, _):
-    """Downloads pending patch sets from Rietveld.
-
-    Returns: A string containing the pending patchsets from Rietveld
-        encoded as JSON.
-    """
-    endpoint = self._get_pending_endpoint
-    if self._cursor:
-      sep = '&' if '?' in endpoint else '?'
-      endpoint = endpoint + '%scursor=%s' % (sep, self._cursor)
-
-    log.msg('RietveldPoller._OpenUrl: %s' % endpoint)
-    return client.getPage(endpoint, agent='buildbot', timeout=2*60)
-
-  def _ParseJson(self, json_string):
-    """Parses the JSON pending patch set information.
-
-    Args:
-      json_string: A string containing the serialized JSON jobs.
-
-    Returns: A list of pending try jobs.  This is the list of all jobs returned
-        by Rietveld, not simply the ones we tried this time.
-    """
-    data = json.loads(json_string)
-    d = self._try_job_rietveld.SubmitJobs(data['jobs'])
-    def success_callback(value):
-      self._cursor = str(data['cursor'])
-      self._try_job_rietveld.processed_keys.clear()
-
-      if self._cachepath:
-        with open(self._cachepath, 'w') as f:
-          json.dump({'cursor': self._cursor}, f)
-
-      return value
-    d.addCallback(success_callback)
-    return d
-
-
 class _RietveldPollerWithCache(base.PollingChangeSource):
   """Polls Rietveld for any pending patch sets to build.
 
@@ -216,7 +122,7 @@ class _RietveldPollerWithCache(base.PollingChangeSource):
   this cache is initialized with jobs currently pending on the Buildbot.
   """
 
-  def __init__(self, pending_jobs_url, interval, cachepath=None):
+  def __init__(self, pending_jobs_url, interval):
     """
     Args:
       pending_jobs_url: Rietveld URL string used to retrieve jobs to try.
@@ -225,7 +131,6 @@ class _RietveldPollerWithCache(base.PollingChangeSource):
     self.pollInterval = interval
     self._try_job_rietveld = None
     self._pending_jobs_url = pending_jobs_url
-    self._cachepath = cachepath
     self._processed_keys = None
 
   # base.PollingChangeSource overrides:
@@ -355,8 +260,7 @@ class TryJobRietveld(TryJobBase):
   """A try job source that gets jobs from pending Rietveld patch sets."""
 
   def __init__(self, name, pools, properties=None, last_good_urls=None,
-               code_review_sites=None, project=None, filter_master=False,
-               cachepath=None, cache_processed_jobs=False):
+               code_review_sites=None, project=None, filter_master=False):
     """Creates a try job source for Rietveld patch sets.
 
     Args:
@@ -377,10 +281,7 @@ class TryJobRietveld(TryJobBase):
     endpoint = self._GetRietveldEndPointForProject(
         code_review_sites, project, filter_master)
 
-    if cache_processed_jobs:
-      self._poller = _RietveldPollerWithCache(endpoint, interval=10)
-    else:
-      self._poller = _RietveldPoller(endpoint, interval=10, cachepath=cachepath)
+    self._poller = _RietveldPollerWithCache(endpoint, interval=10)
     self._valid_users = _ValidUserPoller(interval=12 * 60 * 60)
     self._project = project
 
