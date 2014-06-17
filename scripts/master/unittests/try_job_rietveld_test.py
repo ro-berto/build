@@ -88,6 +88,9 @@ class MockTryJobRietveld(object):
     self.submitted_jobs.extend(jobs);
     return defer.succeed(None)
 
+  def has_valid_user_list(self):
+    return True
+
   def addService(self, service):
     pass
 
@@ -184,6 +187,14 @@ class RietveldPollerWithCacheTest(auto_stub.TestCase):
     poller.poll()
     self.assertEquals(len(self._mockTJR.submitted_jobs), 1)
     self.assertEquals(self._mockTJR.submitted_jobs[0]['key'], 'test_key_1')
+
+  def testDoesNotPerformPollWhenThereAreNoValidUsers(self):
+    self.mock(self._mockTJR, 'has_valid_user_list', lambda: False)
+    poller = try_job_rietveld._RietveldPollerWithCache(TEST_BASE_URL, 60)
+    poller.master = self._mockMaster
+    poller.setServiceParent(self._mockTJR)
+    poller.poll()
+    self.assertEqual(len(self._mockTJR.submitted_jobs), 0)
 
 
 if __name__ == '__main__':

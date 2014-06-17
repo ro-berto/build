@@ -52,6 +52,7 @@ class _ValidUserPoller(internet.TimerService):
       internet.TimerService.__init__(self, interval, _ValidUserPoller._poll,
                                      self)
     self._users = frozenset()
+    self._valid = False
 
   def contains(self, email):
     """Checks if the given email address is a valid user.
@@ -65,6 +66,10 @@ class _ValidUserPoller(internet.TimerService):
     if email is None:
       return False
     return email in self._users or email.endswith(self._SPECIAL_DOMAIN)
+
+  def valid(self):
+    """Returns true if the poller has retrieved valid users successfully."""
+    return self._valid
 
   # base.PollingChangeSource overrides:
   def _poll(self):
@@ -109,6 +114,7 @@ class _ValidUserPoller(internet.TimerService):
     emails = (email.strip() for email in data.splitlines())
     self._users = frozenset(email for email in emails if email)
     log.msg('Found %d users' % len(self._users))
+    self._valid = True
 
 
 class _RietveldPollerWithCache(base.PollingChangeSource):
@@ -140,6 +146,16 @@ class _RietveldPollerWithCache(base.PollingChangeSource):
     Returns:
       A deferred object to be called once the operation completes.
     """
+
+    # Make sure setServiceParent was called before this method is called.
+    assert self._try_job_rietveld
+
+    # Check if we have valid user list, otherwise - do not submit any jobs. This
+    # is different from having no valid users in the list, in which case
+    # SubmitJobs will correctly discard the jobs.
+    if not self._try_job_rietveld.has_valid_user_list():
+      log.msg('[RPWC] No valid user list. Ignoring the poll request.')
+      return
 
     log.msg('[RPWC] Poll started')
     log.msg('[RPWC] Downloading %s...' % self._pending_jobs_url)
@@ -318,6 +334,11 @@ class TryJobRietveld(TryJobBase):
       url += '&master=%s' % urllib.quote_plus(master_utils.GetMastername())
 
     return urlparse.urljoin(code_review_sites[project], url)
+
+  def has_valid_user_list(self):
+    """Returns true if the user poller is valid (has retrieved valid users)."""
+
+    return not self._valid_users.valid()
 
   @defer.inlineCallbacks
   def SubmitJobs(self, jobs):
