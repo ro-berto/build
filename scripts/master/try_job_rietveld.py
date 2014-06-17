@@ -338,7 +338,7 @@ class TryJobRietveld(TryJobBase):
   def has_valid_user_list(self):
     """Returns true if the user poller is valid (has retrieved valid users)."""
 
-    return not self._valid_users.valid()
+    return self._valid_users.valid()
 
   @defer.inlineCallbacks
   def SubmitJobs(self, jobs):
