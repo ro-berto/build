@@ -35,7 +35,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = None\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk', 'webrtc_revision': '12345'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}, {'deps_file': 'DEPS', 'managed': True, 'name': 'webrtc.DEPS', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/deps/third_party/webrtc/webrtc.DEPS'}]\ntarget_os = ['android']"
+      "cache_dir = None\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'got_revision': '12345', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk', 'webrtc_revision': '12345'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}, {'deps_file': 'DEPS', 'managed': True, 'name': 'webrtc.DEPS', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/deps/third_party/webrtc/webrtc.DEPS'}]\ntarget_os = ['android']"
     ],
     "name": "gclient setup"
   },
@@ -150,9 +150,9 @@
       "--build_revision",
       "120644",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Tests (dbg) (KK Nexus5)\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc.fyi\", \"parent_buildername\": \"Android Builder (dbg)\", \"recipe\": \"webrtc/chromium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Tests (dbg) (KK Nexus5)\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc.fyi\", \"parent_buildername\": \"Android Builder (dbg)\", \"parent_got_revision\": \"12345\", \"recipe\": \"webrtc/chromium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Tests (dbg) (KK Nexus5)\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc.fyi\", \"parent_buildername\": \"Android Builder (dbg)\", \"recipe\": \"webrtc/chromium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Tests (dbg) (KK Nexus5)\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc.fyi\", \"parent_buildername\": \"Android Builder (dbg)\", \"parent_got_revision\": \"12345\", \"recipe\": \"webrtc/chromium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "name": "extract build"
   },

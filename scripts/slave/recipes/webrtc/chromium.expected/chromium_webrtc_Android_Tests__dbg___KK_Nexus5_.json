@@ -151,9 +151,9 @@
       "--build_revision",
       "170242",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Tests (dbg) (KK Nexus5)\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc\", \"parent_buildername\": \"Android Builder (dbg)\", \"recipe\": \"webrtc/chromium\", \"revision\": \"321321\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Tests (dbg) (KK Nexus5)\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc\", \"parent_buildername\": \"Android Builder (dbg)\", \"parent_got_revision\": \"321321\", \"recipe\": \"webrtc/chromium\", \"revision\": \"321321\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Tests (dbg) (KK Nexus5)\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc\", \"parent_buildername\": \"Android Builder (dbg)\", \"recipe\": \"webrtc/chromium\", \"revision\": \"321321\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Tests (dbg) (KK Nexus5)\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc\", \"parent_buildername\": \"Android Builder (dbg)\", \"parent_got_revision\": \"321321\", \"recipe\": \"webrtc/chromium\", \"revision\": \"321321\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "name": "extract build"
   },

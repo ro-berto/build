@@ -44,15 +44,26 @@ def GenSteps(api):
   if api.tryserver.is_tryserver:
     api.webrtc.apply_config('webrtc_android_apk_try_builder')
 
+  bot_type = bot_config.get('bot_type', 'builder_tester')
+  does_build = bot_type in ('builder', 'builder_tester')
+  does_test = bot_type in ('builder_tester', 'tester')
+
   # Replace src/third_party/webrtc with the specified revision and force the
   # Chromium code to sync ToT.
   s = api.gclient.c.solutions
   s[0].revision = 'HEAD'
-  s[0].custom_vars['webrtc_revision'] = api.properties.get('revision', 'HEAD')
 
-  bot_type = bot_config.get('bot_type', 'builder_tester')
-  does_build = bot_type in ('builder', 'builder_tester')
-  does_test = bot_type in ('builder_tester', 'tester')
+  if bot_type == 'tester':
+    webrtc_revision = api.properties.get('parent_got_revision')
+    assert webrtc_revision, (
+       'Testers cannot be forced without providing revision information. Please'
+       'select a previous build and click [Rebuild] or force a build for a '
+       'Builder instead (will trigger new runs for the testers).')
+  else:
+    # For forced builds, revision is empty, in which case we sync HEAD.
+    webrtc_revision = api.properties.get('revision', 'HEAD')
+
+  s[0].custom_vars['webrtc_revision'] = webrtc_revision
 
   # TODO(iannucci): Support webrtc.apply_svn_patch with bot_update
   # crbug.com/376122
@@ -85,10 +96,6 @@ def GenSteps(api):
         api.webrtc.GS_ARCHIVES[bot_config['build_gs_archive']], got_revision)
 
   if bot_type == 'tester':
-    assert api.properties.get('revision'), (
-       'Testers cannot be forced without providing revision information. Please'
-       'select a previous build and click [Rebuild] or force a build for a '
-       'Builder instead (will trigger new runs for the testers).')
     yield api.webrtc.extract_build(
         api.webrtc.GS_ARCHIVES[bot_config['build_gs_archive']], got_revision)
 
@@ -105,8 +112,8 @@ def _sanitize_nonalpha(text):
 
 
 def GenTests(api):
-  def generate_builder(mastername, buildername, bot_config, revision,
-                       suffix=None):
+  def generate_builder(mastername, buildername, bot_config, revision=None,
+                       parent_got_revision=None, suffix=None):
     suffix = suffix or ''
     bot_type = bot_config.get('bot_type', 'builder_tester')
     if bot_type in ('builder', 'builder_tester'):
@@ -138,8 +145,9 @@ def GenTests(api):
 
     if revision:
       test += api.properties(revision=revision)
-      if bot_type == 'tester':
-        test += api.properties(parent_got_revision=revision)
+    if bot_type == 'tester':
+      parent_rev = parent_got_revision or revision
+      test += api.properties(parent_got_revision=parent_rev)
 
     if mastername.startswith('tryserver'):
       test += api.properties(patch_url='try_job_svn_patch')
@@ -160,3 +168,8 @@ def GenTests(api):
   bot_config = api.webrtc.BUILDERS[mastername]['builders'][buildername]
   yield generate_builder(mastername, buildername, bot_config, revision=None,
                          suffix='_forced')
+
+  buildername = 'Android Chromium-APK Tests (KK Nexus5)'
+  bot_config = api.webrtc.BUILDERS[mastername]['builders'][buildername]
+  yield generate_builder(mastername, buildername, bot_config, revision=None,
+                         parent_got_revision='12345', suffix='_forced')

@@ -53,6 +53,8 @@ def GenSteps(api):
   if api.platform.is_win:
     yield api.chromium.taskkill()
 
+  bot_type = bot_config.get('bot_type', 'builder_tester')
+
   # The chromium.webrtc.fyi master is used as an early warning system to catch
   # WebRTC specific errors before they get rolled into Chromium's DEPS.
   # Therefore this waterfall needs to build src/third_party/webrtc with WebRTC
@@ -61,7 +63,18 @@ def GenSteps(api):
   if mastername == 'chromium.webrtc.fyi':
     s = api.gclient.c.solutions
     s[0].revision = 'HEAD'
-    s[0].custom_vars['webrtc_revision'] = api.properties.get('revision', 'HEAD')
+
+    if bot_type == 'tester':
+      webrtc_revision = api.properties.get('parent_got_revision')
+      assert webrtc_revision, (
+         'Testers cannot be forced without providing revision information. '
+         'Please select a previous build and click [Rebuild] or force a build '
+         'for a Builder instead (will trigger new runs for the testers).')
+    else:
+      # For forced builds, revision is empty, in which case we sync HEAD.
+      webrtc_revision = api.properties.get('revision', 'HEAD')
+
+    s[0].custom_vars['webrtc_revision'] = webrtc_revision
 
   # Bot Update re-uses the gclient configs.
   yield api.bot_update.ensure_checkout(),
@@ -71,7 +84,6 @@ def GenSteps(api):
   update_step = api.step_history.last_step()
   got_revision = update_step.presentation.properties['got_revision']
 
-  bot_type = bot_config.get('bot_type', 'builder_tester')
 
   if not bot_config.get('disable_runhooks'):
     yield api.chromium.runhooks()
@@ -120,8 +132,8 @@ def _sanitize_nonalpha(text):
 
 
 def GenTests(api):
-  def generate_builder(mastername, buildername, bot_config, revision,
-                       suffix=None):
+  def generate_builder(mastername, buildername, bot_config, revision=None,
+                       parent_got_revision=None, suffix=None):
     suffix = suffix or ''
     bot_type = bot_config.get('bot_type', 'builder_tester')
     if bot_type in ('builder', 'builder_tester'):
@@ -141,14 +153,15 @@ def GenTests(api):
     )
     if revision:
       test += api.properties(revision=revision)
+    if bot_type == 'tester':
+      parent_rev = parent_got_revision or revision
+      test += api.properties(parent_got_revision=parent_rev)
     return test
 
   for mastername in ('chromium.webrtc', 'chromium.webrtc.fyi'):
     master_config = api.webrtc.BUILDERS[mastername]
     for buildername, bot_config in master_config['builders'].iteritems():
-      revision = '321321'
-      if mastername == 'chromium.webrtc.fyi':
-        revision = '12345'
+      revision = '12345' if mastername == 'chromium.webrtc.fyi' else '321321'
       yield generate_builder(mastername, buildername, bot_config, revision)
 
   # Forced build (not specifying any revision).
@@ -157,3 +170,17 @@ def GenTests(api):
   bot_config = api.webrtc.BUILDERS[mastername]['builders'][buildername]
   yield generate_builder(mastername, buildername, bot_config, revision=None,
                          suffix='_forced')
+
+  # Periodic scheduler triggered builds also don't contain revision.
+  mastername = 'chromium.webrtc.fyi'
+  buildername = 'Win Builder'
+  bot_config = api.webrtc.BUILDERS[mastername]['builders'][buildername]
+  yield generate_builder(mastername, buildername, bot_config, revision=None,
+                         suffix='_periodic_triggered')
+
+  # Testers gets got_revision value from builder passed as parent_got_revision.
+  buildername = 'Win7 Tester'
+  bot_config = api.webrtc.BUILDERS[mastername]['builders'][buildername]
+  yield generate_builder(mastername, buildername, bot_config, revision=None,
+                         parent_got_revision='12345',
+                         suffix='_periodic_triggered')
