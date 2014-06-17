@@ -63,6 +63,7 @@ class TryserverApi(recipe_api.RecipeApi):
     """Downloads patch from patch_url using svn-export and applies it"""
     # TODO(nodir): accept these properties as parameters
     patch_url = self.patch_url
+    root = self.m.properties.get('root') or cwd
 
     def link_patch(step_result):
       """Links the patch.diff file on the waterfall."""
@@ -97,7 +98,7 @@ class TryserverApi(recipe_api.RecipeApi):
 
     patch_content = self.m.raw_io.input(
         self.m.step_history.last_step().raw_io.output)
-    yield self._apply_patch_step(patch_content=patch_content, root=cwd)
+    yield self._apply_patch_step(patch_content=patch_content, root=root)
 
   def apply_from_git(self, cwd):
     """Downloads patch from given git repo and ref and applies it"""
