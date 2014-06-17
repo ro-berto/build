@@ -168,6 +168,7 @@ ENABLED_MASTERS = [
     'chromium.memory',
     'chromium.perf',
     'chromium.swarm',
+    'client.nacl.sdk.mono',
     'tryserver.chromium',
 ]
 ENABLED_MASTERS += internal_data.get('ENABLED_MASTERS', [])
