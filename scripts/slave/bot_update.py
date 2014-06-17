@@ -239,9 +239,6 @@ DISABLED_BUILDERS = {
     'chromium.chromedriver': [
         'Win7',
     ],
-    'chromium.linux': [
-        'Android Clang Builder (dbg)',
-    ],
     'chromium': [
         'Win',
     ],
