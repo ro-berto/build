@@ -597,8 +597,7 @@ def solutions_to_git(input_solutions):
 
     # Point .DEPS.git is the git version of the DEPS file.
     if not FLAG_DAY:
-      solution['deps_file'] = '.DEPS.git'.join(
-          solution.get('deps_file', 'DEPS').rsplit('DEPS', 1))
+      solution['deps_file'] = '.DEPS.git'
 
     if first_solution:
       root = parsed_path
