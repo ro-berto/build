@@ -9,6 +9,18 @@ import re
 import tempfile
 
 
+def CompressList(lines, max_length, middle_replacement):
+  """Ensures that |lines| is no longer than |max_length|. If |lines| need to
+  be compressed then the middle items are replaced by |middle_replacement|.
+  """
+  if len(lines) <= max_length:
+    return lines
+  remove_from_start = max_length / 2
+  return (lines[:remove_from_start] +
+          [middle_replacement] +
+          lines[len(lines) - (max_length - remove_from_start):])
+
+
 class GTestLogParser(object):
   """This helper class process GTest test output."""
 
@@ -499,10 +511,10 @@ class GTestJSONParser(object):
           # info can be obtained from the original JSON output.
           ascii_lines = run_data['output_snippet'].encode('ascii',
                                                           errors='replace')
-          decoded_lines = ascii_lines.decode('string_escape').split('\n')
-          if len(decoded_lines) > self.OUTPUT_SNIPPET_LINES_LIMIT:
-            decoded_lines = decoded_lines[self.OUTPUT_SNIPPET_LINES_LIMIT:]
-            decoded_lines = ['<truncated, full output is in gzipped JSON '
-                             'output at end of step>'] + decoded_lines
+          decoded_lines = CompressList(
+              ascii_lines.decode('string_escape').split('\n'),
+              self.OUTPUT_SNIPPET_LINES_LIMIT,
+              '<truncated, full output is in gzipped JSON '
+              'output at end of step>')
           run_lines.extend(decoded_lines)
           self.test_logs[test_name].extend(run_lines)
