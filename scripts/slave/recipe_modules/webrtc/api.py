@@ -200,10 +200,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     assert self.m.chromium.c.TARGET_PLATFORM != "win", (
         'This step is not supported on the Windows platform.')
     script = self.m.path['build'].join('scripts', 'slave', 'apply_svn_patch.py')
-    # Use the SVN mirror as the slaves only have authentication setup for that.
-    patch_url = self.m.properties['patch_url'].replace(
-        'svn://svn.chromium.org', 'svn://svn-mirror.golo.chromium.org')
-    args = ['-p', patch_url,
+    args = ['-p', self.m.properties['patch_url'],
             '-r', self.c.patch_root_dir]
 
     # Allow manipulating patches for try jobs.
