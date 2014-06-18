@@ -258,7 +258,6 @@ DISABLED_BUILDERS = {
     'chromium.fyi': [
         'Chromium Linux Codesearch',
         'ChromiumOS Codesearch',
-        'Chromium Linux Mojo',
         # ClusterFuzz relies on svn revisions to do bisection checks.
         # crbug.com/377963
         'Win SyzyASAN LKGR',
