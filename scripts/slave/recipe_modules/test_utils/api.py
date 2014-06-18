@@ -92,7 +92,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     if self.m.step_history.failed:
       yield self.m.python.inline(
-        'Aborting due to failed build state.',
+        'Aborting due to failed build state',
         "import sys; sys.exit(1)",
         always_run=True, abort_on_failure=True)
       return  # won't actually hit this, but be explicit

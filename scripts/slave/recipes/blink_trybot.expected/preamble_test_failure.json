@@ -232,7 +232,7 @@
       "-u",
       "import sys; sys.exit(1)"
     ],
-    "name": "Aborting due to failed build state.",
+    "name": "Aborting due to failed build state",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@import sys; sys.exit(1)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
