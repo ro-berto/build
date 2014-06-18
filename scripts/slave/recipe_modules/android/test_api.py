@@ -4,8 +4,8 @@ class AOSPTestApi(recipe_test_api.RecipeTestApi):
   def calculate_blacklist(self):
     return self.m.json.output({
       'blacklist': [
-        'src/blacklist/project/1',
-        'src/blacklist/project/2',
+        'blacklist/project/1',
+        'blacklist/project/2',
       ]
     })
 

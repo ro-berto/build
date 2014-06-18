@@ -90,20 +90,6 @@ class AOSPApi(recipe_api.RecipeApi):
           self.c.chromium_in_android_subpath])
 
   def repo_sync_steps(self):
-    # TODO(hjd): remove after buildbot has moved to rsyncing
-    # If external/chromium_org is a symlink this prevents repo from trying to
-    # update the symlink's target (which might be an svn checkout).
-    yield self.m.python.inline(
-      'remove chromium_org symlink',
-      """
-        import os, sys
-
-        to_delete = sys.argv[1]
-        if os.path.exists(to_delete) and os.path.islink(to_delete):
-          os.unlink(to_delete)
-      """,
-      args = [self.c.slave_chromium_in_android_path]
-    )
     # repo_init_steps must have been invoked first.
     sync_flags = self.c.repo.sync_flags.as_jsonish()
     if self.c.sync_manifest_override:
@@ -125,10 +111,6 @@ class AOSPApi(recipe_api.RecipeApi):
     )
 
     blacklist = self.m.step_history.last_step().json.output['blacklist']
-    # TODO(hjd): Remove once deps_whitelist.py refactor is complete.
-    # For now we adjust the output to not have leading a 'src/'
-    blacklist = [b.replace('src/', '', 1) for b in blacklist]
-
     chrome_checkout = str(self.m.path['checkout'])
     android_chrome_checkout = self.c.slave_chromium_in_android_path
 
