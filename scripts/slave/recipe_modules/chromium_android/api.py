@@ -304,8 +304,8 @@ class AndroidApi(recipe_api.RecipeApi):
         can_fail_build=False,
         **kwargs)
 
-  def detect_and_setup_devices(self):
-    yield self.device_status_check()
+  def detect_and_setup_devices(self, restart_usb=False):
+    yield self.device_status_check(restart_usb=restart_usb)
     yield self.provision_devices()
 
   def adb_install_apk(self, apk, apk_package):
