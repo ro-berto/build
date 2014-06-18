@@ -201,7 +201,7 @@
       "test-results.appspot.com",
       "--verbose"
     ],
-    "name": "Instrumentation test None"
+    "name": "Instrumentation test MojoTest"
   },
   {
     "always_run": true,
@@ -232,7 +232,7 @@
       "test-results.appspot.com",
       "--verbose"
     ],
-    "name": "Instrumentation test webview:android_webview/test/data/device_files"
+    "name": "Instrumentation test AndroidWebViewTest"
   },
   {
     "always_run": true,
@@ -263,7 +263,7 @@
       "test-results.appspot.com",
       "--verbose"
     ],
-    "name": "Instrumentation test chrome:chrome/test/data/android/device_files"
+    "name": "Instrumentation test ChromeShellTest"
   },
   {
     "always_run": true,
@@ -294,7 +294,7 @@
       "test-results.appspot.com",
       "--verbose"
     ],
-    "name": "Instrumentation test content:content/test/data/android/device_files"
+    "name": "Instrumentation test ContentShellTest"
   },
   {
     "always_run": true,

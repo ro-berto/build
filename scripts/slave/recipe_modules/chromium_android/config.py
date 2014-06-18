@@ -64,6 +64,10 @@ def main_builder(c):
 def clang_builder(c):
   pass
 
+@config_ctx()
+def android_shared(c):
+  pass
+
 @config_ctx(config_vars={'BUILD_CONFIG': 'Release'})
 def clang_release_builder(c):
   c.asan_symbolize = True

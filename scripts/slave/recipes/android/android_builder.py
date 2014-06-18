@@ -4,6 +4,8 @@
 
 DEPS = [
   'chromium_android',
+  'bot_update',
+  'gclient',
   'properties',
   'tryserver',
 ]
@@ -22,7 +24,7 @@ BUILDERS = {
   },
   'tryserver.chromium': {
     'android_dbg': {
-      'recipe_config': 'arm_builder',
+      'recipe_config': 'android_shared',
       'try': True,
       'upload': {
         'bucket': 'chromium-android',
@@ -48,7 +50,11 @@ def GenSteps(api):
   droid.configure_from_properties(bot_config['recipe_config'], **default_kwargs)
   droid.c.set_val({'deps_file': 'DEPS'})
 
-  yield droid.init_and_sync()
+  api.gclient.set_config('chromium')
+  api.gclient.apply_config('android')
+  api.gclient.apply_config('chrome_internal')
+
+  yield api.bot_update.ensure_checkout()
   yield droid.clean_local_files()
   yield droid.runhooks()
 

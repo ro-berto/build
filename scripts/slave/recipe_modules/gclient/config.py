@@ -210,6 +210,10 @@ def blink(c):
 def android(c):
   c.target_os.add('android')
 
+@config_ctx(includes=['chromium', 'chrome_internal'])
+def android_shared(c):
+  pass
+
 @config_ctx(includes=['chromium'])
 def show_v8_revision(c):
   # Have the V8 revision appear in the web UI instead of Chromium's.

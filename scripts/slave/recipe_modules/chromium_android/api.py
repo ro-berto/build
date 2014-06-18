@@ -147,7 +147,8 @@ class AndroidApi(recipe_api.RecipeApi):
     yield self.m.step('tree truth steps',
                       [self.m.path['checkout'].join('build', 'tree_truth.sh'),
                        self.m.path['checkout']] + repos,
-                      allow_subannotations=False)
+                      allow_subannotations=False,
+                      can_fail_build=False)
 
   def runhooks(self, extra_env={}):
     return self.m.chromium.runhooks(env=dict(self.get_env().items() +
@@ -395,8 +396,9 @@ class AndroidApi(recipe_api.RecipeApi):
   def run_instrumentation_suite(self, test_apk, test_data=None,
                                 flakiness_dashboard=None,
                                 annotation=None, except_annotation=None,
-                                screenshot=False, verbose=False, 
-                                host_driven_root=None, **kwargs):
+                                screenshot=False, verbose=False,
+                                apk_package=None, host_driven_root=None,
+                                **kwargs):
     args = ['--test-apk', test_apk]
     if test_data:
       args.extend(['--test_data', test_data])
@@ -419,7 +421,7 @@ class AndroidApi(recipe_api.RecipeApi):
       args.extend(['--host-driven-root', host_driven_root])
 
     yield self.m.python(
-        'Instrumentation test %s' % (annotation or test_data),
+        'Instrumentation test %s' % (annotation or test_apk),
         self.m.path['checkout'].join('build', 'android', 'test_runner.py'),
         args=['instrumentation'] + args,
         always_run=True,

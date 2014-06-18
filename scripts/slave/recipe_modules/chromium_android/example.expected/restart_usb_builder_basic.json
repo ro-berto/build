@@ -156,6 +156,7 @@
   },
   {
     "allow_subannotations": false,
+    "can_fail_build": false,
     "cmd": [
       "[SLAVE_BUILD]/src/build/tree_truth.sh",
       "[SLAVE_BUILD]/src",
