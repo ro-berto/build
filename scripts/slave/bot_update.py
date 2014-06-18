@@ -180,7 +180,7 @@ ENABLED_BUILDERS = {
         'mac_gpu',
     ],
     'chromium.webkit': [
-        'WebKit Linux Oilpan ',
+        'WebKit Linux Oilpan',
     ],
     'chromium.lkgr': [
         'Android',
