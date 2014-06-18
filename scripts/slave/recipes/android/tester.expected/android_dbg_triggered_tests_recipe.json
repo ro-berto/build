@@ -8,7 +8,7 @@
       "--master",
       "tryserver.chromium",
       "--builder",
-      "android_dbg_triggered_tests",
+      "android_dbg_triggered_tests_recipe",
       "--slave",
       "slavename",
       "--spec",
@@ -116,7 +116,7 @@
       "--",
       "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
       "cp",
-      "gs://chromium-android/android_try_dbg/full-build-linux_1729.zip",
+      "gs://chromium-android/android_try_dbg_recipe/full-build-linux_1729.zip",
       "[SLAVE_BUILD]/src/out/full-build-linux_1729.zip"
     ],
     "name": "gsutil download_build_product"

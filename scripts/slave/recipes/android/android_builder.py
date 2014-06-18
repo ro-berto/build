@@ -23,12 +23,12 @@ BUILDERS = {
     }
   },
   'tryserver.chromium': {
-    'android_dbg': {
+    'android_dbg_recipe': {
       'recipe_config': 'android_shared',
       'try': True,
       'upload': {
         'bucket': 'chromium-android',
-        'path': lambda api: ('android_try_dbg/full-build-linux_%s.zip'
+        'path': lambda api: ('android_try_dbg_recipe/full-build-linux_%s.zip'
                              % api.properties['buildnumber']),
       },
     }

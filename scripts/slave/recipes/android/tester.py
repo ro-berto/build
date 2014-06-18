@@ -15,11 +15,11 @@ DEPS = [
 
 BUILDERS = {
   'tryserver.chromium': {
-    'android_dbg_triggered_tests': {
+    'android_dbg_triggered_tests_recipe': {
       'config': 'android_shared',
       'download': {
         'bucket': 'chromium-android',
-        'path': lambda api: ('android_try_dbg/full-build-linux_%s.zip'
+        'path': lambda api: ('android_try_dbg_recipe/full-build-linux_%s.zip'
                              % api.properties['parent_buildnumber']),
       },
       'instrumentation_tests': [
