@@ -477,10 +477,14 @@ class ChromiumCommands(commands.FactoryCommands):
     if self._target_os == 'android':
       args.extend(['--platform', 'android'])
 
-    self.AddAnnotatedPerfStep('sizes', None, 'graphing', step_name='sizes',
-                              cmd_name = self._sizes_tool, cmd_options=args,
-                              py_script=True,
-                              factory_properties=factory_properties)
+    tool_opts = [
+        '--revision', WithProperties('%(got_revision)s'),
+        '--webkit-revision', WithProperties('%(got_webkit_revision:-)s')]
+
+    self.AddAnnotatedPerfStep(
+        'sizes', None, 'graphing', step_name='sizes', tool_opts=tool_opts,
+        cmd_name=self._sizes_tool, cmd_options=args,
+        py_script=True, factory_properties=factory_properties)
 
   def AddBuildrunnerSizesTests(self, factory_properties=None):
     factory_properties = factory_properties or {}
@@ -493,8 +497,13 @@ class ChromiumCommands(commands.FactoryCommands):
     if self._target_os == 'android':
       args.extend(['--platform', 'android'])
 
-    self.AddBuildrunnerAnnotatedPerfStep('sizes', None, 'graphing',
-        step_name='sizes', cmd_name = self._sizes_tool, cmd_options=args,
+    tool_opts = [
+        '--revision', WithProperties('%(got_revision)s'),
+        '--webkit-revision', WithProperties('%(got_webkit_revision:-)s')]
+
+    self.AddBuildrunnerAnnotatedPerfStep(
+        'sizes', None, 'graphing', step_name='sizes', tool_opts=tool_opts,
+        cmd_name=self._sizes_tool, cmd_options=args,
         py_script=True, factory_properties=factory_properties)
 
   def AddTabCapturePerformanceTests(self, factory_properties=None):
