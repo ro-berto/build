@@ -112,8 +112,6 @@
     ]
   },
   {
-    "abort_on_failure": false,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -133,8 +131,7 @@
     "name": "gclient runhooks"
   },
   {
-    "abort_on_failure": false,
-    "can_fail_build": false,
+    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",

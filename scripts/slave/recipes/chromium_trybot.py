@@ -826,33 +826,31 @@ def GenSteps(api):
 
   runhooks_env = bot_config.get('runhooks_env', {})
 
-  yield api.chromium.runhooks(env=runhooks_env, abort_on_failure=False,
-                              can_fail_build=False)
-  if api.step_history.last_step().retcode != 0:
-    # Before removing the checkout directory try just using LKCR.
-    api.gclient.set_config('chromium_lkcr')
+  if api.platform.is_win and not bot_update_mode:
+    # TODO(phajdan.jr): Enable bot_update on Windows and remove the workarounds.
+    yield api.chromium.runhooks(env=runhooks_env, abort_on_failure=False,
+                                can_fail_build=False)
+    if api.step_history.last_step().retcode != 0:
+      # Before removing the checkout directory try just using LKCR.
+      api.gclient.set_config('chromium_lkcr')
 
-    # Since we're likely to switch to an earlier revision, revert the patch,
-    # sync with the new config, and apply issue again.
-    if bot_update_mode:
-      yield api.bot_update.ensure_checkout(suffix='lkcr')
-      yield api.chromium.runhooks(env=runhooks_env)
-
-    else:
+      # Since we're likely to switch to an earlier revision, revert the patch,
+      # sync with the new config, and apply issue again.
       yield api.gclient.checkout(revert=True)
       yield api.tryserver.maybe_apply_issue()
 
       yield api.chromium.runhooks(env=runhooks_env, abort_on_failure=False,
                                   can_fail_build=False)
       if api.step_history.last_step().retcode != 0:
-        if api.platform.is_win:
-          yield api.chromium.taskkill()
+        yield api.chromium.taskkill()
         yield (
           api.path.rmcontents('slave build directory', api.path['slave_build']),
           api.gclient.checkout(revert=False),
           api.tryserver.maybe_apply_issue(),
           api.chromium.runhooks(env=runhooks_env)
         )
+  else:
+    yield api.chromium.runhooks(env=runhooks_env)
 
   # If going to use swarming_client (pinned in src/DEPS), ensure it is
   # compatible with what recipes expect.
@@ -878,45 +876,43 @@ def GenSteps(api):
   # Disabled for now because it takes too long and/or fails on Windows.
   if not api.platform.is_win and not bot_config.get('exclude_compile_all'):
     compile_targets = ['all'] + compile_targets
-  yield api.chromium.compile(compile_targets,
-                             name='compile (with patch)',
-                             abort_on_failure=False,
-                             can_fail_build=False)
-  if api.step_history['compile (with patch)'].retcode != 0:
-    # Only use LKCR when compile fails. Note that requested specific revision
-    # can still override this.
-    api.gclient.set_config('chromium_lkcr')
-
-    # Since we're likely to switch to an earlier revision, revert the patch,
-    # sync with the new config, and apply issue again.
-    if bot_update_mode:
-      yield api.bot_update.ensure_checkout(suffix='lkcr clobber')
-      yield api.chromium.runhooks()
-    else:
-      yield api.gclient.checkout(revert=True)
-      yield api.tryserver.maybe_apply_issue()
-
+  if api.platform.is_win and not bot_update_mode:
+    # TODO(phajdan.jr): Enable bot_update on Windows and remove the workarounds.
     yield api.chromium.compile(compile_targets,
-                               name='compile (with patch, lkcr, clobber)',
-                               force_clobber=True,
+                               name='compile (with patch)',
                                abort_on_failure=False,
                                can_fail_build=False)
-    if api.step_history['compile (with patch, lkcr, clobber)'].retcode != 0:
-      if api.platform.is_win:
+    if api.step_history['compile (with patch)'].retcode != 0:
+      # Only use LKCR when compile fails. Note that requested specific revision
+      # can still override this.
+      api.gclient.set_config('chromium_lkcr')
+
+      # Since we're likely to switch to an earlier revision, revert the patch,
+      # sync with the new config, and apply issue again.
+      yield api.gclient.checkout(revert=True)
+      yield api.tryserver.maybe_apply_issue()
+      yield api.chromium.runhooks(env=runhooks_env)
+
+      yield api.chromium.compile(compile_targets,
+                                 name='compile (with patch, lkcr, clobber)',
+                                 force_clobber=True,
+                                 abort_on_failure=False,
+                                 can_fail_build=False)
+      if api.step_history['compile (with patch, lkcr, clobber)'].retcode != 0:
         yield api.chromium.taskkill()
-      yield api.path.rmcontents('slave build directory',
-                                api.path['slave_build']),
-      if bot_update_mode:
-        yield api.bot_update.ensure_checkout(suffix='lkcr clobber nuke')
-      else:
+        yield api.path.rmcontents('slave build directory',
+                                  api.path['slave_build']),
         yield api.gclient.checkout(revert=False)
         yield api.tryserver.maybe_apply_issue()
 
-      yield api.chromium.runhooks()
-      yield api.chromium.compile(compile_targets,
-                                 name='compile '
-                                      '(with patch, lkcr, clobber, nuke)',
-                                 force_clobber=True)
+        yield api.chromium.runhooks(env=runhooks_env)
+        yield api.chromium.compile(compile_targets,
+                                   name='compile '
+                                        '(with patch, lkcr, clobber, nuke)',
+                                   force_clobber=True)
+  else:
+    yield api.chromium.compile(compile_targets,
+                               name='compile (with patch)')
 
   # Do not run tests if the build is already in a failed state.
   if api.step_history.failed:
@@ -1084,9 +1080,7 @@ def GenTests(api):
     api.test('gclient_revert_failure_linux') +
     props(buildername='linux_no_bot_update') +
     api.platform.name('linux') +
-    api.step_data('gclient runhooks', retcode=1) +
-    api.step_data('gclient runhooks (2)', retcode=1) +
-    api.step_data('gclient runhooks (3)', retcode=1)
+    api.step_data('gclient runhooks', retcode=1)
   )
 
   yield (
