@@ -166,6 +166,7 @@ ENABLED_MASTERS = [
     'chromium.linux',
     'chromium.mac',
     'chromium.memory',
+    'chromium.memory.fyi',
     'chromium.perf',
     'chromium.swarm',
     'client.nacl.sdk.mono',
