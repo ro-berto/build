@@ -250,6 +250,7 @@ def main(argv):
       'master.push.canary': 'PushCanary',
       'master.tryserver.chromium': 'TryServer',
       'master.tryserver.chromium.gpu': 'GpuTryServer',
+      'master.tryserver.chromium.perf': 'ChromiumPerfTryServer',
       'master.tryserver.blink': 'BlinkTryServer',
       'master.tryserver.libyuv': 'LibyuvTryServer',
       'master.tryserver.nacl': 'NativeClientTryServer',
