@@ -49,24 +49,6 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport os, sys\n\nto_delete = sys.argv[1]\nif os.path.exists(to_delete):\n  os.unlink(to_delete)\n",
-      "[SLAVE_BUILD]/android-src/.repo/local_manifest.xml"
-    ],
-    "name": "remove local_manifest.xml",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@to_delete = sys.argv[1]@@@",
-      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(to_delete):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  os.unlink(to_delete)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
       "[SLAVE_BUILD]/android-src",
       "511"
@@ -96,14 +78,6 @@
     ],
     "cwd": "[SLAVE_BUILD]/android-src",
     "name": "repo init"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/src/android_webview/buildbot/generate_local_manifest.py",
-      "[SLAVE_BUILD]/android-src",
-      "external/chromium_org"
-    ],
-    "name": "generate local manifest"
   },
   {
     "cmd": [

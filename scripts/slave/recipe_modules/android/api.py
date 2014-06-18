@@ -49,19 +49,6 @@ class AOSPApi(recipe_api.RecipeApi):
 
   # TODO(iannucci): Refactor repo stuff into another module?
   def repo_init_steps(self):
-    # If a local_manifest.xml file is present and contains invalid entries init
-    # and sync might fail.
-    yield self.m.python.inline(
-      'remove local_manifest.xml',
-      """
-        import os, sys
-
-        to_delete = sys.argv[1]
-        if os.path.exists(to_delete):
-          os.unlink(to_delete)
-      """,
-      args=[self.c.build_path.join('.repo', 'local_manifest.xml')]
-    )
     # The version of repo checked into depot_tools doesn't support switching
     # between branches correctly due to
     # https://code.google.com/p/git-repo/issues/detail?id=46 which is why we use
@@ -80,14 +67,6 @@ class AOSPApi(recipe_api.RecipeApi):
     yield self.m.repo.init(self.c.repo.url, '-b', self.c.repo.branch,
                            cwd=self.c.build_path)
     self.m.path.mock_add_paths(repo_in_android_path)
-
-  def generate_local_manifest_step(self):
-    yield self.m.step(
-        'generate local manifest', [
-          self.m.path['checkout'].join('android_webview', 'buildbot',
-                                       'generate_local_manifest.py'),
-          self.c.build_path,
-          self.c.chromium_in_android_subpath])
 
   def repo_sync_steps(self):
     # repo_init_steps must have been invoked first.

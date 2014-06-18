@@ -17,7 +17,6 @@ def GenSteps(api):
   yield api.android.sync_chromium()
 
   yield api.android.repo_init_steps()
-  yield api.android.generate_local_manifest_step()
   yield api.android.repo_sync_steps()
   yield api.android.update_defaut_props_step({'ro.adb.secure': '0'})
 
