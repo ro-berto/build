@@ -169,7 +169,6 @@ ENABLED_MASTERS = [
     'chromium.memory.fyi',
     'chromium.perf',
     'chromium.swarm',
-    'chromium.webkit',
     'client.nacl.sdk.mono',
     'tryserver.chromium',
 ]
@@ -179,6 +178,9 @@ ENABLED_BUILDERS = {
     'tryserver.chromium.gpu': [
         'linux_gpu',
         'mac_gpu',
+    ],
+    'chromium.webkit': [
+        'WebKit Linux Oilpan',
     ],
     'chromium.lkgr': [
         'Android',
@@ -287,13 +289,6 @@ DISABLED_BUILDERS = {
     'chromium.swarm': [
         'Windows Swarm Tests',
         'Windows Swarm Tests (dbg)',
-    ],
-    'chromium.webkit': [
-        'WebKit Win Builder (deps)',
-        'WebKit XP (deps)',
-        'WebKit Mac Builder (deps)',
-        'WebKit Mac10.6 (deps)',
-        'WebKit Linux (deps)',
     ],
     'tryserver.chromium': [
         # These don't exist, but are just here to satisfy recipes.
