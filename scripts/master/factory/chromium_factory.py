@@ -342,6 +342,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddGTestTestStep('dbus_unittests', fp)
     if R('dbus_br'):
       f.AddBuildrunnerGTest('dbus_unittests', fp)
+    if R('display_unittests'):
+      f.AddGTestTestStep('display_unittests', fp)
+    if R('display_unittests_br'):
+      f.AddBuildrunnerGTest('display_unittests', fp)
     if R('extensions_unittests'):
       f.AddGTestTestStep('extensions_unittests', fp)
     if R('extensions_unittests_br'):
