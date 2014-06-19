@@ -243,6 +243,9 @@ DISABLED_BUILDERS = {
     'chromium.chromedriver': [
         'Win7',
     ],
+    'chromium': [
+        'Win',
+    ],
     'chromium.gpu.fyi': [
         'GPU Win Builder (dbg)',
         'GPU Win Builder',
