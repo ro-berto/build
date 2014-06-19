@@ -345,6 +345,7 @@ BUILDERS = {
         'compile_only': False,
         'testing': {
           'platform': 'win',
+          'test_spec_file': 'chromium_win8_trybot.json',
         },
       },
       'win8_chromium_rel': {
@@ -356,6 +357,7 @@ BUILDERS = {
         'compile_only': False,
         'testing': {
           'platform': 'win',
+          'test_spec_file': 'chromium_win8_trybot.json',
         },
       },
     },

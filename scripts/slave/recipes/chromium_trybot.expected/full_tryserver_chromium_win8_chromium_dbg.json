@@ -134,12 +134,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]\\src\\testing\\buildbot\\chromium_trybot.json",
+      "[SLAVE_BUILD]\\src\\testing\\buildbot\\chromium_win8_trybot.json",
       "/path/to/tmp/json"
     ],
     "name": "read test spec",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: testing\\buildbot\\chromium_trybot.json@@@",
+      "@@@STEP_TEXT@path: testing\\buildbot\\chromium_win8_trybot.json@@@",
       "@@@STEP_LOG_LINE@json.output@[@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_unittests\", @@@",
       "@@@STEP_LOG_LINE@json.output@  {@@@",
