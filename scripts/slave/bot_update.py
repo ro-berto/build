@@ -1054,8 +1054,14 @@ def parse_got_revision(gclient_output, got_revision_mapping, use_svn_revs):
   to svn revision numbers.
   """
   properties = {}
-  solutions_output = gclient_output['solutions']
+  solutions_output = {
+      # Make sure path always ends with a single slash.
+      '%s/' % path.rstrip('/') : solution_output for path, solution_output
+      in gclient_output['solutions'].iteritems()
+  }
   for dir_name, property_name in got_revision_mapping.iteritems():
+    # Make sure dir_name always ends with a single slash.
+    dir_name = '%s/' % dir_name.rstrip('/')
     if dir_name not in solutions_output:
       continue
     solution_output = solutions_output[dir_name]
