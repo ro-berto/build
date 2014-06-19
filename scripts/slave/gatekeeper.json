@@ -75,6 +75,34 @@
         }
       }
     ],
+    "http://build.chromium.org/p/chromium.gpu": [
+      {
+        "sheriff_classes": ["sheriff", "sheriff_gpu"],
+        "builders": {
+          "*": {
+            "closing_optional": [
+              "angle_unittests",
+              "compile",
+              "content_gl_tests",
+              "context_lost_tests",
+              "find isolated tests",
+              "gclient runhooks",
+              "gl_tests",
+              "gles2_conform_test",
+              "gpu_process_launch_tests",
+              "gpu_rasterization_tests",
+              "hardware_accelerated_feature_tests",
+              "maps_pixel_test",
+              "memory_test",
+              "pixel_test",
+              "screenshot_sync_tests",
+              "tab_capture_end2end_tests",
+              "webgl_conformance_tests"
+            ]
+          }
+        }
+      }
+    ],
     "http://build.chromium.org/p/chromium.lkgr": [
       {
         "tree_notify": [
