@@ -101,6 +101,7 @@ class AndroidApi(recipe_api.RecipeApi):
     s.custom_vars = self.c.gclient_custom_vars or {}
     s.managed = self.c.managed
     s.revision = self.c.revision
+    spec.revisions = self.c.revisions
 
     yield self.m.gclient.break_locks()
     yield self.m.bot_update.ensure_checkout(spec)

@@ -5,9 +5,9 @@
 DEPS = [
   'chromium',
   'chromium_android',
-  'properties',
   'json',
   'path',
+  'properties',
   'python',
 ]
 
@@ -21,7 +21,9 @@ def GenSteps(api):
       REPO_NAME='dartium.deps',
       BUILD_CONFIG='Release',
       INTERNAL=False)
-  api.chromium_android.c.revision = 'HEAD'
+  revision = api.properties.get('revision', 'HEAD')
+  api.chromium_android.c.revision = revision
+  api.chromium_android.c.revisions['src/dart'] = revision
 
   yield api.chromium_android.init_and_sync()
   yield api.chromium_android.clean_local_files()
@@ -41,6 +43,6 @@ def GenTests(api):
   yield (
       api.test('dartium_builder_basic') +
       api.properties.generic(
-          revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
+          revision='34567',
           buildername='dartium-builder',
           buildnumber=1337))

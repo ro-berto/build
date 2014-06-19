@@ -41,7 +41,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "dartium.deps@HEAD"
+      "dartium.deps@34567"
     ],
     "name": "bot_update",
     "~followup_annotations": [
@@ -74,7 +74,9 @@
       "--force",
       "--verbose",
       "--revision",
-      "dartium.deps@HEAD",
+      "dartium.deps@34567",
+      "--revision",
+      "src/dart@34567",
       "--output-json",
       "/path/to/tmp/json"
     ],
