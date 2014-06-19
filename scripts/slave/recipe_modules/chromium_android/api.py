@@ -169,8 +169,10 @@ class AndroidApi(recipe_api.RecipeApi):
     kwargs['env'] = self.get_env()
     return self.m.chromium.compile(**kwargs)
 
-  def findbugs(self):
+  def findbugs(self, findbugs_options=[]):
     cmd = [self.m.path['checkout'].join('build', 'android', 'findbugs_diff.py')]
+    cmd.extend(findbugs_options)
+
     if self.m.chromium.c.BUILD_CONFIG == 'Release':
       cmd.append('--release-build')
 
