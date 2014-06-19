@@ -609,6 +609,7 @@ BUILDERS = {
         'GYP_DEFINES': {
           'msan': 1,
           'use_instrumented_libraries': 1,
+          'instrumented_libraries_jobs': 5,
         },
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -622,8 +623,9 @@ BUILDERS = {
       'Chromium Linux MSan': {
         'recipe_config': 'chromium_clang',
         'GYP_DEFINES': {
+          # Required on testers to pass the right runtime flags.
+          # TODO(earthdok): make this part of a chromium_msan recipe config.
           'msan': 1,
-          'use_instrumented_libraries': 1,
         },
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -641,8 +643,9 @@ BUILDERS = {
       'Chromium Linux MSan (browser tests)': {
         'recipe_config': 'chromium_clang',
         'GYP_DEFINES': {
+          # Required on testers to pass the right runtime flags.
+          # TODO(earthdok): make this part of a chromium_msan recipe config.
           'msan': 1,
-          'use_instrumented_libraries': 1,
         },
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
