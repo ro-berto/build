@@ -169,6 +169,7 @@ ENABLED_MASTERS = [
     'chromium.memory.fyi',
     'chromium.perf',
     'chromium.swarm',
+    'client.drmemory',
     'client.nacl.sdk.mono',
     'tryserver.chromium',
 ]
