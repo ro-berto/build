@@ -162,8 +162,7 @@
     "name": "findbugs",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@<br/>There could be stale class files; try a clobber.<br/>@@@",
-      "@@@STEP_EXCEPTION@@@"
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {

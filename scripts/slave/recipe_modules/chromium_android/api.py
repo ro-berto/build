@@ -177,14 +177,7 @@ class AndroidApi(recipe_api.RecipeApi):
     if self.m.chromium.c.BUILD_CONFIG == 'Release':
       cmd.append('--release-build')
 
-    def set_failure_message(step):
-      if step.retcode != 0:
-        step.presentation.status = 'EXCEPTION'
-        step.presentation.step_text = self.m.test_utils.format_step_text(
-            [ ('There could be stale class files; try a clobber.',) ])
-
-    yield self.m.step('findbugs', cmd, env=self.get_env(),
-                      followup_fn=set_failure_message)
+    yield self.m.step('findbugs', cmd, env=self.get_env())
 
     cmd = [self.m.path['checkout'].join('tools', 'android', 'findbugs_plugin',
                'test', 'run_findbugs_plugin_tests.py')]
