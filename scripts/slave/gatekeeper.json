@@ -100,7 +100,23 @@
               "webgl_conformance_tests"
             ]
           }
-        }
+        },
+        "comment": [
+          "Keep excluded builders in sync with the gpu closers list in",
+          "masters/master.chromium/templates/announce.html."
+        ],
+        "excluded_builders" : [
+          "Android Debug (Nexus 7)",
+          "GPU Linux Builder (dbg)",
+          "GPU Mac Builder (dbg)",
+          "GPU Win Builder (dbg)",
+          "Linux Debug (NVIDIA)",
+          "Mac 10.8 Debug (Intel)",
+          "Mac Debug (Intel)",
+          "Mac Retina Debug",
+          "Win7 Debug (NVIDIA)",
+          "Win8 Debug (NVIDIA)"
+        ]
       }
     ],
     "http://build.chromium.org/p/chromium.lkgr": [
