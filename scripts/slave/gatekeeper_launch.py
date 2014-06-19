@@ -80,6 +80,8 @@ def main():
 
     extra_args = ['--build-db=blink_build_db.json', '-s',
                   '--status-url=%s' % status_url,
+                  '--track-revisions',
+                  '--revision-properties', 'got_revision,got_webkit_revision',
                   '--password-file=.blink_status_password']
 
     if run_gatekeeper(master_urls, extra_args=extra_args) != 0:
