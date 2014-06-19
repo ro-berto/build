@@ -291,6 +291,7 @@
     "name": "Monkey Test"
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",

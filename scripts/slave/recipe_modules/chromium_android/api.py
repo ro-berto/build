@@ -352,6 +352,7 @@ class AndroidApi(recipe_api.RecipeApi):
         self.m.path['checkout'].join('build', 'android', 'test_runner.py'),
         args,
         cwd=self.m.path['checkout'],
+        always_run=True,
         **kwargs)
 
   def run_sharded_perf_tests(self, config, flaky_config=None, perf_id=None,
