@@ -604,31 +604,27 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
-      'Chromium Linux MSan': {
+      'Chromium Linux MSan Builder': {
         'recipe_config': 'chromium_clang',
         'GYP_DEFINES': {
           'msan': 1,
-          'use_allocator': 'none',
-          # See http://www.chromium.org/developers/testing/memorysanitizer for
-          # explanation of these flags.
-          'use_custom_libcxx': 1,
           'use_instrumented_libraries': 1,
-          'v8_target_arch': 'arm64',
         },
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
-        'bot_type': 'builder_tester',
-        'tests': [
-          DynamicGTestTests('Chromium Linux MSan'),
-        ],
+        'bot_type': 'builder',
         'testing': {
           'platform': 'linux',
         },
       },
-      'Chromium Linux MSan (browser tests)': {
+      'Chromium Linux MSan': {
         'recipe_config': 'chromium_clang',
+        'GYP_DEFINES': {
+          'msan': 1,
+          'use_instrumented_libraries': 1,
+        },
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -637,7 +633,26 @@ BUILDERS = {
         'tests': [
           DynamicGTestTests('Chromium Linux MSan'),
         ],
-        'parent_buildername': 'Chromium Linux MSan',
+        'parent_buildername': 'Chromium Linux MSan Builder',
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'Chromium Linux MSan (browser tests)': {
+        'recipe_config': 'chromium_clang',
+        'GYP_DEFINES': {
+          'msan': 1,
+          'use_instrumented_libraries': 1,
+        },
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'tests': [
+          DynamicGTestTests('Chromium Linux MSan (browser tests)'),
+        ],
+        'parent_buildername': 'Chromium Linux MSan Builder',
         'testing': {
           'platform': 'linux',
         },
@@ -1922,7 +1937,8 @@ def GenTests(api):
   yield (
     api.test('msan') +
     api.properties.generic(mastername='chromium.fyi',
-                           buildername='Chromium Linux MSan') +
+                           buildername='Chromium Linux MSan',
+                           parent_buildername='Chromium Linux MSan Builder') +
     api.platform('linux', 64) +
     api.override_step_data('read test spec', api.json.output({
       'Chromium Linux MSan': {
