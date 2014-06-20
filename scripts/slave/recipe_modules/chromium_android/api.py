@@ -288,10 +288,13 @@ class AndroidApi(recipe_api.RecipeApi):
         followup_fn=followup_fn,
         **kwargs)
 
-  def provision_devices(self, skip_wipe=False, **kwargs):
+  def provision_devices(self, skip_wipe=False, disable_location=False,
+                        **kwargs):
     args = ['-t', self.m.chromium.c.BUILD_CONFIG]
     if skip_wipe:
       args.append('--skip-wipe')
+    if disable_location:
+      args.append('--disable_location')
     yield self.m.python(
         'provision_devices',
         self.m.path['checkout'].join(
@@ -300,9 +303,11 @@ class AndroidApi(recipe_api.RecipeApi):
         can_fail_build=False,
         **kwargs)
 
-  def detect_and_setup_devices(self, restart_usb=False, skip_wipe=False):
+  def detect_and_setup_devices(self, restart_usb=False, skip_wipe=False,
+                               disable_location=False):
     yield self.device_status_check(restart_usb=restart_usb)
-    yield self.provision_devices(skip_wipe=skip_wipe)
+    yield self.provision_devices(skip_wipe=skip_wipe,
+                                 disable_location=disable_location)
 
   def adb_install_apk(self, apk, apk_package):
     install_cmd = [
