@@ -759,7 +759,8 @@ def _UploadGtestJsonSummary(json_path, build_properties, test_exe):
   }
   target_json_serialized = json.dumps(target_json, indent=2)
 
-  today = datetime.date.today()
+  now = datetime.datetime.utcnow()
+  today = now.date()
   weekly_timestamp = today - datetime.timedelta(days=today.weekday())
 
   # Pick a non-colliding file name by hashing the JSON contents
@@ -820,6 +821,7 @@ def _UploadGtestJsonSummary(json_path, build_properties, test_exe):
                 'mastername':
                     target_json['build_properties'].get('mastername', ''),
                 'raw_json_gs_path': raw_json_gs_path,
+                'timestamp': now.strftime('%Y-%m-%d %H:%M:%S.%f')
               }
               gzipf.write(json.dumps(row) + '\n')
 
