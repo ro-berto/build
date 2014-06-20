@@ -291,33 +291,10 @@ DISABLED_BUILDERS = {
     'tryserver.chromium': [
         # These don't exist, but are just here to satisfy recipes.
         'linux_no_bot_update',
-        'win8_chromium_dbg',
-        'win8_chromium_rel',
+        'win_no_bot_update',
         'win_blink',
         'win_blink_compile',
         'win_blink_compile_rel',
-
-        # Disable Win bots until performance is okay.
-        'win',
-        'win_blink_rel',
-        'win8_aura',
-        'win_8_perf_bisect',
-        'win_chromium_compile_dbg',
-        'win_chromium_compile_rel',
-        'win_chromium_dbg',
-        'win_chromium_rel',
-        'win_chromium_x64_dbg',
-        'win_chromium_x64_rel',
-        'win_drmemory',
-        'win_nacl_sdk',
-        'win_nacl_sdk_build',
-        'win_perf_bisect',
-        'win_perf_bisect_builder',
-        'win_rel',
-        'win_rel_naclmore',
-        'win_tsan',
-        'win_x64_rel',
-        'win_xp_perf_bisect',
     ],
 }
 DISABLED_BUILDERS.update(internal_data.get('DISABLED_BUILDERS', {}))

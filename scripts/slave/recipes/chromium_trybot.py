@@ -360,6 +360,18 @@ BUILDERS = {
           'test_spec_file': 'chromium_win8_trybot.json',
         },
       },
+      # Fake builder to provide testing coverage for non-bot_update.
+      'win_no_bot_update': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'chromium_config': 'chromium',
+        'compile_only': False,
+        'testing': {
+          'platform': 'win',
+        },
+      },
     },
   },
 }
@@ -1073,7 +1085,7 @@ def GenTests(api):
   for step in ('gclient revert', 'gclient runhooks'):
     yield (
       api.test(step.replace(' ', '_') + '_failure') +
-      props(buildername='win_chromium_rel') +
+      props(buildername='win_no_bot_update') +
       api.platform.name('win') +
       api.step_data(step, retcode=1)
     )
@@ -1087,7 +1099,7 @@ def GenTests(api):
 
   yield (
     api.test('gclient_revert_failure_win') +
-    props(buildername='win_chromium_rel') +
+    props(buildername='win_no_bot_update') +
     api.platform.name('win') +
     api.step_data('gclient runhooks', retcode=1) +
     api.step_data('gclient runhooks (2)', retcode=1) +
@@ -1148,7 +1160,7 @@ def GenTests(api):
 
   yield (
     api.test('deapply_compile_failure_linux') +
-    props() +
+    props(buildername='linux_no_bot_update') +
     api.platform.name('linux') +
     api.override_step_data('base_unittests (with patch)',
                            canned_test(passing=False)) +
