@@ -945,7 +945,8 @@ def parse_diff(diff):
 
 def get_svn_patch(patch_url):
   """Fetch patch from patch_url, return list of (filename, diff)"""
-  patch_data = call('svn', 'cat', patch_url)
+  svn_exe = 'svn.bat' if sys.platform.startswith('win') else 'svn'
+  patch_data = call(svn_exe, 'cat', patch_url)
   return parse_diff(patch_data)
 
 
