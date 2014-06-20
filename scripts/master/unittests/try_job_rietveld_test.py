@@ -10,9 +10,8 @@ from common import find_depot_tools
 
 import datetime
 import json
-import os
-import shutil
-import tempfile
+import logging
+import sys
 import unittest
 import uuid
 
@@ -20,7 +19,9 @@ from testing_support import auto_stub
 from twisted.internet import defer
 from twisted.web import client
 
+from master import master_utils
 from master import try_job_rietveld
+from master.builders_pools import BuildersPools
 
 
 TEST_BASE_URL = ('https://codereview.chromium.org/get_pending_try_patchsets?'
@@ -71,12 +72,19 @@ class MockDBCollection(object):
       self.buildsets = MockBuildSetsDB()
 
 
+class MockBotMaster(object):
+
+  def __init__(self):
+    self.builders = {}
+
+
 class MockMaster(object):
 
   db = None
 
   def __init__(self):
     self.db = MockDBCollection()
+    self.botmaster = MockBotMaster()
 
 
 class MockTryJobRietveld(object):
@@ -96,6 +104,50 @@ class MockTryJobRietveld(object):
 
   def clear(self):
     self.submitted_jobs = []
+
+
+class MockValidUserPoller(object):
+
+  mockValid = True
+  parent = None
+
+  def __init__(self, interval):
+    pass
+
+  def contains(self, email):
+    return True
+
+  def valid(self):
+    return self.mockValid
+
+  def setServiceParent(self, parent):
+    MockValidUserPoller.parent = parent
+
+
+class MockRietveldPollerWithCache(object):
+
+  endpoint = None
+  parent = None
+
+  def __init__(self, pending_jobs_url, interval):
+    MockRietveldPollerWithCache.endpoint = pending_jobs_url
+
+  def poll(self):
+    pass
+
+  def setServiceParent(self, parent):
+    MockRietveldPollerWithCache.parent = parent
+
+
+class MockServiceParent(object):
+
+  master = MockMaster()
+
+  def __init__(self):
+    pass
+
+  def addService(self, service):
+    service.master = MockServiceParent.master
 
 
 class RietveldPollerWithCacheTest(auto_stub.TestCase):
@@ -197,5 +249,44 @@ class RietveldPollerWithCacheTest(auto_stub.TestCase):
     self.assertEqual(len(self._mockTJR.submitted_jobs), 0)
 
 
+class TryJobRietveldTest(auto_stub.TestCase):
+
+  def setUp(self):
+    self.mock(try_job_rietveld, '_ValidUserPoller', MockValidUserPoller)
+    self.mock(try_job_rietveld, '_RietveldPollerWithCache',
+              MockRietveldPollerWithCache)
+    self.mock(master_utils, 'GetMastername', lambda: 'tryserver.test')
+    self.tjr = try_job_rietveld.TryJobRietveld(
+        name='test_try_job_rietveld',
+        last_good_urls={'test_project': 'http://www.example.com/lkgr'},
+        code_review_sites={'test_project': 'http://www.example.com'},
+        pools=BuildersPools('test_project'),
+        project='test_project',
+        filter_master=True)
+
+  def testCorrectlyComputesValidityOfTheUserList(self):
+    MockValidUserPoller.mockValid = False
+    self.assertFalse(self.tjr.has_valid_user_list())
+
+    MockValidUserPoller.mockValid = True
+    self.assertTrue(self.tjr.has_valid_user_list())
+
+  def testCorrectlyFormsTheEndpointForRietveldPoller(self):
+    self.assertEqual(MockRietveldPollerWithCache.endpoint,
+                     'http://www.example.com/get_pending_try_patchsets'
+                     '?limit=1000&master=tryserver.test')
+
+  def testSetsServiceParentOnUserAndRietveldPollers(self):
+    mockServiceParent = MockServiceParent()
+    self.tjr.setServiceParent(mockServiceParent)
+    self.assertEqual(self.tjr, MockValidUserPoller.parent)
+    self.assertEqual(self.tjr, MockRietveldPollerWithCache.parent)
+
+  # TODO(sergiyb): Write tests for the SubmitJobs.
+
+
 if __name__ == '__main__':
+  logging.basicConfig(
+      level=logging.DEBUG if '-v' in sys.argv else logging.WARNING,
+      format='%(levelname)5s %(module)15s(%(lineno)3d): %(message)s')
   unittest.main()
