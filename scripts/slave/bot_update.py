@@ -1088,8 +1088,7 @@ def ensure_deps_revisions(deps_url_mapping, solutions, revisions):
 
 def ensure_checkout(solutions, revisions, first_sln, target_os, target_os_only,
                     patch_root, issue, patchset, patch_url, rietveld_server,
-                    revision_mapping, buildspec_name, gyp_env, shallow,
-                    orig_solutions):
+                    revision_mapping, buildspec_name, gyp_env, shallow):
   # Get a checkout of each solution, without DEPS or hooks.
   # Calling git directly because there is no way to run Gclient without
   # invoking DEPS.
@@ -1145,9 +1144,6 @@ def ensure_checkout(solutions, revisions, first_sln, target_os, target_os_only,
   elif issue:
     apply_rietveld_issue(issue, patchset, patch_root, rietveld_server,
                          revision_mapping, git_ref, blacklist=['DEPS'])
-
-  # Reset the solution so that hooks get run properly.
-  gclient_configure(orig_solutions, target_os, target_os_only)
 
   return gclient_output
 
@@ -1498,9 +1494,6 @@ def main():
           # For official builders.
           buildspec_name=buildspec_name,
           gyp_env=options.gyp_env,
-
-          # We need to reset the solution to get hooks to run properly.
-          orig_solutions = svn_solutions,
 
           # Finally, extra configurations such as shallowness of the clone.
           shallow=options.shallow)
