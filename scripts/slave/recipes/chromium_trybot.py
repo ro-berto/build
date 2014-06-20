@@ -872,7 +872,9 @@ def GenSteps(api):
     yield api.swarming.check_client_version()
 
   tests = []
-  tests.append(CheckdepsTest())
+  # TODO(phajdan.jr): Re-enable checkdeps on Windows when it works with git.
+  if not api.platform.is_win:
+    tests.append(CheckdepsTest())
   if api.platform.is_linux:
     tests.extend([
         CheckpermsTest(),
@@ -1039,8 +1041,8 @@ def GenTests(api):
   # retries at all.
   yield (
     api.test('persistent_failure_and_runhooks_2_fail_test') +
-    props() +
-    api.platform.name('linux') +
+    props(buildername='win_chromium_rel') +
+    api.platform.name('win') +
     api.override_step_data('base_unittests (with patch)',
                            canned_test(passing=False)) +
     api.override_step_data('base_unittests (without patch)',
@@ -1064,8 +1066,8 @@ def GenTests(api):
 
   yield (
     api.test('invalid_json_without_patch') +
-    props(buildername='win_chromium_rel') +
-    api.platform.name('win') +
+    props(buildername='linux_chromium_rel') +
+    api.platform.name('linux') +
     api.override_step_data('checkdeps (with patch)',
                            api.json.output(canned_checkdeps[False])) +
     api.override_step_data('checkdeps (without patch)',

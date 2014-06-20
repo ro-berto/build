@@ -198,22 +198,6 @@
     "name": "telemetry_perf_unittests"
   },
   {
-    "always_run": true,
-    "can_fail_build": false,
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\buildtools\\checkdeps\\checkdeps.py",
-      "--json",
-      "/path/to/tmp/json"
-    ],
-    "name": "checkdeps (with patch)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
     "can_fail_build": false,
     "cmd": [
       "python",

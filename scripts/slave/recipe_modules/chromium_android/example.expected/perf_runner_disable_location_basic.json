@@ -271,7 +271,7 @@
       "[SLAVE_BUILD]/src/build/android/provision_devices.py",
       "-t",
       "Release",
-      "--disable_location"
+      "--disable-location"
     ],
     "name": "provision_devices"
   },
