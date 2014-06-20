@@ -294,7 +294,7 @@ class AndroidApi(recipe_api.RecipeApi):
     if skip_wipe:
       args.append('--skip-wipe')
     if disable_location:
-      args.append('--disable_location')
+      args.append('--disable-location')
     yield self.m.python(
         'provision_devices',
         self.m.path['checkout'].join(
