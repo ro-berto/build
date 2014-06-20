@@ -11,13 +11,10 @@ DEPS = [
   'python',
 ]
 
-REPO_URL = \
-  'https://dart.googlecode.com/svn/branches/bleeding_edge/deps/dartium.deps'
-
 def GenSteps(api):
   api.chromium_android.configure_from_properties(
       'dartium_builder',
-      REPO_URL=REPO_URL,
+      REPO_URL=api.properties.get('deps_url'),
       REPO_NAME='dartium.deps',
       BUILD_CONFIG='Release',
       INTERNAL=False)
@@ -45,4 +42,5 @@ def GenTests(api):
       api.properties.generic(
           revision='34567',
           buildername='dartium-builder',
-          buildnumber=1337))
+          buildnumber=1337,
+          deps_url='https://dart.googlecode.com/svn/trunk/deps/dartium.deps'))
