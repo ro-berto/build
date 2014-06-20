@@ -17,6 +17,7 @@ DEPS = [
 # recipes lands. This is needed for ARM testers http://crbug.com/359338
 test_args = {
     'browser_tests': ['--gtest-filter="*NaCl*"'],
+    'sandbox_linux_unittests': ['--test-launcher-print-test-stdio=always'],
 }
 
 
