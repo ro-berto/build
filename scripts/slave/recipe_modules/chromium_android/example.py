@@ -42,6 +42,12 @@ BUILDERS = {
         'perf_config': 'sharded_perf_tests.json',
         'build': False,
         'skip_wipe': True,
+    },
+    'perf_runner_disable_location': {
+        'perf_config': 'sharded_perf_tests.json',
+        'build': False,
+        'skip_wipe': False,
+        'disable_location': True,
     }
 }
 
@@ -78,7 +84,9 @@ def GenSteps(api):
   yield api.chromium_android.device_status_check(
       restart_usb=config.get('restart_usb', False))
 
-  yield api.chromium_android.provision_devices(skip_wipe=config['skip_wipe'])
+  yield api.chromium_android.provision_devices(
+      skip_wipe=config['skip_wipe'],
+      disable_location=config.get('disable_location', False))
 
   yield api.chromium_android.monkey_test()
 
