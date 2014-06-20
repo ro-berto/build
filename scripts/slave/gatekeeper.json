@@ -77,6 +77,7 @@
     ],
     "http://build.chromium.org/p/chromium.gpu": [
       {
+        "tree_notify": ["chrome-gpu-build-failures@google.com"],
         "sheriff_classes": ["sheriff", "sheriff_gpu"],
         "builders": {
           "*": {
