@@ -222,7 +222,7 @@ class _RietveldPollerWithCache(base.PollingChangeSource):
   this cache is initialized with jobs currently pending on the Buildbot.
   """
 
-  def __init__(self, pending_jobs_url, interval):
+  def __init__(self, pending_jobs_url, interval, timeout=2*60):
     """
     Args:
       pending_jobs_url: Rietveld URL string used to retrieve jobs to try.
@@ -232,6 +232,11 @@ class _RietveldPollerWithCache(base.PollingChangeSource):
     self._try_job_rietveld = None
     self._pending_jobs_url = pending_jobs_url
     self._processed_keys = None
+    self.timeout = timeout
+
+  def getPage(self, url):  # pylint: disable=R0201
+    """Schedules a page at `url` to be downloaded. Returns a deferred."""
+    return client.getPage(url, agent='buildbot', timeout=self.timeout)
 
   # base.PollingChangeSource overrides:
   def poll(self):
@@ -253,8 +258,7 @@ class _RietveldPollerWithCache(base.PollingChangeSource):
 
     log.msg('[RPWC] Poll started')
     log.msg('[RPWC] Downloading %s...' % self._pending_jobs_url)
-    pollDeferred = client.getPage(self._pending_jobs_url, agent='buildbot',
-                                  timeout=2*60)
+    pollDeferred = self.getPage(self._pending_jobs_url)
     pollDeferred.addCallback(self._ProcessResults)
     pollDeferred.addErrback(log.err, '[RPWC] error')
     return pollDeferred
@@ -322,7 +326,7 @@ class _RietveldPollerWithCache(base.PollingChangeSource):
       next_url = self._pending_jobs_url + '&cursor=%s' % str(results['cursor'])
       prev_cursor = results['cursor']
       log.msg('[RPWC] Downloading %s...' % next_url)
-      page_json = yield client.getPage(next_url, agent='buildbot', timeout=2*60)
+      page_json = yield self.getPage(next_url)
       results = json.loads(page_json)
 
     log.msg('[RPWC] Retrieved %d jobs' % len(all_jobs))
