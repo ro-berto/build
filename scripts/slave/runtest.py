@@ -346,6 +346,7 @@ def _GenerateJSONForTestResults(options, results_tracker):
 
   except Exception as e:
     print 'Unexpected error while generating JSON: %s' % e
+    sys.excepthook(*sys.exc_info())
     return False
 
   # The code can throw all sorts of exceptions, including
@@ -359,6 +360,7 @@ def _GenerateJSONForTestResults(options, results_tracker):
   except Exception as e:
     # Consider this non-fatal for the moment.
     print 'Unexpected error while uploading JSON: %s' % e
+    sys.excepthook(*sys.exc_info())
 
   return True
 
