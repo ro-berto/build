@@ -641,14 +641,14 @@ def get_svn_rev(git_hash, dir_name):
   return int(match.group(1))
 
 
-def get_git_hash(revision, sln_dir):
+def get_git_hash(revision, branch, sln_dir):
   """We want to search for the SVN revision on the git-svn branch.
 
   Note that git will search backwards from origin/master.
   """
   match = "^git-svn-id: [^ ]*@%s " % revision
   cmd = ['log', '-E', '--grep', match, '--format=%H', '--max-count=1',
-         'origin/master']
+         'origin/%s' % branch]
   result = git(*cmd, cwd=sln_dir).strip()
   if result:
     return result
@@ -812,16 +812,22 @@ def get_target_revision(folder_name, git_url, revisions):
 
 
 def force_revision(folder_name, revision, git_svn=False):
+  split_revision = revision.split(':', 1)
+  branch = 'master'
+  if len(split_revision) == 2:
+    # Support for "branch:revision" syntax.
+    branch, revision = split_revision
+
   if revision and revision.upper() != 'HEAD':
     if revision and revision.isdigit() and len(revision) < 40:
       # rev_num is really a svn revision number, convert it into a git hash.
-      git_ref = get_git_hash(int(revision), folder_name)
+      git_ref = get_git_hash(int(revision), branch, folder_name)
     else:
       # rev_num is actually a git hash or ref, we can just use it.
       git_ref = revision
     git('checkout', '--force', git_ref, cwd=folder_name)
   else:
-    git('checkout', '--force', 'origin/master', cwd=folder_name)
+    git('checkout', '--force', 'origin/%s' % branch, cwd=folder_name)
 
 def git_checkout(solutions, revisions, shallow):
   build_dir = os.getcwd()
@@ -1324,7 +1330,9 @@ def parse_args():
                         'git hash, or any form of git ref.  Can prepend '
                         'root@<rev> to specify which repository, where root '
                         'is either a filesystem path, git https url, or '
-                        'svn url. To specify Tip of Tree, set rev to HEAD.')
+                        'svn url. To specify Tip of Tree, set rev to HEAD.'
+                        'To specify a git branch and an SVN rev, <rev> can be '
+                        'set to <branch>:<revision>.')
   parse.add_option('--slave_name', default=socket.getfqdn().split('.')[0],
                    help='Hostname of the current machine, '
                    'used for determining whether or not to activate.')
