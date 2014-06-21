@@ -71,17 +71,6 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
-      'linux_rel_alt': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'chromium_config': 'chromium',
-        'compile_only': False,
-        'testing': {
-          'platform': 'linux',
-        },
-      },
       # Fake builder to provide testing coverage for non-bot_update.
       'linux_no_bot_update': {
         'chromium_config_kwargs': {
@@ -936,11 +925,6 @@ def GenTests(api):
       **kwargs
     )
 
-  yield (api.test('linux_rel_alt') +
-         api.properties(mastername='tryserver.chromium',
-                        buildername='linux_rel_alt',
-                        slavename='slave101-c4'))
-
   # While not strictly required for coverage, record expectations for each
   # of the configs so we can see when and how they change.
   for mastername, master_config in BUILDERS.iteritems():
@@ -970,20 +954,6 @@ def GenTests(api):
   )
 
   yield (
-    api.test('persistent_failure_and_runhooks_2_fail_test_bot_update') +
-    props() +
-    api.platform.name('linux') +
-    api.override_step_data('base_unittests (with patch)',
-                           canned_test(passing=False)) +
-    api.override_step_data('base_unittests (without patch)',
-                           canned_test(passing=False)) +
-    api.step_data('gclient runhooks (2)', retcode=1) +
-    api.properties(mastername='tryserver.chromium',
-                   buildername='linux_rel_alt',
-                   slavename='slave101-c4')
-  )
-
-  yield (
     api.test('invalid_json_without_patch') +
     props(buildername='linux_chromium_rel') +
     api.platform.name('linux') +
@@ -991,16 +961,6 @@ def GenTests(api):
                            api.json.output(canned_checkdeps[False])) +
     api.override_step_data('checkdeps (without patch)',
                            api.json.output(None))
-  )
-
-  yield (
-    api.test('gclient_runhooks_failure_bot_update') +
-    props() +
-    api.platform.name('linux') +
-    api.step_data('gclient runhooks', retcode=1) +
-    api.properties(mastername='tryserver.chromium',
-                   buildername='linux_rel_alt',
-                   slavename='slave101-c4')
   )
 
   for step in ('bot_update', 'gclient runhooks'):
@@ -1024,18 +984,6 @@ def GenTests(api):
     api.platform.name('linux') +
     api.step_data('compile (with patch)', retcode=1) +
     api.step_data('compile (with patch, lkcr, clobber)', retcode=0)
-  )
-
-  yield (
-    api.test('compile_failure_linux_bot_update') +
-    props() +
-    api.platform.name('linux') +
-    api.step_data('compile (with patch)', retcode=1) +
-    api.step_data('compile (with patch, lkcr, clobber)', retcode=1) +
-    api.step_data('compile (with patch, lkcr, clobber, nuke)', retcode=1) +
-    api.properties(mastername='tryserver.chromium',
-                   buildername='linux_rel_alt',
-                   slavename='slave101-c4')
   )
 
   yield (
