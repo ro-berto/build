@@ -100,9 +100,6 @@ class GclientApi(recipe_api.RecipeApi):
 
     def parse_got_revision(step_result):
       data = step_result.json.output
-      if not data:
-        step_result.presentation.status = 'WARNING'
-        return
       for path, info in data['solutions'].iteritems():
         # gclient json paths always end with a slash
         path = path.rstrip('/')
