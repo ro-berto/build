@@ -66,7 +66,7 @@ class GpuApi(recipe_api.RecipeApi):
 
     # The FYI waterfall is being used to test top-of-tree ANGLE with
     # Chromium on all platforms.
-    if self._is_fyi_waterfall:
+    if self.is_fyi_waterfall:
       self.m.gclient.c.solutions[0].custom_vars['angle_revision'] = (
           'refs/remotes/origin/master')
 
@@ -137,7 +137,7 @@ class GpuApi(recipe_api.RecipeApi):
     return self.m.properties.get('master_class_name_for_testing')
 
   @property
-  def _is_fyi_waterfall(self):
+  def is_fyi_waterfall(self):
     """Indicates whether the recipe is running on the GPU FYI waterfall."""
     return self.m.properties['mastername'] == 'chromium.gpu.fyi'
 
@@ -221,7 +221,7 @@ class GpuApi(recipe_api.RecipeApi):
     basic_tests = list(SIMPLE_TESTS_TO_RUN)
     # Only run tests on the tree closers and on the CQ which are
     # available in the open-source repository.
-    if self._is_fyi_waterfall:
+    if self.is_fyi_waterfall:
       basic_tests += SIMPLE_NON_OPEN_SOURCE_TESTS_TO_RUN
     for test in basic_tests:
       yield self._run_isolate(test, args=['--use-gpu-in-tests'])
