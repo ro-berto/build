@@ -421,7 +421,7 @@ class GatekeeperTest(unittest.TestCase):
     sys.argv.extend(['--skip-build-db-update',
                      '--email-app-secret-file=%s' % self.email_secret_file])
 
-    self.masters[0].builders[0].builds[0].results = 3
+    self.masters[0].builders[0].builds[0].results = 2
     self.add_gatekeeper_master_config(self.masters[0].url,
                                       {'respect_build_status': True})
     self.add_gatekeeper_section(self.masters[0].url,
@@ -435,6 +435,40 @@ class GatekeeperTest(unittest.TestCase):
     mailer_data = GatekeeperTest.decode_param_json(
         self.url_calls[-1]['params'])
     self.assertEquals(mailer_data['recipients'], ['a_committer@chromium.org'])
+
+  def testRetryDoesntClose(self):
+    """Test that a step marked retry doesn't close the tree."""
+    sys.argv.extend([m.url for m in self.masters])
+    sys.argv.extend(['--skip-build-db-update',
+                     '--email-app-secret-file=%s' % self.email_secret_file])
+
+    self.masters[0].builders[0].builds[0].results = 5
+    self.add_gatekeeper_master_config(self.masters[0].url,
+                                      {'respect_build_status': True})
+    self.add_gatekeeper_section(self.masters[0].url,
+                                self.masters[0].builders[0].name,
+                                {},
+                                idx=0)
+
+    urls = self.call_gatekeeper()
+    self.assertNotIn(self.mailer_url, urls)
+
+  def testExceptionDoesntClose(self):
+    """Test that a step marked exception doesn't close the tree."""
+    sys.argv.extend([m.url for m in self.masters])
+    sys.argv.extend(['--skip-build-db-update',
+                     '--email-app-secret-file=%s' % self.email_secret_file])
+
+    self.masters[0].builders[0].builds[0].results = 4
+    self.add_gatekeeper_master_config(self.masters[0].url,
+                                      {'respect_build_status': True})
+    self.add_gatekeeper_section(self.masters[0].url,
+                                self.masters[0].builders[0].name,
+                                {},
+                                idx=0)
+
+    urls = self.call_gatekeeper()
+    self.assertNotIn(self.mailer_url, urls)
 
   def testFailedBuildNoEmail(self):
     """Test that no email is sent if there are no watchers."""
@@ -489,6 +523,20 @@ class GatekeeperTest(unittest.TestCase):
     mailer_data = GatekeeperTest.decode_param_json(
         self.url_calls[-1]['params'])
     self.assertEquals(mailer_data['recipients'], ['a_committer@chromium.org'])
+
+  def testStepExceptionIgnored(self):
+    """Test that an exception on a closing step doesn't close the tree."""
+    sys.argv.extend([m.url for m in self.masters])
+    sys.argv.extend(['--skip-build-db-update',
+                     '--email-app-secret-file=%s' % self.email_secret_file])
+
+    self.masters[0].builders[0].builds[0].steps[1].results = [5, None]
+    self.add_gatekeeper_section(self.masters[0].url,
+                                self.masters[0].builders[0].name,
+                                {'closing_steps': ['step1']})
+
+    urls = self.call_gatekeeper()
+    self.assertNotIn(self.mailer_url, urls)
 
   def testStepCloserFailureOptional(self):
     """Test that a failed closing_optional step closes the tree."""
@@ -747,7 +795,7 @@ class GatekeeperTest(unittest.TestCase):
                      '--email-app-secret-file=%s' % self.email_secret_file])
 
     subject_template = 'build %(result)s, oh no!'
-    self.masters[0].builders[0].builds[0].results = 3
+    self.masters[0].builders[0].builds[0].results = 2
     self.add_gatekeeper_master_config(self.masters[0].url,
                                       {'respect_build_status': True})
     self.add_gatekeeper_section(self.masters[0].url,
@@ -783,7 +831,7 @@ class GatekeeperTest(unittest.TestCase):
       step_dicts.append(step_json)
 
     self.assertEquals(mailer_data['steps'], step_dicts)
-    self.assertEquals(mailer_data['result'], 3)
+    self.assertEquals(mailer_data['result'], 2)
     self.assertEquals(mailer_data['blamelist'], ['a_committer@chromium.org'])
     self.assertEquals(mailer_data['changes'],
         self.masters[0].builders[0].builds[0].sourcestamp['changes'])

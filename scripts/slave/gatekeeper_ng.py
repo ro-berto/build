@@ -106,9 +106,10 @@ def check_builds(master_builds, master_jsons, gatekeeper_config):
       close_tree = gatekeeper.get('close_tree', True)
       respect_build_status = gatekeeper.get('respect_build_status', False)
 
+      # We ignore EXCEPTION and RETRY here since those are usually
+      # infrastructure-related instead of actual test errors.
       successful_steps = set(s['name'] for s in finished
-                             if (s.get('results', [FAILURE])[0] == SUCCESS or
-                                 s.get('results', [FAILURE])[0] == WARNINGS))
+                             if s.get('results', [FAILURE])[0] != FAILURE)
 
       finished_steps = set(s['name'] for s in finished)
 
@@ -128,7 +129,7 @@ def check_builds(master_builds, master_jsons, gatekeeper_config):
 
       # If the entire build failed.
       if (not unsatisfied_steps and 'results' in build_json and
-          build_json['results'] != SUCCESS and respect_build_status):
+          build_json['results'] == FAILURE and respect_build_status):
         unsatisfied_steps.add('[overall build status]')
 
       buildbot_url = master_jsons[master_url]['project']['buildbotURL']
