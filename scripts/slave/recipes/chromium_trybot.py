@@ -855,8 +855,9 @@ def GenSteps(api):
   if bot_config['compile_only']:
     return
 
-  if bot_config['chromium_config'] not in ['chromium_chromeos',
-                                           'chromium_chromeos_clang']:
+  if (bot_config['chromium_config'] not in ['chromium_chromeos',
+                                           'chromium_chromeos_clang']
+      and not buildername.startswith('win8')):
     # TODO(phajdan.jr): Make it possible to retry telemetry tests (add JSON).
     # TODO(vadimsh): Trigger swarming tests before telemetry tests.
     yield (
