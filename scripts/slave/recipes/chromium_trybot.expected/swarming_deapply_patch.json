@@ -1,6 +1,5 @@
 [
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -436,7 +435,6 @@
     "name": "[swarming] browser_tests (with patch)"
   },
   {
-    "abort_on_failure": true,
     "always_run": true,
     "cmd": [
       "python",

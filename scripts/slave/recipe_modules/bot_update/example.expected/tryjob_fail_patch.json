@@ -1,6 +1,5 @@
 [
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -24,6 +23,7 @@
     ],
     "name": "bot_update",
     "~followup_annotations": [
+      "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@Some step text@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
@@ -40,7 +40,8 @@
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@patch failed@Patch failed to apply@@@",
-      "@@@STEP_LOG_END@patch failed@@@"
+      "@@@STEP_LOG_END@patch failed@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   }
 ]

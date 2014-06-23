@@ -7,6 +7,7 @@
 
 
 from slave import recipe_api
+from slave import recipe_util
 
 
 # This is just for testing, to indicate if a master is using a Git scheduler
@@ -50,7 +51,6 @@ class BotUpdateApi(recipe_api.RecipeApi):
   def __call__(self, name, cmd, **kwargs):
     """Wrapper for easy calling of bot_update."""
     assert isinstance(cmd, (list, tuple))
-    kwargs.setdefault('abort_on_failure', True)
     bot_update_path = self.m.path['build'].join(
         'scripts', 'slave', 'bot_update.py')
     return self.m.python(name, bot_update_path, cmd, **kwargs)
@@ -155,6 +155,9 @@ class BotUpdateApi(recipe_api.RecipeApi):
       if 'log_lines' in step_result.json.output:
         for log_name, log_lines in step_result.json.output['log_lines']:
           step_result.presentation.logs[log_name] = log_lines.splitlines()
+      # Abort the build on failure.
+      if step_result.presentation.status == 'FAILURE':
+        raise recipe_util.RecipeAbort('Bot Update failed, aborting.')
 
     # Add suffixes to the step name, if specified.
     name = 'bot_update'
