@@ -15,7 +15,7 @@ def GenSteps(api):
   api.v8.set_config('v8')
   api.perf_dashboard.set_config('testing')
   yield api.v8.checkout()
-  yield api.v8.runperf(['experimental'], api.v8.PERF_CONFIGS)
+  yield api.v8.runperf(['experimental'], api.v8.PERF_CONFIGS, category='ia32')
 
 
 def GenTests(api):

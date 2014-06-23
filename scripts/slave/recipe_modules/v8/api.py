@@ -500,7 +500,7 @@ class V8Api(recipe_api.RecipeApi):
     else:
       return self._runtest(test['name'], test, **kwargs)
 
-  def runperf(self, tests, perf_configs):
+  def runperf(self, tests, perf_configs, category=None):
     def run_single_perf_test(name, json_file):
       """Call the v8 benchmark suite runner.
 
@@ -578,6 +578,11 @@ class V8Api(recipe_api.RecipeApi):
             test_path, self.revision, str(average))
         p['error'] = str(standard_deviation(values, average))
         p['units'] = trace['units']
+
+        # Use bot nesting level as category. Bot names are irrelevant if
+        # several different bots run in the same category like ia32. 
+        p['bot'] = category or p['bot']
+
         points.append(p)
 
     # Send all perf data to the perf dashboard in one step.
