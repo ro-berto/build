@@ -48,6 +48,7 @@ sharded_tests = [
   'content_unittests',
   'crypto_unittests',
   'device_unittests',
+  'display_unittests',
   'events_unittests',
   'gcm_unit_tests',
   'gpu_unittests',
@@ -78,6 +79,7 @@ linux_aura_options = [
   'content_browsertests',
   'content_unittests',
   'crypto_unittests',
+  'display_unittests',
   'gcm_unit_tests',
   'gpu_unittests',
   'interactive_ui_tests',
@@ -153,6 +155,7 @@ asan_tests_2 = [
 
 asan_tests_3 = [
   'browser_tests',
+  'display_unittests',
   'unit',
 ]
 

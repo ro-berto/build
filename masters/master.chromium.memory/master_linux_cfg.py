@@ -46,6 +46,7 @@ sharded_tests = [
   'content_unittests',
   'crypto_unittests',
   'device_unittests',
+  'display_unittests',
   'gcm_unit_tests',
   'gpu_unittests',
   'jingle_unittests',
@@ -82,6 +83,7 @@ F('linux_asan_rel', linux().ChromiumASANFactory(
       'content_unittests',
       'crypto_unittests',
       'device_unittests',
+      'display_unittests',
       'gcm_unit_tests',
       'gpu_unittests',
       'interactive_ui_tests',
@@ -143,6 +145,7 @@ F('linux_asan_rel_tests_2', linux().ChromiumASANFactory(
     build_url=linux_asan_archive,
     tests=[
       'browser_tests',
+      'display_unittests',
       'media',
       'ppapi_unittests',
       'printing',
