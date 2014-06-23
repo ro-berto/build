@@ -98,7 +98,13 @@ class ChromiumApi(recipe_api.RecipeApi):
     if self.c.compile_py.pass_arch_flag:
       args += ['--arch', self.c.gyp_env.GYP_DEFINES['target_arch']]
     args.append('--')
-    args.extend(targets)
+    if self.c.compile_py.build_tool == 'xcode':
+      for target in targets:
+        args.extend(['-target', target])
+      if self.c.compile_py.xcode_sdk:
+        args.extend(['-sdk', self.c.compile_py.xcode_sdk])
+    else:
+      args.extend(targets)
     return self.m.python(name or 'compile',
                          self.m.path['build'].join('scripts', 'slave',
                                                    'compile.py'),

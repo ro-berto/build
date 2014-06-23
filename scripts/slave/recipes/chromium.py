@@ -497,6 +497,48 @@ BUILDERS = {
       'build_gs_bucket': 'chromium-fyi-archive',
     },
     'builders': {
+      'Chromium iOS Device': {
+        'recipe_config': 'chromium_ios_device',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'ios',
+          'TARGET_BITS': 32,
+        },
+        'gclient_config_kwargs': {
+          'GIT_MODE': True,
+        },
+        'testing': {
+          'platform': 'mac',
+        }
+      },
+      'Chromium iOS Simulator (dbg)': {
+        'recipe_config': 'chromium_ios_simulator',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'ios',
+          'TARGET_BITS': 32,
+        },
+        'gclient_config_kwargs': {
+          'GIT_MODE': True,
+        },
+        'testing': {
+          'platform': 'mac',
+        }
+      },
+      'Chromium iOS Device (ninja)': {
+        'recipe_config': 'chromium_ios_ninja',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'ios',
+          'TARGET_BITS': 64,
+        },
+        'gclient_config_kwargs': {
+          'GIT_MODE': True,
+        },
+        'testing': {
+          'platform': 'mac',
+        }
+      },
       'Linux ARM Cross-Compile': {
         # TODO(phajdan.jr): Re-enable goma, http://crbug.com/349236 .
         'recipe_config': 'chromium_no_goma',
@@ -1186,6 +1228,48 @@ BUILDERS = {
           'platform': 'mac',
         }
       },
+      'iOS Device': {
+        'recipe_config': 'chromium_ios_device',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'ios',
+          'TARGET_BITS': 32,
+        },
+        'gclient_config_kwargs': {
+          'GIT_MODE': True,
+        },
+        'testing': {
+          'platform': 'mac',
+        }
+      },
+      'iOS Simulator (dbg)': {
+        'recipe_config': 'chromium_ios_simulator',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'ios',
+          'TARGET_BITS': 32,
+        },
+        'gclient_config_kwargs': {
+          'GIT_MODE': True,
+        },
+        'testing': {
+          'platform': 'mac',
+        }
+      },
+      'iOS Device (ninja)': {
+        'recipe_config': 'chromium_ios_ninja',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'ios',
+          'TARGET_BITS': 64,
+        },
+        'gclient_config_kwargs': {
+          'GIT_MODE': True,
+        },
+        'testing': {
+          'platform': 'mac',
+        }
+      },
     },
   },
   'chromium.win': {
@@ -1686,6 +1770,18 @@ RECIPE_CONFIGS = {
     'chromium_apply_config': ['chromeos'],
     'gclient_config': 'chromium',
   },
+  'chromium_ios_device': {
+    'chromium_config': 'chromium_ios_device',
+    'gclient_config': 'ios',
+  },
+  'chromium_ios_ninja': {
+    'chromium_config': 'chromium_ios_ninja',
+    'gclient_config': 'ios',
+  },
+  'chromium_ios_simulator': {
+    'chromium_config': 'chromium_ios_simulator',
+    'gclient_config': 'ios',
+  },
   'chromium_no_goma': {
     'chromium_config': 'chromium_no_goma',
     'gclient_config': 'chromium',
@@ -1721,7 +1817,8 @@ def GenSteps(api):
     api.chromium.apply_config(c)
   for c in bot_config.get('chromium_apply_config', []):
     api.chromium.apply_config(c)
-  api.gclient.set_config(recipe_config['gclient_config'])
+  api.gclient.set_config(recipe_config['gclient_config'],
+                         **bot_config.get('gclient_config_kwargs', {}))
   for c in recipe_config.get('gclient_apply_config', []):
     api.gclient.apply_config(c)
 

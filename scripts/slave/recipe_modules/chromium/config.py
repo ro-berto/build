@@ -39,6 +39,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       goma_dir = Single(Path, required=False),
       clobber = Single(bool, empty_val=False, required=False, hidden=False),
       pass_arch_flag = Single(bool, empty_val=False, required=False),
+      xcode_sdk = Single(basestring, required=False),
     ),
     gyp_env = ConfigGroup(
       GYP_CROSSCOMPILE = Single(int, jsonish_fn=str, required=False),
@@ -101,8 +102,8 @@ def BASE(c):
 
   for (plat, arch, bits) in host_targ_tuples:
     if plat == 'ios':
-      if arch != 'arm' or bits != 32:
-        raise BadConf('iOS only supports arm/32')
+      if arch not in ('arm', 'intel'):
+        raise BadConf('%s/%s arch is not supported on %s' % (arch, bits, plat))
     elif plat in ('win', 'mac'):
       if arch != 'intel':
         raise BadConf('%s arch is not supported on %s' % (arch, plat))
@@ -379,6 +380,41 @@ def chromium_chromeos_clang(c):
 @config_ctx(includes=['ninja', 'clang', 'goma'])
 def chromium_clang(c):
   c.compile_py.default_targets = ['All', 'chromium_builder_tests']
+
+@config_ctx(includes=['static_library'])
+def ios(c):
+  gyp_defs = c.gyp_env.GYP_DEFINES
+  gyp_defs['OS'] = c.TARGET_PLATFORM
+  gyp_defs['chromium_ios_signing'] = 0
+
+  if c.TARGET_BITS == 64:
+    gyp_defs['target_subarch'] = 'both'
+
+  # Do not pass target_arch explicitly, this is the current practice on iOS.
+  # TODO(phajdan.jr): Clean this up and pass target_arch explicitly.
+  del gyp_defs['target_arch']
+
+  c.gyp_env.GYP_GENERATOR_FLAGS['xcode_project_version'] = '3.2'
+
+@config_ctx(includes=['ios'])
+def chromium_ios_device(c):
+  c.compile_py.build_tool = 'xcode'
+  c.compile_py.default_targets = ['All']
+  c.compile_py.xcode_sdk = 'iphoneos7.0'
+
+@config_ctx(includes=['ios', 'ninja'])
+def chromium_ios_ninja(c):
+  c.build_config_fs += '-iphoneos'
+  c.compile_py.default_targets = ['All']
+
+  gyp_defs = c.gyp_env.GYP_DEFINES
+  gyp_defs['clang_xcode'] = 0
+
+@config_ctx(includes=['ios'])
+def chromium_ios_simulator(c):
+  c.compile_py.build_tool = 'xcode'
+  c.compile_py.default_targets = ['All']
+  c.compile_py.xcode_sdk = 'iphonesimulator7.0'
 
 @config_ctx(includes=['chromium', 'official'])
 def chromium_official(c):
