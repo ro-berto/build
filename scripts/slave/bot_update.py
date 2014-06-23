@@ -608,7 +608,8 @@ def gclient_sync(buildspec_name, shallow):
   os.close(fd)
   gclient_bin = 'gclient.bat' if sys.platform.startswith('win') else 'gclient'
   cmd = [gclient_bin, 'sync', '--verbose', '--reset', '--force',
-         '--output-json', gclient_output_file , '--nohooks', '--noprehooks']
+         '--ignore_locks', '--output-json', gclient_output_file ,
+         '--nohooks', '--noprehooks']
   if buildspec_name:
     cmd += ['--with_branch_heads']
   if shallow:
