@@ -697,7 +697,8 @@ def get_git_buildspec(version):
   The contents are returned instead of the file so that we can check the
   repository into a temp directory and confine the cleanup logic here.
   """
-  git('cache', 'populate', '-v', '--cache-dir', CACHE_DIR, GIT_BUILDSPEC_REPO)
+  git('cache', 'populate', '--ignore_locks', '-v', '--cache-dir', CACHE_DIR,
+      GIT_BUILDSPEC_REPO)
   mirror_dir = git(
       'cache', 'exists', '--quiet', '--cache-dir', CACHE_DIR,
       GIT_BUILDSPEC_REPO).strip()
@@ -709,7 +710,7 @@ def get_git_buildspec(version):
       if tries < TOTAL_TRIES - 1:
         print 'Buildspec for %s not committed yet, waiting 5 seconds...'
         time.sleep(5)
-        git('cache', 'populate', '-v', '--cache-dir',
+        git('cache', 'populate', '--ignore_locks', '-v', '--cache-dir',
             CACHE_DIR, GIT_BUILDSPEC_REPO)
       else:
         print >> sys.stderr, '%s not found, ' % version,
@@ -853,8 +854,8 @@ def git_checkout(solutions, revisions, shallow):
         shallow = False
       sln_dir = path.join(build_dir, name)
       s = ['--shallow'] if shallow else []
-      populate_cmd = (['cache', 'populate', '-v', '--cache-dir', CACHE_DIR]
-                      + s + [url])
+      populate_cmd = (['cache', 'populate', '--ignore_locks', '-v',
+                       '--cache-dir', CACHE_DIR] + s + [url])
       git(*populate_cmd)
       mirror_dir = git(
           'cache', 'exists', '--quiet', '--cache-dir', CACHE_DIR, url).strip()
