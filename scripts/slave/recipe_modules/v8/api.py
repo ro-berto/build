@@ -501,6 +501,16 @@ class V8Api(recipe_api.RecipeApi):
       return self._runtest(test['name'], test, **kwargs)
 
   def runperf(self, tests, perf_configs, category=None):
+    """Run v8 performance tests and upload results.
+
+    Args:
+      tests: A list of tests from perf_configs to run.
+      perf_configs: A mapping from test name to a suite configuration json.
+      category: Optionally use bot nesting level as category. Bot names are
+                irrelevant if several different bots run in the same category
+                like ia32.
+    """
+
     def run_single_perf_test(name, json_file):
       """Call the v8 benchmark suite runner.
 
@@ -519,6 +529,15 @@ class V8Api(recipe_api.RecipeApi):
         errors = step_result.json.output['errors']
         if errors:
           step_result.presentation.logs['Errors'] = errors
+        else:
+          # Add a link to the dashboard. This assumes the naming convention
+          # step name == suite name. If this convention didn't hold, we'd need
+          # to use the path from the json output graphs here.
+          self.m.perf_dashboard.add_dashboard_link(
+              step_result.presentation,
+              'v8/%s' % name,
+              self.revision,
+              bot=category)
 
       step_test_data = lambda: self.test_api.perf_json(
           self._test_data.get('perf_failures', False))
@@ -560,8 +579,8 @@ class V8Api(recipe_api.RecipeApi):
     # Collect all perf data of the previous steps.
     points = []
     for t in tests:
-      name = perf_configs[t]['name']
-      for trace in self.m.step_history[name].json.output['traces']:
+      step = self.m.step_history[perf_configs[t]['name']]
+      for trace in step.json.output['traces']:
         # Make 'v8' the root of all standalone v8 performance tests.
         test_path = '/'.join(['v8'] + trace['graphs'])
 
@@ -578,11 +597,7 @@ class V8Api(recipe_api.RecipeApi):
             test_path, self.revision, str(average))
         p['error'] = str(standard_deviation(values, average))
         p['units'] = trace['units']
-
-        # Use bot nesting level as category. Bot names are irrelevant if
-        # several different bots run in the same category like ia32. 
         p['bot'] = category or p['bot']
-
         points.append(p)
 
     # Send all perf data to the perf dashboard in one step.

@@ -317,7 +317,10 @@
       "benchmarks/v8.json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Experimental"
+    "name": "Experimental",
+    "~followup_annotations": [
+      "@@@STEP_LINK@Results Dashboard@https://chrome-perf.googleplex.com/report?rev=50110&masters=client.v8&tests=v8%2FExperimental&bots=TestSlavename@@@"
+    ]
   },
   {
     "cmd": [
