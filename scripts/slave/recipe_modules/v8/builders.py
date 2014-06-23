@@ -143,7 +143,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - builder',
         'build_gs_archive': 'linux_rel_archive',
-        'tests': ['v8testing', 'test262', 'mozilla', 'gcmole'],
+        'tests': ['v8testing', 'test262', 'mozilla'],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - nosse3': {
@@ -228,6 +228,17 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
         'tests': ['v8testing', 'test262', 'mozilla'],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - gcmole': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux - builder',
+        'build_gs_archive': 'linux_rel_archive',
+        'tests': ['gcmole'],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - interpreted regexp': {

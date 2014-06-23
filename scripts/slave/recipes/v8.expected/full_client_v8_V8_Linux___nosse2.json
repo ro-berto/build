@@ -172,17 +172,5 @@
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Mozilla"
-  },
-  {
-    "cmd": [
-      "lua",
-      "tools/gcmole/gcmole.lua"
-    ],
-    "cwd": "[SLAVE_BUILD]/v8",
-    "env": {
-      "CLANG_BIN": "../../../../../gcmole/bin",
-      "CLANG_PLUGINS": "../../../../../gcmole"
-    },
-    "name": "GCMole"
   }
 ]
