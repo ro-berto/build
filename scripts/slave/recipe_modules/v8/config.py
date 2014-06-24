@@ -66,12 +66,6 @@ def no_snapshot(c):
 
 
 @config_ctx()
-def nosse2(c):
-  # TODO(machenbach): Remove nosse2 bot from infrastructure.
-  pass
-
-
-@config_ctx()
 def nosse3(c):
   c.testing.test_args.add('--shell_flags="--noenable-sse3"')
 

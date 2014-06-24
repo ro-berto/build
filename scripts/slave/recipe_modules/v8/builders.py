@@ -134,18 +134,6 @@ BUILDERS = {
         'tests': ['v8testing'],
         'testing': {'platform': 'linux'},
       },
-      'V8 Linux - nosse2': {
-        'v8_apply_config': ['nosse2'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'tester',
-        'parent_buildername': 'V8 Linux - builder',
-        'build_gs_archive': 'linux_rel_archive',
-        'tests': ['v8testing', 'test262', 'mozilla'],
-        'testing': {'platform': 'linux'},
-      },
       'V8 Linux - nosse3': {
         'v8_apply_config': ['nosse3'],
         'v8_config_kwargs': {
@@ -192,18 +180,6 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
         'tests': ['v8testing'],
-        'testing': {'platform': 'linux'},
-      },
-      'V8 Linux - debug - nosse2': {
-        'v8_apply_config': ['nosse2'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'tester',
-        'parent_buildername': 'V8 Linux - debug builder',
-        'build_gs_archive': 'linux_dbg_archive',
-        'tests': ['v8testing', 'test262', 'mozilla'],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - debug - nosse3': {
