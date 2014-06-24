@@ -86,6 +86,11 @@ class GTestTest(object):
     if api.chromium.c.TARGET_PLATFORM == 'android':
       return [self.name + '_apk']
 
+    # On iOS we rely on 'All' target being compiled instead of using
+    # individual targets.
+    if api.chromium.c.TARGET_PLATFORM == 'ios':
+      return []
+
     return [self.name]
 
 
@@ -187,6 +192,20 @@ class AndroidInstrumentationTest(object):
 
   def compile_targets(self, _):
     return [self.compile_target]
+
+
+IOS_TESTS = [
+  GTestTest('base_unittests'),
+  GTestTest('components_unittests'),
+  GTestTest('crypto_unittests'),
+  GTestTest('gfx_unittests'),
+  GTestTest('url_unittests'),
+  GTestTest('content_unittests'),
+  GTestTest('net_unittests'),
+  GTestTest('ui_unittests'),
+  GTestTest('sync_unit_tests'),
+  GTestTest('sql_unittests'),
+]
 
 
 # Make it easy to change how different configurations of this recipe
@@ -520,6 +539,7 @@ BUILDERS = {
         'gclient_config_kwargs': {
           'GIT_MODE': True,
         },
+        'tests': IOS_TESTS,
         'testing': {
           'platform': 'mac',
         }
@@ -1251,6 +1271,7 @@ BUILDERS = {
         'gclient_config_kwargs': {
           'GIT_MODE': True,
         },
+        'tests': IOS_TESTS,
         'testing': {
           'platform': 'mac',
         }

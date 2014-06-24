@@ -130,6 +130,8 @@ class ChromiumApi(recipe_api.RecipeApi):
       test += '.exe'
 
     full_args = ['--target', self.c.build_config_fs]
+    if self.c.TARGET_PLATFORM == 'ios':
+      full_args.extend(['--test-platform', 'ios-simulator'])
     if self.m.platform.is_linux:
       full_args.append('--xvfb' if xvfb else '--no-xvfb')
     full_args += self.m.json.property_args()

@@ -1496,6 +1496,8 @@ def main():
   option_parser.add_option('--pass-build-dir', action='store_true',
                            default=False,
                            help='pass --build-dir to the spawned test script')
+  option_parser.add_option('--test-platform',
+                           help='Platform to test on, e.g. ios-simulator')
   option_parser.add_option('--enable-pageheap', action='store_true',
                            default=False,
                            help='enable pageheap checking for chrome.exe')
@@ -1835,7 +1837,8 @@ def main():
     if options.parse_input:
       result = _MainParse(options, args)
     elif sys.platform.startswith('darwin'):
-      test_platform = options.factory_properties.get('test_platform', '')
+      test_platform = options.factory_properties.get(
+          'test_platform', options.test_platform)
       if test_platform in ('ios-simulator',):
         result = _MainIOS(options, args, extra_env)
       else:
