@@ -3,7 +3,6 @@
 # found in the LICENSE file.
 
 import math
-import os
 
 from slave import recipe_api
 from slave.recipe_modules.v8 import builders
@@ -136,12 +135,6 @@ def ChromiumSvnSubURL(c, *pieces):
 
 class V8Api(recipe_api.RecipeApi):
   BUILDERS = builders.BUILDERS
-  PERF_CONFIGS = {
-    'experimental': {
-      'name': 'Experimental',
-      'json': os.path.join('benchmarks', 'v8.json'),
-    }
-  }
 
   # Map of GS archive names to urls.
   GS_ARCHIVES = {
@@ -187,6 +180,10 @@ class V8Api(recipe_api.RecipeApi):
     # TODO(machenbach): Set to default config as soon as the experimental
     # development on the performance runner is finished.
     self.m.perf_dashboard.set_config('testing')
+
+  def set_bot_config(self, bot_config):
+    """Set bot configuration for testing only."""
+    self.bot_config = bot_config
 
   def init_tryserver(self):
     self.m.chromium.apply_config('trybot_flavor')

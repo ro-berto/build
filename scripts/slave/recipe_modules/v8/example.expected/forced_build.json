@@ -48,12 +48,12 @@
       "--buildbot",
       "--json-test-results",
       "/path/to/tmp/json",
-      "benchmarks/v8.json"
+      "example.json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Experimental",
+    "name": "Example",
     "~followup_annotations": [
-      "@@@STEP_LINK@Results Dashboard@https://chrome-perf.googleplex.com/report?rev=50110&masters=Fake_Master&tests=v8%2FExperimental&bots=ia32@@@"
+      "@@@STEP_LINK@Results Dashboard@https://chrome-perf.googleplex.com/report?rev=50110&masters=Fake_Master&tests=v8%2FExample&bots=ia32@@@"
     ]
   },
   {

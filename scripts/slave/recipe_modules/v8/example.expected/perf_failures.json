@@ -50,10 +50,10 @@
       "--buildbot",
       "--json-test-results",
       "/path/to/tmp/json",
-      "benchmarks/v8.json"
+      "example.json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Experimental",
+    "name": "Example",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@Errors@Error line 1.@@@",
       "@@@STEP_LOG_LINE@Errors@Error line 2.@@@",
