@@ -68,14 +68,14 @@ def cronet_builder(c):
   c.compile_py.default_targets=['cronet_package', 'cronet_sample_test_apk']
 
 @CONFIG_CTX(includes=['main_builder'])
-def arm_builder(c):
+def arm_k_builder(c):
   gyp_defs = c.gyp_env.GYP_DEFINES
   gyp_defs['android_sdk_build_tools_version'] = '19.0.0'
   gyp_defs['android_sdk_version'] = '19'
   gyp_defs['android_sdk_root'] = Path(
     '[CHECKOUT]', 'third_party', 'android_tools', 'sdk')
 
-@CONFIG_CTX(includes=['arm_builder'])
+@CONFIG_CTX(includes=['arm_k_builder'])
 def android_shared(c):
   c.gyp_env.GYP_DEFINES['component'] = 'shared_library'
 
@@ -89,9 +89,9 @@ def arm_l_builder(c):
   gyp_defs['use_unpublished_apis'] = 1
   c.compile_py.default_targets = ['All', 'hera_apk']
 
-@CONFIG_CTX(includes=['arm_builder'],
+@CONFIG_CTX(includes=['arm_k_builder'],
             config_vars={'BUILD_CONFIG': 'Release'})
-def arm_builder_rel(c):
+def arm_k_builder_rel(c):
   pass
 
 @CONFIG_CTX(includes=['base_config', 'default_compiler', 'goma'],

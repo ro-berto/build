@@ -103,7 +103,7 @@ def dartium_builder(c):
   c.managed = True
 
 @config_ctx()
-def arm_builder(c):
+def arm_k_builder(c):
   pass
 
 @config_ctx()
@@ -111,7 +111,7 @@ def arm_l_builder(c):
   pass
 
 @config_ctx()
-def arm_builder_rel(c):
+def arm_k_builder_rel(c):
   pass
 
 @config_ctx()
