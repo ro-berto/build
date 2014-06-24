@@ -57,7 +57,6 @@ tests_1 = [
     'sql_unittests',
     'ui_unittests',
     'views_unittests',
-    'webkit_compositor_bindings_unittests',
 ]
 
 tests_2 = [

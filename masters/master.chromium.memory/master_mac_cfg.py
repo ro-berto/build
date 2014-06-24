@@ -55,7 +55,6 @@ sharded_tests = [
   'ui_unittests',
   'unit_tests',
   'views_unittests',
-  'webkit_compositor_bindings_unittests',
 ]
 
 mac_asan_options = [

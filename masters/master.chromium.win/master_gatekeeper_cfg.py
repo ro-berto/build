@@ -57,7 +57,6 @@ categories_steps = {
     'unit_tests',
     'url_unittests',
     'views_unittests',
-    'webkit_compositor_bindings_unittests',
     #'webkit_tests',
    ],
   'windows': ['svnkill', 'taskkill'],

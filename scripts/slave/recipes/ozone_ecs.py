@@ -42,7 +42,6 @@ OZONE_TESTS = [
     'ui_unittests',
     # 'unit_tests',  Not sensible.
     'url_unittests',
-    # 'webkit_compositor_bindings_unittests', Not specified in bug.
     # 'sync_integration_tests', Not specified in bug.
     # 'chromium_swarm_tests', Not specified in bug.
 ] + [

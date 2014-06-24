@@ -579,22 +579,6 @@
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "gtest",
       "-s",
-      "webkit_compositor_bindings_unittests",
-      "--verbose"
-    ],
-    "env": {
-      "BUILDTYPE": "Debug"
-    },
-    "name": "webkit_compositor_bindings_unittests"
-  },
-  {
-    "always_run": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "gtest",
-      "-s",
       "webkit_unit_tests",
       "--verbose"
     ],
