@@ -79,6 +79,9 @@
       {
         "tree_notify": ["chrome-gpu-build-failures@google.com"],
         "sheriff_classes": ["sheriff", "sheriff_gpu"],
+        "categories": [
+          "chromium_tree_closer"
+        ],
         "builders": {
           "*": {
             "closing_optional": [
@@ -264,6 +267,10 @@
       "forgiving_steps": [
         "start_crash_handler"
       ]
+    },
+
+    "chromium_tree_closer":{
+      "status_template": "Tree is closed (Automatic: \"%(unsatisfied)s\" on %(build_url)s \"%(builder_name)s\" from: %(revision)s: %(blamelist)s)"
     },
 
     "chromium_windows": {
