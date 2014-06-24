@@ -363,6 +363,7 @@ def main():
         # TODO(maruel): Remove once everyone is on 2.7.5.
         'DEPOT_TOOLS_PYTHON_275',
         'DXSDK_DIR',
+        'HOME',
         'HOMEDRIVE',
         'HOMEPATH',
         'LOCALAPPDATA',
