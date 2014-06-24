@@ -101,7 +101,6 @@
     "name": "gclient runhooks"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -120,7 +119,6 @@
     "name": "compile"
   },
   {
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -148,7 +146,6 @@
     "name": "findbugs_tests"
   },
   {
-    "always_run": true,
     "cmd": [
       "rm",
       "-rf"

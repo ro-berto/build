@@ -45,7 +45,6 @@
     "name": "gclient setup"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -56,7 +55,6 @@
     "name": "gclient revert"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -109,7 +107,6 @@
     ]
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -139,7 +136,6 @@
     "name": "gclient runhooks"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -160,7 +156,6 @@
     "name": "compile content_shell"
   },
   {
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -170,7 +165,6 @@
     "name": "check ecs deps"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -213,7 +207,6 @@
     "name": "compile tests"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -234,7 +227,6 @@
     "name": "aura_unittests"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -255,7 +247,6 @@
     "name": "base_unittests"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -276,7 +267,6 @@
     "name": "cacheinvalidation_unittests"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -297,7 +287,6 @@
     "name": "cc_unittests"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -318,7 +307,6 @@
     "name": "components_unittests"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -339,7 +327,6 @@
     "name": "compositor_unittests"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -360,7 +347,6 @@
     "name": "content_browsertests"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -381,7 +367,6 @@
     "name": "content_unittests"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -402,7 +387,6 @@
     "name": "crypto_unittests"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -423,7 +407,6 @@
     "name": "device_unittests"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -444,7 +427,6 @@
     "name": "events_unittests"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -465,7 +447,6 @@
     "name": "gfx_unittests"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -486,7 +467,6 @@
     "name": "gpu_unittests"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -507,7 +487,6 @@
     "name": "ipc_tests"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -528,7 +507,6 @@
     "name": "media_unittests"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -549,7 +527,6 @@
     "name": "net_unittests"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -570,7 +547,6 @@
     "name": "ozone_unittests"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -591,7 +567,6 @@
     "name": "ppapi_unittests"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -612,7 +587,6 @@
     "name": "sandbox_linux_unittests"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -633,7 +607,6 @@
     "name": "sql_unittests"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -654,7 +627,6 @@
     "name": "sync_unit_tests"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -675,7 +647,6 @@
     "name": "ui_unittests"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",

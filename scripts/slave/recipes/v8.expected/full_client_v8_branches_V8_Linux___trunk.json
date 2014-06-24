@@ -1,7 +1,5 @@
 [
   {
-    "abort_on_failure": false,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -13,8 +11,6 @@
     "name": "gclient setup"
   },
   {
-    "abort_on_failure": false,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -63,7 +59,6 @@
     "name": "cleanup_temp"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -87,14 +82,9 @@
       "presubmit"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Presubmit",
-    "seed_steps": [
-      "Presubmit",
-      "Check"
-    ]
+    "name": "Presubmit"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -112,8 +102,6 @@
     "name": "Check"
   },
   {
-    "always_run": true,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -131,7 +119,6 @@
     "name": "Check - flaky"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -149,8 +136,6 @@
     "name": "Webkit"
   },
   {
-    "always_run": true,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -168,7 +153,6 @@
     "name": "Webkit - flaky"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -184,7 +168,6 @@
     "name": "Test262"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",

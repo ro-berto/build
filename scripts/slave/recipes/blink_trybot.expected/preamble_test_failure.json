@@ -79,15 +79,9 @@
     "env": {
       "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
     },
-    "name": "gclient runhooks",
-    "seed_steps": [
-      "gclient runhooks",
-      "compile"
-    ]
+    "name": "gclient runhooks"
   },
   {
-    "abort_on_failure": false,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -117,15 +111,7 @@
       "--target",
       "Release"
     ],
-    "name": "webkit_lint",
-    "seed_steps": [
-      "webkit_lint",
-      "webkit_python_tests",
-      "webkit_unit_tests",
-      "blink_platform_unittests",
-      "blink_heap_unittests",
-      "wtf_unittests"
-    ]
+    "name": "webkit_lint"
   },
   {
     "cmd": [
@@ -140,7 +126,6 @@
     "name": "webkit_python_tests"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -164,7 +149,6 @@
     ]
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -184,7 +168,6 @@
     "name": "blink_platform_unittests"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -204,7 +187,6 @@
     "name": "blink_heap_unittests"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -224,8 +206,6 @@
     "name": "wtf_unittests"
   },
   {
-    "abort_on_failure": true,
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -236,5 +216,10 @@
       "@@@STEP_LOG_LINE@python.inline@import sys; sys.exit(1)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
+  },
+  {
+    "name": "$final_result",
+    "reason": "Step('webkit_unit_tests') failed with return_code 1",
+    "status_code": 1
   }
 ]

@@ -98,7 +98,6 @@
     "name": "cleanup_temp"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -120,12 +119,7 @@
       "content_shell_test_apk",
       "mojo_test_apk"
     ],
-    "name": "compile",
-    "seed_steps": [
-      "compile",
-      "checkdeps",
-      "check_licenses"
-    ]
+    "name": "compile"
   },
   {
     "cmd": [

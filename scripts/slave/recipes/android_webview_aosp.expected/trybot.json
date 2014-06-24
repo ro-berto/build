@@ -45,7 +45,6 @@
     "name": "gclient setup"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -56,7 +55,6 @@
     "name": "gclient revert"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -128,11 +126,7 @@
       "-s",
       "[SLAVE_BUILD]/src"
     ],
-    "name": "Chromium LASTCHANGE",
-    "seed_steps": [
-      "Chromium LASTCHANGE",
-      "Blink LASTCHANGE"
-    ]
+    "name": "Chromium LASTCHANGE"
   },
   {
     "cmd": [
@@ -145,7 +139,6 @@
     "name": "Blink LASTCHANGE"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",

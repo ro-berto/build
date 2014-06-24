@@ -9,15 +9,7 @@
       "--url",
       "https://chromium.googlesource.com/external/swarming.client.git"
     ],
-    "name": "git setup (swarming_client)",
-    "seed_steps": [
-      "git setup (swarming_client)",
-      "git fetch (swarming_client)",
-      "git checkout (swarming_client)",
-      "git clean (swarming_client)",
-      "submodule sync (swarming_client)",
-      "submodule update (swarming_client)"
-    ]
+    "name": "git setup (swarming_client)"
   },
   {
     "cmd": [
@@ -169,12 +161,7 @@
       "--verbose",
       "hash_for_win"
     ],
-    "name": "[trigger] hello_world on Windows-6.1",
-    "seed_steps": [
-      "[trigger] hello_world on Windows-6.1",
-      "[trigger] hello_world",
-      "[trigger] hello_world on Mac"
-    ]
+    "name": "[trigger] hello_world on Windows-6.1"
   },
   {
     "cmd": [
@@ -240,7 +227,6 @@
     "name": "local step"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -255,15 +241,9 @@
       "--verbose",
       "hello_world/Windows-6.1/hash_for_win/local/0/1337000001500"
     ],
-    "name": "[swarming] hello_world on Windows-6.1",
-    "seed_steps": [
-      "[swarming] hello_world on Windows-6.1",
-      "[swarming] hello_world",
-      "[swarming] hello_world on Mac"
-    ]
+    "name": "[swarming] hello_world on Windows-6.1"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -281,7 +261,6 @@
     "name": "[swarming] hello_world"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",

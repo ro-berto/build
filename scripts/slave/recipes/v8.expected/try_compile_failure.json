@@ -8,8 +8,6 @@
     "name": "taskkill"
   },
   {
-    "abort_on_failure": false,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -21,8 +19,6 @@
     "name": "gclient setup"
   },
   {
-    "abort_on_failure": false,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -33,8 +29,6 @@
     "name": "gclient revert"
   },
   {
-    "abort_on_failure": false,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -61,7 +55,6 @@
     ]
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -99,8 +92,6 @@
     "name": "cleanup_temp"
   },
   {
-    "abort_on_failure": false,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -120,8 +111,6 @@
     ]
   },
   {
-    "abort_on_failure": false,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -133,8 +122,6 @@
     "name": "gclient setup (2)"
   },
   {
-    "abort_on_failure": false,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -145,8 +132,6 @@
     "name": "gclient revert (2)"
   },
   {
-    "abort_on_failure": false,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -180,10 +165,6 @@
       "[SLAVE_BUILD]"
     ],
     "name": "rmcontents slave build directory",
-    "seed_steps": [
-      "rmcontents slave build directory",
-      "gclient setup (3)"
-    ],
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -209,7 +190,6 @@
     "name": "gclient setup (3)"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -220,7 +200,6 @@
     "name": "gclient revert (3)"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -247,7 +226,6 @@
     ]
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -277,7 +255,6 @@
     "name": "gclient runhooks (2)"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -294,7 +271,6 @@
     "name": "compile (with patch, lkgr, clobber)"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",

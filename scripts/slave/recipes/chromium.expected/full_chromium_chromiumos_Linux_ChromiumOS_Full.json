@@ -97,7 +97,6 @@
     "name": "cleanup_temp"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -147,15 +146,7 @@
       "url_unittests",
       "views_unittests"
     ],
-    "name": "compile",
-    "seed_steps": [
-      "compile",
-      "checkdeps",
-      "archive build",
-      "deps2git",
-      "deps2submodules",
-      "checkperms"
-    ]
+    "name": "compile"
   },
   {
     "cmd": [

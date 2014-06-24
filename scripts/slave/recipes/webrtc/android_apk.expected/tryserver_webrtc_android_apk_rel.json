@@ -41,7 +41,6 @@
     "name": "gclient setup"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -52,7 +51,6 @@
     "name": "gclient revert"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -168,7 +166,6 @@
     "name": "cleanup_temp"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -195,7 +192,6 @@
     "name": "compile"
   },
   {
-    "can_fail_build": false,
     "cmd": [
       "[BUILD]/scripts/slave/daemonizer.py",
       "--",
@@ -217,7 +213,6 @@
     "name": "device_status_check"
   },
   {
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -475,7 +470,6 @@
     "name": "webrtc_perf_tests"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -488,7 +482,6 @@
     "name": "logcat_dump"
   },
   {
-    "always_run": true,
     "cmd": [
       "[SLAVE_BUILD]/src/third_party/android_platform/development/scripts/stack",
       "--more-info",
@@ -500,7 +493,6 @@
     "name": "stack_tool_with_logcat_dump"
   },
   {
-    "always_run": true,
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/tombstones.py",
       "-a",
@@ -513,7 +505,6 @@
     "name": "stack_tool_for_tombstones"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -533,7 +524,6 @@
     ]
   },
   {
-    "always_run": true,
     "cmd": [
       "rm",
       "-rf"

@@ -34,15 +34,7 @@
       "--url",
       "https://chromium.googlesource.com/android_tools"
     ],
-    "name": "git setup",
-    "seed_steps": [
-      "git setup",
-      "git fetch",
-      "git checkout",
-      "git clean",
-      "submodule sync",
-      "submodule update"
-    ]
+    "name": "git setup"
   },
   {
     "cmd": [
@@ -106,15 +98,7 @@
       "--url",
       "https://chromium.googlesource.com/webm/libvpx"
     ],
-    "name": "git setup (2)",
-    "seed_steps": [
-      "git setup (2)",
-      "git fetch (2)",
-      "git checkout (2)",
-      "git clean (2)",
-      "submodule sync (2)",
-      "submodule update (2)"
-    ]
+    "name": "git setup (2)"
   },
   {
     "cmd": [
@@ -188,7 +172,6 @@
     "name": "configure"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "[SLAVE_BUILD]/android_tools/ndk/ndk-build",
       "APP_BUILD_SCRIPT=[SLAVE_BUILD]/libvpx/test/android/Android.mk",
@@ -237,7 +220,6 @@
     "name": "push_so"
   },
   {
-    "can_fail_build": true,
     "cmd": [
       "python",
       "-u",

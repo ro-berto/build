@@ -124,7 +124,6 @@
     "name": "gclient runhooks"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -150,8 +149,6 @@
     "name": "compile (with patch)"
   },
   {
-    "always_run": true,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -166,8 +163,6 @@
     ]
   },
   {
-    "always_run": true,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -184,8 +179,6 @@
     ]
   },
   {
-    "always_run": true,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -202,7 +195,6 @@
     ]
   },
   {
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -216,10 +208,6 @@
       "/path/to/tmp/json"
     ],
     "name": "deps2git (with patch)",
-    "seed_steps": [
-      "deps2git (with patch)",
-      "deps2submodules"
-    ],
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[]@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -237,8 +225,6 @@
   },
   {
     "allow_subannotations": true,
-    "always_run": true,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -263,8 +249,6 @@
   },
   {
     "allow_subannotations": true,
-    "always_run": true,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -289,8 +273,6 @@
   },
   {
     "allow_subannotations": true,
-    "always_run": true,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -316,8 +298,6 @@
   },
   {
     "allow_subannotations": true,
-    "always_run": true,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -341,7 +321,6 @@
     "name": "browser_tests (with patch)"
   },
   {
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",

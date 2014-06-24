@@ -47,7 +47,6 @@
     "name": "gclient setup"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -130,12 +129,6 @@
       "[SLAVE_BUILD]\\src\\out\\Release"
     ],
     "name": "rmtree build directory",
-    "seed_steps": [
-      "rmtree build directory",
-      "extract build",
-      "start_crash_service",
-      "process_dumps"
-    ],
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -147,7 +140,6 @@
     ]
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -176,7 +168,6 @@
     "name": "start_crash_service"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",

@@ -19,7 +19,6 @@
     "name": "gclient setup"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -86,7 +85,6 @@
     ]
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -105,7 +103,6 @@
     "name": "extract build"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -127,8 +124,6 @@
     "name": "Check"
   },
   {
-    "always_run": true,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -150,7 +145,6 @@
     "name": "Check - flaky"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -172,8 +166,6 @@
     "name": "Webkit"
   },
   {
-    "always_run": true,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -195,7 +187,6 @@
     "name": "Webkit - flaky"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -215,7 +206,6 @@
     "name": "Test262"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",

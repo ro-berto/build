@@ -35,5 +35,10 @@
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_FAILURE@@@"
     ]
+  },
+  {
+    "name": "$final_result",
+    "reason": "Step('bot_update') failed with return_code 1",
+    "status_code": 1
   }
 ]

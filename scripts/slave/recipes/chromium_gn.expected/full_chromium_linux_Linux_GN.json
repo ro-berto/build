@@ -87,7 +87,6 @@
     "name": "gn"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",

@@ -79,15 +79,9 @@
     "env": {
       "GYP_DEFINES": "component=shared_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
     },
-    "name": "gclient runhooks",
-    "seed_steps": [
-      "gclient runhooks",
-      "compile"
-    ]
+    "name": "gclient runhooks"
   },
   {
-    "abort_on_failure": false,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -212,14 +206,9 @@
     "env": {
       "GYP_DEFINES": "component=shared_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
     },
-    "name": "gclient runhooks (2)",
-    "seed_steps": [
-      "gclient runhooks (2)",
-      "compile (2)"
-    ]
+    "name": "gclient runhooks (2)"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -249,15 +238,7 @@
       "--target",
       "Debug"
     ],
-    "name": "webkit_lint",
-    "seed_steps": [
-      "webkit_lint",
-      "webkit_python_tests",
-      "webkit_unit_tests",
-      "blink_platform_unittests",
-      "blink_heap_unittests",
-      "wtf_unittests"
-    ]
+    "name": "webkit_lint"
   },
   {
     "cmd": [
@@ -272,7 +253,6 @@
     "name": "webkit_python_tests"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -292,7 +272,6 @@
     "name": "webkit_unit_tests"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -312,7 +291,6 @@
     "name": "blink_platform_unittests"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -332,7 +310,6 @@
     "name": "blink_heap_unittests"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -352,8 +329,6 @@
     "name": "wtf_unittests"
   },
   {
-    "always_run": true,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",

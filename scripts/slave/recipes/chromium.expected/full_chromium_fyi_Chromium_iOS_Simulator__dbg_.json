@@ -99,7 +99,6 @@
     "name": "cleanup_temp"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -116,21 +115,7 @@
       "-sdk",
       "iphonesimulator7.0"
     ],
-    "name": "compile",
-    "seed_steps": [
-      "compile",
-      "checkdeps",
-      "base_unittests",
-      "components_unittests",
-      "crypto_unittests",
-      "gfx_unittests",
-      "url_unittests",
-      "content_unittests",
-      "net_unittests",
-      "ui_unittests",
-      "sync_unit_tests",
-      "sql_unittests"
-    ]
+    "name": "compile"
   },
   {
     "cmd": [
@@ -148,7 +133,6 @@
   },
   {
     "allow_subannotations": true,
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -172,7 +156,6 @@
   },
   {
     "allow_subannotations": true,
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -196,7 +179,6 @@
   },
   {
     "allow_subannotations": true,
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -220,7 +202,6 @@
   },
   {
     "allow_subannotations": true,
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -244,7 +225,6 @@
   },
   {
     "allow_subannotations": true,
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -268,7 +248,6 @@
   },
   {
     "allow_subannotations": true,
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -292,7 +271,6 @@
   },
   {
     "allow_subannotations": true,
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -316,7 +294,6 @@
   },
   {
     "allow_subannotations": true,
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -340,7 +317,6 @@
   },
   {
     "allow_subannotations": true,
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -364,7 +340,6 @@
   },
   {
     "allow_subannotations": true,
-    "always_run": true,
     "cmd": [
       "python",
       "-u",

@@ -47,7 +47,6 @@
     "name": "gclient setup"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -117,10 +116,6 @@
       "[SLAVE_BUILD]\\src\\out\\Release"
     ],
     "name": "rmtree build directory",
-    "seed_steps": [
-      "rmtree build directory",
-      "extract build"
-    ],
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -132,7 +127,6 @@
     ]
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -158,18 +152,10 @@
       "--target",
       "Release"
     ],
-    "name": "start_crash_service",
-    "seed_steps": [
-      "start_crash_service",
-      "content_browsertests (webrtc)",
-      "browser_tests (webrtc)",
-      "content_unittests (webrtc)",
-      "process_dumps"
-    ]
+    "name": "start_crash_service"
   },
   {
     "allow_subannotations": true,
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -200,7 +186,6 @@
   },
   {
     "allow_subannotations": true,
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -233,7 +218,6 @@
   },
   {
     "allow_subannotations": true,
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -255,7 +239,6 @@
     "name": "content_unittests (webrtc)"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",

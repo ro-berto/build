@@ -41,7 +41,6 @@
     "name": "gclient setup"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -118,14 +117,9 @@
     "env": {
       "GYP_DEFINES": "chromium_win_pch=0 component=static_library fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 test_isolation_mode=archive test_isolation_outdir=https://isolateserver-dev.appspot.com use_goma=1"
     },
-    "name": "gclient runhooks",
-    "seed_steps": [
-      "gclient runhooks",
-      "compile"
-    ]
+    "name": "gclient runhooks"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -149,7 +143,6 @@
     "name": "compile"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -194,11 +187,7 @@
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] dummy_target_1",
-    "seed_steps": [
-      "[trigger] dummy_target_1",
-      "[trigger] dummy_target_2"
-    ]
+    "name": "[trigger] dummy_target_1"
   },
   {
     "cmd": [
@@ -229,7 +218,6 @@
   },
   {
     "allow_subannotations": true,
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -251,15 +239,10 @@
       "--verbose",
       "dummy_target_1/Windows-6.1/[dummy hash for dummy_target_1]/TestBuilder/571"
     ],
-    "name": "[swarming] dummy_target_1",
-    "seed_steps": [
-      "[swarming] dummy_target_1",
-      "[swarming] dummy_target_2"
-    ]
+    "name": "[swarming] dummy_target_1"
   },
   {
     "allow_subannotations": true,
-    "always_run": true,
     "cmd": [
       "python",
       "-u",

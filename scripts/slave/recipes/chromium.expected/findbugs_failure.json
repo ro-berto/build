@@ -98,7 +98,6 @@
     "name": "cleanup_temp"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -120,12 +119,7 @@
       "content_shell_test_apk",
       "mojo_test_apk"
     ],
-    "name": "compile",
-    "seed_steps": [
-      "compile",
-      "checkdeps",
-      "check_licenses"
-    ]
+    "name": "compile"
   },
   {
     "cmd": [
@@ -165,32 +159,8 @@
     ]
   },
   {
-    "cmd": [
-      "[SLAVE_BUILD]/src/tools/android/findbugs_plugin/test/run_findbugs_plugin_tests.py"
-    ],
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "findbugs_tests",
-    "skip": true
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/zip_build.py",
-      "--target",
-      "Debug",
-      "--build-url",
-      "gs://chromium-linux-archive/chromium.linux/Android Builder (dbg)",
-      "--build_revision",
-      "170242",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Builder (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.linux\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Builder (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.linux\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
-    ],
-    "name": "package build",
-    "skip": true
+    "name": "$final_result",
+    "reason": "Step('findbugs') failed with return_code 1",
+    "status_code": 1
   }
 ]

@@ -97,7 +97,6 @@
     "name": "cleanup_temp"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -117,12 +116,7 @@
       "chromium_swarm_tests",
       "sync_integration_tests"
     ],
-    "name": "compile",
-    "seed_steps": [
-      "compile",
-      "checkdeps",
-      "package build"
-    ]
+    "name": "compile"
   },
   {
     "cmd": [

@@ -36,8 +36,6 @@
     ]
   },
   {
-    "abort_on_failure": false,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -49,8 +47,6 @@
     "name": "gclient setup"
   },
   {
-    "abort_on_failure": false,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -65,8 +61,6 @@
     ]
   },
   {
-    "abort_on_failure": false,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -129,10 +123,6 @@
       "[SLAVE_BUILD]"
     ],
     "name": "rmcontents slave build directory",
-    "seed_steps": [
-      "rmcontents slave build directory",
-      "gclient setup (2)"
-    ],
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -158,7 +148,6 @@
     "name": "gclient setup (2)"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -226,8 +215,6 @@
     "name": "gclient runhooks"
   },
   {
-    "abort_on_failure": true,
-    "can_fail_build": true,
     "cmd": [
       "python",
       "-u",
@@ -254,7 +241,6 @@
     "name": "compile"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",

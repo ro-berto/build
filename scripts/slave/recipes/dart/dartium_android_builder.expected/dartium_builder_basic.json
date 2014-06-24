@@ -62,7 +62,6 @@
     "name": "gclient setup"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -156,7 +155,6 @@
     "name": "gclient runhooks"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -180,7 +178,6 @@
     "name": "compile"
   },
   {
-    "always_run": true,
     "cmd": [
       "rm",
       "-rf"

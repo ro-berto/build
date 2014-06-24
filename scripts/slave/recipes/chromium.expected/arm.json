@@ -121,7 +121,6 @@
     "name": "cleanup_temp"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -136,12 +135,7 @@
       "browser_tests",
       "browser_tests_run"
     ],
-    "name": "compile",
-    "seed_steps": [
-      "compile",
-      "checkdeps",
-      "find isolated tests"
-    ]
+    "name": "compile"
   },
   {
     "cmd": [
@@ -158,7 +152,6 @@
     ]
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",

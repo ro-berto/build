@@ -39,7 +39,6 @@
     "name": "gclient setup"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -116,7 +115,6 @@
     "name": "cleanup_temp"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -134,11 +132,7 @@
       "--",
       "android_builder_chromium_webrtc"
     ],
-    "name": "compile",
-    "seed_steps": [
-      "compile",
-      "package build"
-    ]
+    "name": "compile"
   },
   {
     "cmd": [

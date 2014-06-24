@@ -99,7 +99,6 @@
     "name": "cleanup_temp"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -116,11 +115,7 @@
       "-sdk",
       "iphoneos7.0"
     ],
-    "name": "compile",
-    "seed_steps": [
-      "compile",
-      "checkdeps"
-    ]
+    "name": "compile"
   },
   {
     "cmd": [

@@ -95,8 +95,6 @@
     "name": "gn"
   },
   {
-    "abort_on_failure": false,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",

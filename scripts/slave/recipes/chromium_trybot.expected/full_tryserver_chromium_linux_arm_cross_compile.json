@@ -131,7 +131,6 @@
     "name": "gclient runhooks"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -155,7 +154,6 @@
     "name": "compile (with patch)"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",

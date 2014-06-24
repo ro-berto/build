@@ -100,7 +100,6 @@
     "name": "cleanup_temp"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -114,11 +113,7 @@
       "--",
       "All"
     ],
-    "name": "compile",
-    "seed_steps": [
-      "compile",
-      "checkdeps"
-    ]
+    "name": "compile"
   },
   {
     "cmd": [

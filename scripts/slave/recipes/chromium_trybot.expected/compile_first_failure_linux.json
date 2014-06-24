@@ -124,7 +124,6 @@
     "name": "gclient runhooks"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -151,5 +150,10 @@
       "step returned non-zero exit code: 1",
       "@@@STEP_FAILURE@@@"
     ]
+  },
+  {
+    "name": "$final_result",
+    "reason": "Step('compile (with patch)') failed with return_code 1",
+    "status_code": 1
   }
 ]

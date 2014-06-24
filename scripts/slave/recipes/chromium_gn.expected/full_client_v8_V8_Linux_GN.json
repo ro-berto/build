@@ -1,6 +1,5 @@
 [
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -12,7 +11,6 @@
     "name": "gclient setup"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -90,7 +88,6 @@
     "name": "gn"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",

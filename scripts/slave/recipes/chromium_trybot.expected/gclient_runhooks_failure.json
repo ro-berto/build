@@ -128,27 +128,8 @@
     ]
   },
   {
-    "abort_on_failure": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]\\scripts\\slave\\compile.py",
-      "--target",
-      "Release",
-      "--src-dir",
-      "[SLAVE_BUILD]\\src",
-      "--build-tool",
-      "ninja",
-      "--compiler",
-      "goma",
-      "--goma-dir",
-      "[BUILD]\\goma",
-      "--",
-      "base_unittests",
-      "browser_tests",
-      "chrome"
-    ],
-    "name": "compile (with patch)",
-    "skip": true
+    "name": "$final_result",
+    "reason": "Step('gclient runhooks') failed with return_code 1",
+    "status_code": 1
   }
 ]

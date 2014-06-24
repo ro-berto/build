@@ -11,7 +11,6 @@
     "name": "gclient setup"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -78,7 +77,6 @@
     ]
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -103,14 +101,9 @@
       "out/Release/d8"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Static-Initializers",
-    "seed_steps": [
-      "Static-Initializers",
-      "Check"
-    ]
+    "name": "Static-Initializers"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -130,8 +123,6 @@
     "name": "Check"
   },
   {
-    "always_run": true,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -151,7 +142,6 @@
     "name": "Check - flaky"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -173,8 +163,6 @@
     "name": "OptimizeForSize"
   },
   {
-    "always_run": true,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -196,7 +184,6 @@
     "name": "OptimizeForSize - flaky"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -216,8 +203,6 @@
     "name": "Webkit"
   },
   {
-    "always_run": true,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -237,7 +222,6 @@
     "name": "Webkit - flaky"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -255,7 +239,6 @@
     "name": "Test262"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",

@@ -93,8 +93,6 @@
     "name": "gn"
   },
   {
-    "abort_on_failure": false,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -212,7 +210,6 @@
     "name": "gn (2)"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",

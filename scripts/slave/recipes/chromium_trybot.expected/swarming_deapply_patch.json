@@ -124,7 +124,6 @@
     ]
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -148,7 +147,6 @@
     "name": "compile (with patch)"
   },
   {
-    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -170,7 +168,6 @@
   },
   {
     "allow_subannotations": true,
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -191,15 +188,10 @@
       "[SLAVE_BUILD]/src/tools/telemetry/run_tests",
       "--browser=release"
     ],
-    "name": "telemetry_unittests",
-    "seed_steps": [
-      "telemetry_unittests",
-      "telemetry_perf_unittests"
-    ]
+    "name": "telemetry_unittests"
   },
   {
     "allow_subannotations": true,
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -223,7 +215,6 @@
     "name": "telemetry_perf_unittests"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -249,7 +240,6 @@
     "name": "[trigger] base_unittests (with patch)"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -275,8 +265,6 @@
     "name": "[trigger] browser_tests (with patch)"
   },
   {
-    "always_run": true,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -291,8 +279,6 @@
     ]
   },
   {
-    "always_run": true,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -309,8 +295,6 @@
     ]
   },
   {
-    "always_run": true,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -327,7 +311,6 @@
     ]
   },
   {
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -341,10 +324,6 @@
       "/path/to/tmp/json"
     ],
     "name": "deps2git (with patch)",
-    "seed_steps": [
-      "deps2git (with patch)",
-      "deps2submodules"
-    ],
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[]@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -361,7 +340,6 @@
     "name": "deps2submodules"
   },
   {
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -379,8 +357,6 @@
   },
   {
     "allow_subannotations": true,
-    "always_run": true,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -410,8 +386,6 @@
   },
   {
     "allow_subannotations": true,
-    "always_run": true,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -435,7 +409,6 @@
     "name": "[swarming] browser_tests (with patch)"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -487,7 +460,6 @@
     ]
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -500,9 +472,6 @@
     "name": "gclient runhooks (2)"
   },
   {
-    "abort_on_failure": false,
-    "always_run": true,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -523,8 +492,6 @@
     "name": "compile (without patch)"
   },
   {
-    "abort_on_failure": true,
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -544,7 +511,6 @@
     ]
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -572,8 +538,6 @@
   },
   {
     "allow_subannotations": true,
-    "always_run": true,
-    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -597,7 +561,6 @@
     "name": "[swarming] base_unittests (without patch)"
   },
   {
-    "always_run": true,
     "cmd": [
       "python",
       "-u",
