@@ -174,7 +174,6 @@
       "--builder-name=Linux Tests",
       "--slave-name=TestSlavename",
       "--build-number=571",
-      "--parallel",
       "base_unittests"
     ],
     "name": "base_unittests"
@@ -201,7 +200,6 @@
       "--builder-name=Linux Tests",
       "--slave-name=TestSlavename",
       "--build-number=571",
-      "--parallel",
       "browser_tests",
       "--test-launcher-shard-index=0",
       "--test-launcher-total-shards=2"

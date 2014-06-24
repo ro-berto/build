@@ -207,7 +207,6 @@
       "--builder-name=Win7 Tests (1)",
       "--slave-name=TestSlavename",
       "--build-number=571",
-      "--parallel",
       "aura_unittests.exe"
     ],
     "name": "aura_unittests"
@@ -233,7 +232,6 @@
       "--builder-name=Win7 Tests (1)",
       "--slave-name=TestSlavename",
       "--build-number=571",
-      "--parallel",
       "browser_tests.exe",
       "--test-launcher-shard-index=0",
       "--test-launcher-total-shards=2"

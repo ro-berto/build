@@ -169,7 +169,6 @@
       "--builder-name=Chromium Linux MSan",
       "--slave-name=TestSlavename",
       "--build-number=571",
-      "--parallel",
       "--enable-msan",
       "base_unittests"
     ],

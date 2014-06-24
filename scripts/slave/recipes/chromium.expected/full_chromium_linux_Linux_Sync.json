@@ -157,7 +157,6 @@
       "--builder-name=Linux Sync",
       "--slave-name=TestSlavename",
       "--build-number=571",
-      "--parallel",
       "sync_integration_tests",
       "--ui-test-action-max-timeout=120000"
     ],

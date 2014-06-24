@@ -194,7 +194,6 @@
       "--builder-name=Win7 Sync x64",
       "--slave-name=TestSlavename",
       "--build-number=571",
-      "--parallel",
       "sync_integration_tests.exe",
       "--ui-test-action-max-timeout=120000"
     ],

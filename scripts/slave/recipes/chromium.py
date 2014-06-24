@@ -80,7 +80,6 @@ class GTestTest(object):
                                 args=self.args,
                                 annotate='gtest',
                                 xvfb=True,
-                                parallel=True,
                                 flakiness_dash=self.flakiness_dash)
 
   def compile_targets(self, api):
@@ -118,7 +117,7 @@ class DynamicGTestTests(object):
                      '--test-launcher-total-shards=%d' % test['total_shards']])
       steps.append(api.chromium.runtest(
           test['test'], test_type=test['test'], args=args, annotate='gtest',
-          xvfb=True, parallel=True, flakiness_dash=self.flakiness_dash))
+          xvfb=True, flakiness_dash=self.flakiness_dash))
 
     return steps
 
