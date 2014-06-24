@@ -94,7 +94,7 @@
       "-I",
       "https://isolateserver.appspot.com",
       "--",
-      "--gtest-filter=\"*NaCl*\""
+      "--gtest_filter=\"*NaCl*\""
     ],
     "name": "browser_tests"
   }
