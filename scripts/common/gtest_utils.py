@@ -408,7 +408,7 @@ class GTestLogParser(object):
 class GTestJSONParser(object):
   # Limit of output snippet lines. Avoids flooding the logs with amount
   # of output that gums up the infrastructure.
-  OUTPUT_SNIPPET_LINES_LIMIT = 50
+  OUTPUT_SNIPPET_LINES_LIMIT = 5000
 
   def __init__(self):
     self.json_file_path = None
