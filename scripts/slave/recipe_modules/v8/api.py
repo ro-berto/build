@@ -542,8 +542,6 @@ class V8Api(recipe_api.RecipeApi):
       step_test_data = lambda: self.test_api.perf_json(
           self._test_data.get('perf_failures', False))
 
-      # TODO(machenbach): Remove 'can_fail_build' as soon as performance tests
-      # are stable.
       yield self.m.python(
         name,
         self.m.path['checkout'].join('tools', 'run_benchmarks.py'),
@@ -552,7 +550,6 @@ class V8Api(recipe_api.RecipeApi):
         followup_fn=followup_fn,
         step_test_data=step_test_data,
         always_run=True,
-        can_fail_build=False
       )
 
     def mean(values):
