@@ -27,10 +27,12 @@ def GenSteps(api):
   if api.platform.is_win:
     yield api.chromium.taskkill()
 
-  if api.tryserver.is_tryserver:
-    yield v8.tryserver_checkout()
-  else:
-    yield v8.checkout()
+  # On the branch builders, the gclient solution changes on every milestone.
+  # If the sync fails, we nuke the build dir.
+  yield v8.checkout(
+      may_nuke=(api.tryserver.is_tryserver
+                or api.properties.get('mastername') == 'client.v8.branches'),
+      revert=api.tryserver.is_tryserver)
 
   if api.tryserver.is_tryserver:
     yield api.tryserver.maybe_apply_issue()
@@ -97,6 +99,15 @@ def GenTests(api):
                              revision=None) +
     api.platform('win', 32) +
     api.step_data('compile (with patch)', retcode=1)
+  )
+
+  yield (
+    api.test('branch_sync_failure') +
+    api.properties.tryserver(mastername='client.v8.branches',
+                             buildername='V8 Linux - trunk',
+                             revision='20123') +
+    api.platform('linux', 32) +
+    api.step_data('gclient sync', retcode=1)
   )
 
   mastername = 'client.v8'

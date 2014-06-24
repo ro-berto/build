@@ -197,22 +197,24 @@ class V8Api(recipe_api.RecipeApi):
   def has_failed_steps(self):
     return any(s.retcode != 0 for s in self.m.step_history.values())
 
-  def checkout(self):
-    yield self.m.gclient.checkout()
+  def checkout(self, may_nuke=False, revert=False):
+    if may_nuke:
+      yield self.m.gclient.checkout(revert=revert,
+                                    can_fail_build=False,
+                                    abort_on_failure=False)
+      if self.has_failed_steps():
+        # TODO(phajdan.jr): Remove the workaround, http://crbug.com/357767 .
+        yield (
+            self.m.path.rmcontents('slave build directory',
+                                   self.m.path['slave_build']),
+            self.m.gclient.checkout(),
+          )
+    else:
+      yield self.m.gclient.checkout()
+
     # Whatever step is run right before this line needs to emit got_revision.
     update_step = self.m.step_history.last_step()
     self.revision = update_step.presentation.properties['got_revision']
-
-  def tryserver_checkout(self):
-    yield self.m.gclient.checkout(
-        revert=True, can_fail_build=False, abort_on_failure=False)
-    if self.has_failed_steps():
-      # TODO(phajdan.jr): Remove the workaround, http://crbug.com/357767 .
-      yield (
-          self.m.path.rmcontents('slave build directory',
-                                 self.m.path['slave_build']),
-          self.m.gclient.checkout(),
-        )
 
   def runhooks(self, **kwargs):
     return self.m.chromium.runhooks(**kwargs)
@@ -234,7 +236,7 @@ class V8Api(recipe_api.RecipeApi):
   def tryserver_lkgr_fallback(self):
     self.m.gclient.apply_config('v8_lkgr')
     yield (
-      self.tryserver_checkout(),
+      self.checkout(True, True),
       self.m.tryserver.maybe_apply_issue(),
       self.runhooks(),
     )
