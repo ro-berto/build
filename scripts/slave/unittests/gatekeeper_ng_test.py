@@ -787,6 +787,59 @@ class GatekeeperTest(unittest.TestCase):
         'buildbot %(result)s in %(project_name)s on %(builder_name)s, '
         'revision %(revision)s'))
 
+  def testDefaultStatusTemplate(self):
+    """Test that the status template is set by default."""
+    sys.argv.extend([m.url for m in self.masters])
+    sys.argv.extend(['--no-email-app', '--set-status',
+                     '--password-file', self.status_secret_file,
+                     '--revision-properties', 'revision,got_webkit_revision'])
+
+    self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
+    self.add_gatekeeper_section(self.masters[0].url,
+                                self.masters[0].builders[0].name,
+                                {'closing_steps': ['step1']})
+
+    self.call_gatekeeper()
+    gatekeeper_data = urlparse.parse_qs(self.url_calls[-1]['params'])
+    msg = ['Tree is closed (Automatic: "step1" on "mybuilder" '
+           'a_committer@chromium.org)']
+    self.assertEquals(gatekeeper_data['message'], msg)
+
+  def testStatusTemplate(self):
+    """Test that the status template can be set.
+
+    Also checks that revisions set in --revision-properties are set as template
+    variables.
+    """
+    sys.argv.extend([m.url for m in self.masters])
+    sys.argv.extend(['--no-email-app', '--set-status',
+                     '--password-file', self.status_secret_file,
+                     '--revision-properties', 'revision,got_webkit_revision'])
+
+    template = ('Tree is radioactively melting due to %(unsatisfied)s on '
+        '%(builder_name)s %(blamelist)s %(build_url)s %(project_name)s '
+        '%(revision)s %(got_webkit_revision)s')
+
+    self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
+    self.add_gatekeeper_section(self.masters[0].url,
+                                self.masters[0].builders[0].name,
+                                {'closing_steps': ['step1'],
+                                 'status_template': template})
+
+    self.call_gatekeeper()
+    gatekeeper_data = urlparse.parse_qs(self.url_calls[-1]['params'])
+    msg = template % {
+      'blamelist': 'a_committer@chromium.org',
+      'build_url': ('http://build.chromium.org/p/chromium.fyi/'
+                    'builders/mybuilder/builds/1'),
+      'builder_name': 'mybuilder',
+      'got_webkit_revision': 100,
+      'project_name': 'Chromium FYI',
+      'revision': 72453,
+      'unsatisfied': 'step1',
+    }
+    self.assertEquals(gatekeeper_data['message'], [msg])
+
 
   def testEmailJson(self):
     """Test that the email json is formatted correctly."""

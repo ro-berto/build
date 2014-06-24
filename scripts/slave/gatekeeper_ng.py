@@ -99,9 +99,11 @@ def check_builds(master_builds, master_jsons, gatekeeper_config):
       )
       tree_notify = set(gatekeeper.get('tree_notify', []))
       sheriff_classes = set(gatekeeper.get('sheriff_classes', []))
-      subject_template = gatekeeper.get('subject_template',
-                                        gatekeeper_ng_config.DEFAULTS[
-                                            'subject_template'])
+      status_template = gatekeeper.get(
+          'status_template', gatekeeper_ng_config.DEFAULTS['status_template'])
+      subject_template = gatekeeper.get(
+          'subject_template', gatekeeper_ng_config.DEFAULTS[
+             'subject_template'])
       finished = [s for s in steps if s.get('isFinished')]
       close_tree = gatekeeper.get('close_tree', True)
       respect_build_status = gatekeeper.get('respect_build_status', False)
@@ -144,6 +146,7 @@ def check_builds(master_builds, master_jsons, gatekeeper_config):
                                'project_name': project_name,
                                'sheriff_classes': sheriff_classes,
                                'subject_template': subject_template,
+                               'status_template': status_template,
                                'tree_notify': tree_notify,
                                'unsatisfied': unsatisfied_steps,
                               },
@@ -391,8 +394,17 @@ def open_tree_if_possible(failed_builds, username, password, status_url_root,
     logging.info('set-status not set, not connecting to chromium-status!')
 
 
+def generate_build_url(build):
+  """Creates a URL to reference the build."""
+  return '%s/builders/%s/builds/%d' % (
+      build['base_url'].rstrip('/'),
+      build['build']['builderName'],
+      build['build']['number']
+  )
+
+
 def close_tree_if_necessary(failed_builds, username, password, status_url_root,
-                            set_status):
+                            set_status, revision_properties):
   """Given a list of failed builds, close the tree if necessary."""
 
   closing_builds = [b for b in failed_builds if b['close_tree']]
@@ -408,13 +420,19 @@ def close_tree_if_necessary(failed_builds, username, password, status_url_root,
   logging.info('%d failed builds found, closing the tree...' %
                len(closing_builds))
 
+  template_vars = {
+      'blamelist': ','.join(closing_builds[0]['build']['blame']),
+      'build_url': generate_build_url(closing_builds[0]),
+      'builder_name': closing_builds[0]['build']['builderName'],
+      'project_name': closing_builds[0]['project_name'],
+      'unsatisfied': ','.join(closing_builds[0]['unsatisfied']),
+  }
+
+  template_vars.update(get_build_properties(closing_builds[0]['build'],
+                                            revision_properties))
+
   # Close on first failure seen.
-  msg = 'Tree is closed (Automatic: "%(steps)s" on "%(builder)s" %(blame)s)'
-  tree_status = msg % {'steps': ','.join(closing_builds[0]['unsatisfied']),
-                       'builder': failed_builds[0]['build']['builderName'],
-                       'blame':
-                       ','.join(failed_builds[0]['build']['blame'])
-                      }
+  tree_status = closing_builds[0]['status_template'] % template_vars
 
   logging.info('closing the tree with message: \'%s\'' % tree_status)
   if set_status:
@@ -430,10 +448,7 @@ def notify_failures(failed_builds, sheriff_url, default_from_email,
   emails_to_send = []
   for failed_build in failed_builds:
     waterfall_url = failed_build['base_url'].rstrip('/')
-    build_url = '%s/builders/%s/builds/%d' % (
-        failed_build['base_url'].rstrip('/'),
-        failed_build['build']['builderName'],
-        failed_build['build']['number'])
+    build_url = generate_build_url(failed_build)
     project_name = failed_build['project_name']
     fromaddr = failed_build['build'].get('fromAddr', default_from_email)
 
@@ -671,7 +686,8 @@ def main():
   # 3. Rejects builds we've already warned about (and logs).
   new_failures = debounce_failures(failure_tuples, build_db)
   close_tree_if_necessary(new_failures, options.status_user, options.password,
-                          options.status_url, options.set_status)
+                          options.status_url, options.set_status,
+                          options.revision_properties.split(','))
   notify_failures(new_failures, options.sheriff_url, options.default_from_email,
                   options.email_app_url, options.email_app_secret,
                   options.email_domain, options.filter_domain,
