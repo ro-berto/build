@@ -270,7 +270,7 @@
     },
 
     "chromium_tree_closer":{
-      "status_template": "Tree is closed (Automatic: \"%(unsatisfied)s\" on %(build_url)s \"%(builder_name)s\" from: %(revision)s: %(blamelist)s)"
+      "status_template": "Tree is closed (Automatic: \"%(unsatisfied)s\" on %(build_url)s \"%(builder_name)s\" from %(revision)s: %(blamelist)s)"
     },
 
     "chromium_windows": {
