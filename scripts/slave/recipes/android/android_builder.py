@@ -33,6 +33,20 @@ BUILDERS = {
       },
     }
   },
+  'chromium.perf.fyi': {
+    'android_oilpan_builder': {
+      'recipe_config': 'oilpan_builder',
+      'kwargs': {
+        'REPO_URL': 'https://chromium.googlesource.com/chromium/src.git',
+        'BUILD_CONFIG': 'Release',
+      },
+      'upload': {
+        'bucket': 'chromium-android',
+        'path': lambda api: ('android_oilpan_builder/full-build-linux_%s.zip'
+                             % api.properties['buildnumber']),
+      }
+    }
+  }
 }
 
 def GenSteps(api):
@@ -47,6 +61,7 @@ def GenSteps(api):
     'REPO_NAME': 'src',
     'BUILD_CONFIG': 'Debug'
   }
+  default_kwargs.update(bot_config.get('kwargs', {}))
   droid.configure_from_properties(bot_config['recipe_config'], **default_kwargs)
   droid.c.set_val({'deps_file': 'DEPS'})
 

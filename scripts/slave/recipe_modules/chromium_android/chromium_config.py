@@ -146,3 +146,8 @@ def coverage_builder_tests(c):
   gyp_defs = c.gyp_env.GYP_DEFINES
   gyp_defs['emma_coverage'] = 1
   gyp_defs['emma_filter'] = 'com.google.android.apps.chrome.*'
+
+@CONFIG_CTX(includes=['main_builder'])
+def oilpan_builder(c):
+  gyp_defs = c.gyp_env.GYP_DEFINES
+  gyp_defs['enable_oilpan'] = 1

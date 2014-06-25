@@ -174,3 +174,7 @@ def x86_try_instrumentation_tests(c):
 @config_ctx(includes=['main_builder'])
 def coverage_builder_tests(c):
   pass
+
+@config_ctx()
+def oilpan_builder(c):
+  pass

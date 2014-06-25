@@ -172,6 +172,7 @@ ENABLED_MASTERS = [
     'client.drmemory',
     'client.nacl.sdk.mono',
     'tryserver.chromium',
+    'chromium.perf.fyi',
 ]
 ENABLED_MASTERS += internal_data.get('ENABLED_MASTERS', [])
 
