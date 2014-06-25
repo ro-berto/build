@@ -1756,6 +1756,24 @@ BUILDERS = {
       },
     },
   },
+  'client.v8': {
+    'settings': {
+      'build_gs_bucket': 'chromium-v8',
+    },
+    'builders': {
+      'Linux Debug Builder': {
+        'recipe_config': 'chromium_v8',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+    },
+  },
 }
 
 
@@ -1805,6 +1823,16 @@ RECIPE_CONFIGS = {
   'chromium_no_goma': {
     'chromium_config': 'chromium_no_goma',
     'gclient_config': 'chromium',
+  },
+  'chromium_v8': {
+    'chromium_config': 'chromium',
+    'gclient_config': 'chromium',
+    # TODO(machenbach): Use revision property.
+    'gclient_apply_config': [
+      'v8_bleeding_edge',
+      'chromium_lkcr',
+      'show_v8_revision',
+    ],
   },
   'official': {
     'chromium_config': 'chromium_official',
