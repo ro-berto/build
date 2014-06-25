@@ -284,6 +284,24 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
 ####### Category: Windows
+      'V8 Win32 - builder': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'build_gs_archive': 'win32_rel_archive',
+        'testing': {'platform': 'win'},
+      },
+      'V8 Win32 - debug builder': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'build_gs_archive': 'win32_dbg_archive',
+        'testing': {'platform': 'win'},
+      },
       'V8 Win32 - 1': {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -713,6 +731,16 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'tests': ['deopt'],
         'testing': {'platform': 'linux'},
+      },
+      'V8 Win32 - full debug builder': {
+        'chromium_apply_config': ['no_optimized_debug'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'build_gs_archive': 'win32_dbg_archive',
+        'testing': {'platform': 'win'},
       },
       'V8 Mac - full debug': {
         'chromium_apply_config': ['no_optimized_debug'],
