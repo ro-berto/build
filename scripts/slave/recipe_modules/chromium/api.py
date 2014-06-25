@@ -309,10 +309,10 @@ class ChromiumApi(recipe_api.RecipeApi):
         python_mode=True,
         xvfb=True)
 
-  def runhooks(self, run_gyp=True, **kwargs):
+  def runhooks(self, **kwargs):
     """Run the build-configuration hooks for chromium."""
     env = kwargs.get('env', {})
-    if run_gyp:
+    if self.c.project_generator.tool == 'gyp':
       env.update(self.c.gyp_env.as_jsonish())
     else:
       env['GYP_CHROMIUM_NO_ACTION'] = 1
@@ -329,6 +329,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       gn_args.append('os="android"')
     if self.c.TARGET_ARCH == 'arm':
       gn_args.append('cpu_arch="arm"')
+    gn_args.extend(self.c.project_generator.args)
 
     return self.m.python(
         name='gn',

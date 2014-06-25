@@ -20,6 +20,7 @@ TARGET_ARCHS = HOST_ARCHS + ('arm', 'mipsel')
 BUILD_CONFIGS = ('Release', 'Debug')
 MEMORY_TOOLS = ('memcheck', 'tsan', 'tsan_rv', 'drmemory_full',
                 'drmemory_light')
+PROJECT_GENERATORS = ('gyp', 'gn')
 
 def check(val, potentials):
   assert val in potentials
@@ -48,6 +49,10 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       GYP_GENERATORS = Set(basestring, ','.join),
       GYP_GENERATOR_FLAGS = Dict(equal_fn, ' '.join, (basestring,int)),
       GYP_USE_SEPARATE_MSPDBSRV = Single(int, jsonish_fn=str, required=False),
+    ),
+    project_generator = ConfigGroup(
+      tool = Single(basestring, empty_val='gyp'),
+      args = Set(basestring),
     ),
     build_dir = Single(Path),
     runtests = ConfigGroup(
@@ -144,6 +149,11 @@ def BASE(c):
                                         platform_ext={'win': '.bat',
                                                       'mac': '.sh',
                                                       'linux': '.sh'})
+
+  if c.project_generator.tool not in PROJECT_GENERATORS:  # pragma: no cover
+    raise BadConf('"%s" is not a supported project generator tool, the '
+                  'supported ones are: %s' % (c.project_generator.tool,
+                                              ','.join(PROJECT_GENERATORS)))
   gyp_arch = {
     ('intel', 32): 'ia32',
     ('intel', 64): 'x64',
@@ -161,6 +171,10 @@ def BASE(c):
     shared_library(c, final=False)
   else:  # pragma: no cover
     raise BadConf('Unknown build config "%s"' % c.BUILD_CONFIG)
+
+@config_ctx()
+def gn(c):
+  c.project_generator.tool = 'gn'
 
 @config_ctx(group='builder')
 def ninja(c):

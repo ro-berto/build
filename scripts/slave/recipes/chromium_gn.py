@@ -138,6 +138,7 @@ def GenSteps(api):
 
   api.chromium.set_config('chromium',
                           **bot_config.get('chromium_config_kwargs', {}))
+  api.chromium.apply_config('gn')
 
   # Note that we have to call gclient.set_config() and apply_config() *after*
   # calling chromium.set_config(), above, because otherwise the chromium
@@ -162,7 +163,7 @@ def GenSteps(api):
   else:
     yield api.bot_update.ensure_checkout(force=True)
 
-  yield api.chromium.runhooks(run_gyp=False)
+  yield api.chromium.runhooks()
 
   yield api.chromium.run_gn()
 
@@ -173,7 +174,7 @@ def GenSteps(api):
       api.gclient.set_config('chromium_lkcr')
 
       yield api.bot_update.ensure_checkout(force=True, suffix='lkcr')
-      yield api.chromium.runhooks(run_gyp=False)
+      yield api.chromium.runhooks()
       yield api.chromium.run_gn()
       yield api.chromium.compile(targets=['all'], force_clobber=True)
   else:
