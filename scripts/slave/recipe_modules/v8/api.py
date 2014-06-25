@@ -595,6 +595,7 @@ class V8Api(recipe_api.RecipeApi):
         p['units'] = trace['units']
         p['bot'] = category or p['bot']
         p['supplemental_columns'] = {'a_default_rev': 'r_v8_rev'}
+        p['supplemental_columns'] = {'r_v8_rev': self.revision}
         points.append(p)
 
     # Send all perf data to the perf dashboard in one step.
