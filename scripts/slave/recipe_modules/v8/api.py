@@ -96,6 +96,16 @@ class V8Fuzzer(object):
     pass
 
 
+class V8DeoptFuzzer(object):
+  @staticmethod
+  def run(api, **kwargs):
+    return api.deopt_fuzz()
+
+  @staticmethod
+  def gclient_apply_config(_):
+    pass
+
+
 class V8GCMole(object):
   @staticmethod
   def run(api, **kwargs):
@@ -117,6 +127,7 @@ class V8SimpleLeakCheck(object):
 
 
 V8_NON_STANDARD_TESTS = {
+  'deopt': V8DeoptFuzzer,
   'fuzz': V8Fuzzer,
   'gcmole': V8GCMole,
   'presubmit': V8Presubmit,
@@ -368,6 +379,24 @@ class V8Api(recipe_api.RecipeApi):
       'Simple Leak Check',
       ['valgrind', '--leak-check=full', '--show-reachable=yes',
        '--num-callers=20', relative_d8_path, '-e', '"print(1+2)"'],
+      cwd=self.m.path['checkout'],
+    )
+
+  def deopt_fuzz(self):
+    full_args = [
+      '--mode', self.m.chromium.c.build_config_fs,
+      '--arch', self.m.chromium.c.gyp_env.GYP_DEFINES['v8_target_arch'],
+      '--progress', 'verbose',
+      '--buildbot',
+    ]
+
+    # Add builder-specific test arguments.
+    full_args += self.c.testing.test_args
+
+    yield self.m.python(
+      'Deopt Fuzz',
+      self.m.path['checkout'].join('tools', 'run-deopt-fuzzer.py'),
+      full_args,
       cwd=self.m.path['checkout'],
     )
 

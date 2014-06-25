@@ -560,6 +560,18 @@ BUILDERS = {
         'tests': ['fuzz'],
         'testing': {'platform': 'linux'},
       },
+      'V8 Deopt Fuzzer': {
+        'v8_apply_config': ['deopt_fuzz_normal'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux - builder',
+        'build_gs_archive': 'linux_rel_archive',
+        'tests': ['deopt'],
+        'testing': {'platform': 'linux'},
+      },
       'V8 GC Stress - 1': {
         'v8_apply_config': ['gc_stress'],
         'v8_config_kwargs': {
@@ -690,6 +702,16 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'build_gs_archive': 'linux_dbg_archive',
+        'testing': {'platform': 'linux'},
+      },
+      ' V8 Random Deopt Fuzzer - debug': {
+        'v8_apply_config': ['deopt_fuzz_random'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['deopt'],
         'testing': {'platform': 'linux'},
       },
       'V8 Mac - full debug': {
