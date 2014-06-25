@@ -22,6 +22,7 @@ import StringIO
 import sys
 import tempfile
 import unittest
+import urllib
 import urllib2
 import urlparse
 
@@ -184,7 +185,7 @@ class GatekeeperTest(unittest.TestCase):
                                  'title': master.title}}
 
       for builder in master.builders:
-        builder_url = master.url + '/builders/%s' % builder.name
+        builder_url = master.url + '/builders/%s' % urllib.quote(builder.name)
         builder_json = {'cachedBuilds': [],
                         'currentBuilds': []}
 
@@ -225,7 +226,7 @@ class GatekeeperTest(unittest.TestCase):
             builder_json['currentBuilds'].append(build.number)
 
           build_json_url = master.url + '/json/builders/%s/builds/%d' % (
-              builder.name, build.number)
+              urllib.quote(builder.name), build.number)
 
           self.handle_url_json(build_json_url, build_json)
 
@@ -820,19 +821,31 @@ class GatekeeperTest(unittest.TestCase):
         '%(builder_name)s %(blamelist)s %(build_url)s %(project_name)s '
         '%(revision)s %(got_webkit_revision)s')
 
-    self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
+    new_build = self.create_generic_build(1, ['a_committer@chromium.org'])
+    new_builder = Builder('my builder', [new_build])
+    self.masters[0].builders.append(new_builder)
+
+    self.masters[0].builders[1].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
-                                self.masters[0].builders[0].name,
+                                self.masters[0].builders[1].name,
                                 {'closing_steps': ['step1'],
                                  'status_template': template})
 
-    self.call_gatekeeper()
+    build_db = build_scan_db.gen_db(masters={
+        self.masters[0].url: {
+            'my builder': {
+                0: build_scan_db.gen_build(finished=True)
+            }
+        }
+    })
+
+    self.call_gatekeeper(build_db=build_db)
     gatekeeper_data = urlparse.parse_qs(self.url_calls[-1]['params'])
     msg = template % {
       'blamelist': 'a_committer@chromium.org',
       'build_url': ('http://build.chromium.org/p/chromium.fyi/'
-                    'builders/mybuilder/builds/1'),
-      'builder_name': 'mybuilder',
+                    'builders/my%20builder/builds/1'),
+      'builder_name': 'my builder',
       'got_webkit_revision': 100,
       'project_name': 'Chromium FYI',
       'revision': 72453,

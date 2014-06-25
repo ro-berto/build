@@ -398,7 +398,7 @@ def generate_build_url(build):
   """Creates a URL to reference the build."""
   return '%s/builders/%s/builds/%d' % (
       build['base_url'].rstrip('/'),
-      build['build']['builderName'],
+      urllib.quote(build['build']['builderName']),
       build['build']['number']
   )
 
