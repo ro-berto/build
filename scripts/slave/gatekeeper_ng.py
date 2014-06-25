@@ -475,7 +475,12 @@ def notify_failures(failed_builds, sheriff_url, default_from_email,
     for field in ['builderName', 'number', 'reason']:
       build_data[field] = failed_build['build'][field]
 
-    build_data['result'] = failed_build['build'].get('results', 0)
+    # The default value here is 2. In the case of failing on an unfinished
+    # build, the build won't have a result yet. As of now, chromium-build treats
+    # anything as 'not failure' as warning. Since we can't get into
+    # notify_failures without a failure, it makes sense to have the default
+    # value be failure (2) here.
+    build_data['result'] = failed_build['build'].get('results', 2)
     build_data['blamelist'] = failed_build['build']['blame']
     build_data['changes'] = failed_build['build'].get('sourceStamp', {}).get(
         'changes', [])

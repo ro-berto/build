@@ -1763,7 +1763,7 @@ class GatekeeperTest(unittest.TestCase):
     urls = self.call_gatekeeper(build_db)
     self.assertEquals(urls.count(self.set_status_url), 1)
 
-    self.assertEquals(urls[-1], self.mailer_url)
+    self.assertEquals(urls[-2], self.mailer_url)
     self.assertEquals(urls[-1], self.mailer_url)
     mailer_data = GatekeeperTest.decode_param_json(
         self.url_calls[-2]['params'])
@@ -1799,19 +1799,26 @@ class GatekeeperTest(unittest.TestCase):
     """Test that a still-running build can close the tree."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--no-email-app', '--set-status',
+                     '--email-app-secret-file=%s' % self.email_secret_file,
+                     '--set-status',
                      '--password-file', self.status_secret_file])
 
-    self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
                                 {'closing_steps': ['step1']})
     mybuild = self.create_generic_build(2, ['a_second_committer@chromium.org'])
     mybuild.finished = False
+    mybuild.steps[1].results = [2, None]
     self.masters[0].builders[0].builds.append(mybuild)
 
     urls = self.call_gatekeeper()
     self.assertIn(self.set_status_url, urls)
+    self.assertIn(self.mailer_url, urls)
+    for call in self.url_calls:
+      if call['url'] == self.mailer_url:
+        mailer_data = GatekeeperTest.decode_param_json(
+            call['params'])
+        self.assertEquals(mailer_data['result'], 2)
 
   def testUpdateBuildDBNotCompletedButFailed(self):
     """Test that partial builds increment the DB if they failed."""
