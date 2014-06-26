@@ -46,6 +46,9 @@ def GenSteps(api):
                         **bot_config.get('webrtc_config_kwargs', {}))
   api.chromium.set_config(recipe_config['chromium_config'],
                           **bot_config.get('chromium_config_kwargs', {}))
+  for c in recipe_config.get('chromium_apply_config', []):
+    api.chromium.apply_config(c)
+
   api.gclient.set_config(recipe_config['gclient_config'], GIT_MODE=use_git)
   for c in recipe_config.get('gclient_apply_config', []):
     api.gclient.apply_config(c)
@@ -84,7 +87,6 @@ def GenSteps(api):
   update_step = api.step_history.last_step()
   got_revision = update_step.presentation.properties['got_revision']
 
-
   if not bot_config.get('disable_runhooks'):
     yield api.chromium.runhooks()
 
@@ -94,12 +96,17 @@ def GenSteps(api):
   steps = []
 
   if bot_type in ('builder', 'builder_tester'):
+    run_gn = api.chromium.c.project_generator.tool == 'gn'
+    if run_gn:
+      steps.append(api.chromium.run_gn())
+
     compile_targets = recipe_config.get('compile_targets', [])
     steps.append(api.chromium.compile(targets=compile_targets))
-    if mastername == 'chromium.webrtc.fyi':
+
+    if mastername == 'chromium.webrtc.fyi' and not run_gn:
       steps.append(api.webrtc.sizes(got_revision))
 
-  if bot_type == 'builder':
+  if bot_type == 'builder' and bot_config.get('build_gs_archive'):
     steps.append(api.webrtc.package_build(
         api.webrtc.GS_ARCHIVES[bot_config['build_gs_archive']], got_revision))
 

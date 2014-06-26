@@ -92,3 +92,7 @@ def webrtc_ios(c):
   gyp_defs['OS'] = c.TARGET_PLATFORM
 
   c.compile_py.default_targets = ['All']
+
+@CONFIG_CTX(includes=['gn'])
+def webrtc_gn(c):
+  c.project_generator.args = ['build_with_chromium=false']

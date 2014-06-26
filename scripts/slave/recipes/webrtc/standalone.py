@@ -46,6 +46,7 @@ def GenSteps(api):
     api.chromium.apply_config('trybot_flavor')
 
   yield api.gclient.checkout()
+
   # Whatever step is run right before this line needs to emit got_revision.
   update_step = api.step_history.last_step()
   got_revision = update_step.presentation.properties['got_revision']
@@ -55,7 +56,12 @@ def GenSteps(api):
     steps.append(api.tryserver.maybe_apply_issue())
 
   steps.append(api.chromium.runhooks())
-  steps.append(api.chromium.compile())
+
+  if api.chromium.c.project_generator.tool == 'gn':
+    steps.append(api.chromium.run_gn())
+    steps.append(api.chromium.compile(targets=['all']))
+  else:
+    steps.append(api.chromium.compile())
 
   if api.chromium.c.gyp_env.GYP_DEFINES.get('syzyasan', 0) == 1:
     steps.append(api.chromium.apply_syzyasan())
