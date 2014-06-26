@@ -368,11 +368,21 @@ def submit_email(email_app, build_data, secret):
           code, response))
 
 
-def open_tree_if_possible(failed_builds, username, password, status_url_root,
-                          set_status):
+def open_tree_if_possible(build_db, master_jsons, failed_builds, username,
+    password, status_url_root, set_status):
   closing_builds = [b for b in failed_builds if b['close_tree']]
   if closing_builds:
+    logging.debug('Not opening tree because failing builds were detected.')
     return
+
+  for master_url, master in master_jsons.iteritems():
+    for builder in master['builders']:
+      for buildnum, build in build_db.masters[master_url][builder].iteritems():
+        if build.finished:
+          if not build.succeeded:
+            logging.debug('Not opening tree because previous build %s/%s/%s '
+                          'wasn\'t successful', master_url, builder, buildnum)
+            return
 
   status = get_tree_status(status_url_root)
   # Don't change the status unless the tree is currently closed.
@@ -672,8 +682,9 @@ def main():
   if options.open_tree:
     # failures are actually tuples, we only care about the build part.
     failing_builds = [b[0] for b in failure_tuples]
-    open_tree_if_possible(failing_builds, options.status_user, options.password,
-                          options.status_url, options.set_status)
+    open_tree_if_possible(build_db, master_jsons, failing_builds,
+        options.status_user, options.password, options.status_url,
+        options.set_status)
 
   if options.track_revisions:
     properties = options.revision_properties.split(',')

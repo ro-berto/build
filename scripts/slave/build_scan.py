@@ -136,6 +136,24 @@ def get_build_jsons(master_builds, processes):
   return builds
 
 
+def build_is_successful(build):
+  """Returns if a build was successful.
+
+  Success here is considered to be a status of SUCCESS or WARNINGS and all steps
+  are SUCCESS or WARNINGS. Unfinished builds can't be successful because they
+  haven't finished yet.
+  """
+  results = build.get('results')
+  if results == SUCCESS or results == WARNINGS:
+    for step in build.get('steps', []):
+      if step.get('isFinished'):
+        step_result = step.get('results', [None, []])[0]
+        if step_result != SUCCESS and step_result != WARNINGS:
+          return False
+    return True
+  return False
+
+
 def propagate_build_json_to_db(build_db, builds):
   """Propagates build status changes from build_json to build_db."""
   for build_json, master, builder, buildnum in builds:
@@ -145,6 +163,8 @@ def propagate_build_json_to_db(build_db, builds):
 
     if build_json.get('results', None) is not None:
       build = build._replace(finished=True)  # pylint: disable=W0212
+      if build_is_successful(build_json):
+        build = build._replace(succeeded=True)  # pylint: disable=W0212
 
     build_db.masters[master][builder][buildnum] = build
 

@@ -731,24 +731,52 @@ class GatekeeperTest(unittest.TestCase):
     urls = self.call_gatekeeper()
     self.assertNotIn(self.set_status_url, urls)
 
+  def testDontOpenTreeIfFailing(self):
+    """Test that we don't open the tree if the last completed build failed."""
+    sys.argv.extend([m.url for m in self.masters])
+    sys.argv.extend(['--skip-build-db-update',
+                     '--no-email-app', '--set-status',
+                     '--open-tree',
+                     '--password-file', self.status_secret_file])
+    self.add_gatekeeper_section(self.masters[0].url,
+        self.masters[0].builders[0].name, {})
+
+    # Open the tree if it was previously automatically closed.
+    # The default build_db marks the last successful build as failing.
+    self.handle_url_json(self.get_status_url, {
+      'message': 'closed (automatic)',
+      'general_state': 'closed',
+    })
+    urls = self.call_gatekeeper()
+    self.assertNotIn(self.set_status_url, urls)
+
   def testOpenTree(self):
+    """Test that we open the tree if no tracked failures."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
                      '--no-email-app', '--set-status',
                      '--open-tree',
                      '--password-file', self.status_secret_file])
 
-    self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
+    self.masters[0].builders[0].builds[0].finished = False
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step2']})
+                                {})
 
-    # Open the tree if it was previously automaticly closed.
+    build_db = build_scan_db.gen_db(masters={
+        self.masters[0].url: {
+            'my builder': {
+                0: build_scan_db.gen_build(finished=True, succeeded=True)
+            }
+        }
+    })
+
+    # Open the tree if it was previously automatically closed.
     self.handle_url_json(self.get_status_url, {
       'message': 'closed (automatic)',
       'general_state': 'closed',
     })
-    self.call_gatekeeper()
+    self.call_gatekeeper(build_db=build_db)
     self.assertEquals(self.url_calls[-1]['url'], self.set_status_url)
     status_data = urlparse.parse_qs(self.url_calls[-1]['params'])
     self.assertEquals(status_data['message'][0], "Tree is open (Automatic)")
@@ -758,7 +786,7 @@ class GatekeeperTest(unittest.TestCase):
       'message': 'closed, world is on fire',
       'general_state': 'closed',
     })
-    urls = self.call_gatekeeper()
+    urls = self.call_gatekeeper(build_db=build_db)
     self.assertNotIn(self.set_status_url, urls)
 
     # Only change the tree status if it's currently 'closed'
@@ -766,7 +794,7 @@ class GatekeeperTest(unittest.TestCase):
       'message': 'come on in, we\'re open',
       'general_state': 'open',
     })
-    urls = self.call_gatekeeper()
+    urls = self.call_gatekeeper(build_db=build_db)
     self.assertNotIn(self.set_status_url, urls)
 
   def testDefaultSubjectTemplate(self):
@@ -1968,7 +1996,8 @@ class GatekeeperTest(unittest.TestCase):
     _, finished_new_builds = self.process_build_db(
         self.masters[0].url, 'mybuilder')
     self.assertEquals(finished_new_builds,
-                      {2: build_scan_db.gen_build(finished=True)})
+                      {2: build_scan_db.gen_build(
+                        finished=True, succeeded=True)})
 
   def testOnlyFireOnNewFailures(self):
     """Test that the tree isn't closed if only an old test failed."""
