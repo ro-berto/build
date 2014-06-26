@@ -425,6 +425,17 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
 ####### Category: Arm
+      'V8 Arm - builder': {
+        'chromium_apply_config': ['arm_hard_float'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'build_gs_archive': 'arm_rel_archive',
+        'testing': {'platform': 'linux'},
+      },
 # TODO(machenbach): Enable i18n as soon as icu dynamically ensures the -m32
 # compilation option.
       'V8 Arm': {

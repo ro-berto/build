@@ -35,6 +35,13 @@ def v8(c):
 
 
 @CONFIG_CTX(includes=['v8'])
+def arm_hard_float(c):
+  c.compile_py.pass_arch_flag = True
+  c.compile_py.cross_tool = '/usr/bin/arm-linux-gnueabihf'
+  c.gyp_env.GYP_DEFINES['arm_float_abi'] = 'hard'
+
+
+@CONFIG_CTX(includes=['v8'])
 def interpreted_regexp(c):
   c.gyp_env.GYP_DEFINES['v8_interpreted_regexp'] = 1
 

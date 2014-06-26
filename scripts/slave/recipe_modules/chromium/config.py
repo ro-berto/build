@@ -35,6 +35,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
     compile_py = ConfigGroup(
       default_targets = Set(basestring),
       build_tool = Single(basestring),
+      cross_tool = Single(basestring, required=False),
       compiler = Single(basestring, required=False),
       mode = Single(basestring, required=False),
       goma_dir = Single(Path, required=False),

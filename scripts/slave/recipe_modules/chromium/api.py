@@ -91,6 +91,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     ]
     if self.c.compile_py.build_tool:
       args += ['--build-tool', self.c.compile_py.build_tool]
+    if self.c.compile_py.cross_tool:
+      args += ['--crosstool', self.c.compile_py.cross_tool]
     if self.c.compile_py.compiler:
       args += ['--compiler', self.c.compile_py.compiler]
     if self.c.compile_py.mode:
