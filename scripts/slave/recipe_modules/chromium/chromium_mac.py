@@ -62,6 +62,7 @@ SPEC = {
       },
       'tests': [
         steps.DynamicGTestTests('Mac10.6 Tests (3)'),
+        steps.MojoPythonTests(),
         steps.TelemetryUnitTests(),
         steps.TelemetryPerfUnitTests(),
       ],
@@ -110,6 +111,7 @@ SPEC = {
       },
       'tests': [
         steps.DynamicGTestTests('Mac10.7 Tests (3)'),
+        steps.MojoPythonTests(),
         steps.TelemetryUnitTests(),
         steps.TelemetryPerfUnitTests(),
       ],

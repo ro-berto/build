@@ -92,6 +92,7 @@ SPEC = {
       ],
       'tests': [
         steps.DynamicGTestTests('Linux Trusty'),
+        steps.MojoPythonTests(),
         steps.TelemetryUnitTests(),
         steps.TelemetryPerfUnitTests(),
       ],
@@ -112,6 +113,7 @@ SPEC = {
       ],
       'tests': [
         steps.DynamicGTestTests('Linux Trusty (32)'),
+        steps.MojoPythonTests(),
         steps.TelemetryUnitTests(),
         steps.TelemetryPerfUnitTests(),
       ],
@@ -132,6 +134,7 @@ SPEC = {
       ],
       'tests': [
         steps.DynamicGTestTests('Linux Trusty (dbg)'),
+        steps.MojoPythonTests(),
         steps.TelemetryUnitTests(),
         steps.TelemetryPerfUnitTests(),
       ],
@@ -152,6 +155,7 @@ SPEC = {
       ],
       'tests': [
         steps.DynamicGTestTests('Linux Trusty (dbg)(32)'),
+        steps.MojoPythonTests(),
         steps.TelemetryUnitTests(),
         steps.TelemetryPerfUnitTests(),
       ],

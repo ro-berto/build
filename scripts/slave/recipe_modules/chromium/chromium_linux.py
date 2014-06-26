@@ -32,6 +32,7 @@ SPEC = {
       'bot_type': 'tester',
       'tests': [
         steps.DynamicGTestTests('Linux Tests'),
+        steps.MojoPythonTests(),
         steps.TelemetryUnitTests(),
         steps.TelemetryPerfUnitTests(),
       ],

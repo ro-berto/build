@@ -49,6 +49,7 @@ SPEC = {
       'disable_runhooks': True,
       'tests': [
         steps.DynamicGTestTests('XP Tests (2)'),
+        steps.MojoPythonTests(),
         steps.TelemetryUnitTests(),
         steps.TelemetryPerfUnitTests(),
       ],
@@ -99,6 +100,7 @@ SPEC = {
       'disable_runhooks': True,
       'tests': [
         steps.DynamicGTestTests('Vista Tests (2)'),
+        steps.MojoPythonTests(),
         steps.TelemetryUnitTests(),
         steps.TelemetryPerfUnitTests(),
       ],
@@ -149,6 +151,7 @@ SPEC = {
       'disable_runhooks': True,
       'tests': [
         steps.DynamicGTestTests('Win7 Tests (2)'),
+        steps.MojoPythonTests(),
         steps.TelemetryUnitTests(),
         steps.TelemetryPerfUnitTests(),
       ],
@@ -249,6 +252,7 @@ SPEC = {
       'disable_runhooks': True,
       'tests': [
         steps.DynamicGTestTests('Win 7 Tests x64 (3)'),
+        steps.MojoPythonTests(),
         steps.TelemetryUnitTests(),
       ],
       'parent_buildername': 'Win x64 Builder',

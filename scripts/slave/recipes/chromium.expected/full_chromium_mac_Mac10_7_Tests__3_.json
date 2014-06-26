@@ -133,6 +133,16 @@
     "name": "extract build"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/mojo/tools/run_mojo_python_tests.py",
+      "--write-full-results-to",
+      "/path/to/tmp/json"
+    ],
+    "name": "mojo_python_tests"
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",

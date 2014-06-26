@@ -736,6 +736,48 @@ def GenSteps(api):
 
     return compile_targets, gtest_tests, swarming_tests
 
+  class MojoPythonTests(api.test_utils.Test):  # pylint: disable=W0232
+    name = 'mojo_python_tests'
+
+    @staticmethod
+    def compile_targets():
+      return []
+
+    def run(self, suffix):
+      args = ['--write-full-results-to',
+              api.json.test_results(add_json_log=False)]
+      if suffix == 'without patch':
+        args.extend(self.failures('with patch'))
+
+      def followup_fn(step_result):
+        r = step_result.json.test_results
+        p = step_result.presentation
+
+        p.step_text += api.test_utils.format_step_text([
+          ['unexpected_failures:', r.unexpected_failures.keys()],
+        ])
+
+      return api.python(
+          self._step_name(suffix),
+          api.path['checkout'].join(
+              'mojo',
+              'tools',
+              'run_mojo_python_tests.py'),
+          args,
+          can_fail_build=False,
+          step_test_data=lambda: api.json.test_api.canned_test_output(
+              True), followup_fn=followup_fn)
+
+    def has_valid_results(self, suffix):
+      # TODO(dpranke): we should just return zero/nonzero for success/fail.
+      # crbug.com/357866
+      step = api.step_history[self._step_name(suffix)]
+      return (step.json.test_results.valid and
+              step.retcode <= step.json.test_results.MAX_FAILURES_EXIT_STATUS)
+
+    def failures(self, suffix):
+      sn = self._step_name(suffix)
+      return api.step_history[sn].json.test_results.unexpected_failures
 
   mastername = api.properties.get('mastername')
   buildername = api.properties.get('buildername')
@@ -832,6 +874,7 @@ def GenSteps(api):
   tests.extend(gtest_tests)
   tests.extend(swarming_tests)
   tests.append(NaclIntegrationTest())
+  tests.append(MojoPythonTests())
 
   compile_targets.extend(bot_config.get('compile_targets', []))
   compile_targets.extend(api.itertools.chain(
@@ -1042,6 +1085,15 @@ def GenTests(api):
                 'license': 'UNKNOWN',
             },
         ]))
+  )
+
+  yield (
+    api.test('mojo_python_tests_failure') +
+    props() +
+    api.platform.name('linux') +
+    api.override_step_data(
+        'mojo_python_tests (with patch)',
+        api.json.canned_test_output(False))
   )
 
   # Successfully compiling, isolating and running two targets on swarming.

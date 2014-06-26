@@ -15,6 +15,7 @@ DEPS = [
   'properties',
   'python',
   'step_history',
+  'test_utils',
 ]
 
 

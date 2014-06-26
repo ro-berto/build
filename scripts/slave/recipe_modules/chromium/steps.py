@@ -177,6 +177,31 @@ class AndroidInstrumentationTest(object):
   def compile_targets(self, _):
     return [self.compile_target]
 
+class MojoPythonTests(object):
+  @staticmethod
+  def run(api):
+    args = ['--write-full-results-to',
+            api.json.test_results(add_json_log=False)]
+
+    def followup_fn(step_result):
+      r = step_result.json.test_results
+      p = step_result.presentation
+
+      p.step_text += api.test_utils.format_step_text([
+          ['unexpected_failures:', r.unexpected_failures.keys()],
+      ])
+
+    return api.python(
+        'mojo_python_tests',
+        api.path['checkout'].join('mojo', 'tools', 'run_mojo_python_tests.py'),
+        args, followup_fn=followup_fn,
+        step_test_data=lambda: api.json.test_api.canned_test_output(
+            "{'tests': {}}"))
+
+  @staticmethod
+  def compile_targets(_):
+    return []
+
 
 IOS_TESTS = [
   GTestTest('base_unittests'),

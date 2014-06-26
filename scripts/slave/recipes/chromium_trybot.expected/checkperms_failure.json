@@ -367,6 +367,16 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]/src/mojo/tools/run_mojo_python_tests.py",
+      "--write-full-results-to",
+      "/path/to/tmp/json"
+    ],
+    "name": "mojo_python_tests (with patch)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[BUILD]/scripts/slave/bot_update.py",
       "--master",
       "tryserver.chromium",
