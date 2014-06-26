@@ -722,7 +722,7 @@ BUILDERS = {
         'build_gs_archive': 'linux_dbg_archive',
         'testing': {'platform': 'linux'},
       },
-      ' V8 Random Deopt Fuzzer - debug': {
+      'V8 Random Deopt Fuzzer - debug': {
         'v8_apply_config': ['deopt_fuzz_random'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
