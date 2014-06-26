@@ -368,45 +368,11 @@ def GenSteps(api):
   webkit_python_tests = api.path['build'].join('scripts', 'slave', 'chromium',
                                                'test_webkitpy_wrapper.py')
 
-  root = bot_config.get('root_override', api.rietveld.calculate_issue_root())
-
-  yield api.bot_update.ensure_checkout()
-  # The first time we run bot update, remember if bot_update mode is on or off.
-  bot_update_mode = api.step_history.last_step().json.output['did_run']
-  if not bot_update_mode:
-    yield api.gclient.checkout(
-        revert=True, can_fail_build=False, abort_on_failure=False)
-    for step in api.step_history.values():
-      if step.retcode != 0:
-        # TODO(phajdan.jr): Remove the workaround, http://crbug.com/357767 .
-        yield (
-          api.path.rmcontents('slave build directory', api.path['slave_build']),
-          api.gclient.checkout(),
-        )
-        break
-    yield api.rietveld.apply_issue(root)
-
+  yield api.bot_update.ensure_checkout(force=True)
   yield (
     api.chromium.runhooks(),
-    api.chromium.compile(abort_on_failure=False, can_fail_build=False),
+    api.chromium.compile(),
   )
-
-  if api.step_history['compile'].retcode != 0:
-    # TODO(phajdan.jr): Remove the workaround, http://crbug.com/357767 .
-    if api.platform.is_win:
-      yield api.chromium.taskkill()
-    yield api.path.rmcontents('slave build directory', api.path['slave_build'])
-    if bot_update_mode:
-      yield api.bot_update.ensure_checkout()
-    else:
-      yield (
-        api.gclient.checkout(revert=False),
-        api.rietveld.apply_issue(root),
-      )
-    yield (
-      api.chromium.runhooks(),
-      api.chromium.compile(),
-    )
 
   if not bot_config['compile_only']:
     yield (
@@ -426,10 +392,7 @@ def GenSteps(api):
 
   if not bot_config['compile_only']:
     def deapply_patch_fn(_failing_steps):
-      if bot_update_mode:
-        yield api.bot_update.ensure_checkout(patch=False, always_run=True)
-      else:
-        yield api.gclient.checkout(revert=True, always_run=True)
+      yield api.bot_update.ensure_checkout(patch=False, always_run=True)
 
       yield (
         api.chromium.runhooks(always_run=True),
@@ -490,13 +453,6 @@ def GenTests(api):
     api.override_step_data(with_patch, canned_test(passing=False)) +
     api.override_step_data(without_patch,
                            canned_test(passing=True, minimal=True))
-  )
-
-  yield (
-    api.test('gclient_revert_nuke') +
-    properties('tryserver.blink', 'linux_blink_no_bot_update') +
-    api.step_data('gclient revert', retcode=1) +
-    api.override_step_data(with_patch, canned_test(passing=True, minimal=True))
   )
 
   yield (

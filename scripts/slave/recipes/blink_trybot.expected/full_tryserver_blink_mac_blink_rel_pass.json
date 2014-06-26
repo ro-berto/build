@@ -25,7 +25,8 @@
       "--revision",
       "src@HEAD",
       "--revision",
-      "src/third_party/WebKit@HEAD"
+      "src/third_party/WebKit@HEAD",
+      "--force"
     ],
     "name": "bot_update",
     "~followup_annotations": [
