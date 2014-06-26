@@ -14,6 +14,10 @@ def BaseConfig(**_kwargs):
   assert shard_run <= shard_count
 
   return ConfigGroup(
+    gyp_env = ConfigGroup(
+      CXX = Single(basestring, required=False),
+      LINK = Single(basestring, required=False),
+    ),
     # Test configuration that is the equal for all tests of a builder. It
     # might be refined later in the test runner for distinct tests.
     testing = ConfigGroup(
@@ -38,6 +42,12 @@ config_ctx = config_item_context(BaseConfig, {}, 'v8')
 @config_ctx()
 def v8(c):
   pass
+
+
+@config_ctx()
+def arm_hard_float(c):
+  c.gyp_env.CXX = '/usr/bin/arm-linux-gnueabihf-g++'
+  c.gyp_env.LINK = '/usr/bin/arm-linux-gnueabihf-g++'
 
 
 @config_ctx()

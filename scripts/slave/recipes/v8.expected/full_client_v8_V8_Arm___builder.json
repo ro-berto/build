@@ -46,7 +46,9 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "arm_float_abi=hard target_arch=arm v8_target_arch=arm"
+      "CXX": "/usr/bin/arm-linux-gnueabihf-g++",
+      "GYP_DEFINES": "arm_float_abi=hard target_arch=arm v8_target_arch=arm",
+      "LINK": "/usr/bin/arm-linux-gnueabihf-g++"
     },
     "name": "gclient runhooks"
   },

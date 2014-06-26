@@ -427,6 +427,7 @@ BUILDERS = {
 ####### Category: Arm
       'V8 Arm - builder': {
         'chromium_apply_config': ['arm_hard_float'],
+        'v8_apply_config': ['arm_hard_float'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_ARCH': 'arm',

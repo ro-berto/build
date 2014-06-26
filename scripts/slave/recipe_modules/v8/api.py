@@ -226,7 +226,12 @@ class V8Api(recipe_api.RecipeApi):
     self.revision = update_step.presentation.properties['got_revision']
 
   def runhooks(self, **kwargs):
-    return self.m.chromium.runhooks(**kwargs)
+    env = {}
+    if self.c.gyp_env.CXX:
+      env['CXX'] = self.c.gyp_env.CXX
+    if self.c.gyp_env.LINK:
+      env['LINK'] = self.c.gyp_env.LINK
+    return self.m.chromium.runhooks(env=env, **kwargs)
 
   @property
   def needs_clang(self):
