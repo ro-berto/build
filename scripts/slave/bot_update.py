@@ -184,6 +184,10 @@ ENABLED_BUILDERS = {
     ],
     'chromium.webkit': [
         'WebKit Linux Oilpan',
+        'WebKit Linux',
+        'WebKit Linux 32',
+        'Android Builder',
+        'WebKit Android (Nexus4)',
     ],
     'chromium.lkgr': [
         'Android',
