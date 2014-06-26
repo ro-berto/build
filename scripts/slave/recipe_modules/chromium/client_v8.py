@@ -16,6 +16,7 @@ SPEC = {
       'bot_type': 'builder',
       'testing': {
         'platform': 'linux',
+        'test_spec_file': 'chromium.linux.json',
       },
     },
   },
