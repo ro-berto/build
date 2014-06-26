@@ -788,21 +788,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('webrtc_manual_browser_tests'):
       f.AddWebRtcPerfManualBrowserTests(fp)
 
-    # GPU tests:
-    if R('gl_tests'):
-      f.AddGLTests(fp)
-    if R('gl_tests_br'):
-      f.AddBuildrunnerGTest('gl_tests', fp, test_tool_arg_list=['--no-xvfb'])
-    if R('content_gl_tests'):
-      f.AddContentGLTests(fp)
-    if R('gles2_conform_test'):
-      f.AddGLES2ConformTest(fp)
-    if R('gles2_conform_test_br'):
-      f.AddBuildrunnerGTest('gles2_conform_test', fp,
-                            test_tool_arg_list=['--no-xvfb'])
-    if R('gpu_content_tests'):
-      f.AddGpuContentTests(fp)
-
     def S(test, prefix, add_functor, br_functor=None):
       """Find any tests with a specific prefix and add them to the build.
 
@@ -1336,19 +1321,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       build_url=None, project=None, factory_properties=None,
       trunk_src_url=None):
     self._solutions = [gclient_factory.GClientSolution(trunk_src_url, 'src')]
-    return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
-                                options, compile_timeout, build_url, project,
-                                factory_properties)
-
-  def ChromiumGPUFactory(self, target='Release', clobber=False, tests=None,
-                         mode=None, slave_type='Tester', options=None,
-                         compile_timeout=1200, build_url=None, project=None,
-                         factory_properties=None):
-    # Make sure the solution is not already there.
-    if 'gpu_reference.DEPS' not in [s.name for s in self._solutions]:
-      self._solutions.append(gclient_factory.GClientSolution(
-          config.Master.trunk_url + '/deps/gpu_reference/gpu_reference.DEPS',
-          'gpu_reference.DEPS'))
     return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
                                 options, compile_timeout, build_url, project,
                                 factory_properties)

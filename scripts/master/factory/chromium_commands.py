@@ -67,7 +67,6 @@ class ChromiumCommands(commands.FactoryCommands):
     self._lint_test_files_tool = J(s_dir, 'lint_test_files_wrapper.py')
     self._test_webkitpy_tool = J(s_dir, 'test_webkitpy_wrapper.py')
     self._archive_coverage = J(s_dir, 'archive_coverage.py')
-    self._gpu_archive_tool = J(s_dir, 'archive_gpu_pixel_test_results.py')
     self._cf_archive_tool = J(s_dir, 'cf_archive_build.py')
     self._archive_tool = J(s_dir, 'archive_build.py')
     self._sizes_tool = J(s_dir, 'sizes.py')
@@ -1166,111 +1165,6 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddTestStep(commands.WaterfallLoggingShellCommand,
                      'Download and extract official build', cmd,
                      halt_on_failure=True)
-
-  def AddGpuContentTests(self, factory_properties):
-    """Runs content_browsertests binary with selected gpu tests.
-
-    This binary contains content side browser tests that should be run on the
-    gpu bots.
-    """
-    # Put gpu data in /b/build/slave/SLAVE_NAME/gpu_data
-    gpu_data = self.PathJoin('..', 'content_gpu_data')
-    gen_dir = self.PathJoin(gpu_data, 'generated')
-    ref_dir = self.PathJoin(gpu_data, 'reference')
-
-    revision_arg = WithProperties('--build-revision=%(got_revision)s')
-
-    tests = ':'.join(['WebGLConformanceTest.*', 'Gpu*.*'])
-
-    self.AddGTestTestStep('content_browsertests', factory_properties,
-                          arg_list=['--use-gpu-in-tests',
-                                    '--generated-dir=%s' % gen_dir,
-                                    '--reference-dir=%s' % ref_dir,
-                                    revision_arg,
-                                    '--gtest_filter=%s' % tests,
-                                    '--ui-test-action-max-timeout=45000',
-                                    '--run-manual'],
-                          test_tool_arg_list=['--no-xvfb'])
-
-    # Setup environment for running gsutil, a Google Storage utility.
-    env = {}
-    env['GSUTIL'] = self._gsutil
-
-    cmd = [self._python,
-           self._gpu_archive_tool,
-           '--run-id', WithProperties('%(got_revision)s_%(buildername)s'),
-           '--generated-dir', gen_dir,
-           '--gpu-reference-dir', ref_dir]
-    self.AddTestStep(shell.ShellCommand, 'archive test results', cmd, env=env)
-
-  def AddBuildrunnerGpuContentTests(self, factory_properties):
-    """Runs content_browsertests with selected gpu tests under Buildrunner.
-
-    This binary contains content side browser tests that should be run on the
-    gpu bots.
-    """
-    # Put gpu data in /b/build/slave/SLAVE_NAME/gpu_data
-    gpu_data = self.PathJoin('..', 'content_gpu_data')
-    gen_dir = self.PathJoin(gpu_data, 'generated')
-    ref_dir = self.PathJoin(gpu_data, 'reference')
-
-    revision_arg = WithProperties('--build-revision=%(got_revision)s')
-
-    tests = ':'.join(['WebGLConformanceTest.*', 'Gpu*.*'])
-
-    self.AddBuildrunnerGTest('content_browsertests', factory_properties,
-                          arg_list=['--use-gpu-in-tests',
-                                    '--generated-dir=%s' % gen_dir,
-                                    '--reference-dir=%s' % ref_dir,
-                                    revision_arg,
-                                    '--gtest_filter=%s' % tests,
-                                    '--ui-test-action-max-timeout=45000',
-                                    '--run-manual'],
-                          test_tool_arg_list=['--no-xvfb'])
-
-    # Setup environment for running gsutil, a Google Storage utility.
-    env = {}
-    env['GSUTIL'] = self._gsutil
-
-    cmd = [self._python,
-           self._gpu_archive_tool,
-           '--run-id', WithProperties('%(got_revision)s_%(buildername)s'),
-           '--generated-dir', gen_dir,
-           '--gpu-reference-dir', ref_dir]
-    self.AddBuildrunnerTestStep(shell.ShellCommand, 'archive test results', cmd,
-                                env=env)
-
-  def AddGLTests(self, factory_properties=None):
-    """Runs gl_tests binary.
-
-    This binary contains unit tests that should be run on the gpu bots.
-    """
-    factory_properties = factory_properties or {}
-
-    self.AddGTestTestStep('gl_tests', factory_properties,
-                          test_tool_arg_list=['--no-xvfb'])
-
-  def AddContentGLTests(self, factory_properties=None):
-    """Runs content_gl_tests binary.
-
-    This binary contains unit tests from the content directory
-    that should be run on the gpu bots.
-    """
-    factory_properties = factory_properties or {}
-
-    self.AddGTestTestStep('content_gl_tests', factory_properties,
-                          test_tool_arg_list=['--no-xvfb'])
-
-  def AddGLES2ConformTest(self, factory_properties=None):
-    """Runs gles2_conform_test binary.
-
-    This binary contains the OpenGL ES 2.0 Conformance tests to be run on the
-    gpu bots.
-    """
-    factory_properties = factory_properties or {}
-
-    self.AddGTestTestStep('gles2_conform_test', factory_properties,
-                          test_tool_arg_list=['--no-xvfb'])
 
   def AddNaClIntegrationTestStep(self, factory_properties, target=None,
                                  buildbot_preset=None, timeout=1200):
