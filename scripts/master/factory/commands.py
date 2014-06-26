@@ -953,9 +953,10 @@ class FactoryCommands(object):
         revision = properties.getProperty('parent_wk_revision')
         if not revision:
           revision = properties.getProperty('revision')
-        return 'src/third_party/WebKit@%s' % revision
+        return 'src@HEAD,src/third_party/WebKit@%s' % revision
       else:
-        return properties.getProperty('revision')
+        return ('src@%s,src/third_party/WebKit@HEAD'
+                % properties.getProperty('revision'))
 
     PROPERTIES = {
         'root': '%(root:-)s',
@@ -976,8 +977,7 @@ class FactoryCommands(object):
         property_value = WithProperties(**property_expr)
       else:
         property_value = WithProperties(property_expr)
-      if property_value:
-        cmd.extend(['--%s' % property_name, property_value])
+      cmd.extend(['--%s' % property_name, property_value])
 
     if server:
       cmd.extend(['--rietveld_server', server])
