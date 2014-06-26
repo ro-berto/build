@@ -61,7 +61,10 @@ def main():
   with stream.step('waterfall_gatekeeper') as s:
     status_url = 'https://chromium-status.appspot.com'
 
-    master_urls = ['https://build.chromium.org/p/chromium.gpu']
+    master_urls = ['https://build.chromium.org/p/chromium.linux',
+                   'https://build.chromium.org/p/chromium.gpu',
+                   'https://build.chromium.org/p/chromium.mac',
+    ]
 
     extra_args = ['--build-db=waterfall_build_db.json', '-s',
                   '--status-url=%s' % status_url,
