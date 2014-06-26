@@ -5,6 +5,8 @@
 from slave import recipe_api
 from slave import recipe_util
 
+from . import builders
+
 
 class TestLauncherFilterFileInputPlaceholder(recipe_util.Placeholder):
   def __init__(self, api, tests):
@@ -45,6 +47,10 @@ class ChromiumApi(recipe_api.RecipeApi):
 
       'BUILD_CONFIG': self.m.properties.get('build_config', 'Release')
     }
+
+  @property
+  def builders(self):
+    return builders.BUILDERS
 
   @property
   def output_dir(self):
