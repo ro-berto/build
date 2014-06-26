@@ -81,6 +81,7 @@ def main():
     master_urls = ['https://build.chromium.org/p/chromium.webkit']
 
     extra_args = ['--build-db=blink_build_db.json', '-s',
+                  '--open-tree',
                   '--status-url=%s' % status_url,
                   '--track-revisions',
                   '--revision-properties', 'got_revision,got_webkit_revision',
