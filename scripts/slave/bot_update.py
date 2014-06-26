@@ -1254,7 +1254,12 @@ def parse_revisions(revisions, root):
   is unspecified, or if revisions is [], then revision will be assigned 'HEAD'
   """
   results = {root.strip('/'): 'HEAD'}
+  expanded_revisions = []
   for revision in revisions:
+    # Allow rev1,rev2,rev3 format.
+    # TODO(hinoka): Delete this when webkit switches to recipes.
+    expanded_revisions.extend(revision.split(','))
+  for revision in expanded_revisions:
     split_revision = revision.split('@')
     if len(split_revision) == 1:
       # This is just a plain revision, set it as the revision for root.
