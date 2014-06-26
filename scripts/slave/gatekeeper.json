@@ -3,64 +3,52 @@
               "Look at that for documentation on this file's format."],
 
   "masters": {
-    "http://build.chromium.org/p/chromium": [
+    "https://build.chromium.org/p/chromium": [
       {
         "categories": [
+          "chromium_archive_build",
+          "chromium_checkdeps",
+          "chromium_checkdeps2git",
+          "chromium_compile",
+          "chromium_sizes",
+          "chromium_tree_closer",
           "gclient"
         ],
-
-        "forgive_all": "true",
 
         "builders": {
           "Win": {
             "categories": [
-              "chromium_archive_build",
-              "chromium_checkdeps2git",
-              "chromium_compile",
-              "chromium_crash_handler",
-              "chromium_sizes",
-              "chromium_windows"
-            ]
-          },
-          "Win Split": {
-            "categories": [
-              "chromium_compile",
               "chromium_crash_handler",
               "chromium_windows"
             ]
           },
-          "Mac": {
-            "categories": [
-              "chromium_archive_build",
-              "chromium_checkdeps2git",
-              "chromium_compile",
-              "chromium_sizes"
-            ]
-          },
-          "Linux": {
-            "categories": [
-              "chromium_checkdeps2git",
-              "chromium_compile",
-              "chromium_archive_build",
-              "chromium_sizes"
-            ]
-          },
-          "Linux x64": {
-            "categories": [
-              "chromium_checkdeps2git",
-              "chromium_compile",
-              "chromium_archive_build",
-              "chromium_sizes"
-            ]
-          },
-          "Android": {
-            "comment": ["Android slave_steps aren't enabled in",
-                        "master_full_cfg.py."]
-          }
+          "*": {}
         }
       }
     ],
-    "http://build.chromium.org/p/chromium.gatekeeper": [
+    "https://build.chromium.org/p/chromium.chrome": [
+      {
+        "categories": [
+          "chromium_tree_closer",
+          "chromium_recipes"
+        ],
+        "builders": {
+          "*": {}
+        }
+      }
+    ],
+    "https://build.chromium.org/p/chromium.chromiumos": [
+      {
+        "categories": [
+          "chromium_tree_closer",
+          "chromium_recipes"
+        ],
+        "builders": {
+          "*": {}
+        }
+      }
+    ],
+    "https://build.chromium.org/p/chromium.gatekeeper": [
       {
         "tree_notify": [
           "chromium-build-heartbeat@chromium-gatekeeper-sentry.appspotmail.com"
@@ -75,7 +63,7 @@
         }
       }
     ],
-    "http://build.chromium.org/p/chromium.gpu": [
+    "https://build.chromium.org/p/chromium.gpu": [
       {
         "tree_notify": ["chrome-gpu-build-failures@google.com"],
         "sheriff_classes": ["sheriff", "sheriff_gpu"],
@@ -123,7 +111,39 @@
         ]
       }
     ],
-    "http://build.chromium.org/p/chromium.lkgr": [
+    "https://build.chromium.org/p/chromium.linux": [
+      {
+        "categories": [
+          "chromium_tree_closer",
+          "chromium_recipes"
+        ],
+        "builders": {
+          "Android Builder (dbg)": {
+            "sheriff_classes": ["sheriff_android"]
+          },
+          "Android Tests (dbg)": {
+            "sheriff_classes": ["sheriff_android"]
+          },
+          "Android Builder": {
+            "sheriff_classes": ["sheriff_android"]
+          },
+          "Android Tests": {
+            "sheriff_classes": ["sheriff_android"]
+          },
+          "Android Clang Builder (dbg)": {
+            "sheriff_classes": ["sheriff_android"]
+          },
+          "Android Webview AOSP Builder": {
+            "sheriff_classes": ["sheriff_android"]
+          },
+          "Android GN": {
+            "sheriff_classes": ["sheriff_android"]
+          },
+          "*": {}
+        }
+      }
+    ],
+    "https://build.chromium.org/p/chromium.lkgr": [
       {
         "tree_notify": [
           "jschuh@chromium.org",
@@ -143,7 +163,27 @@
         }
       }
     ],
-    "http://build.chromium.org/p/chromium.perf": [
+    "https://build.chromium.org/p/chromium.mac": [
+      {
+        "categories": [
+          "chromium_tree_closer",
+          "chromium_recipes"
+        ],
+        "builders": {
+          "iOS Device": {
+            "sheriff_classes": ["sheriff_ios_europe", "sheriff_ios_us"]
+          },
+          "iOS Simulator (dbg)": {
+            "sheriff_classes": ["sheriff_ios_europe", "sheriff_ios_us"]
+          },
+          "iOS Device (ninja)": {
+            "sheriff_classes": ["sheriff_ios_europe", "sheriff_ios_us"]
+          },
+          "*": {}
+        }
+      }
+    ],
+    "https://build.chromium.org/p/chromium.perf": [
       {
         "tree_notify": [
           "stip@chromium.org",
@@ -166,7 +206,7 @@
         }
       }
     ],
-    "http://build.chromium.org/p/chromium.webkit": [
+    "https://build.chromium.org/p/chromium.webkit": [
       {
         "tree_notify": [
           "eseidel@chromium.org",
@@ -202,7 +242,7 @@
             "comment": ["We should close on test failures, but we don't",
                         "currently."],
             "categories": [
-              "chromium_compile_optional"
+              "chromium_compile"
             ],
 
             "closing_optional": [
@@ -214,7 +254,7 @@
 
           "WebKit XP": {
             "categories": [
-              "chromium_compile_optional"
+              "chromium_compile"
             ],
 
             "closing_optional": [
@@ -225,7 +265,18 @@
         }
       }
     ],
-    "http://build.chromium.org/p/client.libvpx": [
+    "https://build.chromium.org/p/chromium.win": [
+      {
+        "categories": [
+          "chromium_tree_closer",
+          "chromium_recipes"
+        ],
+        "builders": {
+          "*": {}
+        }
+      }
+    ],
+    "https://build.chromium.org/p/client.libvpx": [
       {
         "tree_notify": [
           "stip@chromium.org",
@@ -247,64 +298,68 @@
 
   "categories": {
     "gclient": {
-      "closing_steps": [
+      "closing_optional": [
         "runhooks"
       ],
-      "forgiving_steps": [
-        "gclient_revert",
-        "update",
-        "update_scripts"
+      "forgiving_optional": [
+        "update"
       ]
     },
 
     "chromium_sizes": {
-      "closing_steps": [
+      "closing_optional": [
         "sizes"
       ]
     },
 
     "chromium_crash_handler": {
-      "forgiving_steps": [
+      "forgiving_optional": [
         "start_crash_handler"
       ]
     },
 
     "chromium_tree_closer":{
+      "sheriff_classes": ["sheriff"],
       "status_template": "Tree is closed (Automatic: \"%(unsatisfied)s\" on %(build_url)s \"%(builder_name)s\" from %(revision)s: %(blamelist)s)"
     },
 
     "chromium_windows": {
-      "forgiving_steps": [
+      "forgiving_optional": [
         "svnkill",
         "taskkill"
       ]
     },
 
+    "chromium_checkdeps": {
+      "closing_optional": [
+        "check_deps"
+      ]
+    },
+
     "chromium_checkdeps2git": {
-      "closing_steps": [
+      "closing_optional": [
         "check_deps2git"
       ]
     },
 
     "chromium_compile": {
-      "closing_steps": [
-        "compile"
-      ]
-    },
-
-    "chromium_compile_optional": {
       "closing_optional": [
         "compile"
       ]
     },
 
     "chromium_archive_build": {
-      "forgiving_steps": [
+      "forgiving_optional": [
         "archive_build"
       ]
     },
 
     "chromium_perf_steps": {
+      "closing_optional": [
+        "*"
+      ]
+    },
+    "chromium_recipes": {
       "closing_optional": [
         "*"
       ]

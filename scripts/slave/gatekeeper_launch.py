@@ -49,10 +49,9 @@ def main():
       'blink_gatekeeper'])
 
   with stream.step('gatekeeper non-closure') as s:
-    master_urls = ['http://build.chromium.org/p/chromium',
-                   'http://build.chromium.org/p/chromium.lkgr',
-                   'http://build.chromium.org/p/chromium.perf',
-                   'http://build.chromium.org/p/client.libvpx',
+    master_urls = ['https://build.chromium.org/p/chromium.lkgr',
+                   'https://build.chromium.org/p/chromium.perf',
+                   'https://build.chromium.org/p/client.libvpx',
     ]
 
     if run_gatekeeper(master_urls) != 0:
@@ -62,7 +61,7 @@ def main():
   with stream.step('waterfall_gatekeeper') as s:
     status_url = 'https://chromium-status.appspot.com'
 
-    master_urls = ['http://build.chromium.org/p/chromium.gpu']
+    master_urls = ['https://build.chromium.org/p/chromium.gpu']
 
     extra_args = ['--build-db=waterfall_build_db.json', '-s',
                   '--status-url=%s' % status_url,
@@ -76,7 +75,7 @@ def main():
   with stream.step('blink_gatekeeper') as s:
     status_url = 'https://blink-status.appspot.com'
 
-    master_urls = ['http://build.chromium.org/p/chromium.webkit']
+    master_urls = ['https://build.chromium.org/p/chromium.webkit']
 
     extra_args = ['--build-db=blink_build_db.json', '-s',
                   '--status-url=%s' % status_url,
