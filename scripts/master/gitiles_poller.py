@@ -7,13 +7,13 @@
 
 The advantage of using gitiles is that a local clone is not needed."""
 
-import time
+import datetime
+import os
 import urllib
 from urlparse import urlparse
 
 from buildbot.status.web.console import RevisionComparator
 from buildbot.changes.base import PollingChangeSource
-from buildbot.util import epoch2datetime
 from twisted.internet import defer
 from twisted.python import log
 
@@ -28,6 +28,9 @@ def _always_unlock(result, lock):
   lock.release()
   return result
 
+def time_to_datetime(tm):
+  return datetime.datetime.strptime(
+      tm.partition('+')[0].strip(), "%a %b %d %H:%M:%S %Y")
 
 class GitilesRevisionComparator(RevisionComparator):
   """Tracks the commit order of tags in a git repository.
@@ -107,26 +110,29 @@ class GitilesPoller(PollingChangeSource):
     u = urlparse(repo_url)
     self.repo_url = repo_url
     self.repo_host = u.netloc
-    self.repo_path = urllib.urlquote(u.path)
+    self.repo_path = urllib.quote(u.path)
     self.branch = branch
     self.pollInterval = pollInterval
     self.category = category
+    if project is None:
+      project = os.path.basename(repo_url)
+      if project.endswith('.git'):
+        project = project[:-4]
     self.project = project
     self.revlinktmpl = revlinktmpl
     if agent is None:
-      agent = GerritAgent(repo_url, read_only=True)
+      agent = GerritAgent('%s://%s' % (u.scheme, u.netloc), read_only=True)
     self.agent = agent
     self.comparator = GitilesRevisionComparator(
         self.repo_path, branch, self.agent)
-    self.lock = defer.deferredLock()
+    self.lock = defer.DeferredLock()
     self.last_head = None
 
   def _create_change(self, commit_json):
     if not commit_json:
       return
     commit_author = commit_json['author']['email']
-    commit_tm = commit_json['committer']['time']
-    commit_tm = time.strptime(commit_tm.partition('+')[0].strip())
+    commit_tm = time_to_datetime(commit_json['committer']['time'])
     commit_files = []
     if 'tree_diff' in commit_json:
       commit_files = [
@@ -140,7 +146,7 @@ class GitilesPoller(PollingChangeSource):
         revision=commit_json['commit'],
         files=commit_files,
         comments=commit_msg,
-        when_timestamp=epoch2datetime(commit_tm),
+        when_timestamp=commit_tm,
         branch=self.branch,
         category=self.category,
         project=self.project,
