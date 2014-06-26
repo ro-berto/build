@@ -171,6 +171,7 @@ ENABLED_MASTERS = [
     'chromium.swarm',
     'client.drmemory',
     'client.nacl.sdk.mono',
+    'tryserver.blink',
     'tryserver.chromium',
     'chromium.perf.fyi',
 ]
@@ -191,25 +192,6 @@ ENABLED_BUILDERS = {
         'Mac',
         'Telemetry Harness Upload',
     ],
-    'tryserver.blink': [
-        # Linux
-        'android_blink_compile_dbg',
-        'android_blink_compile_rel',
-        'blink_presubmit',
-        'linux_blink_bot_update',
-        'linux_blink_compile_dbg',
-        'linux_blink_compile_rel',
-        'linux_blink_dbg',
-        'linux_blink_oilpan_dbg',
-        'linux_blink_oilpan_rel',
-        'linux_blink_rel',
-
-        # Mac
-        'mac_blink_compile_dbg',
-        'mac_blink_compile_rel',
-        'mac_blink_dbg',
-        'mac_blink_rel',
-    ]
 }
 ENABLED_BUILDERS.update(internal_data.get('ENABLED_BUILDERS', {}))
 
@@ -288,6 +270,11 @@ DISABLED_BUILDERS = {
     'chromium.swarm': [
         'Windows Swarm Tests',
         'Windows Swarm Tests (dbg)',
+    ],
+    'tryserver.blink': [
+        # These don't exist, but are just here to satisfy recipes.
+        'linux_blink_no_bot_update',
+        'win_blink_no_bot_update',
     ],
     'tryserver.chromium': [
         # These don't exist, but are just here to satisfy recipes.

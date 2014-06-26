@@ -222,6 +222,16 @@ BUILDERS = {
           'platform': 'win',
         },
       },
+      'win_blink_no_bot_update': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'compile_only': False,
+        'testing': {
+          'platform': 'win',
+        },
+      },
     },
   },
   'tryserver.v8': {
@@ -530,7 +540,7 @@ def GenTests(api):
   yield (
     api.test('compile_failure_win') +
     api.platform('win', 32) +
-    properties('tryserver.blink', 'win_blink_rel') +
+    properties('tryserver.blink', 'win_blink_no_bot_update') +
     api.step_data('compile', retcode=1) +
     api.step_data(with_patch, canned_test(passing=True, minimal=True))
   )
