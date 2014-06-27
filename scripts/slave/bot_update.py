@@ -332,6 +332,11 @@ class InvalidDiff(Exception):
   pass
 
 
+class Inactive(Exception):
+  """Not really an exception, just used to exit early cleanly."""
+  pass
+
+
 RETRY = object()
 OK = object()
 FAIL = object()
@@ -1355,64 +1360,11 @@ def parse_args():
   return options, args
 
 
-def main():
-  # Get inputs.
-  options, _ = parse_args()
-  builder = options.builder_name
-  slave = options.slave_name
-  master = options.master
-
-  # Check if this script should activate or not.
-  active = check_valid_host(master, builder, slave) or options.force or False
-
-  # Print helpful messages to tell devs whats going on.
-  if options.force and options.output_json:
-    recipe_force = 'Forced on by recipes'
-  elif active and options.output_json:
-    recipe_force = 'Off by recipes, but forced on by bot update'
-  elif not active and options.output_json:
-    recipe_force = 'Forced off by recipes'
-  else:
-    recipe_force = 'N/A. Was not called by recipes'
-
-  print BOT_UPDATE_MESSAGE % {
-    'master': master or 'Not specified',
-    'builder': builder or 'Not specified',
-    'slave': slave or 'Not specified',
-    'recipe': recipe_force,
-  },
-  # Print to stderr so that it shows up red on win/mac.
-  print ACTIVATED_MESSAGE if active else NOT_ACTIVATED_MESSAGE
-
-  # Parse, munipulate, and print the gclient solutions.
-  specs = {}
-  exec(options.specs, specs)
-  svn_solutions = specs.get('solutions', [])
-  git_slns, svn_root, buildspec_name, warnings = solutions_to_git(svn_solutions)
-  solutions_printer(git_slns)
-
-  # Lets send some telemetry data about bot_update here. This returns a thread
-  # object so we can join on it later.
-  all_threads = []
-  run_id = uuid.uuid4().hex
-  thr = upload_telemetry(
-      active=active,
-      builder=builder,
-      conversion_warnings=warnings,
-      git_solutions=git_slns,
-      master=master,
-      prefix='start',
-      run_id=run_id,
-      slave=slave,
-      solutions=specs.get('solutions', []),
-      specs=options.specs,
-      unix_time=time.time(),
-  )
-  all_threads.append(thr)
-
-  dir_names = [sln.get('name') for sln in svn_solutions if 'name' in sln]
-  # If we're active now, but the flag file doesn't exist (we weren't active last
-  # run) or vice versa, blow away all checkouts.
+def prepare(options, git_slns, active):
+  """Prepares the target folder before we checkout."""
+  dir_names = [sln.get('name') for sln in git_slns if 'name' in sln]
+  # If we're active now, but the flag file doesn't exist (we weren't active
+  # last run) or vice versa, blow away all checkouts.
   if bool(active) != bool(check_flag(options.flag_file)):
     ensure_no_checkout(dir_names, '*')
   if options.output_json:
@@ -1426,8 +1378,7 @@ def main():
     emit_flag(options.flag_file)
   else:
     delete_flag(options.flag_file)
-    thr.join()
-    return
+    raise Inactive  # This is caught in main() and we exit cleanly.
 
   # Do a shallow checkout if the disk is less than 100GB.
   total_disk_space, free_disk_space = get_total_disk_space()
@@ -1449,10 +1400,14 @@ def main():
   # Split all the revision specifications into a nice dict.
   print 'Revisions: %s' % options.revision
   revisions = parse_revisions(options.revision, first_sln)
-  # This is meant to be just an alias to the revision of the main solution.
-  root_revision = revisions[first_sln]
-  print 'Fetching Git checkout at %s@%s' % (first_sln, root_revision)
+  print 'Fetching Git checkout at %s@%s' % (first_sln, revisions[first_sln])
+  return revisions, step_text
 
+
+def checkout(options, git_slns, specs, buildspec_name, master,
+             svn_root, revisions, step_text):
+  first_sln = git_slns[0]['name']
+  dir_names = [sln.get('name') for sln in git_slns if 'name' in sln]
   try:
     # Outer try is for catching patch failures and exiting gracefully.
     # Inner try is for catching gclient failures and retrying gracefully.
@@ -1467,7 +1422,7 @@ def main():
           target_os=specs.get('target_os', []),
           target_os_only=specs.get('target_os_only', False),
 
-          # Then, pass in information about how to patch on top of the checkout.
+          # Then, pass in information about how to patch.
           patch_root=options.patch_root,
           issue=options.issue,
           patchset=options.patchset,
@@ -1523,28 +1478,110 @@ def main():
     # If we're not on recipes, tell annotator about our got_revisions.
     emit_properties(got_revisions)
 
-  thr = upload_telemetry(
-      active=active,
-      builder=builder,
-      conversion_warnings=warnings,
-      did_run=True,
-      gclient_output=gclient_output,
-      git_solutions=git_slns,
-      got_revision=got_revisions,
-      master=master,
-      patch_root=options.patch_root,
-      prefix='end',
-      run_id=run_id,
-      slave=slave,
-      solutions=specs['solutions'],
-      specs=options.specs,
-      unix_time=time.time(),
-  )
-  all_threads.append(thr)
+  return gclient_output, got_revisions
 
-  # Sort of wait for all telemetry threads to finish.
-  for thr in all_threads:
-    thr.join(5)
+
+def print_help_text(force, output_json, active, master, builder, slave):
+  """Print helpful messages to tell devs whats going on."""
+  if force and output_json:
+    recipe_force = 'Forced on by recipes'
+  elif active and output_json:
+    recipe_force = 'Off by recipes, but forced on by bot update'
+  elif not active and output_json:
+    recipe_force = 'Forced off by recipes'
+  else:
+    recipe_force = 'N/A. Was not called by recipes'
+
+  print BOT_UPDATE_MESSAGE % {
+    'master': master or 'Not specified',
+    'builder': builder or 'Not specified',
+    'slave': slave or 'Not specified',
+    'recipe': recipe_force,
+  },
+  print ACTIVATED_MESSAGE if active else NOT_ACTIVATED_MESSAGE
+
+
+def main():
+  # Get inputs.
+  options, _ = parse_args()
+  builder = options.builder_name
+  slave = options.slave_name
+  master = options.master
+
+  # Check if this script should activate or not.
+  active = check_valid_host(master, builder, slave) or options.force or False
+
+  # Print a helpful message to tell developers whats going on with this step.
+  print_help_text(
+      options.force, options.output_json, active, master, builder, slave)
+
+  # Parse, munipulate, and print the gclient solutions.
+  specs = {}
+  exec(options.specs, specs)
+  svn_solutions = specs.get('solutions', [])
+  git_slns, svn_root, buildspec_name, warnings = solutions_to_git(svn_solutions)
+  solutions_printer(git_slns)
+
+  # Lets send some telemetry data about bot_update here. This returns a thread
+  # object so we can join on it later.
+  telemetry_info = {
+      'active': active,
+      'builder': builder,
+      'conversion_warnings': warnings,
+      'git_solutions': git_slns,
+      'master': master,
+      'patch_root': options.patch_root,
+      'run_id': uuid.uuid4().hex,
+      'slave': slave,
+      'solutions': specs.get('solutions', []),
+      'specs': options.specs,
+  }
+  all_threads = [
+      upload_telemetry(prefix='start', unix_time=time.time(), **telemetry_info)
+  ]
+
+  try:
+    # Dun dun dun, the main part of bot_update.
+    revisions, step_text = prepare(options, git_slns, active)
+    gclient_output, got_revisions = checkout(
+        options, git_slns, specs, buildspec_name, master, svn_root, revisions,
+        step_text)
+
+  except Inactive:
+    # Not active, should count as passing.
+    telemetry_info.update({
+        'passed': True,
+        'patch_failure': False,
+    })
+  except PatchFailed as e:
+    # Patch failure - as far as telemetry is concerned, bot_update passed.
+    telemetry_info.update({
+        'passed': True,
+        'patch_failure': True,
+    })
+    raise
+  except Exception as e:
+    # Unexpected failure.
+    telemetry_info.update({
+        'message': str(e),
+        'passed': False,
+        'patch_failure': False,
+    })
+    raise
+  else:
+    telemetry_info.update({
+        'gclient_output': gclient_output,
+        'got_revisions': got_revisions,
+        'passed': True,
+        'patch_failure': False,
+    })
+  finally:
+    thr = upload_telemetry(prefix='end', unix_time=time.time(),
+                           **telemetry_info)
+    all_threads.append(thr)
+    # Sort of wait for all telemetry threads to finish.
+    for thr in all_threads:
+      thr.join(5)
 
 
 if __name__ == '__main__':
