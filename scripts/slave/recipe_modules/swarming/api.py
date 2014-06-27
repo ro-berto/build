@@ -2,11 +2,13 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import functools
+
 from slave import recipe_api
 
 
 # Minimally supported version of swarming.py script (reported by --version).
-MINIMAL_SWARMING_VERSION = (0, 4, 8)
+MINIMAL_SWARMING_VERSION = (0, 4, 10)
 
 
 # Platform name as provided by 'platform' module -> Swarming OS dimension.
@@ -231,6 +233,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     """
     # TODO(vadimsh): Trigger multiple tasks as a single step.
     assert all(isinstance(t, SwarmingTask) for t in tasks)
+    assert 'followup_fn' not in kwargs, 'Not supported, patches are welcome'
     steps = []
     for task in tasks:
       assert task.task_id not in self._pending_tasks, (
@@ -245,6 +248,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         '--priority', str(task.priority),
         '--shards', str(task.shards),
         '--task-name', task.task_id,
+        '--dump-json', self.m.json.output(),
       ]
       for name, value in sorted(task.dimensions.iteritems()):
         assert isinstance(value, basestring), value
@@ -270,6 +274,8 @@ class SwarmingApi(recipe_api.RecipeApi):
           name=self._get_step_name('trigger', task),
           script=self.m.swarming_client.path.join('swarming.py'),
           args=args,
+          followup_fn=functools.partial(self._decorate_trigger_step, task),
+          step_test_data=functools.partial(self._gen_trigger_step_data, task),
           **kwargs))
 
     return steps
@@ -375,6 +381,53 @@ class SwarmingApi(recipe_api.RecipeApi):
       args.append('--verbose')
     args.append(task.task_id)
     return args
+
+  def _gen_trigger_step_data(self, task):
+    """Generates an expected value of --dump-json in 'trigger' step.
+
+    Used when running recipes to generate test expectations.
+    """
+    # Suffixes of shard subtask names.
+    subtasks = []
+    if task.shards == 1:
+      subtasks = ['']
+    else:
+      subtasks = [':%d:%d' % (task.shards, i) for i in range(task.shards)]
+    return self.m.json.test_api.output({
+      'base_task_name': task.task_id,
+      'tasks': {
+        '%s%s' % (task.task_id, suffix): {
+          'task_id': 'deadbeef%d' % i,
+          'shard_index': i,
+          'view_url': '%s/user/task/deadbeef%d' % (self.swarming_server, i),
+        } for i, suffix in enumerate(subtasks)
+      },
+    })
+
+  def _decorate_trigger_step(self, task, step_result):
+    """Called as followup_fn for 'trigger' to add URLs to task shards."""
+    # Step failed.
+    if step_result.presentation == 'FAILURE':  # pragma: no cover
+      return
+
+    # Step succeeded, but for some reason didn't produce valid json.
+    if not step_result.json.output:  # pragma: no cover
+      return
+
+    # Format:
+    # {
+    #   'tasks': {
+    #     '<shard subtask name>': {'shard_index': 0, 'view_url': '...', ...},
+    #     ...
+    #    },
+    #   ...
+    # }
+    tasks = step_result.json.output.get('tasks')
+    if tasks:
+      links = step_result.presentation.links
+      shard_dicts = sorted(tasks.itervalues(), key=lambda x: x['shard_index'])
+      for shard_dict in shard_dicts:
+        links['shard #%d' % shard_dict['shard_index']] = shard_dict['view_url']
 
 
 class SwarmingTask(object):

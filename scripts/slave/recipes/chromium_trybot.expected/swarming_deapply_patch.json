@@ -120,7 +120,7 @@
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@0.4.8@@@"
+      "@@@STEP_TEXT@0.4.10@@@"
     ]
   },
   {
@@ -230,6 +230,8 @@
       "1",
       "--task-name",
       "base_unittests (with patch)/Linux/[dummy hash for base_unittests]/linux_chromium_rel_swarming/571",
+      "--dump-json",
+      "/path/to/tmp/json",
       "--dimension",
       "os",
       "Linux",
@@ -237,7 +239,21 @@
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] base_unittests (with patch)"
+    "name": "[trigger] base_unittests (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"base_unittests (with patch)/Linux/[dummy hash for base_unittests]/linux_chromium_rel_swarming/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"base_unittests (with patch)/Linux/[dummy hash for base_unittests]/linux_chromium_rel_swarming/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"deadbeef0\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/deadbeef0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/deadbeef0@@@"
+    ]
   },
   {
     "cmd": [
@@ -255,6 +271,8 @@
       "1",
       "--task-name",
       "browser_tests (with patch)/Linux/[dummy hash for browser_tests]/linux_chromium_rel_swarming/571",
+      "--dump-json",
+      "/path/to/tmp/json",
       "--dimension",
       "os",
       "Linux",
@@ -262,7 +280,21 @@
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] browser_tests (with patch)"
+    "name": "[trigger] browser_tests (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"browser_tests (with patch)/Linux/[dummy hash for browser_tests]/linux_chromium_rel_swarming/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"browser_tests (with patch)/Linux/[dummy hash for browser_tests]/linux_chromium_rel_swarming/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"deadbeef0\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/deadbeef0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/deadbeef0@@@"
+    ]
   },
   {
     "cmd": [
@@ -536,6 +568,8 @@
       "1",
       "--task-name",
       "base_unittests (without patch)/Linux/[dummy hash for base_unittests]/linux_chromium_rel_swarming/571",
+      "--dump-json",
+      "/path/to/tmp/json",
       "--dimension",
       "os",
       "Linux",
@@ -544,7 +578,21 @@
       "--gtest_filter=Test.Two",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] base_unittests (without patch)"
+    "name": "[trigger] base_unittests (without patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"base_unittests (without patch)/Linux/[dummy hash for base_unittests]/linux_chromium_rel_swarming/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"base_unittests (without patch)/Linux/[dummy hash for base_unittests]/linux_chromium_rel_swarming/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"deadbeef0\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/deadbeef0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/deadbeef0@@@"
+    ]
   },
   {
     "allow_subannotations": true,

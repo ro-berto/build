@@ -104,7 +104,7 @@
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@0.4.8@@@"
+      "@@@STEP_TEXT@0.4.10@@@"
     ]
   },
   {
@@ -178,6 +178,8 @@
       "1",
       "--task-name",
       "dummy_target_1/Mac/[dummy hash for dummy_target_1]/TestBuilder/571",
+      "--dump-json",
+      "/path/to/tmp/json",
       "--dimension",
       "os",
       "Mac",
@@ -187,7 +189,21 @@
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] dummy_target_1"
+    "name": "[trigger] dummy_target_1",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"dummy_target_1/Mac/[dummy hash for dummy_target_1]/TestBuilder/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"dummy_target_1/Mac/[dummy hash for dummy_target_1]/TestBuilder/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"deadbeef0\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/deadbeef0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm-dev.appspot.com/user/task/deadbeef0@@@"
+    ]
   },
   {
     "cmd": [
@@ -205,6 +221,8 @@
       "1",
       "--task-name",
       "dummy_target_2/Mac/[dummy hash for dummy_target_2]/TestBuilder/571",
+      "--dump-json",
+      "/path/to/tmp/json",
       "--dimension",
       "os",
       "Mac",
@@ -214,7 +232,21 @@
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] dummy_target_2"
+    "name": "[trigger] dummy_target_2",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"dummy_target_2/Mac/[dummy hash for dummy_target_2]/TestBuilder/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"dummy_target_2/Mac/[dummy hash for dummy_target_2]/TestBuilder/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"deadbeef0\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/deadbeef0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm-dev.appspot.com/user/task/deadbeef0@@@"
+    ]
   },
   {
     "allow_subannotations": true,
