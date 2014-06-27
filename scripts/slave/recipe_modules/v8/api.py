@@ -189,9 +189,7 @@ class V8Api(recipe_api.RecipeApi):
     for t in self.bot_config.get('tests', []):
       self.create_test(t).gclient_apply_config(self.m)
     # Initialize perf_dashboard api if any perf test should run.
-    # TODO(machenbach): Set to default config as soon as the experimental
-    # development on the performance runner is finished.
-    self.m.perf_dashboard.set_config('testing')
+    self.m.perf_dashboard.set_default_config()
 
   def set_bot_config(self, bot_config):
     """Set bot configuration for testing only."""
