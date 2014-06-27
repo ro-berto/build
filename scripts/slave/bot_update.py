@@ -248,6 +248,15 @@ DISABLED_BUILDERS = {
         'Win SyzyASAN LKGR',
     ],
     'chromium.perf': [
+        # Android Builder (and triggered builds) disabled because 'vm500-m1'
+        # (Android Builder) only has 40G of disk space and can't sustain a
+        # cache. crbug.com/389608
+        'Android Builder',
+        'Android Nexus4 Perf',
+        'Android Nexus5 Perf',
+        'Android Nexus7v2 Perf',
+        'Android Nexus10 Perf',
+        'Android GN Perf',
         # Windows disabled for performance reasons.
         'Win Builder',
         'Win x64 Builder',
