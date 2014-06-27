@@ -169,6 +169,11 @@ class AnnotatorCommandsTest(unittest.TestCase):
     self.step.script_observer['step'].stepFinished()
     self.step.script_observer.handleReturnCode(code)
 
+  def startNewStep(self, name='example_step'):
+    self.handleOutputLine('@@@SEED_STEP %s@@@' % name)
+    self.handleOutputLine('@@@SEED_STEP_TEXT@%s@example_text@@@' % name)
+    self.handleOutputLine('@@@STEP_CURSOR %s@@@' % name)
+
   def testAddAnnotatedSteps(self):
     self.handleOutputLine('@@@BUILD_STEP step@@@')
     self.handleOutputLine('@@@BUILD_STEP step2@@@')
@@ -286,8 +291,10 @@ class AnnotatorCommandsTest(unittest.TestCase):
     self.handleOutputLine('@@@HALT_ON_FAILURE@@@')
 
     catchFailure = lambda r: self.assertEquals(
-        self.step_status.getBuild().receivedStatus, [builder.FAILURE])
+        self.step_status.getBuild().receivedStatus,
+        [builder.FAILURE, builder.FAILURE])
     self.step.deferred.addBoth(catchFailure)
+    self.startNewStep()
     self.handleOutputLine('@@@STEP_FAILURE@@@')
 
     self.assertEquals(self.step.script_observer.annotate_status,
@@ -301,6 +308,7 @@ class AnnotatorCommandsTest(unittest.TestCase):
 
   def testHonorZeroReturnCode(self):
     self.handleOutputLine('@@@HONOR_ZERO_RETURN_CODE@@@')
+    self.startNewStep()
     self.handleOutputLine('@@@STEP_FAILURE@@@')
     self.step.script_observer.handleReturnCode(0)
 
@@ -443,6 +451,22 @@ class AnnotatorCommandsTest(unittest.TestCase):
         ['', 'AAthis is line one\nAAthis is line two'],
         []
     ])
+
+  def testCannotClosePreamble(self):
+    self.assertRaises(ValueError, self.handleOutputLine, '@@@STEP_CLOSED@@@')
+
+  def testCannotClosePreambleUsingDoubleStepClose(self):
+    self.startNewStep()
+    self.handleOutputLine('@@@STEP_CLOSED@@@')
+    self.assertRaises(ValueError, self.handleOutputLine, '@@@STEP_CLOSED@@@')
+
+  def testPreambleNotClosedOnReturnCode(self):
+    self.startNewStep()
+    self.handleOutputLine('@@@STEP_CLOSED@@@')
+    self.step.script_observer.handleReturnCode(0)
+    preamble_step = self.step.script_observer.sections[0]['step']
+    self.assertTrue(preamble_step.isStarted())
+    self.assertFalse(preamble_step.isFinished())
 
   def testHandleRealOutput(self):
     with open(os.path.join(test_env.DATA_PATH,

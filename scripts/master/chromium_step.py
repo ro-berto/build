@@ -641,6 +641,17 @@ class AnnotationObserver(buildstep.LogLineObserver):
     self.sections[0]['started'] = util.now()
     self.cursor = self.sections[0]
 
+  def sectionIsPreamble(self, section):
+    return section is self.sections[0]
+
+  def cursorIsPreamble(self):
+    return self.sectionIsPreamble(self.cursor)
+
+  def ensureCursorIsNotPreamble(self):
+    if self.cursorIsPreamble():
+      raise ValueError('This operation is not supported when the cursor is '
+                       'set to preamble.')
+
   def describe(self):
     """Used for the 'original' step, when updated by buildbot's getText().
 
@@ -663,6 +674,12 @@ class AnnotationObserver(buildstep.LogLineObserver):
 
   def finishStep(self, section, status=None, reason=None):
     """Mark the specified step as 'finished.'"""
+
+    # The initial section will be closed by self.finished when runCommand
+    # completes, so finishStep should not close it.
+    assert not self.sectionIsPreamble(section), ('The initial section cannot '
+                                                 'be finalized at annotator '
+                                                 'level.')
 
     status_map = {
         builder.SUCCESS: 'SUCCESS',
@@ -767,7 +784,8 @@ class AnnotationObserver(buildstep.LogLineObserver):
     self.cursor['status'] = BuilderStatus.combine(self.cursor['status'], status)
     if self.halt_on_failure and self.cursor['status'] in [
         builder.FAILURE, builder.EXCEPTION]:
-      self.finishCursor()
+      if not self.sectionIsPreamble(self.cursor):
+        self.finishCursor()
       self.cleanupSteps()
       self.command.finished(self.cursor['status'])
 
@@ -953,10 +971,12 @@ class AnnotationObserver(buildstep.LogLineObserver):
 
   def STEP_STARTED(self):
     # Support: @@@STEP_STARTED@@@ (start a step at cursor)
+    self.ensureCursorIsNotPreamble()
     self.startStep(self.cursor)
 
   def STEP_CLOSED(self):
     # Support: @@@STEP_CLOSED@@@
+    self.ensureCursorIsNotPreamble()
     self.finishCursor()
     self.cursor = self.sections[0]
 
@@ -1026,7 +1046,7 @@ class AnnotationObserver(buildstep.LogLineObserver):
       # Don't close already closed steps or the initial step
       # when using BUILD_STEP.
       if not (self.cursor['step'].isFinished() or
-              self.cursor == self.sections[0]):
+              self.cursorIsPreamble()):
         # Finish up last section.
         self.finishCursor()
       section = self.addSection(step_name)
@@ -1040,13 +1060,17 @@ class AnnotationObserver(buildstep.LogLineObserver):
     # Besides, applications can always intercept return codes and emit
     # STEP_* tags.
     if return_code == 0:
-      self.finishCursor()
+      # Do not close the initial section because it will be closed by
+      # self.finished when runCommand completes.
+      if not self.cursorIsPreamble():
+        self.finishCursor()
       if self.honor_zero_return_code:
         self.annotate_status = builder.SUCCESS
     else:
       self.annotate_status = builder.FAILURE
-      self.finishCursor(builder.FAILURE,
-                        reason='return code was %d.' % return_code)
+      if not self.cursorIsPreamble():
+        self.finishCursor(builder.FAILURE,
+                          reason='return code was %d.' % return_code)
     self.cleanupSteps()
 
 
@@ -1115,8 +1139,9 @@ class AnnotatedCommand(ProcessLogShellStep):
                                x.name != 'preamble']
 
   def interrupt(self, reason):
-    self.script_observer.finishCursor(builder.EXCEPTION,
-                                      reason='step was interrupted.')
+    if not self.cursorIsPreamble():
+      self.script_observer.finishCursor(builder.EXCEPTION,
+                                        reason='step was interrupted.')
     self.script_observer.cleanupSteps()
     self._removePreamble()
     return ProcessLogShellStep.interrupt(self, reason)
