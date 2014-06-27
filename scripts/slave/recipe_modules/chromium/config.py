@@ -60,7 +60,6 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       memory_tool = Single(basestring, required=False),
       memory_tests_runner = Single(Path),
       lsan_suppressions_file = Single(Path),
-      tsan_suppressions_file = Single(Path),
     ),
 
     # Some platforms do not have a 1:1 correlation of BUILD_CONFIG to what is
@@ -377,8 +376,6 @@ def chromium_syzyasan(c):
 @config_ctx(includes=['ninja', 'clang', 'goma', 'tsan2'])
 def chromium_tsan2(c):
   c.compile_py.default_targets = ['All', 'chromium_builder_tests']
-  c.runtests.tsan_suppressions_file = Path('[CHECKOUT]', 'tools', 'valgrind',
-                                           'tsan_v2', 'suppressions.txt')
 
 @config_ctx(includes=['ninja', 'default_compiler', 'goma', 'chromeos'])
 def chromium_chromeos(c):

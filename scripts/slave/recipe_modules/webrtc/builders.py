@@ -26,10 +26,6 @@ RECIPE_CONFIGS = {
     'webrtc_config': 'webrtc_lsan',
     'test_suite': 'webrtc',
   },
-  'webrtc_tsan2': {
-    'webrtc_config': 'webrtc_tsan2',
-    'test_suite': 'webrtc',
-  },
   'webrtc_android': {
     'webrtc_config': 'webrtc_android',
   },
@@ -665,7 +661,8 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'Linux Tsan v2': {
-        'recipe_config': 'webrtc_tsan2',
+        'recipe_config': 'webrtc_clang',
+        'chromium_apply_config': ['tsan2'],
         'webrtc_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -1101,7 +1098,8 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'linux_tsan2': {
-        'recipe_config': 'webrtc_tsan2',
+        'recipe_config': 'webrtc_clang',
+        'chromium_apply_config': ['tsan2'],
         'webrtc_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,

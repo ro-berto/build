@@ -46,13 +46,6 @@ def webrtc_lsan(c):
   c.runtests.lsan_suppressions_file = Path('[CHECKOUT]', 'tools', 'lsan',
                                            'suppressions.txt')
 
-@CONFIG_CTX(includes=['webrtc_clang', 'tsan2'])
-def webrtc_tsan2(c):
-  c.compile_py.default_targets = ['All']
-  c.runtests.tsan_suppressions_file = Path('[CHECKOUT]', 'tools',
-                                           'valgrind-webrtc', 'tsan_v2',
-                                           'suppressions.txt')
-
 @CONFIG_CTX(includes=['android'])
 def webrtc_android(c):
   pass
