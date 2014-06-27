@@ -89,7 +89,7 @@ class JSONResultsGenerator(object):
 
   RESULTS_FILENAME = 'results.json'
   TIMES_MS_FILENAME = 'times_ms.json'
-  INCREMENTAL_RESULTS_FILENAME = 'incremental_results.json'
+  FULL_RESULTS_FILENAME = 'full_results.json'
 
   def __init__(self, builder_name, build_name, build_number,
                results_file_base_path, builder_base_url,
@@ -142,7 +142,7 @@ class JSONResultsGenerator(object):
     json = self.get_full_results_json()
     if json:
       file_path = os.path.join(self._results_directory,
-                               self.INCREMENTAL_RESULTS_FILENAME)
+                               self.FULL_RESULTS_FILENAME)
       self._write_json(json, file_path)
 
   def generate_times_ms_file(self):
