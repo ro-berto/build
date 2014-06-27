@@ -1636,13 +1636,6 @@ def main():
                            help='Enable data race detection '
                                 '(ThreadSanitizer). Can also enabled with the '
                                 'factory property "tsan" (deprecated).')
-  option_parser.add_option('--tsan-suppressions-file',
-                           default=('src/tools/valgrind/tsan_v2/'
-                                    'suppressions.txt'),
-                           help='Suppression file for ThreadSanitizer. '
-                                'Default: %default. Can also be specified '
-                                'using the factory property '
-                                '"tsan_suppressions_file" (deprecated).')
   option_parser.add_option('--strip-path-prefix',
                            default='build/src/out/Release/../../',
                            help='Source paths in stack traces will be stripped '
@@ -1695,8 +1688,6 @@ def main():
                            options.factory_properties.get('msan', False))
     options.enable_tsan = (options.enable_tsan or
                            options.factory_properties.get('tsan', False))
-    options.tsan_suppressions_file = (options.tsan_suppressions_file or
-        options.factory_properties.get('tsan_suppressions_file'))
     options.enable_lsan = (options.enable_lsan or
                            options.factory_properties.get('lsan', False))
 
@@ -1754,15 +1745,7 @@ def main():
 
     # ThreadSanitizer
     if options.enable_tsan:
-      # TODO(glider): enable die_after_fork back once http://crbug.com/356758
-      # is fixed.
-      tsan_options = symbolization_options + \
-                     ['suppressions=%s' % options.tsan_suppressions_file,
-                      'print_suppressions=1',
-                      'report_signal_unsafe=0',
-                      'report_thread_leaks=0',
-                      'history_size=7',
-                      'die_after_fork=0']
+      tsan_options = symbolization_options
       extra_env['TSAN_OPTIONS'] = ' '.join(tsan_options)
       # Disable sandboxing under TSan for now. http://crbug.com/223602.
       args.append('--no-sandbox')

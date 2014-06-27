@@ -572,16 +572,6 @@ def common_make_settings(
       command.append('-r')
       return
 
-  if options.llvm_tsan:
-    supp_path = os.path.join(options.src_dir,
-      'tools', 'valgrind', 'tsan_v2', 'suppressions.txt')
-    # Do not report thread leaks when running executables compiled with TSan.
-    # Use the suppressions file to avoid reporting known errors during
-    # compilation.
-    # http://dev.chromium.org/developers/testing/threadsanitizer-tsan-v2
-    # contains other options that might be worth adding.
-    env['TSAN_OPTIONS'] = 'report_thread_leaks=0 suppressions=%s' % supp_path
-
   if compiler in ('goma', 'goma-clang', 'jsonclang'):
     print 'using', compiler
     if compiler == 'goma':
@@ -766,12 +756,6 @@ def main_ninja(options, args):
     command.extend(args)
 
     maybe_set_official_build_envvars(options, env)
-
-    if options.llvm_tsan:
-      # Do not report thread leaks when running executables compiled with TSan.
-      # http://dev.chromium.org/developers/testing/threadsanitizer-tsan-v2
-      # contains other options that might be worth adding.
-      env['TSAN_OPTIONS'] = 'report_thread_leaks=0'
 
     if options.compiler:
       print 'using', options.compiler
