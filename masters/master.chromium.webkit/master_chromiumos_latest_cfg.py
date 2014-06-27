@@ -6,6 +6,8 @@
 from master import master_config
 from master.factory import chromium_factory
 
+import master_chromiumos_cfg
+
 defaults = {}
 
 helper = master_config.Helper(defaults)
@@ -25,8 +27,8 @@ defaults['category'] = 'nonlayout'
 #
 # ChromiumOS Rel Builder
 #
-B('Linux ChromiumOS Builder', 'f_chromiumos_rel', scheduler='global_scheduler',
-    auto_reboot=False)
+B('Linux ChromiumOS Builder (obsolete)', 'f_chromiumos_rel',
+    scheduler='global_scheduler', auto_reboot=False)
 F('f_chromiumos_rel', linux().ChromiumOSFactory(
     slave_type='Builder',
     tests=[],
@@ -62,6 +64,6 @@ F('f_chromiumos_rel', linux().ChromiumOSFactory(
         'blink_config': 'blink',
     }))
 
-
 def Update(_config, _active_master, c):
-  return helper.Update(c)
+  helper.Update(c)
+  master_chromiumos_cfg.Update(_config, _active_master, c)

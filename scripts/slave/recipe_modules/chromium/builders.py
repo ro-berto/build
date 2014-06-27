@@ -20,6 +20,10 @@ BUILDERS = {
   'chromium.fyi': chromium_fyi.SPEC,
   'chromium.linux': chromium_linux.SPEC,
   'chromium.mac': chromium_mac.SPEC,
+  # Currently the only bots on the Blink waterfall using the Chromium
+  # recipe are the ChromiumOS builders and testers. If this changes,
+  # will need to rethink how to specify the bots on this waterfall.
+  'chromium.webkit': chromium_chromiumos.SPEC,
   'chromium.win': chromium_win.SPEC,
   'client.v8': client_v8.SPEC,
   'tryserver.chromium': tryserver_chromium.SPEC,
