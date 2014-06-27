@@ -185,6 +185,9 @@ class V8Api(recipe_api.RecipeApi):
       self.m.chromium.apply_config(c)
     for c in self.bot_config.get('v8_apply_config', []):
       self.apply_config(c)
+    if self.c.nacl.update_nacl_sdk:
+      self.c.nacl.NACL_SDK_ROOT = str(self.m.path['slave_build'].join(
+          'nacl_sdk', 'pepper_current'))
     # Test-specific configurations.
     for t in self.bot_config.get('tests', []):
       self.create_test(t).gclient_apply_config(self.m)
@@ -245,6 +248,14 @@ class V8Api(recipe_api.RecipeApi):
         env={'LLVM_URL': ChromiumSvnSubURL(self.m.gclient.c,
                                            'llvm-project')})
 
+  def update_nacl_sdk(self):
+    return self.m.python(
+      'update NaCl SDK',
+      self.m.path['build'].join('scripts', 'slave', 'update_nacl_sdk.py'),
+      ['--pepper-channel', self.c.nacl.update_nacl_sdk],
+      cwd=self.m.path['slave_build'],
+    )
+
   def tryserver_lkgr_fallback(self):
     self.m.gclient.apply_config('v8_lkgr')
     yield (
@@ -278,7 +289,13 @@ class V8Api(recipe_api.RecipeApi):
     return self.bot_config.get('perf', [])
 
   def compile(self, **kwargs):
-    yield self.m.chromium.compile(**kwargs)
+    env={}
+    if self.c.nacl.NACL_SDK_ROOT:
+      env['NACL_SDK_ROOT'] = self.c.nacl.NACL_SDK_ROOT
+    args = []
+    if self.c.nacl.compile_extra_args:
+      args.extend(self.c.nacl.compile_extra_args)
+    yield self.m.chromium.compile(args, env=env, **kwargs)
 
   def tryserver_compile(self, fallback_fn, **kwargs):
     yield self.compile(name='compile (with patch)',
@@ -440,8 +457,13 @@ class V8Api(recipe_api.RecipeApi):
 
   def _runtest(self, name, test, flaky_tests=None, **kwargs):
     env = {}
+    target = self.m.chromium.c.build_config_fs
+    if self.c.nacl.update_nacl_sdk:
+      # TODO(machenbach): NaCl circumvents the buildbot naming conventions and
+      # uses v8 flavor. Make this more uniform.
+      target = target.lower()
     full_args = [
-      '--target', self.m.chromium.c.build_config_fs,
+      '--target', target,
       '--arch', self.m.chromium.c.gyp_env.GYP_DEFINES['v8_target_arch'],
       '--testname', test['tests'],
     ]
@@ -467,6 +489,10 @@ class V8Api(recipe_api.RecipeApi):
       env['ASAN_SYMBOLIZER_PATH'] = self.m.path['checkout'].join(
           'third_party', 'llvm-build', 'Release+Asserts', 'bin',
           'llvm-symbolizer')
+
+    # Environment for nacl builds:
+    if self.c.nacl.NACL_SDK_ROOT:
+      env['NACL_SDK_ROOT'] = self.c.nacl.NACL_SDK_ROOT
 
     # Default callbacks if the show_test_results feature is turned off.
     followup_fn = None

@@ -40,6 +40,9 @@ def GenSteps(api):
   yield v8.runhooks()
   yield api.chromium.cleanup_temp()
 
+  if v8.c.nacl.update_nacl_sdk:
+    yield v8.update_nacl_sdk()
+
   if v8.needs_clang:
     yield v8.update_clang()
 

@@ -47,6 +47,16 @@ def interpreted_regexp(c):
 
 
 @CONFIG_CTX(includes=['v8'])
+def nacl_ia32(c):
+  c.gyp_env.GYP_DEFINES['v8_target_arch'] = 'nacl_ia32'
+
+
+@CONFIG_CTX(includes=['v8'])
+def nacl_x64(c):
+  c.gyp_env.GYP_DEFINES['v8_target_arch'] = 'nacl_x64'
+
+
+@CONFIG_CTX(includes=['v8'])
 def no_i18n(c):
   c.gyp_env.GYP_DEFINES['v8_enable_i18n_support'] = 0
 
