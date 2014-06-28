@@ -6,6 +6,7 @@ from slave import recipe_api
 from slave import recipe_util
 
 from . import builders
+from . import steps
 
 
 class TestLauncherFilterFileInputPlaceholder(recipe_util.Placeholder):
@@ -51,6 +52,10 @@ class ChromiumApi(recipe_api.RecipeApi):
   @property
   def builders(self):
     return builders.BUILDERS
+
+  @property
+  def steps(self):
+    return steps
 
   @property
   def output_dir(self):

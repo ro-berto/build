@@ -382,294 +382,6 @@ add_swarming_builder('mac_chromium_rel', 'mac_chromium_rel_swarming')
 
 
 def GenSteps(api):
-  class CheckdepsTest(api.test_utils.Test):  # pylint: disable=W0232
-    name = 'checkdeps'
-
-    @staticmethod
-    def compile_targets():
-      return []
-
-    @staticmethod
-    def run(suffix):
-      return api.chromium.checkdeps(
-          suffix, can_fail_build=False, always_run=True)
-
-    def has_valid_results(self, suffix):
-      return api.step_history[self._step_name(suffix)].json.output is not None
-
-    def failures(self, suffix):
-      results = api.step_history[self._step_name(suffix)].json.output
-      result_set = set()
-      for result in results:
-        for violation in result['violations']:
-          result_set.add((result['dependee_path'], violation['include_path']))
-      return ['%s: %s' % (r[0], r[1]) for r in result_set]
-
-
-  class CheckpermsTest(api.test_utils.Test):  # pylint: disable=W0232
-    name = 'checkperms'
-
-    @staticmethod
-    def compile_targets():
-      return []
-
-    @staticmethod
-    def run(suffix):
-      return api.chromium.checkperms(
-          suffix, can_fail_build=False, always_run=True)
-
-    def has_valid_results(self, suffix):
-      return api.step_history[self._step_name(suffix)].json.output is not None
-
-    def failures(self, suffix):
-      results = api.step_history[self._step_name(suffix)].json.output
-      result_set = set()
-      for result in results:
-        result_set.add((result['rel_path'], result['error']))
-      return ['%s: %s' % (r[0], r[1]) for r in result_set]
-
-
-  class ChecklicensesTest(api.test_utils.Test):  # pylint: disable=W0232
-    name = 'checklicenses'
-
-    @staticmethod
-    def compile_targets():
-      return []
-
-    @staticmethod
-    def run(suffix):
-      return api.chromium.checklicenses(
-          suffix, can_fail_build=False, always_run=True)
-
-    def has_valid_results(self, suffix):
-      return api.step_history[self._step_name(suffix)].json.output is not None
-
-    def failures(self, suffix):
-      results = api.step_history[self._step_name(suffix)].json.output
-      result_set = set()
-      for result in results:
-        result_set.add((result['filename'], result['license']))
-      return ['%s: %s' % (r[0], r[1]) for r in result_set]
-
-
-  class Deps2GitTest(api.test_utils.Test):  # pylint: disable=W0232
-    name = 'deps2git'
-
-    @staticmethod
-    def compile_targets():
-      return []
-
-    @staticmethod
-    def run(suffix):
-      yield (
-        api.chromium.deps2git(suffix, can_fail_build=False),
-        api.chromium.deps2submodules()
-      )
-
-    def has_valid_results(self, suffix):
-      return api.step_history[self._step_name(suffix)].json.output is not None
-
-    def failures(self, suffix):
-      return api.step_history[self._step_name(suffix)].json.output
-
-
-  class GTestTest(api.test_utils.Test):
-    def __init__(self, name, args=None, compile_targets=None):
-      api.test_utils.Test.__init__(self)
-      self._name = name
-      self._args = args or []
-
-    @property
-    def name(self):
-      return self._name
-
-    def compile_targets(self):
-      return [self._name]
-
-    def run(self, suffix):
-      def followup_fn(step_result):
-        r = step_result.json.gtest_results
-        p = step_result.presentation
-
-        if r.valid:
-          p.step_text += api.test_utils.format_step_text([
-              ['failures:', r.failures]
-          ])
-
-      # Copy the list because run can be invoked multiple times and we modify
-      # the local copy.
-      args = self._args[:]
-
-      if suffix == 'without patch':
-        args.append(api.chromium.test_launcher_filter(
-                        self.failures('with patch')))
-
-      return api.chromium.runtest(
-          self.name,
-          args,
-          annotate='gtest',
-          test_launcher_summary_output=api.json.gtest_results(
-              add_json_log=False),
-          xvfb=True,
-          name=self._step_name(suffix),
-          parallel=True,
-          can_fail_build=False,
-          followup_fn=followup_fn,
-          step_test_data=lambda: api.json.test_api.canned_gtest_output(True))
-
-    def has_valid_results(self, suffix):
-      step_name = self._step_name(suffix)
-      gtest_results = api.step_history[step_name].json.gtest_results
-      if not gtest_results.valid:  # pragma: no cover
-        return False
-      global_tags = gtest_results.raw.get('global_tags', [])
-      return 'UNRELIABLE_RESULTS' not in global_tags
-
-    def failures(self, suffix):
-      step_name = self._step_name(suffix)
-      return api.step_history[step_name].json.gtest_results.failures
-
-
-  class SwarmingGTestTest(api.test_utils.Test):
-    def __init__(self, name, args=None, shards=1):
-      api.test_utils.Test.__init__(self)
-      self._name = name
-      self._args = args or []
-      self._shards = shards
-      self._tasks = {}
-      self._results = {}
-
-    @property
-    def name(self):
-      return self._name
-
-    def compile_targets(self):
-      # <X>_run target depends on <X>, and then isolates it invoking isolate.py.
-      # It is a convention, not a hard coded rule.
-      return [self._name + '_run']
-
-    def pre_run(self, suffix):
-      """Launches the test on Swarming."""
-      assert suffix not in self._tasks, (
-          'Test %s was already triggered' % self._step_name(suffix))
-
-      # *.isolated may be missing if *_run target is misconfigured. It's a error
-      # in gyp, not a recipe failure. So carry on with recipe execution.
-      isolated_hash = api.isolate.isolated_tests.get(self._name)
-      if not isolated_hash:
-        return api.python.inline(
-            '[error] %s' % self._step_name(suffix),
-            r"""
-            import sys
-            print '*.isolated file for target %s is missing' % sys.argv[1]
-            sys.exit(1)
-            """,
-            args=[self._name],
-            always_run=True)
-
-      # If rerunning without a patch, run only tests that failed.
-      args = self._args[:]
-      if suffix == 'without patch':
-        failed_tests = sorted(self.failures('with patch'))
-        args.append('--gtest_filter=%s' % ':'.join(failed_tests))
-
-      # Trigger the test on swarming.
-      self._tasks[suffix] = api.swarming.gtest_task(
-          title=self._step_name(suffix),
-          isolated_hash=isolated_hash,
-          shards=self._shards,
-          test_launcher_summary_output=api.json.gtest_results(
-              add_json_log=False),
-          extra_args=args)
-      return api.swarming.trigger([self._tasks[suffix]], always_run=True)
-
-    def run(self, suffix):  # pylint: disable=R0201
-      """Not used. All logic in pre_run, post_run."""
-      return []
-
-    def post_run(self, suffix):
-      """Waits for launched test to finish and collect the results."""
-      assert suffix not in self._results, (
-          'Results of %s were already collected' % self._step_name(suffix))
-
-      # Emit error if test wasn't triggered. This happens if *.isolated is not
-      # found. (The build is already red by this moment anyway).
-      if suffix not in self._tasks:
-        return api.python.inline(
-            '[collect error] %s' % self._step_name(suffix),
-            r"""
-            import sys
-            print '%s wasn\'t triggered' % sys.argv[1]
-            sys.exit(1)
-            """,
-            args=[self._name],
-            always_run=True)
-
-      # Update step presentation, store step results in self._results.
-      def followup_fn(step_result):
-        r = step_result.json.gtest_results
-        p = step_result.presentation
-        if r.valid:
-          p.step_text += api.test_utils.format_step_text([
-              ['failures:', r.failures]
-          ])
-        self._results[suffix] = r
-
-      # Wait for test on swarming to finish. If swarming infrastructure is
-      # having issues, this step produces no valid *.json test summary, and
-      # 'has_valid_results' returns False.
-      return api.swarming.collect(
-          [self._tasks[suffix]],
-          always_run=True,
-          can_fail_build=False,
-          followup_fn=followup_fn)
-
-    def has_valid_results(self, suffix):
-      # Test wasn't triggered or wasn't collected.
-      if suffix not in self._tasks or not suffix in self._results:
-        return False
-      # Test ran, but failed to produce valid *.json.
-      gtest_results = self._results[suffix]
-      if not gtest_results.valid:  # pragma: no cover
-        return False
-      global_tags = gtest_results.raw.get('global_tags', [])
-      return 'UNRELIABLE_RESULTS' not in global_tags
-
-    def failures(self, suffix):
-      assert self.has_valid_results(suffix)
-      return self._results[suffix].failures
-
-
-  class NaclIntegrationTest(api.test_utils.Test):  # pylint: disable=W0232
-    name = 'nacl_integration'
-
-    @staticmethod
-    def compile_targets():
-      return ['chrome']
-
-    def run(self, suffix):
-      args = [
-        '--mode', api.chromium.c.build_config_fs,
-        '--json_build_results_output_file', api.json.output(),
-      ]
-      return api.python(
-          self._step_name(suffix),
-          api.path['checkout'].join('chrome',
-                            'test',
-                            'nacl_test_injection',
-                            'buildbot_nacl_integration.py'),
-          args,
-          can_fail_build=False,
-          step_test_data=lambda: api.m.json.test_api.output([]))
-
-    def has_valid_results(self, suffix):
-      return api.step_history[self._step_name(suffix)].json.output is not None
-
-    def failures(self, suffix):
-      failures = api.step_history[self._step_name(suffix)].json.output
-      return [f['raw_name'] for f in failures]
-
-
   def parse_test_spec(test_spec, enable_swarming, should_use_test):
     """Returns a list of tests to run and additional targets to compile.
 
@@ -730,54 +442,12 @@ def GenSteps(api):
 
       if use_swarming:
         swarming_tests.append(
-            SwarmingGTestTest(test_name, test_args, swarming_shards))
+            api.chromium.steps.SwarmingGTestTest(
+                test_name, test_args, swarming_shards))
       else:
-        gtest_tests.append(GTestTest(test_name, test_args))
+        gtest_tests.append(api.chromium.steps.GTestTest(test_name, test_args))
 
     return compile_targets, gtest_tests, swarming_tests
-
-  class MojoPythonTests(api.test_utils.Test):  # pylint: disable=W0232
-    name = 'mojo_python_tests'
-
-    @staticmethod
-    def compile_targets():
-      return []
-
-    def run(self, suffix):
-      args = ['--write-full-results-to',
-              api.json.test_results(add_json_log=False)]
-      if suffix == 'without patch':
-        args.extend(self.failures('with patch'))
-
-      def followup_fn(step_result):
-        r = step_result.json.test_results
-        p = step_result.presentation
-
-        p.step_text += api.test_utils.format_step_text([
-          ['unexpected_failures:', r.unexpected_failures.keys()],
-        ])
-
-      return api.python(
-          self._step_name(suffix),
-          api.path['checkout'].join(
-              'mojo',
-              'tools',
-              'run_mojo_python_tests.py'),
-          args,
-          can_fail_build=False,
-          step_test_data=lambda: api.json.test_api.canned_test_output(
-              True), followup_fn=followup_fn)
-
-    def has_valid_results(self, suffix):
-      # TODO(dpranke): we should just return zero/nonzero for success/fail.
-      # crbug.com/357866
-      step = api.step_history[self._step_name(suffix)]
-      return (step.json.test_results.valid and
-              step.retcode <= step.json.test_results.MAX_FAILURES_EXIT_STATUS)
-
-    def failures(self, suffix):
-      sn = self._step_name(suffix)
-      return api.step_history[sn].json.test_results.unexpected_failures
 
   mastername = api.properties.get('mastername')
   buildername = api.properties.get('buildername')
@@ -864,21 +534,21 @@ def GenSteps(api):
   tests = []
   # TODO(phajdan.jr): Re-enable checkdeps on Windows when it works with git.
   if not api.platform.is_win:
-    tests.append(CheckdepsTest())
+    tests.append(api.chromium.steps.CheckdepsTest())
   if api.platform.is_linux:
     tests.extend([
-        CheckpermsTest(),
-        ChecklicensesTest(),
+        api.chromium.steps.CheckpermsTest(),
+        api.chromium.steps.ChecklicensesTest(),
     ])
-  tests.append(Deps2GitTest())
+  tests.append(api.chromium.steps.Deps2GitTest())
   tests.extend(gtest_tests)
   tests.extend(swarming_tests)
-  tests.append(NaclIntegrationTest())
-  tests.append(MojoPythonTests())
+  tests.append(api.chromium.steps.NaclIntegrationTest())
+  tests.append(api.chromium.steps.MojoPythonTests())
 
   compile_targets.extend(bot_config.get('compile_targets', []))
   compile_targets.extend(api.itertools.chain(
-      *[t.compile_targets() for t in tests]))
+      *[t.compile_targets(api) for t in tests]))
   # TODO(phajdan.jr): Also compile 'all' on win, http://crbug.com/368831 .
   # Disabled for now because it takes too long and/or fails on Windows.
   if not api.platform.is_win and not bot_config.get('exclude_compile_all'):
@@ -920,7 +590,7 @@ def GenSteps(api):
                                          update_presentation=False)
     yield api.chromium.runhooks(always_run=True),
     compile_targets = list(api.itertools.chain(
-                               *[t.compile_targets() for t in failing_tests]))
+        *[t.compile_targets(api) for t in failing_tests]))
     if compile_targets:
       yield api.chromium.compile(compile_targets,
                                  name='compile (without patch)',
@@ -939,7 +609,7 @@ def GenSteps(api):
         yield api.isolate.find_isolated_tests(api.chromium.output_dir,
                                               always_run=True)
 
-  yield api.test_utils.determine_new_failures(tests, deapply_patch_fn)
+  yield api.test_utils.determine_new_failures(api, tests, deapply_patch_fn)
 
 
 def _sanitize_nonalpha(text):

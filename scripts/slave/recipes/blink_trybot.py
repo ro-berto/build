@@ -254,96 +254,6 @@ BUILDERS = {
 
 
 def GenSteps(api):
-  class BlinkTest(api.test_utils.Test):
-    name = 'webkit_tests'
-
-    def __init__(self):
-      self.results_dir = api.path['slave_build'].join('layout-test-results')
-      self.layout_test_wrapper = api.path['build'].join(
-          'scripts', 'slave', 'chromium', 'layout_test_wrapper.py')
-
-    def run(self, suffix):
-      args = ['--target', api.chromium.c.BUILD_CONFIG,
-              '-o', self.results_dir,
-              '--build-dir', api.chromium.c.build_dir,
-              '--json-test-results', api.json.test_results(add_json_log=False)]
-      if suffix == 'without patch':
-        test_list = "\n".join(self.failures('with patch'))
-        args.extend(['--test-list', api.raw_io.input(test_list),
-                     '--skipped', 'always'])
-
-      if 'oilpan' in api.properties['buildername']:
-        args.extend(['--additional-expectations',
-                     api.path['checkout'].join('third_party', 'WebKit',
-                                               'LayoutTests',
-                                               'OilpanExpectations')])
-
-      def followup_fn(step_result):
-        r = step_result.json.test_results
-        p = step_result.presentation
-
-        p.step_text += api.test_utils.format_step_text([
-          ['unexpected_flakes:', r.unexpected_flakes.keys()],
-          ['unexpected_failures:', r.unexpected_failures.keys()],
-          ['Total executed: %s' % r.num_passes],
-        ])
-
-        if r.unexpected_flakes or r.unexpected_failures:
-          p.status = 'WARNING'
-        else:
-          p.status = 'SUCCESS'
-
-      yield api.chromium.runtest(self.layout_test_wrapper,
-                                 args,
-                                 name=self._step_name(suffix),
-                                 can_fail_build=False,
-                                 followup_fn=followup_fn)
-
-      if suffix == 'with patch':
-        buildername = api.properties['buildername']
-        buildnumber = api.properties['buildnumber']
-        def archive_webkit_tests_results_followup(step_result):
-          base = (
-            "https://storage.googleapis.com/chromium-layout-test-archives/%s/%s"
-            % (buildername, buildnumber))
-
-          step_result.presentation.links['layout_test_results'] = (
-              base + '/layout-test-results/results.html')
-          step_result.presentation.links['(zip)'] = (
-              base + '/layout-test-results.zip')
-
-        archive_layout_test_results = api.path['build'].join(
-            'scripts', 'slave', 'chromium', 'archive_layout_test_results.py')
-
-        yield api.python(
-          'archive_webkit_tests_results',
-          archive_layout_test_results,
-          [
-            '--results-dir', self.results_dir,
-            '--build-dir', api.chromium.c.build_dir,
-            '--build-number', buildnumber,
-            '--builder-name', buildername,
-            '--gs-bucket', 'gs://chromium-layout-test-archives',
-          ] + api.json.property_args(),
-          followup_fn=archive_webkit_tests_results_followup
-        )
-
-    def has_valid_results(self, suffix):
-      step = api.step_history[self._step_name(suffix)]
-      # TODO(dpranke): crbug.com/357866 - note that all comparing against
-      # MAX_FAILURES_EXIT_STATUS tells us is that we did not exit early
-      # or abnormally; it does not tell us how many failures there actually
-      # were, which might be much higher (up to 5000 diffs, where we
-      # would bail out early with --exit-after-n-failures) or lower
-      # if we bailed out after 100 crashes w/ -exit-after-n-crashes, in
-      # which case the retcode is actually 130
-      return (step.json.test_results.valid and
-              step.retcode <= step.json.test_results.MAX_FAILURES_EXIT_STATUS)
-
-    def failures(self, suffix):
-      sn = self._step_name(suffix)
-      return api.step_history[sn].json.test_results.unexpected_failures
-
   mastername = api.properties.get('mastername')
   buildername = api.properties.get('buildername')
   master_dict = BUILDERS.get(mastername, {})
@@ -399,7 +309,8 @@ def GenSteps(api):
         api.chromium.compile(always_run=True),
       )
 
-    yield api.test_utils.determine_new_failures([BlinkTest()], deapply_patch_fn)
+    yield api.test_utils.determine_new_failures(
+        api, [api.chromium.steps.BlinkTest(api)], deapply_patch_fn)
 
 
 def _sanitize_nonalpha(text):

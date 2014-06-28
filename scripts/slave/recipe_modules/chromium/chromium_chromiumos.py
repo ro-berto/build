@@ -57,7 +57,6 @@ SPEC = {
             gs_acl='public-read',
         ),
         steps.Deps2GitTest(),
-        steps.Deps2SubmodulesTest(),
         steps.CheckpermsTest(),
       ],
       'testing': {

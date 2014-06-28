@@ -219,7 +219,7 @@ def GenSteps(api):
     steps.append(api.chromium_android.common_tests_setup_steps())
 
   if not bot_config.get('do_not_run_tests'):
-    test_steps = [t.run(api) for t in bot_config.get('tests', [])]
+    test_steps = [t.run(api, '') for t in bot_config.get('tests', [])]
     steps.extend(api.chromium.setup_tests(bot_type, test_steps))
 
   if (api.chromium.c.TARGET_PLATFORM == 'android' and
