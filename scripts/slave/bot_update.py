@@ -1181,6 +1181,11 @@ def ensure_checkout(solutions, revisions, first_sln, target_os, target_os_only,
     apply_rietveld_issue(issue, patchset, patch_root, rietveld_server,
                          revision_mapping, git_ref, blacklist=['DEPS'])
 
+  # Reset the deps_file point in the solutions so that hooks get run properly.
+  for sln in solutions:
+    sln['deps_file'] = sln.get('deps_file', 'DEPS').replace('.DEPS.git', 'DEPS')
+  gclient_configure(solutions, target_os, target_os_only)
+
   return gclient_output
 
 
