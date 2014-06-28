@@ -23,6 +23,7 @@ import optparse
 import os
 import re
 import stat
+import subprocess
 import sys
 import tempfile
 
@@ -65,6 +66,8 @@ HTTPD_CONF = {
     'mac': 'httpd2_mac.conf',
     'win': 'httpd.conf'
 }
+# Regex matching git comment lines containing svn revision info.
+GIT_SVN_ID_RE = re.compile('^git-svn-id: .*@([0-9]+) .*$')
 
 # The directory that this script is in.
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -115,7 +118,6 @@ def _LaunchDBus():
     True if it actually spawned DBus.
   """
   import platform
-  import subprocess
   if (platform.uname()[0].lower() == 'linux' and
       'DBUS_SESSION_BUS_ADDRESS' not in os.environ):
     try:
@@ -202,6 +204,24 @@ def _GetMasterString(master):
   return '[Running for master: "%s"]' % master
 
 
+def _GetGitSvnRevision(dir_path):
+  """Extracts the svn revision number of the HEAD commit."""
+  git_exe = 'git.bat' if sys.platform.startswith('win') else 'git'
+  p = subprocess.Popen(
+      [git_exe, 'log', '-n', '1', '--pretty=format:%H', 'HEAD'],
+      cwd=dir_path, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+  (log, _) = p.communicate()
+  if p.returncode != 0:
+    return None
+  # Parse from the bottom up, in case the commit message embeds the message
+  # from a different commit (e.g., for a revert).
+  for line in reversed(log.splitlines()):
+    m = GIT_SVN_ID_RE.match(line.strip())
+    if m:
+      return m.group(1)
+  return None
+
+
 def _IsGitDirectory(dir_path):
   """Checks whether the given directory is in a git repository.
 
@@ -211,13 +231,11 @@ def _IsGitDirectory(dir_path):
   Returns:
     True if given directory is in a git repository, False otherwise.
   """
-  if os.path.exists(os.path.join(dir_path, '.git')):
-    return True
-  parent = os.path.dirname(dir_path)
-  # The parent path of / is /. Stop if we've reached the root.
-  if parent == dir_path:
-    return False
-  return _IsGitDirectory(parent)
+  git_exe = 'git.bat' if sys.platform.startswith('win') else 'git'
+  with open(os.devnull, 'w') as devnull:
+    p = subprocess.Popen([git_exe, 'rev-parse', '--git-dir'],
+                         cwd=dir_path, stdout=devnull, stderr=devnull)
+    return p.wait() == 0
 
 
 def _GetSvnRevision(in_directory):
@@ -231,10 +249,12 @@ def _GetSvnRevision(in_directory):
     a git SHA1 hash if the given directory is in a git repository, or an empty
     string if the revision number couldn't be found.
   """
-  import subprocess
   import xml.dom.minidom
   if not os.path.exists(os.path.join(in_directory, '.svn')):
     if _IsGitDirectory(in_directory):
+      svn_rev = _GetGitSvnRevision(in_directory)
+      if svn_rev:
+        return svn_rev
       return _GetGitRevision(in_directory)
     else:
       return ''
@@ -261,13 +281,12 @@ def _GetGitRevision(in_directory):
   Returns:
     The git SHA1 hash string.
   """
-  import subprocess
-  command_line = ['git', 'log', '-1', '--pretty=oneline']
-  output = subprocess.Popen(command_line,
-                            cwd=in_directory,
-                            shell=(sys.platform == 'win32'),
-                            stdout=subprocess.PIPE).communicate()[0]
-  return output[0:40]
+  git_exe = 'git.bat' if sys.platform.startswith('win') else 'git'
+  p = subprocess.Popen(
+      [git_exe, 'rev-parse', 'HEAD'],
+      cwd=in_directory, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+  (stdout, _) = p.communicate()
+  return stdout.strip()
 
 
 def _GenerateJSONForTestResults(options, results_tracker):
