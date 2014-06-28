@@ -20,7 +20,7 @@ GENERATE_JSON_RESULTS_OPTIONS = [
     'builder_base_url', 'webkit_revision', 'chrome_revision',
     'test_results_server', 'test_type', 'master_name']
 
-INCREMENTAL_RESULTS_FILENAME = 'incremental_results.json'
+FULL_RESULTS_FILENAME = 'full_results.json'
 TIMES_MS_FILENAME = 'times_ms.json'
 
 
@@ -191,7 +191,7 @@ def UploadJSONResults(generator):
   """Conditionally uploads the results from GenerateJSONResults if
   test_results_server was given."""
   if generator:
-    generator.upload_json_files([INCREMENTAL_RESULTS_FILENAME,
+    generator.upload_json_files([FULL_RESULTS_FILENAME,
                                  TIMES_MS_FILENAME])
 
 # For command-line testing.
