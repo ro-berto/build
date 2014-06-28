@@ -183,6 +183,41 @@
         }
       }
     ],
+    "https://build.chromium.org/p/chromium.memory": [
+      {
+        "categories": [
+          "chromium_tree_closer",
+          "gclient"
+        ],
+        "builders": {
+          "Linux Chromium OS ASan LSan Builder": {
+            "categories": [
+              "chromium_compile"
+            ]
+          },
+          "Linux ASan LSan Builder": {
+            "categories": [
+              "chromium_compile"
+            ]
+          },
+          "Mac ASan Builder": {
+            "categories": [
+              "chromium_compile"
+            ]
+          },
+          "Mac ASan Builder": {
+            "categories": [
+              "chromium_compile"
+            ]
+          },
+          "*": {
+            "categories": [
+              "chromium_asan_tests"
+            ]
+          }
+        }
+      }
+    ],
     "https://build.chromium.org/p/chromium.perf": [
       {
         "tree_notify": [
@@ -362,6 +397,36 @@
     "chromium_recipes": {
       "closing_optional": [
         "*"
+      ]
+    },
+    "chromium_asan_tests": {
+      "closing_optional": [
+        "base_unittests",
+        "browser_tests",
+        "cacheinvalidation_unittests",
+        "cc_unittests",
+        "content_browsertests",
+        "content_unittests",
+        "courgette_unittests",
+        "crypto_unittests",
+        "device_unittests",
+        "gcm_unit_tests",
+        "gpu_unittests",
+        "installer_util_unittests",
+        "ipc_tests",
+        "jingle_unittests",
+        "media_unittests",
+        "nacl_integration",
+        "net_unittests",
+        "ppapi_unittests",
+        "printing_unittests",
+        "remoting_unittests",
+        "sandbox_linux_unittests",
+        "sql_unittests",
+        "sync_unit_tests",
+        "ui_unittests",
+        "unit_tests",
+        "url_unittests"
       ]
     }
   }
