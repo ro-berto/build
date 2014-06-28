@@ -65,6 +65,32 @@ def get_tree_status(status_url_root):
   return json.load(urllib2.urlopen(status_url))
 
 
+def get_builder_section(gatekeeper_section, builder):
+  """Returns the applicable gatekeeper config for the builder.
+
+  If the builder isn't present or is excluded, return None.
+  """
+  if builder in gatekeeper_section:
+    builder_section = gatekeeper_section[builder]
+  elif '*' in gatekeeper_section:
+    builder_section = gatekeeper_section['*']
+  else:
+    return None
+
+  if builder not in builder_section.get('excluded_builders', set()):
+    return builder_section
+  return None
+
+
+def builder_is_excluded(gatekeeper_config, master_url, builder):
+  """Determines if a builder is excluded for any master sections."""
+  gatekeeper_sections = gatekeeper_config[master_url]
+  for gatekeeper_section in gatekeeper_sections:
+    if not get_builder_section(gatekeeper_section, builder):
+      return True
+  return False
+
+
 def check_builds(master_builds, master_jsons, gatekeeper_config):
   """Given a gatekeeper configuration, see which builds have failed."""
   failed_builds = []
@@ -74,16 +100,9 @@ def check_builds(master_builds, master_jsons, gatekeeper_config):
       section_hash = gatekeeper_ng_config.gatekeeper_section_hash(
           gatekeeper_section)
 
-      if build_json['builderName'] in gatekeeper_section:
-        gatekeeper = gatekeeper_section[build_json['builderName']]
-      elif '*' in gatekeeper_section:
-        gatekeeper = gatekeeper_section['*']
-      else:
-        continue
-
-      # Check if the buildername is in the excluded builder list and disable if
-      # so.
-      if build_json['builderName'] in gatekeeper.get('excluded_builders', []):
+      gatekeeper = get_builder_section(
+          gatekeeper_section, build_json['builderName'])
+      if not gatekeeper:
         continue
 
       steps = build_json['steps']
@@ -368,8 +387,8 @@ def submit_email(email_app, build_data, secret):
           code, response))
 
 
-def open_tree_if_possible(build_db, master_jsons, failed_builds, username,
-    password, status_url_root, set_status):
+def open_tree_if_possible(gatekeeper_config, build_db, master_jsons,
+    failed_builds, username, password, status_url_root, set_status):
   closing_builds = [b for b in failed_builds if b['close_tree']]
   if closing_builds:
     logging.debug('Not opening tree because failing builds were detected.')
@@ -377,6 +396,9 @@ def open_tree_if_possible(build_db, master_jsons, failed_builds, username,
 
   for master_url, master in master_jsons.iteritems():
     for builder in master['builders']:
+      if builder_is_excluded(gatekeeper_config, master_url, builder):
+        continue
+
       for buildnum, build in build_db.masters[master_url][builder].iteritems():
         if build.finished:
           if not build.succeeded:
@@ -682,9 +704,9 @@ def main():
   if options.open_tree:
     # failures are actually tuples, we only care about the build part.
     failing_builds = [b[0] for b in failure_tuples]
-    open_tree_if_possible(build_db, master_jsons, failing_builds,
-        options.status_user, options.password, options.status_url,
-        options.set_status)
+    open_tree_if_possible(gatekeeper_config, build_db, master_jsons,
+        failing_builds, options.status_user, options.password,
+        options.status_url, options.set_status)
 
   if options.track_revisions:
     properties = options.revision_properties.split(',')

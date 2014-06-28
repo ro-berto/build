@@ -715,7 +715,7 @@ class GatekeeperTest(unittest.TestCase):
     self.assertNotIn(self.set_status_url, urls)
 
   def testExcludedBuildersDontCloseTree(self):
-    """Test that excluded steps don't call to the status app."""
+    """Test that excluded builders don't call to the status app."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
                      '--no-email-app', '--set-status',
@@ -765,7 +765,7 @@ class GatekeeperTest(unittest.TestCase):
 
     build_db = build_scan_db.gen_db(masters={
         self.masters[0].url: {
-            'my builder': {
+            'mybuilder': {
                 0: build_scan_db.gen_build(finished=True, succeeded=True)
             }
         }
@@ -796,6 +796,44 @@ class GatekeeperTest(unittest.TestCase):
     })
     urls = self.call_gatekeeper(build_db=build_db)
     self.assertNotIn(self.set_status_url, urls)
+
+  def testOpenTreeIfExcludedBuilderFailing(self):
+    """Test that we open the tree even if an excluded builder is failing."""
+    sys.argv.extend([m.url for m in self.masters])
+    sys.argv.extend(['--skip-build-db-update',
+                     '--no-email-app', '--set-status',
+                     '--open-tree',
+                     '--password-file', self.status_secret_file])
+
+    self.masters[0].builders[0].builds[0].finished = False
+    self.add_gatekeeper_section(self.masters[0].url,
+                                '*',
+                                {'excluded_builders': ['mybuilder2']})
+
+    new_build = self.create_generic_build(1, ['a_committer@chromium.org'])
+    new_builder = Builder('mybuilder2', [new_build])
+    self.masters[0].builders.append(new_builder)
+
+    build_db = build_scan_db.gen_db(masters={
+        self.masters[0].url: {
+            'mybuilder': {
+                0: build_scan_db.gen_build(finished=True, succeeded=True)
+            },
+            'mybuilder2': {
+                0: build_scan_db.gen_build(finished=True)
+            }
+        }
+    })
+
+    # Open the tree if it was previously automatically closed.
+    self.handle_url_json(self.get_status_url, {
+      'message': 'closed (automatic)',
+      'general_state': 'closed',
+    })
+    self.call_gatekeeper(build_db=build_db)
+    self.assertEquals(self.url_calls[-1]['url'], self.set_status_url)
+    status_data = urlparse.parse_qs(self.url_calls[-1]['params'])
+    self.assertEquals(status_data['message'][0], "Tree is open (Automatic)")
 
   def testDefaultSubjectTemplate(self):
     """Test that the subject template is set by default."""
