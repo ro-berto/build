@@ -310,8 +310,9 @@
     "name": "get perf test list",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"perf-test-1\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"perf-test-2\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"perf_test.foo\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"page_cycler.foo\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"endure.foo\"@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -331,8 +332,8 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"perf_runner\", \"buildnumber\": 571, \"internal\": true, \"mastername\": \"chromium.testing.master\", \"patch_url\": \"https://the.patch.url/the.patch\", \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
-      "--perf-dashboard-id=perf-test-1",
-      "--test-type=perf-test-1",
+      "--perf-dashboard-id=perf_test.foo",
+      "--test-type=perf_test.foo",
       "--builder-name=perf_runner",
       "--slave-name=tehslave",
       "--build-number=571",
@@ -340,10 +341,10 @@
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "perf",
       "--print-step",
-      "perf-test-1",
+      "perf_test.foo",
       "--verbose"
     ],
-    "name": "perf-test-1"
+    "name": "perf_test.foo"
   },
   {
     "allow_subannotations": true,
@@ -358,10 +359,10 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"perf_runner\", \"buildnumber\": 571, \"internal\": true, \"mastername\": \"chromium.testing.master\", \"patch_url\": \"https://the.patch.url/the.patch\", \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"perf_runner\", \"buildnumber\": 571, \"internal\": true, \"mastername\": \"chromium.testing.master\", \"patch_url\": \"https://the.patch.url/the.patch\", \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--annotate=graphing",
+      "--annotate=pagecycler",
       "--results-url=https://chromeperf.appspot.com",
-      "--perf-dashboard-id=perf-test-2",
-      "--test-type=perf-test-2",
+      "--perf-dashboard-id=page_cycler.foo",
+      "--test-type=page_cycler.foo",
       "--builder-name=perf_runner",
       "--slave-name=tehslave",
       "--build-number=571",
@@ -369,10 +370,39 @@
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "perf",
       "--print-step",
-      "perf-test-2",
+      "page_cycler.foo",
       "--verbose"
     ],
-    "name": "perf-test-2"
+    "name": "page_cycler.foo"
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"perf_runner\", \"buildnumber\": 571, \"internal\": true, \"mastername\": \"chromium.testing.master\", \"patch_url\": \"https://the.patch.url/the.patch\", \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"perf_runner\", \"buildnumber\": 571, \"internal\": true, \"mastername\": \"chromium.testing.master\", \"patch_url\": \"https://the.patch.url/the.patch\", \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--annotate=endure",
+      "--results-url=https://chromeperf.appspot.com",
+      "--perf-dashboard-id=endure.foo",
+      "--test-type=endure.foo",
+      "--builder-name=perf_runner",
+      "--slave-name=tehslave",
+      "--build-number=571",
+      "--run-python-script",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "perf",
+      "--print-step",
+      "endure.foo",
+      "--verbose"
+    ],
+    "name": "endure.foo"
   },
   {
     "cmd": [

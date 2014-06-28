@@ -375,7 +375,7 @@ class AndroidApi(recipe_api.RecipeApi):
         [self.m.path['checkout'].join('build', 'android', 'test_runner.py'),
          'perf', '--steps', config, '--output-json-list', self.m.json.output()],
         step_test_data=lambda: self.m.json.test_api.output([
-            'perf-test-1', 'perf-test-2']),
+            'perf_test.foo', 'page_cycler.foo', 'endure.foo']),
         always_run=True
     )
     perf_tests = self.m.step_history.last_step().json.output
@@ -383,13 +383,18 @@ class AndroidApi(recipe_api.RecipeApi):
     for test_name in perf_tests:
       test_name = str(test_name)  # un-unicode
       dashboard_id = perf_dashboard_id_transform(test_name)
+      annotate = 'graphing'
+      if test_name.split('.')[0] == 'page_cycler':
+        annotate = 'pagecycler'
+      elif test_name.split('.')[0] == 'endure':
+        annotate = 'endure'
 
       yield self.m.chromium.runtest(
           self.m.path['checkout'].join('build', 'android', 'test_runner.py'),
           ['perf', '--print-step', test_name, '--verbose'],
           name=test_name,
           perf_dashboard_id=dashboard_id,
-          annotate='graphing',
+          annotate=annotate,
           results_url='https://chromeperf.appspot.com',
           perf_id=perf_id,
           test_type=test_name,
