@@ -69,6 +69,7 @@ def main():
         'https://build.chromium.org/p/chromium.gpu',
         'https://build.chromium.org/p/chromium.linux',
         'https://build.chromium.org/p/chromium.mac',
+        'https://build.chromium.org/p/chromium.memory',
         'https://build.chromium.org/p/chromium.win',
     ]
 
