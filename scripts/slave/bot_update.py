@@ -169,6 +169,7 @@ ENABLED_MASTERS = [
     'chromium.memory.fyi',
     'chromium.perf',
     'chromium.swarm',
+    'chromium.webkit',
     'client.drmemory',
     'client.nacl.sdk.mono',
     'tryserver.blink',
@@ -181,13 +182,6 @@ ENABLED_BUILDERS = {
     'tryserver.chromium.gpu': [
         'linux_gpu',
         'mac_gpu',
-    ],
-    'chromium.webkit': [
-        'WebKit Linux Oilpan',
-        'WebKit Linux',
-        'WebKit Linux 32',
-        'Android Builder',
-        'WebKit Android (Nexus4)',
     ],
     'chromium.lkgr': [
         'Android',
@@ -283,6 +277,33 @@ DISABLED_BUILDERS = {
     'chromium.swarm': [
         'Windows Swarm Tests',
         'Windows Swarm Tests (dbg)',
+    ],
+    'chromium.webkit': [
+        # We don't know how to deal with the DEPS builder yet.
+        'WebKit Win Builder (deps)',
+        'WebKit XP (deps)',
+        'WebKit Mac Builder (deps)',
+        'WebKit Mac10.6 (deps)',
+        'WebKit Linux (deps)',
+
+        # Windows bots are less battle tested at the moment.
+        # We'll turn them on separately.
+        'WebKit Win Builder',
+        'WebKit XP',
+        'WebKit Win7',
+        'WebKit Win x64 Builder',
+        'WebKit Win Oilpan',
+        'WebKit Win Builder (dbg)',
+        'WebKit Win7 (dbg)',
+        'WebKit Win Oilpan (dbg)',
+        'WebKit Win x64 Builder (dbg)',
+        'Win Builder',
+        'Win7 Tests',
+        'Win7 (dbg)',
+        'GPU Win Builder',
+        'GPU Win Builder (dbg)',
+        'GPU Win7 (NVIDIA)',
+        'GPU Win7 (dbg) (NVIDIA)',
     ],
     'tryserver.blink': [
         # These don't exist, but are just here to satisfy recipes.
