@@ -274,10 +274,6 @@ DISABLED_BUILDERS = {
         'Win XP Perf (4)',
         'Win XP Perf (5)',
     ],
-    'chromium.swarm': [
-        'Windows Swarm Tests',
-        'Windows Swarm Tests (dbg)',
-    ],
     'chromium.webkit': [
         # We don't know how to deal with the DEPS builder yet.
         'WebKit Win Builder (deps)',
