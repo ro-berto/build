@@ -394,17 +394,23 @@ def open_tree_if_possible(gatekeeper_config, build_db, master_jsons,
     logging.debug('Not opening tree because failing builds were detected.')
     return
 
+  previously_failed_builds = []
   for master_url, master in master_jsons.iteritems():
     for builder in master['builders']:
       if builder_is_excluded(gatekeeper_config, master_url, builder):
         continue
-
       for buildnum, build in build_db.masters[master_url][builder].iteritems():
         if build.finished:
           if not build.succeeded:
-            logging.debug('Not opening tree because previous build %s/%s/%s '
-                          'wasn\'t successful', master_url, builder, buildnum)
-            return
+            previously_failed_builds.append('%s %s/builders/%s/builds/%d' % (
+                builder, master_url, urllib.quote(builder), buildnum))
+
+  if previously_failed_builds:
+    logging.debug(
+        'Not opening tree because previous builds weren\'t successful:')
+    for build in previously_failed_builds:
+      logging.debug('  %s' % build)
+    return
 
   status = get_tree_status(status_url_root)
   # Don't change the status unless the tree is currently closed.
