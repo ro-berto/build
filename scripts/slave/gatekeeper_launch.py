@@ -76,6 +76,7 @@ def main():
     extra_args = ['--build-db=waterfall_build_db.json', '-s',
                   '--status-url=%s' % status_url,
                   '--track-revisions',
+                  '--open-tree',
                   '--password-file=.status_password']
 
     if run_gatekeeper(master_urls, extra_args=extra_args) != 0:
