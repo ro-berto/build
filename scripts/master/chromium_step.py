@@ -1139,7 +1139,7 @@ class AnnotatedCommand(ProcessLogShellStep):
                                x.name != 'preamble']
 
   def interrupt(self, reason):
-    if not self.cursorIsPreamble():
+    if not self.script_observer.cursorIsPreamble():
       self.script_observer.finishCursor(builder.EXCEPTION,
                                         reason='step was interrupted.')
     self.script_observer.cleanupSteps()
