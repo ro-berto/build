@@ -74,6 +74,7 @@ linux_aura_options = [
   'browser_tests',
   'cacheinvalidation_unittests',
   'chromeos_unittests',
+  'components_unittests',
   'compositor_unittests',
   'content_browsertests',
   'content_unittests',
@@ -154,6 +155,7 @@ asan_tests_2 = [
 
 asan_tests_3 = [
   'browser_tests',
+  'components_unittests',
   'display_unittests',
   'unit',
 ]

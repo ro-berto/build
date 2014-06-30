@@ -78,6 +78,7 @@ F('linux_asan_rel', linux().ChromiumASANFactory(
       'browser_tests',
       'cacheinvalidation_unittests',
       'cc_unittests',
+      'components_unittests',
       'content_browsertests',
       'content_unittests',
       'crypto_unittests',
@@ -169,6 +170,7 @@ F('linux_asan_rel_tests_3', linux().ChromiumASANFactory(
     tests=[
       'browser_tests',
       'cc_unittests',
+      'components_unittests',
       'content_browsertests',
       'interactive_ui_tests',
     ],
