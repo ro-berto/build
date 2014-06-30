@@ -568,7 +568,7 @@ def solutions_to_git(input_solutions):
       print 'Warning: %s' % (warnings[-1],)
 
     # Point .DEPS.git is the git version of the DEPS file.
-    if not FLAG_DAY:
+    if not FLAG_DAY and not buildspec_name:
       solution['deps_file'] = '.DEPS.git'
 
     if first_solution:
@@ -760,7 +760,7 @@ def buildspecs2git(sln_dir, buildspec_name):
   deps_file = path.join(repo_base, 'build', buildspec_name, 'DEPS')
   deps_git_file = path.join(repo_base, 'build', buildspec_name, '.DEPS.git')
   deps_log = git('log', '-1', '--format=%B', deps_file, cwd=repo_base)
-  m = re.search(r'Buildspec for\s+version (\d+\.\d+\.\d+\.\d+)', deps_log)
+  m = re.search(r'Buildspec for.*version (\d+\.\d+\.\d+\.\d+)', deps_log)
   version = m.group(1)
   git_buildspec = get_git_buildspec(version)
   with open(deps_git_file, 'wb') as f:
