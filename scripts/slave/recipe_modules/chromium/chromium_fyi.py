@@ -167,6 +167,7 @@ SPEC = {
       'recipe_config': 'chromium_clang',
       'GYP_DEFINES': {
         'msan': 1,
+        'msan_track_origins': 0,
         'use_instrumented_libraries': 1,
         'instrumented_libraries_jobs': 5,
       },
