@@ -124,6 +124,9 @@ class FakeBuildstepStatus(mock.Mock):
   def setHidden(self, hidden):
     return None
 
+  def isWaitingForLocks(self):
+    return False
+
 
 class FakeBuildStatus(mock.Mock):
   def __init__(self):
@@ -451,6 +454,10 @@ class AnnotatorCommandsTest(unittest.TestCase):
         ['', 'AAthis is line one\nAAthis is line two'],
         []
     ])
+
+  def testStopBuild(self):
+    self.startNewStep()
+    self.step.interrupt('it is time')
 
   def testCannotClosePreamble(self):
     self.assertRaises(ValueError, self.handleOutputLine, '@@@STEP_CLOSED@@@')
