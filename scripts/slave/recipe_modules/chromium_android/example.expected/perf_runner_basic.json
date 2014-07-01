@@ -265,6 +265,9 @@
       "-t",
       "Release"
     ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
     "name": "provision_devices"
   },
   {
@@ -296,6 +299,9 @@
       "flake_fakes.json"
     ],
     "cwd": "[SLAVE_BUILD]/src",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
     "name": "Sharded Perf Tests"
   },
   {
@@ -307,6 +313,9 @@
       "--output-json-list",
       "/path/to/tmp/json"
     ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
     "name": "get perf test list",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
@@ -344,6 +353,9 @@
       "perf_test.foo",
       "--verbose"
     ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
     "name": "perf_test.foo"
   },
   {
@@ -373,6 +385,9 @@
       "page_cycler.foo",
       "--verbose"
     ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
     "name": "page_cycler.foo"
   },
   {
@@ -402,6 +417,9 @@
       "endure.foo",
       "--verbose"
     ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
     "name": "endure.foo"
   },
   {
@@ -442,7 +460,7 @@
       "--tool=asan"
     ],
     "env": {
-      "BUILDTYPE": "Release"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "unittests"
   },

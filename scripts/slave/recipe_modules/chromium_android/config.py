@@ -33,7 +33,8 @@ def BaseConfig(INTERNAL=False, REPO_NAME=None, REPO_URL=None,
     channel = Single(basestring, empty_val='chrome'),
     upload_dest_prefix = Single(basestring, empty_val=''),
     gclient_custom_vars = Dict(value_type=(basestring, types.NoneType)),
-    coverage = Single(bool, required=False, empty_val=False)
+    coverage = Single(bool, required=False, empty_val=False),
+    adb_vendor_keys = Single(Path, required=False),
   )
 
 

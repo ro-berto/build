@@ -178,6 +178,9 @@
       "-t",
       "Debug"
     ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
     "name": "provision_devices"
   },
   {
@@ -192,7 +195,7 @@
       "--gtest_filter=WebRtc*"
     ],
     "env": {
-      "BUILDTYPE": "Debug"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "content_browsertests"
   },

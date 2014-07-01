@@ -48,6 +48,11 @@ BUILDERS = {
         'build': False,
         'skip_wipe': False,
         'disable_location': True,
+    },
+    'perf_adb_vendor_keys': {
+        'adb_vendor_keys': True,
+        'build': False,
+        'skip_wipe': False,
     }
 }
 
@@ -62,6 +67,10 @@ def GenSteps(api):
   api.chromium_android.c.get_app_manifest_vars = True
   api.chromium_android.c.coverage = config.get('coverage', False)
   api.chromium_android.c.asan_symbolize = True
+
+  if config.get('adb_vendor_keys'):
+    api.chromium_android.c.adb_vendor_keys = api.path['build'].join(
+      'site_config', '.adb_key')
 
   yield api.chromium_android.init_and_sync()
 

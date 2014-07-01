@@ -30,7 +30,7 @@
       "--master",
       "chromium.testing.master",
       "--builder",
-      "coverage_builder",
+      "perf_adb_vendor_keys",
       "--slave",
       "tehslave",
       "--spec",
@@ -136,6 +136,7 @@
       "runhooks"
     ],
     "env": {
+      "ADB_VENDOR_KEYS": "[BUILD]/site_config/.adb_key",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 target_arch=arm",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
@@ -174,19 +175,23 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/compile.py",
-      "--target",
-      "Release",
-      "--src-dir",
-      "[SLAVE_BUILD]/src",
-      "--build-tool",
-      "ninja",
-      "--"
+      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
+      "cp",
+      "gs://build-bucket/build_product.zip",
+      "[SLAVE_BUILD]/src/out/build_product.zip"
     ],
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "compile"
+    "name": "gsutil download_build_product"
+  },
+  {
+    "cmd": [
+      "unzip",
+      "-o",
+      "[SLAVE_BUILD]/src/out/build_product.zip"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "unzip_build_product"
   },
   {
     "cmd": [
@@ -240,6 +245,7 @@
       "[SLAVE_BUILD]/src/out/logcat"
     ],
     "env": {
+      "ADB_VENDOR_KEYS": "[BUILD]/site_config/.adb_key",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "spawn_logcat_monitor"
@@ -249,6 +255,7 @@
       "[SLAVE_BUILD]/src/build/android/buildbot/bb_device_status_check.py"
     ],
     "env": {
+      "ADB_VENDOR_KEYS": "[BUILD]/site_config/.adb_key",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "device_status_check"
@@ -262,6 +269,7 @@
       "Release"
     ],
     "env": {
+      "ADB_VENDOR_KEYS": "[BUILD]/site_config/.adb_key",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "provision_devices"
@@ -299,9 +307,6 @@
       "FlakyTest",
       "--screenshot",
       "--release",
-      "--coverage-dir",
-      "[SLAVE_BUILD]/src/out/Release/coverage",
-      "--python-only",
       "--host-driven-root",
       "[SLAVE_BUILD]/src/chrome/test"
     ],
@@ -322,6 +327,7 @@
       "--tool=asan"
     ],
     "env": {
+      "ADB_VENDOR_KEYS": "[BUILD]/site_config/.adb_key",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "unittests"
@@ -365,6 +371,7 @@
       "[SLAVE_BUILD]/src/out/Release/full_log"
     ],
     "env": {
+      "ADB_VENDOR_KEYS": "[BUILD]/site_config/.adb_key",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "stack_tool_with_logcat_dump"
@@ -377,6 +384,7 @@
       "-w"
     ],
     "env": {
+      "ADB_VENDOR_KEYS": "[BUILD]/site_config/.adb_key",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "stack_tool_for_tombstones"
@@ -388,46 +396,16 @@
       "[SLAVE_BUILD]/src/out/Release/full_log"
     ],
     "env": {
+      "ADB_VENDOR_KEYS": "[BUILD]/site_config/.adb_key",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "stack_tool_for_asan"
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/generate_emma_html.py",
-      "--coverage-dir",
-      "[SLAVE_BUILD]/src/out/Release/coverage",
-      "--metadata-dir",
-      "[SLAVE_BUILD]/src/out/Release",
-      "--cleanup",
-      "--output",
-      "[SLAVE_BUILD]/src/out/Release/coverage/coverage_html/index.html"
-    ],
-    "name": "Generate coverage report"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
-      "cp",
-      "-R",
-      "[SLAVE_BUILD]/src/out/Release/coverage/coverage_html",
-      "gs://chrome-code-coverage/java/coverage_builder/4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00"
-    ],
-    "name": "gsutil upload coverage report",
-    "~followup_annotations": [
-      "@@@STEP_LINK@Coverage report@https://storage.cloud.google.com/chrome-code-coverage/java/coverage_builder/4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00@@@"
-    ]
-  },
-  {
-    "cmd": [
       "rm",
-      "-rf"
+      "-rf",
+      "[SLAVE_BUILD]/src/out/build_product.zip"
     ],
     "name": "cleanup_build"
   }

@@ -193,6 +193,9 @@
       "-t",
       "Debug"
     ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
     "name": "provision_devices"
   },
   {
@@ -299,7 +302,7 @@
       "--verbose"
     ],
     "env": {
-      "BUILDTYPE": "Debug"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "base_unittests"
   },
@@ -314,7 +317,7 @@
       "--verbose"
     ],
     "env": {
-      "BUILDTYPE": "Debug"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "breakpad_unittests"
   },
@@ -329,7 +332,7 @@
       "--verbose"
     ],
     "env": {
-      "BUILDTYPE": "Debug"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "cc_unittests"
   },
@@ -344,7 +347,7 @@
       "--verbose"
     ],
     "env": {
-      "BUILDTYPE": "Debug"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "components_unittests"
   },
@@ -359,7 +362,7 @@
       "--verbose"
     ],
     "env": {
-      "BUILDTYPE": "Debug"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "content_browsertests"
   },
@@ -374,7 +377,7 @@
       "--verbose"
     ],
     "env": {
-      "BUILDTYPE": "Debug"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "content_unittests"
   },
@@ -389,7 +392,7 @@
       "--verbose"
     ],
     "env": {
-      "BUILDTYPE": "Debug"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "events_unittests"
   },
@@ -404,7 +407,7 @@
       "--verbose"
     ],
     "env": {
-      "BUILDTYPE": "Debug"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "gl_tests"
   },
@@ -419,7 +422,7 @@
       "--verbose"
     ],
     "env": {
-      "BUILDTYPE": "Debug"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "gpu_unittests"
   },
@@ -434,7 +437,7 @@
       "--verbose"
     ],
     "env": {
-      "BUILDTYPE": "Debug"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "ipc_tests"
   },
@@ -449,7 +452,7 @@
       "--verbose"
     ],
     "env": {
-      "BUILDTYPE": "Debug"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "media_unittests"
   },
@@ -464,7 +467,7 @@
       "--verbose"
     ],
     "env": {
-      "BUILDTYPE": "Debug"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "net_unittests"
   },
@@ -479,7 +482,7 @@
       "--verbose"
     ],
     "env": {
-      "BUILDTYPE": "Debug"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "sandbox_linux_unittests"
   },
@@ -494,7 +497,7 @@
       "--verbose"
     ],
     "env": {
-      "BUILDTYPE": "Debug"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "sql_unittests"
   },
@@ -509,7 +512,7 @@
       "--verbose"
     ],
     "env": {
-      "BUILDTYPE": "Debug"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "sync_unit_tests"
   },
@@ -524,7 +527,7 @@
       "--verbose"
     ],
     "env": {
-      "BUILDTYPE": "Debug"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "ui_unittests"
   },
@@ -539,7 +542,7 @@
       "--verbose"
     ],
     "env": {
-      "BUILDTYPE": "Debug"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "unit_tests"
   },
@@ -554,7 +557,7 @@
       "--verbose"
     ],
     "env": {
-      "BUILDTYPE": "Debug"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "webkit_unit_tests"
   },

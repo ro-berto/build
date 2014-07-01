@@ -261,6 +261,9 @@
       "-t",
       "Release"
     ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
     "name": "provision_devices"
   },
   {
@@ -316,7 +319,7 @@
       "--tool=asan"
     ],
     "env": {
-      "BUILDTYPE": "Release"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "unittests"
   },

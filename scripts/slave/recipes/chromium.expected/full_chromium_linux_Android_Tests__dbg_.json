@@ -162,6 +162,9 @@
       "-t",
       "Debug"
     ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
     "name": "provision_devices"
   },
   {
@@ -174,7 +177,7 @@
       "base_unittests"
     ],
     "env": {
-      "BUILDTYPE": "Debug"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "base_unittests"
   },

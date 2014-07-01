@@ -33,13 +33,16 @@ class AndroidApi(recipe_api.RecipeApi):
     return self.out_path.join(self.c.BUILD_CONFIG, 'coverage')
 
   def get_env(self):
-    return {
+    env = {
         'PATH': self.m.path.pathsep.join(map(str, [
                    self.m.path['checkout'].join('third_party', 'android_tools',
                                                 'sdk', 'platform-tools'),
                    self.m.path['checkout'].join('build', 'android'),
                    '%(PATH)s']))
     }
+    if self.c.adb_vendor_keys:
+      env.update({'ADB_VENDOR_KEYS': self.c.adb_vendor_keys})
+    return env
 
   def configure_from_properties(self, config_name, **kwargs):
     def set_property(prop, var):
@@ -301,6 +304,7 @@ class AndroidApi(recipe_api.RecipeApi):
             'build', 'android', 'provision_devices.py'),
         args=args,
         can_fail_build=False,
+        env=self.get_env(),
         **kwargs)
 
   def detect_and_setup_devices(self, restart_usb=False, skip_wipe=False,
@@ -351,6 +355,7 @@ class AndroidApi(recipe_api.RecipeApi):
         args,
         cwd=self.m.path['checkout'],
         always_run=True,
+        env=self.get_env(),
         **kwargs)
 
   def run_sharded_perf_tests(self, config, flaky_config=None, perf_id=None,
@@ -376,7 +381,8 @@ class AndroidApi(recipe_api.RecipeApi):
          'perf', '--steps', config, '--output-json-list', self.m.json.output()],
         step_test_data=lambda: self.m.json.test_api.output([
             'perf_test.foo', 'page_cycler.foo', 'endure.foo']),
-        always_run=True
+        always_run=True,
+        env=self.get_env()
     )
     perf_tests = self.m.step_history.last_step().json.output
 
@@ -398,6 +404,7 @@ class AndroidApi(recipe_api.RecipeApi):
           results_url='https://chromeperf.appspot.com',
           perf_id=perf_id,
           test_type=test_name,
+          env=self.get_env(),
           always_run=True)
 
   def run_instrumentation_suite(self, test_apk, test_data=None,
@@ -534,7 +541,7 @@ class AndroidApi(recipe_api.RecipeApi):
         str(suite),
         self.m.path['checkout'].join('build', 'android', 'test_runner.py'),
         ['gtest', '-s', suite] + args,
-        env={'BUILDTYPE': self.c.BUILD_CONFIG},
+        env=self.get_env(),
         always_run=True)
 
   def coverage_report(self, **kwargs):
