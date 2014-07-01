@@ -25,7 +25,7 @@
       "--revision",
       "src@HEAD",
       "--revision",
-      "src/v8@HEAD",
+      "src/v8@bleeding_edge:HEAD",
       "--force"
     ],
     "name": "bot_update",

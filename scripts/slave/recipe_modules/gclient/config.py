@@ -232,7 +232,11 @@ def v8_bleeding_edge(c):
   c.solutions[0].custom_vars['v8_branch'] = 'branches/bleeding_edge'
   c.revisions['src/v8'] = 'HEAD'
 
-@config_ctx(includes=['blink', 'v8_bleeding_edge'])
+@config_ctx(includes=['v8_bleeding_edge'])
+def v8_bleeding_edge_git(c):
+  c.revisions['src/v8'] = 'bleeding_edge:HEAD'
+
+@config_ctx(includes=['blink', 'v8_bleeding_edge_git'])
 def v8_blink_flavor(c):
   del c.revisions['src/third_party/WebKit']
 

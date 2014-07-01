@@ -243,7 +243,11 @@ BUILDERS = {
         },
         'compile_only': False,
         'v8_blink_flavor': True,
+        # TODO(machenbach): Check if this is needed in bot_update.
         'root_override': 'v8',
+        'set_custom_revs': {
+          'src/v8': 'bleeding_edge:%(revision)s',
+        },
         'testing': {
           'platform': 'linux',
         },
@@ -266,8 +270,9 @@ def GenSteps(api):
   if bot_config.get('v8_blink_flavor'):
     api.gclient.apply_config('v8_blink_flavor')
     api.gclient.apply_config('show_v8_revision')
-    if api.properties['revision']:
-      api.gclient.c.revisions['src/v8'] = api.properties['revision']
+  if api.properties['revision']:
+    for dep, rev in bot_config.get('set_custom_revs', {}).iteritems():
+      api.gclient.c.revisions[dep] = rev % api.properties
   api.step.auto_resolve_conflicts = True
 
   if 'oilpan' in buildername:
