@@ -243,8 +243,7 @@ BUILDERS = {
         },
         'compile_only': False,
         'v8_blink_flavor': True,
-        # TODO(machenbach): Check if this is needed in bot_update.
-        'root_override': 'v8',
+        'root_override': 'src/v8',
         'set_custom_revs': {
           'src/v8': 'bleeding_edge:%(revision)s',
         },
@@ -283,7 +282,11 @@ def GenSteps(api):
   webkit_python_tests = api.path['build'].join('scripts', 'slave', 'chromium',
                                                'test_webkitpy_wrapper.py')
 
-  yield api.bot_update.ensure_checkout(force=True)
+  # Set patch_root used when applying the patch after checkout. Default None
+  # makes bot_update determine the patch_root from tryserver root, e.g. 'src'.
+  yield api.bot_update.ensure_checkout(
+      force=True, patch_root=bot_config.get('root_override'))
+
   yield (
     api.chromium.runhooks(),
     api.chromium.compile(),

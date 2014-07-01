@@ -57,7 +57,7 @@ class BotUpdateApi(recipe_api.RecipeApi):
 
   def ensure_checkout(self, gclient_config=None, suffix=None,
                       patch=True, update_presentation=True,
-                      force=False, **kwargs):
+                      force=False, patch_root=None, **kwargs):
     # We can re-use the gclient spec from the gclient module, since all the
     # data bot_update needs is already configured into the gclient spec.
     cfg = gclient_config or self.m.gclient.c
@@ -70,7 +70,7 @@ class BotUpdateApi(recipe_api.RecipeApi):
 
     # Construct our bot_update command.  This basically be inclusive of
     # everything required for bot_update to know:
-    root = self.m.properties.get('root')
+    root = patch_root or self.m.properties.get('root')
     if patch:
       issue = self.m.properties.get('issue')
       patchset = self.m.properties.get('patchset')
