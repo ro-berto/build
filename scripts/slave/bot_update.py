@@ -171,6 +171,7 @@ ENABLED_MASTERS = [
     'chromium.swarm',
     'chromium.webkit',
     'client.drmemory',
+    'client.nacl.sdk',
     'client.nacl.sdk.mono',
     'tryserver.blink',
     'tryserver.chromium',
