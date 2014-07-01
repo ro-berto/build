@@ -26,6 +26,9 @@ import uuid
 
 import os.path as path
 
+# How many bytes at a time to read from pipes.
+BUF_SIZE = 256
+
 # Set this to true on flag day.
 FLAG_DAY = False
 
@@ -397,6 +400,7 @@ def call(*args, **kwargs):
   """Interactive subprocess call."""
   kwargs['stdout'] = subprocess.PIPE
   kwargs['stderr'] = subprocess.STDOUT
+  kwargs.setdefault('bufsize', BUF_SIZE)
   cwd = kwargs.get('cwd', os.getcwd())
   result_fn = kwargs.pop('result_fn', lambda code, out: RETRY if code else OK)
   stdin_data = kwargs.pop('stdin_data', None)
@@ -423,20 +427,23 @@ def call(*args, **kwargs):
       proc.stdin.close()
     # This is here because passing 'sys.stdout' into stdout for proc will
     # produce out of order output.
-    last_was_cr = False
+    hanging_cr = False
     while True:
-      buf = proc.stdout.read(1)
-      if buf == '\r':
-        buf = '\n'
-        last_was_cr = True
-      elif last_was_cr:
-        last_was_cr = False
-        if buf == '\n':
-          continue
+      buf = proc.stdout.read(BUF_SIZE)
       if not buf:
         break
+      if hanging_cr:
+        buf = '\r' + buf
+      hanging_cr = buf.endswith('\r')
+      if hanging_cr:
+        buf = buf[:-1]
+      buf = buf.replace('\r\n', '\n').replace('\r', '\n')
       sys.stdout.write(buf)
       out.write(buf)
+    if hanging_cr:
+      sys.stdout.write('\n')
+      out.write('\n')
+
     code = proc.wait()
     elapsed_time = ((time.time() - start_time) / 60.0)
     outval = out.getvalue()
@@ -838,7 +845,7 @@ def get_target_revision(folder_name, git_url, revisions):
   return None
 
 
-def force_revision(folder_name, revision, git_svn=False):
+def force_revision(folder_name, revision):
   split_revision = revision.split(':', 1)
   branch = 'master'
   if len(split_revision) == 2:
@@ -894,7 +901,7 @@ def git_checkout(solutions, revisions, shallow):
 
       revision = get_target_revision(name, url, revisions) or 'HEAD'
       try:
-        force_revision(sln_dir, revision, url==CHROMIUM_SRC_URL)
+        force_revision(sln_dir, revision)
         done = True
       except SubprocessFailed:
         # Exited abnormally, theres probably something wrong.
