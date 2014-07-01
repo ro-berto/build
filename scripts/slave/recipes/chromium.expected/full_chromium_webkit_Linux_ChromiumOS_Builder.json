@@ -17,7 +17,9 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD"
+      "src@HEAD",
+      "--revision",
+      "src/third_party/WebKit@HEAD"
     ],
     "name": "bot_update",
     "~followup_annotations": [
@@ -138,7 +140,7 @@
       "--target",
       "Release",
       "--build-url",
-      "gs://chromium-chromiumos-archive/chromium.webkit/Linux ChromiumOS Builder",
+      "gs://chromium-webkit-archive/chromium.webkit/Linux ChromiumOS Builder",
       "--build_revision",
       "170242",
       "--factory-properties",

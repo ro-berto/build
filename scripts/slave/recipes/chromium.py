@@ -111,6 +111,8 @@ def GenSteps(api):
                          **bot_config.get('gclient_config_kwargs', {}))
   for c in recipe_config.get('gclient_apply_config', []):
     api.gclient.apply_config(c)
+  for c in bot_config.get('gclient_apply_config', []):
+    api.gclient.apply_config(c)
 
   if 'android_config' in bot_config:
     api.chromium_android.set_config(
