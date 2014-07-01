@@ -175,7 +175,7 @@
       "--run-manual",
       "--test-launcher-print-test-stdio=always"
     ],
-    "name": "content_browsertests (webrtc)"
+    "name": "content_browsertests"
   },
   {
     "allow_subannotations": true,
@@ -205,7 +205,7 @@
       "--test-launcher-jobs=1",
       "--test-launcher-print-test-stdio=always"
     ],
-    "name": "browser_tests (webrtc)"
+    "name": "browser_tests"
   },
   {
     "allow_subannotations": true,
@@ -227,6 +227,6 @@
       "content_unittests",
       "--gtest_filter=WebRtc*:WebRTC*:RTC*:MediaStream*"
     ],
-    "name": "content_unittests (webrtc)"
+    "name": "content_unittests"
   }
 ]

@@ -83,13 +83,13 @@ class WebRTCApi(recipe_api.RecipeApi):
       elif self.m.platform.is_linux:
         f = self.m.path['checkout'].join
         steps.append(self.add_test(
-            'audioproc', name='audioproc_perf',
+            'audioproc',
             args=['-aecm', '-ns', '-agc', '--fixed_digital', '--perf', '-pb',
                   f('resources', 'audioproc.aecdump')],
             revision=revision,
             perf_test=True))
         steps.append(self.add_test(
-            'iSACFixtest', name='isac_fixed_perf',
+            'iSACFixtest',
             args=['32000', f('resources', 'speech_and_misc_wb.pcm'),
                   'isac_speech_and_misc_wb.pcm'],
             revision=revision,
@@ -100,7 +100,8 @@ class WebRTCApi(recipe_api.RecipeApi):
             env={'LD_PRELOAD': '/usr/lib/x86_64-linux-gnu/libpulse.so.0'}))
 
       steps.append(self.virtual_webcam_check())
-      steps.append(self.add_test('vie_auto_test',
+      steps.append(self.add_test(
+          'vie_auto_test',
           args=['--automated',
                 '--capture_test_ensure_resolution_alignment_in_capture_device='
                 'false'],
@@ -117,13 +118,13 @@ class WebRTCApi(recipe_api.RecipeApi):
       # because they rely on physical audio and video devices, which are only
       # available at bare-metal machines.
       steps.append(self.add_test(
-          test='content_browsertests', name='content_browsertests (webrtc)',
+          'content_browsertests',
           args=['--gtest_filter=WebRtc*', '--run-manual',
                 '--test-launcher-print-test-stdio=always'],
           revision=revision,
           perf_test=True))
       steps.append(self.add_test(
-          test='browser_tests', name='browser_tests (webrtc)',
+          'browser_tests',
           # These tests needs --test-launcher-jobs=1 since some of them are
           # not able to run in parallel (due to the usage of the
           # peerconnection server).
@@ -134,13 +135,19 @@ class WebRTCApi(recipe_api.RecipeApi):
           revision=revision,
           perf_test=True))
       steps.append(self.add_test(
-          test='content_unittests', name='content_unittests (webrtc)',
+          'content_unittests',
           args=['--gtest_filter=WebRtc*:WebRTC*:RTC*:MediaStream*']))
 
     return steps
 
   def add_test(self, test, name=None, args=None, revision=None, env=None,
                perf_test=False, perf_dashboard_id=None):
+    """Helper function to invoke chromium.runtest().
+
+    Notice that the name parameter should be the same as the test executable in
+    order to get the stdio links in the perf dashboard to become correct.
+    """
+    name = name or test
     args = args or []
     env = env or {}
     if self.c.PERF_ID and perf_test:
