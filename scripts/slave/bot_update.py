@@ -780,7 +780,7 @@ def ensure_deps2git(solution, shallow):
   repo_base = path.join(os.getcwd(), solution['name'])
   deps_file = path.join(repo_base, 'DEPS')
   deps_git_file = path.join(repo_base, '.DEPS.git')
-  if not git('ls-files', '.DEPS.git', cwd=repo_base).strip():
+  if not git('ls-files', 'DEPS', cwd=repo_base).strip():
     return
 
   print 'Checking if %s is newer than %s' % (deps_file, deps_git_file)
