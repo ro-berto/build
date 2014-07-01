@@ -9,6 +9,7 @@ The advantage of using gitiles is that a local clone is not needed."""
 
 import datetime
 import os
+import re
 import urllib
 from urlparse import urlparse
 
@@ -92,9 +93,11 @@ class GitilesRevisionComparator(RevisionComparator):
 class GitilesPoller(PollingChangeSource):
   """Polls a git repository using the gitiles web interface. """
 
+  git_svn_id_re = re.compile('^git-svn-id: (.*)@([0-9]+) [0-9a-fA-F\-]*$')
+
   def __init__(
       self, repo_url, branch='master', pollInterval=10*60, category=None,
-      project=None, revlinktmpl=None, agent=None):
+      project=None, revlinktmpl=None, agent=None, svn_mode=False):
     """Args:
 
     repo_url: URL of the gitiles service to be polled.
@@ -105,6 +108,8 @@ class GitilesPoller(PollingChangeSource):
     revlinktmpl: String template, taking a single 'revision' parameter, used to
         generate a web link to a revision.
     agent: A GerritAgent object used to make requests to the gitiles service.
+    svn_mode: When polling a mirror of an svn repository, create changes using
+        the svn revision number.
     """
 
     u = urlparse(repo_url)
@@ -120,6 +125,7 @@ class GitilesPoller(PollingChangeSource):
         project = project[:-4]
     self.project = project
     self.revlinktmpl = revlinktmpl
+    self.svn_mode = svn_mode
     if agent is None:
       agent = GerritAgent('%s://%s' % (u.scheme, u.netloc), read_only=True)
     self.agent = agent
@@ -138,19 +144,36 @@ class GitilesPoller(PollingChangeSource):
       commit_files = [
           x['new_path'] for x in commit_json['tree_diff'] if 'new_path' in x]
     commit_msg = commit_json['message']
+    repo_url = self.repo_url
+    revision = commit_json['commit']
+    branch = self.branch
+    if self.svn_mode:
+      revision = None
+      for line in reversed(commit_msg.splitlines()):
+        m = self.git_svn_id_re.match(line)
+        if m:
+          repo_url = m.group(1)
+          revision = m.group(2)
+          branch = self.project
+          break
+      if revision is None:
+        log.err(
+            'Could not parse svn revision out of commit message '
+            'for commit %s in %s' % (commit_json['commit'], self.repo_url))
+        return None
     revlink = ''
-    if self.revlinktmpl and commit_json['commit']:
-      revlink = self.revlinktmpl % commit_json['commit']
+    if self.revlinktmpl and revision:
+      revlink = self.revlinktmpl % revision
     return self.master.addChange(
         author=commit_author,
-        revision=commit_json['commit'],
+        revision=revision,
         files=commit_files,
         comments=commit_msg,
         when_timestamp=commit_tm,
-        branch=self.branch,
+        branch=branch,
         category=self.category,
         project=self.project,
-        repository=self.repo_url,
+        repository=repo_url,
         revlink=revlink)
 
   def _process_log(self, log_json):
