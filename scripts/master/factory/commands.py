@@ -950,11 +950,11 @@ class FactoryCommands(object):
           or properties.getProperty('parent_branch') == 'trunk'):
         revision = properties.getProperty('parent_wk_revision')
         if not revision:
-          revision = properties.getProperty('revision')
-        return 'src@HEAD,src/third_party/WebKit@%s' % revision
+          revision = properties.getProperty('revision') or 'HEAD'
+        return 'src@HEAD,src/third_party/WebKit@%s' % (revision,)
       else:
         return ('src@%s,src/third_party/WebKit@HEAD'
-                % properties.getProperty('revision'))
+                % (properties.getProperty('revision') or 'HEAD',))
 
     PROPERTIES = {
         'root': '%(root:-)s',
