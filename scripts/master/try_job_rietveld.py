@@ -482,7 +482,6 @@ class TryJobRietveld(TryJobBase):
         # Now cleanup the job dictionary and submit it.
         cleaned_job = self.parse_options(options)
 
-        yield self.get_lkgr(cleaned_job)
         c = yield self.master.addChange(
             author=','.join(cleaned_job['email']),
             # TODO(maruel): Get patchset properties to get the list of files.

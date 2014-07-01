@@ -9,9 +9,7 @@ import sys
 from buildbot.process.properties import Properties
 from buildbot.schedulers.trysched import TryBase
 from buildbot.schedulers.trysched import BadJobfile
-from twisted.internet import defer
 from twisted.python import log
-from twisted.web import client
 
 from master.factory.commands import DEFAULT_TESTS
 
@@ -189,7 +187,6 @@ class TryJobBase(TryBase):
     pools.SetParent(self)
     self.last_good_urls = last_good_urls
     self.code_review_sites = code_review_sites
-    self._last_lkgr = {}
     self.valid_builders = []
 
   def setServiceParent(self, parent):
@@ -278,34 +275,3 @@ class TryJobBase(TryBase):
     d.addCallback(self.create_buildset, parsed_job)
     d.addErrback(log.err, "Failed to queue a try job!")
     return d
-
-  def get_lkgr(self, options):
-    """Grabs last known good revision number if necessary."""
-
-    # TODO: crbug.com/233418 - Only use the blink url for jobs with the blink
-    # project set. This will require us to always set the project in blink
-    # configs.
-    project = options['project'] or 'chrome'
-    if project == 'chrome' and all('_layout' in bot for bot in options['bot']):
-      project = 'blink'
-
-    options['rietveld'] = (self.code_review_sites or {}).get(project)
-    self._last_lkgr.setdefault(project, None)
-    last_good_url = (self.last_good_urls or {}).get(project)
-
-    if options['revision'] or not last_good_url:
-      return defer.succeed(0)
-
-    def Success(result):
-      new_value = result.strip()
-      if new_value and (not self._last_lkgr[project] or
-                        new_value != self._last_lkgr[project]):
-        self._last_lkgr[project] = new_value
-      options['revision'] = self._last_lkgr[project] or 'HEAD'
-
-    def Failure(result):
-      options['revision'] = self._last_lkgr[project] or 'HEAD'
-
-    connection = client.getPage(last_good_url, agent='buildbot')
-    connection.addCallbacks(Success, Failure)
-    return connection
