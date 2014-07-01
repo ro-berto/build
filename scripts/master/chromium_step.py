@@ -1163,8 +1163,8 @@ class AnnotationObserver(buildstep.LogLineObserver):
     }
     props.update(new_properties)
     # Specify property sources.
-    return {k: (v, 'ParentBuild')
-            for k, v in props.iteritems()}
+    return dict((k, (v, 'ParentBuild'))
+            for k, v in props.iteritems())
 
   @defer.inlineCallbacks
   def triggerBuilds(self, builder_names, properties):
