@@ -534,6 +534,11 @@ class AnnotationObserver(buildstep.LogLineObserver):
   @@@HONOR_ZERO_RETURN_CODE@@@
   Honor the return code being zero (success), even if steps have other results.
 
+  @@@STEP_TRIGGER@<spec>@@@
+  Trigger build(s), where <spec> is a JSON-encoded dict with keys:
+    builderNames - A list of builder names that should be triggered.
+    properties - A dictionary of properties to override the default ones.
+
   Deprecated annotations:
   TODO(bradnelson): drop these when all users have been tracked down.
 
@@ -758,8 +763,8 @@ class AnnotationObserver(buildstep.LogLineObserver):
     assert not section['closed'], 'Can\'t close a closed step'
     # The initial section will be closed by self.finished when runCommand
     # completes.
-    assert section is not self.sections[0], ('The initial section cannot be '
-                                             'closed')
+    assert not self.sectionIsPreamble(section), ('The initial section cannot '
+                                                 'be closed')
     section['closed'] = True
     if section['step'].isFinished():
       return
@@ -1130,6 +1135,61 @@ class AnnotationObserver(buildstep.LogLineObserver):
       section = self.addSection(step_name)
       self.startStep(section)
       self.cursor = section
+
+  def STEP_TRIGGER(self, spec):
+    # Support: @@@STEP_TRIGGER <json spec>@@@ (trigger build(s)).
+    try:
+      spec = json.loads(spec)
+      builder_names = spec.get('builderNames')
+      if not builder_names:
+        raise ValueError('builderNames is not specified: %r' % (spec,))
+
+      # Start builds.
+      d = self.triggerBuilds(builder_names, spec.get('properties') or {})
+      # addAsyncOpToCursor expects a deferred to return a build result. If a
+      # buildset is added, then it is a success. This lambda function returns a
+      # tuple, which is received by addAsyncOpToCursor.
+      d.addCallback(lambda _: (builder.SUCCESS, None))
+      description = 'Triggering build(s) on %s' % (', '.join(builder_names),)
+      self.addAsyncOpToCursor(d, description)
+    except Exception as ex:
+      self.finishStep(self.cursor, builder.FAILURE, ex)
+
+  @staticmethod
+  def getPropertiesForTriggeredBuild(current_properties, new_properties):
+    props = {
+        'parent_buildername': current_properties.getProperty('buildername'),
+        'parent_buildnumber': current_properties.getProperty('buildnumber'),
+    }
+    props.update(new_properties)
+    # Specify property sources.
+    return {k: (v, 'ParentBuild')
+            for k, v in props.iteritems()}
+
+  @defer.inlineCallbacks
+  def triggerBuilds(self, builder_names, properties):
+    """Creates a new buildset."""
+    build = self.command.build
+    master = build.builder.botmaster.parent
+    current_properties = build.getProperties()
+
+    # Use the same source stamp.
+    source_stamp = build.getSourceStamp()
+    revision = current_properties.getProperty('got_revision')
+    if revision:
+      source_stamp = source_stamp.getAbsoluteSourceStamp(revision)
+    ssid = yield source_stamp.getSourceStampId(master)
+
+    properties = self.getPropertiesForTriggeredBuild(current_properties,
+                                                     properties)
+
+    bsid, brids = yield master.addBuildset(
+        ssid=ssid,
+        reason='Triggered by %s' % build.builder.name,
+        properties=properties,
+        builderNames=builder_names)
+    log.msg('Triggered a buildset %s with builders %s' % (bsid, builder_names))
+    defer.returnValue((bsid, brids))
 
   def handleReturnCode(self, return_code):
     # Treat all non-zero return codes as failure.
