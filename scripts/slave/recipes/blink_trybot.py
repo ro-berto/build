@@ -32,26 +32,6 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
-      'linux_blink_bot_update': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'compile_only': False,
-        'testing': {
-          'platform': 'linux',
-        },
-      },
-      'linux_blink_no_bot_update': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'compile_only': False,
-        'testing': {
-          'platform': 'linux',
-        },
-      },
       'linux_blink_rel': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -222,16 +202,6 @@ BUILDERS = {
           'platform': 'win',
         },
       },
-      'win_blink_no_bot_update': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'compile_only': False,
-        'testing': {
-          'platform': 'win',
-        },
-      },
     },
   },
   'tryserver.v8': {
@@ -310,7 +280,8 @@ def GenSteps(api):
 
   if not bot_config['compile_only']:
     def deapply_patch_fn(_failing_steps):
-      yield api.bot_update.ensure_checkout(patch=False, always_run=True)
+      yield api.bot_update.ensure_checkout(patch=False, force=True,
+                                           always_run=True)
 
       yield (
         api.chromium.runhooks(always_run=True),
@@ -402,22 +373,6 @@ def GenTests(api):
     properties('tryserver.blink', 'linux_blink_rel') +
     api.override_step_data(with_patch, canned_test(passing=False,
                                                    retcode=130))
-  )
-
-  yield (
-    api.test('compile_failure_bot_update') +
-    api.platform('linux', 64) +
-    properties('tryserver.blink', 'linux_blink_bot_update') +
-    api.step_data('compile', retcode=1) +
-    api.step_data(with_patch, canned_test(passing=True, minimal=True))
-  )
-
-  yield (
-    api.test('compile_failure_win') +
-    api.platform('win', 32) +
-    properties('tryserver.blink', 'win_blink_no_bot_update') +
-    api.step_data('compile', retcode=1) +
-    api.step_data(with_patch, canned_test(passing=True, minimal=True))
   )
 
   # This tests what happens if we don't trip the thresholds listed
