@@ -155,6 +155,10 @@ def main():
     if options.quickcheck:
       cmd.extend(['--quickcheck'])
     if options.json_test_results:
+      # Rerun failures to test for flakes when presenting test results.
+      # TODO(machenbach): Both flags should be default as soon as the feature
+      # makes it into all branches.
+      cmd.extend(['--rerun-failures-count=2'])
       cmd.extend(['--json-test-results', options.json_test_results])
 
   if options.shard_count > 1:

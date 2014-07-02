@@ -421,7 +421,38 @@ class V8Api(recipe_api.RecipeApi):
       cwd=self.m.path['checkout'],
     )
 
+  def _command_results_text(self, results, flaky):
+    """Returns log lines for all results of a unique command."""
+    assert results
+    lines = []
+
+    # Add common description for multiple runs.
+    flaky_suffix = ' (flaky)' if flaky else ''
+    lines.append('Test: %s%s' % (results[0]['name'], flaky_suffix))
+    lines.append('Flags: %s' % " ".join(results[0]['flags']))
+    lines.append('Command: %s' % results[0]['command'])
+    lines.append('')
+
+    # Add results for each run of a command.
+    for result in sorted(results, key=lambda r: int(r['run'])):
+      lines.append('Run #%d' % int(result['run']))
+      lines.append('Exit code: %s' % result['exit_code'])
+      lines.append('Result: %s' % result['result'])
+      lines.append('')
+      if result['stdout']:
+        lines.append('Stdout:')
+        lines.extend(result['stdout'].splitlines())
+        lines.append('')
+      if result['stderr']:
+        lines.append('Stderr:')
+        lines.extend(result['stderr'].splitlines())
+        lines.append('')
+    return lines
+
   def _update_test_presentation(self, results, presentation):
+    def all_same(items):
+      return all(x == items[0] for x in items)
+
     if not results:
       return
 
@@ -436,24 +467,35 @@ class V8Api(recipe_api.RecipeApi):
       # different configurations).
       unique_results.setdefault(label, []).append(result)
 
+    failure_count = 0
+    flake_count = 0
     for label in sorted(unique_results.keys()[:MAX_FAILURE_LOGS]):
       lines = []
+
+      # Group results by command. The same command might have run multiple
+      # times to detect flakes.
+      results_per_command = {}
       for result in unique_results[label]:
-        lines.append('Test: %s' % result['name'])
-        lines.append('Flags: %s' % " ".join(result['flags']))
-        lines.append('Exit code: %s' % result['exit_code'])
-        lines.append('Result: %s' % result['result'])
-        lines.append('Command: %s' % result['command'])
-        lines.append('')
-        if result['stdout']:
-          lines.append('Stdout:')
-          lines.extend(result['stdout'].splitlines())
-          lines.append('')
-        if result['stderr']:
-          lines.append('Stderr:')
-          lines.extend(result['stderr'].splitlines())
-          lines.append('')
+        results_per_command.setdefault(result['command'], []).append(result)
+
+      for command in results_per_command:
+        # Determine flakiness. A test is flaky if not all results from a unique
+        # command are the same (e.g. all 'FAIL').
+        flaky = not all_same(map(lambda x: x['result'],
+                                 results_per_command[command]))
+
+        # Count flakes and failures for summary. The v8 test driver reports
+        # failures and reruns of failures.
+        flake_count += int(flaky)
+        failure_count += int(not flaky)
+
+        lines += self._command_results_text(results_per_command[command],
+                                            flaky)
       presentation.logs[label] = lines
+
+    # Summary about flakes and failures.
+    presentation.step_text += ('failures: %d<br/>flakes: %d<br/><br/>' %
+                               (failure_count, flake_count))
 
   def _runtest(self, name, test, flaky_tests=None, **kwargs):
     env = {}
