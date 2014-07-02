@@ -173,11 +173,11 @@
       "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
       "cp",
       "[SLAVE_BUILD]/src/out/build_product.zip",
-      "gs://chromium-android/android_oilpan_builder/full-build-linux_257.zip"
+      "gs://chromium-android/android_oilpan_builder/build_product_267739.zip"
     ],
     "name": "gsutil upload_build_product",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-android/android_oilpan_builder/full-build-linux_257.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-android/android_oilpan_builder/build_product_267739.zip@@@"
     ]
   },
   {

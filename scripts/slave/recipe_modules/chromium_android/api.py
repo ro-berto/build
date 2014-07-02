@@ -341,6 +341,13 @@ class AndroidApi(recipe_api.RecipeApi):
         always_run=True,
         **kwargs)
 
+  def list_perf_tests(self, browser, json_output_file):
+    yield self.m.python(
+      'List Perf Tests',
+      self.m.path['checkout'].join('tools', 'perf', 'run_benchmark'),
+      ['list', '--browser', browser, '--json-output', json_output_file],
+      always_run=True)
+
   def _run_sharded_tests(self,
                          config='sharded_perf_tests.json',
                          flaky_config=None,

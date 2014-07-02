@@ -37,13 +37,13 @@ BUILDERS = {
     'android_oilpan_builder': {
       'recipe_config': 'oilpan_builder',
       'kwargs': {
-        'REPO_URL': 'https://chromium.googlesource.com/chromium/src.git',
         'BUILD_CONFIG': 'Release',
       },
       'upload': {
         'bucket': 'chromium-android',
-        'path': lambda api: ('android_oilpan_builder/full-build-linux_%s.zip'
-                             % api.properties['buildnumber']),
+        'path': lambda api: (
+          '%s/build_product_%s.zip' % (api.properties['buildername'],
+                                       api.properties['revision'])),
       }
     }
   }
