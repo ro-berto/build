@@ -17,7 +17,7 @@ DEPS = [
 REPO_URL = 'https://chromium.googlesource.com/chromium/src.git'
 
 BUILDERS = {
-  'android_nexus5-oilpan-perf': {
+  'android_nexus5_oilpan_perf': {
     'bucket': 'chromium-android',
     'path': lambda api: (
       '%s/build_product_%s.zip' % (
