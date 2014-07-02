@@ -574,34 +574,6 @@ def common_make_settings(
 
   if compiler in ('goma', 'goma-clang', 'jsonclang'):
     print 'using', compiler
-    if compiler == 'goma':
-      assert options.goma_dir
-      env['CC'] = 'gcc'
-      env['CXX'] = 'g++'
-      env['PATH'] = ':'.join([options.goma_dir, env['PATH']])
-    elif compiler == 'goma-clang':
-      assert options.goma_dir
-      env['CC'] = 'clang'
-      env['CXX'] = 'clang++'
-      clang_dir = os.path.join(options.src_dir,
-        'third_party', 'llvm-build', 'Release+Asserts', 'bin')
-      env['PATH'] = ':'.join([options.goma_dir, clang_dir, env['PATH']])
-    else:  # jsonclang
-      env['CC'] = os.path.join(SLAVE_SCRIPTS_DIR, 'chromium', 'jsonclang')
-      env['CXX'] = os.path.join(SLAVE_SCRIPTS_DIR, 'chromium', 'jsonclang++')
-      command.append('-r')
-      command.append('-k')
-      # 'jsonclang' assumes the clang binary is in the path.
-      clang_dir = os.path.join(options.src_dir,
-        'third_party', 'llvm-build', 'Release+Asserts', 'bin')
-      if options.goma_dir:
-        env['PATH'] = ':'.join([options.goma_dir, clang_dir, env['PATH']])
-      else:
-        env['PATH'] = ':'.join([clang_dir, env['PATH']])
-
-    command.append('CC.host=' + env['CC'])
-    command.append('CXX.host=' + env['CXX'])
-
     goma_jobs = 50
     if jobs < goma_jobs:
       jobs = goma_jobs
@@ -609,12 +581,6 @@ def common_make_settings(
     return
 
   if compiler == 'clang':
-    clang_dir = os.path.join(options.src_dir,
-        'third_party', 'llvm-build', 'Release+Asserts', 'bin')
-    env['CC'] = os.path.join(clang_dir, 'clang')
-    env['CXX'] = os.path.join(clang_dir, 'clang++')
-    command.append('CC.host=' + env['CC'])
-    command.append('CXX.host=' + env['CXX'])
     command.append('-r')
 
   command.append('-j%d' % jobs)
@@ -725,7 +691,6 @@ def main_ninja(options, args):
   # Prepare environment.
   env = EchoDict(os.environ)
   env.setdefault('NINJA_STATUS', '[%s/%t | %e] ')
-  orig_compiler = options.compiler
   goma_ready = goma_setup(options, env)
   try:
     if not goma_ready:
@@ -763,69 +728,13 @@ def main_ninja(options, args):
     if options.compiler in ('goma', 'goma-clang', 'jsonclang'):
       assert options.goma_dir
       if chromium_utils.IsWindows():
-        # rewrite cc, cxx line in output_dir\build.ninja.
-        # in winja, ninja -t msvc is used to run $cc/$cxx to collect
-        # dependency with "cl /showIncludes" and generates dependency info.
-        # ninja -t msvc uses environment in output_dir\environment.*,
-        # which is generated at gyp time (Note: gyp detect MSVC's path and set
-        # it to PATH.  This PATH doesn't include goma_dir.), and ignores PATH
-        # to run $cc/$cxx at run time.
-        # So modifying PATH in compile.py doesn't afffect to run $cc/$cxx
-        # under ninja -t msvc. (PATH is just ignored. Note PATH set/used
-        # in compile.py doesn't include MSVC's path).
-        # Hence, we'll got
-        # "CreateProcess failed: The system cannot find the file specified."
-        #
-        # So, rewrite cc, cxx line to "$goma_dir/gomacc cl".
-        #
-        # Note that, on other platform, ninja doesn't use ninja -t msvc
-        # (it just simply run $cc/$cxx), so modifying PATH can work to run
-        # gomacc without this hack.
-        #
-        # Another option is to use CC_wrapper, CXX_wrapper environement
-        # variables at gyp time (and this is typical usage for chromium
-        # developers), but it would make it harder to fallback no-goma when
-        # goma is not available.
-        # TODO: Set CC / CXX at gyp time instead. This is a horrible hack.
-        manifest = os.path.join(options.target_output_dir, 'build.ninja')
-        orig_manifest = manifest + '.orig'
-        if os.path.exists(orig_manifest):
-          os.remove(orig_manifest)
-        os.rename(manifest, orig_manifest)
-        cc_line_pattern = re.compile(
-            r'(cc|cxx|cc_host|cxx_host|cl_x86|cl_x64) = (.*)')
-        gomacc = os.path.join(options.goma_dir, 'gomacc.exe')
-        modified_lines = []
-        with open(orig_manifest) as orig_build:
-          with open(manifest, 'w') as new_build:
-            for line in orig_build:
-              m = cc_line_pattern.match(line)
-              if m:
-                cc_type = m.group(1)
-                cc_cmd = m.group(2).strip()
-                # use gomacc if cc_cmd is simple command (e.g. cl.exe), or
-                # quoted full path (e.g. "c:\Program Files\...").
-                if not ' ' in cc_cmd or re.match('^"[^"]+"$', cc_cmd):
-                  orig_line = line
-                  line = '%s = %s %s\n' % (cc_type, gomacc, cc_cmd)
-                  modified_lines.append((orig_line, line))
-              new_build.write(line)
-        if modified_lines:
-          print 'build.ninja modified in compile.py for goma:\n'
-          for (orig_line, line) in modified_lines:
-            sys.stdout.write('    ' + orig_line)
-            sys.stdout.write(' -> ' + line)
+        assert options.compiler != 'jsonclang', ('jsonclang does not use '
+            'CC_wrapper, so it cannot easily work on Windows.')
 
-      # CC and CXX are set at gyp time for ninja. PATH still needs to be
-      # adjusted.
-      if options.compiler == 'goma':
-        env['PATH'] = os.pathsep.join([options.goma_dir, env['PATH']])
-      elif options.compiler == 'goma-clang':
-        clang_dir = os.path.abspath(os.path.join(
-            'third_party', 'llvm-build', 'Release+Asserts', 'bin'))
-        env['PATH'] = os.pathsep.join(
-            [options.goma_dir, clang_dir, env['PATH']])
-      elif options.compiler ==  'jsonclang':
+      # Adjust the path for jsonclang, since it doesn't use CC_wrapper. Windows
+      # uses -t msvc and hardcodes the compiler path in build.ninja, so this
+      # doesn't have an effect there.
+      if options.compiler == 'jsonclang':
         jsonclang_dir = os.path.join(SLAVE_SCRIPTS_DIR, 'chromium')
         clang_dir = os.path.join(options.src_dir,
             'third_party', 'llvm-build', 'Release+Asserts', 'bin')
@@ -869,16 +778,6 @@ def main_ninja(options, args):
         if options.clobber:
           # Enabling this while attempting to solve crbug.com/257467
           env['GOMA_USE_LOCAL'] = '1'
-
-    if orig_compiler == 'goma-clang' and options.compiler == 'clang':
-      # goma setup failed, fallback to local clang.
-      # Note that ninja.build was generated for goma, so need to set PATH
-      # to clang dir.
-      # If orig_compiler is not goma, gyp set this path in ninja.build.
-      print 'using', options.compiler
-      clang_dir = os.path.abspath(os.path.join(
-          'third_party', 'llvm-build', 'Release+Asserts', 'bin'))
-      env['PATH'] = os.pathsep.join([clang_dir, env['PATH']])
 
     # Run the build.
     env.print_overrides()
