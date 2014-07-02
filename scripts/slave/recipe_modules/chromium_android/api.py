@@ -366,14 +366,14 @@ class AndroidApi(recipe_api.RecipeApi):
         **kwargs)
 
   def run_sharded_perf_tests(self, config, flaky_config=None, perf_id=None,
-                             perf_dashboard_id_transform=lambda x: x, **kwargs):
+                             test_type_transform=lambda x: x, **kwargs):
     """Run the perf tests from the given config file.
 
     config: the path of the config file containing perf tests.
     flaky_config: optional file of tests to avoid.
     perf_id: the id of the builder running these tests
-    perf_dashboard_id_transform: a lambda transforming the test name to the
-      perf dashboard id to upload to.
+    test_type_transform: a lambda transforming the test name to the
+      test_type to upload to.
 
     returns: a step generator to run and upload the tests.
     """
@@ -395,7 +395,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
     for test_name in perf_tests:
       test_name = str(test_name)  # un-unicode
-      dashboard_id = perf_dashboard_id_transform(test_name)
+      test_type = test_type_transform(test_name)
       annotate = 'graphing'
       if test_name.split('.')[0] == 'page_cycler':
         annotate = 'pagecycler'
@@ -406,11 +406,11 @@ class AndroidApi(recipe_api.RecipeApi):
           self.m.path['checkout'].join('build', 'android', 'test_runner.py'),
           ['perf', '--print-step', test_name, '--verbose'],
           name=test_name,
-          perf_dashboard_id=dashboard_id,
+          perf_dashboard_id=test_type,
+          test_type=test_type,
           annotate=annotate,
           results_url='https://chromeperf.appspot.com',
           perf_id=perf_id,
-          test_type=test_name,
           env=self.get_env(),
           always_run=True)
 
