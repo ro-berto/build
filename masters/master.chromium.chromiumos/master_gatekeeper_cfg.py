@@ -57,6 +57,9 @@ chromium_categories_steps = {
 }
 
 exclusions = {
+    'Linux ChromiumOS Ozone Builder': [],
+    'Linux ChromiumOS Ozone Tests (1)': [],
+    'Linux ChromiumOS Ozone Tests (2)': [],
 }
 
 forgiving_steps = ['update_scripts', 'update', 'svnkill', 'taskkill',

@@ -155,6 +155,54 @@ SPEC = {
       },
     },
 
+    'Linux ChromiumOS Ozone Builder': {
+      'recipe_config': 'chromium_chromeos',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'GYP_DEFINES': {
+        'use_ozone': 1,
+      },
+      'bot_type': 'builder',
+      'compile_targets': [
+        'aura_builder',
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+    'Linux ChromiumOS Ozone Tests (1)': {
+      'recipe_config': 'chromium_chromeos',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'tests': [
+        steps.DynamicGTestTests('Linux ChromiumOS Tests (1)'),
+      ],
+      'parent_buildername': 'Linux ChromiumOS Ozone Builder',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+    'Linux ChromiumOS Ozone Tests (2)': {
+      'recipe_config': 'chromium_chromeos',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'tests': [
+        steps.DynamicGTestTests('Linux ChromiumOS Tests (2)'),
+      ],
+      'parent_buildername': 'Linux ChromiumOS Ozone Builder',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+
     'Linux ChromiumOS Builder (dbg)': {
       'recipe_config': 'chromium_chromeos',
       'chromium_config_kwargs': {
