@@ -231,6 +231,7 @@ DISABLED_BUILDERS = {
     ],
     'chromium.chromedriver': [
         'Win7',
+        'Linux32',  # Low memory crbug.com/390639
     ],
     'chromium.gpu.fyi': [
         'GPU Win Builder (dbg)',
