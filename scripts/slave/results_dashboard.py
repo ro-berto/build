@@ -85,7 +85,7 @@ def SendResults(logname, lines, system, test_name, url, masterid,
     # Check that the line that was read from the file is valid JSON. If not,
     # don't try to send it, and don't re-try it later; just print an error.
     if not _CanParseJSON(line):
-      errors.append('Could not parse JSON:', line)
+      errors.append('Could not parse JSON: %s' % line)
       continue
 
     error = _SendResultsJson(url, line)
