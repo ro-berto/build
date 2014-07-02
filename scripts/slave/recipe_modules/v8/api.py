@@ -494,7 +494,7 @@ class V8Api(recipe_api.RecipeApi):
       presentation.logs[label] = lines
 
     # Summary about flakes and failures.
-    presentation.step_text += ('failures: %d<br/>flakes: %d<br/><br/>' %
+    presentation.step_text += ('failures: %d<br/>flakes: %d<br/>' %
                                (failure_count, flake_count))
 
   def _runtest(self, name, test, flaky_tests=None, **kwargs):
