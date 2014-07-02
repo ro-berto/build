@@ -124,7 +124,7 @@
       "--build-url",
       "gs://chromium-linux-archive/chromium.linux/Linux Builder/full-build-linux.zip",
       "--build_revision",
-      "170242",
+      "1111111",
       "--factory-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux Sync\", \"buildnumber\": 571, \"mastername\": \"chromium.linux\", \"parent_buildername\": \"Linux Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",

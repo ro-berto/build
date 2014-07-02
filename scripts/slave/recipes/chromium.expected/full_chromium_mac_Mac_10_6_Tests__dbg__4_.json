@@ -124,7 +124,7 @@
       "--build-url",
       "gs://chromium-mac-archive/chromium.mac/Mac Builder (dbg)/full-build-mac.zip",
       "--build_revision",
-      "170242",
+      "1111111",
       "--factory-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac 10.6 Tests (dbg)(4)\", \"buildnumber\": 571, \"mastername\": \"chromium.mac\", \"parent_buildername\": \"Mac Builder (dbg)\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",

@@ -126,7 +126,7 @@
       "--build-url",
       "gs://chromium-webkit-archive/chromium.webkit/Linux ChromiumOS Builder (dbg)/full-build-linux.zip",
       "--build_revision",
-      "170242",
+      "1111111",
       "--factory-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux ChromiumOS Tests (dbg)(1)\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"parent_buildername\": \"Linux ChromiumOS Builder (dbg)\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",

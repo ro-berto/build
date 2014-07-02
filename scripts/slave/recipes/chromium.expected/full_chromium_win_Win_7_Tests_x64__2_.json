@@ -149,7 +149,7 @@
       "--build-url",
       "gs://chromium-win-archive/chromium.win/Win x64 Builder/full-build-win32.zip",
       "--build_revision",
-      "170242",
+      "1111111",
       "--factory-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Win 7 Tests x64 (2)\", \"buildnumber\": 571, \"mastername\": \"chromium.win\", \"parent_buildername\": \"Win x64 Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",

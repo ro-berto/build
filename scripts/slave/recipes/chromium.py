@@ -212,7 +212,7 @@ def GenSteps(api):
       api.archive.legacy_download_url(
         master_config.get('build_gs_bucket'),
         extra_url_components=api.properties['mastername'],),
-      build_revision=got_revision,
+      build_revision=api.properties.get('parent_got_revision', got_revision),
       # TODO(phajdan.jr): Move abort_on_failure to archive recipe module.
       abort_on_failure=True))
 

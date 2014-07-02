@@ -124,7 +124,7 @@
       "--build-url",
       "gs://chromium-fyi-archive/chromium.fyi/Chromium Linux MSan Builder/full-build-linux.zip",
       "--build_revision",
-      "170242",
+      "1111111",
       "--factory-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Chromium Linux MSan (browser tests)\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": \"Chromium Linux MSan Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
