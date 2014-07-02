@@ -60,6 +60,9 @@ class TryJobHTTP(TryJobBase):
   @defer.deferredGenerator
   def messageReceived(self, options):
     parsed = self.parse_options(options)
+    wfd = defer.waitForDeferred(self.get_lkgr(parsed))
+    yield wfd
+    wfd.getResult()
 
     wfd = defer.waitForDeferred(self.master.addChange(
       author=','.join(parsed['email']),

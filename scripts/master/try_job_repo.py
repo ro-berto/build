@@ -27,7 +27,16 @@ class TryJobRepoBase(TryJobBase):
 
   @defer.deferredGenerator
   def addJob(self, options):
-    """Submits a job to master to process."""
+    """Submits a job to master to process.
+
+    Resolves revision to LKGR if needed.
+    """
+
+    # If there is no revision specified, try finding LKGR.
+    if not options.get('revision'):
+      wfd = defer.waitForDeferred(self.get_lkgr(options))
+      yield wfd
+      wfd.getResult()
 
     wfd = defer.waitForDeferred(self.master.addChange(
         author=','.join(options['email']),
