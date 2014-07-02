@@ -1245,6 +1245,8 @@ class UploadTelemetryThread(threading.Thread):
         'slave': self.slave,
     }
     data.update(self.kwargs)
+    if 'conversion_warnings' not in data:
+      data['conversion_warnings'] = []
     try:
       total_disk_space, free_disk_space = get_total_disk_space()
       total_disk_space_gb = int(total_disk_space / (1024 * 1024 * 1024))
@@ -1258,6 +1260,19 @@ class UploadTelemetryThread(threading.Thread):
           'status': 'OK',
           'small': total_disk_space < SHALLOW_CLONE_THRESHOLD,
       }
+      if total_disk_space < SHALLOW_CLONE_THRESHOLD:
+        data['conversion_warnings'].append(
+            'Small disk: %s GB' % total_disk_space_gb)
+
+      git_version_string = git('--version').strip()
+      git_version_m = re.search(r'git version (\d+\.\d+).*',
+                                git_version_string)
+      if git_version_m:
+        git_version = float(git_version_m.group(1))
+        if git_version < 1.9:
+          data['conversion_warnings'].append(
+              'Git version %0.1f < 1.9' % git_version)
+
     except Exception as e:
       data['disk'] = {
           'status': 'EXCEPTION',
