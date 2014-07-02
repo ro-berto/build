@@ -10,7 +10,6 @@ dimensions and startup method easily.
 
 import logging
 import os
-import socket
 import sys
 
 import os_utilities  # pylint: disable-msg=F0401
@@ -19,8 +18,7 @@ import zipped_archive  # pylint: disable-msg=F0401
 
 def get_attributes():
   """Returns the attributes for this machine."""
-  bot_id = socket.gethostname().lower().split('.', 1)[0]
-  return os_utilities.get_attributes(bot_id)
+  return os_utilities.get_attributes(None)
 
 
 def setup_bot():
