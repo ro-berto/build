@@ -174,6 +174,7 @@ ENABLED_MASTERS = [
     'chromium.perf',
     'chromium.swarm',
     'chromium.webkit',
+    'chromium.webrtc',
     'chromium.webrtc.fyi',
     'client.drmemory',
     'client.nacl.sdk',

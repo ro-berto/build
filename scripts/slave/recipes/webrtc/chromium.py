@@ -80,10 +80,7 @@ def GenSteps(api):
     s[0].custom_vars['webrtc_revision'] = webrtc_revision
 
   # Bot Update re-uses the gclient configs.
-  yield api.bot_update.ensure_checkout(),
-  if not api.step_history.last_step().json.output['did_run']:
-    yield api.gclient.checkout(),
-  # Whatever step is run right before this line needs to emit got_revision.
+  yield api.bot_update.ensure_checkout(force=True),
   update_step = api.step_history.last_step()
   got_revision = update_step.presentation.properties['got_revision']
 
