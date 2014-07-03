@@ -437,20 +437,19 @@ BUILDERS = {
         'build_gs_archive': 'arm_rel_archive',
         'testing': {'platform': 'linux'},
       },
-# TODO(machenbach): Enable i18n as soon as icu dynamically ensures the -m32
-# compilation option.
       'V8 Arm': {
-        'v8_apply_config': ['no_i18n'],
-        'chromium_apply_config': ['no_i18n'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
-        'bot_type': 'builder_tester',
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Arm - builder',
+        'build_gs_archive': 'arm_rel_archive',
         'tests': ['v8testing', 'webkit', 'optimize_for_size'],
         'testing': {'platform': 'linux'},
       },
+# TODO(machenbach): Use build uploaded by an arm debug builder.
       'V8 Arm - debug': {
         'v8_apply_config': ['no_i18n'],
         'chromium_apply_config': ['no_i18n'],
