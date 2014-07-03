@@ -550,7 +550,7 @@ def solutions_to_git(input_solutions):
     if first_solution and buildspec_m:
       solution['url'] = GIT_BUILDSPEC_PATH
       buildspec_name = buildspec_m.group(1)
-      solution['deps_file'] = path.join('build', buildspec_name, 'DEPS')
+      solution['deps_file'] = path.join('build', buildspec_name, '.DEPS.git')
     elif parsed_path in RECOGNIZED_PATHS:
       solution['url'] = RECOGNIZED_PATHS[parsed_path]
     else:
