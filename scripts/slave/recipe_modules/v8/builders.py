@@ -116,7 +116,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - nosnap debug builder',
         'build_gs_archive': 'linux_nosnap_dbg_archive',
-        'tests': ['v8testing', 'test262', 'mozilla'],
+        'tests': ['v8testing', 'mozilla'],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - isolates': {
