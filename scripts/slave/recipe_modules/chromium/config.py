@@ -461,3 +461,20 @@ def _android_common(c):
 def codesearch(c):
   gyp_defs = c.gyp_env.GYP_DEFINES
   gyp_defs['fastbuild'] = 1
+
+@config_ctx(includes=['ninja', 'static_library'])
+def chrome_pgo_base(c):
+  c.gyp_env.GYP_DEFINES['buildtype'] = 'Official'
+  c.gyp_env.GYP_DEFINES['optimize'] = 'max'
+  c.gyp_env.GYP_DEFINES['use_goma'] = 0
+  fastbuild(c, invert=True)
+  c.compile_py.default_targets = ['chrome']
+
+#### 'Full' configurations
+@config_ctx(includes=['chrome_pgo_base'])
+def chrome_pgo_instrument(c):
+  c.gyp_env.GYP_DEFINES['chrome_pgo_phase'] = 1
+
+@config_ctx(includes=['chrome_pgo_base'])
+def chrome_pgo_optimize(c):
+  c.gyp_env.GYP_DEFINES['chrome_pgo_phase'] = 2
