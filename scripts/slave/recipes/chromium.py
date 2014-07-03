@@ -69,9 +69,8 @@ RECIPE_CONFIGS = {
   'chromium_v8': {
     'chromium_config': 'chromium',
     'gclient_config': 'chromium',
-    # TODO(machenbach): Use revision property.
     'gclient_apply_config': [
-      'v8_bleeding_edge',
+      'v8_bleeding_edge_git',
       'chromium_lkcr',
       'show_v8_revision',
     ],
@@ -118,6 +117,10 @@ def GenSteps(api):
     api.chromium_android.set_config(
         bot_config['android_config'],
         **bot_config.get('chromium_config_kwargs', {}))
+
+  if api.properties.get('revision'):
+    for dep, rev in bot_config.get('set_custom_revs', {}).iteritems():
+      api.gclient.c.revisions[dep] = rev % api.properties
 
   if api.platform.is_win:
     yield api.chromium.taskkill()
@@ -264,6 +267,9 @@ def GenTests(api):
 
       if bot_type in ['builder', 'builder_tester']:
         test += api.step_data('checkdeps', api.json.output([]))
+
+      if mastername == 'client.v8':
+        test += api.properties(revision='22135')
 
       yield test
 

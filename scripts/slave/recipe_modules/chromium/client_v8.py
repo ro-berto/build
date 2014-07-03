@@ -14,6 +14,9 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder',
+      'set_custom_revs': {
+        'src/v8': 'bleeding_edge:%(revision)s',
+      },
       'testing': {
         'platform': 'linux',
         'test_spec_file': 'chromium.linux.json',

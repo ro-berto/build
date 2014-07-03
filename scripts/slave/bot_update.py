@@ -186,6 +186,9 @@ ENABLED_MASTERS = [
 ENABLED_MASTERS += internal_data.get('ENABLED_MASTERS', [])
 
 ENABLED_BUILDERS = {
+    'client.v8': [
+        'Linux Debug Builder',
+    ],
     'tryserver.chromium.gpu': [
         'linux_gpu',
         'mac_gpu',
