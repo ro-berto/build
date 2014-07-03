@@ -825,6 +825,18 @@ def _UploadGtestJsonSummary(json_path, build_properties, test_exe):
         for iteration_data in (
             target_json['gtest_results']['per_iteration_data']):
           for test_name, test_runs in iteration_data.iteritems():
+            # Compute the number of flaky failures. A failure is only considered
+            # flaky, when the test succeeds at least once on the same code.
+            # However, we do not consider a test flaky if it only changes
+            # between various failure states, e.g. FAIL and TIMEOUT.
+            num_successes = len([r['status'] for r in test_runs
+                                             if r['status'] == 'SUCCESS'])
+            num_failures = len(test_runs) - num_successes
+            if num_failures > 0 and num_successes > 0:
+              flaky_failures = num_failures
+            else:
+              flaky_failures = 0
+
             for run_index, run_data in enumerate(test_runs):
               row = {
                 'test_name': test_name,
@@ -840,7 +852,10 @@ def _UploadGtestJsonSummary(json_path, build_properties, test_exe):
                 'mastername':
                     target_json['build_properties'].get('mastername', ''),
                 'raw_json_gs_path': raw_json_gs_path,
-                'timestamp': now.strftime('%Y-%m-%d %H:%M:%S.%f')
+                'timestamp': now.strftime('%Y-%m-%d %H:%M:%S.%f'),
+                'flaky_failures': flaky_failures,
+                'num_successes': num_successes,
+                'num_failures': num_failures
               }
               gzipf.write(json.dumps(row) + '\n')
 
