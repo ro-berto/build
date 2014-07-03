@@ -28,6 +28,7 @@ categories_steps = {
     'courgette_unittests',
     'crypto_unittests',
     'device_unittests',
+    'display_unittests',
     'events_unittests',
     'gcm_unit_tests',
     'gfx_unittests',
