@@ -40,12 +40,23 @@
   },
   {
     "cmd": [
+      "[SLAVE_BUILD]/v8/tools/clang/scripts/update.sh"
+    ],
+    "env": {
+      "LLVM_URL": "svn://svn-mirror.golo.chromium.org/llvm-project"
+    },
+    "name": "update clang"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
     "env": {
+      "CC": "[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/clang",
+      "CXX": "[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/clang++",
       "GYP_DEFINES": "asan=1 clang=1 lsan=0 target_arch=x64 use_allocator=none v8_target_arch=x64"
     },
     "name": "gclient runhooks"
@@ -57,15 +68,6 @@
       "[BUILD]/scripts/slave/cleanup_temp.py"
     ],
     "name": "cleanup_temp"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/v8/tools/clang/scripts/update.sh"
-    ],
-    "env": {
-      "LLVM_URL": "svn://svn-mirror.golo.chromium.org/llvm-project"
-    },
-    "name": "update clang"
   },
   {
     "cmd": [

@@ -17,6 +17,7 @@ def BaseConfig(**_kwargs):
 
   return ConfigGroup(
     gyp_env = ConfigGroup(
+      CC = Single(basestring, required=False),
       CXX = Single(basestring, required=False),
       LINK = Single(basestring, required=False),
     ), 

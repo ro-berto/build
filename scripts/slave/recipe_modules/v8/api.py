@@ -228,6 +228,8 @@ class V8Api(recipe_api.RecipeApi):
 
   def runhooks(self, **kwargs):
     env = {}
+    if self.c.gyp_env.CC:
+      env['CC'] = self.c.gyp_env.CC
     if self.c.gyp_env.CXX:
       env['CXX'] = self.c.gyp_env.CXX
     if self.c.gyp_env.LINK:
@@ -247,6 +249,12 @@ class V8Api(recipe_api.RecipeApi):
                                       'scripts', 'update.sh')],
         env={'LLVM_URL': ChromiumSvnSubURL(self.m.gclient.c,
                                            'llvm-project')})
+
+    # TODO(machenbach): Move this path tweaking to the v8 gyp file.
+    clang_dir = self.m.path['checkout'].join(
+        'third_party', 'llvm-build', 'Release+Asserts', 'bin')
+    self.c.gyp_env.CC = self.m.path.join(clang_dir, 'clang')
+    self.c.gyp_env.CXX = self.m.path.join(clang_dir, 'clang++')
 
   def update_nacl_sdk(self):
     return self.m.python(

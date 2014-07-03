@@ -37,14 +37,14 @@ def GenSteps(api):
   if api.tryserver.is_tryserver:
     yield api.tryserver.maybe_apply_issue()
 
+  if v8.needs_clang:
+    yield v8.update_clang()
+
   yield v8.runhooks()
   yield api.chromium.cleanup_temp()
 
   if v8.c.nacl.update_nacl_sdk:
     yield v8.update_nacl_sdk()
-
-  if v8.needs_clang:
-    yield v8.update_clang()
 
   if v8.should_build:
     if api.tryserver.is_tryserver:
