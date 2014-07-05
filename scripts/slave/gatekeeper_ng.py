@@ -399,7 +399,8 @@ def open_tree_if_possible(gatekeeper_config, build_db, master_jsons,
     for builder in master['builders']:
       if builder_is_excluded(gatekeeper_config, master_url, builder):
         continue
-      for buildnum, build in build_db.masters[master_url][builder].iteritems():
+      builder_dict = build_db.masters.get(master_url, {}).get(builder, {})
+      for buildnum, build in builder_dict.iteritems():
         if build.finished:
           if not build.succeeded:
             previously_failed_builds.append('%s %s/builders/%s/builds/%d' % (
