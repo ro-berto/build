@@ -14,17 +14,21 @@ BUILDERS = {
   'chromium.fyi': {
     'Android ARM64 Builder (dbg)': {
       'recipe_config': 'arm64_builder',
+      'gclient_apply_config': ['android', 'chrome_internal'],
     },
     'Android x64 Builder (dbg)': {
       'recipe_config': 'x64_builder',
+      'gclient_apply_config': ['android', 'chrome_internal'],
     },
     'Android MIPS Builder (dbg)': {
       'recipe_config': 'mipsel_builder',
+      'gclient_apply_config': ['android', 'chrome_internal'],
     }
   },
   'tryserver.chromium': {
     'android_dbg_recipe': {
       'recipe_config': 'android_shared',
+      'gclient_apply_config': ['android', 'chrome_internal'],
       'try': True,
       'upload': {
         'bucket': 'chromium-android',
@@ -36,6 +40,7 @@ BUILDERS = {
   'chromium.perf.fyi': {
     'android_oilpan_builder': {
       'recipe_config': 'oilpan_builder',
+      'gclient_apply_config': ['oilpan_internal'],
       'kwargs': {
         'BUILD_CONFIG': 'Release',
       },
@@ -66,8 +71,8 @@ def GenSteps(api):
   droid.c.set_val({'deps_file': 'DEPS'})
 
   api.gclient.set_config('chromium')
-  api.gclient.apply_config('android')
-  api.gclient.apply_config('chrome_internal')
+  for c in bot_config.get('gclient_apply_config', []):
+    api.gclient.apply_config(c)
 
   yield api.bot_update.ensure_checkout()
   yield droid.clean_local_files()
