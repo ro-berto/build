@@ -461,16 +461,15 @@ BUILDERS = {
         'tests': ['v8testing', 'webkit', 'optimize_for_size'],
         'testing': {'platform': 'linux'},
       },
-# TODO(machenbach): Use build uploaded by an arm debug builder.
       'V8 Arm - debug': {
-        'v8_apply_config': ['no_i18n'],
-        'chromium_apply_config': ['no_i18n'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
-        'bot_type': 'builder_tester',
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Arm - debug builder',
+        'build_gs_archive': 'arm_dbg_archive',
         'tests': ['v8testing', 'webkit', 'optimize_for_size'],
         'testing': {'platform': 'linux'},
       },
@@ -692,14 +691,15 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'V8 Arm GC Stress': {
-        'v8_apply_config': ['gc_stress', 'no_i18n'],
-        'chromium_apply_config': ['no_i18n'],
+        'v8_apply_config': ['gc_stress'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
-        'bot_type': 'builder_tester',
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Arm - debug builder',
+        'build_gs_archive': 'arm_dbg_archive',
         'tests': ['mjsunit', 'webkit'],
         'testing': {'platform': 'linux'},
       },
