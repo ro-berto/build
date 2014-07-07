@@ -118,9 +118,21 @@ def GenSteps(api):
         bot_config['android_config'],
         **bot_config.get('chromium_config_kwargs', {}))
 
-  if api.properties.get('revision'):
-    for dep, rev in bot_config.get('set_custom_revs', {}).iteritems():
-      api.gclient.c.revisions[dep] = rev % api.properties
+  bot_type = bot_config.get('bot_type', 'builder_tester')
+
+  if bot_config.get('set_component_rev'):
+    # If this is a component build and the main revision is e.g. blink, webrtc,
+    # or v8, the custom deps revision of this component must be dynamically
+    # set to either: (1) the revision of the builder if this is a tester,
+    # (2) 'revision' from the waterfall or (3) 'HEAD' for forced builds with
+    # unspecified 'revision'.
+    # TODO(machenbach): Use parent_got_cr_revision on testers with component
+    # builds to match also the chromium revision from the builder.
+    component_rev = api.properties.get('revision', 'HEAD')
+    if bot_type == 'tester':
+      component_rev = api.properties.get('parent_got_revision', component_rev)
+    dep = bot_config.get('set_component_rev')
+    api.gclient.c.revisions[dep['name']] = dep['rev_str'] % component_rev
 
   if api.platform.is_win:
     yield api.chromium.taskkill()
@@ -132,8 +144,6 @@ def GenSteps(api):
   # Whatever step is run right before this line needs to emit got_revision.
   update_step = api.step_history.last_step()
   got_revision = update_step.presentation.properties['got_revision']
-
-  bot_type = bot_config.get('bot_type', 'builder_tester')
 
   if not bot_config.get('disable_runhooks'):
     yield api.chromium.runhooks(env=bot_config.get('runhooks_env', {}))
