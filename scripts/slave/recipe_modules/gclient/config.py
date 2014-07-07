@@ -116,7 +116,6 @@ def chromium_bare(c):
   m = c.got_revision_mapping
   m['src'] = 'got_revision'
   m['src/native_client'] = 'got_nacl_revision'
-  m['src/tools/swarm_client'] = 'got_swarm_client_revision'
   m['src/tools/swarming_client'] = 'got_swarming_client_revision'
   m['src/v8'] = 'got_v8_revision'
   m['src/third_party/WebKit'] = 'got_webkit_revision'

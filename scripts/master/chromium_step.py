@@ -281,7 +281,6 @@ class GClient(source.Source):
     properties = (
       ('got_revision', primary_revision_key),
       ('got_nacl_revision', 'got_nacl_revision'),
-      ('got_swarm_client_revision', 'got_swarm_client_revision'),
       ('got_swarming_client_revision', 'got_swarming_client_revision'),
       ('got_v8_revision', 'got_v8_revision'),
       ('got_webkit_revision', 'got_webkit_revision'),

@@ -120,7 +120,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
   CHROMIUM_GOT_REVISION_MAPPINGS = {
       'src': 'got_revision',
       'src/third_party/WebKit': 'got_webkit_revision',
-      'src/tools/swarm_client': 'got_swarm_client_revision',  # crbug.com/321778
       'src/tools/swarming_client': 'got_swarming_client_revision',
       'src/v8': 'got_v8_revision',
   }
