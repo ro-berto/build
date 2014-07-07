@@ -150,6 +150,7 @@ class V8Api(recipe_api.RecipeApi):
   # Map of GS archive names to urls.
   GS_ARCHIVES = {
     'arm_rel_archive': 'gs://chromium-v8/v8-arm-rel',
+    'arm_dbg_archive': 'gs://chromium-v8/v8-arm-dbg',
     'linux_rel_archive': 'gs://chromium-v8/v8-linux-rel',
     'linux_dbg_archive': 'gs://chromium-v8/v8-linux-dbg',
     'linux_nosnap_rel_archive': 'gs://chromium-v8/v8-linux-nosnap-rel',

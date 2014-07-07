@@ -437,6 +437,18 @@ BUILDERS = {
         'build_gs_archive': 'arm_rel_archive',
         'testing': {'platform': 'linux'},
       },
+      'V8 Arm - debug builder': {
+        'chromium_apply_config': ['arm_hard_float'],
+        'v8_apply_config': ['arm_hard_float'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'build_gs_archive': 'arm_dbg_archive',
+        'testing': {'platform': 'linux'},
+      },
       'V8 Arm': {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
