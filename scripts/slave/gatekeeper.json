@@ -45,7 +45,10 @@
         ],
         "builders": {
           "*": {}
-        }
+        },
+        "excluded_builders" : [
+          "Linux ChromiumOS Ozone Builder"
+        ]
       }
     ],
     "https://build.chromium.org/p/chromium.gatekeeper": [
