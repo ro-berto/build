@@ -531,7 +531,7 @@ class AndroidApi(recipe_api.RecipeApi):
          '-w', self.m.path['slave_build']] + args)
 
   def run_test_suite(self, suite, verbose=True, isolate_file_path=None,
-                     gtest_filter=None, tool=None):
+                     gtest_filter=None, tool=None, **kwargs):
     args = []
     if verbose:
       args.append('--verbose')
@@ -549,7 +549,8 @@ class AndroidApi(recipe_api.RecipeApi):
         self.m.path['checkout'].join('build', 'android', 'test_runner.py'),
         ['gtest', '-s', suite] + args,
         env=self.get_env(),
-        always_run=True)
+        always_run=True,
+        **kwargs)
 
   def coverage_report(self, **kwargs):
     assert self.c.coverage, (
