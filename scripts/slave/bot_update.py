@@ -1513,6 +1513,7 @@ def checkout(options, git_slns, specs, buildspec_name, master,
                 root=first_sln,
                 log_lines=[('patch error', e.output),],
                 patch_root=options.patch_root,
+                patch_failure=True,
                 step_text='%s PATCH FAILED' % step_text)
     else:
       # If we're not on recipes, tell annotator about our got_revisions.

@@ -155,9 +155,12 @@ class BotUpdateApi(recipe_api.RecipeApi):
       if 'log_lines' in step_result.json.output:
         for log_name, log_lines in step_result.json.output['log_lines']:
           step_result.presentation.logs[log_name] = log_lines.splitlines()
-      # Abort the build on failure.
+      # Abort the build on failure, if its not a patch failure.
       if step_result.presentation.status == 'FAILURE':
-        raise recipe_util.RecipeAbort('Bot Update failed, aborting.')
+        if step_result.json.output.get('patch_failure'):
+          step_result.presentation.status = 'SUCCESS'
+        else:
+          raise recipe_util.RecipeAbort('Bot Update failed, aborting.')
 
     # Add suffixes to the step name, if specified.
     name = 'bot_update'
@@ -174,6 +177,20 @@ class BotUpdateApi(recipe_api.RecipeApi):
     # This is used by the Chromium module to figure out where to look for
     # the checkout.
     bot_update_step = self.m.step_history.last_step()
+
+    # If there is a patch failure, emit another step that said things failed.
+    if bot_update_step.json.output.get('patch_failure'):
+      yield self.m.python.inline(
+          'Patch failure',
+          """\
+          import sys
+          print 'Check the bot_update step for details.'
+          sys.exit(1)
+          """,
+          abort_on_failure=True,
+          always_run=True,
+          step_test_data=self.test_api.patch_error_data)
+
     # bot_update actually just sets root to be the folder name of the
     # first solution.
     if bot_update_step.json.output['did_run']:
