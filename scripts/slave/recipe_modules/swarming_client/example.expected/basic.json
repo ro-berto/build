@@ -96,7 +96,8 @@
     ],
     "name": "swarming.py is too old",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Expecting at least v0.5.0, got v0.4.4@@@"
+      "@@@STEP_TEXT@Expecting at least v0.5.0, got v0.4.4@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {

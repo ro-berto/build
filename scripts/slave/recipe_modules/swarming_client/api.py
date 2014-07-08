@@ -114,7 +114,7 @@ class SwarmingClientApi(recipe_api.RecipeApi):
         expecting = '.'.join(map(str, min_version))
         got = '.'.join(map(str, version))
         abort_reason = 'Expecting at least v%s, got v%s' % (expecting, got)
-        step_result.presentation.status == 'FAILURE'
+        step_result.presentation.status = 'FAILURE'
         step_result.presentation.step_text = abort_reason
         raise recipe_util.RecipeAbort(abort_reason)
       yield self.m.python.inline(
