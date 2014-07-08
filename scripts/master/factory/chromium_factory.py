@@ -175,7 +175,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
   def __init__(self, build_dir, target_platform=None, pull_internal=True,
                full_checkout=False, additional_svn_urls=None, name=None,
                custom_deps_list=None, nohooks_on_update=False, target_os=None,
-               swarm_client_canary=False):
+               swarm_client_canary=False, internal_custom_deps_list=None):
     if full_checkout:
       needed_components = None
     else:
@@ -189,7 +189,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                                  self.CUSTOM_VARS_SOURCEFORGE_URL,
                                  self.CUSTOM_VARS_LLVM_URL,
                                  self.CUSTOM_VARS_NACL_TRUNK_URL])
-    internal_custom_deps_list = [main]
+    solutions = [main]
     if config.Master.trunk_internal_url_src and pull_internal:
       if full_checkout:
         needed_components = None
@@ -197,16 +197,17 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         needed_components = self.NEEDED_COMPONENTS_INTERNAL
       internal = gclient_factory.GClientSolution(
                      config.Master.trunk_internal_url_src,
-                     needed_components=needed_components)
-      internal_custom_deps_list.append(internal)
+                     needed_components=needed_components,
+                     custom_deps_list=internal_custom_deps_list)
+      solutions.append(internal)
 
     additional_svn_urls = additional_svn_urls or []
     for svn_url in additional_svn_urls:
       solution = gclient_factory.GClientSolution(svn_url)
-      internal_custom_deps_list.append(solution)
+      solutions.append(solution)
 
     gclient_factory.GClientFactory.__init__(self,
-        build_dir, internal_custom_deps_list, target_platform=target_platform,
+        build_dir, solutions, target_platform=target_platform,
         nohooks_on_update=nohooks_on_update, target_os=target_os,
         revision_mapping=self.CHROMIUM_GOT_REVISION_MAPPINGS)
     if swarm_client_canary:
