@@ -1623,6 +1623,7 @@ def main():
         'passed': True,
         'patch_failure': True,
     })
+    emit_flag(options.flag_file)
     raise
   except Exception as e:
     # Unexpected failure.
@@ -1631,6 +1632,7 @@ def main():
         'passed': False,
         'patch_failure': False,
     })
+    emit_flag(options.flag_file)
     raise
   else:
     telemetry_info.update({
@@ -1639,6 +1641,7 @@ def main():
         'passed': True,
         'patch_failure': False,
     })
+    emit_flag(options.flag_file)
   finally:
     thr = upload_telemetry(prefix='end', unix_time=time.time(),
                            **telemetry_info)
