@@ -269,6 +269,15 @@ class GpuApi(recipe_api.RecipeApi):
     # WebGL conformance tests.
     yield self._run_isolated_telemetry_gpu_test('webgl_conformance')
 
+    # Run extra D3D9 conformance in Windows FYI GPU bots
+    # This ensures the ANGLE/D3D9 gets some testing
+    if self.is_fyi_waterfall and self.m.platform.is_win:
+      yield self._run_isolated_telemetry_gpu_test('webgl_conformance',
+        args=[
+          '--extra-browser-args=--disable-d3d11'
+        ],
+        name='webgl_conformance_d3d9')
+
     # Context lost tests.
     yield self._run_isolated_telemetry_gpu_test('context_lost')
 
