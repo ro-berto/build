@@ -36,7 +36,7 @@ class AdbApi(recipe_api.RecipeApi):
     return self._devices
 
   def root_devices(self, **kwargs):
-    yield self.list_devices()
+    yield self.list_devices(**kwargs)
     yield self.m.python.inline(
         'Root devices',
         """
