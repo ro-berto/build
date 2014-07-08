@@ -879,20 +879,27 @@ def git_checkout(solutions, revisions, shallow):
           'cache', 'exists', '--quiet', '--cache-dir', CACHE_DIR, url).strip()
       clone_cmd = (
           'clone', '--no-checkout', '--local', '--shared', mirror_dir, sln_dir)
-      if not path.isdir(sln_dir):
-        git(*clone_cmd)
-      else:
-        git('fetch', 'origin', cwd=sln_dir)
 
-      revision = get_target_revision(name, url, revisions) or 'HEAD'
       try:
+        if not path.isdir(sln_dir):
+          git(*clone_cmd)
+        else:
+          git('fetch', 'origin', cwd=sln_dir)
+
+        revision = get_target_revision(name, url, revisions) or 'HEAD'
         force_revision(sln_dir, revision)
         done = True
-      except SubprocessFailed:
+      except SubprocessFailed as e:
         # Exited abnormally, theres probably something wrong.
         # Lets wipe the checkout and try again.
+        tries_left -= 1
+        if tries_left > 0:
+          print 'Something failed: %s.' % str(e)
+          print 'waiting 5 seconds and trying again...'
+          time.sleep(5)
+        else:
+          raise
         remove(sln_dir)
-        git(*clone_cmd)
       except SVNRevisionNotFound:
         tries_left -= 1
         if tries_left > 0:
