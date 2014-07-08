@@ -1,0 +1,395 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport os, sys\n\nbuild_path = sys.argv[1]\nif os.path.exists(build_path):\n  for (path, dir, files) in os.walk(build_path):\n    for cur_file in files:\n      if cur_file.endswith('index.lock'):\n        path_to_file = os.path.join(path, cur_file)\n        print 'deleting %s' % path_to_file\n        os.remove(path_to_file)\n",
+      "[SLAVE_BUILD]"
+    ],
+    "name": "cleanup index.lock",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@build_path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(build_path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  for (path, dir, files) in os.walk(build_path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    for cur_file in files:@@@",
+      "@@@STEP_LOG_LINE@python.inline@      if cur_file.endswith('index.lock'):@@@",
+      "@@@STEP_LOG_LINE@python.inline@        path_to_file = os.path.join(path, cur_file)@@@",
+      "@@@STEP_LOG_LINE@python.inline@        print 'deleting %s' % path_to_file@@@",
+      "@@@STEP_LOG_LINE@python.inline@        os.remove(path_to_file)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/bot_update.py",
+      "--master",
+      "chromium.testing.master",
+      "--builder",
+      "Android Nexus7v2 Perf",
+      "--slave",
+      "slavename",
+      "--spec",
+      "cache_dir = None\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]\ntarget_os = ['android']",
+      "--revision_mapping_file",
+      "{\"src\": \"got_revision\", \"src/native_client\": \"got_nacl_revision\", \"src/third_party/WebKit\": \"got_webkit_revision\", \"src/third_party/webrtc\": \"got_webrtc_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_v8_revision\"}",
+      "--output_json",
+      "/path/to/tmp/json",
+      "--revision",
+      "src@deadbeef"
+    ],
+    "name": "bot_update",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"did_run\": false@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/gclient.py",
+      "config",
+      "--spec",
+      "cache_dir = None\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]\ntarget_os = ['android']"
+    ],
+    "name": "gclient setup"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/gclient.py",
+      "sync",
+      "--nohooks",
+      "--delete_unversioned_trees",
+      "--force",
+      "--verbose",
+      "--revision",
+      "src@deadbeef",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "name": "gclient sync",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"solutions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": 170242@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/native_client/\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": 274981@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/third_party/WebKit/\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": 124383@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/third_party/webrtc/\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": 120644@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/tools/swarming_client/\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": 276089@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/v8/\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": 43426@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@got_nacl_revision@274981@@@",
+      "@@@SET_BUILD_PROPERTY@got_webkit_revision@124383@@@",
+      "@@@SET_BUILD_PROPERTY@got_src_revision@170242@@@",
+      "@@@SET_BUILD_PROPERTY@got_webrtc_revision@120644@@@",
+      "@@@SET_BUILD_PROPERTY@got_swarming_client_revision@276089@@@",
+      "@@@SET_BUILD_PROPERTY@got_v8_revision@43426@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
+      "cp",
+      "gs://chrome-perf/android_perf_rel/full-build-linux_deadbeef.zip",
+      "[SLAVE_BUILD]/src/out/full-build-linux_deadbeef.zip"
+    ],
+    "name": "gsutil download_build_product"
+  },
+  {
+    "cmd": [
+      "unzip",
+      "-o",
+      "[SLAVE_BUILD]/src/out/full-build-linux_deadbeef.zip"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "unzip_build_product"
+  },
+  {
+    "cmd": [
+      "[BUILD]/scripts/slave/daemonizer.py",
+      "--",
+      "[SLAVE_BUILD]/src/build/android/adb_logcat_monitor.py",
+      "[SLAVE_BUILD]/src/out/logcat"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "spawn_logcat_monitor"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/build/android/buildbot/bb_device_status_check.py"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "device_status_check"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/provision_devices.py",
+      "-t",
+      "Release"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "provision_devices"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "--apk",
+      "ChromeShell.apk",
+      "--apk_package",
+      "org.chromium.chrome.shell",
+      "--release"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "install ChromeShell.apk"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "list",
+      "--browser",
+      "android-content-shell",
+      "--json-output",
+      "[SLAVE_BUILD]/src/out/perf-tests.json"
+    ],
+    "name": "List Perf Tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "perf",
+      "--release",
+      "--verbose",
+      "--steps",
+      "[SLAVE_BUILD]/src/out/perf-tests.json"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "Sharded Perf Tests"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "perf",
+      "--steps",
+      "[SLAVE_BUILD]/src/out/perf-tests.json",
+      "--output-json-list",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "get perf test list",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"perf_test.foo\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"page_cycler.foo\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"endure.foo\"@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Nexus7v2 Perf\", \"buildnumber\": 571, \"mastername\": \"chromium.testing.master\", \"parent_buildername\": \"parent_buildername\", \"parent_buildnumber\": \"1729\", \"parent_revision\": \"deadbeef\", \"recipe\": \"android/perf\", \"repo_name\": \"src\", \"repo_url\": \"https://chromium.googlesource.com/chromium/src.git\", \"revision\": \"deadbeef\", \"slavename\": \"slavename\", \"target\": \"Release\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Nexus7v2 Perf\", \"buildnumber\": 571, \"mastername\": \"chromium.testing.master\", \"parent_buildername\": \"parent_buildername\", \"parent_buildnumber\": \"1729\", \"parent_revision\": \"deadbeef\", \"recipe\": \"android/perf\", \"repo_name\": \"src\", \"repo_url\": \"https://chromium.googlesource.com/chromium/src.git\", \"revision\": \"deadbeef\", \"slavename\": \"slavename\", \"target\": \"Release\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--annotate=graphing",
+      "--results-url=https://chromeperf.appspot.com",
+      "--perf-dashboard-id=perf_test.foo",
+      "--perf-id=Android Nexus7v2 Perf",
+      "--test-type=perf_test.foo",
+      "--builder-name=Android Nexus7v2 Perf",
+      "--slave-name=slavename",
+      "--build-number=571",
+      "--run-python-script",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "perf",
+      "--print-step",
+      "perf_test.foo",
+      "--verbose"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "perf_test.foo"
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Nexus7v2 Perf\", \"buildnumber\": 571, \"mastername\": \"chromium.testing.master\", \"parent_buildername\": \"parent_buildername\", \"parent_buildnumber\": \"1729\", \"parent_revision\": \"deadbeef\", \"recipe\": \"android/perf\", \"repo_name\": \"src\", \"repo_url\": \"https://chromium.googlesource.com/chromium/src.git\", \"revision\": \"deadbeef\", \"slavename\": \"slavename\", \"target\": \"Release\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Nexus7v2 Perf\", \"buildnumber\": 571, \"mastername\": \"chromium.testing.master\", \"parent_buildername\": \"parent_buildername\", \"parent_buildnumber\": \"1729\", \"parent_revision\": \"deadbeef\", \"recipe\": \"android/perf\", \"repo_name\": \"src\", \"repo_url\": \"https://chromium.googlesource.com/chromium/src.git\", \"revision\": \"deadbeef\", \"slavename\": \"slavename\", \"target\": \"Release\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--annotate=pagecycler",
+      "--results-url=https://chromeperf.appspot.com",
+      "--perf-dashboard-id=page_cycler.foo",
+      "--perf-id=Android Nexus7v2 Perf",
+      "--test-type=page_cycler.foo",
+      "--builder-name=Android Nexus7v2 Perf",
+      "--slave-name=slavename",
+      "--build-number=571",
+      "--run-python-script",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "perf",
+      "--print-step",
+      "page_cycler.foo",
+      "--verbose"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "page_cycler.foo"
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Nexus7v2 Perf\", \"buildnumber\": 571, \"mastername\": \"chromium.testing.master\", \"parent_buildername\": \"parent_buildername\", \"parent_buildnumber\": \"1729\", \"parent_revision\": \"deadbeef\", \"recipe\": \"android/perf\", \"repo_name\": \"src\", \"repo_url\": \"https://chromium.googlesource.com/chromium/src.git\", \"revision\": \"deadbeef\", \"slavename\": \"slavename\", \"target\": \"Release\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Nexus7v2 Perf\", \"buildnumber\": 571, \"mastername\": \"chromium.testing.master\", \"parent_buildername\": \"parent_buildername\", \"parent_buildnumber\": \"1729\", \"parent_revision\": \"deadbeef\", \"recipe\": \"android/perf\", \"repo_name\": \"src\", \"repo_url\": \"https://chromium.googlesource.com/chromium/src.git\", \"revision\": \"deadbeef\", \"slavename\": \"slavename\", \"target\": \"Release\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--annotate=endure",
+      "--results-url=https://chromeperf.appspot.com",
+      "--perf-dashboard-id=endure.foo",
+      "--perf-id=Android Nexus7v2 Perf",
+      "--test-type=endure.foo",
+      "--builder-name=Android Nexus7v2 Perf",
+      "--slave-name=slavename",
+      "--build-number=571",
+      "--run-python-script",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "perf",
+      "--print-step",
+      "endure.foo",
+      "--verbose"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "endure.foo"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/tee.py",
+      "[SLAVE_BUILD]/src/out/Release/full_log",
+      "--",
+      "[SLAVE_BUILD]/src/build/android/adb_logcat_printer.py",
+      "[SLAVE_BUILD]/src/out/logcat"
+    ],
+    "name": "logcat_dump"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/third_party/android_platform/development/scripts/stack",
+      "--more-info",
+      "[SLAVE_BUILD]/src/out/Release/full_log"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "stack_tool_with_logcat_dump"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/build/android/tombstones.py",
+      "-a",
+      "-s",
+      "-w"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "stack_tool_for_tombstones"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
+      "[SLAVE_BUILD]/src/out/Release/test_logs/*.log"
+    ],
+    "name": "test_report",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import glob, os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@for report in glob.glob(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  with open(report, 'r') as f:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    for l in f.readlines():@@@",
+      "@@@STEP_LOG_LINE@python.inline@      print l@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.remove(report)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "rm",
+      "-rf",
+      "[SLAVE_BUILD]/src/out/full-build-linux_deadbeef.zip"
+    ],
+    "name": "cleanup_build"
+  }
+]

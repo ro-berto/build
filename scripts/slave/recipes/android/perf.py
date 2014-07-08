@@ -3,18 +3,20 @@
 # found in the LICENSE file.
 
 DEPS = [
-    'adb',
-    'bot_update',
     'chromium_android',
     'gclient',
-    'json',
     'step',
     'path',
     'properties',
-    'python',
 ]
 
 REPO_URL = 'https://chromium.googlesource.com/chromium/src.git'
+
+PERF_ANDROID = {
+  'bucket': 'chrome-perf',
+  'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip'
+                             % api.properties['parent_revision']),
+}
 
 BUILDERS = {
   'android_nexus5_oilpan_perf': {
@@ -24,6 +26,11 @@ BUILDERS = {
             api.properties['parent_buildername'],
             api.properties['parent_revision'])),
   },
+  'Android Nexus4 Perf': PERF_ANDROID,
+  'Android Nexus5 Perf': PERF_ANDROID,
+  'Android Nexus7v2 Perf': PERF_ANDROID,
+  'Android Nexus10 Perf': PERF_ANDROID,
+  'Android GN Perf': PERF_ANDROID,
 }
 
 def GenSteps(api):
@@ -63,10 +70,13 @@ def GenSteps(api):
 
   yield api.chromium_android.cleanup_build()
 
+def _sanitize_nonalpha(text):
+  return ''.join(c if c.isalnum() else '_' for c in text)
+
 def GenTests(api):
   for buildername in BUILDERS:
     yield (
-        api.test('test_%s' % buildername) +
+        api.test('test_%s' % _sanitize_nonalpha(buildername)) +
         api.properties.generic(
             repo_name='src',
             repo_url=REPO_URL,
