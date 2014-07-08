@@ -110,7 +110,11 @@ def main_mac(options, args):
         p = subprocess.Popen(pipe, stdin=last_stdout, stdout=subprocess.PIPE)
         last_stdout = p.stdout
       stdout = p.communicate()[0]
-      initializers_s = re.search('0x([0-9a-f]+)', stdout).group(1)
+      initializers = re.search('0x([0-9a-f]+)', stdout)
+      if initializers:
+        initializers_s = initializers.group(1)
+      else:
+        initializers_s = '0'
       if result == 0:
         result = p.returncode
       word_size = 4  # Assume 32 bit
