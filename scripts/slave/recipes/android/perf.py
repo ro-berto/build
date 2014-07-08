@@ -12,25 +12,45 @@ DEPS = [
 
 REPO_URL = 'https://chromium.googlesource.com/chromium/src.git'
 
-PERF_ANDROID = {
-  'bucket': 'chrome-perf',
-  'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip'
-                             % api.properties['parent_revision']),
-}
-
 BUILDERS = {
   'android_nexus5_oilpan_perf': {
+    'perf_id': 'android-nexus5-oilpan',
     'bucket': 'chromium-android',
     'path': lambda api: (
       '%s/build_product_%s.zip' % (
             api.properties['parent_buildername'],
             api.properties['parent_revision'])),
   },
-  'Android Nexus4 Perf': PERF_ANDROID,
-  'Android Nexus5 Perf': PERF_ANDROID,
-  'Android Nexus7v2 Perf': PERF_ANDROID,
-  'Android Nexus10 Perf': PERF_ANDROID,
-  'Android GN Perf': PERF_ANDROID,
+  'Android Nexus4 Perf': {
+    'perf_id': 'android-nexus4',
+    'bucket': 'chrome-perf',
+    'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip'
+                               % api.properties['parent_revision']),
+  },
+  'Android Nexus5 Perf': {
+    'perf_id': 'android-nexus5',
+    'bucket': 'chrome-perf',
+    'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip'
+                               % api.properties['parent_revision']),
+  },
+  'Android Nexus7v2 Perf': {
+    'perf_id': 'android-nexus7v2',
+    'bucket': 'chrome-perf',
+    'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip'
+                               % api.properties['parent_revision']),
+  },
+  'Android Nexus10 Perf': {
+    'perf_id': 'android-nexus10',
+    'bucket': 'chrome-perf',
+    'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip'
+                               % api.properties['parent_revision']),
+  },
+  'Android GN Perf': {
+    'perf_id': 'android-gn',
+    'bucket': 'chrome-perf',
+    'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip'
+                               % api.properties['parent_revision']),
+  },
 }
 
 def GenSteps(api):
@@ -62,7 +82,7 @@ def GenSteps(api):
     json_output_file=tests_json_file)
   yield api.chromium_android.run_sharded_perf_tests(
       config=tests_json_file,
-      perf_id=buildername)
+      perf_id=builder['perf_id'])
 
   yield api.chromium_android.logcat_dump()
   yield api.chromium_android.stack_tool_steps()
