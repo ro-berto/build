@@ -113,10 +113,10 @@ def main_mac(options, args):
       initializers = re.search('0x([0-9a-f]+)', stdout)
       if initializers:
         initializers_s = initializers.group(1)
+        if result == 0:
+          result = p.returncode
       else:
         initializers_s = '0'
-      if result == 0:
-        result = p.returncode
       word_size = 4  # Assume 32 bit
       si_count = int(initializers_s, 16) / word_size
       print_dict['initializers'] = si_count
