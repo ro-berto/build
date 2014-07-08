@@ -1583,6 +1583,47 @@ class GatekeeperTest(unittest.TestCase):
            'a_second_committer@chromium.org)']
     self.assertEquals(gatekeeper_data['message'], msg)
 
+  def testOldFailuresNotRecorded(self):
+    """Test that only new failing steps are recoreded to the build_db."""
+    sys.argv.extend([m.url for m in self.masters])
+    sys.argv.extend(['--no-email-app', '--set-status',
+                     '--password-file', self.status_secret_file,
+                     '--track-revisions',
+                     '--revision-properties', 'revision,got_webkit_revision'])
+
+    new_build = self.create_generic_build(
+        2, ['a_second_committer@chromium.org'])
+    new_build.properties = [
+        ['revision', 72459, 'GatekeeperTest'],
+        ['got_webkit_revision', 200, 'GatekeeperTest'],
+    ]
+    self.masters[0].builders[0].builds.append(new_build)
+
+    self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
+    self.masters[0].builders[0].builds[1].steps[1].results = [2, None]
+    self.masters[0].builders[0].builds[1].finished = False
+
+    self.add_gatekeeper_section(self.masters[0].url,
+                                self.masters[0].builders[0].name,
+                                {'closing_steps': ['step1']})
+
+    build_db = build_scan_db.gen_db(masters={
+        self.masters[0].url: {
+            'mybuilder': {
+                0: build_scan_db.gen_build(finished=True)
+            },
+        }
+    })
+    build_db.aux['triggered_revisions'] = {'revision': 72452,
+                                           'got_webkit_revision': 100}
+
+    urls = self.call_gatekeeper(build_db=build_db)
+    self.assertEquals(urls.count(self.set_status_url), 1)
+    build_db = build_scan_db.get_build_db(self.build_db_file)
+    self.assertEquals(build_db.aux['triggered_revisions'],
+                      {'revision': 72453,
+                       'got_webkit_revision': 100})
+
   #### Multiple failures.
 
   def testSequentialFailures(self):

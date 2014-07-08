@@ -200,7 +200,7 @@ def log_section(url, builder, buildnum, section_hash=None):
   logging.debug('----')
 
 
-def reject_old_revisions(failure_tuples, build_db):
+def reject_old_revisions(failed_builds, build_db):
   """Ignore builds which triggered on revisions older than the current.
 
   triggered_revisions has the format: {'revision': 500,
@@ -222,10 +222,10 @@ def reject_old_revisions(failure_tuples, build_db):
     # failing builds.
     logging.debug('no previous revision tracking information, '
                   'keeping all failures.')
-    return failure_tuples
+    return failed_builds
 
-  def tuple_start_time(tup):
-    """Sorting key that returns a tuple's negative build start time.
+  def build_start_time(build):
+    """Sorting key that returns a build's negative build start time.
 
     By using negative start time, we sort such that the latest builds come
     first. This gives us a crude approximation of revision order, which means
@@ -234,11 +234,12 @@ def reject_old_revisions(failure_tuples, build_db):
     same minute is low and multi-revision sorting is potentially error-prone. An
     action-log based approach would obviate this hack.
     """
-    return tup[0]['build'].get('times', [None])[0]
+    return build['build'].get('times', [None])[0]
 
-  kept_tuples = []
-  for tup in sorted(failure_tuples, key=tuple_start_time, reverse=True):
-    build, _, builder, buildnum, _ = tup
+  kept_builds = []
+  for build in sorted(failed_builds, key=build_start_time, reverse=True):
+    builder = build['build']['builderName']
+    buildnum = build['build']['number']
     with log_section(build['base_url'], builder, buildnum):
       # get_build_properties will return a dict with all the keys given to it.
       # Since we're giving it triggered_revisions.keys(), revisions is
@@ -255,7 +256,7 @@ def reject_old_revisions(failure_tuples, build_db):
         logging.debug('Nones detected in revision tracking information, '
                       'keeping build.')
         triggered_revisions = revisions
-        kept_tuples.append(tup)
+        kept_builds.append(build)
         continue
 
       paired = []
@@ -268,13 +269,13 @@ def reject_old_revisions(failure_tuples, build_db):
         # TODO(stip): evaluate the greatest revision if we see a stream of
         # failures at once.
         logging.debug('keeping build')
-        kept_tuples.append(tup)
+        kept_builds.append(build)
         triggered_revisions = revisions
         continue
       logging.debug('rejecting build')
 
   build_db.aux['triggered_revisions'] = triggered_revisions
-  return kept_tuples
+  return kept_builds
 
 
 def debounce_failures(failed_builds, build_db):
@@ -715,7 +716,14 @@ def main():
         failing_builds, options.status_user, options.password,
         options.status_url, options.set_status)
 
+  # debounce_failures does 3 things:
+  # 1. Groups logging by builder
+  # 2. Selects out the "build" part from the failure tuple.
+  # 3. Rejects builds we've already warned about (and logs).
+  new_failures = debounce_failures(failure_tuples, build_db)
+
   if options.track_revisions:
+    # Only close the tree if it's a newer revision than before.
     properties = options.revision_properties.split(',')
     triggered_revisions = build_db.aux.get('triggered_revisions', {})
     if not triggered_revisions or (
@@ -723,13 +731,8 @@ def main():
       logging.info('revision properties have changed from %s to %s. '
                    'clearing previous data.', triggered_revisions, properties)
       build_db.aux['triggered_revisions'] = dict.fromkeys(properties)
-    failure_tuples = reject_old_revisions(failure_tuples, build_db)
+    new_failures = reject_old_revisions(new_failures, build_db)
 
-  # debounce_failures does 3 things:
-  # 1. Groups logging by builder
-  # 2. Selects out the "build" part from the failure tuple.
-  # 3. Rejects builds we've already warned about (and logs).
-  new_failures = debounce_failures(failure_tuples, build_db)
   close_tree_if_necessary(new_failures, options.status_user, options.password,
                           options.status_url, options.set_status,
                           options.revision_properties.split(','))
