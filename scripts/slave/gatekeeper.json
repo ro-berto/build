@@ -47,7 +47,9 @@
           "*": {}
         },
         "excluded_builders" : [
-          "Linux ChromiumOS Ozone Builder"
+          "Linux ChromiumOS Ozone Builder",
+          "Linux ChromiumOS Ozone Tests (1)",
+          "Linux ChromiumOS Ozone Tests (2)"
         ]
       }
     ],
