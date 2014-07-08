@@ -151,6 +151,11 @@ def novfp3(c):
 
 
 @config_ctx()
+def predictable(c):
+  c.testing.test_args.add('--predictable')
+
+
+@config_ctx()
 def trybot_flavor(c):
   c.testing.add_flaky_step = False
   c.testing.test_args.add('--quickcheck')

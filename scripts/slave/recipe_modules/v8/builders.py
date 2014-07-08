@@ -735,6 +735,17 @@ BUILDERS = {
         'tests': ['v8testing'],
         'testing': {'platform': 'linux'},
       },
+      'V8 Linux - predictable': {
+        'v8_apply_config': ['predictable'],
+        'chromium_apply_config': ['predictable'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['v8testing', 'benchmarks'],
+        'testing': {'platform': 'linux'},
+      },
       'V8 Linux - full debug builder': {
         'chromium_apply_config': ['no_optimized_debug'],
         'v8_config_kwargs': {

@@ -88,6 +88,9 @@ def main():
   option_parser.add_option("--quickcheck",
                            default=False, action='store_true',
                            help='Quick check mode (skip slow/flaky tests)')
+  option_parser.add_option("--predictable",
+                           default=False, action="store_true",
+                           help="Compare several reruns of each test")
 
   options, args = option_parser.parse_args()
   if args:
@@ -160,6 +163,8 @@ def main():
       # makes it into all branches.
       cmd.extend(['--rerun-failures-count=2'])
       cmd.extend(['--json-test-results', options.json_test_results])
+    if options.predictable:
+      cmd.extend(['--predictable'])
 
   if options.shard_count > 1:
     cmd.extend(['--shard-count=%s' % options.shard_count,
