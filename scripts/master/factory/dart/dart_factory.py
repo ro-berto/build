@@ -661,7 +661,7 @@ class DartUtils(object):
     for v in variants:
       builder = {
          'name': v['name'],
-         'builddir': v['name'],
+         'builddir': v.get('builddir', v['name']),
          'factory': v['factory_builder'],
          'slavenames': slaves.GetSlavesName(builder=v['name']),
          'category': v['category'],
