@@ -360,6 +360,7 @@ def main():
         'COMSPEC',
         'COMPUTERNAME',
         'DBUS_SESSION_BUS_ADDRESS',
+        'DEPOT_TOOLS_GIT_BLEEDING',
         # TODO(maruel): Remove once everyone is on 2.7.5.
         'DEPOT_TOOLS_PYTHON_275',
         'DXSDK_DIR',
