@@ -204,16 +204,12 @@ class V8Api(recipe_api.RecipeApi):
     self.m.chromium.apply_config('optimized_debug')
     self.apply_config('trybot_flavor')
 
-  # TODO(machenbach): Make this a step_history helper.
-  def has_failed_steps(self):
-    return any(s.retcode != 0 for s in self.m.step_history.values())
-
   def checkout(self, may_nuke=False, revert=False):
     if may_nuke:
       yield self.m.gclient.checkout(revert=revert,
                                     can_fail_build=False,
                                     abort_on_failure=False)
-      if self.has_failed_steps():
+      if self.m.step_history.last_step().retcode != 0:
         # TODO(phajdan.jr): Remove the workaround, http://crbug.com/357767 .
         yield (
             self.m.path.rmcontents('slave build directory',
