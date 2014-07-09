@@ -638,14 +638,18 @@ class DartUtils(object):
                  '../master.chromium/templates']
     master_port = self._active_master.master_port
     master_port_alt = self._active_master.master_port_alt
+    kwargs = {
+      'public_html' : public_html,
+      'templates' : templates,
+    }
 
     statuses = []
     statuses.append(master_utils.CreateWebStatus(master_port,
                                                  allowForce=True,
-                                                 public_html=public_html,
-                                                 templates=templates))
+                                                 **kwargs))
     statuses.append(
-        master_utils.CreateWebStatus(master_port_alt, allowForce=False))
+        master_utils.CreateWebStatus(master_port_alt, allowForce=False,
+                                     **kwargs))
 
     http_status_push_url = self._active_master.http_status_push_url
     if self._active_master.is_production_host and http_status_push_url:
