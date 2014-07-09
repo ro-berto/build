@@ -37,7 +37,6 @@ _BENCHMARKS_TO_RUN = {
   'dromaeo.jslibtraverseprototype',
   'sunspider',
   'jsgamebench',
-  'kraken',
 }
 
 

@@ -119,130 +119,9 @@
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
       "--use-live-sites",
-      "dromaeo.jslibeventjquery"
-    ],
-    "name": "Telemetry benchmark: dromaeo.jslibeventjquery"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--use-live-sites",
-      "peacekeeper.array"
-    ],
-    "name": "Telemetry benchmark: peacekeeper.array"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--use-live-sites",
-      "dromaeo.jslibstyleprototype"
-    ],
-    "name": "Telemetry benchmark: dromaeo.jslibstyleprototype"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--use-live-sites",
-      "dromaeo.jslibstylejquery"
-    ],
-    "name": "Telemetry benchmark: dromaeo.jslibstylejquery"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--use-live-sites",
-      "dromaeo.jslibeventprototype"
-    ],
-    "name": "Telemetry benchmark: dromaeo.jslibeventprototype"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--use-live-sites",
-      "peacekeeper.render"
-    ],
-    "name": "Telemetry benchmark: peacekeeper.render"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--use-live-sites",
       "jsgamebench"
     ],
     "name": "Telemetry benchmark: jsgamebench"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--use-live-sites",
-      "dromaeo.jslibtraverseprototype"
-    ],
-    "name": "Telemetry benchmark: dromaeo.jslibtraverseprototype"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--use-live-sites",
-      "dromaeo.domcoreattr"
-    ],
-    "name": "Telemetry benchmark: dromaeo.domcoreattr"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--use-live-sites",
-      "dromaeo.jslibattrprototype"
-    ],
-    "name": "Telemetry benchmark: dromaeo.jslibattrprototype"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--use-live-sites",
-      "sunspider"
-    ],
-    "name": "Telemetry benchmark: sunspider"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--use-live-sites",
-      "dromaeo.jslibattrjquery"
-    ],
-    "name": "Telemetry benchmark: dromaeo.jslibattrjquery"
   },
   {
     "cmd": [
@@ -262,42 +141,9 @@
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
       "--use-live-sites",
-      "dromaeo.domcoremodify"
+      "dromaeo.jslibtraverseprototype"
     ],
-    "name": "Telemetry benchmark: dromaeo.domcoremodify"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--use-live-sites",
-      "peacekeeper.string"
-    ],
-    "name": "Telemetry benchmark: peacekeeper.string"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--use-live-sites",
-      "peacekeeper.dom"
-    ],
-    "name": "Telemetry benchmark: peacekeeper.dom"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--use-live-sites",
-      "peacekeeper.html5"
-    ],
-    "name": "Telemetry benchmark: peacekeeper.html5"
+    "name": "Telemetry benchmark: dromaeo.jslibtraverseprototype"
   },
   {
     "cmd": [
@@ -309,6 +155,17 @@
       "dromaeo.domcorequery"
     ],
     "name": "Telemetry benchmark: dromaeo.domcorequery"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
+      "--profiler=win_pgo_profiler",
+      "--use-live-sites",
+      "dromaeo.jslibeventjquery"
+    ],
+    "name": "Telemetry benchmark: dromaeo.jslibeventjquery"
   },
   {
     "cmd": [
@@ -339,9 +196,75 @@
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
       "--use-live-sites",
-      "kraken"
+      "peacekeeper.string"
     ],
-    "name": "Telemetry benchmark: kraken"
+    "name": "Telemetry benchmark: peacekeeper.string"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
+      "--profiler=win_pgo_profiler",
+      "--use-live-sites",
+      "dromaeo.jslibattrprototype"
+    ],
+    "name": "Telemetry benchmark: dromaeo.jslibattrprototype"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
+      "--profiler=win_pgo_profiler",
+      "--use-live-sites",
+      "dromaeo.jslibeventprototype"
+    ],
+    "name": "Telemetry benchmark: dromaeo.jslibeventprototype"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
+      "--profiler=win_pgo_profiler",
+      "--use-live-sites",
+      "dromaeo.domcoreattr"
+    ],
+    "name": "Telemetry benchmark: dromaeo.domcoreattr"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
+      "--profiler=win_pgo_profiler",
+      "--use-live-sites",
+      "dromaeo.jslibstyleprototype"
+    ],
+    "name": "Telemetry benchmark: dromaeo.jslibstyleprototype"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
+      "--profiler=win_pgo_profiler",
+      "--use-live-sites",
+      "dromaeo.jslibstylejquery"
+    ],
+    "name": "Telemetry benchmark: dromaeo.jslibstylejquery"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
+      "--profiler=win_pgo_profiler",
+      "--use-live-sites",
+      "peacekeeper.dom"
+    ],
+    "name": "Telemetry benchmark: peacekeeper.dom"
   },
   {
     "cmd": [
@@ -353,6 +276,72 @@
       "dromaeo.jslibmodifyjquery"
     ],
     "name": "Telemetry benchmark: dromaeo.jslibmodifyjquery"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
+      "--profiler=win_pgo_profiler",
+      "--use-live-sites",
+      "dromaeo.domcoremodify"
+    ],
+    "name": "Telemetry benchmark: dromaeo.domcoremodify"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
+      "--profiler=win_pgo_profiler",
+      "--use-live-sites",
+      "sunspider"
+    ],
+    "name": "Telemetry benchmark: sunspider"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
+      "--profiler=win_pgo_profiler",
+      "--use-live-sites",
+      "peacekeeper.html5"
+    ],
+    "name": "Telemetry benchmark: peacekeeper.html5"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
+      "--profiler=win_pgo_profiler",
+      "--use-live-sites",
+      "peacekeeper.render"
+    ],
+    "name": "Telemetry benchmark: peacekeeper.render"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
+      "--profiler=win_pgo_profiler",
+      "--use-live-sites",
+      "dromaeo.jslibattrjquery"
+    ],
+    "name": "Telemetry benchmark: dromaeo.jslibattrjquery"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
+      "--profiler=win_pgo_profiler",
+      "--use-live-sites",
+      "peacekeeper.array"
+    ],
+    "name": "Telemetry benchmark: peacekeeper.array"
   },
   {
     "cmd": [
