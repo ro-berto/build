@@ -4,6 +4,7 @@
 
 DEPS = [
   'archive',
+  'bot_update',
   'chromium',
   'gclient',
   'json',
@@ -26,6 +27,11 @@ def GenSteps(api):
 
   if api.platform.is_win:
     yield api.chromium.taskkill()
+
+  # TODO(machenbach): Experimental bot_update, remove guard once
+  # crbug.com/391704 is resolved.
+  if api.properties.get('buildername') == 'V8 Linux - git':
+    yield api.bot_update.ensure_checkout()
 
   # On the branch builders, the gclient solution changes on every milestone.
   # If the sync fails, we nuke the build dir.

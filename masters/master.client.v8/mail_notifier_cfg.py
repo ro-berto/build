@@ -45,6 +45,7 @@ exclusions = {
   'V8 Linux - mips - sim': ['compile'],
   'V8 Linux - x87 - nosnap - debug': [],
   'V8 Linux - predictable': [],
+  'V8 Linux - git': [],
   'NaCl V8 Linux': ['Check'],
   'NaCl V8 Linux64 - stable': ['Check'],
   'NaCl V8 Linux64 - canary': ['Check'],

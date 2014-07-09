@@ -190,6 +190,7 @@ ENABLED_BUILDERS = {
     'client.v8': [
         'Linux Debug Builder',
         'Linux Tests (dbg)(1)',
+        'V8 Linux - git',
     ],
     'tryserver.chromium.gpu': [
         'linux_gpu',
