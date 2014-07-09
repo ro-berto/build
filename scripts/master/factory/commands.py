@@ -993,7 +993,9 @@ class FactoryCommands(object):
         description='bot_update',
         haltOnFailure=True,
         flunkOnFailure=True,
-        timeout=600,
+        # TODO(hinoka): Change this back to 600 once Windows performance issues
+        #               are resolved crbug.com/383455.
+        timeout=1800,
         workdir=self.working_dir,
         command=cmd)
 
