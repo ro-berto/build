@@ -134,6 +134,30 @@
   },
   {
     "cmd": [
+      "rm",
+      "-rf",
+      "[SLAVE_BUILD]/src/out"
+    ],
+    "name": "rm out"
+  },
+  {
+    "cmd": [
+      "mkdir",
+      "-p",
+      "[SLAVE_BUILD]/src/out"
+    ],
+    "name": "mkdir out"
+  },
+  {
+    "cmd": [
+      "mv",
+      "[SLAVE_BUILD]/src/full-build-linux",
+      "[SLAVE_BUILD]/src/out/Release"
+    ],
+    "name": "move build"
+  },
+  {
+    "cmd": [
       "[BUILD]/scripts/slave/daemonizer.py",
       "--",
       "[SLAVE_BUILD]/src/build/android/adb_logcat_monitor.py",

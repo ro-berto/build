@@ -69,6 +69,20 @@ def GenSteps(api):
   yield api.chromium_android.download_build(bucket=builder['bucket'],
     path=builder['path'](api))
 
+  # The directory extracted as src/full-build-linux and needs to be renamed to
+  # src/out/Release
+  # TODO(zty): make the following part of download_build api.
+  yield api.step(
+      'rm out',
+      ['rm', '-rf', api.path['checkout'].join('out')])
+  yield api.step(
+      'mkdir out',
+      ['mkdir', '-p', api.path['checkout'].join('out')])
+  yield api.step(
+      'move build',
+      ['mv', api.path['checkout'].join('full-build-linux'),
+             api.path['checkout'].join('out','Release')])
+
   yield api.chromium_android.spawn_logcat_monitor()
   yield api.chromium_android.device_status_check()
   yield api.chromium_android.provision_devices()
