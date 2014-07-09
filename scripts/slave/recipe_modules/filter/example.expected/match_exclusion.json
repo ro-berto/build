@@ -1,0 +1,13 @@
+[
+  {
+    "cmd": [
+      "git",
+      "diff",
+      "--cached",
+      "--name-only"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "git diff to analyze patch",
+    "stdout": "/path/to/tmp/"
+  }
+]

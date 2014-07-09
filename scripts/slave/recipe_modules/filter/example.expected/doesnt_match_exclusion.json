@@ -1,0 +1,24 @@
+[
+  {
+    "cmd": [
+      "git",
+      "diff",
+      "--cached",
+      "--name-only"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "git diff to analyze patch",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/build/gyp_chromium",
+      "--analyzer",
+      "bar.cc"
+    ],
+    "name": "analyze",
+    "stdout": "/path/to/tmp/"
+  }
+]

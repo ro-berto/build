@@ -5,6 +5,7 @@
 DEPS = [
   'bot_update',
   'chromium',
+  'filter',
   'gclient',
   'isolate',
   'itertools',
@@ -499,6 +500,17 @@ def GenSteps(api):
       followup_fn=test_spec_followup_fn,
   )
 
+  test_spec = api.step_history['read test spec'].json.output
+
+  # See if the patch needs to compile on the current platform.
+  if isinstance(test_spec, dict) and \
+        buildername in test_spec.get('filter_builders', []):
+    yield api.filter.does_patch_require_compile(
+      exclusions=test_spec.get('gtest_tests_filter_exclusions', []))
+    if not api.filter.result:
+      print 'No compile necessary'
+      return
+
   def should_use_test(test):
     """Given a test dict from test spec returns True or False."""
     if 'platforms' in test:
@@ -514,7 +526,7 @@ def GenSteps(api):
 
   # Parse test spec file into list of Test instances.
   compile_targets, gtest_tests, swarming_tests = parse_test_spec(
-      api.step_history['read test spec'].json.output,
+      test_spec,
       bot_config.get('enable_swarming'),
       should_use_test)
 
@@ -843,4 +855,43 @@ def GenTests(api):
     api.override_step_data(
         'find isolated tests (2)',
         api.isolate.output_json(['base_unittests']))
+  )
+
+  # Tests analyze module by way of making builder match that of filter_builders.
+  yield (
+    api.test('no_compile_because_of_analyze') +
+    props(buildername='linux_chromium_rel') +
+    api.platform.name('linux') +
+    api.override_step_data('read test spec', api.json.output({
+        'filter_builders': ['linux_chromium_rel'],
+      })
+    )
+  )
+
+  # Tests analyze module by way of making builder match that of filter_builders
+  # and file matching exclusion list. This should result in a compile.
+  yield (
+    api.test('compile_because_of_analyze_matching_exclusion') +
+    props(buildername='linux_chromium_rel') +
+    api.platform.name('linux') +
+    api.override_step_data('read test spec', api.json.output({
+        'filter_builders': ['linux_chromium_rel'],
+        'gtest_tests_filter_exclusions': ['f.*'],
+      })
+    )
+  )
+
+  # Tests analyze module by way of making builder match that of filter_builders
+  # and analyze result returning true. This should result in a compile.
+  yield (
+    api.test('compile_because_of_analyze') +
+    props(buildername='linux_chromium_rel') +
+    api.platform.name('linux') +
+    api.override_step_data('read test spec', api.json.output({
+        'filter_builders': ['linux_chromium_rel'],
+      })
+    ) +
+    api.override_step_data(
+      'analyze',
+      api.raw_io.stream_output('Found dependency'))
   )
