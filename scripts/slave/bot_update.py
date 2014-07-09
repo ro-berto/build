@@ -298,6 +298,7 @@ DISABLED_BUILDERS = {
         'win_blink',
         'win_blink_compile',
         'win_blink_compile_rel',
+        'win_drmemory',
     ],
 }
 DISABLED_BUILDERS.update(internal_data.get('DISABLED_BUILDERS', {}))
