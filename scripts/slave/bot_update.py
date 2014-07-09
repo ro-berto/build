@@ -288,7 +288,9 @@ DISABLED_BUILDERS = {
         'GPU Win7 (dbg) (NVIDIA)',
     ],
     'chromium.win': [
+        # crbug.com/392565
         'NaCl Tests (x86-64)',  # nacl_integration is failing.
+        'Win Builder',  # nacl_integration is failing.
     ],
     'tryserver.blink': [
         # These don't exist, but are just here to satisfy recipes.
