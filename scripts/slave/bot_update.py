@@ -258,11 +258,6 @@ DISABLED_BUILDERS = {
         # (Android Builder) only has 40G of disk space and can't sustain a
         # cache. crbug.com/389608
         'Android Builder',
-        'Android Nexus4 Perf',
-        'Android Nexus5 Perf',
-        'Android Nexus7v2 Perf',
-        'Android Nexus10 Perf',
-        'Android GN Perf',
     ],
     'chromium.webkit': [
         # We don't know how to deal with the DEPS builder yet.
