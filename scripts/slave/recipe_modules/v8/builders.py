@@ -743,7 +743,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing', 'benchmarks'],
+        'tests': ['mjsunit', 'webkit', 'benchmarks', 'mozilla'],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - full debug builder': {

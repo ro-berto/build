@@ -6,7 +6,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = None\nsolutions = [{'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'http://v8.googlecode.com/svn/branches/bleeding_edge'}]"
+      "cache_dir = None\nsolutions = [{'custom_deps': {'v8/test/mozilla/data': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/deps/third_party/mozilla-tests'}, 'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'http://v8.googlecode.com/svn/branches/bleeding_edge'}]"
     ],
     "name": "gclient setup"
   },
@@ -83,7 +83,7 @@
       "--arch",
       "ia32",
       "--testname",
-      "mjsunit fuzz-natives cctest message preparser",
+      "mjsunit",
       "--predictable",
       "--flaky-tests",
       "skip",
@@ -91,7 +91,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Check"
+    "name": "Mjsunit"
   },
   {
     "cmd": [
@@ -103,7 +103,7 @@
       "--arch",
       "ia32",
       "--testname",
-      "mjsunit fuzz-natives cctest message preparser",
+      "mjsunit",
       "--predictable",
       "--flaky-tests",
       "run",
@@ -111,7 +111,47 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Check - flaky"
+    "name": "Mjsunit - flaky"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/v8/v8testing.py",
+      "--target",
+      "Release",
+      "--arch",
+      "ia32",
+      "--testname",
+      "webkit",
+      "--predictable",
+      "--flaky-tests",
+      "skip",
+      "--json-test-results",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "name": "Webkit"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/v8/v8testing.py",
+      "--target",
+      "Release",
+      "--arch",
+      "ia32",
+      "--testname",
+      "webkit",
+      "--predictable",
+      "--flaky-tests",
+      "run",
+      "--json-test-results",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "name": "Webkit - flaky"
   },
   {
     "cmd": [
@@ -130,5 +170,23 @@
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Benchmarks"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/v8/v8testing.py",
+      "--target",
+      "Release",
+      "--arch",
+      "ia32",
+      "--testname",
+      "mozilla",
+      "--predictable",
+      "--json-test-results",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "name": "Mozilla"
   }
 ]
