@@ -156,7 +156,9 @@ class GclientApi(recipe_api.RecipeApi):
       if val:
         # Special case for 'src', inject into solutions[0]
         if custom_var is None:
-          if cfg.solutions[0].revision is None or override:
+          # This is not covered because we are deprecating this feature and
+          # it is no longer used by the public recipes.
+          if cfg.solutions[0].revision is None or override:  # pragma: no cover
             cfg.solutions[0].revision = val
         else:
           if custom_var not in cfg.solutions[0].custom_vars or override:

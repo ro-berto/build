@@ -176,6 +176,7 @@ ENABLED_MASTERS = [
     'chromium.webkit',
     'chromium.webrtc',
     'chromium.webrtc.fyi',
+    'chromium.win',
     'client.drmemory',
     'client.nacl.sdk',
     'client.nacl.sdk.mono',
@@ -245,7 +246,6 @@ DISABLED_BUILDERS = {
         'Win8 Debug (NVIDIA)',
         'WinXP Debug (NVIDIA)',
     ],
-    'chromium.win': ['Win Builder'],  # crbug.com/370473
     'chromium.fyi': [
         'Chromium Linux Codesearch',
         'ChromiumOS Codesearch',
