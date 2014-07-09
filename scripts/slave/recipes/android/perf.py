@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+    'bot_update',
     'chromium_android',
     'gclient',
     'step',
@@ -61,17 +62,18 @@ def GenSteps(api):
                                                  REPO_URL=REPO_URL,
                                                  INTERNAL=False,
                                                  BUILD_CONFIG='Release')
-  api.gclient.set_config('chromium')
+  api.gclient.set_config('android_shared')
   api.gclient.apply_config('android')
 
-  yield api.chromium_android.init_and_sync()
+  yield api.bot_update.ensure_checkout()
+  api.path['checkout'] = api.path['slave_build'].join('src')
 
   yield api.chromium_android.download_build(bucket=builder['bucket'],
     path=builder['path'](api))
 
   # The directory extracted as src/full-build-linux and needs to be renamed to
   # src/out/Release
-  # TODO(zty): make the following part of download_build api.
+  # TODO(zty): remove the following once parent builder is zipping out/
   yield api.step(
       'rm out',
       ['rm', '-rf', api.path['checkout'].join('out')])
