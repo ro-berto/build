@@ -781,11 +781,7 @@ def main_ninja(options, args):
 
     # Run the build.
     env.print_overrides()
-    # TODO(maruel): Remove the shell argument as soon as ninja.exe is in PATH.
-    # At the moment of writing, ninja.bat in depot_tools wraps
-    # third_party\ninja.exe, which requires shell=True so it is found correctly.
-    return chromium_utils.RunCommand(
-        command, env=env, shell=sys.platform=='win32')
+    return chromium_utils.RunCommand(command, env=env)
   finally:
     goma_teardown(options, env)
 
