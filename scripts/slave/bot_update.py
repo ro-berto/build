@@ -180,6 +180,7 @@ ENABLED_MASTERS = [
     'client.drmemory',
     'client.nacl.sdk',
     'client.nacl.sdk.mono',
+    'client.webrtc',
     'tryserver.blink',
     'tryserver.chromium',
     'chromium.perf.fyi',

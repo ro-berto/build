@@ -153,12 +153,12 @@ class GclientApi(recipe_api.RecipeApi):
 
     for prop, custom_var in cfg.parent_got_revision_mapping.iteritems():
       val = str(self.m.properties.get(prop, ''))
-      if val:
+      if val:  # pragma: no cover
         # Special case for 'src', inject into solutions[0]
         if custom_var is None:
           # This is not covered because we are deprecating this feature and
           # it is no longer used by the public recipes.
-          if cfg.solutions[0].revision is None or override:  # pragma: no cover
+          if cfg.solutions[0].revision is None or override:
             cfg.solutions[0].revision = val
         else:
           if custom_var not in cfg.solutions[0].custom_vars or override:
