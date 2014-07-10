@@ -227,6 +227,7 @@ def main(argv):
       'master.chromiumos.tryserver': 'ChromiumOSTryServer',
       'master.client.dart': 'Dart',
       'master.client.dart.fyi': 'DartFYI',
+      'master.client.dart.packages': 'DartPackages',
       'master.client.drmemory': 'DrMemory',
       'master.client.dynamorio': 'DynamoRIO',
       'master.client.libyuv': 'Libyuv',
