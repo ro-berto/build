@@ -1404,6 +1404,9 @@ def parse_args():
   parse.add_option('--post-flag-day', action='store_true',
                    help='Behave as if the chromium git migration has already '
                    'happened')
+  parse.add_option('--no_shallow', action='store_true',
+                   help='Bypass disk detection and never shallow clone. '
+                        'Does not override the --shallow flag')
 
 
   options, args = parse.parse_args()
@@ -1462,7 +1465,8 @@ def prepare(options, git_slns, active):
   if not options.output_json:
     print '@@@STEP_TEXT@%s@@@' % step_text
   if not options.shallow:
-    options.shallow = total_disk_space < SHALLOW_CLONE_THRESHOLD
+    options.shallow = (total_disk_space < SHALLOW_CLONE_THRESHOLD
+                       and not options.no_shallow)
 
   # The first solution is where the primary DEPS file resides.
   first_sln = dir_names[0]
