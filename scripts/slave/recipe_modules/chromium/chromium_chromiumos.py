@@ -180,7 +180,7 @@ SPEC = {
       },
       'bot_type': 'tester',
       'tests': [
-        steps.DynamicGTestTests('Linux ChromiumOS Tests (1)'),
+        steps.DynamicGTestTests('Linux ChromiumOS Ozone Tests (1)'),
       ],
       'parent_buildername': 'Linux ChromiumOS Ozone Builder',
       'testing': {
@@ -195,7 +195,7 @@ SPEC = {
       },
       'bot_type': 'tester',
       'tests': [
-        steps.DynamicGTestTests('Linux ChromiumOS Tests (2)'),
+        steps.DynamicGTestTests('Linux ChromiumOS Ozone Tests (2)'),
       ],
       'parent_buildername': 'Linux ChromiumOS Ozone Builder',
       'testing': {
