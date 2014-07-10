@@ -341,8 +341,10 @@ class AndroidApi(recipe_api.RecipeApi):
         always_run=True,
         **kwargs)
 
-  def list_perf_tests(self, browser, json_output_file, devices=[]):
-    args = ['list', '--browser', browser, '--json-output', json_output_file]
+  def list_perf_tests(self, browser, json_output_file, num_device_shards,
+                      devices=[]):
+    args = ['list', '--browser', browser, '--json-output', json_output_file,
+            '--num-shards', num_device_shards]
     for x in devices:
       args += ['--device', x]
     yield self.m.python(

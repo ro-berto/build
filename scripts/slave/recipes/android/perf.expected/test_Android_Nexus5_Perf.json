@@ -149,6 +149,8 @@
       "android-chrome-shell",
       "--json-output",
       "[SLAVE_BUILD]/src/out/perf-tests.json",
+      "--num-shards",
+      "1",
       "--device",
       "014E1F310401C009"
     ],

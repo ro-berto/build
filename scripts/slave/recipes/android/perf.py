@@ -23,36 +23,42 @@ BUILDERS = {
       '%s/build_product_%s.zip' % (
             api.properties['parent_buildername'],
             api.properties['parent_revision'])),
+    'num_device_shards': 1,
   },
   'Android Nexus4 Perf': {
     'perf_id': 'android-nexus4',
     'bucket': 'chrome-perf',
     'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip'
                                % api.properties['parent_revision']),
+    'num_device_shards': 2,
   },
   'Android Nexus5 Perf': {
     'perf_id': 'android-nexus5',
     'bucket': 'chrome-perf',
     'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip'
                                % api.properties['parent_revision']),
+    'num_device_shards': 1,
   },
   'Android Nexus7v2 Perf': {
     'perf_id': 'android-nexus7v2',
     'bucket': 'chrome-perf',
     'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip'
                                % api.properties['parent_revision']),
+    'num_device_shards': 1,
   },
   'Android Nexus10 Perf': {
     'perf_id': 'android-nexus10',
     'bucket': 'chrome-perf',
     'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip'
                                % api.properties['parent_revision']),
+    'num_device_shards': 1,
   },
   'Android GN Perf': {
     'perf_id': 'android-gn',
     'bucket': 'chrome-perf',
     'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip'
                                % api.properties['parent_revision']),
+    'num_device_shards': 1,
   },
 }
 
@@ -71,7 +77,7 @@ def GenSteps(api):
   api.path['checkout'] = api.path['slave_build'].join('src')
 
   yield api.chromium_android.download_build(bucket=builder['bucket'],
-    path=builder['path'](api))
+      path=builder['path'](api))
 
   # The directory extracted as src/full-build-linux and needs to be renamed to
   # src/out/Release
@@ -97,8 +103,11 @@ def GenSteps(api):
 
   yield api.adb.list_devices()
   tests_json_file = api.path['checkout'].join('out', 'perf-tests.json')
-  yield api.chromium_android.list_perf_tests(browser='android-chrome-shell',
-    json_output_file=tests_json_file, devices=api.adb.devices[0:1])
+  yield api.chromium_android.list_perf_tests(
+      browser='android-chrome-shell',
+      json_output_file=tests_json_file,
+      num_device_shards=builder['num_device_shards'],
+      devices=api.adb.devices[0:1])
   yield api.chromium_android.run_sharded_perf_tests(
       config=tests_json_file,
       perf_id=builder['perf_id'])
