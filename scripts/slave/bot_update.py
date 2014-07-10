@@ -153,6 +153,7 @@ RECOGNIZED_PATHS = {
         CHROMIUM_SRC_URL,
     '/chrome/trunk/deps/third_party/webrtc/webrtc.DEPS':
         CHROMIUM_GIT_HOST + '/chromium/deps/webrtc/webrtc.DEPS.git',
+    '/svn/branches/bleeding_edge': CHROMIUM_GIT_HOST + '/external/v8.git',
 }
 RECOGNIZED_PATHS.update(internal_data.get('RECOGNIZED_PATHS', {}))
 

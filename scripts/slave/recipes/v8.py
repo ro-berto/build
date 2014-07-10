@@ -31,6 +31,8 @@ def GenSteps(api):
   # TODO(machenbach): Experimental bot_update, remove guard once
   # crbug.com/391704 is resolved.
   if api.properties.get('buildername') == 'V8 Linux - git':
+    api.gclient.c.solutions[0].revision = ('bleeding_edge:%s' %
+        api.properties.get('revision', 'HEAD'))
     yield api.bot_update.ensure_checkout()
 
   # On the branch builders, the gclient solution changes on every milestone.
