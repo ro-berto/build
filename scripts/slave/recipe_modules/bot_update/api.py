@@ -57,7 +57,8 @@ class BotUpdateApi(recipe_api.RecipeApi):
 
   def ensure_checkout(self, gclient_config=None, suffix=None,
                       patch=True, update_presentation=True,
-                      force=False, patch_root=None, **kwargs):
+                      force=False, patch_root=None, no_shallow=False,
+                      **kwargs):
     # We can re-use the gclient spec from the gclient module, since all the
     # data bot_update needs is already configured into the gclient spec.
     cfg = gclient_config or self.m.gclient.c
@@ -132,6 +133,8 @@ class BotUpdateApi(recipe_api.RecipeApi):
 
     if force:
       cmd.append('--force')
+    if no_shallow:
+      cmd.append('--no_shallow')
 
     # Inject Json output for testing.
     git_mode = self.m.properties.get('mastername') in GIT_MASTERS
