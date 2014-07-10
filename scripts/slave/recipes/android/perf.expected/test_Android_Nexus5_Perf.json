@@ -126,12 +126,31 @@
     "cmd": [
       "python",
       "-u",
+      "[BUILD]/scripts/slave/recipe_modules/adb/resources/list_devices.py",
+      "['[BUILD_INTERNAL]/scripts/slave/android/adb', 'devices']",
+      "/path/to/tmp/json"
+    ],
+    "name": "List adb devices",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"014E1F310401C009\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"014E1F310401C010\"@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
       "list",
       "--browser",
       "android-chrome-shell",
       "--json-output",
-      "[SLAVE_BUILD]/src/out/perf-tests.json"
+      "[SLAVE_BUILD]/src/out/perf-tests.json",
+      "--device",
+      "014E1F310401C009"
     ],
     "name": "List Perf Tests"
   },

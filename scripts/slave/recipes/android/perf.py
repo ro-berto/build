@@ -3,9 +3,11 @@
 # found in the LICENSE file.
 
 DEPS = [
+    'adb',
     'bot_update',
     'chromium_android',
     'gclient',
+    'json',
     'step',
     'path',
     'properties',
@@ -93,9 +95,10 @@ def GenSteps(api):
       'ChromeShell.apk',
       'org.chromium.chrome.shell')
 
+  yield api.adb.list_devices()
   tests_json_file = api.path['checkout'].join('out', 'perf-tests.json')
   yield api.chromium_android.list_perf_tests(browser='android-chrome-shell',
-    json_output_file=tests_json_file)
+    json_output_file=tests_json_file, devices=api.adb.devices[0:1])
   yield api.chromium_android.run_sharded_perf_tests(
       config=tests_json_file,
       perf_id=builder['perf_id'])
@@ -122,5 +125,8 @@ def GenTests(api):
             parent_revision='deadbeef',
             revision='deadbeef',
             slavename='slavename',
-            target='Release')
+            target='Release') +
+        api.override_step_data('List adb devices', api.json.output([
+          "014E1F310401C009", "014E1F310401C010"
+          ]))
     )
