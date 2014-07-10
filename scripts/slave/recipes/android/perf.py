@@ -94,7 +94,7 @@ def GenSteps(api):
       'org.chromium.chrome.shell')
 
   tests_json_file = api.path['checkout'].join('out', 'perf-tests.json')
-  yield api.chromium_android.list_perf_tests(browser='android-content-shell',
+  yield api.chromium_android.list_perf_tests(browser='android-chrome-shell',
     json_output_file=tests_json_file)
   yield api.chromium_android.run_sharded_perf_tests(
       config=tests_json_file,

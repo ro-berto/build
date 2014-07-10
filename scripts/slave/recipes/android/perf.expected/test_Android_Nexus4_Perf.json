@@ -129,7 +129,7 @@
       "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
       "list",
       "--browser",
-      "android-content-shell",
+      "android-chrome-shell",
       "--json-output",
       "[SLAVE_BUILD]/src/out/perf-tests.json"
     ],
