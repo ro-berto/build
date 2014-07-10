@@ -28,10 +28,12 @@ from slave import build_directory
 from slave import slave_utils
 from slave import zip_build
 
-class StagingError(Exception): pass
+class StagingError(Exception):
+  pass
 
 
 def ShouldPackageFile(filename, target):
+  # Disable 'unused argument' warning for 'target' | pylint: disable=W0613
   """Returns true if the file should be a part of the resulting archive."""
   if chromium_utils.IsMac():
     file_filter = '^.+\.(a|dSYM)$'
@@ -54,13 +56,13 @@ def ShouldPackageFile(filename, target):
 
 
 def archive(options, args):
+  # Disable 'unused argument' warning for 'args' | pylint: disable=W0613
   build_dir = build_directory.GetBuildOutputDirectory()
   src_dir = os.path.abspath(os.path.dirname(build_dir))
   build_dir = os.path.join(build_dir, options.target)
 
   revision_dir = options.factory_properties.get('revision_dir')
-  (build_revision, _) = slave_utils.GetBuildRevisions(
-      src_dir, None, revision_dir)
+  _, build_sortkey_value = chromium_utils.GetBuildSortKey(options)
 
   staging_dir = slave_utils.GetStagingDir(src_dir)
   chromium_utils.MakeParentDirectoriesWorldReadable(staging_dir)
@@ -84,11 +86,11 @@ def archive(options, args):
     component = '-%s-component' % revision_dir
 
   prefix = options.factory_properties.get('cf_archive_name', 'cf_archive')
-  zip_file_name = '%s-%s-%s%s-%s' % (prefix,
+  zip_file_name = '%s-%s-%s%s-%d' % (prefix,
                                    chromium_utils.PlatformName(),
                                    options.target.lower(),
                                    component,
-                                   build_revision)
+                                   build_sortkey_value)
 
   (zip_dir, zip_file) = chromium_utils.MakeZip(staging_dir,
                                                zip_file_name,

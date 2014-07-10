@@ -5,6 +5,7 @@
 """ Set of basic operations/utilities that are used by the build. """
 
 from contextlib import contextmanager
+import ast
 import copy
 import cStringIO
 import errno
@@ -13,6 +14,7 @@ import glob
 import math
 import multiprocessing
 import os
+import optparse
 import shutil
 import socket
 import stat
@@ -41,9 +43,14 @@ GIT_BIN = os.path.join(BUILD_DIR, 'scripts', 'tools', 'git-with-timeout')
 SVN_BIN = os.path.join(BUILD_DIR, 'scripts', 'tools', 'svn-with-timeout')
 
 # Local errors.
-class MissingArgument(Exception): pass
-class PathNotFound(Exception): pass
-class ExternalError(Exception): pass
+class MissingArgument(Exception):
+  pass
+class PathNotFound(Exception):
+  pass
+class ExternalError(Exception):
+  pass
+class NoIdentifiedRevision(Exception):
+  pass
 
 def IsWindows():
   return sys.platform == 'cygwin' or sys.platform.startswith('win')
@@ -1227,7 +1234,7 @@ def RunSlavesCfg(slaves_cfg, fail_hard=False):
   return slave_config.get('slaves', [])
 
 
-def convert_json(option, opt, value, parser):
+def convert_json(option, _, value, parser):
   """Provide an OptionParser callback to unmarshal a JSON string."""
   setattr(parser.values, option.dest, json.loads(value))
 
@@ -1280,6 +1287,53 @@ def GetCBuildbotConfigs(chromite_path=None):
     return {}
 
 
+def GetBuildSortKey(options):
+  """Reads a variety of sources to determine the current build revision.
+
+  Build revision is either explicitly specified using the 'build_sort_key'
+  command-line option (used by recipes) or determined by examining a
+  'build_properties' value, 'got_[*]revision'. The optional specification of
+  the 'primary_repo' build property will take precedence over the default
+  'got_revision' property.
+
+  NOTE: Currently, the return value does not qualify branch name. This can
+  present a problem with git numbering scheme, where numbers are only unique
+  in the context of their respective branches. When this happens, this
+  function will return a branch name as part of the sort key and its callers
+  will need to adapt their naming/querying schemes to accommodate this. Until
+  then, we will return 'None' as the branch name.
+  (e.g., refs/foo/bar@{#12345} => (12345, refs/foo/bar))
+
+  Args:
+    options: Command-line options structure
+  Returns: (branch, value) The qualified sortkey value
+    branch: (str/None) The name of the branch, or 'None' if there is no branch
+        context. Currently this always returns 'None'.
+    value: (int) The iteration value within the specified branch
+  Raises: (NoIdentifiedRevision) if no revision could be identified from the
+      supplied options.
+  """
+  if options.build_sort_key:
+    return options.build_sort_key
+
+  # Construct the build parameter. Use 'primary_repo' as the (optional)
+  # revision key.
+  revision_keys = []
+  primary_repo = options.build_properties.get('primary_repo')
+  if primary_repo:
+    # 'primary_repo' value currently contains a trailing underscore. However,
+    # this isn't an obvious thing given its name, so we'll strip it here and
+    # remove that expectation.
+    revision_keys.append('got_%s_revision' % (primary_repo.strip('_'),))
+  revision_keys.append('got_revision')
+  for revision_key in revision_keys:
+    revision = options.build_properties.get(revision_key)
+    if revision:
+      return None, int(revision)
+  raise NoIdentifiedRevision("Unable to identify revision; used revision "
+                             "key(s): %s" % (revision_keys,))
+
+
 def AddPropertiesOptions(option_parser):
   """Registers command line options for parsing build and factory properties.
 
@@ -1300,6 +1354,24 @@ def AddPropertiesOptions(option_parser):
                            callback=convert_json, type='string',
                            nargs=1, default={},
                            help='factory properties in JSON format')
+
+  def cb_sort_key(option, opt, value, parser):
+    try:
+      literal = ast.literal_eval(value)
+    except ValueError:
+      raise optparse.OptionValueError("Failed to parse literal: %s" % (value,))
+
+    try:
+      sort_key = (literal[0], int(literal[1]))
+    except (TypeError, ValueError):
+      raise optparse.OptionValueError("Invalid sort key: %s" % (value,))
+    setattr(parser.values, option.dest, sort_key)
+  option_parser.add_option('--build-sort-key', metavar='(BRANCH, VALUE)',
+                           type=str, action='callback', callback=cb_sort_key,
+                           help="The build sort key associated with the "
+                                "primary repository, expressed as a "
+                                "(branch, value) tuple. If omitted, this will "
+                                "be inferred from the build properties.")
 
 
 def AddThirdPartyLibToPath(lib, override=False):
