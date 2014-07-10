@@ -890,6 +890,14 @@ BUILDERS = {
         'tests': ['v8testing'],
         'testing': {'platform': 'win'},
       },
+      'v8_win64_rel': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'win'},
+      },
       'v8_mac_rel': {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
