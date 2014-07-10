@@ -208,7 +208,7 @@ def _GetGitSvnRevision(dir_path):
   """Extracts the svn revision number of the HEAD commit."""
   git_exe = 'git.bat' if sys.platform.startswith('win') else 'git'
   p = subprocess.Popen(
-      [git_exe, 'log', '-n', '1', '--pretty=format:%H', 'HEAD'],
+      [git_exe, 'log', '-n', '1', '--pretty=format:%B', 'HEAD'],
       cwd=dir_path, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
   (log, _) = p.communicate()
   if p.returncode != 0:
