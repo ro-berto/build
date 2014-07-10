@@ -233,7 +233,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     """
     # TODO(vadimsh): Trigger multiple tasks as a single step.
     assert all(isinstance(t, SwarmingTask) for t in tasks)
-    assert 'followup_fn' not in kwargs, 'Not supported, patches are welcome'
+    old_followup = kwargs.pop('followup_fn', None)
     steps = []
     for task in tasks:
       assert task.task_id not in self._pending_tasks, (
@@ -274,7 +274,8 @@ class SwarmingApi(recipe_api.RecipeApi):
           name=self._get_step_name('trigger', task),
           script=self.m.swarming_client.path.join('swarming.py'),
           args=args,
-          followup_fn=functools.partial(self._decorate_trigger_step, task),
+          followup_fn=functools.partial(
+              self._trigger_followup, task, old_followup),
           step_test_data=functools.partial(self._gen_trigger_step_data, task),
           **kwargs))
 
@@ -297,12 +298,17 @@ class SwarmingApi(recipe_api.RecipeApi):
     # TODO(vadimsh): Update |tasks| in-place with results of task execution.
     # TODO(vadimsh): Add timeouts.
     assert all(isinstance(t, SwarmingTask) for t in tasks)
+    old_followup = kwargs.pop('followup_fn', None)
     steps = []
     for task in tasks:
       assert task.task_id in self._pending_tasks, (
           'Trying to collect a task that was not triggered: %s' % task.task_id)
       self._pending_tasks.remove(task.task_id)
-      steps.append(task.collect_step_builder(task, **kwargs))
+      steps.append(task.collect_step_builder(
+          task,
+          followup_fn=functools.partial(
+              self._collect_followup, task, old_followup),
+          **kwargs))
     return steps
 
   def _default_collect_step(self, task, **kwargs):
@@ -404,30 +410,30 @@ class SwarmingApi(recipe_api.RecipeApi):
       },
     })
 
-  def _decorate_trigger_step(self, task, step_result):
+  def _trigger_followup(self, task, next_followup, step_result):
     """Called as followup_fn for 'trigger' to add URLs to task shards."""
-    # Step failed.
-    if step_result.presentation == 'FAILURE':  # pragma: no cover
-      return
-
-    # Step succeeded, but for some reason didn't produce valid json.
-    if not step_result.json.output:  # pragma: no cover
-      return
-
-    # Format:
-    # {
-    #   'tasks': {
-    #     '<shard subtask name>': {'shard_index': 0, 'view_url': '...', ...},
-    #     ...
-    #    },
-    #   ...
-    # }
-    tasks = step_result.json.output.get('tasks')
-    if tasks:
+    # Store trigger output with the |task|, print links to triggered shards.
+    if step_result.presentation != 'FAILURE':
+      task._trigger_output = step_result.json.output
       links = step_result.presentation.links
-      shard_dicts = sorted(tasks.itervalues(), key=lambda x: x['shard_index'])
-      for shard_dict in shard_dicts:
-        links['shard #%d' % shard_dict['shard_index']] = shard_dict['view_url']
+      for index in xrange(task.shards):
+        url = task.get_shard_view_url(index)
+        if url:
+          links['shard #%d' % index] = url
+
+    # Append SwarmingTask to step_result for |next_followup| to see it.
+    assert not hasattr(step_result, 'swarming_task')
+    step_result.swarming_task = task
+    if next_followup:
+      next_followup(step_result)
+
+  def _collect_followup(self, task, next_followup, step_result):
+    """Called as followup_fn for 'collect' to append task to step_result."""
+    # Append SwarmingTask to step_result for |next_followup| to see it.
+    assert not hasattr(step_result, 'swarming_task')
+    step_result.swarming_task = task
+    if next_followup:
+      next_followup(step_result)
 
 
 class SwarmingTask(object):
@@ -478,6 +484,7 @@ class SwarmingTask(object):
     self.suffix = suffix
     self.extra_args = tuple(extra_args or [])
     self.collect_step_builder = collect_step_builder
+    self._trigger_output = None
 
   @property
   def task_id(self):
@@ -492,3 +499,13 @@ class SwarmingTask(object):
     return '%s/%s/%s/%s/%d%s' % (
         self.title, self.dimensions['os'], self.isolated_hash,
         self.builder, self.build_number, self.suffix)
+
+  def get_shard_view_url(self, index):
+    """Returns URL of HTML page with shard details or None if not available.
+
+    Works only after the task has been successfully triggered.
+    """
+    if self._trigger_output and self._trigger_output.get('tasks'):
+      for shard_dict in self._trigger_output['tasks'].itervalues():
+        if shard_dict['shard_index'] == index:
+          return shard_dict['view_url']

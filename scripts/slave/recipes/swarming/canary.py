@@ -88,6 +88,10 @@ def GenSteps(api):
   def followup_fn(step_result):
     r = step_result.json.gtest_results
     p = step_result.presentation
+    t = step_result.swarming_task
+    missing_shards = r.raw.get('missing_shards') or []
+    for index in missing_shards:  # pragma: no cover
+      p.links['missing shard #%d' % index] = t.get_shard_view_url(index)
     if r.valid:
       p.step_text += api.test_utils.format_step_text([
           ['failures:', r.failures]

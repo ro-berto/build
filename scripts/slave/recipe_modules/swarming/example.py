@@ -61,14 +61,20 @@ def GenSteps(api):
     tasks.append(task)
 
   # Launch all tasks.
-  yield api.swarming.trigger(tasks)
+  def trigger_followup_fn(step_result):
+    # Each trigger step gets associated with a task.
+    assert step_result.swarming_task in tasks
+  yield api.swarming.trigger(tasks, followup_fn=trigger_followup_fn)
 
   # Recipe can do something useful here locally while tasks are
   # running on swarming.
   yield api.step('local step', ['echo', 'running something locally'])
 
   # Wait for all tasks to complete.
-  yield api.swarming.collect(tasks)
+  def collect_followup_fn(step_result):
+    # Collect step also is associated with a task.
+    assert step_result.swarming_task in tasks
+  yield api.swarming.collect(tasks, followup_fn=collect_followup_fn)
 
   # Cleanup.
   yield api.path.rmtree('remove temp dir', temp_dir)
