@@ -317,3 +317,21 @@ def tools_build(c):
   s.url = ChromiumGitURL(c, 'chromium', 'tools', 'build.git')
   m = c.got_revision_mapping
   m['build'] = 'got_revision'
+
+@config_ctx(includes=['chromium', 'chrome_internal'])
+def perf(c):
+  s = c.solutions[0]
+  s.custom_vars['llvm_url'] = 'svn://svn-mirror.golo.chromium.org/llvm-project'
+  # These repos are large and the perf bots don't need them.
+  s.custom_deps.update({
+    'src/chrome/test/data/pdf_private': None,
+    'src/third_party/WebKit/LayoutTests': None,
+    'src/tools/valgrind': None,
+  })
+  s.managed = False
+  needed_components_internal = [
+    "src/data/page_cycler",
+  ]
+  for key in needed_components_internal:
+    del c.solutions[1].custom_deps[key]
+  c.solutions[1].managed = False

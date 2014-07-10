@@ -62,7 +62,7 @@ def GenSteps(api):
                                                  REPO_URL=REPO_URL,
                                                  INTERNAL=False,
                                                  BUILD_CONFIG='Release')
-  api.gclient.set_config('android_shared')
+  api.gclient.set_config('perf')
   api.gclient.apply_config('android')
 
   yield api.bot_update.ensure_checkout()
