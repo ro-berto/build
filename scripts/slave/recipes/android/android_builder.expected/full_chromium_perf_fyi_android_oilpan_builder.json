@@ -11,9 +11,9 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = None\nsolutions = [{'custom_deps': {'src/chrome/tools/test/reference_build/chrome_linux': 'svn://svn-mirror.golo.chromium.org/blink/branches/oilpan/Tools/reference_build/chrome_linux'}, 'custom_vars': {'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/branches/oilpan'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}, {'custom_deps': {'src/chrome/test/data/firefox2_profile/searchplugins': None, 'src/chrome/test/data/firefox2_searchplugins': None, 'src/chrome/test/data/firefox3_profile/searchplugins': None, 'src/chrome/test/data/firefox3_searchplugins': None, 'src/chrome/test/data/osdd': None, 'src/chrome/test/data/perf/frame_rate/private': None, 'src/chrome/test/data/plugin': None, 'src/chrome/test/data/ssl/certs': None, 'src/data/autodiscovery': None, 'src/data/esctf': None, 'src/data/mach_ports': None, 'src/data/selenium_core': None, 'src/tools/grit/grit/test/data': None}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src-internal', 'url': 'svn://svn-mirror.golo.chromium.org/chrome-internal/trunk/src-internal'}]",
+      "cache_dir = None\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}, {'custom_deps': {'src/chrome/test/data/firefox2_profile/searchplugins': None, 'src/chrome/test/data/firefox2_searchplugins': None, 'src/chrome/test/data/firefox3_profile/searchplugins': None, 'src/chrome/test/data/firefox3_searchplugins': None, 'src/chrome/test/data/osdd': None, 'src/chrome/test/data/perf/frame_rate/private': None, 'src/chrome/test/data/plugin': None, 'src/chrome/test/data/ssl/certs': None, 'src/data/autodiscovery': None, 'src/data/esctf': None, 'src/data/mach_ports': None, 'src/data/memory_test': None, 'src/data/mozilla_js_tests': None, 'src/data/page_cycler': None, 'src/data/selenium_core': None, 'src/data/tab_switching': None, 'src/tools/grit/grit/test/data': None, 'src/webkit/data/bmp_decoder': None, 'src/webkit/data/ico_decoder': None, 'src/webkit/data/test_shell/plugins': None, 'src/webkit/data/xbm_decoder': None}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src-internal', 'url': 'svn://svn-mirror.golo.chromium.org/chrome-internal/trunk/src-internal'}]\ntarget_os = ['android']",
       "--revision_mapping_file",
-      "{\"src/native_client\": \"got_nacl_revision\", \"src/third_party/WebKit\": \"got_webkit_revision\", \"src/third_party/WebKit/Source\": \"got_revision\", \"src/third_party/webrtc\": \"got_webrtc_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_v8_revision\"}",
+      "{\"src\": \"got_revision\", \"src/native_client\": \"got_nacl_revision\", \"src/third_party/WebKit\": \"got_webkit_revision\", \"src/third_party/webrtc\": \"got_webrtc_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_v8_revision\"}",
       "--issue",
       "8675309",
       "--patchset",
@@ -21,9 +21,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@197341",
-      "--revision",
-      "src/third_party/WebKit@HEAD"
+      "src@267739"
     ],
     "name": "bot_update",
     "~followup_annotations": [
@@ -35,8 +33,8 @@
       "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_nacl_revision\": 274981, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_nacl_revision_git\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": 280132, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_revision_git\": \"4316fd642c044ed58155743761bcab3033ea8bc6\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": 170242, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision_git\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_swarming_client_revision\": 276089, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_swarming_client_revision_git\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_v8_revision\": 43426, @@@",
@@ -54,14 +52,14 @@
       "@@@SET_BUILD_PROPERTY@got_webkit_revision@124383@@@",
       "@@@SET_BUILD_PROPERTY@got_swarming_client_revision@276089@@@",
       "@@@SET_BUILD_PROPERTY@got_webrtc_revision@120644@@@",
-      "@@@SET_BUILD_PROPERTY@got_revision@280132@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision@170242@@@",
       "@@@SET_BUILD_PROPERTY@got_v8_revision@43426@@@",
       "@@@SET_BUILD_PROPERTY@got_nacl_revision_git@\"d998e125e8253980d76e269b7982aeeefc1b9b50\"@@@",
       "@@@SET_BUILD_PROPERTY@got_webkit_revision_git@\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\"@@@",
       "@@@SET_BUILD_PROPERTY@got_v8_revision_git@\"801ada225ddc271c132c3a35f03975671d43e399\"@@@",
       "@@@SET_BUILD_PROPERTY@got_webrtc_revision_git@\"0f90628433546e61d9268596da93418c623137f4\"@@@",
       "@@@SET_BUILD_PROPERTY@got_swarming_client_revision_git@\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_revision_git@\"4316fd642c044ed58155743761bcab3033ea8bc6\"@@@"
+      "@@@SET_BUILD_PROPERTY@got_revision_git@\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"@@@"
     ]
   },
   {

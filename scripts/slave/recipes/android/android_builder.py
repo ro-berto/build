@@ -40,7 +40,7 @@ BUILDERS = {
   'chromium.perf.fyi': {
     'android_oilpan_builder': {
       'recipe_config': 'oilpan_builder',
-      'gclient_apply_config': ['oilpan_internal'],
+      'gclient_apply_config': ['android', 'android_shared'],
       'kwargs': {
         'BUILD_CONFIG': 'Release',
       },
