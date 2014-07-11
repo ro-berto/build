@@ -910,7 +910,7 @@ def git_checkout(solutions, revisions, shallow):
         else:
           raise
 
-    git('clean', '-df', cwd=sln_dir)
+    git('clean', '-dff', cwd=sln_dir)
 
     if first_solution:
       git_ref = git('log', '--format=%H', '--max-count=1',
