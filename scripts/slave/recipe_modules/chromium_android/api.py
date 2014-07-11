@@ -196,7 +196,7 @@ class AndroidApi(recipe_api.RecipeApi):
        'scan'],
       env=self.get_env())
 
-  def git_number(self):
+  def git_number(self, **kwargs):
     yield self.m.step(
         'git_number',
         [self.m.path['depot_tools'].join('git_number.py')],
@@ -205,7 +205,8 @@ class AndroidApi(recipe_api.RecipeApi):
           lambda:
             self.m.raw_io.test_api.stream_output('3000\n')
         ),
-        cwd=self.m.path['checkout'])
+        cwd=self.m.path['checkout'],
+        **kwargs)
 
   def check_webview_licenses(self):
     yield self.m.python(

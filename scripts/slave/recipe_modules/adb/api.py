@@ -24,6 +24,7 @@ class AdbApi(recipe_api.RecipeApi):
         self.resource('list_devices.py'),
         args=[ repr(cmd), self.m.json.output() ],
         step_test_data=self.test_api.device_list,
+        always_run=True,
         **kwargs)
 
     step = self.m.step_history.last_step()
