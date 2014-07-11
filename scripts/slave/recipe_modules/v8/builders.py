@@ -724,14 +724,6 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
-      'V8 Linux - git': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'linux'},
-      },
       'V8 Linux - x87 - nosnap - debug': {
         'v8_apply_config': ['no_snapshot'],
         'chromium_apply_config': ['no_snapshot', 'x87'],
