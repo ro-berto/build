@@ -429,7 +429,7 @@ class NaclIntegrationTest(Test):  # pylint: disable=W0232
       # TODO(phajdan.jr): Just remove it, keeping for now to avoid
       # expectation changes.
       args.extend([
-        '--mode', api.chromium.c.BUILD_CONFIG,
+        '--mode', api.chromium.c.build_config_fs,
       ])
 
     return api.python(
