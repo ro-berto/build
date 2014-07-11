@@ -200,8 +200,6 @@ ENABLED_BUILDERS = {
         'V8 Linux',
         'V8 Linux64',
         'V8 Linux - gcmole',
-        'V8 Linux - debug builder',
-        'V8 Arm - builder',
     ],
     'tryserver.chromium.gpu': [
         'linux_gpu',
