@@ -341,9 +341,8 @@ class AndroidApi(recipe_api.RecipeApi):
         always_run=True,
         **kwargs)
 
-  def list_perf_tests(self, browser, json_output_file, num_device_shards,
-                      devices=[]):
-    args = ['list', '--browser', browser, '--json-output', json_output_file,
+  def list_perf_tests(self, browser, num_device_shards, devices=[]):
+    args = ['list', '--browser', browser, '--json-output', self.m.json.output(),
             '--num-shards', num_device_shards]
     for x in devices:
       args += ['--device', x]
@@ -351,6 +350,19 @@ class AndroidApi(recipe_api.RecipeApi):
       'List Perf Tests',
       self.m.path['checkout'].join('tools', 'perf', 'run_benchmark'),
       args,
+      step_test_data=lambda: self.m.json.test_api.output({
+        "steps": {
+          "blink_perf.all": {
+            "cmd": "cmd1",
+            "device_affinity": 0
+          },
+          "dromaeo.cssqueryjquery": {
+            "cmd": "cmd2",
+            "device_affinity": 1
+          },
+        },
+        "version": 1,
+      }),
       always_run=True)
 
   def _run_sharded_tests(self,

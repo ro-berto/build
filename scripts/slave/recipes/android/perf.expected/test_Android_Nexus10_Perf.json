@@ -148,13 +148,29 @@
       "--browser",
       "android-chrome-shell",
       "--json-output",
-      "[SLAVE_BUILD]/src/out/perf-tests.json",
+      "/path/to/tmp/json",
       "--num-shards",
       "1",
       "--device",
       "014E1F310401C009"
     ],
-    "name": "List Perf Tests"
+    "name": "List Perf Tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"steps\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"blink_perf.all\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"cmd\": \"cmd1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"device_affinity\": 0@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"dromaeo.cssqueryjquery\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"cmd\": \"cmd2\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"device_affinity\": 1@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"version\": 1@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "cmd": [
@@ -165,7 +181,7 @@
       "--release",
       "--verbose",
       "--steps",
-      "[SLAVE_BUILD]/src/out/perf-tests.json"
+      "{\"steps\": {\"blink_perf.all\": {\"cmd\": \"cmd1\", \"device_affinity\": 0}, \"dromaeo.cssqueryjquery\": {\"cmd\": \"cmd2\", \"device_affinity\": 1}}, \"version\": 1}"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "env": {
@@ -178,7 +194,7 @@
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "perf",
       "--steps",
-      "[SLAVE_BUILD]/src/out/perf-tests.json",
+      "{\"steps\": {\"blink_perf.all\": {\"cmd\": \"cmd1\", \"device_affinity\": 0}, \"dromaeo.cssqueryjquery\": {\"cmd\": \"cmd2\", \"device_affinity\": 1}}, \"version\": 1}",
       "--output-json-list",
       "/path/to/tmp/json"
     ],

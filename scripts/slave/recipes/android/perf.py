@@ -11,6 +11,7 @@ DEPS = [
     'step',
     'path',
     'properties',
+    'step_history',
 ]
 
 REPO_URL = 'https://chromium.googlesource.com/chromium/src.git'
@@ -101,15 +102,15 @@ def GenSteps(api):
       'ChromeShell.apk',
       'org.chromium.chrome.shell')
 
+  # TODO(zty): remove this in favor of device_status_check
   yield api.adb.list_devices()
-  tests_json_file = api.path['checkout'].join('out', 'perf-tests.json')
   yield api.chromium_android.list_perf_tests(
       browser='android-chrome-shell',
-      json_output_file=tests_json_file,
       num_device_shards=builder['num_device_shards'],
       devices=api.adb.devices[0:1])
+  perf_tests = api.step_history['List Perf Tests'].json.output
   yield api.chromium_android.run_sharded_perf_tests(
-      config=tests_json_file,
+      config=api.json.input(data=perf_tests),
       perf_id=builder['perf_id'])
 
   yield api.chromium_android.logcat_dump()
