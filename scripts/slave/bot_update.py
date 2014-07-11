@@ -208,6 +208,11 @@ ENABLED_BUILDERS = {
         'V8 Win32 - builder',
         'V8 Win32 - 1',
         'V8 Win32 - 2',
+        'V8 Arm - builder',
+        'V8 Arm - debug builder',
+        'V8 Arm',
+        'V8 Arm - debug',
+        'V8 Arm GC Stress',
     ],
     'tryserver.chromium.gpu': [
         'linux_gpu',
