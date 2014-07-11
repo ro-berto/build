@@ -204,7 +204,7 @@ class V8Api(recipe_api.RecipeApi):
     self.m.chromium.apply_config('optimized_debug')
     self.apply_config('trybot_flavor')
 
-  def checkout(self, may_nuke=False, revert=False):
+  def _gclient_checkout(self, may_nuke=False, revert=False):
     if may_nuke:
       yield self.m.gclient.checkout(revert=revert,
                                     can_fail_build=False,
@@ -218,6 +218,17 @@ class V8Api(recipe_api.RecipeApi):
           )
     else:
       yield self.m.gclient.checkout()
+
+  def checkout(self, may_nuke=False, revert=False):
+    # Set revision for bot_update including branch information. Needs to be
+    # reset afterwards as gclient doesn't understand this info.
+    self.m.gclient.c.solutions[0].revision = ('bleeding_edge:%s' %
+        self.m.properties.get('revision', 'HEAD'))
+    yield self.m.bot_update.ensure_checkout(no_shallow=True)
+
+    if not self.m.step_history.last_step().json.output['did_run']:
+      self.m.gclient.c.solutions[0].revision = None
+      yield self._gclient_checkout(may_nuke=may_nuke, revert=revert)
 
     # Whatever step is run right before this line needs to emit got_revision.
     update_step = self.m.step_history.last_step()
