@@ -95,7 +95,7 @@ def GenSteps(api):
              api.path['checkout'].join('out','Release')])
 
   yield api.chromium_android.spawn_logcat_monitor()
-  yield api.chromium_android.device_status_check()
+  yield api.chromium_android.device_status_check(abort_on_failure=True)
   yield api.chromium_android.provision_devices()
 
   yield api.chromium_android.adb_install_apk(
