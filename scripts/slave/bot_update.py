@@ -197,9 +197,6 @@ ENABLED_BUILDERS = {
         'V8 Linux - predictable',
         'NaCl V8 Linux',
         'V8 Linux - noi18n - debug',
-        'V8 Linux',
-        'V8 Linux64',
-        'V8 Linux - gcmole',
     ],
     'tryserver.chromium.gpu': [
         'linux_gpu',
