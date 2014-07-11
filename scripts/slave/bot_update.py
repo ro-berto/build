@@ -224,6 +224,22 @@ ENABLED_BUILDERS = {
         'Linux',
         'Mac',
         'Telemetry Harness Upload',
+        'ASAN Release',
+        'ASAN Release (symbolized)',
+        'ASAN Debug',
+        'ASan Debug (32-bit x86 with V8-ARM)',
+        'ASan Release (32-bit x86 with V8-ARM)',
+        'ASan Release (32-bit x86 with V8-ARM, symbolized)',
+        'TSAN Release',
+        'TSAN Debug',
+        'Win ASan Release',
+        'Mac ASAN Debug',
+        'Mac ASAN Release',
+    ],
+    'client.v8.branches': [
+        'Chromium ASAN (symbolized) - trunk',
+        'Chromium ASAN - trunk - debug',
+        'Chromium Win SyzyASAN - trunk',
     ],
 }
 ENABLED_BUILDERS.update(internal_data.get('ENABLED_BUILDERS', {}))
