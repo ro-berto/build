@@ -192,6 +192,11 @@ ENABLED_BUILDERS = {
         'Linux Debug Builder',
         'Linux Tests (dbg)(1)',
         'V8 Linux - git',
+        'V8 Linux - x87 - nosnap - debug',
+        'V8 Linux - vtunejit',
+        'V8 Linux - predictable',
+        'NaCl V8 Linux',
+        'V8 Linux - noi18n - debug',
     ],
     'tryserver.chromium.gpu': [
         'linux_gpu',
