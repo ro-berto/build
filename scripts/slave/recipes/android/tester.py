@@ -16,7 +16,7 @@ DEPS = [
 BUILDERS = {
   'tryserver.chromium': {
     'android_dbg_triggered_tests_recipe': {
-      'config': 'android_shared',
+      'config': 'main_builder',
       'download': {
         'bucket': 'chromium-android',
         'path': lambda api: ('android_try_dbg_recipe/full-build-linux_%s.zip'
@@ -59,24 +59,24 @@ BUILDERS = {
         },
       ],
       'unittests': [
-        'base_unittests',
-        'breakpad_unittests',
-        'cc_unittests',
-        'components_unittests',
-        'content_browsertests',
-        'content_unittests',
-        'events_unittests',
-        'gl_tests',
-        'gpu_unittests',
-        'ipc_tests',
-        'media_unittests',
-        'net_unittests',
-        'sandbox_linux_unittests',
-        'sql_unittests',
-        'sync_unit_tests',
-        'ui_unittests',
-        'unit_tests',
-        'webkit_unit_tests',
+        [ 'base_unittests', None ],
+        [ 'breakpad_unittests', [ 'breakpad', 'breakpad_unittests.isolate' ] ],
+        [ 'cc_unittests', None ],
+        [ 'components_unittests', None ],
+        [ 'content_browsertests',  None ],
+        [ 'content_unittests', None ],
+        [ 'events_unittests', None ],
+        [ 'gl_tests', None ],
+        [ 'gpu_unittests', None ],
+        [ 'ipc_tests', None ],
+        [ 'media_unittests', None ],
+        [ 'net_unittests', None ],
+        [ 'sandbox_linux_unittests', None ],
+        [ 'sql_unittests', None ],
+        [ 'sync_unit_tests', None ],
+        [ 'ui_unittests', None ],
+        [ 'unit_tests', None ],
+        [ 'webkit_unit_tests', None ],
       ],
       'target': 'Debug',
       'try': True,
@@ -132,8 +132,12 @@ def GenSteps(api):
         suite['test'], verbose=True, **suite.get('kwargs', {}))
 
   unittests = bot_config.get('unittests', [])
-  for suite in unittests:
-    yield api.chromium_android.run_test_suite(suite)
+  for suite, isolate_path in unittests:
+    if isolate_path:
+      isolate_path = api.path['checkout'].join(*isolate_path)
+    yield api.chromium_android.run_test_suite(
+        suite,
+        isolate_file_path=isolate_path)
 
   yield api.chromium_android.logcat_dump()
   yield api.chromium_android.stack_tool_steps()

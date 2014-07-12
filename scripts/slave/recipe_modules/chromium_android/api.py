@@ -188,14 +188,6 @@ class AndroidApi(recipe_api.RecipeApi):
       cmd.append('--release-build')
     yield self.m.step('findbugs_tests', cmd, env=self.get_env())
 
-  def checklicenses(self):
-    yield self.m.step(
-      'check_licenses',
-      [self.m.path['checkout'].join('android_webview', 'tools',
-                                    'webview_licenses.py'),
-       'scan'],
-      env=self.get_env())
-
   def git_number(self, **kwargs):
     yield self.m.step(
         'git_number',
@@ -215,7 +207,8 @@ class AndroidApi(recipe_api.RecipeApi):
                                      'tools',
                                      'webview_licenses.py'),
         args=['scan'],
-        can_fail_build=False)
+        can_fail_build=False,
+        cwd=self.m.path['checkout'])
 
   def upload_build(self, bucket, path):
     archive_name = 'build_product.zip'

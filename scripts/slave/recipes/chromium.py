@@ -181,7 +181,7 @@ def GenSteps(api):
 
     if api.chromium.c.TARGET_PLATFORM == 'android':
       steps.extend([
-          api.chromium_android.checklicenses(),
+          api.chromium_android.check_webview_licenses(),
           api.chromium_android.findbugs(),
       ])
 

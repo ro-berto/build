@@ -6,6 +6,7 @@ DEPS = [
   'chromium_android',
   'bot_update',
   'gclient',
+  'path',
   'properties',
   'tryserver',
 ]
@@ -27,7 +28,7 @@ BUILDERS = {
   },
   'tryserver.chromium': {
     'android_dbg_recipe': {
-      'recipe_config': 'android_shared',
+      'recipe_config': 'main_builder',
       'gclient_apply_config': ['android', 'chrome_internal'],
       'try': True,
       'upload': {
@@ -40,7 +41,7 @@ BUILDERS = {
   'chromium.perf.fyi': {
     'android_oilpan_builder': {
       'recipe_config': 'oilpan_builder',
-      'gclient_apply_config': ['android', 'android_shared'],
+      'gclient_apply_config': ['android', 'chrome_internal'],
       'kwargs': {
         'BUILD_CONFIG': 'Release',
       },

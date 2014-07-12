@@ -66,10 +66,6 @@ def main_builder(c):
 def clang_builder(c):
   pass
 
-@config_ctx()
-def android_shared(c):
-  pass
-
 @config_ctx(config_vars={'BUILD_CONFIG': 'Release'})
 def clang_release_builder(c):
   c.asan_symbolize = True
@@ -176,6 +172,6 @@ def x86_try_instrumentation_tests(c):
 def coverage_builder_tests(c):
   pass
 
-@config_ctx()
+@config_ctx(includes=['component_builder'])
 def oilpan_builder(c):
   pass

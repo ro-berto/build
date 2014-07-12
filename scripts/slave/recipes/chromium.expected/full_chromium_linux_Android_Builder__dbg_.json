@@ -134,13 +134,13 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/android_webview/tools/webview_licenses.py",
       "scan"
     ],
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "check_licenses"
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "check licenses"
   },
   {
     "cmd": [

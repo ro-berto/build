@@ -126,6 +126,7 @@
       "[SLAVE_BUILD]/src/android_webview/tools/webview_licenses.py",
       "scan"
     ],
+    "cwd": "[SLAVE_BUILD]/src",
     "name": "check licenses"
   },
   {

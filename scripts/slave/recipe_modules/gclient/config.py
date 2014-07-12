@@ -210,10 +210,6 @@ def android(c):
   c.target_os.add('android')
 
 @config_ctx(includes=['chromium', 'chrome_internal'])
-def android_shared(c):
-  pass
-
-@config_ctx(includes=['chromium', 'chrome_internal'])
 def ios(c):
   c.target_os.add('ios')
 

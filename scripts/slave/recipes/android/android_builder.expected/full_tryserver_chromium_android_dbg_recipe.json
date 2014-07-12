@@ -92,7 +92,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "OS=android android_sdk_build_tools_version=19.0.0 android_sdk_root='[SLAVE_BUILD]/src/third_party/android_tools/sdk' android_sdk_version=19 component=shared_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "gclient runhooks"
@@ -126,6 +126,7 @@
       "[SLAVE_BUILD]/src/android_webview/tools/webview_licenses.py",
       "scan"
     ],
+    "cwd": "[SLAVE_BUILD]/src",
     "name": "check licenses"
   },
   {
