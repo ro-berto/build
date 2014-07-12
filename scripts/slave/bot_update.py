@@ -214,7 +214,7 @@ ENABLED_BUILDERS = {
         'V8 Win32 - full debug builder',
         'V8 Win32 - debug - 1',
         'V8 Win32 - debug - 2',
-        'V8 Win32 - debug - 3'
+        'V8 Win32 - debug - 3',
         'V8 Win32 - nosnap - shared',
         'V8 Win64',
         'V8 Mac',
