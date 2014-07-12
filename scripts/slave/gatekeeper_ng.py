@@ -82,17 +82,9 @@ def get_builder_section(gatekeeper_section, builder):
   return None
 
 
-def builder_is_excluded(gatekeeper_config, master_url, builder):
-  """Determines if a builder is excluded for any master sections."""
-  gatekeeper_sections = gatekeeper_config[master_url]
-  for gatekeeper_section in gatekeeper_sections:
-    if not get_builder_section(gatekeeper_section, builder):
-      return True
-  return False
-
-
 def check_builds(master_builds, master_jsons, gatekeeper_config):
   """Given a gatekeeper configuration, see which builds have failed."""
+  succeeded_builds = []
   failed_builds = []
   for build_json, master_url, builder, buildnum in master_builds:
     gatekeeper_sections = gatekeeper_config.get(master_url, [])
@@ -103,6 +95,7 @@ def check_builds(master_builds, master_jsons, gatekeeper_config):
       gatekeeper = get_builder_section(
           gatekeeper_section, build_json['builderName'])
       if not gatekeeper:
+        succeeded_builds.append((master_url, builder, buildnum))
         continue
 
       steps = build_json['steps']
@@ -173,8 +166,26 @@ def check_builds(master_builds, master_jsons, gatekeeper_config):
                               builder,
                               buildnum,
                               section_hash))
+      else:
+        succeeded_builds.append((master_url, builder, buildnum))
 
-  return failed_builds
+  return failed_builds, succeeded_builds
+
+
+def propagate_build_status_back_to_db(failure_tuples, success_tuples, build_db):
+  """Write back to build_db which finished steps failed or succeeded."""
+  for _, master_url, builder, buildnum, _ in failure_tuples:
+    builder_dict = build_db.masters[master_url][builder]
+    if builder_dict[buildnum].finished:
+      # pylint: disable=W0212
+      builder_dict[buildnum] = builder_dict[buildnum]._replace(
+          succeeded=False)
+  for master_url, builder, buildnum in success_tuples:
+    builder_dict = build_db.masters[master_url][builder]
+    if builder_dict[buildnum].finished:
+      # pylint: disable=W0212
+      builder_dict[buildnum] = builder_dict[buildnum]._replace(
+          succeeded=True)
 
 
 def get_build_properties(build_json, properties):
@@ -398,8 +409,6 @@ def open_tree_if_possible(gatekeeper_config, build_db, master_jsons,
   previously_failed_builds = []
   for master_url, master in master_jsons.iteritems():
     for builder in master['builders']:
-      if builder_is_excluded(gatekeeper_config, master_url, builder):
-        continue
       builder_dict = build_db.masters.get(master_url, {}).get(builder, {})
       for buildnum, build in builder_dict.iteritems():
         if build.finished:
@@ -706,7 +715,12 @@ def main():
                              options.build_db)
     return 0
 
-  failure_tuples = check_builds(build_jsons, master_jsons, gatekeeper_config)
+  failure_tuples, success_tuples = check_builds(
+      build_jsons, master_jsons, gatekeeper_config)
+
+  # Write failure / success information back to the build_db.
+  propagate_build_status_back_to_db(failure_tuples, success_tuples, build_db)
+
   # opening is an option, mostly to keep the unittests working which
   # assume that any setting of status is negative.
   if options.open_tree:

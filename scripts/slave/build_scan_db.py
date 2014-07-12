@@ -23,7 +23,7 @@ DATA_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 # Bump each time there is an incompatible change in build_db.
-BUILD_DB_VERSION = 4
+BUILD_DB_VERSION = 5
 
 
 _BuildDB = collections.namedtuple('BuildDB', [
@@ -37,7 +37,7 @@ _BuildDB = collections.namedtuple('BuildDB', [
 
 _BuildDBBuild = collections.namedtuple('BuildDBBuild', [
     'finished',  # True if the build has finished, False otherwise.
-    'succeeded',  # True if finished and the build had all steps green.
+    'succeeded',  # True if finished and would have not closed the tree.
     'triggered',  # {section: [steps which triggered the section]}
 ])
 
