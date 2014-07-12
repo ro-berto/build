@@ -19,6 +19,9 @@
       "yy"
     ],
     "name": "analyze",
-    "stdout": "/path/to/tmp/"
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@No compile necessary@@@"
+    ]
   }
 ]

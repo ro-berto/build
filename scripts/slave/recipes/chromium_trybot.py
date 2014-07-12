@@ -508,7 +508,6 @@ def GenSteps(api):
     yield api.filter.does_patch_require_compile(
       exclusions=test_spec.get('gtest_tests_filter_exclusions', []))
     if not api.filter.result:
-      print 'No compile necessary'
       return
 
   def should_use_test(test):

@@ -96,7 +96,11 @@
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "git diff to analyze patch",
-    "stdout": "/path/to/tmp/"
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@excluded_files@foo.cc (regex = 'f.*')@@@",
+      "@@@STEP_LOG_END@excluded_files@@@"
+    ]
   },
   {
     "cmd": [

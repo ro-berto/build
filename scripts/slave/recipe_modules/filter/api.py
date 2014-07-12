@@ -9,9 +9,9 @@ from slave import recipe_api
 class FilterApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
     super(FilterApi, self).__init__(**kwargs)
-    self._result = 0
+    self._result = False
 
-  def __is_path_in_exclusion_list(self, path, exclusions):
+  def _is_path_in_exclusion_list(self, path, exclusions):
     """Returns true if |path| matches any of the regular expressions in
     |exclusions|."""
     for regex in exclusions:
@@ -34,34 +34,46 @@ class FilterApi(recipe_api.RecipeApi):
     Args:
       exclusions: list of python regular expressions (as strings). If any of
       the files in the current patch match one of the values in |exclusions|
-      false is returned."""
+      True is returned."""
 
     exclusions = exclusions or self.m.properties.get('filter_exclusions', [])
 
+    def process_filenames(step_result):
+      # Check the path of each file against the exclusion list.
+      exclusion_regexs = [re.compile(exclusion) for exclusion in exclusions]
+      for path in step_result.stdout.splitlines():
+        first_match = self._is_path_in_exclusion_list(path, exclusion_regexs)
+        if first_match:
+          step_result.presentation.logs.setdefault('excluded_files', []).append(
+              '%s (regex = \'%s\')' % (path, first_match))
+          self._result = True
+
     # Get the set of files in the current patch.
-    yield self.m.git('diff', '--cached', '--name-only',
-                     name='git diff to analyze patch',
-                     stdout=self.m.raw_io.output(),
-                     step_test_data=lambda:
-                       self.m.raw_io.test_api.stream_output('foo.cc'))
+    yield self.m.git(
+        'diff', '--cached', '--name-only',
+        name='git diff to analyze patch',
+        stdout=self.m.raw_io.output(),
+        step_test_data=lambda:
+            self.m.raw_io.test_api.stream_output('foo.cc'),
+        followup_fn=process_filenames)
 
-    # Check the path of each file against the exclusion list. If found, no need
-    # to check dependencies.
-    exclusion_regexs = [re.compile(exclusion) for exclusion in exclusions]
-    for path in self.m.step_history.last_step().stdout.split():
-      first_match = self.__is_path_in_exclusion_list(path, exclusion_regexs)
-      if first_match:
-        print 'file in exclusion list', path, 'regex=', first_match
-        self._result = 1
-        return
+    # If exclusion found, no need to check dependencies.
+    if self._result:
+      return
 
-    yield self.m.python('analyze',
-                        self.m.path['checkout'].join('build', 'gyp_chromium'),
-                        ['--analyzer',
-                         self.m.raw_io.input(
-                           self.m.step_history.last_step().stdout)],
-                        stdout = self.m.raw_io.output(),
-                        step_test_data=lambda:
-                          self.m.raw_io.test_api.stream_output('No dependency'))
-    self._result = \
-        self.m.step_history.last_step().stdout.find('Found dependency') != -1
+    def process_dependencies(step_result):
+      if step_result.stdout.find('Found dependency') != -1:
+        self._result = True
+      else:
+        step_result.presentation.step_text = 'No compile necessary'
+
+    yield self.m.python(
+        'analyze',
+        self.m.path['checkout'].join('build', 'gyp_chromium'),
+        ['--analyzer',
+         self.m.raw_io.input(
+             self.m.step_history.last_step().stdout)],
+        stdout = self.m.raw_io.output(),
+        step_test_data=lambda:
+            self.m.raw_io.test_api.stream_output('No dependency'),
+        followup_fn=process_dependencies)
