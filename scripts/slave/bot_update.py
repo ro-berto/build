@@ -205,6 +205,8 @@ ENABLED_BUILDERS = {
         'V8 GC Stress - 1',
         'V8 GC Stress - 2',
         'V8 GC Stress - 3',
+        'V8 Linux64 - builder',
+        'V8 Linux64',
         'V8 Win32 - builder',
         'V8 Win32 - 1',
         'V8 Win32 - 2',
