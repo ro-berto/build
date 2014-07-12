@@ -299,6 +299,12 @@ DISABLED_BUILDERS = {
         # crbug.com/377963
         'Win SyzyASAN LKGR',
     ],
+    'chromium.perf': [
+        # Android Builder (and triggered builds) disabled because 'vm500-m1'
+        # (Android Builder) only has 40G of disk space and can't sustain a
+        # cache. crbug.com/389608
+        'Android Builder',
+    ],
     'chromium.webkit': [
         # We don't know how to deal with the DEPS builder yet.
         'WebKit Win Builder (deps)',
