@@ -247,11 +247,6 @@ ENABLED_BUILDERS = {
         'Mac ASAN Debug',
         'Mac ASAN Release',
     ],
-    'client.v8.branches': [
-        'Chromium ASAN (symbolized) - trunk',
-        'Chromium ASAN - trunk - debug',
-        'Chromium Win SyzyASAN - trunk',
-    ],
 }
 ENABLED_BUILDERS.update(internal_data.get('ENABLED_BUILDERS', {}))
 
