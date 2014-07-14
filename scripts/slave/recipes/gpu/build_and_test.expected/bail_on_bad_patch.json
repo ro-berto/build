@@ -141,7 +141,7 @@
   },
   {
     "name": "$final_result",
-    "reason": "Step('apply_issue') failed with return_code 1",
+    "reason": "Step(apply_issue) failed and was marked as abort_on_failure",
     "status_code": 1
   }
 ]

@@ -58,7 +58,7 @@
   },
   {
     "name": "$final_result",
-    "reason": "Step('Patch failure') failed with return_code 1",
+    "reason": "Step(Patch failure) failed and was marked as abort_on_failure",
     "status_code": 1
   }
 ]
