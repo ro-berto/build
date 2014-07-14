@@ -96,7 +96,7 @@ def GenSteps(api):
 
   yield api.chromium_android.spawn_logcat_monitor()
   yield api.chromium_android.device_status_check(abort_on_failure=True)
-  yield api.chromium_android.provision_devices()
+  yield api.chromium_android.provision_devices(abort_on_failure=True)
 
   yield api.chromium_android.adb_install_apk(
       'ChromeShell.apk',
@@ -140,3 +140,27 @@ def GenTests(api):
           "014E1F310401C009", "014E1F310401C010"
           ]))
     )
+  yield (api.test('device_status_check') +
+      api.properties.generic(
+          repo_name='src',
+              repo_url=REPO_URL,
+              buildername='Android GN Perf',
+              parent_buildername='parent_buildername',
+              parent_buildnumber='1729',
+              parent_revision='deadbeef',
+              revision='deadbeef',
+              slavename='slavename',
+              target='Release')
+      + api.step_data('device_status_check', retcode=1))
+  yield (api.test('provision_devices') +
+      api.properties.generic(
+          repo_name='src',
+              repo_url=REPO_URL,
+              buildername='Android GN Perf',
+              parent_buildername='parent_buildername',
+              parent_buildnumber='1729',
+              parent_revision='deadbeef',
+              revision='deadbeef',
+              slavename='slavename',
+              target='Release')
+      + api.step_data('provision_devices', retcode=1))
