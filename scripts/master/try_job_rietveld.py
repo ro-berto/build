@@ -24,7 +24,7 @@ from master.try_job_base import TryJobBase
 
 
 # Number of recent buildsets used to initialize RietveldPollerWithCache's cache.
-MAX_RECENT_BUILDSETS_TO_INIT_CACHE = 10000
+MAX_RECENT_BUILDSETS_TO_INIT_CACHE = 200
 
 
 def str_to_datetime(text):
