@@ -102,10 +102,6 @@
       "[SLAVE_BUILD]/src",
       "--build-tool",
       "ninja",
-      "--compiler",
-      "goma",
-      "--goma-dir",
-      "[BUILD]/goma",
       "--",
       "all"
     ],

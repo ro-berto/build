@@ -154,6 +154,11 @@ def GenSteps(api):
     s[0].custom_vars[custom['var']] = api.properties.get(
         custom['property'], custom['default'])
 
+  # TODO(dpranke): crbug.com/394501 - turn goma back on when it works right.
+  api.chromium.c.compile_py.build_tool = 'ninja'
+  api.chromium.c.compile_py.goma_dir = None
+  api.chromium.c.compile_py.compiler = None
+
   if api.tryserver.is_tryserver:
     api.step.auto_resolve_conflicts = True
 
