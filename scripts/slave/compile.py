@@ -210,6 +210,7 @@ def ninja_clobber(build_output_dir):
       # compile, so make sure not to delete those generated files, otherwise
       # compile will fail.
       if (f.endswith('.ninja') or f.endswith('.manifest') or
+          f in ('args.gn') or
           f.startswith('msvc') or  # VS runtime DLLs.
           f in ('gyp-mac-tool', 'gyp-win-tool',
                 'environment.x86', 'environment.x64')):
