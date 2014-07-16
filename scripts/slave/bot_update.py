@@ -245,14 +245,6 @@ DISABLED_BUILDERS = {
         'GPU Win Builder',
         'GPU Win Builder (dbg)',
     ],
-    'chromium.gpu.fyi': [
-        'GPU Win Builder (dbg)',
-        'GPU Win Builder',
-        'Win7 Audio',
-        'Win7 Debug (NVIDIA)',
-        'Win8 Debug (NVIDIA)',
-        'WinXP Debug (NVIDIA)',
-    ],
     'chromium.fyi': [
         'Chromium Linux Codesearch',
         'ChromiumOS Codesearch',
