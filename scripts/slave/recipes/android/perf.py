@@ -38,7 +38,7 @@ BUILDERS = {
     'bucket': 'chrome-perf',
     'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip'
                                % api.properties['parent_revision']),
-    'num_device_shards': 1,
+    'num_device_shards': 8,
   },
   'Android Nexus7v2 Perf': {
     'perf_id': 'android-nexus7v2',
@@ -56,6 +56,13 @@ BUILDERS = {
   },
   'Android GN Perf': {
     'perf_id': 'android-gn',
+    'bucket': 'chrome-perf',
+    'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip'
+                               % api.properties['parent_revision']),
+    'num_device_shards': 1,
+  },
+  'Android MotoE Perf': {
+    'perf_id': 'android-motoe',
     'bucket': 'chrome-perf',
     'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip'
                                % api.properties['parent_revision']),
