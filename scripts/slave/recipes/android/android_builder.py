@@ -49,7 +49,21 @@ BUILDERS = {
         'bucket': 'chromium-android',
         'path': lambda api: (
           '%s/build_product_%s.zip' % (api.properties['buildername'],
-                                       api.properties['revision'])),
+                                       api.properties['got_revision'])),
+      }
+    },
+  },
+  'chromium.perf': {
+    'Android Builder': {
+      'recipe_config': 'perf',
+      'gclient_apply_config': ['android', 'perf'],
+      'kwargs': {
+        'BUILD_CONFIG': 'Release',
+      },
+      'upload': {
+        'bucket': 'chrome-perf',
+        'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip'
+                             % api.properties['got_revision']),
       }
     }
   }
@@ -109,4 +123,5 @@ def GenTests(api):
             mastername=mastername,
             issue='8675309',
             patchset='1',
-            revision='267739'))
+            revision='267739',
+            got_revision='267739'))

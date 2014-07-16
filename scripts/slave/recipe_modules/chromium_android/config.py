@@ -179,3 +179,7 @@ def coverage_builder_tests(c):
 @config_ctx(includes=['component_builder'])
 def oilpan_builder(c):
   pass
+
+@config_ctx()
+def perf(c):
+  pass
