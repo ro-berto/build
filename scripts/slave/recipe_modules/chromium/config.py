@@ -412,7 +412,7 @@ def ios(c):
 def chromium_ios_device(c):
   c.compile_py.build_tool = 'xcode'
   c.compile_py.default_targets = ['All']
-  c.compile_py.xcode_sdk = 'iphoneos7.0'
+  c.compile_py.xcode_sdk = 'iphoneos7.1'
 
 @config_ctx(includes=['ios', 'ninja'])
 def chromium_ios_ninja(c):
@@ -426,7 +426,7 @@ def chromium_ios_ninja(c):
 def chromium_ios_simulator(c):
   c.compile_py.build_tool = 'xcode'
   c.compile_py.default_targets = ['All']
-  c.compile_py.xcode_sdk = 'iphonesimulator7.0'
+  c.compile_py.xcode_sdk = 'iphonesimulator7.1'
 
 @config_ctx(includes=['chromium', 'official'])
 def chromium_official(c):

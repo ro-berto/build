@@ -1052,7 +1052,7 @@ def _MainIOS(options, args, extra_env):
   # Set defaults in case the device family and iOS version can't be parsed out
   # of |args|
   device = 'iPhone Retina (4-inch)'
-  ios_version = '7.0'
+  ios_version = '7.1'
 
   # Parse the test_name and device from the test display name.
   # The expected format is: <test_name> (<device>)

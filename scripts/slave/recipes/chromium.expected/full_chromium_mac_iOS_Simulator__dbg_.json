@@ -110,7 +110,7 @@
       "-target",
       "All",
       "-sdk",
-      "iphonesimulator7.0"
+      "iphonesimulator7.1"
     ],
     "name": "compile"
   },

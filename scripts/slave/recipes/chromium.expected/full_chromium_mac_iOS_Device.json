@@ -110,7 +110,7 @@
       "-target",
       "All",
       "-sdk",
-      "iphoneos7.0"
+      "iphoneos7.1"
     ],
     "name": "compile"
   },
