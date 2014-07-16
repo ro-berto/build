@@ -475,9 +475,9 @@ BUILDERS = {
       },
 ####### Category: Simulators
       'V8 Linux - arm - sim': {
+        'chromium_apply_config': ['simulate_arm'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
@@ -485,9 +485,9 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm - sim - debug': {
+        'chromium_apply_config': ['simulate_arm'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
@@ -496,11 +496,10 @@ BUILDERS = {
       },
       'V8 Linux - arm - sim - novfp3': {
         # TODO(machenbach): Can these configs be reduced to one?
-        'chromium_apply_config': ['novfp3'],
+        'chromium_apply_config': ['simulate_arm', 'novfp3'],
         'v8_apply_config': ['novfp3'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
@@ -508,11 +507,10 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm - sim - debug - novfp3': {
-        'chromium_apply_config': ['novfp3'],
+        'chromium_apply_config': ['simulate_arm', 'novfp3'],
         'v8_apply_config': ['novfp3'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
@@ -520,9 +518,9 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm64 - sim': {
+        'chromium_apply_config': ['simulate_arm'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_ARCH': 'arm',
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
@@ -530,9 +528,9 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm64 - sim - debug': {
+        'chromium_apply_config': ['simulate_arm'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_ARCH': 'arm',
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
@@ -540,11 +538,10 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm64 - sim - nosnap - debug - 1': {
+        'chromium_apply_config': ['simulate_arm', 'no_snapshot'],
         'v8_apply_config': ['no_snapshot'],
-        'chromium_apply_config': ['no_snapshot'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_ARCH': 'arm',
           'TARGET_BITS': 64,
           'SHARD_COUNT': 2,
           'SHARD_RUN': 1,
@@ -554,11 +551,10 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm64 - sim - nosnap - debug - 2': {
+        'chromium_apply_config': ['simulate_arm', 'no_snapshot'],
         'v8_apply_config': ['no_snapshot'],
-        'chromium_apply_config': ['no_snapshot'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_ARCH': 'arm',
           'TARGET_BITS': 64,
           'SHARD_COUNT': 2,
           'SHARD_RUN': 2,
@@ -568,10 +564,10 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm64 - sim - gc stress': {
+        'chromium_apply_config': ['simulate_arm'],
         'v8_apply_config': ['gc_stress'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_ARCH': 'arm',
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
@@ -579,9 +575,9 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - mips - sim': {
+        'chromium_apply_config': ['simulate_mips'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_ARCH': 'mipsel',
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
@@ -959,6 +955,7 @@ for build_config, name_suffix in (('Release', ''), ('Debug', ' - debug')):
         branch_config, build_config, 'intel', 64)
     name = 'V8 arm - sim - %s%s' % (branch_name, name_suffix)
     BRANCH_BUILDERS[name] = AddBranchBuilder(
-        branch_config, build_config, 'arm', 32)
+        branch_config, build_config, 'intel', 32)
+    BRANCH_BUILDERS[name]['chromium_apply_config'].append('simulate_arm')
 
 BUILDERS['client.v8.branches'] = {'builders': BRANCH_BUILDERS}

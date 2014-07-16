@@ -47,7 +47,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "target_arch=arm v8_can_use_vfp3_instructions=false v8_optimized_debug=1 v8_target_arch=arm"
+      "GYP_DEFINES": "target_arch=ia32 v8_can_use_vfp3_instructions=false v8_optimized_debug=1 v8_target_arch=arm"
     },
     "name": "gclient runhooks"
   },

@@ -47,7 +47,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "target_arch=mipsel v8_target_arch=mipsel"
+      "GYP_DEFINES": "target_arch=ia32 v8_target_arch=mipsel"
     },
     "name": "gclient runhooks"
   },

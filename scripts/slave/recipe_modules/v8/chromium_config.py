@@ -94,6 +94,20 @@ def predictable(c):
 
 
 @CONFIG_CTX(includes=['v8'])
+def simulate_mips(c):
+  # TODO(machenbach): Add mips64.
+  c.gyp_env.GYP_DEFINES['v8_target_arch'] = 'mipsel'
+
+
+@CONFIG_CTX(includes=['v8'])
+def simulate_arm(c):
+  if c.TARGET_BITS == 64:
+    c.gyp_env.GYP_DEFINES['v8_target_arch'] = 'arm64'
+  else:
+    c.gyp_env.GYP_DEFINES['v8_target_arch'] = 'arm'
+
+
+@CONFIG_CTX(includes=['v8'])
 def verify_heap(c):
   c.gyp_env.GYP_DEFINES['v8_enable_verify_heap'] = 1
 
