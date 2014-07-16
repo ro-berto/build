@@ -1082,9 +1082,11 @@ def _MainIOS(options, args, extra_env):
       build_dir, options.target + '-iphonesimulator', test_name + '.app')
   test_exe_path = os.path.join(
       build_dir, 'ninja-iossim', options.target, 'iossim')
+  tmpdir = tempfile.mkdtemp()
   command = [test_exe_path,
       '-d', device,
       '-s', ios_version,
+      '-u', tmpdir,
       app_exe_path, '--'
   ]
   command.extend(args[1:])
@@ -1101,7 +1103,7 @@ def _MainIOS(options, args, extra_env):
   # directory from previous test runs (i.e.- from crashes or unittest leaks).
   slave_utils.RemoveChromeTemporaryFiles()
 
-  dirs_to_cleanup = []
+  dirs_to_cleanup = [tmpdir]
   crash_files_before = set([])
   crash_files_after = set([])
   crash_files_before = set(crash_utils.list_crash_logs())
