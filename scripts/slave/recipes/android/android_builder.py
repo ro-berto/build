@@ -49,7 +49,7 @@ BUILDERS = {
         'bucket': 'chromium-android',
         'path': lambda api: (
           '%s/build_product_%s.zip' % (api.properties['buildername'],
-                                       api.properties['got_revision'])),
+                                       api.properties['revision'])),
       }
     },
   },
@@ -63,7 +63,7 @@ BUILDERS = {
       'upload': {
         'bucket': 'chrome-perf',
         'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip'
-                             % api.properties['got_revision']),
+                             % api.properties['revision']),
       }
     }
   }
