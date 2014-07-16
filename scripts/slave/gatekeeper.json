@@ -180,7 +180,8 @@
           },
           "iOS Simulator (dbg)": {
             "sheriff_classes": ["sheriff_ios_europe", "sheriff_ios_us"],
-            "closing_optional": []
+            "closing_optional": [],
+            "comment": ["closing_optional due to crbug.com/393861"]
           },
           "iOS Device (ninja)": {
             "sheriff_classes": ["sheriff_ios_europe", "sheriff_ios_us"]
@@ -211,10 +212,13 @@
               "chromium_compile"
             ]
           },
-          "Mac ASan Builder": {
-            "categories": [
-              "chromium_compile"
-            ]
+          "Mac ASan 64 Tests (1)": {
+            "closing_optional": [],
+            "comment": ["closing_optional due to crbug.com/394232"]
+          },
+          "Mac ASan 64 Tests (2)": {
+            "closing_optional": [],
+            "comment": ["closing_optional due to crbug.com/394232"]
           },
           "*": {
             "categories": [
