@@ -26,8 +26,8 @@ assert os.path.isdir(os.path.join(ROOT_DIR, 'build')), \
 sys.path.insert(0, os.path.join(ROOT_DIR, 'build', 'scripts', 'tools'))
 import runit  # pylint: disable=F0401
 runit.add_build_paths(sys.path)
-import requests
-import pytz
+import requests  # pylint: disable=F0401
+import pytz  # pylint: disable=F0401
 
 from common import find_depot_tools
 DEPOT_TOOLS_DIR = find_depot_tools.add_depot_tools_to_path()
