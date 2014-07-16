@@ -534,13 +534,13 @@ def GenSteps(api):
   if bot_config.get('use_isolate') or swarming_tests:
     api.isolate.set_isolate_environment(api.chromium.c)
 
-  runhooks_env = bot_config.get('runhooks_env', {})
-  yield api.chromium.runhooks(env=runhooks_env)
-
   # If going to use swarming_client (pinned in src/DEPS), ensure it is
   # compatible with what recipes expect.
   if swarming_tests:
     yield api.swarming.check_client_version()
+
+  runhooks_env = bot_config.get('runhooks_env', {})
+  yield api.chromium.runhooks(env=runhooks_env)
 
   tests = []
   # TODO(phajdan.jr): Re-enable checkdeps on Windows when it works with git.

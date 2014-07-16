@@ -90,7 +90,8 @@ class SwarmingClientApi(recipe_api.RecipeApi):
           args=['--version'],
           stdout=self.m.raw_io.output(),
           followup_fn=followup_fn,
-          step_test_data=step_test_data_cb)
+          step_test_data=step_test_data_cb,
+          always_run=True)
 
   def get_script_version(self, script):
     """Returns a version of some swarming script as a tuple (Major, Minor, Rev).

@@ -103,18 +103,6 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/gclient.py",
-      "runhooks"
-    ],
-    "env": {
-      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=archive test_isolation_outdir=https://isolateserver.appspot.com use_goma=1"
-    },
-    "name": "gclient runhooks"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "--version"
     ],
@@ -123,6 +111,18 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@0.4.10@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/gclient.py",
+      "runhooks"
+    ],
+    "env": {
+      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=archive test_isolation_outdir=https://isolateserver.appspot.com use_goma=1"
+    },
+    "name": "gclient runhooks"
   },
   {
     "cmd": [
