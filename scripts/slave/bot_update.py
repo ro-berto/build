@@ -255,25 +255,6 @@ DISABLED_BUILDERS = {
         'WebKit Mac Builder (deps)',
         'WebKit Mac10.6 (deps)',
         'WebKit Linux (deps)',
-
-        # Windows bots are less battle tested at the moment.
-        # We'll turn them on separately.
-        'WebKit Win Builder',
-        'WebKit XP',
-        'WebKit Win7',
-        'WebKit Win x64 Builder',
-        'WebKit Win Oilpan',
-        'WebKit Win Builder (dbg)',
-        'WebKit Win7 (dbg)',
-        'WebKit Win Oilpan (dbg)',
-        'WebKit Win x64 Builder (dbg)',
-        'Win Builder',
-        'Win7 Tests',
-        'Win7 (dbg)',
-        'GPU Win Builder',
-        'GPU Win Builder (dbg)',
-        'GPU Win7 (NVIDIA)',
-        'GPU Win7 (dbg) (NVIDIA)',
     ],
     'chromium.win': [
         # crbug.com/392565
