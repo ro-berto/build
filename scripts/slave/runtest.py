@@ -1086,6 +1086,7 @@ def _MainIOS(options, args, extra_env):
   command = [test_exe_path,
       '-d', device,
       '-s', ios_version,
+      '-t', '120',
       '-u', tmpdir,
       app_exe_path, '--'
   ]
