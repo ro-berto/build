@@ -708,11 +708,16 @@ class V8Api(recipe_api.RecipeApi):
 
         p = self.m.perf_dashboard.get_skeleton_point(
             test_path, self.revision, str(average))
-        p['error'] = str(standard_deviation(values, average))
         p['units'] = trace['units']
         p['bot'] = category or p['bot']
         p['supplemental_columns'] = {'a_default_rev': 'r_v8_rev',
                                      'r_v8_rev': self.revision}
+
+        # A trace might provide a value for standard deviation if the test
+        # driver already calculated it, otherwise calculate it here.
+        p['error'] = (trace.get('stddev') or
+                      str(standard_deviation(values, average)))
+
         points.append(p)
 
     # Send all perf data to the perf dashboard in one step.
