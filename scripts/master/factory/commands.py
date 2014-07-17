@@ -946,15 +946,32 @@ class FactoryCommands(object):
       # call the value (it expects a lambda/function) with "build" as the
       # only argument, where the output is then passed to the format string.
       properties = build.getProperties()
+
+      # 1. Revisions always default to parent revisions.
+      src_revision = properties.getProperty('parent_got_revision')
+      webkit_revision = properties.getProperty('parent_wk_revision')
+
+      # 2. If this is not a triggered build, then add special logic to resolve
+      #    the revision based on if we got passed a blink sourcestamp or
+      #    chromium sourcestamp.
       if (properties.getProperty('branch') == 'trunk'
           or properties.getProperty('parent_branch') == 'trunk'):
-        revision = properties.getProperty('parent_wk_revision')
-        if not revision:
-          revision = properties.getProperty('revision') or 'HEAD'
-        return 'src@HEAD,src/third_party/WebKit@%s' % (revision,)
+        # Blink Mode, revision refers to webkit.
+        if not webkit_revision:
+          webkit_revision = properties.getProperty('revision') or 'HEAD'
       else:
-        return ('src@%s,src/third_party/WebKit@HEAD'
-                % (properties.getProperty('revision') or 'HEAD',))
+        # Normal Mode, revision refers to chromium.
+        if not src_revision:
+          src_revision = properties.getProperty('revision') or 'HEAD'
+
+      # 3. Default uninitialized revisions to HEAD.  This only happens when
+      #    someone presses "Force build", but we want to handle this gracefully
+      #    too.
+      webkit_revision = webkit_revision or 'HEAD'
+      src_revision = src_revision or 'HEAD'
+
+      return 'src@%s,src/third_party/WebKit@%s' % (src_revision,
+                                                   webkit_revision)
 
     PROPERTIES = {
         'root': '%(root:-)s',
@@ -964,7 +981,7 @@ class FactoryCommands(object):
         'revision': {
             'fmtstring': '%(resolved_revision:-)s',
             'resolved_revision': resolve_blink_revision
-        } if blink_config else '%(revision:-)s',
+        } if blink_config == 'blink' else '%(revision:-)s',
         'patch_url': '%(patch_url:-)s',
         'slave_name': '%(slavename:-)s',
         'builder_name': '%(buildername:-)s',
