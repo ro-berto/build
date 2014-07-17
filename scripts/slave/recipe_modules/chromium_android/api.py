@@ -430,6 +430,7 @@ class AndroidApi(recipe_api.RecipeApi):
                                 annotation=None, except_annotation=None,
                                 screenshot=False, verbose=False,
                                 apk_package=None, host_driven_root=None,
+                                official_build=False,
                                 **kwargs):
     args = ['--test-apk', test_apk]
     if test_data:
@@ -451,6 +452,8 @@ class AndroidApi(recipe_api.RecipeApi):
                    '--python-only'])
     if host_driven_root:
       args.extend(['--host-driven-root', host_driven_root])
+    if official_build:
+      args.extend(['--official-build'])
 
     yield self.m.python(
         'Instrumentation test %s' % (annotation or test_apk),
