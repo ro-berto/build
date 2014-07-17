@@ -123,36 +123,6 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/android_webview/tools/webview_licenses.py",
-      "scan"
-    ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "check licenses"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/src/build/android/findbugs_diff.py",
-      "--release-build"
-    ],
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "findbugs"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/src/tools/android/findbugs_plugin/test/run_findbugs_plugin_tests.py",
-      "--release-build"
-    ],
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "findbugs_tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[BUILD]/scripts/slave/android/archive_build.py",
       "--target",
       "Release",

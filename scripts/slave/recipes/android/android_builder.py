@@ -15,14 +15,20 @@ BUILDERS = {
   'chromium.fyi': {
     'Android ARM64 Builder (dbg)': {
       'recipe_config': 'arm64_builder',
+      'check_licenses': True,
+      'findbugs': True,
       'gclient_apply_config': ['android', 'chrome_internal'],
     },
     'Android x64 Builder (dbg)': {
       'recipe_config': 'x64_builder',
+      'check_licenses': True,
+      'findbugs': True,
       'gclient_apply_config': ['android', 'chrome_internal'],
     },
     'Android MIPS Builder (dbg)': {
       'recipe_config': 'mipsel_builder',
+      'check_licenses': True,
+      'findbugs': True,
       'gclient_apply_config': ['android', 'chrome_internal'],
     }
   },
@@ -31,6 +37,8 @@ BUILDERS = {
       'recipe_config': 'main_builder',
       'gclient_apply_config': ['android', 'chrome_internal'],
       'try': True,
+      'check_licenses': True,
+      'findbugs': True,
       'upload': {
         'bucket': 'chromium-android',
         'path': lambda api: ('android_try_dbg_recipe/full-build-linux_%s.zip'
@@ -97,8 +105,10 @@ def GenSteps(api):
     yield api.tryserver.maybe_apply_issue()
 
   yield droid.compile()
-  yield droid.check_webview_licenses()
-  yield droid.findbugs()
+  if bot_config.get('check_licenses'):
+    yield droid.check_webview_licenses()
+  if bot_config.get('findbugs'):
+    yield droid.findbugs()
 
   upload_config = bot_config.get('upload')
   if upload_config:
