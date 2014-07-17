@@ -18,7 +18,7 @@ DEPS = [
 
 
 def GenSteps(api):
-  yield api.swarming_client.checkout('master')
+  yield api.swarming_client.checkout('master', can_fail_build=False)
   yield api.swarming.check_client_version()
   script = api.path['build'].join(
       'scripts', 'slave', 'swarming', 'job_runs_fine.py')

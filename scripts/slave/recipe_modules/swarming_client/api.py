@@ -20,7 +20,7 @@ class SwarmingClientApi(recipe_api.RecipeApi):
     self._client_path = None
     self._script_version = {}
 
-  def checkout(self, revision=None, curl_trace_file=None):
+  def checkout(self, revision=None, curl_trace_file=None, can_fail_build=True):
     """Returns a step to checkout swarming client into a separate directory.
 
     Ordinarily swarming client is checked out via Chromium DEPS into
@@ -45,7 +45,8 @@ class SwarmingClientApi(recipe_api.RecipeApi):
         ref=revision,
         dir_path=self._client_path,
         step_suffix='swarming_client',
-        curl_trace_file=curl_trace_file)
+        curl_trace_file=curl_trace_file,
+        can_fail_build=can_fail_build)
 
   @property
   def path(self):

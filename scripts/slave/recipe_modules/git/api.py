@@ -26,7 +26,7 @@ class GitApi(recipe_api.RecipeApi):
 
   def checkout(self, url, ref=None, dir_path=None, recursive=False,
                submodules=True, keep_paths=None, step_suffix=None,
-               curl_trace_file=None):
+               curl_trace_file=None, can_fail_build=True):
     """Returns an iterable of steps to perform a full git checkout.
     Args:
       url (string): url of remote repo to use as upstream
@@ -40,6 +40,7 @@ class GitApi(recipe_api.RecipeApi):
       curl_trace_file (Path): if not None, dump GIT_CURL_VERBOSE=1 trace to that
           file. Useful for debugging git issue reproducible only on bots. It has
           a side effect of all stderr output of 'git fetch' going to that file.
+      can_fail_build (bool): if False, ignore errors during fetch or checkout.
     """
     if not dir_path:
       dir_path = url.rsplit('/', 1)[-1]
@@ -110,25 +111,34 @@ class GitApi(recipe_api.RecipeApi):
            cwd=dir_path,
            name='git fetch%s' % step_suffix,
            env=fetch_env,
-           stderr=fetch_stderr),
+           stderr=fetch_stderr,
+           can_fail_build=can_fail_build),
       self('checkout', '-f', checkout_ref,
            cwd=dir_path,
-           name='git checkout%s' % step_suffix),
+           name='git checkout%s' % step_suffix,
+           can_fail_build=can_fail_build),
     ])
 
     clean_args = list(self.m.itertools.chain(
         *[('-e', path) for path in keep_paths or []]))
 
     steps.append([
-      self('clean', '-f', '-d', '-x', *clean_args, cwd=dir_path,
-           name='git clean%s' % step_suffix),
+      self('clean', '-f', '-d', '-x', *clean_args,
+           name='git clean%s' % step_suffix,
+           cwd=dir_path,
+           can_fail_build=can_fail_build),
     ])
 
     if submodules:
       steps.append([
-        self('submodule', 'sync', name='submodule sync%s' % step_suffix, cwd=dir_path),
+        self('submodule', 'sync',
+             name='submodule sync%s' % step_suffix,
+             cwd=dir_path,
+             can_fail_build=can_fail_build),
         self('submodule', 'update', '--init', '--recursive',
-             name='submodule update%s' % step_suffix, cwd=dir_path),
+             name='submodule update%s' % step_suffix,
+             cwd=dir_path,
+             can_fail_build=can_fail_build),
       ])
 
     return steps
