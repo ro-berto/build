@@ -7,6 +7,8 @@ import types
 from slave.recipe_config import config_item_context, ConfigGroup, BadConf
 from slave.recipe_config import ConfigList, Dict, Single, Static, Set, List
 
+from RECIPE_MODULES.gclient import api as gclient_api
+
 def BaseConfig(USE_MIRROR=True, GIT_MODE=False, CACHE_DIR=None, **_kwargs):
   deps = '.DEPS.git' if GIT_MODE else 'DEPS'
   cache_dir = str(CACHE_DIR) if GIT_MODE and CACHE_DIR else None
@@ -22,7 +24,8 @@ def BaseConfig(USE_MIRROR=True, GIT_MODE=False, CACHE_DIR=None, **_kwargs):
         custom_vars = Dict(value_type=basestring),
         safesync_url = Single(basestring, required=False),
 
-        revision = Single(basestring, required=False, hidden=True),
+        revision = Single((basestring, gclient_api.RevisionFallbackChain),
+                          required=False, hidden=True),
       )
     ),
     deps_os = Dict(value_type=basestring),
@@ -37,7 +40,8 @@ def BaseConfig(USE_MIRROR=True, GIT_MODE=False, CACHE_DIR=None, **_kwargs):
     # Addition revisions we want to pass in.  For now theres a duplication
     # of code here of setting custom vars AND passing in --revision. We hope
     # to remove custom vars later.
-    revisions = Dict(value_type=basestring, hidden=True),
+    revisions = Dict(value_type=(basestring, gclient_api.RevisionFallbackChain),
+                     hidden=True),
 
     # TODO(iannucci): HACK! The use of None here to indicate that we apply this
     #   to the solution.revision field is really terrible. I mostly blame
@@ -331,3 +335,13 @@ def perf(c):
   for key in needed_components_internal:
     del c.solutions[1].custom_deps[key]
   c.solutions[1].managed = False
+
+@config_ctx(includes=['chromium'])
+def chromium_skia(c):
+  c.solutions[0].revision = 'HEAD'
+  del c.solutions[0].custom_deps
+  c.revisions['src/third_party/skia'] = (
+      gclient_api.RevisionFallbackChain('origin/master'))
+  c.got_revision_mapping['src'] = 'got_chromium_revision'
+  c.got_revision_mapping['src/third_party/skia'] = 'got_revision'
+  c.parent_got_revision_mapping['parent_got_revision'] = 'got_revision'

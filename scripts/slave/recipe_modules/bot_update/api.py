@@ -125,7 +125,9 @@ class BotUpdateApi(recipe_api.RecipeApi):
     if self.m.gclient.c and self.m.gclient.c.revisions:
       revisions.update(self.m.gclient.c.revisions)
     for name, revision in sorted(revisions.items()):
-      flags.append(['--revision', '%s@%s' % (name, revision)])
+      fixed_revision = self.m.gclient.resolve_revision(revision)
+      if fixed_revision:
+        flags.append(['--revision', '%s@%s' % (name, fixed_revision)])
 
     # Filter out flags that are None.
     cmd = [item for flag_set in flags

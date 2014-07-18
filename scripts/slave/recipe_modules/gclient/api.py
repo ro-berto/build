@@ -4,6 +4,27 @@
 
 from slave import recipe_api
 
+
+class RevisionFallbackChain(object):
+  """Specify that a given project's sync revision follows the fallback chain."""
+  def __init__(self, default=None):
+    self._default = default
+
+  def resolve(self, properties):
+    """Resolve the revision via the revision fallback chain.
+
+    If the given revision was set using the revision_fallback_chain() function,
+    this function will follow the chain, looking at relevant build properties
+    until it finds one set or reaches the end of the chain and returns the
+    default. If the given revision was not set using revision_fallback_chain(),
+    this function just returns it as-is.
+    """
+    return (properties.get('parent_got_revision') or
+            properties.get('orig_revision') or
+            properties.get('revision') or
+            self._default)
+
+
 def jsonish_to_python(spec, is_top=False):
   ret = ''
   if is_top:  # We're the 'top' level, so treat this dict as a suite.
@@ -81,6 +102,11 @@ class GclientApi(recipe_api.RecipeApi):
     ret['CACHE_DIR'] = self.m.path['root'].join('git_cache')
     return ret
 
+  def resolve_revision(self, revision):
+    if hasattr(revision, 'resolve'):
+      return revision.resolve(self.m.properties)
+    return revision
+
   def sync(self, cfg, **kwargs):
     kwargs.setdefault('abort_on_failure', True)
 
@@ -89,14 +115,17 @@ class GclientApi(recipe_api.RecipeApi):
       if s.safesync_url:  # prefer safesync_url in gclient mode
         continue
       if i == 0 and s.revision is None:
-        s.revision = self.m.properties.get('orig_revision',
-                                           self.m.properties.get('revision'))
+        s.revision = RevisionFallbackChain()
 
       if s.revision is not None and s.revision != '':
-        revisions.extend(['--revision', '%s@%s' % (s.name, s.revision)])
+        fixed_revision = self.resolve_revision(s.revision)
+        if fixed_revision:
+          revisions.extend(['--revision', '%s@%s' % (s.name, fixed_revision)])
 
     for name, revision in sorted(cfg.revisions.items()):
-      revisions.extend(['--revision', '%s@%s' % (name, revision)])
+      fixed_revision = self.resolve_revision(revision)
+      if fixed_revision:
+        revisions.extend(['--revision', '%s@%s' % (name, fixed_revision)])
 
     def parse_got_revision(step_result):
       data = step_result.json.output

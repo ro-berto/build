@@ -75,6 +75,10 @@ RECIPE_CONFIGS = {
       'show_v8_revision',
     ],
   },
+  'chromium_skia': {
+    'chromium_config': 'chromium',
+    'gclient_config': 'chromium_skia',
+  },
   'official': {
     'chromium_config': 'chromium_official',
     'gclient_config': 'chromium',
