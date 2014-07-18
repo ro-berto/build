@@ -43,6 +43,9 @@
       "gyp_skia"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
+    "env": {
+      "GYP_DEFINES": "skia_arch_width=64 skia_gpu=0 skia_warnings_as_errors=0"
+    },
     "name": "gyp_skia"
   },
   {
@@ -55,13 +58,44 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/out/Debug/tests"
+      "catchsegv",
+      "[SLAVE_BUILD]/skia/out/Release/tests",
+      "--verbose",
+      "--tmpDir",
+      "[SLAVE_BUILD]/tmp",
+      "--resourcePath",
+      "resources"
     ],
     "name": "tests"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/out/Debug/gm"
+      "catchsegv",
+      "[SLAVE_BUILD]/skia/out/Release/gm",
+      "--verbose",
+      "--writeChecksumBasedFilenames",
+      "--mismatchPath",
+      "[SLAVE_BUILD]/gm/actual/Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug",
+      "--missingExpectationsPath",
+      "[SLAVE_BUILD]/gm/actual/Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug",
+      "--writeJsonSummaryPath",
+      "[SLAVE_BUILD]/gm/actual/Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug/actual_results.json",
+      "--ignoreErrorTypes",
+      "IntentionallySkipped",
+      "MissingExpectations",
+      "ExpectationsMismatch",
+      "--resourcePath",
+      "resources",
+      "--readPath",
+      "[SLAVE_BUILD]/gm/expected/expected-results.json",
+      "--ignoreFailuresFile",
+      "[SLAVE_BUILD]/gm/expected/ignored-tests.txt",
+      "--deferred",
+      "--pipe",
+      "--replay",
+      "--rtree",
+      "--serialize",
+      "--tileGrid"
     ],
     "name": "gm"
   }

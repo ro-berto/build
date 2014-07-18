@@ -14,16 +14,6 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/gclient_safe_revert.py",
-      ".",
-      "[DEPOT_TOOLS]/gclient"
-    ],
-    "name": "gclient revert"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[DEPOT_TOOLS]/gclient.py",
       "sync",
       "--nohooks",
@@ -50,40 +40,9 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/apply_issue.py",
-      "-r",
-      "[SLAVE_BUILD]/skia",
-      "-i",
-      "12853011",
-      "-p",
-      "1",
-      "-s",
-      "https://codereview.chromium.org",
-      "--no-auth"
-    ],
-    "name": "apply_issue",
-    "~followup_annotations": [
-      "@@@STEP_LINK@Applied issue 12853011@https://codereview.chromium.org/12853011@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "make",
-      "clean"
-    ],
-    "cwd": "[SLAVE_BUILD]/skia",
-    "name": "clean"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "gyp_skia"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
-    "env": {
-      "GYP_DEFINES": "skia_arch_width=64 skia_gpu=0 skia_warnings_as_errors=0"
-    },
     "name": "gyp_skia"
   },
   {
@@ -96,15 +55,39 @@
   },
   {
     "cmd": [
-      "catchsegv",
-      "[SLAVE_BUILD]/skia/out/Debug/tests"
+      "[SLAVE_BUILD]/skia/out/Release/tests",
+      "--verbose",
+      "--tmpDir",
+      "[SLAVE_BUILD]/tmp",
+      "--resourcePath",
+      "resources"
     ],
     "name": "tests"
   },
   {
     "cmd": [
-      "catchsegv",
-      "[SLAVE_BUILD]/skia/out/Debug/gm"
+      "[SLAVE_BUILD]/skia/out/Release/gm",
+      "--verbose",
+      "--writeChecksumBasedFilenames",
+      "--mismatchPath",
+      "[SLAVE_BUILD]/gm/actual/Test-Android-Nexus10-MaliT604-Arm7-Release",
+      "--missingExpectationsPath",
+      "[SLAVE_BUILD]/gm/actual/Test-Android-Nexus10-MaliT604-Arm7-Release",
+      "--writeJsonSummaryPath",
+      "[SLAVE_BUILD]/gm/actual/Test-Android-Nexus10-MaliT604-Arm7-Release/actual_results.json",
+      "--ignoreErrorTypes",
+      "IntentionallySkipped",
+      "MissingExpectations",
+      "ExpectationsMismatch",
+      "--resourcePath",
+      "resources",
+      "--readPath",
+      "[SLAVE_BUILD]/gm/expected/expected-results.json",
+      "--ignoreFailuresFile",
+      "[SLAVE_BUILD]/gm/expected/ignored-tests.txt",
+      "--config",
+      "defaults",
+      "msaa4"
     ],
     "name": "gm"
   }
