@@ -731,25 +731,6 @@ class GatekeeperTest(unittest.TestCase):
     urls = self.call_gatekeeper()
     self.assertNotIn(self.set_status_url, urls)
 
-  def testDontOpenTreeIfFailing(self):
-    """Test that we don't open the tree if the last completed build failed."""
-    sys.argv.extend([m.url for m in self.masters])
-    sys.argv.extend(['--skip-build-db-update',
-                     '--no-email-app', '--set-status',
-                     '--open-tree',
-                     '--password-file', self.status_secret_file])
-    self.add_gatekeeper_section(self.masters[0].url,
-        self.masters[0].builders[0].name, {})
-
-    # Open the tree if it was previously automatically closed.
-    # The default build_db marks the last successful build as failing.
-    self.handle_url_json(self.get_status_url, {
-      'message': 'closed (automatic)',
-      'general_state': 'closed',
-    })
-    urls = self.call_gatekeeper()
-    self.assertNotIn(self.set_status_url, urls)
-
   def testOpenTree(self):
     """Test that we open the tree if no tracked failures."""
     sys.argv.extend([m.url for m in self.masters])
@@ -796,6 +777,178 @@ class GatekeeperTest(unittest.TestCase):
     })
     urls = self.call_gatekeeper(build_db=build_db)
     self.assertNotIn(self.set_status_url, urls)
+
+  def testOpenTreeOnUnfinishedBuild(self):
+    """Test that the tree opens if builds succeed on previously failed steps."""
+    sys.argv.extend([m.url for m in self.masters])
+    sys.argv.extend(['--skip-build-db-update',
+                     '--no-email-app', '--set-status',
+                     '--open-tree',
+                     '--password-file', self.status_secret_file])
+
+    self.add_gatekeeper_section(self.masters[0].url,
+                                self.masters[0].builders[0].name,
+                                {'closing_steps': ['step1']})
+
+    self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
+    self.masters[0].builders[0].builds[0].finished = False
+
+    new_build = self.create_generic_build(
+        2, ['a_second_committer@chromium.org'])
+    self.masters[0].builders[0].builds.append(new_build)
+    self.masters[0].builders[0].builds[0].finished = False
+
+    # Open the tree if it was previously automatically closed.
+    self.handle_url_json(self.get_status_url, {
+      'message': 'closed (automatic)',
+      'general_state': 'closed',
+    })
+    self.call_gatekeeper()
+    self.assertEquals(self.url_calls[-1]['url'], self.set_status_url)
+    status_data = urlparse.parse_qs(self.url_calls[-1]['params'])
+    self.assertEquals(status_data['message'][0], "Tree is open (Automatic)")
+
+  def testOpenTreeIfFailedFinishedStepsSucceeded(self):
+    """Test that we open the tree if no tracked failures."""
+    sys.argv.extend([m.url for m in self.masters])
+    sys.argv.extend(['--skip-build-db-update',
+                     '--no-email-app', '--set-status',
+                     '--open-tree',
+                     '--password-file', self.status_secret_file])
+
+    self.masters[0].builders[0].builds[0].finished = False
+    self.add_gatekeeper_section(self.masters[0].url,
+                                self.masters[0].builders[0].name,
+                                {'closing_steps': ['step1']})
+
+    build_db = build_scan_db.gen_db(masters={
+        self.masters[0].url: {
+            'mybuilder': {
+                0: build_scan_db.gen_build(
+                  finished=True,
+                  succeeded=False,
+                  triggered={0: ['step1']})
+            }
+        }
+    })
+
+    # Open the tree if it was previously automatically closed.
+    self.handle_url_json(self.get_status_url, {
+      'message': 'closed (automatic)',
+      'general_state': 'closed',
+    })
+    self.call_gatekeeper(build_db=build_db)
+    self.assertEquals(self.url_calls[-1]['url'], self.set_status_url)
+    status_data = urlparse.parse_qs(self.url_calls[-1]['params'])
+    self.assertEquals(status_data['message'][0], "Tree is open (Automatic)")
+
+  def testOpenTreeIfMultipleStepsSucceeded(self):
+    """Test that we open the tree if all failing steps succeded."""
+    sys.argv.extend([m.url for m in self.masters])
+    sys.argv.extend(['--skip-build-db-update',
+                     '--no-email-app', '--set-status',
+                     '--open-tree',
+                     '--password-file', self.status_secret_file])
+
+    new_build = self.create_generic_build(
+        2, ['a_second_committer@chromium.org'])
+    self.masters[0].builders[0].builds.append(new_build)
+
+    self.masters[0].builders[0].builds[0].finished = False
+    self.masters[0].builders[0].builds[0].steps[0].results = [2, None]
+    self.masters[0].builders[0].builds[0].steps[2].results = [None, None]
+    self.masters[0].builders[0].builds[0].steps[3].results = [None, None]
+
+    self.masters[0].builders[0].builds[1].finished = False
+    self.masters[0].builders[0].builds[1].steps[1].results = [None, None]
+    self.masters[0].builders[0].builds[1].steps[2].results = [None, None]
+    self.masters[0].builders[0].builds[1].steps[3].results = [None, None]
+
+    self.add_gatekeeper_section(self.masters[0].url,
+                                self.masters[0].builders[0].name,
+                                {'closing_steps': [
+                                     'step0',
+                                     'step1',
+                                     'step2',
+                                     'step3',
+                                 ]})
+
+    build_db = build_scan_db.gen_db(masters={
+        self.masters[0].url: {
+            'mybuilder': {
+                0: build_scan_db.gen_build(
+                  finished=True,
+                  succeeded=False,
+                  triggered={0: ['step1']})
+            }
+        }
+    })
+
+    # Open the tree if it was previously automatically closed.
+    self.handle_url_json(self.get_status_url, {
+      'message': 'closed (automatic)',
+      'general_state': 'closed',
+    })
+    self.call_gatekeeper(build_db=build_db)
+    self.assertEquals(self.url_calls[-1]['url'], self.set_status_url)
+    status_data = urlparse.parse_qs(self.url_calls[-1]['params'])
+    self.assertEquals(status_data['message'][0], "Tree is open (Automatic)")
+
+  def testOpenTreeIfMultipleStepsSucceededInFlight(self):
+    """Test we open the tree if all newly-failing builds have steps succeed."""
+    sys.argv.extend([m.url for m in self.masters])
+    sys.argv.extend(['--skip-build-db-update',
+                     '--no-email-app', '--set-status',
+                     '--open-tree',
+                     '--password-file', self.status_secret_file])
+
+    new_build = self.create_generic_build(
+        2, ['a_second_committer@chromium.org'])
+    self.masters[0].builders[0].builds.append(new_build)
+    new_build = self.create_generic_build(
+        3, ['a_third_committer@chromium.org'])
+    self.masters[0].builders[0].builds.append(new_build)
+
+    self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
+
+    self.masters[0].builders[0].builds[1].finished = False
+    self.masters[0].builders[0].builds[1].steps[0].results = [2, None]
+    self.masters[0].builders[0].builds[1].steps[2].results = [None, None]
+    self.masters[0].builders[0].builds[1].steps[3].results = [None, None]
+
+    self.masters[0].builders[0].builds[2].finished = False
+    self.masters[0].builders[0].builds[2].steps[1].results = [None, None]
+    self.masters[0].builders[0].builds[2].steps[2].results = [None, None]
+    self.masters[0].builders[0].builds[2].steps[3].results = [None, None]
+
+
+    self.add_gatekeeper_section(self.masters[0].url,
+                                self.masters[0].builders[0].name,
+                                {'closing_steps': [
+                                     'step0',
+                                     'step1',
+                                     'step2',
+                                     'step3',
+                                 ]})
+
+    build_db = build_scan_db.gen_db(masters={
+        self.masters[0].url: {
+            'mybuilder': {
+                0: build_scan_db.gen_build(
+                  finished=True, succeeded=True)
+            }
+        }
+    })
+
+    # Open the tree if it was previously automatically closed.
+    self.handle_url_json(self.get_status_url, {
+      'message': 'closed (automatic)',
+      'general_state': 'closed',
+    })
+    self.call_gatekeeper(build_db=build_db)
+    self.assertEquals(self.url_calls[-1]['url'], self.set_status_url)
+    status_data = urlparse.parse_qs(self.url_calls[-1]['params'])
+    self.assertEquals(status_data['message'][0], "Tree is open (Automatic)")
 
   def testBuildStatusWrittenToBuildDB(self):
     """Test that build success and failure is written to the build_db."""
@@ -1591,7 +1744,12 @@ class GatekeeperTest(unittest.TestCase):
     self.assertEquals(gatekeeper_data['message'], msg)
 
   def testOldFailuresNotRecorded(self):
-    """Test that only new failing steps are recoreded to the build_db."""
+    """Test that only new failing steps are recorded to the build_db.
+
+    A failing step that we've already seen shouldn't bump triggered_revisions
+    since doing so would bump triggered_revisions on every build -- suppressing
+    every legitimate failure in the process.
+    """
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--no-email-app', '--set-status',
                      '--password-file', self.status_secret_file,
