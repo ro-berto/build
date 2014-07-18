@@ -122,7 +122,10 @@
       "https://codereview.chromium.org",
       "--no-auth"
     ],
-    "name": "apply_issue"
+    "name": "apply_issue",
+    "~followup_annotations": [
+      "@@@STEP_LINK@Applied issue 12853011@https://codereview.chromium.org/12853011@@@"
+    ]
   },
   {
     "cmd": [
@@ -258,7 +261,10 @@
       "https://codereview.chromium.org",
       "--no-auth"
     ],
-    "name": "apply_issue (2)"
+    "name": "apply_issue (2)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@Applied issue 12853011@https://codereview.chromium.org/12853011@@@"
+    ]
   },
   {
     "cmd": [

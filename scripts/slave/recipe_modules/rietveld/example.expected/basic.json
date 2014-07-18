@@ -17,6 +17,9 @@
       "-k",
       "[BUILD]/site_config/.rietveld_secret_key"
     ],
-    "name": "apply_issue"
+    "name": "apply_issue",
+    "~followup_annotations": [
+      "@@@STEP_LINK@Applied issue 1@http://review_tool.url/1@@@"
+    ]
   }
 ]
