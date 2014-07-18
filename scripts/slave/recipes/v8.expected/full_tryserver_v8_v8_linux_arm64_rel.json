@@ -118,7 +118,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "dcheck_always_on=1 fastbuild=1 target_arch=arm64 v8_target_arch=arm64"
+      "GYP_DEFINES": "dcheck_always_on=1 fastbuild=1 target_arch=x64 v8_target_arch=arm64"
     },
     "name": "gclient runhooks"
   },

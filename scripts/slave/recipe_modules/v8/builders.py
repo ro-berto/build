@@ -896,9 +896,9 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'v8_linux_arm_dbg': {
+        'chromium_apply_config': ['simulate_arm'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
@@ -906,9 +906,9 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm64_rel': {
+        'chromium_apply_config': ['simulate_arm'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_ARCH': 'arm',
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
