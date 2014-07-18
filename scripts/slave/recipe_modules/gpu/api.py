@@ -39,9 +39,12 @@ class GpuApi(recipe_api.RecipeApi):
       self.m.chromium.set_config(self._configuration + '_clang',
                                  GIT_MODE=self._use_git)
     self.m.gclient.apply_config('chrome_internal')
-    if self.m.tryserver.is_tryserver:
-      # Force dcheck on in try server builds.
-      self.m.chromium.apply_config('dcheck')
+
+    # To catch errors earlier on Release bots, in particular the try
+    # servers which are Release mode only, force dcheck and blink
+    # asserts on.
+    self.m.chromium.apply_config('dcheck')
+    self.m.chromium.apply_config('blink_asserts_on')
 
     # Use the default Ash and Aura settings on all bots (specifically Blink
     # bots).

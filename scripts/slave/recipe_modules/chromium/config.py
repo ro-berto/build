@@ -444,6 +444,10 @@ def blink(c):
 def blink_clang(c):
   c.compile_py.default_targets = ['blink_tests']
 
+@config_ctx()
+def blink_asserts_on(c, invert=False):
+  c.gyp_env.GYP_DEFINES['blink_asserts_always_on'] = int(not invert)
+
 @config_ctx(includes=['ninja', 'static_library', 'default_compiler', 'goma'])
 def android(c):
   _android_common(c)

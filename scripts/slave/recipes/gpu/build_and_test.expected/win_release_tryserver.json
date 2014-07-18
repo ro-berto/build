@@ -142,7 +142,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' internal_gles2_conform_tests=1 target_arch=ia32 test_isolation_mode=archive test_isolation_outdir=https://isolateserver.appspot.com use_goma=1"
+      "GYP_DEFINES": "blink_asserts_always_on=1 chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' internal_gles2_conform_tests=1 target_arch=ia32 test_isolation_mode=archive test_isolation_outdir=https://isolateserver.appspot.com use_goma=1"
     },
     "name": "gclient runhooks"
   },
