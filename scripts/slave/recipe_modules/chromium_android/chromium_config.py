@@ -70,7 +70,7 @@ def cronet_builder(c):
 @CONFIG_CTX(includes=['main_builder'])
 def arm_k_builder(c):
   gyp_defs = c.gyp_env.GYP_DEFINES
-  gyp_defs['android_sdk_build_tools_version'] = '19.0.0'
+  gyp_defs['android_sdk_build_tools_version'] = '20.0.0'
   gyp_defs['android_sdk_version'] = '19'
   gyp_defs['android_sdk_root'] = Path(
     '[CHECKOUT]', 'third_party', 'android_tools', 'sdk')
