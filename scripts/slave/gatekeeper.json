@@ -124,25 +124,39 @@
         ],
         "builders": {
           "Android Builder (dbg)": {
-            "sheriff_classes": ["sheriff_android"]
+            "categories": [
+              "chromium_android"
+            ]
           },
           "Android Tests (dbg)": {
-            "sheriff_classes": ["sheriff_android"]
+            "categories": [
+              "chromium_android"
+            ]
           },
           "Android Builder": {
-            "sheriff_classes": ["sheriff_android"]
+            "categories": [
+              "chromium_android"
+            ]
           },
           "Android Tests": {
-            "sheriff_classes": ["sheriff_android"]
+            "categories": [
+              "chromium_android"
+            ]
           },
           "Android Clang Builder (dbg)": {
-            "sheriff_classes": ["sheriff_android"]
+            "categories": [
+              "chromium_android"
+            ]
           },
           "Android Webview AOSP Builder": {
-            "sheriff_classes": ["sheriff_android"]
+            "categories": [
+              "chromium_android"
+            ]
           },
           "Android GN": {
-            "sheriff_classes": ["sheriff_android"]
+            "categories": [
+              "chromium_android"
+            ]
           },
           "*": {}
         }
@@ -410,6 +424,15 @@
       "excluded_steps": [
         "steps"
       ]
+    },
+    "chromium_android": {
+      "closing_optional": [
+        "*"
+      ],
+      "excluded_steps": [
+        "slave_steps"
+      ],
+      "sheriff_classes": ["sheriff_android"]
     },
     "chromium_asan_tests": {
       "closing_optional": [
