@@ -760,7 +760,8 @@ class GatekeeperTest(unittest.TestCase):
     self.call_gatekeeper(build_db=build_db)
     self.assertEquals(self.url_calls[-1]['url'], self.set_status_url)
     status_data = urlparse.parse_qs(self.url_calls[-1]['params'])
-    self.assertEquals(status_data['message'][0], "Tree is open (Automatic)")
+    self.assertTrue(status_data['message'][0].startswith(
+      "Tree is open (Automatic"))
 
     # However, don't touch the tree status if a human set it.
     self.handle_url_json(self.get_status_url, {
@@ -806,7 +807,8 @@ class GatekeeperTest(unittest.TestCase):
     self.call_gatekeeper()
     self.assertEquals(self.url_calls[-1]['url'], self.set_status_url)
     status_data = urlparse.parse_qs(self.url_calls[-1]['params'])
-    self.assertEquals(status_data['message'][0], "Tree is open (Automatic)")
+    self.assertTrue(status_data['message'][0].startswith(
+      "Tree is open (Automatic"))
 
   def testOpenTreeIfFailedFinishedStepsSucceeded(self):
     """Test that we open the tree if no tracked failures."""
@@ -840,7 +842,8 @@ class GatekeeperTest(unittest.TestCase):
     self.call_gatekeeper(build_db=build_db)
     self.assertEquals(self.url_calls[-1]['url'], self.set_status_url)
     status_data = urlparse.parse_qs(self.url_calls[-1]['params'])
-    self.assertEquals(status_data['message'][0], "Tree is open (Automatic)")
+    self.assertTrue(status_data['message'][0].startswith(
+      "Tree is open (Automatic"))
 
   def testOpenTreeIfMultipleStepsSucceeded(self):
     """Test that we open the tree if all failing steps succeded."""
@@ -892,7 +895,8 @@ class GatekeeperTest(unittest.TestCase):
     self.call_gatekeeper(build_db=build_db)
     self.assertEquals(self.url_calls[-1]['url'], self.set_status_url)
     status_data = urlparse.parse_qs(self.url_calls[-1]['params'])
-    self.assertEquals(status_data['message'][0], "Tree is open (Automatic)")
+    self.assertTrue(status_data['message'][0].startswith(
+      "Tree is open (Automatic"))
 
   def testOpenTreeIfMultipleStepsSucceededInFlight(self):
     """Test we open the tree if all newly-failing builds have steps succeed."""
@@ -948,7 +952,8 @@ class GatekeeperTest(unittest.TestCase):
     self.call_gatekeeper(build_db=build_db)
     self.assertEquals(self.url_calls[-1]['url'], self.set_status_url)
     status_data = urlparse.parse_qs(self.url_calls[-1]['params'])
-    self.assertEquals(status_data['message'][0], "Tree is open (Automatic)")
+    self.assertTrue(status_data['message'][0].startswith(
+      "Tree is open (Automatic"))
 
   def testBuildStatusWrittenToBuildDB(self):
     """Test that build success and failure is written to the build_db."""

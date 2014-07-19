@@ -33,8 +33,7 @@ from slave import build_scan
 from slave import build_scan_db
 from slave import gatekeeper_ng_config
 
-SCRIPTS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                           '..', '..')
+DATA_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Buildbot status enum.
 SUCCESS, WARNINGS, FAILURE, SKIPPED, EXCEPTION, RETRY = range(6)
@@ -49,6 +48,12 @@ def get_pwd(password_file):
 def update_status(tree_message, status_url_root, username, password):
   """Connects to chromium-status and closes the tree."""
   #TODO(xusydoc): append status if status is already closed.
+
+  if isinstance(tree_message, unicode):
+    tree_message = tree_message.encode('utf8')
+  elif isinstance(tree_message, str):
+    tree_message = tree_message.decode('utf8')
+
   params = urllib.urlencode({
       'message': tree_message,
       'username': username,
@@ -424,7 +429,7 @@ def submit_email(email_app, build_data, secret):
 
 def open_tree_if_possible(build_db, master_jsons, successful_builder_steps,
     current_builds_successful, username, password, status_url_root,
-    set_status):
+    set_status, emoji):
   if not current_builds_successful:
     logging.debug('Not opening tree because failing steps were detected.')
     return
@@ -469,6 +474,11 @@ def open_tree_if_possible(build_db, master_jsons, successful_builder_steps,
   logging.info('All builders are green, opening the tree...')
 
   tree_status = 'Tree is open (Automatic)'
+  if emoji:
+    random_emoji = random.choice(emoji)
+    if random_emoji.endswith(')'):
+      random_emoji += ' '
+    tree_status = 'Tree is open (Automatic: %s)' % random_emoji
   logging.info('Opening tree with message: \'%s\'' % tree_status)
   if set_status:
     update_status(tree_status, status_url_root, username, password)
@@ -662,8 +672,12 @@ def get_options():
                     help='file containing secret used in email app auth')
   parser.add_option('--no-email-app', action='store_true',
                     help='don\'t send emails')
-  parser.add_option('--json', default='gatekeeper.json',
+  parser.add_option('--json', default=os.path.join(DATA_DIR, 'gatekeeper.json'),
                     help='location of gatekeeper configuration file')
+  parser.add_option('--emoji',
+                    default=os.path.join(DATA_DIR, 'gatekeeper_emoji.json'),
+                    help='location of gatekeeper configuration file (None to'
+                         'turn off)')
   parser.add_option('--verify', action='store_true',
                     help='verify that the gatekeeper config file is correct')
   parser.add_option('--flatten-json', action='store_true',
@@ -733,6 +747,14 @@ def main():
       print '  ' + m
     return 1
 
+  emoji = []
+  if options.emoji != 'None':
+    try:
+      with open(options.emoji) as f:
+        emoji = json.load(f)
+    except (IOError, ValueError) as e:
+      logging.warning('Could not load emoji file %s: %s', options.emoji, e)
+
   if options.clear_build_db:
     build_db = {}
     build_scan_db.save_build_db(build_db, gatekeeper_config,
@@ -760,7 +782,7 @@ def main():
   if options.open_tree:
     open_tree_if_possible(build_db, master_jsons, successful_builder_steps,
         current_builds_successful, options.status_user, options.password,
-        options.status_url, options.set_status)
+        options.status_url, options.set_status, emoji)
 
   # debounce_failures does 3 things:
   # 1. Groups logging by builder
