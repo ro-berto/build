@@ -21,6 +21,7 @@ from buildbot.status.web.baseweb import WebStatus
 import master.chromium_status_bb8 as chromium_status
 
 from common import chromium_utils
+from master import status_logger
 import config
 
 
@@ -299,6 +300,9 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
                                        num_events_max=3000,
                                        templates=templates,
                                        **kwargs))
+
+  # Add a status logger, which is only active if '.logstatus' is touched.
+  c['status'].append(status_logger.StatusEventLogger())
 
   # Keep last build logs, the default is too low.
   c['buildHorizon'] = 1000

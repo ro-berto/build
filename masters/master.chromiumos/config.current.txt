@@ -1003,5 +1003,9 @@ config = {
     <BuildSlave 'build119-m2', (no builders yet)>,
     <BuildSlave 'build87-m2', (no builders yet)>,
   ],
-  'status': [<WebStatus on port tcp:8014>, <WebStatus on port tcp:8214>],
+  'status': [
+    <WebStatus on port tcp:8014>,
+    <WebStatus on port tcp:8214>,
+    <master.status_logger.StatusEventLogger instance>,
+  ],
 }
