@@ -406,6 +406,9 @@
     "chromium_recipes": {
       "closing_optional": [
         "*"
+      ],
+      "excluded_steps": [
+        "steps"
       ]
     },
     "chromium_asan_tests": {
