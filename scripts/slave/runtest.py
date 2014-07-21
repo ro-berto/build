@@ -1012,7 +1012,7 @@ def _MainMac(options, args, extra_env):
       _UploadGtestJsonSummary(json_file_name,
                               options.build_properties,
                               test_exe)
-      results_tracker.ProcessJSONFile()
+      results_tracker.ProcessJSONFile(options.build_dir)
 
   if options.generate_json_file:
     if not _GenerateJSONForTestResults(options, results_tracker):
@@ -1286,7 +1286,7 @@ def _MainLinux(options, args, extra_env):
       _UploadGtestJsonSummary(json_file_name,
                               options.build_properties,
                               test_exe)
-      results_tracker.ProcessJSONFile()
+      results_tracker.ProcessJSONFile(options.build_dir)
 
   if options.generate_json_file:
     if not _GenerateJSONForTestResults(options, results_tracker):
@@ -1405,7 +1405,7 @@ def _MainWin(options, args, extra_env):
       _UploadGtestJsonSummary(json_file_name,
                               options.build_properties,
                               test_exe)
-      results_tracker.ProcessJSONFile()
+      results_tracker.ProcessJSONFile(options.build_dir)
 
   if options.enable_pageheap:
     slave_utils.SetPageHeap(build_dir, 'chrome.exe', False)
