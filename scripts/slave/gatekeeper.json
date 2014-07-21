@@ -234,6 +234,14 @@
             "closing_optional": [],
             "comment": ["closing_optional due to crbug.com/394232"]
           },
+          "Mac ASan Tests (1)": {
+            "closing_optional": [],
+            "comment": ["closing_optional due to crbug.com/394232"]
+          },
+          "Mac ASan Tests (2)": {
+            "closing_optional": [],
+            "comment": ["closing_optional due to crbug.com/394232"]
+          },
           "*": {
             "categories": [
               "chromium_asan_tests"
