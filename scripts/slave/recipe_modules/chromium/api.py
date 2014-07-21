@@ -348,7 +348,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     # run_gn(). We shouldn't have *three* different mechanisms to control
     # what args to use.
     if use_goma:
-      gn_args.append('use_goma=1')
+      gn_args.append('use_goma=true')
       gn_args.append('goma_dir="%s"' % self.m.path['build'].join('goma'))
     gn_args.extend(self.c.project_generator.args)
 

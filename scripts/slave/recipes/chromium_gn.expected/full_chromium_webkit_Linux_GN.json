@@ -81,7 +81,7 @@
       "--root=[SLAVE_BUILD]/src",
       "gen",
       "//out/Release",
-      "--args=is_debug=false use_goma=1 goma_dir=\"[BUILD]/goma\""
+      "--args=is_debug=false use_goma=true goma_dir=\"[BUILD]/goma\""
     ],
     "name": "gn"
   },
