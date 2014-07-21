@@ -10,9 +10,12 @@ The advantage of using gitiles is that a local clone is not needed."""
 import datetime
 import os
 import re
+import time
+import traceback
 import urllib
 from urlparse import urlparse
 
+import sqlalchemy as sa
 from buildbot.status.web.console import RevisionComparator
 from buildbot.changes.base import PollingChangeSource
 from twisted.internet import defer
@@ -34,48 +37,18 @@ def time_to_datetime(tm):
       tm.partition('+')[0].strip(), "%a %b %d %H:%M:%S %Y")
 
 class GitilesRevisionComparator(RevisionComparator):
-  """Tracks the commit order of tags in a git repository.
+  """Tracks the commit order of tags in a git repository."""
 
-  This class explicitly does NOT support any kind of branching; it assumes
-  a strictly linear commit history."""
-
-  def __init__(self, repo_path, branch, agent, init_cb=None):
+  def __init__(self):
     super(GitilesRevisionComparator, self).__init__()
-    self.repo_path = urllib.quote(repo_path)
-    self.agent = agent
-    self.min_idx = 0
-    self.max_idx = 0
     self.sha1_lookup = {}
     self.initialized = False
-    d = self._fetch(branch)
-    def _set_initialized(_):
-      self.initialized = True
-      return True
-    d.addCallback(_set_initialized)
-    if init_cb:
-      d.addCallback(init_cb)
-
-  def _fetch(self, revision):
-    path = LOG_TEMPLATE % (self.repo_path, revision, 10000)
-    d = self.agent.request('GET', path, retry=5)
-    d.addCallback(self._process_log)
-    return d
-
-  def _process_log(self, log_json):
-    for commit in log_json['log']:
-      sha1 = commit['commit']
-      assert sha1 not in self.sha1_lookup
-      self.min_idx -= 1
-      self.sha1_lookup[sha1] = self.min_idx
-    next_sha1 = log_json.get('next', None)
-    if next_sha1:
-      return self._fetch(next_sha1)
-    return defer.succeed(None)
 
   def addRevision(self, revision):
-    assert revision not in self.sha1_lookup
-    self.sha1_lookup[revision] = self.max_idx
-    self.max_idx += 1
+    if revision in self.sha1_lookup:
+      return
+    idx = len(self.sha1_lookup)
+    self.sha1_lookup[revision] = idx
 
   def tagcmp(self, x, y):
     return cmp(self.sha1_lookup[x], self.sha1_lookup[y])
@@ -87,7 +60,7 @@ class GitilesRevisionComparator(RevisionComparator):
     return self.tagcmp(first_change, second_change) < 0
 
   def getSortingKey(self):
-    return self.sha1_lookup.__getitem__
+    return lambda c: self.sha1_lookup.__getitem__(c.revision)
 
 
 class GitilesPoller(PollingChangeSource):
@@ -96,12 +69,12 @@ class GitilesPoller(PollingChangeSource):
   git_svn_id_re = re.compile('^git-svn-id: (.*)@([0-9]+) [0-9a-fA-F\-]*$')
 
   def __init__(
-      self, repo_url, branch='master', pollInterval=10*60, category=None,
+      self, repo_url, branches=None, pollInterval=10*60, category=None,
       project=None, revlinktmpl=None, agent=None, svn_mode=False):
     """Args:
 
     repo_url: URL of the gitiles service to be polled.
-    branch: Git repository branch to be polled.
+    branches: List of repository branches to be polled.
     pollInterval: Number of seconds between polling operations.
     category: Category to be applied to generated Change objects.
     project: Project to be applied to generated Change objects.
@@ -111,12 +84,15 @@ class GitilesPoller(PollingChangeSource):
     svn_mode: When polling a mirror of an svn repository, create changes using
         the svn revision number.
     """
-
     u = urlparse(repo_url)
     self.repo_url = repo_url
     self.repo_host = u.netloc
     self.repo_path = urllib.quote(u.path)
-    self.branch = branch
+    if branches is None:
+      branches = ['master']
+    elif isinstance(branches, basestring):
+      branches = [branches]
+    self.branches = dict([(b, None) for b in branches])
     self.pollInterval = pollInterval
     self.category = category
     if project is None:
@@ -129,12 +105,39 @@ class GitilesPoller(PollingChangeSource):
     if agent is None:
       agent = GerritAgent('%s://%s' % (u.scheme, u.netloc), read_only=True)
     self.agent = agent
-    self.comparator = GitilesRevisionComparator(
-        self.repo_path, branch, self.agent)
-    self.lock = defer.DeferredLock()
-    self.last_head = None
+    self.comparator = GitilesRevisionComparator()
 
-  def _create_change(self, commit_json):
+  @defer.inlineCallbacks
+  def startService(self):
+    # Initialize revision comparator with revisions from all changes
+    # known to buildbot.
+    def db_thread_main(conn):
+      changes_tbl = self.master.db.model.changes
+      q = changes_tbl.select(order_by=[sa.asc(changes_tbl.c.changeid)])
+      rp = conn.execute(q)
+      for row in rp:
+        self.comparator.addRevision(row.revision)
+    yield self.master.db.pool.do(db_thread_main)
+
+    # It's now safe to produce the console view.
+    self.comparator.initialized = True
+
+    # Get the head commit for each branch being polled.
+    for branch in self.branches:
+      path = LOG_TEMPLATE % (self.repo_path, branch, 1)
+      log_json = yield self.agent.request('GET', path, retry=5)
+      assert log_json.get('log'), log_json
+      revision = log_json['log'][0]['commit']
+      log.msg('GitilesPoller: Initial revision for branch %s is %s' % (
+          branch, revision))
+      self.branches[branch] = revision
+      self.comparator.addRevision(revision)
+
+    log.msg('GitilesPoller: Finished initializing revision history')
+    PollingChangeSource.startService(self)
+
+  def _create_change(self, commit_json, branch):
+    """Send a new Change object to the buildbot master."""
     if not commit_json:
       return
     commit_author = commit_json['author']['email']
@@ -146,7 +149,6 @@ class GitilesPoller(PollingChangeSource):
     commit_msg = commit_json['message']
     repo_url = self.repo_url
     revision = commit_json['commit']
-    branch = self.branch
     if self.svn_mode:
       revision = None
       for line in reversed(commit_msg.splitlines()):
@@ -158,7 +160,7 @@ class GitilesPoller(PollingChangeSource):
           break
       if revision is None:
         log.err(
-            'Could not parse svn revision out of commit message '
+            'GitilesPoller: Could not parse svn revision out of commit message '
             'for commit %s in %s' % (commit_json['commit'], self.repo_url))
         return None
     revlink = ''
@@ -176,44 +178,70 @@ class GitilesPoller(PollingChangeSource):
         repository=repo_url,
         revlink=revlink)
 
-  def _process_log(self, log_json):
-    if not log_json['log']:
-      return
-    if 'next' in log_json:
-      log_spec = '%s..%s' % (self.last_head, log_json['next'])
+  @defer.inlineCallbacks
+  def _fetch_new_commits(self, branch, since):
+    """Query gitiles for all commits on 'branch' more recent than 'since'."""
+    result = []
+    log_json = {'next': branch}
+    while 'next' in log_json:
+      log_spec = '%s..%s' % (since, log_json['next'])
       path = LOG_TEMPLATE % (self.repo_path, log_spec, 100)
-      d = self.agent.request('GET', path, retry=5)
-      d.addCallback(self._process_log)
-      d.addCallback(lambda _: self._process_log(log_json))
-      return d
-    self.last_head = log_json['log'][0]['commit']
-    d = defer.succeed(None)
-    for log_entry in reversed(log_json['log']):
-      self.comparator.addRevision(log_entry['commit'])
-      path = REVISION_DETAIL_TEMPLATE % (self.repo_path, log_entry['commit'])
-      d.addCallback(lambda _: self.agent.request('GET', path, retry=5))
-      def _report_error(result):
-        log.err(result, '... while fetching %r from gitiles server.' % path)
-      d.addCallback(self._create_change)
-      d.addErrback(_report_error)
-    return d
+      log_json = yield self.agent.request('GET', path, retry=5)
+      if log_json.get('log'):
+        result.extend(log_json['log'])
+    result.reverse()
+    defer.returnValue(result)
 
-  def startService(self):
-    path = LOG_TEMPLATE % (self.repo_path, self.branch, 1)
-    d = self.agent.request('GET', path, retry=5)
-    def _finish(log_json):
-      self.last_head = log_json['log'][0]['commit']
-      PollingChangeSource.startService(self)
-    d.addCallback(_finish)
+  @staticmethod
+  def _collate_commits(a, b):
+    """Shuffle together two lists of commits.
 
+    The result will be sorted by commit time, while guaranteeing that there are
+    no inversions compared to the argument lists."""
+    a = [(c, time.mktime(time.strptime(c[0]['committer']['time']))) for c in a]
+    b = [(c, time.mktime(time.strptime(c[0]['committer']['time']))) for c in b]
+    result = []
+    while a and b:
+      if a[-1][1] > b[-1][1]:
+        result.append(a.pop()[0])
+      else:
+        result.append(b.pop()[0])
+    while a:
+      result.append(a.pop()[0])
+    while b:
+      result.append(b.pop()[0])
+    result.reverse()
+    return result
+
+  @defer.inlineCallbacks
   def poll(self):
-    d = self.lock.acquire()
-    log_spec = '%s..%s' % (self.last_head, self.branch)
-    path = LOG_TEMPLATE % (self.repo_path, log_spec, 100)
-    d.addCallback(lambda _: self.agent.request('GET', path, retry=5))
-    d.addCallback(self._process_log)
-    d.addBoth(_always_unlock, self.lock)
-    return d
+    all_commits = []
+    for branch, last_head in self.branches.iteritems():
+      try:
+        branch_commits = yield self._fetch_new_commits(
+            branch, last_head)
+        if branch_commits:
+          self.branches[branch] = branch_commits[-1]['commit']
+          branch_commits = [(c, branch) for c in branch_commits]
+          all_commits = self._collate_commits(all_commits, branch_commits)
+      except Exception:
+        msg = ('GitilesPoller: Error while fetching logs for branch %s:\n%s' %
+                   (branch, traceback.format_exc()))
+        log.err(msg)
+    for commit in all_commits:
+      commit, branch = commit
+      self.comparator.addRevision(commit['commit'])
+      try:
+        path = REVISION_DETAIL_TEMPLATE % (self.repo_path, commit['commit'])
+        detail = yield self.agent.request('GET', path, retry=5)
+        yield self._create_change(detail, branch)
+      except Exception:
+        msg = ('GitilesPoller: Error while processing revision %s '
+               'on branch %s:\n%s' % (
+                   commit['commit'], branch, traceback.format_exc()))
+        log.err(msg)
+    else:
+      log.msg('GitilesPoller: No new commits.')
 
   def describe(self):
     status = self.__class__.__name__
