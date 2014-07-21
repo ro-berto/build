@@ -165,7 +165,7 @@ def GenSteps(api):
 
   yield api.chromium.runhooks()
 
-  yield api.chromium.run_gn()
+  yield api.chromium.run_gn(use_goma=True)
 
   if api.tryserver.is_tryserver:
     yield api.chromium.compile(

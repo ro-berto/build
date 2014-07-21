@@ -330,7 +330,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     kwargs['env'] = env
     return self.m.gclient.runhooks(**kwargs)
 
-  def run_gn(self):
+  def run_gn(self, use_goma=False):
     gn_args = []
     if self.c.BUILD_CONFIG == 'Debug':
       gn_args.append('is_debug=true')
@@ -340,6 +340,16 @@ class ChromiumApi(recipe_api.RecipeApi):
       gn_args.append('os="android"')
     if self.c.TARGET_ARCH == 'arm':
       gn_args.append('cpu_arch="arm"')
+
+    # TODO: crbug.com/395784.
+    # Consider getting the flags to use via the project_generator config
+    # and/or modifying the goma config to modify the gn flags directly,
+    # rather than setting the gn_args flags via a parameter passed to
+    # run_gn(). We shouldn't have *three* different mechanisms to control
+    # what args to use.
+    if use_goma:
+      gn_args.append('use_goma=1')
+      gn_args.append('goma_dir="%s"' % self.m.path['build'].join('goma'))
     gn_args.extend(self.c.project_generator.args)
 
     return self.m.python(

@@ -79,7 +79,7 @@
       "--root=[SLAVE_BUILD]/src",
       "gen",
       "//out/Debug",
-      "--args=is_debug=true os=\"android\" cpu_arch=\"arm\""
+      "--args=is_debug=true os=\"android\" cpu_arch=\"arm\" use_goma=1 goma_dir=\"[BUILD]/goma\""
     ],
     "name": "gn"
   },
