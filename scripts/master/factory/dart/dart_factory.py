@@ -60,10 +60,12 @@ CUSTOM_VARS_SOURCEFORGE_URL = ('sourceforge_url', config.Master.sourceforge_url)
 CUSTOM_VARS_GOOGLECODE_URL = ('googlecode_url', config.Master.googlecode_url)
 CUSTOM_VARS_CHROMIUM_URL = (
   'chromium_url', config.Master.server_url + config.Master.repo_root)
+CUSTOM_VARS_DARTIUM_BASE = ('dartium_base', config.Master.server_url)
 
 custom_vars_list = [CUSTOM_VARS_SOURCEFORGE_URL,
                     CUSTOM_VARS_GOOGLECODE_URL,
-                    CUSTOM_VARS_CHROMIUM_URL]
+                    CUSTOM_VARS_CHROMIUM_URL,
+                    CUSTOM_VARS_DARTIUM_BASE]
 
 # gclient custom deps
 if config.Master.trunk_internal_url:
@@ -713,4 +715,3 @@ class DartUtils(object):
                          lookup=master_utils.FilterDomain(),
                          builders=notifying_builders))
     return statuses
-
