@@ -26,7 +26,6 @@ import optparse
 import os
 import simplejson
 import sys
-import re
 
 from common import archive_utils
 from common import chromium_utils
@@ -43,50 +42,6 @@ TEST_FILE_NAME = 'TESTS'
 
 class GSUtilError(Exception):
   pass
-
-
-def _GetXMLChangeLogByModule(module_name, module_src_dir,
-                             last_revision, current_revision):
-  """Get the change log information for specified module and start/end
-  revision.
-  """
-  changelog = ''
-  changelog_description = 'No new ChangeLogs on %s' % (module_name)
-  try:
-    last_revision = int(last_revision)
-    current_revision = int(current_revision)
-    if (last_revision and current_revision > last_revision):
-      command = [slave_utils.SubversionExe(), 'log', module_src_dir, '--xml',
-                 '-r', '%d:%d' % (last_revision + 1, current_revision)]
-      changelog = chromium_utils.GetCommandOutput(command)
-      changelog_description = '%s changeLogs from ]%d to %d]' % (
-          module_name, last_revision, current_revision)
-  except ValueError, e:
-    print >> os.stderr, e
-  return (changelog, changelog_description)
-
-
-def _GetGitChangeLogByModule(module_name, module_src_dir,
-                             last_revision, current_revision):
-  """Get the git log output for the specified module and revisions."""
-  #TODO(agable): Actually implement this. This needs to work for the full git
-  # changeover, but will require a bunch of code archaeology.
-  changelog = ''
-  changelog_description = 'Unable to create Git ChangeLog on %s' % module_name
-  return (changelog, changelog_description)
-
-
-def _GetChangeLog(module_name, module_src_dir,
-                  last_revision, current_revision):
-  """Get the Git or SVN ChangeLog."""
-  vcs = slave_utils.GitOrSubversion(module_src_dir)
-  if vcs == 'svn':
-    return _GetXMLChangeLogByModule(module_name, module_src_dir,
-                                    last_revision, current_revision)
-  elif vcs == 'git':
-    return _GetGitChangeLogByModule(module_name, module_src_dir,
-                                    last_revision, current_revision)
-  raise slave_utils.NotAnyWorkingCopy(module_src_dir)
 
 
 def Write(file_path, data):
@@ -336,34 +291,30 @@ class StagerBase(object):
     return archive_utils.CreateArchive(self._build_dir, self._staging_dir,
                                        zip_file_list, zip_name)
 
-  # TODO(mmoss): This could be simplified a bit if changelog_path and
-  # revisions_path were added to archive_files. The only difference in handling
-  # seems to be that Linux/Mac unlink archives after upload, but don't unlink
-  # those two files. Any reason why deleting them would be a problem? They don't
-  # appear to be used elsewhere in this script.
-  def _UploadBuild(self, www_dir, changelog_path, revisions_path,
-                   archive_files, gs_base, gs_acl):
+  # TODO(mmoss): This could be simplified a bit if revisions_path were added to
+  # archive_files. The only difference in handling seems to be that Linux/Mac
+  # unlink archives after upload, but don't unlink those two files. Any reason
+  # why deleting them would be a problem? They don't appear to be used elsewhere
+  # in this script.
+  def _UploadBuild(self, www_dir, revisions_path, archive_files, gs_base,
+                   gs_acl):
     if chromium_utils.IsWindows():
       print 'os.makedirs(%s)' % www_dir
 
       for archive in archive_files:
         print 'chromium_utils.CopyFileToDir(%s, %s)' % (archive, www_dir)
-      print 'chromium_utils.CopyFileToDir(%s, %s)' % (changelog_path, www_dir)
       print 'chromium_utils.CopyFileToDir(%s, %s)' % (revisions_path, www_dir)
 
       if not self.options.dry_run:
         self.MyMaybeMakeDirectory(www_dir, gs_base)
         for archive in archive_files:
           self.MyCopyFileToDir(archive, www_dir, gs_base, gs_acl=gs_acl)
-        self.MyCopyFileToDir(changelog_path, www_dir, gs_base, gs_acl=gs_acl)
         self.MyCopyFileToDir(revisions_path, www_dir, gs_base, gs_acl=gs_acl)
     elif chromium_utils.IsLinux() or chromium_utils.IsMac():
       for archive in archive_files:
         print 'SshCopyFiles(%s, %s, %s)' % (archive,
                                             self.options.archive_host,
                                             www_dir)
-      print 'SshCopyFiles(%s, %s, %s)' % (changelog_path,
-                                          self.options.archive_host, www_dir)
       print 'SshCopyFiles(%s, %s, %s)' % (revisions_path,
                                           self.options.archive_host, www_dir)
       if not self.options.dry_run:
@@ -377,9 +328,6 @@ class StagerBase(object):
           os.unlink(archive)
         # Files are created umask 077 by default, so make it world-readable
         # before pushing to web server.
-        self.MyMakeWorldReadable(changelog_path, gs_base)
-        self.MySshCopyFiles(changelog_path, self.options.archive_host, www_dir,
-                            gs_base, gs_acl=gs_acl)
         self.MyMakeWorldReadable(revisions_path, gs_base)
         self.MySshCopyFiles(revisions_path, self.options.archive_host, www_dir,
                             gs_base, gs_acl=gs_acl)
@@ -451,47 +399,6 @@ class StagerBase(object):
                               gs_base,
                               gs_subdir='/'.join([UPLOAD_DIR, relative_dir]),
                               gs_acl=gs_acl)
-
-  def _GenerateChangeLog(self, previous_revision, changelog_path):
-    """We need to generate change log for both chrome and webkit repository."""
-    regex = re.compile(r'<\?xml.*\?>')
-
-    if not previous_revision:
-      changelog = 'Unknown previous build number: no change log produced.'
-    else:
-      # Generate Chromium changelogs
-      (chromium_cl, chromium_cl_description) = _GetChangeLog(
-          'Chromium', self._src_dir, self.last_chromium_revision,
-          self._chromium_revision)
-      # Remove the xml declaration since we need to combine  the changelogs
-      # of both chromium and webkit.
-      if chromium_cl:
-        chromium_cl = regex.sub('', chromium_cl)
-
-      # Generate WebKit changelogs
-      (webkit_cl, webkit_cl_description) = _GetChangeLog(
-          'WebKit', self._webkit_dir, self.last_webkit_revision,
-          self._webkit_revision)
-      # Remove the xml declaration since we need to combine  the changelogs
-      # of both chromium and webkit.
-      if webkit_cl:
-        webkit_cl = regex.sub('', webkit_cl)
-
-      # Generate V8 changelogs
-      (v8_cl, v8_cl_description) = _GetChangeLog(
-          'V8', self._v8_dir, self.last_v8_revision, self._v8_revision)
-      # Remove the xml declaration since we need to combine the changelogs
-      # of both chromium and webkit.
-      if v8_cl:
-        v8_cl = regex.sub('', v8_cl)
-
-      # Generate the change logs.
-      changelog = ('<?xml version=\"1.0\"?>\n'
-                   '<changelogs>\n%s\n%s\n%s\n%s\n%s\n%s\n</changelogs>\n' % (
-                      chromium_cl_description, chromium_cl,
-                      webkit_cl_description, webkit_cl,
-                      v8_cl_description, v8_cl))
-    Write(changelog_path, changelog)
 
   def ArchiveBuild(self):
     """Zips build files and uploads them, their symbols, and a change log."""
@@ -576,10 +483,6 @@ class StagerBase(object):
         print 'Adding %s to be archived.' % (custom_archive)
         archive_files.append(custom_archive)
 
-    # Generate a change log or an error message if no previous revision.
-    changelog_path = os.path.join(self._staging_dir, 'changelog.xml')
-    self._GenerateChangeLog(previous_revision, changelog_path)
-
     # Generate a revisions file which contains the Chromium/WebKit/V8's
     # revision information.
     self.GenerateRevisionFile()
@@ -591,8 +494,8 @@ class StagerBase(object):
     if gs_bucket:
       gs_base = '/'.join([gs_bucket, self._build_name,
                           str(self._build_revision)])
-    self._UploadBuild(www_dir, changelog_path, self.revisions_path,
-                      archive_files, gs_base, gs_acl)
+    self._UploadBuild(www_dir, self.revisions_path, archive_files, gs_base,
+                      gs_acl)
 
     # Archive Linux packages (if any -- only created for Chrome builds).
     if chromium_utils.IsLinux():
@@ -680,7 +583,7 @@ class StagerByBuildNumber(StagerBase):
     StagerBase.__init__(self, options, options.build_number)
 
 
-def main(argv):
+def main():
   option_parser = optparse.OptionParser()
 
   option_parser.add_option('--mode', default='dev',
@@ -757,4 +660,4 @@ def main(argv):
 
 
 if '__main__' == __name__:
-  sys.exit(main(None))
+  sys.exit(main())
