@@ -28,7 +28,6 @@
         "set-status": true,
         "status-url": "https://chromium-status.appspot.com",
         "track-revisions": true
-        "track-revisions": true
     },
     "non-closers": {
         "masters": [
