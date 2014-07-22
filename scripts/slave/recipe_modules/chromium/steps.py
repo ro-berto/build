@@ -392,8 +392,12 @@ class TelemetryUnitTests(Test):
   name = 'telemetry_unittests'
 
   def run(self, api, suffix):
+    # Until telemetry tests output JSON, need to fail on failure with patch.
+    # Otherwise, if the tests were failing on trunks and a cl introduces a
+    # new regression the cl would land since the failure text is hardcoded
+    # below. http://crbug.com/359521.
     return api.chromium.run_telemetry_unittests(
-        suffix, always_run=True, can_fail_build=(not suffix))
+        suffix, always_run=True, can_fail_build=True)
 
   @staticmethod
   def compile_targets(_):
@@ -413,8 +417,12 @@ class TelemetryPerfUnitTests(Test):
   name = 'telemetry_perf_unittests'
 
   def run(self, api, suffix):
+    # Until telemetry tests output JSON, need to fail on failure with patch.
+    # Otherwise, if the tests were failing on trunks and a cl introduces a
+    # new regression the cl would land since the failure text is hardcoded
+    # below. http://crbug.com/359521.
     return api.chromium.run_telemetry_perf_unittests(
-        suffix, always_run=True, can_fail_build=(not suffix))
+        suffix, always_run=True, can_fail_build=True)
 
   @staticmethod
   def compile_targets(_):
