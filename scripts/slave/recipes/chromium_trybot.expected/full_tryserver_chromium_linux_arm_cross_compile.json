@@ -143,6 +143,8 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
+      "chrome",
+      "chrome",
       "base_unittests",
       "mojo_common_unittests",
       "browser_tests",

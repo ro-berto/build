@@ -252,7 +252,7 @@ class ChromiumApi(recipe_api.RecipeApi):
   def run_telemetry_test(self, runner, test, name='', args=None,
                          prefix_args=None, results_directory='',
                          spawn_dbus=False, revision=None, webkit_revision=None,
-                         master_class_name=None):
+                         master_class_name=None, **kwargs):
     """Runs a Telemetry based test with 'runner' as the executable.
     Automatically passes certain flags like --output-format=gtest to the
     test runner. 'prefix_args' are passed before the built-in arguments and
@@ -298,27 +298,36 @@ class ChromiumApi(recipe_api.RecipeApi):
         revision=revision,
         webkit_revision=webkit_revision,
         master_class_name=master_class_name,
-        env=env)
+        env=env,
+        **kwargs)
 
-  def run_telemetry_unittests(self):
+  def run_telemetry_unittests(self, suffix=None, **kwargs):
+    name = 'telemetry_unittests'
+    if suffix:
+      name += ' (%s)' % suffix
     return self.runtest(
         self.m.path['checkout'].join('tools', 'telemetry', 'run_tests'),
         args=['--browser=%s' % self.c.build_config_fs.lower()],
         annotate='gtest',
-        name='telemetry_unittests',
+        name=name,
         test_type='telemetry_unittests',
         python_mode=True,
-        xvfb=True)
+        xvfb=True,
+        **kwargs)
 
-  def run_telemetry_perf_unittests(self):
+  def run_telemetry_perf_unittests(self, suffix=None, **kwargs):
+    name = 'telemetry_perf_unittests'
+    if suffix:
+      name += ' (%s)' % suffix
     return self.runtest(
         self.m.path['checkout'].join('tools', 'perf', 'run_tests'),
         args=['--browser=%s' % self.c.build_config_fs.lower()],
         annotate='gtest',
-        name='telemetry_perf_unittests',
+        name=name,
         test_type='telemetry_perf_unittests',
         python_mode=True,
-        xvfb=True)
+        xvfb=True,
+        **kwargs)
 
   def runhooks(self, **kwargs):
     """Run the build-configuration hooks for chromium."""

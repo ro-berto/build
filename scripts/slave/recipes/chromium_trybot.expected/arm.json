@@ -126,6 +126,8 @@
       "[BUILD]/goma",
       "--",
       "browser_tests_run",
+      "chrome",
+      "chrome",
       "browser_tests",
       "base_tests",
       "chrome"

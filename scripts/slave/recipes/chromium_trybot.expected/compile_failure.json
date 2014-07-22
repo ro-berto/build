@@ -136,6 +136,8 @@
       "--goma-dir",
       "[BUILD]\\goma",
       "--",
+      "chrome",
+      "chrome",
       "base_unittests",
       "browser_tests",
       "chrome"

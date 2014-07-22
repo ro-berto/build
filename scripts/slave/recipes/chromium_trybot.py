@@ -552,6 +552,13 @@ def GenSteps(api):
         api.chromium.steps.ChecklicensesTest(),
     ])
   tests.append(api.chromium.steps.Deps2GitTest())
+
+  if (bot_config['chromium_config'] not in ['chromium_chromeos',
+                                           'chromium_chromeos_clang']
+      and not buildername.startswith('win8')):
+    tests.append(api.chromium.steps.TelemetryUnitTests())
+    tests.append(api.chromium.steps.TelemetryPerfUnitTests())
+
   tests.extend(gtest_tests)
   tests.extend(swarming_tests)
   tests.append(api.chromium.steps.NaclIntegrationTest())
@@ -578,16 +585,6 @@ def GenSteps(api):
 
   if bot_config['compile_only']:
     return
-
-  if (bot_config['chromium_config'] not in ['chromium_chromeos',
-                                           'chromium_chromeos_clang']
-      and not buildername.startswith('win8')):
-    # TODO(phajdan.jr): Make it possible to retry telemetry tests (add JSON).
-    # TODO(vadimsh): Trigger swarming tests before telemetry tests.
-    yield (
-      api.chromium.run_telemetry_unittests(),
-      api.chromium.run_telemetry_perf_unittests(),
-    )
 
   def deapply_patch_fn(failing_tests):
     if api.platform.is_win:

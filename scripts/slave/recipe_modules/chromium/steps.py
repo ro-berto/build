@@ -389,22 +389,46 @@ class SwarmingGTestTest(Test):
 
 
 class TelemetryUnitTests(Test):
-  @staticmethod
-  def run(api, suffix):
-    return api.chromium.run_telemetry_unittests()
+  name = 'telemetry_unittests'
+
+  def run(self, api, suffix):
+    return api.chromium.run_telemetry_unittests(
+        suffix, always_run=True, can_fail_build=(not suffix))
 
   @staticmethod
   def compile_targets(_):
     return ['chrome']
+
+  def has_valid_results(self, api, suffix):
+    return True
+
+  def failures(self, api, suffix):
+    # TODO(phajdan.jr): Make it possible to retry individual failing telemetry
+    # tests (add JSON).
+    if api.step_history[self._step_name(suffix)].retcode:
+      return ['telemetry_unittest']
+    return []
 
 class TelemetryPerfUnitTests(Test):
-  @staticmethod
-  def run(api, suffix):
-    return api.chromium.run_telemetry_perf_unittests()
+  name = 'telemetry_perf_unittests'
+
+  def run(self, api, suffix):
+    return api.chromium.run_telemetry_perf_unittests(
+        suffix, always_run=True, can_fail_build=(not suffix))
 
   @staticmethod
   def compile_targets(_):
     return ['chrome']
+
+  def has_valid_results(self, api, suffix):
+    return True
+
+  def failures(self, api, suffix):
+    # TODO(phajdan.jr): Make it possible to retry individual failing telemetry
+    # tests (add JSON).
+    if api.step_history[self._step_name(suffix)].retcode:
+      return ['telemetry_perf_unittests']
+    return []
 
 
 class NaclIntegrationTest(Test):  # pylint: disable=W0232
