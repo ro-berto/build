@@ -701,7 +701,18 @@ BUILDERS = {
       },
       'V8 Linux64 ASAN': {
         'gclient_apply_config': ['clang'],
-        'chromium_apply_config': ['clang', 'asan', 'no_lsan'],
+        'chromium_apply_config': ['clang', 'asan'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['v8testing'],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux64 TSAN': {
+        'gclient_apply_config': ['clang'],
+        'chromium_apply_config': ['clang', 'tsan2'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,

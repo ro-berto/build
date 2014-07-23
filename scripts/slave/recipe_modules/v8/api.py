@@ -263,6 +263,7 @@ class V8Api(recipe_api.RecipeApi):
         'third_party', 'llvm-build', 'Release+Asserts', 'bin')
     self.c.gyp_env.CC = self.m.path.join(clang_dir, 'clang')
     self.c.gyp_env.CXX = self.m.path.join(clang_dir, 'clang++')
+    self.c.gyp_env.LINK = self.m.path.join(clang_dir, 'clang++')
 
   def update_nacl_sdk(self):
     return self.m.python(
@@ -547,6 +548,20 @@ class V8Api(recipe_api.RecipeApi):
       env['ASAN_SYMBOLIZER_PATH'] = self.m.path['checkout'].join(
           'third_party', 'llvm-build', 'Release+Asserts', 'bin',
           'llvm-symbolizer')
+
+    # Arguments and environment for tsan builds:
+    if self.m.chromium.c.gyp_env.GYP_DEFINES.get('tsan') == 1:
+      full_args.append('--tsan')
+      env['TSAN_OPTIONS'] = " ".join([
+        'external_symbolizer_path=%s' %
+            self.m.path['checkout'].join(
+                'third_party', 'llvm-build', 'Release+Asserts', 'bin',
+                'llvm-symbolizer'),
+        'exit_code=0',
+        'report_thread_leaks=0',
+        'history_size=7',
+        'report_destroy_locked=0',
+      ])
 
     # Environment for nacl builds:
     if self.c.nacl.NACL_SDK_ROOT:

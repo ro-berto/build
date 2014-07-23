@@ -62,11 +62,6 @@ def no_i18n(c):
 
 
 @CONFIG_CTX(includes=['v8'])
-def no_lsan(c):
-  c.gyp_env.GYP_DEFINES['lsan'] = 0
-
-
-@CONFIG_CTX(includes=['v8'])
 def no_snapshot(c):
   c.gyp_env.GYP_DEFINES['v8_use_snapshot'] = 'false'
 

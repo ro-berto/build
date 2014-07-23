@@ -91,6 +91,9 @@ def main():
   option_parser.add_option("--predictable",
                            default=False, action="store_true",
                            help="Compare several reruns of each test")
+  option_parser.add_option("--tsan",
+                           help="Regard test expectations for TSAN",
+                           default=False, action="store_true")
 
   options, args = option_parser.parse_args()
   if args:
@@ -114,6 +117,8 @@ def main():
       options.testname = []
     if options.asan:
       cmd.extend(['--asan'])
+    if options.tsan:
+      cmd.extend(['--tsan'])
     if options.buildbot == 'True':
       cmd.extend(['--buildbot'])
     if options.no_presubmit:

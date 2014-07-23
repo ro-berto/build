@@ -7,7 +7,7 @@
       "--master",
       "client.v8",
       "--builder",
-      "V8 Linux64 ASAN",
+      "V8 Linux64 TSAN",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -58,7 +58,7 @@
     "env": {
       "CC": "[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/clang",
       "CXX": "[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/clang++",
-      "GYP_DEFINES": "asan=1 clang=1 lsan=1 target_arch=x64 use_allocator=none v8_target_arch=x64",
+      "GYP_DEFINES": "clang=1 disable_nacl=1 release_extra_cflags=-gline-tables-only target_arch=x64 tsan=1 use_allocator=none use_aura=1 v8_target_arch=x64",
       "LINK": "[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/clang++"
     },
     "name": "gclient runhooks"
@@ -101,13 +101,13 @@
       "mjsunit fuzz-natives cctest message preparser",
       "--flaky-tests",
       "skip",
-      "--asan",
+      "--tsan",
       "--json-test-results",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "env": {
-      "ASAN_SYMBOLIZER_PATH": "[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+      "TSAN_OPTIONS": "external_symbolizer_path=[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer exit_code=0 report_thread_leaks=0 history_size=7 report_destroy_locked=0"
     },
     "name": "Check"
   },
@@ -124,13 +124,13 @@
       "mjsunit fuzz-natives cctest message preparser",
       "--flaky-tests",
       "run",
-      "--asan",
+      "--tsan",
       "--json-test-results",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "env": {
-      "ASAN_SYMBOLIZER_PATH": "[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+      "TSAN_OPTIONS": "external_symbolizer_path=[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer exit_code=0 report_thread_leaks=0 history_size=7 report_destroy_locked=0"
     },
     "name": "Check - flaky"
   }
