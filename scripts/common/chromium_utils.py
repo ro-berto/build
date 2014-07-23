@@ -1287,7 +1287,7 @@ def GetCBuildbotConfigs(chromite_path=None):
     return {}
 
 
-def GetBuildSortKey(options, repo=None, fallback=True):
+def GetBuildSortKey(options):
   """Reads a variety of sources to determine the current build revision.
 
   Build revision is either explicitly specified using the 'build_sort_key'
@@ -1306,10 +1306,6 @@ def GetBuildSortKey(options, repo=None, fallback=True):
 
   Args:
     options: Command-line options structure
-    repo: (str/None) If not None, the repository to get the build sort key
-        for. Otherwise, the build-wide sort key will be used.
-    fallback: (bool) If True, return the build-wide sort key if a repository
-        sort key is not defined.
   Returns: (branch, value) The qualified sortkey value
     branch: (str/None) The name of the branch, or 'None' if there is no branch
         context. Currently this always returns 'None'.
@@ -1317,20 +1313,19 @@ def GetBuildSortKey(options, repo=None, fallback=True):
   Raises: (NoIdentifiedRevision) if no revision could be identified from the
       supplied options.
   """
-  if (not repo) and options.build_sort_key:
+  if options.build_sort_key:
     return options.build_sort_key
 
-  # Construct the build parameter. Use 'repo' as the (optional)
+  # Construct the build parameter. Use 'primary_repo' as the (optional)
   # revision key.
   revision_keys = []
-  repo = repo or options.build_properties.get('primary_repo')
-  if repo:
+  primary_repo = options.build_properties.get('primary_repo')
+  if primary_repo:
     # 'primary_repo' value currently contains a trailing underscore. However,
     # this isn't an obvious thing given its name, so we'll strip it here and
     # remove that expectation.
-    revision_keys.append('got_%s_revision' % (repo.strip('_'),))
-  if (not repo) or fallback:
-    revision_keys.append('got_revision')
+    revision_keys.append('got_%s_revision' % (primary_repo.strip('_'),))
+  revision_keys.append('got_revision')
   for revision_key in revision_keys:
     revision = options.build_properties.get(revision_key)
     if revision:

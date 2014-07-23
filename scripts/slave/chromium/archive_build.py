@@ -80,6 +80,12 @@ class StagerBase(object):
     self.options = options
     self._src_dir = os.path.abspath(options.src_dir)
     self._chrome_dir = os.path.join(self._src_dir, 'chrome')
+    # TODO: This scode should not be grabbing so deeply into WebKit.
+    #       Worse, this code ends up looking at top-of-tree WebKit
+    #       instead of the revision in DEPS.
+    self._webkit_dir = os.path.join(self._src_dir, 'third_party', 'WebKit',
+                                    'Source')
+    self._v8_dir = os.path.join(self._src_dir, 'v8')
 
     build_dir = build_directory.GetBuildOutputDirectory()
     self._build_dir = os.path.join(build_dir, options.target)
@@ -119,24 +125,20 @@ class StagerBase(object):
 
     self._version_file = os.path.join(self._chrome_dir, 'VERSION')
 
-    self._chromium_revision = self._getRevision(
-        options,
-        'default_chromium_revision',
-        None,
-    )
-
-    self._webkit_revision = self._getRevision(
-        options,
-        'default_webkit_revision',
-        'webkit',
-    )
-
-    self._v8_revision = self._getRevision(
-        options,
-        'default_v8_revision',
-        'v8',
-    )
-
+    if options.default_chromium_revision:
+      self._chromium_revision = options.default_chromium_revision
+    else:
+      self._chromium_revision = slave_utils.GetHashOrRevision(
+          os.path.dirname(self._chrome_dir)) # src/ instead of src/chrome
+    if options.default_webkit_revision:
+      self._webkit_revision = options.default_webkit_revision
+    else:
+      self._webkit_revision = slave_utils.GetHashOrRevision(
+          os.path.dirname(self._webkit_dir)) # WebKit/ instead of WebKit/Source
+    if options.default_v8_revision:
+      self._v8_revision = options.default_v8_revision
+    else:
+      self._v8_revision = slave_utils.GetHashOrRevision(self._v8_dir)
     self.last_change_file = os.path.join(self._staging_dir, 'LAST_CHANGE')
     # The REVISIONS file will record the revisions information of the main
     # components Chromium/WebKit/V8.
@@ -153,23 +155,6 @@ class StagerBase(object):
 
     self._dual_upload = options.factory_properties.get('dual_upload', False)
     self._archive_files = None
-
-  @staticmethod
-  def _getRevision(options, option_key, repo):
-    # Use the command-line default, if specified
-    option_value = getattr(options, option_key, None)
-    if option_value:
-      return option_value
-
-    # Use the sort key. We don't use the 'branch' aspect since the archive
-    # itself designates the branch. If this is ever not the case, we need to
-    # factor that in and systematically update archive name generation across
-    # all consuming tools.
-    return chromium_utils.GetBuildSortKey(
-        options,
-        repo=repo,
-        fallback=False,
-    )[1]
 
   def TargetPlatformName(self):
     return self.options.factory_properties.get('target_os',
