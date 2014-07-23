@@ -29,6 +29,7 @@ class GitBranchPoller(PollingChangeSource):
     """
     self.repo_url = repo_url
     assert branches, 'GitBranchPoller: at least one branch is required'
+    self.branches = branches
     self.pollInterval = pollInterval
     self.revlinktmpl = revlinktmpl
     self.workdir = os.path.abspath(workdir)
