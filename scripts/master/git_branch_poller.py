@@ -7,6 +7,7 @@ from buildbot.util import deferredLocked
 from twisted.internet import defer, utils
 from twisted.python import log
 
+import datetime
 import os
 import shutil
 
@@ -98,12 +99,12 @@ class GitBranchPoller(PollingChangeSource):
   @deferredLocked('branch_heads_lock')
   @defer.inlineCallbacks
   def poll(self):
-    def log_error(err, ret):
+    def log_error(err, ret, always_emit_error=False):
       if ret:
         self._log('Polling', self.repo_url, 'failed, retrying in',
                   self.pollInterval, 'seconds')
         # In verbose mode, stderr has already been emitted.
-        if not self.verbose and err.rstrip():
+        if (not self.verbose or always_emit_error) and err.rstrip():
           self._log('stderr:\n%s' % err.rstrip())
 
       return ret
@@ -162,7 +163,8 @@ class GitBranchPoller(PollingChangeSource):
         'show', r'--format=%ct', '--quiet', revision)
       if log_error(err, ret):
         return
-      change_data[revision]['timestamp'] = out.rstrip()
+      change_data[revision]['timestamp'] = datetime.datetime.fromtimestamp(
+        float(out.rstrip()))
 
       out, err, ret = yield self._git(
         'show', r'--format=%B', '--quiet', revision)
@@ -189,7 +191,7 @@ class GitBranchPoller(PollingChangeSource):
           when_timestamp=change_data[revision]['timestamp'],
         )
       except Exception as e:
-        log_error(str(e), 1)
+        log_error(str(e), 1, always_emit_error=True)
         return
 
     # Now that all git operations have succeeded and the poll is complete,
