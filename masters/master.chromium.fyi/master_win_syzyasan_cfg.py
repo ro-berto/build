@@ -34,10 +34,8 @@ S('win_syzyasan_rel', branch='src', treeStableTimer=60)
 #
 T('win_syzyasan_rel_trigger')
 
-win_syzyasan_archive = master_config.GetArchiveUrl('ChromiumFYI',
-                                               'Win SyzyASAN Builder',
-                                               'Win_SyzyASAN_Builder',
-                                               'win32')
+win_syzyasan_archive = master_config.GetGSUtilUrl(
+    'chromium-build-transfer', 'Win SyzyASAN FYI Builder')
 
 tests_1 = [
     'app_list_unittests',
