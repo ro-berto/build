@@ -113,6 +113,12 @@
           "Mac Retina Debug",
           "Win7 Debug (NVIDIA)",
           "Win8 Debug (NVIDIA)"
+        ],
+        "comment": [
+          "Re-enable maps_pixel_test once crbug.com/395914 is resolved."
+        ],
+        "excluded_steps": [
+          "maps_pixel_test"
         ]
       }
     ],
