@@ -26,9 +26,8 @@ defaults['category'] = 'deps'
 ################################################################################
 
 # Archive location
-rel_archive = master_config.GetArchiveUrl('ChromiumWebkit',
-                                          'WebKit Win Builder (deps)',
-                                          'webkit-win-pinned-rel', 'win32')
+rel_archive = master_config.GetGSUtilUrl('chromium-build-transfer',
+                                         'WebKit Win Builder (deps)')
 
 #
 # Trigger scheduler for the dbg builder

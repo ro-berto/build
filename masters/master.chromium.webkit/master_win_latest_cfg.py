@@ -52,9 +52,8 @@ sharded_tests = [
 ################################################################################
 
 # Archive location
-rel_archive = master_config.GetArchiveUrl('ChromiumWebkit',
-                                          'Win Builder',
-                                          'win-latest-rel', 'win32')
+rel_archive = master_config.GetGSUtilUrl('chromium-build-transfer',
+                                         'win-latest-rel')
 
 # Triggerable scheduler for testers
 T('s7_webkit_builder_rel_trigger')

@@ -26,9 +26,8 @@ defaults['category'] = 'layout'
 ################################################################################
 
 # Archive location
-rel_archive = master_config.GetArchiveUrl('ChromiumWebkit',
-                                          'WebKit Win Builder',
-                                          'webkit-win-latest-rel', 'win32')
+rel_archive = master_config.GetGSUtilUrl('chromium-build-transfer',
+                                         'WebKit Win Builder')
 
 #
 # Triggerable scheduler for testers
@@ -112,9 +111,8 @@ F('f_webkit_win_oilpan_rel', win().ChromiumFactory(
 ################################################################################
 
 # Archive location
-dbg_archive = master_config.GetArchiveUrl('ChromiumWebkit',
-                                          'WebKit Win Builder (dbg)',
-                                          'webkit-win-latest-dbg', 'win32')
+dbg_archive = master_config.GetGSUtilUrl('chromium-build-transfer',
+                                         'WebKit Win Builder (dbg)')
 #
 # Triggerable scheduler for testers
 #

@@ -42,9 +42,8 @@ defaults['category'] = 'layout'
 ################################################################################
 
 # Archive location
-rel_archive = master_config.GetArchiveUrl('ChromiumWebkit',
-                                          'WebKit Mac Builder',
-                                          'webkit-mac-latest-rel', 'mac')
+rel_archive = master_config.GetGSUtilUrl('chromium-build-transfer',
+                                         'WebKit Mac Builder')
 
 #
 # Triggerable scheduler for testers
@@ -168,9 +167,8 @@ F('f_webkit_mac_oilpan_rel', mac().ChromiumFactory(
 ################################################################################
 
 # Archive location
-dbg_archive = master_config.GetArchiveUrl('ChromiumWebkit',
-                                          'WebKit Mac Builder (dbg)',
-                                          'webkit-mac-latest-dbg', 'mac')
+dbg_archive = master_config.GetGSUtilUrl('chromium-build-transfer',
+                                         'WebKit Mac Builder (dbg)')
 
 #
 # Triggerable scheduler for testers

@@ -32,9 +32,8 @@ defaults['category'] = 'deps'
 
 # Archive location
 rel_builddir = 'webkit-mac-pinned-rel'
-rel_archive = master_config.GetArchiveUrl('ChromiumWebkit',
-    'WebKit Mac Builder (deps)',
-    rel_builddir, 'mac')
+rel_archive = master_config.GetGSUtilUrl(
+    'chromium-build-transfer', 'WebKit Mac Builder (deps)')
 
 #
 # Triggerable scheduler for the dbg builder
