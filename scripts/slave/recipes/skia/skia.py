@@ -14,20 +14,12 @@ DEPS = [
 
 
 def GenSteps(api):
-  api.skia.setup()
-  yield api.skia.common_steps()
-  role = api.skia.c.BUILDER_NAME.split('-')[0]
+  yield api.skia.gen_steps()
 
-  if role == 'Test':
-    yield api.skia.test_steps()
-
-  # Run the Perf steps on Test bots in Debug mode to catch any assertions.
-  if (role == 'Perf' or
-      (role == 'Test' and 'Debug' in api.skia.c.BUILDER_NAME)):
-    yield api.skia.perf_steps()
 
 def GenTests(api):
   builders = [
+    'Build-Ubuntu13.10-GCC4.8-x86_64-Debug',
     'Perf-ChromeOS-Daisy-MaliT604-Arm7-Release',
     'Test-Android-Nexus10-MaliT604-Arm7-Release',
     'Test-Android-Xoom-Tegra2-Arm7-Release',

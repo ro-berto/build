@@ -111,8 +111,8 @@ class DefaultFlavorUtils(base_flavor.BaseFlavorUtils):
     """Wrapper for the Step API; runs a step as appropriate for this flavor."""
     path_to_app = self._skia_api.m.chromium.output_dir.join(cmd[0])
     if (self._skia_api.m.platform.is_linux and
-        'x86_64' in self._skia_api.builder_name and
-        not 'TSAN' in self._skia_api.builder_name):
+        'x86_64' in self._skia_api.c.BUILDER_NAME and
+        not 'TSAN' in self._skia_api.c.BUILDER_NAME):
       new_cmd = ['catchsegv', path_to_app]
     else:
       new_cmd = [path_to_app]

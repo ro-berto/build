@@ -5,6 +5,9 @@
 
 from slave import recipe_api
 from slave import recipe_config_types
+from common.skia import builder_name_schema
+
+import default_flavor
 
 
 class SKPDirs(object):
@@ -46,29 +49,39 @@ class SKPDirs(object):
 
 class SkiaApi(recipe_api.RecipeApi):
 
-  def setup(self):
-    self.builder_name = self.m.properties['buildername']
-    self.set_config('skia', BUILDER_NAME=self.builder_name)
+  def gen_steps(self):
+    """Generate all build steps."""
+    # Setup
+    self.set_config('skia', BUILDER_NAME=self.m.properties['buildername'])
 
-    join = self.m.path.join
-    pardir = self.m.path.pardir
-
+    # Set some important paths.
+    slave_dir = self.m.path['slave_build']
+    skia_dir = slave_dir.join('skia')
     self.perf_data_dir = None
-    if self.builder_name.startswith('Perf'):
-      self.perf_data_dir = join(pardir, pardir, pardir, pardir, 'perfdata',
-                                self.builder_name, 'data')
-
+    if self.c.role == builder_name_schema.BUILDER_ROLE_PERF:
+      self.perf_data_dir = slave_dir.join('perfdata', self.c.BUILDER_NAME,
+                                          'data')
     self.resource_dir = 'resources'
-    self.skimage_expected_dir = join('expectations', 'skimage')
-    self.skimage_in_dir = join(pardir, 'skimage_in')
-    self.skimage_out_dir = join('out', self.c.build_config, 'skimage_out')
+    self.skimage_expected_dir = skia_dir.join('expectations', 'skimage')
+    self.skimage_in_dir = slave_dir.join('skimage_in')
+    self.skimage_out_dir = skia_dir.join('out', self.c.configuration,
+                                         'skimage_out')
+    self.local_skp_dirs = SKPDirs(str(slave_dir.join('playback')),
+                                  self.c.BUILDER_NAME, self.m.path.sep)
+    self.storage_skp_dirs = SKPDirs('playback', self.c.BUILDER_NAME, '/')
 
-    self.local_skp_dirs = SKPDirs(join(pardir, 'playback'), self.builder_name,
-                                  self.m.path.sep)
-    self.storage_skp_dirs = SKPDirs('playback', self.builder_name, '/')
+    # TODO(borenet): Switch this by builder type.
+    self.flavor = default_flavor.DefaultFlavorUtils(self)
+    self.device_dirs = self.flavor.get_device_dirs()
 
-    self.c.flavor.set_skia_api(self)
-    self.device_dirs = self.c.flavor.get_device_dirs()
+    # Start yielding steps.
+    yield self.common_steps()
+
+    if self.c.do_test_steps:
+      yield self.test_steps()
+
+    if self.c.do_perf_steps:
+      yield self.perf_steps()
 
   def checkout_steps(self):
     """Run the steps to obtain a checkout of Skia."""
@@ -105,11 +118,11 @@ class SkiaApi(recipe_api.RecipeApi):
     """
     args = ['tests', '--verbose', '--tmpDir', self.device_dirs.tmp_dir,
             '--resourcePath', self.device_dirs.resource_dir]
-    if 'Xoom' in self.builder_name:
+    if 'Xoom' in self.c.BUILDER_NAME:
       # WritePixels fails on Xoom due to a bug which won't be fixed very soon.
       # http://code.google.com/p/skia/issues/detail?id=1699
       args.extend(['--match', '~WritePixels'])
-    yield self.c.flavor.step('tests', args)
+    yield self.flavor.step('tests', args)
 
   def run_gm(self):
     """Run the Skia GM test.
@@ -117,10 +130,10 @@ class SkiaApi(recipe_api.RecipeApi):
     This code was adapted from
     https://skia.googlesource.com/buildbot.git/+/aa46f57/slave/skia_slave_scripts/run_gm.py
     """
-    output_dir = self.c.flavor.device_path_join(self.device_dirs.gm_actual_dir,
-                                                self.builder_name)
-    json_summary_path = self.c.flavor.device_path_join(output_dir,
-                                                       'actual_results.json')
+    output_dir = self.flavor.device_path_join(self.device_dirs.gm_actual_dir,
+                                              self.c.BUILDER_NAME)
+    json_summary_path = self.flavor.device_path_join(output_dir,
+                                                     'actual_results.json')
     args = ['gm', '--verbose', '--writeChecksumBasedFilenames',
             '--mismatchPath', output_dir,
             '--missingExpectationsPath', output_dir,
@@ -130,17 +143,17 @@ class SkiaApi(recipe_api.RecipeApi):
                 'ExpectationsMismatch',
             '--resourcePath', self.device_dirs.resource_dir]
 
-    device_gm_expectations_path = self.c.flavor.device_path_join(
+    device_gm_expectations_path = self.flavor.device_path_join(
         self.device_dirs.gm_expected_dir, 'expected-results.json')
-    if self.c.flavor.device_path_exists(device_gm_expectations_path):
+    if self.flavor.device_path_exists(device_gm_expectations_path):
       args.extend(['--readPath', device_gm_expectations_path])
 
-    device_ignore_failures_path = self.c.flavor.device_path_join(
+    device_ignore_failures_path = self.flavor.device_path_join(
         self.device_dirs.gm_expected_dir, 'ignored-tests.txt')
-    if self.c.flavor.device_path_exists(device_ignore_failures_path):
+    if self.flavor.device_path_exists(device_ignore_failures_path):
       args.extend(['--ignoreFailuresFile', device_ignore_failures_path])
 
-    if 'Xoom' in self.builder_name:
+    if 'Xoom' in self.c.BUILDER_NAME:
       # The Xoom's GPU will crash on some tests if we don't use this flag.
       # http://code.google.com/p/skia/issues/detail?id=1434
       args.append('--resetGpuContext')
@@ -151,35 +164,35 @@ class SkiaApi(recipe_api.RecipeApi):
     # And not on Windows, which keeps running out of memory (sigh)
     # See https://code.google.com/p/skia/issues/detail?id=1783 ('Win7 Test bots
     # have out-of-memory issues')
-    if (not 'Android' in self.builder_name and
-        not 'ChromeOS' in self.builder_name and
-        not 'Win7' in self.builder_name):
+    if (not 'Android' in self.c.BUILDER_NAME and
+        not 'ChromeOS' in self.c.BUILDER_NAME and
+        not 'Win7' in self.c.BUILDER_NAME):
       args.extend(['--deferred', '--pipe', '--replay', '--rtree', '--serialize',
                    '--tileGrid'])
 
-    if 'Mac' in self.builder_name:
+    if 'Mac' in self.c.BUILDER_NAME:
       # msaa16 is flaky on Macs (driver bug?) so we skip the test for now
       args.extend(['--config', 'defaults', '~msaa16'])
-    elif ('RazrI' in self.builder_name or
-          'Nexus10' in self.builder_name or
-          'Nexus4' in self.builder_name):
+    elif ('RazrI' in self.c.BUILDER_NAME or
+          'Nexus10' in self.c.BUILDER_NAME or
+          'Nexus4' in self.c.BUILDER_NAME):
       args.extend(['--config', 'defaults', 'msaa4'])
-    elif 'ANGLE' in self.builder_name:
+    elif 'ANGLE' in self.c.BUILDER_NAME:
       args.extend(['--config', 'angle'])
-    elif (not 'NoGPU' in self.builder_name and
-          not 'ChromeOS' in self.builder_name and
-          not 'GalaxyNexus' in self.builder_name and
-          not 'IntelRhb' in self.builder_name):
+    elif (not 'NoGPU' in self.c.BUILDER_NAME and
+          not 'ChromeOS' in self.c.BUILDER_NAME and
+          not 'GalaxyNexus' in self.c.BUILDER_NAME and
+          not 'IntelRhb' in self.c.BUILDER_NAME):
       args.extend(['--config', 'defaults', 'msaa16'])
-    if 'Valgrind' in self.builder_name:
+    if 'Valgrind' in self.c.BUILDER_NAME:
       # Poppler has lots of memory errors. Skip PDF rasterisation so we don't
       # have to see them
       # Bug: https://code.google.com/p/skia/issues/detail?id=1806
       args.extend(['--pdfRasterizers'])
-    if 'ZeroGPUCache' in self.builder_name:
+    if 'ZeroGPUCache' in self.c.BUILDER_NAME:
       args.extend(['--gpuCacheSize', '0', '0', '--config', 'gpu'])
-    if self.builder_name in ('Test-Win7-ShuttleA-HD2000-x86-Release',
-                             'Test-Win7-ShuttleA-HD2000-x86-Release-Trybot'):
+    if self.c.BUILDER_NAME in ('Test-Win7-ShuttleA-HD2000-x86-Release',
+                               'Test-Win7-ShuttleA-HD2000-x86-Release-Trybot'):
       args.extend(['--useDocumentInsteadOfDevice',
                    '--forcePerspectiveMatrix',
                    # Disabling the following tests because they crash GM in
@@ -191,7 +204,7 @@ class SkiaApi(recipe_api.RecipeApi):
                    '~clipped-bitmap',
                    '~xfermodes3'])
 
-    yield self.c.flavor.step('gm', args)
+    yield self.flavor.step('gm', args)
 
   def test_steps(self):
     """Run all Skia test executables."""
