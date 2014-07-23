@@ -1510,6 +1510,46 @@ def GetMasterDevParameters(filename='master_cfg_params.json'):
   return {}
 
 
+def FileExclusions():
+  all_platforms = ['.landmines', 'obj', 'gen', '.ninja_deps', '.ninja_log']
+  # Skip files that the testers don't care about. Mostly directories.
+  if IsWindows():
+    # Remove obj or lib dir entries
+    return all_platforms + ['cfinstaller_archive', 'lib', 'installer_archive']
+  if IsMac():
+    return all_platforms + [
+      # We don't need the arm bits v8 builds.
+      'd8_arm', 'v8_shell_arm',
+      # pdfsqueeze is a build helper, no need to copy it to testers.
+      'pdfsqueeze',
+      # We copy the framework into the app bundle, we don't need the second
+      # copy outside the app.
+      # TODO(mark): Since r28431, the copy in the build directory is actually
+      # used by tests.  Putting two copies in the .zip isn't great, so maybe
+      # we can find another workaround.
+      # 'Chromium Framework.framework',
+      # 'Google Chrome Framework.framework',
+      # We copy the Helper into the app bundle, we don't need the second
+      # copy outside the app.
+      'Chromium Helper.app',
+      'Google Chrome Helper.app',
+      'App Shim Socket',
+      '.deps', 'obj.host', 'obj.target', 'lib'
+    ]
+  if IsLinux():
+    return all_platforms + [
+      # intermediate build directories (full of .o, .d, etc.).
+      'appcache', 'glue', 'lib.host', 'obj.host',
+      'obj.target', 'src', '.deps',
+      # scons build cruft
+      '.sconsign.dblite',
+      # build helper, not needed on testers
+      'mksnapshot',
+    ]
+
+  return all_platforms
+
+
 def DatabaseSetup(buildmaster_config, require_dbconfig=False):
   """Read database credentials in the master directory."""
   if os.path.isfile('.dbconfig'):
