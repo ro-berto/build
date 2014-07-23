@@ -140,7 +140,7 @@ class GitBranchPoller(PollingChangeSource):
     if log_error(err, ret):
       return
 
-    change_data = {revision: {} for revision in new_branch_heads}
+    change_data = {revision: {} for revision in out.splitlines()}
 
     # Accumulate data to be sent to the master from earliest to latest revision.
     for revision in reversed(out.splitlines()):
