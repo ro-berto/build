@@ -1254,10 +1254,12 @@ class AnnotatedCommand(ProcessLogShellStep):
     env = {
         'BUILDBOT_BLAMELIST': WithProperties('%(blamelist:-[])s'),
         'BUILDBOT_BRANCH': WithProperties('%(branch:-None)s'),
+        'BUILDBOT_BUILDBOTURL': WithProperties('%(buildbotURL:-None)s'),
         'BUILDBOT_BUILDERNAME': WithProperties('%(buildername:-None)s'),
         'BUILDBOT_BUILDNUMBER': WithProperties('%(buildnumber:-None)s'),
         'BUILDBOT_CLOBBER': clobber or WithProperties('%(clobber:+1)s'),
         'BUILDBOT_GOT_REVISION': WithProperties('%(got_revision:-None)s'),
+        'BUILDBOT_MASTERNAME': WithProperties('%(mastername:-None)s'),
         'BUILDBOT_REVISION': WithProperties('%(revision:-None)s'),
         'BUILDBOT_SCHEDULER': WithProperties('%(scheduler:-None)s'),
         'BUILDBOT_SLAVENAME': WithProperties('%(slavename:-None)s'),
