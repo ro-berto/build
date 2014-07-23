@@ -146,6 +146,11 @@ def no_test_results(c):
 
 
 @config_ctx()
+def no_variants(c):
+  c.testing.test_args.add('--no-variants')
+
+
+@config_ctx()
 def novfp3(c):
   c.testing.test_args.add('--shell_flags="--noenable-vfp3"')
 

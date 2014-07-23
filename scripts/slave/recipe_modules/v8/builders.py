@@ -687,7 +687,7 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'V8 Arm GC Stress': {
-        'v8_apply_config': ['gc_stress'],
+        'v8_apply_config': ['gc_stress', 'no_variants'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_ARCH': 'arm',
