@@ -24,11 +24,8 @@ def linux_android():
 
 defaults['category'] = '5android'
 
-android_dbg_archive = master_config.GetArchiveUrl(
-    'ChromiumLinux',
-    'Android Builder (dbg)',
-    'Android_Builder__dbg_',
-    'linux')
+android_dbg_archive = master_config.GetGSUtilUrl(
+    'chromium-android', 'android_main_dbg')
 
 android_rel_archive = master_config.GetGSUtilUrl(
     'chromium-android', 'android_main_rel')
