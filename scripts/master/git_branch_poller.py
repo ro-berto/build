@@ -188,7 +188,7 @@ class GitBranchPoller(PollingChangeSource):
           when_timestamp=change_data[revision]['timestamp'],
         )
       except Exception as e:
-        log_error(e.message, 1)
+        log_error(str(e), 1)
         return
 
     # Now that all git operations have succeeded and the poll is complete,
