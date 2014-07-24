@@ -355,6 +355,15 @@ def GenTests(api):
     properties('tryserver.blink', 'linux_blink_rel') +
     api.step_data('webkit_unit_tests', retcode=1)
   )
+  for test in (
+          'blink_platform_unittests',
+          'blink_heap_unittests',
+          'wtf_unittests'):
+    yield (
+      api.test('%s_failure' % test) +
+      properties('tryserver.blink', 'linux_blink_rel') +
+      api.step_data(test, retcode=1)
+    )
 
   # This tests what happens if something goes horribly wrong in
   # run-webkit-tests and we return an internal error; the step should
