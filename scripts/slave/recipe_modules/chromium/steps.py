@@ -472,6 +472,7 @@ class NaclIntegrationTest(Test):  # pylint: disable=W0232
                           'buildbot_nacl_integration.py'),
         args,
         can_fail_build=(not suffix),
+        always_run=True,
         step_test_data=lambda: api.m.json.test_api.output([]))
 
   def has_valid_results(self, api, suffix):
