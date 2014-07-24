@@ -53,7 +53,7 @@ config = {
         properties: Properties(**{}),
       },
       'name': 'x86-generic paladin',
-      'slavenames': ['build119-m2'],
+      'slavenames': ['build174-m2'],
     },
     {
       'auto_reboot': False,
@@ -994,6 +994,7 @@ config = {
     <BuildSlave 'build156-m2', (no builders yet)>,
     <BuildSlave 'build89-m2', (no builders yet)>,
     <BuildSlave 'build93-m2', (no builders yet)>,
+    <BuildSlave 'build174-m2', (no builders yet)>,
     <BuildSlave 'build86-m2', (no builders yet)>,
     <BuildSlave 'build118-m2', (no builders yet)>,
     <BuildSlave 'build112-m2', (no builders yet)>,
@@ -1001,7 +1002,6 @@ config = {
     <BuildSlave 'build90-m2', (no builders yet)>,
     <BuildSlave 'build84-m2', (no builders yet)>,
     <BuildSlave 'build94-m2', (no builders yet)>,
-    <BuildSlave 'build119-m2', (no builders yet)>,
     <BuildSlave 'build87-m2', (no builders yet)>,
   ],
   'status': [
