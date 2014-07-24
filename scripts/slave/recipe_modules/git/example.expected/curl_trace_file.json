@@ -84,5 +84,21 @@
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "git status"
+  },
+  {
+    "cmd": [
+      "git",
+      "status"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "git status can_fail_build"
+  },
+  {
+    "cmd": [
+      "git",
+      "status"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "git status cannot_fail_build"
   }
 ]

@@ -33,6 +33,12 @@ def GenSteps(api):
   # which behaves like api.step(), but automatically sets the name of the step.
   yield api.git('status', cwd=api.path['checkout'])
 
+  yield api.git('status', name='git status can_fail_build',
+                can_fail_build=True)
+
+  yield api.git('status', name='git status cannot_fail_build',
+                can_fail_build=False)
+
 
 def GenTests(api):
   yield api.test('basic')
@@ -45,3 +51,13 @@ def GenTests(api):
 
   yield api.test('curl_trace_file') + api.properties(
       revision='refs/foo/bar', use_curl_trace=True)
+
+  yield (
+    api.test('can_fail_build') +
+    api.step_data('git status can_fail_build', retcode=1)
+  )
+
+  yield (
+    api.test('cannot_fail_build') +
+    api.step_data('git status cannot_fail_build', retcode=1)
+  )

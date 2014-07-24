@@ -3,100 +3,102 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\git_setup.py",
+      "[BUILD]/scripts/slave/git_setup.py",
       "--path",
-      "[SLAVE_BUILD]\\src",
+      "[SLAVE_BUILD]/src",
       "--url",
-      "https://chromium.googlesource.com/chromium/src.git",
-      "--git_cmd_path",
-      "[DEPOT_TOOLS]\\git.bat"
+      "https://chromium.googlesource.com/chromium/src.git"
     ],
     "name": "git setup"
   },
   {
     "cmd": [
-      "[DEPOT_TOOLS]\\git.bat",
+      "git",
       "fetch",
       "origin",
       "master",
       "--recurse-submodules"
     ],
-    "cwd": "[SLAVE_BUILD]\\src",
+    "cwd": "[SLAVE_BUILD]/src",
     "name": "git fetch"
   },
   {
     "cmd": [
-      "[DEPOT_TOOLS]\\git.bat",
+      "git",
       "checkout",
       "-f",
       "FETCH_HEAD"
     ],
-    "cwd": "[SLAVE_BUILD]\\src",
+    "cwd": "[SLAVE_BUILD]/src",
     "name": "git checkout"
   },
   {
     "cmd": [
-      "[DEPOT_TOOLS]\\git.bat",
+      "git",
       "clean",
       "-f",
       "-d",
       "-x"
     ],
-    "cwd": "[SLAVE_BUILD]\\src",
+    "cwd": "[SLAVE_BUILD]/src",
     "name": "git clean"
   },
   {
     "cmd": [
-      "[DEPOT_TOOLS]\\git.bat",
+      "git",
       "submodule",
       "sync"
     ],
-    "cwd": "[SLAVE_BUILD]\\src",
+    "cwd": "[SLAVE_BUILD]/src",
     "name": "submodule sync"
   },
   {
     "cmd": [
-      "[DEPOT_TOOLS]\\git.bat",
+      "git",
       "submodule",
       "update",
       "--init",
       "--recursive"
     ],
-    "cwd": "[SLAVE_BUILD]\\src",
+    "cwd": "[SLAVE_BUILD]/src",
     "name": "submodule update"
   },
   {
     "cmd": [
-      "[DEPOT_TOOLS]\\git.bat",
+      "git",
       "fetch",
       "origin",
       "--tags"
     ],
-    "cwd": "[SLAVE_BUILD]\\src",
+    "cwd": "[SLAVE_BUILD]/src",
     "name": "git fetch tags"
   },
   {
     "cmd": [
-      "[DEPOT_TOOLS]\\git.bat",
+      "git",
       "status"
     ],
-    "cwd": "[SLAVE_BUILD]\\src",
+    "cwd": "[SLAVE_BUILD]/src",
     "name": "git status"
   },
   {
     "cmd": [
-      "[DEPOT_TOOLS]\\git.bat",
+      "git",
       "status"
     ],
-    "cwd": "[SLAVE_BUILD]\\src",
+    "cwd": "[SLAVE_BUILD]/src",
     "name": "git status can_fail_build"
   },
   {
     "cmd": [
-      "[DEPOT_TOOLS]\\git.bat",
+      "git",
       "status"
     ],
-    "cwd": "[SLAVE_BUILD]\\src",
-    "name": "git status cannot_fail_build"
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "git status cannot_fail_build",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_FAILURE@@@"
+    ]
   }
 ]
