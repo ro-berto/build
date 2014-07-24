@@ -115,10 +115,10 @@
           "Win8 Debug (NVIDIA)"
         ],
         "comment": [
-          "Re-enable maps_pixel_test once crbug.com/395914 is resolved."
+          "Any steps whose results must be temporarily ignored (e.g.",
+          "due to flakiness) can be added here."
         ],
         "excluded_steps": [
-          "maps_pixel_test"
         ]
       }
     ],

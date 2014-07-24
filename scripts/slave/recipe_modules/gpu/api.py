@@ -230,16 +230,14 @@ class GpuApi(recipe_api.RecipeApi):
       yield self._run_isolate(test, args=['--use-gpu-in-tests'])
 
     # Google Maps Pixel tests.
-    # TODO(kbr): re-enable on Win try servers. crbug.com/395914
-    if not (self.m.platform.is_win and self.m.tryserver.is_tryserver):
-      yield self._run_isolated_telemetry_gpu_test(
-        'maps', name='maps_pixel_test',
-        args=[
-          '--build-revision',
-          str(self._build_revision),
-          '--test-machine-name',
-          self.m.properties['buildername']
-        ])
+    yield self._run_isolated_telemetry_gpu_test(
+      'maps', name='maps_pixel_test',
+      args=[
+        '--build-revision',
+        str(self._build_revision),
+        '--test-machine-name',
+        self.m.properties['buildername']
+      ])
 
     # Pixel tests.
     # Try servers pull their results from cloud storage; the other
