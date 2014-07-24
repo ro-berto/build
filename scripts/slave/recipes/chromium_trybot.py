@@ -752,6 +752,22 @@ def GenTests(api):
   )
 
   yield (
+    api.test('check_swarming_version_failure') +
+    props(buildername='linux_chromium_rel_swarming') +
+    api.platform.name('linux') +
+    api.step_data('swarming.py --version', retcode=1) +
+    api.override_step_data('read test spec', api.json.output({
+        'gtest_tests': [
+          {
+            'test': 'base_unittests',
+            'swarming': {'can_use_on_swarming_builders': True},
+          },
+        ],
+      })
+      )
+  )
+
+  yield (
     api.test('checklicenses_failure') +
     props() +
     api.platform.name('linux') +
