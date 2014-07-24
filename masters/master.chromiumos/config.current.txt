@@ -985,7 +985,7 @@ config = {
       periodicBuildTimer: 86400,
     },
   ],
-  'slavePortnum': 8114,
+  'slavePortnum': 8182,
   'slaves': [
     <BuildSlave 'build162-m2', (no builders yet)>,
     <BuildSlave 'build85-m2', (no builders yet)>,
@@ -1005,8 +1005,8 @@ config = {
     <BuildSlave 'build87-m2', (no builders yet)>,
   ],
   'status': [
-    <WebStatus on port tcp:8014>,
-    <WebStatus on port tcp:8214>,
+    <WebStatus on port tcp:8082>,
+    <WebStatus on port tcp:8282>,
     <master.status_logger.StatusEventLogger instance>,
   ],
 }
