@@ -132,3 +132,15 @@ def GenTests(api):
 
   yield TestFailures(wrong_results=False)
   yield TestFailures(wrong_results=True)
+  yield (
+    api.test('full_%s_%s_flaky_test_failures' % (
+        _sanitize_nonalpha(mastername), _sanitize_nonalpha(buildername))) +
+    api.properties.generic(mastername=mastername,
+                           buildername=buildername,
+                           parent_buildername=bot_config.get(
+                               'parent_buildername')) +
+    api.platform(bot_config['testing']['platform'],
+                 v8_config_kwargs.get('TARGET_BITS', 64)) +
+    api.step_data('Check - flaky', retcode=1)
+  )
+
