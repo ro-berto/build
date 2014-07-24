@@ -123,3 +123,13 @@ def GenTests(api):
     ) +
     api.platform.name('win')
   )
+
+  yield (
+    api.test('killall_gnome_keyring_failure') +
+    api.properties.scheduled(
+      build_config='Release',
+      mastername='chromium.gpu.fyi',
+    ) +
+    api.platform.name('linux') +
+    api.step_data('killall gnome-keyring-daemon', retcode=1)
+  )
