@@ -278,9 +278,9 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD",
+      "src@170242",
       "--revision",
-      "src/third_party/WebKit@HEAD",
+      "src/third_party/WebKit@124383",
       "--force"
     ],
     "name": "bot_update (without patch)",

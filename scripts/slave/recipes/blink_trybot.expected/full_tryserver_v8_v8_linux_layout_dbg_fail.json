@@ -274,7 +274,9 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD",
+      "src@43426",
+      "--revision",
+      "src/third_party/WebKit@124383",
       "--revision",
       "src/v8@bleeding_edge:HEAD",
       "--force"

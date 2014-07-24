@@ -280,6 +280,11 @@ def GenSteps(api):
 
   if not bot_config['compile_only']:
     def deapply_patch_fn(_failing_steps):
+      bot_update_json = api.step_history['bot_update'].json.output
+      api.gclient.c.revisions['src'] = str(
+          bot_update_json['properties']['got_revision'])
+      api.gclient.c.revisions['src/third_party/WebKit'] = str(
+          bot_update_json['properties']['got_webkit_revision'])
       yield api.bot_update.ensure_checkout(patch=False, force=True,
                                            always_run=True)
 
