@@ -105,3 +105,9 @@ def GenSteps(api):
 def GenTests(api):
   yield api.test('basic') + api.properties.scheduled()
   yield api.test('trybot') + api.properties.tryserver()
+
+  yield (
+    api.test('check_ecs_deps_fail') +
+    api.properties.scheduled() +
+    api.step_data('check ecs deps', retcode=1)
+  )
