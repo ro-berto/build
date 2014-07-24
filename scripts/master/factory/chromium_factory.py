@@ -485,6 +485,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddGTestTestStep('app_list_unittests', fp)
     if R('app_list_unittests_br'):
       f.AddBuildrunnerGTest('app_list_unittests', fp)
+    if R('athena_unittests'):
+      f.AddGTestTestStep('athena_unittests', fp)
+    if R('athena_unittests_br'):
+      f.AddBuildrunnerGTest('athena_unittests', fp)
     if R('message_center_unittests'):
       f.AddGTestTestStep('message_center_unittests', fp)
     if R('message_center_unittests_br'):

@@ -37,6 +37,7 @@ chromeos_asan_archive = master_config.GetArchiveUrl(
 # Tests that are single-machine shard-safe.
 sharded_tests = [
   'aura_unittests',
+  'athena_unittests',
   'base_unittests',
   'browser_tests',
   'cacheinvalidation_unittests',
@@ -70,6 +71,7 @@ sharded_tests = [
 #
 linux_aura_options = [
   'aura_builder',
+  'athena_unittests',
   'base_unittests',
   'browser_tests',
   'cacheinvalidation_unittests',
@@ -154,6 +156,7 @@ asan_tests_2 = [
 ]
 
 asan_tests_3 = [
+  'athena_unittests',
   'browser_tests',
   'components_unittests',
   'display_unittests',
