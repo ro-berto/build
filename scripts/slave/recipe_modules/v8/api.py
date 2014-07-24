@@ -36,6 +36,11 @@ TEST_CONFIGS = {
     'test_args': ['--no-variants', '--shell_flags="--optimize-for-size"'],
   },
   'test262': {
+    'name': 'Test262 - no variants',
+    'tests': 'test262',
+    'test_args': ['--no-variants'],
+  },
+  'test262_variants': {
     'name': 'Test262',
     'tests': 'test262',
   },

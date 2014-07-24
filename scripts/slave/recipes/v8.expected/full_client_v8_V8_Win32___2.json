@@ -198,13 +198,14 @@
       "ia32",
       "--testname",
       "test262",
+      "--no-variants",
       "--shard_count=2",
       "--shard_run=2",
       "--json-test-results",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]\\v8",
-    "name": "Test262"
+    "name": "Test262 - no variants"
   },
   {
     "cmd": [

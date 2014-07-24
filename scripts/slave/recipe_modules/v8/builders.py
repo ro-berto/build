@@ -63,7 +63,7 @@ BUILDERS = {
           'optimize_for_size',
           'webkit',
           'benchmarks',
-          'test262',
+          'test262_variants',
           'mozilla',
         ],
         'testing': {'platform': 'linux'},
@@ -79,7 +79,7 @@ BUILDERS = {
         'tests': [
           'v8testing',
           'benchmarks',
-          'test262',
+          'test262_variants',
           'mozilla',
           'simpleleak',
         ],
