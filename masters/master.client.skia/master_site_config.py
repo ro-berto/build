@@ -10,9 +10,9 @@ from config_bootstrap import Master
 
 class Skia(Master.Master3):
   project_name = 'Skia'
-  master_port = 8053
-  slave_port = 8153
-  master_port_alt = 8253
+  master_port = 8084
+  slave_port = 8184
+  master_port_alt = 8284
   repo_url = 'https://skia.googlesource.com/skia.git'
   production_host = None
   is_production_host = False
