@@ -590,7 +590,7 @@ def GenSteps(api):
     if api.platform.is_win:
       yield api.chromium.taskkill()
     bot_update_json = api.step_history['bot_update'].json.output
-    api.gclient.c.solutions[0].revision = str(
+    api.gclient.c.revisions['src'] = str(
         bot_update_json['properties']['got_revision'])
     yield api.bot_update.ensure_checkout(force=True,
                                          patch=False,
