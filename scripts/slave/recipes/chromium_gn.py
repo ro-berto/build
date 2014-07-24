@@ -166,19 +166,7 @@ def GenSteps(api):
   yield api.chromium.runhooks()
 
   yield api.chromium.run_gn(use_goma=True)
-
-  if api.tryserver.is_tryserver:
-    yield api.chromium.compile(
-        targets=['all'], abort_on_failure=False, can_fail_build=False)
-    if api.step_history.last_step().retcode != 0:
-      api.gclient.set_config('chromium_lkcr')
-
-      yield api.bot_update.ensure_checkout(force=True, suffix='lkcr')
-      yield api.chromium.runhooks()
-      yield api.chromium.run_gn()
-      yield api.chromium.compile(targets=['all'], force_clobber=True)
-  else:
-    yield api.chromium.compile(targets=['all'])
+  yield api.chromium.compile(targets=['all'])
 
   # TODO(dpranke): crbug.com/353854. Run gn_unittests and other tests
   # when they are also being run as part of the try jobs.
