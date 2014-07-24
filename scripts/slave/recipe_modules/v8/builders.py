@@ -753,14 +753,14 @@ BUILDERS = {
         'tests': ['mjsunit', 'webkit', 'benchmarks', 'mozilla'],
         'testing': {'platform': 'linux'},
       },
-      'V8 Linux - full debug builder': {
+      'V8 Linux - full debug': {
         'chromium_apply_config': ['no_optimized_debug'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
         },
-        'bot_type': 'builder',
-        'build_gs_archive': 'linux_dbg_archive',
+        'bot_type': 'builder_tester',
+        'tests': ['v8testing'],
         'testing': {'platform': 'linux'},
       },
       'V8 Random Deopt Fuzzer - debug': {
@@ -772,26 +772,6 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'tests': ['deopt'],
         'testing': {'platform': 'linux'},
-      },
-      'V8 Win32 - full debug builder': {
-        'chromium_apply_config': ['no_optimized_debug'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder',
-        'build_gs_archive': 'win32_dbg_archive',
-        'testing': {'platform': 'win'},
-      },
-      'V8 Mac - full debug': {
-        'chromium_apply_config': ['no_optimized_debug'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'tests': ['v8testing', 'webkit', 'mozilla'],
-        'testing': {'platform': 'mac'},
       },
 ####### Category: NaCl
 # TODO(machenbach): Add MS Windows builder for nacl/v8.

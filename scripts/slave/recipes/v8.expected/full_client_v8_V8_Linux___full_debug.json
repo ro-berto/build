@@ -3,19 +3,11 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\kill_processes.py"
-    ],
-    "name": "taskkill"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]\\scripts\\slave\\bot_update.py",
+      "[BUILD]/scripts/slave/bot_update.py",
       "--master",
       "client.v8",
       "--builder",
-      "V8 Win32 - full debug builder",
+      "V8 Linux - full debug",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -51,7 +43,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]\\gclient.py",
+      "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
     "env": {
@@ -63,7 +55,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\cleanup_temp.py"
+      "[BUILD]/scripts/slave/cleanup_temp.py"
     ],
     "name": "cleanup_temp"
   },
@@ -71,13 +63,13 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\compile.py",
+      "[BUILD]/scripts/slave/compile.py",
       "--target",
       "Debug",
       "--src-dir",
-      "[SLAVE_BUILD]\\v8",
+      "[SLAVE_BUILD]/v8",
       "--build-tool",
-      "vs",
+      "make",
       "--"
     ],
     "name": "compile"
@@ -86,18 +78,38 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\zip_build.py",
+      "[BUILD]/scripts/slave/v8/v8testing.py",
       "--target",
       "Debug",
-      "--build-url",
-      "gs://chromium-v8/v8-win32-dbg",
-      "--src-dir",
-      "v8",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8 Win32 - full debug builder\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": null, \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8 Win32 - full debug builder\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": null, \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "--arch",
+      "ia32",
+      "--testname",
+      "mjsunit fuzz-natives cctest message preparser",
+      "--flaky-tests",
+      "skip",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
-    "name": "package build"
+    "cwd": "[SLAVE_BUILD]/v8",
+    "name": "Check"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/v8/v8testing.py",
+      "--target",
+      "Debug",
+      "--arch",
+      "ia32",
+      "--testname",
+      "mjsunit fuzz-natives cctest message preparser",
+      "--flaky-tests",
+      "run",
+      "--json-test-results",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "name": "Check - flaky"
   }
 ]
