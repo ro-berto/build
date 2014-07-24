@@ -85,6 +85,9 @@
       "@@@STEP_LOG_LINE@json.output@      ], @@@",
       "@@@STEP_LOG_LINE@json.output@      \"test\": \"base_tests\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"non_filter_builders\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \".*\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"

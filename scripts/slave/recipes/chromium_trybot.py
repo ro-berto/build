@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import re
+
 DEPS = [
   'bot_update',
   'chromium',
@@ -376,6 +378,16 @@ def add_swarming_builder(original, swarming, server='tryserver.chromium'):
   conf['enable_swarming'] = True
   BUILDERS[server]['builders'][swarming] = conf
 
+def should_filter_builder(name, regexs):
+  """Returns true if the builder |name| should be filtered. |regexs| is a list
+  of the regular expressions specifying the builders that should *not* be
+  filtered. If |name| completely matches one of the regular expressions than
+  false is returned, otherwise true."""
+  for regex in regexs:
+    match = re.match(regex, name)
+    if match and match.end() == len(name):
+      return False
+  return True
 
 add_swarming_builder('linux_chromium_rel', 'linux_chromium_rel_swarming')
 add_swarming_builder('win_chromium_rel', 'win_chromium_rel_swarming')
@@ -503,8 +515,8 @@ def GenSteps(api):
   test_spec = api.step_history['read test spec'].json.output
 
   # See if the patch needs to compile on the current platform.
-  if isinstance(test_spec, dict) and \
-        buildername in test_spec.get('filter_builders', []):
+  if isinstance(test_spec, dict) and should_filter_builder(
+    buildername, test_spec.get('non_filter_builders', [])):
     yield api.filter.does_patch_require_compile(
       exclusions=test_spec.get('gtest_tests_filter_exclusions', []))
     if not api.filter.result:
@@ -733,6 +745,7 @@ def GenTests(api):
             'args': ['--gtest-filter: *NaCl*'],
           },
         ],
+        'non_filter_builders': ['.*'],
       })
     )
   )
@@ -763,6 +776,7 @@ def GenTests(api):
             'swarming': {'can_use_on_swarming_builders': True},
           },
         ],
+        'non_filter_builders': ['linux_chromium_rel_swarming'],
       })
       )
   )
@@ -810,6 +824,7 @@ def GenTests(api):
             },
           },
         ],
+        'non_filter_builders': ['linux_chromium_rel_swarming'],
       })
     ) +
     api.override_step_data(
@@ -833,6 +848,7 @@ def GenTests(api):
             'swarming': {'can_use_on_swarming_builders': True},
           },
         ],
+        'non_filter_builders': ['linux_chromium_rel_swarming'],
       })
     ) +
     api.override_step_data(
@@ -857,6 +873,7 @@ def GenTests(api):
             'swarming': {'can_use_on_swarming_builders': True},
           },
         ],
+        'non_filter_builders': ['linux_chromium_rel_swarming'],
       })
     ) +
     api.override_step_data(
@@ -869,38 +886,35 @@ def GenTests(api):
         api.isolate.output_json(['base_unittests']))
   )
 
-  # Tests analyze module by way of making builder match that of filter_builders.
+  # Tests analyze module by not specifying a non_filter_builders.
   yield (
     api.test('no_compile_because_of_analyze') +
     props(buildername='linux_chromium_rel') +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
-        'filter_builders': ['linux_chromium_rel'],
       })
     )
   )
 
-  # Tests analyze module by way of making builder match that of filter_builders
-  # and file matching exclusion list. This should result in a compile.
+  # Tests analyze module by way of not specifying non_filter_builders and file
+  # matching exclusion list. This should result in a compile.
   yield (
     api.test('compile_because_of_analyze_matching_exclusion') +
     props(buildername='linux_chromium_rel') +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
-        'filter_builders': ['linux_chromium_rel'],
         'gtest_tests_filter_exclusions': ['f.*'],
       })
     )
   )
 
-  # Tests analyze module by way of making builder match that of filter_builders
-  # and analyze result returning true. This should result in a compile.
+  # Tests analyze module by way of not specifying non_filter_builders and
+  # analyze result returning true. This should result in a compile.
   yield (
     api.test('compile_because_of_analyze') +
     props(buildername='linux_chromium_rel') +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
-        'filter_builders': ['linux_chromium_rel'],
       })
     ) +
     api.override_step_data(
