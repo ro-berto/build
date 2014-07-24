@@ -1092,12 +1092,13 @@ class FactoryCommands(object):
                           command=['python', self._kill_tool])
 
   # Zip / Extract commands.
-  def AddZipBuild(self, halt_on_failure=False, factory_properties=None):
+  def AddZipBuild(self, build_url, factory_properties=None):
     factory_properties = factory_properties or {}
     revision = factory_properties.get('got_revision')
 
     cmd = [self._python, self._zip_tool,
-           '--target', self._target]
+           '--target', self._target,
+           '--build-url', build_url]
     if revision:
       cmd.extend(['--build_revision', revision])
 
@@ -1112,7 +1113,7 @@ class FactoryCommands(object):
                           timeout=600,
                           description='packaging build',
                           descriptionDone='packaged build',
-                          haltOnFailure=halt_on_failure,
+                          haltOnFailure=True,
                           command=cmd)
 
   def AddExtractBuild(self, build_url, factory_properties=None):

@@ -291,7 +291,7 @@ class GClientFactory(object):
     if not skip_archive_steps:
       # Archive the full output directory if the machine is a builder.
       if slave_type in ['Builder', 'TrybotBuilder']:
-        factory_cmd_obj.AddZipBuild(halt_on_failure=True,
+        factory_cmd_obj.AddZipBuild(build_url,
                                     factory_properties=factory_properties)
 
       # Download the full output directory if the machine is a tester.
