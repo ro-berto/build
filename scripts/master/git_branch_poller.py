@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 from buildbot.changes.base import PollingChangeSource
+from buildbot.status.web.console import RevisionComparator
 from buildbot.util import deferredLocked
 from twisted.internet import defer, utils
 from twisted.python import log
@@ -14,6 +15,51 @@ import shutil
 
 class GitBranchPoller(PollingChangeSource):
   """Polls multiple branches in a git repository."""
+
+  class GitBranchRevisionComparator(RevisionComparator):
+    def __init__(self):
+      """Initializes a new instance of the GitBranchRevisionComparator class."""
+      super(GitBranchPoller.GitBranchRevisionComparator, self).__init__()
+      self.revisions = {}
+
+    def addRevisions(self, revisions):
+      """Add revisions to the GitBranchRevisionComparator.
+
+      Args:
+        revisions: An ordered list of revisions without duplicates.
+      """
+      for revision in revisions:
+        assert revision not in self.revisions
+        self.revisions[revision] = len(self.revisions)
+
+    def isRevisionEarlier(self, first, second):
+      """Returns whether the first revision is earlier than the second.
+
+      Args:
+        first: A revision this GitBranchRevisionComparator is aware of.
+        second: A revision this GitBranchRevisionComparator is aware of.
+
+      Returns:
+        True if the first revision is earlier than the second.
+      """
+      assert first in self.revisions
+      assert second in self.revisions
+      return self.revisions[first] < self._revisions[second]
+
+    def isValidRevision(self, revision):
+      """Returns whether or not the given revision is known.
+
+      Args:
+        revision: A revision.
+
+      Returns:
+        True if this GitBranchRevisionComparator knows about the given revision.
+      """
+      return revision in self.revisions
+
+    def getSortingKey(self):
+      """Returns a function which maps revisions to their sorted order."""
+      return lambda revision: self.revisions[revision]
 
   def __init__(self, repo_url, branches, pollInterval=60, revlinktmpl='',
                workdir='git_poller', verbose=False):
@@ -45,6 +91,9 @@ class GitBranchPoller(PollingChangeSource):
     # Mapping of branch names to the latest observed revision.
     self.branch_heads = {branch: None for branch in branches}
     self.branch_heads_lock = defer.DeferredLock()
+
+    # Revision comparator.
+    self.comparator = self.GitBranchRevisionComparator()
 
   @deferredLocked('branch_heads_lock')
   @defer.inlineCallbacks
@@ -87,12 +136,25 @@ class GitBranchPoller(PollingChangeSource):
       yield stop(err)
       return
 
+    new_branch_heads = {}
+
     for branch in self.branch_heads:
       out, err, ret = yield self._git('rev-parse', branch)
       if ret:
         yield stop(err)
       self._log(branch, 'at', out.rstrip())
-      self.branch_heads[branch] = out.rstrip()
+      new_branch_heads[branch] = out.rstrip()
+
+    out, err, ret = yield self._git(
+      'rev-list', '--date-order', '--reverse', *new_branch_heads.values())
+    if ret:
+      yield stop(err)
+    revisions = out.splitlines()
+
+    # Now that all git operations have succeeded and the poll is complete,
+    # update our view of the branch heads and revision order.
+    self.branch_heads.update(new_branch_heads)
+    self.comparator.addRevisions(revisions)
 
     yield PollingChangeSource.startService(self)
 
@@ -114,13 +176,13 @@ class GitBranchPoller(PollingChangeSource):
     if log_error(err, ret):
       return
 
-    args = []
+    rev_list_args = []
     revision_branch_map = {}
     new_branch_heads = {}
 
     for branch, head in self.branch_heads.iteritems():
-      args.append('%s..%s' % (head, branch))
-      out, err, ret = yield self._git('rev-list', args[-1])
+      rev_list_args.append('%s..%s' % (head, branch))
+      out, err, ret = yield self._git('rev-list', rev_list_args[-1])
       if log_error(err, ret):
         return
       revisions = out.splitlines()
@@ -138,14 +200,15 @@ class GitBranchPoller(PollingChangeSource):
       return
 
     self._log('Determining total ordering of revisions')
-    out, err, ret = yield self._git('rev-list', '--date-order', *args)
+    out, err, ret = yield self._git(
+      'rev-list', '--date-order', '--reverse' *rev_list_args)
     if log_error(err, ret):
       return
 
-    change_data = {revision: {} for revision in out.splitlines()}
+    revisions = out.splitlines()
+    change_data = {revision: {} for revision in revisions}
 
-    # Accumulate data to be sent to the master from earliest to latest revision.
-    for revision in reversed(out.splitlines()):
+    for revision in revisions:
       if revision not in revision_branch_map:
         self._log('Saw unexpected revision:', revision)
         continue
@@ -178,7 +241,7 @@ class GitBranchPoller(PollingChangeSource):
         return
       change_data[revision]['files'] = out.splitlines()
 
-    for revision in change_data:
+    for revision in revisions:
       try:
         yield self.master.addChange(
           author=change_data[revision]['author'],
@@ -190,6 +253,8 @@ class GitBranchPoller(PollingChangeSource):
           revlink=self.revlinktmpl % revision,
           when_timestamp=change_data[revision]['timestamp'],
         )
+
+        self.comparator.addRevisions([revision])
       except Exception as e:
         log_error(str(e), 1, always_emit_error=True)
         return
