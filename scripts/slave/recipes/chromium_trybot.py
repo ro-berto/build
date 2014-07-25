@@ -390,6 +390,8 @@ def should_filter_builder(name, regexs):
   return True
 
 add_swarming_builder('linux_chromium_rel', 'linux_chromium_rel_swarming')
+add_swarming_builder('linux_chromium_chromeos_rel',
+                     'linux_chromium_chromeos_rel_swarming')
 add_swarming_builder('win_chromium_rel', 'win_chromium_rel_swarming')
 add_swarming_builder('mac_chromium_rel', 'mac_chromium_rel_swarming')
 
