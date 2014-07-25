@@ -116,9 +116,11 @@
         ],
         "comment": [
           "Any steps whose results must be temporarily ignored (e.g.",
-          "due to flakiness) can be added here."
+          "due to flakiness) can be added here.",
+          "Remove webgl_conformance_tests after crbug.com/383963 fixed"
         ],
         "excluded_steps": [
+          "webgl_conformance_tests"
         ]
       }
     ],
