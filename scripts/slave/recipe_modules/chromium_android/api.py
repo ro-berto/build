@@ -559,12 +559,13 @@ class AndroidApi(recipe_api.RecipeApi):
     if tool:
       args.append('--tool=%s' % tool)
 
+    kwargs.setdefault('always_run', True)
+
     yield self.m.python(
         str(suite),
         self.m.path['checkout'].join('build', 'android', 'test_runner.py'),
         ['gtest', '-s', suite] + args,
         env=self.get_env(),
-        always_run=True,
         **kwargs)
 
   def coverage_report(self, **kwargs):

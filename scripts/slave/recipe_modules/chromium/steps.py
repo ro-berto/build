@@ -143,7 +143,8 @@ class Deps2GitTest(Test):  # pylint: disable=W0232
   @staticmethod
   def run(api, suffix):
     yield (
-      api.chromium.deps2git(suffix, can_fail_build=(not suffix)),
+      api.chromium.deps2git(
+          suffix, can_fail_build=(not suffix), always_run=True),
       api.chromium.deps2submodules()
     )
 
@@ -177,7 +178,8 @@ class GTestTest(Test):
 
   def run(self, api, suffix):
     if api.chromium.c.TARGET_PLATFORM == 'android':
-      return api.chromium_android.run_test_suite(self.name, self._args)
+      return api.chromium_android.run_test_suite(
+          self.name, self._args, always_run=True)
 
     def followup_fn(step_result):
       r = step_result.json.gtest_results
@@ -218,7 +220,8 @@ class GTestTest(Test):
         annotate='gtest',
         xvfb=True,
         name=self._step_name(suffix),
-        can_fail_build=False,
+        can_fail_build=(not suffix),
+        always_run=True,
         flakiness_dash=self.flakiness_dash,
         step_test_data=lambda: api.json.test_api.canned_gtest_output(True),
         **kwargs)
@@ -264,7 +267,7 @@ class DynamicGTestTests(Test):
                      '--test-launcher-total-shards=%d' % test['total_shards']])
       steps.append(api.chromium.runtest(
           test['test'], test_type=test['test'], args=args, annotate='gtest',
-          xvfb=True, flakiness_dash=self.flakiness_dash))
+          xvfb=True, flakiness_dash=self.flakiness_dash, always_run=True))
 
     return steps
 
@@ -539,6 +542,7 @@ class MojoPythonTests(Test):  # pylint: disable=W0232
             'run_mojo_python_tests.py'),
         args,
         can_fail_build=(not suffix),
+        always_run=True,
         step_test_data=lambda: api.json.test_api.canned_test_output(
             True), followup_fn=followup_fn)
 
@@ -596,7 +600,8 @@ class BlinkTest(Test):
     yield api.chromium.runtest(self.layout_test_wrapper,
                                args,
                                name=self._step_name(suffix),
-                               can_fail_build=False,
+                               can_fail_build=(not suffix),
+                               always_run=True,
                                followup_fn=followup_fn)
 
     if suffix == 'with patch':
