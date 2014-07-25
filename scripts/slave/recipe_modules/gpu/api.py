@@ -276,8 +276,8 @@ class GpuApi(recipe_api.RecipeApi):
     # This ensures the ANGLE/D3D9 gets some testing
     if self.is_fyi_waterfall and self.m.platform.is_win:
       yield self._run_isolated_telemetry_gpu_test('webgl_conformance',
-        args=[
-          '--extra-browser-args=--disable-d3d11'
+        extra_browser_args=[
+          '--disable-d3d11'
         ],
         name='webgl_conformance_d3d9')
 
@@ -339,10 +339,14 @@ class GpuApi(recipe_api.RecipeApi):
       **kwargs)
 
   def _run_isolated_telemetry_gpu_test(self, test, args=None, name=None,
-                                       **kwargs):
+                                       extra_browser_args=None, **kwargs):
     test_args = ['-v', '--use-devtools-active-port']
     if args:
       test_args.extend(args)
+    extra_browser_args_string = '--extra-browser-args=--enable-logging=stderr'
+    if extra_browser_args:
+      extra_browser_args_string += ' ' + ' '.join(extra_browser_args)
+    test_args.append(extra_browser_args_string)
     yield self.m.isolate.run_telemetry_test(
       'telemetry_gpu_test',
       test,

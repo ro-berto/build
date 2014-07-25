@@ -309,7 +309,8 @@
       "--build-revision",
       "170242",
       "--test-machine-name",
-      "TestBuilder"
+      "TestBuilder",
+      "--extra-browser-args=--enable-logging=stderr"
     ],
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
@@ -359,7 +360,8 @@
       "--os-type",
       "linux",
       "--test-machine-name",
-      "TestBuilder"
+      "TestBuilder",
+      "--extra-browser-args=--enable-logging=stderr"
     ],
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
@@ -400,7 +402,8 @@
       "--output-format=gtest",
       "--browser=release",
       "-v",
-      "--use-devtools-active-port"
+      "--use-devtools-active-port",
+      "--extra-browser-args=--enable-logging=stderr"
     ],
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
@@ -441,7 +444,8 @@
       "--output-format=gtest",
       "--browser=release",
       "-v",
-      "--use-devtools-active-port"
+      "--use-devtools-active-port",
+      "--extra-browser-args=--enable-logging=stderr"
     ],
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
@@ -482,7 +486,8 @@
       "--output-format=gtest",
       "--browser=release",
       "-v",
-      "--use-devtools-active-port"
+      "--use-devtools-active-port",
+      "--extra-browser-args=--enable-logging=stderr"
     ],
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
@@ -523,7 +528,8 @@
       "--output-format=gtest",
       "--browser=release",
       "-v",
-      "--use-devtools-active-port"
+      "--use-devtools-active-port",
+      "--extra-browser-args=--enable-logging=stderr"
     ],
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
@@ -564,7 +570,8 @@
       "--output-format=gtest",
       "--browser=release",
       "-v",
-      "--use-devtools-active-port"
+      "--use-devtools-active-port",
+      "--extra-browser-args=--enable-logging=stderr"
     ],
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
@@ -605,7 +612,8 @@
       "--output-format=gtest",
       "--browser=release",
       "-v",
-      "--use-devtools-active-port"
+      "--use-devtools-active-port",
+      "--extra-browser-args=--enable-logging=stderr"
     ],
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
@@ -650,7 +658,8 @@
       "--build-revision",
       "170242",
       "--test-machine-name",
-      "TestBuilder"
+      "TestBuilder",
+      "--extra-browser-args=--enable-logging=stderr"
     ],
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"

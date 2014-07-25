@@ -241,7 +241,8 @@
       "--build-revision",
       "170242",
       "--test-machine-name",
-      "TestBuilder"
+      "TestBuilder",
+      "--extra-browser-args=--enable-logging=stderr"
     ],
     "name": "maps_pixel_test"
   },
@@ -287,7 +288,8 @@
       "--os-type",
       "mac",
       "--test-machine-name",
-      "TestBuilder"
+      "TestBuilder",
+      "--extra-browser-args=--enable-logging=stderr"
     ],
     "name": "pixel_test"
   },
@@ -324,7 +326,8 @@
       "--output-format=gtest",
       "--browser=release",
       "-v",
-      "--use-devtools-active-port"
+      "--use-devtools-active-port",
+      "--extra-browser-args=--enable-logging=stderr"
     ],
     "name": "webgl_conformance_tests"
   },
@@ -361,7 +364,8 @@
       "--output-format=gtest",
       "--browser=release",
       "-v",
-      "--use-devtools-active-port"
+      "--use-devtools-active-port",
+      "--extra-browser-args=--enable-logging=stderr"
     ],
     "name": "context_lost_tests"
   },
@@ -398,7 +402,8 @@
       "--output-format=gtest",
       "--browser=release",
       "-v",
-      "--use-devtools-active-port"
+      "--use-devtools-active-port",
+      "--extra-browser-args=--enable-logging=stderr"
     ],
     "name": "memory_test"
   },
@@ -435,7 +440,8 @@
       "--output-format=gtest",
       "--browser=release",
       "-v",
-      "--use-devtools-active-port"
+      "--use-devtools-active-port",
+      "--extra-browser-args=--enable-logging=stderr"
     ],
     "name": "screenshot_sync_tests"
   },
@@ -472,7 +478,8 @@
       "--output-format=gtest",
       "--browser=release",
       "-v",
-      "--use-devtools-active-port"
+      "--use-devtools-active-port",
+      "--extra-browser-args=--enable-logging=stderr"
     ],
     "name": "hardware_accelerated_feature_tests"
   },
@@ -509,7 +516,8 @@
       "--output-format=gtest",
       "--browser=release",
       "-v",
-      "--use-devtools-active-port"
+      "--use-devtools-active-port",
+      "--extra-browser-args=--enable-logging=stderr"
     ],
     "name": "gpu_process_launch_tests"
   },
@@ -550,7 +558,8 @@
       "--build-revision",
       "170242",
       "--test-machine-name",
-      "TestBuilder"
+      "TestBuilder",
+      "--extra-browser-args=--enable-logging=stderr"
     ],
     "name": "gpu_rasterization_tests"
   },
