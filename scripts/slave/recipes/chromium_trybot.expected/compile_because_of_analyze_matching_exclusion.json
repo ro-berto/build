@@ -229,9 +229,7 @@
       "--build-number=571",
       "--run-python-script",
       "[SLAVE_BUILD]/src/tools/telemetry/run_tests",
-      "--browser=release",
-      "--write-full-results-to",
-      "/path/to/tmp/json"
+      "--browser=release"
     ],
     "name": "telemetry_unittests (with patch)"
   },
@@ -255,9 +253,7 @@
       "--build-number=571",
       "--run-python-script",
       "[SLAVE_BUILD]/src/tools/perf/run_tests",
-      "--browser=release",
-      "--write-full-results-to",
-      "/path/to/tmp/json"
+      "--browser=release"
     ],
     "name": "telemetry_perf_unittests (with patch)"
   },
