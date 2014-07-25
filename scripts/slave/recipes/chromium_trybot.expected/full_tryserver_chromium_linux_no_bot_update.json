@@ -283,12 +283,12 @@
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"build_config\": \"Release\", \"buildername\": \"linux_no_bot_update\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"chromium_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": null, \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=gtest",
+      "--test-type=base_unittests",
       "--test-launcher-summary-output",
       "/path/to/tmp/json",
       "--builder-name=linux_no_bot_update",
       "--slave-name=TestSlavename",
       "--build-number=571",
-      "--parallel",
       "base_unittests"
     ],
     "name": "base_unittests (with patch)"
@@ -307,12 +307,12 @@
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"build_config\": \"Release\", \"buildername\": \"linux_no_bot_update\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"chromium_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": null, \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=gtest",
+      "--test-type=mojo_common_unittests",
       "--test-launcher-summary-output",
       "/path/to/tmp/json",
       "--builder-name=linux_no_bot_update",
       "--slave-name=TestSlavename",
       "--build-number=571",
-      "--parallel",
       "mojo_common_unittests"
     ],
     "name": "mojo_common_unittests (with patch)"
@@ -331,12 +331,12 @@
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"build_config\": \"Release\", \"buildername\": \"linux_no_bot_update\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"chromium_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": null, \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=gtest",
+      "--test-type=browser_tests",
       "--test-launcher-summary-output",
       "/path/to/tmp/json",
       "--builder-name=linux_no_bot_update",
       "--slave-name=TestSlavename",
       "--build-number=571",
-      "--parallel",
       "browser_tests"
     ],
     "name": "browser_tests (with patch)"

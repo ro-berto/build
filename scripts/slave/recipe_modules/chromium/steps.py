@@ -198,33 +198,19 @@ class GTestTest(Test):
       args.append(api.chromium.test_launcher_filter(
                       self.failures(api, 'with patch')))
 
-    kwargs = {}
-    if suffix:
-      # TODO(phajdan.jr): Just remove it, keeping for now to avoid
-      # expectation changes.
-      kwargs['parallel'] = True
-
-      # TODO(phajdan.jr): Always do that, keeping for now to avoid
-      # expectation changes.
-      kwargs['test_launcher_summary_output'] = api.json.gtest_results(
-          add_json_log=False)
-      kwargs['followup_fn'] = followup_fn
-    else:
-      # TODO(phajdan.jr): Always do that, keeping for now to avoid
-      # expectation changes.
-      kwargs['test_type'] = self.name
-
     return api.chromium.runtest(
         self.name,
         args,
         annotate='gtest',
         xvfb=True,
         name=self._step_name(suffix),
+        test_type=self.name,
         can_fail_build=(not suffix),
         always_run=True,
         flakiness_dash=self.flakiness_dash,
-        step_test_data=lambda: api.json.test_api.canned_gtest_output(True),
-        **kwargs)
+        test_launcher_summary_output=api.json.gtest_results(add_json_log=False),
+        followup_fn=followup_fn,
+        step_test_data=lambda: api.json.test_api.canned_gtest_output(True))
 
   def has_valid_results(self, api, suffix):
     step_name = self._step_name(suffix)
@@ -451,21 +437,9 @@ class NaclIntegrationTest(Test):  # pylint: disable=W0232
 
   def run(self, api, suffix):
     args = [
-    ]
-
-    if suffix:
-      # TODO(phajdan.jr): Always do that, keeping for now to avoid
-      # expectation changes.
-      args.extend([
         '--mode', api.chromium.c.build_config_fs,
         '--json_build_results_output_file', api.json.output(),
-      ])
-    else:
-      # TODO(phajdan.jr): Just remove it, keeping for now to avoid
-      # expectation changes.
-      args.extend([
-        '--mode', api.chromium.c.build_config_fs,
-      ])
+    ]
 
     return api.python(
         self._step_name(suffix),

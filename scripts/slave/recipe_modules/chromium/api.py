@@ -196,8 +196,6 @@ class ChromiumApi(recipe_api.RecipeApi):
       full_args.append('--run-python-script')
     if not spawn_dbus:
       full_args.append('--no-spawn-dbus')
-    if parallel:
-      full_args.append('--parallel')
     if revision:
       full_args.append('--revision=%s' % revision)
     if webkit_revision:

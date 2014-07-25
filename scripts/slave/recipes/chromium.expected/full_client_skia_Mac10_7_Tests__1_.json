@@ -172,8 +172,14 @@
       "-u",
       "[SLAVE_BUILD]/src/chrome/test/nacl_test_injection/buildbot_nacl_integration.py",
       "--mode",
-      "Release"
+      "Release",
+      "--json_build_results_output_file",
+      "/path/to/tmp/json"
     ],
-    "name": "nacl_integration"
+    "name": "nacl_integration",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   }
 ]
