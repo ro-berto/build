@@ -357,7 +357,8 @@ class AndroidApi(recipe_api.RecipeApi):
         },
         "version": 1,
       }),
-      always_run=True)
+      always_run=True,
+      abort_on_failure=True)
 
   def _run_sharded_tests(self,
                          config='sharded_perf_tests.json',
