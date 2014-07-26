@@ -6,7 +6,7 @@
 #   chromium.gpu
 #   chromium.gpu.fyi
 #   The GPU bots on the chromium.webkit waterfall
-#   The GPU bots on the tryserver.chromium waterfall
+#   The GPU bots on the tryserver.chromium.* waterfalls
 
 DEPS = [
   'buildbot',

@@ -14,7 +14,7 @@ DEPS = [
 ]
 
 BUILDERS = {
-  'tryserver.chromium': {
+  'tryserver.chromium.linux': {
     'android_dbg_triggered_tests_recipe': {
       'config': 'main_builder',
       'download': {

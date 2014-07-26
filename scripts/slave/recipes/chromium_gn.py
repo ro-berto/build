@@ -82,7 +82,7 @@ BUILDERS = {
       },
     },
   },
-  'tryserver.chromium': {
+  'tryserver.chromium.linux': {
     'builders': {
       'android_chromium_gn_compile_rel': {
         'chromium_config_kwargs': {
@@ -199,6 +199,7 @@ def GenTests(api):
     api.test('compile_failure') +
     api.platform.name('linux') +
     api.properties.tryserver(
-        buildername='linux_chromium_gn_rel', mastername='tryserver.chromium') +
+        buildername='linux_chromium_gn_rel',
+        mastername='tryserver.chromium.linux') +
     api.step_data('compile', retcode=1)
   )

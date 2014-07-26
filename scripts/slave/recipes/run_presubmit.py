@@ -84,9 +84,10 @@ def GenTests(api):
 
     yield (
       api.test(repo_name) +
-      api.properties.tryserver(mastername='tryserver.chromium',
-                               buildername='chromium_presubmit',
-                               repo_name=repo_name, **extra) +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='chromium_presubmit',
+          repo_name=repo_name, **extra) +
       api.step_data('presubmit', api.json.output([['chromium_presubmit',
                                                    ['compile']]]))
     )

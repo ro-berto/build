@@ -28,7 +28,7 @@ def GenTests(api):
       slavename='totallyaslave-m1',
   )
   yield api.test('tryjob') + api.properties(
-      mastername='tryserver.chromium',
+      mastername='tryserver.chromium.linux',
       buildername='linux_rel',
       slavename='totallyaslave-c4',
       issue=12345,
@@ -36,7 +36,7 @@ def GenTests(api):
       patch_url='http://src.chromium.org/foo/bar'
   )
   yield api.test('tryjob_fail') + api.properties(
-      mastername='tryserver.chromium',
+      mastername='tryserver.chromium.linux',
       buildername='linux_rel',
       slavename='totallyaslave-c4',
       issue=12345,
@@ -44,7 +44,7 @@ def GenTests(api):
       patch_url='http://src.chromium.org/foo/bar',
   ) + api.step_data('bot_update', retcode=1)
   yield api.test('tryjob_fail_patch') + api.properties(
-      mastername='tryserver.chromium',
+      mastername='tryserver.chromium.linux',
       buildername='linux_rel',
       slavename='totallyaslave-c4',
       issue=12345,

@@ -183,7 +183,9 @@ ENABLED_MASTERS = [
     'client.nacl.sdk.mono',
     'client.v8',
     'tryserver.blink',
-    'tryserver.chromium',
+    'tryserver.chromium.mac',
+    'tryserver.chromium.linux',
+    'tryserver.chromium.win',
     'chromium.perf.fyi',
 ]
 ENABLED_MASTERS += internal_data.get('ENABLED_MASTERS', [])
@@ -228,12 +230,30 @@ ENABLED_SLAVES = {
 
     # Tryserver bots need to be enabled on a bot basis to make sure checkouts
     # on the same bot do not conflict.
-    'tryserver.chromium': ['slave%d-c4' % i for i in range(250, 400)] +
-                          ['slave%d-c4' % i for i in range(102, 121)] +
-                          ['vm%d-m4' % i for i in [468, 469, 497, 502, 503]] +
-                          ['vm%d-m4' % i for i in range(800, 810)] +
-                          ['vm%d-m4' % i for i in range(666, 671)] +
-                          ['build%d-a4' % i for i in range(100, 140)],
+    # TODO(iannucci): Not all of these slaves are on the same master... c+p'd
+    #   for expediency.
+    # TODO(iannucci): Are these even needed?
+    'tryserver.chromium.linux':
+        ['slave%d-c4' % i for i in range(250, 400)] +
+        ['slave%d-c4' % i for i in range(102, 121)] +
+        ['vm%d-m4' % i for i in [468, 469, 497, 502, 503]] +
+        ['vm%d-m4' % i for i in range(800, 810)] +
+        ['vm%d-m4' % i for i in range(666, 671)] +
+        ['build%d-a4' % i for i in range(100, 140)],
+    'tryserver.chromium.mac':
+        ['slave%d-c4' % i for i in range(250, 400)] +
+        ['slave%d-c4' % i for i in range(102, 121)] +
+        ['vm%d-m4' % i for i in [468, 469, 497, 502, 503]] +
+        ['vm%d-m4' % i for i in range(800, 810)] +
+        ['vm%d-m4' % i for i in range(666, 671)] +
+        ['build%d-a4' % i for i in range(100, 140)],
+    'tryserver.chromium.win':
+        ['slave%d-c4' % i for i in range(250, 400)] +
+        ['slave%d-c4' % i for i in range(102, 121)] +
+        ['vm%d-m4' % i for i in [468, 469, 497, 502, 503]] +
+        ['vm%d-m4' % i for i in range(800, 810)] +
+        ['vm%d-m4' % i for i in range(666, 671)] +
+        ['build%d-a4' % i for i in range(100, 140)],
 }
 ENABLED_SLAVES.update(internal_data.get('ENABLED_SLAVES', {}))
 
@@ -266,9 +286,12 @@ DISABLED_BUILDERS = {
         'linux_blink_no_bot_update',
         'win_blink_no_bot_update',
     ],
-    'tryserver.chromium': [
+    'tryserver.chromium.linux': [
         # These don't exist, but are just here to satisfy recipes.
         'linux_no_bot_update',
+    ],
+    'tryserver.chromium.win': [
+        # These don't exist, but are just here to satisfy recipes.
         'win_no_bot_update',
         'win_blink',
         'win_blink_compile',

@@ -5,7 +5,7 @@
       "-u",
       "[BUILD]/scripts/slave/bot_update.py",
       "--master",
-      "tryserver.chromium",
+      "tryserver.chromium.linux",
       "--builder",
       "linux_chromium_rel_swarming",
       "--slave",

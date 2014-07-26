@@ -245,7 +245,7 @@ class GpuApi(recipe_api.RecipeApi):
     #
     # NOTE that ALL of the bots need to share a bucket. They can't be split
     # by mastername/waterfall, because the try servers are on a different
-    # waterfall (tryserver.chromium) than the other test bots (chromium.gpu
+    # waterfall (tryserver.chromium.*) than the other test bots (chromium.gpu
     # and chromium.webkit, as of this writing). This means there will be
     # races between bots with identical OS/GPU combinations, on different
     # waterfalls, attempting to upload results for new versions of each

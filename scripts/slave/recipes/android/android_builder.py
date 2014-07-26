@@ -32,7 +32,7 @@ BUILDERS = {
       'gclient_apply_config': ['android', 'chrome_internal'],
     }
   },
-  'tryserver.chromium': {
+  'tryserver.chromium.linux': {
     'android_dbg_recipe': {
       'recipe_config': 'main_builder',
       'gclient_apply_config': ['android', 'chrome_internal'],

@@ -7,7 +7,7 @@
 #   chromium.gpu
 #   chromium.gpu.fyi
 #   chromium.webkit
-#   tryserver.chromium
+#   tryserver.chromium.*
 # These testers are triggered by the builders on the same waterfall.
 
 DEPS = [

@@ -26,7 +26,7 @@ DEPS = [
 
 
 BUILDERS = {
-  'tryserver.chromium': {
+  'tryserver.chromium.linux': {
     'builders': {
       'linux_arm_cross_compile': {
         'GYP_DEFINES': {
@@ -218,6 +218,10 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
+    },
+  },
+  'tryserver.chromium.mac': {
+    'builders': {
       'mac_chromium_dbg': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -262,6 +266,10 @@ BUILDERS = {
           'platform': 'mac',
         },
       },
+    },
+  },
+  'tryserver.chromium.win': {
+    'builders': {
       'win_chromium_dbg': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -369,7 +377,7 @@ BUILDERS = {
 }
 
 
-def add_swarming_builder(original, swarming, server='tryserver.chromium'):
+def add_swarming_builder(original, swarming, server):
   """Duplicates builder config on |server|, adding 'enable_swarming: True'."""
   assert server in BUILDERS
   assert original in BUILDERS[server]['builders']
@@ -389,11 +397,15 @@ def should_filter_builder(name, regexs):
       return False
   return True
 
-add_swarming_builder('linux_chromium_rel', 'linux_chromium_rel_swarming')
+add_swarming_builder('linux_chromium_rel', 'linux_chromium_rel_swarming',
+                     'tryserver.chromium.linux')
 add_swarming_builder('linux_chromium_chromeos_rel',
-                     'linux_chromium_chromeos_rel_swarming')
-add_swarming_builder('win_chromium_rel', 'win_chromium_rel_swarming')
-add_swarming_builder('mac_chromium_rel', 'mac_chromium_rel_swarming')
+                     'linux_chromium_chromeos_rel_swarming',
+                     'tryserver.chromium.linux')
+add_swarming_builder('win_chromium_rel', 'win_chromium_rel_swarming',
+                     'tryserver.chromium.win')
+add_swarming_builder('mac_chromium_rel', 'mac_chromium_rel_swarming',
+                     'tryserver.chromium.mac')
 
 
 def GenSteps(api):
@@ -508,7 +520,7 @@ def GenSteps(api):
         },
         {
           'test': 'browser_tests',
-          'exclude_builders': ['tryserver.chromium:win_chromium_x64_rel'],
+          'exclude_builders': ['tryserver.chromium.win:win_chromium_x64_rel'],
         },
       ]),
       followup_fn=test_spec_followup_fn,
@@ -651,7 +663,7 @@ def GenTests(api):
     ],
   }
   canned_test = api.json.canned_gtest_output
-  def props(config='Release', mastername='tryserver.chromium',
+  def props(config='Release', mastername='tryserver.chromium.linux',
             buildername='linux_chromium_rel', **kwargs):
     kwargs.setdefault('revision', None)
     return api.properties.tryserver(
@@ -680,7 +692,7 @@ def GenTests(api):
   # retries at all.
   yield (
     api.test('persistent_failure_and_runhooks_2_fail_test') +
-    props(buildername='win_chromium_rel') +
+    props(buildername='win_chromium_rel', mastername='tryserver.chromium.win') +
     api.platform.name('win') +
     api.override_step_data('base_unittests (with patch)',
                            canned_test(passing=False)) +
@@ -702,14 +714,16 @@ def GenTests(api):
   for step in ('bot_update', 'gclient runhooks'):
     yield (
       api.test(step.replace(' ', '_') + '_failure') +
-      props(buildername='win_no_bot_update') +
+      props(buildername='win_no_bot_update',
+            mastername='tryserver.chromium.win') +
       api.platform.name('win') +
       api.step_data(step, retcode=1)
     )
 
   yield (
     api.test('compile_failure') +
-    props(buildername='win_chromium_rel') +
+    props(buildername='win_chromium_rel',
+          mastername='tryserver.chromium.win') +
     api.platform.name('win') +
     api.step_data('compile (with patch)', retcode=1)
   )
@@ -733,7 +747,7 @@ def GenTests(api):
 
   yield (
     api.test('arm') +
-    api.properties.generic(mastername='tryserver.chromium',
+    api.properties.generic(mastername='tryserver.chromium.linux',
                            buildername='linux_arm_cross_compile') +
     api.platform('linux', 64) +
     api.override_step_data('read test spec', api.json.output({
