@@ -174,6 +174,34 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
+      'linux_chromium_chromeos_ozone_rel': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'GYP_DEFINES': {
+          'use_ozone': '1',
+        },
+        'chromium_config': 'chromium_chromeos',
+        'compile_only': False,
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'linux_chromium_chromeos_ozone_dbg': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'chromium_config': 'chromium_chromeos',
+        'GYP_DEFINES': {
+          'use_ozone': '1',
+        },
+        'compile_only': False,
+        'testing': {
+          'platform': 'linux',
+        },
+      },
       'linux_chromium_trusty_dbg': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
