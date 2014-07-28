@@ -38,10 +38,12 @@ class TestAnnotationStreams(unittest.TestCase):
       pass
 
     result = [
+        '@@@SEED_STEP one@@@',
         '@@@STEP_CURSOR one@@@',
         '@@@STEP_STARTED@@@',
         '@@@STEP_CURSOR one@@@',
         '@@@STEP_CLOSED@@@',
+        '@@@SEED_STEP two@@@',
         '@@@STEP_CURSOR two@@@',
         '@@@STEP_STARTED@@@',
         '@@@STEP_CURSOR two@@@',
@@ -70,6 +72,7 @@ class TestAnnotationStreams(unittest.TestCase):
                         perf='full_perf')
 
     result = [
+        '@@@SEED_STEP one@@@',
         '@@@STEP_CURSOR one@@@',
         '@@@STEP_STARTED@@@',
         '@@@STEP_WARNINGS@@@',
