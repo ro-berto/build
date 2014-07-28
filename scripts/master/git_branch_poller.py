@@ -44,18 +44,18 @@ class GitBranchPoller(PollingChangeSource):
       """
       assert first.revision in self.revisions
       assert second.revision in self.revisions
-      return self.revisions[first.revision] < self._revisions[second.revision]
+      return self.revisions[first.revision] < self.revisions[second.revision]
 
-    def isValidRevision(self, change):
-      """Returns whether or not the given change is known.
+    def isValidRevision(self, revision):
+      """Returns whether or not the given revision is known.
 
       Args:
-        change: A change.
+        revision: A revision.
 
       Returns:
-        True if this GitBranchRevisionComparator knows about the given change.
+        True if this GitBranchRevisionComparator knows about the given revision.
       """
-      return change.revision in self.revisions
+      return revision in self.revisions
 
     def getSortingKey(self):
       """Returns a function which maps changes to their sorted order."""
