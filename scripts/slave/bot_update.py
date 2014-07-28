@@ -183,8 +183,9 @@ ENABLED_MASTERS = [
     'client.nacl.sdk.mono',
     'client.v8',
     'tryserver.blink',
-    'tryserver.chromium.mac',
     'tryserver.chromium.linux',
+    'tryserver.chromium.mac',
+    'tryserver.chromium.perf',
     'tryserver.chromium.win',
     'chromium.perf.fyi',
 ]
