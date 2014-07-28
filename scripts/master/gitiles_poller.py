@@ -131,7 +131,6 @@ class GitilesPoller(PollingChangeSource):
       log.msg('GitilesPoller: Initial revision for branch %s is %s' % (
           branch, revision))
       self.branches[branch] = revision
-      self.comparator.addRevision(revision)
 
     log.msg('GitilesPoller: Finished initializing revision history')
     PollingChangeSource.startService(self)
@@ -163,6 +162,7 @@ class GitilesPoller(PollingChangeSource):
             'GitilesPoller: Could not parse svn revision out of commit message '
             'for commit %s in %s' % (commit_json['commit'], self.repo_url))
         return None
+      self.comparator.addRevision(revision)
     revlink = ''
     if self.revlinktmpl and revision:
       revlink = self.revlinktmpl % revision
@@ -230,7 +230,8 @@ class GitilesPoller(PollingChangeSource):
         log.err(msg)
     for commit in all_commits:
       commit, branch = commit
-      self.comparator.addRevision(commit['commit'])
+      if not self.svn_mode:
+        self.comparator.addRevision(commit['commit'])
       try:
         path = REVISION_DETAIL_TEMPLATE % (self.repo_path, commit['commit'])
         detail = yield self.agent.request('GET', path, retry=5)
