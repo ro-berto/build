@@ -347,3 +347,20 @@ def GenTests(api):
       },
     }))
   )
+
+  yield (
+    api.test('buildnumber_zero') +
+    api.properties.generic(mastername='chromium.linux',
+                           buildername='Linux Tests',
+                           parent_buildername='Linux Builder',
+                           buildnumber=0) +
+    api.platform('linux', 64) +
+    api.override_step_data('read test spec', api.json.output({
+      'Linux Tests': {
+        'gtest_tests': [
+          'base_unittests',
+          {'test': 'browser_tests', 'shard_index': 0, 'total_shards': 2},
+        ],
+      },
+    }))
+  )

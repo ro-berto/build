@@ -182,7 +182,7 @@ class ChromiumApi(recipe_api.RecipeApi):
         '-o', 'gtest-results/%s' % test,
       ])
       # The flakiness dashboard needs the buildnumber, so we assert it here.
-      assert self.m.properties.get('buildnumber')
+      assert self.m.properties.get('buildnumber') is not None
 
     # These properties are specified on every bot, so pass them down
     # unconditionally.
@@ -190,7 +190,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     full_args.append('--slave-name=%s' % self.m.properties['slavename'])
     # A couple of the recipes contain tests which don't specify a buildnumber,
     # so make this optional.
-    if self.m.properties.get('buildnumber'):
+    if self.m.properties.get('buildnumber') is not None:
       full_args.append('--build-number=%s' % self.m.properties['buildnumber'])
     if ext == '.py' or python_mode:
       full_args.append('--run-python-script')
