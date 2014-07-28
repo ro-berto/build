@@ -8,7 +8,6 @@ DEPS = [
   'json',
   'path',
   'python',
-  'step_history',
 ]
 
 
@@ -40,7 +39,7 @@ def gatekeeper_step(api, tree_name, tree_args):
 
 
 def GenSteps(api):
-  yield api.json.read(
+  step_result = api.json.read(
     'reading gatekeeper_trees.json',
     api.path['build'].join('scripts', 'slave', 'gatekeeper_trees.json'),
     # Needed for training step.
@@ -60,10 +59,9 @@ def GenSteps(api):
       }
     )
   )
-  trees = api.step_history.last_step().json.output
+  trees = step_result.json.output
   for tree_name, tree_args in trees.iteritems():
-    yield gatekeeper_step(api, tree_name, tree_args)
-
+    gatekeeper_step(api, tree_name, tree_args)
 
 def GenTests(api):
   yield api.test('basic')

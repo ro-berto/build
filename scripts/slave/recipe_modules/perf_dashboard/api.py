@@ -61,7 +61,7 @@ class PerfDashboardApi(recipe_api.RecipeApi):
 
   def post(self, data):
     """Takes a data object which can be jsonified and posts it to url."""
-    yield self.m.python(
+    self.m.python(
       name="perf dashboard post",
       script=self.resource('post_json.py'),
       stdin=self.m.json.input({

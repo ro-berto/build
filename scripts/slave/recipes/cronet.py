@@ -94,14 +94,14 @@ def GenSteps(api):
   gyp_defs = builder_config.get('gyp_defs', {})
 
   cronet = api.cronet
-  yield cronet.init_and_sync(recipe_config, kwargs, custom, gyp_defs)
-  yield cronet.clean_and_build()
+  cronet.init_and_sync(recipe_config, kwargs, custom, gyp_defs)
+  cronet.clean_and_build()
 
   if builder_config['upload_package']:
-    yield api.cronet.upload_package(kwargs['BUILD_CONFIG'])
+    api.cronet.upload_package(kwargs['BUILD_CONFIG'])
 
   if builder_config['run_tests']:
-    yield api.cronet.run_tests()
+    api.cronet.run_tests()
 
 def _sanitize_nonalpha(text):
   return ''.join(c if c.isalnum() else '_' for c in text.lower())

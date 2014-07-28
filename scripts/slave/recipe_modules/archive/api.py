@@ -26,7 +26,7 @@ class ArchiveApi(recipe_api.RecipeApi):
     elif src_dir:
       args.extend(['--src-dir', src_dir])
     args.extend(self.m.json.property_args())
-    return self.m.python(
+    self.m.python(
       step_name,
       self.m.path['build'].join('scripts', 'slave', 'zip_build.py'),
       args,
@@ -45,7 +45,7 @@ class ArchiveApi(recipe_api.RecipeApi):
     elif src_dir:
       args.extend(['--src-dir', src_dir])
     args.extend(self.m.json.property_args())
-    return self.m.python(
+    self.m.python(
       step_name,
       self.m.path['build'].join('scripts', 'slave', 'extract_build.py'),
       args,

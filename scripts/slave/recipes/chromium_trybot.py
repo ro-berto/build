@@ -18,7 +18,6 @@ DEPS = [
   'python',
   'raw_io',
   'step',
-  'step_history',
   'swarming',
   'test_utils',
   'tryserver',
@@ -524,14 +523,12 @@ def GenSteps(api):
   api.gclient.set_config('chromium')
   api.step.auto_resolve_conflicts = True
 
-  yield api.bot_update.ensure_checkout(force=True)
+  bot_update_step = api.bot_update.ensure_checkout(force=True)
 
   test_spec_file = bot_config['testing'].get('test_spec_file',
                                              'chromium_trybot.json')
   test_spec_path = api.path.join('testing', 'buildbot', test_spec_file)
-  def test_spec_followup_fn(step_result):
-    step_result.presentation.step_text = 'path: %s' % test_spec_path
-  yield api.json.read(
+  step_result = api.json.read(
       'read test spec',
       api.path['checkout'].join(test_spec_path),
       step_test_data=lambda: api.json.test_api.output([
@@ -551,15 +548,14 @@ def GenSteps(api):
           'exclude_builders': ['tryserver.chromium.win:win_chromium_x64_rel'],
         },
       ]),
-      followup_fn=test_spec_followup_fn,
   )
-
-  test_spec = api.step_history['read test spec'].json.output
+  step_result.presentation.step_text = 'path: %s' % test_spec_path
+  test_spec = step_result.json.output
 
   # See if the patch needs to compile on the current platform.
   if isinstance(test_spec, dict) and should_filter_builder(
     buildername, test_spec.get('non_filter_builders', [])):
-    yield api.filter.does_patch_require_compile(
+    api.filter.does_patch_require_compile(
       exclusions=test_spec.get('gtest_tests_filter_exclusions', []))
     if not api.filter.result:
       return
@@ -591,10 +587,10 @@ def GenSteps(api):
   # If going to use swarming_client (pinned in src/DEPS), ensure it is
   # compatible with what recipes expect.
   if swarming_tests:
-    yield api.swarming.check_client_version()
+    api.swarming.check_client_version()
 
   runhooks_env = bot_config.get('runhooks_env', {})
-  yield api.chromium.runhooks(env=runhooks_env)
+  api.chromium.runhooks(env=runhooks_env)
 
   tests = []
   # TODO(phajdan.jr): Re-enable checkdeps on Windows when it works with git.
@@ -625,53 +621,47 @@ def GenSteps(api):
   # Disabled for now because it takes too long and/or fails on Windows.
   if not api.platform.is_win and not bot_config.get('exclude_compile_all'):
     compile_targets = ['all'] + compile_targets
-  yield api.chromium.compile(compile_targets,
-                             name='compile (with patch)')
-
-  # Do not run tests if the build is already in a failed state.
-  if api.step_history.failed:
-    return
+  api.chromium.compile(compile_targets, name='compile (with patch)')
 
   # Collect *.isolated hashes for all isolated targets, used when triggering
   # tests on swarming.
   if bot_config.get('use_isolate') or swarming_tests:
-    yield api.isolate.find_isolated_tests(api.chromium.output_dir)
+    api.isolate.find_isolated_tests(api.chromium.output_dir)
 
   if bot_config['compile_only']:
     return
 
   def deapply_patch_fn(failing_tests):
     if api.platform.is_win:
-      yield api.chromium.taskkill()
-    bot_update_json = api.step_history['bot_update'].json.output
+      api.chromium.taskkill()
+    bot_update_json = bot_update_step.json.output
     api.gclient.c.revisions['src'] = str(
         bot_update_json['properties']['got_revision'])
-    yield api.bot_update.ensure_checkout(force=True,
-                                         patch=False,
-                                         always_run=True,
-                                         update_presentation=False)
-    yield api.chromium.runhooks(always_run=True),
-    compile_targets = list(api.itertools.chain(
-        *[t.compile_targets(api) for t in failing_tests]))
-    if compile_targets:
-      yield api.chromium.compile(compile_targets,
-                                 name='compile (without patch)',
-                                 abort_on_failure=False,
-                                 can_fail_build=False,
-                                 always_run=True)
-      if api.step_history['compile (without patch)'].retcode != 0:
-        yield api.chromium.compile(compile_targets,
-                                   name='compile (without patch, clobber)',
-                                   force_clobber=True,
-                                   always_run=True)
-      # Search for *.isolated only if enabled in bot config or if some swarming
-      # test is being recompiled.
-      failing_swarming_tests = set(failing_tests) & set(swarming_tests)
-      if bot_config.get('use_isolate') or failing_swarming_tests:
-        yield api.isolate.find_isolated_tests(api.chromium.output_dir,
-                                              always_run=True)
+    api.bot_update.ensure_checkout(force=True,
+                                   patch=False,
+                                   update_presentation=False)
+    try:
+      api.chromium.runhooks()
+    finally:
+      compile_targets = list(api.itertools.chain(
+          *[t.compile_targets(api) for t in failing_tests]))
+      if compile_targets:
+        try:
+          api.chromium.compile(
+                  compile_targets, name='compile (without patch)')
+        except api.StepFailure:
+          api.chromium.compile(compile_targets,
+                               name='compile (without patch, clobber)',
+                               force_clobber=True)
+        # Search for *.isolated only if enabled in bot config or if some
+        # swarming test is being recompiled.
+        failing_swarming_tests = set(failing_tests) & set(swarming_tests)
+        if bot_config.get('use_isolate') or failing_swarming_tests:
+          api.isolate.find_isolated_tests(api.chromium.output_dir)
 
-  yield api.test_utils.determine_new_failures(api, tests, deapply_patch_fn)
+  result = api.test_utils.determine_new_failures(api, tests, deapply_patch_fn)
+
+  return result
 
 
 def _sanitize_nonalpha(text):
@@ -760,8 +750,7 @@ def GenTests(api):
     api.test('compile_first_failure_linux') +
     props() +
     api.platform.name('linux') +
-    api.step_data('compile (with patch)', retcode=1) +
-    api.step_data('compile (with patch, lkcr, clobber)', retcode=0)
+    api.step_data('compile (with patch)', retcode=1)
   )
 
   yield (

@@ -54,27 +54,26 @@ def GenSteps(api):
   api.chromium.set_config('chrome_pgo_instrument', BUILD_CONFIG='Release')
   api.gclient.set_config('chromium_lkgr')
 
-  yield api.chromium.taskkill()
-  yield api.bot_update.ensure_checkout()
+  api.chromium.taskkill()
+  api.bot_update.ensure_checkout()
 
   # First step: compilation of the instrumented build.
-  yield api.chromium.runhooks()
-  yield api.chromium.compile()
+  api.chromium.runhooks()
+  api.chromium.compile()
 
   # Remove the profile files from the previous builds.
-  yield api.path.rmwildcard('*.pgc',
+  api.path.rmwildcard('*.pgc',
                             str(api.chromium.output_dir))
 
   # Second step: profiling of the instrumented build.
   for benchmark in _BENCHMARKS_TO_RUN:
-    yield RunTelemetryBenchmark(api, benchmark)
+    RunTelemetryBenchmark(api, benchmark)
 
   # Third step: Compilation of the optimized build, this will use the profile
   #     data files produced by the previous step.
   api.chromium.set_config('chrome_pgo_optimize', BUILD_CONFIG='Release')
-  yield api.chromium.runhooks()
-  yield api.chromium.compile()
-
+  api.chromium.runhooks()
+  api.chromium.compile()
 
 def GenTests(api):
   mastername = 'chromium.fyi'

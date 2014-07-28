@@ -11,7 +11,6 @@ DEPS = [
     'step',
     'path',
     'properties',
-    'step_history',
 ]
 
 REPO_URL = 'https://chromium.googlesource.com/chromium/src.git'
@@ -81,36 +80,35 @@ def GenSteps(api):
   api.gclient.set_config('perf')
   api.gclient.apply_config('android')
 
-  yield api.bot_update.ensure_checkout()
+  api.bot_update.ensure_checkout()
   api.path['checkout'] = api.path['slave_build'].join('src')
 
-  yield api.chromium_android.download_build(bucket=builder['bucket'],
-      path=builder['path'](api))
+  api.chromium_android.download_build(bucket=builder['bucket'],
+    path=builder['path'](api))
 
-  yield api.chromium_android.spawn_logcat_monitor()
-  yield api.chromium_android.device_status_check(abort_on_failure=True)
-  yield api.chromium_android.provision_devices(abort_on_failure=True)
+  api.chromium_android.spawn_logcat_monitor()
+  api.chromium_android.device_status_check(abort_on_failure=True)
+  api.chromium_android.provision_devices(abort_on_failure=True)
 
-  yield api.chromium_android.adb_install_apk(
+  api.chromium_android.adb_install_apk(
       'ChromeShell.apk',
       'org.chromium.chrome.shell')
 
   # TODO(zty): remove this in favor of device_status_check
-  yield api.adb.list_devices()
-  yield api.chromium_android.list_perf_tests(
+  api.adb.list_devices()
+  perf_tests = api.chromium_android.list_perf_tests(
       browser='android-chrome-shell',
       num_device_shards=builder['num_device_shards'],
-      devices=api.adb.devices[0:1])
-  perf_tests = api.step_history['List Perf Tests'].json.output
-  yield api.chromium_android.run_sharded_perf_tests(
+      devices=api.adb.devices[0:1]).json.output
+  api.chromium_android.run_sharded_perf_tests(
       config=api.json.input(data=perf_tests),
       perf_id=builder['perf_id'])
 
-  yield api.chromium_android.logcat_dump()
-  yield api.chromium_android.stack_tool_steps()
-  yield api.chromium_android.test_report()
+  api.chromium_android.logcat_dump()
+  api.chromium_android.stack_tool_steps()
+  api.chromium_android.test_report()
 
-  yield api.chromium_android.cleanup_build()
+  api.chromium_android.cleanup_build()
 
 def _sanitize_nonalpha(text):
   return ''.join(c if c.isalnum() else '_' for c in text)

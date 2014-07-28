@@ -23,15 +23,15 @@ DEPS = [
 
 def GenSteps(api):
   api.gpu.setup()
-  yield api.buildbot.prep()
+  api.buildbot.prep()
 
   # The GPU recipes require the use of isolates for transmitting the
   # test binaries and data files from the builder to the tester. The
   # testers do not checkout the full Chromium tree; instead, the
   # swarming_client tools are checked out separately.
-  yield api.swarming_client.checkout()
-  yield api.buildbot.copy_parent_got_revision_to_got_revision()
-  yield api.gpu.test_steps()
+  api.swarming_client.checkout()
+  api.buildbot.copy_parent_got_revision_to_got_revision()
+  api.gpu.test_steps()
 
 def GenTests(api):
   # The majority of the tests are in the build_and_test recipe.

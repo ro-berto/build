@@ -8,7 +8,6 @@ from slave import recipe_util
 from . import builders
 from . import steps
 
-
 class TestLauncherFilterFileInputPlaceholder(recipe_util.Placeholder):
   def __init__(self, api, tests):
     self.raw = api.m.raw_io.input('\n'.join(tests))
@@ -68,7 +67,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     { 'MAJOR'": '37', 'MINOR': '0', 'BUILD': '2021', 'PATCH': '0' }
     """
-    text = self.m.step_history['get version'].stdout
+    text = self._version
     output = {}
     for line in text.splitlines():
       [k,v] = line.split('=', 1)
@@ -76,15 +75,16 @@ class ChromiumApi(recipe_api.RecipeApi):
     return output
 
   def get_version(self):
-    yield self.m.step(
+    self._version = self.m.step(
         'get version',
         ['cat', self.m.path['checkout'].join('chrome', 'VERSION')],
         stdout=self.m.raw_io.output('version'),
         step_test_data=(
             lambda: self.m.raw_io.test_api.stream_output(
-                "MAJOR=37\nMINOR=0\nBUILD=2021\nPATCH=0\n")))
+                "MAJOR=37\nMINOR=0\nBUILD=2021\nPATCH=0\n"))).stdout
+    return self.version
 
-  def compile(self, targets=None, name=None, abort_on_failure=True,
+  def compile(self, targets=None, name=None,
               force_clobber=False, **kwargs):
     """Return a compile.py invocation."""
     targets = targets or self.c.compile_py.default_targets.as_jsonish()
@@ -118,10 +118,10 @@ class ChromiumApi(recipe_api.RecipeApi):
         args.extend(['-sdk', self.c.compile_py.xcode_sdk])
     else:
       args.extend(targets)
-    return self.m.python(name or 'compile',
-                         self.m.path['build'].join('scripts', 'slave',
-                                                   'compile.py'),
-                         args, abort_on_failure=abort_on_failure, **kwargs)
+    self.m.python(name or 'compile',
+                  self.m.path['build'].join('scripts', 'slave',
+                                            'compile.py'),
+                  args, abort_on_failure=True, **kwargs)
 
   @recipe_util.returns_placeholder
   def test_launcher_filter(self, tests):
@@ -233,9 +233,6 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     full_args.extend(args)
 
-    # By default, always run the tests.
-    kwargs.setdefault('always_run', True)
-
     return self.m.python(
       name or t_name,
       self.m.path['build'].join('scripts', 'slave', 'runtest.py'),
@@ -283,7 +280,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     if not results_directory:
       results_directory = self.m.path['slave_build'].join('gtest-results', name)
 
-    return self.runtest(
+    self.runtest(
         runner,
         test_args,
         annotate='gtest',
@@ -303,7 +300,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     name = 'telemetry_unittests'
     if suffix:
       name += ' (%s)' % suffix
-    return self.runtest(
+    self.runtest(
         self.m.path['checkout'].join('tools', 'telemetry', 'run_tests'),
         args=['--browser=%s' % self.c.build_config_fs.lower()],
         annotate='gtest',
@@ -317,7 +314,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     name = 'telemetry_perf_unittests'
     if suffix:
       name += ' (%s)' % suffix
-    return self.runtest(
+    self.runtest(
         self.m.path['checkout'].join('tools', 'perf', 'run_tests'),
         args=['--browser=%s' % self.c.build_config_fs.lower()],
         annotate='gtest',
@@ -335,7 +332,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     else:
       env['GYP_CHROMIUM_NO_ACTION'] = 1
     kwargs['env'] = env
-    return self.m.gclient.runhooks(**kwargs)
+    self.m.gclient.runhooks(**kwargs)
 
   def run_gn(self, use_goma=False):
     gn_args = []
@@ -359,7 +356,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       gn_args.append('goma_dir="%s"' % self.m.path['build'].join('goma'))
     gn_args.extend(self.c.project_generator.args)
 
-    return self.m.python(
+    self.m.python(
         name='gn',
         script=self.m.path['depot_tools'].join('gn.py'),
         args=[
@@ -370,17 +367,17 @@ class ChromiumApi(recipe_api.RecipeApi):
         ])
 
   def taskkill(self):
-    return self.m.python(
+    self.m.python(
       'taskkill',
       self.m.path['build'].join('scripts', 'slave', 'kill_processes.py'))
 
   def cleanup_temp(self):
-    return self.m.python(
+    self.m.python(
       'cleanup_temp',
       self.m.path['build'].join('scripts', 'slave', 'cleanup_temp.py'))
 
   def crash_handler(self):
-    return self.m.python(
+    self.m.python(
         'start_crash_service',
         self.m.path['build'].join('scripts', 'slave', 'chromium',
                                   'run_crash_handler.py'),
@@ -388,8 +385,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
   def process_dumps(self, **kwargs):
     # Dumps are especially useful when other steps (e.g. tests) are failing.
-    kwargs.setdefault('always_run', True)
-    return self.m.python(
+    self.m.python(
         'process_dumps',
         self.m.path['build'].join('scripts', 'slave', 'process_dumps.py'),
         ['--target', self.c.build_config_fs],
@@ -397,7 +393,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
   def apply_syzyasan(self):
     args = ['--target', self.c.BUILD_CONFIG]
-    return self.m.python(
+    self.m.python(
       'apply_syzyasan',
       self.m.path['build'].join('scripts', 'slave', 'chromium',
                                 'win_apply_syzyasan.py'),
@@ -419,7 +415,7 @@ class ChromiumApi(recipe_api.RecipeApi):
         '--target', self.c.BUILD_CONFIG,
         '--factory-properties', self.m.json.dumps(fake_factory_properties),
     ]
-    return self.m.python(
+    self.m.python(
       step_name,
       self.m.path['build'].join('scripts', 'slave', 'chromium',
                                 'archive_build.py'),
@@ -487,14 +483,12 @@ class ChromiumApi(recipe_api.RecipeApi):
         args=['--gitless', self.m.path['checkout'].join('.DEPS.git')],
         **kwargs)
 
-  def setup_tests(self, bot_type, test_steps):
-    steps = []
-    if bot_type in ['tester', 'builder_tester'] and test_steps:
+  def setup_tests(self, bot_type, test_runner):
+    if bot_type in ['tester', 'builder_tester']:
       if self.m.platform.is_win:
-        steps.append(self.crash_handler())
+        self.crash_handler()
 
-      steps.extend(test_steps)
+      test_runner()
 
       if self.m.platform.is_win:
-        steps.append(self.process_dumps())
-    return steps
+        self.process_dumps()

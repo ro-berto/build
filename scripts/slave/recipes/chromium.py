@@ -14,10 +14,8 @@ DEPS = [
   'platform',
   'properties',
   'python',
-  'step_history',
   'test_utils',
 ]
-
 
 # Different types of builds this recipe can do.
 RECIPE_CONFIGS = {
@@ -139,36 +137,31 @@ def GenSteps(api):
     api.gclient.c.revisions[dep['name']] = dep['rev_str'] % component_rev
 
   if api.platform.is_win:
-    yield api.chromium.taskkill()
+    api.chromium.taskkill()
 
   # Bot Update re-uses the gclient configs.
-  yield api.bot_update.ensure_checkout(),
-  if not api.step_history.last_step().json.output['did_run']:
-    yield api.gclient.checkout(),
+  update_step = api.bot_update.ensure_checkout()
+  if not update_step.json.output['did_run']:
+    update_step = api.gclient.checkout()
   # Whatever step is run right before this line needs to emit got_revision.
-  update_step = api.step_history.last_step()
   got_revision = update_step.presentation.properties['got_revision']
 
   if not bot_config.get('disable_runhooks'):
-    yield api.chromium.runhooks(env=bot_config.get('runhooks_env', {}))
+    api.chromium.runhooks(env=bot_config.get('runhooks_env', {}))
 
   test_spec_file = bot_config.get('testing', {}).get('test_spec_file',
                                                      '%s.json' % mastername)
   test_spec_path = api.path['checkout'].join('testing', 'buildbot',
                                              test_spec_file)
-  def test_spec_followup_fn(step_result):
-    step_result.presentation.step_text = 'path: %s' % test_spec_path
-  yield api.json.read(
+  test_spec_result = api.json.read(
       'read test spec',
       test_spec_path,
-      step_test_data=lambda: api.json.test_api.output({}),
-      followup_fn=test_spec_followup_fn),
-  yield api.chromium.cleanup_temp()
+      step_test_data=lambda: api.json.test_api.output({}))
+  test_spec_result.presentation.step_text = 'path: %s' % test_spec_path
+  for test in bot_config.get('tests', []):
+    test.set_test_spec(test_spec_result.json.output)
 
-  # For non-trybot recipes we should know (seed) all steps in advance,
-  # once we read the test spec. Instead of yielding single steps
-  # or groups of steps, yield all of them at the end.
-  steps = []
+  api.chromium.cleanup_temp()
 
   if bot_type in ['builder', 'builder_tester']:
     compile_targets = set(bot_config.get('compile_targets', []))
@@ -178,20 +171,17 @@ def GenSteps(api):
       if builder_dict.get('parent_buildername') == buildername:
         for test in builder_dict.get('tests', []):
           compile_targets.update(test.compile_targets(api))
-    steps.extend([
-        api.chromium.compile(targets=sorted(compile_targets)),
-        api.chromium.checkdeps(),
-    ])
+
+    api.chromium.compile(targets=sorted(compile_targets))
+    api.chromium.checkdeps()
 
     if api.chromium.c.TARGET_PLATFORM == 'android':
-      steps.extend([
-          api.chromium_android.check_webview_licenses(),
-          api.chromium_android.findbugs(),
-      ])
+      api.chromium_android.check_webview_licenses()
+      api.chromium_android.findbugs()
 
   if bot_config.get('use_isolate'):
     test_args_map = {}
-    test_spec = api.step_history['read test spec'].json.output
+    test_spec = test_spec_result.json.output
     gtests_tests = test_spec.get(buildername, {}).get('gtest_tests', [])
     for test in gtests_tests:
       if isinstance(test, dict):
@@ -199,16 +189,16 @@ def GenSteps(api):
         test_name = test.get('test')
         if test_name and test_args:
           test_args_map[test_name] = test_args
-    steps.append(api.isolate.find_isolated_tests(api.chromium.output_dir))
+    api.isolate.find_isolated_tests(api.chromium.output_dir)
 
   if bot_type == 'builder':
-    steps.append(api.archive.zip_and_upload_build(
+    api.archive.zip_and_upload_build(
         'package build',
         api.chromium.c.build_config_fs,
         api.archive.legacy_upload_url(
           master_config.get('build_gs_bucket'),
           extra_url_components=api.properties['mastername']),
-        build_revision=got_revision))
+        build_revision=got_revision)
 
   if bot_type == 'tester':
     # Protect against hard to debug mismatches between directory names
@@ -219,36 +209,34 @@ def GenSteps(api):
     #
     # The best way to ensure the old build directory is not used is to
     # remove it.
-    steps.append(api.path.rmtree(
+    api.path.rmtree(
       'build directory',
-      api.chromium.c.build_dir.join(api.chromium.c.build_config_fs)))
+      api.chromium.c.build_dir.join(api.chromium.c.build_config_fs))
 
-    steps.append(api.archive.download_and_unzip_build(
+    api.archive.download_and_unzip_build(
       'extract build',
       api.chromium.c.build_config_fs,
       api.archive.legacy_download_url(
         master_config.get('build_gs_bucket'),
         extra_url_components=api.properties['mastername'],),
-      build_revision=api.properties.get('parent_got_revision', got_revision),
-      # TODO(phajdan.jr): Move abort_on_failure to archive recipe module.
-      abort_on_failure=True))
+      build_revision=api.properties.get('parent_got_revision', got_revision)
+      )
 
   if (api.chromium.c.TARGET_PLATFORM == 'android' and
       bot_type in ['tester', 'builder_tester']):
-    steps.append(api.chromium_android.common_tests_setup_steps())
+    api.chromium_android.common_tests_setup_steps()
 
-  if not bot_config.get('do_not_run_tests'):
-    test_steps = [t.run(api, '') for t in bot_config.get('tests', [])]
-    steps.extend(api.chromium.setup_tests(bot_type, test_steps))
+  if not bot_config.get('do_not_run_tests') and bot_config.get('tests', None):
+    def test_runner():
+      tests = bot_config.get('tests', [])
+      for t in tests:
+        t.run(api, '')
+
+    api.chromium.setup_tests(bot_type, test_runner)
 
   if (api.chromium.c.TARGET_PLATFORM == 'android' and
       bot_type in ['tester', 'builder_tester']):
-    steps.append(api.chromium_android.common_tests_final_steps())
-
-  # For non-trybot recipes we should know (seed) all steps in advance,
-  # at the beginning of each build. Instead of yielding single steps
-  # or groups of steps, yield all of them at the end.
-  yield steps
+    api.chromium_android.common_tests_final_steps()
 
 
 def _sanitize_nonalpha(text):

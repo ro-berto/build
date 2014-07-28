@@ -145,7 +145,21 @@ class BotUpdateApi(recipe_api.RecipeApi):
         master, builder, slave, root, first_sln, rev_map, git_mode, force,
         self.m.properties.get('fail_patch', False))
 
-    def followup_fn(step_result):
+    # Add suffixes to the step name, if specified.
+    name = 'bot_update'
+    if not patch:
+      name += ' (without patch)'
+    if suffix:
+      name += ' - %s' % suffix
+
+    # Ah hah! Now that everything is in place, lets run bot_update!
+    try:
+      step_result = self(name, cmd,
+                         step_test_data=step_test_data, **kwargs)
+    except self.StepFailure as f:
+      step_result = f.result
+      raise
+    finally:
       if update_presentation:
         # Set properties such as got_revision.
         if 'properties' in step_result.json.output:
@@ -165,40 +179,28 @@ class BotUpdateApi(recipe_api.RecipeApi):
         if step_result.json.output.get('patch_failure'):
           step_result.presentation.status = 'SUCCESS'
         else:
-          raise recipe_util.RecipeAbort('Bot Update failed, aborting.')
+          raise self.StepFailure('Bot Update failed, aborting.')
 
-    # Add suffixes to the step name, if specified.
-    name = 'bot_update'
-    if not patch:
-      name += ' (without patch)'
-    if suffix:
-      name += ' - %s' % suffix
+      # Set the "checkout" path for the main solution.
+      # This is used by the Chromium module to figure out where to look for
+      # the checkout.
+      # If there is a patch failure, emit another step that said things failed.
+      if step_result.json.output.get('patch_failure'):
+        self.m.python.inline(
+            'Patch failure',
+            """\
+            import sys
+            print 'Check the bot_update step for details.'
+            sys.exit(1)
+            """,
+            step_test_data=self.test_api.patch_error_data,
+            abort_on_failure=True)
 
-    # Ah hah! Now that everything is in place, lets run bot_update!
-    yield self(name, cmd, followup_fn=followup_fn,
-               step_test_data=step_test_data, **kwargs),
+      # bot_update actually just sets root to be the folder name of the
+      # first solution.
+      if step_result.json.output['did_run']:
+        co_root = step_result.json.output['root']
+        cwd = kwargs.get('cwd', self.m.path['slave_build'])
+        self.m.path['checkout'] = cwd.join(*co_root.split(self.m.path.sep))
 
-    # Set the "checkout" path for the main solution.
-    # This is used by the Chromium module to figure out where to look for
-    # the checkout.
-    bot_update_step = self.m.step_history.last_step()
-
-    # If there is a patch failure, emit another step that said things failed.
-    if bot_update_step.json.output.get('patch_failure'):
-      yield self.m.python.inline(
-          'Patch failure',
-          """\
-          import sys
-          print 'Check the bot_update step for details.'
-          sys.exit(1)
-          """,
-          abort_on_failure=True,
-          always_run=True,
-          step_test_data=self.test_api.patch_error_data)
-
-    # bot_update actually just sets root to be the folder name of the
-    # first solution.
-    if bot_update_step.json.output['did_run']:
-      co_root = bot_update_step.json.output['root']
-      cwd = kwargs.get('cwd', self.m.path['slave_build'])
-      self.m.path['checkout'] = cwd.join(*co_root.split(self.m.path.sep))
+    return step_result

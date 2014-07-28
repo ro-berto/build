@@ -9,7 +9,7 @@ DEPS = [
 
 
 def GenSteps(api):
-  yield api.trigger(*api.properties['trigger_props_list'])
+  api.trigger(*api.properties['trigger_props_list'])
 
 
 def GenTests(api):

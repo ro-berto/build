@@ -36,7 +36,6 @@ DEPS = [
   'python',
   'raw_io',
   'step',
-  'step_history',
   'test_utils',
 ]
 
@@ -82,17 +81,15 @@ def GenSteps(api):
 
   api.step.auto_resolve_conflicts = True
 
-  yield api.bot_update.ensure_checkout(force=True)
+  step_result = api.bot_update.ensure_checkout(force=True)
 
-  yield (
-    api.chromium.runhooks(),
-    api.chromium.compile(),
-  )
+  api.chromium.runhooks()
+  api.chromium.compile()
 
-  yield api.chromium.runtest('webkit_unit_tests', xvfb=True)
+  api.chromium.runtest('webkit_unit_tests', xvfb=True)
 
   def component_pinned_fn(_failing_steps):
-    bot_update_json = api.step_history['bot_update'].json.output
+    bot_update_json = step_result.json.output
     api.gclient.c.revisions['src'] = str(
         bot_update_json['properties']['got_cr_revision'])
     api.gclient.c.revisions['src/third_party/WebKit'] = str(
@@ -100,14 +97,12 @@ def GenSteps(api):
     # Reset component revision to the pinned revision from chromium's DEPS
     # for comparison.
     del api.gclient.c.revisions[bot_config['component']['path']]
-    yield api.bot_update.ensure_checkout(force=True, always_run=True)
+    api.bot_update.ensure_checkout(force=True)
 
-    yield (
-      api.chromium.runhooks(always_run=True),
-      api.chromium.compile(always_run=True),
-    )
+    api.chromium.runhooks()
+    api.chromium.compile()
 
-  yield api.test_utils.determine_new_failures(
+  api.test_utils.determine_new_failures(
       api, [api.chromium.steps.BlinkTest(api)], component_pinned_fn)
 
 

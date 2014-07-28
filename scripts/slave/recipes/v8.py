@@ -11,7 +11,6 @@ DEPS = [
   'platform',
   'properties',
   'step',
-  'step_history',
   'tryserver',
   'v8',
 ]
@@ -25,41 +24,40 @@ def GenSteps(api):
     v8.init_tryserver()
 
   if api.platform.is_win:
-    yield api.chromium.taskkill()
+    api.chromium.taskkill()
 
   # On the branch builders, the gclient solution changes on every milestone.
   # If the sync fails, we nuke the build dir.
-  yield v8.checkout(
+  v8.checkout(
       may_nuke=(api.tryserver.is_tryserver
                 or api.properties.get('mastername') == 'client.v8.branches'),
       revert=api.tryserver.is_tryserver)
 
   if api.tryserver.is_tryserver:
-    yield api.tryserver.maybe_apply_issue()
+    api.tryserver.maybe_apply_issue()
 
   if v8.needs_clang:
-    yield v8.update_clang()
-
-  yield v8.runhooks()
-  yield api.chromium.cleanup_temp()
+    v8.update_clang()
+  v8.runhooks()
+  api.chromium.cleanup_temp()
 
   if v8.c.nacl.update_nacl_sdk:
-    yield v8.update_nacl_sdk()
+    v8.update_nacl_sdk()
 
   if v8.should_build:
     if api.tryserver.is_tryserver:
-      yield v8.tryserver_compile(v8.tryserver_lkgr_fallback)
+      v8.tryserver_compile(v8.tryserver_lkgr_fallback)
     else:
-      yield v8.compile()
+      v8.compile()
 
   if v8.should_upload_build:
-    yield v8.upload_build()
+    v8.upload_build()
 
   if v8.should_download_build:
-    yield v8.download_build()
+    v8.download_build()
 
   if v8.should_test:
-    yield v8.runtests()
+    v8.runtests()
 
 
 def _sanitize_nonalpha(text):

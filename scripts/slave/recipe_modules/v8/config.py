@@ -20,7 +20,7 @@ def BaseConfig(**_kwargs):
       CC = Single(basestring, required=False),
       CXX = Single(basestring, required=False),
       LINK = Single(basestring, required=False),
-    ), 
+    ),
     nacl = ConfigGroup(
       update_nacl_sdk = Single(basestring, required=False),
       compile_extra_args = List(basestring),

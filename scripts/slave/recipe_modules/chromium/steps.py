@@ -9,6 +9,11 @@ class Test(object):
   applied patch.
   """
 
+  def __init__(self):
+    super(Test, self).__init__()
+    self._test_runs = {}
+    self._test_spec = {}
+
   @property
   def name(self):  # pragma: no cover
     """Name of the test."""
@@ -46,6 +51,9 @@ class Test(object):
       return self.name
     return '%s (%s)' % (self.name, suffix)
 
+  def set_test_spec(self, test_spec):
+    self._test_spec = test_spec
+
 
 class ArchiveBuildStep(Test):
   def __init__(self, gs_bucket, gs_acl=None):
@@ -71,16 +79,19 @@ class CheckdepsTest(Test):  # pylint: disable=W0232
   def compile_targets(_):
     return []
 
-  @staticmethod
-  def run(api, suffix):
-    return api.chromium.checkdeps(
-        suffix, can_fail_build=(not suffix), always_run=True)
+  def run(self, api, suffix):
+    try:
+      self._test_runs[suffix] = api.chromium.checkdeps(suffix)
+    except api.StepFailure as f:
+      self._test_runs[suffix] = f.result
+
+    return self._test_runs[suffix]
 
   def has_valid_results(self, api, suffix):
-    return api.step_history[self._step_name(suffix)].json.output is not None
+    return self._test_runs[suffix].json.output is not None
 
   def failures(self, api, suffix):
-    results = api.step_history[self._step_name(suffix)].json.output
+    results = self._test_runs[suffix].json.output
     result_set = set()
     for result in results:
       for violation in result['violations']:
@@ -95,16 +106,22 @@ class CheckpermsTest(Test):  # pylint: disable=W0232
   def compile_targets(_):
     return []
 
-  @staticmethod
-  def run(api, suffix):
-    return api.chromium.checkperms(
-        suffix, can_fail_build=(not suffix), always_run=True)
+  def run(self, api, suffix):
+    try:
+      self._test_runs[suffix] = api.chromium.checkperms(suffix)
+    except api.StepFailure as f:
+      if not suffix:
+        raise
+      else:
+        self._test_runs[suffix] = f.result
+
+    return self._test_runs[suffix]
 
   def has_valid_results(self, api, suffix):
-    return api.step_history[self._step_name(suffix)].json.output is not None
+    return self._test_runs[suffix].json.output is not None
 
   def failures(self, api, suffix):
-    results = api.step_history[self._step_name(suffix)].json.output
+    results = self._test_runs[suffix].json.output
     result_set = set()
     for result in results:
       result_set.add((result['rel_path'], result['error']))
@@ -117,16 +134,22 @@ class ChecklicensesTest(Test):  # pylint: disable=W0232
   def compile_targets(_):
     return []
 
-  @staticmethod
-  def run(api, suffix):
-    return api.chromium.checklicenses(
-        suffix, can_fail_build=(not suffix), always_run=True)
+  def run(self, api, suffix):
+    try:
+      self._test_runs[suffix] = api.chromium.checklicenses(suffix)
+    except api.StepFailure as f:
+      if not suffix:
+        raise
+      else:
+        self._test_runs[suffix] = f.result
+
+    return self._test_runs[suffix]
 
   def has_valid_results(self, api, suffix):
-    return api.step_history[self._step_name(suffix)].json.output is not None
+    return self._test_runs[suffix].json.output is not None
 
   def failures(self, api, suffix):
-    results = api.step_history[self._step_name(suffix)].json.output
+    results = self._test_runs[suffix].json.output
     result_set = set()
     for result in results:
       result_set.add((result['filename'], result['license']))
@@ -136,27 +159,28 @@ class ChecklicensesTest(Test):  # pylint: disable=W0232
 class Deps2GitTest(Test):  # pylint: disable=W0232
   name = 'deps2git'
 
+  def __init__(self):
+    super(Deps2GitTest, self).__init__()
+
   @staticmethod
   def compile_targets(_):
     return []
 
-  @staticmethod
-  def run(api, suffix):
-    yield (
-      api.chromium.deps2git(
-          suffix, can_fail_build=(not suffix), always_run=True),
-      api.chromium.deps2submodules()
-    )
+  def run(self, api, suffix):
+    self._test_runs[suffix] = api.chromium.deps2git(suffix)
+    api.chromium.deps2submodules()
+    return self._test_runs[suffix]
 
   def has_valid_results(self, api, suffix):
-    return api.step_history[self._step_name(suffix)].json.output is not None
+    return self._test_runs[suffix].json.output is not None
 
   def failures(self, api, suffix):
-    return api.step_history[self._step_name(suffix)].json.output
+    return self._test_runs[suffix].json.output
 
 
 class GTestTest(Test):
   def __init__(self, name, args=None, compile_targets=None, flakiness_dash=False):
+    super(GTestTest, self).__init__()
     self._name = name
     self._args = args or []
     self.flakiness_dash = flakiness_dash
@@ -179,16 +203,7 @@ class GTestTest(Test):
   def run(self, api, suffix):
     if api.chromium.c.TARGET_PLATFORM == 'android':
       return api.chromium_android.run_test_suite(
-          self.name, self._args, always_run=True)
-
-    def followup_fn(step_result):
-      r = step_result.json.gtest_results
-      p = step_result.presentation
-
-      if r.valid:
-        p.step_text += api.test_utils.format_step_text([
-            ['failures:', r.failures]
-        ])
+          self.name, self._args)
 
     # Copy the list because run can be invoked multiple times and we modify
     # the local copy.
@@ -198,35 +213,48 @@ class GTestTest(Test):
       args.append(api.chromium.test_launcher_filter(
                       self.failures(api, 'with patch')))
 
-    return api.chromium.runtest(
-        self.name,
-        args,
-        annotate='gtest',
-        xvfb=True,
-        name=self._step_name(suffix),
-        test_type=self.name,
-        can_fail_build=(not suffix),
-        always_run=True,
-        flakiness_dash=self.flakiness_dash,
-        test_launcher_summary_output=api.json.gtest_results(add_json_log=False),
-        followup_fn=followup_fn,
-        step_test_data=lambda: api.json.test_api.canned_gtest_output(True))
+    kwargs = {}
+
+    try:
+      step_result = api.chromium.runtest(
+          self.name, args,
+          annotate='gtest',
+          xvfb=True,
+          name=self._step_name(suffix),
+          test_type=self.name,
+          flakiness_dash=self.flakiness_dash,
+          step_test_data=lambda: api.json.test_api.canned_gtest_output(True),
+          test_launcher_summary_output=api.json.gtest_results(add_json_log=False),
+          **kwargs)
+
+    except api.StepFailure as f:
+      step_result = f.result
+
+    if suffix:
+      r = step_result.json.gtest_results
+      p = step_result.presentation
+
+      if r.valid:
+        p.step_text += api.test_utils.format_step_text([
+            ['failures:', r.failures]
+        ])
+    self._test_runs[suffix] = step_result
+    return step_result
 
   def has_valid_results(self, api, suffix):
-    step_name = self._step_name(suffix)
-    gtest_results = api.step_history[step_name].json.gtest_results
+    gtest_results = self._test_runs[suffix].json.gtest_results
     if not gtest_results.valid:  # pragma: no cover
       return False
     global_tags = gtest_results.raw.get('global_tags', [])
     return 'UNRELIABLE_RESULTS' not in global_tags
 
   def failures(self, api, suffix):
-    step_name = self._step_name(suffix)
-    return api.step_history[step_name].json.gtest_results.failures
+    return self._test_runs[suffix].json.gtest_results.failures
 
 
 class DynamicGTestTests(Test):
   def __init__(self, buildername, flakiness_dash=True):
+    super(DynamicGTestTests, self).__init__()
     self.buildername = buildername
     self.flakiness_dash = flakiness_dash
 
@@ -237,8 +265,7 @@ class DynamicGTestTests(Test):
     return test
 
   def _get_test_spec(self, api):
-    all_test_specs = api.step_history['read test spec'].json.output
-    return all_test_specs.get(self.buildername, {})
+    return self._test_spec.get(self.buildername, {})
 
   def _get_tests(self, api):
     return [self._canonicalize_test(t) for t in
@@ -253,7 +280,7 @@ class DynamicGTestTests(Test):
                      '--test-launcher-total-shards=%d' % test['total_shards']])
       steps.append(api.chromium.runtest(
           test['test'], test_type=test['test'], args=args, annotate='gtest',
-          xvfb=True, flakiness_dash=self.flakiness_dash, always_run=True))
+          xvfb=True, flakiness_dash=self.flakiness_dash))
 
     return steps
 
@@ -297,8 +324,7 @@ class SwarmingGTestTest(Test):
           print '*.isolated file for target %s is missing' % sys.argv[1]
           sys.exit(1)
           """,
-          args=[self._name],
-          always_run=True)
+          args=[self._name])
 
     # If rerunning without a patch, run only tests that failed.
     args = self._args[:]
@@ -314,7 +340,7 @@ class SwarmingGTestTest(Test):
         test_launcher_summary_output=api.json.gtest_results(
             add_json_log=False),
         extra_args=args)
-    return api.swarming.trigger([self._tasks[suffix]], always_run=True)
+    return api.swarming.trigger([self._tasks[suffix]])
 
   def run(self, api, suffix):  # pylint: disable=R0201
     """Not used. All logic in pre_run, post_run."""
@@ -335,31 +361,34 @@ class SwarmingGTestTest(Test):
           print '%s wasn\'t triggered' % sys.argv[1]
           sys.exit(1)
           """,
-          args=[self._name],
-          always_run=True)
-
-    # Update step presentation, store step results in self._results.
-    def followup_fn(step_result):
-      r = step_result.json.gtest_results
-      p = step_result.presentation
-      t = step_result.swarming_task
-      missing_shards = r.raw.get('missing_shards') or []
-      for index in missing_shards:
-        p.links['missing shard #%d' % index] = t.get_shard_view_url(index)
-      if r.valid:
-        p.step_text += api.test_utils.format_step_text([
-            ['failures:', r.failures]
-        ])
-      self._results[suffix] = r
+          args=[self._name])
 
     # Wait for test on swarming to finish. If swarming infrastructure is
     # having issues, this step produces no valid *.json test summary, and
     # 'has_valid_results' returns False.
-    return api.swarming.collect(
-        [self._tasks[suffix]],
-        always_run=True,
-        can_fail_build=(not suffix),
-        followup_fn=followup_fn)
+    step_results = api.swarming.collect_each([self._tasks[suffix]])
+
+    # TODO(martiniss) make this loop better. It's kinda hacky.
+    try:
+      while True:
+        try:
+          step_result = next(step_results)
+        except api.StepFailure as f:
+          step_result = f.result
+
+        r = step_result.json.gtest_results
+        p = step_result.presentation
+        t = step_result.swarming_task
+        missing_shards = r.raw.get('missing_shards') or []
+        for index in missing_shards:
+          p.links['missing shard #%d' % index] = t.get_shard_view_url(index)
+        if r.valid:
+          p.step_text += api.test_utils.format_step_text([
+              ['failures:', r.failures]
+          ])
+        self._results[suffix] = r
+    except StopIteration:
+      pass
 
   def has_valid_results(self, api, suffix):
     # Test wasn't triggered or wasn't collected.
@@ -385,8 +414,14 @@ class TelemetryUnitTests(Test):
     # Otherwise, if the tests were failing on trunks and a cl introduces a
     # new regression the cl would land since the failure text is hardcoded
     # below. http://crbug.com/359521.
-    return api.chromium.run_telemetry_unittests(
-        suffix, always_run=True, can_fail_build=True)
+    failed = False
+    try:
+      step_result = api.chromium.run_telemetry_unittests(suffix)
+    except self.StepFailure as f:
+      step_result = f.result
+      raise
+    finally:
+      self._test_runs[suffix] = step_result, failed
 
   @staticmethod
   def compile_targets(_):
@@ -398,7 +433,8 @@ class TelemetryUnitTests(Test):
   def failures(self, api, suffix):
     # TODO(phajdan.jr): Make it possible to retry individual failing telemetry
     # tests (add JSON).
-    if api.step_history[self._step_name(suffix)].retcode:
+    _, failed = self._test_runs[suffix]
+    if failed:
       return ['telemetry_unittest']
     return []
 
@@ -410,8 +446,14 @@ class TelemetryPerfUnitTests(Test):
     # Otherwise, if the tests were failing on trunks and a cl introduces a
     # new regression the cl would land since the failure text is hardcoded
     # below. http://crbug.com/359521.
-    return api.chromium.run_telemetry_perf_unittests(
-        suffix, always_run=True, can_fail_build=True)
+    failed = False
+    try:
+      step_result = api.chromium.run_telemetry_perf_unittests(suffix)
+    except self.StepFailure as f:
+      step_result = f.result
+      raise
+    finally:
+      self._test_runs[suffix] = step_result, failed
 
   @staticmethod
   def compile_targets(_):
@@ -423,10 +465,10 @@ class TelemetryPerfUnitTests(Test):
   def failures(self, api, suffix):
     # TODO(phajdan.jr): Make it possible to retry individual failing telemetry
     # tests (add JSON).
-    if api.step_history[self._step_name(suffix)].retcode:
-      return ['telemetry_perf_unittests']
+    _, failed = self._test_runs[suffix]
+    if failed:
+      return ['telemetry_perf_unittest']
     return []
-
 
 class NaclIntegrationTest(Test):  # pylint: disable=W0232
   name = 'nacl_integration'
@@ -441,22 +483,20 @@ class NaclIntegrationTest(Test):  # pylint: disable=W0232
         '--json_build_results_output_file', api.json.output(),
     ]
 
-    return api.python(
+    self._test_runs[suffix] = api.python(
         self._step_name(suffix),
         api.path['checkout'].join('chrome',
                           'test',
                           'nacl_test_injection',
                           'buildbot_nacl_integration.py'),
         args,
-        can_fail_build=(not suffix),
-        always_run=True,
         step_test_data=lambda: api.m.json.test_api.output([]))
 
   def has_valid_results(self, api, suffix):
-    return api.step_history[self._step_name(suffix)].json.output is not None
+    return self._test_runs[suffix].json.output is not None
 
   def failures(self, api, suffix):
-    failures = api.step_history[self._step_name(suffix)].json.output
+    failures = self._test_runs[suffix].json.output
     return [f['raw_name'] for f in failures]
 
 
@@ -476,9 +516,9 @@ class AndroidInstrumentationTest(Test):
   def run(self, api, suffix):
     assert api.chromium.c.TARGET_PLATFORM == 'android'
     if self.adb_install_apk:
-      yield api.chromium_android.adb_install_apk(
+      api.chromium_android.adb_install_apk(
           self.adb_install_apk[0], self.adb_install_apk[1])
-    yield api.chromium_android.run_instrumentation_suite(
+    api.chromium_android.run_instrumentation_suite(
         self.name, test_data=self.test_data,
         flakiness_dashboard='test-results.appspot.com',
         verbose=True)
@@ -500,42 +540,46 @@ class MojoPythonTests(Test):  # pylint: disable=W0232
     if suffix == 'without patch':
       args.extend(self.failures(api, 'with patch'))
 
-    def followup_fn(step_result):
-      r = step_result.json.test_results
-      p = step_result.presentation
-
-      p.step_text += api.test_utils.format_step_text([
-        ['unexpected_failures:', r.unexpected_failures.keys()],
-      ])
-
-    return api.python(
+    try:
+      step_result = api.python(
         self._step_name(suffix),
         api.path['checkout'].join(
             'mojo',
             'tools',
             'run_mojo_python_tests.py'),
         args,
-        can_fail_build=(not suffix),
-        always_run=True,
         step_test_data=lambda: api.json.test_api.canned_test_output(
-            True), followup_fn=followup_fn)
+            True))
+    except api.StepFailure as f:
+      step_result = f.result
+      raise
+    finally:
+      r = step_result.json.test_results
+      p = step_result.presentation
+
+      p.step_text += api.test_utils.format_step_text([
+        ['unexpected_failures:', r.unexpected_failures.keys()],
+      ])
+      self._test_runs[suffix] = step_result
+
+    return step_result
 
   def has_valid_results(self, api, suffix):
     # TODO(dpranke): we should just return zero/nonzero for success/fail.
     # crbug.com/357866
-    step = api.step_history[self._step_name(suffix)]
+    step = self._test_runs[suffix]
     return (step.json.test_results.valid and
             step.retcode <= step.json.test_results.MAX_FAILURES_EXIT_STATUS)
 
   def failures(self, api, suffix):
-    sn = self._step_name(suffix)
-    return api.step_history[sn].json.test_results.unexpected_failures
+    return self._test_runs[suffix].json.test_results.unexpected_failures
 
 
 class BlinkTest(Test):
   name = 'webkit_tests'
 
   def __init__(self, api):
+    super(BlinkTest, self).__init__()
     self.results_dir = api.path['slave_build'].join('layout-test-results')
     self.layout_test_wrapper = api.path['build'].join(
         'scripts', 'slave', 'chromium', 'layout_test_wrapper.py')
@@ -556,7 +600,15 @@ class BlinkTest(Test):
                                              'LayoutTests',
                                              'OilpanExpectations')])
 
-    def followup_fn(step_result):
+    try:
+      step_result = api.chromium.runtest(self.layout_test_wrapper,
+                                         args, name=self._step_name(suffix))
+    except api.StepFailure as f:
+      step_result = f.result
+
+    self._test_runs[suffix] = step_result
+
+    if step_result:
       r = step_result.json.test_results
       p = step_result.presentation
 
@@ -571,30 +623,14 @@ class BlinkTest(Test):
       else:
         p.status = 'SUCCESS'
 
-    yield api.chromium.runtest(self.layout_test_wrapper,
-                               args,
-                               name=self._step_name(suffix),
-                               can_fail_build=(not suffix),
-                               always_run=True,
-                               followup_fn=followup_fn)
-
     if suffix == 'with patch':
       buildername = api.properties['buildername']
       buildnumber = api.properties['buildnumber']
-      def archive_webkit_tests_results_followup(step_result):
-        base = (
-          "https://storage.googleapis.com/chromium-layout-test-archives/%s/%s"
-          % (buildername, buildnumber))
-
-        step_result.presentation.links['layout_test_results'] = (
-            base + '/layout-test-results/results.html')
-        step_result.presentation.links['(zip)'] = (
-            base + '/layout-test-results.zip')
 
       archive_layout_test_results = api.path['build'].join(
           'scripts', 'slave', 'chromium', 'archive_layout_test_results.py')
 
-      yield api.python(
+      archive_result = api.python(
         'archive_webkit_tests_results',
         archive_layout_test_results,
         [
@@ -604,11 +640,19 @@ class BlinkTest(Test):
           '--builder-name', buildername,
           '--gs-bucket', 'gs://chromium-layout-test-archives',
         ] + api.json.property_args(),
-        followup_fn=archive_webkit_tests_results_followup
       )
 
+      base = (
+        "https://storage.googleapis.com/chromium-layout-test-archives/%s/%s"
+        % (buildername, buildnumber))
+
+      archive_result.presentation.links['layout_test_results'] = (
+          base + '/layout-test-results/results.html')
+      archive_result.presentation.links['(zip)'] = (
+          base + '/layout-test-results.zip')
+
   def has_valid_results(self, api, suffix):
-    step = api.step_history[self._step_name(suffix)]
+    step = self._test_runs[suffix]
     # TODO(dpranke): crbug.com/357866 - note that all comparing against
     # MAX_FAILURES_EXIT_STATUS tells us is that we did not exit early
     # or abnormally; it does not tell us how many failures there actually
@@ -620,8 +664,7 @@ class BlinkTest(Test):
             step.retcode <= step.json.test_results.MAX_FAILURES_EXIT_STATUS)
 
   def failures(self, api, suffix):
-    sn = self._step_name(suffix)
-    return api.step_history[sn].json.test_results.unexpected_failures
+    return self._test_runs[suffix].json.test_results.unexpected_failures
 
 
 IOS_TESTS = [

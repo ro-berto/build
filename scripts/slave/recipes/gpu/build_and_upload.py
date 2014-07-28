@@ -17,9 +17,9 @@ DEPS = [
 
 def GenSteps(api):
   api.gpu.setup()
-  yield api.buildbot.prep()
-  yield api.gpu.checkout_steps()
-  yield api.gpu.compile_steps()
+  api.buildbot.prep()
+  api.gpu.checkout_steps()
+  api.gpu.compile_steps()
 
 def GenTests(api):
   # The majority of the tests are in the build_and_test recipe.

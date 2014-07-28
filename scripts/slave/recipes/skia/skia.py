@@ -14,8 +14,7 @@ DEPS = [
 
 
 def GenSteps(api):
-  yield api.skia.gen_steps()
-
+  api.skia.gen_steps()
 
 def GenTests(api):
   builders = [

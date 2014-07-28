@@ -18,7 +18,6 @@ DEPS = [
   'platform',
   'properties',
   'python',
-  'step_history',
   'webrtc',
 ]
 
@@ -46,6 +45,7 @@ def GenSteps(api):
                         **bot_config.get('webrtc_config_kwargs', {}))
   api.chromium.set_config(recipe_config['chromium_config'],
                           **bot_config.get('chromium_config_kwargs', {}))
+
   for c in recipe_config.get('chromium_apply_config', []):
     api.chromium.apply_config(c)
 
@@ -54,7 +54,7 @@ def GenSteps(api):
     api.gclient.apply_config(c)
 
   if api.platform.is_win:
-    yield api.chromium.taskkill()
+    api.chromium.taskkill()
 
   bot_type = bot_config.get('bot_type', 'builder_tester')
 
@@ -80,55 +80,47 @@ def GenSteps(api):
     s[0].custom_vars['webrtc_revision'] = webrtc_revision
 
   # Bot Update re-uses the gclient configs.
-  yield api.bot_update.ensure_checkout(force=True),
-  update_step = api.step_history.last_step()
-  got_revision = update_step.presentation.properties['got_revision']
+  step_result = api.bot_update.ensure_checkout(force=True)
+  got_revision = step_result.presentation.properties['got_revision']
 
   if not bot_config.get('disable_runhooks'):
-    yield api.chromium.runhooks()
+    api.chromium.runhooks()
 
-  yield api.chromium.cleanup_temp()
-
-  # Instead of yielding single steps or groups of steps, yield all at the end.
-  steps = []
-
+  api.chromium.cleanup_temp()
   if bot_type in ('builder', 'builder_tester'):
     run_gn = api.chromium.c.project_generator.tool == 'gn'
     if run_gn:
-      steps.append(api.chromium.run_gn())
+      api.chromium.run_gn()
 
     compile_targets = recipe_config.get('compile_targets', [])
-    steps.append(api.chromium.compile(targets=compile_targets))
-
+    api.chromium.compile(targets=compile_targets)
     if mastername == 'chromium.webrtc.fyi' and not run_gn:
-      steps.append(api.webrtc.sizes(got_revision))
+      api.webrtc.sizes(got_revision)
 
   if bot_type == 'builder' and bot_config.get('build_gs_archive'):
-    steps.append(api.webrtc.package_build(
-        api.webrtc.GS_ARCHIVES[bot_config['build_gs_archive']], got_revision))
+    api.webrtc.package_build(
+        api.webrtc.GS_ARCHIVES[bot_config['build_gs_archive']], got_revision)
 
   if bot_type == 'tester':
     # Ensure old build directory is not used is by removing it.
-    steps.append(api.path.rmtree(
+    api.path.rmtree(
         'build directory',
-        api.chromium.c.build_dir.join(api.chromium.c.build_config_fs)))
+        api.chromium.c.build_dir.join(api.chromium.c.build_config_fs))
 
-    steps.append(api.webrtc.extract_build(
-        api.webrtc.GS_ARCHIVES[bot_config['build_gs_archive']], got_revision))
+    api.webrtc.extract_build(
+        api.webrtc.GS_ARCHIVES[bot_config['build_gs_archive']], got_revision)
 
   if bot_type in ('builder_tester', 'tester'):
     if api.chromium.c.TARGET_PLATFORM == 'android':
-      steps.append(api.chromium_android.common_tests_setup_steps())
-      steps.append(api.chromium_android.run_test_suite(
+      api.chromium_android.common_tests_setup_steps()
+      api.chromium_android.run_test_suite(
           'content_browsertests',
-          gtest_filter='WebRtc*'))
-      steps.append(api.chromium_android.common_tests_final_steps())
+          gtest_filter='WebRtc*')
+      api.chromium_android.common_tests_final_steps()
     else:
-      test_steps = api.webrtc.runtests(recipe_config.get('test_suite'),
-                                       revision=got_revision)
-      steps.extend(api.chromium.setup_tests(bot_type, test_steps))
-
-  yield steps
+      test_runner = lambda: api.webrtc.runtests(recipe_config.get('test_suite'),
+                                                revision=got_revision)
+      api.chromium.setup_tests(bot_type, test_runner)
 
 
 def _sanitize_nonalpha(text):

@@ -22,16 +22,16 @@ def GenSteps(api):
   api.chromium_android.c.revision = revision
   api.chromium_android.c.revisions['src/dart'] = revision
 
-  yield api.chromium_android.init_and_sync()
-  yield api.chromium_android.clean_local_files()
+  api.chromium_android.init_and_sync()
+  api.chromium_android.clean_local_files()
   # TODO(iannucci): Remove when dartium syncs chromium to >= crrev.com/252649
-  yield api.chromium_android.runhooks({'GYP_CROSSCOMPILE': "1"})
-  yield api.chromium_android.compile(targets=['content_shell_apk'])
-  yield api.chromium_android.cleanup_build()
+  api.chromium_android.runhooks({'GYP_CROSSCOMPILE': "1"})
+  api.chromium_android.compile(targets=['content_shell_apk'])
+  api.chromium_android.cleanup_build()
 
   build_products_dir = \
       api.chromium.c.build_dir.join(api.chromium.c.build_config_fs)
-  yield api.python('dartium_test',
+  api.python('dartium_test',
                    api.path['slave_build'].join('src', 'dart', 'tools',
                                                 'bots', 'dartium_android.py'),
                    args=['--build-products-dir', build_products_dir])

@@ -27,24 +27,24 @@ class CronetApi(recipe_api.RecipeApi):
     droid.c.set_val(custom)
     self.m.chromium.apply_config('cronet_builder')
     self.m.chromium.c.gyp_env.GYP_DEFINES.update(gyp_defs)
-    yield droid.init_and_sync()
+    droid.init_and_sync()
 
 
   def clean_and_build(self, use_revision=True):
     droid = self.m.chromium_android
-    yield droid.clean_local_files()
-    yield droid.runhooks()
-    yield droid.compile()
+    droid.clean_local_files()
+    droid.runhooks()
+    droid.compile()
 
 
   def upload_package(self, build_config):
     droid = self.m.chromium_android
     revision = self.m.properties.get('revision')
-    cronetdir = self.m.path['checkout'].join('out', 
-                                             droid.c.BUILD_CONFIG, 
+    cronetdir = self.m.path['checkout'].join('out',
+                                             droid.c.BUILD_CONFIG,
                                              'cronet')
     destdir = 'cronet-%s-%s' % (build_config, revision)
-    yield self.m.gsutil.upload(
+    self.m.gsutil.upload(
         source=cronetdir,
         bucket='chromium-cronet/android',
         dest=destdir,
@@ -56,17 +56,17 @@ class CronetApi(recipe_api.RecipeApi):
   def run_tests(self):
     droid = self.m.chromium_android
     checkout_path = self.m.path['checkout']
-    yield droid.common_tests_setup_steps()
+    droid.common_tests_setup_steps()
     install_cmd = checkout_path.join('build',
                                      'android',
                                      'adb_install_apk.py')
-    yield self.m.python('install CronetSample', install_cmd,
+    self.m.python('install CronetSample', install_cmd,
         args = ['--apk', 'CronetSample.apk'])
     test_cmd = checkout_path.join('build',
                                   'android',
                                   'test_runner.py')
-    yield self.m.python('test CronetSample', test_cmd,
+    self.m.python('test CronetSample', test_cmd,
         args = ['instrumentation', '--test-apk', 'CronetSampleTest'])
-    yield droid.common_tests_final_steps()
+    droid.common_tests_final_steps()
 
 

@@ -74,37 +74,36 @@ class SkiaApi(recipe_api.RecipeApi):
     self.flavor = default_flavor.DefaultFlavorUtils(self)
     self.device_dirs = self.flavor.get_device_dirs()
 
-    # Start yielding steps.
-    yield self.common_steps()
+    self.common_steps()
 
     if self.c.do_test_steps:
-      yield self.test_steps()
+      self.test_steps()
 
     if self.c.do_perf_steps:
-      yield self.perf_steps()
+      self.perf_steps()
 
   def checkout_steps(self):
     """Run the steps to obtain a checkout of Skia."""
-    yield self.m.gclient.checkout()
-    yield self.m.tryserver.maybe_apply_issue()
+    self.m.gclient.checkout()
+    self.m.tryserver.maybe_apply_issue()
 
   def compile_steps(self, clobber=False):
     """Run the steps to build Skia."""
 
     # Run GYP to generate project files.
     env = dict(self.c.gyp_env.as_jsonish())
-    yield self.m.python(name='gyp_skia', script='gyp_skia', env=env,
-                        cwd=self.m.path['checkout'], abort_on_failure=True)
+    self.m.python(name='gyp_skia', script='gyp_skia', env=env,
+                  cwd=self.m.path['checkout'])
 
     # Compile each target.
     for target in self.c.build_targets:
-      yield self.m.step('build %s' % target, ['make', target],
-                        cwd=self.m.path['checkout'], abort_on_failure=True)
+      self.m.step('build %s' % target, ['make', target],
+                  cwd=self.m.path['checkout'], abort_on_failure=True)
 
   def common_steps(self):
     """Steps run by both Test and Perf bots."""
-    yield self.checkout_steps()
-    yield self.compile_steps()
+    self.checkout_steps()
+    self.compile_steps()
 
     # TODO(borenet): The following steps still need to be added:
     # DownloadSKPs
@@ -122,7 +121,7 @@ class SkiaApi(recipe_api.RecipeApi):
       # WritePixels fails on Xoom due to a bug which won't be fixed very soon.
       # http://code.google.com/p/skia/issues/detail?id=1699
       args.extend(['--match', '~WritePixels'])
-    yield self.flavor.step('tests', args)
+    self.flavor.step('tests', args)
 
   def run_gm(self):
     """Run the Skia GM test.
@@ -204,7 +203,7 @@ class SkiaApi(recipe_api.RecipeApi):
                    '~clipped-bitmap',
                    '~xfermodes3'])
 
-    yield self.flavor.step('gm', args)
+    self.flavor.step('gm', args)
 
   def test_steps(self):
     """Run all Skia test executables."""
@@ -213,10 +212,10 @@ class SkiaApi(recipe_api.RecipeApi):
     # PreRender (maybe rename to PreTest)
 
     # Unit tests.
-    yield self.run_tests()
+    self.run_tests()
 
     # GM
-    yield self.run_gm()
+    self.run_gm()
 
     # TODO(borenet): The following steps still need to be added:
     # RunDM
@@ -231,7 +230,7 @@ class SkiaApi(recipe_api.RecipeApi):
     # UploadSKImageResults
 
   def perf_steps(self):
-    yield []
+    return
     # TODO(borenet): The following steps still need to be added:
     # PreBench (maybe rename to PrePerf)
     # RunBench

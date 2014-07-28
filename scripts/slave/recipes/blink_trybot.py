@@ -14,7 +14,6 @@ DEPS = [
   'raw_io',
   'rietveld',
   'step',
-  'step_history',
   'test_utils',
 ]
 
@@ -254,46 +253,68 @@ def GenSteps(api):
 
   # Set patch_root used when applying the patch after checkout. Default None
   # makes bot_update determine the patch_root from tryserver root, e.g. 'src'.
-  yield api.bot_update.ensure_checkout(
+  bot_update_step = api.bot_update.ensure_checkout(
       force=True, patch_root=bot_config.get('root_override'))
 
-  yield (
-    api.chromium.runhooks(),
-    api.chromium.compile(),
-  )
+  api.chromium.runhooks()
+  api.chromium.compile()
 
   if not bot_config['compile_only']:
-    yield (
-      api.python('webkit_lint', webkit_lint, [
-        '--build-dir', api.path['checkout'].join('out'),
-        '--target', api.chromium.c.BUILD_CONFIG
-      ]),
-      api.python('webkit_python_tests', webkit_python_tests, [
-        '--build-dir', api.path['checkout'].join('out'),
-        '--target', api.chromium.c.BUILD_CONFIG,
-      ]),
-      api.chromium.runtest('webkit_unit_tests', xvfb=True),
-      api.chromium.runtest('blink_platform_unittests'),
-      api.chromium.runtest('blink_heap_unittests'),
-      api.chromium.runtest('wtf_unittests'),
-    )
+    api.python('webkit_lint', webkit_lint, [
+      '--build-dir', api.path['checkout'].join('out'),
+      '--target', api.chromium.c.BUILD_CONFIG
+    ])
+    api.python('webkit_python_tests', webkit_python_tests, [
+      '--build-dir', api.path['checkout'].join('out'),
+      '--target', api.chromium.c.BUILD_CONFIG,
+    ])
+
+    # TODO(martiniss) this is pretty goofy
+    failed = False
+    exception = Exception() # So that pylint doesn't complain
+    try:
+      api.chromium.runtest('webkit_unit_tests', xvfb=True)
+    except api.StepFailure as f:
+      failed = True
+      exception = f
+
+    try:
+      api.chromium.runtest('blink_platform_unittests')
+    except api.StepFailure as f:
+      failed = True
+      exception = f
+
+    try:
+      api.chromium.runtest('blink_heap_unittests')
+    except api.StepFailure as f:
+      failed = True
+      exception = f
+
+    try:
+      api.chromium.runtest('wtf_unittests')
+    except api.StepFailure as f:
+      failed = True
+      exception = f
+
+    if failed:
+      api.python.inline(
+        'Aborting due to failed build state',
+        "import sys; sys.exit(1)")
+      raise exception
 
   if not bot_config['compile_only']:
     def deapply_patch_fn(_failing_steps):
-      bot_update_json = api.step_history['bot_update'].json.output
+      bot_update_json = bot_update_step.json.output
       api.gclient.c.revisions['src'] = str(
           bot_update_json['properties']['got_revision'])
       api.gclient.c.revisions['src/third_party/WebKit'] = str(
           bot_update_json['properties']['got_webkit_revision'])
-      yield api.bot_update.ensure_checkout(patch=False, force=True,
-                                           always_run=True)
 
-      yield (
-        api.chromium.runhooks(always_run=True),
-        api.chromium.compile(always_run=True),
-      )
+      api.bot_update.ensure_checkout(patch=False, force=True)
+      api.chromium.runhooks()
+      api.chromium.compile()
 
-    yield api.test_utils.determine_new_failures(
+    api.test_utils.determine_new_failures(
         api, [api.chromium.steps.BlinkTest(api)], deapply_patch_fn)
 
 

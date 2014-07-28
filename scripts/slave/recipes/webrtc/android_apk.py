@@ -15,7 +15,6 @@ DEPS = [
   'properties',
   'python',
   'step',
-  'step_history',
   'tryserver',
   'webrtc',
 ]
@@ -67,44 +66,44 @@ def GenSteps(api):
 
   # TODO(iannucci): Support webrtc.apply_svn_patch with bot_update
   # crbug.com/376122
-  yield api.bot_update.ensure_checkout()
-  bot_update_mode = api.step_history.last_step().json.output['did_run']
+  step_result = api.bot_update.ensure_checkout()
+  bot_update_mode = step_result.json.output['did_run']
   if not bot_update_mode:
-    yield api.gclient.checkout()
+    step_result = api.gclient.checkout()
 
   # Whatever step is run right before this line needs to emit got_revision.
-  update_step = api.step_history.last_step()
+  update_step = step_result
   got_revision = update_step.presentation.properties['got_revision']
 
   if not bot_update_mode:
     if does_build and api.tryserver.is_tryserver:
-      yield api.webrtc.apply_svn_patch()
+      api.webrtc.apply_svn_patch()
 
   if does_build:
-    yield api.base_android.envsetup()
+    api.base_android.envsetup()
 
   # WebRTC Android APK testers also have to run the runhooks, since test
   # resources are currently downloaded during this step.
-  yield api.base_android.runhooks()
+  api.base_android.runhooks()
 
-  yield api.chromium.cleanup_temp()
+  api.chromium.cleanup_temp()
   if does_build:
-    yield api.base_android.compile()
+    api.base_android.compile()
 
   if bot_type == 'builder':
-    yield api.webrtc.package_build(
+    api.webrtc.package_build(
         api.webrtc.GS_ARCHIVES[bot_config['build_gs_archive']], got_revision)
 
   if bot_type == 'tester':
-    yield api.webrtc.extract_build(
+    api.webrtc.extract_build(
         api.webrtc.GS_ARCHIVES[bot_config['build_gs_archive']], got_revision)
 
   if does_test:
-    yield api.chromium_android.common_tests_setup_steps()
+    api.chromium_android.common_tests_setup_steps()
     for test in api.webrtc.ANDROID_APK_TESTS:
-      yield api.base_android.test_runner(test)
+      api.base_android.test_runner(test)
 
-    yield api.chromium_android.common_tests_final_steps()
+    api.chromium_android.common_tests_final_steps()
 
 
 def _sanitize_nonalpha(text):

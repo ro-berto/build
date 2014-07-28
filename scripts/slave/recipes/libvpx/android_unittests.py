@@ -12,7 +12,6 @@ DEPS = [
     'python',
     'raw_io',
     'step',
-    'step_history'
 ]
 
 # Constants
@@ -49,7 +48,7 @@ def GenSteps(api):
   libvpx_root = build_root.join('libvpx')
   test_data = build_root.join('test_data')
 
-  yield api.python.inline(
+  api.python.inline(
       'clean_build', r"""
           import os, sys, shutil
           root = sys.argv[1]
@@ -64,12 +63,12 @@ def GenSteps(api):
 
   # Checkout android_tools and libvpx.  NDK and SDK are required to build
   # libvpx for android
-  yield api.git.checkout(
+  api.git.checkout(
       ANDROID_TOOLS_GIT, dir_path=android_tools_root, recursive=True)
-  yield api.git.checkout(
+  api.git.checkout(
       libvpx_git_url, dir_path=libvpx_root, recursive=True)
 
-  yield api.step(
+  api.step(
       'configure', [
           CONFIGURE_PATH_REL, '--disable-examples', '--disable-install-docs',
           '--disable-install-srcs', '--enable-unit-tests', '--enable-webm-io',
@@ -79,32 +78,32 @@ def GenSteps(api):
           '--sdk-path=%s' % ndk_root, '--target=armv7-android-gcc'])
 
   # NDK requires NDK_PROJECT_PATH environment variable to be defined
-  yield api.step(
+  api.step(
       'ndk-build', [
           ndk_root.join('ndk-build'),
           'APP_BUILD_SCRIPT=%s'
               % libvpx_root.join('test', 'android', 'Android.mk'),
           'APP_ABI=armeabi-v7a', 'APP_PLATFORM=android-14',
           'APP_OPTIM=release', 'APP_STL=gnustl_static'],
-      env={'NDK_PROJECT_PATH' : build_root}, abort_on_failure=True)
+      env={'NDK_PROJECT_PATH' : build_root})
 
   test_root = libvpx_root.join('test')
-  yield api.python(
+  api.python(
       'get_files', test_root.join('android', 'get_files.py'),
       args=[
           '-i', test_root.join('test-data.sha1'),
           '-o', test_data, '-u', TEST_FILES_URL])
 
-  yield api.python(
+  api.python(
       'transfer_files',
       api.path['build'].join('scripts', 'slave', 'android',
                              'transfer_files.py'),
       args=[adb, DEVICE_ROOT, test_data])
 
   lib_root = build_root.join('libs', 'armeabi-v7a')
-  yield api.step('push_so', [ adb, 'push', lib_root, DEVICE_ROOT])
+  api.step('push_so', [ adb, 'push', lib_root, DEVICE_ROOT])
 
-  yield api.python.inline(
+  step_result = api.python.inline(
       'adb_wrap', r"""
           import sys, subprocess, time
           out = open(sys.argv[1], "w")
@@ -117,16 +116,15 @@ def GenSteps(api):
       """, args=[api.raw_io.output(), adb, 'shell',
           'LD_LIBRARY_PATH=' + DEVICE_ROOT,
           'LIBVPX_TEST_DATA_PATH=' + DEVICE_ROOT, DEVICE_ROOT +
-          '/vpx_test'],
-          can_fail_build=True)
+          '/vpx_test'])
 
-  yield api.python(
+  step_result = api.python(
       'scrape_logs',
       libvpx_root.join('test', 'android', 'scrape_gtest_log.py'),
       args=['--output-json', api.json.output()],
-      stdin=api.raw_io.input(api.step_history.last_step().raw_io.output))
+      stdin=api.raw_io.input(step_result.raw_io.output))
 
-  data = api.step_history.last_step().json.output
+  data = step_result.json.output
   # Data is json array in the format as follows:
   # videoName: name
   # threadCount: #ofthreads
@@ -142,7 +140,7 @@ def GenSteps(api):
     points.append(p)
 
   api.perf_dashboard.set_default_config()
-  yield api.perf_dashboard.post(points)
+  api.perf_dashboard.post(points)
 
 def GenTests(api):
   # Right now we just support linux, but one day we will have mac and windows

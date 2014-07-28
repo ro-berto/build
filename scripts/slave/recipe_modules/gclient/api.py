@@ -108,8 +108,6 @@ class GclientApi(recipe_api.RecipeApi):
     return revision
 
   def sync(self, cfg, **kwargs):
-    kwargs.setdefault('abort_on_failure', True)
-
     revisions = []
     for i, s in enumerate(cfg.solutions):
       if s.safesync_url:  # prefer safesync_url in gclient mode
@@ -127,47 +125,52 @@ class GclientApi(recipe_api.RecipeApi):
       if fixed_revision:
         revisions.extend(['--revision', '%s@%s' % (name, fixed_revision)])
 
-    def parse_got_revision(step_result):
-      data = step_result.json.output
+    test_data_paths = set(cfg.got_revision_mapping.keys() +
+                          [s.name for s in cfg.solutions])
+    step_test_data = lambda: (
+      self.test_api.output_json(test_data_paths, cfg.GIT_MODE))
+    try:
+      if not cfg.GIT_MODE:
+        result = self('sync', ['sync', '--nohooks', '--delete_unversioned_trees',
+                   '--force', '--verbose'] +
+                   revisions + ['--output-json', self.m.json.output()],
+                   step_test_data=step_test_data,
+                   **kwargs)
+      else:
+        # clean() isn't used because the gclient sync flags passed in checkout()
+        # do much the same thing, and they're more correct than doing a separate
+        # 'gclient revert' because it makes sure the other args are correct when
+        # a repo was deleted and needs to be re-cloned (notably
+        # --with_branch_heads), whereas 'revert' uses default args for clone
+        # operations.
+        #
+        # TODO(mmoss): To be like current official builders, this step could just
+        # delete the whole <slave_name>/build/ directory and start each build
+        # from scratch. That might be the least bad solution, at least until we
+        # have a reliable gclient method to produce a pristine working dir for
+        # git-based builds (e.g. maybe some combination of 'git reset/clean -fx'
+        # and removing the 'out' directory).
+        j = '-j2' if self.m.platform.is_win else '-j8'
+        result = self('sync',
+                   ['sync', '--verbose', '--with_branch_heads', '--nohooks', j,
+                    '--reset', '--delete_unversioned_trees', '--force',
+                    '--upstream', '--no-nag-max'] + revisions +
+                   ['--output-json', self.m.json.output()],
+                   step_test_data=step_test_data,
+                   **kwargs)
+    except self.StepFailure as f:
+      result = f.result
+      raise
+    finally:
+      data = result.json.output
       for path, info in data['solutions'].iteritems():
         # gclient json paths always end with a slash
         path = path.rstrip('/')
         if path in cfg.got_revision_mapping:
           propname = cfg.got_revision_mapping[path]
-          step_result.presentation.properties[propname] = info['revision']
+          result.presentation.properties[propname] = info['revision']
 
-    test_data_paths = set(cfg.got_revision_mapping.keys() +
-                          [s.name for s in cfg.solutions])
-    step_test_data = lambda: (
-      self.test_api.output_json(test_data_paths, cfg.GIT_MODE))
-    if not cfg.GIT_MODE:
-      yield self('sync', ['sync', '--nohooks', '--delete_unversioned_trees',
-                 '--force', '--verbose'] +
-                 revisions + ['--output-json', self.m.json.output()],
-                 followup_fn=parse_got_revision, step_test_data=step_test_data,
-                 **kwargs)
-    else:
-      # clean() isn't used because the gclient sync flags passed in checkout()
-      # do much the same thing, and they're more correct than doing a separate
-      # 'gclient revert' because it makes sure the other args are correct when
-      # a repo was deleted and needs to be re-cloned (notably
-      # --with_branch_heads), whereas 'revert' uses default args for clone
-      # operations.
-      #
-      # TODO(mmoss): To be like current official builders, this step could just
-      # delete the whole <slave_name>/build/ directory and start each build
-      # from scratch. That might be the least bad solution, at least until we
-      # have a reliable gclient method to produce a pristine working dir for
-      # git-based builds (e.g. maybe some combination of 'git reset/clean -fx'
-      # and removing the 'out' directory).
-      j = '-j2' if self.m.platform.is_win else '-j8'
-      yield self('sync',
-                 ['sync', '--verbose', '--with_branch_heads', '--nohooks', j,
-                  '--reset', '--delete_unversioned_trees', '--force',
-                  '--upstream', '--no-nag-max'] + revisions +
-                 ['--output-json', self.m.json.output()],
-                 followup_fn=parse_got_revision, step_test_data=step_test_data,
-                 **kwargs)
+    return result
 
   def inject_parent_got_revision(self, gclient_config=None, override=False):
     """Match gclient config to build revisions obtained from build_properties.
@@ -207,35 +210,41 @@ class GclientApi(recipe_api.RecipeApi):
 
     spec_string = jsonish_to_python(cfg.as_jsonish(), True)
 
-    yield self('setup', ['config', '--spec', spec_string], **kwargs)
+    self('setup', ['config', '--spec', spec_string], **kwargs)
 
-    if not cfg.GIT_MODE:
-      if revert:
-        yield self.revert(**kwargs)
-      yield self.sync(cfg, **kwargs)
-    else:
-      yield self.sync(cfg, **kwargs)
+    revert_step = None
+    sync_step = None
+    try:
+      if not cfg.GIT_MODE:
+        try:
+          if revert:
+            self.revert(**kwargs)
+        finally:
+          sync_step = self.sync(cfg, **kwargs)
+      else:
+        sync_step = self.sync(cfg, **kwargs)
 
-      cfg_cmds = [
-        ('user.name', 'local_bot'),
-        ('user.email', 'local_bot@example.com'),
-      ]
-      for var, val in cfg_cmds:
-        name = 'recurse (git config %s)' % var
-        yield self(name, ['recurse', 'git', 'config', var, val], **kwargs)
+        cfg_cmds = [
+          ('user.name', 'local_bot'),
+          ('user.email', 'local_bot@example.com'),
+        ]
+        for var, val in cfg_cmds:
+          name = 'recurse (git config %s)' % var
+          self(name, ['recurse', 'git', 'config', var, val], **kwargs)
 
-    cwd = kwargs.get('cwd', self.m.path['slave_build'])
-    if 'checkout' not in self.m.path:
-      self.m.path['checkout'] = cwd.join(
-        *cfg.solutions[0].name.split(self.m.path.sep))
+    finally:
+      cwd = kwargs.get('cwd', self.m.path['slave_build'])
+      if 'checkout' not in self.m.path:
+        self.m.path['checkout'] = cwd.join(
+          *cfg.solutions[0].name.split(self.m.path.sep))
+
+    return sync_step
 
   def revert(self, **kwargs):
     """Return a gclient_safe_revert step."""
     # Not directly calling gclient, so don't use self().
     alias = self.spec_alias
     prefix = '%sgclient ' % (('[spec: %s] ' % alias) if alias else '')
-
-    kwargs.setdefault('abort_on_failure', True)
 
     return self.m.python(prefix + 'revert',
         self.m.path['build'].join('scripts', 'slave', 'gclient_safe_revert.py'),
@@ -248,7 +257,7 @@ class GclientApi(recipe_api.RecipeApi):
     """Return a 'gclient runhooks' step."""
     args = args or []
     assert isinstance(args, (list, tuple))
-    return self('runhooks', ['runhooks'] + list(args), **kwargs)
+    self('runhooks', ['runhooks'] + list(args), **kwargs)
 
   @property
   def is_blink_mode(self):
@@ -274,7 +283,7 @@ class GclientApi(recipe_api.RecipeApi):
     """Remove all index.lock files. If a previous run of git crashed, bot was
     reset, etc... we might end up with leftover index.lock files.
     """
-    yield self.m.python.inline(
+    self.m.python.inline(
       'cleanup index.lock',
       """
         import os, sys

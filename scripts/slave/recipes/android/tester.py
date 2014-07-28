@@ -104,45 +104,45 @@ def GenSteps(api):
       'No parent_buildername in properties.  If you forced this build, please '
       'use Rebuild instead')
 
-  yield api.bot_update.ensure_checkout()
-  yield api.chromium_android.envsetup()
-  yield api.chromium_android.runhooks()
+  api.bot_update.ensure_checkout()
+  api.chromium_android.envsetup()
+  api.chromium_android.runhooks()
 
   if bot_config.get('try', False):
-    yield api.tryserver.maybe_apply_issue()
+    api.tryserver.maybe_apply_issue()
 
-  yield api.chromium_android.clean_local_files()
-  yield api.chromium_android.run_tree_truth()
-  yield api.chromium_android.download_build(
+  api.chromium_android.clean_local_files()
+  api.chromium_android.run_tree_truth()
+  api.chromium_android.download_build(
       bot_config['download']['bucket'],
       bot_config['download']['path'](api))
 
-  yield api.adb.root_devices()
+  api.adb.root_devices()
 
-  yield api.chromium_android.spawn_logcat_monitor()
-  yield api.chromium_android.detect_and_setup_devices()
+  api.chromium_android.spawn_logcat_monitor()
+  api.chromium_android.detect_and_setup_devices()
 
   instrumentation_tests = bot_config.get('instrumentation_tests', [])
   for suite in instrumentation_tests:
     if 'install' in suite:
-      yield api.chromium_android.adb_install_apk(
+      api.chromium_android.adb_install_apk(
           suite['install']['apk'],
           suite['install']['package'])
-    yield api.chromium_android.run_instrumentation_suite(
+    api.chromium_android.run_instrumentation_suite(
         suite['test'], verbose=True, **suite.get('kwargs', {}))
 
   unittests = bot_config.get('unittests', [])
   for suite, isolate_path in unittests:
     if isolate_path:
       isolate_path = api.path['checkout'].join(*isolate_path)
-    yield api.chromium_android.run_test_suite(
+    api.chromium_android.run_test_suite(
         suite,
         isolate_file_path=isolate_path)
 
-  yield api.chromium_android.logcat_dump()
-  yield api.chromium_android.stack_tool_steps()
-  yield api.chromium_android.test_report()
-  yield api.chromium_android.cleanup_build()
+  api.chromium_android.logcat_dump()
+  api.chromium_android.stack_tool_steps()
+  api.chromium_android.test_report()
+  api.chromium_android.cleanup_build()
 
 def GenTests(api):
   for mastername in BUILDERS:

@@ -35,10 +35,10 @@ def GenSteps(api):
   gyp_defs = builder_config.get('gyp_defs', {})
 
   cronet = api.cronet
-  yield cronet.init_and_sync(recipe_config, kwargs, custom, gyp_defs)
-  yield cronet.clean_and_build()
-  yield cronet.upload_package(kwargs['BUILD_CONFIG'])
-  yield cronet.run_tests()
+  cronet.init_and_sync(recipe_config, kwargs, custom, gyp_defs)
+  cronet.clean_and_build()
+  cronet.upload_package(kwargs['BUILD_CONFIG'])
+  cronet.run_tests()
 
 def GenTests(api):
   bot_id = 'local_test'

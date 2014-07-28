@@ -97,24 +97,24 @@ def GenSteps(api):
   for c in bot_config.get('gclient_apply_config', []):
     api.gclient.apply_config(c)
 
-  yield api.bot_update.ensure_checkout()
-  yield droid.clean_local_files()
-  yield droid.runhooks()
+  api.bot_update.ensure_checkout()
+  droid.clean_local_files()
+  droid.runhooks()
 
   if bot_config.get('try', False):
-    yield api.tryserver.maybe_apply_issue()
+    api.tryserver.maybe_apply_issue()
 
-  yield droid.compile()
+  droid.compile()
   if bot_config.get('check_licenses'):
-    yield droid.check_webview_licenses()
+    droid.check_webview_licenses()
   if bot_config.get('findbugs'):
-    yield droid.findbugs()
+    droid.findbugs()
 
   upload_config = bot_config.get('upload')
   if upload_config:
-    yield droid.upload_build(upload_config['bucket'],
+    droid.upload_build(upload_config['bucket'],
                              upload_config['path'](api))
-  yield droid.cleanup_build()
+  droid.cleanup_build()
 
 
 def _sanitize_nonalpha(text):

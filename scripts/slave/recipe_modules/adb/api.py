@@ -19,16 +19,14 @@ class AdbApi(recipe_api.RecipeApi):
         'devices',
     ]
 
-    yield self.m.python(
+    result = self.m.python(
         'List adb devices',
         self.resource('list_devices.py'),
         args=[ repr(cmd), self.m.json.output() ],
         step_test_data=self.test_api.device_list,
-        always_run=True,
         **kwargs)
 
-    step = self.m.step_history.last_step()
-    self._devices = step.json.output
+    self._devices = result.json.output
 
   @property
   def devices(self):
@@ -37,8 +35,8 @@ class AdbApi(recipe_api.RecipeApi):
     return self._devices
 
   def root_devices(self, **kwargs):
-    yield self.list_devices(**kwargs)
-    yield self.m.python.inline(
+    self.list_devices(**kwargs)
+    self.m.python.inline(
         'Root devices',
         """
         import subprocess

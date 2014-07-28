@@ -31,12 +31,8 @@ class RietveldApi(recipe_api.RecipeApi):
     rietveld_url = self.m.properties['rietveld']
     issue_number = self.m.properties['issue']
 
-    def add_issue_url(step_result):
-      step_result.presentation.links['Applied issue %s' % issue_number] = (
-        urlparse.urljoin(rietveld_url, str(issue_number)))
-
     if authentication == 'oauth2':
-      return self.m.python(
+      step_result = self.m.python(
         'apply_issue',
         self.m.path['depot_tools'].join('apply_issue.py'), [
           '-r', self.m.path['checkout'].join(*root_pieces),
@@ -48,15 +44,20 @@ class RietveldApi(recipe_api.RecipeApi):
           '-k', self.m.path['build'].join('site_config',
                                           '.rietveld_secret_key')
           ],
-        abort_on_failure=True, followup_fn=add_issue_url)
+        abort_on_failure=True
+        )
 
-    return self.m.python(
-      'apply_issue',
-      self.m.path['depot_tools'].join('apply_issue.py'), [
-        '-r', self.m.path['checkout'].join(*root_pieces),
-        '-i', issue_number,
-        '-p', self.m.properties['patchset'],
-        '-s', rietveld_url,
-        '--no-auth'],
-      abort_on_failure=True, followup_fn=add_issue_url)
+    else:
+      step_result = self.m.python(
+        'apply_issue',
+        self.m.path['depot_tools'].join('apply_issue.py'), [
+          '-r', self.m.path['checkout'].join(*root_pieces),
+          '-i', issue_number,
+          '-p', self.m.properties['patchset'],
+          '-s', rietveld_url,
+          '--no-auth'],
+        abort_on_failure=True
+        )
+    step_result.presentation.links['Applied issue %s' % issue_number] = (
+      urlparse.urljoin(rietveld_url, str(issue_number)))
 

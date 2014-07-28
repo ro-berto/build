@@ -10,7 +10,6 @@ DEPS = [
   'platform',
   'properties',
   'step',
-  'step_history',
   'tryserver',
 ]
 
@@ -159,14 +158,15 @@ def GenSteps(api):
 
   # FIXME(machenbach): Remove this as soon as crbug.com/380053 is resolved.
   if mastername == 'client.v8':
-    yield api.gclient.checkout(abort_on_failure=True)
+    api.gclient.checkout()
   else:
-    yield api.bot_update.ensure_checkout(force=True)
+    api.bot_update.ensure_checkout(force=True)
 
-  yield api.chromium.runhooks()
+  api.chromium.runhooks()
 
-  yield api.chromium.run_gn(use_goma=True)
-  yield api.chromium.compile(targets=['all'])
+  api.chromium.run_gn(use_goma=True)
+
+  api.chromium.compile(targets=['all'])
 
   # TODO(dpranke): crbug.com/353854. Run gn_unittests and other tests
   # when they are also being run as part of the try jobs.

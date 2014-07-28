@@ -20,24 +20,24 @@ def GenSteps(api):
     curl_trace_file = api.path['slave_build'].join('curl_trace.log')
 
   # You can use api.git.checkout to perform all the steps of a safe checkout.
-  yield api.git.checkout(
+  api.git.checkout(
       url,
       ref=api.properties.get('revision'),
       recursive=True,
       curl_trace_file=curl_trace_file)
 
   # You can use api.git.fetch_tags to fetch all tags from the origin
-  yield api.git.fetch_tags()
+  api.git.fetch_tags()
 
   # If you need to run more arbitrary git commands, you can use api.git itself,
   # which behaves like api.step(), but automatically sets the name of the step.
-  yield api.git('status', cwd=api.path['checkout'])
+  api.git('status', cwd=api.path['checkout'])
 
-  yield api.git('status', name='git status can_fail_build',
-                can_fail_build=True)
+  api.git('status', name='git status can_fail_build',
+          can_fail_build=True)
 
-  yield api.git('status', name='git status cannot_fail_build',
-                can_fail_build=False)
+  api.git('status', name='git status cannot_fail_build',
+          can_fail_build=False)
 
 
 def GenTests(api):

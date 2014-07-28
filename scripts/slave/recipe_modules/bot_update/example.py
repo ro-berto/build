@@ -18,7 +18,7 @@ def GenSteps(api):
   soln.url = 'svn://svn.chromium.org/chrome/trunk/src'
   api.gclient.c = src_cfg
   force = True if api.properties.get('force') else False
-  yield api.bot_update.ensure_checkout(force=force)
+  api.bot_update.ensure_checkout(force=force)
 
 
 def GenTests(api):

@@ -40,7 +40,7 @@ class SwarmingClientApi(recipe_api.RecipeApi):
     if revision is None:
       revision = self.m.properties['parent_got_swarming_client_revision']
     self._client_path = self.m.path['slave_build'].join('swarming.client')
-    return self.m.git.checkout(
+    self.m.git.checkout(
         url='https://chromium.googlesource.com/external/swarming.client.git',
         ref=revision,
         dir_path=self._client_path,
@@ -81,18 +81,22 @@ class SwarmingClientApi(recipe_api.RecipeApi):
       step_test_data_cb = None
 
     if script not in self._script_version:
-      def followup_fn(step_result):
-        version = step_result.stdout.strip()
-        step_result.presentation.step_text = version
-        self._script_version[script] = tuple(map(int, version.split('.')))
-      yield self.m.python(
+      try:
+        step_result = self.m.python(
           name='%s --version' % script,
           script=self.path.join(script),
           args=['--version'],
           stdout=self.m.raw_io.output(),
-          followup_fn=followup_fn,
-          step_test_data=step_test_data_cb,
-          always_run=True)
+          step_test_data=step_test_data_cb)
+      except self.StepFailure as f:
+        step_result = f.result
+        raise
+      finally:
+        version = step_result.stdout.strip()
+        step_result.presentation.step_text = version
+        self._script_version[script] = tuple(map(int, version.split('.')))
+
+      return step_result
 
   def get_script_version(self, script):
     """Returns a version of some swarming script as a tuple (Major, Minor, Rev).
@@ -108,21 +112,20 @@ class SwarmingClientApi(recipe_api.RecipeApi):
 
     Will abort recipe execution if it is.
     """
-    yield self.query_script_version(script, step_test_data=min_version)
+    step_result = self.query_script_version(script, step_test_data=min_version)
     version = self.get_script_version(script)
     if version < min_version:
-      # Gross hack to abort the recipe execution with a message.
-      def followup_fn(step_result):
-        expecting = '.'.join(map(str, min_version))
-        got = '.'.join(map(str, version))
-        abort_reason = 'Expecting at least v%s, got v%s' % (expecting, got)
-        step_result.presentation.status = 'FAILURE'
-        step_result.presentation.step_text = abort_reason
-        raise recipe_util.RecipeAbort(abort_reason)
-      yield self.m.python.inline(
+      expecting = '.'.join(map(str, min_version))
+      got = '.'.join(map(str, version))
+      abort_reason = 'Expecting at least v%s, got v%s' % (expecting, got)
+
+      # TODO(martiniss) remove once recipe 1.5 migration done
+      step_result = self.m.python.inline(
           '%s is too old' % script,
           'import sys; sys.exit(1)',
-          add_python_log=False,
-          always_run=True,
-          abort_on_failure=False,
-          followup_fn=followup_fn)
+          add_python_log=False)
+      # TODO(martiniss) get rid of this bare string.
+      step_result.presentation.status = 'FAILURE'
+      step_result.presentation.step_text = abort_reason
+
+      raise self.StepFailure(abort_reason)

@@ -217,7 +217,7 @@ class SwarmingApi(recipe_api.RecipeApi):
 
   def check_client_version(self):
     """Yields steps to verify compatibility with swarming_client version."""
-    yield self.m.swarming_client.ensure_script_version(
+    return self.m.swarming_client.ensure_script_version(
         'swarming.py', MINIMAL_SWARMING_VERSION)
 
   def trigger(self, tasks, **kwargs):
@@ -228,13 +228,11 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     Args:
       tasks: an enumerable of SwarmingTask instances.
-      kwargs: passed to recipe step constructor as-is, may contain
-        always_run, can_fail_build, etc.
+      kwargs: passed to recipe step constructor as-is
     """
     # TODO(vadimsh): Trigger multiple tasks as a single step.
     assert all(isinstance(t, SwarmingTask) for t in tasks)
-    old_followup = kwargs.pop('followup_fn', None)
-    steps = []
+    results = []
     for task in tasks:
       assert task.task_id not in self._pending_tasks, (
           'Triggered same task twice: %s' % task.task_id)
@@ -270,51 +268,52 @@ class SwarmingApi(recipe_api.RecipeApi):
         args.extend(task.extra_args)
 
       # Build corresponding step.
-      steps.append(self.m.python(
+      step_result = self.m.python(
           name=self._get_step_name('trigger', task),
           script=self.m.swarming_client.path.join('swarming.py'),
           args=args,
-          followup_fn=functools.partial(
-              self._trigger_followup, task, old_followup),
           step_test_data=functools.partial(self._gen_trigger_step_data, task),
-          **kwargs))
+          **kwargs)
+      self._trigger_followup(task, step_result)
+      results.append(step_result)
 
-    return steps
+    return results
 
   def collect(self, tasks, **kwargs):
+    return list(self.collect_each(tasks, **kwargs))
+
+  def collect_each(self, tasks, **kwargs):
     """Waits for a set of Swarming tasks to finish.
 
     Always waits for all task results. Failed tasks will be marked as such
-    but would not abort the build (corresponds to always_run=True step
-    property).
+    but would not abort the build.
 
     Args:
       tasks: an enumerable of SwarmingTask instances. All of them should have
           been triggered previously with 'trigger' method.
-      kwargs: passed to recipe step constructor as-is, may contain
-        always_run, can_fail_build, followup_fn, etc.
+      kwargs: passed to recipe step constructor as-is
     """
     # TODO(vadimsh): Implement "wait for any" to wait for first finished task.
     # TODO(vadimsh): Update |tasks| in-place with results of task execution.
     # TODO(vadimsh): Add timeouts.
     assert all(isinstance(t, SwarmingTask) for t in tasks)
-    old_followup = kwargs.pop('followup_fn', None)
-    steps = []
     for task in tasks:
       assert task.task_id in self._pending_tasks, (
           'Trying to collect a task that was not triggered: %s' % task.task_id)
       self._pending_tasks.remove(task.task_id)
-      steps.append(task.collect_step_builder(
-          task,
-          followup_fn=functools.partial(
-              self._collect_followup, task, old_followup),
-          **kwargs))
-    return steps
+      try:
+        step_result = task.collect_step_builder(task, **kwargs)
+        step_result.swarming_task = task
+        yield step_result
+      except self.StepFailure as f:
+        step_result = f.result
+        step_result.swarming_task = task
+        raise
+
 
   def _default_collect_step(self, task, **kwargs):
     """Produces a step that collects a result of an arbitrary task."""
     # By default wait for all tasks to finish even if some of them failed.
-    kwargs.setdefault('always_run', True)
     return self.m.python(
         name=self._get_step_name('swarming', task),
         script=self.m.swarming_client.path.join('swarming.py'),
@@ -324,8 +323,6 @@ class SwarmingApi(recipe_api.RecipeApi):
   def _gtest_collect_step(self, merged_test_output, task, **kwargs):
     """Produces a step that collects and processes a result of gtest task."""
     # By default wait for all tasks to finish even if some of them failed.
-    kwargs.setdefault('always_run', True)
-
     # Shim script's own arguments.
     args = [
       '--swarming-client-dir', self.m.swarming_client.path,
@@ -410,7 +407,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       },
     })
 
-  def _trigger_followup(self, task, next_followup, step_result):
+  def _trigger_followup(self, task, step_result):
     """Called as followup_fn for 'trigger' to add URLs to task shards."""
     # Store trigger output with the |task|, print links to triggered shards.
     if step_result.presentation != 'FAILURE':
@@ -421,19 +418,8 @@ class SwarmingApi(recipe_api.RecipeApi):
         if url:
           links['shard #%d' % index] = url
 
-    # Append SwarmingTask to step_result for |next_followup| to see it.
     assert not hasattr(step_result, 'swarming_task')
     step_result.swarming_task = task
-    if next_followup:
-      next_followup(step_result)
-
-  def _collect_followup(self, task, next_followup, step_result):
-    """Called as followup_fn for 'collect' to append task to step_result."""
-    # Append SwarmingTask to step_result for |next_followup| to see it.
-    assert not hasattr(step_result, 'swarming_task')
-    step_result.swarming_task = task
-    if next_followup:
-      next_followup(step_result)
 
 
 class SwarmingTask(object):

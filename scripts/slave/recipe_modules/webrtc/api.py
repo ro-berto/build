@@ -154,14 +154,14 @@ class WebRTCApi(recipe_api.RecipeApi):
       perf_dashboard_id = perf_dashboard_id or test
       assert revision, ('Revision must be specified for perf tests as they '
                         'upload data to the perf dashboard.')
-      return self.m.chromium.runtest(
+      self.m.chromium.runtest(
           test=test, args=args, name=name,
           results_url=self.DASHBOARD_UPLOAD_URL, annotate='graphing',
           xvfb=True, perf_dashboard_id=perf_dashboard_id, test_type=test,
           env=env, revision=revision, perf_id=self.c.PERF_ID,
           perf_config=self.c.PERF_CONFIG)
     else:
-      return self.m.chromium.runtest(
+      self.m.chromium.runtest(
           test=test, args=args, name=name, annotate='gtest', xvfb=True,
           test_type=test, env=env)
 
@@ -175,7 +175,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     args = ['--target', self.m.chromium.c.BUILD_CONFIG,
             '--platform', self.m.chromium.c.TARGET_PLATFORM]
     test_name = 'sizes'
-    yield self.add_test(
+    self.add_test(
         test=sizes_script,
         name=test_name,
         perf_dashboard_id=test_name,
@@ -184,19 +184,18 @@ class WebRTCApi(recipe_api.RecipeApi):
         perf_test=True)
 
   def package_build(self, gs_url, revision):
-    yield self.m.archive.zip_and_upload_build(
+    self.m.archive.zip_and_upload_build(
         'package build',
         self.m.chromium.c.build_config_fs,
         gs_url,
         build_revision=revision)
 
   def extract_build(self, gs_url, revision):
-    yield self.m.archive.download_and_unzip_build(
+    self.m.archive.download_and_unzip_build(
         'extract build',
         self.m.chromium.c.build_config_fs,
         gs_url,
-        build_revision=revision,
-        abort_on_failure=True)
+        build_revision=revision)
 
   def apply_svn_patch(self):
     """Patch step for applying WebRTC patches to Chromium checkouts.
@@ -215,10 +214,10 @@ class WebRTCApi(recipe_api.RecipeApi):
       args += ['--filter-script', self.c.patch_filter_script,
                '--strip-level', self.c.patch_strip_level,
                '--', '--path-filter', self.c.patch_path_filter]
-    return self.m.python('apply_patch', script, args)
+    self.m.python('apply_patch', script, args)
 
   def virtual_webcam_check(self):
-    return self.m.python(
+    self.m.python(
       'webcam_check',
       self.m.path['build'].join('scripts', 'slave', 'webrtc',
                                 'ensure_webcam_is_running.py'))
