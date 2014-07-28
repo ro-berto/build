@@ -57,10 +57,10 @@ class GitilesRevisionComparator(RevisionComparator):
     return revision in self.sha1_lookup
 
   def isRevisionEarlier(self, first_change, second_change):
-    return self.tagcmp(first_change, second_change) < 0
+    return self.tagcmp(first_change.revision, second_change.revision) < 0
 
   def getSortingKey(self):
-    return lambda c: self.sha1_lookup.__getitem__(c.revision)
+    return self.sha1_lookup.__getitem__
 
 
 class GitilesPoller(PollingChangeSource):
