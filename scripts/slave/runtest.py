@@ -1866,7 +1866,8 @@ def main():
     elif sys.platform == 'win32':
       result = _MainWin(options, args, extra_env)
     elif sys.platform == 'linux2':
-      if options.factory_properties.get('test_platform', '') == 'android':
+      if options.factory_properties.get('test_platform',
+            options.test_platform) == 'android':
         result = _MainAndroid(options, args, extra_env)
       else:
         result = _MainLinux(options, args, extra_env)
