@@ -276,11 +276,6 @@ DISABLED_BUILDERS = {
         'WebKit Mac10.6 (deps)',
         'WebKit Linux (deps)',
     ],
-    'chromium.win': [
-        # crbug.com/392565
-        'NaCl Tests (x86-64)',  # nacl_integration is failing.
-        'Win Builder',  # nacl_integration is failing.
-    ],
     'tryserver.blink': [
         # These don't exist, but are just here to satisfy recipes.
         'linux_blink_no_bot_update',
