@@ -36,7 +36,8 @@ DEFAULT_TESTS = 'defaulttests'
 
 
 def CreateTriggerStep(trigger_name, trigger_set_properties=None,
-                      trigger_copy_properties=None, do_step_if=True):
+                      trigger_copy_properties=None, do_step_if=True,
+                      waitForFinish=False):
   """Returns a Trigger Step, with all the default values copied over.
 
   Args:
@@ -46,6 +47,7 @@ def CreateTriggerStep(trigger_name, trigger_set_properties=None,
       overwritten.
     trigger_copy_properties: a list of all the additional properties to copy
       over to the triggered bot.
+    waitForFinish: Wait for the triggered build to finish.
   """
   trigger_set_properties = trigger_set_properties or {}
   trigger_copy_properties = trigger_copy_properties or []
@@ -87,7 +89,7 @@ def CreateTriggerStep(trigger_name, trigger_set_properties=None,
   return trigger.Trigger(
       schedulerNames=[trigger_name],
       updateSourceStamp=False,
-      waitForFinish=False,
+      waitForFinish=waitForFinish,
       set_properties=set_properties,
       copy_properties=trigger_copy_properties + ['testfilter'],
       doStepIf=do_step_if)
