@@ -201,7 +201,7 @@ class GitBranchPoller(PollingChangeSource):
 
     self._log('Determining total ordering of revisions')
     out, err, ret = yield self._git(
-      'rev-list', '--date-order', '--reverse' *rev_list_args)
+      'rev-list', '--date-order', '--reverse', *rev_list_args)
     if log_error(err, ret):
       return
 
