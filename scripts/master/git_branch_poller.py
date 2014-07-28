@@ -33,33 +33,33 @@ class GitBranchPoller(PollingChangeSource):
         self.revisions[revision] = len(self.revisions)
 
     def isRevisionEarlier(self, first, second):
-      """Returns whether the first revision is earlier than the second.
+      """Returns whether the first change is earlier than the second.
 
       Args:
-        first: A revision this GitBranchRevisionComparator is aware of.
-        second: A revision this GitBranchRevisionComparator is aware of.
+        first: A change this GitBranchRevisionComparator is aware of.
+        second: A change this GitBranchRevisionComparator is aware of.
 
       Returns:
-        True if the first revision is earlier than the second.
+        True if the first change's revision is earlier than the second's.
       """
-      assert first in self.revisions
-      assert second in self.revisions
-      return self.revisions[first] < self._revisions[second]
+      assert first.revision in self.revisions
+      assert second.revision in self.revisions
+      return self.revisions[first.revision] < self._revisions[second.revision]
 
-    def isValidRevision(self, revision):
-      """Returns whether or not the given revision is known.
+    def isValidRevision(self, change):
+      """Returns whether or not the given change is known.
 
       Args:
-        revision: A revision.
+        change: A change.
 
       Returns:
-        True if this GitBranchRevisionComparator knows about the given revision.
+        True if this GitBranchRevisionComparator knows about the given change.
       """
-      return revision in self.revisions
+      return change.revision in self.revisions
 
     def getSortingKey(self):
-      """Returns a function which maps revisions to their sorted order."""
-      return lambda revision: self.revisions[revision]
+      """Returns a function which maps changes to their sorted order."""
+      return lambda change: self.revisions[change.revision]
 
   def __init__(self, repo_url, branches, pollInterval=60, revlinktmpl='',
                workdir='git_poller', verbose=False):
