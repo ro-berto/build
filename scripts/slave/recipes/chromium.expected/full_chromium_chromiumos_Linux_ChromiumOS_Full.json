@@ -167,7 +167,9 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"gclient_env\": {\"GYP_DEFINES\": \"chromeos=1 component=static_library ffmpeg_branding=ChromeOS gomadir='[BUILD]/goma' proprietary_codecs=1 target_arch=x64 use_goma=1\"}, \"gs_acl\": \"public-read\", \"gs_bucket\": \"gs://chromium-browser-snapshots\"}"
+      "{\"gclient_env\": {\"GYP_DEFINES\": \"chromeos=1 component=static_library ffmpeg_branding=ChromeOS gomadir='[BUILD]/goma' proprietary_codecs=1 target_arch=x64 use_goma=1\"}, \"gs_acl\": \"public-read\", \"gs_bucket\": \"gs://chromium-browser-snapshots\"}",
+      "--build-properties",
+      "{\"got_nacl_revision\": 274981, \"got_nacl_revision_git\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_revision\": 170242, \"got_revision_git\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_swarming_client_revision\": 276089, \"got_swarming_client_revision_git\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", \"got_v8_revision\": 43426, \"got_v8_revision_git\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_webkit_revision\": 124383, \"got_webkit_revision_git\": \"5e2293dffc3cd07d37fbedea3b500f0eb650614d\", \"got_webrtc_revision\": 120644, \"got_webrtc_revision_git\": \"0f90628433546e61d9268596da93418c623137f4\"}"
     ],
     "name": "archive build"
   },

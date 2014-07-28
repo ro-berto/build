@@ -24,6 +24,10 @@ class TestLauncherFilterFileInputPlaceholder(recipe_util.Placeholder):
 
 
 class ChromiumApi(recipe_api.RecipeApi):
+  def __init__(self, *args, **kwargs):
+    super(ChromiumApi, self).__init__(*args, **kwargs)
+    self._build_properties = None
+
   def get_config_defaults(self):
     return {
       'HOST_PLATFORM': self.m.platform.name,
@@ -45,7 +49,7 @@ class ChromiumApi(recipe_api.RecipeApi):
         32 if self.m.platform.name in ('mac', 'win')
         else self.m.platform.bits),
 
-      'BUILD_CONFIG': self.m.properties.get('build_config', 'Release')
+      'BUILD_CONFIG': self.m.properties.get('build_config', 'Release'),
     }
 
   @property
@@ -55,6 +59,10 @@ class ChromiumApi(recipe_api.RecipeApi):
   @property
   def steps(self):
     return steps
+
+  @property
+  def build_properties(self):
+    return self._build_properties
 
   @property
   def output_dir(self):
@@ -83,6 +91,9 @@ class ChromiumApi(recipe_api.RecipeApi):
             lambda: self.m.raw_io.test_api.stream_output(
                 "MAJOR=37\nMINOR=0\nBUILD=2021\nPATCH=0\n"))).stdout
     return self.version
+
+  def set_build_properties(self, props):
+    self._build_properties = props
 
   def compile(self, targets=None, name=None,
               force_clobber=False, **kwargs):
@@ -415,6 +426,10 @@ class ChromiumApi(recipe_api.RecipeApi):
         '--target', self.c.BUILD_CONFIG,
         '--factory-properties', self.m.json.dumps(fake_factory_properties),
     ]
+    if self.build_properties:
+      args += [
+        '--build-properties', self.m.json.dumps(self.build_properties),
+      ]
     self.m.python(
       step_name,
       self.m.path['build'].join('scripts', 'slave', 'chromium',
