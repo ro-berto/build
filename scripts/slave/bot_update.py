@@ -201,15 +201,6 @@ ENABLED_BUILDERS = {
 ENABLED_BUILDERS.update(internal_data.get('ENABLED_BUILDERS', {}))
 
 ENABLED_SLAVES = {
-    # This is enabled on a bot-to-bot basis to ensure that we don't have
-    # bots that have mixed configs.
-    'chromium.fyi': [
-        'build1-m1',  # Chromium Builder / Chromium Builder (dbg)
-        'vm928-m1',   # Chromium Linux Buildrunner
-        'vm859-m1',   # Chromium Linux Redux
-        'vm933-m1',   # ChromiumOS Linux Tests
-    ],
-
     # Tryserver bots need to be enabled on a bot basis to make sure checkouts
     # on the same bot do not conflict.
     # TODO(iannucci): Not all of these slaves are on the same master... c+p'd
@@ -246,9 +237,6 @@ DISABLED_BUILDERS = {
     'chromium.fyi': [
         'Chromium Linux Codesearch',
         'ChromiumOS Codesearch',
-        # ClusterFuzz relies on svn revisions to do bisection checks.
-        # crbug.com/377963
-        'Win SyzyASAN LKGR',
     ],
     'chromium.webkit': [
         # We don't know how to deal with the DEPS builder yet.
