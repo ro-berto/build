@@ -84,23 +84,27 @@ class ChromiteFactory(object):
       patch: object with url and ref to patch on top
     """
     git_bin = '/usr/bin/git'
+    def git(*args):
+      return ' '.join((git_bin,) + args)
+
     git_checkout_dir = os.path.basename(repo).replace('.git', '')
-    clear_and_clone_cmd = 'rm -rf %s' % git_checkout_dir
-    clear_and_clone_cmd += ' && %s clone %s' % (git_bin, repo)
-    clear_and_clone_cmd += ' && cd %s' % git_checkout_dir
+
+    commands = []
+    commands += ['rm -rf "%s"' % (git_checkout_dir,)]
+    commands += [git('retry', 'clone', repo)]
+    commands += ['cd "%s"' % (git_checkout_dir,)]
 
     # We ignore branches coming from buildbot triggers and rely on those in the
     # config.  This is because buildbot branch names do not match up with
     # cros builds.
-    clear_and_clone_cmd += ' && %s checkout %s' % (git_bin, self.branch)
+    commands += [git('checkout', self.branch)]
     msg = 'Clear and Clone %s' % git_checkout_dir
     if patch:
-      clear_and_clone_cmd += (' && %s pull %s %s' %
-                              (git_bin, patch['url'], patch['ref']))
+      commands += [git('retry', 'pull', patch['url'], patch['ref'])]
       msg = 'Clear, Clone and Patch %s' % git_checkout_dir
 
     self.f_cbuild.addStep(shell.ShellCommand,
-                          command=clear_and_clone_cmd,
+                          command=' && '.join(commands),
                           name=msg,
                           description=msg,
                           haltOnFailure=True)

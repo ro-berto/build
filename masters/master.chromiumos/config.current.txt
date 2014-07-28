@@ -24,7 +24,7 @@ config = {
           (
             <class buildbot.steps.shell.ShellCommand>,
             {
-              'command': 'rm -rf chromite && /usr/bin/git clone https://chromium.googlesource.com/chromiumos/chromite.git && cd chromite && /usr/bin/git checkout master',
+              'command': 'rm -rf "chromite" && /usr/bin/git retry clone https://chromium.googlesource.com/chromiumos/chromite.git && cd "chromite" && /usr/bin/git checkout master',
               'description': 'Clear and Clone chromite',
               'haltOnFailure': True,
               'name': 'Clear and Clone chromite',
@@ -76,7 +76,7 @@ config = {
           (
             <class buildbot.steps.shell.ShellCommand>,
             {
-              'command': 'rm -rf chromite && /usr/bin/git clone https://chromium.googlesource.com/chromiumos/chromite.git && cd chromite && /usr/bin/git checkout master',
+              'command': 'rm -rf "chromite" && /usr/bin/git retry clone https://chromium.googlesource.com/chromiumos/chromite.git && cd "chromite" && /usr/bin/git checkout master',
               'description': 'Clear and Clone chromite',
               'haltOnFailure': True,
               'name': 'Clear and Clone chromite',
@@ -128,7 +128,7 @@ config = {
           (
             <class buildbot.steps.shell.ShellCommand>,
             {
-              'command': 'rm -rf chromite && /usr/bin/git clone https://chromium.googlesource.com/chromiumos/chromite.git && cd chromite && /usr/bin/git checkout master',
+              'command': 'rm -rf "chromite" && /usr/bin/git retry clone https://chromium.googlesource.com/chromiumos/chromite.git && cd "chromite" && /usr/bin/git checkout master',
               'description': 'Clear and Clone chromite',
               'haltOnFailure': True,
               'name': 'Clear and Clone chromite',
@@ -180,7 +180,7 @@ config = {
           (
             <class buildbot.steps.shell.ShellCommand>,
             {
-              'command': 'rm -rf chromite && /usr/bin/git clone https://chromium.googlesource.com/chromiumos/chromite.git && cd chromite && /usr/bin/git checkout master',
+              'command': 'rm -rf "chromite" && /usr/bin/git retry clone https://chromium.googlesource.com/chromiumos/chromite.git && cd "chromite" && /usr/bin/git checkout master',
               'description': 'Clear and Clone chromite',
               'haltOnFailure': True,
               'name': 'Clear and Clone chromite',
@@ -232,7 +232,7 @@ config = {
           (
             <class buildbot.steps.shell.ShellCommand>,
             {
-              'command': 'rm -rf chromite && /usr/bin/git clone https://chromium.googlesource.com/chromiumos/chromite.git && cd chromite && /usr/bin/git checkout master',
+              'command': 'rm -rf "chromite" && /usr/bin/git retry clone https://chromium.googlesource.com/chromiumos/chromite.git && cd "chromite" && /usr/bin/git checkout master',
               'description': 'Clear and Clone chromite',
               'haltOnFailure': True,
               'name': 'Clear and Clone chromite',
@@ -284,7 +284,7 @@ config = {
           (
             <class buildbot.steps.shell.ShellCommand>,
             {
-              'command': 'rm -rf chromite && /usr/bin/git clone https://chromium.googlesource.com/chromiumos/chromite.git && cd chromite && /usr/bin/git checkout master',
+              'command': 'rm -rf "chromite" && /usr/bin/git retry clone https://chromium.googlesource.com/chromiumos/chromite.git && cd "chromite" && /usr/bin/git checkout master',
               'description': 'Clear and Clone chromite',
               'haltOnFailure': True,
               'name': 'Clear and Clone chromite',
@@ -336,7 +336,7 @@ config = {
           (
             <class buildbot.steps.shell.ShellCommand>,
             {
-              'command': 'rm -rf chromite && /usr/bin/git clone https://chromium.googlesource.com/chromiumos/chromite.git && cd chromite && /usr/bin/git checkout master',
+              'command': 'rm -rf "chromite" && /usr/bin/git retry clone https://chromium.googlesource.com/chromiumos/chromite.git && cd "chromite" && /usr/bin/git checkout master',
               'description': 'Clear and Clone chromite',
               'haltOnFailure': True,
               'name': 'Clear and Clone chromite',
@@ -388,7 +388,7 @@ config = {
           (
             <class buildbot.steps.shell.ShellCommand>,
             {
-              'command': 'rm -rf chromite && /usr/bin/git clone https://chromium.googlesource.com/chromiumos/chromite.git && cd chromite && /usr/bin/git checkout master',
+              'command': 'rm -rf "chromite" && /usr/bin/git retry clone https://chromium.googlesource.com/chromiumos/chromite.git && cd "chromite" && /usr/bin/git checkout master',
               'description': 'Clear and Clone chromite',
               'haltOnFailure': True,
               'name': 'Clear and Clone chromite',
@@ -440,7 +440,7 @@ config = {
           (
             <class buildbot.steps.shell.ShellCommand>,
             {
-              'command': 'rm -rf chromite && /usr/bin/git clone https://chromium.googlesource.com/chromiumos/chromite.git && cd chromite && /usr/bin/git checkout master',
+              'command': 'rm -rf "chromite" && /usr/bin/git retry clone https://chromium.googlesource.com/chromiumos/chromite.git && cd "chromite" && /usr/bin/git checkout master',
               'description': 'Clear and Clone chromite',
               'haltOnFailure': True,
               'name': 'Clear and Clone chromite',
@@ -492,7 +492,7 @@ config = {
           (
             <class buildbot.steps.shell.ShellCommand>,
             {
-              'command': 'rm -rf chromite && /usr/bin/git clone https://chromium.googlesource.com/chromiumos/chromite.git && cd chromite && /usr/bin/git checkout master',
+              'command': 'rm -rf "chromite" && /usr/bin/git retry clone https://chromium.googlesource.com/chromiumos/chromite.git && cd "chromite" && /usr/bin/git checkout master',
               'description': 'Clear and Clone chromite',
               'haltOnFailure': True,
               'name': 'Clear and Clone chromite',
@@ -544,7 +544,7 @@ config = {
           (
             <class buildbot.steps.shell.ShellCommand>,
             {
-              'command': 'rm -rf chromite && /usr/bin/git clone https://chromium.googlesource.com/chromiumos/chromite.git && cd chromite && /usr/bin/git checkout master',
+              'command': 'rm -rf "chromite" && /usr/bin/git retry clone https://chromium.googlesource.com/chromiumos/chromite.git && cd "chromite" && /usr/bin/git checkout master',
               'description': 'Clear and Clone chromite',
               'haltOnFailure': True,
               'name': 'Clear and Clone chromite',
@@ -596,7 +596,7 @@ config = {
           (
             <class buildbot.steps.shell.ShellCommand>,
             {
-              'command': 'rm -rf chromite && /usr/bin/git clone https://chromium.googlesource.com/chromiumos/chromite.git && cd chromite && /usr/bin/git checkout master',
+              'command': 'rm -rf "chromite" && /usr/bin/git retry clone https://chromium.googlesource.com/chromiumos/chromite.git && cd "chromite" && /usr/bin/git checkout master',
               'description': 'Clear and Clone chromite',
               'haltOnFailure': True,
               'name': 'Clear and Clone chromite',
@@ -648,7 +648,7 @@ config = {
           (
             <class buildbot.steps.shell.ShellCommand>,
             {
-              'command': 'rm -rf chromite && /usr/bin/git clone https://chromium.googlesource.com/chromiumos/chromite.git && cd chromite && /usr/bin/git checkout master',
+              'command': 'rm -rf "chromite" && /usr/bin/git retry clone https://chromium.googlesource.com/chromiumos/chromite.git && cd "chromite" && /usr/bin/git checkout master',
               'description': 'Clear and Clone chromite',
               'haltOnFailure': True,
               'name': 'Clear and Clone chromite',
@@ -700,7 +700,7 @@ config = {
           (
             <class buildbot.steps.shell.ShellCommand>,
             {
-              'command': 'rm -rf chromite && /usr/bin/git clone https://chromium.googlesource.com/chromiumos/chromite.git && cd chromite && /usr/bin/git checkout master',
+              'command': 'rm -rf "chromite" && /usr/bin/git retry clone https://chromium.googlesource.com/chromiumos/chromite.git && cd "chromite" && /usr/bin/git checkout master',
               'description': 'Clear and Clone chromite',
               'haltOnFailure': True,
               'name': 'Clear and Clone chromite',
@@ -766,7 +766,7 @@ config = {
           (
             <class buildbot.steps.shell.ShellCommand>,
             {
-              'command': 'rm -rf chromite && /usr/bin/git clone https://chromium.googlesource.com/chromiumos/chromite.git && cd chromite && /usr/bin/git checkout master',
+              'command': 'rm -rf "chromite" && /usr/bin/git retry clone https://chromium.googlesource.com/chromiumos/chromite.git && cd "chromite" && /usr/bin/git checkout master',
               'description': 'Clear and Clone chromite',
               'haltOnFailure': True,
               'name': 'Clear and Clone chromite',
@@ -818,7 +818,7 @@ config = {
           (
             <class buildbot.steps.shell.ShellCommand>,
             {
-              'command': 'rm -rf chromite && /usr/bin/git clone https://chromium.googlesource.com/chromiumos/chromite.git && cd chromite && /usr/bin/git checkout master',
+              'command': 'rm -rf "chromite" && /usr/bin/git retry clone https://chromium.googlesource.com/chromiumos/chromite.git && cd "chromite" && /usr/bin/git checkout master',
               'description': 'Clear and Clone chromite',
               'haltOnFailure': True,
               'name': 'Clear and Clone chromite',
@@ -870,7 +870,7 @@ config = {
           (
             <class buildbot.steps.shell.ShellCommand>,
             {
-              'command': 'rm -rf chromite && /usr/bin/git clone https://chromium.googlesource.com/chromiumos/chromite.git && cd chromite && /usr/bin/git checkout master',
+              'command': 'rm -rf "chromite" && /usr/bin/git retry clone https://chromium.googlesource.com/chromiumos/chromite.git && cd "chromite" && /usr/bin/git checkout master',
               'description': 'Clear and Clone chromite',
               'haltOnFailure': True,
               'name': 'Clear and Clone chromite',
