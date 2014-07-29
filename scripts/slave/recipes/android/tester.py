@@ -139,7 +139,7 @@ def GenSteps(api):
         suite,
         isolate_file_path=isolate_path)
 
-  api.chromium_android.logcat_dump()
+  api.chromium_android.logcat_dump(gs_bucket='chromium-android')
   api.chromium_android.stack_tool_steps()
   api.chromium_android.test_report()
   api.chromium_android.cleanup_build()

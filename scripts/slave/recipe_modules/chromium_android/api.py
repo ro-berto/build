@@ -12,7 +12,6 @@ class AndroidApi(recipe_api.RecipeApi):
     super(AndroidApi, self).__init__(**kwargs)
     self._internal_names = dict()
     self._cleanup_list = []
-    self._spawn_logcat_monitor = None
 
   def get_config_defaults(self):
     return {
@@ -248,16 +247,12 @@ class AndroidApi(recipe_api.RecipeApi):
     )
 
   def spawn_logcat_monitor(self):
-    # This is to say we started it.
-    self._spawn_logcat_monitor = 0
-
-    self._spawn_logcat_monitor = self.m.step(
+    self.m.step(
         'spawn_logcat_monitor',
         [self.m.path['build'].join('scripts', 'slave', 'daemonizer.py'),
          '--', self.c.cr_build_android.join('adb_logcat_monitor.py'),
          self.m.chromium.c.build_dir.join('logcat')],
         env=self.get_env())
-    self._spawn_logcat_monitor
 
   def detect_and_setup_devices(self, restart_usb=False, skip_wipe=False,
                                disable_location=False):
@@ -459,8 +454,22 @@ class AndroidApi(recipe_api.RecipeApi):
         args=['instrumentation'] + args,
         **kwargs)
 
-  def logcat_dump(self):
-    if self._spawn_logcat_monitor is not None:
+  def logcat_dump(self, gs_bucket=None):
+    if gs_bucket:
+      log_path = self.m.chromium.output_dir.join('full_log')
+      self.m.python(
+          'logcat_dump',
+          self.m.path['checkout'].join('build', 'android',
+                                       'adb_logcat_printer.py'),
+          [ '--output_path', log_path,
+            self.m.path['checkout'].join('out', 'logcat') ])
+      self.m.gsutil.upload(
+          log_path,
+          gs_bucket,
+          'logcat_dumps/%s/%s' % (self.m.properties['buildername'],
+                                  self.m.properties['buildnumber']),
+          link_name='logcat dump')
+    else:
       self.m.python(
           'logcat_dump',
           self.m.path['build'].join('scripts', 'slave', 'tee.py'),
