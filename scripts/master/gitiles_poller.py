@@ -60,7 +60,7 @@ class GitilesRevisionComparator(RevisionComparator):
     return self.tagcmp(first_change.revision, second_change.revision) < 0
 
   def getSortingKey(self):
-    return lambda c: self.sha1_lookup.__getitem__[c.revision]
+    return lambda c: self.sha1_lookup.__getitem__(c.revision)
 
 
 class GitilesPoller(PollingChangeSource):
