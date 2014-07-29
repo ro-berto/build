@@ -25,6 +25,7 @@ from common.gerrit_agent import GerritAgent
 
 
 LOG_TEMPLATE = '%s/+log/%s?format=JSON&n=%d'
+REFS_TEMPLATE = '%s/+refs/heads?format=JSON'
 REVISION_DETAIL_TEMPLATE = '%s/+/%s?format=JSON'
 
 
@@ -67,6 +68,7 @@ class GitilesPoller(PollingChangeSource):
   """Polls a git repository using the gitiles web interface. """
 
   git_svn_id_re = re.compile('^git-svn-id: (.*)@([0-9]+) [0-9a-fA-F\-]*$')
+  re_pattern_type = type(re.compile(''))
 
   def __init__(
       self, repo_url, branches=None, pollInterval=10*60, category=None,
@@ -74,7 +76,8 @@ class GitilesPoller(PollingChangeSource):
     """Args:
 
     repo_url: URL of the gitiles service to be polled.
-    branches: List of repository branches to be polled.
+    branches: List of strings and/or compiled regular expressions, specifying
+        the branches to be polled.
     pollInterval: Number of seconds between polling operations.
     category: Category to be applied to generated Change objects.
     project: Project to be applied to generated Change objects.
@@ -92,7 +95,8 @@ class GitilesPoller(PollingChangeSource):
       branches = ['master']
     elif isinstance(branches, basestring):
       branches = [branches]
-    self.branches = dict([(b, None) for b in branches])
+    self.branches = branches
+    self.branch_heads = {}
     self.pollInterval = pollInterval
     self.category = category
     if project is None:
@@ -123,17 +127,27 @@ class GitilesPoller(PollingChangeSource):
     self.comparator.initialized = True
 
     # Get the head commit for each branch being polled.
-    for branch in self.branches:
-      path = LOG_TEMPLATE % (self.repo_path, branch, 1)
-      log_json = yield self.agent.request('GET', path, retry=5)
-      assert log_json.get('log'), log_json
-      revision = log_json['log'][0]['commit']
+    branches = yield self._get_branches()
+    for branch, branch_head in branches.iteritems():
       log.msg('GitilesPoller: Initial revision for branch %s is %s' % (
-          branch, revision))
-      self.branches[branch] = revision
+          branch, branch_head))
+      self.branch_heads[branch] = branch_head
 
     log.msg('GitilesPoller: Finished initializing revision history')
     PollingChangeSource.startService(self)
+
+  @defer.inlineCallbacks
+  def _get_branches(self):
+    result = {}
+    path = REFS_TEMPLATE % (self.repo_path,)
+    refs_json = yield self.agent.request('GET', path, retry=5)
+    for ref, ref_head in refs_json.iteritems():
+      for branch in self.branches:
+        if (ref == branch or
+            (isinstance(branch, self.re_pattern_type) and branch.match(ref))):
+          result[ref] = ref_head['value']
+          break
+    defer.returnValue(result)
 
   def _create_change(self, commit_json, branch):
     """Send a new Change object to the buildbot master."""
@@ -216,12 +230,20 @@ class GitilesPoller(PollingChangeSource):
   @defer.inlineCallbacks
   def poll(self):
     all_commits = []
-    for branch, last_head in self.branches.iteritems():
+    branches = yield self._get_branches()
+    for branch, branch_head in branches.iteritems():
       try:
-        branch_commits = yield self._fetch_new_commits(
-            branch, last_head)
+        branch_commits = None
+        if branch not in self.branch_heads:
+          # New branch: trigger a build based on the current head.
+          log.msg('GitilesPoller: Discovered new branch %s.' % branch)
+          branch_commits = yield self._fetch_new_commits(
+              branch, branch + '~')
+        elif self.branch_heads[branch] != branch_head:
+          branch_commits = yield self._fetch_new_commits(
+              branch, self.branch_heads[branch])
         if branch_commits:
-          self.branches[branch] = branch_commits[-1]['commit']
+          self.branch_heads[branch] = branch_commits[-1]['commit']
           branch_commits = [(c, branch) for c in branch_commits]
           all_commits = self._collate_commits(all_commits, branch_commits)
       except Exception:
