@@ -82,7 +82,7 @@ def arm_l_builder(c):
   gyp_defs['android_sdk_root'] = Path(
     '[CHECKOUT]', 'third_party', 'android_tools_internal', 'sdk')
   gyp_defs['use_unpublished_apis'] = 1
-  c.compile_py.default_targets = ['All', 'hera_apk']
+  c.compile_py.default_targets = ['All', 'hera_apk', 'hera_test_apk']
 
 @CONFIG_CTX(includes=['arm_k_builder'],
             config_vars={'BUILD_CONFIG': 'Release'})
