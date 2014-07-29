@@ -172,6 +172,7 @@ def GenSteps(api):
     for builder_dict in master_dict.get('builders', {}).itervalues():
       if builder_dict.get('parent_buildername') == buildername:
         for test in builder_dict.get('tests', []):
+          test.set_test_spec(test_spec_result.json.output)
           compile_targets.update(test.compile_targets(api))
 
     api.chromium.compile(targets=sorted(compile_targets))
@@ -365,4 +366,23 @@ def GenTests(api):
         ],
       },
     }))
+  )
+
+  yield (
+    api.test('buildspec_compile_targets') +
+    api.properties.generic(mastername='chromium.linux',
+                           buildername='Linux Builder (dbg)',
+                           buildnumber=1) +
+    api.platform('linux', 64) +
+    api.override_step_data('read test spec', api.json.output({
+      "Linux Tests (dbg)(1)": {
+        "gtest_tests": [
+          'target_from_dbg_1'
+        ]
+      },
+      "Linux Tests (dbg)(2)": {
+        "gtest_tests": [
+          'target_from_dbg_2'
+        ]
+      }}))
   )
