@@ -1100,7 +1100,7 @@ class FactoryCommands(object):
 
     cmd = [self._python, self._zip_tool,
            '--target', self._target,
-           '--build-url', build_url]
+           '--build-url', build_url or '']
     if revision:
       cmd.extend(['--build_revision', revision])
 
