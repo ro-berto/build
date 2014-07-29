@@ -465,8 +465,7 @@ class Waterfall(object):
       filename = os.path.join(self._master_path,
                               build_properties['builderName'], basename)
       ref = (build_properties['builderName'],
-             build_number,
-             re.sub(r'[^\w\.\-]', '_', step_name) + '.' + log_name)
+             build_number, re.sub(r'/', '_', step_name) + '.' + log_name)
 
       for ext in ('', '.bz2'):
         filename_ext = filename + ext
