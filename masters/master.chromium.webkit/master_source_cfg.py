@@ -54,3 +54,7 @@ def Update(config, _active_master, c):
   c['schedulers'].append(AnyBranchScheduler(
       name='global_scheduler', branches=['trunk', 'src'], treeStableTimer=60,
       builderNames=[]))
+
+  c['schedulers'].append(AnyBranchScheduler(
+      name='global_deps_scheduler', branches=['src'], treeStableTimer=60,
+      builderNames=[]))
