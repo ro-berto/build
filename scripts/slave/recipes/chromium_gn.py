@@ -124,6 +124,20 @@ BUILDERS = {
       },
     },
   },
+  'chromium.fyi': {
+    'builders': {
+      'Windows GN': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+        },
+      },
+      'Windows GN (dbg)': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+        },
+      },
+    },
+  },
 }
 
 def GenSteps(api):
