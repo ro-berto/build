@@ -224,6 +224,10 @@ def _RevisionNumberColumns(data, master):
     return int(calendar.timegm(datetime.datetime.utcnow().utctimetuple()))
 
   revision_supplemental_columns = {}
+
+  # The dashboard requires points' x-values to be integers, and points are
+  # ordered by this. If the revision can't be parsed as an int, assume that
+  # it's a git hash and use timestamp as the x-value.
   git_hash = None
   try:
     revision = int(data['rev'])
@@ -233,28 +237,29 @@ def _RevisionNumberColumns(data, master):
     revision = GetTimestamp()
     git_hash = data['rev']
 
+  # Add Chromium version if it was specified, and use timestamp as x-value.
   if 'ver' in data and data['ver'] != 'undefined':
     revision_supplemental_columns['r_chrome_version'] = data['ver']
     revision_supplemental_columns['a_default_rev'] = 'r_chrome_version'
     revision = GetTimestamp()
 
+  # Blink builds can have the same chromium revision for two builds. So
+  # order them by timestamp to get them to show on the dashboard in the
+  # order they were built.
   if master in ['ChromiumWebkit', 'Oilpan']:
-    # Blink builds can have the same chromium revision for two builds. So
-    # order them by timestamp to get them to show on the dashboard in the
-    # order they were built.
     if not git_hash:
       revision_supplemental_columns['r_chromium_svn'] = revision
     revision = GetTimestamp()
 
-  # Regardless of what the master is, if a git hash is given instead of an int,
-  # then set a supplemental column to hold this git hash.
+  # Regardless of what the master is, if the given "rev" can't be parsed as
+  # an int, we're assuming that it's a git hash.
   if git_hash:
     revision_supplemental_columns['r_chromium'] = git_hash
 
+  # For Oilpan, send the webkit_rev as r_oilpan since we are getting
+  # the oilpan branch revision instead of the Blink trunk revision
+  # and set r_oilpan to be the dashboard default revision.
   if master == 'Oilpan':
-    # For Oilpan, send the webkit_rev as r_oilpan since we are getting
-    # the oilpan branch revision instead of the Blink trunk revision
-    # and set r_oilpan to be the dashboard default revision.
     revision_supplemental_columns['r_oilpan'] = data['webkit_rev']
     revision_supplemental_columns['a_default_rev'] = 'r_oilpan'
   else:
@@ -267,23 +272,33 @@ def _RevisionNumberColumns(data, master):
 
 
 def _TestPath(test_name, chart_name, trace_name):
-  """Get the slash-separated test path.
+  """Get the slash-separated test path to send.
 
   Args:
-    test: Test name. Typically, this will be a top-level 'test suite' name
-        such as 'moz'. A nested test hierarchy can be specified by including
-        slashes in this name.
-    chart_name: Name of chart where multiple trace lines are grouped.
-    trace_name: Name of trace line on chart.
+    test: Test name. Typically, this will be a top-level 'test suite' name.
+    chart_name: Name of a chart where multiple trace lines are grouped. If the
+        chart name is the same as the trace name, that signifies that this is
+        the main trace for the chart.
+    trace_name: The "trace name" is the name of an individual line on chart.
 
   Returns:
     A slash-separated list of names that corresponds to the hierarchy of test
-    data in the Chrome Performance Dashboard.
+    data in the Chrome Performance Dashboard; doesn't include master or bot
+    name.
   """
+  # For tests run on reference builds by builds/scripts/slave/telemetry.py,
+  # "_ref" is appended to the trace name. On the dashboard, as long as the
+  # result is on the right chart, it can just be called "ref".
   if trace_name == chart_name + '_ref':
     trace_name = 'ref'
   chart_name = chart_name.replace('_by_url', '')
+
+  # No slashes are allowed in the trace name.
   trace_name = trace_name.replace('/', '_')
+
+  # The results for "test/chart" and "test/chart/*" will all be shown on the
+  # same chart by the dashboard. The result with path "test/path" is considered
+  # the main trace for the chart.
   test_path = '%s/%s/%s' % (test_name, chart_name, trace_name)
   if chart_name == trace_name:
     test_path = '%s/%s' % (test_name, chart_name)
