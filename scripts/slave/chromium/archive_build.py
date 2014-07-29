@@ -28,6 +28,8 @@ import simplejson
 import sys
 
 from common import archive_utils
+from common.chromium_utils import GS_COMMIT_POSITION_NUMBER_KEY, \
+                                  GS_GIT_COMMIT_KEY
 from common import chromium_utils
 from slave import build_directory
 from slave import slave_utils
@@ -50,25 +52,6 @@ def Write(file_path, data):
     f.write(data)
   finally:
     f.close()
-
-
-def MyCopyFileToGS(filename, gs_base, gs_subdir, mimetype=None, gs_acl=None):
-  # normalize the subdir to remove duplicated slashes. This break newer versions
-  # of gsutil. Also remove leading and ending slashes for the subdir, gsutil
-  # adds them back autimatically and this can cause a double slash to be added.
-  if gs_subdir:
-    gs_subdir = gs_subdir.replace('//', '/')
-    gs_subdir = gs_subdir.strip('/')
-  status = slave_utils.GSUtilCopyFile(filename,
-                                      gs_base,
-                                      gs_subdir,
-                                      mimetype,
-                                      gs_acl)
-  if status != 0:
-    dest = gs_base + '/' + gs_subdir
-    raise GSUtilError('GSUtilCopyFile error %d. "%s" -> "%s"' % (status,
-                                                                 filename,
-                                                                 dest))
 
 
 class StagerBase(object):
@@ -119,10 +102,12 @@ class StagerBase(object):
 
     self._version_file = os.path.join(self._chrome_dir, 'VERSION')
 
+    self._git_commit = chromium_utils.GetGitCommit(options)
+
     self._chromium_revision = self._getRevision(
         options,
         'default_chromium_revision',
-        None,
+        None, # (Use 'default' repository).
     )
 
     self._webkit_revision = self._getRevision(
@@ -168,8 +153,37 @@ class StagerBase(object):
     return chromium_utils.GetBuildSortKey(
         options,
         repo=repo,
-        fallback=False,
     )[1]
+
+  def CopyFileToGS(self, filename, gs_base, gs_subdir, mimetype=None,
+                   gs_acl=None):
+    # normalize the subdir to remove duplicated slashes. This break newer
+    # versions of gsutil. Also remove leading and ending slashes for the subdir,
+    # gsutil adds them back autimatically and this can cause a double slash to
+    # be added.
+    if gs_subdir:
+      gs_subdir = gs_subdir.replace('//', '/')
+      gs_subdir = gs_subdir.strip('/')
+
+    # Construct metadata from our revision information
+    gs_metadata = {
+        GS_COMMIT_POSITION_NUMBER_KEY: self._chromium_revision,
+        GS_GIT_COMMIT_KEY: self._git_commit,
+    }
+
+    status = slave_utils.GSUtilCopyFile(filename,
+                                        gs_base,
+                                        gs_subdir,
+                                        mimetype,
+                                        gs_acl,
+                                        metadata=gs_metadata)
+    if status != 0:
+      dest = gs_base + '/' + gs_subdir
+      raise GSUtilError('GSUtilCopyFile error %d. "%s" -> "%s"' % (status,
+                                                                   filename,
+                                                                   dest))
+
+
 
   def TargetPlatformName(self):
     return self.options.factory_properties.get('target_os',
@@ -197,8 +211,8 @@ class StagerBase(object):
   def MyCopyFileToDir(self, filename, destination, gs_base, gs_subdir='',
                       mimetype=None, gs_acl=None):
     if gs_base:
-      MyCopyFileToGS(filename, gs_base, gs_subdir, mimetype=mimetype,
-                     gs_acl=gs_acl)
+      self.CopyFileToGS(filename, gs_base, gs_subdir, mimetype=mimetype,
+                        gs_acl=gs_acl)
 
     if not gs_base or self._dual_upload:
       chromium_utils.CopyFileToDir(filename, destination)
@@ -218,8 +232,8 @@ class StagerBase(object):
   def MySshCopyFiles(self, filename, host, destination, gs_base,
                      gs_subdir='', mimetype=None, gs_acl=None):
     if gs_base:
-      MyCopyFileToGS(filename, gs_base, gs_subdir, mimetype=mimetype,
-                     gs_acl=gs_acl)
+      self.CopyFileToGS(filename, gs_base, gs_subdir, mimetype=mimetype,
+                        gs_acl=gs_acl)
 
     if not gs_base or self._dual_upload:
       chromium_utils.SshCopyFiles(filename, host, destination)
@@ -547,8 +561,8 @@ class StagerBase(object):
       if chromium_utils.IsWindows():
         print 'Saving revision to %s' % latest_file_path
         if gs_base:
-          MyCopyFileToGS(self.last_change_file, gs_base, '..',
-                         mimetype='text/plain', gs_acl=gs_acl)
+          self.CopyFileToGS(self.last_change_file, gs_base, '..',
+                            mimetype='text/plain', gs_acl=gs_acl)
         if not gs_base or self._dual_upload:
           self.SaveBuildRevisionToSpecifiedFile(latest_file_path)
       elif chromium_utils.IsLinux() or chromium_utils.IsMac():

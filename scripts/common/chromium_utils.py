@@ -5,7 +5,6 @@
 """ Set of basic operations/utilities that are used by the build. """
 
 from contextlib import contextmanager
-import ast
 import copy
 import cStringIO
 import errno
@@ -14,7 +13,6 @@ import glob
 import math
 import multiprocessing
 import os
-import optparse
 import shutil
 import socket
 import stat
@@ -41,6 +39,13 @@ GIT_BIN = os.path.join(BUILD_DIR, 'scripts', 'tools', 'git-with-timeout')
 
 # Wrapper around svn that enforces a timeout.
 SVN_BIN = os.path.join(BUILD_DIR, 'scripts', 'tools', 'svn-with-timeout')
+
+# The Google Storage metadata key for the full commit position
+GS_COMMIT_POSITION_KEY = 'Cr-Commit-Position'
+# The Google Storage metadata key for the commit position number
+GS_COMMIT_POSITION_NUMBER_KEY = 'Cr-Commit-Position-Number'
+# The Google Storage metadata key for the Git commit hash
+GS_GIT_COMMIT_KEY = 'Cr-Git-Commit'
 
 # Local errors.
 class MissingArgument(Exception):
@@ -1287,14 +1292,22 @@ def GetCBuildbotConfigs(chromite_path=None):
     return {}
 
 
-def GetBuildSortKey(options, repo=None, fallback=True):
-  """Reads a variety of sources to determine the current build revision.
+def GetPrimaryRepository(options):
+  """Returns: (str) the key of the primary repository.
 
-  Build revision is either explicitly specified using the 'build_sort_key'
-  command-line option (used by recipes) or determined by examining a
-  'build_properties' value, 'got_[*]revision'. The optional specification of
-  the 'primary_repo' build property will take precedence over the default
-  'got_revision' property.
+  If no primary repository is configured, 'None' will be returned.
+  """
+  result = options.build_properties.get('primary_repo')
+  if not result:
+    return None
+  # The 'primary_repo' property currently contains a trailing underscore.
+  # However, this isn't an obvious thing given its name, so we'll strip it here
+  # and remove that expectation.
+  return result.strip('_')
+
+
+def GetBuildSortKey(options, repo=None):
+  """Reads a variety of sources to determine the current build revision.
 
   NOTE: Currently, the return value does not qualify branch name. This can
   present a problem with git numbering scheme, where numbers are only unique
@@ -1302,14 +1315,12 @@ def GetBuildSortKey(options, repo=None, fallback=True):
   function will return a branch name as part of the sort key and its callers
   will need to adapt their naming/querying schemes to accommodate this. Until
   then, we will return 'None' as the branch name.
-  (e.g., refs/foo/bar@{#12345} => (12345, refs/foo/bar))
+  (e.g., refs/foo/bar@{#12345} => ("refs/foo/bar", 12345)
 
   Args:
     options: Command-line options structure
     repo: (str/None) If not None, the repository to get the build sort key
         for. Otherwise, the build-wide sort key will be used.
-    fallback: (bool) If True, return the build-wide sort key if a repository
-        sort key is not defined.
   Returns: (branch, value) The qualified sortkey value
     branch: (str/None) The name of the branch, or 'None' if there is no branch
         context. Currently this always returns 'None'.
@@ -1317,26 +1328,39 @@ def GetBuildSortKey(options, repo=None, fallback=True):
   Raises: (NoIdentifiedRevision) if no revision could be identified from the
       supplied options.
   """
-  if (not repo) and options.build_sort_key:
-    return options.build_sort_key
-
-  # Construct the build parameter. Use 'repo' as the (optional)
-  # revision key.
-  revision_keys = []
-  repo = repo or options.build_properties.get('primary_repo')
   if repo:
-    # 'primary_repo' value currently contains a trailing underscore. However,
-    # this isn't an obvious thing given its name, so we'll strip it here and
-    # remove that expectation.
-    revision_keys.append('got_%s_revision' % (repo.strip('_'),))
-  if (not repo) or fallback:
-    revision_keys.append('got_revision')
-  for revision_key in revision_keys:
-    revision = options.build_properties.get(revision_key)
-    if revision:
-      return None, int(revision)
-  raise NoIdentifiedRevision("Unable to identify revision; used revision "
-                             "key(s): %s" % (revision_keys,))
+    revision_key = 'got_%s_revision' % (repo,)
+  else:
+    revision_key = 'got_revision'
+  revision = options.build_properties.get(revision_key)
+  if revision:
+    return None, int(revision)
+  raise NoIdentifiedRevision("Unable to identify revision for revision key "
+                             "[%s]" % (revision_key,))
+
+
+def GetGitCommit(options, repo=None):
+  """Returns the 'git' commit hash for the specified repository
+
+  This function uses environmental options to identify the 'git' commit hash
+  for the specified repository.
+
+  Args:
+    options: Command-line options structure
+    repo: (str/None) The repository key to use. If None, use the topmost
+        repository identification properties.
+  Raises: (NoIdentifiedRevision) if no git commit could be identified from the
+      supplied options.
+  """
+  if repo:
+    commit_key = 'got_%s_revision_git' % (repo,)
+  else:
+    commit_key = 'got_revision_git'
+  commit = options.build_properties.get(commit_key)
+  if commit:
+    return commit
+  raise NoIdentifiedRevision("Unable to identify commit for commit key [%s]" % (
+                             commit_key,))
 
 
 def AddPropertiesOptions(option_parser):
@@ -1359,24 +1383,6 @@ def AddPropertiesOptions(option_parser):
                            callback=convert_json, type='string',
                            nargs=1, default={},
                            help='factory properties in JSON format')
-
-  def cb_sort_key(option, opt, value, parser):
-    try:
-      literal = ast.literal_eval(value)
-    except ValueError:
-      raise optparse.OptionValueError("Failed to parse literal: %s" % (value,))
-
-    try:
-      sort_key = (literal[0], int(literal[1]))
-    except (TypeError, ValueError):
-      raise optparse.OptionValueError("Invalid sort key: %s" % (value,))
-    setattr(parser.values, option.dest, sort_key)
-  option_parser.add_option('--build-sort-key', metavar='(BRANCH, VALUE)',
-                           type=str, action='callback', callback=cb_sort_key,
-                           help="The build sort key associated with the "
-                                "primary repository, expressed as a "
-                                "(branch, value) tuple. If omitted, this will "
-                                "be inferred from the build properties.")
 
 
 def AddThirdPartyLibToPath(lib, override=False):

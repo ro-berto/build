@@ -345,7 +345,35 @@ def GSUtilSetup():
   return gsutil
 
 
-def GSUtilCopy(source, dest, mimetype=None, gs_acl=None, cache_control=None):
+def GSUtilGetMetadataField(name, provider_prefix=None):
+  """Returns: (str) the metadata field to use with Google Storage
+
+  The Google Storage specification for metadata can be found at:
+  https://developers.google.com/storage/docs/gsutil/addlhelp/WorkingWithObjectMetadata
+  """
+  # Already contains custom provider prefix
+  if name.lower().startswith('x-'):
+    return name
+
+  # See if it's innately supported by Google Storage
+  if name in (
+      'Cache-Control',
+      'Content-Disposition',
+      'Content-Encoding',
+      'Content-Language',
+      'Content-MD5',
+      'Content-Type',
+  ):
+    return name
+
+  # Add provider prefix
+  if not provider_prefix:
+    provider_prefix = 'x-goog-meta'
+  return '%s-%s' % (provider_prefix, name)
+
+
+def GSUtilCopy(source, dest, mimetype=None, gs_acl=None, cache_control=None,
+               metadata=None):
   """Copy a file to Google Storage.
 
   Runs the following command:
@@ -359,6 +387,8 @@ def GSUtilCopy(source, dest, mimetype=None, gs_acl=None, cache_control=None):
     mimetype: optional value to add as a Content-Type header
     gs_acl: optional value to add as a canned-acl
     cache_control: optional value to set Cache-Control header
+    metadata: (dict) A dictionary of string key/value metadata entries to set
+        (see `gsutil cp' '-h' option)
   Returns:
     The status code returned from running the generated gsutil command.
   """
@@ -371,10 +401,17 @@ def GSUtilCopy(source, dest, mimetype=None, gs_acl=None, cache_control=None):
   # Run the gsutil command. gsutil internally calls command_wrapper, which
   # will try to run the command 10 times if it fails.
   command = [gsutil]
+
+  if not metadata:
+    metadata = {}
   if mimetype:
-    command.extend(['-h', 'Content-Type:%s' % mimetype])
+    metadata['Content-Type'] = mimetype
   if cache_control:
-    command.extend(['-h', 'Cache-Control:%s' % cache_control])
+    metadata['Cache-Control'] = cache_control
+  for k, v in sorted(metadata.iteritems(), key=lambda (k, _): k):
+    field = GSUtilGetMetadataField(k)
+    param = (field) if v is None else ('%s:%s' % (field, v))
+    command += ['-h', param]
   command.extend(['cp'])
   if gs_acl:
     command.extend(['-a', gs_acl])
@@ -383,7 +420,7 @@ def GSUtilCopy(source, dest, mimetype=None, gs_acl=None, cache_control=None):
 
 
 def GSUtilCopyFile(filename, gs_base, subdir=None, mimetype=None, gs_acl=None,
-                   cache_control=None):
+                   cache_control=None, metadata=None):
   """Copy a file to Google Storage.
 
   Runs the following command:
@@ -411,7 +448,8 @@ def GSUtilCopyFile(filename, gs_base, subdir=None, mimetype=None, gs_acl=None,
     else:
       dest = '/'.join([gs_base, subdir])
   dest = '/'.join([dest, os.path.basename(filename)])
-  return GSUtilCopy(source, dest, mimetype, gs_acl, cache_control)
+  return GSUtilCopy(source, dest, mimetype, gs_acl, cache_control,
+                    metadata=metadata)
 
 
 def GSUtilCopyDir(src_dir, gs_base, dest_dir=None, gs_acl=None,
