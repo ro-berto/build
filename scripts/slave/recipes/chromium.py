@@ -141,11 +141,9 @@ def GenSteps(api):
 
   # Bot Update re-uses the gclient configs.
   update_step = api.bot_update.ensure_checkout()
-  if not update_step.json.output['did_run']:
-    update_step = api.gclient.checkout()
-  else:
-    # HACK(dnj): Remove after 'crbug.com/398105' has landed
-    api.chromium.set_build_properties(update_step.json.output['properties'])
+  assert update_step.json.output['did_run']
+  # HACK(dnj): Remove after 'crbug.com/398105' has landed
+  api.chromium.set_build_properties(update_step.json.output['properties'])
 
   # Whatever step is run right before this line needs to emit got_revision.
   got_revision = update_step.presentation.properties['got_revision']

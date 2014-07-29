@@ -182,6 +182,7 @@ ENABLED_MASTERS = [
     'client.drmemory',
     'client.nacl.sdk',
     'client.nacl.sdk.mono',
+    'client.skia',
     'client.v8',
     'tryserver.blink',
     'tryserver.chromium.linux',
