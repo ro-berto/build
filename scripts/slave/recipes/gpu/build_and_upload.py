@@ -70,3 +70,14 @@ def GenTests(api):
     api.platform.name('linux') +
     api.step_data('compile', retcode=1)
   )
+
+  yield (
+    api.test('compile_fail_is_critical_on_main') +
+    api.properties.scheduled(
+      build_config='Release',
+      mastername='chromium.gpu.testing',
+      buildername='linux release builder',
+      buildnumber=571) +
+    api.platform.name('linux') +
+    api.step_data('compile', retcode=1)
+  )
