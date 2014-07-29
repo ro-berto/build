@@ -229,17 +229,31 @@ def GenSteps(api):
       bot_type in ['tester', 'builder_tester']):
     api.chromium_android.common_tests_setup_steps()
 
+  failed_tests = []
+
   if not bot_config.get('do_not_run_tests') and bot_config.get('tests', None):
     def test_runner():
+      failed_tests = []
       tests = bot_config.get('tests', [])
       for t in tests:
-        t.run(api, '')
+        try:
+          t.run(api, '')
+        except api.StepFailure:
+          failed_tests.append(t)
+      return failed_tests
 
-    api.chromium.setup_tests(bot_type, test_runner)
+    failed_tests = api.chromium.setup_tests(bot_type, test_runner)
 
   if (api.chromium.c.TARGET_PLATFORM == 'android' and
       bot_type in ['tester', 'builder_tester']):
     api.chromium_android.common_tests_final_steps()
+
+  # FIXME(iannucci): Currently only dynamic gtests raise failures. All the
+  # other tests catch failures and handle them. Also dynamic gtests raise only
+  # one exception, which makes counting here quite useless.
+  if failed_tests:
+    raise api.StepFailure('Build failed due to %d test failures'
+                          % len(failed_tests))
 
 
 def _sanitize_nonalpha(text):
@@ -385,4 +399,31 @@ def GenTests(api):
           'target_from_dbg_2'
         ]
       }}))
+  )
+
+  # FIXME(iannucci): Make this test work.
+  #yield (
+  #  api.test('one_failure_keeps_going') +
+  #  api.properties.generic(mastername='chromium.linux',
+  #                         buildername='Linux Tests',
+  #                         parent_buildername='Linux Builder') +
+  #  api.platform('linux', 64) +
+  #  api.step_data('mojo_python_tests', retcode=1)
+  #)
+
+  yield (
+    api.test('one_failure_keeps_going_dynamic_tests') +
+    api.properties.generic(mastername='chromium.linux',
+                           buildername='Linux Tests',
+                           parent_buildername='Linux Builder') +
+    api.platform('linux', 64) +
+    api.override_step_data('read test spec', api.json.output({
+      'Linux Tests': {
+        'gtest_tests': [
+          'base_unittests',
+          {'test': 'browser_tests', 'shard_index': 0, 'total_shards': 2},
+        ],
+      },
+    })) +
+    api.step_data('base_unittests', retcode=1)
   )

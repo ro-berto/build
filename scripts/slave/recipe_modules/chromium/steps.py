@@ -272,17 +272,22 @@ class DynamicGTestTests(Test):
             self._get_test_spec(api).get('gtest_tests', [])]
 
   def run(self, api, suffix):
-    steps = []
+    exception = None
     for test in self._get_tests(api):
       args = []
       if test['shard_index'] != 0 or test['total_shards'] != 1:
         args.extend(['--test-launcher-shard-index=%d' % test['shard_index'],
                      '--test-launcher-total-shards=%d' % test['total_shards']])
-      steps.append(api.chromium.runtest(
-          test['test'], test_type=test['test'], args=args, annotate='gtest',
-          xvfb=True, flakiness_dash=self.flakiness_dash))
-
-    return steps
+      try:
+        api.chromium.runtest(
+            test['test'], test_type=test['test'], args=args, annotate='gtest',
+            xvfb=True, flakiness_dash=self.flakiness_dash)
+      except api.StepFailure as f:
+        exception = f
+    # TODO(iannucci): This raises only the last exception. The return
+    # type of the other run methods makes not much sense for DynamicGTestTests.
+    if exception:
+      raise exception
 
   def compile_targets(self, api):
     explicit_targets = self._get_test_spec(api).get('compile_targets', [])

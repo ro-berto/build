@@ -499,11 +499,13 @@ class ChromiumApi(recipe_api.RecipeApi):
         **kwargs)
 
   def setup_tests(self, bot_type, test_runner):
+    ret = None
     if bot_type in ['tester', 'builder_tester']:
       if self.m.platform.is_win:
         self.crash_handler()
 
-      test_runner()
+      ret = test_runner()
 
       if self.m.platform.is_win:
         self.process_dumps()
+    return ret

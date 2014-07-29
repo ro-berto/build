@@ -56,15 +56,24 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     failing_tests = []
     def run(prefix, tests):
-      try:
-        for t in tests:
+      for t in tests:
+        try:
           t.pre_run(caller_api, prefix)
-        for t in tests:
+        # TODO(iannucci): Write a test.
+        except caller_api.StepFailure:  # pragma: no cover
+          pass
+      for t in tests:
+        try:
           t.run(caller_api, prefix)
-        for t in tests:
+        # TODO(iannucci): How should exceptions be accumulated/handled here?
+        except caller_api.StepFailure:
+          pass
+      for t in tests:
+        try:
           t.post_run(caller_api, prefix)
-      except caller_api.StepFailure:
-        pass
+        # TODO(iannucci): Write a test.
+        except caller_api.StepFailure:  # pragma: no cover
+          pass
 
     run('with patch', tests)
 
