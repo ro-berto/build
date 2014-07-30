@@ -252,23 +252,6 @@ DISABLED_BUILDERS = {
         'win_blink_compile_rel',
         'win_drmemory',
     ],
-    'client.v8': [
-        'Linux ASAN Builder',
-        'Linux64 ASAN',
-        'Android Builder',
-        'Android Nexus4 Perf',
-        'Chrome Win7 Perf',
-        'Chrome Mac10.6 Perf',
-        'Chrome Linux Perf',
-        'Webkit',
-        'Webkit Mac',
-        'Webkit Linux',
-        'Webkit Linux 64',
-        'Webkit Linux - dbg',
-        'Webkit - dbg',
-        'Webkit Mac - dbg',
-        'V8 Linux GN',
-    ],
 }
 DISABLED_BUILDERS.update(internal_data.get('DISABLED_BUILDERS', {}))
 
