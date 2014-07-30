@@ -584,8 +584,10 @@ def _CreateResultsTracker(tracker_class, options):
   if not tracker_class:
     return None
 
-  if tracker_class.__name__ in ('GTestLogParser', 'GTestJSONParser'):
+  if tracker_class.__name__ in ('GTestLogParser',):
     tracker_obj = tracker_class()
+  elif tracker_class.__name__ in ('GTestJSONParser',):
+    tracker_obj = tracker_class(options.build_properties.get('mastername'))
   else:
     build_dir = os.path.abspath(options.build_dir)
 

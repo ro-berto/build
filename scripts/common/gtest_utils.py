@@ -411,7 +411,7 @@ class GTestJSONParser(object):
   # of output that gums up the infrastructure.
   OUTPUT_SNIPPET_LINES_LIMIT = 5000
 
-  def __init__(self):
+  def __init__(self, mastername=None):
     self.json_file_path = None
     self.delete_json_file = False
 
@@ -424,7 +424,7 @@ class GTestJSONParser(object):
 
     self.parsing_errors = []
 
-    self.master_name = None
+    self.master_name = mastername
 
   def ProcessLine(self, line):
     # Deliberately do nothing - we parse out-of-band JSON summary
