@@ -235,9 +235,6 @@ ENABLED_SLAVES.update(internal_data.get('ENABLED_SLAVES', {}))
 # config is enabled, but a bot on that builder is disabled, that bot will
 # be disabled.
 DISABLED_BUILDERS = {
-    'chromium.fyi': [
-        'ChromiumOS Codesearch',
-    ],
     'tryserver.blink': [
         # These don't exist, but are just here to satisfy recipes.
         'linux_blink_no_bot_update',
