@@ -515,6 +515,16 @@ def solutions_to_git(input_solutions):
     if not FLAG_DAY and not buildspec_name:
       solution['deps_file'] = '.DEPS.git'
 
+    # Strip out deps containing $$V8_REV$$, etc.
+    if 'custom_deps' in solution:
+      new_custom_deps = {}
+      for deps_name, deps_value in solution['custom_deps'].iteritems():
+        if deps_value and '$$' in deps_value:
+          print 'Dropping %s:%s from custom deps' % (deps_name, deps_value)
+        else:
+          new_custom_deps[deps_name] = deps_value
+      solution['custom_deps'] = new_custom_deps
+
     if first_solution:
       root = parsed_path
       first_solution = False
