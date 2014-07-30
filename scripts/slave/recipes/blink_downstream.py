@@ -40,18 +40,30 @@ DEPS = [
 ]
 
 
+def V8Builder(config, bits, platform):
+  chromium_configs = []
+  if config == 'Debug':
+    chromium_configs.append('v8_optimize_medium')
+  return {
+    'gclient_apply_config': ['show_v8_revision'],
+    'chromium_apply_config': chromium_configs,
+    'chromium_config_kwargs': {
+      'BUILD_CONFIG': config,
+      'TARGET_BITS': bits,
+    },
+    'component': {'path': 'src/v8', 'revision': 'bleeding_edge:%s'},
+    'testing': {'platform': platform},
+  }
+
+
 BUILDERS = {
   'client.v8': {
     'builders': {
-      'V8-Blink Linux 64': {
-        'gclient_apply_config': ['show_v8_revision'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'component': {'path': 'src/v8', 'revision': 'bleeding_edge:%s'},
-        'testing': {'platform': 'linux'},
-      },
+      'V8-Blink Win': V8Builder('Release', 32, 'win'),
+      'V8-Blink Mac': V8Builder('Release', 32, 'mac'),
+      'V8-Blink Linux 32': V8Builder('Release', 32, 'linux'),
+      'V8-Blink Linux 64': V8Builder('Release', 64, 'linux'),
+      'V8-Blink Linux 64 (dbg)': V8Builder('Debug', 64, 'linux'),
     },
   },
 }
@@ -70,6 +82,8 @@ def GenSteps(api):
 
   for c in bot_config.get('gclient_apply_config', []):
     api.gclient.apply_config(c)
+  for c in bot_config.get('chromium_apply_config', []):
+    api.chromium.apply_config(c)
 
   # Sync component to current component revision.
   component_revision = api.properties.get('revision', 'HEAD')

@@ -482,3 +482,7 @@ def chrome_pgo_instrument(c):
 @config_ctx(includes=['chrome_pgo_base'])
 def chrome_pgo_optimize(c):
   c.gyp_env.GYP_DEFINES['chrome_pgo_phase'] = 2
+
+@config_ctx()
+def v8_optimize_medium(c):
+  c.gyp_env.GYP_DEFINES['v8_optimized_debug'] = 1
