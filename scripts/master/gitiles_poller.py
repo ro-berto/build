@@ -10,7 +10,6 @@ The advantage of using gitiles is that a local clone is not needed."""
 import datetime
 import os
 import re
-import time
 import traceback
 import urllib
 from urlparse import urlparse
@@ -33,9 +32,28 @@ def _always_unlock(result, lock):
   lock.release()
   return result
 
+
 def time_to_datetime(tm):
-  return datetime.datetime.strptime(
-      tm.partition('+')[0].strip(), "%a %b %d %H:%M:%S %Y")
+  tm_parts = tm.split()
+  # Time stamps from gitiles sometimes have a UTC offset (e.g., -0800), and
+  # sometimes not.  time.strptime() cannot parse UTC offsets, so if one is
+  # present, strip it out and parse manually.
+  timezone = None
+  if len(tm_parts) == 6:
+    tm = ' '.join(tm_parts[:-1])
+    timezone = tm_parts[-1]
+  dt = datetime.datetime.strptime(tm, "%a %b %d %H:%M:%S %Y")
+  if timezone:
+    m = re.match(r'([+-])(\d\d):?(\d\d)?', timezone)
+    assert m, 'Could not parse time zone information from "%s"' % timezone
+    timezone_delta = datetime.timedelta(
+        hours=int(m.group(2)), minutes=int(m.group(3) or '0'))
+    if m.group(1) == '-':
+      dt += timezone_delta
+    else:
+      dt -= timezone_delta
+  return dt
+
 
 class GitilesRevisionComparator(RevisionComparator):
   """Tracks the commit order of tags in a git repository."""
@@ -212,8 +230,8 @@ class GitilesPoller(PollingChangeSource):
 
     The result will be sorted by commit time, while guaranteeing that there are
     no inversions compared to the argument lists."""
-    a = [(c, time.mktime(time.strptime(c[0]['committer']['time']))) for c in a]
-    b = [(c, time.mktime(time.strptime(c[0]['committer']['time']))) for c in b]
+    a = [(c, time_to_datetime(c[0]['committer']['time'])) for c in a]
+    b = [(c, time_to_datetime(c[0]['committer']['time'])) for c in b]
     result = []
     while a and b:
       if a[-1][1] > b[-1][1]:
