@@ -940,41 +940,76 @@ class FactoryCommands(object):
       if 'gyp' in env_key.lower():
         cmd.extend(['--gyp_env', '%s=%s' % (env_key, env_value)])
 
-    # HACK(hinoka): Because WebKit schedulers watch both the Chromium and Blink
-    #               repositories, the revision could be either a blink or
-    #               chromium revision. We need to differentiate them.
-    def resolve_blink_revision(build):
-      # Ahem, so when WithProperties() is resolved with getRenderingFor(),
-      # if you pass in keyword arguments to WithProperties(), it will actually
-      # call the value (it expects a lambda/function) with "build" as the
-      # only argument, where the output is then passed to the format string.
-      properties = build.getProperties()
+    def rev_factory(blink_config, gclient_specs):
+      """Using a variety of signals, determine the revision resolver."""
+      # HACK(hinoka): Because WebKit schedulers watch both the Chromium and
+      #               Blink repositories, the revision could be either a blink
+      #               or chromium revision. We need to differentiate them.
+      def resolve_blink_revision(build):
+        # Ahem, so when WithProperties() is resolved with getRenderingFor(),
+        # if you pass in keyword arguments to WithProperties(), it will actually
+        # call the value (it expects a lambda/function) with "build" as the
+        # only argument, where the output is then passed to the format string.
+        properties = build.getProperties()
 
-      # 1. Revisions always default to parent revisions.
-      src_revision = properties.getProperty('parent_got_revision')
-      webkit_revision = properties.getProperty('parent_wk_revision')
+        # 1. Revisions always default to parent revisions.
+        src_revision = properties.getProperty('parent_got_revision')
+        webkit_revision = properties.getProperty('parent_wk_revision')
 
-      # 2. If this is not a triggered build, then add special logic to resolve
-      #    the revision based on if we got passed a blink sourcestamp or
-      #    chromium sourcestamp.
-      if (properties.getProperty('branch') == 'trunk'
-          or properties.getProperty('parent_branch') == 'trunk'):
-        # Blink Mode, revision refers to webkit.
-        if not webkit_revision:
-          webkit_revision = properties.getProperty('revision') or 'HEAD'
+        # 2. If this is not a triggered build, then add special logic to
+        #    resolve the revision based on if we got passed a blink sourcestamp
+        #    or chromium sourcestamp.
+        if (properties.getProperty('branch') == 'trunk'
+            or properties.getProperty('parent_branch') == 'trunk'):
+          # Blink Mode, revision refers to webkit.
+          if not webkit_revision:
+            webkit_revision = properties.getProperty('revision') or 'HEAD'
+        else:
+          # Normal Mode, revision refers to chromium.
+          if not src_revision:
+            src_revision = properties.getProperty('revision') or 'HEAD'
+
+        # 3. Default uninitialized revisions to HEAD.  This only happens when
+        #    someone presses "Force build", but we want to handle this
+        #    gracefully too.
+        webkit_revision = webkit_revision or 'HEAD'
+        src_revision = src_revision or 'HEAD'
+
+        return 'src@%s,src/third_party/WebKit@%s' % (src_revision,
+                                                    webkit_revision)
+      def resolve_v8_revision(build):
+        # TODO(hinoka): Remove this once V8 is 100% recipes.
+        properties = build.getProperties()
+        v8_revision = (properties.getProperty('parent_got_v8_revision') or
+                       properties.getProperty('revision') or 'HEAD')
+        lkgr = 'lkgr'
+        # HACK(hinoka): master.client.v8 sets this URL in the gclient
+        #               spec to indicate it wants to sync to lkcr, we use this
+        #               signal to sync to origin/lkcr.
+        if ('https://build.chromium.org/p/chromium/lkcr-status/lkgr'
+            in gclient_specs):
+          lkgr = 'lkcr'
+
+        bleeding_edge = ''
+        if 'bleeding_edge@$$V8_REV$$' in gclient_specs:
+          bleeding_edge = 'bleeding_edge:'
+
+        return 'src@origin/%s,src/v8@%s%s' % (lkgr, bleeding_edge, v8_revision)
+
+      # This is where the rev factory starts.  It uses blink_config and
+      # gclient_specs to determine what mode we're running in, and sets the
+      # revision property accordingly, defaulting to just passing the revision
+      # property through.
+      if blink_config == 'blink':
+        return resolve_blink_revision
+      elif '$$V8_REV$$' in gclient_specs:
+        # HACK(hinoka): We are relying on the fact that in the v8 config, a
+        #               property is added in to be string replaced later in
+        #               the gclient pipeline.
+        return resolve_v8_revision
       else:
-        # Normal Mode, revision refers to chromium.
-        if not src_revision:
-          src_revision = properties.getProperty('revision') or 'HEAD'
+        return lambda build: build.getProperties().getProperty('revision')
 
-      # 3. Default uninitialized revisions to HEAD.  This only happens when
-      #    someone presses "Force build", but we want to handle this gracefully
-      #    too.
-      webkit_revision = webkit_revision or 'HEAD'
-      src_revision = src_revision or 'HEAD'
-
-      return 'src@%s,src/third_party/WebKit@%s' % (src_revision,
-                                                   webkit_revision)
 
     PROPERTIES = {
         'root': '%(root:-)s',
@@ -983,8 +1018,8 @@ class FactoryCommands(object):
         'master': '%(mastername:-)s',
         'revision': {
             'fmtstring': '%(resolved_revision:-)s',
-            'resolved_revision': resolve_blink_revision
-        } if blink_config == 'blink' else '%(revision:-)s',
+            'resolved_revision': rev_factory(blink_config, gclient_specs)
+        },
         'patch_url': '%(patch_url:-)s',
         'slave_name': '%(slavename:-)s',
         'builder_name': '%(buildername:-)s',
