@@ -74,8 +74,8 @@ def arm_k_builder(c):
   gyp_defs['android_sdk_root'] = Path(
     '[CHECKOUT]', 'third_party', 'android_tools', 'sdk')
 
-@CONFIG_CTX(includes=['main_builder'])
-def arm_l_builder(c):
+@CONFIG_CTX()
+def hera(c):
   gyp_defs = c.gyp_env.GYP_DEFINES
   gyp_defs['android_sdk_build_tools_version'] = 'android-L'
   gyp_defs['android_sdk_version'] = 'L'
@@ -83,6 +83,10 @@ def arm_l_builder(c):
     '[CHECKOUT]', 'third_party', 'android_tools_internal', 'sdk')
   gyp_defs['use_unpublished_apis'] = 1
   c.compile_py.default_targets = ['All', 'hera_apk', 'hera_test_apk']
+
+@CONFIG_CTX(includes=['main_builder', 'hera'])
+def arm_l_builder(c):
+  pass
 
 @CONFIG_CTX(includes=['arm_k_builder'],
             config_vars={'BUILD_CONFIG': 'Release'})
@@ -103,7 +107,7 @@ def arm64_builder(c):
   gyp_defs['OS'] = 'android'
   gyp_defs['target_arch'] = 'arm64'
 
-@CONFIG_CTX(includes=['arm64_builder'],
+@CONFIG_CTX(includes=['arm64_builder', 'hera'],
             config_vars={'BUILD_CONFIG': 'Release'})
 def arm64_builder_rel(c):
   pass
