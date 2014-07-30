@@ -142,7 +142,11 @@ class GCStorage(object):
   re_number = re.compile('[0-9]+$')
 
   def __init__(self, master_name, bucket, chunk_size=CHUNK_SIZE, dry_run=False):
-    self._master_name = master_name
+    if master_name.startswith('master.'):
+      self._master_name = master_name[7:]
+    else:
+      self._master_name = master_name
+
     self._bucket = bucket.rstrip('/')
     # chunk to use when uncompressing files.
     self._chunk_size = chunk_size
