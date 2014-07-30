@@ -193,8 +193,7 @@ class BotUpdateApi(recipe_api.RecipeApi):
             print 'Check the bot_update step for details.'
             sys.exit(1)
             """,
-            step_test_data=self.test_api.patch_error_data,
-            abort_on_failure=True)
+            step_test_data=self.test_api.patch_error_data)
 
       # bot_update actually just sets root to be the folder name of the
       # first solution.

@@ -374,6 +374,6 @@
   {
     "name": "$final_result",
     "reason": "Step('device_status_check') failed with return_code 2",
-    "status_code": 1
+    "status_code": 2
   }
 ]

@@ -132,7 +132,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     self.m.python(name or 'compile',
                   self.m.path['build'].join('scripts', 'slave',
                                             'compile.py'),
-                  args, abort_on_failure=True, **kwargs)
+                  args, **kwargs)
 
   @recipe_util.returns_placeholder
   def test_launcher_filter(self, tests):

@@ -90,7 +90,7 @@
   },
   {
     "name": "$final_result",
-    "reason": "Step(provision_devices) failed and was marked as abort_on_failure",
+    "reason": "Step('provision_devices') failed with return_code 1",
     "status_code": 1
   }
 ]

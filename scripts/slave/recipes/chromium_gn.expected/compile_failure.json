@@ -115,7 +115,7 @@
   },
   {
     "name": "$final_result",
-    "reason": "Step(compile) failed and was marked as abort_on_failure",
+    "reason": "Step('compile') failed with return_code 1",
     "status_code": 1
   }
 ]

@@ -44,7 +44,6 @@ class RietveldApi(recipe_api.RecipeApi):
           '-k', self.m.path['build'].join('site_config',
                                           '.rietveld_secret_key')
           ],
-        abort_on_failure=True
         )
 
     else:
@@ -56,7 +55,6 @@ class RietveldApi(recipe_api.RecipeApi):
           '-p', self.m.properties['patchset'],
           '-s', rietveld_url,
           '--no-auth'],
-        abort_on_failure=True
         )
     step_result.presentation.links['Applied issue %s' % issue_number] = (
       urlparse.urljoin(rietveld_url, str(issue_number)))

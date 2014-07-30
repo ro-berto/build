@@ -87,8 +87,8 @@ def GenSteps(api):
     path=builder['path'](api))
 
   api.chromium_android.spawn_logcat_monitor()
-  api.chromium_android.device_status_check(abort_on_failure=True)
-  api.chromium_android.provision_devices(abort_on_failure=True)
+  api.chromium_android.device_status_check()
+  api.chromium_android.provision_devices()
 
   api.chromium_android.adb_install_apk(
       'ChromeShell.apk',
