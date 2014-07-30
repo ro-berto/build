@@ -238,14 +238,6 @@ DISABLED_BUILDERS = {
     'chromium.fyi': [
         'ChromiumOS Codesearch',
     ],
-    'chromium.webkit': [
-        # We don't know how to deal with the DEPS builder yet.
-        'WebKit Win Builder (deps)',
-        'WebKit XP (deps)',
-        'WebKit Mac Builder (deps)',
-        'WebKit Mac10.6 (deps)',
-        'WebKit Linux (deps)',
-    ],
     'tryserver.blink': [
         # These don't exist, but are just here to satisfy recipes.
         'linux_blink_no_bot_update',
