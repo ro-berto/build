@@ -303,6 +303,23 @@ B('Telemetry Harness Upload', 'telemetry_harness_upload', None, 'chromium_lkgr')
 F('telemetry_harness_upload',
   m_annotator.BaseFactory('perf/telemetry_harness_upload'))
 
+# The build process for UBSan vptr is described at
+# http://dev.chromium.org/developers/testing/undefinedbehaviorsanitizer
+ubsan_vptr_gyp = ('ubsan_vptr=1 release_extra_cflags="-gline-tables-only"')
+
+B('UBSan vptr Release', 'linux_ubsan_vptr_rel', 'compile','chromium_lkgr')
+F('linux_ubsan_vptr_rel', linux().ChromiumFactory(
+    clobber=True,
+    target='Release',
+    options=['--compiler=goma-clang', 'chromium_builder_asan'],
+    factory_properties={
+       'cf_archive_build': ActiveMaster.is_production_host,
+       'cf_archive_subdir_suffix': 'vptr',
+       'cf_archive_name': 'ubsan-vptr',
+       'gs_bucket': 'gs://chromium-browser-ubsan',
+       'gs_acl': 'public-read',
+       'gclient_env': {'GYP_DEFINES': ubsan_vptr_gyp}}))
+
 ################################################################################
 ## Android
 ################################################################################
