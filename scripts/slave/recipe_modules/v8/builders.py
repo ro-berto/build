@@ -699,6 +699,17 @@ BUILDERS = {
         'tests': ['mjsunit', 'webkit'],
         'testing': {'platform': 'linux'},
       },
+      'V8 Linux clang': {
+        'gclient_apply_config': ['clang'],
+        'chromium_apply_config': ['clang'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['v8testing'],
+        'testing': {'platform': 'linux'},
+      },
       'V8 Linux64 ASAN': {
         'gclient_apply_config': ['clang'],
         'chromium_apply_config': ['clang', 'asan'],
