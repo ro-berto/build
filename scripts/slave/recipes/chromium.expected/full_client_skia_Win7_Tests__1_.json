@@ -120,14 +120,12 @@
       "[BUILD]\\scripts\\slave\\extract_build.py",
       "--target",
       "Release",
-      "--build-url",
-      "gs://chromium-skia-gm/client.skia/Win Builder/full-build-win32.zip",
-      "--build_revision",
-      "1111111",
+      "--build-archvive-url",
+      "gs://test-domain/test-archive.zip",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Win7 Tests (1)\", \"buildnumber\": 571, \"mastername\": \"client.skia\", \"parent_buildername\": \"Win Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Win7 Tests (1)\", \"buildnumber\": 571, \"mastername\": \"client.skia\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Win Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Win7 Tests (1)\", \"buildnumber\": 571, \"mastername\": \"client.skia\", \"parent_buildername\": \"Win Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Win7 Tests (1)\", \"buildnumber\": 571, \"mastername\": \"client.skia\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Win Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "name": "extract build"
   },

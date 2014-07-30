@@ -302,8 +302,8 @@ class GClientFactory(object):
 
       # Download the full output directory if the machine is a tester.
       if slave_type in ['Tester', 'TrybotTester']:
-        factory_cmd_obj.AddExtractBuild(build_url,
-                                        factory_properties=factory_properties)
+        factory_cmd_obj.AddExtractBuild()
+
 
     return factory
 

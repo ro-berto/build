@@ -222,7 +222,8 @@ def GenSteps(api):
       api.archive.legacy_download_url(
         master_config.get('build_gs_bucket'),
         extra_url_components=api.properties['mastername'],),
-      build_revision=api.properties.get('parent_got_revision', got_revision)
+      build_revision=api.properties.get('parent_got_revision', got_revision),
+      build_archive_url=api.properties.get('parent_build_archive_url'),
       )
 
   if (api.chromium.c.TARGET_PLATFORM == 'android' and
@@ -277,6 +278,8 @@ def GenTests(api):
       )
       if bot_config.get('parent_buildername'):
         test += api.properties(parent_got_revision='1111111')
+        test += api.properties(
+            parent_build_archive_url='gs://test-domain/test-archive.zip')
 
       if bot_type in ['builder', 'builder_tester']:
         test += api.step_data('checkdeps', api.json.output([]))

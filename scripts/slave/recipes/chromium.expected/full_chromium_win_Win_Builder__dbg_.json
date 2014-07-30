@@ -136,6 +136,7 @@
     ]
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",

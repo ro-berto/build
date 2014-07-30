@@ -161,6 +161,7 @@
     "name": "findbugs_tests"
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",

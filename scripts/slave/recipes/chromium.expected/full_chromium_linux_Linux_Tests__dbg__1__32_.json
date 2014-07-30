@@ -118,14 +118,12 @@
       "[BUILD]/scripts/slave/extract_build.py",
       "--target",
       "Debug",
-      "--build-url",
-      "gs://chromium-linux-archive/chromium.linux/Linux Builder (dbg)(32)/full-build-linux.zip",
-      "--build_revision",
-      "1111111",
+      "--build-archvive-url",
+      "gs://test-domain/test-archive.zip",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux Tests (dbg)(1)(32)\", \"buildnumber\": 571, \"mastername\": \"chromium.linux\", \"parent_buildername\": \"Linux Builder (dbg)(32)\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux Tests (dbg)(1)(32)\", \"buildnumber\": 571, \"mastername\": \"chromium.linux\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Linux Builder (dbg)(32)\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux Tests (dbg)(1)(32)\", \"buildnumber\": 571, \"mastername\": \"chromium.linux\", \"parent_buildername\": \"Linux Builder (dbg)(32)\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux Tests (dbg)(1)(32)\", \"buildnumber\": 571, \"mastername\": \"chromium.linux\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Linux Builder (dbg)(32)\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "name": "extract build"
   }

@@ -56,6 +56,7 @@ def CreateTriggerStep(trigger_name, trigger_set_properties=None,
       # Here are the standard names of the parent build properties.
       'parent_buildername': WithProperties('%(buildername:-)s'),
       'parent_buildnumber': WithProperties('%(buildnumber:-)s'),
+      'parent_build_archive_url': WithProperties('%(build_archive_url:-)s'),
       'parent_branch': WithProperties('%(branch:-)s'),
       'parent_got_revision': WithProperties('%(got_revision:-)s'),
       'parent_got_v8_revision': WithProperties('%(got_v8_revision:-)s'),
@@ -1112,7 +1113,7 @@ class FactoryCommands(object):
     cmd = self.AddBuildProperties(cmd)
     cmd = self.AddFactoryProperties(factory_properties, cmd)
 
-    self._factory.addStep(shell.ShellCommand,
+    self._factory.addStep(chromium_step.AnnotatedCommand,
                           name='package_build',
                           timeout=600,
                           description='packaging build',
@@ -1120,29 +1121,18 @@ class FactoryCommands(object):
                           haltOnFailure=True,
                           command=cmd)
 
-  def AddExtractBuild(self, build_url, factory_properties=None):
+  def AddExtractBuild(self):
     """Extract a build.
 
     Assumes the zip file has a directory like src/xcodebuild which
     contains the actual build.
     """
-    factory_properties = factory_properties or {}
-    build_url = build_url or factory_properties['build_url']
-    assert build_url
-    revision = (factory_properties.get('parent_got_revision')
-                or factory_properties.get('got_revision'))
-
     cmd = [self._python, self._extract_tool,
            '--target', self._target,
-           '--build-url', build_url]
-    if revision:
-      cmd.extend(['--build_revision', revision])
-
-    if 'webkit_dir' in factory_properties:
-      cmd += ['--webkit-dir', factory_properties['webkit_dir']]
+           '--build-archive-url',
+           WithProperties('%(parent_build_archive_url:-)s')]
 
     cmd = self.AddBuildProperties(cmd)
-    cmd = self.AddFactoryProperties(factory_properties, cmd)
     self.AddTestStep(retcode_command.ReturnCodeCommand, 'extract_build', cmd,
                      halt_on_failure=True)
 

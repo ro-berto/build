@@ -256,6 +256,7 @@ def UploadToGoogleStorage(versioned_file, revision_file, build_url, gs_acl):
         (last_change_file, build_url))
   print 'Successfully uploaded %s to %s' % (last_change_file, build_url)
   os.remove(last_change_file)
+  return '/'.join([build_url, os.path.basename(versioned_file)])
 
 
 def PruneOldArchives(staging_dir, zip_base, zip_ext, prune_limit):
@@ -392,7 +393,15 @@ def Archive(options):
                options.factory_properties.get('build_url', ''))
   if build_url.startswith('gs://'):
     gs_acl = options.factory_properties.get('gs_acl')
-    UploadToGoogleStorage(versioned_file, revision_file, build_url, gs_acl)
+    zip_url = UploadToGoogleStorage(
+        versioned_file, revision_file, build_url, gs_acl)
+  else:
+    slavename = options.build_properties['slavename']
+    staging_path = (
+        os.path.splitdrive(versioned_file)[1].replace(os.path.sep, '/'))
+    zip_url = 'http://' + slavename + staging_path
+
+  print '@@@SET_BUILD_PROPERTY@build_archive_url@"%s"@@@' % zip_url
 
   return 0
 
