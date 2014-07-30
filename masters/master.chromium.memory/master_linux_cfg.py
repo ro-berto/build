@@ -70,6 +70,7 @@ B('Linux ASan LSan Builder', 'linux_asan_rel', 'compile', 'linux_asan_rel',
 # Please do not add release_extra_cflags=-g here until the debug info section
 # produced by Clang on Linux is small enough.
 F('linux_asan_rel', linux().ChromiumASANFactory(
+    build_url=linux_asan_archive,
     slave_type='Builder',
     options=[
       '--compiler=goma-clang',

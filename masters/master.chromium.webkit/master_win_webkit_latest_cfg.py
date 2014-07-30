@@ -42,6 +42,7 @@ B('WebKit Win Builder', 'f_webkit_win_rel',
   auto_reboot=False)
 F('f_webkit_win_rel', win().ChromiumFactory(
     slave_type='Builder',
+    build_url=rel_archive,
     options=['--build-tool=ninja', '--', 'blink_tests'],
     factory_properties={
         'trigger': 's4_webkit_rel_trigger',
@@ -126,6 +127,7 @@ B('WebKit Win Builder (dbg)', 'f_webkit_win_dbg', scheduler='global_scheduler',
 F('f_webkit_win_dbg', win().ChromiumFactory(
     target='Debug',
     slave_type='Builder',
+    build_url=dbg_archive,
     options=['--build-tool=ninja', '--', 'blink_tests'],
     factory_properties={
         'trigger': 's4_webkit_dbg_trigger',

@@ -64,7 +64,10 @@ T('s7_webkit_builder_rel_trigger')
 #
 B('Win Builder', 'f_win_rel', scheduler='global_scheduler',
   builddir='win-latest-rel', auto_reboot=False)
+# Note: This step both uploads the build to transfer to its triggered builder
+# AND archives the build to chromium-webkit-snapshots for prosperity.
 F('f_win_rel', win().ChromiumFactory(
+    build_url=rel_archive,
     slave_type='Builder',
     options=['--build-tool=ninja', '--compiler=goma', 'chromium_builder'],
     factory_properties={

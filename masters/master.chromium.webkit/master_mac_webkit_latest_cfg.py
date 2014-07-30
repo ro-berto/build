@@ -58,6 +58,7 @@ B('WebKit Mac Builder', 'f_webkit_mac_rel',
   builddir='webkit-mac-latest-rel')
 F('f_webkit_mac_rel', mac().ChromiumFactory(
     slave_type='Builder',
+    build_url=rel_archive,
     options=['--build-tool=ninja', '--compiler=goma-clang', '--',
         'blink_tests'],
     factory_properties={
@@ -183,6 +184,7 @@ B('WebKit Mac Builder (dbg)', 'f_webkit_mac_dbg', auto_reboot=False,
 F('f_webkit_mac_dbg', mac().ChromiumFactory(
     target='Debug',
     slave_type='Builder',
+    build_url=dbg_archive,
     options=['--build-tool=ninja', '--compiler=goma-clang', '--',
         'blink_tests'],
     factory_properties={

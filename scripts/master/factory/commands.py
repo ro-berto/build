@@ -1096,6 +1096,8 @@ class FactoryCommands(object):
   # Zip / Extract commands.
   def AddZipBuild(self, build_url, factory_properties=None):
     factory_properties = factory_properties or {}
+    build_url = build_url or factory_properties['build_url']
+    assert build_url
     revision = factory_properties.get('got_revision')
 
     cmd = [self._python, self._zip_tool,
@@ -1125,6 +1127,8 @@ class FactoryCommands(object):
     contains the actual build.
     """
     factory_properties = factory_properties or {}
+    build_url = build_url or factory_properties['build_url']
+    assert build_url
     revision = (factory_properties.get('parent_got_revision')
                 or factory_properties.get('got_revision'))
 

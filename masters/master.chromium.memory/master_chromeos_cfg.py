@@ -116,6 +116,7 @@ B('Linux Chromium OS ASan LSan Builder', 'chromeos_asan_rel', 'compile',
   'chromeos_asan_rel', auto_reboot=False, notify_on_missing=True)
 F('chromeos_asan_rel', linux().ChromiumASANFactory(
     slave_type='Builder',
+    build_url=chromeos_asan_archive,
     options=[
       '--build-tool=ninja',
       '--compiler=goma-clang',

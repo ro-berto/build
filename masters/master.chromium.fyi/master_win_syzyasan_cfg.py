@@ -105,6 +105,7 @@ F('win_syzyasan_rel', win().ChromiumASANFactory(
     # This slow down the build but this is necessary due to crbug.com/359183.
     clobber=True,
     slave_type='Builder',
+    build_url=win_syzyasan_archive,
     target='Release',
     options=['--build-tool=ninja', '--', 'chromium_builder_tests'],
     compile_timeout=7200,

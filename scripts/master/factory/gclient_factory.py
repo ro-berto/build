@@ -291,8 +291,14 @@ class GClientFactory(object):
     if not skip_archive_steps:
       # Archive the full output directory if the machine is a builder.
       if slave_type in ['Builder', 'TrybotBuilder']:
-        factory_cmd_obj.AddZipBuild(build_url,
-                                    factory_properties=factory_properties)
+        if build_url:
+          # There are some builders that are classified as builders, but only
+          # because we only need to see if the patch compiles, and not
+          # actually because triggered testers needs the build. So if we don't
+          # supply a build_url, we assume that the build artifact doesn't
+          # need to be uploaded and we can bypass this step.
+          factory_cmd_obj.AddZipBuild(build_url,
+                                      factory_properties=factory_properties)
 
       # Download the full output directory if the machine is a tester.
       if slave_type in ['Tester', 'TrybotTester']:

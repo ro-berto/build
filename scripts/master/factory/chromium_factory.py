@@ -1033,8 +1033,9 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
       chromium_cmd_obj.AddWindowsSyzyASanStep()
       # Need to add the Zip Build step back
-      chromium_cmd_obj.AddZipBuild(build_url,
-                                   factory_properties=factory_properties)
+      if build_url:
+        chromium_cmd_obj.AddZipBuild(build_url,
+                                    factory_properties=factory_properties)
 
     # Trigger Swarming tester. This buildbot builder does nothing else than
     # running swarming jobs.

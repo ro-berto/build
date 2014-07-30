@@ -47,6 +47,7 @@ B('WebKit Mac Builder (deps)', 'f_webkit_mac_rel', auto_reboot=False,
   scheduler='global_deps_scheduler', builddir=rel_builddir)
 F('f_webkit_mac_rel', mac_out().ChromiumFactory(
     slave_type='Builder',
+    build_url=rel_archive,
     options=['--build-tool=ninja', '--compiler=goma-clang', '--',
         'blink_tests'],
     factory_properties={
