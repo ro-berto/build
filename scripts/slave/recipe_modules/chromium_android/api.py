@@ -461,7 +461,7 @@ class AndroidApi(recipe_api.RecipeApi):
           'logcat_dump',
           self.m.path['checkout'].join('build', 'android',
                                        'adb_logcat_printer.py'),
-          [ '--output_path', log_path,
+          [ '--output-path', log_path,
             self.m.path['checkout'].join('out', 'logcat') ])
       self.m.gsutil.upload(
           log_path,

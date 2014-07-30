@@ -564,7 +564,7 @@
       "python",
       "-u",
       "[SLAVE_BUILD]/src/build/android/adb_logcat_printer.py",
-      "--output_path",
+      "--output-path",
       "[SLAVE_BUILD]/src/out/Debug/full_log",
       "[SLAVE_BUILD]/src/out/logcat"
     ],
