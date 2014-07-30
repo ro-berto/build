@@ -54,6 +54,9 @@
       "most"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
+    "env": {
+      "GYP_DEFINES": "skia_arch_width=32 skia_warnings_as_errors=0"
+    },
     "name": "build most"
   },
   {
@@ -63,7 +66,7 @@
       "--tmpDir",
       "[SLAVE_BUILD]/tmp",
       "--resourcePath",
-      "resources",
+      "[SLAVE_BUILD]/skia/resources",
       "--match",
       "~WritePixels"
     ],
@@ -85,7 +88,7 @@
       "MissingExpectations",
       "ExpectationsMismatch",
       "--resourcePath",
-      "resources",
+      "[SLAVE_BUILD]/skia/resources",
       "--readPath",
       "[SLAVE_BUILD]/gm/expected/expected-results.json",
       "--ignoreFailuresFile",

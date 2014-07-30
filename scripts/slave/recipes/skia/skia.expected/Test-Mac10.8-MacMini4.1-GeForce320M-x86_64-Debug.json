@@ -54,24 +54,27 @@
       "most"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
+    "env": {
+      "GYP_DEFINES": "skia_arch_width=64 skia_warnings_as_errors=0"
+    },
     "name": "build most"
   },
   {
     "cmd": [
       "catchsegv",
-      "[SLAVE_BUILD]/skia/out/Release/tests",
+      "[SLAVE_BUILD]/skia/out/Debug/tests",
       "--verbose",
       "--tmpDir",
       "[SLAVE_BUILD]/tmp",
       "--resourcePath",
-      "resources"
+      "[SLAVE_BUILD]/skia/resources"
     ],
     "name": "tests"
   },
   {
     "cmd": [
       "catchsegv",
-      "[SLAVE_BUILD]/skia/out/Release/gm",
+      "[SLAVE_BUILD]/skia/out/Debug/gm",
       "--verbose",
       "--writeChecksumBasedFilenames",
       "--mismatchPath",
@@ -85,7 +88,7 @@
       "MissingExpectations",
       "ExpectationsMismatch",
       "--resourcePath",
-      "resources",
+      "[SLAVE_BUILD]/skia/resources",
       "--readPath",
       "[SLAVE_BUILD]/gm/expected/expected-results.json",
       "--ignoreFailuresFile",

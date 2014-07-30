@@ -61,7 +61,7 @@ class SkiaApi(recipe_api.RecipeApi):
     if self.c.role == builder_name_schema.BUILDER_ROLE_PERF:
       self.perf_data_dir = slave_dir.join('perfdata', self.c.BUILDER_NAME,
                                           'data')
-    self.resource_dir = 'resources'
+    self.resource_dir = skia_dir.join('resources')
     self.skimage_expected_dir = skia_dir.join('expectations', 'skimage')
     self.skimage_in_dir = slave_dir.join('skimage_in')
     self.skimage_out_dir = skia_dir.join('out', self.c.configuration,
@@ -98,7 +98,7 @@ class SkiaApi(recipe_api.RecipeApi):
     # Compile each target.
     for target in self.c.build_targets:
       self.m.step('build %s' % target, ['make', target],
-                  cwd=self.m.path['checkout'], abort_on_failure=True)
+                  cwd=self.m.path['checkout'], env=env)
 
   def common_steps(self):
     """Steps run by both Test and Perf bots."""
@@ -121,7 +121,12 @@ class SkiaApi(recipe_api.RecipeApi):
       # WritePixels fails on Xoom due to a bug which won't be fixed very soon.
       # http://code.google.com/p/skia/issues/detail?id=1699
       args.extend(['--match', '~WritePixels'])
-    self.flavor.step('tests', args)
+
+    try:
+      self.flavor.step('tests', args)
+    except self.m.step.StepFailure:
+      pass
+
 
   def run_gm(self):
     """Run the Skia GM test.
@@ -202,8 +207,11 @@ class SkiaApi(recipe_api.RecipeApi):
                    '~convexpaths',
                    '~clipped-bitmap',
                    '~xfermodes3'])
+    try:
+      self.flavor.step('gm', args)
+    except self.m.step.StepFailure:
+      pass
 
-    self.flavor.step('gm', args)
 
   def test_steps(self):
     """Run all Skia test executables."""

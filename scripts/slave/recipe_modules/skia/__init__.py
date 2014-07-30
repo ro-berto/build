@@ -3,7 +3,6 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'chromium',
   'gclient',
   'path',
   'platform',

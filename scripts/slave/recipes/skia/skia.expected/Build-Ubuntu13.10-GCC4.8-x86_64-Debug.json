@@ -54,6 +54,9 @@
       "most"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
+    "env": {
+      "GYP_DEFINES": "skia_arch_width=64 skia_warnings_as_errors=1"
+    },
     "name": "build most"
   }
 ]

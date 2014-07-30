@@ -41,3 +41,16 @@ def GenTests(api):
                                        'ignored-tests.txt'),
       )
     )
+
+  builder = 'Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug'
+  yield (
+    api.test('failed_tests') +
+    api.properties(buildername=builder) +
+    api.step_data('tests', retcode=1)
+  )
+
+  yield (
+    api.test('failed_gm') +
+    api.properties(buildername=builder) +
+    api.step_data('gm', retcode=1)
+  )
