@@ -173,7 +173,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                                       '/data/devtools_test_pages'))
 
   def __init__(self, build_dir, target_platform=None, pull_internal=True,
-               full_checkout=False, additional_svn_urls=None, name=None,
+               full_checkout=False, additional_repos=None, name=None,
                custom_deps_list=None, nohooks_on_update=False, target_os=None,
                swarm_client_canary=False, internal_custom_deps_list=None):
     if full_checkout:
@@ -201,9 +201,9 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                      custom_deps_list=internal_custom_deps_list)
       solutions.append(internal)
 
-    additional_svn_urls = additional_svn_urls or []
-    for svn_url in additional_svn_urls:
-      solution = gclient_factory.GClientSolution(svn_url)
+    additional_repos = additional_repos or []
+    for name, url in additional_repos:
+      solution = gclient_factory.GClientSolution(url, name=name)
       solutions.append(solution)
 
     gclient_factory.GClientFactory.__init__(self,
@@ -1255,8 +1255,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # Make sure the solution is not already there.
     assert 'clang_indexer.DEPS' not in [s.name for s in self._solutions]
     self._solutions.append(gclient_factory.GClientSolution(
-        'svn://svn.chromium.org/chrome-internal/trunk/deps/'
-        'clang_indexer.DEPS'))
+        'https://chrome-internal.googlesource.com/chrome/tools/clang_indexer'))
     return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
                                 options, compile_timeout, build_url, project,
                                 factory_properties)

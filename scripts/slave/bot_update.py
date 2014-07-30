@@ -236,7 +236,6 @@ ENABLED_SLAVES.update(internal_data.get('ENABLED_SLAVES', {}))
 # be disabled.
 DISABLED_BUILDERS = {
     'chromium.fyi': [
-        'Chromium Linux Codesearch',
         'ChromiumOS Codesearch',
     ],
     'chromium.webkit': [
@@ -534,6 +533,8 @@ def solutions_to_git(input_solutions):
       solution['deps_file'] = path.join('build', buildspec_name, '.DEPS.git')
     elif parsed_path in RECOGNIZED_PATHS:
       solution['url'] = RECOGNIZED_PATHS[parsed_path]
+    elif parsed_url.scheme == 'https' and 'googlesource' in parsed_url.netloc:
+      pass
     else:
       warnings.append('path %r not recognized' % parsed_path)
       print 'Warning: %s' % (warnings[-1],)
