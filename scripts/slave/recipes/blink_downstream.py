@@ -111,7 +111,10 @@ def GenSteps(api):
     # Reset component revision to the pinned revision from chromium's DEPS
     # for comparison.
     del api.gclient.c.revisions[bot_config['component']['path']]
-    api.bot_update.ensure_checkout(force=True)
+    # Update without changing got_revision. The first sync is the revision
+    # that is tested. The second is just for comparison. Setting got_revision
+    # again confuses the waterfall's console view.
+    api.bot_update.ensure_checkout(force=True, update_presentation=False)
 
     api.chromium.runhooks()
     api.chromium.compile()
