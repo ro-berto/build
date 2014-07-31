@@ -175,7 +175,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
   def __init__(self, build_dir, target_platform=None, pull_internal=True,
                full_checkout=False, additional_repos=None, name=None,
                custom_deps_list=None, nohooks_on_update=False, target_os=None,
-               swarm_client_canary=False, internal_custom_deps_list=None):
+               swarm_client_canary=False, internal_custom_deps_list=None,
+               got_revision_mapping_overrides=None):
     if full_checkout:
       needed_components = None
     else:
@@ -206,10 +207,22 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       solution = gclient_factory.GClientSolution(url, name=name)
       solutions.append(solution)
 
+    got_rev_mappings = self.CHROMIUM_GOT_REVISION_MAPPINGS
+    if got_revision_mapping_overrides:
+      # We need to reverse the key/value in the got revision mapping dict
+      # because values are unique and keys are not.
+      bw_mappings = {
+          v: k for k, v in got_rev_mappings.iteritems()}
+      bw_mapping_overrides = {
+          v: k for k, v in got_revision_mapping_overrides.iteritems()}
+      bw_mappings.update(bw_mapping_overrides)
+      got_rev_mappings = {
+          v: k for k, v in bw_mappings.iteritems()}
+
     gclient_factory.GClientFactory.__init__(self,
         build_dir, solutions, target_platform=target_platform,
         nohooks_on_update=nohooks_on_update, target_os=target_os,
-        revision_mapping=self.CHROMIUM_GOT_REVISION_MAPPINGS)
+        revision_mapping=got_rev_mappings)
     if swarm_client_canary:
       # Contrary to other canaries like blink, v8, we don't really care about
       # having one build per swarm_client commits by having an additional source
@@ -1149,11 +1162,13 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                               mode=None, slave_type='BuilderTester',
                               options=None, compile_timeout=1200,
                               build_url=None, project=None,
-                              factory_properties=None):
+                              factory_properties=None,
+                              got_revision_mapping_overrides=None):
     self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_V8_LATEST]
     return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
                                 options, compile_timeout, build_url, project,
-                                factory_properties)
+                                factory_properties,
+                                got_revision_mapping_overrides)
   def ChromiumV8TrunkFactory(self, target='Release', clobber=False, tests=None,
                              mode=None, slave_type='BuilderTester',
                              options=None, compile_timeout=1200,
@@ -1243,10 +1258,12 @@ class ChromiumFactory(gclient_factory.GClientFactory):
   def ChromiumASANFactory(self, target='Release', clobber=False, tests=None,
                           mode=None, slave_type='BuilderTester', options=None,
                           compile_timeout=1200, build_url=None, project=None,
-                          factory_properties=None):
+                          factory_properties=None,
+                          got_revision_mapping_overrides=None):
     return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
                                 options, compile_timeout, build_url, project,
-                                factory_properties)
+                                factory_properties,
+                                got_revision_mapping_overrides)
 
   def ChromiumCodesearchFactory(self, target='Release', clobber=False,
                                 tests=None, mode=None,
