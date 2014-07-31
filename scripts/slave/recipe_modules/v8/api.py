@@ -354,9 +354,15 @@ class V8Api(recipe_api.RecipeApi):
       return V8Test(test)
 
   def runtests(self):
-    return [self.create_test(t).run(self)
-            for t in self.bot_config.get('tests', [])]
-
+    failed = False
+    for t in self.bot_config.get('tests', []):
+      try:
+        self.create_test(t).run(self)
+      except self.StepFailure as f:
+        failed = True
+    if failed:
+      raise self.StepFailure('One or more tests failed.')
+            
   def presubmit(self):
     self.m.python(
       'Presubmit',
@@ -577,16 +583,22 @@ class V8Api(recipe_api.RecipeApi):
             self._test_data.get('test_failures', False),
             self._test_data.get('wrong_results', False))
 
-    step_result = self.m.python(
-      name,
-      self.m.path['build'].join('scripts', 'slave', 'v8', 'v8testing.py'),
-      full_args,
-      cwd=self.m.path['checkout'],
-      env=env,
-      step_test_data=step_test_data,
-      **kwargs
-    )
+    ex = None
+    try:
+      step_result = self.m.python(
+        name,
+        self.m.path['build'].join('scripts', 'slave', 'v8', 'v8testing.py'),
+        full_args,
+        cwd=self.m.path['checkout'],
+        env=env,
+        step_test_data=step_test_data,
+        **kwargs
+      )
+    except self.StepFailure as f:
+      step_result = f.result
+      ex = f
 
+    # Show test results independent of the step result.
     if self.c.testing.show_test_results:
       r = step_result.json.output
       # The output is expected to be a list of architecture dicts that
@@ -608,6 +620,8 @@ class V8Api(recipe_api.RecipeApi):
             print 'Unexpected results set present.'
             sys.exit(1)
             """)
+    if ex:
+      raise ex
 
   def runtest(self, test, **kwargs):
     # Get the flaky-step configuration default per test.
@@ -618,12 +632,14 @@ class V8Api(recipe_api.RecipeApi):
     if self.c.testing.add_flaky_step is not None:
       add_flaky_step = self.c.testing.add_flaky_step
     if add_flaky_step:
-      self._runtest(test['name'], test, flaky_tests='skip', **kwargs),
       try:
-        self._runtest(test['name'] + ' - flaky', test, flaky_tests='run',
-                      **kwargs),
-      except self.StepFailure:
-        pass
+        self._runtest(test['name'], test, flaky_tests='skip', **kwargs)
+      finally:
+        try:
+          self._runtest(test['name'] + ' - flaky', test, flaky_tests='run',
+                        **kwargs)
+        except self.StepFailure:
+          pass
     else:
       self._runtest(test['name'], test, **kwargs)
 

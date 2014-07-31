@@ -125,7 +125,9 @@ def GenTests(api):
                                  'parent_buildername')) +
       api.platform(bot_config['testing']['platform'],
                    v8_config_kwargs.get('TARGET_BITS', 64)) +
-      api.v8(test_failures=True, wrong_results=wrong_results)
+      api.v8(test_failures=True, wrong_results=wrong_results) +
+      api.step_data('Check', retcode=1) +
+      api.step_data('Check - flaky', retcode=1)
     )
 
   yield TestFailures(wrong_results=False)
