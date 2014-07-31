@@ -411,69 +411,84 @@ class SwarmingGTestTest(Test):
     return self._results[suffix].failures
 
 
-class TelemetryUnitTests(Test):
+class PythonBasedTest(Test):
+  @staticmethod
+  def compile_targets(_):
+    return []
+
+  def run_step(self, api, suffix, cmd_args, **kwargs):
+    raise NotImplementedError()
+
+  def run(self, api, suffix):
+    cmd_args = ['--write-full-results-to',
+                api.json.test_results(add_json_log=False)]
+    if suffix == 'without patch':
+      cmd_args.extend(self.failures(api, 'with patch'))
+
+    try:
+      step_result = self.run_step(
+          api,
+          suffix,
+          cmd_args,
+          step_test_data=lambda: api.json.test_api.canned_test_output(True))
+    except api.StepFailure as f:
+      step_result = f.result
+      raise
+    finally:
+      r = step_result.json.test_results
+      p = step_result.presentation
+      p.step_text += api.test_utils.format_step_text([
+        ['unexpected_failures:', r.unexpected_failures.keys()],
+      ])
+      self._test_runs[suffix] = step_result
+
+    return step_result
+
+  def has_valid_results(self, api, suffix):
+    # TODO(dpranke): we should just return zero/nonzero for success/fail.
+    # crbug.com/357866
+    step = self._test_runs[suffix]
+    return (step.json.test_results.valid and
+            step.retcode <= step.json.test_results.MAX_FAILURES_EXIT_STATUS and
+            (step.retcode == 0) or self.failures(api, suffix))
+
+  def failures(self, api, suffix):
+    return self._test_runs[suffix].json.test_results.unexpected_failures
+
+
+class MojoPythonTests(PythonBasedTest):  # pylint: disable=W0232
+  name = 'mojo_python_tests'
+
+  def run_step(self, api, suffix, cmd_args, **kwargs):
+    return api.python(self._step_name(suffix),
+                      api.path['checkout'].join('mojo', 'tools',
+                                                'run_mojo_python_tests.py'),
+                      cmd_args,
+                      **kwargs)
+
+
+class TelemetryUnitTests(PythonBasedTest):  # pylint: disable=W0232
   name = 'telemetry_unittests'
 
-  def run(self, api, suffix):
-    # Until telemetry tests output JSON, need to fail on failure with patch.
-    # Otherwise, if the tests were failing on trunks and a cl introduces a
-    # new regression the cl would land since the failure text is hardcoded
-    # below. http://crbug.com/359521.
-    failed = False
-    try:
-      step_result = api.chromium.run_telemetry_unittests(suffix)
-    except self.StepFailure as f:
-      step_result = f.result
-      raise
-    finally:
-      self._test_runs[suffix] = step_result, failed
-
   @staticmethod
   def compile_targets(_):
-    return ['chrome']
+      return ['chrome']
 
-  def has_valid_results(self, api, suffix):
-    return True
+  def run_step(self, api, suffix, cmd_args, **kwargs):
+    return api.chromium.run_telemetry_unittests(suffix, cmd_args, **kwargs)
 
-  def failures(self, api, suffix):
-    # TODO(phajdan.jr): Make it possible to retry individual failing telemetry
-    # tests (add JSON).
-    _, failed = self._test_runs[suffix]
-    if failed:
-      return ['telemetry_unittest']
-    return []
 
-class TelemetryPerfUnitTests(Test):
+class TelemetryPerfUnitTests(PythonBasedTest):
   name = 'telemetry_perf_unittests'
 
-  def run(self, api, suffix):
-    # Until telemetry tests output JSON, need to fail on failure with patch.
-    # Otherwise, if the tests were failing on trunks and a cl introduces a
-    # new regression the cl would land since the failure text is hardcoded
-    # below. http://crbug.com/359521.
-    failed = False
-    try:
-      step_result = api.chromium.run_telemetry_perf_unittests(suffix)
-    except self.StepFailure as f:
-      step_result = f.result
-      raise
-    finally:
-      self._test_runs[suffix] = step_result, failed
-
   @staticmethod
   def compile_targets(_):
     return ['chrome']
 
-  def has_valid_results(self, api, suffix):
-    return True
+  def run_step(self, api, suffix, cmd_args, **kwargs):
+    return api.chromium.run_telemetry_perf_unittests(suffix, cmd_args,
+                                                     **kwargs)
 
-  def failures(self, api, suffix):
-    # TODO(phajdan.jr): Make it possible to retry individual failing telemetry
-    # tests (add JSON).
-    _, failed = self._test_runs[suffix]
-    if failed:
-      return ['telemetry_perf_unittest']
-    return []
 
 class NaclIntegrationTest(Test):  # pylint: disable=W0232
   name = 'nacl_integration'
@@ -532,55 +547,10 @@ class AndroidInstrumentationTest(Test):
     return [self.compile_target]
 
 
-class MojoPythonTests(Test):  # pylint: disable=W0232
-  name = 'mojo_python_tests'
-
-  @staticmethod
-  def compile_targets(_):
-    return []
-
-  def run(self, api, suffix):
-    args = ['--write-full-results-to',
-            api.json.test_results(add_json_log=False)]
-    if suffix == 'without patch':
-      args.extend(self.failures(api, 'with patch'))
-
-    try:
-      step_result = api.python(
-        self._step_name(suffix),
-        api.path['checkout'].join(
-            'mojo',
-            'tools',
-            'run_mojo_python_tests.py'),
-        args,
-        step_test_data=lambda: api.json.test_api.canned_test_output(
-            True))
-    except api.StepFailure as f:
-      step_result = f.result
-      raise
-    finally:
-      r = step_result.json.test_results
-      p = step_result.presentation
-
-      p.step_text += api.test_utils.format_step_text([
-        ['unexpected_failures:', r.unexpected_failures.keys()],
-      ])
-      self._test_runs[suffix] = step_result
-
-    return step_result
-
-  def has_valid_results(self, api, suffix):
-    # TODO(dpranke): we should just return zero/nonzero for success/fail.
-    # crbug.com/357866
-    step = self._test_runs[suffix]
-    return (step.json.test_results.valid and
-            step.retcode <= step.json.test_results.MAX_FAILURES_EXIT_STATUS)
-
-  def failures(self, api, suffix):
-    return self._test_runs[suffix].json.test_results.unexpected_failures
-
-
 class BlinkTest(Test):
+  # TODO(dpranke): This should be converted to a PythonBasedTest, although it
+  # will need custom behavior because we archive the results as well.
+
   name = 'webkit_tests'
 
   def __init__(self, api):
