@@ -100,15 +100,17 @@ def GenSteps(api):
       browser='android-chrome-shell',
       num_device_shards=builder['num_device_shards'],
       devices=api.adb.devices[0:1]).json.output
-  api.chromium_android.run_sharded_perf_tests(
+  try:
+    api.chromium_android.run_sharded_perf_tests(
       config=api.json.input(data=perf_tests),
       perf_id=builder['perf_id'])
 
-  api.chromium_android.logcat_dump()
-  api.chromium_android.stack_tool_steps()
-  api.chromium_android.test_report()
+  finally:
+    api.chromium_android.logcat_dump()
+    api.chromium_android.stack_tool_steps()
+    api.chromium_android.test_report()
 
-  api.chromium_android.cleanup_build()
+    api.chromium_android.cleanup_build()
 
 def _sanitize_nonalpha(text):
   return ''.join(c if c.isalnum() else '_' for c in text)

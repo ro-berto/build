@@ -104,10 +104,14 @@ def GenSteps(api):
 
   api.chromium_android.monkey_test()
 
-  if config.get('perf_config'):
-    api.chromium_android.run_sharded_perf_tests(
-        config='fake_config.json',
-        flaky_config='flake_fakes.json')
+  try:
+    if config.get('perf_config'):
+      api.chromium_android.run_sharded_perf_tests(
+          config='fake_config.json',
+          flaky_config='flake_fakes.json')
+  except api.StepFailure as f:
+    failure = f
+
   api.chromium_android.run_instrumentation_suite(
       test_apk='AndroidWebViewTest',
       test_data='webview:android_webview/test/data/device_files',
@@ -155,3 +159,7 @@ def GenTests(api):
   yield (api.test('tester_other_device_failure') +
          properties_for('tester') +
          api.step_data('device_status_check', retcode=2))
+
+  yield (api.test('perf_tests_failure') +
+      properties_for('perf_runner') +
+      api.step_data('endure.foo', retcode=1))

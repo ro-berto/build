@@ -398,6 +398,7 @@ class AndroidApi(recipe_api.RecipeApi):
     )
     perf_tests = result.json.output
 
+    failures = []
     for test_name in perf_tests:
       test_name = str(test_name)  # un-unicode
       test_type = test_type_transform(test_name)
@@ -407,7 +408,8 @@ class AndroidApi(recipe_api.RecipeApi):
       elif test_name.split('.')[0] == 'endure':
         annotate = 'endure'
 
-      self.m.chromium.runtest(
+      try:
+        self.m.chromium.runtest(
           self.m.path['checkout'].join('build', 'android', 'test_runner.py'),
           ['perf', '--print-step', test_name, '--verbose'],
           name=test_name,
@@ -417,6 +419,11 @@ class AndroidApi(recipe_api.RecipeApi):
           results_url='https://chromeperf.appspot.com',
           perf_id=perf_id,
           env=self.get_env())
+      except self.StepFailure as f:
+        failures.append(f)
+
+    if failures:
+      raise self.StepFailure('sharded perf tests failed %s' % failures)
 
   def run_instrumentation_suite(self, test_apk, test_data=None,
                                 flakiness_dashboard=None,
