@@ -195,6 +195,9 @@
       "\"print(1+2)\""
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Simple Leak Check"
+    "name": "Simple Leak Check",
+    "~followup_annotations": [
+      "@@@STEP_FAILURE@@@"
+    ]
   }
 ]

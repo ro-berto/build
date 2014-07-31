@@ -418,12 +418,14 @@ class V8Api(recipe_api.RecipeApi):
         self.m.path.basename(self.m.chromium.c.build_dir),
         self.m.chromium.c.build_config_fs,
         'd8')
-    self.m.step(
+    step_result = self.m.step(
       'Simple Leak Check',
       ['valgrind', '--leak-check=full', '--show-reachable=yes',
        '--num-callers=20', relative_d8_path, '-e', '"print(1+2)"'],
       cwd=self.m.path['checkout'],
     )
+    if not 'no leaks are possible' in (step_result.stdout or ''):
+      step_result.presentation.status = 'FAILURE'
 
   def deopt_fuzz(self):
     full_args = [
