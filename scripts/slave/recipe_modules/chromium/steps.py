@@ -642,6 +642,29 @@ class BlinkTest(Test):
     return self._test_runs[suffix].json.test_results.unexpected_failures
 
 
+class MiniInstallerTest(PythonBasedTest):  # pylint: disable=W0232
+  name = 'test_installer'
+
+  @staticmethod
+  def compile_targets(_):
+    return ['mini_installer']
+
+  def run_step(self, api, suffix, cmd_args, **kwargs):
+    test_path = api.path['checkout'].join('chrome', 'test', 'mini_installer')
+    args = [
+      '--build-dir', api.chromium.output_dir,
+      '--target', api.chromium.c.build_config_fs,
+      '--force-clean',
+      '--config', test_path.join('config', 'config.config'),
+    ]
+    args.extend(cmd_args)
+    return api.python(
+      self._step_name(suffix),
+      test_path.join('test_installer.py'),
+      args,
+      **kwargs)
+
+
 IOS_TESTS = [
   GTestTest('base_unittests'),
   GTestTest('components_unittests'),

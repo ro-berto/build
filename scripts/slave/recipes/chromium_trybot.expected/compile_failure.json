@@ -140,7 +140,8 @@
       "chrome",
       "base_unittests",
       "browser_tests",
-      "chrome"
+      "chrome",
+      "mini_installer"
     ],
     "name": "compile (with patch)",
     "~followup_annotations": [
