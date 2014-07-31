@@ -71,7 +71,7 @@ def deopt_fuzz_normal(c):
 
 @config_ctx()
 def deopt_fuzz_random(c):
-  c.testing.test_args.add('--coverage=0.45')
+  c.testing.test_args.add('--coverage=0.4')
   c.testing.test_args.add('--coverage-lift=50')
   c.testing.test_args.add('--distribution-mode=random')
 
