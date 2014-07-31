@@ -9,6 +9,7 @@ import datetime
 import glob
 import os
 import re
+import shutil
 import sys
 import tempfile
 import time
@@ -608,6 +609,28 @@ def RemoveJumpListFiles():
     LogAndRemoveFiles(custom_destination_path, '.+')
 
 
+def RemoveTempDirContents():
+  print 'Removing contents of %s' % tempfile.gettempdir()
+  start_time = time.time()
+  for root, dirs, files in os.walk(tempfile.gettempdir()):
+    for f in files:
+      try:
+        os.remove(os.path.join(root, f))
+      except OSError:
+        pass
+    for d in dirs[:]:
+      try:
+        # chromium_utils.RemoveDirectory gives access denied error when called
+        # in this loop.
+        shutil.rmtree(os.path.join(root, d), ignore_errors=True)
+        # Remove it so that os.walk() doesn't try to recurse into a non-existing
+        # directory.
+        dirs.remove(d)
+      except OSError:
+        pass
+  print '   Removing temp contents took %.1f s' % (time.time() - start_time)
+
+
 def RemoveChromeTemporaryFiles():
   """A large hammer to nuke what could be leaked files from unittests or
   files left from a unittest that crashed, was killed, etc."""
@@ -617,15 +640,11 @@ def RemoveChromeTemporaryFiles():
   # At some point a leading dot got added, support with and without it.
   kLogRegex = '^\.?(com\.google\.Chrome|org\.chromium)\.'
   if chromium_utils.IsWindows():
-    kLogRegex = r'^(base_dir|scoped_dir|nps|chrome_test|SafeBrowseringTest)'
-    LogAndRemoveFiles(tempfile.gettempdir(), kLogRegex)
-    # Dump and temporary files.
-    LogAndRemoveFiles(tempfile.gettempdir(), r'^.+\.(dmp|tmp)$')
-    LogAndRemoveFiles(tempfile.gettempdir(), r'^_CL_.*$')
+    RemoveTempDirContents()
     RemoveChromeDesktopFiles()
     RemoveJumpListFiles()
   elif chromium_utils.IsLinux():
-    LogAndRemoveFiles(tempfile.gettempdir(), kLogRegex)
+    RemoveTempDirContents()
     LogAndRemoveFiles('/dev/shm', kLogRegex)
   elif chromium_utils.IsMac():
     nstempdir_path = '/usr/local/libexec/nstempdir'
