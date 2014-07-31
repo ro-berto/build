@@ -62,13 +62,7 @@ SPEC = {
       },
       'chromium_config': 'chromium',
       'runhooks_env': {
-        'AR': 'arm-linux-gnueabihf-ar',
-        'AS': 'arm-linux-gnueabihf-as',
-        'CC': 'arm-linux-gnueabihf-gcc',
-        'CC_host': 'gcc',
-        'CXX': 'arm-linux-gnueabihf-g++',
-        'CXX_host': 'g++',
-        'RANLIB': 'arm-linux-gnueabihf-ranlib',
+        'GYP_CROSSCOMPILE': '1',
       },
       'tests': [
         steps.DynamicGTestTests('Linux ARM Cross-Compile'),

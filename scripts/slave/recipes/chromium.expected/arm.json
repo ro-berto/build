@@ -66,14 +66,8 @@
       "runhooks"
     ],
     "env": {
-      "AR": "arm-linux-gnueabihf-ar",
-      "AS": "arm-linux-gnueabihf-as",
-      "CC": "arm-linux-gnueabihf-gcc",
-      "CC_host": "gcc",
-      "CXX": "arm-linux-gnueabihf-g++",
-      "CXX_host": "g++",
-      "GYP_DEFINES": "arm_float_abi=hard component=static_library target_arch=arm test_isolation_mode=archive test_isolation_outdir=https://isolateserver.appspot.com",
-      "RANLIB": "arm-linux-gnueabihf-ranlib"
+      "GYP_CROSSCOMPILE": "1",
+      "GYP_DEFINES": "arm_float_abi=hard component=static_library target_arch=arm test_isolation_mode=archive test_isolation_outdir=https://isolateserver.appspot.com"
     },
     "name": "gclient runhooks"
   },
