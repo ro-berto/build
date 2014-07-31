@@ -81,7 +81,6 @@ BUILDERS = {
           'benchmarks',
           'test262_variants',
           'mozilla',
-          'simpleleak',
         ],
         'testing': {'platform': 'linux'},
       },
@@ -730,6 +729,17 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'tests': ['v8testing'],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - memcheck': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux - debug builder',
+        'build_gs_archive': 'linux_dbg_archive',
+        'tests': ['simpleleak'],
         'testing': {'platform': 'linux'},
       },
 ####### Category: FYI
