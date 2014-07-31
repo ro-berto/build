@@ -143,6 +143,10 @@ def x86_try_builder(c):
 def tests_base(c):
   pass
 
+@config_ctx(includes=['arm64_builder_rel'])
+def tests_arm64(c):
+  pass
+
 @config_ctx(includes=['tests_base'])
 def instrumentation_tests(c):
   c.tests.append('smoke_instrumentation_tests')
