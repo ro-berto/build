@@ -229,7 +229,6 @@
       "-rav",
       "--delete",
       "--delete-excluded",
-      "--include=third_party/angle/.git",
       "--exclude=.svn",
       "--exclude=.git",
       "--exclude=blacklist/project/1",

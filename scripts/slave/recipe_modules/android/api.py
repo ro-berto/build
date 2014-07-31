@@ -108,9 +108,6 @@ class AOSPApi(recipe_api.RecipeApi):
     options.append('-rav')
     options.append('--delete')
     options.append('--delete-excluded')
-    # TODO: Remove after https://code.google.com/p/angleproject/issues/detail?id=669
-    # is resolved. Must come before "--exclude=.git".
-    options.append('--include=third_party/angle/.git')
     options.append('--exclude=.svn')
     options.append('--exclude=.git')
     options.extend(['--exclude=' + proj for proj in blacklist])
