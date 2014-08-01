@@ -1241,6 +1241,7 @@ def _MainLinux(options, args, extra_env):
   try:
     start_xvfb = False
     http_server = None
+    json_file_name = None
     if options.document_root:
       http_server = _StartHttpServer('linux', build_dir=build_dir,
                                       test_exe_path=test_exe_path,
@@ -1285,9 +1286,10 @@ def _MainLinux(options, args, extra_env):
     if start_xvfb:
       xvfb.StopVirtualX(slave_name)
     if _UsingGtestJson(options):
-      _UploadGtestJsonSummary(json_file_name,
-                              options.build_properties,
-                              test_exe)
+      if json_file_name:
+        _UploadGtestJsonSummary(json_file_name,
+                                options.build_properties,
+                                test_exe)
       results_tracker.ProcessJSONFile(options.build_dir)
 
   if options.generate_json_file:
