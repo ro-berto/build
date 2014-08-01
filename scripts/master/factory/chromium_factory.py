@@ -211,13 +211,13 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if got_revision_mapping_overrides:
       # We need to reverse the key/value in the got revision mapping dict
       # because values are unique and keys are not.
-      bw_mappings = {
-          v: k for k, v in got_rev_mappings.iteritems()}
-      bw_mapping_overrides = {
-          v: k for k, v in got_revision_mapping_overrides.iteritems()}
+      bw_mappings = dict(
+          (v, k) for k, v in got_rev_mappings.iteritems())
+      bw_mapping_overrides = dict(
+          (v, k) for k, v in got_revision_mapping_overrides.iteritems())
       bw_mappings.update(bw_mapping_overrides)
-      got_rev_mappings = {
-          v: k for k, v in bw_mappings.iteritems()}
+      got_rev_mappings = dict(
+          (v, k) for k, v in bw_mappings.iteritems())
       got_rev_mappings.update(got_revision_mapping_overrides)
 
     gclient_factory.GClientFactory.__init__(self,
