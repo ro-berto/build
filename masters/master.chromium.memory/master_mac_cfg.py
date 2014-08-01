@@ -124,10 +124,10 @@ mac_asan_tests_3 = [
   'interactive_ui_tests',
 ]
 
-mac_asan_archive = master_config.GetGSUtilUrl('ChromiumMemory',
+mac_asan_archive = master_config.GetGSUtilUrl('chromium-build-transfer',
                                               'Mac ASan Builder')
 
-mac_asan_64_archive = master_config.GetGSUtilUrl('ChromiumMemory',
+mac_asan_64_archive = master_config.GetGSUtilUrl('chromium-build-transfer',
                                                  'Mac ASan 64 Builder')
 
 gclient_env = {
