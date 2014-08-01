@@ -2,6 +2,59 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+"""A poller which consistently interleaves revisions across multiple branches.
+
+SAMPLE USAGE:
+
+Simple case:
+  poller = GitBranchPoller(
+    'https://chromium.googlesource.com/chromium/src.git',
+    ['master', 'lkcr', 'lkgr'],
+  )
+
+  c['change_sources'] = [poller]
+
+  This poller will poll the Chromium src repository for changes on the master,
+  lkcr, and lkgr branches. New changes will be sent to the buildbot master.
+
+Tag comparator:
+  poller = GitBranchPoller(
+    'https://chromium.googlesource.com/chromium/src.git',
+    ['master', 'lkcr', 'lkgr'],
+  )
+
+  c['change_sources'] = [poller]
+
+  master_utils.AutoSetupMaster(c, ActiveMaster, tagComparator=poller.comparator)
+
+  This is the same as above, except the console view will sort revisions using
+  the same logic as the poller, which allows for a consistent revision ordering.
+
+Excluded refs:
+  remote = GitBranchPoller.Remote(
+    'upstream',
+    'https://chromium.googlesource.com/chromium/src.git',
+    {
+      'refs/branch-heads/2062': 'refs/remotes/upstream/2062',
+      'refs/branch-heads/1985': 'refs/remotes/upstream/1985',
+    },
+  )
+
+  poller = GitBranchPoller(
+    'https://chromium.googlesource.com/my_chromium_fork/src.git',
+    ['master', '2062', '1985'],
+    excluded_refs=['upstream/master', 'upstream/2062', 'upstream/1985'],
+    additional_remotes=[remote],
+  )
+
+  c['change_sources'] = [poller]
+
+  This poller can be used to poll My Chromium Fork's src repository for changes
+  on the master, as well as the 2062 and 1985 release branches, while ignoring
+  any revision history from the original Chromium src repository. This is useful
+  for polling for changes that are unique to the fork.
+"""
+
 from buildbot.changes.base import PollingChangeSource
 from buildbot.status.web.console import RevisionComparator
 from buildbot.util import deferredLocked
@@ -61,8 +114,23 @@ class GitBranchPoller(PollingChangeSource):
       """Returns a function which maps changes to their sorted order."""
       return lambda change: self.revisions[change.revision]
 
+  class Remote(object):
+    def __init__(self, name, repo_url, ref_map, exclusions):
+      """Initializes a new instance of the Remote class.
+
+      Args:
+        name: A name for this remote.
+        repo_url: URL of the remote repository.
+        ref_map: A mapping of additional refspecs in the remote repository to
+          local refspecs which should be kept up-to-date.
+      """
+      self.name = name
+      self.repo_url = repo_url
+      self.ref_map = ref_map
+
   def __init__(self, repo_url, branches, pollInterval=60, revlinktmpl='',
-               workdir='git_poller', verbose=False):
+               workdir='git_poller', verbose=False, excluded_refs=tuple(),
+               additional_remotes=tuple()):
     """Initializes a new instance of the GitBranchPoller class.
 
     Args:
@@ -73,6 +141,8 @@ class GitBranchPoller(PollingChangeSource):
         used to generate a web link to a revision.
       workdir: Working directory for the poller to use.
       verbose: Emit actual git commands and their raw results.
+      excluded_refs: List of refs to exclude from polling operations.
+      additional_remotes: List of Remote instances to fetch during polling.
     """
     self.repo_url = repo_url
     assert branches, 'GitBranchPoller: at least one branch is required'
@@ -81,6 +151,8 @@ class GitBranchPoller(PollingChangeSource):
     self.revlinktmpl = revlinktmpl
     self.workdir = os.path.abspath(workdir)
     self.verbose = verbose
+    self.excluded_refs = ['^%s' % ref for ref in excluded_refs]
+    self.additional_remotes = additional_remotes
 
     if not os.path.exists(self.workdir):
       self._log('Creating working directory:', self.workdir)
@@ -130,8 +202,28 @@ class GitBranchPoller(PollingChangeSource):
         yield stop(err)
         return
 
+    for remote in self.excluded_remotes:
+      self._log('Adding remote', remote.repo_url)
+
+      out, err, ret = yield self._git(
+        'remote', 'add', remote.name, remote.repo_url)
+      if ret:
+        yield stop(err)
+        return
+
+      for (remote_ref, local_ref) in remote.ref_map:
+        out, err, ret = yield self._git(
+          'config',
+          '--add',
+          'remote.%s.fetch' % remote.name,
+          '+%s:%s' % (remote_ref, local_ref),
+        )
+        if ret:
+          yield stop(err)
+          return
+
     yield self._log('Fetching origin for', self.repo_url)
-    out, err, ret = yield self._git('fetch', 'origin')
+    out, err, ret = yield self._git('fetch', '--all')
     if ret:
       yield stop(err)
       return
@@ -145,8 +237,15 @@ class GitBranchPoller(PollingChangeSource):
       self._log(branch, 'at', out.rstrip())
       new_branch_heads[branch] = out.rstrip()
 
+    # Don't exclude the specified excluded_refs here so the
+    # comparator has the complete picture. Only exclude in
+    # the polling operation, so those refs don't get passed
+    # to the master.
     out, err, ret = yield self._git(
-      'rev-list', '--date-order', '--reverse', *new_branch_heads.values())
+      'rev-list',
+      '--date-order',
+      '--reverse',
+      *new_branch_heads.values())
     if ret:
       yield stop(err)
     revisions = out.splitlines()
@@ -172,7 +271,7 @@ class GitBranchPoller(PollingChangeSource):
       return ret
 
     self._log('Polling', self.repo_url)
-    out, err, ret = yield self._git('fetch', 'origin')
+    out, err, ret = yield self._git('fetch', '--all')
     if log_error(err, ret):
       return
 
@@ -198,6 +297,8 @@ class GitBranchPoller(PollingChangeSource):
 
     if not revision_branch_map:
       return
+
+    rev_list_args.extend(self.excluded_refs)
 
     self._log('Determining total ordering of revisions')
     out, err, ret = yield self._git(
