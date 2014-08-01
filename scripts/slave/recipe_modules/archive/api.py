@@ -41,7 +41,7 @@ class ArchiveApi(recipe_api.RecipeApi):
        a Chromium build."""
     args = ['--target', target]
     if build_archive_url:
-      args.extend(['--build-archvive-url', build_archive_url])
+      args.extend(['--build-archive-url', build_archive_url])
     else:
       args.extend(['--build-url', build_url])
       if build_revision:

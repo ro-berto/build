@@ -114,7 +114,7 @@
       "[BUILD]\\scripts\\slave\\extract_build.py",
       "--target",
       "Debug",
-      "--build-archvive-url",
+      "--build-archive-url",
       "gs://test-domain/test-archive.zip",
       "--factory-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Win7 Tests (dbg)(2)\", \"buildnumber\": 571, \"mastername\": \"chromium.win\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Win Builder (dbg)\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
