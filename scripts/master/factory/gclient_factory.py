@@ -291,7 +291,7 @@ class GClientFactory(object):
     if not skip_archive_steps:
       # Archive the full output directory if the machine is a builder.
       if slave_type in ['Builder', 'TrybotBuilder']:
-        if build_url:
+        if build_url or factory_properties.get('build_url'):
           # There are some builders that are classified as builders, but only
           # because we only need to see if the patch compiles, and not
           # actually because triggered testers needs the build. So if we don't
