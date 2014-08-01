@@ -110,5 +110,9 @@
     "~followup_annotations": [
       "@@@STEP_FAILURE@@@"
     ]
+  },
+  {
+    "name": "$final_result",
+    "reason": "One or more tests failed."
   }
 ]
