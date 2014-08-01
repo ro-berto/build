@@ -7,7 +7,7 @@
       "--master",
       "chromium.fyi",
       "--builder",
-      "Linux MSan Tests",
+      "Linux MSan Browser (2)",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -17,7 +17,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD"
+      "src@1111111"
     ],
     "name": "bot_update",
     "~followup_annotations": [
@@ -81,16 +81,7 @@
     "name": "read test spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.fyi.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Linux MSan Tests\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"base_unittests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    ], @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"base_unittests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
@@ -127,41 +118,13 @@
       "[BUILD]/scripts/slave/extract_build.py",
       "--target",
       "Release",
-      "--build-url",
-      "gs://chromium-fyi-archive/chromium.fyi/Chromium Linux MSan Builder/full-build-linux.zip",
-      "--build_revision",
-      "170242",
+      "--build-archive-url",
+      "gs://test-domain/test-archive.zip",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux MSan Tests\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": \"Chromium Linux MSan Builder\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux MSan Browser (2)\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Chromium Linux MSan Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux MSan Tests\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": \"Chromium Linux MSan Builder\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux MSan Browser (2)\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Chromium Linux MSan Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "name": "extract build"
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Release",
-      "--xvfb",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux MSan Tests\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": \"Chromium Linux MSan Builder\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux MSan Tests\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": \"Chromium Linux MSan Builder\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--annotate=gtest",
-      "--test-type=base_unittests",
-      "--generate-json-file",
-      "-o",
-      "gtest-results/base_unittests",
-      "--builder-name=Linux MSan Tests",
-      "--slave-name=TestSlavename",
-      "--build-number=571",
-      "--enable-msan",
-      "base_unittests"
-    ],
-    "name": "base_unittests"
   }
 ]

@@ -174,7 +174,7 @@ SPEC = {
         'platform': 'linux',
       },
     },
-    'Chromium Linux MSan': {
+    'Linux MSan Tests': {
       'recipe_config': 'chromium_clang',
       'GYP_DEFINES': {
         # Required on testers to pass the right runtime flags.
@@ -187,14 +187,14 @@ SPEC = {
       },
       'bot_type': 'tester',
       'tests': [
-        steps.DynamicGTestTests('Chromium Linux MSan'),
+        steps.DynamicGTestTests('Linux MSan Tests'),
       ],
       'parent_buildername': 'Chromium Linux MSan Builder',
       'testing': {
         'platform': 'linux',
       },
     },
-    'Chromium Linux MSan (browser tests)': {
+    'Linux MSan Browser (1)': {
       'recipe_config': 'chromium_clang',
       'GYP_DEFINES': {
         # Required on testers to pass the right runtime flags.
@@ -207,7 +207,47 @@ SPEC = {
       },
       'bot_type': 'tester',
       'tests': [
-        steps.DynamicGTestTests('Chromium Linux MSan (browser tests)'),
+        steps.DynamicGTestTests('Linux MSan Browser (1)'),
+      ],
+      'parent_buildername': 'Chromium Linux MSan Builder',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+    'Linux MSan Browser (2)': {
+      'recipe_config': 'chromium_clang',
+      'GYP_DEFINES': {
+        # Required on testers to pass the right runtime flags.
+        # TODO(earthdok): make this part of a chromium_msan recipe config.
+        'msan': 1,
+      },
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'tests': [
+        steps.DynamicGTestTests('Linux MSan Browser (2)'),
+      ],
+      'parent_buildername': 'Chromium Linux MSan Builder',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+    'Linux MSan Browser (3)': {
+      'recipe_config': 'chromium_clang',
+      'GYP_DEFINES': {
+        # Required on testers to pass the right runtime flags.
+        # TODO(earthdok): make this part of a chromium_msan recipe config.
+        'msan': 1,
+      },
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'tests': [
+        steps.DynamicGTestTests('Linux MSan Browser (3)'),
       ],
       'parent_buildername': 'Chromium Linux MSan Builder',
       'testing': {
