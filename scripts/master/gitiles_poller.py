@@ -90,7 +90,8 @@ class GitilesPoller(PollingChangeSource):
 
   def __init__(
       self, repo_url, branches=None, pollInterval=10*60, category=None,
-      project=None, revlinktmpl=None, agent=None, svn_mode=False):
+      project=None, revlinktmpl=None, agent=None, svn_mode=False,
+      change_filter=None):
     """Args:
 
     repo_url: URL of the gitiles service to be polled.
@@ -127,6 +128,7 @@ class GitilesPoller(PollingChangeSource):
     if agent is None:
       agent = GerritAgent('%s://%s' % (u.scheme, u.netloc), read_only=True)
     self.agent = agent
+    self.change_filter = change_filter
     self.comparator = GitilesRevisionComparator()
 
   @defer.inlineCallbacks
@@ -170,6 +172,8 @@ class GitilesPoller(PollingChangeSource):
   def _create_change(self, commit_json, branch):
     """Send a new Change object to the buildbot master."""
     if not commit_json:
+      return
+    if self.change_filter and not self.change_filter(commit_json, branch):
       return
     commit_author = commit_json['author']['email']
     commit_tm = time_to_datetime(commit_json['committer']['time'])
