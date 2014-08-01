@@ -209,6 +209,10 @@ def prepend_type(prefix, test_list):
 def valgrind_tests(test_list):
   return prepend_type('valgrind', test_list)
 
+def without_tests(tests, without):
+  """Exclude tests from a list."""
+  return [t for t in tests if t not in without]
+
 # 32 bits tools can't link libwebcore.a anymore due to lack of virtual address
 # space, including OSX 10.5.
 valgrind_gyp_defines = (
