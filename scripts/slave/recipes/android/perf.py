@@ -5,6 +5,7 @@
 DEPS = [
     'adb',
     'bot_update',
+    'chromium',
     'chromium_android',
     'gclient',
     'json',
@@ -96,9 +97,9 @@ def GenSteps(api):
 
   # TODO(zty): remove this in favor of device_status_check
   api.adb.list_devices()
-  perf_tests = api.chromium_android.list_perf_tests(
+  perf_tests = api.chromium.list_perf_tests(
       browser='android-chrome-shell',
-      num_device_shards=builder['num_device_shards'],
+      num_shards=builder['num_device_shards'],
       devices=api.adb.devices[0:1]).json.output
   try:
     api.chromium_android.run_sharded_perf_tests(

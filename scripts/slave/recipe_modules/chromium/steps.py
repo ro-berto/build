@@ -296,6 +296,40 @@ class DynamicGTestTests(Test):
     return sorted(set(explicit_targets + test_targets))
 
 
+class DynamicPerfTests(Test):
+  def __init__(self, browser, perf_id, shard_index, num_shards):
+    self.browser = browser
+    self.perf_id = perf_id
+    self.shard_index = shard_index
+    self.num_shards = num_shards
+
+  def run(self, api, suffix):
+    exception = None
+    tests = api.chromium.list_perf_tests(self.browser, self.num_shards)
+    tests = dict((k, v) for k, v in tests.json.output['steps'].iteritems()
+        if v['device_affinity'] == self.shard_index)
+    for test_name, test in tests.iteritems():
+      test_name = str(test_name)
+      annotate = api.chromium.get_annotate_by_test_name(test_name)
+      try:
+        api.chromium.runtest(
+            test['cmd'],
+            name=test_name,
+            annotate=annotate,
+            python_mode=True,
+            results_url='https://chromeperf.appspot.com',
+            perf_dashboard_id=test_name,
+            perf_id=self.perf_id)
+      except api.StepFailure as f:
+        exception = f
+    if exception:
+      raise exception
+
+  @staticmethod
+  def compile_targets(_):
+    return []
+
+
 class SwarmingGTestTest(Test):
   def __init__(self, name, args=None, shards=1):
     self._name = name

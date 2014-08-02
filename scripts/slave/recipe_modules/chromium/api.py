@@ -511,3 +511,34 @@ class ChromiumApi(recipe_api.RecipeApi):
       if self.m.platform.is_win:
         self.process_dumps()
     return ret
+
+  def list_perf_tests(self, browser, num_shards, devices=[]):
+    args = ['list', '--browser', browser, '--json-output',
+            self.m.json.output(), '--num-shards', num_shards]
+    for x in devices:
+      args += ['--device', x]
+
+    return self.m.python(
+      'List Perf Tests',
+      self.m.path['checkout'].join('tools', 'perf', 'run_benchmark'),
+      args,
+      step_test_data=lambda: self.m.json.test_api.output({
+        "steps": {
+          "blink_perf.all": {
+            "cmd": "cmd1",
+            "device_affinity": 0
+          },
+          "dromaeo.cssqueryjquery": {
+            "cmd": "cmd2",
+            "device_affinity": 1
+          },
+        },
+        "version": 1,
+      }))
+
+  def get_annotate_by_test_name(self, test_name):
+    if test_name.split('.')[0] == 'page_cycler':
+      return 'pagecycler'
+    elif test_name.split('.')[0] == 'endure':
+      return 'endure'
+    return 'graphing'

@@ -333,29 +333,6 @@ class AndroidApi(recipe_api.RecipeApi):
         env={'BUILDTYPE': self.c.BUILD_CONFIG},
         **kwargs)
 
-  def list_perf_tests(self, browser, num_device_shards, devices=[]):
-    args = ['list', '--browser', browser, '--json-output', self.m.json.output(),
-            '--num-shards', num_device_shards]
-    for x in devices:
-      args += ['--device', x]
-
-    return self.m.python(
-      'List Perf Tests',
-      self.m.path['checkout'].join('tools', 'perf', 'run_benchmark'),
-      args,
-      step_test_data=lambda: self.m.json.test_api.output({
-        "steps": {
-          "blink_perf.all": {
-            "cmd": "cmd1",
-            "device_affinity": 0
-          },
-          "dromaeo.cssqueryjquery": {
-            "cmd": "cmd2",
-            "device_affinity": 1
-          },
-        },
-        "version": 1,
-      }))
 
   def _run_sharded_tests(self,
                          config='sharded_perf_tests.json',
@@ -402,11 +379,7 @@ class AndroidApi(recipe_api.RecipeApi):
     for test_name in perf_tests:
       test_name = str(test_name)  # un-unicode
       test_type = test_type_transform(test_name)
-      annotate = 'graphing'
-      if test_name.split('.')[0] == 'page_cycler':
-        annotate = 'pagecycler'
-      elif test_name.split('.')[0] == 'endure':
-        annotate = 'endure'
+      annotate = self.m.chromium.get_annotate_by_test_name(test_name)
 
       try:
         self.m.chromium.runtest(

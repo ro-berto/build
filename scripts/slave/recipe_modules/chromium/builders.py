@@ -8,6 +8,7 @@ from . import chromium_git
 from . import chromium_fyi
 from . import chromium_linux
 from . import chromium_mac
+from . import chromium_perf
 from . import chromium_webkit
 from . import chromium_win
 from . import client_skia
@@ -22,6 +23,7 @@ BUILDERS = {
   'chromium.fyi': chromium_fyi.SPEC,
   'chromium.linux': chromium_linux.SPEC,
   'chromium.mac': chromium_mac.SPEC,
+  'chromium.perf': chromium_perf.SPEC,
   'chromium.webkit': chromium_webkit.SPEC,
   'chromium.win': chromium_win.SPEC,
   'client.skia': client_skia.SPEC,

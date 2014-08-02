@@ -64,6 +64,12 @@ RECIPE_CONFIGS = {
     'chromium_config': 'chromium_no_goma',
     'gclient_config': 'chromium',
   },
+  'chromium_oilpan': {
+    'chromium_config': 'chromium_official',
+    'chromium_apply_config': ['oilpan'],
+    'gclient_config': 'chromium',
+    'gclient_apply_config': ['chrome_internal'],
+  },
   'chromium_v8': {
     'chromium_config': 'chromium',
     'gclient_config': 'chromium',
