@@ -594,9 +594,9 @@ class BlinkTest(Test):
       ])
 
       if r.unexpected_flakes or r.unexpected_failures:
-        p.status = 'WARNING'
+        p.status = api.step.WARNING
       else:
-        p.status = 'SUCCESS'
+        p.status = api.step.SUCCESS
 
     if suffix == 'with patch':
       buildername = api.properties['buildername']

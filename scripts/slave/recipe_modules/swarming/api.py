@@ -410,7 +410,7 @@ class SwarmingApi(recipe_api.RecipeApi):
   def _trigger_followup(self, task, step_result):
     """Called as followup_fn for 'trigger' to add URLs to task shards."""
     # Store trigger output with the |task|, print links to triggered shards.
-    if step_result.presentation != 'FAILURE':
+    if step_result.presentation != self.m.step.FAILURE:
       task._trigger_output = step_result.json.output
       links = step_result.presentation.links
       for index in xrange(task.shards):

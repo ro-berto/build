@@ -61,7 +61,8 @@ class IsolateApi(recipe_api.RecipeApi):
 
     assert isinstance(step_result.json.output, dict)
     self._isolated_tests = step_result.json.output
-    if targets is not None and step_result.presentation.status != 'FAILURE':
+    if targets is not None and (
+            step_result.presentation.status != self.m.step.FAILURE):
       found = set(step_result.json.output)
       expected = set(targets)
       if found >= expected:
@@ -71,14 +72,14 @@ class IsolateApi(recipe_api.RecipeApi):
         }
       else:
         # Some expected targets are missing? Fail the step.
-        step_result.presentation.status = 'FAILURE'
+        step_result.presentation.status = self.m.step.FAILURE
         step_result.presentation.logs['missing.isolates'] = (
             ['Failed to find *.isolated files:'] + list(expected - found))
     step_result.presentation.properties['swarm_hashes'] = self._isolated_tests
     # No isolated files found? That looks suspicious, emit warning.
     if (not self._isolated_tests and
-        step_result.presentation.status != 'FAILURE'):
-      step_result.presentation.status = 'WARNING'
+        step_result.presentation.status != self.m.step.FAILURE):
+      step_result.presentation.status = self.m.step.WARNING
 
   @property
   def isolated_tests(self):

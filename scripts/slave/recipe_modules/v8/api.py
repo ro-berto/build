@@ -425,7 +425,7 @@ class V8Api(recipe_api.RecipeApi):
       cwd=self.m.path['checkout'],
     )
     if not 'no leaks are possible' in (step_result.stdout or ''):
-      step_result.presentation.status = 'FAILURE'
+      step_result.presentation.status = self.m.step.FAILURE
       raise self.StepFailure('Failed leak check')
 
   def deopt_fuzz(self):

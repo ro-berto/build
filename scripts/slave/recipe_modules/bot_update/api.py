@@ -175,9 +175,9 @@ class BotUpdateApi(recipe_api.RecipeApi):
         for log_name, log_lines in step_result.json.output['log_lines']:
           step_result.presentation.logs[log_name] = log_lines.splitlines()
       # Abort the build on failure, if its not a patch failure.
-      if step_result.presentation.status == 'FAILURE':
+      if step_result.presentation.status == self.m.step.FAILURE:
         if step_result.json.output.get('patch_failure'):
-          step_result.presentation.status = 'SUCCESS'
+          step_result.presentation.status = self.m.step.SUCCESS
         else:
           raise self.StepFailure('Bot Update failed, aborting.')
 

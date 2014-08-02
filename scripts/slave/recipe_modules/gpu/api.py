@@ -206,7 +206,7 @@ class GpuApi(recipe_api.RecipeApi):
                         ['killall', '-9', 'gnome-keyring-daemon'])
       except self.StepFailure as f:
         result = f.result
-      result.presentation.status = 'SUCCESS'
+      result.presentation.status = self.m.step.SUCCESS
 
     # Accumulate a list of all the failed test names.
     failures = []

@@ -149,6 +149,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
     ])
 
     if new_failures:
-      p.status = 'FAILURE'
+      p.status = self.m.step.FAILURE
     elif ignored_failures:
-      p.status = 'WARNING'
+      p.status = self.m.step.WARNING

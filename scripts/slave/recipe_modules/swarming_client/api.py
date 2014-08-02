@@ -125,7 +125,7 @@ class SwarmingClientApi(recipe_api.RecipeApi):
           'import sys; sys.exit(1)',
           add_python_log=False)
       # TODO(martiniss) get rid of this bare string.
-      step_result.presentation.status = 'FAILURE'
+      step_result.presentation.status = self.m.step.FAILURE
       step_result.presentation.step_text = abort_reason
 
       raise self.StepFailure(abort_reason)
