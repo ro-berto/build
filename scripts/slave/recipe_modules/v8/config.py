@@ -20,6 +20,7 @@ def BaseConfig(**_kwargs):
       CC = Single(basestring, required=False),
       CXX = Single(basestring, required=False),
       LINK = Single(basestring, required=False),
+      GYP_MSVS_VERSION = Single(basestring, required=False),
     ),
     nacl = ConfigGroup(
       update_nacl_sdk = Single(basestring, required=False),
@@ -85,6 +86,11 @@ def gc_stress(c):
 def isolates(c):
   c.testing.test_args.add('--isolates=on')
 
+
+@config_ctx()
+def msvs2013(c):
+  c.gyp_env.GYP_MSVS_VERSION = '2013'
+  
 
 @config_ctx()
 def nacl(c):
