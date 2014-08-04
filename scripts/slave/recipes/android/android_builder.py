@@ -106,9 +106,15 @@ def GenSteps(api):
 
   droid.compile()
   if bot_config.get('check_licenses'):
-    droid.check_webview_licenses()
+    try:
+      droid.check_webview_licenses()
+    except api.StepFailure:
+      pass
   if bot_config.get('findbugs'):
-    droid.findbugs()
+    try:
+      droid.findbugs()
+    except api.StepFailure:
+      pass
 
   upload_config = bot_config.get('upload')
   if upload_config:
@@ -135,3 +141,15 @@ def GenTests(api):
             patchset='1',
             revision='267739',
             got_revision='267739'))
+  yield (
+    api.test('findbugs_failure') +
+    api.properties.generic(mastername='chromium.fyi',
+                           buildername='Android x64 Builder (dbg)') +
+    api.step_data('findbugs', retcode=1)
+  )
+  yield (
+    api.test('check_licenses_failure') +
+    api.properties.generic(mastername='chromium.fyi',
+                           buildername='Android x64 Builder (dbg)') +
+    api.step_data('check licenses', retcode=1)
+  )
