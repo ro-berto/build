@@ -183,7 +183,8 @@ class FilterDomain(util.ComparableMixin):
     return result
 
 
-def CreateWebStatus(port, templates=None, tagComparator=None, **kwargs):
+def CreateWebStatus(port, templates=None, tagComparator=None,
+                    customEndpoints=None, **kwargs):
   webstatus = WebStatus(port, **kwargs)
   if templates:
     # Manipulate the search path for jinja templates
@@ -196,7 +197,7 @@ def CreateWebStatus(port, templates=None, tagComparator=None, **kwargs):
     new_loaders.extend([jinja2.FileSystemLoader(x) for x in templates])
     new_loaders.extend(old_loaders[1:])
     webstatus.templates.loader.loaders = new_loaders
-  chromium_status.SetupChromiumPages(webstatus, tagComparator)
+  chromium_status.SetupChromiumPages(webstatus, tagComparator, customEndpoints)
   return webstatus
 
 
@@ -210,6 +211,7 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
                     public_html=None, templates=None,
                     order_console_by_time=False,
                     tagComparator=None,
+                    customEndpoints=None,
                     enable_http_status_push=False):
   """Add common settings and status services to a master.
 
@@ -290,6 +292,7 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
                   cancelPendingBuild=True)
     c['status'].append(CreateWebStatus(active_master.master_port,
                                        tagComparator=tagComparator,
+                                       customEndpoints=customEndpoints,
                                        authz=authz,
                                        num_events_max=3000,
                                        templates=templates,
@@ -297,6 +300,7 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
   if active_master.master_port_alt:
     c['status'].append(CreateWebStatus(active_master.master_port_alt,
                                        tagComparator=tagComparator,
+                                       customEndpoints=customEndpoints,
                                        num_events_max=3000,
                                        templates=templates,
                                        **kwargs))

@@ -8,6 +8,7 @@
 The advantage of using gitiles is that a local clone is not needed."""
 
 import datetime
+import json
 import os
 import re
 import traceback
@@ -15,6 +16,7 @@ import urllib
 from urlparse import urlparse
 
 import sqlalchemy as sa
+import buildbot.status.web.base as base
 from buildbot.status.web.console import RevisionComparator
 from buildbot.changes.base import PollingChangeSource
 from twisted.internet import defer
@@ -167,6 +169,13 @@ class GitilesPoller(PollingChangeSource):
             (isinstance(branch, self.re_pattern_type) and branch.match(ref))):
           result[ref] = ref_head['value']
           break
+    deleted_branches = []
+    for branch in self.branch_heads:
+      if branch not in result:
+        deleted_branches.append(branch)
+    for branch in deleted_branches:
+      log.msg('GitilesPoller: Deleting branch head for %s' % (branch,))
+      del self.branch_heads[branch]
     defer.returnValue(result)
 
   def _create_change(self, commit_json, branch):
@@ -293,3 +302,18 @@ class GitilesPoller(PollingChangeSource):
     if not self.master:
       status += ' [STOPPED - check log]'
     return '%s repo_url=%s' % (status, self.repo_url)
+
+
+class GitilesStatus(base.HtmlResource):
+  """This provides, in JSON, data about the specified GitilesPoller."""
+  contentType = "application/json"
+
+  def __init__(self, poller):
+    self.poller = poller
+    super(GitilesStatus, self).__init__()
+
+  def content(self, request, ctx):
+    data = {
+        'branch_heads': self.poller.branch_heads,
+    }
+    return json.dumps(data)

@@ -261,13 +261,15 @@ class ConsoleStatusResource(console.ConsoleStatusResource):
     return console.ConsoleStatusResource.content(self, request, cxt)
 
 
-def SetupChromiumPages(webstatus, tagComparator=None):
+def SetupChromiumPages(webstatus, tagComparator=None, customEndpoints=None):
   """Add customizations to default web reporting."""
 
   def _tick_filter(n, stride):
     n = ((n / stride) + 1) * stride
     return filter(lambda x: x % (n/stride) == 0, range(n+1))
 
+  if not customEndpoints:
+    customEndpoints = {}
   orig_shortrev = webstatus.templates.filters['shortrev']
 
   webstatus.templates.filters.update(
@@ -293,4 +295,6 @@ def SetupChromiumPages(webstatus, tagComparator=None):
   webstatus.putChild("tgrid", console_)
   webstatus.putChild("horizontal_one_box_per_builder",
                      HorizontalOneBoxPerBuilder())
+  for url, resource in customEndpoints.items():
+    webstatus.putChild(url, resource)
   return webstatus
