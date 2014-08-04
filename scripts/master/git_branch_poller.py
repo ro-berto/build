@@ -202,7 +202,7 @@ class GitBranchPoller(PollingChangeSource):
         yield stop(err)
         return
 
-    for remote in self.excluded_remotes:
+    for remote in self.additional_remotes:
       self._log('Adding remote', remote.repo_url)
 
       out, err, ret = yield self._git(
