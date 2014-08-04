@@ -39,6 +39,7 @@
   },
   {
     "name": "$final_result",
-    "reason": "Bot Update failed, aborting."
+    "reason": "Bot Update failed, aborting.",
+    "status_code": 1
   }
 ]

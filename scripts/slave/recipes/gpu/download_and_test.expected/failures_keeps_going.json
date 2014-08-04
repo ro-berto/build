@@ -640,6 +640,7 @@
   },
   {
     "name": "$final_result",
-    "reason": "2 tests failed: ['content_gl_tests', 'maps']"
+    "reason": "2 tests failed: ['content_gl_tests', 'maps']",
+    "status_code": 1
   }
 ]

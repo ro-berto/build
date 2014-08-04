@@ -522,6 +522,7 @@
   },
   {
     "name": "$final_result",
-    "reason": "sharded perf tests failed [StepFailure(\"Step('endure.foo') failed with return_code 1\",)]"
+    "reason": "sharded perf tests failed [StepFailure(\"Step('endure.foo') failed with return_code 1\",)]",
+    "status_code": 1
   }
 ]

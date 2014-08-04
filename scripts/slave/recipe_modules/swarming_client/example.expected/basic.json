@@ -102,6 +102,7 @@
   },
   {
     "name": "$final_result",
-    "reason": "Expecting at least v0.5.0, got v0.4.4"
+    "reason": "Expecting at least v0.5.0, got v0.4.4",
+    "status_code": 1
   }
 ]

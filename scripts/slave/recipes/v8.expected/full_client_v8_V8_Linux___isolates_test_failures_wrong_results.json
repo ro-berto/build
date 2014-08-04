@@ -175,6 +175,7 @@
   },
   {
     "name": "$final_result",
-    "reason": "One or more tests failed."
+    "reason": "One or more tests failed.",
+    "status_code": 1
   }
 ]
