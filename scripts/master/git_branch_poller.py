@@ -115,7 +115,7 @@ class GitBranchPoller(PollingChangeSource):
       return lambda change: self.revisions[change.revision]
 
   class Remote(object):
-    def __init__(self, name, repo_url, ref_map, exclusions):
+    def __init__(self, name, repo_url, ref_map):
       """Initializes a new instance of the Remote class.
 
       Args:
