@@ -13,6 +13,8 @@
 
 import datetime
 import errno
+import glob
+import gzip
 import multiprocessing
 import optparse
 import os
@@ -20,10 +22,12 @@ import re
 import shlex
 import socket
 import sys
+import tempfile
 import time
 
 from common import chromium_utils
 from slave import build_directory
+from slave import slave_utils
 
 
 # Path of the scripts/slave/ checkout on the slave, found by looking at the
@@ -144,6 +148,47 @@ def goma_setup(options, env):
   return False
 
 
+def GetGomaTmpDirectory():
+  """Get goma's temp directory."""
+  candidates = ['GOMA_TMP_DIR', 'TEST_TMPDIR', 'TMPDIR', 'TMP']
+  for candidate in candidates:
+    value = os.environ.get(candidate)
+    if value and os.path.isdir(value):
+      return value
+  return '/tmp'
+
+
+def GetLatestGomaCompilerProxyInfo():
+  """Get a filename of the latest goma comiler_proxy.INFO."""
+  dirname = GetGomaTmpDirectory()
+  info_pattern = os.path.join(dirname, 'compiler_proxy.*.INFO.*')
+  candidates = glob.glob(info_pattern)
+  if not candidates:
+    return
+  return sorted(candidates, reverse=True)[0]
+
+
+def UploadGomaCompilerProxyInfo():
+  """Upload goma compiler_proxy.INFO to Google Storage."""
+  latest_info = GetLatestGomaCompilerProxyInfo()
+  today = datetime.datetime.utcnow().date()
+  # Since a real name of compiler_proxy.INFO is fairly unique,
+  # we might be able to upload it as-is.
+  goma_log_gs_path = ('gs://chrome-goma-log/%s/%s.gz' % (
+      today.strftime('%Y/%m/%d'), latest_info))
+  try:
+    fd, output_filename = tempfile.mkstemp()
+    with open(latest_info) as f_in:
+      with os.fdopen(fd, 'w') as f_out:
+        with gzip.GzipFile(fileobj=f_out, compresslevel=9) as gzipf:
+          gzipf.writelines(f_in)
+
+    slave_utils.GSUtilCopy(output_filename, goma_log_gs_path)
+    print "Copied log file to %s" % goma_log_gs_path
+  finally:
+    os.remove(output_filename)
+
+
 def goma_teardown(options, env):
   """Tears down goma if necessary. """
   if (options.compiler in ('goma', 'goma-clang', 'jsonclang') and
@@ -158,6 +203,7 @@ def goma_teardown(options, env):
     chromium_utils.RunCommand(goma_ctl_cmd + ['stat'], env=env)
     # Always stop the proxy for now to allow in-place update.
     chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
+    UploadGomaCompilerProxyInfo()
 
 
 def common_xcode_settings(command, options, env, compiler=None):
