@@ -76,6 +76,16 @@
     "cmd": [
       "python",
       "-u",
+      "[DEPOT_TOOLS]\\win_toolchain\\get_toolchain_if_necessary.py",
+      "27eac9b2869ef6c89391f305a3f01285ea317867",
+      "9d9a93134b3eabd003b85b4e7dea06c0eae150ed"
+    ],
+    "name": "get_vs_toolchain_if_necessary"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "exit()"
     ],
     "name": "copy parent_got_revision to got_revision",

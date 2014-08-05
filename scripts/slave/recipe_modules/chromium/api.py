@@ -542,3 +542,19 @@ class ChromiumApi(recipe_api.RecipeApi):
     elif test_name.split('.')[0] == 'endure':
       return 'endure'
     return 'graphing'
+
+  def get_vs_toolchain_if_necessary(self):
+    """Updates and/or installs the Visual Studio toolchain if necessary.
+    Used on Windows bots which only run tests and do not check out the
+    Chromium workspace. Has no effect on non-Windows platforms."""
+    # These hashes come from src/build/toolchain_vs2013.hash in the
+    # Chromium workspace.
+    if self.m.platform.is_win:
+      self.m.python(
+          name='get_vs_toolchain_if_necessary',
+          script=self.m.path['depot_tools'].join(
+              'win_toolchain', 'get_toolchain_if_necessary.py'),
+          args=[
+              '27eac9b2869ef6c89391f305a3f01285ea317867',
+              '9d9a93134b3eabd003b85b4e7dea06c0eae150ed',
+          ])

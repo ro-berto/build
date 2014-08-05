@@ -12,6 +12,7 @@
 
 DEPS = [
   'buildbot',
+  'chromium',
   'gpu',
   'isolate',
   'path',
@@ -30,6 +31,7 @@ def GenSteps(api):
   # testers do not checkout the full Chromium tree; instead, the
   # swarming_client tools are checked out separately.
   api.swarming_client.checkout()
+  api.chromium.get_vs_toolchain_if_necessary()
   api.buildbot.copy_parent_got_revision_to_got_revision()
   api.gpu.test_steps()
 
