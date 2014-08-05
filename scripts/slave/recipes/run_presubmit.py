@@ -27,7 +27,7 @@ def GenSteps(api):
   if not bot_update_mode:
     try:
       api.gclient.checkout(revert=True)
-    except api.StepFailure:
+    except api.step.StepFailure:
       api.path.rmcontents('slave build directory', api.path['slave_build'])
       api.gclient.checkout(revert=False)
     upstream = ''

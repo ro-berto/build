@@ -60,19 +60,19 @@ class TestUtilsApi(recipe_api.RecipeApi):
         try:
           t.pre_run(caller_api, prefix)
         # TODO(iannucci): Write a test.
-        except caller_api.StepFailure:  # pragma: no cover
+        except caller_api.step.StepFailure:  # pragma: no cover
           pass
       for t in tests:
         try:
           t.run(caller_api, prefix)
         # TODO(iannucci): How should exceptions be accumulated/handled here?
-        except caller_api.StepFailure:
+        except caller_api.step.StepFailure:
           pass
       for t in tests:
         try:
           t.post_run(caller_api, prefix)
         # TODO(iannucci): Write a test.
-        except caller_api.StepFailure:  # pragma: no cover
+        except caller_api.step.StepFailure:  # pragma: no cover
           pass
 
     run('with patch', tests)

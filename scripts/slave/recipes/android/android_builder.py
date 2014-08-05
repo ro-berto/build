@@ -8,6 +8,7 @@ DEPS = [
   'gclient',
   'path',
   'properties',
+  'step',
   'tryserver',
 ]
 
@@ -108,12 +109,12 @@ def GenSteps(api):
   if bot_config.get('check_licenses'):
     try:
       droid.check_webview_licenses()
-    except api.StepFailure:
+    except api.step.StepFailure:
       pass
   if bot_config.get('findbugs'):
     try:
       droid.findbugs()
-    except api.StepFailure:
+    except api.step.StepFailure:
       pass
 
   upload_config = bot_config.get('upload')

@@ -21,7 +21,7 @@ class GitApi(recipe_api.RecipeApi):
     can_fail_build = kwargs.pop('can_fail_build', True)
     try:
       return self.m.step(name, [git_cmd] + list(args), **kwargs)
-    except self.StepFailure as f:
+    except self.m.step.StepFailure as f:
       if can_fail_build:
         raise
       else:

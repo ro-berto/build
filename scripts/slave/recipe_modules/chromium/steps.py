@@ -82,7 +82,7 @@ class CheckdepsTest(Test):  # pylint: disable=W0232
   def run(self, api, suffix):
     try:
       self._test_runs[suffix] = api.chromium.checkdeps(suffix)
-    except api.StepFailure as f:
+    except api.step.StepFailure as f:
       self._test_runs[suffix] = f.result
 
     return self._test_runs[suffix]
@@ -109,7 +109,7 @@ class CheckpermsTest(Test):  # pylint: disable=W0232
   def run(self, api, suffix):
     try:
       self._test_runs[suffix] = api.chromium.checkperms(suffix)
-    except api.StepFailure as f:
+    except api.step.StepFailure as f:
       if not suffix:
         raise
       else:
@@ -137,7 +137,7 @@ class ChecklicensesTest(Test):  # pylint: disable=W0232
   def run(self, api, suffix):
     try:
       self._test_runs[suffix] = api.chromium.checklicenses(suffix)
-    except api.StepFailure as f:
+    except api.step.StepFailure as f:
       if not suffix:
         raise
       else:
@@ -227,7 +227,7 @@ class GTestTest(Test):
           test_launcher_summary_output=api.json.gtest_results(add_json_log=False),
           **kwargs)
 
-    except api.StepFailure as f:
+    except api.step.StepFailure as f:
       step_result = f.result
 
     if suffix:
@@ -282,7 +282,7 @@ class DynamicGTestTests(Test):
         api.chromium.runtest(
             test['test'], test_type=test['test'], args=args, annotate='gtest',
             xvfb=True, flakiness_dash=self.flakiness_dash)
-      except api.StepFailure as f:
+      except api.step.StepFailure as f:
         exception = f
     # TODO(iannucci): This raises only the last exception. The return
     # type of the other run methods makes not much sense for DynamicGTestTests.
@@ -320,7 +320,7 @@ class DynamicPerfTests(Test):
             results_url='https://chromeperf.appspot.com',
             perf_dashboard_id=test_name,
             perf_id=self.perf_id)
-      except api.StepFailure as f:
+      except api.step.StepFailure as f:
         exception = f
     if exception:
       raise exception
@@ -412,7 +412,7 @@ class SwarmingGTestTest(Test):
       while True:
         try:
           step_result = next(step_results)
-        except api.StepFailure as f:
+        except api.step.StepFailure as f:
           step_result = f.result
 
         r = step_result.json.gtest_results
@@ -465,7 +465,7 @@ class PythonBasedTest(Test):
           suffix,
           cmd_args,
           step_test_data=lambda: api.json.test_api.canned_test_output(True))
-    except api.StepFailure as f:
+    except api.step.StepFailure as f:
       step_result = f.result
       raise
     finally:
@@ -612,7 +612,7 @@ class BlinkTest(Test):
     try:
       step_result = api.chromium.runtest(self.layout_test_wrapper,
                                          args, name=self._step_name(suffix))
-    except api.StepFailure as f:
+    except api.step.StepFailure as f:
       step_result = f.result
 
     self._test_runs[suffix] = step_result

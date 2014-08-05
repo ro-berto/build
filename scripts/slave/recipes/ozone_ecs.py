@@ -79,7 +79,7 @@ def GenSteps(api):
     api.python('check ecs deps', api.path['checkout'].join('tools',
       'check_ecs_deps', 'check_ecs_deps.py'),
       cwd=api.chromium.c.build_dir.join(api.chromium.c.build_config_fs))
-  except api.StepFailure:
+  except api.step.StepFailure:
     pass
 
   tests_to_compile = list(set(OZONE_TESTS) - set(tests_that_do_not_compile))
@@ -95,7 +95,7 @@ def GenSteps(api):
                   set(tests_that_do_not_compile)): # pragma: no cover
     try:
       api.chromium.compile([x], name='experimentally compile %s' % x)
-    except api.StepFailure:
+    except api.step.StepFailure:
       pass
 
   # Run the failing tests.
@@ -103,7 +103,7 @@ def GenSteps(api):
   for x in sorted(tests_to_try): # pragma: no cover
     try:
       api.chromium.runtest(x, xvfb=False, name='experimentally run %s' % x)
-    except api.StepFailure:
+    except api.step.StepFailure:
       pass
 
 def GenTests(api):

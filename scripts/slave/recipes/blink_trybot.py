@@ -274,25 +274,25 @@ def GenSteps(api):
     exception = Exception() # So that pylint doesn't complain
     try:
       api.chromium.runtest('webkit_unit_tests', xvfb=True)
-    except api.StepFailure as f:
+    except api.step.StepFailure as f:
       failed = True
       exception = f
 
     try:
       api.chromium.runtest('blink_platform_unittests')
-    except api.StepFailure as f:
+    except api.step.StepFailure as f:
       failed = True
       exception = f
 
     try:
       api.chromium.runtest('blink_heap_unittests')
-    except api.StepFailure as f:
+    except api.step.StepFailure as f:
       failed = True
       exception = f
 
     try:
       api.chromium.runtest('wtf_unittests')
-    except api.StepFailure as f:
+    except api.step.StepFailure as f:
       failed = True
       exception = f
 

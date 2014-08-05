@@ -156,7 +156,7 @@ class BotUpdateApi(recipe_api.RecipeApi):
     try:
       step_result = self(name, cmd,
                          step_test_data=step_test_data, **kwargs)
-    except self.StepFailure as f:
+    except self.m.step.StepFailure as f:
       step_result = f.result
       raise
     finally:
@@ -179,7 +179,7 @@ class BotUpdateApi(recipe_api.RecipeApi):
         if step_result.json.output.get('patch_failure'):
           step_result.presentation.status = self.m.step.SUCCESS
         else:
-          raise self.StepFailure('Bot Update failed, aborting.')
+          raise self.m.step.StepFailure('Bot Update failed, aborting.')
 
       # Set the "checkout" path for the main solution.
       # This is used by the Chromium module to figure out where to look for

@@ -214,7 +214,7 @@ class V8Api(recipe_api.RecipeApi):
     if may_nuke:
       try:
         update_step = self.m.gclient.checkout(revert=revert)
-      except self.StepFailure as f:
+      except self.m.step.StepFailure as f:
         # TODO(phajdan.jr): Remove the workaround, http://crbug.com/357767 .
         self.m.path.rmcontents('slave build directory',
                                self.m.path['slave_build']),
@@ -321,7 +321,7 @@ class V8Api(recipe_api.RecipeApi):
   def tryserver_compile(self, fallback_fn, **kwargs):
     try:
       self.compile(name='compile (with patch)')
-    except self.StepFailure as f:
+    except self.m.step.StepFailure as f:
       fallback_fn()
       self.compile(name='compile (with patch, lkgr, clobber)',
                          force_clobber=True)
@@ -361,10 +361,10 @@ class V8Api(recipe_api.RecipeApi):
     for t in self.bot_config.get('tests', []):
       try:
         self.create_test(t).run(self)
-      except self.StepFailure as f:
+      except self.m.step.StepFailure as f:
         failed = True
     if failed:
-      raise self.StepFailure('One or more tests failed.')
+      raise self.m.step.StepFailure('One or more tests failed.')
             
   def presubmit(self):
     self.m.python(
@@ -429,7 +429,7 @@ class V8Api(recipe_api.RecipeApi):
     )
     if not 'no leaks are possible' in (step_result.stdout or ''):
       step_result.presentation.status = self.m.step.FAILURE
-      raise self.StepFailure('Failed leak check')
+      raise self.m.step.StepFailure('Failed leak check')
 
   def deopt_fuzz(self):
     full_args = [
@@ -599,7 +599,7 @@ class V8Api(recipe_api.RecipeApi):
         step_test_data=step_test_data,
         **kwargs
       )
-    except self.StepFailure as f:
+    except self.m.step.StepFailure as f:
       step_result = f.result
       raise f
     finally:
@@ -641,7 +641,7 @@ class V8Api(recipe_api.RecipeApi):
         try:
           self._runtest(test['name'] + ' - flaky', test, flaky_tests='run',
                         **kwargs)
-        except self.StepFailure:
+        except self.m.step.StepFailure:
           pass
     else:
       self._runtest(test['name'], test, **kwargs)

@@ -88,7 +88,7 @@ class SwarmingClientApi(recipe_api.RecipeApi):
           args=['--version'],
           stdout=self.m.raw_io.output(),
           step_test_data=step_test_data_cb)
-      except self.StepFailure as f:
+      except self.m.step.StepFailure as f:
         step_result = f.result
         raise
       finally:
@@ -128,4 +128,4 @@ class SwarmingClientApi(recipe_api.RecipeApi):
       step_result.presentation.status = self.m.step.FAILURE
       step_result.presentation.step_text = abort_reason
 
-      raise self.StepFailure(abort_reason)
+      raise self.m.step.StepFailure(abort_reason)

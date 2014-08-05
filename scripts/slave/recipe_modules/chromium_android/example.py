@@ -9,6 +9,7 @@ DEPS = [
     'json',
     'path',
     'properties',
+    'step',
 ]
 
 BUILDERS = {
@@ -99,7 +100,7 @@ def GenSteps(api):
         skip_wipe=config['skip_wipe'],
         disable_location=config.get('disable_location', False))
 
-  except api.StepFailure as f:
+  except api.step.StepFailure as f:
     failure = f
 
   api.chromium_android.monkey_test()
@@ -109,7 +110,7 @@ def GenSteps(api):
       api.chromium_android.run_sharded_perf_tests(
           config='fake_config.json',
           flaky_config='flake_fakes.json')
-  except api.StepFailure as f:
+  except api.step.StepFailure as f:
     failure = f
 
   api.chromium_android.run_instrumentation_suite(

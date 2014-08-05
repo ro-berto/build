@@ -158,7 +158,7 @@ class GclientApi(recipe_api.RecipeApi):
                    ['--output-json', self.m.json.output()],
                    step_test_data=step_test_data,
                    **kwargs)
-    except self.StepFailure as f:
+    except self.m.step.StepFailure as f:
       result = f.result
       raise
     finally:

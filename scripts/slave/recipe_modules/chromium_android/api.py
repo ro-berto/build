@@ -272,7 +272,7 @@ class AndroidApi(recipe_api.RecipeApi):
                                 'bb_device_status_check.py')] + args,
           env=self.get_env(),
           **kwargs)
-    except self.StepFailure as f:
+    except self.m.step.StepFailure as f:
       step_result = f.result
       params = {
         'summary': ('Device Offline on %s %s' %
@@ -392,11 +392,11 @@ class AndroidApi(recipe_api.RecipeApi):
           results_url='https://chromeperf.appspot.com',
           perf_id=perf_id,
           env=self.get_env())
-      except self.StepFailure as f:
+      except self.m.step.StepFailure as f:
         failures.append(f)
 
     if failures:
-      raise self.StepFailure('sharded perf tests failed %s' % failures)
+      raise self.m.step.StepFailure('sharded perf tests failed %s' % failures)
 
   def run_instrumentation_suite(self, test_apk, test_data=None,
                                 flakiness_dashboard=None,

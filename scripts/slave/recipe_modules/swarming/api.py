@@ -305,7 +305,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         step_result = task.collect_step_builder(task, **kwargs)
         step_result.swarming_task = task
         yield step_result
-      except self.StepFailure as f:
+      except self.m.step.StepFailure as f:
         step_result = f.result
         step_result.swarming_task = task
         raise

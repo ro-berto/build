@@ -15,6 +15,7 @@ DEPS = [
   'properties',
   'python',
   'test_utils',
+  'step',
 ]
 
 # Different types of builds this recipe can do.
@@ -244,11 +245,11 @@ def GenSteps(api):
         for t in tests:
           try:
             t.run(api, '')
-          except api.StepFailure:
+          except api.step.StepFailure:
             failed_tests.append(t)
         # TODO(iannucci): Make this include the list of test names.
         if failed_tests:
-          raise api.StepFailure('Build failed due to %d test failures'
+          raise api.step.StepFailure('Build failed due to %d test failures'
                                 % len(failed_tests))
       api.chromium.setup_tests(bot_type, test_runner)
   finally:

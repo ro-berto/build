@@ -643,7 +643,7 @@ def GenSteps(api):
         try:
           api.chromium.compile(
                   compile_targets, name='compile (without patch)')
-        except api.StepFailure:
+        except api.step.StepFailure:
           api.chromium.compile(compile_targets,
                                name='compile (without patch, clobber)',
                                force_clobber=True)
