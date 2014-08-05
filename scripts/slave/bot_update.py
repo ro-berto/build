@@ -197,6 +197,7 @@ ENABLED_BUILDERS = {
     'tryserver.chromium.gpu': [
         'linux_gpu',
         'mac_gpu',
+        'win_gpu',
     ],
 }
 ENABLED_BUILDERS.update(internal_data.get('ENABLED_BUILDERS', {}))
