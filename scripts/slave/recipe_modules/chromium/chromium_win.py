@@ -368,6 +368,8 @@ SPEC = {
       'disable_runhooks': True,
       'tests': [
         steps.DynamicGTestTests('Win7 Tests (dbg)(2)'),
+        steps.TelemetryUnitTests(),
+        steps.TelemetryPerfUnitTests(),
       ],
       'parent_buildername': 'Win Builder (dbg)',
       'testing': {

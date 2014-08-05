@@ -126,6 +126,8 @@ SPEC = {
       'bot_type': 'tester',
       'tests': [
         steps.DynamicGTestTests('Linux Tests (dbg)(1)'),
+        steps.TelemetryUnitTests(),
+        steps.TelemetryPerfUnitTests(),
       ],
       'parent_buildername': 'Linux Builder (dbg)',
       'testing': {

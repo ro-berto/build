@@ -117,6 +117,7 @@
       "--goma-dir",
       "[BUILD]\\goma",
       "--",
+      "chrome",
       "chromium_builder_tests"
     ],
     "name": "compile"

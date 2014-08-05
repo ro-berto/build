@@ -191,6 +191,8 @@ SPEC = {
       },
       'tests': [
         steps.DynamicGTestTests('Mac 10.6 Tests (dbg)(3)'),
+        steps.TelemetryUnitTests(),
+        steps.TelemetryPerfUnitTests(),
       ],
       'bot_type': 'tester',
       'parent_buildername': 'Mac Builder (dbg)',
@@ -252,6 +254,8 @@ SPEC = {
       },
       'tests': [
         steps.DynamicGTestTests('Mac 10.7 Tests (dbg)(3)'),
+        steps.TelemetryUnitTests(),
+        steps.TelemetryPerfUnitTests(),
       ],
       'bot_type': 'tester',
       'parent_buildername': 'Mac Builder (dbg)',
