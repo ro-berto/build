@@ -677,26 +677,30 @@ class V8Api(recipe_api.RecipeApi):
       step_test_data = lambda: self.test_api.perf_json(
           self._test_data.get('perf_failures', False))
 
-      results_mapping[t][name] = step_result = self.m.python(
-        name,
-        self.m.path['checkout'].join('tools', 'run_benchmarks.py'),
-        full_args,
-        cwd=self.m.path['checkout'],
-        step_test_data=step_test_data,
-      )
-
-      errors = step_result.json.output['errors']
-      if errors:
-        step_result.presentation.logs['Errors'] = errors
-      else:
-        # Add a link to the dashboard. This assumes the naming convention
-        # step name == suite name. If this convention didn't hold, we'd need
-        # to use the path from the json output graphs here.
-        self.m.perf_dashboard.add_dashboard_link(
-            step_result.presentation,
-            'v8/%s' % name,
-            self.revision,
-            bot=category)
+      try:
+        results_mapping[t][name] = step_result = self.m.python(
+          name,
+          self.m.path['checkout'].join('tools', 'run_benchmarks.py'),
+          full_args,
+          cwd=self.m.path['checkout'],
+          step_test_data=step_test_data,
+        )
+      except self.m.step.StepFailure as f:
+        results_mapping[t][name] = step_result = f.result
+        raise f
+      finally:
+        errors = step_result.json.output['errors']
+        if errors:
+          step_result.presentation.logs['Errors'] = errors
+        else:
+          # Add a link to the dashboard. This assumes the naming convention
+          # step name == suite name. If this convention didn't hold, we'd need
+          # to use the path from the json output graphs here.
+          self.m.perf_dashboard.add_dashboard_link(
+              step_result.presentation,
+              'v8/%s' % name,
+              self.revision,
+              bot=category)
 
     def mean(values):
       return float(sum(values)) / len(values)
@@ -707,12 +711,16 @@ class V8Api(recipe_api.RecipeApi):
     def standard_deviation(values, average):
       return math.sqrt(mean(variance(values, average)))
 
+    failed = False
     for t in tests:
       assert perf_configs[t]
       assert perf_configs[t]['name']
       assert perf_configs[t]['json']
-      run_single_perf_test(t, perf_configs[t]['name'],
-                                 perf_configs[t]['json'])
+      try:
+        run_single_perf_test(
+            t, perf_configs[t]['name'], perf_configs[t]['json'])
+      except self.m.step.StepFailure:
+        failed = True
 
     # Make sure that bots that run perf tests have a revision property.
     if tests:
@@ -753,3 +761,6 @@ class V8Api(recipe_api.RecipeApi):
     # Send all perf data to the perf dashboard in one step.
     if points:
       self.m.perf_dashboard.post(points)
+
+    if failed:
+      raise self.m.step.StepFailure('One or more performance tests failed.')

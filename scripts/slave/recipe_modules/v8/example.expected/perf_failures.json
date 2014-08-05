@@ -78,10 +78,32 @@
       "--buildbot",
       "--json-test-results",
       "/path/to/tmp/json",
-      "example.json"
+      "example1.json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Example",
+    "name": "Example1",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_LOG_LINE@Errors@Error line 1.@@@",
+      "@@@STEP_LOG_LINE@Errors@Error line 2.@@@",
+      "@@@STEP_LOG_END@Errors@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/v8/tools/run_benchmarks.py",
+      "--arch",
+      "x64",
+      "--buildbot",
+      "--json-test-results",
+      "/path/to/tmp/json",
+      "example2.json"
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "name": "Example2",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@Errors@Error line 1.@@@",
       "@@@STEP_LOG_LINE@Errors@Error line 2.@@@",
@@ -95,6 +117,11 @@
       "[BUILD]/scripts/slave/recipe_modules/perf_dashboard/resources/post_json.py"
     ],
     "name": "perf dashboard post",
-    "stdin": "{\"data\": [{\"bot\": \"ia32\", \"buildername\": \"Fake Builder\", \"buildnumber\": 571, \"error\": \"8.16496580928\", \"master\": \"Fake_Master\", \"masterid\": \"Fake_Master\", \"revision\": 50110, \"supplemental_columns\": {\"a_default_rev\": \"r_v8_rev\", \"r_v8_rev\": 50110}, \"test\": \"v8/v8/Richards\", \"units\": \"score\", \"value\": \"20.0\"}, {\"bot\": \"ia32\", \"buildername\": \"Fake Builder\", \"buildnumber\": 571, \"error\": \"0.0\", \"master\": \"Fake_Master\", \"masterid\": \"Fake_Master\", \"revision\": 50110, \"supplemental_columns\": {\"a_default_rev\": \"r_v8_rev\", \"r_v8_rev\": 50110}, \"test\": \"v8/v8/DeltaBlue\", \"units\": \"ms\", \"value\": \"1.2\"}], \"url\": \"https://chrome-perf.googleplex.com/add_point\"}"
+    "stdin": "{\"data\": [{\"bot\": \"ia32\", \"buildername\": \"Fake Builder\", \"buildnumber\": 571, \"error\": \"8.16496580928\", \"master\": \"Fake_Master\", \"masterid\": \"Fake_Master\", \"revision\": 50110, \"supplemental_columns\": {\"a_default_rev\": \"r_v8_rev\", \"r_v8_rev\": 50110}, \"test\": \"v8/v8/Richards\", \"units\": \"score\", \"value\": \"20.0\"}, {\"bot\": \"ia32\", \"buildername\": \"Fake Builder\", \"buildnumber\": 571, \"error\": \"0.0\", \"master\": \"Fake_Master\", \"masterid\": \"Fake_Master\", \"revision\": 50110, \"supplemental_columns\": {\"a_default_rev\": \"r_v8_rev\", \"r_v8_rev\": 50110}, \"test\": \"v8/v8/DeltaBlue\", \"units\": \"ms\", \"value\": \"1.2\"}, {\"bot\": \"ia32\", \"buildername\": \"Fake Builder\", \"buildnumber\": 571, \"error\": \"8.16496580928\", \"master\": \"Fake_Master\", \"masterid\": \"Fake_Master\", \"revision\": 50110, \"supplemental_columns\": {\"a_default_rev\": \"r_v8_rev\", \"r_v8_rev\": 50110}, \"test\": \"v8/v8/Richards\", \"units\": \"score\", \"value\": \"20.0\"}, {\"bot\": \"ia32\", \"buildername\": \"Fake Builder\", \"buildnumber\": 571, \"error\": \"0.0\", \"master\": \"Fake_Master\", \"masterid\": \"Fake_Master\", \"revision\": 50110, \"supplemental_columns\": {\"a_default_rev\": \"r_v8_rev\", \"r_v8_rev\": 50110}, \"test\": \"v8/v8/DeltaBlue\", \"units\": \"ms\", \"value\": \"1.2\"}], \"url\": \"https://chrome-perf.googleplex.com/add_point\"}"
+  },
+  {
+    "name": "$final_result",
+    "reason": "One or more performance tests failed.",
+    "status_code": 1
   }
 ]
