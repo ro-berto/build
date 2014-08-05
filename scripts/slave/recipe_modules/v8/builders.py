@@ -388,6 +388,8 @@ BUILDERS = {
       },
 ####### Category: Mac
       'V8 Mac': {
+        'gclient_apply_config': ['clang'],
+        'chromium_apply_config': ['clang'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -397,6 +399,8 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'V8 Mac - debug': {
+        'gclient_apply_config': ['clang'],
+        'chromium_apply_config': ['clang'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -406,6 +410,8 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'V8 Mac64': {
+        'gclient_apply_config': ['clang'],
+        'chromium_apply_config': ['clang'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -415,6 +421,8 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'V8 Mac64 - debug': {
+        'gclient_apply_config': ['clang'],
+        'chromium_apply_config': ['clang'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -650,6 +658,8 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Mac GC Stress - 1': {
+        'gclient_apply_config': ['clang'],
+        'chromium_apply_config': ['clang'],
         'v8_apply_config': ['gc_stress'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -662,6 +672,8 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'V8 Mac GC Stress - 2': {
+        'gclient_apply_config': ['clang'],
+        'chromium_apply_config': ['clang'],
         'v8_apply_config': ['gc_stress'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -674,6 +686,8 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'V8 Mac GC Stress - 3': {
+        'gclient_apply_config': ['clang'],
+        'chromium_apply_config': ['clang'],
         'v8_apply_config': ['gc_stress'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
