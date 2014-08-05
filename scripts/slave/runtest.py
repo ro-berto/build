@@ -644,10 +644,6 @@ def _SendResultsToDashboard(results_tracker, system, test, url, build_dir,
                             supplemental_columns_file, extra_columns=None):
   """Sends results from a results tracker (aka log parser) to the dashboard.
 
-  TODO(qyearsley): Change this function and results_dashboard.SendResults so
-  that only one request is made per test run (instead of one per graph name).
-  Also, maybe refactor this function to take fewer arguments.
-
   Args:
     results_tracker: An instance of a log parser class, which has been used to
         process the test output, so it contains the test results.
@@ -665,20 +661,55 @@ def _SendResultsToDashboard(results_tracker, system, test, url, build_dir,
         dict.
   """
   if system is None:
-    # perf_id not specified in factory-properties
+    # perf_id not specified in factory properties.
+    print 'Error: No system name (perf_id) specified when sending to dashboard.'
     return
-  supplemental_columns = _GetSupplementalColumns(build_dir,
-                                                 supplemental_columns_file)
+  supplemental_columns = _GetSupplementalColumns(
+      build_dir, supplemental_columns_file)
   if extra_columns:
     supplemental_columns.update(extra_columns)
-  for logname, log in results_tracker.PerformanceLogs().iteritems():
-    lines = [str(l).rstrip() for l in log]
+
+  charts = _GetDataFromLogProcessor(results_tracker)
+  points = results_dashboard.MakeListOfPoints(
+      charts, system, test, mastername, buildername, buildnumber,
+      supplemental_columns)
+  results_dashboard.SendResults(points, url, build_dir)
+
+
+def _GetDataFromLogProcessor(log_processor):
+  """Returns a mapping of chart names to chart data.
+
+  Args:
+    log_processor: A log processor (aka results tracker) object.
+
+  Returns:
+    A dictionary mapping chart name to lists of chart data.
+    put together in process_log_utils. Each chart data dictionary contains:
+      "traces": A dictionary mapping trace names to value, stddev pairs.
+      "units": Units for the chart.
+      "rev": A revision number (or git hash).
+      Plus other revision keys, e.g. webkit_rev, ver, v8_rev.
+  """
+  charts = {}
+  for log_file_name, line_list in log_processor.PerformanceLogs().iteritems():
+    if not log_file_name.endswith('-summary.dat'):
+      # The log processor data also contains "graphs list" file contents,
+      # which we can ignore.
+      continue
+    chart_name = log_file_name.replace('-summary.dat', '')
+
+    # It's assumed that the log lines list has length one, because for each
+    # graph name only one line is added in process_log_utils in the method
+    # GraphingLogProcessor._CreateSummaryOutput.
+    if len(line_list) != 1:
+      print 'Error: Unexpected log processor line list: %s' % str(line_list)
+      continue
+    line = line_list[0].rstrip()
     try:
-      results_dashboard.SendResults(logname, lines, system, test, url,
-                                    mastername, buildername, buildnumber,
-                                    build_dir, supplemental_columns)
-    except NotImplementedError as e:
-      print 'Did not submit to results dashboard: %s' % e
+      charts[chart_name] = json.loads(line)
+    except ValueError:
+      print 'Error: Could not parse JSON: %s' % line
+  return charts
 
 
 def _BuildCoverageGtestExclusions(options, args):
