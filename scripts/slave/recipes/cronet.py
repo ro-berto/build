@@ -115,7 +115,7 @@ def GenTests(api):
     props = api.properties.generic(
       buildername=bot_id,
       revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
-      repository='svn://svn-mirror.golo.chromium.org/chrome/trunk',
+      repository='svn://svn-mirror.golo.chromium.org/chrome/trunk/src',
       branch='src',
     )
     yield api.test(_sanitize_nonalpha(bot_id)) + props

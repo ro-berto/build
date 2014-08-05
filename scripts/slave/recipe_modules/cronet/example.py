@@ -14,11 +14,9 @@ BUILDERS = {
     'upload_package': True,
     'kwargs': {
       'BUILD_CONFIG': 'Debug',
-      'REPO_URL': 'https://chromium.googlesource.com/chromium/src.git',
-      'REPO_NAME': 'src',
     },
     'custom': {
-      'deps_file': '.DEPS.git'
+      'deps_file': 'DEPS'
     },
     'gyp_defs': {
       'use_goma': 0,
@@ -45,7 +43,7 @@ def GenTests(api):
   props = api.properties.generic(
     buildername=bot_id,
     revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
-    repository='svn://svn-mirror.golo.chromium.org/chrome/trunk',
+    repository='svn://svn.chromium.org/chrome/trunk/src',
     branch='src',
   )
   yield api.test(bot_id) + props

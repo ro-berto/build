@@ -14,8 +14,7 @@ class CronetApi(recipe_api.RecipeApi):
 
   def init_and_sync(self, recipe_config, kwargs, custom, gyp_defs):
     default_kwargs = {
-      'REPO_URL': '/'.join((self.m.properties.get('repository') or '',
-                            self.m.properties.get('branch') or '')),
+      'REPO_URL': self.m.properties.get('repository') or '',
       'INTERNAL': False,
       'REPO_NAME': self.m.properties.get('branch') or '',
       'BUILD_CONFIG': 'Debug'
