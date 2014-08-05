@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+  'chromium',
   'filter',
   'path',
   'properties',
@@ -11,6 +12,7 @@ DEPS = [
 
 def GenSteps(api):
   api.path['checkout'] = api.path['slave_build']
+  api.chromium.set_config('chromium')
   api.filter.does_patch_require_compile()
   assert (api.filter.result and api.properties['example_result']) or \
       (not api.filter.result and not api.properties['example_result'])

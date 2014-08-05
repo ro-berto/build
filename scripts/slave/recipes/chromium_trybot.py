@@ -546,11 +546,14 @@ def GenSteps(api):
   step_result.presentation.step_text = 'path: %s' % test_spec_path
   test_spec = step_result.json.output
 
+  runhooks_env = bot_config.get('runhooks_env', {})
+
   # See if the patch needs to compile on the current platform.
   if isinstance(test_spec, dict) and should_filter_builder(
     buildername, test_spec.get('non_filter_builders', [])):
     api.filter.does_patch_require_compile(
-      exclusions=test_spec.get('gtest_tests_filter_exclusions', []))
+      exclusions=test_spec.get('gtest_tests_filter_exclusions', []),
+      env=runhooks_env)
     if not api.filter.result:
       return
 
@@ -583,7 +586,6 @@ def GenSteps(api):
   if swarming_tests:
     api.swarming.check_client_version()
 
-  runhooks_env = bot_config.get('runhooks_env', {})
   api.chromium.runhooks(env=runhooks_env)
 
   tests = []

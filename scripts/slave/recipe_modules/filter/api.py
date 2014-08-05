@@ -27,7 +27,7 @@ class FilterApi(recipe_api.RecipeApi):
     return self._result
 
 
-  def does_patch_require_compile(self, exclusions=None):
+  def does_patch_require_compile(self, exclusions=None, **kwargs):
     """Return true if the current patch requires a build (and tests to run).
     Return value can be accessed by call to result().
 
@@ -56,13 +56,17 @@ class FilterApi(recipe_api.RecipeApi):
         self._result = 1
         return
 
+    kwargs.setdefault('env', {})
+    kwargs['env'].update(self.m.chromium.c.gyp_env.as_jsonish())
+
     step_result = self.m.python('analyze',
                         self.m.path['checkout'].join('build', 'gyp_chromium'),
                         ['--analyzer',
                          self.m.raw_io.input(step_result.stdout)],
                         stdout = self.m.raw_io.output(),
                         step_test_data=lambda:
-                          self.m.raw_io.test_api.stream_output('No dependency'))
+                          self.m.raw_io.test_api.stream_output('No dependency'),
+                        **kwargs)
     if step_result.stdout.find('Found dependency') != -1:
       self._result = True
     else:
