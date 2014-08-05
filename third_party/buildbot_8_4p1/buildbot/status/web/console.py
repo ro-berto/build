@@ -173,9 +173,10 @@ class ConsoleStatusResource(HtmlResource):
     Every change is a line in the page, and it shows the result of the first
     build with this change for each slave."""
 
-    def __init__(self, orderByTime=False):
+    def __init__(self, orderByTime=False, repository=None):
         HtmlResource.__init__(self)
 
+        self.repository = repository
         self.status = None
         self.cache = CacheStatus()
 
@@ -244,11 +245,11 @@ class ConsoleStatusResource(HtmlResource):
         return allChanges
 
     @defer.deferredGenerator
-    def getAllChanges(self, request, status, debugInfo):
+    def getAllChanges(self, request, status, debugInfo, **kwargs):
         master = request.site.buildbot_service.master
         limit = min(100, max(1, int(request.args.get('limit', [25])[0])))
         wfd = defer.waitForDeferred(
-                master.db.changes.getRecentChanges(limit))
+                master.db.changes.getRecentChanges(limit, **kwargs))
         yield wfd
         chdicts = wfd.getResult()
 
@@ -762,19 +763,14 @@ class ConsoleStatusResource(HtmlResource):
 
         # Get all changes we can find.  This is a DB operation, so it must use
         # a deferred.
-        d = self.getAllChanges(request, status, debugInfo)
+        filter_branch = None if branch == ANYBRANCH else branch
+        filter_repo = repository if repository else self.repository
+        filter_author = devName[0] if devName else None
+        d = self.getAllChanges(request, status, debugInfo, author=filter_author,
+                               branch=filter_branch, repository=filter_repo)
         def got_changes(allChanges):
             debugInfo["source_all"] = len(allChanges)
-
-            revFilter = {}
-            if branch != ANYBRANCH:
-                revFilter['branch'] = branch
-            if devName:
-                revFilter['who'] = devName
-            if repository:
-                revFilter['repository'] = repository
-            revisions = list(self.filterRevisions(allChanges, max_revs=numRevs,
-                                                            filter=revFilter))
+            revisions = list(self.filterRevisions(allChanges, max_revs=numRevs))
             debugInfo["revision_final"] = len(revisions)
 
             # Fetch all the builds for all builders until we get the next build
