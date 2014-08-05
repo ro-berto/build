@@ -243,6 +243,8 @@ class V8Api(recipe_api.RecipeApi):
       env['CC'] = self.c.gyp_env.CC
     if self.c.gyp_env.CXX:
       env['CXX'] = self.c.gyp_env.CXX
+    if self.c.gyp_env.CXX_host:
+      env['CXX_host'] = self.c.gyp_env.CXX_host
     if self.c.gyp_env.LINK:
       env['LINK'] = self.c.gyp_env.LINK
     # TODO(machenbach): Make this the default on windows.
@@ -269,6 +271,7 @@ class V8Api(recipe_api.RecipeApi):
         'third_party', 'llvm-build', 'Release+Asserts', 'bin')
     self.c.gyp_env.CC = self.m.path.join(clang_dir, 'clang')
     self.c.gyp_env.CXX = self.m.path.join(clang_dir, 'clang++')
+    self.c.gyp_env.CXX_host = self.m.path.join(clang_dir, 'clang++')
     self.c.gyp_env.LINK = self.m.path.join(clang_dir, 'clang++')
 
   def update_nacl_sdk(self):

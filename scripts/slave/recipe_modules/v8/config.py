@@ -19,6 +19,7 @@ def BaseConfig(**_kwargs):
     gyp_env = ConfigGroup(
       CC = Single(basestring, required=False),
       CXX = Single(basestring, required=False),
+      CXX_host = Single(basestring, required=False),
       LINK = Single(basestring, required=False),
       GYP_MSVS_VERSION = Single(basestring, required=False),
     ),
