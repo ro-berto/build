@@ -130,6 +130,7 @@ class GitilesPoller(PollingChangeSource):
     if agent is None:
       agent = GerritAgent('%s://%s' % (u.scheme, u.netloc), read_only=True)
     self.agent = agent
+    self.dry_run = os.environ.get('POLLER_DRY_RUN')
     self.change_filter = change_filter
     self.comparator = GitilesRevisionComparator()
 
@@ -162,7 +163,10 @@ class GitilesPoller(PollingChangeSource):
   def _get_branches(self):
     result = {}
     path = REFS_TEMPLATE % (self.repo_path,)
-    refs_json = yield self.agent.request('GET', path, retry=5)
+    if self.dry_run:
+      refs_json = {}
+    else:
+      refs_json = yield self.agent.request('GET', path, retry=5)
     for ref, ref_head in refs_json.iteritems():
       for branch in self.branches:
         if (ref == branch or
@@ -231,7 +235,10 @@ class GitilesPoller(PollingChangeSource):
     while 'next' in log_json:
       log_spec = '%s..%s' % (since, log_json['next'])
       path = LOG_TEMPLATE % (self.repo_path, log_spec, 100)
-      log_json = yield self.agent.request('GET', path, retry=5)
+      if self.dry_run:
+        log_json = {}
+      else:
+        log_json = yield self.agent.request('GET', path, retry=5)
       if log_json.get('log'):
         result.extend(log_json['log'])
     result.reverse()
@@ -287,8 +294,9 @@ class GitilesPoller(PollingChangeSource):
         self.comparator.addRevision(commit['commit'])
       try:
         path = REVISION_DETAIL_TEMPLATE % (self.repo_path, commit['commit'])
-        detail = yield self.agent.request('GET', path, retry=5)
-        yield self._create_change(detail, branch)
+        if not self.dry_run:
+          detail = yield self.agent.request('GET', path, retry=5)
+          yield self._create_change(detail, branch)
       except Exception:
         msg = ('GitilesPoller: Error while processing revision %s '
                'on branch %s:\n%s' % (
