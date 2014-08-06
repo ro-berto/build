@@ -75,6 +75,7 @@ def GenSteps(api):
           '--disable-vp8-encoder', '--disable-vp9-encoder',
           '--enable-decode-perf-tests', '--enable-external-build',
           '--enable-vp8-decoder', '--enable-vp9-decoder',
+          '--enable-encode-perf-tests', '--disable-realtime-only',
           '--sdk-path=%s' % ndk_root, '--target=armv7-android-gcc'])
 
   # NDK requires NDK_PROJECT_PATH environment variable to be defined
@@ -116,7 +117,7 @@ def GenSteps(api):
       """, args=[api.raw_io.output(), adb, 'shell',
           'LD_LIBRARY_PATH=' + DEVICE_ROOT,
           'LIBVPX_TEST_DATA_PATH=' + DEVICE_ROOT, DEVICE_ROOT +
-          '/vpx_test'])
+          '/vpx_test', '--gtest_filter=-*Large*'])
 
   step_result = api.python(
       'scrape_logs',
@@ -131,13 +132,30 @@ def GenSteps(api):
   # framesPerSecond: fps
   points = []
   device = BUILDER_TO_DEVICE[api.properties["buildername"]]
-  testname = "libvpx/decode/perf_test/" + device + "/"
   for i in data:
-    p = api.perf_dashboard.get_skeleton_point( testname + i["videoName"] +
-        "_" + str(i["threadCount"]), api.properties['buildnumber'],
-        i["framesPerSecond"])
-    p['units'] = "fps"
-    points.append(p)
+    if i["type"] == "encode_perf_test":
+      # Two data points for encoder tests, FPS and minPsnr
+      testname = "libvpx/encode/perf_test/fps/" + device + "/"
+      testname = testname + i["videoName"] + "_" + str(i["speed"])
+      p = api.perf_dashboard.get_skeleton_point(testname,
+          api.properties['buildnumber'], i["framesPerSecond"])
+      p['units'] = "fps"
+      points.append(p)
+
+      #minPsnr
+      testname = "libvpx/encode/perf_test/minPsnr/" + device + "/"
+      testname = testname + i["videoName"] + "_" + str(i["speed"])
+      p = api.perf_dashboard.get_skeleton_point(testname,
+          api.properties['buildnumber'], i["minPsnr"])
+      p['units'] = "dB"
+      points.append(p)
+    else:
+      testname = "libvpx/decode/perf_test/" + device + "/"
+      testname = testname + i["videoName"] + "_" + str(i["threadCount"])
+      p = api.perf_dashboard.get_skeleton_point(testname,
+          api.properties['buildnumber'], i["framesPerSecond"])
+      p['units'] = "fps"
+      points.append(p)
 
   api.perf_dashboard.set_default_config()
   api.perf_dashboard.post(points)
@@ -156,6 +174,7 @@ def GenTests(api):
     api.step_data('scrape_logs', api.json.output(
             [
                 {
+                    "type" : "decode_perf_test",
                     "decodeTimeSecs": 29.344307,
                     "framesPerSecond": 609.82868,
                     "threadCount": 1,
@@ -164,7 +183,10 @@ def GenTests(api):
                     "videoName": "vp90-2-bbb_426x240_tile_1x1_180kbps.webm"
                 },
                 {
-                    "decodeTimeSecs": 56.277676,
+                    "type" : "encode_perf_test",
+                    "encodeTimeSecs": 56.277676,
+                    "speed" : 5,
+                    "minPsnr" : 43.5,
                     "framesPerSecond": 317.976883,
                     "threadCount": 2,
                     "totalFrames": 17895,
