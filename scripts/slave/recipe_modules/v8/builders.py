@@ -896,7 +896,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_win_rel': {
-        'v8_apply_config': ['msvs2013'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -906,7 +905,6 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'v8_win64_rel': {
-        'v8_apply_config': ['msvs2013'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
