@@ -155,7 +155,7 @@
       "--arch",
       "arm64",
       "--testname",
-      "mjsunit fuzz-natives cctest message preparser",
+      "mjsunit fuzz-natives cctest message preparser base-unittests",
       "--quickcheck",
       "--json-test-results",
       "/path/to/tmp/json"
