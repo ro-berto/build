@@ -610,6 +610,10 @@ def GenSteps(api):
   tests.append(api.chromium.steps.NaclIntegrationTest())
   tests.append(api.chromium.steps.MojoPythonTests())
 
+  # test_installer only works on 32-bit builds; http://crbug.com/399643
+  if api.platform.is_win and api.chromium.c.TARGET_BITS == 32:
+    tests.append(api.chromium.steps.MiniInstallerTest())
+
   compile_targets.extend(bot_config.get('compile_targets', []))
   compile_targets.extend(api.itertools.chain(
       *[t.compile_targets(api) for t in tests]))
