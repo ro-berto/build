@@ -364,7 +364,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     # rather than setting the gn_args flags via a parameter passed to
     # run_gn(). We shouldn't have *three* different mechanisms to control
     # what args to use.
-    if use_goma:
+    # TODO(dpranke): remove the pragma when goma is reenabled crbug.com/400893
+    if use_goma: # pragma: no cover
       gn_args.append('use_goma=true')
       gn_args.append('goma_dir="%s"' % self.m.path['build'].join('goma'))
     gn_args.extend(self.c.project_generator.args)
