@@ -173,10 +173,12 @@ class ConsoleStatusResource(HtmlResource):
     Every change is a line in the page, and it shows the result of the first
     build with this change for each slave."""
 
-    def __init__(self, orderByTime=False, repository=None):
+    def __init__(self, orderByTime=False, repository=None,
+                 builder_filter_fn=lambda builderName: True):
         HtmlResource.__init__(self)
 
         self.repository = repository
+        self.builder_filter_fn = builder_filter_fn
         self.status = None
         self.cache = CacheStatus()
 
@@ -228,6 +230,8 @@ class ConsoleStatusResource(HtmlResource):
         allChanges = list()
         build_count = 0
         for builderName in status.getBuilderNames()[:]:
+            if not self.builder_filter_fn(builderName):
+                continue
             if build_count > max_builds:
                 break
 
@@ -406,6 +410,8 @@ class ConsoleStatusResource(HtmlResource):
             if categories and builder.category not in categories:
                 continue
             if builders and builderName not in builders:
+                continue
+            if not self.builder_filter_fn(builderName):
                 continue
 
             # We want to display this builder.

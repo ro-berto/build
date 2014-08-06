@@ -4114,3 +4114,46 @@ index de922a4..fd4bd11 100644
              debugInfo["revision_final"] = len(revisions)
  
              # Fetch all the builds for all builders until we get the next build
+
+Date:   Wed Jul 30 12:11:07 2014 -0400
+
+    Add optional builder filter function to console page
+    
+    This is needed for client.skia, where we want to hide trybots from the console.
+
+diff --git a/third_party/buildbot_8_4p1/buildbot/status/web/console.py b/third_party/buildbot_8_4p1/buildbot/status/web/console.py
+index fd4bd11..60383f4 100644
+--- a/third_party/buildbot_8_4p1/buildbot/status/web/console.py
++++ b/third_party/buildbot_8_4p1/buildbot/status/web/console.py
+@@ -173,10 +173,12 @@ class ConsoleStatusResource(HtmlResource):
+     Every change is a line in the page, and it shows the result of the first
+     build with this change for each slave."""
+ 
+-    def __init__(self, orderByTime=False, repository=None):
++    def __init__(self, orderByTime=False, repository=None,
++                 builder_filter_fn=lambda builderName: True):
+         HtmlResource.__init__(self)
+ 
+         self.repository = repository
++        self.builder_filter_fn = builder_filter_fn
+         self.status = None
+         self.cache = CacheStatus()
+ 
+@@ -228,6 +230,8 @@ class ConsoleStatusResource(HtmlResource):
+         allChanges = list()
+         build_count = 0
+         for builderName in status.getBuilderNames()[:]:
++            if not self.builder_filter_fn(builderName):
++                continue
+             if build_count > max_builds:
+                 break
+ 
+@@ -407,6 +411,8 @@ class ConsoleStatusResource(HtmlResource):
+                 continue
+             if builders and builderName not in builders:
+                 continue
++            if not self.builder_filter_fn(builderName):
++                continue
+ 
+             # We want to display this builder.
+             category = builder.category or "default"
