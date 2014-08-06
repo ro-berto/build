@@ -89,6 +89,11 @@ def ReadHKLMValue(path, value):
     return None
 
 
+def GetShortHostname():
+  """Get this machine's short hostname in lower case."""
+  return socket.gethostname().split('.')[0].lower()
+
+
 def goma_setup(options, env):
   """Sets up goma if necessary.
 
@@ -109,7 +114,7 @@ def goma_setup(options, env):
   # so that we can check whether this feature is not harmful and how much
   # this feature can improve compile performance.
   # If this experiment succeeds, I'll enable this in all Win/Mac platforms.
-  hostname = socket.gethostname().split('.')[0].lower()
+  hostname = GetShortHostname()
   if hostname.lower() in ['build28-m1', 'build58-m1']:
     patterns = r'win_toolchain\vs2013_files,third_party,src\chrome,src\content'
     env['GOMA_GLOBAL_FILEID_CACHE_PATTERNS'] = patterns
@@ -172,10 +177,11 @@ def UploadGomaCompilerProxyInfo():
   """Upload goma compiler_proxy.INFO to Google Storage."""
   latest_info = GetLatestGomaCompilerProxyInfo()
   today = datetime.datetime.utcnow().date()
-  # Since a real name of compiler_proxy.INFO is fairly unique,
+  hostname = GetShortHostname()
+  # Since a filename of compiler_proxy.INFO is fairly unique,
   # we might be able to upload it as-is.
-  goma_log_gs_path = ('gs://chrome-goma-log/%s/%s.gz' % (
-      today.strftime('%Y/%m/%d'), latest_info))
+  goma_log_gs_path = ('gs://chrome-goma-log/%s/%s/%s.gz' % (
+      today.strftime('%Y/%m/%d'), hostname, os.path.basename(latest_info)))
   try:
     fd, output_filename = tempfile.mkstemp()
     with open(latest_info) as f_in:
