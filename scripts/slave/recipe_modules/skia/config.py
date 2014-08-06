@@ -32,7 +32,7 @@ def BaseConfig(BUILDER_NAME, **_kwargs):
 
 
 VAR_TEST_MAP = {
-  'BUILDER_NAME': (u'Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug',
+  'BUILDER_NAME': (u'Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes',
                    u'Build-Ubuntu13.10-GCC4.8-x86_64-Debug'),
 }
 

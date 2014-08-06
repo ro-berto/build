@@ -25,7 +25,7 @@ def GenTests(api):
     'Test-Mac10.8-MacMini4.1-GeForce320M-x86_64-Debug',
     'Test-Ubuntu12-ShuttleA-GTX550Ti-x86_64-Release-Valgrind',
     'Test-Ubuntu12-ShuttleA-GTX550Ti-x86_64-Debug-ZeroGPUCache',
-    'Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug',
+    'Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes',
     'Test-Ubuntu13.10-GCE-NoGPU-x86_64-Release-TSAN',
     'Test-Win7-ShuttleA-HD2000-x86-Release',
     'Test-Win7-ShuttleA-HD2000-x86-Release-ANGLE',
@@ -42,7 +42,7 @@ def GenTests(api):
       )
     )
 
-  builder = 'Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug'
+  builder = 'Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes'
   yield (
     api.test('failed_tests') +
     api.properties(buildername=builder) +
