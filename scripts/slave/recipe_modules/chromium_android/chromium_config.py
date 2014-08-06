@@ -82,6 +82,7 @@ def hera(c):
   gyp_defs['android_sdk_root'] = Path(
     '[CHECKOUT]', 'third_party', 'android_tools_internal', 'sdk')
   gyp_defs['use_unpublished_apis'] = 1
+  gyp_defs['use_unreleased_google_play_services_first_party']=1
   c.compile_py.default_targets = ['All', 'hera_apk', 'hera_test_apk']
 
 @CONFIG_CTX(includes=['main_builder', 'hera'])
