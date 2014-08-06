@@ -610,24 +610,55 @@ def RemoveJumpListFiles():
 
 
 def RemoveTempDirContents():
-  print 'Removing contents of %s' % tempfile.gettempdir()
+  """Obliterate the entire contents of the temporary directory, excluding
+  paths in sys.argv.
+  """
+  temp_dir = os.path.abspath(tempfile.gettempdir())
+  print 'Removing contents of %s' % temp_dir
+
+  print '  Inspecting args for files to skip'
+  whitelist = set()
+  for i in sys.argv:
+    try:
+      low = os.path.abspath(i.lower())
+      if low.startswith(temp_dir.lower()):
+        whitelist.add(low)
+    except TypeError:
+      # If the argument is too long, windows will freak out and pop a TypeError.
+      pass
+  if whitelist:
+    print '  Whitelisting:'
+    for w in whitelist:
+      print '    %r' % w
+
   start_time = time.time()
-  for root, dirs, files in os.walk(tempfile.gettempdir()):
+  for root, dirs, files in os.walk(temp_dir):
     for f in files:
-      try:
-        os.remove(os.path.join(root, f))
-      except OSError:
-        pass
+      p = os.path.join(root, f)
+      if p.lower() not in whitelist:
+        try:
+          os.remove(p)
+        except OSError:
+          pass
+      else:
+        print '  Keeping file %r (whitelisted)' % p
     for d in dirs[:]:
-      try:
-        # chromium_utils.RemoveDirectory gives access denied error when called
-        # in this loop.
-        shutil.rmtree(os.path.join(root, d), ignore_errors=True)
-        # Remove it so that os.walk() doesn't try to recurse into a non-existing
-        # directory.
-        dirs.remove(d)
-      except OSError:
-        pass
+      p = os.path.join(root, d)
+      if p.lower() not in whitelist:
+        try:
+          # TODO(iannucci): Make this deal with whitelisted items which are
+          # inside of |d|
+
+          # chromium_utils.RemoveDirectory gives access denied error when called
+          # in this loop.
+          shutil.rmtree(p, ignore_errors=True)
+          # Remove it so that os.walk() doesn't try to recurse into
+          # a non-existing directory.
+          dirs.remove(d)
+        except OSError:
+          pass
+      else:
+        print '  Keeping dir %r (whitelisted)' % p
   print '   Removing temp contents took %.1f s' % (time.time() - start_time)
 
 
