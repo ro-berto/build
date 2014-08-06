@@ -5,6 +5,7 @@
 DEPS = [
   'chromium',
   'git',
+  'json',
   'path',
   'properties',
   'python',

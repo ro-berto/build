@@ -407,6 +407,7 @@ def add_swarming_builder(original, swarming, server):
   conf['enable_swarming'] = True
   BUILDERS[server]['builders'][swarming] = conf
 
+
 def should_filter_builder(name, regexs):
   """Returns true if the builder |name| should be filtered. |regexs| is a list
   of the regular expressions specifying the builders that should *not* be
@@ -417,6 +418,23 @@ def should_filter_builder(name, regexs):
     if match and match.end() == len(name):
       return False
   return True
+
+
+def get_test_names(gtest_tests, swarming_tests):
+  """Returns the names of each of the tests in |gtest_tests| and
+  |swarming_tests|. These are lists of GTestTest and SwarmingGTestTest."""
+  return [test.name for test in gtest_tests + swarming_tests]
+
+
+def filter_tests(possible_tests, needed_tests):
+  """Returns a list of all the tests in |possible_tests| whose name is in
+  |needed_tests|."""
+  result = []
+  for test in possible_tests:
+    if test.name in needed_tests:
+      result.append(test)
+  return result
+
 
 add_swarming_builder('linux_chromium_rel', 'linux_chromium_rel_swarming',
                      'tryserver.chromium.linux')
@@ -546,17 +564,6 @@ def GenSteps(api):
   step_result.presentation.step_text = 'path: %s' % test_spec_path
   test_spec = step_result.json.output
 
-  runhooks_env = bot_config.get('runhooks_env', {})
-
-  # See if the patch needs to compile on the current platform.
-  if isinstance(test_spec, dict) and should_filter_builder(
-    buildername, test_spec.get('non_filter_builders', [])):
-    api.filter.does_patch_require_compile(
-      exclusions=test_spec.get('gtest_tests_filter_exclusions', []),
-      env=runhooks_env)
-    if not api.filter.result:
-      return
-
   def should_use_test(test):
     """Given a test dict from test spec returns True or False."""
     if 'platforms' in test:
@@ -575,6 +582,22 @@ def GenSteps(api):
       test_spec,
       bot_config.get('enable_swarming'),
       should_use_test)
+
+  runhooks_env = bot_config.get('runhooks_env', {})
+
+  # See if the patch needs to compile on the current platform.
+  if isinstance(test_spec, dict) and should_filter_builder(
+    buildername, test_spec.get('non_filter_builders', [])):
+    api.filter.does_patch_require_compile(
+      exclusions=test_spec.get('gtest_tests_filter_exclusions', []),
+      exes=get_test_names(gtest_tests, swarming_tests),
+      env=runhooks_env)
+    if not api.filter.result:
+      return
+    # Patch needs compile. Filter the list of test targets.
+    if buildername in test_spec.get('filter_tests_builders', []):
+      gtest_tests = filter_tests(gtest_tests, api.filter.matching_exes)
+      swarming_tests = filter_tests(swarming_tests, api.filter.matching_exes)
 
   # Swarming uses Isolate to transfer files to swarming bots.
   # set_isolate_environment modifies GYP_DEFINES to enable test isolation.
@@ -952,5 +975,61 @@ def GenTests(api):
     ) +
     api.override_step_data(
       'analyze',
-      api.raw_io.stream_output('Found dependency'))
+      api.json.output({'status': 'Found dependency', 'targets': []}))
+  )
+
+  # Tests analyze module by way of not specifying non_filter_builders and
+  # analyze result returning true along with a smaller set of tests.
+  yield (
+    api.test('compile_because_of_analyze_with_filtered_tests_no_builder') +
+    props(buildername='linux_chromium_rel') +
+    api.platform.name('linux') +
+    api.override_step_data('read test spec', api.json.output({
+        'gtest_tests': [
+          {
+            'test': 'base_unittests',
+            'swarming': {'can_use_on_swarming_builders': True},
+          },
+          {
+            'test': 'browser_tests',
+          },
+          {
+            'test': 'unittests',
+          },
+        ],
+      })
+    ) +
+    api.override_step_data(
+      'analyze',
+      api.json.output({'status': 'Found dependency',
+                       'targets': ['browser_tests', 'base_unittests']}))
+  )
+
+  # Tests analyze module by way of not specifying non_filter_builders and
+  # analyze result returning true along with a smaller set of tests. This
+  # specifices a 'filter_test_builder', so that this bot uses the filtered set.
+  yield (
+    api.test('compile_because_of_analyze_with_filtered_tests') +
+    props(buildername='linux_chromium_rel') +
+    api.platform.name('linux') +
+    api.override_step_data('read test spec', api.json.output({
+        'filter_tests_builders': 'linux_chromium_rel',
+        'gtest_tests': [
+          {
+            'test': 'base_unittests',
+            'swarming': {'can_use_on_swarming_builders': True},
+          },
+          {
+            'test': 'browser_tests',
+          },
+          {
+            'test': 'unittests',
+          },
+        ],
+      })
+    ) +
+    api.override_step_data(
+      'analyze',
+      api.json.output({'status': 'Found dependency',
+                       'targets': ['browser_tests', 'base_unittests']}))
   )

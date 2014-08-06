@@ -10,6 +10,7 @@ class FilterApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
     super(FilterApi, self).__init__(**kwargs)
     self._result = False
+    self._matching_exes = []
 
   def __is_path_in_exclusion_list(self, path, exclusions):
     """Returns true if |path| matches any of the regular expressions in
@@ -26,17 +27,26 @@ class FilterApi(recipe_api.RecipeApi):
     does_patch_require_compile."""
     return self._result
 
+  @property
+  def matching_exes(self):
+    """Returns the set of exes passed to does_patch_require_compile() that
+    are effected by the set of files that have changed."""
+    return self._matching_exes
 
-  def does_patch_require_compile(self, exclusions=None, **kwargs):
-    """Return true if the current patch requires a build (and tests to run).
+  def does_patch_require_compile(self, exclusions=None, exes=None, **kwargs):
+    """Return true if the current patch requires a build (and exes to run).
     Return value can be accessed by call to result().
 
     Args:
       exclusions: list of python regular expressions (as strings). If any of
       the files in the current patch match one of the values in |exclusions|
-      True is returned."""
+      True is returned (by way of result()).
+      exes: the possible set of executables that are desired to run. When done
+      matching_exes() returns the set of exes that are effected by the files
+      that have changed."""
 
     exclusions = exclusions or self.m.properties.get('filter_exclusions', [])
+    self._matching_exes = exes or self.m.properties.get('matching_exes', [])
 
     # Get the set of files in the current patch.
     step_result = self.m.git('diff', '--cached', '--name-only',
@@ -48,7 +58,9 @@ class FilterApi(recipe_api.RecipeApi):
     # Check the path of each file against the exclusion list. If found, no need
     # to check dependencies.
     exclusion_regexs = [re.compile(exclusion) for exclusion in exclusions]
+    paths = []
     for path in step_result.stdout.split():
+      paths.append(path)
       first_match = self.__is_path_in_exclusion_list(path, exclusion_regexs)
       if first_match:
         step_result.presentation.logs.setdefault('excluded_files', []).append(
@@ -56,18 +68,27 @@ class FilterApi(recipe_api.RecipeApi):
         self._result = 1
         return
 
+    analyze_input = {'files': paths, 'targets': self._matching_exes}
+
+    test_output = {'status': 'No dependency', 'targets': []}
+
     kwargs.setdefault('env', {})
     kwargs['env'].update(self.m.chromium.c.gyp_env.as_jsonish())
 
     step_result = self.m.python('analyze',
                         self.m.path['checkout'].join('build', 'gyp_chromium'),
-                        ['--analyzer',
-                         self.m.raw_io.input(step_result.stdout)],
-                        stdout = self.m.raw_io.output(),
-                        step_test_data=lambda:
-                          self.m.raw_io.test_api.stream_output('No dependency'),
+                        args=['--analyzer2',
+                              self.m.json.input(analyze_input),
+                              self.m.json.output()],
+                        step_test_data=lambda: self.m.json.test_api.output(
+                          test_output),
                         **kwargs)
-    if step_result.stdout.find('Found dependency') != -1:
+    if 'error' in step_result.json.output:
+      self._result = True
+      step_result.presentation.step_text = 'Error: ' + \
+          step_result.json.output['error']
+    elif step_result.json.output['status'] == 'Found dependency':
+      self._matching_exes = step_result.json.output['targets']
       self._result = True
     else:
       step_result.presentation.step_text = 'No compile necessary'
