@@ -466,11 +466,12 @@ class AndroidApi(recipe_api.RecipeApi):
     log_file = self.m.path['checkout'].join('out',
                                             self.m.chromium.c.BUILD_CONFIG,
                                             'full_log')
+    target_arch = self.m.chromium.c.gyp_env.GYP_DEFINES['target_arch']
     self.m.step(
         'stack_tool_with_logcat_dump',
         [self.m.path['checkout'].join('third_party', 'android_platform',
                               'development', 'scripts', 'stack'),
-         '--more-info', log_file], env=self.get_env())
+         '--arch', target_arch, '--more-info', log_file], env=self.get_env())
     self.m.step(
         'stack_tool_for_tombstones',
         [self.m.path['checkout'].join('build', 'android', 'tombstones.py'),

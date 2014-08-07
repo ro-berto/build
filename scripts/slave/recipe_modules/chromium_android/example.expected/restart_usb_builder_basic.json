@@ -371,6 +371,8 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/third_party/android_platform/development/scripts/stack",
+      "--arch",
+      "arm",
       "--more-info",
       "[SLAVE_BUILD]/src/out/Release/full_log"
     ],
