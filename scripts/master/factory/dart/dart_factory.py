@@ -10,7 +10,7 @@ Based on gclient_factory.py.
 
 import random
 
-from buildbot.changes import svnpoller
+from buildbot.changes import svnpoller, gitpoller
 from buildbot.process.buildstep import RemoteShellCommand
 from buildbot.status.mail import MailNotifier
 from buildbot.status.status_push import HttpStatusPush
@@ -163,6 +163,7 @@ def AddGeneralGClientProperties(factory_properties):
   # Don't set branch part on the --revision flag - we don't use standard
   # chromium layout and hence this is doing the wrong thing.
   factory_properties['no_gclient_branch'] = True
+  factory_properties['no_gclient_revision'] = True
 
 class DartFactory(gclient_factory.GClientFactory):
   """Encapsulates data and methods common to the dart master.cfg files."""
@@ -516,6 +517,25 @@ class DartUtils(object):
                                pollinterval=10,
                                revlinktmpl=dart_revision_url)
 
+
+  @staticmethod
+  def get_git_poller(repo, project, revlink):
+    return gitpoller.GitPoller(repourl=repo,
+                               pollinterval=10,
+                               project=project,
+                               revlinktmpl=revlink)
+
+
+  @staticmethod
+  def get_dartlang_git_repo(name):
+    return 'https://github.com/dart-lang/%s' % name
+
+  @staticmethod
+  def get_dartlang_git_poller(name):
+    revlink = "https://github.com/dart-lang/" + name + "/commit/%s"
+    repo = DartUtils.get_dartlang_git_repo(name)
+    return DartUtils.get_git_poller(repo, name, revlink)
+
   @staticmethod
   def prioritize_builders(buildmaster, builders):
     def get_priority(name):
@@ -568,6 +588,11 @@ class DartUtils(object):
             env=env,
             triggers=trigger_instances,
         )
+      elif v['name'].startswith('packages'):
+        v['factory_builder'] = base.DartAnnotatedFactory(
+            python_script='client/tools/buildbot_annotated_steps.py',
+            env=env,
+        )
       else:
         v['factory_builder'] = base.DartAnnotatedFactory(
             python_script='client/tools/buildbot_annotated_steps.py',
@@ -575,6 +600,12 @@ class DartUtils(object):
             triggers=trigger_instances,
             secondAnnotatedRun=v.get('second_annotated_steps_run', False)
         )
+
+    def setup_package_factory_base(v):
+      extra_deps = v.get('deps', [])
+      return DartFactory(channel=CHANNELS_BY_NAME['dev'],
+                         custom_deps_list=extra_deps)
+
 
     def setup_v8_factory(v):
       factory = None
@@ -616,6 +647,9 @@ class DartUtils(object):
       platform = v['platform']
       if platform == 'v8_vm':
         setup_v8_factory(v)
+      elif platform == 'packages':
+        base = setup_package_factory_base(v)
+        setup_dart_factory(v, base, False)
       else:
         base = self.factory_base[platform]
         name = v['name']
