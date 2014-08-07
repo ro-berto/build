@@ -371,7 +371,7 @@
     ],
     "name": "mojo_python_tests (with patch)",
     "~followup_annotations": [
-      "step returned non-zero exit code: 4",
+      "step returned non-zero exit code: 5",
       "@@@STEP_TEXT@<br/>unexpected_failures:<br/>bad/totally-bad-probably.html<br/>tricky/totally-maybe-not-awesome.html<br/>@@@",
       "@@@STEP_FAILURE@@@"
     ]

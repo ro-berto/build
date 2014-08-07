@@ -223,8 +223,8 @@
     ],
     "name": "webkit_tests (with patch)",
     "~followup_annotations": [
-      "step returned non-zero exit code: 4",
-      "@@@STEP_TEXT@<br/>unexpected_flakes:<br/>flake/slow.html<br/>flake/totally-flakey.html<br/><br/>unexpected_failures:<br/>bad/totally-bad-probably.html<br/>tricky/totally-maybe-not-awesome.html<br/><br/>Total executed: 9001<br/>@@@",
+      "step returned non-zero exit code: 5",
+      "@@@STEP_TEXT@<br/>unexpected_flakes:<br/>flake/slow.html<br/>flake/totally-flakey.html<br/>flake/timeout-then-crash.html<br/><br/>unexpected_failures:<br/>bad/totally-bad-probably.html<br/>tricky/totally-maybe-not-awesome.html<br/><br/>Total executed: 9001<br/>@@@",
       "@@@STEP_WARNINGS@@@"
     ]
   },
@@ -380,8 +380,8 @@
     ],
     "name": "webkit_tests (without patch)",
     "~followup_annotations": [
-      "step returned non-zero exit code: 4",
-      "@@@STEP_TEXT@<br/>unexpected_flakes:<br/>flake/slow.html<br/>flake/totally-flakey.html<br/><br/>unexpected_failures:<br/>bad/totally-bad-probably.html<br/>tricky/totally-maybe-not-awesome.html<br/><br/>Total executed: 9001<br/>@@@",
+      "step returned non-zero exit code: 5",
+      "@@@STEP_TEXT@<br/>unexpected_flakes:<br/>flake/slow.html<br/>flake/totally-flakey.html<br/>flake/timeout-then-crash.html<br/><br/>unexpected_failures:<br/>bad/totally-bad-probably.html<br/>tricky/totally-maybe-not-awesome.html<br/><br/>Total executed: 9001<br/>@@@",
       "@@@STEP_WARNINGS@@@"
     ]
   },
