@@ -63,6 +63,7 @@ def GenSteps(api):
     webrtc_revision = api.properties.get('revision', 'HEAD')
 
   s[0].custom_vars['webrtc_revision'] = webrtc_revision
+  api.gclient.c.revisions['src/third_party/webrtc'] = webrtc_revision
 
   # TODO(iannucci): Support webrtc.apply_svn_patch with bot_update
   # crbug.com/376122

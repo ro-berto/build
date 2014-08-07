@@ -19,7 +19,9 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD"
+      "src@HEAD",
+      "--revision",
+      "src/third_party/webrtc@12345"
     ],
     "name": "bot_update",
     "~followup_annotations": [
@@ -63,6 +65,8 @@
       "--verbose",
       "--revision",
       "src@HEAD",
+      "--revision",
+      "src/third_party/webrtc@12345",
       "--output-json",
       "/path/to/tmp/json"
     ],
