@@ -19,6 +19,8 @@
       "--revision",
       "src@HEAD",
       "--revision",
+      "src/third_party/libjingle/source/talk@HEAD",
+      "--revision",
       "src/third_party/webrtc@HEAD"
     ],
     "name": "bot_update",
@@ -53,6 +55,8 @@
       "--verbose",
       "--revision",
       "src@HEAD",
+      "--revision",
+      "src/third_party/libjingle/source/talk@HEAD",
       "--revision",
       "src/third_party/webrtc@HEAD",
       "--output-json",
