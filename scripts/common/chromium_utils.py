@@ -807,14 +807,17 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
   [['python', 'b'],['c']]
   """
 
-  def TimedFlush(timeout, fh):
+  def TimedFlush(timeout, fh, kill_event):
+    """Flush fh every timeout seconds until kill_event is true."""
     while True:
       try:
         fh.flush()
       # File handle is closed, exit.
       except ValueError:
-        return
-      time.sleep(timeout)
+        break
+      # Wait for kill signal or timeout.
+      if kill_event.wait(timeout):
+        break
 
   # TODO(all): nsylvain's CommandRunner in buildbot_slave is based on this
   # method.  Update it when changes are introduced here.
@@ -826,49 +829,55 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
     # we would flush a minimum of 10 seconds.  However, we only write and
     # flush no more often than 20 seconds to avoid flooding the master with
     # network traffic from unbuffered output.
-    flush_thread = threading.Thread(target=TimedFlush, args=(20, writefh))
+    kill_event = threading.Event()
+    flush_thread = threading.Thread(
+        target=TimedFlush, args=(20, writefh, kill_event))
     flush_thread.daemon = True
     flush_thread.start()
 
-    in_byte = readfh.read(1)
-    in_line = cStringIO.StringIO()
-    while in_byte:
-      # Capture all characters except \r.
-      if in_byte != '\r':
-        in_line.write(in_byte)
+    try:
+      in_byte = readfh.read(1)
+      in_line = cStringIO.StringIO()
+      while in_byte:
+        # Capture all characters except \r.
+        if in_byte != '\r':
+          in_line.write(in_byte)
 
-      # Write and flush on newline.
-      if in_byte == '\n':
-        if log_event:
-          log_event.set()
-        if parser_func:
-          parser_func(in_line.getvalue().strip())
+        # Write and flush on newline.
+        if in_byte == '\n':
+          if log_event:
+            log_event.set()
+          if parser_func:
+            parser_func(in_line.getvalue().strip())
 
-        if filter_obj:
-          filtered_line = filter_obj.FilterLine(in_line.getvalue())
+          if filter_obj:
+            filtered_line = filter_obj.FilterLine(in_line.getvalue())
+            if filtered_line is not None:
+              writefh.write(filtered_line)
+          else:
+            writefh.write(in_line.getvalue())
+          in_line = cStringIO.StringIO()
+        in_byte = readfh.read(1)
+
+      if log_event and in_line.getvalue():
+        log_event.set()
+
+      # Write remaining data and flush on EOF.
+      if parser_func:
+        parser_func(in_line.getvalue().strip())
+
+      if filter_obj:
+        if in_line.getvalue():
+          filtered_line = filter_obj.FilterDone(in_line.getvalue())
           if filtered_line is not None:
             writefh.write(filtered_line)
-        else:
+      else:
+        if in_line.getvalue():
           writefh.write(in_line.getvalue())
-        in_line = cStringIO.StringIO()
-      in_byte = readfh.read(1)
-
-    if log_event and in_line.getvalue():
-      log_event.set()
-
-    # Write remaining data and flush on EOF.
-    if parser_func:
-      parser_func(in_line.getvalue().strip())
-
-    if filter_obj:
-      if in_line.getvalue():
-        filtered_line = filter_obj.FilterDone(in_line.getvalue())
-        if filtered_line is not None:
-          writefh.write(filtered_line)
-    else:
-      if in_line.getvalue():
-        writefh.write(in_line.getvalue())
-    writefh.flush()
+    finally:
+      kill_event.set()
+      flush_thread.join()
+      writefh.flush()
 
   pipes = pipes or []
 
