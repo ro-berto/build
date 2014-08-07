@@ -100,7 +100,8 @@
         },
         "comment": [
           "Keep excluded builders in sync with the gpu closers list in",
-          "masters/master.chromium/templates/announce.html."
+          "masters/master.chromium/templates/announce.html.",
+          "Mac Release (ATI) and Mac 10.8 Release (ATI): crbug.com/395305"
         ],
         "excluded_builders" : [
           "Android Debug (Nexus 7)",
@@ -109,7 +110,9 @@
           "GPU Win Builder (dbg)",
           "Linux Debug (NVIDIA)",
           "Mac 10.8 Debug (Intel)",
+          "Mac 10.8 Release (ATI)",
           "Mac Debug (Intel)",
+          "Mac Release (ATI)",
           "Mac Retina Debug",
           "Win7 Debug (NVIDIA)",
           "Win8 Debug (NVIDIA)"
