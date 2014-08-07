@@ -261,7 +261,8 @@ class ConsoleStatusResource(console.ConsoleStatusResource):
     return console.ConsoleStatusResource.content(self, request, cxt)
 
 
-def SetupChromiumPages(webstatus, tagComparator=None, customEndpoints=None):
+def SetupChromiumPages(webstatus, tagComparator=None, customEndpoints=None,
+                       console_repo_filter=None, console_builder_filter=None):
   """Add customizations to default web reporting."""
 
   def _tick_filter(n, stride):
@@ -284,9 +285,15 @@ def SetupChromiumPages(webstatus, tagComparator=None, customEndpoints=None):
         'fixname': lambda x: x.translate(None, ' -():'),
         'extract_index': lambda x, i: [y[i] for y in x] })
 
+  kwargs = {}
+  if console_repo_filter:
+    kwargs['repository'] = console_repo_filter
+  if console_builder_filter:
+    kwargs['builder_filter_fn'] = console_builder_filter
   console_ = ConsoleStatusResource(
       orderByTime=webstatus.orderConsoleByTime,
-      tagComparator=tagComparator)
+      tagComparator=tagComparator,
+      **kwargs)
 
   webstatus.putChild("stats", stats.StatsStatusResource())
   webstatus.putChild("waterfall", WaterfallStatusResource())

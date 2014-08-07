@@ -184,7 +184,8 @@ class FilterDomain(util.ComparableMixin):
 
 
 def CreateWebStatus(port, templates=None, tagComparator=None,
-                    customEndpoints=None, **kwargs):
+                    customEndpoints=None, console_repo_filter=None,
+                    console_builder_filter=None, **kwargs):
   webstatus = WebStatus(port, **kwargs)
   if templates:
     # Manipulate the search path for jinja templates
@@ -197,7 +198,10 @@ def CreateWebStatus(port, templates=None, tagComparator=None,
     new_loaders.extend([jinja2.FileSystemLoader(x) for x in templates])
     new_loaders.extend(old_loaders[1:])
     webstatus.templates.loader.loaders = new_loaders
-  chromium_status.SetupChromiumPages(webstatus, tagComparator, customEndpoints)
+  chromium_status.SetupChromiumPages(
+      webstatus, tagComparator, customEndpoints,
+      console_repo_filter=console_repo_filter,
+      console_builder_filter=console_builder_filter)
   return webstatus
 
 
@@ -212,7 +216,9 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
                     order_console_by_time=False,
                     tagComparator=None,
                     customEndpoints=None,
-                    enable_http_status_push=False):
+                    enable_http_status_push=False,
+                    console_repo_filter=None,
+                    console_builder_filter=None):
   """Add common settings and status services to a master.
 
   If you wonder what all these mean, PLEASE go check the official doc!
@@ -290,20 +296,27 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
                   stopBuild=True,
                   stopAllBuilds=True,
                   cancelPendingBuild=True)
-    c['status'].append(CreateWebStatus(active_master.master_port,
-                                       tagComparator=tagComparator,
-                                       customEndpoints=customEndpoints,
-                                       authz=authz,
-                                       num_events_max=3000,
-                                       templates=templates,
-                                       **kwargs))
+    c['status'].append(CreateWebStatus(
+        active_master.master_port,
+        tagComparator=tagComparator,
+        customEndpoints=customEndpoints,
+        authz=authz,
+        num_events_max=3000,
+        templates=templates,
+        console_repo_filter=console_repo_filter,
+        console_builder_filter=console_builder_filter,
+        **kwargs))
   if active_master.master_port_alt:
-    c['status'].append(CreateWebStatus(active_master.master_port_alt,
-                                       tagComparator=tagComparator,
-                                       customEndpoints=customEndpoints,
-                                       num_events_max=3000,
-                                       templates=templates,
-                                       **kwargs))
+    c['status'].append(CreateWebStatus(
+        active_master.master_port_alt,
+        tagComparator=tagComparator,
+        customEndpoints=customEndpoints,
+        authz=authz,
+        num_events_max=3000,
+        templates=templates,
+        console_repo_filter=console_repo_filter,
+        console_builder_filter=console_builder_filter,
+        **kwargs))
 
   # Add a status logger, which is only active if '.logstatus' is touched.
   c['status'].append(status_logger.StatusEventLogger())
