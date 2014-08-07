@@ -408,11 +408,15 @@ def add_swarming_builder(original, swarming, server):
   BUILDERS[server]['builders'][swarming] = conf
 
 
-def should_filter_builder(name, regexs):
+def should_filter_builder(name, regexs, root):
   """Returns true if the builder |name| should be filtered. |regexs| is a list
   of the regular expressions specifying the builders that should *not* be
-  filtered. If |name| completely matches one of the regular expressions than
-  false is returned, otherwise true."""
+  filtered. |root| is the root of the project. If |name| completely matches one
+  of the regular expressions than false is returned, otherwise true."""
+  # Don't run alalyze for other projects, such as blink, as there aren't that
+  # many try jobs for them.
+  if root != 'src':
+    return False
   for regex in regexs:
     match = re.match(regex, name)
     if match and match.end() == len(name):
@@ -587,7 +591,8 @@ def GenSteps(api):
 
   # See if the patch needs to compile on the current platform.
   if isinstance(test_spec, dict) and should_filter_builder(
-    buildername, test_spec.get('non_filter_builders', [])):
+      buildername, test_spec.get('non_filter_builders', []),
+      api.properties.get('root')):
     api.filter.does_patch_require_compile(
       exclusions=test_spec.get('gtest_tests_filter_exclusions', []),
       exes=get_test_names(gtest_tests, swarming_tests),
@@ -946,6 +951,17 @@ def GenTests(api):
   yield (
     api.test('no_compile_because_of_analyze') +
     props(buildername='linux_chromium_rel') +
+    api.platform.name('linux') +
+    api.override_step_data('read test spec', api.json.output({
+      })
+    )
+  )
+
+  # Verifies analyze skips projects other than src.
+  yield (
+    api.test('dont_analyze_for_non_src_project') +
+    props(buildername='linux_chromium_rel') +
+    props(root='blink') +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
       })
