@@ -497,7 +497,9 @@ class ChromiumCommands(commands.FactoryCommands):
         py_script=True, factory_properties=factory_properties)
 
   def AddTabCapturePerformanceTests(self, factory_properties=None):
-    options = ['--enable-gpu']
+    options = ['--enable-gpu',
+               '--test-launcher-jobs=1',
+               '--test-launcher-print-test-stdio=always']
     tool_options = ['--no-xvfb']
 
     self.AddAnnotatedPerfStep('tab_capture_performance',
