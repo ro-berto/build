@@ -245,28 +245,21 @@ def GenSteps(api):
   buildername = api.properties.get('buildername')
 
   tests = CompileAndReturnTests(mastername, buildername)
-  if tests:
-    # TODO(phajdan.jr): Move this to api.chromium.setup_tests.
-    if api.chromium.c.TARGET_PLATFORM == 'android':
-      api.chromium_android.common_tests_setup_steps()
+  if not tests:
+    return
 
-    try:
-      def test_runner():
-        failed_tests = []
-        for t in tests:
-          try:
-            t.run(api, '')
-          except api.step.StepFailure:
-            failed_tests.append(t)
-        # TODO(iannucci): Make this include the list of test names.
-        if failed_tests:
-          raise api.step.StepFailure('Build failed due to %d test failures'
-                                % len(failed_tests))
-      api.chromium_tests.setup_chromium_tests(test_runner)
-    finally:
-      # TODO(phajdan.jr): Move this to api.chromium.setup_tests.
-      if api.chromium.c.TARGET_PLATFORM == 'android':
-        api.chromium_android.common_tests_final_steps()
+  def test_runner():
+    failed_tests = []
+    for t in tests:
+      try:
+        t.run(api, '')
+      except api.step.StepFailure:
+        failed_tests.append(t)
+    # TODO(iannucci): Make this include the list of test names.
+    if failed_tests:
+      raise api.step.StepFailure('Build failed due to %d test failures'
+                            % len(failed_tests))
+  api.chromium_tests.setup_chromium_tests(test_runner)
 
 
 def _sanitize_nonalpha(text):
