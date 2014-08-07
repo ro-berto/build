@@ -62,14 +62,14 @@ class AndroidApi(recipe_api.RecipeApi):
     self.set_config(config_name, **kwargs)
 
   def make_zip_archive(self, step_name, archive_name, files=None,
-                       preserve_paths=True, **kwargs):
+                       preserve_paths=True, filters=None, **kwargs):
     """Creates and stores the archive file.
 
     Args:
       step_name: Name of the step.
       archive_name: Name of the archive file.
-      files: List of files. Files can be glob's or file paths. If no files
-        are provided, everything in the target directory will be included.
+      files: If specified, only include files here instead of out/<target>.
+      filters: List of globs to be included in the archive.
       preserve_paths: If True, files will be stored using the subdolders
         in the archive.
     """
@@ -79,6 +79,8 @@ class AndroidApi(recipe_api.RecipeApi):
     # TODO(luqui): Clean up when these are covered by the external builders.
     if files:              # pragma: no cover
       archive_args.extend(['--files', ','.join(files)])
+    if filters:
+      archive_args.extend(['--filters', ','.join(filters)])
     if not preserve_paths: # pragma: no cover
       archive_args.append('--ignore-subfolder-names')
 

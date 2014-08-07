@@ -34,6 +34,7 @@ INTERMEDIATE_FILES = ['test1.o',
                       os.path.join('dir1', 'test3.o'),
                       os.path.join('dir2', 'lib3.o')]
 
+SOURCE_FILES = ['a.cpp']
 
 class ArchiveTest(unittest.TestCase):
 
@@ -51,15 +52,17 @@ class ArchiveTest(unittest.TestCase):
     self.target_dir = os.path.join(self.out_dir, self.target)
     os.makedirs(self.target_dir)
 
-    # Create build product
+    # Create test files
+    archive_utils_unittest.CreateFileSetInDir(self.src_dir, SOURCE_FILES)
     archive_utils_unittest.CreateFileSetInDir(self.target_dir, BINARY_FILES)
     archive_utils_unittest.CreateFileSetInDir(self.target_dir,
         INTERMEDIATE_FILES)
+    os.chdir(self.src_dir)
 
   def tearDown(self):
     shutil.rmtree(self.temp_dir)
 
-  def verifyZipFile(self, zip_dir, zip_file_path, archive_name, expected_files):
+  def verifyZipFile(self, zip_dir, zip_file_path, expected_files):
     # Extract the files from the archive
     extract_dir = os.path.join(zip_dir, 'extract')
     os.makedirs(extract_dir)
@@ -71,9 +74,7 @@ class ArchiveTest(unittest.TestCase):
         extracted_files.extend([os.path.join(subdir, name) for name in names if
                                 os.path.isfile(os.path.join(dirname, name))])
       extracted_files = []
-      archive_path = os.path.join(extract_dir, archive_name)
-      os.path.walk(archive_path, FindFiles, archive_path)
-      print archive_path, extracted_files
+      os.path.walk(extract_dir, FindFiles, extract_dir)
       self.assertEquals(len(expected_files), len(extracted_files))
       for f in extracted_files:
         self.assertIn(f, expected_files)
@@ -83,26 +84,45 @@ class ArchiveTest(unittest.TestCase):
     zip_file.close()
 
   def testArchiveBuild(self):
-    os.chdir(self.src_dir)
     archive_build.archive_build(self.target, name=self.zip_file, location='out')
     zip_file_path = os.path.join(self.out_dir, self.zip_file)
 
     self.assertTrue(os.path.exists(zip_file_path))
-    files_list =  [os.path.join(self.target, x) for x in (BINARY_FILES +
+    files_list = [os.path.join('out', self.target, x) for x in (BINARY_FILES +
         INTERMEDIATE_FILES)]
-    self.verifyZipFile(self.out_dir, zip_file_path,
-        os.path.basename(self.out_dir), files_list)
+    self.verifyZipFile(self.out_dir, zip_file_path, files_list)
 
   def testArchiveBuildIgnoreSubfolderNames(self):
-    os.chdir(self.src_dir)
     archive_build.archive_build(self.target, name=self.zip_file, location='out',
         ignore_subfolder_names=True)
     zip_file_path = os.path.join(self.out_dir, self.zip_file)
 
     self.assertTrue(os.path.exists(zip_file_path))
-    files_list =  [os.path.basename(x) for x in (BINARY_FILES +
+    files_list = [os.path.basename(x) for x in (BINARY_FILES +
         INTERMEDIATE_FILES)]
-    self.verifyZipFile(self.out_dir, zip_file_path, '', files_list)
+    self.verifyZipFile(self.out_dir, zip_file_path, files_list)
+
+  def testArchiveBuildWithFiles(self):
+    files = ['*dir1/test3.o', '../../a.cpp']
+    archive_build.archive_build(self.target, name=self.zip_file, location='out',
+        files=files)
+    zip_file_path = os.path.join(self.out_dir, self.zip_file)
+
+    self.assertTrue(os.path.exists(zip_file_path))
+    files_list = [os.path.join('out', self.target, 'dir1', 'test3.o'), 'a.cpp']
+    self.verifyZipFile(self.out_dir, zip_file_path, files_list)
+
+  def testArchiveBuildWithFilters(self):
+    filters = ['*.so']
+    archive_build.archive_build(self.target, name=self.zip_file, location='out',
+        filters=filters)
+    zip_file_path = os.path.join(self.out_dir, self.zip_file)
+
+    self.assertTrue(os.path.exists(zip_file_path))
+    files_list = [os.path.join('out', self.target, 'dir2', 'lib3.so'),
+      os.path.join('out', self.target, 'lib1.so'),
+      os.path.join('out', self.target, 'lib2.so')]
+    self.verifyZipFile(self.out_dir, zip_file_path, files_list)
 
 if __name__ == '__main__':
   suite = unittest.TestLoader().loadTestsFromTestCase(ArchiveTest)

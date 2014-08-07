@@ -187,6 +187,20 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/android/archive_build.py",
+      "--target",
+      "Release",
+      "--name",
+      "archive.zip",
+      "--filters",
+      "*.apk"
+    ],
+    "name": "zip_build_proudct"
+  },
+  {
+    "cmd": [
       "[DEPOT_TOOLS]/git_number.py"
     ],
     "cwd": "[SLAVE_BUILD]/src",

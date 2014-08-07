@@ -83,6 +83,8 @@ def GenSteps(api):
 
   if config['build']:
     api.chromium_android.compile()
+    api.chromium_android.make_zip_archive('zip_build_proudct', 'archive.zip',
+        filters=['*.apk'])
   else:
     api.chromium_android.download_build('build-bucket',
                                               'build_product.zip')
