@@ -12,6 +12,7 @@ DEPS = [
   'bot_update',
   'chromium',
   'chromium_android',
+  'chromium_tests',
   'gclient',
   'json',
   'path',
@@ -120,7 +121,7 @@ def GenSteps(api):
     else:
       test_runner = lambda: api.webrtc.runtests(recipe_config.get('test_suite'),
                                                 revision=got_revision)
-      api.chromium.setup_tests(bot_type, test_runner)
+      api.chromium_tests.setup_chromium_tests(test_runner)
 
 
 def _sanitize_nonalpha(text):

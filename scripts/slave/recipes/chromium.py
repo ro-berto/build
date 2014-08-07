@@ -7,6 +7,7 @@ DEPS = [
   'bot_update',
   'chromium',
   'chromium_android',
+  'chromium_tests',
   'gclient',
   'isolate',
   'json',
@@ -261,8 +262,7 @@ def GenSteps(api):
         if failed_tests:
           raise api.step.StepFailure('Build failed due to %d test failures'
                                 % len(failed_tests))
-      # TODO(phajdan.jr): Remove bot_type from api.chromium.setup_tests.
-      api.chromium.setup_tests('builder_tester', test_runner)
+      api.chromium_tests.setup_chromium_tests(test_runner)
     finally:
       # TODO(phajdan.jr): Move this to api.chromium.setup_tests.
       if api.chromium.c.TARGET_PLATFORM == 'android':

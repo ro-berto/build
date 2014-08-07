@@ -501,18 +501,6 @@ class ChromiumApi(recipe_api.RecipeApi):
         args=['--gitless', self.m.path['checkout'].join('.DEPS.git')],
         **kwargs)
 
-  def setup_tests(self, bot_type, test_runner):
-    ret = None
-    if bot_type in ['tester', 'builder_tester']:
-      if self.m.platform.is_win:
-        self.crash_handler()
-
-      ret = test_runner()
-
-      if self.m.platform.is_win:
-        self.process_dumps()
-    return ret
-
   def list_perf_tests(self, browser, num_shards, devices=[]):
     args = ['list', '--browser', browser, '--json-output',
             self.m.json.output(), '--num-shards', num_shards]
