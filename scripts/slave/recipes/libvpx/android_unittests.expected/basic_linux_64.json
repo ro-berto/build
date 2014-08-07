@@ -161,7 +161,7 @@
       "--enable-unit-tests",
       "--enable-webm-io",
       "--disable-vp8-encoder",
-      "--disable-vp9-encoder",
+      "--enable-vp9-encoder",
       "--enable-decode-perf-tests",
       "--enable-external-build",
       "--enable-vp8-decoder",

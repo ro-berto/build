@@ -72,7 +72,7 @@ def GenSteps(api):
       'configure', [
           CONFIGURE_PATH_REL, '--disable-examples', '--disable-install-docs',
           '--disable-install-srcs', '--enable-unit-tests', '--enable-webm-io',
-          '--disable-vp8-encoder', '--disable-vp9-encoder',
+          '--disable-vp8-encoder', '--enable-vp9-encoder',
           '--enable-decode-perf-tests', '--enable-external-build',
           '--enable-vp8-decoder', '--enable-vp9-decoder',
           '--enable-encode-perf-tests', '--disable-realtime-only',
