@@ -253,35 +253,6 @@ def common_xcode_settings(command, options, env, compiler=None):
     env['LDPLUSPLUS'] = ldplusplus
 
 
-def ninja_clobber(build_output_dir):
-  """Removes everything but ninja files from a build directory."""
-  for root, _, files in os.walk(build_output_dir, topdown=False):
-    for f in files:
-      # For .manifest in particular, gyp windows ninja generates manifest
-      # files at generation time but clobber nukes at the beginning of
-      # compile, so make sure not to delete those generated files, otherwise
-      # compile will fail.
-      if (f.endswith('.ninja') or f.endswith('.manifest') or
-          f == 'args.gn' or
-          f.startswith('msvc') or  # VS runtime DLLs.
-          f in ('gyp-mac-tool', 'gyp-win-tool',
-                'environment.x86', 'environment.x64')):
-        continue
-      os.unlink(os.path.join(root, f))
-    # Delete the directory if empty; this works because the walk is bottom-up.
-    try:
-      os.rmdir(root)
-    except OSError, e:
-      if e.errno in (39, 41, 66):
-        # If the directory isn't empty, ignore it.
-        # On Windows, os.rmdir will raise WindowsError with winerror 145,
-        # which e.errno is 41.
-        # On Linux, e.errno is 39.
-        pass
-      else:
-        raise
-
-
 # RunCommandFilter for xcodebuild
 class XcodebuildFilter(chromium_utils.RunCommandFilter):
   """xcodebuild filter"""
@@ -541,7 +512,7 @@ def main_xcode(options, args):
     # .ninja files). For now, only delete all non-.ninja files.
     # TODO(thakis): Make "clobber" a step that runs before "runhooks". Once the
     # master has been restarted, remove all clobber handling from compile.py.
-    ninja_clobber(clobber_dir)
+    build_directory.RmtreeExceptNinjaFiles(clobber_dir)
 
   common_xcode_settings(command, options, env, options.compiler)
   maybe_set_official_build_envvars(options, env)
@@ -765,7 +736,7 @@ def main_ninja(options, args):
       # TODO(thakis): Make "clobber" a step that runs before "runhooks".
       # Once the master has been restarted, remove all clobber handling
       # from compile.py.
-      ninja_clobber(options.target_output_dir)
+      build_directory.RmtreeExceptNinjaFiles(options.target_output_dir)
 
     if options.verbose:
       command.append('-v')
