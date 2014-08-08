@@ -184,6 +184,7 @@ ENABLED_MASTERS = [
     'client.nacl.sdk.mono',
     'client.skia',
     'client.v8',
+    'client.webrtc',
     'tryserver.blink',
     'tryserver.chromium.linux',
     'tryserver.chromium.mac',

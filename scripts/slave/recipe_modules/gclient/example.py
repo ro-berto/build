@@ -14,6 +14,7 @@ def GenSteps(api):
   soln = src_cfg.solutions.add()
   soln.name = 'src'
   soln.url = 'svn://svn.chromium.org/chrome/trunk/src'
+  src_cfg.parent_got_revision_mapping['parent_got_revision'] = 'got_revision'
   api.gclient.c = src_cfg
   api.gclient.checkout()
 
