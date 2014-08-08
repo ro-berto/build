@@ -139,7 +139,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - builder',
         'build_gs_archive': 'linux_rel_archive',
-        'tests': ['v8testing', 'test262', 'mozilla'],
+        'tests': ['v8testing', 'mozilla'],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - nosse4': {
@@ -151,7 +151,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - builder',
         'build_gs_archive': 'linux_rel_archive',
-        'tests': ['v8testing', 'test262', 'mozilla'],
+        'tests': ['v8testing', 'mozilla'],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - deadcode': {
@@ -383,7 +383,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing', 'test262', 'mozilla'],
+        'tests': ['v8testing', 'mozilla'],
         'testing': {'platform': 'win'},
       },
 ####### Category: Mac
@@ -541,7 +541,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
+        'tests': ['v8testing', 'webkit', 'mozilla'],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm64 - sim - nosnap - debug - 1': {
