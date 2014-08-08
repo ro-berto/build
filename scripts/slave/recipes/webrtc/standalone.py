@@ -5,6 +5,7 @@
 # Recipe for building and running tests for WebRTC stand-alone.
 
 DEPS = [
+  'bot_update',
   'chromium',
   'gclient',
   'path',
@@ -44,7 +45,7 @@ def GenSteps(api):
   if api.tryserver.is_tryserver:
     api.chromium.apply_config('trybot_flavor')
 
-  step_result = api.gclient.checkout()
+  step_result = api.bot_update.ensure_checkout(force=True)
   # Whatever step is run right before this line needs to emit got_revision.
   got_revision = step_result.presentation.properties['got_revision']
 
