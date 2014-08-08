@@ -26,6 +26,10 @@ RECIPE_CONFIGS = {
     'chromium_config': 'chromium_clang',
     'gclient_config': 'chromium',
   },
+  'chromium_asan': {
+    'chromium_config': 'chromium_asan',
+    'gclient_config': 'chromium',
+  },
   'chromium_chromeos': {
     'chromium_config': 'chromium',
     'chromium_apply_config': ['chromeos'],

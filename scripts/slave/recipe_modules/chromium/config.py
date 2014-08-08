@@ -5,7 +5,7 @@
 import pipes
 
 from slave.recipe_config import config_item_context, ConfigGroup
-from slave.recipe_config import Dict, Single, Static, Set, BadConf
+from slave.recipe_config import Dict, List, Single, Static, Set, BadConf
 from slave.recipe_config_types import Path
 
 # Because of the way that we use decorators, pylint can't figure out the proper
@@ -60,6 +60,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       memory_tool = Single(basestring, required=False),
       memory_tests_runner = Single(Path),
       lsan_suppressions_file = Single(Path),
+      test_args = List(basestring),
     ),
 
     # Some platforms do not have a 1:1 correlation of BUILD_CONFIG to what is
@@ -297,6 +298,10 @@ def asan(c):
   c.gyp_env.GYP_DEFINES['asan'] = 1
   c.gyp_env.GYP_DEFINES['lsan'] = 1
 
+@config_ctx()
+def no_lsan(c):
+  c.gyp_env.GYP_DEFINES['lsan'] = 0
+
 @config_ctx(group='memory_tool')
 def memcheck(c):
   _memory_tool(c, 'memcheck')
@@ -365,9 +370,9 @@ def chromium(c):
 
 @config_ctx(includes=['ninja', 'clang', 'goma', 'asan'])
 def chromium_asan(c):
-  c.compile_py.default_targets = ['All', 'chromium_builder_tests']
   c.runtests.lsan_suppressions_file = Path('[CHECKOUT]', 'tools', 'lsan',
                                            'suppressions.txt')
+  c.runtests.test_args.append('--test-launcher-batch-limit=1')
 
 @config_ctx(includes=['ninja', 'clang', 'goma', 'syzyasan'])
 def chromium_syzyasan(c):

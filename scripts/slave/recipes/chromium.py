@@ -108,6 +108,39 @@ def GenTests(api):
     }))
   )
 
+  # Tests switching on asan and swiching off lsan for sandbox tester.
+  yield (
+    api.test('dynamic_gtest_memory') +
+    api.properties.generic(mastername='chromium.memory',
+                           buildername='Linux ASan Tests (sandboxed)',
+                           parent_buildername='Linux ASan LSan Builder') +
+    api.platform('linux', 64) +
+    api.override_step_data('read test spec', api.json.output({
+      'Linux ASan Tests (sandboxed)': {
+        'gtest_tests': [
+          'browser_tests',
+        ],
+      },
+    }))
+  )
+
+  # Tests that the memory builder is using the correct compile targets.
+  yield (
+    api.test('dynamic_gtest_memory_builder') +
+    api.properties.generic(mastername='chromium.memory',
+                           buildername='Linux ASan LSan Builder',
+                           revision='123456') +
+    api.platform('linux', 64) +
+    # The builder should build 'browser_tests', because there exists a child
+    # tester that uses that test.
+    api.override_step_data('read test spec', api.json.output({
+      'Linux ASan Tests (sandboxed)': {
+        'gtest_tests': [
+          'browser_tests',
+        ],
+      },
+    }))
+  )
 
   yield (
     api.test('arm') +
