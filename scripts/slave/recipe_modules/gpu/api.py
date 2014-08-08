@@ -51,6 +51,11 @@ class GpuApi(recipe_api.RecipeApi):
     self.m.chromium.c.gyp_env.GYP_DEFINES.pop('use_ash', None)
     self.m.chromium.c.gyp_env.GYP_DEFINES.pop('use_aura', None)
 
+    # Enable archiving the GPU tests' isolates in chrome_tests.gypi.
+    # The non-GPU trybots build the "all" target, and these tests
+    # shouldn't be built or run on those bots.
+    self.m.chromium.c.gyp_env.GYP_DEFINES['archive_gpu_tests'] = 1
+
     # TODO(kbr): remove the workaround for http://crbug.com/328249 .
     # See crbug.com/335827 for background on the conditional.
     if not self.m.platform.is_win:
