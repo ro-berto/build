@@ -118,7 +118,8 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "dcheck_always_on=1 fastbuild=1 target_arch=ia32 v8_target_arch=ia32"
+      "GYP_DEFINES": "dcheck_always_on=1 fastbuild=1 target_arch=ia32 v8_target_arch=ia32",
+      "GYP_MSVS_VERSION": "2013"
     },
     "name": "gclient runhooks"
   },
@@ -260,7 +261,8 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "dcheck_always_on=1 fastbuild=1 target_arch=ia32 v8_target_arch=ia32"
+      "GYP_DEFINES": "dcheck_always_on=1 fastbuild=1 target_arch=ia32 v8_target_arch=ia32",
+      "GYP_MSVS_VERSION": "2013"
     },
     "name": "gclient runhooks (2)"
   },
