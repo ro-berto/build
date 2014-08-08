@@ -26,6 +26,8 @@
       "/path/to/tmp/json",
       "--revision",
       "src@HEAD",
+      "--revision",
+      "src/third_party/webrtc@12345",
       "--force"
     ],
     "name": "bot_update",

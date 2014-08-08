@@ -79,6 +79,7 @@ def GenSteps(api):
       webrtc_revision = api.properties.get('revision', 'HEAD')
 
     s[0].custom_vars['webrtc_revision'] = webrtc_revision
+    api.gclient.c.revisions['src/third_party/webrtc'] = webrtc_revision
 
   # Bot Update re-uses the gclient configs.
   step_result = api.bot_update.ensure_checkout(force=True)
