@@ -15,7 +15,7 @@
       "python",
       "-u",
       "[SLAVE_BUILD]/build/gyp_chromium",
-      "--analyzer2",
+      "--analyzer",
       "{\"files\": [\"foo.cc\"], \"targets\": []}",
       "/path/to/tmp/json"
     ],

@@ -112,7 +112,7 @@
       "python",
       "-u",
       "[SLAVE_BUILD]/src/build/gyp_chromium",
-      "--analyzer2",
+      "--analyzer",
       "{\"files\": [\"foo.cc\"], \"targets\": [\"base_unittests\", \"browser_tests\", \"unittests\"]}",
       "/path/to/tmp/json"
     ],
