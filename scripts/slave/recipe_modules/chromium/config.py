@@ -373,6 +373,7 @@ def chromium_asan(c):
   c.runtests.lsan_suppressions_file = Path('[CHECKOUT]', 'tools', 'lsan',
                                            'suppressions.txt')
   c.runtests.test_args.append('--test-launcher-batch-limit=1')
+  c.runtests.test_args.append('--test-launcher-print-test-stdio=always')
 
 @config_ctx(includes=['ninja', 'clang', 'goma', 'syzyasan'])
 def chromium_syzyasan(c):

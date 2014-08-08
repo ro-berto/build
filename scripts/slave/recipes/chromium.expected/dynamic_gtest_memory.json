@@ -158,7 +158,8 @@
       "--build-number=571",
       "--enable-asan",
       "browser_tests",
-      "--test-launcher-batch-limit=1"
+      "--test-launcher-batch-limit=1",
+      "--test-launcher-print-test-stdio=always"
     ],
     "name": "browser_tests"
   }
