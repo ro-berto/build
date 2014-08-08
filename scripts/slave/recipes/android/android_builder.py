@@ -99,7 +99,8 @@ def GenSteps(api):
     api.gclient.apply_config(c)
 
   api.bot_update.ensure_checkout()
-  droid.clean_local_files()
+  api.chromium_android.clean_local_files()
+
   droid.runhooks()
 
   if bot_config.get('try', False):
@@ -121,7 +122,6 @@ def GenSteps(api):
   if upload_config:
     droid.upload_build(upload_config['bucket'],
                              upload_config['path'](api))
-  droid.cleanup_build()
 
 
 def _sanitize_nonalpha(text):

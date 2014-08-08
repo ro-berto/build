@@ -95,7 +95,7 @@ def GenSteps(api):
 
   cronet = api.cronet
   cronet.init_and_sync(recipe_config, kwargs, custom, gyp_defs)
-  cronet.clean_and_build()
+  cronet.build()
 
   if builder_config['upload_package']:
     api.cronet.upload_package(kwargs['BUILD_CONFIG'])

@@ -29,9 +29,8 @@ class CronetApi(recipe_api.RecipeApi):
     droid.init_and_sync()
 
 
-  def clean_and_build(self, use_revision=True):
+  def build(self, use_revision=True):
     droid = self.m.chromium_android
-    droid.clean_local_files()
     droid.runhooks()
     droid.compile()
 

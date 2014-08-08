@@ -172,6 +172,8 @@ def GenSteps(api):
       test.set_test_spec(test_spec_result.json.output)
 
     api.chromium.cleanup_temp()
+    if api.chromium.c.TARGET_PLATFORM == 'android':
+      api.chromium_android.clean_local_files()
 
     if bot_type in ['builder', 'builder_tester']:
       compile_targets = set(bot_config.get('compile_targets', []))

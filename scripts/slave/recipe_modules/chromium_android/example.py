@@ -75,7 +75,6 @@ def GenSteps(api):
 
   api.chromium_android.init_and_sync()
 
-  api.chromium_android.envsetup()
   api.chromium_android.runhooks()
   api.chromium_android.apply_svn_patch()
   api.chromium_android.run_tree_truth()
@@ -136,7 +135,6 @@ def GenSteps(api):
   api.chromium_android.stack_tool_steps()
   if config.get('coverage', False):
     api.chromium_android.coverage_report()
-  api.chromium_android.cleanup_build()
 
   if failure:
     raise failure

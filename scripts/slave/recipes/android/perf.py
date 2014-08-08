@@ -83,6 +83,7 @@ def GenSteps(api):
 
   api.bot_update.ensure_checkout()
   api.path['checkout'] = api.path['slave_build'].join('src')
+  api.chromium_android.clean_local_files()
 
   api.chromium_android.download_build(bucket=builder['bucket'],
     path=builder['path'](api))
@@ -110,8 +111,6 @@ def GenSteps(api):
     api.chromium_android.logcat_dump()
     api.chromium_android.stack_tool_steps()
     api.chromium_android.test_report()
-
-    api.chromium_android.cleanup_build()
 
 def _sanitize_nonalpha(text):
   return ''.join(c if c.isalnum() else '_' for c in text)

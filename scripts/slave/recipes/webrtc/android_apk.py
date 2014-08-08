@@ -76,6 +76,8 @@ def GenSteps(api):
   if not bot_update_mode:
     step_result = api.gclient.checkout()
 
+  api.chromium_android.clean_local_files()
+
   # Whatever step is run right before this line needs to emit got_revision.
   update_step = step_result
   got_revision = update_step.presentation.properties['got_revision']

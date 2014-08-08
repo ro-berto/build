@@ -105,13 +105,12 @@ def GenSteps(api):
       'use Rebuild instead')
 
   api.bot_update.ensure_checkout()
-  api.chromium_android.envsetup()
+  api.chromium_android.clean_local_files()
   api.chromium_android.runhooks()
 
   if bot_config.get('try', False):
     api.tryserver.maybe_apply_issue()
 
-  api.chromium_android.clean_local_files()
   api.chromium_android.run_tree_truth()
   api.chromium_android.download_build(
       bot_config['download']['bucket'],
@@ -142,7 +141,6 @@ def GenSteps(api):
   api.chromium_android.logcat_dump(gs_bucket='chromium-android')
   api.chromium_android.stack_tool_steps()
   api.chromium_android.test_report()
-  api.chromium_android.cleanup_build()
 
 def GenTests(api):
   for mastername in BUILDERS:

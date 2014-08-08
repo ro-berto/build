@@ -84,6 +84,8 @@ def GenSteps(api):
   step_result = api.bot_update.ensure_checkout(force=True)
   got_revision = step_result.presentation.properties['got_revision']
 
+  api.chromium_android.clean_local_files()
+
   if not bot_config.get('disable_runhooks'):
     api.chromium.runhooks()
 

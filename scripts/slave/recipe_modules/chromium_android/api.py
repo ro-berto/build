@@ -10,8 +10,6 @@ from slave import recipe_api
 class AndroidApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
     super(AndroidApi, self).__init__(**kwargs)
-    self._internal_names = dict()
-    self._cleanup_list = []
 
   def get_config_defaults(self):
     return {
@@ -117,11 +115,9 @@ class AndroidApi(recipe_api.RecipeApi):
     # correctly set by gclient.checkout
     self.m.path['checkout'] = self.m.path['slave_build'].join('src')
 
-    return result
+    self.clean_local_files()
 
-  def envsetup(self):
-    # TODO(luqui): remove once no recipes call anymore
-    return []
+    return result
 
   def clean_local_files(self):
     target = self.c.BUILD_CONFIG
@@ -129,18 +125,24 @@ class AndroidApi(recipe_api.RecipeApi):
                                                     target,
                                                     'debug_info_dumps')
     test_logs = self.m.path['checkout'].join('out', target, 'test_logs')
+    build_product = self.m.path['checkout'].join('out', 'build_product.zip')
     self.m.python.inline(
         'clean local files',
         """
           import shutil, sys, os
           shutil.rmtree(sys.argv[1], True)
           shutil.rmtree(sys.argv[2], True)
-          for base, _dirs, files in os.walk(sys.argv[3]):
+          try:
+            os.remove(sys.argv[3])
+          except OSError:
+            pass
+          for base, _dirs, files in os.walk(sys.argv[4]):
             for f in files:
               if f.endswith('.pyc'):
                 os.remove(os.path.join(base, f))
         """,
-        args=[debug_info_dumps, test_logs, self.m.path['checkout']],
+        args=[debug_info_dumps, test_logs, build_product,
+              self.m.path['checkout']],
     )
 
   def run_tree_truth(self):
@@ -215,7 +217,6 @@ class AndroidApi(recipe_api.RecipeApi):
     archive_name = 'build_product.zip'
 
     zipfile = self.m.path['checkout'].join('out', archive_name)
-    self._cleanup_list.append(zipfile)
 
     self.make_zip_archive(
       'zip_build_product',
@@ -233,9 +234,7 @@ class AndroidApi(recipe_api.RecipeApi):
       )
 
   def download_build(self, bucket, path):
-    base_path = path.split('/')[-1]
-    zipfile = self.m.path['checkout'].join('out', base_path)
-    self._cleanup_list.append(zipfile)
+    zipfile = self.m.path['checkout'].join('out', 'build_product.zip')
     self.m.gsutil.download(
         name='download_build_product',
         bucket=bucket,
@@ -501,11 +500,6 @@ class AndroidApi(recipe_api.RecipeApi):
                                             '*.log')],
     )
 
-  def cleanup_build(self):
-    self.m.step(
-        'cleanup_build',
-        ['rm', '-rf'] + self._cleanup_list)
-
   def common_tests_setup_steps(self):
     self.spawn_logcat_monitor()
     self.device_status_check()
@@ -515,7 +509,6 @@ class AndroidApi(recipe_api.RecipeApi):
     self.logcat_dump()
     self.stack_tool_steps()
     self.test_report()
-    self.cleanup_build()
 
   def run_bisect_script(self, extra_src='', path_to_config=''):
     self.m.step('prepare bisect perf regression',
