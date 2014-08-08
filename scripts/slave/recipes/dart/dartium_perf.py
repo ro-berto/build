@@ -32,7 +32,6 @@ PERF_TESTS = [
   'image_decoding.image_decoding_measurement',
   'kraken',
   'octane',
-  'pica.pica',
   'spaceport',
   'sunspider',
 ]
