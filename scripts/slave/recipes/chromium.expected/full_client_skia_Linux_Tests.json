@@ -164,6 +164,7 @@
       "--run-python-script",
       "[SLAVE_BUILD]/src/tools/telemetry/run_tests",
       "--browser=release",
+      "--retry-limit=3",
       "--write-full-results-to",
       "/path/to/tmp/json"
     ],
@@ -190,6 +191,7 @@
       "--run-python-script",
       "[SLAVE_BUILD]/src/tools/perf/run_tests",
       "--browser=release",
+      "--retry-limit=3",
       "--write-full-results-to",
       "/path/to/tmp/json"
     ],

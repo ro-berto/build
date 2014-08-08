@@ -313,9 +313,11 @@ class ChromiumApi(recipe_api.RecipeApi):
     if suffix:
       name += ' (%s)' % suffix
     cmd_args = cmd_args or []
+    args = ['--browser=%s' % self.c.build_config_fs.lower(),
+            '--retry-limit=3'] + cmd_args
     return self.runtest(
         self.m.path['checkout'].join('tools', 'telemetry', 'run_tests'),
-        args=['--browser=%s' % self.c.build_config_fs.lower()] + cmd_args,
+        args=args,
         annotate='gtest',
         name=name,
         test_type='telemetry_unittests',
@@ -328,9 +330,11 @@ class ChromiumApi(recipe_api.RecipeApi):
     if suffix:
       name += ' (%s)' % suffix
     cmd_args = cmd_args or []
+    args = ['--browser=%s' % self.c.build_config_fs.lower(),
+            '--retry-limit=3'] + cmd_args
     return self.runtest(
         self.m.path['checkout'].join('tools', 'perf', 'run_tests'),
-        args=['--browser=%s' % self.c.build_config_fs.lower()] + cmd_args,
+        args=args,
         annotate='gtest',
         name=name,
         test_type='telemetry_perf_unittests',
