@@ -187,7 +187,7 @@
       "--arch",
       "ia32",
       "--testname",
-      "mjsunit fuzz-natives cctest message preparser base-unittests",
+      "mjsunit fuzz-natives cctest message preparser base-unittests compiler-unittests",
       "--quickcheck",
       "--json-test-results",
       "/path/to/tmp/json"
