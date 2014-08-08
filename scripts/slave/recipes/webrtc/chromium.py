@@ -36,11 +36,6 @@ def GenSteps(api):
   assert recipe_config, ('Cannot find recipe_config "%s" for builder "%r".' %
                          (recipe_config_name, buildername))
 
-  # The infrastructure team has recommended not to use git yet on the
-  # bots, but it's very nice to have when testing locally.
-  # To use, pass "use_git=True" as an argument to run_recipe.py.
-  use_git = api.properties.get('use_git', False)
-
   api.webrtc.set_config(recipe_config['webrtc_config'],
                         PERF_CONFIG=master_settings.get('PERF_CONFIG'),
                         **bot_config.get('webrtc_config_kwargs', {}))
@@ -50,7 +45,7 @@ def GenSteps(api):
   for c in recipe_config.get('chromium_apply_config', []):
     api.chromium.apply_config(c)
 
-  api.gclient.set_config(recipe_config['gclient_config'], GIT_MODE=use_git)
+  api.gclient.set_config(recipe_config['gclient_config'])
   for c in recipe_config.get('gclient_apply_config', []):
     api.gclient.apply_config(c)
 
