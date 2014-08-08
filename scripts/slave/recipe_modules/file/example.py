@@ -25,7 +25,7 @@ def GenSteps(api):
     api.file.write('write_%s' % name, 'tmp_file.txt', content)
     actual_content = api.file.read(
         'read_%s' % name, 'tmp_file.txt',
-        step_test_data=lambda: api.raw_io.test_api.output(content)
+        test_data=content
     )
     msg = 'expected %s but got %s' % (content, actual_content)
     assert actual_content == content, msg

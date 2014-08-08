@@ -11,8 +11,14 @@ class FileApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
     super(FileApi, self).__init__(**kwargs)
 
-  def read(self, name, path, **kwargs):
+  def read(self, name, path, test_data=None):
     """Read a file and return its contents."""
+    kwargs = {}
+    if test_data is not None:
+      kwargs['step_test_data'] = (
+          lambda: self.m.raw_io.test_api.output(test_data)
+      )
+
     return self.m.python.inline(
         name,
         """
