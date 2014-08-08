@@ -32,5 +32,12 @@
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
+  },
+  {
+    "cmd": [
+      "echo",
+      "Why hello, there."
+    ],
+    "name": "hello"
   }
 ]

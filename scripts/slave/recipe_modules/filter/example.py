@@ -9,6 +9,7 @@ DEPS = [
   'path',
   'properties',
   'raw_io',
+  'step',
 ]
 
 def GenSteps(api):
@@ -20,6 +21,7 @@ def GenSteps(api):
   assert (not api.properties['example_matching_exes'] or
           list(api.properties['example_matching_exes']) ==
           api.filter.matching_exes)
+  api.step('hello', ['echo', 'Why hello, there.'])
 
 def GenTests(api):
   # Trivial test with no exclusions and nothing matching.
@@ -76,3 +78,12 @@ def GenTests(api):
          api.override_step_data(
           'analyze',
           api.json.output({'error': 'ERROR'})))
+
+  # Analyze with python returning bad status.
+  yield (api.test('bad_retcode_doesnt_fail') +
+         api.properties(matching_exes=None) +
+         api.properties(example_matching_exes=None) +
+         api.properties(example_result=1) +
+         api.step_data(
+          'analyze',
+          retcode=-1))

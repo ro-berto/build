@@ -13,5 +13,12 @@
       "@@@STEP_LOG_LINE@excluded_files@foo.cc (regex = 'fo.*')@@@",
       "@@@STEP_LOG_END@excluded_files@@@"
     ]
+  },
+  {
+    "cmd": [
+      "echo",
+      "Why hello, there."
+    ],
+    "name": "hello"
   }
 ]
