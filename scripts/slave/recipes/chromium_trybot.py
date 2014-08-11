@@ -440,6 +440,19 @@ def filter_tests(possible_tests, needed_tests):
   return result
 
 
+def get_analyze_config(api, file_name):
+  """ Returns the dictionary used to configure certain aspects of the analyze
+  step."""
+  config_path = api.path.join('testing', 'buildbot', file_name)
+  step_result = api.json.read(
+    'read analyze test spec',
+    api.path['checkout'].join(config_path),
+    step_test_data=lambda: api.json.test_api.output({'exclusions': []})
+    )
+  step_result.presentation.step_text = 'path: %r' % config_path
+  return step_result.json.output
+
+
 add_swarming_builder('linux_chromium_rel', 'linux_chromium_rel_swarming',
                      'tryserver.chromium.linux')
 add_swarming_builder('linux_chromium_chromeos_rel',
@@ -611,10 +624,13 @@ def GenSteps(api):
     if isinstance(test_spec, dict) and should_filter_builder(
         buildername, test_spec.get('non_filter_builders', []),
         api.properties.get('root')):
+      analyze_config = get_analyze_config(
+          api, bot_config['testing'].get('analyze_config_file',
+                                         'trybot_analyze_config.json'))
       api.filter.does_patch_require_compile(
-        exclusions=test_spec.get('gtest_tests_filter_exclusions', []),
-        exes=get_test_names(gtest_tests, swarming_tests),
-        env=runhooks_env)
+          exclusions=analyze_config.get('exclusions', []),
+          exes=get_test_names(gtest_tests, swarming_tests),
+          env=runhooks_env)
       if not api.filter.result:
         return [], swarming_tests, bot_update_step
       # Patch needs compile. Filter the list of test targets.
@@ -1034,8 +1050,9 @@ def GenTests(api):
     api.test('compile_because_of_analyze_matching_exclusion') +
     props(buildername='linux_chromium_rel') +
     api.platform.name('linux') +
-    api.override_step_data('read test spec', api.json.output({
-        'gtest_tests_filter_exclusions': ['f.*'],
+    api.override_step_data('read test spec', api.json.output({})) +
+    api.override_step_data('read analyze test spec', api.json.output({
+        'exclusions': ['f.*'],
       })
     )
   )

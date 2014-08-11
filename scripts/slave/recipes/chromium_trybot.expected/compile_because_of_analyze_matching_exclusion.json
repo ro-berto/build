@@ -76,8 +76,23 @@
     "name": "read test spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: testing/buildbot/chromium_trybot.json@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]/src/testing/buildbot/trybot_analyze_config.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "read analyze test spec",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@path: 'testing/buildbot/trybot_analyze_config.json'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"gtest_tests_filter_exclusions\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"exclusions\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"f.*\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
