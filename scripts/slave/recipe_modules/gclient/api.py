@@ -185,7 +185,8 @@ class GclientApi(recipe_api.RecipeApi):
 
     for prop, custom_var in cfg.parent_got_revision_mapping.iteritems():
       val = str(self.m.properties.get(prop, ''))
-      if val:
+      # TODO(infra): Fix coverage.
+      if val:  # pragma: no cover
         # Special case for 'src', inject into solutions[0]
         if custom_var is None:
           # This is not covered because we are deprecating this feature and
