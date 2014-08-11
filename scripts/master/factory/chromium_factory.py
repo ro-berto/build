@@ -1159,15 +1159,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     return factory
 
 
-  def ChromiumV8LatestFactory(self, target='Release', clobber=False, tests=None,
-                              mode=None, slave_type='BuilderTester',
-                              options=None, compile_timeout=1200,
-                              build_url=None, project=None,
-                              factory_properties=None):
-    self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_V8_LATEST]
-    return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
-                                options, compile_timeout, build_url, project,
-                                factory_properties)
   def ChromiumV8TrunkFactory(self, target='Release', clobber=False, tests=None,
                              mode=None, slave_type='BuilderTester',
                              options=None, compile_timeout=1200,
