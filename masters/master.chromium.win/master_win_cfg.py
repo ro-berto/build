@@ -88,8 +88,7 @@ def Update(config, active_master, c):
     {'name': 'Win7 Tests (dbg)(5)'},
     {'name': 'Win7 Tests (dbg)(6)'},
     {'name': 'Interactive Tests (dbg)'},
-    # Temporary huge timeout to debug http://crbug.com/340422.
-    {'name': 'Win8 Aura', 'timeout': 86400 },
+    {'name': 'Win8 Aura'},
   ]
 
   c['builders'].extend([
