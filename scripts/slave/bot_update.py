@@ -200,6 +200,13 @@ ENABLED_BUILDERS = {
         'mac_gpu',
         'win_gpu',
     ],
+    'client.v8.branches': [
+        # Note, bot_update can't be activated on other builders of
+        # client.v8.branches, as they're all pure svn based (non-chromium).
+        'Chromium ASAN (symbolized) - trunk',
+        'Chromium ASAN - trunk - debug',
+        'Chromium Win SyzyASAN - trunk',
+    ],
 }
 ENABLED_BUILDERS.update(internal_data.get('ENABLED_BUILDERS', {}))
 
