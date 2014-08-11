@@ -17,3 +17,4 @@ class Skia(Master.Master3):
   production_host = None
   is_production_host = False
   buildbot_url = None
+  code_review_site = 'https://codereview.chromium.org'

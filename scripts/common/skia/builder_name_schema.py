@@ -142,6 +142,17 @@ def GetWaterfallBot(builder_name):
   return _WithoutSuffix(builder_name, BUILDER_NAME_SEP + TRYBOT_NAME_SUFFIX)
 
 
+def TrybotName(builder_name):
+  """Returns the name of the trybot clone of this builder.
+
+  If the given builder is a trybot, the name is returned unchanged. If not, the
+  TRYBOT_NAME_SUFFIX is appended.
+  """
+  if builder_name.endswith(TRYBOT_NAME_SUFFIX):
+    return builder_name
+  return builder_name + BUILDER_NAME_SEP + TRYBOT_NAME_SUFFIX
+
+
 def _WithoutSuffix(string, suffix):
   """ Returns a copy of string 'string', but with suffix 'suffix' removed.
   Raises ValueError if string does not end with suffix. """
