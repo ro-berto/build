@@ -52,15 +52,13 @@ def GenSteps(api):
   s = api.gclient.c.solutions
   s[0].revision = 'HEAD'
 
+  webrtc_revision = 'HEAD'
   if bot_type == 'tester':
     webrtc_revision = api.properties.get('parent_got_revision')
     assert webrtc_revision, (
        'Testers cannot be forced without providing revision information. Please'
        'select a previous build and click [Rebuild] or force a build for a '
        'Builder instead (will trigger new runs for the testers).')
-  else:
-    # For forced builds, revision is empty, in which case we sync HEAD.
-    webrtc_revision = api.properties.get('revision', 'HEAD')
 
   s[0].custom_vars['webrtc_revision'] = webrtc_revision
   # For bot_update.
