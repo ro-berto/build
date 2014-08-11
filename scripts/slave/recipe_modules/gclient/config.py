@@ -226,13 +226,11 @@ def show_v8_revision(c):
   c.parent_got_revision_mapping['parent_got_revision'] = 'got_revision'
 
 @config_ctx(includes=['chromium'])
-def v8_bleeding_edge(c):
-  c.solutions[0].revision = 'HEAD'
-  c.solutions[0].custom_vars['v8_branch'] = 'branches/bleeding_edge'
-  c.revisions['src/v8'] = 'HEAD'
-
-@config_ctx(includes=['v8_bleeding_edge'])
 def v8_bleeding_edge_git(c):
+  c.solutions[0].revision = 'HEAD'
+  # TODO(machenbach): If bot_update is activated for all v8-chromium bots
+  # and there's no gclient fallback, then the following line can be removed.
+  c.solutions[0].custom_vars['v8_branch'] = 'branches/bleeding_edge'
   c.revisions['src/v8'] = 'bleeding_edge:HEAD'
 
 @config_ctx(includes=['blink', 'v8_bleeding_edge_git'])

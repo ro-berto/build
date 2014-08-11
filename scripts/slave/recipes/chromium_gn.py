@@ -117,10 +117,12 @@ BUILDERS = {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'gclient_apply_config': ['v8_bleeding_edge', 'show_v8_revision'],
-        'set_custom_vars': [{'var': 'v8_revision',
-                             'property': 'revision',
-                             'default': 'HEAD'}]
+        'gclient_apply_config': [
+          'v8_bleeding_edge_git',
+          'chromium_lkcr',
+          'show_v8_revision',
+        ],
+        'set_component_rev': {'name': 'src/v8', 'rev_str': 'bleeding_edge:%s'},
       },
     },
   },
@@ -160,21 +162,20 @@ def GenSteps(api):
   for c in bot_config.get('gclient_apply_config', []):
     api.gclient.apply_config(c)
 
-  # Overwrite custom deps variables based on build properties.
-  # TODO: Figure out how to make this work generally for custom revisions.
-  for custom in bot_config.get('set_custom_vars', []):
-    s = api.gclient.c.solutions
-    s[0].custom_vars[custom['var']] = api.properties.get(
-        custom['property'], custom['default'])
+  if bot_config.get('set_component_rev'):
+    # If this is a component build and the main revision is e.g. blink,
+    # webrtc, or v8, the custom deps revision of this component must be
+    # dynamically set to either:
+    # (1) 'revision' from the waterfall, or
+    # (2) 'HEAD' for forced builds with unspecified 'revision'.
+    component_rev = api.properties.get('revision', 'HEAD')
+    dep = bot_config.get('set_component_rev')
+    api.gclient.c.revisions[dep['name']] = dep['rev_str'] % component_rev
 
   if api.tryserver.is_tryserver:
     api.step.auto_resolve_conflicts = True
 
-  # FIXME(machenbach): Remove this as soon as crbug.com/380053 is resolved.
-  if mastername == 'client.v8':
-    api.gclient.checkout()
-  else:
-    api.bot_update.ensure_checkout(force=True)
+  api.bot_update.ensure_checkout(force=True)
 
   api.chromium.runhooks()
 
