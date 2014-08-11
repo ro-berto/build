@@ -451,6 +451,19 @@ add_swarming_builder('mac_chromium_rel', 'mac_chromium_rel_swarming',
                      'tryserver.chromium.mac')
 
 
+def build_to_priority(build_properties):
+  """Returns the Swarming task priority for the build.
+
+  Does this by determining the build type. Lower is higher priority.
+  """
+  requester = build_properties.get('requester')
+  if requester == 'commit-bot@chromium.org':
+    # Commit queue job.
+    return 30
+  # Normal try job.
+  return 50
+
+
 def GenSteps(api):
   def parse_test_spec(test_spec, enable_swarming, should_use_test):
     """Returns a list of tests to run and additional targets to compile.
@@ -618,6 +631,8 @@ def GenSteps(api):
     # compatible with what recipes expect.
     if swarming_tests:
       api.swarming.check_client_version()
+      # Decide the task priority.
+      api.swarming.task_priority = build_to_priority(api.properties)
 
     api.chromium.runhooks(env=runhooks_env)
 
@@ -878,10 +893,42 @@ def GenTests(api):
         api.json.canned_test_output(False))
   )
 
-  # Successfully compiling, isolating and running two targets on swarming.
+  # Successfully compiling, isolating and running two targets on swarming for a
+  # commit queue job.
   yield (
-    api.test('swarming_basic') +
+    api.test('swarming_basic_cq') +
     props(buildername='linux_chromium_rel_swarming') +
+    api.platform.name('linux') +
+    api.override_step_data('read test spec', api.json.output({
+        'gtest_tests': [
+          {
+            'test': 'base_unittests',
+            'swarming': {'can_use_on_swarming_builders': True},
+          },
+          {
+            'test': 'browser_tests',
+            'swarming': {
+              'can_use_on_swarming_builders': True,
+              'shards': 5,
+              'platforms': ['linux'],
+            },
+          },
+        ],
+        'non_filter_builders': ['linux_chromium_rel_swarming'],
+      })
+    ) +
+    api.override_step_data(
+        'find isolated tests',
+        api.isolate.output_json(['base_unittests', 'browser_tests']))
+  )
+
+  # Successfully compiling, isolating and running two targets on swarming for a
+  # manual try job.
+  yield (
+    api.test('swarming_basic_try_job') +
+    props(
+        buildername='linux_chromium_rel_swarming',
+        requester='joe@chromium.org') +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
         'gtest_tests': [

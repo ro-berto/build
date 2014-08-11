@@ -133,7 +133,7 @@ class SwarmingApi(recipe_api.RecipeApi):
   @task_priority.setter
   def task_priority(self, value):
     """Sets swarming task priority for tasks triggered from the recipe."""
-    assert 0 <= value <= 1000
+    assert 0 <= value <= 255
     self._task_priority = value
 
   @staticmethod
