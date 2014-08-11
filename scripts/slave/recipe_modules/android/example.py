@@ -14,7 +14,8 @@ def GenSteps(api):
     'https://android.googlesource.com/platform/manifest')
   api.android.c.repo.branch = 'master'
 
-  api.android.sync_chromium()
+  spec = api.android.create_spec()
+  api.android.sync_chromium(spec)
 
   api.android.repo_init_steps()
   api.android.repo_sync_steps()

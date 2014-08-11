@@ -18,15 +18,18 @@ class AOSPApi(recipe_api.RecipeApi):
             self.c.build_path,
             self.c.lunch_flavor]
 
-  def sync_chromium(self, use_revision=True):
-    svn_revision = 'HEAD'
-    if use_revision and 'revision' in self.m.properties:
-      svn_revision = str(self.m.properties['revision'])
-
+  def create_spec(self):
     spec = self.m.gclient.make_config('chromium')
-    spec.solutions[0].revision = svn_revision
     spec.target_os = ['android']
 
+    svn_revision = 'HEAD'
+    if 'revision' in self.m.properties:
+      svn_revision = str(self.m.properties['revision'])
+    spec.solutions[0].revision = svn_revision
+
+    return spec
+
+  def sync_chromium(self, spec):
     result = self.m.bot_update.ensure_checkout(spec)
     if not result.json.output['did_run']:
       self.m.gclient.checkout(spec)
@@ -164,3 +167,4 @@ class AOSPApi(recipe_api.RecipeApi):
         ['%s=%s' % (k,v) for k,v in extra_properties.iteritems()])
     self.m.step('update /root/default.prop',
                        self.with_lunch_command + update_default_props_command)
+

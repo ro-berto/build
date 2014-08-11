@@ -36,7 +36,8 @@ def GenSteps(api):
   # we use the all_incompatible_directories_check_step to check nothing is
   # incompatible licenced.
 
-  droid.sync_chromium()
+  spec = droid.create_spec()
+  droid.sync_chromium(spec)
 
   droid.lastchange_steps()
 
