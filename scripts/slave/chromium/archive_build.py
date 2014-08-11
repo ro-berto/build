@@ -273,10 +273,12 @@ class StagerBase(object):
     print 'Saving revision to %s' % self.revisions_path
     Write(
         self.revisions_path,
-        ('{"chromium_revision":%s, "webkit_revision":%s, '
-         '"v8_revision":%s}') % (self._chromium_revision,
-                                 self._webkit_revision,
-                                 self._v8_revision))
+        simplejson.dumps({
+            'chromium_revision': self._chromium_revision,
+            'webkit_revision': self._webkit_revision,
+            'v8_revision': self._v8_revision,
+        })
+    )
 
   def GetLastBuildRevision(self):
     """Reads the last staged build revision from last_change_file.
