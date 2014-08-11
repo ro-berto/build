@@ -254,5 +254,59 @@ SPEC = {
         'platform': 'linux',
       },
     },
+    'Print Preview Linux': {
+      'recipe_config': 'chromium',
+      'GYP_DEFINES': {
+        'component': 'shared_library',
+      },
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_PLATFORM': 'linux',
+        'TARGET_BITS': 64,
+      },
+      'tests': [
+        steps.PrintPreviewTests(),
+      ],
+      'bot_type': 'builder_tester',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+    'Print Preview Mac': {
+      'recipe_config': 'chromium',
+      'GYP_DEFINES': {
+        'component': 'shared_library',
+      },
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_PLATFORM': 'mac',
+        'TARGET_BITS': 64,
+      },
+      'tests': [
+        steps.PrintPreviewTests(),
+      ],
+      'bot_type': 'builder_tester',
+      'testing': {
+        'platform': 'mac',
+      },
+    },
+    'Print Preview Win': {
+      'recipe_config': 'chromium',
+      'GYP_DEFINES': {
+        'component': 'shared_library',
+      },
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_PLATFORM': 'win',
+        'TARGET_BITS': 64,
+      },
+      'tests': [
+        steps.PrintPreviewTests(),
+      ],
+      'bot_type': 'builder_tester',
+      'testing': {
+        'platform': 'win',
+      },
+    },
   },
 }

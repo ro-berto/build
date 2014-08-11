@@ -501,6 +501,27 @@ class MojoPythonTests(PythonBasedTest):  # pylint: disable=W0232
                       **kwargs)
 
 
+class PrintPreviewTests(PythonBasedTest):  # pylint: disable=W032
+  name = 'print_preview_tests'
+
+  def run_step(self, api, suffix, cmd_args, **kwargs):
+    platform_arg = '.'.join(['browser_test',
+        api.platform.normalize_platform_name(api.platform.name)])
+    args = list(cmd_args)
+    path = api.path['checkout'].join(
+        'webkit', 'layout_tests', 'tools', 'run_webkit_tests.py')
+    args.extend(['--platform', platform_arg])
+
+    return api.python(self._step_name(suffix),
+                      path,
+                      args,
+                      **kwargs)
+
+  @staticmethod
+  def compile_targets(_):
+    return ['browser_tests', 'blink_tests']
+
+
 class TelemetryUnitTests(PythonBasedTest):  # pylint: disable=W0232
   name = 'telemetry_unittests'
 
