@@ -15,13 +15,8 @@ DEPS = [
 
 BUILDERS = {
   'tryserver.chromium.linux': {
-    'android_dbg_triggered_tests_recipe': {
+    'android_dbg_tests_recipe': {
       'config': 'main_builder',
-      'download': {
-        'bucket': 'chromium-android',
-        'path': lambda api: ('android_try_dbg_recipe/full-build-linux_%s.zip'
-                             % api.properties['parent_buildnumber']),
-      },
       'instrumentation_tests': [
         {
           'test': 'MojoTest',
@@ -95,14 +90,10 @@ def GenSteps(api):
       BUILD_CONFIG='Debug',
       REPO_NAME='src',
       REPO_URL='svn://svn-mirror.golo.chromium.org/chrome/trunk/src')
-  api.chromium_android.c.set_val(bot_config.get('custom', {}))
+
   api.gclient.set_config('chromium')
   api.gclient.apply_config('android')
   api.gclient.apply_config('chrome_internal')
-
-  assert 'parent_buildername' in api.properties, (
-      'No parent_buildername in properties.  If you forced this build, please '
-      'use Rebuild instead')
 
   api.bot_update.ensure_checkout()
   api.chromium_android.clean_local_files()
@@ -112,9 +103,7 @@ def GenSteps(api):
     api.tryserver.maybe_apply_issue()
 
   api.chromium_android.run_tree_truth()
-  api.chromium_android.download_build(
-      bot_config['download']['bucket'],
-      bot_config['download']['path'](api))
+  api.chromium_android.compile()
 
   api.adb.root_devices()
 

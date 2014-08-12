@@ -7,7 +7,7 @@
       "--master",
       "tryserver.chromium.linux",
       "--builder",
-      "android_dbg_triggered_tests_recipe",
+      "android_dbg_tests_recipe",
       "--slave",
       "slavename",
       "--spec",
@@ -112,23 +112,23 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
-      "cp",
-      "gs://chromium-android/android_try_dbg_recipe/full-build-linux_1729.zip",
-      "[SLAVE_BUILD]/src/out/build_product.zip"
+      "[BUILD]/scripts/slave/compile.py",
+      "--target",
+      "Debug",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
+      "--build-tool",
+      "ninja",
+      "--compiler",
+      "goma",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "--"
     ],
-    "name": "gsutil download_build_product"
-  },
-  {
-    "cmd": [
-      "unzip",
-      "-o",
-      "[SLAVE_BUILD]/src/out/build_product.zip"
-    ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "unzip_build_product"
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "compile"
   },
   {
     "cmd": [
@@ -584,11 +584,11 @@
       "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
       "cp",
       "[SLAVE_BUILD]/src/out/Debug/full_log",
-      "gs://chromium-android/logcat_dumps/android_dbg_triggered_tests_recipe/1337"
+      "gs://chromium-android/logcat_dumps/android_dbg_tests_recipe/1337"
     ],
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/android_dbg_triggered_tests_recipe/1337@@@"
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/android_dbg_tests_recipe/1337@@@"
     ]
   },
   {
