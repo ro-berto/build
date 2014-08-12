@@ -82,16 +82,14 @@ class SwarmingClientApi(recipe_api.RecipeApi):
 
     if script not in self._script_version:
       try:
-        step_result = self.m.python(
+        self.m.python(
           name='%s --version' % script,
           script=self.path.join(script),
           args=['--version'],
           stdout=self.m.raw_io.output(),
           step_test_data=step_test_data_cb)
-      except self.m.step.StepFailure as f:
-        step_result = f.result
-        raise
       finally:
+        step_result = self.m.step.active_result
         version = step_result.stdout.strip()
         step_result.presentation.step_text = version
         self._script_version[script] = tuple(map(int, version.split('.')))

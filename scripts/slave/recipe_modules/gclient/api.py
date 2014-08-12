@@ -131,7 +131,7 @@ class GclientApi(recipe_api.RecipeApi):
       self.test_api.output_json(test_data_paths, cfg.GIT_MODE))
     try:
       if not cfg.GIT_MODE:
-        result = self('sync', ['sync', '--nohooks', '--delete_unversioned_trees',
+        self('sync', ['sync', '--nohooks', '--delete_unversioned_trees',
                    '--force', '--verbose'] +
                    revisions + ['--output-json', self.m.json.output()],
                    step_test_data=step_test_data,
@@ -151,17 +151,15 @@ class GclientApi(recipe_api.RecipeApi):
         # git-based builds (e.g. maybe some combination of 'git reset/clean -fx'
         # and removing the 'out' directory).
         j = '-j2' if self.m.platform.is_win else '-j8'
-        result = self('sync',
+        self('sync',
                    ['sync', '--verbose', '--with_branch_heads', '--nohooks', j,
                     '--reset', '--delete_unversioned_trees', '--force',
                     '--upstream', '--no-nag-max'] + revisions +
                    ['--output-json', self.m.json.output()],
                    step_test_data=step_test_data,
                    **kwargs)
-    except self.m.step.StepFailure as f:
-      result = f.result
-      raise
     finally:
+      result = self.m.step.active_result
       data = result.json.output
       for path, info in data['solutions'].iteritems():
         # gclient json paths always end with a slash
