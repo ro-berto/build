@@ -54,15 +54,18 @@ CHROMIUM_GIT_HOST = 'https://chromium.googlesource.com'
 CHROMIUM_SRC_URL = CHROMIUM_GIT_HOST + '/chromium/src.git'
 
 # Official builds use buildspecs, so this is a special case.
-BUILDSPEC_RE = r'^/chrome-internal/trunk/tools/buildspec/build/(.*)$'
+BUILDSPEC_RE = (r'^/chrome-internal/trunk/tools/buildspec/'
+                '(build|branches|releases)/(.*)$')
 GIT_BUILDSPEC_PATH = ('https://chrome-internal.googlesource.com/chrome/tools/'
                       'buildspec')
 
-# This is the repository that the buildspecs2git cron job mirrors
-# all buildspecs into. When we see an svn buildspec, we rely on the
-# buildspecs2git cron job to produce the git version of the buildspec.
+# This is the git mirror of the buildspecs repository. We could rely on the svn
+# checkout, now that the git buildspecs are checked in alongside the svn
+# buildspecs, but we're going to want to pull all the buildspecs from here
+# eventually anyhow, and there's already some logic to pull from git (for the
+# old git_buildspecs.git repo), so just stick with that.
 GIT_BUILDSPEC_REPO = (
-    'https://chrome-internal.googlesource.com/chrome/tools/git_buildspecs')
+    'https://chrome-internal.googlesource.com/chrome/tools/buildspec')
 
 # Copied from scripts/recipes/chromium.py.
 GOT_REVISION_MAPPINGS = {
@@ -510,8 +513,10 @@ def solutions_to_git(input_solutions):
     buildspec_m = re.match(BUILDSPEC_RE, parsed_path)
     if first_solution and buildspec_m:
       solution['url'] = GIT_BUILDSPEC_PATH
-      buildspec_name = buildspec_m.group(1)
-      solution['deps_file'] = path.join('build', buildspec_name, '.DEPS.git')
+      buildspec_path = buildspec_m.group(1)
+      buildspec_name = buildspec_m.group(2)
+      solution['deps_file'] = path.join(buildspec_path, buildspec_name,
+                                        '.DEPS.git')
     elif parsed_path in RECOGNIZED_PATHS:
       solution['url'] = RECOGNIZED_PATHS[parsed_path]
     elif parsed_url.scheme == 'https' and 'googlesource' in parsed_url.netloc:
@@ -692,17 +697,19 @@ def get_git_buildspec(version):
   TOTAL_TRIES = 30
   for tries in range(TOTAL_TRIES):
     try:
-      return git('show', 'master:%s/DEPS' % version, cwd=mirror_dir)
+      return git('show', 'master:releases/%s/.DEPS.git' % version,
+                 cwd=mirror_dir)
     except SubprocessFailed:
       if tries < TOTAL_TRIES - 1:
-        print 'Buildspec for %s not committed yet, waiting 5 seconds...'
+        print 'Git Buildspec for %s not committed yet, waiting 5 seconds...'
         time.sleep(5)
         git('cache', 'populate', '--ignore_locks', '-v', '--cache-dir',
             CACHE_DIR, GIT_BUILDSPEC_REPO)
       else:
-        print >> sys.stderr, '%s not found, ' % version,
-        print >> sys.stderr, 'the buildspec2git cron job probably is not ',
-        print >> sys.stderr, 'running correctly, please contact mmoss@.'
+        print >> sys.stderr, '%s .DEPS.git not found, ' % version
+        print >> sys.stderr, 'the publish_deps.py "privategit" step in the ',
+        print >> sys.stderr, 'Chrome release process might have failed. ',
+        print >> sys.stderr, 'Please contact chrome-re@google.com.'
         raise
 
 
