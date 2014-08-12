@@ -106,6 +106,9 @@ class DefaultFlavorUtils(base_flavor.BaseFlavorUtils):
   copying files between the host and Android device, as well as the
   'step' function, so that commands may be run through ADB.
   """
+  def __init__(self, *args, **kwargs):
+    super(DefaultFlavorUtils, self).__init__(*args, **kwargs)
+    self._chrome_path = None
 
   def step(self, name, cmd, **kwargs):
     """Wrapper for the Step API; runs a step as appropriate for this flavor."""
@@ -119,6 +122,37 @@ class DefaultFlavorUtils(base_flavor.BaseFlavorUtils):
       new_cmd = [path_to_app]
     new_cmd.extend(cmd[1:])
     return self._skia_api.m.step(name, new_cmd, **kwargs)
+
+  @property
+  def chrome_path(self):
+    """Path to a checkout of Chrome on this machine."""
+    if self._chrome_path is None:
+      test_data = lambda: self._skia_api.m.raw_io.test_api.output(
+          '/home/chrome-bot/src')
+      self._chrome_path = self._skia_api.m.python.inline(
+          'get CHROME_PATH',
+          """
+          import os
+          import sys
+          with open(sys.argv[1], 'w') as f:
+            f.write(os.path.join(os.path.expanduser('~'), 'src'))
+          """,
+          args=[self._skia_api.m.raw_io.output()],
+          step_test_data=test_data
+      ).raw_io.output
+    return self._chrome_path
+
+  def compile(self, target):
+    """Build the given target."""
+    env = {}
+    # The CHROME_PATH environment variable is needed for builders that use
+    # toolchains downloaded by Chrome.
+    env['CHROME_PATH'] = self.chrome_path
+    env.update(self._skia_api.c.gyp_env.as_jsonish())
+    make_cmd = 'make.bat' if self._skia_api.m.platform.is_win else 'make'
+    cmd = [make_cmd, target, 'BUILDTYPE=%s' % self._skia_api.c.configuration]
+    self._skia_api.m.step('build %s' % target, cmd, env=env,
+                          cwd=self._skia_api.m.path['checkout'])
 
   def device_path_join(self, *args):
     """Like os.path.join(), but for paths on a connected device."""

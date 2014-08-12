@@ -7,7 +7,6 @@ from slave.recipe_config import Dict, Set, Single, Static
 from slave.recipe_config_types import Path
 
 from common.skia import builder_name_schema
-from . import base_flavor
 
 
 CONFIG_DEBUG = 'Debug'

@@ -40,21 +40,28 @@
     "cmd": [
       "python",
       "-u",
-      "gyp_skia"
+      "\nimport os\nimport sys\nwith open(sys.argv[1], 'w') as f:\n  f.write(os.path.join(os.path.expanduser('~'), 'src'))\n",
+      "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
-    "env": {
-      "GYP_DEFINES": "skia_arch_width=32 skia_warnings_as_errors=0"
-    },
-    "name": "gyp_skia"
+    "name": "get CHROME_PATH",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@with open(sys.argv[1], 'w') as f:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  f.write(os.path.join(os.path.expanduser('~'), 'src'))@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
   },
   {
     "cmd": [
       "make",
-      "most"
+      "most",
+      "BUILDTYPE=Release"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
+      "CHROME_PATH": "/home/chrome-bot/src",
       "GYP_DEFINES": "skia_arch_width=32 skia_warnings_as_errors=0"
     },
     "name": "build most"

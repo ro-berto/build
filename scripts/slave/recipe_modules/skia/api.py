@@ -89,16 +89,8 @@ class SkiaApi(recipe_api.RecipeApi):
 
   def compile_steps(self, clobber=False):
     """Run the steps to build Skia."""
-
-    # Run GYP to generate project files.
-    env = dict(self.c.gyp_env.as_jsonish())
-    self.m.python(name='gyp_skia', script='gyp_skia', env=env,
-                  cwd=self.m.path['checkout'])
-
-    # Compile each target.
     for target in self.c.build_targets:
-      self.m.step('build %s' % target, ['make', target],
-                  cwd=self.m.path['checkout'], env=env)
+      self.flavor.compile(target)
 
   def common_steps(self):
     """Steps run by both Test and Perf bots."""
