@@ -163,7 +163,6 @@ def AddGeneralGClientProperties(factory_properties):
   # Don't set branch part on the --revision flag - we don't use standard
   # chromium layout and hence this is doing the wrong thing.
   factory_properties['no_gclient_branch'] = True
-  factory_properties['no_gclient_revision'] = True
 
 class DartFactory(gclient_factory.GClientFactory):
   """Encapsulates data and methods common to the dart master.cfg files."""
