@@ -620,6 +620,8 @@ def RemoveTempDirContents():
   whitelist = set()
   for i in sys.argv:
     try:
+      if '=' in i:
+        i = i.split('=')[1]
       low = os.path.abspath(i.lower())
       if low.startswith(temp_dir.lower()):
         whitelist.add(low)
