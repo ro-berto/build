@@ -594,7 +594,7 @@ class V8Api(recipe_api.RecipeApi):
             self._test_data.get('wrong_results', False))
 
     try:
-      self.m.python(
+      step_result = self.m.python(
         name,
         self.m.path['build'].join('scripts', 'slave', 'v8', 'v8testing.py'),
         full_args,
@@ -603,9 +603,11 @@ class V8Api(recipe_api.RecipeApi):
         step_test_data=step_test_data,
         **kwargs
       )
+    except self.m.step.StepFailure as f:
+      step_result = f.result
+      raise f
     finally:
       # Show test results independent of the step result.
-      step_result = self.m.step.active_result
       if self.c.testing.show_test_results:
         r = step_result.json.output
         # The output is expected to be a list of architecture dicts that
@@ -677,15 +679,17 @@ class V8Api(recipe_api.RecipeApi):
           self._test_data.get('perf_failures', False))
 
       try:
-        self.m.python(
+        results_mapping[t][name] = step_result = self.m.python(
           name,
           self.m.path['checkout'].join('tools', 'run_benchmarks.py'),
           full_args,
           cwd=self.m.path['checkout'],
           step_test_data=step_test_data,
         )
+      except self.m.step.StepFailure as f:
+        results_mapping[t][name] = step_result = f.result
+        raise f
       finally:
-        results_mapping[t][name] = step_result = self.m.step.active_result
         errors = step_result.json.output['errors']
         if errors:
           step_result.presentation.logs['Errors'] = errors
