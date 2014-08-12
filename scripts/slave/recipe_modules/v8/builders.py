@@ -76,12 +76,18 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
-        'tests': [
-          'v8testing',
-          'benchmarks',
-          'test262_variants',
-          'mozilla',
-        ],
+        'tests': ['v8testing', 'benchmarks', 'mozilla'],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - test262 - debug': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux - debug builder',
+        'build_gs_archive': 'linux_dbg_archive',
+        'tests': ['test262_variants'],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - shared': {
