@@ -58,7 +58,9 @@ def GenTests(api):
         api.properties.generic(mastername=mastername,
                                buildername=buildername,
                                parent_buildername=bot_config.get(
-                                   'parent_buildername')) +
+                                   'parent_buildername'),
+                               got_revision='250000',
+                               got_webkit_revision='150000') +
         api.platform(bot_config['testing']['platform'],
                      bot_config.get(
                          'chromium_config_kwargs', {}).get('TARGET_BITS', 64))
@@ -80,7 +82,9 @@ def GenTests(api):
     api.test('dynamic_gtest') +
     api.properties.generic(mastername='chromium.linux',
                            buildername='Linux Tests',
-                           parent_buildername='Linux Builder') +
+                           parent_buildername='Linux Builder',
+                           got_revision='250000',
+                           got_webkit_revision='150000') +
     api.platform('linux', 64) +
     api.override_step_data('read test spec', api.json.output({
       'Linux Tests': {
@@ -96,7 +100,9 @@ def GenTests(api):
     api.test('dynamic_gtest_win') +
     api.properties.generic(mastername='chromium.win',
                            buildername='Win7 Tests (1)',
-                           parent_buildername='Win Builder') +
+                           parent_buildername='Win Builder',
+                           got_revision='250000',
+                           got_webkit_revision='150000') +
     api.platform('win', 64) +
     api.override_step_data('read test spec', api.json.output({
       'Win7 Tests (1)': {
@@ -187,7 +193,9 @@ def GenTests(api):
     api.properties.generic(mastername='chromium.linux',
                            buildername='Linux Tests',
                            parent_buildername='Linux Builder',
-                           buildnumber=0) +
+                           buildnumber=0,
+                           got_revision='250000',
+                           got_webkit_revision='150000') +
     api.platform('linux', 64) +
     api.override_step_data('read test spec', api.json.output({
       'Linux Tests': {
@@ -232,7 +240,9 @@ def GenTests(api):
     api.test('one_failure_keeps_going_dynamic_tests') +
     api.properties.generic(mastername='chromium.linux',
                            buildername='Linux Tests',
-                           parent_buildername='Linux Builder') +
+                           parent_buildername='Linux Builder',
+                           got_revision='250000',
+                           got_webkit_revision='150000') +
     api.platform('linux', 64) +
     api.override_step_data('read test spec', api.json.output({
       'Linux Tests': {

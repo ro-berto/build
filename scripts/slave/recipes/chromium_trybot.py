@@ -756,6 +756,8 @@ def GenTests(api):
   def props(config='Release', mastername='tryserver.chromium.linux',
             buildername='linux_chromium_rel', **kwargs):
     kwargs.setdefault('revision', None)
+    kwargs.setdefault('got_revision', '250000')
+    kwargs.setdefault('got_webkit_revision', '150000')
     return api.properties.tryserver(
       build_config=config,
       mastername=mastername,
