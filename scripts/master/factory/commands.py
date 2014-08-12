@@ -58,7 +58,6 @@ def CreateTriggerStep(trigger_name, trigger_set_properties=None,
       'parent_buildnumber': WithProperties('%(buildnumber:-)s'),
       'parent_build_archive_url': WithProperties('%(build_archive_url:-)s'),
       'parent_branch': WithProperties('%(branch:-)s'),
-      'parent_git_number': WithProperties('%s(git_number:-)s'),
       'parent_got_revision': WithProperties('%(got_revision:-)s'),
       'parent_got_v8_revision': WithProperties('%(got_v8_revision:-)s'),
       'parent_got_webkit_revision':
