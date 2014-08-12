@@ -7,6 +7,7 @@
 
 import cStringIO
 import codecs
+import collections
 import copy
 import ctypes
 import json
@@ -54,10 +55,18 @@ CHROMIUM_GIT_HOST = 'https://chromium.googlesource.com'
 CHROMIUM_SRC_URL = CHROMIUM_GIT_HOST + '/chromium/src.git'
 
 # Official builds use buildspecs, so this is a special case.
+BUILDSPEC_TYPE = collections.namedtuple('buildspec',
+    ('container', 'version'))
 BUILDSPEC_RE = (r'^/chrome-internal/trunk/tools/buildspec/'
-                '(build|branches|releases)/(.*)$')
+                 '(build|branches|releases)/(.+)$')
 GIT_BUILDSPEC_PATH = ('https://chrome-internal.googlesource.com/chrome/tools/'
                       'buildspec')
+
+BUILDSPEC_COMMIT_RE = (
+    re.compile(r'Buildspec for.*version (\d+\.\d+\.\d+\.\d+)'),
+    re.compile(r'Create (\d+\.\d+\.\d+\.\d+) buildspec'),
+    re.compile(r'Auto-converted (\d+\.\d+\.\d+\.\d+) buildspec to git'),
+)
 
 # This is the git mirror of the buildspecs repository. We could rely on the svn
 # checkout, now that the git buildspecs are checked in alongside the svn
@@ -503,7 +512,7 @@ def solutions_to_git(input_solutions):
   assert input_solutions
   solutions = copy.deepcopy(input_solutions)
   first_solution = True
-  buildspec_name = False
+  buildspec = None
   for solution in solutions:
     original_url = solution['url']
     parsed_url = urlparse.urlparse(original_url)
@@ -513,9 +522,11 @@ def solutions_to_git(input_solutions):
     buildspec_m = re.match(BUILDSPEC_RE, parsed_path)
     if first_solution and buildspec_m:
       solution['url'] = GIT_BUILDSPEC_PATH
-      buildspec_path = buildspec_m.group(1)
-      buildspec_name = buildspec_m.group(2)
-      solution['deps_file'] = path.join(buildspec_path, buildspec_name,
+      buildspec = BUILDSPEC_TYPE(
+          container=buildspec_m.group(1),
+          version=buildspec_m.group(2),
+      )
+      solution['deps_file'] = path.join(buildspec.container, buildspec.version,
                                         '.DEPS.git')
     elif parsed_path in RECOGNIZED_PATHS:
       solution['url'] = RECOGNIZED_PATHS[parsed_path]
@@ -526,7 +537,7 @@ def solutions_to_git(input_solutions):
       print 'Warning: %s' % (warnings[-1],)
 
     # Point .DEPS.git is the git version of the DEPS file.
-    if not FLAG_DAY and not buildspec_name:
+    if not FLAG_DAY and not buildspec:
       solution['deps_file'] = '.DEPS.git'
 
     # Strip out deps containing $$V8_REV$$, etc.
@@ -550,7 +561,7 @@ def solutions_to_git(input_solutions):
       print 'Removing safesync url %s from %s' % (solution['safesync_url'],
                                                   parsed_path)
       del solution['safesync_url']
-  return solutions, root, buildspec_name, warnings
+  return solutions, root, buildspec, warnings
 
 
 def remove(target):
@@ -593,7 +604,7 @@ def gclient_configure(solutions, target_os, target_os_only):
     f.write(get_gclient_spec(solutions, target_os, target_os_only))
 
 
-def gclient_sync(buildspec_name, shallow):
+def gclient_sync(buildspec, shallow):
   # We just need to allocate a filename.
   fd, gclient_output_file = tempfile.mkstemp(suffix='.json')
   os.close(fd)
@@ -601,7 +612,7 @@ def gclient_sync(buildspec_name, shallow):
   cmd = [gclient_bin, 'sync', '--verbose', '--reset', '--force',
          '--ignore_locks', '--output-json', gclient_output_file ,
          '--nohooks', '--noprehooks']
-  if buildspec_name:
+  if buildspec:
     cmd += ['--with_branch_heads']
   if shallow:
     cmd += ['--shallow']
@@ -683,7 +694,7 @@ def need_to_run_deps2git(repo_base, deps_file, deps_git_file):
   return last_known_deps_ref != merge_base_ref
 
 
-def get_git_buildspec(version):
+def get_git_buildspec(buildspec_path, buildspec_version):
   """Get the git buildspec of a version, return its contents.
 
   The contents are returned instead of the file so that we can check the
@@ -697,8 +708,11 @@ def get_git_buildspec(version):
   TOTAL_TRIES = 30
   for tries in range(TOTAL_TRIES):
     try:
-      return git('show', 'master:releases/%s/.DEPS.git' % version,
-                 cwd=mirror_dir)
+      return git(
+          'show',
+          'master:%s/%s/.DEPS.git' % (buildspec_path, buildspec_version),
+          cwd=mirror_dir
+      )
     except SubprocessFailed:
       if tries < TOTAL_TRIES - 1:
         print 'Git Buildspec for %s not committed yet, waiting 5 seconds...'
@@ -706,14 +720,15 @@ def get_git_buildspec(version):
         git('cache', 'populate', '--ignore_locks', '-v', '--cache-dir',
             CACHE_DIR, GIT_BUILDSPEC_REPO)
       else:
-        print >> sys.stderr, '%s .DEPS.git not found, ' % version
+        print >> sys.stderr, '%s/%s .DEPS.git not found, ' % (
+            buildspec_path, buildspec_version)
         print >> sys.stderr, 'the publish_deps.py "privategit" step in the ',
         print >> sys.stderr, 'Chrome release process might have failed. ',
         print >> sys.stderr, 'Please contact chrome-re@google.com.'
         raise
 
 
-def buildspecs2git(sln_dir, buildspec_name):
+def buildspecs2git(sln_dir, buildspec):
   """This is like deps2git, but for buildspecs.
 
   Because buildspecs are vastly different than normal DEPS files, we cannot
@@ -727,12 +742,27 @@ def buildspecs2git(sln_dir, buildspec_name):
   committed into the git_buildspecs repository.
   """
   repo_base = path.join(os.getcwd(), sln_dir)
-  deps_file = path.join(repo_base, 'build', buildspec_name, 'DEPS')
-  deps_git_file = path.join(repo_base, 'build', buildspec_name, '.DEPS.git')
+  deps_file = path.join(repo_base, buildspec.container, buildspec.version,
+                        'DEPS')
+  deps_git_file = path.join(repo_base, buildspec.container, buildspec.version,
+                            '.DEPS.git')
   deps_log = git('log', '-1', '--format=%B', deps_file, cwd=repo_base)
-  m = re.search(r'Buildspec for.*version (\d+\.\d+\.\d+\.\d+)', deps_log)
-  version = m.group(1)
-  git_buildspec = get_git_buildspec(version)
+
+  # Identify the path from the container name
+  if buildspec.container == 'branches':
+    # Path to the buildspec is: .../branches/VERSION
+    buildspec_version = buildspec.version
+  else:
+    # Scan through known commit headers for the number
+    for buildspec_re in BUILDSPEC_COMMIT_RE:
+      m = buildspec_re.search(deps_log)
+      if m:
+        break
+    if not m:
+      raise ValueError("Unable to parse buildspec from:\n%s" % (deps_log,))
+    buildspec_version = m.group(1)
+
+  git_buildspec = get_git_buildspec(buildspec.container, buildspec_version)
   with open(deps_git_file, 'wb') as f:
     f.write(git_buildspec)
 
@@ -1097,7 +1127,7 @@ def ensure_deps_revisions(deps_url_mapping, solutions, revisions):
 
 def ensure_checkout(solutions, revisions, first_sln, target_os, target_os_only,
                     patch_root, issue, patchset, patch_url, rietveld_server,
-                    revision_mapping, buildspec_name, gyp_env, shallow):
+                    revision_mapping, buildspec, gyp_env, shallow):
   # Get a checkout of each solution, without DEPS or hooks.
   # Calling git directly because there is no way to run Gclient without
   # invoking DEPS.
@@ -1118,8 +1148,8 @@ def ensure_checkout(solutions, revisions, first_sln, target_os, target_os_only,
                             revision_mapping, git_ref, whitelist=['DEPS'])
       break
 
-  if buildspec_name:
-    buildspecs2git(first_sln, buildspec_name)
+  if buildspec:
+    buildspecs2git(first_sln, buildspec)
   else:
     # Run deps2git if there is a DEPS change after the last .DEPS.git commit.
     for solution in solutions:
@@ -1129,15 +1159,15 @@ def ensure_checkout(solutions, revisions, first_sln, target_os, target_os_only,
   gclient_configure(solutions, target_os, target_os_only)
 
   # Let gclient do the DEPS syncing.
-  gclient_output = gclient_sync(buildspec_name, shallow)
+  gclient_output = gclient_sync(buildspec, shallow)
 
   # Now that gclient_sync has finished, we should revert any .DEPS.git so that
   # presubmit doesn't complain about it being modified.
-  if (not buildspec_name and
+  if (not buildspec and
       git('ls-files', '.DEPS.git', cwd=first_sln).strip()):
     git('checkout', 'HEAD', '--', '.DEPS.git', cwd=first_sln)
 
-  if buildspec_name:
+  if buildspec:
     # Run gclient runhooks if we're on an official builder.
     # TODO(hinoka): Remove this when the official builders run their own
     #               runhooks step.
@@ -1455,7 +1485,7 @@ def prepare(options, git_slns, active):
   return revisions, step_text
 
 
-def checkout(options, git_slns, specs, buildspec_name, master,
+def checkout(options, git_slns, specs, buildspec, master,
              svn_root, revisions, step_text):
   first_sln = git_slns[0]['name']
   dir_names = [sln.get('name') for sln in git_slns if 'name' in sln]
@@ -1482,7 +1512,7 @@ def checkout(options, git_slns, specs, buildspec_name, master,
           revision_mapping=options.revision_mapping,
 
           # For official builders.
-          buildspec_name=buildspec_name,
+          buildspec=buildspec,
           gyp_env=options.gyp_env,
 
           # Finally, extra configurations such as shallowness of the clone.
@@ -1571,7 +1601,7 @@ def main():
   specs = {}
   exec(options.specs, specs)
   svn_solutions = specs.get('solutions', [])
-  git_slns, svn_root, buildspec_name, warnings = solutions_to_git(svn_solutions)
+  git_slns, svn_root, buildspec, warnings = solutions_to_git(svn_solutions)
   solutions_printer(git_slns)
 
   # Lets send some telemetry data about bot_update here. This returns a thread
@@ -1596,7 +1626,7 @@ def main():
     # Dun dun dun, the main part of bot_update.
     revisions, step_text = prepare(options, git_slns, active)
     gclient_output, got_revisions = checkout(
-        options, git_slns, specs, buildspec_name, master, svn_root, revisions,
+        options, git_slns, specs, buildspec, master, svn_root, revisions,
         step_text)
 
   except Inactive:
