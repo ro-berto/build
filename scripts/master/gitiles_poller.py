@@ -93,7 +93,7 @@ class GitilesPoller(PollingChangeSource):
   def __init__(
       self, repo_url, branches=None, pollInterval=10*60, category=None,
       project=None, revlinktmpl=None, agent=None, svn_mode=False,
-      change_filter=None):
+      svn_branch=None, change_filter=None):
     """Args:
 
     repo_url: URL of the gitiles service to be polled.
@@ -127,6 +127,7 @@ class GitilesPoller(PollingChangeSource):
     self.project = project
     self.revlinktmpl = revlinktmpl
     self.svn_mode = svn_mode
+    self.svn_branch = svn_branch or project
     if agent is None:
       agent = GerritAgent('%s://%s' % (u.scheme, u.netloc), read_only=True)
     self.agent = agent
@@ -204,7 +205,7 @@ class GitilesPoller(PollingChangeSource):
         if m:
           repo_url = m.group(1)
           revision = m.group(2)
-          branch = self.project
+          branch = self.svn_branch
           break
       if revision is None:
         log.err(
