@@ -8,6 +8,7 @@ import re
 import buildbot
 from buildbot import interfaces, util
 from buildbot.buildslave import BuildSlave
+from buildbot.interfaces import IRenderable
 from buildbot.status import mail
 from buildbot.status.builder import BuildStatus
 from buildbot.status.status_push import HttpStatusPush
@@ -16,6 +17,7 @@ from zope.interface import implements
 
 from master.autoreboot_buildslave import AutoRebootBuildSlave
 from buildbot.status.web.authz import Authz
+from buildbot.status.web.baseweb import WebStatus
 from buildbot.status.web.baseweb import WebStatus
 
 import master.chromium_status_bb8 as chromium_status
@@ -449,3 +451,56 @@ def Partition(item_tuples, num_partitions):
   for item in sorted(item_tuples, reverse=True):
     GetLowestSumPartition().append(item)
   return sorted([sorted([name for _, name in p]) for p in partitions])
+
+
+class ConditionalProperty(util.ComparableMixin):
+  """A IRenderable that chooses between IRenderable options given a condition.
+
+  A typical 'WithProperties' will be rendered as a string and included as an
+  argument. If it's an empty string, it will become a position argment, "".
+
+  This property wraps two IRenderables (which can be 'WithProperties' instances)
+  and chooses between them based on a condition. This allows the full exclusion
+  and tailoring of property output.
+
+  For example, to optionally add a parameter, one can use the following recipe:
+  args.append(
+      ConditionalProperty(
+          'author_name',
+          WithProperties('--author-name=%(author_name)s'),
+          [],
+      )
+  )
+
+  In this example, if 'author_name' is defined as a property, the first
+  IRenderable (WithProperties) will be rendered and the '--author-name' argument
+  will be inclided. Otherwise, the second will be rendered. Since 'step'
+  flattens the command list, returning '[]' will result in the argument being
+  completely omitted.
+
+  If a more complex condition is required, a callable function may be used
+  as the 'prop' argument. In this case, the function will be passed a single
+  parameter, the build object, and is expected to return True if the 'present'
+  IRenderable should be used and 'False' if the 'absent' one should be used.
+  """
+  implements(IRenderable)
+  compare_attrs = ('prop', 'present', 'absent')
+
+  def __init__(self, condition, present, absent):
+    if not callable(condition):
+      self.prop = condition
+      condition = lambda build: (self.prop in build.getProperties())
+    else:
+      self.prop = None
+    self.condition = condition
+    self.present = present
+    self.absent = absent
+
+  def getRenderingFor(self, build):
+    # Test whether we're going to render
+    is_present = self.condition(build)
+
+    # Choose our inner IRenderer and render it
+    renderer = (self.present) if is_present else (self.absent)
+    # Disable 'too many positional arguments' error | pylint: disable=E1121
+    return IRenderable(renderer).getRenderingFor(build)

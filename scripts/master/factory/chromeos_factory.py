@@ -12,6 +12,7 @@ from buildbot.process.properties import Property, WithProperties
 from master import chromium_step
 from master.factory import build_factory
 from master.factory import chromeos_build_factory
+from master.master_utils import ConditionalProperty
 
 
 class ChromiteFactory(object):
@@ -223,6 +224,15 @@ class CbuildbotFactory(ChromiteFactory):
     cmd = [WithProperties('--buildnumber=%(buildnumber)s'),
            '--buildroot=%s' % self.buildroot]
 
+    # Add '--master-build-id' flag when build ID property is present
+    cmd.append(
+        ConditionalProperty(
+            'master_build_id',
+            WithProperties('--master-build-id=%(master_build_id)s'),
+            [], # Will be flattened to nothing.
+        )
+    )
+
     if self.trybot:
       cmd.append(Property('extra_args'))
     else:
@@ -237,8 +247,13 @@ class CbuildbotFactory(ChromiteFactory):
     if self.pass_revision:
       cmd.append(WithProperties('--chrome_version=%(revision)s'))
 
-    #TODO(petermayo): This adds an empty parameter when not clobbering; fix.
-    cmd.append(WithProperties('%s', 'clobber:+--clobber'))
+    cmd.append(
+        ConditionalProperty(
+            'clobber',
+            '--clobber',
+            [], # Will be flattened to nothing.
+        )
+    )
 
     return cmd
 
