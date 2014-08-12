@@ -1372,6 +1372,30 @@ def GetGitCommit(options, repo=None):
                              commit_key,))
 
 
+def GetSortableUploadPathForSortKey(branch, value):
+  """Returns: (str) the canonical sort key path constructed from a sort key.
+
+  Returns a canonical sort key path for a sort key. The result will be one of
+  two forms:
+  - (With Branch): <branch-path>-<value> (e.g., "refs_heads_master-12345")
+  - (Without Branch): <value> (e.g., "12345")
+
+  When a 'branch' is supplied, it is converted to a path-suitable form. This
+  conversion replaces undesirable characters ('/') with underscores.
+
+  See 'GetBuildSortKey' for more information about sort keys.
+
+  Args:
+    branch: (str/None) The sort key branch, or 'None' if there is no associated
+        branch.
+    value: (int) The sort key value.
+  """
+  if branch:
+    branch = branch.replace('/', '_')
+    return '%s-%s' % (branch, value)
+  return str(value)
+
+
 def AddPropertiesOptions(option_parser):
   """Registers command line options for parsing build and factory properties.
 
