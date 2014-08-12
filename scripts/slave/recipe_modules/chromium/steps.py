@@ -509,7 +509,7 @@ class PrintPreviewTests(PythonBasedTest):  # pylint: disable=W032
         api.platform.normalize_platform_name(api.platform.name)])
     args = list(cmd_args)
     path = api.path['checkout'].join(
-        'webkit', 'layout_tests', 'tools', 'run_webkit_tests.py')
+        'webkit', 'tools', 'layout_tests', 'run_webkit_tests.py')
     args.extend(['--platform', platform_arg])
 
     return api.python(self._step_name(suffix),

@@ -150,7 +150,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\webkit\\layout_tests\\tools\\run_webkit_tests.py",
+      "[SLAVE_BUILD]\\src\\webkit\\tools\\layout_tests\\run_webkit_tests.py",
       "--write-full-results-to",
       "/path/to/tmp/json",
       "--platform",
