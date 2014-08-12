@@ -154,12 +154,10 @@ class BotUpdateApi(recipe_api.RecipeApi):
 
     # Ah hah! Now that everything is in place, lets run bot_update!
     try:
-      step_result = self(name, cmd,
-                         step_test_data=step_test_data, **kwargs)
-    except self.m.step.StepFailure as f:
-      step_result = f.result
-      raise
+      self(name, cmd, step_test_data=step_test_data, **kwargs)
     finally:
+      step_result = self.m.step.active_result
+
       if update_presentation:
         # Set properties such as got_revision.
         if 'properties' in step_result.json.output:
