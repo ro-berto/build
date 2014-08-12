@@ -993,16 +993,6 @@ def main_win(options, args):
   return result
 
 
-def landmines_triggered(build_dir):
-  trigger_file = os.path.join(build_dir, '.landmines_triggered')
-  if os.path.exists(trigger_file):
-    print 'Setting clobber due to triggered landmines:'
-    with open(trigger_file) as f:
-      print f.read()
-    return True
-  return False
-
-
 def get_target_build_dir(build_tool, src_dir, target, is_iphone=False):
   """Keep this function in sync with src/build/landmines.py"""
   ret = None
@@ -1146,8 +1136,6 @@ def real_main():
 
   options.target_output_dir = get_target_build_dir(options.build_tool,
       options.src_dir, options.target, 'iphoneos' in args)
-  options.clobber = (options.clobber or
-      landmines_triggered(options.target_output_dir))
 
   return main(options, args)
 
