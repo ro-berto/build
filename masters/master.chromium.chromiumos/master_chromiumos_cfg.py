@@ -18,7 +18,6 @@ def Update(config, active_master, c):
           'Linux ChromiumOS Full',
           'Linux ChromiumOS Builder',
           'Linux ChromiumOS Ozone Builder',
-          'Linux ChromiumOS (Clang dbg)',
           'Linux ChromiumOS Builder (dbg)',
       ]),
       Triggerable(name='chromiumos_rel_trigger', builderNames=[
@@ -56,9 +55,6 @@ def Update(config, active_master, c):
            'triggers': ['chromiumos_rel_ozone_trigger']},
           {'buildername': 'Linux ChromiumOS Ozone Tests (1)'},
           {'buildername': 'Linux ChromiumOS Ozone Tests (2)'},
-
-          # Linux ChromiumOS Clang (dbg)
-          {'buildername': 'Linux ChromiumOS (Clang dbg)'},
 
           # Linux ChromiumOS (dbg)
           {'buildername': 'Linux ChromiumOS Builder (dbg)',
