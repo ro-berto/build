@@ -103,9 +103,9 @@ def SetupBuildersAndSchedulers(c, builders, slaves, ActiveMaster):
                 builderNames=polling_builders)
   c['schedulers'] = [s]
 
-  for parent, triggered_builders in triggered_builders.iteritems():
+  for parent, builders_to_trigger in triggered_builders.iteritems():
     c['schedulers'].append(Triggerable(name=trigger_name(parent),
-                                       builderNames=triggered_builders))
+                                       builderNames=builders_to_trigger))
 
   pools = BuildersPools(TRY_SCHEDULER_NAME)
   pools[TRY_SCHEDULER_NAME].extend(trybots)
