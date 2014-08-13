@@ -108,7 +108,7 @@ def arm64_builder(c):
   gyp_defs['OS'] = 'android'
   gyp_defs['target_arch'] = 'arm64'
 
-@CONFIG_CTX(includes=['arm64_builder', 'hera'],
+@CONFIG_CTX(includes=['arm64_builder'],
             config_vars={'BUILD_CONFIG': 'Release'})
 def arm64_builder_rel(c):
   pass
