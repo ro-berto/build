@@ -302,13 +302,11 @@ class SwarmingApi(recipe_api.RecipeApi):
           'Trying to collect a task that was not triggered: %s' % task.task_id)
       self._pending_tasks.remove(task.task_id)
       try:
-        step_result = task.collect_step_builder(task, **kwargs)
+        task.collect_step_builder(task, **kwargs)
+      finally:
+        step_result = self.m.step.active_result
         step_result.swarming_task = task
-        yield step_result
-      except self.m.step.StepFailure as f:
-        step_result = f.result
-        step_result.swarming_task = task
-        raise
+      yield step_result
 
 
   def _default_collect_step(self, task, **kwargs):

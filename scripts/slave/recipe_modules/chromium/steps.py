@@ -460,15 +460,13 @@ class PythonBasedTest(Test):
       cmd_args.extend(self.failures(api, 'with patch'))
 
     try:
-      step_result = self.run_step(
+      self.run_step(
           api,
           suffix,
           cmd_args,
           step_test_data=lambda: api.json.test_api.canned_test_output(True))
-    except api.step.StepFailure as f:
-      step_result = f.result
-      raise
     finally:
+      step_result = api.step.active_result
       r = step_result.json.test_results
       p = step_result.presentation
       p.step_text += api.test_utils.format_step_text([
