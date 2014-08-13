@@ -67,6 +67,8 @@ def GenSteps(api):
     # builders/testers.
     # For forced builds, revision is empty, in which case we sync HEAD.
     webrtc_revision = api.properties.get('revision', 'HEAD')
+    if webrtc_revision is None:
+      webrtc_revision = 'HEAD'
 
     if bot_type == 'tester':
       webrtc_revision = api.properties.get('parent_got_revision')
@@ -148,14 +150,13 @@ def GenTests(api):
                             _sanitize_nonalpha(buildername), suffix)) +
       api.properties.generic(mastername=mastername,
                              buildername=buildername,
+                             revision=revision,
                              parent_buildername=bot_config.get(
                                  'parent_buildername')) +
       api.platform(bot_config['testing']['platform'],
                    bot_config.get(
                        'chromium_config_kwargs', {}).get('TARGET_BITS', 64))
     )
-    if revision:
-      test += api.properties(revision=revision)
     if bot_type == 'tester':
       parent_rev = parent_got_revision or revision
       test += api.properties(parent_got_revision=parent_rev)
