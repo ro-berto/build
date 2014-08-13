@@ -47,12 +47,16 @@ def GenSteps(api):
   does_build = bot_type in ('builder', 'builder_tester')
   does_test = bot_type in ('builder_tester', 'tester')
 
+  # Revision to be used for SVN-based checkouts and passing builds between
+  # builders/testers.
+
   # Replace src/third_party/webrtc with the specified revision and force the
   # Chromium code to sync ToT.
   s = api.gclient.c.solutions
   s[0].revision = 'HEAD'
 
-  webrtc_revision = 'HEAD'
+  # For forced builds, revision is empty, in which case we sync HEAD.
+  webrtc_revision = api.properties.get('revision', 'HEAD')
   if bot_type == 'tester':
     webrtc_revision = api.properties.get('parent_got_revision')
     assert webrtc_revision, (
@@ -60,11 +64,17 @@ def GenSteps(api):
        'select a previous build and click [Rebuild] or force a build for a '
        'Builder instead (will trigger new runs for the testers).')
 
+  # This is only used by SVN-based checkouts.
+  # TODO(kjellander): Remove this when these bots are switched to bot_update.
   s[0].custom_vars['webrtc_revision'] = webrtc_revision
-  # For bot_update.
+
+  # Since bot_update uses separate Git mirrors for the webrtc and libjingle
+  # repos, they cannot use the revision we get from the poller, since it won't
+  # be present in both if there's a revision that only contains changes in one
+  # of them. For now, work around this by always syncing HEAD for both.
   api.gclient.c.revisions.update({
-      'src/third_party/webrtc': webrtc_revision,
-      'src/third_party/libjingle/source/talk': webrtc_revision,
+      'src/third_party/webrtc': 'HEAD',
+      'src/third_party/libjingle/source/talk': 'HEAD',
   })
 
   # TODO(iannucci): Support webrtc.apply_svn_patch with bot_update
@@ -95,13 +105,17 @@ def GenSteps(api):
   if does_build:
     api.base_android.compile()
 
+  # Can't use webrtc_revision when passing builds between builders and testers
+  # since it will differ between builder and tester syncs if additional
+  # revisions are committed between their runs.
+  archive_rev = got_revision if webrtc_revision == 'HEAD' else webrtc_revision
   if bot_type == 'builder':
     api.webrtc.package_build(
-        api.webrtc.GS_ARCHIVES[bot_config['build_gs_archive']], got_revision)
+        api.webrtc.GS_ARCHIVES[bot_config['build_gs_archive']], archive_rev)
 
   if bot_type == 'tester':
     api.webrtc.extract_build(
-        api.webrtc.GS_ARCHIVES[bot_config['build_gs_archive']], got_revision)
+        api.webrtc.GS_ARCHIVES[bot_config['build_gs_archive']], archive_rev)
 
   if does_test:
     api.chromium_android.common_tests_setup_steps()

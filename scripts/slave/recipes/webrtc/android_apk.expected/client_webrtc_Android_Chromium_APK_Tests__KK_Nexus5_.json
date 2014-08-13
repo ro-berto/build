@@ -19,9 +19,9 @@
       "--revision",
       "src@HEAD",
       "--revision",
-      "src/third_party/libjingle/source/talk@12345",
+      "src/third_party/libjingle/source/talk@HEAD",
       "--revision",
-      "src/third_party/webrtc@12345"
+      "src/third_party/webrtc@HEAD"
     ],
     "name": "bot_update",
     "~followup_annotations": [
@@ -117,7 +117,7 @@
       "--build-url",
       "gs://chromium-webrtc/android_rel",
       "--build_revision",
-      "120644",
+      "12345",
       "--factory-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"TARGET_ARCH\": \"arm\", \"TARGET_BITS\": 32, \"TARGET_PLATFORM\": \"android\", \"buildername\": \"Android Chromium-APK Tests (KK Nexus5)\", \"mastername\": \"client.webrtc\", \"parent_buildername\": \"Android Chromium-APK Builder\", \"parent_got_revision\": \"12345\", \"recipe\": \"webrtc/android_apk\", \"revision\": \"12345\", \"slavename\": \"fake_slavename\"}",
       "--build-properties",
