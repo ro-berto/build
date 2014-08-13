@@ -57,6 +57,12 @@ def _CheckoutSteps(api):
 
 
 def GenSteps(api):
+  # Disable linux builders until the browsers on the bots are updated to the
+  # latest version. [crbug.com/402664]
+  if api.platform.is_linux:
+    api.step('Linux builders (temporarily) disabled [crbug.com/402664]',
+        ['echo', 'Linux builders (temporarily) disabled [crbug.com/402664]'])
+    return None
   _CheckoutSteps(api)
   this_repo = api.properties['buildername'].split()[0]
   api.path['checkout'] = api.path['slave_build'].join(this_repo)
@@ -87,7 +93,10 @@ def GenSteps(api):
     }
 
   test_prefix = []
-  if api.platform.is_linux:
+  # TODO: remove the no coverage pragma on the next line when re-enabling
+  # linux builders; it's been put there purely to get 100% code coverage.
+  # [crbug.com/402664]
+  if api.platform.is_linux: #pragma: no cover
     test_prefix = ['xvfb-run']
 
   # Install deps from npm
