@@ -198,6 +198,7 @@ class GitilesPoller(PollingChangeSource):
     commit_msg = commit_json['message']
     repo_url = self.repo_url
     revision = commit_json['commit']
+    properties = { 'git_revision': revision }
     if self.svn_mode:
       revision = None
       for line in reversed(commit_msg.splitlines()):
@@ -225,6 +226,7 @@ class GitilesPoller(PollingChangeSource):
         branch=branch,
         category=self.category,
         project=self.project,
+        properties=properties,
         repository=repo_url,
         revlink=revlink)
 
