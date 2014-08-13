@@ -14,7 +14,5 @@ class Skia(Master.Master3):
   slave_port = 8184
   master_port_alt = 8284
   repo_url = 'https://skia.googlesource.com/skia.git'
-  production_host = None
-  is_production_host = False
   buildbot_url = None
   code_review_site = 'https://codereview.chromium.org'
