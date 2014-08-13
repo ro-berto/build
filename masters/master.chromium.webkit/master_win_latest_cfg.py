@@ -102,6 +102,7 @@ F('f_win_rel_tests', win().ChromiumFactory(
     factory_properties={
         'perf_id': 'chromium-rel-win7-webkit',
         'show_perf_results': True,
+        'generate_gtest_json': True,
         'start_crash_handler': True,
         'test_results_server': 'test-results.appspot.com',
         'blink_config': 'blink',
