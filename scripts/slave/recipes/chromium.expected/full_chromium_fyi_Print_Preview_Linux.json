@@ -132,12 +132,27 @@
     "cmd": [
       "python",
       "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--xvfb",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Print Preview Linux\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Print Preview Linux\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--builder-name=Print Preview Linux",
+      "--slave-name=TestSlavename",
+      "--build-number=571",
+      "--run-python-script",
       "[SLAVE_BUILD]/src/webkit/tools/layout_tests/run_webkit_tests.py",
       "--write-full-results-to",
       "/path/to/tmp/json",
       "--platform",
       "browser_test.linux"
     ],
+    "env": {
+      "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
+    },
     "name": "print_preview_tests"
   }
 ]

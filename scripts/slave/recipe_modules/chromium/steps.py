@@ -512,14 +512,29 @@ class PrintPreviewTests(PythonBasedTest):  # pylint: disable=W032
         'webkit', 'tools', 'layout_tests', 'run_webkit_tests.py')
     args.extend(['--platform', platform_arg])
 
-    return api.python(self._step_name(suffix),
-                      path,
-                      args,
-                      **kwargs)
+    # This is similar to how api.chromium.run_telemetry_test() sets the
+    # environment variable for the sandbox.
+    env = {}
+    if 'linux' in platform_arg:
+      env['CHROME_DEVEL_SANDBOX'] = api.path.join(
+          '/opt', 'chromium', 'chrome_sandbox')
+
+    return api.chromium.runtest(
+        test=path,
+        args=args,
+        xvfb=True,
+        name=self._step_name(suffix),
+        python_mode=True,
+        env=env,
+        **kwargs)
 
   @staticmethod
-  def compile_targets(_):
-    return ['browser_tests', 'blink_tests']
+  def compile_targets(api):
+    targets = ['browser_tests', 'blink_tests']
+    if api.platform.is_win:
+      targets.append('crash_service')
+
+    return targets
 
 
 class TelemetryUnitTests(PythonBasedTest):  # pylint: disable=W0232
