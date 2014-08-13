@@ -343,3 +343,9 @@ def chromium_skia(c):
   c.got_revision_mapping['src'] = 'got_chromium_revision'
   c.got_revision_mapping['src/third_party/skia'] = 'got_revision'
   c.parent_got_revision_mapping['parent_got_revision'] = 'got_revision'
+
+@config_ctx()
+def pdfium(c):
+  soln = c.solutions.add()
+  soln.name = 'pdfium'
+  soln.url = 'https://pdfium.googlesource.com/pdfium.git'
