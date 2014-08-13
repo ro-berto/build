@@ -751,6 +751,7 @@ def buildspecs2git(sln_dir, buildspec):
   # Identify the path from the container name
   if buildspec.container == 'branches':
     # Path to the buildspec is: .../branches/VERSION
+    buildspec_path = buildspec.container
     buildspec_version = buildspec.version
   else:
     # Scan through known commit headers for the number
@@ -760,9 +761,11 @@ def buildspecs2git(sln_dir, buildspec):
         break
     if not m:
       raise ValueError("Unable to parse buildspec from:\n%s" % (deps_log,))
+    # Release versioned buildspecs are always in the 'releases' path.
+    buildspec_path = 'releases'
     buildspec_version = m.group(1)
 
-  git_buildspec = get_git_buildspec(buildspec.container, buildspec_version)
+  git_buildspec = get_git_buildspec(buildspec_path, buildspec_version)
   with open(deps_git_file, 'wb') as f:
     f.write(git_buildspec)
 
