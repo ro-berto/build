@@ -9,6 +9,7 @@
 DEPS = [
   'path',
   'properties',
+  'raw_io',
   'skia',
 ]
 
@@ -31,7 +32,7 @@ def GenTests(api):
     'Test-Win7-ShuttleA-HD2000-x86-Release-ANGLE',
   ]
   for builder in builders:
-    yield (
+    test = (
       api.test(builder) +
       api.properties(buildername=builder) +
       api.path.exists(
@@ -41,6 +42,9 @@ def GenTests(api):
                                        'ignored-tests.txt'),
       )
     )
+    if 'Android' in builder:
+      test += api.step_data('has ccache?', retcode=1)
+    yield test
 
   builder = 'Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes'
   yield (
@@ -53,4 +57,11 @@ def GenTests(api):
     api.test('failed_gm') +
     api.properties(buildername=builder) +
     api.step_data('gm', retcode=1)
+  )
+
+  yield (
+    api.test('has_ccache_android') +
+    api.properties(buildername='Build-Ubuntu13.10-GCC4.8-Arm7-Debug-Android') +
+    api.step_data('has ccache?', retcode=0,
+                  stdout=api.raw_io.output('/usr/bin/ccache'))
   )

@@ -6,8 +6,8 @@
 from slave import recipe_api
 from slave import recipe_config_types
 from common.skia import builder_name_schema
-
-import default_flavor
+from . import android_flavor
+from . import default_flavor
 
 
 class SKPDirs(object):
@@ -47,12 +47,26 @@ class SKPDirs(object):
     return self._path_sep.join((root_dir, 'skps'))
 
 
+def is_android(builder_cfg):
+  """Determine whether the given builder is an Android builder."""
+  return ('Android' in builder_cfg.get('extra_config', '') or
+          builder_cfg['os'] == 'Android')
+
+
 class SkiaApi(recipe_api.RecipeApi):
+
+  def _set_flavor(self):
+    """Return a flavor utils object specific to the given builder."""
+    if is_android(self.c.builder_cfg):
+      self.flavor = android_flavor.AndroidFlavorUtils(self)
+    else:
+      self.flavor = default_flavor.DefaultFlavorUtils(self)
 
   def gen_steps(self):
     """Generate all build steps."""
     # Setup
     self.set_config('skia', BUILDER_NAME=self.m.properties['buildername'])
+    self._set_flavor()
 
     # Set some important paths.
     slave_dir = self.m.path['slave_build']
@@ -70,9 +84,9 @@ class SkiaApi(recipe_api.RecipeApi):
                                   self.c.BUILDER_NAME, self.m.path.sep)
     self.storage_skp_dirs = SKPDirs('playback', self.c.BUILDER_NAME, '/')
 
-    # TODO(borenet): Switch this by builder type.
-    self.flavor = default_flavor.DefaultFlavorUtils(self)
     self.device_dirs = self.flavor.get_device_dirs()
+    self._ccache = None
+    self._checked_for_ccache = False
 
     self.common_steps()
 
@@ -100,6 +114,21 @@ class SkiaApi(recipe_api.RecipeApi):
     # TODO(borenet): The following steps still need to be added:
     # DownloadSKPs
     # Install
+
+  def ccache(self):
+    if not self._checked_for_ccache:
+      self._checked_for_ccache = True
+      if not self.m.platform.is_win:
+        try:
+          result = self.m.step(
+              'has ccache?', ['which', 'ccache'],
+              stdout=self.m.raw_io.output())
+          ccache = result.stdout.rstrip()
+          if ccache:
+            self._ccache = ccache
+        except self.m.step.StepFailure:
+          pass
+    return self._ccache
 
   def run_tests(self):
     """Run the Skia unit tests.

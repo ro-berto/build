@@ -6,7 +6,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]"
+      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]\ntarget_os = ['android']"
     ],
     "name": "gclient setup"
   },
@@ -38,31 +38,29 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "\nimport os\nimport sys\nwith open(sys.argv[1], 'w') as f:\n  f.write(os.path.join(os.path.expanduser('~'), 'src'))\n",
-      "/path/to/tmp/"
+      "which",
+      "ccache"
     ],
-    "name": "get CHROME_PATH",
+    "name": "has ccache?",
+    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@with open(sys.argv[1], 'w') as f:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  f.write(os.path.join(os.path.expanduser('~'), 'src'))@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
     "cmd": [
-      "make",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_ninja",
       "most",
-      "BUILDTYPE=Release"
+      "-d",
+      "nexus_10"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
-      "CHROME_PATH": "/home/chrome-bot/src",
-      "GYP_DEFINES": "skia_arch_width=32 skia_warnings_as_errors=0"
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "BUILDTYPE": "Release",
+      "GYP_DEFINES": "skia_arch_width=32 skia_warnings_as_errors=0",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
     "name": "build most"
   },

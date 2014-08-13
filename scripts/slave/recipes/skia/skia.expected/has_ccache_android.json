@@ -42,67 +42,23 @@
       "ccache"
     ],
     "name": "has ccache?",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_FAILURE@@@"
-    ]
+    "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_ninja",
       "most",
       "-d",
-      "xoom"
+      "arm_v7_thumb"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
+      "ANDROID_MAKE_CCACHE": "/usr/bin/ccache",
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
-      "BUILDTYPE": "Release",
-      "GYP_DEFINES": "skia_arch_width=32 skia_warnings_as_errors=0",
+      "BUILDTYPE": "Debug",
+      "GYP_DEFINES": "skia_arch_width=32 skia_warnings_as_errors=1",
       "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
     "name": "build most"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/skia/out/Release/tests",
-      "--verbose",
-      "--tmpDir",
-      "[SLAVE_BUILD]/tmp",
-      "--resourcePath",
-      "[SLAVE_BUILD]/skia/resources",
-      "--match",
-      "~WritePixels"
-    ],
-    "name": "tests"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/skia/out/Release/gm",
-      "--verbose",
-      "--writeChecksumBasedFilenames",
-      "--mismatchPath",
-      "[SLAVE_BUILD]/gm/actual/Test-Android-Xoom-Tegra2-Arm7-Release",
-      "--missingExpectationsPath",
-      "[SLAVE_BUILD]/gm/actual/Test-Android-Xoom-Tegra2-Arm7-Release",
-      "--writeJsonSummaryPath",
-      "[SLAVE_BUILD]/gm/actual/Test-Android-Xoom-Tegra2-Arm7-Release/actual_results.json",
-      "--ignoreErrorTypes",
-      "IntentionallySkipped",
-      "MissingExpectations",
-      "ExpectationsMismatch",
-      "--resourcePath",
-      "[SLAVE_BUILD]/skia/resources",
-      "--readPath",
-      "[SLAVE_BUILD]/gm/expected/expected-results.json",
-      "--ignoreFailuresFile",
-      "[SLAVE_BUILD]/gm/expected/ignored-tests.txt",
-      "--resetGpuContext",
-      "--config",
-      "defaults",
-      "msaa16"
-    ],
-    "name": "gm"
   }
 ]
