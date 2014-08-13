@@ -63,18 +63,26 @@ def GenSteps(api):
     s = api.gclient.c.solutions
     s[0].revision = 'HEAD'
 
+    # Revision to be used for SVN-based checkouts and passing builds between
+    # builders/testers.
+    # For forced builds, revision is empty, in which case we sync HEAD.
+    webrtc_revision = api.properties.get('revision', 'HEAD')
+
     if bot_type == 'tester':
       webrtc_revision = api.properties.get('parent_got_revision')
       assert webrtc_revision, (
          'Testers cannot be forced without providing revision information. '
          'Please select a previous build and click [Rebuild] or force a build '
          'for a Builder instead (will trigger new runs for the testers).')
-    else:
-      # For forced builds, revision is empty, in which case we sync HEAD.
-      webrtc_revision = api.properties.get('revision', 'HEAD')
 
-    s[0].custom_vars['webrtc_revision'] = webrtc_revision
-    api.gclient.c.revisions['src/third_party/webrtc'] = webrtc_revision
+    # Since bot_update uses separate Git mirrors for the webrtc and libjingle
+    # repos, they cannot use the revision we get from the poller, since it won't
+    # be present in both if there's a revision that only contains changes in one
+    # of them. For now, work around this by always syncing HEAD for both.
+    api.gclient.c.revisions.update({
+        'src/third_party/webrtc': 'HEAD',
+        'src/third_party/libjingle/source/talk': 'HEAD',
+    })
 
   # Bot Update re-uses the gclient configs.
   step_result = api.bot_update.ensure_checkout(force=True)

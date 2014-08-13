@@ -47,14 +47,13 @@ def GenSteps(api):
   does_build = bot_type in ('builder', 'builder_tester')
   does_test = bot_type in ('builder_tester', 'tester')
 
-  # Revision to be used for SVN-based checkouts and passing builds between
-  # builders/testers.
-
   # Replace src/third_party/webrtc with the specified revision and force the
   # Chromium code to sync ToT.
   s = api.gclient.c.solutions
   s[0].revision = 'HEAD'
 
+  # Revision to be used for SVN-based checkouts and passing builds between
+  # builders/testers.
   # For forced builds, revision is empty, in which case we sync HEAD.
   webrtc_revision = api.properties.get('revision', 'HEAD')
   if bot_type == 'tester':
