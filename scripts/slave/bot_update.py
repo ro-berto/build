@@ -168,7 +168,7 @@ RECOGNIZED_PATHS = {
     '/svn/branches/bleeding_edge':
         CHROMIUM_GIT_HOST + '/external/v8.git',
     '/chrome/trunk/src/tools/cros.DEPS':
-        CHROMIUM_GIT_HOST + 'chromium/src/tools/cros.DEPS.git',
+        CHROMIUM_GIT_HOST + '/chromium/src/tools/cros.DEPS.git',
 }
 RECOGNIZED_PATHS.update(internal_data.get('RECOGNIZED_PATHS', {}))
 
