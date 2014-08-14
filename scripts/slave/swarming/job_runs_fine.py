@@ -9,6 +9,7 @@ possible to run a job on each OS.
 
 import Queue
 import datetime
+import optparse
 import os
 import shutil
 import subprocess
@@ -66,9 +67,21 @@ def main():
   # It is expected that cwd is the build directory.
   cwd = os.getcwd()
 
+  parser = optparse.OptionParser()
+  parser.add_option('--canary', action='store_true')
+  options, args = parser.parse_args()
+
+  if args:
+    parser.error('Unknown args: %s' % args)
+
   # Testing parameters:
-  swarming_server = 'https://chromium-swarm.appspot.com'
-  isolate_server = 'https://isolateserver.appspot.com'
+  if options.canary:
+    swarming_server = 'https://chromium-swarm-dev.appspot.com'
+    isolate_server = 'https://isolateserver-dev.appspot.com'
+  else:
+    swarming_server = 'https://chromium-swarm.appspot.com'
+    isolate_server = 'https://isolateserver.appspot.com'
+
   dimensions_to_test = (
     {'os': 'Linux'},
     {'os': 'Mac'},
@@ -104,7 +117,10 @@ def main():
   print('Archiving heartbeat.isolate took %3.1fs' % (time.time() - start))
 
   now = datetime.datetime.utcnow()
-  task_name = 'heartbeat-%s' % now.strftime('%Y-%m-%d_%H:%M:%S')
+  if options.canary:
+    task_name = 'heartbeat-canary-%s' % now.strftime('%Y-%m-%d_%H:%M:%S')
+  else:
+    task_name = 'heartbeat-%s' % now.strftime('%Y-%m-%d_%H:%M:%S')
 
   print('Sending tasks named %s' % task_name)
   # Runs the tasks in parallel.

@@ -16,7 +16,7 @@
       "git",
       "fetch",
       "origin",
-      "stable"
+      "master"
     ],
     "cwd": "[SLAVE_BUILD]/swarming.client",
     "name": "git fetch (swarming_client)"
@@ -79,7 +79,8 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/swarming/job_runs_fine.py"
+      "[BUILD]/scripts/slave/swarming/job_runs_fine.py",
+      "--canary"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "job_runs_fine.py"
