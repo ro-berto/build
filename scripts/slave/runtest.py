@@ -43,7 +43,10 @@ sys.path.insert(0, os.path.abspath('src/tools/python'))
 
 from common import chromium_utils
 from common import gtest_utils
+
+# TODO(crbug.com/403564). We almost certainly shouldn't be importing this.
 import config
+
 from slave import annotation_utils
 from slave import build_directory
 from slave import crash_utils

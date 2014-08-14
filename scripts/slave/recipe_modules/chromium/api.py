@@ -309,35 +309,47 @@ class ChromiumApi(recipe_api.RecipeApi):
         **kwargs)
 
   def run_telemetry_unittests(self, suffix=None, cmd_args=None, **kwargs):
-    name = 'telemetry_unittests'
-    if suffix:
-      name += ' (%s)' % suffix
-    cmd_args = cmd_args or []
-    args = ['--browser=%s' % self.c.build_config_fs.lower(),
-            '--retry-limit=3'] + cmd_args
-    return self.runtest(
+    return self._run_telemetry_script(
+        'telemetry_unittests',
         self.m.path['checkout'].join('tools', 'telemetry', 'run_tests'),
-        args=args,
-        annotate='gtest',
-        name=name,
-        test_type='telemetry_unittests',
-        python_mode=True,
-        xvfb=True,
-        **kwargs)
+        suffix, cmd_args, **kwargs)
 
   def run_telemetry_perf_unittests(self, suffix=None, cmd_args=None, **kwargs):
-    name = 'telemetry_perf_unittests'
+    return self._run_telemetry_script(
+        'telemetry_perf_unittests',
+        self.m.path['checkout'].join('tools', 'perf', 'run_tests'),
+        suffix, cmd_args, **kwargs)
+
+  def _run_telemetry_script(self, name, script_path, suffix,
+                            cmd_args, **kwargs):
+    test_type = name
     if suffix:
       name += ' (%s)' % suffix
     cmd_args = cmd_args or []
+
     args = ['--browser=%s' % self.c.build_config_fs.lower(),
-            '--retry-limit=3'] + cmd_args
+            '--retry-limit=3']
+
+    if not self.m.tryserver.is_tryserver:
+      chromium_revision = self.m.bot_update.properties['got_revision']
+      blink_revision = self.m.bot_update.properties['got_webkit_revision']
+      args += [
+          '--builder-name=%s' % self.m.properties['buildername'],
+          '--master-name=%s' % self.m.properties['mastername'],
+          '--test-results-server=%s' % 'test-results.appspot.com',
+          '--metadata', 'chromium_revision=%s' % chromium_revision,
+          '--metadata', 'blink_revision=%s' % blink_revision,
+          '--metadata', 'build_number=%s' % self.m.properties['buildnumber'],
+      ]
+
+    args += cmd_args
+
     return self.runtest(
-        self.m.path['checkout'].join('tools', 'perf', 'run_tests'),
+        script_path,
         args=args,
         annotate='gtest',
         name=name,
-        test_type='telemetry_perf_unittests',
+        test_type=test_type,
         python_mode=True,
         xvfb=True,
         **kwargs)
