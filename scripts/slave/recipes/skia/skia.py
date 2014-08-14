@@ -42,7 +42,7 @@ def GenTests(api):
                                        'ignored-tests.txt'),
       )
     )
-    if 'Android' in builder:
+    if 'Android' in builder or 'NaCl' in builder:
       test += api.step_data('has ccache?', retcode=1)
     yield test
 
@@ -62,6 +62,13 @@ def GenTests(api):
   yield (
     api.test('has_ccache_android') +
     api.properties(buildername='Build-Ubuntu13.10-GCC4.8-Arm7-Debug-Android') +
+    api.step_data('has ccache?', retcode=0,
+                  stdout=api.raw_io.output('/usr/bin/ccache'))
+  )
+
+  yield (
+    api.test('has_ccache_nacl') +
+    api.properties(buildername='Build-Ubuntu13.10-GCC4.8-NaCl-Debug') +
     api.step_data('has ccache?', retcode=0,
                   stdout=api.raw_io.output('/usr/bin/ccache'))
   )

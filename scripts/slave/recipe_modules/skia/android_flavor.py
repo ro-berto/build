@@ -54,7 +54,7 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
     env['ANDROID_SDK_ROOT'] = DEFAULT_ANDROID_SDK_ROOT
     env.update(self._skia_api.c.gyp_env.as_jsonish())
     env['BUILDTYPE'] = self._skia_api.c.configuration
-    ccache = self._skia_api.ccache()
+    ccache = self._skia_api.ccache
     if ccache:
       env['ANDROID_MAKE_CCACHE'] = ccache
 

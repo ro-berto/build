@@ -9,6 +9,7 @@ from common.skia import builder_name_schema
 from . import android_flavor
 from . import chromeos_flavor
 from . import default_flavor
+from . import nacl_flavor
 
 
 class SKPDirs(object):
@@ -59,6 +60,10 @@ def is_chromeos(builder_cfg):
           builder_cfg['os'] == 'ChromeOS')
 
 
+def is_nacl(builder_cfg):
+  return 'NaCl' in builder_cfg.get('target_arch', '')
+
+
 class SkiaApi(recipe_api.RecipeApi):
 
   def _set_flavor(self):
@@ -67,6 +72,8 @@ class SkiaApi(recipe_api.RecipeApi):
       self.flavor = android_flavor.AndroidFlavorUtils(self)
     elif is_chromeos(self.c.builder_cfg):
       self.flavor = chromeos_flavor.ChromeOSFlavorUtils(self)
+    elif is_nacl(self.c.builder_cfg):
+      self.flavor = nacl_flavor.NaClFlavorUtils(self)
     else:
       self.flavor = default_flavor.DefaultFlavorUtils(self)
 
@@ -123,6 +130,7 @@ class SkiaApi(recipe_api.RecipeApi):
     # DownloadSKPs
     # Install
 
+  @property
   def ccache(self):
     if not self._checked_for_ccache:
       self._checked_for_ccache = True
