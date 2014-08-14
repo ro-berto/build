@@ -13,7 +13,7 @@ import subprocess
 import sys
 import tempfile
 
-from common.skia import global_variables
+from common.skia import global_constants
 
 
 IMAGE_FILE_PATTERN = re.compile(r'^([^_]+)_(.+)_([^_]+)\.png$')
