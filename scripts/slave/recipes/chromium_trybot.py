@@ -460,6 +460,8 @@ add_swarming_builder('linux_chromium_chromeos_rel',
                      'tryserver.chromium.linux')
 add_swarming_builder('win_chromium_rel', 'win_chromium_rel_swarming',
                      'tryserver.chromium.win')
+add_swarming_builder('win_chromium_x64_rel', 'win_chromium_x64_rel_swarming',
+                     'tryserver.chromium.win')
 add_swarming_builder('mac_chromium_rel', 'mac_chromium_rel_swarming',
                      'tryserver.chromium.mac')
 
