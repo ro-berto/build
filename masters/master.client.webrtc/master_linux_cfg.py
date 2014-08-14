@@ -12,7 +12,7 @@ def Update(c):
   c['schedulers'].extend([
       SingleBranchScheduler(name='webrtc_linux_scheduler',
                             branch='trunk',
-                            treeStableTimer=0,
+                            treeStableTimer=30,
                             builderNames=[
           'Linux32 Debug',
           'Linux32 Release',
