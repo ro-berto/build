@@ -68,6 +68,10 @@ BUILDSPEC_COMMIT_RE = (
     re.compile(r'Auto-converted (\d+\.\d+\.\d+\.\d+) buildspec to git'),
 )
 
+# Regular expression to parse a commit position
+COMMIT_POSITION_RE = re.compile(r'^Cr-Commit-Position:\s*((.+)@\{#(\d+)\})$',
+                                re.M)
+
 # This is the git mirror of the buildspecs repository. We could rely on the svn
 # checkout, now that the git buildspecs are checked in alongside the svn
 # buildspecs, but we're going to want to pull all the buildspecs from here
@@ -1067,6 +1071,17 @@ def emit_flag(flag_file):
     f.write('Success!')
 
 
+def get_commit_position(git_path, revision='HEAD'):
+  """Dumps the 'git' log for a specific revision and parses out the commit
+  position.
+  """
+  git_log = git('log', '--format=%B', '-n1', revision, cwd=git_path)
+  m = COMMIT_POSITION_RE.search(git_log)
+  if not m:
+    return None
+  return m.group(1)
+
+
 def parse_got_revision(gclient_output, got_revision_mapping, use_svn_revs):
   """Translate git gclient revision mapping to build properties.
 
@@ -1087,7 +1102,7 @@ def parse_got_revision(gclient_output, got_revision_mapping, use_svn_revs):
     solution_output = solutions_output[dir_name]
     if solution_output.get('scm') is None:
       # This is an ignored DEPS, so the output got_revision should be 'None'.
-      git_revision = revision = None
+      git_revision = revision = commit_position = None
     else:
       # Since we are using .DEPS.git, everything had better be git.
       assert solution_output.get('scm') == 'git'
@@ -1098,10 +1113,13 @@ def parse_got_revision(gclient_output, got_revision_mapping, use_svn_revs):
           revision = git_revision
       else:
         revision = git_revision
+      commit_position = get_commit_position(dir_name)
 
     properties[property_name] = revision
     if revision != git_revision:
       properties['%s_git' % property_name] = git_revision
+    if commit_position:
+      properties['%s_cp' % property_name] = commit_position
 
   return properties
 
