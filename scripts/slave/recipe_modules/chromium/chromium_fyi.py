@@ -298,7 +298,7 @@ SPEC = {
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_PLATFORM': 'win',
-        'TARGET_BITS': 64,
+        'TARGET_BITS': 32,
       },
       'tests': [
         steps.PrintPreviewTests(),

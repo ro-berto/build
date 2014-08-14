@@ -513,7 +513,7 @@ class PrintPreviewTests(PythonBasedTest):  # pylint: disable=W032
     # This is similar to how api.chromium.run_telemetry_test() sets the
     # environment variable for the sandbox.
     env = {}
-    if 'linux' in platform_arg:
+    if api.platform.is_linux:
       env['CHROME_DEVEL_SANDBOX'] = api.path.join(
           '/opt', 'chromium', 'chrome_sandbox')
 
