@@ -6,6 +6,7 @@
 from slave import recipe_api
 from slave import recipe_config_types
 from common.skia import builder_name_schema
+from common.skia import global_constants
 from . import android_flavor
 from . import chromeos_flavor
 from . import default_flavor
@@ -80,6 +81,7 @@ class SkiaApi(recipe_api.RecipeApi):
   def gen_steps(self):
     """Generate all build steps."""
     # Setup
+    self.failed = []
     self.set_config('skia', BUILDER_NAME=self.m.properties['buildername'])
     self._set_flavor()
 
@@ -93,8 +95,7 @@ class SkiaApi(recipe_api.RecipeApi):
     self.resource_dir = skia_dir.join('resources')
     self.skimage_expected_dir = skia_dir.join('expectations', 'skimage')
     self.skimage_in_dir = slave_dir.join('skimage_in')
-    self.skimage_out_dir = skia_dir.join('out', self.c.configuration,
-                                         'skimage_out')
+    self.skimage_out_dir = slave_dir.join('skimage_out')
     self.local_skp_dirs = SKPDirs(str(slave_dir.join('playback')),
                                   self.c.BUILDER_NAME, self.m.path.sep)
     self.storage_skp_dirs = SKPDirs('playback', self.c.BUILDER_NAME, '/')
@@ -111,6 +112,10 @@ class SkiaApi(recipe_api.RecipeApi):
     if self.c.do_perf_steps:
       self.perf_steps()
 
+    if self.failed:
+      raise self.m.step.StepFailure('Failed build steps: %s' %
+                                    ', '.join([f.name for f in self.failed]))
+
   def checkout_steps(self):
     """Run the steps to obtain a checkout of Skia."""
     self.m.gclient.checkout()
@@ -121,14 +126,34 @@ class SkiaApi(recipe_api.RecipeApi):
     for target in self.c.build_targets:
       self.flavor.compile(target)
 
+  def run(self, steptype, name, abort_on_failure=True,
+          fail_build_on_failure=True, **kwargs):
+    """Run a step. If it fails, keep going but mark the build status failed."""
+    try:
+      return steptype(name, **kwargs)
+    except self.m.step.StepFailure as e:
+      if abort_on_failure:
+        raise  # pragma: no cover
+      if fail_build_on_failure:
+        self.failed.append(e)
+
+  def install(self):
+    """Copy the required executables and files to the device."""
+    # TODO(borenet): Only copy files which have changed.
+    # Resources
+    self.flavor.copy_directory_to_device(self.resource_dir,
+                                         self.device_dirs.resource_dir)
+
+    # Run any device-specific installation.
+    self.flavor.install()
+
   def common_steps(self):
     """Steps run by both Test and Perf bots."""
     self.checkout_steps()
     self.compile_steps()
-
-    # TODO(borenet): The following steps still need to be added:
-    # DownloadSKPs
-    # Install
+    # TODO(borenet): Implement.
+    #self.download_skps()
+    self.install()
 
   @property
   def ccache(self):
@@ -146,35 +171,38 @@ class SkiaApi(recipe_api.RecipeApi):
           pass
     return self._ccache
 
-  def run_tests(self):
-    """Run the Skia unit tests.
-
-    This code was adapted from
-    https://skia.googlesource.com/buildbot.git/+/aa46f57/slave/skia_slave_scripts/run_tests.py
-    """
-    args = ['tests', '--verbose', '--tmpDir', self.device_dirs.tmp_dir,
-            '--resourcePath', self.device_dirs.resource_dir]
-    if 'Xoom' in self.c.BUILDER_NAME:
-      # WritePixels fails on Xoom due to a bug which won't be fixed very soon.
-      # http://code.google.com/p/skia/issues/detail?id=1699
-      args.extend(['--match', '~WritePixels'])
-
-    try:
-      self.flavor.step('tests', args)
-    except self.m.step.StepFailure:
-      pass
-
-
   def run_gm(self):
-    """Run the Skia GM test.
+    """Run the Skia GM test."""
+    # Setup
+    self.flavor.create_clean_device_dir(self.device_dirs.gm_actual_dir)
+    host_gm_actual_dir = self.m.path['slave_build'].join('gm', 'actual',
+                                                         self.c.BUILDER_NAME)
+    self.flavor.create_clean_host_dir(host_gm_actual_dir)
 
-    This code was adapted from
-    https://skia.googlesource.com/buildbot.git/+/aa46f57/slave/skia_slave_scripts/run_gm.py
-    """
+    device_gm_expectations_path = self.flavor.device_path_join(
+        self.device_dirs.gm_expected_dir, self.c.BUILDER_NAME,
+        global_constants.GM_EXPECTATIONS_FILENAME)
+    repo_gm_expectations_path = self.m.path['checkout'].join(
+        'expectations', 'gm', self.c.BUILDER_NAME,
+        global_constants.GM_EXPECTATIONS_FILENAME)
+    if self.m.path.exists(repo_gm_expectations_path):
+      self.flavor.copy_file_to_device(repo_gm_expectations_path,
+                                      device_gm_expectations_path)
+
+    device_ignore_tests_path = self.flavor.device_path_join(
+        self.device_dirs.gm_expected_dir,
+        global_constants.GM_IGNORE_TESTS_FILENAME)
+    repo_ignore_tests_path = self.m.path['checkout'].join(
+        'expectations', 'gm', global_constants.GM_IGNORE_TESTS_FILENAME)
+    if self.m.path.exists(repo_ignore_tests_path):
+      self.flavor.copy_file_to_device(repo_ignore_tests_path,
+                                      device_ignore_tests_path)
+
+    # Run the test.
     output_dir = self.flavor.device_path_join(self.device_dirs.gm_actual_dir,
                                               self.c.BUILDER_NAME)
-    json_summary_path = self.flavor.device_path_join(output_dir,
-                                                     'actual_results.json')
+    json_summary_path = self.flavor.device_path_join(
+        output_dir, global_constants.GM_ACTUAL_FILENAME)
     args = ['gm', '--verbose', '--writeChecksumBasedFilenames',
             '--mismatchPath', output_dir,
             '--missingExpectationsPath', output_dir,
@@ -184,32 +212,16 @@ class SkiaApi(recipe_api.RecipeApi):
                 'ExpectationsMismatch',
             '--resourcePath', self.device_dirs.resource_dir]
 
-    device_gm_expectations_path = self.flavor.device_path_join(
-        self.device_dirs.gm_expected_dir, 'expected-results.json')
     if self.flavor.device_path_exists(device_gm_expectations_path):
       args.extend(['--readPath', device_gm_expectations_path])
 
-    device_ignore_failures_path = self.flavor.device_path_join(
-        self.device_dirs.gm_expected_dir, 'ignored-tests.txt')
-    if self.flavor.device_path_exists(device_ignore_failures_path):
-      args.extend(['--ignoreFailuresFile', device_ignore_failures_path])
+    if self.flavor.device_path_exists(device_ignore_tests_path):
+      args.extend(['--ignoreFailuresFile', device_ignore_tests_path])
 
     if 'Xoom' in self.c.BUILDER_NAME:
       # The Xoom's GPU will crash on some tests if we don't use this flag.
       # http://code.google.com/p/skia/issues/detail?id=1434
       args.append('--resetGpuContext')
-
-    # Exercise alternative renderModes, but not on the slowest platforms.
-    # See https://code.google.com/p/skia/issues/detail?id=1641 ('Run GM tests
-    # with all rendering modes enabled, SOMETIMES')
-    # And not on Windows, which keeps running out of memory (sigh)
-    # See https://code.google.com/p/skia/issues/detail?id=1783 ('Win7 Test bots
-    # have out-of-memory issues')
-    if (not 'Android' in self.c.BUILDER_NAME and
-        not 'ChromeOS' in self.c.BUILDER_NAME and
-        not 'Win7' in self.c.BUILDER_NAME):
-      args.extend(['--deferred', '--pipe', '--replay', '--rtree', '--serialize',
-                   '--tileGrid'])
 
     if 'Mac' in self.c.BUILDER_NAME:
       # msaa16 is flaky on Macs (driver bug?) so we skip the test for now
@@ -244,44 +256,55 @@ class SkiaApi(recipe_api.RecipeApi):
                    '~convexpaths',
                    '~clipped-bitmap',
                    '~xfermodes3'])
-    try:
-      self.flavor.step('gm', args)
-    except self.m.step.StepFailure:
-      pass
+    self.run(self.flavor.step, 'gm', cmd=args, abort_on_failure=False)
 
+    # Teardown.
+    self.flavor.copy_directory_to_host(output_dir,
+                                       host_gm_actual_dir)
+
+    # Compare results to expectations.
+    # TODO(borenet): Display a link to the rebaseline server. See
+    # LIVE_REBASELINE_SERVER_BASEURL in
+    # https://skia.googlesource.com/buildbot/+/master/slave/skia_slave_scripts/compare_gms.py
+    results_file = host_gm_actual_dir.join(global_constants.GM_ACTUAL_FILENAME)
+    compare_script = self.m.path['checkout'].join('gm',
+                                                  'display_json_results.py')
+    self.run(self.m.python, 'Compare GMs', script=compare_script,
+             args=[results_file], abort_on_failure=False)
+
+    # Upload results.
+    self.run(self.m.python,
+             'Upload GM Results',
+             script=self.resource('upload_gm_results.py'),
+             args=[str(host_gm_actual_dir), self.c.BUILDER_NAME],
+             cwd=self.m.path['checkout'],
+             abort_on_failure=False)
 
   def test_steps(self):
     """Run all Skia test executables."""
-    # DownloadSKImageFiles
-
-    # PreRender (maybe rename to PreTest)
-
-    # Unit tests.
-    self.run_tests()
-
-    # GM
     self.run_gm()
-
-    # TODO(borenet): The following steps still need to be added:
-    # RunDM
-    # RenderSKPs
-    # RenderPDFs
-    # RunDecodingTests
-    # PostRender (maybe rename to PostTest)
-    # CompareGMs
-    # CompareRenderedSKPs
-    # UploadGMResults
-    # UploadRenderedSKPs
-    # UploadSKImageResults
+    # TODO(borenet): Implement these steps.
+    #self.run_dm()
+    #self.run_render_skps()
+    #self.run_render_pdfs()
+    #self.run_decoding_tests()
 
   def perf_steps(self):
-    return
-    # TODO(borenet): The following steps still need to be added:
-    # PreBench (maybe rename to PrePerf)
-    # RunBench
-    # RunNanobench
-    # BenchPictures
-    # PostBench (maybe rename to PostPerf)
-    # CheckForRegressions
-    # UploadBenchResults
+    pass
+    # TODO(borenet): Implement these steps.
+    # Setup
+    #self.pre_perf()
 
+    # Perf tests.
+    #self.run_bench()
+    #self.run_nanobench()
+    #self.run_bench_pictures()
+
+    # Teardown.
+    #self.post_perf()
+
+    # Verify results.
+    #self.check_for_regressions()
+
+    # Upload results.
+    #self.upload_bench_results

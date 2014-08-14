@@ -162,6 +162,49 @@ class DefaultFlavorUtils(base_flavor.BaseFlavorUtils):
     """Like os.path.exists(), but for paths on a connected device."""
     return self._skia_api.m.path.exists(path)
 
+  def copy_directory_to_device(self, host_dir, device_dir):
+    """Like shutil.copytree(), but for copying to a connected device."""
+    # For "normal" builders who don't have an attached device, we expect
+    # host_dir and device_dir to be the same.
+    if str(host_dir) != str(device_dir):
+      raise ValueError('For builders who do not have attached devices, copying '
+                       'from host to device is undefined and only allowed if '
+                       'host_path and device_path are the same (%s vs %s).' % (
+                       str(host_path), str(device_path)))
+
+  def copy_directory_to_host(self, device_dir, host_dir):
+    """Like shutil.copytree(), but for copying from a connected device."""
+    # For "normal" builders who don't have an attached device, we expect
+    # host_dir and device_dir to be the same.
+    if str(host_dir) != str(device_dir):
+      raise ValueError('For builders who do not have attached devices, copying '
+                       'from device to host is undefined and only allowed if '
+                       'host_path and device_path are the same (%s vs %s).' % (
+                       str(host_path), str(device_path)))
+
+  def copy_file_to_device(self, host_path, device_path):
+    """Like shutil.copyfile, but for copying to a connected device."""
+    # For "normal" builders who don't have an attached device, we expect
+    # host_dir and device_dir to be the same.
+    if str(host_path) != str(device_path):
+      raise ValueError('For builders who do not have attached devices, copying '
+                       'from host to device is undefined and only allowed if '
+                       'host_path and device_path are the same (%s vs %s).' % (
+                       str(host_path), str(device_path)))
+
+  def create_clean_device_dir(self, path):
+    """Like shutil.rmtree() + os.makedirs(), but on a connected device."""
+    self.create_clean_host_dir(path)
+
+  def create_clean_host_dir(self, path):
+    """Convenience function for creating a clean directory."""
+    self._skia_api.m.path.rmtree(str(path), path)
+    self._skia_api.m.path.makedirs(str(path), path)
+
+  def install(self):
+    """Run device-specific installation steps."""
+    pass
+
   def get_device_dirs(self):
     """ Set the directories which will be used by the build steps.
 
@@ -173,10 +216,10 @@ class DefaultFlavorUtils(base_flavor.BaseFlavorUtils):
     join = self._skia_api.m.path['slave_build'].join
     return DeviceDirs(
         gm_actual_dir=join('gm', 'actual'),
-        gm_expected_dir=join('gm', 'expected'),
+        gm_expected_dir=join('skia', 'expectations', 'gm'),
         perf_data_dir=self._skia_api.perf_data_dir,
         resource_dir=self._skia_api.resource_dir,
-        skimage_expected_dir=join('skimage', 'expected'),
+        skimage_expected_dir=join('skia', 'expectations', 'skimage'),
         skimage_in_dir=self._skia_api.skimage_in_dir,
         skimage_out_dir=self._skia_api.skimage_out_dir,
         skp_dirs=self._skia_api.local_skp_dirs,

@@ -36,9 +36,11 @@ def GenTests(api):
       api.test(builder) +
       api.properties(buildername=builder) +
       api.path.exists(
-          api.path['slave_build'].join('gm', 'expected',
-                                       'expected-results.json'),
-          api.path['slave_build'].join('gm', 'expected',
+          api.path['slave_build'].join(
+              'skia', 'expectations', 'gm',
+              'Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes',
+              'expected-results.json'),
+          api.path['slave_build'].join('skia', 'expectations', 'gm',
                                        'ignored-tests.txt'),
       )
     )
@@ -47,12 +49,6 @@ def GenTests(api):
     yield test
 
   builder = 'Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes'
-  yield (
-    api.test('failed_tests') +
-    api.properties(buildername=builder) +
-    api.step_data('tests', retcode=1)
-  )
-
   yield (
     api.test('failed_gm') +
     api.properties(buildername=builder) +

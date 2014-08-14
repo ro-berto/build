@@ -68,14 +68,83 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/out/Release/tests",
-      "--verbose",
-      "--tmpDir",
-      "[SLAVE_BUILD]/tmp",
-      "--resourcePath",
-      "[SLAVE_BUILD]/skia/resources"
+      "python",
+      "-u",
+      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[SLAVE_BUILD]/gm/actual"
     ],
-    "name": "tests"
+    "name": "rmtree [SLAVE_BUILD]/gm/actual",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[SLAVE_BUILD]/gm/actual",
+      "511"
+    ],
+    "name": "makedirs [SLAVE_BUILD]/gm/actual",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[SLAVE_BUILD]/gm/actual/Test-Win7-ShuttleA-HD2000-x86-Release"
+    ],
+    "name": "rmtree [SLAVE_BUILD]/gm/actual/Test-Win7-ShuttleA-HD2000-x86-Release",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[SLAVE_BUILD]/gm/actual/Test-Win7-ShuttleA-HD2000-x86-Release",
+      "511"
+    ],
+    "name": "makedirs [SLAVE_BUILD]/gm/actual/Test-Win7-ShuttleA-HD2000-x86-Release",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
   },
   {
     "cmd": [
@@ -87,17 +156,15 @@
       "--missingExpectationsPath",
       "[SLAVE_BUILD]/gm/actual/Test-Win7-ShuttleA-HD2000-x86-Release",
       "--writeJsonSummaryPath",
-      "[SLAVE_BUILD]/gm/actual/Test-Win7-ShuttleA-HD2000-x86-Release/actual_results.json",
+      "[SLAVE_BUILD]/gm/actual/Test-Win7-ShuttleA-HD2000-x86-Release/actual-results.json",
       "--ignoreErrorTypes",
       "IntentionallySkipped",
       "MissingExpectations",
       "ExpectationsMismatch",
       "--resourcePath",
       "[SLAVE_BUILD]/skia/resources",
-      "--readPath",
-      "[SLAVE_BUILD]/gm/expected/expected-results.json",
       "--ignoreFailuresFile",
-      "[SLAVE_BUILD]/gm/expected/ignored-tests.txt",
+      "[SLAVE_BUILD]/skia/expectations/gm/ignored-tests.txt",
       "--config",
       "defaults",
       "msaa16",
@@ -110,5 +177,25 @@
       "~xfermodes3"
     ],
     "name": "gm"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/skia/gm/display_json_results.py",
+      "[SLAVE_BUILD]/gm/actual/Test-Win7-ShuttleA-HD2000-x86-Release/actual-results.json"
+    ],
+    "name": "Compare GMs"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/skia/resources/upload_gm_results.py",
+      "[SLAVE_BUILD]/gm/actual/Test-Win7-ShuttleA-HD2000-x86-Release",
+      "Test-Win7-ShuttleA-HD2000-x86-Release"
+    ],
+    "cwd": "[SLAVE_BUILD]/skia",
+    "name": "Upload GM Results"
   }
 ]
