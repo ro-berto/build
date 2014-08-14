@@ -127,6 +127,10 @@ class HorizontalOneBoxPerBuilder(base.HtmlResource):
             can be used to see builds from any builder in the set. If no
             builder= is given, shows them all.
   """
+  def __init__(self, builder_filter_fn=None, *args, **kwargs):
+    super(HorizontalOneBoxPerBuilder, self).__init__(*args, **kwargs)
+    self.builder_filter_fn = builder_filter_fn or (lambda b: True)
+
 
   # pylint: disable=W0221
   def content(self, request, cxt):
@@ -134,6 +138,8 @@ class HorizontalOneBoxPerBuilder(base.HtmlResource):
     builders = request.args.get("builder", status.getBuilderNames())
     cxt_builders = []
     for builder_name in builders:
+      if not self.builder_filter_fn(builder_name):
+        continue
       try:
         builder_status = status.getBuilder(builder_name)
       except KeyError:
@@ -301,7 +307,8 @@ def SetupChromiumPages(webstatus, tagComparator=None, customEndpoints=None,
   webstatus.putChild("grid", console_)
   webstatus.putChild("tgrid", console_)
   webstatus.putChild("horizontal_one_box_per_builder",
-                     HorizontalOneBoxPerBuilder())
+                     HorizontalOneBoxPerBuilder(
+                         builder_filter_fn=console_builder_filter))
   for url, resource in customEndpoints.items():
     webstatus.putChild(url, resource)
   return webstatus
