@@ -337,6 +337,7 @@ class ChromiumApi(recipe_api.RecipeApi):
           '--builder-name=%s' % self.m.properties['buildername'],
           '--master-name=%s' % self.m.properties['mastername'],
           '--test-results-server=%s' % 'test-results.appspot.com',
+          '--test-type=%s' % test_type,
           '--metadata', 'chromium_revision=%s' % chromium_revision,
           '--metadata', 'blink_revision=%s' % blink_revision,
           '--metadata', 'build_number=%s' % self.m.properties['buildnumber'],
