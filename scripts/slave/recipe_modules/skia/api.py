@@ -7,6 +7,7 @@ from slave import recipe_api
 from slave import recipe_config_types
 from common.skia import builder_name_schema
 from . import android_flavor
+from . import chromeos_flavor
 from . import default_flavor
 
 
@@ -53,12 +54,19 @@ def is_android(builder_cfg):
           builder_cfg['os'] == 'Android')
 
 
+def is_chromeos(builder_cfg):
+  return ('CrOS' in builder_cfg.get('extra_config', '') or
+          builder_cfg['os'] == 'ChromeOS')
+
+
 class SkiaApi(recipe_api.RecipeApi):
 
   def _set_flavor(self):
     """Return a flavor utils object specific to the given builder."""
     if is_android(self.c.builder_cfg):
       self.flavor = android_flavor.AndroidFlavorUtils(self)
+    elif is_chromeos(self.c.builder_cfg):
+      self.flavor = chromeos_flavor.ChromeOSFlavorUtils(self)
     else:
       self.flavor = default_flavor.DefaultFlavorUtils(self)
 
