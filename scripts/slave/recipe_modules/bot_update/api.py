@@ -48,12 +48,20 @@ def jsonish_to_python(spec, is_top=False):
 
 class BotUpdateApi(recipe_api.RecipeApi):
 
+  def __init__(self, *args, **kwargs):
+      self._properties = {}
+      super(BotUpdateApi, self).__init__(*args, **kwargs)
+
   def __call__(self, name, cmd, **kwargs):
     """Wrapper for easy calling of bot_update."""
     assert isinstance(cmd, (list, tuple))
     bot_update_path = self.m.path['build'].join(
         'scripts', 'slave', 'bot_update.py')
     return self.m.python(name, bot_update_path, cmd, **kwargs)
+
+  @property
+  def properties(self):
+      return self._properties
 
   def ensure_checkout(self, gclient_config=None, suffix=None,
                       patch=True, update_presentation=True,
@@ -158,12 +166,12 @@ class BotUpdateApi(recipe_api.RecipeApi):
     finally:
       step_result = self.m.step.active_result
 
+      self._properties = step_result.json.output.get('properties', {})
+
       if update_presentation:
         # Set properties such as got_revision.
-        if 'properties' in step_result.json.output:
-          properties = step_result.json.output['properties']
-          for prop_name, prop_value in properties.iteritems():
-            step_result.presentation.properties[prop_name] = prop_value
+        for prop_name, prop_value in self.properties.iteritems():
+          step_result.presentation.properties[prop_name] = prop_value
       # Add helpful step description in the step UI.
       if 'step_text' in step_result.json.output:
         step_text = step_result.json.output['step_text']
