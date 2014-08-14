@@ -167,7 +167,6 @@
       "--builder-name=Win 7 Tests x64 (3)",
       "--master-name=chromium.win",
       "--test-results-server=test-results.appspot.com",
-      "--test-type=telemetry_unittests",
       "--metadata",
       "chromium_revision=170242",
       "--metadata",
