@@ -31,15 +31,23 @@ def BaseConfig(BUILDER_NAME, **_kwargs):
 
 
 VAR_TEST_MAP = {
-  'BUILDER_NAME': (u'Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes',
-                   u'Build-Ubuntu13.10-GCC4.8-x86_64-Debug'),
+  'BUILDER_NAME': (u'Build-Mac10.7-Clang-Arm7-Debug-iOS',
+                   u'Build-Ubuntu13.10-GCC4.8-x86_64-Debug',
+                   u'Build-Win-VS2013-x86-Debug-Exceptions',
+                   u'Test-Mac10.8-MacMini4.1-GeForce320M-x86_64-Release',
+                   u'Test-Ubuntu12-ShuttleA-GTX550Ti-x86_64-Release-Valgrind',
+                   u'Test-Ubuntu13.10-GCE-NoGPU-x86_64-Release-Shared',
+                   u'Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes',
+                   u'Test-Win7-ShuttleA-HD2000-x86-Debug-GDI',
+                   u'Test-Win7-ShuttleA-HD2000-x86-Release-ANGLE',
+                   u'Test-Win8-ShuttleA-GTX660-x86-Release')
 }
 
 
 def gyp_defs_from_builder_dict(builder_dict):
   gyp_defs = {}
 
-  # skia_arch_width
+  # skia_arch_width.
   if builder_dict['role'] == builder_name_schema.BUILDER_ROLE_BUILD:
     arch = builder_dict['target_arch']
   else:
@@ -57,15 +65,63 @@ def gyp_defs_from_builder_dict(builder_dict):
   if skia_arch_width:
     gyp_defs['skia_arch_width'] = skia_arch_width
 
-  # skia_gpu
-  if builder_dict.get('gpu') == 'NoGPU':
+  # skia_gpu.
+  if (builder_dict.get('gpu') == 'NoGPU' or
+      builder_dict.get('model') == 'IntelRHB'):
     gyp_defs['skia_gpu'] = '0'
 
-  # skia_warnings_as_errors
+  # skia_warnings_as_errors.
   if builder_dict['role'] == builder_name_schema.BUILDER_ROLE_BUILD:
     gyp_defs['skia_warnings_as_errors'] = '1'
   else:
     gyp_defs['skia_warnings_as_errors'] = '0'
+
+  # Win debugger.
+  if 'Win' in builder_dict.get('os', ''):
+    gyp_defs['skia_win_debuggers_path'] = 'c:/DbgHelp'
+
+  # Qt SDK (Win).
+  if 'Win' in builder_dict.get('os', ''):
+    if builder_dict.get('os') == 'Win8':
+      gyp_defs['qt_sdk'] = 'C:/Qt/Qt5.1.0/5.1.0/msvc2012_64/'
+    else:
+      gyp_defs['qt_sdk'] = 'C:/Qt/4.8.5/'
+
+  # ANGLE.
+  if builder_dict.get('extra_config') == 'ANGLE':
+    gyp_defs['skia_angle'] = '1'
+
+  # GDI.
+  if builder_dict.get('extra_config') == 'GDI':
+    gyp_defs['skia_gdi'] = '1'
+
+  # Build with Exceptions on Windows.
+  if ('Win' in builder_dict.get('os', '') and
+      builder_dict.get('extra_config') == 'Exceptions'):
+    gyp_defs['skia_win_exceptions'] = '1'
+
+  # iOS.
+  if (builder_dict.get('os') == 'iOS' or
+      builder_dict.get('extra_config') == 'iOS'):
+    gyp_defs['skia_os'] = 'ios'
+
+  # Shared library build.
+  if builder_dict.get('extra_config') == 'Shared':
+    gyp_defs['skia_shared_lib'] = '1'
+
+  # PDF viewer in GM.
+  if (builder_dict.get('os') == 'Mac10.8' and
+      builder_dict.get('arch') == 'x86_64' and
+      builder_dict.get('configuration') == 'Release'):
+    gyp_defs['skia_run_pdfviewer_in_gm'] = '1'
+
+  # Clang.
+  if builder_dict.get('compiler') == 'Clang':
+    gyp_defs['skia_clang_build'] = '1'
+
+  # Valgrind.
+  if builder_dict.get('extra_config') == 'Valgrind':
+    gyp_defs['skia_release_optimization_level'] = '1'
 
   return gyp_defs
 
