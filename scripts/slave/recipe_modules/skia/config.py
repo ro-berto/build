@@ -32,11 +32,14 @@ def BaseConfig(BUILDER_NAME, **_kwargs):
 
 VAR_TEST_MAP = {
   'BUILDER_NAME': (u'Build-Mac10.7-Clang-Arm7-Debug-iOS',
+                   u'Build-Ubuntu13.10-GCC4.8-NaCl-Debug',
                    u'Build-Ubuntu13.10-GCC4.8-x86_64-Debug',
                    u'Build-Win-VS2013-x86-Debug-Exceptions',
                    u'Test-Mac10.8-MacMini4.1-GeForce320M-x86_64-Release',
+                   u'Test-Ubuntu12-ShuttleA-GTX550Ti-x86_64-Debug-ZeroGPUCache',
                    u'Test-Ubuntu12-ShuttleA-GTX550Ti-x86_64-Release-Valgrind',
                    u'Test-Ubuntu13.10-GCE-NoGPU-x86_64-Release-Shared',
+                   u'Test-Ubuntu13.10-GCE-NoGPU-x86_64-Release-TSAN',
                    u'Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes',
                    u'Test-Win7-ShuttleA-HD2000-x86-Debug-GDI',
                    u'Test-Win7-ShuttleA-HD2000-x86-Release-ANGLE',
@@ -126,15 +129,27 @@ def gyp_defs_from_builder_dict(builder_dict):
   return gyp_defs
 
 
+def build_targets_from_builder_dict(builder_dict):
+  """Return a list of targets to build, depending on the builder type."""
+  if builder_dict.get('target_arch') == 'NaCl':
+    return ['skia_lib', 'debugger']
+  elif builder_dict.get('extra_config') == 'ZeroGPUCache':
+    return ['gm']
+  elif (builder_dict['role'] == builder_name_schema.BUILDER_ROLE_TEST and
+        builder_dict.get('extra_config') == 'TSAN'):
+    return ['dm']
+  else:
+    return ['most']
+
+
 config_ctx = config_item_context(BaseConfig, VAR_TEST_MAP, '%(BUILDER_NAME)s')
 
 
 @config_ctx(is_root=True)
 def skia(c):
   """Base config for Skia."""
-  # TODO(borenet): Build targets should change based on OS and various configs.
-  c.build_targets = ['most']
   c.builder_cfg = builder_name_schema.DictForBuilderName(c.BUILDER_NAME)
+  c.build_targets = build_targets_from_builder_dict(c.builder_cfg)
   c.configuration = c.builder_cfg.get('configuration', CONFIG_DEBUG)
   c.role = c.builder_cfg['role']
   c.do_test_steps = c.role == builder_name_schema.BUILDER_ROLE_TEST

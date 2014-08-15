@@ -47,7 +47,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/nacl/nacl_make",
-      "most",
+      "skia_lib",
       "BUILDTYPE=Debug",
       "--use-ccache"
     ],
@@ -55,6 +55,19 @@
     "env": {
       "NACL_SDK_ROOT": "/home/chrome-bot/nacl_sdk/pepper_32"
     },
-    "name": "build most"
+    "name": "build skia_lib"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/skia/platform_tools/nacl/nacl_make",
+      "debugger",
+      "BUILDTYPE=Debug",
+      "--use-ccache"
+    ],
+    "cwd": "[SLAVE_BUILD]/skia",
+    "env": {
+      "NACL_SDK_ROOT": "/home/chrome-bot/nacl_sdk/pepper_32"
+    },
+    "name": "build debugger"
   }
 ]

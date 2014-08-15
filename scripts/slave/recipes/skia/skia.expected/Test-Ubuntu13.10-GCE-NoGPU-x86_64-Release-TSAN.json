@@ -56,7 +56,7 @@
   {
     "cmd": [
       "make",
-      "most",
+      "dm",
       "BUILDTYPE=Release"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
@@ -64,7 +64,7 @@
       "CHROME_PATH": "/home/chrome-bot/src",
       "GYP_DEFINES": "skia_arch_width=64 skia_gpu=0 skia_warnings_as_errors=0"
     },
-    "name": "build most"
+    "name": "build dm"
   },
   {
     "cmd": [
