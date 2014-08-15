@@ -722,8 +722,8 @@ def get_git_buildspec(buildspec_path, buildspec_version):
       )
     except SubprocessFailed:
       if tries < TOTAL_TRIES - 1:
-        print 'Git Buildspec for %s not committed yet, waiting 5 seconds...'
-        time.sleep(5)
+        print 'Git Buildspec for %s not committed yet, waiting 10 seconds...'
+        time.sleep(10)
         git('cache', 'populate', '--ignore_locks', '-v', '--cache-dir',
             CACHE_DIR, GIT_BUILDSPEC_REPO)
       else:
