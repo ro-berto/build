@@ -55,6 +55,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     tests = list(tests)
 
     failing_tests = []
+    #TODO(martiniss) convert loop
     def run(prefix, tests):
       for t in tests:
         try:

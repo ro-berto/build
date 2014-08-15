@@ -360,6 +360,7 @@ class V8Api(recipe_api.RecipeApi):
     else:
       return V8Test(test)
 
+  #TODO(martiniss) convert loop
   def runtests(self):
     with self.m.step.defer_results():
       for t in self.bot_config.get('tests', []):

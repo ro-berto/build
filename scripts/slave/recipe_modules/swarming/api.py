@@ -233,6 +233,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     # TODO(vadimsh): Trigger multiple tasks as a single step.
     assert all(isinstance(t, SwarmingTask) for t in tasks)
     results = []
+    #TODO(martiniss) convert loop
     for task in tasks:
       assert task.task_id not in self._pending_tasks, (
           'Triggered same task twice: %s' % task.task_id)
@@ -297,6 +298,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     # TODO(vadimsh): Update |tasks| in-place with results of task execution.
     # TODO(vadimsh): Add timeouts.
     assert all(isinstance(t, SwarmingTask) for t in tasks)
+    #TODO(martiniss) convert loop
     for task in tasks:
       assert task.task_id in self._pending_tasks, (
           'Trying to collect a task that was not triggered: %s' % task.task_id)

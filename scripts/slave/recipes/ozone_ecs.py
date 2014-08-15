@@ -87,10 +87,12 @@ def GenSteps(api):
   api.chromium.compile(tests_to_compile, name='compile tests')
 
   tests_to_run = list(set(tests_to_compile) - set(tests_that_do_not_pass))
+  #TODO(martiniss) convert loop
   for x in sorted(tests_to_run):
     api.chromium.runtest(x, xvfb=False, spawn_dbus=(x in dbus_tests))
 
   # Compile the failing targets.
+  #TODO(martiniss) convert loop
   for x in sorted(set(OZONE_TESTS) &
                   set(tests_that_do_not_compile)): # pragma: no cover
     try:
@@ -100,6 +102,7 @@ def GenSteps(api):
 
   # Run the failing tests.
   tests_to_try = list(set(tests_to_compile) & set(tests_that_do_not_pass))
+  #TODO(martiniss) convert loop
   for x in sorted(tests_to_try): # pragma: no cover
     try:
       api.chromium.runtest(x, xvfb=False, name='experimentally run %s' % x)

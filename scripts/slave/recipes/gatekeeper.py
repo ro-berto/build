@@ -60,6 +60,7 @@ def GenSteps(api):
     )
   )
   trees = step_result.json.output
+  #TODO(martiniss) convert loop
   for tree_name, tree_args in trees.iteritems():
     gatekeeper_step(api, tree_name, tree_args)
 

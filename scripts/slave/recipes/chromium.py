@@ -26,6 +26,7 @@ def GenSteps(api):
 
   def test_runner():
     failed_tests = []
+    #TODO(martiniss) convert loop
     for t in tests:
       try:
         t.run(api, '')

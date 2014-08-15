@@ -116,6 +116,7 @@ def GenSteps(api):
       api.chromium_android.adb_install_apk(
           suite['install']['apk'],
           suite['install']['package'])
+    #TODO(martiniss) convert loop
     api.chromium_android.run_instrumentation_suite(
         suite['test'], verbose=True, **suite.get('kwargs', {}))
 
@@ -123,6 +124,7 @@ def GenSteps(api):
   for suite, isolate_path in unittests:
     if isolate_path:
       isolate_path = api.path['checkout'].join(*isolate_path)
+    #TODO(martiniss) convert loop
     api.chromium_android.run_test_suite(
         suite,
         isolate_file_path=isolate_path)

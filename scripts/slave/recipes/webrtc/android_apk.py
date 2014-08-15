@@ -120,6 +120,7 @@ def GenSteps(api):
 
   if does_test:
     api.chromium_android.common_tests_setup_steps()
+    #TODO(martiniss) convert loop
     for test in api.webrtc.ANDROID_APK_TESTS:
       api.base_android.test_runner(test)
 

@@ -132,6 +132,7 @@ def GenSteps(api):
   # framesPerSecond: fps
   points = []
   device = BUILDER_TO_DEVICE[api.properties["buildername"]]
+  #TODO(martiniss) convert loop
   for i in data:
     if i["type"] == "encode_perf_test":
       # Two data points for encoder tests, FPS and minPsnr

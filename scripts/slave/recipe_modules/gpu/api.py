@@ -215,6 +215,7 @@ class GpuApi(recipe_api.RecipeApi):
 
     # Accumulate a list of all the failed test names.
     failures = []
+    #TODO(martiniss) change how this processes everything
     def capture(failure):
       if failure:
         failures.append(failure)
@@ -226,6 +227,8 @@ class GpuApi(recipe_api.RecipeApi):
     # available in the open-source repository.
     if self.is_fyi_waterfall:
       basic_tests += SIMPLE_NON_OPEN_SOURCE_TESTS_TO_RUN
+
+    #TODO(martiniss) convert loop
     for test in basic_tests:
       capture(self._run_isolate(test, args=['--use-gpu-in-tests']))
 
