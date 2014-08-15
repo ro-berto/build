@@ -148,7 +148,13 @@
   },
   {
     "cmd": [
-      "catchsegv",
+      "valgrind",
+      "--gen-suppressions=all",
+      "--leak-check=full",
+      "--track-origins=yes",
+      "--error-exitcode=1",
+      "--num-callers=40",
+      "--suppressions=[SLAVE_BUILD]/skia/tools/valgrind.supp",
       "[SLAVE_BUILD]/skia/out/Release/gm",
       "--verbose",
       "--writeChecksumBasedFilenames",

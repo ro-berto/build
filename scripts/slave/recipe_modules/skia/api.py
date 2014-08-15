@@ -11,6 +11,7 @@ from . import android_flavor
 from . import chromeos_flavor
 from . import default_flavor
 from . import nacl_flavor
+from . import valgrind_flavor
 
 
 class SKPDirs(object):
@@ -65,6 +66,10 @@ def is_nacl(builder_cfg):
   return 'NaCl' in builder_cfg.get('target_arch', '')
 
 
+def is_valgrind(builder_cfg):
+  return 'Valgrind' in builder_cfg.get('extra_config', '')
+
+
 class SkiaApi(recipe_api.RecipeApi):
 
   def _set_flavor(self):
@@ -75,6 +80,8 @@ class SkiaApi(recipe_api.RecipeApi):
       self.flavor = chromeos_flavor.ChromeOSFlavorUtils(self)
     elif is_nacl(self.c.builder_cfg):
       self.flavor = nacl_flavor.NaClFlavorUtils(self)
+    elif is_valgrind(self.c.builder_cfg):
+      self.flavor = valgrind_flavor.ValgrindFlavorUtils(self)
     else:
       self.flavor = default_flavor.DefaultFlavorUtils(self)
 
