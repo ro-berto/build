@@ -150,6 +150,9 @@ def goma_setup(options, env):
   # when options.compiler=jsonclang.
   options.goma_dir = None
   env['GOMA_DISABLED'] = '1'
+  # Upload compiler_proxy.INFO to investigate the reason of compiler_proxy
+  # start-up failure.
+  UploadGomaCompilerProxyInfo()
   return False
 
 
