@@ -96,7 +96,8 @@ class FilterApi(recipe_api.RecipeApi):
       self._result = True
       step_result.presentation.step_text = 'Error: ' + \
           step_result.json.output['error']
-    elif step_result.json.output['status'] == 'Found dependency':
+    elif step_result.json.output['status'] == 'Found dependency' or \
+         step_result.json.output['status'] == 'Found dependency (all)':
       self._matching_exes = step_result.json.output['targets']
       self._result = True
     else:

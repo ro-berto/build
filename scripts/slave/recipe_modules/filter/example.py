@@ -60,7 +60,17 @@ def GenTests(api):
           api.json.output({'status': 'Found dependency',
                                   'targets': []})))
 
-  # Analyze returns matching tests.
+  # Analyze returns matching tests while matching all.
+  yield (api.test('analyzes_matches_all_exes') +
+         api.properties(matching_exes=['foo', 'bar']) +
+         api.properties(example_matching_exes=['foo']) +
+         api.properties(example_result=1) +
+         api.override_step_data(
+          'analyze',
+          api.json.output({'status': 'Found dependency (all)',
+                                  'targets': ['foo']})))
+
+  # Analyze matches all and returns matching tests.
   yield (api.test('analyzes_matches_exes') +
          api.properties(matching_exes=['foo', 'bar']) +
          api.properties(example_matching_exes=['foo']) +
