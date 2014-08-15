@@ -51,8 +51,10 @@ def _GSUploadAllImages(src_dir):
     # Upload the entire staging dir to Google Storage.
     # At present, this will merge the entire contents of [temp_root]/gm
     # into the existing contents of gs://chromium-skia-gm/gm .
-    subprocess.check_call(['gsutil', 'cp', '-R', temp_root,
-                           global_constants.GS_GM_BUCKET])
+    cmd = ['gsutil', 'cp', '-R', os.path.join(temp_root, gm_actuals_subdir),
+           global_constants.GS_GM_BUCKET]
+    print ' '.join(cmd)
+    subprocess.check_call(cmd)
   finally:
     shutil.rmtree(temp_root)
 
