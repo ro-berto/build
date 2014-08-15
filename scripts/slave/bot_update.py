@@ -286,6 +286,9 @@ DISABLED_BUILDERS.update(internal_data.get('DISABLED_BUILDERS', {}))
 DISABLED_SLAVES = {}
 DISABLED_SLAVES.update(internal_data.get('DISABLED_SLAVES', {}))
 
+HEAD_BUILDERS = {}
+HEAD_BUILDERS.update(internal_data.get('HEAD_BUILDERS', {}))
+
 # These masters work only in Git, meaning for got_revision, always output
 # a git hash rather than a SVN rev. This goes away if flag_day is True.
 GIT_MASTERS = ['chromium.git']
@@ -474,6 +477,22 @@ def check_disabled(master, builder, slave):
 def check_valid_host(master, builder, slave):
   return (check_enabled(master, builder, slave)
           and not check_disabled(master, builder, slave))
+
+
+def maybe_ignore_revision(master, builder, revision):
+  """Handle builders that don't care what buildbot tells them to build.
+
+  This is especially the case with builders that build from buildspecs and/or
+  trigger off multiple repositories, where the --revision passed in has nothing
+  to do with the solution being built. Clearing the revision in this case
+  causes bot_update to use HEAD rather that trying to checkout an inappropriate
+  version of the solution.
+  """
+  builder_list = HEAD_BUILDERS.get(master)
+  if builder_list and builder in builder_list:
+    return []
+  return revision
+
 
 
 def solutions_printer(solutions):
@@ -1616,6 +1635,8 @@ def main():
 
   # Check if this script should activate or not.
   active = check_valid_host(master, builder, slave) or options.force or False
+
+  options.revision = maybe_ignore_revision(master, builder, options.revision)
 
   # Print a helpful message to tell developers whats going on with this step.
   print_help_text(
