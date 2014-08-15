@@ -466,6 +466,8 @@ class AndroidApi(recipe_api.RecipeApi):
                                             self.m.chromium.c.BUILD_CONFIG,
                                             'full_log')
     target_arch = self.m.chromium.c.gyp_env.GYP_DEFINES['target_arch']
+    # gyp converts ia32 to x86, bot needs to do the same
+    target_arch = {'ia32': 'x86'}.get(target_arch) or target_arch
     self.m.step(
         'stack_tool_with_logcat_dump',
         [self.m.path['checkout'].join('third_party', 'android_platform',
