@@ -175,7 +175,7 @@
   },
   {
     "name": "$final_result",
-    "reason": "One or more tests failed.",
+    "reason": "2 out of 2 aggregated steps failed. Failures: Step('Check') failed with return_code 1, Step('Check - flaky') failed with return_code 1",
     "status_code": 1
   }
 ]

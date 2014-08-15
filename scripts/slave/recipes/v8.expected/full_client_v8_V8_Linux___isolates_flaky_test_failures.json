@@ -138,5 +138,10 @@
       "step returned non-zero exit code: 1",
       "@@@STEP_FAILURE@@@"
     ]
+  },
+  {
+    "name": "$final_result",
+    "reason": "1 out of 2 aggregated steps failed. Failures: Step('Check - flaky') failed with return_code 1",
+    "status_code": 1
   }
 ]

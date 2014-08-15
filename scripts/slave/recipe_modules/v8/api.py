@@ -361,15 +361,10 @@ class V8Api(recipe_api.RecipeApi):
       return V8Test(test)
 
   def runtests(self):
-    failed = False
-    for t in self.bot_config.get('tests', []):
-      try:
+    with self.m.step.defer_results():
+      for t in self.bot_config.get('tests', []):
         self.create_test(t).run(self)
-      except self.m.step.StepFailure as f:
-        failed = True
-    if failed:
-      raise self.m.step.StepFailure('One or more tests failed.')
-            
+
   def presubmit(self):
     self.m.python(
       'Presubmit',
@@ -419,6 +414,7 @@ class V8Api(recipe_api.RecipeApi):
       env=env,
     )
 
+  @recipe_api.composite_step
   def simple_leak_check(self):
     # TODO(machenbach): Add task kill step for windows.
     relative_d8_path = self.m.path.join(
@@ -529,6 +525,7 @@ class V8Api(recipe_api.RecipeApi):
     presentation.step_text += ('failures: %d<br/>flakes: %d<br/>' %
                                (failure_count, flake_count))
 
+  @recipe_api.composite_step
   def _runtest(self, name, test, flaky_tests=None, **kwargs):
     env = {}
     target = self.m.chromium.c.build_config_fs
@@ -640,11 +637,8 @@ class V8Api(recipe_api.RecipeApi):
       try:
         self._runtest(test['name'], test, flaky_tests='skip', **kwargs)
       finally:
-        try:
-          self._runtest(test['name'] + ' - flaky', test, flaky_tests='run',
-                        **kwargs)
-        except self.m.step.StepFailure:
-          pass
+        self._runtest(test['name'] + ' - flaky', test, flaky_tests='run',
+                      **kwargs)
     else:
       self._runtest(test['name'], test, **kwargs)
 

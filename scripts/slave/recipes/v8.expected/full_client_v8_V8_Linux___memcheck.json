@@ -113,7 +113,7 @@
   },
   {
     "name": "$final_result",
-    "reason": "One or more tests failed.",
+    "reason": "1 out of 1 aggregated steps failed. Failures: Failed leak check",
     "status_code": 1
   }
 ]
