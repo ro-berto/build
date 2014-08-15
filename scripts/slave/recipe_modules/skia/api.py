@@ -12,6 +12,7 @@ from . import chromeos_flavor
 from . import default_flavor
 from . import nacl_flavor
 from . import valgrind_flavor
+from . import xsan_flavor
 
 
 class SKPDirs(object):
@@ -70,6 +71,11 @@ def is_valgrind(builder_cfg):
   return 'Valgrind' in builder_cfg.get('extra_config', '')
 
 
+def is_xsan(builder_cfg):
+  return (builder_cfg.get('extra_config') == 'ASAN' or
+          builder_cfg.get('extra_config') == 'TSAN')
+
+
 class SkiaApi(recipe_api.RecipeApi):
 
   def _set_flavor(self):
@@ -82,6 +88,8 @@ class SkiaApi(recipe_api.RecipeApi):
       self.flavor = nacl_flavor.NaClFlavorUtils(self)
     elif is_valgrind(self.c.builder_cfg):
       self.flavor = valgrind_flavor.ValgrindFlavorUtils(self)
+    elif is_xsan(self.c.builder_cfg):
+      self.flavor = xsan_flavor.XSanFlavorUtils(self)
     else:
       self.flavor = default_flavor.DefaultFlavorUtils(self)
 
