@@ -667,7 +667,7 @@ class DartUtils(object):
       name = variant['name']
       variant['factory_builder'] = self.factory_base_dartium[name]
 
-  def get_web_statuses(self):
+  def get_web_statuses(self, order_console_by_time=False):
     public_html = '../master.chromium/public_html'
     templates = ['../master.client.dart/templates',
                  '../master.chromium/templates']
@@ -676,6 +676,7 @@ class DartUtils(object):
     kwargs = {
       'public_html' : public_html,
       'templates' : templates,
+      'order_console_by_time' : order_console_by_time,
     }
 
     statuses = []
