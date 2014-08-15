@@ -5,15 +5,27 @@
 from common import chromium_utils
 
 from master import build_utils
-from master import gitiles_poller
+
+from buildbot.changes import svnpoller
+
+
+def WebRTCFileSplitter(path):
+  """Splits the SVN path into branch and filename sections."""
+
+  # List of projects we are interested in. The project names must exactly
+  # match paths in the Subversion repository, relative to the 'path' URL
+  # argument. build_utils.SplitPath() will use them as branch names to
+  # kick off the Schedulers for different projects.
+  projects = ['trunk']
+  return build_utils.SplitPath(projects, path)
 
 
 def Update(config, c):
-  poller = gitiles_poller.GitilesPoller(
-      (config.Master.git_server_url + '/external/webrtc'),
-      branches=['master'],
-      project='trunk', # This translates to branch of changes.
-      pollInterval=10,
-      revlinktmpl='http://code.google.com/p/webrtc/source/detail?r=%s',
-      svn_mode=True)
+  poller = svnpoller.SVNPoller(
+      svnurl=config.Master.webrtc_url,
+      svnbin=chromium_utils.SVN_BIN,
+      split_file=WebRTCFileSplitter,
+      pollinterval=30,
+      histmax=10,
+      revlinktmpl='http://code.google.com/p/webrtc/source/detail?r=%s')
   c['change_source'].append(poller)
