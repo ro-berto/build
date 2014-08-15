@@ -21,7 +21,8 @@ class TryserverApi(recipe_api.RecipeApi):
   @property
   def is_tryserver(self):
     """Returns true iff we can apply_issue or patch."""
-    return self.can_apply_issue or self.is_patch_in_svn or self.is_patch_in_git
+    return (self.can_apply_issue or self.is_patch_in_svn or
+            self.is_patch_in_git or self.is_gerrit_issue)
 
   @property
   def can_apply_issue(self):
@@ -29,6 +30,13 @@ class TryserverApi(recipe_api.RecipeApi):
     return (self.m.properties.get('rietveld')
             and 'issue' in self.m.properties
             and 'patchset' in self.m.properties)
+
+  @property
+  def is_gerrit_issue(self):
+    """Returns true iff the properties exist to match a Gerrit issue."""
+    return ('event.patchSet.ref' in self.m.properties and
+            'event.change.url' in self.m.properties and
+            'event.change.id' in self.m.properties)
 
   @property
   def is_patch_in_svn(self):
