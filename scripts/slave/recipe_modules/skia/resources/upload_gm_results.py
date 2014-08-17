@@ -51,7 +51,8 @@ def _GSUploadAllImages(src_dir):
     # Upload the entire staging dir to Google Storage.
     # At present, this will merge the entire contents of [temp_root]/gm
     # into the existing contents of gs://chromium-skia-gm/gm .
-    cmd = ['gsutil', 'cp', '-R', os.path.join(temp_root, gm_actuals_subdir),
+    cmd = ['gsutil', 'cp', '-a', 'public-read', '-R',
+           os.path.join(temp_root, gm_actuals_subdir),
            global_constants.GS_GM_BUCKET]
     print ' '.join(cmd)
     subprocess.check_call(cmd)
@@ -75,7 +76,8 @@ def _GSUploadJsonFiles(src_dir, builder_name):
   for filename in files_to_upload:
     src_path = os.path.join(src_dir, filename)
     gs_dest_path = posixpath.join(gs_dest_dir, filename)
-    subprocess.check_call(['gsutil', 'cp', src_path, gs_dest_path])
+    subprocess.check_call(['gsutil', 'cp', '-a', 'public-read', src_path,
+                           gs_dest_path])
 
 def main(gm_actual_dir, builder_name):
   _GSUploadAllImages(gm_actual_dir)
