@@ -17,6 +17,7 @@ DEPS = [
 def GenSteps(api):
   api.skia.gen_steps()
 
+
 def GenTests(api):
   mastername = 'client.skia'
   slavename = 'skiabot-linux-tester-004'
@@ -35,6 +36,31 @@ def GenTests(api):
     'Test-Win7-ShuttleA-HD2000-x86-Release',
     'Test-Win7-ShuttleA-HD2000-x86-Release-ANGLE',
   ]
+
+  def AndroidTestData(builder):
+    return (
+        api.step_data(
+            'get EXTERNAL_STORAGE dir',
+            stdout=api.raw_io.output('/storage/emulated/legacy')) +
+        api.step_data(
+            'exists /storage/emulated/legacy/skiabot/skia_skp/skps',
+            stdout=api.raw_io.output('')) +
+        api.step_data(
+            'exists /storage/emulated/legacy/skiabot/skia_resources',
+            stdout=api.raw_io.output('')) +
+        api.step_data(
+            'exists /storage/emulated/legacy/skiabot/skia_gm_actual',
+            stdout=api.raw_io.output('')) +
+        api.step_data(
+            ('exists /storage/emulated/legacy/skiabot/skia_gm_expected/' +
+             builder + '/expected-results.json'),
+            stdout=api.raw_io.output('')) +
+        api.step_data(
+            ('exists /storage/emulated/legacy/skiabot/skia_gm_expected/'
+             'ignored-tests.txt'),
+            stdout=api.raw_io.output(''))
+    )
+
   for builder in builders:
     test = (
       api.test(builder) +
@@ -48,28 +74,13 @@ def GenTests(api):
               'expected-results.json'),
           api.path['slave_build'].join('skia', 'expectations', 'gm',
                                        'ignored-tests.txt'),
+          api.path['slave_build'].join('playback', 'skps', 'SKP_VERSION')
       )
     )
     if 'Android' in builder or 'NaCl' in builder:
       test += api.step_data('has ccache?', retcode=1)
     if 'Android' in builder:
-      test += api.step_data(
-          'get EXTERNAL_STORAGE dir',
-          stdout=api.raw_io.output('/storage/emulated/legacy'))
-      test += api.step_data(
-          'exists /storage/emulated/legacy/skiabot/skia_resources',
-          stdout=api.raw_io.output(''))
-      test += api.step_data(
-          'exists /storage/emulated/legacy/skiabot/skia_gm_actual',
-          stdout=api.raw_io.output(''))
-      test += api.step_data(
-          ('exists /storage/emulated/legacy/skiabot/skia_gm_expected/' +
-           builder + '/expected-results.json'),
-          stdout=api.raw_io.output(''))
-      test += api.step_data(
-          ('exists /storage/emulated/legacy/skiabot/skia_gm_expected/'
-           'ignored-tests.txt'),
-          stdout=api.raw_io.output(''))
+      test += AndroidTestData(builder)
     yield test
 
   builder = 'Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes'
@@ -87,11 +98,7 @@ def GenTests(api):
                    mastername=mastername,
                    slavename=slavename) +
     api.step_data('has ccache?', retcode=0,
-                  stdout=api.raw_io.output('/usr/bin/ccache')) +
-    api.step_data('get EXTERNAL_STORAGE dir',
-                  stdout=api.raw_io.output('/storage/emulated/legacy')) +
-    api.step_data('exists /storage/emulated/legacy/skiabot/skia_resources',
-                  stdout=api.raw_io.output(''))
+                  stdout=api.raw_io.output('/usr/bin/ccache'))
   )
 
   yield (

@@ -4,7 +4,9 @@
 
 DEPS = [
   'adb',
+  'file',
   'gclient',
+  'gsutil',
   'path',
   'platform',
   'properties',

@@ -15,6 +15,10 @@ from . import valgrind_flavor
 from . import xsan_flavor
 
 
+TEST_ACTUAL_SKP_VERSION = '43'
+TEST_EXPECTED_SKP_VERSION = '42'
+
+
 def is_android(builder_cfg):
   """Determine whether the given builder is an Android builder."""
   return ('Android' in builder_cfg.get('extra_config', '') or
@@ -83,9 +87,10 @@ class SkiaApi(recipe_api.RecipeApi):
     self.storage_skp_dirs = default_flavor.SKPDirs(
         'playback', self.c.BUILDER_NAME, '/')
 
-    self.device_dirs = self.flavor.get_device_dirs()
+    self.device_dirs = None
     self._ccache = None
     self._checked_for_ccache = False
+    self._already_ran = {}
 
     self.common_steps()
 
@@ -99,6 +104,11 @@ class SkiaApi(recipe_api.RecipeApi):
       raise self.m.step.StepFailure('Failed build steps: %s' %
                                     ', '.join([f.name for f in self.failed]))
 
+  def _run_once(self, fn, *args, **kwargs):
+    if not fn.__name__ in self._already_ran:
+      self._already_ran[fn.__name__] = True
+      fn(*args, **kwargs)
+
   def checkout_steps(self):
     """Run the steps to obtain a checkout of Skia."""
     self.m.gclient.checkout()
@@ -108,6 +118,14 @@ class SkiaApi(recipe_api.RecipeApi):
     """Run the steps to build Skia."""
     for target in self.c.build_targets:
       self.flavor.compile(target)
+
+  def _readfile(self, filename, *args, **kwargs):
+    """Convenience function for reading files."""
+    return self.m.file.read('read %s' % filename, filename, *args, **kwargs)
+
+  def _writefile(self, filename, contents):
+    """Convenience function for writing files."""
+    return self.m.file.write('write %s' % filename, filename, contents)
 
   def run(self, steptype, name, abort_on_failure=True,
           fail_build_on_failure=True, **kwargs):
@@ -120,8 +138,38 @@ class SkiaApi(recipe_api.RecipeApi):
       if fail_build_on_failure:
         self.failed.append(e)
 
+  def download_and_copy_skps(self):
+    """Download the SKPs if needed."""
+    expected_skp_version = None
+    actual_skp_version = None
+
+    version_file = 'SKP_VERSION'
+    expected_version_file = self.m.path['checkout'].join(version_file)
+    expected_skp_version = self._readfile(expected_version_file,
+                                          test_data=TEST_EXPECTED_SKP_VERSION)
+
+    local_skp_path = self.local_skp_dirs.skp_dir()
+    actual_version_file = self.m.path.join(local_skp_path, version_file)
+    if self.m.path.exists(actual_version_file):
+      actual_skp_version = self._readfile(actual_version_file,
+                                          test_data=TEST_ACTUAL_SKP_VERSION)
+
+    if actual_skp_version != expected_skp_version:
+      self.flavor.create_clean_host_dir(local_skp_path)
+      skp_dest = self.m.path.split(local_skp_path)[0]
+      remote_skp_path = self.storage_skp_dirs.skp_dir(expected_skp_version)
+      self.m.gsutil.download(global_constants.GS_GM_BUCKET, remote_skp_path,
+                             skp_dest, args=['-R'], name='download skps')
+      self._writefile(actual_version_file, expected_skp_version)
+
+    # Copy SKPs to device.
+    self.flavor.copy_directory_to_device(self.local_skp_dirs.skp_dir(),
+                                         self.device_dirs.skp_dir)
+
   def install(self):
     """Copy the required executables and files to the device."""
+    self.device_dirs = self.flavor.get_device_dirs()
+
     # TODO(borenet): Only copy files which have changed.
     # Resources
     self.flavor.copy_directory_to_device(self.resource_dir,
@@ -134,9 +182,6 @@ class SkiaApi(recipe_api.RecipeApi):
     """Steps run by both Test and Perf bots."""
     self.checkout_steps()
     self.compile_steps()
-    # TODO(borenet): Implement.
-    #self.download_skps()
-    self.install()
 
   @property
   def ccache(self):
@@ -300,19 +345,33 @@ class SkiaApi(recipe_api.RecipeApi):
       self.run(self.flavor.step, 'dm --abandonGpuContext',
                cmd=abandonGpuContext, abort_on_failure=False)
 
+  def run_render_pdfs(self):
+    """Render SKPs to PDFs."""
+    self._run_once(self.download_and_copy_skps)
+    args = ['render_pdfs', '--inputPaths', self.device_dirs.skp_dir]
+    if ('Nexus4' in self.c.BUILDER_NAME or
+        'NexusS' in self.c.BUILDER_NAME or
+        'Xoom' in self.c.BUILDER_NAME):
+      # On these devices, these SKPs usually make render_pdfs run out of
+      # memory.  See skia:2743.
+      args.extend(['--match', '~tabl_mozilla', '~tabl_nytimes'])
+    self.run(self.flavor.step, 'render_pdfs', cmd=args, abort_on_failure=False)
+
   def test_steps(self):
     """Run all Skia test executables."""
+    self._run_once(self.install)
     self.run_gm()
     self.run_dm()
+    self.run_render_pdfs()
     # TODO(borenet): Implement these steps.
     #self.run_render_skps()
-    #self.run_render_pdfs()
     #self.run_decoding_tests()
 
   def perf_steps(self):
     pass
     # TODO(borenet): Implement these steps.
     # Setup
+    #self._run_once(self.install)
     #self.pre_perf()
 
     # Perf tests.

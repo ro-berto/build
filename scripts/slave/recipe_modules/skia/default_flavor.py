@@ -38,11 +38,8 @@ class SKPDirs(object):
 
   def skp_dir(self, skp_version=None):
     root_dir = self.root_dir
-    # TODO(borenet): The next two lines are commented out to avoid breaking
-    # the coverage test. They will be uncommented when the code to use them is
-    # added.
-    #if skp_version:
-    #  root_dir += '_%s' % skp_version
+    if skp_version:
+      root_dir += '_%s' % skp_version
     return self._path_sep.join((root_dir, 'skps'))
 
 
