@@ -24,11 +24,8 @@ def linux_android():
 
 defaults['category'] = '5android'
 
-android_dbg_archive = master_config.GetArchiveUrl(
-    'ChromiumLinux',
-    'Android Builder (dbg)',
-    'Android_Builder__dbg_',
-    'linux')
+android_dbg_archive = master_config.GetGSUtilUrl(
+    'chromium-android', 'android_main_dbg')
 
 android_rel_archive = master_config.GetGSUtilUrl(
     'chromium-android', 'android_main_rel')
@@ -54,6 +51,7 @@ F('f_android_dbg', linux_android().ChromiumAnnotationFactory(
     annotation_script='src/build/android/buildbot/bb_run_bot.py',
     factory_properties={
       'android_bot_id': 'main-builder-dbg',
+      'build_url': android_dbg_archive,
       'trigger': 'android_trigger_dbg',
     }))
 
