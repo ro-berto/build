@@ -88,7 +88,7 @@ BUILDERS = {
     'android_rel_tests_recipe': {
       'config': 'main_builder',
       'instrumentation_tests': INSTRUMENTATION_TESTS,
-      'unittests': UNIT_TESTS + TELEMETRY_UNIT_TESTS,
+      'unittests': TELEMETRY_UNIT_TESTS,
       'target': 'Release',
       'try': True,
     },
