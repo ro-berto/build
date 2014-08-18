@@ -62,6 +62,7 @@ def _ChromiumChangeFilter(commit_json, branch):
 
 def ChromiumSvnPoller(svnurl=None, *args, **kwargs):
   cachepath = kwargs.pop('cachepath', None)
+  change_filter = kwargs.pop('change_filter', _ChromiumChangeFilter)
   pollInterval = kwargs.pop('pollinterval', 10)
   project = kwargs.pop('project', None)
   if svnurl is None:
@@ -74,7 +75,7 @@ def ChromiumSvnPoller(svnurl=None, *args, **kwargs):
             'http://src.chromium.org/viewvc/chrome?view=rev&revision=%s',
         'pollInterval': pollInterval,
         'svn_mode': True,
-        'change_filter': _ChromiumChangeFilter,
+        'change_filter': change_filter,
     }
     if project and project != 'src':
       poller_kwargs['svn_branch'] = 'src'
