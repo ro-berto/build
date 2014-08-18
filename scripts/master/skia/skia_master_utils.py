@@ -16,6 +16,7 @@ from master.builders_pools import BuildersPools
 from master.factory import annotator_factory
 from master.gitiles_poller import GitilesPoller
 from master.skia import status_json
+from master.status_push import TryServerHttpStatusPush
 from master.try_job_rietveld import TryJobRietveld
 
 import collections
@@ -186,6 +187,19 @@ def SetupMaster(ActiveMaster):
 
   with status_json.JsonStatusHelper() as json_helper:
     json_helper.putChild('trybots', status_json.TryBuildersJsonResource)
+
+  if ActiveMaster.is_production_host:
+    # Try job result emails.
+    from master.try_mail_notifier import TryMailNotifier
+    c['status'].append(TryMailNotifier(
+        fromaddr=ActiveMaster.from_address,
+        subject="try %(result)s for %(reason)s @ r%(revision)s",
+        mode='all',
+        relayhost=config.Master.smtp,
+        lookup=master_utils.UsersAreEmails()))
+
+    c['status'].append(
+        TryServerHttpStatusPush(serverUrl=ActiveMaster.code_review_site))
 
   return c
 
