@@ -34,18 +34,32 @@ BUILDERS = {
     }
   },
   'tryserver.chromium.linux': {
-    'android_dbg_recipe': {
-      'recipe_config': 'main_builder',
+    'android_clang_dbg_recipe': {
+      'recipe_config': 'clang_builder',
       'gclient_apply_config': ['android', 'chrome_internal'],
       'try': True,
       'check_licenses': True,
       'findbugs': True,
-      'upload': {
-        'bucket': 'chromium-android',
-        'path': lambda api: ('android_try_dbg_recipe/full-build-linux_%s.zip'
-                             % api.properties['buildnumber']),
+    },
+    'android_x86_dbg_recipe': {
+      'recipe_config': 'x86_builder',
+      'gclient_apply_config': ['android', 'chrome_internal'],
+      'try': True,
+      'findbugs': True,
+    },
+    'blink_android_compile_dbg_recipe': {
+      'recipe_config': 'main_builder',
+      'gclient_apply_config': ['android', 'chrome_internal'],
+      'try': True,
+    },
+    'blink_android_compile_rel_recipe': {
+      'recipe_config': 'main_builder',
+      'gclient_apply_config': ['android', 'chrome_internal'],
+      'try': True,
+      'kwargs': {
+        'BUILD_CONFIG': 'Release',
       },
-    }
+    },
   },
   'chromium.perf.fyi': {
     'android_oilpan_builder': {

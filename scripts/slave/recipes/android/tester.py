@@ -13,67 +13,83 @@ DEPS = [
     'tryserver',
 ]
 
+INSTRUMENTATION_TESTS = [
+  {
+    'test': 'MojoTest',
+  },
+  {
+    'install': {
+      'package': 'org.chromium.android_webview.shell',
+      'apk': 'AndroidWebView.apk'
+    },
+    'test': 'AndroidWebViewTest',
+    'kwargs': {
+      'test_data': 'webview:android_webview/test/data/device_files',
+    },
+  },
+  {
+    'install': {
+      'package': 'org.chromium.chrome.shell',
+      'apk': 'ChromeShell.apk',
+    },
+    'test': 'ChromeShellTest',
+    'kwargs': {
+      'test_data': 'chrome:chrome/test/data/android/device_files',
+      # TODO(luqui): find out if host_driven_root is necessary
+    },
+  },
+  {
+    'install': {
+      'package': 'org.chromium.chontent_shell_apk',
+      'apk': 'ContentShell.apk',
+    },
+    'test': 'ContentShellTest',
+    'kwargs': {
+      'test_data': 'content:content/test/data/android/device_files',
+    },
+  },
+]
+
+UNIT_TESTS = [
+  [ 'base_unittests', None ],
+  [ 'breakpad_unittests', [ 'breakpad', 'breakpad_unittests.isolate' ] ],
+  [ 'cc_unittests', None ],
+  [ 'components_unittests', None ],
+  [ 'content_browsertests',  None ],
+  [ 'content_unittests', None ],
+  [ 'events_unittests', None ],
+  [ 'gl_tests', None ],
+  [ 'gpu_unittests', None ],
+  [ 'ipc_tests', None ],
+  [ 'media_unittests', None ],
+  [ 'net_unittests', None ],
+  [ 'sandbox_linux_unittests', None ],
+  [ 'sql_unittests', None ],
+  [ 'sync_unit_tests', None ],
+  [ 'ui_unittests', None ],
+  [ 'unit_tests', None ],
+  [ 'webkit_unit_tests', None ],
+]
+
+TELEMETRY_UNIT_TESTS = [
+  [ 'telemetry_unittests', None ],
+  [ 'telemetry_perf_unittests', None ],
+]
+
 BUILDERS = {
   'tryserver.chromium.linux': {
     'android_dbg_tests_recipe': {
       'config': 'main_builder',
-      'instrumentation_tests': [
-        {
-          'test': 'MojoTest',
-        },
-        {
-          'install': {
-            'package': 'org.chromium.android_webview.shell',
-            'apk': 'AndroidWebView.apk'
-          },
-          'test': 'AndroidWebViewTest',
-          'kwargs': {
-            'test_data': 'webview:android_webview/test/data/device_files',
-          },
-        },
-        {
-          'install': {
-            'package': 'org.chromium.chrome.shell',
-            'apk': 'ChromeShell.apk',
-          },
-          'test': 'ChromeShellTest',
-          'kwargs': {
-            'test_data': 'chrome:chrome/test/data/android/device_files',
-            # TODO(luqui): find out if host_driven_root is necessary
-          },
-        },
-        {
-          'install': {
-            'package': 'org.chromium.chontent_shell_apk',
-            'apk': 'ContentShell.apk',
-          },
-          'test': 'ContentShellTest',
-          'kwargs': {
-            'test_data': 'content:content/test/data/android/device_files',
-          },
-        },
-      ],
-      'unittests': [
-        [ 'base_unittests', None ],
-        [ 'breakpad_unittests', [ 'breakpad', 'breakpad_unittests.isolate' ] ],
-        [ 'cc_unittests', None ],
-        [ 'components_unittests', None ],
-        [ 'content_browsertests',  None ],
-        [ 'content_unittests', None ],
-        [ 'events_unittests', None ],
-        [ 'gl_tests', None ],
-        [ 'gpu_unittests', None ],
-        [ 'ipc_tests', None ],
-        [ 'media_unittests', None ],
-        [ 'net_unittests', None ],
-        [ 'sandbox_linux_unittests', None ],
-        [ 'sql_unittests', None ],
-        [ 'sync_unit_tests', None ],
-        [ 'ui_unittests', None ],
-        [ 'unit_tests', None ],
-        [ 'webkit_unit_tests', None ],
-      ],
+      'instrumentation_tests': INSTRUMENTATION_TESTS,
+      'unittests': UNIT_TESTS,
       'target': 'Debug',
+      'try': True,
+    },
+    'android_rel_tests_recipe': {
+      'config': 'main_builder',
+      'instrumentation_tests': INSTRUMENTATION_TESTS,
+      'unittests': UNIT_TESTS + TELEMETRY_UNIT_TESTS,
+      'target': 'Release',
       'try': True,
     },
   }

@@ -7,7 +7,7 @@
       "--master",
       "tryserver.chromium.linux",
       "--builder",
-      "android_dbg_recipe",
+      "blink_android_compile_dbg_recipe",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -123,62 +123,5 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "compile"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/android_webview/tools/webview_licenses.py",
-      "scan"
-    ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "check licenses"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/src/build/android/findbugs_diff.py"
-    ],
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "findbugs"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/src/tools/android/findbugs_plugin/test/run_findbugs_plugin_tests.py"
-    ],
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "findbugs_tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/android/archive_build.py",
-      "--target",
-      "Debug",
-      "--name",
-      "build_product.zip"
-    ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "zip_build_product"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
-      "cp",
-      "[SLAVE_BUILD]/src/out/build_product.zip",
-      "gs://chromium-android/android_try_dbg_recipe/full-build-linux_257.zip"
-    ],
-    "name": "gsutil upload_build_product",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-android/android_try_dbg_recipe/full-build-linux_257.zip@@@"
-    ]
   }
 ]
