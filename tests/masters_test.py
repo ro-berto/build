@@ -250,7 +250,6 @@ def main(argv):
       'master.client.webrtc.fyi': 'WebRTCFYI',
       'master.experimental': 'Experimental',
       'master.push.canary': 'PushCanary',
-      'master.tryserver.chromium': 'TryServer',
       'master.tryserver.chromium.linux': 'TryServerChromiumLinux',
       'master.tryserver.chromium.mac': 'TryServerChromiumMac',
       'master.tryserver.chromium.win': 'TryServerChromiumWin',
