@@ -15,6 +15,16 @@ def WebkitFileSplitter(path):
   projects = ['trunk']
   return build_utils.SplitPath(projects, path)
 
+class WebkitSvnPoller(svnpoller.SVNPoller):
+  def __init__(self, *args, **kwargs):
+    self.comparator = kwargs.pop('comparator')
+    svnpoller.SVNPoller.__init__(self, *args, **kwargs)
+
+  def create_changes(self, new_logentries):
+    changes = super(WebkitSvnPoller, self).create_changes(new_logentries)
+    for change in changes:
+      self.comparator.addRevision(change['revision'])
+    return changes
 
 def Update(config, _active_master, c):
   # Polls config.Master.trunk_url for changes
@@ -24,13 +34,14 @@ def Update(config, _active_master, c):
   c['change_source'].append(cr_poller)
 
   webkit_url = 'http://src.chromium.org/viewvc/blink?view=rev&revision=%s'
-  webkit_poller = svnpoller.SVNPoller(svnurl = config.Master.webkit_root_url,
-                                      svnbin=chromium_utils.SVN_BIN,
-                                      split_file=WebkitFileSplitter,
-                                      pollinterval=30,
-                                      revlinktmpl=webkit_url,
-                                      cachepath='webkit.svnrev',
-                                      project='webkit')
+  webkit_poller = WebkitSvnPoller(svnurl = config.Master.webkit_root_url,
+                                  svnbin=chromium_utils.SVN_BIN,
+                                  split_file=WebkitFileSplitter,
+                                  pollinterval=30,
+                                  revlinktmpl=webkit_url,
+                                  cachepath='webkit.svnrev',
+                                  project='webkit',
+                                  comparator=cr_poller.comparator)
   c['change_source'].append(webkit_poller)
 
   c['schedulers'].append(AnyBranchScheduler(
