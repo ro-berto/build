@@ -6,6 +6,7 @@
 import argparse
 import bz2
 import datetime
+import gzip
 import inspect
 import logging
 import logging.handlers
@@ -205,8 +206,8 @@ class GCStorage(object):
     if returncode != 0:
       # The object can be missing when the builder name hasn't been used yet.
       if not 'No such object' in stderr:
-        logger.error("Unable to list bucket content.")
-        raise GSutilError("Unable to list bucket content. gsutil stderr: %s",
+        logger.error('Unable to list bucket content.')
+        raise GSutilError('Unable to list bucket content. gsutil stderr: %s',
                           stderr)
     else:
       for line in stdout.splitlines():
@@ -232,6 +233,9 @@ class GCStorage(object):
     if source.endswith('.bz2'):
       logger.debug('Uncompressing bz2 file...')
       openfunc = lambda: bz2.BZ2File(source, 'rb')
+    elif source.endswith('.gz'):
+      logger.debug('Uncompressing gz file...')
+      openfunc = lambda: gzip.GzipFile(source, 'rb')
     else:
       # TODO(pgervais) could use a symbolic link instead.
       # But beware of race conditions.
@@ -471,7 +475,7 @@ class Waterfall(object):
       ref = (build_properties['builderName'],
              build_number, re.sub(r'/', '_', step_name) + '.' + log_name)
 
-      for ext in ('', '.bz2'):
+      for ext in ('', '.gz', '.bz2'):
         filename_ext = filename + ext
         if os.path.isfile(filename_ext):
           log_filenames.append((ref, filename_ext))
