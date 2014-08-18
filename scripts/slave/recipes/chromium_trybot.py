@@ -431,6 +431,16 @@ def add_swarming_builder(original, swarming, server):
   BUILDERS[server]['builders'][swarming] = conf
 
 
+def does_regex_match(name, regexs):
+  """Returns true if |name| matches one of the regular expressions in
+  |regexs|."""
+  for regex in regexs:
+    match = re.match(regex, name)
+    if match and match.end() == len(name):
+      return True
+  return False
+
+
 def should_filter_builder(name, regexs, root):
   """Returns true if the builder |name| should be filtered. |regexs| is a list
   of the regular expressions specifying the builders that should *not* be
@@ -440,11 +450,15 @@ def should_filter_builder(name, regexs, root):
   # many try jobs for them.
   if root != 'src':
     return False
-  for regex in regexs:
-    match = re.match(regex, name)
-    if match and match.end() == len(name):
-      return False
-  return True
+  return not does_regex_match(name, regexs)
+
+
+def should_filter_tests(name, regexs):
+  """Returns true if the builder |name| should filter the sets of tests.
+  |regexs| is a list of the regular expressions specifying the builders that
+  should *not* be filtered. If |name| completely matches one of the regular
+  expressions than false is returned, otherwise true."""
+  return not does_regex_match(name, regexs)
 
 
 def get_test_names(gtest_tests, swarming_tests):
@@ -659,7 +673,8 @@ def GenSteps(api):
       if not api.filter.result:
         return [], swarming_tests, bot_update_step
       # Patch needs compile. Filter the list of test targets.
-      if buildername in test_spec.get('filter_tests_builders', []):
+      if should_filter_tests(buildername,
+                             test_spec.get('non_filter_tests_builders', [])):
         gtest_tests = filter_tests(gtest_tests, api.filter.matching_exes)
         swarming_tests = filter_tests(swarming_tests, api.filter.matching_exes)
 
@@ -1106,13 +1121,14 @@ def GenTests(api):
       api.json.output({'status': 'Found dependency', 'targets': []}))
   )
 
-  # Tests analyze module by way of not specifying non_filter_builders and
+  # Tests analyze module by way of specifying non_filter_builders and
   # analyze result returning true along with a smaller set of tests.
   yield (
     api.test('compile_because_of_analyze_with_filtered_tests_no_builder') +
     props(buildername='linux_chromium_rel') +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
+        'non_filter_tests_builders': ['linux_chromium_rel'],
         'gtest_tests': [
           {
             'test': 'base_unittests',
@@ -1141,7 +1157,6 @@ def GenTests(api):
     props(buildername='linux_chromium_rel') +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
-        'filter_tests_builders': 'linux_chromium_rel',
         'gtest_tests': [
           {
             'test': 'base_unittests',
