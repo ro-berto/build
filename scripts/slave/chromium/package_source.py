@@ -158,7 +158,7 @@ def main():
   find_command = ['find', 'src/', 'tools/', '/usr/include/', '-type', 'f',
                   # The only files under src/out we want to package up
                   # are index files....
-                  '(', '-regex', '^src/out/.*index$', '-o',
+                  '(', '-regex', '^src/out/.*\.index$', '-o',
                       '(',
                          # ... and generated sources...
                          '-regex', '^src/out/.*/gen/.*', '-a',
