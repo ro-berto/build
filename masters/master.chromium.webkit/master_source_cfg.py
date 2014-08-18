@@ -21,7 +21,7 @@ class WebkitSvnPoller(svnpoller.SVNPoller):
     svnpoller.SVNPoller.__init__(self, *args, **kwargs)
 
   def create_changes(self, new_logentries):
-    changes = super(WebkitSvnPoller, self).create_changes(new_logentries)
+    changes = svnpoller.SVNPoller.create_changes(self, new_logentries)
     for change in changes:
       self.comparator.addRevision(change['revision'])
     return changes
