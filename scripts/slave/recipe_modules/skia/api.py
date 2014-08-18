@@ -263,11 +263,48 @@ class SkiaApi(recipe_api.RecipeApi):
              cwd=self.m.path['checkout'],
              abort_on_failure=False)
 
+  def run_dm(self):
+    """Run the DM test."""
+    args = [
+      'dm',
+      '--verbose',
+      '--resourcePath', self.device_dirs.resource_dir,
+    ]
+
+    match = []
+    if 'Alex' in self.c.BUILDER_NAME:
+      # This machine looks to be running out of heap.
+      # Running with fewer threads may help.
+      args.extend(['--threads', '1'])
+    if 'Android' in self.c.BUILDER_NAME:
+      match.append('~giantbitmap')
+    if 'Tegra' in self.c.BUILDER_NAME:
+      match.append('~downsamplebitmap_text')
+    if 'Xoom' in self.c.BUILDER_NAME:
+      match.append('~WritePixels')  # skia:1699
+    if 'SGX540' in self.c.BUILDER_NAME:
+      # Nexus S and Galaxy Nexus are still crashing.
+      # Maybe the GPU's the problem?
+      args.append('--nogpu')
+
+    if match:
+      args.append('--match')
+      args.extend(match)
+    self.run(self.flavor.step, 'dm', cmd=args, abort_on_failure=False)
+
+    # See skia:2789.
+    if 'Valgrind' in self.c.BUILDER_NAME:
+      abandonGpuContext = list(args)
+      abandonGpuContext.append('--abandonGpuContext')
+      abandonGpuContext.append('--nocpu')
+      self.run(self.flavor.step, 'dm --abandonGpuContext',
+               cmd=abandonGpuContext, abort_on_failure=False)
+
   def test_steps(self):
     """Run all Skia test executables."""
     self.run_gm()
+    self.run_dm()
     # TODO(borenet): Implement these steps.
-    #self.run_dm()
     #self.run_render_skps()
     #self.run_render_pdfs()
     #self.run_decoding_tests()

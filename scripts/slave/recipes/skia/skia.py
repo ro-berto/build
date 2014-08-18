@@ -23,8 +23,10 @@ def GenTests(api):
   builders = [
     'Build-Ubuntu13.10-GCC4.8-x86_64-Debug',
     'Perf-ChromeOS-Daisy-MaliT604-Arm7-Release',
+    'Test-Android-GalaxyNexus-SGX540-Arm7-Debug',
     'Test-Android-Nexus10-MaliT604-Arm7-Release',
     'Test-Android-Xoom-Tegra2-Arm7-Release',
+    'Test-ChromeOS-Alex-GMA3150-x86-Debug',
     'Test-Mac10.8-MacMini4.1-GeForce320M-x86_64-Debug',
     'Test-Ubuntu12-ShuttleA-GTX550Ti-x86_64-Release-Valgrind',
     'Test-Ubuntu12-ShuttleA-GTX550Ti-x86_64-Debug-ZeroGPUCache',

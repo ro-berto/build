@@ -81,12 +81,12 @@
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_ninja",
       "most",
       "-d",
-      "xoom"
+      "galaxy_nexus"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
-      "BUILDTYPE": "Release",
+      "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_width=32 skia_warnings_as_errors=0",
       "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
@@ -218,9 +218,9 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/gm/actual/Test-Android-Xoom-Tegra2-Arm7-Release"
+      "[SLAVE_BUILD]/gm/actual/Test-Android-GalaxyNexus-SGX540-Arm7-Debug"
     ],
-    "name": "rmtree [SLAVE_BUILD]/gm/actual/Test-Android-Xoom-Tegra2-Arm7-Release",
+    "name": "rmtree [SLAVE_BUILD]/gm/actual/Test-Android-GalaxyNexus-SGX540-Arm7-Debug",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -236,10 +236,10 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/gm/actual/Test-Android-Xoom-Tegra2-Arm7-Release",
+      "[SLAVE_BUILD]/gm/actual/Test-Android-GalaxyNexus-SGX540-Arm7-Debug",
       "511"
     ],
-    "name": "makedirs [SLAVE_BUILD]/gm/actual/Test-Android-Xoom-Tegra2-Arm7-Release",
+    "name": "makedirs [SLAVE_BUILD]/gm/actual/Test-Android-GalaxyNexus-SGX540-Arm7-Debug",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -273,14 +273,14 @@
       "if",
       "[",
       "-e",
-      "/storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-Xoom-Tegra2-Arm7-Release/expected-results.json",
+      "/storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-GalaxyNexus-SGX540-Arm7-Debug/expected-results.json",
       "];",
       "then",
       "echo",
       "FILE_EXISTS;",
       "fi"
     ],
-    "name": "exists /storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-Xoom-Tegra2-Arm7-Release/expected-results.json",
+    "name": "exists /storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-GalaxyNexus-SGX540-Arm7-Debug/expected-results.json",
     "stdout": "/path/to/tmp/"
   },
   {
@@ -306,29 +306,24 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_run_skia",
       "-d",
-      "xoom",
+      "galaxy_nexus",
       "-s",
       "014E1F310401C009",
-      "--release",
       "gm",
       "--verbose",
       "--writeChecksumBasedFilenames",
       "--mismatchPath",
-      "/storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-Xoom-Tegra2-Arm7-Release",
+      "/storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-GalaxyNexus-SGX540-Arm7-Debug",
       "--missingExpectationsPath",
-      "/storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-Xoom-Tegra2-Arm7-Release",
+      "/storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-GalaxyNexus-SGX540-Arm7-Debug",
       "--writeJsonSummaryPath",
-      "/storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-Xoom-Tegra2-Arm7-Release/actual-results.json",
+      "/storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-GalaxyNexus-SGX540-Arm7-Debug/actual-results.json",
       "--ignoreErrorTypes",
       "IntentionallySkipped",
       "MissingExpectations",
       "ExpectationsMismatch",
       "--resourcePath",
-      "/storage/emulated/legacy/skiabot/skia_resources",
-      "--resetGpuContext",
-      "--config",
-      "defaults",
-      "msaa16"
+      "/storage/emulated/legacy/skiabot/skia_resources"
     ],
     "name": "gm"
   },
@@ -338,17 +333,17 @@
       "-s",
       "014E1F310401C009",
       "pull",
-      "/storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-Xoom-Tegra2-Arm7-Release",
-      "[SLAVE_BUILD]/gm/actual/Test-Android-Xoom-Tegra2-Arm7-Release"
+      "/storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-GalaxyNexus-SGX540-Arm7-Debug",
+      "[SLAVE_BUILD]/gm/actual/Test-Android-GalaxyNexus-SGX540-Arm7-Debug"
     ],
-    "name": "pull /storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-Xoom-Tegra2-Arm7-Release"
+    "name": "pull /storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-GalaxyNexus-SGX540-Arm7-Debug"
   },
   {
     "cmd": [
       "python",
       "-u",
       "[SLAVE_BUILD]/skia/gm/display_json_results.py",
-      "[SLAVE_BUILD]/gm/actual/Test-Android-Xoom-Tegra2-Arm7-Release/actual-results.json"
+      "[SLAVE_BUILD]/gm/actual/Test-Android-GalaxyNexus-SGX540-Arm7-Debug/actual-results.json"
     ],
     "name": "Compare GMs"
   },
@@ -357,8 +352,8 @@
       "python",
       "-u",
       "[BUILD]/scripts/slave/recipe_modules/skia/resources/upload_gm_results.py",
-      "[SLAVE_BUILD]/gm/actual/Test-Android-Xoom-Tegra2-Arm7-Release",
-      "Test-Android-Xoom-Tegra2-Arm7-Release"
+      "[SLAVE_BUILD]/gm/actual/Test-Android-GalaxyNexus-SGX540-Arm7-Debug",
+      "Test-Android-GalaxyNexus-SGX540-Arm7-Debug"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "name": "Upload GM Results"
@@ -367,18 +362,16 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_run_skia",
       "-d",
-      "xoom",
+      "galaxy_nexus",
       "-s",
       "014E1F310401C009",
-      "--release",
       "dm",
       "--verbose",
       "--resourcePath",
       "/storage/emulated/legacy/skiabot/skia_resources",
+      "--nogpu",
       "--match",
-      "~giantbitmap",
-      "~downsamplebitmap_text",
-      "~WritePixels"
+      "~giantbitmap"
     ],
     "name": "dm"
   }

@@ -361,5 +361,22 @@
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "name": "Upload GM Results"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_run_skia",
+      "-d",
+      "nexus_10",
+      "-s",
+      "014E1F310401C009",
+      "--release",
+      "dm",
+      "--verbose",
+      "--resourcePath",
+      "/storage/emulated/legacy/skiabot/skia_resources",
+      "--match",
+      "~giantbitmap"
+    ],
+    "name": "dm"
   }
 ]

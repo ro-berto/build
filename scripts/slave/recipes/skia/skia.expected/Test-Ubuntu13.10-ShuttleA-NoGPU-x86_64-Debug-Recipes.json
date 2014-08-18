@@ -190,5 +190,15 @@
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "name": "Upload GM Results"
+  },
+  {
+    "cmd": [
+      "catchsegv",
+      "[SLAVE_BUILD]/skia/out/Debug/dm",
+      "--verbose",
+      "--resourcePath",
+      "[SLAVE_BUILD]/skia/resources"
+    ],
+    "name": "dm"
   }
 ]

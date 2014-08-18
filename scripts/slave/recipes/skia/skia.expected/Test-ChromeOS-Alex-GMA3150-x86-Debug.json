@@ -38,31 +38,15 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "\nimport os\nimport sys\nwith open(sys.argv[1], 'w') as f:\n  f.write(os.path.join(os.path.expanduser('~'), 'src'))\n",
-      "/path/to/tmp/"
-    ],
-    "name": "get CHROME_PATH",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@with open(sys.argv[1], 'w') as f:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  f.write(os.path.join(os.path.expanduser('~'), 'src'))@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "make",
+      "[SLAVE_BUILD]/skia/platform_tools/chromeos/bin/chromeos_make",
+      "-d",
+      "x86-alex",
       "most",
-      "BUILDTYPE=Release"
+      "BUILDTYPE=Debug"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
-      "CHROME_PATH": "/home/chrome-bot/src",
-      "GYP_DEFINES": "skia_arch_width=64 skia_release_optimization_level=1 skia_warnings_as_errors=0"
+      "GYP_DEFINES": "skia_arch_width=32 skia_warnings_as_errors=0"
     },
     "name": "build most"
   },
@@ -111,9 +95,9 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/gm/actual/Test-Ubuntu12-ShuttleA-GTX550Ti-x86_64-Release-Valgrind"
+      "[SLAVE_BUILD]/gm/actual/Test-ChromeOS-Alex-GMA3150-x86-Debug"
     ],
-    "name": "rmtree [SLAVE_BUILD]/gm/actual/Test-Ubuntu12-ShuttleA-GTX550Ti-x86_64-Release-Valgrind",
+    "name": "rmtree [SLAVE_BUILD]/gm/actual/Test-ChromeOS-Alex-GMA3150-x86-Debug",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -129,10 +113,10 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/gm/actual/Test-Ubuntu12-ShuttleA-GTX550Ti-x86_64-Release-Valgrind",
+      "[SLAVE_BUILD]/gm/actual/Test-ChromeOS-Alex-GMA3150-x86-Debug",
       "511"
     ],
-    "name": "makedirs [SLAVE_BUILD]/gm/actual/Test-Ubuntu12-ShuttleA-GTX550Ti-x86_64-Release-Valgrind",
+    "name": "makedirs [SLAVE_BUILD]/gm/actual/Test-ChromeOS-Alex-GMA3150-x86-Debug",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -148,22 +132,15 @@
   },
   {
     "cmd": [
-      "valgrind",
-      "--gen-suppressions=all",
-      "--leak-check=full",
-      "--track-origins=yes",
-      "--error-exitcode=1",
-      "--num-callers=40",
-      "--suppressions=[SLAVE_BUILD]/skia/tools/valgrind.supp",
-      "[SLAVE_BUILD]/skia/out/Release/gm",
+      "[SLAVE_BUILD]/skia/out/Debug/gm",
       "--verbose",
       "--writeChecksumBasedFilenames",
       "--mismatchPath",
-      "[SLAVE_BUILD]/gm/actual/Test-Ubuntu12-ShuttleA-GTX550Ti-x86_64-Release-Valgrind",
+      "[SLAVE_BUILD]/gm/actual/Test-ChromeOS-Alex-GMA3150-x86-Debug",
       "--missingExpectationsPath",
-      "[SLAVE_BUILD]/gm/actual/Test-Ubuntu12-ShuttleA-GTX550Ti-x86_64-Release-Valgrind",
+      "[SLAVE_BUILD]/gm/actual/Test-ChromeOS-Alex-GMA3150-x86-Debug",
       "--writeJsonSummaryPath",
-      "[SLAVE_BUILD]/gm/actual/Test-Ubuntu12-ShuttleA-GTX550Ti-x86_64-Release-Valgrind/actual-results.json",
+      "[SLAVE_BUILD]/gm/actual/Test-ChromeOS-Alex-GMA3150-x86-Debug/actual-results.json",
       "--ignoreErrorTypes",
       "IntentionallySkipped",
       "MissingExpectations",
@@ -171,11 +148,7 @@
       "--resourcePath",
       "[SLAVE_BUILD]/skia/resources",
       "--ignoreFailuresFile",
-      "[SLAVE_BUILD]/skia/expectations/gm/ignored-tests.txt",
-      "--config",
-      "defaults",
-      "msaa16",
-      "--pdfRasterizers"
+      "[SLAVE_BUILD]/skia/expectations/gm/ignored-tests.txt"
     ],
     "name": "gm"
   },
@@ -184,7 +157,7 @@
       "python",
       "-u",
       "[SLAVE_BUILD]/skia/gm/display_json_results.py",
-      "[SLAVE_BUILD]/gm/actual/Test-Ubuntu12-ShuttleA-GTX550Ti-x86_64-Release-Valgrind/actual-results.json"
+      "[SLAVE_BUILD]/gm/actual/Test-ChromeOS-Alex-GMA3150-x86-Debug/actual-results.json"
     ],
     "name": "Compare GMs"
   },
@@ -193,44 +166,21 @@
       "python",
       "-u",
       "[BUILD]/scripts/slave/recipe_modules/skia/resources/upload_gm_results.py",
-      "[SLAVE_BUILD]/gm/actual/Test-Ubuntu12-ShuttleA-GTX550Ti-x86_64-Release-Valgrind",
-      "Test-Ubuntu12-ShuttleA-GTX550Ti-x86_64-Release-Valgrind"
+      "[SLAVE_BUILD]/gm/actual/Test-ChromeOS-Alex-GMA3150-x86-Debug",
+      "Test-ChromeOS-Alex-GMA3150-x86-Debug"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "name": "Upload GM Results"
   },
   {
     "cmd": [
-      "valgrind",
-      "--gen-suppressions=all",
-      "--leak-check=full",
-      "--track-origins=yes",
-      "--error-exitcode=1",
-      "--num-callers=40",
-      "--suppressions=[SLAVE_BUILD]/skia/tools/valgrind.supp",
-      "[SLAVE_BUILD]/skia/out/Release/dm",
-      "--verbose",
-      "--resourcePath",
-      "[SLAVE_BUILD]/skia/resources"
-    ],
-    "name": "dm"
-  },
-  {
-    "cmd": [
-      "valgrind",
-      "--gen-suppressions=all",
-      "--leak-check=full",
-      "--track-origins=yes",
-      "--error-exitcode=1",
-      "--num-callers=40",
-      "--suppressions=[SLAVE_BUILD]/skia/tools/valgrind.supp",
-      "[SLAVE_BUILD]/skia/out/Release/dm",
+      "[SLAVE_BUILD]/skia/out/Debug/dm",
       "--verbose",
       "--resourcePath",
       "[SLAVE_BUILD]/skia/resources",
-      "--abandonGpuContext",
-      "--nocpu"
+      "--threads",
+      "1"
     ],
-    "name": "dm --abandonGpuContext"
+    "name": "dm"
   }
 ]
