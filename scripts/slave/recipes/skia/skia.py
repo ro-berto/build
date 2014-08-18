@@ -18,6 +18,8 @@ def GenSteps(api):
   api.skia.gen_steps()
 
 def GenTests(api):
+  mastername = 'client.skia'
+  slavename = 'skiabot-linux-tester-004'
   builders = [
     'Build-Ubuntu13.10-GCC4.8-x86_64-Debug',
     'Perf-ChromeOS-Daisy-MaliT604-Arm7-Release',
@@ -34,7 +36,9 @@ def GenTests(api):
   for builder in builders:
     test = (
       api.test(builder) +
-      api.properties(buildername=builder) +
+      api.properties(buildername=builder,
+                     mastername=mastername,
+                     slavename=slavename) +
       api.path.exists(
           api.path['slave_build'].join(
               'skia', 'expectations', 'gm',
@@ -46,25 +50,53 @@ def GenTests(api):
     )
     if 'Android' in builder or 'NaCl' in builder:
       test += api.step_data('has ccache?', retcode=1)
+    if 'Android' in builder:
+      test += api.step_data(
+          'get EXTERNAL_STORAGE dir',
+          stdout=api.raw_io.output('/storage/emulated/legacy'))
+      test += api.step_data(
+          'exists /storage/emulated/legacy/skiabot/skia_resources',
+          stdout=api.raw_io.output(''))
+      test += api.step_data(
+          'exists /storage/emulated/legacy/skiabot/skia_gm_actual',
+          stdout=api.raw_io.output(''))
+      test += api.step_data(
+          ('exists /storage/emulated/legacy/skiabot/skia_gm_expected/' +
+           builder + '/expected-results.json'),
+          stdout=api.raw_io.output(''))
+      test += api.step_data(
+          ('exists /storage/emulated/legacy/skiabot/skia_gm_expected/'
+           'ignored-tests.txt'),
+          stdout=api.raw_io.output(''))
     yield test
 
   builder = 'Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes'
   yield (
     api.test('failed_gm') +
-    api.properties(buildername=builder) +
+    api.properties(buildername=builder,
+                   mastername=mastername,
+                   slavename=slavename) +
     api.step_data('gm', retcode=1)
   )
 
   yield (
     api.test('has_ccache_android') +
-    api.properties(buildername='Build-Ubuntu13.10-GCC4.8-Arm7-Debug-Android') +
+    api.properties(buildername='Build-Ubuntu13.10-GCC4.8-Arm7-Debug-Android',
+                   mastername=mastername,
+                   slavename=slavename) +
     api.step_data('has ccache?', retcode=0,
-                  stdout=api.raw_io.output('/usr/bin/ccache'))
+                  stdout=api.raw_io.output('/usr/bin/ccache')) +
+    api.step_data('get EXTERNAL_STORAGE dir',
+                  stdout=api.raw_io.output('/storage/emulated/legacy')) +
+    api.step_data('exists /storage/emulated/legacy/skiabot/skia_resources',
+                  stdout=api.raw_io.output(''))
   )
 
   yield (
     api.test('has_ccache_nacl') +
-    api.properties(buildername='Build-Ubuntu13.10-GCC4.8-NaCl-Debug') +
+    api.properties(buildername='Build-Ubuntu13.10-GCC4.8-NaCl-Debug',
+                   mastername=mastername,
+                   slavename=slavename) +
     api.step_data('has ccache?', retcode=0,
                   stdout=api.raw_io.output('/usr/bin/ccache'))
   )

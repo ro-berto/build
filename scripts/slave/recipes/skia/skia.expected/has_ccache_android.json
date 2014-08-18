@@ -3,6 +3,34 @@
     "cmd": [
       "python",
       "-u",
+      "[BUILD]/scripts/slave/recipe_modules/adb/resources/list_devices.py",
+      "['[BUILD_INTERNAL]/scripts/slave/android/adb', 'devices']",
+      "/path/to/tmp/json"
+    ],
+    "name": "List adb devices",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"014E1F310401C009\"@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "shell",
+      "echo",
+      "$EXTERNAL_STORAGE"
+    ],
+    "name": "get EXTERNAL_STORAGE dir",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[DEPOT_TOOLS]/gclient.py",
       "config",
       "--spec",
@@ -60,5 +88,83 @@
       "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
     "name": "build most"
+  },
+  {
+    "cmd": [
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "shell",
+      "rm",
+      "-r",
+      "/storage/emulated/legacy/skiabot/skia_resources"
+    ],
+    "name": "rmdir /storage/emulated/legacy/skiabot/skia_resources"
+  },
+  {
+    "cmd": [
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "shell",
+      "if",
+      "[",
+      "-e",
+      "/storage/emulated/legacy/skiabot/skia_resources",
+      "];",
+      "then",
+      "echo",
+      "FILE_EXISTS;",
+      "fi"
+    ],
+    "name": "exists /storage/emulated/legacy/skiabot/skia_resources",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "push",
+      "[SLAVE_BUILD]/skia/resources",
+      "/storage/emulated/legacy/skiabot/skia_resources"
+    ],
+    "name": "push [SLAVE_BUILD]/skia/resources"
+  },
+  {
+    "cmd": [
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "root"
+    ],
+    "name": "adb root"
+  },
+  {
+    "cmd": [
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "remount"
+    ],
+    "name": "adb remount"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_kill_skia",
+      "-s",
+      "014E1F310401C009"
+    ],
+    "name": "kill skia"
+  },
+  {
+    "cmd": [
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "shell",
+      "stop"
+    ],
+    "name": "stop shell"
   }
 ]

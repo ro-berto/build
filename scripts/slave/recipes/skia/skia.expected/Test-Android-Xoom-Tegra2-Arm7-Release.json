@@ -3,6 +3,34 @@
     "cmd": [
       "python",
       "-u",
+      "[BUILD]/scripts/slave/recipe_modules/adb/resources/list_devices.py",
+      "['[BUILD_INTERNAL]/scripts/slave/android/adb', 'devices']",
+      "/path/to/tmp/json"
+    ],
+    "name": "List adb devices",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"014E1F310401C009\"@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "shell",
+      "echo",
+      "$EXTERNAL_STORAGE"
+    ],
+    "name": "get EXTERNAL_STORAGE dir",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[DEPOT_TOOLS]/gclient.py",
       "config",
       "--spec",
@@ -66,43 +94,124 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/gm/actual"
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "shell",
+      "rm",
+      "-r",
+      "/storage/emulated/legacy/skiabot/skia_resources"
     ],
-    "name": "rmtree [SLAVE_BUILD]/gm/actual",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
+    "name": "rmdir /storage/emulated/legacy/skiabot/skia_resources"
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/gm/actual",
-      "511"
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "shell",
+      "if",
+      "[",
+      "-e",
+      "/storage/emulated/legacy/skiabot/skia_resources",
+      "];",
+      "then",
+      "echo",
+      "FILE_EXISTS;",
+      "fi"
     ],
-    "name": "makedirs [SLAVE_BUILD]/gm/actual",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
-      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
-      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
-      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
-      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
-      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
+    "name": "exists /storage/emulated/legacy/skiabot/skia_resources",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "push",
+      "[SLAVE_BUILD]/skia/resources",
+      "/storage/emulated/legacy/skiabot/skia_resources"
+    ],
+    "name": "push [SLAVE_BUILD]/skia/resources"
+  },
+  {
+    "cmd": [
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "root"
+    ],
+    "name": "adb root"
+  },
+  {
+    "cmd": [
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "remount"
+    ],
+    "name": "adb remount"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_kill_skia",
+      "-s",
+      "014E1F310401C009"
+    ],
+    "name": "kill skia"
+  },
+  {
+    "cmd": [
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "shell",
+      "stop"
+    ],
+    "name": "stop shell"
+  },
+  {
+    "cmd": [
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "shell",
+      "rm",
+      "-r",
+      "/storage/emulated/legacy/skiabot/skia_gm_actual"
+    ],
+    "name": "rmdir /storage/emulated/legacy/skiabot/skia_gm_actual"
+  },
+  {
+    "cmd": [
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "shell",
+      "if",
+      "[",
+      "-e",
+      "/storage/emulated/legacy/skiabot/skia_gm_actual",
+      "];",
+      "then",
+      "echo",
+      "FILE_EXISTS;",
+      "fi"
+    ],
+    "name": "exists /storage/emulated/legacy/skiabot/skia_gm_actual",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "shell",
+      "mkdir",
+      "-p",
+      "/storage/emulated/legacy/skiabot/skia_gm_actual"
+    ],
+    "name": "mkdir /storage/emulated/legacy/skiabot/skia_gm_actual"
   },
   {
     "cmd": [
@@ -146,29 +255,93 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/out/Release/gm",
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "push",
+      "[SLAVE_BUILD]/skia/expectations/gm/ignored-tests.txt",
+      "/storage/emulated/legacy/skiabot/skia_gm_expected/ignored-tests.txt"
+    ],
+    "name": "push [SLAVE_BUILD]/skia/expectations/gm/ignored-tests.txt"
+  },
+  {
+    "cmd": [
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "shell",
+      "if",
+      "[",
+      "-e",
+      "/storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-Xoom-Tegra2-Arm7-Release/expected-results.json",
+      "];",
+      "then",
+      "echo",
+      "FILE_EXISTS;",
+      "fi"
+    ],
+    "name": "exists /storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-Xoom-Tegra2-Arm7-Release/expected-results.json",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "shell",
+      "if",
+      "[",
+      "-e",
+      "/storage/emulated/legacy/skiabot/skia_gm_expected/ignored-tests.txt",
+      "];",
+      "then",
+      "echo",
+      "FILE_EXISTS;",
+      "fi"
+    ],
+    "name": "exists /storage/emulated/legacy/skiabot/skia_gm_expected/ignored-tests.txt",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_run_skia",
+      "-d",
+      "xoom",
+      "-s",
+      "014E1F310401C009",
+      "--release",
+      "gm",
       "--verbose",
       "--writeChecksumBasedFilenames",
       "--mismatchPath",
-      "[SLAVE_BUILD]/gm/actual/Test-Android-Xoom-Tegra2-Arm7-Release",
+      "/storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-Xoom-Tegra2-Arm7-Release",
       "--missingExpectationsPath",
-      "[SLAVE_BUILD]/gm/actual/Test-Android-Xoom-Tegra2-Arm7-Release",
+      "/storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-Xoom-Tegra2-Arm7-Release",
       "--writeJsonSummaryPath",
-      "[SLAVE_BUILD]/gm/actual/Test-Android-Xoom-Tegra2-Arm7-Release/actual-results.json",
+      "/storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-Xoom-Tegra2-Arm7-Release/actual-results.json",
       "--ignoreErrorTypes",
       "IntentionallySkipped",
       "MissingExpectations",
       "ExpectationsMismatch",
       "--resourcePath",
-      "[SLAVE_BUILD]/skia/resources",
-      "--ignoreFailuresFile",
-      "[SLAVE_BUILD]/skia/expectations/gm/ignored-tests.txt",
+      "/storage/emulated/legacy/skiabot/skia_resources",
       "--resetGpuContext",
       "--config",
       "defaults",
       "msaa16"
     ],
     "name": "gm"
+  },
+  {
+    "cmd": [
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "pull",
+      "/storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-Xoom-Tegra2-Arm7-Release",
+      "[SLAVE_BUILD]/gm/actual/Test-Android-Xoom-Tegra2-Arm7-Release"
+    ],
+    "name": "pull /storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-Xoom-Tegra2-Arm7-Release"
   },
   {
     "cmd": [

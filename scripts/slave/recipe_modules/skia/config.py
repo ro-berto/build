@@ -7,6 +7,7 @@ from slave.recipe_config import Dict, Set, Single, Static
 from slave.recipe_config_types import Path
 
 from common.skia import builder_name_schema
+from . import slaves_cfg
 
 
 CONFIG_DEBUG = 'Debug'
@@ -14,10 +15,12 @@ CONFIG_RELEASE = 'Release'
 VALID_CONFIGS = (CONFIG_DEBUG, CONFIG_RELEASE)
 
 
-def BaseConfig(BUILDER_NAME, **_kwargs):
+def BaseConfig(BUILDER_NAME, MASTER_NAME, SLAVE_NAME, **_kwargs):
   equal_fn = lambda tup: ('%s=%s' % tup)
   return ConfigGroup(
     BUILDER_NAME = Static(str(BUILDER_NAME)),
+    MASTER_NAME = Static(str(MASTER_NAME)),
+    SLAVE_NAME = Static(str(SLAVE_NAME)),
     build_targets = Single(list),
     builder_cfg = Single(dict),
     configuration = Single(str),
@@ -27,6 +30,7 @@ def BaseConfig(BUILDER_NAME, **_kwargs):
       GYP_DEFINES = Dict(equal_fn, ' '.join, (basestring,int,Path)),
     ),
     role = Single(str),
+    slave_cfg = Single(dict)
   )
 
 
@@ -43,7 +47,9 @@ VAR_TEST_MAP = {
                    u'Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes',
                    u'Test-Win7-ShuttleA-HD2000-x86-Debug-GDI',
                    u'Test-Win7-ShuttleA-HD2000-x86-Release-ANGLE',
-                   u'Test-Win8-ShuttleA-GTX660-x86-Release')
+                   u'Test-Win8-ShuttleA-GTX660-x86-Release'),
+  'MASTER_NAME': (u'client.skia',),
+  'SLAVE_NAME': (u'skiabot-linux-tester-004',),
 }
 
 
@@ -157,4 +163,5 @@ def skia(c):
                      (c.role == builder_name_schema.BUILDER_ROLE_TEST and
                       c.configuration == CONFIG_DEBUG))
   c.gyp_env.GYP_DEFINES.update(gyp_defs_from_builder_dict(c.builder_cfg))
+  c.slave_cfg = slaves_cfg.get(c.MASTER_NAME)[c.SLAVE_NAME]
 

@@ -15,43 +15,6 @@ from . import valgrind_flavor
 from . import xsan_flavor
 
 
-class SKPDirs(object):
-  """Wraps up important directories for SKP-related testing."""
-
-  def __init__(self, root_dir, builder_name, path_sep):
-    self._root_dir = root_dir
-    self._builder_name = builder_name
-    self._path_sep = path_sep
-
-  @property
-  def root_dir(self):
-    return self._root_dir
-
-  @property
-  def actual_images_dir(self):
-    return self._path_sep.join((self.root_dir, 'actualImages',
-                                self._builder_name))
-
-  @property
-  def actual_summaries_dir(self):
-    return self._path_sep.join((self.root_dir, 'actualSummaries',
-                                self._builder_name))
-
-  @property
-  def expected_summaries_dir(self):
-    return self._path_sep.join((self.root_dir, 'expectedSummaries',
-                                self._builder_name))
-
-  def skp_dir(self, skp_version=None):
-    root_dir = self.root_dir
-    # TODO(borenet): The next two lines are commented out to avoid breaking
-    # the coverage test. They will be uncommented when the code to use them is
-    # added.
-    #if skp_version:
-    #  root_dir += '_%s' % skp_version
-    return self._path_sep.join((root_dir, 'skps'))
-
-
 def is_android(builder_cfg):
   """Determine whether the given builder is an Android builder."""
   return ('Android' in builder_cfg.get('extra_config', '') or
@@ -97,7 +60,10 @@ class SkiaApi(recipe_api.RecipeApi):
     """Generate all build steps."""
     # Setup
     self.failed = []
-    self.set_config('skia', BUILDER_NAME=self.m.properties['buildername'])
+    self.set_config('skia',
+                    BUILDER_NAME=self.m.properties['buildername'],
+                    MASTER_NAME=self.m.properties['mastername'],
+                    SLAVE_NAME=self.m.properties['slavename'])
     self._set_flavor()
 
     # Set some important paths.
@@ -111,9 +77,11 @@ class SkiaApi(recipe_api.RecipeApi):
     self.skimage_expected_dir = skia_dir.join('expectations', 'skimage')
     self.skimage_in_dir = slave_dir.join('skimage_in')
     self.skimage_out_dir = slave_dir.join('skimage_out')
-    self.local_skp_dirs = SKPDirs(str(slave_dir.join('playback')),
-                                  self.c.BUILDER_NAME, self.m.path.sep)
-    self.storage_skp_dirs = SKPDirs('playback', self.c.BUILDER_NAME, '/')
+    self.local_skp_dirs = default_flavor.SKPDirs(
+        str(slave_dir.join('playback')),
+        self.c.BUILDER_NAME, self.m.path.sep)
+    self.storage_skp_dirs = default_flavor.SKPDirs(
+        'playback', self.c.BUILDER_NAME, '/')
 
     self.device_dirs = self.flavor.get_device_dirs()
     self._ccache = None

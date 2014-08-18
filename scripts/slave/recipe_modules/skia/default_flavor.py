@@ -9,6 +9,43 @@ import base_flavor
 """Default flavor utils class, used for desktop builders."""
 
 
+class SKPDirs(object):
+  """Wraps up important directories for SKP-related testing."""
+
+  def __init__(self, root_dir, builder_name, path_sep):
+    self._root_dir = root_dir
+    self._builder_name = builder_name
+    self._path_sep = path_sep
+
+  @property
+  def root_dir(self):
+    return self._root_dir
+
+  @property
+  def actual_images_dir(self):
+    return self._path_sep.join((self.root_dir, 'actualImages',
+                                self._builder_name))
+
+  @property
+  def actual_summaries_dir(self):
+    return self._path_sep.join((self.root_dir, 'actualSummaries',
+                                self._builder_name))
+
+  @property
+  def expected_summaries_dir(self):
+    return self._path_sep.join((self.root_dir, 'expectedSummaries',
+                                self._builder_name))
+
+  def skp_dir(self, skp_version=None):
+    root_dir = self.root_dir
+    # TODO(borenet): The next two lines are commented out to avoid breaking
+    # the coverage test. They will be uncommented when the code to use them is
+    # added.
+    #if skp_version:
+    #  root_dir += '_%s' % skp_version
+    return self._path_sep.join((root_dir, 'skps'))
+
+
 class DeviceDirs(object):
   def __init__(self,
                gm_actual_dir,
