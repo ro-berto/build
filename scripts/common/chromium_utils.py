@@ -110,7 +110,9 @@ def IsGitCommit(value):
   This only works on full Git commit hashes. A value qualifies as a Git commit
   hash if it only contains hexadecimal numbers and is forty characters long.
   """
-  return (GIT_COMMIT_HASH_RE.match(value) is not None)
+  if value is None:
+    return False
+  return (GIT_COMMIT_HASH_RE.match(str(value)) is not None)
 
 
 # GetParentClass allows a class instance to find its parent class using Python's
