@@ -20,7 +20,12 @@ def GenSteps(api):
   mastername = api.properties.get('mastername')
   buildername = api.properties.get('buildername')
 
-  tests = api.chromium_tests.compile_and_return_tests(mastername, buildername)
+  tests, swarming_tests, _ = api.chromium_tests.compile_and_return_tests(
+      mastername, buildername)
+
+  # TODO(phajdan.jr): Add support for swarming tests.
+  assert not swarming_tests
+
   if not tests:
     return
 

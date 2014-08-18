@@ -229,11 +229,16 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         build_archive_url=self.m.properties.get('parent_build_archive_url'),
         )
 
+    tests = bot_config.get('tests', [])
+    # TODO(phajdan.jr): Add support for swarming tests.
+    swarming_tests = []
+
     # TODO(phajdan.jr): bots should just leave tests empty instead of this.
     if bot_config.get('do_not_run_tests'):
-      return []
+      tests = []
+      swarming_tests = []
 
-    return bot_config.get('tests', [])
+    return tests, swarming_tests, update_step
 
   def setup_chromium_tests(self, test_runner):
     if self.m.chromium.c.TARGET_PLATFORM == 'android':

@@ -7,6 +7,7 @@ import re
 DEPS = [
   'bot_update',
   'chromium',
+  'chromium_tests',
   'filter',
   'gclient',
   'isolate',
@@ -63,6 +64,15 @@ BUILDERS = {
         },
         'chromium_config': 'chromium',
         'compile_only': False,
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'linux_chromium_rel_ng': {
+        'based_on_main_waterfall': {
+          'mastername': 'chromium.linux',
+          'buildername': 'Linux Builder',
+        },
         'testing': {
           'platform': 'linux',
         },
@@ -716,8 +726,18 @@ def GenSteps(api):
 
   mastername = api.properties.get('mastername')
   buildername = api.properties.get('buildername')
-  tests, swarming_tests, bot_update_step = compile_and_return_tests(
-      mastername, buildername)
+  bot_config = get_bot_config(mastername, buildername)
+
+  main_waterfall_config = bot_config.get('based_on_main_waterfall')
+  if main_waterfall_config:
+    tests, swarming_tests, bot_update_step = \
+        api.chromium_tests.compile_and_return_tests(
+            main_waterfall_config['mastername'],
+            main_waterfall_config['buildername'])
+  else:
+    # TODO(phajdan.jr): Remove the legacy trybot-specific codepath.
+    tests, swarming_tests, bot_update_step = compile_and_return_tests(
+        mastername, buildername)
 
   def deapply_patch_fn(failing_tests):
     if api.platform.is_win:
