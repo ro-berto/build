@@ -458,7 +458,13 @@ class Waterfall(object):
                      % (builder_name, build_number))
     return r.text, r.json()
 
-  def get_log_filenames(self, build_properties):
+  def get_log_filenames(self, build_properties, basedir):
+    """Compute log file names.
+
+    build_properties (dict): build properties as returned by buildbot.
+        Second return value of get_build_properties().
+    basedir (string): builder directory containing the log files.
+    """
     build_number = build_properties['number']
 
     step_logs = [(s['name'], loginfo[0])
@@ -470,8 +476,7 @@ class Waterfall(object):
       # From buildbot, in  status/build.py:generateLogfileName
       basename = '%d-log-%s-%s' % (build_number, step_name, log_name)
       basename = re.sub(r'[^\w\.\-]', '_', basename)
-      filename = os.path.join(self._master_path,
-                              build_properties['builderName'], basename)
+      filename = os.path.join(self._master_path, basedir, basename)
       ref = (build_properties['builderName'],
              build_number, re.sub(r'/', '_', step_name) + '.' + log_name)
 
@@ -622,7 +627,7 @@ def main():
       logger.info('Starting processing build %s/%d',
                   builder_name, build_number)
       bp_str, bp = w.get_build_properties(builder_name, build_number)
-      log_filenames = w.get_log_filenames(bp)
+      log_filenames = w.get_log_filenames(bp, builders[builder_name]['basedir'])
 
       # Beginning of critical section
       storage.mark_upload_started(builder_name, build_number)
