@@ -3,22 +3,6 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/adb/resources/list_devices.py",
-      "['[BUILD_INTERNAL]/scripts/slave/android/adb', 'devices']",
-      "/path/to/tmp/json"
-    ],
-    "name": "List adb devices",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"014E1F310401C009\"@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[DEPOT_TOOLS]/gclient.py",
       "config",
       "--spec",
@@ -79,6 +63,22 @@
       "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
     "name": "build most"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/adb/resources/list_devices.py",
+      "['[BUILD_INTERNAL]/scripts/slave/android/adb', 'devices']",
+      "/path/to/tmp/json"
+    ],
+    "name": "List adb devices",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"014E1F310401C009\"@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "cmd": [
