@@ -103,7 +103,7 @@ def GenSteps(api):
   api.chromium_android.configure_from_properties(
       bot_config['config'],
       INTERNAL=False,
-      BUILD_CONFIG='Debug',
+      BUILD_CONFIG=bot_config['target'],
       REPO_NAME='src',
       REPO_URL='svn://svn-mirror.golo.chromium.org/chrome/trunk/src')
 
