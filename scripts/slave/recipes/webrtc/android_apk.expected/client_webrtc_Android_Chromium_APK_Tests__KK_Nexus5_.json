@@ -23,7 +23,7 @@
       "--revision",
       "src/third_party/webrtc@HEAD"
     ],
-    "name": "bot_update",
+    "name": "bot_update (without patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
