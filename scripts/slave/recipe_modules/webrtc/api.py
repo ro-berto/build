@@ -120,7 +120,8 @@ class WebRTCApi(recipe_api.RecipeApi):
       steps.append(self.add_test(
           'content_browsertests',
           args=['--gtest_filter=WebRtc*', '--run-manual',
-                '--test-launcher-print-test-stdio=always'],
+                '--test-launcher-print-test-stdio=always',
+                '--test-launcher-bot-mode'],
           revision=revision,
           perf_test=True))
       steps.append(self.add_test(
@@ -131,6 +132,7 @@ class WebRTCApi(recipe_api.RecipeApi):
           args = ['--gtest_filter=WebRtc*:TabCapture*',
                   '--run-manual', '--ui-test-action-max-timeout=300000',
                   '--test-launcher-jobs=1',
+                  '--test-launcher-bot-mode',
                   '--test-launcher-print-test-stdio=always'],
           revision=revision,
           perf_test=True))

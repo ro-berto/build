@@ -186,7 +186,8 @@
       "content_browsertests",
       "--gtest_filter=WebRtc*",
       "--run-manual",
-      "--test-launcher-print-test-stdio=always"
+      "--test-launcher-print-test-stdio=always",
+      "--test-launcher-bot-mode"
     ],
     "name": "content_browsertests"
   },
@@ -219,6 +220,7 @@
       "--run-manual",
       "--ui-test-action-max-timeout=300000",
       "--test-launcher-jobs=1",
+      "--test-launcher-bot-mode",
       "--test-launcher-print-test-stdio=always"
     ],
     "name": "browser_tests"
