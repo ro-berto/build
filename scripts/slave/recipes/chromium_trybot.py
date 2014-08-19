@@ -77,7 +77,7 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
-      'linux_browser_asan': {
+      'linux_chromium_browser_asan_rel': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
