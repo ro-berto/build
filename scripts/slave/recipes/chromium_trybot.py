@@ -732,6 +732,7 @@ def GenSteps(api):
     tests.append(api.chromium.steps.Deps2GitTest())
 
     if (bot_config['chromium_config'] not in ['chromium_chromeos',
+                                             'chromium_asan',
                                              'chromium_chromeos_clang']
         and not buildername.startswith('win8')):
       tests.append(api.chromium.steps.TelemetryUnitTests())
