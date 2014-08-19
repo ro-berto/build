@@ -448,7 +448,7 @@
       "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
       "cp",
       "-R",
-      "gs://gs://chromium-skia-gm/playback_42/skps",
+      "gs://chromium-skia-gm/playback_42/skps",
       "[SLAVE_BUILD]/playback"
     ],
     "name": "gsutil download skps"

@@ -53,7 +53,7 @@ def _GSUploadAllImages(src_dir):
     # into the existing contents of gs://chromium-skia-gm/gm .
     cmd = ['gsutil', 'cp', '-a', 'public-read', '-R',
            os.path.join(temp_root, gm_actuals_subdir),
-           global_constants.GS_GM_BUCKET]
+           'gs://' + global_constants.GS_GM_BUCKET]
     print ' '.join(cmd)
     subprocess.check_call(cmd)
   finally:
@@ -71,7 +71,7 @@ def _GSUploadJsonFiles(src_dir, builder_name):
   files_to_upload = [f for f in all_files if f.endswith('.json')]
   print 'Uploading %d JSON files to Google Storage: %s...' % (
       len(files_to_upload), files_to_upload)
-  gs_dest_dir = posixpath.join(global_constants.GS_SUMMARIES_BUCKET,
+  gs_dest_dir = posixpath.join('gs://' + global_constants.GS_SUMMARIES_BUCKET,
                                builder_name)
   for filename in files_to_upload:
     src_path = os.path.join(src_dir, filename)
