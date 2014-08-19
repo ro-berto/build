@@ -357,15 +357,115 @@ class SkiaApi(recipe_api.RecipeApi):
       args.extend(['--match', '~tabl_mozilla', '~tabl_nytimes'])
     self.run(self.flavor.step, 'render_pdfs', cmd=args, abort_on_failure=False)
 
+
+  def run_decoding_tests(self):
+    """Run the skimage decoding tests."""
+    # Download the input files.
+    # TODO(borenet): Only copy when modified.
+    self.flavor.create_clean_host_dir(self.skimage_in_dir)
+    self.m.gsutil.download(global_constants.GS_GM_BUCKET,
+                           '/'.join(('skimage', 'input', '*')),
+                           self.skimage_in_dir,
+                           name='download skimage files',
+                           args=['-R'])
+
+    # Copy input files.
+    self.flavor.copy_directory_to_device(self.skimage_in_dir,
+                                         self.device_dirs.skimage_in_dir)
+
+    # Create output dirs.
+    actual_image_subdir = 'images'
+    self.flavor.create_clean_host_dir(self.skimage_out_dir)
+    skimage_image_out_dir = self.flavor.device_path_join(
+        self.device_dirs.skimage_out_dir, actual_image_subdir)
+    self.flavor.create_clean_device_dir(skimage_image_out_dir)
+    skimage_summary_out_dir = self.flavor.device_path_join(
+        self.device_dirs.skimage_out_dir, self.c.BUILDER_NAME)
+    self.flavor.create_clean_device_dir(skimage_summary_out_dir)
+
+    # Copy expectations.
+    repo_expectations_path = self.m.path['checkout'].join(
+        'expectations', 'skimage', self.c.BUILDER_NAME,
+        global_constants.GM_EXPECTATIONS_FILENAME)
+    device_expectations_path = None
+    if self.m.path.exists(repo_expectations_path):
+      self.flavor.create_clean_device_dir(self.device_dirs.skimage_expected_dir)
+      device_expectations_path = self.flavor.device_path_join(
+          self.device_dirs.skimage_expected_dir, self.c.BUILDER_NAME,
+          global_constants.GM_EXPECTATIONS_FILENAME)
+      self.flavor.copy_file_to_device(repo_expectations_path,
+                                      device_expectations_path)
+
+    # Run the tests.
+    args = ['skimage', '-r', self.device_dirs.skimage_in_dir, '--noreencode',
+            '--writeChecksumBasedFilenames', '--config', '8888',
+            '--mismatchPath', skimage_image_out_dir,
+            '--createExpectationsPath', self.flavor.device_path_join(
+                skimage_summary_out_dir, global_constants.GM_ACTUAL_FILENAME)]
+    if device_expectations_path:
+      args.extend(['--readExpectationsPath', device_expectations_path])
+
+    self.run(self.flavor.step, 'skimage', cmd=args, abort_on_failure=False)
+
+    # Copy the results back.
+    self.flavor.copy_directory_to_host(self.device_dirs.skimage_out_dir,
+                                       self.skimage_out_dir)
+
+    # Upload results.
+    # Actual images.
+    self.m.gsutil.upload(self.skimage_out_dir.join(actual_image_subdir),
+                         global_constants.GS_GM_BUCKET,
+                         '/'.join(('skimage_experimental', 'output')),
+                         args=['-R'])
+    # JSON Summary file.
+    self.m.gsutil.upload(
+        self.skimage_out_dir.join(self.c.BUILDER_NAME,
+                                  global_constants.GM_ACTUAL_FILENAME),
+        global_constants.GS_GM_BUCKET,
+        '/'.join(('skimage_experimental', 'actuals',
+                  self.c.BUILDER_NAME, global_constants.GM_ACTUAL_FILENAME)))
+
+    # If there is no expectations file, still run the tests, and then report a
+    # failure. Then we'll know to update the expectations with the results of
+    # running the tests.
+    # TODO(scroggo): Skipping the TSAN bot, where we'll never have
+    # expectations. A better way might be to have empty expectations. See
+    # https://code.google.com/p/skia/issues/detail?id=1711
+    if not 'TSAN' in self.c.BUILDER_NAME:
+      self.m.python.inline(
+          'assert skimage expectations',
+          '''
+          import os
+          import sys
+          if not os.path.isfile(sys.argv[1]):
+            print 'Missing expectations file %s.' % sys.argv[1]
+            print ('In order to blindly use the actual results as '
+                   'the expectations, run the following commands:')
+            print ('$ gsutil cp -R '
+                   'gs://chromium-skia-gm/skimage/actuals/%s '
+                   'expectations/skimage/%s') % (sys.argv[2],
+                                                 sys.argv[2])
+            print ('$ mv expectations/skimage/%s/actual-results.json '
+                   'expectations/skimage/%s/%s') % (
+                       sys.argv[2], sys.argv[2], sys.argv[3])
+            print ''
+            print 'Then check in using git.'
+            sys.exit(1)
+            ''',
+            args=[repo_expectations_path,
+                  self.c.BUILDER_NAME,
+                  global_constants.GM_EXPECTATIONS_FILENAME])
+
+
   def test_steps(self):
     """Run all Skia test executables."""
     self._run_once(self.install)
     self.run_gm()
     self.run_dm()
     self.run_render_pdfs()
+    self.run_decoding_tests()
     # TODO(borenet): Implement these steps.
     #self.run_render_skps()
-    #self.run_decoding_tests()
 
   def perf_steps(self):
     pass

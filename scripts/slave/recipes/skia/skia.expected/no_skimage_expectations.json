@@ -38,15 +38,31 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/chromeos/bin/chromeos_make",
-      "-d",
-      "x86-alex",
+      "python",
+      "-u",
+      "\nimport os\nimport sys\nwith open(sys.argv[1], 'w') as f:\n  f.write(os.path.join(os.path.expanduser('~'), 'src'))\n",
+      "/path/to/tmp/"
+    ],
+    "name": "get CHROME_PATH",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@with open(sys.argv[1], 'w') as f:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  f.write(os.path.join(os.path.expanduser('~'), 'src'))@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "make",
       "most",
       "BUILDTYPE=Debug"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
-      "GYP_DEFINES": "skia_arch_width=32 skia_warnings_as_errors=0"
+      "CHROME_PATH": "/home/chrome-bot/src",
+      "GYP_DEFINES": "skia_arch_width=64 skia_gpu=0 skia_warnings_as_errors=0"
     },
     "name": "build most"
   },
@@ -95,9 +111,9 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/gm/actual/Test-ChromeOS-Alex-GMA3150-x86-Debug"
+      "[SLAVE_BUILD]/gm/actual/Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes"
     ],
-    "name": "rmtree [SLAVE_BUILD]/gm/actual/Test-ChromeOS-Alex-GMA3150-x86-Debug",
+    "name": "rmtree [SLAVE_BUILD]/gm/actual/Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -113,10 +129,10 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/gm/actual/Test-ChromeOS-Alex-GMA3150-x86-Debug",
+      "[SLAVE_BUILD]/gm/actual/Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes",
       "511"
     ],
-    "name": "makedirs [SLAVE_BUILD]/gm/actual/Test-ChromeOS-Alex-GMA3150-x86-Debug",
+    "name": "makedirs [SLAVE_BUILD]/gm/actual/Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -132,23 +148,22 @@
   },
   {
     "cmd": [
+      "catchsegv",
       "[SLAVE_BUILD]/skia/out/Debug/gm",
       "--verbose",
       "--writeChecksumBasedFilenames",
       "--mismatchPath",
-      "[SLAVE_BUILD]/gm/actual/Test-ChromeOS-Alex-GMA3150-x86-Debug",
+      "[SLAVE_BUILD]/gm/actual/Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes",
       "--missingExpectationsPath",
-      "[SLAVE_BUILD]/gm/actual/Test-ChromeOS-Alex-GMA3150-x86-Debug",
+      "[SLAVE_BUILD]/gm/actual/Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes",
       "--writeJsonSummaryPath",
-      "[SLAVE_BUILD]/gm/actual/Test-ChromeOS-Alex-GMA3150-x86-Debug/actual-results.json",
+      "[SLAVE_BUILD]/gm/actual/Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes/actual-results.json",
       "--ignoreErrorTypes",
       "IntentionallySkipped",
       "MissingExpectations",
       "ExpectationsMismatch",
       "--resourcePath",
-      "[SLAVE_BUILD]/skia/resources",
-      "--ignoreFailuresFile",
-      "[SLAVE_BUILD]/skia/expectations/gm/ignored-tests.txt"
+      "[SLAVE_BUILD]/skia/resources"
     ],
     "name": "gm"
   },
@@ -157,7 +172,7 @@
       "python",
       "-u",
       "[SLAVE_BUILD]/skia/gm/display_json_results.py",
-      "[SLAVE_BUILD]/gm/actual/Test-ChromeOS-Alex-GMA3150-x86-Debug/actual-results.json"
+      "[SLAVE_BUILD]/gm/actual/Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes/actual-results.json"
     ],
     "name": "Compare GMs"
   },
@@ -166,20 +181,19 @@
       "python",
       "-u",
       "[BUILD]/scripts/slave/recipe_modules/skia/resources/upload_gm_results.py",
-      "[SLAVE_BUILD]/gm/actual/Test-ChromeOS-Alex-GMA3150-x86-Debug",
-      "Test-ChromeOS-Alex-GMA3150-x86-Debug"
+      "[SLAVE_BUILD]/gm/actual/Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes",
+      "Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "name": "Upload GM Results"
   },
   {
     "cmd": [
+      "catchsegv",
       "[SLAVE_BUILD]/skia/out/Debug/dm",
       "--verbose",
       "--resourcePath",
-      "[SLAVE_BUILD]/skia/resources",
-      "--threads",
-      "1"
+      "[SLAVE_BUILD]/skia/resources"
     ],
     "name": "dm"
   },
@@ -192,16 +206,6 @@
       "/path/to/tmp/"
     ],
     "name": "read [SLAVE_BUILD]/skia/SKP_VERSION"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/playback/skps/SKP_VERSION",
-      "/path/to/tmp/"
-    ],
-    "name": "read [SLAVE_BUILD]/playback/skps/SKP_VERSION"
   },
   {
     "cmd": [
@@ -269,6 +273,7 @@
   },
   {
     "cmd": [
+      "catchsegv",
       "[SLAVE_BUILD]/skia/out/Debug/render_pdfs",
       "--inputPaths",
       "[SLAVE_BUILD]/playback/skps"
@@ -414,9 +419,9 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/skimage_out/Test-ChromeOS-Alex-GMA3150-x86-Debug"
+      "[SLAVE_BUILD]/skimage_out/Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes"
     ],
-    "name": "rmtree [SLAVE_BUILD]/skimage_out/Test-ChromeOS-Alex-GMA3150-x86-Debug",
+    "name": "rmtree [SLAVE_BUILD]/skimage_out/Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -432,10 +437,10 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/skimage_out/Test-ChromeOS-Alex-GMA3150-x86-Debug",
+      "[SLAVE_BUILD]/skimage_out/Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes",
       "511"
     ],
-    "name": "makedirs [SLAVE_BUILD]/skimage_out/Test-ChromeOS-Alex-GMA3150-x86-Debug",
+    "name": "makedirs [SLAVE_BUILD]/skimage_out/Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -451,46 +456,7 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/skia/expectations/skimage"
-    ],
-    "name": "rmtree [SLAVE_BUILD]/skia/expectations/skimage",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/skia/expectations/skimage",
-      "511"
-    ],
-    "name": "makedirs [SLAVE_BUILD]/skia/expectations/skimage",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
-      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
-      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
-      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
-      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
-      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
+      "catchsegv",
       "[SLAVE_BUILD]/skia/out/Debug/skimage",
       "-r",
       "[SLAVE_BUILD]/skimage_in",
@@ -501,9 +467,7 @@
       "--mismatchPath",
       "[SLAVE_BUILD]/skimage_out/images",
       "--createExpectationsPath",
-      "[SLAVE_BUILD]/skimage_out/Test-ChromeOS-Alex-GMA3150-x86-Debug/actual-results.json",
-      "--readExpectationsPath",
-      "[SLAVE_BUILD]/skia/expectations/skimage/Test-ChromeOS-Alex-GMA3150-x86-Debug/expected-results.json"
+      "[SLAVE_BUILD]/skimage_out/Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes/actual-results.json"
     ],
     "name": "skimage"
   },
@@ -515,12 +479,12 @@
       "--",
       "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
       "cp",
-      "[SLAVE_BUILD]/skimage_out/Test-ChromeOS-Alex-GMA3150-x86-Debug/actual-results.json",
-      "gs://chromium-skia-gm/skimage_experimental/actuals/Test-ChromeOS-Alex-GMA3150-x86-Debug/actual-results.json"
+      "[SLAVE_BUILD]/skimage_out/Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes/actual-results.json",
+      "gs://chromium-skia-gm/skimage_experimental/actuals/Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes/actual-results.json"
     ],
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-skia-gm/skimage_experimental/actuals/Test-ChromeOS-Alex-GMA3150-x86-Debug/actual-results.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-skia-gm/skimage_experimental/actuals/Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes/actual-results.json@@@"
     ]
   },
   {
@@ -528,30 +492,19 @@
       "python",
       "-u",
       "\nimport os\nimport sys\nif not os.path.isfile(sys.argv[1]):\n  print 'Missing expectations file %s.' % sys.argv[1]\n  print ('In order to blindly use the actual results as '\n         'the expectations, run the following commands:')\n  print ('$ gsutil cp -R '\n         'gs://chromium-skia-gm/skimage/actuals/%s '\n         'expectations/skimage/%s') % (sys.argv[2],\n                                       sys.argv[2])\n  print ('$ mv expectations/skimage/%s/actual-results.json '\n         'expectations/skimage/%s/%s') % (\n             sys.argv[2], sys.argv[2], sys.argv[3])\n  print ''\n  print 'Then check in using git.'\n  sys.exit(1)\n",
-      "[SLAVE_BUILD]/skia/expectations/skimage/Test-ChromeOS-Alex-GMA3150-x86-Debug/expected-results.json",
-      "Test-ChromeOS-Alex-GMA3150-x86-Debug",
+      "[SLAVE_BUILD]/skia/expectations/skimage/Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes/expected-results.json",
+      "Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes",
       "expected-results.json"
     ],
     "name": "assert skimage expectations",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@if not os.path.isfile(sys.argv[1]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  print 'Missing expectations file %s.' % sys.argv[1]@@@",
-      "@@@STEP_LOG_LINE@python.inline@  print ('In order to blindly use the actual results as '@@@",
-      "@@@STEP_LOG_LINE@python.inline@         'the expectations, run the following commands:')@@@",
-      "@@@STEP_LOG_LINE@python.inline@  print ('$ gsutil cp -R '@@@",
-      "@@@STEP_LOG_LINE@python.inline@         'gs://chromium-skia-gm/skimage/actuals/%s '@@@",
-      "@@@STEP_LOG_LINE@python.inline@         'expectations/skimage/%s') % (sys.argv[2],@@@",
-      "@@@STEP_LOG_LINE@python.inline@                                       sys.argv[2])@@@",
-      "@@@STEP_LOG_LINE@python.inline@  print ('$ mv expectations/skimage/%s/actual-results.json '@@@",
-      "@@@STEP_LOG_LINE@python.inline@         'expectations/skimage/%s/%s') % (@@@",
-      "@@@STEP_LOG_LINE@python.inline@             sys.argv[2], sys.argv[2], sys.argv[3])@@@",
-      "@@@STEP_LOG_LINE@python.inline@  print ''@@@",
-      "@@@STEP_LOG_LINE@python.inline@  print 'Then check in using git.'@@@",
-      "@@@STEP_LOG_LINE@python.inline@  sys.exit(1)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_FAILURE@@@"
     ]
+  },
+  {
+    "name": "$final_result",
+    "reason": "Step('assert skimage expectations') failed with return_code 1",
+    "status_code": 1
   }
 ]
