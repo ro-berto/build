@@ -68,9 +68,38 @@ BUILDSPEC_COMMIT_RE = (
     re.compile(r'Auto-converted (\d+\.\d+\.\d+\.\d+) buildspec to git'),
 )
 
+# Regular expression that matches a single commit footer line.
+COMMIT_FOOTER_ENTRY_RE = re.compile(r'([^:]+):\s+(.+)')
+
+# Footer metadata key for commit position.
+COMMIT_POSITION_FOOTER_KEY = 'Cr-Commit-Position'
 # Regular expression to parse a commit position
-COMMIT_POSITION_RE = re.compile(r'^Cr-Commit-Position:\s*((.+)@\{#(\d+)\})$',
-                                re.M)
+COMMIT_POSITION_RE = re.compile(r'(.+)@\{#(\d+)\}')
+
+# Used by 'ResolveSvnRevisionFromGitiles'
+GIT_SVN_PROJECT_MAP = {
+  'webkit': {
+    'svn_url': 'svn://svn.chromium.org/blink',
+    'branch_map': [
+      (r'trunk', r'refs/heads/master'),
+      (r'branches/([^/]+)', r'refs/branch-heads/\1'),
+    ],
+  },
+  'v8': {
+    'svn_url': 'https://v8.googlecode.com/svn',
+    'branch_map': [
+      (r'trunk', r'refs/heads/master'),
+      (r'branches/([^/]+)', r'refs/branch-heads/\1'),
+    ],
+  }
+}
+
+# Key for the 'git-svn' ID metadata commit footer entry.
+GIT_SVN_ID_FOOTER_KEY = 'git-svn-id'
+# e.g., git-svn-id: https://v8.googlecode.com/svn/trunk@23117
+#     ce2b1a6d-e550-0410-aec6-3dcde31c8c00
+GIT_SVN_ID_RE = re.compile(r'((?:\w+)://[^@]+)@(\d+)\s+(?:[a-zA-Z0-9\-]+)')
+
 
 # This is the git mirror of the buildspecs repository. We could rely on the svn
 # checkout, now that the git buildspecs are checked in alongside the svn
@@ -326,6 +355,12 @@ GSUTIL_BIN = path.join(DEPOT_TOOLS_DIR, 'third_party', 'gsutil', 'gsutil')
 # If there is less than 100GB of disk space on the system, then we do
 # a shallow checkout.
 SHALLOW_CLONE_THRESHOLD = 100 * 1024 * 1024 * 1024
+
+# Telemetry data that is gathered during operation
+TELEMETRY = {
+    'run_id': uuid.uuid4().hex,
+    'unmapped_git_svn_urls': [],
+}
 
 
 class SubprocessFailed(Exception):
@@ -661,13 +696,46 @@ def gclient_runhooks(gyp_envs):
   call(gclient_bin, 'runhooks', env=env)
 
 
+def get_commit_message_footer_map(message):
+  """Returns: (dict) A dictionary of commit message footer entries.
+  """
+  footers = {}
+
+  # Extract the lines in the footer block.
+  lines = []
+  for line in message.strip().splitlines():
+    line = line.strip()
+    if len(line) == 0:
+      del(lines[:])
+      continue
+    lines.append(line)
+
+  # Parse the footer
+  for line in lines:
+    m = COMMIT_FOOTER_ENTRY_RE.match(line)
+    if not m:
+      # If any single line isn't valid, the entire footer is invalid.
+      footers.clear()
+      return footers
+    footers[m.group(1)] = m.group(2).strip()
+  return footers
+
+
+def get_commit_message_footer(message, key):
+  """Returns: (str/None) The footer value for 'key', or None if none was found.
+  """
+  return get_commit_message_footer_map(message).get(key)
+
+
 def get_svn_rev(git_hash, dir_name):
-  pattern = r'^\s*git-svn-id: [^ ]*@(\d+) '
   log = git('log', '-1', git_hash, cwd=dir_name)
-  match = re.search(pattern, log, re.M)
-  if not match:
+  git_svn_id = get_commit_message_footer(log, GIT_SVN_ID_FOOTER_KEY)
+  if not git_svn_id:
     return None
-  return int(match.group(1))
+  m = GIT_SVN_ID_RE.match(git_svn_id)
+  if not m:
+    return None
+  return int(m.group(2))
 
 
 def get_git_hash(revision, branch, sln_dir):
@@ -675,7 +743,7 @@ def get_git_hash(revision, branch, sln_dir):
 
   Note that git will search backwards from origin/master.
   """
-  match = "^git-svn-id: [^ ]*@%s " % revision
+  match = "^%s: [^ ]*@%s " % (GIT_SVN_ID_FOOTER_KEY, revision)
   cmd = ['log', '-E', '--grep', match, '--format=%H', '--max-count=1',
          'origin/%s' % branch]
   result = git(*cmd, cwd=sln_dir).strip()
@@ -1090,15 +1158,69 @@ def emit_flag(flag_file):
     f.write('Success!')
 
 
+def get_commit_position_for_git_svn(url, revision):
+  """Generates a commit position string for a 'git-svn' URL/revision.
+
+  If the 'git-svn' URL maps to a known project, we will construct a commit
+  position branch value by applying substitution on the SVN URL.
+  """
+  # Identify the base URL so we can strip off trunk/branch name
+  project_config = branch = None
+  for _, project_config in GIT_SVN_PROJECT_MAP.iteritems():
+    if url.startswith(project_config['svn_url']):
+      branch = url[len(project_config['svn_url']):]
+      break
+
+  if branch:
+    # Strip any leading slashes
+    branch = branch.lstrip('/')
+
+    # Try and map the branch
+    for pattern, repl in project_config.get('branch_map', ()):
+      nbranch, subn = re.subn(pattern, repl, branch, count=1)
+      if subn:
+        print 'INFO: Mapped SVN branch to Git branch [%s] => [%s]' % (
+            branch, nbranch)
+        branch = nbranch
+        break
+  else:
+    # Use generic 'svn' branch
+    print 'INFO: Could not resolve project for SVN URL %r' % (url,)
+    TELEMETRY['unmapped_git_svn_urls'].append(url)
+    branch = 'svn'
+  return '%s@{#%s}' % (branch, revision)
+
+
 def get_commit_position(git_path, revision='HEAD'):
   """Dumps the 'git' log for a specific revision and parses out the commit
   position.
+
+  If a commit position metadata key is found, its value will be returned.
+
+  Otherwise, we will search for a 'git-svn' metadata entry. If one is found,
+  we will compose a commit position from it, using its SVN revision value as
+  the revision.
+
+  If the 'git-svn' URL maps to a known project, we will construct a commit
+  position branch value by truncating the URL, mapping 'trunk' to
+  "refs/heads/master". Otherwise, we will return the generic branch, 'svn'.
   """
   git_log = git('log', '--format=%B', '-n1', revision, cwd=git_path)
-  m = COMMIT_POSITION_RE.search(git_log)
-  if not m:
-    return None
-  return m.group(1)
+  footer_map = get_commit_message_footer_map(git_log)
+
+  # Search for commit position metadata
+  value = footer_map.get(COMMIT_POSITION_FOOTER_KEY)
+  if value:
+    return value
+
+  # Compose a commit position from 'git-svn' metadata
+  value = footer_map.get(GIT_SVN_ID_FOOTER_KEY)
+  if value:
+    m = GIT_SVN_ID_RE.match(value)
+    if not m:
+      raise ValueError("Invalid 'git-svn' value: [%s]" % (value,))
+    return get_commit_position_for_git_svn(m.group(1), m.group(2))
+  return None
 
 
 def parse_got_revision(gclient_output, got_revision_mapping, use_svn_revs):
@@ -1346,7 +1468,9 @@ class UploadTelemetryThread(threading.Thread):
 
 
 def upload_telemetry(prefix, master, builder, slave, **kwargs):
-  thr = UploadTelemetryThread(prefix, master, builder, slave, kwargs)
+  telemetry = copy.deepcopy(TELEMETRY)
+  telemetry.update(kwargs)
+  thr = UploadTelemetryThread(prefix, master, builder, slave, telemetry)
   thr.daemon = True
   thr.start()
   return thr
@@ -1651,20 +1775,19 @@ def main():
 
   # Lets send some telemetry data about bot_update here. This returns a thread
   # object so we can join on it later.
-  telemetry_info = {
+  TELEMETRY.update({
       'active': active,
       'builder': builder,
       'conversion_warnings': warnings,
       'git_solutions': git_slns,
       'master': master,
       'patch_root': options.patch_root,
-      'run_id': uuid.uuid4().hex,
       'slave': slave,
       'solutions': specs.get('solutions', []),
       'specs': options.specs,
-  }
+  })
   all_threads = [
-      upload_telemetry(prefix='start', unix_time=time.time(), **telemetry_info)
+      upload_telemetry('start', master, builder, slave, unix_time=time.time())
   ]
 
   try:
@@ -1676,13 +1799,13 @@ def main():
 
   except Inactive:
     # Not active, should count as passing.
-    telemetry_info.update({
+    TELEMETRY.update({
         'passed': True,
         'patch_failure': False,
     })
   except PatchFailed as e:
     # Patch failure - as far as telemetry is concerned, bot_update passed.
-    telemetry_info.update({
+    TELEMETRY.update({
         'passed': True,
         'patch_failure': True,
     })
@@ -1690,7 +1813,7 @@ def main():
     raise
   except Exception as e:
     # Unexpected failure.
-    telemetry_info.update({
+    TELEMETRY.update({
         'message': str(e),
         'passed': False,
         'patch_failure': False,
@@ -1698,7 +1821,7 @@ def main():
     emit_flag(options.flag_file)
     raise
   else:
-    telemetry_info.update({
+    TELEMETRY.update({
         'gclient_output': gclient_output,
         'got_revisions': got_revisions,
         'passed': True,
@@ -1706,8 +1829,7 @@ def main():
     })
     emit_flag(options.flag_file)
   finally:
-    thr = upload_telemetry(prefix='end', unix_time=time.time(),
-                           **telemetry_info)
+    thr = upload_telemetry('end', master, builder, slave, unix_time=time.time())
     all_threads.append(thr)
     # Sort of wait for all telemetry threads to finish.
     for thr in all_threads:
