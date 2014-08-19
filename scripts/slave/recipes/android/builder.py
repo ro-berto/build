@@ -14,12 +14,6 @@ DEPS = [
 
 BUILDERS = {
   'chromium.fyi': {
-    'Android ARM64 Builder (dbg)': {
-      'recipe_config': 'arm64_builder',
-      'check_licenses': True,
-      'findbugs': True,
-      'gclient_apply_config': ['android', 'chrome_internal'],
-    },
     'Android x64 Builder (dbg)': {
       'recipe_config': 'x64_builder',
       'check_licenses': True,
@@ -33,9 +27,24 @@ BUILDERS = {
       'gclient_apply_config': ['android', 'chrome_internal'],
     }
   },
+  'chromium.linux': {
+    'Android Arm64 Builder (dbg)': {
+      'recipe_config': 'arm64_builder',
+      'check_licenses': True,
+      'findbugs': True,
+      'gclient_apply_config': ['android', 'chrome_internal'],
+    },
+  },
   'tryserver.chromium.linux': {
     'android_clang_dbg_recipe': {
       'recipe_config': 'clang_builder',
+      'gclient_apply_config': ['android', 'chrome_internal'],
+      'try': True,
+      'check_licenses': True,
+      'findbugs': True,
+    },
+    'android_arm64_dbg_recipe': {
+      'recipe_config': 'arm64_builder',
       'gclient_apply_config': ['android', 'chrome_internal'],
       'try': True,
       'check_licenses': True,
