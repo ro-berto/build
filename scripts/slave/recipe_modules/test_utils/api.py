@@ -113,43 +113,44 @@ class TestUtilsApi(recipe_api.RecipeApi):
     ignored_failures = set(test.failures(caller_api, 'without patch'))
     new_failures = set(test.failures(caller_api, 'with patch')) - ignored_failures
 
-    step_result = self.m.python.inline(
-      test.name,
-      r"""
-      import sys, json
-      failures = json.load(open(sys.argv[1], 'rb'))
+    try:
+      self.m.python.inline(
+        test.name,
+        r"""
+        import sys, json
+        failures = json.load(open(sys.argv[1], 'rb'))
 
-      success = True
+        success = True
 
-      if failures['new']:
-        success = False
-        print 'New failures:'
-        for f in failures['new']:
-          print f
+        if failures['new']:
+          success = False
+          print 'New failures:'
+          for f in failures['new']:
+            print f
 
-      if failures['ignored']:
-        print 'Ignored failures:'
-        for f in failures['ignored']:
-          print f
+        if failures['ignored']:
+          print 'Ignored failures:'
+          for f in failures['ignored']:
+            print f
 
-      sys.exit(0 if success else 1)
-      """,
-      args=[
-        self.m.json.input({
-          'new': list(new_failures),
-          'ignored': list(ignored_failures),
-        })
-      ],
-    )
+        sys.exit(0 if success else 1)
+        """,
+        args=[
+          self.m.json.input({
+            'new': list(new_failures),
+            'ignored': list(ignored_failures),
+          })
+        ],
+      )
+    finally:
+      p = self.m.step.active_result.presentation
 
-    p = step_result.presentation
+      p.step_text += self.format_step_text([
+          ['failures:', new_failures],
+          ['ignored:', ignored_failures]
+      ])
 
-    p.step_text += self.format_step_text([
-        ['failures:', new_failures],
-        ['ignored:', ignored_failures]
-    ])
-
-    if new_failures:
-      p.status = self.m.step.FAILURE
-    elif ignored_failures:
-      p.status = self.m.step.WARNING
+      if new_failures:
+        p.status = self.m.step.FAILURE
+      elif ignored_failures:
+        p.status = self.m.step.WARNING

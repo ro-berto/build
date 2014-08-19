@@ -969,6 +969,7 @@ def GenTests(api):
     api.test('checklicenses_failure') +
     props() +
     api.platform.name('linux') +
+    api.override_step_data('checklicenses', retcode=1) +
     api.override_step_data(
         'checklicenses (with patch)',
         api.json.output([

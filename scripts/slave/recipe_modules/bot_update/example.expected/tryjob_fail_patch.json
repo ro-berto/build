@@ -53,6 +53,10 @@
     "name": "Patch failure",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@print 'Check the bot_update step for details.'@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.exit(1)@@@",
+      "@@@STEP_LOG_END@python.inline@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },

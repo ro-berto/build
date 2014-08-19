@@ -465,6 +465,7 @@
     ],
     "name": "checklicenses",
     "~followup_annotations": [
+      "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@<br/>failures:<br/>base/basictypes.h: UNKNOWN<br/>@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, json@@@",
@@ -487,5 +488,10 @@
       "@@@STEP_LOG_END@python.inline@@@",
       "@@@STEP_FAILURE@@@"
     ]
+  },
+  {
+    "name": "$final_result",
+    "reason": "Step('checklicenses') failed with return_code 1",
+    "status_code": 1
   }
 ]
