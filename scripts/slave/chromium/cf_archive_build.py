@@ -136,7 +136,7 @@ def archive(options, args):
   prefix = options.factory_properties.get('cf_archive_name', 'cf_archive')
   sortkey_path = chromium_utils.GetSortableUploadPathForSortKey(
       build_sortkey_branch, build_sortkey_value)
-  zip_file_name = '%s-%s-%s%s-%d' % (prefix,
+  zip_file_name = '%s-%s-%s%s-%s' % (prefix,
                                    chromium_utils.PlatformName(),
                                    options.target.lower(),
                                    component,
