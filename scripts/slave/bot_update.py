@@ -91,7 +91,19 @@ GIT_SVN_PROJECT_MAP = {
       (r'trunk', r'refs/heads/master'),
       (r'branches/([^/]+)', r'refs/branch-heads/\1'),
     ],
-  }
+  },
+  'nacl': {
+    'svn_url': 'svn://svn.chromium.org/native_client',
+    'branch_map': [
+      (r'trunk/src/native_client', r'refs/heads/master'),
+    ],
+  },
+  'webrtc': {
+    'svn_url': 'http://webrtc.googlecode.com/svn',
+    'branch_map': [
+      (r'trunk/src', r'refs/heads/master'),
+    ],
+  },
 }
 
 # Key for the 'git-svn' ID metadata commit footer entry.
