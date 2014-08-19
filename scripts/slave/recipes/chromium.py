@@ -250,3 +250,12 @@ def GenTests(api):
     })) +
     api.step_data('base_unittests', retcode=1)
   )
+
+  yield (
+    api.test('ios_gfx_unittests_failure') +
+    api.properties.generic(mastername='chromium.mac',
+                           buildername='iOS Simulator (dbg)') +
+    api.platform('mac', 32) +
+    api.override_step_data(
+        'gfx_unittests', api.json.canned_gtest_output(True), retcode=1)
+  )

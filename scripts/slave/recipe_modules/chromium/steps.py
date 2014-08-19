@@ -216,7 +216,7 @@ class GTestTest(Test):
     kwargs = {}
 
     try:
-      step_result = api.chromium.runtest(
+      api.chromium.runtest(
           self.name, args,
           annotate='gtest',
           xvfb=True,
@@ -226,11 +226,10 @@ class GTestTest(Test):
           step_test_data=lambda: api.json.test_api.canned_gtest_output(True),
           test_launcher_summary_output=api.json.gtest_results(add_json_log=False),
           **kwargs)
+    finally:
+      step_result = api.step.active_result
+      self._test_runs[suffix] = step_result
 
-    except api.step.StepFailure as f:
-      step_result = f.result
-
-    if suffix:
       r = step_result.json.gtest_results
       p = step_result.presentation
 
@@ -238,7 +237,6 @@ class GTestTest(Test):
         p.step_text += api.test_utils.format_step_text([
             ['failures:', r.failures]
         ])
-    self._test_runs[suffix] = step_result
     return step_result
 
   def has_valid_results(self, api, suffix):
