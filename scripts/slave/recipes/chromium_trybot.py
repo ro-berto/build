@@ -310,6 +310,34 @@ BUILDERS = {
           'platform': 'mac',
         },
       },
+      'mac_chromium_openssl_dbg': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'GYP_DEFINES': {
+          'use_openssl': '1',
+        },
+        'chromium_config': 'chromium',
+        'compile_only': False,
+        'testing': {
+          'platform': 'mac',
+        },
+      },
+      'mac_chromium_openssl_rel': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'GYP_DEFINES': {
+          'use_openssl': '1',
+        },
+        'chromium_config': 'chromium',
+        'compile_only': False,
+        'testing': {
+          'platform': 'mac',
+        },
+      },
     },
   },
   'tryserver.chromium.win': {

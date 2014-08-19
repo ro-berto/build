@@ -308,5 +308,21 @@ SPEC = {
         'platform': 'win',
       },
     },
+    'Mac OpenSSL': {
+      'recipe_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'GYP_DEFINES': {
+        'use_openssl': '1',
+      },
+      'tests': [
+        steps.DynamicGTestTests('Mac OpenSSL'),
+      ],
+      'testing': {
+        'platform': 'mac',
+      },
+    },
   },
 }
