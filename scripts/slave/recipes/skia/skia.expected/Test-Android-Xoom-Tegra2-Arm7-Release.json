@@ -330,6 +330,9 @@
       "defaults",
       "msaa16"
     ],
+    "env": {
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+    },
     "name": "gm"
   },
   {
@@ -380,6 +383,9 @@
       "~downsamplebitmap_text",
       "~WritePixels"
     ],
+    "env": {
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+    },
     "name": "dm"
   },
   {
@@ -523,6 +529,9 @@
       "~tabl_mozilla",
       "~tabl_nytimes"
     ],
+    "env": {
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+    },
     "name": "render_pdfs"
   }
 ]

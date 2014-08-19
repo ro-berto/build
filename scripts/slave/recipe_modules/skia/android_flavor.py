@@ -70,6 +70,7 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
     return self._serial
 
   def step(self, name, cmd, **kwargs):
+    env = {'ANDROID_SDK_ROOT': DEFAULT_ANDROID_SDK_ROOT}
     args = [self.android_bin.join('android_run_skia'),
             '-d', self.device,
             '-s', self.serial,
@@ -77,7 +78,7 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
     if self._skia_api.c.configuration == config.CONFIG_RELEASE:
       args.append('--release')
     
-    return self._skia_api.m.step(name=name, cmd=args + cmd, **kwargs)
+    return self._skia_api.m.step(name=name, cmd=args + cmd, env=env, **kwargs)
 
   def compile(self, target):
     """Build the given target."""

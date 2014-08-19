@@ -329,6 +329,9 @@
       "defaults",
       "msaa4"
     ],
+    "env": {
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+    },
     "name": "gm"
   },
   {
@@ -377,6 +380,9 @@
       "--match",
       "~giantbitmap"
     ],
+    "env": {
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+    },
     "name": "dm"
   },
   {
@@ -517,6 +523,9 @@
       "--inputPaths",
       "/storage/emulated/legacy/skiabot/skia_skp/skps"
     ],
+    "env": {
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+    },
     "name": "render_pdfs"
   }
 ]
