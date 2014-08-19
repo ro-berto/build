@@ -267,6 +267,9 @@ ENABLED_BUILDERS = {
         'Chromium ASAN - trunk - debug',
         'Chromium Win SyzyASAN - trunk',
     ],
+    'tryserver.webrtc': [
+        'android_apk',
+    ],
 }
 ENABLED_BUILDERS.update(internal_data.get('ENABLED_BUILDERS', {}))
 
