@@ -845,12 +845,29 @@
       "--",
       "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
       "cp",
-      "[SLAVE_BUILD]/skimage_out/Test-Android-GalaxyNexus-SGX540-Arm7-Debug/actual-results.json",
-      "gs://chromium-skia-gm/skimage_experimental/actuals/Test-Android-GalaxyNexus-SGX540-Arm7-Debug/actual-results.json"
+      "-R",
+      "[SLAVE_BUILD]/skimage_out/images",
+      "gs://chromium-skia-gm/skimage/output"
     ],
-    "name": "gsutil upload",
+    "name": "gsutil upload skimage actual images",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-skia-gm/skimage_experimental/actuals/Test-Android-GalaxyNexus-SGX540-Arm7-Debug/actual-results.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-skia-gm/skimage/output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
+      "cp",
+      "[SLAVE_BUILD]/skimage_out/Test-Android-GalaxyNexus-SGX540-Arm7-Debug/actual-results.json",
+      "gs://chromium-skia-gm/skimage/actuals/Test-Android-GalaxyNexus-SGX540-Arm7-Debug/actual-results.json"
+    ],
+    "name": "gsutil upload skimage actual summary",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-skia-gm/skimage/actuals/Test-Android-GalaxyNexus-SGX540-Arm7-Debug/actual-results.json@@@"
     ]
   },
   {

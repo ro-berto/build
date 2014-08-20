@@ -391,12 +391,15 @@ class SkiaApi(recipe_api.RecipeApi):
         global_constants.GM_EXPECTATIONS_FILENAME)
     device_expectations_path = None
     if self.m.path.exists(repo_expectations_path):
-      self.flavor.create_clean_device_dir(self.device_dirs.skimage_expected_dir)
       device_expectations_path = self.flavor.device_path_join(
           self.device_dirs.skimage_expected_dir, self.c.BUILDER_NAME,
           global_constants.GM_EXPECTATIONS_FILENAME)
-      self.flavor.copy_file_to_device(repo_expectations_path,
-                                      device_expectations_path)
+      if str(device_expectations_path) != str(repo_expectations_path):
+        print '%s != %s' % (device_expectations_path, repo_expectations_path)
+        self.flavor.create_clean_device_dir(
+            self.device_dirs.skimage_expected_dir)
+        self.flavor.copy_file_to_device(repo_expectations_path,
+                                        device_expectations_path)
 
     # Run the tests.
     args = ['skimage', '-r', self.device_dirs.skimage_in_dir, '--noreencode',
@@ -417,15 +420,17 @@ class SkiaApi(recipe_api.RecipeApi):
     # Actual images.
     self.m.gsutil.upload(self.skimage_out_dir.join(actual_image_subdir),
                          global_constants.GS_GM_BUCKET,
-                         '/'.join(('skimage_experimental', 'output')),
-                         args=['-R'])
+                         '/'.join(('skimage', 'output')),
+                         args=['-R'],
+                         name='upload skimage actual images')
     # JSON Summary file.
     self.m.gsutil.upload(
         self.skimage_out_dir.join(self.c.BUILDER_NAME,
                                   global_constants.GM_ACTUAL_FILENAME),
         global_constants.GS_GM_BUCKET,
-        '/'.join(('skimage_experimental', 'actuals',
-                  self.c.BUILDER_NAME, global_constants.GM_ACTUAL_FILENAME)))
+        '/'.join(('skimage', 'actuals', self.c.BUILDER_NAME,
+                  global_constants.GM_ACTUAL_FILENAME)),
+        name='upload skimage actual summary')
 
     # If there is no expectations file, still run the tests, and then report a
     # failure. Then we'll know to update the expectations with the results of
