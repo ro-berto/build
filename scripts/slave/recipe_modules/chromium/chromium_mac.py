@@ -32,6 +32,9 @@ SPEC = {
       'tests': [
         steps.DynamicGTestTests('Mac10.6 Tests (1)'),
         steps.NaclIntegrationTest(),
+        steps.MojoPythonTests(),
+        steps.TelemetryUnitTests(),
+        steps.TelemetryPerfUnitTests(),
       ],
       'bot_type': 'tester',
       'parent_buildername': 'Mac Builder',
@@ -54,24 +57,6 @@ SPEC = {
         'platform': 'mac',
       }
     },
-    'Mac10.6 Tests (3)': {
-      'recipe_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'tests': [
-        steps.DynamicGTestTests('Mac10.6 Tests (3)'),
-        steps.MojoPythonTests(),
-        steps.TelemetryUnitTests(),
-        steps.TelemetryPerfUnitTests(),
-      ],
-      'bot_type': 'tester',
-      'parent_buildername': 'Mac Builder',
-      'testing': {
-        'platform': 'mac',
-      }
-    },
     'Mac10.7 Tests (1)': {
       'recipe_config': 'chromium',
       'chromium_config_kwargs': {
@@ -81,6 +66,9 @@ SPEC = {
       'tests': [
         steps.DynamicGTestTests('Mac10.7 Tests (1)'),
         steps.NaclIntegrationTest(),
+        steps.MojoPythonTests(),
+        steps.TelemetryUnitTests(),
+        steps.TelemetryPerfUnitTests(),
       ],
       'bot_type': 'tester',
       'parent_buildername': 'Mac Builder',
@@ -96,24 +84,6 @@ SPEC = {
       },
       'tests': [
         steps.DynamicGTestTests('Mac10.7 Tests (2)'),
-      ],
-      'bot_type': 'tester',
-      'parent_buildername': 'Mac Builder',
-      'testing': {
-        'platform': 'mac',
-      }
-    },
-    'Mac10.7 Tests (3)': {
-      'recipe_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'tests': [
-        steps.DynamicGTestTests('Mac10.7 Tests (3)'),
-        steps.MojoPythonTests(),
-        steps.TelemetryUnitTests(),
-        steps.TelemetryPerfUnitTests(),
       ],
       'bot_type': 'tester',
       'parent_buildername': 'Mac Builder',
@@ -161,6 +131,9 @@ SPEC = {
       'tests': [
         steps.DynamicGTestTests('Mac 10.6 Tests (dbg)(1)'),
         steps.NaclIntegrationTest(),
+        steps.MojoPythonTests(),
+        steps.TelemetryUnitTests(),
+        steps.TelemetryPerfUnitTests(),
       ],
       'bot_type': 'tester',
       'parent_buildername': 'Mac Builder (dbg)',
@@ -183,38 +156,6 @@ SPEC = {
         'platform': 'mac',
       }
     },
-    'Mac 10.6 Tests (dbg)(3)': {
-      'recipe_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-      },
-      'tests': [
-        steps.DynamicGTestTests('Mac 10.6 Tests (dbg)(3)'),
-        steps.TelemetryUnitTests(),
-        steps.TelemetryPerfUnitTests(),
-      ],
-      'bot_type': 'tester',
-      'parent_buildername': 'Mac Builder (dbg)',
-      'testing': {
-        'platform': 'mac',
-      }
-    },
-    'Mac 10.6 Tests (dbg)(4)': {
-      'recipe_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-      },
-      'tests': [
-        steps.DynamicGTestTests('Mac 10.6 Tests (dbg)(4)'),
-      ],
-      'bot_type': 'tester',
-      'parent_buildername': 'Mac Builder (dbg)',
-      'testing': {
-        'platform': 'mac',
-      }
-    },
     'Mac 10.7 Tests (dbg)(1)': {
       'recipe_config': 'chromium',
       'chromium_config_kwargs': {
@@ -224,6 +165,9 @@ SPEC = {
       'tests': [
         steps.DynamicGTestTests('Mac 10.7 Tests (dbg)(1)'),
         steps.NaclIntegrationTest(),
+        steps.MojoPythonTests(),
+        steps.TelemetryUnitTests(),
+        steps.TelemetryPerfUnitTests(),
       ],
       'bot_type': 'tester',
       'parent_buildername': 'Mac Builder (dbg)',
@@ -239,38 +183,6 @@ SPEC = {
       },
       'tests': [
         steps.DynamicGTestTests('Mac 10.7 Tests (dbg)(2)'),
-      ],
-      'bot_type': 'tester',
-      'parent_buildername': 'Mac Builder (dbg)',
-      'testing': {
-        'platform': 'mac',
-      }
-    },
-    'Mac 10.7 Tests (dbg)(3)': {
-      'recipe_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-      },
-      'tests': [
-        steps.DynamicGTestTests('Mac 10.7 Tests (dbg)(3)'),
-        steps.TelemetryUnitTests(),
-        steps.TelemetryPerfUnitTests(),
-      ],
-      'bot_type': 'tester',
-      'parent_buildername': 'Mac Builder (dbg)',
-      'testing': {
-        'platform': 'mac',
-      }
-    },
-    'Mac 10.7 Tests (dbg)(4)': {
-      'recipe_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-      },
-      'tests': [
-        steps.DynamicGTestTests('Mac 10.7 Tests (dbg)(4)'),
       ],
       'bot_type': 'tester',
       'parent_buildername': 'Mac Builder (dbg)',
