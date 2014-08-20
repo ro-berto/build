@@ -84,7 +84,7 @@ RECIPE_CONFIGS = {
 
 
 class ChromiumTestsApi(recipe_api.RecipeApi):
-  def compile_and_return_tests(self, mastername, buildername):
+  def compile_and_return_bot_update(self, mastername, buildername):
     master_dict = self.m.chromium.builders.get(mastername, {})
     bot_config = master_dict.get('builders', {}).get(buildername)
     master_config = master_dict.get('settings', {})
@@ -206,6 +206,17 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             extra_url_components=self.m.properties['mastername']),
           build_revision=got_revision)
 
+    return update_step
+
+  def tests_for_builder(self, mastername, buildername, update_step):
+    got_revision = update_step.presentation.properties['got_revision']
+
+    master_dict = self.m.chromium.builders.get(mastername, {})
+    bot_config = master_dict.get('builders', {}).get(buildername)
+    master_config = master_dict.get('settings', {})
+
+    bot_type = bot_config.get('bot_type', 'builder_tester')
+
     if bot_type == 'tester':
       # Protect against hard to debug mismatches between directory names
       # used to run tests from and extract build to. We've had several cases
@@ -238,7 +249,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       tests = []
       swarming_tests = []
 
-    return tests, swarming_tests, update_step
+    return tests, swarming_tests
 
   def setup_chromium_tests(self, test_runner):
     if self.m.chromium.c.TARGET_PLATFORM == 'android':
