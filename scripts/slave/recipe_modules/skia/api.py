@@ -301,10 +301,12 @@ class SkiaApi(recipe_api.RecipeApi):
              args=[results_file], abort_on_failure=False)
 
     # Upload results.
+    gsutil_path = self.m.path['depot_tools'].join(
+        'third_party', 'gsutil', 'gsutil')
     self.run(self.m.python,
              'Upload GM Results',
              script=self.resource('upload_gm_results.py'),
-             args=[str(host_gm_actual_dir), self.c.BUILDER_NAME],
+             args=[str(host_gm_actual_dir), self.c.BUILDER_NAME, gsutil_path],
              cwd=self.m.path['checkout'],
              abort_on_failure=False)
 

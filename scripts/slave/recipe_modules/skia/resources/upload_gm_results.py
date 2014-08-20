@@ -19,7 +19,7 @@ from common.skia import global_constants
 IMAGE_FILE_PATTERN = re.compile(r'^([^_]+)_(.+)_([^_]+)\.png$')
 
 
-def _GSUploadAllImages(src_dir):
+def _GSUploadAllImages(src_dir, gsutil_path='gsutil'):
   """Upload all image files from src_dir to Google Storage.
 
   We know that GM wrote out these image files with a filename pattern we
@@ -51,7 +51,7 @@ def _GSUploadAllImages(src_dir):
     # Upload the entire staging dir to Google Storage.
     # At present, this will merge the entire contents of [temp_root]/gm
     # into the existing contents of gs://chromium-skia-gm/gm .
-    cmd = ['gsutil', 'cp', '-a', 'public-read', '-R',
+    cmd = [gsutil_path, 'cp', '-a', 'public-read', '-R',
            os.path.join(temp_root, gm_actuals_subdir),
            'gs://' + global_constants.GS_GM_BUCKET]
     print ' '.join(cmd)
@@ -59,7 +59,7 @@ def _GSUploadAllImages(src_dir):
   finally:
     shutil.rmtree(temp_root)
 
-def _GSUploadJsonFiles(src_dir, builder_name):
+def _GSUploadJsonFiles(src_dir, builder_name, gsutil_path='gsutil'):
   """Upload just the JSON files within src_dir to GS_SUMMARIES_BUCKET.
 
   Args:
@@ -76,12 +76,12 @@ def _GSUploadJsonFiles(src_dir, builder_name):
   for filename in files_to_upload:
     src_path = os.path.join(src_dir, filename)
     gs_dest_path = posixpath.join(gs_dest_dir, filename)
-    subprocess.check_call(['gsutil', 'cp', '-a', 'public-read', src_path,
+    subprocess.check_call([gsutil_path, 'cp', '-a', 'public-read', src_path,
                            gs_dest_path])
 
-def main(gm_actual_dir, builder_name):
-  _GSUploadAllImages(gm_actual_dir)
-  _GSUploadJsonFiles(gm_actual_dir, builder_name)
+def main(gm_actual_dir, builder_name, gsutil_path):
+  _GSUploadAllImages(gm_actual_dir, gsutil_path=gsutil_path)
+  _GSUploadJsonFiles(gm_actual_dir, builder_name, gsutil_path=gsutil_path)
 
 
 if '__main__' == __name__:

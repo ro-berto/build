@@ -185,7 +185,8 @@
       "-u",
       "[BUILD]/scripts/slave/recipe_modules/skia/resources/upload_gm_results.py",
       "[SLAVE_BUILD]/gm/actual/Test-Win7-ShuttleA-HD2000-x86-Release-ANGLE",
-      "Test-Win7-ShuttleA-HD2000-x86-Release-ANGLE"
+      "Test-Win7-ShuttleA-HD2000-x86-Release-ANGLE",
+      "[DEPOT_TOOLS]/third_party/gsutil/gsutil"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "name": "Upload GM Results"

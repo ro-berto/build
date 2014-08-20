@@ -360,7 +360,8 @@
       "-u",
       "[BUILD]/scripts/slave/recipe_modules/skia/resources/upload_gm_results.py",
       "[SLAVE_BUILD]/gm/actual/Test-Android-Nexus10-MaliT604-Arm7-Release",
-      "Test-Android-Nexus10-MaliT604-Arm7-Release"
+      "Test-Android-Nexus10-MaliT604-Arm7-Release",
+      "[DEPOT_TOOLS]/third_party/gsutil/gsutil"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "name": "Upload GM Results"
