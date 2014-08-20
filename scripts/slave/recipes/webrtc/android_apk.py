@@ -82,9 +82,6 @@ def GenSteps(api):
   # crbug.com/376122
   # For now, ignore all patches in bot_update, and apply_svn_patch always.
   step_result = api.bot_update.ensure_checkout(patch=False)
-  bot_update_mode = step_result.json.output['did_run']
-  if not bot_update_mode:
-    step_result = api.gclient.checkout()
 
   api.chromium_android.clean_local_files()
 
@@ -92,8 +89,7 @@ def GenSteps(api):
   update_step = step_result
   got_revision = update_step.presentation.properties['got_revision']
 
-  # Until crbug.com/376122 is resolved, run apply_svn_patch regardless of
-  # bot_update_mode.
+  # Until crbug.com/376122 is resolved, run apply_svn_patch after bot_update.
   if does_build and api.tryserver.is_tryserver:
     api.webrtc.apply_svn_patch()
 

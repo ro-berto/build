@@ -269,6 +269,7 @@ ENABLED_BUILDERS = {
     ],
     'tryserver.webrtc': [
         'android_apk',
+        'android_apk_rel',
     ],
 }
 ENABLED_BUILDERS.update(internal_data.get('ENABLED_BUILDERS', {}))
