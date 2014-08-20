@@ -156,13 +156,10 @@ SPEC = {
     },
 
     'Linux ChromiumOS Ozone Builder': {
-      'recipe_config': 'chromium_chromeos',
+      'recipe_config': 'chromium_chromeos_ozone',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
-      },
-      'GYP_DEFINES': {
-        'use_ozone': 1,
       },
       'bot_type': 'builder',
       'compile_targets': [
@@ -173,7 +170,7 @@ SPEC = {
       },
     },
     'Linux ChromiumOS Ozone Tests (1)': {
-      'recipe_config': 'chromium_chromeos',
+      'recipe_config': 'chromium_chromeos_ozone',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -188,7 +185,7 @@ SPEC = {
       },
     },
     'Linux ChromiumOS Ozone Tests (2)': {
-      'recipe_config': 'chromium_chromeos',
+      'recipe_config': 'chromium_chromeos_ozone',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,

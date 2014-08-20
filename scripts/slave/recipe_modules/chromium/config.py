@@ -277,6 +277,10 @@ def chromeos(c):
   proprietary_codecs(c)
 
 @config_ctx()
+def ozone(c):
+  c.gyp_env.GYP_DEFINES['use_ozone'] = 1
+
+@config_ctx()
 def oilpan(c):
   c.gyp_env.GYP_DEFINES['enable_oilpan'] = 1
 
