@@ -16,7 +16,7 @@
       "-u",
       "[SLAVE_BUILD]/build/gyp_chromium",
       "--analyzer",
-      "{\"files\": [\"foo.cc\"], \"targets\": null}",
+      "{\"files\": [\"foo.cc\"], \"targets\": []}",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -26,6 +26,7 @@
     "~followup_annotations": [
       "step returned non-zero exit code: -1",
       "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"status\": \"No dependency\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"targets\": []@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",

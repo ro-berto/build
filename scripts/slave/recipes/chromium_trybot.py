@@ -518,6 +518,16 @@ def get_analyze_config(api, file_name):
   return step_result.json.output
 
 
+def tests_in_compile_targets(compile_targets, *tests):
+  """Returns the tests in |tests| that have at least one of their compile
+  targets in |compile_targets|."""
+  # The target all builds everything.
+  if 'all' in compile_targets:
+    return tests
+  return [test for test in tests if set(compile_targets) &
+          set(test.compile_targets(None))]
+
+
 add_swarming_builder('linux_chromium_rel', 'linux_chromium_rel_swarming',
                      'tryserver.chromium.linux')
 add_swarming_builder('linux_chromium_chromeos_rel',
@@ -684,6 +694,11 @@ def GenSteps(api):
         test_spec,
         bot_config.get('enable_swarming'),
         should_use_test)
+    compile_targets.extend(bot_config.get('compile_targets', []))
+    # TODO(phajdan.jr): Also compile 'all' on win, http://crbug.com/368831 .
+    # Disabled for now because it takes too long and/or fails on Windows.
+    if not api.platform.is_win and not bot_config.get('exclude_compile_all'):
+      compile_targets = ['all'] + compile_targets
 
     runhooks_env = bot_config.get('runhooks_env', {})
 
@@ -697,14 +712,21 @@ def GenSteps(api):
       api.filter.does_patch_require_compile(
           exclusions=analyze_config.get('exclusions', []),
           exes=get_test_names(gtest_tests, swarming_tests),
+          compile_targets=compile_targets,
           env=runhooks_env)
       if not api.filter.result:
         return [], swarming_tests, bot_update_step
-      # Patch needs compile. Filter the list of test targets.
+      # Patch needs compile. Filter the list of test and compile targets.
       if should_filter_tests(buildername,
                              test_spec.get('non_filter_tests_builders', [])):
         gtest_tests = filter_tests(gtest_tests, api.filter.matching_exes)
         swarming_tests = filter_tests(swarming_tests, api.filter.matching_exes)
+      if buildername in test_spec.get('filter_compile_builders', []):
+        if 'all' in compile_targets:
+          compile_targets = api.filter.compile_targets
+        else:
+          compile_targets = list(set(compile_targets) &
+                                 set(api.filter.compile_targets))
 
     # Swarming uses Isolate to transfer files to swarming bots.
     # set_isolate_environment modifies GYP_DEFINES to enable test isolation.
@@ -735,12 +757,16 @@ def GenSteps(api):
                                              'chromium_asan',
                                              'chromium_chromeos_clang']
         and not buildername.startswith('win8')):
-      tests.append(api.chromium.steps.TelemetryUnitTests())
-      tests.append(api.chromium.steps.TelemetryPerfUnitTests())
+      tests.extend(tests_in_compile_targets(
+          compile_targets,
+          api.chromium.steps.TelemetryUnitTests(),
+          api.chromium.steps.TelemetryPerfUnitTests()))
 
     tests.extend(gtest_tests)
     tests.extend(swarming_tests)
-    tests.append(api.chromium.steps.NaclIntegrationTest())
+    tests.extend(tests_in_compile_targets(compile_targets,
+        api.chromium.steps.NaclIntegrationTest()))
+    # MojoPythonTests don't require anything to be compiled.
     tests.append(api.chromium.steps.MojoPythonTests())
 
     # test_installer only works on 32-bit builds; http://crbug.com/399643
@@ -748,13 +774,8 @@ def GenSteps(api):
     #if api.platform.is_win and api.chromium.c.TARGET_BITS == 32:
     #  tests.append(api.chromium.steps.MiniInstallerTest())
 
-    compile_targets.extend(bot_config.get('compile_targets', []))
     compile_targets.extend(api.itertools.chain(
         *[t.compile_targets(api) for t in tests]))
-    # TODO(phajdan.jr): Also compile 'all' on win, http://crbug.com/368831 .
-    # Disabled for now because it takes too long and/or fails on Windows.
-    if not api.platform.is_win and not bot_config.get('exclude_compile_all'):
-      compile_targets = ['all'] + compile_targets
     api.chromium.compile(compile_targets, name='compile (with patch)')
 
     # Collect *.isolated hashes for all isolated targets, used when triggering
@@ -801,6 +822,8 @@ def GenSteps(api):
       compile_targets = list(api.itertools.chain(
           *[t.compile_targets(api) for t in failing_tests]))
       if compile_targets:
+        # Remove duplicate targets.
+        compile_targets = list(set(compile_targets))
         try:
           api.chromium.compile(
                   compile_targets, name='compile (without patch)')
@@ -1151,7 +1174,8 @@ def GenTests(api):
     ) +
     api.override_step_data(
       'analyze',
-      api.json.output({'status': 'Found dependency', 'targets': []}))
+      api.json.output({'status': 'Found dependency', 'targets': [],
+                       'build_targets': []}))
   )
 
   # Tests analyze module by way of specifying non_filter_builders and
@@ -1179,7 +1203,8 @@ def GenTests(api):
     api.override_step_data(
       'analyze',
       api.json.output({'status': 'Found dependency',
-                       'targets': ['browser_tests', 'base_unittests']}))
+                       'targets': ['browser_tests', 'base_unittests'],
+                       'build_targets': ['browser_tests', 'base_unittests']}))
   )
 
   # Tests analyze module by way of not specifying non_filter_builders and
@@ -1207,5 +1232,64 @@ def GenTests(api):
     api.override_step_data(
       'analyze',
       api.json.output({'status': 'Found dependency',
-                       'targets': ['browser_tests', 'base_unittests']}))
+                       'targets': ['browser_tests', 'base_unittests'],
+                       'build_targets': ['browser_tests', 'base_unittests']}))
   )
+
+  # Tests compile_target portion of analyze module.
+  yield (
+    api.test('compile_because_of_analyze_with_filtered_compile_targets') +
+    props(buildername='linux_chromium_rel') +
+    api.platform.name('linux') +
+    api.override_step_data('read test spec', api.json.output({
+        'filter_compile_builders': 'linux_chromium_rel',
+        'gtest_tests': [
+          {
+            'test': 'base_unittests',
+            'swarming': {'can_use_on_swarming_builders': True},
+          },
+          {
+            'test': 'browser_tests',
+          },
+          {
+            'test': 'unittests',
+          },
+        ],
+      })
+    ) +
+    api.override_step_data(
+      'analyze',
+      api.json.output({'status': 'Found dependency',
+                       'targets': ['browser_tests', 'base_unittests'],
+                       'build_targets': ['chrome', 'browser_tests',
+                                         'base_unittests']}))
+  )
+
+  # Tests compile_targets portion of analyze with a bot that doesn't include the
+  # 'all' target.
+  yield (
+    api.test(
+      'compile_because_of_analyze_with_filtered_compile_targets_exclude_all') +
+    props(buildername='linux_chromium_browser_asan_rel') +
+    api.platform.name('linux') +
+    api.override_step_data('read test spec', api.json.output({
+        'compile_targets': ['base_unittests'],
+        'gtest_tests': [
+          {
+            'test': 'browser_tests',
+            'args': '--gtest-filter: *NaCl*',
+          }, {
+            'test': 'base_tests',
+            'args': ['--gtest-filter: *NaCl*'],
+          },
+        ],
+        'filter_compile_builders': 'linux_chromium_browser_asan_rel',
+      })
+    ) +
+    api.override_step_data(
+      'analyze',
+      api.json.output({'status': 'Found dependency',
+                       'targets': ['browser_tests', 'base_unittests'],
+                       'build_targets': ['base_unittests']}))
+  )
+

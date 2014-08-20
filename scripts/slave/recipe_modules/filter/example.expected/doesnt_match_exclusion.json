@@ -26,6 +26,7 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@No compile necessary@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"status\": \"No dependency\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"targets\": []@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",

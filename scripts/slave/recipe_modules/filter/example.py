@@ -18,35 +18,36 @@ def GenSteps(api):
   api.filter.does_patch_require_compile()
   assert (api.filter.result and api.properties['example_result']) or \
       (not api.filter.result and not api.properties['example_result'])
-  assert (not api.properties['example_matching_exes'] or
-          list(api.properties['example_matching_exes']) ==
-          api.filter.matching_exes)
+  assert (list(api.properties.get('example_matching_exes', [])) ==
+          list(api.filter.matching_exes))
+  assert (list(api.properties.get('example_matching_compile_targets', [])) ==
+          api.filter.compile_targets)
   api.step('hello', ['echo', 'Why hello, there.'])
 
 def GenTests(api):
   # Trivial test with no exclusions and nothing matching.
   yield (api.test('basic') +
-         api.properties(filter_exclusions=[]) +
-         api.properties(example_result=None) +
-         api.properties(example_matching_exes=None) +
+         api.properties(
+           filter_exclusions=[],
+           example_result=None) +
          api.override_step_data(
           'git diff to analyze patch',
           api.raw_io.stream_output('yy')))
   
   # Matches exclusions
   yield (api.test('match_exclusion') +
-         api.properties(filter_exclusions=['fo.*']) +
-         api.properties(example_result=1) +
-         api.properties(example_matching_exes=None) +
+         api.properties(
+           filter_exclusions=['fo.*'],
+           example_result=1) +
          api.override_step_data(
           'git diff to analyze patch',
           api.raw_io.stream_output('foo.cc')))
 
   # Doesnt match exclusion.
   yield (api.test('doesnt_match_exclusion') +
-         api.properties(filter_exclusions=['fo.*']) +
-         api.properties(example_result=None) +
-         api.properties(example_matching_exes=None) +
+         api.properties(
+           filter_exclusions=['fo.*'],
+           example_result=None) +
          api.override_step_data(
           'git diff to analyze patch',
           api.raw_io.stream_output('bar.cc')))
@@ -54,46 +55,57 @@ def GenTests(api):
   # Analyze returns matching result.
   yield (api.test('analyzes_returns_true') +
          api.properties(example_result=1) +
-         api.properties(example_matching_exes=None) +
          api.override_step_data(
           'analyze',
           api.json.output({'status': 'Found dependency',
-                                  'targets': []})))
+                           'targets': [],
+                           'build_targets': []})))
 
   # Analyze returns matching tests while matching all.
   yield (api.test('analyzes_matches_all_exes') +
-         api.properties(matching_exes=['foo', 'bar']) +
-         api.properties(example_matching_exes=['foo']) +
          api.properties(example_result=1) +
          api.override_step_data(
           'analyze',
-          api.json.output({'status': 'Found dependency (all)',
-                                  'targets': ['foo']})))
+          api.json.output({'status': 'Found dependency (all)'})))
 
   # Analyze matches all and returns matching tests.
   yield (api.test('analyzes_matches_exes') +
-         api.properties(matching_exes=['foo', 'bar']) +
-         api.properties(example_matching_exes=['foo']) +
-         api.properties(example_result=1) +
+         api.properties(
+           matching_exes=['foo', 'bar'],
+           example_matching_exes=['foo'],
+           example_result=1) +
          api.override_step_data(
           'analyze',
           api.json.output({'status': 'Found dependency',
-                                  'targets': ['foo']})))
+                           'targets': ['foo'],
+                           'build_targets': []})))
+
+  # Analyze matches all and returns matching tests.
+  yield (api.test('analyzes_matches_compile_targets') +
+         api.properties(
+           example_matching_exes=['foo'],
+           example_matching_compile_targets=['bar'],
+           example_result=1) +
+         api.override_step_data(
+          'analyze',
+          api.json.output({'status': 'Found dependency',
+                           'targets': ['foo'],
+                           'build_targets': ['bar']})))
 
   # Analyze with error condition.
   yield (api.test('analyzes_error') +
-         api.properties(matching_exes=None) +
-         api.properties(example_matching_exes=None) +
-         api.properties(example_result=1) +
+         api.properties(
+           matching_exes=[],
+           example_result=1) +
          api.override_step_data(
           'analyze',
           api.json.output({'error': 'ERROR'})))
 
   # Analyze with python returning bad status.
   yield (api.test('bad_retcode_doesnt_fail') +
-         api.properties(matching_exes=None) +
-         api.properties(example_matching_exes=None) +
-         api.properties(example_result=1) +
+         api.properties(
+           matching_exes=[],
+           example_result=1) +
          api.step_data(
           'analyze',
           retcode=-1))

@@ -11,6 +11,7 @@ class FilterApi(recipe_api.RecipeApi):
     super(FilterApi, self).__init__(**kwargs)
     self._result = False
     self._matching_exes = []
+    self._compile_targets = []
 
   def __is_path_in_exclusion_list(self, path, exclusions):
     """Returns true if |path| matches any of the regular expressions in
@@ -33,7 +34,14 @@ class FilterApi(recipe_api.RecipeApi):
     are effected by the set of files that have changed."""
     return self._matching_exes
 
-  def does_patch_require_compile(self, exclusions=None, exes=None, **kwargs):
+  @property
+  def compile_targets(self):
+    """Returns the set of targets that need to be compiled based on the set of
+    files that have changed."""
+    return self._compile_targets
+
+  def does_patch_require_compile(self, exclusions=None, exes=None,
+                                 compile_targets=None, **kwargs):
     """Return true if the current patch requires a build (and exes to run).
     Return value can be accessed by call to result().
 
@@ -43,10 +51,13 @@ class FilterApi(recipe_api.RecipeApi):
       True is returned (by way of result()).
       exes: the possible set of executables that are desired to run. When done
       matching_exes() returns the set of exes that are effected by the files
-      that have changed."""
+      that have changed.
+      compile_targets: proposed set of targets to compile."""
 
     exclusions = exclusions or self.m.properties.get('filter_exclusions', [])
     self._matching_exes = exes or self.m.properties.get('matching_exes', [])
+    self._compile_targets = compile_targets or \
+        self.m.properties.get('compile_targets', [])
 
     # Get the set of files in the current patch.
     step_result = self.m.git('diff', '--cached', '--name-only',
@@ -65,12 +76,14 @@ class FilterApi(recipe_api.RecipeApi):
       if first_match:
         step_result.presentation.logs.setdefault('excluded_files', []).append(
             '%s (regex = \'%s\')' % (path, first_match))
-        self._result = 1
+        self._result = True
         return
 
     analyze_input = {'files': paths, 'targets': self._matching_exes}
 
-    test_output = {'status': 'No dependency', 'targets': []}
+    test_output = {'status': 'No dependency',
+                   'targets': [],
+                   'build_targets': []}
 
     kwargs.setdefault('env', {})
     kwargs['env'].update(self.m.chromium.c.gyp_env.as_jsonish())
@@ -96,9 +109,11 @@ class FilterApi(recipe_api.RecipeApi):
       self._result = True
       step_result.presentation.step_text = 'Error: ' + \
           step_result.json.output['error']
-    elif step_result.json.output['status'] == 'Found dependency' or \
-         step_result.json.output['status'] == 'Found dependency (all)':
+    elif step_result.json.output['status'] == 'Found dependency':
+      self._result = True
       self._matching_exes = step_result.json.output['targets']
+      self._compile_targets = step_result.json.output['build_targets']
+    elif step_result.json.output['status'] == 'Found dependency (all)':
       self._result = True
     else:
       step_result.presentation.step_text = 'No compile necessary'

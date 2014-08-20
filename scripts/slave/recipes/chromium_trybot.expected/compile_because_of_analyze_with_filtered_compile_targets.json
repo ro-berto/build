@@ -77,6 +77,7 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@path: testing/buildbot/chromium_trybot.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"filter_compile_builders\": \"linux_chromium_rel\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"swarming\": {@@@",
@@ -139,6 +140,7 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"chrome\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"browser_tests\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"base_unittests\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
@@ -179,7 +181,9 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "all",
+      "chrome",
+      "browser_tests",
+      "base_unittests",
       "chrome",
       "chrome",
       "base_unittests",

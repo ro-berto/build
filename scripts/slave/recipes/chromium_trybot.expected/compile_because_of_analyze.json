@@ -123,6 +123,7 @@
     "name": "analyze",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"status\": \"Found dependency\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"targets\": []@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",

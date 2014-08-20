@@ -137,8 +137,7 @@
       "[BUILD]\\goma",
       "--",
       "base_unittests",
-      "browser_tests",
-      "chrome"
+      "browser_tests"
     ],
     "name": "compile (with patch)"
   },
@@ -216,22 +215,6 @@
       "browser_tests.exe"
     ],
     "name": "browser_tests (with patch)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\chrome\\test\\nacl_test_injection\\buildbot_nacl_integration.py",
-      "--mode",
-      "Debug",
-      "--json_build_results_output_file",
-      "/path/to/tmp/json"
-    ],
-    "name": "nacl_integration (with patch)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
   },
   {
     "cmd": [

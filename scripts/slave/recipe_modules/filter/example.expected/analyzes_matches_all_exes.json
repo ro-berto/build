@@ -16,7 +16,7 @@
       "-u",
       "[SLAVE_BUILD]/build/gyp_chromium",
       "--analyzer",
-      "{\"files\": [\"foo.cc\"], \"targets\": [\"foo\", \"bar\"]}",
+      "{\"files\": [\"foo.cc\"], \"targets\": []}",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -25,10 +25,7 @@
     "name": "analyze",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"status\": \"Found dependency (all)\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"targets\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"foo\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"status\": \"Found dependency (all)\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
