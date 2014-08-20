@@ -26,7 +26,7 @@ from common.gerrit_agent import GerritAgent
 
 
 LOG_TEMPLATE = '%s/+log/%s?format=JSON&n=%d'
-REFS_TEMPLATE = '%s/+refs/heads?format=JSON'
+REFS_TEMPLATE = '%s/+refs?format=JSON'
 REVISION_DETAIL_TEMPLATE = '%s/+/%s?format=JSON'
 
 
@@ -134,7 +134,13 @@ class GitilesPoller(PollingChangeSource):
       branches = ['master']
     elif isinstance(branches, basestring):
       branches = [branches]
-    self.branches = branches
+    self.branches = []
+    for b in branches:
+      if not isinstance(b, self.re_pattern_type):
+        b = b.lstrip('/')
+        if not b.startswith('refs/'):
+          b = 'refs/heads/' + b
+      self.branches.append(b)
     self.branch_heads = {}
     self.pollInterval = pollInterval
     self.category = category
@@ -179,7 +185,9 @@ class GitilesPoller(PollingChangeSource):
     for ref, ref_head in refs_json.iteritems():
       for branch in self.branches:
         if (ref == branch or
-            (isinstance(branch, self.re_pattern_type) and branch.match(ref))):
+            (isinstance(branch, self.re_pattern_type) and
+             (branch.match(ref) or
+              (ref.startswith('refs/heads/') and branch.match(ref[11:]))))):
           result[ref] = ref_head['value']
           break
     deleted_branches = []
@@ -197,6 +205,7 @@ class GitilesPoller(PollingChangeSource):
       return
     if self.change_filter and not self.change_filter(commit_json, branch):
       return
+    commit_branch = branch.rpartition('/')[2]
     commit_author = commit_json['author']['email']
     commit_tm = time_to_datetime(commit_json['committer']['time'])
     commit_files = []
@@ -214,7 +223,7 @@ class GitilesPoller(PollingChangeSource):
         if m:
           repo_url = m.group(1)
           revision = m.group(2)
-          branch = self.svn_branch
+          commit_branch = self.svn_branch
           break
       if revision is None:
         log.err(
@@ -231,7 +240,7 @@ class GitilesPoller(PollingChangeSource):
         files=commit_files,
         comments=commit_msg,
         when_timestamp=commit_tm,
-        branch=branch,
+        branch=commit_branch,
         category=self.category,
         project=self.project,
         properties=properties,
