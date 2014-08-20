@@ -399,13 +399,17 @@ class AndroidApi(recipe_api.RecipeApi):
     if failures:
       raise self.m.step.StepFailure('sharded perf tests failed %s' % failures)
 
+  @recipe_api.composite_step
   def run_instrumentation_suite(self, test_apk, test_data=None,
                                 flakiness_dashboard=None,
                                 annotation=None, except_annotation=None,
                                 screenshot=False, verbose=False,
                                 apk_package=None, host_driven_root=None,
-                                official_build=False,
+                                official_build=False, install_apk=None,
                                 **kwargs):
+    if install_apk:
+      self.adb_install_apk(install_apk['apk'], install_apk['package'])
+
     args = ['--test-apk', test_apk]
     if test_data:
       args.extend(['--test_data', test_data])
@@ -435,6 +439,7 @@ class AndroidApi(recipe_api.RecipeApi):
         args=['instrumentation'] + args,
         **kwargs)
 
+  @recipe_api.composite_step
   def logcat_dump(self, gs_bucket=None):
     if gs_bucket:
       log_path = self.m.chromium.output_dir.join('full_log')

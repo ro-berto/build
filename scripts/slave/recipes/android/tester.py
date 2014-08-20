@@ -10,6 +10,7 @@ DEPS = [
     'json',
     'path',
     'properties',
+    'step',
     'tryserver',
 ]
 
@@ -18,34 +19,34 @@ INSTRUMENTATION_TESTS = [
     'test': 'MojoTest',
   },
   {
-    'install': {
-      'package': 'org.chromium.android_webview.shell',
-      'apk': 'AndroidWebView.apk'
-    },
     'test': 'AndroidWebViewTest',
     'kwargs': {
       'test_data': 'webview:android_webview/test/data/device_files',
+      'install_apk': {
+        'package': 'org.chromium.android_webview.shell',
+        'apk': 'AndroidWebView.apk'
+      },
     },
   },
   {
-    'install': {
-      'package': 'org.chromium.chrome.shell',
-      'apk': 'ChromeShell.apk',
-    },
     'test': 'ChromeShellTest',
     'kwargs': {
       'test_data': 'chrome:chrome/test/data/android/device_files',
+      'install_apk': {
+        'package': 'org.chromium.chrome.shell',
+        'apk': 'ChromeShell.apk',
+      },
       # TODO(luqui): find out if host_driven_root is necessary
     },
   },
   {
-    'install': {
-      'package': 'org.chromium.chontent_shell_apk',
-      'apk': 'ContentShell.apk',
-    },
     'test': 'ContentShellTest',
     'kwargs': {
       'test_data': 'content:content/test/data/android/device_files',
+      'install_apk': {
+        'package': 'org.chromium.chontent_shell_apk',
+        'apk': 'ContentShell.apk',
+      },
     },
   },
 ]
@@ -126,28 +127,23 @@ def GenSteps(api):
   api.chromium_android.spawn_logcat_monitor()
   api.chromium_android.detect_and_setup_devices()
 
-  instrumentation_tests = bot_config.get('instrumentation_tests', [])
-  for suite in instrumentation_tests:
-    if 'install' in suite:
-      api.chromium_android.adb_install_apk(
-          suite['install']['apk'],
-          suite['install']['package'])
-    #TODO(martiniss) convert loop
-    api.chromium_android.run_instrumentation_suite(
-        suite['test'], verbose=True, **suite.get('kwargs', {}))
+  with api.step.defer_results():
+    instrumentation_tests = bot_config.get('instrumentation_tests', [])
+    for suite in instrumentation_tests:
+      api.chromium_android.run_instrumentation_suite(
+          suite['test'], verbose=True, **suite.get('kwargs', {}))
 
-  unittests = bot_config.get('unittests', [])
-  for suite, isolate_path in unittests:
-    if isolate_path:
-      isolate_path = api.path['checkout'].join(*isolate_path)
-    #TODO(martiniss) convert loop
-    api.chromium_android.run_test_suite(
-        suite,
-        isolate_file_path=isolate_path)
+    unittests = bot_config.get('unittests', [])
+    for suite, isolate_path in unittests:
+      if isolate_path:
+        isolate_path = api.path['checkout'].join(*isolate_path)
+      api.chromium_android.run_test_suite(
+          suite,
+          isolate_file_path=isolate_path)
 
-  api.chromium_android.logcat_dump(gs_bucket='chromium-android')
-  api.chromium_android.stack_tool_steps()
-  api.chromium_android.test_report()
+    api.chromium_android.logcat_dump(gs_bucket='chromium-android')
+    api.chromium_android.stack_tool_steps()
+    api.chromium_android.test_report()
 
 def GenTests(api):
   for mastername in BUILDERS:
@@ -163,3 +159,12 @@ def GenTests(api):
               slavename='slavename',
               buildnumber='1337')
       )
+
+  yield (
+      api.test('android_dbg_tests_recipe__content_browsertests_failure') +
+      api.properties.generic(
+          mastername='tryserver.chromium.linux',
+          buildername='android_dbg_tests_recipe',
+          slavename='slavename') +
+      api.step_data('content_browsertests', retcode=1)
+  )
