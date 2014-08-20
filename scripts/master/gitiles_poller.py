@@ -123,6 +123,10 @@ class GitilesPoller(PollingChangeSource):
     agent: A GerritAgent object used to make requests to the gitiles service.
     svn_mode: When polling a mirror of an svn repository, create changes using
         the svn revision number.
+    svn_branch: When svn_mode=True, this is used to determine the svn branch
+        name for each change.  It can be either a static string, or a function
+        that takes (gitiles_commit_json, git_branch) as arguments and returns
+        a static string.
     comparator: A GitilesRevisionComparator object, or None.  This is used to
         share a single comparator between multiple pollers.
     """
@@ -223,7 +227,10 @@ class GitilesPoller(PollingChangeSource):
         if m:
           repo_url = m.group(1)
           revision = m.group(2)
-          commit_branch = self.svn_branch
+          if callable(self.svn_branch):
+            commit_branch = self.svn_branch(commit_json, branch)
+          else:
+            commit_branch = self.svn_branch
           break
       if revision is None:
         log.err(

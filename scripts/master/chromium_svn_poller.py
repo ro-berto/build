@@ -51,7 +51,7 @@ class _ChromiumSvnPoller(svnpoller.SVNPoller):
         pollinterval=pollinterval, revlinktmpl=revlinktmpl, *args, **kwargs)
 
 
-def _ChromiumChangeFilter(commit_json, branch):
+def ChromiumChangeFilter(commit_json, branch):
   if 'tree_diff' not in commit_json:
     return True
   if (len(commit_json.get('tree_diff', [])) == 1 and
@@ -62,7 +62,7 @@ def _ChromiumChangeFilter(commit_json, branch):
 
 def ChromiumSvnPoller(svnurl=None, *args, **kwargs):
   cachepath = kwargs.pop('cachepath', None)
-  change_filter = kwargs.pop('change_filter', _ChromiumChangeFilter)
+  change_filter = kwargs.pop('change_filter', ChromiumChangeFilter)
   pollInterval = kwargs.pop('pollinterval', 10)
   project = kwargs.pop('project', None)
   if svnurl is None:
