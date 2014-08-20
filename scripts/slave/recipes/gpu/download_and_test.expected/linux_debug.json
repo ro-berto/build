@@ -328,7 +328,7 @@
       "--browser=debug",
       "-vv",
       "--use-devtools-active-port",
-      "--extra-browser-args=--enable-logging=stderr"
+      "--extra-browser-args=--enable-logging=stderr --blink-platform-log-channels=ScriptedAnimationController"
     ],
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"

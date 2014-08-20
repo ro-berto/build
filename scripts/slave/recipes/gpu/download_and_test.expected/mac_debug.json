@@ -308,7 +308,7 @@
       "--browser=debug",
       "-vv",
       "--use-devtools-active-port",
-      "--extra-browser-args=--enable-logging=stderr"
+      "--extra-browser-args=--enable-logging=stderr --blink-platform-log-channels=ScriptedAnimationController"
     ],
     "name": "webgl_conformance_tests"
   },

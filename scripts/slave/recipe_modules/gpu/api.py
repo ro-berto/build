@@ -46,6 +46,10 @@ class GpuApi(recipe_api.RecipeApi):
     self.m.chromium.apply_config('dcheck')
     self.m.chromium.apply_config('blink_asserts_on')
 
+    # To more easily diagnose failures from logs, enable logging in
+    # Blink Release builds.
+    self.m.chromium.apply_config('blink_logging_on')
+
     # Use the default Ash and Aura settings on all bots (specifically Blink
     # bots).
     self.m.chromium.c.gyp_env.GYP_DEFINES.pop('use_ash', None)
@@ -273,7 +277,11 @@ class GpuApi(recipe_api.RecipeApi):
         name='pixel_test'))
 
     # WebGL conformance tests.
-    capture(self._run_isolated_telemetry_gpu_test('webgl_conformance'))
+    capture(self._run_isolated_telemetry_gpu_test('webgl_conformance',
+        extra_browser_args=[
+          # For diagnosing crbug.com/393331
+          '--blink-platform-log-channels=ScriptedAnimationController'
+        ]))
 
     # Run extra D3D9 conformance in Windows FYI GPU bots
     # This ensures the ANGLE/D3D9 gets some testing
