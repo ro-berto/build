@@ -799,11 +799,6 @@ def main_ninja(options, args):
       goma_jobs = determine_goma_jobs()
       command.append('-j%d' % goma_jobs)
 
-      if chromium_utils.IsMac():
-        if options.clobber:
-          # Enabling this while attempting to solve crbug.com/257467
-          env['GOMA_USE_LOCAL'] = '1'
-
     # Run the build.
     env.print_overrides()
     return chromium_utils.RunCommand(command, env=env)
