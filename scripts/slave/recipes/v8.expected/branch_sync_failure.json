@@ -232,7 +232,7 @@
       "--arch",
       "ia32",
       "--testname",
-      "mjsunit fuzz-natives cctest message preparser base-unittests compiler-unittests",
+      "mjsunit fuzz-natives cctest message preparser heap-unittests runtime-unittests base-unittests compiler-unittests",
       "--quickcheck"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
