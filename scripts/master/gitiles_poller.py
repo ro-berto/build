@@ -30,11 +30,6 @@ REFS_TEMPLATE = '%s/+refs/heads?format=JSON'
 REVISION_DETAIL_TEMPLATE = '%s/+/%s?format=JSON'
 
 
-def _always_unlock(result, lock):
-  lock.release()
-  return result
-
-
 def time_to_datetime(tm):
   tm_parts = tm.split()
   # Time stamps from gitiles sometimes have a UTC offset (e.g., -0800), and
@@ -64,6 +59,27 @@ class GitilesRevisionComparator(RevisionComparator):
     super(GitilesRevisionComparator, self).__init__()
     self.sha1_lookup = {}
     self.initialized = False
+    self.initLock = defer.DeferredLock()
+
+  @defer.inlineCallbacks
+  def initialize(self, db):
+    yield self.initLock.acquire()
+    if self.initialized:
+      self.initLock.release()
+      return
+    def db_thread_main(conn):
+      changes_tbl = db.model.changes
+      q = changes_tbl.select(order_by=[sa.asc(changes_tbl.c.changeid)])
+      rp = conn.execute(q)
+      for row in rp:
+        self.addRevision(row.revision)
+    try:
+      yield db.pool.do(db_thread_main)
+      log.msg(
+          'GitilesRevisionComparator: Finished initializing revision history')
+      self.initialized = True
+    finally:
+      self.initLock.release()
 
   def addRevision(self, revision):
     if revision in self.sha1_lookup:
@@ -93,7 +109,7 @@ class GitilesPoller(PollingChangeSource):
   def __init__(
       self, repo_url, branches=None, pollInterval=10*60, category=None,
       project=None, revlinktmpl=None, agent=None, svn_mode=False,
-      svn_branch=None, change_filter=None):
+      svn_branch=None, change_filter=None, comparator=None):
     """Args:
 
     repo_url: URL of the gitiles service to be polled.
@@ -107,6 +123,8 @@ class GitilesPoller(PollingChangeSource):
     agent: A GerritAgent object used to make requests to the gitiles service.
     svn_mode: When polling a mirror of an svn repository, create changes using
         the svn revision number.
+    comparator: A GitilesRevisionComparator object, or None.  This is used to
+        share a single comparator between multiple pollers.
     """
     u = urlparse(repo_url)
     self.repo_url = repo_url
@@ -133,22 +151,13 @@ class GitilesPoller(PollingChangeSource):
     self.agent = agent
     self.dry_run = os.environ.get('POLLER_DRY_RUN')
     self.change_filter = change_filter
-    self.comparator = GitilesRevisionComparator()
+    self.comparator = comparator or GitilesRevisionComparator()
 
   @defer.inlineCallbacks
   def startService(self):
     # Initialize revision comparator with revisions from all changes
     # known to buildbot.
-    def db_thread_main(conn):
-      changes_tbl = self.master.db.model.changes
-      q = changes_tbl.select(order_by=[sa.asc(changes_tbl.c.changeid)])
-      rp = conn.execute(q)
-      for row in rp:
-        self.comparator.addRevision(row.revision)
-    yield self.master.db.pool.do(db_thread_main)
-
-    # It's now safe to produce the console view.
-    self.comparator.initialized = True
+    yield self.comparator.initialize(self.master.db)
 
     # Get the head commit for each branch being polled.
     branches = yield self._get_branches()
@@ -157,7 +166,6 @@ class GitilesPoller(PollingChangeSource):
           branch, branch_head))
       self.branch_heads[branch] = branch_head
 
-    log.msg('GitilesPoller: Finished initializing revision history')
     PollingChangeSource.startService(self)
 
   @defer.inlineCallbacks
