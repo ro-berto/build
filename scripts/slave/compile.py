@@ -800,8 +800,6 @@ def main_ninja(options, args):
       command.append('-j%d' % goma_jobs)
 
       if chromium_utils.IsMac():
-        # Work around for crbug.com/347918
-        env['GOMA_HERMETIC'] = 'fallback'
         if options.clobber:
           # Enabling this while attempting to solve crbug.com/257467
           env['GOMA_USE_LOCAL'] = '1'
