@@ -242,7 +242,9 @@ def UploadNinjaLog(options, command, exit_status):
           'platform': platform,
           'exit': exit_status,
           'argv': sys.argv,
-          'env': os.environ}
+          'env': {}}
+  for k, v in os.environ.iteritems():
+    info['env'][k] = v
   if options.compiler:
     info['compiler'] = options.compiler
   compiler_proxy_info = GetLatestGomaCompilerProxyInfo()
