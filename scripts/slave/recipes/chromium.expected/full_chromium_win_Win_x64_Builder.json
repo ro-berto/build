@@ -118,8 +118,7 @@
       "[BUILD]\\goma",
       "--",
       "all",
-      "chrome",
-      "sync_integration_tests"
+      "chrome"
     ],
     "name": "compile"
   },

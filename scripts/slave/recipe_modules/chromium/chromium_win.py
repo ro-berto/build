@@ -176,25 +176,6 @@ SPEC = {
         'platform': 'win',
       },
     },
-    'Win7 Sync': {
-      'recipe_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'tester',
-      'disable_runhooks': True,
-      'tests': [
-        steps.GTestTest('sync_integration_tests', args=[
-            '--ui-test-action-max-timeout=120000'
-        ]),
-      ],
-      'parent_buildername': 'Win Builder',
-      'testing': {
-        'platform': 'win',
-      },
-    },
-
     'Win x64 Builder': {
       'recipe_config': 'chromium',
       'chromium_apply_config': ['shared_library'],
@@ -260,25 +241,6 @@ SPEC = {
         'platform': 'win',
       },
     },
-    'Win7 Sync x64': {
-      'recipe_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'tester',
-      'disable_runhooks': True,
-      'tests': [
-        steps.GTestTest('sync_integration_tests', args=[
-            '--ui-test-action-max-timeout=120000'
-        ]),
-      ],
-      'parent_buildername': 'Win x64 Builder',
-      'testing': {
-        'platform': 'win',
-      },
-    },
-
     'NaCl Tests (x86-32)': {
       'recipe_config': 'chromium',
       'chromium_config_kwargs': {

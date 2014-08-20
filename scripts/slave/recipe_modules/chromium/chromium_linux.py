@@ -41,24 +41,6 @@ SPEC = {
         'platform': 'linux',
       },
     },
-    'Linux Sync': {
-      'recipe_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'tester',
-      'tests': [
-        steps.GTestTest('sync_integration_tests', args=[
-            '--ui-test-action-max-timeout=120000'
-        ]),
-      ],
-      'parent_buildername': 'Linux Builder',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-
     'Linux Builder (dbg)(32)': {
       'recipe_config': 'chromium',
       'chromium_config_kwargs': {

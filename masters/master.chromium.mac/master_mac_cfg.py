@@ -23,7 +23,6 @@ def Update(config, active_master, c):
           'Mac10.6 Tests (2)',
           'Mac10.7 Tests (1)',
           'Mac10.7 Tests (2)',
-          'Mac10.6 Sync',
       ]),
       Triggerable(name='mac_dbg_trigger', builderNames=[
           'Mac 10.6 Tests (dbg)(1)',
@@ -41,7 +40,6 @@ def Update(config, active_master, c):
     {'name': 'Mac10.6 Tests (2)'},
     {'name': 'Mac10.7 Tests (1)'},
     {'name': 'Mac10.7 Tests (2)'},
-    {'name': 'Mac10.6 Sync'},
     {
       'name': 'Mac Builder (dbg)',
       'triggers': ['mac_dbg_trigger'],

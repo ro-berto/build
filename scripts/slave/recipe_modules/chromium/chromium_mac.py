@@ -91,23 +91,6 @@ SPEC = {
         'platform': 'mac',
       }
     },
-    'Mac10.6 Sync': {
-      'recipe_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'tests': [
-        steps.GTestTest('sync_integration_tests', args=[
-            '--ui-test-action-max-timeout=120000'
-        ]),
-      ],
-      'bot_type': 'tester',
-      'parent_buildername': 'Mac Builder',
-      'testing': {
-        'platform': 'mac',
-      }
-    },
     'Mac Builder (dbg)': {
       'recipe_config': 'chromium',
       'chromium_config_kwargs': {

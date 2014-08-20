@@ -116,8 +116,7 @@
       "[BUILD]/goma",
       "--",
       "chrome",
-      "chromium_swarm_tests",
-      "sync_integration_tests"
+      "chromium_swarm_tests"
     ],
     "name": "compile"
   },
