@@ -13,8 +13,10 @@
 
 import datetime
 import errno
+import getpass
 import glob
 import gzip
+import json
 import multiprocessing
 import optparse
 import os
@@ -213,6 +215,61 @@ def goma_teardown(options, env):
     # Always stop the proxy for now to allow in-place update.
     chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
     UploadGomaCompilerProxyInfo()
+
+
+def UploadNinjaLog(options, command, exit_status):
+  """Upload .ninja_log to Google Cloud Storage (gs://chrome-goma-log),
+  in the same folder with goma's compiler_proxy.INFO.
+
+  Args:
+    options: compile.py's options.
+    command: command line.
+    exit_status: ninja's exit status.
+  """
+  ninja_log_path = os.path.join(options.target_output_dir, '.ninja_log')
+  try:
+    st = os.stat(ninja_log_path)
+    mtime = datetime.datetime.fromtimestamp(st.st_mtime)
+  except OSError, e:
+    print(e)
+    return
+
+  cwd = os.getcwd()
+  platform = chromium_utils.PlatformName()
+
+  info = {'cmdline': command,
+          'cwd': cwd,
+          'platform': platform,
+          'exit': exit_status,
+          'argv': sys.argv,
+          'env': os.environ}
+  if options.compiler:
+    info['compiler'] = options.compiler
+  compiler_proxy_info = GetLatestGomaCompilerProxyInfo()
+  if compiler_proxy_info:
+    info['compiler_proxy_info'] = compiler_proxy_info
+
+  username = getpass.getuser()
+  hostname = GetShortHostname()
+  pid = os.getpid()
+  ninja_log_filename = 'ninja_log.%s.%s.%s.%d' % (
+      hostname, username, mtime.strftime('%Y%m%d-%H%M%S'), pid)
+  today = datetime.datetime.utcnow().date()
+  ninja_log_gs_path = ('gs://chrome-goma-log/%s/%s/%s.gz' % (
+      today.strftime('%Y/%m/%d'), hostname, ninja_log_filename))
+  try:
+    fd, output_filename = tempfile.mkstemp()
+    with open(ninja_log_path) as f_in:
+      with os.fdopen(fd, 'w') as f_out:
+        with gzip.GzipFile(fileobj=f_out, compresslevel=9) as gzipf:
+          gzipf.writelines(f_in)
+          gzipf.write('# end of ninja log\n')
+          gzipf.write(json.dumps(info))
+
+    slave_utils.GSUtilCopy(output_filename, ninja_log_gs_path)
+    print "Copied log file to %s" % ninja_log_gs_path
+  finally:
+    os.remove(output_filename)
 
 
 def common_xcode_settings(command, options, env, compiler=None):
@@ -719,6 +776,7 @@ def main_ninja(options, args):
   env = EchoDict(os.environ)
   env.setdefault('NINJA_STATUS', '[%s/%t | %e] ')
   goma_ready = goma_setup(options, env)
+  exit_status = -1
   try:
     if not goma_ready:
       assert options.compiler not in ('goma', 'goma-clang')
@@ -801,9 +859,11 @@ def main_ninja(options, args):
 
     # Run the build.
     env.print_overrides()
-    return chromium_utils.RunCommand(command, env=env)
+    exit_status = chromium_utils.RunCommand(command, env=env)
+    return exit_status
   finally:
     goma_teardown(options, env)
+    UploadNinjaLog(options, command, exit_status)
 
 
 def main_win(options, args):
