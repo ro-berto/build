@@ -355,3 +355,4 @@ def infra(c):
   soln = c.solutions.add()
   soln.name = 'infra'
   soln.url = 'https://chromium.googlesource.com/infra/infra.git'
+  c.got_revision_mapping['infra'] = 'got_revision'
