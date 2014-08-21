@@ -395,7 +395,6 @@ class SkiaApi(recipe_api.RecipeApi):
           self.device_dirs.skimage_expected_dir, self.c.BUILDER_NAME,
           global_constants.GM_EXPECTATIONS_FILENAME)
       if str(device_expectations_path) != str(repo_expectations_path):
-        print '%s != %s' % (device_expectations_path, repo_expectations_path)
         self.flavor.create_clean_device_dir(
             self.device_dirs.skimage_expected_dir)
         self.flavor.copy_file_to_device(repo_expectations_path,
