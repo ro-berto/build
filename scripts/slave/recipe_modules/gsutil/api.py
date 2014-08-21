@@ -53,6 +53,7 @@ class GSUtilApi(recipe_api.RecipeApi):
       result.presentation.links[link_name] = (
         'https://storage.cloud.google.com/%s/%s' % (bucket, dest)
       )
+    return result
 
   def download(self, bucket, source, dest, args=None, **kwargs):
     args = [] if args is None else args[:]
