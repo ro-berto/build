@@ -45,7 +45,7 @@ def webrtc_android_apk(c):
 
 @CONFIG_CTX(includes=['webrtc'])
 def webrtc_ios(c):
-  pass
+  c.target_os.add('ios')
 
 
 @CONFIG_CTX(includes=['webrtc'])
