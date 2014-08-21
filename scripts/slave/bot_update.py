@@ -1308,7 +1308,7 @@ def ensure_deps_revisions(deps_url_mapping, solutions, revisions):
 
 def ensure_checkout(solutions, revisions, first_sln, target_os, target_os_only,
                     patch_root, issue, patchset, patch_url, rietveld_server,
-                    revision_mapping, buildspec, gyp_env, shallow):
+                    revision_mapping, buildspec, gyp_env, shallow, runhooks):
   # Get a checkout of each solution, without DEPS or hooks.
   # Calling git directly because there is no way to run Gclient without
   # invoking DEPS.
@@ -1348,7 +1348,7 @@ def ensure_checkout(solutions, revisions, first_sln, target_os, target_os_only,
       git('ls-files', '.DEPS.git', cwd=first_sln).strip()):
     git('checkout', 'HEAD', '--', '.DEPS.git', cwd=first_sln)
 
-  if buildspec:
+  if buildspec and runhooks:
     # Run gclient runhooks if we're on an official builder.
     # TODO(hinoka): Remove this when the official builders run their own
     #               runhooks step.
@@ -1597,6 +1597,8 @@ def parse_args():
   parse.add_option('--no_shallow', action='store_true',
                    help='Bypass disk detection and never shallow clone. '
                         'Does not override the --shallow flag')
+  parse.add_option('--no_runhooks', action='store_true',
+                   help='Do not run hooks on official builder.')
 
 
   options, args = parse.parse_args()
@@ -1697,6 +1699,7 @@ def checkout(options, git_slns, specs, buildspec, master,
           # For official builders.
           buildspec=buildspec,
           gyp_env=options.gyp_env,
+          runhooks=not options.no_runhooks,
 
           # Finally, extra configurations such as shallowness of the clone.
           shallow=options.shallow)
