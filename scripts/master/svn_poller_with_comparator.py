@@ -4,6 +4,7 @@
 
 from buildbot.changes.svnpoller import SVNPoller
 from buildbot.changes.base import PollingChangeSource
+from buildbot.changes.pb import ChangePerspective, PBChangeSource
 from twisted.internet import defer
 
 class SvnPollerWithComparator(SVNPoller):
@@ -23,3 +24,24 @@ class SvnPollerWithComparator(SVNPoller):
     for change in changes:
       self.comparator.addRevision(change['revision'])
     return changes
+
+
+class ChangePerspectiveWithComparator(ChangePerspective):
+  def __init__(self, comparator, *args, **kwargs):
+    self.comparator = comparator
+    ChangePerspective.__init__(self, *args, **kwargs)
+
+  def perspective_addChange(self, changedict):
+    self.comparator.addRevision(changedict.get('revision'))
+    return ChangePerspective.perspective_addChange(self, changedict)
+
+
+class PBChangeSourceWithComparator(PBChangeSource):
+  def __init__(self, comparator, *args, **kwargs):
+    self.comparator = comparator
+    PBChangeSource.__init__(self, *args, **kwargs)
+
+  def getPerspective(self, _mind, username):
+    assert username == self.user
+    return ChangePerspectiveWithComparator(
+        self.comparator, self.master, self.prefix)
