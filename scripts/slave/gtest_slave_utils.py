@@ -9,6 +9,7 @@ import os
 import re
 import sys
 
+from common import gtest_utils
 from xml.dom import minidom
 from slave.gtest.json_results_generator import JSONResultsGenerator
 from slave.gtest.test_result import canonical_name
@@ -71,7 +72,7 @@ class GTestUnexpectedDeathTracker(object):
 
     test_results_map = dict()
     for test in self._failed_tests:
-      test_results_map[canonical_name(test)] = TestResult(test, failed=True)
+      test_results_map[canonical_name(test)] = [TestResult(test, failed=True)]
 
     return test_results_map
 
@@ -93,10 +94,17 @@ def GetResultsMap(observer):
   """Returns a map of TestResults."""
 
   test_results_map = dict()
-  for test in observer.FailedTests(include_fails=True, include_flaky=True):
-    test_results_map[canonical_name(test)] = TestResult(test, failed=True)
-  for test in observer.PassedTests():
-    test_results_map[canonical_name(test)] = TestResult(test, failed=False)
+  tests = (observer.FailedTests(include_fails=True, include_flaky=True) +
+           observer.PassedTests())
+  for test in tests:
+    key = canonical_name(test)
+    test_results_map[key] = []
+    tries = observer.TriesForTest(test)
+    for test_try in tries:
+      # FIXME: Store the actual failure type so we can expose whether the test
+      # crashed or timed out. See crbug.com/249965.
+      failed = (test_try != gtest_utils.TEST_SUCCESS_LABEL)
+      test_results_map[key].extend(TestResult(test, failed=failed))
 
   return test_results_map
 
@@ -128,7 +136,8 @@ def GetResultsMapFromXML(results_xml):
                         failed=bool(failures),
                         not_run=not_run,
                         elapsed_time=elapsed)
-    test_results_map[canonical_name(test_name)] = result
+    test_results_map[canonical_name(test_name)] = [result]
+
   return test_results_map
 
 
