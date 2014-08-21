@@ -318,10 +318,13 @@ class GpuApi(recipe_api.RecipeApi):
       ]))
 
     # Tab capture end-to-end (correctness) tests.
-    capture(self._run_isolate(
-        'tab_capture_end2end_tests',
-        name='tab_capture_end2end_tests',
-        spawn_dbus=True))
+    # This test is unfortunately disabled in Debug builds and the lack
+    # of logs is causing alerts. Skip it on Debug bots. crbug.com/403012
+    if self.m.chromium.is_release_build:
+      capture(self._run_isolate(
+          'tab_capture_end2end_tests',
+          name='tab_capture_end2end_tests',
+          spawn_dbus=True))
 
     # TODO(kbr): after the conversion to recipes, add all GPU related
     # steps from the main waterfall, like gpu_unittests.
