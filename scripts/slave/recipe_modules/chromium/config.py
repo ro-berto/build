@@ -399,6 +399,10 @@ def chromium_chromeos_asan(c):
 def chromium_chromeos_clang(c):
   c.compile_py.default_targets = ['All', 'chromium_builder_tests']
 
+@config_ctx(includes=['chromium_chromeos', 'ozone'])
+def chromium_chromeos_ozone(c):
+  c.compile_py.default_targets = ['All', 'chromium_builder_tests']
+
 @config_ctx(includes=['ninja', 'clang', 'goma'])
 def chromium_clang(c):
   c.compile_py.default_targets = ['All', 'chromium_builder_tests']

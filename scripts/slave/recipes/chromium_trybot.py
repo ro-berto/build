@@ -195,10 +195,7 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
-        'GYP_DEFINES': {
-          'use_ozone': '1',
-        },
-        'chromium_config': 'chromium_chromeos',
+        'chromium_config': 'chromium_chromeos_ozone',
         'compile_only': False,
         'testing': {
           'platform': 'linux',
@@ -209,10 +206,7 @@ BUILDERS = {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
         },
-        'chromium_config': 'chromium_chromeos',
-        'GYP_DEFINES': {
-          'use_ozone': '1',
-        },
+        'chromium_config': 'chromium_chromeos_ozone',
         'compile_only': False,
         'testing': {
           'platform': 'linux',
@@ -663,7 +657,8 @@ def GenSteps(api):
             'platforms': ['linux'],
             'chromium_configs': [
               'chromium_chromeos',
-              'chromium_chromeos_clang'
+              'chromium_chromeos_clang',
+              'chromium_chromeos_ozone',
             ],
             'args': ['--test-launcher-print-test-stdio=always'],
           },
@@ -755,7 +750,8 @@ def GenSteps(api):
 
     if (bot_config['chromium_config'] not in ['chromium_chromeos',
                                              'chromium_asan',
-                                             'chromium_chromeos_clang']
+                                             'chromium_chromeos_clang',
+                                             'chromium_chromeos_ozone']
         and not buildername.startswith('win8')):
       tests.extend(tests_in_compile_targets(
           compile_targets,
