@@ -71,6 +71,8 @@ HTTPD_CONF = {
 }
 # Regex matching git comment lines containing svn revision info.
 GIT_SVN_ID_RE = re.compile('^git-svn-id: .*@([0-9]+) .*$')
+# Regex for the master branch commit position.
+GIT_CR_POS_RE = re.compile('^Cr-Commit-Position: refs/heads/master@{#(\d+)}$')
 
 # The directory that this script is in.
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -207,8 +209,20 @@ def _GetMasterString(master):
   return '[Running for master: "%s"]' % master
 
 
-def _GetGitSvnRevision(dir_path):
-  """Extracts the svn revision number of the HEAD commit."""
+def _GetGitCommitPositionFromLog(log):
+  """Returns either the commit position or svn rev from a git log."""
+  # Parse from the bottom up, in case the commit message embeds the message
+  # from a different commit (e.g., for a revert).
+  for r in [GIT_CR_POS_RE, GIT_SVN_ID_RE]:
+    for line in reversed(log.splitlines()):
+      m = r.match(line.strip())
+      if m:
+        return m.group(1)
+  return None
+
+
+def _GetGitCommitPosition(dir_path):
+  """Extracts the commit position or svn revision number of the HEAD commit."""
   git_exe = 'git.bat' if sys.platform.startswith('win') else 'git'
   p = subprocess.Popen(
       [git_exe, 'log', '-n', '1', '--pretty=format:%B', 'HEAD'],
@@ -216,13 +230,7 @@ def _GetGitSvnRevision(dir_path):
   (log, _) = p.communicate()
   if p.returncode != 0:
     return None
-  # Parse from the bottom up, in case the commit message embeds the message
-  # from a different commit (e.g., for a revert).
-  for line in reversed(log.splitlines()):
-    m = GIT_SVN_ID_RE.match(line.strip())
-    if m:
-      return m.group(1)
-  return None
+  return _GetGitCommitPositionFromLog(log)
 
 
 def _IsGitDirectory(dir_path):
@@ -242,7 +250,7 @@ def _IsGitDirectory(dir_path):
 
 
 def _GetSvnRevision(in_directory):
-  """Returns the SVN revision (or git SHA1 hash) for the given directory.
+  """Returns the SVN revision, git commit position, or git hash.
 
   Args:
     in_directory: A directory in the repository to be checked.
@@ -255,7 +263,7 @@ def _GetSvnRevision(in_directory):
   import xml.dom.minidom
   if not os.path.exists(os.path.join(in_directory, '.svn')):
     if _IsGitDirectory(in_directory):
-      svn_rev = _GetGitSvnRevision(in_directory)
+      svn_rev = _GetGitCommitPosition(in_directory)
       if svn_rev:
         return svn_rev
       return _GetGitRevision(in_directory)
