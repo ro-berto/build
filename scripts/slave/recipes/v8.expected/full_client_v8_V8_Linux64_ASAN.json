@@ -99,7 +99,29 @@
       "--arch",
       "x64",
       "--testname",
-      "mjsunit fuzz-natives cctest message preparser heap-unittests runtime-unittests base-unittests compiler-unittests",
+      "heap-unittests runtime-unittests compiler-unittests base-unittests",
+      "--no-variants",
+      "--asan",
+      "--json-test-results",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "env": {
+      "ASAN_SYMBOLIZER_PATH": "[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+    },
+    "name": "Unittests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/v8/v8testing.py",
+      "--target",
+      "Release",
+      "--arch",
+      "x64",
+      "--testname",
+      "mjsunit fuzz-natives cctest message preparser",
       "--flaky-tests",
       "skip",
       "--asan",
@@ -122,7 +144,7 @@
       "--arch",
       "x64",
       "--testname",
-      "mjsunit fuzz-natives cctest message preparser heap-unittests runtime-unittests base-unittests compiler-unittests",
+      "mjsunit fuzz-natives cctest message preparser",
       "--flaky-tests",
       "run",
       "--asan",

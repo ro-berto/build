@@ -45,10 +45,15 @@ TEST_CONFIGS = {
     'name': 'Test262',
     'tests': 'test262',
   },
+  'unittests': {
+    'name': 'Unittests',
+    'tests': ('heap-unittests runtime-unittests compiler-unittests '
+              'base-unittests'),
+    'test_args': ['--no-variants'],
+  },
   'v8testing': {
     'name': 'Check',
-    'tests': ('mjsunit fuzz-natives cctest message preparser heap-unittests '
-              'runtime-unittests base-unittests compiler-unittests'),
+    'tests': ('mjsunit fuzz-natives cctest message preparser'),
     'add_flaky_step': True,
   },
   'webkit': {
