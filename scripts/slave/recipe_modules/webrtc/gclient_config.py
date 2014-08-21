@@ -45,6 +45,9 @@ def webrtc_android_apk(c):
 
 @CONFIG_CTX(includes=['webrtc'])
 def webrtc_ios(c):
+  # WebRTC for iOS depends on the src/third_party/openmax_dl in Chromium, which
+  # is set to None for iOS. Because of this, sync Mac as well to get it.
+  c.target_os.add('mac')
   c.target_os.add('ios')
 
 
