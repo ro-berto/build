@@ -178,6 +178,7 @@ def main():
                   '!', '-regex', '^src/native_client/toolchain/.*', '-a',
                   '!', '-regex', '^src/native_client/.*/testdata/.*', '-a',
                   '!', '-regex', '^src/third_party/llvm-build/.*', '-a',
+                  '!', '-regex', '^src/.*/\.cvsignore', '-a',
                   '!', '-regex', '^src/chrome/tools/test/reference_build/.*',
                   '-a',
                   '!', '-regex', '^tools/perf/data/.*']
