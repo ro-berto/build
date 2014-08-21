@@ -256,6 +256,17 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
+      'linux_chromium_compile_dbg_32': {
+         'chromium_config_kwargs': {
+           'BUILD_CONFIG': 'Debug',
+           'TARGET_BITS': 32,
+         },
+         'chromium_config': 'chromium',
+         'compile_only': True,
+         'testing': {
+           'platform': 'linux',
+         },
+       },
     },
   },
   'tryserver.chromium.mac': {
