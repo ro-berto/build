@@ -4,14 +4,6 @@
 
 """
 Performance testing for the WebView.
-
-To do this we use an exciting build strategy:
-1. Build ToT Chromium.
-2. Drop the WebView .so into an Android AOSP checkout as a prebuilt.
-3. Build the WebView glue layer.
-4. Push all the files into a pre-flashed device.
-5. Build Telemetery Tests.
-6. Run Telemetery Tests.
 """
 
 DEPS = [
@@ -77,17 +69,11 @@ def GenSteps(api):
 
   # Sync code.
   droid.sync_chromium(spec)
-  droid.repo_init_steps()
-  droid.repo_sync_steps()
 
   # Use our adb
   api.adb.adb_path = str(
     api.path['checkout'].join('third_party', 'android_tools',
                               'sdk', 'platform-tools', 'adb'))
-
-  # TODO(hjd): Remove when using the prebuilt build.
-  droid.rsync_chromium_into_android_tree_step()
-  droid.gyp_webview_step()
 
   # Gyp the chromium checkout.
   api.step(
@@ -102,14 +88,6 @@ def GenSteps(api):
     targets=['android_webview_apk', 'android_webview_telemetry_shell_apk'],
     use_goma=True,
     src_dir=api.path['checkout'])
-
-  # TODO(hjd): Create the prebuilt then drop it into the Android checkout.
-
-  # Build the WebView.
-  droid.compile_step(
-    build_tool='make-android',
-    targets=['webview'],
-    use_goma=True)
 
   # Build tools.
   droid.compile_step(
