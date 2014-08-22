@@ -11,7 +11,7 @@ from master import master_config
 defaults = {}
 
 helper = master_config.Helper(defaults)
-helper.Scheduler('chromium_src', branch='src', treeStableTimer=60)
+helper.Scheduler('chromium_src', branch='master', treeStableTimer=60)
 
 def Update(config, _active_master, c):
   poller = gitiles_poller.GitilesPoller(
