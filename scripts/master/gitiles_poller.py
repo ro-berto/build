@@ -52,6 +52,23 @@ def time_to_datetime(tm):
   return dt
 
 
+class Revision(object):
+  """Commit wrapper that can be compared to other commits through a comparator.
+
+  (See GitilesRevisionComparator.comparableRevision)
+  """
+  def __init__(self, comparator, commit):
+    self.comparator = comparator
+    self.commit = commit
+
+  def __cmp__(self, other):
+    assert self.comparator.initialized, "The comparator must be initialized"
+    return self.comparator.tagcmp(self.commit, other.commit)
+
+  def __repr__(self):
+    return self.commit
+
+
 class GitilesRevisionComparator(RevisionComparator):
   """Tracks the commit order of tags in a git repository."""
 
@@ -80,6 +97,10 @@ class GitilesRevisionComparator(RevisionComparator):
       self.initialized = True
     finally:
       self.initLock.release()
+
+  def comparableRevision(self, commit):
+    assert self.initialized, "The comparator must be initialized"
+    return Revision(self, commit)
 
   def addRevision(self, revision):
     if revision in self.sha1_lookup:
