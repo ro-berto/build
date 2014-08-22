@@ -17,7 +17,7 @@ def Update(config, _active_master, c):
   poller = gitiles_poller.GitilesPoller(
     repo_url='https://chromium.googlesource.com/chromium/src',
     branches=['master'],
-    revlinktmpl='http://src.chromium.org/viewvc/chrome?view=rev&revision=%s',
+    revlinktmpl='https://chromium.googlesource.com/chromium/src/+/%s',
     pollInterval=10,
     svn_mode=False,
     change_filter=chromium_svn_poller.ChromiumChangeFilter,
