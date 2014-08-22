@@ -467,31 +467,24 @@ class TestGTestLogParserTests(auto_stub.TestCase):
     test_name = 'NavigationControllerTest.Reload'
     self.assertEqual('\n'.join(['%s: ' % test_name, RELOAD_ERRORS]),
                      '\n'.join(parser.FailureDescription(test_name)))
-    self.assertEqual(['FAILURE'], parser.TriesForTest(test_name))
 
     test_name = 'NavigationControllerTest/SpdyNetworkTransTest.Constructor/0'
     self.assertEqual('\n'.join(['%s: ' % test_name, SPDY_ERRORS]),
                      '\n'.join(parser.FailureDescription(test_name)))
-    self.assertEqual(['FAILURE'], parser.TriesForTest(test_name))
 
     test_name = 'SomeOtherTest.SwitchTypes'
     self.assertEqual('\n'.join(['%s: ' % test_name, SWITCH_ERRORS]),
                      '\n'.join(parser.FailureDescription(test_name)))
-    self.assertEqual(['FAILURE'], parser.TriesForTest(test_name))
 
     test_name = 'BadTest.TimesOut'
     self.assertEqual('\n'.join(['%s: ' % test_name,
                                 TIMEOUT_ERRORS, TIMEOUT_MESSAGE]),
                      '\n'.join(parser.FailureDescription(test_name)))
-    self.assertEqual(['TIMEOUT'], parser.TriesForTest(test_name))
 
     test_name = 'MoreBadTest.TimesOutAndFails'
     self.assertEqual('\n'.join(['%s: ' % test_name,
                                 MOREBAD_ERRORS, TIMEOUT_MESSAGE]),
                      '\n'.join(parser.FailureDescription(test_name)))
-    self.assertEqual(['TIMEOUT'], parser.TriesForTest(test_name))
-
-    self.assertEqual(['SUCCESS'], parser.TriesForTest('SomeOtherTest.Foo'))
 
     parser = gtest_utils.GTestLogParser()
     for line in TEST_DATA_CRASH.splitlines():
@@ -506,7 +499,6 @@ class TestGTestLogParserTests(auto_stub.TestCase):
     test_name = 'HunspellTest.Crashes'
     self.assertEqual('\n'.join(['%s: ' % test_name, 'Did not complete.']),
                      '\n'.join(parser.FailureDescription(test_name)))
-    self.assertEqual(['UNKNOWN'], parser.TriesForTest(test_name))
 
   def testGTestLogParserSharing(self):
     # Same tests for log parsing with sharding_supervisor.
@@ -534,34 +526,27 @@ class TestGTestLogParserTests(auto_stub.TestCase):
     test_name = 'NavigationControllerTest.Reload'
     self.assertEqual('\n'.join(['%s: ' % test_name, RELOAD_ERRORS]),
                      '\n'.join(parser.FailureDescription(test_name)))
-    self.assertEqual(['FAILURE'], parser.TriesForTest(test_name))
 
     test_name = (
         'NavigationControllerTest/SpdyNetworkTransTest.Constructor/0')
     self.assertEqual('\n'.join(['%s: ' % test_name, SPDY_ERRORS]),
                      '\n'.join(parser.FailureDescription(test_name)))
-    self.assertEqual(['FAILURE'], parser.TriesForTest(test_name))
 
     test_name = 'SomeOtherTest.SwitchTypes'
     self.assertEqual('\n'.join(['%s: ' % test_name, SWITCH_ERRORS]),
                      '\n'.join(parser.FailureDescription(test_name)))
-    self.assertEqual(['FAILURE'], parser.TriesForTest(test_name))
 
     test_name = 'BadTest.TimesOut'
     self.assertEqual(
         '\n'.join(['%s: ' % test_name,
         TIMEOUT_ERRORS, TIMEOUT_MESSAGE]),
         '\n'.join(parser.FailureDescription(test_name)))
-    self.assertEqual(['TIMEOUT'], parser.TriesForTest(test_name))
 
     test_name = 'MoreBadTest.TimesOutAndFails'
     self.assertEqual(
         '\n'.join(['%s: ' % test_name,
         MOREBAD_ERRORS, TIMEOUT_MESSAGE]),
         '\n'.join(parser.FailureDescription(test_name)))
-    self.assertEqual(['TIMEOUT'], parser.TriesForTest(test_name))
-
-    self.assertEqual(['SUCCESS'], parser.TriesForTest('SomeOtherTest.Foo'))
 
     parser = gtest_utils.GTestLogParser()
     for line in TEST_DATA_CRASH.splitlines():
@@ -576,7 +561,6 @@ class TestGTestLogParserTests(auto_stub.TestCase):
     test_name = 'HunspellTest.Crashes'
     self.assertEqual('\n'.join(['%s: ' % test_name, 'Did not complete.']),
                      '\n'.join(parser.FailureDescription(test_name)))
-    self.assertEqual(['UNKNOWN'], parser.TriesForTest(test_name))
 
   def testGTestLogParserMixedStdout(self):
     parser = gtest_utils.GTestLogParser()
@@ -588,10 +572,6 @@ class TestGTestLogParserTests(auto_stub.TestCase):
     self.assertEqual(['TestFix.TestCase', 'Crash.Test'], parser.FailedTests())
     self.assertEqual(0, parser.DisabledTests())
     self.assertEqual(0, parser.FlakyTests())
-    self.assertEqual(['UNKNOWN'], parser.TriesForTest('Crash.Test'))
-    self.assertEqual(['TIMEOUT'], parser.TriesForTest('TestFix.TestCase'))
-    self.assertEqual(['SUCCESS'], parser.TriesForTest(
-        'WebSocketHandshakeHandlerSpdy3Test.RequestResponse'))
 
   def testGTestLogParserValgrind(self):
     parser = gtest_utils.GTestLogParser()
@@ -604,7 +584,6 @@ class TestGTestLogParserTests(auto_stub.TestCase):
     self.assertEqual([VALGRIND_HASH], parser.SuppressionHashes())
     self.assertEqual(VALGRIND_SUPPRESSION,
                      '\n'.join(parser.Suppression(VALGRIND_HASH)))
-    self.assertEqual(['SUCCESS'], parser.TriesForTest('HunspellTest.All'))
 
     parser = gtest_utils.GTestLogParser()
     for line in FAILING_TESTS_OUTPUT.splitlines():
@@ -624,9 +603,6 @@ class TestGTestLogParserTests(auto_stub.TestCase):
     self.assertEqual(
         ['SUIDSandboxUITest.testSUIDSandboxEnabled: '],
         parser.FailureDescription('SUIDSandboxUITest.testSUIDSandboxEnabled'))
-    self.assertEqual(
-        ['FAILURE'],
-        parser.TriesForTest('SUIDSandboxUITest.testSUIDSandboxEnabled'))
 
   def testRunTestCaseTimeout(self):
     parser = gtest_utils.GTestLogParser()
@@ -640,9 +616,6 @@ class TestGTestLogParserTests(auto_stub.TestCase):
     self.assertEqual(
         ['SUIDSandboxUITest.testSUIDSandboxEnabled: ', '(junk)'],
         parser.FailureDescription('SUIDSandboxUITest.testSUIDSandboxEnabled'))
-    self.assertEqual(
-        ['TIMEOUT'],
-        parser.TriesForTest('SUIDSandboxUITest.testSUIDSandboxEnabled'))
 
   def testRunTestCaseParseSwarm(self):
     parser = gtest_utils.GTestLogParser()
@@ -662,9 +635,6 @@ class TestGTestLogParserTests(auto_stub.TestCase):
           'Expected: true',
         ],
         parser.FailureDescription('PickleTest.EncodeDecode'))
-    self.assertEqual(
-        ['FAILURE'],
-        parser.TriesForTest('PickleTest.EncodeDecode'))
 
   def testNestedGtests(self):
     parser = gtest_utils.GTestLogParser()
@@ -685,12 +655,11 @@ class TestGTestJSONParserTests(auto_stub.TestCase):
         }
       ]
     })
+
     self.assertEqual(['Test.One', 'Test.Two'], parser.PassedTests())
     self.assertEqual([], parser.FailedTests())
     self.assertEqual(0, parser.FlakyTests())
     self.assertEqual(0, parser.DisabledTests())
-    self.assertEqual(['SUCCESS'], parser.TriesForTest('Test.One'))
-    self.assertEqual(['SUCCESS'], parser.TriesForTest('Test.Two'))
 
   def testFailedTests(self):
     parser = gtest_utils.GTestJSONParser()
@@ -708,8 +677,6 @@ class TestGTestJSONParserTests(auto_stub.TestCase):
     self.assertEqual(['Test.One', 'Test.Two'], parser.FailedTests())
     self.assertEqual(0, parser.FlakyTests())
     self.assertEqual(0, parser.DisabledTests())
-    self.assertEqual(['FAILURE'], parser.TriesForTest('Test.One'))
-    self.assertEqual(['FAILURE'], parser.TriesForTest('Test.Two'))
 
   def testFlakyTests(self):
     parser = gtest_utils.GTestJSONParser()
@@ -730,45 +697,6 @@ class TestGTestJSONParserTests(auto_stub.TestCase):
     self.assertEqual(['Test.One'], parser.FailedTests())
     self.assertEqual(1, parser.FlakyTests())
     self.assertEqual(0, parser.DisabledTests())
-    self.assertEqual(['FAILURE'], parser.TriesForTest('Test.One'))
-    self.assertEqual(['FAILURE', 'SUCCESS'], parser.TriesForTest('Test.Two'))
-
-  def testRetriedTests(self):
-    parser = gtest_utils.GTestJSONParser()
-    parser.ProcessJSONData({
-      'disabled_tests': [],
-      'per_iteration_data': [
-        {
-          'Test.One': [
-            {'status': 'FAILURE', 'output_snippet': ''},
-            {'status': 'FAILURE', 'output_snippet': ''},
-          ],
-          'Test.Two': [
-            {'status': 'FAILURE', 'output_snippet': ''},
-            {'status': 'FAILURE_ON_EXIT', 'output_snippet': ''},
-            {'status': 'CRASH', 'output_snippet': ''},
-            {'status': 'TIMEOUT', 'output_snippet': ''},
-            {'status': 'SKIPPED', 'output_snippet': ''},
-            {'status': 'SUCCESS', 'output_snippet': ''},
-          ],
-        }
-      ]
-    })
-    expected_tries_test_two = [
-      'FAILURE',
-      'FAILURE_ON_EXIT',
-      'CRASH',
-      'TIMEOUT',
-      'SKIPPED',
-      'SUCCESS'
-    ]
-
-    self.assertEqual(['Test.Two'], parser.PassedTests())
-    self.assertEqual(['Test.One'], parser.FailedTests())
-    self.assertEqual(1, parser.FlakyTests())
-    self.assertEqual(0, parser.DisabledTests())
-    self.assertEqual(['FAILURE', 'FAILURE'], parser.TriesForTest('Test.One'))
-    self.assertEqual(expected_tries_test_two, parser.TriesForTest('Test.Two'))
 
   def testDisabledTests(self):
     parser = gtest_utils.GTestJSONParser()
@@ -785,8 +713,6 @@ class TestGTestJSONParserTests(auto_stub.TestCase):
     self.assertEqual([], parser.FailedTests())
     self.assertEqual(0, parser.FlakyTests())
     self.assertEqual(1, parser.DisabledTests())
-    self.assertEqual(['SUCCESS'], parser.TriesForTest('Test.One'))
-    self.assertEqual(['UNKNOWN'], parser.TriesForTest('Test.Two'))
 
   def testIngoredFailedTests(self):
     TEST_IGNORED_FAILED_TESTS_SPEC = """
@@ -828,11 +754,6 @@ class TestGTestJSONParserTests(auto_stub.TestCase):
     self.assertEqual(['Test.Five', 'Test.Four'], parser.FailedTests())
     self.assertEqual(['Perf/Test.Three', 'Test.One', 'Test.Two/2'],
                      parser.IgnoredFailedTests())
-    self.assertEqual(['FAILURE'], parser.TriesForTest('Test.One'))
-    self.assertEqual(['FAILURE'], parser.TriesForTest('Test.Two/2'))
-    self.assertEqual(['FAILURE'], parser.TriesForTest('Perf/Test.Three'))
-    self.assertEqual(['FAILURE'], parser.TriesForTest('Test.Four'))
-    self.assertEqual(['FAILURE'], parser.TriesForTest('Test.Five'))
 
   # pylint: disable=R0201
   def testDoesNotThrowExceptionOnMissingIgnoredFailedTestsFile(self):
