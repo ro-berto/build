@@ -33,7 +33,7 @@ android_rel_archive = master_config.GetGSUtilUrl(
 #
 # Main release scheduler for src/
 #
-S('android', branch='src', treeStableTimer=60)
+S('android', branch='master', treeStableTimer=60)
 
 #
 # Triggerable scheduler for the builder

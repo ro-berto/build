@@ -74,7 +74,7 @@ def ChromiumSvnPoller(svnurl=None, *args, **kwargs):
         'revlinktmpl':
             'http://src.chromium.org/viewvc/chrome?view=rev&revision=%s',
         'pollInterval': pollInterval,
-        'svn_mode': True,
+        'svn_mode': False,
         'change_filter': change_filter,
     }
     if project and project != 'src':

@@ -12,7 +12,7 @@ m_annotator = annotator_factory.AnnotatorFactory()
 def Update(config, active_master, c):
   c['schedulers'].extend([
       SingleBranchScheduler(name='mac_src',
-                            branch='src',
+                            branch='master',
                             treeStableTimer=60,
                             builderNames=[
           'Mac Builder',

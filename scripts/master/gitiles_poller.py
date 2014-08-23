@@ -128,7 +128,7 @@ class GitilesPoller(PollingChangeSource):
   re_pattern_type = type(re.compile(''))
 
   def __init__(
-      self, repo_url, branches=None, pollInterval=10*60, category=None,
+      self, repo_url, branches=None, pollInterval=30, category=None,
       project=None, revlinktmpl=None, agent=None, svn_mode=False,
       svn_branch=None, change_filter=None, comparator=None):
     """Args:
@@ -174,9 +174,11 @@ class GitilesPoller(PollingChangeSource):
       if project.endswith('.git'):
         project = project[:-4]
     self.project = project
-    self.revlinktmpl = revlinktmpl
+    self.revlinktmpl = revlinktmpl or '%s/+/%%s' % repo_url
     self.svn_mode = svn_mode
-    self.svn_branch = svn_branch or project
+    self.svn_branch = svn_branch
+    if svn_mode and not svn_branch:
+      self.svn_branch = project
     if agent is None:
       agent = GerritAgent('%s://%s' % (u.scheme, u.netloc), read_only=True)
     self.agent = agent

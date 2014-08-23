@@ -21,7 +21,7 @@ defaults['category'] = '3chromeos asan'
 #
 # Main asan release scheduler for src/
 #
-S('chromeos_asan_rel', branch='src', treeStableTimer=60)
+S('chromeos_asan_rel', branch='master', treeStableTimer=60)
 
 #
 # Triggerable scheduler for the rel asan builder
