@@ -6,7 +6,6 @@
 # Refer: http://dev.chromium.org/developers/contributing-code/watchlists
 
 {
-
   'WATCHLIST_DEFINITIONS': {
     'this_file': {
       'filepath': '^WATCHLISTS$',
