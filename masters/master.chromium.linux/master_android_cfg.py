@@ -116,7 +116,7 @@ def Update(_config_arg, _active_master, c):
 
   c['schedulers'].extend([
       SingleBranchScheduler(name='android_gn',
-                            branch='src',
+                            branch='master',
                             treeStableTimer=60,
                             builderNames=['Android GN']),
   ])
