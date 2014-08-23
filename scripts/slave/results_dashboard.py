@@ -57,7 +57,8 @@ def SendResults(data, url, build_dir):
     print error
   if fatal_error:
     print 'Error uploading to dashboard.'
-    print '@@@STEP_EXCEPTION@@@'
+    # TODO(stip): remove this once crbug.com/406674 is fixed.
+    # print '@@@STEP_EXCEPTION@@@'
 
 
 def _GetCacheFileName(build_dir):
