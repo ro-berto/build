@@ -185,7 +185,7 @@ This step does nothing. You actually want to look at the "update" step.
 
 GCLIENT_TEMPLATE = """solutions = %(solutions)s
 
-cache_dir = %(cache_dir)s
+cache_dir = r%(cache_dir)s
 %(target_os)s
 %(target_os_only)s
 """
