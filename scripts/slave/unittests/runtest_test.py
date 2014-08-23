@@ -105,6 +105,13 @@ class GetGitRevisionTest(unittest.TestCase):
     self.assertEqual(runtest._GetGitCommitPositionFromLog(BLINK_LOG),
                      '180728')
 
+  def test_GetCommitPosFromBuildPropTest(self):
+    """Tests related to getting a commit position from build properties."""
+    # pylint: disable=W0212
+    self.assertEqual(runtest._GetCommitPos(
+        {'got_revision_cp': 'refs/heads/master@{#12345}'}), 12345)
+    # pylint: disable=W0212
+    self.assertIsNone(runtest._GetCommitPos({'got_revision': 12345}))
 
 
 class SendResultsToDashboardTest(unittest.TestCase):

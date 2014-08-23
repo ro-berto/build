@@ -582,6 +582,14 @@ def _SelectResultsTracker(options):
   return None
 
 
+def _GetCommitPos(build_properties):
+  """Extract the commit position from the build properties, if its there."""
+  if 'got_revision_cp' not in build_properties:
+    return None
+  commit_pos = build_properties['got_revision_cp']
+  return int(re.search(r'{#(\d+)}', commit_pos).group(1))
+
+
 def _CreateResultsTracker(tracker_class, options):
   """Instantiate a log parser (aka results tracker).
 
@@ -612,7 +620,10 @@ def _CreateResultsTracker(tracker_class, options):
       except Exception:
         webkit_revision = 'undefined'
 
-    if options.revision:
+    commit_pos_num = _GetCommitPos(options.build_properties)
+    if commit_pos_num is not None:
+      revision = commit_pos_num
+    elif options.revision:
       revision = options.revision
     else:
       revision = _GetSvnRevision(os.path.dirname(build_dir))
