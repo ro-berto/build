@@ -107,12 +107,12 @@ def _current_sheriff_emails():
 PROJECT_CONFIGS = {
   'blink': {
     'extra_emails_fn': _current_gardener_emails,
+    'git_mode': True,
     'path_to_project': os.path.join('third_party', 'WebKit'),
     'project_alias': 'webkit',
     'revision_link_fn': lambda before_rev, after_rev: (
-        'http://build.chromium.org/f/chromium/perf/dashboard/ui/'
-        'changelog_blink.html?url=/trunk&range=%s:%s&mode=html') % (
-            str(int(before_rev) + 1), after_rev),
+        'https://chromium.googlesource.com/chromium/blink/+log/%s..%s' % (
+            before_rev, after_rev)),
   },
   'skia': {
     'cq_extra_trybots': ['tryserver.chromium.linux:linux_layout_rel'],
