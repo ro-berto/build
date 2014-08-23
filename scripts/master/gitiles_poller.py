@@ -233,6 +233,10 @@ class GitilesPoller(PollingChangeSource):
     if self.change_filter and not self.change_filter(commit_json, branch):
       return
     commit_branch = branch.rpartition('/')[2]
+    if callable(self.svn_branch):
+      commit_branch = self.svn_branch(commit_json, branch)
+    elif self.svn_branch:
+      commit_branch = self.svn_branch
     commit_author = commit_json['author']['email']
     commit_tm = time_to_datetime(commit_json['committer']['time'])
     commit_files = []
@@ -250,10 +254,6 @@ class GitilesPoller(PollingChangeSource):
         if m:
           repo_url = m.group(1)
           revision = m.group(2)
-          if callable(self.svn_branch):
-            commit_branch = self.svn_branch(commit_json, branch)
-          else:
-            commit_branch = self.svn_branch
           break
       if revision is None:
         log.err(
