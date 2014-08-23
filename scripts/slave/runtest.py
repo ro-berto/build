@@ -686,9 +686,8 @@ def _SendResultsToDashboard(results_tracker, system, test, url, build_dir,
     # perf_id not specified in factory properties.
     print 'Error: No system name (perf_id) specified when sending to dashboard.'
     return
-  if supplemental_columns_file:
-    supplemental_columns = _GetSupplementalColumns(
-        build_dir, supplemental_columns_file)
+  supplemental_columns = _GetSupplementalColumns(
+      build_dir, supplemental_columns_file)
   if extra_columns:
     supplemental_columns.update(extra_columns)
 
