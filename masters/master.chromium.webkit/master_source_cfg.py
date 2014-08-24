@@ -24,8 +24,7 @@ def Update(config, _active_master, c):
   c['change_source'].append(cr_poller)
 
   webkit_url = 'http://src.chromium.org/viewvc/blink?view=rev&revision=%s'
-  webkit_poller = svn_poller_with_comparator.SvnPollerWithComparator(
-      cr_poller.comparator,
+  webkit_poller = svnpoller.SVNPoller(
       svnurl = config.Master.webkit_root_url,
       svnbin=chromium_utils.SVN_BIN,
       split_file=WebkitFileSplitter,
