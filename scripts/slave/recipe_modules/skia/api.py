@@ -208,10 +208,12 @@ class SkiaApi(recipe_api.RecipeApi):
     self.flavor.create_clean_host_dir(host_gm_actual_dir)
 
     device_gm_expectations_path = self.flavor.device_path_join(
-        self.device_dirs.gm_expected_dir, self.c.BUILDER_NAME,
+        self.device_dirs.gm_expected_dir,
+        builder_name_schema.GetWaterfallBot(self.c.BUILDER_NAME),
         global_constants.GM_EXPECTATIONS_FILENAME)
     repo_gm_expectations_path = self.m.path['checkout'].join(
-        'expectations', 'gm', self.c.BUILDER_NAME,
+        'expectations', 'gm',
+        builder_name_schema.GetWaterfallBot(self.c.BUILDER_NAME),
         global_constants.GM_EXPECTATIONS_FILENAME)
     if self.m.path.exists(repo_gm_expectations_path):
       self.flavor.copy_file_to_device(repo_gm_expectations_path,
@@ -387,12 +389,14 @@ class SkiaApi(recipe_api.RecipeApi):
 
     # Copy expectations.
     repo_expectations_path = self.m.path['checkout'].join(
-        'expectations', 'skimage', self.c.BUILDER_NAME,
+        'expectations', 'skimage',
+        builder_name_schema.GetWaterfallBot(self.c.BUILDER_NAME),
         global_constants.GM_EXPECTATIONS_FILENAME)
     device_expectations_path = None
     if self.m.path.exists(repo_expectations_path):
       device_expectations_path = self.flavor.device_path_join(
-          self.device_dirs.skimage_expected_dir, self.c.BUILDER_NAME,
+          self.device_dirs.skimage_expected_dir,
+          builder_name_schema.GetWaterfallBot(self.c.BUILDER_NAME),
           global_constants.GM_EXPECTATIONS_FILENAME)
       if str(device_expectations_path) != str(repo_expectations_path):
         self.flavor.create_clean_device_dir(
