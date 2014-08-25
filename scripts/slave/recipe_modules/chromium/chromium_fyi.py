@@ -52,6 +52,23 @@ SPEC = {
         'platform': 'mac',
       }
     },
+    'Chromium Mac 10.10': {
+      'recipe_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'tests': [
+        steps.DynamicGTestTests('Chromium Mac 10.10'),
+        steps.NaclIntegrationTest(),
+        steps.MojoPythonTests(),
+        steps.TelemetryUnitTests(),
+        steps.TelemetryPerfUnitTests(),
+      ],
+      'testing': {
+        'platform': 'mac',
+      },
+    },
     'Linux ARM Cross-Compile': {
       # TODO(phajdan.jr): Re-enable goma, http://crbug.com/349236 .
       'recipe_config': 'chromium_no_goma',
