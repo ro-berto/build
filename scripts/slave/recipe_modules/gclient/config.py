@@ -350,7 +350,7 @@ def pdfium(c):
   soln.name = 'pdfium'
   soln.url = 'https://pdfium.googlesource.com/pdfium.git'
 
-@config_ctx()
+@config_ctx(config_vars={'GIT_MODE': True})
 def infra(c):
   soln = c.solutions.add()
   soln.name = 'infra'
