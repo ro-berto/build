@@ -258,6 +258,60 @@
       "[BUILD_INTERNAL]/scripts/slave/android/adb",
       "-s",
       "014E1F310401C009",
+      "shell",
+      "rm",
+      "-r",
+      "/storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-Xoom-Tegra2-Arm7-Release"
+    ],
+    "name": "rmdir /storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-Xoom-Tegra2-Arm7-Release"
+  },
+  {
+    "cmd": [
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "shell",
+      "if",
+      "[",
+      "-e",
+      "/storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-Xoom-Tegra2-Arm7-Release",
+      "];",
+      "then",
+      "echo",
+      "FILE_EXISTS;",
+      "fi"
+    ],
+    "name": "exists /storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-Xoom-Tegra2-Arm7-Release",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "shell",
+      "mkdir",
+      "-p",
+      "/storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-Xoom-Tegra2-Arm7-Release"
+    ],
+    "name": "mkdir /storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-Xoom-Tegra2-Arm7-Release"
+  },
+  {
+    "cmd": [
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "push",
+      "[SLAVE_BUILD]/skia/expectations/gm/Test-Android-Xoom-Tegra2-Arm7-Release/expected-results.json",
+      "/storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-Xoom-Tegra2-Arm7-Release/expected-results.json"
+    ],
+    "name": "push [SLAVE_BUILD]/skia/expectations/gm/Test-Android-Xoom-Tegra2-Arm7-Release/expected-results.json"
+  },
+  {
+    "cmd": [
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
       "push",
       "[SLAVE_BUILD]/skia/expectations/gm/ignored-tests.txt",
       "/storage/emulated/legacy/skiabot/skia_gm_expected/ignored-tests.txt"

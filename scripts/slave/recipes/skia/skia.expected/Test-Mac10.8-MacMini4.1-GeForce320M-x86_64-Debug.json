@@ -164,6 +164,8 @@
       "ExpectationsMismatch",
       "--resourcePath",
       "[SLAVE_BUILD]/skia/resources",
+      "--readPath",
+      "[SLAVE_BUILD]/skia/expectations/gm/Test-Mac10.8-MacMini4.1-GeForce320M-x86_64-Debug/expected-results.json",
       "--ignoreFailuresFile",
       "[SLAVE_BUILD]/skia/expectations/gm/ignored-tests.txt",
       "--config",

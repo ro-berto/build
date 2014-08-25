@@ -207,17 +207,20 @@ class SkiaApi(recipe_api.RecipeApi):
                                                          self.c.BUILDER_NAME)
     self.flavor.create_clean_host_dir(host_gm_actual_dir)
 
-    device_gm_expectations_path = self.flavor.device_path_join(
+    device_gm_expected_dir = self.flavor.device_path_join(
         self.device_dirs.gm_expected_dir,
-        builder_name_schema.GetWaterfallBot(self.c.BUILDER_NAME),
-        global_constants.GM_EXPECTATIONS_FILENAME)
+        builder_name_schema.GetWaterfallBot(self.c.BUILDER_NAME))
+    device_gm_expectations_path = self.flavor.device_path_join(
+        device_gm_expected_dir, global_constants.GM_EXPECTATIONS_FILENAME)
     repo_gm_expectations_path = self.m.path['checkout'].join(
         'expectations', 'gm',
         builder_name_schema.GetWaterfallBot(self.c.BUILDER_NAME),
         global_constants.GM_EXPECTATIONS_FILENAME)
     if self.m.path.exists(repo_gm_expectations_path):
-      self.flavor.copy_file_to_device(repo_gm_expectations_path,
-                                      device_gm_expectations_path)
+      if str(device_gm_expectations_path) != str(repo_gm_expectations_path):
+        self.flavor.create_clean_device_dir(device_gm_expected_dir)
+        self.flavor.copy_file_to_device(repo_gm_expectations_path,
+                                        device_gm_expectations_path)
 
     device_ignore_tests_path = self.flavor.device_path_join(
         self.device_dirs.gm_expected_dir,

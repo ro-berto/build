@@ -164,6 +164,8 @@
       "ExpectationsMismatch",
       "--resourcePath",
       "[SLAVE_BUILD]/skia/resources",
+      "--readPath",
+      "[SLAVE_BUILD]/skia/expectations/gm/Test-Ubuntu12-ShuttleA-GTX550Ti-x86_64-Debug-ZeroGPUCache/expected-results.json",
       "--ignoreFailuresFile",
       "[SLAVE_BUILD]/skia/expectations/gm/ignored-tests.txt",
       "--config",

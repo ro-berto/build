@@ -6,6 +6,9 @@
 # Recipe module for Skia builders.
 
 
+from common.skia import builder_name_schema
+
+
 DEPS = [
   'path',
   'properties',
@@ -22,12 +25,14 @@ def GenTests(api):
   mastername = 'client.skia'
   slavename = 'skiabot-linux-tester-004'
   builders = [
+    'Build-Ubuntu13.10-GCC4.8-Arm7-Debug-CrOS_Daisy',
     'Build-Ubuntu13.10-GCC4.8-x86_64-Debug',
     'Perf-ChromeOS-Daisy-MaliT604-Arm7-Release',
     'Test-Android-GalaxyNexus-SGX540-Arm7-Debug',
     'Test-Android-Nexus10-MaliT604-Arm7-Release',
     'Test-Android-Xoom-Tegra2-Arm7-Release',
     'Test-ChromeOS-Alex-GMA3150-x86-Debug',
+    'Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes',
     'Test-Mac10.8-MacMini4.1-GeForce320M-x86_64-Debug',
     'Test-Ubuntu12-ShuttleA-GTX550Ti-x86_64-Release-Valgrind',
     'Test-Ubuntu12-ShuttleA-GTX550Ti-x86_64-Debug-ZeroGPUCache',
@@ -54,6 +59,10 @@ def GenTests(api):
             stdout=api.raw_io.output('')) +
         api.step_data(
             ('exists /storage/emulated/legacy/skiabot/skia_gm_expected/' +
+             builder),
+            stdout=api.raw_io.output('')) +
+        api.step_data(
+            ('exists /storage/emulated/legacy/skiabot/skia_gm_expected/' +
              builder + '/expected-results.json'),
             stdout=api.raw_io.output('')) +
         api.step_data(
@@ -75,15 +84,17 @@ def GenTests(api):
     )
 
   for builder in builders:
+    prop_slavename = (
+        'skiabot-cros-link-002' if 'ChromeOS' in builder else slavename)
     test = (
       api.test(builder) +
       api.properties(buildername=builder,
                      mastername=mastername,
-                     slavename=slavename) +
+                     slavename=prop_slavename) +
       api.path.exists(
           api.path['slave_build'].join(
               'skia', 'expectations', 'gm',
-              'Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes',
+              builder_name_schema.GetWaterfallBot(builder),
               'expected-results.json'),
           api.path['slave_build'].join('skia', 'expectations', 'gm',
                                        'ignored-tests.txt'),
