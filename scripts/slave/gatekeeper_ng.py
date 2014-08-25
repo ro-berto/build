@@ -546,8 +546,13 @@ def close_tree_if_necessary(failed_builds, username, password, status_url_root,
       'unsatisfied': ','.join(closing_builds[0]['unsatisfied']),
   }
 
-  revision_props = convert_revisions_to_positions(
-      get_build_properties(closing_builds[0]['build'], revision_properties))
+  # First populate un-transformed revision and got_revision.
+  revision_props = get_build_properties(closing_builds[0]['build'],
+    ['revision', 'got_revision'])
+
+  # Second add in transformed specified revision_properties.
+  revision_props.update(convert_revisions_to_positions(
+      get_build_properties(closing_builds[0]['build'], revision_properties)))
 
   template_vars.update(revision_props)
 
