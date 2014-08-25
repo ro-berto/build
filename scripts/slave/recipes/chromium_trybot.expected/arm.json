@@ -122,9 +122,9 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "browser_tests_run",
+      "base_tests",
       "browser_tests",
-      "base_tests"
+      "browser_tests_run"
     ],
     "name": "compile (with patch)"
   },

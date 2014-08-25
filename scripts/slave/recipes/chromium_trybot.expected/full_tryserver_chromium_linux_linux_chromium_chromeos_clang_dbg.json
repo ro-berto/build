@@ -139,11 +139,11 @@
       "--",
       "all",
       "base_unittests",
-      "mojo_common_unittests",
-      "sandbox_linux_unittests",
       "browser_tests",
       "chrome",
-      "chrome_run"
+      "chrome_run",
+      "mojo_common_unittests",
+      "sandbox_linux_unittests"
     ],
     "name": "compile (with patch)"
   }

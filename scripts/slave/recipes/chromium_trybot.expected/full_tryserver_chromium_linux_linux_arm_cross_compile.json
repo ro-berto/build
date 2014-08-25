@@ -139,8 +139,8 @@
       "[BUILD]/goma",
       "--",
       "base_unittests",
-      "mojo_common_unittests",
-      "browser_tests"
+      "browser_tests",
+      "mojo_common_unittests"
     ],
     "name": "compile (with patch)"
   },

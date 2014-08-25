@@ -183,15 +183,11 @@
       "[BUILD]/goma",
       "--",
       "all",
-      "chrome",
-      "chrome_run",
-      "chrome",
-      "chrome_run",
       "base_unittests",
       "browser_tests",
-      "unittests",
       "chrome",
-      "chrome_run"
+      "chrome_run",
+      "unittests"
     ],
     "name": "compile (with patch)"
   },

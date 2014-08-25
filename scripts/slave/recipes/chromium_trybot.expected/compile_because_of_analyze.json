@@ -160,10 +160,6 @@
       "--",
       "all",
       "chrome",
-      "chrome_run",
-      "chrome",
-      "chrome_run",
-      "chrome",
       "chrome_run"
     ],
     "name": "compile (with patch)"

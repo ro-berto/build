@@ -783,6 +783,8 @@ def GenSteps(api):
 
     compile_targets.extend(api.itertools.chain(
         *[t.compile_targets(api) for t in tests]))
+    # Remove duplicate targets.
+    compile_targets = sorted(set(compile_targets))
     api.chromium.compile(compile_targets, name='compile (with patch)')
 
     # Collect *.isolated hashes for all isolated targets, used when triggering
@@ -830,7 +832,7 @@ def GenSteps(api):
           *[t.compile_targets(api) for t in failing_tests]))
       if compile_targets:
         # Remove duplicate targets.
-        compile_targets = list(set(compile_targets))
+        compile_targets = sorted(set(compile_targets))
         try:
           api.chromium.compile(
                   compile_targets, name='compile (without patch)')
