@@ -483,6 +483,11 @@ div.column {
     float: left;
 }
 
+/* block above the columns */
+.BuildHeader {
+    display: block;
+}
+
 /* grid styles */
 
 table.Grid {
