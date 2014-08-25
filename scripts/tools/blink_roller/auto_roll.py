@@ -147,7 +147,8 @@ class AutoRoller(object):
   # FIXME: These are taken from gardeningserver.py and should be shared.
   CHROMIUM_SVN_DEPS_URL = 'http://src.chromium.org/chrome/trunk/src/DEPS'
   # 'webkit_revision': '149598',
-  REVISION_REGEXP = r'^  "%s_revision": "(?P<revision>[0-9a-fA-F]{2,40})",$'
+  REVISION_REGEXP = (
+      r'^  [\'"]%s_revision[\'"]: [\'"](?P<revision>[0-9a-fA-F]{2,40})[\'"],$')
 
   ROLL_BOT_INSTRUCTIONS = textwrap.dedent(
     '''This roll was created by the Blink AutoRollBot.
@@ -269,15 +270,32 @@ class AutoRoller(object):
     return _filter_emails(self._get_extra_emails())
 
   def _start_roll(self, new_roll_revision, commit_msg):
-    safely_roll_path = (
-        self._path_from_chromium_root('tools', 'safely-roll-deps.py'))
-    safely_roll_args = [safely_roll_path, self._project_alias,
-                        new_roll_revision, '--message', commit_msg, '--force']
+    roll_branch = '%s_roll' % self._project
+    subprocess2.check_call(['git', 'clean', '-d', '-f'])
+    subprocess2.call(['git', 'rebase', '--abort'])
+    subprocess2.call(['git', 'branch', '-D', roll_branch])
+    subprocess2.check_call(['git', 'checkout', 'master', '-f'])
+    subprocess2.check_call(['git', 'checkout', '-b', roll_branch,
+                            '-t', 'origin/master', '-f'])
+    try:
+      subprocess2.check_call(['roll-dep', self._path_to_project,
+                              new_roll_revision])
+      subprocess2.check_call(['git', 'add', 'DEPS'])
 
-    emails = self._emails_to_cc_on_rolls()
-    if emails:
-      safely_roll_args.extend(['--reviewers', ','.join(emails)])
-    subprocess2.check_call(map(str, safely_roll_args))
+      upload_cmd = ['git', 'cl', 'upload', '--bypass-hooks',
+                    '--use-commit-queue']
+      tbr = '\nTBR='
+      emails = self._emails_to_cc_on_rolls()
+      if emails:
+        emails_str = ','.join(emails)
+        tbr += emails_str
+        upload_cmd.extend(['--cc', emails_str, '--send-mail'])
+      commit_msg += tbr
+      subprocess2.check_call(['git', 'commit', '-m', commit_msg])
+      subprocess2.check_call(upload_cmd)
+    finally:
+      subprocess2.check_call(['git', 'checkout', 'master', '-f'])
+      subprocess2.check_call(['git', 'branch', '-D', roll_branch])
 
     # FIXME: It's easier to pull the issue id from rietveld rather than
     # parse it from the safely-roll-deps output.  Once we inline
