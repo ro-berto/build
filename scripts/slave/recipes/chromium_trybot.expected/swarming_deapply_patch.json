@@ -141,10 +141,13 @@
       "--",
       "all",
       "chrome",
+      "chrome_run",
       "chrome",
+      "chrome_run",
       "base_unittests_run",
       "browser_tests_run",
-      "chrome"
+      "chrome",
+      "chrome_run"
     ],
     "name": "compile (with patch)"
   },

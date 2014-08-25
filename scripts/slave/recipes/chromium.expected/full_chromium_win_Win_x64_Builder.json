@@ -118,7 +118,8 @@
       "[BUILD]\\goma",
       "--",
       "all",
-      "chrome"
+      "chrome",
+      "chrome_run"
     ],
     "name": "compile"
   },

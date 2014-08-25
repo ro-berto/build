@@ -118,6 +118,7 @@
       "[BUILD]\\goma",
       "--",
       "chrome",
+      "chrome_run",
       "chromium_builder_tests"
     ],
     "name": "compile"

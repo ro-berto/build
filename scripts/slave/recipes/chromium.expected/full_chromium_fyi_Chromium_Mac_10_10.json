@@ -109,7 +109,8 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "chrome"
+      "chrome",
+      "chrome_run"
     ],
     "name": "compile"
   },
