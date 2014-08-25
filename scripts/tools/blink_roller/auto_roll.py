@@ -292,6 +292,7 @@ class AutoRoller(object):
         upload_cmd.extend(['--cc', emails_str, '--send-mail'])
       commit_msg += tbr
       subprocess2.check_call(['git', 'commit', '-m', commit_msg])
+      upload_cmd.extend(['-m', commit_msg])
       subprocess2.check_call(upload_cmd)
     finally:
       subprocess2.check_call(['git', 'checkout', 'master', '-f'])

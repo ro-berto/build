@@ -178,7 +178,7 @@ class AutoRollTestBase(SuperMoxTestBase):
     auto_roll.subprocess2.check_call(['git', 'add', 'DEPS'])
     auto_roll.subprocess2.check_call(['git', 'commit', '-m', message])
     auto_roll.subprocess2.check_call(['git', 'cl', 'upload', '--bypass-hooks',
-                                      '--use-commit-queue'])
+                                      '--use-commit-queue', '-m', message])
     auto_roll.subprocess2.check_call(['git', 'checkout', 'master', '-f'])
     auto_roll.subprocess2.check_call(['git', 'branch', '-D',
                                       'test_project_roll'])
