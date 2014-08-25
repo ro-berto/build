@@ -1727,9 +1727,13 @@ def checkout(options, git_slns, specs, buildspec, master,
   # Revision is an svn revision, unless its a git master or past flag day.
   use_svn_rev = master not in GIT_MASTERS and not FLAG_DAY
   # Take care of got_revisions outputs.
-  revision_mapping = dict(GOT_REVISION_MAPPINGS.get(svn_root, {}))
-  if options.revision_mapping:
-    revision_mapping.update(options.revision_mapping)
+  if buildspec:
+    # Buildspec builds should ignore got_revision.
+    revision_mapping = { first_sln: 'got_revision' }
+  else:
+    revision_mapping = dict(GOT_REVISION_MAPPINGS.get(svn_root, {}))
+    if options.revision_mapping:
+      revision_mapping.update(options.revision_mapping)
 
   got_revisions = parse_got_revision(gclient_output, revision_mapping,
                                      use_svn_rev)
