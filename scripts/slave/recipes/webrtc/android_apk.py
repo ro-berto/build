@@ -83,7 +83,7 @@ def GenSteps(api):
   # For now, ignore all patches in bot_update, and apply_svn_patch always.
   step_result = api.bot_update.ensure_checkout(patch=False)
 
-  api.chromium_android.clean_local_files()
+  api.webrtc.cleanup()
 
   # Whatever step is run right before this line needs to emit got_revision.
   update_step = step_result

@@ -90,12 +90,9 @@ def GenSteps(api):
   step_result = api.bot_update.ensure_checkout(force=True)
   got_revision = step_result.presentation.properties['got_revision']
 
-  api.chromium_android.clean_local_files()
-
   if not bot_config.get('disable_runhooks'):
     api.chromium.runhooks()
 
-  api.chromium.cleanup_temp()
   if bot_type in ('builder', 'builder_tester'):
     run_gn = api.chromium.c.project_generator.tool == 'gn'
     if run_gn:
@@ -120,6 +117,7 @@ def GenSteps(api):
         api.webrtc.GS_ARCHIVES[bot_config['build_gs_archive']], got_revision)
 
   if bot_type in ('builder_tester', 'tester'):
+    api.webrtc.cleanup()
     if api.chromium.c.TARGET_PLATFORM == 'android':
       api.chromium_android.common_tests_setup_steps()
       api.chromium_android.run_test_suite(

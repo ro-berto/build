@@ -199,6 +199,12 @@ class WebRTCApi(recipe_api.RecipeApi):
         gs_url,
         build_revision=revision)
 
+  def cleanup(self):
+    if self.m.chromium.c.TARGET_PLATFORM == 'android':
+      self.m.chromium_android.clean_local_files()
+    else:
+      self.m.chromium.cleanup_temp()
+
   def apply_svn_patch(self):
     """Patch step for applying WebRTC patches to Chromium checkouts.
 

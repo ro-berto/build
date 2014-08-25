@@ -52,6 +52,7 @@ def GenSteps(api):
     api.tryserver.maybe_apply_issue()
 
   api.chromium.runhooks()
+
   if api.chromium.c.project_generator.tool == 'gn':
     api.chromium.run_gn()
     api.chromium.compile(targets=['all'])
@@ -61,9 +62,11 @@ def GenSteps(api):
   if api.chromium.c.gyp_env.GYP_DEFINES.get('syzyasan', 0) == 1:
     api.chromium.apply_syzyasan()
 
-  test_suite = recipe_config.get('test_suite')
-  if test_suite and bot_type in ('builder_tester', 'tester'):
-    api.webrtc.runtests(test_suite, got_revision)
+  if bot_type in ('builder_tester', 'tester'):
+    api.webrtc.cleanup()
+    test_suite = recipe_config.get('test_suite')
+    if test_suite:
+      api.webrtc.runtests(test_suite, got_revision)
 
 def _sanitize_nonalpha(text):
   return ''.join(c if c.isalnum() else '_' for c in text.lower())
@@ -85,7 +88,8 @@ def GenTests(api):
                             _sanitize_nonalpha(buildername), suffix)) +
       api.properties(mastername=mastername,
                      buildername=buildername,
-                     slavename='slavename') +
+                     slavename='slavename',
+                     BUILD_CONFIG=webrtc_config_kwargs['BUILD_CONFIG']) +
       api.platform(bot_config['testing']['platform'],
                    webrtc_config_kwargs.get('TARGET_BITS', 64))
     )
