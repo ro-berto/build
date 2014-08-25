@@ -15,7 +15,7 @@ deps = {
     "/trunk/deps/third_party/lighttpd@58968",
 
   "build/scripts/tools/deps2git":
-    "svn://svn.chromium.org/chrome/trunk/tools/deps2git@248305",
+    "svn://svn.chromium.org/chrome/trunk/tools/deps2git@291329",
 
   "commit-queue":
     "/trunk/tools/commit-queue",
