@@ -286,7 +286,7 @@ class AutoRoller(object):
       subprocess2.check_call(['git', 'add', 'DEPS'], **cwd_kwargs)
 
       upload_cmd = ['git', 'cl', 'upload', '--bypass-hooks',
-                    '--use-commit-queue']
+                    '--use-commit-queue', '-f']
       tbr = '\nTBR='
       emails = self._emails_to_cc_on_rolls()
       if emails:
