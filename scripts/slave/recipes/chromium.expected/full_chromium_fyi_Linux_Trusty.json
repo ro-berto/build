@@ -106,8 +106,7 @@
       "ninja",
       "--",
       "all",
-      "chrome",
-      "chrome_run"
+      "chrome"
     ],
     "name": "compile"
   },

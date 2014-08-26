@@ -132,7 +132,7 @@
       "-u",
       "[SLAVE_BUILD]/src/build/gyp_chromium",
       "--analyzer",
-      "{\"files\": [\"foo.cc\"], \"targets\": [\"base_unittests\", \"browser_tests\", \"unittests\"]}",
+      "{\"files\": [\"foo.cc\"], \"targets\": [\"base_unittests\", \"browser_tests\", \"unittests\", \"chrome\"]}",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -186,7 +186,6 @@
       "base_unittests",
       "browser_tests",
       "chrome",
-      "chrome_run",
       "unittests"
     ],
     "name": "compile (with patch)"

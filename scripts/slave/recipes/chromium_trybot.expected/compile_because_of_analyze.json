@@ -114,7 +114,7 @@
       "-u",
       "[SLAVE_BUILD]/src/build/gyp_chromium",
       "--analyzer",
-      "{\"files\": [\"foo.cc\"], \"targets\": []}",
+      "{\"files\": [\"foo.cc\"], \"targets\": [\"chrome\"]}",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -159,8 +159,7 @@
       "[BUILD]/goma",
       "--",
       "all",
-      "chrome",
-      "chrome_run"
+      "chrome"
     ],
     "name": "compile (with patch)"
   },

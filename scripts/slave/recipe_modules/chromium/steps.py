@@ -538,8 +538,7 @@ class TelemetryUnitTests(PythonBasedTest):  # pylint: disable=W0232
 
   @staticmethod
   def compile_targets(_):
-    # Include chrome_run as filter picks up chrome and not chrome_run.
-    return ['chrome', 'chrome_run']
+    return ['chrome']
 
   def run_step(self, api, suffix, cmd_args, **kwargs):
     return api.chromium.run_telemetry_unittests(suffix, cmd_args, **kwargs)
@@ -550,8 +549,7 @@ class TelemetryPerfUnitTests(PythonBasedTest):
 
   @staticmethod
   def compile_targets(_):
-    # Include chrome_run as filter picks up chrome and not chrome_run.
-    return ['chrome', 'chrome_run']
+    return ['chrome']
 
   def run_step(self, api, suffix, cmd_args, **kwargs):
     return api.chromium.run_telemetry_perf_unittests(suffix, cmd_args,
@@ -563,8 +561,7 @@ class NaclIntegrationTest(Test):  # pylint: disable=W0232
 
   @staticmethod
   def compile_targets(_):
-    # Include chrome_run as filter picks up chrome and not chrome_run.
-    return ['chrome', 'chrome_run']
+    return ['chrome']
 
   def run(self, api, suffix):
     args = [

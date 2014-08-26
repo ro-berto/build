@@ -79,6 +79,7 @@ BUILDERS = {
         },
       },
       'linux_chromium_browser_asan_rel': {
+        'add_telemetry_tests': False,
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -161,6 +162,7 @@ BUILDERS = {
         },
       },
       'linux_chromium_chromeos_dbg': {
+        'add_telemetry_tests': False,
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -172,6 +174,7 @@ BUILDERS = {
         },
       },
       'linux_chromium_chromeos_rel': {
+        'add_telemetry_tests': False,
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -183,6 +186,7 @@ BUILDERS = {
         },
       },
       'linux_chromium_chromeos_clang_dbg': {
+        'add_telemetry_tests': False,
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -194,6 +198,7 @@ BUILDERS = {
         },
       },
       'linux_chromium_chromeos_clang_rel': {
+        'add_telemetry_tests': False,
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -205,6 +210,7 @@ BUILDERS = {
         },
       },
       'linux_chromium_chromeos_ozone_rel': {
+        'add_telemetry_tests': False,
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -216,6 +222,7 @@ BUILDERS = {
         },
       },
       'linux_chromium_chromeos_ozone_dbg': {
+        'add_telemetry_tests': False,
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -428,6 +435,7 @@ BUILDERS = {
         },
       },
       'win8_chromium_dbg': {
+        'add_telemetry_tests': False,
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -440,6 +448,7 @@ BUILDERS = {
         },
       },
       'win8_chromium_rel': {
+        'add_telemetry_tests': False,
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -537,7 +546,7 @@ def get_analyze_config(api, file_name):
   return step_result.json.output
 
 
-def tests_in_compile_targets(compile_targets, *tests):
+def tests_in_compile_targets(compile_targets, tests):
   """Returns the tests in |tests| that have at least one of their compile
   targets in |compile_targets|."""
   # The target all builds everything.
@@ -545,6 +554,18 @@ def tests_in_compile_targets(compile_targets, *tests):
     return tests
   return [test for test in tests if set(compile_targets) &
           set(test.compile_targets(None))]
+
+
+def all_compile_targets(tests):
+  """Returns the compile_targets for all the Tests in |tests|."""
+  return sorted(set(x
+                    for test in tests
+                    for x in test.compile_targets(None)))
+
+
+def find_test_named(test_name, tests):
+  """Returns a list with all tests whose name matches |test_name|."""
+  return [test for test in tests if test.name == test_name]
 
 
 add_swarming_builder('linux_chromium_rel', 'linux_chromium_rel_swarming',
@@ -722,6 +743,12 @@ def GenSteps(api):
 
     runhooks_env = bot_config.get('runhooks_env', {})
 
+    # Tests that are only run if their compile_targets are going to be built.
+    conditional_tests = [api.chromium.steps.NaclIntegrationTest()]
+    if bot_config.get('add_telemetry_tests', True):
+      conditional_tests += [api.chromium.steps.TelemetryUnitTests(),
+                            api.chromium.steps.TelemetryPerfUnitTests()]
+
     # See if the patch needs to compile on the current platform.
     if isinstance(test_spec, dict) and should_filter_builder(
         buildername, test_spec.get('non_filter_builders', []),
@@ -731,7 +758,8 @@ def GenSteps(api):
                                          'trybot_analyze_config.json'))
       api.filter.does_patch_require_compile(
           exclusions=analyze_config.get('exclusions', []),
-          exes=get_test_names(gtest_tests, swarming_tests),
+          exes=get_test_names(gtest_tests, swarming_tests) +
+               all_compile_targets(conditional_tests),
           compile_targets=compile_targets,
           env=runhooks_env)
       if not api.filter.result:
@@ -747,6 +775,14 @@ def GenSteps(api):
         else:
           compile_targets = list(set(compile_targets) &
                                  set(api.filter.compile_targets))
+        # Always add |matching_exes|. They will be covered by |compile_targets|,
+        # but adding |matching_exes| makes determing if conditional tests are
+        # necessary easier. For example, if we didn't do this we could end up
+        # with chrome_run as a compile_target and not chrome (since chrome_run
+        # depends upon chrome). This results in not picking up
+        # NaclIntegrationTest as it depends upon chrome not chrome_run.
+        compile_targets = list(set(api.filter.matching_exes +
+                                   api.filter.compile_targets))
 
     # Swarming uses Isolate to transfer files to swarming bots.
     # set_isolate_environment modifies GYP_DEFINES to enable test isolation.
@@ -773,20 +809,16 @@ def GenSteps(api):
       ])
     tests.append(api.chromium.steps.Deps2GitTest())
 
-    if (bot_config['chromium_config'] not in ['chromium_chromeos',
-                                             'chromium_asan',
-                                             'chromium_chromeos_clang',
-                                             'chromium_chromeos_ozone']
-        and not buildername.startswith('win8')):
-      tests.extend(tests_in_compile_targets(
-          compile_targets,
-          api.chromium.steps.TelemetryUnitTests(),
-          api.chromium.steps.TelemetryPerfUnitTests()))
-
+    conditional_tests = tests_in_compile_targets(compile_targets,
+                                                 conditional_tests)
+    tests.extend(find_test_named(api.chromium.steps.TelemetryUnitTests.name,
+                                 conditional_tests))
+    tests.extend(find_test_named(api.chromium.steps.TelemetryPerfUnitTests.name,
+                                 conditional_tests))
     tests.extend(gtest_tests)
     tests.extend(swarming_tests)
-    tests.extend(tests_in_compile_targets(compile_targets,
-        api.chromium.steps.NaclIntegrationTest()))
+    tests.extend(find_test_named(api.chromium.steps.NaclIntegrationTest.name,
+                                 conditional_tests))
     # MojoPythonTests don't require anything to be compiled.
     tests.append(api.chromium.steps.MojoPythonTests())
 

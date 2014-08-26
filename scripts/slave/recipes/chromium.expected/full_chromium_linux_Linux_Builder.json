@@ -110,7 +110,6 @@
       "[BUILD]/goma",
       "--",
       "chrome",
-      "chrome_run",
       "chromium_swarm_tests"
     ],
     "name": "compile"

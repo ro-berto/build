@@ -141,7 +141,6 @@
       "base_unittests",
       "browser_tests",
       "chrome",
-      "chrome_run",
       "mojo_common_unittests"
     ],
     "name": "compile (with patch)",

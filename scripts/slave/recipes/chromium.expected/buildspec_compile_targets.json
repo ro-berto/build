@@ -121,7 +121,6 @@
       "[BUILD]/goma",
       "--",
       "chrome",
-      "chrome_run",
       "target_from_dbg_1",
       "target_from_dbg_2"
     ],
