@@ -248,7 +248,7 @@ def parse_commit_position(prop):
 
   match = COMMIT_POSITION_REGEX.match(prop)
   if not match:
-    return int(prop)
+    return prop
   else:
     return int(match.group(2))
 
