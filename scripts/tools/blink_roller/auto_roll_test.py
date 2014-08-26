@@ -160,28 +160,33 @@ class AutoRollTestBase(SuperMoxTestBase):
     self._get_current_revision()
     self._compare_revs(self.OLD_REV, self.NEW_REV)
 
-    auto_roll.subprocess2.check_call(['git', 'clean', '-d', '-f'])
-    auto_roll.subprocess2.call(['git', 'rebase', '--abort'])
-    auto_roll.subprocess2.call(['git', 'branch', '-D', 'test_project_roll'])
-    auto_roll.subprocess2.check_call(['git', 'checkout', 'master', '-f'])
+    auto_roll.subprocess2.check_call(['git', 'clean', '-d', '-f'], cwd='.')
+    auto_roll.subprocess2.call(['git', 'rebase', '--abort'], cwd='.')
+    auto_roll.subprocess2.call(['git', 'branch', '-D', 'test_project_roll'],
+                               cwd='.')
+    auto_roll.subprocess2.check_call(['git', 'checkout', 'origin/master', '-f'],
+                                     cwd='.')
     auto_roll.subprocess2.check_call(['git', 'checkout',
                                       '-b', 'test_project_roll',
-                                      '-t', 'origin/master', '-f'])
+                                      '-t', 'origin/master', '-f'], cwd='.')
 
     from_rev = self._display_rev(self.OLD_REV)
     to_rev = self._display_rev(self.NEW_REV)
     message = custom_message or 'Test_Project roll %s:%s' % (from_rev, to_rev)
     message += '\nTBR='
     auto_roll.subprocess2.check_call(
-        ['roll-dep', 'third_party/%s' % self.TEST_PROJECT, str(self.NEW_REV)])
+        ['roll-dep', 'third_party/%s' % self.TEST_PROJECT, str(self.NEW_REV)],
+        cwd='.')
 
-    auto_roll.subprocess2.check_call(['git', 'add', 'DEPS'])
-    auto_roll.subprocess2.check_call(['git', 'commit', '-m', message])
+    auto_roll.subprocess2.check_call(['git', 'add', 'DEPS'], cwd='.')
+    auto_roll.subprocess2.check_call(['git', 'commit', '-m', message], cwd='.')
     auto_roll.subprocess2.check_call(['git', 'cl', 'upload', '--bypass-hooks',
-                                      '--use-commit-queue', '-m', message])
-    auto_roll.subprocess2.check_call(['git', 'checkout', 'master', '-f'])
+                                      '--use-commit-queue', '-m', message],
+                                     cwd='.')
+    auto_roll.subprocess2.check_call(['git', 'checkout', 'origin/master', '-f'],
+                                     cwd='.')
     auto_roll.subprocess2.check_call(['git', 'branch', '-D',
-                                      'test_project_roll'])
+                                      'test_project_roll'], cwd='.')
 
     issue = self._make_issue(created_datetime=self.CURRENT_DATETIME_STR)
     self._arb._rietveld.search(owner=self.TEST_AUTHOR,

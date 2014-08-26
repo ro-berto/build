@@ -264,23 +264,26 @@ class AutoRoller(object):
       if match:
         return match.group('svn_revision')
       else:
-        raise AutoRollException('Could not determine the current SVN revision.')
+        raise AutoRollException(
+            'Could not determine the current SVN revision.')
 
   def _emails_to_cc_on_rolls(self):
     return _filter_emails(self._get_extra_emails())
 
   def _start_roll(self, new_roll_revision, commit_msg):
     roll_branch = '%s_roll' % self._project
-    subprocess2.check_call(['git', 'clean', '-d', '-f'])
-    subprocess2.call(['git', 'rebase', '--abort'])
-    subprocess2.call(['git', 'branch', '-D', roll_branch])
-    subprocess2.check_call(['git', 'checkout', 'master', '-f'])
+    cwd_kwargs = {'cwd': self._path_to_chrome}
+    subprocess2.check_call(['git', 'clean', '-d', '-f'], **cwd_kwargs)
+    subprocess2.call(['git', 'rebase', '--abort'], **cwd_kwargs)
+    subprocess2.call(['git', 'branch', '-D', roll_branch], **cwd_kwargs)
+    subprocess2.check_call(['git', 'checkout', 'origin/master', '-f'],
+                           **cwd_kwargs)
     subprocess2.check_call(['git', 'checkout', '-b', roll_branch,
-                            '-t', 'origin/master', '-f'])
+                            '-t', 'origin/master', '-f'], **cwd_kwargs)
     try:
       subprocess2.check_call(['roll-dep', self._path_to_project,
-                              new_roll_revision])
-      subprocess2.check_call(['git', 'add', 'DEPS'])
+                              new_roll_revision], **cwd_kwargs)
+      subprocess2.check_call(['git', 'add', 'DEPS'], **cwd_kwargs)
 
       upload_cmd = ['git', 'cl', 'upload', '--bypass-hooks',
                     '--use-commit-queue']
@@ -291,12 +294,14 @@ class AutoRoller(object):
         tbr += emails_str
         upload_cmd.extend(['--cc', emails_str, '--send-mail'])
       commit_msg += tbr
-      subprocess2.check_call(['git', 'commit', '-m', commit_msg])
+      subprocess2.check_call(['git', 'commit', '-m', commit_msg], **cwd_kwargs)
       upload_cmd.extend(['-m', commit_msg])
-      subprocess2.check_call(upload_cmd)
+      subprocess2.check_call(upload_cmd, **cwd_kwargs)
     finally:
-      subprocess2.check_call(['git', 'checkout', 'master', '-f'])
-      subprocess2.check_call(['git', 'branch', '-D', roll_branch])
+      subprocess2.check_call(['git', 'checkout', 'origin/master', '-f'],
+                             **cwd_kwargs)
+      subprocess2.check_call(
+          ['git', 'branch', '-D', roll_branch], **cwd_kwargs)
 
     # FIXME: It's easier to pull the issue id from rietveld rather than
     # parse it from the safely-roll-deps output.  Once we inline
