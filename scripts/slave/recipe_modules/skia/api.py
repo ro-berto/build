@@ -170,13 +170,13 @@ class SkiaApi(recipe_api.RecipeApi):
     """Copy the required executables and files to the device."""
     self.device_dirs = self.flavor.get_device_dirs()
 
+    # Run any device-specific installation.
+    self.flavor.install()
+
     # TODO(borenet): Only copy files which have changed.
     # Resources
     self.flavor.copy_directory_to_device(self.resource_dir,
                                          self.device_dirs.resource_dir)
-
-    # Run any device-specific installation.
-    self.flavor.install()
 
   def common_steps(self):
     """Steps run by both Test and Perf bots."""

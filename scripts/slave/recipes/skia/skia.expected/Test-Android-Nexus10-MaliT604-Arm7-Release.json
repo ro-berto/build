@@ -97,6 +97,42 @@
       "[BUILD_INTERNAL]/scripts/slave/android/adb",
       "-s",
       "014E1F310401C009",
+      "root"
+    ],
+    "name": "adb root"
+  },
+  {
+    "cmd": [
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "remount"
+    ],
+    "name": "adb remount"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_kill_skia",
+      "-s",
+      "014E1F310401C009"
+    ],
+    "name": "kill skia"
+  },
+  {
+    "cmd": [
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "shell",
+      "stop"
+    ],
+    "name": "stop shell"
+  },
+  {
+    "cmd": [
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
       "shell",
       "rm",
       "-r",
@@ -133,42 +169,6 @@
       "/storage/emulated/legacy/skiabot/skia_resources"
     ],
     "name": "push [SLAVE_BUILD]/skia/resources"
-  },
-  {
-    "cmd": [
-      "[BUILD_INTERNAL]/scripts/slave/android/adb",
-      "-s",
-      "014E1F310401C009",
-      "root"
-    ],
-    "name": "adb root"
-  },
-  {
-    "cmd": [
-      "[BUILD_INTERNAL]/scripts/slave/android/adb",
-      "-s",
-      "014E1F310401C009",
-      "remount"
-    ],
-    "name": "adb remount"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_kill_skia",
-      "-s",
-      "014E1F310401C009"
-    ],
-    "name": "kill skia"
-  },
-  {
-    "cmd": [
-      "[BUILD_INTERNAL]/scripts/slave/android/adb",
-      "-s",
-      "014E1F310401C009",
-      "shell",
-      "stop"
-    ],
-    "name": "stop shell"
   },
   {
     "cmd": [

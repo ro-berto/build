@@ -58,29 +58,6 @@
       "root@192.168.1.126",
       "rm",
       "-rf",
-      "/usr/local/skiabot/skia_resources"
-    ],
-    "name": "rmdir /usr/local/skiabot/skia_resources"
-  },
-  {
-    "cmd": [
-      "scp",
-      "-r",
-      "-P",
-      "22",
-      "[SLAVE_BUILD]/skia/resources",
-      "root@192.168.1.126:/usr/local/skiabot/skia_resources"
-    ],
-    "name": "scp [SLAVE_BUILD]/skia/resources"
-  },
-  {
-    "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.126",
-      "rm",
-      "-rf",
       "/usr/local/skiabot/bin"
     ],
     "name": "rmdir /usr/local/skiabot/bin"
@@ -96,6 +73,29 @@
       "/usr/local/skiabot/bin"
     ],
     "name": "mkdir /usr/local/skiabot/bin"
+  },
+  {
+    "cmd": [
+      "ssh",
+      "-p",
+      "22",
+      "root@192.168.1.126",
+      "rm",
+      "-rf",
+      "/usr/local/skiabot/skia_resources"
+    ],
+    "name": "rmdir /usr/local/skiabot/skia_resources"
+  },
+  {
+    "cmd": [
+      "scp",
+      "-r",
+      "-P",
+      "22",
+      "[SLAVE_BUILD]/skia/resources",
+      "root@192.168.1.126:/usr/local/skiabot/skia_resources"
+    ],
+    "name": "scp [SLAVE_BUILD]/skia/resources"
   },
   {
     "cmd": [
