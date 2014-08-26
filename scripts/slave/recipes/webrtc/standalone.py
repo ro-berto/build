@@ -74,7 +74,7 @@ def _sanitize_nonalpha(text):
 
 def GenTests(api):
   def generate_builder(mastername, buildername, bot_config, revision,
-                       suffix=None):
+                       legacy_trybot=False, suffix=None):
     suffix = suffix or ''
     bot_type = bot_config.get('bot_type', 'builder_tester')
     if bot_type in ('builder', 'builder_tester'):
@@ -96,7 +96,11 @@ def GenTests(api):
     if revision:
       test += api.properties(revision=revision)
     if mastername.startswith('tryserver'):
-      test += api.properties(patch_url='try_job_svn_patch')
+      if legacy_trybot:
+        test += api.properties(patch_url='try_job_svn_patch')
+      else:
+        test += api.properties(issue=666666, patchset=1,
+                               rietveld='https://fake.rietveld.url')
     return test
 
   for mastername in ('client.webrtc', 'client.webrtc.fyi', 'tryserver.webrtc'):
@@ -113,3 +117,10 @@ def GenTests(api):
   bot_config = api.webrtc.BUILDERS[mastername]['builders'][buildername]
   yield generate_builder(mastername, buildername, bot_config, revision=None,
                          suffix='_forced')
+
+  # Legacy trybot (SVN-based).
+  mastername = 'tryserver.webrtc'
+  buildername = 'linux'
+  bot_config = api.webrtc.BUILDERS[mastername]['builders'][buildername]
+  yield generate_builder(mastername, buildername, bot_config, revision='12345',
+                         legacy_trybot=True, suffix='_legacy_svn_patch')
