@@ -190,6 +190,13 @@ def SetupMaster(ActiveMaster):
     json_helper.putChild('trybots', status_json.TryBuildersJsonResource)
 
   if ActiveMaster.is_production_host:
+    # Build result emails.
+    c['status'].append(skia_notifier.SkiaMailNotifier(
+        fromaddr=ActiveMaster.from_address,
+        mode='change',
+        relayhost=config.Master.smtp,
+        lookup=master_utils.UsersAreEmails()))
+
     # Try job result emails.
     c['status'].append(skia_notifier.SkiaTryMailNotifier(
         fromaddr=ActiveMaster.from_address,
@@ -198,6 +205,7 @@ def SetupMaster(ActiveMaster):
         relayhost=config.Master.smtp,
         lookup=master_utils.UsersAreEmails()))
 
+    # Rietveld status push.
     c['status'].append(
         TryServerHttpStatusPush(serverUrl=ActiveMaster.code_review_site))
 

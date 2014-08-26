@@ -6,8 +6,16 @@
 """Notifier classes for Skia build masters."""
 
 
+from buildbot.status.mail import MailNotifier
 from common.skia import builder_name_schema
 from master.try_mail_notifier import TryMailNotifier
+
+
+class SkiaMailNotifier(MailNotifier):
+  """Filter out trybots from the MailNotifier."""
+  def buildMessage(self, name, build, results):
+    if not builder_name_schema.IsTrybot(build[0].getBuilder().name):
+      return MailNotifier.buildMessage(self, name, build, results)
 
 
 class SkiaTryMailNotifier(TryMailNotifier):
