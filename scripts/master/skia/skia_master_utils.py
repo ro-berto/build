@@ -16,6 +16,7 @@ from master.builders_pools import BuildersPools
 from master.factory import annotator_factory
 from master.gitiles_poller import GitilesPoller
 from master.skia import status_json
+from master.skia import skia_notifier
 from master.status_push import TryServerHttpStatusPush
 from master.try_job_rietveld import TryJobRietveld
 
@@ -190,8 +191,7 @@ def SetupMaster(ActiveMaster):
 
   if ActiveMaster.is_production_host:
     # Try job result emails.
-    from master.try_mail_notifier import TryMailNotifier
-    c['status'].append(TryMailNotifier(
+    c['status'].append(skia_notifier.SkiaTryMailNotifier(
         fromaddr=ActiveMaster.from_address,
         subject="try %(result)s for %(reason)s @ r%(revision)s",
         mode='all',
