@@ -1734,6 +1734,13 @@ def checkout(options, git_slns, specs, buildspec, master,
   got_revisions = parse_got_revision(gclient_output, revision_mapping,
                                      use_svn_rev)
 
+  if not got_revisions and revisions:
+    # If we have no revision_mapping, then just pass through the first revision
+    # as the got_revision.
+    got_revisions = {
+        'got_revision': revisions[0],
+    }
+
   if options.output_json:
     # Tell recipes information such as root, got_revision, etc.
     emit_json(options.output_json,
