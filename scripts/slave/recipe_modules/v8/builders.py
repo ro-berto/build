@@ -65,6 +65,7 @@ BUILDERS = {
           'webkit',
           'benchmarks',
           'test262_variants',
+          'test262_es6_variants',
           'mozilla',
         ],
         'testing': {'platform': 'linux'},
@@ -91,6 +92,17 @@ BUILDERS = {
         'tests': ['test262_variants'],
         'testing': {'platform': 'linux'},
       },
+      'V8 Linux - test262-es6 - debug': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux - debug builder',
+        'build_gs_archive': 'linux_dbg_archive',
+        'tests': ['test262_es6_variants'],
+        'testing': {'platform': 'linux'},
+      },
       'V8 Linux - shared': {
         'chromium_apply_config': ['shared_library', 'verify_heap'],
         'v8_config_kwargs': {
@@ -110,7 +122,13 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - nosnap builder',
         'build_gs_archive': 'linux_nosnap_rel_archive',
-        'tests': ['unittests', 'v8testing', 'test262', 'mozilla'],
+        'tests': [
+          'unittests',
+          'v8testing',
+          'test262',
+          'test262_es6',
+          'mozilla',
+        ],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - nosnap - debug': {
@@ -275,6 +293,7 @@ BUILDERS = {
           'optimize_for_size',
           'webkit',
           'test262',
+          'test262_es6',
           'mozilla',
         ],
         'testing': {'platform': 'linux'},
@@ -287,7 +306,14 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux64 - debug builder',
         'build_gs_archive': 'linux64_dbg_archive',
-        'tests': ['unittests', 'v8testing', 'webkit', 'test262', 'mozilla'],
+        'tests': [
+          'unittests',
+          'v8testing',
+          'webkit',
+          'test262',
+          'test262_es6',
+          'mozilla',
+        ],
         'testing': {'platform': 'linux'},
       },
 ####### Category: Windows
@@ -499,7 +525,13 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['unittests', 'v8testing', 'test262', 'mozilla'],
+        'tests': [
+          'unittests',
+          'v8testing',
+          'test262',
+          'test262_es6',
+          'mozilla',
+        ],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm - sim - debug': {
@@ -542,7 +574,14 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['unittests', 'v8testing', 'webkit', 'test262', 'mozilla'],
+        'tests': [
+          'unittests',
+          'v8testing',
+          'webkit',
+          'test262',
+          'test262_es6',
+          'mozilla',
+        ],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm64 - sim - debug': {
@@ -599,7 +638,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['unittests', 'v8testing', 'test262'],
+        'tests': ['unittests', 'v8testing', 'test262', 'test262_es6'],
         'testing': {'platform': 'linux'},
       },
 ####### Category: Misc
