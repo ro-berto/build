@@ -1809,6 +1809,8 @@ def main():
       upload_telemetry('start', master, builder, slave, unix_time=time.time())
   ]
 
+  patch_failure = False
+
   try:
     # Dun dun dun, the main part of bot_update.
     revisions, step_text = prepare(options, git_slns, active)
@@ -1829,7 +1831,7 @@ def main():
         'patch_failure': True,
     })
     emit_flag(options.flag_file)
-    raise
+    patch_failure = True
   except Exception as e:
     # Unexpected failure.
     TELEMETRY.update({
@@ -1853,6 +1855,13 @@ def main():
     # Sort of wait for all telemetry threads to finish.
     for thr in all_threads:
       thr.join(5)
+
+  # Return a specific non-zero exit code for patch failure (because it is
+  # a failure), but make it different than other failures to distinguish between
+  # infra failures (independent from patch author), and patch failures (that
+  # patch author can fix).
+  if patch_failure:
+    return 88
 
 
 if __name__ == '__main__':

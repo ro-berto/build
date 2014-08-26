@@ -51,7 +51,7 @@ def GenTests(api):
       patchset=654321,
       patch_url='http://src.chromium.org/foo/bar',
       fail_patch=True,
-  ) + api.step_data('bot_update', retcode=1)
+  ) + api.step_data('bot_update', retcode=88)
   yield api.test('forced') + api.properties(
       mastername='experimental',
       buildername='Experimental Builder',

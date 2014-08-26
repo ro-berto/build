@@ -57,6 +57,7 @@ class BotUpdateApi(recipe_api.RecipeApi):
     assert isinstance(cmd, (list, tuple))
     bot_update_path = self.m.path['build'].join(
         'scripts', 'slave', 'bot_update.py')
+    kwargs.setdefault('infra_step', True)
     return self.m.python(name, bot_update_path, cmd, **kwargs)
 
   @property
@@ -162,7 +163,8 @@ class BotUpdateApi(recipe_api.RecipeApi):
 
     # Ah hah! Now that everything is in place, lets run bot_update!
     try:
-      self(name, cmd, step_test_data=step_test_data, **kwargs)
+      # 88 is the 'patch failure' return code.
+      self(name, cmd, step_test_data=step_test_data, ok_ret=(0, 88), **kwargs)
     finally:
       step_result = self.m.step.active_result
 
@@ -180,12 +182,6 @@ class BotUpdateApi(recipe_api.RecipeApi):
       if 'log_lines' in step_result.json.output:
         for log_name, log_lines in step_result.json.output['log_lines']:
           step_result.presentation.logs[log_name] = log_lines.splitlines()
-      # Abort the build on failure, if its not a patch failure.
-      if step_result.presentation.status == self.m.step.FAILURE:
-        if step_result.json.output.get('patch_failure'):
-          step_result.presentation.status = self.m.step.SUCCESS
-        else:
-          raise self.m.step.StepFailure('Bot Update failed, aborting.')
 
       # Set the "checkout" path for the main solution.
       # This is used by the Chromium module to figure out where to look for
