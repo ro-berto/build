@@ -79,10 +79,15 @@ class TestUtilsApi(recipe_api.RecipeApi):
     run('with patch', tests)
 
     for t in tests:
-      if not t.has_valid_results(caller_api, 'with patch'):
-        self.m.python.failing_step(t.name, 'TEST RESULTS WERE INVALID')
-      elif t.failures(caller_api, 'with patch'):
-        failing_tests.append(t)
+      try:
+        if not t.has_valid_results(caller_api, 'with patch'):
+          self.m.python.failing_step(t.name, 'TEST RESULTS WERE INVALID')
+        elif t.failures(caller_api, 'with patch'):
+          failing_tests.append(t)
+      except NotImplementedError:
+        # TODO(phajdan.jr): Make all steps support retry without patch.
+        self.m.python.failing_step(
+            'determine_new_failures', 'RETRY WITHOUT PATCH NOT IMPLEMENTED')
     if not failing_tests:
       return
 

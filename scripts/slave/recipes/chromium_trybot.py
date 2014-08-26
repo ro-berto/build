@@ -72,6 +72,7 @@ BUILDERS = {
         'based_on_main_waterfall': {
           'mastername': 'chromium.linux',
           'buildername': 'Linux Builder',
+          'testers': ['Linux Tests'],
         },
         'testing': {
           'platform': 'linux',
@@ -806,11 +807,21 @@ def GenSteps(api):
   if main_waterfall_config:
     bot_update_step = api.chromium_tests.compile_and_return_bot_update(
         main_waterfall_config['mastername'],
-        main_waterfall_config['buildername'])
+        main_waterfall_config['buildername'],
+        override_bot_type='builder_tester')
     tests, swarming_tests = api.chromium_tests.tests_for_builder(
         main_waterfall_config['mastername'],
         main_waterfall_config['buildername'],
-        bot_update_step)
+        bot_update_step,
+        override_bot_type='builder_tester')
+    for tester in main_waterfall_config['testers']:
+      new_tests, new_swarming_tests = api.chromium_tests.tests_for_builder(
+          main_waterfall_config['mastername'],
+          tester,
+          bot_update_step,
+          override_bot_type='builder_tester')
+      tests.extend(new_tests)
+      swarming_tests.extend(new_swarming_tests)
   else:
     # TODO(phajdan.jr): Remove the legacy trybot-specific codepath.
     tests, swarming_tests, bot_update_step = compile_and_return_tests(

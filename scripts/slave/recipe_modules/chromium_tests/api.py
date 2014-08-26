@@ -89,7 +89,8 @@ RECIPE_CONFIGS = {
 
 
 class ChromiumTestsApi(recipe_api.RecipeApi):
-  def compile_and_return_bot_update(self, mastername, buildername):
+  def compile_and_return_bot_update(self, mastername, buildername,
+                                    override_bot_type=None):
     master_dict = self.m.chromium.builders.get(mastername, {})
     bot_config = master_dict.get('builders', {}).get(buildername)
     master_config = master_dict.get('settings', {})
@@ -125,7 +126,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           bot_config['android_config'],
           **bot_config.get('chromium_config_kwargs', {}))
 
-    bot_type = bot_config.get('bot_type', 'builder_tester')
+    bot_type = override_bot_type or bot_config.get('bot_type', 'builder_tester')
 
     if bot_config.get('set_component_rev'):
       # If this is a component build and the main revision is e.g. blink,
@@ -213,14 +214,15 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return update_step
 
-  def tests_for_builder(self, mastername, buildername, update_step):
+  def tests_for_builder(self, mastername, buildername, update_step,
+                        override_bot_type=None):
     got_revision = update_step.presentation.properties['got_revision']
 
     master_dict = self.m.chromium.builders.get(mastername, {})
     bot_config = master_dict.get('builders', {}).get(buildername)
     master_config = master_dict.get('settings', {})
 
-    bot_type = bot_config.get('bot_type', 'builder_tester')
+    bot_type = override_bot_type or bot_config.get('bot_type', 'builder_tester')
 
     if bot_type == 'tester':
       # Protect against hard to debug mismatches between directory names
