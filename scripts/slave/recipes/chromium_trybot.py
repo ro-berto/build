@@ -91,6 +91,19 @@ BUILDERS = {
           'test_spec_file': 'chromium_memory_trybot.json',
         },
       },
+      'linux_chromium_asan_rel': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'exclude_compile_all': True,
+        'chromium_config': 'chromium_asan',
+        'compile_only': False,
+        'testing': {
+          'platform': 'linux',
+          'test_spec_file': 'chromium_memory_trybot.json',
+        },
+      },
       # Fake builder to provide testing coverage for non-bot_update.
       'linux_no_bot_update': {
         'chromium_config_kwargs': {
