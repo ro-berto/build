@@ -1738,7 +1738,7 @@ def checkout(options, git_slns, specs, buildspec, master,
     # If we have no revision_mapping, then just pass through the first revision
     # as the got_revision.
     got_revisions = {
-        'got_revision': revisions[0],
+        'got_revision': options.revision[0],
     }
 
   if options.output_json:
