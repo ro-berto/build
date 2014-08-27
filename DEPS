@@ -33,17 +33,3 @@ deps_os = {
       "/trunk/tools/third_party/xvfb",
   },
 }
-
-hooks = [
-  {
-    # Removes lone *.pyc files which have no corresponding *.py files.
-    # TODO(sergiyb): This is not called by gclient, when build/ repo is checked
-    # out recursively via DEPS at recursion level 2. This is a bug in glcient,
-    # which needs to be fixed.
-    "name": "remove_lone_pyc_files",
-    "pattern": ".",
-    "action": [
-        "python", "scripts/tools/remove_lone_pyc_files.py",
-    ],
-  },
-]
