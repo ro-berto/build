@@ -517,6 +517,14 @@ def should_filter_tests(name, regexs):
   return not does_regex_match(name, regexs)
 
 
+def should_filter_compile(name, regexs):
+  """Returns true if the builder |name| should filter the sets of compile
+  targets. |regexs| is a list of the regular expressions specifying the
+  builders that should *not* be filtered. If |name| completely matches one of
+  the regular expressions than false is returned, otherwise true."""
+  return not does_regex_match(name, regexs)
+
+
 def get_test_names(gtest_tests, swarming_tests):
   """Returns the names of each of the tests in |gtest_tests| and
   |swarming_tests|. These are lists of GTestTest and SwarmingGTestTest."""
@@ -769,7 +777,9 @@ def GenSteps(api):
                              test_spec.get('non_filter_tests_builders', [])):
         gtest_tests = filter_tests(gtest_tests, api.filter.matching_exes)
         swarming_tests = filter_tests(swarming_tests, api.filter.matching_exes)
-      if buildername in test_spec.get('filter_compile_builders', []):
+      if should_filter_compile(buildername,
+                               test_spec.get('non_filter_compile_builders',
+                                             [])):
         if 'all' in compile_targets:
           compile_targets = api.filter.compile_targets
         else:
@@ -1235,6 +1245,7 @@ def GenTests(api):
     props(buildername='linux_chromium_rel') +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
+        'non_filter_compile_builders': ['linux_chromium_rel'],
       })
     ) +
     api.override_step_data(
@@ -1251,6 +1262,7 @@ def GenTests(api):
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
         'non_filter_tests_builders': ['linux_chromium_rel'],
+        'non_filter_compile_builders': ['linux_chromium_rel'],
         'gtest_tests': [
           {
             'test': 'base_unittests',
@@ -1280,6 +1292,7 @@ def GenTests(api):
     props(buildername='linux_chromium_rel') +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
+        'non_filter_compile_builders': ['linux_chromium_rel'],
         'gtest_tests': [
           {
             'test': 'base_unittests',
@@ -1307,7 +1320,6 @@ def GenTests(api):
     props(buildername='linux_chromium_rel') +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
-        'filter_compile_builders': 'linux_chromium_rel',
         'gtest_tests': [
           {
             'test': 'base_unittests',
@@ -1348,7 +1360,6 @@ def GenTests(api):
             'args': ['--gtest-filter: *NaCl*'],
           },
         ],
-        'filter_compile_builders': 'linux_chromium_browser_asan_rel',
       })
     ) +
     api.override_step_data(

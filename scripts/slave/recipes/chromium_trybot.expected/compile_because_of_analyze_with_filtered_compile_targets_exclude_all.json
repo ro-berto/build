@@ -80,7 +80,6 @@
       "@@@STEP_LOG_LINE@json.output@  \"compile_targets\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"base_unittests\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"filter_compile_builders\": \"linux_chromium_browser_asan_rel\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"args\": \"--gtest-filter: *NaCl*\", @@@",
