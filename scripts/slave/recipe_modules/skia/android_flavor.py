@@ -34,6 +34,7 @@ def device_from_builder_dict(builder_dict):
     return {
       'NexusS': 'nexus_s',
       'Nexus4': 'nexus_4',
+      'Nexus5': 'nexus_5',
       'Nexus7': 'nexus_7',
       'Nexus10': 'nexus_10',
       'GalaxyNexus': 'galaxy_nexus',
@@ -65,7 +66,7 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
           raise Exception('No serial number specified in slaves.cfg and %d '
                           'devices attached; unable to determine which serial '
                           'number to use.' % len(attached_devices))
-      if serial not in attached_devices: 
+      if serial not in attached_devices:
         raise Exception('Device %s not attached!' % serial)
       self._serial = serial
     return self._serial
@@ -78,7 +79,7 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
     ]
     if self._skia_api.c.configuration == config.CONFIG_RELEASE:
       args.append('--release')
-    
+
     return self._skia_api.m.step(name=name, cmd=args + cmd, env=env, **kwargs)
 
   def compile(self, target):
