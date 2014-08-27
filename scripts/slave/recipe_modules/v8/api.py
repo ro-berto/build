@@ -441,8 +441,11 @@ class V8Api(recipe_api.RecipeApi):
       ['valgrind', '--leak-check=full', '--show-reachable=yes',
        '--num-callers=20', relative_d8_path, '-e', '"print(1+2)"'],
       cwd=self.m.path['checkout'],
+      stdout=self.m.raw_io.output(),
+      step_test_data=lambda: self.m.raw_io.test_api.stream_output(
+          'tons of leaks')
     )
-    if not 'no leaks are possible' in (step_result.stdout or ''):
+    if not 'no leaks are possible' in (step_result.stdout):
       step_result.presentation.status = self.m.step.FAILURE
       raise self.m.step.StepFailure('Failed leak check')
 
