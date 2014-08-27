@@ -16,6 +16,7 @@ categories_steps = {
     'Presubmit',
     'Static-Initializers',
     'Check',
+    'Unittests',
     'OptimizeForSize',
     'Webkit',
     'Benchmarks',
