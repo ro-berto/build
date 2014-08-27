@@ -19,7 +19,6 @@ import socket
 import subprocess
 import sys
 import tempfile
-import threading
 import time
 import urllib2
 import urlparse
@@ -32,9 +31,6 @@ BUF_SIZE = 256
 
 # Set this to true on flag day.
 FLAG_DAY = False
-
-# Should we upload the status of this step?
-UPLOAD_TELEMETRY = True
 
 # Define a bunch of directory paths.
 # Relative to the current working directory.
@@ -364,19 +360,9 @@ if sys.platform.startswith('win'):
 else:
   PATCH_TOOL = '/usr/bin/patch'
 
-# For uploading some telemetry data.
-GS_BUCKET = 'chrome-bot-update'
-GSUTIL_BIN = path.join(DEPOT_TOOLS_DIR, 'third_party', 'gsutil', 'gsutil')
-
 # If there is less than 100GB of disk space on the system, then we do
 # a shallow checkout.
 SHALLOW_CLONE_THRESHOLD = 100 * 1024 * 1024 * 1024
-
-# Telemetry data that is gathered during operation
-TELEMETRY = {
-    'run_id': uuid.uuid4().hex,
-    'unmapped_git_svn_urls': [],
-}
 
 
 class SubprocessFailed(Exception):
@@ -545,7 +531,6 @@ def maybe_ignore_revision(master, builder, revision):
   return revision
 
 
-
 def solutions_printer(solutions):
   """Prints gclient solution to stdout."""
   print 'Gclient Solutions'
@@ -585,7 +570,6 @@ def solutions_to_git(input_solutions):
 
   returns: (git solution, svn root of first solution) tuple.
   """
-  warnings = []
   assert input_solutions
   solutions = copy.deepcopy(input_solutions)
   first_solution = True
@@ -610,8 +594,7 @@ def solutions_to_git(input_solutions):
     elif parsed_url.scheme == 'https' and 'googlesource' in parsed_url.netloc:
       pass
     else:
-      warnings.append('path %r not recognized' % parsed_path)
-      print 'Warning: %s' % (warnings[-1],)
+      print 'Warning: %s' % ('path %r not recognized' % parsed_path,)
 
     # Point .DEPS.git is the git version of the DEPS file.
     if not FLAG_DAY and not buildspec:
@@ -638,7 +621,7 @@ def solutions_to_git(input_solutions):
       print 'Removing safesync url %s from %s' % (solution['safesync_url'],
                                                   parsed_path)
       del solution['safesync_url']
-  return solutions, root, buildspec, warnings
+  return solutions, root, buildspec
 
 
 def remove(target):
@@ -1202,7 +1185,6 @@ def get_commit_position_for_git_svn(url, revision):
   else:
     # Use generic 'svn' branch
     print 'INFO: Could not resolve project for SVN URL %r' % (url,)
-    TELEMETRY['unmapped_git_svn_urls'].append(url)
     branch = 'svn'
   return '%s@{#%s}' % (branch, revision)
 
@@ -1371,125 +1353,6 @@ def ensure_checkout(solutions, revisions, first_sln, target_os, target_os_only,
   gclient_configure(solutions, target_os, target_os_only)
 
   return gclient_output
-
-
-class UploadTelemetryThread(threading.Thread):
-  def __init__(self, prefix, master, builder, slave, kwargs):
-    super(UploadTelemetryThread, self).__init__()
-    self.master = master
-    self.builder = builder
-    self.slave = slave
-    self.prefix = prefix
-    self.kwargs = kwargs or {}
-
-  def url(self, name=None):
-    return 'gs://%s/%s/%s/%s/%s.json' % (
-        GS_BUCKET, self.master, self.builder, self.slave, name or self.prefix)
-
-  @staticmethod
-  def _gsutil(*args, **kwargs):
-    fail_gs_codes = kwargs.pop('fail_gs_codes', ())
-    fail_gs_msgs = kwargs.pop('fail_gs_msgs', ())
-    def gs_ok_fn(code, out):
-      if not code:
-        return OK
-      if not fail_gs_msgs and not fail_gs_codes:
-        return RETRY
-
-      lines = out.splitlines()
-      if fail_gs_codes:
-        status = re.match('GSResponseError.*status=(\d+)', lines[-1])
-        if status and int(status.group(1)) in fail_gs_codes:
-          return FAIL
-
-      if fail_gs_msgs:
-        if any(m in lines[0] for m in fail_gs_msgs):
-          return FAIL
-
-      return RETRY
-    kwargs.setdefault('result_fn', gs_ok_fn)
-
-    return call(sys.executable, '-u', GSUTIL_BIN, *args, **kwargs)
-
-  def run(self):
-    if not UPLOAD_TELEMETRY:
-      return
-
-    if self.prefix == 'start':
-      try:
-        self._gsutil('rm', self.url('start_old'), self.url('end_old'),
-                     fail_gs_codes={404})
-      except Exception as e:
-        print 'INFO: Could not rm start_old, end_old. %r' % e
-
-      try:
-        self._gsutil('mv', self.url('start'), self.url('start_old'),
-                     fail_gs_msgs={'InvalidUriError'})
-      except Exception as e:
-        print 'INFO: Could not move start -> start_old. %r' % e
-
-      try:
-        self._gsutil('mv', self.url('end'), self.url('end_old'),
-                     fail_gs_msgs={'InvalidUriError'})
-      except Exception as e:
-        print 'INFO: Could not move end -> end_old. %r' % e
-
-    # Disk space Code duplicated here to get it out of the critical path
-    # when bot_update is not activated.
-    data = {
-        'prefix': self.prefix,
-        'master': self.master,
-        'builder': self.builder,
-        'slave': self.slave,
-    }
-    data.update(self.kwargs)
-    if 'conversion_warnings' not in data:
-      data['conversion_warnings'] = []
-    try:
-      total_disk_space, free_disk_space = get_total_disk_space()
-      total_disk_space_gb = int(total_disk_space / (1024 * 1024 * 1024))
-      used_disk_space_gb = int((total_disk_space - free_disk_space)
-                              / (1024 * 1024 * 1024))
-      percent_used = int(used_disk_space_gb * 100 / total_disk_space_gb)
-      data['disk'] = {
-          'total': total_disk_space_gb,
-          'used': used_disk_space_gb,
-          'percent': percent_used,
-          'status': 'OK',
-          'small': total_disk_space < SHALLOW_CLONE_THRESHOLD,
-      }
-      if total_disk_space < SHALLOW_CLONE_THRESHOLD:
-        data['conversion_warnings'].append(
-            'Small disk: %s GB' % total_disk_space_gb)
-
-      git_version_string = git('--version').strip()
-      git_version_m = re.search(r'git version (\d+\.\d+).*',
-                                git_version_string)
-      if git_version_m:
-        git_version = float(git_version_m.group(1))
-        if git_version < 1.9:
-          data['conversion_warnings'].append(
-              'Git version %0.1f < 1.9' % git_version)
-
-    except Exception as e:
-      data['disk'] = {
-          'status': 'EXCEPTION',
-          'message': str(e),
-      }
-
-    try:
-      self._gsutil('cp', '-', self.url(), stdin_data=json.dumps(data))
-    except Exception:
-      print 'Telemetry upload failed.'
-
-
-def upload_telemetry(prefix, master, builder, slave, **kwargs):
-  telemetry = copy.deepcopy(TELEMETRY)
-  telemetry.update(kwargs)
-  thr = UploadTelemetryThread(prefix, master, builder, slave, telemetry)
-  thr.daemon = True
-  thr.start()
-  return thr
 
 
 def parse_revisions(revisions, root):
@@ -1753,8 +1616,6 @@ def checkout(options, git_slns, specs, buildspec, master,
     # If we're not on recipes, tell annotator about our got_revisions.
     emit_properties(got_revisions)
 
-  return gclient_output, got_revisions
-
 
 def print_help_text(force, output_json, active, master, builder, slave):
   """Print helpful messages to tell devs whats going on."""
@@ -1796,79 +1657,31 @@ def main():
   specs = {}
   exec(options.specs, specs)
   svn_solutions = specs.get('solutions', [])
-  git_slns, svn_root, buildspec, warnings = solutions_to_git(svn_solutions)
+  git_slns, svn_root, buildspec = solutions_to_git(svn_solutions)
   solutions_printer(git_slns)
-
-  # Lets send some telemetry data about bot_update here. This returns a thread
-  # object so we can join on it later.
-  TELEMETRY.update({
-      'active': active,
-      'builder': builder,
-      'conversion_warnings': warnings,
-      'git_solutions': git_slns,
-      'master': master,
-      'patch_root': options.patch_root,
-      'slave': slave,
-      'solutions': specs.get('solutions', []),
-      'specs': options.specs,
-  })
-  all_threads = [
-      upload_telemetry('start', master, builder, slave, unix_time=time.time())
-  ]
-
-  patch_failure = False
 
   try:
     # Dun dun dun, the main part of bot_update.
     revisions, step_text = prepare(options, git_slns, active)
-    gclient_output, got_revisions = checkout(
-        options, git_slns, specs, buildspec, master, svn_root, revisions,
-        step_text)
+    checkout(options, git_slns, specs, buildspec, master, svn_root, revisions,
+             step_text)
 
   except Inactive:
     # Not active, should count as passing.
-    TELEMETRY.update({
-        'passed': True,
-        'patch_failure': False,
-    })
-  except PatchFailed as e:
-    # Patch failure - as far as telemetry is concerned, bot_update passed.
-    TELEMETRY.update({
-        'passed': True,
-        'patch_failure': True,
-    })
+    pass
+  except PatchFailed:
     emit_flag(options.flag_file)
-    patch_failure = True
-  except Exception as e:
+    # Return a specific non-zero exit code for patch failure (because it is
+    # a failure), but make it different than other failures to distinguish
+    # between infra failures (independent from patch author), and patch
+    # failures (that patch author can fix).
+    return 88
+  except Exception:
     # Unexpected failure.
-    TELEMETRY.update({
-        'message': str(e),
-        'passed': False,
-        'patch_failure': False,
-    })
     emit_flag(options.flag_file)
     raise
   else:
-    TELEMETRY.update({
-        'gclient_output': gclient_output,
-        'got_revisions': got_revisions,
-        'passed': True,
-        'patch_failure': False,
-    })
     emit_flag(options.flag_file)
-  finally:
-    thr = upload_telemetry('end', master, builder, slave, unix_time=time.time())
-    all_threads.append(thr)
-    # Sort of wait for all telemetry threads to finish.
-    for thr in all_threads:
-      thr.join(5)
-
-  # Return a specific non-zero exit code for patch failure (because it is
-  # a failure), but make it different than other failures to distinguish between
-  # infra failures (independent from patch author), and patch failures (that
-  # patch author can fix).
-  if patch_failure:
-    return 88
 
 
 if __name__ == '__main__':
