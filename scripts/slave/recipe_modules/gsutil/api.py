@@ -87,6 +87,14 @@ class GSUtilApi(recipe_api.RecipeApi):
         'https://storage.cloud.google.com/%s/%s' % (dest_bucket, dest)
       )
 
+  def signurl(self, private_key_file, bucket, dest, args=None,
+              **kwargs):
+    args = args or []
+    full_source = 'gs://%s/%s' % (bucket, dest)
+    cmd = ['signurl'] + args + [private_key_file, full_source]
+    name = kwargs.pop('name', 'signurl')
+    return self(cmd, name, **kwargs)
+
   def _generate_metadata_args(self, metadata):
     result = []
     if metadata:
