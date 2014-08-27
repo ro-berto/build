@@ -112,12 +112,12 @@
     "name": "provision_devices",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_EXCEPTION@@@"
     ]
   },
   {
     "name": "$final_result",
-    "reason": "Step('provision_devices') failed with return_code 1",
+    "reason": "Infra Failure: Step('provision_devices') returned 1",
     "status_code": 1
   }
 ]

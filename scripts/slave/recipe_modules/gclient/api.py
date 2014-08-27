@@ -59,7 +59,7 @@ class GclientApi(recipe_api.RecipeApi):
     self.USE_MIRROR = None
     self._spec_alias = None
 
-  def __call__(self, name, cmd, **kwargs):
+  def __call__(self, name, cmd, infra_step=True, **kwargs):
     """Wrapper for easy calling of gclient steps."""
     assert isinstance(cmd, (list, tuple))
     prefix = 'gclient '
@@ -69,6 +69,7 @@ class GclientApi(recipe_api.RecipeApi):
     return self.m.python(prefix + name,
                          self.m.path['depot_tools'].join('gclient.py'),
                          cmd,
+                         infra_step=infra_step,
                          **kwargs)
 
   @property
@@ -249,6 +250,7 @@ class GclientApi(recipe_api.RecipeApi):
         self.m.path['build'].join('scripts', 'slave', 'gclient_safe_revert.py'),
         ['.', self.m.path['depot_tools'].join('gclient',
                                               platform_ext={'win': '.bat'})],
+        infra_step=True,
         **kwargs
     )
 
@@ -256,7 +258,7 @@ class GclientApi(recipe_api.RecipeApi):
     """Return a 'gclient runhooks' step."""
     args = args or []
     assert isinstance(args, (list, tuple))
-    self('runhooks', ['runhooks'] + list(args), **kwargs)
+    self('runhooks', ['runhooks'] + list(args), infra_step=False, **kwargs)
 
   @property
   def is_blink_mode(self):
@@ -296,5 +298,6 @@ class GclientApi(recipe_api.RecipeApi):
                 print 'deleting %s' % path_to_file
                 os.remove(path_to_file)
       """,
-      args = [self.m.path['slave_build']]
+      args=[self.m.path['slave_build']],
+      infra_step=True,
     )

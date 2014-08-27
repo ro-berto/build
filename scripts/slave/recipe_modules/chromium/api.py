@@ -455,6 +455,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       self.m.path['build'].join('scripts', 'slave', 'chromium',
                                 'archive_build.py'),
       args,
+      infra_step=True,
       **kwargs)
 
   def checkdeps(self, suffix=None, **kwargs):

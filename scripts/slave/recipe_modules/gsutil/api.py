@@ -37,8 +37,10 @@ class GSUtilApi(recipe_api.RecipeApi):
       cmd_prefix = ['--', gsutil_path]
       gsutil_path = self.resource('gsutil_wrapper.py')
 
-    return self.m.python(full_name, gsutil_path, cmd_prefix + cmd, **kwargs)
+    return self.m.python(full_name, gsutil_path, cmd_prefix + cmd,
+                         infra_step=True, **kwargs)
 
+  @recipe_api.composite_step
   def upload(self, source, bucket, dest, args=None, link_name='gsutil.upload',
              metadata=None, **kwargs):
     args = [] if args is None else args[:]

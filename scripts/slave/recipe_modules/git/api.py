@@ -20,7 +20,8 @@ class GitApi(recipe_api.RecipeApi):
       git_cmd = self.m.path['depot_tools'].join('git.bat')
     can_fail_build = kwargs.pop('can_fail_build', True)
     try:
-      return self.m.step(name, [git_cmd] + list(args), **kwargs)
+      return self.m.step(name, [git_cmd] + list(args), infra_step=True,
+                         **kwargs)
     except self.m.step.StepFailure as f:
       if can_fail_build:
         raise
