@@ -63,14 +63,6 @@ def GenTests(api):
     api.platform.name('win')
   )
 
-  # Test one tryserver configuration when the initial compile fails.
-  yield (
-    api.test('clobber_after_tryserver_failed_compile') +
-    api.properties.tryserver(build_config='Release') +
-    api.platform.name('linux') +
-    api.step_data('compile', retcode=1)
-  )
-
   yield (
     api.test('compile_fail_is_critical_on_main') +
     api.properties.scheduled(
