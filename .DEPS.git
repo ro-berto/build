@@ -48,5 +48,15 @@ skip_child_includes = [
 ]
 
 hooks = [
-    
+    {
+    'action':
+         [
+    'python',
+    'scripts/tools/remove_lone_pyc_files.py'
+],
+    'pattern':
+         '.',
+    'name':
+         'remove_lone_pyc_files'
+}
 ]
