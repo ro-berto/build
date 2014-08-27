@@ -163,8 +163,10 @@ class SkiaApi(recipe_api.RecipeApi):
       self._writefile(actual_version_file, expected_skp_version)
 
     # Copy SKPs to device.
-    self.flavor.copy_directory_to_device(self.local_skp_dirs.skp_dir(),
-                                         self.device_dirs.skp_dir)
+    if str(self.local_skp_dirs.skp_dir()) != str(self.device_dirs.skp_dir):
+      self.flavor.create_clean_device_dir(self.device_dirs.skp_dir)
+    self.flavor.copy_directory_contents_to_device(self.local_skp_dirs.skp_dir(),
+                                                  self.device_dirs.skp_dir)
 
   def install(self):
     """Copy the required executables and files to the device."""
@@ -175,8 +177,8 @@ class SkiaApi(recipe_api.RecipeApi):
 
     # TODO(borenet): Only copy files which have changed.
     # Resources
-    self.flavor.copy_directory_to_device(self.resource_dir,
-                                         self.device_dirs.resource_dir)
+    self.flavor.copy_directory_contents_to_device(self.resource_dir,
+                                                  self.device_dirs.resource_dir)
 
   def common_steps(self):
     """Steps run by both Test and Perf bots."""
@@ -207,13 +209,24 @@ class SkiaApi(recipe_api.RecipeApi):
                                                          self.c.BUILDER_NAME)
     self.flavor.create_clean_host_dir(host_gm_actual_dir)
 
+    repo_gm_expected_root = self.m.path['checkout'].join('expectations', 'gm')
+    device_ignore_tests_path = self.flavor.device_path_join(
+        self.device_dirs.gm_expected_dir,
+        global_constants.GM_IGNORE_TESTS_FILENAME)
+    repo_ignore_tests_path = repo_gm_expected_root.join(
+        global_constants.GM_IGNORE_TESTS_FILENAME)
+    if self.m.path.exists(repo_ignore_tests_path):
+      if str(self.device_dirs.gm_expected_dir) !=  str(repo_gm_expected_root):
+        self.flavor.create_clean_device_dir(self.device_dirs.gm_expected_dir)
+      self.flavor.copy_file_to_device(repo_ignore_tests_path,
+                                      device_ignore_tests_path)
+
     device_gm_expected_dir = self.flavor.device_path_join(
         self.device_dirs.gm_expected_dir,
         builder_name_schema.GetWaterfallBot(self.c.BUILDER_NAME))
     device_gm_expectations_path = self.flavor.device_path_join(
         device_gm_expected_dir, global_constants.GM_EXPECTATIONS_FILENAME)
-    repo_gm_expectations_path = self.m.path['checkout'].join(
-        'expectations', 'gm',
+    repo_gm_expectations_path = repo_gm_expected_root.join(
         builder_name_schema.GetWaterfallBot(self.c.BUILDER_NAME),
         global_constants.GM_EXPECTATIONS_FILENAME)
     if self.m.path.exists(repo_gm_expectations_path):
@@ -221,15 +234,6 @@ class SkiaApi(recipe_api.RecipeApi):
         self.flavor.create_clean_device_dir(device_gm_expected_dir)
         self.flavor.copy_file_to_device(repo_gm_expectations_path,
                                         device_gm_expectations_path)
-
-    device_ignore_tests_path = self.flavor.device_path_join(
-        self.device_dirs.gm_expected_dir,
-        global_constants.GM_IGNORE_TESTS_FILENAME)
-    repo_ignore_tests_path = self.m.path['checkout'].join(
-        'expectations', 'gm', global_constants.GM_IGNORE_TESTS_FILENAME)
-    if self.m.path.exists(repo_ignore_tests_path):
-      self.flavor.copy_file_to_device(repo_ignore_tests_path,
-                                      device_ignore_tests_path)
 
     # Run the test.
     output_dir = self.flavor.device_path_join(self.device_dirs.gm_actual_dir,
@@ -292,8 +296,8 @@ class SkiaApi(recipe_api.RecipeApi):
     self.run(self.flavor.step, 'gm', cmd=args, abort_on_failure=False)
 
     # Teardown.
-    self.flavor.copy_directory_to_host(output_dir,
-                                       host_gm_actual_dir)
+    self.flavor.copy_directory_contents_to_host(output_dir,
+                                                host_gm_actual_dir)
 
     # Compare results to expectations.
     # TODO(borenet): Display a link to the rebaseline server. See
@@ -377,8 +381,9 @@ class SkiaApi(recipe_api.RecipeApi):
                            args=['-R'])
 
     # Copy input files.
-    self.flavor.copy_directory_to_device(self.skimage_in_dir,
-                                         self.device_dirs.skimage_in_dir)
+    self.flavor.copy_directory_contents_to_device(
+        self.skimage_in_dir,
+        self.device_dirs.skimage_in_dir)
 
     # Create output dirs.
     actual_image_subdir = 'images'
@@ -397,13 +402,14 @@ class SkiaApi(recipe_api.RecipeApi):
         global_constants.GM_EXPECTATIONS_FILENAME)
     device_expectations_path = None
     if self.m.path.exists(repo_expectations_path):
-      device_expectations_path = self.flavor.device_path_join(
+      device_expectations_dir = self.flavor.device_path_join(
           self.device_dirs.skimage_expected_dir,
-          builder_name_schema.GetWaterfallBot(self.c.BUILDER_NAME),
+          builder_name_schema.GetWaterfallBot(self.c.BUILDER_NAME))
+      device_expectations_path = self.flavor.device_path_join(
+          device_expectations_dir,
           global_constants.GM_EXPECTATIONS_FILENAME)
       if str(device_expectations_path) != str(repo_expectations_path):
-        self.flavor.create_clean_device_dir(
-            self.device_dirs.skimage_expected_dir)
+        self.flavor.create_clean_device_dir(device_expectations_dir)
         self.flavor.copy_file_to_device(repo_expectations_path,
                                         device_expectations_path)
 
@@ -419,8 +425,9 @@ class SkiaApi(recipe_api.RecipeApi):
     self.run(self.flavor.step, 'skimage', cmd=args, abort_on_failure=False)
 
     # Copy the results back.
-    self.flavor.copy_directory_to_host(self.device_dirs.skimage_out_dir,
-                                       self.skimage_out_dir)
+    self.flavor.copy_directory_contents_to_host(
+        self.device_dirs.skimage_out_dir,
+        self.skimage_out_dir)
 
     # Upload results.
     # Actual images.

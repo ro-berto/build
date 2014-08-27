@@ -52,10 +52,10 @@ def GenTests(api):
             'exists /storage/emulated/legacy/skiabot/skia_skp/skps',
             stdout=api.raw_io.output('')) +
         api.step_data(
-            'exists /storage/emulated/legacy/skiabot/skia_resources',
+            'exists /storage/emulated/legacy/skiabot/skia_gm_actual',
             stdout=api.raw_io.output('')) +
         api.step_data(
-            'exists /storage/emulated/legacy/skiabot/skia_gm_actual',
+            'exists /storage/emulated/legacy/skiabot/skia_gm_expected',
             stdout=api.raw_io.output('')) +
         api.step_data(
             ('exists /storage/emulated/legacy/skiabot/skia_gm_expected/' +
@@ -69,8 +69,6 @@ def GenTests(api):
             ('exists /storage/emulated/legacy/skiabot/skia_gm_expected/'
              'ignored-tests.txt'),
             stdout=api.raw_io.output('')) +
-        api.step_data('exists /storage/emulated/legacy/skiabot/skia_skimage_in',
-                      stdout=api.raw_io.output('')) +
         api.step_data(
             'exists /storage/emulated/legacy/skiabot/skia_skimage_out/images',
             stdout=api.raw_io.output('')) +
@@ -79,7 +77,8 @@ def GenTests(api):
                  builder,
             stdout=api.raw_io.output('')) +
         api.step_data(
-            'exists /storage/emulated/legacy/skiabot/skia_skimage_expected',
+            ('exists /storage/emulated/legacy/skiabot/skia_skimage_expected/' +
+             builder),
             stdout=api.raw_io.output(''))
     )
 

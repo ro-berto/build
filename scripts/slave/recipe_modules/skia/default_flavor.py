@@ -196,7 +196,7 @@ class DefaultFlavorUtils(base_flavor.BaseFlavorUtils):
     """Like os.path.exists(), but for paths on a connected device."""
     return self._skia_api.m.path.exists(path)
 
-  def copy_directory_to_device(self, host_dir, device_dir):
+  def copy_directory_contents_to_device(self, host_dir, device_dir):
     """Like shutil.copytree(), but for copying to a connected device."""
     # For "normal" builders who don't have an attached device, we expect
     # host_dir and device_dir to be the same.
@@ -206,7 +206,7 @@ class DefaultFlavorUtils(base_flavor.BaseFlavorUtils):
                        'host_path and device_path are the same (%s vs %s).' % (
                        str(host_path), str(device_path)))
 
-  def copy_directory_to_host(self, device_dir, host_dir):
+  def copy_directory_contents_to_host(self, device_dir, host_dir):
     """Like shutil.copytree(), but for copying from a connected device."""
     # For "normal" builders who don't have an attached device, we expect
     # host_dir and device_dir to be the same.

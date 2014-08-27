@@ -133,42 +133,11 @@
       "[BUILD_INTERNAL]/scripts/slave/android/adb",
       "-s",
       "014E1F310401C009",
-      "shell",
-      "rm",
-      "-r",
-      "/storage/emulated/legacy/skiabot/skia_resources"
-    ],
-    "name": "rmdir /storage/emulated/legacy/skiabot/skia_resources"
-  },
-  {
-    "cmd": [
-      "[BUILD_INTERNAL]/scripts/slave/android/adb",
-      "-s",
-      "014E1F310401C009",
-      "shell",
-      "if",
-      "[",
-      "-e",
-      "/storage/emulated/legacy/skiabot/skia_resources",
-      "];",
-      "then",
-      "echo",
-      "FILE_EXISTS;",
-      "fi"
-    ],
-    "name": "exists /storage/emulated/legacy/skiabot/skia_resources",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [
-      "[BUILD_INTERNAL]/scripts/slave/android/adb",
-      "-s",
-      "014E1F310401C009",
       "push",
-      "[SLAVE_BUILD]/skia/resources",
+      "[SLAVE_BUILD]/skia/resources/*",
       "/storage/emulated/legacy/skiabot/skia_resources"
     ],
-    "name": "push [SLAVE_BUILD]/skia/resources"
+    "name": "push [SLAVE_BUILD]/skia/resources/*"
   },
   {
     "cmd": [
@@ -261,6 +230,60 @@
       "shell",
       "rm",
       "-r",
+      "/storage/emulated/legacy/skiabot/skia_gm_expected"
+    ],
+    "name": "rmdir /storage/emulated/legacy/skiabot/skia_gm_expected"
+  },
+  {
+    "cmd": [
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "shell",
+      "if",
+      "[",
+      "-e",
+      "/storage/emulated/legacy/skiabot/skia_gm_expected",
+      "];",
+      "then",
+      "echo",
+      "FILE_EXISTS;",
+      "fi"
+    ],
+    "name": "exists /storage/emulated/legacy/skiabot/skia_gm_expected",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "shell",
+      "mkdir",
+      "-p",
+      "/storage/emulated/legacy/skiabot/skia_gm_expected"
+    ],
+    "name": "mkdir /storage/emulated/legacy/skiabot/skia_gm_expected"
+  },
+  {
+    "cmd": [
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "push",
+      "[SLAVE_BUILD]/skia/expectations/gm/ignored-tests.txt",
+      "/storage/emulated/legacy/skiabot/skia_gm_expected/ignored-tests.txt"
+    ],
+    "name": "push [SLAVE_BUILD]/skia/expectations/gm/ignored-tests.txt"
+  },
+  {
+    "cmd": [
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "shell",
+      "rm",
+      "-r",
       "/storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-GalaxyNexus-SGX540-Arm7-Debug"
     ],
     "name": "rmdir /storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-GalaxyNexus-SGX540-Arm7-Debug"
@@ -306,17 +329,6 @@
       "/storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-GalaxyNexus-SGX540-Arm7-Debug/expected-results.json"
     ],
     "name": "push [SLAVE_BUILD]/skia/expectations/gm/Test-Android-GalaxyNexus-SGX540-Arm7-Debug/expected-results.json"
-  },
-  {
-    "cmd": [
-      "[BUILD_INTERNAL]/scripts/slave/android/adb",
-      "-s",
-      "014E1F310401C009",
-      "push",
-      "[SLAVE_BUILD]/skia/expectations/gm/ignored-tests.txt",
-      "/storage/emulated/legacy/skiabot/skia_gm_expected/ignored-tests.txt"
-    ],
-    "name": "push [SLAVE_BUILD]/skia/expectations/gm/ignored-tests.txt"
   },
   {
     "cmd": [
@@ -390,7 +402,7 @@
       "-s",
       "014E1F310401C009",
       "pull",
-      "/storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-GalaxyNexus-SGX540-Arm7-Debug",
+      "/storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-GalaxyNexus-SGX540-Arm7-Debug/*",
       "[SLAVE_BUILD]/gm/actual/Test-Android-GalaxyNexus-SGX540-Arm7-Debug"
     ],
     "name": "pull /storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-GalaxyNexus-SGX540-Arm7-Debug"
@@ -556,11 +568,23 @@
       "[BUILD_INTERNAL]/scripts/slave/android/adb",
       "-s",
       "014E1F310401C009",
-      "push",
-      "[SLAVE_BUILD]/playback/skps",
+      "shell",
+      "mkdir",
+      "-p",
       "/storage/emulated/legacy/skiabot/skia_skp/skps"
     ],
-    "name": "push [SLAVE_BUILD]/playback/skps"
+    "name": "mkdir /storage/emulated/legacy/skiabot/skia_skp/skps"
+  },
+  {
+    "cmd": [
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "push",
+      "[SLAVE_BUILD]/playback/skps/*",
+      "/storage/emulated/legacy/skiabot/skia_skp/skps"
+    ],
+    "name": "push [SLAVE_BUILD]/playback/skps/*"
   },
   {
     "cmd": [
@@ -637,42 +661,11 @@
       "[BUILD_INTERNAL]/scripts/slave/android/adb",
       "-s",
       "014E1F310401C009",
-      "shell",
-      "rm",
-      "-r",
-      "/storage/emulated/legacy/skiabot/skia_skimage_in"
-    ],
-    "name": "rmdir /storage/emulated/legacy/skiabot/skia_skimage_in"
-  },
-  {
-    "cmd": [
-      "[BUILD_INTERNAL]/scripts/slave/android/adb",
-      "-s",
-      "014E1F310401C009",
-      "shell",
-      "if",
-      "[",
-      "-e",
-      "/storage/emulated/legacy/skiabot/skia_skimage_in",
-      "];",
-      "then",
-      "echo",
-      "FILE_EXISTS;",
-      "fi"
-    ],
-    "name": "exists /storage/emulated/legacy/skiabot/skia_skimage_in",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [
-      "[BUILD_INTERNAL]/scripts/slave/android/adb",
-      "-s",
-      "014E1F310401C009",
       "push",
-      "[SLAVE_BUILD]/skimage_in",
+      "[SLAVE_BUILD]/skimage_in/*",
       "/storage/emulated/legacy/skiabot/skia_skimage_in"
     ],
-    "name": "push [SLAVE_BUILD]/skimage_in"
+    "name": "push [SLAVE_BUILD]/skimage_in/*"
   },
   {
     "cmd": [
@@ -808,9 +801,9 @@
       "shell",
       "rm",
       "-r",
-      "/storage/emulated/legacy/skiabot/skia_skimage_expected"
+      "/storage/emulated/legacy/skiabot/skia_skimage_expected/Test-Android-GalaxyNexus-SGX540-Arm7-Debug"
     ],
-    "name": "rmdir /storage/emulated/legacy/skiabot/skia_skimage_expected"
+    "name": "rmdir /storage/emulated/legacy/skiabot/skia_skimage_expected/Test-Android-GalaxyNexus-SGX540-Arm7-Debug"
   },
   {
     "cmd": [
@@ -821,14 +814,14 @@
       "if",
       "[",
       "-e",
-      "/storage/emulated/legacy/skiabot/skia_skimage_expected",
+      "/storage/emulated/legacy/skiabot/skia_skimage_expected/Test-Android-GalaxyNexus-SGX540-Arm7-Debug",
       "];",
       "then",
       "echo",
       "FILE_EXISTS;",
       "fi"
     ],
-    "name": "exists /storage/emulated/legacy/skiabot/skia_skimage_expected",
+    "name": "exists /storage/emulated/legacy/skiabot/skia_skimage_expected/Test-Android-GalaxyNexus-SGX540-Arm7-Debug",
     "stdout": "/path/to/tmp/"
   },
   {
@@ -839,9 +832,9 @@
       "shell",
       "mkdir",
       "-p",
-      "/storage/emulated/legacy/skiabot/skia_skimage_expected"
+      "/storage/emulated/legacy/skiabot/skia_skimage_expected/Test-Android-GalaxyNexus-SGX540-Arm7-Debug"
     ],
-    "name": "mkdir /storage/emulated/legacy/skiabot/skia_skimage_expected"
+    "name": "mkdir /storage/emulated/legacy/skiabot/skia_skimage_expected/Test-Android-GalaxyNexus-SGX540-Arm7-Debug"
   },
   {
     "cmd": [
@@ -886,7 +879,7 @@
       "-s",
       "014E1F310401C009",
       "pull",
-      "/storage/emulated/legacy/skiabot/skia_skimage_out",
+      "/storage/emulated/legacy/skiabot/skia_skimage_out/*",
       "[SLAVE_BUILD]/skimage_out"
     ],
     "name": "pull /storage/emulated/legacy/skiabot/skia_skimage_out"

@@ -97,17 +97,18 @@ class SSHFlavorUtils(default_flavor.DefaultFlavorUtils):
       adj_remote_path = self.user + '@' + adj_remote_path
     return cmd, adj_remote_path
 
-  def copy_directory_to_device(self, host_dir, device_dir):
+  def copy_directory_contents_to_device(self, host_dir, device_dir):
     """Like shutil.copytree(), but for copying to a remote device."""
-    self._remove_device_dir(device_dir)
-    cmd, remote_path = self._make_scp_cmd(device_dir)
-    cmd.extend([host_dir, remote_path])
+    _, remote_path = self._make_scp_cmd(device_dir)
+    cmd = [self._skia_api.resource('scp_dir_contents.sh'),
+           host_dir, remote_path]
     self._skia_api.m.step(name='scp %s' % host_dir, cmd=cmd)
 
-  def copy_directory_to_host(self, device_dir, host_dir):
+  def copy_directory_contents_to_host(self, device_dir, host_dir):
     """Like shutil.copytree(), but for copying from a remote device."""
-    cmd, remote_path = self._make_scp_cmd(device_dir)
-    cmd.extend([remote_path, host_dir])
+    _, remote_path = self._make_scp_cmd(device_dir)
+    cmd = [self._skia_api.resource('scp_dir_contents.sh'),
+           remote_path, host_dir]
     self._skia_api.m.step(name='scp %s' % device_dir, cmd=cmd)
 
   def copy_file_to_device(self, host_path, device_path):
