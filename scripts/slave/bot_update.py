@@ -1734,7 +1734,7 @@ def checkout(options, git_slns, specs, buildspec, master,
   got_revisions = parse_got_revision(gclient_output, revision_mapping,
                                      use_svn_rev)
 
-  if not got_revisions and revisions:
+  if not got_revisions and options.revision:
     # If we have no revision_mapping, then just pass through the first revision
     # as the got_revision.
     got_revisions = {
