@@ -180,7 +180,7 @@ def HistogramPercentiles(histogram, percentiles):
   return output
 
 def GeomMeanAndStdDevFromHistogram(histogram):
-  if not 'buckets' in histogram or not 'count' in histogram:
+  if not 'buckets' in histogram:
     return 0.0, 0.0
   count = 0
   sum_of_logs = 0
