@@ -143,3 +143,13 @@ class GitApi(recipe_api.RecipeApi):
         name='submodule update%s' % step_suffix,
         cwd=dir_path,
         can_fail_build=can_fail_build)
+
+  def get_timestamp(self, commit='HEAD', test_data=None, **kwargs):
+    """Find and return the timestamp of the given commit."""
+    step_test_data = None
+    if test_data is not None:
+      step_test_data = lambda: self.m.raw_io.test_api.stream_output(test_data)
+    return self('show', commit, '--format=%at', '-s',
+                stdout=self.m.raw_io.output(),
+                step_test_data=step_test_data).stdout.rstrip()
+

@@ -488,22 +488,77 @@ class SkiaApi(recipe_api.RecipeApi):
     #self.run_render_skps()
 
   def perf_steps(self):
-    pass
-    # TODO(borenet): Implement these steps.
-    # Setup
-    #self._run_once(self.install)
-    #self.pre_perf()
+    """Run Skia benchmarks."""
+    self._run_once(self.install)
+    self._run_once(self.download_and_copy_skps)
+    is_perf = self.c.role == builder_name_schema.BUILDER_ROLE_PERF
+    if is_perf:
+      self.flavor.create_clean_device_dir(self.device_dirs.perf_data_dir)
 
-    # Perf tests.
-    #self.run_bench()
-    #self.run_nanobench()
-    #self.run_bench_pictures()
+    # Run nanobench.
+    args = ['nanobench', '-i', self.device_dirs.resource_dir,
+            '--skps', self.device_dirs.skp_dir,
+            '--scales', '1.0', '1.1']
+    if 'Valgrind' in self.c.BUILDER_NAME:
+      args.extend(['--loops', '1'])  # Don't care about Valgrind performance.
+    if is_perf:
+      git_timestamp = self.m.git.get_timestamp(test_data='1408633190')
+      json_path = self.flavor.device_path_join(
+          self.device_dirs.perf_data_dir,
+          'nanobench_%s_%s.json' % (
+              self.m.properties['got_revision'],
+              git_timestamp))
+      args.extend(['--outResultsFile', json_path,
+                   '--properties',
+                       'gitHash', self.m.properties['got_revision'],
+                       'build_number', self.m.properties['buildnumber'],
+                   ])
+      keys_blacklist = ['configuration', 'role', 'is_trybot']
+      args.append('--key')
+      for k in sorted(self.c.builder_cfg.keys()):
+        if not k in keys_blacklist:
+          args.extend([k, self.c.builder_cfg[k]])
 
-    # Teardown.
-    #self.post_perf()
+    match = []
+    if 'Android' in self.c.BUILDER_NAME:
+      # Segfaults when run as GPU bench. Very large texture?
+      match.append('~blurroundrect')
+    if 'HD2000' in self.c.BUILDER_NAME:
+      # GPU benches seem to hang on HD2000. Not sure why.
+      args.append('--nogpu')
+    if 'Nexus7' in self.c.BUILDER_NAME:
+      # Crashes in GPU mode.
+      match.append('~draw_stroke')
+      # Fatally overload the driver.
+      match.extend(['~path_fill_big_triangle', '~lines_0'])
+    if 'Xoom' in self.c.BUILDER_NAME:
+      # skia:2847
+      match.append('~patch_grid')
+    if match:
+      args.append('--match')
+      args.extend(match)
 
-    # Verify results.
-    #self.check_for_regressions()
+    self.run(self.flavor.step, 'nanobench', cmd=args, abort_on_failure=False)
+
+    if 'Valgrind' in self.c.BUILDER_NAME:
+      abandonGpuContext = list(args)
+      abandonGpuContext.extend(['--abandonGpuContext', '--nocpu'])
+      self.run(self.flavor.step, 'nanobench --abandonGpuContext',
+               cmd=abandonGpuContext, abort_on_failure=False)
 
     # Upload results.
-    #self.upload_bench_results
+    if is_perf:
+      self.flavor.copy_directory_contents_to_host(
+          self.device_dirs.perf_data_dir, self.perf_data_dir)
+      gsutil_path = self.m.path['depot_tools'].join(
+          'third_party', 'gsutil', 'gsutil')
+      upload_args = [self.c.BUILDER_NAME, self.perf_data_dir,
+                     self.m.properties['got_revision'], gsutil_path]
+      if builder_name_schema.IsTrybot(self.c.BUILDER_NAME):
+        upload_args.append(self.m.properties['issue'])
+      self.run(self.m.python,
+               'Upload Nanobench Results',
+               script=self.resource('upload_bench_results.py'),
+               args=upload_args,
+               cwd=self.m.path['checkout'],
+               abort_on_failure=False)

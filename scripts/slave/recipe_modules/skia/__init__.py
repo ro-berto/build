@@ -6,6 +6,7 @@ DEPS = [
   'adb',
   'file',
   'gclient',
+  'git',
   'gsutil',
   'path',
   'platform',

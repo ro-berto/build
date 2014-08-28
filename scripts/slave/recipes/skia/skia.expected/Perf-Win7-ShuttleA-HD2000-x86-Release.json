@@ -38,49 +38,33 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/chromeos/bin/chromeos_make",
-      "-d",
-      "daisy",
+      "python",
+      "-u",
+      "\nimport os\nimport sys\nwith open(sys.argv[1], 'w') as f:\n  f.write(os.path.join(os.path.expanduser('~'), 'src'))\n",
+      "/path/to/tmp/"
+    ],
+    "name": "get CHROME_PATH",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@with open(sys.argv[1], 'w') as f:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  f.write(os.path.join(os.path.expanduser('~'), 'src'))@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "make",
       "most",
       "BUILDTYPE=Release"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
-      "GYP_DEFINES": "skia_arch_width=32 skia_warnings_as_errors=0"
+      "CHROME_PATH": "/home/chrome-bot/src",
+      "GYP_DEFINES": "qt_sdk=C:/Qt/4.8.5/ skia_arch_width=32 skia_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgHelp"
     },
     "name": "build most"
-  },
-  {
-    "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.126",
-      "rm",
-      "-rf",
-      "/usr/local/skiabot/bin"
-    ],
-    "name": "rmdir /usr/local/skiabot/bin"
-  },
-  {
-    "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.126",
-      "mkdir",
-      "-p",
-      "/usr/local/skiabot/bin"
-    ],
-    "name": "mkdir /usr/local/skiabot/bin"
-  },
-  {
-    "cmd": [
-      "[BUILD]/scripts/slave/recipe_modules/skia/resources/scp_dir_contents.sh",
-      "[SLAVE_BUILD]/skia/resources",
-      "root@192.168.1.126:/usr/local/skiabot/skia_resources"
-    ],
-    "name": "scp [SLAVE_BUILD]/skia/resources"
   },
   {
     "cmd": [
@@ -168,59 +152,43 @@
   },
   {
     "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.126",
-      "rm",
-      "-rf",
-      "/usr/local/skiabot/skia_skp/skps"
+      "python",
+      "-u",
+      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[SLAVE_BUILD]/perfdata/Perf-Win7-ShuttleA-HD2000-x86-Release/data"
     ],
-    "name": "rmdir /usr/local/skiabot/skia_skp/skps"
+    "name": "rmtree [SLAVE_BUILD]/perfdata/Perf-Win7-ShuttleA-HD2000-x86-Release/data",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
   },
   {
     "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.126",
-      "mkdir",
-      "-p",
-      "/usr/local/skiabot/skia_skp/skps"
+      "python",
+      "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[SLAVE_BUILD]/perfdata/Perf-Win7-ShuttleA-HD2000-x86-Release/data",
+      "511"
     ],
-    "name": "mkdir /usr/local/skiabot/skia_skp/skps"
-  },
-  {
-    "cmd": [
-      "[BUILD]/scripts/slave/recipe_modules/skia/resources/scp_dir_contents.sh",
-      "[SLAVE_BUILD]/playback/skps",
-      "root@192.168.1.126:/usr/local/skiabot/skia_skp/skps"
-    ],
-    "name": "scp [SLAVE_BUILD]/playback/skps"
-  },
-  {
-    "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.126",
-      "rm",
-      "-rf",
-      "/usr/local/skiabot/skia_perf"
-    ],
-    "name": "rmdir /usr/local/skiabot/skia_perf"
-  },
-  {
-    "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.126",
-      "mkdir",
-      "-p",
-      "/usr/local/skiabot/skia_perf"
-    ],
-    "name": "mkdir /usr/local/skiabot/skia_perf"
+    "name": "makedirs [SLAVE_BUILD]/perfdata/Perf-Win7-ShuttleA-HD2000-x86-Release/data",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
   },
   {
     "cmd": [
@@ -236,30 +204,16 @@
   },
   {
     "cmd": [
-      "scp",
-      "-P",
-      "22",
-      "[SLAVE_BUILD]/skia/out/config/chromeos-daisy/Release/nanobench",
-      "root@192.168.1.126:/usr/local/skiabot/bin/nanobench"
-    ],
-    "name": "scp [SLAVE_BUILD]/skia/out/config/chromeos-daisy/Release/nanobench"
-  },
-  {
-    "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.126",
-      "/usr/local/skiabot/bin/nanobench",
+      "[SLAVE_BUILD]/skia/out/Release/nanobench",
       "-i",
-      "/usr/local/skiabot/skia_resources",
+      "[SLAVE_BUILD]/skia/resources",
       "--skps",
-      "/usr/local/skiabot/skia_skp/skps",
+      "[SLAVE_BUILD]/playback/skps",
       "--scales",
       "1.0",
       "1.1",
       "--outResultsFile",
-      "/usr/local/skiabot/skia_perf/nanobench_abc123_1408633190.json",
+      "[SLAVE_BUILD]/perfdata/Perf-Win7-ShuttleA-HD2000-x86-Release/data/nanobench_abc123_1408633190.json",
       "--properties",
       "gitHash",
       "abc123",
@@ -267,31 +221,24 @@
       "5",
       "--key",
       "arch",
-      "Arm7",
+      "x86",
       "gpu",
-      "MaliT604",
+      "HD2000",
       "model",
-      "Daisy",
+      "ShuttleA",
       "os",
-      "ChromeOS"
+      "Win7",
+      "--nogpu"
     ],
     "name": "nanobench"
-  },
-  {
-    "cmd": [
-      "[BUILD]/scripts/slave/recipe_modules/skia/resources/scp_dir_contents.sh",
-      "root@192.168.1.126:/usr/local/skiabot/skia_perf",
-      "[SLAVE_BUILD]/perfdata/Perf-ChromeOS-Daisy-MaliT604-Arm7-Release/data"
-    ],
-    "name": "scp /usr/local/skiabot/skia_perf"
   },
   {
     "cmd": [
       "python",
       "-u",
       "[BUILD]/scripts/slave/recipe_modules/skia/resources/upload_bench_results.py",
-      "Perf-ChromeOS-Daisy-MaliT604-Arm7-Release",
-      "[SLAVE_BUILD]/perfdata/Perf-ChromeOS-Daisy-MaliT604-Arm7-Release/data",
+      "Perf-Win7-ShuttleA-HD2000-x86-Release",
+      "[SLAVE_BUILD]/perfdata/Perf-Win7-ShuttleA-HD2000-x86-Release/data",
       "abc123",
       "[DEPOT_TOOLS]/third_party/gsutil/gsutil"
     ],

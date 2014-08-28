@@ -957,5 +957,28 @@
       "@@@STEP_LOG_LINE@python.inline@  sys.exit(1)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_run_skia",
+      "-d",
+      "galaxy_nexus",
+      "-s",
+      "014E1F310401C009",
+      "nanobench",
+      "-i",
+      "/storage/emulated/legacy/skiabot/skia_resources",
+      "--skps",
+      "/storage/emulated/legacy/skiabot/skia_skp/skps",
+      "--scales",
+      "1.0",
+      "1.1",
+      "--match",
+      "~blurroundrect"
+    ],
+    "env": {
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+    },
+    "name": "nanobench"
   }
 ]

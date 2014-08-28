@@ -27,10 +27,13 @@ def GenTests(api):
   builders = [
     'Build-Ubuntu13.10-GCC4.8-Arm7-Debug-CrOS_Daisy',
     'Build-Ubuntu13.10-GCC4.8-x86_64-Debug',
+    'Perf-Android-Nexus7-Tegra3-Arm7-Release',
     'Perf-ChromeOS-Daisy-MaliT604-Arm7-Release',
+    'Perf-Win7-ShuttleA-HD2000-x86-Release',
+    'Perf-Win7-ShuttleA-HD2000-x86-Release-Trybot',
     'Test-Android-GalaxyNexus-SGX540-Arm7-Debug',
     'Test-Android-Nexus10-MaliT604-Arm7-Release',
-    'Test-Android-Xoom-Tegra2-Arm7-Release',
+    'Test-Android-Xoom-Tegra2-Arm7-Debug',
     'Test-ChromeOS-Alex-GMA3150-x86-Debug',
     'Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes',
     'Test-Mac10.8-MacMini4.1-GeForce320M-x86_64-Debug',
@@ -44,13 +47,16 @@ def GenTests(api):
   ]
 
   def AndroidTestData(builder):
-    return (
+    test_data = (
         api.step_data(
             'get EXTERNAL_STORAGE dir',
             stdout=api.raw_io.output('/storage/emulated/legacy')) +
         api.step_data(
             'exists /storage/emulated/legacy/skiabot/skia_skp/skps',
-            stdout=api.raw_io.output('')) +
+            stdout=api.raw_io.output(''))
+    )
+    if 'Test' in builder:
+      test_data += (
         api.step_data(
             'exists /storage/emulated/legacy/skiabot/skia_gm_actual',
             stdout=api.raw_io.output('')) +
@@ -80,7 +86,13 @@ def GenTests(api):
             ('exists /storage/emulated/legacy/skiabot/skia_skimage_expected/' +
              builder),
             stdout=api.raw_io.output(''))
-    )
+      )
+
+    if 'Perf' in builder:
+      test_data += api.step_data(
+          'exists /storage/emulated/legacy/skiabot/skia_perf',
+          stdout=api.raw_io.output(''))
+    return test_data
 
   for builder in builders:
     prop_slavename = (
@@ -89,7 +101,9 @@ def GenTests(api):
       api.test(builder) +
       api.properties(buildername=builder,
                      mastername=mastername,
-                     slavename=prop_slavename) +
+                     slavename=prop_slavename,
+                     got_revision='abc123',
+                     buildnumber=5) +
       api.path.exists(
           api.path['slave_build'].join(
               'skia', 'expectations', 'gm',
@@ -106,6 +120,10 @@ def GenTests(api):
       test += api.step_data('has ccache?', retcode=1)
     if 'Android' in builder:
       test += AndroidTestData(builder)
+    if 'Trybot' in builder:
+      test += api.properties(issue=500,
+                             patchset=1,
+                             rietveld='https://codereview.chromium.org')
     yield test
 
   builder = 'Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes'

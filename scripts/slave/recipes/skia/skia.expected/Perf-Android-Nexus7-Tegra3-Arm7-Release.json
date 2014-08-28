@@ -38,49 +38,108 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/chromeos/bin/chromeos_make",
-      "-d",
-      "daisy",
+      "which",
+      "ccache"
+    ],
+    "name": "has ccache?",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_ninja",
       "most",
-      "BUILDTYPE=Release"
+      "-d",
+      "nexus_7"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
-      "GYP_DEFINES": "skia_arch_width=32 skia_warnings_as_errors=0"
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "BUILDTYPE": "Release",
+      "GYP_DEFINES": "skia_arch_width=32 skia_warnings_as_errors=0",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
     "name": "build most"
   },
   {
     "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.126",
-      "rm",
-      "-rf",
-      "/usr/local/skiabot/bin"
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/adb/resources/list_devices.py",
+      "['[BUILD_INTERNAL]/scripts/slave/android/adb', 'devices']",
+      "/path/to/tmp/json"
     ],
-    "name": "rmdir /usr/local/skiabot/bin"
+    "name": "List adb devices",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"014E1F310401C009\"@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.126",
-      "mkdir",
-      "-p",
-      "/usr/local/skiabot/bin"
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "shell",
+      "echo",
+      "$EXTERNAL_STORAGE"
     ],
-    "name": "mkdir /usr/local/skiabot/bin"
+    "name": "get EXTERNAL_STORAGE dir",
+    "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [
-      "[BUILD]/scripts/slave/recipe_modules/skia/resources/scp_dir_contents.sh",
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "root"
+    ],
+    "name": "adb root"
+  },
+  {
+    "cmd": [
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "remount"
+    ],
+    "name": "adb remount"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_kill_skia",
+      "-s",
+      "014E1F310401C009"
+    ],
+    "name": "kill skia"
+  },
+  {
+    "cmd": [
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "shell",
+      "stop"
+    ],
+    "name": "stop shell"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_push_if_needed",
+      "-s",
+      "014E1F310401C009",
       "[SLAVE_BUILD]/skia/resources",
-      "root@192.168.1.126:/usr/local/skiabot/skia_resources"
+      "/storage/emulated/legacy/skiabot/skia_resources"
     ],
-    "name": "scp [SLAVE_BUILD]/skia/resources"
+    "env": {
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+    },
+    "name": "push [SLAVE_BUILD]/skia/resources"
   },
   {
     "cmd": [
@@ -168,59 +227,102 @@
   },
   {
     "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.126",
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "shell",
       "rm",
-      "-rf",
-      "/usr/local/skiabot/skia_skp/skps"
+      "-r",
+      "/storage/emulated/legacy/skiabot/skia_skp/skps"
     ],
-    "name": "rmdir /usr/local/skiabot/skia_skp/skps"
+    "name": "rmdir /storage/emulated/legacy/skiabot/skia_skp/skps"
   },
   {
     "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.126",
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "shell",
+      "if",
+      "[",
+      "-e",
+      "/storage/emulated/legacy/skiabot/skia_skp/skps",
+      "];",
+      "then",
+      "echo",
+      "FILE_EXISTS;",
+      "fi"
+    ],
+    "name": "exists /storage/emulated/legacy/skiabot/skia_skp/skps",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "shell",
       "mkdir",
       "-p",
-      "/usr/local/skiabot/skia_skp/skps"
+      "/storage/emulated/legacy/skiabot/skia_skp/skps"
     ],
-    "name": "mkdir /usr/local/skiabot/skia_skp/skps"
+    "name": "mkdir /storage/emulated/legacy/skiabot/skia_skp/skps"
   },
   {
     "cmd": [
-      "[BUILD]/scripts/slave/recipe_modules/skia/resources/scp_dir_contents.sh",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_push_if_needed",
+      "-s",
+      "014E1F310401C009",
       "[SLAVE_BUILD]/playback/skps",
-      "root@192.168.1.126:/usr/local/skiabot/skia_skp/skps"
+      "/storage/emulated/legacy/skiabot/skia_skp/skps"
     ],
-    "name": "scp [SLAVE_BUILD]/playback/skps"
+    "env": {
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+    },
+    "name": "push [SLAVE_BUILD]/playback/skps"
   },
   {
     "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.126",
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "shell",
       "rm",
-      "-rf",
-      "/usr/local/skiabot/skia_perf"
+      "-r",
+      "/storage/emulated/legacy/skiabot/skia_perf"
     ],
-    "name": "rmdir /usr/local/skiabot/skia_perf"
+    "name": "rmdir /storage/emulated/legacy/skiabot/skia_perf"
   },
   {
     "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.126",
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "shell",
+      "if",
+      "[",
+      "-e",
+      "/storage/emulated/legacy/skiabot/skia_perf",
+      "];",
+      "then",
+      "echo",
+      "FILE_EXISTS;",
+      "fi"
+    ],
+    "name": "exists /storage/emulated/legacy/skiabot/skia_perf",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "-s",
+      "014E1F310401C009",
+      "shell",
       "mkdir",
       "-p",
-      "/usr/local/skiabot/skia_perf"
+      "/storage/emulated/legacy/skiabot/skia_perf"
     ],
-    "name": "mkdir /usr/local/skiabot/skia_perf"
+    "name": "mkdir /storage/emulated/legacy/skiabot/skia_perf"
   },
   {
     "cmd": [
@@ -236,30 +338,22 @@
   },
   {
     "cmd": [
-      "scp",
-      "-P",
-      "22",
-      "[SLAVE_BUILD]/skia/out/config/chromeos-daisy/Release/nanobench",
-      "root@192.168.1.126:/usr/local/skiabot/bin/nanobench"
-    ],
-    "name": "scp [SLAVE_BUILD]/skia/out/config/chromeos-daisy/Release/nanobench"
-  },
-  {
-    "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.126",
-      "/usr/local/skiabot/bin/nanobench",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_run_skia",
+      "-d",
+      "nexus_7",
+      "-s",
+      "014E1F310401C009",
+      "--release",
+      "nanobench",
       "-i",
-      "/usr/local/skiabot/skia_resources",
+      "/storage/emulated/legacy/skiabot/skia_resources",
       "--skps",
-      "/usr/local/skiabot/skia_skp/skps",
+      "/storage/emulated/legacy/skiabot/skia_skp/skps",
       "--scales",
       "1.0",
       "1.1",
       "--outResultsFile",
-      "/usr/local/skiabot/skia_perf/nanobench_abc123_1408633190.json",
+      "/storage/emulated/legacy/skiabot/skia_perf/nanobench_abc123_1408633190.json",
       "--properties",
       "gitHash",
       "abc123",
@@ -269,29 +363,42 @@
       "arch",
       "Arm7",
       "gpu",
-      "MaliT604",
+      "Tegra3",
       "model",
-      "Daisy",
+      "Nexus7",
       "os",
-      "ChromeOS"
+      "Android",
+      "--match",
+      "~blurroundrect",
+      "~draw_stroke",
+      "~path_fill_big_triangle",
+      "~lines_0"
     ],
+    "env": {
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+    },
     "name": "nanobench"
   },
   {
     "cmd": [
-      "[BUILD]/scripts/slave/recipe_modules/skia/resources/scp_dir_contents.sh",
-      "root@192.168.1.126:/usr/local/skiabot/skia_perf",
-      "[SLAVE_BUILD]/perfdata/Perf-ChromeOS-Daisy-MaliT604-Arm7-Release/data"
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_pull_if_needed",
+      "-s",
+      "014E1F310401C009",
+      "/storage/emulated/legacy/skiabot/skia_perf",
+      "[SLAVE_BUILD]/perfdata/Perf-Android-Nexus7-Tegra3-Arm7-Release/data"
     ],
-    "name": "scp /usr/local/skiabot/skia_perf"
+    "env": {
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+    },
+    "name": "pull /storage/emulated/legacy/skiabot/skia_perf"
   },
   {
     "cmd": [
       "python",
       "-u",
       "[BUILD]/scripts/slave/recipe_modules/skia/resources/upload_bench_results.py",
-      "Perf-ChromeOS-Daisy-MaliT604-Arm7-Release",
-      "[SLAVE_BUILD]/perfdata/Perf-ChromeOS-Daisy-MaliT604-Arm7-Release/data",
+      "Perf-Android-Nexus7-Tegra3-Arm7-Release",
+      "[SLAVE_BUILD]/perfdata/Perf-Android-Nexus7-Tegra3-Arm7-Release/data",
       "abc123",
       "[DEPOT_TOOLS]/third_party/gsutil/gsutil"
     ],

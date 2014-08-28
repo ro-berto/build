@@ -755,5 +755,32 @@
       "@@@STEP_LOG_LINE@python.inline@  sys.exit(1)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
+  },
+  {
+    "cmd": [
+      "scp",
+      "-P",
+      "22",
+      "[SLAVE_BUILD]/skia/out/config/chromeos-x86-alex/Debug/nanobench",
+      "root@192.168.1.126:/usr/local/skiabot/bin/nanobench"
+    ],
+    "name": "scp [SLAVE_BUILD]/skia/out/config/chromeos-x86-alex/Debug/nanobench"
+  },
+  {
+    "cmd": [
+      "ssh",
+      "-p",
+      "22",
+      "root@192.168.1.126",
+      "/usr/local/skiabot/bin/nanobench",
+      "-i",
+      "/usr/local/skiabot/skia_resources",
+      "--skps",
+      "/usr/local/skiabot/skia_skp/skps",
+      "--scales",
+      "1.0",
+      "1.1"
+    ],
+    "name": "nanobench"
   }
 ]

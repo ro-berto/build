@@ -597,5 +597,51 @@
       "@@@STEP_LOG_LINE@python.inline@  sys.exit(1)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
+  },
+  {
+    "cmd": [
+      "valgrind",
+      "--gen-suppressions=all",
+      "--leak-check=full",
+      "--track-origins=yes",
+      "--error-exitcode=1",
+      "--num-callers=40",
+      "--suppressions=[SLAVE_BUILD]/skia/tools/valgrind.supp",
+      "[SLAVE_BUILD]/skia/out/Release/nanobench",
+      "-i",
+      "[SLAVE_BUILD]/skia/resources",
+      "--skps",
+      "[SLAVE_BUILD]/playback/skps",
+      "--scales",
+      "1.0",
+      "1.1",
+      "--loops",
+      "1"
+    ],
+    "name": "nanobench"
+  },
+  {
+    "cmd": [
+      "valgrind",
+      "--gen-suppressions=all",
+      "--leak-check=full",
+      "--track-origins=yes",
+      "--error-exitcode=1",
+      "--num-callers=40",
+      "--suppressions=[SLAVE_BUILD]/skia/tools/valgrind.supp",
+      "[SLAVE_BUILD]/skia/out/Release/nanobench",
+      "-i",
+      "[SLAVE_BUILD]/skia/resources",
+      "--skps",
+      "[SLAVE_BUILD]/playback/skps",
+      "--scales",
+      "1.0",
+      "1.1",
+      "--loops",
+      "1",
+      "--abandonGpuContext",
+      "--nocpu"
+    ],
+    "name": "nanobench --abandonGpuContext"
   }
 ]

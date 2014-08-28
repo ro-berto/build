@@ -161,7 +161,8 @@ def skia(c):
   c.do_test_steps = c.role == builder_name_schema.BUILDER_ROLE_TEST
   c.do_perf_steps = (c.role == builder_name_schema.BUILDER_ROLE_PERF or
                      (c.role == builder_name_schema.BUILDER_ROLE_TEST and
-                      c.configuration == CONFIG_DEBUG))
+                      c.configuration == CONFIG_DEBUG) or
+                     'Valgrind' in c.BUILDER_NAME)
   c.gyp_env.GYP_DEFINES.update(gyp_defs_from_builder_dict(c.builder_cfg))
   c.slave_cfg = slaves_cfg.get(c.MASTER_NAME)[c.SLAVE_NAME]
 
