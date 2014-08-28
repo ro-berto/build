@@ -130,14 +130,13 @@
   },
   {
     "cmd": [
-      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_push_if_needed",
       "-s",
       "014E1F310401C009",
-      "push",
-      "[SLAVE_BUILD]/skia/resources/*",
+      "[SLAVE_BUILD]/skia/resources",
       "/storage/emulated/legacy/skiabot/skia_resources"
     ],
-    "name": "push [SLAVE_BUILD]/skia/resources/*"
+    "name": "push [SLAVE_BUILD]/skia/resources"
   },
   {
     "cmd": [
@@ -403,11 +402,10 @@
   },
   {
     "cmd": [
-      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_pull_if_needed",
       "-s",
       "014E1F310401C009",
-      "pull",
-      "/storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-Xoom-Tegra2-Arm7-Release/*",
+      "/storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-Xoom-Tegra2-Arm7-Release",
       "[SLAVE_BUILD]/gm/actual/Test-Android-Xoom-Tegra2-Arm7-Release"
     ],
     "name": "pull /storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-Xoom-Tegra2-Arm7-Release"
@@ -584,14 +582,13 @@
   },
   {
     "cmd": [
-      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_push_if_needed",
       "-s",
       "014E1F310401C009",
-      "push",
-      "[SLAVE_BUILD]/playback/skps/*",
+      "[SLAVE_BUILD]/playback/skps",
       "/storage/emulated/legacy/skiabot/skia_skp/skps"
     ],
-    "name": "push [SLAVE_BUILD]/playback/skps/*"
+    "name": "push [SLAVE_BUILD]/playback/skps"
   },
   {
     "cmd": [
@@ -669,14 +666,13 @@
   },
   {
     "cmd": [
-      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_push_if_needed",
       "-s",
       "014E1F310401C009",
-      "push",
-      "[SLAVE_BUILD]/skimage_in/*",
+      "[SLAVE_BUILD]/skimage_in",
       "/storage/emulated/legacy/skiabot/skia_skimage_in"
     ],
-    "name": "push [SLAVE_BUILD]/skimage_in/*"
+    "name": "push [SLAVE_BUILD]/skimage_in"
   },
   {
     "cmd": [
@@ -887,11 +883,10 @@
   },
   {
     "cmd": [
-      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_pull_if_needed",
       "-s",
       "014E1F310401C009",
-      "pull",
-      "/storage/emulated/legacy/skiabot/skia_skimage_out/*",
+      "/storage/emulated/legacy/skiabot/skia_skimage_out",
       "[SLAVE_BUILD]/skimage_out"
     ],
     "name": "pull /storage/emulated/legacy/skiabot/skia_skimage_out"

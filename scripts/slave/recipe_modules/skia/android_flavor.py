@@ -5,7 +5,6 @@
 
 import config
 import default_flavor
-import posixpath
 
 
 """Android flavor utils, used for building for and running tests on Android."""
@@ -129,20 +128,17 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
 
   def copy_directory_contents_to_device(self, host_dir, device_dir):
     """Like shutil.copytree(), but for copying to a connected device."""
-    if isinstance(host_dir, str):
-      host_path = self._skia_api.m.path.sep.join((host_dir, '*'))
-    else:
-      host_path = host_dir.join('*')
-    self._skia_api.m.adb(name='push %s' % host_path,
-                         serial=self.serial,
-                         cmd=['push', host_path, device_dir])
+    self._skia_api.m.step(
+        name='push %s' % host_dir,
+        cmd=[self.android_bin.join('adb_push_if_needed'),
+             '-s', self.serial, host_dir, device_dir])
 
   def copy_directory_contents_to_host(self, device_dir, host_dir):
     """Like shutil.copytree(), but for copying from a connected device."""
-    self._skia_api.m.adb(name='pull %s' % device_dir,
-                         serial=self.serial,
-                         cmd=['pull', posixpath.join(device_dir, '*'),
-                              host_dir])
+    self._skia_api.m.step(
+        name='pull %s' % device_dir,
+        cmd=[self.android_bin.join('adb_pull_if_needed'),
+             '-s', self.serial, device_dir, host_dir])
 
   def copy_file_to_device(self, host_path, device_path):
     """Like shutil.copyfile, but for copying to a connected device."""
