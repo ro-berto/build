@@ -218,7 +218,6 @@ ENABLED_MASTERS = [
     'chromium.chrome',
     'chromium.chromedriver',
     'chromium.chromiumos',
-    'chromium.endure',
     'chromium',
     'chromium.fyi',
     'chromium.git',

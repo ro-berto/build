@@ -165,43 +165,6 @@ class ResultsDashboardFormatTest(unittest.TestCase):
     ]
     self.assertEqual(expected_points, actual_points)
 
-  def test_MakeListOfPoints_MultiValueRow(self):
-    """A test for the special case of sending time series."""
-    # The master name is gotten when making the list of points,
-    # so it must be stubbed out here.
-    self.mox.StubOutWithMock(slave_utils, 'GetActiveMaster')
-    slave_utils.GetActiveMaster().AndReturn('ChromiumEndure')
-    self.mox.ReplayAll()
-
-    actual_points = results_dashboard.MakeListOfPoints(
-        {
-            'gmail_test': {
-                'traces': {
-                    'dom_nodes': [[10, 123], [20.5, 234]],
-                },
-                'units': 'count',
-                'units_x': 'seconds',
-                'rev': '12345',
-            }
-        },
-        'linux', 'endure', 'chromium.endure', 'Builder', 10, {})
-    expected_points = [
-        {
-            'master': 'ChromiumEndure',
-            'bot': 'linux',
-            'test': 'endure/gmail_test/dom_nodes',
-            'revision': 12345,
-            'data': [[10, 123], [20.5, 234]],
-            'units': 'count',
-            'units_x': 'seconds',
-            'masterid': 'chromium.endure',
-            'buildername': 'Builder',
-            'buildnumber': 10,
-            'supplemental_columns': {},
-        }
-    ]
-    self.assertEqual(expected_points, actual_points)
-
   def test_MakeListOfPoints_TimestampUsedWhenRevisionIsNaN(self):
     """Tests sending data with a git hash as "revision"."""
     self.mox.StubOutWithMock(datetime, 'datetime')

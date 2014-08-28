@@ -528,7 +528,6 @@ def _GetParsers():
   parsers = {
       'gtest': gtest_utils.GTestLogParser,
       'graphing': process_log_utils.GraphingLogProcessor,
-      'endure': process_log_utils.GraphingEndureLogProcessor,
       'pagecycler': process_log_utils.GraphingPageCyclerLogProcessor,
   }
   return parsers
