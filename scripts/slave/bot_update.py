@@ -664,7 +664,7 @@ def gclient_configure(solutions, target_os, target_os_only):
     f.write(get_gclient_spec(solutions, target_os, target_os_only))
 
 
-def gclient_sync(buildspec, shallow):
+def gclient_sync(with_branch_heads, shallow):
   # We just need to allocate a filename.
   fd, gclient_output_file = tempfile.mkstemp(suffix='.json')
   os.close(fd)
@@ -672,7 +672,7 @@ def gclient_sync(buildspec, shallow):
   cmd = [gclient_bin, 'sync', '--verbose', '--reset', '--force',
          '--ignore_locks', '--output-json', gclient_output_file ,
          '--nohooks', '--noprehooks']
-  if buildspec:
+  if with_branch_heads:
     cmd += ['--with_branch_heads']
   if shallow:
     cmd += ['--shallow']
@@ -1290,7 +1290,8 @@ def ensure_deps_revisions(deps_url_mapping, solutions, revisions):
 
 def ensure_checkout(solutions, revisions, first_sln, target_os, target_os_only,
                     patch_root, issue, patchset, patch_url, rietveld_server,
-                    revision_mapping, buildspec, gyp_env, shallow, runhooks):
+                    revision_mapping, buildspec, gyp_env, shallow, runhooks,
+                    with_branch_heads):
   # Get a checkout of each solution, without DEPS or hooks.
   # Calling git directly because there is no way to run Gclient without
   # invoking DEPS.
@@ -1322,7 +1323,7 @@ def ensure_checkout(solutions, revisions, first_sln, target_os, target_os_only,
   gclient_configure(solutions, target_os, target_os_only)
 
   # Let gclient do the DEPS syncing.
-  gclient_output = gclient_sync(buildspec, shallow)
+  gclient_output = gclient_sync(buildspec or with_branch_heads, shallow)
 
   # Now that gclient_sync has finished, we should revert any .DEPS.git so that
   # presubmit doesn't complain about it being modified.
@@ -1462,6 +1463,8 @@ def parse_args():
                         'Does not override the --shallow flag')
   parse.add_option('--no_runhooks', action='store_true',
                    help='Do not run hooks on official builder.')
+  parse.add_option('--with_branch_heads', action='store_true',
+                    help='Always pass --with_branch_heads to gclient.')
 
 
   options, args = parse.parse_args()
@@ -1565,7 +1568,8 @@ def checkout(options, git_slns, specs, buildspec, master,
           runhooks=not options.no_runhooks,
 
           # Finally, extra configurations such as shallowness of the clone.
-          shallow=options.shallow)
+          shallow=options.shallow,
+          with_branch_heads=options.with_branch_heads)
       gclient_output = ensure_checkout(**checkout_parameters)
     except GclientSyncFailed:
       print 'We failed gclient sync, lets delete the checkout and retry.'
