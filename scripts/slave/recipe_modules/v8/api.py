@@ -436,6 +436,7 @@ class V8Api(recipe_api.RecipeApi):
       step_test_data=lambda: self.m.raw_io.test_api.stream_output(
           'tons of leaks', stream='stderr')
     )
+    step_result.presentation.logs['stderr'] = step_result.stderr.splitlines()
     if not 'no leaks are possible' in (step_result.stderr):
       step_result.presentation.status = self.m.step.FAILURE
       raise self.m.step.StepFailure('Failed leak check')

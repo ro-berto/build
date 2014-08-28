@@ -109,6 +109,8 @@
     "name": "Simple Leak Check",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
+      "@@@STEP_LOG_LINE@stderr@tons of leaks@@@",
+      "@@@STEP_LOG_END@stderr@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
