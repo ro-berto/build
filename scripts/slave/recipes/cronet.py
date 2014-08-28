@@ -42,9 +42,10 @@ BUILDERS = {
     'upload_package': True,
     'kwargs': {
       'BUILD_CONFIG': 'Release',
+      'REPO_NAME': 'src',
     },
     'custom': {
-      'deps_file': 'DEPS'
+      'deps_file': '.DEPS.git'
     },
   },
   'Android Cronet ARMv6 Builder': {
