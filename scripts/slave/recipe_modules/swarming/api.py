@@ -308,16 +308,29 @@ class SwarmingApi(recipe_api.RecipeApi):
       finally:
         step_result = self.m.step.active_result
         step_result.swarming_task = task
+      try:
+        json_data = step_result.json.output
+        links = step_result.presentation.links
+        for index, shard in enumerate(json_data['shards']):
+          isolated_out = shard['isolated_out']
+          link_name = 'shard #%d isolated out' % index
+          links[link_name] = isolated_out['view_url']
+      except (KeyError, AttributeError):
+        # No isolated_out data exists (or any JSON at all)
+        pass
       yield step_result
 
 
   def _default_collect_step(self, task, **kwargs):
     """Produces a step that collects a result of an arbitrary task."""
     # By default wait for all tasks to finish even if some of them failed.
+    args = self._get_collect_cmd_args(task)
+    args.extend(['--task-summary-json', self.m.json.output()])
     return self.m.python(
         name=self._get_step_name('swarming', task),
         script=self.m.swarming_client.path.join('swarming.py'),
-        args=self._get_collect_cmd_args(task),
+        args=args,
+        step_test_data=functools.partial(self._gen_collect_step_data, task),
         **kwargs)
 
   def _gtest_collect_step(self, merged_test_output, task, **kwargs):
@@ -406,6 +419,29 @@ class SwarmingApi(recipe_api.RecipeApi):
         } for i, suffix in enumerate(subtasks)
       },
     })
+
+  def _gen_collect_step_data(self, task):
+    """Generates an expected value of --task-summary-json in 'collect' step.
+
+    Used when running recipes to generate test expectations.
+    """
+    if task.shards == 1:
+      subtasks = ['']
+    else:
+      subtasks = [':%d:%d' % (task.shards, i) for i in range(task.shards)]
+    return self.m.json.test_api.output({
+      'task_name': task.task_id,
+      'shards': [
+        {
+          'isolated_out': {
+              'view_url': 'blah',
+          },
+          'machine_id': 'fakemachine',
+          'machine_tag': 'fakemachinetag',
+        } for i, suffix in enumerate(subtasks)
+      ],
+    })
+
 
   def _trigger_followup(self, task, step_result):
     """Called as followup_fn for 'trigger' to add URLs to task shards."""
