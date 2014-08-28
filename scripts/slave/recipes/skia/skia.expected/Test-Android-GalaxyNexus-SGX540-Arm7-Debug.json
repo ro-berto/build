@@ -136,6 +136,9 @@
       "[SLAVE_BUILD]/skia/resources",
       "/storage/emulated/legacy/skiabot/skia_resources"
     ],
+    "env": {
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+    },
     "name": "push [SLAVE_BUILD]/skia/resources"
   },
   {
@@ -403,6 +406,9 @@
       "/storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-GalaxyNexus-SGX540-Arm7-Debug",
       "[SLAVE_BUILD]/gm/actual/Test-Android-GalaxyNexus-SGX540-Arm7-Debug"
     ],
+    "env": {
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+    },
     "name": "pull /storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-GalaxyNexus-SGX540-Arm7-Debug"
   },
   {
@@ -581,6 +587,9 @@
       "[SLAVE_BUILD]/playback/skps",
       "/storage/emulated/legacy/skiabot/skia_skp/skps"
     ],
+    "env": {
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+    },
     "name": "push [SLAVE_BUILD]/playback/skps"
   },
   {
@@ -661,6 +670,9 @@
       "[SLAVE_BUILD]/skimage_in",
       "/storage/emulated/legacy/skiabot/skia_skimage_in"
     ],
+    "env": {
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+    },
     "name": "push [SLAVE_BUILD]/skimage_in"
   },
   {
@@ -877,6 +889,9 @@
       "/storage/emulated/legacy/skiabot/skia_skimage_out",
       "[SLAVE_BUILD]/skimage_out"
     ],
+    "env": {
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+    },
     "name": "pull /storage/emulated/legacy/skiabot/skia_skimage_out"
   },
   {

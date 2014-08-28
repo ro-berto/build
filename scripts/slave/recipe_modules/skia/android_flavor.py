@@ -131,14 +131,16 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
     self._skia_api.m.step(
         name='push %s' % host_dir,
         cmd=[self.android_bin.join('adb_push_if_needed'),
-             '-s', self.serial, host_dir, device_dir])
+             '-s', self.serial, host_dir, device_dir],
+        env={'ANDROID_SDK_ROOT': DEFAULT_ANDROID_SDK_ROOT})
 
   def copy_directory_contents_to_host(self, device_dir, host_dir):
     """Like shutil.copytree(), but for copying from a connected device."""
     self._skia_api.m.step(
         name='pull %s' % device_dir,
         cmd=[self.android_bin.join('adb_pull_if_needed'),
-             '-s', self.serial, device_dir, host_dir])
+             '-s', self.serial, device_dir, host_dir],
+        env={'ANDROID_SDK_ROOT': DEFAULT_ANDROID_SDK_ROOT})
 
   def copy_file_to_device(self, host_path, device_path):
     """Like shutil.copyfile, but for copying to a connected device."""
