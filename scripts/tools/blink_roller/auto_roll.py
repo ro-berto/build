@@ -148,7 +148,7 @@ class AutoRoller(object):
   CHROMIUM_SVN_DEPS_URL = 'http://src.chromium.org/chrome/trunk/src/DEPS'
   # 'webkit_revision': '149598',
   REVISION_REGEXP = (
-      r'^  [\'"]%s_revision[\'"]: [\'"](?P<revision>[0-9a-fA-F]{2,40})[\'"],$')
+      r'^  [\'"]%s_revision[\'"]: [\'"](?P<revision>[0-9a-fA-F]{2,40})[\'"],')
 
   ROLL_BOT_INSTRUCTIONS = textwrap.dedent(
     '''This roll was created by the Blink AutoRollBot.

@@ -406,7 +406,7 @@ class AutoRollTestGit(AutoRollTestBase):
 
   DEPS_CONTENT = '''
 vars = {
-  'test_project_revision': '%s',
+  'test_project_revision': '%s', # Some comment.
 }
 ''' % OLD_REV
 
