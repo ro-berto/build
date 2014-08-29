@@ -40,10 +40,11 @@ def _UploadJSONResults(builder_name, build_number, dest_gsbase, gs_subdir,
       with gzip.open(gzipped_file, 'wb') as f_out:
         f_out.writelines(f_in)
     full_path_to_upload = gzipped_file
-  cmd = [gsutil_path, 'cp', '-a', 'public-read', full_path_to_upload,
-         '/'.join((dest_gsbase, gs_dir, file_to_upload))]
+  cmd = [gsutil_path]
   for header in http_header:
     cmd.extend(['-h', header])
+  cmd.extend(['cp', '-a', 'public-read', full_path_to_upload,
+              '/'.join((dest_gsbase, gs_dir, file_to_upload))])
   print ' '.join(cmd)
   subprocess.check_call(cmd)
 
