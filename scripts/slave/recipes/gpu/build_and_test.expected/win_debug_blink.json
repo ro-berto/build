@@ -393,7 +393,7 @@
       "--browser=debug",
       "-vv",
       "--use-devtools-active-port",
-      "--extra-browser-args=--enable-logging=stderr --blink-platform-log-channels=ScriptedAnimationController"
+      "--extra-browser-args=--enable-logging=stderr --blink-platform-log-channels=ScriptedAnimationController,Timers"
     ],
     "name": "webgl_conformance_tests"
   },

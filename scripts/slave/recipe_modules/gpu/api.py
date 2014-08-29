@@ -267,8 +267,8 @@ class GpuApi(recipe_api.RecipeApi):
     # WebGL conformance tests.
     capture(self._run_isolated_telemetry_gpu_test('webgl_conformance',
         extra_browser_args=[
-          # For diagnosing crbug.com/393331
-          '--blink-platform-log-channels=ScriptedAnimationController'
+          # For diagnosing crbug.com/393331 and crbug.com/408358
+          '--blink-platform-log-channels=ScriptedAnimationController,Timers'
         ]))
 
     # Run extra D3D9 conformance in Windows FYI GPU bots
