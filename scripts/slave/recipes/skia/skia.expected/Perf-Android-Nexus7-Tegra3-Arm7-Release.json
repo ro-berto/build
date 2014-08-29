@@ -370,6 +370,7 @@
       "Android",
       "--match",
       "~blurroundrect",
+      "~patch_grid",
       "~draw_stroke",
       "~path_fill_big_triangle",
       "~lines_0"

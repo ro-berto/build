@@ -974,7 +974,8 @@
       "1.0",
       "1.1",
       "--match",
-      "~blurroundrect"
+      "~blurroundrect",
+      "~patch_grid"
     ],
     "env": {
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"

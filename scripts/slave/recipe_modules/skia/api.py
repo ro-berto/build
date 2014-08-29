@@ -523,6 +523,8 @@ class SkiaApi(recipe_api.RecipeApi):
     if 'Android' in self.c.BUILDER_NAME:
       # Segfaults when run as GPU bench. Very large texture?
       match.append('~blurroundrect')
+      # skia:2847
+      match.append('~patch_grid')
     if 'HD2000' in self.c.BUILDER_NAME:
       # GPU benches seem to hang on HD2000. Not sure why.
       args.append('--nogpu')
@@ -531,9 +533,6 @@ class SkiaApi(recipe_api.RecipeApi):
       match.append('~draw_stroke')
       # Fatally overload the driver.
       match.extend(['~path_fill_big_triangle', '~lines_0'])
-    if 'Xoom' in self.c.BUILDER_NAME:
-      # skia:2847
-      match.append('~patch_grid')
     if match:
       args.append('--match')
       args.extend(match)
