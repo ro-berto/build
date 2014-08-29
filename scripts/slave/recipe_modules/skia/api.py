@@ -553,8 +553,8 @@ class SkiaApi(recipe_api.RecipeApi):
           self.device_dirs.perf_data_dir, self.perf_data_dir)
       gsutil_path = self.m.path['depot_tools'].join(
           'third_party', 'gsutil', 'gsutil')
-      upload_args = [self.c.BUILDER_NAME, self.perf_data_dir,
-                     self.got_revision, gsutil_path]
+      upload_args = [self.c.BUILDER_NAME, self.m.properties['buildnumber'],
+                     self.perf_data_dir, self.got_revision, gsutil_path]
       if builder_name_schema.IsTrybot(self.c.BUILDER_NAME):
         upload_args.append(self.m.properties['issue'])
       self.run(self.m.python,

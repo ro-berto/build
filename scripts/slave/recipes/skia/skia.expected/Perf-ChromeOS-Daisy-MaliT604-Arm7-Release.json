@@ -291,6 +291,7 @@
       "-u",
       "[BUILD]/scripts/slave/recipe_modules/skia/resources/upload_bench_results.py",
       "Perf-ChromeOS-Daisy-MaliT604-Arm7-Release",
+      "5",
       "[SLAVE_BUILD]/perfdata/Perf-ChromeOS-Daisy-MaliT604-Arm7-Release/data",
       "164710",
       "[DEPOT_TOOLS]/third_party/gsutil/gsutil"

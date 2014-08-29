@@ -9,6 +9,7 @@ import gzip
 import os
 import os.path
 import re
+import subprocess
 import sys
 import tempfile
 
@@ -17,8 +18,9 @@ from common.skia import global_constants
 from datetime import datetime
 
 
-def _UploadJSONResults(builder_name, dest_gsbase, gs_subdir, full_json_path,
-                       gzipped=True, gsutil_path='gsutil', issue_number=None):
+def _UploadJSONResults(builder_name, build_number, dest_gsbase, gs_subdir,
+                       full_json_path, gzipped=True, gsutil_path='gsutil',
+                       issue_number=None):
   now = datetime.utcnow()
   gs_json_path = '/'.join((str(now.year).zfill(4), str(now.month).zfill(2),
                            str(now.day).zfill(2), str(now.hour).zfill(2)))
@@ -46,7 +48,7 @@ def _UploadJSONResults(builder_name, dest_gsbase, gs_subdir, full_json_path,
   subprocess.check_call(cmd)
 
 
-def main(builder_name, perf_data_dir, got_revision, gsutil_path,
+def main(builder_name, build_number, perf_data_dir, got_revision, gsutil_path,
          issue_number=None):
   """Uploads gzipped nanobench JSON data."""
   # Find the nanobench JSON
@@ -64,8 +66,9 @@ def main(builder_name, perf_data_dir, got_revision, gsutil_path,
     dest_gsbase = 'gs://' + global_constants.GS_GM_BUCKET
     nanobench_json_file = os.path.join(perf_data_dir,
                                        nanobench_name)
-    _UploadJSONResults(builder_name, dest_gsbase, 'nano-json-v1',
-                       nanobench_json_file, gsutil_path=gsutil_path)
+    _UploadJSONResults(builder_name, build_number, dest_gsbase, 'nano-json-v1',
+                       nanobench_json_file, gsutil_path=gsutil_path,
+                       issue_number=issue_number)
 
 
 if __name__ == '__main__':
