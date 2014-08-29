@@ -115,7 +115,7 @@ PROJECT_CONFIGS = {
             before_rev, after_rev)),
   },
   'skia': {
-    'cq_extra_trybots': ['tryserver.blink:linux_blink_rel'],
+    'cq_extra_trybots': ['tryserver.blink:linux_blink_rel,linux_blink_dbg'],
     'extra_emails_fn': lambda: [_get_skia_sheriff()],
     'git_mode': True,
     'path_to_project': os.path.join('third_party', 'skia'),
