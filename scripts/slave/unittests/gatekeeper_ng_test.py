@@ -2732,6 +2732,10 @@ class GatekeeperTest(unittest.TestCase):
     self.call_gatekeeper(
         json=os.path.join(SCRIPT_DIR, os.pardir, 'gatekeeper.json'))
 
+  def testCheckedInTreeConfigIsValid(self): # pylint: disable=R0201
+    tree_config = os.path.join(SCRIPT_DIR, os.pardir, 'gatekeeper_trees.json')
+    gatekeeper_ng_config.load_gatekeeper_tree_config(tree_config)
+
 
 if __name__ == '__main__':
   with utils.print_coverage(include=[__file__]):
