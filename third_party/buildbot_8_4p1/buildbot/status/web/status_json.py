@@ -613,7 +613,7 @@ class ChangesJsonResource(JsonResource):
         wfd = defer.waitForDeferred(d)
         yield wfd
         chobjs = wfd.getResult()
-        yield {change.number: change.asDict() for change in chobjs}
+        yield dict([(change.number, change.asDict()) for change in chobjs])
 
 
 class ChangeSourcesJsonResource(JsonResource):
