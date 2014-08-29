@@ -104,7 +104,8 @@ class PerformanceLogProcessor(object):
     """Initializes the log processor.
 
     Args:
-      revision: Chromium revision number.
+      revision: Revision number; this currently could also be a git number.
+          It is sent to the perf dashboard to be used as the x-value.
       factory_properties: Factory properties dict.
       build_properties: Build properties dict.
       webkit_revision: Blink revision number.
@@ -150,18 +151,18 @@ class PerformanceLogProcessor(object):
       raise ValueError('Must provide a revision to PerformanceLogProcessor.')
 
     self._webkit_revision = webkit_revision
-    if build_properties:
-      if factory_properties.get('show_v8_revision'):
-        self._v8_revision = build_properties.get('got_v8_revision', 'undefined')
-      else:
-        self._v8_revision = 'undefined'
-      self._webrtc_revision = build_properties.get('got_webrtc_revision',
-                                                   'undefined')
-      self._version = build_properties.get('version') or 'undefined'
-      self._channel = build_properties.get('channel') or 'undefined'
-    else:
-      self._v8_revision = 'undefined'
-      self._webrtc_revision = 'undefined'
+
+    if not build_properties:
+      build_properties = {}
+    self._git_revision = build_properties.get('git_revision', 'undefined')
+    self._version = build_properties.get('version', 'undefined')
+    self._channel = build_properties.get('channel', 'undefined')
+    self._webrtc_revision = build_properties.get('got_webrtc_revision',
+                                                 'undefined')
+
+    self._v8_revision = 'undefined'
+    if factory_properties.get('show_v8_revision'):
+      self._v8_revision = build_properties.get('got_v8_revision', 'undefined')
 
     self._percentiles = [.1, .25, .5, .75, .90, .95, .99]
 
@@ -507,11 +508,6 @@ class GraphingLogProcessor(PerformanceLogProcessor):
     # A dict of Graph objects, by name.
     self._graphs = {}
 
-    # Version and channel, from build properties.
-    build_properties = kwargs.get('build_properties', {})
-    self._version = build_properties.get('version', 'undefined')
-    self._channel = build_properties.get('channel', 'undefined')
-
     # Load performance expectations for this test.
     self.LoadPerformanceExpectations()
 
@@ -692,6 +688,7 @@ class GraphingLogProcessor(PerformanceLogProcessor):
     graph_dict = collections.OrderedDict([
         ('traces', graph.BuildTracesDict()),
         ('rev', str(self._revision)),
+        ('git_revision', str(self._git_revision)),
         ('webkit_rev', str(self._webkit_revision)),
         ('webrtc_rev', str(self._webrtc_revision)),
         ('v8_rev', str(self._v8_revision)),

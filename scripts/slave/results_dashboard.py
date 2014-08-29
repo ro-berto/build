@@ -286,6 +286,14 @@ def _RevisionNumberColumns(data, master):
       if key in data and data[key] != 'undefined':
         revision_supplemental_columns['r_' + key] = data[key]
 
+  # If possible, also send the git hash.
+  # If no other "default revision" type is specified already, use the git hash.
+  # This will change how it is displayed on the perf dashboard.
+  if 'git_revision' in data and data['git_revision'] != 'undefined':
+    revision_supplemental_columns['r_chromium'] = data['git_revision']
+    if 'a_default_rev' not in revision_supplemental_columns:
+      revision_supplemental_columns['a_default_rev'] = 'r_chromium'
+
   return revision, revision_supplemental_columns
 
 
