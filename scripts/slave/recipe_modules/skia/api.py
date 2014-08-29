@@ -70,6 +70,9 @@ class SkiaApi(recipe_api.RecipeApi):
                     SLAVE_NAME=self.m.properties['slavename'])
     self._set_flavor()
 
+    # self.got_revision will be set in checkout_steps.
+    self.got_revision = None
+
     # Set some important paths.
     slave_dir = self.m.path['slave_build']
     skia_dir = slave_dir.join('skia')
@@ -111,7 +114,8 @@ class SkiaApi(recipe_api.RecipeApi):
 
   def checkout_steps(self):
     """Run the steps to obtain a checkout of Skia."""
-    self.m.gclient.checkout()
+    update_step = self.m.gclient.checkout()
+    self.got_revision = update_step.presentation.properties['got_revision']
     self.m.tryserver.maybe_apply_issue()
 
   def compile_steps(self, clobber=False):
@@ -505,12 +509,10 @@ class SkiaApi(recipe_api.RecipeApi):
       git_timestamp = self.m.git.get_timestamp(test_data='1408633190')
       json_path = self.flavor.device_path_join(
           self.device_dirs.perf_data_dir,
-          'nanobench_%s_%s.json' % (
-              self.m.properties['got_revision'],
-              git_timestamp))
+          'nanobench_%s_%s.json' % (self.got_revision, git_timestamp))
       args.extend(['--outResultsFile', json_path,
                    '--properties',
-                       'gitHash', self.m.properties['got_revision'],
+                       'gitHash', self.got_revision,
                        'build_number', self.m.properties['buildnumber'],
                    ])
       keys_blacklist = ['configuration', 'role', 'is_trybot']
@@ -552,7 +554,7 @@ class SkiaApi(recipe_api.RecipeApi):
       gsutil_path = self.m.path['depot_tools'].join(
           'third_party', 'gsutil', 'gsutil')
       upload_args = [self.c.BUILDER_NAME, self.perf_data_dir,
-                     self.m.properties['got_revision'], gsutil_path]
+                     self.got_revision, gsutil_path]
       if builder_name_schema.IsTrybot(self.c.BUILDER_NAME):
         upload_args.append(self.m.properties['issue'])
       self.run(self.m.python,

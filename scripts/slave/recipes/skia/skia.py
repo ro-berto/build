@@ -102,7 +102,6 @@ def GenTests(api):
       api.properties(buildername=builder,
                      mastername=mastername,
                      slavename=prop_slavename,
-                     got_revision='abc123',
                      buildnumber=5) +
       api.path.exists(
           api.path['slave_build'].join(
