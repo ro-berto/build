@@ -368,12 +368,10 @@
       "Nexus7",
       "os",
       "Android",
+      "--nogpu",
       "--match",
       "~blurroundrect",
-      "~patch_grid",
-      "~draw_stroke",
-      "~path_fill_big_triangle",
-      "~lines_0"
+      "~patch_grid"
     ],
     "env": {
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"

@@ -342,10 +342,12 @@ class SkiaApi(recipe_api.RecipeApi):
       match.append('~downsamplebitmap_text')
     if 'Xoom' in self.c.BUILDER_NAME:
       match.append('~WritePixels')  # skia:1699
-    if 'SGX540' in self.c.BUILDER_NAME:
-      # Nexus S and Galaxy Nexus are still crashing.
-      # Maybe the GPU's the problem?
-      args.append('--nogpu')
+    # Though their GPUs are interesting, these don't test anything on
+    # the CPU that other ARMv7+NEON bots don't test faster (N5).
+    if ('GalaxyNexus' in self.c.BUILDER_NAME or
+        'Nexus10'     in self.c.BUILDER_NAME or
+        'Nexus7'      in self.c.BUILDER_NAME):
+      match.append('--nocpu')
 
     if match:
       args.append('--match')
@@ -527,14 +529,15 @@ class SkiaApi(recipe_api.RecipeApi):
       match.append('~blurroundrect')
       # skia:2847
       match.append('~patch_grid')
-    if 'HD2000' in self.c.BUILDER_NAME:
-      # GPU benches seem to hang on HD2000. Not sure why.
-      args.append('--nogpu')
     if 'Nexus7' in self.c.BUILDER_NAME:
-      # Crashes in GPU mode.
-      match.append('~draw_stroke')
-      # Fatally overload the driver.
-      match.extend(['~path_fill_big_triangle', '~lines_0'])
+      # skia:2774
+      args.append('--nogpu')
+    if 'GalaxyNexus' in self.c.BUILDER_NAME:
+      # Covered by faster CPUs in the same processor family (N7).
+      args.append('--nocpu')
+    if 'HD2000' in self.c.BUILDER_NAME:
+      # skia:2895
+      match.extend(['~gradient', '~etc1bitmap'])
     if match:
       args.append('--match')
       args.extend(match)

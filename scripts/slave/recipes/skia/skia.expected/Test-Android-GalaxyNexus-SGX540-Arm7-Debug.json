@@ -443,9 +443,9 @@
       "--verbose",
       "--resourcePath",
       "/storage/emulated/legacy/skiabot/skia_resources",
-      "--nogpu",
       "--match",
-      "~giantbitmap"
+      "~giantbitmap",
+      "--nocpu"
     ],
     "env": {
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
@@ -973,6 +973,7 @@
       "--scales",
       "1.0",
       "1.1",
+      "--nocpu",
       "--match",
       "~blurroundrect",
       "~patch_grid"

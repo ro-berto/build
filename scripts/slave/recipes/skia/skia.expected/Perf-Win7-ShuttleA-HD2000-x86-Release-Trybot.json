@@ -258,7 +258,9 @@
       "ShuttleA",
       "os",
       "Win7",
-      "--nogpu"
+      "--match",
+      "~gradient",
+      "~etc1bitmap"
     ],
     "name": "nanobench"
   },
