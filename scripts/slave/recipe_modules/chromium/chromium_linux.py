@@ -175,7 +175,8 @@ SPEC = {
       'android_config': 'tests_base',
       'tests': [
         steps.GTestTest('base_unittests'),
-        steps.AndroidInstrumentationTest('MojoTest', 'mojo_test_apk'),
+        steps.AndroidInstrumentationTest('MojoTest', 'mojo_test_apk',
+            test_data='bindings:mojo/public/interfaces/bindings/tests/data'),
         steps.AndroidInstrumentationTest(
             'AndroidWebViewTest', 'android_webview_test_apk',
             test_data='webview:android_webview/test/data/device_files',
@@ -222,7 +223,8 @@ SPEC = {
       'android_config': 'tests_base',
       'tests': [
         steps.GTestTest('base_unittests'),
-        steps.AndroidInstrumentationTest('MojoTest', 'mojo_test_apk'),
+        steps.AndroidInstrumentationTest('MojoTest', 'mojo_test_apk',
+            test_data='bindings:mojo/public/interfaces/bindings/tests/data'),
         steps.AndroidInstrumentationTest(
             'AndroidWebViewTest', 'android_webview_test_apk',
             test_data='webview:android_webview/test/data/device_files',
