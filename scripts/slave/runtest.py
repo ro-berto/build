@@ -249,7 +249,7 @@ def _IsGitDirectory(dir_path):
     return p.wait() == 0
 
 
-def _GetSvnRevision(in_directory):
+def _GetRevision(in_directory):
   """Returns the SVN revision, git commit position, or git hash.
 
   Args:
@@ -257,8 +257,8 @@ def _GetSvnRevision(in_directory):
 
   Returns:
     An SVN revision as a string if the given directory is in a SVN repository,
-    a git SHA1 hash if the given directory is in a git repository, or an empty
-    string if the revision number couldn't be found.
+    or a git commit position number, or if that's not available, a git hash.
+    If all of that fails, an empty string is returned.
   """
   import xml.dom.minidom
   if not os.path.exists(os.path.join(in_directory, '.svn')):
@@ -361,14 +361,14 @@ def _GenerateJSONForTestResults(options, results_tracker):
       generate_json_options.chrome_revision = options.revision
     else:
       chrome_dir = chromium_utils.FindUpwardParent(build_dir, 'third_party')
-      generate_json_options.chrome_revision = _GetSvnRevision(chrome_dir)
+      generate_json_options.chrome_revision = _GetRevision(chrome_dir)
 
     if options.webkit_revision:
       generate_json_options.webkit_revision = options.webkit_revision
     else:
       webkit_dir = chromium_utils.FindUpward(
         build_dir, 'third_party', 'WebKit', 'Source')
-      generate_json_options.webkit_revision = _GetSvnRevision(webkit_dir)
+      generate_json_options.webkit_revision = _GetRevision(webkit_dir)
 
     # Generate results JSON file and upload it to the appspot server.
     generator = gtest_slave_utils.GenerateJSONResults(
@@ -615,7 +615,7 @@ def _CreateResultsTracker(tracker_class, options):
       try:
         webkit_dir = chromium_utils.FindUpward(
             build_dir, 'third_party', 'WebKit', 'Source')
-        webkit_revision = _GetSvnRevision(webkit_dir)
+        webkit_revision = _GetRevision(webkit_dir)
       except Exception:
         webkit_revision = 'undefined'
 
@@ -625,7 +625,7 @@ def _CreateResultsTracker(tracker_class, options):
     elif options.revision:
       revision = options.revision
     else:
-      revision = _GetSvnRevision(os.path.dirname(build_dir))
+      revision = _GetRevision(os.path.dirname(build_dir))
 
     tracker_obj = tracker_class(
         revision=revision,
@@ -708,7 +708,7 @@ def _GetDataFromLogProcessor(log_processor):
     put together in process_log_utils. Each chart data dictionary contains:
       "traces": A dictionary mapping trace names to value, stddev pairs.
       "units": Units for the chart.
-      "rev": A revision number (or git hash).
+      "rev": A revision number or git hash.
       Plus other revision keys, e.g. webkit_rev, ver, v8_rev.
   """
   charts = {}
