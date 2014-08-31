@@ -45,7 +45,7 @@ BUILDERS = {
     'bucket': 'chrome-perf',
     'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip'
                                % api.properties['parent_revision']),
-    'num_device_shards': 1,
+    'num_device_shards': 8,
   },
   'Android Nexus10 Perf': {
     'perf_id': 'android-nexus10',
