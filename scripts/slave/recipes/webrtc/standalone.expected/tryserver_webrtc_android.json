@@ -239,23 +239,6 @@
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "gtest",
       "-s",
-      "modules_unittests",
-      "--verbose",
-      "--isolate-file-path",
-      "webrtc/modules/modules_unittests.isolate"
-    ],
-    "env": {
-      "CHECKOUT_SOURCE_ROOT": "[SLAVE_BUILD]/src"
-    },
-    "name": "modules_unittests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "gtest",
-      "-s",
       "system_wrappers_unittests",
       "--verbose",
       "--isolate-file-path",
@@ -307,23 +290,6 @@
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "gtest",
       "-s",
-      "video_capture_tests",
-      "--verbose",
-      "--isolate-file-path",
-      "webrtc/modules/video_capture/video_capture_tests.isolate"
-    ],
-    "env": {
-      "CHECKOUT_SOURCE_ROOT": "[SLAVE_BUILD]/src"
-    },
-    "name": "video_capture_tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "gtest",
-      "-s",
       "video_engine_core_unittests",
       "--verbose",
       "--isolate-file-path",
@@ -333,23 +299,6 @@
       "CHECKOUT_SOURCE_ROOT": "[SLAVE_BUILD]/src"
     },
     "name": "video_engine_core_unittests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "gtest",
-      "-s",
-      "video_engine_tests",
-      "--verbose",
-      "--isolate-file-path",
-      "webrtc/video_engine_tests.isolate"
-    ],
-    "env": {
-      "CHECKOUT_SOURCE_ROOT": "[SLAVE_BUILD]/src"
-    },
-    "name": "video_engine_tests"
   },
   {
     "cmd": [
