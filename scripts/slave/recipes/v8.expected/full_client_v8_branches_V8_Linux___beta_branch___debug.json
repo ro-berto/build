@@ -124,7 +124,7 @@
       "--arch",
       "ia32",
       "--testname",
-      "heap-unittests runtime-unittests compiler-unittests base-unittests",
+      "unittests",
       "--no-variants"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
@@ -140,7 +140,7 @@
       "--arch",
       "ia32",
       "--testname",
-      "mjsunit fuzz-natives cctest message preparser",
+      "default",
       "--flaky-tests",
       "skip"
     ],
@@ -157,7 +157,7 @@
       "--arch",
       "ia32",
       "--testname",
-      "mjsunit fuzz-natives cctest message preparser",
+      "default",
       "--flaky-tests",
       "run"
     ],

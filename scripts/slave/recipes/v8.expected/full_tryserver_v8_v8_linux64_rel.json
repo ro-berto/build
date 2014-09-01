@@ -155,7 +155,7 @@
       "--arch",
       "x64",
       "--testname",
-      "heap-unittests runtime-unittests compiler-unittests base-unittests",
+      "unittests",
       "--no-variants",
       "--quickcheck",
       "--json-test-results",
@@ -174,7 +174,7 @@
       "--arch",
       "x64",
       "--testname",
-      "mjsunit fuzz-natives cctest message preparser",
+      "default",
       "--quickcheck",
       "--json-test-results",
       "/path/to/tmp/json"

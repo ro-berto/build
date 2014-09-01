@@ -32,7 +32,7 @@ TEST_CONFIGS = {
   },
   'optimize_for_size': {
     'name': 'OptimizeForSize',
-    'tests': 'cctest mjsunit webkit',
+    'tests': 'optimize_for_size',
     'add_flaky_step': True,
     'test_args': ['--no-variants', '--shell_flags="--optimize-for-size"'],
   },
@@ -47,13 +47,12 @@ TEST_CONFIGS = {
   },
   'unittests': {
     'name': 'Unittests',
-    'tests': ('heap-unittests runtime-unittests compiler-unittests '
-              'base-unittests'),
+    'tests': ('unittests'),
     'test_args': ['--no-variants'],
   },
   'v8testing': {
     'name': 'Check',
-    'tests': ('mjsunit fuzz-natives cctest message preparser'),
+    'tests': ('default'),
     'add_flaky_step': True,
   },
   'webkit': {
