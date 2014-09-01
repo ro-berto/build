@@ -94,6 +94,7 @@ BUILDERS = {
         },
       },
       'linux_chromium_asan_rel': {
+        'add_telemetry_tests': False,
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
