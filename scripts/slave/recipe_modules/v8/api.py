@@ -664,7 +664,7 @@ class V8Api(recipe_api.RecipeApi):
 
     results_mapping = collections.defaultdict(dict)
     def run_single_perf_test(test, name, json_file):
-      """Call the v8 benchmark suite runner.
+      """Call the v8 perf test runner.
 
       Performance results are saved in the json test results file as a dict with
       'errors' for accumulated errors and 'traces' for the measurements.
@@ -682,7 +682,7 @@ class V8Api(recipe_api.RecipeApi):
       try:
         self.m.python(
           name,
-          self.m.path['checkout'].join('tools', 'run_benchmarks.py'),
+          self.m.path['checkout'].join('tools', 'run_perf.py'),
           full_args,
           cwd=self.m.path['checkout'],
           step_test_data=step_test_data,

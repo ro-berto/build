@@ -72,7 +72,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/run_benchmarks.py",
+      "[SLAVE_BUILD]/v8/tools/run_perf.py",
       "--arch",
       "x64",
       "--buildbot",
@@ -94,7 +94,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/run_benchmarks.py",
+      "[SLAVE_BUILD]/v8/tools/run_perf.py",
       "--arch",
       "x64",
       "--buildbot",
