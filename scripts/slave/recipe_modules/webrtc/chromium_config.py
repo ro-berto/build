@@ -54,19 +54,6 @@ def webrtc_android(c):
 def webrtc_android_clang(c):
   pass
 
-@CONFIG_CTX(includes=['android'])
-def webrtc_android_apk(c):
-  if c.TARGET_PLATFORM != 'android':
-    raise BadConf('Only "android" platform is supported (got: "%s")' %
-                  c.TARGET_PLATFORM)
-  if c.TARGET_ARCH not in SUPPORTED_TARGET_ARCHS:
-    raise BadConf('Only "%s" architectures are supported (got: "%s")' %
-                  (','.join(SUPPORTED_TARGET_ARCHS), c.TARGET_ARCH))
-
-  c.compile_py.default_targets = ['android_builder_webrtc']
-  c.gyp_env.GYP_GENERATOR_FLAGS['default_target'] = 'android_builder_webrtc'
-  c.gyp_env.GYP_DEFINES['include_tests'] = 1
-
 @CONFIG_CTX(includes=['chromium', 'static_library'])
 def webrtc_ios(c):
   if c.HOST_PLATFORM != 'mac':

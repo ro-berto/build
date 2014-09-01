@@ -107,7 +107,7 @@
       "--build-url",
       "gs://chromium-webrtc/win_rel-fyi",
       "--build_revision",
-      "120644",
+      "12345",
       "--factory-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Win7 Tester\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc.fyi\", \"parent_buildername\": \"Win Builder\", \"parent_got_revision\": \"12345\", \"recipe\": \"webrtc/chromium\", \"revision\": null, \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",

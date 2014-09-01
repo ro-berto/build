@@ -11,37 +11,25 @@ from slave.recipe_modules.gclient.config import ChromeSvnSubURL,\
 def webrtc(c):
   pass
 
-
 @CONFIG_CTX(includes=['webrtc'])
 def webrtc_clang(c):
   pass
-
 
 @CONFIG_CTX(includes=['webrtc'])
 def webrtc_asan(c):
   pass
 
-
 @CONFIG_CTX(includes=['webrtc'])
 def webrtc_lsan(c):
   pass
-
 
 @CONFIG_CTX(includes=['webrtc', 'android'])
 def webrtc_android(c):
   pass
 
-
 @CONFIG_CTX(includes=['webrtc_android'])
 def webrtc_android_clang(c):
   pass
-
-
-@CONFIG_CTX(includes=['chromium', 'android', '_webrtc_limited',
-                      '_webrtc_deps', '_webrtc_tot_in_chromium'])
-def webrtc_android_apk(c):
-  pass
-
 
 @CONFIG_CTX(includes=['webrtc'])
 def webrtc_ios(c):
@@ -49,7 +37,6 @@ def webrtc_ios(c):
   # is set to None for iOS. Because of this, sync Mac as well to get it.
   c.target_os.add('mac')
   c.target_os.add('ios')
-
 
 @CONFIG_CTX(includes=['webrtc'])
 def valgrind(c):
@@ -62,7 +49,6 @@ def valgrind(c):
       ChromiumSvnSubURL(c, 'chrome', 'trunk', 'deps', 'third_party', 'valgrind',
                         'binaries')
 
-
 @CONFIG_CTX(includes=['webrtc'])
 def tsan_win(c):
   """Add TSan Windows binaries dependency for WebRTC.
@@ -73,16 +59,13 @@ def tsan_win(c):
   c.solutions[0].custom_deps['chromium/src/third_party/tsan'] = \
       ChromiumSvnSubURL(c, 'chrome', 'trunk', 'deps', 'third_party', 'tsan')
 
-
 @CONFIG_CTX(includes=['chromium', '_webrtc_deps'])
 def chromium_webrtc(c):
   pass
 
-
 @CONFIG_CTX(includes=['chromium', '_webrtc_deps', '_webrtc_tot_in_chromium'])
 def chromium_webrtc_tot(c):
   pass
-
 
 @CONFIG_CTX()
 def _webrtc(c):
@@ -99,7 +82,6 @@ def _webrtc(c):
   s.custom_vars['root_dir'] = 'src'
   c.got_revision_mapping['src'] = 'got_revision'
 
-
 @CONFIG_CTX()
 def _webrtc_deps(c):
   """Add webrtc.DEPS solution for test resources and tools.
@@ -112,7 +94,6 @@ def _webrtc_deps(c):
   s.url = ChromiumSvnSubURL(c, 'chrome', 'trunk', 'deps', 'third_party',
                             'webrtc', 'webrtc.DEPS')
   s.deps_file = 'DEPS'
-
 
 # Needs to depend on 'chromium' in order to pass recipe_configs_test.py.
 @CONFIG_CTX(includes=['chromium'])
@@ -130,7 +111,6 @@ def _webrtc_tot_in_chromium(c):
   # Needed to get the testers to properly sync the right revision.
   c.parent_got_revision_mapping['parent_got_revision'] = 'got_revision'
 
-
 @CONFIG_CTX()
 def _webrtc_limited(c):
   """Helper config for loading the webrtc-limited solution.
@@ -142,7 +122,6 @@ def _webrtc_limited(c):
   s.url = ChromeSvnSubURL(c, 'chrome-internal', 'trunk', 'webrtc-limited')
   s.deps_file = 'DEPS'
   s.custom_vars['root_dir'] = 'src'
-
 
 def WebRTCSvnURL(c, *pieces):
   BASES = ('http://webrtc.googlecode.com/svn',

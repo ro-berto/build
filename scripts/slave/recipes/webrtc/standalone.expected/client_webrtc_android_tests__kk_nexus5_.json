@@ -14,16 +14,6 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/gclient_safe_revert.py",
-      ".",
-      "[DEPOT_TOOLS]/gclient"
-    ],
-    "name": "gclient revert"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[DEPOT_TOOLS]/gclient.py",
       "sync",
       "--nohooks",
@@ -55,32 +45,12 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/apply_issue.py",
-      "-r",
-      "[SLAVE_BUILD]/src",
-      "-i",
-      "666666",
-      "-p",
-      "1",
-      "-s",
-      "https://fake.rietveld.url",
-      "--no-auth"
-    ],
-    "name": "apply_issue",
-    "~followup_annotations": [
-      "@@@STEP_LINK@Applied issue 666666@https://fake.rietveld.url/666666@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
     "env": {
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1"
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1"
     },
     "name": "gclient runhooks"
   },
@@ -88,28 +58,45 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/compile.py",
-      "--target",
-      "Debug",
-      "--src-dir",
-      "[SLAVE_BUILD]/src",
-      "--build-tool",
-      "ninja",
-      "--compiler",
-      "goma",
-      "--goma-dir",
-      "[BUILD]/goma",
-      "--"
+      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[SLAVE_BUILD]/src/out/Release"
     ],
-    "name": "compile"
+    "name": "rmtree build directory",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/extract_build.py",
+      "--target",
+      "Release",
+      "--build-url",
+      "gs://chromium-webrtc/android_rel",
+      "--build_revision",
+      "12345",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Android Tests (KK Nexus5)\", \"mastername\": \"client.webrtc\", \"parent_buildername\": \"Android Builder\", \"parent_got_revision\": \"12345\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Android Tests (KK Nexus5)\", \"mastername\": \"client.webrtc\", \"parent_buildername\": \"Android Builder\", \"parent_got_revision\": \"12345\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}"
+    ],
+    "name": "extract build"
   },
   {
     "cmd": [
       "python",
       "-u",
       "\nimport shutil, sys, os\nshutil.rmtree(sys.argv[1], True)\nshutil.rmtree(sys.argv[2], True)\ntry:\n  os.remove(sys.argv[3])\nexcept OSError:\n  pass\nfor base, _dirs, files in os.walk(sys.argv[4]):\n  for f in files:\n    if f.endswith('.pyc'):\n      os.remove(os.path.join(base, f))\n",
-      "[SLAVE_BUILD]/src/out/Debug/debug_info_dumps",
-      "[SLAVE_BUILD]/src/out/Debug/test_logs",
+      "[SLAVE_BUILD]/src/out/Release/debug_info_dumps",
+      "[SLAVE_BUILD]/src/out/Release/test_logs",
       "[SLAVE_BUILD]/src/out/build_product.zip",
       "[SLAVE_BUILD]/src"
     ],
@@ -157,7 +144,7 @@
       "-u",
       "[SLAVE_BUILD]/src/build/android/provision_devices.py",
       "-t",
-      "Debug"
+      "Release"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -174,7 +161,8 @@
       "audio_decoder_unittests",
       "--verbose",
       "--isolate-file-path",
-      "webrtc/modules/audio_coding/neteq/audio_decoder_unittests.isolate"
+      "webrtc/modules/audio_coding/neteq/audio_decoder_unittests.isolate",
+      "--release"
     ],
     "env": {
       "CHECKOUT_SOURCE_ROOT": "[SLAVE_BUILD]/src"
@@ -191,7 +179,8 @@
       "common_audio_unittests",
       "--verbose",
       "--isolate-file-path",
-      "webrtc/common_audio/common_audio_unittests.isolate"
+      "webrtc/common_audio/common_audio_unittests.isolate",
+      "--release"
     ],
     "env": {
       "CHECKOUT_SOURCE_ROOT": "[SLAVE_BUILD]/src"
@@ -208,7 +197,8 @@
       "common_video_unittests",
       "--verbose",
       "--isolate-file-path",
-      "webrtc/common_video/common_video_unittests.isolate"
+      "webrtc/common_video/common_video_unittests.isolate",
+      "--release"
     ],
     "env": {
       "CHECKOUT_SOURCE_ROOT": "[SLAVE_BUILD]/src"
@@ -225,7 +215,8 @@
       "modules_tests",
       "--verbose",
       "--isolate-file-path",
-      "webrtc/modules/modules_tests.isolate"
+      "webrtc/modules/modules_tests.isolate",
+      "--release"
     ],
     "env": {
       "CHECKOUT_SOURCE_ROOT": "[SLAVE_BUILD]/src"
@@ -242,7 +233,8 @@
       "modules_unittests",
       "--verbose",
       "--isolate-file-path",
-      "webrtc/modules/modules_unittests.isolate"
+      "webrtc/modules/modules_unittests.isolate",
+      "--release"
     ],
     "env": {
       "CHECKOUT_SOURCE_ROOT": "[SLAVE_BUILD]/src"
@@ -259,7 +251,8 @@
       "system_wrappers_unittests",
       "--verbose",
       "--isolate-file-path",
-      "webrtc/system_wrappers/source/system_wrappers_unittests.isolate"
+      "webrtc/system_wrappers/source/system_wrappers_unittests.isolate",
+      "--release"
     ],
     "env": {
       "CHECKOUT_SOURCE_ROOT": "[SLAVE_BUILD]/src"
@@ -276,7 +269,8 @@
       "test_support_unittests",
       "--verbose",
       "--isolate-file-path",
-      "webrtc/test/test_support_unittests.isolate"
+      "webrtc/test/test_support_unittests.isolate",
+      "--release"
     ],
     "env": {
       "CHECKOUT_SOURCE_ROOT": "[SLAVE_BUILD]/src"
@@ -293,7 +287,8 @@
       "tools_unittests",
       "--verbose",
       "--isolate-file-path",
-      "webrtc/tools/tools_unittests.isolate"
+      "webrtc/tools/tools_unittests.isolate",
+      "--release"
     ],
     "env": {
       "CHECKOUT_SOURCE_ROOT": "[SLAVE_BUILD]/src"
@@ -310,7 +305,8 @@
       "video_capture_tests",
       "--verbose",
       "--isolate-file-path",
-      "webrtc/modules/video_capture/video_capture_tests.isolate"
+      "webrtc/modules/video_capture/video_capture_tests.isolate",
+      "--release"
     ],
     "env": {
       "CHECKOUT_SOURCE_ROOT": "[SLAVE_BUILD]/src"
@@ -327,7 +323,8 @@
       "video_engine_core_unittests",
       "--verbose",
       "--isolate-file-path",
-      "webrtc/video_engine/video_engine_core_unittests.isolate"
+      "webrtc/video_engine/video_engine_core_unittests.isolate",
+      "--release"
     ],
     "env": {
       "CHECKOUT_SOURCE_ROOT": "[SLAVE_BUILD]/src"
@@ -344,7 +341,8 @@
       "video_engine_tests",
       "--verbose",
       "--isolate-file-path",
-      "webrtc/video_engine_tests.isolate"
+      "webrtc/video_engine_tests.isolate",
+      "--release"
     ],
     "env": {
       "CHECKOUT_SOURCE_ROOT": "[SLAVE_BUILD]/src"
@@ -361,7 +359,8 @@
       "voice_engine_unittests",
       "--verbose",
       "--isolate-file-path",
-      "webrtc/voice_engine/voice_engine_unittests.isolate"
+      "webrtc/voice_engine/voice_engine_unittests.isolate",
+      "--release"
     ],
     "env": {
       "CHECKOUT_SOURCE_ROOT": "[SLAVE_BUILD]/src"
@@ -378,7 +377,8 @@
       "webrtc_perf_tests",
       "--verbose",
       "--isolate-file-path",
-      "webrtc/webrtc_perf_tests.isolate"
+      "webrtc/webrtc_perf_tests.isolate",
+      "--release"
     ],
     "env": {
       "CHECKOUT_SOURCE_ROOT": "[SLAVE_BUILD]/src"
@@ -390,7 +390,7 @@
       "python",
       "-u",
       "[BUILD]/scripts/slave/tee.py",
-      "[SLAVE_BUILD]/src/out/Debug/full_log",
+      "[SLAVE_BUILD]/src/out/Release/full_log",
       "--",
       "[SLAVE_BUILD]/src/build/android/adb_logcat_printer.py",
       "[SLAVE_BUILD]/src/out/logcat"
@@ -403,7 +403,7 @@
       "--arch",
       "arm",
       "--more-info",
-      "[SLAVE_BUILD]/src/out/Debug/full_log"
+      "[SLAVE_BUILD]/src/out/Release/full_log"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -427,7 +427,7 @@
       "python",
       "-u",
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
-      "[SLAVE_BUILD]/src/out/Debug/test_logs/*.log"
+      "[SLAVE_BUILD]/src/out/Release/test_logs/*.log"
     ],
     "name": "test_report",
     "~followup_annotations": [

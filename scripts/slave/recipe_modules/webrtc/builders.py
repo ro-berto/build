@@ -28,12 +28,10 @@ RECIPE_CONFIGS = {
   },
   'webrtc_android': {
     'webrtc_config': 'webrtc_android',
+    'test_suite': 'android',
   },
   'webrtc_android_clang': {
     'webrtc_config': 'webrtc_android_clang',
-  },
-  'webrtc_android_apk': {
-    'webrtc_config': 'webrtc_android_apk',
   },
   'webrtc_ios': {
     'webrtc_config': 'webrtc_ios',
@@ -680,7 +678,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
-      'Android': {
+      'Android Builder': {
         'recipe_config': 'webrtc_android',
         'webrtc_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -689,9 +687,10 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder',
+        'build_gs_archive': 'android_apk_rel_archive',
         'testing': {'platform': 'linux'},
       },
-      'Android (dbg)': {
+      'Android Builder (dbg)': {
         'recipe_config': 'webrtc_android',
         'webrtc_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -700,6 +699,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder',
+        'build_gs_archive': 'android_apk_dbg_archive',
         'testing': {'platform': 'linux'},
       },
       'Android ARM64 (dbg)': {
@@ -748,32 +748,34 @@ BUILDERS = {
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
       },
-      'Android Chromium-APK Builder (dbg)': {
-        'recipe_config': 'webrtc_android_apk',
+      'Android Tests (KK Nexus5)(dbg)': {
+        'recipe_config': 'webrtc_android',
         'webrtc_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
-        'bot_type': 'builder',
+        'bot_type': 'tester',
+        'parent_buildername': 'Android Builder (dbg)',
         'build_gs_archive': 'android_apk_dbg_archive',
         'testing': {'platform': 'linux'},
       },
-      'Android Chromium-APK Builder': {
-        'recipe_config': 'webrtc_android_apk',
+      'Android Tests (KK Nexus5)': {
+        'recipe_config': 'webrtc_android',
         'webrtc_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
-        'bot_type': 'builder',
+        'bot_type': 'tester',
+        'parent_buildername': 'Android Builder',
         'build_gs_archive': 'android_apk_rel_archive',
         'testing': {'platform': 'linux'},
       },
-      'Android Chromium-APK Tests (KK Nexus5)(dbg)': {
-        'recipe_config': 'webrtc_android_apk',
+      'Android Tests (JB Nexus7.2)(dbg)': {
+        'recipe_config': 'webrtc_android',
         'webrtc_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'android',
@@ -781,12 +783,12 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'tester',
-        'parent_buildername': 'Android Chromium-APK Builder (dbg)',
+        'parent_buildername': 'Android Builder (dbg)',
         'build_gs_archive': 'android_apk_dbg_archive',
         'testing': {'platform': 'linux'},
       },
-      'Android Chromium-APK Tests (KK Nexus5)': {
-        'recipe_config': 'webrtc_android_apk',
+      'Android Tests (JB Nexus7.2)': {
+        'recipe_config': 'webrtc_android',
         'webrtc_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
@@ -794,33 +796,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'tester',
-        'parent_buildername': 'Android Chromium-APK Builder',
-        'build_gs_archive': 'android_apk_rel_archive',
-        'testing': {'platform': 'linux'},
-      },
-      'Android Chromium-APK Tests (JB Nexus7.2)(dbg)': {
-        'recipe_config': 'webrtc_android_apk',
-        'webrtc_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'tester',
-        'parent_buildername': 'Android Chromium-APK Builder (dbg)',
-        'build_gs_archive': 'android_apk_dbg_archive',
-        'testing': {'platform': 'linux'},
-      },
-      'Android Chromium-APK Tests (JB Nexus7.2)': {
-        'recipe_config': 'webrtc_android_apk',
-        'webrtc_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'tester',
-        'parent_buildername': 'Android Chromium-APK Builder',
+        'parent_buildername': 'Android Builder',
         'build_gs_archive': 'android_apk_rel_archive',
         'testing': {'platform': 'linux'},
       },
@@ -1114,7 +1090,7 @@ BUILDERS = {
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
-        'bot_type': 'builder',
+        'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
       'android_rel': {
@@ -1125,7 +1101,7 @@ BUILDERS = {
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
-        'bot_type': 'builder',
+        'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
       'android_clang': {
@@ -1172,28 +1148,6 @@ BUILDERS = {
         },
         'chromium_apply_config': ['webrtc_gn'],
         'bot_type': 'builder',
-        'testing': {'platform': 'linux'},
-      },
-      'android_apk': {
-        'recipe_config': 'webrtc_android_apk',
-        'webrtc_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'linux'},
-      },
-      'android_apk_rel': {
-        'recipe_config': 'webrtc_android_apk',
-        'webrtc_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
     },

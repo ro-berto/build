@@ -16,9 +16,5 @@ def webrtc_android_clang(c):
   pass
 
 @CONFIG_CTX()
-def webrtc_android_apk(c):
-  pass
-
-@CONFIG_CTX()
 def chromium(c):
   pass
