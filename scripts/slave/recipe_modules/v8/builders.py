@@ -467,6 +467,20 @@ BUILDERS = {
         'build_gs_archive': 'arm_dbg_archive',
         'testing': {'platform': 'linux'},
       },
+      'V8 Android Arm - builder': {
+        'gclient_apply_config': ['android'],
+        'chromium_apply_config': ['android_arm'],
+        'v8_apply_config': ['android_arm'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+          'TARGET_PLATFORM': 'android',
+        },
+        'bot_type': 'builder',
+        'build_gs_archive': 'android_arm_rel_archive',
+        'testing': {'platform': 'linux'},
+      },
       'V8 Arm': {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',

@@ -160,6 +160,7 @@ class V8Api(recipe_api.RecipeApi):
 
   # Map of GS archive names to urls.
   GS_ARCHIVES = {
+    'android_arm_rel_archive': 'gs://chromium-v8/v8-android-arm-rel',
     'arm_rel_archive': 'gs://chromium-v8/v8-arm-rel',
     'arm_dbg_archive': 'gs://chromium-v8/v8-arm-dbg',
     'linux_rel_archive': 'gs://chromium-v8/v8-linux-rel',
@@ -319,11 +320,14 @@ class V8Api(recipe_api.RecipeApi):
 
   def compile(self, **kwargs):
     env={}
+    if self.m.chromium.c.TARGET_PLATFORM == 'android':
+      env['ANDROID_NDK_ROOT'] = str(self.m.path['checkout'].join(
+          'third_party', 'android_tools', 'ndk'))
     if self.c.nacl.NACL_SDK_ROOT:
       env['NACL_SDK_ROOT'] = self.c.nacl.NACL_SDK_ROOT
     args = []
-    if self.c.nacl.compile_extra_args:
-      args.extend(self.c.nacl.compile_extra_args)
+    if self.c.compile_py.compile_extra_args:
+      args.extend(self.c.compile_py.compile_extra_args)
     self.m.chromium.compile(args, env=env, **kwargs)
 
   def tryserver_compile(self, fallback_fn, **kwargs):

@@ -16,6 +16,9 @@ def BaseConfig(**_kwargs):
   assert shard_run <= shard_count
 
   return ConfigGroup(
+    compile_py = ConfigGroup(
+      compile_extra_args = List(basestring),
+    ),
     gyp_env = ConfigGroup(
       CC = Single(basestring, required=False),
       CXX = Single(basestring, required=False),
@@ -25,7 +28,6 @@ def BaseConfig(**_kwargs):
     ),
     nacl = ConfigGroup(
       update_nacl_sdk = Single(basestring, required=False),
-      compile_extra_args = List(basestring),
       NACL_SDK_ROOT = Single(basestring, required=False),
     ),
     # Test configuration that is the equal for all tests of a builder. It
@@ -52,6 +54,13 @@ config_ctx = config_item_context(BaseConfig, {}, 'v8')
 @config_ctx()
 def v8(c):
   pass
+
+
+@config_ctx()
+def android_arm(c):
+  # Make is executed in the out dir. Android points to the toplevel Makefile in
+  # the v8 dir.
+  c.compile_py.compile_extra_args.extend(['-C', '..' , 'android_arm.release'])
 
 
 @config_ctx()
@@ -117,14 +126,14 @@ def nacl_canary(c):
 def nacl_ia32(c):
   # Make is executed in the out dir. NaCl points to the toplevel Makefile in
   # the v8 dir.
-  c.nacl.compile_extra_args.extend(['-C', '..' , 'nacl_ia32.release'])
+  c.compile_py.compile_extra_args.extend(['-C', '..' , 'nacl_ia32.release'])
 
 
 @config_ctx(includes=['nacl'])
 def nacl_x64(c):
   # Make is executed in the out dir. NaCl points to the toplevel Makefile in
   # the v8 dir.
-  c.nacl.compile_extra_args.extend(['-C', '..' , 'nacl_x64.release'])
+  c.compile_py.compile_extra_args.extend(['-C', '..' , 'nacl_x64.release'])
 
 
 @config_ctx()
