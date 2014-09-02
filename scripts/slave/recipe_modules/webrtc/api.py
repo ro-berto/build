@@ -34,15 +34,12 @@ class WebRTCApi(recipe_api.RecipeApi):
     'common_audio_unittests': 'webrtc/common_audio',
     'common_video_unittests': 'webrtc/common_video',
     'modules_tests': 'webrtc/modules',
-    # Disabled (webrtc:3764)
-    #'modules_unittests': 'webrtc/modules',
+    'modules_unittests': 'webrtc/modules',
     'system_wrappers_unittests': 'webrtc/system_wrappers/source',
     'test_support_unittests': 'webrtc/test',
     'tools_unittests': 'webrtc/tools',
-    # Disabled (webrtc:3764)
-    #'video_capture_tests': 'webrtc/modules/video_capture',
-    # Disabled (webrtc:3764)
-    #'video_engine_tests': 'webrtc',
+    'video_capture_tests': 'webrtc/modules/video_capture',
+    'video_engine_tests': 'webrtc',
     'video_engine_core_unittests': 'webrtc/video_engine',
     'voice_engine_unittests': 'webrtc/voice_engine',
     'webrtc_perf_tests': 'webrtc',
