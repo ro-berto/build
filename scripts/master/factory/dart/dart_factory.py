@@ -277,9 +277,13 @@ class DartFactory(gclient_factory.GClientFactory):
   def DartAnnotatedFactory(self, python_script,
                            target='Release', tests=None,
                            timeout=1200, factory_properties=None,
-                           env=None, triggers=(), secondAnnotatedRun=False):
+                           env=None, triggers=(), secondAnnotatedRun=False,
+                           no_gclient_revision=False):
     factory_properties = factory_properties or {}
     AddGeneralGClientProperties(factory_properties)
+    if no_gclient_revision:
+      factory_properties['no_gclient_revision'] = True
+
     tests = tests or []
     # Create the spec for the solutions
     gclient_spec = self.BuildGClientSpec(tests)
@@ -591,6 +595,7 @@ class DartUtils(object):
         v['factory_builder'] = base.DartAnnotatedFactory(
             python_script='client/tools/buildbot_annotated_steps.py',
             env=env,
+            no_gclient_revision=True, # Ignore passed in github revision
         )
       else:
         v['factory_builder'] = base.DartAnnotatedFactory(

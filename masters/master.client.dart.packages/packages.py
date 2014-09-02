@@ -10,6 +10,9 @@ PACKAGES = [
   {
     'name' : 'paper-elements',
     'package_dependencies' : ['core-elements'],
-  }
-
+  },
+  {
+    'name' : 'discovery_api_dart_client_generator',
+    'package_dependencies' : [],
+  },
 ]
