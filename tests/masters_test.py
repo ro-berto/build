@@ -206,7 +206,6 @@ def main(argv):
       'master.chromium.chromiumos': 'ChromiumChromiumOS',
       'master.chromium.fyi': 'ChromiumFYI',
       'master.chromium.gatekeeper': 'Gatekeeper',
-      'master.chromium.git': 'ChromiumGit',
       'master.chromium.gpu': 'ChromiumGPU',
       'master.chromium.gpu.fyi': 'ChromiumGPUFYI',
       'master.chromium.linux': 'ChromiumLinux',
