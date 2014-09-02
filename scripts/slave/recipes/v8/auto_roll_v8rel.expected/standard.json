@@ -88,10 +88,28 @@
       "[SLAVE_BUILD]/v8/tools/push-to-trunk/releases.py",
       "-c",
       "[SLAVE_BUILD]/src",
+      "--json",
+      "[SLAVE_BUILD]/v8-releases-update.json",
       "--branch",
       "recent"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "V8Releases"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
+      "cp",
+      "[SLAVE_BUILD]/v8-releases-update.json",
+      "gs://chromium-v8-auto-roll/v8rel/v8-releases-update.json"
+    ],
+    "name": "gsutil upload",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8-auto-roll/v8rel/v8-releases-update.json@@@"
+    ]
   }
 ]

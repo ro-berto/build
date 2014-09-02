@@ -23,8 +23,6 @@ def GenSteps(api):
                   api.path['slave_build'].join('v8.zip'),
                   api.path['slave_build'].join('v8'))
   api.gclient.set_config('chromium')
-  # FIXME(machenbach): Branch heads are checked out for sub projects
-  # not chromium.
   api.bot_update.ensure_checkout(
       force=True, no_shallow=True, with_branch_heads=True)
   api.step(
@@ -32,9 +30,14 @@ def GenSteps(api):
       [api.path['slave_build'].join(
            'v8', 'tools', 'push-to-trunk', 'releases.py'),
        '-c', api.path['checkout'],
+       '--json', api.path['slave_build'].join('v8-releases-update.json'),
        '--branch', 'recent'],
       cwd=api.path['slave_build'].join('v8'),
     )
+  api.gsutil.upload(api.path['slave_build'].join('v8-releases-update.json'),
+                    'chromium-v8-auto-roll',
+                    api.path.join('v8rel', 'v8-releases-update.json'))
+
 
 def GenTests(api):
   yield api.test('standard') + api.properties.generic(mastername='client.v8')
