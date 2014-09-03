@@ -532,7 +532,7 @@ class DartUtils(object):
 
   @staticmethod
   def get_dartlang_git_repo(name):
-    return 'https://github.com/dart-lang/%s' % name
+    return 'https://github.com/dart-lang/%s.git' % name
 
   @staticmethod
   def get_dartlang_git_poller(name):
