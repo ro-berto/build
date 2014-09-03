@@ -594,7 +594,7 @@ class DartUtils(object):
         )
       elif v['name'].startswith('packages'):
         v['factory_builder'] = base.DartAnnotatedFactory(
-            python_script='client/tools/buildbot_annotated_steps.py',
+            python_script='third_party/package-bots/annotated_steps.py',
             env=env,
             no_gclient_revision=True, # Ignore passed in github revision
         )
