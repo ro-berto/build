@@ -949,7 +949,7 @@ def force_revision(folder_name, revision):
   else:
     git('checkout', '--force', 'origin/%s' % branch, cwd=folder_name)
 
-def git_checkout(solutions, revisions, shallow):
+def git_checkout(solutions, revisions, shallow, with_branch_heads):
   build_dir = os.getcwd()
   # Before we do anything, break all git_cache locks.
   if path.isdir(CACHE_DIR):
@@ -975,6 +975,8 @@ def git_checkout(solutions, revisions, shallow):
       s = ['--shallow'] if shallow else []
       populate_cmd = (['cache', 'populate', '--ignore_locks', '-v',
                        '--cache-dir', CACHE_DIR] + s + [url])
+      if with_branch_heads:
+        populate_cmd.extend(['--ref', '+refs/branch-heads/*'])
       git(*populate_cmd)
       mirror_dir = git(
           'cache', 'exists', '--quiet', '--cache-dir', CACHE_DIR, url).strip()
@@ -986,6 +988,9 @@ def git_checkout(solutions, revisions, shallow):
           git(*clone_cmd)
         else:
           git('fetch', 'origin', cwd=sln_dir)
+        if with_branch_heads:
+          git('fetch', 'origin', '+refs/branch-heads/*:refs/branch-heads/*',
+              cwd=sln_dir)
 
         revision = get_target_revision(name, url, revisions) or 'HEAD'
         force_revision(sln_dir, revision)
@@ -1295,7 +1300,7 @@ def ensure_checkout(solutions, revisions, first_sln, target_os, target_os_only,
   # Calling git directly because there is no way to run Gclient without
   # invoking DEPS.
   print 'Fetching Git checkout'
-  git_ref = git_checkout(solutions, revisions, shallow)
+  git_ref = git_checkout(solutions, revisions, shallow, with_branch_heads)
 
   patches = None
   if patch_url:
