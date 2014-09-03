@@ -526,6 +526,7 @@ class DartUtils(object):
     return gitpoller.GitPoller(repourl=repo,
                                pollinterval=10,
                                project=project,
+                               workdir='/tmp/git_workdir_%s' % project,
                                revlinktmpl=revlink)
 
 
