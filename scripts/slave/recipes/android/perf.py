@@ -52,14 +52,7 @@ BUILDERS = {
     'bucket': 'chrome-perf',
     'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip'
                                % api.properties['parent_revision']),
-    'num_device_shards': 1,
-  },
-  'Android GN Perf': {
-    'perf_id': 'android-gn',
-    'bucket': 'chrome-perf',
-    'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip'
-                               % api.properties['parent_revision']),
-    'num_device_shards': 1,
+    'num_device_shards': 8,
   },
   'Android MotoE Perf': {
     'perf_id': 'android-motoe',
@@ -137,7 +130,7 @@ def GenTests(api):
       api.properties.generic(
           repo_name='src',
               repo_url=REPO_URL,
-              buildername='Android GN Perf',
+              buildername='Android Nexus5 Perf',
               parent_buildername='parent_buildername',
               parent_buildnumber='1729',
               parent_revision='deadbeef',
@@ -149,7 +142,7 @@ def GenTests(api):
       api.properties.generic(
           repo_name='src',
               repo_url=REPO_URL,
-              buildername='Android GN Perf',
+              buildername='Android Nexus5 Perf',
               parent_buildername='parent_buildername',
               parent_buildnumber='1729',
               parent_revision='deadbeef',
