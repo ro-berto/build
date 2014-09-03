@@ -10,7 +10,7 @@ class Breakpad(Master.Master3):
   project_name = 'Breakpad'
   project_url = ('https://code.google.com/p/google-breakpad/wiki/'
                  'GettingStartedWithBreakpad')
-  master_port = 8047
-  slave_port = 8147
-  master_port_alt = 8247
+  master_port = 8053
+  slave_port = 8153
+  master_port_alt = 8253
   buildbot_url = 'http://build.chromium.org/p/client.breakpad/'
