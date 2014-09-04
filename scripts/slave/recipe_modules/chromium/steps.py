@@ -758,6 +758,7 @@ IOS_TESTS = [
   GTestTest('content_unittests'),
   GTestTest('net_unittests'),
   GTestTest('ui_unittests'),
+  GTestTest('ui_ios_unittests'),
   GTestTest('sync_unit_tests'),
   GTestTest('sql_unittests'),
 ]
