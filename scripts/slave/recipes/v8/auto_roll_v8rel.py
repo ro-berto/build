@@ -4,6 +4,7 @@
 
 DEPS = [
   'bot_update',
+  'chromium',
   'gclient',
   'gsutil',
   'json',
@@ -14,6 +15,7 @@ DEPS = [
 ]
 
 def GenSteps(api):
+  api.chromium.cleanup_temp()
   if not api.path.exists(api.path['slave_build'].join('v8')):
     api.gsutil.download_url(
         'gs://chromium-v8-auto-roll/bootstrap/v8.zip',

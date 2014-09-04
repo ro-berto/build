@@ -12,6 +12,7 @@ DEPS = [
 ]
 
 def GenSteps(api):
+  api.chromium.cleanup_temp()
   api.gclient.set_config('chromium')
   api.gclient.apply_config('v8_bleeding_edge_git')
   api.bot_update.ensure_checkout(force=True, no_shallow=True)
@@ -26,7 +27,6 @@ def GenSteps(api):
        '--roll', '--dry-run'],
       cwd=api.path['checkout'].join('v8'),
     )
-  api.chromium.cleanup_temp()
 
 
 def GenTests(api):

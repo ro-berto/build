@@ -3,6 +3,14 @@
     "cmd": [
       "python",
       "-u",
+      "[BUILD]/scripts/slave/cleanup_temp.py"
+    ],
+    "name": "cleanup_temp"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[BUILD]/scripts/slave/bot_update.py",
       "--master",
       "client.v8",
@@ -78,13 +86,5 @@
     ],
     "cwd": "[SLAVE_BUILD]/src/v8",
     "name": "roll deps"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/cleanup_temp.py"
-    ],
-    "name": "cleanup_temp"
   }
 ]
