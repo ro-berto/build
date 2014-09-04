@@ -241,6 +241,7 @@ ENABLED_MASTERS = [
     'client.v8',
     'client.webrtc',
     'tryserver.blink',
+    'tryserver.chromium.gpu',
     'tryserver.chromium.linux',
     'tryserver.chromium.mac',
     'tryserver.chromium.perf',
@@ -250,11 +251,6 @@ ENABLED_MASTERS = [
 ENABLED_MASTERS += internal_data.get('ENABLED_MASTERS', [])
 
 ENABLED_BUILDERS = {
-    'tryserver.chromium.gpu': [
-        'linux_gpu',
-        'mac_gpu',
-        'win_gpu',
-    ],
     'client.v8.branches': [
         # Note, bot_update can't be activated on other builders of
         # client.v8.branches, as they're all pure svn based (non-chromium).
@@ -269,58 +265,13 @@ ENABLED_BUILDERS = {
 }
 ENABLED_BUILDERS.update(internal_data.get('ENABLED_BUILDERS', {}))
 
-ENABLED_SLAVES = {
-    # Tryserver bots need to be enabled on a bot basis to make sure checkouts
-    # on the same bot do not conflict.
-    # TODO(iannucci): Not all of these slaves are on the same master... c+p'd
-    #   for expediency.
-    # TODO(iannucci): Are these even needed?
-    'tryserver.chromium.linux':
-        ['slave%d-c4' % i for i in range(250, 400)] +
-        ['slave%d-c4' % i for i in range(102, 121)] +
-        ['vm%d-m4' % i for i in [468, 469, 497, 502, 503]] +
-        ['vm%d-m4' % i for i in range(800, 810)] +
-        ['vm%d-m4' % i for i in range(666, 671)] +
-        ['build%d-a4' % i for i in range(100, 140)],
-    'tryserver.chromium.mac':
-        ['slave%d-c4' % i for i in range(250, 400)] +
-        ['slave%d-c4' % i for i in range(102, 121)] +
-        ['vm%d-m4' % i for i in [468, 469, 497, 502, 503]] +
-        ['vm%d-m4' % i for i in range(800, 810)] +
-        ['vm%d-m4' % i for i in range(666, 671)] +
-        ['build%d-a4' % i for i in range(100, 140)],
-    'tryserver.chromium.win':
-        ['slave%d-c4' % i for i in range(250, 400)] +
-        ['slave%d-c4' % i for i in range(102, 121)] +
-        ['vm%d-m4' % i for i in [468, 469, 497, 502, 503]] +
-        ['vm%d-m4' % i for i in range(800, 810)] +
-        ['vm%d-m4' % i for i in range(666, 671)] +
-        ['build%d-a4' % i for i in range(100, 140)],
-}
+ENABLED_SLAVES = {}
 ENABLED_SLAVES.update(internal_data.get('ENABLED_SLAVES', {}))
 
 # Disabled filters get run AFTER enabled filters, so for example if a builder
 # config is enabled, but a bot on that builder is disabled, that bot will
 # be disabled.
-DISABLED_BUILDERS = {
-    'tryserver.blink': [
-        # These don't exist, but are just here to satisfy recipes.
-        'linux_blink_no_bot_update',
-        'win_blink_no_bot_update',
-    ],
-    'tryserver.chromium.linux': [
-        # These don't exist, but are just here to satisfy recipes.
-        'linux_no_bot_update',
-    ],
-    'tryserver.chromium.win': [
-        # These don't exist, but are just here to satisfy recipes.
-        'win_no_bot_update',
-        'win_blink',
-        'win_blink_compile',
-        'win_blink_compile_rel',
-        'win_drmemory',
-    ],
-}
+DISABLED_BUILDERS = {}
 DISABLED_BUILDERS.update(internal_data.get('DISABLED_BUILDERS', {}))
 
 DISABLED_SLAVES = {}
@@ -1431,8 +1382,6 @@ def parse_args():
   parse.add_option('--revision_mapping_file',
                    help=('Same as revision_mapping, except its a path to a json'
                          ' file containing that format.'))
-  parse.add_option('--revision-mapping', # Backwards compatability.
-                   help='DEPRECATED, use "revision_mapping" instead')
   parse.add_option('--revision', action='append', default=[],
                    help='Revision to check out. Can be an SVN revision number, '
                         'git hash, or any form of git ref.  Can prepend '
