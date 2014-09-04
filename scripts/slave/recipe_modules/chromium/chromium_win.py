@@ -178,7 +178,6 @@ SPEC = {
     },
     'Win x64 Builder': {
       'recipe_config': 'chromium',
-      'chromium_apply_config': ['shared_library'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -276,7 +275,6 @@ SPEC = {
 
     'Win x64 Builder (dbg)': {
       'recipe_config': 'chromium',
-      'chromium_apply_config': ['shared_library'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
