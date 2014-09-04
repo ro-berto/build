@@ -9,6 +9,7 @@ from . import chromium_fyi
 from . import chromium_linux
 from . import chromium_mac
 from . import chromium_memory
+from . import chromium_memory_fyi
 from . import chromium_perf
 from . import chromium_webkit
 from . import chromium_win
@@ -25,6 +26,7 @@ BUILDERS = {
   'chromium.linux': chromium_linux.SPEC,
   'chromium.mac': chromium_mac.SPEC,
   'chromium.memory': chromium_memory.SPEC,
+  'chromium.memory.fyi': chromium_memory_fyi.SPEC,
   'chromium.perf': chromium_perf.SPEC,
   'chromium.webkit': chromium_webkit.SPEC,
   'chromium.win': chromium_win.SPEC,
