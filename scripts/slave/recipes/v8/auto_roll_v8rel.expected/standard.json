@@ -31,6 +31,25 @@
   },
   {
     "cmd": [
+      "git",
+      "checkout",
+      "-f",
+      "master"
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "name": "git checkout"
+  },
+  {
+    "cmd": [
+      "git",
+      "svn",
+      "rebase"
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "name": "git svn"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "[BUILD]/scripts/slave/bot_update.py",

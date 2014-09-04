@@ -6,6 +6,7 @@ DEPS = [
   'bot_update',
   'chromium',
   'gclient',
+  'git',
   'gsutil',
   'json',
   'path',
@@ -24,6 +25,8 @@ def GenSteps(api):
     api.zip.unzip('unzipping',
                   api.path['slave_build'].join('v8.zip'),
                   api.path['slave_build'].join('v8'))
+  api.git('checkout', '-f', 'master', cwd=api.path['slave_build'].join('v8'))
+  api.git('svn', 'rebase', cwd=api.path['slave_build'].join('v8'))
   api.gclient.set_config('chromium')
   api.bot_update.ensure_checkout(
       force=True, no_shallow=True, with_branch_heads=True)
