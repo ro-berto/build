@@ -167,6 +167,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         test_spec_path,
         step_test_data=lambda: self.m.json.test_api.output({}))
     test_spec_result.presentation.step_text = 'path: %s' % test_spec_path
+    generated_tests = []
+    for generator in bot_config.get('test_generators', []):
+      new_tests = generator(
+          self.m, mastername, buildername, test_spec_result.json.output)
+      generated_tests.extend(new_tests)
+    bot_config['tests'] = generated_tests + bot_config.get('tests', [])
     for test in bot_config.get('tests', []):
       test.set_test_spec(test_spec_result.json.output)
 

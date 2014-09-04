@@ -30,8 +30,10 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
+      'test_generators': [
+        steps.generate_gtest,
+      ],
       'tests': [
-        steps.DynamicGTestTests('Linux Tests'),
         steps.MojoPythonTests(),
         steps.TelemetryUnitTests(),
         steps.TelemetryPerfUnitTests(),

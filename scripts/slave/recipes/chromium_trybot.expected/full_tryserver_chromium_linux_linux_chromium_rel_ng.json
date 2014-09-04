@@ -197,23 +197,5 @@
       "/path/to/tmp/json"
     ],
     "name": "telemetry_perf_unittests (with patch)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(1)"
-    ],
-    "name": "determine_new_failures",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@RETRY WITHOUT PATCH NOT IMPLEMENTED@@@",
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
-    "name": "$final_result",
-    "reason": "Step('determine_new_failures') failed with return_code 1",
-    "status_code": 1
   }
 ]

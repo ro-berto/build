@@ -250,6 +250,24 @@ class GTestTest(Test):
     return self._test_runs[suffix].json.gtest_results.failures
 
 
+def generate_gtest(api, mastername, buildername, test_spec):
+  def canonicalize_test(test):
+    if isinstance(test, basestring):
+      return {'test': test, 'shard_index': 0, 'total_shards': 1}
+    return test
+
+  def get_tests(api):
+    return [canonicalize_test(t) for t in
+            test_spec.get(buildername, {}).get('gtest_tests', [])]
+
+  for test in get_tests(api):
+    args = []
+    if test['shard_index'] != 0 or test['total_shards'] != 1:
+      args.extend(['--test-launcher-shard-index=%d' % test['shard_index'],
+                   '--test-launcher-total-shards=%d' % test['total_shards']])
+    yield GTestTest(str(test['test']), args=args, flakiness_dash=True)
+
+
 class DynamicGTestTests(Test):
   def __init__(self, buildername, flakiness_dash=True):
     super(DynamicGTestTests, self).__init__()
