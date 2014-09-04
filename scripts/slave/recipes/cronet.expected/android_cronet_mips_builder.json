@@ -161,6 +161,7 @@
       "[SLAVE_BUILD]/src",
       "--build-tool",
       "ninja",
+      "--clobber",
       "--",
       "cronet_package",
       "cronet_sample_test_apk"

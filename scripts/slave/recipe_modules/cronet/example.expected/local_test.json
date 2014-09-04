@@ -165,6 +165,7 @@
       "goma",
       "--goma-dir",
       "[BUILD]/goma",
+      "--clobber",
       "--",
       "cronet_package",
       "cronet_sample_test_apk"
