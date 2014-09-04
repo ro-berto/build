@@ -2,6 +2,9 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from contextlib import contextmanager
+from slave import recipe_api
+
 DEPS = [
   'chromium_android',
   'bot_update',
@@ -12,26 +15,38 @@ DEPS = [
   'tryserver',
 ]
 
+# Step types
+@contextmanager
+def NormalStep():
+  yield
+
+@contextmanager
+def FYIStep():
+  try:
+    yield
+  except recipe_api.StepFailure:
+    pass
+
 BUILDERS = {
   'chromium.fyi': {
     'Android x64 Builder (dbg)': {
       'recipe_config': 'x64_builder',
-      'check_licenses': True,
-      'findbugs': True,
+      'check_licenses': FYIStep,
+      'findbugs': FYIStep,
       'gclient_apply_config': ['android', 'chrome_internal'],
     },
     'Android MIPS Builder (dbg)': {
       'recipe_config': 'mipsel_builder',
-      'check_licenses': True,
-      'findbugs': True,
+      'check_licenses': FYIStep,
+      'findbugs': FYIStep,
       'gclient_apply_config': ['android', 'chrome_internal'],
     }
   },
   'chromium.linux': {
     'Android Arm64 Builder (dbg)': {
       'recipe_config': 'arm64_builder',
-      'check_licenses': True,
-      'findbugs': True,
+      'check_licenses': FYIStep,
+      'findbugs': FYIStep,
       'gclient_apply_config': ['android', 'chrome_internal'],
     },
   },
@@ -40,21 +55,21 @@ BUILDERS = {
       'recipe_config': 'clang_builder',
       'gclient_apply_config': ['android', 'chrome_internal'],
       'try': True,
-      'check_licenses': True,
-      'findbugs': True,
+      'check_licenses': NormalStep,
+      'findbugs': NormalStep,
     },
     'android_arm64_dbg_recipe': {
       'recipe_config': 'arm64_builder',
       'gclient_apply_config': ['android', 'chrome_internal'],
       'try': True,
-      'check_licenses': True,
-      'findbugs': True,
+      'check_licenses': FYIStep,
+      'findbugs': FYIStep,
     },
     'android_x86_dbg_recipe': {
       'recipe_config': 'x86_builder',
       'gclient_apply_config': ['android', 'chrome_internal'],
       'try': True,
-      'findbugs': True,
+      'findbugs': FYIStep,
     },
     'blink_android_compile_dbg_recipe': {
       'recipe_config': 'main_builder',
@@ -131,20 +146,16 @@ def GenSteps(api):
 
   droid.compile()
   if bot_config.get('check_licenses'):
-    try:
+    with bot_config['check_licenses']():
       droid.check_webview_licenses()
-    except api.step.StepFailure:
-      pass
   if bot_config.get('findbugs'):
-    try:
+    with bot_config['findbugs']():
       droid.findbugs()
-    except api.step.StepFailure:
-      pass
 
   upload_config = bot_config.get('upload')
   if upload_config:
     droid.upload_build(upload_config['bucket'],
-                             upload_config['path'](api))
+                       upload_config['path'](api))
 
 
 def _sanitize_nonalpha(text):
@@ -165,15 +176,27 @@ def GenTests(api):
             patchset='1',
             revision='267739',
             got_revision='267739'))
-  yield (
-    api.test('findbugs_failure') +
-    api.properties.generic(mastername='chromium.fyi',
-                           buildername='Android x64 Builder (dbg)') +
-    api.step_data('findbugs', retcode=1)
-  )
-  yield (
-    api.test('check_licenses_failure') +
-    api.properties.generic(mastername='chromium.fyi',
-                           buildername='Android x64 Builder (dbg)') +
-    api.step_data('check licenses', retcode=1)
-  )
+
+  def step_failure(mastername, buildername, step):
+    return (
+      api.test('%s_%s_fail_%s' % (_sanitize_nonalpha(mastername),
+                                  _sanitize_nonalpha(buildername),
+                                  _sanitize_nonalpha(step))) +
+      api.properties.generic(mastername=mastername,
+                             buildername=buildername) +
+      api.step_data(step, retcode=1)
+    )
+
+  yield step_failure(mastername='chromium.fyi',
+                     buildername='Android x64 Builder (dbg)',
+                     step='findbugs')
+  yield step_failure(mastername='chromium.fyi',
+                     buildername='Android x64 Builder (dbg)',
+                     step='check licenses')
+
+  yield step_failure(mastername='tryserver.chromium.linux',
+                     buildername='android_clang_dbg_recipe',
+                     step='findbugs')
+  yield step_failure(mastername='tryserver.chromium.linux',
+                     buildername='android_clang_dbg_recipe',
+                     step='check licenses')
