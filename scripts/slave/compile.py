@@ -756,14 +756,36 @@ def main_make_android(options, args):
   env.print_overrides()
   result = 0
 
+  bad_paths = [
+    'out/target/common/obj/JAVA_LIBRARIES/*webview*',
+    'out/target/common/R/com/android/*webview*',
+    'out/target/product/*/obj/SHARED_LIBRARIES/*webview*',
+    'out/target/product/*/system/lib/*webview*',
+    'out/target/product/*/system/app/*webview*',
+    'out/host/*/obj/EXECUTABLES/*gyp*',
+    'out/host/*/obj/STATIC_LIBRARIES/*gyp*',
+    'out/host/*/obj/NOTICE_FILES/*gyp*',
+    'out/host/*/obj/GYP',
+    'out/target/product/*/obj/EXECUTABLES/*gyp*',
+    'out/target/product/*/obj/STATIC_LIBRARIES/*gyp*',
+    'out/target/product/*/obj/NOTICE_FILES/*gyp*',
+    'out/target/product/*/obj/GYP',
+  ]
+
   def clobber():
     print('Removing %s' % options.target_output_dir)
     chromium_utils.RemoveDirectory(options.target_output_dir)
 
   # The Android.mk build system handles deps differently than the 'regular'
   # Chromium makefiles which can lead to targets not being rebuilt properly.
-  # Fixing this is actually quite hard so we make this bot always clobber.
-  clobber()
+  # Fixing this is actually quite hard so we always delete at least
+  # everything Chrome related from out.
+  if options.clobber:
+    clobber()
+  else:
+    for path in bad_paths:
+      print('Removing {}'.format(path))
+      chromium_utils.RemoveFilesWildcards(path)
 
   result = chromium_utils.RunCommand(command, env=env)
 

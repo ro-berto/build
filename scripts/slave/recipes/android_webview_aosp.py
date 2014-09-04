@@ -83,10 +83,8 @@ def GenTests(api):
   )
 
   yield (
-    api.test('does_delete_stale_chromium') +
-    api.properties.scheduled() +
-    api.path.exists(
-      api.path['slave_build'].join('android-src', 'external', 'chromium_org'))
+    api.test('can_clobber') +
+    api.properties.scheduled(clobber=True)
   )
 
   yield (

@@ -235,7 +235,8 @@
       "[SLAVE_BUILD]/android-src",
       "--build-tool",
       "make-android",
-      "--verbose"
+      "--verbose",
+      "--clobber"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile"
