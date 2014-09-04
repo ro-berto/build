@@ -350,7 +350,7 @@ class GpuApi(recipe_api.RecipeApi):
 
   def _run_isolated_telemetry_gpu_test(self, test, args=None, name=None,
                                        extra_browser_args=None, **kwargs):
-    test_args = ['-vv', '--use-devtools-active-port']
+    test_args = ['-v', '--use-devtools-active-port']
     if args:
       test_args.extend(args)
     extra_browser_args_string = '--extra-browser-args=--enable-logging=stderr'
