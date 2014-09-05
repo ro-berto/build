@@ -45,7 +45,7 @@ def valgrind(c):
   Since WebRTC DEPS is using relative paths, it it not possible to use a generic
   valgrind config in the gclient recipe module.
   """
-  c.solutions[0].custom_deps['chromium/src/third_party/valgrind'] = \
+  c.solutions[0].custom_deps['src/chromium/src/third_party/valgrind'] = \
       ChromiumSvnSubURL(c, 'chrome', 'trunk', 'deps', 'third_party', 'valgrind',
                         'binaries')
 
@@ -56,7 +56,7 @@ def tsan_win(c):
   Since WebRTC DEPS is using relative paths, it it not possible to use a generic
   tsan config in the gclient recipe module.
   """
-  c.solutions[0].custom_deps['chromium/src/third_party/tsan'] = \
+  c.solutions[0].custom_deps['src/chromium/src/third_party/tsan'] = \
       ChromiumSvnSubURL(c, 'chrome', 'trunk', 'deps', 'third_party', 'tsan')
 
 @CONFIG_CTX(includes=['chromium', '_webrtc_deps'])
