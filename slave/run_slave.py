@@ -364,6 +364,7 @@ def main():
         # TODO(maruel): Remove once everyone is on 2.7.5.
         'DEPOT_TOOLS_PYTHON_275',
         'DXSDK_DIR',
+        'GIT_USER_AGENT',
         'HOME',
         'HOMEDRIVE',
         'HOMEPATH',
@@ -422,6 +423,7 @@ def main():
         'CHROME_VALGRIND_NUMCPUS',
         'DISPLAY',
         'DISTCC_DIR',
+        'GIT_USER_AGENT',
         'HOME',
         'HOSTNAME',
         'HTTP_PROXY',
@@ -464,6 +466,15 @@ def main():
   else:
     error('Platform %s is not implemented yet' % sys.platform)
 
+  git_exe = 'git' + ('.bat' if sys.platform.startswith('win') else '')
+  try:
+    git_version = subprocess.check_output([git_exe, '--version'])
+  except (OSError, subprocess.CalledProcessError) as e:
+    Log('WARNING: Could not get git version information: %r' % e)
+    git_version = '?'
+  uname = os.uname()
+  os.environ.setdefault('GIT_USER_AGENT', '%s git-%s %s %s' % (
+      uname[0], git_version.rstrip().split()[-1], uname[1], active_slavename))
   # This may be redundant, unless this is imported and main is called.
   UseBotoPath()
 
