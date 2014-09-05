@@ -253,15 +253,20 @@ class GTestTest(Test):
 def generate_gtest(api, mastername, buildername, test_spec):
   def canonicalize_test(test):
     if isinstance(test, basestring):
-      return {'test': test, 'shard_index': 0, 'total_shards': 1}
-    return test
+      canonical_test = {'test': test}
+    else:
+      canonical_test = test.copy()
+
+    canonical_test.setdefault('shard_index', 0)
+    canonical_test.setdefault('total_shards', 1)
+    return canonical_test
 
   def get_tests(api):
     return [canonicalize_test(t) for t in
             test_spec.get(buildername, {}).get('gtest_tests', [])]
 
   for test in get_tests(api):
-    args = []
+    args = test.get('args', [])
     if test['shard_index'] != 0 or test['total_shards'] != 1:
       args.extend(['--test-launcher-shard-index=%d' % test['shard_index'],
                    '--test-launcher-total-shards=%d' % test['total_shards']])
@@ -277,8 +282,13 @@ class DynamicGTestTests(Test):
   @staticmethod
   def _canonicalize_test(test):
     if isinstance(test, basestring):
-      return {'test': test, 'shard_index': 0, 'total_shards': 1}
-    return test
+      canonical_test = {'test': test}
+    else:
+      canonical_test = test.copy()
+
+    canonical_test.setdefault('shard_index', 0)
+    canonical_test.setdefault('total_shards', 1)
+    return canonical_test
 
   def _get_test_spec(self, api):
     return self._test_spec.get(self.buildername, {})
@@ -290,7 +300,7 @@ class DynamicGTestTests(Test):
   def run(self, api, suffix):
     exception = None
     for test in self._get_tests(api):
-      args = []
+      args = test.get('args', [])
       if test['shard_index'] != 0 or test['total_shards'] != 1:
         args.extend(['--test-launcher-shard-index=%d' % test['shard_index'],
                      '--test-launcher-total-shards=%d' % test['total_shards']])
