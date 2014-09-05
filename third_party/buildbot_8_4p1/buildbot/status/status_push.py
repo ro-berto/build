@@ -36,6 +36,7 @@ from buildbot.status.persistent_queue import DiskQueue, IndexedQueue, \
 from buildbot.status.web.status_json import FilterOut
 from twisted.internet import defer, reactor
 from twisted.python import log
+from twisted.python.logfile import LogFile
 from twisted.web import client
 
 
@@ -108,6 +109,9 @@ class StatusPush(StatusReceiverMultiService):
         if self.queue.nbItems():
             # Last shutdown was not clean, don't wait to send events.
             self.queueNextServerPush()
+
+        self.verboseLog = LogFile.fromFullPath(
+            'status_push.log', rotateLength=10*1024*1024, maxRotatedFiles=14)
 
     def startService(self):
         """Starting up."""
@@ -390,6 +394,10 @@ class HttpStatusPush(StatusPush):
                 # This packet is just too large. Drop this packet.
                 log.msg("ERROR: packet %s was dropped, too large: %d > %d" %
                         (items[0]['id'], len(data), self.maxHttpRequestSize))
+                self.verboseLog.write(
+                    "ERROR: packet %s was dropped, too large: %d > %d; %s" %
+                        (items[0]['id'], len(data), self.maxHttpRequestSize,
+                         json.dumps(items, indent=2, sort_keys=True)))
                 chunkSize = self.chunkSize
             else:
                 # Try with half the packets.
@@ -405,6 +413,9 @@ class HttpStatusPush(StatusPush):
         def Success(result):
             """Queue up next push."""
             log.msg('Sent %d events to %s' % (len(items), self.serverUrl))
+            self.verboseLog.write('Sent %d events to %s; %s' % (
+                len(items), self.serverUrl,
+                json.dumps(items, indent=2, sort_keys=True)))
             self.lastPushWasSuccessful = True
             return self.queueNextServerPush()
 
@@ -413,6 +424,9 @@ class HttpStatusPush(StatusPush):
             # Server is now down.
             log.msg('Failed to push %d events to %s: %s' %
                     (len(items), self.serverUrl, str(result)))
+            self.verboseLog.write('Failed to push %d events to %s: %s; %s' %
+                    (len(items), self.serverUrl, str(result),
+                    json.dumps(items, indent=2, sort_keys=True)))
             self.queue.insertBackChunk(items)
             if self.stopped:
                 # Bad timing, was being called on shutdown and the server died
