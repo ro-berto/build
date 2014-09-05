@@ -244,5 +244,42 @@ SPEC = {
         'platform': 'mac',
       },
     },
+    'Site Isolation Linux': {
+      'recipe_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder_tester',
+      'compile_targets': [
+        'content_unittests',
+        'content_browsertests',
+      ],
+      'test_generators': [
+        steps.generate_gtest,
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+    'Site Isolation Win': {
+      'recipe_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_PLATFORM': 'win',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder_tester',
+      'compile_targets': [
+        'content_unittests',
+        'content_browsertests',
+      ],
+      'test_generators': [
+        steps.generate_gtest,
+      ],
+      'testing': {
+        'platform': 'win',
+      },
+    },
   },
 }
