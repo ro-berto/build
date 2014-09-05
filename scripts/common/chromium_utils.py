@@ -376,6 +376,16 @@ def MaybeMakeDirectory(*path):
       raise
 
 
+def RemovePath(*path):
+  """Removes the file or directory at 'path', if it exists."""
+  file_path = os.path.join(*path)
+  if os.path.exists(file_path):
+    if os.path.isdir(file_path):
+      RemoveDirectory(file_path)
+    else:
+      RemoveFile(file_path)
+
+
 def RemoveFile(*path):
   """Removes the file located at 'path', if it exists."""
   file_path = os.path.join(*path)
@@ -416,6 +426,25 @@ def RemoveFilesWildcards(file_wildcard, root=os.curdir):
     except OSError, e:
       if e.errno != errno.ENOENT:
         raise
+
+
+def RemoveGlobbedPaths(path_wildcard, root=os.curdir):
+  """Removes all paths matching 'path_wildcard' beneath root.
+
+  Returns the list of paths removed.
+
+  An exception is thrown if root doesn't exist."""
+  if not os.path.exists(root):
+    raise OSError(2, 'No such file or directory', root)
+
+  full_path_wildcard = os.path.join(path_wildcard, root)
+  paths = glob.glob(full_path_wildcard)
+  for path in paths:
+    # When glob returns directories they end in "/."
+    if path.endswith(os.sep + '.'):
+      path = path[:-2]
+    RemovePath(path)
+  return paths
 
 
 def RemoveDirectory(*path):

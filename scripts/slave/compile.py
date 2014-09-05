@@ -756,7 +756,7 @@ def main_make_android(options, args):
   env.print_overrides()
   result = 0
 
-  bad_paths = [
+  bad_path_patterns = [
     'out/target/common/obj/JAVA_LIBRARIES/*webview*',
     'out/target/common/R/com/android/*webview*',
     'out/target/product/*/obj/SHARED_LIBRARIES/*webview*',
@@ -783,9 +783,9 @@ def main_make_android(options, args):
   if options.clobber:
     clobber()
   else:
-    for path in bad_paths:
-      print('Removing {}'.format(path))
-      chromium_utils.RemoveFilesWildcards(path)
+    for path in bad_path_patterns:
+      paths = chromium_utils.RemoveGlobbedPaths(path)
+      print('\n'.join(['Removed {}'.format(removed) for removed in paths]))
 
   result = chromium_utils.RunCommand(command, env=env)
 
