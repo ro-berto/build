@@ -4575,3 +4575,41 @@ index ca83fdb..af764f1 100644
              self.queue.insertBackChunk(items)
              if self.stopped:
                  # Bad timing, was being called on shutdown and the server died
+diff --git a/third_party/buildbot_8_4p1/buildbot/status/status_push.py b/third_party/buildbot_8_4p1/buildbot/status/status_push.py
+index af764f1..e8319e0 100644
+--- a/third_party/buildbot_8_4p1/buildbot/status/status_push.py
++++ b/third_party/buildbot_8_4p1/buildbot/status/status_push.py
+@@ -51,7 +51,7 @@ class StatusPush(StatusReceiverMultiService):
+     """
+ 
+     def __init__(self, serverPushCb, queue=None, path=None, filter=True,
+-                 bufferDelay=1, retryDelay=5, blackList=None):
++                 bufferDelay=1, retryDelay=5, blackList=None, filterFunc=None):
+         """
+         @serverPushCb: callback to be used. It receives 'self' as parameter. It
+         should call self.queueNextServerPush() when it's done to queue the next
+@@ -67,6 +67,7 @@ class StatusPush(StatusReceiverMultiService):
+         @retryDelay: amount of time between retries when no items were pushed on
+         last serverPushCb call.
+         @blackList: events that shouldn't be sent.
++        @filterFunc: optional function applied to items added to packet payload
+         """
+         StatusReceiverMultiService.__init__(self)
+ 
+@@ -90,6 +91,7 @@ class StatusPush(StatusReceiverMultiService):
+             return serverPushCb(self)
+         self.serverPushCb = hookPushCb
+         self.blackList = blackList
++        self.filterFunc = filterFunc
+ 
+         # Other defaults.
+         # IDelayedCall object that represents the next queued push.
+@@ -234,6 +236,8 @@ class StatusPush(StatusReceiverMultiService):
+                 obj = obj.asDict()
+             if self.filter:
+                 obj = FilterOut(obj)
++            if self.filterFunc:
++                obj = self.filterFunc(obj)
+             packet['payload'][obj_name] = obj
+         self.queue.pushItem(packet)
+         if self.task is None or not self.task.active():
