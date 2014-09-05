@@ -16,6 +16,11 @@ SIMPLE_NON_OPEN_SOURCE_TESTS_TO_RUN = [
   'gles2_conform_test',
 ]
 
+D3D9_TEST_NAME_MAPPING = {
+  'gles2_conform_test': 'gles2_conform_d3d9_test',
+  'webgl_conformance': 'webgl_conformance_d3d9'
+}
+
 class GpuApi(recipe_api.RecipeApi):
   def setup(self):
     """Call this once before any of the other APIs in this module."""
@@ -224,6 +229,17 @@ class GpuApi(recipe_api.RecipeApi):
     for test in basic_tests:
       capture(self._run_isolate(test, args=['--use-gpu-in-tests']))
 
+    # Run closed source tests with ANGLE-D3D9
+    if self.is_fyi_waterfall and self.m.platform.is_win:
+      for test in SIMPLE_NON_OPEN_SOURCE_TESTS_TO_RUN:
+        capture(self._run_isolate(D3D9_TEST_NAME_MAPPING[test],
+          args=[
+            '--use-gpu-in-tests',
+            '--disable-d3d11'
+          ],
+          isolate_name=test,
+          name=D3D9_TEST_NAME_MAPPING[test]))
+
     # Google Maps Pixel tests.
     capture(self._run_isolated_telemetry_gpu_test(
       'maps', name='maps_pixel_test',
@@ -279,7 +295,7 @@ class GpuApi(recipe_api.RecipeApi):
         extra_browser_args=[
           '--disable-d3d11'
         ],
-        name='webgl_conformance_d3d9'))
+        name=D3D9_TEST_NAME_MAPPING['webgl_conformance']))
 
     # Context lost tests.
     capture(self._run_isolated_telemetry_gpu_test('context_lost'))
@@ -322,24 +338,23 @@ class GpuApi(recipe_api.RecipeApi):
       raise self.m.step.StepFailure('%d tests failed: %r' % (len(failures), failures))
 
   def _run_isolate(self, test, isolate_name=None, **kwargs):
-    test_name = isolate_name or test
     # The test_type must end in 'test' or 'tests' in order for the results to
     # automatically show up on the flakiness dashboard.
     #
     # Currently all tests on the GPU bots follow this rule, so we can't add
     # code like in chromium/api.py, run_telemetry_test.
-    assert test_name.endswith('test') or test_name.endswith('tests')
+    assert test.endswith('test') or test.endswith('tests')
     # TODO(kbr): turn this into a temporary path. There were problems
     # with the recipe simulation test in doing so and cleaning it up.
     results_directory = self.m.path['slave_build'].join(
-      'gtest-results', test_name)
+      'gtest-results', test)
     try:
       self.m.isolate.runtest(
         isolate_name or test,
         self.get_build_revision(),
         self.get_webkit_revision(),
         annotate='gtest',
-        test_type=test_name,
+        test_type=test,
         generate_json_file=True,
         results_directory=results_directory,
         master_class_name=self._master_class_name_for_testing,
