@@ -546,8 +546,6 @@ class ChromiumApi(recipe_api.RecipeApi):
   def get_annotate_by_test_name(self, test_name):
     if test_name.split('.')[0] == 'page_cycler':
       return 'pagecycler'
-    elif test_name.split('.')[0] == 'endure':
-      return 'endure'
     return 'graphing'
 
   def get_vs_toolchain_if_necessary(self):

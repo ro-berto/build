@@ -373,7 +373,7 @@ class AndroidApi(recipe_api.RecipeApi):
         [self.m.path['checkout'].join('build', 'android', 'test_runner.py'),
          'perf', '--steps', config, '--output-json-list', self.m.json.output()],
         step_test_data=lambda: self.m.json.test_api.output([
-            'perf_test.foo', 'page_cycler.foo', 'endure.foo']),
+            'perf_test.foo', 'page_cycler.foo']),
         env=self.get_env()
     )
     perf_tests = result.json.output
