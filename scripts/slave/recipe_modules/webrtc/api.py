@@ -157,7 +157,10 @@ class WebRTCApi(recipe_api.RecipeApi):
                                         '%s.isolate' % test)
         self.test_runner(test, isolate_file)
 
-      self.m.chromium_android.common_tests_final_steps()
+      self.m.chromium_android.logcat_dump()
+      # Disable stack tools steps until crbug.com/411685 is fixed.
+      #self.m.chromium_android.stack_tool_steps()
+      self.m.chromium_android.test_report()
 
   def add_test(self, test, name=None, args=None, revision=None, env=None,
                perf_test=False, perf_dashboard_id=None):
