@@ -23,8 +23,8 @@ def GenSteps(api):
           'v8', 'tools', 'push-to-trunk', 'auto_roll.py'),
       ['--chromium', api.path['checkout'],
        '--author', 'v8-autoroll@chromium.org',
-       '--reviewer', 'v8-autoroll@chromium.org',
-       '--roll', '--dry-run'],
+       '--reviewer', 'machenbach@chromium.org',
+       '--roll'],
       cwd=api.path['checkout'].join('v8'),
     )
 
