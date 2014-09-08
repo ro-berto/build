@@ -38,8 +38,8 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'tests': [
-        steps.DynamicGTestTests('Linux MSan Tests'),
+      'test_generators': [
+        steps.generate_gtest,
       ],
       'parent_buildername': 'Chromium Linux MSan Builder',
       'testing': {
@@ -58,8 +58,8 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'tests': [
-        steps.DynamicGTestTests('Linux MSan Browser (1)'),
+      'test_generators': [
+        steps.generate_gtest,
       ],
       'parent_buildername': 'Chromium Linux MSan Builder',
       'testing': {
@@ -78,8 +78,8 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'tests': [
-        steps.DynamicGTestTests('Linux MSan Browser (2)'),
+      'test_generators': [
+        steps.generate_gtest,
       ],
       'parent_buildername': 'Chromium Linux MSan Builder',
       'testing': {
@@ -98,8 +98,8 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'tests': [
-        steps.DynamicGTestTests('Linux MSan Browser (3)'),
+      'test_generators': [
+        steps.generate_gtest,
       ],
       'parent_buildername': 'Chromium Linux MSan Builder',
       'testing': {

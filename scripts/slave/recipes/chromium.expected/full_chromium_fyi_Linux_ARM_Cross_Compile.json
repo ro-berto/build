@@ -106,8 +106,7 @@
       "--build-tool",
       "ninja",
       "--",
-      "All",
-      "chromium_builder_tests"
+      "browser_tests_run"
     ],
     "name": "compile"
   },

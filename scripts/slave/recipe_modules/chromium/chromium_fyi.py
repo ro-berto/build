@@ -58,8 +58,10 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
       },
+      'test_generators': [
+        steps.generate_gtest,
+      ],
       'tests': [
-        steps.DynamicGTestTests('Chromium Mac 10.10'),
         steps.NaclIntegrationTest(),
         steps.MojoPythonTests(),
         steps.TelemetryUnitTests(),
@@ -81,8 +83,12 @@ SPEC = {
       'runhooks_env': {
         'GYP_CROSSCOMPILE': '1',
       },
-      'tests': [
-        steps.DynamicGTestTests('Linux ARM Cross-Compile'),
+      'test_generators': [
+        steps.generate_gtest,
+      ],
+      # TODO(phajdan.jr): Automatically add _run targets when used.
+      'compile_targets': [
+        'browser_tests_run',
       ],
       'testing': {
         'platform': 'linux',
@@ -101,8 +107,10 @@ SPEC = {
       'compile_targets': [
         'all',
       ],
+      'test_generators': [
+        steps.generate_gtest,
+      ],
       'tests': [
-        steps.DynamicGTestTests('Linux Trusty'),
         steps.MojoPythonTests(),
         steps.TelemetryUnitTests(),
         steps.TelemetryPerfUnitTests(),
@@ -122,8 +130,10 @@ SPEC = {
       'compile_targets': [
         'all',
       ],
+      'test_generators': [
+        steps.generate_gtest,
+      ],
       'tests': [
-        steps.DynamicGTestTests('Linux Trusty (32)'),
         steps.MojoPythonTests(),
         steps.TelemetryUnitTests(),
         steps.TelemetryPerfUnitTests(),
@@ -143,8 +153,10 @@ SPEC = {
       'compile_targets': [
         'all',
       ],
+      'test_generators': [
+        steps.generate_gtest,
+      ],
       'tests': [
-        steps.DynamicGTestTests('Linux Trusty (dbg)'),
         steps.MojoPythonTests(),
         steps.TelemetryUnitTests(),
         steps.TelemetryPerfUnitTests(),
@@ -164,8 +176,10 @@ SPEC = {
       'compile_targets': [
         'all',
       ],
+      'test_generators': [
+        steps.generate_gtest,
+      ],
       'tests': [
-        steps.DynamicGTestTests('Linux Trusty (dbg)(32)'),
         steps.MojoPythonTests(),
         steps.TelemetryUnitTests(),
         steps.TelemetryPerfUnitTests(),
@@ -237,8 +251,8 @@ SPEC = {
       'GYP_DEFINES': {
         'use_openssl': '1',
       },
-      'tests': [
-        steps.DynamicGTestTests('Mac OpenSSL'),
+      'test_generators': [
+        steps.generate_gtest,
       ],
       'testing': {
         'platform': 'mac',

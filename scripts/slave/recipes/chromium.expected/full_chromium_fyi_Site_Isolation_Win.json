@@ -1,5 +1,12 @@
-[ {"cmd": ["python", "-u", "[BUILD]\\scripts\\slave\\kill_processes.py"],
-   "name": "taskkill"},
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\kill_processes.py"
+    ],
+    "name": "taskkill"
+  },
   {
     "cmd": [
       "python",

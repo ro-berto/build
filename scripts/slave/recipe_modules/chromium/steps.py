@@ -273,55 +273,6 @@ def generate_gtest(api, mastername, buildername, test_spec):
     yield GTestTest(str(test['test']), args=args, flakiness_dash=True)
 
 
-class DynamicGTestTests(Test):
-  def __init__(self, buildername, flakiness_dash=True):
-    super(DynamicGTestTests, self).__init__()
-    self.buildername = buildername
-    self.flakiness_dash = flakiness_dash
-
-  @staticmethod
-  def _canonicalize_test(test):
-    if isinstance(test, basestring):
-      canonical_test = {'test': test}
-    else:
-      canonical_test = test.copy()
-
-    canonical_test.setdefault('shard_index', 0)
-    canonical_test.setdefault('total_shards', 1)
-    return canonical_test
-
-  def _get_test_spec(self, api):
-    return self._test_spec.get(self.buildername, {})
-
-  def _get_tests(self, api):
-    return [self._canonicalize_test(t) for t in
-            self._get_test_spec(api).get('gtest_tests', [])]
-
-  def run(self, api, suffix):
-    exception = None
-    for test in self._get_tests(api):
-      args = test.get('args', [])
-      if test['shard_index'] != 0 or test['total_shards'] != 1:
-        args.extend(['--test-launcher-shard-index=%d' % test['shard_index'],
-                     '--test-launcher-total-shards=%d' % test['total_shards']])
-      try:
-        api.chromium.runtest(
-            test['test'], test_type=test['test'], args=args, annotate='gtest',
-            xvfb=True, flakiness_dash=self.flakiness_dash)
-      except api.step.StepFailure as f:
-        exception = f
-    # TODO(iannucci): This raises only the last exception. The return
-    # type of the other run methods makes not much sense for DynamicGTestTests.
-    if exception:
-      raise exception
-
-  def compile_targets(self, api):
-    explicit_targets = self._get_test_spec(api).get('compile_targets', [])
-    test_targets = [t['test'] for t in self._get_tests(api)]
-    # Remove duplicates.
-    return sorted(set(explicit_targets + test_targets))
-
-
 class DynamicPerfTests(Test):
   def __init__(self, browser, perf_id, shard_index, num_shards):
     self.browser = browser

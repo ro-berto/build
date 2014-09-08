@@ -222,25 +222,6 @@ def GenTests(api):
     }))
   )
 
-  yield (
-    api.test('buildspec_compile_targets') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Builder (dbg)',
-                           buildnumber=1) +
-    api.platform('linux', 64) +
-    api.override_step_data('read test spec', api.json.output({
-      "Linux Tests (dbg)(1)": {
-        "gtest_tests": [
-          'target_from_dbg_1'
-        ]
-      },
-      "Linux Tests (dbg)(2)": {
-        "gtest_tests": [
-          'target_from_dbg_2'
-        ]
-      }}))
-  )
-
   # FIXME(iannucci): Make this test work.
   #yield (
   #  api.test('one_failure_keeps_going') +

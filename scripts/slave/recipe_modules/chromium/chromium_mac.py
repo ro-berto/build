@@ -29,8 +29,10 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
       },
+      'test_generators': [
+        steps.generate_gtest,
+      ],
       'tests': [
-        steps.DynamicGTestTests('Mac10.6 Tests (1)'),
         steps.NaclIntegrationTest(),
         steps.MojoPythonTests(),
         steps.TelemetryUnitTests(),
@@ -48,8 +50,8 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
       },
-      'tests': [
-        steps.DynamicGTestTests('Mac10.6 Tests (2)'),
+      'test_generators': [
+        steps.generate_gtest,
       ],
       'bot_type': 'tester',
       'parent_buildername': 'Mac Builder',
@@ -63,8 +65,10 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
       },
+      'test_generators': [
+        steps.generate_gtest,
+      ],
       'tests': [
-        steps.DynamicGTestTests('Mac10.7 Tests (1)'),
         steps.NaclIntegrationTest(),
         steps.MojoPythonTests(),
         steps.TelemetryUnitTests(),
@@ -82,8 +86,8 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
       },
-      'tests': [
-        steps.DynamicGTestTests('Mac10.7 Tests (2)'),
+      'test_generators': [
+        steps.generate_gtest,
       ],
       'bot_type': 'tester',
       'parent_buildername': 'Mac Builder',
@@ -111,8 +115,10 @@ SPEC = {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 32,
       },
+      'test_generators': [
+        steps.generate_gtest,
+      ],
       'tests': [
-        steps.DynamicGTestTests('Mac 10.6 Tests (dbg)(1)'),
         steps.NaclIntegrationTest(),
         steps.MojoPythonTests(),
         steps.TelemetryUnitTests(),
@@ -130,8 +136,8 @@ SPEC = {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 32,
       },
-      'tests': [
-        steps.DynamicGTestTests('Mac 10.6 Tests (dbg)(2)'),
+      'test_generators': [
+        steps.generate_gtest,
       ],
       'bot_type': 'tester',
       'parent_buildername': 'Mac Builder (dbg)',
@@ -145,8 +151,10 @@ SPEC = {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 32,
       },
+      'test_generators': [
+        steps.generate_gtest,
+      ],
       'tests': [
-        steps.DynamicGTestTests('Mac 10.7 Tests (dbg)(1)'),
         steps.NaclIntegrationTest(),
         steps.MojoPythonTests(),
         steps.TelemetryUnitTests(),
@@ -164,8 +172,8 @@ SPEC = {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 32,
       },
-      'tests': [
-        steps.DynamicGTestTests('Mac 10.7 Tests (dbg)(2)'),
+      'test_generators': [
+        steps.generate_gtest,
       ],
       'bot_type': 'tester',
       'parent_buildername': 'Mac Builder (dbg)',

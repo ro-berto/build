@@ -85,8 +85,8 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'tests': [
-        steps.DynamicGTestTests('Linux ChromiumOS Tests (1)'),
+      'test_generators': [
+        steps.generate_gtest,
       ],
       'parent_buildername': 'Linux ChromiumOS Builder',
       'testing': {
@@ -100,8 +100,8 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'tests': [
-        steps.DynamicGTestTests('Linux ChromiumOS Tests (2)'),
+      'test_generators': [
+        steps.generate_gtest,
       ],
       'parent_buildername': 'Linux ChromiumOS Builder',
       'testing': {
@@ -176,8 +176,8 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'tests': [
-        steps.DynamicGTestTests('Linux ChromiumOS Ozone Tests (1)'),
+      'test_generators': [
+        steps.generate_gtest,
       ],
       'parent_buildername': 'Linux ChromiumOS Ozone Builder',
       'testing': {
@@ -191,8 +191,8 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'tests': [
-        steps.DynamicGTestTests('Linux ChromiumOS Ozone Tests (2)'),
+      'test_generators': [
+        steps.generate_gtest,
       ],
       'parent_buildername': 'Linux ChromiumOS Ozone Builder',
       'testing': {
@@ -221,8 +221,8 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'tests': [
-        steps.DynamicGTestTests('Linux ChromiumOS Tests (dbg)(1)'),
+      'test_generators': [
+        steps.generate_gtest,
       ],
       'parent_buildername': 'Linux ChromiumOS Builder (dbg)',
       'testing': {
@@ -236,8 +236,8 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'tests': [
-        steps.DynamicGTestTests('Linux ChromiumOS Tests (dbg)(2)'),
+      'test_generators': [
+        steps.generate_gtest,
       ],
       'parent_buildername': 'Linux ChromiumOS Builder (dbg)',
       'testing': {
@@ -251,8 +251,8 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'tests': [
-        steps.DynamicGTestTests('Linux ChromiumOS Tests (dbg)(3)'),
+      'test_generators': [
+        steps.generate_gtest,
       ],
       'parent_buildername': 'Linux ChromiumOS Builder (dbg)',
       'testing': {

@@ -65,8 +65,8 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'tester',
-      'tests': [
-        steps.DynamicGTestTests('Linux Tests (dbg)(1)(32)'),
+      'test_generators': [
+        steps.generate_gtest,
       ],
       'parent_buildername': 'Linux Builder (dbg)(32)',
       'testing': {
@@ -80,8 +80,10 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'tester',
+      'test_generators': [
+        steps.generate_gtest,
+      ],
       'tests': [
-        steps.DynamicGTestTests('Linux Tests (dbg)(2)(32)'),
         steps.NaclIntegrationTest(),
       ],
       'parent_buildername': 'Linux Builder (dbg)(32)',
@@ -108,8 +110,10 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
+      'test_generators': [
+        steps.generate_gtest,
+      ],
       'tests': [
-        steps.DynamicGTestTests('Linux Tests (dbg)(1)'),
         steps.TelemetryUnitTests(),
         steps.TelemetryPerfUnitTests(),
       ],
@@ -125,8 +129,10 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
+      'test_generators': [
+        steps.generate_gtest,
+      ],
       'tests': [
-        steps.DynamicGTestTests('Linux Tests (dbg)(2)'),
         steps.NaclIntegrationTest(),
       ],
       'parent_buildername': 'Linux Builder (dbg)',
@@ -144,8 +150,8 @@ SPEC = {
       'compile_targets': [
         'all',
       ],
-      'tests': [
-        steps.DynamicGTestTests('Linux Clang (dbg)'),
+      'test_generators': [
+        steps.generate_gtest,
       ],
       'testing': {
         'platform': 'linux',
