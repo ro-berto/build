@@ -184,9 +184,16 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       compile_targets = set(bot_config.get('compile_targets', []))
       for test in bot_config.get('tests', []):
         compile_targets.update(test.compile_targets(self.m))
-      for builder_dict in master_dict.get('builders', {}).itervalues():
+      for loop_buildername, builder_dict in master_dict.get(
+          'builders', {}).iteritems():
         if builder_dict.get('parent_buildername') == buildername:
-          for test in builder_dict.get('tests', []):
+          generated_tests = []
+          for generator in builder_dict.get('test_generators', []):
+            new_tests = generator(
+                self.m, mastername, loop_buildername,
+                test_spec_result.json.output)
+            generated_tests.extend(new_tests)
+          for test in builder_dict.get('tests', []) + generated_tests:
             test.set_test_spec(test_spec_result.json.output)
             compile_targets.update(test.compile_targets(self.m))
 

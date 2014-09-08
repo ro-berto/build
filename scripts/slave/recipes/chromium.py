@@ -101,6 +101,21 @@ def GenTests(api):
   )
 
   yield (
+    api.test('dynamic_gtest_on_builder') +
+    api.properties.generic(mastername='chromium.linux',
+                           buildername='Linux Builder') +
+    api.platform('linux', 64) +
+    api.override_step_data('read test spec', api.json.output({
+      'Linux Tests': {
+        'gtest_tests': [
+          'base_unittests',
+          {'test': 'browser_tests', 'shard_index': 0, 'total_shards': 2},
+        ],
+      },
+    }))
+  )
+
+  yield (
     api.test('dynamic_gtest_win') +
     api.properties.generic(mastername='chromium.win',
                            buildername='Win7 Tests (1)',
