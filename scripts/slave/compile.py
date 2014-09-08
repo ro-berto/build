@@ -1074,20 +1074,29 @@ def main_win(options, args):
   return result
 
 
-def get_target_build_dir(build_tool, src_dir, target, is_iphone=False):
+def get_target_build_dir(args, options):
   """Keep this function in sync with src/build/landmines.py"""
+  build_tool = options.build_tool
+
   ret = None
   if build_tool == 'xcode':
-    ret = os.path.join(src_dir, 'xcodebuild',
-        target + ('-iphoneos' if is_iphone else ''))
+    relpath = os.path.join('xcodebuild',
+        options.target + ('-iphoneos' if 'iphoneos' in args else ''))
   elif build_tool in ['make', 'ninja']:
-    ret = os.path.join(src_dir, 'out', target)
+    if chromium_utils.IsLinux() and options.cros_board:
+      # When building ChromeOS's Simple Chrome workflow, the output directory
+      # has a CROS board name suffix.
+      outdir = 'out_%s' % (options.cros_board,)
+    else:
+      outdir = 'out'
+    relpath = os.path.join(outdir, options.target)
   elif build_tool == 'make-android':
-    ret = os.path.join(src_dir, 'out')
+    relpath = os.path.join('out')
   elif build_tool in ['vs', 'ib']:
-    ret = os.path.join(src_dir, 'build', target)
+    relpath = os.path.join('build', options.target)
   else:
     raise NotImplementedError()
+  ret = os.path.join(options.src_dir, relpath)
   return os.path.abspath(ret)
 
 
@@ -1140,6 +1149,10 @@ def real_main():
     # Mac only.
     option_parser.add_option('--xcode-target', default=None,
                              help='Target from the xcodeproj file')
+  if chromium_utils.IsLinux():
+    option_parser.add_option('--cros-board', action='store',
+                             help='If building for the ChromeOS Simple Chrome '
+                                  'workflow, the name of the ChromeOS board.')
   option_parser.add_option('--goma-dir',
                            default=os.path.join(BUILD_DIR, 'goma'),
                            help='specify goma directory')
@@ -1215,8 +1228,7 @@ def real_main():
       sys.stderr.write('Unknown build tool %s.\n' % repr(options.build_tool))
       return 2
 
-  options.target_output_dir = get_target_build_dir(options.build_tool,
-      options.src_dir, options.target, 'iphoneos' in args)
+  options.target_output_dir = get_target_build_dir(args, options)
 
   return main(options, args)
 
