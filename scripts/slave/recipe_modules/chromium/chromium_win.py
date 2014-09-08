@@ -135,6 +135,7 @@ SPEC = {
       'disable_runhooks': True,
       'tests': [
         steps.DynamicGTestTests('Win7 Tests (1)'),
+        steps.MiniInstallerTest(),
       ],
       'parent_buildername': 'Win Builder',
       'testing': {
