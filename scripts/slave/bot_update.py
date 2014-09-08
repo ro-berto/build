@@ -1257,19 +1257,15 @@ def ensure_checkout(solutions, revisions, first_sln, target_os, target_os_only,
   if patch_url:
     patches = get_svn_patch(patch_url)
 
-  already_patched = []
   for solution in solutions:
-    if (patch_root == solution['name'] or
-        solution['name'].startswith(patch_root + '/')):
-      relative_root = solution['name'][len(patch_root) + 1:]
-      target = '/'.join([relative_root, 'DEPS']).lstrip('/')
+    # At first, only patch top-level DEPS.
+    if patch_root == solution['name']:
       if patches:
-        apply_svn_patch(patch_root, patches, whitelist=[target])
-        already_patched.append(target)
+        apply_svn_patch(patch_root, patches, whitelist=['DEPS'])
       elif issue:
         apply_rietveld_issue(issue, patchset, patch_root, rietveld_server,
-                            revision_mapping, git_ref, whitelist=[target])
-        already_patched.append(target)
+                            revision_mapping, git_ref, whitelist=['DEPS'])
+      break
 
   if buildspec:
     buildspecs2git(first_sln, buildspec)
@@ -1302,10 +1298,10 @@ def ensure_checkout(solutions, revisions, first_sln, target_os, target_os_only,
                         dir_names, revisions)
   # Apply the rest of the patch here (sans DEPS)
   if patches:
-    apply_svn_patch(patch_root, patches, blacklist=already_patched)
+    apply_svn_patch(patch_root, patches, blacklist=['DEPS'])
   elif issue:
     apply_rietveld_issue(issue, patchset, patch_root, rietveld_server,
-                         revision_mapping, git_ref, blacklist=already_patched)
+                         revision_mapping, git_ref, blacklist=['DEPS'])
 
   # Reset the deps_file point in the solutions so that hooks get run properly.
   for sln in solutions:
