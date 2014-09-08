@@ -57,7 +57,7 @@ USAGE = """
 If specified, the properties file should contain a Python dictionary. If the
 filename "-" is used, then the dictionary is read from stdin, for example:
 
-%(prog)s recipe_name --properties-file - <EOF
+%(prog)s recipe_name --properties-file - <<EOF
 {
   'property1: 'value1',
   'property2: 'value2',
