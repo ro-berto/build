@@ -282,8 +282,9 @@ class GpuApi(recipe_api.RecipeApi):
     # WebGL conformance tests.
     capture(self._run_isolated_telemetry_gpu_test('webgl_conformance',
         extra_browser_args=[
-          # For diagnosing crbug.com/393331 and crbug.com/408358
-          '--blink-platform-log-channels=Timers',
+          # For diagnosing crbug.com/393331, crbug.com/407976,
+          # and crbug.com/408358
+          '--blink-platform-log-channels=Timers,Media',
           '--vmodule=thread_proxy=2,render_widget_compositor=2'
         ]))
 

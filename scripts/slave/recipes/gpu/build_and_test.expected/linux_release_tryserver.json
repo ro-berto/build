@@ -435,7 +435,7 @@
       "--browser=release",
       "-v",
       "--use-devtools-active-port",
-      "--extra-browser-args=--enable-logging=stderr --blink-platform-log-channels=Timers --vmodule=thread_proxy=2,render_widget_compositor=2"
+      "--extra-browser-args=--enable-logging=stderr --blink-platform-log-channels=Timers,Media --vmodule=thread_proxy=2,render_widget_compositor=2"
     ],
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
