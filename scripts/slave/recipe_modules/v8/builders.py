@@ -606,13 +606,25 @@ BUILDERS = {
         'tests': ['mjsunit', 'webkit'],
         'testing': {'platform': 'linux'},
       },
+      'V8 Linux - mips - sim - builder': {
+        'chromium_apply_config': ['simulate_mips'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'build_gs_archive': 'mips_sim_rel_archive',
+        'testing': {'platform': 'linux'},
+      },
       'V8 Linux - mips - sim': {
         'chromium_apply_config': ['simulate_mips'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
-        'bot_type': 'builder_tester',
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux - mips - sim - builder',
+        'build_gs_archive': 'mips_sim_rel_archive',
         'tests': ['unittests', 'v8testing', 'test262'],
         'testing': {'platform': 'linux'},
       },
