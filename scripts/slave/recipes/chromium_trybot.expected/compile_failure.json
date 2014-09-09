@@ -138,8 +138,7 @@
       "[BUILD]\\goma",
       "--",
       "base_unittests",
-      "browser_tests",
-      "mini_installer"
+      "browser_tests"
     ],
     "name": "compile (with patch)",
     "~followup_annotations": [
