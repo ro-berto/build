@@ -61,9 +61,12 @@ def tsan_win(c):
 
 @CONFIG_CTX(includes=['chromium', '_webrtc_deps'])
 def chromium_webrtc(c):
-  pass
+  c.got_revision_mapping['src/third_party/libjingle/source/talk'] = (
+      'got_libjingle_revision')
+  c.got_revision_mapping['src/third_party/libvpx/source'] = (
+      'got_libvpx_revision')
 
-@CONFIG_CTX(includes=['chromium', '_webrtc_deps', '_webrtc_tot_in_chromium'])
+@CONFIG_CTX(includes=['chromium_webrtc', '_webrtc_tot_in_chromium'])
 def chromium_webrtc_tot(c):
   pass
 
@@ -100,14 +103,17 @@ def _webrtc_deps(c):
 def _webrtc_tot_in_chromium(c):
   """Configures src/third_party/webrtc to be the revision decider.
 
-  WebRTC's Android APK tests are built from a Chromium checkout with
+  The Chromium WebRTC FYI bots build a Chromium checkout with
   src/third_party/webrtc replaced with ToT instead of the DEPS-pinned revision.
-  There are also similar Chromium builders and testers used to catch pre-roll
-  test failures for new WebRTC revisions.
+  This is used to catch pre-roll test failures for new WebRTC revisions.
   """
   # Have the WebRTC revision appear in the web UI instead of Chromium's.
-  del c.got_revision_mapping['src']
   c.got_revision_mapping['src/third_party/webrtc'] = 'got_revision'
+
+  # Since got_revision is occupied by the WebRTC revision, add a new property
+  # for the Chromium revision.
+  c.got_revision_mapping['src'] = 'got_chromium_revision'
+
   # Needed to get the testers to properly sync the right revision.
   c.parent_got_revision_mapping['parent_got_revision'] = 'got_revision'
 
