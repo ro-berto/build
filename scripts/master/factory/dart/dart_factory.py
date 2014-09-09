@@ -608,7 +608,7 @@ class DartUtils(object):
 
     def setup_package_factory_base(v):
       extra_deps = v.get('deps', [])
-      return DartFactory(channel=CHANNELS_BY_NAME['dev'],
+      return DartFactory(channel=CHANNELS_BY_NAME['be'],
                          custom_deps_list=extra_deps)
 
 
