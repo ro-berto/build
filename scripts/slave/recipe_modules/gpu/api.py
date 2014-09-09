@@ -49,7 +49,6 @@ class GpuApi(recipe_api.RecipeApi):
     # servers which are Release mode only, force dcheck and blink
     # asserts on.
     self.m.chromium.apply_config('dcheck')
-    self.m.chromium.apply_config('blink_asserts_on')
 
     # To more easily diagnose failures from logs, enable logging in
     # Blink Release builds.
