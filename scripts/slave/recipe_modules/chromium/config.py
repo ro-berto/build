@@ -17,6 +17,7 @@ TARGET_PLATFORMS = HOST_PLATFORMS + ('ios', 'android', 'chromeos')
 HOST_TARGET_BITS = (32, 64)
 HOST_ARCHS = ('intel',)
 TARGET_ARCHS = HOST_ARCHS + ('arm', 'mipsel')
+TARGET_CROS_BOARDS = (None, 'x86-generic')
 BUILD_CONFIGS = ('Release', 'Debug')
 MEMORY_TOOLS = ('memcheck', 'tsan', 'tsan_rv', 'drmemory_full',
                 'drmemory_light')
@@ -29,7 +30,7 @@ def check(val, potentials):
 # Schema for config items in this module.
 def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
                TARGET_PLATFORM, TARGET_ARCH, TARGET_BITS,
-               BUILD_CONFIG, **_kwargs):
+               BUILD_CONFIG, TARGET_CROS_BOARD, **_kwargs):
   equal_fn = lambda tup: ('%s=%s' % (tup[0], pipes.quote(str(tup[1]))))
   return ConfigGroup(
     compile_py = ConfigGroup(
@@ -56,6 +57,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       args = Set(basestring),
     ),
     build_dir = Single(Path),
+    cros_sdk_args = List(basestring),
     runtests = ConfigGroup(
       memory_tool = Single(basestring, required=False),
       memory_tests_runner = Single(Path),
@@ -76,6 +78,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
     TARGET_PLATFORM = Static(check(TARGET_PLATFORM, TARGET_PLATFORMS)),
     TARGET_ARCH = Static(check(TARGET_ARCH, TARGET_ARCHS)),
     TARGET_BITS = Static(check(TARGET_BITS, HOST_TARGET_BITS)),
+    TARGET_CROS_BOARD = Static(TARGET_CROS_BOARD),
   )
 
 TEST_FORMAT = (
@@ -95,6 +98,7 @@ VAR_TEST_MAP = {
   'TARGET_PLATFORM': TARGET_PLATFORMS,
   'TARGET_ARCH':     TARGET_ARCHS,
   'TARGET_BITS':     HOST_TARGET_BITS,
+  'TARGET_CROS_BOARD': TARGET_CROS_BOARDS,
 
   'BUILD_CONFIG':    BUILD_CONFIGS,
 }
@@ -131,6 +135,10 @@ def BASE(c):
   if c.TARGET_PLATFORM not in potential_platforms:
     raise BadConf('Can not compile "%s" on "%s"' %
                   (c.TARGET_PLATFORM, c.HOST_PLATFORM))
+
+  if c.TARGET_CROS_BOARD:
+    if not c.TARGET_PLATFORM == 'chromeos':
+      raise BadConf("Cannot specify CROS board for non-'chromeos' platform")
 
   if c.HOST_PLATFORM != c.TARGET_PLATFORM:
     c.gyp_env.GYP_CROSSCOMPILE = 1
@@ -183,7 +191,11 @@ def ninja(c):
     c.gyp_env.GYP_GENERATORS.add('ninja')
 
   c.compile_py.build_tool = 'ninja'
-  c.build_dir = Path('[CHECKOUT]', 'out')
+
+  out_path = 'out'
+  if c.TARGET_CROS_BOARD:
+    out_path += '_%s' % (c.TARGET_CROS_BOARD,)
+  c.build_dir = Path('[CHECKOUT]', out_path)
 
 @config_ctx(group='builder')
 def msvs(c):
@@ -406,6 +418,11 @@ def chromium_chromeos_ozone(c):
 @config_ctx(includes=['ninja', 'clang', 'goma'])
 def chromium_clang(c):
   c.compile_py.default_targets = ['All', 'chromium_builder_tests']
+
+@config_ctx()
+def chrome_internal(c):
+  # For internal Chrome builds, add this flag to our 'cros' wrapper.
+  c.cros_sdk_args.append('--internal')
 
 @config_ctx(includes=['static_library'])
 def ios(c):

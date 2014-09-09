@@ -27,6 +27,8 @@ class ChromiumApi(recipe_api.RecipeApi):
   def __init__(self, *args, **kwargs):
     super(ChromiumApi, self).__init__(*args, **kwargs)
     self._build_properties = None
+    self._builders = {}
+    self.add_builders(builders.BUILDERS)
 
   def get_config_defaults(self):
     return {
@@ -36,6 +38,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
       'TARGET_PLATFORM': self.m.platform.name,
       'TARGET_ARCH': self.m.platform.arch,
+      'TARGET_CROS_BOARD': None,
 
       # NOTE: This is replicating logic which lives in
       # chrome/trunk/src/build/common.gypi, which is undesirable. The desired
@@ -54,7 +57,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
   @property
   def builders(self):
-    return builders.BUILDERS
+    return self._builders
 
   @property
   def steps(self):
@@ -95,6 +98,10 @@ class ChromiumApi(recipe_api.RecipeApi):
   def set_build_properties(self, props):
     self._build_properties = props
 
+  def add_builders(self, builders):
+    """Adds builders to our builder map"""
+    self._builders.update(builders)
+
   def compile(self, targets=None, name=None,
               force_clobber=False, **kwargs):
     """Return a compile.py invocation."""
@@ -121,6 +128,8 @@ class ChromiumApi(recipe_api.RecipeApi):
       args.append('--clobber')
     if self.c.compile_py.pass_arch_flag:
       args += ['--arch', self.c.gyp_env.GYP_DEFINES['target_arch']]
+    if self.c.TARGET_CROS_BOARD:
+      args += ['--cros-board', self.c.TARGET_CROS_BOARD]
     args.append('--')
     if self.c.compile_py.build_tool == 'xcode':
       for target in targets:
@@ -129,6 +138,9 @@ class ChromiumApi(recipe_api.RecipeApi):
         args.extend(['-sdk', self.c.compile_py.xcode_sdk])
     else:
       args.extend(targets)
+    if self.c.TARGET_CROS_BOARD:
+      # Wrap 'compile' through 'cros chrome-sdk'
+      kwargs['wrapper'] = self._get_cros_chrome_sdk_wrapper()
     self.m.python(name or 'compile',
                   self.m.path['build'].join('scripts', 'slave',
                                             'compile.py'),
@@ -355,6 +367,24 @@ class ChromiumApi(recipe_api.RecipeApi):
         xvfb=True,
         **kwargs)
 
+  def _get_cros_chrome_sdk_wrapper(self, clean=False):
+    """Returns: a wrapper command for 'cros chrome-sdk'
+
+    Args:
+      clean: (bool) If True, instruct the wrapper to clean any previous
+          state data.
+    """
+    assert self.c.TARGET_CROS_BOARD
+    wrapper = [
+        'cros', 'chrome-sdk',
+        '--board=%s' % (self.c.TARGET_CROS_BOARD,),
+        '--nocolor',]
+    wrapper += self.c.cros_sdk_args
+    if clean:
+      wrapper += ['--clear-sdk-cache']
+    wrapper += ['--']
+    return wrapper
+
   def runhooks(self, **kwargs):
     """Run the build-configuration hooks for chromium."""
     env = kwargs.get('env', {})
@@ -363,6 +393,9 @@ class ChromiumApi(recipe_api.RecipeApi):
     else:
       env['GYP_CHROMIUM_NO_ACTION'] = 1
     kwargs['env'] = env
+    if self.c.TARGET_CROS_BOARD:
+      # Wrap 'runhooks' through 'cros chrome-sdk'
+      kwargs['wrapper'] = self._get_cros_chrome_sdk_wrapper(clean=True)
     self.m.gclient.runhooks(**kwargs)
 
   def run_gn(self, use_goma=False):

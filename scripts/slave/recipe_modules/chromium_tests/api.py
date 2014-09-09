@@ -35,6 +35,12 @@ RECIPE_CONFIGS = {
     'chromium_apply_config': ['chromeos'],
     'gclient_config': 'chromium',
   },
+  'chrome_chromeos': {
+    'chromium_config': 'chromium',
+    'chromium_apply_config': ['chromeos', 'chrome_internal'],
+    'gclient_config': 'chromium',
+    'gclient_apply_config': ['chrome_internal'],
+  },
   'chromium_chromeos_ozone': {
     'chromium_config': 'chromium',
     'chromium_apply_config': ['chromeos', 'ozone'],
@@ -162,19 +168,23 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                                        '%s.json' % mastername)
     test_spec_path = self.m.path['checkout'].join('testing', 'buildbot',
                                                test_spec_file)
-    test_spec_result = self.m.json.read(
-        'read test spec',
-        test_spec_path,
-        step_test_data=lambda: self.m.json.test_api.output({}))
-    test_spec_result.presentation.step_text = 'path: %s' % test_spec_path
-    generated_tests = []
-    for generator in bot_config.get('test_generators', []):
-      new_tests = generator(
-          self.m, mastername, buildername, test_spec_result.json.output)
-      generated_tests.extend(new_tests)
-    bot_config['tests'] = generated_tests + bot_config.get('tests', [])
+    if not bot_config.get('disable_tests', False):
+      test_spec_result = self.m.json.read(
+          'read test spec',
+          test_spec_path,
+          step_test_data=lambda: self.m.json.test_api.output({}))
+      test_spec_result.presentation.step_text = 'path: %s' % test_spec_path
+      test_spec = test_spec_result.json.output
+      generated_tests = []
+      for generator in bot_config.get('test_generators', []):
+        new_tests = generator(
+            self.m, mastername, buildername, test_spec)
+        generated_tests.extend(new_tests)
+      bot_config['tests'] = generated_tests + bot_config.get('tests', [])
+    else:
+      test_spec = {}
     for test in bot_config.get('tests', []):
-      test.set_test_spec(test_spec_result.json.output)
+      test.set_test_spec(test_spec)
 
     self.m.chromium.cleanup_temp()
     if self.m.chromium.c.TARGET_PLATFORM == 'android':
@@ -190,11 +200,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           generated_tests = []
           for generator in builder_dict.get('test_generators', []):
             new_tests = generator(
-                self.m, mastername, loop_buildername,
-                test_spec_result.json.output)
+                self.m, mastername, loop_buildername, test_spec)
             generated_tests.extend(new_tests)
           for test in builder_dict.get('tests', []) + generated_tests:
-            test.set_test_spec(test_spec_result.json.output)
+            test.set_test_spec(test_spec)
             compile_targets.update(test.compile_targets(self.m))
 
       self.m.chromium.compile(targets=sorted(compile_targets))
@@ -206,7 +215,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     if bot_config.get('use_isolate'):
       test_args_map = {}
-      test_spec = test_spec_result.json.output
       gtests_tests = test_spec.get(buildername, {}).get('gtest_tests', [])
       for test in gtests_tests:
         if isinstance(test, dict):
@@ -223,7 +231,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           self.m.archive.legacy_upload_url(
             master_config.get('build_gs_bucket'),
             extra_url_components=self.m.properties['mastername']),
-          build_revision=got_revision)
+          build_revision=got_revision,
+          cros_board=self.m.chromium.c.TARGET_CROS_BOARD,
+      )
 
     return update_step
 

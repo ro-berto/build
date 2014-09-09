@@ -259,5 +259,24 @@ SPEC = {
         'platform': 'linux',
       },
     },
+
+    # Simple Chrome test builder for coverage
+    'Coverage ChromiumOS Simple Chrome x86-generic': {
+      'recipe_config': 'chromium_chromeos',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+        'TARGET_PLATFORM': 'chromeos',
+        'TARGET_CROS_BOARD': 'x86-generic',
+      },
+      'bot_type': 'builder',
+      'disable_tests': True,
+      'compile_targets': [
+        'chrome',
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+    },
   },
 }

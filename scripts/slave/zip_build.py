@@ -309,7 +309,8 @@ class PathMatcher(object):
 
 
 def Archive(options):
-  build_dir = build_directory.GetBuildOutputDirectory(options.src_dir)
+  build_dir = build_directory.GetBuildOutputDirectory(
+      options.src_dir, options.cros_board)
   build_dir = os.path.abspath(os.path.join(build_dir, options.target))
 
   staging_dir = slave_utils.GetStagingDir(options.src_dir)
@@ -439,6 +440,10 @@ def main(argv):
   option_parser.add_option('--build-url', default='',
                            help=('Optional URL to which to upload build '
                                  '(overrides build_url factory property)'))
+  option_parser.add_option('--cros-board',
+                           help=('If building for Chrom[e|ium]OS via the '
+                                 'simple chrome workflow, the name of the '
+                                 'target CROS board.'))
   chromium_utils.AddPropertiesOptions(option_parser)
 
   options, args = option_parser.parse_args(argv)
@@ -465,7 +470,8 @@ def main(argv):
 
   if options.path_filter:
     options.path_filter = PATH_FILTERS[options.path_filter](
-        build_directory.GetBuildOutputDirectory(), options.target)
+        build_directory.GetBuildOutputDirectory(cros_board=options.cros_board),
+        options.target)
 
   return Archive(options)
 
