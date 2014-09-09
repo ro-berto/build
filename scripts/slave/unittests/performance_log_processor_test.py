@@ -1,15 +1,9 @@
 #!/usr/bin/env python
-# Copyright (c) 2012 The Chromium Authors. All rights reserved.
+# Copyright 2014 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-"""Unit tests for annotated log parsers (aka log processors) used by runtest.py.
-
-The classes tested here reside in process_log_utils.py.
-
-The script runtest.py has the option to parse test output locally and send
-results to the master via annotator steps. This file tests those parsers.
-"""
+"""Unit tests for annotated log processor classes used by runtest.py."""
 
 import json
 import os
@@ -17,9 +11,9 @@ import unittest
 
 import test_env  # pylint: disable=W0403,W0611
 
-from slave import process_log_utils
+from slave import performance_log_processor
 
-# These should be the same as the constants used in process_log_utils.
+# These should be the same as the constants used in performance_log_processor.
 # See: http://docs.buildbot.net/current/developer/results.html
 SUCCESS, WARNINGS, FAILURE, SKIPPED, EXCEPTION, RETRY = range(6)
 
@@ -141,7 +135,7 @@ class GraphingLogProcessorTest(LogProcessorTest):
         'ws_final_browser', 'processes', 'artificial_graph')]
 
     self._ConstructParseAndCheckJSON(input_files, output_files, None,
-        process_log_utils.GraphingLogProcessor)
+        performance_log_processor.GraphingLogProcessor)
 
   def testGraphList(self):
     """Tests the output of "graphs.dat" files, which contains a graph list."""
@@ -150,7 +144,7 @@ class GraphingLogProcessorTest(LogProcessorTest):
     output_files = [graphfile]
 
     logs = self._ConstructParseAndCheckLogfiles(input_files, output_files,
-        process_log_utils.GraphingLogProcessor)
+        performance_log_processor.GraphingLogProcessor)
 
     actual = json.loads('\n'.join(logs[graphfile]))
     expected = json.load(open(
@@ -169,7 +163,7 @@ class GraphingLogProcessorTest(LogProcessorTest):
     output_files = [summary_file]
 
     logs = self._ConstructParseAndCheckLogfiles(input_files, output_files,
-        process_log_utils.GraphingLogProcessor)
+        performance_log_processor.GraphingLogProcessor)
 
     actual = json.loads('\n'.join(logs[summary_file]))
     expected = json.load(open(
@@ -184,7 +178,7 @@ class GraphingLogProcessorTest(LogProcessorTest):
     output_files = summary_files
 
     logs = self._ConstructParseAndCheckLogfiles(input_files, output_files,
-        process_log_utils.GraphingLogProcessor)
+        performance_log_processor.GraphingLogProcessor)
 
     for filename in output_files:
       actual = json.loads('\n'.join(logs[filename]))
@@ -208,7 +202,7 @@ class GraphingLogProcessorPerfTest(LogProcessorTest):
     graph_file = 'graphs.dat'
 
     parser = self._ConstructDefaultProcessor(
-        process_log_utils.GraphingLogProcessor,
+        performance_log_processor.GraphingLogProcessor,
         factory_properties={'expectations': True, 'perf_id': 'tester'},
         perf_expectations_path=perf_expectations_path)
 
@@ -368,7 +362,7 @@ class GraphingPageCyclerLogProcessorPerfTest(LogProcessorTest):
 
   def testPageCycler(self):
     parser = self._ConstructDefaultProcessor(
-        process_log_utils.GraphingPageCyclerLogProcessor)
+        performance_log_processor.GraphingPageCyclerLogProcessor)
     self._ProcessLog(parser, 'page_cycler.log')
 
     expected = 't: 2.32k'

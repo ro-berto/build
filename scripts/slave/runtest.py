@@ -51,7 +51,7 @@ from slave import annotation_utils
 from slave import build_directory
 from slave import crash_utils
 from slave import gtest_slave_utils
-from slave import process_log_utils
+from slave import performance_log_processor
 from slave import results_dashboard
 from slave import slave_utils
 from slave import xvfb
@@ -76,6 +76,12 @@ GIT_CR_POS_RE = re.compile('^Cr-Commit-Position: refs/heads/master@{#(\d+)}$')
 
 # The directory that this script is in.
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+LOG_PROCESSOR_CLASSES = {
+    'gtest': gtest_utils.GTestLogParser,
+    'graphing': performance_log_processor.GraphingLogProcessor,
+    'pagecycler': performance_log_processor.GraphingPageCyclerLogProcessor,
+}
 
 
 def _ShouldEnableSandbox(sandbox_path):
@@ -166,13 +172,13 @@ def _ShutdownDBus():
     print ' cleared DBUS_SESSION_BUS_ADDRESS environment variable'
 
 
-def _RunGTestCommand(command, extra_env, results_tracker=None, pipes=None):
+def _RunGTestCommand(command, extra_env, log_processor=None, pipes=None):
   """Runs a test, printing and possibly processing the output.
 
   Args:
     command: A list of strings in a command (the command and its arguments).
     extra_env: A dictionary of extra environment variables to set.
-    results_tracker: A "log processor" class which has the ProcessLine method.
+    log_processor: A log processor instance which has the ProcessLine method.
     pipes: A list of command string lists which the output will be piped to.
 
   Returns:
@@ -192,9 +198,9 @@ def _RunGTestCommand(command, extra_env, results_tracker=None, pipes=None):
   # TODO(phajdan.jr): Clean this up when internal waterfalls are fixed.
   env.update({'CHROMIUM_TEST_LAUNCHER_BOT_MODE': '1'})
 
-  if results_tracker:
+  if log_processor:
     return chromium_utils.RunCommand(
-        command, pipes=pipes, parser_func=results_tracker.ProcessLine, env=env)
+        command, pipes=pipes, parser_func=log_processor.ProcessLine, env=env)
   else:
     return chromium_utils.RunCommand(command, pipes=pipes, env=env)
 
@@ -300,7 +306,7 @@ def _GetGitRevision(in_directory):
   return stdout.strip()
 
 
-def _GenerateJSONForTestResults(options, results_tracker):
+def _GenerateJSONForTestResults(options, log_processor):
   """Generates or updates a JSON file from the gtest results XML and upload the
   file to the archive server.
 
@@ -311,6 +317,7 @@ def _GenerateJSONForTestResults(options, results_tracker):
   Args:
     options: command-line options that are supposed to have build_dir,
         results_directory, builder_name, build_name and test_output_xml values.
+    log_processor: An instance of PerformanceLogProcessor or similar class.
 
   Returns:
     True upon success, False upon failure.
@@ -330,7 +337,7 @@ def _GenerateJSONForTestResults(options, results_tracker):
              'using log output.\n') % (os.getcwd(), options.test_output_xml))
       # The file did not get generated. See if we can generate a results map
       # from the log output.
-      results_map = gtest_slave_utils.GetResultsMap(results_tracker)
+      results_map = gtest_slave_utils.GetResultsMap(log_processor)
   except Exception as e:
     # This error will be caught by the following 'not results_map' statement.
     print 'Error: ', e
@@ -351,7 +358,6 @@ def _GenerateJSONForTestResults(options, results_tracker):
   generate_json_options.master_name = options.master_class_name or _GetMaster()
   generate_json_options.test_results_server = config.Master.test_results_server
 
-  # Print out master name for log_parser
   print _GetMasterString(generate_json_options.master_name)
 
   generator = None
@@ -523,89 +529,78 @@ def _UsingGtestJson(options):
           not options.run_shell_script)
 
 
-def _GetParsers():
-  """Returns a dictionary mapping strings to log parser classes."""
-  parsers = {
-      'gtest': gtest_utils.GTestLogParser,
-      'graphing': process_log_utils.GraphingLogProcessor,
-      'pagecycler': process_log_utils.GraphingPageCyclerLogProcessor,
-  }
-  return parsers
-
-
-def _ListParsers(selection):
-  """Prints a list of available log parser classes iff the input is 'list'.
+def _ListLogProcessors(selection):
+  """Prints a list of available log processor classes iff the input is 'list'.
 
   Args:
-    selection: A log parser name, or the string "list".
+    selection: A log processor name, or the string "list".
 
   Returns:
     True if a list was printed, False otherwise.
   """
-  parsers = _GetParsers()
   shouldlist = selection and selection == 'list'
   if shouldlist:
     print
-    print 'Available log parsers:'
-    for p in parsers:
-      print ' ', p, parsers[p].__name__
+    print 'Available log processors:'
+    for p in LOG_PROCESSOR_CLASSES:
+      print ' ', p, LOG_PROCESSOR_CLASSES[p].__name__
 
   return shouldlist
 
 
-def _SelectResultsTracker(options):
-  """Returns a log parser class (aka results tracker class).
+def _SelectLogProcessor(options):
+  """Returns a log processor class based on the command line options.
 
   Args:
     options: Command-line options (from OptionParser).
 
   Returns:
-    A log parser class (aka results tracker class), or None.
+    A log processor class, or None.
   """
   if _UsingGtestJson(options):
     return gtest_utils.GTestJSONParser
 
-  parsers = _GetParsers()
   if options.annotate:
-    if options.annotate in parsers:
+    if options.annotate in LOG_PROCESSOR_CLASSES:
       if options.generate_json_file and options.annotate != 'gtest':
         raise NotImplementedError('"%s" doesn\'t make sense with '
                                   'options.generate_json_file.')
       else:
-        return parsers[options.annotate]
+        return LOG_PROCESSOR_CLASSES[options.annotate]
     else:
       raise KeyError('"%s" is not a valid GTest parser!' % options.annotate)
   elif options.generate_json_file:
-    return parsers['gtest']
+    return LOG_PROCESSOR_CLASSES['gtest']
 
   return None
 
 
 def _GetCommitPos(build_properties):
-  """Extract the commit position from the build properties, if its there."""
+  """Extracts the commit position from the build properties, if its there."""
   if 'got_revision_cp' not in build_properties:
     return None
   commit_pos = build_properties['got_revision_cp']
   return int(re.search(r'{#(\d+)}', commit_pos).group(1))
 
 
-def _CreateResultsTracker(tracker_class, options):
-  """Instantiate a log parser (aka results tracker).
+def _CreateLogProcessor(log_processor_class, options):
+  """Creates a log processor instance.
 
   Args:
-    tracker_class: A log parser class.
+    log_processor_class: A subclass of PerformanceLogProcessor or similar class.
     options: Command-line options (from OptionParser).
 
   Returns:
-    An instance of a log parser class, or None.
+    An instance of a log processor class, or None.
   """
-  if not tracker_class:
+  if not log_processor_class:
     return None
 
-  if tracker_class.__name__ in ('GTestLogParser',):
-    tracker_obj = tracker_class()
-  elif tracker_class.__name__ in ('GTestJSONParser',):
-    tracker_obj = tracker_class(options.build_properties.get('mastername'))
+  if log_processor_class.__name__ in ('GTestLogParser',):
+    tracker_obj = log_processor_class()
+  elif log_processor_class.__name__ in ('GTestJSONParser',):
+    tracker_obj = log_processor_class(
+        options.build_properties.get('mastername'))
   else:
     build_dir = os.path.abspath(options.build_dir)
 
@@ -627,7 +622,7 @@ def _CreateResultsTracker(tracker_class, options):
     else:
       revision = _GetRevision(os.path.dirname(build_dir))
 
-    tracker_obj = tracker_class(
+    tracker_obj = log_processor_class(
         revision=revision,
         build_properties=options.build_properties,
         factory_properties=options.factory_properties,
@@ -660,13 +655,13 @@ def _GetSupplementalColumns(build_dir, supplemental_colummns_file_name):
   return supplemental_columns
 
 
-def _SendResultsToDashboard(results_tracker, system, test, url, build_dir,
+def _SendResultsToDashboard(log_processor, system, test, url, build_dir,
                             mastername, buildername, buildnumber,
                             supplemental_columns_file, extra_columns=None):
-  """Sends results from a results tracker (aka log parser) to the dashboard.
+  """Sends results from a log processor instance to the dashboard.
 
   Args:
-    results_tracker: An instance of a log parser class, which has been used to
+    log_processor: An instance of a log processor class, which has been used to
         process the test output, so it contains the test results.
     system: A string such as 'linux-release', which comes from perf_id.
     test: Test "suite" name string.
@@ -690,7 +685,7 @@ def _SendResultsToDashboard(results_tracker, system, test, url, build_dir,
   if extra_columns:
     supplemental_columns.update(extra_columns)
 
-  charts = _GetDataFromLogProcessor(results_tracker)
+  charts = _GetDataFromLogProcessor(log_processor)
   points = results_dashboard.MakeListOfPoints(
       charts, system, test, mastername, buildername, buildnumber,
       supplemental_columns)
@@ -705,7 +700,7 @@ def _GetDataFromLogProcessor(log_processor):
 
   Returns:
     A dictionary mapping chart name to lists of chart data.
-    put together in process_log_utils. Each chart data dictionary contains:
+    put together in log_processor. Each chart data dictionary contains:
       "traces": A dictionary mapping trace names to value, stddev pairs.
       "units": Units for the chart.
       "rev": A revision number or git hash.
@@ -720,7 +715,7 @@ def _GetDataFromLogProcessor(log_processor):
     chart_name = log_file_name.replace('-summary.dat', '')
 
     # It's assumed that the log lines list has length one, because for each
-    # graph name only one line is added in process_log_utils in the method
+    # graph name only one line is added in log_processor in the method
     # GraphingLogProcessor._CreateSummaryOutput.
     if len(line_list) != 1:
       print 'Error: Unexpected log processor line list: %s' % str(line_list)
@@ -952,18 +947,18 @@ def _MainParse(options, _args):
   """Run input through annotated test parser.
 
   This doesn't execute a test, but reads test input from a file and runs it
-  through the specified annotation parser.
+  through the specified annotation parser (aka log processor).
   """
   if not options.annotate:
     raise chromium_utils.MissingArgument('--parse-input doesn\'t make sense '
                                          'without --annotate.')
 
-  # If --annotate=list was passed, list the log parser classes and exit.
-  if _ListParsers(options.annotate):
+  # If --annotate=list was passed, list the log processor classes and exit.
+  if _ListLogProcessors(options.annotate):
     return 0
 
-  tracker_class = _SelectResultsTracker(options)
-  results_tracker = _CreateResultsTracker(tracker_class, options)
+  log_processor_class = _SelectLogProcessor(options)
+  log_processor = _CreateLogProcessor(log_processor_class, options)
 
   if options.generate_json_file:
     if os.path.exists(options.test_output_xml):
@@ -982,15 +977,15 @@ def _MainParse(options, _args):
 
   with f:
     for line in f:
-      results_tracker.ProcessLine(line)
+      log_processor.ProcessLine(line)
 
   if options.generate_json_file:
-    if not _GenerateJSONForTestResults(options, results_tracker):
+    if not _GenerateJSONForTestResults(options, log_processor):
       return 1
 
   if options.annotate:
     annotation_utils.annotate(
-        options.test_type, options.parse_result, results_tracker,
+        options.test_type, options.parse_result, log_processor,
         options.factory_properties.get('full_test_name'),
         perf_dashboard_id=options.perf_dashboard_id)
 
@@ -1026,11 +1021,11 @@ def _MainMac(options, args, extra_env):
       command.extend(['--brave-new-test-launcher', '--test-launcher-bot-mode'])
   command.extend(args[1:])
 
-  # If --annotate=list was passed, list the log parser classes and exit.
-  if _ListParsers(options.annotate):
+  # If --annotate=list was passed, list the log processor classes and exit.
+  if _ListLogProcessors(options.annotate):
     return 0
-  tracker_class = _SelectResultsTracker(options)
-  results_tracker = _CreateResultsTracker(tracker_class, options)
+  log_processor_class = _SelectLogProcessor(options)
+  log_processor = _CreateLogProcessor(log_processor_class, options)
 
   if options.generate_json_file:
     if os.path.exists(options.test_output_xml):
@@ -1045,7 +1040,7 @@ def _MainMac(options, args, extra_env):
                                       document_root=options.document_root)
 
     if _UsingGtestJson(options):
-      json_file_name = results_tracker.PrepareJSONFile(
+      json_file_name = log_processor.PrepareJSONFile(
           options.test_launcher_summary_output)
       command.append('--test-launcher-summary-output=%s' % json_file_name)
 
@@ -1058,7 +1053,7 @@ def _MainMac(options, args, extra_env):
     command = _GenerateRunIsolatedCommand(build_dir, test_exe_path, options,
                                           command)
     result = _RunGTestCommand(command, extra_env, pipes=pipes,
-                              results_tracker=results_tracker)
+                              log_processor=log_processor)
   finally:
     if http_server:
       http_server.StopServer()
@@ -1066,21 +1061,21 @@ def _MainMac(options, args, extra_env):
       _UploadGtestJsonSummary(json_file_name,
                               options.build_properties,
                               test_exe)
-      results_tracker.ProcessJSONFile(options.build_dir)
+      log_processor.ProcessJSONFile(options.build_dir)
 
   if options.generate_json_file:
-    if not _GenerateJSONForTestResults(options, results_tracker):
+    if not _GenerateJSONForTestResults(options, log_processor):
       return 1
 
   if options.annotate:
     annotation_utils.annotate(
-        options.test_type, result, results_tracker,
+        options.test_type, result, log_processor,
         options.factory_properties.get('full_test_name'),
         perf_dashboard_id=options.perf_dashboard_id)
 
   if options.results_url:
     _SendResultsToDashboard(
-        results_tracker, _GetPerfID(options),
+        log_processor, _GetPerfID(options),
         options.test_type, options.results_url, options.build_dir,
         options.build_properties.get('mastername'),
         options.build_properties.get('buildername'),
@@ -1146,10 +1141,10 @@ def _MainIOS(options, args, extra_env):
   ]
   command.extend(args[1:])
 
-  # If --annotate=list was passed, list the log parser classes and exit.
-  if _ListParsers(options.annotate):
+  # If --annotate=list was passed, list the log processor classes and exit.
+  if _ListLogProcessors(options.annotate):
     return 0
-  results_tracker = _CreateResultsTracker(_GetParsers()['gtest'], options)
+  log_processor = _CreateLogProcessor(LOG_PROCESSOR_CLASSES['gtest'], options)
 
   # Make sure the simulator isn't running.
   kill_simulator()
@@ -1163,12 +1158,12 @@ def _MainIOS(options, args, extra_env):
   crash_files_after = set([])
   crash_files_before = set(crash_utils.list_crash_logs())
 
-  result = _RunGTestCommand(command, extra_env, results_tracker)
+  result = _RunGTestCommand(command, extra_env, log_processor)
 
   # Because test apps kill themselves, iossim sometimes returns non-zero
-  # status even though all tests have passed.  Check the results_tracker to
+  # status even though all tests have passed.  Check the log_processor to
   # see if the test run was successful.
-  if results_tracker.CompletedWithoutFailure():
+  if log_processor.CompletedWithoutFailure():
     result = 0
   else:
     result = 1
@@ -1279,11 +1274,11 @@ def _MainLinux(options, args, extra_env):
       command.extend(['--brave-new-test-launcher', '--test-launcher-bot-mode'])
   command.extend(args[1:])
 
-  # If --annotate=list was passed, list the log parser classes and exit.
-  if _ListParsers(options.annotate):
+  # If --annotate=list was passed, list the log processor classes and exit.
+  if _ListLogProcessors(options.annotate):
     return 0
-  tracker_class = _SelectResultsTracker(options)
-  results_tracker = _CreateResultsTracker(tracker_class, options)
+  log_processor_class = _SelectLogProcessor(options)
+  log_processor = _CreateLogProcessor(log_processor_class, options)
 
   if options.generate_json_file:
     if os.path.exists(options.test_output_xml):
@@ -1314,7 +1309,7 @@ def _MainLinux(options, args, extra_env):
           server_dir=special_xvfb_dir)
 
     if _UsingGtestJson(options):
-      json_file_name = results_tracker.PrepareJSONFile(
+      json_file_name = log_processor.PrepareJSONFile(
           options.test_launcher_summary_output)
       command.append('--test-launcher-summary-output=%s' % json_file_name)
 
@@ -1331,7 +1326,7 @@ def _MainLinux(options, args, extra_env):
     command = _GenerateRunIsolatedCommand(build_dir, test_exe_path, options,
                                           command)
     result = _RunGTestCommand(command, extra_env, pipes=pipes,
-                              results_tracker=results_tracker)
+                              log_processor=log_processor)
   finally:
     if http_server:
       http_server.StopServer()
@@ -1342,21 +1337,21 @@ def _MainLinux(options, args, extra_env):
         _UploadGtestJsonSummary(json_file_name,
                                 options.build_properties,
                                 test_exe)
-      results_tracker.ProcessJSONFile(options.build_dir)
+      log_processor.ProcessJSONFile(options.build_dir)
 
   if options.generate_json_file:
-    if not _GenerateJSONForTestResults(options, results_tracker):
+    if not _GenerateJSONForTestResults(options, log_processor):
       return 1
 
   if options.annotate:
     annotation_utils.annotate(
-        options.test_type, result, results_tracker,
+        options.test_type, result, log_processor,
         options.factory_properties.get('full_test_name'),
         perf_dashboard_id=options.perf_dashboard_id)
 
   if options.results_url:
     _SendResultsToDashboard(
-        results_tracker, _GetPerfID(options),
+        log_processor, _GetPerfID(options),
         options.test_type, options.results_url, options.build_dir,
         options.build_properties.get('mastername'),
         options.build_properties.get('buildername'),
@@ -1428,11 +1423,11 @@ def _MainWin(options, args, extra_env):
   # directory from previous test runs (i.e.- from crashes or unittest leaks).
   slave_utils.RemoveChromeTemporaryFiles()
 
-  # If --annotate=list was passed, list the log parser classes and exit.
-  if _ListParsers(options.annotate):
+  # If --annotate=list was passed, list the log processor classes and exit.
+  if _ListLogProcessors(options.annotate):
     return 0
-  tracker_class = _SelectResultsTracker(options)
-  results_tracker = _CreateResultsTracker(tracker_class, options)
+  log_processor_class = _SelectLogProcessor(options)
+  log_processor = _CreateLogProcessor(log_processor_class, options)
 
   if options.generate_json_file:
     if os.path.exists(options.test_output_xml):
@@ -1447,13 +1442,13 @@ def _MainWin(options, args, extra_env):
                                       document_root=options.document_root)
 
     if _UsingGtestJson(options):
-      json_file_name = results_tracker.PrepareJSONFile(
+      json_file_name = log_processor.PrepareJSONFile(
           options.test_launcher_summary_output)
       command.append('--test-launcher-summary-output=%s' % json_file_name)
 
     command = _GenerateRunIsolatedCommand(build_dir, test_exe_path, options,
                                           command)
-    result = _RunGTestCommand(command, extra_env, results_tracker)
+    result = _RunGTestCommand(command, extra_env, log_processor)
   finally:
     if http_server:
       http_server.StopServer()
@@ -1461,24 +1456,24 @@ def _MainWin(options, args, extra_env):
       _UploadGtestJsonSummary(json_file_name,
                               options.build_properties,
                               test_exe)
-      results_tracker.ProcessJSONFile(options.build_dir)
+      log_processor.ProcessJSONFile(options.build_dir)
 
   if options.enable_pageheap:
     slave_utils.SetPageHeap(build_dir, 'chrome.exe', False)
 
   if options.generate_json_file:
-    if not _GenerateJSONForTestResults(options, results_tracker):
+    if not _GenerateJSONForTestResults(options, log_processor):
       return 1
 
   if options.annotate:
     annotation_utils.annotate(
-        options.test_type, result, results_tracker,
+        options.test_type, result, log_processor,
         options.factory_properties.get('full_test_name'),
         perf_dashboard_id=options.perf_dashboard_id)
 
   if options.results_url:
     _SendResultsToDashboard(
-        results_tracker, _GetPerfID(options),
+        log_processor, _GetPerfID(options),
         options.test_type, options.results_url, options.build_dir,
         options.build_properties.get('mastername'),
         options.build_properties.get('buildername'),
@@ -1510,10 +1505,10 @@ def _MainAndroid(options, args, extra_env):
   if len(args) < 1:
     raise chromium_utils.MissingArgument('Usage: %s' % USAGE)
 
-  if _ListParsers(options.annotate):
+  if _ListLogProcessors(options.annotate):
     return 0
-  tracker_class = _SelectResultsTracker(options)
-  results_tracker = _CreateResultsTracker(tracker_class, options)
+  log_processor_class = _SelectLogProcessor(options)
+  log_processor = _CreateLogProcessor(log_processor_class, options)
 
   if options.generate_json_file:
     if os.path.exists(options.test_output_xml):
@@ -1527,21 +1522,21 @@ def _MainAndroid(options, args, extra_env):
     run_test_target_option = '--debug'
   command = ['src/build/android/test_runner.py', 'gtest',
              run_test_target_option, '-s', test_suite]
-  result = _RunGTestCommand(command, extra_env, results_tracker=results_tracker)
+  result = _RunGTestCommand(command, extra_env, log_processor=log_processor)
 
   if options.generate_json_file:
-    if not _GenerateJSONForTestResults(options, results_tracker):
+    if not _GenerateJSONForTestResults(options, log_processor):
       return 1
 
   if options.annotate:
     annotation_utils.annotate(
-        options.test_type, result, results_tracker,
+        options.test_type, result, log_processor,
         options.factory_properties.get('full_test_name'),
         perf_dashboard_id=options.perf_dashboard_id)
 
   if options.results_url:
     _SendResultsToDashboard(
-        results_tracker, _GetPerfID(options),
+        log_processor, _GetPerfID(options),
         options.test_type, options.results_url, options.build_dir,
         options.build_properties.get('mastername'),
         options.build_properties.get('buildername'),
@@ -1760,7 +1755,6 @@ def main():
                      'not both.')
     return 1
 
-  # Print out builder name for log_parser
   print '[Running on builder: "%s"]' % options.builder_name
 
   did_launch_dbus = False

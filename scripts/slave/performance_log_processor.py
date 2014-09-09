@@ -1,4 +1,4 @@
-# Copyright (c) 2012 The Chromium Authors. All rights reserved.
+# Copyright 2014 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -22,68 +22,14 @@ import os
 import re
 
 from common import chromium_utils
+
+# TODO(crbug.com/403564).
 import config
 
 # Status codes that can be returned by the evaluateCommand method.
 # From buildbot.status.builder.
 # See: http://docs.buildbot.net/current/developer/results.html
 SUCCESS, WARNINGS, FAILURE, SKIPPED, EXCEPTION, RETRY = range(6)
-
-
-def _FormatFloat(number):
-  """Formats float with two decimal points."""
-  if number:
-    return '%.2f' % number
-  else:
-    return '0.00'
-
-
-def _FormatPercentage(ratio):
-  """Formats a number as a string with a percentage (e.g. 0.5 => "50%")."""
-  return '%s%%' % _FormatFloat(100 * ratio)
-
-
-def _Divide(x, y):
-  """Divides with float division, or returns infinity if denominator is 0."""
-  if y == 0:
-    return float('inf')
-  return float(x) / y
-
-
-def _FormatHumanReadable(number):
-  """Formats a float into three significant figures, using metric suffixes.
-
-  Only m, k, and M prefixes (for 1/1000, 1000, and 1,000,000) are used.
-  Examples:
-    0.0387    => 38.7m
-    1.1234    => 1.12
-    10866     => 10.8k
-    682851200 => 683M
-  """
-  metric_prefixes = {-3: 'm', 0: '', 3: 'k', 6: 'M'}
-  scientific = '%.2e' % float(number)     # 6.83e+005
-  e_idx = scientific.find('e')            # 4, or 5 if negative
-  digits = float(scientific[:e_idx])      # 6.83
-  exponent = int(scientific[e_idx + 1:])  # int('+005') = 5
-  while exponent % 3:
-    digits *= 10
-    exponent -= 1
-  while exponent > 6:
-    digits *= 10
-    exponent -= 1
-  while exponent < -3:
-    digits /= 10
-    exponent += 1
-  if digits >= 100:
-    # Don't append a meaningless '.0' to an integer number.
-    digits = int(digits)
-  # Exponent is now divisible by 3, between -3 and 6 inclusive: (-3, 0, 3, 6).
-  return '%s%s' % (digits, metric_prefixes[exponent])
-
-
-def _JoinWithSpacesAndNewLine(words):
-  """Joins a list of words together with spaces."""
-  return ' '.join(str(w) for w in words) + '\n'
 
 
 class PerformanceLogProcessor(object):
@@ -840,3 +786,59 @@ class GraphingPageCyclerLogProcessor(GraphingLogProcessor):
 
     filename = '%s_%s.dat' % (self._revision, trace_name)
     return {filename: file_data}
+
+
+def _FormatFloat(number):
+  """Formats float with two decimal points."""
+  if number:
+    return '%.2f' % number
+  else:
+    return '0.00'
+
+
+def _FormatPercentage(ratio):
+  """Formats a number as a string with a percentage (e.g. 0.5 => "50%")."""
+  return '%s%%' % _FormatFloat(100 * ratio)
+
+
+def _Divide(x, y):
+  """Divides with float division, or returns infinity if denominator is 0."""
+  if y == 0:
+    return float('inf')
+  return float(x) / y
+
+
+def _FormatHumanReadable(number):
+  """Formats a float into three significant figures, using metric suffixes.
+
+  Only m, k, and M prefixes (for 1/1000, 1000, and 1,000,000) are used.
+  Examples:
+    0.0387    => 38.7m
+    1.1234    => 1.12
+    10866     => 10.8k
+    682851200 => 683M
+  """
+  metric_prefixes = {-3: 'm', 0: '', 3: 'k', 6: 'M'}
+  scientific = '%.2e' % float(number)     # 6.83e+005
+  e_idx = scientific.find('e')            # 4, or 5 if negative
+  digits = float(scientific[:e_idx])      # 6.83
+  exponent = int(scientific[e_idx + 1:])  # int('+005') = 5
+  while exponent % 3:
+    digits *= 10
+    exponent -= 1
+  while exponent > 6:
+    digits *= 10
+    exponent -= 1
+  while exponent < -3:
+    digits /= 10
+    exponent += 1
+  if digits >= 100:
+    # Don't append a meaningless '.0' to an integer number.
+    digits = int(digits)
+  # Exponent is now divisible by 3, between -3 and 6 inclusive: (-3, 0, 3, 6).
+  return '%s%s' % (digits, metric_prefixes[exponent])
+
+
+def _JoinWithSpacesAndNewLine(words):
+  """Joins a list of words together with spaces."""
+  return ' '.join(str(w) for w in words) + '\n'
