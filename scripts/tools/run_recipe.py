@@ -15,9 +15,9 @@ Example:
     rietveld=https://codereview.chromium.org
 
 Alternatively, the properties can be specified as a Python dict using a
---properties_file, which can optionally be read in from stdin. For example:
+--properties-file, which can optionally be read in from stdin. For example:
 
-./run_recipe.py run_presubmit --properties_file - <<EOF
+./run_recipe.py run_presubmit --properties-file - <<EOF
 {
   'repo_name': 'tools_build',
   'issue': 12345,
