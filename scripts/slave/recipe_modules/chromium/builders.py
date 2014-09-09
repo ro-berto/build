@@ -15,6 +15,7 @@ from . import chromium_webkit
 from . import chromium_win
 from . import client_skia
 from . import client_v8
+from . import tryserver_chromium_linux
 from . import tryserver_chromium_mac
 
 
@@ -32,5 +33,6 @@ BUILDERS = {
   'chromium.win': chromium_win.SPEC,
   'client.skia': client_skia.SPEC,
   'client.v8': client_v8.SPEC,
+  'tryserver.chromium.linux': tryserver_chromium_linux.SPEC,
   'tryserver.chromium.mac': tryserver_chromium_mac.SPEC,
 }
