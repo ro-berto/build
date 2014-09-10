@@ -254,9 +254,9 @@ ENABLED_BUILDERS = {
     'client.v8.branches': [
         # Note, bot_update can't be activated on other builders of
         # client.v8.branches, as they're all pure svn based (non-chromium).
-        'Chromium ASAN (symbolized) - trunk',
-        'Chromium ASAN - trunk - debug',
-        'Chromium Win SyzyASAN - trunk',
+        'Chromium ASAN (symbolized)',
+        'Chromium ASAN - debug',
+        'Chromium Win SyzyASAN',
     ],
     'tryserver.webrtc': [
         'android_apk',
