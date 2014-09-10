@@ -77,6 +77,12 @@ def GenTests(api):
   )
 
   yield (
+    api.test('repo_infra_failure') +
+    api.properties.scheduled() +
+    api.step_data('repo sync', retcode=1)
+  )
+
+  yield (
     api.test('doesnt_sync_if_android_present') +
     api.properties.scheduled() +
     api.path.exists(api.path['slave_build'].join('android-src'))
