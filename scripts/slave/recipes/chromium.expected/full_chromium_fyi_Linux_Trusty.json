@@ -106,7 +106,9 @@
       "ninja",
       "--",
       "all",
-      "chrome"
+      "chrome",
+      "mojo_public_test_interfaces",
+      "mojo_python"
     ],
     "name": "compile"
   },
@@ -133,6 +135,18 @@
       "/path/to/tmp/json"
     ],
     "name": "mojo_python_tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/mojo/tools/run_mojo_python_bindings_tests.py",
+      "--write-full-results-to",
+      "/path/to/tmp/json",
+      "--build-dir",
+      "[SLAVE_BUILD]/src/out"
+    ],
+    "name": "mojo_python_bindings_tests"
   },
   {
     "allow_subannotations": true,
