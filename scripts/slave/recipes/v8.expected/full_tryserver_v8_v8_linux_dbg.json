@@ -118,7 +118,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "dcheck_always_on=1 fastbuild=1 target_arch=ia32 v8_optimized_debug=2 v8_target_arch=ia32"
+      "GYP_DEFINES": "dcheck_always_on=1 fastbuild=1 target_arch=ia32 v8_optimized_debug=1 v8_target_arch=ia32"
     },
     "name": "gclient runhooks"
   },
@@ -157,7 +157,7 @@
       "--testname",
       "unittests",
       "--no-variants",
-      "--quickcheck",
+      "--flaky-tests=skip",
       "--json-test-results",
       "/path/to/tmp/json"
     ],
@@ -175,7 +175,7 @@
       "ia32",
       "--testname",
       "default",
-      "--quickcheck",
+      "--flaky-tests=skip",
       "--json-test-results",
       "/path/to/tmp/json"
     ],

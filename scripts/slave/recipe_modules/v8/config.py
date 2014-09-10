@@ -179,4 +179,4 @@ def predictable(c):
 @config_ctx()
 def trybot_flavor(c):
   c.testing.add_flaky_step = False
-  c.testing.test_args.add('--quickcheck')
+  c.testing.test_args.add('--flaky-tests=skip')

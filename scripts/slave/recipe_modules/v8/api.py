@@ -214,7 +214,6 @@ class V8Api(recipe_api.RecipeApi):
 
   def init_tryserver(self):
     self.m.chromium.apply_config('trybot_flavor')
-    self.m.chromium.apply_config('optimized_debug')
     self.apply_config('trybot_flavor')
 
   def _gclient_checkout(self, may_nuke=False, revert=False):

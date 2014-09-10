@@ -157,7 +157,7 @@
       "--testname",
       "unittests",
       "--no-variants",
-      "--quickcheck",
+      "--flaky-tests=skip",
       "--json-test-results",
       "/path/to/tmp/json"
     ],
@@ -175,7 +175,7 @@
       "ia32",
       "--testname",
       "default",
-      "--quickcheck",
+      "--flaky-tests=skip",
       "--json-test-results",
       "/path/to/tmp/json"
     ],
