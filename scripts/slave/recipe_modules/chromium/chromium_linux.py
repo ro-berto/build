@@ -35,7 +35,6 @@ SPEC = {
       ],
       'tests': [
         steps.MojoPythonTests(),
-        steps.MojoPythonBindingsTests(),
         steps.TelemetryUnitTests(),
         steps.TelemetryPerfUnitTests(),
       ],
