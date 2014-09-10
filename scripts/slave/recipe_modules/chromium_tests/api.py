@@ -266,20 +266,18 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self.m.archive.legacy_download_url(
           master_config.get('build_gs_bucket'),
           extra_url_components=self.m.properties['mastername'],),
-        build_revision=self.m.properties.get('parent_got_revision', got_revision),
+        build_revision=self.m.properties.get(
+          'parent_got_revision', got_revision),
         build_archive_url=self.m.properties.get('parent_build_archive_url'),
         )
 
     tests = bot_config.get('tests', [])
-    # TODO(phajdan.jr): Add support for swarming tests.
-    swarming_tests = []
 
     # TODO(phajdan.jr): bots should just leave tests empty instead of this.
     if bot_config.get('do_not_run_tests'):
       tests = []
-      swarming_tests = []
 
-    return tests, swarming_tests
+    return tests
 
   def setup_chromium_tests(self, test_runner):
     if self.m.chromium.c.TARGET_PLATFORM == 'android':

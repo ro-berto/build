@@ -45,6 +45,11 @@ class Test(object):
     """Return list of failures (list of strings)."""
     raise NotImplementedError()
 
+  @property
+  def uses_swarming(self):
+    """Returns true if the test uses swarming."""
+    return False
+
   def _step_name(self, suffix):
     """Helper to uniformly combine tests's name with a suffix."""
     if not suffix:
@@ -178,9 +183,10 @@ class Deps2GitTest(Test):  # pylint: disable=W0232
     return self._test_runs[suffix].json.output
 
 
-class GTestTest(Test):
-  def __init__(self, name, args=None, compile_targets=None, flakiness_dash=False):
-    super(GTestTest, self).__init__()
+class LocalGTestTest(Test):
+  def __init__(self, name, args=None, compile_targets=None,
+               flakiness_dash=False):
+    super(LocalGTestTest, self).__init__()
     self._name = name
     self._args = args or []
     self.flakiness_dash = flakiness_dash
@@ -420,6 +426,46 @@ class SwarmingGTestTest(Test):
   def failures(self, api, suffix):
     assert self.has_valid_results(api, suffix)
     return self._results[suffix].failures
+
+  @property
+  def uses_swarming(self):
+    return True
+
+
+class GTestTest(Test):
+  def __init__(self, name, args=None, compile_targets=None,
+               flakiness_dash=False, enable_swarming=False, swarming_shards=1):
+    super(GTestTest, self).__init__()
+    if enable_swarming:
+      self._test = SwarmingGTestTest(name, args, swarming_shards)
+    else:
+      self._test = LocalGTestTest(name, args, compile_targets, flakiness_dash)
+
+  @property
+  def name(self):
+    return self._test.name
+
+  def compile_targets(self, api):
+    return self._test.compile_targets(api)
+
+  def pre_run(self, api, suffix):
+    return self._test.pre_run(api, suffix)
+
+  def run(self, api, suffix):
+    return self._test.run(api, suffix)
+
+  def post_run(self, api, suffix):
+    return self._test.post_run(api, suffix)
+
+  def has_valid_results(self, api, suffix):
+    return self._test.has_valid_results(api, suffix)
+
+  def failures(self, api, suffix):
+    return self._test.failures(api, suffix)
+
+  @property
+  def uses_swarming(self):
+    return self._test.uses_swarming
 
 
 class PythonBasedTest(Test):

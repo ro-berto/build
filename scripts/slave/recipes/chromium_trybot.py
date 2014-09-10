@@ -528,10 +528,9 @@ def should_filter_compile(name, regexs):
   return not does_regex_match(name, regexs)
 
 
-def get_test_names(gtest_tests, swarming_tests):
-  """Returns the names of each of the tests in |gtest_tests| and
-  |swarming_tests|. These are lists of GTestTest and SwarmingGTestTest."""
-  return [test.name for test in gtest_tests + swarming_tests]
+def get_test_names(tests):
+  """Returns the names of each of the tests in |tests|."""
+  return [test.name for test in tests]
 
 
 def filter_tests(possible_tests, needed_tests):
@@ -611,9 +610,8 @@ def GenSteps(api):
 
     Uses 'should_use_test' callback to figure out what tests should be skipped.
 
-    Returns triple (compile_targets, gtest_tests, swarming_tests) where
+    Returns tuple (compile_targets, gtest_tests) where
       gtest_tests is a list of GTestTest
-      swarming_tests is a list of SwarmingGTestTest.
     """
     compile_targets = []
     gtest_tests_spec = []
@@ -627,7 +625,6 @@ def GenSteps(api):
       gtest_tests_spec = test_spec
 
     gtest_tests = []
-    swarming_tests = []
     for test in gtest_tests_spec:
       test_name = None
       test_dict = None
@@ -665,13 +662,17 @@ def GenSteps(api):
         test_args = [test_args]
 
       if use_swarming:
-        swarming_tests.append(
-            api.chromium.steps.SwarmingGTestTest(
-                test_name, test_args, swarming_shards))
+        test = api.chromium.steps.GTestTest(
+            test_name, test_args, enable_swarming=True,
+            swarming_shards=swarming_shards)
+        assert test.uses_swarming
       else:
-        gtest_tests.append(api.chromium.steps.GTestTest(test_name, test_args))
+        test = api.chromium.steps.GTestTest(test_name, test_args)
+        assert not test.uses_swarming
 
-    return compile_targets, gtest_tests, swarming_tests
+      gtest_tests.append(test)
+
+    return compile_targets, gtest_tests
 
   def get_bot_config(mastername, buildername):
     master_dict = BUILDERS.get(mastername, {})
@@ -742,7 +743,7 @@ def GenSteps(api):
       return True
 
     # Parse test spec file into list of Test instances.
-    compile_targets, gtest_tests, swarming_tests = parse_test_spec(
+    compile_targets, gtest_tests = parse_test_spec(
         test_spec,
         bot_config.get('enable_swarming'),
         should_use_test)
@@ -769,17 +770,16 @@ def GenSteps(api):
                                          'trybot_analyze_config.json'))
       api.filter.does_patch_require_compile(
           exclusions=analyze_config.get('exclusions', []),
-          exes=get_test_names(gtest_tests, swarming_tests) +
+          exes=get_test_names(gtest_tests) +
                all_compile_targets(conditional_tests),
           compile_targets=compile_targets,
           env=runhooks_env)
       if not api.filter.result:
-        return [], swarming_tests, bot_update_step
+        return [], bot_update_step
       # Patch needs compile. Filter the list of test and compile targets.
       if should_filter_tests(buildername,
                              test_spec.get('non_filter_tests_builders', [])):
         gtest_tests = filter_tests(gtest_tests, api.filter.matching_exes)
-        swarming_tests = filter_tests(swarming_tests, api.filter.matching_exes)
       if should_filter_compile(buildername,
                                test_spec.get('non_filter_compile_builders',
                                              [])):
@@ -796,20 +796,6 @@ def GenSteps(api):
         # NaclIntegrationTest as it depends upon chrome not chrome_run.
         compile_targets = list(set(api.filter.matching_exes +
                                    api.filter.compile_targets))
-
-    # Swarming uses Isolate to transfer files to swarming bots.
-    # set_isolate_environment modifies GYP_DEFINES to enable test isolation.
-    if bot_config.get('use_isolate') or swarming_tests:
-      api.isolate.set_isolate_environment(api.chromium.c)
-
-    # If going to use swarming_client (pinned in src/DEPS), ensure it is
-    # compatible with what recipes expect.
-    if swarming_tests:
-      api.swarming.check_client_version()
-      # Decide the task priority.
-      api.swarming.task_priority = build_to_priority(api.properties)
-
-    api.chromium.runhooks(env=runhooks_env)
 
     tests = []
     # TODO(phajdan.jr): Re-enable checkdeps on Windows when it works with git.
@@ -829,7 +815,6 @@ def GenSteps(api):
     tests.extend(find_test_named(api.chromium.steps.TelemetryPerfUnitTests.name,
                                  conditional_tests))
     tests.extend(gtest_tests)
-    tests.extend(swarming_tests)
     tests.extend(find_test_named(api.chromium.steps.NaclIntegrationTest.name,
                                  conditional_tests))
     # MojoPythonTests don't require anything to be compiled.
@@ -839,6 +824,22 @@ def GenSteps(api):
     if api.platform.is_win and api.chromium.c.TARGET_BITS == 32:
       tests.append(api.chromium.steps.MiniInstallerTest())
 
+    has_swarming_tests = any(t.uses_swarming for t in tests)
+
+    # Swarming uses Isolate to transfer files to swarming bots.
+    # set_isolate_environment modifies GYP_DEFINES to enable test isolation.
+    if bot_config.get('use_isolate') or has_swarming_tests:
+      api.isolate.set_isolate_environment(api.chromium.c)
+
+    # If going to use swarming_client (pinned in src/DEPS), ensure it is
+    # compatible with what recipes expect.
+    if has_swarming_tests:
+      api.swarming.check_client_version()
+      # Decide the task priority.
+      api.swarming.task_priority = build_to_priority(api.properties)
+
+    api.chromium.runhooks(env=runhooks_env)
+
     compile_targets.extend(api.itertools.chain(
         *[t.compile_targets(api) for t in tests]))
     # Remove duplicate targets.
@@ -847,14 +848,13 @@ def GenSteps(api):
 
     # Collect *.isolated hashes for all isolated targets, used when triggering
     # tests on swarming.
-    if bot_config.get('use_isolate') or swarming_tests:
+    if bot_config.get('use_isolate') or has_swarming_tests:
       api.isolate.find_isolated_tests(api.chromium.output_dir)
 
     if bot_config['compile_only']:
       tests = []
-      swarming_tests = []
 
-    return tests, swarming_tests, bot_update_step
+    return tests, bot_update_step
 
   mastername = api.properties.get('mastername')
   buildername = api.properties.get('buildername')
@@ -866,22 +866,20 @@ def GenSteps(api):
         main_waterfall_config['mastername'],
         main_waterfall_config['buildername'],
         override_bot_type='builder_tester')
-    tests, swarming_tests = api.chromium_tests.tests_for_builder(
+    tests = api.chromium_tests.tests_for_builder(
         main_waterfall_config['mastername'],
         main_waterfall_config['buildername'],
         bot_update_step,
         override_bot_type='builder_tester')
     for tester in main_waterfall_config['testers']:
-      new_tests, new_swarming_tests = api.chromium_tests.tests_for_builder(
+      tests.extend(api.chromium_tests.tests_for_builder(
           main_waterfall_config['mastername'],
           tester,
           bot_update_step,
-          override_bot_type='builder_tester')
-      tests.extend(new_tests)
-      swarming_tests.extend(new_swarming_tests)
+          override_bot_type='builder_tester'))
   else:
     # TODO(phajdan.jr): Remove the legacy trybot-specific codepath.
-    tests, swarming_tests, bot_update_step = compile_and_return_tests(
+    tests, bot_update_step = compile_and_return_tests(
         mastername, buildername)
 
   def deapply_patch_fn(failing_tests):
@@ -911,8 +909,9 @@ def GenSteps(api):
         # Search for *.isolated only if enabled in bot config or if some
         # swarming test is being recompiled.
         bot_config = get_bot_config(mastername, buildername)
-        failing_swarming_tests = set(failing_tests) & set(swarming_tests)
-        if bot_config.get('use_isolate') or failing_swarming_tests:
+        has_failing_swarming_tests = [
+            t for t in failing_tests if t.uses_swarming]
+        if bot_config.get('use_isolate') or has_failing_swarming_tests:
           api.isolate.find_isolated_tests(api.chromium.output_dir)
 
   return api.test_utils.determine_new_failures(api, tests, deapply_patch_fn)
