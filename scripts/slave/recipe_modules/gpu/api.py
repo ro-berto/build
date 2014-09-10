@@ -284,7 +284,8 @@ class GpuApi(recipe_api.RecipeApi):
         extra_browser_args=[
           # For diagnosing crbug.com/393331, crbug.com/407976,
           # and crbug.com/408358
-          '--blink-platform-log-channels=Timers,Media',
+          '--blink-platform-log-channels=Timers,Media,'
+              'ScriptedAnimationController',
           '--vmodule=thread_proxy=2,render_widget_compositor=2'
         ]))
 
