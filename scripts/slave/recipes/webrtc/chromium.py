@@ -122,7 +122,8 @@ def GenTests(api):
   builders = api.webrtc.BUILDERS
 
   def generate_builder(mastername, buildername, revision=None,
-                       parent_got_revision=None, suffix=None):
+                       failing_test=None, parent_got_revision=None,
+                       suffix=None):
     suffix = suffix or ''
     bot_config = builders[mastername]['builders'][buildername]
     bot_type = bot_config.get('bot_type', 'builder_tester')
@@ -146,6 +147,10 @@ def GenTests(api):
     if bot_type == 'tester':
       parent_rev = parent_got_revision or revision
       test += api.properties(parent_got_revision=parent_rev)
+
+    if failing_test:
+      test += api.step_data(failing_test, retcode=1)
+
     return test
 
   for mastername in ('chromium.webrtc', 'chromium.webrtc.fyi'):
@@ -154,24 +159,23 @@ def GenTests(api):
       revision = '12345' if mastername == 'chromium.webrtc.fyi' else '321321'
       yield generate_builder(mastername, buildername, revision)
 
-  # Forced build (not specifying any revision).
+  # Forced build (not specifying any revision) and failing tests.
   mastername = 'chromium.webrtc'
-  buildername = 'Linux Builder'
-  yield generate_builder(mastername, buildername, revision=None,
+  yield generate_builder(mastername, 'Linux Builder', revision=None,
                          suffix='_forced')
 
   buildername = 'Linux Tester'
   yield generate_builder(mastername, buildername, revision=None,
                          suffix='_forced_invalid')
+  yield generate_builder(mastername, buildername, revision='321321',
+                         failing_test='browser_tests', suffix='_failing_test')
 
   # Periodic scheduler triggered builds also don't contain revision.
   mastername = 'chromium.webrtc.fyi'
-  buildername = 'Win Builder'
-  yield generate_builder(mastername, buildername, revision=None,
+  yield generate_builder(mastername, 'Win Builder', revision=None,
                          suffix='_periodic_triggered')
 
   # Testers gets got_revision value from builder passed as parent_got_revision.
-  buildername = 'Win7 Tester'
-  yield generate_builder(mastername, buildername, revision=None,
+  yield generate_builder(mastername, 'Win7 Tester', revision=None,
                          parent_got_revision='12345',
                          suffix='_periodic_triggered')

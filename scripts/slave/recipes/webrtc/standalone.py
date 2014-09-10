@@ -95,7 +95,7 @@ def GenTests(api):
 
   def generate_builder(mastername, buildername, revision,
                        parent_got_revision=None, legacy_trybot=False,
-                       suffix=None):
+                       failing_test=None, suffix=None):
     suffix = suffix or ''
     bot_config = builders[mastername]['builders'][buildername]
     bot_type = bot_config.get('bot_type', 'builder_tester')
@@ -127,6 +127,9 @@ def GenTests(api):
       parent_rev = parent_got_revision or revision
       test += api.properties(parent_got_revision=parent_rev)
 
+    if failing_test:
+      test += api.step_data(failing_test, retcode=1)
+
     if mastername.startswith('tryserver'):
       if legacy_trybot:
         test += api.properties(patch_url='try_job_svn_patch')
@@ -140,14 +143,16 @@ def GenTests(api):
     for buildername in master_config['builders'].keys():
       yield generate_builder(mastername, buildername, revision='12345')
 
-  # Forced build (not specifying any revision).
+  # Forced builds (not specifying any revision) and test failures.
   mastername = 'client.webrtc'
   buildername = 'Linux64 Debug'
   yield generate_builder(mastername, buildername, revision=None,
                          suffix='_forced')
+  yield generate_builder(mastername, buildername, revision='12345',
+                         failing_test='tools_unittests',
+                         suffix='_failing_test')
 
-  buildername = 'Android Builder'
-  yield generate_builder(mastername, buildername, revision=None,
+  yield generate_builder(mastername, 'Android Builder', revision=None,
                          suffix='_forced')
 
   buildername = 'Android Tests (KK Nexus5)'
@@ -155,9 +160,10 @@ def GenTests(api):
                          parent_got_revision='12345', suffix='_forced')
   yield generate_builder(mastername, buildername, revision=None,
                          suffix='_forced_invalid')
+  yield generate_builder(mastername, buildername, revision='12345',
+                         failing_test='tools_unittests', suffix='_failing_test')
 
   # Legacy trybot (SVN-based).
   mastername = 'tryserver.webrtc'
-  buildername = 'linux'
-  yield generate_builder(mastername, buildername, revision='12345',
+  yield generate_builder(mastername, 'linux', revision='12345',
                          legacy_trybot=True, suffix='_legacy_svn_patch')

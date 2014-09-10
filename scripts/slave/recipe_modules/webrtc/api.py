@@ -77,91 +77,93 @@ class WebRTCApi(recipe_api.RecipeApi):
       test_suite: The name of the test suite.
       revision: Revision for the build. Mandatory for perf measuring tests.
     """
-    if test_suite == 'webrtc':
-      for test in self.NORMAL_TESTS:
-        self.add_test(test)
+    with self.m.step.defer_results():
+      if test_suite == 'webrtc':
+        for test in self.NORMAL_TESTS:
+          self.add_test(test)
 
-      if self.m.platform.is_mac and self.m.chromium.c.TARGET_BITS == 64:
-        test = self.m.path.join('libjingle_peerconnection_objc_test.app',
-                                'Contents', 'MacOS',
-                                'libjingle_peerconnection_objc_test')
-        self.add_test(test, name='libjingle_peerconnection_objc_test')
-    elif test_suite == 'webrtc_baremetal':
-      # Add baremetal tests, which are different depending on the platform.
-      if self.m.platform.is_win or self.m.platform.is_mac:
-        self.add_test('audio_device_tests')
-      elif self.m.platform.is_linux:
-        f = self.m.path['checkout'].join
-        self.add_test(
-            'audioproc',
-            args=['-aecm', '-ns', '-agc', '--fixed_digital', '--perf', '-pb',
-                  f('resources', 'audioproc.aecdump')],
-            revision=revision,
-            perf_test=True)
-        self.add_test(
-            'iSACFixtest',
-            args=['32000', f('resources', 'speech_and_misc_wb.pcm'),
-                  'isac_speech_and_misc_wb.pcm'],
-            revision=revision,
-            perf_test=True)
+        if self.m.platform.is_mac and self.m.chromium.c.TARGET_BITS == 64:
+          test = self.m.path.join('libjingle_peerconnection_objc_test.app',
+                                  'Contents', 'MacOS',
+                                  'libjingle_peerconnection_objc_test')
+          self.add_test(test, name='libjingle_peerconnection_objc_test')
+      elif test_suite == 'webrtc_baremetal':
+        # Add baremetal tests, which are different depending on the platform.
+        if self.m.platform.is_win or self.m.platform.is_mac:
+          self.add_test('audio_device_tests')
+        elif self.m.platform.is_linux:
+          f = self.m.path['checkout'].join
+          self.add_test(
+              'audioproc',
+              args=['-aecm', '-ns', '-agc', '--fixed_digital', '--perf', '-pb',
+                    f('resources', 'audioproc.aecdump')],
+              revision=revision,
+              perf_test=True)
+          self.add_test(
+              'iSACFixtest',
+              args=['32000', f('resources', 'speech_and_misc_wb.pcm'),
+                    'isac_speech_and_misc_wb.pcm'],
+              revision=revision,
+              perf_test=True)
+          self.virtual_webcam_check()
+          self.add_test(
+              'libjingle_peerconnection_java_unittest',
+              env={'LD_PRELOAD': '/usr/lib/x86_64-linux-gnu/libpulse.so.0'})
+
         self.virtual_webcam_check()
         self.add_test(
-            'libjingle_peerconnection_java_unittest',
-            env={'LD_PRELOAD': '/usr/lib/x86_64-linux-gnu/libpulse.so.0'})
+            'vie_auto_test',
+            args=['--automated',
+                  '--capture_test_ensure_resolution_alignment_in_capture_device='
+                  'false'],
+            revision=revision,
+            perf_test=True)
+        self.add_test('voe_auto_test', args=['--automated'])
+        self.virtual_webcam_check()
+        self.add_test('video_capture_tests')
+        self.add_test('webrtc_perf_tests', revision=revision, perf_test=True)
+      elif test_suite == 'chromium':
+        # Many of these tests run in the Chromium WebRTC waterfalls are not run in
+        # the main Chromium waterfalls as they are marked as MANUAL_. This is
+        # because they rely on physical audio and video devices, which are only
+        # available at bare-metal machines.
+        self.add_test(
+            'content_browsertests',
+            args=['--gtest_filter=WebRtc*', '--run-manual',
+                  '--test-launcher-print-test-stdio=always',
+                  '--test-launcher-bot-mode'],
+            revision=revision,
+            perf_test=True)
+        self.add_test(
+            'browser_tests',
+            # These tests needs --test-launcher-jobs=1 since some of them are
+            # not able to run in parallel (due to the usage of the
+            # peerconnection server).
+            args = ['--gtest_filter=WebRtc*:TabCapture*',
+                    '--run-manual', '--ui-test-action-max-timeout=300000',
+                    '--test-launcher-jobs=1',
+                    '--test-launcher-bot-mode',
+                    '--test-launcher-print-test-stdio=always'],
+            revision=revision,
+            perf_test=True)
+        self.add_test(
+            'content_unittests',
+            args=['--gtest_filter=WebRtc*:WebRTC*:RTC*:MediaStream*'])
+      elif test_suite == 'android':
+        self.m.chromium_android.common_tests_setup_steps()
 
-      self.virtual_webcam_check()
-      self.add_test(
-          'vie_auto_test',
-          args=['--automated',
-                '--capture_test_ensure_resolution_alignment_in_capture_device='
-                'false'],
-          revision=revision,
-          perf_test=True)
-      self.add_test('voe_auto_test', args=['--automated'])
-      self.virtual_webcam_check()
-      self.add_test('video_capture_tests')
-      self.add_test('webrtc_perf_tests', revision=revision, perf_test=True)
-    elif test_suite == 'chromium':
-      # Many of these tests run in the Chromium WebRTC waterfalls are not run in
-      # the main Chromium waterfalls as they are marked as MANUAL_. This is
-      # because they rely on physical audio and video devices, which are only
-      # available at bare-metal machines.
-      self.add_test(
-          'content_browsertests',
-          args=['--gtest_filter=WebRtc*', '--run-manual',
-                '--test-launcher-print-test-stdio=always',
-                '--test-launcher-bot-mode'],
-          revision=revision,
-          perf_test=True)
-      self.add_test(
-          'browser_tests',
-          # These tests needs --test-launcher-jobs=1 since some of them are
-          # not able to run in parallel (due to the usage of the
-          # peerconnection server).
-          args = ['--gtest_filter=WebRtc*:TabCapture*',
-                  '--run-manual', '--ui-test-action-max-timeout=300000',
-                  '--test-launcher-jobs=1',
-                  '--test-launcher-bot-mode',
-                  '--test-launcher-print-test-stdio=always'],
-          revision=revision,
-          perf_test=True)
-      self.add_test(
-          'content_unittests',
-          args=['--gtest_filter=WebRtc*:WebRTC*:RTC*:MediaStream*'])
-    elif test_suite == 'android':
-      self.m.chromium_android.common_tests_setup_steps()
+        for test in sorted(self.ANDROID_APK_TESTS.keys()):
+          # Add the filename of the test.isolate files to the path.
+          isolate_file = self.m.path.join(self.ANDROID_APK_TESTS[test],
+                                          '%s.isolate' % test)
+          self.test_runner(test, isolate_file)
 
-      for test in sorted(self.ANDROID_APK_TESTS.keys()):
-        # Add the filename of the test.isolate files to the path.
-        isolate_file = self.m.path.join(self.ANDROID_APK_TESTS[test],
-                                        '%s.isolate' % test)
-        self.test_runner(test, isolate_file)
+        self.m.chromium_android.logcat_dump()
+        # Disable stack tools steps until crbug.com/411685 is fixed.
+        #self.m.chromium_android.stack_tool_steps()
+        self.m.chromium_android.test_report()
 
-      self.m.chromium_android.logcat_dump()
-      # Disable stack tools steps until crbug.com/411685 is fixed.
-      #self.m.chromium_android.stack_tool_steps()
-      self.m.chromium_android.test_report()
-
+  @recipe_api.composite_step
   def add_test(self, test, name=None, args=None, revision=None, env=None,
                perf_test=False, perf_dashboard_id=None):
     """Helper function to invoke chromium.runtest().
@@ -187,6 +189,7 @@ class WebRTCApi(recipe_api.RecipeApi):
           test=test, args=args, name=name, annotate='gtest', xvfb=True,
           test_type=test, env=env)
 
+  @recipe_api.composite_step
   def test_runner(self, test, isolate_path):
     """Adds a test to run on Android devices.
 
