@@ -132,6 +132,7 @@ class ArchiveApi(recipe_api.RecipeApi):
                                          'slave',
                                          'archive_dependencies.py')
       args = []
+      args.extend(['--src-dir', self.m.path['checkout']])
       args.extend(['--target', target])
       args.extend(['--master', master])
       args.extend(['--builder', builder])

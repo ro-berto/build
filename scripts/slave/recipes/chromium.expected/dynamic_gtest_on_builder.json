@@ -148,6 +148,8 @@
       "python",
       "-u",
       "[BUILD]/scripts/slave/archive_dependencies.py",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
       "--target",
       "Release",
       "--master",

@@ -44,24 +44,36 @@ def _RunNinjaSubTool(options, tmp_dir, sub_tool):
 
 def Archive(options, args):
   try:
-    tmp_dir = tempfile.mkdtemp()
-    print 'Staging in %s' % tmp_dir
-    _RunNinjaSubTool(options, tmp_dir, 'graph')
-    _RunNinjaSubTool(options, tmp_dir, 'deps')
+    start_dir = os.getcwd()
+    print 'Changing directory to %s' % options.src_dir
+    os.chdir(options.src_dir)
+    try:
+      tmp_dir = tempfile.mkdtemp()
+      print 'Staging in %s' % tmp_dir
+      _RunNinjaSubTool(options, tmp_dir, 'graph')
+      _RunNinjaSubTool(options, tmp_dir, 'deps')
+    finally:
+      os.chdir(start_dir)
   finally:
     shutil.rmtree(tmp_dir)
 
 
 def main():
   option_parser = optparse.OptionParser()
-  option_parser.add_option('--target', help='either Debug or Release')
+
+  option_parser.add_option('--src-dir', default='src',
+                           help='path to the root of the source tree')
+  option_parser.add_option('--target', default='Release',
+                           help='build target (Debug or Release)')
   option_parser.add_option('--master', help='master name (e.g. chromium)')
   option_parser.add_option('--builder', help='builder name (e.g. Linux)')
   option_parser.add_option('--build', help='build number (e.g. 53197)')
+
   options, args = option_parser.parse_args()
 
-  if not options.target or not options.master or not options.builder or \
-      not options.build:
+  options.src_dir = os.path.abspath(options.src_dir)
+
+  if not options.master or not options.builder or not options.build:
     print option_parser.usage
     return 1
 
