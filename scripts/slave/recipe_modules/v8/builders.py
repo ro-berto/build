@@ -942,6 +942,16 @@ BUILDERS = {
         'tests': ['unittests', 'v8testing'],
         'testing': {'platform': 'win'},
       },
+      'v8_win_dbg': {
+        'v8_apply_config': ['msvs2013'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['unittests', 'v8testing'],
+        'testing': {'platform': 'win'},
+      },
       'v8_win64_rel': {
         'v8_apply_config': ['msvs2013'],
         'v8_config_kwargs': {
@@ -956,6 +966,17 @@ BUILDERS = {
         'chromium_apply_config': ['clang'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['unittests', 'v8testing'],
+        'testing': {'platform': 'mac'},
+      },
+      'v8_mac_dbg': {
+        'gclient_apply_config': ['clang'],
+        'chromium_apply_config': ['clang'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
