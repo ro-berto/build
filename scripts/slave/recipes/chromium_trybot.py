@@ -887,20 +887,30 @@ def GenSteps(api):
 
   main_waterfall_config = bot_config.get('based_on_main_waterfall')
   if main_waterfall_config:
-    bot_update_step = api.chromium_tests.compile_and_return_bot_update(
+    bot_update_step, master_dict, test_spec = \
+        api.chromium_tests.sync_and_configure_build(
+            main_waterfall_config['mastername'],
+            main_waterfall_config['buildername'],
+            override_bot_type='builder_tester')
+    api.chromium_tests.compile(
         main_waterfall_config['mastername'],
         main_waterfall_config['buildername'],
+        bot_update_step,
+        master_dict,
+        test_spec,
         override_bot_type='builder_tester')
     tests = api.chromium_tests.tests_for_builder(
         main_waterfall_config['mastername'],
         main_waterfall_config['buildername'],
         bot_update_step,
+        master_dict,
         override_bot_type='builder_tester')
     for tester in main_waterfall_config['testers']:
       tests.extend(api.chromium_tests.tests_for_builder(
           main_waterfall_config['mastername'],
           tester,
           bot_update_step,
+          master_dict,
           override_bot_type='builder_tester'))
   else:
     # TODO(phajdan.jr): Remove the legacy trybot-specific codepath.

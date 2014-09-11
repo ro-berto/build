@@ -12,7 +12,6 @@ class Test(object):
   def __init__(self):
     super(Test, self).__init__()
     self._test_runs = {}
-    self._test_spec = {}
 
   @property
   def name(self):  # pragma: no cover
@@ -55,9 +54,6 @@ class Test(object):
     if not suffix:
       return self.name
     return '%s (%s)' % (self.name, suffix)
-
-  def set_test_spec(self, test_spec):
-    self._test_spec = test_spec
 
 
 class ArchiveBuildStep(Test):

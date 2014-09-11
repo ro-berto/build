@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import copy
+
 from slave import recipe_api
 
 
@@ -95,9 +97,11 @@ RECIPE_CONFIGS = {
 
 
 class ChromiumTestsApi(recipe_api.RecipeApi):
-  def compile_and_return_bot_update(self, mastername, buildername,
-                                    override_bot_type=None):
-    master_dict = self.m.chromium.builders.get(mastername, {})
+  def sync_and_configure_build(self, mastername, buildername, override_bot_type=None):
+    # Make an independent copy so that we don't overwrite global state
+    # with updates made dynamically based on the test specs.
+    master_dict = copy.deepcopy(self.m.chromium.builders.get(mastername, {}))
+
     bot_config = master_dict.get('builders', {}).get(buildername)
     master_config = master_dict.get('settings', {})
     recipe_config_name = bot_config['recipe_config']
@@ -158,9 +162,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # HACK(dnj): Remove after 'crbug.com/398105' has landed
     self.m.chromium.set_build_properties(update_step.json.output['properties'])
 
-    # Whatever step is run right before this line needs to emit got_revision.
-    got_revision = update_step.presentation.properties['got_revision']
-
     if not bot_config.get('disable_runhooks'):
       self.m.chromium.runhooks(env=bot_config.get('runhooks_env', {}))
 
@@ -168,23 +169,32 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                                        '%s.json' % mastername)
     test_spec_path = self.m.path['checkout'].join('testing', 'buildbot',
                                                test_spec_file)
-    if not bot_config.get('disable_tests', False):
+    # TODO(phajdan.jr): Bots should have no generators instead.
+    if bot_config.get('disable_tests'):
+      test_spec = {}
+    else:
       test_spec_result = self.m.json.read(
           'read test spec',
           test_spec_path,
           step_test_data=lambda: self.m.json.test_api.output({}))
       test_spec_result.presentation.step_text = 'path: %s' % test_spec_path
       test_spec = test_spec_result.json.output
-      generated_tests = []
-      for generator in bot_config.get('test_generators', []):
-        new_tests = generator(
-            self.m, mastername, buildername, test_spec)
-        generated_tests.extend(new_tests)
-      bot_config['tests'] = generated_tests + bot_config.get('tests', [])
-    else:
-      test_spec = {}
-    for test in bot_config.get('tests', []):
-      test.set_test_spec(test_spec)
+
+    for loop_buildername, builder_dict in master_dict.get(
+        'builders', {}).iteritems():
+      builder_dict.setdefault('tests', [])
+      for generator in builder_dict.get('test_generators', []):
+        builder_dict['tests'] = (
+            list(generator(self.m, mastername, loop_buildername, test_spec)) +
+            builder_dict['tests'])
+
+    return update_step, master_dict, test_spec
+
+  def compile(self, mastername, buildername, update_step, master_dict,
+              test_spec, override_bot_type=None):
+    bot_config = master_dict.get('builders', {}).get(buildername)
+    master_config = master_dict.get('settings', {})
+    bot_type = override_bot_type or bot_config.get('bot_type', 'builder_tester')
 
     self.m.chromium.cleanup_temp()
     if self.m.chromium.c.TARGET_PLATFORM == 'android':
@@ -203,7 +213,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                 self.m, mastername, loop_buildername, test_spec)
             generated_tests.extend(new_tests)
           for test in builder_dict.get('tests', []) + generated_tests:
-            test.set_test_spec(test_spec)
             compile_targets.update(test.compile_targets(self.m))
 
       self.m.chromium.compile(targets=sorted(compile_targets))
@@ -224,6 +233,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             test_args_map[test_name] = test_args
       self.m.isolate.find_isolated_tests(self.m.chromium.output_dir)
 
+    got_revision = update_step.presentation.properties['got_revision']
+
     if bot_type == 'builder':
       self.m.archive.zip_and_upload_build(
           'package build',
@@ -235,13 +246,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           cros_board=self.m.chromium.c.TARGET_CROS_BOARD,
       )
 
-    return update_step
-
-  def tests_for_builder(self, mastername, buildername, update_step,
+  def tests_for_builder(self, mastername, buildername, update_step, master_dict,
                         override_bot_type=None):
     got_revision = update_step.presentation.properties['got_revision']
 
-    master_dict = self.m.chromium.builders.get(mastername, {})
     bot_config = master_dict.get('builders', {}).get(buildername)
     master_config = master_dict.get('settings', {})
 
