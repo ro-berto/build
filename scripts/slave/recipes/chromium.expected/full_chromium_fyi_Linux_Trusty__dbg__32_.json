@@ -106,7 +106,9 @@
       "ninja",
       "--",
       "all",
-      "chrome"
+      "chrome",
+      "mojo_public_test_interfaces",
+      "mojo_python"
     ],
     "name": "compile"
   },

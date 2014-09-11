@@ -522,13 +522,35 @@ class MojoPythonTests(PythonBasedTest):  # pylint: disable=W0232
                       **kwargs)
 
 
+class MojoPythonBindingsTests(PythonBasedTest):  # pylint: disable=W0232
+  name = 'mojo_python_bindings_tests'
+
+  def run_step(self, api, suffix, cmd_args, **kwargs):
+    component = api.chromium.c.gyp_env.GYP_DEFINES.get('component', None)
+    # Python modules are not build for the component build.
+    if component == 'shared_library':
+      return None
+    args = cmd_args
+    args.extend(['--build-dir', api.chromium.output_dir])
+    return api.python(
+        self._step_name(suffix),
+        api.path['checkout'].join('mojo', 'tools',
+                                  'run_mojo_python_bindings_tests.py'),
+        args,
+        **kwargs)
+
+  @staticmethod
+  def compile_targets(api):
+    return ['mojo_python', 'mojo_public_test_interfaces']
+
+
 class PrintPreviewTests(PythonBasedTest):  # pylint: disable=W032
   name = 'print_preview_tests'
 
   def run_step(self, api, suffix, cmd_args, **kwargs):
     platform_arg = '.'.join(['browser_test',
         api.platform.normalize_platform_name(api.platform.name)])
-    args = list(cmd_args)
+    args = cmd_args
     path = api.path['checkout'].join(
         'webkit', 'tools', 'layout_tests', 'run_webkit_tests.py')
     args.extend(['--platform', platform_arg])

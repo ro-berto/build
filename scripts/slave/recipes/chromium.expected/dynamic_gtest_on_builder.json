@@ -123,7 +123,9 @@
       "base_unittests",
       "browser_tests",
       "chrome",
-      "chromium_swarm_tests"
+      "chromium_swarm_tests",
+      "mojo_public_test_interfaces",
+      "mojo_python"
     ],
     "name": "compile"
   },
