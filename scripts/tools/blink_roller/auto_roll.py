@@ -104,6 +104,10 @@ def _current_sheriff_emails():
   return _emails_from_url(CHROMIUM_SHERIFF_URL)
 
 
+def _do_git_fetch(git_dir):
+  subprocess2.check_call(['git', '--git-dir', git_dir, 'fetch'])
+
+
 PROJECT_CONFIGS = {
   'blink': {
     'extra_emails_fn': _current_gardener_emails,
@@ -148,7 +152,8 @@ class AutoRoller(object):
   CHROMIUM_SVN_DEPS_URL = 'http://src.chromium.org/chrome/trunk/src/DEPS'
   # 'webkit_revision': '149598',
   REVISION_REGEXP = (
-      r'^  [\'"]%s_revision[\'"]: [\'"](?P<revision>[0-9a-fA-F]{2,40})[\'"],')
+      r'^  [\'"]%s_revision[\'"]: [\'"](?P<revision>[0-9a-fA-F]{2,40})[\'"],'
+      r'( # from svn revision (?P<svn_revision>\d+))?')
 
   ROLL_BOT_INSTRUCTIONS = textwrap.dedent(
     '''This roll was created by the Blink AutoRollBot.
@@ -169,6 +174,7 @@ class AutoRoller(object):
     self._rietveld = rietveld.Rietveld(
       self.RIETVELD_URL, self._author, None)
     self._cached_last_roll_revision = None
+    self._cached_deps_contents = None
 
     project_config = PROJECT_CONFIGS.get(self._project, {
       'path_to_project': os.path.join('third_party', self._project),
@@ -236,36 +242,43 @@ class AutoRoller(object):
         SVN revision number.
     """
     if not self._cached_last_roll_revision:
-      subprocess2.check_call(['git', '--git-dir', self._chromium_git_dir,
-                              'fetch'])
-      git_show_cmd = ['git', '--git-dir', self._chromium_git_dir, 'show',
-                      'origin/master:DEPS']
-      deps_contents = subprocess2.check_output(git_show_cmd)
-      pattern = self.REVISION_REGEXP % self._project_alias
-      match = re.search(pattern, deps_contents, re.MULTILINE)
-      self._cached_last_roll_revision = match.group('revision')
+      self._cached_last_roll_revision = self._last_roll_revision_helper(
+          'revision')
     if self._git_mode:
       assert len(self._cached_last_roll_revision) == 40
     return self._cached_last_roll_revision
 
+  def _last_roll_revision_svn(self):
+    return self._last_roll_revision_helper('svn_revision')
+
+  def _last_roll_revision_helper(self, match_group):
+    if not self._cached_deps_contents:
+      git_show_cmd = ['git', '--git-dir', self._chromium_git_dir, 'show',
+                      'origin/master:DEPS']
+      self._cached_deps_contents = subprocess2.check_output(git_show_cmd)
+
+    pattern = self.REVISION_REGEXP % self._project_alias
+    match = re.search(pattern, self._cached_deps_contents, re.MULTILINE)
+    return match.group(match_group)
+
   def _current_revision(self):
-    subprocess2.check_call(['git', '--git-dir', self._project_git_dir,
-                            'fetch'])
     if self._git_mode:
       git_revparse_cmd = ['git', '--git-dir', self._project_git_dir,
                           'rev-parse', 'origin/master']
       return subprocess2.check_output(git_revparse_cmd).rstrip()
     else:
-      git_show_cmd = ['git', '--git-dir', self._project_git_dir, 'show', '-s',
-                      'origin/master']
-      git_log = subprocess2.check_output(git_show_cmd)
-      match = re.search('^\s*git-svn-id:.*@(?P<svn_revision>\d+)\ ',
-                        git_log, re.MULTILINE)
-      if match:
-        return match.group('svn_revision')
-      else:
-        raise AutoRollException(
-            'Could not determine the current SVN revision.')
+      return self._current_revision_svn()
+
+  def _current_revision_svn(self):
+    git_show_cmd = ['git', '--git-dir', self._project_git_dir, 'show', '-s',
+                    'origin/master']
+    git_log = subprocess2.check_output(git_show_cmd)
+    match = re.search('^\s*git-svn-id:.*@(?P<svn_revision>\d+)\ ',
+                      git_log, re.MULTILINE)
+    if match:
+      return match.group('svn_revision')
+    else:
+      return None
 
   def _emails_to_cc_on_rolls(self):
     return _filter_emails(self._get_extra_emails())
@@ -393,8 +406,23 @@ class AutoRoller(object):
             self._url_for_issue(issue_number)
         return 0
 
+    _do_git_fetch(self._chromium_git_dir)
+    _do_git_fetch(self._project_git_dir)
+
     last_roll_revision = self._last_roll_revision()
     new_roll_revision = self._current_revision()
+
+    if not new_roll_revision:
+      raise AutoRollException(
+          'Could not determine the current revision.')
+
+    if self._git_mode:
+      last_roll_revision_svn = self._last_roll_revision_svn()
+      new_roll_revision_svn = self._current_revision_svn()
+    else:
+      last_roll_revision_svn = None
+      new_roll_revision_svn = None
+
     self._compare_revisions(last_roll_revision, new_roll_revision)
 
     display_from_rev = (
@@ -408,6 +436,11 @@ class AutoRoller(object):
         'from_revision': display_from_rev,
         'to_revision': display_to_rev,
     }
+
+    if last_roll_revision_svn and new_roll_revision_svn:
+      commit_msg += ' (svn %s:%s)' % (
+                    last_roll_revision_svn, new_roll_revision_svn)
+
     revlink = self._get_revision_link(last_roll_revision, new_roll_revision)
     if revlink:
       commit_msg += '\n\n' + revlink

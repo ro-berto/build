@@ -139,15 +139,11 @@ class AutoRollTestBase(SuperMoxTestBase):
     }
 
   def _get_last_revision(self):
-    auto_roll.subprocess2.check_call(
-        ['git', '--git-dir', './.git', 'fetch'])
     auto_roll.subprocess2.check_output(
         ['git', '--git-dir', './.git', 'show', 'origin/master:DEPS']
         ).AndReturn(self.DEPS_CONTENT)
 
   def _get_current_revision(self):
-    auto_roll.subprocess2.check_call(
-        ['git', '--git-dir', './third_party/test_project/.git', 'fetch'])
     if self._arb._git_mode:
       self._parse_origin_master(returnval=self.NEW_REV)
     else:
@@ -156,8 +152,18 @@ class AutoRollTestBase(SuperMoxTestBase):
            'origin/master']).AndReturn(self.GIT_LOG_UPDATED)
 
   def _upload_issue(self, custom_message=None):
+    auto_roll.subprocess2.check_call(
+        ['git', '--git-dir', './.git', 'fetch'])
+    auto_roll.subprocess2.check_call(
+        ['git', '--git-dir', './third_party/test_project/.git', 'fetch'])
+
     self._get_last_revision()
     self._get_current_revision()
+    if self._arb._git_mode:
+      auto_roll.subprocess2.check_output(
+          ['git', '--git-dir', './third_party/test_project/.git', 'show', '-s',
+           'origin/master']).AndReturn(self.GIT_LOG_UPDATED)
+
     self._compare_revs(self.OLD_REV, self.NEW_REV)
 
     auto_roll.subprocess2.check_call(['git', 'clean', '-d', '-f'], cwd='.')
@@ -172,7 +178,14 @@ class AutoRollTestBase(SuperMoxTestBase):
 
     from_rev = self._display_rev(self.OLD_REV)
     to_rev = self._display_rev(self.NEW_REV)
-    message = custom_message or 'Test_Project roll %s:%s' % (from_rev, to_rev)
+
+    if custom_message:
+      message = custom_message
+    else:
+      message = 'Test_Project roll %s:%s' % (from_rev, to_rev)
+      if self._arb._git_mode:
+        message += ' (svn %s:%s)' % (self.OLD_SVN_REV, self.NEW_SVN_REV)
+
     message += '\nTBR='
     auto_roll.subprocess2.check_call(
         ['roll-dep', 'third_party/%s' % self.TEST_PROJECT, str(self.NEW_REV)],
@@ -232,8 +245,6 @@ Please email (eseidel@chromium.org) if the Rollbot is causing trouble.
                                closed=2).AndReturn(search_results)
     self._arb._rietveld.get_issue_properties(issue['issue'],
                                              messages=True).AndReturn(issue)
-    auto_roll.subprocess2.check_call(
-        ['git', '--git-dir', './.git', 'fetch'])
     auto_roll.subprocess2.check_output(
         ['git', '--git-dir', './.git', 'show', 'origin/master:DEPS']
         ).AndReturn(self.DEPS_CONTENT)
@@ -302,10 +313,9 @@ Please email (eseidel@chromium.org) if the Rollbot is causing trouble.
       auto_roll.subprocess2.check_output(
           ['git', '--git-dir', './third_party/test_project/.git', 'rev-parse',
            'origin/master']).AndReturn(self.OLDER_REV)
-    else:
-      auto_roll.subprocess2.check_output(
-          ['git', '--git-dir', './third_party/test_project/.git', 'show', '-s',
-           'origin/master']).AndReturn(self.GIT_LOG_TOO_OLD)
+    auto_roll.subprocess2.check_output(
+        ['git', '--git-dir', './third_party/test_project/.git', 'show', '-s',
+         'origin/master']).AndReturn(self.GIT_LOG_TOO_OLD)
     self._compare_revs(self.OLD_REV, self.OLDER_REV)
 
     self.mox.ReplayAll()
@@ -344,9 +354,12 @@ Please email (eseidel@chromium.org) if the Rollbot is causing trouble.
       return
     self._arb._cq_extra_trybots = ['sometrybot']
     self._arb._rietveld.search(owner=self.TEST_AUTHOR, closed=2).AndReturn([])
-    commit_msg = ('Test_Project roll %s:%s\n\nCQ_EXTRA_TRYBOTS=sometrybot' %
+    commit_msg = ('Test_Project roll %s:%s' %
                   (self._display_rev(self.OLD_REV),
                    self._display_rev(self.NEW_REV)))
+    if self._arb._git_mode:
+      commit_msg += ' (svn %s:%s)' % (self.OLD_SVN_REV, self.NEW_SVN_REV)
+    commit_msg += '\n\nCQ_EXTRA_TRYBOTS=sometrybot'
     self._upload_issue(custom_message=commit_msg)
     self.mox.ReplayAll()
     self.assertEquals(self._arb.main(), 0)
@@ -403,12 +416,15 @@ class AutoRollTestGit(AutoRollTestBase):
   OLDER_REV = 'cfcf604fbdcf6e2d9b982a2fab3fc9f1e3f8cd65'
   OLD_REV =   'b9af6489f6f2004ad11b82c6057f7007e3c35372'
   NEW_REV =   '79539998e04afab3ee9c3016881755ca52f60a73'
+  OLDER_SVN_REV = 1231
+  OLD_SVN_REV = 1234
+  NEW_SVN_REV = 1235
 
   DEPS_CONTENT = '''
 vars = {
-  'test_project_revision': '%s', # Some comment.
+  'test_project_revision': '%s', # from svn revision %s
 }
-''' % OLD_REV
+''' % (OLD_REV, OLD_SVN_REV)
 
   _GIT_LOG = '''
 commit %s
@@ -416,9 +432,11 @@ Author: Test Author <test_author@example.com>
 Date:   Wed Apr 2 14:00:14 2014 -0400
 
     Make some changes.
+
+    git-svn-id: svn://svn.url/trunk@%d abcdefgh-abcd-abcd-abcd-abcdefghijkl
 '''
-  GIT_LOG_UPDATED = _GIT_LOG % NEW_REV
-  GIT_LOG_TOO_OLD = _GIT_LOG % OLDER_REV
+  GIT_LOG_UPDATED = _GIT_LOG % (NEW_REV, NEW_SVN_REV)
+  GIT_LOG_TOO_OLD = _GIT_LOG % (OLDER_REV, OLDER_SVN_REV)
 
   _commit_timestamps = {
     OLDER_REV: '1399573100',
