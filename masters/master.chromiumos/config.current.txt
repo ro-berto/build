@@ -875,7 +875,7 @@ config = {
   },
   'change_source': [
     <buildbot.changes.pb.PBChangeSource instance>,
-    <buildbot.changes.gitpoller.GitPoller instance>,
+    <master.chromeos_manifest_scheduler.CommentRespectingGitPoller instance>,
   ],
   'eventHorizon': 200,
   'logHorizon': 500,
