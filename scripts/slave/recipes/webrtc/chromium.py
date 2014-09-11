@@ -82,7 +82,7 @@ def GenSteps(api):
   if bot_type in ('builder', 'builder_tester'):
     run_gn = api.chromium.c.project_generator.tool == 'gn'
     if run_gn:
-      api.chromium.run_gn()
+      api.chromium.run_gn(use_goma=True)
 
     compile_targets = recipe_config.get('compile_targets', [])
     api.chromium.compile(targets=compile_targets)

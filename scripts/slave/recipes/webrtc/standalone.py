@@ -60,7 +60,7 @@ def GenSteps(api):
 
   if does_build:
     if api.chromium.c.project_generator.tool == 'gn':
-      api.chromium.run_gn()
+      api.chromium.run_gn(use_goma=True)
       api.chromium.compile(targets=['all'])
     else:
       api.chromium.compile()
