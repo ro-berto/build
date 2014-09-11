@@ -236,6 +236,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     got_revision = update_step.presentation.properties['got_revision']
 
     if bot_type == 'builder':
+      if mastername == 'chromium.linux':
+        # TODO(samuong): This is restricted to Linux for now until I have more
+        # confidence that it is not totally broken.
+        self.m.archive.archive_dependencies('archive dependencies',
+                                            self.m.chromium.c.build_config_fs,
+                                            mastername,
+                                            buildername,
+                                            self.m.properties.get('buildnumber'))
       self.m.archive.zip_and_upload_build(
           'package build',
           self.m.chromium.c.build_config_fs,

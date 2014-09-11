@@ -130,6 +130,22 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/archive_dependencies.py",
+      "--target",
+      "Debug",
+      "--master",
+      "chromium.linux",
+      "--builder",
+      "Linux Builder (dbg)(32)",
+      "--build",
+      "571"
+    ],
+    "name": "archive dependencies"
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",
