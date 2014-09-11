@@ -256,6 +256,8 @@ ENABLED_BUILDERS = {
         # client.v8.branches, as they're all pure svn based (non-chromium).
         'Chromium ASAN (symbolized)',
         'Chromium ASAN - debug',
+        'Chromium ASAN arm64 (symbolized)',
+        'Chromium ASAN arm64 - debug',
         'Chromium Win SyzyASAN',
     ],
     'tryserver.webrtc': [
