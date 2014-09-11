@@ -678,6 +678,21 @@ def GenSteps(api):
     master_dict = BUILDERS.get(mastername, {})
     return master_dict.get('builders', {}).get(buildername)
 
+  def deapply_patch(bot_update_step):
+    if api.platform.is_win:
+      api.chromium.taskkill()
+    bot_update_json = bot_update_step.json.output
+    api.gclient.c.revisions['src'] = str(
+        bot_update_json['properties']['got_revision'])
+    api.bot_update.ensure_checkout(force=True,
+                                   patch=False,
+                                   update_presentation=False)
+    try:
+      api.chromium.runhooks()
+    except api.step.StepFailure:
+      api.tryserver.set_unknown_tryjob_result()
+      raise
+
   def compile_and_return_tests(mastername, buildername):
     bot_config = get_bot_config(mastername, buildername)
     assert bot_config, (
@@ -844,7 +859,17 @@ def GenSteps(api):
         *[t.compile_targets(api) for t in tests]))
     # Remove duplicate targets.
     compile_targets = sorted(set(compile_targets))
-    api.chromium.compile(compile_targets, name='compile (with patch)')
+    try:
+      api.chromium.compile(compile_targets, name='compile (with patch)')
+    except api.step.StepFailure:
+      deapply_patch(bot_update_step)
+      try:
+        api.chromium.compile(
+            compile_targets, name='compile (without patch)')
+      except api.step.StepFailure:
+        api.tryserver.set_unknown_tryjob_result()
+        raise
+      raise
 
     # Collect *.isolated hashes for all isolated targets, used when triggering
     # tests on swarming.
@@ -883,36 +908,25 @@ def GenSteps(api):
         mastername, buildername)
 
   def deapply_patch_fn(failing_tests):
-    if api.platform.is_win:
-      api.chromium.taskkill()
-    bot_update_json = bot_update_step.json.output
-    api.gclient.c.revisions['src'] = str(
-        bot_update_json['properties']['got_revision'])
-    api.bot_update.ensure_checkout(force=True,
-                                   patch=False,
-                                   update_presentation=False)
-    try:
-      api.chromium.runhooks()
-    finally:
-      compile_targets = list(api.itertools.chain(
-          *[t.compile_targets(api) for t in failing_tests]))
-      if compile_targets:
-        # Remove duplicate targets.
-        compile_targets = sorted(set(compile_targets))
-        try:
-          api.chromium.compile(
-                  compile_targets, name='compile (without patch)')
-        except api.step.StepFailure:
-          api.chromium.compile(compile_targets,
-                               name='compile (without patch, clobber)',
-                               force_clobber=True)
-        # Search for *.isolated only if enabled in bot config or if some
-        # swarming test is being recompiled.
-        bot_config = get_bot_config(mastername, buildername)
-        has_failing_swarming_tests = [
-            t for t in failing_tests if t.uses_swarming]
-        if bot_config.get('use_isolate') or has_failing_swarming_tests:
-          api.isolate.find_isolated_tests(api.chromium.output_dir)
+    deapply_patch(bot_update_step)
+    compile_targets = list(api.itertools.chain(
+        *[t.compile_targets(api) for t in failing_tests]))
+    if compile_targets:
+      # Remove duplicate targets.
+      compile_targets = sorted(set(compile_targets))
+      try:
+        api.chromium.compile(
+            compile_targets, name='compile (without patch)')
+      except api.step.StepFailure:
+        api.tryserver.set_unknown_tryjob_result()
+        raise
+      # Search for *.isolated only if enabled in bot config or if some
+      # swarming test is being recompiled.
+      bot_config = get_bot_config(mastername, buildername)
+      has_failing_swarming_tests = [
+          t for t in failing_tests if t.uses_swarming]
+      if bot_config.get('use_isolate') or has_failing_swarming_tests:
+        api.isolate.find_isolated_tests(api.chromium.output_dir)
 
   return api.test_utils.determine_new_failures(api, tests, deapply_patch_fn)
 
@@ -1000,10 +1014,12 @@ def GenTests(api):
   )
 
   yield (
-    api.test('compile_first_failure_linux') +
-    props() +
-    api.platform.name('linux') +
-    api.step_data('compile (with patch)', retcode=1)
+    api.test('compile_failure_without_patch') +
+    props(buildername='win_chromium_rel',
+          mastername='tryserver.chromium.win') +
+    api.platform.name('win') +
+    api.step_data('compile (with patch)', retcode=1) +
+    api.step_data('compile (without patch)', retcode=1)
   )
 
   yield (

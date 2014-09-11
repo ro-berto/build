@@ -88,6 +88,9 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     try:
       return deapply_patch_fn(failing_tests)
+    except self.m.step.StepFailure:
+      self.m.tryserver.set_unknown_tryjob_result()
+      raise
     finally:
       run('without patch', failing_tests)
       for t in failing_tests:

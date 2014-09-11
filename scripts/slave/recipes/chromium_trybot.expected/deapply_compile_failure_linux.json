@@ -460,29 +460,9 @@
     "name": "compile (without patch)",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_FAILURE@@@",
+      "@@@SET_BUILD_PROPERTY@failure_type@\"UNKNOWN\"@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/compile.py",
-      "--target",
-      "Release",
-      "--src-dir",
-      "[SLAVE_BUILD]/src",
-      "--build-tool",
-      "ninja",
-      "--compiler",
-      "goma",
-      "--goma-dir",
-      "[BUILD]/goma",
-      "--clobber",
-      "--",
-      "base_unittests"
-    ],
-    "name": "compile (without patch, clobber)"
   },
   {
     "allow_subannotations": true,
@@ -540,5 +520,10 @@
       "@@@STEP_LOG_END@python.inline@@@",
       "@@@STEP_FAILURE@@@"
     ]
+  },
+  {
+    "name": "$final_result",
+    "reason": "Step('compile (without patch)') failed with return_code 1",
+    "status_code": 1
   }
 ]

@@ -155,3 +155,22 @@ class TryserverApi(recipe_api.RecipeApi):
     else:
       # Since this method is "maybe", we don't raise an Exception.
       pass
+
+  def set_unknown_tryjob_result(self):
+    """Mark the tryjob result as unknown.
+
+    This means the system was unable to determine for sure whether the patch
+    was good or bad.
+
+    For strictly infra failures please use infra_step instead.
+
+    This unknown result helper is intended to be used in cases where
+    the cause is independent from infra, and also independent from the
+    patch author (or at least we are not certain about the latter).
+    """
+    # Unknown tryjob result should only be used on the tryserver,
+    # since it's not obvious what it would mean on the main waterfall.
+    assert self.is_tryserver
+
+    step_result = self.m.step.active_result
+    step_result.presentation.properties['failure_type'] = 'UNKNOWN'
