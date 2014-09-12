@@ -79,6 +79,8 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
     TARGET_ARCH = Static(check(TARGET_ARCH, TARGET_ARCHS)),
     TARGET_BITS = Static(check(TARGET_BITS, HOST_TARGET_BITS)),
     TARGET_CROS_BOARD = Static(TARGET_CROS_BOARD),
+
+    gn_args = List(basestring),
   )
 
 TEST_FORMAT = (
@@ -374,6 +376,10 @@ def _memory_tool(c, tool):
 def trybot_flavor(c):
   fastbuild(c, optional=True)
   dcheck(c, optional=True)
+
+@config_ctx()
+def gn_component_build(c):
+  c.gn_args.append('is_component_build=true')
 
 #### 'Full' configurations
 @config_ctx(includes=['ninja', 'default_compiler'])

@@ -399,7 +399,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     self.m.gclient.runhooks(**kwargs)
 
   def run_gn(self, use_goma=False):
-    gn_args = []
+    gn_args = list(self.c.gn_args)
     if self.c.BUILD_CONFIG == 'Debug':
       gn_args.append('is_debug=true')
     if self.c.BUILD_CONFIG == 'Release':

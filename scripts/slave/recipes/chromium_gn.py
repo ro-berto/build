@@ -78,6 +78,7 @@ BUILDERS = {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
         },
+        'chromium_apply_config': ['gn_component_build'],
       },
     },
   },
@@ -108,6 +109,7 @@ BUILDERS = {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
         },
+        'chromium_apply_config': ['gn_component_build'],
       },
     },
   },
@@ -153,6 +155,9 @@ def GenSteps(api):
 
   api.chromium.set_config('chromium',
                           **bot_config.get('chromium_config_kwargs', {}))
+  for c in bot_config.get('chromium_apply_config', []):
+    api.chromium.apply_config(c)
+
   api.chromium.apply_config('gn')
 
   # Note that we have to call gclient.set_config() and apply_config() *after*
