@@ -605,6 +605,25 @@ def build_to_priority(build_properties):
 
 
 def GenSteps(api):
+  def swarming_shards_from_test_spec(test_spec, test_name):
+    if isinstance(test_spec, dict):
+      gtest_tests_spec = test_spec.get('gtest_tests', [])
+    else:
+      # TODO(phajdan.jr): Convert test step data and remove this.
+      gtest_tests_spec = test_spec
+
+    for test in gtest_tests_spec:
+      if not isinstance(test, dict):
+        continue
+
+      if test['test'] == test_name:
+        swarming_spec = test.get('swarming', {})
+        if not swarming_spec.get('can_use_on_swarming_builders'):
+          continue
+        return (True, swarming_spec.get('shards', 1))
+
+    return (False, -1)
+
   def parse_test_spec(test_spec, enable_swarming, should_use_test):
     """Returns a list of tests to run and additional targets to compile.
 
@@ -619,9 +638,7 @@ def GenSteps(api):
       compile_targets = test_spec.get('compile_targets', [])
       gtest_tests_spec = test_spec.get('gtest_tests', [])
     else:
-      # TODO(nodir): Remove this after
-      # https://codereview.chromium.org/297303012/#ps50001
-      # lands.
+      # TODO(phajdan.jr): Convert test step data and remove this.
       gtest_tests_spec = test_spec
 
     gtest_tests = []
@@ -650,12 +667,8 @@ def GenSteps(api):
       use_swarming = False
       swarming_shards = 1
       if enable_swarming:
-        swarming_spec = test_dict.get('swarming') or {}
-        if not isinstance(swarming_spec, dict):  # pragma: no cover
-          raise ValueError('\'swarming\' entry in test spec should be a dict')
-        if swarming_spec.get('can_use_on_swarming_builders'):
-          use_swarming = should_use_test(swarming_spec)
-        swarming_shards = swarming_spec.get('shards', 1)
+        use_swarming, swarming_shards = swarming_shards_from_test_spec(
+            test_spec, test_name)
 
       test_args = test_dict.get('args')
       if isinstance(test_args, basestring):
@@ -693,6 +706,43 @@ def GenSteps(api):
       api.tryserver.set_unknown_tryjob_result()
       raise
 
+  def get_test_spec(mastername, buildername, name='read test spec',
+                    step_test_data=None):
+    bot_config = get_bot_config(mastername, buildername)
+
+    test_spec_file = bot_config['testing'].get('test_spec_file',
+                                               'chromium_trybot.json')
+    test_spec_path = api.path.join('testing', 'buildbot', test_spec_file)
+    if not step_test_data:
+      step_test_data = lambda: api.json.test_api.output([
+        'base_unittests',
+        {
+          'test': 'mojo_common_unittests',
+          'platforms': ['linux', 'mac'],
+        },
+        {
+          'test': 'sandbox_linux_unittests',
+          'platforms': ['linux'],
+          'chromium_configs': [
+            'chromium_chromeos',
+            'chromium_chromeos_clang',
+            'chromium_chromeos_ozone',
+          ],
+          'args': ['--test-launcher-print-test-stdio=always'],
+        },
+        {
+          'test': 'browser_tests',
+          'exclude_builders': ['tryserver.chromium.win:win_chromium_x64_rel'],
+        },
+      ])
+    step_result = api.json.read(
+        name,
+        api.path['checkout'].join(test_spec_path),
+        step_test_data=step_test_data
+    )
+    step_result.presentation.step_text = 'path: %s' % test_spec_path
+    return step_result.json.output
+
   def compile_and_return_tests(mastername, buildername):
     bot_config = get_bot_config(mastername, buildername)
     assert bot_config, (
@@ -713,36 +763,7 @@ def GenSteps(api):
 
     bot_update_step = api.bot_update.ensure_checkout(force=True)
 
-    test_spec_file = bot_config['testing'].get('test_spec_file',
-                                               'chromium_trybot.json')
-    test_spec_path = api.path.join('testing', 'buildbot', test_spec_file)
-    step_result = api.json.read(
-        'read test spec',
-        api.path['checkout'].join(test_spec_path),
-        step_test_data=lambda: api.json.test_api.output([
-          'base_unittests',
-          {
-            'test': 'mojo_common_unittests',
-            'platforms': ['linux', 'mac'],
-          },
-          {
-            'test': 'sandbox_linux_unittests',
-            'platforms': ['linux'],
-            'chromium_configs': [
-              'chromium_chromeos',
-              'chromium_chromeos_clang',
-              'chromium_chromeos_ozone',
-            ],
-            'args': ['--test-launcher-print-test-stdio=always'],
-          },
-          {
-            'test': 'browser_tests',
-            'exclude_builders': ['tryserver.chromium.win:win_chromium_x64_rel'],
-          },
-        ]),
-    )
-    step_result.presentation.step_text = 'path: %s' % test_spec_path
-    test_spec = step_result.json.output
+    test_spec = get_test_spec(mastername, buildername)
 
     def should_use_test(test):
       """Given a test dict from test spec returns True or False."""
@@ -891,14 +912,9 @@ def GenSteps(api):
         api.chromium_tests.sync_and_configure_build(
             main_waterfall_config['mastername'],
             main_waterfall_config['buildername'],
-            override_bot_type='builder_tester')
-    api.chromium_tests.compile(
-        main_waterfall_config['mastername'],
-        main_waterfall_config['buildername'],
-        bot_update_step,
-        master_dict,
-        test_spec,
-        override_bot_type='builder_tester')
+            override_bot_type='builder_tester',
+            enable_swarming=True)
+
     tests = api.chromium_tests.tests_for_builder(
         main_waterfall_config['mastername'],
         main_waterfall_config['buildername'],
@@ -912,6 +928,34 @@ def GenSteps(api):
           bot_update_step,
           master_dict,
           override_bot_type='builder_tester'))
+
+    trybot_test_spec = get_test_spec(
+        mastername,
+        buildername,
+        name='read trybot test spec',
+        step_test_data=lambda: api.json.test_api.output([
+            {
+              'test': 'base_unittests',
+              'swarming': {
+                'can_use_on_swarming_builders': True,
+                'shards': 5,
+              },
+            },
+        ]))
+    for test in tests:
+      use_swarming, swarming_shards = swarming_shards_from_test_spec(
+          trybot_test_spec, test.name)
+      if use_swarming:
+        test.force_swarming(swarming_shards)
+
+    api.chromium_tests.compile(
+        main_waterfall_config['mastername'],
+        main_waterfall_config['buildername'],
+        bot_update_step,
+        master_dict,
+        test_spec,
+        override_bot_type='builder_tester',
+        override_tests=tests)
   else:
     # TODO(phajdan.jr): Remove the legacy trybot-specific codepath.
     tests, bot_update_step = compile_and_return_tests(
@@ -981,6 +1025,21 @@ def GenTests(api):
                          'chromium_config_kwargs', {}).get('TARGET_BITS', 64)) +
         props(mastername=mastername, buildername=buildername)
       )
+
+  yield (
+    api.test('force_swarming') +
+    api.platform('linux', 64) +
+    api.properties.generic(mastername='tryserver.chromium.linux',
+                           buildername='linux_chromium_rel_ng') +
+    api.override_step_data('read test spec', api.json.output({
+        'Linux Tests': {
+          'gtest_tests': [
+            'base_unittests',
+          ],
+        },
+      })
+    )
+  )
 
   # It is important that even when steps related to deapplying the patch
   # fail, we either print the summary for all retried steps or do no

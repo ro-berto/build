@@ -432,10 +432,15 @@ class GTestTest(Test):
   def __init__(self, name, args=None, compile_targets=None,
                flakiness_dash=False, enable_swarming=False, swarming_shards=1):
     super(GTestTest, self).__init__()
+    self._name = name
+    self._args = args
     if enable_swarming:
       self._test = SwarmingGTestTest(name, args, swarming_shards)
     else:
       self._test = LocalGTestTest(name, args, compile_targets, flakiness_dash)
+
+  def force_swarming(self, swarming_shards=1):
+    self._test = SwarmingGTestTest(self._name, self._args, swarming_shards)
 
   @property
   def name(self):

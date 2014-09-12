@@ -97,7 +97,8 @@ RECIPE_CONFIGS = {
 
 
 class ChromiumTestsApi(recipe_api.RecipeApi):
-  def sync_and_configure_build(self, mastername, buildername, override_bot_type=None):
+  def sync_and_configure_build(self, mastername, buildername,
+                               override_bot_type=None, enable_swarming=False):
     # Make an independent copy so that we don't overwrite global state
     # with updates made dynamically based on the test specs.
     master_dict = copy.deepcopy(self.m.chromium.builders.get(mastername, {}))
@@ -149,7 +150,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       # builds to match also the chromium revision from the builder.
       component_rev = self.m.properties.get('revision', 'HEAD')
       if bot_type == 'tester':
-        component_rev = self.m.properties.get('parent_got_revision', component_rev)
+        component_rev = self.m.properties.get(
+            'parent_got_revision', component_rev)
       dep = bot_config.get('set_component_rev')
       self.m.gclient.c.revisions[dep['name']] = dep['rev_str'] % component_rev
 
@@ -161,6 +163,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     assert update_step.json.output['did_run']
     # HACK(dnj): Remove after 'crbug.com/398105' has landed
     self.m.chromium.set_build_properties(update_step.json.output['properties'])
+
+    if enable_swarming:
+      self.m.isolate.set_isolate_environment(self.m.chromium.c)
+      self.m.swarming.check_client_version()
+      self.m.swarming.task_priority = 50
 
     if not bot_config.get('disable_runhooks'):
       self.m.chromium.runhooks(env=bot_config.get('runhooks_env', {}))
@@ -191,10 +198,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     return update_step, master_dict, test_spec
 
   def compile(self, mastername, buildername, update_step, master_dict,
-              test_spec, override_bot_type=None):
+              test_spec, override_bot_type=None, override_tests=None):
     bot_config = master_dict.get('builders', {}).get(buildername)
     master_config = master_dict.get('settings', {})
     bot_type = override_bot_type or bot_config.get('bot_type', 'builder_tester')
+
+    tests = bot_config.get('tests', [])
+    if override_tests is not None:
+      tests = override_tests
 
     self.m.chromium.cleanup_temp()
     if self.m.chromium.c.TARGET_PLATFORM == 'android':
@@ -202,17 +213,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     if bot_type in ['builder', 'builder_tester']:
       compile_targets = set(bot_config.get('compile_targets', []))
-      for test in bot_config.get('tests', []):
+      for test in tests:
         compile_targets.update(test.compile_targets(self.m))
       for loop_buildername, builder_dict in master_dict.get(
           'builders', {}).iteritems():
         if builder_dict.get('parent_buildername') == buildername:
-          generated_tests = []
-          for generator in builder_dict.get('test_generators', []):
-            new_tests = generator(
-                self.m, mastername, loop_buildername, test_spec)
-            generated_tests.extend(new_tests)
-          for test in builder_dict.get('tests', []) + generated_tests:
+          for test in builder_dict.get('tests', []):
             compile_targets.update(test.compile_targets(self.m))
 
       self.m.chromium.compile(targets=sorted(compile_targets))
@@ -222,16 +228,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self.m.chromium_android.check_webview_licenses()
         self.m.chromium_android.findbugs()
 
+    has_swarming_tests = any(t.uses_swarming for t in tests)
     if bot_config.get('use_isolate'):
-      test_args_map = {}
-      gtests_tests = test_spec.get(buildername, {}).get('gtest_tests', [])
-      for test in gtests_tests:
-        if isinstance(test, dict):
-          test_args = test.get('args')
-          test_name = test.get('test')
-          if test_name and test_args:
-            test_args_map[test_name] = test_args
       self.m.isolate.find_isolated_tests(self.m.chromium.output_dir)
+    # TODO(phajdan.jr): Always use the below codepath once fully tested.
+    elif has_swarming_tests:
+      isolated_targets = [t.name for t in tests if t.uses_swarming]
+      self.m.isolate.find_isolated_tests(
+          self.m.chromium.output_dir, targets=list(set(isolated_targets)))
 
     got_revision = update_step.presentation.properties['got_revision']
 
