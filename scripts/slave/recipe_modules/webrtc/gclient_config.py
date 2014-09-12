@@ -66,9 +66,27 @@ def chromium_webrtc(c):
   c.got_revision_mapping['src/third_party/libvpx/source'] = (
       'got_libvpx_revision')
 
-@CONFIG_CTX(includes=['chromium_webrtc', '_webrtc_tot_in_chromium'])
+@CONFIG_CTX(includes=['chromium_webrtc'])
 def chromium_webrtc_tot(c):
-  pass
+  """Configures ToT revisions for WebRTC and Libjingle for Chromium.
+
+  Sets up ToT instead of the DEPS-pinned revision for WebRTC and Libjingle.
+  This is used for some bots to provide data about which revisions are green to
+  roll into Chromium.
+  """
+  c.revisions['src'] = 'HEAD'
+  c.revisions['src/third_party/webrtc'] = 'HEAD'
+  c.revisions['src/third_party/libjingle/source/talk'] = 'HEAD'
+
+  # Have the WebRTC revision appear in the web UI instead of Chromium's.
+  c.got_revision_mapping['src/third_party/webrtc'] = 'got_revision'
+
+  # Since got_revision is occupied by the WebRTC revision, add a new property
+  # for the Chromium revision.
+  c.got_revision_mapping['src'] = 'got_chromium_revision'
+
+  # Needed to get the testers to properly sync the right revision.
+  c.parent_got_revision_mapping['parent_got_revision'] = 'got_revision'
 
 @CONFIG_CTX()
 def _webrtc(c):
@@ -97,25 +115,6 @@ def _webrtc_deps(c):
   s.url = ChromiumSvnSubURL(c, 'chrome', 'trunk', 'deps', 'third_party',
                             'webrtc', 'webrtc.DEPS')
   s.deps_file = 'DEPS'
-
-# Needs to depend on 'chromium' in order to pass recipe_configs_test.py.
-@CONFIG_CTX(includes=['chromium'])
-def _webrtc_tot_in_chromium(c):
-  """Configures src/third_party/webrtc to be the revision decider.
-
-  The Chromium WebRTC FYI bots build a Chromium checkout with
-  src/third_party/webrtc replaced with ToT instead of the DEPS-pinned revision.
-  This is used to catch pre-roll test failures for new WebRTC revisions.
-  """
-  # Have the WebRTC revision appear in the web UI instead of Chromium's.
-  c.got_revision_mapping['src/third_party/webrtc'] = 'got_revision'
-
-  # Since got_revision is occupied by the WebRTC revision, add a new property
-  # for the Chromium revision.
-  c.got_revision_mapping['src'] = 'got_chromium_revision'
-
-  # Needed to get the testers to properly sync the right revision.
-  c.parent_got_revision_mapping['parent_got_revision'] = 'got_revision'
 
 @CONFIG_CTX()
 def _webrtc_limited(c):

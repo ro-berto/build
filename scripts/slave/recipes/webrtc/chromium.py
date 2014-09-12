@@ -54,24 +54,6 @@ def GenSteps(api):
 
   bot_type = bot_config.get('bot_type', 'builder_tester')
 
-  # The chromium.webrtc.fyi master is used as an early warning system to catch
-  # WebRTC specific errors before they get rolled into Chromium's DEPS.
-  # Therefore this waterfall needs to build src/third_party/webrtc with WebRTC
-  # ToT and use the Chromium HEAD. The revision poller is passing a WebRTC
-  # revision for these recipes.
-  if mastername == 'chromium.webrtc.fyi':
-    s = api.gclient.c.solutions
-    s[0].revision = 'HEAD'
-
-    # Since bot_update uses separate Git mirrors for the webrtc and libjingle
-    # repos, they cannot use the revision we get from the poller, since it won't
-    # be present in both if there's a revision that only contains changes in one
-    # of them. For now, work around this by always syncing HEAD for both.
-    api.gclient.c.revisions.update({
-        'src/third_party/webrtc': 'HEAD',
-        'src/third_party/libjingle/source/talk': 'HEAD',
-    })
-
   # Bot Update re-uses the gclient configs.
   step_result = api.bot_update.ensure_checkout(force=True)
   got_revision = step_result.presentation.properties['got_revision']
