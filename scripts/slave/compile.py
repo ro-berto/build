@@ -111,13 +111,30 @@ def goma_setup(options, env):
     options.goma_dir = None
     return False
 
+  hostname = GetShortHostname()
+  # HACK(yyanagisawa, goma): Enable GOMA_SEND_SUBPROGRAM_SPEC=true
+  # Since goma server won't cache on subprograms mismatch like command mismatch,
+  # we need to find out issues before makingGOMA_SEND_SUBPROGRAM_SPEC=true by
+  # default.
+  # Linux chromium rel
+  if hostname in ['slave%d-c4' % i for i in range(270, 275)]:
+    env['GOMA_SEND_SUBPROGRAM_SPEC'] = 'true'
+  # Linux android
+  if hostname in ['slave%d-c4' % i for i in range(460, 465)]:
+    env['GOMA_SEND_SUBPROGRAM_SPEC'] = 'true'
+  # Mac rel
+  if hostname in ['vm%d-m4' % i for i in range(700, 705)]:
+    env['GOMA_SEND_SUBPROGRAM_SPEC'] = 'true'
+  # Win rel
+  if hostname in ['vm%d-m4' % i for i in range(120, 125)]:
+    env['GOMA_SEND_SUBPROGRAM_SPEC'] = 'true'
+
   # HACK(shinyak, goma): Enable GLOBAL_FILEID_CACHE_PATTERNS only in
   # Chromium Win Ninja Goma and Chromium Win Ninja Goma (shared) builders,
   # so that we can check whether this feature is not harmful and how much
   # this feature can improve compile performance.
   # If this experiment succeeds, I'll enable this in all Win/Mac platforms.
-  hostname = GetShortHostname()
-  if hostname.lower() in ['build28-m1', 'build58-m1']:
+  if hostname in ['build28-m1', 'build58-m1']:
     patterns = r'win_toolchain\vs2013_files,third_party,src\chrome,src\content'
     env['GOMA_GLOBAL_FILEID_CACHE_PATTERNS'] = patterns
 
