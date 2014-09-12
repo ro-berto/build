@@ -757,6 +757,8 @@ def GenSteps(api):
     # Settings GYP_DEFINES explicitly because chromium config constructor does
     # not support that.
     api.chromium.c.gyp_env.GYP_DEFINES.update(bot_config.get('GYP_DEFINES', {}))
+    if bot_config['compile_only']:
+      api.chromium.c.gyp_env.GYP_DEFINES['fastbuild'] = 2
     api.chromium.apply_config('trybot_flavor')
     api.gclient.set_config('chromium')
     api.step.auto_resolve_conflicts = True
