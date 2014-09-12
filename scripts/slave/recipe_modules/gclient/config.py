@@ -52,6 +52,7 @@ def BaseConfig(USE_MIRROR=True, GIT_MODE=False, CACHE_DIR=None, **_kwargs):
     # solutions[0].revision. Otherwise, it will be applied to
     # solutions[0].custom_vars['custom_var_name']
     parent_got_revision_mapping = Dict(hidden=True),
+    delete_unversioned_trees = Single(bool, empty_val=True, required=False),
 
     GIT_MODE = Static(bool(GIT_MODE)),
     USE_MIRROR = Static(bool(USE_MIRROR)),

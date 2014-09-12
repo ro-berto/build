@@ -132,9 +132,10 @@ class GclientApi(recipe_api.RecipeApi):
       self.test_api.output_json(test_data_paths, cfg.GIT_MODE))
     try:
       if not cfg.GIT_MODE:
-        self('sync', ['sync', '--nohooks', '--delete_unversioned_trees',
-                   '--force', '--verbose'] +
-                   revisions + ['--output-json', self.m.json.output()],
+        args = ['sync', '--nohooks', '--force', '--verbose']
+        if cfg.delete_unversioned_trees:
+          args.append('--delete_unversioned_trees')
+        self('sync', args + revisions + ['--output-json', self.m.json.output()],
                    step_test_data=step_test_data,
                    **kwargs)
       else:
@@ -152,10 +153,11 @@ class GclientApi(recipe_api.RecipeApi):
         # git-based builds (e.g. maybe some combination of 'git reset/clean -fx'
         # and removing the 'out' directory).
         j = '-j2' if self.m.platform.is_win else '-j8'
-        self('sync',
-                   ['sync', '--verbose', '--with_branch_heads', '--nohooks', j,
-                    '--reset', '--delete_unversioned_trees', '--force',
-                    '--upstream', '--no-nag-max'] + revisions +
+        args = ['sync', '--verbose', '--with_branch_heads', '--nohooks', j,
+                '--reset', '--force', '--upstream', '--no-nag-max']
+        if cfg.delete_unversioned_trees:
+          args.append('--delete_unversioned_trees')
+        self('sync', args + revisions +
                    ['--output-json', self.m.json.output()],
                    step_test_data=step_test_data,
                    **kwargs)
