@@ -77,7 +77,7 @@ def _GenerateTelemetryCommandSequence(options):
       # INFO level verbosity.
       '-v',
       # Output results in the format the buildbot expects.
-      '--output-format=buildbot',
+      '--output-format=chartjson'
       ]
 
   if profile_type:
@@ -108,6 +108,7 @@ def _GenerateTelemetryCommandSequence(options):
   test_args = list(common_args)
   test_args.extend(browser_info)
   test_args.extend(test_specification)
+  test_args.extend(['--output=%s' % options.chart_output_filename])
   test_cmd = _GetPythonTestCommand(script, target, test_args,
                                    wrapper_args=wrapper_args, fp=fp)
   commands.append(test_cmd)
@@ -141,6 +142,7 @@ def _GenerateTelemetryCommandSequence(options):
                 '--browser-executable=%s' % ref_build,
                 '--output-trace-tag=_ref'])
     ref_args.extend(test_specification)
+    ref_args.extend(['--output=%s' % options.ref_output_filename])
     ref_cmd = _GetPythonTestCommand(script, target, ref_args, fp=fp)
     commands.append(ref_cmd)
 
@@ -159,6 +161,10 @@ def main(argv):
                     callback=chromium_utils.convert_json, type='string',
                     nargs=1, default={},
                     help='factory properties in JSON format')
+  parser.add_option('--chart-output-filename',
+                    help='file to save telemetry test output')
+  parser.add_option('--ref-output-filename',
+                    help='file to save reference telemetry test output')
 
   options, _ = parser.parse_args(argv[1:])
   if not options.factory_properties:
