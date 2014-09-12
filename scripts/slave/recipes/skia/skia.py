@@ -34,6 +34,7 @@ def GenTests(api):
     'Test-Android-GalaxyNexus-SGX540-Arm7-Debug',
     'Test-Android-Nexus10-MaliT604-Arm7-Release',
     'Test-Android-Xoom-Tegra2-Arm7-Debug',
+    'Test-Android-Venue8-PowerVR-x86-Debug',
     'Test-ChromeOS-Alex-GMA3150-x86-Debug',
     'Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes',
     'Test-Mac10.8-MacMini4.1-GeForce320M-x86_64-Debug',

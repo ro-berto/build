@@ -325,6 +325,11 @@
       "--verbose",
       "--resourcePath",
       "/usr/local/skiabot/skia_resources",
+      "--skps",
+      "/usr/local/skiabot/skia_skp/skps",
+      "--writePath",
+      "/usr/local/skiabot/skia_dm_out",
+      "--nameByHash",
       "--threads",
       "1"
     ],

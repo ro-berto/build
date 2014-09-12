@@ -31,14 +31,12 @@ def device_from_builder_dict(builder_dict):
     }.get(builder_dict['target_arch'], 'arm_v7_thumb')
   elif builder_dict['os'] == 'Android':
     return {
-      'NexusS': 'nexus_s',
-      'Nexus4': 'nexus_4',
       'Nexus5': 'nexus_5',
       'Nexus7': 'nexus_7',
       'Nexus10': 'nexus_10',
       'GalaxyNexus': 'galaxy_nexus',
       'Xoom': 'xoom',
-      'IntelRhb': 'intel_rhb',
+      'Venue8': 'x86',
     }[builder_dict['model']]
   # pragma: no cover
   raise Exception('No device found for builder: %s' % str(builder_dict))
@@ -179,6 +177,7 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
     return default_flavor.DeviceDirs(
         gm_actual_dir=prefix + 'gm_actual',
         gm_expected_dir=prefix + 'gm_expected',
+        dm_dir=prefix + 'dm',
         perf_data_dir=prefix + 'perf',
         resource_dir=prefix + 'resources',
         skimage_expected_dir=prefix + 'skimage_expected',

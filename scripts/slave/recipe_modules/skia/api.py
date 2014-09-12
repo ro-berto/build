@@ -329,19 +329,23 @@ class SkiaApi(recipe_api.RecipeApi):
       'dm',
       '--verbose',
       '--resourcePath', self.device_dirs.resource_dir,
+      '--skps',         self.device_dirs.skp_dir,
+      '--writePath',    self.device_dirs.dm_dir,
+      '--nameByHash',
     ]
 
     match = []
-    if 'Alex' in self.c.BUILDER_NAME:
+    if 'Alex' in self.c.BUILDER_NAME:  # skia:2793
       # This machine looks to be running out of heap.
       # Running with fewer threads may help.
       args.extend(['--threads', '1'])
-    if 'Android' in self.c.BUILDER_NAME:
-      match.append('~giantbitmap')
-    if 'Tegra' in self.c.BUILDER_NAME:
-      match.append('~downsamplebitmap_text')
-    if 'Xoom' in self.c.BUILDER_NAME:
-      match.append('~WritePixels')  # skia:1699
+    if 'Xoom' in self.c.BUILDER_NAME:  # skia:1699
+      match.append('~WritePixels')
+    if 'GalaxyNexus' in self.c.BUILDER_NAME:  # skia:2900
+      match.extend(['~filterindiabox', '~bleed'])
+    if 'Venue8' in self.c.BUILDER_NAME:  # skia:2922
+      match.append('~imagealphathreshold')
+
     # Though their GPUs are interesting, these don't test anything on
     # the CPU that other ARMv7+NEON bots don't test faster (N5).
     if ('GalaxyNexus' in self.c.BUILDER_NAME or
@@ -523,28 +527,28 @@ class SkiaApi(recipe_api.RecipeApi):
         if not k in keys_blacklist:
           args.extend([k, self.c.builder_cfg[k]])
 
+    if 'GalaxyNexus' in self.c.BUILDER_NAME:
+      # Covered by faster CPUs in the same processor family (N7).
+      args.append('--nocpu')
+
     match = []
     if 'Android' in self.c.BUILDER_NAME:
       # Segfaults when run as GPU bench. Very large texture?
       match.append('~blurroundrect')
-      # skia:2847
-      match.append('~patch_grid')
-    if 'Nexus7' in self.c.BUILDER_NAME:
-      # skia:2774
-      args.append('--nogpu')
-    if 'GalaxyNexus' in self.c.BUILDER_NAME:
-      # Covered by faster CPUs in the same processor family (N7).
-      args.append('--nocpu')
+      match.append('~patch_grid')  # skia:2847
     if 'HD2000' in self.c.BUILDER_NAME:
-      # skia:2895
-      match.extend(['~gradient', '~etc1bitmap'])
+      match.extend(['~gradient', '~etc1bitmap'])  # skia:2895
+    if 'Xoom' in self.c.BUILDER_NAME or 'Venue8' in self.c.BUILDER_NAME:
+      match.append('~desk_carsvg')
+    if 'Nexus7' in self.c.BUILDER_NAME:
+      match = ['skp']  # skia:2774
     if match:
       args.append('--match')
       args.extend(match)
 
     self.run(self.flavor.step, 'nanobench', cmd=args, abort_on_failure=False)
 
-    if 'Valgrind' in self.c.BUILDER_NAME:
+    if 'Valgrind' in self.c.BUILDER_NAME:  # see skia:2789
       abandonGpuContext = list(args)
       abandonGpuContext.extend(['--abandonGpuContext', '--nocpu'])
       self.run(self.flavor.step, 'nanobench --abandonGpuContext',

@@ -324,7 +324,12 @@
       "/usr/local/skiabot/bin/dm",
       "--verbose",
       "--resourcePath",
-      "/usr/local/skiabot/skia_resources"
+      "/usr/local/skiabot/skia_resources",
+      "--skps",
+      "/usr/local/skiabot/skia_skp/skps",
+      "--writePath",
+      "/usr/local/skiabot/skia_dm_out",
+      "--nameByHash"
     ],
     "name": "dm"
   },

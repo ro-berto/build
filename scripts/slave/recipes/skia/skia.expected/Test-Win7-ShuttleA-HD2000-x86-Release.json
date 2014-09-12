@@ -206,7 +206,12 @@
       "[SLAVE_BUILD]/skia/out/Release/dm",
       "--verbose",
       "--resourcePath",
-      "[SLAVE_BUILD]/skia/resources"
+      "[SLAVE_BUILD]/skia/resources",
+      "--skps",
+      "[SLAVE_BUILD]/playback/skps",
+      "--writePath",
+      "[SLAVE_BUILD]/dm",
+      "--nameByHash"
     ],
     "name": "dm"
   },

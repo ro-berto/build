@@ -443,8 +443,14 @@
       "--verbose",
       "--resourcePath",
       "/storage/emulated/legacy/skiabot/skia_resources",
+      "--skps",
+      "/storage/emulated/legacy/skiabot/skia_skp/skps",
+      "--writePath",
+      "/storage/emulated/legacy/skiabot/skia_dm",
+      "--nameByHash",
       "--match",
-      "~giantbitmap",
+      "~filterindiabox",
+      "~bleed",
       "--nocpu"
     ],
     "env": {
