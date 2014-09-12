@@ -16,6 +16,13 @@ from testing_support.super_mox import SuperMoxTestBase
 # pylint: disable=W0212
 
 
+def _do_fetches():
+  auto_roll.subprocess2.check_call(
+      ['git', '--git-dir', './.git', 'fetch'])
+  auto_roll.subprocess2.check_call(
+      ['git', '--git-dir', './third_party/test_project/.git', 'fetch'])
+
+
 class RevisionLinkTest(SuperMoxTestBase):
   def test_blink(self):
     revlink_fn = auto_roll.PROJECT_CONFIGS['blink']['revision_link_fn']
@@ -152,10 +159,7 @@ class AutoRollTestBase(SuperMoxTestBase):
            'origin/master']).AndReturn(self.GIT_LOG_UPDATED)
 
   def _upload_issue(self, custom_message=None):
-    auto_roll.subprocess2.check_call(
-        ['git', '--git-dir', './.git', 'fetch'])
-    auto_roll.subprocess2.check_call(
-        ['git', '--git-dir', './third_party/test_project/.git', 'fetch'])
+    _do_fetches()
 
     self._get_last_revision()
     self._get_current_revision()
@@ -211,6 +215,7 @@ class AutoRollTestBase(SuperMoxTestBase):
   def test_should_stop(self):
     if self.__class__.__name__ == 'AutoRollTestBase':
       return
+    _do_fetches()
     issue = self._make_issue(created_datetime=self.OLD_ISSUE_CREATED_STR)
     issue['messages'].append({
         'text': 'STOP',
@@ -239,6 +244,7 @@ Please email (eseidel@chromium.org) if the Rollbot is causing trouble.
   def test_already_rolling(self):
     if self.__class__.__name__ == 'AutoRollTestBase':
       return
+    _do_fetches()
     issue = self._make_issue()
     search_results = [issue]
     self._arb._rietveld.search(owner=self.TEST_AUTHOR,
@@ -301,14 +307,11 @@ Please email (eseidel@chromium.org) if the Rollbot is causing trouble.
   def test_no_roll_backwards(self):
     if self.__class__.__name__ == 'AutoRollTestBase':
       return
+    _do_fetches()
     self._arb._rietveld.search(owner=self.TEST_AUTHOR, closed=2).AndReturn([])
-    auto_roll.subprocess2.check_call(
-        ['git', '--git-dir', './.git', 'fetch'])
     auto_roll.subprocess2.check_output(
         ['git', '--git-dir', './.git', 'show', 'origin/master:DEPS']
         ).AndReturn(self.DEPS_CONTENT)
-    auto_roll.subprocess2.check_call(
-        ['git', '--git-dir', './third_party/test_project/.git', 'fetch'])
     if self._arb._git_mode:
       auto_roll.subprocess2.check_output(
           ['git', '--git-dir', './third_party/test_project/.git', 'rev-parse',

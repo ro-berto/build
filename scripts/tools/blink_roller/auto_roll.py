@@ -391,6 +391,9 @@ class AutoRoller(object):
                                     ).rstrip()
 
   def main(self):
+    _do_git_fetch(self._chromium_git_dir)
+    _do_git_fetch(self._project_git_dir)
+
     search_result = self._search_for_active_roll()
     issue_number = search_result['issue'] if search_result else None
     if issue_number:
@@ -405,9 +408,6 @@ class AutoRoller(object):
         print '%s is still active, nothing to do.' % \
             self._url_for_issue(issue_number)
         return 0
-
-    _do_git_fetch(self._chromium_git_dir)
-    _do_git_fetch(self._project_git_dir)
 
     last_roll_revision = self._last_roll_revision()
     new_roll_revision = self._current_revision()
