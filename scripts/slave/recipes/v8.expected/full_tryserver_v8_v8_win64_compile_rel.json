@@ -15,7 +15,7 @@
       "--master",
       "tryserver.v8",
       "--builder",
-      "v8_win64_rel",
+      "v8_win64_compile_rel",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -179,42 +179,5 @@
       "--"
     ],
     "name": "compile (with patch)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]\\scripts\\slave\\v8\\v8testing.py",
-      "--target",
-      "Release",
-      "--arch",
-      "x64",
-      "--testname",
-      "unittests",
-      "--no-variants",
-      "--flaky-tests=skip",
-      "--json-test-results",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]\\v8",
-    "name": "Unittests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]\\scripts\\slave\\v8\\v8testing.py",
-      "--target",
-      "Release",
-      "--arch",
-      "x64",
-      "--testname",
-      "default",
-      "--flaky-tests=skip",
-      "--json-test-results",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]\\v8",
-    "name": "Check"
   }
 ]
