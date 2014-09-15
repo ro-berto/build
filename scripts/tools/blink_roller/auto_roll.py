@@ -361,28 +361,25 @@ class AutoRoller(object):
     return False
 
   def _compare_revisions(self, last_roll_revision, new_roll_revision):
-    """Ensure that new_roll_revision is newer than last_roll_revision.
-
-    Raises:
-        AutoRollException if new_roll_revision is not newer than than
-        last_roll_revision.
-    """
+    """Ensure that new_roll_revision is newer than last_roll_revision."""
     if self._git_mode:
       # Ensure that new_roll_revision is not an ancestor of old_roll_revision.
       try:
         subprocess2.check_call(['git', '--git-dir', self._project_git_dir,
                                 'merge-base', '--is-ancestor',
                                 new_roll_revision, last_roll_revision])
-        raise AutoRollException('Already at %s refusing to roll backwards to '
-                                '%s.' % (last_roll_revision, new_roll_revision))
+        print ('Already at %s refusing to roll backwards to %s.' % (
+                   last_roll_revision, new_roll_revision))
+        return False
       except subprocess2.CalledProcessError:
         pass
     else:
       # Fall back on svn revisions.
       if int(new_roll_revision) <= int(last_roll_revision):
-        raise AutoRollException(
-            'Already at %s refusing to roll backwards to %s.' % (
-                last_roll_revision, new_roll_revision))
+        print ('Already at %s refusing to roll backwards to %s.' % (
+                   last_roll_revision, new_roll_revision))
+        return False
+    return True
 
   def _short_rev(self, revision):
     """Shorten a Git commit hash."""
@@ -423,7 +420,8 @@ class AutoRoller(object):
       last_roll_revision_svn = None
       new_roll_revision_svn = None
 
-    self._compare_revisions(last_roll_revision, new_roll_revision)
+    if not self._compare_revisions(last_roll_revision, new_roll_revision):
+      return 0
 
     display_from_rev = (
         self._short_rev(last_roll_revision) if self._git_mode

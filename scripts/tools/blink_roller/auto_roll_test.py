@@ -322,11 +322,9 @@ Please email (eseidel@chromium.org) if the Rollbot is causing trouble.
     self._compare_revs(self.OLD_REV, self.OLDER_REV)
 
     self.mox.ReplayAll()
-    try:
-      self._arb.main()
-    except auto_roll.AutoRollException, e:
-      self.assertEquals(e.args[0], ('Already at %s refusing to roll backwards '
-                                    'to %s.') % (self.OLD_REV, self.OLDER_REV))
+    self.assertEquals(self._arb.main(), 0)
+    self.checkstdout('Already at %s refusing to roll backwards to %s.\n' % (
+                         self.OLD_REV, self.OLDER_REV))
 
   def test_upload_issue(self):
     if self.__class__.__name__ == 'AutoRollTestBase':
