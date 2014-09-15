@@ -13,19 +13,17 @@ SUPPORTED_TARGET_ARCHS = ('intel', 'arm')
 
 @CONFIG_CTX(includes=['chromium'])
 def webrtc(c):
-  c.compile_py.default_targets = ['All']
+  _compiler_defaults(c)
 
   c.runtests.memory_tests_runner = Path('[CHECKOUT]', 'tools',
                                         'valgrind-webrtc', 'webrtc_tests',
                                         platform_ext={'win': '.bat',
                                                       'mac': '.sh',
                                                       'linux': '.sh'})
-  if c.TARGET_PLATFORM == 'mac':
-    c.gyp_env.GYP_DEFINES['mac_sdk'] = '10.9'
 
 @CONFIG_CTX(includes=['chromium_clang'])
 def webrtc_clang(c):
-  c.compile_py.default_targets = ['All']
+  _compiler_defaults(c)
 
 @CONFIG_CTX(includes=['webrtc_clang'])
 def webrtc_asan(c):
@@ -38,11 +36,11 @@ def webrtc_asan(c):
     c.gyp_env.GYP_DEFINES['use_allocator'] = 'none'
 
   c.gyp_env.GYP_DEFINES['asan'] = 1
-  c.compile_py.default_targets = ['All']
+  _compiler_defaults(c)
 
 @CONFIG_CTX(includes=['webrtc_clang', 'asan'])  # 'asan' config sets lsan=1 too.
 def webrtc_lsan(c):
-  c.compile_py.default_targets = ['All']
+  _compiler_defaults(c)
   c.runtests.lsan_suppressions_file = Path('[CHECKOUT]', 'tools', 'lsan',
                                            'suppressions.txt')
 
@@ -68,12 +66,16 @@ def webrtc_ios(c):
   gyp_defs['build_with_libjingle'] = 1
   gyp_defs['chromium_ios_signing'] = 0
   gyp_defs['key_id'] = ''
-  gyp_defs['mac_sdk'] = '10.9'
   gyp_defs['target_arch'] = 'armv7'
   gyp_defs['OS'] = c.TARGET_PLATFORM
 
-  c.compile_py.default_targets = ['All']
+  _compiler_defaults(c)
 
 @CONFIG_CTX(includes=['gn'])
 def webrtc_gn(c):
   c.project_generator.args = ['build_with_chromium=false']
+
+def _compiler_defaults(c):
+  c.compile_py.default_targets = ['All']
+  if c.TARGET_PLATFORM in ('mac', 'ios'):
+    c.gyp_env.GYP_DEFINES['mac_sdk'] = '10.9'
