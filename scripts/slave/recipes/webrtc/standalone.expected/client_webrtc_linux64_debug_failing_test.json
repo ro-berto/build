@@ -221,27 +221,6 @@
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Linux64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
-      "--test-type=libjingle_sound_unittest",
-      "--builder-name=Linux64 Debug",
-      "--slave-name=slavename",
-      "libjingle_sound_unittest"
-    ],
-    "name": "libjingle_sound_unittest"
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Debug",
-      "--xvfb",
-      "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Linux64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--build-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Linux64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
       "--test-type=libjingle_unittest",
       "--builder-name=Linux64 Debug",
       "--slave-name=slavename",
@@ -423,7 +402,7 @@
   },
   {
     "name": "$final_result",
-    "reason": "1 out of 16 aggregated steps failed. Failures: Step('tools_unittests') failed with return_code 1",
+    "reason": "1 out of 15 aggregated steps failed. Failures: Step('tools_unittests') failed with return_code 1",
     "status_code": 1
   }
 ]

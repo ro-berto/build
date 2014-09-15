@@ -49,7 +49,6 @@ class WebRTCApi(recipe_api.RecipeApi):
     'libjingle_media_unittest',
     'libjingle_p2p_unittest',
     'libjingle_peerconnection_unittest',
-    'libjingle_sound_unittest',
     'libjingle_unittest',
   ])
 

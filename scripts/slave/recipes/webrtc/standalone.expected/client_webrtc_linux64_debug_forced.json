@@ -219,27 +219,6 @@
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Linux64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
-      "--test-type=libjingle_sound_unittest",
-      "--builder-name=Linux64 Debug",
-      "--slave-name=slavename",
-      "libjingle_sound_unittest"
-    ],
-    "name": "libjingle_sound_unittest"
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Debug",
-      "--xvfb",
-      "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Linux64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"slavename\": \"slavename\"}",
-      "--build-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Linux64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
       "--test-type=libjingle_unittest",
       "--builder-name=Linux64 Debug",
       "--slave-name=slavename",
