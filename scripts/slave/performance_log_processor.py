@@ -112,6 +112,10 @@ class PerformanceLogProcessor(object):
 
     self._percentiles = [.1, .25, .5, .75, .90, .95, .99]
 
+  def IsChartJson(self):  # pylint: disable=R0201
+    """This is not the new telemetry --chartjson output format."""
+    return False
+
   def PerformanceLogs(self):
     if not self._finalized:
       self._FinalizeProcessing()

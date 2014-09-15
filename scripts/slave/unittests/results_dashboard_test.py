@@ -39,6 +39,32 @@ class ResultsDashboardFormatTest(unittest.TestCase):
   def tearDown(self):
     self.mox.UnsetStubs()
 
+  def test_MakeDashboardJsonV1(self):
+    self.mox.StubOutWithMock(slave_utils, 'GetActiveMaster')
+    slave_utils.GetActiveMaster().AndReturn('ChromiumPerf')
+    self.mox.StubOutWithMock(results_dashboard, '_GetTimestamp')
+    # pylint: disable=W0212
+    results_dashboard._GetTimestamp().AndReturn(12345)
+    results_dashboard._GetTimestamp().AndReturn(12345)
+    self.mox.ReplayAll()
+    v1json = results_dashboard.MakeDashboardJsonV1(
+        {'some_json': 'from_telemetry'},
+        {'rev': 'f46bf3c', 'git_revision': 'f46bf3c', 'v8_rev': '73a34f'},
+        'win7', 'chromium.perf', 'Windows Builder (1)', '432', {'x': 'y'},
+        True)
+    self.assertEqual({
+        'master': 'ChromiumPerf',
+        'masterid': 'chromium.perf',
+        'bot': 'win7',
+        'buildername': 'Windows Builder (1)',
+        'buildnumber': '432',
+        'chart_data': {'some_json': 'from_telemetry'},
+        'is_ref': True,
+        'point_id': 12345,
+        'supplemental': {'default_rev': 'r_chromium', 'x': 'y'},
+        'versions': {'v8_rev': '73a34f', 'chromium': 'f46bf3c'}},
+        v1json)
+
   def test_MakeListOfPoints_MinimalCase(self):
     """A very simple test of a call to MakeListOfPoints."""
 
@@ -305,28 +331,38 @@ class ResultsDashboardSendDataTest(unittest.TestCase):
     """After failing once, the same JSON is sent the next time."""
     # First, some data is sent but it fails for some reason.
     self._TestSendResults(
-        {'sample': 1},
-        ['{"sample": 1}'],
+        {'sample': 1, 'master': 'm', 'bot': 'b',
+         'chart_data': {'benchmark_name': 'b'}, 'point_id': 1234},
+        [('{"sample": 1, "master": "m", "bot": "b", '
+          '"chart_data": {"benchmark_name": "b"}, "point_id": 1234}')],
         [urllib2.URLError('some reason')])
 
     # The next time, the old data is sent with the new data.
     self._TestSendResults(
-        {'sample': 2},
-        ['{"sample": 1}', '{"sample": 2}'],
+        {'sample': 2, 'master': 'm2', 'bot': 'b2',
+         'chart_data': {'benchmark_name': 'b'}, 'point_id': 1234},
+        [('{"sample": 1, "master": "m", "bot": "b", '
+          '"chart_data": {"benchmark_name": "b"}, "point_id": 1234}'),
+         ('{"sample": 2, "master": "m2", "bot": "b2", '
+          '"chart_data": {"benchmark_name": "b"}, "point_id": 1234}')],
         [None, None])
 
   def test_SuccessNotRetried(self):
     """After being successfully sent, data is not re-sent."""
     # First, some data is sent.
     self._TestSendResults(
-        {'sample': 1},
-        ['{"sample": 1}'],
+        {'sample': 1, 'master': 'm', 'bot': 'b',
+         'chart_data': {'benchmark_name': 'b'}, 'point_id': 1234},
+        [('{"sample": 1, "master": "m", "bot": "b", '
+          '"chart_data": {"benchmark_name": "b"}, "point_id": 1234}')],
         [None])
 
     # The next time, the old data is not sent with the new data.
     self._TestSendResults(
-        {'sample': 2},
-        ['{"sample": 2}'],
+        {'sample': 2, 'master': 'm2', 'bot': 'b2',
+         'chart_data': {'benchmark_name': 'b'}, 'point_id': 1234},
+        [('{"sample": 2, "master": "m2", "bot": "b2", '
+          '"chart_data": {"benchmark_name": "b"}, "point_id": 1234}')],
         [None])
 
 
