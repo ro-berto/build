@@ -49,7 +49,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "build_for_tool=memcheck clang=1 component=shared_library gomadir='[BUILD]/goma' target_arch=ia32 use_goma=1"
+      "GYP_DEFINES": "build_for_tool=memcheck clang=1 component=shared_library gomadir='[BUILD]/goma' mac_sdk=10.9 target_arch=ia32 use_goma=1"
     },
     "name": "gclient runhooks"
   },

@@ -20,8 +20,8 @@ def webrtc(c):
                                         platform_ext={'win': '.bat',
                                                       'mac': '.sh',
                                                       'linux': '.sh'})
-  if c.TARGET_PLATFORM == 'mac' and c.TARGET_BITS == 64:
-    c.gyp_env.GYP_DEFINES['mac_sdk'] = '10.7'
+  if c.TARGET_PLATFORM == 'mac':
+    c.gyp_env.GYP_DEFINES['mac_sdk'] = '10.9'
 
 @CONFIG_CTX(includes=['chromium_clang'])
 def webrtc_clang(c):
@@ -68,6 +68,7 @@ def webrtc_ios(c):
   gyp_defs['build_with_libjingle'] = 1
   gyp_defs['chromium_ios_signing'] = 0
   gyp_defs['key_id'] = ''
+  gyp_defs['mac_sdk'] = '10.9'
   gyp_defs['target_arch'] = 'armv7'
   gyp_defs['OS'] = c.TARGET_PLATFORM
 

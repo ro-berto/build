@@ -50,7 +50,7 @@
     ],
     "env": {
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=ios build_with_libjingle=1 chromium_ios_signing=0 clang=1 component=static_library gomadir='[BUILD]/goma' key_id='' target_arch=armv7 use_goma=1",
+      "GYP_DEFINES": "OS=ios build_with_libjingle=1 chromium_ios_signing=0 clang=1 component=static_library gomadir='[BUILD]/goma' key_id='' mac_sdk=10.9 target_arch=armv7 use_goma=1",
       "GYP_GENERATORS": "ninja"
     },
     "name": "gclient runhooks"
