@@ -22,10 +22,6 @@ RECIPE_CONFIGS = {
     'webrtc_config': 'webrtc_asan',
     'test_suite': 'webrtc',
   },
-  'webrtc_lsan': {
-    'webrtc_config': 'webrtc_lsan',
-    'test_suite': 'webrtc',
-  },
   'webrtc_android': {
     'webrtc_config': 'webrtc_android',
     'test_suite': 'android',
@@ -810,15 +806,6 @@ BUILDERS = {
         'gclient_apply_config': ['valgrind'],
         'webrtc_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'linux'},
-      },
-      'Linux LSan (and ASan)': {
-        'recipe_config': 'webrtc_lsan',
-        'webrtc_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',

@@ -79,7 +79,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "asan=1 clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 use_allocator=none use_goma=1"
+      "GYP_DEFINES": "asan=1 clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' lsan=1 target_arch=x64 use_allocator=none use_goma=1"
     },
     "name": "gclient runhooks"
   },
@@ -129,7 +129,11 @@
       "--builder-name=linux_asan",
       "--slave-name=slavename",
       "--enable-asan",
-      "audio_decoder_unittests"
+      "--enable-lsan",
+      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
+      "audio_decoder_unittests",
+      "--test-launcher-batch-limit=1",
+      "--test-launcher-print-test-stdio=always"
     ],
     "name": "audio_decoder_unittests"
   },
@@ -151,7 +155,11 @@
       "--builder-name=linux_asan",
       "--slave-name=slavename",
       "--enable-asan",
-      "common_audio_unittests"
+      "--enable-lsan",
+      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
+      "common_audio_unittests",
+      "--test-launcher-batch-limit=1",
+      "--test-launcher-print-test-stdio=always"
     ],
     "name": "common_audio_unittests"
   },
@@ -173,7 +181,11 @@
       "--builder-name=linux_asan",
       "--slave-name=slavename",
       "--enable-asan",
-      "common_video_unittests"
+      "--enable-lsan",
+      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
+      "common_video_unittests",
+      "--test-launcher-batch-limit=1",
+      "--test-launcher-print-test-stdio=always"
     ],
     "name": "common_video_unittests"
   },
@@ -195,7 +207,11 @@
       "--builder-name=linux_asan",
       "--slave-name=slavename",
       "--enable-asan",
-      "libjingle_media_unittest"
+      "--enable-lsan",
+      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
+      "libjingle_media_unittest",
+      "--test-launcher-batch-limit=1",
+      "--test-launcher-print-test-stdio=always"
     ],
     "name": "libjingle_media_unittest"
   },
@@ -217,7 +233,11 @@
       "--builder-name=linux_asan",
       "--slave-name=slavename",
       "--enable-asan",
-      "libjingle_p2p_unittest"
+      "--enable-lsan",
+      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
+      "libjingle_p2p_unittest",
+      "--test-launcher-batch-limit=1",
+      "--test-launcher-print-test-stdio=always"
     ],
     "name": "libjingle_p2p_unittest"
   },
@@ -239,7 +259,11 @@
       "--builder-name=linux_asan",
       "--slave-name=slavename",
       "--enable-asan",
-      "libjingle_peerconnection_unittest"
+      "--enable-lsan",
+      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
+      "libjingle_peerconnection_unittest",
+      "--test-launcher-batch-limit=1",
+      "--test-launcher-print-test-stdio=always"
     ],
     "name": "libjingle_peerconnection_unittest"
   },
@@ -261,7 +285,11 @@
       "--builder-name=linux_asan",
       "--slave-name=slavename",
       "--enable-asan",
-      "libjingle_unittest"
+      "--enable-lsan",
+      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
+      "libjingle_unittest",
+      "--test-launcher-batch-limit=1",
+      "--test-launcher-print-test-stdio=always"
     ],
     "name": "libjingle_unittest"
   },
@@ -283,7 +311,11 @@
       "--builder-name=linux_asan",
       "--slave-name=slavename",
       "--enable-asan",
-      "modules_tests"
+      "--enable-lsan",
+      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
+      "modules_tests",
+      "--test-launcher-batch-limit=1",
+      "--test-launcher-print-test-stdio=always"
     ],
     "name": "modules_tests"
   },
@@ -305,7 +337,11 @@
       "--builder-name=linux_asan",
       "--slave-name=slavename",
       "--enable-asan",
-      "modules_unittests"
+      "--enable-lsan",
+      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
+      "modules_unittests",
+      "--test-launcher-batch-limit=1",
+      "--test-launcher-print-test-stdio=always"
     ],
     "name": "modules_unittests"
   },
@@ -327,7 +363,11 @@
       "--builder-name=linux_asan",
       "--slave-name=slavename",
       "--enable-asan",
-      "system_wrappers_unittests"
+      "--enable-lsan",
+      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
+      "system_wrappers_unittests",
+      "--test-launcher-batch-limit=1",
+      "--test-launcher-print-test-stdio=always"
     ],
     "name": "system_wrappers_unittests"
   },
@@ -349,7 +389,11 @@
       "--builder-name=linux_asan",
       "--slave-name=slavename",
       "--enable-asan",
-      "test_support_unittests"
+      "--enable-lsan",
+      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
+      "test_support_unittests",
+      "--test-launcher-batch-limit=1",
+      "--test-launcher-print-test-stdio=always"
     ],
     "name": "test_support_unittests"
   },
@@ -371,7 +415,11 @@
       "--builder-name=linux_asan",
       "--slave-name=slavename",
       "--enable-asan",
-      "tools_unittests"
+      "--enable-lsan",
+      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
+      "tools_unittests",
+      "--test-launcher-batch-limit=1",
+      "--test-launcher-print-test-stdio=always"
     ],
     "name": "tools_unittests"
   },
@@ -393,7 +441,11 @@
       "--builder-name=linux_asan",
       "--slave-name=slavename",
       "--enable-asan",
-      "video_engine_core_unittests"
+      "--enable-lsan",
+      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
+      "video_engine_core_unittests",
+      "--test-launcher-batch-limit=1",
+      "--test-launcher-print-test-stdio=always"
     ],
     "name": "video_engine_core_unittests"
   },
@@ -415,7 +467,11 @@
       "--builder-name=linux_asan",
       "--slave-name=slavename",
       "--enable-asan",
-      "video_engine_tests"
+      "--enable-lsan",
+      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
+      "video_engine_tests",
+      "--test-launcher-batch-limit=1",
+      "--test-launcher-print-test-stdio=always"
     ],
     "name": "video_engine_tests"
   },
@@ -437,7 +493,11 @@
       "--builder-name=linux_asan",
       "--slave-name=slavename",
       "--enable-asan",
-      "voice_engine_unittests"
+      "--enable-lsan",
+      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
+      "voice_engine_unittests",
+      "--test-launcher-batch-limit=1",
+      "--test-launcher-print-test-stdio=always"
     ],
     "name": "voice_engine_unittests"
   }

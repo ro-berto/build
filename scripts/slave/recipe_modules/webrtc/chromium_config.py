@@ -25,24 +25,9 @@ def webrtc(c):
 def webrtc_clang(c):
   _compiler_defaults(c)
 
-@CONFIG_CTX(includes=['webrtc_clang'])
+@CONFIG_CTX(includes=['chromium_asan'])
 def webrtc_asan(c):
-  # We can't use the 'asan' configuration from the chromium recipe module since
-  # it's also enabling LSan, which we don't yet support: crbug.com/375154.
-  if 'clang' not in c.compile_py.compiler:  # pragma: no cover
-    raise BadConf('asan requires clang')
-
-  if c.TARGET_PLATFORM == 'linux':
-    c.gyp_env.GYP_DEFINES['use_allocator'] = 'none'
-
-  c.gyp_env.GYP_DEFINES['asan'] = 1
   _compiler_defaults(c)
-
-@CONFIG_CTX(includes=['webrtc_clang', 'asan'])  # 'asan' config sets lsan=1 too.
-def webrtc_lsan(c):
-  _compiler_defaults(c)
-  c.runtests.lsan_suppressions_file = Path('[CHECKOUT]', 'tools', 'lsan',
-                                           'suppressions.txt')
 
 @CONFIG_CTX(includes=['android'])
 def webrtc_android(c):
