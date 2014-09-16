@@ -73,12 +73,14 @@ BUILDERS = {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
+        'should_run_gn_gyp_compare': True,
       },
       'Linux GN (dbg)': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
         },
         'chromium_apply_config': ['gn_component_build'],
+        'should_run_gn_gyp_compare': True,
       },
     },
   },
@@ -192,6 +194,9 @@ def GenSteps(api):
     api.chromium.c.compile_py.goma_dir = None
 
   api.chromium.compile(targets=['all'])
+
+  if bot_config.get('should_run_gn_gyp_compare', False):
+    api.chromium.run_gn_compare()
 
   # TODO(dpranke): crbug.com/353854. Run gn_unittests and other tests
   # when they are also being run as part of the try jobs.
