@@ -191,14 +191,9 @@ class BotUpdateApi(recipe_api.RecipeApi):
       # the checkout.
       # If there is a patch failure, emit another step that said things failed.
       if step_result.json.output.get('patch_failure'):
-        self.m.python.inline(
-            'Patch failure',
-            """\
-            import sys
-            print 'Check the bot_update step for details.'
-            sys.exit(1)
-            """,
-            step_test_data=self.test_api.patch_error_data)
+        self.m.tryserver.set_failed_tryjob_result()
+        self.m.python.failing_step(
+            'Patch failure', 'Check the bot_update step for details')
 
       # bot_update actually just sets root to be the folder name of the
       # first solution.

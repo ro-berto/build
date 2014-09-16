@@ -889,6 +889,10 @@ def GenSteps(api):
       try:
         api.chromium.compile(
             compile_targets, name='compile (without patch)')
+
+        # When compile failed with patch but succeeded without patch,
+        # we're confident it's the patch that is bad.
+        api.tryserver.set_failed_tryjob_result()
       except api.step.StepFailure:
         api.tryserver.set_unknown_tryjob_result()
         raise

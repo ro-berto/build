@@ -237,7 +237,10 @@
       "browser_tests",
       "mini_installer"
     ],
-    "name": "compile (without patch)"
+    "name": "compile (without patch)",
+    "~followup_annotations": [
+      "@@@SET_BUILD_PROPERTY@failure_type@\"FAILED\"@@@"
+    ]
   },
   {
     "name": "$final_result",

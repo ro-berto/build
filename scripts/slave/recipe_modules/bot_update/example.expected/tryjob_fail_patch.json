@@ -40,22 +40,20 @@
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@patch error@Patch failed to apply@@@",
-      "@@@STEP_LOG_END@patch error@@@"
+      "@@@STEP_LOG_END@patch error@@@",
+      "@@@SET_BUILD_PROPERTY@failure_type@\"FAILED\"@@@"
     ]
   },
   {
     "cmd": [
       "python",
       "-u",
-      "import sys\nprint 'Check the bot_update step for details.'\nsys.exit(1)\n"
+      "import sys; sys.exit(1)"
     ],
     "name": "Patch failure",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@print 'Check the bot_update step for details.'@@@",
-      "@@@STEP_LOG_LINE@python.inline@sys.exit(1)@@@",
-      "@@@STEP_LOG_END@python.inline@@@",
+      "@@@STEP_TEXT@Check the bot_update step for details@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
