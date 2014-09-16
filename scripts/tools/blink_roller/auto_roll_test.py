@@ -23,6 +23,19 @@ def _do_fetches():
       ['git', '--git-dir', './third_party/test_project/.git', 'fetch'])
 
 
+class RevisionLinkTest(SuperMoxTestBase):
+  def test_blink(self):
+    revlink_fn = auto_roll.PROJECT_CONFIGS['blink']['revision_link_fn']
+    expected = ('https://chromium.googlesource.com/chromium/blink/'
+                '+log/abc1234..def1256')
+    self.assertEqual(revlink_fn('abc1234', 'def1256'), expected)
+
+  def test_skia(self):
+    revlink_fn = auto_roll.PROJECT_CONFIGS['skia']['revision_link_fn']
+    expected = 'https://skia.googlesource.com/skia/+log/abc1234..def1256'
+    self.assertEqual(revlink_fn('abc1234', 'def1256'), expected)
+
+
 class SheriffCalendarTest(SuperMoxTestBase):
 
   def test_complete_email(self):
@@ -119,24 +132,17 @@ class AutoRollTestBase(SuperMoxTestBase):
                                      self.TEST_AUTHOR,
                                      self.PATH_TO_CHROME)
 
-  def _make_issue(self, old_rev=None, new_rev=None, created_datetime=None,
-                  svn_range_str=''):
-    description = auto_roll.roll_dep.ROLL_DESCRIPTION_STR % {
-        'dep_path': 'src/third_party/test_project',
-        'before_rev': str(old_rev or 'dummy')[:7],
-        'after_rev': str(new_rev or 'dummy')[:7],
-        'svn_range': svn_range_str,
-        'revlog_url': '',
-    }
+  def _make_issue(self, old_rev=None, new_rev=None, created_datetime=None):
     return {
         'author': self.TEST_AUTHOR,
         'commit': created_datetime or self.RECENT_ISSUE_CREATED_STR,
         'created': created_datetime or self.RECENT_ISSUE_CREATED_STR,
-        'description': description,
+        'description': 'Test_Project roll %s:%s' % (self._display_rev(old_rev),
+                                                    self._display_rev(new_rev)),
         'issue': 1234567,
         'messages': [],
         'modified': created_datetime or self.RECENT_ISSUE_CREATED_STR,
-        'subject': description.splitlines()[0],
+        'subject': 'Test_Project roll %s:%s' % (old_rev, new_rev),
     }
 
   def _get_last_revision(self):
@@ -157,6 +163,10 @@ class AutoRollTestBase(SuperMoxTestBase):
 
     self._get_last_revision()
     self._get_current_revision()
+    if self._arb._git_mode:
+      auto_roll.subprocess2.check_output(
+          ['git', '--git-dir', './third_party/test_project/.git', 'show', '-s',
+           'origin/master']).AndReturn(self.GIT_LOG_UPDATED)
 
     self._compare_revs(self.OLD_REV, self.NEW_REV)
 
@@ -173,13 +183,12 @@ class AutoRollTestBase(SuperMoxTestBase):
     from_rev = self._display_rev(self.OLD_REV)
     to_rev = self._display_rev(self.NEW_REV)
 
-    issue = self._make_issue(old_rev=from_rev, new_rev=to_rev,
-                             created_datetime=self.CURRENT_DATETIME_STR)
-
     if custom_message:
       message = custom_message
     else:
-      message = issue['description']
+      message = 'Test_Project roll %s:%s' % (from_rev, to_rev)
+      if self._arb._git_mode:
+        message += ' (svn %s:%s)' % (self.OLD_SVN_REV, self.NEW_SVN_REV)
 
     message += '\nTBR='
     auto_roll.subprocess2.check_call(
@@ -187,10 +196,7 @@ class AutoRollTestBase(SuperMoxTestBase):
         cwd='.')
 
     auto_roll.subprocess2.check_call(['git', 'add', 'DEPS'], cwd='.')
-    auto_roll.subprocess2.check_call(['git', 'commit', '--no-edit'], cwd='.')
-    auto_roll.subprocess2.check_output(
-        ['git', 'log', '-n1', '--format=%B', 'HEAD'],
-        cwd='.').AndReturn(issue['description'])
+    auto_roll.subprocess2.check_call(['git', 'commit', '-m', message], cwd='.')
     auto_roll.subprocess2.check_call(['git', 'cl', 'upload', '--bypass-hooks',
                                       '--use-commit-queue', '-f',
                                       '-m', message],
@@ -200,6 +206,7 @@ class AutoRollTestBase(SuperMoxTestBase):
     auto_roll.subprocess2.check_call(['git', 'branch', '-D',
                                       'test_project_roll'], cwd='.')
 
+    issue = self._make_issue(created_datetime=self.CURRENT_DATETIME_STR)
     self._arb._rietveld.search(owner=self.TEST_AUTHOR,
                                closed=2).AndReturn([issue])
     self._arb._rietveld.add_comment(issue['issue'],
@@ -309,10 +316,9 @@ Please email (eseidel@chromium.org) if the Rollbot is causing trouble.
       auto_roll.subprocess2.check_output(
           ['git', '--git-dir', './third_party/test_project/.git', 'rev-parse',
            'origin/master']).AndReturn(self.OLDER_REV)
-    if not self._arb._git_mode:
-      auto_roll.subprocess2.check_output(
-          ['git', '--git-dir', './third_party/test_project/.git', 'show', '-s',
-           'origin/master']).AndReturn(self.GIT_LOG_TOO_OLD)
+    auto_roll.subprocess2.check_output(
+        ['git', '--git-dir', './third_party/test_project/.git', 'show', '-s',
+         'origin/master']).AndReturn(self.GIT_LOG_TOO_OLD)
     self._compare_revs(self.OLD_REV, self.OLDER_REV)
 
     self.mox.ReplayAll()
@@ -349,10 +355,11 @@ Please email (eseidel@chromium.org) if the Rollbot is causing trouble.
       return
     self._arb._cq_extra_trybots = ['sometrybot']
     self._arb._rietveld.search(owner=self.TEST_AUTHOR, closed=2).AndReturn([])
-    svn_range_str = ''
-    commit_msg = self._make_issue(old_rev=self.OLD_REV,
-                                  new_rev=self.NEW_REV,
-                                  svn_range_str=svn_range_str)['description']
+    commit_msg = ('Test_Project roll %s:%s' %
+                  (self._display_rev(self.OLD_REV),
+                   self._display_rev(self.NEW_REV)))
+    if self._arb._git_mode:
+      commit_msg += ' (svn %s:%s)' % (self.OLD_SVN_REV, self.NEW_SVN_REV)
     commit_msg += '\n\nCQ_EXTRA_TRYBOTS=sometrybot'
     self._upload_issue(custom_message=commit_msg)
     self.mox.ReplayAll()
@@ -384,11 +391,11 @@ Date:   Wed Apr 2 14:00:14 2014 -0400
   GIT_LOG_UPDATED = _GIT_LOG % NEW_REV
   GIT_LOG_TOO_OLD = _GIT_LOG % OLDER_REV
 
-  def _make_issue(self, old_rev=None, new_rev=None, **kwargs):
+  def _make_issue(self, old_rev=None, new_rev=None, created_datetime=None):
     return AutoRollTestBase._make_issue(self,
                                         old_rev=old_rev or self.OLD_REV,
                                         new_rev=new_rev or self.NEW_REV,
-                                        **kwargs)
+                                        created_datetime=created_datetime)
 
   # pylint: disable=R0201
   def _display_rev(self, rev):
@@ -442,11 +449,11 @@ Date:   Wed Apr 2 14:00:14 2014 -0400
     AutoRollTestBase.setUp(self)
     self._arb._git_mode = True
 
-  def _make_issue(self, old_rev=None, new_rev=None, **kwargs):
+  def _make_issue(self, old_rev=None, new_rev=None, created_datetime=None):
     return AutoRollTestBase._make_issue(self,
                                         old_rev=old_rev or self.OLD_REV,
                                         new_rev=new_rev or self.NEW_REV,
-                                        **kwargs)
+                                        created_datetime=created_datetime)
 
   # pylint: disable=R0201
   def _display_rev(self, rev):
@@ -468,6 +475,8 @@ Date:   Wed Apr 2 14:00:14 2014 -0400
     else:
       auto_roll.subprocess2.check_call(merge_base_cmd)
       return
+    self._short_rev(old_rev)
+    self._short_rev(new_rev)
 
   # pylint: disable=R0201
   def _parse_origin_master(self, returnval):
