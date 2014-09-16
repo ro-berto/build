@@ -845,7 +845,7 @@ def emit_log_lines(name, lines):
 
 
 def emit_properties(properties):
-  for property_name, property_value in properties.iteritems():
+  for property_name, property_value in sorted(properties.items()):
     print '@@@SET_BUILD_PROPERTY@%s@"%s"@@@' % (property_name, property_value)
 
 
