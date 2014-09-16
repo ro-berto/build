@@ -15,4 +15,8 @@ PACKAGES = [
     'name' : 'dart-protobuf',
     'package_dependencies' : [],
   },
+  {
+    'name' : 'gcloud',
+    'package_dependencies' : [],
+  },
 ]
