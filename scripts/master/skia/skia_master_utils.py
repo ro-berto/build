@@ -178,9 +178,9 @@ def SetupMaster(ActiveMaster):
 
   # Adds common status and tools to this master.
   master_utils.AutoSetupMaster(c, ActiveMaster,
-      public_html='../master.chromium/public_html',
-      templates=['../master.client.skia/templates',
-                 '../master.chromium/templates'],
+      public_html='../../../build/masters/master.chromium/public_html',
+      templates=['../../../build/masters/master.client.skia/templates',
+                 '../../../build/masters/master.chromium/templates'],
       tagComparator=poller.comparator,
       enable_http_status_push=ActiveMaster.is_production_host,
       order_console_by_time=True,
