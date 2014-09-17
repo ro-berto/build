@@ -5,7 +5,6 @@
 PACKAGES = [
   {
     'name' : 'core-elements',
-    'package_dependencies' : [],
   },
   {
     'name' : 'paper-elements',
@@ -13,11 +12,9 @@ PACKAGES = [
   },
   {
     'name' : 'dart-protobuf',
-    'package_dependencies' : [],
   },
   {
     'name' : 'gcloud',
-    'package_dependencies' : [],
   },
   {
     'name' : 'googleapis_auth',
