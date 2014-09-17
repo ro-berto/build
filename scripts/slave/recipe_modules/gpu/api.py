@@ -181,7 +181,31 @@ class GpuApi(recipe_api.RecipeApi):
     is_tryserver = self.m.tryserver.is_tryserver
     targets = ['chromium_gpu_%sbuilder' % build_tag] + [
       '%s_run' % test for test in common.GPU_ISOLATES]
-    self.m.chromium.compile(targets=targets, name='compile')
+    if is_tryserver:
+      try:
+        self.m.chromium.compile(targets, name='compile (with patch)')
+      except self.m.step.StepFailure:
+        if self.m.platform.is_win:
+          self.m.chromium.taskkill()
+        bot_update_json = self._bot_update.json.output
+        self.m.gclient.c.revisions['src'] = str(
+            bot_update_json['properties']['got_revision'])
+        self.m.bot_update.ensure_checkout(force=True,
+                                       patch=False,
+                                       update_presentation=False)
+        try:
+          self.m.chromium.runhooks()
+          self.m.chromium.compile(targets, name='compile (without patch)')
+
+          # When compile failed with patch but succeeded without patch,
+          # we're confident it's the patch that is bad.
+          self.m.tryserver.set_failed_tryjob_result()
+        except self.m.step.StepFailure:
+          self.m.tryserver.set_unknown_tryjob_result()
+          raise
+        raise
+    else:
+      self.m.chromium.compile(targets=targets, name='compile')
     self.m.isolate.find_isolated_tests(
         self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs),
         common.GPU_ISOLATES)

@@ -64,6 +64,25 @@ def GenTests(api):
   )
 
   yield (
+    api.test('compile_with_patch_fail') +
+    api.properties.tryserver(
+      mastername='tryserver.chromium.gpu',
+      buildername='mac_gpu') +
+    api.step_data('compile (with patch)', retcode=1) +
+    api.platform.name('win')
+  )
+
+  yield (
+    api.test('compile_without_patch_fail') +
+    api.properties.tryserver(
+      mastername='tryserver.chromium.gpu',
+      buildername='mac_gpu') +
+    api.step_data('compile (with patch)', retcode=1) +
+    api.step_data('compile (without patch)', retcode=1) +
+    api.platform.name('win')
+  )
+
+  yield (
     api.test('compile_fail_is_critical_on_main') +
     api.properties.scheduled(
       build_config='Release',
