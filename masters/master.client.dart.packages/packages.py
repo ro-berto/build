@@ -19,4 +19,8 @@ PACKAGES = [
     'name' : 'gcloud',
     'package_dependencies' : [],
   },
+  {
+    'name' : 'googleapis_auth',
+    'package_dependencies' : [],
+  },
 ]
