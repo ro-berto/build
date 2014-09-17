@@ -241,6 +241,7 @@ def main(argv):
       'master.client.polymer': 'Polymer',
       'master.client.sfntly': 'Sfntly',
       'master.client.skia': 'Skia',
+      'master.client.skia.android': 'SkiaAndroid',
       'master.client.skia.compile': 'SkiaCompile',
       'master.client.syzygy': 'Syzygy',
       'master.client.v8': 'V8',
