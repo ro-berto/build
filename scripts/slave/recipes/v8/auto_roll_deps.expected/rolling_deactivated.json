@@ -80,25 +80,9 @@
     "name": "check roll status",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Rolling activated@@@",
-      "@@@STEP_LOG_LINE@stdout@1@@@",
+      "@@@STEP_TEXT@Rolling deactivated@@@",
+      "@@@STEP_LOG_LINE@stdout@0@@@",
       "@@@STEP_LOG_END@stdout@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/v8/tools/push-to-trunk/auto_roll.py",
-      "--chromium",
-      "[SLAVE_BUILD]/src",
-      "--author",
-      "v8-autoroll@chromium.org",
-      "--reviewer",
-      "machenbach@chromium.org",
-      "--roll"
-    ],
-    "cwd": "[SLAVE_BUILD]/src/v8",
-    "name": "roll deps"
   }
 ]

@@ -9,6 +9,7 @@ DEPS = [
   'path',
   'properties',
   'python',
+  'raw_io',
 ]
 
 def GenSteps(api):
@@ -16,6 +17,21 @@ def GenSteps(api):
   api.gclient.set_config('chromium')
   api.gclient.apply_config('v8_bleeding_edge_git')
   api.bot_update.ensure_checkout(force=True, no_shallow=True)
+
+  step_result = api.python(
+      'check roll status',
+      api.path['build'].join('scripts', 'tools', 'pycurl.py'),
+      ['https://v8-roll.appspot.com/status'],
+      stdout=api.raw_io.output(),
+      step_test_data=lambda: api.raw_io.test_api.stream_output(
+          '1', stream='stdout')
+    )
+  step_result.presentation.logs['stdout'] = step_result.stdout.splitlines()
+  if step_result.stdout.strip() != '1':
+    step_result.presentation.step_text = "Rolling deactivated"
+    return
+  else:
+    step_result.presentation.step_text = "Rolling activated"
 
   api.python(
       'roll deps',
@@ -31,3 +47,8 @@ def GenSteps(api):
 
 def GenTests(api):
   yield api.test('standard') + api.properties.generic(mastername='client.v8')
+  yield (api.test('rolling_deactivated') +
+      api.properties.generic(mastername='client.v8') +
+      api.override_step_data(
+          'check roll status', api.raw_io.stream_output('0', stream='stdout'))
+    )
