@@ -136,7 +136,7 @@ def GenSteps(api):
   for c in bot_config.get('gclient_apply_config', []):
     api.gclient.apply_config(c)
 
-  api.bot_update.ensure_checkout()
+  bot_update_step = api.bot_update.ensure_checkout()
   api.chromium_android.clean_local_files()
 
   droid.runhooks()
@@ -144,7 +144,29 @@ def GenSteps(api):
   if bot_config.get('try', False):
     api.tryserver.maybe_apply_issue()
 
-  droid.compile()
+    try:
+      droid.compile(name='compile (with patch)')
+    except api.step.StepFailure:
+      bot_update_json = bot_update_step.json.output
+      api.gclient.c.revisions['src'] = str(
+          bot_update_json['properties']['got_revision'])
+      api.bot_update.ensure_checkout(force=True,
+                                     patch=False,
+                                     update_presentation=False)
+      try:
+        droid.runhooks()
+        droid.compile(name='compile (without patch)')
+
+        # When compile failed with patch but succeeded without patch,
+        # we're confident it's the patch that is bad.
+        api.tryserver.set_failed_tryjob_result()
+      except api.step.StepFailure:
+        api.tryserver.set_unknown_tryjob_result()
+        raise
+      raise
+  else:
+    droid.compile()
+
   if bot_config.get('check_licenses'):
     with bot_config['check_licenses']():
       droid.check_webview_licenses()
@@ -177,26 +199,38 @@ def GenTests(api):
             revision='267739',
             got_revision='267739'))
 
-  def step_failure(mastername, buildername, step):
+  def step_failure(mastername, buildername, steps, tryserver=False):
+    props = api.properties.tryserver if tryserver else api.properties.generic
     return (
-      api.test('%s_%s_fail_%s' % (_sanitize_nonalpha(mastername),
-                                  _sanitize_nonalpha(buildername),
-                                  _sanitize_nonalpha(step))) +
-      api.properties.generic(mastername=mastername,
-                             buildername=buildername) +
-      api.step_data(step, retcode=1)
+      api.test('%s_%s_fail_%s' % (
+        _sanitize_nonalpha(mastername),
+        _sanitize_nonalpha(buildername),
+        '_'.join(_sanitize_nonalpha(step) for step in steps))) +
+      props(mastername=mastername, buildername=buildername) +
+      reduce(lambda a, b: a + b,
+             (api.step_data(step, retcode=1) for step in steps))
     )
 
   yield step_failure(mastername='chromium.fyi',
                      buildername='Android x64 Builder (dbg)',
-                     step='findbugs')
+                     steps=['findbugs'])
   yield step_failure(mastername='chromium.fyi',
                      buildername='Android x64 Builder (dbg)',
-                     step='check licenses')
+                     steps=['check licenses'])
 
   yield step_failure(mastername='tryserver.chromium.linux',
                      buildername='android_clang_dbg_recipe',
-                     step='findbugs')
+                     steps=['compile (with patch)'],
+                     tryserver=True)
   yield step_failure(mastername='tryserver.chromium.linux',
                      buildername='android_clang_dbg_recipe',
-                     step='check licenses')
+                     steps=['compile (with patch)', 'compile (without patch)'],
+                     tryserver=True)
+  yield step_failure(mastername='tryserver.chromium.linux',
+                     buildername='android_clang_dbg_recipe',
+                     steps=['findbugs'],
+                     tryserver=True)
+  yield step_failure(mastername='tryserver.chromium.linux',
+                     buildername='android_clang_dbg_recipe',
+                     steps=['check licenses'],
+                     tryserver=True)
