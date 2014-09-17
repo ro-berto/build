@@ -282,27 +282,6 @@
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Linux64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
-      "--test-type=rtc_unittests",
-      "--builder-name=Linux64 Debug",
-      "--slave-name=slavename",
-      "rtc_unittests"
-    ],
-    "name": "rtc_unittests"
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Debug",
-      "--xvfb",
-      "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Linux64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"slavename\": \"slavename\"}",
-      "--build-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Linux64 Debug\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
       "--test-type=system_wrappers_unittests",
       "--builder-name=Linux64 Debug",
       "--slave-name=slavename",
