@@ -29,6 +29,7 @@ def BaseConfig(BUILDER_NAME, MASTER_NAME, SLAVE_NAME, **_kwargs):
     gyp_env = ConfigGroup(
       GYP_DEFINES = Dict(equal_fn, ' '.join, (basestring,int,Path)),
     ),
+    is_trybot = Single(bool),
     role = Single(str),
     slave_cfg = Single(dict)
   )
@@ -39,6 +40,7 @@ VAR_TEST_MAP = {
                    u'Build-Ubuntu13.10-GCC4.8-NaCl-Debug',
                    u'Build-Ubuntu13.10-GCC4.8-x86_64-Debug',
                    u'Build-Win-VS2013-x86-Debug-Exceptions',
+                   u'Housekeeper-PerCommit',
                    u'Test-Mac10.8-MacMini4.1-GeForce320M-x86_64-Release',
                    u'Test-Ubuntu12-ShuttleA-GTX550Ti-x86_64-Debug-ZeroGPUCache',
                    u'Test-Ubuntu12-ShuttleA-GTX550Ti-x86_64-Release-Valgrind',
@@ -59,6 +61,8 @@ def gyp_defs_from_builder_dict(builder_dict):
   # skia_arch_width.
   if builder_dict['role'] == builder_name_schema.BUILDER_ROLE_BUILD:
     arch = builder_dict['target_arch']
+  elif builder_dict['role'] == builder_name_schema.BUILDER_ROLE_HOUSEKEEPER:
+    arch = None
   else:
     arch = builder_dict['arch']
   skia_arch_width = {
@@ -144,6 +148,8 @@ def build_targets_from_builder_dict(builder_dict):
   elif (builder_dict['role'] == builder_name_schema.BUILDER_ROLE_TEST and
         builder_dict.get('extra_config') == 'TSAN'):
     return ['dm']
+  elif builder_dict['role'] == builder_name_schema.BUILDER_ROLE_HOUSEKEEPER:
+    return ['tools', 'gm', 'dm']
   else:
     return ['most']
 
@@ -165,4 +171,5 @@ def skia(c):
                      'Valgrind' in c.BUILDER_NAME)
   c.gyp_env.GYP_DEFINES.update(gyp_defs_from_builder_dict(c.builder_cfg))
   c.slave_cfg = slaves_cfg.get(c.MASTER_NAME)[c.SLAVE_NAME]
+  c.is_trybot = builder_name_schema.IsTrybot(c.BUILDER_NAME)
 

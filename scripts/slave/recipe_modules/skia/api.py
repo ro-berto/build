@@ -22,12 +22,12 @@ TEST_EXPECTED_SKP_VERSION = '42'
 def is_android(builder_cfg):
   """Determine whether the given builder is an Android builder."""
   return ('Android' in builder_cfg.get('extra_config', '') or
-          builder_cfg['os'] == 'Android')
+          builder_cfg.get('os') == 'Android')
 
 
 def is_chromeos(builder_cfg):
   return ('CrOS' in builder_cfg.get('extra_config', '') or
-          builder_cfg['os'] == 'ChromeOS')
+          builder_cfg.get('os') == 'ChromeOS')
 
 
 def is_nacl(builder_cfg):
@@ -562,7 +562,7 @@ class SkiaApi(recipe_api.RecipeApi):
           'third_party', 'gsutil', 'gsutil')
       upload_args = [self.c.BUILDER_NAME, self.m.properties['buildnumber'],
                      self.perf_data_dir, self.got_revision, gsutil_path]
-      if builder_name_schema.IsTrybot(self.c.BUILDER_NAME):
+      if self.c.is_trybot:
         upload_args.append(self.m.properties['issue'])
       self.run(self.m.python,
                'Upload Nanobench Results',

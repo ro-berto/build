@@ -243,6 +243,7 @@ def main(argv):
       'master.client.skia': 'Skia',
       'master.client.skia.android': 'SkiaAndroid',
       'master.client.skia.compile': 'SkiaCompile',
+      'master.client.skia.fyi': 'SkiaFYI',
       'master.client.syzygy': 'Syzygy',
       'master.client.v8': 'V8',
       'master.client.v8.branches': 'V8Branches',
