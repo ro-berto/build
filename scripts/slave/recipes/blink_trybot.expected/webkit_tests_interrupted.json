@@ -255,7 +255,8 @@
     "name": "archive_webkit_tests_results",
     "~followup_annotations": [
       "@@@STEP_LINK@layout_test_results@https://storage.googleapis.com/chromium-layout-test-archives/linux_blink_rel/571/layout-test-results/results.html@@@",
-      "@@@STEP_LINK@(zip)@https://storage.googleapis.com/chromium-layout-test-archives/linux_blink_rel/571/layout-test-results.zip@@@"
+      "@@@STEP_LINK@(zip)@https://storage.googleapis.com/chromium-layout-test-archives/linux_blink_rel/571/layout-test-results.zip@@@",
+      "@@@SET_BUILD_PROPERTY@failure_type@\"UNKNOWN\"@@@"
     ]
   },
   {

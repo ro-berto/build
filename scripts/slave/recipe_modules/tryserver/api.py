@@ -175,6 +175,11 @@ class TryserverApi(recipe_api.RecipeApi):
     step_result = self.m.step.active_result
     step_result.presentation.properties['failure_type'] = 'UNKNOWN'
 
+  def maybe_set_unknown_tryjob_result(self):
+    """Set unknown result if we're tryserver."""
+    if self.is_tryserver:
+      self.set_unknown_tryjob_result()
+
   def set_failed_tryjob_result(self):
     """Mark the tryjob result as failed.
 

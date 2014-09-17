@@ -80,6 +80,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     for t in tests:
       if not t.has_valid_results(caller_api, 'with patch'):
+        self.m.tryserver.maybe_set_unknown_tryjob_result()
         self.m.python.failing_step(t.name, 'TEST RESULTS WERE INVALID')
       elif t.failures(caller_api, 'with patch'):
         failing_tests.append(t)
@@ -98,6 +99,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
   def _summarize_retried_test(self, caller_api, test):
     if not test.has_valid_results(caller_api, 'without patch'):
+      self.m.tryserver.maybe_set_unknown_tryjob_result()
       self.m.python.failing_step(test.name, 'TEST RESULTS WERE INVALID')
 
     ignored_failures = set(test.failures(caller_api, 'without patch'))
