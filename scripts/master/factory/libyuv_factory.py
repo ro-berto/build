@@ -52,7 +52,7 @@ class LibyuvFactory(chromium_factory.ChromiumFactory):
 
     if factory_properties.get('needs_valgrind'):
       self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_VALGRIND]
-    factory = self.BuildFactory(target=target, tests=tests,
+    factory = self.BuildFactory(target=target, tests=tests, clobber=True,
                                 slave_type=slave_type, options=options,
                                 factory_properties=factory_properties)
 

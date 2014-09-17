@@ -70,79 +70,84 @@ mac_ios_factory_properties = {
 # Windows.
 defaults['category'] = 'win'
 
-B('Win32 Debug (VS2010)', 'win32_2010_debug_factory',
+B('Win32 Debug (VS2010)', 'win32_2010_debug_factory', slavebuilddir='win',
   scheduler=scheduler_name)
 F('win32_2010_debug_factory', win().LibyuvFactory(
     target='Debug',
     tests=test_targets,
     factory_properties=win_msvs_2010_factory_properties))
 
-B('Win32 Release (VS2010)', 'win32_2010_release_factory',
+B('Win32 Release (VS2010)', 'win32_2010_release_factory', slavebuilddir='win',
   scheduler=scheduler_name)
 F('win32_2010_release_factory', win().LibyuvFactory(
     target='Release',
     tests=test_targets,
     factory_properties=win_msvs_2010_factory_properties))
 
-B('Win64 Debug (VS2010)', 'win64_2010_debug_factory', scheduler=scheduler_name)
+B('Win64 Debug (VS2010)', 'win64_2010_debug_factory', slavebuilddir='win',
+  scheduler=scheduler_name)
 F('win64_2010_debug_factory', win().LibyuvFactory(
     target='Debug_x64',
     tests=test_targets,
     factory_properties=win_msvs_2010_x64_factory_properties))
 
-B('Win64 Release (VS2010)', 'win64_2010_release_factory',
+B('Win64 Release (VS2010)', 'win64_2010_release_factory', slavebuilddir='win',
   scheduler=scheduler_name)
 F('win64_2010_release_factory', win().LibyuvFactory(
     target='Release_x64',
     tests=test_targets,
     factory_properties=win_msvs_2010_x64_factory_properties))
 
-B('Win32 Debug (VS2012)', 'win32_2012_debug_factory', scheduler=scheduler_name)
+B('Win32 Debug (VS2012)', 'win32_2012_debug_factory',  slavebuilddir='win',
+  scheduler=scheduler_name)
 F('win32_2012_debug_factory', win().LibyuvFactory(
     target='Debug',
     tests=test_targets,
     factory_properties=win_msvs_2012_factory_properties))
 
-B('Win32 Release (VS2012)', 'win32_2012_release_factory',
+B('Win32 Release (VS2012)', 'win32_2012_release_factory', slavebuilddir='win',
   scheduler=scheduler_name)
 F('win32_2012_release_factory', win().LibyuvFactory(
     target='Release',
     tests=test_targets,
     factory_properties=win_msvs_2012_factory_properties))
 
-B('Win64 Debug (VS2012)', 'win64_2012_debug_factory', scheduler=scheduler_name)
+B('Win64 Debug (VS2012)', 'win64_2012_debug_factory', slavebuilddir='win',
+  scheduler=scheduler_name)
 F('win64_2012_debug_factory', win().LibyuvFactory(
     target='Debug_x64',
     tests=test_targets,
     factory_properties=win_msvs_2012_x64_factory_properties))
 
-B('Win64 Release (VS2012)', 'win64_2012_release_factory',
+B('Win64 Release (VS2012)', 'win64_2012_release_factory', slavebuilddir='win',
   scheduler=scheduler_name)
 F('win64_2012_release_factory', win().LibyuvFactory(
     target='Release_x64',
     tests=test_targets,
     factory_properties=win_msvs_2012_x64_factory_properties))
 
-B('Win32 Debug (VS2013)', 'win32_2013_debug_factory', scheduler=scheduler_name)
+B('Win32 Debug (VS2013)', 'win32_2013_debug_factory', slavebuilddir='win',
+  scheduler=scheduler_name)
 F('win32_2013_debug_factory', win().LibyuvFactory(
     target='Debug',
     tests=test_targets,
     factory_properties=win_msvs_2013_factory_properties))
 
-B('Win32 Release (VS2013)', 'win32_2013_release_factory',
+B('Win32 Release (VS2013)', 'win32_2013_release_factory', slavebuilddir='win',
   scheduler=scheduler_name)
 F('win32_2013_release_factory', win().LibyuvFactory(
     target='Release',
     tests=test_targets,
     factory_properties=win_msvs_2013_factory_properties))
 
-B('Win64 Debug (VS2013)', 'win64_2013_debug_factory', scheduler=scheduler_name)
+B('Win64 Debug (VS2013)', 'win64_2013_debug_factory', slavebuilddir='win',
+  scheduler=scheduler_name)
 F('win64_2013_debug_factory', win().LibyuvFactory(
     target='Debug_x64',
     tests=test_targets,
     factory_properties=win_msvs_2013_x64_factory_properties))
 
-B('Win64 Release (VS2013)', 'win64_2013_release_factory',
+B('Win64 Release (VS2013)', 'win64_2013_release_factory', slavebuilddir='win',
   scheduler=scheduler_name)
 F('win64_2013_release_factory', win().LibyuvFactory(
     target='Release_x64',
@@ -152,17 +157,20 @@ F('win64_2013_release_factory', win().LibyuvFactory(
 # Mac.
 defaults['category'] = 'mac'
 
-B('Mac32 Debug', 'mac32_debug_factory', scheduler=scheduler_name)
+B('Mac32 Debug', 'mac32_debug_factory', slavebuilddir='mac',
+  scheduler=scheduler_name)
 F('mac32_debug_factory', mac().LibyuvFactory(
     target='Debug',
     tests=test_targets))
 
-B('Mac32 Release', 'mac32_release_factory', scheduler=scheduler_name)
+B('Mac32 Release', 'mac32_release_factory', slavebuilddir='mac',
+  scheduler=scheduler_name)
 F('mac32_release_factory', mac().LibyuvFactory(
     target='Release',
     tests=test_targets))
 
-B('Mac64 Debug', 'mac64_debug_factory', scheduler=scheduler_name)
+B('Mac64 Debug', 'mac64_debug_factory', slavebuilddir='mac',
+  scheduler=scheduler_name)
 F('mac64_debug_factory', mac().LibyuvFactory(
     target='Debug',
     tests=test_targets,
@@ -170,7 +178,8 @@ F('mac64_debug_factory', mac().LibyuvFactory(
         'gclient_env': {'GYP_DEFINES': 'host_arch=x64 target_arch=x64'},
     }))
 
-B('Mac64 Release', 'mac64_release_factory', scheduler=scheduler_name)
+B('Mac64 Release', 'mac64_release_factory', slavebuilddir='mac',
+  scheduler=scheduler_name)
 F('mac64_release_factory', mac().LibyuvFactory(
     target='Release',
     tests=test_targets,
@@ -178,7 +187,8 @@ F('mac64_release_factory', mac().LibyuvFactory(
         'gclient_env': {'GYP_DEFINES': 'host_arch=x64 target_arch=x64'},
     }))
 
-B('Mac Asan', 'mac_asan_factory', scheduler=scheduler_name)
+B('Mac Asan', 'mac_asan_factory', slavebuilddir='mac',
+  scheduler=scheduler_name)
 F('mac_asan_factory', mac().LibyuvFactory(
     target='Release',
     tests=test_targets,
@@ -187,12 +197,14 @@ F('mac_asan_factory', mac().LibyuvFactory(
         'gclient_env': {'GYP_DEFINES': 'asan=1 release_extra_cflags=-g'},
     }))
 
-B('iOS Debug', 'ios_debug_factory', scheduler=scheduler_name)
+B('iOS Debug', 'ios_debug_factory', slavebuilddir='mac',
+  scheduler=scheduler_name)
 F('ios_debug_factory', mac_ios().LibyuvFactory(
     target='Debug-iphoneos',
     factory_properties=mac_ios_factory_properties))
 
-B('iOS Release', 'ios_release_factory', scheduler=scheduler_name)
+B('iOS Release', 'ios_release_factory', slavebuilddir='mac',
+  scheduler=scheduler_name)
 F('ios_release_factory', mac_ios().LibyuvFactory(
     target='Release-iphoneos',
     factory_properties=mac_ios_factory_properties))
@@ -200,36 +212,34 @@ F('ios_release_factory', mac_ios().LibyuvFactory(
 # Linux.
 defaults['category'] = 'linux'
 
-B('Linux32 Debug', 'linux32_debug_factory', scheduler=scheduler_name)
+B('Linux32 Debug', 'linux32_debug_factory', slavebuilddir='linux',
+  scheduler=scheduler_name)
 F('linux32_debug_factory', linux().LibyuvFactory(
     target='Debug',
     tests=test_targets,
     factory_properties={'gclient_env': {'GYP_DEFINES': 'target_arch=ia32'}}))
 
-B('Linux32 Release', 'linux32_release_factory', scheduler=scheduler_name)
+B('Linux32 Release', 'linux32_release_factory', slavebuilddir='linux',
+  scheduler=scheduler_name)
 F('linux32_release_factory', linux().LibyuvFactory(
     target='Release',
     tests=test_targets,
     factory_properties={'gclient_env': {'GYP_DEFINES': 'target_arch=ia32'}}))
 
-B('Linux64 Debug', 'linux64_debug_factory', scheduler=scheduler_name)
+B('Linux64 Debug', 'linux64_debug_factory', slavebuilddir='linux',
+  scheduler=scheduler_name)
 F('linux64_debug_factory', linux().LibyuvFactory(
     target='Debug',
     tests=test_targets))
 
-B('Linux64 Release', 'linux64_release_factory', scheduler=scheduler_name)
+B('Linux64 Release', 'linux64_release_factory', slavebuilddir='linux',
+  scheduler=scheduler_name)
 F('linux64_release_factory', linux().LibyuvFactory(
     target='Release',
     tests=test_targets))
 
-B('Linux Clang', 'linux_clang_factory', scheduler=scheduler_name)
-F('linux_clang_factory', linux().LibyuvFactory(
-    target='Debug',
-    options=['--compiler=clang'],
-    tests=test_targets,
-    factory_properties={'gclient_env': {'GYP_DEFINES': 'clang=1'}}))
-
-B('Linux Memcheck', 'linux_memcheck_factory', scheduler=scheduler_name)
+B('Linux Memcheck', 'linux_memcheck_factory', slavebuilddir='linux',
+  scheduler=scheduler_name)
 F('linux_memcheck_factory', linux().LibyuvFactory(
     target='Release',
     tests=test_targets,
@@ -238,7 +248,8 @@ F('linux_memcheck_factory', linux().LibyuvFactory(
         'gclient_env': {'GYP_DEFINES': 'build_for_tool=memcheck'},
     }))
 
-B('Linux Tsan', 'linux_tsan_factory', scheduler=scheduler_name)
+B('Linux Tsan', 'linux_tsan_factory', slavebuilddir='linux',
+  scheduler=scheduler_name)
 F('linux_tsan_factory', linux().LibyuvFactory(
     target='Release',
     tests=test_targets,
@@ -247,7 +258,8 @@ F('linux_tsan_factory', linux().LibyuvFactory(
         'gclient_env': {'GYP_DEFINES': 'build_for_tool=tsan'},
     }))
 
-B('Linux Asan', 'linux_asan_factory', scheduler=scheduler_name)
+B('Linux Asan', 'linux_asan_factory', slavebuilddir='linux',
+  scheduler=scheduler_name)
 F('linux_asan_factory', linux().LibyuvFactory(
     target='Release',
     options=['--compiler=clang'],
@@ -260,7 +272,8 @@ F('linux_asan_factory', linux().LibyuvFactory(
     }))
 
 # Android.
-B('Android Debug', 'android_debug_factory', scheduler=scheduler_name)
+B('Android Debug', 'android_debug_factory', slavebuilddir='android',
+  scheduler=scheduler_name)
 F('android_debug_factory', android().ChromiumAnnotationFactory(
   target='Debug',
   annotation_script='src/build/android/buildbot/bb_run_bot.py',
@@ -268,20 +281,14 @@ F('android_debug_factory', android().ChromiumAnnotationFactory(
       'android_bot_id': 'libyuv-main-clobber-dbg',
   }))
 
-B('Android Release', 'android_release_factory', scheduler=scheduler_name)
+B('Android Release', 'android_release_factory', slavebuilddir='android',
+  scheduler=scheduler_name)
 F('android_release_factory', android().ChromiumAnnotationFactory(
   target='Release',
   annotation_script='src/build/android/buildbot/bb_run_bot.py',
   factory_properties={
       'android_bot_id': 'libyuv-main-clobber',
   }))
-
-# Chrome OS.
-B('Chrome OS', 'chromeos_factory', scheduler=scheduler_name)
-F('chromeos_factory', linux().LibyuvFactory(
-    target='Debug',
-    tests=test_targets,
-    factory_properties={'gclient_env': {'GYP_DEFINES': 'chromeos=1'}}))
 
 
 def Update(c):
