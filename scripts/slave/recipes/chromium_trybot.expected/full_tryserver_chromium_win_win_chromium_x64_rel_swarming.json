@@ -138,7 +138,8 @@
       "[BUILD]\\goma",
       "--",
       "base_unittests",
-      "browser_tests"
+      "browser_tests",
+      "mini_installer"
     ],
     "name": "compile (with patch)"
   },
@@ -226,5 +227,22 @@
       "/path/to/tmp/json"
     ],
     "name": "mojo_python_tests (with patch)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\src\\chrome\\test\\mini_installer\\test_installer.py",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out",
+      "--target",
+      "Release_x64",
+      "--force-clean",
+      "--config",
+      "[SLAVE_BUILD]\\src\\chrome\\test\\mini_installer\\config\\config.config",
+      "--write-full-results-to",
+      "/path/to/tmp/json"
+    ],
+    "name": "test_installer (with patch)"
   }
 ]

@@ -858,8 +858,7 @@ def GenSteps(api):
     # MojoPythonTests don't require anything to be compiled.
     tests.append(api.chromium.steps.MojoPythonTests())
 
-    # test_installer only works on 32-bit builds; http://crbug.com/399643
-    if api.platform.is_win and api.chromium.c.TARGET_BITS == 32:
+    if api.platform.is_win:
       tests.append(api.chromium.steps.MiniInstallerTest())
 
     has_swarming_tests = any(t.uses_swarming for t in tests)
