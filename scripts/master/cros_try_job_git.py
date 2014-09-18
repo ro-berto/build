@@ -168,7 +168,7 @@ class CrOSTryJobGit(TryBase):
         error_msgs.append('Option %s of wrong type!' % name)
 
     # If we're an 'etc' job, we must have bots defined to execute.
-    for bot in parsed_job['bots']:
+    for bot in parsed_job['bot']:
       if bot in self.cbuildbot_configs:
         continue
       if self.etc_builder:
