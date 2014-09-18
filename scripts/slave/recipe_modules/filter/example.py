@@ -13,9 +13,17 @@ DEPS = [
 ]
 
 def GenSteps(api):
+  exes = api.m.properties.get('exes')
+  compile_targets = api.m.properties.get('compile_targets')
+
   api.path['checkout'] = api.path['slave_build']
   api.chromium.set_config('chromium')
-  api.filter.does_patch_require_compile()
+  api.filter.does_patch_require_compile(exes=exes,
+                                        compile_targets=compile_targets,
+                                        additional_name='chromium')
+
+  assert (list(api.properties.get('example_changed_paths', ['foo.cc'])) == \
+          api.filter.paths)
   assert (api.filter.result and api.properties['example_result']) or \
       (not api.filter.result and not api.properties['example_result'])
   assert (list(api.properties.get('example_matching_exes', [])) ==
@@ -29,16 +37,37 @@ def GenTests(api):
   yield (api.test('basic') +
          api.properties(
            filter_exclusions=[],
+           example_changed_paths=['yy'],
            example_result=None) +
+         api.override_step_data(
+          'read filter exclusion spec',
+          api.json.output({
+           'base': { 'exclusions': [] },
+           'chromium': { 'exclusions': [] }})) +
          api.override_step_data(
           'git diff to analyze patch',
           api.raw_io.stream_output('yy')))
-  
+
   # Matches exclusions
   yield (api.test('match_exclusion') +
-         api.properties(
-           filter_exclusions=['fo.*'],
-           example_result=1) +
+         api.properties(example_result=1) +
+         api.override_step_data(
+          'read filter exclusion spec',
+          api.json.output({
+           'base': { 'exclusions': ['fo.*'] },
+           'chromium': { 'exclusions': [] }})) +
+         api.override_step_data(
+          'git diff to analyze patch',
+          api.raw_io.stream_output('foo.cc')))
+
+  # Matches exclusions in additional_name key
+  yield (api.test('match_additional_name_exclusion') +
+         api.properties(example_result=1) +
+         api.override_step_data(
+          'read filter exclusion spec',
+          api.json.output({
+           'base': { 'exclusions': [] },
+           'chromium': { 'exclusions': ['fo.*'] }})) +
          api.override_step_data(
           'git diff to analyze patch',
           api.raw_io.stream_output('foo.cc')))
@@ -46,8 +75,13 @@ def GenTests(api):
   # Doesnt match exclusion.
   yield (api.test('doesnt_match_exclusion') +
          api.properties(
-           filter_exclusions=['fo.*'],
+           example_changed_paths=['bar.cc'],
            example_result=None) +
+         api.override_step_data(
+          'read filter exclusion spec',
+          api.json.output({
+           'base': { 'exclusions': ['fo.*'] },
+           'chromium': { 'exclusions': [] }})) +
          api.override_step_data(
           'git diff to analyze patch',
           api.raw_io.stream_output('bar.cc')))

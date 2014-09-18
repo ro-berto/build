@@ -12,18 +12,12 @@
       "TestSlavename",
       "--spec",
       "cache_dir = None\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]\ntarget_os = ['android']",
-      "--root",
-      "src",
       "--revision_mapping_file",
       "{}",
-      "--issue",
-      "12853011",
-      "--patchset",
-      "1",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD"
+      "src@204787"
     ],
     "name": "bot_update",
     "~followup_annotations": [
@@ -49,16 +43,6 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/gclient_safe_revert.py",
-      ".",
-      "[DEPOT_TOOLS]/gclient"
-    ],
-    "name": "gclient revert"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[DEPOT_TOOLS]/gclient.py",
       "sync",
       "--nohooks",
@@ -66,7 +50,7 @@
       "--verbose",
       "--delete_unversioned_trees",
       "--revision",
-      "src@HEAD",
+      "src@204787",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -134,26 +118,6 @@
       "[SLAVE_BUILD]/src/third_party/WebKit"
     ],
     "name": "Blink LASTCHANGE"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[DEPOT_TOOLS]/apply_issue.py",
-      "-r",
-      "[SLAVE_BUILD]/src",
-      "-i",
-      "12853011",
-      "-p",
-      "1",
-      "-s",
-      "https://codereview.chromium.org",
-      "--no-auth"
-    ],
-    "name": "apply_issue",
-    "~followup_annotations": [
-      "@@@STEP_LINK@Applied issue 12853011@https://codereview.chromium.org/12853011@@@"
-    ]
   },
   {
     "cmd": [
@@ -299,7 +263,7 @@
       "-u",
       "[SLAVE_BUILD]/src/build/gyp_chromium",
       "--analyzer",
-      "{\"files\": [\"foo.cc\"], \"targets\": [\"android_webview_apk\"]}",
+      "{\"files\": [\"chrome/common/my_file.cc\"], \"targets\": [\"android_webview_apk\"]}",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -307,14 +271,11 @@
     },
     "name": "analyze",
     "~followup_annotations": [
+      "@@@STEP_TEXT@No compile necessary@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"some_target\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"status\": \"Found dependency\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"targets\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"android_webview_apk\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"status\": \"No dependency\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"targets\": []@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]

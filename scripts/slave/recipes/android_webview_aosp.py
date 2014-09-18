@@ -4,10 +4,17 @@
 
 DEPS = [
   'android',
+  'chromium_android',
+  'filter',
+  'json',
   'path',
   'properties',
+  'raw_io',
   'tryserver',
 ]
+
+AOSP_MANIFEST_PATH = 'android_webview/buildbot/aosp_manifest.xml'
+WEBVIEW_EXES = ['android_webview_apk']
 
 # This recipe describes building the Android framework WebView component inside
 # an Android build environment.
@@ -19,7 +26,11 @@ DEPS = [
 # SDK that the 'regular' Chromium build uses. This is why the recipe requires
 # checking out the Android source tree and building using the Android build
 # system.
+
 def GenSteps(api):
+  # Required for us to be able to use filter.
+  api.chromium_android.set_config('base_config')
+
   droid = api.android
   droid.set_config('AOSP_webview')
 
@@ -60,6 +71,13 @@ def GenSteps(api):
   # checked into the main Chromium repository.
   droid.all_incompatible_directories_check_step()
 
+  # Early out if we haven't changed any relevant code.
+  api.filter.does_patch_require_compile(exes=WEBVIEW_EXES,
+                                        additional_name='android_webview')
+  needs_compile = not api.filter.result or not api.filter.matching_exes
+  if api.tryserver.is_tryserver and needs_compile:
+    return
+
   # TODO(android): use api.chromium.compile for this
   droid.compile_step(
     build_tool='make-android',
@@ -67,14 +85,29 @@ def GenSteps(api):
     use_goma=True)
 
 def GenTests(api):
-  yield api.test('basic') + api.properties.scheduled()
-
-  yield (
-    api.test('uses_android_repo') +
-    api.properties.scheduled() +
-    api.path.exists(
-      api.path['slave_build'].join('android-src', '.repo', 'repo', 'repo'))
+  analyze_config = api.override_step_data(
+      'read filter exclusion spec',
+      api.json.output({
+        'base': {
+          'exclusions': [],
+        },
+        'android_webview': {
+          'exclusions': ['android_webview/.*'],
+        },
+      })
   )
+
+  chrome_change = analyze_config + api.override_step_data(
+      'git diff to analyze patch',
+      api.raw_io.stream_output('chrome/common/my_file.cc'))
+
+  dependant_change = analyze_config + api.override_step_data(
+      'analyze',
+      api.json.output({'status': 'Found dependency',
+                       'targets': ['android_webview_apk'],
+                       'build_targets': ['some_target']}))
+
+  yield api.test('basic') + api.properties.scheduled() + dependant_change
 
   yield (
     api.test('repo_infra_failure') +
@@ -83,22 +116,46 @@ def GenTests(api):
   )
 
   yield (
-    api.test('doesnt_sync_if_android_present') +
+    api.test('uses_android_repo') +
     api.properties.scheduled() +
-    api.path.exists(api.path['slave_build'].join('android-src'))
+    api.path.exists(
+      api.path['slave_build'].join('android-src', '.repo', 'repo', 'repo')) +
+    dependant_change
   )
 
   yield (
     api.test('can_clobber') +
-    api.properties.scheduled(clobber=True)
+    api.properties.scheduled(clobber=True) +
+    dependant_change
   )
 
   yield (
     api.test('uses_goma_test') +
     api.properties.scheduled() +
+    dependant_change +
     api.path.exists(api.path['build'].join('goma'))
   )
 
-  yield api.test('works_if_revision_not_present') + api.properties.generic()
+  yield (
+    api.test('works_if_revision_not_present') +
+    api.properties.generic() +
+    dependant_change
+  )
 
-  yield api.test('trybot') + api.properties.tryserver()
+  yield (
+    api.test('trybot') +
+    api.properties.tryserver() +
+    dependant_change
+  )
+
+  yield (
+    api.test('build_compiles_chrome_only_changes') +
+    api.properties.scheduled() +
+    chrome_change
+  )
+
+  yield (
+    api.test('trybot_doesnt_compile_chrome_only_changes') +
+    api.properties.tryserver() +
+    chrome_change
+  )

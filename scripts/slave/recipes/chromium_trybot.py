@@ -543,19 +543,6 @@ def filter_tests(possible_tests, needed_tests):
   return result
 
 
-def get_analyze_config(api, file_name):
-  """ Returns the dictionary used to configure certain aspects of the analyze
-  step."""
-  config_path = api.path.join('testing', 'buildbot', file_name)
-  step_result = api.json.read(
-    'read analyze test spec',
-    api.path['checkout'].join(config_path),
-    step_test_data=lambda: api.json.test_api.output({'exclusions': []})
-    )
-  step_result.presentation.step_text = 'path: %r' % config_path
-  return step_result.json.output
-
-
 def tests_in_compile_targets(compile_targets, tests):
   """Returns the tests in |tests| that have at least one of their compile
   targets in |compile_targets|."""
@@ -803,14 +790,14 @@ def GenSteps(api):
     if isinstance(test_spec, dict) and should_filter_builder(
         buildername, test_spec.get('non_filter_builders', []),
         api.properties.get('root')):
-      analyze_config = get_analyze_config(
-          api, bot_config['testing'].get('analyze_config_file',
-                                         'trybot_analyze_config.json'))
+      analyze_config_file = bot_config['testing'].get('analyze_config_file',
+                                         'trybot_analyze_config.json')
       api.filter.does_patch_require_compile(
-          exclusions=analyze_config.get('exclusions', []),
           exes=get_test_names(gtest_tests) +
                all_compile_targets(conditional_tests),
           compile_targets=compile_targets,
+          additional_name='chromium',
+          config_file_name=analyze_config_file,
           env=runhooks_env)
       if not api.filter.result:
         return [], bot_update_step
@@ -1323,9 +1310,14 @@ def GenTests(api):
     props(buildername='linux_chromium_rel') +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({})) +
-    api.override_step_data('read analyze test spec', api.json.output({
-        'exclusions': ['f.*'],
-      })
+    api.override_step_data('read filter exclusion spec', api.json.output({
+        'base': {
+          'exclusions': ['f.*'],
+        },
+        'chromium': {
+          'exclusions': [],
+        },
+     })
     )
   )
 
