@@ -7,7 +7,7 @@
       "--master",
       "chromium.perf",
       "--builder",
-      "Linux Perf (4)",
+      "Mac 10.8 Perf (5)",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -66,7 +66,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
+      "GYP_DEFINES": "branding=Chrome buildtype=Official clang=1 component=static_library gomadir='[BUILD]/goma' target_arch=ia32 use_goma=1"
     },
     "name": "gclient runhooks"
   },
@@ -121,9 +121,9 @@
       "--build-archive-url",
       "gs://test-domain/test-archive.zip",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux Perf (4)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Linux Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac 10.8 Perf (5)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Mac Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux Perf (4)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Linux Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac 10.8 Perf (5)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Mac Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "name": "extract build"
   },

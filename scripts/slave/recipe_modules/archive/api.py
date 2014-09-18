@@ -90,9 +90,9 @@ class ArchiveApi(recipe_api.RecipeApi):
     The builder_name, or parent_buildername, is always automatically
     inserted into the URL."""
 
-    result = ('gs://' + gs_bucket_name + '/')
+    result = ('gs://' + gs_bucket_name)
     if extra_url_components:
-      result += extra_url_components
+      result += ('/' + extra_url_components)
     if is_download:
       result += ('/' + self.m.properties['parent_buildername'] + '/' +
                  'full-build-' + self._legacy_platform_name() +

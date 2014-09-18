@@ -139,7 +139,7 @@
       "--target",
       "Release",
       "--build-url",
-      "gs://chrome-perf/chromium.perf/Linux Builder",
+      "gs://chrome-perf/Linux Builder",
       "--build_revision",
       "170242",
       "--factory-properties",

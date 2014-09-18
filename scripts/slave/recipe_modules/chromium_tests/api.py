@@ -243,17 +243,19 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if mastername == 'chromium.linux':
         # TODO(samuong): This is restricted to Linux for now until I have more
         # confidence that it is not totally broken.
-        self.m.archive.archive_dependencies('archive dependencies',
-                                            self.m.chromium.c.build_config_fs,
-                                            mastername,
-                                            buildername,
-                                            self.m.properties.get('buildnumber'))
+        self.m.archive.archive_dependencies(
+            'archive dependencies',
+            self.m.chromium.c.build_config_fs,
+            mastername,
+            buildername,
+            self.m.properties.get('buildnumber'))
       self.m.archive.zip_and_upload_build(
           'package build',
           self.m.chromium.c.build_config_fs,
           self.m.archive.legacy_upload_url(
-            master_config.get('build_gs_bucket'),
-            extra_url_components=self.m.properties['mastername']),
+              master_config.get('build_gs_bucket'),
+              extra_url_components=(None if mastername == 'chromium.perf' else
+                                    self.m.properties['mastername'])),
           build_revision=got_revision,
           cros_board=self.m.chromium.c.TARGET_CROS_BOARD,
       )
@@ -279,13 +281,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.path.rmtree(
         'build directory',
         self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
-
       self.m.archive.download_and_unzip_build(
         'extract build',
         self.m.chromium.c.build_config_fs,
         self.m.archive.legacy_download_url(
           master_config.get('build_gs_bucket'),
-          extra_url_components=self.m.properties['mastername'],),
+          extra_url_components=(None if mastername == 'chromium.perf' else
+           self.m.properties['mastername'])),
         build_revision=self.m.properties.get(
           'parent_got_revision', got_revision),
         build_archive_url=self.m.properties.get('parent_build_archive_url'),
