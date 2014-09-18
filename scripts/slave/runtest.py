@@ -1813,6 +1813,9 @@ def main():
     symbolizer_path = os.path.abspath(os.path.join('src', 'third_party',
         'llvm-build', 'Release+Asserts', 'bin', 'llvm-symbolizer'))
     strip_path_prefix = options.strip_path_prefix
+    disable_sandbox_flag = '--no-sandbox'
+    if 'layout_test_wrapper' in sys.argv[0]:
+      disable_sandbox_flag = '--additional-drt-flag=%s' % disable_sandbox_flag
 
     # Symbolization of sanitizer reports.
     if options.enable_tsan or options.enable_lsan:
@@ -1835,7 +1838,7 @@ def main():
       tsan_options = symbolization_options
       extra_env['TSAN_OPTIONS'] = ' '.join(tsan_options)
       # Disable sandboxing under TSan for now. http://crbug.com/223602.
-      args.append('--no-sandbox')
+      args.append(disable_sandbox_flag)
 
     # LeakSanitizer
     if options.enable_lsan:
@@ -1845,7 +1848,7 @@ def main():
                       'print_suppressions=1']
       extra_env['LSAN_OPTIONS'] = ' '.join(lsan_options)
       # Disable sandboxing under LSan.
-      args.append('--no-sandbox')
+      args.append(disable_sandbox_flag)
 
     # AddressSanitizer
     if options.enable_asan:
@@ -1862,7 +1865,7 @@ def main():
 
       # ASan is not yet sandbox-friendly on Windows.
       if sys.platform == 'win32':
-        args.append('--no-sandbox')
+        args.append(disable_sandbox_flag)
 
     # MemorySanitizer
     if options.enable_msan:
