@@ -99,6 +99,7 @@
       "content_gl_tests_run",
       "gl_tests_run",
       "gles2_conform_test_run",
+      "gpu_unittests_run",
       "tab_capture_end2end_tests_run",
       "telemetry_gpu_test_run"
     ],
@@ -121,11 +122,12 @@
       "@@@STEP_LOG_LINE@json.output@  \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"gl_tests\": \"[dummy hash for gl_tests]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"gpu_unittests\": \"[dummy hash for gpu_unittests]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}@@@"
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"gpu_unittests\": \"[dummy hash for gpu_unittests]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}@@@"
     ]
   },
   {
@@ -716,5 +718,36 @@
       "--"
     ],
     "name": "tab_capture_end2end_tests"
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\runtest.py",
+      "--target",
+      "Release",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"TestBranch\", \"build_config\": \"Release\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"mastername\": \"chromium.gpu.fyi\", \"project\": \"\", \"recipe\": \"gpu/build_and_test\", \"repository\": \"svn://svn-mirror.golo.chromium.org/chrome/trunk\", \"revision\": \"204787\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"TestBranch\", \"build_config\": \"Release\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"mastername\": \"chromium.gpu.fyi\", \"project\": \"\", \"recipe\": \"gpu/build_and_test\", \"repository\": \"svn://svn-mirror.golo.chromium.org/chrome/trunk\", \"revision\": \"204787\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--annotate=gtest",
+      "--test-type=gpu_unittests",
+      "--generate-json-file",
+      "--results-directory=[SLAVE_BUILD]\\gtest-results\\gpu_unittests",
+      "--builder-name=TestBuilder",
+      "--slave-name=TestSlavename",
+      "--build-number=571",
+      "--run-python-script",
+      "--revision=170242",
+      "--webkit-revision=124383",
+      "[SLAVE_BUILD]\\src\\tools\\swarming_client\\run_isolated.py",
+      "-H",
+      "[dummy hash for gpu_unittests]",
+      "-I",
+      "https://isolateserver.appspot.com",
+      "--"
+    ],
+    "name": "gpu_unittests"
   }
 ]
