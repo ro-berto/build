@@ -1814,7 +1814,7 @@ def main():
         'llvm-build', 'Release+Asserts', 'bin', 'llvm-symbolizer'))
     strip_path_prefix = options.strip_path_prefix
     disable_sandbox_flag = '--no-sandbox'
-    if 'layout_test_wrapper' in sys.argv[0]:
+    if args and 'layout_test_wrapper' in args[0]:
       disable_sandbox_flag = '--additional-drt-flag=%s' % disable_sandbox_flag
 
     # Symbolization of sanitizer reports.
