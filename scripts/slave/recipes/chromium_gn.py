@@ -25,10 +25,25 @@ BUILDERS = {
         },
         'gclient_apply_config': ['android', 'blink'],
       },
+      'Android GN (dbg)': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+        },
+        'gclient_apply_config': ['android', 'blink'],
+      },
       'Linux GN': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
+        'gclient_apply_config': ['blink'],
+      },
+      'Linux GN (dbg)': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+        },
+        'chromium_apply_config': ['gn_component_build'],
         'gclient_apply_config': ['blink'],
       },
     },
