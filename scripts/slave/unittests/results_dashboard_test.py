@@ -126,7 +126,6 @@ class ResultsDashboardFormatTest(unittest.TestCase):
                 'r_webkit_rev': '6789',
                 'r_bar': '89abcdef',
                 'r_chromium': '46790669f8a2ecd7249ab92418260316b1c60dbf',
-                'a_default_rev': 'r_chromium',
                 'a_stdio_uri': 'http://mylogs.com/Builder/10',
                 # Note that v8 rev is not included since it was 'undefined'.
             },
@@ -146,7 +145,6 @@ class ResultsDashboardFormatTest(unittest.TestCase):
                 'r_webkit_rev': '6789',
                 'r_bar': '89abcdef',
                 'r_chromium': '46790669f8a2ecd7249ab92418260316b1c60dbf',
-                'a_default_rev': 'r_chromium',
                 'a_stdio_uri': 'http://mylogs.com/Builder/10',
             },
         },
@@ -166,7 +164,6 @@ class ResultsDashboardFormatTest(unittest.TestCase):
                 'r_v8_rev': '2345',
                 'r_bar': '89abcdef',
                 'r_chromium': '46790669f8a2ecd7249ab92418260316b1c60dbf',
-                'a_default_rev': 'r_chromium',
                 'a_stdio_uri': 'http://mylogs.com/Builder/10',
             },
         },
