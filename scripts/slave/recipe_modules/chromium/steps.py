@@ -553,7 +553,7 @@ class PrintPreviewTests(PythonBasedTest):  # pylint: disable=W032
         api.platform.normalize_platform_name(api.platform.name)])
     args = cmd_args
     path = api.path['checkout'].join(
-        'webkit', 'tools', 'layout_tests', 'run_webkit_tests.py')
+        'third_party', 'WebKit', 'Tools', 'Scripts', 'run-webkit-tests')
     args.extend(['--platform', platform_arg])
 
     # This is similar to how api.chromium.run_telemetry_test() sets the
