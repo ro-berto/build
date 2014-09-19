@@ -146,7 +146,8 @@ def GenSteps(api):
     if not api.filter.result:
       return
     compile_targets = list(set(compile_targets) &
-                                 set(api.filter.compile_targets))
+                                 set(api.filter.compile_targets)) if \
+        compile_targets else api.filter.compile_targets
     instrumentation_tests = [i for i in instrumentation_tests if \
         i['gyp_target'] in api.filter.matching_exes]
     unittests = [i for i in unittests if i[0] in api.filter.matching_exes]
