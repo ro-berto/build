@@ -14,12 +14,17 @@ class WebRTCApi(recipe_api.RecipeApi):
   BUILDERS = builders.BUILDERS
   RECIPE_CONFIGS = builders.RECIPE_CONFIGS
 
-  COMMON_TESTS = [
+  NORMAL_TESTS = [
     'audio_decoder_unittests',
     'common_audio_unittests',
     'common_video_unittests',
+    'libjingle_media_unittest',
+    'libjingle_p2p_unittest',
+    'libjingle_peerconnection_unittest',
+    'libjingle_unittest',
     'modules_tests',
     'modules_unittests',
+    'rtc_unittests',
     'system_wrappers_unittests',
     'test_support_unittests',
     'tools_unittests',
@@ -44,13 +49,6 @@ class WebRTCApi(recipe_api.RecipeApi):
     'voice_engine_unittests': 'webrtc/voice_engine',
     'webrtc_perf_tests': 'webrtc',
   }
-
-  NORMAL_TESTS = sorted(COMMON_TESTS + [
-    'libjingle_media_unittest',
-    'libjingle_p2p_unittest',
-    'libjingle_peerconnection_unittest',
-    'libjingle_unittest',
-  ])
 
   # Map of GS archive names to urls.
   # TODO(kjellander): Convert to use the auto-generated URLs once we've setup a
