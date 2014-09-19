@@ -191,7 +191,9 @@ class BotUpdateApi(recipe_api.RecipeApi):
       # the checkout.
       # If there is a patch failure, emit another step that said things failed.
       if step_result.json.output.get('patch_failure'):
-        self.m.tryserver.set_failed_tryjob_result()
+        # TODO(phajdan.jr): Differentiate between failure to download the patch
+        # and failure to apply it. The first is an infra failure, the latter
+        # a definite patch failure.
         self.m.python.failing_step(
             'Patch failure', 'Check the bot_update step for details')
 
