@@ -293,28 +293,6 @@
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux Tsan v2\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
-      "--test-type=rtc_unittests",
-      "--builder-name=Linux Tsan v2",
-      "--slave-name=slavename",
-      "--enable-tsan",
-      "rtc_unittests"
-    ],
-    "name": "rtc_unittests"
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Release",
-      "--xvfb",
-      "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux Tsan v2\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux Tsan v2\", \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
       "--test-type=system_wrappers_unittests",
       "--builder-name=Linux Tsan v2",
       "--slave-name=slavename",
