@@ -140,9 +140,12 @@ class AutoRollTestBase(SuperMoxTestBase):
     }
 
   def _get_last_revision(self):
-    auto_roll.subprocess2.check_output(
-        ['git', '--git-dir', './.git', 'show', 'origin/master:DEPS']
-        ).AndReturn(self.DEPS_CONTENT)
+    revinfo = (
+        'src/third_party/test_project: '
+        'https://chromium.googlesource.com/test_project.git@%s' %
+            str(self.OLD_REV))
+    auto_roll.subprocess2.check_output(['gclient', 'revinfo'],
+                                       cwd='.').AndReturn(revinfo)
 
   def _get_current_revision(self):
     if self._arb._git_mode:
@@ -244,9 +247,7 @@ Please email (eseidel@chromium.org) if the Rollbot is causing trouble.
                                closed=2).AndReturn(search_results)
     self._arb._rietveld.get_issue_properties(issue['issue'],
                                              messages=True).AndReturn(issue)
-    auto_roll.subprocess2.check_output(
-        ['git', '--git-dir', './.git', 'show', 'origin/master:DEPS']
-        ).AndReturn(self.DEPS_CONTENT)
+    self._get_last_revision()
     if self._arb._git_mode:
       self._short_rev(self.OLD_REV)
     self.mox.ReplayAll()
@@ -302,9 +303,7 @@ Please email (eseidel@chromium.org) if the Rollbot is causing trouble.
       return
     _do_fetches()
     self._arb._rietveld.search(owner=self.TEST_AUTHOR, closed=2).AndReturn([])
-    auto_roll.subprocess2.check_output(
-        ['git', '--git-dir', './.git', 'show', 'origin/master:DEPS']
-        ).AndReturn(self.DEPS_CONTENT)
+    self._get_last_revision()
     if self._arb._git_mode:
       auto_roll.subprocess2.check_output(
           ['git', '--git-dir', './third_party/test_project/.git', 'rev-parse',
@@ -365,12 +364,6 @@ class AutoRollTestSVN(AutoRollTestBase):
   OLD_REV = 1234
   NEW_REV = 1235
 
-  DEPS_CONTENT = '''
-vars = {
-  'test_project_revision': '%d',
-}
-''' % OLD_REV
-
   _GIT_LOG = '''
 commit abcde
 Author: Test Author <test_author@example.com>
@@ -413,12 +406,6 @@ class AutoRollTestGit(AutoRollTestBase):
   OLDER_SVN_REV = 1231
   OLD_SVN_REV = 1234
   NEW_SVN_REV = 1235
-
-  DEPS_CONTENT = '''
-vars = {
-  'test_project_revision': '%s', # from svn revision %s
-}
-''' % (OLD_REV, OLD_SVN_REV)
 
   _GIT_LOG = '''
 commit %s

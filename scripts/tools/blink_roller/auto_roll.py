@@ -146,10 +146,6 @@ class AutoRoller(object):
 
   # FIXME: These are taken from gardeningserver.py and should be shared.
   CHROMIUM_SVN_DEPS_URL = 'http://src.chromium.org/chrome/trunk/src/DEPS'
-  # 'webkit_revision': '149598',
-  REVISION_REGEXP = (
-      r'^  [\'"]%s_revision[\'"]: [\'"](?P<revision>[0-9a-fA-F]{2,40})[\'"],'
-      r'( # from svn revision (?P<svn_revision>\d+))?')
 
   ROLL_BOT_INSTRUCTIONS = textwrap.dedent(
     '''This roll was created by the Blink AutoRollBot.
@@ -170,7 +166,6 @@ class AutoRoller(object):
     self._rietveld = rietveld.Rietveld(
       self.RIETVELD_URL, self._author, None)
     self._cached_last_roll_revision = None
-    self._cached_deps_contents = None
 
     project_config = PROJECT_CONFIGS.get(self._project, {
       'path_to_project': os.path.join('third_party', self._project),
@@ -237,16 +232,16 @@ class AutoRoller(object):
         SVN revision number.
     """
     if not self._cached_last_roll_revision:
-      if not self._cached_deps_contents:
-        git_show_cmd = ['git', '--git-dir', self._chromium_git_dir, 'show',
-                        'origin/master:DEPS']
-        self._cached_deps_contents = subprocess2.check_output(git_show_cmd)
-
-      pattern = self.REVISION_REGEXP % self._project_alias
-      match = re.search(pattern, self._cached_deps_contents, re.MULTILINE)
-      self._cached_last_roll_revision = match.group('revision')
-    if self._git_mode:
-      assert len(self._cached_last_roll_revision) == 40
+      revinfo = subprocess2.check_output(['gclient', 'revinfo'],
+                                         cwd=self._path_to_chrome)
+      project_path = 'src/' + self._path_to_project
+      for line in revinfo.splitlines():
+        dep_path, source = line.split(': ', 1)
+        if dep_path == project_path:
+          self._cached_last_roll_revision = source.split('@')[-1]
+          break
+      if self._git_mode:
+        assert len(self._cached_last_roll_revision) == 40
     return self._cached_last_roll_revision
 
   def _current_revision(self):
