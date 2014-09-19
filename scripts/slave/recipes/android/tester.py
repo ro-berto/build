@@ -5,7 +5,9 @@
 DEPS = [
     'adb',
     'bot_update',
+    'chromium',
     'chromium_android',
+    'filter',
     'gclient',
     'json',
     'path',
@@ -17,9 +19,11 @@ DEPS = [
 INSTRUMENTATION_TESTS = [
   {
     'test': 'MojoTest',
+    'gyp_target': 'mojo_test_apk',
   },
   {
     'test': 'AndroidWebViewTest',
+    'gyp_target': 'android_webview_test_apk',
     'kwargs': {
       'test_data': 'webview:android_webview/test/data/device_files',
       'install_apk': {
@@ -30,6 +34,7 @@ INSTRUMENTATION_TESTS = [
   },
   {
     'test': 'ChromeShellTest',
+    'gyp_target': 'chrome_shell_test_apk',
     'kwargs': {
       'test_data': 'chrome:chrome/test/data/android/device_files',
       'install_apk': {
@@ -41,6 +46,7 @@ INSTRUMENTATION_TESTS = [
   },
   {
     'test': 'ContentShellTest',
+    'gyp_target': 'content_shell_test_apk',
     'kwargs': {
       'test_data': 'content:content/test/data/android/device_files',
       'install_apk': {
@@ -97,6 +103,9 @@ BUILDERS = {
 }
 
 def GenSteps(api):
+  # Required for us to be able to use filter.
+  api.chromium_android.set_config('base_config')
+
   mastername = api.properties['mastername']
   buildername = api.properties['buildername']
   bot_config = BUILDERS[mastername][buildername]
@@ -116,11 +125,34 @@ def GenSteps(api):
   api.chromium_android.clean_local_files()
   api.chromium_android.runhooks()
 
-  if bot_config.get('try', False):
+  compile_targets = None
+  instrumentation_tests = bot_config.get('instrumentation_tests', [])
+  unittests = bot_config.get('unittests', [])
+  is_trybot = bot_config.get('try', False)
+  if is_trybot:
     api.tryserver.maybe_apply_issue()
 
+    # Early out if we haven't changed any relevant code.
+    test_names = []
+    test_names.extend([suite['gyp_target'] for suite in instrumentation_tests])
+    test_names.extend([suite for suite, _ in unittests])
+
+    compile_targets = api.chromium.c.compile_py.default_targets
+    api.filter.does_patch_require_compile(
+        exes=test_names,
+        compile_targets=compile_targets,
+        additional_name='chromium',
+        config_file_name='trybot_analyze_config.json')
+    if not api.filter.result:
+      return
+    compile_targets = list(set(compile_targets) &
+                                 set(api.filter.compile_targets))
+    instrumentation_tests = [i for i in instrumentation_tests if \
+        i['gyp_target'] in api.filter.matching_exes]
+    unittests = [i for i in unittests if i[0] in api.filter.matching_exes]
+
   api.chromium_android.run_tree_truth()
-  api.chromium_android.compile()
+  api.chromium_android.compile(targets=compile_targets)
 
   api.adb.root_devices()
 
@@ -128,12 +160,10 @@ def GenSteps(api):
   api.chromium_android.detect_and_setup_devices()
 
   with api.step.defer_results():
-    instrumentation_tests = bot_config.get('instrumentation_tests', [])
     for suite in instrumentation_tests:
       api.chromium_android.run_instrumentation_suite(
           suite['test'], verbose=True, **suite.get('kwargs', {}))
 
-    unittests = bot_config.get('unittests', [])
     for suite, isolate_path in unittests:
       if isolate_path:
         isolate_path = api.path['checkout'].join(*isolate_path)
@@ -157,7 +187,14 @@ def GenTests(api):
               mastername=mastername,
               buildername=buildername,
               slavename='slavename',
-              buildnumber='1337')
+              buildnumber='1337') +
+          api.override_step_data(
+              'analyze',
+              api.json.output({'status': 'Found dependency',
+                               'targets': ['breakpad_unittests',
+                                           'chrome_shell_test_apk'],
+                               'build_targets': ['breakpad_unittests',
+                                                 'chrome_shell_test_apk']}))
       )
 
   yield (
@@ -166,5 +203,22 @@ def GenTests(api):
           mastername='tryserver.chromium.linux',
           buildername='android_dbg_tests_recipe',
           slavename='slavename') +
+      api.override_step_data(
+          'analyze',
+          api.json.output({'status': 'Found dependency',
+                           'targets': ['content_browsertests'],
+                           'build_targets': ['content_browsertests']})) +
       api.step_data('content_browsertests', retcode=1)
+  )
+
+  # Tests analyze module early exits if patch can't affect this config.
+  yield (
+      api.test('no_compile_because_of_analyze') +
+      api.properties.generic(
+          mastername='tryserver.chromium.linux',
+          buildername='android_dbg_tests_recipe',
+          slavename='slavename') +
+      api.override_step_data(
+          'analyze',
+          api.json.output({'status': 'No compile necessary'}))
   )
