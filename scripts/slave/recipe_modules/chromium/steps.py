@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import shlex
+
 
 class Test(object):
   """
@@ -290,9 +292,11 @@ class DynamicPerfTests(Test):
     for test_name, test in tests.iteritems():
       test_name = str(test_name)
       annotate = api.chromium.get_annotate_by_test_name(test_name)
+      cmd = shlex.split(test['cmd'])
       try:
         api.chromium.runtest(
-            test['cmd'],
+            cmd[1] if len(cmd) > 1 else cmd[0],
+            args=cmd[2:],
             name=test_name,
             annotate=annotate,
             python_mode=True,

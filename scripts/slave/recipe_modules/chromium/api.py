@@ -575,11 +575,11 @@ class ChromiumApi(recipe_api.RecipeApi):
       step_test_data=lambda: self.m.json.test_api.output({
         "steps": {
           "blink_perf.all": {
-            "cmd": "cmd1",
+            "cmd": "/usr/bin/python /path/to/run_benmark --a=1 -v --b=2",
             "device_affinity": 0
           },
           "dromaeo.cssqueryjquery": {
-            "cmd": "cmd2",
+            "cmd": "/path/to/run_benmark",
             "device_affinity": 1
           },
         },

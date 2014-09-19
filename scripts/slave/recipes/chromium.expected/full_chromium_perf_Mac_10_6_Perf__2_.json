@@ -144,11 +144,11 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"steps\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"blink_perf.all\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"cmd\": \"cmd1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"cmd\": \"/usr/bin/python /path/to/run_benmark --a=1 -v --b=2\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"device_affinity\": 0@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"dromaeo.cssqueryjquery\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"cmd\": \"cmd2\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"cmd\": \"/path/to/run_benmark\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"device_affinity\": 1@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
@@ -177,7 +177,7 @@
       "--slave-name=TestSlavename",
       "--build-number=571",
       "--run-python-script",
-      "cmd2"
+      "/path/to/run_benmark"
     ],
     "name": "dromaeo.cssqueryjquery"
   }

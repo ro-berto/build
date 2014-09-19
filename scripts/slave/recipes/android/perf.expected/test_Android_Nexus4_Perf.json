@@ -162,11 +162,11 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"steps\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"blink_perf.all\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"cmd\": \"cmd1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"cmd\": \"/usr/bin/python /path/to/run_benmark --a=1 -v --b=2\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"device_affinity\": 0@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"dromaeo.cssqueryjquery\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"cmd\": \"cmd2\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"cmd\": \"/path/to/run_benmark\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"device_affinity\": 1@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
@@ -184,7 +184,7 @@
       "--release",
       "--verbose",
       "--steps",
-      "{\"steps\": {\"blink_perf.all\": {\"cmd\": \"cmd1\", \"device_affinity\": 0}, \"dromaeo.cssqueryjquery\": {\"cmd\": \"cmd2\", \"device_affinity\": 1}}, \"version\": 1}"
+      "{\"steps\": {\"blink_perf.all\": {\"cmd\": \"/usr/bin/python /path/to/run_benmark --a=1 -v --b=2\", \"device_affinity\": 0}, \"dromaeo.cssqueryjquery\": {\"cmd\": \"/path/to/run_benmark\", \"device_affinity\": 1}}, \"version\": 1}"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "env": {
@@ -197,7 +197,7 @@
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "perf",
       "--steps",
-      "{\"steps\": {\"blink_perf.all\": {\"cmd\": \"cmd1\", \"device_affinity\": 0}, \"dromaeo.cssqueryjquery\": {\"cmd\": \"cmd2\", \"device_affinity\": 1}}, \"version\": 1}",
+      "{\"steps\": {\"blink_perf.all\": {\"cmd\": \"/usr/bin/python /path/to/run_benmark --a=1 -v --b=2\", \"device_affinity\": 0}, \"dromaeo.cssqueryjquery\": {\"cmd\": \"/path/to/run_benmark\", \"device_affinity\": 1}}, \"version\": 1}",
       "--output-json-list",
       "/path/to/tmp/json"
     ],
