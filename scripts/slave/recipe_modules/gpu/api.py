@@ -201,7 +201,7 @@ class GpuApi(recipe_api.RecipeApi):
           # we're confident it's the patch that is bad.
           self.m.tryserver.set_failed_tryjob_result()
         except self.m.step.StepFailure:
-          self.m.tryserver.set_unknown_tryjob_result()
+          self.m.tryserver.set_transient_failure_tryjob_result()
           raise
         raise
     else:

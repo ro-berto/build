@@ -455,7 +455,7 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@null@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@failure_type@\"UNKNOWN\"@@@"
+      "@@@SET_BUILD_PROPERTY@failure_type@\"TRANSIENT_FAILURE\"@@@"
     ]
   },
   {

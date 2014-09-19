@@ -690,7 +690,7 @@ def GenSteps(api):
     try:
       api.chromium.runhooks()
     except api.step.StepFailure:
-      api.tryserver.set_unknown_tryjob_result()
+      api.tryserver.set_transient_failure_tryjob_result()
       raise
 
   def get_test_spec(mastername, buildername, name='read test spec',
@@ -880,7 +880,7 @@ def GenSteps(api):
         # we're confident it's the patch that is bad.
         api.tryserver.set_failed_tryjob_result()
       except api.step.StepFailure:
-        api.tryserver.set_unknown_tryjob_result()
+        api.tryserver.set_transient_failure_tryjob_result()
         raise
       raise
 
@@ -964,7 +964,7 @@ def GenSteps(api):
         api.chromium.compile(
             compile_targets, name='compile (without patch)')
       except api.step.StepFailure:
-        api.tryserver.set_unknown_tryjob_result()
+        api.tryserver.set_transient_failure_tryjob_result()
         raise
       # Search for *.isolated only if enabled in bot config or if some
       # swarming test is being recompiled.

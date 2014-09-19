@@ -161,7 +161,7 @@ def GenSteps(api):
         # we're confident it's the patch that is bad.
         api.tryserver.set_failed_tryjob_result()
       except api.step.StepFailure:
-        api.tryserver.set_unknown_tryjob_result()
+        api.tryserver.set_transient_failure_tryjob_result()
         raise
       raise
   else:
