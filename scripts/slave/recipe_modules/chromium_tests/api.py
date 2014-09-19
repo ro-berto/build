@@ -93,6 +93,10 @@ RECIPE_CONFIGS = {
     'gclient_config': 'chromium',
     'gclient_apply_config': ['chrome_internal'],
   },
+  'perf': {
+    'chromium_config': 'chromium_official',
+    'gclient_config': 'perf',
+  }
 }
 
 

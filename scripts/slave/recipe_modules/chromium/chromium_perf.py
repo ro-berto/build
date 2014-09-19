@@ -15,7 +15,7 @@ def _Spec(platform, parent_builder, perf_id, index, num_shards, target_bits):
     },
     'parent_buildername': parent_builder,
     'perf_tester_shards': num_shards,
-    'recipe_config': 'official',
+    'recipe_config': 'perf',
     'testing': {
       'platform': platform,
     },
