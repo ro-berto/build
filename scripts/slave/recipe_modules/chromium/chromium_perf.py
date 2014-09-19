@@ -7,6 +7,7 @@ from . import steps
 
 def _Spec(platform, parent_builder, perf_id, index, num_shards, target_bits):
   return {
+    'disable_tests': True,
     'bot_type': 'tester',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
