@@ -779,6 +779,29 @@ class MiniInstallerTest(PythonBasedTest):  # pylint: disable=W0232
       **kwargs)
 
 
+class GenerateTelemetryProfileStep(Test):
+  name = 'generate_telemetry_profiles'
+
+  def __init__(self, target, profile_type_to_create):
+    super(GenerateTelemetryProfileStep, self).__init__()
+    self._target = target
+    self._profile_type_to_create = profile_type_to_create
+
+  def run(self, api, suffix):
+    args = ['--run-python-script',
+            '--target', self._target,
+            api.path['build'].join('scripts', 'slave',
+                                   'generate_profile_shim.py'),
+            '--target=' + self._target,
+            '--profile-type-to-generate=' + self._profile_type_to_create]
+    api.python('generate_telemetry_profiles',
+               api.path['build'].join('scripts', 'slave','runtest.py'),
+               args)
+
+  @staticmethod
+  def compile_targets(_):
+    return []
+
 IOS_TESTS = [
   GTestTest('base_unittests'),
   GTestTest('components_unittests'),
