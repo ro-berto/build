@@ -41,6 +41,8 @@ def GenSteps(api):
         t.run(api, '')
       except api.step.StepFailure:
         failed_tests.append(t)
+        if t.abort_on_failure:
+          raise
     # TODO(iannucci): Make this include the list of test names.
     if failed_tests:
       raise api.step.StepFailure('Build failed due to %d test failures'
@@ -268,4 +270,15 @@ def GenTests(api):
     api.platform('linux', 64) +
     api.override_step_data(
         'archive dependencies', api.json.canned_gtest_output(True), retcode=1)
+  )
+
+  yield (
+    api.test('generate_telemetry_profile_failure') +
+    api.properties.generic(mastername='chromium.perf',
+                           buildername='Linux Perf (1)',
+                           parent_buildername='Linux Builder',
+                           buildnumber=0) +
+    api.platform('linux', 64) +
+    api.override_step_data(
+        'generate_telemetry_profiles', retcode=1)
   )

@@ -11,9 +11,10 @@ class Test(object):
   applied patch.
   """
 
-  def __init__(self):
+  def __init__(self, abort_on_failure=False):
     super(Test, self).__init__()
     self._test_runs = {}
+    self.abort_on_failure = abort_on_failure
 
   @property
   def name(self):  # pragma: no cover
@@ -292,7 +293,7 @@ class DynamicPerfTests(Test):
     for test_name, test in tests.iteritems():
       test_name = str(test_name)
       annotate = api.chromium.get_annotate_by_test_name(test_name)
-      cmd = shlex.split(test['cmd'])
+      cmd = test['cmd'].split()
       try:
         api.chromium.runtest(
             cmd[1] if len(cmd) > 1 else cmd[0],
@@ -787,7 +788,7 @@ class GenerateTelemetryProfileStep(Test):
   name = 'generate_telemetry_profiles'
 
   def __init__(self, target, profile_type_to_create):
-    super(GenerateTelemetryProfileStep, self).__init__()
+    super(GenerateTelemetryProfileStep, self).__init__(abort_on_failure=True)
     self._target = target
     self._profile_type_to_create = profile_type_to_create
 
