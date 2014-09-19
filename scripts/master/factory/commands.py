@@ -37,7 +37,7 @@ DEFAULT_TESTS = 'defaulttests'
 
 def CreateTriggerStep(trigger_name, trigger_set_properties=None,
                       trigger_copy_properties=None, do_step_if=True,
-                      waitForFinish=False):
+                      waitForFinish=False, trigger_drop_properties=None):
   """Returns a Trigger Step, with all the default values copied over.
 
   Args:
@@ -87,6 +87,11 @@ def CreateTriggerStep(trigger_name, trigger_set_properties=None,
   }
 
   set_properties.update(trigger_set_properties)
+
+  if trigger_drop_properties:
+    for key in trigger_drop_properties:
+      if key in set_properties:
+        del set_properties[key]
 
   return trigger.Trigger(
       schedulerNames=[trigger_name],
