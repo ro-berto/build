@@ -44,6 +44,7 @@ SPEC = {
   },
   'builders': {
     'Linux Builder': {
+      'disable_tests': True,
       'recipe_config': 'official',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -58,6 +59,7 @@ SPEC = {
       },
     },
     'Linux Oilpan Builder': {
+      'disable_tests': True,
       'recipe_config': 'chromium_oilpan',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -72,6 +74,7 @@ SPEC = {
       },
     },
     'Win Builder': {
+      'disable_tests': True,
       'recipe_config': 'official',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -86,6 +89,7 @@ SPEC = {
       },
     },
     'Win x64 Builder': {
+      'disable_tests': True,
       'recipe_config': 'official',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -100,6 +104,7 @@ SPEC = {
       },
     },
     'Mac Builder': {
+      'disable_tests': True,
       'recipe_config': 'official',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
