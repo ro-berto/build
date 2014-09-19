@@ -356,10 +356,8 @@ class GpuApi(recipe_api.RecipeApi):
           name='tab_capture_end2end_tests',
           spawn_dbus=True))
 
-    # TODO(jmadill): run gpu_unittests everywhere once it's green on
-    # the FYI waterfall
-    if self.is_fyi_waterfall:
-      capture(self._run_isolate('gpu_unittests', name='gpu_unittests'))
+    # GPU unit tests.
+    capture(self._run_isolate('gpu_unittests', name='gpu_unittests'))
 
     if failures:
       raise self.m.step.StepFailure('%d tests failed: %r' % (len(failures), failures))
