@@ -578,6 +578,10 @@ class ChromiumApi(recipe_api.RecipeApi):
             "cmd": "/usr/bin/python /path/to/run_benmark --a=1 -v --b=2",
             "device_affinity": 0
           },
+          "chrome_perf.all": {
+            "cmd": "/usr/bin/python /path/to/run_benmark --a=2 -v --b=3",
+            "device_affinity": 0
+          },
           "dromaeo.cssqueryjquery": {
             "cmd": "/path/to/run_benmark",
             "device_affinity": 1

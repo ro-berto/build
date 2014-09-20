@@ -523,3 +523,7 @@ def chrome_pgo_optimize(c):
 @config_ctx()
 def v8_optimize_medium(c):
   c.gyp_env.GYP_DEFINES['v8_optimized_debug'] = 1
+
+@config_ctx()
+def chromium_perf(c):
+  c.compile_py.clobber = False

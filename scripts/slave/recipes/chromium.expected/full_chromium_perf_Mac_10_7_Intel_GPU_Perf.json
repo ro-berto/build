@@ -147,6 +147,10 @@
       "@@@STEP_LOG_LINE@json.output@      \"cmd\": \"/usr/bin/python /path/to/run_benmark --a=1 -v --b=2\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"device_affinity\": 0@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"chrome_perf.all\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"cmd\": \"/usr/bin/python /path/to/run_benmark --a=2 -v --b=3\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"device_affinity\": 0@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"dromaeo.cssqueryjquery\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"cmd\": \"/path/to/run_benmark\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"device_affinity\": 1@@@",
@@ -183,5 +187,32 @@
       "--b=2"
     ],
     "name": "blink_perf.all"
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac 10.7 Intel GPU Perf\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Mac Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac 10.7 Intel GPU Perf\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Mac Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--annotate=graphing",
+      "--results-url=https://chromeperf.appspot.com",
+      "--perf-dashboard-id=chrome_perf.all",
+      "--perf-id=chromium-rel-mac7-gpu-intel",
+      "--builder-name=Mac 10.7 Intel GPU Perf",
+      "--slave-name=TestSlavename",
+      "--build-number=571",
+      "--run-python-script",
+      "/path/to/run_benmark",
+      "--a=2",
+      "-v",
+      "--b=3"
+    ],
+    "name": "chrome_perf.all"
   }
 ]

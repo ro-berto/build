@@ -282,3 +282,14 @@ def GenTests(api):
     api.override_step_data(
         'generate_telemetry_profiles', retcode=1)
   )
+
+  yield (
+    api.test('perf_test_profile_failure') +
+    api.properties.generic(mastername='chromium.perf',
+                           buildername='Linux Perf (1)',
+                           parent_buildername='Linux Builder',
+                           buildnumber=0) +
+    api.platform('linux', 64) +
+    api.override_step_data(
+        'blink_perf.all', retcode=1)
+  )

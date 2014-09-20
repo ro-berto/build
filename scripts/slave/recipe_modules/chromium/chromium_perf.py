@@ -57,6 +57,7 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
+      'chromium_apply_config': ['chromium_perf']
     },
     'Linux Oilpan Builder': {
       'disable_tests': True,
@@ -72,6 +73,7 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
+      'chromium_apply_config': ['chromium_perf']
     },
     'Win Builder': {
       'disable_tests': True,
@@ -87,6 +89,7 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'chromium_apply_config': ['chromium_perf']
     },
     'Win x64 Builder': {
       'disable_tests': True,
@@ -102,6 +105,7 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'chromium_apply_config': ['chromium_perf']
     },
     'Mac Builder': {
       'disable_tests': True,
@@ -117,6 +121,7 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
+      'chromium_apply_config': ['chromium_perf']
     },
   }
 }

@@ -9,10 +9,14 @@ class Test(object):
   applied patch.
   """
 
-  def __init__(self, abort_on_failure=False):
+  def __init__(self):
     super(Test, self).__init__()
     self._test_runs = {}
-    self.abort_on_failure = abort_on_failure
+
+  @property
+  def abort_on_failure(self):
+    """If True, abort build when test fails."""
+    return False
 
   @property
   def name(self):  # pragma: no cover
@@ -786,7 +790,7 @@ class GenerateTelemetryProfileStep(Test):
   name = 'generate_telemetry_profiles'
 
   def __init__(self, target, profile_type_to_create):
-    super(GenerateTelemetryProfileStep, self).__init__(abort_on_failure=True)
+    super(GenerateTelemetryProfileStep, self).__init__()
     self._target = target
     self._profile_type_to_create = profile_type_to_create
 
@@ -800,6 +804,11 @@ class GenerateTelemetryProfileStep(Test):
     api.python('generate_telemetry_profiles',
                api.path['build'].join('scripts', 'slave','runtest.py'),
                args)
+
+  @property
+  def abort_on_failure(self):
+    """If True, abort build when test fails."""
+    return True
 
   @staticmethod
   def compile_targets(_):

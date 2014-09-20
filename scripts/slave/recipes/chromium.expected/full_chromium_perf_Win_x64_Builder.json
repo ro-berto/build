@@ -103,7 +103,6 @@
       "official",
       "--goma-dir",
       "[BUILD]\\goma",
-      "--clobber",
       "--",
       "chromium_builder_perf"
     ],
