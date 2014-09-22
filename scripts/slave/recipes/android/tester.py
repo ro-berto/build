@@ -155,6 +155,9 @@ def GenSteps(api):
   api.chromium_android.run_tree_truth()
   api.chromium_android.compile(targets=compile_targets)
 
+  if not instrumentation_tests and not unittests:
+    return
+
   api.adb.root_devices()
 
   api.chromium_android.spawn_logcat_monitor()
@@ -210,6 +213,19 @@ def GenTests(api):
                            'targets': ['content_browsertests'],
                            'build_targets': ['content_browsertests']})) +
       api.step_data('content_browsertests', retcode=1)
+  )
+
+  yield (
+      api.test('no_provision_devices_when_no_tests') +
+      api.properties.generic(
+          mastername='tryserver.chromium.linux',
+          buildername='android_dbg_tests_recipe',
+          slavename='slavename') +
+      api.override_step_data(
+          'analyze',
+          api.json.output({'status': 'Found dependency',
+                           'targets': [],
+                           'build_targets': ['content_browsertests']}))
   )
 
   # Tests analyze module early exits if patch can't affect this config.
