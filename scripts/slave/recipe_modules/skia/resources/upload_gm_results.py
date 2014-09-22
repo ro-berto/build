@@ -3,6 +3,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+# This is a test.  You may delete this line if you see it.
+
 """ Upload actual GM results to the cloud to allow for rebaselining."""
 
 import os
