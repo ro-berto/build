@@ -1299,4 +1299,4 @@ def _GetSnapshotUrl(factory_properties=None, builder_name='%(build_name)s'):
   gs_bucket = factory_properties['gs_bucket']
   gs_bucket = re.sub(r'^gs://', 'http://commondatastorage.googleapis.com/',
                      gs_bucket)
-  return ('%s/index.html?path=%s' % (gs_bucket, builder_name), '/')
+  return ('%s/index.html?prefix=%s' % (gs_bucket, builder_name), '')
