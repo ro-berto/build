@@ -55,7 +55,8 @@ class TelemetryTest(unittest.TestCase):
     fp = self._GetDefaultFactoryProperties()
 
     cmd = [self.telemetry, '--print-cmd',
-           '--factory-properties=%s' % json.dumps(fp)]
+           '--factory-properties=%s' % json.dumps(fp),
+           '--chart-output-filename=name.out']
 
     ret = runScript(cmd, filter_obj=self.capture, print_cmd=False)
     self.assertEqual(ret, 0)
@@ -77,8 +78,10 @@ class TelemetryTest(unittest.TestCase):
             '\'--single-step\' ' +
             '\'--\' ' +
             '\'src/tools/perf/run_benchmark\' \'-v\' ' +
-            '\'--output-format=buildbot\' ' +
-            '\'--browser=android-chrome-shell\' \'sunspider\''
+            '\'--output-format=chartjson\' ' +
+            '\'--upload-results\' ' +
+            '\'--browser=android-chrome-shell\' \'sunspider\' ' +
+            '\'--output=name.out\''
         ])
 
     self.assertEqual(expectedText, self.capture.text)
@@ -88,7 +91,8 @@ class TelemetryTest(unittest.TestCase):
     fp['extra_args'] = ['--profile-dir=fake_dir']
 
     cmd = [self.telemetry, '--print-cmd',
-           '--factory-properties=%s' % json.dumps(fp)]
+           '--factory-properties=%s' % json.dumps(fp),
+           '--chart-output-filename=tmpfile']
 
     ret = runScript(cmd, filter_obj=self.capture, print_cmd=False)
     self.assertEqual(ret, 0)
@@ -111,9 +115,11 @@ class TelemetryTest(unittest.TestCase):
             '\'--single-step\' ' +
             '\'--\' ' +
             '\'src/tools/perf/run_benchmark\' \'-v\' ' +
-            '\'--output-format=buildbot\' ' +
+            '\'--output-format=chartjson\' ' +
+            '\'--upload-results\' ' +
             '\'--profile-dir=fake_dir\' '+
-            '\'--browser=android-chrome-shell\' \'sunspider\''
+            '\'--browser=android-chrome-shell\' \'sunspider\' ' +
+            '\'--output=tmpfile\''
         ])
 
     self.assertEqual(expectedText, self.capture.text)

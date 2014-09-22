@@ -54,6 +54,7 @@ from slave import gtest_slave_utils
 from slave import performance_log_processor
 from slave import results_dashboard
 from slave import slave_utils
+from slave import telemetry_utils
 from slave import xvfb
 
 USAGE = '%s [options] test.exe [test args]' % os.path.basename(sys.argv[0])
@@ -548,17 +549,21 @@ def _ListLogProcessors(selection):
   return shouldlist
 
 
-def _SelectLogProcessor(options):
+def _SelectLogProcessor(options, test_exe):
   """Returns a log processor class based on the command line options.
 
   Args:
     options: Command-line options (from OptionParser).
+    test_exe: Name of the test to execute
 
   Returns:
     A log processor class, or None.
   """
   if _UsingGtestJson(options):
     return gtest_utils.GTestJSONParser
+
+  if test_exe and test_exe.endswith('telemetry.py'):
+    return telemetry_utils.TelemetryResultsProcessor
 
   if options.annotate:
     if options.annotate in LOG_PROCESSOR_CLASSES:
@@ -583,6 +588,56 @@ def _GetCommitPos(build_properties):
   return int(re.search(r'{#(\d+)}', commit_pos).group(1))
 
 
+def _GetMainRevision(options):
+  """Return revision to use as the numerical x-value in the perf dashboard.
+
+  In general, for most data, we always want to use the git commit position. In
+  cases where we want to use something else, it should be specified as
+  'got_revision_cp' in build properties, or if that is not specified, the
+  --revision flag to runtest.py.
+  """
+  commit_pos_num = _GetCommitPos(options.build_properties)
+  if commit_pos_num is not None:
+    revision = commit_pos_num
+  elif options.revision:
+    revision = options.revision
+  else:
+    # TODO(sullivan,qyearsley): Don't fall back to _GetRevision if it returns
+    # a git commit, since this should be a numerical revision.
+    revision = _GetRevision(os.path.dirname(os.path.abspath(options.build_dir)))
+  return revision
+
+
+def _GetBlinkRevision(options):
+  if options.webkit_revision:
+    webkit_revision = options.webkit_revision
+  else:
+    try:
+      webkit_dir = chromium_utils.FindUpward(
+          os.path.abspath(options.build_dir), 'third_party', 'WebKit', 'Source')
+      webkit_revision = _GetRevision(webkit_dir)
+    except Exception:
+      webkit_revision = None
+  return webkit_revision
+
+
+def _GetTelemetryRevisions(options):
+  """Fills in the same revisions fields that process_log_utils does."""
+
+  versions = {}
+  versions['rev'] = _GetMainRevision(options)
+  versions['webkit_rev'] = _GetBlinkRevision(options)
+  versions['webrtc_rev'] = options.build_properties.get('got_webrtc_revision')
+  versions['v8_rev'] = options.build_properties.get('got_v8_revision')
+  versions['ver'] = options.build_properties.get('version')
+  versions['git_revision'] = options.build_properties.get('git_revision')
+  # There are a lot of "bad" revisions to check for, so clean them all up here.
+  for key in versions.keys():
+    if not versions[key] or versions[key] == 'undefined':
+      del versions[key]
+  return versions
+
+
 def _CreateLogProcessor(log_processor_class, options):
   """Creates a log processor instance.
 
@@ -596,31 +651,15 @@ def _CreateLogProcessor(log_processor_class, options):
   if not log_processor_class:
     return None
 
-  if log_processor_class.__name__ in ('GTestLogParser',):
+  if log_processor_class.__name__ in ('GTestLogParser',
+                                      'TelemetryResultsTracker'):
     tracker_obj = log_processor_class()
   elif log_processor_class.__name__ in ('GTestJSONParser',):
     tracker_obj = log_processor_class(
         options.build_properties.get('mastername'))
   else:
-    build_dir = os.path.abspath(options.build_dir)
-
-    if options.webkit_revision:
-      webkit_revision = options.webkit_revision
-    else:
-      try:
-        webkit_dir = chromium_utils.FindUpward(
-            build_dir, 'third_party', 'WebKit', 'Source')
-        webkit_revision = _GetRevision(webkit_dir)
-      except Exception:
-        webkit_revision = 'undefined'
-
-    commit_pos_num = _GetCommitPos(options.build_properties)
-    if commit_pos_num is not None:
-      revision = commit_pos_num
-    elif options.revision:
-      revision = options.revision
-    else:
-      revision = _GetRevision(os.path.dirname(build_dir))
+    webkit_revision = _GetBlinkRevision(options) or 'undefined'
+    revision = _GetMainRevision(options) or 'undefined'
 
     tracker_obj = log_processor_class(
         revision=revision,
@@ -655,41 +694,74 @@ def _GetSupplementalColumns(build_dir, supplemental_colummns_file_name):
   return supplemental_columns
 
 
-def _SendResultsToDashboard(log_processor, system, test, url, build_dir,
-                            mastername, buildername, buildnumber,
-                            supplemental_columns_file, extra_columns=None):
+def _ResultsDashboardDict(options):
+  """Generates a dict of info needed by the results dashboard.
+
+  Args:
+    options: Program arguments.
+
+  Returns:
+    dict containing data the dashboard needs.
+  """
+  build_dir = os.path.abspath(options.build_dir)
+  supplemental_columns = _GetSupplementalColumns(
+      build_dir, options.supplemental_columns_file)
+  extra_columns = options.perf_config
+  if extra_columns:
+    supplemental_columns.update(extra_columns)
+  fields = {
+      'system': _GetPerfID(options),
+      'test': options.test_type,
+      'url': options.results_url,
+      'mastername': options.build_properties.get('mastername'),
+      'buildername': options.build_properties.get('buildername'),
+      'buildnumber': options.build_properties.get('buildnumber'),
+      'build_dir': build_dir,
+      'supplemental_columns': supplemental_columns,
+      'revisions': _GetTelemetryRevisions(options),
+  }
+  return fields
+
+
+def _SendResultsToDashboard(log_processor, args):
   """Sends results from a log processor instance to the dashboard.
 
   Args:
     log_processor: An instance of a log processor class, which has been used to
         process the test output, so it contains the test results.
-    system: A string such as 'linux-release', which comes from perf_id.
-    test: Test "suite" name string.
-    url: Dashboard URL.
-    build_dir: Build dir name (used for cache file by results_dashboard).
-    mastername: Buildbot master name, e.g. 'chromium.perf'.
-        WARNING! This is incorrectly called "masterid" in some parts of the
-        dashboard code.
-    buildername: Builder name, e.g. 'Linux QA Perf (1)'
-    buildnumber: Build number (as a string).
-    supplemental_columns_file: Filename for JSON supplemental columns file.
-    extra_columns: A dict of extra values to add to the supplemental columns
-        dict.
+    args: Dict of additional args to send to results_dashboard.
   """
-  if system is None:
+  if args['system'] is None:
     # perf_id not specified in factory properties.
     print 'Error: No system name (perf_id) specified when sending to dashboard.'
     return
-  supplemental_columns = _GetSupplementalColumns(
-      build_dir, supplemental_columns_file)
-  if extra_columns:
-    supplemental_columns.update(extra_columns)
 
-  charts = _GetDataFromLogProcessor(log_processor)
-  points = results_dashboard.MakeListOfPoints(
-      charts, system, test, mastername, buildername, buildnumber,
-      supplemental_columns)
-  results_dashboard.SendResults(points, url, build_dir)
+  results = []
+  if log_processor.IsChartJson():
+    chart_json = log_processor.ChartJson()
+    if chart_json:
+      results = [results_dashboard.MakeDashboardJsonV1(
+          chart_json,
+          args['revisions'], args['system'], args['mastername'],
+          args['buildername'], args['buildnumber'],
+          args['supplemental_columns'], False)]
+      ref_json = log_processor.RefChartJson()
+      if ref_json:
+        results.append(results_dashboard.MakeDashboardJsonV1(
+            ref_json, args['revisions'], args['system'], args['mastername'],
+            args['buildername'], args['buildnumber'],
+            args['supplemental_columns'], True))
+    else:
+      print 'Error: No json output from telemetry.'
+      print '@@@STEP_EXCEPTION@@@'
+    log_processor.Cleanup()
+  else:
+    charts = _GetDataFromLogProcessor(log_processor)
+    results = [results_dashboard.MakeListOfPoints(
+        charts, args['system'], args['test'], args['mastername'],
+        args['buildername'], args['buildnumber'], args['supplemental_columns'])]
+  for result in results:
+    results_dashboard.SendResults(result, args['url'], args['build_dir'])
 
 
 def _GetDataFromLogProcessor(log_processor):
@@ -957,7 +1029,7 @@ def _MainParse(options, _args):
   if _ListLogProcessors(options.annotate):
     return 0
 
-  log_processor_class = _SelectLogProcessor(options)
+  log_processor_class = _SelectLogProcessor(options, None)
   log_processor = _CreateLogProcessor(log_processor_class, options)
 
   if options.generate_json_file:
@@ -1024,8 +1096,10 @@ def _MainMac(options, args, extra_env):
   # If --annotate=list was passed, list the log processor classes and exit.
   if _ListLogProcessors(options.annotate):
     return 0
-  log_processor_class = _SelectLogProcessor(options)
+  log_processor_class = _SelectLogProcessor(options, test_exe)
   log_processor = _CreateLogProcessor(log_processor_class, options)
+  if hasattr(log_processor, 'IsChartJson') and log_processor.IsChartJson():
+    command.extend(log_processor.GetArguments())
 
   if options.generate_json_file:
     if os.path.exists(options.test_output_xml):
@@ -1074,14 +1148,7 @@ def _MainMac(options, args, extra_env):
         perf_dashboard_id=options.perf_dashboard_id)
 
   if options.results_url:
-    _SendResultsToDashboard(
-        log_processor, _GetPerfID(options),
-        options.test_type, options.results_url, options.build_dir,
-        options.build_properties.get('mastername'),
-        options.build_properties.get('buildername'),
-        options.build_properties.get('buildnumber'),
-        options.supplemental_columns_file,
-        options.perf_config)
+    _SendResultsToDashboard(log_processor, _ResultsDashboardDict(options))
 
   return result
 
@@ -1277,8 +1344,10 @@ def _MainLinux(options, args, extra_env):
   # If --annotate=list was passed, list the log processor classes and exit.
   if _ListLogProcessors(options.annotate):
     return 0
-  log_processor_class = _SelectLogProcessor(options)
+  log_processor_class = _SelectLogProcessor(options, test_exe)
   log_processor = _CreateLogProcessor(log_processor_class, options)
+  if hasattr(log_processor, 'IsChartJson') and log_processor.IsChartJson():
+    command.extend(log_processor.GetArguments())
 
   if options.generate_json_file:
     if os.path.exists(options.test_output_xml):
@@ -1350,14 +1419,7 @@ def _MainLinux(options, args, extra_env):
         perf_dashboard_id=options.perf_dashboard_id)
 
   if options.results_url:
-    _SendResultsToDashboard(
-        log_processor, _GetPerfID(options),
-        options.test_type, options.results_url, options.build_dir,
-        options.build_properties.get('mastername'),
-        options.build_properties.get('buildername'),
-        options.build_properties.get('buildnumber'),
-        options.supplemental_columns_file,
-        options.perf_config)
+    _SendResultsToDashboard(log_processor, _ResultsDashboardDict(options))
 
   return result
 
@@ -1426,8 +1488,10 @@ def _MainWin(options, args, extra_env):
   # If --annotate=list was passed, list the log processor classes and exit.
   if _ListLogProcessors(options.annotate):
     return 0
-  log_processor_class = _SelectLogProcessor(options)
+  log_processor_class = _SelectLogProcessor(options, test_exe)
   log_processor = _CreateLogProcessor(log_processor_class, options)
+  if hasattr(log_processor, 'IsChartJson') and log_processor.IsChartJson():
+    command.extend(log_processor.GetArguments())
 
   if options.generate_json_file:
     if os.path.exists(options.test_output_xml):
@@ -1472,14 +1536,7 @@ def _MainWin(options, args, extra_env):
         perf_dashboard_id=options.perf_dashboard_id)
 
   if options.results_url:
-    _SendResultsToDashboard(
-        log_processor, _GetPerfID(options),
-        options.test_type, options.results_url, options.build_dir,
-        options.build_properties.get('mastername'),
-        options.build_properties.get('buildername'),
-        options.build_properties.get('buildnumber'),
-        options.supplemental_columns_file,
-        options.perf_config)
+    _SendResultsToDashboard(log_processor, _ResultsDashboardDict(options))
 
   return result
 
@@ -1507,7 +1564,7 @@ def _MainAndroid(options, args, extra_env):
 
   if _ListLogProcessors(options.annotate):
     return 0
-  log_processor_class = _SelectLogProcessor(options)
+  log_processor_class = _SelectLogProcessor(options, args[0])
   log_processor = _CreateLogProcessor(log_processor_class, options)
 
   if options.generate_json_file:
@@ -1535,14 +1592,7 @@ def _MainAndroid(options, args, extra_env):
         perf_dashboard_id=options.perf_dashboard_id)
 
   if options.results_url:
-    _SendResultsToDashboard(
-        log_processor, _GetPerfID(options),
-        options.test_type, options.results_url, options.build_dir,
-        options.build_properties.get('mastername'),
-        options.build_properties.get('buildername'),
-        options.build_properties.get('buildnumber'),
-        options.supplemental_columns_file,
-        options.perf_config)
+    _SendResultsToDashboard(log_processor, _ResultsDashboardDict(options))
 
   return result
 
