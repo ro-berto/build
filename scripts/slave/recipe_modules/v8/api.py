@@ -254,8 +254,8 @@ class V8Api(recipe_api.RecipeApi):
     if self.c.gyp_env.LINK:
       env['LINK'] = self.c.gyp_env.LINK
     # TODO(machenbach): Make this the default on windows.
-    if self.c.gyp_env.GYP_MSVS_VERSION:
-      env['GYP_MSVS_VERSION'] = self.c.gyp_env.GYP_MSVS_VERSION
+    if self.m.chromium.c.gyp_env.GYP_MSVS_VERSION:
+      env['GYP_MSVS_VERSION'] = self.m.chromium.c.gyp_env.GYP_MSVS_VERSION
     self.m.chromium.runhooks(env=env, **kwargs)
 
   @property

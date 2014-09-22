@@ -292,7 +292,7 @@ BUILDERS = {
       },
 ####### Category: Windows
       'V8 Win32 - builder': {
-        'v8_apply_config': ['msvs2013'],
+        'chromium_apply_config': ['msvs2013'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -302,7 +302,7 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'V8 Win32 - debug builder': {
-        'v8_apply_config': ['msvs2013'],
+        'chromium_apply_config': ['msvs2013'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -338,8 +338,8 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'V8 Win32 - nosnap - shared': {
-        'v8_apply_config': ['msvs2013', 'no_snapshot'],
-        'chromium_apply_config': ['shared_library', 'no_snapshot'],
+        'v8_apply_config': ['no_snapshot'],
+        'chromium_apply_config': ['msvs2013', 'shared_library', 'no_snapshot'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -388,7 +388,7 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'V8 Win64': {
-        'v8_apply_config': ['msvs2013'],
+        'chromium_apply_config': ['msvs2013'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -933,7 +933,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_win_rel': {
-        'v8_apply_config': ['msvs2013'],
+        'chromium_apply_config': ['msvs2013'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -943,7 +943,7 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'v8_win_dbg': {
-        'v8_apply_config': ['msvs2013'],
+        'chromium_apply_config': ['msvs2013'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -953,7 +953,7 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'v8_win64_compile_rel': {
-        'v8_apply_config': ['msvs2013'],
+        'chromium_apply_config': ['msvs2013'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -962,7 +962,7 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'v8_win64_rel': {
-        'v8_apply_config': ['msvs2013'],
+        'chromium_apply_config': ['msvs2013'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,

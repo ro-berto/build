@@ -51,6 +51,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       GYP_GENERATORS = Set(basestring, ','.join),
       GYP_GENERATOR_FLAGS = Dict(equal_fn, ' '.join, (basestring,int)),
       GYP_USE_SEPARATE_MSPDBSRV = Single(int, jsonish_fn=str, required=False),
+      GYP_MSVS_VERSION = Single(basestring, required=False),
     ),
     project_generator = ConfigGroup(
       tool = Single(basestring, empty_val='gyp'),
@@ -206,6 +207,18 @@ def msvs(c):
   c.gyp_env.GYP_GENERATORS.add('msvs')
   c.compile_py.build_tool = 'msvs'
   c.build_dir = Path('[CHECKOUT]', 'build')
+
+@config_ctx()
+def msvs2010(c):
+  c.gyp_env.GYP_MSVS_VERSION = '2010'
+
+@config_ctx()
+def msvs2012(c):
+  c.gyp_env.GYP_MSVS_VERSION = '2012'
+
+@config_ctx()
+def msvs2013(c):
+  c.gyp_env.GYP_MSVS_VERSION = '2013'
 
 @config_ctx(group='builder')
 def xcodebuild(c):
