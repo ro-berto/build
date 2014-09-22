@@ -178,6 +178,7 @@
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=dromaeo.cssqueryjquery",
       "--perf-id=linux-release",
+      "--test-type=dromaeo.cssqueryjquery",
       "--builder-name=Linux Perf (2)",
       "--slave-name=TestSlavename",
       "--build-number=571",

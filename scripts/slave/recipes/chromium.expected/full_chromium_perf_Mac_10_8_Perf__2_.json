@@ -177,6 +177,7 @@
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=dromaeo.cssqueryjquery",
       "--perf-id=chromium-rel-mac8",
+      "--test-type=dromaeo.cssqueryjquery",
       "--builder-name=Mac 10.8 Perf (2)",
       "--slave-name=TestSlavename",
       "--build-number=571",

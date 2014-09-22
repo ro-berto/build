@@ -305,7 +305,8 @@ class DynamicPerfTests(Test):
             python_mode=True,
             results_url='https://chromeperf.appspot.com',
             perf_dashboard_id=test_name,
-            perf_id=self.perf_id)
+            perf_id=self.perf_id,
+            test_type=test_name)
       except api.step.StepFailure as f:
         exception = f
     if exception:

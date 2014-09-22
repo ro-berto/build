@@ -178,6 +178,7 @@
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=dromaeo.cssqueryjquery",
       "--perf-id=linux-oilpan-release",
+      "--test-type=dromaeo.cssqueryjquery",
       "--builder-name=Linux Oilpan Perf (2)",
       "--slave-name=TestSlavename",
       "--build-number=571",

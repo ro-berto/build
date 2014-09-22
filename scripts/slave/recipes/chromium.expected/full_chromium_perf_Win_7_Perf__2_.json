@@ -195,6 +195,7 @@
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=dromaeo.cssqueryjquery",
       "--perf-id=chromium-rel-win7-dual",
+      "--test-type=dromaeo.cssqueryjquery",
       "--builder-name=Win 7 Perf (2)",
       "--slave-name=TestSlavename",
       "--build-number=571",
