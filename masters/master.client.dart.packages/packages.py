@@ -7,10 +7,6 @@ PACKAGES = [
     'name' : 'core-elements',
   },
   {
-    'name' : 'paper-elements',
-    'package_dependencies' : ['core-elements'],
-  },
-  {
     'name' : 'dart-protobuf',
   },
   {
@@ -18,6 +14,23 @@ PACKAGES = [
   },
   {
     'name' : 'googleapis_auth',
-    'package_dependencies' : [],
+  },
+  {
+    'name' : 'observe',
+  },
+  {
+    'name' : 'paper-elements',
+  },
+  {
+    'name' : 'polymer-dart',
+  },
+  {
+    'name' : 'polymer-expressions',
+  },
+  {
+    'name' : 'template-binding',
+  },
+  {
+    'name' : 'web-components',
   },
 ]
