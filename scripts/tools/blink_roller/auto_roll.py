@@ -112,14 +112,12 @@ def _do_git_fetch(git_dir):
 PROJECT_CONFIGS = {
   'blink': {
     'extra_emails_fn': _current_gardener_emails,
-    'git_mode': True,
     'path_to_project': os.path.join('third_party', 'WebKit'),
     'project_alias': 'webkit',
   },
   'skia': {
     'cq_extra_trybots': ['tryserver.blink:linux_blink_rel,linux_blink_dbg'],
     'extra_emails_fn': lambda: [_get_skia_sheriff()],
-    'git_mode': True,
     'path_to_project': os.path.join('third_party', 'skia'),
   },
 }
@@ -173,7 +171,6 @@ class AutoRoller(object):
     self._project_alias = project_config.get('project_alias', self._project)
     self._path_to_project = project_config['path_to_project']
     self._get_extra_emails = project_config.get('extra_emails_fn', lambda: [])
-    self._git_mode = project_config.get('git_mode', False)
     self._cq_extra_trybots = project_config.get('cq_extra_trybots', [])
 
     self._chromium_git_dir = self._path_from_chromium_root('.git')
@@ -240,28 +237,13 @@ class AutoRoller(object):
         if dep_path == project_path:
           self._cached_last_roll_revision = source.split('@')[-1]
           break
-      if self._git_mode:
-        assert len(self._cached_last_roll_revision) == 40
+      assert len(self._cached_last_roll_revision) == 40
     return self._cached_last_roll_revision
 
   def _current_revision(self):
-    if self._git_mode:
-      git_revparse_cmd = ['git', '--git-dir', self._project_git_dir,
-                          'rev-parse', 'origin/master']
-      return subprocess2.check_output(git_revparse_cmd).rstrip()
-    else:
-      return self._current_revision_svn()
-
-  def _current_revision_svn(self):
-    git_show_cmd = ['git', '--git-dir', self._project_git_dir, 'show', '-s',
-                    'origin/master']
-    git_log = subprocess2.check_output(git_show_cmd)
-    match = re.search('^\s*git-svn-id:.*@(?P<svn_revision>\d+)\ ',
-                      git_log, re.MULTILINE)
-    if match:
-      return match.group('svn_revision')
-    else:
-      return None
+    git_revparse_cmd = ['git', '--git-dir', self._project_git_dir,
+                        'rev-parse', 'origin/master']
+    return subprocess2.check_output(git_revparse_cmd).rstrip()
 
   def _emails_to_cc_on_rolls(self):
     return _filter_emails(self._get_extra_emails())
@@ -333,9 +315,7 @@ class AutoRoller(object):
           self.ROLL_TIME_LIMIT)
       return True
 
-    last_roll_revision = self._last_roll_revision()
-    if self._git_mode:
-      last_roll_revision = self._short_rev(last_roll_revision)
+    last_roll_revision = self._short_rev(self._last_roll_revision())
     match = re.match(self._roll_description_regexp, issue['subject'])
     if match.group('from_revision') != last_roll_revision:
       self._close_issue(
@@ -348,23 +328,16 @@ class AutoRoller(object):
 
   def _compare_revisions(self, last_roll_revision, new_roll_revision):
     """Ensure that new_roll_revision is newer than last_roll_revision."""
-    if self._git_mode:
-      # Ensure that new_roll_revision is not an ancestor of old_roll_revision.
-      try:
-        subprocess2.check_call(['git', '--git-dir', self._project_git_dir,
-                                'merge-base', '--is-ancestor',
-                                new_roll_revision, last_roll_revision])
-        print ('Already at %s refusing to roll backwards to %s.' % (
-                   last_roll_revision, new_roll_revision))
-        return False
-      except subprocess2.CalledProcessError:
-        pass
-    else:
-      # Fall back on svn revisions.
-      if int(new_roll_revision) <= int(last_roll_revision):
-        print ('Already at %s refusing to roll backwards to %s.' % (
-                   last_roll_revision, new_roll_revision))
-        return False
+    # Ensure that new_roll_revision is not an ancestor of old_roll_revision.
+    try:
+      subprocess2.check_call(['git', '--git-dir', self._project_git_dir,
+                              'merge-base', '--is-ancestor',
+                              new_roll_revision, last_roll_revision])
+      print ('Already at %s refusing to roll backwards to %s.' % (
+                 last_roll_revision, new_roll_revision))
+      return False
+    except subprocess2.CalledProcessError:
+      pass
     return True
 
   def _short_rev(self, revision):
