@@ -10,9 +10,9 @@ from config_bootstrap import Master
 
 class SkiaFYI(Master.Master3):
   project_name = 'SkiaFYI'
-  master_port = 8094
-  slave_port = 8194
-  master_port_alt = 8294
+  master_port = 8098
+  slave_port = 8198
+  master_port_alt = 8298
   repo_url = 'https://skia.googlesource.com/skia.git'
   buildbot_url = 'http://build.chromium.org/p/client.skia.fyi/'
   code_review_site = 'https://codereview.chromium.org'
