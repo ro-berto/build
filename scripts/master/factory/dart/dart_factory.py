@@ -326,7 +326,7 @@ class DartUtils(object):
 
   win_rel_factory_properties = {
     'gclient_env': {
-      'GYP_DEFINES': 'fastbuild=1 disable_nacl=1 disable_pnacl=1',
+      'GYP_DEFINES': 'fastbuild=1',
     },
     'gclient_transitive': True,
     'no_gclient_branch': True,
@@ -334,7 +334,7 @@ class DartUtils(object):
   }
   win_rel_factory_properties_ninja = {
     'gclient_env': {
-      'GYP_DEFINES': 'fastbuild=1 disable_nacl=1 disable_pnacl=1',
+      'GYP_DEFINES': 'fastbuild=1',
       'GYP_GENERATORS': 'ninja',
     },
     'gclient_transitive': True,
@@ -350,17 +350,13 @@ class DartUtils(object):
       # will unwind the stack and call destructors when doing a longjmp().
       # The DartVM uses it's own mechanism for calling the destructors (see
       # vm/longjump.cc). (i.e. with /EHsc the destructors will be called twice)
-      'GYP_DEFINES': 'fastbuild=1 component=static_library '
-                     'disable_nacl=1 disable_pnacl=1',
+      'GYP_DEFINES': 'fastbuild=1 component=static_library',
     },
     'gclient_transitive': True,
     'no_gclient_branch': True,
     'annotated_script': 'dart_buildbot_run.py',
   }
   mac_factory_properties = {
-    'gclient_env': {
-        'GYP_DEFINES': 'disable_nacl=1 disable_pnacl=1',
-    },
     'gclient_transitive': True,
     'no_gclient_branch': True,
     'annotated_script': 'dart_buildbot_run.py',
@@ -368,7 +364,6 @@ class DartUtils(object):
   linux_factory_properties = {
     'gclient_env': {
         'GYP_GENERATORS' : 'ninja',
-        'GYP_DEFINES': 'disable_nacl=1 disable_pnacl=1',
     },
     'gclient_transitive': True,
     'no_gclient_branch': True,
@@ -377,7 +372,7 @@ class DartUtils(object):
   linux32_factory_properties = {
     'gclient_env': {
         'GYP_GENERATORS' : 'ninja',
-        'GYP_DEFINES': 'target_arch=ia32 disable_nacl=1 disable_pnacl=1',
+        'GYP_DEFINES': 'target_arch=ia32',
     },
     'gclient_transitive': True,
     'no_gclient_branch': True,
@@ -608,8 +603,10 @@ class DartUtils(object):
 
     def setup_package_factory_base(v):
       extra_deps = v.get('deps', [])
+      target_platform = 'win32' if v.get('os', '') == 'windows' else 'posix'
       return DartFactory(channel=CHANNELS_BY_NAME['be'],
-                         custom_deps_list=extra_deps)
+                         custom_deps_list=extra_deps,
+                         target_platform=target_platform)
 
 
     def setup_v8_factory(v):
