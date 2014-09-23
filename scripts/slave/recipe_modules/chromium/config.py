@@ -19,8 +19,7 @@ HOST_ARCHS = ('intel',)
 TARGET_ARCHS = HOST_ARCHS + ('arm', 'mipsel')
 TARGET_CROS_BOARDS = (None, 'x86-generic')
 BUILD_CONFIGS = ('Release', 'Debug')
-MEMORY_TOOLS = ('memcheck', 'tsan', 'tsan_rv', 'drmemory_full',
-                'drmemory_light')
+MEMORY_TOOLS = ('memcheck', 'tsan', 'drmemory_full', 'drmemory_light')
 PROJECT_GENERATORS = ('gyp', 'gn')
 
 def check(val, potentials):
@@ -341,11 +340,6 @@ def memcheck(c):
 @config_ctx(group='memory_tool')
 def tsan(c):
   _memory_tool(c, 'tsan')
-  c.gyp_env.GYP_DEFINES['build_for_tool'] = 'tsan'
-
-@config_ctx(group='memory_tool')
-def tsan_race_verifier(c):
-  _memory_tool(c, 'tsan_rv')
   c.gyp_env.GYP_DEFINES['build_for_tool'] = 'tsan'
 
 @config_ctx(deps=['compiler'], group='memory_tool')

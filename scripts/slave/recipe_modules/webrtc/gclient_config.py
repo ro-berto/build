@@ -36,11 +36,7 @@ def webrtc_ios(c):
 
 @CONFIG_CTX(includes=['webrtc'])
 def valgrind(c):
-  """Add Valgrind binaries dependency for WebRTC.
-
-  Since WebRTC DEPS is using relative paths, it it not possible to use a generic
-  valgrind config in the gclient recipe module.
-  """
+  """Add Valgrind binaries to the gclient solution."""
   c.solutions[0].custom_deps['src/chromium/src/third_party/valgrind'] = \
       ChromiumSvnSubURL(c, 'chrome', 'trunk', 'deps', 'third_party', 'valgrind',
                         'binaries')

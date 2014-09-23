@@ -647,17 +647,6 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
-      'Linux Tsan': {
-        'recipe_config': 'webrtc',
-        'chromium_apply_config': ['tsan'],
-        'gclient_apply_config': ['valgrind'],
-        'webrtc_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'linux'},
-      },
       'Linux Tsan v2': {
         'recipe_config': 'webrtc_clang',
         'chromium_apply_config': ['tsan2'],
@@ -812,39 +801,6 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-      },
-      'Linux TsanRV': {
-        'recipe_config': 'webrtc',
-        'chromium_apply_config': ['tsan_race_verifier'],
-        'gclient_apply_config': ['valgrind'],
-        'webrtc_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'linux'},
-      },
-      'Mac 10.6 Memcheck': {
-        'recipe_config': 'webrtc',
-        'chromium_apply_config': ['memcheck'],
-        'gclient_apply_config': ['valgrind'],
-        'webrtc_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'mac'},
-      },
-      'Mac 10.6 TSan': {
-        'recipe_config': 'webrtc',
-        'chromium_apply_config': ['tsan'],
-        'gclient_apply_config': ['valgrind'],
-        'webrtc_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'mac'},
       },
       'Win Tsan': {
         'recipe_config': 'webrtc',
@@ -1044,17 +1000,6 @@ BUILDERS = {
       'linux_memcheck': {
         'recipe_config': 'webrtc',
         'chromium_apply_config': ['memcheck'],
-        'gclient_apply_config': ['valgrind'],
-        'webrtc_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'linux'},
-      },
-      'linux_tsan': {
-        'recipe_config': 'webrtc',
-        'chromium_apply_config': ['tsan'],
         'gclient_apply_config': ['valgrind'],
         'webrtc_config_kwargs': {
           'BUILD_CONFIG': 'Release',
