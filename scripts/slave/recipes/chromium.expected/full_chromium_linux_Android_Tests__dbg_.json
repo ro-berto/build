@@ -62,12 +62,25 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "--version"
+    ],
+    "name": "swarming.py --version",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@0.4.10@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
     "env": {
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 target_arch=arm"
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 target_arch=arm test_isolation_mode=archive test_isolation_outdir=https://isolateserver.appspot.com"
     },
     "name": "gclient runhooks"
   },

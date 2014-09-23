@@ -196,7 +196,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       builder_dict.setdefault('tests', [])
       for generator in builder_dict.get('test_generators', []):
         builder_dict['tests'] = (
-            list(generator(self.m, mastername, loop_buildername, test_spec)) +
+            list(generator(self.m, mastername, loop_buildername, test_spec,
+                           enable_swarming=enable_swarming)) +
             builder_dict['tests'])
 
     return update_step, master_dict, test_spec

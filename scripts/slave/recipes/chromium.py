@@ -6,6 +6,7 @@ DEPS = [
   'chromium',
   'chromium_android',
   'chromium_tests',
+  'isolate',
   'json',
   'path',
   'platform',
@@ -13,6 +14,7 @@ DEPS = [
   'python',
   'test_utils',
   'step',
+  'swarming',
 ]
 
 
@@ -21,25 +23,37 @@ def GenSteps(api):
   buildername = api.properties.get('buildername')
 
   update_step, master_dict, test_spec = \
-      api.chromium_tests.sync_and_configure_build(mastername, buildername)
+      api.chromium_tests.sync_and_configure_build(mastername, buildername,
+                                                  enable_swarming=True)
   api.chromium_tests.compile(mastername, buildername, update_step, master_dict,
                              test_spec)
   tests = api.chromium_tests.tests_for_builder(
       mastername, buildername, update_step, master_dict)
 
-  # TODO(phajdan.jr): Add support for swarming tests.
-  assert all(not t.uses_swarming for t in tests)
-
   if not tests:
     return
+
+  api.swarming.task_priority = 40  # Per http://crbug.com/401096.
 
   def test_runner():
     failed_tests = []
     #TODO(martiniss) convert loop
     for t in tests:
       try:
+        t.pre_run(api, '')
+      except api.step.StepFailure:  # pragma: no cover
+        failed_tests.append(t)
+    for t in tests:
+      try:
         t.run(api, '')
       except api.step.StepFailure:
+        failed_tests.append(t)
+        if t.abort_on_failure:
+          raise
+    for t in tests:
+      try:
+        t.post_run(api, '')
+      except api.step.StepFailure:  # pragma: no cover
         failed_tests.append(t)
         if t.abort_on_failure:
           raise

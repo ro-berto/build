@@ -103,6 +103,7 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
+      'use_isolate': True,
     },
     'Linux Tests (dbg)(1)': {
       'recipe_config': 'chromium',
