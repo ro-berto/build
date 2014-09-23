@@ -626,7 +626,8 @@ class NaclIntegrationTest(Test):  # pylint: disable=W0232
         '--json_build_results_output_file', api.json.output(),
     ]
 
-    self._test_runs[suffix] = api.python(
+    try:
+      api.python(
         self._step_name(suffix),
         api.path['checkout'].join('chrome',
                           'test',
@@ -634,6 +635,8 @@ class NaclIntegrationTest(Test):  # pylint: disable=W0232
                           'buildbot_nacl_integration.py'),
         args,
         step_test_data=lambda: api.m.json.test_api.output([]))
+    finally:
+      self._test_runs[suffix] = api.step.active_result
 
   def has_valid_results(self, api, suffix):
     return self._test_runs[suffix].json.output is not None
