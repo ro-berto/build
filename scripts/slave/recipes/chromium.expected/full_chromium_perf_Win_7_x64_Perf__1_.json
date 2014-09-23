@@ -161,20 +161,27 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"steps\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"blink_perf.all\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"blink_perf.all.exact\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"cmd\": \"/usr/bin/python /path/to/run_benmark --a=1 -v --b=2\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"device_affinity\": 0@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"device_affinity\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"perf_dashboard_id\": \"blink_perf.all\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"chrome_perf.all\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"cmd\": \"/usr/bin/python /path/to/run_benmark --a=2 -v --b=3\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"device_affinity\": 0@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"blink_perf.all.release\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"cmd\": \"/usr/bin/python /path/to/run_benmark --a=1 -v --b=2\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"device_affinity\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"perf_dashboard_id\": \"blink_perf.all\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"dromaeo.cssqueryjquery\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"cmd\": \"/path/to/run_benmark\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"device_affinity\": 1@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"dromaeo.cssqueryjquery.release\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"cmd\": \"/path/to/run_benmark\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"device_affinity\": 1, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"perf_dashboard_id\": \"dromaeo.cssqueryjquery\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"version\": 1@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"version\": 2@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -205,7 +212,7 @@
       "-v",
       "--b=2"
     ],
-    "name": "blink_perf.all"
+    "name": "blink_perf.all.exact"
   },
   {
     "allow_subannotations": true,
@@ -221,19 +228,19 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Win 7 x64 Perf (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Win x64 Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
-      "--perf-dashboard-id=chrome_perf.all",
+      "--perf-dashboard-id=blink_perf.all",
       "--perf-id=chromium-rel-win7-x64-dual",
-      "--test-type=chrome_perf.all",
+      "--test-type=blink_perf.all",
       "--builder-name=Win 7 x64 Perf (1)",
       "--slave-name=TestSlavename",
       "--build-number=571",
       "--run-python-script",
       "/path/to/run_benmark",
-      "--a=2",
+      "--a=1",
       "-v",
-      "--b=3"
+      "--b=2"
     ],
-    "name": "chrome_perf.all"
+    "name": "blink_perf.all.release"
   },
   {
     "cmd": [

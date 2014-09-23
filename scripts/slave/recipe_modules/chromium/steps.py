@@ -292,7 +292,7 @@ class DynamicPerfTests(Test):
     tests = api.chromium.list_perf_tests(self.browser, self.num_shards)
     tests = dict((k, v) for k, v in tests.json.output['steps'].iteritems()
         if v['device_affinity'] == self.shard_index)
-    for test_name, test in tests.iteritems():
+    for test_name, test in sorted(tests.iteritems()):
       test_name = str(test_name)
       annotate = api.chromium.get_annotate_by_test_name(test_name)
       cmd = test['cmd'].split()
@@ -304,9 +304,9 @@ class DynamicPerfTests(Test):
             annotate=annotate,
             python_mode=True,
             results_url='https://chromeperf.appspot.com',
-            perf_dashboard_id=test_name,
+            perf_dashboard_id=test.get('perf_dashboard_id', test_name),
             perf_id=self.perf_id,
-            test_type=test_name,
+            test_type=test.get('perf_dashboard_id', test_name),
             xvfb=True)
       except api.step.StepFailure as f:
         exception = f

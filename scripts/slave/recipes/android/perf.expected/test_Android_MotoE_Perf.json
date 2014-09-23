@@ -161,20 +161,27 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"steps\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"blink_perf.all\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"blink_perf.all.exact\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"cmd\": \"/usr/bin/python /path/to/run_benmark --a=1 -v --b=2\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"device_affinity\": 0@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"device_affinity\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"perf_dashboard_id\": \"blink_perf.all\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"chrome_perf.all\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"cmd\": \"/usr/bin/python /path/to/run_benmark --a=2 -v --b=3\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"device_affinity\": 0@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"blink_perf.all.release\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"cmd\": \"/usr/bin/python /path/to/run_benmark --a=1 -v --b=2\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"device_affinity\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"perf_dashboard_id\": \"blink_perf.all\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"dromaeo.cssqueryjquery\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"cmd\": \"/path/to/run_benmark\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"device_affinity\": 1@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"dromaeo.cssqueryjquery.release\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"cmd\": \"/path/to/run_benmark\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"device_affinity\": 1, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"perf_dashboard_id\": \"dromaeo.cssqueryjquery\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"version\": 1@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"version\": 2@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -188,7 +195,7 @@
       "--release",
       "--verbose",
       "--steps",
-      "{\"steps\": {\"blink_perf.all\": {\"cmd\": \"/usr/bin/python /path/to/run_benmark --a=1 -v --b=2\", \"device_affinity\": 0}, \"chrome_perf.all\": {\"cmd\": \"/usr/bin/python /path/to/run_benmark --a=2 -v --b=3\", \"device_affinity\": 0}, \"dromaeo.cssqueryjquery\": {\"cmd\": \"/path/to/run_benmark\", \"device_affinity\": 1}}, \"version\": 1}"
+      "{\"steps\": {\"blink_perf.all.exact\": {\"cmd\": \"/usr/bin/python /path/to/run_benmark --a=1 -v --b=2\", \"device_affinity\": 0, \"perf_dashboard_id\": \"blink_perf.all\"}, \"blink_perf.all.release\": {\"cmd\": \"/usr/bin/python /path/to/run_benmark --a=1 -v --b=2\", \"device_affinity\": 0, \"perf_dashboard_id\": \"blink_perf.all\"}, \"dromaeo.cssqueryjquery\": {\"cmd\": \"/path/to/run_benmark\", \"device_affinity\": 1}, \"dromaeo.cssqueryjquery.release\": {\"cmd\": \"/path/to/run_benmark\", \"device_affinity\": 1, \"perf_dashboard_id\": \"dromaeo.cssqueryjquery\"}}, \"version\": 2}"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "env": {
@@ -201,7 +208,7 @@
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "perf",
       "--steps",
-      "{\"steps\": {\"blink_perf.all\": {\"cmd\": \"/usr/bin/python /path/to/run_benmark --a=1 -v --b=2\", \"device_affinity\": 0}, \"chrome_perf.all\": {\"cmd\": \"/usr/bin/python /path/to/run_benmark --a=2 -v --b=3\", \"device_affinity\": 0}, \"dromaeo.cssqueryjquery\": {\"cmd\": \"/path/to/run_benmark\", \"device_affinity\": 1}}, \"version\": 1}",
+      "{\"steps\": {\"blink_perf.all.exact\": {\"cmd\": \"/usr/bin/python /path/to/run_benmark --a=1 -v --b=2\", \"device_affinity\": 0, \"perf_dashboard_id\": \"blink_perf.all\"}, \"blink_perf.all.release\": {\"cmd\": \"/usr/bin/python /path/to/run_benmark --a=1 -v --b=2\", \"device_affinity\": 0, \"perf_dashboard_id\": \"blink_perf.all\"}, \"dromaeo.cssqueryjquery\": {\"cmd\": \"/path/to/run_benmark\", \"device_affinity\": 1}, \"dromaeo.cssqueryjquery.release\": {\"cmd\": \"/path/to/run_benmark\", \"device_affinity\": 1, \"perf_dashboard_id\": \"dromaeo.cssqueryjquery\"}}, \"version\": 2}",
       "--output-json-list",
       "/path/to/tmp/json"
     ],

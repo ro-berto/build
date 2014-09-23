@@ -291,5 +291,5 @@ def GenTests(api):
                            buildnumber=0) +
     api.platform('linux', 64) +
     api.override_step_data(
-        'blink_perf.all', retcode=1)
+        'blink_perf.all.release', retcode=1)
   )
