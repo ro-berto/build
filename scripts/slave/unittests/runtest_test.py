@@ -133,21 +133,13 @@ class SendResultsToDashboardTest(unittest.TestCase):
     # a call to _SendResultsDashboard is made, the data used below is arbitrary.
     fake_charts_data = {'chart': {'traces': {'x': [1, 0]}, 'rev': 1000}}
     fake_points_data = [{'test': 'master/bot/chart/x', 'revision': 1000}]
-    fake_results_tracker = mock.Mock()
-    fake_results_tracker.IsChartJson = mock.MagicMock(return_value=False)
+    fake_results_tracker = object()
     GetDataFromLogProcessor.return_value = fake_charts_data
     MakeListOfPoints.return_value = fake_points_data
 
     runtest._SendResultsToDashboard(
-        fake_results_tracker, {
-            'system': 'linux',
-            'test': 'sunspider',
-            'url': 'http://x.com',
-            'build_dir': 'builddir',
-            'mastername': 'my.master',
-            'buildername': 'Builder',
-            'buildnumber': 123,
-            'supplemental_columns': {}})
+        fake_results_tracker, 'linux', 'sunspider', 'http://x.com', 'builddir',
+        'my.master', 'Builder', 123, 'columns_file', extra_columns={})
 
     # First a function is called to get data from the log processor.
     GetDataFromLogProcessor.assert_called_with(fake_results_tracker)
@@ -160,90 +152,6 @@ class SendResultsToDashboardTest(unittest.TestCase):
     SendResults.assert_called_with(
         fake_points_data, 'http://x.com', 'builddir')
 
-  @mock.patch('slave.results_dashboard.MakeDashboardJsonV1')
-  @mock.patch('slave.results_dashboard.SendResults')
-  def test_SendResultsToDashboard_Telemetry(
-      self, SendResults, MakeDashboardJsonV1):
-    """Tests that the right methods get called in _SendResultsToDashboard."""
-    # Since this method just tests that certain methods get called when
-    # a call to _SendResultsDashboard is made, the data used below is arbitrary.
-    fake_json_data = {'chart': {'traces': {'x': [1, 0]}, 'rev': 1000}}
-    fake_ref_data = {'test': 'master/bot/chart/x', 'revision': 1000}
-    fake_results_tracker = mock.Mock()
-    fake_results_tracker.IsChartJson = mock.MagicMock(return_value=True)
-    fake_results_tracker.ChartJson = mock.MagicMock(return_value=fake_json_data)
-    fake_results_tracker.RefChartJson = mock.MagicMock(
-        return_value=fake_ref_data)
-    fake_results_tracker.Cleanup = mock.MagicMock()
-    MakeDashboardJsonV1.return_value = {'doesnt': 'matter'}
-
-    runtest._SendResultsToDashboard(
-        fake_results_tracker, {
-            'system': 'linux',
-            'test': 'sunspider',
-            'url': 'http://x.com',
-            'build_dir': 'builddir',
-            'mastername': 'my.master',
-            'buildername': 'Builder',
-            'buildnumber': 123,
-            'revisions': {'rev': 343},
-            'supplemental_columns': {}})
-
-    # Then the data is re-formatted to a format that the dashboard accepts.
-    MakeDashboardJsonV1.assert_has_calls([
-        mock.call(fake_json_data, {'rev': 343}, 'linux',
-                  'my.master', 'Builder', 123, {}, False),
-        mock.call(fake_ref_data, {'rev': 343}, 'linux',
-                  'my.master', 'Builder', 123, {}, True)])
-
-    # Then a function is called to send the data (and any cached data).
-    SendResults.assert_has_calls([
-        mock.call({'doesnt': 'matter'}, 'http://x.com', 'builddir'),
-        mock.call({'doesnt': 'matter'}, 'http://x.com', 'builddir')])
-    fake_results_tracker.Cleanup.assert_called_with()
-
-  @mock.patch('slave.results_dashboard.MakeDashboardJsonV1')
-  @mock.patch('slave.results_dashboard.SendResults')
-  def test_SendResultsToDashboard_NoTelemetryOutput(
-      self, SendResults, MakeDashboardJsonV1):
-    """Tests that the right methods get called in _SendResultsToDashboard."""
-    fake_results_tracker = mock.Mock()
-    fake_results_tracker.IsChartJson = mock.MagicMock(return_value=True)
-    fake_results_tracker.ChartJson = mock.MagicMock(return_value=None)
-    fake_results_tracker.RefChartJson = mock.MagicMock(return_value=None)
-    fake_results_tracker.Cleanup = mock.MagicMock()
-
-    runtest._SendResultsToDashboard(
-        fake_results_tracker, {
-            'system': 'linux',
-            'test': 'sunspider',
-            'url': 'http://x.com',
-            'build_dir': 'builddir',
-            'mastername': 'my.master',
-            'buildername': 'Builder',
-            'buildnumber': 123,
-            'revisions': {'rev': 343},
-            'supplemental_columns': {}})
-
-    # Should not call functions to generate JSON and send to JSON if Telemetry
-    # did not return results.
-    self.assertFalse(MakeDashboardJsonV1.called)
-    self.assertFalse(SendResults.called)
-    fake_results_tracker.Cleanup.assert_called_with()
-
-  def test_GetTelemetryRevisions(self):
-    options = mock.MagicMock()
-    options.revision = '294850'
-    options.webkit_revision = '34f9d01'
-    options.build_properties = {
-        'got_webrtc_revision': None,
-        'got_v8_revision': 'undefined',
-        'git_revision': '9a7b354',
-    }
-    versions = runtest._GetTelemetryRevisions(options)
-    self.assertEqual(
-        {'rev': '294850', 'webkit_rev': '34f9d01', 'git_revision': '9a7b354'},
-        versions)
 
 if __name__ == '__main__':
   unittest.main()

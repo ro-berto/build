@@ -63,7 +63,8 @@ def _GenerateTelemetryCommandSequence(options):
   profile_type = fp.get('profile_type')
   build_dir = build_directory.GetBuildOutputDirectory()
 
-  script = os.path.join(fp.get('tools_dir') or os.path.join('src', 'tools'),
+  script = os.path.join(fp.get('tools_dir')
+                            or os.path.join('src', 'tools'),
                         'perf', 'run_benchmark')
   browser_exe = fp.get('browser_exe')
 
@@ -75,9 +76,8 @@ def _GenerateTelemetryCommandSequence(options):
   common_args = [
       # INFO level verbosity.
       '-v',
-      # Output perf dashboard results in JSON format (http://goo.gl/mDZHPl)
-      '--output-format=chartjson',
-      '--upload-results'
+      # Output results in the format the buildbot expects.
+      '--output-format=buildbot',
       ]
 
   if profile_type:
@@ -108,7 +108,6 @@ def _GenerateTelemetryCommandSequence(options):
   test_args = list(common_args)
   test_args.extend(browser_info)
   test_args.extend(test_specification)
-  test_args.extend(['--output=%s' % options.chart_output_filename])
   test_cmd = _GetPythonTestCommand(script, target, test_args,
                                    wrapper_args=wrapper_args, fp=fp)
   commands.append(test_cmd)
@@ -142,7 +141,6 @@ def _GenerateTelemetryCommandSequence(options):
                 '--browser-executable=%s' % ref_build,
                 '--output-trace-tag=_ref'])
     ref_args.extend(test_specification)
-    ref_args.extend(['--output=%s' % options.ref_output_filename])
     ref_cmd = _GetPythonTestCommand(script, target, ref_args, fp=fp)
     commands.append(ref_cmd)
 
@@ -161,10 +159,6 @@ def main(argv):
                     callback=chromium_utils.convert_json, type='string',
                     nargs=1, default={},
                     help='factory properties in JSON format')
-  parser.add_option('--chart-output-filename',
-                    help='file to save telemetry test output')
-  parser.add_option('--ref-output-filename',
-                    help='file to save reference telemetry test output')
 
   options, _ = parser.parse_args(argv[1:])
   if not options.factory_properties:
