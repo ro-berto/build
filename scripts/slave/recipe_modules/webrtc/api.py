@@ -75,15 +75,17 @@ class WebRTCApi(recipe_api.RecipeApi):
       revision: Revision for the build. Mandatory for perf measuring tests.
     """
     with self.m.step.defer_results():
-      if test_suite == 'webrtc':
+      if test_suite in ('webrtc', 'webrtc_parallel'):
+        parallel = test_suite.endswith('_parallel')
         for test in self.NORMAL_TESTS:
-          self.add_test(test)
+          self.add_test(test, parallel=parallel)
 
         if self.m.platform.is_mac and self.m.chromium.c.TARGET_BITS == 64:
           test = self.m.path.join('libjingle_peerconnection_objc_test.app',
                                   'Contents', 'MacOS',
                                   'libjingle_peerconnection_objc_test')
-          self.add_test(test, name='libjingle_peerconnection_objc_test')
+          self.add_test(test, name='libjingle_peerconnection_objc_test',
+                        parallel=parallel)
       elif test_suite == 'webrtc_baremetal':
         # Add baremetal tests, which are different depending on the platform.
         if self.m.platform.is_win or self.m.platform.is_mac:
@@ -162,7 +164,7 @@ class WebRTCApi(recipe_api.RecipeApi):
 
   @recipe_api.composite_step
   def add_test(self, test, name=None, args=None, revision=None, env=None,
-               perf_test=False, perf_dashboard_id=None):
+               perf_test=False, perf_dashboard_id=None, parallel=False):
     """Helper function to invoke chromium.runtest().
 
     Notice that the name parameter should be the same as the test executable in
@@ -181,6 +183,12 @@ class WebRTCApi(recipe_api.RecipeApi):
           xvfb=True, perf_dashboard_id=perf_dashboard_id, test_type=test,
           env=env, revision=revision, perf_id=self.c.PERF_ID,
           perf_config=self.c.PERF_CONFIG)
+    elif parallel:
+      script = self.m.path['checkout'].join('third_party', 'gtest-parallel',
+                                            'gtest-parallel')
+      test_executable = self.m.chromium.c.build_dir.join(
+          self.m.chromium.c.build_config_fs, test)
+      self.m.python(name, script, args=[test_executable] + args, env=env)
     else:
       self.m.chromium.runtest(
           test=test, args=args, name=name, annotate='gtest', xvfb=True,
