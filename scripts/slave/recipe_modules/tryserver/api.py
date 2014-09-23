@@ -179,17 +179,3 @@ class TryserverApi(recipe_api.RecipeApi):
     """Set transient failure result if we're tryserver."""
     if self.is_tryserver:
       self.set_transient_failure_tryjob_result()
-
-  def set_failed_tryjob_result(self):
-    """Mark the tryjob result as failed.
-
-    This means the system is confident the patch being tried is bad,
-    i.e. everything else is working correctly, but the patch
-    is breaking compile or tests.
-    """
-    # Failed tryjob result should only be used on the tryserver,
-    # since it's not obvious what it would mean on the main waterfall.
-    assert self.is_tryserver
-
-    step_result = self.m.step.active_result
-    step_result.presentation.properties['failure_type'] = 'FAILED'

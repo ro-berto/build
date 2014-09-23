@@ -197,9 +197,11 @@ class GpuApi(recipe_api.RecipeApi):
           self.m.chromium.runhooks()
           self.m.chromium.compile(targets, name='compile (without patch)')
 
-          # When compile failed with patch but succeeded without patch,
-          # we're confident it's the patch that is bad.
-          self.m.tryserver.set_failed_tryjob_result()
+          # TODO(phajdan.jr): Set failed tryjob result after recognizing infra
+          # compile failures. We've seen cases of compile with patch failing
+          # with build steps getting killed, compile without patch succeeding,
+          # and compile with patch succeeding on another attempt with same
+          # patch.
         except self.m.step.StepFailure:
           self.m.tryserver.set_transient_failure_tryjob_result()
           raise

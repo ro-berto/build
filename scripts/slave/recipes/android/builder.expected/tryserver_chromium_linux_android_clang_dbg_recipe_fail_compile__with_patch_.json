@@ -220,10 +220,7 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "compile (without patch)",
-    "~followup_annotations": [
-      "@@@SET_BUILD_PROPERTY@failure_type@\"FAILED\"@@@"
-    ]
+    "name": "compile (without patch)"
   },
   {
     "name": "$final_result",

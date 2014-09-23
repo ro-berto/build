@@ -208,10 +208,7 @@
       "tab_capture_end2end_tests_run",
       "telemetry_gpu_test_run"
     ],
-    "name": "compile (without patch)",
-    "~followup_annotations": [
-      "@@@SET_BUILD_PROPERTY@failure_type@\"FAILED\"@@@"
-    ]
+    "name": "compile (without patch)"
   },
   {
     "name": "$final_result",
