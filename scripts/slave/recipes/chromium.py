@@ -118,6 +118,21 @@ def GenTests(api):
   )
 
   yield (
+    api.test('dynamic_swarmed_gtest') +
+    api.properties.generic(mastername='chromium.linux',
+                           buildername='Linux Builder') +
+    api.platform('linux', 64) +
+    api.override_step_data('read test spec', api.json.output({
+      'Linux Tests': {
+        'gtest_tests': [
+          {'test': 'browser_tests',
+           'swarming': {'can_use_on_swarming_builders': True } },
+        ],
+      },
+    }))
+  )
+
+  yield (
     api.test('dynamic_gtest_on_builder') +
     api.properties.generic(mastername='chromium.linux',
                            buildername='Linux Builder') +
