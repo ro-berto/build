@@ -236,14 +236,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self.m.chromium_android.check_webview_licenses()
         self.m.chromium_android.findbugs()
 
-    has_swarming_tests = any(t.uses_swarming for t in tests)
-    if bot_config.get('use_isolate'):
-      self.m.isolate.find_isolated_tests(self.m.chromium.output_dir)
-    # TODO(phajdan.jr): Always use the below codepath once fully tested.
-    elif has_swarming_tests:
-      isolated_targets = [t.name for t in tests if t.uses_swarming]
-      self.m.isolate.find_isolated_tests(
-          self.m.chromium.output_dir, targets=list(set(isolated_targets)))
+      has_swarming_tests = any(t.uses_swarming for t in tests)
+      if bot_config.get('use_isolate'):
+        self.m.isolate.find_isolated_tests(self.m.chromium.output_dir)
+      # TODO(phajdan.jr): Always use the below codepath once fully tested.
+      elif has_swarming_tests:
+        isolated_targets = [t.name for t in tests if t.uses_swarming]
+        self.m.isolate.find_isolated_tests(
+            self.m.chromium.output_dir, targets=list(set(isolated_targets)))
 
     got_revision = update_step.presentation.properties['got_revision']
 
