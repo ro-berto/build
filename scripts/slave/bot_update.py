@@ -941,6 +941,7 @@ def git_checkout(solutions, revisions, shallow, with_branch_heads):
         if not path.isdir(sln_dir):
           git(*clone_cmd)
         else:
+          git('remote', 'set-url', 'origin', mirror_dir, cwd=sln_dir)
           git('fetch', 'origin', cwd=sln_dir)
         if with_branch_heads:
           git('fetch', 'origin', '+refs/branch-heads/*:refs/branch-heads/*',
