@@ -168,6 +168,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # HACK(dnj): Remove after 'crbug.com/398105' has landed
     self.m.chromium.set_build_properties(update_step.json.output['properties'])
 
+    if not enable_swarming:
+      enable_swarming = bot_config.get('enable_swarming')
+
     if enable_swarming:
       self.m.isolate.set_isolate_environment(self.m.chromium.c)
       self.m.swarming.check_client_version()
@@ -196,7 +199,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       builder_dict.setdefault('tests', [])
       for generator in builder_dict.get('test_generators', []):
         builder_dict['tests'] = (
-            list(generator(self.m, mastername, loop_buildername, test_spec)) +
+            list(generator(self.m, mastername, loop_buildername, test_spec,
+                           enable_swarming=enable_swarming)) +
             builder_dict['tests'])
 
     return update_step, master_dict, test_spec

@@ -103,6 +103,8 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
+      'enable_swarming': True,
+      'use_isolate': True,
     },
     'Linux Tests (dbg)(1)': {
       'recipe_config': 'chromium',
@@ -122,6 +124,7 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
+      'enable_swarming': True,
     },
     'Linux Tests (dbg)(2)': {
       'recipe_config': 'chromium',
@@ -140,6 +143,7 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
+      'enable_swarming': True,
     },
 
     'Linux Clang (dbg)': {
