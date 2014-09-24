@@ -688,7 +688,7 @@ def GenSteps(api):
                                    patch=False,
                                    update_presentation=False)
     try:
-      api.chromium.runhooks()
+      api.chromium.runhooks(name='runhooks (without patch)')
     except api.step.StepFailure:
       api.tryserver.set_transient_failure_tryjob_result()
       raise
@@ -862,7 +862,12 @@ def GenSteps(api):
       # Decide the task priority.
       api.swarming.task_priority = build_to_priority(api.properties)
 
-    api.chromium.runhooks(env=runhooks_env)
+    try:
+      api.chromium.runhooks(name='runhooks (with patch)', env=runhooks_env)
+    except api.step.StepFailure:
+      # As part of deapplying patch we call runhooks without the patch.
+      deapply_patch(bot_update_step)
+      raise
 
     compile_targets.extend(api.itertools.chain(
         *[t.compile_targets(api) for t in tests]))
@@ -1045,7 +1050,7 @@ def GenTests(api):
                            canned_test(passing=False)) +
     api.override_step_data('base_unittests (without patch)',
                            canned_test(passing=False)) +
-    api.step_data('gclient runhooks (2)', retcode=1)
+    api.step_data('gclient runhooks (without patch)', retcode=1)
   )
 
   yield (
@@ -1058,14 +1063,23 @@ def GenTests(api):
                            api.json.output(None))
   )
 
-  for step in ('bot_update', 'gclient runhooks'):
+  for step in ('bot_update', 'gclient runhooks (with patch)'):
     yield (
-      api.test(step.replace(' ', '_') + '_failure') +
+      api.test(_sanitize_nonalpha(step) + '_failure') +
       props(buildername='win_no_bot_update',
             mastername='tryserver.chromium.win') +
       api.platform.name('win') +
       api.step_data(step, retcode=1)
     )
+
+  yield (
+    api.test('runhooks_failure') +
+    props(buildername='win_chromium_rel',
+          mastername='tryserver.chromium.win') +
+    api.platform.name('win') +
+    api.step_data('gclient runhooks (with patch)', retcode=1) +
+    api.step_data('gclient runhooks (without patch)', retcode=1)
+  )
 
   yield (
     api.test('compile_failure') +

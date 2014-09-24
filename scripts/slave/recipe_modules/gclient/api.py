@@ -256,11 +256,11 @@ class GclientApi(recipe_api.RecipeApi):
         **kwargs
     )
 
-  def runhooks(self, args=None, **kwargs):
+  def runhooks(self, args=None, name='runhooks', **kwargs):
     args = args or []
     assert isinstance(args, (list, tuple))
     return self(
-      'runhooks', ['runhooks'] + list(args), infra_step=False, **kwargs)
+      name, ['runhooks'] + list(args), infra_step=False, **kwargs)
 
   @property
   def is_blink_mode(self):
