@@ -84,7 +84,8 @@ GIT_SVN_PROJECT_MAP = {
   'v8': {
     'svn_url': 'https://v8.googlecode.com/svn',
     'branch_map': [
-      (r'trunk', r'refs/heads/master'),
+      (r'trunk', r'refs/heads/candidates'),
+      (r'branches/bleeding_edge', r'refs/heads/master'),
       (r'branches/([^/]+)', r'refs/branch-heads/\1'),
     ],
   },

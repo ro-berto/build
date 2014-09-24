@@ -230,9 +230,9 @@ class V8Api(recipe_api.RecipeApi):
     return update_step
 
   def checkout(self, may_nuke=False, revert=False):
-    # Set revision for bot_update including branch information. Needs to be
+    # Set revision for bot_update. Needs to be
     # reset afterwards as gclient doesn't understand this info.
-    self.m.gclient.c.solutions[0].revision = ('bleeding_edge:%s' %
+    self.m.gclient.c.solutions[0].revision = (
         self.m.properties.get('revision', 'HEAD'))
     update_step = self.m.bot_update.ensure_checkout(no_shallow=True)
 
