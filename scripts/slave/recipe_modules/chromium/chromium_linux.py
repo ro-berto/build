@@ -22,8 +22,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'use_isolate': True,
-      'enable_swarming': True,
     },
     'Linux Tests': {
       'recipe_config': 'chromium',
@@ -45,7 +43,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
     },
     'Linux Builder (dbg)(32)': {
       'recipe_config': 'chromium',
