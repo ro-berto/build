@@ -561,6 +561,18 @@ class AndroidApi(recipe_api.RecipeApi):
         env=self.get_env(),
         **kwargs)
 
+  def run_java_unit_test_suite(self, suite, verbose=True, **kwargs):
+    args = []
+    if verbose:
+      args.append('--verbose')
+
+    self.m.python(
+      str(suite),
+      self.m.path['checkout'].join('build', 'android', 'test_runner.py'),
+      ['junit', '-s', suite] + args,
+      env=self.get_env(),
+      **kwargs)
+
   def coverage_report(self, **kwargs):
     assert self.c.coverage, (
         'Trying to generate coverage report but coverage is not enabled')

@@ -78,6 +78,10 @@ UNIT_TESTS = [
   [ 'webkit_unit_tests', None ],
 ]
 
+JAVA_UNIT_TESTS = [
+  'junit_unit_tests',
+]
+
 TELEMETRY_UNIT_TESTS = [
   [ 'telemetry_unittests', None ],
   [ 'telemetry_perf_unittests', None ],
@@ -89,6 +93,7 @@ BUILDERS = {
       'config': 'main_builder',
       'instrumentation_tests': INSTRUMENTATION_TESTS,
       'unittests': UNIT_TESTS,
+      'java_unittests': JAVA_UNIT_TESTS,
       'target': 'Debug',
       'try': True,
     },
@@ -96,6 +101,7 @@ BUILDERS = {
       'config': 'main_builder',
       'instrumentation_tests': INSTRUMENTATION_TESTS,
       'unittests': TELEMETRY_UNIT_TESTS,
+      'java_unittests': JAVA_UNIT_TESTS,
       'target': 'Release',
       'try': True,
     },
@@ -128,6 +134,7 @@ def GenSteps(api):
   compile_targets = None
   instrumentation_tests = bot_config.get('instrumentation_tests', [])
   unittests = bot_config.get('unittests', [])
+  java_unittests = bot_config.get('java_unittests', [])
   is_trybot = bot_config.get('try', False)
   if is_trybot:
     api.tryserver.maybe_apply_issue()
@@ -136,6 +143,7 @@ def GenSteps(api):
     test_names = []
     test_names.extend([suite['gyp_target'] for suite in instrumentation_tests])
     test_names.extend([suite for suite, _ in unittests])
+    test_names.extend(java_unittests)
 
     compile_targets = api.chromium.c.compile_py.default_targets
     api.filter.does_patch_require_compile(
@@ -151,11 +159,13 @@ def GenSteps(api):
     instrumentation_tests = [i for i in instrumentation_tests if \
         i['gyp_target'] in api.filter.matching_exes]
     unittests = [i for i in unittests if i[0] in api.filter.matching_exes]
+    java_unittests = [i for i in java_unittests
+                      if i in api.filter.matching_exes]
 
   api.chromium_android.run_tree_truth()
   api.chromium_android.compile(targets=compile_targets)
 
-  if not instrumentation_tests and not unittests:
+  if not instrumentation_tests and not unittests and not java_unittests:
     return
 
   api.adb.root_devices()
@@ -174,6 +184,9 @@ def GenSteps(api):
       api.chromium_android.run_test_suite(
           suite,
           isolate_file_path=isolate_path)
+
+    for suite in java_unittests:
+      api.chromium_android.run_java_unit_test_suite(suite)
 
     api.chromium_android.logcat_dump(gs_bucket='chromium-android')
     api.chromium_android.stack_tool_steps()
@@ -196,9 +209,11 @@ def GenTests(api):
               'analyze',
               api.json.output({'status': 'Found dependency',
                                'targets': ['breakpad_unittests',
-                                           'chrome_shell_test_apk'],
+                                           'chrome_shell_test_apk',
+                                           'junit_unit_tests'],
                                'build_targets': ['breakpad_unittests',
-                                                 'chrome_shell_test_apk']}))
+                                                 'chrome_shell_test_apk',
+                                                 'junit_unit_tests']}))
       )
 
   yield (

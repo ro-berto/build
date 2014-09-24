@@ -137,7 +137,7 @@
       "-u",
       "[SLAVE_BUILD]/src/build/gyp_chromium",
       "--analyzer",
-      "{\"files\": [\"foo.cc\"], \"targets\": [\"mojo_test_apk\", \"android_webview_test_apk\", \"chrome_shell_test_apk\", \"content_shell_test_apk\", \"telemetry_unittests\", \"telemetry_perf_unittests\"]}",
+      "{\"files\": [\"foo.cc\"], \"targets\": [\"mojo_test_apk\", \"android_webview_test_apk\", \"chrome_shell_test_apk\", \"content_shell_test_apk\", \"telemetry_unittests\", \"telemetry_perf_unittests\", \"junit_unit_tests\"]}",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -148,12 +148,14 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"breakpad_unittests\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"chrome_shell_test_apk\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"chrome_shell_test_apk\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"junit_unit_tests\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"status\": \"Found dependency\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"targets\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"breakpad_unittests\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"chrome_shell_test_apk\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"chrome_shell_test_apk\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"junit_unit_tests\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -186,7 +188,8 @@
       "[BUILD]/goma",
       "--",
       "breakpad_unittests",
-      "chrome_shell_test_apk"
+      "chrome_shell_test_apk",
+      "junit_unit_tests"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -291,6 +294,21 @@
       "--release"
     ],
     "name": "Instrumentation test ChromeShellTest"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "junit",
+      "-s",
+      "junit_unit_tests",
+      "--verbose"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "junit_unit_tests"
   },
   {
     "cmd": [
