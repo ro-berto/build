@@ -77,6 +77,8 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
+      'enable_swarming': True,
+      'use_isolate': True,
     },
     'Linux ChromiumOS Tests (1)': {
       'recipe_config': 'chromium_chromeos',
@@ -92,6 +94,7 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
+      'enable_swarming': True,
     },
     'Linux ChromiumOS Tests (2)': {
       'recipe_config': 'chromium_chromeos',
@@ -107,6 +110,7 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
+      'enable_swarming': True,
     },
 
     'Linux ChromiumOS (Clang dbg)': {
@@ -168,6 +172,8 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
+      'enable_swarming': True,
+      'use_isolate': True,
     },
     'Linux ChromiumOS Ozone Tests (1)': {
       'recipe_config': 'chromium_chromeos_ozone',
@@ -183,6 +189,7 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
+      'enable_swarming': True,
     },
     'Linux ChromiumOS Ozone Tests (2)': {
       'recipe_config': 'chromium_chromeos_ozone',
@@ -198,6 +205,7 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
+      'enable_swarming': True,
     },
 
     'Linux ChromiumOS Builder (dbg)': {
@@ -213,6 +221,8 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
+      'enable_swarming': True,
+      'use_isolate': True,
     },
     'Linux ChromiumOS Tests (dbg)(1)': {
       'recipe_config': 'chromium_chromeos',
@@ -228,6 +238,7 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
+      'enable_swarming': True,
     },
     'Linux ChromiumOS Tests (dbg)(2)': {
       'recipe_config': 'chromium_chromeos',
@@ -243,6 +254,7 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
+      'enable_swarming': True,
     },
     'Linux ChromiumOS Tests (dbg)(3)': {
       'recipe_config': 'chromium_chromeos',
@@ -258,6 +270,7 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
+      'enable_swarming': True,
     },
 
     # Simple Chrome test builder for coverage
