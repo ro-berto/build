@@ -257,8 +257,7 @@ class LocalGTestTest(Test):
     return self._test_runs[suffix].json.gtest_results.failures
 
 
-def generate_gtest(api, mastername, buildername, test_spec,
-                   enable_swarming=False):
+def generate_gtest(api, mastername, buildername, test_spec):
   def canonicalize_test(test):
     if isinstance(test, basestring):
       canonical_test = {'test': test}
@@ -278,16 +277,7 @@ def generate_gtest(api, mastername, buildername, test_spec,
     if test['shard_index'] != 0 or test['total_shards'] != 1:
       args.extend(['--test-launcher-shard-index=%d' % test['shard_index'],
                    '--test-launcher-total-shards=%d' % test['total_shards']])
-    use_swarming = False
-    swarming_shards = 1
-    if enable_swarming:
-      swarming_spec = test.get('swarming', {})
-      if swarming_spec.get('can_use_on_swarming_builders'):
-        use_swarming = True
-        swarming_shards = swarming_spec.get('shards', 1)
-    yield GTestTest(str(test['test']), args=args, flakiness_dash=True,
-                    enable_swarming=use_swarming,
-                    swarming_shards=swarming_shards)
+    yield GTestTest(str(test['test']), args=args, flakiness_dash=True)
 
 
 class DynamicPerfTests(Test):
