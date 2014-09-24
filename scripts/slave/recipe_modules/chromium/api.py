@@ -134,6 +134,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     if self.c.compile_py.build_tool == 'xcode':
       for target in targets:
         args.extend(['-target', target])
+      if self.c.compile_py.xcode_project:  # pragma: no cover
+        args.extend(['-project', self.c.compile_py.xcode_project])
       if self.c.compile_py.xcode_sdk:
         args.extend(['-sdk', self.c.compile_py.xcode_sdk])
     else:

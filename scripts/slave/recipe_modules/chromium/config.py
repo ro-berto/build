@@ -42,6 +42,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       clobber = Single(bool, empty_val=False, required=False, hidden=False),
       pass_arch_flag = Single(bool, empty_val=False, required=False),
       xcode_sdk = Single(basestring, required=False),
+      xcode_project = Single(Path, required=False),
     ),
     gyp_env = ConfigGroup(
       GYP_CROSSCOMPILE = Single(int, jsonish_fn=str, required=False),
@@ -220,10 +221,10 @@ def msvs2013(c):
   c.gyp_env.GYP_MSVS_VERSION = '2013'
 
 @config_ctx(group='builder')
-def xcodebuild(c):
+def xcode(c):
   if c.HOST_PLATFORM != 'mac':
     raise BadConf('can not use xcodebuild on "%s"' % c.HOST_PLATFORM)
-  c.gyp_env.GYP_GENERATORS.add('xcodebuild')
+  c.gyp_env.GYP_GENERATORS.add('xcode')
 
 def _clang_common(c):
   c.compile_py.compiler = 'clang'
@@ -431,6 +432,12 @@ def chromium_chromeos_ozone(c):
 @config_ctx(includes=['ninja', 'clang', 'goma'])
 def chromium_clang(c):
   c.compile_py.default_targets = ['All', 'chromium_builder_tests']
+
+@config_ctx(includes=['xcode', 'static_library'])
+def chromium_xcode(c):
+  c.compile_py.build_tool = 'xcode'
+  c.compile_py.default_targets = ['All']
+  c.compile_py.xcode_project = Path('[CHECKOUT]', 'build', 'all.xcodeproj')
 
 @config_ctx()
 def chrome_internal(c):
