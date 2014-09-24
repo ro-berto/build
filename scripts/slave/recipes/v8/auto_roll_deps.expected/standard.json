@@ -27,7 +27,7 @@
       "--revision",
       "src@HEAD",
       "--revision",
-      "src/v8@bleeding_edge:HEAD",
+      "src/v8@HEAD",
       "--force",
       "--no_shallow"
     ],

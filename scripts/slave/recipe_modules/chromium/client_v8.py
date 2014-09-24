@@ -16,7 +16,7 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder',
-      'set_component_rev': {'name': 'src/v8', 'rev_str': 'bleeding_edge:%s'},
+      'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
       'testing': {
         'platform': 'linux',
         'test_spec_file': 'chromium.linux.json',
@@ -31,7 +31,7 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'set_component_rev': {'name': 'src/v8', 'rev_str': 'bleeding_edge:%s'},
+      'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
       'test_generators': [
         steps.generate_gtest,
       ],

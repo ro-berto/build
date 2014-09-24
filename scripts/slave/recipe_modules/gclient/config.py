@@ -232,7 +232,7 @@ def v8_bleeding_edge_git(c):
   # TODO(machenbach): If bot_update is activated for all v8-chromium bots
   # and there's no gclient fallback, then the following line can be removed.
   c.solutions[0].custom_vars['v8_branch'] = 'branches/bleeding_edge'
-  c.revisions['src/v8'] = 'bleeding_edge:HEAD'
+  c.revisions['src/v8'] = 'HEAD'
 
 @config_ctx(includes=['blink', 'v8_bleeding_edge_git'])
 def v8_blink_flavor(c):

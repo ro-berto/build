@@ -996,11 +996,7 @@ class FactoryCommands(object):
             in gclient_specs):
           lkgr = 'lkcr'
 
-        bleeding_edge = ''
-        if 'bleeding_edge@$$V8_REV$$' in gclient_specs:
-          bleeding_edge = 'bleeding_edge:'
-
-        return 'src@origin/%s,src/v8@%s%s' % (lkgr, bleeding_edge, v8_revision)
+        return 'src@origin/%s,src/v8@%s' % (lkgr, v8_revision)
 
       # This is where the rev factory starts.  It uses blink_config and
       # gclient_specs to determine what mode we're running in, and sets the

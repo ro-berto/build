@@ -25,7 +25,7 @@
       "--revision",
       "src@HEAD",
       "--revision",
-      "src/v8@bleeding_edge:HEAD",
+      "src/v8@HEAD",
       "--force"
     ],
     "name": "bot_update",
@@ -278,7 +278,7 @@
       "--revision",
       "src/third_party/WebKit@124383",
       "--revision",
-      "src/v8@bleeding_edge:HEAD",
+      "src/v8@HEAD",
       "--force"
     ],
     "name": "bot_update (without patch)",
