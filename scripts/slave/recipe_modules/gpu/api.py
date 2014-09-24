@@ -358,7 +358,8 @@ class GpuApi(recipe_api.RecipeApi):
           name='tab_capture_end2end_tests',
           spawn_dbus=True))
 
-    # TODO(jmadll): Add gpu_unittests once we figure out the libGLESv2.dll issue.
+    # GPU unit tests.
+    capture(self._run_isolate('gpu_unittests', name='gpu_unittests'))
 
     if failures:
       raise self.m.step.StepFailure('%d tests failed: %r' % (len(failures), failures))
