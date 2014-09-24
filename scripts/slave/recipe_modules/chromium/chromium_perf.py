@@ -5,6 +5,10 @@
 from . import steps
 
 
+def _GetTargetName(platform, target_bits):
+  return ('Release_x64' if platform is 'win' and target_bits is 64
+            else 'Release')
+
 def _Spec(platform, parent_builder, perf_id, index, num_shards, target_bits):
   return {
     'disable_tests': True,
@@ -20,8 +24,12 @@ def _Spec(platform, parent_builder, perf_id, index, num_shards, target_bits):
       'platform': platform,
     },
     'tests': [
-      steps.GenerateTelemetryProfileStep('Release', 'small_profile'),
-      steps.DynamicPerfTests('release', perf_id, index, num_shards),
+      steps.GenerateTelemetryProfileStep(
+          _GetTargetName(platform, target_bits),
+          'small_profile'),
+      steps.DynamicPerfTests(
+          _GetTargetName(platform, target_bits).lower(),
+          perf_id, index, num_shards),
     ],
   }
 

@@ -150,9 +150,9 @@
       "[BUILD]\\scripts\\slave\\runtest.py",
       "--run-python-script",
       "--target",
-      "Release",
+      "Release_x64",
       "[BUILD]\\scripts\\slave\\generate_profile_shim.py",
-      "--target=Release",
+      "--target=Release_x64",
       "--profile-type-to-generate=small_profile"
     ],
     "name": "generate_telemetry_profiles"
@@ -164,7 +164,7 @@
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "list",
       "--browser",
-      "release",
+      "release_x64",
       "--json-output",
       "/path/to/tmp/json",
       "--num-shards",
