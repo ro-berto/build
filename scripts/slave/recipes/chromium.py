@@ -32,7 +32,7 @@ def GenSteps(api):
   if not tests:
     return
 
-  api.swarming.task_priority = 40  # Per http://crbug.com/401096.
+  api.swarming.task_priority = 25  # Per http://crbug.com/401096.
 
   def test_runner():
     failed_tests = []
