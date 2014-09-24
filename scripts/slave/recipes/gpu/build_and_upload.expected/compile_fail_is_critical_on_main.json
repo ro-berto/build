@@ -141,6 +141,7 @@
       "content_gl_tests_run",
       "gl_tests_run",
       "gles2_conform_test_run",
+      "gpu_unittests_run",
       "tab_capture_end2end_tests_run",
       "telemetry_gpu_test_run"
     ],
