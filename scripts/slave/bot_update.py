@@ -624,7 +624,7 @@ def gclient_sync(with_branch_heads, shallow):
   gclient_bin = 'gclient.bat' if sys.platform.startswith('win') else 'gclient'
   cmd = [gclient_bin, 'sync', '--verbose', '--reset', '--force',
          '--ignore_locks', '--output-json', gclient_output_file ,
-         '--nohooks', '--noprehooks']
+         '--nohooks', '--noprehooks', '--delete_unversioned_trees']
   if with_branch_heads:
     cmd += ['--with_branch_heads']
   if shallow:
