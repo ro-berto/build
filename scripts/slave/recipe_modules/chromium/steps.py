@@ -406,12 +406,14 @@ class SwarmingGTestTest(Test):
     step_results = api.swarming.collect_each([self._tasks[suffix]])
 
     # TODO(martiniss) make this loop better. It's kinda hacky.
+    failed_results = []
     try:
       while True:
         try:
           step_result = next(step_results)
         except api.step.StepFailure as f:
-          step_result = f.result
+          step_result = api.step.active_result
+          failed_results.append(step_result)
 
         r = step_result.json.gtest_results
         p = step_result.presentation
@@ -426,6 +428,10 @@ class SwarmingGTestTest(Test):
         self._results[suffix] = r
     except StopIteration:
       pass
+    finally:
+      if failed_results:
+        raise api.step.StepFailure(
+            'Swarming failed due to %d result failures' % len(failed_results))
 
   def has_valid_results(self, api, suffix):
     # Test wasn't triggered or wasn't collected.
