@@ -198,13 +198,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"base_unittests (with patch)/Linux/[dummy hash for base_unittests]/linux_chromium_rel_swarming/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"deadbeef0\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/deadbeef0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"010000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/010000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/deadbeef0@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/010000@@@"
     ]
   },
   {
@@ -239,13 +239,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"browser_tests (with patch)/Linux/[dummy hash for browser_tests]/linux_chromium_rel_swarming/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"deadbeef0\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/deadbeef0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"010000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/010000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/deadbeef0@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/010000@@@"
     ]
   },
   {
@@ -590,13 +590,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"base_unittests (without patch)/Linux/[dummy hash for base_unittests]/linux_chromium_rel_swarming/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"deadbeef0\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/deadbeef0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"010000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/010000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/deadbeef0@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/010000@@@"
     ]
   },
   {
