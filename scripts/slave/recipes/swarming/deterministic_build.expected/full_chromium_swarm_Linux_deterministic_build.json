@@ -5,9 +5,9 @@
       "-u",
       "[BUILD]/scripts/slave/bot_update.py",
       "--master",
-      "chromium.testing.master",
+      "chromium.swarm",
       "--builder",
-      "TestBuilder",
+      "Linux deterministic build",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -67,7 +67,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "clang=1 component=static_library target_arch=ia32"
+      "GYP_DEFINES": "component=static_library target_arch=ia32"
     },
     "name": "gclient runhooks"
   },
@@ -82,8 +82,6 @@
       "[SLAVE_BUILD]/src",
       "--build-tool",
       "ninja",
-      "--compiler",
-      "clang",
       "--clobber",
       "--",
       "base_unittests"

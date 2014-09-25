@@ -3,11 +3,11 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/bot_update.py",
+      "[BUILD]\\scripts\\slave\\bot_update.py",
       "--master",
-      "chromium.testing.master",
+      "chromium.swarm",
       "--builder",
-      "TestBuilder",
+      "Windows deterministic build",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -63,11 +63,11 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/gclient.py",
+      "[DEPOT_TOOLS]\\gclient.py",
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "clang=1 component=static_library target_arch=ia32"
+      "GYP_DEFINES": "component=static_library target_arch=ia32"
     },
     "name": "gclient runhooks"
   },
@@ -75,15 +75,13 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/compile.py",
+      "[BUILD]\\scripts\\slave\\compile.py",
       "--target",
       "Release",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[SLAVE_BUILD]\\src",
       "--build-tool",
       "ninja",
-      "--compiler",
-      "clang",
       "--clobber",
       "--",
       "base_unittests"
