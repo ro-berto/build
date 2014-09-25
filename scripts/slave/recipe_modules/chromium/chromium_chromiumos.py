@@ -172,8 +172,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
-      'use_isolate': True,
     },
     'Linux ChromiumOS Ozone Tests (1)': {
       'recipe_config': 'chromium_chromeos_ozone',
@@ -189,7 +187,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
     },
     'Linux ChromiumOS Ozone Tests (2)': {
       'recipe_config': 'chromium_chromeos_ozone',
@@ -205,7 +202,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
     },
 
     'Linux ChromiumOS Builder (dbg)': {
