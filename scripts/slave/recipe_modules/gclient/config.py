@@ -357,3 +357,10 @@ def infra(c):
   soln.name = 'infra'
   soln.url = 'https://chromium.googlesource.com/infra/infra.git'
   c.got_revision_mapping['infra'] = 'got_revision'
+
+@config_ctx(config_vars={'GIT_MODE': True})
+def infra_internal(c):
+  soln = c.solutions.add()
+  soln.name = 'infra_internal'
+  soln.url = 'https://chrome-internal.googlesource.com/infra/infra_internal.git'
+  c.got_revision_mapping['infra_internal'] = 'got_revision'
