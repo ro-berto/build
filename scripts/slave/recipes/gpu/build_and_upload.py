@@ -51,18 +51,6 @@ def GenTests(api):
     api.platform.name('win')
   )
 
-  # Test one configuration where 'gclient revert' fails.
-  yield (
-    api.test('win_release_gclient_revert_failure') +
-    api.properties.scheduled(
-      build_config='Release',
-      mastername='chromium.gpu.testing',
-      buildername='win release builder',
-      buildnumber=571) +
-    api.step_data('gclient revert', retcode=1) +
-    api.platform.name('win')
-  )
-
   yield (
     api.test('compile_with_patch_fail') +
     api.properties.tryserver(

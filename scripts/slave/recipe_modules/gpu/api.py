@@ -86,9 +86,6 @@ class GpuApi(recipe_api.RecipeApi):
       self.m.gclient.c.solutions[0].custom_vars['angle_revision'] = (
           'refs/remotes/origin/master')
 
-    # This is part of the workaround for flakiness during gclient
-    # revert, below.
-    # TODO(phajdan.jr): Remove the workaround, http://crbug.com/357767 .
     self.m.step.auto_resolve_conflicts = True
 
   # TODO(martinis) change this to a property that grabs the revision
@@ -152,22 +149,7 @@ class GpuApi(recipe_api.RecipeApi):
     return self.m.properties['mastername'] == 'chromium.gpu.fyi'
 
   def checkout_steps(self):
-    # Always force a gclient-revert in order to avoid problems when
-    # directories are added to, removed from, and re-added to the repo.
-    # crbug.com/329577
-    self._bot_update = self.m.bot_update.ensure_checkout()
-    bot_update_mode = self._bot_update.json.output['did_run']
-    if not bot_update_mode:
-      try:
-        self._bot_update = self.m.gclient.checkout(revert=True)
-      except self.m.step.StepFailure:
-        # TODO(phajdan.jr): Remove the workaround, http://crbug.com/357767 .
-        self.m.path.rmcontents('slave build directory',
-                                self.m.path['slave_build'])
-        self.m.gclient.checkout()
-
-      # If being run as a try server, apply the CL.
-      self.m.tryserver.maybe_apply_issue()
+    self._bot_update = self.m.bot_update.ensure_checkout(force=True)
 
   def compile_steps(self):
     # We only need to runhooks if we're going to compile locally.
