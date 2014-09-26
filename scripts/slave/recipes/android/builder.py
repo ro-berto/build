@@ -137,7 +137,28 @@ BUILDERS = {
                              % api.properties['revision']),
       }
     }
-  }
+  },
+  'client.v8': {
+    'Android Builder': {
+      'recipe_config': 'perf',
+      'gclient_apply_config': [
+        'android',
+        'perf',
+        'v8_bleeding_edge_git',
+        'chromium_lkcr',
+        'show_v8_revision',
+      ],
+      'kwargs': {
+        'BUILD_CONFIG': 'Release',
+      },
+      'upload': {
+        'bucket': 'v8-android',
+        'path': lambda api: ('v8_android_perf_rel/full-build-linux_%s.zip'
+                             % api.properties['revision']),
+      },
+      'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
+    }
+  },
 }
 
 def GenSteps(api):
@@ -159,6 +180,16 @@ def GenSteps(api):
   api.gclient.set_config('chromium')
   for c in bot_config.get('gclient_apply_config', []):
     api.gclient.apply_config(c)
+
+  if bot_config.get('set_component_rev'):
+    # If this is a component build and the main revision is e.g. blink,
+    # webrtc, or v8, the custom deps revision of this component must be
+    # dynamically set to either:
+    # (1) 'revision' from the waterfall, or
+    # (2) 'HEAD' for forced builds with unspecified 'revision'.
+    component_rev = api.properties.get('revision', 'HEAD')
+    dep = bot_config.get('set_component_rev')
+    api.gclient.c.revisions[dep['name']] = dep['rev_str'] % component_rev
 
   bot_update_step = api.bot_update.ensure_checkout()
   api.chromium_android.clean_local_files()
