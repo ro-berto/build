@@ -87,9 +87,9 @@ class CheckdepsTest(Test):  # pylint: disable=W0232
 
   def run(self, api, suffix):
     try:
-      self._test_runs[suffix] = api.chromium.checkdeps(suffix)
-    except api.step.StepFailure as f:
-      self._test_runs[suffix] = f.result
+      api.chromium.checkdeps(suffix)
+    finally:
+      self._test_runs[suffix] = api.step.active_result
 
     return self._test_runs[suffix]
 
@@ -114,12 +114,9 @@ class CheckpermsTest(Test):  # pylint: disable=W0232
 
   def run(self, api, suffix):
     try:
-      self._test_runs[suffix] = api.chromium.checkperms(suffix)
-    except api.step.StepFailure as f:
-      if not suffix:
-        raise
-      else:
-        self._test_runs[suffix] = f.result
+      api.chromium.checkperms(suffix)
+    finally:
+      self._test_runs[suffix] = api.step.active_result
 
     return self._test_runs[suffix]
 
@@ -142,12 +139,9 @@ class ChecklicensesTest(Test):  # pylint: disable=W0232
 
   def run(self, api, suffix):
     try:
-      self._test_runs[suffix] = api.chromium.checklicenses(suffix)
-    except api.step.StepFailure as f:
-      if not suffix:
-        raise
-      else:
-        self._test_runs[suffix] = f.result
+      api.chromium.checklicenses(suffix)
+    finally:
+      self._test_runs[suffix] = api.step.active_result
 
     return self._test_runs[suffix]
 
@@ -173,8 +167,13 @@ class Deps2GitTest(Test):  # pylint: disable=W0232
     return []
 
   def run(self, api, suffix):
-    self._test_runs[suffix] = api.chromium.deps2git(suffix)
+    try:
+      api.chromium.deps2git(suffix)
+    finally:
+      self._test_runs[suffix] = api.step.active_result
+
     api.chromium.deps2submodules()
+
     return self._test_runs[suffix]
 
   def has_valid_results(self, api, suffix):
