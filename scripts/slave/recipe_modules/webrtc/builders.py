@@ -802,17 +802,6 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
-      'Win Tsan': {
-        'recipe_config': 'webrtc',
-        'chromium_apply_config': ['tsan'],
-        'gclient_apply_config': ['tsan_win'],
-        'webrtc_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'win'},
-      },
     },
   },
   'tryserver.webrtc': {
