@@ -78,11 +78,15 @@ def GenSteps(api):
   if api.tryserver.is_tryserver and needs_compile:
     return
 
+  # If the Manifest has changed then we need to recompile everything.
+  force_clobber = AOSP_MANIFEST_PATH in api.filter.paths
+
   # TODO(android): use api.chromium.compile for this
   droid.compile_step(
     build_tool='make-android',
     targets=['webviewchromium'],
-    use_goma=True)
+    use_goma=True,
+    force_clobber=force_clobber)
 
 def GenTests(api):
   analyze_config = api.override_step_data(
@@ -100,6 +104,10 @@ def GenTests(api):
   chrome_change = analyze_config + api.override_step_data(
       'git diff to analyze patch',
       api.raw_io.stream_output('chrome/common/my_file.cc'))
+
+  manifest_change = analyze_config + api.override_step_data(
+      'git diff to analyze patch',
+      api.raw_io.stream_output(AOSP_MANIFEST_PATH))
 
   dependant_change = analyze_config + api.override_step_data(
       'analyze',
@@ -127,6 +135,12 @@ def GenTests(api):
     api.test('can_clobber') +
     api.properties.scheduled(clobber=True) +
     dependant_change
+  )
+
+  yield (
+    api.test('manifest_changes_cause_clobber') +
+    api.properties.scheduled() +
+    manifest_change
   )
 
   yield (
