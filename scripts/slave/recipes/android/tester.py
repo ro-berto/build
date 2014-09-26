@@ -82,11 +82,6 @@ JAVA_UNIT_TESTS = [
   'junit_unit_tests',
 ]
 
-TELEMETRY_UNIT_TESTS = [
-  [ 'telemetry_unittests', None ],
-  [ 'telemetry_perf_unittests', None ],
-]
-
 BUILDERS = {
   'tryserver.chromium.linux': {
     'android_dbg_tests_recipe': {
@@ -100,7 +95,9 @@ BUILDERS = {
     'android_rel_tests_recipe': {
       'config': 'main_builder',
       'instrumentation_tests': INSTRUMENTATION_TESTS,
-      'unittests': TELEMETRY_UNIT_TESTS,
+      'unittests': [],
+      'telemetry_unittests': True,
+      'telemetry_perf_unittests': True,
       'java_unittests': JAVA_UNIT_TESTS,
       'target': 'Release',
       'try': True,
@@ -216,6 +213,11 @@ def GenSteps(api):
       api.chromium_android.run_test_suite(
           suite,
           isolate_file_path=isolate_path)
+
+    if bot_config.get('telemetry_unittests'):
+      api.chromium.run_telemetry_unittests()
+    if bot_config.get('telemetry_perf_unittests'):
+      api.chromium.run_telemetry_perf_unittests()
 
     for suite in java_unittests:
       api.chromium_android.run_java_unit_test_suite(suite)
