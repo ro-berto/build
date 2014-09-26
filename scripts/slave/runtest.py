@@ -1863,7 +1863,7 @@ def main():
         asan_options += ['detect_leaks=1']
       extra_env['ASAN_OPTIONS'] = ' '.join(asan_options)
 
-      # ASan is not yet sandbox-friendly on Windows.
+      # ASan is not yet sandbox-friendly on Windows (http://crbug.com/382867).
       if sys.platform == 'win32':
         args.append(disable_sandbox_flag)
 
