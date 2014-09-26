@@ -565,6 +565,8 @@ class AndroidApi(recipe_api.RecipeApi):
     args = []
     if verbose:
       args.append('--verbose')
+    if self.c.BUILD_CONFIG == 'Release':
+      args.append('--release')
 
     self.m.python(
       str(suite),
