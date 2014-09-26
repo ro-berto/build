@@ -40,7 +40,31 @@ BUILDERS = {
       'check_licenses': FYIStep,
       'findbugs': FYIStep,
       'gclient_apply_config': ['android', 'chrome_internal'],
-    }
+    },
+    'Android Builder (dbg)': {
+      'recipe_config': 'main_builder',
+      'check_licenses': NormalStep,
+      'findbugs': NormalStep,
+      'upload': {
+        'bucket': 'chromium_android',
+        'path': lambda api: ('android_fyi_dbg/full-build-linux_%s.zip' %
+                             api.properties['revision']),
+      },
+    },
+    'Android Builder': {
+      'recipe_config': 'main_builder',
+      'check_licenses': NormalStep,
+      'findbugs': NormalStep,
+      'upload': {
+        'bucket': 'chromium_android',
+        'path': lambda api: ('android_fyi_rel/full-build-linux_%s.zip' %
+                             api.properties['revision']),
+      },
+      'target': 'Release',
+    },
+    'Android Clang Builder (dbg)': {
+      'recipe_config': 'clang_builder',
+    },
   },
   'chromium.linux': {
     'Android Arm64 Builder (dbg)': {
@@ -126,7 +150,7 @@ def GenSteps(api):
     'REPO_URL': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src',
     'INTERNAL': False,
     'REPO_NAME': 'src',
-    'BUILD_CONFIG': 'Debug'
+    'BUILD_CONFIG': bot_config.get('target', 'Debug'),
   }
   default_kwargs.update(bot_config.get('kwargs', {}))
   droid.configure_from_properties(bot_config['recipe_config'], **default_kwargs)

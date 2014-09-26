@@ -105,7 +105,34 @@ BUILDERS = {
       'target': 'Release',
       'try': True,
     },
+  },
+  'chromium.fyi': {
+    'Android Tests (dbg)': {
+      'config': 'main_builder',
+      'instrumentation_tests': INSTRUMENTATION_TESTS,
+      'unittests': UNIT_TESTS,
+      'java_unittests': [],
+      'target': 'Debug',
+      'download': {
+        'bucket': 'chromium-android',
+        'path': lambda api: ('android_fyi_dbg/full-build-linux_%s.zip' %
+                             api.properties['revision']),
+      },
+    },
+    'Android Tests': {
+      'config': 'main_builder',
+      'instrumentation_tests': INSTRUMENTATION_TESTS,
+      'unittests': UNIT_TESTS,
+      'java_unittests': [],
+      'target': 'Release',
+      'download': {
+        'bucket': 'chromium-android',
+        'path': lambda api: ('android_fyi_rel/full-build-linux_%s.zip' %
+                             api.properties['revision']),
+      },
+    },
   }
+
 }
 
 def GenSteps(api):
@@ -163,7 +190,12 @@ def GenSteps(api):
                       if i in api.filter.matching_exes]
 
   api.chromium_android.run_tree_truth()
-  api.chromium_android.compile(targets=compile_targets)
+
+  if bot_config.get('download'):
+    api.chromium_android.download_build(bot_config['download']['bucket'],
+                                        bot_config['download']['path'](api))
+  else:
+    api.chromium_android.compile(targets=compile_targets)
 
   if not instrumentation_tests and not unittests and not java_unittests:
     return
@@ -192,29 +224,37 @@ def GenSteps(api):
     api.chromium_android.stack_tool_steps()
     api.chromium_android.test_report()
 
+
+def _sanitize_nonalpha(text):
+  return ''.join(c if c.isalnum() else '_' for c in text)
+
+
 def GenTests(api):
   for mastername in BUILDERS:
     for buildername in BUILDERS[mastername]:
-      yield (
-          api.test(buildername) +
-          api.properties.generic(
-              revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
-              parent_buildername='parent_buildername',
-              parent_buildnumber='1729',
-              mastername=mastername,
-              buildername=buildername,
-              slavename='slavename',
-              buildnumber='1337') +
-          api.override_step_data(
-              'analyze',
-              api.json.output({'status': 'Found dependency',
-                               'targets': ['breakpad_unittests',
-                                           'chrome_shell_test_apk',
-                                           'junit_unit_tests'],
-                               'build_targets': ['breakpad_unittests',
-                                                 'chrome_shell_test_apk',
-                                                 'junit_unit_tests']}))
-      )
+      bot_config = BUILDERS[mastername][buildername]
+      test_props = (api.test(_sanitize_nonalpha('%s_%s' %
+                                                (mastername, buildername))) +
+                    api.properties.generic(
+                        revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
+                        parent_buildername='parent_buildername',
+                        parent_buildnumber='1729',
+                        mastername=mastername,
+                        buildername=buildername,
+                        slavename='slavename',
+                        buildnumber='1337'))
+
+      if bot_config.get('try'):
+        test_props += api.override_step_data(
+            'analyze',
+            api.json.output({'status': 'Found dependency',
+                             'targets': ['breakpad_unittests',
+                                         'chrome_shell_test_apk',
+                                         'junit_unit_tests'],
+                             'build_targets': ['breakpad_unittests',
+                                               'chrome_shell_test_apk',
+                                               'junit_unit_tests']}))
+      yield test_props
 
   yield (
       api.test('android_dbg_tests_recipe__content_browsertests_failure') +
