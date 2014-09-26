@@ -38,13 +38,9 @@ def clang_release_builder(c):
   c.gyp_env.GYP_DEFINES['use_allocator'] = 'none'
   c.compile_py.default_targets = ['chrome_apk']
 
-@CONFIG_CTX(includes=['base_config', 'clang', 'goma'])
+@CONFIG_CTX(includes=['clang_release_builder','android_l'])
 def clang_release_builder_l(c):
-  hera(c)
-  c.gyp_env.GYP_DEFINES['component'] = 'shared_library'
-  c.gyp_env.GYP_DEFINES['asan'] = 1
-  c.gyp_env.GYP_DEFINES['use_allocator'] = 'none'
-  c.compile_py.default_targets = ['hera_apk']
+  pass
 
 @CONFIG_CTX(includes=['main_builder'])
 def component_builder(c):
@@ -77,7 +73,7 @@ def cronet_builder(c):
   c.compile_py.default_targets=['cronet_package', 'cronet_sample_test_apk']
 
 @CONFIG_CTX()
-def hera(c):
+def android_l(c):
   gyp_defs = c.gyp_env.GYP_DEFINES
   gyp_defs['android_sdk_build_tools_version'] = 'android-L'
   gyp_defs['android_sdk_version'] = 'L'
@@ -85,9 +81,8 @@ def hera(c):
     '[CHECKOUT]', 'third_party', 'android_tools_internal', 'sdk')
   gyp_defs['use_unpublished_apis'] = 1
   gyp_defs['use_unreleased_google_play_services_first_party']=1
-  c.compile_py.default_targets = ['All', 'hera_apk', 'hera_test_apk']
 
-@CONFIG_CTX(includes=['main_builder', 'hera'])
+@CONFIG_CTX(includes=['main_builder', 'android_l'])
 def arm_l_builder(c):
   pass
 
