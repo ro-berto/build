@@ -97,8 +97,7 @@ SPEC = {
       'use_isolate': True,
     },
     'Linux Trusty': {
-      # TODO(phajdan.jr): Re-enable goma, http://crbug.com/349236 .
-      'recipe_config': 'chromium_no_goma',
+      'recipe_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -121,8 +120,7 @@ SPEC = {
       },
     },
     'Linux Trusty (32)': {
-      # TODO(phajdan.jr): Re-enable goma, http://crbug.com/349236 .
-      'recipe_config': 'chromium_no_goma',
+      'recipe_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -145,8 +143,7 @@ SPEC = {
       },
     },
     'Linux Trusty (dbg)': {
-      # TODO(phajdan.jr): Re-enable goma, http://crbug.com/349236 .
-      'recipe_config': 'chromium_no_goma',
+      'recipe_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
@@ -169,8 +166,7 @@ SPEC = {
       },
     },
     'Linux Trusty (dbg)(32)': {
-      # TODO(phajdan.jr): Re-enable goma, http://crbug.com/349236 .
-      'recipe_config': 'chromium_no_goma',
+      'recipe_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 32,
