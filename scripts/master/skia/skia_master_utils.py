@@ -62,6 +62,8 @@ def SetupBuildersAndSchedulers(c, builders, slaves, ActiveMaster):
     # Categorize the builder based on its role.
     try:
       category = builder_name_schema.DictForBuilderName(builder_name)['role']
+      subcategory = builder_name.split(builder_name_schema.BUILDER_NAME_SEP)[1]
+      category = '|'.join((category, subcategory))
     except ValueError:
       # Assume that all builders whose names don't play by our rules are named
       # upstream and are therefore canaries.
