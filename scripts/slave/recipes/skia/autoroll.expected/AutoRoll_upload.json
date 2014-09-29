@@ -106,7 +106,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "In progress - https://codereview.chromium.org/1234/",
+      "In progress - <a href=\"https://codereview.chromium.org/1234/\" target=\"_blank\">https://codereview.chromium.org/1234/</a>",
       "arb_status.html"
     ],
     "name": "write arb_status.html"

@@ -46,8 +46,14 @@ REGEXP_ROLL_STOPPED = (
 # This occurs when the ARB has "caught up" and has nothing new to roll, or when
 # a different roll (typically a manual roll) has already rolled past it.
 REGEXP_ROLL_TOO_OLD = r'Already at .+ refusing to roll backwards to .+'
-ROLL_STATUS_IN_PROGRESS = 'In progress - %s' % ISSUE_URL_TEMPLATE
-ROLL_STATUS_STOPPED = 'Stopped - %s' % ISSUE_URL_TEMPLATE
+ROLL_STATUS_IN_PROGRESS = (
+    'In progress - <a href="{0}" target="_blank">{0}</a>'.format(
+        ISSUE_URL_TEMPLATE)
+)
+ROLL_STATUS_STOPPED = (
+    'Stopped - <a href="{0}" target="_blank">{0}</a>'.format(
+        ISSUE_URL_TEMPLATE)
+)
 ROLL_STATUS_IDLE = 'Idle'
 ROLL_STATUSES = [
     (REGEXP_ISSUE_CREATED, ROLL_STATUS_IN_PROGRESS),
