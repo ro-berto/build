@@ -535,8 +535,3 @@ def v8_optimize_medium(c):
 @config_ctx()
 def chromium_perf(c):
   c.compile_py.clobber = False
-  if c.HOST_PLATFORM == 'win':
-    c.compile_py.compiler = None
-    c.compile_py.goma_dir = None
-    c.gyp_env.GYP_DEFINES['use_goma'] = 0
-

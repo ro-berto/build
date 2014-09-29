@@ -74,7 +74,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "branding=Chrome buildtype=Official chromium_win_pch=0 component=static_library fastbuild=1 gomadir='[BUILD]\\goma' target_arch=x64 use_goma=0"
+      "GYP_DEFINES": "branding=Chrome buildtype=Official chromium_win_pch=0 component=static_library fastbuild=1 gomadir='[BUILD]\\goma' target_arch=x64 use_goma=1"
     },
     "name": "gclient runhooks"
   },
@@ -97,8 +97,12 @@
       "[SLAVE_BUILD]\\src",
       "--build-tool",
       "ninja",
+      "--compiler",
+      "goma",
       "--mode",
       "official",
+      "--goma-dir",
+      "[BUILD]\\goma",
       "--",
       "chromium_builder_perf"
     ],
