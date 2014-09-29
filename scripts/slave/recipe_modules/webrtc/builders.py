@@ -18,10 +18,6 @@ RECIPE_CONFIGS = {
     'webrtc_config': 'webrtc_clang',
     'test_suite': 'webrtc',
   },
-  'webrtc_asan': {
-    'webrtc_config': 'webrtc_asan',
-    'test_suite': 'webrtc',
-  },
   'webrtc_parallel': {
     'webrtc_config': 'webrtc',
     'test_suite': 'webrtc_parallel',
@@ -531,7 +527,8 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'Mac Asan': {
-        'recipe_config': 'webrtc_asan',
+        'recipe_config': 'webrtc_clang',
+        'chromium_apply_config': ['asan'],
         'webrtc_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -628,7 +625,8 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'Linux Asan': {
-        'recipe_config': 'webrtc_asan',
+        'recipe_config': 'webrtc_clang',
+        'chromium_apply_config': ['asan'],
         'webrtc_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -900,7 +898,8 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'mac_asan': {
-        'recipe_config': 'webrtc_asan',
+        'recipe_config': 'webrtc_clang',
+        'chromium_apply_config': ['asan'],
         'webrtc_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -978,7 +977,8 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'linux_asan': {
-        'recipe_config': 'webrtc_asan',
+        'recipe_config': 'webrtc_clang',
+        'chromium_apply_config': ['asan'],
         'webrtc_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,

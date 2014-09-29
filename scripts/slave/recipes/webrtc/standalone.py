@@ -53,9 +53,7 @@ def GenSteps(api):
   # Whatever step is run right before this line needs to emit got_revision.
   got_revision = step_result.presentation.properties['got_revision']
 
-  if api.tryserver.is_tryserver:
-    api.tryserver.maybe_apply_issue()
-
+  api.tryserver.maybe_apply_issue()
   api.chromium.runhooks()
 
   if does_build:

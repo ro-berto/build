@@ -25,10 +25,6 @@ def webrtc(c):
 def webrtc_clang(c):
   _compiler_defaults(c)
 
-@CONFIG_CTX(includes=['chromium_asan'])
-def webrtc_asan(c):
-  _compiler_defaults(c)
-
 @CONFIG_CTX(includes=['android'])
 def webrtc_android(c):
   pass

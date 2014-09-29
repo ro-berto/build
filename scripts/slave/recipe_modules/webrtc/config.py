@@ -32,10 +32,6 @@ def webrtc_clang(c):
   pass
 
 @config_ctx()
-def webrtc_asan(c):
-  pass
-
-@config_ctx()
 def webrtc_android(c):
   pass
 

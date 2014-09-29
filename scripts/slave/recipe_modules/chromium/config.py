@@ -322,7 +322,8 @@ def official(c):
 def asan(c):
   if 'clang' not in c.compile_py.compiler:  # pragma: no cover
     raise BadConf('asan requires clang')
-
+  c.runtests.lsan_suppressions_file = Path('[CHECKOUT]', 'tools', 'lsan',
+                                           'suppressions.txt')
   if c.TARGET_PLATFORM == 'linux':
     c.gyp_env.GYP_DEFINES['use_allocator'] = 'none'
 
@@ -395,8 +396,6 @@ def chromium(c):
 
 @config_ctx(includes=['ninja', 'clang', 'goma', 'asan'])
 def chromium_asan(c):
-  c.runtests.lsan_suppressions_file = Path('[CHECKOUT]', 'tools', 'lsan',
-                                           'suppressions.txt')
   c.runtests.test_args.append('--test-launcher-batch-limit=1')
   c.runtests.test_args.append('--test-launcher-print-test-stdio=always')
 
