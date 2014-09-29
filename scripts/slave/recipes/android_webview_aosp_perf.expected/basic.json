@@ -105,7 +105,8 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/gyp_chromium",
-      "-DOS=android"
+      "-DOS=android",
+      "-Dandroid_webview_telemetry_build=1"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "gyp_chromium"
@@ -116,7 +117,7 @@
       "[SLAVE_BUILD]/android-src",
       "full-eng",
       "[BUILD]/scripts/slave/compile.py",
-      "android_webview_apk",
+      "system_webview_apk",
       "android_webview_telemetry_shell_apk",
       "--build-dir",
       "[SLAVE_BUILD]",
@@ -127,7 +128,7 @@
       "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "compile android_webview"
+    "name": "compile system_webview_apk and shell"
   },
   {
     "cmd": [
@@ -180,6 +181,20 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "provision_devices"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "--apk",
+      "SystemWebView.apk",
+      "--apk_package",
+      "com.android.webview",
+      "--release"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "install SystemWebView.apk"
   },
   {
     "cmd": [

@@ -42,6 +42,9 @@ PERF_TESTS = {
   "version": 1,
 }
 
+WEBVIEW_APK = 'SystemWebView.apk'
+WEBVIEW_PACKAGE = 'com.android.webview'
+
 TELEMETRY_SHELL_APK = 'AndroidWebViewTelemetryShell.apk'
 TELEMETRY_SHELL_PACKAGE = 'org.chromium.telemetry_shell'
 
@@ -78,14 +81,15 @@ def GenSteps(api):
   # Gyp the chromium checkout.
   api.step(
       'gyp_chromium',
-      [api.path['checkout'].join('build', 'gyp_chromium'), '-DOS=android'],
+      [api.path['checkout'].join('build', 'gyp_chromium')] +
+          ['-DOS=android', '-Dandroid_webview_telemetry_build=1'],
       cwd=api.path['checkout'])
 
   # Build the webview shell and chromium parts.
   droid.compile_step(
-    step_name='compile android_webview',
+    step_name='compile system_webview_apk and shell',
     build_tool='ninja',
-    targets=['android_webview_apk', 'android_webview_telemetry_shell_apk'],
+    targets=['system_webview_apk', 'android_webview_telemetry_shell_apk'],
     use_goma=True,
     src_dir=api.path['checkout'])
 
@@ -102,7 +106,8 @@ def GenSteps(api):
   # TODO(hjd): Do special WebView provision.
   api.chromium_android.provision_devices()
 
-  # TODO(hjd): Push the WebView files to the devices.
+  # Install WebView
+  api.chromium_android.adb_install_apk(WEBVIEW_APK, WEBVIEW_PACKAGE)
 
   # Install the telemetry shell.
   api.chromium_android.adb_install_apk(TELEMETRY_SHELL_APK,
