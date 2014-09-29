@@ -57,6 +57,7 @@ BUILDSPEC_RE = (r'^/chrome-internal/trunk/tools/buildspec/'
                  '(build|branches|releases)/(.+)$')
 GIT_BUILDSPEC_PATH = ('https://chrome-internal.googlesource.com/chrome/tools/'
                       'buildspec')
+BRANCH_HEADS_REFSPEC = '+refs/branch-heads/*'
 
 BUILDSPEC_COMMIT_RE = (
     re.compile(r'Buildspec for.*version (\d+\.\d+\.\d+\.\d+)'),
@@ -903,7 +904,7 @@ def force_revision(folder_name, revision):
   else:
     git('checkout', '--force', 'origin/%s' % branch, cwd=folder_name)
 
-def git_checkout(solutions, revisions, shallow, with_branch_heads):
+def git_checkout(solutions, revisions, shallow, refs):
   build_dir = os.getcwd()
   # Before we do anything, break all git_cache locks.
   if path.isdir(CACHE_DIR):
@@ -929,8 +930,8 @@ def git_checkout(solutions, revisions, shallow, with_branch_heads):
       s = ['--shallow'] if shallow else []
       populate_cmd = (['cache', 'populate', '--ignore_locks', '-v',
                        '--cache-dir', CACHE_DIR] + s + [url])
-      if with_branch_heads:
-        populate_cmd.extend(['--ref', '+refs/branch-heads/*'])
+      for ref in refs:
+        populate_cmd.extend(['--ref', ref])
       git(*populate_cmd)
       mirror_dir = git(
           'cache', 'exists', '--quiet', '--cache-dir', CACHE_DIR, url).strip()
@@ -943,9 +944,9 @@ def git_checkout(solutions, revisions, shallow, with_branch_heads):
         else:
           git('remote', 'set-url', 'origin', mirror_dir, cwd=sln_dir)
           git('fetch', 'origin', cwd=sln_dir)
-        if with_branch_heads:
-          git('fetch', 'origin', '+refs/branch-heads/*:refs/branch-heads/*',
-              cwd=sln_dir)
+        for ref in refs:
+          refspec = '%s:%s' % (ref, ref.lstrip('+'))
+          git('fetch', 'origin', refspec, cwd=sln_dir)
 
         revision = get_target_revision(name, url, revisions) or 'HEAD'
         force_revision(sln_dir, revision)
@@ -1250,12 +1251,13 @@ def ensure_deps_revisions(deps_url_mapping, solutions, revisions):
 def ensure_checkout(solutions, revisions, first_sln, target_os, target_os_only,
                     patch_root, issue, patchset, patch_url, rietveld_server,
                     revision_mapping, buildspec, gyp_env, shallow, runhooks,
-                    with_branch_heads):
+                    refs):
   # Get a checkout of each solution, without DEPS or hooks.
   # Calling git directly because there is no way to run Gclient without
   # invoking DEPS.
   print 'Fetching Git checkout'
-  git_ref = git_checkout(solutions, revisions, shallow, with_branch_heads)
+
+  git_ref = git_checkout(solutions, revisions, shallow, refs)
 
   patches = None
   if patch_url:
@@ -1287,7 +1289,10 @@ def ensure_checkout(solutions, revisions, first_sln, target_os, target_os_only,
   gclient_configure(solutions, target_os, target_os_only)
 
   # Let gclient do the DEPS syncing.
-  gclient_output = gclient_sync(buildspec or with_branch_heads, shallow)
+  # The branch-head refspec is a special case because its possible Chrome
+  # src, which contains the branch-head refspecs, is DEPSed in.
+  gclient_output = gclient_sync(buildspec or BRANCH_HEADS_REFSPEC in refs,
+                                shallow)
 
   # Now that gclient_sync has finished, we should revert any .DEPS.git so that
   # presubmit doesn't complain about it being modified.
@@ -1425,8 +1430,12 @@ def parse_args():
                         'Does not override the --shallow flag')
   parse.add_option('--no_runhooks', action='store_true',
                    help='Do not run hooks on official builder.')
+  parse.add_option('--refs', action='append',
+                   help='Also fetch this refspec for the main solution(s). '
+                        'Eg. +refs/branch-heads/*')
   parse.add_option('--with_branch_heads', action='store_true',
-                    help='Always pass --with_branch_heads to gclient.')
+                    help='Always pass --with_branch_heads to gclient.  This '
+                          'does the same thing as --refs +refs/branch-heads/*')
 
 
   options, args = parse.parse_args()
@@ -1434,6 +1443,13 @@ def parse_args():
   if options.post_flag_day:
     global FLAG_DAY
     FLAG_DAY = True
+
+  if not options.refs:
+    options.refs = []
+
+  if options.with_branch_heads:
+    options.refs.append(BRANCH_HEADS_REFSPEC)
+    del options.with_branch_heads
 
   try:
     if options.revision_mapping_file:
@@ -1531,7 +1547,7 @@ def checkout(options, git_slns, specs, buildspec, master,
 
           # Finally, extra configurations such as shallowness of the clone.
           shallow=options.shallow,
-          with_branch_heads=options.with_branch_heads)
+          refs=options.refs)
       gclient_output = ensure_checkout(**checkout_parameters)
     except GclientSyncFailed:
       print 'We failed gclient sync, lets delete the checkout and retry.'
