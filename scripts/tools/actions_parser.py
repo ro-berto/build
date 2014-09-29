@@ -59,10 +59,7 @@ class Master(_Master):
     name = os.path.split(d)[1]
     if name.startswith('master.'):
       name = name[7:]
-    return cls(
-        name=name,
-        path=d,
-    )
+    return cls(name=name, path=d)
 
   def get_timestamp(self):
     """Returns the timestamp for this master, or None if there is no timestamp.
@@ -71,35 +68,35 @@ class Master(_Master):
       with open(self.timestamp_path, 'r') as fd:
         timestamp = fd.read()
     except IOError:
-      logging.debug("Failed to open difference file for '%s' at: %s",
-          self.name, self.timestamp_path)
+      logging.debug('Failed to open difference file for "%s" at: %s',
+                    self.name, self.timestamp_path)
       return None
 
     try:
       return datetime.datetime.strptime(timestamp, self.TIMESTAMP_FORMAT)
     except ValueError as e:
-      logging.warning("Failed to load timestamp from '%s': %s",
-          timestamp, e.message)
+      logging.warning('Failed to load timestamp from "%s": %s',
+                      timestamp, e.message)
 
   def write_timestamp(self, dt):
     """Writes a new timestamp file for this master with the value 'dt'."""
     value = dt.strftime(self.TIMESTAMP_FORMAT)
-    logging.info("Writing timestamp for '%s' at '%s' to: %s",
-        self.name, dt, self.timestamp_path)
+    logging.info('Writing timestamp for "%s" at "%s" to: %s',
+                 self.name, dt, self.timestamp_path)
     with open(self.timestamp_path, 'w') as fd:
       fd.write(value)
 
   def delete_timestamp(self):
     """Deletes the timestamp file for this master, if it exists."""
-    logging.debug("Removing timestamp file for '%s' at: %s",
-        self.name, self.timestamp_path)
+    logging.debug('Removing timestamp file for "%s" at: %s',
+                  self.name, self.timestamp_path)
     try:
       os.remove(self.timestamp_path)
     except Exception as e:
       # Failure to remove is not a fatal error. If the file doesn't exist, it's
       # not even an error.
-      logging.debug("Failed to remove timestamp at [%s]: %s",
-          self.timestamp_path, e.message)
+      logging.debug('Failed to remove timestamp at [%s]: %s',
+                    self.timestamp_path, e.message)
 
   def load_actions(self, threshold=None):
     """Loads the set of actions from this master.
@@ -109,8 +106,8 @@ class Master(_Master):
           after this time.
     """
     if not os.path.exists(self.actions_log_path):
-      logging.warning("No 'actions.log' found for master %s at: %s",
-          self.name, self.actions_log_path)
+      logging.warning('No "actions.log" found for master %s at: %s',
+                      self.name, self.actions_log_path)
 
     # Load matches from the 'actions.log'.
     matches = []
@@ -128,12 +125,12 @@ class Master(_Master):
       try:
         date = datetime.datetime.strptime(datestr, '%a %b %d %H:%M:%S %Z %Y')
       except ValueError as e:
-        logging.error("Failed to parse date from '%s': %s", datestr, e.message)
+        logging.error('Failed to parse date from "%s": %s', datestr, e.message)
         continue
 
       if threshold and date <= threshold:
-        logging.debug("Skipping action '%s' from '%s' at %s (below threshold)",
-            action, self.name, date)
+        logging.debug('Skipping action "%s" from "%s" at %s (below threshold)',
+                      action, self.name, date)
         continue
 
       # Parse action
@@ -156,17 +153,17 @@ def do_post(actions, endpoint):
   def json_default(obj):
     if isinstance(obj, datetime.datetime):
       return obj.isoformat()
-    raise TypeError("Don't know how to translate '%s' to JSON" % (
+    raise TypeError('Don\'t know how to translate "%s" to JSON' % (
         type(obj).__name__,))
 
   json_actions = json.dumps(actions, default=json_default)
 
-  logging.debug("Posting JSON data to [%s]: %s", endpoint, json_actions)
+  logging.debug('Posting JSON data to [%s]: %s', endpoint, json_actions)
   r = requests.post(endpoint, data=json_actions, verify=True)
   if r.status_code != httplib.OK:
-    logging.error("Failed to POST JSON data to [%s]: %s",
-        endpoint, r.status_code)
-    raise PostFailedError("Unsuccessful HTTP response (%s)" % (r.status_code,))
+    logging.error('Failed to POST JSON data to [%s]: %s',
+                  endpoint, r.status_code)
+    raise PostFailedError('Unsuccessful HTTP response (%s)' % (r.status_code,))
   return 0
 
 
@@ -194,30 +191,39 @@ def get_all_masters(checkout_root):
 
     # Discard this master if there is no 'actions.log' file.
     if not os.path.exists(master.actions_log_path):
-      logging.debug("Discarding master '%s': no 'actions.log' available.",
-          master.name)
+      logging.debug('Discarding master "%s": no "actions.log" available.',
+                    master.name)
       continue
     masters.append(master)
   return masters
 
 
 def main():
-  parser = argparse.ArgumentParser()
-  parser.add_argument('-v', '--verbose', action='count',
-      help="Increases logging verbosity. Can be specified multiple times.")
-  parser.add_argument('-C', '--checkout-root', action='store', metavar='PATH',
-      help="The checkout root to use for 'master' probing.")
-  parser.add_argument('-A', '--all', action='store_true',
-      help="Include output for all Masters hosted on this system.")
-  parser.add_argument('-P', '--post', metavar='ENDPOINT',
-      help="Post JSON actions for each master to the specified ENDPOINT.")
-  parser.add_argument('-c', '--clear-difference', action='store_true',
-      help="Clear any existing difference files.")
-  parser.add_argument('-D', '--difference', action='store_true',
-      help="Calculate the actions since the 'difference' time. After "
-           "successful operation, a new difference file will be written.")
-  parser.add_argument('mastername', nargs='*',
-      help="The names of masters to extract action information for.")
+  parser = argparse.ArgumentParser(
+      description='Parse a master\'s actions.log file for events.',
+      prog='./runit.py actions_parser.py')
+  parser.add_argument(
+      '-v', '--verbose', action='count',
+      help='Increases logging verbosity. Can be specified multiple times.')
+  parser.add_argument(
+      '-C', '--checkout-root', action='store', metavar='PATH',
+      help='The checkout root to use for "master" probing.')
+  parser.add_argument(
+      '-A', '--all', action='store_true',
+      help='Include output for all Masters hosted on this system.')
+  parser.add_argument(
+      '-P', '--post', metavar='ENDPOINT',
+      help='Post JSON actions for each master to the specified ENDPOINT.')
+  parser.add_argument(
+      '-c', '--clear-difference', action='store_true',
+      help='Clear any existing difference files.')
+  parser.add_argument(
+      '-D', '--difference', action='store_true',
+      help='Calculate the actions since the "difference" time. After '
+           'successful operation, a new difference file will be written.')
+  parser.add_argument(
+      'mastername', nargs='*',
+      help='The names of masters to extract action information for.')
 
   args = parser.parse_args()
 
@@ -231,7 +237,7 @@ def main():
     checkout_root = os.path.abspath(os.path.join(
         os.path.dirname(__file__), os.pardir, os.pardir, os.pardir))
   checkout_root = os.path.expanduser(checkout_root)
-  logging.debug("Using checkout root: %s", checkout_root)
+  logging.debug('Using checkout root: %s', checkout_root)
 
   # Get the list of masters to run against.
   masters = []
@@ -247,14 +253,14 @@ def main():
     masters.append(master)
 
   if missing_masters:
-    logging.error("Unable to locate masters: %s", ', '.join(missing_masters))
+    logging.error('Unable to locate masters: %s', ', '.join(missing_masters))
     return 1
 
-  logging.debug("Collecting 'actions' information for %d master(s)",
-      len(masters))
+  logging.debug('Collecting "actions" information for %d master(s)',
+                len(masters))
   if logging.getLogger().isEnabledFor(logging.DEBUG):
     for master in masters:
-      logging.debug("  - %s", master.name)
+      logging.debug('  - %s', master.name)
 
   # Construct our actions JSON-able dictionary
   actions = {}
@@ -271,15 +277,15 @@ def main():
     try:
       do_post(actions, args.post)
     except PostFailedError:
-      logging.exception("Failed to POST to endpoint [%s]" % (args.post,))
+      logging.exception('Failed to POST to endpoint [%s]' % (args.post,))
       return 2
   elif logging.getLogger().isEnabledFor(logging.INFO):
-    logging.info("Loaded action set:\n%s", pprint.pformat(actions))
+    logging.info('Loaded action set:\n%s', pprint.pformat(actions))
 
   # Write the difference file. At this point, all operations have been
   # successful.
   if args.difference:
-    logging.info("Writing updated timestamp files")
+    logging.info('Writing updated timestamp files')
     for master in masters:
       timestamp = timestamps.get(master.name)
       if not timestamp:
@@ -294,6 +300,6 @@ if __name__ == '__main__':
   try:
     return_code = main()
   except Exception:
-    logging.exception("Uncaught exception during execution")
+    logging.exception('Uncaught exception during execution')
   finally:
     sys.exit(return_code)

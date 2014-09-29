@@ -6,16 +6,13 @@
 import argparse
 import sys
 
-from common import chromium_utils
-
-chromium_utils.AddThirdPartyLibToPath('requests_1_2_3')
-
 import requests  # "Unable to import" pylint: disable=F0401
 
 
 def main():
   parser = argparse.ArgumentParser(
-      description='Get a url and print its document.')
+      description='Get a url and print its document.',
+      prog='./runit.py pycurl.py')
   parser.add_argument('url', help='the url to fetch')
   parser.add_argument('--outfile', help='write output to this file')
   args = parser.parse_args()
