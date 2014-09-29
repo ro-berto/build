@@ -17,6 +17,8 @@ SPEC = {
       },
       'bot_type': 'builder',
       'testing': {'platform': 'linux'},
+      'enable_swarming': True,
+      'use_isolate': True,
     },
   },
 }
@@ -37,6 +39,7 @@ for name in ('Linux ASan LSan Tests (1)',
     ],
     'parent_buildername': 'Linux ASan LSan Builder',
     'testing': {'platform': 'linux'},
+    'enable_swarming': True,
   }
 
 # LSan is not sandbox-compatible, which is why testers 1-3 have the sandbox
