@@ -170,6 +170,11 @@
               <nobr><a href="https://codereview.chromium.org/search?closed=3&project=skia&private=1&commit=2&limit=30" target="_blank">Commit Queue</a></nobr><br/>
             </td>
           </tr>
+          <tr>
+            <td colspan="2">
+              <nobr>Loaded at <span id="last_loaded_span"></span><br/>
+            </td>
+          </tr>
         </table>
       </td>
       <td width="1" bgcolor="#CCCCCC">
@@ -331,6 +336,12 @@
                     tr(HTMLBaseBar(c.status_skia_compile + "console", c.bar_skia_compile, c.skia_compile, 'client.skia.compile', 'width="100%"'))
                   )
             )));
+
+            var now = new Date();
+            var loadedAt = document.getElementById("last_loaded_span");
+            if (loadedAt) {
+              loadedAt.innerHTML = now.toDateString() + " at " + now.toTimeString();
+            }
           </script>
         </table>
       </td>
