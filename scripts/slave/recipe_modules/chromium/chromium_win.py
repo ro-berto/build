@@ -22,6 +22,8 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'enable_swarming': True,
+      'use_isolate': True,
     },
     'XP Tests (1)': {
       'recipe_config': 'chromium',
@@ -142,11 +144,15 @@ SPEC = {
       ],
       'tests': [
         steps.MiniInstallerTest(),
+        steps.MojoPythonTests(),
+        steps.TelemetryUnitTests(),
+        steps.TelemetryPerfUnitTests(),
       ],
       'parent_buildername': 'Win Builder',
       'testing': {
         'platform': 'win',
       },
+      'enable_swarming': True,
     },
     'Win7 Tests (2)': {
       'recipe_config': 'chromium',
@@ -160,9 +166,6 @@ SPEC = {
         steps.generate_gtest,
       ],
       'tests': [
-        steps.MojoPythonTests(),
-        steps.TelemetryUnitTests(),
-        steps.TelemetryPerfUnitTests(),
       ],
       'parent_buildername': 'Win Builder',
       'testing': {
@@ -198,6 +201,8 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'enable_swarming': True,
+      'use_isolate': True,
     },
     'Win 7 Tests x64 (1)': {
       'recipe_config': 'chromium',
@@ -210,10 +215,15 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
       ],
+      'tests': [
+        steps.MojoPythonTests(),
+        steps.TelemetryUnitTests(),
+      ],
       'parent_buildername': 'Win x64 Builder',
       'testing': {
         'platform': 'win',
       },
+      'enable_swarming': True,
     },
     'Win 7 Tests x64 (2)': {
       'recipe_config': 'chromium',
@@ -243,8 +253,6 @@ SPEC = {
         steps.generate_gtest,
       ],
       'tests': [
-        steps.MojoPythonTests(),
-        steps.TelemetryUnitTests(),
       ],
       'parent_buildername': 'Win x64 Builder',
       'testing': {
@@ -297,6 +305,8 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'enable_swarming': True,
+      'use_isolate': True,
     },
 
     'Win Builder (dbg)': {
@@ -312,24 +322,10 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'enable_swarming': True,
+      'use_isolate': True,
     },
     'Win7 Tests (dbg)(1)': {
-      'recipe_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'tester',
-      'disable_runhooks': True,
-      'test_generators': [
-        steps.generate_gtest,
-      ],
-      'parent_buildername': 'Win Builder (dbg)',
-      'testing': {
-        'platform': 'win',
-      },
-    },
-    'Win7 Tests (dbg)(2)': {
       'recipe_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -343,6 +339,25 @@ SPEC = {
       'tests': [
         steps.TelemetryUnitTests(),
         steps.TelemetryPerfUnitTests(),
+      ],
+      'parent_buildername': 'Win Builder (dbg)',
+      'testing': {
+        'platform': 'win',
+      },
+      'enable_swarming': True,
+    },
+    'Win7 Tests (dbg)(2)': {
+      'recipe_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 32,
+      },
+      'bot_type': 'tester',
+      'disable_runhooks': True,
+      'test_generators': [
+        steps.generate_gtest,
+      ],
+      'tests': [
       ],
       'parent_buildername': 'Win Builder (dbg)',
       'testing': {
