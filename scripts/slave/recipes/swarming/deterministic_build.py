@@ -30,13 +30,14 @@ DETERMINISTIC_BUILDERS = {
     'platform': 'linux',
   },
   'IOS deterministic build': {
+    'chromium_apply_config': ['ninja'],
     'chromium_config': 'chromium_ios_device',
-    'gclient_config': 'ios',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
       'TARGET_PLATFORM': 'ios',
       'TARGET_BITS': 32,
     },
+    'gclient_config': 'ios',
     'platform': 'mac',
   },
   'Linux deterministic build': {
@@ -63,6 +64,8 @@ def GenSteps(api):
   api.chromium.set_config(recipe_config['chromium_config'],
                           **recipe_config.get('chromium_config_kwargs',
                                               {'BUILD_CONFIG': 'Release'}))
+  for c in recipe_config.get('chromium_apply_config', []):
+    api.chromium.apply_config(c)
 
   api.gclient.set_config(recipe_config['gclient_config'],
                          **recipe_config.get('gclient_config_kwargs', {}))

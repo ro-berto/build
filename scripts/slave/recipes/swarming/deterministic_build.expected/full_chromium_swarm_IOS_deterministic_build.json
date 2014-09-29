@@ -69,6 +69,7 @@
     "env": {
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=ios chromium_ios_signing=0 component=static_library",
+      "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "xcode_project_version=3.2"
     },
     "name": "gclient runhooks"
@@ -83,13 +84,10 @@
       "--src-dir",
       "[SLAVE_BUILD]/src",
       "--build-tool",
-      "xcode",
+      "ninja",
       "--clobber",
       "--",
-      "-target",
-      "base_unittests",
-      "-sdk",
-      "iphoneos7.1"
+      "base_unittests"
     ],
     "name": "compile"
   }
