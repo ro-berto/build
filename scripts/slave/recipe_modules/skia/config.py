@@ -51,7 +51,7 @@ VAR_TEST_MAP = {
                    u'Test-Win7-ShuttleA-HD2000-x86-Release-ANGLE',
                    u'Test-Win8-ShuttleA-GTX660-x86-Release'),
   'MASTER_NAME': (u'client.skia',),
-  'SLAVE_NAME': (u'skiabot-linux-tester-004',),
+  'SLAVE_NAME': (u'skiabot-shuttle-ubuntu12-003',),
 }
 
 

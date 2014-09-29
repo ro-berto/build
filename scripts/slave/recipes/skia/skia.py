@@ -23,7 +23,7 @@ def GenSteps(api):
 
 def GenTests(api):
   mastername = 'client.skia'
-  slavename = 'skiabot-linux-tester-004'
+  slavename = 'skiabot-shuttle-ubuntu12-003'
   builders = [
     'Build-Ubuntu13.10-GCC4.8-Arm7-Debug-CrOS_Daisy',
     'Build-Ubuntu13.10-GCC4.8-x86_64-Debug',
@@ -96,13 +96,11 @@ def GenTests(api):
     return test_data
 
   for builder in builders:
-    prop_slavename = (
-        'skiabot-cros-link-002' if 'ChromeOS' in builder else slavename)
     test = (
       api.test(builder) +
       api.properties(buildername=builder,
                      mastername=mastername,
-                     slavename=prop_slavename,
+                     slavename=slavename,
                      buildnumber=5) +
       api.path.exists(
           api.path['slave_build'].join(

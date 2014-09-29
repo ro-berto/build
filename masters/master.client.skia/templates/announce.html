@@ -185,16 +185,14 @@
         <table width="100%">
           <script language="javascript">
             c.skia = '';
-            c.skia_old = '';
             c.skia_fyi = '';
             c.skia_android = '';
             c.skia_compile = '';
 
             c.status_skia = '../client.skia';
-            c.status_skia_old = 'https://skia-tree-status.appspot.com/redirect/buildbots/';
-            c.status_skia_fyi = 'https://skia-tree-status.appspot.com/redirect/fyi-buildbots/';
-            c.status_skia_android = 'https://skia-tree-status.appspot.com/redirect/android-buildbots/';
-            c.status_skia_compile = 'https://skia-tree-status.appspot.com/redirect/compile-buildbots/';
+            c.status_skia_fyi = '../client.skia.fyi'
+            c.status_skia_android = '../client.skia.android'
+            c.status_skia_compile = '../client.skia.compile'
 
             /**
              * Builds a reference for the iframe with boxes.
@@ -218,11 +216,10 @@
               return 'https://build.chromium.org/p/' + x +
                      '/horizontal_one_box_per_builder' + builders;
             }
-            c.bar_skia = BarUrl('client.skia')
-            c.bar_skia_old = c.status_skia_old + "horizontal_one_box_per_builder";
-            c.bar_skia_fyi = c.status_skia_fyi + "horizontal_one_box_per_builder";
-            c.bar_skia_android = c.status_skia_android + "horizontal_one_box_per_builder";
-            c.bar_skia_compile = c.status_skia_compile + "horizontal_one_box_per_builder";
+            c.bar_skia = BarUrl('client.skia');
+            c.bar_skia_fyi = BarUrl('client.skia.fyi');
+            c.bar_skia_android = BarUrl('client.skia.android');
+            c.bar_skia_compile = BarUrl('client.skia.compile');
 
             /**
              * Joins URL and search terms.
@@ -330,10 +327,9 @@
                   table(
                     'width="100%"',
                     tr(HTMLBaseBar(c.status_skia, c.bar_skia, c.skia, 'client.skia', 'width="100%"')) +
-                    tr(HTMLBaseBar(c.status_skia_old + "console", c.bar_skia_old, c.skia_old, 'client.skia.old', 'width="100%"')) +
-                    tr(HTMLBaseBar(c.status_skia_fyi + "console", c.bar_skia_fyi, c.skia_fyi, 'client.skia.fyi', 'width="100%"')) +
-                    tr(HTMLBaseBar(c.status_skia_android + "console", c.bar_skia_android, c.skia_android, 'client.skia.android', 'width="100%"')) +
-                    tr(HTMLBaseBar(c.status_skia_compile + "console", c.bar_skia_compile, c.skia_compile, 'client.skia.compile', 'width="100%"'))
+                    tr(HTMLBaseBar(c.status_skia_fyi, c.bar_skia_fyi, c.skia_fyi, 'client.skia.fyi', 'width="100%"')) +
+                    tr(HTMLBaseBar(c.status_skia_android, c.bar_skia_android, c.skia_android, 'client.skia.android', 'width="100%"')) +
+                    tr(HTMLBaseBar(c.status_skia_compile, c.bar_skia_compile, c.skia_compile, 'client.skia.compile', 'width="100%"'))
                   )
             )));
 

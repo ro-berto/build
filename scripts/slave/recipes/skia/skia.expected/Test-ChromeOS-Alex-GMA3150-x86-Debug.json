@@ -55,7 +55,7 @@
       "ssh",
       "-p",
       "22",
-      "root@192.168.1.126",
+      "chrome-bot@192.168.1.123",
       "rm",
       "-rf",
       "/usr/local/skiabot/bin"
@@ -67,7 +67,7 @@
       "ssh",
       "-p",
       "22",
-      "root@192.168.1.126",
+      "chrome-bot@192.168.1.123",
       "mkdir",
       "-p",
       "/usr/local/skiabot/bin"
@@ -78,7 +78,7 @@
     "cmd": [
       "[BUILD]/scripts/slave/recipe_modules/skia/resources/scp_dir_contents.sh",
       "[SLAVE_BUILD]/skia/resources",
-      "root@192.168.1.126:/usr/local/skiabot/skia_resources"
+      "chrome-bot@192.168.1.123:/usr/local/skiabot/skia_resources"
     ],
     "name": "scp [SLAVE_BUILD]/skia/resources"
   },
@@ -87,7 +87,7 @@
       "ssh",
       "-p",
       "22",
-      "root@192.168.1.126",
+      "chrome-bot@192.168.1.123",
       "rm",
       "-rf",
       "/usr/local/skiabot/skia_gm_actual"
@@ -99,7 +99,7 @@
       "ssh",
       "-p",
       "22",
-      "root@192.168.1.126",
+      "chrome-bot@192.168.1.123",
       "mkdir",
       "-p",
       "/usr/local/skiabot/skia_gm_actual"
@@ -151,7 +151,7 @@
       "ssh",
       "-p",
       "22",
-      "root@192.168.1.126",
+      "chrome-bot@192.168.1.123",
       "rm",
       "-rf",
       "/usr/local/skiabot/skia_gm_expected"
@@ -163,7 +163,7 @@
       "ssh",
       "-p",
       "22",
-      "root@192.168.1.126",
+      "chrome-bot@192.168.1.123",
       "mkdir",
       "-p",
       "/usr/local/skiabot/skia_gm_expected"
@@ -176,7 +176,7 @@
       "-P",
       "22",
       "[SLAVE_BUILD]/skia/expectations/gm/ignored-tests.txt",
-      "root@192.168.1.126:/usr/local/skiabot/skia_gm_expected/ignored-tests.txt"
+      "chrome-bot@192.168.1.123:/usr/local/skiabot/skia_gm_expected/ignored-tests.txt"
     ],
     "name": "scp [SLAVE_BUILD]/skia/expectations/gm/ignored-tests.txt"
   },
@@ -185,7 +185,7 @@
       "ssh",
       "-p",
       "22",
-      "root@192.168.1.126",
+      "chrome-bot@192.168.1.123",
       "rm",
       "-rf",
       "/usr/local/skiabot/skia_gm_expected/Test-ChromeOS-Alex-GMA3150-x86-Debug"
@@ -197,7 +197,7 @@
       "ssh",
       "-p",
       "22",
-      "root@192.168.1.126",
+      "chrome-bot@192.168.1.123",
       "mkdir",
       "-p",
       "/usr/local/skiabot/skia_gm_expected/Test-ChromeOS-Alex-GMA3150-x86-Debug"
@@ -210,7 +210,7 @@
       "-P",
       "22",
       "[SLAVE_BUILD]/skia/expectations/gm/Test-ChromeOS-Alex-GMA3150-x86-Debug/expected-results.json",
-      "root@192.168.1.126:/usr/local/skiabot/skia_gm_expected/Test-ChromeOS-Alex-GMA3150-x86-Debug/expected-results.json"
+      "chrome-bot@192.168.1.123:/usr/local/skiabot/skia_gm_expected/Test-ChromeOS-Alex-GMA3150-x86-Debug/expected-results.json"
     ],
     "name": "scp [SLAVE_BUILD]/skia/expectations/gm/Test-ChromeOS-Alex-GMA3150-x86-Debug/expected-results.json"
   },
@@ -219,7 +219,7 @@
       "ssh",
       "-p",
       "22",
-      "root@192.168.1.126",
+      "chrome-bot@192.168.1.123",
       "test",
       "-e",
       "/usr/local/skiabot/skia_gm_expected/Test-ChromeOS-Alex-GMA3150-x86-Debug/expected-results.json"
@@ -231,7 +231,7 @@
       "ssh",
       "-p",
       "22",
-      "root@192.168.1.126",
+      "chrome-bot@192.168.1.123",
       "test",
       "-e",
       "/usr/local/skiabot/skia_gm_expected/ignored-tests.txt"
@@ -244,7 +244,7 @@
       "-P",
       "22",
       "[SLAVE_BUILD]/skia/out/config/chromeos-x86-alex/Debug/gm",
-      "root@192.168.1.126:/usr/local/skiabot/bin/gm"
+      "chrome-bot@192.168.1.123:/usr/local/skiabot/bin/gm"
     ],
     "name": "scp [SLAVE_BUILD]/skia/out/config/chromeos-x86-alex/Debug/gm"
   },
@@ -253,7 +253,7 @@
       "ssh",
       "-p",
       "22",
-      "root@192.168.1.126",
+      "chrome-bot@192.168.1.123",
       "/usr/local/skiabot/bin/gm",
       "--verbose",
       "--writeChecksumBasedFilenames",
@@ -279,7 +279,7 @@
   {
     "cmd": [
       "[BUILD]/scripts/slave/recipe_modules/skia/resources/scp_dir_contents.sh",
-      "root@192.168.1.126:/usr/local/skiabot/skia_gm_actual/Test-ChromeOS-Alex-GMA3150-x86-Debug",
+      "chrome-bot@192.168.1.123:/usr/local/skiabot/skia_gm_actual/Test-ChromeOS-Alex-GMA3150-x86-Debug",
       "[SLAVE_BUILD]/gm/actual/Test-ChromeOS-Alex-GMA3150-x86-Debug"
     ],
     "name": "scp /usr/local/skiabot/skia_gm_actual/Test-ChromeOS-Alex-GMA3150-x86-Debug"
@@ -311,7 +311,7 @@
       "-P",
       "22",
       "[SLAVE_BUILD]/skia/out/config/chromeos-x86-alex/Debug/dm",
-      "root@192.168.1.126:/usr/local/skiabot/bin/dm"
+      "chrome-bot@192.168.1.123:/usr/local/skiabot/bin/dm"
     ],
     "name": "scp [SLAVE_BUILD]/skia/out/config/chromeos-x86-alex/Debug/dm"
   },
@@ -320,7 +320,7 @@
       "ssh",
       "-p",
       "22",
-      "root@192.168.1.126",
+      "chrome-bot@192.168.1.123",
       "/usr/local/skiabot/bin/dm",
       "--verbose",
       "--resourcePath",
@@ -424,7 +424,7 @@
       "ssh",
       "-p",
       "22",
-      "root@192.168.1.126",
+      "chrome-bot@192.168.1.123",
       "rm",
       "-rf",
       "/usr/local/skiabot/skia_skp/skps"
@@ -436,7 +436,7 @@
       "ssh",
       "-p",
       "22",
-      "root@192.168.1.126",
+      "chrome-bot@192.168.1.123",
       "mkdir",
       "-p",
       "/usr/local/skiabot/skia_skp/skps"
@@ -447,7 +447,7 @@
     "cmd": [
       "[BUILD]/scripts/slave/recipe_modules/skia/resources/scp_dir_contents.sh",
       "[SLAVE_BUILD]/playback/skps",
-      "root@192.168.1.126:/usr/local/skiabot/skia_skp/skps"
+      "chrome-bot@192.168.1.123:/usr/local/skiabot/skia_skp/skps"
     ],
     "name": "scp [SLAVE_BUILD]/playback/skps"
   },
@@ -457,7 +457,7 @@
       "-P",
       "22",
       "[SLAVE_BUILD]/skia/out/config/chromeos-x86-alex/Debug/render_pdfs",
-      "root@192.168.1.126:/usr/local/skiabot/bin/render_pdfs"
+      "chrome-bot@192.168.1.123:/usr/local/skiabot/bin/render_pdfs"
     ],
     "name": "scp [SLAVE_BUILD]/skia/out/config/chromeos-x86-alex/Debug/render_pdfs"
   },
@@ -466,7 +466,7 @@
       "ssh",
       "-p",
       "22",
-      "root@192.168.1.126",
+      "chrome-bot@192.168.1.123",
       "/usr/local/skiabot/bin/render_pdfs",
       "--inputPaths",
       "/usr/local/skiabot/skia_skp/skps"
@@ -531,7 +531,7 @@
     "cmd": [
       "[BUILD]/scripts/slave/recipe_modules/skia/resources/scp_dir_contents.sh",
       "[SLAVE_BUILD]/skimage_in",
-      "root@192.168.1.126:/usr/local/skiabot/skia_skimage_in"
+      "chrome-bot@192.168.1.123:/usr/local/skiabot/skia_skimage_in"
     ],
     "name": "scp [SLAVE_BUILD]/skimage_in"
   },
@@ -580,7 +580,7 @@
       "ssh",
       "-p",
       "22",
-      "root@192.168.1.126",
+      "chrome-bot@192.168.1.123",
       "rm",
       "-rf",
       "/usr/local/skiabot/skia_skimage_out/images"
@@ -592,7 +592,7 @@
       "ssh",
       "-p",
       "22",
-      "root@192.168.1.126",
+      "chrome-bot@192.168.1.123",
       "mkdir",
       "-p",
       "/usr/local/skiabot/skia_skimage_out/images"
@@ -604,7 +604,7 @@
       "ssh",
       "-p",
       "22",
-      "root@192.168.1.126",
+      "chrome-bot@192.168.1.123",
       "rm",
       "-rf",
       "/usr/local/skiabot/skia_skimage_out/Test-ChromeOS-Alex-GMA3150-x86-Debug"
@@ -616,7 +616,7 @@
       "ssh",
       "-p",
       "22",
-      "root@192.168.1.126",
+      "chrome-bot@192.168.1.123",
       "mkdir",
       "-p",
       "/usr/local/skiabot/skia_skimage_out/Test-ChromeOS-Alex-GMA3150-x86-Debug"
@@ -628,7 +628,7 @@
       "ssh",
       "-p",
       "22",
-      "root@192.168.1.126",
+      "chrome-bot@192.168.1.123",
       "rm",
       "-rf",
       "/usr/local/skiabot/skia_skimage_expected/Test-ChromeOS-Alex-GMA3150-x86-Debug"
@@ -640,7 +640,7 @@
       "ssh",
       "-p",
       "22",
-      "root@192.168.1.126",
+      "chrome-bot@192.168.1.123",
       "mkdir",
       "-p",
       "/usr/local/skiabot/skia_skimage_expected/Test-ChromeOS-Alex-GMA3150-x86-Debug"
@@ -653,7 +653,7 @@
       "-P",
       "22",
       "[SLAVE_BUILD]/skia/expectations/skimage/Test-ChromeOS-Alex-GMA3150-x86-Debug/expected-results.json",
-      "root@192.168.1.126:/usr/local/skiabot/skia_skimage_expected/Test-ChromeOS-Alex-GMA3150-x86-Debug/expected-results.json"
+      "chrome-bot@192.168.1.123:/usr/local/skiabot/skia_skimage_expected/Test-ChromeOS-Alex-GMA3150-x86-Debug/expected-results.json"
     ],
     "name": "scp [SLAVE_BUILD]/skia/expectations/skimage/Test-ChromeOS-Alex-GMA3150-x86-Debug/expected-results.json"
   },
@@ -663,7 +663,7 @@
       "-P",
       "22",
       "[SLAVE_BUILD]/skia/out/config/chromeos-x86-alex/Debug/skimage",
-      "root@192.168.1.126:/usr/local/skiabot/bin/skimage"
+      "chrome-bot@192.168.1.123:/usr/local/skiabot/bin/skimage"
     ],
     "name": "scp [SLAVE_BUILD]/skia/out/config/chromeos-x86-alex/Debug/skimage"
   },
@@ -672,7 +672,7 @@
       "ssh",
       "-p",
       "22",
-      "root@192.168.1.126",
+      "chrome-bot@192.168.1.123",
       "/usr/local/skiabot/bin/skimage",
       "-r",
       "/usr/local/skiabot/skia_skimage_in",
@@ -692,7 +692,7 @@
   {
     "cmd": [
       "[BUILD]/scripts/slave/recipe_modules/skia/resources/scp_dir_contents.sh",
-      "root@192.168.1.126:/usr/local/skiabot/skia_skimage_out",
+      "chrome-bot@192.168.1.123:/usr/local/skiabot/skia_skimage_out",
       "[SLAVE_BUILD]/skimage_out"
     ],
     "name": "scp /usr/local/skiabot/skia_skimage_out"
@@ -767,7 +767,7 @@
       "-P",
       "22",
       "[SLAVE_BUILD]/skia/out/config/chromeos-x86-alex/Debug/nanobench",
-      "root@192.168.1.126:/usr/local/skiabot/bin/nanobench"
+      "chrome-bot@192.168.1.123:/usr/local/skiabot/bin/nanobench"
     ],
     "name": "scp [SLAVE_BUILD]/skia/out/config/chromeos-x86-alex/Debug/nanobench"
   },
@@ -776,7 +776,7 @@
       "ssh",
       "-p",
       "22",
-      "root@192.168.1.126",
+      "chrome-bot@192.168.1.123",
       "/usr/local/skiabot/bin/nanobench",
       "-i",
       "/usr/local/skiabot/skia_resources",
