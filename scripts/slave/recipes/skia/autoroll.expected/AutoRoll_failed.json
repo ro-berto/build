@@ -6,7 +6,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = None\nsolutions = [{'custom_deps': {'src/third_party/skia': 'https://skia.googlesource.com/skia.git'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]"
+      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]"
     ],
     "name": "gclient setup"
   },

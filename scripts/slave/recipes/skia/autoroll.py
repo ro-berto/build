@@ -63,10 +63,6 @@ def GenSteps(api):
   s = gclient_cfg.solutions.add()
   s.name = 'src'
   s.url = 'https://chromium.googlesource.com/chromium/src.git'
-  # This isn't strictly required, but sometimes chromium.googlesource.com/skia
-  # lags behind.  We'd rather be as up-to-date as possible in our rolls.
-  s.custom_deps['src/third_party/skia'] = (
-      'https://skia.googlesource.com/skia.git')
   gclient_cfg.got_revision_mapping['src/third_party/skia'] = 'got_revision'
 
   api.gclient.checkout(gclient_config=gclient_cfg)
