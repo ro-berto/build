@@ -68,7 +68,10 @@ class GClientSolution(object):
     self.managed = managed
 
     if not self.name:
-      self.name = svn_url.split('/')[-1]
+      last_comp = svn_url.split('/')[-1]
+      if last_comp.endswith('.git'):
+        last_comp = last_comp[:-len('.git')]
+      self.name = last_comp
 
   def GetSpec(self, tests=None):
     """Returns the specs for this solution.
