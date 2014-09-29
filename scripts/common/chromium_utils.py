@@ -633,11 +633,17 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
   output_file = '%s.zip' % archive_dir
   previous_file = '%s_old.zip' % archive_dir
   MoveFile(output_file, previous_file)
+
+  # If we have 7z, use that as it's much faster. See http://crbug.com/418702.
+  windows_zip_cmd = None
+  if os.path.exists('C:\\Program Files\\7-Zip\\7z.exe'):
+    windows_zip_cmd = ['C:\\Program Files\\7-Zip\\7z.exe', 'a', '-y']
+
   # On Windows we use the python zip module; on Linux and Mac, we use the zip
   # command as it will handle links and file bits (executable).  Which is much
   # easier then trying to do that with ZipInfo options.
   start_time = time.clock()
-  if IsWindows():
+  if IsWindows() and not windows_zip_cmd:
     print 'Creating %s' % output_file
 
     def _Addfiles(to_zip_file, dirname, files_to_add):
@@ -660,10 +666,13 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
     finally:
       zip_file.close()
   else:
-    assert IsMac() or IsLinux()
+    if IsMac() or IsLinux():
+      zip_cmd = ['zip', '-yr1']
+    else:
+      zip_cmd = windows_zip_cmd
     saved_dir = os.getcwd()
     os.chdir(os.path.dirname(archive_dir))
-    command = ['zip', '-yr1', output_file, os.path.basename(archive_dir)]
+    command = zip_cmd + [output_file, os.path.basename(archive_dir)]
     result = RunCommand(command)
     os.chdir(saved_dir)
     if result and raise_error:
