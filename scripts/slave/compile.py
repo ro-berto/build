@@ -116,17 +116,8 @@ def goma_setup(options, env):
   # Since goma server won't cache on subprograms mismatch like command mismatch,
   # we need to find out issues before makingGOMA_SEND_SUBPROGRAM_SPEC=true by
   # default.
-  # Linux chromium rel
-  if hostname in ['slave%d-c4' % i for i in range(270, 275)]:
-    env['GOMA_SEND_SUBPROGRAM_SPEC'] = 'true'
-  # Linux android
-  if hostname in ['slave%d-c4' % i for i in range(460, 465)]:
-    env['GOMA_SEND_SUBPROGRAM_SPEC'] = 'true'
-  # Mac rel
-  if hostname in ['vm%d-m4' % i for i in range(700, 705)]:
-    env['GOMA_SEND_SUBPROGRAM_SPEC'] = 'true'
-  # Win rel
-  if hostname in ['vm%d-m4' % i for i in range(120, 125)]:
+  # roughly 10% experiment on GOMA_SEND_SUBPROGRAM_SPEC.
+  if hash(hostname) % 100 <= 10:
     env['GOMA_SEND_SUBPROGRAM_SPEC'] = 'true'
 
   # HACK(shinyak, goma): Enable GLOBAL_FILEID_CACHE_PATTERNS only in
