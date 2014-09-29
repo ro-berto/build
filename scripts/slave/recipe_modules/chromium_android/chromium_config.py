@@ -75,12 +75,10 @@ def cronet_builder(c):
 @CONFIG_CTX()
 def android_l(c):
   gyp_defs = c.gyp_env.GYP_DEFINES
-  gyp_defs['android_sdk_build_tools_version'] = 'android-L'
-  gyp_defs['android_sdk_version'] = 'L'
+  gyp_defs['android_sdk_build_tools_version'] = 'android-5.0'
+  gyp_defs['android_sdk_version'] = '5.0'
   gyp_defs['android_sdk_root'] = Path(
     '[CHECKOUT]', 'third_party', 'android_tools_internal', 'sdk')
-  gyp_defs['use_unpublished_apis'] = 1
-  gyp_defs['use_unreleased_google_play_services_first_party']=1
 
 @CONFIG_CTX(includes=['main_builder', 'android_l'])
 def arm_l_builder(c):
