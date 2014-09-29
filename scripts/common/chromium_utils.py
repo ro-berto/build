@@ -636,6 +636,7 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
   # On Windows we use the python zip module; on Linux and Mac, we use the zip
   # command as it will handle links and file bits (executable).  Which is much
   # easier then trying to do that with ZipInfo options.
+  start_time = time.clock()
   if IsWindows():
     print 'Creating %s' % output_file
 
@@ -668,6 +669,8 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
     if result and raise_error:
       raise ExternalError('zip failed: %s => %s' %
                           (str(command), result))
+  end_time = time.clock()
+  print 'Took %f seconds to create zip.' % (end_time - start_time)
   return (archive_dir, output_file)
 
 
