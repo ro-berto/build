@@ -122,6 +122,7 @@ SPEC = {
       'tests': [
         steps.TelemetryUnitTests(),
         steps.TelemetryPerfUnitTests(),
+        steps.NaclIntegrationTest(),
       ],
       'parent_buildername': 'Linux Builder (dbg)',
       'testing': {
@@ -140,7 +141,6 @@ SPEC = {
         steps.generate_gtest,
       ],
       'tests': [
-        steps.NaclIntegrationTest(),
       ],
       'parent_buildername': 'Linux Builder (dbg)',
       'testing': {
