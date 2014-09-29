@@ -78,21 +78,6 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
-      'linux_chromium_browser_asan_rel': {
-        'add_telemetry_tests': False,
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'enable_swarming': True,
-        'exclude_compile_all': True,
-        'chromium_config': 'chromium_asan',
-        'compile_only': False,
-        'testing': {
-          'platform': 'linux',
-          'test_spec_file': 'chromium_memory_trybot.json',
-        },
-      },
       'linux_chromium_asan_rel': {
         'add_telemetry_tests': False,
         'chromium_config_kwargs': {
@@ -1445,7 +1430,7 @@ def GenTests(api):
   yield (
     api.test(
       'compile_because_of_analyze_with_filtered_compile_targets_exclude_all') +
-    props(buildername='linux_chromium_browser_asan_rel') +
+    props(buildername='linux_chromium_asan_rel') +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
         'compile_targets': ['base_unittests'],
