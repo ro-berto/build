@@ -588,6 +588,7 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
     raise_error is False, in which case the error will be ignored.
   """
 
+  start_time = time.clock()
   # Collect files into the archive directory.
   archive_dir = os.path.join(output_dir, archive_name)
   if remove_archive_directory and os.path.exists(archive_dir):
@@ -628,6 +629,8 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
     except PathNotFound:
       if raise_error:
         raise
+  end_time = time.clock()
+  print 'Took %f seconds to create archive directory.' % (end_time - start_time)
 
   # Pack the zip file.
   output_file = '%s.zip' % archive_dir
