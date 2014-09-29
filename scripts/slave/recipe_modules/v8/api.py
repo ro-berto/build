@@ -468,7 +468,7 @@ class V8Api(recipe_api.RecipeApi):
     lines = []
 
     # Add common description for multiple runs.
-    flaky_suffix = ' (flaky)' if flaky else ''
+    flaky_suffix = ' (flaky in a repeated run)' if flaky else ''
     lines.append('Test: %s%s' % (results[0]['name'], flaky_suffix))
     lines.append('Flags: %s' % " ".join(results[0]['flags']))
     lines.append('Command: %s' % results[0]['command'])
