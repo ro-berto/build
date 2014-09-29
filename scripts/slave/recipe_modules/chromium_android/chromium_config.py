@@ -70,7 +70,9 @@ def cronet_builder(c):
   c.gyp_env.GYP_DEFINES['enable_websockets'] = 0
   c.gyp_env.GYP_DEFINES['use_icu_alternatives_on_android'] = 1
   c.compile_py.clobber = True
-  c.compile_py.default_targets=['cronet_package', 'cronet_sample_test_apk']
+  c.compile_py.default_targets=['cronet_package',
+                                'cronet_sample_test_apk',
+                                'cronet_test_instrumentation_apk']
 
 @CONFIG_CTX()
 def android_l(c):

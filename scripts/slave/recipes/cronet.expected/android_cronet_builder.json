@@ -168,7 +168,8 @@
       "--clobber",
       "--",
       "cronet_package",
-      "cronet_sample_test_apk"
+      "cronet_sample_test_apk",
+      "cronet_test_instrumentation_apk"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"

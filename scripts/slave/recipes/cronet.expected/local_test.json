@@ -168,29 +168,13 @@
       "--clobber",
       "--",
       "cronet_package",
-      "cronet_sample_test_apk"
+      "cronet_sample_test_apk",
+      "cronet_test_instrumentation_apk"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "compile"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
-      "cp",
-      "-R",
-      "[SLAVE_BUILD]/src/out/Debug/cronet",
-      "gs://chromium-cronet/android/cronet-Debug-4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00"
-    ],
-    "name": "gsutil upload_cronet_package",
-    "~followup_annotations": [
-      "@@@STEP_LINK@Cronet package@https://storage.cloud.google.com/chromium-cronet/android/cronet-Debug-4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00@@@"
-    ]
   },
   {
     "cmd": [
@@ -246,6 +230,27 @@
       "CronetSampleTest"
     ],
     "name": "test CronetSample"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "--apk",
+      "CronetTest.apk"
+    ],
+    "name": "install CronetTest"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "instrumentation",
+      "--test-apk",
+      "CronetTestInstrumentation"
+    ],
+    "name": "test CronetTest"
   },
   {
     "cmd": [

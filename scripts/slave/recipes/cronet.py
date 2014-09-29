@@ -12,7 +12,7 @@ BUILDERS = {
   'local_test': {
     'recipe_config': 'main_builder',
     'run_tests': True,
-    'upload_package': True,
+    'upload_package': False,
     'kwargs': {
       'BUILD_CONFIG': 'Debug',
       'REPO_URL': 'https://chromium.googlesource.com/chromium/src.git',
