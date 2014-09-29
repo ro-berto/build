@@ -82,22 +82,6 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\compile.py",
-      "--target",
-      "Release",
-      "--src-dir",
-      "[SLAVE_BUILD]\\src",
-      "--build-tool",
-      "ninja",
-      "--",
-      "chrome"
-    ],
-    "name": "compile"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "\nimport sys\nfrom common import chromium_utils\n\nchromium_utils.RemoveFilesWildcards(sys.argv[1], root=sys.argv[2])\n",
       "*.pg[cd]",
       "[SLAVE_BUILD]\\src\\out\\Release"
@@ -111,6 +95,22 @@
       "@@@STEP_LOG_LINE@python.inline@chromium_utils.RemoveFilesWildcards(sys.argv[1], root=sys.argv[2])@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\compile.py",
+      "--target",
+      "Release",
+      "--src-dir",
+      "[SLAVE_BUILD]\\src",
+      "--build-tool",
+      "ninja",
+      "--",
+      "chrome"
+    ],
+    "name": "compile"
   },
   {
     "cmd": [

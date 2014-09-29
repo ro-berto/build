@@ -57,12 +57,13 @@ def GenSteps(api):
   api.chromium.taskkill()
   api.bot_update.ensure_checkout()
 
-  # First step: compilation of the instrumented build.
   api.chromium.runhooks()
-  api.chromium.compile()
 
   # Remove the profile files from the previous builds.
   api.path.rmwildcard('*.pg[cd]', str(api.chromium.output_dir))
+
+  # First step: compilation of the instrumented build.
+  api.chromium.compile()
 
   # Second step: profiling of the instrumented build.
   for benchmark in _BENCHMARKS_TO_RUN:
