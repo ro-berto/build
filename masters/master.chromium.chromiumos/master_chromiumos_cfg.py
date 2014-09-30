@@ -22,7 +22,6 @@ def Update(config, active_master, c):
       ]),
       Triggerable(name='chromiumos_rel_trigger', builderNames=[
           'Linux ChromiumOS Tests (1)',
-          'Linux ChromiumOS Tests (2)',
       ]),
       Triggerable(name='chromiumos_rel_ozone_trigger', builderNames=[
           'Linux ChromiumOS Ozone Tests (1)',
@@ -30,8 +29,6 @@ def Update(config, active_master, c):
       ]),
       Triggerable(name='chromiumos_dbg_trigger', builderNames=[
           'Linux ChromiumOS Tests (dbg)(1)',
-          'Linux ChromiumOS Tests (dbg)(2)',
-          'Linux ChromiumOS Tests (dbg)(3)',
       ]),
   ])
   c['builders'].extend([
@@ -48,7 +45,6 @@ def Update(config, active_master, c):
           # Linux ChromiumOS
            'triggers': ['chromiumos_rel_trigger']},
           {'buildername': 'Linux ChromiumOS Tests (1)'},
-          {'buildername': 'Linux ChromiumOS Tests (2)'},
 
           # Linux ChromiumOS Ozone
           {'buildername': 'Linux ChromiumOS Ozone Builder',
@@ -60,7 +56,5 @@ def Update(config, active_master, c):
           {'buildername': 'Linux ChromiumOS Builder (dbg)',
            'triggers': ['chromiumos_dbg_trigger']},
           {'buildername': 'Linux ChromiumOS Tests (dbg)(1)'},
-          {'buildername': 'Linux ChromiumOS Tests (dbg)(2)'},
-          {'buildername': 'Linux ChromiumOS Tests (dbg)(3)'},
       ]
   ])
