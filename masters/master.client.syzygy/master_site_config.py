@@ -8,7 +8,7 @@ from config_bootstrap import Master
 
 class Syzygy(Master.Master3):
   project_name = 'Syzygy'
-  project_url = 'http://sawbuck.googlecode.com'
+  project_url = 'http://www.github.com/google/syzygy'
   master_port = 8042
   slave_port = 8142
   master_port_alt = 8242

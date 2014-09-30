@@ -2,53 +2,28 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from buildbot.changes.filter import ChangeFilter
-from buildbot.schedulers.basic import SingleBranchScheduler
-
-from master.factory import syzygy_factory
+from buildbot.scheduler import Triggerable
+from master.factory import annotator_factory
 
 
-def win():
-  return syzygy_factory.SyzygyFactory('src/build',
-                                      target_platform='win32')
+AF = annotator_factory.AnnotatorFactory()
 
 
-def _BinariesFilter(change):
-  """A change filter function that disregards all changes that don't
-  touch src/syzygy/binaries/*.
-
-  Args:
-      change: a buildbot Change object.
-  """
-  if change.branch != 'trunk':
-    return False
-  for path in change.files:
-    if path.startswith('syzygy/binaries/'):
-      return True
-  return False
-
-
-# Binaries scheduler for Syzygy.
-binaries_scheduler = SingleBranchScheduler('syzygy_binaries',
-                                           treeStableTimer=0,
-                                           change_filter=ChangeFilter(
-                                               filter_fn=_BinariesFilter),
-                                           builderNames=['Syzygy Smoke Test'])
+# Trigger that is fired when an official build passes.
+smoke_test_trigger = Triggerable(
+    name='smoke_test_trigger', builderNames=['Syzygy Official'])
 
 
 # Windows binaries smoke-test builder for Syzygy.
-smoke_test_factory = win().SyzygySmokeTestFactory()
-
-
 smoke_test_builder = {
   'name': 'Syzygy Smoke Test',
-  'factory': smoke_test_factory,
-  'schedulers': 'syzygy_binaries',
+  'factory': AF.BaseFactory(recipe='syzygy/smoke_test',
+                            triggers=['smoke_test_trigger']),
   'auto_reboot': False,
   'category': 'official',
 }
 
 
 def Update(config, active_master, c):
-  c['schedulers'].append(binaries_scheduler)
+  c['schedulers'].append(smoke_test_trigger)
   c['builders'].append(smoke_test_builder)

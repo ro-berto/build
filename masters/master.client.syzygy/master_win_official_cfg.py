@@ -4,13 +4,10 @@
 
 from buildbot.changes.filter import ChangeFilter
 from buildbot.schedulers.basic import SingleBranchScheduler
+from master.factory import annotator_factory
 
-from master.factory import syzygy_factory
 
-
-def win():
-  return syzygy_factory.SyzygyFactory('src/build',
-                                      target_platform='win32')
+AF = annotator_factory.AnnotatorFactory()
 
 
 def _VersionFileFilter(change):
@@ -20,25 +17,20 @@ def _VersionFileFilter(change):
   Args:
       change: a buildbot Change object.
   """
-  return change.branch == 'trunk' and 'syzygy/VERSION' in change.files
+  return change.branch == 'master' and 'syzygy/VERSION' in change.files
 
-#
+
 # Official build scheduler for Syzygy
-#
 official_scheduler = SingleBranchScheduler('syzygy_version',
                                            treeStableTimer=0,
                                            change_filter=ChangeFilter(
                                                filter_fn=_VersionFileFilter),
                                            builderNames=['Syzygy Official'])
 
-#
 # Windows official Release builder
-#
-official_factory = win().SyzygyFactory(official_release=True)
-
 official_builder = {
     'name': 'Syzygy Official',
-    'factory': official_factory,
+    'factory': AF.BaseFactory(recipe='syzygy/continuous'),
     'schedulers': 'syzygy_version',
     'auto_reboot': False,
     'category': 'official',
