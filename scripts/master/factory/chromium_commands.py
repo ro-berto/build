@@ -15,7 +15,6 @@ from buildbot.steps import shell
 from buildbot.steps import trigger
 from buildbot.steps.transfer import FileUpload
 
-from common import chromium_utils
 import config
 from master import chromium_step
 from master.factory import commands
@@ -95,13 +94,6 @@ class ChromiumCommands(commands.FactoryCommands):
         'buildbot_nacl_integration.py')
     # chrome_staging directory, relative to the build directory.
     self._staging_dir = self.PathJoin('..', 'chrome_staging')
-
-    # The _update_scripts_command will be run in the _update_scripts_dir to
-    # udpate the slave's own script checkout.
-    self._update_scripts_dir = '..'
-    self._update_scripts_command = [
-        chromium_utils.GetGClientCommand(self._target_platform),
-        'sync', '--verbose']
 
     self._telemetry_tool = self.PathJoin(self._script_dir, 'telemetry.py')
     self._telemetry_unit_tests = J('src', 'tools', 'telemetry', 'run_tests')

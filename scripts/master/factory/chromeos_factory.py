@@ -122,7 +122,7 @@ class ChromiteFactory(object):
     * clean checkout of chromite
     """
     if self.slave_manager:
-      build_slave_sync = ['gclient', 'sync',
+      build_slave_sync = ['gclient', 'sync', '--verbose', '--force',
                           '--delete_unversioned_trees']
       self.f_cbuild.addStep(shell.ShellCommand,
                             command=build_slave_sync,

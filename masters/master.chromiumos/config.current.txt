@@ -12,7 +12,13 @@ config = {
           (
             <class buildbot.steps.shell.ShellCommand>,
             {
-              'command': ['gclient', 'sync', '--delete_unversioned_trees'],
+              'command': [
+                'gclient',
+                'sync',
+                '--verbose',
+                '--force',
+                '--delete_unversioned_trees',
+              ],
               'description': 'Sync buildbot slave files',
               'name': 'update_scripts',
               'timeout': 300,
@@ -65,7 +71,13 @@ config = {
           (
             <class buildbot.steps.shell.ShellCommand>,
             {
-              'command': ['gclient', 'sync', '--delete_unversioned_trees'],
+              'command': [
+                'gclient',
+                'sync',
+                '--verbose',
+                '--force',
+                '--delete_unversioned_trees',
+              ],
               'description': 'Sync buildbot slave files',
               'name': 'update_scripts',
               'timeout': 300,
@@ -118,7 +130,13 @@ config = {
           (
             <class buildbot.steps.shell.ShellCommand>,
             {
-              'command': ['gclient', 'sync', '--delete_unversioned_trees'],
+              'command': [
+                'gclient',
+                'sync',
+                '--verbose',
+                '--force',
+                '--delete_unversioned_trees',
+              ],
               'description': 'Sync buildbot slave files',
               'name': 'update_scripts',
               'timeout': 300,
@@ -171,7 +189,13 @@ config = {
           (
             <class buildbot.steps.shell.ShellCommand>,
             {
-              'command': ['gclient', 'sync', '--delete_unversioned_trees'],
+              'command': [
+                'gclient',
+                'sync',
+                '--verbose',
+                '--force',
+                '--delete_unversioned_trees',
+              ],
               'description': 'Sync buildbot slave files',
               'name': 'update_scripts',
               'timeout': 300,
@@ -224,7 +248,13 @@ config = {
           (
             <class buildbot.steps.shell.ShellCommand>,
             {
-              'command': ['gclient', 'sync', '--delete_unversioned_trees'],
+              'command': [
+                'gclient',
+                'sync',
+                '--verbose',
+                '--force',
+                '--delete_unversioned_trees',
+              ],
               'description': 'Sync buildbot slave files',
               'name': 'update_scripts',
               'timeout': 300,
@@ -277,7 +307,13 @@ config = {
           (
             <class buildbot.steps.shell.ShellCommand>,
             {
-              'command': ['gclient', 'sync', '--delete_unversioned_trees'],
+              'command': [
+                'gclient',
+                'sync',
+                '--verbose',
+                '--force',
+                '--delete_unversioned_trees',
+              ],
               'description': 'Sync buildbot slave files',
               'name': 'update_scripts',
               'timeout': 300,
@@ -330,7 +366,13 @@ config = {
           (
             <class buildbot.steps.shell.ShellCommand>,
             {
-              'command': ['gclient', 'sync', '--delete_unversioned_trees'],
+              'command': [
+                'gclient',
+                'sync',
+                '--verbose',
+                '--force',
+                '--delete_unversioned_trees',
+              ],
               'description': 'Sync buildbot slave files',
               'name': 'update_scripts',
               'timeout': 300,
@@ -383,7 +425,13 @@ config = {
           (
             <class buildbot.steps.shell.ShellCommand>,
             {
-              'command': ['gclient', 'sync', '--delete_unversioned_trees'],
+              'command': [
+                'gclient',
+                'sync',
+                '--verbose',
+                '--force',
+                '--delete_unversioned_trees',
+              ],
               'description': 'Sync buildbot slave files',
               'name': 'update_scripts',
               'timeout': 300,
@@ -436,7 +484,13 @@ config = {
           (
             <class buildbot.steps.shell.ShellCommand>,
             {
-              'command': ['gclient', 'sync', '--delete_unversioned_trees'],
+              'command': [
+                'gclient',
+                'sync',
+                '--verbose',
+                '--force',
+                '--delete_unversioned_trees',
+              ],
               'description': 'Sync buildbot slave files',
               'name': 'update_scripts',
               'timeout': 300,
@@ -489,7 +543,13 @@ config = {
           (
             <class buildbot.steps.shell.ShellCommand>,
             {
-              'command': ['gclient', 'sync', '--delete_unversioned_trees'],
+              'command': [
+                'gclient',
+                'sync',
+                '--verbose',
+                '--force',
+                '--delete_unversioned_trees',
+              ],
               'description': 'Sync buildbot slave files',
               'name': 'update_scripts',
               'timeout': 300,
@@ -542,7 +602,13 @@ config = {
           (
             <class buildbot.steps.shell.ShellCommand>,
             {
-              'command': ['gclient', 'sync', '--delete_unversioned_trees'],
+              'command': [
+                'gclient',
+                'sync',
+                '--verbose',
+                '--force',
+                '--delete_unversioned_trees',
+              ],
               'description': 'Sync buildbot slave files',
               'name': 'update_scripts',
               'timeout': 300,
@@ -595,7 +661,13 @@ config = {
           (
             <class buildbot.steps.shell.ShellCommand>,
             {
-              'command': ['gclient', 'sync', '--delete_unversioned_trees'],
+              'command': [
+                'gclient',
+                'sync',
+                '--verbose',
+                '--force',
+                '--delete_unversioned_trees',
+              ],
               'description': 'Sync buildbot slave files',
               'name': 'update_scripts',
               'timeout': 300,
@@ -648,7 +720,13 @@ config = {
           (
             <class buildbot.steps.shell.ShellCommand>,
             {
-              'command': ['gclient', 'sync', '--delete_unversioned_trees'],
+              'command': [
+                'gclient',
+                'sync',
+                '--verbose',
+                '--force',
+                '--delete_unversioned_trees',
+              ],
               'description': 'Sync buildbot slave files',
               'name': 'update_scripts',
               'timeout': 300,
@@ -701,7 +779,13 @@ config = {
           (
             <class buildbot.steps.shell.ShellCommand>,
             {
-              'command': ['gclient', 'sync', '--delete_unversioned_trees'],
+              'command': [
+                'gclient',
+                'sync',
+                '--verbose',
+                '--force',
+                '--delete_unversioned_trees',
+              ],
               'description': 'Sync buildbot slave files',
               'name': 'update_scripts',
               'timeout': 300,
@@ -754,7 +838,13 @@ config = {
           (
             <class buildbot.steps.shell.ShellCommand>,
             {
-              'command': ['gclient', 'sync', '--delete_unversioned_trees'],
+              'command': [
+                'gclient',
+                'sync',
+                '--verbose',
+                '--force',
+                '--delete_unversioned_trees',
+              ],
               'description': 'Sync buildbot slave files',
               'name': 'update_scripts',
               'timeout': 300,
@@ -821,7 +911,13 @@ config = {
           (
             <class buildbot.steps.shell.ShellCommand>,
             {
-              'command': ['gclient', 'sync', '--delete_unversioned_trees'],
+              'command': [
+                'gclient',
+                'sync',
+                '--verbose',
+                '--force',
+                '--delete_unversioned_trees',
+              ],
               'description': 'Sync buildbot slave files',
               'name': 'update_scripts',
               'timeout': 300,
@@ -874,7 +970,13 @@ config = {
           (
             <class buildbot.steps.shell.ShellCommand>,
             {
-              'command': ['gclient', 'sync', '--delete_unversioned_trees'],
+              'command': [
+                'gclient',
+                'sync',
+                '--verbose',
+                '--force',
+                '--delete_unversioned_trees',
+              ],
               'description': 'Sync buildbot slave files',
               'name': 'update_scripts',
               'timeout': 300,
