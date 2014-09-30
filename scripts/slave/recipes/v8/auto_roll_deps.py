@@ -20,8 +20,9 @@ def GenSteps(api):
 
   step_result = api.python(
       'check roll status',
-      api.path['build'].join('scripts', 'tools', 'pycurl.py'),
-      ['https://v8-roll.appspot.com/status'],
+      api.path['build'].join('scripts', 'tools', 'runit.py'),
+      [api.path['build'].join('scripts', 'tools', 'pycurl.py'),
+       'https://v8-roll.appspot.com/status'],
       stdout=api.raw_io.output(),
       step_test_data=lambda: api.raw_io.test_api.stream_output(
           '1', stream='stdout')

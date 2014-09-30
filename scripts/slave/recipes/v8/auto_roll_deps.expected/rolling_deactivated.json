@@ -74,6 +74,7 @@
     "cmd": [
       "python",
       "-u",
+      "[BUILD]/scripts/tools/runit.py",
       "[BUILD]/scripts/tools/pycurl.py",
       "https://v8-roll.appspot.com/status"
     ],
