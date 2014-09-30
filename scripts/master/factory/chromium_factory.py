@@ -999,6 +999,13 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # Add all the tests.
     self._AddTests(chromium_cmd_obj, tests, mode, factory_properties)
 
+    # Add late cf archive build
+    # The late_cf_archive_build is needed for tools like Dr.Memory to
+    # collect some information from the tests and pack them into the archive.
+    if factory_properties.get('late_cf_archive_build'):
+      chromium_cmd_obj.AddCFArchiveBuild(
+          factory_properties=factory_properties)
+
     if factory_properties.get('process_dumps'):
       chromium_cmd_obj.AddProcessDumps()
 

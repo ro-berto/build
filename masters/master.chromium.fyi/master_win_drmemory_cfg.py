@@ -40,15 +40,17 @@ F('win_lkgr_drmemory', win().ChromiumFactory(
     options=['--build-tool=ninja', '--', 'chromium_builder_lkgr_drmemory_win'],
     compile_timeout=7200,
     tests=['drmemory_full_webkit'],
-    factory_properties={'package_pdb_files': True,
-                        'gclient_env': {
-                          'GYP_DEFINES': ('build_for_tool=drmemory '
-                                          'component=shared_library '),
-                          'GYP_GENERATORS': 'ninja', },
-                        'cf_archive_build': ActiveMaster.is_production_host,
-                        'cf_archive_name': 'drmemory',
-                        'gs_acl': 'public-read',
-                        'gs_bucket': 'gs://chromium-browser-drmemory',
+    factory_properties={
+      'package_pdb_files': True,
+      'gclient_env': {
+        'GYP_DEFINES': ('build_for_tool=drmemory '
+                        'component=shared_library '),
+        'GYP_GENERATORS': 'ninja',
+      },
+      'late_cf_archive_build': ActiveMaster.is_production_host,
+      'cf_archive_name': 'drmemory',
+      'gs_acl': 'public-read',
+      'gs_bucket': 'gs://chromium-browser-drmemory',
     }))
 
 def Update(update_config, active_master, c):
