@@ -706,11 +706,13 @@ class RunProcess:
         self.timer = None
         msg = "command timed out: %d seconds without output" % self.timeout
         self.kill(msg)
+        self.failed(RuntimeError(msg))
 
     def doMaxTimeout(self):
         self.maxTimer = None
         msg = "command timed out: %d seconds elapsed" % self.maxTime
         self.kill(msg)
+        self.failed(RuntimeError(msg))
 
     def kill(self, msg):
         # This may be called by the timeout, or when the user has decided to
