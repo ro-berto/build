@@ -65,6 +65,10 @@ RECIPE_CONFIGS = {
     'chromium_config': 'chromium_ios_simulator',
     'gclient_config': 'ios',
   },
+  'chromium_msan': {
+    'chromium_config': 'chromium_msan',
+    'gclient_config': 'chromium',
+  },
   'chromium_no_goma': {
     'chromium_config': 'chromium_no_goma',
     'gclient_config': 'chromium',

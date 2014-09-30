@@ -340,6 +340,17 @@ def asan(c):
 def no_lsan(c):
   c.gyp_env.GYP_DEFINES['lsan'] = 0
 
+@config_ctx(deps=['compiler'])
+def msan(c):
+  if 'clang' not in c.compile_py.compiler:  # pragma: no cover
+    raise BadConf('msan requires clang')
+  c.gyp_env.GYP_DEFINES['msan'] = 1
+
+@config_ctx()
+def instrumented_libraries(c):
+  c.gyp_env.GYP_DEFINES['use_instrumented_libraries'] = 1
+  c.gyp_env.GYP_DEFINES['instrumented_libraries_jobs'] = 10
+
 @config_ctx(group='memory_tool')
 def memcheck(c):
   _memory_tool(c, 'memcheck')
@@ -404,6 +415,10 @@ def chromium(c):
 def chromium_asan(c):
   c.runtests.test_args.append('--test-launcher-batch-limit=1')
   c.runtests.test_args.append('--test-launcher-print-test-stdio=always')
+
+@config_ctx(includes=['ninja', 'clang', 'goma', 'msan'])
+def chromium_msan(c):
+  c.compile_py.default_targets = ['All', 'chromium_builder_tests']
 
 @config_ctx(includes=['ninja', 'clang', 'goma', 'syzyasan'])
 def chromium_syzyasan(c):

@@ -800,7 +800,17 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
-    },
+      'Linux MSan': {
+        'recipe_config': 'webrtc_clang',
+        'chromium_apply_config': ['msan', 'instrumented_libraries'],
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
+      },
+     },
   },
   'tryserver.webrtc': {
     'builders': {
