@@ -204,13 +204,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"dummy_target_1/Windows-6.1/[dummy hash for dummy_target_1]/TestBuilder/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"010000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/010000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm-dev.appspot.com/user/task/010000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm-dev.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -247,13 +247,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"dummy_target_2/Windows-6.1/[dummy hash for dummy_target_2]/TestBuilder/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"010000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/010000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm-dev.appspot.com/user/task/010000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm-dev.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -272,11 +272,11 @@
       "collect",
       "--swarming",
       "https://chromium-swarm-dev.appspot.com",
-      "--shards",
-      "1",
       "--decorate",
       "--print-status-updates",
       "--verbose",
+      "--shards",
+      "1",
       "dummy_target_1/Windows-6.1/[dummy hash for dummy_target_1]/TestBuilder/571"
     ],
     "name": "dummy_target_1"
@@ -297,11 +297,11 @@
       "collect",
       "--swarming",
       "https://chromium-swarm-dev.appspot.com",
-      "--shards",
-      "1",
       "--decorate",
       "--print-status-updates",
       "--verbose",
+      "--shards",
+      "1",
       "dummy_target_2/Windows-6.1/[dummy hash for dummy_target_2]/TestBuilder/571"
     ],
     "name": "dummy_target_2"

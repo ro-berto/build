@@ -171,6 +171,7 @@ class SwarmingApi(recipe_api.RecipeApi):
           this value is either 1 or based on the title.
       extra_args: list of command line arguments to pass to isolated tasks.
     """
+    # TODO(maruel): Get rid of make_unique.
     return SwarmingTask(
         title=title,
         isolated_hash=isolated_hash,
@@ -215,10 +216,10 @@ class SwarmingApi(recipe_api.RecipeApi):
         self._gtest_collect_step(test_launcher_summary_output, *args, **kwargs))
     return task
 
-  def check_client_version(self):
+  def check_client_version(self, step_test_data=None):
     """Yields steps to verify compatibility with swarming_client version."""
     return self.m.swarming_client.ensure_script_version(
-        'swarming.py', MINIMAL_SWARMING_VERSION)
+        'swarming.py', MINIMAL_SWARMING_VERSION, step_test_data)
 
   def trigger(self, tasks, **kwargs):
     """Asynchronously launches a set of tasks on Swarming.
@@ -230,10 +231,8 @@ class SwarmingApi(recipe_api.RecipeApi):
       tasks: an enumerable of SwarmingTask instances.
       kwargs: passed to recipe step constructor as-is
     """
-    # TODO(vadimsh): Trigger multiple tasks as a single step.
     assert all(isinstance(t, SwarmingTask) for t in tasks)
     results = []
-    #TODO(martiniss) convert loop
     for task in tasks:
       assert task.task_name not in self._pending_tasks, (
           'Triggered same task twice: %s' % task.task_name)
@@ -281,6 +280,12 @@ class SwarmingApi(recipe_api.RecipeApi):
     return results
 
   def collect(self, tasks, **kwargs):
+    """Returns a list of steps to collect results for each test executed thru
+    Swarming.
+
+    Each test may have been sharded in multiple task, each running a subset of
+    the test.
+    """
     return list(self.collect_each(tasks, **kwargs))
 
   def collect_each(self, tasks, **kwargs):
@@ -298,7 +303,6 @@ class SwarmingApi(recipe_api.RecipeApi):
     # TODO(vadimsh): Update |tasks| in-place with results of task execution.
     # TODO(vadimsh): Add timeouts.
     assert all(isinstance(t, SwarmingTask) for t in tasks)
-    #TODO(martiniss) convert loop
     for task in tasks:
       assert task.task_name in self._pending_tasks, (
           'Trying to collect a task that was not triggered: %s' %
@@ -330,7 +334,8 @@ class SwarmingApi(recipe_api.RecipeApi):
         name=self._get_step_name('', task),
         script=self.m.swarming_client.path.join('swarming.py'),
         args=args,
-        step_test_data=functools.partial(self._gen_collect_step_data, task),
+        step_test_data=functools.partial(
+            self._gen_collect_step_test_data, task),
         **kwargs)
 
   def _gtest_collect_step(self, merged_test_output, task, **kwargs):
@@ -393,13 +398,16 @@ class SwarmingApi(recipe_api.RecipeApi):
     args = [
       'collect',
       '--swarming', self.swarming_server,
-      '--shards', str(task.shards),
       '--decorate',
       '--print-status-updates',
     ]
     if self.verbose:
       args.append('--verbose')
-    args.append(task.task_name)
+    if self.m.swarming_client.get_script_version('swarming.py') < (0, 5):
+      args.extend(('--shards', str(task.shards)))
+      args.append(task.task_name)
+    else:
+      args.extend(task.task_ids)
     return args
 
   def _gen_trigger_step_data(self, task):
@@ -417,32 +425,44 @@ class SwarmingApi(recipe_api.RecipeApi):
       'base_task_name': task.task_name,
       'tasks': {
         '%s%s' % (task.task_name, suffix): {
-          'task_id': '01%02d00' % i,
+          'task_id': '1%02d00' % i,
           'shard_index': i,
-          'view_url': '%s/user/task/01%02d00' % (self.swarming_server, i),
+          'view_url': '%s/user/task/1%02d00' % (self.swarming_server, i),
         } for i, suffix in enumerate(subtasks)
       },
     })
 
-  def _gen_collect_step_data(self, task):
+  def _gen_collect_step_test_data(self, task):
     """Generates an expected value of --task-summary-json in 'collect' step.
 
     Used when running recipes to generate test expectations.
     """
-    if task.shards == 1:
-      subtasks = ['']
-    else:
-      subtasks = [':%d:%d' % (task.shards, i) for i in range(task.shards)]
     return self.m.json.test_api.output({
-      'task_name': task.task_name,
       'shards': [
         {
+          'abandoned_ts': None,
+          'bot_id': 'vm30',
+          'completed_ts': '2014-09-25 01:42:00',
+          'created_ts': '2014-09-25 01:41:00',
+          'durations': [5.7, 31.5],
+          'exit_codes': [0, 0],
+          'failure': False,
+          'id': '148aa78d7aa%02d00' % i,
+          'internal_failure': False,
           'isolated_out': {
-              'view_url': 'blah',
+            'view_url': 'blah',
           },
-          'machine_id': 'fakemachine',
-          'machine_tag': 'fakemachinetag',
-        } for i, suffix in enumerate(subtasks)
+          'modified_ts': '2014-09-25 01:42:00',
+          'name': 'heartbeat-canary-2014-09-25_01:41:55-os=Windows',
+          'outputs': [
+            'Heart beat succeeded on win32.\n',
+            'Foo',
+          ],
+          'started_ts': '2014-09-25 01:42:11',
+          'state': 112,
+          'try_number': 1,
+          'user': 'unknown',
+        } for i in xrange(task.shards)
       ],
     })
 
@@ -524,6 +544,12 @@ class SwarmingTask(object):
     return '%s/%s/%s/%s/%d%s' % (
         self.title, self.dimensions['os'], self.isolated_hash,
         self.builder, self.build_number, self.suffix)
+
+  @property
+  def task_ids(self):
+    """List of task_id for each shard."""
+    items = (self._trigger_output or {}).get('tasks', {}).itervalues()
+    return filter(None, (i.get('task_id') for i in items))
 
   def get_shard_view_url(self, index):
     """Returns URL of HTML page with shard details or None if not available.

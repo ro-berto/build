@@ -5,6 +5,7 @@
 DEPS = [
   'isolate',
   'path',
+  'properties',
   'python',
   'raw_io',
   'step',
@@ -18,7 +19,8 @@ def GenSteps(api):
   api.swarming_client.checkout('master')
 
   # Ensure swarming_client version is fresh enough.
-  api.swarming.check_client_version()
+  api.swarming.check_client_version(
+      step_test_data=api.properties['simulated_version'])
 
   # Configure isolate & swarming modules (this is optional).
   api.isolate.isolate_server = 'https://isolateserver-dev.appspot.com'
@@ -77,7 +79,7 @@ def GenSteps(api):
 
 def GenTests(api):
   yield (
-      api.test('basic') +
+      api.test('basic_0.4') +
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
@@ -86,4 +88,18 @@ def GenTests(api):
           stdout=api.raw_io.output('hash_for_linux hello_world.isolated')) +
       api.step_data(
           'archive for mac',
-          stdout=api.raw_io.output('hash_for_mac hello_world.isolated')))
+          stdout=api.raw_io.output('hash_for_mac hello_world.isolated')) +
+      api.properties(simulated_version=(0, 4, 10)))
+
+  yield (
+      api.test('basic_0.5') +
+      api.step_data(
+          'archive for win',
+          stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
+      api.step_data(
+          'archive for linux',
+          stdout=api.raw_io.output('hash_for_linux hello_world.isolated')) +
+      api.step_data(
+          'archive for mac',
+          stdout=api.raw_io.output('hash_for_mac hello_world.isolated')) +
+      api.properties(simulated_version=(0, 5)))

@@ -105,12 +105,13 @@ class SwarmingClientApi(recipe_api.RecipeApi):
     assert script in self._script_version, script
     return self._script_version[script]
 
-  def ensure_script_version(self, script, min_version):
+  def ensure_script_version(self, script, min_version, step_test_data=None):
     """Yields steps to ensure a script version is not older than |min_version|.
 
     Will abort recipe execution if it is.
     """
-    step_result = self.query_script_version(script, step_test_data=min_version)
+    step_result = self.query_script_version(
+        script, step_test_data=step_test_data or min_version)
     version = self.get_script_version(script)
     if version < min_version:
       expecting = '.'.join(map(str, min_version))

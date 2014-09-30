@@ -23,7 +23,7 @@ def GenSteps(api):
   assert api.swarming_client.get_script_version('swarming.py') >= (0, 4, 4)
 
   # Coverage for 'fail' path of ensure_script_version.
-  api.swarming_client.ensure_script_version('swarming.py', (0, 5, 0))
+  api.swarming_client.ensure_script_version('swarming.py', (20, 0, 0))
 
 def GenTests(api):
   yield (
