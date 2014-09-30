@@ -10,6 +10,7 @@ from twisted.internet import defer
 from twisted.python import log
 
 from buildbot.schedulers.base import BaseScheduler
+from buildbot.status import results
 from buildbot.status.base import StatusReceiverMultiService
 from buildbot.status.builder import Results
 
@@ -141,7 +142,7 @@ class TryJobGerritScheduler(BaseScheduler):
 class TryJobGerritStatus(StatusReceiverMultiService):
   """Posts results of a try job back to a Gerrit change."""
 
-  def __init__(self, gerrit_host, review_factory=None):
+  def __init__(self, gerrit_host, review_factory=None, cq_builders=None):
     """Creates a TryJobGerritStatus.
 
     Args:
@@ -149,11 +150,14 @@ class TryJobGerritStatus(StatusReceiverMultiService):
       review_factory: a function (self, builder_name, build, result) => review,
         where review is a dict described in Gerrit docs:
         https://gerrit-review.googlesource.com/Documentation/rest-api-changes.html#review-input
+      cq_builders: a list of buildernames, if specified, patchset will be
+          submitted if all builders have completed successfully.
     """
     StatusReceiverMultiService.__init__(self)
     self.review_factory = review_factory or TryJobGerritStatus.createReview
     self.agent = GerritAgent(gerrit_host)
     self.status = None
+    self.cq_builders = cq_builders
 
   def createReview(self, builder_name, build, result):
     review = {}
@@ -187,6 +191,54 @@ class TryJobGerritStatus(StatusReceiverMultiService):
         path = '/changes/%s/revisions/%s/review' % (change_id, revision)
         return self.agent.request('POST', path, body=review)
 
+  def _add_verified_label(self, change_id, revision, patchset_id):
+    message = 'All tryjobs have passed for patchset %s' % patchset_id
+    path = '/changes/%s/revisions/%s/review' % (change_id, revision)
+    body = {'message': message, 'labels': {'Verified': '+1'}}
+    d = self.agent.request('POST', path, body=body)
+    def _add_verified_label_callback(_):
+      # commit the change
+      path = 'changes/%s/submit' % change_id
+      body = {'wait_for_merge': True}
+      return self.agent.request('POST', path, body=body)
+    d.addCallback(_add_verified_label_callback)
+    return d
+
+  MESSAGE_REGEX_TRYJOB_RESULT = re.compile(
+    'A try job has finished on builder (.+): SUCCESS', re.I | re.M)
+
+  def submitPatchSetIfNecessary(self, builder_name, build, result):
+    """This is a temporary hack until Gerrit CQ is deployed."""
+    if not self.cq_builders:
+      return
+    if not (result == results.SUCCESS or results == results.WARNINGS):
+      return
+    props = build.properties
+    change_id = (props.getProperty('event.change.id') or
+                 props.getProperty('parent_event.change.id'))
+    revision = props.getProperty('revision')
+    patchset_id = props.getProperty('event.patchSet.ref').rsplit('/', 1)[1]
+    builders = [x for x in self.cq_builders if x != builder_name]
+    o_params = '&'.join('o=%s' % x for x in (
+        'MESSAGES', 'ALL_REVISIONS', 'ALL_COMMITS', 'ALL_FILES'))
+    path = '/changes/%s?%s' % (change_id, o_params)
+    d = self.agent.request('GET', path)
+    def _parse_messages(j):
+      if not j or 'messages' not in j:
+        return
+      for m in reversed(j['messages']):
+        if m['_revision_number'] == int(patchset_id):
+          match = self.MESSAGE_REGEX_TRYJOB_RESULT.search(m['message'])
+          if match:
+            builder = match.groups()[0]
+            if builder in builders:
+              builders.remove(builder)
+              if len(builders) == 0:
+                self._add_verified_label(change_id, revision, patchset_id)
+                break
+    d.addCallback(_parse_messages)
+    return d
+
   def startService(self):
     StatusReceiverMultiService.startService(self)
     self.status = self.parent.getStatus()
@@ -201,3 +253,4 @@ class TryJobGerritStatus(StatusReceiverMultiService):
 
   def buildFinished(self, builder_name, build, result):
     self.sendUpdate(builder_name, build, result)
+    self.submitPatchSetIfNecessary(builder_name, build, result)
