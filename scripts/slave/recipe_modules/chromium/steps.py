@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import re
+
 
 class Test(object):
   """
@@ -758,9 +760,11 @@ class BlinkTest(Test):
         ] + api.json.property_args(),
       )
 
+      # TODO(infra): http://crbug.com/418946 .
+      sanitized_buildername = re.sub('[ .()]', '_', buildername)
       base = (
         "https://storage.googleapis.com/chromium-layout-test-archives/%s/%s"
-        % (buildername, buildnumber))
+        % (sanitized_buildername, buildnumber))
 
       archive_result.presentation.links['layout_test_results'] = (
           base + '/layout-test-results/results.html')
