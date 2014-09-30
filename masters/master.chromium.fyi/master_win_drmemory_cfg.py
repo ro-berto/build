@@ -39,7 +39,10 @@ F('win_lkgr_drmemory', win().ChromiumFactory(
     slave_type='BuilderTester',
     options=['--build-tool=ninja', '--', 'chromium_builder_lkgr_drmemory_win'],
     compile_timeout=7200,
-    tests=['drmemory_full_webkit'],
+    tests=[
+      'drmemory_light_webkit',
+      'drmemory_full_webkit',
+    ],
     factory_properties={
       'package_pdb_files': True,
       'gclient_env': {
