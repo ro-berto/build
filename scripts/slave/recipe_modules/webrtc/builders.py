@@ -34,6 +34,7 @@ RECIPE_CONFIGS = {
   },
   'chromium_webrtc': {
     'chromium_config': 'chromium',
+    'chromium_apply_config': ['dcheck', 'blink_logging_on'],
     'webrtc_config': 'chromium',
     'gclient_config': 'chromium_webrtc',
     'compile_targets': ['chromium_builder_webrtc'],
@@ -41,6 +42,7 @@ RECIPE_CONFIGS = {
   },
   'chromium_webrtc_tot': {
     'chromium_config': 'chromium',
+    'chromium_apply_config': ['dcheck', 'blink_logging_on'],
     'webrtc_config': 'chromium',
     'gclient_config': 'chromium_webrtc_tot',
     'compile_targets': ['chromium_builder_webrtc'],
