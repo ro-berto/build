@@ -35,6 +35,40 @@ except ImportError:
 BUILD_DIR = os.path.realpath(os.path.join(
     os.path.dirname(__file__), os.pardir, os.pardir))
 
+
+WIN_LINK_FUNC = None
+try:
+  if sys.platform.startswith('win'):
+    import ctypes
+    import exceptions
+    # There's 4 possibilities on Windows for links:
+    # 1. Symbolic file links;
+    # 2. Symbolic directory links;
+    # 3. Hardlinked files;
+    # 4. Junctioned directories.
+    # (Hardlinked directories don't really exist.)
+    #
+    # 7-Zip does not handle symbolic file links as we want (it puts the
+    # content of the link, not what it refers to, and reports "CRC Error" on
+    # extraction). It does work as expected for symbolic directory links.
+    # Because the majority of the large files are in the root of the staging
+    # directory, we do however need to handle file links, so we do this with
+    # hardlinking. Junctioning requires a huge whack of code, so we take the
+    # slightly odd tactic of using #2 and #3, but not #1 and #4. That is,
+    # hardlinks for files, but symbolic links for directories.
+    def _WIN_LINK_FUNC(src, dst):
+      if os.path.isdir(src):
+        if not ctypes.windll.kernel32.CreateSymbolicLinkA(dst, src, 1):
+          raise exceptions.WindowsError("CreateSymbolicLinkA failed")
+      else:
+        if not ctypes.windll.kernel32.CreateHardLinkA(dst, src, 0):
+          raise exceptions.WindowsError("CreateHardLinkA failed")
+    WIN_LINK_FUNC = _WIN_LINK_FUNC
+except ImportError:
+  # If we don't have ctypes or aren't on Windows, leave WIN_LINK_FUNC as None.
+  pass
+
+
 # Wrapper around git that enforces a timeout.
 GIT_BIN = os.path.join(BUILD_DIR, 'scripts', 'tools', 'git-with-timeout')
 
@@ -529,7 +563,7 @@ def RemoveDirectory(*path):
   remove_with_retry(os.rmdir, file_path)
 
 
-def CopyFileToDir(src_path, dest_dir, dest_fn=None):
+def CopyFileToDir(src_path, dest_dir, dest_fn=None, link_ok=False):
   """Copies the file found at src_path to the dest_dir directory, with metadata.
 
   If dest_fn is specified, the src_path is copied to that name in dest_dir,
@@ -545,7 +579,12 @@ def CopyFileToDir(src_path, dest_dir, dest_fn=None):
     raise PathNotFound('Unable to find dir %s' % dest_dir)
   src_file = os.path.basename(src_path)
   if dest_fn:
-    shutil.copy2(src_path, os.path.join(dest_dir, dest_fn))
+    # If we have ctypes and the caller doesn't mind links, use that to
+    # try to make the copy faster on Windows. http://crbug.com/418702.
+    if link_ok and WIN_LINK_FUNC:
+      WIN_LINK_FUNC(src_path, os.path.join(dest_dir, dest_fn))
+    else:
+      shutil.copy2(src_path, os.path.join(dest_dir, dest_fn))
   else:
     shutil.copy2(src_path, os.path.join(dest_dir, src_file))
 
@@ -618,14 +657,17 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
     dirname, basename = os.path.split(needed_file)
     try:
       if os.path.isdir(src_path):
-        shutil.copytree(src_path, os.path.join(archive_dir, needed_file),
-                        symlinks=True)
+        if WIN_LINK_FUNC:
+          WIN_LINK_FUNC(src_path, os.path.join(archive_dir, needed_file))
+        else:
+          shutil.copytree(src_path, os.path.join(archive_dir, needed_file),
+                          symlinks=True)
       elif dirname != '' and basename != '':
         dest_dir = os.path.join(archive_dir, dirname)
         MaybeMakeDirectory(dest_dir)
-        CopyFileToDir(src_path, dest_dir, basename)
+        CopyFileToDir(src_path, dest_dir, basename, link_ok=True)
       else:
-        CopyFileToDir(src_path, archive_dir, basename)
+        CopyFileToDir(src_path, archive_dir, basename, link_ok=True)
     except PathNotFound:
       if raise_error:
         raise
