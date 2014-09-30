@@ -54,6 +54,10 @@ BUILDERS = {
         'adb_vendor_keys': True,
         'build': False,
         'skip_wipe': False,
+    },
+    'gerrit_try_builder': {
+      'build': True,
+      'skip_wipe': True,
     }
 }
 
@@ -164,3 +168,13 @@ def GenTests(api):
   yield (api.test('perf_tests_failure') +
       properties_for('perf_runner') +
       api.step_data('perf_test.foo', retcode=1))
+
+  yield (api.test('gerrit_refs') +
+      api.properties.generic(
+        buildername='gerrit_try_builder',
+        slavename='testslave',
+        repo_name='src/repo',
+        patch_url='https://the.patch.url/the.patch',
+        repo_url='svn://svn.chromium.org/chrome/trunk/src',
+        revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
+        internal=True, **({'event.patchSet.ref':'refs/changes/50/176150/1'})))

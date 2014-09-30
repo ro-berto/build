@@ -107,7 +107,10 @@ class AndroidApi(recipe_api.RecipeApi):
     spec.revisions = self.c.revisions
 
     self.m.gclient.break_locks()
-    result = self.m.bot_update.ensure_checkout(spec)
+    refs = self.m.properties.get('event.patchSet.ref')
+    if refs:
+      refs = [refs]
+    result = self.m.bot_update.ensure_checkout(spec, refs=refs)
     if not result.json.output['did_run']:
       result = self.m.gclient.checkout(spec)
 
