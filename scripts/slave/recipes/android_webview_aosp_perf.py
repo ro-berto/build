@@ -7,15 +7,16 @@ Performance testing for the WebView.
 """
 
 DEPS = [
-  'android',
-  'json',
-  'properties',
-  'path',
-  'step',
-  'gclient',
-  'python',
-  'chromium_android',
   'adb',
+  'bot_update',
+  'chromium',
+  'chromium_android',
+  'gclient',
+  'json',
+  'path',
+  'properties',
+  'python',
+  'step',
 ]
 
 REPO_URL = 'https://chromium.googlesource.com/chromium/src.git'
@@ -54,56 +55,28 @@ BUILDER = {
 }
 
 def GenSteps(api):
-  api.chromium_android.configure_from_properties('base_config',
+  api.chromium_android.configure_from_properties('webview_perf',
                                                  REPO_NAME='src',
                                                  REPO_URL=REPO_URL,
                                                  INTERNAL=False,
                                                  BUILD_CONFIG='Release')
 
-  droid = api.android
-  droid.set_config('AOSP_webview')
-
-  # add chrome src-internal deps needed for page_cycler page sets.
-  spec = droid.create_spec()
-  api.gclient.apply_config('chrome_internal', spec)
-
-  # re-include page_cycler dep, which is excluded by default in chrome_internal.
-  del spec.solutions[1].custom_deps['src/data/page_cycler']
-
   # Sync code.
-  droid.sync_chromium(spec)
-
-  # Use our adb
-  api.adb.adb_path = str(
-    api.path['checkout'].join('third_party', 'android_tools',
-                              'sdk', 'platform-tools', 'adb'))
+  api.gclient.set_config('perf')
+  api.gclient.apply_config('android')
+  api.bot_update.ensure_checkout(force=True)
+  api.chromium_android.clean_local_files()
 
   # Gyp the chromium checkout.
-  api.step(
-      'gyp_chromium',
-      [api.path['checkout'].join('build', 'gyp_chromium')] +
-          ['-DOS=android', '-Dandroid_webview_telemetry_build=1'],
-      cwd=api.path['checkout'])
+  api.chromium_android.runhooks()
 
-  # Build the webview shell and chromium parts.
-  droid.compile_step(
-    step_name='compile system_webview_apk and shell',
-    build_tool='ninja',
-    targets=['system_webview_apk', 'android_webview_telemetry_shell_apk'],
-    use_goma=True,
-    src_dir=api.path['checkout'])
-
-  # Build tools.
-  droid.compile_step(
-    step_name='compile android_tools',
-    build_tool='ninja',
-    targets=['android_tools'],
-    use_goma=True,
-    src_dir=api.path['checkout'])
+  # Build the WebView apk, WebView shell and Android testing tools.
+  api.chromium.compile(targets=['system_webview_apk',
+                                'android_webview_telemetry_shell_apk',
+                                'android_tools'])
 
   api.chromium_android.spawn_logcat_monitor()
   api.chromium_android.device_status_check()
-  # TODO(hjd): Do special WebView provision.
   api.chromium_android.provision_devices()
 
   # Install WebView
@@ -113,7 +86,7 @@ def GenSteps(api):
   api.chromium_android.adb_install_apk(TELEMETRY_SHELL_APK,
                                        TELEMETRY_SHELL_PACKAGE)
 
-  # TODO(hjd): Start using list_perf_tests
+  # TODO(hjd) Start using api.chromium.list_perf_tests
   try:
     api.chromium_android.run_sharded_perf_tests(
       config=api.json.input(data=PERF_TESTS),
@@ -126,4 +99,3 @@ def GenSteps(api):
 
 def GenTests(api):
   yield api.test('basic') + api.properties.scheduled()
-

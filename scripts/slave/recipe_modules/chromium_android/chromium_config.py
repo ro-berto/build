@@ -165,3 +165,8 @@ def perf(c):
   gyp_defs = c.gyp_env.GYP_DEFINES
   gyp_defs['branding'] = 'Chrome'
   gyp_defs['buildtype'] = 'Official'
+
+@CONFIG_CTX(includes=['main_builder'])
+def webview_perf(c):
+  gyp_defs = c.gyp_env.GYP_DEFINES
+  gyp_defs['android_webview_telemetry_build'] = 1

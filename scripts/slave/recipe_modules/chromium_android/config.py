@@ -189,3 +189,7 @@ def oilpan_builder(c):
 @config_ctx()
 def perf(c):
   pass
+
+@config_ctx()
+def webview_perf(c):
+  pass
