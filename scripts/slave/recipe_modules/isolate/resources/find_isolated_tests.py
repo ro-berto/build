@@ -36,20 +36,30 @@ def hash_file(filepath):
 
 def main():
   parser = optparse.OptionParser(
-      usage='%prog --build-dir <path> --output-json <path>',
+      usage='%prog --build-dir <path> '
+          '[--output-json <path> | --clean-isolated-files]',
       description=sys.modules[__name__].__doc__)
   parser.add_option(
       '--build-dir',
       help='Path to a directory to search for *.isolated files.')
   parser.add_option(
       '--output-json',
-      help='File to dump JSON results into.')
+      help='File to dump JSON results into. '
+          'Mutually exclusive with --clean-isolated-files.')
+  parser.add_option(
+      '--clean-isolated-files',
+      action='store_true',
+      help='Whether to clean out all .isolated files. '
+          'Mutually exclusive with --output-json.')
 
   options, _ = parser.parse_args()
   if not options.build_dir:
     parser.error('--build-dir option is required')
-  if not options.output_json:
-    parser.error('--output-json option is required')
+  if not (options.output_json or options.clean_isolated_files):
+    parser.error('either --output-json or --clean-isolated-files is required')
+  if options.output_json and options.clean_isolated_files:
+    parser.error('only one of --output-json and '
+                 '--clean-isolated-files is allowed')
 
   result = {}
 
@@ -61,11 +71,18 @@ def main():
       # It's a split .isolated file, e.g. foo.0.isolated. Ignore these.
       continue
 
-    sha1_hash = hash_file(filepath)
-    result[test_name] = sha1_hash
+    if options.clean_isolated_files:
+      # TODO(csharp): Remove deletion entirely once the isolate
+      # tracked dependencies are inputs for the isolated files.
+      # http://crbug.com/419031
+      os.remove(filepath)
+    else:
+      sha1_hash = hash_file(filepath)
+      result[test_name] = sha1_hash
 
-  with open(options.output_json, 'wb') as f:
-    json.dump(result, f)
+  if options.output_json:
+    with open(options.output_json, 'wb') as f:
+      json.dump(result, f)
 
   return 0
 

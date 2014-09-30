@@ -163,6 +163,8 @@ class GpuApi(recipe_api.RecipeApi):
     is_tryserver = self.m.tryserver.is_tryserver
     targets = ['chromium_gpu_%sbuilder' % build_tag] + [
       '%s_run' % test for test in common.GPU_ISOLATES]
+    self.m.isolate.clean_isolated_files(
+        self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
     if is_tryserver:
       try:
         self.m.chromium.compile(targets, name='compile (with patch)')

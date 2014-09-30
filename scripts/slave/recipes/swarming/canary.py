@@ -61,6 +61,7 @@ def GenSteps(api):
   # that isolate scripts invoked by ninja produce more information. Corresponds
   # to --profile flag.
   api.chromium.runhooks()
+  api.isolate.clean_isolated_files(api.chromium.output_dir)
   api.chromium.compile(
       targets=['chromium_swarm_tests'], env={'ISOLATE_DEBUG': 1})
 

@@ -38,6 +38,19 @@ class IsolateApi(recipe_api.RecipeApi):
     config.gyp_env.GYP_DEFINES['test_isolation_mode'] = 'archive'
     config.gyp_env.GYP_DEFINES['test_isolation_outdir'] = self._isolate_server
 
+  def clean_isolated_files(self, build_dir):
+    """Cleans out all *.isolated files from the build directory in
+    preparation for the compile. Needed in order to ensure isolates
+    are rebuilt properly because their dependencies are currently not
+    completely described to gyp."""
+    self.m.python(
+      'clean isolated files',
+      self.resource('find_isolated_tests.py'),
+      [
+        '--build-dir', build_dir,
+        '--clean-isolated-files'
+      ])
+
   def find_isolated_tests(self, build_dir, targets=None, **kwargs):
     """Returns a step which finds all *.isolated files in a build directory.
 

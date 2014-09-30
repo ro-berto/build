@@ -854,6 +854,9 @@ def GenSteps(api):
       deapply_patch(bot_update_step)
       raise
 
+    if bot_config.get('use_isolate') or has_swarming_tests:
+      api.isolate.clean_isolated_files(api.chromium.output_dir)
+
     compile_targets.extend(api.itertools.chain(
         *[t.compile_targets(api) for t in tests]))
     # Remove duplicate targets.
@@ -951,17 +954,19 @@ def GenSteps(api):
     if compile_targets:
       # Remove duplicate targets.
       compile_targets = sorted(set(compile_targets))
+      # Search for *.isolated only if enabled in bot config or if some
+      # swarming test is being recompiled.
+      bot_config = get_bot_config(mastername, buildername)
+      has_failing_swarming_tests = [
+          t for t in failing_tests if t.uses_swarming]
+      if bot_config.get('use_isolate') or has_failing_swarming_tests:
+        api.isolate.clean_isolated_files(api.chromium.output_dir)
       try:
         api.chromium.compile(
             compile_targets, name='compile (without patch)')
       except api.step.StepFailure:
         api.tryserver.set_transient_failure_tryjob_result()
         raise
-      # Search for *.isolated only if enabled in bot config or if some
-      # swarming test is being recompiled.
-      bot_config = get_bot_config(mastername, buildername)
-      has_failing_swarming_tests = [
-          t for t in failing_tests if t.uses_swarming]
       if bot_config.get('use_isolate') or has_failing_swarming_tests:
         api.isolate.find_isolated_tests(api.chromium.output_dir)
 

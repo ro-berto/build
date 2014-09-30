@@ -232,6 +232,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           for test in builder_dict.get('tests', []):
             tests_including_triggered.append(test)
 
+      isolated_targets = [
+        t.name for t in tests_including_triggered if t.uses_swarming
+      ]
+
+      if isolated_targets:
+        self.m.isolate.clean_isolated_files(self.m.chromium.output_dir)
+
       for t in tests_including_triggered:
         compile_targets.update(t.compile_targets(self.m))
 
@@ -242,9 +249,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self.m.chromium_android.check_webview_licenses()
         self.m.chromium_android.findbugs()
 
-      isolated_targets = [
-        t.name for t in tests_including_triggered if t.uses_swarming
-      ]
       if isolated_targets:
         self.m.isolate.find_isolated_tests(
             self.m.chromium.output_dir, targets=list(set(isolated_targets)))
