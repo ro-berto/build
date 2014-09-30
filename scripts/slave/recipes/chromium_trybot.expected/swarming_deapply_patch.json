@@ -425,7 +425,7 @@
       "--print-status-updates",
       "base_unittests (with patch)/Linux/[dummy hash for base_unittests]/linux_chromium_rel_swarming/571"
     ],
-    "name": "[swarming] base_unittests (with patch)",
+    "name": "base_unittests (with patch)",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
@@ -454,7 +454,7 @@
       "--print-status-updates",
       "browser_tests (with patch)/Linux/[dummy hash for browser_tests]/linux_chromium_rel_swarming/571"
     ],
-    "name": "[swarming] browser_tests (with patch)"
+    "name": "browser_tests (with patch)"
   },
   {
     "cmd": [
@@ -621,7 +621,7 @@
       "--print-status-updates",
       "base_unittests (without patch)/Linux/[dummy hash for base_unittests]/linux_chromium_rel_swarming/571"
     ],
-    "name": "[swarming] base_unittests (without patch)"
+    "name": "base_unittests (without patch)"
   },
   {
     "cmd": [

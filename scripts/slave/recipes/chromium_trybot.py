@@ -1275,7 +1275,7 @@ def GenTests(api):
     api.override_step_data(
         'find isolated tests',
         api.isolate.output_json(['base_unittests', 'browser_tests'])) +
-    api.override_step_data('[swarming] base_unittests (with patch)',
+    api.override_step_data('base_unittests (with patch)',
                            canned_test(passing=False)) +
     api.override_step_data(
         'find isolated tests (2)',

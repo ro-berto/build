@@ -327,7 +327,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     args = self._get_collect_cmd_args(task)
     args.extend(['--task-summary-json', self.m.json.output()])
     return self.m.python(
-        name=self._get_step_name('swarming', task),
+        name=self._get_step_name('', task),
         script=self.m.swarming_client.path.join('swarming.py'),
         args=args,
         step_test_data=functools.partial(self._gen_collect_step_data, task),
@@ -356,7 +356,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     # Always wait for all tasks to finish even if some of them failed. Allow
     # collect_gtest_task.py to emit all necessary annotations itself.
     return self.m.python(
-        name=self._get_step_name('swarming', task),
+        name=self._get_step_name('', task),
         script=self.resource('collect_gtest_task.py'),
         args=args,
         allow_subannotations=True,
@@ -373,16 +373,20 @@ class SwarmingApi(recipe_api.RecipeApi):
     is running on.
 
     Args:
-      prefix: prefix to append to task title, like 'trigger' or 'swarming'.
+      prefix: prefix to append to task title, like 'trigger'.
       task: SwarmingTask instance.
 
     Returns:
       '[<prefix>] <task title> (on <OS>)' where <OS> is optional.
     """
+    prefix = '[%s] ' % prefix if prefix else ''
+
+    # TODO(maruel): Differentiate Windows-6.1 from Windows-5.1, etc.
     task_os = task.dimensions['os']
     bot_os = self.platform_to_os_dimension(self.m.platform.name)
-    return '[%s] %s%s' % (
-        prefix, task.title, '' if task_os == bot_os else ' on %s' % task_os)
+    suffix = '' if task_os == bot_os else ' on %s' % task_os
+
+    return ''.join((prefix, task.title, suffix))
 
   def _get_collect_cmd_args(self, task):
     """SwarmingTask -> argument list for 'swarming.py' command."""
