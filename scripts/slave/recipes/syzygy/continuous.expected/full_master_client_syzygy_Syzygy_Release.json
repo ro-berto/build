@@ -1,0 +1,192 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\kill_processes.py"
+    ],
+    "name": "taskkill"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]\\gclient.py",
+      "config",
+      "--spec",
+      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS.syzygy', 'managed': False, 'name': 'src', 'url': 'https://github.com/google/syzygy.git'}, {'deps_file': 'DEPS', 'managed': False, 'name': 'src-internal', 'url': 'svn://svn.chromium.org/chrome-internal/trunk/syzygy/internal.DEPS'}]"
+    ],
+    "name": "gclient setup"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]\\gclient.py",
+      "sync",
+      "--nohooks",
+      "--force",
+      "--verbose",
+      "--delete_unversioned_trees",
+      "--revision",
+      "src@0e9f25b1098271be2b096fd1c095d6d907cf86f7",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "name": "gclient sync",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"solutions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src-internal/\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": 274229@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": 170242@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision@170242@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]\\gclient.py",
+      "runhooks"
+    ],
+    "env": {
+      "GYP_DEFINES": "target_arch=ia32",
+      "GYP_GENERATORS": "msvs",
+      "GYP_MSVS_VERSION": "2013"
+    },
+    "name": "gclient runhooks"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\compile.py",
+      "--target",
+      "Release",
+      "--src-dir",
+      "[SLAVE_BUILD]\\src",
+      "--build-tool",
+      "vs",
+      "--solution",
+      "[SLAVE_BUILD]\\src\\syzygy\\syzygy.sln",
+      "--project",
+      "build_all"
+    ],
+    "name": "compile"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]\\src\\syzygy\\unittests.gypi",
+      "/path/to/tmp/"
+    ],
+    "name": "read_unittests_gypi"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\runtest.py",
+      "--target",
+      "Release",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Syzygy Release\", \"buildnumber\": 571, \"mastername\": \"master.client.syzygy\", \"recipe\": \"syzygy/continuous\", \"revision\": \"0e9f25b1098271be2b096fd1c095d6d907cf86f7\", \"slavename\": \"vm331-m3\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Syzygy Release\", \"buildnumber\": 571, \"mastername\": \"master.client.syzygy\", \"recipe\": \"syzygy/continuous\", \"revision\": \"0e9f25b1098271be2b096fd1c095d6d907cf86f7\", \"slavename\": \"vm331-m3\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--test-type=foo_unittests",
+      "--builder-name=Syzygy Release",
+      "--slave-name=vm331-m3",
+      "--build-number=571",
+      "--run-python-script",
+      "[SLAVE_BUILD]\\src\\syzygy\\build\\app_verifier.py",
+      "--on-waterfall",
+      "[SLAVE_BUILD]\\src\\build\\Release\\foo_unittests.exe",
+      "--",
+      "--gtest_print_time"
+    ],
+    "name": "foo_unittests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\runtest.py",
+      "--target",
+      "Release",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Syzygy Release\", \"buildnumber\": 571, \"mastername\": \"master.client.syzygy\", \"recipe\": \"syzygy/continuous\", \"revision\": \"0e9f25b1098271be2b096fd1c095d6d907cf86f7\", \"slavename\": \"vm331-m3\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Syzygy Release\", \"buildnumber\": 571, \"mastername\": \"master.client.syzygy\", \"recipe\": \"syzygy/continuous\", \"revision\": \"0e9f25b1098271be2b096fd1c095d6d907cf86f7\", \"slavename\": \"vm331-m3\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--test-type=bar_unittests",
+      "--builder-name=Syzygy Release",
+      "--slave-name=vm331-m3",
+      "--build-number=571",
+      "--run-python-script",
+      "[SLAVE_BUILD]\\src\\syzygy\\build\\app_verifier.py",
+      "--on-waterfall",
+      "[SLAVE_BUILD]\\src\\build\\Release\\bar_unittests.exe",
+      "--",
+      "--gtest_print_time"
+    ],
+    "name": "bar_unittests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\runtest.py",
+      "--target",
+      "Release",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Syzygy Release\", \"buildnumber\": 571, \"mastername\": \"master.client.syzygy\", \"recipe\": \"syzygy/continuous\", \"revision\": \"0e9f25b1098271be2b096fd1c095d6d907cf86f7\", \"slavename\": \"vm331-m3\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Syzygy Release\", \"buildnumber\": 571, \"mastername\": \"master.client.syzygy\", \"recipe\": \"syzygy/continuous\", \"revision\": \"0e9f25b1098271be2b096fd1c095d6d907cf86f7\", \"slavename\": \"vm331-m3\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--test-type=baz_unittests",
+      "--builder-name=Syzygy Release",
+      "--slave-name=vm331-m3",
+      "--build-number=571",
+      "--run-python-script",
+      "[SLAVE_BUILD]\\src\\syzygy\\build\\app_verifier.py",
+      "--on-waterfall",
+      "[SLAVE_BUILD]\\src\\build\\Release\\baz_unittests.exe",
+      "--",
+      "--gtest_print_time"
+    ],
+    "name": "baz_unittests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\src\\syzygy\\internal\\build\\randomize_chrome.py",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\build",
+      "--target",
+      "Release",
+      "--verbose"
+    ],
+    "name": "randomly_reorder_chrome"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\src\\syzygy\\internal\\build\\benchmark_chrome.py",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\build",
+      "--target",
+      "Release",
+      "--verbose"
+    ],
+    "name": "benchmark_chrome"
+  }
+]

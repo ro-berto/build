@@ -18,7 +18,7 @@ HOST_TARGET_BITS = (32, 64)
 HOST_ARCHS = ('intel',)
 TARGET_ARCHS = HOST_ARCHS + ('arm', 'mipsel')
 TARGET_CROS_BOARDS = (None, 'x86-generic')
-BUILD_CONFIGS = ('Release', 'Debug')
+BUILD_CONFIGS = ('Release', 'Debug', 'Coverage')
 MEMORY_TOOLS = ('memcheck', 'drmemory_full', 'drmemory_light')
 PROJECT_GENERATORS = ('gyp', 'gn')
 
@@ -43,6 +43,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       pass_arch_flag = Single(bool, empty_val=False, required=False),
       xcode_sdk = Single(basestring, required=False),
       xcode_project = Single(Path, required=False),
+      solution = Single(Path, required=False),
     ),
     gyp_env = ConfigGroup(
       GYP_CROSSCOMPILE = Single(int, jsonish_fn=str, required=False),
@@ -50,8 +51,8 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       GYP_DEFINES = Dict(equal_fn, ' '.join, (basestring,int,Path)),
       GYP_GENERATORS = Set(basestring, ','.join),
       GYP_GENERATOR_FLAGS = Dict(equal_fn, ' '.join, (basestring,int)),
-      GYP_USE_SEPARATE_MSPDBSRV = Single(int, jsonish_fn=str, required=False),
       GYP_MSVS_VERSION = Single(basestring, required=False),
+      GYP_USE_SEPARATE_MSPDBSRV = Single(int, jsonish_fn=str, required=False),
     ),
     project_generator = ConfigGroup(
       tool = Single(basestring, empty_val='gyp'),
@@ -177,7 +178,9 @@ def BASE(c):
   if gyp_arch:
     c.gyp_env.GYP_DEFINES['target_arch'] = gyp_arch
 
-  if c.BUILD_CONFIG == 'Release':
+  if c.BUILD_CONFIG in ['Coverage', 'Release']:
+    # The 'Coverage' target is not explicitly used by Chrome, but by some other
+    # projects in the Chrome ecosystem (ie: Syzygy).
     static_library(c, final=False)
   elif c.BUILD_CONFIG == 'Debug':
     shared_library(c, final=False)
@@ -204,8 +207,11 @@ def ninja(c):
 def msvs(c):
   if c.HOST_PLATFORM != 'win':
     raise BadConf('can not use msvs on "%s"' % c.HOST_PLATFORM)
+  # If compile.py is invoking devenv it needs to refer to a solution file.
+  # For chrome this defaults to ['CHECKOUT']/build/all.sln.
+  c.compile_py.solution = Path('[CHECKOUT]', 'build', 'all.sln')
   c.gyp_env.GYP_GENERATORS.add('msvs')
-  c.compile_py.build_tool = 'msvs'
+  c.compile_py.build_tool = 'vs'
   c.build_dir = Path('[CHECKOUT]', 'build')
 
 @config_ctx()
@@ -246,7 +252,7 @@ def default_compiler(c):
 
 @config_ctx(deps=['compiler', 'builder'], group='distributor')
 def goma(c):
-  if c.compile_py.build_tool == 'msvs':  # pragma: no cover
+  if c.compile_py.build_tool == 'vs':  # pragma: no cover
     raise BadConf('goma doesn\'t work with msvs')
 
   # TODO(iannucci): support clang and jsonclang
@@ -535,3 +541,4 @@ def v8_optimize_medium(c):
 @config_ctx()
 def chromium_perf(c):
   c.compile_py.clobber = False
+

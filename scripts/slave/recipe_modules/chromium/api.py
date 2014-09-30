@@ -130,19 +130,29 @@ class ChromiumApi(recipe_api.RecipeApi):
       args += ['--arch', self.c.gyp_env.GYP_DEFINES['target_arch']]
     if self.c.TARGET_CROS_BOARD:
       args += ['--cros-board', self.c.TARGET_CROS_BOARD]
-    args.append('--')
-    if self.c.compile_py.build_tool == 'xcode':
+
+    if (self.c.compile_py.build_tool == 'vs' and
+        self.c.compile_py.solution):
+      args.extend(['--solution', self.c.compile_py.solution])
       for target in targets:
-        args.extend(['-target', target])
-      if self.c.compile_py.xcode_project:  # pragma: no cover
-        args.extend(['-project', self.c.compile_py.xcode_project])
-      if self.c.compile_py.xcode_sdk:
-        args.extend(['-sdk', self.c.compile_py.xcode_sdk])
+        args.extend(['--project', target])
     else:
-      args.extend(targets)
+      assert not self.c.compile_py.solution
+      args.append('--')
+      if self.c.compile_py.build_tool == 'xcode':
+        for target in targets:
+          args.extend(['-target', target])
+        if self.c.compile_py.xcode_project:  # pragma: no cover
+          args.extend(['-project', self.c.compile_py.xcode_project])
+        if self.c.compile_py.xcode_sdk:
+          args.extend(['-sdk', self.c.compile_py.xcode_sdk])
+      else:
+        args.extend(targets)
+
     if self.c.TARGET_CROS_BOARD:
       # Wrap 'compile' through 'cros chrome-sdk'
       kwargs['wrapper'] = self._get_cros_chrome_sdk_wrapper()
+
     self.m.python(name or 'compile',
                   self.m.path['build'].join('scripts', 'slave',
                                             'compile.py'),
