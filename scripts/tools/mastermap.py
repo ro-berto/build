@@ -18,6 +18,7 @@ In both modes, --csv causes the output (if any) to be formatted as
 comma-separated values.
 """
 
+import json
 import optparse
 import os
 import sys
@@ -65,6 +66,8 @@ def get_args():
 
   parser.add_option('--csv', action='store_true', default=False,
                     help='Print output in comma-separated values format.')
+  parser.add_option('--json', action='store_true', default=False,
+                    help='Print output in JSON format. Overrides --csv.')
   parser.add_option('--full-host-names', action='store_true', default=False,
                     help='Refrain from truncating the master host names')
 
@@ -312,7 +315,11 @@ def real_main(include_internal=False):
     printer = human_print
 
   if opts.list:
-    master_map(sorted_masters, printer, opts)
+    if opts.json:
+      print json.dumps(sorted_masters,
+                       sort_keys=True, indent=2, separators=(',', ': '))
+    else:
+      master_map(sorted_masters, printer, opts)
 
   ret = 0
   if opts.audit or opts.presubmit:
