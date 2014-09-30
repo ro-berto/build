@@ -67,8 +67,9 @@ class BotUpdateApi(recipe_api.RecipeApi):
   def ensure_checkout(self, gclient_config=None, suffix=None,
                       patch=True, update_presentation=True,
                       force=False, patch_root=None, no_shallow=False,
-                      with_branch_heads=False,
+                      with_branch_heads=False, refs=None,
                       **kwargs):
+    refs = refs or []
     # We can re-use the gclient spec from the gclient module, since all the
     # data bot_update needs is already configured into the gclient spec.
     cfg = gclient_config or self.m.gclient.c
@@ -138,6 +139,10 @@ class BotUpdateApi(recipe_api.RecipeApi):
       fixed_revision = self.m.gclient.resolve_revision(revision)
       if fixed_revision:
         flags.append(['--revision', '%s@%s' % (name, fixed_revision)])
+
+    # Add extra fetch refspecs.
+    for ref in refs:
+      flags.append(['--refs', ref])
 
     # Filter out flags that are None.
     cmd = [item for flag_set in flags

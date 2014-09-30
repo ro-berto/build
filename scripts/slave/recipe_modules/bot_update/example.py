@@ -19,8 +19,10 @@ def GenSteps(api):
   api.gclient.c = src_cfg
   force = True if api.properties.get('force') else False
   with_branch_heads = api.properties.get('with_branch_heads', False)
+  refs = api.properties.get('refs', [])
   api.bot_update.ensure_checkout(force=force,
-                                 with_branch_heads=with_branch_heads)
+                                 with_branch_heads=with_branch_heads,
+                                 refs=refs)
 
 
 def GenTests(api):
@@ -42,6 +44,12 @@ def GenTests(api):
       issue=12345,
       patchset=654321,
       patch_url='http://src.chromium.org/foo/bar'
+  )
+  yield api.test('trychange') + api.properties(
+      mastername='tryserver.chromium.linux',
+      buildername='linux_rel',
+      slavename='totallyaslave-c4',
+      refs=['+refs/change/1/2/333'],
   )
   yield api.test('tryjob_fail') + api.properties(
       mastername='tryserver.chromium.linux',
