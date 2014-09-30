@@ -211,11 +211,11 @@
       "-u",
       "[BUILD]\\scripts\\slave\\syzygy\\gsutil_cp_dir.py",
       "[SLAVE_BUILD]\\src\\build\\Coverage\\cov",
-      "gs://syzygy-archive/test/builds/coverage/000571_0e9f25b1098271be2b096fd1c095d6d907cf86f7"
+      "gs://syzygy-archive/test/builds/coverage/0e9f25b1098271be2b096fd1c095d6d907cf86f7"
     ],
     "name": "archive_coverage",
     "~followup_annotations": [
-      "@@@STEP_LINK@coverage_report@https://syzygy-archive.commondatastorage.googleapis.com/test/builds/coverage/000571_0e9f25b1098271be2b096fd1c095d6d907cf86f7/index.html@@@"
+      "@@@STEP_LINK@coverage_report@https://syzygy-archive.commondatastorage.googleapis.com/test/builds/coverage/0e9f25b1098271be2b096fd1c095d6d907cf86f7/index.html@@@"
     ]
   },
   {

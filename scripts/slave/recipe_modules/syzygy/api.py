@@ -87,18 +87,6 @@ PATCH=1
     # Return the cached value.
     return self._version
 
-  def _get_build_id(self):
-    """Returns a string build identifier that uniquely identifies this build."""
-    revision = self.m.properties['revision']
-
-    # For official builds we use the actual version number and the revision.
-    if self.c.official_build:
-      return ('%03d.%03d.%03d.%03d' % self.version) + ('_%s' % revision)
-
-    # Otherwise use the buildnumber and the revision.
-    buildnumber = self.m.properties['buildnumber']
-    return '%06d_%s' % (int(buildnumber), revision)
-
   def _gen_step_gs_util_cp_dir(self, step_name, src_dir, dst_rel_path):
     """Returns a gsutil_cp_dir step. Internal use only.
 
@@ -209,8 +197,7 @@ PATCH=1
     """
     assert self.m.chromium.c.BUILD_CONFIG == 'Coverage'
     cov_dir = self.output_dir.join('cov')
-    build_id = self._get_build_id()
-    archive_path = 'builds/coverage/%s' % build_id
+    archive_path = 'builds/coverage/%s' % self.m.properties['revision']
     if self.m.properties['slavename'] == 'fake_slave':
       archive_path = 'test/' + archive_path
     report_url = '%s/%s/index.html' % (self._SYZYGY_ARCHIVE_URL, archive_path)
@@ -226,15 +213,15 @@ PATCH=1
     """
     assert self.m.chromium.c.BUILD_CONFIG == 'Release' and self.c.official_build
     bin_dir = self.output_dir.join('archive')
-    archive_name = self._get_build_id()
-    archive_path = 'builds/official/%s' % archive_name
+    archive_path = 'builds/official/%s' % self.m.properties['revision']
     if self.m.properties['slavename'] == 'fake_slave':
       archive_path = 'test/' + archive_path
     bin_url = '%s/index.html?path=%s/' % (
         self._SYZYGY_ARCHIVE_URL, archive_path)
+    link_text = '.'.join(str(i) for i in self.version) + ' archive'
     step = self._gen_step_gs_util_cp_dir(
         'archive_binaries', bin_dir, archive_path)
-    step.presentation.links['archive'] = bin_url
+    step.presentation.links[link_text] = bin_url
     return step
 
   def upload_symbols(self):

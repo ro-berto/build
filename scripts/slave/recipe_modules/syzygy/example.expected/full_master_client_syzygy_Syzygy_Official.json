@@ -210,11 +210,11 @@
       "-u",
       "[BUILD]\\scripts\\slave\\syzygy\\gsutil_cp_dir.py",
       "[SLAVE_BUILD]\\src\\build\\Release\\archive",
-      "gs://syzygy-archive/test/builds/official/000.000.000.001_0e9f25b1098271be2b096fd1c095d6d907cf86f7"
+      "gs://syzygy-archive/test/builds/official/0e9f25b1098271be2b096fd1c095d6d907cf86f7"
     ],
     "name": "archive_binaries",
     "~followup_annotations": [
-      "@@@STEP_LINK@archive@https://syzygy-archive.commondatastorage.googleapis.com/index.html?path=test/builds/official/000.000.000.001_0e9f25b1098271be2b096fd1c095d6d907cf86f7/@@@"
+      "@@@STEP_LINK@0.0.0.1 archive@https://syzygy-archive.commondatastorage.googleapis.com/index.html?path=test/builds/official/0e9f25b1098271be2b096fd1c095d6d907cf86f7/@@@"
     ]
   },
   {
