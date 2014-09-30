@@ -616,6 +616,10 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
         print 'Replacing contents of %s with %s' % (src_path, new_src_path)
       src_path = new_src_path
     dirname, basename = os.path.split(needed_file)
+    print ('src_path', src_path,
+           'isdir', os.path.isdir(src_path),
+           'dirname', dirname,
+           'basename', basename)
     try:
       if os.path.isdir(src_path):
         shutil.copytree(src_path, os.path.join(archive_dir, needed_file),
