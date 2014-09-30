@@ -45,15 +45,15 @@ def ProbeDebuggerDir():
   debugger_dir = '%s\\Debugging Tools For Windows (x64)' % program_file
   if os.path.exists(debugger_dir):
     return debugger_dir
+  # windows 8 32 bit
+  debugger_dir = '%s\\Windows Kits\\8.0\\Debuggers\\x86' % program_file
+  if os.path.exists(debugger_dir):
+    return debugger_dir
   program_file = os.environ.get('PROGRAMW6432')
   if not program_file:
     return ''
   # 64 bit debugger on 64 bit platform.
   debugger_dir = '%s\\Debugging Tools For Windows (x64)' % program_file
-  if os.path.exists(debugger_dir):
-    return debugger_dir
-  # windows 8 32 bit
-  debugger_dir = '%s\\Windows Kits\\8.0\\Debuggers\\x86' % program_file
   if os.path.exists(debugger_dir):
     return debugger_dir
   return ''
