@@ -54,6 +54,19 @@ GIT_COMMIT_HASH_RE = re.compile(r'[a-zA-Z0-9]{40}')
 # Regular expression to parse a commit position
 COMMIT_POSITION_RE = re.compile(r'([^@]+)@{#(\d+)}')
 
+WIN_LINK_FUNC = None
+try:
+  if sys.platform.startswith('win'):
+    import ctypes
+    def _WIN_LINK_FUNC(src, dst):
+      flags = 1 if os.path.isdir(src) else 0
+      if not ctypes.windll.kernel32.CreateSymbolicLinkA(dst, src, flags):
+        raise OSError
+    WIN_LINK_FUNC = _WIN_LINK_FUNC
+except ImportError:
+  # If we don't have ctypes, leave WIN_LINK_FUNC as None.
+  pass
+
 # Local errors.
 class MissingArgument(Exception):
   pass
@@ -529,7 +542,7 @@ def RemoveDirectory(*path):
   remove_with_retry(os.rmdir, file_path)
 
 
-def CopyFileToDir(src_path, dest_dir, dest_fn=None):
+def CopyFileToDir(src_path, dest_dir, dest_fn=None, link_ok=False):
   """Copies the file found at src_path to the dest_dir directory, with metadata.
 
   If dest_fn is specified, the src_path is copied to that name in dest_dir,
@@ -545,7 +558,12 @@ def CopyFileToDir(src_path, dest_dir, dest_fn=None):
     raise PathNotFound('Unable to find dir %s' % dest_dir)
   src_file = os.path.basename(src_path)
   if dest_fn:
-    shutil.copy2(src_path, os.path.join(dest_dir, dest_fn))
+    # If we have ctypes and the caller doesn't mind symlinks, use that to
+    # try to make the copy faster on Windows. http://crbug.com/418702.
+    if link_ok and WIN_LINK_FUNC:
+      WIN_LINK_FUNC(src_path, os.path.join(dest_dir, dest_fn))
+    else:
+      shutil.copy2(src_path, os.path.join(dest_dir, dest_fn))
   else:
     shutil.copy2(src_path, os.path.join(dest_dir, src_file))
 
@@ -618,14 +636,17 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
     dirname, basename = os.path.split(needed_file)
     try:
       if os.path.isdir(src_path):
-        shutil.copytree(src_path, os.path.join(archive_dir, needed_file),
-                        symlinks=True)
+        if WIN_LINK_FUNC:
+          WIN_LINK_FUNC(src_path, os.path.join(archive_dir, needed_file))
+        else:
+          shutil.copytree(src_path, os.path.join(archive_dir, needed_file),
+                          symlinks=True)
       elif dirname != '' and basename != '':
         dest_dir = os.path.join(archive_dir, dirname)
         MaybeMakeDirectory(dest_dir)
-        CopyFileToDir(src_path, dest_dir, basename)
+        CopyFileToDir(src_path, dest_dir, basename, link_ok=True)
       else:
-        CopyFileToDir(src_path, archive_dir, basename)
+        CopyFileToDir(src_path, archive_dir, basename, link_ok=True)
     except PathNotFound:
       if raise_error:
         raise
