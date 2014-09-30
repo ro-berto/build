@@ -68,7 +68,7 @@
       "python",
       "-u",
       "[SLAVE_BUILD]\\src\\syzygy\\build\\get_syzygy_binaries.py",
-      "--output_dir",
+      "--output-dir",
       "[SLAVE_BUILD]\\src\\syzygy\\binaries",
       "--revision",
       "0e9f25b1098271be2b096fd1c095d6d907cf86f7",

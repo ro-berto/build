@@ -243,7 +243,7 @@ PATCH=1
     get_syzygy_binaries_py = self.public_scripts_dir.join(
         'get_syzygy_binaries.py')
     output_dir = self.m.path['checkout'].join('syzygy', 'binaries')
-    args = ['--output_dir', output_dir,
+    args = ['--output-dir', output_dir,
             '--revision', revision,
             '--overwrite',
             '--verbose']
