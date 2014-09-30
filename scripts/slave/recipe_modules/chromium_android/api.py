@@ -234,7 +234,7 @@ class AndroidApi(recipe_api.RecipeApi):
         bucket=bucket,
         dest=path)
 
-  def download_build(self, bucket, path):
+  def download_build(self, bucket, path, extract_path=None):
     zipfile = self.m.path['checkout'].join('out', 'build_product.zip')
     self.m.gsutil.download(
         name='download_build_product',
@@ -242,10 +242,11 @@ class AndroidApi(recipe_api.RecipeApi):
         source=path,
         dest=zipfile
     )
+    extract_path = extract_path or self.m.path['checkout']
     self.m.step(
       'unzip_build_product',
       ['unzip', '-o', zipfile],
-      cwd=self.m.path['checkout'],
+      cwd=extract_path,
       infra_step=True,
     )
 
