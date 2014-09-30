@@ -4,8 +4,7 @@
 # found in the LICENSE file.
 
 """Scans build output directory for .isolated files, calculates their SHA1
-hashes, stores final list in JSON document and then removes *.isolated files
-found (to ensure no stale *.isolated stay around on the next build).
+hashes and stores final list in JSON document.
 
 Used to figure out what tests were build in isolated mode to trigger these
 tests to run on swarming.
@@ -62,10 +61,7 @@ def main():
       # It's a split .isolated file, e.g. foo.0.isolated. Ignore these.
       continue
 
-    # TODO(csharp): Remove deletion once the isolate tracked dependencies are
-    # inputs for the isolated files.
     sha1_hash = hash_file(filepath)
-    os.remove(filepath)
     result[test_name] = sha1_hash
 
   with open(options.output_json, 'wb') as f:
