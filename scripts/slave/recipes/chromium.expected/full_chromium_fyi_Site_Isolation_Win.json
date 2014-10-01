@@ -118,7 +118,8 @@
       "[BUILD]\\goma",
       "--",
       "content_browsertests",
-      "content_unittests"
+      "content_unittests",
+      "crash_service"
     ],
     "name": "compile"
   },
