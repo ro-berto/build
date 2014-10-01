@@ -11,6 +11,7 @@
 DEPS = [
   'buildbot',
   'gpu',
+  'json',
   'platform',
   'properties',
 ]
@@ -56,6 +57,7 @@ def GenTests(api):
     api.properties.tryserver(
       mastername='tryserver.chromium.gpu',
       buildername='mac_gpu') +
+    api.override_step_data('analyze', api.gpu.analyze_builds_everything) +
     api.step_data('compile (with patch)', retcode=1) +
     api.platform.name('win')
   )
@@ -65,6 +67,7 @@ def GenTests(api):
     api.properties.tryserver(
       mastername='tryserver.chromium.gpu',
       buildername='mac_gpu') +
+    api.override_step_data('analyze', api.gpu.analyze_builds_everything) +
     api.step_data('compile (with patch)', retcode=1) +
     api.step_data('compile (without patch)', retcode=1) +
     api.platform.name('win')
@@ -79,4 +82,43 @@ def GenTests(api):
       buildnumber=571) +
     api.platform.name('linux') +
     api.step_data('compile', retcode=1)
+  )
+
+  # Tests that we only build a single isolate if that's all that
+  # needed to be rebuilt in a patch.
+  yield (
+    api.test('analyze_builds_only_angle_unittests') +
+    api.properties.tryserver(
+      mastername='tryserver.chromium.gpu',
+      buildername='mac_gpu') +
+    api.override_step_data(
+        'analyze',
+        api.json.output({'status': 'Found dependency',
+                         'targets': ['angle_unittests'],
+                         'build_targets': ['angle_unittests_run']}))
+  )
+
+  # Tests that we skip the compile if analyze reports only executables
+  # unrelated to this bot.
+  yield (
+    api.test('analyze_builds_unrelated_executable') +
+    api.properties.tryserver(
+      mastername='tryserver.chromium.gpu',
+      buildername='mac_gpu') +
+    api.override_step_data(
+        'analyze',
+        api.json.output({'status': 'Found dependency',
+                         'targets': ['base_unittests'],
+                         'build_targets': ['base_unittests_run']}))
+  )
+
+  # Tests analyze module early exits if patch can't affect this config.
+  yield (
+    api.test('no_compile_because_of_analyze') +
+    api.properties.tryserver(
+      mastername='tryserver.chromium.gpu',
+      buildername='mac_gpu') +
+    api.override_step_data(
+        'analyze',
+        api.json.output({'status': 'No compile necessary'}))
   )

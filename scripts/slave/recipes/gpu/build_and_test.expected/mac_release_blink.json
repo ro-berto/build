@@ -108,7 +108,6 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "chromium_gpu_builder",
       "angle_unittests_run",
       "content_gl_tests_run",
       "content_unittests_run",
