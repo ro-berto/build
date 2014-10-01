@@ -302,6 +302,16 @@ BUILDERS = {
           'platform': 'mac',
         },
       },
+      'mac_chromium_rel_ng': {
+        'based_on_main_waterfall': {
+          'mastername': 'chromium.mac',
+          'buildername': 'Mac Builder',
+          'testers': ['Mac10.7 Tests (1)', 'Mac10.7 Tests (2)'],
+        },
+        'testing': {
+          'platform': 'mac',
+        },
+      },
       'mac_chromium_compile_dbg': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
