@@ -131,6 +131,17 @@ def main():
   chromium_utils.AddPropertiesOptions(option_parser)
   options, _ = option_parser.parse_args()
 
+  # First clean up old .index and .json-command files from previous runs.
+  print '%s: Cleaning up locally...' % time.strftime('%X')
+  chromium_utils.RunCommand(['find', 'src/out', '-type', 'f',
+                               '(', '-name', '*.json-command', '-o',
+                                    '-name', '*.index', ')',
+                               '-exec', 'rm', '-f', '{}', ';'])
+  # Clean up any source archives from previous runs.
+  package_filename = options.factory_properties.get(
+      'package_filename', FILENAME)
+  chromium_utils.RunCommand(['rm', '-f', '%s-*.%s' % (package_filename, EXT)])
+
   if not os.path.exists('src'):
     raise Exception('ERROR: no src directory to package, exiting')
 
@@ -141,14 +152,13 @@ def main():
   except chromium_utils.NoIdentifiedRevision:
     revision_upload_path = 'NONE'
   completed_filename = '%s-%s.%s' % (
-      options.factory_properties.get('package_filename', FILENAME),
+      package_filename,
       revision_upload_path,
       EXT)
   partial_filename = '%s.partial' % completed_filename
-
-  chromium_utils.RunCommand(['rm', '-f', partial_filename])
+  # Check if the file (still) exists.
   if os.path.exists(partial_filename):
-    raise Exception('ERROR: %s cannot be removed, exiting' % partial_filename)
+    raise Exception('ERROR: %s already exists, exiting' % partial_filename)
 
   print '%s: Index generation...' % time.strftime('%X')
   indexing_successful = GenerateIndex()
@@ -240,16 +250,6 @@ def main():
     packaging_successful = False
 
   finally:
-    print '%s: Cleaning up locally...' % time.strftime('%X')
-    chromium_utils.RunCommand(['rm', '-f', partial_filename])
-    # TODO(klimek): If this is not executed at the end of a run, we will
-    # use leftover data on the next run; add an extra build step that
-    # does this clean up before the build starts.
-    if chromium_utils.RunCommand(['find', 'src/out', '-type', 'f',
-                                 '(', '-name', '*.json-command', '-o',
-                                      '-name', '*.index', ')',
-                                 '-exec', 'rm', '-f', '{}', ';']):
-      raise Exception('ERROR: failed to clean up indexer files')
     print '%s: Done.' % time.strftime('%X')
 
   if not (indexing_successful and packaging_successful):
