@@ -19,8 +19,6 @@ def Update(_config, active_master, c):
       ]),
       Triggerable(name='linux_asan_rel_trigger', builderNames=[
           'Linux ASan LSan Tests (1)',
-          'Linux ASan LSan Tests (2)',
-          'Linux ASan LSan Tests (3)',
           'Linux ASan Tests (sandboxed)',
       ]),
   ])
@@ -30,8 +28,6 @@ def Update(_config, active_master, c):
       'triggers': ['linux_asan_rel_trigger'],
     },
     {'name': 'Linux ASan LSan Tests (1)'},
-    {'name': 'Linux ASan LSan Tests (2)'},
-    {'name': 'Linux ASan LSan Tests (3)'},
     {'name': 'Linux ASan Tests (sandboxed)'},
   ]
 
