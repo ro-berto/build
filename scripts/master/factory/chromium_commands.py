@@ -18,7 +18,6 @@ from buildbot.steps.transfer import FileUpload
 import config
 from master import chromium_step
 from master.factory import commands
-from master.factory import swarm_commands
 
 from master.log_parser import archive_command
 from master.log_parser import retcode_command
@@ -1154,45 +1153,6 @@ class ChromiumCommands(commands.FactoryCommands):
                                 'test_mini_installer', cmd,
                                 halt_on_failure=True, timeout=timeout,
                                 do_step_if=self.TestStepFilter)
-
-  def AddTriggerSwarmingTests(self, run_default_swarm_tests,
-                              factory_properties):
-    """Prepares a build to be run on the builder specified by
-    'swarming_triggered_builder'.
-
-    1. Generates the hash for each .isolated file and saves it in the build
-       property 'swarm_hashes'.
-    2. Triggers a dependent build which will actually talk to the Swarming
-       master.
-    """
-    self._factory.properties.setProperty(
-        'run_default_swarm_tests', run_default_swarm_tests, 'BuildFactory')
-
-    # This step sets the build property 'swarm_hashes'.
-    self.AddGenerateIsolatedHashesStep(
-        swarm_commands.TestStepFilterTriggerSwarm)
-
-    # Trigger the swarming test builder. The only issue here is that
-    # updateSourceStamp=False cannot be used because we want the user to get the
-    # email, e.g. the blamelist to be properly set, but that causes any patch to
-    # be caried over, which is annoying but benign.
-    self._factory.addStep(commands.CreateTriggerStep(
-        trigger_name=factory_properties['swarming_triggered_builder'],
-        trigger_set_properties={
-            'target_os': self._target_platform,
-            'use_swarming_client_revision':
-              WithProperties('%(got_swarming_client_revision:-)s'),
-        },
-        trigger_copy_properties=[
-            # try_mail_notifier.py needs issue, patchset and rietveld to note in
-            # its email which issue this build references to.
-            'issue',
-            'patchset',
-            'rietveld',
-            'run_default_swarm_tests',
-            'swarm_hashes',
-        ],
-        do_step_if=swarm_commands.TestStepFilterTriggerSwarm))
 
   def AddTriggerCoverageTests(self, factory_properties):
     """Trigger coverage testers, wait for completion, then process coverage."""

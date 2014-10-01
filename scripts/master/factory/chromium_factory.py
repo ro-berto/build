@@ -969,13 +969,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         chromium_cmd_obj.AddZipBuild(build_url,
                                     factory_properties=factory_properties)
 
-    # Trigger Swarming tester. This buildbot builder does nothing else than
-    # running swarming jobs.
-    if (factory_properties.get('swarming_triggered_builder') or
-        run_default_swarm_tests):
-      chromium_cmd_obj.AddTriggerSwarmingTests(
-          run_default_swarm_tests, factory_properties)
-
     # Add this archive build step.
     if factory_properties.get('archive_build'):
       chromium_cmd_obj.AddArchiveBuild(factory_properties=factory_properties)
