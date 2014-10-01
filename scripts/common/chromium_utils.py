@@ -40,7 +40,6 @@ WIN_LINK_FUNC = None
 try:
   if sys.platform.startswith('win'):
     import ctypes
-    import exceptions
     # There's 4 possibilities on Windows for links:
     # 1. Symbolic file links;
     # 2. Symbolic directory links;
@@ -59,10 +58,10 @@ try:
     def _WIN_LINK_FUNC(src, dst):
       if os.path.isdir(src):
         if not ctypes.windll.kernel32.CreateSymbolicLinkA(dst, src, 1):
-          raise exceptions.WindowsError("CreateSymbolicLinkA failed")
+          raise ctypes.WinError()
       else:
         if not ctypes.windll.kernel32.CreateHardLinkA(dst, src, 0):
-          raise exceptions.WindowsError("CreateHardLinkA failed")
+          raise ctypes.WinError()
     WIN_LINK_FUNC = _WIN_LINK_FUNC
 except ImportError:
   # If we don't have ctypes or aren't on Windows, leave WIN_LINK_FUNC as None.
