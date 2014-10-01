@@ -6,8 +6,8 @@ from RECIPE_MODULES.gclient import CONFIG_CTX
 from slave.recipe_config import BadConf
 
 # TODO(machenbach): Move this to an external configuration file.
-STABLE_BRANCH = '3.27'
-BETA_BRANCH = '3.28'
+STABLE_BRANCH = '3.28'
+BETA_BRANCH = '3.29'
 
 
 # TODO(machenbach): This is copied from gclient's config.py and should be
