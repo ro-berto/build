@@ -183,16 +183,22 @@ class WebRTCApi(recipe_api.RecipeApi):
           xvfb=True, perf_dashboard_id=perf_dashboard_id, test_type=test,
           env=env, revision=revision, perf_id=self.c.PERF_ID,
           perf_config=self.c.PERF_CONFIG)
-    elif parallel:
-      script = self.m.path['checkout'].join('third_party', 'gtest-parallel',
-                                            'gtest-parallel')
-      test_executable = self.m.chromium.c.build_dir.join(
-          self.m.chromium.c.build_config_fs, test)
-      self.m.python(name, script, args=[test_executable] + args, env=env)
     else:
+      annotate = 'gtest'
+      python_mode = False
+      test_type = test
+      if parallel:
+        test_executable = self.m.chromium.c.build_dir.join(
+          self.m.chromium.c.build_config_fs, test)
+        args = [test_executable] + args
+        test = self.m.path['checkout'].join('third_party', 'gtest-parallel',
+                                            'gtest-parallel')
+        python_mode = True
+        annotate = None  # The parallel script doesn't output gtest format.
+
       self.m.chromium.runtest(
-          test=test, args=args, name=name, annotate='gtest', xvfb=True,
-          test_type=test, env=env)
+          test=test, args=args, name=name, annotate=annotate, xvfb=True,
+          python_mode=python_mode, test_type=test_type, env=env)
 
   @recipe_api.composite_step
   def test_runner(self, test, isolate_path):
