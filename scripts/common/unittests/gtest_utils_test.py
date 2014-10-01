@@ -648,6 +648,7 @@ class TestGTestJSONParserTests(auto_stub.TestCase):
     parser = gtest_utils.GTestJSONParser()
     parser.ProcessJSONData({
       'disabled_tests': [],
+      'global_tags': [],
       'per_iteration_data': [
         {
           'Test.One': [{'status': 'SUCCESS', 'output_snippet': ''}],
@@ -665,6 +666,7 @@ class TestGTestJSONParserTests(auto_stub.TestCase):
     parser = gtest_utils.GTestJSONParser()
     parser.ProcessJSONData({
       'disabled_tests': [],
+      'global_tags': [],
       'per_iteration_data': [
         {
           'Test.One': [{'status': 'FAILURE', 'output_snippet': ''}],
@@ -682,6 +684,7 @@ class TestGTestJSONParserTests(auto_stub.TestCase):
     parser = gtest_utils.GTestJSONParser()
     parser.ProcessJSONData({
       'disabled_tests': [],
+      'global_tags': [],
       'per_iteration_data': [
         {
           'Test.One': [{'status': 'FAILURE', 'output_snippet': ''}],
@@ -702,6 +705,7 @@ class TestGTestJSONParserTests(auto_stub.TestCase):
     parser = gtest_utils.GTestJSONParser()
     parser.ProcessJSONData({
       'disabled_tests': ['Test.Two'],
+      'global_tags': [],
       'per_iteration_data': [
         {
           'Test.One': [{'status': 'SUCCESS', 'output_snippet': ''}],
@@ -758,7 +762,11 @@ class TestGTestJSONParserTests(auto_stub.TestCase):
   # pylint: disable=R0201
   def testDoesNotThrowExceptionOnMissingIgnoredFailedTestsFile(self):
     parser = gtest_utils.GTestJSONParser()
-    parser.ProcessJSONData({'per_iteration_data': []}, tempfile.gettempdir())
+    parser.ProcessJSONData({
+      'disabled_tests': [],
+      'global_tags': [],
+      'per_iteration_data': []},
+      tempfile.gettempdir())
 
   def testCompressList(self):
     CompressList = gtest_utils.CompressList

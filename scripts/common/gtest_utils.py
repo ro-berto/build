@@ -576,10 +576,9 @@ class GTestJSONParser(object):
           break
 
   def ProcessJSONData(self, json_data, build_dir=None):
-    # TODO(phajdan.jr): Require disabled_tests to be present (May 2014).
-    self.disabled_tests.update(json_data.get('disabled_tests', []))
-    self._RetrieveIgnoredFailuresForPlatform(build_dir,
-                                             json_data.get('global_tags', []))
+    self.disabled_tests.update(json_data['disabled_tests'])
+    self._RetrieveIgnoredFailuresForPlatform(
+        build_dir, json_data['global_tags'])
 
     for iteration_data in json_data['per_iteration_data']:
       for test_name, test_runs in iteration_data.iteritems():
