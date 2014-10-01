@@ -50,6 +50,14 @@ BUILDERS = {
       'arm_version': 6
     }
   },
+  'Android Cronet ARM64 Builder': {
+    'recipe_config': 'arm64_builder',
+    'run_tests': False,
+    'upload_package': True,
+    'kwargs': {
+      'BUILD_CONFIG': 'Release',
+    },
+  },
   'Android Cronet x86 Builder': {
     'recipe_config': 'x86_builder',
     'run_tests': False,
@@ -91,6 +99,7 @@ def _sanitize_nonalpha(text):
 def GenTests(api):
   bot_ids = ['local_test', 'Android Cronet Builder (dbg)',
       'Android Cronet Builder', 'Android Cronet ARMv6 Builder',
+      'Android Cronet ARM64 Builder',
       'Android Cronet MIPS Builder', 'Android Cronet x86 Builder']
 
   for bot_id in bot_ids:
