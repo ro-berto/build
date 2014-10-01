@@ -2,8 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from os import path
-
 from slave.recipe_config import config_item_context, ConfigGroup
 from slave.recipe_config import List, Set, Single, Static
 
@@ -98,8 +96,8 @@ def isolates(c):
 
 @config_ctx()
 def nacl(c):
-  c.testing.test_args.add('--command_prefix=%s'
-                          % path.join('tools', 'nacl-run.py'))
+  # TODO(iannucci): Figure out how to make api path available here.
+  c.testing.test_args.add('--command_prefix=tools/nacl-run.py')
   # This switches off buildbot flavor for NaCl, i.e. uses the directory layout
   # out/nacl_ia32.release instead of out/Release.
   c.testing.test_args.add('--buildbot=False')
