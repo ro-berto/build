@@ -41,6 +41,52 @@ SCHEDULERS = [
 ]
 
 
+def CanMergeBuildRequests(req1, req2):
+  """Determine whether or not two BuildRequests can be merged.
+
+  Rewrite of buildbot.sourcestamp.SourceStamp.canBeMergedWith(), which
+  verifies that:
+  1. req1.source.repository == req2.source.repository
+  2. req1.source.project == req2.source.project
+  3. req1.source.branch == req2.source.branch
+  4. req1.patch == None and req2.patch = None
+  5. (req1.source.changes and req2.source.changes) or \
+     (not req1.source.changes and not req2.source.changes and \
+      req1.source.revision == req2.source.revision)
+
+  Of the above, we want 1, 2, 3, and 5.
+  Instead of 4, we want to make sure that neither request is a Trybot request.
+  """
+  # Verify that the repositories are the same (#1 above).
+  if req1.source.repository != req2.source.repository:
+    return False
+
+  # Verify that the projects are the same (#2 above).
+  if req1.source.project != req2.source.project:
+    return False
+
+  # Verify that the branches are the same (#3 above).
+  if req1.source.branch != req2.source.branch:
+    return False
+
+  # If either is a try request, don't merge (#4 above).
+  if (builder_name_schema.IsTrybot(req1.buildername) or
+      builder_name_schema.IsTrybot(req2.buildername)):
+    return False
+
+  # Verify that either: both requests are associated with changes OR neither
+  # request is associated with a change but the revisions match (#5 above).
+  if req1.source.changes and not req2.source.changes:
+    return False
+  if not req1.source.changes and req2.source.changes:
+    return False
+  if not (req1.source.changes and req2.source.changes):
+    if req1.source.revision != req2.source.revision:
+      return False
+
+  return True
+
+
 def SetupBuildersAndSchedulers(c, builders, slaves, ActiveMaster):
   """Set up builders and schedulers for the build master."""
   # List of dicts for every builder.
@@ -235,6 +281,8 @@ def SetupMaster(ActiveMaster):
     # Rietveld status push.
     c['status'].append(
         TryServerHttpStatusPush(serverUrl=ActiveMaster.code_review_site))
+
+  c['mergeRequests'] = CanMergeBuildRequests
 
   return c
 
