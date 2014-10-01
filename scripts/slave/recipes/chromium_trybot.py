@@ -388,6 +388,21 @@ BUILDERS = {
           'platform': 'win',
         },
       },
+      'win_chromium_rel_ng': {
+        'based_on_main_waterfall': {
+          'mastername': 'chromium.win',
+          'buildername': 'Win Builder',
+          'testers': [
+            'Win7 Tests (1)',
+            'Win7 Tests (2)',
+            'Win7 Tests (3)',
+            'NaCl Tests (x86-32)',
+          ],
+        },
+        'testing': {
+          'platform': 'win',
+        },
+      },
       'win_chromium_compile_dbg': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -428,6 +443,21 @@ BUILDERS = {
         },
         'chromium_config': 'chromium',
         'compile_only': False,
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'win_chromium_x64_rel_ng': {
+        'based_on_main_waterfall': {
+          'mastername': 'chromium.win',
+          'buildername': 'Win x64 Builder',
+          'testers': [
+            'Win 7 Tests x64 (1)',
+            'Win 7 Tests x64 (2)',
+            'Win 7 Tests x64 (3)',
+            'NaCl Tests (x86-64)',
+          ],
+        },
         'testing': {
           'platform': 'win',
         },
