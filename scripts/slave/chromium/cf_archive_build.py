@@ -115,7 +115,8 @@ def archive(options, args):
   staging_dir = slave_utils.GetStagingDir(src_dir)
   chromium_utils.MakeParentDirectoriesWorldReadable(staging_dir)
 
-  print 'Staging in %s' % build_dir
+  print 'Full Staging in %s' % staging_dir
+  print 'Build Directory %s' % build_dir
 
   # Build the list of files to archive.
   zip_file_list = [f for f in os.listdir(build_dir)
@@ -137,10 +138,10 @@ def archive(options, args):
   sortkey_path = chromium_utils.GetSortableUploadPathForSortKey(
       build_sortkey_branch, build_sortkey_value)
   zip_file_name = '%s-%s-%s%s-%s' % (prefix,
-                                   chromium_utils.PlatformName(),
-                                   options.target.lower(),
-                                   component,
-                                   sortkey_path)
+                                     chromium_utils.PlatformName(),
+                                     options.target.lower(),
+                                     component,
+                                     sortkey_path)
 
   (zip_dir, zip_file) = chromium_utils.MakeZip(staging_dir,
                                                zip_file_name,

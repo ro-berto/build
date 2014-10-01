@@ -56,6 +56,7 @@ try:
     # slightly odd tactic of using #2 and #3, but not #1 and #4. That is,
     # hardlinks for files, but symbolic links for directories.
     def _WIN_LINK_FUNC(src, dst):
+      print 'linking %s -> %s' % (src, dst)
       if os.path.isdir(src):
         if not ctypes.windll.kernel32.CreateSymbolicLinkA(dst, src, 1):
           raise ctypes.WinError()
