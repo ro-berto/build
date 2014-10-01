@@ -43,6 +43,7 @@ BUILDERS = {
     },
     'Android Builder (dbg)': {
       'recipe_config': 'main_builder',
+      'gclient_apply_config': ['android', 'chrome_internal'],
       'check_licenses': NormalStep,
       'findbugs': NormalStep,
       'upload': {
@@ -53,6 +54,7 @@ BUILDERS = {
     },
     'Android Builder': {
       'recipe_config': 'main_builder',
+      'gclient_apply_config': ['android', 'chrome_internal'],
       'check_licenses': NormalStep,
       'findbugs': NormalStep,
       'upload': {
@@ -64,6 +66,7 @@ BUILDERS = {
     },
     'Android Clang Builder (dbg)': {
       'recipe_config': 'clang_builder',
+      'gclient_apply_config': ['android', 'chrome_internal'],
     },
   },
   'chromium.linux': {
