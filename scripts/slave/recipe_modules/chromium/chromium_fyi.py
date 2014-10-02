@@ -9,6 +9,41 @@ SPEC = {
     'build_gs_bucket': 'chromium-fyi-archive',
   },
   'builders': {
+    'android_nexus5_oilpan_perf': {
+      'disable_tests': True,
+      'bot_type': 'tester',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+        'TARGET_PLATFORM': 'android',
+      },
+      'gclient_config': 'perf',
+      'gclient_apply_config': ['android'],
+      'parent_buildername': 'android_oilpan_builder',
+      'recipe_config': 'perf',
+      'android_config': 'perf',
+      'testing': {
+        'platform': 'linux',
+      },
+      'tests': [
+        steps.AndroidPerfTests('android-nexus5-oilpan', 1),
+      ],
+    },
+    'android_oilpan_builder': {
+      'disable_tests': True,
+      'recipe_config': 'chromium_oilpan',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+        'TARGET_ARCH': 'arm',
+      },
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'linux',
+      },
+      'chromium_apply_config': ['chromium_perf', 'android'],
+      'gclient_apply_config': ['android', 'perf'],
+    },
     'Chromium iOS Device': {
       'recipe_config': 'chromium_ios_device',
       'chromium_config_kwargs': {

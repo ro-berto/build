@@ -20,7 +20,7 @@ class AdbApi(recipe_api.RecipeApi):
     return str(self.m.path['build_internal'].join('scripts', 'slave',
                                                   'android', 'adb'))
 
-  def list_devices(self, **kwargs):
+  def list_devices(self, step_test_data=None, **kwargs):
     cmd = [
         self._adb_path(),
         'devices',
@@ -30,7 +30,7 @@ class AdbApi(recipe_api.RecipeApi):
         'List adb devices',
         self.resource('list_devices.py'),
         args=[ repr(cmd), self.m.json.output() ],
-        step_test_data=self.test_api.device_list,
+        step_test_data=step_test_data or self.test_api.device_list,
         **kwargs)
 
     self._devices = result.json.output

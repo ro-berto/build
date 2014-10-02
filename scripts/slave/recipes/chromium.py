@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+  'adb',
   'chromium',
   'chromium_android',
   'chromium_tests',

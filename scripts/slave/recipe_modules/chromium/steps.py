@@ -329,6 +329,32 @@ class DynamicPerfTests(Test):
     return []
 
 
+class AndroidPerfTests(Test):
+  def __init__(self, perf_id, num_shards):
+    self.perf_id = perf_id
+    self.num_shards = num_shards
+
+  def run(self, api, suffix):
+    exception = None
+    api.adb.list_devices(step_test_data=api.adb.test_api.two_devices)
+    perf_tests = api.chromium.list_perf_tests(
+        browser='android-chrome-shell',
+        num_shards=self.num_shards,
+        devices=api.adb.devices[0:1]).json.output
+    try:
+      api.chromium_android.run_sharded_perf_tests(
+        config=api.json.input(data=perf_tests),
+        perf_id=self.perf_id)
+    except api.step.StepFailure as f:
+      exception = f
+    if exception:
+      raise exception
+
+  @staticmethod
+  def compile_targets(_):
+    return []
+
+
 class SwarmingGTestTest(Test):
   def __init__(self, name, args=None, shards=1):
     self._name = name

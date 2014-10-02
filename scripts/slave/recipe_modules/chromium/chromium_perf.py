@@ -18,7 +18,6 @@ def _Spec(platform, parent_builder, perf_id, index, num_shards, target_bits):
       'TARGET_BITS': target_bits,
     },
     'parent_buildername': parent_builder,
-    'perf_tester_shards': num_shards,
     'recipe_config': 'perf',
     'testing': {
       'platform': platform,
@@ -131,6 +130,21 @@ SPEC = {
       },
       'chromium_apply_config': ['chromium_perf']
     },
+    'Android Builder': {
+      'disable_tests': True,
+      'recipe_config': 'official',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+        'TARGET_ARCH': 'arm',
+      },
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'linux',
+      },
+      'chromium_apply_config': ['chromium_perf', 'android'],
+      'gclient_apply_config': ['android', 'perf'],
+    },
   }
 }
 
@@ -232,3 +246,47 @@ _AddBotSpec(
     perf_id='chromium-rel-mac6',
     target_bits=32,
     num_shards=5)
+
+_AndroidSpecs = {
+  'Android Nexus4 Perf': {
+    'perf_id': 'android-nexus4',
+    'num_device_shards': 2,
+  },
+  'Android Nexus5 Perf': {
+    'perf_id': 'android-nexus5',
+    'num_device_shards': 8,
+  },
+  'Android Nexus7v2 Perf': {
+    'perf_id': 'android-nexus7v2',
+    'num_device_shards': 8,
+  },
+  'Android Nexus10 Perf': {
+    'perf_id': 'android-nexus10',
+    'num_device_shards': 8,
+  },
+  'Android MotoE Perf': {
+    'perf_id': 'android-motoe',
+    'num_device_shards': 8,
+  },
+}
+for k, v in _AndroidSpecs.iteritems():
+  SPEC['builders'][k] = {
+    'disable_tests': True,
+    'bot_type': 'tester',
+    'chromium_config_kwargs': {
+      'BUILD_CONFIG': 'Release',
+      'TARGET_BITS': 32,
+      'TARGET_PLATFORM': 'android',
+    },
+    'gclient_config': 'perf',
+    'gclient_apply_config': ['android'],
+    'parent_buildername': 'Android Builder',
+    'recipe_config': 'perf',
+    'android_config': 'perf',
+    'testing': {
+      'platform': 'linux',
+    },
+    'tests': [
+      steps.AndroidPerfTests(v['perf_id'], v['num_device_shards']),
+    ],
+  }
