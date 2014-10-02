@@ -106,6 +106,7 @@
       "runhooks"
     ],
     "env": {
+      "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android android_webview_telemetry_build=1 component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },

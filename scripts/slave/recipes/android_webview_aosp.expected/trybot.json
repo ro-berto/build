@@ -303,6 +303,7 @@
       "/path/to/tmp/json"
     ],
     "env": {
+      "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 target_arch=arm"
     },
     "name": "analyze",

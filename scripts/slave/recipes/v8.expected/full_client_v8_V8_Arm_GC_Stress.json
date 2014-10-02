@@ -49,6 +49,7 @@
       "runhooks"
     ],
     "env": {
+      "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "target_arch=arm v8_optimized_debug=1 v8_target_arch=arm"
     },
     "name": "gclient runhooks"

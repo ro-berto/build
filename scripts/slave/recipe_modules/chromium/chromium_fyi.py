@@ -109,15 +109,16 @@ SPEC = {
     'Linux ARM Cross-Compile': {
       # TODO(phajdan.jr): Re-enable goma, http://crbug.com/349236 .
       'recipe_config': 'chromium_no_goma',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_ARCH': 'arm',
+        'TARGET_BITS': 32,
+      },
       'GYP_DEFINES': {
-        'target_arch': 'arm',
         'arm_float_abi': 'hard',
         'test_isolation_mode': 'archive',
       },
       'chromium_config': 'chromium',
-      'runhooks_env': {
-        'GYP_CROSSCOMPILE': '1',
-      },
       'test_generators': [
         steps.generate_gtest,
       ],

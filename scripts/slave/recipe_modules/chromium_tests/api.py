@@ -181,7 +181,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.swarming.task_priority = 50
 
     if not bot_config.get('disable_runhooks'):
-      self.m.chromium.runhooks(env=bot_config.get('runhooks_env', {}))
+      self.m.chromium.runhooks()
 
     test_spec_file = bot_config.get('testing', {}).get('test_spec_file',
                                                        '%s.json' % mastername)

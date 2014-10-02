@@ -78,6 +78,7 @@
       "runhooks"
     ],
     "env": {
+      "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android branding=Chrome buildtype=Official component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1"
     },
     "name": "gclient runhooks"

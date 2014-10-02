@@ -144,7 +144,7 @@ def BASE(c):
     if not c.TARGET_PLATFORM == 'chromeos':
       raise BadConf("Cannot specify CROS board for non-'chromeos' platform")
 
-  if c.HOST_PLATFORM != c.TARGET_PLATFORM:
+  if c.HOST_PLATFORM != c.TARGET_PLATFORM or c.HOST_ARCH != c.TARGET_ARCH:
     c.gyp_env.GYP_CROSSCOMPILE = 1
 
   if c.HOST_BITS < c.TARGET_BITS:
