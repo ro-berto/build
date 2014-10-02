@@ -120,6 +120,14 @@ def goma_setup(options, env):
   if hash(hostname) % 100 <= 10:
     env['GOMA_SEND_SUBPROGRAM_SPEC'] = 'true'
 
+  # HACK(yyanagisawa, goma): Windows NO_NACL_GOMA (crbug.com/390764)
+  # Building NaCl untrusted code using goma brings large performance
+  # improvement but it sometimes cause build failure by race condition.
+  # Let me enable goma build on several buildslaves to confirm the issue
+  # has been fixed by a workaround.
+  if hostname in ['vm120-m4', 'vm245-m4', 'vm320-m4', 'vm365-m4']:
+    env['NO_NACL_GOMA'] = 'false'
+
   # HACK(shinyak, goma): Enable GLOBAL_FILEID_CACHE_PATTERNS only in
   # Chromium Win Ninja Goma and Chromium Win Ninja Goma (shared) builders,
   # so that we can check whether this feature is not harmful and how much
