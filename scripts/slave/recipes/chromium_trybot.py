@@ -30,14 +30,15 @@ BUILDERS = {
     'builders': {
       'linux_arm_cross_compile': {
         'GYP_DEFINES': {
-          'target_arch': 'arm',
           'arm_float_abi': 'hard',
           'test_isolation_mode': 'archive',
         },
-        'chromium_config': 'chromium',
-        'runhooks_env': {
-          'GYP_CROSSCOMPILE': '1',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
         },
+        'chromium_config': 'chromium',
         'compile_only': True,
         'exclude_compile_all': True,
         'testing': {
@@ -803,8 +804,6 @@ def GenSteps(api):
     if not api.platform.is_win and not bot_config.get('exclude_compile_all'):
       compile_targets = ['all'] + compile_targets
 
-    runhooks_env = bot_config.get('runhooks_env', {})
-
     # Tests that are only run if their compile_targets are going to be built.
     conditional_tests = [api.chromium.steps.NaclIntegrationTest()]
     if bot_config.get('add_telemetry_tests', True):
@@ -822,8 +821,7 @@ def GenSteps(api):
                all_compile_targets(conditional_tests),
           compile_targets=compile_targets,
           additional_name='chromium',
-          config_file_name=analyze_config_file,
-          env=runhooks_env)
+          config_file_name=analyze_config_file)
       if not api.filter.result:
         return [], bot_update_step
       # Patch needs compile. Filter the list of test and compile targets.
@@ -888,7 +886,7 @@ def GenSteps(api):
       api.swarming.task_priority = build_to_priority(api.properties)
 
     try:
-      api.chromium.runhooks(name='runhooks (with patch)', env=runhooks_env)
+      api.chromium.runhooks(name='runhooks (with patch)')
     except api.step.StepFailure:
       # As part of deapplying patch we call runhooks without the patch.
       deapply_patch(bot_update_step)
