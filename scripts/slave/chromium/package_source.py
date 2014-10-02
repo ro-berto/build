@@ -131,17 +131,16 @@ def main():
   chromium_utils.AddPropertiesOptions(option_parser)
   options, _ = option_parser.parse_args()
 
-  # First clean up old .index and .json-command files from previous runs.
-  print '%s: Cleaning up locally...' % time.strftime('%X')
-  chromium_utils.RunCommand(['find', 'src/out', '-type', 'f',
-                               '(', '-name', '*.json-command', '-o',
-                                    '-name', '*.index', ')',
-                               '-exec', 'rm', '-f', '{}', ';'])
+  print '%s: Cleaning up old data...' % time.strftime('%X')
   # Clean up any source archives from previous runs.
   package_filename = options.factory_properties.get(
       'package_filename', FILENAME)
-  chromium_utils.RunCommand(['rm', '-f', '%s-*.%s.partial' % (
-      package_filename, EXT)])
+  chromium_utils.RemoveFilesWildcards(
+      '%s-*.%s.partial' % (package_filename, EXT))
+  # Clean up index files from previous runs.
+  chromium_utils.RemoveFilesWildcards(
+      '*.index', os.path.join('src/out', os.curdir))
+
 
   if not os.path.exists('src'):
     raise Exception('ERROR: no src directory to package, exiting')
@@ -251,6 +250,12 @@ def main():
     packaging_successful = False
 
   finally:
+    # Clean up .json-command files.
+    # TODO(akuegel): Move this to a separate cleanup step that runs before the
+    # compile step.
+    print '%s: Cleaning up locally...' % time.strftime('%X')
+    chromium_utils.RemoveFilesWildcards(
+        '*.json-command', os.path.join('src/out', os.curdir))
     print '%s: Done.' % time.strftime('%X')
 
   if not (indexing_successful and packaging_successful):
