@@ -536,6 +536,17 @@ class DartUtils(object):
     return DartUtils.get_git_poller(repo, name, revlink)
 
   @staticmethod
+  def get_google_git_repo(name):
+    return 'https://github.com/google/%s.git' % name
+
+  @staticmethod
+  def get_google_git_poller(name):
+    revlink = "https://github.com/google/" + name + "/commit/%s"
+    repo = DartUtils.get_google_git_repo(name)
+    return DartUtils.get_git_poller(repo, name, revlink)
+
+
+  @staticmethod
   def prioritize_builders(buildmaster, builders):
     def get_priority(name):
       for channel in CHANNELS:

@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-PACKAGES = [
+DART_PACKAGES = [
   {
     'name' : 'core-elements',
   },
@@ -14,6 +14,12 @@ PACKAGES = [
   },
   {
     'name' : 'googleapis_auth',
+  },
+  {
+    'name' : 'html5lib',
+  },
+  {
+    'name' : 'code-transformers',
   },
   {
     'name' : 'observe',
@@ -34,3 +40,11 @@ PACKAGES = [
     'name' : 'web-components',
   },
 ]
+
+GOOGLE_PACKAGES = [
+  {
+    'name' : 'serialization.dart',
+  },
+]
+
+PACKAGES = DART_PACKAGES + GOOGLE_PACKAGES
