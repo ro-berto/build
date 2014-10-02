@@ -179,6 +179,22 @@ F('linux_asan_dbg', linux().ChromiumASANFactory(
        'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': asan_debug_gyp}}))
 
+asan_chromiumos_rel_gyp = ('%s chromeos=1' % asan_rel_gyp)
+
+B('ChromiumOS ASAN Release', 'linux_chromiumos_asan_rel', 'compile',
+  'chromium_lkgr')
+F('linux_chromiumos_asan_rel', linux().ChromiumASANFactory(
+    compile_timeout=2400,  # We started seeing 29 minute links, bug 360158
+    clobber=True,
+    options=['--compiler=clang', 'chromium_builder_asan'],
+    factory_properties={
+       'cf_archive_build': ActiveMaster.is_production_host,
+       'cf_archive_name': 'asan',
+       'cf_archive_subdir_suffix': 'chromeos',
+       'gs_bucket': 'gs://chromium-browser-asan',
+       'gs_acl': 'public-read',
+       'gclient_env': {'GYP_DEFINES': asan_chromiumos_rel_gyp}}))
+
 asan_ia32_v8_arm = ('asan=1 asan_coverage=1 disable_nacl=1 '
                     'v8_target_arch=arm host_arch=x86_64 target_arch=ia32 '
                     'sysroot=/var/lib/chroot/precise32bit chroot_cmd=precise32 '
