@@ -505,8 +505,11 @@ def RemoveDirectory(*path):
     # Give up and use cmd.exe's rd command.
     file_path = os.path.normcase(file_path)
     for _ in xrange(3):
+      print 'RemoveDirectory running %s' % (' '.join(
+          ['cmd.exe', '/c', 'rd', '/q', '/s', file_path]))
       if not subprocess.call(['cmd.exe', '/c', 'rd', '/q', '/s', file_path]):
         break
+      print '  Failed'
       time.sleep(3)
     return
 
@@ -644,6 +647,8 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
     else:
       print 'Removing %s' % archive_dir
       RemoveDirectory(archive_dir)
+      print 'Now, os.path.exists(%s): %s' % (
+          archive_dir, os.path.exists(archive_dir))
   MaybeMakeDirectory(archive_dir)
   for needed_file in file_list:
     needed_file = needed_file.rstrip()
