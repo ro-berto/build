@@ -189,6 +189,9 @@
       "--dump-json",
       "/path/to/tmp/json",
       "--dimension",
+      "cpu",
+      "x86-64",
+      "--dimension",
       "os",
       "Mac",
       "--profile",
@@ -197,7 +200,7 @@
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] dummy_target_1",
+    "name": "[trigger] dummy_target_1 on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"dummy_target_1/Mac/[dummy hash for dummy_target_1]/TestBuilder/571\", @@@",
@@ -238,6 +241,9 @@
       "--dump-json",
       "/path/to/tmp/json",
       "--dimension",
+      "cpu",
+      "x86-64",
+      "--dimension",
       "os",
       "Mac",
       "--profile",
@@ -246,7 +252,7 @@
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] dummy_target_2",
+    "name": "[trigger] dummy_target_2 on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"dummy_target_2/Mac/[dummy hash for dummy_target_2]/TestBuilder/571\", @@@",
@@ -291,7 +297,7 @@
       "2",
       "dummy_target_1/Mac/[dummy hash for dummy_target_1]/TestBuilder/571"
     ],
-    "name": "dummy_target_1"
+    "name": "dummy_target_1 on Mac"
   },
   {
     "allow_subannotations": true,
@@ -316,6 +322,6 @@
       "2",
       "dummy_target_2/Mac/[dummy hash for dummy_target_2]/TestBuilder/571"
     ],
-    "name": "dummy_target_2"
+    "name": "dummy_target_2 on Mac"
   }
 ]

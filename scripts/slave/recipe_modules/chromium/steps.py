@@ -404,6 +404,11 @@ class SwarmingGTestTest(Test):
         test_launcher_summary_output=api.json.gtest_results(
             add_json_log=False),
         extra_args=args)
+
+    # Set default value.
+    if 'os' not in self._tasks[suffix].dimensions:
+      self._tasks[suffix].dimensions['os'] = api.swarming.prefered_os_dimension(
+          api.platform.name)
     return api.swarming.trigger_task(self._tasks[suffix])
 
   def run(self, api, suffix):  # pylint: disable=R0201

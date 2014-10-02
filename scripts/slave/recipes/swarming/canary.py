@@ -35,7 +35,12 @@ def GenSteps(api):
 
   # Run tests from chromium.swarm buildbot with a relatively high priority
   # so that they take precedence over manually triggered tasks.
-  api.swarming.task_priority = 20
+  api.swarming.default_priority = 20
+
+  # Do not care about the OS specific version on Canary.
+  api.swarming.set_default_dimension(
+      'os',
+      api.swarming.prefered_os_dimension(api.platform.name).split('-', 1)[0])
 
   # We are building simplest Chromium flavor possible.
   api.chromium.set_config(
@@ -79,9 +84,6 @@ def GenSteps(api):
     for test, isolated_hash in sorted(api.isolate.isolated_tests.iteritems())
   ]
 
-  # Launch them on swarming using OS dimension that correspond to platform this
-  # recipe is running on (that is default behavior), since we used that platform
-  # to compile tests.
   for task in tasks:
     api.swarming.trigger_task(task)
 
@@ -109,7 +111,7 @@ def GenTests(api):
     api.properties.scheduled() +
     api.properties(configuration='Debug') +
     api.override_step_data(
-        'dummy_target_1',
+        'dummy_target_1 on Ubuntu',
         api.json.canned_gtest_output(
             passing=False,
             minimal=True,

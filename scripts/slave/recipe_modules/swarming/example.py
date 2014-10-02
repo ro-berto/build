@@ -27,7 +27,18 @@ def GenSteps(api):
   api.swarming.swarming_server = 'https://chromium-swarm-dev.appspot.com'
   api.swarming.profile = True
   api.swarming.verbose = True
-  api.swarming.task_priority = 30
+  api.swarming.default_priority = 30
+  api.swarming.set_default_env('TESTING', '1')
+
+  try:
+    # Testing ReadOnlyDict.__setattr__() coverage.
+    api.swarming.default_dimensions['invalid'] = 'foo'
+  except TypeError:
+    pass
+  try:
+    api.swarming.default_env['invalid'] = 'foo'
+  except TypeError:
+    pass
 
   # Create a temp dir to put *.isolated files into.
   temp_dir = api.path.mkdtemp('hello_isolated_world')
@@ -56,8 +67,7 @@ def GenSteps(api):
     # Also generate code coverage for multi-shard case by triggering multiple
     # shards on Linux.
     task = api.swarming.task('hello_world', isolated_hash, make_unique=True)
-    task.dimensions['os'] = api.swarming.platform_to_os_dimension(platform)
-    task.env['TESTING'] = '1'
+    task.dimensions['os'] = api.swarming.prefered_os_dimension(platform)
     task.shards = 2 if platform == 'linux' else 1
     tasks.append(task)
 

@@ -882,8 +882,7 @@ def GenSteps(api):
     # compatible with what recipes expect.
     if has_swarming_tests:
       api.swarming.check_client_version()
-      # Decide the task priority.
-      api.swarming.task_priority = build_to_priority(api.properties)
+      api.swarming.default_priority = build_to_priority(api.properties)
 
     try:
       api.chromium.runhooks(name='runhooks (with patch)')

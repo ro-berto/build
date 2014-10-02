@@ -182,7 +182,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if enable_swarming:
       self.m.isolate.set_isolate_environment(self.m.chromium.c)
       self.m.swarming.check_client_version()
-      self.m.swarming.task_priority = 50
+      self.m.swarming.default_priority = 50
 
     if not bot_config.get('disable_runhooks'):
       self.m.chromium.runhooks()

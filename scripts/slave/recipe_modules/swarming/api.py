@@ -11,15 +11,6 @@ from slave import recipe_api
 MINIMAL_SWARMING_VERSION = (0, 4, 10)
 
 
-# Platform name as provided by 'platform' module -> Swarming OS dimension.
-PLATFORM_TO_OS_DIMENSION = {
-  'mac': 'Mac',
-  'linux': 'Linux',
-  # Run on Win7 by default. CI recipe may override OS to be XP if necessary.
-  'win': 'Windows-6.1',
-}
-
-
 # The goal here is to take ~5m of actual test run per shard, e.g. the 'RunTest'
 # section in the logs, so that the trade-off of setup time overhead vs latency
 # is reasonable. The overhead is in the 15~90s range, with the vast majority
@@ -36,12 +27,17 @@ TESTS_SHARDS = {
 }
 
 
+class ReadOnlyDict(dict):
+  def __setitem__(self, key, value):
+    raise TypeError('ReadOnlyDict is immutable')
+
+
 class SwarmingApi(recipe_api.RecipeApi):
   """Recipe module to use swarming.py tool to run tasks on Swarming.
 
   General usage:
     1. Tweak default task parameters applied to all swarming tasks (such as
-       task_os_dimension and task_priority). This step is optional.
+       default_dimensions and default_priority).
     2. Isolate some test using 'isolate' recipe module. Get isolated hash as
        a result of that process.
     3. Create a task configuration using 'task(...)' method, providing
@@ -58,12 +54,16 @@ class SwarmingApi(recipe_api.RecipeApi):
 
   def __init__(self, **kwargs):
     super(SwarmingApi, self).__init__(**kwargs)
-    self._swarming_server = 'https://chromium-swarm.appspot.com'
-    self._profile = False
-    self._verbose = False
-    self._task_os_dimension = None
-    self._task_priority = 200
+    # All tests default to a x86-64 bot.
+    self._default_dimensions = {'cpu': 'x86-64'}
+    self._default_env = {}
+    # The default priority is extremely low and should be increased dependending
+    # on the type of task.
+    self._default_priority = 200
     self._pending_tasks = set()
+    self._profile = False
+    self._swarming_server = 'https://chromium-swarm.appspot.com'
+    self._verbose = False
 
   @property
   def swarming_server(self):
@@ -98,66 +98,68 @@ class SwarmingApi(recipe_api.RecipeApi):
     self._verbose = value
 
   @property
-  def task_os_dimension(self):
-    """Swarming OS dimension to run task on: Mac, Linux, Windows-6.1, etc.
+  def default_dimensions(self):
+    """Returns a copy of the default Swarming dimensions to run task on.
 
-    Used for tasks triggered in current recipe unless recipe itself overrides
-    it on per-task basis.
-
-    Default is derived from 'target_os' build property (if set) or OS of
-    a machine that runs the recipe (if 'target_os' is not set).
+    Example:
+      {'cpu': 'x86-64', 'os': 'Windows-6.1'}
     """
-    if self._task_os_dimension is None:
-      # 'target_os' is defined in builder/tester configuration (where 'tester'
-      # is a bot that just triggers the tasks). In that case target_os may be
-      # different from OS that recipe is running on, i.e. bot running recipe
-      # on Linux may trigger tasks running on Windows.
-      target_os = self.m.properties.get('target_os')
-      if target_os:  # pragma: no cover
-        platform = self.m.platform.normalize_platform_name(target_os)
-      else:
-        platform = self.m.platform.name
-      self._task_os_dimension = self.platform_to_os_dimension(platform)
-    return self._task_os_dimension
+    return ReadOnlyDict(self._default_dimensions)
 
-  @task_os_dimension.setter
-  def task_os_dimension(self, value):  # pragma: no cover
+  def set_default_dimension(self, key, value):
     """Sets Swarming OS dimension to run task on by default."""
-    self._task_os_dimension = value
+    assert isinstance(key, basestring), key
+    assert isinstance(value, basestring), value
+    self._default_dimensions[key] = value
 
   @property
-  def task_priority(self):
-    """Swarming task priority for tasks triggered from the recipe."""
-    return self._task_priority
+  def default_env(self):
+    """Returns a copy of the default environment variable to run tasks with."""
+    return ReadOnlyDict(self._default_env)
 
-  @task_priority.setter
-  def task_priority(self, value):
+  def set_default_env(self, key, value):
+    """Sets an environment variable to run tasks with."""
+    assert isinstance(key, basestring), key
+    assert isinstance(value, basestring), value
+    self._default_env[key] = value
+
+  @property
+  def default_priority(self):
+    """Swarming task priority for tasks triggered from the recipe."""
+    return self._default_priority
+
+  @default_priority.setter
+  def default_priority(self, value):
     """Sets swarming task priority for tasks triggered from the recipe."""
     assert 0 <= value <= 255
-    self._task_priority = value
+    self._default_priority = value
 
   @staticmethod
-  def platform_to_os_dimension(platform):
-    """Given a platform name returns swarming OS dimension that represents it.
+  def prefered_os_dimension(platform):
+    """Given a platform name returns the prefered Swarming OS dimension.
 
     Platform name is usually provided by 'platform' recipe module, it's one
     of 'win', 'linux', 'mac'. This function returns more concrete Swarming OS
-    dimension that represent this platform on Swarming by default. For example,
-    currently 'win' is represented by Windows 7 Swarming slaves ('Windows-6.1'
-    OS dimension).
+    dimension that represent this platform on Swarming by default.
 
     Recipes are free to use other OS dimension if there's a need for it. For
     example WinXP try bot recipe may explicitly specify 'Windows-5.1' dimension.
     """
-    return PLATFORM_TO_OS_DIMENSION[platform]
+    return {
+      'linux': 'Ubuntu-12.04',
+      'mac': 'Mac-10.8',
+      'win': 'Windows-6.1',
+    }[platform]
 
   def task(self, title, isolated_hash,
            make_unique=False, shards=None, extra_args=None):
-    """Returns SwarmingTask instance that represents some isolated test.
+    """Returns a new SwarmingTask instance to run an isolated executable on
+    Swarming.
 
-    It can be customized if necessary (see SwarmingTask class below). Pass it
-    to 'trigger_task' to launch it on swarming. Later pass the same instance to
-    'collect_task' to wait for the task to finish and fetch its results.
+    The return value can be customized if necessary (see SwarmingTask class
+    below). Pass it to 'trigger_task' to launch it on swarming. Later pass the
+    same instance to 'collect_task' to wait for the task to finish and fetch its
+    results.
 
     Args:
       title: name of the test, used as part of a task ID, also used as a key
@@ -175,9 +177,9 @@ class SwarmingApi(recipe_api.RecipeApi):
     return SwarmingTask(
         title=title,
         isolated_hash=isolated_hash,
-        dimensions={'os': self.task_os_dimension},
-        env={},
-        priority=self.task_priority,
+        dimensions=self._default_dimensions,
+        env=self._default_env,
+        priority=self.default_priority,
         shards=shards or TESTS_SHARDS.get(title, 1),
         builder=self.m.properties.get('buildername', 'local'),
         build_number=self.m.properties.get('buildnumber', 0),
@@ -186,9 +188,9 @@ class SwarmingApi(recipe_api.RecipeApi):
         extra_args=extra_args,
         collect_step=self._default_collect_step)
 
-  def gtest_task(self, title, isolated_hash, make_unique=False, shards=None,
-                 test_launcher_summary_output=None, extra_args=None):
-    """Returns SwarmingTask instance that represents some isolated gtest.
+  def gtest_task(self, title, isolated_hash, test_launcher_summary_output=None,
+                 extra_args=None, **kwargs):
+    """Returns a new SwarmingTask instance to run an isolated gtest on Swarming.
 
     Swarming recipe module knows how collect and interpret JSON files with test
     execution summary produced by chromium test launcher. It will combine JSON
@@ -211,9 +213,9 @@ class SwarmingApi(recipe_api.RecipeApi):
         '--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json')
 
     # Make a task, configure it to be collected through shim script.
-    task = self.task(title, isolated_hash, make_unique, shards, extra_args)
-    task.collect_step = lambda *args, **kwargs: (
-        self._gtest_collect_step(test_launcher_summary_output, *args, **kwargs))
+    task = self.task(title, isolated_hash, extra_args=extra_args, **kwargs)
+    task.collect_step = lambda *args, **kw: (
+        self._gtest_collect_step(test_launcher_summary_output, *args, **kw))
     return task
 
   def check_client_version(self, step_test_data=None):
@@ -238,6 +240,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     assert isinstance(task, SwarmingTask)
     assert task.task_name not in self._pending_tasks, (
         'Triggered same task twice: %s' % task.task_name)
+    assert 'os' in task.dimensions, task.dimensions
     self._pending_tasks.add(task.task_name)
 
     # Trigger parameters.
@@ -426,7 +429,7 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     # TODO(maruel): Differentiate Windows-6.1 from Windows-5.1, etc.
     task_os = task.dimensions['os']
-    bot_os = self.platform_to_os_dimension(self.m.platform.name)
+    bot_os = self.prefered_os_dimension(self.m.platform.name)
     suffix = '' if task_os == bot_os else ' on %s' % task_os
 
     return ''.join((prefix, task.title, suffix))
@@ -539,20 +542,19 @@ class SwarmingTask(object):
       collect_step: callback that will be called to collect and processes
           results of task execution, signature is collect_step(task, **kwargs).
     """
-    assert 'os' in dimensions
-    self.title = title
-    self.isolated_hash = isolated_hash
+    self._trigger_output = None
+    self.build_number = build_number
+    self.builder = builder
+    self.collect_step = collect_step
     self.dimensions = dimensions.copy()
     self.env = env.copy()
-    self.priority = priority
-    self.shards = shards
-    self.builder = builder
-    self.build_number = build_number
-    self.profile = profile
-    self.suffix = suffix
     self.extra_args = tuple(extra_args or [])
-    self.collect_step = collect_step
-    self._trigger_output = None
+    self.isolated_hash = isolated_hash
+    self.priority = priority
+    self.profile = profile
+    self.shards = shards
+    self.suffix = suffix
+    self.title = title
 
   @property
   def task_name(self):

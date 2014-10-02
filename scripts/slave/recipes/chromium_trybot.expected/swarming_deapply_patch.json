@@ -204,12 +204,15 @@
       "--shards",
       "1",
       "--task-name",
-      "base_unittests (with patch)/Linux/[dummy hash for base_unittests]/linux_chromium_rel_swarming/571",
+      "base_unittests (with patch)/Ubuntu-12.04/[dummy hash for base_unittests]/linux_chromium_rel_swarming/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--dimension",
+      "cpu",
+      "x86-64",
+      "--dimension",
       "os",
-      "Linux",
+      "Ubuntu-12.04",
       "[dummy hash for base_unittests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
@@ -217,9 +220,9 @@
     "name": "[trigger] base_unittests (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"base_unittests (with patch)/Linux/[dummy hash for base_unittests]/linux_chromium_rel_swarming/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"base_unittests (with patch)/Ubuntu-12.04/[dummy hash for base_unittests]/linux_chromium_rel_swarming/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"base_unittests (with patch)/Linux/[dummy hash for base_unittests]/linux_chromium_rel_swarming/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"base_unittests (with patch)/Ubuntu-12.04/[dummy hash for base_unittests]/linux_chromium_rel_swarming/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -245,12 +248,15 @@
       "--shards",
       "1",
       "--task-name",
-      "browser_tests (with patch)/Linux/[dummy hash for browser_tests]/linux_chromium_rel_swarming/571",
+      "browser_tests (with patch)/Ubuntu-12.04/[dummy hash for browser_tests]/linux_chromium_rel_swarming/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--dimension",
+      "cpu",
+      "x86-64",
+      "--dimension",
       "os",
-      "Linux",
+      "Ubuntu-12.04",
       "[dummy hash for browser_tests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
@@ -258,9 +264,9 @@
     "name": "[trigger] browser_tests (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"browser_tests (with patch)/Linux/[dummy hash for browser_tests]/linux_chromium_rel_swarming/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"browser_tests (with patch)/Ubuntu-12.04/[dummy hash for browser_tests]/linux_chromium_rel_swarming/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"browser_tests (with patch)/Linux/[dummy hash for browser_tests]/linux_chromium_rel_swarming/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"browser_tests (with patch)/Ubuntu-12.04/[dummy hash for browser_tests]/linux_chromium_rel_swarming/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -446,7 +452,7 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "base_unittests (with patch)/Linux/[dummy hash for base_unittests]/linux_chromium_rel_swarming/571"
+      "base_unittests (with patch)/Ubuntu-12.04/[dummy hash for base_unittests]/linux_chromium_rel_swarming/571"
     ],
     "name": "base_unittests (with patch)",
     "~followup_annotations": [
@@ -475,7 +481,7 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "browser_tests (with patch)/Linux/[dummy hash for browser_tests]/linux_chromium_rel_swarming/571"
+      "browser_tests (with patch)/Ubuntu-12.04/[dummy hash for browser_tests]/linux_chromium_rel_swarming/571"
     ],
     "name": "browser_tests (with patch)"
   },
@@ -612,12 +618,15 @@
       "--shards",
       "1",
       "--task-name",
-      "base_unittests (without patch)/Linux/[dummy hash for base_unittests]/linux_chromium_rel_swarming/571",
+      "base_unittests (without patch)/Ubuntu-12.04/[dummy hash for base_unittests]/linux_chromium_rel_swarming/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--dimension",
+      "cpu",
+      "x86-64",
+      "--dimension",
       "os",
-      "Linux",
+      "Ubuntu-12.04",
       "[dummy hash for base_unittests]",
       "--",
       "--gtest_filter=Test.Two",
@@ -626,9 +635,9 @@
     "name": "[trigger] base_unittests (without patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"base_unittests (without patch)/Linux/[dummy hash for base_unittests]/linux_chromium_rel_swarming/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"base_unittests (without patch)/Ubuntu-12.04/[dummy hash for base_unittests]/linux_chromium_rel_swarming/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"base_unittests (without patch)/Linux/[dummy hash for base_unittests]/linux_chromium_rel_swarming/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"base_unittests (without patch)/Ubuntu-12.04/[dummy hash for base_unittests]/linux_chromium_rel_swarming/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -659,7 +668,7 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "base_unittests (without patch)/Linux/[dummy hash for base_unittests]/linux_chromium_rel_swarming/571"
+      "base_unittests (without patch)/Ubuntu-12.04/[dummy hash for base_unittests]/linux_chromium_rel_swarming/571"
     ],
     "name": "base_unittests (without patch)"
   },
