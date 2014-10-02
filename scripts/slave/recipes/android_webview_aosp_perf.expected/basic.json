@@ -200,12 +200,72 @@
     "cmd": [
       "python",
       "-u",
+      "[BUILD]/scripts/slave/recipe_modules/adb/resources/list_devices.py",
+      "['[BUILD_INTERNAL]/scripts/slave/android/adb', 'devices']",
+      "/path/to/tmp/json"
+    ],
+    "name": "List adb devices",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"014E1F310401C009\"@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "list",
+      "--browser",
+      "android-webview",
+      "--json-output",
+      "/path/to/tmp/json",
+      "--num-shards",
+      "2",
+      "--device",
+      "014E1F310401C009"
+    ],
+    "name": "List Perf Tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"steps\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"blink_perf.all.exact\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"cmd\": \"/usr/bin/python /path/to/run_benmark --a=1 -v --b=2\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"device_affinity\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"perf_dashboard_id\": \"blink_perf.all\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"blink_perf.all.release\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"cmd\": \"/usr/bin/python /path/to/run_benmark --a=1 -v --b=2\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"device_affinity\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"perf_dashboard_id\": \"blink_perf.all\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"dromaeo.cssqueryjquery\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"cmd\": \"/path/to/run_benmark\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"device_affinity\": 1@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"dromaeo.cssqueryjquery.release\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"cmd\": \"/path/to/run_benmark\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"device_affinity\": 1, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"perf_dashboard_id\": \"dromaeo.cssqueryjquery\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"version\": 2@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "perf",
       "--release",
       "--verbose",
       "--steps",
-      "{\"steps\": {\"page_cycler.bloat\": {\"cmd\": \"tools/perf/run_benchmark -v --browser=android-webview --extra-browser-args=--spdy-proxy-origin --show-stdout page_cycler.bloat\", \"device_affinity\": 1}, \"sunspider\": {\"cmd\": \"tools/perf/run_benchmark -v --browser=android-webview --extra-browser-args=--spdy-proxy-origin --show-stdout sunspider\", \"device_affinity\": 0}}, \"version\": 1}"
+      "{\"steps\": {\"blink_perf.all.exact\": {\"cmd\": \"/usr/bin/python /path/to/run_benmark --a=1 -v --b=2\", \"device_affinity\": 0, \"perf_dashboard_id\": \"blink_perf.all\"}, \"blink_perf.all.release\": {\"cmd\": \"/usr/bin/python /path/to/run_benmark --a=1 -v --b=2\", \"device_affinity\": 0, \"perf_dashboard_id\": \"blink_perf.all\"}, \"dromaeo.cssqueryjquery\": {\"cmd\": \"/path/to/run_benmark\", \"device_affinity\": 1}, \"dromaeo.cssqueryjquery.release\": {\"cmd\": \"/path/to/run_benmark\", \"device_affinity\": 1, \"perf_dashboard_id\": \"dromaeo.cssqueryjquery\"}}, \"version\": 2}"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "env": {
@@ -218,7 +278,7 @@
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "perf",
       "--steps",
-      "{\"steps\": {\"page_cycler.bloat\": {\"cmd\": \"tools/perf/run_benchmark -v --browser=android-webview --extra-browser-args=--spdy-proxy-origin --show-stdout page_cycler.bloat\", \"device_affinity\": 1}, \"sunspider\": {\"cmd\": \"tools/perf/run_benchmark -v --browser=android-webview --extra-browser-args=--spdy-proxy-origin --show-stdout sunspider\", \"device_affinity\": 0}}, \"version\": 1}",
+      "{\"steps\": {\"blink_perf.all.exact\": {\"cmd\": \"/usr/bin/python /path/to/run_benmark --a=1 -v --b=2\", \"device_affinity\": 0, \"perf_dashboard_id\": \"blink_perf.all\"}, \"blink_perf.all.release\": {\"cmd\": \"/usr/bin/python /path/to/run_benmark --a=1 -v --b=2\", \"device_affinity\": 0, \"perf_dashboard_id\": \"blink_perf.all\"}, \"dromaeo.cssqueryjquery\": {\"cmd\": \"/path/to/run_benmark\", \"device_affinity\": 1}, \"dromaeo.cssqueryjquery.release\": {\"cmd\": \"/path/to/run_benmark\", \"device_affinity\": 1, \"perf_dashboard_id\": \"dromaeo.cssqueryjquery\"}}, \"version\": 2}",
       "--output-json-list",
       "/path/to/tmp/json"
     ],

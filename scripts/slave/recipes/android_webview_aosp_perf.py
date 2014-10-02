@@ -21,28 +21,6 @@ DEPS = [
 
 REPO_URL = 'https://chromium.googlesource.com/chromium/src.git'
 
-PERF_TESTS = {
-  "steps": {
-    "sunspider": {
-      "cmd": "tools/perf/run_benchmark" \
-             " -v" \
-             " --browser=android-webview" \
-             " --extra-browser-args=--spdy-proxy-origin" \
-             " --show-stdout sunspider",
-      "device_affinity": 0,
-    },
-    "page_cycler.bloat": {
-      "cmd": "tools/perf/run_benchmark" \
-             " -v" \
-             " --browser=android-webview" \
-             " --extra-browser-args=--spdy-proxy-origin" \
-             " --show-stdout page_cycler.bloat",
-      "device_affinity": 1,
-    },
-  },
-  "version": 1,
-}
-
 WEBVIEW_APK = 'SystemWebView.apk'
 WEBVIEW_PACKAGE = 'com.android.webview'
 
@@ -86,10 +64,15 @@ def GenSteps(api):
   api.chromium_android.adb_install_apk(TELEMETRY_SHELL_APK,
                                        TELEMETRY_SHELL_PACKAGE)
 
-  # TODO(hjd) Start using api.chromium.list_perf_tests
+  # Run the tests.
+  api.adb.list_devices()
+  perf_tests = api.chromium.list_perf_tests(
+      browser='android-webview',
+      num_shards=BUILDER['num_device_shards'],
+      devices=api.adb.devices[0:1]).json.output
   try:
     api.chromium_android.run_sharded_perf_tests(
-      config=api.json.input(data=PERF_TESTS),
+      config=api.json.input(data=perf_tests),
       perf_id=BUILDER['perf_id'])
   finally:
     api.chromium_android.logcat_dump()
