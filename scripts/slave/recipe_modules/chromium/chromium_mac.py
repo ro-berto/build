@@ -21,7 +21,9 @@ SPEC = {
       ],
       'testing': {
         'platform': 'mac',
-      }
+      },
+      'enable_swarming': True,
+      'use_isolate': True,
     },
     'Mac10.6 Tests (1)': {
       'recipe_config': 'chromium',
@@ -78,7 +80,8 @@ SPEC = {
       'parent_buildername': 'Mac Builder',
       'testing': {
         'platform': 'mac',
-      }
+      },
+      'enable_swarming': True,
     },
     'Mac10.7 Tests (2)': {
       'recipe_config': 'chromium',
@@ -107,7 +110,9 @@ SPEC = {
       ],
       'testing': {
         'platform': 'mac',
-      }
+      },
+      'enable_swarming': True,
+      'use_isolate': True,
     },
     'Mac 10.6 Tests (dbg)(1)': {
       'recipe_config': 'chromium',
@@ -164,7 +169,8 @@ SPEC = {
       'parent_buildername': 'Mac Builder (dbg)',
       'testing': {
         'platform': 'mac',
-      }
+      },
+      'enable_swarming': True,
     },
     'Mac 10.7 Tests (dbg)(2)': {
       'recipe_config': 'chromium',
