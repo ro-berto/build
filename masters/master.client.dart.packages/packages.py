@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+# Packages that lives in the dart-lang github repo.
 DART_PACKAGES = [
   {
     'name' : 'core-elements',
@@ -41,10 +42,26 @@ DART_PACKAGES = [
   },
 ]
 
+# Packages that lives in the google github repo.
 GOOGLE_PACKAGES = [
   {
     'name' : 'serialization.dart',
   },
 ]
 
-PACKAGES = DART_PACKAGES + GOOGLE_PACKAGES
+# Packages that we test from the dart repo.
+DART_REPO_SAMPLES = [
+  {
+    'name' : 'polymer_intl',
+  },
+  {
+    'name' : 'todomvc',
+  },
+]
+
+DART_REPO_PACKAGES = [
+
+]
+
+
+PACKAGES = DART_PACKAGES + GOOGLE_PACKAGES + DART_REPO_SAMPLES
