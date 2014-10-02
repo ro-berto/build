@@ -630,6 +630,9 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
   start_time = time.clock()
   # Collect files into the archive directory.
   archive_dir = os.path.join(output_dir, archive_name)
+  print 'output_dir: %s, archive_name: %s' % (output_dir, archive_name)
+  print 'archive_dir: %s, remove_archive_directory: %s, exists: %s' % (
+      archive_dir, remove_archive_directory, os.path.exists(archive_dir))
   if remove_archive_directory and os.path.exists(archive_dir):
     # Move it even if it's not a directory as expected. This can happen with
     # FILES.cfg archive creation where we create an archive staging directory
