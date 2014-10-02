@@ -287,6 +287,22 @@
           }
         }
       }
+    ],
+    "https://build.chromium.org/p/chromium.fyi": [
+      {
+        "tree_notify": [
+          "dbeam+closure-bots@chromium.org",
+          "vitalyp@chromium.org"
+        ],
+
+        "builders": {
+          "Closure Compilation Linux": {
+            "forgiving_steps": [
+              "*"
+            ]
+          }
+        }
+      }
     ]
   },
 
