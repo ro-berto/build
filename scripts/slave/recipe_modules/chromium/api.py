@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import re
+
 from slave import recipe_api
 from slave import recipe_util
 
@@ -355,8 +357,8 @@ class ChromiumApi(recipe_api.RecipeApi):
             '--retry-limit=3']
 
     if not self.m.tryserver.is_tryserver:
-      chromium_revision = self.m.bot_update.properties['got_revision']
-      blink_revision = self.m.bot_update.properties['got_webkit_revision']
+      chromium_revision = self._commit_position('got_revision_cp')
+      blink_revision = self._commit_position('got_webkit_revision_cp')
       args += [
           '--builder-name=%s' % self.m.properties['buildername'],
           '--master-name=%s' % self.m.properties['mastername'],
@@ -378,6 +380,11 @@ class ChromiumApi(recipe_api.RecipeApi):
         python_mode=True,
         xvfb=True,
         **kwargs)
+
+  def _commit_position(self, property_name):
+      revision_str = self.m.bot_update.properties[property_name]
+      m = re.match('.*@{#(\d+)}', revision_str)
+      return m.group(1)
 
   def _get_cros_chrome_sdk_wrapper(self, clean=False):
     """Returns: a wrapper command for 'cros chrome-sdk'

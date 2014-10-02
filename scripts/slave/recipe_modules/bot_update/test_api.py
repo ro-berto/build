@@ -28,6 +28,12 @@ class BotUpdateTestApi(recipe_test_api.RecipeTestApi):
           property_name: self.gen_revision(project_name, git_mode)
           for project_name, property_name in revision_mapping.iteritems()
       }
+      properties.update({
+          '%s_cp' % property_name: ('refs/heads/master@{#%s}' %
+                                    self.gen_revision(project_name, False))
+          for project_name, property_name in revision_mapping.iteritems()
+      })
+
       # We also want to simulate outputting "got_revision_git": ...
       # when git mode is off to match what bot_update.py does.
       if not git_mode:
