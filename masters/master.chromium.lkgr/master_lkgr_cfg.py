@@ -134,9 +134,8 @@ F('linux64_full', linux().ChromiumFactory(
         'gs_acl': 'public-read',
         'gclient_env': {'GYP_DEFINES':'target_arch=x64'}}))
 
-asan_rel_gyp = ('asan=1 lsan=1 asan_coverage=1 use_allocator=none '
-                'v8_enable_verify_heap=1 enable_ipc_fuzzer=1 '
-                'release_extra_cflags="-gline-tables-only"')
+asan_rel_gyp = ('asan=1 lsan=1 asan_coverage=1 '
+                'v8_enable_verify_heap=1 enable_ipc_fuzzer=1 ')
 
 B('ASAN Release', 'linux_asan_rel', 'compile', 'chromium_lkgr')
 F('linux_asan_rel', linux().ChromiumASANFactory(
@@ -150,10 +149,10 @@ F('linux_asan_rel', linux().ChromiumASANFactory(
        'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': asan_rel_gyp}}))
 
-asan_rel_sym_gyp = ('asan=1 lsan=1 asan_coverage=1 use_allocator=none '
+asan_rel_sym_gyp = ('asan=1 lsan=1 asan_coverage=1 '
                     'v8_enable_verify_heap=1 enable_ipc_fuzzer=1 '
-                    'release_extra_cflags="-gline-tables-only -O1 '
-                    '-fno-inline-functions -fno-inline"')
+                    'release_extra_cflags="-O1 -fno-inline-functions '
+                    '-fno-inline" ')
 
 B('ASAN Release (symbolized)', 'linux_asan_rel_sym', 'compile', 'chromium_lkgr')
 F('linux_asan_rel_sym', linux().ChromiumASANFactory(
@@ -166,8 +165,7 @@ F('linux_asan_rel_sym', linux().ChromiumASANFactory(
        'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': asan_rel_sym_gyp}}))
 
-asan_debug_gyp = ('asan=1 lsan=1 asan_coverage=1 use_allocator=none '
-                  'enable_ipc_fuzzer=1')
+asan_debug_gyp = ('asan=1 lsan=1 asan_coverage=1 enable_ipc_fuzzer=1')
 
 B('ASAN Debug', 'linux_asan_dbg', 'compile', 'chromium_lkgr')
 F('linux_asan_dbg', linux().ChromiumASANFactory(
@@ -181,16 +179,15 @@ F('linux_asan_dbg', linux().ChromiumASANFactory(
        'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': asan_debug_gyp}}))
 
-asan_ia32_v8_arm = ('asan=1 asan_coverage=1 use_allocator=none disable_nacl=1 '
+asan_ia32_v8_arm = ('asan=1 asan_coverage=1 disable_nacl=1 '
                     'v8_target_arch=arm host_arch=x86_64 target_arch=ia32 '
                     'sysroot=/var/lib/chroot/precise32bit chroot_cmd=precise32 '
                     'v8_enable_verify_heap=1 enable_ipc_fuzzer=1')
 
-asan_ia32_v8_arm_rel_sym = ('%s release_extra_cflags="-gline-tables-only -O1 '
+asan_ia32_v8_arm_rel_sym = ('%s release_extra_cflags="-O1 '
                             '-fno-inline-functions -fno-inline"' %
                             asan_ia32_v8_arm)
-asan_ia32_v8_arm_rel = ('%s release_extra_cflags="-gline-tables-only"' %
-                        asan_ia32_v8_arm)
+asan_ia32_v8_arm_rel = asan_ia32_v8_arm
 
 # The build process is described at
 # https://sites.google.com/a/chromium.org/dev/developers/testing/addresssanitizer#TOC-Building-with-v8_target_arch-arm
@@ -239,9 +236,8 @@ F('linux_asan_rel_sym_ia32_v8_arm', linux().ChromiumASANFactory(
 
 # The build process for TSan is described at
 # http://dev.chromium.org/developers/testing/threadsanitizer-tsan-v2
-tsan_gyp = ('tsan=1 use_allocator=none disable_nacl=1 '
-            'debug_extra_cflags="-gline-tables-only" '
-            'release_extra_cflags="-gline-tables-only" ')
+tsan_gyp = ('tsan=1 disable_nacl=1 '
+            'debug_extra_cflags="-gline-tables-only" ')
 
 B('TSAN Release', 'linux_tsan_rel', 'compile', 'chromium_lkgr')
 F('linux_tsan_rel', linux().ChromiumFactory(
@@ -306,7 +302,7 @@ F('telemetry_harness_upload',
 
 # The build process for UBSan vptr is described at
 # http://dev.chromium.org/developers/testing/undefinedbehaviorsanitizer
-ubsan_vptr_gyp = ('ubsan_vptr=1 release_extra_cflags="-gline-tables-only"')
+ubsan_vptr_gyp = ('ubsan_vptr=1')
 
 B('UBSan vptr Release', 'linux_ubsan_vptr_rel', 'compile','chromium_lkgr')
 F('linux_ubsan_vptr_rel', linux().ChromiumFactory(
