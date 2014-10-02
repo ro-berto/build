@@ -824,7 +824,7 @@ class FactoryCommands(object):
                           command=command,
                           haltOnFailure=False)
 
-  def AddUpdateScriptStep(self, gclient_jobs=None, solutions=None):
+  def AddUpdateScriptStep(self, gclient_jobs=None, solutions=None, args=None):
     """Adds a step to the factory to update the script folder."""
     # This will be run in the '..' directory to udpate the slave's own script
     # checkout.
@@ -836,6 +836,8 @@ class FactoryCommands(object):
       spec = 'solutions=[%s]' % ''.join(s.GetSpec() for s in solutions)
       spec = spec.replace(' ', '')
       command.extend(['--spec', spec])
+    if args:
+      command.extend(args)
     self._factory.addStep(shell.ShellCommand,
                           name='update_scripts',
                           description='update_scripts',
