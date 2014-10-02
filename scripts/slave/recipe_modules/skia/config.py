@@ -39,6 +39,7 @@ VAR_TEST_MAP = {
   'BUILDER_NAME': (u'Build-Mac10.7-Clang-Arm7-Debug-iOS',
                    u'Build-Ubuntu13.10-GCC4.8-NaCl-Debug',
                    u'Build-Ubuntu13.10-GCC4.8-x86_64-Debug',
+                   u'Build-Win-VS2013-x86-Release',
                    u'Build-Win-VS2013-x86-Debug-Exceptions',
                    u'Housekeeper-PerCommit',
                    u'Test-Mac10.8-MacMini4.1-GeForce320M-x86_64-Release',
@@ -84,10 +85,19 @@ def gyp_defs_from_builder_dict(builder_dict):
     gyp_defs['skia_gpu'] = '0'
 
   # skia_warnings_as_errors.
+  werr = False
   if builder_dict['role'] == builder_name_schema.BUILDER_ROLE_BUILD:
-    gyp_defs['skia_warnings_as_errors'] = '1'
-  else:
-    gyp_defs['skia_warnings_as_errors'] = '0'
+    if 'Win' in builder_dict.get('os', ''):
+      if arch == 'x86':
+        if not ('GDI' in builder_dict.get('extra_config', '') or
+                'Exceptions' in builder_dict.get('extra_config', '')):
+          werr = True
+    elif 'Mac' in builder_dict.get('os', ''):
+      if 'iOS' in builder_dict.get('extra_config', ''):
+        werr = True
+    else:
+      werr = True
+  gyp_defs['skia_warnings_as_errors'] = str(int(werr))  # True/False -> '1'/'0'
 
   # Win debugger.
   if 'Win' in builder_dict.get('os', ''):
