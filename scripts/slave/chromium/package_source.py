@@ -140,7 +140,8 @@ def main():
   # Clean up any source archives from previous runs.
   package_filename = options.factory_properties.get(
       'package_filename', FILENAME)
-  chromium_utils.RunCommand(['rm', '-f', '%s-*.%s' % (package_filename, EXT)])
+  chromium_utils.RunCommand(['rm', '-f', '%s-*.%s.partial' % (
+      package_filename, EXT)])
 
   if not os.path.exists('src'):
     raise Exception('ERROR: no src directory to package, exiting')
