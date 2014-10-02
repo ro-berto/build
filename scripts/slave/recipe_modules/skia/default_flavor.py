@@ -190,8 +190,11 @@ class DefaultFlavorUtils(base_flavor.BaseFlavorUtils):
     # toolchains downloaded by Chrome.
     env['CHROME_PATH'] = self.chrome_path
     env.update(self._skia_api.c.gyp_env.as_jsonish())
-    make_cmd = 'make.bat' if self._skia_api.m.platform.is_win else 'make'
-    cmd = [make_cmd, target, 'BUILDTYPE=%s' % self._skia_api.c.configuration]
+    if self._skia_api.m.platform.is_win:
+      make_cmd = ['python', 'make.py']
+    else:
+      make_cmd = ['make']
+    cmd = make_cmd + [target, 'BUILDTYPE=%s' % self._skia_api.c.configuration]
     self._skia_api.m.step('build %s' % target, cmd, env=env,
                           cwd=self._skia_api.m.path['checkout'])
 

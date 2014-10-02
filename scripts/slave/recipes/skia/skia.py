@@ -11,6 +11,7 @@ from common.skia import builder_name_schema
 
 DEPS = [
   'path',
+  'platform',
   'properties',
   'raw_io',
   'skia',
@@ -122,6 +123,8 @@ def GenTests(api):
       test += api.properties(issue=500,
                              patchset=1,
                              rietveld='https://codereview.chromium.org')
+    if 'Win' in builder:
+      test += api.platform('win', 64)
     yield test
 
   builder = 'Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes'
