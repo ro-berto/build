@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\bot_update.py",
+      "[BUILD]/scripts/slave/bot_update.py",
       "--master",
       "chromium.testing.master",
       "--builder",
@@ -34,7 +34,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]\\gclient.py",
+      "[DEPOT_TOOLS]/gclient.py",
       "config",
       "--spec",
       "cache_dir = None\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'swarming_revision': '', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]"
@@ -45,7 +45,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]\\gclient.py",
+      "[DEPOT_TOOLS]/gclient.py",
       "sync",
       "--nohooks",
       "--force",
@@ -95,7 +95,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\swarming_client\\swarming.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "--version"
     ],
     "name": "swarming.py --version",
@@ -108,11 +108,11 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]\\gclient.py",
+      "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "chromium_win_pch=0 component=static_library fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 test_isolation_mode=archive test_isolation_outdir=https://isolateserver-dev.appspot.com use_goma=1"
+      "GYP_DEFINES": "component=shared_library gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=archive test_isolation_outdir=https://isolateserver-dev.appspot.com use_goma=1"
     },
     "name": "gclient runhooks"
   },
@@ -120,9 +120,9 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\recipe_modules\\isolate\\resources\\find_isolated_tests.py",
+      "[BUILD]/scripts/slave/recipe_modules/isolate/resources/find_isolated_tests.py",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[SLAVE_BUILD]/src/out/Debug",
       "--clean-isolated-files"
     ],
     "name": "clean isolated files"
@@ -131,17 +131,17 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\compile.py",
+      "[BUILD]/scripts/slave/compile.py",
       "--target",
-      "Release",
+      "Debug",
       "--src-dir",
-      "[SLAVE_BUILD]\\src",
+      "[SLAVE_BUILD]/src",
       "--build-tool",
       "ninja",
       "--compiler",
       "goma",
       "--goma-dir",
-      "[BUILD]\\goma",
+      "[BUILD]/goma",
       "--",
       "chromium_swarm_tests"
     ],
@@ -154,9 +154,9 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\recipe_modules\\isolate\\resources\\find_isolated_tests.py",
+      "[BUILD]/scripts/slave/recipe_modules/isolate/resources/find_isolated_tests.py",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[SLAVE_BUILD]/src/out/Debug",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -174,7 +174,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\swarming_client\\swarming.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm-dev.appspot.com",
@@ -185,12 +185,12 @@
       "--shards",
       "2",
       "--task-name",
-      "dummy_target_1/Windows-6.1/[dummy hash for dummy_target_1]/TestBuilder/571",
+      "dummy_target_1/Linux/[dummy hash for dummy_target_1]/TestBuilder/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--dimension",
       "os",
-      "Windows-6.1",
+      "Linux",
       "--profile",
       "--verbose",
       "[dummy hash for dummy_target_1]",
@@ -200,14 +200,14 @@
     "name": "[trigger] dummy_target_1",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"dummy_target_1/Windows-6.1/[dummy hash for dummy_target_1]/TestBuilder/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"dummy_target_1/Linux/[dummy hash for dummy_target_1]/TestBuilder/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"dummy_target_1/Windows-6.1/[dummy hash for dummy_target_1]/TestBuilder/571:2:0\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"dummy_target_1/Linux/[dummy hash for dummy_target_1]/TestBuilder/571:2:0\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"dummy_target_1/Windows-6.1/[dummy hash for dummy_target_1]/TestBuilder/571:2:1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"dummy_target_1/Linux/[dummy hash for dummy_target_1]/TestBuilder/571:2:1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 1, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10100\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10100\"@@@",
@@ -223,7 +223,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\swarming_client\\swarming.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm-dev.appspot.com",
@@ -234,12 +234,12 @@
       "--shards",
       "2",
       "--task-name",
-      "dummy_target_2/Windows-6.1/[dummy hash for dummy_target_2]/TestBuilder/571",
+      "dummy_target_2/Linux/[dummy hash for dummy_target_2]/TestBuilder/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--dimension",
       "os",
-      "Windows-6.1",
+      "Linux",
       "--profile",
       "--verbose",
       "[dummy hash for dummy_target_2]",
@@ -249,14 +249,14 @@
     "name": "[trigger] dummy_target_2",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"dummy_target_2/Windows-6.1/[dummy hash for dummy_target_2]/TestBuilder/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"dummy_target_2/Linux/[dummy hash for dummy_target_2]/TestBuilder/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"dummy_target_2/Windows-6.1/[dummy hash for dummy_target_2]/TestBuilder/571:2:0\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"dummy_target_2/Linux/[dummy hash for dummy_target_2]/TestBuilder/571:2:0\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"dummy_target_2/Windows-6.1/[dummy hash for dummy_target_2]/TestBuilder/571:2:1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"dummy_target_2/Linux/[dummy hash for dummy_target_2]/TestBuilder/571:2:1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 1, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10100\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10100\"@@@",
@@ -273,9 +273,9 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\recipe_modules\\swarming\\resources\\collect_gtest_task.py",
+      "[BUILD]/scripts/slave/recipe_modules/swarming/resources/collect_gtest_task.py",
       "--swarming-client-dir",
-      "[SLAVE_BUILD]\\src\\tools\\swarming_client",
+      "[SLAVE_BUILD]/src/tools/swarming_client",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",
@@ -289,18 +289,24 @@
       "--verbose",
       "--shards",
       "2",
-      "dummy_target_1/Windows-6.1/[dummy hash for dummy_target_1]/TestBuilder/571"
+      "dummy_target_1/Linux/[dummy hash for dummy_target_1]/TestBuilder/571"
     ],
-    "name": "dummy_target_1"
+    "name": "dummy_target_1",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_LINK@missing shard #1@https://chromium-swarm-dev.appspot.com/user/task/10100@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\recipe_modules\\swarming\\resources\\collect_gtest_task.py",
+      "[BUILD]/scripts/slave/recipe_modules/swarming/resources/collect_gtest_task.py",
       "--swarming-client-dir",
-      "[SLAVE_BUILD]\\src\\tools\\swarming_client",
+      "[SLAVE_BUILD]/src/tools/swarming_client",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",
@@ -314,8 +320,13 @@
       "--verbose",
       "--shards",
       "2",
-      "dummy_target_2/Windows-6.1/[dummy hash for dummy_target_2]/TestBuilder/571"
+      "dummy_target_2/Linux/[dummy hash for dummy_target_2]/TestBuilder/571"
     ],
     "name": "dummy_target_2"
+  },
+  {
+    "name": "$final_result",
+    "reason": "1 out of 2 aggregated steps failed. Failures: Step('dummy_target_1') failed with return_code 1",
+    "status_code": 1
   }
 ]

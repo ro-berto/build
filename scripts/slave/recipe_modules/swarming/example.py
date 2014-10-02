@@ -62,7 +62,8 @@ def GenSteps(api):
     tasks.append(task)
 
   # Launch all tasks.
-  for step_result in api.swarming.trigger(tasks):
+  for task in tasks:
+    step_result = api.swarming.trigger_task(task)
     assert step_result.swarming_task in tasks
 
   # Recipe can do something useful here locally while tasks are
@@ -70,7 +71,8 @@ def GenSteps(api):
   api.step('local step', ['echo', 'running something locally'])
 
   # Wait for all tasks to complete.
-  for step_result in api.swarming.collect(tasks):
+  for task in tasks:
+    step_result = api.swarming.collect_task(task)
     assert step_result.swarming_task in tasks
 
   # Cleanup.

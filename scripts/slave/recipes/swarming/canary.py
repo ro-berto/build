@@ -19,6 +19,7 @@ DEPS = [
   'json',
   'platform',
   'properties',
+  'step',
   'swarming',
   'swarming_client',
   'test_utils',
@@ -73,6 +74,7 @@ def GenSteps(api):
     api.swarming.gtest_task(
         test,
         isolated_hash,
+        shards=2,
         test_launcher_summary_output=api.json.gtest_results(add_json_log=False))
     for test, isolated_hash in sorted(api.isolate.isolated_tests.iteritems())
   ]
@@ -80,20 +82,13 @@ def GenSteps(api):
   # Launch them on swarming using OS dimension that correspond to platform this
   # recipe is running on (that is default behavior), since we used that platform
   # to compile tests.
-  api.swarming.trigger(tasks)
+  for task in tasks:
+    api.swarming.trigger_task(task)
 
-  # And wait for them to finish. Ensure JSON result collection is working.
-  for step_result in api.swarming.collect_each(tasks):
-    r = step_result.json.gtest_results
-    p = step_result.presentation
-    t = step_result.swarming_task
-    missing_shards = r.raw.get('missing_shards') or []
-    for index in missing_shards:  # pragma: no cover
-      p.links['missing shard #%d' % index] = t.get_shard_view_url(index)
-    if r.valid:
-      p.step_text += api.test_utils.format_step_text([
-          ['failures:', r.failures]
-      ])
+  # And wait for ALL them to finish.
+  with api.step.defer_results():
+    for task in tasks:
+      api.swarming.collect_task(task)
 
 
 def GenTests(api):
@@ -105,3 +100,19 @@ def GenTests(api):
         api.properties.scheduled() +
         api.properties(configuration=configuration)
       )
+
+  # One 'collect' fails due to a missing shard and failing test, should not
+  # prevent the second 'collect' from running.
+  yield (
+    api.test('one_fails') +
+    api.platform.name('linux') +
+    api.properties.scheduled() +
+    api.properties(configuration='Debug') +
+    api.override_step_data(
+        'dummy_target_1',
+        api.json.canned_gtest_output(
+            passing=False,
+            minimal=True,
+            extra_json={'missing_shards': [1]}),
+    )
+  )

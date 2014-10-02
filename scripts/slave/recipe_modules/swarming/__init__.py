@@ -9,7 +9,8 @@ DEPS = [
   'platform',
   'properties',
   'python',
-  'swarming_client',
-  'time',
   'step',
+  'swarming_client',
+  'test_utils',
+  'time',
 ]

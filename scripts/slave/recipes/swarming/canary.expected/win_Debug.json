@@ -183,7 +183,7 @@
       "--priority",
       "20",
       "--shards",
-      "1",
+      "2",
       "--task-name",
       "dummy_target_1/Windows-6.1/[dummy hash for dummy_target_1]/TestBuilder/571",
       "--dump-json",
@@ -202,15 +202,21 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"dummy_target_1/Windows-6.1/[dummy hash for dummy_target_1]/TestBuilder/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"dummy_target_1/Windows-6.1/[dummy hash for dummy_target_1]/TestBuilder/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"dummy_target_1/Windows-6.1/[dummy hash for dummy_target_1]/TestBuilder/571:2:0\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"dummy_target_1/Windows-6.1/[dummy hash for dummy_target_1]/TestBuilder/571:2:1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 1, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10100\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10100\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm-dev.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm-dev.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #1@https://chromium-swarm-dev.appspot.com/user/task/10100@@@"
     ]
   },
   {
@@ -226,7 +232,7 @@
       "--priority",
       "20",
       "--shards",
-      "1",
+      "2",
       "--task-name",
       "dummy_target_2/Windows-6.1/[dummy hash for dummy_target_2]/TestBuilder/571",
       "--dump-json",
@@ -245,15 +251,21 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"dummy_target_2/Windows-6.1/[dummy hash for dummy_target_2]/TestBuilder/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"dummy_target_2/Windows-6.1/[dummy hash for dummy_target_2]/TestBuilder/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"dummy_target_2/Windows-6.1/[dummy hash for dummy_target_2]/TestBuilder/571:2:0\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"dummy_target_2/Windows-6.1/[dummy hash for dummy_target_2]/TestBuilder/571:2:1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 1, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10100\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10100\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm-dev.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm-dev.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #1@https://chromium-swarm-dev.appspot.com/user/task/10100@@@"
     ]
   },
   {
@@ -276,7 +288,7 @@
       "--print-status-updates",
       "--verbose",
       "--shards",
-      "1",
+      "2",
       "dummy_target_1/Windows-6.1/[dummy hash for dummy_target_1]/TestBuilder/571"
     ],
     "name": "dummy_target_1"
@@ -301,7 +313,7 @@
       "--print-status-updates",
       "--verbose",
       "--shards",
-      "1",
+      "2",
       "dummy_target_2/Windows-6.1/[dummy hash for dummy_target_2]/TestBuilder/571"
     ],
     "name": "dummy_target_2"

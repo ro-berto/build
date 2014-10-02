@@ -404,7 +404,7 @@ class SwarmingGTestTest(Test):
         test_launcher_summary_output=api.json.gtest_results(
             add_json_log=False),
         extra_args=args)
-    return api.swarming.trigger([self._tasks[suffix]])
+    return api.swarming.trigger_task(self._tasks[suffix])
 
   def run(self, api, suffix):  # pylint: disable=R0201
     """Not used. All logic in pre_run, post_run."""
@@ -430,35 +430,11 @@ class SwarmingGTestTest(Test):
     # Wait for test on swarming to finish. If swarming infrastructure is
     # having issues, this step produces no valid *.json test summary, and
     # 'has_valid_results' returns False.
-    step_results = api.swarming.collect_each([self._tasks[suffix]])
-
-    # TODO(martiniss) make this loop better. It's kinda hacky.
-    failed_results = []
     try:
-      while True:
-        try:
-          step_result = next(step_results)
-        except api.step.StepFailure as f:
-          step_result = api.step.active_result
-          failed_results.append(step_result)
-
-        r = step_result.json.gtest_results
-        p = step_result.presentation
-        t = step_result.swarming_task
-        missing_shards = r.raw.get('missing_shards') or []
-        for index in missing_shards:
-          p.links['missing shard #%d' % index] = t.get_shard_view_url(index)
-        if r.valid:
-          p.step_text += api.test_utils.format_step_text([
-              ['failures:', r.failures]
-          ])
-        self._results[suffix] = r
-    except StopIteration:
-      pass
+      api.swarming.collect_task(self._tasks[suffix])
     finally:
-      if failed_results:
-        raise api.step.StepFailure(
-            'Swarming failed due to %d result failures' % len(failed_results))
+      step_result = api.step.active_result
+      self._results[suffix] = step_result.json.gtest_results
 
   def has_valid_results(self, api, suffix):
     # Test wasn't triggered or wasn't collected.
