@@ -8,7 +8,7 @@
       'python',
       'heartbeat.py',
     ],
-    'isolate_dependency_tracked': [
+    'files': [
       'heartbeat.py',
     ],
   },
