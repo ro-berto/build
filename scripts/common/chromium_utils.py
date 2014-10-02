@@ -639,6 +639,7 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
       previous_archive_file = '%s.old' % archive_dir
       MoveFile(archive_dir, previous_archive_file)
     else:
+      print 'Removing %s' % archive_dir
       RemoveDirectory(archive_dir)
   MaybeMakeDirectory(archive_dir)
   for needed_file in file_list:
