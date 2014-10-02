@@ -416,6 +416,20 @@ def chromium_asan(c):
   c.runtests.test_args.append('--test-launcher-batch-limit=1')
   c.runtests.test_args.append('--test-launcher-print-test-stdio=always')
 
+@config_ctx(includes=['ninja', 'clang', 'goma', 'asan', 'static_library'])
+def chromium_mac_asan(c):
+  # TODO(glider, earthdok): Add --test-launcher-batch-limit for mac.
+  c.runtests.test_args.append('--test-launcher-print-test-stdio=always')
+
+  # Clear lsan configuration for mac.
+  del c.gyp_env.GYP_DEFINES['lsan']
+
+  # Need to explicitly set host arch for mac asan 64.
+  # TODO(glider, earthdok): Figure out if this is really required or
+  # auto-detected by gyp.
+  if c.gyp_env.GYP_DEFINES['target_arch'] == 'x64':
+    c.gyp_env.GYP_DEFINES['host_arch'] = 'x64'
+
 @config_ctx(includes=['ninja', 'clang', 'goma', 'msan'])
 def chromium_msan(c):
   c.compile_py.default_targets = ['All', 'chromium_builder_tests']

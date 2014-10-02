@@ -129,8 +129,8 @@ def FileRegexBlacklist(options):
     # The static libs are just built as intermediate targets, and we don't
     # need to pull the dSYMs over to the testers most of the time (except for
     # the memory tools).
-    include_dsyms = options.factory_properties.get('package_dsym_files', False)
-    if include_dsyms:
+    if options.factory_properties.get(
+        'package_dsym_files', options.package_dsym_files):
       return r'^.+\.(a)$'
     else:
       return r'^.+\.(a|dSYM)$'
@@ -445,6 +445,8 @@ def main(argv):
                            help=('If building for Chrom[e|ium]OS via the '
                                  'simple chrome workflow, the name of the '
                                  'target CROS board.'))
+  option_parser.add_option('--package-dsym-files', action='store_true',
+                           default=False, help='Add also dSYM files.')
   chromium_utils.AddPropertiesOptions(option_parser)
 
   options, args = option_parser.parse_args(argv)

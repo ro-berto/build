@@ -47,3 +47,31 @@ for name in ('Linux ASan LSan Tests (1)',
 # disabled. This only affects browser tests. See http://crbug.com/336218
 SPEC['builders']['Linux ASan Tests (sandboxed)']['chromium_apply_config'] = (
     ['no_lsan'])
+
+for bits, bit_txt in ((32, ''), (64, ' 64')):
+  builder_name = 'Mac ASan%s Builder' % bit_txt
+  SPEC['builders'][builder_name] = {
+    'recipe_config': 'chromium_mac_asan',
+    'chromium_config_kwargs': {
+      'BUILD_CONFIG': 'Release',
+      'TARGET_BITS': bits,
+    },
+    'bot_type': 'builder',
+    'testing': {'platform': 'mac'},
+  }
+
+  for shard in (1, 2, 3):
+    name = 'Mac ASan%s Tests (%d)' % (bit_txt, shard)
+    SPEC['builders'][name] = {
+      'recipe_config': 'chromium_mac_asan',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': bits,
+      },
+      'bot_type': 'tester',
+      'test_generators': [
+        steps.generate_gtest,
+      ],
+      'parent_buildername': builder_name,
+      'testing': {'platform': 'mac'},
+    }
