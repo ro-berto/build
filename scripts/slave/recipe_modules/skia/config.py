@@ -26,6 +26,7 @@ def BaseConfig(BUILDER_NAME, MASTER_NAME, SLAVE_NAME, **_kwargs):
     configuration = Single(str),
     do_test_steps = Single(bool),
     do_perf_steps = Single(bool),
+    extra_env_vars = Single(dict),
     gyp_env = ConfigGroup(
       GYP_DEFINES = Dict(equal_fn, ' '.join, (basestring,int,Path)),
     ),
@@ -54,6 +55,14 @@ VAR_TEST_MAP = {
   'MASTER_NAME': (u'client.skia',),
   'SLAVE_NAME': (u'skiabot-shuttle-ubuntu12-003',),
 }
+
+
+def get_extra_env_vars(builder_dict):
+  env = {}
+  if builder_dict.get('compiler') == 'Clang':
+    env['CC'] = '/usr/bin/clang'
+    env['CXX'] = '/usr/bin/clang++'
+  return env
 
 
 def gyp_defs_from_builder_dict(builder_dict):
@@ -182,4 +191,5 @@ def skia(c):
   c.gyp_env.GYP_DEFINES.update(gyp_defs_from_builder_dict(c.builder_cfg))
   c.slave_cfg = slaves_cfg.get(c.MASTER_NAME)[c.SLAVE_NAME]
   c.is_trybot = builder_name_schema.IsTrybot(c.BUILDER_NAME)
+  c.extra_env_vars = get_extra_env_vars(c.builder_cfg)
 

@@ -162,7 +162,8 @@ class DefaultFlavorUtils(base_flavor.BaseFlavorUtils):
     else:
       new_cmd = [path_to_app]
     new_cmd.extend(cmd[1:])
-    return self._skia_api.m.step(name, new_cmd, **kwargs)
+    return self._skia_api.m.step(name, new_cmd,
+                                 env=self._skia_api.c.extra_env_vars, **kwargs)
 
   @property
   def chrome_path(self):
@@ -190,6 +191,7 @@ class DefaultFlavorUtils(base_flavor.BaseFlavorUtils):
     # toolchains downloaded by Chrome.
     env['CHROME_PATH'] = self.chrome_path
     env.update(self._skia_api.c.gyp_env.as_jsonish())
+    env.update(self._skia_api.c.extra_env_vars)
     if self._skia_api.m.platform.is_win:
       make_cmd = ['python', 'make.py']
     else:
