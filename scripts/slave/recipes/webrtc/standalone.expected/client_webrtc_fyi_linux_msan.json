@@ -3,6 +3,35 @@
     "cmd": [
       "python",
       "-u",
+      "[BUILD]/scripts/slave/bot_update.py",
+      "--master",
+      "client.webrtc.fyi",
+      "--builder",
+      "Linux MSan",
+      "--slave",
+      "slavename",
+      "--spec",
+      "cache_dir = None\nsolutions = [{'custom_vars': {'root_dir': 'src'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/webrtc/trunk'}, {'custom_vars': {'root_dir': 'src'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'webrtc-limited', 'url': 'svn://svn-mirror.golo.chromium.org/chrome-internal/trunk/webrtc-limited'}]",
+      "--revision_mapping_file",
+      "{\"src\": \"got_revision\"}",
+      "--output_json",
+      "/path/to/tmp/json",
+      "--revision",
+      "src@12345"
+    ],
+    "name": "bot_update",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"did_run\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[DEPOT_TOOLS]/gclient.py",
       "config",
       "--spec",

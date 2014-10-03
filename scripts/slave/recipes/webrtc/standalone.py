@@ -6,6 +6,7 @@
 
 DEPS = [
   'archive',
+  'bot_update',
   'chromium',
   'chromium_android',
   'gclient',
@@ -49,7 +50,11 @@ def GenSteps(api):
   if api.tryserver.is_tryserver:
     api.chromium.apply_config('trybot_flavor')
 
-  step_result = api.gclient.checkout()
+  step_result = api.bot_update.ensure_checkout()
+  bot_update_mode = step_result.json.output['did_run']
+  if not bot_update_mode:
+    step_result = api.gclient.checkout()
+
   # Whatever step is run right before this line needs to emit got_revision.
   got_revision = step_result.presentation.properties['got_revision']
 
