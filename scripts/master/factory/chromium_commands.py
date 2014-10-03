@@ -622,6 +622,7 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddGTestTestStep('sync_unit_tests', factory_properties)
     self.AddGTestTestStep('unit_tests', factory_properties)
     self.AddGTestTestStep('sql_unittests', factory_properties)
+    self.AddGTestTestStep('ui_base_unittests', factory_properties)
     self.AddGTestTestStep('ui_unittests', factory_properties)
     self.AddGTestTestStep('content_unittests', factory_properties)
     if self._target_platform == 'win32':
@@ -632,6 +633,7 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddBuildrunnerGTest('sync_unit_tests', factory_properties)
     self.AddBuildrunnerGTest('unit_tests', factory_properties)
     self.AddBuildrunnerGTest('sql_unittests', factory_properties)
+    self.AddBuildrunnerGTest('ui_base_unittests', factory_properties)
     self.AddBuildrunnerGTest('ui_unittests', factory_properties)
     self.AddBuildrunnerGTest('content_unittests', factory_properties)
     if self._target_platform == 'win32':
