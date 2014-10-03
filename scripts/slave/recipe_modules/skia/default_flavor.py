@@ -208,21 +208,21 @@ class DefaultFlavorUtils(base_flavor.BaseFlavorUtils):
     """Like os.path.exists(), but for paths on a connected device."""
     return self._skia_api.m.path.exists(path)
 
-  def copy_directory_contents_to_device(self, host_path, device_path):
+  def copy_directory_contents_to_device(self, host_dir, device_dir):
     """Like shutil.copytree(), but for copying to a connected device."""
     # For "normal" builders who don't have an attached device, we expect
-    # host_path and device_path to be the same.
-    if str(host_path) != str(device_path):
+    # host_dir and device_dir to be the same.
+    if str(host_dir) != str(device_dir):
       raise ValueError('For builders who do not have attached devices, copying '
                        'from host to device is undefined and only allowed if '
                        'host_path and device_path are the same (%s vs %s).' % (
                        str(host_path), str(device_path)))
 
-  def copy_directory_contents_to_host(self, device_path, host_path):
+  def copy_directory_contents_to_host(self, device_dir, host_dir):
     """Like shutil.copytree(), but for copying from a connected device."""
     # For "normal" builders who don't have an attached device, we expect
-    # host_path and device_path to be the same.
-    if str(host_path) != str(device_path):
+    # host_dir and device_dir to be the same.
+    if str(host_dir) != str(device_dir):
       raise ValueError('For builders who do not have attached devices, copying '
                        'from device to host is undefined and only allowed if '
                        'host_path and device_path are the same (%s vs %s).' % (
@@ -231,7 +231,7 @@ class DefaultFlavorUtils(base_flavor.BaseFlavorUtils):
   def copy_file_to_device(self, host_path, device_path):
     """Like shutil.copyfile, but for copying to a connected device."""
     # For "normal" builders who don't have an attached device, we expect
-    # host_path and device_path to be the same.
+    # host_dir and device_dir to be the same.
     if str(host_path) != str(device_path):
       raise ValueError('For builders who do not have attached devices, copying '
                        'from host to device is undefined and only allowed if '
