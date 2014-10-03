@@ -135,6 +135,16 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport glob\nimport sys\nwith open(sys.argv[1], 'w') as f:\n  f.write('\\n'.join(glob.glob(sys.argv[2])))\n",
+      "/path/to/tmp/",
+      "[SLAVE_BUILD]/copytree_example_tmp/*"
+    ],
+    "name": "glob"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/copytree_example_tmp"
     ],

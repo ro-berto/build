@@ -61,3 +61,26 @@ class FileApi(recipe_api.RecipeApi):
         **kwargs
     )
 
+  def glob(self, name, pattern, test_data=None, **kwargs):
+    """Performs glob search on a directory.
+
+    Returns list of files found.
+    """
+    step_test_data = None
+    if test_data is not None:
+      step_test_data = (
+          lambda: self.m.raw_io.test_api.output('\n'.join(map(str, test_data))))
+    step_result = self.m.python.inline(
+        name,
+        r"""
+        import glob
+        import sys
+        with open(sys.argv[1], 'w') as f:
+          f.write('\n'.join(glob.glob(sys.argv[2])))
+        """,
+        args=[self.m.raw_io.output(), pattern],
+        step_test_data=step_test_data,
+        add_python_log=False,
+        **kwargs
+    )
+    return step_result.raw_io.output.splitlines()

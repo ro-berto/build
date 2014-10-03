@@ -5,4 +5,5 @@
 DEPS = [
   'python',
   'raw_io',
+  'step',
 ]

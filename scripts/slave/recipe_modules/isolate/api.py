@@ -23,26 +23,33 @@ class IsolateApi(recipe_api.RecipeApi):
     """Changes URL of Isolate server to use."""
     self._isolate_server = value
 
-  def set_isolate_environment(self, config):
+  def set_isolate_environment(self, config, mode='archive'):
     """Modifies the config to include isolate related GYP_DEFINES.
 
     Modifies the passed Config (which should generally be api.chromium.c)
     to set up the appropriate GYP_DEFINES to upload isolates to the isolate
-    server during the build. This must be called early in your recipe;
-    definitely before the checkout and runhooks steps.
+    server during the build (if mode == 'archive') or to prepare all necessary
+    files to do this after the build (if mode == 'prepare'). This must be called
+    early in your recipe; definitely before the checkout and runhooks steps.
 
     Uses current values of self.isolate_server. It should be property configured
     before calling this method if the default value (production instance of
     Isolate service) is not ok.
     """
-    config.gyp_env.GYP_DEFINES['test_isolation_mode'] = 'archive'
-    config.gyp_env.GYP_DEFINES['test_isolation_outdir'] = self._isolate_server
+    assert mode in ('archive', 'prepare'), mode
+    config.gyp_env.GYP_DEFINES['test_isolation_mode'] = mode
+    if mode == 'archive':
+      config.gyp_env.GYP_DEFINES['test_isolation_outdir'] = self._isolate_server
 
   def clean_isolated_files(self, build_dir):
     """Cleans out all *.isolated files from the build directory in
     preparation for the compile. Needed in order to ensure isolates
     are rebuilt properly because their dependencies are currently not
-    completely described to gyp."""
+    completely described to gyp.
+
+    Should be invoked before compilation in both 'archive' or 'prepare' modes
+    (see 'set_isolate_environment').
+    """
     self.m.python(
       'clean isolated files',
       self.resource('find_isolated_tests.py'),
@@ -53,6 +60,9 @@ class IsolateApi(recipe_api.RecipeApi):
 
   def find_isolated_tests(self, build_dir, targets=None, **kwargs):
     """Returns a step which finds all *.isolated files in a build directory.
+
+    Useful only with 'archive' isolation mode (see 'set_isolate_environment').
+    In 'prepare' mode use 'isolate_tests' instead.
 
     Assigns the dict {target name -> *.isolated file hash} to the swarm_hashes
     build property. This implies this step can currently only be run once
@@ -93,6 +103,51 @@ class IsolateApi(recipe_api.RecipeApi):
     if (not self._isolated_tests and
         step_result.presentation.status != self.m.step.FAILURE):
       step_result.presentation.status = self.m.step.WARNING
+
+  def isolate_tests(self, build_dir, targets, verbose=False, **kwargs):
+    """Archives prepared tests in |build_dir| to isolate server.
+
+    Works only if Chromium was compiled with test_isolation_mode=='prepare'. See
+    set_isolate_environment(). In that mode src/tools/isolate_driver.py is
+    invoked by ninja during compilation to produce *.isolated.gen.json files
+    that describe how to archive tests.
+
+    This step then uses *.isolated.gen.json files to actually performs the
+    archival. By archiving all tests at once it is able to reduce the total
+    amount of work. Tests share many common files, and such files are processed
+    only once.
+
+    Assigns the dict {target name -> *.isolated file hash} to the swarm_hashes
+    build property (also accessible as 'isolated_tests' property). This implies
+    this step can currently only be run once per recipe.
+    """
+    input_files = [build_dir.join('%s.isolated.gen.json' % t) for t in targets]
+    try:
+      # TODO(vadimsh): Differentiate between bad *.isolate and upload errors.
+      # Raise InfraFailure on upload errors.
+      return self.m.python(
+          'isolate tests',
+          self.m.swarming_client.path.join('isolate.py'),
+          [
+            'batcharchive',
+            '--dump-json', self.m.json.output(),
+            '--isolate-server', self._isolate_server,
+          ] + (['--verbose'] if verbose else []) + input_files,
+          step_test_data=lambda: (self.test_api.output_json(targets)),
+          **kwargs)
+    finally:
+      step_result = self.m.step.active_result
+      self._isolated_tests = step_result.json.output
+      step_result.presentation.properties['swarm_hashes'] = self._isolated_tests
+      missing = sorted(t for t, h in self._isolated_tests.iteritems() if not h)
+      if missing:
+        step_result.presentation.logs['failed to isolate'] = (
+          ['Failed to isolate following targets:'] +
+          missing +
+          ['', 'See logs for more information.']
+        )
+        for k in missing:
+          self._isolated_tests.pop(k)
 
   @property
   def isolated_tests(self):

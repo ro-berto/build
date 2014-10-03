@@ -7,10 +7,14 @@ DEPS = [
   'json',
   'path',
   'step',
+  'swarming_client',
 ]
 
 
 def GenSteps(api):
+  # 'isolate_tests' step needs swarming checkout.
+  api.swarming_client.checkout('master')
+
   # Code coverage for isolate_server property.
   api.isolate.isolate_server = 'https://isolateserver-dev.appspot.com'
   assert api.isolate.isolate_server == 'https://isolateserver-dev.appspot.com'
@@ -24,15 +28,29 @@ def GenSteps(api):
   # is running for real via run_recipe.py.
   api.isolate.find_isolated_tests(api.path['build'], expected_targets)
 
+  # Code coverage for 'isolate_tests'. 'isolated_test' doesn't support discovery
+  # of isolated targets in build directory, so skip if 'expected_targets' is
+  # None.
+  if expected_targets is not None:
+    api.isolate.isolate_tests(api.path['build'], expected_targets)
+
 
 def GenTests(api):
   def make_test(name, expected_targets, discovered_targets):
-    return (
+    missing = set(expected_targets or []) - set(discovered_targets or [])
+    output = (
         api.test(name) +
         api.step_data(
             'read test spec', stdout=api.json.output(expected_targets)) +
         api.override_step_data(
-            'find isolated tests', api.isolate.output_json(discovered_targets)))
+            'find isolated tests', api.isolate.output_json(discovered_targets))
+    )
+    # See comment around 'if expected_targets is not None' above.
+    if expected_targets is not None:
+      output += api.override_step_data(
+          'isolate tests',
+          api.isolate.output_json(expected_targets, missing))
+    return output
 
   # Expected targets == found targets.
   yield make_test('basic', ['test1', 'test2'], ['test1', 'test2'])

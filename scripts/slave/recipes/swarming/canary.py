@@ -11,9 +11,12 @@ full roll out.
 Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 """
 
+import os
+
 DEPS = [
   'bot_update',
   'chromium',
+  'file',
   'gclient',
   'isolate',
   'json',
@@ -53,7 +56,7 @@ def GenSteps(api):
   api.gclient.c.revisions['src/tools/swarming_client'] = 'HEAD'
 
   # Enable test isolation. Modifies GYP_DEFINES used in 'runhooks' below.
-  api.isolate.set_isolate_environment(api.chromium.c)
+  api.isolate.set_isolate_environment(api.chromium.c, mode='prepare')
 
   # Checkout chromium + deps (including 'master' of swarming_client).
   step_result = api.bot_update.ensure_checkout()
@@ -63,16 +66,29 @@ def GenSteps(api):
   # Ensure swarming_client version is fresh enough.
   api.swarming.check_client_version()
 
-  # Build all supported tests, isolate them to the server. Set ISOLATE_DEBUG so
-  # that isolate scripts invoked by ninja produce more information. Corresponds
-  # to --profile flag.
+  # Build all supported tests.
   api.chromium.runhooks()
   api.isolate.clean_isolated_files(api.chromium.output_dir)
-  api.chromium.compile(
-      targets=['chromium_swarm_tests'], env={'ISOLATE_DEBUG': 1})
+  api.chromium.compile(targets=['chromium_swarm_tests'])
 
-  # Gather hashes of all isolated tests.
-  api.isolate.find_isolated_tests(api.chromium.output_dir)
+  # Discover all targets prepared for isolation. Generally it's better to
+  # provide this list explicitly in the recipe. But on the canary we isolate
+  # everything we can.
+  paths = api.file.glob(
+      'find isolated targets',
+      api.chromium.output_dir.join('*.isolated.gen.json'),
+      test_data=[
+        api.chromium.output_dir.join('dummy_target_%d.isolated.gen.json' % i)
+        for i in (1, 2)
+      ])
+  targets = []
+  for p in paths:
+    name = os.path.basename(p)
+    assert name.endswith('.isolated.gen.json'), name
+    targets.append(name[:-len('.isolated.gen.json')])
+
+  # Perform the upload.
+  api.isolate.isolate_tests(api.chromium.output_dir, targets, verbose=True)
 
   # Make swarming tasks that run isolated tests.
   tasks = [

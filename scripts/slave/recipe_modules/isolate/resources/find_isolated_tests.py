@@ -49,7 +49,7 @@ def main():
   parser.add_option(
       '--clean-isolated-files',
       action='store_true',
-      help='Whether to clean out all .isolated files. '
+      help='Whether to clean out all .isolated and .isolated.gen.json files. '
           'Mutually exclusive with --output-json.')
 
   options, _ = parser.parse_args()
@@ -62,6 +62,13 @@ def main():
                  '--clean-isolated-files is allowed')
 
   result = {}
+
+  # Clean up generated *.isolated.gen.json files, produced by isolate_driver.py
+  # in test_isolation_mode='prepare'.
+  if options.clean_isolated_files:
+    pattern = os.path.join(options.build_dir, '*.isolated.gen.json')
+    for filepath in sorted(glob.glob(pattern)):
+      os.remove(filepath)
 
   # Get the file hash values and output the pair.
   pattern = os.path.join(options.build_dir, '*.isolated')
