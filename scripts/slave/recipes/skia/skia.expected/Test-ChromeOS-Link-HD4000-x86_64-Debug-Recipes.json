@@ -55,7 +55,7 @@
       "ssh",
       "-p",
       "22",
-      "chrome-bot@192.168.1.123",
+      "root@192.168.1.123",
       "rm",
       "-rf",
       "/usr/local/skiabot/bin"
@@ -67,7 +67,7 @@
       "ssh",
       "-p",
       "22",
-      "chrome-bot@192.168.1.123",
+      "root@192.168.1.123",
       "mkdir",
       "-p",
       "/usr/local/skiabot/bin"
@@ -78,7 +78,7 @@
     "cmd": [
       "[BUILD]/scripts/slave/recipe_modules/skia/resources/scp_dir_contents.sh",
       "[SLAVE_BUILD]/skia/resources",
-      "chrome-bot@192.168.1.123:/usr/local/skiabot/skia_resources"
+      "root@192.168.1.123:/usr/local/skiabot/skia_resources"
     ],
     "name": "scp [SLAVE_BUILD]/skia/resources"
   },
@@ -87,7 +87,7 @@
       "ssh",
       "-p",
       "22",
-      "chrome-bot@192.168.1.123",
+      "root@192.168.1.123",
       "rm",
       "-rf",
       "/usr/local/skiabot/skia_gm_actual"
@@ -99,7 +99,7 @@
       "ssh",
       "-p",
       "22",
-      "chrome-bot@192.168.1.123",
+      "root@192.168.1.123",
       "mkdir",
       "-p",
       "/usr/local/skiabot/skia_gm_actual"
@@ -151,7 +151,7 @@
       "ssh",
       "-p",
       "22",
-      "chrome-bot@192.168.1.123",
+      "root@192.168.1.123",
       "rm",
       "-rf",
       "/usr/local/skiabot/skia_gm_expected"
@@ -163,7 +163,7 @@
       "ssh",
       "-p",
       "22",
-      "chrome-bot@192.168.1.123",
+      "root@192.168.1.123",
       "mkdir",
       "-p",
       "/usr/local/skiabot/skia_gm_expected"
@@ -176,7 +176,7 @@
       "-P",
       "22",
       "[SLAVE_BUILD]/skia/expectations/gm/ignored-tests.txt",
-      "chrome-bot@192.168.1.123:/usr/local/skiabot/skia_gm_expected/ignored-tests.txt"
+      "root@192.168.1.123:/usr/local/skiabot/skia_gm_expected/ignored-tests.txt"
     ],
     "name": "scp [SLAVE_BUILD]/skia/expectations/gm/ignored-tests.txt"
   },
@@ -185,7 +185,7 @@
       "ssh",
       "-p",
       "22",
-      "chrome-bot@192.168.1.123",
+      "root@192.168.1.123",
       "rm",
       "-rf",
       "/usr/local/skiabot/skia_gm_expected/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes"
@@ -197,7 +197,7 @@
       "ssh",
       "-p",
       "22",
-      "chrome-bot@192.168.1.123",
+      "root@192.168.1.123",
       "mkdir",
       "-p",
       "/usr/local/skiabot/skia_gm_expected/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes"
@@ -210,7 +210,7 @@
       "-P",
       "22",
       "[SLAVE_BUILD]/skia/expectations/gm/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes/expected-results.json",
-      "chrome-bot@192.168.1.123:/usr/local/skiabot/skia_gm_expected/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes/expected-results.json"
+      "root@192.168.1.123:/usr/local/skiabot/skia_gm_expected/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes/expected-results.json"
     ],
     "name": "scp [SLAVE_BUILD]/skia/expectations/gm/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes/expected-results.json"
   },
@@ -219,7 +219,7 @@
       "ssh",
       "-p",
       "22",
-      "chrome-bot@192.168.1.123",
+      "root@192.168.1.123",
       "test",
       "-e",
       "/usr/local/skiabot/skia_gm_expected/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes/expected-results.json"
@@ -231,7 +231,7 @@
       "ssh",
       "-p",
       "22",
-      "chrome-bot@192.168.1.123",
+      "root@192.168.1.123",
       "test",
       "-e",
       "/usr/local/skiabot/skia_gm_expected/ignored-tests.txt"
@@ -244,7 +244,7 @@
       "-P",
       "22",
       "[SLAVE_BUILD]/skia/out/config/chromeos-link/Debug/gm",
-      "chrome-bot@192.168.1.123:/usr/local/skiabot/bin/gm"
+      "root@192.168.1.123:/usr/local/skiabot/bin/gm"
     ],
     "name": "scp [SLAVE_BUILD]/skia/out/config/chromeos-link/Debug/gm"
   },
@@ -253,7 +253,7 @@
       "ssh",
       "-p",
       "22",
-      "chrome-bot@192.168.1.123",
+      "root@192.168.1.123",
       "/usr/local/skiabot/bin/gm",
       "--verbose",
       "--writeChecksumBasedFilenames",
@@ -279,7 +279,7 @@
   {
     "cmd": [
       "[BUILD]/scripts/slave/recipe_modules/skia/resources/scp_dir_contents.sh",
-      "chrome-bot@192.168.1.123:/usr/local/skiabot/skia_gm_actual/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes",
+      "root@192.168.1.123:/usr/local/skiabot/skia_gm_actual/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes",
       "[SLAVE_BUILD]/gm/actual/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes"
     ],
     "name": "scp /usr/local/skiabot/skia_gm_actual/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes"
@@ -311,7 +311,7 @@
       "-P",
       "22",
       "[SLAVE_BUILD]/skia/out/config/chromeos-link/Debug/dm",
-      "chrome-bot@192.168.1.123:/usr/local/skiabot/bin/dm"
+      "root@192.168.1.123:/usr/local/skiabot/bin/dm"
     ],
     "name": "scp [SLAVE_BUILD]/skia/out/config/chromeos-link/Debug/dm"
   },
@@ -320,7 +320,7 @@
       "ssh",
       "-p",
       "22",
-      "chrome-bot@192.168.1.123",
+      "root@192.168.1.123",
       "/usr/local/skiabot/bin/dm",
       "--verbose",
       "--resourcePath",
@@ -422,7 +422,7 @@
       "ssh",
       "-p",
       "22",
-      "chrome-bot@192.168.1.123",
+      "root@192.168.1.123",
       "rm",
       "-rf",
       "/usr/local/skiabot/skia_skp/skps"
@@ -434,7 +434,7 @@
       "ssh",
       "-p",
       "22",
-      "chrome-bot@192.168.1.123",
+      "root@192.168.1.123",
       "mkdir",
       "-p",
       "/usr/local/skiabot/skia_skp/skps"
@@ -445,7 +445,7 @@
     "cmd": [
       "[BUILD]/scripts/slave/recipe_modules/skia/resources/scp_dir_contents.sh",
       "[SLAVE_BUILD]/playback/skps",
-      "chrome-bot@192.168.1.123:/usr/local/skiabot/skia_skp/skps"
+      "root@192.168.1.123:/usr/local/skiabot/skia_skp/skps"
     ],
     "name": "scp [SLAVE_BUILD]/playback/skps"
   },
@@ -455,7 +455,7 @@
       "-P",
       "22",
       "[SLAVE_BUILD]/skia/out/config/chromeos-link/Debug/render_pdfs",
-      "chrome-bot@192.168.1.123:/usr/local/skiabot/bin/render_pdfs"
+      "root@192.168.1.123:/usr/local/skiabot/bin/render_pdfs"
     ],
     "name": "scp [SLAVE_BUILD]/skia/out/config/chromeos-link/Debug/render_pdfs"
   },
@@ -464,7 +464,7 @@
       "ssh",
       "-p",
       "22",
-      "chrome-bot@192.168.1.123",
+      "root@192.168.1.123",
       "/usr/local/skiabot/bin/render_pdfs",
       "--inputPaths",
       "/usr/local/skiabot/skia_skp/skps"
@@ -529,7 +529,7 @@
     "cmd": [
       "[BUILD]/scripts/slave/recipe_modules/skia/resources/scp_dir_contents.sh",
       "[SLAVE_BUILD]/skimage_in",
-      "chrome-bot@192.168.1.123:/usr/local/skiabot/skia_skimage_in"
+      "root@192.168.1.123:/usr/local/skiabot/skia_skimage_in"
     ],
     "name": "scp [SLAVE_BUILD]/skimage_in"
   },
@@ -578,7 +578,7 @@
       "ssh",
       "-p",
       "22",
-      "chrome-bot@192.168.1.123",
+      "root@192.168.1.123",
       "rm",
       "-rf",
       "/usr/local/skiabot/skia_skimage_out/images"
@@ -590,7 +590,7 @@
       "ssh",
       "-p",
       "22",
-      "chrome-bot@192.168.1.123",
+      "root@192.168.1.123",
       "mkdir",
       "-p",
       "/usr/local/skiabot/skia_skimage_out/images"
@@ -602,7 +602,7 @@
       "ssh",
       "-p",
       "22",
-      "chrome-bot@192.168.1.123",
+      "root@192.168.1.123",
       "rm",
       "-rf",
       "/usr/local/skiabot/skia_skimage_out/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes"
@@ -614,7 +614,7 @@
       "ssh",
       "-p",
       "22",
-      "chrome-bot@192.168.1.123",
+      "root@192.168.1.123",
       "mkdir",
       "-p",
       "/usr/local/skiabot/skia_skimage_out/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes"
@@ -626,7 +626,7 @@
       "ssh",
       "-p",
       "22",
-      "chrome-bot@192.168.1.123",
+      "root@192.168.1.123",
       "rm",
       "-rf",
       "/usr/local/skiabot/skia_skimage_expected/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes"
@@ -638,7 +638,7 @@
       "ssh",
       "-p",
       "22",
-      "chrome-bot@192.168.1.123",
+      "root@192.168.1.123",
       "mkdir",
       "-p",
       "/usr/local/skiabot/skia_skimage_expected/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes"
@@ -651,7 +651,7 @@
       "-P",
       "22",
       "[SLAVE_BUILD]/skia/expectations/skimage/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes/expected-results.json",
-      "chrome-bot@192.168.1.123:/usr/local/skiabot/skia_skimage_expected/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes/expected-results.json"
+      "root@192.168.1.123:/usr/local/skiabot/skia_skimage_expected/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes/expected-results.json"
     ],
     "name": "scp [SLAVE_BUILD]/skia/expectations/skimage/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes/expected-results.json"
   },
@@ -661,7 +661,7 @@
       "-P",
       "22",
       "[SLAVE_BUILD]/skia/out/config/chromeos-link/Debug/skimage",
-      "chrome-bot@192.168.1.123:/usr/local/skiabot/bin/skimage"
+      "root@192.168.1.123:/usr/local/skiabot/bin/skimage"
     ],
     "name": "scp [SLAVE_BUILD]/skia/out/config/chromeos-link/Debug/skimage"
   },
@@ -670,7 +670,7 @@
       "ssh",
       "-p",
       "22",
-      "chrome-bot@192.168.1.123",
+      "root@192.168.1.123",
       "/usr/local/skiabot/bin/skimage",
       "-r",
       "/usr/local/skiabot/skia_skimage_in",
@@ -690,7 +690,7 @@
   {
     "cmd": [
       "[BUILD]/scripts/slave/recipe_modules/skia/resources/scp_dir_contents.sh",
-      "chrome-bot@192.168.1.123:/usr/local/skiabot/skia_skimage_out",
+      "root@192.168.1.123:/usr/local/skiabot/skia_skimage_out",
       "[SLAVE_BUILD]/skimage_out"
     ],
     "name": "scp /usr/local/skiabot/skia_skimage_out"
@@ -765,7 +765,7 @@
       "-P",
       "22",
       "[SLAVE_BUILD]/skia/out/config/chromeos-link/Debug/nanobench",
-      "chrome-bot@192.168.1.123:/usr/local/skiabot/bin/nanobench"
+      "root@192.168.1.123:/usr/local/skiabot/bin/nanobench"
     ],
     "name": "scp [SLAVE_BUILD]/skia/out/config/chromeos-link/Debug/nanobench"
   },
@@ -774,7 +774,7 @@
       "ssh",
       "-p",
       "22",
-      "chrome-bot@192.168.1.123",
+      "root@192.168.1.123",
       "/usr/local/skiabot/bin/nanobench",
       "-i",
       "/usr/local/skiabot/skia_resources",
