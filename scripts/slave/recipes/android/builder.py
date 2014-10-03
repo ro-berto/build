@@ -47,7 +47,7 @@ BUILDERS = {
       'check_licenses': NormalStep,
       'findbugs': NormalStep,
       'upload': {
-        'bucket': 'chromium_android',
+        'bucket': 'chromium-android',
         'path': lambda api: ('android_fyi_dbg/full-build-linux_%s.zip' %
                              api.properties['revision']),
       },
@@ -58,7 +58,7 @@ BUILDERS = {
       'check_licenses': NormalStep,
       'findbugs': NormalStep,
       'upload': {
-        'bucket': 'chromium_android',
+        'bucket': 'chromium-android',
         'path': lambda api: ('android_fyi_rel/full-build-linux_%s.zip' %
                              api.properties['revision']),
       },

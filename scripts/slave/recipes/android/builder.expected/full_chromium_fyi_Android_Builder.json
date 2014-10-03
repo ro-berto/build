@@ -189,11 +189,11 @@
       "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
       "cp",
       "[SLAVE_BUILD]/src/out/build_product.zip",
-      "gs://chromium_android/android_fyi_rel/full-build-linux_267739.zip"
+      "gs://chromium-android/android_fyi_rel/full-build-linux_267739.zip"
     ],
     "name": "gsutil upload_build_product",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium_android/android_fyi_rel/full-build-linux_267739.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-android/android_fyi_rel/full-build-linux_267739.zip@@@"
     ]
   }
 ]
