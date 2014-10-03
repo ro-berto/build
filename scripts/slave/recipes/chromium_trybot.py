@@ -307,7 +307,7 @@ BUILDERS = {
         'based_on_main_waterfall': {
           'mastername': 'chromium.mac',
           'buildername': 'Mac Builder',
-          'testers': ['Mac10.7 Tests (1)', 'Mac10.7 Tests (2)'],
+          'testers': ['Mac10.7 Tests (1)'],
         },
         'testing': {
           'platform': 'mac',
@@ -395,8 +395,6 @@ BUILDERS = {
           'buildername': 'Win Builder',
           'testers': [
             'Win7 Tests (1)',
-            'Win7 Tests (2)',
-            'Win7 Tests (3)',
             'NaCl Tests (x86-32)',
           ],
         },
@@ -454,8 +452,6 @@ BUILDERS = {
           'buildername': 'Win x64 Builder',
           'testers': [
             'Win 7 Tests x64 (1)',
-            'Win 7 Tests x64 (2)',
-            'Win 7 Tests x64 (3)',
             'NaCl Tests (x86-64)',
           ],
         },

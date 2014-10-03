@@ -130,24 +130,6 @@ SPEC = {
       },
       'enable_swarming': True,
     },
-    'Linux Tests (dbg)(2)': {
-      'recipe_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-      ],
-      'tests': [
-      ],
-      'parent_buildername': 'Linux Builder (dbg)',
-      'testing': {
-        'platform': 'linux',
-      },
-      'enable_swarming': True,
-    },
 
     'Linux Clang (dbg)': {
       'recipe_config': 'chromium_clang',

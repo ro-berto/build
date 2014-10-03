@@ -83,21 +83,6 @@ SPEC = {
       },
       'enable_swarming': True,
     },
-    'Mac10.7 Tests (2)': {
-      'recipe_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'test_generators': [
-        steps.generate_gtest,
-      ],
-      'bot_type': 'tester',
-      'parent_buildername': 'Mac Builder',
-      'testing': {
-        'platform': 'mac',
-      }
-    },
     'Mac Builder (dbg)': {
       'recipe_config': 'chromium',
       'chromium_config_kwargs': {
@@ -171,21 +156,6 @@ SPEC = {
         'platform': 'mac',
       },
       'enable_swarming': True,
-    },
-    'Mac 10.7 Tests (dbg)(2)': {
-      'recipe_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-      },
-      'test_generators': [
-        steps.generate_gtest,
-      ],
-      'bot_type': 'tester',
-      'parent_buildername': 'Mac Builder (dbg)',
-      'testing': {
-        'platform': 'mac',
-      }
     },
     'iOS Device': {
       'recipe_config': 'chromium_ios_device',

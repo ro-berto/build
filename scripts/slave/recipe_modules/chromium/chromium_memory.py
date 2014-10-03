@@ -24,8 +24,6 @@ SPEC = {
 }
 
 for name in ('Linux ASan LSan Tests (1)',
-             'Linux ASan LSan Tests (2)',
-             'Linux ASan LSan Tests (3)',
              'Linux ASan Tests (sandboxed)'):
   SPEC['builders'][name] = {
     'recipe_config': 'chromium_asan',
