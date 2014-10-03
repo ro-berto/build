@@ -199,6 +199,26 @@
         }
       }
     ],
+    "https://build.chromium.org/p/chromium.memory.fyi": [
+      {
+        "categories": [
+          "chromium_memory_fyi"
+        ],
+        "tree_notify": [
+          "earthdok@chromium.org"
+        ],
+        "forgive_all": "true",
+        "sheriff_classes": ["sheriff_memory"],
+
+        "builders": {
+          "Chromium Linux MSan Builder": {},
+          "Linux MSan Tests": {},
+          "Linux MSan Browser (1)": {},
+          "Linux MSan Browser (2)": {},
+          "Linux MSan Browser (3)": {}
+        }
+      }
+    ],
     "https://build.chromium.org/p/chromium.perf": [
       {
         "tree_notify": [
@@ -313,7 +333,13 @@
       ]
     },
 
-    "chromium_tree_closer":{
+    "chromium_memory_fyi": {
+      "closing_optional": [
+        "*"
+      ]
+    },
+
+    "chromium_tree_closer": {
       "closing_optional": [
         "bot_update",
         "compile",

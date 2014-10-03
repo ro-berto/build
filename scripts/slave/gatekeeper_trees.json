@@ -34,6 +34,7 @@
         "masters": [
             "https://build.chromium.org/p/chromium.fyi",
             "https://build.chromium.org/p/chromium.lkgr",
+            "https://build.chromium.org/p/chromium.memory.fyi",
             "https://build.chromium.org/p/chromium.perf",
             "https://build.chromium.org/p/client.libvpx"
         ]
