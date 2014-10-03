@@ -22,13 +22,11 @@ def Update(config, active_master, c):
           'Mac10.6 Tests (1)',
           'Mac10.6 Tests (2)',
           'Mac10.7 Tests (1)',
-          'Mac10.7 Tests (2)',
       ]),
       Triggerable(name='mac_dbg_trigger', builderNames=[
           'Mac 10.6 Tests (dbg)(1)',
           'Mac 10.6 Tests (dbg)(2)',
           'Mac 10.7 Tests (dbg)(1)',
-          'Mac 10.7 Tests (dbg)(2)',
       ]),
   ])
   specs = [
@@ -39,7 +37,6 @@ def Update(config, active_master, c):
     {'name': 'Mac10.6 Tests (1)'},
     {'name': 'Mac10.6 Tests (2)'},
     {'name': 'Mac10.7 Tests (1)'},
-    {'name': 'Mac10.7 Tests (2)'},
     {
       'name': 'Mac Builder (dbg)',
       'triggers': ['mac_dbg_trigger'],
@@ -47,7 +44,6 @@ def Update(config, active_master, c):
     {'name': 'Mac 10.6 Tests (dbg)(1)'},
     {'name': 'Mac 10.6 Tests (dbg)(2)'},
     {'name': 'Mac 10.7 Tests (dbg)(1)'},
-    {'name': 'Mac 10.7 Tests (dbg)(2)'},
   ]
 
   c['builders'].extend([
