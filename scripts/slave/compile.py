@@ -116,8 +116,8 @@ def goma_setup(options, env):
   # Since goma server won't cache on subprograms mismatch like command mismatch,
   # we need to find out issues before makingGOMA_SEND_SUBPROGRAM_SPEC=true by
   # default.
-  # roughly 10% experiment on GOMA_SEND_SUBPROGRAM_SPEC.
-  if hash(hostname) % 100 <= 10:
+  # roughly 20% experiment on GOMA_SEND_SUBPROGRAM_SPEC.
+  if hash(hostname) % 100 <= 20:
     env['GOMA_SEND_SUBPROGRAM_SPEC'] = 'true'
 
   # HACK(yyanagisawa, goma): Windows NO_NACL_GOMA (crbug.com/390764)
