@@ -132,7 +132,8 @@ def GenTests(api):
     api.test('failed_gm') +
     api.properties(buildername=builder,
                    mastername=mastername,
-                   slavename=slavename) +
+                   slavename=slavename,
+                   buildnumber=6) +
     api.path.exists(
         api.path['slave_build'].join('skia', 'expectations', 'skimage',
                                      builder, 'expected-results.json')
@@ -162,6 +163,7 @@ def GenTests(api):
     api.test('no_skimage_expectations') +
     api.properties(buildername=builder,
                    mastername=mastername,
-                   slavename=slavename) +
+                   slavename=slavename,
+                   buildnumber=7) +
     api.step_data('assert skimage expectations', retcode=1)
   )

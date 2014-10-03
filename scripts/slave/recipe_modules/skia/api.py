@@ -325,6 +325,11 @@ class SkiaApi(recipe_api.RecipeApi):
 
   def run_dm(self):
     """Run the DM test."""
+    # This must run before we write anything into self.device_dirs.dm_dir
+    # or we may end up deleting our output on machines where they're the same.
+    host_dm_dir = self.m.path['slave_build'].join('dm')
+    self.flavor.create_clean_host_dir(host_dm_dir)
+
     args = [
       'dm',
       '--verbose',
@@ -357,6 +362,23 @@ class SkiaApi(recipe_api.RecipeApi):
       args.append('--match')
       args.extend(match)
     self.run(self.flavor.step, 'dm', cmd=args, abort_on_failure=False)
+
+    # Copy images and JSON to host machine if needed.
+    self.flavor.copy_directory_contents_to_host(self.device_dirs.dm_dir,
+                                                host_dm_dir)
+    # Upload them to Google Storage.
+    self.run(self.m.python,
+             'Upload DM Results',
+             script=self.resource('upload_dm_results.py'),
+             args=[
+               host_dm_dir,
+               self.got_revision,
+               self.c.BUILDER_NAME,
+               self.m.properties['buildnumber'],
+               self.m.properties['issue'] if self.c.is_trybot else '',
+             ],
+             cwd=self.m.path['checkout'],
+             abort_on_failure=False)
 
     # See skia:2789.
     if 'Valgrind' in self.c.BUILDER_NAME:
