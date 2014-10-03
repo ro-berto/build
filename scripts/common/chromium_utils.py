@@ -58,10 +58,11 @@ try:
     def _WIN_LINK_FUNC(src, dst):
       print 'linking %s -> %s' % (src, dst)
       if os.path.isdir(src):
-        if not ctypes.windll.kernel32.CreateSymbolicLinkA(dst, src, 1):
+        if not ctypes.windll.kernel32.CreateSymbolicLinkA(
+            str(dst), str(src), 1):
           raise ctypes.WinError()
       else:
-        if not ctypes.windll.kernel32.CreateHardLinkA(dst, src, 0):
+        if not ctypes.windll.kernel32.CreateHardLinkA(str(dst), str(src), 0):
           raise ctypes.WinError()
     WIN_LINK_FUNC = _WIN_LINK_FUNC
 except ImportError:
