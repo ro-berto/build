@@ -195,5 +195,16 @@
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-android/android_fyi_rel/full-build-linux_267739.zip@@@"
     ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger Android Tests",
+    "trigger_specs": [
+      {
+        "properties": {
+          "buildername": "Android Tests"
+        }
+      }
+    ]
   }
 ]

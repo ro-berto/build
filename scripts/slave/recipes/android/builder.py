@@ -12,6 +12,7 @@ DEPS = [
   'path',
   'properties',
   'step',
+  'trigger',
   'tryserver',
 ]
 
@@ -51,6 +52,7 @@ BUILDERS = {
         'path': lambda api: ('android_fyi_dbg/full-build-linux_%s.zip' %
                              api.properties['revision']),
       },
+      'triggers': ['Android Tests (dbg)'],
     },
     'Android Builder': {
       'recipe_config': 'main_builder',
@@ -62,6 +64,7 @@ BUILDERS = {
         'path': lambda api: ('android_fyi_rel/full-build-linux_%s.zip' %
                              api.properties['revision']),
       },
+      'triggers': ['Android Tests'],
       'target': 'Release',
     },
     'Android Clang Builder (dbg)': {
@@ -238,6 +241,8 @@ def GenSteps(api):
     droid.upload_build(upload_config['bucket'],
                        upload_config['path'](api))
 
+  if bot_config.get('triggers'):
+    api.trigger(*[{ 'buildername': t } for t in bot_config['triggers']])
 
 def _sanitize_nonalpha(text):
   return ''.join(c if c.isalnum() else '_' for c in text)
