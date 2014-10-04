@@ -59,7 +59,7 @@ try:
       print 'linking %s -> %s' % (src, dst)
       if os.path.isdir(src):
         if not ctypes.windll.kernel32.CreateSymbolicLinkA(
-            str(dst), str(src), 1):
+            str(dst), str(os.path.abspath(src)), 1):
           raise ctypes.WinError()
       else:
         if not ctypes.windll.kernel32.CreateHardLinkA(str(dst), str(src), 0):
