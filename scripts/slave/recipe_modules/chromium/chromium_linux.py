@@ -74,6 +74,9 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
       ],
+      'tests': [
+        steps.NaclIntegrationTest(),
+      ],
       'parent_buildername': 'Linux Builder (dbg)(32)',
       'testing': {
         'platform': 'linux',
@@ -89,9 +92,6 @@ SPEC = {
       'bot_type': 'tester',
       'test_generators': [
         steps.generate_gtest,
-      ],
-      'tests': [
-        steps.NaclIntegrationTest(),
       ],
       'parent_buildername': 'Linux Builder (dbg)(32)',
       'testing': {
