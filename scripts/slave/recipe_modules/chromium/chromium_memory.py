@@ -56,6 +56,8 @@ for bits, bit_txt in ((32, ''), (64, ' 64')):
     },
     'bot_type': 'builder',
     'testing': {'platform': 'mac'},
+    'enable_swarming': True,
+    'use_isolate': True,
   }
 
   for shard in (1, 2, 3):
@@ -72,4 +74,5 @@ for bits, bit_txt in ((32, ''), (64, ' 64')):
       ],
       'parent_buildername': builder_name,
       'testing': {'platform': 'mac'},
+      'enable_swarming': True,
     }
