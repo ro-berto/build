@@ -16,3 +16,4 @@ GM_IGNORE_TESTS_FILENAME = 'ignored-tests.txt'
 GS_GM_BUCKET = 'chromium-skia-gm'
 GS_SUMMARIES_BUCKET = 'chromium-skia-gm-summaries'
 
+SKIA_REPO = 'https://skia.googlesource.com/skia.git'

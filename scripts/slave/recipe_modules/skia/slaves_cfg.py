@@ -10,10 +10,18 @@ import os
 
 
 def _slaves_cfg_path(master_name):
-  return os.path.abspath(os.path.join(
-      os.path.abspath(os.path.dirname(__file__)),
-      os.pardir, os.pardir, os.pardir, os.pardir, 'masters',
-      'master.' + master_name, 'slaves.cfg'))
+  def _make_path(master_name, build_dir):
+    return os.path.abspath(os.path.join(
+        os.path.abspath(os.path.dirname(__file__)), os.pardir, os.pardir,
+        os.pardir, os.pardir, os.pardir, build_dir, 'masters',
+        'master.' + master_name, 'slaves.cfg'))
+  path = _make_path(master_name, 'build')
+  if os.path.isfile(path):
+    return path
+  path = _make_path(master_name, 'build_internal')
+  if os.path.isfile(path):
+    return path
+  return None
 
 
 def get(master_name):
