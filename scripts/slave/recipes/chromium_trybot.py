@@ -469,6 +469,9 @@ BUILDERS = {
           'platform': 'win',
           'test_spec_file': 'chromium_win8_trybot.json',
         },
+        'swarming_dimensions': {
+          'os': 'Windows-6.2',
+        },
       },
       'win8_chromium_rel': {
         'add_telemetry_tests': False,
@@ -481,6 +484,9 @@ BUILDERS = {
         'testing': {
           'platform': 'win',
           'test_spec_file': 'chromium_win8_trybot.json',
+        },
+        'swarming_dimensions': {
+          'os': 'Windows-6.2',
         },
       },
       # Fake builder to provide testing coverage for non-bot_update.
@@ -836,6 +842,10 @@ def GenSteps(api):
     if has_swarming_tests:
       api.swarming.check_client_version()
       api.swarming.default_priority = build_to_priority(api.properties)
+      # TODO(phajdan): uncomment once we have XP or 10.6 trybots.
+      #os_dimension = bot_config.get('swarming_dimensions', {}).get('os')
+      #if os_dimension:
+      #  api.swarming.set_default_dimension('os', os_dimension)
 
     try:
       api.chromium.runhooks(name='runhooks (with patch)')

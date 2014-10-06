@@ -82,6 +82,19 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]\\src\\tools\\swarming_client\\swarming.py",
+      "--version"
+    ],
+    "name": "swarming.py --version",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@0.4.10@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "[SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.win.json",
       "/path/to/tmp/json"

@@ -40,6 +40,10 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'enable_swarming': True,
+      'swarming_dimensions': {
+        'os': 'Windows-5.1',
+      },
     },
     'XP Tests (2)': {
       'recipe_config': 'chromium',
@@ -92,6 +96,9 @@ SPEC = {
       'parent_buildername': 'Win Builder',
       'testing': {
         'platform': 'win',
+      },
+      'swarming_dimensions': {
+        'os': 'Windows-6.0',
       },
     },
     'Vista Tests (2)': {
@@ -292,6 +299,9 @@ SPEC = {
       'parent_buildername': 'Win Builder (dbg)',
       'testing': {
         'platform': 'win',
+      },
+      'swarming_dimensions': {
+        'os': 'Windows-6.2',
       },
     },
   },

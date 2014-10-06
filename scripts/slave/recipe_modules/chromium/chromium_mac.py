@@ -44,7 +44,11 @@ SPEC = {
       'parent_buildername': 'Mac Builder',
       'testing': {
         'platform': 'mac',
-      }
+      },
+      'enable_swarming': True,
+      'swarming_dimensions': {
+        'os': 'Mac-10.6',
+      },
     },
     'Mac10.6 Tests (2)': {
       'recipe_config': 'chromium',
@@ -118,7 +122,11 @@ SPEC = {
       'parent_buildername': 'Mac Builder (dbg)',
       'testing': {
         'platform': 'mac',
-      }
+      },
+      'enable_swarming': True,
+      'swarming_dimensions': {
+        'os': 'Mac-10.6',
+      },
     },
     'Mac 10.6 Tests (dbg)(2)': {
       'recipe_config': 'chromium',
