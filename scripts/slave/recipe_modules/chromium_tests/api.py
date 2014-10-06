@@ -186,6 +186,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       os_dimension = bot_config.get('swarming_dimensions', {}).get('os')
       if os_dimension:
         self.m.swarming.set_default_dimension('os', os_dimension)
+      cpu_dimension = bot_config.get('swarming_dimensions', {}).get('cpu')
+      if cpu_dimension:
+        self.m.swarming.set_default_dimension('cpu', cpu_dimension)
 
     if not bot_config.get('disable_runhooks'):
       self.m.chromium.runhooks()

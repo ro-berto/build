@@ -42,6 +42,7 @@ SPEC = {
       },
       'enable_swarming': True,
       'swarming_dimensions': {
+        'cpu': 'x86-32',
         'os': 'Windows-5.1',
       },
     },
