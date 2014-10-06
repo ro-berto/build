@@ -22,8 +22,6 @@ def Update(config, active_master, c):
       ]),
       Triggerable(name='win_rel_trigger', builderNames=[
           'XP Tests (1)',
-          'XP Tests (2)',
-          'XP Tests (3)',
           'Vista Tests (1)',
           'Vista Tests (2)',
           'Vista Tests (3)',
@@ -45,8 +43,6 @@ def Update(config, active_master, c):
       'triggers': ['win_rel_trigger'],
     },
     {'name': 'XP Tests (1)'},
-    {'name': 'XP Tests (2)'},
-    {'name': 'XP Tests (3)'},
     {'name': 'Vista Tests (1)'},
     {'name': 'Vista Tests (2)'},
     {'name': 'Vista Tests (3)'},
