@@ -63,6 +63,21 @@ BUILDERS = {
       'num_device_shards': 8,
     },
   },
+  'client.v8': {
+    'Android Nexus4 Perf': {
+      'gclient_apply_config': [
+        'v8_bleeding_edge_git',
+        'chromium_lkcr',
+        'show_v8_revision',
+      ],
+      'perf_id': 'v8-android-nexus4',
+      'bucket': 'v8-android',
+      'path': lambda api: ('v8_android_perf_rel/full-build-linux_%s.zip' %
+                           api.properties['parent_revision']),
+      'num_device_shards': 1,
+      'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
+    },
+  },
 }
 
 def GenSteps(api):
@@ -76,6 +91,22 @@ def GenSteps(api):
                                                  BUILD_CONFIG='Release')
   api.gclient.set_config('perf')
   api.gclient.apply_config('android')
+  for c in builder.get('gclient_apply_config', []):
+    api.gclient.apply_config(c)
+
+  if builder.get('set_component_rev'):
+    # If this is a component build and the main revision is e.g. blink,
+    # webrtc, or v8, the custom deps revision of this component must be
+    # dynamically set to either:
+    # (1) the revision of the builder,
+    # (2) 'revision' from the waterfall, or
+    # (3) 'HEAD' for forced builds with unspecified 'revision'.
+    # TODO(machenbach): Use parent_got_cr_revision on testers with component
+    # builds to match also the chromium revision from the builder.
+    component_rev = api.properties.get(
+        'parent_got_revision', api.properties.get('revision', 'HEAD'))
+    dep = builder.get('set_component_rev')
+    api.gclient.c.revisions[dep['name']] = dep['rev_str'] % component_rev
 
   api.bot_update.ensure_checkout()
   api.path['checkout'] = api.path['slave_build'].join('src')
