@@ -1,0 +1,30 @@
+[
+  {
+    "cmd": [
+      "/bin/echo",
+      "foo/bar/baz"
+    ],
+    "name": "step1"
+  },
+  {
+    "cmd": [
+      "/bin/echo",
+      "foo/bar/baz"
+    ],
+    "name": "step2"
+  },
+  {
+    "cmd": [
+      "/bin/echo",
+      "foo/bar/baz"
+    ],
+    "name": "step3"
+  },
+  {
+    "cmd": [
+      "/bin/echo",
+      "foo/bar/baz"
+    ],
+    "name": "step4"
+  }
+]
