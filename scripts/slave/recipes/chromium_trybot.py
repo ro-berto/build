@@ -2,8 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import re
-
 DEPS = [
   'bot_update',
   'chromium',
@@ -512,44 +510,6 @@ def add_swarming_builder(original, swarming, server):
   BUILDERS[server]['builders'][swarming] = conf
 
 
-def does_regex_match(name, regexs):
-  """Returns true if |name| matches one of the regular expressions in
-  |regexs|."""
-  for regex in regexs:
-    match = re.match(regex, name)
-    if match and match.end() == len(name):
-      return True
-  return False
-
-
-def should_filter_builder(name, regexs, root):
-  """Returns true if the builder |name| should be filtered. |regexs| is a list
-  of the regular expressions specifying the builders that should *not* be
-  filtered. |root| is the root of the project. If |name| completely matches one
-  of the regular expressions than false is returned, otherwise true."""
-  # Don't run alalyze for other projects, such as blink, as there aren't that
-  # many try jobs for them.
-  if root != 'src':
-    return False
-  return not does_regex_match(name, regexs)
-
-
-def should_filter_tests(name, regexs):
-  """Returns true if the builder |name| should filter the sets of tests.
-  |regexs| is a list of the regular expressions specifying the builders that
-  should *not* be filtered. If |name| completely matches one of the regular
-  expressions than false is returned, otherwise true."""
-  return not does_regex_match(name, regexs)
-
-
-def should_filter_compile(name, regexs):
-  """Returns true if the builder |name| should filter the sets of compile
-  targets. |regexs| is a list of the regular expressions specifying the
-  builders that should *not* be filtered. If |name| completely matches one of
-  the regular expressions than false is returned, otherwise true."""
-  return not does_regex_match(name, regexs)
-
-
 def get_test_names(tests):
   """Returns the names of each of the tests in |tests|."""
   return [test.name for test in tests]
@@ -807,9 +767,9 @@ def GenSteps(api):
                             api.chromium.steps.TelemetryPerfUnitTests()]
 
     # See if the patch needs to compile on the current platform.
-    if isinstance(test_spec, dict) and should_filter_builder(
-        buildername, test_spec.get('non_filter_builders', []),
-        api.properties.get('root')):
+    # Don't run analyze for other projects, such as blink, as there aren't that
+    # many try jobs for them.
+    if isinstance(test_spec, dict) and api.properties.get('root') == 'src':
       analyze_config_file = bot_config['testing'].get('analyze_config_file',
                                          'trybot_analyze_config.json')
       api.filter.does_patch_require_compile(
@@ -820,26 +780,23 @@ def GenSteps(api):
           config_file_name=analyze_config_file)
       if not api.filter.result:
         return [], bot_update_step
+
       # Patch needs compile. Filter the list of test and compile targets.
-      if should_filter_tests(buildername,
-                             test_spec.get('non_filter_tests_builders', [])):
-        gtest_tests = filter_tests(gtest_tests, api.filter.matching_exes)
-      if should_filter_compile(buildername,
-                               test_spec.get('non_filter_compile_builders',
-                                             [])):
-        if 'all' in compile_targets:
-          compile_targets = api.filter.compile_targets
-        else:
-          compile_targets = list(set(compile_targets) &
-                                 set(api.filter.compile_targets))
-        # Always add |matching_exes|. They will be covered by |compile_targets|,
-        # but adding |matching_exes| makes determing if conditional tests are
-        # necessary easier. For example, if we didn't do this we could end up
-        # with chrome_run as a compile_target and not chrome (since chrome_run
-        # depends upon chrome). This results in not picking up
-        # NaclIntegrationTest as it depends upon chrome not chrome_run.
-        compile_targets = list(set(api.filter.matching_exes +
-                                   api.filter.compile_targets))
+      gtest_tests = filter_tests(gtest_tests, api.filter.matching_exes)
+
+      if 'all' in compile_targets:
+        compile_targets = api.filter.compile_targets
+      else:
+        compile_targets = list(set(compile_targets) &
+                               set(api.filter.compile_targets))
+      # Always add |matching_exes|. They will be covered by |compile_targets|,
+      # but adding |matching_exes| makes determing if conditional tests are
+      # necessary easier. For example, if we didn't do this we could end up
+      # with chrome_run as a compile_target and not chrome (since chrome_run
+      # depends upon chrome). This results in not picking up
+      # NaclIntegrationTest as it depends upon chrome not chrome_run.
+      compile_targets = list(set(api.filter.matching_exes +
+                                 api.filter.compile_targets))
 
     tests = []
     # TODO(phajdan.jr): Re-enable checkdeps on Windows when it works with git.
@@ -1146,7 +1103,6 @@ def GenTests(api):
             'args': ['--gtest-filter: *NaCl*'],
           },
         ],
-        'non_filter_builders': ['.*'],
       })
     )
   )
@@ -1177,9 +1133,16 @@ def GenTests(api):
             'swarming': {'can_use_on_swarming_builders': True},
           },
         ],
-        'non_filter_builders': ['linux_chromium_rel_swarming'],
       })
-      )
+      ) +
+    api.override_step_data('read filter exclusion spec', api.json.output({
+        'base': {
+          'exclusions': ['f.*'],
+        },
+        'chromium': {
+          'exclusions': [],
+        },
+     }))
   )
 
   yield (
@@ -1227,9 +1190,16 @@ def GenTests(api):
             },
           },
         ],
-        'non_filter_builders': ['linux_chromium_rel_swarming'],
       })
     ) +
+    api.override_step_data('read filter exclusion spec', api.json.output({
+        'base': {
+          'exclusions': ['f.*'],
+        },
+        'chromium': {
+          'exclusions': [],
+        },
+     })) +
     api.override_step_data(
         'find isolated tests',
         api.isolate.output_json(['base_unittests', 'browser_tests']))
@@ -1258,9 +1228,16 @@ def GenTests(api):
             },
           },
         ],
-        'non_filter_builders': ['linux_chromium_rel_swarming'],
       })
     ) +
+    api.override_step_data('read filter exclusion spec', api.json.output({
+        'base': {
+          'exclusions': ['f.*'],
+        },
+        'chromium': {
+          'exclusions': [],
+        },
+     })) +
     api.override_step_data(
         'find isolated tests',
         api.isolate.output_json(['base_unittests', 'browser_tests']))
@@ -1282,9 +1259,16 @@ def GenTests(api):
             'swarming': {'can_use_on_swarming_builders': True},
           },
         ],
-        'non_filter_builders': ['linux_chromium_rel_swarming'],
       })
     ) +
+    api.override_step_data('read filter exclusion spec', api.json.output({
+        'base': {
+          'exclusions': ['f.*'],
+        },
+        'chromium': {
+          'exclusions': [],
+        },
+     })) +
     api.override_step_data(
         'find isolated tests',
         api.isolate.output_json(['base_unittests']))
@@ -1307,9 +1291,16 @@ def GenTests(api):
             'swarming': {'can_use_on_swarming_builders': True},
           },
         ],
-        'non_filter_builders': ['linux_chromium_rel_swarming'],
       })
     ) +
+    api.override_step_data('read filter exclusion spec', api.json.output({
+        'base': {
+          'exclusions': ['f.*'],
+        },
+        'chromium': {
+          'exclusions': [],
+        },
+     })) +
     api.override_step_data(
         'find isolated tests',
         api.isolate.output_json(['base_unittests', 'browser_tests'])) +
@@ -1320,7 +1311,6 @@ def GenTests(api):
         api.isolate.output_json(['base_unittests']))
   )
 
-  # Tests analyze module by not specifying a non_filter_builders.
   yield (
     api.test('no_compile_because_of_analyze') +
     props(buildername='linux_chromium_rel') +
@@ -1341,8 +1331,7 @@ def GenTests(api):
     )
   )
 
-  # Tests analyze module by way of not specifying non_filter_builders and file
-  # matching exclusion list. This should result in a compile.
+  # This should result in a compile.
   yield (
     api.test('compile_because_of_analyze_matching_exclusion') +
     props(buildername='linux_chromium_rel') +
@@ -1359,14 +1348,12 @@ def GenTests(api):
     )
   )
 
-  # Tests analyze module by way of not specifying non_filter_builders and
-  # analyze result returning true. This should result in a compile.
+  # This should result in a compile.
   yield (
     api.test('compile_because_of_analyze') +
     props(buildername='linux_chromium_rel') +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
-        'non_filter_compile_builders': ['linux_chromium_rel'],
       })
     ) +
     api.override_step_data(
@@ -1375,15 +1362,11 @@ def GenTests(api):
                        'build_targets': []}))
   )
 
-  # Tests analyze module by way of specifying non_filter_builders and
-  # analyze result returning true along with a smaller set of tests.
   yield (
     api.test('compile_because_of_analyze_with_filtered_tests_no_builder') +
     props(buildername='linux_chromium_rel') +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
-        'non_filter_tests_builders': ['linux_chromium_rel'],
-        'non_filter_compile_builders': ['linux_chromium_rel'],
         'gtest_tests': [
           {
             'test': 'base_unittests',
@@ -1405,15 +1388,11 @@ def GenTests(api):
                        'build_targets': ['browser_tests', 'base_unittests']}))
   )
 
-  # Tests analyze module by way of not specifying non_filter_builders and
-  # analyze result returning true along with a smaller set of tests. This
-  # specifices a 'filter_test_builder', so that this bot uses the filtered set.
   yield (
     api.test('compile_because_of_analyze_with_filtered_tests') +
     props(buildername='linux_chromium_rel') +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
-        'non_filter_compile_builders': ['linux_chromium_rel'],
         'gtest_tests': [
           {
             'test': 'base_unittests',
