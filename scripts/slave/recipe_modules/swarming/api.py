@@ -357,8 +357,9 @@ class SwarmingApi(recipe_api.RecipeApi):
         links = step_result.presentation.links
         for index, shard in enumerate(json_data['shards']):
           isolated_out = shard['isolated_out']
-          link_name = 'shard #%d isolated out' % index
-          links[link_name] = isolated_out['view_url']
+          if isolated_out:
+            link_name = 'shard #%d isolated out' % index
+            links[link_name] = isolated_out['view_url']
       except (KeyError, AttributeError):  # pragma: no cover
         # No isolated_out data exists (or any JSON at all)
         pass
