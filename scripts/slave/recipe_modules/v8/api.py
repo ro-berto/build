@@ -359,6 +359,7 @@ class V8Api(recipe_api.RecipeApi):
 
   # TODO(machenbach): Pass api already in constructor to avoid redundant api
   # parameter passing later.
+  @recipe_api.non_step
   def create_test(self, test):
     """Wrapper that allows to shortcut common tests with their names.
     Returns a runnable test instance.
@@ -423,7 +424,6 @@ class V8Api(recipe_api.RecipeApi):
       env=env,
     )
 
-  @recipe_api.composite_step
   def simple_leak_check(self):
     # TODO(machenbach): Add task kill step for windows.
     relative_d8_path = self.m.path.join(
@@ -538,7 +538,6 @@ class V8Api(recipe_api.RecipeApi):
     presentation.step_text += ('failures: %d<br/>flakes: %d<br/>' %
                                (failure_count, flake_count))
 
-  @recipe_api.composite_step
   def _runtest(self, name, test, flaky_tests=None, **kwargs):
     env = {}
     target = self.m.chromium.c.build_config_fs

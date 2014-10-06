@@ -405,7 +405,6 @@ class AndroidApi(recipe_api.RecipeApi):
     if failures:
       raise self.m.step.StepFailure('sharded perf tests failed %s' % failures)
 
-  @recipe_api.composite_step
   def run_instrumentation_suite(self, test_apk, test_data=None,
                                 flakiness_dashboard=None,
                                 annotation=None, except_annotation=None,
@@ -445,7 +444,6 @@ class AndroidApi(recipe_api.RecipeApi):
         args=['instrumentation'] + args,
         **kwargs)
 
-  @recipe_api.composite_step
   def logcat_dump(self, gs_bucket=None):
     if gs_bucket:
       log_path = self.m.chromium.output_dir.join('full_log')

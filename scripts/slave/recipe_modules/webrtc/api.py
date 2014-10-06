@@ -162,7 +162,6 @@ class WebRTCApi(recipe_api.RecipeApi):
         #self.m.chromium_android.stack_tool_steps()
         self.m.chromium_android.test_report()
 
-  @recipe_api.composite_step
   def add_test(self, test, name=None, args=None, revision=None, env=None,
                perf_test=False, perf_dashboard_id=None, parallel=False):
     """Helper function to invoke chromium.runtest().
@@ -200,7 +199,6 @@ class WebRTCApi(recipe_api.RecipeApi):
           test=test, args=args, name=name, annotate=annotate, xvfb=True,
           python_mode=python_mode, test_type=test_type, env=env)
 
-  @recipe_api.composite_step
   def test_runner(self, test, isolate_path):
     """Adds a test to run on Android devices.
 

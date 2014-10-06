@@ -7,9 +7,12 @@ DEPS = [
 ]
 
 def GenSteps(api):
-  with api.step.defer_results(should_raise=False):
-    api.step("testa", ["echo", "testa"])
-    api.step("testb", ["echo", "testb"])
+  try:
+    with api.step.defer_results():
+      api.step("testa", ["echo", "testa"])
+      api.step("testb", ["echo", "testb"])
+  except api.step.StepFailure:
+    pass
 
 
 def GenTests(api):

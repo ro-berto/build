@@ -13,6 +13,7 @@ API = None
 def step(step_name):
   API.step(step_name, ['true'])
 
+@recipe_api.composite_step
 def deferrer(api):
   with api.step.defer_results():
     step('aggregated start')

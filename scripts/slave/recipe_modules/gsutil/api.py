@@ -40,7 +40,6 @@ class GSUtilApi(recipe_api.RecipeApi):
     return self.m.python(full_name, gsutil_path, cmd_prefix + cmd,
                          infra_step=True, **kwargs)
 
-  @recipe_api.composite_step
   def upload(self, source, bucket, dest, args=None, link_name='gsutil.upload',
              metadata=None, **kwargs):
     args = [] if args is None else args[:]
