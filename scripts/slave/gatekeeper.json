@@ -204,10 +204,6 @@
         "categories": [
           "chromium_memory_fyi"
         ],
-        "tree_notify": [
-          "earthdok@chromium.org"
-        ],
-        "forgive_all": "true",
         "sheriff_classes": ["sheriff_memory"],
 
         "builders": {
