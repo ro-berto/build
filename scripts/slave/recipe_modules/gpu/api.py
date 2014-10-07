@@ -370,9 +370,11 @@ class GpuApi(recipe_api.RecipeApi):
     # GPU unit tests.
     capture(self._run_isolate('gpu_unittests', name='gpu_unittests'))
 
-    # Run the content and media unittests.
-    capture(self._run_isolate('content_unittests', name='content_unittests'))
-    capture(self._run_isolate('media_unittests', name='media_unittests'))
+    # Run the content and media unittests on the FYI bots
+    # TODO(jmadill): Run them on all GPU bots once stable
+    if self.is_fyi_waterfall:
+      capture(self._run_isolate('content_unittests', name='content_unittests'))
+      capture(self._run_isolate('media_unittests', name='media_unittests'))
 
     if failures:
       raise self.m.step.StepFailure('%d tests failed: %r' % (len(failures), failures))
