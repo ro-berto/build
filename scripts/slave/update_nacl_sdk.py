@@ -11,7 +11,7 @@ requested and copied to nacl_sdk/pepper_current.
 """
 
 from common import chromium_utils
-chromium_utils.AddThirdPartyLibToPath('requests_1_2_3')
+chromium_utils.AddThirdPartyLibToPath('requests_1_2_3', override=True)
 
 import hashlib
 import optparse
