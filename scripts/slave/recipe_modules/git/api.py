@@ -35,7 +35,8 @@ class GitApi(recipe_api.RecipeApi):
 
   def checkout(self, url, ref=None, dir_path=None, recursive=False,
                submodules=True, keep_paths=None, step_suffix=None,
-               curl_trace_file=None, can_fail_build=True):
+               curl_trace_file=None, can_fail_build=True,
+               set_got_revision=False):
     """Returns an iterable of steps to perform a full git checkout.
     Args:
       url (string): url of remote repo to use as upstream
@@ -50,6 +51,8 @@ class GitApi(recipe_api.RecipeApi):
           file. Useful for debugging git issue reproducible only on bots. It has
           a side effect of all stderr output of 'git fetch' going to that file.
       can_fail_build (bool): if False, ignore errors during fetch or checkout.
+      set_got_revision (bool): if True, resolves HEAD and sets got_revision
+          property.
     """
     if not dir_path:
       dir_path = url.rsplit('/', 1)[-1]
@@ -125,6 +128,17 @@ class GitApi(recipe_api.RecipeApi):
       cwd=dir_path,
       name='git checkout%s' % step_suffix,
       can_fail_build=can_fail_build)
+
+    if set_got_revision:
+      rev_parse_step = self('rev-parse', 'HEAD',
+                           cwd=dir_path,
+                           name='set got_revision',
+                           stdout=self.m.raw_io.output(),
+                           can_fail_build=False)
+
+      if rev_parse_step.presentation.status == 'SUCCESS':
+        sha = rev_parse_step.stdout
+        rev_parse_step.presentation.properties['got_revision'] = sha
 
     clean_args = list(self.m.itertools.chain(
         *[('-e', path) for path in keep_paths or []]))

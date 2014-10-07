@@ -7,6 +7,7 @@ DEPS = [
   'path',
   'platform',
   'properties',
+  'raw_io',
 ]
 
 
@@ -24,6 +25,7 @@ def GenSteps(api):
       url,
       ref=api.properties.get('revision'),
       recursive=True,
+      set_got_revision=api.properties.get('set_got_revision'),
       curl_trace_file=curl_trace_file)
 
   # You can use api.git.fetch_tags to fetch all tags from the origin
@@ -60,4 +62,12 @@ def GenTests(api):
   yield (
     api.test('cannot_fail_build') +
     api.step_data('git status cannot_fail_build', retcode=1)
+  )
+
+
+  yield (
+      api.test('set_got_revision') +
+      api.properties(set_got_revision=True) +
+      api.step_data('set got_revision',
+                    stdout=api.raw_io.output('deadbeef'))
   )
