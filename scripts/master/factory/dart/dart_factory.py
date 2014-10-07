@@ -526,25 +526,14 @@ class DartUtils(object):
 
 
   @staticmethod
-  def get_dartlang_git_repo(name):
-    return 'https://github.com/dart-lang/%s.git' % name
+  def get_github_repo(project, name):
+    return 'https://github.com/%s/%s.git' % (project, name)
 
   @staticmethod
-  def get_dartlang_git_poller(name):
-    revlink = "https://github.com/dart-lang/" + name + "/commit/%s"
-    repo = DartUtils.get_dartlang_git_repo(name)
-    return DartUtils.get_git_poller(repo, name, revlink)
-
-  @staticmethod
-  def get_google_git_repo(name):
-    return 'https://github.com/google/%s.git' % name
-
-  @staticmethod
-  def get_google_git_poller(name):
-    revlink = "https://github.com/google/" + name + "/commit/%s"
-    repo = DartUtils.get_google_git_repo(name)
-    return DartUtils.get_git_poller(repo, name, revlink)
-
+  def get_github_poller(project, name):
+    repository = 'https://github.com/%s/%s.git' % (project, name)
+    revlink = ('https://github.com/' + project + '/' + name + '/commit/%s')
+    return DartUtils.get_git_poller(repository, name, revlink)
 
   @staticmethod
   def prioritize_builders(buildmaster, builders):

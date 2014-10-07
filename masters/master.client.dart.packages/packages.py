@@ -2,8 +2,12 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-# Packages that lives in the dart-lang github repo.
-DART_PACKAGES = [
+# Packages that we test:
+#   We default to github-project dart-lang
+#   is_sample means that we will append sample to the name
+#   is_repo means if something is living in the dart repository, we will add
+#     this to the name as well.
+PACKAGES = [
   {
     'name' : 'core-elements',
   },
@@ -40,28 +44,28 @@ DART_PACKAGES = [
   {
     'name' : 'web-components',
   },
-]
-
-# Packages that lives in the google github repo.
-GOOGLE_PACKAGES = [
+  # Packages in the github project google
   {
     'name' : 'serialization.dart',
+    'github_project' : 'google'
   },
-]
-
-# Packages that we test from the dart repo.
-DART_REPO_SAMPLES = [
+  # Repo samples
   {
     'name' : 'polymer_intl',
+    'is_sample' : True,
+    'is_repo' : True
   },
   {
     'name' : 'todomvc',
+    'is_sample' : True,
+    'is_repo' : True
   },
 ]
 
-DART_REPO_PACKAGES = [
-
+GITHUB_PACKAGES = [
+  p for p in PACKAGES if (not p.get('is_sample') and not p.get('is_repo'))
 ]
 
-
-PACKAGES = DART_PACKAGES + GOOGLE_PACKAGES + DART_REPO_SAMPLES
+DART_REPO_SAMPLES = [
+  p for p in PACKAGES if p.get('is_sample') and p.get('is_repo')
+]
