@@ -76,3 +76,29 @@ for bits, bit_txt in ((32, ''), (64, ' 64')):
       'testing': {'platform': 'mac'},
       'enable_swarming': True,
     }
+
+SPEC['builders']['Linux Chromium OS ASan LSan Builder'] = {
+  'recipe_config': 'chromium_chromiumos_asan',
+  'chromium_config_kwargs': {
+    'BUILD_CONFIG': 'Release',
+    'TARGET_BITS': 64,
+  },
+  'bot_type': 'builder',
+  'testing': {'platform': 'linux'}
+}
+
+for shard in range(1, 4):
+  tester_name = 'Linux Chromium OS ASan LSan Tests (%d)' % shard
+  SPEC['builders'][tester_name] = {
+    'recipe_config': 'chromium_chromiumos_asan',
+    'chromium_config_kwargs': {
+      'BUILD_CONFIG': 'Release',
+      'TARGET_BITS': 64,
+    },
+    'test_generators': [
+      steps.generate_gtest,
+    ],
+    'parent_buildername': 'Linux Chromium OS ASan LSan Builder',
+    'bot_type': 'tester',
+    'testing': {'platform': 'linux'}
+  }

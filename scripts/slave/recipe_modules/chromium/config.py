@@ -304,8 +304,11 @@ def proprietary_codecs(c, invert=False):
   c.gyp_env.GYP_DEFINES['proprietary_codecs'] = int(not invert)
 
 @config_ctx()
-def chromeos(c):
+def chromiumos(c):
   c.gyp_env.GYP_DEFINES['chromeos'] = 1
+
+@config_ctx(includes=['chromiumos'])
+def chromeos(c):
   ffmpeg_branding(c, branding='ChromeOS')
   proprietary_codecs(c)
 
@@ -446,9 +449,9 @@ def chromium_tsan2(c):
 def chromium_chromeos(c):
   c.compile_py.default_targets = ['All', 'chromium_builder_tests']
 
-@config_ctx(includes=['ninja', 'clang', 'goma', 'chromeos', 'asan'])
-def chromium_chromeos_asan(c):
-  c.compile_py.default_targets = ['All', 'chromium_builder_tests']
+@config_ctx(includes=['ninja', 'clang', 'goma', 'chromiumos', 'asan'])
+def chromium_chromiumos_asan(c):
+  c.runtests.test_args.append('--test-launcher-print-test-stdio=always')
 
 @config_ctx(includes=['ninja', 'clang', 'goma', 'chromeos'])
 def chromium_chromeos_clang(c):
