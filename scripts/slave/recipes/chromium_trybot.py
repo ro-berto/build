@@ -26,7 +26,7 @@ DEPS = [
 BUILDERS = {
   'tryserver.chromium.linux': {
     'builders': {
-      'linux_arm_cross_compile': {
+      'linux_arm': {
         'GYP_DEFINES': {
           'arm_float_abi': 'hard',
           'test_isolation_mode': 'archive',
@@ -44,6 +44,23 @@ BUILDERS = {
           'test_spec_file': 'chromium_arm.json',
         },
         'use_isolate': True,
+      },
+      'linux_arm_compile': {
+        'GYP_DEFINES': {
+          'arm_float_abi': 'hard',
+          'test_isolation_mode': 'archive',
+        },
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'chromium_config': 'chromium',
+        'compile_only': True,
+        'exclude_compile_all': True,
+        'testing': {
+          'platform': 'linux',
+        },
       },
       'linux_chromium_dbg': {
         'chromium_config_kwargs': {
@@ -1100,7 +1117,7 @@ def GenTests(api):
   yield (
     api.test('arm') +
     api.properties.generic(mastername='tryserver.chromium.linux',
-                           buildername='linux_arm_cross_compile') +
+                           buildername='linux_arm') +
     api.platform('linux', 64) +
     api.override_step_data('read test spec', api.json.output({
         'compile_targets': ['browser_tests_run'],
