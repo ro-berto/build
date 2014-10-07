@@ -1584,11 +1584,6 @@ def _UpdateRunBenchmarkArgs(args):
     None if not a telemetry test, otherwise a
     dict containing the output filename and whether it is a reference build.
   """
-  # TODO(sullivan): remove this line to enable new telemetry chartjson.
-  # W0101: unreachable code. Disable this check until we're able to remove this
-  # line entirely.
-  # pylint: disable=W0101
-  return {}
   if not args[0].endswith('run_benchmark'):
     # Not a telemetry run
     return None
