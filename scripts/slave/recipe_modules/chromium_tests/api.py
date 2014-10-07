@@ -191,7 +191,15 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self.m.swarming.set_default_dimension('cpu', cpu_dimension)
 
     if not bot_config.get('disable_runhooks'):
-      self.m.chromium.runhooks()
+      if self.m.tryserver.is_tryserver:
+        try:
+          self.m.chromium.runhooks(name='runhooks (with patch)')
+        except self.m.step.StepFailure:
+          # As part of deapplying patch we call runhooks without the patch.
+          self.deapply_patch(update_step)
+          raise
+      else:
+        self.m.chromium.runhooks()
 
     test_spec_file = bot_config.get('testing', {}).get('test_spec_file',
                                                        '%s.json' % mastername)
@@ -252,7 +260,28 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       for t in tests_including_triggered:
         compile_targets.update(t.compile_targets(self.m))
 
-      self.m.chromium.compile(targets=sorted(compile_targets))
+      compile_targets = sorted(compile_targets)
+      if self.m.tryserver.is_tryserver:
+        try:
+          self.m.chromium.compile(compile_targets, name='compile (with patch)')
+        except self.m.step.StepFailure:
+          self.deapply_patch(update_step)
+          try:
+            self.m.chromium.compile(
+                compile_targets, name='compile (without patch)')
+
+            # TODO(phajdan.jr): Set failed tryjob result after recognizing infra
+            # compile failures. We've seen cases of compile with patch failing
+            # with build steps getting killed, compile without patch succeeding,
+            # and compile with patch succeeding on another attempt with same
+            # patch.
+          except self.m.step.StepFailure:
+            self.m.tryserver.set_transient_failure_tryjob_result()
+            raise
+          raise
+      else:
+        self.m.chromium.compile(compile_targets)
+
       self.m.chromium.checkdeps()
 
       if self.m.chromium.c.TARGET_PLATFORM == 'android':
@@ -346,3 +375,19 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       if self.m.chromium.c.TARGET_PLATFORM == 'android':
         self.m.chromium_android.common_tests_final_steps()
+
+  def deapply_patch(self, bot_update_step):
+    assert self.m.tryserver.is_tryserver
+
+    if self.m.platform.is_win:
+      self.m.chromium.taskkill()
+    bot_update_json = bot_update_step.json.output
+    self.m.gclient.c.revisions['src'] = str(
+        bot_update_json['properties']['got_revision'])
+    self.m.bot_update.ensure_checkout(
+        force=True, patch=False, update_presentation=False)
+    try:
+      self.m.chromium.runhooks(name='runhooks (without patch)')
+    except self.m.step.StepFailure:
+      self.m.tryserver.set_transient_failure_tryjob_result()
+      raise

@@ -683,21 +683,6 @@ def GenSteps(api):
     master_dict = BUILDERS.get(mastername, {})
     return master_dict.get('builders', {}).get(buildername)
 
-  def deapply_patch(bot_update_step):
-    if api.platform.is_win:
-      api.chromium.taskkill()
-    bot_update_json = bot_update_step.json.output
-    api.gclient.c.revisions['src'] = str(
-        bot_update_json['properties']['got_revision'])
-    api.bot_update.ensure_checkout(force=True,
-                                   patch=False,
-                                   update_presentation=False)
-    try:
-      api.chromium.runhooks(name='runhooks (without patch)')
-    except api.step.StepFailure:
-      api.tryserver.set_transient_failure_tryjob_result()
-      raise
-
   def get_test_spec(mastername, buildername, name='read test spec',
                     step_test_data=None):
     bot_config = get_bot_config(mastername, buildername)
@@ -868,7 +853,7 @@ def GenSteps(api):
       api.chromium.runhooks(name='runhooks (with patch)')
     except api.step.StepFailure:
       # As part of deapplying patch we call runhooks without the patch.
-      deapply_patch(bot_update_step)
+      api.chromium_tests.deapply_patch(bot_update_step)
       raise
 
     if bot_config.get('use_isolate') or has_swarming_tests:
@@ -881,7 +866,7 @@ def GenSteps(api):
     try:
       api.chromium.compile(compile_targets, name='compile (with patch)')
     except api.step.StepFailure:
-      deapply_patch(bot_update_step)
+      api.chromium_tests.deapply_patch(bot_update_step)
       try:
         api.chromium.compile(
             compile_targets, name='compile (without patch)')
@@ -965,7 +950,7 @@ def GenSteps(api):
         mastername, buildername)
 
   def deapply_patch_fn(failing_tests):
-    deapply_patch(bot_update_step)
+    api.chromium_tests.deapply_patch(bot_update_step)
     compile_targets = list(api.itertools.chain(
         *[t.compile_targets(api) for t in failing_tests]))
     if compile_targets:
@@ -1089,6 +1074,14 @@ def GenTests(api):
   )
 
   yield (
+    api.test('runhooks_failure_ng') +
+    api.platform('linux', 64) +
+    props(mastername='tryserver.chromium.linux',
+          buildername='linux_chromium_rel_ng') +
+    api.step_data('gclient runhooks (with patch)', retcode=1)
+  )
+
+  yield (
     api.test('compile_failure') +
     props(buildername='win_chromium_rel',
           mastername='tryserver.chromium.win') +
@@ -1111,6 +1104,23 @@ def GenTests(api):
     api.platform.name('linux') +
     api.override_step_data('base_unittests (with patch)',
                            canned_test(passing=False)) +
+    api.step_data('compile (without patch)', retcode=1)
+  )
+
+  yield (
+    api.test('compile_failure_ng') +
+    api.platform('linux', 64) +
+    props(mastername='tryserver.chromium.linux',
+          buildername='linux_chromium_rel_ng') +
+    api.step_data('compile (with patch)', retcode=1)
+  )
+
+  yield (
+    api.test('compile_failure_without_patch_ng') +
+    api.platform('linux', 64) +
+    props(mastername='tryserver.chromium.linux',
+          buildername='linux_chromium_rel_ng') +
+    api.step_data('compile (with patch)', retcode=1) +
     api.step_data('compile (without patch)', retcode=1)
   )
 

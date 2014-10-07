@@ -99,7 +99,7 @@
     "env": {
       "GYP_DEFINES": "component=static_library gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=archive test_isolation_outdir=https://isolateserver.appspot.com use_goma=1"
     },
-    "name": "gclient runhooks"
+    "name": "gclient runhooks (with patch)"
   },
   {
     "cmd": [
@@ -168,7 +168,7 @@
       "mojo_public_test_interfaces",
       "mojo_python"
     ],
-    "name": "compile"
+    "name": "compile (with patch)"
   },
   {
     "cmd": [

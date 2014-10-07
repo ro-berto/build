@@ -9,5 +9,7 @@ DEPS = [
   'path',
   'platform',
   'properties',
+  'step',
   'swarming',
+  'tryserver',
 ]

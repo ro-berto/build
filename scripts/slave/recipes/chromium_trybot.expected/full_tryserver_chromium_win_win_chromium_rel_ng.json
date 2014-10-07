@@ -107,7 +107,7 @@
     "env": {
       "GYP_DEFINES": "chromium_win_pch=0 component=static_library fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 test_isolation_mode=archive test_isolation_outdir=https://isolateserver.appspot.com use_goma=1"
     },
-    "name": "gclient runhooks"
+    "name": "gclient runhooks (with patch)"
   },
   {
     "cmd": [
@@ -175,7 +175,7 @@
       "chromium_builder_tests",
       "mini_installer"
     ],
-    "name": "compile"
+    "name": "compile (with patch)"
   },
   {
     "cmd": [
