@@ -20,12 +20,10 @@ def Update(config, active_master, c):
       ]),
       Triggerable(name='mac_rel_trigger', builderNames=[
           'Mac10.6 Tests (1)',
-          'Mac10.6 Tests (2)',
           'Mac10.7 Tests (1)',
       ]),
       Triggerable(name='mac_dbg_trigger', builderNames=[
           'Mac 10.6 Tests (dbg)(1)',
-          'Mac 10.6 Tests (dbg)(2)',
           'Mac 10.7 Tests (dbg)(1)',
       ]),
   ])
@@ -35,14 +33,12 @@ def Update(config, active_master, c):
       'triggers': ['mac_rel_trigger'],
     },
     {'name': 'Mac10.6 Tests (1)'},
-    {'name': 'Mac10.6 Tests (2)'},
     {'name': 'Mac10.7 Tests (1)'},
     {
       'name': 'Mac Builder (dbg)',
       'triggers': ['mac_dbg_trigger'],
     },
     {'name': 'Mac 10.6 Tests (dbg)(1)'},
-    {'name': 'Mac 10.6 Tests (dbg)(2)'},
     {'name': 'Mac 10.7 Tests (dbg)(1)'},
   ]
 
