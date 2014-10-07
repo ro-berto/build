@@ -733,6 +733,7 @@ def _SendResultsToDashboard(log_processor, args):
         charts, args['system'], args['test'], args['mastername'],
         args['buildername'], args['buildnumber'], args['supplemental_columns'])
   if results:
+    logging.debug(json.dumps(results, indent=2))
     results_dashboard.SendResults(results, args['url'], args['build_dir'])
 
 
@@ -1623,13 +1624,6 @@ def main():
   xvfb_path = os.path.join(os.path.dirname(sys.argv[0]), '..', '..',
                            'third_party', 'xvfb', platform.architecture()[0])
 
-  # Initialize logging.
-  log_level = logging.INFO
-  logging.basicConfig(level=log_level,
-                      format='%(asctime)s %(filename)s:%(lineno)-3d'
-                             ' %(levelname)s %(message)s',
-                      datefmt='%y%m%d %H:%M:%S')
-
   option_parser = optparse.OptionParser(usage=USAGE)
 
   # Since the trailing program to run may have has command-line args of its
@@ -1801,9 +1795,23 @@ def main():
   option_parser.add_option('--test-launcher-summary-output',
                            help='Path to test results file with all the info '
                                 'from the test launcher')
+  option_parser.add_option('--verbose', action='store_true', default=False,
+                            help='Prints more information.')
 
   chromium_utils.AddPropertiesOptions(option_parser)
   options, args = option_parser.parse_args()
+
+  # Initialize logging.
+  log_level = logging.INFO
+  if options.verbose:
+    log_level = logging.DEBUG
+  logging.basicConfig(level=log_level,
+                      format='%(asctime)s %(filename)s:%(lineno)-3d'
+                             ' %(levelname)s %(message)s',
+                      datefmt='%y%m%d %H:%M:%S')
+  logging.basicConfig(level=logging.DEBUG)
+  logging.getLogger().addHandler(logging.StreamHandler(stream=sys.stdout))
+
   if not options.perf_dashboard_id:
     options.perf_dashboard_id = options.factory_properties.get('test_name')
 
