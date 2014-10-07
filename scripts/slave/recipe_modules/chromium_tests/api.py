@@ -28,8 +28,8 @@ RECIPE_CONFIGS = {
     'chromium_config': 'chromium_clang',
     'gclient_config': 'chromium',
   },
-  'chromium_asan': {
-    'chromium_config': 'chromium_asan',
+  'chromium_linux_asan': {
+    'chromium_config': 'chromium_linux_asan',
     'gclient_config': 'chromium',
   },
   'chromium_mac_asan': {

@@ -416,13 +416,15 @@ def chromium(c):
 
 @config_ctx(includes=['ninja', 'clang', 'goma', 'asan'])
 def chromium_asan(c):
-  c.runtests.test_args.append('--test-launcher-batch-limit=1')
   c.runtests.test_args.append('--test-launcher-print-test-stdio=always')
 
-@config_ctx(includes=['ninja', 'clang', 'goma', 'asan', 'static_library'])
+@config_ctx(includes=['chromium_asan'])
+def chromium_linux_asan(c):
+  c.runtests.test_args.append('--test-launcher-batch-limit=1')
+
+@config_ctx(includes=['chromium_asan', 'static_library'])
 def chromium_mac_asan(c):
   # TODO(glider, earthdok): Add --test-launcher-batch-limit for mac.
-  c.runtests.test_args.append('--test-launcher-print-test-stdio=always')
 
   # Clear lsan configuration for mac.
   del c.gyp_env.GYP_DEFINES['lsan']
@@ -449,9 +451,9 @@ def chromium_tsan2(c):
 def chromium_chromeos(c):
   c.compile_py.default_targets = ['All', 'chromium_builder_tests']
 
-@config_ctx(includes=['ninja', 'clang', 'goma', 'chromiumos', 'asan'])
+@config_ctx(includes=['chromium_asan', 'chromiumos'])
 def chromium_chromiumos_asan(c):
-  c.runtests.test_args.append('--test-launcher-print-test-stdio=always')
+  pass
 
 @config_ctx(includes=['ninja', 'clang', 'goma', 'chromeos'])
 def chromium_chromeos_clang(c):

@@ -254,8 +254,8 @@
       "--enable-lsan",
       "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "base_unittests",
-      "--test-launcher-batch-limit=1",
-      "--test-launcher-print-test-stdio=always"
+      "--test-launcher-print-test-stdio=always",
+      "--test-launcher-batch-limit=1"
     ],
     "name": "base_unittests (with patch)"
   },
@@ -283,8 +283,8 @@
       "--enable-lsan",
       "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "mojo_common_unittests",
-      "--test-launcher-batch-limit=1",
-      "--test-launcher-print-test-stdio=always"
+      "--test-launcher-print-test-stdio=always",
+      "--test-launcher-batch-limit=1"
     ],
     "name": "mojo_common_unittests (with patch)"
   },
@@ -312,8 +312,8 @@
       "--enable-lsan",
       "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "browser_tests",
-      "--test-launcher-batch-limit=1",
-      "--test-launcher-print-test-stdio=always"
+      "--test-launcher-print-test-stdio=always",
+      "--test-launcher-batch-limit=1"
     ],
     "name": "browser_tests (with patch)"
   },

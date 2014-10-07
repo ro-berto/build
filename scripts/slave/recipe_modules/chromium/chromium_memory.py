@@ -10,7 +10,7 @@ SPEC = {
   },
   'builders': {
     'Linux ASan LSan Builder': {
-      'recipe_config': 'chromium_asan',
+      'recipe_config': 'chromium_linux_asan',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -26,7 +26,7 @@ SPEC = {
 for name in ('Linux ASan LSan Tests (1)',
              'Linux ASan Tests (sandboxed)'):
   SPEC['builders'][name] = {
-    'recipe_config': 'chromium_asan',
+    'recipe_config': 'chromium_linux_asan',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
       'TARGET_BITS': 64,

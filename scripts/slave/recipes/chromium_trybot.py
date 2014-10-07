@@ -102,7 +102,7 @@ BUILDERS = {
         },
         'enable_swarming': True,
         'exclude_compile_all': True,
-        'chromium_config': 'chromium_asan',
+        'chromium_config': 'chromium_linux_asan',
         'compile_only': False,
         'testing': {
           'platform': 'linux',
