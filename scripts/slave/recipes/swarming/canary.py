@@ -88,7 +88,11 @@ def GenSteps(api):
     targets.append(name[:-len('.isolated.gen.json')])
 
   # Perform the upload.
-  api.isolate.isolate_tests(api.chromium.output_dir, targets, verbose=True)
+  api.isolate.isolate_tests(
+      api.chromium.output_dir,
+      targets,
+      verbose=True,
+      env={'SWARMING_PROFILE': '1'})
 
   # Make swarming tasks that run isolated tests.
   tasks = [
