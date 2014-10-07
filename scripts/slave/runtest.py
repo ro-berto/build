@@ -54,6 +54,7 @@ from slave import gtest_slave_utils
 from slave import performance_log_processor
 from slave import results_dashboard
 from slave import slave_utils
+from slave import telemetry_utils
 from slave import xvfb
 
 USAGE = '%s [options] test.exe [test args]' % os.path.basename(sys.argv[0])
@@ -520,17 +521,21 @@ def _ListLogProcessors(selection):
   return shouldlist
 
 
-def _SelectLogProcessor(options):
+def _SelectLogProcessor(options, is_telemetry):
   """Returns a log processor class based on the command line options.
 
   Args:
     options: Command-line options (from OptionParser).
+    is_telemetry: bool for whether to create a telemetry log processor.
 
   Returns:
     A log processor class, or None.
   """
   if _UsingGtestJson(options):
     return gtest_utils.GTestJSONParser
+
+  if is_telemetry:
+    return telemetry_utils.TelemetryResultsProcessor
 
   if options.annotate:
     if options.annotate in LOG_PROCESSOR_CLASSES:
@@ -555,12 +560,66 @@ def _GetCommitPos(build_properties):
   return int(re.search(r'{#(\d+)}', commit_pos).group(1))
 
 
-def _CreateLogProcessor(log_processor_class, options):
+def _GetMainRevision(options):
+  """Return revision to use as the numerical x-value in the perf dashboard.
+
+  In general, for most data, we always want to use the git commit position. In
+  cases where we want to use something else, it should be specified as
+  'got_revision_cp' in build properties, or if that is not specified, the
+  --revision flag to runtest.py.
+  """
+  commit_pos_num = _GetCommitPos(options.build_properties)
+  if commit_pos_num is not None:
+    revision = commit_pos_num
+  elif options.revision:
+    # TODO(sullivan): options.revision should override everything else,
+    # including commit_pos_num.
+    revision = options.revision
+  else:
+    # TODO(sullivan,qyearsley): Don't fall back to _GetRevision if it returns
+    # a git commit, since this should be a numerical revision. Instead, abort
+    # and fail.
+    revision = _GetRevision(os.path.dirname(os.path.abspath(options.build_dir)))
+  return revision
+
+
+def _GetBlinkRevision(options):
+  if options.webkit_revision:
+    webkit_revision = options.webkit_revision
+  else:
+    try:
+      webkit_dir = chromium_utils.FindUpward(
+          os.path.abspath(options.build_dir), 'third_party', 'WebKit', 'Source')
+      webkit_revision = _GetRevision(webkit_dir)
+    except Exception:
+      webkit_revision = None
+  return webkit_revision
+
+
+def _GetTelemetryRevisions(options):
+  """Fills in the same revisions fields that process_log_utils does."""
+
+  versions = {}
+  versions['rev'] = _GetMainRevision(options)
+  versions['webkit_rev'] = _GetBlinkRevision(options)
+  versions['webrtc_rev'] = options.build_properties.get('got_webrtc_revision')
+  versions['v8_rev'] = options.build_properties.get('got_v8_revision')
+  versions['ver'] = options.build_properties.get('version')
+  versions['git_revision'] = options.build_properties.get('git_revision')
+  # There are a lot of "bad" revisions to check for, so clean them all up here.
+  for key in versions.keys():
+    if not versions[key] or versions[key] == 'undefined':
+      del versions[key]
+  return versions
+
+
+def _CreateLogProcessor(log_processor_class, options, telemetry_info):
   """Creates a log processor instance.
 
   Args:
     log_processor_class: A subclass of PerformanceLogProcessor or similar class.
     options: Command-line options (from OptionParser).
+    telemetry_info: dict of info for run_benchmark runs.
 
   Returns:
     An instance of a log processor class, or None.
@@ -568,31 +627,17 @@ def _CreateLogProcessor(log_processor_class, options):
   if not log_processor_class:
     return None
 
-  if log_processor_class.__name__ in ('GTestLogParser',):
+  if log_processor_class.__name__ == 'TelemetryResultsProcessor':
+    tracker_obj = log_processor_class(
+        telemetry_info['filename'], telemetry_info['is_ref'])
+  elif log_processor_class.__name__ == 'GTestLogParser':
     tracker_obj = log_processor_class()
-  elif log_processor_class.__name__ in ('GTestJSONParser',):
+  elif log_processor_class.__name__ == 'GTestJSONParser':
     tracker_obj = log_processor_class(
         options.build_properties.get('mastername'))
   else:
-    build_dir = os.path.abspath(options.build_dir)
-
-    if options.webkit_revision:
-      webkit_revision = options.webkit_revision
-    else:
-      try:
-        webkit_dir = chromium_utils.FindUpward(
-            build_dir, 'third_party', 'WebKit', 'Source')
-        webkit_revision = _GetRevision(webkit_dir)
-      except Exception:
-        webkit_revision = 'undefined'
-
-    commit_pos_num = _GetCommitPos(options.build_properties)
-    if commit_pos_num is not None:
-      revision = commit_pos_num
-    elif options.revision:
-      revision = options.revision
-    else:
-      revision = _GetRevision(os.path.dirname(build_dir))
+    webkit_revision = _GetBlinkRevision(options) or 'undefined'
+    revision = _GetMainRevision(options) or 'undefined'
 
     tracker_obj = log_processor_class(
         revision=revision,
@@ -627,41 +672,68 @@ def _GetSupplementalColumns(build_dir, supplemental_colummns_file_name):
   return supplemental_columns
 
 
-def _SendResultsToDashboard(log_processor, system, test, url, build_dir,
-                            mastername, buildername, buildnumber,
-                            supplemental_columns_file, extra_columns=None):
+def _ResultsDashboardDict(options):
+  """Generates a dict of info needed by the results dashboard.
+
+  Args:
+    options: Program arguments.
+
+  Returns:
+    dict containing data the dashboard needs.
+  """
+  build_dir = os.path.abspath(options.build_dir)
+  supplemental_columns = _GetSupplementalColumns(
+      build_dir, options.supplemental_columns_file)
+  extra_columns = options.perf_config
+  if extra_columns:
+    supplemental_columns.update(extra_columns)
+  fields = {
+      'system': _GetPerfID(options),
+      'test': options.test_type,
+      'url': options.results_url,
+      'mastername': options.build_properties.get('mastername'),
+      'buildername': options.build_properties.get('buildername'),
+      'buildnumber': options.build_properties.get('buildnumber'),
+      'build_dir': build_dir,
+      'supplemental_columns': supplemental_columns,
+      'revisions': _GetTelemetryRevisions(options),
+  }
+  return fields
+
+
+def _SendResultsToDashboard(log_processor, args):
   """Sends results from a log processor instance to the dashboard.
 
   Args:
     log_processor: An instance of a log processor class, which has been used to
         process the test output, so it contains the test results.
-    system: A string such as 'linux-release', which comes from perf_id.
-    test: Test "suite" name string.
-    url: Dashboard URL.
-    build_dir: Build dir name (used for cache file by results_dashboard).
-    mastername: Buildbot master name, e.g. 'chromium.perf'.
-        WARNING! This is incorrectly called "masterid" in some parts of the
-        dashboard code.
-    buildername: Builder name, e.g. 'Linux QA Perf (1)'
-    buildnumber: Build number (as a string).
-    supplemental_columns_file: Filename for JSON supplemental columns file.
-    extra_columns: A dict of extra values to add to the supplemental columns
-        dict.
+    args: Dict of additional args to send to results_dashboard.
   """
-  if system is None:
+  if args['system'] is None:
     # perf_id not specified in factory properties.
     print 'Error: No system name (perf_id) specified when sending to dashboard.'
     return
-  supplemental_columns = _GetSupplementalColumns(
-      build_dir, supplemental_columns_file)
-  if extra_columns:
-    supplemental_columns.update(extra_columns)
 
-  charts = _GetDataFromLogProcessor(log_processor)
-  points = results_dashboard.MakeListOfPoints(
-      charts, system, test, mastername, buildername, buildnumber,
-      supplemental_columns)
-  results_dashboard.SendResults(points, url, build_dir)
+  results = None
+  if log_processor.IsChartJson():
+    chart_json = log_processor.ChartJson()
+    if chart_json:
+      results = results_dashboard.MakeDashboardJsonV1(
+          chart_json,
+          args['revisions'], args['system'], args['mastername'],
+          args['buildername'], args['buildnumber'],
+          args['supplemental_columns'], log_processor.IsReferenceBuild())
+    else:
+      print 'Error: No json output from telemetry.'
+      print '@@@STEP_EXCEPTION@@@'
+    log_processor.Cleanup()
+  else:
+    charts = _GetDataFromLogProcessor(log_processor)
+    results = results_dashboard.MakeListOfPoints(
+        charts, args['system'], args['test'], args['mastername'],
+        args['buildername'], args['buildnumber'], args['supplemental_columns'])
+  if results:
+    results_dashboard.SendResults(results, args['url'], args['build_dir'])
 
 
 def _GetDataFromLogProcessor(log_processor):
@@ -929,8 +1001,8 @@ def _MainParse(options, _args):
   if _ListLogProcessors(options.annotate):
     return 0
 
-  log_processor_class = _SelectLogProcessor(options)
-  log_processor = _CreateLogProcessor(log_processor_class, options)
+  log_processor_class = _SelectLogProcessor(options, False)
+  log_processor = _CreateLogProcessor(log_processor_class, options, None)
 
   if options.generate_json_file:
     if os.path.exists(options.test_output_xml):
@@ -969,6 +1041,7 @@ def _MainMac(options, args, extra_env):
   if len(args) < 1:
     raise chromium_utils.MissingArgument('Usage: %s' % USAGE)
 
+  telemetry_info = _UpdateRunBenchmarkArgs(args)
   test_exe = args[0]
   if options.run_python_script:
     build_dir = os.path.normpath(os.path.abspath(options.build_dir))
@@ -996,8 +1069,9 @@ def _MainMac(options, args, extra_env):
   # If --annotate=list was passed, list the log processor classes and exit.
   if _ListLogProcessors(options.annotate):
     return 0
-  log_processor_class = _SelectLogProcessor(options)
-  log_processor = _CreateLogProcessor(log_processor_class, options)
+  log_processor_class = _SelectLogProcessor(options, bool(telemetry_info))
+  log_processor = _CreateLogProcessor(
+      log_processor_class, options, telemetry_info)
 
   if options.generate_json_file:
     if os.path.exists(options.test_output_xml):
@@ -1046,14 +1120,7 @@ def _MainMac(options, args, extra_env):
         perf_dashboard_id=options.perf_dashboard_id)
 
   if options.results_url:
-    _SendResultsToDashboard(
-        log_processor, _GetPerfID(options),
-        options.test_type, options.results_url, options.build_dir,
-        options.build_properties.get('mastername'),
-        options.build_properties.get('buildername'),
-        options.build_properties.get('buildnumber'),
-        options.supplemental_columns_file,
-        options.perf_config)
+    _SendResultsToDashboard(log_processor, _ResultsDashboardDict(options))
 
   return result
 
@@ -1116,7 +1183,8 @@ def _MainIOS(options, args, extra_env):
   # If --annotate=list was passed, list the log processor classes and exit.
   if _ListLogProcessors(options.annotate):
     return 0
-  log_processor = _CreateLogProcessor(LOG_PROCESSOR_CLASSES['gtest'], options)
+  log_processor = _CreateLogProcessor(
+      LOG_PROCESSOR_CLASSES['gtest'], options, None)
 
   # Make sure the simulator isn't running.
   kill_simulator()
@@ -1183,6 +1251,7 @@ def _MainLinux(options, args, extra_env):
   elif options.special_xvfb:
     special_xvfb_dir = options.special_xvfb_dir
 
+  telemetry_info = _UpdateRunBenchmarkArgs(args)
   test_exe = args[0]
   if options.run_python_script:
     test_exe_path = test_exe
@@ -1249,8 +1318,9 @@ def _MainLinux(options, args, extra_env):
   # If --annotate=list was passed, list the log processor classes and exit.
   if _ListLogProcessors(options.annotate):
     return 0
-  log_processor_class = _SelectLogProcessor(options)
-  log_processor = _CreateLogProcessor(log_processor_class, options)
+  log_processor_class = _SelectLogProcessor(options, bool(telemetry_info))
+  log_processor = _CreateLogProcessor(
+      log_processor_class, options, telemetry_info)
 
   if options.generate_json_file:
     if os.path.exists(options.test_output_xml):
@@ -1322,14 +1392,7 @@ def _MainLinux(options, args, extra_env):
         perf_dashboard_id=options.perf_dashboard_id)
 
   if options.results_url:
-    _SendResultsToDashboard(
-        log_processor, _GetPerfID(options),
-        options.test_type, options.results_url, options.build_dir,
-        options.build_properties.get('mastername'),
-        options.build_properties.get('buildername'),
-        options.build_properties.get('buildnumber'),
-        options.supplemental_columns_file,
-        options.perf_config)
+    _SendResultsToDashboard(log_processor, _ResultsDashboardDict(options))
 
   return result
 
@@ -1352,6 +1415,7 @@ def _MainWin(options, args, extra_env):
   if len(args) < 1:
     raise chromium_utils.MissingArgument('Usage: %s' % USAGE)
 
+  telemetry_info = _UpdateRunBenchmarkArgs(args)
   test_exe = args[0]
   build_dir = os.path.abspath(options.build_dir)
   if options.run_python_script:
@@ -1398,8 +1462,9 @@ def _MainWin(options, args, extra_env):
   # If --annotate=list was passed, list the log processor classes and exit.
   if _ListLogProcessors(options.annotate):
     return 0
-  log_processor_class = _SelectLogProcessor(options)
-  log_processor = _CreateLogProcessor(log_processor_class, options)
+  log_processor_class = _SelectLogProcessor(options, bool(telemetry_info))
+  log_processor = _CreateLogProcessor(
+      log_processor_class, options, telemetry_info)
 
   if options.generate_json_file:
     if os.path.exists(options.test_output_xml):
@@ -1444,14 +1509,7 @@ def _MainWin(options, args, extra_env):
         perf_dashboard_id=options.perf_dashboard_id)
 
   if options.results_url:
-    _SendResultsToDashboard(
-        log_processor, _GetPerfID(options),
-        options.test_type, options.results_url, options.build_dir,
-        options.build_properties.get('mastername'),
-        options.build_properties.get('buildername'),
-        options.build_properties.get('buildnumber'),
-        options.supplemental_columns_file,
-        options.perf_config)
+    _SendResultsToDashboard(log_processor, _ResultsDashboardDict(options))
 
   return result
 
@@ -1479,8 +1537,8 @@ def _MainAndroid(options, args, extra_env):
 
   if _ListLogProcessors(options.annotate):
     return 0
-  log_processor_class = _SelectLogProcessor(options)
-  log_processor = _CreateLogProcessor(log_processor_class, options)
+  log_processor_class = _SelectLogProcessor(options, False)
+  log_processor = _CreateLogProcessor(log_processor_class, options, None)
 
   if options.generate_json_file:
     if os.path.exists(options.test_output_xml):
@@ -1507,16 +1565,46 @@ def _MainAndroid(options, args, extra_env):
         perf_dashboard_id=options.perf_dashboard_id)
 
   if options.results_url:
-    _SendResultsToDashboard(
-        log_processor, _GetPerfID(options),
-        options.test_type, options.results_url, options.build_dir,
-        options.build_properties.get('mastername'),
-        options.build_properties.get('buildername'),
-        options.build_properties.get('buildnumber'),
-        options.supplemental_columns_file,
-        options.perf_config)
+    _SendResultsToDashboard(log_processor, _ResultsDashboardDict(options))
 
   return result
+
+
+def _UpdateRunBenchmarkArgs(args):
+  """Updates the arguments for telemetry run_benchmark commands.
+
+  Ensures that --output=chartjson is set and adds a --output argument.
+
+  Arguments:
+    args: list of command line arguments, starts with 'run_benchmark' for
+          telemetry tests.
+
+  Returns:
+    None if not a telemetry test, otherwise a
+    dict containing the output filename and whether it is a reference build.
+  """
+  # TODO(sullivan): remove this line to enable new telemetry chartjson.
+  # W0101: unreachable code. Disable this check until we're able to remove this
+  # line entirely.
+  # pylint: disable=W0101
+  return {}
+  if not args[0].endswith('run_benchmark'):
+    # Not a telemetry run
+    return None
+
+  is_ref = '--browser=reference' in args
+
+  if '--output-format=buildbot' in args:
+    args[args.index('--output-format=buildbot')] = '--output-format=chartjson'
+  # Using NamedTemporaryFile instead of mkstemp because of windows issues
+  # with mkstemp.
+
+  handle = tempfile.NamedTemporaryFile(delete=False)
+  temp_filename = handle.name
+  handle.close()
+  args.extend(['--output=%s' % temp_filename])
+
+  return {'filename': temp_filename, 'is_ref': is_ref}
 
 
 def main():
