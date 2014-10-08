@@ -28,4 +28,4 @@ for line in output.splitlines():
     devices.append(m.group(1))
 
 with open(outFileName, 'w') as outFile:
-  json.dump(devices, outFile)
+  json.dump(sorted(devices), outFile)
