@@ -424,8 +424,6 @@ def chromium_linux_asan(c):
 
 @config_ctx(includes=['chromium_asan', 'static_library'])
 def chromium_mac_asan(c):
-  # TODO(glider, earthdok): Add --test-launcher-batch-limit for mac.
-
   # Clear lsan configuration for mac.
   del c.gyp_env.GYP_DEFINES['lsan']
 
@@ -453,7 +451,7 @@ def chromium_chromeos(c):
 
 @config_ctx(includes=['chromium_asan', 'chromiumos'])
 def chromium_chromiumos_asan(c):
-  pass
+  c.runtests.test_args.append('--test-launcher-batch-limit=1')
 
 @config_ctx(includes=['ninja', 'clang', 'goma', 'chromeos'])
 def chromium_chromeos_clang(c):
