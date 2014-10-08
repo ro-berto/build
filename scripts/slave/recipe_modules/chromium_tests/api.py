@@ -231,8 +231,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return update_step, master_dict, test_spec
 
-  def compile(self, mastername, buildername, update_step, master_dict,
-              test_spec, override_bot_type=None, override_tests=None):
+  def get_compile_targets_and_tests(
+      self, mastername, buildername, master_dict, override_bot_type=None,
+      override_tests=None):
+    """Returns a tuple: list of compile targets and list of tests.
+
+    The list of tests includes ones on the triggered testers."""
+
     bot_config = master_dict.get('builders', {}).get(buildername)
     master_config = master_dict.get('settings', {})
     bot_type = override_bot_type or bot_config.get('bot_type', 'builder_tester')
@@ -241,19 +246,49 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if override_tests is not None:
       tests = override_tests
 
+    if bot_type not in ['builder', 'builder_tester']:
+      return [], []
+
+    compile_targets = set(bot_config.get('compile_targets', []))
+    tests_including_triggered = tests[:]
+    for loop_buildername, builder_dict in master_dict.get(
+        'builders', {}).iteritems():
+      if builder_dict.get('parent_buildername') == buildername:
+        tests_including_triggered.extend(builder_dict.get('tests', []))
+
+    for t in tests_including_triggered:
+      compile_targets.update(t.compile_targets(self.m))
+
+    return sorted(compile_targets), tests_including_triggered
+
+  def compile(self, mastername, buildername, update_step, master_dict,
+              test_spec):
+    """Runs compile and related steps for given builder."""
+    compile_targets, tests_including_triggered = \
+        self.get_compile_targets_and_tests(
+            mastername,
+            buildername,
+            master_dict)
+    self.compile_specific_targets(
+        mastername, buildername, update_step, master_dict, test_spec,
+        compile_targets, tests_including_triggered)
+
+  def compile_specific_targets(
+      self, mastername, buildername, update_step, master_dict, test_spec,
+      compile_targets, tests_including_triggered, override_bot_type=None):
+    """Runs compile and related steps for given builder.
+
+    Allows finer-grained control about exact compile targets used."""
+
+    bot_config = master_dict.get('builders', {}).get(buildername)
+    master_config = master_dict.get('settings', {})
+    bot_type = override_bot_type or bot_config.get('bot_type', 'builder_tester')
+
     self.m.chromium.cleanup_temp()
     if self.m.chromium.c.TARGET_PLATFORM == 'android':
       self.m.chromium_android.clean_local_files()
 
     if bot_type in ['builder', 'builder_tester']:
-      compile_targets = set(bot_config.get('compile_targets', []))
-      tests_including_triggered = tests[:]
-      for loop_buildername, builder_dict in master_dict.get(
-          'builders', {}).iteritems():
-        if builder_dict.get('parent_buildername') == buildername:
-          for test in builder_dict.get('tests', []):
-            tests_including_triggered.append(test)
-
       isolated_targets = [
         t.name for t in tests_including_triggered if t.uses_swarming
       ]
@@ -261,10 +296,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if isolated_targets:
         self.m.isolate.clean_isolated_files(self.m.chromium.output_dir)
 
-      for t in tests_including_triggered:
-        compile_targets.update(t.compile_targets(self.m))
-
-      compile_targets = sorted(compile_targets)
       if self.m.tryserver.is_tryserver:
         try:
           self.m.chromium.compile(compile_targets, name='compile (with patch)')
@@ -395,3 +426,37 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     except self.m.step.StepFailure:
       self.m.tryserver.set_transient_failure_tryjob_result()
       raise
+
+  def analyze(self, exes, compile_targets, config_file_name):
+    """Runs "analyze" step to determine targets affected by the patch.
+
+    Returns a tuple of:
+      - boolean, indicating whether patch requires compile
+      - list of matching exes (see filter recipe module)
+      - list of targets that need to be compiled (see filter recipe module)"""
+
+    self.m.filter.does_patch_require_compile(
+        exes=exes,
+        compile_targets=compile_targets,
+        additional_name='chromium',
+        config_file_name=config_file_name)
+
+    if not self.m.filter.result:
+      # Patch does not require compile.
+      return False, [], []
+
+    if 'all' in compile_targets:
+      compile_targets = self.m.filter.compile_targets
+    else:
+      compile_targets = list(set(compile_targets) &
+                             set(self.m.filter.compile_targets))
+    # Always add |matching_exes|. They will be covered by |compile_targets|,
+    # but adding |matching_exes| makes determing if conditional tests are
+    # necessary easier. For example, if we didn't do this we could end up
+    # with chrome_run as a compile_target and not chrome (since chrome_run
+    # depends upon chrome). This results in not picking up
+    # NaclIntegrationTest as it depends upon chrome not chrome_run.
+    compile_targets = list(set(self.m.filter.matching_exes +
+                               self.m.filter.compile_targets))
+
+    return True, self.m.filter.matching_exes, compile_targets

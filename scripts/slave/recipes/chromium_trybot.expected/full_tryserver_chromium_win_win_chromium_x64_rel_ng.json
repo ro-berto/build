@@ -153,94 +153,55 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\cleanup_temp.py"
-    ],
-    "name": "cleanup_temp"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]\\scripts\\slave\\compile.py",
-      "--target",
-      "Release_x64",
-      "--src-dir",
-      "[SLAVE_BUILD]\\src",
-      "--build-tool",
-      "ninja",
-      "--compiler",
-      "goma",
-      "--goma-dir",
-      "[BUILD]\\goma",
-      "--",
-      "all",
-      "chrome"
-    ],
-    "name": "compile (with patch)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\buildtools\\checkdeps\\checkdeps.py",
-      "--json",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]\\src\\testing\\buildbot\\trybot_analyze_config.json",
       "/path/to/tmp/json"
     ],
-    "name": "checkdeps",
+    "name": "read filter exclusion spec",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[]@@@",
+      "@@@STEP_TEXT@path: 'testing\\\\buildbot\\\\trybot_analyze_config.json'@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"chromium\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\mojo\\tools\\run_mojo_python_tests.py",
-      "--write-full-results-to",
-      "/path/to/tmp/json"
+      "[DEPOT_TOOLS]\\git.bat",
+      "diff",
+      "--cached",
+      "--name-only"
     ],
-    "name": "mojo_python_tests (with patch)"
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]\\scripts\\slave\\runtest.py",
-      "--target",
-      "Release_x64",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"build_config\": \"Release\", \"buildername\": \"win_chromium_x64_rel_ng\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium.win\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"chromium_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": null, \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"build_config\": \"Release\", \"buildername\": \"win_chromium_x64_rel_ng\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium.win\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"chromium_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": null, \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--annotate=gtest",
-      "--test-type=telemetry_unittests",
-      "--builder-name=win_chromium_x64_rel_ng",
-      "--slave-name=TestSlavename",
-      "--build-number=571",
-      "--run-python-script",
-      "[SLAVE_BUILD]\\src\\tools\\telemetry\\run_tests",
-      "--browser=release_x64",
-      "--retry-limit=3",
-      "--write-full-results-to",
-      "/path/to/tmp/json"
-    ],
-    "name": "telemetry_unittests (with patch)"
+    "cwd": "[SLAVE_BUILD]\\src",
+    "name": "git diff to analyze patch",
+    "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\chrome\\test\\nacl_test_injection\\buildbot_nacl_integration.py",
-      "--mode",
-      "Release_x64",
-      "--json_build_results_output_file",
+      "[SLAVE_BUILD]\\src\\build\\gyp_chromium",
+      "--analyzer",
+      "{\"files\": [\"foo.cc\"], \"targets\": [\"mojo_python_tests\", \"telemetry_unittests\", \"nacl_integration\", \"mojo_python_tests\", \"telemetry_unittests\", \"nacl_integration\", \"mojo_python_tests\", \"telemetry_unittests\", \"chrome\"]}",
       "/path/to/tmp/json"
     ],
-    "name": "nacl_integration (with patch)",
+    "env": {
+      "GYP_DEFINES": "chromium_win_pch=0 component=static_library fastbuild=1 gomadir='[BUILD]\\goma' target_arch=x64 test_isolation_mode=archive test_isolation_outdir=https://isolateserver.appspot.com use_goma=1"
+    },
+    "name": "analyze",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[]@@@",
+      "@@@STEP_TEXT@No compile necessary@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"status\": \"No dependency\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"targets\": []@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   }

@@ -3,6 +3,7 @@ DEPS = [
   'bot_update',
   'chromium',
   'chromium_android',
+  'filter',
   'gclient',
   'isolate',
   'json',

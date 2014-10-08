@@ -6,7 +6,6 @@ DEPS = [
   'bot_update',
   'chromium',
   'chromium_tests',
-  'filter',
   'gclient',
   'isolate',
   'itertools',
@@ -780,31 +779,17 @@ def GenSteps(api):
     if isinstance(test_spec, dict) and api.properties.get('root') == 'src':
       analyze_config_file = bot_config['testing'].get('analyze_config_file',
                                          'trybot_analyze_config.json')
-      api.filter.does_patch_require_compile(
-          exes=get_test_names(gtest_tests) +
-               all_compile_targets(conditional_tests),
-          compile_targets=compile_targets,
-          additional_name='chromium',
-          config_file_name=analyze_config_file)
-      if not api.filter.result:
+      requires_compile, matching_exes, compile_targets = \
+          api.chromium_tests.analyze(
+              get_test_names(gtest_tests) +
+                  all_compile_targets(conditional_tests),
+              compile_targets,
+              analyze_config_file)
+
+      if not requires_compile:
         return [], bot_update_step
 
-      # Patch needs compile. Filter the list of test and compile targets.
-      gtest_tests = filter_tests(gtest_tests, api.filter.matching_exes)
-
-      if 'all' in compile_targets:
-        compile_targets = api.filter.compile_targets
-      else:
-        compile_targets = list(set(compile_targets) &
-                               set(api.filter.compile_targets))
-      # Always add |matching_exes|. They will be covered by |compile_targets|,
-      # but adding |matching_exes| makes determing if conditional tests are
-      # necessary easier. For example, if we didn't do this we could end up
-      # with chrome_run as a compile_target and not chrome (since chrome_run
-      # depends upon chrome). This results in not picking up
-      # NaclIntegrationTest as it depends upon chrome not chrome_run.
-      compile_targets = list(set(api.filter.matching_exes +
-                                 api.filter.compile_targets))
+      gtest_tests = filter_tests(gtest_tests, matching_exes)
 
     tests = []
     # TODO(phajdan.jr): Re-enable checkdeps on Windows when it works with git.
@@ -936,14 +921,37 @@ def GenSteps(api):
       if use_swarming:
         test.force_swarming(swarming_shards)
 
-    api.chromium_tests.compile(
+    compile_targets, tests_including_triggered = \
+        api.chromium_tests.get_compile_targets_and_tests(
+            main_waterfall_config['mastername'],
+            main_waterfall_config['buildername'],
+            master_dict,
+            override_bot_type='builder_tester',
+            override_tests=tests)
+
+    requires_compile, matching_exes, compile_targets = \
+        api.chromium_tests.analyze(
+            get_test_names(tests + tests_including_triggered) +
+                all_compile_targets(tests + tests_including_triggered),
+            compile_targets,
+            'trybot_analyze_config.json')
+
+    if not requires_compile:
+      return
+
+    tests = filter_tests(tests, matching_exes)
+    tests_including_triggered = filter_tests(
+        tests_including_triggered, matching_exes)
+
+    api.chromium_tests.compile_specific_targets(
         main_waterfall_config['mastername'],
         main_waterfall_config['buildername'],
         bot_update_step,
         master_dict,
         test_spec,
-        override_bot_type='builder_tester',
-        override_tests=tests)
+        compile_targets,
+        tests_including_triggered,
+        override_bot_type='builder_tester')
   else:
     # TODO(phajdan.jr): Remove the legacy trybot-specific codepath.
     tests, bot_update_step = compile_and_return_tests(
@@ -1112,6 +1120,14 @@ def GenTests(api):
     api.platform('linux', 64) +
     props(mastername='tryserver.chromium.linux',
           buildername='linux_chromium_rel_ng') +
+    api.override_step_data('read filter exclusion spec', api.json.output({
+        'base': {
+          'exclusions': ['f.*'],
+        },
+        'chromium': {
+          'exclusions': [],
+        },
+     })) +
     api.step_data('compile (with patch)', retcode=1)
   )
 
@@ -1120,6 +1136,14 @@ def GenTests(api):
     api.platform('linux', 64) +
     props(mastername='tryserver.chromium.linux',
           buildername='linux_chromium_rel_ng') +
+    api.override_step_data('read filter exclusion spec', api.json.output({
+        'base': {
+          'exclusions': ['f.*'],
+        },
+        'chromium': {
+          'exclusions': [],
+        },
+     })) +
     api.step_data('compile (with patch)', retcode=1) +
     api.step_data('compile (without patch)', retcode=1)
   )
