@@ -449,7 +449,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       args.extend(('--shards', str(task.shards)))
       args.append(task.task_name)
     else:
-      args.extend(task.task_ids)
+      args.extend(('--json', self.m.json.input(task.trigger_output)))
     return args
 
   def _gen_trigger_step_test_data(self, task):
@@ -572,10 +572,9 @@ class SwarmingTask(object):
         self.builder, self.build_number, self.suffix)
 
   @property
-  def task_ids(self):
-    """List of task_id for each shard."""
-    items = (self._trigger_output or {}).get('tasks', {}).itervalues()
-    return filter(None, (i.get('task_id') for i in items))
+  def trigger_output(self):
+    """JSON results of 'trigger' step or None if not triggered."""
+    return self._trigger_output
 
   def get_shard_view_url(self, index):
     """Returns URL of HTML page with shard details or None if not available.

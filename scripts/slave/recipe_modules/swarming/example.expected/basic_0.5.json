@@ -300,7 +300,8 @@
       "--decorate",
       "--print-status-updates",
       "--verbose",
-      "10000",
+      "--json",
+      "{\"base_task_name\": \"hello_world/Windows-6.1/hash_for_win/local/0/1337000001500\", \"tasks\": {\"hello_world/Windows-6.1/hash_for_win/local/0/1337000001500\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -355,8 +356,8 @@
       "--decorate",
       "--print-status-updates",
       "--verbose",
-      "10100",
-      "10000",
+      "--json",
+      "{\"base_task_name\": \"hello_world/Ubuntu-12.04/hash_for_linux/local/0/1337000003000\", \"tasks\": {\"hello_world/Ubuntu-12.04/hash_for_linux/local/0/1337000003000:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10000\"}, \"hello_world/Ubuntu-12.04/hash_for_linux/local/0/1337000003000:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10100\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -442,7 +443,8 @@
       "--decorate",
       "--print-status-updates",
       "--verbose",
-      "10000",
+      "--json",
+      "{\"base_task_name\": \"hello_world/Mac-10.8/hash_for_mac/local/0/1337000004500\", \"tasks\": {\"hello_world/Mac-10.8/hash_for_mac/local/0/1337000004500\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
