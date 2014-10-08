@@ -34,7 +34,6 @@ def device_from_builder_dict(builder_dict):
       'Nexus5': 'nexus_5',
       'Nexus7': 'nexus_7',
       'Nexus10': 'nexus_10',
-      'GalaxyNexus': 'galaxy_nexus',
       'Xoom': 'xoom',
       'Venue8': 'x86',
     }[builder_dict['model']]

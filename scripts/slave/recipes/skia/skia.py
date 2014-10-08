@@ -32,7 +32,6 @@ def GenTests(api):
     'Perf-ChromeOS-Daisy-MaliT604-Arm7-Release',
     'Perf-Win7-ShuttleA-HD2000-x86-Release',
     'Perf-Win7-ShuttleA-HD2000-x86-Release-Trybot',
-    'Test-Android-GalaxyNexus-SGX540-Arm7-Debug',
     'Test-Android-Nexus10-MaliT604-Arm7-Release',
     'Test-Android-Xoom-Tegra2-Arm7-Debug',
     'Test-Android-Venue8-PowerVR-x86-Debug',
