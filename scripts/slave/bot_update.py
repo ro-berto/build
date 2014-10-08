@@ -828,6 +828,7 @@ def ensure_deps2git(solution, shallow):
 
   print '===DEPS file modified, need to run deps2git==='
   cmd = [sys.executable, DEPS2GIT_PATH,
+         '--workspace', os.getcwd(),
          '--cache_dir', CACHE_DIR,
          '--deps', deps_file,
          '--out', deps_git_file]
