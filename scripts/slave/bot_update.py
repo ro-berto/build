@@ -222,7 +222,6 @@ ENABLED_MASTERS = [
     'chromium.chromiumos',
     'chromium',
     'chromium.fyi',
-    'chromium.git',
     'chromium.gpu',
     'chromium.gpu.fyi',
     'chromium.linux',
@@ -285,7 +284,7 @@ HEAD_BUILDERS.update(internal_data.get('HEAD_BUILDERS', {}))
 
 # These masters work only in Git, meaning for got_revision, always output
 # a git hash rather than a SVN rev. This goes away if flag_day is True.
-GIT_MASTERS = ['chromium.git']
+GIT_MASTERS = []
 GIT_MASTERS += internal_data.get('GIT_MASTERS', [])
 
 

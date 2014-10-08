@@ -12,7 +12,7 @@ from slave import recipe_util
 
 # This is just for testing, to indicate if a master is using a Git scheduler
 # or not.
-GIT_MASTERS = ['chromium.git']
+GIT_MASTERS = []
 
 
 def jsonish_to_python(spec, is_top=False):

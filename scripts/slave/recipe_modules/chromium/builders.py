@@ -4,7 +4,6 @@
 
 from . import chromium_chrome
 from . import chromium_chromiumos
-from . import chromium_git
 from . import chromium_fyi
 from . import chromium_linux
 from . import chromium_mac
@@ -22,7 +21,6 @@ from . import tryserver_chromium_mac
 BUILDERS = {
   'chromium.chrome': chromium_chrome.SPEC,
   'chromium.chromiumos': chromium_chromiumos.SPEC,
-  'chromium.git': chromium_git.SPEC,
   'chromium.fyi': chromium_fyi.SPEC,
   'chromium.linux': chromium_linux.SPEC,
   'chromium.mac': chromium_mac.SPEC,
