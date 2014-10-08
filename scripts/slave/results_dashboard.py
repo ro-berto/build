@@ -115,10 +115,10 @@ def _SendResultsFromCache(cache_file_name, url):
 
     # If the dashboard returned an error, we will re-try next time.
     if error:
-      if 'HTTPError: 400 for JSON' in error:
+      if 'HTTPError: 400' in error:
         # This is a special case.  If the remote app rejects the json, its
         # probably malformed and we don't want to retry it.
-        print 'Discarding JSON error: %s' % error
+        print 'Discarding JSON, error:\n%s' % error
         break
 
       if index != len(cache_lines) - 1:
@@ -400,11 +400,12 @@ def _SendResultsJson(url, results_json):
   req = urllib2.Request(url + SEND_RESULTS_PATH, data)
   try:
     urllib2.urlopen(req)
-  except urllib2.HTTPError, e:
-    return 'HTTPError: %d for JSON %s\n' % (e.code, results_json)
-  except urllib2.URLError, e:
+  except urllib2.HTTPError as e:
+    return ('HTTPError: %d. Reponse: %s\n'
+            'JSON: %s\n' % (e.code, e.read(), results_json))
+  except urllib2.URLError as e:
     return 'URLError: %s for JSON %s\n' % (str(e.reason), results_json)
-  except httplib.HTTPException, e:
+  except httplib.HTTPException as e:
     return 'HTTPException for JSON %s\n' % results_json
   return None
 
