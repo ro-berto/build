@@ -119,6 +119,7 @@ class BotUpdateApi(recipe_api.RecipeApi):
         ['--issue', issue],
         ['--patchset', patchset],
         ['--patch_url', patch_url],
+        ['--rietveld_server', self.m.properties.get('rietveld')],
 
         # 4. Hookups to JSON output back into recipes.
         ['--output_json', self.m.json.output()],]
