@@ -29,7 +29,7 @@ TELEMETRY_SHELL_PACKAGE = 'org.chromium.telemetry_shell'
 
 BUILDER = {
   'perf_id': 'android-webview',
-  'num_device_shards': 2,
+  'num_device_shards': 5,
 }
 
 def GenSteps(api):

@@ -223,7 +223,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "--num-shards",
-      "2",
+      "5",
       "--device",
       "014E1F310401C009"
     ],
