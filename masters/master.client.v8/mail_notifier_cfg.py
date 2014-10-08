@@ -49,9 +49,7 @@ exclusions = {
   'V8 Linux - predictable': [],
   'V8 Linux64 TSAN': ['Check'],
   'NaCl V8 Linux64 - stable': [],
-  'NaCl V8 Linux64 - canary': ['Check'],
-  'Webkit - dbg': ['webkit_tests'],
-  'Webkit Mac - dbg': ['webkit_tests'],
+  'NaCl V8 Linux64 - canary': [],
 }
 
 forgiving_steps = ['update_scripts', 'update', 'svnkill', 'taskkill',
