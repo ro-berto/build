@@ -54,6 +54,10 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       GYP_MSVS_VERSION = Single(basestring, required=False),
       GYP_USE_SEPARATE_MSPDBSRV = Single(int, jsonish_fn=str, required=False),
     ),
+    env = ConfigGroup(
+      PATH = List(Path),
+      ADB_VENDOR_KEYS = Single(Path, required=False),
+    ),
     project_generator = ConfigGroup(
       tool = Single(basestring, empty_val='gyp'),
       args = Set(basestring),
@@ -536,18 +540,24 @@ def blink_clang(c):
 def blink_logging_on(c, invert=False):
   c.gyp_env.GYP_DEFINES['blink_logging_always_on'] = int(not invert)
 
-@config_ctx(includes=['ninja', 'static_library', 'default_compiler', 'goma'])
+@config_ctx(includes=['android_common', 'ninja', 'static_library', 'default_compiler', 'goma'])
 def android(c):
-  _android_common(c)
+  pass
 
-@config_ctx(includes=['ninja', 'static_library', 'clang', 'goma'])
+@config_ctx(includes=['android_common', 'ninja', 'static_library', 'clang', 'goma'])
 def android_clang(c):
-  _android_common(c)
+  pass
 
-def _android_common(c):
+@config_ctx()
+def android_common(c):
   gyp_defs = c.gyp_env.GYP_DEFINES
   gyp_defs['fastbuild'] = 1
   gyp_defs['OS'] = 'android'
+
+  c.env.PATH.extend([
+      Path('[CHECKOUT]', 'third_party', 'android_tools', 'sdk',
+           'platform-tools'),
+      Path('[CHECKOUT]', 'build', 'android')])
 
 @config_ctx(includes=['ninja', 'shared_library', 'jsonclang'])
 def codesearch(c):

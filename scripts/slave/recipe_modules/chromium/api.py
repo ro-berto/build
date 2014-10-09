@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import os
 import re
 
 from slave import recipe_api
@@ -56,6 +57,14 @@ class ChromiumApi(recipe_api.RecipeApi):
 
       'BUILD_CONFIG': self.m.properties.get('build_config', 'Release'),
     }
+
+  def get_env(self):
+    ret = {}
+    if self.c.env.PATH:
+      ret['PATH'] = os.pathsep.join(map(str, self.c.env.PATH) + ['%(PATH)s'])
+    if self.c.env.ADB_VENDOR_KEYS:
+      ret['ADB_VENDOR_KEYS'] = self.c.env.ADB_VENDOR_KEYS
+    return ret
 
   @property
   def builders(self):
@@ -406,7 +415,9 @@ class ChromiumApi(recipe_api.RecipeApi):
 
   def runhooks(self, **kwargs):
     """Run the build-configuration hooks for chromium."""
-    env = kwargs.get('env', {})
+    env = self.get_env()
+    env.update(kwargs.get('env', {}))
+
     if self.c.project_generator.tool == 'gyp':
       env.update(self.c.gyp_env.as_jsonish())
     else:

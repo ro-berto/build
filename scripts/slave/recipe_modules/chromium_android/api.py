@@ -16,6 +16,9 @@ class AndroidApi(recipe_api.RecipeApi):
       'REVISION': self.m.properties.get('revision', '')
     }
 
+  def get_env(self):
+    return self.m.chromium.get_env()
+
   @property
   def internal_dir(self):
     assert self.c.INTERNAL, (
@@ -29,18 +32,6 @@ class AndroidApi(recipe_api.RecipeApi):
   @property
   def coverage_dir(self):
     return self.out_path.join(self.c.BUILD_CONFIG, 'coverage')
-
-  def get_env(self):
-    env = {
-        'PATH': self.m.path.pathsep.join(map(str, [
-                   self.m.path['checkout'].join('third_party', 'android_tools',
-                                                'sdk', 'platform-tools'),
-                   self.m.path['checkout'].join('build', 'android'),
-                   '%(PATH)s']))
-    }
-    if self.c.adb_vendor_keys:
-      env.update({'ADB_VENDOR_KEYS': self.c.adb_vendor_keys})
-    return env
 
   def configure_from_properties(self, config_name, **kwargs):
     def set_property(prop, var):
@@ -164,8 +155,7 @@ class AndroidApi(recipe_api.RecipeApi):
                 allow_subannotations=False)
 
   def runhooks(self, extra_env={}):
-    self.m.chromium.runhooks(
-        env=dict(self.get_env().items() + extra_env.items()))
+    self.m.chromium.runhooks(env=extra_env)
 
   def apply_svn_patch(self):
     # TODO(sivachandra): We should probably pull this into its own module
@@ -179,7 +169,7 @@ class AndroidApi(recipe_api.RecipeApi):
   def compile(self, **kwargs):
     assert 'env' not in kwargs, (
         "chromium_andoid compile clobbers env in keyword arguments")
-    kwargs['env'] = self.get_env()
+    kwargs['env'] = self.m.chromium.get_env()
     self.m.chromium.compile(**kwargs)
 
   def findbugs(self, findbugs_options=[]):
@@ -189,13 +179,13 @@ class AndroidApi(recipe_api.RecipeApi):
     if self.m.chromium.c.BUILD_CONFIG == 'Release':
       cmd.append('--release-build')
 
-    self.m.step('findbugs', cmd, env=self.get_env())
+    self.m.step('findbugs', cmd, env=self.m.chromium.get_env())
 
     cmd = [self.m.path['checkout'].join('tools', 'android', 'findbugs_plugin',
                'test', 'run_findbugs_plugin_tests.py')]
     if self.m.chromium.c.BUILD_CONFIG == 'Release':
       cmd.append('--release-build')
-    self.m.step('findbugs_tests', cmd, env=self.get_env())
+    self.m.step('findbugs_tests', cmd, env=self.m.chromium.get_env())
 
   def git_number(self, **kwargs):
     return self.m.step(
@@ -259,7 +249,7 @@ class AndroidApi(recipe_api.RecipeApi):
         [self.m.path['build'].join('scripts', 'slave', 'daemonizer.py'),
          '--', self.c.cr_build_android.join('adb_logcat_monitor.py'),
          self.m.chromium.c.build_dir.join('logcat')],
-        env=self.get_env(),
+        env=self.m.chromium.get_env(),
         infra_step=True)
 
   def detect_and_setup_devices(self, restart_usb=False, skip_wipe=False,
@@ -278,7 +268,7 @@ class AndroidApi(recipe_api.RecipeApi):
           'device_status_check',
           [self.m.path['checkout'].join('build', 'android', 'buildbot',
                                 'bb_device_status_check.py')] + args,
-          env=self.get_env(),
+          env=self.m.chromium.get_env(),
           infra_step=True,
           **kwargs)
     except self.m.step.InfraFailure as f:
@@ -308,7 +298,7 @@ class AndroidApi(recipe_api.RecipeApi):
       self.m.path['checkout'].join(
           'build', 'android', 'provision_devices.py'),
       args=args,
-      env=self.get_env(),
+      env=self.m.chromium.get_env(),
       infra_step=True,
       **kwargs)
 
@@ -324,7 +314,7 @@ class AndroidApi(recipe_api.RecipeApi):
       install_cmd.append('--release')
     return self.m.step('install ' + apk, install_cmd,
                        infra_step=True,
-                       env=self.get_env())
+                       env=self.m.chromium.get_env())
 
   def monkey_test(self, **kwargs):
     args = [
@@ -354,7 +344,7 @@ class AndroidApi(recipe_api.RecipeApi):
         self.m.path['checkout'].join('build', 'android', 'test_runner.py'),
         args,
         cwd=self.m.path['checkout'],
-        env=self.get_env(),
+        env=self.m.chromium.get_env(),
         **kwargs)
 
   def run_sharded_perf_tests(self, config, flaky_config=None, perf_id=None,
@@ -378,7 +368,7 @@ class AndroidApi(recipe_api.RecipeApi):
          'perf', '--steps', config, '--output-json-list', self.m.json.output()],
         step_test_data=lambda: self.m.json.test_api.output([
             'perf_test.foo', 'page_cycler.foo']),
-        env=self.get_env()
+        env=self.m.chromium.get_env()
     )
     perf_tests = result.json.output
 
@@ -398,7 +388,7 @@ class AndroidApi(recipe_api.RecipeApi):
           annotate=annotate,
           results_url='https://chromeperf.appspot.com',
           perf_id=perf_id,
-          env=self.get_env())
+          env=self.m.chromium.get_env())
       except self.m.step.StepFailure as f:
         failures.append(f)
 
@@ -483,7 +473,8 @@ class AndroidApi(recipe_api.RecipeApi):
         'stack_tool_with_logcat_dump',
         [self.m.path['checkout'].join('third_party', 'android_platform',
                               'development', 'scripts', 'stack'),
-         '--arch', target_arch, '--more-info', log_file], env=self.get_env(),
+         '--arch', target_arch, '--more-info', log_file],
+        env=self.m.chromium.get_env(),
         infra_step=True)
     self.m.step(
         'stack_tool_for_tombstones',
@@ -496,7 +487,7 @@ class AndroidApi(recipe_api.RecipeApi):
           [self.m.path['checkout'].join('build',
                                         'android',
                                         'asan_symbolize.py'),
-           '-l', log_file], env=self.get_env(),
+           '-l', log_file], env=self.m.chromium.get_env(),
           infra_step=True)
 
   def test_report(self):
@@ -560,7 +551,7 @@ class AndroidApi(recipe_api.RecipeApi):
         str(suite),
         self.m.path['checkout'].join('build', 'android', 'test_runner.py'),
         ['gtest', '-s', suite] + args,
-        env=self.get_env(),
+        env=self.m.chromium.get_env(),
         **kwargs)
 
   def run_java_unit_test_suite(self, suite, verbose=True, **kwargs):
@@ -574,7 +565,7 @@ class AndroidApi(recipe_api.RecipeApi):
       str(suite),
       self.m.path['checkout'].join('build', 'android', 'test_runner.py'),
       ['junit', '-s', suite] + args,
-      env=self.get_env(),
+      env=self.m.chromium.get_env(),
       **kwargs)
 
   def coverage_report(self, **kwargs):

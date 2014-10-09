@@ -34,7 +34,6 @@ def BaseConfig(INTERNAL=False, REPO_NAME=None, REPO_URL=None,
     upload_dest_prefix = Single(basestring, empty_val=''),
     gclient_custom_vars = Dict(value_type=(basestring, types.NoneType)),
     coverage = Single(bool, required=False, empty_val=False),
-    adb_vendor_keys = Single(Path, required=False),
   )
 
 

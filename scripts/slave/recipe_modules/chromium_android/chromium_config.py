@@ -7,14 +7,11 @@ from slave import recipe_config
 
 from RECIPE_MODULES.chromium import CONFIG_CTX
 
-@CONFIG_CTX(includes=['ninja', 'static_library'],
+@CONFIG_CTX(includes=['android_common', 'ninja', 'static_library'],
             config_vars={'TARGET_ARCH': 'arm', 'TARGET_BITS': 32,
                          'BUILD_CONFIG': 'Debug'})
 def base_config(c):
   c.compile_py.default_targets=[]
-  gyp_defs = c.gyp_env.GYP_DEFINES
-  gyp_defs['fastbuild'] = 1
-  gyp_defs['OS'] = 'android'
 
   if c.HOST_PLATFORM != 'linux':
     raise recipe_config.BadConf('Can only build android on linux.')
@@ -102,7 +99,6 @@ def x64_builder(c):
 @CONFIG_CTX(includes=['base_config', 'default_compiler', 'goma'])
 def arm64_builder(c):
   gyp_defs = c.gyp_env.GYP_DEFINES
-  gyp_defs['OS'] = 'android'
   gyp_defs['target_arch'] = 'arm64'
 
 @CONFIG_CTX(includes=['arm64_builder'],

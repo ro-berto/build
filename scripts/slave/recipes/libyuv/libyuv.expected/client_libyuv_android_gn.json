@@ -45,7 +45,8 @@
       "runhooks"
     ],
     "env": {
-      "GYP_CHROMIUM_NO_ACTION": "1"
+      "GYP_CHROMIUM_NO_ACTION": "1",
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "gclient runhooks"
   },

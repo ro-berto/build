@@ -74,7 +74,7 @@ def GenSteps(api):
   api.chromium_android.c.asan_symbolize = True
 
   if config.get('adb_vendor_keys'):
-    api.chromium_android.c.adb_vendor_keys = api.path['build'].join(
+    api.chromium.c.env.ADB_VENDOR_KEYS = api.path['build'].join(
       'site_config', '.adb_key')
 
   api.chromium_android.init_and_sync()
