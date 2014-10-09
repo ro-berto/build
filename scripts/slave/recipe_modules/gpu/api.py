@@ -151,10 +151,6 @@ class GpuApi(recipe_api.RecipeApi):
   def checkout_steps(self):
     self._bot_update = self.m.bot_update.ensure_checkout(force=True)
 
-  def _trim_run(self, str):
-    assert str.endswith('_run')
-    return str[:-4]
-
   def compile_steps(self):
     # We only need to runhooks if we're going to compile locally.
     self.m.chromium.runhooks()
@@ -165,28 +161,10 @@ class GpuApi(recipe_api.RecipeApi):
     # aren't supported on the current configuration (because the component
     # build is used).
     is_tryserver = self.m.tryserver.is_tryserver
-    # Sort the targets to keep the test expectations stable.
-    # By convention, isolates are built with targets named with the
-    # isolate's name + "_run".
-    targets = sorted(
-        [u'%s_run' % test for test in common.GPU_ISOLATE_MAPPING.keys()])
+    targets = ['%s_run' % test for test in common.GPU_ISOLATES]
     self.m.isolate.clean_isolated_files(
         self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
     if is_tryserver:
-      self.m.filter.does_patch_require_compile(
-          exes=common.GPU_ISOLATE_MAPPING.values(),
-          compile_targets=targets,
-          additional_name='chromium',
-          config_file_name='trybot_analyze_config.json')
-      if not self.m.filter.result:
-        # Early out if no work to do.
-        return
-      targets = list(set(targets) &
-                     set(self.m.filter.compile_targets))
-      if not targets:
-        return
-      # Re-sort the targets to keep test expectations stable.
-      targets.sort()
       try:
         self.m.chromium.compile(targets, name='compile (with patch)')
       except self.m.step.StepFailure:
@@ -213,13 +191,9 @@ class GpuApi(recipe_api.RecipeApi):
         raise
     else:
       self.m.chromium.compile(targets=targets, name='compile')
-    # Map 'targets' back to the names of the isolates (not their _run
-    # build targets) in order to let analyze.py properly subset the
-    # tests that are run on the testers.
-    isolates_to_run = [self._trim_run(n) for n in targets]
     self.m.isolate.find_isolated_tests(
         self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs),
-        isolates_to_run)
+        common.GPU_ISOLATES)
 
   def test_steps(self):
     # TODO(kbr): currently some properties are passed to runtest.py via
@@ -379,17 +353,6 @@ class GpuApi(recipe_api.RecipeApi):
     if failures:
       raise self.m.step.StepFailure('%d tests failed: %r' % (len(failures), failures))
 
-  def _should_run_test(self, isolate_name):
-    if not self.m.tryserver.is_tryserver:
-      return True
-    # Check to see if analyze.py excluded this isolate from the
-    # compile targets. If so, skip running it. (It isn't possible to
-    # run analyze.py on the testers because they don't check out the
-    # Chromium workspace.) We prefer to not run this logic on the main
-    # waterfall bots so that forgetting an isolate's hash there will
-    # cause a hard failure.
-    return isolate_name in self.m.isolate.isolated_tests
-
   def _run_isolate(self, test, isolate_name=None, **kwargs):
     # The test_type must end in 'test' or 'tests' in order for the results to
     # automatically show up on the flakiness dashboard.
@@ -397,16 +360,13 @@ class GpuApi(recipe_api.RecipeApi):
     # Currently all tests on the GPU bots follow this rule, so we can't add
     # code like in chromium/api.py, run_telemetry_test.
     assert test.endswith('test') or test.endswith('tests')
-    test_to_run = isolate_name or test
-    if not self._should_run_test(test_to_run):
-      return
     # TODO(kbr): turn this into a temporary path. There were problems
     # with the recipe simulation test in doing so and cleaning it up.
     results_directory = self.m.path['slave_build'].join(
       'gtest-results', test)
     try:
       self.m.isolate.runtest(
-        test_to_run,
+        isolate_name or test,
         self.get_build_revision(),
         self.get_webkit_revision(),
         annotate='gtest',
@@ -421,8 +381,6 @@ class GpuApi(recipe_api.RecipeApi):
 
   def _run_isolated_telemetry_gpu_test(self, test, args=None, name=None,
                                        extra_browser_args=None, **kwargs):
-    if not self._should_run_test('telemetry_gpu_test'):
-      return
     test_args = ['-v', '--use-devtools-active-port']
     if args:
       test_args.extend(args)
