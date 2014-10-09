@@ -141,6 +141,20 @@ BUILDERS = {
       }
     }
   },
+  'tryserver.chromium.perf': {
+    'android_perf_bisect_builder': {
+      'recipe_config': 'perf',
+      'gclient_apply_config': ['android', 'perf'],
+      'kwargs': {
+        'BUILD_CONFIG': 'Release',
+      },
+      'upload': {
+        'bucket': 'chrome-perf',
+        'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip'
+                             % api.properties['revision']),
+      }
+    }
+  },
   'client.v8': {
     'Android Builder': {
       'recipe_config': 'perf',

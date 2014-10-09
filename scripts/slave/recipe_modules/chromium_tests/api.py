@@ -339,13 +339,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             mastername,
             buildername,
             self.m.properties.get('buildnumber'))
+
       self.m.archive.zip_and_upload_build(
           'package build',
           self.m.chromium.c.build_config_fs,
-          self.m.archive.legacy_upload_url(
-              master_config.get('build_gs_bucket'),
-              extra_url_components=(None if mastername == 'chromium.perf' else
-                                    self.m.properties['mastername'])),
+          build_url=self._build_gs_archive_url(mastername, master_config),
           build_revision=got_revision,
           cros_board=self.m.chromium.c.TARGET_CROS_BOARD,
           # TODO(machenbach): Make asan a configuration switch.
@@ -460,3 +458,26 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                self.m.filter.compile_targets))
 
     return True, self.m.filter.matching_exes, compile_targets
+
+  # Used to build the Google Storage archive url.
+  #
+  # We need to special-case the logic for composing the archive url for a couple
+  # of masters. That has been moved outside of the compile method.
+  #
+  # Special-cased masters:
+  #   'chromium.perf':
+  #     exclude the name of the master from the url.
+  #   'tryserver.chromium.perf':
+  #     return nothing so that the archive url specified in factory_properties
+  #     (as set on the master's configuration) is used instead.
+  def _build_gs_archive_url(self, mastername, master_config):
+    if mastername == 'chromium.perf':
+      return self.m.archive.legacy_upload_url(
+          master_config.get('build_gs_bucket'),
+          extra_url_components=None)
+    elif mastername == 'tryserver.chromium.perf':
+      return  None
+    else:
+      return self.m.archive.legacy_upload_url(
+          master_config.get('build_gs_bucket'),
+          extra_url_components=self.m.properties['mastername'])

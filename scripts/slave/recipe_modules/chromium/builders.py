@@ -16,6 +16,7 @@ from . import client_skia
 from . import client_v8
 from . import tryserver_chromium_linux
 from . import tryserver_chromium_mac
+from . import tryserver_chromium_perf
 
 
 BUILDERS = {
@@ -33,4 +34,5 @@ BUILDERS = {
   'client.v8': client_v8.SPEC,
   'tryserver.chromium.linux': tryserver_chromium_linux.SPEC,
   'tryserver.chromium.mac': tryserver_chromium_mac.SPEC,
+  'tryserver.chromium.perf': tryserver_chromium_perf.SPEC,
 }
