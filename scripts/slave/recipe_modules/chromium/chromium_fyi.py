@@ -332,5 +332,81 @@ SPEC = {
         'platform': 'win',
       },
     },
+    'Chromium Linux ChromeOS MSan Builder': {
+      'recipe_config': 'chromium_msan',
+      'chromium_apply_config': ['instrumented_libraries'],
+      'GYP_DEFINES': {
+        'msan_track_origins': 0,
+        'chromeos': 1
+      },
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+    'Linux ChromeOS MSan Tests': {
+      'recipe_config': 'chromium_msan',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'test_generators': [
+        steps.generate_gtest,
+      ],
+      'parent_buildername': 'Chromium Linux ChromeOS MSan Builder',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+    'Linux ChromeOS MSan Browser (1)': {
+      'recipe_config': 'chromium_msan',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'test_generators': [
+        steps.generate_gtest,
+      ],
+      'parent_buildername': 'Chromium Linux ChromeOS MSan Builder',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+    'Linux ChromeOS MSan Browser (2)': {
+      'recipe_config': 'chromium_msan',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'test_generators': [
+        steps.generate_gtest,
+      ],
+      'parent_buildername': 'Chromium Linux ChromeOS MSan Builder',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+    'Linux ChromeOS MSan Browser (3)': {
+      'recipe_config': 'chromium_msan',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'test_generators': [
+        steps.generate_gtest,
+      ],
+      'parent_buildername': 'Chromium Linux ChromeOS MSan Builder',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
   },
 }
