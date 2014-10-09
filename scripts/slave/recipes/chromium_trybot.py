@@ -547,21 +547,21 @@ def filter_tests(possible_tests, needed_tests):
   return result
 
 
-def tests_in_compile_targets(compile_targets, tests):
+def tests_in_compile_targets(api, compile_targets, tests):
   """Returns the tests in |tests| that have at least one of their compile
   targets in |compile_targets|."""
   # The target all builds everything.
   if 'all' in compile_targets:
     return tests
   return [test for test in tests if set(compile_targets) &
-          set(test.compile_targets(None))]
+          set(test.compile_targets(api))]
 
 
-def all_compile_targets(tests):
+def all_compile_targets(api, tests):
   """Returns the compile_targets for all the Tests in |tests|."""
   return sorted(set(x
                     for test in tests
-                    for x in test.compile_targets(None)))
+                    for x in test.compile_targets(api)))
 
 
 def find_test_named(test_name, tests):
@@ -782,7 +782,7 @@ def GenSteps(api):
       requires_compile, matching_exes, compile_targets = \
           api.chromium_tests.analyze(
               get_test_names(gtest_tests) +
-                  all_compile_targets(conditional_tests),
+                  all_compile_targets(api, conditional_tests),
               compile_targets,
               analyze_config_file)
 
@@ -802,8 +802,8 @@ def GenSteps(api):
       ])
     tests.append(api.chromium.steps.Deps2GitTest())
 
-    conditional_tests = tests_in_compile_targets(compile_targets,
-                                                 conditional_tests)
+    conditional_tests = tests_in_compile_targets(
+        api, compile_targets, conditional_tests)
     tests.extend(find_test_named(api.chromium.steps.TelemetryUnitTests.name,
                                  conditional_tests))
     tests.extend(find_test_named(api.chromium.steps.TelemetryPerfUnitTests.name,
@@ -932,7 +932,7 @@ def GenSteps(api):
     requires_compile, matching_exes, compile_targets = \
         api.chromium_tests.analyze(
             get_test_names(tests + tests_including_triggered) +
-                all_compile_targets(tests + tests_including_triggered),
+                all_compile_targets(api, tests + tests_including_triggered),
             compile_targets,
             'trybot_analyze_config.json')
 

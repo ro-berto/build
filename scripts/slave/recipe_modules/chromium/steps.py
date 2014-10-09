@@ -25,6 +25,11 @@ class Test(object):
     """Name of the test."""
     raise NotImplementedError()
 
+  @staticmethod
+  def compile_targets(api):
+    """List of compile targets needed by this test."""
+    raise NotImplementedError()
+
   def pre_run(self, api, suffix):  # pragma: no cover
     """Steps to execute before running the test."""
     return []
