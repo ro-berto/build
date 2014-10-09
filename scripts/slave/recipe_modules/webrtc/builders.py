@@ -804,7 +804,8 @@ BUILDERS = {
       },
       'Linux MSan': {
         'recipe_config': 'webrtc_clang',
-        'chromium_apply_config': ['msan', 'instrumented_libraries'],
+        'chromium_apply_config': ['msan', 'msan_full_origin_tracking',
+                                  'instrumented_libraries'],
         'webrtc_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,

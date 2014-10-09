@@ -350,6 +350,11 @@ def msan(c):
   c.gyp_env.GYP_DEFINES['msan'] = 1
 
 @config_ctx()
+def msan_full_origin_tracking(c):
+  # Track the chain of stores leading from allocation site to use site.
+  c.gyp_env.GYP_DEFINES['msan_track_origins'] = 2
+
+@config_ctx()
 def instrumented_libraries(c):
   c.gyp_env.GYP_DEFINES['use_instrumented_libraries'] = 1
   c.gyp_env.GYP_DEFINES['instrumented_libraries_jobs'] = 10
