@@ -26,7 +26,6 @@ def Update(_config, active_master, c):
       ]),
       Triggerable(name='linux_dbg_32_trigger', builderNames=[
           'Linux Tests (dbg)(1)(32)',
-          'Linux Tests (dbg)(2)(32)',
       ]),
       Triggerable(name='linux_dbg_trigger', builderNames=[
           'Linux Tests (dbg)(1)',
@@ -40,7 +39,6 @@ def Update(_config, active_master, c):
     {'name': 'Linux Tests'},
     {'name': 'Linux Builder (dbg)(32)', 'triggers': ['linux_dbg_32_trigger']},
     {'name': 'Linux Tests (dbg)(1)(32)'},
-    {'name': 'Linux Tests (dbg)(2)(32)'},
     {'name': 'Linux Builder (dbg)', 'triggers': ['linux_dbg_trigger']},
     {'name': 'Linux Tests (dbg)(1)'},
     {'name': 'Linux GN', 'recipe': 'chromium_gn'},

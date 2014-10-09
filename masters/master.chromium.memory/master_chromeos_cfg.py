@@ -18,9 +18,7 @@ def Update(_config, active_master, c):
           builderNames=['Linux Chromium OS ASan LSan Builder']),
       Triggerable(
           name='chromeos_asan_rel_trigger',
-          builderNames=['Linux Chromium OS ASan LSan Tests (1)',
-                        'Linux Chromium OS ASan LSan Tests (2)',
-                        'Linux Chromium OS ASan LSan Tests (3)']),
+          builderNames=['Linux Chromium OS ASan LSan Tests (1)']),
   ])
 
   specs = [
@@ -29,8 +27,6 @@ def Update(_config, active_master, c):
       'triggers': ['chromeos_asan_rel_trigger']
     },
     {'name': 'Linux Chromium OS ASan LSan Tests (1)'},
-    {'name': 'Linux Chromium OS ASan LSan Tests (2)'},
-    {'name': 'Linux Chromium OS ASan LSan Tests (3)'},
   ]
 
   c['builders'].extend([

@@ -51,38 +51,6 @@ SPEC = {
         'os': 'Windows-5.1',
       },
     },
-    'XP Tests (2)': {
-      'recipe_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'tester',
-      'disable_runhooks': True,
-      'test_generators': [
-        steps.generate_gtest,
-      ],
-      'parent_buildername': 'Win Builder',
-      'testing': {
-        'platform': 'win',
-      },
-    },
-    'XP Tests (3)': {
-      'recipe_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'tester',
-      'disable_runhooks': True,
-      'test_generators': [
-        steps.generate_gtest,
-      ],
-      'parent_buildername': 'Win Builder',
-      'testing': {
-        'platform': 'win',
-      },
-    },
     'Vista Tests (1)': {
       'recipe_config': 'chromium',
       'chromium_config_kwargs': {

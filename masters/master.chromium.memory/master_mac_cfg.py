@@ -20,13 +20,9 @@ def Update(_config, active_master, c):
       ]),
       Triggerable(name='mac_asan_rel_trigger', builderNames=[
           'Mac ASan Tests (1)',
-          'Mac ASan Tests (2)',
-          'Mac ASan Tests (3)',
       ]),
       Triggerable(name='mac_asan_64_rel_trigger', builderNames=[
           'Mac ASan 64 Tests (1)',
-          'Mac ASan 64 Tests (2)',
-          'Mac ASan 64 Tests (3)',
       ]),
   ])
   specs = [
@@ -35,15 +31,11 @@ def Update(_config, active_master, c):
       'triggers': ['mac_asan_rel_trigger'],
     },
     {'name': 'Mac ASan Tests (1)'},
-    {'name': 'Mac ASan Tests (2)'},
-    {'name': 'Mac ASan Tests (3)'},
     {
       'name': 'Mac ASan 64 Builder',
       'triggers': ['mac_asan_64_rel_trigger'],
     },
     {'name': 'Mac ASan 64 Tests (1)'},
-    {'name': 'Mac ASan 64 Tests (2)'},
-    {'name': 'Mac ASan 64 Tests (3)'},
   ]
 
   c['builders'].extend([
