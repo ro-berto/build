@@ -78,7 +78,6 @@ def _webrtc(c):
   s.name = 'src'
   s.url = WebRTCSvnURL(c, 'trunk')
   s.deps_file = 'DEPS'
-  s.custom_vars['root_dir'] = 'src'
   c.got_revision_mapping['src'] = 'got_revision'
 
 @CONFIG_CTX()
@@ -104,7 +103,6 @@ def _webrtc_limited(c):
   s.name = 'webrtc-limited'
   s.url = ChromeSvnSubURL(c, 'chrome-internal', 'trunk', 'webrtc-limited')
   s.deps_file = 'DEPS'
-  s.custom_vars['root_dir'] = 'src'
 
 def WebRTCSvnURL(c, *pieces):
   BASES = ('http://webrtc.googlecode.com/svn',
