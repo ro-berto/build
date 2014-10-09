@@ -84,7 +84,9 @@ SPEC['builders']['Linux Chromium OS ASan LSan Builder'] = {
     'TARGET_BITS': 64,
   },
   'bot_type': 'builder',
-  'testing': {'platform': 'linux'}
+  'testing': {'platform': 'linux'},
+  'enable_swarming': True,
+  'use_isolate': True,
 }
 
 for shard in range(1, 4):
@@ -100,5 +102,6 @@ for shard in range(1, 4):
     ],
     'parent_buildername': 'Linux Chromium OS ASan LSan Builder',
     'bot_type': 'tester',
-    'testing': {'platform': 'linux'}
+    'testing': {'platform': 'linux'},
+    'enable_swarming': True,
   }
