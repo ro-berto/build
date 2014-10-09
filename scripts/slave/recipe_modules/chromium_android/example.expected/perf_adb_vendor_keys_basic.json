@@ -168,16 +168,6 @@
     "name": "gclient runhooks"
   },
   {
-    "cmd": [
-      "[BUILD]/scripts/slave/apply_svn_patch.py",
-      "-p",
-      "https://the.patch.url/the.patch",
-      "-r",
-      "[SLAVE_BUILD]/src/clank"
-    ],
-    "name": "apply_patch"
-  },
-  {
     "allow_subannotations": false,
     "cmd": [
       "[SLAVE_BUILD]/src/build/tree_truth.sh",

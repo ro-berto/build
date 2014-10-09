@@ -20,12 +20,6 @@ class AndroidApi(recipe_api.RecipeApi):
     return self.m.chromium.get_env()
 
   @property
-  def internal_dir(self):
-    assert self.c.INTERNAL, (
-        'Attempt to get internal_dir, but not internal build')
-    return self.m.path['checkout'].join(self.c.internal_dir_name)
-
-  @property
   def out_path(self):
     return self.m.path['checkout'].join('out')
 
@@ -34,20 +28,6 @@ class AndroidApi(recipe_api.RecipeApi):
     return self.out_path.join(self.c.BUILD_CONFIG, 'coverage')
 
   def configure_from_properties(self, config_name, **kwargs):
-    def set_property(prop, var):
-      if prop in self.m.properties:
-        if var in kwargs:
-          assert kwargs[var] == self.m.properties[prop], (
-              "Property/Config conflict: %s=%s but %s=%s", (
-                  prop, self.m.properties[prop],
-                  var, kwargs[var]))
-        kwargs[var] = self.m.properties[prop]
-
-    set_property('target', 'BUILD_CONFIG')
-    set_property('internal', 'INTERNAL')
-    set_property('repo_name', 'REPO_NAME')
-    set_property('repo_url', 'REPO_URL')
-
     self.set_config(config_name, **kwargs)
 
   def make_zip_archive(self, step_name, archive_name, files=None,
@@ -156,15 +136,6 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def runhooks(self, extra_env={}):
     self.m.chromium.runhooks(env=extra_env)
-
-  def apply_svn_patch(self):
-    # TODO(sivachandra): We should probably pull this into its own module
-    # (maybe a 'tryserver' module) at some point.
-    self.m.step(
-        'apply_patch',
-        [self.m.path['build'].join('scripts', 'slave', 'apply_svn_patch.py'),
-         '-p', self.m.properties['patch_url'],
-         '-r', self.internal_dir])
 
   def compile(self, **kwargs):
     assert 'env' not in kwargs, (

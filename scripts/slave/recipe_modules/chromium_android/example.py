@@ -66,6 +66,8 @@ def GenSteps(api):
 
   api.chromium_android.configure_from_properties(
       'base_config',
+      REPO_URL='svn://svn.chromium.org/chrome/trunk/src',
+      REPO_NAME='src/repo',
       INTERNAL=True,
       BUILD_CONFIG='Release')
 
@@ -80,7 +82,6 @@ def GenSteps(api):
   api.chromium_android.init_and_sync()
 
   api.chromium_android.runhooks()
-  api.chromium_android.apply_svn_patch()
   api.chromium_android.run_tree_truth()
   assert 'MAJOR' in api.chromium.get_version()
 
