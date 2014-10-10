@@ -12,6 +12,7 @@ class ChromiumPerfTryServer(Master.Master4):
   slave_port = 8141
   master_port_alt = 8241
   try_job_port = 8341
+  buildbot_url = 'http://build.chromium.org/p/chromium/'
   # Select tree status urls and codereview location.
   reply_to = 'chrome-troopers+tryserver@google.com'
   base_app_url = 'https://chromium-status.appspot.com'
