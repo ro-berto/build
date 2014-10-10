@@ -1,0 +1,117 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/cleanup_temp.py"
+    ],
+    "name": "cleanup temp"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/git_setup.py",
+      "--path",
+      "[SLAVE_BUILD]/swarming.client",
+      "--url",
+      "https://chromium.googlesource.com/external/swarming.client.git"
+    ],
+    "name": "git setup (swarming_client)"
+  },
+  {
+    "cmd": [
+      "git",
+      "fetch",
+      "origin",
+      "feaaabcdef"
+    ],
+    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "name": "git fetch (swarming_client)"
+  },
+  {
+    "cmd": [
+      "git",
+      "checkout",
+      "-f",
+      "FETCH_HEAD"
+    ],
+    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "name": "git checkout (swarming_client)"
+  },
+  {
+    "cmd": [
+      "git",
+      "clean",
+      "-f",
+      "-d",
+      "-x"
+    ],
+    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "name": "git clean (swarming_client)"
+  },
+  {
+    "cmd": [
+      "git",
+      "submodule",
+      "sync"
+    ],
+    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "name": "submodule sync (swarming_client)"
+  },
+  {
+    "cmd": [
+      "git",
+      "submodule",
+      "update",
+      "--init",
+      "--recursive"
+    ],
+    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "name": "submodule update (swarming_client)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "exit()"
+    ],
+    "name": "copy parent_got_revision to got_revision",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@exit()@@@",
+      "@@@STEP_LOG_END@python.inline@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision@160000@@@"
+    ]
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"mac_gpu\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium.gpu\", \"parent_got_revision\": 160000, \"parent_got_swarming_client_revision\": \"feaaabcdef\", \"parent_got_webkit_revision\": 10000, \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"gpu/download_and_test\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"gpu_unittests\": \"[dummy hash for gpu_unittests]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"mac_gpu\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium.gpu\", \"parent_got_revision\": 160000, \"parent_got_swarming_client_revision\": \"feaaabcdef\", \"parent_got_webkit_revision\": 10000, \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"gpu/download_and_test\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"gpu_unittests\": \"[dummy hash for gpu_unittests]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--annotate=gtest",
+      "--test-type=gpu_unittests",
+      "--generate-json-file",
+      "--results-directory=[SLAVE_BUILD]/gtest-results/gpu_unittests",
+      "--builder-name=mac_gpu",
+      "--slave-name=TestSlavename",
+      "--build-number=571",
+      "--run-python-script",
+      "--revision=160000",
+      "--webkit-revision=10000",
+      "[SLAVE_BUILD]/swarming.client/run_isolated.py",
+      "-H",
+      "[dummy hash for gpu_unittests]",
+      "-I",
+      "https://isolateserver.appspot.com",
+      "--"
+    ],
+    "name": "gpu_unittests"
+  }
+]
