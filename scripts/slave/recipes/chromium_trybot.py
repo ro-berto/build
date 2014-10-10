@@ -824,7 +824,6 @@ def GenSteps(api):
           api.chromium.steps.CheckpermsTest(),
           api.chromium.steps.ChecklicensesTest(),
       ])
-    tests.append(api.chromium.steps.Deps2GitTest())
 
     conditional_tests = tests_in_compile_targets(
         api, compile_targets, conditional_tests)
@@ -1553,4 +1552,3 @@ def GenTests(api):
                        'targets': ['browser_tests', 'base_unittests'],
                        'build_targets': ['base_unittests']}))
   )
-

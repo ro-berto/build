@@ -571,27 +571,6 @@ class ChromiumApi(recipe_api.RecipeApi):
         step_test_data=lambda: self.m.json.test_api.output([]),
         **kwargs)
 
-  def deps2git(self, suffix=None, **kwargs):
-    name = 'deps2git'
-    if suffix:
-      name += ' (%s)' % suffix
-    return self.m.python(
-        name,
-        self.m.path['checkout'].join('tools', 'deps2git', 'deps2git.py'),
-        args=['-d', self.m.path['checkout'].join('DEPS'),
-              '-o', self.m.path['checkout'].join('.DEPS.git'),
-              '--verify',
-              '--json', self.m.json.output()],
-        step_test_data=lambda: self.m.json.test_api.output([]),
-        **kwargs)
-
-  def deps2submodules(self, **kwargs):
-    return self.m.python(
-        'deps2submodules',
-        self.m.path['checkout'].join('tools', 'deps2git', 'deps2submodules.py'),
-        args=['--gitless', self.m.path['checkout'].join('.DEPS.git')],
-        **kwargs)
-
   def list_perf_tests(self, browser, num_shards, devices=[]):
     args = ['list', '--browser', browser, '--json-output',
             self.m.json.output(), '--num-shards', num_shards]

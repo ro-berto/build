@@ -215,35 +215,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/tools/deps2git/deps2git.py",
-      "-d",
-      "[SLAVE_BUILD]/src/DEPS",
-      "-o",
-      "[SLAVE_BUILD]/src/.DEPS.git",
-      "--verify",
-      "--json",
-      "/path/to/tmp/json"
-    ],
-    "name": "deps2git (with patch)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/tools/deps2git/deps2submodules.py",
-      "--gitless",
-      "[SLAVE_BUILD]/src/.DEPS.git"
-    ],
-    "name": "deps2submodules"
-  },
-  {
     "allow_subannotations": true,
     "cmd": [
       "python",

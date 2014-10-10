@@ -163,33 +163,6 @@ class ChecklicensesTest(Test):  # pylint: disable=W0232
     return ['%s: %s' % (r[0], r[1]) for r in result_set]
 
 
-class Deps2GitTest(Test):  # pylint: disable=W0232
-  name = 'deps2git'
-
-  def __init__(self):
-    super(Deps2GitTest, self).__init__()
-
-  @staticmethod
-  def compile_targets(_):
-    return []
-
-  def run(self, api, suffix):
-    try:
-      api.chromium.deps2git(suffix)
-    finally:
-      self._test_runs[suffix] = api.step.active_result
-
-    api.chromium.deps2submodules()
-
-    return self._test_runs[suffix]
-
-  def has_valid_results(self, api, suffix):
-    return self._test_runs[suffix].json.output is not None
-
-  def failures(self, api, suffix):
-    return self._test_runs[suffix].json.output
-
-
 class LocalGTestTest(Test):
   def __init__(self, name, args=None, compile_targets=None,
                flakiness_dash=False):

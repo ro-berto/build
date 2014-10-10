@@ -56,7 +56,6 @@ SPEC = {
             'chromium-browser-snapshots',
             gs_acl='public-read',
         ),
-        steps.Deps2GitTest(),
         steps.CheckpermsTest(),
       ],
       'testing': {
