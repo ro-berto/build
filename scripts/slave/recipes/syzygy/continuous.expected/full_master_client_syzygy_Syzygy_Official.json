@@ -112,6 +112,8 @@
       "--on-waterfall",
       "[SLAVE_BUILD]\\src\\build\\Release\\foo_unittests.exe",
       "--",
+      "--single-process-tests",
+      "--test-launcher-timeout=300000",
       "--gtest_print_time"
     ],
     "name": "foo_unittests"
@@ -136,6 +138,8 @@
       "--on-waterfall",
       "[SLAVE_BUILD]\\src\\build\\Release\\bar_unittests.exe",
       "--",
+      "--single-process-tests",
+      "--test-launcher-timeout=300000",
       "--gtest_print_time"
     ],
     "name": "bar_unittests"
@@ -160,6 +164,8 @@
       "--on-waterfall",
       "[SLAVE_BUILD]\\src\\build\\Release\\baz_unittests.exe",
       "--",
+      "--single-process-tests",
+      "--test-launcher-timeout=300000",
       "--gtest_print_time"
     ],
     "name": "baz_unittests"

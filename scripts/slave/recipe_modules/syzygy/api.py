@@ -154,6 +154,8 @@ PATCH=1
               unittest_path,
               '--',
               # Arguments to the actual gtest unittest.
+              '--single-process-tests',  # Our VMs are single core.
+              '--test-launcher-timeout=300000',  # 5 minutes in milliseconds.
               '--gtest_print_time']
       self.m.chromium.runtest(app_verifier_py, args, name=unittest,
                               test_type=unittest)

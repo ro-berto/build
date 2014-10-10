@@ -115,6 +115,8 @@
       "--on-waterfall",
       "[SLAVE_BUILD]\\src\\build\\Coverage\\foo_unittests.exe",
       "--",
+      "--single-process-tests",
+      "--test-launcher-timeout=300000",
       "--gtest_print_time"
     ],
     "name": "foo_unittests"
@@ -139,6 +141,8 @@
       "--on-waterfall",
       "[SLAVE_BUILD]\\src\\build\\Coverage\\bar_unittests.exe",
       "--",
+      "--single-process-tests",
+      "--test-launcher-timeout=300000",
       "--gtest_print_time"
     ],
     "name": "bar_unittests"
@@ -163,6 +167,8 @@
       "--on-waterfall",
       "[SLAVE_BUILD]\\src\\build\\Coverage\\baz_unittests.exe",
       "--",
+      "--single-process-tests",
+      "--test-launcher-timeout=300000",
       "--gtest_print_time"
     ],
     "name": "baz_unittests"
