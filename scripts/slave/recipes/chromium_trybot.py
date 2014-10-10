@@ -236,6 +236,30 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
+      'linux_chromium_chromeos_athena_rel': {
+        'add_telemetry_tests': False,
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'chromium_config': 'chromium_chromeos_athena',
+        'compile_only': False,
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'linux_chromium_chromeos_athena_dbg': {
+        'add_telemetry_tests': False,
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'chromium_config': 'chromium_chromeos_athena',
+        'compile_only': False,
+        'testing': {
+          'platform': 'linux',
+        },
+      },
       'linux_chromium_trusty_dbg': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',

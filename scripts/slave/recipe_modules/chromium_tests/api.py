@@ -56,6 +56,10 @@ RECIPE_CONFIGS = {
     'chromium_apply_config': ['chromeos', 'ozone'],
     'gclient_config': 'chromium',
   },
+  'chromium_chromeos_athena': {
+    'chromium_config': 'chromium_chromeos_athena',
+    'gclient_config': 'chromium',
+  },
   'chromium_chromeos_clang': {
     'chromium_config': 'chromium_clang',
     'chromium_apply_config': ['chromeos'],
