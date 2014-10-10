@@ -257,6 +257,9 @@
       "--dimension",
       "os",
       "Ubuntu-12.04",
+      "--dimension",
+      "pool",
+      "Chrome",
       "[dummy hash for base_unittests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
@@ -301,6 +304,9 @@
       "--dimension",
       "os",
       "Ubuntu-12.04",
+      "--dimension",
+      "pool",
+      "Chrome",
       "[dummy hash for browser_tests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"

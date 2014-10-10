@@ -33,7 +33,8 @@ def GenSteps(api):
   if not tests:
     return
 
-  api.swarming.default_priority = 25  # Per http://crbug.com/401096.
+  api.swarming.default_priority = 25
+  api.swarming.set_default_dimension('pool', 'Chrome')
 
   def test_runner():
     failed_tests = []

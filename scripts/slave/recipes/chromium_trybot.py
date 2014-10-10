@@ -901,6 +901,7 @@ def GenSteps(api):
   mastername = api.properties.get('mastername')
   buildername = api.properties.get('buildername')
   bot_config = get_bot_config(mastername, buildername)
+  api.swarming.set_default_dimension('pool', 'Chrome')
 
   main_waterfall_config = bot_config.get('based_on_main_waterfall')
   if main_waterfall_config:
