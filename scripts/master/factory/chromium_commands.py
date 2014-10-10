@@ -503,54 +503,6 @@ class ChromiumCommands(commands.FactoryCommands):
         tool_opts=tool_options,
         factory_properties=factory_properties)
 
-  def AddDeps2GitStep(self, verify=True):
-    J = self.PathJoin
-    deps2git_tool = J(self._repository_root, 'tools', 'deps2git', 'deps2git.py')
-    cmd = [self._python, deps2git_tool,
-           '-d', J(self._repository_root, 'DEPS'),
-           '-o', J(self._repository_root, '.DEPS.git')]
-    if verify:
-      cmd.append('--verify')
-    self.AddTestStep(
-        shell.ShellCommand,
-        'check_deps2git',
-        cmd,
-        do_step_if=self.TestStepFilter)
-
-    deps2submodules_tool = J(self._repository_root, 'tools', 'deps2git',
-                             'deps2submodules.py')
-    cmd = [self._python, deps2submodules_tool, '--gitless',
-           J(self._repository_root, '.DEPS.git')]
-    self.AddTestStep(
-        shell.ShellCommand,
-        'check_deps2submodules',
-        cmd,
-        do_step_if=self.TestStepFilter)
-
-  def AddBuildrunnerDeps2GitStep(self, verify=True):
-    J = self.PathJoin
-    deps2git_tool = J(self._repository_root, 'tools', 'deps2git', 'deps2git.py')
-    cmd = [self._python, deps2git_tool,
-           '-d', J(self._repository_root, 'DEPS'),
-           '-o', J(self._repository_root, '.DEPS.git')]
-    if verify:
-      cmd.append('--verify')
-    self.AddBuildrunnerTestStep(
-        shell.ShellCommand,
-        'check_deps2git',
-        cmd,
-        do_step_if=self.TestStepFilter)
-
-    deps2submodules_tool = J(self._repository_root, 'tools', 'deps2git',
-                             'deps2submodules.py')
-    cmd = [self._python, deps2submodules_tool, '--gitless',
-           J(self._repository_root, '.DEPS.git')]
-    self.AddBuildrunnerTestStep(
-        shell.ShellCommand,
-        'check_deps2submodules',
-        cmd,
-        do_step_if=self.TestStepFilter)
-
   def AddTelemetryUnitTests(self):
     step_name = 'telemetry_unittests'
     if self._target_os == 'android':

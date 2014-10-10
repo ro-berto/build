@@ -41,7 +41,6 @@ F('win_clobber', win().ChromiumFactory(
     project='all.sln',
     tests=[
       'check_bins',
-      'check_deps2git',
       'sizes',
     ],
     options=['--compiler=goma'],
@@ -70,7 +69,6 @@ B('Mac', 'mac_clobber', 'compile|testers', 'chromium',
 F('mac_clobber', mac().ChromiumFactory(
     clobber=True,
     tests=[
-      'check_deps2git',
       'sizes',
     ],
     options=['--compiler=goma-clang'],
@@ -96,7 +94,6 @@ B('Linux', 'linux_clobber', 'compile|testers', 'chromium',
 F('linux_clobber', linux().ChromiumFactory(
     clobber=True,
     tests=[
-      'check_deps2git',
       'check_licenses',
       'check_perms',
       'sizes',
@@ -121,7 +118,6 @@ B('Linux x64', 'linux64_clobber', 'compile|testers', 'chromium',
 F('linux64_clobber', linux().ChromiumFactory(
     clobber=True,
     tests=[
-      'check_deps2git',
       'sizes',
     ],
     options=['--compiler=goma', '--', 'all'],

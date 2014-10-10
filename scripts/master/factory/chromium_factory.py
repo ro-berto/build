@@ -277,10 +277,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddCheckLKGRStep()
 
     # Scripted checks to verify various properties of the codebase:
-    if R('check_deps2git'):
-      f.AddDeps2GitStep()
-    if R('check_deps2git_br'):
-      f.AddBuildrunnerDeps2GitStep()
     if R('check_deps'):
       f.AddCheckDepsStep()
     if R('check_deps_br'):
