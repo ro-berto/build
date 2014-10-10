@@ -157,6 +157,10 @@ class IsolateApi(recipe_api.RecipeApi):
     or from calling find_isolated_tests, above, at some point during the run.
     """
     hashes = self.m.properties.get('swarm_hashes', self._isolated_tests)
+    # Be robust in the case where swarm_hashes is an empty string
+    # instead of an empty dictionary, or similar.
+    if not hashes:
+      return {}
     return {
       k.encode('ascii'): v.encode('ascii')
       for k, v in hashes.iteritems()

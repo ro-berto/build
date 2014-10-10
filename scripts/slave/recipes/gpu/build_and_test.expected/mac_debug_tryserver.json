@@ -114,6 +114,86 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]/src/testing/buildbot/trybot_analyze_config.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "read filter exclusion spec",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@path: 'testing/buildbot/trybot_analyze_config.json'@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"chromium\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "diff",
+      "--cached",
+      "--name-only"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "git diff to analyze patch",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/gyp_chromium",
+      "--analyzer",
+      "{\"files\": [\"foo.cc\"], \"targets\": [\"angle_unittests_run\", \"content_gl_tests_run\", \"content_unittests_run\", \"gl_tests_run\", \"gles2_conform_test_run\", \"gpu_unittests_run\", \"media_unittests_run\", \"tab_capture_end2end_tests_run\", \"telemetry_gpu_test_run\"]}",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "GYP_DEFINES": "archive_gpu_tests=1 blink_logging_always_on=1 clang=1 component=shared_library dcheck_always_on=1 disable_glibcxx_debug=1 gomadir='[BUILD]/goma' internal_gles2_conform_tests=1 target_arch=ia32 test_isolation_mode=archive test_isolation_outdir=https://isolateserver.appspot.com use_goma=1"
+    },
+    "name": "analyze",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"All\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"angle_unittests\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"app_list_demo\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"app_list_unittests\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"app_shell\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"chrome_initial\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"content_gl_tests\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"content_unittests\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gl_tests\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gles2_conform_test\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gpu_unittests\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"media_unittests\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"tab_capture_end2end_tests\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"telemetry_gpu_test\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"status\": \"Found dependency\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"targets\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"angle_unittests_run\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"content_gl_tests_run\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"content_unittests_run\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gl_tests_run\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gles2_conform_test_run\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gpu_unittests_run\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"media_unittests_run\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"tab_capture_end2end_tests_run\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"telemetry_gpu_test_run\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[BUILD]/scripts/slave/compile.py",
       "--target",
       "Debug",

@@ -10,6 +10,7 @@
 
 DEPS = [
   'buildbot',
+  'filter',
   'gpu',
   'path',
   'platform',
@@ -62,6 +63,7 @@ def GenTests(api):
       yield (
         api.test('%s_tryserver' % base_name) +
         api.properties.tryserver(build_config=build_config) +
+        api.override_step_data('analyze', api.gpu.analyze_builds_everything) +
         api.platform.name(plat)
       )
 
@@ -78,6 +80,7 @@ def GenTests(api):
     api.properties.tryserver(
         build_config='Release',
         root='src/third_party/WebKit') +
+    api.override_step_data('analyze', api.gpu.analyze_builds_everything) +
     api.platform.name('mac')
   )
 
