@@ -695,8 +695,8 @@ def get_git_hash(revision, branch, sln_dir):
   Note that git will search backwards from origin/master.
   """
   match = "^%s: [^ ]*@%s " % (GIT_SVN_ID_FOOTER_KEY, revision)
-  cmd = ['log', '-E', '--grep', match, '--format=%H', '--max-count=1',
-         'origin/%s' % branch]
+  ref = branch if branch.startswith('refs/') else 'origin/%s' % branch
+  cmd = ['log', '-E', '--grep', match, '--format=%H', '--max-count=1', ref]
   result = git(*cmd, cwd=sln_dir).strip()
   if result:
     return result
