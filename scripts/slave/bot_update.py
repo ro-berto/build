@@ -29,9 +29,6 @@ import os.path as path
 # How many bytes at a time to read from pipes.
 BUF_SIZE = 256
 
-# Set this to true on flag day.
-FLAG_DAY = False
-
 # Define a bunch of directory paths.
 # Relative to the current working directory.
 CURRENT_DIR = path.abspath(os.getcwd())
@@ -283,7 +280,7 @@ HEAD_BUILDERS = {}
 HEAD_BUILDERS.update(internal_data.get('HEAD_BUILDERS', {}))
 
 # These masters work only in Git, meaning for got_revision, always output
-# a git hash rather than a SVN rev. This goes away if flag_day is True.
+# a git hash rather than a SVN rev.
 GIT_MASTERS = []
 GIT_MASTERS += internal_data.get('GIT_MASTERS', [])
 
@@ -549,7 +546,7 @@ def solutions_to_git(input_solutions):
       print 'Warning: %s' % ('path %r not recognized' % parsed_path,)
 
     # Point .DEPS.git is the git version of the DEPS file.
-    if not FLAG_DAY and not buildspec:
+    if not buildspec:
       solution['deps_file'] = '.DEPS.git'
 
     # Strip out deps containing $$V8_REV$$, etc.
@@ -715,13 +712,6 @@ def need_to_run_deps2git(repo_base, deps_file, deps_git_file):
   Returns True if there was a DEPS change after the last .DEPS.git update
   or if DEPS has local modifications.
   """
-  print 'Checking if %s exists' % deps_git_file
-  if not path.isfile(deps_git_file):
-    # .DEPS.git doesn't exist but DEPS does?  Generate one (unless we're past
-    # migration day, in which case we don't need .DEPS.git.
-    print 'it doesn\'t exist!'
-    return not FLAG_DAY
-
   # See if DEPS is dirty
   deps_file_status = git(
       'status', '--porcelain', deps_file, cwd=repo_base).strip()
@@ -819,7 +809,8 @@ def ensure_deps2git(solution, shallow):
   repo_base = path.join(os.getcwd(), solution['name'])
   deps_file = path.join(repo_base, 'DEPS')
   deps_git_file = path.join(repo_base, '.DEPS.git')
-  if not git('ls-files', 'DEPS', cwd=repo_base).strip():
+  if (not git('ls-files', 'DEPS', cwd=repo_base).strip() or
+      not git('ls-files', '.DEPS.git', cwd=repo_base).strip()):
     return
 
   print 'Checking if %s is newer than %s' % (deps_file, deps_git_file)
@@ -1421,9 +1412,6 @@ def parse_args():
                    help='(synonym for --clobber)')
   parse.add_option('-o', '--output_json',
                    help='Output JSON information into a specified file')
-  parse.add_option('--post-flag-day', action='store_true',
-                   help='Behave as if the chromium git migration has already '
-                   'happened')
   parse.add_option('--no_shallow', action='store_true',
                    help='Bypass disk detection and never shallow clone. '
                         'Does not override the --shallow flag')
@@ -1438,10 +1426,6 @@ def parse_args():
 
 
   options, args = parse.parse_args()
-
-  if options.post_flag_day:
-    global FLAG_DAY
-    FLAG_DAY = True
 
   if not options.refs:
     options.refs = []
@@ -1568,8 +1552,8 @@ def checkout(options, git_slns, specs, buildspec, master,
       print '@@@STEP_TEXT@%s PATCH FAILED@@@' % step_text
     raise
 
-  # Revision is an svn revision, unless its a git master or past flag day.
-  use_svn_rev = master not in GIT_MASTERS and not FLAG_DAY
+  # Revision is an svn revision, unless it's a git master.
+  use_svn_rev = master not in GIT_MASTERS
   # Take care of got_revisions outputs.
   revision_mapping = dict(GOT_REVISION_MAPPINGS.get(svn_root, {}))
   if options.revision_mapping:

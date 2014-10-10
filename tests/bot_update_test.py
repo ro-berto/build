@@ -495,7 +495,6 @@ class BotUpdateTest(unittest.TestCase):
     }
     gclient_spec = 'solutions=[%r]' % solution
     self.bu_args.extend([
-        '--post-flag-day',
         '--specs', gclient_spec,
         '--revision', self.template_dict['top_revision_0']])
     result = self.run_bot_update()
@@ -513,7 +512,7 @@ class BotUpdateTest(unittest.TestCase):
     self.assertItemsEqual(expected_files, self.get_files(topdir))
     expected_json = {
         'root': 'top',
-        'properties': {},
+        'properties': {'got_revision': self.template_dict['top_revision_0']},
         'did_run': True,
         'patch_root': None
     }
@@ -552,7 +551,7 @@ class BotUpdateTest(unittest.TestCase):
     self.assertItemsEqual(expected_files, self.get_files(topdir))
     expected_json = {
         'root': 'top',
-        'properties': {},
+        'properties': {'got_revision': self.template_dict['top_revision_1']},
         'did_run': True,
         'patch_root': None
     }
@@ -615,7 +614,7 @@ class BotUpdateTest(unittest.TestCase):
     self.assertItemsEqual(expected_files, self.get_files(topdir))
     expected_json = {
         'root': 'top',
-        'properties': {},
+        'properties': {'got_revision': self.template_dict['top_revision_1']},
         'did_run': True,
         'patch_root': 'top'
     }
