@@ -404,7 +404,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['unittests', 'v8testing'],
+        'tests': ['unittests', 'v8testing', 'mozilla'],
         'testing': {'platform': 'win'},
       },
 ####### Category: Mac
