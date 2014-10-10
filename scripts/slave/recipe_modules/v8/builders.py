@@ -941,6 +941,28 @@ BUILDERS = {
         'tests': ['unittests', 'v8testing'],
         'testing': {'platform': 'linux'},
       },
+      'v8_linux64_asan_rel': {
+        'gclient_apply_config': ['clang'],
+        'chromium_apply_config': ['clang', 'asan'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['unittests', 'v8testing'],
+        'testing': {'platform': 'linux'},
+      },
+      'v8_linux64_tsan_rel': {
+        'gclient_apply_config': ['clang'],
+        'chromium_apply_config': ['clang', 'tsan2'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['unittests', 'v8testing'],
+        'testing': {'platform': 'linux'},
+      },
       'v8_win_rel': {
         'chromium_apply_config': ['msvs2013'],
         'v8_config_kwargs': {
@@ -1012,6 +1034,16 @@ BUILDERS = {
         'tests': ['unittests', 'v8testing'],
         'testing': {'platform': 'mac'},
       },
+      'v8_linux_arm_rel': {
+        'chromium_apply_config': ['simulate_arm'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['unittests', 'v8testing'],
+        'testing': {'platform': 'linux'},
+      },
       'v8_linux_arm_dbg': {
         'chromium_apply_config': ['simulate_arm'],
         'v8_config_kwargs': {
@@ -1030,6 +1062,29 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'tests': ['unittests', 'v8testing'],
+        'testing': {'platform': 'linux'},
+      },
+      'v8_linux_arm64_dbg': {
+        'chromium_apply_config': ['simulate_arm'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['unittests', 'v8testing'],
+        'testing': {'platform': 'linux'},
+      },
+      'v8_android_arm_compile_rel': {
+        'gclient_apply_config': ['android'],
+        'chromium_apply_config': ['android_arm'],
+        'v8_apply_config': ['android_arm'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+          'TARGET_PLATFORM': 'android',
+        },
+        'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
     },
