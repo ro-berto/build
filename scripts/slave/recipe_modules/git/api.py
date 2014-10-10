@@ -137,7 +137,7 @@ class GitApi(recipe_api.RecipeApi):
                            can_fail_build=False)
 
       if rev_parse_step.presentation.status == 'SUCCESS':
-        sha = rev_parse_step.stdout
+        sha = rev_parse_step.stdout.strip()
         rev_parse_step.presentation.properties['got_revision'] = sha
 
     clean_args = list(self.m.itertools.chain(
