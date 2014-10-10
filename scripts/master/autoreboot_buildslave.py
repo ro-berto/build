@@ -7,6 +7,8 @@
 Yeah, we trust our unit tests *that* much.
 """
 
+import os
+
 from buildbot.buildslave import BuildSlave
 
 
@@ -18,4 +20,12 @@ class AutoRebootBuildSlave(BuildSlave):
 
   def buildFinished(self, sb):
     """This is called when a build on this slave is finished."""
+    flag_path = os.path.join(self.parent.master.basedir,
+                             '.enable_perspective_shutdown')
+    if os.path.exists(flag_path):
+      # TODO(nodir): remove check when ready and deploy everywhere
+      # Mark the build slave is to be shut down, so it does not accept jobs.
+      self.perspective_shutdown()
+
+    # Actually shutdown the slave.
     return self.shutdown()
