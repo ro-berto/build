@@ -705,11 +705,13 @@ class RunProcess:
     def doTimeout(self):
         self.timer = None
         msg = "command timed out: %d seconds without output" % self.timeout
+        self.sendStatus({'timeout': True})
         self.kill(msg)
 
     def doMaxTimeout(self):
         self.maxTimer = None
         msg = "command timed out: %d seconds elapsed" % self.maxTime
+        self.sendStatus({'timeout': True})
         self.kill(msg)
 
     def kill(self, msg):

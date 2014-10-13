@@ -272,6 +272,7 @@ class LoggedRemoteCommand(RemoteCommand):
     def __init__(self, *args, **kwargs):
         self.logs = {}
         self.delayedLogs = {}
+        self.wasTimeout = False
         self._closeWhenFinished = {}
         RemoteCommand.__init__(self, *args, **kwargs)
 
@@ -375,6 +376,8 @@ class LoggedRemoteCommand(RemoteCommand):
             self.addHeader("program finished with exit code %d\n" % rc)
         if update.has_key('elapsed'):
             self._remoteElapsed = update['elapsed']
+        if update.has_key('timeout'):
+            self.wasTimeout = self.wasTimeout or update['timeout']
 
         for k in update:
             if k not in ('stdout', 'stderr', 'header', 'rc'):
@@ -1241,6 +1244,8 @@ class LoggingBuildStep(BuildStep):
 
         if self.log_eval_func:
             return self.log_eval_func(cmd, self.step_status)
+        if getattr(cmd, 'wasTimeout', False):
+            return EXCEPTION
         if cmd.rc != 0:
             return FAILURE
         return SUCCESS

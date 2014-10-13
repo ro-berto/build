@@ -80,3 +80,22 @@ index 75d6cc4..6a96b03 100644
 +        # never called. In testing mode, Reboot() returns immediately
 +        # with no effect, and we need to recover.
          self.failed(RuntimeError("SIGKILL failed to kill process"))
+
+diff --git a/third_party/buildbot_slave_8_4/buildslave/runprocess.py b/third_party/buildbot_slave_8_4/buildslave/runprocess.py
+index 6a96b03..46cca0b 100644
+--- a/third_party/buildbot_slave_8_4/buildslave/runprocess.py
++++ b/third_party/buildbot_slave_8_4/buildslave/runprocess.py
+@@ -705,11 +705,13 @@ class RunProcess:
+     def doTimeout(self):
+         self.timer = None
+         msg = "command timed out: %d seconds without output" % self.timeout
++        self.sendStatus({'timeout': True})
+         self.kill(msg)
+ 
+     def doMaxTimeout(self):
+         self.maxTimer = None
+         msg = "command timed out: %d seconds elapsed" % self.maxTime
++        self.sendStatus({'timeout': True})
+         self.kill(msg)
+ 
+     def kill(self, msg):
