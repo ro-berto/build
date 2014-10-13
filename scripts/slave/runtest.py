@@ -1584,6 +1584,9 @@ def _UpdateRunBenchmarkArgs(args):
     None if not a telemetry test, otherwise a
     dict containing the output filename and whether it is a reference build.
   """
+  # Temporarily revert while investigating crbug.com/423034
+  # pylint: disable=W0101
+  return {}
   if not args[0].endswith('run_benchmark'):
     # Not a telemetry run
     return None
