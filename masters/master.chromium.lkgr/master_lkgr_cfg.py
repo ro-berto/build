@@ -318,6 +318,20 @@ F('telemetry_harness_upload',
 
 # The build process for UBSan vptr is described at
 # http://dev.chromium.org/developers/testing/undefinedbehaviorsanitizer
+ubsan_gyp = ('ubsan=1')
+
+B('UBSan Release', 'linux_ubsan_rel', 'compile','chromium_lkgr')
+F('linux_ubsan_rel', linux().ChromiumFactory(
+    clobber=True,
+    target='Release',
+    options=['--compiler=goma-clang', 'chromium_builder_asan'],
+    factory_properties={
+       'cf_archive_build': ActiveMaster.is_production_host,
+       'cf_archive_name': 'ubsan',
+       'gs_bucket': 'gs://chromium-browser-ubsan',
+       'gs_acl': 'public-read',
+       'gclient_env': {'GYP_DEFINES': ubsan_gyp}}))
+
 ubsan_vptr_gyp = ('ubsan_vptr=1')
 
 B('UBSan vptr Release', 'linux_ubsan_vptr_rel', 'compile','chromium_lkgr')
