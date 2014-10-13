@@ -1,6 +1,11 @@
 {% extends "layout.html" %}
 {% from "tree_status.html" import treestatus %}
 
+{% block head -%}
+{{ super() }}
+<link rel="shortcut icon" href="{{ path_to_root }}favicon.ico" />
+{% endblock head %}
+
 {% block header -%}
 {{ super() }}
 <hr/>
