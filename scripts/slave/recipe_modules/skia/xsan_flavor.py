@@ -37,9 +37,10 @@ class XSanFlavorUtils(default_flavor.DefaultFlavorUtils):
     env['LSAN_OPTIONS'] = \
             'print_suppressions=1 suppressions=%s' % lsan_suppressions
     env['TSAN_OPTIONS'] = 'suppressions=%s' % tsan_suppressions
+
     path_to_app = self._skia_api.m.path['checkout'].join(
         'out', self._skia_api.c.configuration, cmd[0])
     new_cmd = [path_to_app]
     new_cmd.extend(cmd[1:])
-    return self._skia_api.m.step(name, new_cmd, **kwargs)
+    return self._skia_api.m.step(name, new_cmd, env=env, **kwargs)
 

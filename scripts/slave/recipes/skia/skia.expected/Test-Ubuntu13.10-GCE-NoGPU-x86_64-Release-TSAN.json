@@ -61,6 +61,11 @@
       "[SLAVE_BUILD]/dm",
       "--nameByHash"
     ],
+    "env": {
+      "ASAN_OPTIONS": "detect_leaks=1",
+      "LSAN_OPTIONS": "print_suppressions=1 suppressions=[SLAVE_BUILD]/skia/tools/lsan.supp",
+      "TSAN_OPTIONS": "suppressions=[SLAVE_BUILD]/skia/tools/tsan.supp"
+    },
     "name": "dm"
   }
 ]
