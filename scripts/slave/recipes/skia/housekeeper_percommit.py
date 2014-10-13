@@ -50,7 +50,7 @@ def GenSteps(api):
                                                'gsutil')
     api.skia.run(
       api.step,
-      'generate and upload pydoc',
+      'generate and upload doxygen',
       cmd=['python', api.skia.resource('generate_and_upload_doxygen.py'),
            gsutil_path],
       cwd=cwd,

@@ -121,6 +121,6 @@
       "[DEPOT_TOOLS]/third_party/gsutil/gsutil"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
-    "name": "generate and upload pydoc"
+    "name": "generate and upload doxygen"
   }
 ]
