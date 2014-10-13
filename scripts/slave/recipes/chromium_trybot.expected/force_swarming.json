@@ -178,7 +178,7 @@
       "-u",
       "[SLAVE_BUILD]/src/build/gyp_chromium",
       "--analyzer",
-      "{\"files\": [\"foo.cc\"], \"targets\": [\"base_unittests\", \"mojo_python_tests\", \"mojo_python_bindings_tests\", \"telemetry_unittests\", \"telemetry_perf_unittests\", \"base_unittests\", \"mojo_python_tests\", \"mojo_python_bindings_tests\", \"telemetry_unittests\", \"telemetry_perf_unittests\", \"base_unittests\", \"mojo_python_tests\", \"mojo_python_bindings_tests\", \"telemetry_unittests\", \"telemetry_perf_unittests\", \"base_unittests_run\", \"chrome\", \"mojo_public_test_interfaces\", \"mojo_python\"]}",
+      "{\"files\": [\"foo.cc\"], \"targets\": [\"base_unittests_run\", \"chrome\", \"mojo_public_test_interfaces\", \"mojo_python\"]}",
       "/path/to/tmp/json"
     ],
     "env": {

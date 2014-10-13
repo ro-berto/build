@@ -955,8 +955,7 @@ def GenSteps(api):
 
     requires_compile, matching_exes, compile_targets = \
         api.chromium_tests.analyze(
-            get_test_names(tests + tests_including_triggered) +
-                all_compile_targets(api, tests + tests_including_triggered),
+            all_compile_targets(api, tests + tests_including_triggered),
             compile_targets,
             'trybot_analyze_config.json')
 

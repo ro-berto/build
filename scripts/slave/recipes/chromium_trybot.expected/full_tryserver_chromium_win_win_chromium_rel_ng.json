@@ -188,7 +188,7 @@
       "-u",
       "[SLAVE_BUILD]\\src\\build\\gyp_chromium",
       "--analyzer",
-      "{\"files\": [\"foo.cc\"], \"targets\": [\"test_installer\", \"mojo_python_tests\", \"telemetry_unittests\", \"telemetry_perf_unittests\", \"nacl_integration\", \"test_installer\", \"mojo_python_tests\", \"telemetry_unittests\", \"telemetry_perf_unittests\", \"nacl_integration\", \"mojo_python_tests\", \"telemetry_unittests\", \"telemetry_perf_unittests\", \"mojo_python_tests\", \"telemetry_unittests\", \"telemetry_perf_unittests\", \"test_installer\", \"mojo_python_tests\", \"telemetry_unittests\", \"telemetry_perf_unittests\", \"nacl_integration\", \"nacl_integration\", \"chrome\", \"mini_installer\"]}",
+      "{\"files\": [\"foo.cc\"], \"targets\": [\"chrome\", \"mini_installer\"]}",
       "/path/to/tmp/json"
     ],
     "env": {

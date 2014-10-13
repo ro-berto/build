@@ -180,7 +180,7 @@
       "-u",
       "[SLAVE_BUILD]/src/build/gyp_chromium",
       "--analyzer",
-      "{\"files\": [\"foo.cc\"], \"targets\": [\"nacl_integration\", \"mojo_python_tests\", \"telemetry_unittests\", \"telemetry_perf_unittests\", \"nacl_integration\", \"mojo_python_tests\", \"telemetry_unittests\", \"telemetry_perf_unittests\", \"nacl_integration\", \"mojo_python_tests\", \"telemetry_unittests\", \"telemetry_perf_unittests\", \"nacl_integration\", \"mojo_python_tests\", \"telemetry_unittests\", \"telemetry_perf_unittests\", \"chrome\"]}",
+      "{\"files\": [\"foo.cc\"], \"targets\": [\"chrome\"]}",
       "/path/to/tmp/json"
     ],
     "env": {
