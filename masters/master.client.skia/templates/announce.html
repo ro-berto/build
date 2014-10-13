@@ -190,11 +190,13 @@
             c.skia_fyi = '';
             c.skia_android = '';
             c.skia_compile = '';
+            c.skia_internal = '';
 
             c.status_skia = '../client.skia';
             c.status_skia_fyi = '../client.skia.fyi'
             c.status_skia_android = '../client.skia.android'
             c.status_skia_compile = '../client.skia.compile'
+            c.status_skia_internal = '../client.skia.internal'
 
             /**
              * Builds a reference for the iframe with boxes.
@@ -222,6 +224,7 @@
             c.bar_skia_fyi = BarUrl('client.skia.fyi');
             c.bar_skia_android = BarUrl('client.skia.android');
             c.bar_skia_compile = BarUrl('client.skia.compile');
+            c.bar_skia_internal = "http://chromegw.corp.google.com/i/client.skia.internal/horizontal_one_box_per_builder";
 
             /**
              * Joins URL and search terms.
@@ -332,6 +335,10 @@
                     tr(HTMLBaseBar(c.status_skia_fyi, c.bar_skia_fyi, c.skia_fyi, 'client.skia.fyi', 'width="100%"')) +
                     tr(HTMLBaseBar(c.status_skia_android, c.bar_skia_android, c.skia_android, 'client.skia.android', 'width="100%"')) +
                     tr(HTMLBaseBar(c.status_skia_compile, c.bar_skia_compile, c.skia_compile, 'client.skia.compile', 'width="100%"'))
+                    // Hack to only show the internal master if we're looking at the internal view.
+                    {% if authz.advertiseAction('forceBuild') %}
+                  + tr(HTMLBaseBar(c.status_skia_internal, c.bar_skia_internal, c.skia_internal, 'client.skia.internal', 'width="100%"'))
+                    {% endif %}
                   )
             )));
 
