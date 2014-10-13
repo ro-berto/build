@@ -486,15 +486,24 @@ class SkiaApi(recipe_api.RecipeApi):
   def test_steps(self):
     """Run all Skia test executables."""
     self._run_once(self.install)
-    self.run_gm()
-    self.run_dm()
-    self.run_render_pdfs()
-    self.run_decoding_tests()
-    # TODO(borenet): Implement these steps.
-    #self.run_render_skps()
+    if not self.c.BUILDER_NAME in (
+        'Test-Ubuntu13.10-GCE-NoGPU-x86_64-Release-TSAN',):
+      self.run_gm()
+    if not self.c.BUILDER_NAME in (
+        'Test-Ubuntu12-ShuttleA-GTX550Ti-x86_64-Debug-ZeroGPUCache',):
+      self.run_dm()
+    if not self.c.BUILDER_NAME in (
+        'Test-Ubuntu13.10-GCE-NoGPU-x86_64-Release-TSAN',
+        'Test-Ubuntu12-ShuttleA-GTX550Ti-x86_64-Debug-ZeroGPUCache'):
+      self.run_render_pdfs()
+      self.run_decoding_tests()
 
   def perf_steps(self):
     """Run Skia benchmarks."""
+    if self.c.BUILDER_NAME == (
+        'Test-Ubuntu12-ShuttleA-GTX550Ti-x86_64-Debug-ZeroGPUCache'):
+      return
+
     self._run_once(self.install)
     self._run_once(self.download_and_copy_skps)
     is_perf = self.c.role == builder_name_schema.BUILDER_ROLE_PERF
