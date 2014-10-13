@@ -68,6 +68,10 @@ def GenSteps(api):
   api.git.checkout(
       libvpx_git_url, dir_path=libvpx_root, recursive=True)
 
+  # The dashboards need a number to assign to this build for ordering purposes.
+  step_result = api.git('number', cwd=libvpx_root, stdout=api.raw_io.output())
+  libvpx_revision_number = step_result.stdout
+
   api.step(
       'configure', [
           CONFIGURE_PATH_REL, '--disable-examples', '--disable-install-docs',
@@ -132,6 +136,7 @@ def GenSteps(api):
   # framesPerSecond: fps
   points = []
   device = BUILDER_TO_DEVICE[api.properties["buildername"]]
+
   #TODO(martiniss) convert loop
   for i in data:
     if i["type"] == "encode_perf_test":
@@ -139,7 +144,7 @@ def GenSteps(api):
       testname = "libvpx/encode/perf_test/fps/" + device + "/"
       testname = testname + i["videoName"] + "_" + str(i["speed"])
       p = api.perf_dashboard.get_skeleton_point(testname,
-          api.properties['buildnumber'], i["framesPerSecond"])
+              libvpx_revision_number, i["framesPerSecond"])
       p['units'] = "fps"
       points.append(p)
 
@@ -147,14 +152,14 @@ def GenSteps(api):
       testname = "libvpx/encode/perf_test/minPsnr/" + device + "/"
       testname = testname + i["videoName"] + "_" + str(i["speed"])
       p = api.perf_dashboard.get_skeleton_point(testname,
-          api.properties['buildnumber'], i["minPsnr"])
+              libvpx_revision_number, i["minPsnr"])
       p['units'] = "dB"
       points.append(p)
     else:
       testname = "libvpx/decode/perf_test/" + device + "/"
       testname = testname + i["videoName"] + "_" + str(i["threadCount"])
       p = api.perf_dashboard.get_skeleton_point(testname,
-          api.properties['buildnumber'], i["framesPerSecond"])
+              libvpx_revision_number, i["framesPerSecond"])
       p['units'] = "fps"
       points.append(p)
 
@@ -170,6 +175,7 @@ def GenTests(api):
         libvpx_git_url='https://chromium.googlesource.com/webm/libvpx',
         slavename='libvpx-bot', buildername='Nexus 5 Builder',
         mastername='client.libvpx', buildnumber='75') +
+    api.step_data('git number', stdout=api.raw_io.output('42')) +
     api.step_data('adb_wrap',
         api.raw_io.output("This is text with json inside normally")) +
     api.step_data('scrape_logs', api.json.output(
