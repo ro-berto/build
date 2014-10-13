@@ -202,6 +202,23 @@
       "--arch",
       "arm",
       "--testname",
+      "benchmarks",
+      "--json-test-results",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "name": "Benchmarks"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/v8/v8testing.py",
+      "--target",
+      "Release",
+      "--arch",
+      "arm",
+      "--testname",
       "optimize_for_size",
       "--no-variants",
       "--shell_flags=\"--optimize-for-size\"",

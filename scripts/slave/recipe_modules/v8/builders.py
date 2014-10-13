@@ -500,7 +500,13 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Arm - builder',
         'build_gs_archive': 'arm_rel_archive',
-        'tests': ['unittests', 'v8testing', 'webkit', 'optimize_for_size'],
+        'tests': [
+          'unittests',
+          'v8testing',
+          'webkit',
+          'benchmarks',
+          'optimize_for_size',
+        ],
         'testing': {'platform': 'linux'},
       },
       'V8 Arm - debug': {
