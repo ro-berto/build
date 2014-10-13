@@ -305,7 +305,7 @@ class SkiaApi(recipe_api.RecipeApi):
     # Compare results to expectations.
     # TODO(borenet): Display a link to the rebaseline server. See
     # LIVE_REBASELINE_SERVER_BASEURL in
-    # https://skia.googlesource.com/buildbot/+/master/slave/skia_slave_scripts/compare_gms.py
+    # https://skia.googlesource.com/buildbot/+/3de60f3003e3/slave/skia_slave_scripts/compare_gms.py
     results_file = host_gm_actual_dir.join(global_constants.GM_ACTUAL_FILENAME)
     compare_script = self.m.path['checkout'].join('gm',
                                                   'display_json_results.py')

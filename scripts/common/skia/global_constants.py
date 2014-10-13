@@ -7,7 +7,7 @@
 
 
 # TODO(borenet): Keep these in sync with those in the skia-buildbot repo:
-# https://skia.googlesource.com/buildbot/+/master/site_config/global_variables.json
+# https://skia.googlesource.com/buildbot/+/3de60f3003e3/site_config/global_variables.json
 
 GM_ACTUAL_FILENAME = 'actual-results.json'
 GM_EXPECTATIONS_FILENAME = 'expected-results.json'
