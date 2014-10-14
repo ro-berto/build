@@ -14,6 +14,8 @@ from . import nacl_flavor
 from . import valgrind_flavor
 from . import xsan_flavor
 
+import re
+
 
 TEST_ACTUAL_SKP_VERSION = '43'
 TEST_EXPECTED_SKP_VERSION = '42'
@@ -123,9 +125,26 @@ class SkiaApi(recipe_api.RecipeApi):
     for target in self.c.build_targets:
       self.flavor.compile(target)
 
+  def summarize_path(self, path):
+    """Shorten path to a summary.
+    >>> summarize_path('foo/bar/baz')
+    .../bar/baz
+    >>> summarize_path('foo/bar')
+    foo/bar
+    """
+    path = str(path)
+    parts = re.split('/|\\\\', path)  # Split on / or \.
+    summary = ['...'] if len(parts) > 2 else []
+    for part in parts[-2:]:
+      if part == self.c.BUILDER_NAME:
+        part = '<builder>'
+      summary.append(part)
+    return '/'.join(summary)
+
   def _readfile(self, filename, *args, **kwargs):
     """Convenience function for reading files."""
-    return self.m.file.read('read %s' % filename, filename, *args, **kwargs)
+    return self.m.file.read('read %s' % self.summarize_path(filename),
+                            filename, *args, **kwargs)
 
   def _writefile(self, filename, contents):
     """Convenience function for writing files."""

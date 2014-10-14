@@ -60,7 +60,7 @@
       "-rf",
       "/usr/local/skiabot/bin"
     ],
-    "name": "rmdir /usr/local/skiabot/bin"
+    "name": "rmdir .../skiabot/bin"
   },
   {
     "cmd": [
@@ -72,7 +72,7 @@
       "-p",
       "/usr/local/skiabot/bin"
     ],
-    "name": "mkdir /usr/local/skiabot/bin"
+    "name": "mkdir .../skiabot/bin"
   },
   {
     "cmd": [
@@ -92,7 +92,7 @@
       "-rf",
       "/usr/local/skiabot/skia_gm_actual"
     ],
-    "name": "rmdir /usr/local/skiabot/skia_gm_actual"
+    "name": "rmdir .../skiabot/skia_gm_actual"
   },
   {
     "cmd": [
@@ -104,7 +104,7 @@
       "-p",
       "/usr/local/skiabot/skia_gm_actual"
     ],
-    "name": "mkdir /usr/local/skiabot/skia_gm_actual"
+    "name": "mkdir .../skiabot/skia_gm_actual"
   },
   {
     "cmd": [
@@ -113,7 +113,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/gm/actual/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes"
     ],
-    "name": "rmtree [SLAVE_BUILD]/gm/actual/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes",
+    "name": "rmtree .../actual/<builder>",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -132,7 +132,7 @@
       "[SLAVE_BUILD]/gm/actual/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes",
       "511"
     ],
-    "name": "makedirs [SLAVE_BUILD]/gm/actual/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes",
+    "name": "makedirs .../actual/<builder>",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -156,7 +156,7 @@
       "-rf",
       "/usr/local/skiabot/skia_gm_expected"
     ],
-    "name": "rmdir /usr/local/skiabot/skia_gm_expected"
+    "name": "rmdir .../skiabot/skia_gm_expected"
   },
   {
     "cmd": [
@@ -168,7 +168,7 @@
       "-p",
       "/usr/local/skiabot/skia_gm_expected"
     ],
-    "name": "mkdir /usr/local/skiabot/skia_gm_expected"
+    "name": "mkdir .../skiabot/skia_gm_expected"
   },
   {
     "cmd": [
@@ -190,7 +190,7 @@
       "-rf",
       "/usr/local/skiabot/skia_gm_expected/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes"
     ],
-    "name": "rmdir /usr/local/skiabot/skia_gm_expected/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes"
+    "name": "rmdir .../skia_gm_expected/<builder>"
   },
   {
     "cmd": [
@@ -202,7 +202,7 @@
       "-p",
       "/usr/local/skiabot/skia_gm_expected/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes"
     ],
-    "name": "mkdir /usr/local/skiabot/skia_gm_expected/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes"
+    "name": "mkdir .../skia_gm_expected/<builder>"
   },
   {
     "cmd": [
@@ -341,7 +341,7 @@
       "[SLAVE_BUILD]/skia/SKP_VERSION",
       "/path/to/tmp/"
     ],
-    "name": "read [SLAVE_BUILD]/skia/SKP_VERSION"
+    "name": "read .../skia/SKP_VERSION"
   },
   {
     "cmd": [
@@ -351,7 +351,7 @@
       "[SLAVE_BUILD]/playback/skps/SKP_VERSION",
       "/path/to/tmp/"
     ],
-    "name": "read [SLAVE_BUILD]/playback/skps/SKP_VERSION"
+    "name": "read .../skps/SKP_VERSION"
   },
   {
     "cmd": [
@@ -360,7 +360,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/playback/skps"
     ],
-    "name": "rmtree [SLAVE_BUILD]/playback/skps",
+    "name": "rmtree .../playback/skps",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -379,7 +379,7 @@
       "[SLAVE_BUILD]/playback/skps",
       "511"
     ],
-    "name": "makedirs [SLAVE_BUILD]/playback/skps",
+    "name": "makedirs .../playback/skps",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -427,7 +427,7 @@
       "-rf",
       "/usr/local/skiabot/skia_skp/skps"
     ],
-    "name": "rmdir /usr/local/skiabot/skia_skp/skps"
+    "name": "rmdir .../skia_skp/skps"
   },
   {
     "cmd": [
@@ -439,7 +439,7 @@
       "-p",
       "/usr/local/skiabot/skia_skp/skps"
     ],
-    "name": "mkdir /usr/local/skiabot/skia_skp/skps"
+    "name": "mkdir .../skia_skp/skps"
   },
   {
     "cmd": [
@@ -583,7 +583,7 @@
       "-rf",
       "/usr/local/skiabot/skia_skimage_out/images"
     ],
-    "name": "rmdir /usr/local/skiabot/skia_skimage_out/images"
+    "name": "rmdir .../skia_skimage_out/images"
   },
   {
     "cmd": [
@@ -595,7 +595,7 @@
       "-p",
       "/usr/local/skiabot/skia_skimage_out/images"
     ],
-    "name": "mkdir /usr/local/skiabot/skia_skimage_out/images"
+    "name": "mkdir .../skia_skimage_out/images"
   },
   {
     "cmd": [
@@ -607,7 +607,7 @@
       "-rf",
       "/usr/local/skiabot/skia_skimage_out/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes"
     ],
-    "name": "rmdir /usr/local/skiabot/skia_skimage_out/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes"
+    "name": "rmdir .../skia_skimage_out/<builder>"
   },
   {
     "cmd": [
@@ -619,7 +619,7 @@
       "-p",
       "/usr/local/skiabot/skia_skimage_out/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes"
     ],
-    "name": "mkdir /usr/local/skiabot/skia_skimage_out/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes"
+    "name": "mkdir .../skia_skimage_out/<builder>"
   },
   {
     "cmd": [
@@ -631,7 +631,7 @@
       "-rf",
       "/usr/local/skiabot/skia_skimage_expected/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes"
     ],
-    "name": "rmdir /usr/local/skiabot/skia_skimage_expected/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes"
+    "name": "rmdir .../skia_skimage_expected/<builder>"
   },
   {
     "cmd": [
@@ -643,7 +643,7 @@
       "-p",
       "/usr/local/skiabot/skia_skimage_expected/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes"
     ],
-    "name": "mkdir /usr/local/skiabot/skia_skimage_expected/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes"
+    "name": "mkdir .../skia_skimage_expected/<builder>"
   },
   {
     "cmd": [

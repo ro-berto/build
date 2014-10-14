@@ -69,12 +69,12 @@ class SSHFlavorUtils(default_flavor.DefaultFlavorUtils):
 
   def _remove_device_dir(self, path):
     """Remove the directory on the device."""
-    self.ssh(name='rmdir %s' % path,
+    self.ssh(name='rmdir %s' % self._skia_api.summarize_path(path),
              cmd=['rm', '-rf', path])
 
   def _create_device_dir(self, path):
     """Create the directory on the device."""
-    self.ssh(name='mkdir %s' % path,
+    self.ssh(name='mkdir %s' % self._skia_api.summarize_path(path),
              cmd=['mkdir', '-p', path])
 
   def create_clean_device_dir(self, path):

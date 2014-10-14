@@ -149,7 +149,7 @@
       "[SLAVE_BUILD]/skia/SKP_VERSION",
       "/path/to/tmp/"
     ],
-    "name": "read [SLAVE_BUILD]/skia/SKP_VERSION"
+    "name": "read .../skia/SKP_VERSION"
   },
   {
     "cmd": [
@@ -159,7 +159,7 @@
       "[SLAVE_BUILD]/playback/skps/SKP_VERSION",
       "/path/to/tmp/"
     ],
-    "name": "read [SLAVE_BUILD]/playback/skps/SKP_VERSION"
+    "name": "read .../skps/SKP_VERSION"
   },
   {
     "cmd": [
@@ -168,7 +168,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/playback/skps"
     ],
-    "name": "rmtree [SLAVE_BUILD]/playback/skps",
+    "name": "rmtree .../playback/skps",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -187,7 +187,7 @@
       "[SLAVE_BUILD]/playback/skps",
       "511"
     ],
-    "name": "makedirs [SLAVE_BUILD]/playback/skps",
+    "name": "makedirs .../playback/skps",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -235,7 +235,7 @@
       "-r",
       "/storage/emulated/legacy/skiabot/skia_skp/skps"
     ],
-    "name": "rmdir /storage/emulated/legacy/skiabot/skia_skp/skps"
+    "name": "rmdir .../skia_skp/skps"
   },
   {
     "cmd": [
@@ -266,7 +266,7 @@
       "-p",
       "/storage/emulated/legacy/skiabot/skia_skp/skps"
     ],
-    "name": "mkdir /storage/emulated/legacy/skiabot/skia_skp/skps"
+    "name": "mkdir .../skia_skp/skps"
   },
   {
     "cmd": [
@@ -291,7 +291,7 @@
       "-r",
       "/storage/emulated/legacy/skiabot/skia_perf"
     ],
-    "name": "rmdir /storage/emulated/legacy/skiabot/skia_perf"
+    "name": "rmdir .../skiabot/skia_perf"
   },
   {
     "cmd": [
@@ -322,7 +322,7 @@
       "-p",
       "/storage/emulated/legacy/skiabot/skia_perf"
     ],
-    "name": "mkdir /storage/emulated/legacy/skiabot/skia_perf"
+    "name": "mkdir .../skiabot/skia_perf"
   },
   {
     "cmd": [

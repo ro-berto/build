@@ -74,7 +74,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]\\gm\\actual"
     ],
-    "name": "rmtree [SLAVE_BUILD]\\gm\\actual",
+    "name": "rmtree .../gm/actual",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -93,7 +93,7 @@
       "[SLAVE_BUILD]\\gm\\actual",
       "511"
     ],
-    "name": "makedirs [SLAVE_BUILD]\\gm\\actual",
+    "name": "makedirs .../gm/actual",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -114,7 +114,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]\\gm\\actual\\Test-Win7-ShuttleA-HD2000-x86-Release"
     ],
-    "name": "rmtree [SLAVE_BUILD]\\gm\\actual\\Test-Win7-ShuttleA-HD2000-x86-Release",
+    "name": "rmtree .../actual/<builder>",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -133,7 +133,7 @@
       "[SLAVE_BUILD]\\gm\\actual\\Test-Win7-ShuttleA-HD2000-x86-Release",
       "511"
     ],
-    "name": "makedirs [SLAVE_BUILD]\\gm\\actual\\Test-Win7-ShuttleA-HD2000-x86-Release",
+    "name": "makedirs .../actual/<builder>",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -224,7 +224,7 @@
       "[SLAVE_BUILD]\\skia\\SKP_VERSION",
       "/path/to/tmp/"
     ],
-    "name": "read [SLAVE_BUILD]\\skia\\SKP_VERSION"
+    "name": "read .../skia/SKP_VERSION"
   },
   {
     "cmd": [
@@ -234,7 +234,7 @@
       "[SLAVE_BUILD]\\playback\\skps\\SKP_VERSION",
       "/path/to/tmp/"
     ],
-    "name": "read [SLAVE_BUILD]\\playback\\skps\\SKP_VERSION"
+    "name": "read .../skps/SKP_VERSION"
   },
   {
     "cmd": [
@@ -243,7 +243,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]\\playback\\skps"
     ],
-    "name": "rmtree [SLAVE_BUILD]\\playback\\skps",
+    "name": "rmtree .../playback/skps",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -262,7 +262,7 @@
       "[SLAVE_BUILD]\\playback\\skps",
       "511"
     ],
-    "name": "makedirs [SLAVE_BUILD]\\playback\\skps",
+    "name": "makedirs .../playback/skps",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -315,7 +315,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]\\skimage_in"
     ],
-    "name": "rmtree [SLAVE_BUILD]\\skimage_in",
+    "name": "rmtree [SLAVE_BUILD]/skimage_in",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -334,7 +334,7 @@
       "[SLAVE_BUILD]\\skimage_in",
       "511"
     ],
-    "name": "makedirs [SLAVE_BUILD]\\skimage_in",
+    "name": "makedirs [SLAVE_BUILD]/skimage_in",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -369,7 +369,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]\\skimage_out"
     ],
-    "name": "rmtree [SLAVE_BUILD]\\skimage_out",
+    "name": "rmtree [SLAVE_BUILD]/skimage_out",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -388,7 +388,7 @@
       "[SLAVE_BUILD]\\skimage_out",
       "511"
     ],
-    "name": "makedirs [SLAVE_BUILD]\\skimage_out",
+    "name": "makedirs [SLAVE_BUILD]/skimage_out",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -409,7 +409,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]\\skimage_out\\images"
     ],
-    "name": "rmtree [SLAVE_BUILD]\\skimage_out\\images",
+    "name": "rmtree .../skimage_out/images",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -428,7 +428,7 @@
       "[SLAVE_BUILD]\\skimage_out\\images",
       "511"
     ],
-    "name": "makedirs [SLAVE_BUILD]\\skimage_out\\images",
+    "name": "makedirs .../skimage_out/images",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -449,7 +449,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]\\skimage_out\\Test-Win7-ShuttleA-HD2000-x86-Release"
     ],
-    "name": "rmtree [SLAVE_BUILD]\\skimage_out\\Test-Win7-ShuttleA-HD2000-x86-Release",
+    "name": "rmtree .../skimage_out/<builder>",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -468,7 +468,7 @@
       "[SLAVE_BUILD]\\skimage_out\\Test-Win7-ShuttleA-HD2000-x86-Release",
       "511"
     ],
-    "name": "makedirs [SLAVE_BUILD]\\skimage_out\\Test-Win7-ShuttleA-HD2000-x86-Release",
+    "name": "makedirs .../skimage_out/<builder>",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",

@@ -111,7 +111,7 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
 
   def _remove_device_dir(self, path):
     """Remove the directory on the device."""
-    self._skia_api.m.adb(name='rmdir %s' % path,
+    self._skia_api.m.adb(name='rmdir %s' % self._skia_api.summarize_path(path),
                          serial=self.serial,
                          cmd=['shell', 'rm', '-r', path])
     # Sometimes the removal fails silently. Verify that it worked.
@@ -120,7 +120,7 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
 
   def _create_device_dir(self, path):
     """Create the directory on the device."""
-    self._skia_api.m.adb(name='mkdir %s' % path,
+    self._skia_api.m.adb(name='mkdir %s' % self._skia_api.summarize_path(path),
                          serial=self.serial,
                          cmd=['shell', 'mkdir', '-p', path])
 

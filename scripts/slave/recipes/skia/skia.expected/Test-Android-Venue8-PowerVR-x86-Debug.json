@@ -151,7 +151,7 @@
       "-r",
       "/storage/emulated/legacy/skiabot/skia_gm_actual"
     ],
-    "name": "rmdir /storage/emulated/legacy/skiabot/skia_gm_actual"
+    "name": "rmdir .../skiabot/skia_gm_actual"
   },
   {
     "cmd": [
@@ -182,7 +182,7 @@
       "-p",
       "/storage/emulated/legacy/skiabot/skia_gm_actual"
     ],
-    "name": "mkdir /storage/emulated/legacy/skiabot/skia_gm_actual"
+    "name": "mkdir .../skiabot/skia_gm_actual"
   },
   {
     "cmd": [
@@ -191,7 +191,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/gm/actual/Test-Android-Venue8-PowerVR-x86-Debug"
     ],
-    "name": "rmtree [SLAVE_BUILD]/gm/actual/Test-Android-Venue8-PowerVR-x86-Debug",
+    "name": "rmtree .../actual/<builder>",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -210,7 +210,7 @@
       "[SLAVE_BUILD]/gm/actual/Test-Android-Venue8-PowerVR-x86-Debug",
       "511"
     ],
-    "name": "makedirs [SLAVE_BUILD]/gm/actual/Test-Android-Venue8-PowerVR-x86-Debug",
+    "name": "makedirs .../actual/<builder>",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -234,7 +234,7 @@
       "-r",
       "/storage/emulated/legacy/skiabot/skia_gm_expected"
     ],
-    "name": "rmdir /storage/emulated/legacy/skiabot/skia_gm_expected"
+    "name": "rmdir .../skiabot/skia_gm_expected"
   },
   {
     "cmd": [
@@ -265,7 +265,7 @@
       "-p",
       "/storage/emulated/legacy/skiabot/skia_gm_expected"
     ],
-    "name": "mkdir /storage/emulated/legacy/skiabot/skia_gm_expected"
+    "name": "mkdir .../skiabot/skia_gm_expected"
   },
   {
     "cmd": [
@@ -288,7 +288,7 @@
       "-r",
       "/storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-Venue8-PowerVR-x86-Debug"
     ],
-    "name": "rmdir /storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-Venue8-PowerVR-x86-Debug"
+    "name": "rmdir .../skia_gm_expected/<builder>"
   },
   {
     "cmd": [
@@ -319,7 +319,7 @@
       "-p",
       "/storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-Venue8-PowerVR-x86-Debug"
     ],
-    "name": "mkdir /storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-Venue8-PowerVR-x86-Debug"
+    "name": "mkdir .../skia_gm_expected/<builder>"
   },
   {
     "cmd": [
@@ -467,7 +467,7 @@
       "[SLAVE_BUILD]/skia/SKP_VERSION",
       "/path/to/tmp/"
     ],
-    "name": "read [SLAVE_BUILD]/skia/SKP_VERSION"
+    "name": "read .../skia/SKP_VERSION"
   },
   {
     "cmd": [
@@ -477,7 +477,7 @@
       "[SLAVE_BUILD]/playback/skps/SKP_VERSION",
       "/path/to/tmp/"
     ],
-    "name": "read [SLAVE_BUILD]/playback/skps/SKP_VERSION"
+    "name": "read .../skps/SKP_VERSION"
   },
   {
     "cmd": [
@@ -486,7 +486,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/playback/skps"
     ],
-    "name": "rmtree [SLAVE_BUILD]/playback/skps",
+    "name": "rmtree .../playback/skps",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -505,7 +505,7 @@
       "[SLAVE_BUILD]/playback/skps",
       "511"
     ],
-    "name": "makedirs [SLAVE_BUILD]/playback/skps",
+    "name": "makedirs .../playback/skps",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -553,7 +553,7 @@
       "-r",
       "/storage/emulated/legacy/skiabot/skia_skp/skps"
     ],
-    "name": "rmdir /storage/emulated/legacy/skiabot/skia_skp/skps"
+    "name": "rmdir .../skia_skp/skps"
   },
   {
     "cmd": [
@@ -584,7 +584,7 @@
       "-p",
       "/storage/emulated/legacy/skiabot/skia_skp/skps"
     ],
-    "name": "mkdir /storage/emulated/legacy/skiabot/skia_skp/skps"
+    "name": "mkdir .../skia_skp/skps"
   },
   {
     "cmd": [
@@ -732,7 +732,7 @@
       "-r",
       "/storage/emulated/legacy/skiabot/skia_skimage_out/images"
     ],
-    "name": "rmdir /storage/emulated/legacy/skiabot/skia_skimage_out/images"
+    "name": "rmdir .../skia_skimage_out/images"
   },
   {
     "cmd": [
@@ -763,7 +763,7 @@
       "-p",
       "/storage/emulated/legacy/skiabot/skia_skimage_out/images"
     ],
-    "name": "mkdir /storage/emulated/legacy/skiabot/skia_skimage_out/images"
+    "name": "mkdir .../skia_skimage_out/images"
   },
   {
     "cmd": [
@@ -775,7 +775,7 @@
       "-r",
       "/storage/emulated/legacy/skiabot/skia_skimage_out/Test-Android-Venue8-PowerVR-x86-Debug"
     ],
-    "name": "rmdir /storage/emulated/legacy/skiabot/skia_skimage_out/Test-Android-Venue8-PowerVR-x86-Debug"
+    "name": "rmdir .../skia_skimage_out/<builder>"
   },
   {
     "cmd": [
@@ -806,7 +806,7 @@
       "-p",
       "/storage/emulated/legacy/skiabot/skia_skimage_out/Test-Android-Venue8-PowerVR-x86-Debug"
     ],
-    "name": "mkdir /storage/emulated/legacy/skiabot/skia_skimage_out/Test-Android-Venue8-PowerVR-x86-Debug"
+    "name": "mkdir .../skia_skimage_out/<builder>"
   },
   {
     "cmd": [
@@ -818,7 +818,7 @@
       "-r",
       "/storage/emulated/legacy/skiabot/skia_skimage_expected/Test-Android-Venue8-PowerVR-x86-Debug"
     ],
-    "name": "rmdir /storage/emulated/legacy/skiabot/skia_skimage_expected/Test-Android-Venue8-PowerVR-x86-Debug"
+    "name": "rmdir .../skia_skimage_expected/<builder>"
   },
   {
     "cmd": [
@@ -849,7 +849,7 @@
       "-p",
       "/storage/emulated/legacy/skiabot/skia_skimage_expected/Test-Android-Venue8-PowerVR-x86-Debug"
     ],
-    "name": "mkdir /storage/emulated/legacy/skiabot/skia_skimage_expected/Test-Android-Venue8-PowerVR-x86-Debug"
+    "name": "mkdir .../skia_skimage_expected/<builder>"
   },
   {
     "cmd": [
