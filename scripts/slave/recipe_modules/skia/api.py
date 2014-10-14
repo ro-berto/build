@@ -361,8 +361,6 @@ class SkiaApi(recipe_api.RecipeApi):
       match.append('~Threaded')
     if 'Xoom' in self.c.BUILDER_NAME:  # skia:1699
       match.append('~WritePixels')
-    if 'Venue8' in self.c.BUILDER_NAME:  # skia:2922
-      match.append('~imagealphathreshold')
 
     # Though their GPUs are interesting, these don't test anything on
     # the CPU that other ARMv7+NEON bots don't test faster (N5).

@@ -450,9 +450,7 @@
       "/storage/emulated/legacy/skiabot/skia_skp/skps",
       "--writePath",
       "/storage/emulated/legacy/skiabot/skia_dm",
-      "--nameByHash",
-      "--match",
-      "~imagealphathreshold"
+      "--nameByHash"
     ],
     "env": {
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
