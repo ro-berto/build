@@ -32,7 +32,7 @@ def GenSteps(api):
   cronet.init_and_sync(recipe_config, kwargs, gyp_defs)
   cronet.build()
   cronet.upload_package(kwargs['BUILD_CONFIG'])
-  cronet.run_tests()
+  cronet.run_tests(kwargs['BUILD_CONFIG'])
 
 def GenTests(api):
   bot_id = 'local_test'

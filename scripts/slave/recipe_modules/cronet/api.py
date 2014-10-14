@@ -50,25 +50,30 @@ class CronetApi(recipe_api.RecipeApi):
         link_name='Cronet package')
 
 
-  def run_tests(self):
+  def run_tests(self, build_config):
     droid = self.m.chromium_android
     checkout_path = self.m.path['checkout']
     droid.common_tests_setup_steps()
     install_cmd = checkout_path.join('build',
                                      'android',
                                      'adb_install_apk.py')
-    self.m.python('install CronetSample', install_cmd,
-        args = ['--apk', 'CronetSample.apk'])
     test_cmd = checkout_path.join('build',
                                   'android',
                                   'test_runner.py')
+    build_arg = []
+    if build_config == "Release":
+        build_arg = ['--release']
+    self.m.python('install CronetSample', install_cmd,
+        args = build_arg + ['--apk', 'CronetSample.apk'])
     self.m.python('test CronetSample', test_cmd,
-        args = ['instrumentation', '--test-apk', 'CronetSampleTest'])
+        args = ['instrumentation'] +
+               build_arg +
+               ['--test-apk', 'CronetSampleTest'])
     self.m.python('install CronetTest', install_cmd,
-        args = ['--apk', 'CronetTest.apk'])
+        args = build_arg + ['--apk', 'CronetTest.apk'])
     self.m.python('test CronetTest', test_cmd,
-        args = ['instrumentation', '--test-apk', 'CronetTestInstrumentation'])
-
+        args = ['instrumentation'] +
+               build_arg +
+               ['--test-apk','CronetTestInstrumentation'])
     droid.common_tests_final_steps()
-
 

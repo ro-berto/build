@@ -233,6 +233,7 @@
       "python",
       "-u",
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "--release",
       "--apk",
       "CronetSample.apk"
     ],
@@ -244,6 +245,7 @@
       "-u",
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "instrumentation",
+      "--release",
       "--test-apk",
       "CronetSampleTest"
     ],
@@ -254,6 +256,7 @@
       "python",
       "-u",
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "--release",
       "--apk",
       "CronetTest.apk"
     ],
@@ -265,6 +268,7 @@
       "-u",
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "instrumentation",
+      "--release",
       "--test-apk",
       "CronetTestInstrumentation"
     ],

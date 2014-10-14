@@ -91,7 +91,7 @@ def GenSteps(api):
     api.cronet.upload_package(kwargs['BUILD_CONFIG'])
 
   if builder_config['run_tests']:
-    api.cronet.run_tests()
+    api.cronet.run_tests(kwargs['BUILD_CONFIG'])
 
 def _sanitize_nonalpha(text):
   return ''.join(c if c.isalnum() else '_' for c in text.lower())
