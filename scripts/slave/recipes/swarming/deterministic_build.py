@@ -12,8 +12,10 @@ DEPS = [
   'chromium',
   'gclient',
   'json',
+  'path',
   'platform',
   'properties',
+  'python',
   'step',
 ]
 
@@ -28,6 +30,8 @@ DETERMINISTIC_BUILDERS = {
       'TARGET_PLATFORM': 'android',
     },
     'platform': 'linux',
+    'platform_prefix': 'lib',
+    'platform_ext': '.so',
   },
   'IOS deterministic build': {
     'chromium_apply_config': ['ninja'],
@@ -39,6 +43,7 @@ DETERMINISTIC_BUILDERS = {
     },
     'gclient_config': 'ios',
     'platform': 'mac',
+    'platform_ext': '.app',
   },
   'Linux deterministic build': {
     'chromium_config': 'chromium_no_goma',
@@ -54,12 +59,38 @@ DETERMINISTIC_BUILDERS = {
     'chromium_config': 'chromium_no_goma',
     'gclient_config': 'chromium',
     'platform': 'win',
+    'platform_ext': '.exe',
   },
+  'Test deterministic build': {
+    'chromium_config': 'chromium_no_goma',
+    'gclient_config': 'chromium',
+    'platform': 'linux',
+    'test_build': True,
+  }
 }
+
+def MoveBuildDirectory(api, src_dir, dst_dir):
+  api.python.inline('Move %s to %s' % (src_dir, dst_dir),
+                    """
+                    import os
+                    import shutil
+                    import sys
+                    if os.path.exists(sys.argv[2]):
+                      shutil.rmtree(sys.argv[2])
+                    shutil.move(sys.argv[1], sys.argv[2])""",
+                    args=[src_dir, dst_dir])
+
 
 def GenSteps(api):
   buildername = api.properties['buildername']
   recipe_config = DETERMINISTIC_BUILDERS[buildername]
+
+  target_name = 'base_unittests'
+  # Generate the name of the build artifact.
+  # TODO(sebmarchand): This is ugly, find a better way to retrieve the
+  # artifact's name.
+  target_filename = '%s%s%s' % (recipe_config.get('platform_prefix', ''),
+      target_name, recipe_config.get('platform_ext', ''))
 
   api.chromium.set_config(recipe_config['chromium_config'],
                           **recipe_config.get('chromium_config_kwargs',
@@ -74,9 +105,39 @@ def GenSteps(api):
 
   # Checkout chromium.
   api.bot_update.ensure_checkout(force=True)
-  api.chromium.runhooks()
 
-  api.chromium.compile(targets=['base_unittests'], force_clobber=True)
+  # Do a first build and move the build artifact to the temp directory.
+  api.chromium.runhooks()
+  api.chromium.compile(targets=[target_name], force_clobber=True,
+                       name='First build')
+  MoveBuildDirectory(api, str(api.chromium.output_dir),
+                     str(api.chromium.output_dir).rstrip('\\\/') + '.1')
+
+  # Do the second build and move the build artifact to the temp directory.
+  api.chromium.runhooks()
+  api.chromium.compile(targets=[target_name], force_clobber=True,
+                       name='Second build')
+  MoveBuildDirectory(api, str(api.chromium.output_dir),
+                     str(api.chromium.output_dir).rstrip('\\\/') + '.2')
+
+  # Compare the artifacts from the 2 builds, raise an exception if they're
+  # not equals.
+  # TODO(sebmarchand): Do a smarter comparison.
+  api.python.inline(
+      'Compare the binaries',
+       """
+       import filecmp
+       import sys
+       print 'Comparing %s to %s' % (sys.argv[1], sys.argv[2])
+       if not filecmp.cmp(sys.argv[1], sys.argv[2]):
+         print('They are not equal')
+         sys.exit(1)
+       print('They are equal')
+       """,
+       args=[api.path.join(str(api.chromium.output_dir).rstrip('\\\/') + '.1',
+                           target_filename),
+             api.path.join(str(api.chromium.output_dir).rstrip('\\\/') + '.2',
+                           target_filename)])
 
 
 def _sanitize_nonalpha(text):

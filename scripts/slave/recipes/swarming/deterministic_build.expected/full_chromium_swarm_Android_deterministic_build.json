@@ -104,6 +104,88 @@
       "--",
       "base_unittests"
     ],
-    "name": "compile"
+    "name": "First build"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport os\nimport shutil\nimport sys\nif os.path.exists(sys.argv[2]):\n  shutil.rmtree(sys.argv[2])\nshutil.move(sys.argv[1], sys.argv[2])",
+      "[SLAVE_BUILD]/src/out/Release",
+      "[SLAVE_BUILD]/src/out/Release.1"
+    ],
+    "name": "Move [SLAVE_BUILD]/src/out/Release to [SLAVE_BUILD]/src/out/Release.1",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os@@@",
+      "@@@STEP_LOG_LINE@python.inline@import shutil@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[2]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  shutil.rmtree(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@shutil.move(sys.argv[1], sys.argv[2])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/compile.py",
+      "--target",
+      "Release",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
+      "--build-tool",
+      "ninja",
+      "--compiler",
+      "goma",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "--clobber",
+      "--",
+      "base_unittests"
+    ],
+    "name": "Second build"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport os\nimport shutil\nimport sys\nif os.path.exists(sys.argv[2]):\n  shutil.rmtree(sys.argv[2])\nshutil.move(sys.argv[1], sys.argv[2])",
+      "[SLAVE_BUILD]/src/out/Release",
+      "[SLAVE_BUILD]/src/out/Release.2"
+    ],
+    "name": "Move [SLAVE_BUILD]/src/out/Release to [SLAVE_BUILD]/src/out/Release.2",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os@@@",
+      "@@@STEP_LOG_LINE@python.inline@import shutil@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[2]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  shutil.rmtree(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@shutil.move(sys.argv[1], sys.argv[2])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport filecmp\nimport sys\nprint 'Comparing %s to %s' % (sys.argv[1], sys.argv[2])\nif not filecmp.cmp(sys.argv[1], sys.argv[2]):\n  print('They are not equal')\n  sys.exit(1)\nprint('They are equal')\n",
+      "[SLAVE_BUILD]/src/out/Release.1/libbase_unittests.so",
+      "[SLAVE_BUILD]/src/out/Release.2/libbase_unittests.so"
+    ],
+    "name": "Compare the binaries",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import filecmp@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@print 'Comparing %s to %s' % (sys.argv[1], sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not filecmp.cmp(sys.argv[1], sys.argv[2]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  print('They are not equal')@@@",
+      "@@@STEP_LOG_LINE@python.inline@  sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@print('They are equal')@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
   }
 ]

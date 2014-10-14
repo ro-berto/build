@@ -7,7 +7,7 @@
       "--master",
       "chromium.swarm",
       "--builder",
-      "Linux deterministic build",
+      "Test deterministic build",
       "--slave",
       "TestSlavename",
       "--spec",
