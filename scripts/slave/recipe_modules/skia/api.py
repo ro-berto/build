@@ -263,8 +263,6 @@ class SkiaApi(recipe_api.RecipeApi):
       # The Xoom's GPU will crash on some tests if we don't use this flag.
       # http://code.google.com/p/skia/issues/detail?id=1434
       args.append('--resetGpuContext')
-    if 'Venue8' in self.c.BUILDER_NAME:  # skia:2922
-      args.extend(['--match', '~imagealphathreshold'])
 
     if 'Mac' in self.c.BUILDER_NAME:
       # msaa16 is flaky on Macs (driver bug?) so we skip the test for now
