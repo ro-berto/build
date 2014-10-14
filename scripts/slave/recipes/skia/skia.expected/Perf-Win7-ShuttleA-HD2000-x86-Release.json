@@ -158,7 +158,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]\\perfdata\\Perf-Win7-ShuttleA-HD2000-x86-Release\\data"
     ],
-    "name": "rmtree .../<builder>/data",
+    "name": "rmtree .../BUILDER/data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -177,7 +177,7 @@
       "[SLAVE_BUILD]\\perfdata\\Perf-Win7-ShuttleA-HD2000-x86-Release\\data",
       "511"
     ],
-    "name": "makedirs .../<builder>/data",
+    "name": "makedirs .../BUILDER/data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",

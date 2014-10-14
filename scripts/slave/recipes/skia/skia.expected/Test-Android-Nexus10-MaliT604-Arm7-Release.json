@@ -191,7 +191,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/gm/actual/Test-Android-Nexus10-MaliT604-Arm7-Release"
     ],
-    "name": "rmtree .../actual/<builder>",
+    "name": "rmtree .../actual/BUILDER",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -210,7 +210,7 @@
       "[SLAVE_BUILD]/gm/actual/Test-Android-Nexus10-MaliT604-Arm7-Release",
       "511"
     ],
-    "name": "makedirs .../actual/<builder>",
+    "name": "makedirs .../actual/BUILDER",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -288,7 +288,7 @@
       "-r",
       "/storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-Nexus10-MaliT604-Arm7-Release"
     ],
-    "name": "rmdir .../skia_gm_expected/<builder>"
+    "name": "rmdir .../skia_gm_expected/BUILDER"
   },
   {
     "cmd": [
@@ -319,7 +319,7 @@
       "-p",
       "/storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-Nexus10-MaliT604-Arm7-Release"
     ],
-    "name": "mkdir .../skia_gm_expected/<builder>"
+    "name": "mkdir .../skia_gm_expected/BUILDER"
   },
   {
     "cmd": [
@@ -778,7 +778,7 @@
       "-r",
       "/storage/emulated/legacy/skiabot/skia_skimage_out/Test-Android-Nexus10-MaliT604-Arm7-Release"
     ],
-    "name": "rmdir .../skia_skimage_out/<builder>"
+    "name": "rmdir .../skia_skimage_out/BUILDER"
   },
   {
     "cmd": [
@@ -809,7 +809,7 @@
       "-p",
       "/storage/emulated/legacy/skiabot/skia_skimage_out/Test-Android-Nexus10-MaliT604-Arm7-Release"
     ],
-    "name": "mkdir .../skia_skimage_out/<builder>"
+    "name": "mkdir .../skia_skimage_out/BUILDER"
   },
   {
     "cmd": [
@@ -821,7 +821,7 @@
       "-r",
       "/storage/emulated/legacy/skiabot/skia_skimage_expected/Test-Android-Nexus10-MaliT604-Arm7-Release"
     ],
-    "name": "rmdir .../skia_skimage_expected/<builder>"
+    "name": "rmdir .../skia_skimage_expected/BUILDER"
   },
   {
     "cmd": [
@@ -852,7 +852,7 @@
       "-p",
       "/storage/emulated/legacy/skiabot/skia_skimage_expected/Test-Android-Nexus10-MaliT604-Arm7-Release"
     ],
-    "name": "mkdir .../skia_skimage_expected/<builder>"
+    "name": "mkdir .../skia_skimage_expected/BUILDER"
   },
   {
     "cmd": [

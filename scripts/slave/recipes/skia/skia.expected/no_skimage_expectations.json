@@ -113,7 +113,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/gm/actual/Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes"
     ],
-    "name": "rmtree .../actual/<builder>",
+    "name": "rmtree .../actual/BUILDER",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -132,7 +132,7 @@
       "[SLAVE_BUILD]/gm/actual/Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes",
       "511"
     ],
-    "name": "makedirs .../actual/<builder>",
+    "name": "makedirs .../actual/BUILDER",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -427,7 +427,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/skimage_out/Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes"
     ],
-    "name": "rmtree .../skimage_out/<builder>",
+    "name": "rmtree .../skimage_out/BUILDER",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -446,7 +446,7 @@
       "[SLAVE_BUILD]/skimage_out/Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes",
       "511"
     ],
-    "name": "makedirs .../skimage_out/<builder>",
+    "name": "makedirs .../skimage_out/BUILDER",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",

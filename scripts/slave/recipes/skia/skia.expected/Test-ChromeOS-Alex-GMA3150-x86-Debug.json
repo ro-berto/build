@@ -113,7 +113,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/gm/actual/Test-ChromeOS-Alex-GMA3150-x86-Debug"
     ],
-    "name": "rmtree .../actual/<builder>",
+    "name": "rmtree .../actual/BUILDER",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -132,7 +132,7 @@
       "[SLAVE_BUILD]/gm/actual/Test-ChromeOS-Alex-GMA3150-x86-Debug",
       "511"
     ],
-    "name": "makedirs .../actual/<builder>",
+    "name": "makedirs .../actual/BUILDER",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -190,7 +190,7 @@
       "-rf",
       "/usr/local/skiabot/skia_gm_expected/Test-ChromeOS-Alex-GMA3150-x86-Debug"
     ],
-    "name": "rmdir .../skia_gm_expected/<builder>"
+    "name": "rmdir .../skia_gm_expected/BUILDER"
   },
   {
     "cmd": [
@@ -202,7 +202,7 @@
       "-p",
       "/usr/local/skiabot/skia_gm_expected/Test-ChromeOS-Alex-GMA3150-x86-Debug"
     ],
-    "name": "mkdir .../skia_gm_expected/<builder>"
+    "name": "mkdir .../skia_gm_expected/BUILDER"
   },
   {
     "cmd": [
@@ -609,7 +609,7 @@
       "-rf",
       "/usr/local/skiabot/skia_skimage_out/Test-ChromeOS-Alex-GMA3150-x86-Debug"
     ],
-    "name": "rmdir .../skia_skimage_out/<builder>"
+    "name": "rmdir .../skia_skimage_out/BUILDER"
   },
   {
     "cmd": [
@@ -621,7 +621,7 @@
       "-p",
       "/usr/local/skiabot/skia_skimage_out/Test-ChromeOS-Alex-GMA3150-x86-Debug"
     ],
-    "name": "mkdir .../skia_skimage_out/<builder>"
+    "name": "mkdir .../skia_skimage_out/BUILDER"
   },
   {
     "cmd": [
@@ -633,7 +633,7 @@
       "-rf",
       "/usr/local/skiabot/skia_skimage_expected/Test-ChromeOS-Alex-GMA3150-x86-Debug"
     ],
-    "name": "rmdir .../skia_skimage_expected/<builder>"
+    "name": "rmdir .../skia_skimage_expected/BUILDER"
   },
   {
     "cmd": [
@@ -645,7 +645,7 @@
       "-p",
       "/usr/local/skiabot/skia_skimage_expected/Test-ChromeOS-Alex-GMA3150-x86-Debug"
     ],
-    "name": "mkdir .../skia_skimage_expected/<builder>"
+    "name": "mkdir .../skia_skimage_expected/BUILDER"
   },
   {
     "cmd": [

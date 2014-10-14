@@ -137,7 +137,7 @@ class SkiaApi(recipe_api.RecipeApi):
     summary = ['...'] if len(parts) > 2 else []
     for part in parts[-2:]:
       if part == self.c.BUILDER_NAME:
-        part = '<builder>'
+        part = 'BUILDER'
       summary.append(part)
     return '/'.join(summary)
 

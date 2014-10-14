@@ -113,7 +113,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/gm/actual/Test-Mac10.8-MacMini4.1-GeForce320M-x86_64-Debug"
     ],
-    "name": "rmtree .../actual/<builder>",
+    "name": "rmtree .../actual/BUILDER",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -132,7 +132,7 @@
       "[SLAVE_BUILD]/gm/actual/Test-Mac10.8-MacMini4.1-GeForce320M-x86_64-Debug",
       "511"
     ],
-    "name": "makedirs .../actual/<builder>",
+    "name": "makedirs .../actual/BUILDER",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -444,7 +444,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/skimage_out/Test-Mac10.8-MacMini4.1-GeForce320M-x86_64-Debug"
     ],
-    "name": "rmtree .../skimage_out/<builder>",
+    "name": "rmtree .../skimage_out/BUILDER",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -463,7 +463,7 @@
       "[SLAVE_BUILD]/skimage_out/Test-Mac10.8-MacMini4.1-GeForce320M-x86_64-Debug",
       "511"
     ],
-    "name": "makedirs .../skimage_out/<builder>",
+    "name": "makedirs .../skimage_out/BUILDER",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
