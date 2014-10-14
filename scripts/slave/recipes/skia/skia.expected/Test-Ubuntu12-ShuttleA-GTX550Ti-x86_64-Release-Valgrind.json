@@ -219,7 +219,9 @@
       "[SLAVE_BUILD]/playback/skps",
       "--writePath",
       "[SLAVE_BUILD]/dm",
-      "--nameByHash"
+      "--nameByHash",
+      "--match",
+      "~Threaded"
     ],
     "name": "dm"
   },
@@ -241,6 +243,8 @@
       "--writePath",
       "[SLAVE_BUILD]/dm",
       "--nameByHash",
+      "--match",
+      "~Threaded",
       "--abandonGpuContext",
       "--nocpu"
     ],
