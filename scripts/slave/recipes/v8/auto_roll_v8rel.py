@@ -12,22 +12,12 @@ DEPS = [
   'path',
   'properties',
   'step',
-  'zip',
 ]
 
 def GenSteps(api):
   api.chromium.cleanup_temp()
-  if not api.path.exists(api.path['slave_build'].join('v8')):
-    api.gsutil.download_url(
-        'gs://chromium-v8-auto-roll/bootstrap/v8.zip',
-        api.path['slave_build'],
-        name='bootstrapping checkout')
-    api.zip.unzip('unzipping',
-                  api.path['slave_build'].join('v8.zip'),
-                  api.path['slave_build'].join('v8'))
-  api.git('checkout', '-f', 'master', cwd=api.path['slave_build'].join('v8'))
-  api.git('svn', 'rebase', cwd=api.path['slave_build'].join('v8'))
   api.gclient.set_config('chromium')
+  api.gclient.apply_config('v8')
   api.bot_update.ensure_checkout(
       force=True, no_shallow=True, with_branch_heads=True)
   api.step(
@@ -36,7 +26,8 @@ def GenSteps(api):
            'v8', 'tools', 'push-to-trunk', 'releases.py'),
        '-c', api.path['checkout'],
        '--json', api.path['slave_build'].join('v8-releases-update.json'),
-       '--branch', 'recent'],
+       '--branch', 'recent',
+       '--vc-interface', 'git_read_svn_write'],
       cwd=api.path['slave_build'].join('v8'),
     )
   api.gsutil.upload(api.path['slave_build'].join('v8-releases-update.json'),
