@@ -32,7 +32,7 @@ BUILDERS = {
   },
   'Android Cronet Builder': {
     'recipe_config': 'main_builder',
-    'run_tests': False,
+    'run_tests': True,
     'upload_package': True,
     'kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -41,7 +41,7 @@ BUILDERS = {
   },
   'Android Cronet ARMv6 Builder': {
     'recipe_config': 'main_builder',
-    'run_tests': False,
+    'run_tests': True,
     'upload_package': True,
     'kwargs': {
       'BUILD_CONFIG': 'Release',
