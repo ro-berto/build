@@ -392,6 +392,8 @@
       "ExpectationsMismatch",
       "--resourcePath",
       "/storage/emulated/legacy/skiabot/skia_resources",
+      "--match",
+      "~imagealphathreshold",
       "--config",
       "defaults",
       "msaa16"
