@@ -521,6 +521,34 @@ BUILDERS = {
         'tests': ['unittests', 'v8testing', 'webkit', 'optimize_for_size'],
         'testing': {'platform': 'linux'},
       },
+      'V8 Arm - debug - 1': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+          'SHARD_COUNT': 2,
+          'SHARD_RUN': 1,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Arm - debug builder',
+        'build_gs_archive': 'arm_dbg_archive',
+        'tests': ['unittests', 'v8testing', 'webkit', 'optimize_for_size'],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Arm - debug - 2': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+          'SHARD_COUNT': 2,
+          'SHARD_RUN': 2,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Arm - debug builder',
+        'build_gs_archive': 'arm_dbg_archive',
+        'tests': ['unittests', 'v8testing', 'webkit', 'optimize_for_size'],
+        'testing': {'platform': 'linux'},
+      },
 ####### Category: Simulators
       'V8 Linux - arm - sim': {
         'chromium_apply_config': ['simulate_arm'],
