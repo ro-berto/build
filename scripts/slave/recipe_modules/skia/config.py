@@ -51,6 +51,7 @@ VAR_TEST_MAP = {
                    u'Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes',
                    u'Test-Win7-ShuttleA-HD2000-x86-Debug-GDI',
                    u'Test-Win7-ShuttleA-HD2000-x86-Release-ANGLE',
+                   u'Test-Win7-ShuttleA-HD2000-x86_64-Release',
                    u'Test-Win8-ShuttleA-GTX660-x86-Release'),
   'MASTER_NAME': (u'client.skia',),
   'SLAVE_NAME': (u'skiabot-shuttle-ubuntu12-003',),
@@ -192,4 +193,7 @@ def skia(c):
   c.slave_cfg = slaves_cfg.get(c.MASTER_NAME)[c.SLAVE_NAME]
   c.is_trybot = builder_name_schema.IsTrybot(c.BUILDER_NAME)
   c.extra_env_vars = get_extra_env_vars(c.builder_cfg)
+  arch = (c.builder_cfg.get('arch') or c.builder_cfg.get('target_arch'))
+  if ('Win' in c.builder_cfg.get('os', '') and arch == 'x86_64'):
+    c.configuration += '_x64'
 

@@ -45,6 +45,7 @@ def GenTests(api):
     'Test-Ubuntu13.10-GCE-NoGPU-x86_64-Release-TSAN',
     'Test-Win7-ShuttleA-HD2000-x86-Release',
     'Test-Win7-ShuttleA-HD2000-x86-Release-ANGLE',
+    'Test-Win7-ShuttleA-HD2000-x86_64-Release',
   ]
 
   def AndroidTestData(builder):
