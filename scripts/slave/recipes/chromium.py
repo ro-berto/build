@@ -101,6 +101,21 @@ def GenTests(api):
       if mastername == 'client.v8':
         test += api.properties(revision='22135')
 
+      if bot_config.get('enable_swarming') and bot_type == 'tester':
+        test += api.properties(swarm_hashes={
+          'browser_tests': 'ffffffffffffffffffffffffffffffffffffffff',
+        })
+        test += api.override_step_data('read test spec', api.json.output({
+          buildername: {
+            'gtest_tests': [
+              {
+                'test': 'browser_tests',
+                'swarming': {'can_use_on_swarming_builders': True},
+              },
+            ],
+          },
+        }))
+
       yield test
 
   yield (
