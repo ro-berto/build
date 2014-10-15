@@ -816,7 +816,9 @@ def GenSteps(api):
       gtest_tests = filter_tests(gtest_tests, matching_exes)
 
     tests = []
-    tests.append(api.chromium.steps.CheckdepsTest())
+    # TODO(phajdan.jr): Re-enable checkdeps on Windows when it works with git.
+    if not api.platform.is_win:
+      tests.append(api.chromium.steps.CheckdepsTest())
     if api.platform.is_linux:
       tests.extend([
           api.chromium.steps.CheckpermsTest(),
