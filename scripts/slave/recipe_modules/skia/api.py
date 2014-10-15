@@ -505,15 +505,12 @@ class SkiaApi(recipe_api.RecipeApi):
   def test_steps(self):
     """Run all Skia test executables."""
     self._run_once(self.install)
-    if not self.c.BUILDER_NAME in (
-        'Test-Ubuntu13.10-GCE-NoGPU-x86_64-Release-TSAN',):
+    if 'TSAN' not in self.c.BUILDER_NAME:
       self.run_gm()
-    if not self.c.BUILDER_NAME in (
-        'Test-Ubuntu12-ShuttleA-GTX550Ti-x86_64-Debug-ZeroGPUCache',):
+    if 'ZeroGPUCache' not in self.c.BUILDER_NAME:
       self.run_dm()
-    if not self.c.BUILDER_NAME in (
-        'Test-Ubuntu13.10-GCE-NoGPU-x86_64-Release-TSAN',
-        'Test-Ubuntu12-ShuttleA-GTX550Ti-x86_64-Debug-ZeroGPUCache'):
+    if ('TSAN'         not in self.c.BUILDER_NAME and
+        'ZeroGPUCache' not in self.c.BUILDER_NAME):
       self.run_render_pdfs()
       self.run_decoding_tests()
 
