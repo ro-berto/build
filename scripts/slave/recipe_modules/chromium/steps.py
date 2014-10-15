@@ -368,11 +368,8 @@ class SwarmingGTestTest(Test):
           """,
           args=[self._name])
 
-    # For local tests test_args are added inside api.chromium.runtest.
-    args = self._args[:]
-    args.extend(api.chromium.c.runtests.test_args)
-
     # If rerunning without a patch, run only tests that failed.
+    args = self._args[:]
     if suffix == 'without patch':
       failed_tests = sorted(self.failures(api, 'with patch'))
       args.append('--gtest_filter=%s' % ':'.join(failed_tests))
