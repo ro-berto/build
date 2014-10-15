@@ -133,6 +133,8 @@ class ChromiteFactory(object):
                             want_stdout=self.show_gclient_output,
                             want_stderr=self.show_gclient_output)
 
+    # TODO(dnj): Remove this parameter if preliminary tests are working without
+    #            it (crbug.com/422635).
     if self.sleep_sync:
       # We run a script from the script checkout above.
       fuzz_start = ['python', 'scripts/slave/random_delay.py',

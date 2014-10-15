@@ -856,20 +856,6 @@ config = {
           (
             <class buildbot.steps.shell.ShellCommand>,
             {
-              'command': [
-                'python',
-                'scripts/slave/random_delay.py',
-                '--max=60',
-              ],
-              'description': 'Delay start of build',
-              'name': 'random_delay',
-              'timeout': 70,
-              'workdir': '/b/build',
-            },
-          ),
-          (
-            <class buildbot.steps.shell.ShellCommand>,
-            {
               'command': 'rm -rf "chromite" && /usr/bin/git retry clone https://chromium.googlesource.com/chromiumos/chromite.git && cd "chromite" && /usr/bin/git checkout master',
               'description': 'Clear and Clone chromite',
               'haltOnFailure': True,
