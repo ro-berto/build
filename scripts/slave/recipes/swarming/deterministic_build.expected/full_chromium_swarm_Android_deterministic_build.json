@@ -171,7 +171,7 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport filecmp\nimport sys\nprint 'Comparing %s to %s' % (sys.argv[1], sys.argv[2])\nif not filecmp.cmp(sys.argv[1], sys.argv[2]):\n  print('They are not equal')\n  sys.exit(1)\nprint('They are equal')\n",
+      "\nimport filecmp\nimport sys\nprint 'Comparing %s to %s' % (sys.argv[1], sys.argv[2])\nif not filecmp.cmp(sys.argv[1], sys.argv[2], shallow=False):\n  print('They are not equal')\n  sys.exit(1)\nprint('They are equal')\n",
       "[SLAVE_BUILD]/src/out/Release.1/libbase_unittests.so",
       "[SLAVE_BUILD]/src/out/Release.2/libbase_unittests.so"
     ],
@@ -181,7 +181,7 @@
       "@@@STEP_LOG_LINE@python.inline@import filecmp@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
       "@@@STEP_LOG_LINE@python.inline@print 'Comparing %s to %s' % (sys.argv[1], sys.argv[2])@@@",
-      "@@@STEP_LOG_LINE@python.inline@if not filecmp.cmp(sys.argv[1], sys.argv[2]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not filecmp.cmp(sys.argv[1], sys.argv[2], shallow=False):@@@",
       "@@@STEP_LOG_LINE@python.inline@  print('They are not equal')@@@",
       "@@@STEP_LOG_LINE@python.inline@  sys.exit(1)@@@",
       "@@@STEP_LOG_LINE@python.inline@print('They are equal')@@@",

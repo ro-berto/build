@@ -129,7 +129,7 @@ def GenSteps(api):
        import filecmp
        import sys
        print 'Comparing %s to %s' % (sys.argv[1], sys.argv[2])
-       if not filecmp.cmp(sys.argv[1], sys.argv[2]):
+       if not filecmp.cmp(sys.argv[1], sys.argv[2], shallow=False):
          print('They are not equal')
          sys.exit(1)
        print('They are equal')
