@@ -1136,12 +1136,12 @@ def AddBranchBuilder(branch_config, build_config, arch, bits, presubmit=False,
   if presubmit:
     tests = ['presubmit'] + tests
   return {
-    'gclient_apply_config': [branch_config],
+    'gclient_apply_config': ['use_git'],
     'chromium_apply_config': ['no_optimized_debug'],
     # TODO(machenbach): Switch on test results presentation for branch builders
     # as soon as stable branch passes v8 revision 21358, where the feature was
     # introduced.
-    'v8_apply_config': ['no_test_results'],
+    'v8_apply_config': [branch_config, 'no_test_results'],
     'v8_config_kwargs': {
       'BUILD_CONFIG': build_config,
       'TARGET_ARCH': arch,
@@ -1155,7 +1155,7 @@ def AddBranchBuilder(branch_config, build_config, arch, bits, presubmit=False,
 for build_config, name_suffix in (('Release', ''), ('Debug', ' - debug')):
   for branch_name, branch_config in (('stable branch', 'stable_branch'),
                                      ('beta branch', 'beta_branch'),
-                                     ('trunk', 'trunk')):
+                                     ('trunk', 'candidates_branch')):
     name = 'V8 Linux - %s%s' % (branch_name, name_suffix)
     # TODO(machenbach): Run unit tests on stable branch after M40.
     unittests = branch_config != 'stable_branch'

@@ -237,6 +237,7 @@ ENABLED_MASTERS = [
     'client.nacl.sdk.mono',
     'client.skia',
     'client.v8',
+    'client.v8.branches',
     'tryserver.blink',
     'tryserver.chromium.gpu',
     'tryserver.chromium.linux',
@@ -248,15 +249,6 @@ ENABLED_MASTERS = [
 ENABLED_MASTERS += internal_data.get('ENABLED_MASTERS', [])
 
 ENABLED_BUILDERS = {
-    'client.v8.branches': [
-        # Note, bot_update can't be activated on other builders of
-        # client.v8.branches, as they're all pure svn based (non-chromium).
-        'Chromium ASAN (symbolized)',
-        'Chromium ASAN - debug',
-        'Chromium ASAN arm64 (symbolized)',
-        'Chromium ASAN arm64 - debug',
-        'Chromium Win SyzyASAN',
-    ],
     'tryserver.webrtc': [
         'android_apk',
         'android_apk_rel',

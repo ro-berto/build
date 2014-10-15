@@ -216,29 +216,28 @@ class V8Api(recipe_api.RecipeApi):
     self.m.chromium.apply_config('trybot_flavor')
     self.apply_config('trybot_flavor')
 
-  def _gclient_checkout(self, may_nuke=False, revert=False):
-    if may_nuke:
-      try:
-        update_step = self.m.gclient.checkout(revert=revert)
-      except self.m.step.StepFailure as f:
-        # TODO(phajdan.jr): Remove the workaround, http://crbug.com/357767 .
-        self.m.path.rmcontents('slave build directory',
-                               self.m.path['slave_build']),
-        update_step = self.m.gclient.checkout()
-    else:
-      update_step = self.m.gclient.checkout()
-    return update_step
+  def _gclient_checkout(self, revert=False):
+    return self.m.gclient.checkout(revert=revert)
 
-  def checkout(self, may_nuke=False, revert=False):
+  def checkout(self, revert=False):
     # Set revision for bot_update. Needs to be
     # reset afterwards as gclient doesn't understand this info.
-    self.m.gclient.c.solutions[0].revision = (
-        self.m.properties.get('revision', 'HEAD'))
-    update_step = self.m.bot_update.ensure_checkout(no_shallow=True)
+    revision = self.m.properties.get('revision', 'HEAD')
+    solution = self.m.gclient.c.solutions[0]
+    if self.c.branch:
+      if self.c.branch == 'candidates':
+        revision = 'candidates:%s' % revision
+      else:
+        revision = 'refs/branch-heads/%s:%s' % (self.c.branch, revision)
+    solution.revision = revision
+    update_step = self.m.bot_update.ensure_checkout(
+        no_shallow=True,
+        with_branch_heads=(self.m.properties['mastername'] ==
+                           'client.v8.branches'))
 
     if not update_step.json.output['did_run']:
-      self.m.gclient.c.solutions[0].revision = None
-      update_step = self._gclient_checkout(may_nuke=may_nuke, revert=revert)
+      solution.revision = None
+      update_step = self._gclient_checkout(revert=revert)
 
     # Whatever step is run right before this line needs to emit got_revision.
     self.revision = update_step.presentation.properties['got_revision']
@@ -290,7 +289,7 @@ class V8Api(recipe_api.RecipeApi):
 
   def tryserver_lkgr_fallback(self):
     self.m.gclient.apply_config('v8_lkgr')
-    self.checkout(True, True)
+    self.checkout(True)
     self.m.tryserver.maybe_apply_issue()
     self.runhooks()
 
