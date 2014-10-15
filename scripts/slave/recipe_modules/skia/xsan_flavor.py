@@ -33,7 +33,6 @@ class XSanFlavorUtils(default_flavor.DefaultFlavorUtils):
                                                                'lsan.supp')
     tsan_suppressions = self._skia_api.m.path['checkout'].join('tools',
                                                                'tsan.supp')
-    env['ASAN_SYMBOLIZER_PATH'] = '/usr/bin/llvm-symbolizer-3.5'
     env['ASAN_OPTIONS'] = 'symbolize=1 detect_leaks=1'
     env['LSAN_OPTIONS'] = ('symbolize=1 print_suppressions=1 suppressions=%s' %
                            lsan_suppressions)

@@ -63,7 +63,6 @@
     ],
     "env": {
       "ASAN_OPTIONS": "symbolize=1 detect_leaks=1",
-      "ASAN_SYMBOLIZER_PATH": "/usr/bin/llvm-symbolizer-3.5",
       "LSAN_OPTIONS": "symbolize=1 print_suppressions=1 suppressions=[SLAVE_BUILD]/skia/tools/lsan.supp",
       "TSAN_OPTIONS": "suppressions=[SLAVE_BUILD]/skia/tools/tsan.supp"
     },
