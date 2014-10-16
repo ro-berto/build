@@ -137,6 +137,7 @@ class HorizontalOneBoxPerBuilder(base.HtmlResource):
     status = self.getStatus(request)
     builders = request.args.get("builder", status.getBuilderNames())
     cxt_builders = []
+    categories = set()
     for builder_name in builders:
       if not self.builder_filter_fn(builder_name):
         continue
@@ -150,11 +151,17 @@ class HorizontalOneBoxPerBuilder(base.HtmlResource):
       show_name = 'off' not in request.args.get('titles', ['off'])
       url = (base.path_to_root(request) + "waterfall?builder=" +
               urllib.quote(builder_name, safe='() '))
+      category = builder_status.getCategory()
+      if category:
+        category = category.split('|')[0]
+        categories.add(category)
       cxt_builders.append({'outcome': classname,
                            'name': title,
                            'url': url,
-                           'show_name': show_name})
+                           'show_name': show_name,
+                           'category': category})
     cxt['builders'] = cxt_builders
+    cxt['categories'] = sorted(categories)
     templates = request.site.buildbot_service.templates
     template = templates.get_template("horizontal_one_box_per_build.html")
     data = template.render(cxt)
