@@ -48,7 +48,7 @@
     "cmd": [
       "[DEPOT_TOOLS]/gn.py",
       "gen",
-      "out/Debug
+      "out/Debug"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "gn"

@@ -85,6 +85,65 @@ class ArchiveBuildStep(Test):
     return []
 
 
+class ScriptTest(Test):  # pylint: disable=W0232
+  """
+  Test which uses logic from script inside chromium repo.
+
+  This makes it possible to keep the logic src-side as opposed
+  to the build repo most Chromium developers are unfamiliar with.
+
+  Another advantage is being to test changes to these scripts
+  on trybots.
+
+  All new tests are strongly encouraged to use this infrastructure.
+  """
+
+  def __init__(self, name, script):
+    super(ScriptTest, self).__init__()
+    self._name = name
+    self._script = script
+
+  @property
+  def name(self):
+    return self._name
+
+  @staticmethod
+  def compile_targets(_):
+    # TODO(phajdan.jr): Implement this (http://crbug.com/422235).
+    return []
+
+  def run(self, api, suffix):
+    name = self.name
+    if suffix:
+      name += ' (%s)' % suffix
+    try:
+      api.python(
+          name,
+          # Enforce that all scripts are in the specified directory
+          # for consistency.
+          api.path['checkout'].join(
+              'testing', 'scripts', api.path.basename(self._script)),
+          args=['run', '--output', api.json.output()],
+          step_test_data=lambda: api.json.test_api.output(
+              {'valid': True, 'failures': []}))
+    finally:
+      self._test_runs[suffix] = api.step.active_result
+
+    return self._test_runs[suffix]
+
+  def has_valid_results(self, api, suffix):
+    try:
+      # Make sure the JSON includes all necessary data.
+      self.failures(api, suffix)
+
+      return self._test_runs[suffix].json.output['valid']
+    except Exception:
+      return False
+
+  def failures(self, api, suffix):
+    return self._test_runs[suffix].json.output['failures']
+
+
 class CheckdepsTest(Test):  # pylint: disable=W0232
   name = 'checkdeps'
 

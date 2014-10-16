@@ -818,7 +818,7 @@ def GenSteps(api):
     tests = []
     # TODO(phajdan.jr): Re-enable checkdeps on Windows when it works with git.
     if not api.platform.is_win:
-      tests.append(api.chromium.steps.CheckdepsTest())
+      tests.append(api.chromium.steps.ScriptTest('checkdeps', 'checkdeps.py'))
     if api.platform.is_linux:
       tests.extend([
           api.chromium.steps.CheckpermsTest(),
@@ -1012,15 +1012,8 @@ def _sanitize_nonalpha(text):
 
 def GenTests(api):
   canned_checkdeps = {
-    True: [],
-    False: [
-      {
-        'dependee_path': '/path/to/dependee',
-        'violations': [
-          { 'include_path': '/path/to/include', },
-        ],
-      },
-    ],
+    True: {'valid': True, 'failures': []},
+    False: {'valid': True, 'failures': ['foo: bar']},
   }
   canned_test = api.json.canned_gtest_output
   def props(config='Release', mastername='tryserver.chromium.linux',

@@ -327,13 +327,17 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/buildtools/checkdeps/checkdeps.py",
-      "--json",
+      "[SLAVE_BUILD]/src/testing/scripts/checkdeps.py",
+      "run",
+      "--output",
       "/path/to/tmp/json"
     ],
     "name": "checkdeps (with patch)",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[]@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"failures\": [], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"valid\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
