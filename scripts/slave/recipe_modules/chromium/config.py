@@ -600,3 +600,6 @@ def v8_optimize_medium(c):
 def chromium_perf(c):
   c.compile_py.clobber = False
 
+@config_ctx()
+def chromium_deterministic_build(c):
+  c.gyp_env.GYP_DEFINES['dont_embed_build_metadata'] = 1
