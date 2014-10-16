@@ -274,6 +274,7 @@ HEAD_BUILDERS.update(internal_data.get('HEAD_BUILDERS', {}))
 # These masters work only in Git, meaning for got_revision, always output
 # a git hash rather than a SVN rev.
 GIT_MASTERS = [
+    'client.v8',
     'client.v8.branches',
 ]
 GIT_MASTERS += internal_data.get('GIT_MASTERS', [])
