@@ -120,6 +120,11 @@ class GitHelper(object):
     return self._run(cmd)
 
   def number(self, *refs):
+    # Mark this as a headless operation so 'git number' doesn't fail with a
+    # warning.
+    env = os.environ.copy()
+    env['CHROME_HEADLESS'] = '1'
+
     cmd = ['number'] + list(refs)
-    out = self._run(cmd)
+    out = self._run(cmd, env=env)
     return map(int, out.splitlines())
