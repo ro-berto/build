@@ -61,13 +61,8 @@ DETERMINISTIC_BUILDERS = {
     'platform': 'win',
     'platform_ext': '.exe',
   },
-  'Test deterministic build': {
-    'chromium_config': 'chromium_no_goma',
-    'gclient_config': 'chromium',
-    'platform': 'linux',
-    'test_build': True,
-  }
 }
+
 
 def MoveBuildDirectory(api, src_dir, dst_dir):
   api.python.inline('Move %s to %s' % (src_dir, dst_dir),
@@ -79,6 +74,15 @@ def MoveBuildDirectory(api, src_dir, dst_dir):
                       shutil.rmtree(sys.argv[2])
                     shutil.move(sys.argv[1], sys.argv[2])""",
                     args=[src_dir, dst_dir])
+
+
+def RemoveBuildMetadata(api, output_dir):
+  """Remove the build metadata embedded in the build artifacts."""
+  script = api.path['build'].join(
+      'scripts', 'slave', 'swarming', 'remove_build_metadata.py')
+  args = ['--build-dir', output_dir, '--src-dir', api.path['checkout']]
+  api.python('remove_build_metadata.py', script, args=args,
+      cwd=api.path['slave_build'])
 
 
 def GenSteps(api):
@@ -110,6 +114,7 @@ def GenSteps(api):
   api.chromium.runhooks()
   api.chromium.compile(targets=[target_name], force_clobber=True,
                        name='First build')
+  RemoveBuildMetadata(api, api.chromium.output_dir)
   MoveBuildDirectory(api, str(api.chromium.output_dir),
                      str(api.chromium.output_dir).rstrip('\\\/') + '.1')
 
@@ -117,6 +122,7 @@ def GenSteps(api):
   api.chromium.runhooks()
   api.chromium.compile(targets=[target_name], force_clobber=True,
                        name='Second build')
+  RemoveBuildMetadata(api, api.chromium.output_dir)
   MoveBuildDirectory(api, str(api.chromium.output_dir),
                      str(api.chromium.output_dir).rstrip('\\\/') + '.2')
 

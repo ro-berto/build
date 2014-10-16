@@ -104,6 +104,19 @@
     "cmd": [
       "python",
       "-u",
+      "[BUILD]\\scripts\\slave\\swarming\\remove_build_metadata.py",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
+      "--src-dir",
+      "[SLAVE_BUILD]\\src"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "remove_build_metadata.py"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport os\nimport shutil\nimport sys\nif os.path.exists(sys.argv[2]):\n  shutil.rmtree(sys.argv[2])\nshutil.move(sys.argv[1], sys.argv[2])",
       "[SLAVE_BUILD]\\src\\out\\Release",
       "[SLAVE_BUILD]\\src\\out\\Release.1"
