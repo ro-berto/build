@@ -128,6 +128,16 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin\\pgosweep.exe",
+      "[SLAVE_BUILD]\\src\\out\\Release\\pgosweep.exe"
+    ],
+    "name": "Copy pgosweep to the output directory"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
       "--use-live-sites",
@@ -354,6 +364,19 @@
       "peacekeeper.array"
     ],
     "name": "Telemetry benchmark: peacekeeper.array"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import os; import sys; os.remove(sys.argv[1])",
+      "[SLAVE_BUILD]\\src\\out\\Release\\pgosweep.exe"
+    ],
+    "name": "Remove pgosweep from the output directory",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@import os; import sys; os.remove(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
   },
   {
     "cmd": [

@@ -5,6 +5,7 @@
 DEPS = [
   'bot_update',
   'chromium',
+  'file',
   'gclient',
   'path',
   'platform',
@@ -49,6 +50,25 @@ def RunTelemetryBenchmark(api, testname):
   )
 
 
+# Run the profiling benchmarks.
+def RunBenchmarks(api):
+  # Copy pgosweep.exe to the output directory.
+  pgosweep_src_path = api.path['depot_tools'].join(
+      'win_toolchain', 'vs2013_files', 'VC', 'bin', 'pgosweep.exe')
+  pgosweep_dst_path = api.chromium.output_dir.join('pgosweep.exe')
+  api.file.copy('Copy pgosweep to the output directory',
+                pgosweep_src_path,
+                pgosweep_dst_path)
+
+  for benchmark in _BENCHMARKS_TO_RUN:
+    RunTelemetryBenchmark(api, benchmark)
+
+  # Remove pgosweep.exe from the output directory.
+  api.python.inline('Remove pgosweep from the output directory',
+                    'import os; import sys; os.remove(sys.argv[1])',
+                    args=[pgosweep_dst_path])
+
+
 def GenSteps(api):
   api.step.auto_resolve_conflicts = True
   api.chromium.set_config('chrome_pgo_instrument', BUILD_CONFIG='Release')
@@ -66,8 +86,7 @@ def GenSteps(api):
   api.chromium.compile()
 
   # Second step: profiling of the instrumented build.
-  for benchmark in _BENCHMARKS_TO_RUN:
-    RunTelemetryBenchmark(api, benchmark)
+  RunBenchmarks(api)
 
   # Third step: Compilation of the optimized build, this will use the profile
   #     data files produced by the previous step.
