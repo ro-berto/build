@@ -351,6 +351,12 @@ def pdfium(c):
   soln.name = 'pdfium'
   soln.url = 'https://pdfium.googlesource.com/pdfium.git'
 
+@config_ctx()
+def mojo(c):
+  soln = c.solutions.add()
+  soln.name = 'src'
+  soln.url = 'https://chromium.googlesource.com/external/mojo.git'
+
 @config_ctx(config_vars={'GIT_MODE': True})
 def infra(c):
   soln = c.solutions.add()
