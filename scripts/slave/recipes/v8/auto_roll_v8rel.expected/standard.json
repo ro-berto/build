@@ -84,6 +84,16 @@
   {
     "cmd": [
       "git",
+      "svn",
+      "init",
+      "https://v8.googlecode.com/svn"
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "name": "git svn init"
+  },
+  {
+    "cmd": [
+      "git",
       "config",
       "--unset-all",
       "svn-remote.svn.fetch"

@@ -23,6 +23,10 @@ def GenSteps(api):
 
   # TODO(machenbach): Remove svn config after the git switch.
   api.git(
+      'svn', 'init', 'https://v8.googlecode.com/svn',
+      name='git svn init',
+      cwd=api.path['slave_build'].join('v8'))
+  api.git(
       'config', '--unset-all', 'svn-remote.svn.fetch',
       name='git config unset-all',
       cwd=api.path['slave_build'].join('v8'))
