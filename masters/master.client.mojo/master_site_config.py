@@ -6,7 +6,7 @@
 
 from config_bootstrap import Master
 
-class Mojo(Master.Master1):
+class Mojo(Master.Master3):
   project_name = 'Mojo'
   master_port = 8019
   slave_port = 8119
