@@ -23,7 +23,6 @@ from twisted.internet import defer
 
 from buildbot import interfaces
 from buildbot.status.progress import Expectations
-from buildbot.status.builder import RETRY
 from buildbot.status.buildrequest import BuildRequestStatus
 from buildbot.process.properties import Properties
 from buildbot.process import buildrequest, slavebuilder
@@ -567,17 +566,19 @@ class Builder(pb.Referenceable, service.MultiService):
 
         results = build.build_status.getResults()
         self.building.remove(build)
-        if results == RETRY:
-            self._resubmit_buildreqs(build).addErrback(log.err)
-        else:
-            brids = [br.id for br in build.requests]
-            db = self.master.db
-            d = db.buildrequests.completeBuildRequests(brids, results)
-            d.addCallback(
-                lambda _ : self._maybeBuildsetsComplete(build.requests))
-            # nothing in particular to do with this deferred, so just log it if
-            # it fails..
-            d.addErrback(log.err, 'while marking build requests as completed')
+
+        # NOTE: Chrome-infra has explicitly removed the build retry behavior
+        # when results == RETRY. This is because we always have some
+        # higher-order system which has a better view of things to actually do
+        # retrys.
+        brids = [br.id for br in build.requests]
+        db = self.master.db
+        d = db.buildrequests.completeBuildRequests(brids, results)
+        d.addCallback(
+            lambda _ : self._maybeBuildsetsComplete(build.requests))
+        # nothing in particular to do with this deferred, so just log it if
+        # it fails..
+        d.addErrback(log.err, 'while marking build requests as completed')
 
         if sb.slave:
             sb.slave.releaseLocks()
