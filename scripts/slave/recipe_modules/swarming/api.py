@@ -356,7 +356,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         json_data = step_result.json.output
         links = step_result.presentation.links
         for index, shard in enumerate(json_data['shards']):
-          isolated_out = shard['isolated_out']
+          isolated_out = shard.get('isolated_out')
           if isolated_out:
             link_name = 'shard #%d isolated out' % index
             links[link_name] = isolated_out['view_url']
