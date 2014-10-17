@@ -38,6 +38,7 @@ SPEC = {
       ],
       'tests': [
         steps.MojoPythonTests(),
+        steps.NaclIntegrationTest(),
         steps.TelemetryUnitTests(),
         steps.TelemetryPerfUnitTests(),
       ],
@@ -122,6 +123,7 @@ SPEC = {
       'tests': [
         steps.MiniInstallerTest(),
         steps.MojoPythonTests(),
+        steps.NaclIntegrationTest(),
         steps.TelemetryUnitTests(),
         steps.TelemetryPerfUnitTests(),
       ],
@@ -177,7 +179,6 @@ SPEC = {
       'bot_type': 'tester',
       'disable_runhooks': True,
       'tests': [
-        steps.NaclIntegrationTest(),
       ],
       'parent_buildername': 'Win Builder',
       'testing': {
@@ -193,7 +194,6 @@ SPEC = {
       'bot_type': 'tester',
       'disable_runhooks': True,
       'tests': [
-        steps.NaclIntegrationTest(),
       ],
       'parent_buildername': 'Win Builder',
       'testing': {
