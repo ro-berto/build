@@ -30,6 +30,7 @@ DEFAULT_DO_TRYBOT = True
 DEFAULT_RECIPE = 'skia/skia'
 PERCOMMIT_SCHEDULER_NAME = 'skia_percommit'
 PERIODIC_15MINS_SCHEDULER_NAME = 'skia_periodic_15mins'
+NIGHTLY_SCHEDULER_NAME = 'skia_nightly'
 POLLING_BRANCH = 'master'
 TRY_SCHEDULER_NAME = 'try_job_rietveld_skia'
 TRY_SCHEDULER_PROJECT = 'skia'
@@ -38,6 +39,7 @@ SCHEDULERS = [
   PERCOMMIT_SCHEDULER_NAME,
   TRY_SCHEDULER_NAME,
   PERIODIC_15MINS_SCHEDULER_NAME,
+  NIGHTLY_SCHEDULER_NAME,
 ]
 
 
@@ -172,6 +174,17 @@ def SetupBuildersAndSchedulers(c, builders, slaves, ActiveMaster):
       builderNames=builders_by_scheduler[PERIODIC_15MINS_SCHEDULER_NAME],
       minute=[i*15 for i in xrange(60/15)],
       hour='*',
+      dayOfMonth='*',
+      month='*',
+      dayOfWeek='*')
+  c['schedulers'].append(s)
+
+  s = timed.Nightly(
+      name=NIGHTLY_SCHEDULER_NAME,
+      branch=POLLING_BRANCH,
+      builderNames=builders_by_scheduler[NIGHTLY_SCHEDULER_NAME],
+      minute=0,
+      hour=22,
       dayOfMonth='*',
       month='*',
       dayOfWeek='*')
