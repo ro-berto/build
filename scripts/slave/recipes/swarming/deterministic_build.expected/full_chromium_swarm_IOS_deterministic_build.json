@@ -107,7 +107,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/swarming/remove_build_metadata.py",
+      "[BUILD]/scripts/slave/recipe_modules/isolate/resources/remove_build_metadata.py",
       "--build-dir",
       "[SLAVE_BUILD]/src/out/Release",
       "--src-dir",

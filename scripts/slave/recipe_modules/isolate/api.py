@@ -240,3 +240,14 @@ class IsolateApi(recipe_api.RecipeApi):
         webkit_revision=webkit_revision,
         master_class_name=master_class_name,
         **runtest_kwargs)
+
+  def remove_build_metadata(self):
+    """Removes the build metadata embedded in the build artifacts."""
+    args = [
+        '--build-dir', self.m.chromium.output_dir,
+        '--src-dir', self.m.path['checkout']
+    ]
+    self.m.python('remove_build_metadata.py',
+                  self.resource('remove_build_metadata.py'),
+                  args=args,
+                  cwd=self.m.path['slave_build'])

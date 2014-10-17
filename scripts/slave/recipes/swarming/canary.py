@@ -70,6 +70,7 @@ def GenSteps(api):
   api.chromium.runhooks()
   api.isolate.clean_isolated_files(api.chromium.output_dir)
   api.chromium.compile(targets=['chromium_swarm_tests'])
+  api.isolate.remove_build_metadata()
 
   # Discover all targets prepared for isolation. Generally it's better to
   # provide this list explicitly in the recipe. But on the canary we isolate
