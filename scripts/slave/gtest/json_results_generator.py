@@ -58,10 +58,11 @@ def generate_test_timings_trie(individual_test_timings):
   }
   """
   trie = {}
-  for test_result in individual_test_timings:
-    test = test_result.test_name
+  # Only use the timing of the first try of each test.
+  for test_results in individual_test_timings:
+    test = test_results[0].test_name
 
-    add_path_to_trie(test, int(1000 * test_result.test_run_time), trie)
+    add_path_to_trie(test, int(1000 * test_results[-1].test_run_time), trie)
 
   return trie
 
@@ -109,7 +110,8 @@ class JSONResultsGenerator(object):
         results json file.
       builder_base_url: the URL where we have the archived test results.
         If this is None no archived results will be retrieved.
-      test_results_map: A dictionary that maps test_name to TestResult.
+      test_results_map: A dictionary that maps test_name to a list of
+        TestResult, one for each time the test was retried.
       svn_revisions: A (json_field_name, revision) pair for SVN
         repositories that tests rely on.  The SVN revision will be
         included in the JSON with the given json_field_name.
@@ -127,7 +129,6 @@ class JSONResultsGenerator(object):
     self._results_directory = results_file_base_path
 
     self._test_results_map = test_results_map
-    self._test_results = test_results_map.values()
 
     self._svn_revisions = svn_revisions
     if not self._svn_revisions:
@@ -171,12 +172,16 @@ class JSONResultsGenerator(object):
   def _insert_failure_map(self, results):
     # FAIL, PASS, NOTRUN
     summary = {self.PASS_LABEL: 0, self.FAIL_LABEL: 0, self.SKIP_LABEL: 0}
-    for result in self._test_results_map.itervalues():
-      if test_did_pass(result):
+    for test_results in self._test_results_map.itervalues():
+      # Use the result of the first test for aggregate statistics. This may
+      # count as failing a test that passed on retry, but it's a more useful
+      # statistic and it's consistent with our other test harnesses.
+      test_result = test_results[0]
+      if test_did_pass(test_result):
         summary[self.PASS_LABEL] += 1
-      elif result.modifier == TestResult.DISABLED:
+      elif test_result.modifier == TestResult.DISABLED:
         summary[self.SKIP_LABEL] += 1
-      elif result.failed:
+      elif test_result.failed:
         summary[self.FAIL_LABEL] += 1
 
     results[self.FAILURE_SUMMARY] = summary
@@ -186,19 +191,27 @@ class JSONResultsGenerator(object):
     expected, actual = self._get_expected_and_actual_results(test_name)
     test_data[self.EXPECTED] = expected
     test_data[self.ACTUAL] = actual
-    run_time = int(self._test_results_map[test_name].test_run_time)
+    # Use the timing of the first try, it's a better representative since it
+    # runs under more load than retries.
+    run_time = int(self._test_results_map[test_name][0].test_run_time)
     test_data[self.TEST_TIME] = run_time
 
     return test_data
 
   def _get_expected_and_actual_results(self, test_name):
-    test_result = self._test_results_map[test_name]
-    modifier = test_result.modifier
+    test_results = self._test_results_map[test_name]
+    # Use the modifier of the first try, they should all be the same.
+    modifier = test_results[0].modifier
 
     if modifier == TestResult.DISABLED:
       return (self.SKIP_LABEL, self.SKIP_LABEL)
 
-    actual = self.FAIL_LABEL if test_result.failed else self.PASS_LABEL
+    actual_list = []
+    for test_result in test_results:
+      label = self.FAIL_LABEL if test_result.failed else self.PASS_LABEL
+      actual_list.append(label)
+    actual = " ".join(actual_list)
+
     if modifier == TestResult.NONE:
       return (self.PASS_LABEL, actual)
     if modifier == TestResult.FLAKY:

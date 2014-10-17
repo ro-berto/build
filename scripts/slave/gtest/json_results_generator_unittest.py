@@ -43,9 +43,9 @@ class JSONGeneratorTest(unittest.TestCase):
     for i, test in enumerate(tests_set):
       test_name = canonical_name(test)
       test_timings[test_name] = i
-      test_results_map[test_name] = TestResult(test,
+      test_results_map[test_name] = [TestResult(test,
         failed=(test in failed_tests),
-        elapsed_time=test_timings[test_name])
+        elapsed_time=test_timings[test_name])]
 
     # Do not write to an actual file.
     mock_writer = lambda path, data: True
@@ -100,9 +100,9 @@ class JSONGeneratorTest(unittest.TestCase):
   def test_test_timings_trie(self):
     individual_test_timings = []
     individual_test_timings.append(
-        TestResult('foo/bar/baz.html', failed=False, elapsed_time=1.2))
+        [TestResult('foo/bar/baz.html', failed=False, elapsed_time=1.2)])
     individual_test_timings.append(
-        TestResult('bar.html', failed=False, elapsed_time=0.0001))
+        [TestResult('bar.html', failed=False, elapsed_time=0.0001)])
     trie = generate_test_timings_trie(individual_test_timings)
 
     expected_trie = {
