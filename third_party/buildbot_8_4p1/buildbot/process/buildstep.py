@@ -1198,7 +1198,8 @@ class LoggingBuildStep(BuildStep):
         self.step_status.setText(self.describe(True) +
                                  ["exception", "slave", "lost"])
         self.step_status.setText2(["exception", "slave", "lost"])
-        return self.finished(RETRY)
+        # Retry if we're stopping the reactor (resarting the master)
+        return self.finished(RETRY if reactor._stopped else EXCEPTION)
 
     # to refine the status output, override one or more of the following
     # methods. Change as little as possible: start with the first ones on
