@@ -252,14 +252,18 @@ def load_gatekeeper_tree_config(filename):
   with open(filename) as f:
     trees_config = json.load(f)
 
-  tree_config_keys = ['masters',
-                      'build-db',
+  tree_config_keys = ['build-db',
+                      'filter-domain',
+                      'masters',
                       'open-tree',
                       'password-file',
                       'revision-properties',
                       'set-status',
                       'status-url',
-                      'track-revisions']
+                      'status-user',
+                      'track-revisions',
+                      'use-project-email-addresses',
+                     ]
 
   for tree_name, tree_config in trees_config.iteritems():
     allowed_keys(tree_config, *tree_config_keys)
@@ -270,12 +274,16 @@ def load_gatekeeper_tree_config(filename):
     assert all(isinstance(master, basestring) for master in masters)
 
     assert isinstance(tree_config.get('build-db', ''), basestring)
+    assert isinstance(tree_config.get('filter-domain', ''), basestring)
     assert isinstance(tree_config.get('open-tree', True), bool)
     assert isinstance(tree_config.get('password-file', ''), basestring)
     assert isinstance(tree_config.get('revision-properties', ''), basestring)
     assert isinstance(tree_config.get('set-status', True), bool)
     assert isinstance(tree_config.get('status-url', ''), basestring)
+    assert isinstance(tree_config.get('status-user', ''), basestring)
     assert isinstance(tree_config.get('track-revisions', True), bool)
+    assert isinstance(
+        tree_config.get('use-project-email-addresses', True), bool)
 
   return trees_config
 

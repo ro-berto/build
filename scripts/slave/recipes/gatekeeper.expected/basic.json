@@ -12,6 +12,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"blink\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"build-db\": \"blink_build_db.json\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"filter-domain\": \"google.com\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"masters\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/chromium.webkit\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ], @@@",
@@ -20,7 +21,9 @@
       "@@@STEP_LOG_LINE@json.output@    \"revision-properties\": \"got_revision,got_webkit_revision\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"set-status\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"status-url\": \"https://blink-status.appspot.com\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"track-revisions\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"status-user\": \"gatekeeper@google.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"track-revisions\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"use-project-email-address\": true@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -45,6 +48,12 @@
       "blink_build_db.json",
       "--password-file",
       ".blink_status_password",
+      "--default-from-email",
+      "blink-buildbot@chromium-build.appspotmail.com",
+      "--filter-domain",
+      "google.com",
+      "--status-user",
+      "gatekeeper@google.com",
       "https://build.chromium.org/p/chromium.webkit"
     ],
     "name": "gatekeeper: blink"

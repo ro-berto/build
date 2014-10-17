@@ -31,6 +31,13 @@ def gatekeeper_step(api, tree_name, tree_args):
     args.extend(['--build-db', tree_args['build-db']])
   if tree_args.get('password-file'):
     args.extend(['--password-file', tree_args['password-file']])
+  if tree_args.get('use-project-email-address'):
+    args.extend(['--default-from-email',
+                 '%s-buildbot@chromium-build.appspotmail.com' % tree_name])
+  if tree_args.get('filter-domain'):
+    args.extend(['--filter-domain', tree_args['filter-domain']])
+  if tree_args.get('status-user'):
+    args.extend(['--status-user', tree_args['status-user']])
 
   if tree_args.get('masters'):
     args.extend(tree_args['masters'])
@@ -49,12 +56,15 @@ def GenSteps(api):
         'masters': [
           'https://build.chromium.org/p/chromium.webkit'
           ],
+        'filter-domain': 'google.com',
         'open-tree': True,
         'password-file': '.blink_status_password',
         'revision-properties': 'got_revision,got_webkit_revision',
         'set-status': True,
         'status-url': 'https://blink-status.appspot.com',
+        'status-user': 'gatekeeper@google.com',
         'track-revisions': True,
+        'use-project-email-address': True,
         }
       }
     )
