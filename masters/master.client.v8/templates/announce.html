@@ -26,18 +26,22 @@
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() { 
       if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-        json = JSON.parse(xmlHttp.responseText);
-        lkgr = 0
-        for (var i in json) {
-          if(json[i]["status"] && json[i]["revision"] > lkgr)
-            lkgr = json[i]["revision"];
-        }
-        if(lkgr != 0)
-          document.getElementById('lkgr_link').innerHTML = lkgr;
+        lkgr_entry = JSON.parse(xmlHttp.responseText)[0];
+        git_hash = lkgr_entry['git_hash'].substring(0, 8);
+        lkgr_date = lkgr_entry['date']
+        if (!/ UTC$/.test(lkgr_date) && ! / GMT$/.test(lkgr_date))
+          // The lkgr date is in UTC, but it's unfortunately not part of the
+          // string. Add it as otherwise the parser assumes local time.
+          lkgr_date += ' UTC'
+        now = (new Date()).getTime();
+        lkgr_date = Date.parse(lkgr_date);
+        age_in_hours = (now - lkgr_date) / 3600000;
+        new_label = git_hash + ' (' + Math.floor(age_in_hours) + 'h old)';
+        document.getElementById('lkgr_link').innerHTML = new_label;
       }
     };
 
-    var lkgrPath = "https://v8-status.appspot.com/revisions?format=json";
+    var lkgrPath = "https://v8-status.appspot.com/commits?format=json";
     xmlHttp.open('GET', lkgrPath, true);
     xmlHttp.send(null);
   }
@@ -65,7 +69,7 @@
         <a id="roll_status_link" href="https://v8-roll.appspot.com">roll status</a>
         &nbsp;&nbsp;
         <b>LKGR: </b>
-        <a id="lkgr_link" href="https://v8-status.appspot.com/lkgr">lkgr</a>
+        <a id="lkgr_link" href="https://v8-status.appspot.com/commits">lkgr</a>
         <script language="javascript">
           setTimeout('DisplayLKGR()', 100);
         </script>
