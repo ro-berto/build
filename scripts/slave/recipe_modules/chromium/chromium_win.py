@@ -62,10 +62,16 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
       ],
+      'tests': [
+        steps.MojoPythonTests(),
+        steps.TelemetryUnitTests(),
+        steps.TelemetryPerfUnitTests(),
+      ],
       'parent_buildername': 'Win Builder',
       'testing': {
         'platform': 'win',
       },
+      'enable_swarming': True,
       'swarming_dimensions': {
         'os': 'Windows-6.0',
       },
@@ -80,11 +86,6 @@ SPEC = {
       'disable_runhooks': True,
       'test_generators': [
         steps.generate_gtest,
-      ],
-      'tests': [
-        steps.MojoPythonTests(),
-        steps.TelemetryUnitTests(),
-        steps.TelemetryPerfUnitTests(),
       ],
       'parent_buildername': 'Win Builder',
       'testing': {
