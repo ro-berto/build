@@ -77,38 +77,6 @@ SPEC = {
         'os': 'Windows-6.0',
       },
     },
-    'Vista Tests (2)': {
-      'recipe_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'tester',
-      'disable_runhooks': True,
-      'test_generators': [
-        steps.generate_gtest,
-      ],
-      'parent_buildername': 'Win Builder',
-      'testing': {
-        'platform': 'win',
-      },
-    },
-    'Vista Tests (3)': {
-      'recipe_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'tester',
-      'disable_runhooks': True,
-      'test_generators': [
-        steps.generate_gtest,
-      ],
-      'parent_buildername': 'Win Builder',
-      'testing': {
-        'platform': 'win',
-      },
-    },
     'Win7 Tests (1)': {
       'recipe_config': 'chromium',
       'chromium_config_kwargs': {
@@ -169,36 +137,6 @@ SPEC = {
         'platform': 'win',
       },
       'enable_swarming': True,
-    },
-    'NaCl Tests (x86-32)': {
-      'recipe_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'tester',
-      'disable_runhooks': True,
-      'tests': [
-      ],
-      'parent_buildername': 'Win Builder',
-      'testing': {
-        'platform': 'win',
-      },
-    },
-    'NaCl Tests (x86-64)': {
-      'recipe_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'tester',
-      'disable_runhooks': True,
-      'tests': [
-      ],
-      'parent_buildername': 'Win Builder',
-      'testing': {
-        'platform': 'win',
-      },
     },
 
     'Win x64 Builder (dbg)': {

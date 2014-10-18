@@ -23,11 +23,7 @@ def Update(config, active_master, c):
       Triggerable(name='win_rel_trigger', builderNames=[
           'XP Tests (1)',
           'Vista Tests (1)',
-          'Vista Tests (2)',
-          'Vista Tests (3)',
           'Win7 Tests (1)',
-          'NaCl Tests (x86-32)',
-          'NaCl Tests (x86-64)',
       ]),
       Triggerable(name='win_x64_rel_trigger', builderNames=[
           'Win 7 Tests x64 (1)',
@@ -44,16 +40,12 @@ def Update(config, active_master, c):
     },
     {'name': 'XP Tests (1)'},
     {'name': 'Vista Tests (1)'},
-    {'name': 'Vista Tests (2)'},
-    {'name': 'Vista Tests (3)'},
     {'name': 'Win7 Tests (1)'},
     {
       'name': 'Win x64 Builder',
       'triggers': ['win_x64_rel_trigger'],
     },
     {'name': 'Win 7 Tests x64 (1)'},
-    {'name': 'NaCl Tests (x86-32)'},
-    {'name': 'NaCl Tests (x86-64)'},
     {'name': 'Win x64 Builder (dbg)'},
     {
       'name': 'Win Builder (dbg)',

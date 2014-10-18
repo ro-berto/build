@@ -433,7 +433,6 @@ BUILDERS = {
           'buildername': 'Win Builder',
           'testers': [
             'Win7 Tests (1)',
-            'NaCl Tests (x86-32)',
           ],
         },
         'testing': {
@@ -490,7 +489,6 @@ BUILDERS = {
           'buildername': 'Win x64 Builder',
           'testers': [
             'Win 7 Tests x64 (1)',
-            'NaCl Tests (x86-64)',
           ],
         },
         'testing': {
