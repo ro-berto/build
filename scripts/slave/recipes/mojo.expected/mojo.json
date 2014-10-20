@@ -62,4 +62,12 @@
     ],
     "name": "compile with ninja"
   }
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/mojo/tools/mojob.sh",
+      "test",
+      "--debug"
+    ],
+    "name": "mojob test"
+  }
 ]

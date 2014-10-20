@@ -19,19 +19,21 @@ def _CheckoutSteps(api):
 
 
 def _BuildSteps(api):
-  # Generate build files for Ninja
   gn_path = api.path['depot_tools'].join('gn.py')
   api.step('gn', [gn_path, "gen", "out/Debug"], cwd=api.path['checkout'])
 
-  # Build sample file using Ninja
   debug_path = api.path['checkout'].join('out', 'Debug')
   api.step('compile with ninja', ['ninja', '-C', debug_path, 'mojo'])
 
 
+def _RunTests(api):
+  mojob_path = api.path['checkout'].join('mojo', 'tools', 'mojob.sh')
+  api.step('mojob test', [mojob_path, 'test', '--debug'])
+
 def GenSteps(api):
   _CheckoutSteps(api)
   _BuildSteps(api)
-  # TODO: Run tests.
+  _RunTests(api)
 
 def GenTests(api):
   yield api.test("mojo")
