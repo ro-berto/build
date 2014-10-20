@@ -18,7 +18,6 @@ from buildbot.steps import trigger
 
 from common import chromium_utils
 
-from master.factory import v8_factory
 from master.factory import chromium_factory
 from master.factory.dart import dart_commands
 from master.factory.dart.channels import CHANNELS, CHANNELS_BY_NAME
@@ -27,7 +26,6 @@ from master import master_utils
 
 import config
 
-v8_stable_branch = '3.27'
 android_tools_rev = '@b12d410c0ee23385da78e6c9f353d28fd992e0bd'
 android_resources_rev = '@3855'
 
@@ -139,22 +137,6 @@ def BuildChromiumFactory(channel, target_platform='win32'):
     factory.add_solution(new_solution(dartium_deps_url, custom_vars_list, []))
 
   return factory.ChromiumFactory
-
-# These factories are used for building v8
-v8_win_default_opts = ['--build-tool=vs', '--src-dir=v8']
-v8_linux_default_opts = ['--build-tool=make', '--src-dir=v8',
-                         # TODO(thakis): Remove this once v8 r18257 has reached
-                         # the stable branch.
-                         '--', 'builddir_name=.']
-v8_mac_default_opts = ['--solution=../build/all.xcodeproj',
-                       '--build-tool=xcode', '--src-dir=v8']
-
-m_v8_linux_stable = v8_factory.V8Factory('v8', target_platform = 'linux2',
-                                         branch='branches/' + v8_stable_branch)
-m_v8_win32_stable = v8_factory.V8Factory('v8', target_platform = 'win32',
-                                         branch='branches/' + v8_stable_branch)
-m_v8_mac_stable = v8_factory.V8Factory('v8', target_platform = 'darwin',
-                                       branch='branches/' + v8_stable_branch)
 
 def AddGeneralGClientProperties(factory_properties):
   """Adds the general gclient options to ensure we get the correct revisions"""
@@ -608,48 +590,9 @@ class DartUtils(object):
                          custom_deps_list=extra_deps,
                          target_platform=target_platform)
 
-
-    def setup_v8_factory(v):
-      factory = None
-      name = v['name']
-      arch = v['arch']
-      if name.startswith('v8-linux-release'):
-        factory = m_v8_linux_stable.V8Factory(
-            options=v8_linux_default_opts,
-            target='Release',
-            factory_properties={
-              'gclient_env': {'GYP_DEFINES': 'v8_enable_disassembler=1'},
-            },
-            tests=[],
-            target_arch=arch)
-      elif name.startswith('v8-win-release'):
-        factory = m_v8_win32_stable.V8Factory(
-            options=v8_win_default_opts,
-            project='all.sln',
-            target='Release',
-            factory_properties={
-              'gclient_env': {'GYP_DEFINES': 'v8_enable_disassembler=1'},
-            },
-            tests=[],
-            target_arch=arch)
-      elif name.startswith('v8-mac-release'):
-        factory = m_v8_mac_stable.V8Factory(
-            options=v8_mac_default_opts,
-            target='Release',
-            factory_properties={
-              'gclient_env': {'GYP_DEFINES': 'v8_enable_disassembler=1'},
-            },
-            tests=[],
-            target_arch=arch)
-      else:
-        raise Exception("Unknown v8 builder")
-      v['factory_builder'] = factory
-
     for v in variants:
       platform = v['platform']
-      if platform == 'v8_vm':
-        setup_v8_factory(v)
-      elif platform == 'packages':
+      if platform == 'packages':
         base = setup_package_factory_base(v)
         setup_dart_factory(v, base, False)
       else:

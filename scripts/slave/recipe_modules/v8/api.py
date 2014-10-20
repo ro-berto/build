@@ -172,6 +172,7 @@ class V8Api(recipe_api.RecipeApi):
     'mips_sim_rel_archive': 'gs://chromium-v8/v8-mips-sim-rel',
     'win32_rel_archive': 'gs://chromium-v8/v8-win32-rel',
     'win32_dbg_archive': 'gs://chromium-v8/v8-win32-dbg',
+    'v8_for_dart_archive': 'gs://chromium-v8/v8-for-dart-rel',
   }
 
   def apply_bot_config(self, builders):

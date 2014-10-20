@@ -48,6 +48,11 @@ def arm_hard_float(c):
 
 
 @CONFIG_CTX(includes=['v8'])
+def disassembler(c):
+  c.gyp_env.GYP_DEFINES['v8_enable_disassembler'] = 1
+
+
+@CONFIG_CTX(includes=['v8'])
 def interpreted_regexp(c):
   c.gyp_env.GYP_DEFINES['v8_interpreted_regexp'] = 1
 

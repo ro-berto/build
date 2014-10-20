@@ -1171,3 +1171,19 @@ for build_config, name_suffix in (('Release', ''), ('Debug', ' - debug')):
     BRANCH_BUILDERS[name]['chromium_apply_config'].append('simulate_arm')
 
 BUILDERS['client.v8.branches'] = {'builders': BRANCH_BUILDERS}
+
+BUILDERS['client.dart.fyi'] = {'builders': {
+  'v8-%s-release' % platform: {
+    'gclient_apply_config': ['use_git'],
+    'chromium_apply_config': ['disassembler'],
+    'v8_apply_config': ['stable_branch'],
+    'v8_config_kwargs': {
+      'BUILD_CONFIG': 'Release',
+      'TARGET_ARCH': 'intel',
+      'TARGET_BITS': 32,
+    },
+    'bot_type': 'builder',
+    'build_gs_archive': 'v8_for_dart_archive',
+    'testing': {'platform': platform},
+  } for platform in ('win', 'linux', 'mac')
+}}

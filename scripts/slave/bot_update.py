@@ -249,6 +249,11 @@ ENABLED_MASTERS = [
 ENABLED_MASTERS += internal_data.get('ENABLED_MASTERS', [])
 
 ENABLED_BUILDERS = {
+    'client.dart.fyi': [
+        'v8-linux-release',
+        'v8-mac-release',
+        'v8-win-release',
+    ],
     'tryserver.webrtc': [
         'android_apk',
         'android_apk_rel',
