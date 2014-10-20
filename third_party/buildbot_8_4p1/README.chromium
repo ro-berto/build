@@ -4644,3 +4644,25 @@ index f5b4f43..160a4de 100644
  
      # to refine the status output, override one or more of the following
      # methods. Change as little as possible: start with the first ones on
+
+diff --git a/third_party/buildbot_8_4p1/buildbot/status/web/templates/logs.html b/third_party/buildbot_8_4p1/buildbot/status/web/templates/logs.html
+index 116bbd6..99708b4 100644
+--- a/third_party/buildbot_8_4p1/buildbot/status/web/templates/logs.html
++++ b/third_party/buildbot_8_4p1/buildbot/status/web/templates/logs.html
+@@ -4,6 +4,16 @@
+   <html>
+   <head><title>{{ pageTitle }}</title>
+   <link rel="stylesheet" href="{{ path_to_root }}default.css" type="text/css" />
++  <script>
++    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
++    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
++    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
++    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
++
++    ga('create', 'UA-55762617-2', 'auto');
++    ga('send', 'pageview');
++
++  </script>
+   </head>
+   <body class='log'>
+     <a href="{{ texturl }}">(view as text)</a><br/>
