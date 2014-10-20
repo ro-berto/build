@@ -30,6 +30,18 @@
         "status-url": "https://chromium-status.appspot.com",
         "track-revisions": true
     },
+    "webrtc": {
+        "build-db": "webrtc_build_db.json",
+        "masters": [
+            "https://build.chromium.org/p/client.webrtc"
+        ],
+        "open-tree": true,
+        "password-file": ".webrtc_status_password",
+        "revision-properties": "got_revision",
+        "set-status": true,
+        "status-url": "https://webrtc-status.appspot.com",
+        "track-revisions": true
+    },
     "non-closers": {
         "masters": [
             "https://build.chromium.org/p/chromium.fyi",

@@ -304,6 +304,41 @@
         }
       }
     ],
+    "https://build.chromium.org/p/client.webrtc": [
+      {
+        "tree_notify": [
+          "webrtc-sheriff-mtv@grotations.appspotmail.com",
+          "webrtc-sheriff-sto@grotations.appspotmail.com"
+        ],
+        "categories": [
+          "chromium_tree_closer"
+        ],
+        "builders": {
+          "Win32 Debug": { "categories": [ "webrtc_windows"] },
+          "Win32 Release": { "categories": [ "webrtc_windows"] },
+          "Win64 Debug": { "categories": [ "webrtc_windows"] },
+          "Win64 Release": { "categories": [ "webrtc_windows"] },
+          "Mac32 Debug": { "categories": [ "webrtc_compile"] },
+          "Mac32 Release": { "categories": [ "webrtc_compile"] },
+          "Mac64 Debug": { "categories": [ "webrtc_compile"] },
+          "Mac64 Release": { "categories": [ "webrtc_compile"] },
+          "Mac Asan": { "categories": [ "webrtc_compile"] },
+          "iOS Debug": { "categories": [ "webrtc_compile"] },
+          "iOS Release": { "categories": [ "webrtc_compile"] },
+          "Linux32 Debug": { "categories": [ "webrtc_compile"] },
+          "Linux32 Release": { "categories": [ "webrtc_compile"] },
+          "Linux64 Debug": { "categories": [ "webrtc_compile"] },
+          "Linux64 Release": { "categories": [ "webrtc_compile"] },
+          "Linux Asan": { "categories": [ "webrtc_compile"] },
+          "Linux Tsan v2": { "categories": [ "webrtc_compile"] },
+          "Android Builder": { "categories": [ "webrtc_compile"] },
+          "Android Builder (dbg)": { "categories": [ "webrtc_compile"] },
+          "Android Clang (dbg)": { "categories": [ "webrtc_compile"] },
+          "Android ARM64 (dbg)": { "categories": [ "webrtc_compile"] },
+          "*": {}
+        }
+      }
+    ],
     "https://build.chromium.org/p/chromium.fyi": [
       {
         "tree_notify": [
@@ -376,6 +411,20 @@
         "slave_steps"
       ],
       "sheriff_classes": ["sheriff_android"]
+    },
+    "webrtc_compile": {
+      "closing_optional": [
+        "compile"
+      ]
+    },
+    "webrtc_windows": {
+      "forgiving_optional": [
+        "svnkill",
+        "taskkill"
+      ],
+      "closing_optional": [
+        "compile"
+      ]
     }
   }
 }
