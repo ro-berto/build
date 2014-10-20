@@ -215,7 +215,7 @@
       "python",
       "-u",
       "[BUILD]/scripts/slave/recipe_modules/adb/resources/list_devices.py",
-      "['[BUILD_INTERNAL]/scripts/slave/android/adb', 'devices']",
+      "['[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb', 'devices']",
       "/path/to/tmp/json"
     ],
     "name": "List adb devices",
@@ -231,7 +231,7 @@
       "python",
       "-u",
       "\nimport subprocess\nimport sys\nadb_path = sys.argv[1]\nfor device in sys.argv[2:]:\n  subprocess.check_call([adb_path, '-s', device, 'root'])\n  subprocess.check_call([adb_path, '-s', device, 'wait-for-device'])\n",
-      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
       "014E1F310401C009"
     ],
     "name": "Root devices",

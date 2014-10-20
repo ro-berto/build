@@ -69,7 +69,7 @@
       "python",
       "-u",
       "[BUILD]/scripts/slave/recipe_modules/adb/resources/list_devices.py",
-      "['[BUILD_INTERNAL]/scripts/slave/android/adb', 'devices']",
+      "['[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb', 'devices']",
       "/path/to/tmp/json"
     ],
     "name": "List adb devices",
@@ -82,7 +82,7 @@
   },
   {
     "cmd": [
-      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
       "-s",
       "014E1F310401C009",
       "shell",
@@ -94,7 +94,7 @@
   },
   {
     "cmd": [
-      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
       "-s",
       "014E1F310401C009",
       "root"
@@ -103,7 +103,7 @@
   },
   {
     "cmd": [
-      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
       "-s",
       "014E1F310401C009",
       "remount"
@@ -120,7 +120,7 @@
   },
   {
     "cmd": [
-      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
       "-s",
       "014E1F310401C009",
       "shell",
@@ -227,7 +227,7 @@
   },
   {
     "cmd": [
-      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
       "-s",
       "014E1F310401C009",
       "shell",
@@ -239,7 +239,7 @@
   },
   {
     "cmd": [
-      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
       "-s",
       "014E1F310401C009",
       "shell",
@@ -258,7 +258,7 @@
   },
   {
     "cmd": [
-      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
       "-s",
       "014E1F310401C009",
       "shell",
@@ -283,7 +283,7 @@
   },
   {
     "cmd": [
-      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
       "-s",
       "014E1F310401C009",
       "shell",
@@ -295,7 +295,7 @@
   },
   {
     "cmd": [
-      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
       "-s",
       "014E1F310401C009",
       "shell",
@@ -314,7 +314,7 @@
   },
   {
     "cmd": [
-      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
       "-s",
       "014E1F310401C009",
       "shell",

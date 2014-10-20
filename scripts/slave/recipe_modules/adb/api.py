@@ -17,8 +17,8 @@ class AdbApi(recipe_api.RecipeApi):
     return self.m.step(cmd=cmd_prefix + cmd, **kwargs)
 
   def _adb_path(self):
-    return str(self.m.path['build_internal'].join('scripts', 'slave',
-                                                  'android', 'adb'))
+    return str(self.m.path['slave_build'].join(
+        'src', 'third_party', 'android_tools', 'sdk', 'platform-tools', 'adb'))
 
   def list_devices(self, step_test_data=None, **kwargs):
     cmd = [
