@@ -18,7 +18,8 @@
       "/path/to/tmp/json",
       "--revision",
       "v8@refs/branch-heads/3.28:20123",
-      "--no_shallow"
+      "--no_shallow",
+      "--with_branch_heads"
     ],
     "name": "bot_update",
     "~followup_annotations": [

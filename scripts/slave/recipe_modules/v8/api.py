@@ -233,8 +233,7 @@ class V8Api(recipe_api.RecipeApi):
     solution.revision = revision
     update_step = self.m.bot_update.ensure_checkout(
         no_shallow=True,
-        with_branch_heads=(self.m.properties['mastername'] ==
-                           'client.v8.branches'))
+        with_branch_heads=bool(self.c.branch))
 
     if not update_step.json.output['did_run']:
       solution.revision = None
