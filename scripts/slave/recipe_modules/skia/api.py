@@ -116,7 +116,19 @@ class SkiaApi(recipe_api.RecipeApi):
 
   def checkout_steps(self):
     """Run the steps to obtain a checkout of Skia."""
-    update_step = self.m.gclient.checkout()
+    gclient_cfg = self.m.gclient.make_config()
+    skia = gclient_cfg.solutions.add()
+    skia.name = 'skia'
+    skia.url = global_constants.SKIA_REPO
+    gclient_cfg.got_revision_mapping['skia'] = 'got_revision'
+    target_os = []
+    if is_android(self.c.builder_cfg):
+      target_os.append('android')
+    if is_chromeos(self.c.builder_cfg):
+      target_os.append('chromeos')
+    gclient_cfg.target_os = target_os
+    update_step = self.m.gclient.checkout(gclient_config=gclient_cfg)
+
     self.got_revision = update_step.presentation.properties['got_revision']
     self.m.tryserver.maybe_apply_issue()
 
