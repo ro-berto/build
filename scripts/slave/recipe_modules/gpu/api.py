@@ -363,13 +363,11 @@ class GpuApi(recipe_api.RecipeApi):
     # GPU unit tests.
     capture(self._run_isolate('gpu_unittests', name='gpu_unittests'))
 
-    # Run the content unit tests on all bots except Mac 10.8.
-    # TODO(jmadill): Run on all bots once http://crbug.com/421067 is fixed.
-    if not "Mac 10.8" in self.m.properties['buildername']:
+    # Run the content and media unittests on the FYI bots
+    # TODO(jmadill): Run them on all GPU bots once stable
+    if self.is_fyi_waterfall:
       capture(self._run_isolate('content_unittests', name='content_unittests'))
-
-    # Run the media unit tests.
-    capture(self._run_isolate('media_unittests', name='media_unittests'))
+      capture(self._run_isolate('media_unittests', name='media_unittests'))
 
     if failures:
       raise self.m.step.StepFailure('%d tests failed: %r' % (len(failures), failures))
