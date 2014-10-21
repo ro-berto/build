@@ -51,10 +51,3 @@ def clang(c):
 def use_git(c):
   # TODO(machenbach): Make this the default.
   c.solutions[0].url = 'https://chromium.googlesource.com/v8/v8'
-
-
-@CONFIG_CTX(includes=['v8'])
-def v8_lkgr(c):
-  if c.GIT_MODE:
-    raise BadConf('Git has problems with safesync_url.')
-  c.solutions[0].safesync_url = 'https://v8-status.appspot.com/lkgr'

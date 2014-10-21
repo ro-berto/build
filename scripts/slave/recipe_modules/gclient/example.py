@@ -23,6 +23,10 @@ def GenSteps(api):
   soln = bl_cfg.solutions.add()
   soln.name = 'WebKit'
   soln.url = 'svn://svn.chromium.org/blink/trunk'
+
+  # Use safesync url for lkgr.
+  soln.safesync_url = 'https://blink-status.appspot.com/lkgr'
+
   bl_cfg.got_revision_mapping['src/blatley'] = 'got_blatley_revision'
   api.gclient.checkout(
       gclient_config=bl_cfg,
