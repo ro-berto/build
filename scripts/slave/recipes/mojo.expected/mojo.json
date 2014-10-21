@@ -65,8 +65,8 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/mojo/tools/mojob.sh",
-      "test",
-      "--debug"
+      "--debug",
+      "test"
     ],
     "name": "mojob test"
   }

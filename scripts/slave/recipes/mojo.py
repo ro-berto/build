@@ -28,7 +28,7 @@ def _BuildSteps(api):
 
 def _RunTests(api):
   mojob_path = api.path['checkout'].join('mojo', 'tools', 'mojob.sh')
-  api.step('mojob test', [mojob_path, 'test', '--debug'])
+  api.step('mojob test', [mojob_path, '--debug', 'test'])
 
 def GenSteps(api):
   _CheckoutSteps(api)
