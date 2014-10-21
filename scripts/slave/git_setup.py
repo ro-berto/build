@@ -46,7 +46,8 @@ def main():
     os.makedirs(path)
 
   if os.path.exists(os.path.join(path, '.git')):
-    run_git(opts.git_cmd_path, 'remote', 'rm', 'origin', cwd=path)
+    run_git(opts.git_cmd_path, 'config', '--remove-section', 'remote.origin',
+            cwd=path)
   else:
     run_git(opts.git_cmd_path, 'init', cwd=path)
   run_git(opts.git_cmd_path, 'remote', 'add', 'origin', url, cwd=path)
