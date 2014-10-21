@@ -377,13 +377,16 @@
           "Linux32 Release": { "categories": [ "webrtc_compile"] },
           "Linux64 Debug": { "categories": [ "webrtc_compile"] },
           "Linux64 Release": { "categories": [ "webrtc_compile"] },
+          "Linux64 Debug (GN)": { "categories": [ "webrtc_compile"] },
+          "Linux64 Release (GN)": { "categories": [ "webrtc_compile"] },
           "Linux Asan": { "categories": [ "webrtc_compile"] },
           "Linux Tsan v2": { "categories": [ "webrtc_compile"] },
           "Android Builder": { "categories": [ "webrtc_compile"] },
           "Android Builder (dbg)": { "categories": [ "webrtc_compile"] },
           "Android Clang (dbg)": { "categories": [ "webrtc_compile"] },
           "Android ARM64 (dbg)": { "categories": [ "webrtc_compile"] },
-          "*": {}
+          "Android GN": { "categories": [ "webrtc_compile"] },
+          "Android GN (dbg)": { "categories": [ "webrtc_compile"] }
         }
       }
     ],
@@ -495,7 +498,8 @@
     },
     "webrtc_compile": {
       "closing_optional": [
-        "compile"
+        "compile",
+        "gn"
       ]
     },
     "webrtc_windows": {
