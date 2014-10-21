@@ -36,7 +36,7 @@ class GitApi(recipe_api.RecipeApi):
   def checkout(self, url, ref=None, dir_path=None, recursive=False,
                submodules=True, keep_paths=None, step_suffix=None,
                curl_trace_file=None, can_fail_build=True,
-               set_got_revision=False, run_gc=False):
+               set_got_revision=False):
     """Returns an iterable of steps to perform a full git checkout.
     Args:
       url (string): url of remote repo to use as upstream
@@ -53,7 +53,6 @@ class GitApi(recipe_api.RecipeApi):
       can_fail_build (bool): if False, ignore errors during fetch or checkout.
       set_got_revision (bool): if True, resolves HEAD and sets got_revision
           property.
-      run_gc (bool): If True, run git-gc after fetch.
     """
     if not dir_path:
       dir_path = url.rsplit('/', 1)[-1]
@@ -125,8 +124,6 @@ class GitApi(recipe_api.RecipeApi):
       env=fetch_env,
       stderr=fetch_stderr,
       can_fail_build=can_fail_build)
-    if run_gc:
-      self('gc', name='git gc%s' % step_suffix, can_fail_build=False)
     self('checkout', '-f', checkout_ref,
       cwd=dir_path,
       name='git checkout%s' % step_suffix,

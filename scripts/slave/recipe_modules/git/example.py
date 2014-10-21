@@ -26,9 +26,7 @@ def GenSteps(api):
       ref=api.properties.get('revision'),
       recursive=True,
       set_got_revision=api.properties.get('set_got_revision'),
-      curl_trace_file=curl_trace_file,
-      run_gc=api.properties.get('run_gc', False),
-  )
+      curl_trace_file=curl_trace_file)
 
   # You can use api.git.fetch_tags to fetch all tags from the origin
   api.git.fetch_tags()
@@ -72,9 +70,4 @@ def GenTests(api):
       api.properties(set_got_revision=True) +
       api.step_data('set got_revision',
                     stdout=api.raw_io.output('deadbeef'))
-  )
-
-  yield (
-      api.test('git-gc') +
-      api.properties(run_gc=True)
   )
