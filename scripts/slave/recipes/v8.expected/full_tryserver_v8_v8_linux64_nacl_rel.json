@@ -12,6 +12,8 @@
       "TestSlavename",
       "--spec",
       "cache_dir = None\nsolutions = [{'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'http://v8.googlecode.com/svn/branches/bleeding_edge'}]",
+      "--root",
+      "v8",
       "--revision_mapping_file",
       "{\"v8\": \"got_revision\"}",
       "--patch_url",
@@ -24,91 +26,24 @@
     ],
     "name": "bot_update",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Some step text@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"did_run\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[DEPOT_TOOLS]/gclient.py",
-      "config",
-      "--spec",
-      "cache_dir = None\nsolutions = [{'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'http://v8.googlecode.com/svn/branches/bleeding_edge'}]"
-    ],
-    "name": "gclient setup"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/gclient_safe_revert.py",
-      ".",
-      "[DEPOT_TOOLS]/gclient"
-    ],
-    "name": "gclient revert"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[DEPOT_TOOLS]/gclient.py",
-      "sync",
-      "--nohooks",
-      "--force",
-      "--verbose",
-      "--delete_unversioned_trees",
-      "--revision",
-      "v8@12345",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "name": "gclient sync",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"solutions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"v8/\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": 50110@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"v8\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": 50110, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision_cp\": \"refs/heads/master@{#50110}\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision_git\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"root\": \"v8\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@got_revision@50110@@@"
+      "@@@SET_BUILD_PROPERTY@got_revision@50110@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision_cp@\"refs/heads/master@{#50110}\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision_git@\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\"@@@"
     ]
-  },
-  {
-    "cmd": [
-      "svn",
-      "export",
-      "--force",
-      "svn://svn-mirror.golo.chromium.org/patch",
-      "/path/to/tmp/diff"
-    ],
-    "name": "download patch",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@patch.diff@fake patch.diff content (line 1)@@@",
-      "@@@STEP_LOG_LINE@patch.diff@fake patch.diff content (line 2)@@@",
-      "@@@STEP_LOG_LINE@patch.diff@@@@",
-      "@@@STEP_LOG_END@patch.diff@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "patch",
-      "--dir",
-      "[SLAVE_BUILD]/v8",
-      "--force",
-      "--forward",
-      "--remove-empty-files",
-      "--strip",
-      "0"
-    ],
-    "name": "apply patch",
-    "stdin": "fake patch.diff content (line 1)\nfake patch.diff content (line 2)\n"
   },
   {
     "cmd": [
@@ -160,7 +95,7 @@
     "env": {
       "NACL_SDK_ROOT": "[SLAVE_BUILD]/nacl_sdk/pepper_current"
     },
-    "name": "compile (with patch)"
+    "name": "compile"
   },
   {
     "cmd": [

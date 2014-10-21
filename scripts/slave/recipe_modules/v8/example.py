@@ -3,7 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'gclient',
+  'bot_update',
   'perf_dashboard',
   'properties',
   'v8',
@@ -15,7 +15,8 @@ def GenSteps(api):
   api.v8.set_config('v8')
   api.v8.set_bot_config({'perf': ['example1', 'example2']})
   api.perf_dashboard.set_config('testing')
-  api.v8.checkout()
+  update_step = api.bot_update.ensure_checkout(force=True, no_shallow=True)
+  api.v8.revision = update_step.presentation.properties['got_revision']
   perf_config = {
     'example1': {
       'name': 'Example1',
