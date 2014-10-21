@@ -897,7 +897,8 @@ def force_revision(folder_name, revision):
       git_ref = revision
     git('checkout', '--force', git_ref, cwd=folder_name)
   else:
-    git('checkout', '--force', 'origin/%s' % branch, cwd=folder_name)
+    ref = branch if branch.startswith('refs/') else 'origin/%s' % branch
+    git('checkout', '--force', ref, cwd=folder_name)
 
 def git_checkout(solutions, revisions, shallow, refs):
   build_dir = os.getcwd()
