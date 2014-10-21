@@ -31,6 +31,7 @@ def device_from_builder_dict(builder_dict):
     }.get(builder_dict['target_arch'], 'arm_v7_thumb')
   elif builder_dict['os'] == 'Android':
     return {
+      'GalaxyS4': 'arm_v7_thumb',
       'Nexus5': 'nexus_5',
       'Nexus7': 'nexus_7',
       'Nexus10': 'nexus_10',
