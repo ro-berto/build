@@ -223,7 +223,8 @@ class V8Api(recipe_api.RecipeApi):
   def checkout(self, revert=False):
     # Set revision for bot_update. Needs to be
     # reset afterwards as gclient doesn't understand this info.
-    revision = self.m.properties.get('revision', 'HEAD')
+    revision = self.m.properties.get(
+        'parent_got_revision', self.m.properties.get('revision', 'HEAD'))
     solution = self.m.gclient.c.solutions[0]
     if self.c.branch:
       if self.c.branch == 'candidates':

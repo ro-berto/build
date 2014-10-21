@@ -80,6 +80,9 @@ def GenTests(api):
                      v8_config_kwargs.get('TARGET_BITS', 64))
       )
 
+      if bot_config.get('parent_buildername'):
+        test += api.properties(parent_got_revision='54321')
+
       if mastername.startswith('tryserver'):
         test += (api.properties(
             revision='12345',
