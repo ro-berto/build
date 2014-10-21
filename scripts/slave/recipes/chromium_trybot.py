@@ -798,6 +798,7 @@ def GenSteps(api):
     # See if the patch needs to compile on the current platform.
     # Don't run analyze for other projects, such as blink, as there aren't that
     # many try jobs for them.
+    requires_compile = True
     if isinstance(test_spec, dict) and api.properties.get('root') == 'src':
       analyze_config_file = bot_config['testing'].get('analyze_config_file',
                                          'trybot_analyze_config.json')
@@ -807,9 +808,6 @@ def GenSteps(api):
                   all_compile_targets(api, conditional_tests),
               compile_targets,
               analyze_config_file)
-
-      if not requires_compile:
-        return [], bot_update_step
 
       gtest_tests = filter_tests(gtest_tests, matching_exes)
 
@@ -837,6 +835,13 @@ def GenSteps(api):
 
     if api.platform.is_win:
       tests.append(api.chromium.steps.MiniInstallerTest())
+
+    if not requires_compile:
+      # Even though the patch doesn't require compile, we'd still like to
+      # run tests not depending on compiled targets (that's obviously not
+      # covered by the "analyze" step).
+      tests = [t for t in tests if not t.compile_targets(api)]
+      return tests, bot_update_step
 
     has_swarming_tests = any(t.uses_swarming for t in tests)
 
@@ -957,22 +962,26 @@ def GenSteps(api):
             compile_targets,
             'trybot_analyze_config.json')
 
-    if not requires_compile:
-      return
+    if requires_compile:
+      tests = filter_tests(tests, matching_exes)
+      tests_including_triggered = filter_tests(
+          tests_including_triggered, matching_exes)
 
-    tests = filter_tests(tests, matching_exes)
-    tests_including_triggered = filter_tests(
-        tests_including_triggered, matching_exes)
+      api.chromium_tests.compile_specific_targets(
+          main_waterfall_config['mastername'],
+          main_waterfall_config['buildername'],
+          bot_update_step,
+          master_dict,
+          test_spec,
+          compile_targets,
+          tests_including_triggered,
+          override_bot_type='builder_tester')
+    else:
+      # Even though the patch doesn't require compile, we'd still like to
+      # run tests not depending on compiled targets (that's obviously not
+      # covered by the "analyze" step).
+      tests = [t for t in tests if not t.compile_targets(api)]
 
-    api.chromium_tests.compile_specific_targets(
-        main_waterfall_config['mastername'],
-        main_waterfall_config['buildername'],
-        bot_update_step,
-        master_dict,
-        test_spec,
-        compile_targets,
-        tests_including_triggered,
-        override_bot_type='builder_tester')
   else:
     # TODO(phajdan.jr): Remove the legacy trybot-specific codepath.
     tests, bot_update_step = compile_and_return_tests(
