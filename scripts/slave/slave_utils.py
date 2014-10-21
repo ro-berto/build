@@ -340,9 +340,10 @@ def GSUtilSetup():
   boto_file = os.path.join(os.path.dirname(__file__), '..', '..', 'site_config',
                            '.boto')
 
-  # Make sure gsutil uses this boto file.
-  os.environ['AWS_CREDENTIAL_FILE'] = boto_file
-  os.environ['BOTO_CONFIG'] = boto_file
+  # Make sure gsutil uses this boto file if it exists.
+  if os.path.exists(boto_file):
+    os.environ['AWS_CREDENTIAL_FILE'] = boto_file
+    os.environ['BOTO_CONFIG'] = boto_file
   return gsutil
 
 
