@@ -125,23 +125,5 @@
     ],
     "cwd": "[SLAVE_BUILD]\\v8",
     "name": "Check"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]\\scripts\\slave\\v8\\v8testing.py",
-      "--target",
-      "Release",
-      "--arch",
-      "ia32",
-      "--testname",
-      "webkit",
-      "--flaky-tests=skip",
-      "--json-test-results",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]\\v8",
-    "name": "Webkit"
   }
 ]
