@@ -22,9 +22,8 @@ def _BuildSteps(api):
   gn_path = api.path['depot_tools'].join('gn.py')
   api.step('gn', [gn_path, "gen", "out/Debug"], cwd=api.path['checkout'])
 
-  debug_path = api.path['checkout'].join('out', 'Debug')
-  api.step('compile with ninja', ['ninja', '-C', debug_path, 'mojo'])
-
+  mojob_path = api.path['checkout'].join('mojo', 'tools', 'mojob.sh')
+  api.step('mojob build', [mojob_path, '--debug', 'build'])
 
 def _RunTests(api):
   mojob_path = api.path['checkout'].join('mojo', 'tools', 'mojob.sh')

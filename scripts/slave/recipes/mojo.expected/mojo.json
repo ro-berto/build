@@ -55,12 +55,11 @@
   },
   {
     "cmd": [
-      "ninja",
-      "-C",
-      "[SLAVE_BUILD]/src/out/Debug",
-      "mojo"
+      "[SLAVE_BUILD]/src/mojo/tools/mojob.sh",
+      "--debug",
+      "build"
     ],
-    "name": "compile with ninja"
+    "name": "mojob build"
   },
   {
     "cmd": [
