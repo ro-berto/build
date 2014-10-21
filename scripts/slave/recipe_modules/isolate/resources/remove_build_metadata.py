@@ -4,10 +4,14 @@
 # found in the LICENSE file.
 """Remove the build metadata embedded in the artifacts of a build."""
 
+import json
 import optparse
 import os
 import subprocess
 import sys
+
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 def RunZapTimestamp(src_dir, filename):
@@ -21,7 +25,14 @@ def RemovePEMetadata(build_dir, src_dir):
   """Remove the build metadata from a PE file."""
   files = (i for i in os.listdir(build_dir) if i.endswith(('.dll', '.exe')))
 
+  with open(os.path.join(BASE_DIR, 'deterministic_build_blacklist.json')) as f:
+    blacklist = frozenset(json.load(f))
+
   for filename in files:
+    # Ignore the blacklisted files.
+    if filename in blacklist:
+      print 'Ignoring blacklisted file %s' % filename
+      continue
     # Only run zap_timestamp on the PE files for which we have a PDB.
     if os.path.exists(os.path.join(build_dir, filename + '.pdb')):
       ret = RunZapTimestamp(src_dir, os.path.join(build_dir, filename))
