@@ -38,7 +38,6 @@ class ChromiteFactory(object):
       chromite_patch: a url and ref pair (dict) to patch the checked out
           chromite. Fits well with a single change from a codereview, to use
           on one or more builders for realistic testing, or experiments.
-      sleep_sync: Whether to randomly delay the start of the chromite step.
       show_gclient_output: Set to False to hide the output of 'gclient sync'.
           Used by external masters to prevent leaking sensitive information,
           since both external and internal slaves use internal.DEPS/.
@@ -51,8 +50,8 @@ class ChromiteFactory(object):
   def __init__(self, script, params=None, b_params=None, timeout=9000,
                branch='master', chromite_repo=_default_chromite,
                factory=None, use_chromeos_factory=False, slave_manager=True,
-               chromite_patch=None, sleep_sync=None,
-               show_gclient_output=True, max_time=_default_max_time):
+               chromite_patch=None, show_gclient_output=True,
+               max_time=_default_max_time):
     if chromite_patch:
       assert ('url' in chromite_patch and 'ref' in chromite_patch)
 
@@ -62,7 +61,6 @@ class ChromiteFactory(object):
     self.timeout = timeout
     self.show_gclient_output = show_gclient_output
     self.slave_manager = slave_manager
-    self.sleep_sync = sleep_sync
     self.step_args = {}
     self.step_args['maxTime'] = max_time
 
@@ -132,19 +130,6 @@ class ChromiteFactory(object):
                             timeout=300,
                             want_stdout=self.show_gclient_output,
                             want_stderr=self.show_gclient_output)
-
-    # TODO(dnj): Remove this parameter if preliminary tests are working without
-    #            it (crbug.com/422635).
-    if self.sleep_sync:
-      # We run a script from the script checkout above.
-      fuzz_start = ['python', 'scripts/slave/random_delay.py',
-                    '--max=%g' % self.sleep_sync]
-      self.f_cbuild.addStep(shell.ShellCommand,
-                            command=fuzz_start,
-                            name='random_delay',
-                            description='Delay start of build',
-                            workdir='/b/build',
-                            timeout=int(self.sleep_sync) + 10)
 
     self.chromite_dir = self.git_clear_and_checkout(self.chromite_repo,
                                                     self.chromite_patch)
