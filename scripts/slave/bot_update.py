@@ -209,6 +209,8 @@ RECOGNIZED_PATHS = {
         CHROMIUM_GIT_HOST + '/v8/v8.git',
     '/chrome/trunk/src/tools/cros.DEPS':
         CHROMIUM_GIT_HOST + '/chromium/src/tools/cros.DEPS.git',
+    '/webrtc/trunk':
+        CHROMIUM_GIT_HOST + '/external/webrtc.git',
 }
 RECOGNIZED_PATHS.update(internal_data.get('RECOGNIZED_PATHS', {}))
 
@@ -256,9 +258,10 @@ ENABLED_BUILDERS = {
         'v8-win-release',
     ],
     'tryserver.webrtc': [
-        'android_apk',
-        'android_apk_rel',
-    ],
+        'linux',
+        'mac',
+        'win',
+     ],
 }
 ENABLED_BUILDERS.update(internal_data.get('ENABLED_BUILDERS', {}))
 
