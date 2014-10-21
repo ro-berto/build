@@ -360,8 +360,9 @@ class GpuApi(recipe_api.RecipeApi):
           name='tab_capture_end2end_tests',
           spawn_dbus=True))
 
-    # GPU unit tests.
-    capture(self._run_isolate('gpu_unittests', name='gpu_unittests'))
+    # Run GPU unit tests on FYI bots.
+    if self.is_fyi_waterfall:
+      capture(self._run_isolate('gpu_unittests', name='gpu_unittests'))
 
     # Run the content and media unittests on the FYI bots
     # TODO(jmadill): Run them on all GPU bots once stable
