@@ -61,7 +61,7 @@
       "mojo"
     ],
     "name": "compile with ninja"
-  }
+  },
   {
     "cmd": [
       "[SLAVE_BUILD]/src/mojo/tools/mojob.sh",

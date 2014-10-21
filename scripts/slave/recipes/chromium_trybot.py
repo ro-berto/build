@@ -854,11 +854,6 @@ def GenSteps(api):
     # compatible with what recipes expect.
     if has_swarming_tests:
       api.swarming.check_client_version()
-      api.swarming.default_priority = build_to_priority(api.properties)
-      # TODO(phajdan): uncomment once we have XP or 10.6 trybots.
-      #os_dimension = bot_config.get('swarming_dimensions', {}).get('os')
-      #if os_dimension:
-      #  api.swarming.set_default_dimension('os', os_dimension)
 
     try:
       api.chromium.runhooks(name='runhooks (with patch)')
@@ -905,6 +900,27 @@ def GenSteps(api):
   buildername = api.properties.get('buildername')
   bot_config = get_bot_config(mastername, buildername)
   api.swarming.set_default_dimension('pool', 'Chrome')
+  api.swarming.default_priority = build_to_priority(api.properties)
+  api.swarming.add_default_tag('project:chromium')
+  api.swarming.add_default_tag('purpose:pre-commit')
+  # TODO(maruel): Soon!
+  # api.swarming.default_idempotent = True
+
+  # Differentiate between try jobs and CQ jobs. Always find out who made the CL.
+  requestor = api.properties.get('requestor')
+  if requestor == 'commit-bot@chromium.org':
+    api.swarming.add_default_tag('purpose:CQ')
+    blamelist = api.properties.get('blamelist')
+    if len(blamelist) == 1:
+      requestor = blamelist[0]
+  else:
+    api.swarming.add_default_tag('purpose:ManualTS')
+  api.swarming.default_user = requestor
+
+  # TODO(phajdan): uncomment once we have XP or 10.6 trybots.
+  #os_dimension = bot_config.get('swarming_dimensions', {}).get('os')
+  #if os_dimension:
+  #  api.swarming.set_default_dimension('os', os_dimension)
 
   main_waterfall_config = bot_config.get('based_on_main_waterfall')
   if main_waterfall_config:
@@ -1173,8 +1189,12 @@ def GenTests(api):
 
   yield (
     api.test('arm') +
-    api.properties.generic(mastername='tryserver.chromium.linux',
-                           buildername='linux_arm') +
+    api.properties.generic(
+        mastername='tryserver.chromium.linux',
+        buildername='linux_arm',
+        requestor='commit-bot@chromium.org',
+        blamelist='joe@chromium.org',
+        blamelist_real=['joe@chromium.org']) +
     api.platform('linux', 64) +
     api.override_step_data('read test spec', api.json.output({
         'compile_targets': ['browser_tests_run'],

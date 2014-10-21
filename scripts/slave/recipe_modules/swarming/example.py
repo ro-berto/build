@@ -25,10 +25,13 @@ def GenSteps(api):
   # Configure isolate & swarming modules (this is optional).
   api.isolate.isolate_server = 'https://isolateserver-dev.appspot.com'
   api.swarming.swarming_server = 'https://chromium-swarm-dev.appspot.com'
-  api.swarming.profile = True
-  api.swarming.verbose = True
+  api.swarming.add_default_tag('master:tryserver')
+  api.swarming.default_idempotent = True
   api.swarming.default_priority = 30
+  api.swarming.default_user = 'joe'
+  api.swarming.profile = True
   api.swarming.set_default_env('TESTING', '1')
+  api.swarming.verbose = True
 
   try:
     # Testing ReadOnlyDict.__setattr__() coverage.
@@ -66,9 +69,10 @@ def GenSteps(api):
     # Create a task to run the isolated file on swarming, set OS dimension.
     # Also generate code coverage for multi-shard case by triggering multiple
     # shards on Linux.
-    task = api.swarming.task('hello_world', isolated_hash, make_unique=True)
+    task = api.swarming.task('hello_world', isolated_hash)
     task.dimensions['os'] = api.swarming.prefered_os_dimension(platform)
     task.shards = 2 if platform == 'linux' else 1
+    task.tags.add('os:' + platform)
     tasks.append(task)
 
   # Launch all tasks.

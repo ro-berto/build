@@ -56,10 +56,17 @@ class SwarmingApi(recipe_api.RecipeApi):
     super(SwarmingApi, self).__init__(**kwargs)
     # All tests default to a x86-64 bot.
     self._default_dimensions = {'cpu': 'x86-64'}
+    # Expirations are set to mildly good values and will be tightened soon.
+    self._default_expiration = 60*60
     self._default_env = {}
+    self._default_hard_timeout = 60*60
+    self._default_idempotent = False
+    self._default_io_timeout = 20*60
     # The default priority is extremely low and should be increased dependending
     # on the type of task.
     self._default_priority = 200
+    self._default_tags = set()
+    self._default_user = None
     self._pending_tasks = set()
     self._profile = False
     self._swarming_server = 'https://chromium-swarm.appspot.com'
@@ -94,8 +101,26 @@ class SwarmingApi(recipe_api.RecipeApi):
   @verbose.setter
   def verbose(self, value):
     """Enables or disables verbose output in swarming scripts."""
-    assert isinstance(value, bool)
+    assert isinstance(value, bool), value
     self._verbose = value
+
+  @property
+  def default_idempotent(self):
+    return self._default_idempotent
+
+  @default_idempotent.setter
+  def default_idempotent(self, value):
+    assert isinstance(value, bool), value
+    self._default_idempotent = value
+
+  @property
+  def default_user(self):
+    return self._default_user
+
+  @default_user.setter
+  def default_user(self, value):
+    assert value is None or isinstance(value, basestring), value
+    self._default_user = value
 
   @property
   def default_dimensions(self):
@@ -134,6 +159,11 @@ class SwarmingApi(recipe_api.RecipeApi):
     assert 0 <= value <= 255
     self._default_priority = value
 
+  def add_default_tag(self, tag):
+    """Adds a tag to the Swarming tasks triggered."""
+    assert ':' in tag, tag
+    self._default_tags.add(tag)
+
   @staticmethod
   def prefered_os_dimension(platform):
     """Given a platform name returns the prefered Swarming OS dimension.
@@ -151,8 +181,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       'win': 'Windows-6.1',
     }[platform]
 
-  def task(self, title, isolated_hash,
-           make_unique=False, shards=None, extra_args=None):
+  def task(self, title, isolated_hash, shards=None, extra_args=None):
     """Returns a new SwarmingTask instance to run an isolated executable on
     Swarming.
 
@@ -166,14 +195,10 @@ class SwarmingApi(recipe_api.RecipeApi):
           in TESTS_SHARDS mapping.
       isolated_hash: hash of isolated test on isolate server, the test should
           be already isolated there, see 'isolate' recipe module.
-      make_unique: if True, will ensure task is run even if given isolated_hash
-          in given configuration was already tested. Does that by appending
-          current timestamp to task ID.
       shards: if defined, the number of shards to use for the task. By default
           this value is either 1 or based on the title.
       extra_args: list of command line arguments to pass to isolated tasks.
     """
-    # TODO(maruel): Get rid of make_unique.
     return SwarmingTask(
         title=title,
         isolated_hash=isolated_hash,
@@ -181,10 +206,14 @@ class SwarmingApi(recipe_api.RecipeApi):
         env=self._default_env,
         priority=self.default_priority,
         shards=shards or TESTS_SHARDS.get(title, 1),
-        builder=self.m.properties.get('buildername', 'local'),
-        build_number=self.m.properties.get('buildnumber', 0),
+        buildername=self.m.properties.get('buildername'),
+        buildnumber=self.m.properties.get('buildnumber'),
         profile=self.profile,
-        suffix='' if not make_unique else '/%d' % (self.m.time.time() * 1000),
+        user=self.default_user,
+        expiration=self._default_expiration,
+        io_timeout=self._default_io_timeout,
+        hard_timeout=self._default_hard_timeout,
+        idempotent=self.default_idempotent,
         extra_args=extra_args,
         collect_step=self._default_collect_step)
 
@@ -252,6 +281,9 @@ class SwarmingApi(recipe_api.RecipeApi):
       '--shards', str(task.shards),
       '--task-name', task.task_name,
       '--dump-json', self.m.json.output(),
+      '--expiration', str(task.expiration),
+      '--io-timeout', str(task.io_timeout),
+      '--hard-timeout', str(task.hard_timeout),
     ]
     for name, value in sorted(task.dimensions.iteritems()):
       assert isinstance(value, basestring), value
@@ -259,10 +291,34 @@ class SwarmingApi(recipe_api.RecipeApi):
     for name, value in sorted(task.env.iteritems()):
       assert isinstance(value, basestring), value
       args.extend(['--env', name, value])
+
+    # Default tags.
+    tags = set(task.tags)
+    tags.update(self._default_tags)
+    tags.add('data:' + task.isolated_hash)
+    tags.add('name:' + task.title)
+    mastername = self.m.properties.get('mastername')
+    if mastername:
+      tags.add('master:' + mastername)
+    if task.buildername:
+      tags.add('buildername:' + task.buildername)
+    if task.buildnumber:
+      tags.add('buildnumber:%d' % task.buildnumber)
+    if task.dimensions.get('os'):
+      tags.add('os:' + task.dimensions['os'])
+    # TODO(maruel): 'rietveld' and 'issue' and 'patchset', or maybe just an url.
+    for tag in sorted(tags):
+      assert ':' in tag, tag
+      args.extend(['--tag', tag])
+
     if task.profile:
       args.append('--profile')
     if self.verbose:
       args.append('--verbose')
+    if task.idempotent:
+      args.append('--idempotent')
+    if task.user:
+      args.extend(['--user', task.user])
 
     # What isolated command to trigger.
     args.append(task.isolated_hash)
@@ -513,7 +569,8 @@ class SwarmingTask(object):
   """Definition of a task to run on swarming."""
 
   def __init__(self, title, isolated_hash, dimensions, env, priority,
-               shards, builder, build_number, profile, suffix, extra_args,
+               shards, buildername, buildnumber, profile, expiration,
+               user, io_timeout, hard_timeout, idempotent, extra_args,
                collect_step):
     """Configuration of a swarming task.
 
@@ -524,52 +581,64 @@ class SwarmingTask(object):
           run the task as well as command line to launch. See 'isolate' recipe
           module.
       dimensions: key-value mapping with swarming dimensions that specify
-          on what Swarming slaves task can run. One important dimension is 'OS',
-          which defines platform flavor to run the task on.
+          on what Swarming slaves task can run. One important dimension is 'os',
+          which defines platform flavor to run the task on. See Swarming doc.
       env: key-value mapping with additional environment variables to add to
           environment before launching the task executable.
-      priority: integer [0, 1000] that defines how urgent the task is.
-          Lower value corresponds to higher priority. Swarming service tries to
-          execute tasks with higher priority first.
+      priority: integer [0, 255] that defines how urgent the task is.
+          Lower value corresponds to higher priority. Swarming service executes
+          tasks with higher priority first.
       shards: how many concurrent shards to run, makes sense only for
           isolated tests based on gtest. Swarming uses GTEST_SHARD_INDEX
           and GTEST_TOTAL_SHARDS environment variables to tell the executable
           what shard to run.
-      builder: buildbot builder this task was triggered from.
-      build_number: build number of a build this task was triggered from.
+      buildername: buildbot builder this task was triggered from.
+      buildnumber: build number of a build this task was triggered from.
       profile: True to enable swarming profiling.
-      suffix: string suffix to append to task ID.
+      expiration: number of schedule until the task shouldn't even be run if it
+          hadn't started yet.
+      user: user that requested this task, if applicable.
+      io_timeout: number of seconds that the task is allowed to not emit any
+          stdout bytes, after which it is forcibly killed.
+      hard_timeout: number of seconds for which the task is allowed to run,
+          after which it is forcibly killed.
+      idempotent: True if the results from a previous task can be reused. E.g.
+          this task has no side-effects.
       extra_args: list of command line arguments to pass to isolated tasks.
       collect_step: callback that will be called to collect and processes
           results of task execution, signature is collect_step(task, **kwargs).
     """
     self._trigger_output = None
-    self.build_number = build_number
-    self.builder = builder
+    self.buildnumber = buildnumber
+    self.buildername = buildername
     self.collect_step = collect_step
     self.dimensions = dimensions.copy()
     self.env = env.copy()
+    self.expiration = expiration
     self.extra_args = tuple(extra_args or [])
+    self.hard_timeout = hard_timeout
+    self.idempotent = idempotent
+    self.io_timeout = io_timeout
     self.isolated_hash = isolated_hash
     self.priority = priority
     self.profile = profile
     self.shards = shards
-    self.suffix = suffix
+    self.tags = set()
     self.title = title
+    self.user = user
 
   @property
   def task_name(self):
     """Name of this task, derived from its other properties.
 
-    Task ID identifies what task is doing and what machine configuration it
-    expects. It is used as a key in table of a cached results. If Swarming
-    service figures out that a task with given ID has successfully finished
-    before, it will reuse the result right away, without even running
-    the task again.
+    The task name is purely to make sense of the task and is not used in any
+    other way.
     """
-    return '%s/%s/%s/%s/%d%s' % (
-        self.title, self.dimensions['os'], self.isolated_hash,
-        self.builder, self.build_number, self.suffix)
+    out = '%s/%s/%s' % (
+        self.title, self.dimensions['os'], self.isolated_hash[:10])
+    if self.buildername:
+      out += '/%s/%d' % (self.buildername, self.buildnumber or -1)
+    return out
 
   @property
   def trigger_output(self):

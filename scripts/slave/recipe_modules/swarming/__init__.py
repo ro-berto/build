@@ -12,5 +12,4 @@ DEPS = [
   'step',
   'swarming_client',
   'test_utils',
-  'time',
 ]
