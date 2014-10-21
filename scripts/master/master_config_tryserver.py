@@ -78,7 +78,7 @@ sharded_tests = [
   'remoting_unittests',
   'sync_integration_tests',
   'sync_unit_tests',
-  'ui_unittests',
+  'ui_base_unittests',
   'unit_tests',
   'views_unittests',
 ]
