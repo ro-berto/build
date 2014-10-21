@@ -420,7 +420,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['unittests', 'v8testing', 'mozilla'],
+        'tests': ['unittests', 'v8testing', 'webkit', 'mozilla'],
         'testing': {'platform': 'win'},
       },
       'V8 Win64 - debug': {
@@ -430,7 +430,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['unittests', 'v8testing', 'mozilla'],
+        'tests': ['unittests', 'v8testing', 'webkit', 'mozilla'],
         'testing': {'platform': 'win'},
       },
 ####### Category: Mac
@@ -586,6 +586,7 @@ BUILDERS = {
         'tests': [
           'unittests',
           'v8testing',
+          'webkit',
           'test262',
           'test262_es6',
           'mozilla',
@@ -599,7 +600,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['unittests', 'v8testing', 'test262', 'mozilla'],
+        'tests': ['unittests', 'v8testing', 'webkit', 'test262', 'mozilla'],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm - sim - novfp3': {
@@ -962,7 +963,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['unittests', 'v8testing'],
+        'tests': ['unittests', 'v8testing', 'webkit'],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_dbg': {
@@ -971,7 +972,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['unittests', 'v8testing'],
+        'tests': ['unittests', 'v8testing', 'webkit'],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_nosnap_rel': {
@@ -1000,7 +1001,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['unittests', 'v8testing'],
+        'tests': ['unittests', 'v8testing', 'webkit'],
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_nacl_rel': {
@@ -1043,7 +1044,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['unittests', 'v8testing'],
+        'tests': ['unittests', 'v8testing', 'webkit'],
         'testing': {'platform': 'win'},
       },
       'v8_win_dbg': {
@@ -1053,7 +1054,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['unittests', 'v8testing'],
+        'tests': ['unittests', 'v8testing', 'webkit'],
         'testing': {'platform': 'win'},
       },
       'v8_win64_compile_rel': {
@@ -1072,7 +1073,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['unittests', 'v8testing'],
+        'tests': ['unittests', 'v8testing', 'webkit'],
         'testing': {'platform': 'win'},
       },
       'v8_win64_dbg': {
@@ -1082,7 +1083,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['unittests', 'v8testing'],
+        'tests': ['unittests', 'v8testing', 'webkit'],
         'testing': {'platform': 'win'},
       },
       'v8_mac_rel': {
@@ -1093,7 +1094,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['unittests', 'v8testing'],
+        'tests': ['unittests', 'v8testing', 'webkit'],
         'testing': {'platform': 'mac'},
       },
       'v8_mac_dbg': {
@@ -1104,7 +1105,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['unittests', 'v8testing'],
+        'tests': ['unittests', 'v8testing', 'webkit'],
         'testing': {'platform': 'mac'},
       },
       'v8_linux_arm_rel': {
@@ -1114,7 +1115,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['unittests', 'v8testing'],
+        'tests': ['unittests', 'v8testing', 'webkit'],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm_dbg': {
@@ -1124,7 +1125,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['unittests', 'v8testing'],
+        'tests': ['unittests', 'v8testing', 'webkit'],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm64_rel': {
@@ -1134,7 +1135,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['unittests', 'v8testing'],
+        'tests': ['unittests', 'v8testing', 'webkit'],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm64_dbg': {
@@ -1144,7 +1145,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['unittests', 'v8testing'],
+        'tests': ['unittests', 'v8testing', 'webkit'],
         'testing': {'platform': 'linux'},
       },
       'v8_android_arm_compile_rel': {
