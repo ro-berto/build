@@ -42,6 +42,25 @@ def device_from_builder_dict(builder_dict):
   raise Exception('No device found for builder: %s' % str(builder_dict))
 
 
+class _ADBWrapper(object):
+  """Wrapper for the ADB recipe module.
+
+  The ADB recipe module looks for the ADB binary at a path we don't have checked
+  out on our bots. This wrapper ensures that we set a custom ADB path before
+  attempting to use the module.
+  """
+  def __init__(self, adb_api, android_bin):
+    self._adb = adb_api
+    self._adb.set_adb_path(android_bin.join('linux', 'adb'))
+
+  def devices(self):
+    self._adb.list_devices()
+    return self._adb.devices
+
+  def __call__(self, *args, **kwargs):
+    return self._adb(*args, **kwargs)
+
+
 class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
   def __init__(self, skia_api):
     super(AndroidFlavorUtils, self).__init__(skia_api)
@@ -49,13 +68,13 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
     self._serial = None  # Get this lazily.
     self.android_bin = self._skia_api.m.path['slave_build'].join(
         'skia', 'platform_tools', 'android', 'bin')
+    self._adb = _ADBWrapper(self._skia_api.m.adb, self.android_bin)
 
   @property
   def serial(self):
     if not self._serial:
       serial = self._skia_api.c.slave_cfg.get('serial')
-      self._skia_api.m.adb.list_devices()
-      attached_devices = self._skia_api.m.adb.devices
+      attached_devices = self._adb.devices()
       if not serial:
         if len(attached_devices) == 1:
           serial = attached_devices[0]
@@ -101,7 +120,7 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
   def device_path_exists(self, path):
     """Like os.path.exists(), but for paths on a connected device."""
     exists_str = 'FILE_EXISTS'
-    return exists_str in self._skia_api.m.adb(
+    return exists_str in self._adb(
         name='exists %s' % path,
         serial=self.serial,
         cmd=['shell', 'if', '[', '-e', path, '];',
@@ -111,18 +130,18 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
 
   def _remove_device_dir(self, path):
     """Remove the directory on the device."""
-    self._skia_api.m.adb(name='rmdir %s' % self._skia_api.summarize_path(path),
-                         serial=self.serial,
-                         cmd=['shell', 'rm', '-r', path])
+    self._adb(name='rmdir %s' % self._skia_api.summarize_path(path),
+              serial=self.serial,
+              cmd=['shell', 'rm', '-r', path])
     # Sometimes the removal fails silently. Verify that it worked.
     if self.device_path_exists(path):
       raise Exception('Failed to remove %s!' % path)
 
   def _create_device_dir(self, path):
     """Create the directory on the device."""
-    self._skia_api.m.adb(name='mkdir %s' % self._skia_api.summarize_path(path),
-                         serial=self.serial,
-                         cmd=['shell', 'mkdir', '-p', path])
+    self._adb(name='mkdir %s' % self._skia_api.summarize_path(path),
+              serial=self.serial,
+              cmd=['shell', 'mkdir', '-p', path])
 
   def copy_directory_contents_to_device(self, host_dir, device_dir):
     """Like shutil.copytree(), but for copying to a connected device."""
@@ -142,9 +161,9 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
 
   def copy_file_to_device(self, host_path, device_path):
     """Like shutil.copyfile, but for copying to a connected device."""
-    self._skia_api.m.adb(name='push %s' % host_path,
-                         serial=self.serial,
-                         cmd=['push', host_path, device_path])
+    self._adb(name='push %s' % host_path,
+              serial=self.serial,
+              cmd=['push', host_path, device_path])
 
   def create_clean_device_dir(self, path):
     """Like shutil.rmtree() + os.makedirs(), but on a connected device."""
@@ -153,17 +172,17 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
 
   def install(self):
     """Run device-specific installation steps."""
-    self._skia_api.m.adb(name='adb root', serial=self.serial, cmd=['root'])
-    self._skia_api.m.adb(name='adb remount',
-                         serial=self.serial,
-                         cmd=['remount'])
+    self._adb(name='adb root', serial=self.serial, cmd=['root'])
+    self._adb(name='adb remount',
+              serial=self.serial,
+              cmd=['remount'])
     # TODO(borenet): Set CPU scaling mode to 'performance'.
     self._skia_api.m.step(name='kill skia',
                           cmd=[self.android_bin.join('android_kill_skia'),
                                '-s', self.serial])
-    self._skia_api.m.adb(name='stop shell',
-                         serial=self.serial,
-                         cmd=['shell', 'stop'])
+    self._adb(name='stop shell',
+              serial=self.serial,
+              cmd=['shell', 'stop'])
 
   def get_device_dirs(self):
     """ Set the directories which will be used by the build steps."""

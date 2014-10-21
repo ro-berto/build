@@ -69,7 +69,7 @@
       "python",
       "-u",
       "[BUILD]/scripts/slave/recipe_modules/adb/resources/list_devices.py",
-      "['[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb', 'devices']",
+      "['[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb', 'devices']",
       "/path/to/tmp/json"
     ],
     "name": "List adb devices",
@@ -82,7 +82,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
       "014E1F310401C009",
       "shell",
@@ -94,7 +94,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
       "014E1F310401C009",
       "root"
@@ -103,7 +103,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
       "014E1F310401C009",
       "remount"
@@ -120,7 +120,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
       "014E1F310401C009",
       "shell",
@@ -143,7 +143,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
       "014E1F310401C009",
       "shell",
@@ -155,7 +155,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
       "014E1F310401C009",
       "shell",
@@ -174,7 +174,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
       "014E1F310401C009",
       "shell",
@@ -226,7 +226,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
       "014E1F310401C009",
       "shell",
@@ -238,7 +238,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
       "014E1F310401C009",
       "shell",
@@ -257,7 +257,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
       "014E1F310401C009",
       "shell",
@@ -269,7 +269,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
       "014E1F310401C009",
       "push",
@@ -280,7 +280,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
       "014E1F310401C009",
       "shell",
@@ -292,7 +292,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
       "014E1F310401C009",
       "shell",
@@ -311,7 +311,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
       "014E1F310401C009",
       "shell",
@@ -323,7 +323,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
       "014E1F310401C009",
       "push",
@@ -334,7 +334,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
       "014E1F310401C009",
       "shell",
@@ -353,7 +353,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
       "014E1F310401C009",
       "shell",
@@ -543,7 +543,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
       "014E1F310401C009",
       "shell",
@@ -555,7 +555,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
       "014E1F310401C009",
       "shell",
@@ -574,7 +574,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
       "014E1F310401C009",
       "shell",
@@ -722,7 +722,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
       "014E1F310401C009",
       "shell",
@@ -734,7 +734,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
       "014E1F310401C009",
       "shell",
@@ -753,7 +753,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
       "014E1F310401C009",
       "shell",
@@ -765,7 +765,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
       "014E1F310401C009",
       "shell",
@@ -777,7 +777,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
       "014E1F310401C009",
       "shell",
@@ -796,7 +796,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
       "014E1F310401C009",
       "shell",
@@ -808,7 +808,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
       "014E1F310401C009",
       "shell",
@@ -820,7 +820,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
       "014E1F310401C009",
       "shell",
@@ -839,7 +839,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
       "014E1F310401C009",
       "shell",
@@ -851,7 +851,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
       "014E1F310401C009",
       "push",

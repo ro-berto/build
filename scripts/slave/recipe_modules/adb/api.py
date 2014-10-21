@@ -7,6 +7,7 @@ from slave import recipe_api
 class AdbApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
     super(AdbApi, self).__init__(**kwargs)
+    self._custom_adb_path = None
     self._devices = None
 
   def __call__(self, cmd, serial=None, **kwargs):
@@ -16,7 +17,12 @@ class AdbApi(recipe_api.RecipeApi):
       cmd_prefix.extend(['-s', serial])
     return self.m.step(cmd=cmd_prefix + cmd, **kwargs)
 
+  def set_adb_path(self, adb_path):
+    self._custom_adb_path = adb_path
+
   def _adb_path(self):
+    if self._custom_adb_path:
+      return str(self._custom_adb_path)
     return str(self.m.path['slave_build'].join(
         'src', 'third_party', 'android_tools', 'sdk', 'platform-tools', 'adb'))
 
