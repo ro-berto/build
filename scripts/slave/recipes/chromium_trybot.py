@@ -1181,10 +1181,10 @@ def GenTests(api):
         'gtest_tests': [
           {
             'test': 'browser_tests',
-            'args': '--gtest-filter: *NaCl*',
+            'args': '--gtest-filter: *NaCl*.*',
           }, {
             'test': 'base_tests',
-            'args': ['--gtest-filter: *NaCl*'],
+            'args': ['--gtest-filter: *NaCl*.*'],
           },
         ],
       })
@@ -1538,10 +1538,10 @@ def GenTests(api):
         'gtest_tests': [
           {
             'test': 'browser_tests',
-            'args': '--gtest-filter: *NaCl*',
+            'args': '--gtest-filter: *NaCl*.*',
           }, {
             'test': 'base_tests',
-            'args': ['--gtest-filter: *NaCl*'],
+            'args': ['--gtest-filter: *NaCl*.*'],
           },
         ],
       })

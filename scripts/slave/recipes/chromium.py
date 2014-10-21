@@ -242,7 +242,7 @@ def GenTests(api):
         'compile_targets': ['browser_tests_run'],
         'gtest_tests': [{
           'test': 'browser_tests',
-          'args': ['--gtest-filter', '*NaCl*'],
+          'args': ['--gtest-filter', '*NaCl*.*'],
           'shard_index': 0,
           'total_shards': 1,
         }],

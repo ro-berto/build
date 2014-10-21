@@ -103,7 +103,7 @@
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"args\": [@@@",
       "@@@STEP_LOG_LINE@json.output@          \"--gtest-filter\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"*NaCl*\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"*NaCl*.*\"@@@",
       "@@@STEP_LOG_LINE@json.output@        ], @@@",
       "@@@STEP_LOG_LINE@json.output@        \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@        \"test\": \"browser_tests\", @@@",
