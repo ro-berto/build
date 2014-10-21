@@ -246,7 +246,6 @@ ENABLED_MASTERS = [
     'tryserver.chromium.mac',
     'tryserver.chromium.perf',
     'tryserver.chromium.win',
-    'tryserver.v8',
     'chromium.perf.fyi',
 ]
 ENABLED_MASTERS += internal_data.get('ENABLED_MASTERS', [])
@@ -285,7 +284,6 @@ HEAD_BUILDERS.update(internal_data.get('HEAD_BUILDERS', {}))
 GIT_MASTERS = [
     'client.v8',
     'client.v8.branches',
-    'tryserver.v8',
 ]
 GIT_MASTERS += internal_data.get('GIT_MASTERS', [])
 

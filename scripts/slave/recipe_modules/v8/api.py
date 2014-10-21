@@ -217,8 +217,12 @@ class V8Api(recipe_api.RecipeApi):
     self.m.chromium.apply_config('trybot_flavor')
     self.apply_config('trybot_flavor')
 
+  def _gclient_checkout(self, revert=False):
+    return self.m.gclient.checkout(revert=revert)
+
   def checkout(self, revert=False):
-    # Set revision for bot_update.
+    # Set revision for bot_update. Needs to be
+    # reset afterwards as gclient doesn't understand this info.
     revision = self.m.properties.get(
         'parent_got_revision', self.m.properties.get('revision', 'HEAD'))
     solution = self.m.gclient.c.solutions[0]
@@ -232,7 +236,9 @@ class V8Api(recipe_api.RecipeApi):
         no_shallow=True,
         with_branch_heads=bool(self.c.branch))
 
-    assert update_step.json.output['did_run']
+    if not update_step.json.output['did_run']:
+      solution.revision = None
+      update_step = self._gclient_checkout(revert=revert)
 
     # Whatever step is run right before this line needs to emit got_revision.
     self.revision = update_step.presentation.properties['got_revision']
@@ -282,6 +288,12 @@ class V8Api(recipe_api.RecipeApi):
       cwd=self.m.path['slave_build'],
     )
 
+  def tryserver_lkgr_fallback(self):
+    self.m.gclient.apply_config('v8_lkgr')
+    self.checkout(True)
+    self.m.tryserver.maybe_apply_issue()
+    self.runhooks()
+
   @property
   def bot_type(self):
     return self.bot_config.get('bot_type', 'builder_tester')
@@ -317,6 +329,14 @@ class V8Api(recipe_api.RecipeApi):
     if self.c.compile_py.compile_extra_args:
       args.extend(self.c.compile_py.compile_extra_args)
     self.m.chromium.compile(args, env=env, **kwargs)
+
+  def tryserver_compile(self, fallback_fn, **kwargs):
+    try:
+      self.compile(name='compile (with patch)')
+    except self.m.step.StepFailure as f:
+      fallback_fn()
+      self.compile(name='compile (with patch, lkgr, clobber)',
+                         force_clobber=True)
 
   def upload_build(self):
     self.m.archive.zip_and_upload_build(

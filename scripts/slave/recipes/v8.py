@@ -28,6 +28,9 @@ def GenSteps(api):
 
   v8.checkout(revert=api.tryserver.is_tryserver)
 
+  if api.tryserver.is_tryserver:
+    api.tryserver.maybe_apply_issue()
+
   if v8.needs_clang:
     v8.update_clang()
   v8.runhooks()
@@ -37,7 +40,10 @@ def GenSteps(api):
     v8.update_nacl_sdk()
 
   if v8.should_build:
-    v8.compile()
+    if api.tryserver.is_tryserver:
+      v8.tryserver_compile(v8.tryserver_lkgr_fallback)
+    else:
+      v8.compile()
 
   if v8.should_upload_build:
     v8.upload_build()
@@ -83,6 +89,15 @@ def GenTests(api):
             patch_url='svn://svn-mirror.golo.chromium.org/patch'))
 
       yield test
+
+  yield (
+    api.test('try_compile_failure') +
+    api.properties.tryserver(mastername='tryserver.v8',
+                             buildername='v8_win_rel',
+                             revision=None) +
+    api.platform('win', 32) +
+    api.step_data('compile (with patch)', retcode=1)
+  )
 
   yield (
     api.test('branch_sync_failure') +
