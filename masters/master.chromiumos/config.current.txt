@@ -885,7 +885,7 @@ config = {
         ],
         properties: Properties(**{}),
       },
-      'name': 'refresh packages (crbug.com/412795)',
+      'name': 'refresh packages (chromium:412795)',
       'slavenames': ['build94-m2'],
     },
     {
@@ -1085,7 +1085,7 @@ config = {
       master: None,
       branch: None,
       services: [],
-      builderNames: ['refresh packages (crbug.com/412795)'],
+      builderNames: ['refresh packages (chromium:412795)'],
       properties: Properties(**{'scheduler': 'refresh_pkgs_scheduler'}),
       periodicBuildTimer: 86400,
     },
