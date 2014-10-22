@@ -46,6 +46,8 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       solution = Single(Path, required=False),
     ),
     gyp_env = ConfigGroup(
+      CC = Single(basestring, required=False),
+      CXX = Single(basestring, required=False),
       GYP_CROSSCOMPILE = Single(int, jsonish_fn=str, required=False),
       GYP_CHROMIUM_NO_ACTION = Single(int, jsonish_fn=str, required=False),
       GYP_DEFINES = Dict(equal_fn, ' '.join, (basestring,int,Path)),
@@ -247,6 +249,8 @@ def clang(c):
 @config_ctx(group='compiler')
 def jsonclang(c):
   c.compile_py.compiler = 'jsonclang'
+  c.gyp_env.CC = 'jsonclang'
+  c.gyp_env.CXX = 'jsonclang++'
   c.gyp_env.GYP_DEFINES['clang'] = 1
 
 @config_ctx(group='compiler')
@@ -259,13 +263,13 @@ def goma(c):
   if c.compile_py.build_tool == 'vs':  # pragma: no cover
     raise BadConf('goma doesn\'t work with msvs')
 
-  # TODO(iannucci): support clang and jsonclang
   if not c.compile_py.compiler:
     c.compile_py.compiler = 'goma'
   elif c.compile_py.compiler == 'clang':
     c.compile_py.compiler = 'goma-clang'
+  # jsonclang doesn't work with use_goma=1
   else:  # pragma: no cover
-    raise BadConf('goma config dosen\'t understand %s' % c.compile_py.compiler)
+    raise BadConf('goma config doesn\'t understand %s' % c.compile_py.compiler)
 
   c.gyp_env.GYP_DEFINES['use_goma'] = 1
 
@@ -551,11 +555,13 @@ def blink_clang(c):
 def blink_logging_on(c, invert=False):
   c.gyp_env.GYP_DEFINES['blink_logging_always_on'] = int(not invert)
 
-@config_ctx(includes=['android_common', 'ninja', 'static_library', 'default_compiler', 'goma'])
+@config_ctx(includes=['android_common', 'ninja', 'static_library',
+                      'default_compiler', 'goma'])
 def android(c):
   pass
 
-@config_ctx(includes=['android_common', 'ninja', 'static_library', 'clang', 'goma'])
+@config_ctx(includes=['android_common', 'ninja', 'static_library', 'clang',
+                      'goma'])
 def android_clang(c):
   pass
 
@@ -574,6 +580,8 @@ def android_common(c):
 def codesearch(c):
   gyp_defs = c.gyp_env.GYP_DEFINES
   gyp_defs['fastbuild'] = 1
+  if c.TARGET_PLATFORM == 'chromeos':
+    chromeos(c)
 
 @config_ctx(includes=['ninja', 'static_library'])
 def chrome_pgo_base(c):
