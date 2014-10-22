@@ -77,6 +77,7 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
+        'enable_swarming': True,
         'chromium_config': 'chromium',
         'compile_only': False,
         'testing': {
@@ -182,6 +183,7 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
+        'enable_swarming': True,
         'chromium_config': 'chromium_chromeos',
         'compile_only': False,
         'testing': {
@@ -335,6 +337,7 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
+        'enable_swarming': True,
         'chromium_config': 'chromium',
         'compile_only': False,
         'testing': {
@@ -421,6 +424,7 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
+        'enable_swarming': True,
         'chromium_config': 'chromium',
         'compile_only': False,
         'testing': {
@@ -477,6 +481,7 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
+        'enable_swarming': True,
         'chromium_config': 'chromium',
         'compile_only': False,
         'testing': {
