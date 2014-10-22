@@ -923,7 +923,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['unittests', 'v8testing', 'webkit'],
+        'tests': ['unittests', 'v8testing', 'optimize_for_size', 'webkit'],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_dbg': {
@@ -961,7 +961,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['unittests', 'v8testing', 'webkit'],
+        'tests': ['unittests', 'v8testing', 'optimize_for_size', 'webkit'],
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_nacl_rel': {
