@@ -279,6 +279,8 @@
       "purpose:ManualTS",
       "--tag",
       "purpose:pre-commit",
+      "--tag",
+      "rietveld:https://codereview.chromium.org/12853011/#ps1",
       "[dummy hash for base_unittests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"

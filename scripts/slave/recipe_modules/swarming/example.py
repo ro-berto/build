@@ -118,4 +118,8 @@ def GenTests(api):
       api.step_data(
           'archive for mac',
           stdout=api.raw_io.output('hash_for_mac hello_world.isolated')) +
-      api.properties(simulated_version=(0, 5)))
+      api.properties(
+          rietveld="https://codereview.chromium.org",
+          issue="123",
+          patchset="1001",
+          simulated_version=(0, 5)))

@@ -306,7 +306,13 @@ class SwarmingApi(recipe_api.RecipeApi):
       tags.add('buildnumber:%d' % task.buildnumber)
     if task.dimensions.get('os'):
       tags.add('os:' + task.dimensions['os'])
-    # TODO(maruel): 'rietveld' and 'issue' and 'patchset', or maybe just an url.
+    rietveld = self.m.properties.get('rietveld')
+    issue = self.m.properties.get('issue')
+    patchset = self.m.properties.get('patchset')
+    if rietveld and issue and patchset:
+      # The expected format is strict to the usage of buildbot properties on the
+      # Chromium Try Server. Fix if necessary.
+      tags.add('rietveld:%s/%s/#ps%s' % (rietveld, issue, patchset))
     for tag in sorted(tags):
       assert ':' in tag, tag
       args.extend(['--tag', tag])
