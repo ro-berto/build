@@ -247,6 +247,7 @@ ENABLED_MASTERS = [
     'tryserver.chromium.perf',
     'tryserver.chromium.win',
     'tryserver.v8',
+    'tryserver.webrtc',
     'chromium.perf.fyi',
 ]
 ENABLED_MASTERS += internal_data.get('ENABLED_MASTERS', [])
@@ -257,11 +258,6 @@ ENABLED_BUILDERS = {
         'v8-mac-release',
         'v8-win-release',
     ],
-    'tryserver.webrtc': [
-        'linux',
-        'mac',
-        'win',
-     ],
 }
 ENABLED_BUILDERS.update(internal_data.get('ENABLED_BUILDERS', {}))
 
