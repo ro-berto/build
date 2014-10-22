@@ -750,23 +750,20 @@ class GraphingPageCyclerLogProcessor(GraphingLogProcessor):
       return super(GraphingPageCyclerLogProcessor, self)._CalculateStatistics(
           value_list, trace_name)
 
-    sums = []
-    page_times = {}
+    value_count = len(value_list)
     page_count = len(self._page_list)
+    # Chunk value_list into groups, where each sub-list
+    # has all the page times of one iteration.
+    iterations = [value_list[start:start+page_count]
+                  for start in xrange(0, value_count, page_count)]
 
-    iteration_count = len(value_list) / page_count
-    for iteration in range(iteration_count):
-      start = page_count * iteration
-      end = start + page_count
-      iteration_times = value_list[start:end]
-      sums += [sum(iteration_times)]
-      for page_index in range(page_count):
-        page = self._page_list[page_index]
-        if page not in page_times:
-          page_times[page] = []
-        page_times[page].append(iteration_times[page_index])
-    pagedata = self._SavePageData(page_times, trace_name)
-    val, stddev = chromium_utils.FilteredMeanAndStandardDeviation(sums)
+    iteration_times = map(sum, iterations)
+    page_times_list = map(list, zip(*iterations))
+    page_times_dict = dict(zip(self._page_list, page_times_list))
+
+    pagedata = self._SavePageData(page_times_dict, trace_name)
+    val, stddev = chromium_utils.FilteredMeanAndStandardDeviation(
+        iteration_times)
     return val, stddev, pagedata
 
   def _SavePageData(self, page_times, trace_name):
@@ -780,8 +777,7 @@ class GraphingPageCyclerLogProcessor(GraphingLogProcessor):
       A dict with one entry, mapping filename to file contents.
     """
     file_data = []
-    for page in self._page_list:
-      times = page_times[page]
+    for page, times in sorted(page_times.iteritems()):
       mean, stddev = chromium_utils.FilteredMeanAndStandardDeviation(times)
       file_data.append('%s (%s+/-%s): %s' % (page,
                                              _FormatFloat(mean),

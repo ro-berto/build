@@ -368,6 +368,11 @@ class GraphingPageCyclerLogProcessorPerfTest(LogProcessorTest):
     expected = 't: 2.32k'
     self.assertEqual(expected, parser.PerformanceSummary()[0])
 
+    self.assertIn('12345_t.dat', parser.PerformanceLogs())
+    self.assertTrue(parser.PerformanceLogs()['12345_t.dat'])
+    expected = 'blog.chromium.org (441.00+/-0.00): 585.0 441.0\n'
+    self.assertEqual(expected, parser.PerformanceLogs()['12345_t.dat'][0])
+
 
 if __name__ == '__main__':
   unittest.main()
