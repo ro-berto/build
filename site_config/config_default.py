@@ -7,6 +7,7 @@
 The recommended way is to fork this file and use a custom DEPS forked from
 config/XXX/DEPS with the right configuration data."""
 
+import re
 import socket
 
 
@@ -71,11 +72,18 @@ class Master(object):
     # Master address. You should probably copy this file in another svn repo
     # so you can override this value on both the slaves and the master.
     master_host = 'localhost'
+    @classproperty
+    def current_host(cls):
+      return socket.getfqdn()
+    @classproperty
+    def in_production(cls):
+      return re.match(r'master.*\.golo\.chromium\.org', cls.current_host)
     # Only report that we are running on a master if the master_host (even when
     # master_host is overridden by a subclass) is the same as the current host.
     @classproperty
     def is_production_host(cls):
-      return socket.getfqdn() == cls.master_host
+      return cls.current_host == cls.master_host
+
     # 'from:' field for emails sent from the server.
     from_address = 'nobody@example.com'
     # Additional email addresses to send gatekeeper (automatic tree closage)

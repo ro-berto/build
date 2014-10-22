@@ -212,6 +212,10 @@ def GetMastername():
   return re.sub('^master.', '', os.path.basename(os.getcwd()))
 
 
+class WrongHostException(Exception):
+  pass
+
+
 def AutoSetupMaster(c, active_master, mail_notifier=False,
                     mail_notifier_mode=None,
                     public_html=None, templates=None,
@@ -232,6 +236,12 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
   - Debug ssh port. Just add a file named .manhole beside master.cfg and
     simply include one line containing 'port = 10101', then you can
     'ssh localhost -p' and you can access your buildbot from the inside."""
+  if active_master.in_production and not active_master.is_production_host:
+    log.err('ERROR: Trying to start the master on the wrong host.')
+    log.err('ERROR: This machine is %s, expected %s.' % (
+        active_master.current_host, active_master.master_host))
+    raise WrongHostException
+
   c['slavePortnum'] = active_master.slave_port
   c['projectName'] = active_master.project_name
   c['projectURL'] = config.Master.project_url
