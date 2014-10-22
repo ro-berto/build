@@ -44,6 +44,10 @@ def GenSteps(api):
   api.swarming.set_default_dimension(
       'os',
       api.swarming.prefered_os_dimension(api.platform.name).split('-', 1)[0])
+  api.swarming.set_default_dimension('pool', 'Chrome')
+  api.swarming.add_default_tag('project:chromium')
+  api.swarming.add_default_tag('purpose:staging')
+  api.swarming.default_idempotent = True
 
   # We are building simplest Chromium flavor possible.
   api.chromium.set_config(
