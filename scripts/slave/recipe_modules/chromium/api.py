@@ -623,3 +623,32 @@ class ChromiumApi(recipe_api.RecipeApi):
               '27eac9b2869ef6c89391f305a3f01285ea317867',
               '9d9a93134b3eabd003b85b4e7dea06c0eae150ed',
           ])
+
+  def get_common_args_for_scripts(self):
+    args = []
+
+    args.extend(['--build-config-fs', self.c.build_config_fs])
+
+    paths = {}
+    for path in ('build',):
+      paths[path] = self.m.path[path]
+    args.extend(['--paths', self.m.json.input(paths)])
+
+    properties = {}
+    # TODO(phajdan.jr): Remove buildnumber when no longer used.
+    for name in ('buildername', 'slavename', 'buildnumber'):
+      properties[name] = self.m.properties[name]
+    args.extend(['--properties', self.m.json.input(properties)])
+
+    return args
+
+  def get_compile_targets_for_scripts(self):
+    return self.m.python(
+        name='get compile targets for scripts',
+        script=self.m.path['checkout'].join(
+            'testing', 'scripts', 'get_compile_targets.py'),
+        args=[
+            '--output', self.m.json.output(),
+            '--',
+        ] + self.get_common_args_for_scripts(),
+        step_test_data=lambda: self.m.json.test_api.output({}))

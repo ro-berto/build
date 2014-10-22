@@ -98,19 +98,29 @@ class ScriptTest(Test):  # pylint: disable=W0232
   All new tests are strongly encouraged to use this infrastructure.
   """
 
-  def __init__(self, name, script):
+  def __init__(self, name, script, all_compile_targets):
     super(ScriptTest, self).__init__()
     self._name = name
     self._script = script
+    self._all_compile_targets = all_compile_targets
 
   @property
   def name(self):
     return self._name
 
-  @staticmethod
-  def compile_targets(_):
-    # TODO(phajdan.jr): Implement this (http://crbug.com/422235).
-    return []
+  def compile_targets(self, api):
+    try:
+      return self._all_compile_targets[self._script]
+    except KeyError:
+      # Not all scripts will have test data inside recipes,
+      # so return a default value.
+      # TODO(phajdan.jr): Revisit this when all script tests
+      # lists move src-side. We should be able to provide
+      # test data then.
+      if api.chromium._test_data.enabled:
+        return []
+
+      raise
 
   def run(self, api, suffix):
     name = self.name
@@ -123,7 +133,8 @@ class ScriptTest(Test):  # pylint: disable=W0232
           # for consistency.
           api.path['checkout'].join(
               'testing', 'scripts', api.path.basename(self._script)),
-          args=['run', '--output', api.json.output()],
+          args=(api.chromium.get_common_args_for_scripts() +
+                ['run', '--output', api.json.output()]),
           step_test_data=lambda: api.json.test_api.output(
               {'valid': True, 'failures': []}))
     finally:
