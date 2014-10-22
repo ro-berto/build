@@ -219,6 +219,9 @@ class TryJobGerritStatus(StatusReceiverMultiService):
     revision = props.getProperty('revision')
     patchset_id = props.getProperty('event.patchSet.ref').rsplit('/', 1)[1]
     builders = [x for x in self.cq_builders if x != builder_name]
+    if len(builders) == 0:
+      self._add_verified_label(change_id, revision, patchset_id)
+      return
     o_params = '&'.join('o=%s' % x for x in (
         'MESSAGES', 'ALL_REVISIONS', 'ALL_COMMITS', 'ALL_FILES'))
     path = '/changes/%s?%s' % (change_id, o_params)
