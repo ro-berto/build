@@ -94,6 +94,9 @@ def main():
   option_parser.add_option("--tsan",
                            help="Regard test expectations for TSAN",
                            default=False, action="store_true")
+  option_parser.add_option("--msan",
+                           help="Regard test expectations for MSAN",
+                           default=False, action="store_true")
 
   options, args = option_parser.parse_args()
   if args:
@@ -119,6 +122,8 @@ def main():
       cmd.extend(['--asan'])
     if options.tsan:
       cmd.extend(['--tsan'])
+    if options.msan:
+      cmd.extend(['--msan'])
     if options.buildbot == 'True':
       cmd.extend(['--buildbot'])
     if options.no_presubmit:

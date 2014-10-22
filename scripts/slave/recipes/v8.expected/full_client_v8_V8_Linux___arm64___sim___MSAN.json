@@ -7,7 +7,7 @@
       "--master",
       "client.v8",
       "--builder",
-      "V8 Linux64 ASAN",
+      "V8 Linux - arm64 - sim - MSAN",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -61,7 +61,7 @@
       "CC": "[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/clang",
       "CXX": "[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/clang++",
       "CXX_host": "[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/clang++",
-      "GYP_DEFINES": "asan=1 clang=1 lsan=1 target_arch=x64 use_allocator=none v8_target_arch=x64",
+      "GYP_DEFINES": "clang=1 msan=1 target_arch=x64 v8_target_arch=arm64",
       "LINK": "[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/clang++"
     },
     "name": "gclient runhooks"
@@ -99,17 +99,17 @@
       "--target",
       "Release",
       "--arch",
-      "x64",
+      "arm64",
       "--testname",
       "unittests",
       "--no-variants",
-      "--asan",
+      "--msan",
       "--json-test-results",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "env": {
-      "ASAN_OPTIONS": "external_symbolizer_path=[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+      "MSAN_OPTIONS": "external_symbolizer_path=[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
     },
     "name": "Unittests"
   },
@@ -121,18 +121,18 @@
       "--target",
       "Release",
       "--arch",
-      "x64",
+      "arm64",
       "--testname",
       "default",
       "--flaky-tests",
       "skip",
-      "--asan",
+      "--msan",
       "--json-test-results",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "env": {
-      "ASAN_OPTIONS": "external_symbolizer_path=[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+      "MSAN_OPTIONS": "external_symbolizer_path=[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
     },
     "name": "Check"
   },
@@ -144,18 +144,18 @@
       "--target",
       "Release",
       "--arch",
-      "x64",
+      "arm64",
       "--testname",
       "default",
       "--flaky-tests",
       "run",
-      "--asan",
+      "--msan",
       "--json-test-results",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "env": {
-      "ASAN_OPTIONS": "external_symbolizer_path=[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+      "MSAN_OPTIONS": "external_symbolizer_path=[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
     },
     "name": "Check - flaky"
   }

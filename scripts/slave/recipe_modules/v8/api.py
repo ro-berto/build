@@ -547,25 +547,33 @@ class V8Api(recipe_api.RecipeApi):
     if flaky_tests:
       full_args += ['--flaky-tests', flaky_tests]
 
+    llvm_symbolizer_path = self.m.path['checkout'].join(
+        'third_party', 'llvm-build', 'Release+Asserts', 'bin',
+        'llvm-symbolizer')
+
     # Arguments and environment for asan builds:
     if self.m.chromium.c.gyp_env.GYP_DEFINES.get('asan') == 1:
       full_args.append('--asan')
-      env['ASAN_SYMBOLIZER_PATH'] = self.m.path['checkout'].join(
-          'third_party', 'llvm-build', 'Release+Asserts', 'bin',
-          'llvm-symbolizer')
+      env['ASAN_OPTIONS'] = " ".join([
+        'external_symbolizer_path=%s' % llvm_symbolizer_path,
+      ])
 
     # Arguments and environment for tsan builds:
     if self.m.chromium.c.gyp_env.GYP_DEFINES.get('tsan') == 1:
       full_args.append('--tsan')
       env['TSAN_OPTIONS'] = " ".join([
-        'external_symbolizer_path=%s' %
-            self.m.path['checkout'].join(
-                'third_party', 'llvm-build', 'Release+Asserts', 'bin',
-                'llvm-symbolizer'),
+        'external_symbolizer_path=%s' % llvm_symbolizer_path,
         'exit_code=0',
         'report_thread_leaks=0',
         'history_size=7',
         'report_destroy_locked=0',
+      ])
+
+    # Arguments and environment for msan builds:
+    if self.m.chromium.c.gyp_env.GYP_DEFINES.get('msan') == 1:
+      full_args.append('--msan')
+      env['MSAN_OPTIONS'] = " ".join([
+        'external_symbolizer_path=%s' % llvm_symbolizer_path,
       ])
 
     # Environment for nacl builds:

@@ -826,6 +826,19 @@ BUILDERS = {
         'tests': ['unittests', 'v8testing'],
         'testing': {'platform': 'linux'},
       },
+      'V8 Linux - arm64 - sim - MSAN': {
+        'gclient_apply_config': ['clang'],
+        # 'simulate_arm' is actually implied by 'msan'. We still set it
+        # explicitly for the sake of consistency.
+        'chromium_apply_config': ['clang', 'msan', 'simulate_arm'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['unittests', 'v8testing'],
+        'testing': {'platform': 'linux'},
+      },
       'V8 Linux - memcheck': {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
