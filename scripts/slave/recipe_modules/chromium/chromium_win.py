@@ -37,7 +37,6 @@ SPEC = {
         steps.generate_gtest,
       ],
       'tests': [
-        steps.MojoPythonTests(),
         steps.NaclIntegrationTest(),
         steps.TelemetryUnitTests(),
         steps.TelemetryPerfUnitTests(),
@@ -64,7 +63,6 @@ SPEC = {
         steps.generate_gtest,
       ],
       'tests': [
-        steps.MojoPythonTests(),
         steps.TelemetryUnitTests(),
         steps.TelemetryPerfUnitTests(),
       ],
@@ -90,7 +88,6 @@ SPEC = {
       ],
       'tests': [
         steps.MiniInstallerTest(),
-        steps.MojoPythonTests(),
         steps.NaclIntegrationTest(),
         steps.TelemetryUnitTests(),
         steps.TelemetryPerfUnitTests(),
@@ -129,7 +126,6 @@ SPEC = {
         steps.generate_gtest,
       ],
       'tests': [
-        steps.MojoPythonTests(),
         steps.TelemetryUnitTests(),
       ],
       'parent_buildername': 'Win x64 Builder',

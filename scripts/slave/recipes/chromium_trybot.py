@@ -835,8 +835,6 @@ def GenSteps(api):
     tests.extend(gtest_tests)
     tests.extend(find_test_named(api.chromium.steps.NaclIntegrationTest.name,
                                  conditional_tests))
-    # MojoPythonTests don't require anything to be compiled.
-    tests.append(api.chromium.steps.MojoPythonTests())
 
     if api.platform.is_win:
       tests.append(api.chromium.steps.MiniInstallerTest())
@@ -1267,15 +1265,6 @@ def GenTests(api):
                 'license': 'UNKNOWN',
             },
         ]))
-  )
-
-  yield (
-    api.test('mojo_python_tests_failure') +
-    props() +
-    api.platform.name('linux') +
-    api.override_step_data(
-        'mojo_python_tests (with patch)',
-        api.json.canned_test_output(False))
   )
 
   # Successfully compiling, isolating and running two targets on swarming for a

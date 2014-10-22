@@ -36,8 +36,6 @@ SPEC = {
         steps.generate_gtest,
       ],
       'tests': [
-        steps.MojoPythonTests(),
-        steps.MojoPythonBindingsTests(),
         steps.TelemetryUnitTests(),
         steps.TelemetryPerfUnitTests(),
       ],

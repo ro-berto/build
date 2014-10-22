@@ -342,16 +342,6 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/mojo/tools/run_mojo_python_tests.py",
-      "--write-full-results-to",
-      "/path/to/tmp/json"
-    ],
-    "name": "mojo_python_tests (with patch)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "\nimport sys\nprint '%s wasn\\'t triggered' % sys.argv[1]\nsys.exit(1)\n",
       "base_unittests"
     ],

@@ -178,7 +178,7 @@
       "-u",
       "[SLAVE_BUILD]/src/build/gyp_chromium",
       "--analyzer",
-      "{\"files\": [\"foo.cc\"], \"targets\": [\"base_unittests_run\", \"chrome\", \"mojo_public_test_interfaces\", \"mojo_python\"]}",
+      "{\"files\": [\"foo.cc\"], \"targets\": [\"base_unittests_run\", \"chrome\"]}",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -194,15 +194,5 @@
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/mojo/tools/run_mojo_python_tests.py",
-      "--write-full-results-to",
-      "/path/to/tmp/json"
-    ],
-    "name": "mojo_python_tests (with patch)"
   }
 ]

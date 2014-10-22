@@ -129,7 +129,6 @@ SPEC = {
       ],
       'tests': [
         steps.NaclIntegrationTest(),
-        steps.MojoPythonTests(),
         steps.TelemetryUnitTests(),
         steps.TelemetryPerfUnitTests(),
       ],
@@ -177,8 +176,6 @@ SPEC = {
         steps.generate_gtest,
       ],
       'tests': [
-        steps.MojoPythonTests(),
-        steps.MojoPythonBindingsTests(),
         steps.TelemetryUnitTests(),
         steps.TelemetryPerfUnitTests(),
       ],
@@ -200,8 +197,6 @@ SPEC = {
         steps.generate_gtest,
       ],
       'tests': [
-        steps.MojoPythonTests(),
-        steps.MojoPythonBindingsTests(),
         steps.TelemetryUnitTests(),
         steps.TelemetryPerfUnitTests(),
       ],
@@ -223,8 +218,6 @@ SPEC = {
         steps.generate_gtest,
       ],
       'tests': [
-        steps.MojoPythonTests(),
-        steps.MojoPythonBindingsTests(),
         steps.TelemetryUnitTests(),
         steps.TelemetryPerfUnitTests(),
       ],
@@ -246,8 +239,6 @@ SPEC = {
         steps.generate_gtest,
       ],
       'tests': [
-        steps.MojoPythonTests(),
-        steps.MojoPythonBindingsTests(),
         steps.TelemetryUnitTests(),
         steps.TelemetryPerfUnitTests(),
       ],

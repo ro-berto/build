@@ -36,7 +36,6 @@ SPEC = {
       ],
       'tests': [
         steps.NaclIntegrationTest(),
-        steps.MojoPythonTests(),
         steps.TelemetryUnitTests(),
         steps.TelemetryPerfUnitTests(),
       ],
@@ -61,7 +60,6 @@ SPEC = {
       ],
       'tests': [
         steps.NaclIntegrationTest(),
-        steps.MojoPythonTests(),
         steps.TelemetryUnitTests(),
         steps.TelemetryPerfUnitTests(),
       ],
@@ -99,7 +97,6 @@ SPEC = {
       ],
       'tests': [
         steps.NaclIntegrationTest(),
-        steps.MojoPythonTests(),
         steps.TelemetryUnitTests(),
         steps.TelemetryPerfUnitTests(),
       ],
@@ -124,7 +121,6 @@ SPEC = {
       ],
       'tests': [
         steps.NaclIntegrationTest(),
-        steps.MojoPythonTests(),
         steps.TelemetryUnitTests(),
         steps.TelemetryPerfUnitTests(),
       ],

@@ -158,9 +158,7 @@
       "--",
       "browser_tests_run",
       "chrome",
-      "chromium_swarm_tests",
-      "mojo_public_test_interfaces",
-      "mojo_python"
+      "chromium_swarm_tests"
     ],
     "name": "compile"
   },

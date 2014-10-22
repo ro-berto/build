@@ -122,9 +122,7 @@
       "[BUILD]/goma",
       "--",
       "all",
-      "chrome",
-      "mojo_public_test_interfaces",
-      "mojo_python"
+      "chrome"
     ],
     "name": "compile"
   },
@@ -141,16 +139,6 @@
       "@@@STEP_LOG_LINE@json.output@[]@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/mojo/tools/run_mojo_python_tests.py",
-      "--write-full-results-to",
-      "/path/to/tmp/json"
-    ],
-    "name": "mojo_python_tests"
   },
   {
     "allow_subannotations": true,

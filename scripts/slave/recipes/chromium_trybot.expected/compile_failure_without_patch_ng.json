@@ -205,8 +205,6 @@
       "[BUILD]/goma",
       "--",
       "chrome",
-      "mojo_python",
-      "mojo_public_test_interfaces",
       "chromium_swarm_tests"
     ],
     "name": "compile (with patch)",
@@ -302,8 +300,6 @@
       "[BUILD]/goma",
       "--",
       "chrome",
-      "mojo_python",
-      "mojo_public_test_interfaces",
       "chromium_swarm_tests"
     ],
     "name": "compile (without patch)",
