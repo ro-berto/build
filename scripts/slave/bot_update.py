@@ -240,6 +240,7 @@ ENABLED_MASTERS = [
     'client.skia',
     'client.v8',
     'client.v8.branches',
+    'client.webrtc',
     'tryserver.blink',
     'tryserver.chromium.gpu',
     'tryserver.chromium.linux',
