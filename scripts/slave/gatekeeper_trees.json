@@ -37,7 +37,7 @@
         ],
         "open-tree": true,
         "password-file": ".v8_status_password",
-        "revision-properties": "got_revision",
+        "revision-properties": "got_revision_cp",
         "set-status": true,
         "status-url": "https://v8-status.appspot.com",
         "track-revisions": true

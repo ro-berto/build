@@ -315,6 +315,13 @@
           "V8 Linux - x87 - nosnap - debug",
           "V8 Linux - full debug",
           "V8 Linux - interpreted regexp",
+          "V8 Linux - arm64 - sim - nosnap - debug - 1",
+          "V8 Linux - arm64 - sim - nosnap - debug - 2",
+          "V8 Linux - arm64 - sim - gc stress",
+          "V8 Mac GC Stress - 1",
+          "V8 Mac GC Stress - 2",
+          "V8 Mac GC Stress - 3",
+          "V8 Arm GC Stress",
           "V8 Random Deopt Fuzzer - debug",
           "NaCl V8 Linux64 - canary",
           "NaCl V8 Linux64 - stable",
@@ -324,30 +331,15 @@
           "Chrome Linux Perf"
         ],
         "builders": {
-          "*": {}
-        }
-      },
-      {
-        "categories": [
-          "v8_testing"
-        ],
-        "excluded_builders" : [
-          "V8 Linux - mips - sim",
-          "V8 Linux - x87 - nosnap - debug",
-          "V8 Linux - full debug",
-          "V8 Linux - interpreted regexp",
-          "V8 Linux - arm64 - sim - nosnap - debug - 1",
-          "V8 Linux - arm64 - sim - nosnap - debug - 2",
-          "V8 Linux - arm64 - sim - gc stress",
-          "V8 Linux - predictable",
-          "V8 Mac GC Stress - 1",
-          "V8 Mac GC Stress - 2",
-          "V8 Mac GC Stress - 3",
-          "V8 Arm GC Stress",
-          "NaCl V8 Linux64 - canary",
-          "NaCl V8 Linux64 - stable"
-        ],
-        "builders": {
+          "V8 Linux - predictable": {
+            "excluded_steps": [
+              "Mjsunit",
+              "Webkit",
+              "Benchmarks",
+              "Test262",
+              "Mozilla"
+            ]
+          },
           "*": {}
         }
       }
@@ -468,19 +460,7 @@
         "compile",
         "gn",
         "gclient runhooks",
-        "runhooks"
-      ],
-      "forgiving_optional": [
-        "bot_update",
-        "package build",
-        "extract build",
-        "cleanup_temp",
-        "taskkill"
-      ],
-      "status_template": "Tree is closed (Automatic: \"%(unsatisfied)s\" on %(build_url)s \"%(builder_name)s\" from %(revision)s: %(blamelist)s)"
-    },
-    "v8_testing": {
-      "closing_optional": [
+        "runhooks",
         "Presubmit",
         "Static-Initializers",
         "Check",
@@ -493,6 +473,13 @@
         "Mozilla",
         "GCMole",
         "Simple Leak Check"
+      ],
+      "forgiving_optional": [
+        "bot_update",
+        "package build",
+        "extract build",
+        "cleanup_temp",
+        "taskkill"
       ],
       "status_template": "Tree is closed (Automatic: \"%(unsatisfied)s\" on %(build_url)s \"%(builder_name)s\" from %(revision)s: %(blamelist)s)"
     },
