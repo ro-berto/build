@@ -794,18 +794,11 @@ def GenSteps(api):
     if not api.platform.is_win and not bot_config.get('exclude_compile_all'):
       compile_targets = ['all'] + compile_targets
 
-    scripts_compile_targets = \
-        api.chromium.get_compile_targets_for_scripts().json.output
-
     # Tests that are only run if their compile_targets are going to be built.
     conditional_tests = [api.chromium.steps.NaclIntegrationTest()]
     if bot_config.get('add_telemetry_tests', True):
-      conditional_tests += [
-          api.chromium.steps.ScriptTest(
-              'telemetry_unittests', 'telemetry_unittests.py',
-              scripts_compile_targets),
-          api.chromium.steps.TelemetryPerfUnitTests()
-      ]
+      conditional_tests += [api.chromium.steps.TelemetryUnitTests(),
+                            api.chromium.steps.TelemetryPerfUnitTests()]
 
     # See if the patch needs to compile on the current platform.
     # Don't run analyze for other projects, such as blink, as there aren't that
@@ -826,8 +819,7 @@ def GenSteps(api):
     tests = []
     # TODO(phajdan.jr): Re-enable checkdeps on Windows when it works with git.
     if not api.platform.is_win:
-      tests.append(api.chromium.steps.ScriptTest(
-          'checkdeps', 'checkdeps.py', scripts_compile_targets))
+      tests.append(api.chromium.steps.ScriptTest('checkdeps', 'checkdeps.py'))
     if api.platform.is_linux:
       tests.extend([
           api.chromium.steps.CheckpermsTest(),
@@ -836,7 +828,8 @@ def GenSteps(api):
 
     conditional_tests = tests_in_compile_targets(
         api, compile_targets, conditional_tests)
-    tests.extend(find_test_named('telemetry_unittests', conditional_tests))
+    tests.extend(find_test_named(api.chromium.steps.TelemetryUnitTests.name,
+                                 conditional_tests))
     tests.extend(find_test_named(api.chromium.steps.TelemetryPerfUnitTests.name,
                                  conditional_tests))
     tests.extend(gtest_tests)
