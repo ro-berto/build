@@ -178,21 +178,13 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport filecmp\nimport sys\nprint 'Comparing %s to %s' % (sys.argv[1], sys.argv[2])\nif not filecmp.cmp(sys.argv[1], sys.argv[2], shallow=False):\n  print('They are not equal')\n  sys.exit(1)\nprint('They are equal')\n",
-      "[SLAVE_BUILD]/src/out/Release.1/base_unittests",
-      "[SLAVE_BUILD]/src/out/Release.2/base_unittests"
+      "[BUILD]/scripts/slave/recipe_modules/isolate/resources/compare_build_artifacts.py",
+      "--first-build-dir",
+      "[SLAVE_BUILD]/src/out/Release.1",
+      "--second-build-dir",
+      "[SLAVE_BUILD]/src/out/Release.2"
     ],
-    "name": "Compare the binaries",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import filecmp@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@print 'Comparing %s to %s' % (sys.argv[1], sys.argv[2])@@@",
-      "@@@STEP_LOG_LINE@python.inline@if not filecmp.cmp(sys.argv[1], sys.argv[2], shallow=False):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  print('They are not equal')@@@",
-      "@@@STEP_LOG_LINE@python.inline@  sys.exit(1)@@@",
-      "@@@STEP_LOG_LINE@python.inline@print('They are equal')@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
+    "cwd": "[SLAVE_BUILD]",
+    "name": "compare_build_artifacts.py"
   }
 ]

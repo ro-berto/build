@@ -251,3 +251,14 @@ class IsolateApi(recipe_api.RecipeApi):
                   self.resource('remove_build_metadata.py'),
                   args=args,
                   cwd=self.m.path['slave_build'])
+
+  def compare_build_artifacts(self, first_dir, second_dir):
+    """Compare the artifacts from 2 builds."""
+    args = [
+        '--first-build-dir', first_dir,
+        '--second-build-dir', second_dir
+    ]
+    self.m.python('compare_build_artifacts.py',
+                  self.resource('compare_build_artifacts.py'),
+                  args=args,
+                  cwd=self.m.path['slave_build'])
