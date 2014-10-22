@@ -549,16 +549,6 @@ BUILDERS = {
 }
 
 
-def add_swarming_builder(original, swarming, server):
-  """Duplicates builder config on |server|, adding 'enable_swarming: True'."""
-  assert server in BUILDERS
-  assert original in BUILDERS[server]['builders']
-  assert swarming not in BUILDERS[server]['builders']
-  conf = BUILDERS[server]['builders'][original].copy()
-  conf['enable_swarming'] = True
-  BUILDERS[server]['builders'][swarming] = conf
-
-
 def get_test_names(tests):
   """Returns the names of each of the tests in |tests|."""
   return [test.name for test in tests]
@@ -594,19 +584,6 @@ def all_compile_targets(api, tests):
 def find_test_named(test_name, tests):
   """Returns a list with all tests whose name matches |test_name|."""
   return [test for test in tests if test.name == test_name]
-
-
-add_swarming_builder('linux_chromium_rel', 'linux_chromium_rel_swarming',
-                     'tryserver.chromium.linux')
-add_swarming_builder('linux_chromium_chromeos_rel',
-                     'linux_chromium_chromeos_rel_swarming',
-                     'tryserver.chromium.linux')
-add_swarming_builder('win_chromium_rel', 'win_chromium_rel_swarming',
-                     'tryserver.chromium.win')
-add_swarming_builder('win_chromium_x64_rel', 'win_chromium_x64_rel_swarming',
-                     'tryserver.chromium.win')
-add_swarming_builder('mac_chromium_rel', 'mac_chromium_rel_swarming',
-                     'tryserver.chromium.mac')
 
 
 def build_to_priority(build_properties):
@@ -1230,7 +1207,7 @@ def GenTests(api):
 
   yield (
     api.test('check_swarming_version_failure') +
-    props(buildername='linux_chromium_rel_swarming') +
+    props(buildername='linux_chromium_rel') +
     api.platform.name('linux') +
     api.step_data('swarming.py --version', retcode=1) +
     api.override_step_data('read test spec', api.json.output({
@@ -1271,7 +1248,7 @@ def GenTests(api):
   # commit queue job.
   yield (
     api.test('swarming_basic_cq') +
-    props(buildername='linux_chromium_rel_swarming') +
+    props(buildername='linux_chromium_rel') +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
         'gtest_tests': [
@@ -1308,7 +1285,7 @@ def GenTests(api):
   yield (
     api.test('swarming_basic_try_job') +
     props(
-        buildername='linux_chromium_rel_swarming',
+        buildername='linux_chromium_rel',
         requester='joe@chromium.org') +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
@@ -1344,7 +1321,7 @@ def GenTests(api):
   # One target (browser_tests) failed to produce *.isolated file.
   yield (
     api.test('swarming_missing_isolated') +
-    props(buildername='linux_chromium_rel_swarming') +
+    props(buildername='linux_chromium_rel') +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
         'gtest_tests': [
@@ -1376,7 +1353,7 @@ def GenTests(api):
   # deapplied patch.
   yield (
     api.test('swarming_deapply_patch') +
-    props(buildername='linux_chromium_rel_swarming') +
+    props(buildername='linux_chromium_rel') +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
         'gtest_tests': [
