@@ -22,6 +22,8 @@ def get_files_to_compare(build_dir):
   def check(f):
     if not os.path.isfile(f):
       return False
+    if os.path.basename(f).startswith('.'):
+      return False
     ext = os.path.splitext(f)[1]
     if ext == '.isolated':
       return True
