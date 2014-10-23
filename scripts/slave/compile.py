@@ -117,8 +117,10 @@ def goma_setup(options, env):
   # improvement but it sometimes cause build failure by race condition.
   # Let me enable goma build on several buildslaves to confirm the issue
   # has been fixed by a workaround.
-  if hostname in ['vm120-m4', 'vm245-m4', 'vm320-m4', 'vm365-m4']:
+  if hostname in ['vm245-m4', 'vm320-m4', 'vm400-m4', 'vm770-m4']:
     env['NO_NACL_GOMA'] = 'false'
+    if hostname in ['vm320-m4', 'vm770-m4']:
+      env['NACL_GOMA_THREADS'] = '1'
 
   # HACK(shinyak, goma): Enable GLOBAL_FILEID_CACHE_PATTERNS only in
   # Chromium Win Ninja Goma and Chromium Win Ninja Goma (shared) builders,
