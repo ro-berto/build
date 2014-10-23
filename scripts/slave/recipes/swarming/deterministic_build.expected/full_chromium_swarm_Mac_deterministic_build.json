@@ -98,7 +98,7 @@
       "clang",
       "--clobber",
       "--",
-      "base_unittests"
+      "chrome_run"
     ],
     "name": "First build"
   },
@@ -150,7 +150,7 @@
       "clang",
       "--clobber",
       "--",
-      "base_unittests"
+      "chrome_run"
     ],
     "name": "Second build"
   },

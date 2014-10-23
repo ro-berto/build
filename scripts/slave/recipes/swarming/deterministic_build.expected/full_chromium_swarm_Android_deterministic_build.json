@@ -102,7 +102,7 @@
       "[BUILD]/goma",
       "--clobber",
       "--",
-      "base_unittests"
+      "chrome_run"
     ],
     "name": "First build"
   },
@@ -156,7 +156,7 @@
       "[BUILD]/goma",
       "--clobber",
       "--",
-      "base_unittests"
+      "chrome_run"
     ],
     "name": "Second build"
   },

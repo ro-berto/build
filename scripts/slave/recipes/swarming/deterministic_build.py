@@ -77,7 +77,7 @@ def GenSteps(api):
   buildername = api.properties['buildername']
   recipe_config = DETERMINISTIC_BUILDERS[buildername]
 
-  target_name = 'base_unittests'
+  target_name = 'chrome_run'
 
   api.chromium.set_config(recipe_config['chromium_config'],
                           **recipe_config.get('chromium_config_kwargs',
