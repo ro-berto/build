@@ -407,7 +407,9 @@ class SwarmingGTestTest(Test):
   def compile_targets(self, _):
     # <X>_run target depends on <X>, and then isolates it invoking isolate.py.
     # It is a convention, not a hard coded rule.
-    return [self._name + '_run']
+    # Also include name without the _run suffix to help recipes correctly
+    # interpret results returned by "analyze".
+    return [self._name, self._name + '_run']
 
   def pre_run(self, api, suffix):
     """Launches the test on Swarming."""

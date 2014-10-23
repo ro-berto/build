@@ -645,6 +645,7 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
+      "base_unittests",
       "base_unittests_run"
     ],
     "name": "compile (without patch)"

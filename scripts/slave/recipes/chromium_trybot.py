@@ -570,8 +570,18 @@ def tests_in_compile_targets(api, compile_targets, tests):
   # The target all builds everything.
   if 'all' in compile_targets:
     return tests
-  return [test for test in tests if set(compile_targets) &
-          set(test.compile_targets(api))]
+
+  result = []
+  for test in tests:
+    test_compile_targets = test.compile_targets(api)
+
+    # Always return tests that don't require compile. Otherwise we'd never
+    # run them.
+    if ((set(compile_targets) & set(test_compile_targets)) or
+        not test_compile_targets):
+      result.append(test)
+
+  return result
 
 
 def all_compile_targets(api, tests):
@@ -952,16 +962,16 @@ def GenSteps(api):
             override_bot_type='builder_tester',
             override_tests=tests)
 
-    requires_compile, matching_exes, compile_targets = \
+    requires_compile, _, compile_targets = \
         api.chromium_tests.analyze(
             all_compile_targets(api, tests + tests_including_triggered),
             compile_targets,
             'trybot_analyze_config.json')
 
     if requires_compile:
-      tests = filter_tests(tests, matching_exes)
-      tests_including_triggered = filter_tests(
-          tests_including_triggered, matching_exes)
+      tests = tests_in_compile_targets(api, compile_targets, tests)
+      tests_including_triggered = tests_in_compile_targets(
+          api, compile_targets, tests_including_triggered)
 
       api.chromium_tests.compile_specific_targets(
           main_waterfall_config['mastername'],

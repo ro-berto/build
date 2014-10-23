@@ -178,7 +178,7 @@
       "-u",
       "[SLAVE_BUILD]/src/build/gyp_chromium",
       "--analyzer",
-      "{\"files\": [\"foo.cc\"], \"targets\": [\"base_unittests_run\", \"chrome\"]}",
+      "{\"files\": [\"foo.cc\"], \"targets\": [\"base_unittests\", \"base_unittests_run\", \"chrome\"]}",
       "/path/to/tmp/json"
     ],
     "env": {
