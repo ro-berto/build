@@ -17,7 +17,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 def get_files_to_compare(build_dir):
   """Get the list of files to compare."""
   allowed = frozenset(
-      ('', '.app', '.dll', '.dylib', '.exe', '.nexe', '.pdb', '.so'))
+      ('', '.app', '.dll', '.dylib', '.exe', '.nexe', '.so'))
 
   def check(f):
     if not os.path.isfile(f):
