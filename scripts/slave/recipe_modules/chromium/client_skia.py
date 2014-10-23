@@ -5,6 +5,7 @@
 from . import chromium_linux
 from . import chromium_mac
 from . import chromium_win
+from common.skia import builder_name_schema
 import copy
 
 # The Skia config just clones some regular Chromium builders, except that they
@@ -26,8 +27,9 @@ SPEC = {
 }
 
 for spec_module, test_spec_file, builders_list in _builders:
-  for builder_name in builders_list:
-    builder_cfg = copy.deepcopy(spec_module.SPEC['builders'][builder_name])
-    builder_cfg['recipe_config'] = 'chromium_skia'
-    builder_cfg['testing']['test_spec_file'] = test_spec_file
-    SPEC['builders'][builder_name] = builder_cfg
+  for builder in builders_list:
+    for builder_name in (builder, builder_name_schema.TrybotName(builder)):
+      builder_cfg = copy.deepcopy(spec_module.SPEC['builders'][builder])
+      builder_cfg['recipe_config'] = 'chromium_skia'
+      builder_cfg['testing']['test_spec_file'] = test_spec_file
+      SPEC['builders'][builder_name] = builder_cfg
