@@ -58,62 +58,24 @@ INSTRUMENTATION_TESTS = [
 ]
 
 UNIT_TESTS = [
-  {
-    'test': 'base_unittests',
-  },
-  {
-    'test': 'breakpad_unittests',
-    'isolate_path': [ 'breakpad', 'breakpad_unittests.isolate'],
-    'flakiness_dashboard': 'test-results.appspot.com',
-  },
-  {
-    'test': 'cc_unittests',
-  },
-  {
-    'test': 'components_unittests',
-  },
-  {
-    'test': 'content_browsertests',
-  },
-  {
-    'test': 'content_unittests',
-  },
-  {
-    'test': 'events_unittests',
-  },
-  {
-    'test': 'gl_tests',
-  },
-  {
-    'test': 'gpu_unittests',
-  },
-  {
-    'test': 'ipc_tests',
-  },
-  {
-    'test': 'media_unittests',
-  },
-  {
-    'test': 'net_unittests',
-  },
-  {
-    'test': 'sandbox_linux_unittests',
-  },
-  {
-    'test': 'sql_unittests',
-  },
-  {
-    'test': 'sync_unit_tests',
-  },
-  {
-    'test': 'ui_unittests',
-  },
-  {
-    'test': 'unit_tests',
-  },
-  {
-    'test': 'webkit_unit_tests',
-  },
+  [ 'base_unittests', None ],
+  [ 'breakpad_unittests', [ 'breakpad', 'breakpad_unittests.isolate' ] ],
+  [ 'cc_unittests', None ],
+  [ 'components_unittests', None ],
+  [ 'content_browsertests',  None ],
+  [ 'content_unittests', None ],
+  [ 'events_unittests', None ],
+  [ 'gl_tests', None ],
+  [ 'gpu_unittests', None ],
+  [ 'ipc_tests', None ],
+  [ 'media_unittests', None ],
+  [ 'net_unittests', None ],
+  [ 'sandbox_linux_unittests', None ],
+  [ 'sql_unittests', None ],
+  [ 'sync_unit_tests', None ],
+  [ 'ui_unittests', None ],
+  [ 'unit_tests', None ],
+  [ 'webkit_unit_tests', None ],
 ]
 
 JAVA_UNIT_TESTS = [
@@ -204,7 +166,7 @@ def GenSteps(api):
     # Early out if we haven't changed any relevant code.
     test_names = []
     test_names.extend([suite['gyp_target'] for suite in instrumentation_tests])
-    test_names.extend([suite['test'] for suite in unittests])
+    test_names.extend([suite for suite, _ in unittests])
     test_names.extend(java_unittests)
 
     compile_targets = api.chromium.c.compile_py.default_targets
@@ -220,7 +182,7 @@ def GenSteps(api):
         compile_targets else api.filter.compile_targets
     instrumentation_tests = [i for i in instrumentation_tests if \
         i['gyp_target'] in api.filter.matching_exes]
-    unittests = [i for i in unittests if i['test'] in api.filter.matching_exes]
+    unittests = [i for i in unittests if i[0] in api.filter.matching_exes]
     java_unittests = [i for i in java_unittests
                       if i in api.filter.matching_exes]
 
@@ -245,14 +207,12 @@ def GenSteps(api):
       api.chromium_android.run_instrumentation_suite(
           suite['test'], verbose=True, **suite.get('kwargs', {}))
 
-    for suite in unittests:
-      isolate_path = suite.get('isolate_path')
+    for suite, isolate_path in unittests:
       if isolate_path:
         isolate_path = api.path['checkout'].join(*isolate_path)
       api.chromium_android.run_test_suite(
-          suite['test'],
-          isolate_file_path=isolate_path,
-          flakiness_dashboard=suite.get('flakiness_dashboard'))
+          suite,
+          isolate_file_path=isolate_path)
 
     if bot_config.get('telemetry_unittests'):
       api.chromium.run_telemetry_unittests()

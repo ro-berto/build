@@ -339,8 +339,7 @@
       "breakpad_unittests",
       "--verbose",
       "--release",
-      "--isolate_file_path=[SLAVE_BUILD]/src/breakpad/breakpad_unittests.isolate",
-      "--flakiness-dashboard-server=test-results.appspot.com"
+      "--isolate_file_path=[SLAVE_BUILD]/src/breakpad/breakpad_unittests.isolate"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
