@@ -241,6 +241,18 @@ BUILDERS = {
         'tests': ['unittests', 'v8testing', 'webkit', 'mozilla', 'test262'],
         'testing': {'platform': 'linux'},
       },
+      'V8 Linux - debug - code serializer': {
+        'v8_apply_config': ['code_serializer', 'no_variants'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux - debug builder',
+        'build_gs_archive': 'linux_dbg_archive',
+        'tests': ['mjsunit', 'webkit', 'mozilla', 'test262', 'benchmarks'],
+        'testing': {'platform': 'linux'},
+      },
 ####### Category: Linux64
       'V8 Linux64 - builder': {
         'v8_config_kwargs': {

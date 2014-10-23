@@ -88,6 +88,12 @@ def arm_hard_float(c):
   c.gyp_env.LINK = '/usr/bin/arm-linux-gnueabihf-g++'
 
 
+
+@config_ctx()
+def code_serializer(c):
+  c.testing.test_args.add('--shell_flags="--serialize-toplevel --cache=code"')
+
+
 @config_ctx()
 def deadcode(c):
   c.testing.test_args.add('--shell_flags="--dead-code-elimination"')
