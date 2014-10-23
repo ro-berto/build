@@ -45,6 +45,7 @@ def run(
       '--task-name', '%s-%s' % (task_name, suffix),
       '--deadline', str(timeout),
       '--timeout', str(timeout),
+      '--tag', 'heartbeat:1',
       isolated_hash,
     ]
     for key, value in dimensions.iteritems():
