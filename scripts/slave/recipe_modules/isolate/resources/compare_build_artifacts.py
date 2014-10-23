@@ -55,7 +55,7 @@ def compare_build_artifacts(first_dir, second_dir):
     print >> sys.stderr, '\n'.join('  ' + i for i in sorted(diff))
     res = 1
 
-  for f in first_list & second_list:
+  for f in sorted(first_list & second_list):
     first_file = os.path.join(first_dir, f)
     second_file = os.path.join(second_dir, f)
     if filecmp.cmp(first_file, second_file, shallow=False):
