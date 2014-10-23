@@ -15,7 +15,6 @@ from twisted.python import log
 from twisted.web.client import getPage
 
 from buildbot.changes import base
-from master.factory.dart import semantic_version
 
 VALUE_NOT_SET = -1
 
@@ -27,7 +26,7 @@ class PubPoller(base.PollingChangeSource):
     self.pollInterval = pollInterval
     self.project = project
     log.msg("poll interval %s" % pollInterval)
-    self.num_versions = {}
+    self.versions = {}
 
   def describe(self):
     return 'Watching pub packages %s' % self.packages
@@ -43,10 +42,13 @@ class PubPoller(base.PollingChangeSource):
                           revision=version)
 
   # pub.dartlang.org is returning the versions in non sorted order
-  # We sort them using the same semantic version class that pub uses
+  # We simply see if there was any new versions since the last time around.
+  # Normally we only see one version pushed, but since we only pull every
+  # [pollInterval] seconds we may get more than one. We report these with
+  # + between versions.
   @staticmethod
-  def find_new_version(versions):
-    return str(max([semantic_version.SemanticVersion(v) for v in versions]))
+  def find_new_versions(old_set, new_set):
+    return " + ".join(old_set - new_set)
 
   @defer.inlineCallbacks
   def poll(self):
@@ -55,15 +57,17 @@ class PubPoller(base.PollingChangeSource):
       try:
         info = yield self.poll_package(package)
         package_info = json.loads(info)
-        count = len(package_info['versions'])
+        pulled_versions = set(package_info['versions'])
+        count = len(pulled_versions)
         # If we could not set the initial value, set it now
-        if self.num_versions[package] == VALUE_NOT_SET:
+        if self.versions[package] == VALUE_NOT_SET:
           log.msg('Delayed set of initial value for %s' % package)
-          self.num_versions[package] = count
-        elif self.num_versions[package] != count:
+          self.versions[package] = pulled_versions
+        elif len(self.versions[package]) != count:
           log.msg('Package %s has new version' % package)
-          self.num_versions[package] = count
-          version = self.find_new_version(package_info['versions'])
+          version = self.find_new_version(pulled_versions,
+                                          self.versions[package])
+          self.versions[package] = pulled_versions
           self.make_change(package, version)
       except Exception :
         log.msg('Could not get version for package %s: %s' %
@@ -84,12 +88,10 @@ class PubPoller(base.PollingChangeSource):
         package_info = json.loads(info)
         count = len(package_info['versions'])
         log.msg('Initial count for %s is %s' % (package, count))
-        log.msg('Initial version: %s' %
-                self.find_new_version(package_info['versions']))
-        self.num_versions[package] = count
+        self.versions[package] = set(package_info['versions'])
       except Exception :
         log.msg('Could not set initial value for package %s %s' %
                 (package, traceback.format_exc()))
-        self.num_versions[package] = VALUE_NOT_SET
+        self.versions[package] = VALUE_NOT_SET
     base.PollingChangeSource.startService(self)
 
