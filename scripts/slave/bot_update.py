@@ -241,6 +241,7 @@ ENABLED_MASTERS = [
     'client.v8',
     'client.v8.branches',
     'client.webrtc',
+    'client.webrtc.fyi',
     'tryserver.blink',
     'tryserver.chromium.gpu',
     'tryserver.chromium.linux',

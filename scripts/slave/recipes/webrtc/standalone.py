@@ -51,14 +51,10 @@ def GenSteps(api):
     api.chromium.apply_config('trybot_flavor')
 
   step_result = api.bot_update.ensure_checkout()
-  bot_update_mode = step_result.json.output['did_run']
-  if not bot_update_mode:
-    step_result = api.gclient.checkout()
 
   # Whatever step is run right before this line needs to emit got_revision.
   got_revision = step_result.presentation.properties['got_revision']
 
-  api.tryserver.maybe_apply_issue()
   api.chromium.runhooks()
 
   if does_build:
