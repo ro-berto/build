@@ -34,10 +34,10 @@ def device_from_builder_dict(builder_dict):
       'GalaxyS4': 'arm_v7_thumb',
       'Nexus5': 'nexus_5',
       'Nexus7': 'nexus_7',
+      'Nexus9': 'arm64',
       'Nexus10': 'nexus_10',
       'Xoom': 'xoom',
       'Venue8': 'x86',
-      'Reference': 'arm64',
     }[builder_dict['model']]
   # pragma: no cover
   raise Exception('No device found for builder: %s' % str(builder_dict))
