@@ -505,7 +505,8 @@ class AndroidApi(recipe_api.RecipeApi):
          '-w', self.m.path['slave_build']] + args)
 
   def run_test_suite(self, suite, verbose=True, isolate_file_path=None,
-                     gtest_filter=None, tool=None, **kwargs):
+                     gtest_filter=None, tool=None, flakiness_dashboard=None,
+                     **kwargs):
     args = []
     if verbose:
       args.append('--verbose')
@@ -517,6 +518,9 @@ class AndroidApi(recipe_api.RecipeApi):
       args.append('--gtest_filter=%s' % gtest_filter)
     if tool:
       args.append('--tool=%s' % tool)
+    if flakiness_dashboard:
+      args.append('--flakiness-dashboard-server=%s' %
+          flakiness_dashboard)
 
     self.m.python(
         str(suite),
