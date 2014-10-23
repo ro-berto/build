@@ -11,8 +11,6 @@ full roll out.
 Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 """
 
-import os
-
 DEPS = [
   'bot_update',
   'chromium',
@@ -20,6 +18,7 @@ DEPS = [
   'gclient',
   'isolate',
   'json',
+  'path',
   'platform',
   'properties',
   'step',
@@ -88,7 +87,7 @@ def GenSteps(api):
       ])
   targets = []
   for p in paths:
-    name = os.path.basename(p)
+    name = api.path.basename(p)
     assert name.endswith('.isolated.gen.json'), name
     targets.append(name[:-len('.isolated.gen.json')])
 

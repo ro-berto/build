@@ -181,8 +181,8 @@
       "--isolate-server",
       "https://isolateserver-dev.appspot.com",
       "--verbose",
-      "[SLAVE_BUILD]\\src\\out\\Debug\\[SLAVE_BUILD]\\src\\out\\Debug\\dummy_target_1.isolated.gen.json",
-      "[SLAVE_BUILD]\\src\\out\\Debug\\[SLAVE_BUILD]\\src\\out\\Debug\\dummy_target_2.isolated.gen.json"
+      "[SLAVE_BUILD]\\src\\out\\Debug\\dummy_target_1.isolated.gen.json",
+      "[SLAVE_BUILD]\\src\\out\\Debug\\dummy_target_2.isolated.gen.json"
     ],
     "env": {
       "SWARMING_PROFILE": "1"
@@ -190,11 +190,11 @@
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"[SLAVE_BUILD]\\\\src\\\\out\\\\Debug\\\\dummy_target_1\": \"[dummy hash for [SLAVE_BUILD]\\\\src\\\\out\\\\Debug\\\\dummy_target_1]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"[SLAVE_BUILD]\\\\src\\\\out\\\\Debug\\\\dummy_target_2\": \"[dummy hash for [SLAVE_BUILD]\\\\src\\\\out\\\\Debug\\\\dummy_target_2]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"dummy_target_1\": \"[dummy hash for dummy_target_1]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"dummy_target_2\": \"[dummy hash for dummy_target_2]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"[SLAVE_BUILD]\\\\src\\\\out\\\\Debug\\\\dummy_target_1\": \"[dummy hash for [SLAVE_BUILD]\\\\src\\\\out\\\\Debug\\\\dummy_target_1]\", \"[SLAVE_BUILD]\\\\src\\\\out\\\\Debug\\\\dummy_target_2\": \"[dummy hash for [SLAVE_BUILD]\\\\src\\\\out\\\\Debug\\\\dummy_target_2]\"}@@@"
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"dummy_target_1\": \"[dummy hash for dummy_target_1]\", \"dummy_target_2\": \"[dummy hash for dummy_target_2]\"}@@@"
     ]
   },
   {
@@ -212,7 +212,7 @@
       "--shards",
       "2",
       "--task-name",
-      "[SLAVE_BUILD]\\src\\out\\Debug\\dummy_target_1/Windows/[dummy has/TestBuilder/571",
+      "dummy_target_1/Windows/[dummy has/TestBuilder/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -235,11 +235,11 @@
       "--tag",
       "buildnumber:571",
       "--tag",
-      "data:[dummy hash for [SLAVE_BUILD]\\src\\out\\Debug\\dummy_target_1]",
+      "data:[dummy hash for dummy_target_1]",
       "--tag",
       "master:chromium.testing.master",
       "--tag",
-      "name:[SLAVE_BUILD]\\src\\out\\Debug\\dummy_target_1",
+      "name:dummy_target_1",
       "--tag",
       "os:Windows",
       "--tag",
@@ -249,21 +249,21 @@
       "--profile",
       "--verbose",
       "--idempotent",
-      "[dummy hash for [SLAVE_BUILD]\\src\\out\\Debug\\dummy_target_1]",
+      "[dummy hash for dummy_target_1]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] [SLAVE_BUILD]\\src\\out\\Debug\\dummy_target_1 on Windows",
+    "name": "[trigger] dummy_target_1 on Windows",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"[SLAVE_BUILD]\\\\src\\\\out\\\\Debug\\\\dummy_target_1/Windows/[dummy has/TestBuilder/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"dummy_target_1/Windows/[dummy has/TestBuilder/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"[SLAVE_BUILD]\\\\src\\\\out\\\\Debug\\\\dummy_target_1/Windows/[dummy has/TestBuilder/571:2:0\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"dummy_target_1/Windows/[dummy has/TestBuilder/571:2:0\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"[SLAVE_BUILD]\\\\src\\\\out\\\\Debug\\\\dummy_target_1/Windows/[dummy has/TestBuilder/571:2:1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"dummy_target_1/Windows/[dummy has/TestBuilder/571:2:1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 1, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10100\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10100\"@@@",
@@ -290,7 +290,7 @@
       "--shards",
       "2",
       "--task-name",
-      "[SLAVE_BUILD]\\src\\out\\Debug\\dummy_target_2/Windows/[dummy has/TestBuilder/571",
+      "dummy_target_2/Windows/[dummy has/TestBuilder/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -313,11 +313,11 @@
       "--tag",
       "buildnumber:571",
       "--tag",
-      "data:[dummy hash for [SLAVE_BUILD]\\src\\out\\Debug\\dummy_target_2]",
+      "data:[dummy hash for dummy_target_2]",
       "--tag",
       "master:chromium.testing.master",
       "--tag",
-      "name:[SLAVE_BUILD]\\src\\out\\Debug\\dummy_target_2",
+      "name:dummy_target_2",
       "--tag",
       "os:Windows",
       "--tag",
@@ -327,21 +327,21 @@
       "--profile",
       "--verbose",
       "--idempotent",
-      "[dummy hash for [SLAVE_BUILD]\\src\\out\\Debug\\dummy_target_2]",
+      "[dummy hash for dummy_target_2]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] [SLAVE_BUILD]\\src\\out\\Debug\\dummy_target_2 on Windows",
+    "name": "[trigger] dummy_target_2 on Windows",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"[SLAVE_BUILD]\\\\src\\\\out\\\\Debug\\\\dummy_target_2/Windows/[dummy has/TestBuilder/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"dummy_target_2/Windows/[dummy has/TestBuilder/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"[SLAVE_BUILD]\\\\src\\\\out\\\\Debug\\\\dummy_target_2/Windows/[dummy has/TestBuilder/571:2:0\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"dummy_target_2/Windows/[dummy has/TestBuilder/571:2:0\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"[SLAVE_BUILD]\\\\src\\\\out\\\\Debug\\\\dummy_target_2/Windows/[dummy has/TestBuilder/571:2:1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"dummy_target_2/Windows/[dummy has/TestBuilder/571:2:1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 1, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10100\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10100\"@@@",
@@ -374,9 +374,9 @@
       "--verbose",
       "--shards",
       "2",
-      "[SLAVE_BUILD]\\src\\out\\Debug\\dummy_target_1/Windows/[dummy has/TestBuilder/571"
+      "dummy_target_1/Windows/[dummy has/TestBuilder/571"
     ],
-    "name": "[SLAVE_BUILD]\\src\\out\\Debug\\dummy_target_1 on Windows"
+    "name": "dummy_target_1 on Windows"
   },
   {
     "allow_subannotations": true,
@@ -399,8 +399,8 @@
       "--verbose",
       "--shards",
       "2",
-      "[SLAVE_BUILD]\\src\\out\\Debug\\dummy_target_2/Windows/[dummy has/TestBuilder/571"
+      "dummy_target_2/Windows/[dummy has/TestBuilder/571"
     ],
-    "name": "[SLAVE_BUILD]\\src\\out\\Debug\\dummy_target_2 on Windows"
+    "name": "dummy_target_2 on Windows"
   }
 ]
