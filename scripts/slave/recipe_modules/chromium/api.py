@@ -2,7 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import os
 import re
 
 from slave import recipe_api
@@ -61,7 +60,8 @@ class ChromiumApi(recipe_api.RecipeApi):
   def get_env(self):
     ret = {}
     if self.c.env.PATH:
-      ret['PATH'] = os.pathsep.join(map(str, self.c.env.PATH) + ['%(PATH)s'])
+      ret['PATH'] = self.m.path.pathsep.join(
+          map(str, self.c.env.PATH) + ['%(PATH)s'])
     if self.c.env.ADB_VENDOR_KEYS:
       ret['ADB_VENDOR_KEYS'] = self.c.env.ADB_VENDOR_KEYS
     return ret
