@@ -18,10 +18,6 @@ DEPS = [
 
 INSTRUMENTATION_TESTS = [
   {
-    'test': 'MojoTest',
-    'gyp_target': 'mojo_test_apk',
-  },
-  {
     'test': 'AndroidWebViewTest',
     'gyp_target': 'android_webview_test_apk',
     'kwargs': {
