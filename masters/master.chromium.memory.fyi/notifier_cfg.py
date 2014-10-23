@@ -44,7 +44,7 @@ categories_steps = {
     'memory test: sql',
     'memory test: sync',
     'memory test: sync_unit_tests',
-    'memory test: ui_unittests',
+    'memory test: ui_base_unittests',
     'memory test: unit',
     'memory test: unit_1',  # it's sharded on Mac Valgrind and TSan Linux
     'memory test: url',
@@ -105,7 +105,7 @@ def Update(config, active_master, c):
       'memory test: sql',
       'memory test: sync',
       'memory test: sync_unit_tests',
-      'memory test: ui_unittests',
+      'memory test: ui_base_unittests',
       'memory test: unit',  # unit_tests might be sharded
       'memory test: unit_1',
       'memory test: unit_2',
