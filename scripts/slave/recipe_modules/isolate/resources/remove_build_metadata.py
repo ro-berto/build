@@ -28,6 +28,7 @@ def RemovePEMetadata(build_dir, src_dir):
   with open(os.path.join(BASE_DIR, 'deterministic_build_blacklist.json')) as f:
     blacklist = frozenset(json.load(f))
 
+  failed = []
   for filename in files:
     # Ignore the blacklisted files.
     if filename in blacklist:
@@ -37,8 +38,14 @@ def RemovePEMetadata(build_dir, src_dir):
     if os.path.exists(os.path.join(build_dir, filename + '.pdb')):
       ret = RunZapTimestamp(src_dir, os.path.join(build_dir, filename))
       if ret != 0:
-        print "zap_timestamp.exe failed for %s." % filename
-        return ret
+        failed.append(filename)
+
+  if failed:
+    print >> sys.stderr, 'zap_timestamp.exe failed for the following files:'
+    print >> sys.stderr, '\n'.join('  ' + i for i in sorted(failed))
+    return 1
+
+  return 0
 
 
 def main():
