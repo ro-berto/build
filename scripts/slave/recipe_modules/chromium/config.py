@@ -595,6 +595,10 @@ def chrome_pgo_base(c):
 @config_ctx(includes=['chrome_pgo_base'])
 def chrome_pgo_instrument(c):
   c.gyp_env.GYP_DEFINES['chrome_pgo_phase'] = 1
+  # Some of the binaries needed by the PGO gets copied into the build directory
+  # during the build, we need to augment the PATH variable so it can find them
+  # during the profiling step.
+  c.env.PATH.extend([c.build_dir.join(c.build_config_fs)])
 
 @config_ctx(includes=['chrome_pgo_base'])
 def chrome_pgo_optimize(c):
