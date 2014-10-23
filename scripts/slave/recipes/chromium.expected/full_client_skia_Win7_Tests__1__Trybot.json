@@ -226,6 +226,7 @@
       "project:chromium",
       "--tag",
       "purpose:CI",
+      "--idempotent",
       "ffffffffffffffffffffffffffffffffffffffff",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"

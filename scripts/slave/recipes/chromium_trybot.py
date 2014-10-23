@@ -893,8 +893,7 @@ def GenSteps(api):
   api.swarming.default_priority = build_to_priority(api.properties)
   api.swarming.add_default_tag('project:chromium')
   api.swarming.add_default_tag('purpose:pre-commit')
-  # TODO(maruel): Soon!
-  # api.swarming.default_idempotent = True
+  api.swarming.default_idempotent = True
 
   # Differentiate between try jobs and CQ jobs. Always find out who made the CL.
   requestor = api.properties.get('requestor')

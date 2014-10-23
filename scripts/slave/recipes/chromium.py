@@ -37,8 +37,7 @@ def GenSteps(api):
   api.swarming.set_default_dimension('pool', 'Chrome')
   api.swarming.add_default_tag('project:chromium')
   api.swarming.add_default_tag('purpose:CI')
-  # TODO(maruel): Soon!
-  # api.swarming.default_idempotent = True
+  api.swarming.default_idempotent = True
 
   def test_runner():
     failed_tests = []

@@ -282,6 +282,7 @@
       "purpose:pre-commit",
       "--tag",
       "rietveld:https://codereview.chromium.org/12853011/#ps1",
+      "--idempotent",
       "[dummy hash for base_unittests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
@@ -355,6 +356,7 @@
       "purpose:pre-commit",
       "--tag",
       "rietveld:https://codereview.chromium.org/12853011/#ps1",
+      "--idempotent",
       "[dummy hash for browser_tests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
@@ -722,6 +724,7 @@
       "purpose:pre-commit",
       "--tag",
       "rietveld:https://codereview.chromium.org/12853011/#ps1",
+      "--idempotent",
       "[dummy hash for base_unittests]",
       "--",
       "--gtest_filter=Test.Two",
