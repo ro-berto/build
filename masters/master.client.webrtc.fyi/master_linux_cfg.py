@@ -15,7 +15,6 @@ def Update(c):
                             treeStableTimer=0,
                             builderNames=[
                                 'Linux64 Debug (parallel)',
-                                'Linux MSan',
       ]),
   ])
 
@@ -24,10 +23,6 @@ def Update(c):
       'name': 'Linux64 Debug (parallel)',
       'slavebuilddir': 'linux',
     },
-    {
-      'name': 'Linux MSan',
-      'slavebuilddir': 'linux_msan',
-    }
   ]
 
   c['builders'].extend([

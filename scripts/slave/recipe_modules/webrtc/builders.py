@@ -647,6 +647,17 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
+      'Linux MSan': {
+        'recipe_config': 'webrtc_clang',
+        'chromium_apply_config': ['msan', 'msan_full_origin_tracking',
+                                  'instrumented_libraries'],
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
+      },
       'Linux Tsan v2': {
         'recipe_config': 'webrtc_clang',
         'chromium_apply_config': ['tsan2'],
@@ -797,17 +808,6 @@ BUILDERS = {
         'recipe_config': 'webrtc_parallel',
         'webrtc_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'linux'},
-      },
-      'Linux MSan': {
-        'recipe_config': 'webrtc_clang',
-        'chromium_apply_config': ['msan', 'msan_full_origin_tracking',
-                                  'instrumented_libraries'],
-        'webrtc_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
@@ -1003,6 +1003,17 @@ BUILDERS = {
         'recipe_config': 'webrtc',
         'chromium_apply_config': ['memcheck'],
         'gclient_apply_config': ['valgrind'],
+        'webrtc_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
+      },
+      'linux_msan': {
+        'recipe_config': 'webrtc_clang',
+        'chromium_apply_config': ['msan', 'msan_full_origin_tracking',
+                                  'instrumented_libraries'],
         'webrtc_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,

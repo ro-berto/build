@@ -20,6 +20,7 @@ def Update(c):
           'Linux64 Release',
           'Linux Asan',
           'Linux Memcheck',
+          'Linux MSan',
           'Linux Tsan v2',
           'Linux64 Release [large tests]',
           'Linux64 Debug (GN)',
@@ -35,6 +36,7 @@ def Update(c):
     {'name': 'Linux64 Debug', 'slavebuilddir': 'linux64'},
     {'name': 'Linux64 Release', 'slavebuilddir': 'linux64'},
     {'name': 'Linux Asan', 'slavebuilddir': 'linux_asan'},
+    {'name': 'Linux MSan', 'slavebuilddir': 'linux_msan'},
     {'name': 'Linux Memcheck', 'slavebuilddir': 'linux_memcheck_tsan'},
     {'name': 'Linux Tsan v2', 'slavebuilddir': 'linux_tsan2'},
     {
