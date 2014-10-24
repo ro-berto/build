@@ -45,13 +45,13 @@ def V8Builder(config, bits, platform):
   if config == 'Debug':
     chromium_configs.append('v8_optimize_medium')
   return {
-    'gclient_apply_config': ['show_v8_revision', 'v8_bleeding_edge_git'],
+    'gclient_apply_config': ['show_v8_revision'],
     'chromium_apply_config': chromium_configs,
     'chromium_config_kwargs': {
       'BUILD_CONFIG': config,
       'TARGET_BITS': bits,
     },
-    'component': {'path': 'src/v8', 'revision': 'bleeding_edge:%s'},
+    'component': {'path': 'src/v8', 'revision': '%s'},
     'testing': {'platform': platform},
   }
 

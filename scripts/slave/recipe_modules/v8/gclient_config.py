@@ -26,7 +26,7 @@ def v8(c):
   soln = c.solutions.add()
   soln.name = 'v8'
   # TODO(machenbach): Switch to git after change source switches.
-  soln.url = 'https://chromium.googlesource.com/external/v8'
+  soln.url = 'http://v8.googlecode.com/svn/branches/bleeding_edge'
   soln.custom_vars = {'chromium_trunk': ChromiumSvnTrunkURL(c)}
   c.got_revision_mapping['v8'] = 'got_revision'
   # Needed to get the testers to properly sync the right revision.

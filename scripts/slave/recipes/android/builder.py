@@ -173,7 +173,7 @@ BUILDERS = {
         'path': lambda api: ('v8_android_perf_rel/full-build-linux_%s.zip'
                              % api.properties['revision']),
       },
-      'set_component_rev': {'name': 'src/v8', 'rev_str': 'bleeding_edge:%s'},
+      'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
     }
   },
 }
