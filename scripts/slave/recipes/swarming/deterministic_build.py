@@ -44,17 +44,17 @@ DETERMINISTIC_BUILDERS = {
     'platform': 'mac',
   },
   'Linux deterministic build': {
-    'chromium_config': 'chromium_no_goma',
+    'chromium_config': 'chromium',
     'gclient_config': 'chromium',
     'platform': 'linux',
   },
   'Mac deterministic build': {
-    'chromium_config': 'chromium_no_goma',
+    'chromium_config': 'chromium',
     'gclient_config': 'chromium',
     'platform': 'mac',
   },
   'Windows deterministic build': {
-    'chromium_config': 'chromium_no_goma',
+    'chromium_config': 'chromium',
     'gclient_config': 'chromium',
     'platform': 'win',
   },
