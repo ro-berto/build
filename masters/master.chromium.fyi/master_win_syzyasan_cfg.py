@@ -53,7 +53,7 @@ tests_1 = [
     'net_unittests',
     'sbox_unittests',
     'sql_unittests',
-    'ui_unittests',
+    'ui_base_unittests',
     'views_unittests',
 ]
 
