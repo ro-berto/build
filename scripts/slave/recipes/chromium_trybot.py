@@ -1579,3 +1579,18 @@ def GenTests(api):
       'analyze',
       api.json.output({'invalid_targets': 'invalid target'}))
   )
+
+  # Test what happens if a telemetry test fails (we're testing that the
+  # test names that need to be retried are in the 'foo.bar' format rather
+  # than 'foo/bar').
+  yield (
+    api.test('telemetry_failures') +
+    props(buildername='linux_chromium_rel') +
+    api.platform.name('linux') +
+    api.override_step_data('telemetry_unittests (with patch)',
+        api.json.canned_test_output(passing=False, minimal=True,
+                                    path_separator='.')) +
+    api.override_step_data('telemetry_unittests (without patch)',
+        api.json.canned_test_output(passing=False, minimal=True,
+                                    path_separator='.'))
+  )
