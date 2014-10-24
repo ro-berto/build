@@ -280,21 +280,5 @@
       "browser_tests"
     ],
     "name": "browser_tests (with patch)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/chrome/test/nacl_test_injection/buildbot_nacl_integration.py",
-      "--mode",
-      "Release",
-      "--json_build_results_output_file",
-      "/path/to/tmp/json"
-    ],
-    "name": "nacl_integration (with patch)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
   }
 ]

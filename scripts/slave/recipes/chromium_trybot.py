@@ -239,6 +239,7 @@ BUILDERS = {
         },
       },
       'linux_chromium_chromeos_athena_rel': {
+        'add_nacl_integration_tests': False,
         'add_telemetry_tests': False,
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -246,12 +247,16 @@ BUILDERS = {
         },
         'chromium_config': 'chromium_chromeos_athena',
         'compile_only': False,
+        'compile_targets': [
+          'chrome',
+        ],
         'testing': {
           'platform': 'linux',
           'test_spec_file': 'chromium_athena.json',
         },
       },
       'linux_chromium_chromeos_athena_dbg': {
+        'add_nacl_integration_tests': False,
         'add_telemetry_tests': False,
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -259,6 +264,9 @@ BUILDERS = {
         },
         'chromium_config': 'chromium_chromeos_athena',
         'compile_only': False,
+        'compile_targets': [
+          'chrome',
+        ],
         'testing': {
           'platform': 'linux',
           'test_spec_file': 'chromium_athena.json',
@@ -784,7 +792,9 @@ def GenSteps(api):
       compile_targets = ['all'] + compile_targets
 
     # Tests that are only run if their compile_targets are going to be built.
-    conditional_tests = [api.chromium.steps.NaclIntegrationTest()]
+    conditional_tests = []
+    if bot_config.get('add_nacl_integration_tests', True):
+      conditional_tests += [api.chromium.steps.NaclIntegrationTest()]
     if bot_config.get('add_telemetry_tests', True):
       conditional_tests += [api.chromium.steps.TelemetryUnitTests(),
                             api.chromium.steps.TelemetryPerfUnitTests()]
