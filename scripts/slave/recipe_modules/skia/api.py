@@ -367,7 +367,11 @@ class SkiaApi(recipe_api.RecipeApi):
       '--skps',         self.device_dirs.skp_dir,
       '--writePath',    self.device_dirs.dm_dir,
       '--nameByHash',
+      '--properties',  'gitHash',      self.got_revision,
+                       'build_number', self.m.properties['buildnumber'],
     ]
+    args.append('--key')
+    args.extend(self._KeyParams())
 
     match = []
     if 'Alex' in self.c.BUILDER_NAME:  # skia:2793
@@ -622,3 +626,21 @@ class SkiaApi(recipe_api.RecipeApi):
                args=upload_args,
                cwd=self.m.path['checkout'],
                abort_on_failure=False)
+
+
+  def _KeyParams(self):
+    """Build a unique key from the builder name (as a list).
+
+    E.g.  arch x86 gpu GeForce320M mode MacMini4.1 os Mac10.6
+    """
+    # Don't bother to include role, which is always Test.
+    # TryBots are uploaded elsewhere so they can use the same key.
+    blacklist = ['role', 'is_trybot']
+
+    params = builder_name_schema.DictForBuilderName(self.c.BUILDER_NAME)
+    flat = []
+    for k in sorted(params.keys()):
+      if k not in blacklist:
+        flat.append(k)
+        flat.append(params[k])
+    return flat
