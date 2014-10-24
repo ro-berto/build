@@ -1071,23 +1071,5 @@
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
     },
     "name": "nanobench"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
-      "-s",
-      "014E1F310401C009",
-      "reboot"
-    ],
-    "name": "reboot"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
-      "-s",
-      "014E1F310401C009",
-      "wait-for-device"
-    ],
-    "name": "wait for device"
   }
 ]

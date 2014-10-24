@@ -253,10 +253,6 @@ class DefaultFlavorUtils(base_flavor.BaseFlavorUtils):
     """Run device-specific installation steps."""
     pass
 
-  def cleanup_steps(self):
-    """Run any device-specific cleanup steps."""
-    pass
-
   def get_device_dirs(self):
     """ Set the directories which will be used by the build steps.
 

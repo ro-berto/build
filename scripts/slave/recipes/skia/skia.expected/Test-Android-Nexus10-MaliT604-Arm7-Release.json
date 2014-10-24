@@ -1052,23 +1052,5 @@
       "@@@STEP_LOG_LINE@python.inline@  sys.exit(1)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
-      "-s",
-      "014E1F310401C009",
-      "reboot"
-    ],
-    "name": "reboot"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
-      "-s",
-      "014E1F310401C009",
-      "wait-for-device"
-    ],
-    "name": "wait for device"
   }
 ]

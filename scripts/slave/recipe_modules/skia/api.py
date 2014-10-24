@@ -105,9 +105,6 @@ class SkiaApi(recipe_api.RecipeApi):
     if self.c.do_perf_steps:
       self.perf_steps()
 
-    if self.c.do_test_steps or self.c.do_perf_steps:
-      self.cleanup_steps()
-
     if self.failed:
       raise self.m.step.StepFailure('Failed build steps: %s' %
                                     ', '.join([f.name for f in self.failed]))
@@ -630,9 +627,6 @@ class SkiaApi(recipe_api.RecipeApi):
                cwd=self.m.path['checkout'],
                abort_on_failure=False)
 
-  def cleanup_steps(self):
-    """Run any cleanup steps."""
-    self.flavor.cleanup_steps()
 
   def _KeyParams(self):
     """Build a unique key from the builder name (as a list).
