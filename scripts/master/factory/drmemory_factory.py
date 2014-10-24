@@ -18,8 +18,6 @@ from buildbot.steps.transfer import FileUpload
 from buildbot.steps.transfer import FileDownload
 from buildbot.status.builder import SUCCESS, WARNINGS, FAILURE
 
-from master.factory import v8_factory
-
 LATEST_WIN_BUILD = 'public_html/builds/drmemory-windows-latest-sfx.exe'
 
 dr_svnurl = 'http://dynamorio.googlecode.com/svn/trunk'
@@ -582,31 +580,6 @@ class DrMemoryTest(Test):
     if self.failed__:
       return FAILURE
     return Test.evaluateCommand(self, cmd)
-
-
-class V8DrFactory(v8_factory.V8Factory):
-
-  """Subclass of V8Factory to build DR alongside V8 for the same arch."""
-
-  def BuildFactory(self, target_arch=None, *args, **kwargs):
-    f = super(V8DrFactory, self).BuildFactory(*args,
-                                              target_arch=target_arch,
-                                              **kwargs)
-    # Add in a build of DR.
-    b = DrCommands(self._target_platform, os_version=None, build_factory=f)
-    b.AddDynamoRIOSource()
-    b.AddTools()
-    # Debug DR is too slow for the V8 tests so use release.
-    b.AddDRBuild(target='Release', target_arch=target_arch)
-    return f
-
-  def V8Factory(self, target_arch=None, *args, **kwargs):
-    assert 'shell_flags' not in kwargs
-    bits = ArchToBits(target_arch)
-    drrun = '../../dynamorio/build/bin%d/drrun' % bits
-    kwargs['command_prefix'] = '%s -reset_every_nth_pending 0 --' % drrun
-    return super(V8DrFactory, self).V8Factory(*args, target_arch=target_arch,
-                                              **kwargs)
 
 
 def ToolStep(step_class, os, **kwargs):

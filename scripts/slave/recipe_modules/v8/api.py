@@ -319,6 +319,28 @@ class V8Api(recipe_api.RecipeApi):
       args.extend(self.c.compile_py.compile_extra_args)
     self.m.chromium.compile(args, env=env, **kwargs)
 
+  # TODO(machenbach): This should move to a dynamorio module as soon as one
+  # exists.
+  def dr_compile(self):
+    self.m.path.makedirs(
+      'Create Build Dir',
+      self.m.path['slave_build'].join('dynamorio', 'build'))
+    self.m.step(
+      'Configure Release x64 DynamoRIO',
+      ['cmake', '..', '-DDEBUG=OFF'],
+      cwd=self.m.path['slave_build'].join('dynamorio', 'build'),
+    )
+    self.m.step(
+      'Compile Release x64 DynamoRIO',
+      ['make', '-j5'],
+      cwd=self.m.path['slave_build'].join('dynamorio', 'build'),
+    )
+
+  @property
+  def run_dynamorio(self):
+    return (len(self.m.gclient.c.solutions) > 1 and
+            self.m.gclient.c.solutions[1].name == 'dynamorio')
+
   def upload_build(self):
     self.m.archive.zip_and_upload_build(
           'package build',
@@ -537,6 +559,14 @@ class V8Api(recipe_api.RecipeApi):
 
     # Add builder-specific test arguments.
     full_args += self.c.testing.test_args
+
+    if self.run_dynamorio:
+      drrun = self.m.path['slave_build'].join(
+          'dynamorio', 'build', 'bin64', 'drrun')
+      full_args += [
+        '--command_prefix',
+        '%s -reset_every_nth_pending 0 --' % drrun,
+      ]
 
     if self.c.testing.SHARD_COUNT > 1:
       full_args += [

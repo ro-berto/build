@@ -260,6 +260,9 @@ ENABLED_BUILDERS = {
         'v8-mac-release',
         'v8-win-release',
     ],
+    'client.dynamorio': [
+        'linux-v8-dr',
+    ],
 }
 ENABLED_BUILDERS.update(internal_data.get('ENABLED_BUILDERS', {}))
 

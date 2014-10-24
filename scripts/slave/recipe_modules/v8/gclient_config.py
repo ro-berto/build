@@ -36,6 +36,13 @@ def v8(c):
 
 
 @CONFIG_CTX(includes=['v8'])
+def dynamorio(c):
+  soln = c.solutions.add()
+  soln.name = 'dynamorio'
+  soln.url = 'https://chromium.googlesource.com/external/dynamorio'
+
+
+@CONFIG_CTX(includes=['v8'])
 def mozilla_tests(c):
   c.solutions[0].custom_deps['v8/test/mozilla/data'] = ChromiumSvnSubURL(
       c, 'chrome', 'trunk', 'deps', 'third_party', 'mozilla-tests')

@@ -1148,6 +1148,21 @@ BUILDERS = {
       },
     },
   },
+####### Waterfall: client.dynamorio
+  'client.dynamorio': {
+    'builders': {
+      'linux-v8-dr': {
+        'gclient_apply_config': ['dynamorio'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['v8testing'],
+        'testing': {'platform': 'linux'},
+      },
+    },
+  },
 }
 
 ####### Waterfall: client.v8.branches
