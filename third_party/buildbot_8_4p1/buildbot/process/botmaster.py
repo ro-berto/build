@@ -602,11 +602,11 @@ class DuplicateSlaveArbitrator(object):
         # slave to connect.  If this does not kill it, then we disconnect
         # the new slave.
         self.ping_old_slave_done = False
+        self.ping_new_slave_done = False
         self.old_slave_connected = True
         self.ping_old_slave(new_tport.getPeer())
 
         # Print a message on the new slave, if possible.
-        self.ping_new_slave_done = False
         self.ping_new_slave()
 
         return self.new_slave_d

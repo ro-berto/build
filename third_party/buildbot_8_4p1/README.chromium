@@ -4693,3 +4693,21 @@ index 99708b4..bdd35c6 100644
      ga('send', 'pageview');
 
    </script>
+
+diff --git a/third_party/buildbot_8_4p1/buildbot/process/botmaster.py b/third_party/buildbot_8_4p1/buildbot/process/botmaster.py
+index 3ac7bbc..7703e57 100644
+--- a/third_party/buildbot_8_4p1/buildbot/process/botmaster.py
++++ b/third_party/buildbot_8_4p1/buildbot/process/botmaster.py
+@@ -602,11 +602,11 @@ class DuplicateSlaveArbitrator(object):
+         # slave to connect.  If this does not kill it, then we disconnect
+         # the new slave.
+         self.ping_old_slave_done = False
++        self.ping_new_slave_done = False
+         self.old_slave_connected = True
+         self.ping_old_slave(new_tport.getPeer())
+ 
+         # Print a message on the new slave, if possible.
+-        self.ping_new_slave_done = False
+         self.ping_new_slave()
+ 
+         return self.new_slave_d
