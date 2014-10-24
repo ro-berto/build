@@ -218,22 +218,6 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--test-apk",
-      "MojoTest",
-      "--test_data",
-      "bindings:mojo/public/interfaces/bindings/tests/data",
-      "--flakiness-dashboard-server",
-      "test-results.appspot.com",
-      "--verbose"
-    ],
-    "name": "Instrumentation test MojoTest"
-  },
-  {
-    "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
       "--apk",
       "AndroidWebView.apk",
