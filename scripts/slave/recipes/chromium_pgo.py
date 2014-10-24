@@ -42,31 +42,22 @@ _BENCHMARKS_TO_RUN = {
 
 
 # Run a telemetry benchmark under the Windows PGO profiler.
-def RunTelemetryBenchmark(api, testname):
+def RunTelemetryBenchmark(api, testname, pgosweep_path):
   return api.python(
       'Telemetry benchmark: %s' % testname,
       api.path['checkout'].join('tools', 'perf', 'run_benchmark'),
-      ['--profiler=win_pgo_profiler', '--use-live-sites', testname]
+      args=['--profiler=win_pgo_profiler', '--use-live-sites', testname],
+      env={'PATH': '%s;%s' % (pgosweep_path, '%(PATH)s')}
   )
 
 
 # Run the profiling benchmarks.
 def RunBenchmarks(api):
-  # Copy pgosweep.exe to the output directory.
-  pgosweep_src_path = api.path['depot_tools'].join(
-      'win_toolchain', 'vs2013_files', 'VC', 'bin', 'pgosweep.exe')
-  pgosweep_dst_path = api.chromium.output_dir.join('pgosweep.exe')
-  api.file.copy('Copy pgosweep to the output directory',
-                pgosweep_src_path,
-                pgosweep_dst_path)
+  pgosweep_path = api.path['depot_tools'].join(
+      'win_toolchain', 'vs2013_files', 'VC', 'bin')
 
   for benchmark in _BENCHMARKS_TO_RUN:
-    RunTelemetryBenchmark(api, benchmark)
-
-  # Remove pgosweep.exe from the output directory.
-  api.python.inline('Remove pgosweep from the output directory',
-                    'import os; import sys; os.remove(sys.argv[1])',
-                    args=[pgosweep_dst_path])
+    RunTelemetryBenchmark(api, benchmark, pgosweep_path)
 
 
 def GenSteps(api):

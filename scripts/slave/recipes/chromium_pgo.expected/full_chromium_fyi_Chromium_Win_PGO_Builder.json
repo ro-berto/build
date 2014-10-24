@@ -129,21 +129,14 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin\\pgosweep.exe",
-      "[SLAVE_BUILD]\\src\\out\\Release\\pgosweep.exe"
-    ],
-    "name": "Copy pgosweep to the output directory"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
       "--use-live-sites",
       "jsgamebench"
     ],
+    "env": {
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
+    },
     "name": "Telemetry benchmark: jsgamebench"
   },
   {
@@ -155,6 +148,9 @@
       "--use-live-sites",
       "dromaeo.domcoretraverse"
     ],
+    "env": {
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
+    },
     "name": "Telemetry benchmark: dromaeo.domcoretraverse"
   },
   {
@@ -166,6 +162,9 @@
       "--use-live-sites",
       "dromaeo.jslibtraverseprototype"
     ],
+    "env": {
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
+    },
     "name": "Telemetry benchmark: dromaeo.jslibtraverseprototype"
   },
   {
@@ -177,6 +176,9 @@
       "--use-live-sites",
       "dromaeo.domcorequery"
     ],
+    "env": {
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
+    },
     "name": "Telemetry benchmark: dromaeo.domcorequery"
   },
   {
@@ -188,6 +190,9 @@
       "--use-live-sites",
       "dromaeo.jslibeventjquery"
     ],
+    "env": {
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
+    },
     "name": "Telemetry benchmark: dromaeo.jslibeventjquery"
   },
   {
@@ -199,6 +204,9 @@
       "--use-live-sites",
       "dromaeo.jslibtraversejquery"
     ],
+    "env": {
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
+    },
     "name": "Telemetry benchmark: dromaeo.jslibtraversejquery"
   },
   {
@@ -210,6 +218,9 @@
       "--use-live-sites",
       "dromaeo.jslibmodifyprototype"
     ],
+    "env": {
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
+    },
     "name": "Telemetry benchmark: dromaeo.jslibmodifyprototype"
   },
   {
@@ -221,6 +232,9 @@
       "--use-live-sites",
       "peacekeeper.string"
     ],
+    "env": {
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
+    },
     "name": "Telemetry benchmark: peacekeeper.string"
   },
   {
@@ -232,6 +246,9 @@
       "--use-live-sites",
       "dromaeo.jslibattrprototype"
     ],
+    "env": {
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
+    },
     "name": "Telemetry benchmark: dromaeo.jslibattrprototype"
   },
   {
@@ -243,6 +260,9 @@
       "--use-live-sites",
       "dromaeo.jslibeventprototype"
     ],
+    "env": {
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
+    },
     "name": "Telemetry benchmark: dromaeo.jslibeventprototype"
   },
   {
@@ -254,6 +274,9 @@
       "--use-live-sites",
       "dromaeo.domcoreattr"
     ],
+    "env": {
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
+    },
     "name": "Telemetry benchmark: dromaeo.domcoreattr"
   },
   {
@@ -265,6 +288,9 @@
       "--use-live-sites",
       "dromaeo.jslibstyleprototype"
     ],
+    "env": {
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
+    },
     "name": "Telemetry benchmark: dromaeo.jslibstyleprototype"
   },
   {
@@ -276,6 +302,9 @@
       "--use-live-sites",
       "dromaeo.jslibstylejquery"
     ],
+    "env": {
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
+    },
     "name": "Telemetry benchmark: dromaeo.jslibstylejquery"
   },
   {
@@ -287,6 +316,9 @@
       "--use-live-sites",
       "peacekeeper.dom"
     ],
+    "env": {
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
+    },
     "name": "Telemetry benchmark: peacekeeper.dom"
   },
   {
@@ -298,6 +330,9 @@
       "--use-live-sites",
       "dromaeo.jslibmodifyjquery"
     ],
+    "env": {
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
+    },
     "name": "Telemetry benchmark: dromaeo.jslibmodifyjquery"
   },
   {
@@ -309,6 +344,9 @@
       "--use-live-sites",
       "dromaeo.domcoremodify"
     ],
+    "env": {
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
+    },
     "name": "Telemetry benchmark: dromaeo.domcoremodify"
   },
   {
@@ -320,6 +358,9 @@
       "--use-live-sites",
       "sunspider"
     ],
+    "env": {
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
+    },
     "name": "Telemetry benchmark: sunspider"
   },
   {
@@ -331,6 +372,9 @@
       "--use-live-sites",
       "peacekeeper.html5"
     ],
+    "env": {
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
+    },
     "name": "Telemetry benchmark: peacekeeper.html5"
   },
   {
@@ -342,6 +386,9 @@
       "--use-live-sites",
       "peacekeeper.render"
     ],
+    "env": {
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
+    },
     "name": "Telemetry benchmark: peacekeeper.render"
   },
   {
@@ -353,6 +400,9 @@
       "--use-live-sites",
       "dromaeo.jslibattrjquery"
     ],
+    "env": {
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
+    },
     "name": "Telemetry benchmark: dromaeo.jslibattrjquery"
   },
   {
@@ -364,20 +414,10 @@
       "--use-live-sites",
       "peacekeeper.array"
     ],
+    "env": {
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
+    },
     "name": "Telemetry benchmark: peacekeeper.array"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import os; import sys; os.remove(sys.argv[1])",
-      "[SLAVE_BUILD]\\src\\out\\Release\\pgosweep.exe"
-    ],
-    "name": "Remove pgosweep from the output directory",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@import os; import sys; os.remove(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
   },
   {
     "cmd": [
