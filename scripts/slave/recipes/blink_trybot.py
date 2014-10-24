@@ -229,7 +229,7 @@ BUILDERS = {
         'v8_blink_flavor': True,
         'root_override': 'src/v8',
         'set_custom_revs': {
-          'src/v8': '%(revision)s',
+          'src/v8': 'bleeding_edge:%(revision)s',
         },
         'testing': {
           'platform': 'linux',

@@ -227,6 +227,8 @@ class V8Api(recipe_api.RecipeApi):
         revision = 'candidates:%s' % revision
       else:
         revision = 'refs/branch-heads/%s:%s' % (self.c.branch, revision)
+    else:
+      revision = 'bleeding_edge:%s' % revision
     solution.revision = revision
     update_step = self.m.bot_update.ensure_checkout(
         no_shallow=True,

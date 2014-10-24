@@ -141,7 +141,7 @@ BUILDERS = {
           'chromium_lkcr',
           'show_v8_revision',
         ],
-        'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
+        'set_component_rev': {'name': 'src/v8', 'rev_str': 'bleeding_edge:%s'},
       },
     },
   },
