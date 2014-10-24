@@ -150,6 +150,10 @@ class FilterApi(recipe_api.RecipeApi):
       self._result = True
       step_result.presentation.step_text = 'Error: ' + \
           step_result.json.output['error']
+    elif 'invalid_targets' in step_result.json.output:
+      self._result = True
+      raise self.m.step.StepFailure('Error, following targets were not ' + \
+          'found: ' + step_result.json.output['invalid_targets'])
     elif step_result.json.output['status'] == 'Found dependency':
       self._result = True
       self._matching_exes = step_result.json.output['targets']

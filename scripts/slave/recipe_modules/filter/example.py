@@ -143,3 +143,12 @@ def GenTests(api):
          api.step_data(
           'analyze',
           retcode=-1))
+
+  # invalid_targets creates a failure.
+  yield (api.test('invalid_targets') +
+         api.properties(
+           matching_exes=[],
+           example_result=1) +
+         api.override_step_data(
+          'analyze',
+          api.json.output({'invalid_targets': 'invalid'})))

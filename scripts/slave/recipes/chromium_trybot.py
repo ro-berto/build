@@ -1554,3 +1554,28 @@ def GenTests(api):
                        'targets': ['browser_tests', 'base_unittests'],
                        'build_targets': ['base_unittests']}))
   )
+
+  # Tests compile_targets portion of analyze with a bot that doesn't include the
+  # 'all' target.
+  yield (
+    api.test(
+      'analyze_finds_invalid_target') +
+    props(buildername='linux_chromium_asan_rel') +
+    api.platform.name('linux') +
+    api.override_step_data('read test spec', api.json.output({
+        'compile_targets': ['base_unittests'],
+        'gtest_tests': [
+          {
+            'test': 'browser_tests',
+            'args': '--gtest-filter: *NaCl*.*',
+          }, {
+            'test': 'base_tests',
+            'args': ['--gtest-filter: *NaCl*.*'],
+          },
+        ],
+      })
+    ) +
+    api.override_step_data(
+      'analyze',
+      api.json.output({'invalid_targets': 'invalid target'}))
+  )
