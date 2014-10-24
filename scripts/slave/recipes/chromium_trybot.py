@@ -248,6 +248,7 @@ BUILDERS = {
         'compile_only': False,
         'testing': {
           'platform': 'linux',
+          'test_spec_file': 'chromium_athena.json',
         },
       },
       'linux_chromium_chromeos_athena_dbg': {
@@ -260,6 +261,7 @@ BUILDERS = {
         'compile_only': False,
         'testing': {
           'platform': 'linux',
+          'test_spec_file': 'chromium_athena.json',
         },
       },
       'linux_chromium_trusty_dbg': {
