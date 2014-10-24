@@ -338,8 +338,7 @@ class V8Api(recipe_api.RecipeApi):
 
   @property
   def run_dynamorio(self):
-    return (len(self.m.gclient.c.solutions) > 1 and
-            self.m.gclient.c.solutions[1].name == 'dynamorio')
+    return self.m.gclient.c.solutions[-1].name == 'dynamorio'
 
   def upload_build(self):
     self.m.archive.zip_and_upload_build(
