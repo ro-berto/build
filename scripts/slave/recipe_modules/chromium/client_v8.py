@@ -41,5 +41,45 @@ SPEC = {
         'test_spec_file': 'chromium.linux.json',
       },
     },
+    'Linux ASAN Builder': {
+      'recipe_config': 'chromium_linux_asan',
+      'gclient_apply_config': [
+        'v8_bleeding_edge_git',
+        'chromium_lkcr',
+        'show_v8_revision',
+      ],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder',
+      'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
+      'testing': {
+        'platform': 'linux',
+        'test_spec_file': 'chromium.memory.json',
+      },
+    },
+    'Linux ASan LSan Tests (1)': {
+      'recipe_config': 'chromium_linux_asan',
+      'gclient_apply_config': [
+        'v8_bleeding_edge_git',
+        'chromium_lkcr',
+        'show_v8_revision',
+      ],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
+      'test_generators': [
+        steps.generate_gtest,
+      ],
+      'parent_buildername': 'Linux ASan LSan Builder',
+      'testing': {
+        'platform': 'linux',
+        'test_spec_file': 'chromium.memory.json',
+      },
+    },
   },
 }
