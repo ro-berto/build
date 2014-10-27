@@ -6,12 +6,14 @@
 """A tool to package a checkout's source and upload it to Google Storage."""
 
 
+import fnmatch
 import json
 import optparse
 import os
 import re
 import Queue
 import shlex
+import shutil
 import sys
 import threading
 import time
@@ -26,6 +28,22 @@ GSBASE = 'gs://chromium-browser-csindex'
 GSACL = 'public-read'
 CONCURRENT_TASKS = 8
 UNIT_INDEXER = './clang_indexer/bin/external_corpus_compilation_indexer'
+
+
+def CreateJSONCompileCommands():
+  with open('compile_commands.json', 'wb') as json_commands_file:
+    json_commands_file.write('[\n')
+    commands_found = False
+    for root, _, filenames in os.walk('src/out'):
+      for filename in fnmatch.filter(filenames, '*.json-command'):
+        shutil.copyfileobj(open(os.path.join(root, filename), 'rb'),
+                           json_commands_file)
+        commands_found = True
+    if commands_found:
+      # Seek backwards 2 bytes to delete ",\n" from the last entry.
+      json_commands_file.seek(-2, 1)
+    json_commands_file.write('\n]\n')
+    json_commands_file.close()
 
 
 class IndexResult(object):
@@ -46,8 +64,10 @@ class IgnoreOutput(chromium_utils.RunCommandFilter):
   def FilterDone(self, _):
     return None
 
-def GenerateIndex(compdb_path):
-  with open(compdb_path, 'rb') as json_commands_file:
+def GenerateIndex():
+  CreateJSONCompileCommands()
+
+  with open('compile_commands.json', 'rb') as json_commands_file:
     json_commands = json.load(json_commands_file)
 
   if not os.path.exists(UNIT_INDEXER):
@@ -109,11 +129,7 @@ def DeleteIfExists(filename):
 def main():
   option_parser = optparse.OptionParser()
   chromium_utils.AddPropertiesOptions(option_parser)
-  option_parser.add_option('--path-to-compdb', default=None,
-                           help='path to the compilation database')
   options, _ = option_parser.parse_args()
-  if not options.path_to_compdb:
-    option_parser.error('--path-to-compdb is required')
 
   print '%s: Cleaning up old data...' % time.strftime('%X')
   # Clean up any source archives from previous runs.
@@ -145,7 +161,7 @@ def main():
     raise Exception('ERROR: %s already exists, exiting' % partial_filename)
 
   print '%s: Index generation...' % time.strftime('%X')
-  indexing_successful = GenerateIndex(options.path_to_compdb)
+  indexing_successful = GenerateIndex()
 
   print '%s: Creating tar file...' % time.strftime('%X')
   packaging_successful = True
@@ -234,6 +250,12 @@ def main():
     packaging_successful = False
 
   finally:
+    # Clean up .json-command files.
+    # TODO(akuegel): Move this to a separate cleanup step that runs before the
+    # compile step.
+    print '%s: Cleaning up locally...' % time.strftime('%X')
+    chromium_utils.RemoveFilesWildcards(
+        '*.json-command', os.path.join('src/out', os.curdir))
     print '%s: Done.' % time.strftime('%X')
 
   if not (indexing_successful and packaging_successful):

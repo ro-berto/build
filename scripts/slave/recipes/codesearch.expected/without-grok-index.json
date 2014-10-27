@@ -66,7 +66,9 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "clang=1 component=shared_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
+      "CC": "jsonclang",
+      "CXX": "jsonclang++",
+      "GYP_DEFINES": "clang=1 component=shared_library fastbuild=1 target_arch=x64"
     },
     "name": "gclient runhooks"
   },
