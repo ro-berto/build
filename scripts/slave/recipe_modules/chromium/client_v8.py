@@ -81,5 +81,94 @@ SPEC = {
         'test_spec_file': 'chromium.memory.json',
       },
     },
+    'Chrome Linux Perf': {
+      'disable_tests': True,
+      'recipe_config': 'official',
+      'gclient_apply_config': [
+        'perf',
+        'v8_bleeding_edge_git',
+        'chromium_lkcr',
+        'show_v8_revision',
+      ],
+      'chromium_apply_config': ['chromium_perf'],
+      'bot_type': 'builder_tester',
+      'compile_targets': [
+        'chromium_builder_perf',
+      ],
+      'tests': [
+        steps.GenerateTelemetryProfileStep(
+            'Release',
+            'small_profile'),
+        steps.DynamicPerfTests(
+            'release',
+            'chromium-rel-linux-v8', 0, 1),
+      ],
+      'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+    'Chrome Win7 Perf': {
+      'disable_tests': True,
+      'recipe_config': 'official',
+      'gclient_apply_config': [
+        'perf',
+        'v8_bleeding_edge_git',
+        'chromium_lkcr',
+        'show_v8_revision',
+      ],
+      'chromium_apply_config': ['chromium_perf'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'bot_type': 'builder_tester',
+      'compile_targets': [
+        'chromium_builder_perf',
+      ],
+      'tests': [
+        steps.GenerateTelemetryProfileStep(
+            'Release',
+            'small_profile'),
+        steps.DynamicPerfTests(
+            'release',
+            'chromium-rel-win7-dual-v8', 0, 1),
+      ],
+      'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
+      'testing': {
+        'platform': 'win',
+      },
+    },
+    'Chrome Mac10.6 Perf': {
+      'disable_tests': True,
+      'recipe_config': 'official',
+      'gclient_apply_config': [
+        'perf',
+        'v8_bleeding_edge_git',
+        'chromium_lkcr',
+        'show_v8_revision',
+      ],
+      'chromium_apply_config': ['chromium_perf'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'bot_type': 'builder_tester',
+      'compile_targets': [
+        'chromium_builder_perf',
+      ],
+      'tests': [
+        steps.GenerateTelemetryProfileStep(
+            'Release',
+            'small_profile'),
+        steps.DynamicPerfTests(
+            'release',
+            'chromium-rel-mac6-v8', 0, 1),
+      ],
+      'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
+      'testing': {
+        'platform': 'mac',
+      },
+    },
   },
 }
