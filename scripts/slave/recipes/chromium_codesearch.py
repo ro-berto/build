@@ -10,6 +10,8 @@ DEPS = [
   'path',
   'properties',
   'python',
+  'raw_io',
+  'step',
 ]
 
 CHROMIUM_GIT_URL = 'https://chromium.googlesource.com'
@@ -84,11 +86,18 @@ def GenSteps(api):
   update_step = api.bot_update.ensure_checkout()
   api.chromium.set_build_properties(update_step.json.output['properties'])
 
-  # Compile the code using the jsonclang/jsonclang++ wrapper scripts.
+  # Compile the code using clang.
   api.chromium.set_config('codesearch',
                           **bot_config.get('chromium_config_kwargs', {}))
   api.chromium.runhooks()
   targets = bot_config.get('compile_targets', [])
+  debug_path = api.path['checkout'].join('out', api.chromium.c.BUILD_CONFIG)
+  command = ['ninja', '-C', debug_path] + targets
+  # Add the parameters for creating the compilation database.
+  command += ['-t', 'compdb', 'cxx', 'objc', 'objcxx']
+  result = api.step('generate compilation database', command,
+                    stdout=api.raw_io.output())
+  # Now compile the code for real.
   api.chromium.compile(targets, force_clobber=True)
 
   # Run the package_source.py script that creates and uploads the source archive
@@ -101,6 +110,7 @@ def GenSteps(api):
   args = [
       '--build-properties', api.json.dumps(api.chromium.build_properties),
       '--factory-properties', api.json.dumps(fake_factory_properties),
+      '--path-to-compdb', api.raw_io.input(data=result.stdout),
   ]
   api.python('package_source',
              api.path['build'].join('scripts', 'slave', 'chromium',
@@ -116,6 +126,8 @@ def GenTests(api):
   for buildername, _ in SPEC['builders'].iteritems():
     test = (
       api.test('full_%s' % (_sanitize_nonalpha(buildername))) +
+      api.step_data('generate compilation database',
+                    stdout=api.raw_io.output('some compilation data')) +
       api.properties.generic(buildername=buildername, mastername='chromium.fyi')
     )
 

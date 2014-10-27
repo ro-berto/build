@@ -46,8 +46,6 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       solution = Single(Path, required=False),
     ),
     gyp_env = ConfigGroup(
-      CC = Single(basestring, required=False),
-      CXX = Single(basestring, required=False),
       GYP_CROSSCOMPILE = Single(int, jsonish_fn=str, required=False),
       GYP_CHROMIUM_NO_ACTION = Single(int, jsonish_fn=str, required=False),
       GYP_DEFINES = Dict(equal_fn, ' '.join, (basestring,int,Path)),
@@ -247,13 +245,6 @@ def clang(c):
   _clang_common(c)
 
 @config_ctx(group='compiler')
-def jsonclang(c):
-  c.compile_py.compiler = 'jsonclang'
-  c.gyp_env.CC = 'jsonclang'
-  c.gyp_env.CXX = 'jsonclang++'
-  c.gyp_env.GYP_DEFINES['clang'] = 1
-
-@config_ctx(group='compiler')
 def default_compiler(c):
   if c.TARGET_PLATFORM in ('mac', 'ios'):
     _clang_common(c)
@@ -267,7 +258,6 @@ def goma(c):
     c.compile_py.compiler = 'goma'
   elif c.compile_py.compiler == 'clang':
     c.compile_py.compiler = 'goma-clang'
-  # jsonclang doesn't work with use_goma=1
   else:  # pragma: no cover
     raise BadConf('goma config doesn\'t understand %s' % c.compile_py.compiler)
 
@@ -576,7 +566,7 @@ def android_common(c):
            'platform-tools'),
       Path('[CHECKOUT]', 'build', 'android')])
 
-@config_ctx(includes=['ninja', 'shared_library', 'jsonclang'])
+@config_ctx(includes=['ninja', 'shared_library', 'clang', 'goma'])
 def codesearch(c):
   gyp_defs = c.gyp_env.GYP_DEFINES
   gyp_defs['fastbuild'] = 1
