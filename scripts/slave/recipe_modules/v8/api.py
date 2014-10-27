@@ -2,12 +2,15 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import math
 import collections
+import math
+import re
 
 from slave import recipe_api
 from slave.recipe_modules.v8 import builders
 
+
+COMMIT_POSITION_PATTERN = re.compile(r'^([\w/-]+)@{#(\d+)}$')
 
 # With more than 23 letters, labels are to big for buildbot's popup boxes.
 MAX_LABEL_SIZE = 23
@@ -237,6 +240,16 @@ class V8Api(recipe_api.RecipeApi):
 
     # Whatever step is run right before this line needs to emit got_revision.
     self.revision = update_step.presentation.properties['got_revision']
+    self.revision_cp = update_step.presentation.properties['got_revision_cp']
+    match = COMMIT_POSITION_PATTERN.match(self.revision_cp)
+    assert match, 'Invalid Cr-Commit-Position value: %s' % self.revision_cp
+    self.revision_number = match.group(2)
+
+    # TODO (machenbach): Some masters have a revision field with a git hash.
+    # Others have an svn revision field and an additional got_revision_git
+    # property. Remove revision_git after the git switch.
+    self.revision_git = update_step.presentation.properties.get(
+        'got_revision_git', self.revision)
 
   def runhooks(self, **kwargs):
     env = {}
@@ -720,7 +733,7 @@ class V8Api(recipe_api.RecipeApi):
           self.m.perf_dashboard.add_dashboard_link(
               step_result.presentation,
               'v8/%s' % name,
-              self.revision,
+              self.revision_number,
               bot=category)
 
     def mean(values):
@@ -732,6 +745,12 @@ class V8Api(recipe_api.RecipeApi):
     def standard_deviation(values, average):
       return math.sqrt(mean(variance(values, average)))
 
+    # Make sure that bots that run perf tests have a revision property.
+    if tests:
+      assert self.revision_number and self.revision_git, (
+          'Revision must be specified for perf tests as '
+          'they upload data to the perf dashboard.')
+
     failed = False
     for t in tests:
       assert perf_configs[t]
@@ -742,11 +761,6 @@ class V8Api(recipe_api.RecipeApi):
             t, perf_configs[t]['name'], perf_configs[t]['json'])
       except self.m.step.StepFailure:
         failed = True
-
-    # Make sure that bots that run perf tests have a revision property.
-    if tests:
-      assert self.revision, ('Revision must be specified for perf tests as '
-                             'they upload data to the perf dashboard.')
 
     # Collect all perf data of the previous steps.
     points = []
@@ -766,11 +780,11 @@ class V8Api(recipe_api.RecipeApi):
         average = mean(values)
 
         p = self.m.perf_dashboard.get_skeleton_point(
-            test_path, self.revision, str(average))
+            test_path, self.revision_number, str(average))
         p['units'] = trace['units']
         p['bot'] = category or p['bot']
-        p['supplemental_columns'] = {'a_default_rev': 'r_v8_rev',
-                                     'r_v8_rev': self.revision}
+        p['supplemental_columns'] = {'a_default_rev': 'r_v8_git',
+                                     'r_v8_git': self.revision_git}
 
         # A trace might provide a value for standard deviation if the test
         # driver already calculated it, otherwise calculate it here.
