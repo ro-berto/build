@@ -357,6 +357,7 @@ Buildbot waterfall: http://build.chromium.org/
         'buildnumber': str(build_status.getNumber()),
         'date': str(datetime.date.today()),
         'steps': step_name,
+        'slavename': build_status.getSlavename(),
     }
     m['From'] = self.fromaddr
     if self.reply_to:
