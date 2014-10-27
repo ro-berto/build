@@ -118,7 +118,8 @@ RECIPE_CONFIGS = {
 
 class ChromiumTestsApi(recipe_api.RecipeApi):
   def sync_and_configure_build(self, mastername, buildername,
-                               override_bot_type=None, enable_swarming=False):
+                               override_bot_type=None, enable_swarming=False,
+                               chromium_apply_config=None):
     # Make an independent copy so that we don't overwrite global state
     # with updates made dynamically based on the test specs.
     master_dict = copy.deepcopy(self.m.chromium.builders.get(mastername, {}))
@@ -144,6 +145,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.chromium.apply_config(c)
     for c in bot_config.get('chromium_apply_config', []):
       self.m.chromium.apply_config(c)
+    if chromium_apply_config:
+      for c in chromium_apply_config:
+        self.m.chromium.apply_config(c)
     self.m.gclient.set_config(
         recipe_config['gclient_config'],
         **bot_config.get('gclient_config_kwargs', {}))
