@@ -587,7 +587,7 @@ def tests_in_compile_targets(api, compile_targets, tests):
 
     # Always return tests that don't require compile. Otherwise we'd never
     # run them.
-    if ((set(compile_targets) & set(test_compile_targets)) or
+    if ((set(compile_targets).intersection(set(test_compile_targets))) or
         not test_compile_targets):
       result.append(test)
 
@@ -791,13 +791,20 @@ def GenSteps(api):
     if not api.platform.is_win and not bot_config.get('exclude_compile_all'):
       compile_targets = ['all'] + compile_targets
 
+    scripts_compile_targets = \
+        api.chromium.get_compile_targets_for_scripts().json.output
+
     # Tests that are only run if their compile_targets are going to be built.
     conditional_tests = []
     if bot_config.get('add_nacl_integration_tests', True):
       conditional_tests += [api.chromium.steps.NaclIntegrationTest()]
     if bot_config.get('add_telemetry_tests', True):
-      conditional_tests += [api.chromium.steps.TelemetryUnitTests(),
-                            api.chromium.steps.TelemetryPerfUnitTests()]
+      conditional_tests += [
+          api.chromium.steps.ScriptTest(
+              'telemetry_unittests', 'telemetry_unittests.py',
+              scripts_compile_targets),
+          api.chromium.steps.TelemetryPerfUnitTests()
+      ]
 
     # See if the patch needs to compile on the current platform.
     # Don't run analyze for other projects, such as blink, as there aren't that
@@ -818,7 +825,8 @@ def GenSteps(api):
     tests = []
     # TODO(phajdan.jr): Re-enable checkdeps on Windows when it works with git.
     if not api.platform.is_win:
-      tests.append(api.chromium.steps.ScriptTest('checkdeps', 'checkdeps.py'))
+      tests.append(api.chromium.steps.ScriptTest(
+          'checkdeps', 'checkdeps.py', scripts_compile_targets))
     if api.platform.is_linux:
       tests.extend([
           api.chromium.steps.CheckpermsTest(),
@@ -827,8 +835,7 @@ def GenSteps(api):
 
     conditional_tests = tests_in_compile_targets(
         api, compile_targets, conditional_tests)
-    tests.extend(find_test_named(api.chromium.steps.TelemetryUnitTests.name,
-                                 conditional_tests))
+    tests.extend(find_test_named('telemetry_unittests', conditional_tests))
     tests.extend(find_test_named(api.chromium.steps.TelemetryPerfUnitTests.name,
                                  conditional_tests))
     tests.extend(gtest_tests)
@@ -1588,19 +1595,4 @@ def GenTests(api):
     api.override_step_data(
       'analyze',
       api.json.output({'invalid_targets': 'invalid target'}))
-  )
-
-  # Test what happens if a telemetry test fails (we're testing that the
-  # test names that need to be retried are in the 'foo.bar' format rather
-  # than 'foo/bar').
-  yield (
-    api.test('telemetry_failures') +
-    props(buildername='linux_chromium_rel') +
-    api.platform.name('linux') +
-    api.override_step_data('telemetry_unittests (with patch)',
-        api.json.canned_test_output(passing=False, minimal=True,
-                                    path_separator='.')) +
-    api.override_step_data('telemetry_unittests (without patch)',
-        api.json.canned_test_output(passing=False, minimal=True,
-                                    path_separator='.'))
   )
