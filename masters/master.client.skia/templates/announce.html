@@ -152,29 +152,28 @@
       </td>
     </tr>
     <tr>
-      <td width="29%">
+      <td width="19%">
+        External Links
         <table valign="top" width="100%">
           <tr>
-            <td style="text-align: right;">
-               <b>External Links:</b>
-            </td>
             <td style="text-align: left;">
-              <nobr><a href="https://sites.google.com/site/skiadocs/developer-documentation/the-skia-buildbots/1-overview" target="_blank">Full Skia documentation</a></nobr><br/>
-              <nobr><a href="https://skia-tree-status.appspot.com" target="_blank">Skia Tree Status Manager</a></nobr><br/>
-              <nobr><a href="https://code.google.com/p/skia/issues/list?can=2&amp;q=label%3ABreakingTheBuildbots" target="_blank">Current build-breaking bugs</a></nobr><br/>
+              <nobr><a href="https://sites.google.com/site/skiadocs/developer-documentation/the-skia-buildbots/1-overview" target="_blank">Skia Documentation</a></nobr><br/>
+              <nobr><a href="https://code.google.com/p/skia/issues/list?can=2&amp;q=label%3ABreakingTheBuildbots" target="_blank">Build-breaking Bugs</a></nobr><br/>
               <nobr><a href="http://skiaperf.com" target="_blank">Perf Dashboard</a></nobr><br/>
               <nobr><a href="https://storage.cloud.google.com/chromium-skia-gm/static_analyzers/clang_static_analyzer/index.html" target="_blank">Clang Static Analyzer</a></nobr><br/>
               <nobr><a href="https://skia-tree-status.appspot.com/sheriff" target="_blank">Sheriff Schedule</a></nobr><br/>
-              <nobr><a href="https://skia-tree-status.appspot.com/skia-telemetry/lua_script" target="_blank">Run Lua Scripts on SKP Repo</a></nobr><br/>
-              <nobr><a href="https://skia-tree-status.appspot.com/skia-telemetry/skia_try" target="_blank">Run Patches on SKP Repo</a></nobr><br/>
+            </td>
+            <td style="text-align: left;">
+              <nobr><a href="https://skia-tree-status.appspot.com/skia-telemetry/" target="_blank">Cluster Telemetry</a></nobr><br/>
               <nobr><a href="http://skia-tree-status.appspot.com/redirect/rebaseline-server/static/view.html#/view.html?resultsToLoad=/results/failures" target="_blank">Recent GM Failures</a></nobr><br/>
-              <nobr><a href="http://chromium-skia-gm.commondatastorage.googleapis.com/depsroll.html" target="_blank">Current DEPS roll attempt</a></nobr><br/>
+              <nobr><a href="http://chromium-skia-gm.commondatastorage.googleapis.com/depsroll.html" target="_blank">DEPS Roll Attempt</a></nobr><br/>
               <nobr><a href="https://codereview.chromium.org/search?closed=3&project=skia&private=1&commit=2&limit=30" target="_blank">Commit Queue</a></nobr><br/>
+              <nobr><a href="http://chromegw.corp.google.com/i/client.skia/console" target="_blank">Internal View</a></nobr><br/>
             </td>
           </tr>
           <tr>
             <td colspan="2">
-              <nobr>Loaded at <span id="last_loaded_span"></span><br/>
+              <br/><nobr>Page loaded at<br/><span id="last_loaded_span"></span><br/>
             </td>
           </tr>
         </table>
@@ -183,7 +182,7 @@
       </td>
       <td width="1%">
       </td>
-      <td width="70%">
+      <td width="80%">
         <table width="100%">
           <script language="javascript">
             c.skia = '';
@@ -217,8 +216,7 @@
                   builders += 'builder=' + encodeURIComponent(opt_builders[ii]);
                 }
               }
-              return 'https://build.chromium.org/p/' + x +
-                     '/horizontal_one_box_per_builder' + builders;
+              return '../p/' + x + '/horizontal_one_box_per_builder' + builders;
             }
             c.bar_skia = BarUrl('client.skia');
             c.bar_skia_fyi = BarUrl('client.skia.fyi');
