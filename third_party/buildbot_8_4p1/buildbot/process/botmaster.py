@@ -634,8 +634,14 @@ class DuplicateSlaveArbitrator(object):
         self.ping_old_slave_timeout = reactor.callLater(self.PING_TIMEOUT, timeout)
         self.ping_old_slave_timed_out = False
 
-        d = self.old_slave.slave.callRemote("print",
-            "master got a duplicate connection from %s; keeping this one" % new_peer)
+        try:
+          d = self.old_slave.slave.callRemote(
+              "print",
+              "master got a duplicate connection from %s; keeping this one"
+              % new_peer)
+        except pb.DeadReferenceError():
+          timeout()
+          return
 
         def clear_timeout(r):
             if self.ping_old_slave_timeout:

@@ -4711,3 +4711,23 @@ index 3ac7bbc..7703e57 100644
          self.ping_new_slave()
  
          return self.new_slave_d
+
+diff --git a/third_party/buildbot_8_4p1/buildbot/process/botmaster.py b/third_party/buildbot_8_4p1/buildbot/process/botmaster.py
+index 7703e57..7a83ed7 100644
+--- a/third_party/buildbot_8_4p1/buildbot/process/botmaster.py
++++ b/third_party/buildbot_8_4p1/buildbot/process/botmaster.py
+@@ -634,8 +634,14 @@ class DuplicateSlaveArbitrator(object):
+         self.ping_old_slave_timeout = reactor.callLater(self.PING_TIMEOUT, timeout)
+         self.ping_old_slave_timed_out = False
+ 
+-        d = self.old_slave.slave.callRemote("print",
+-            "master got a duplicate connection from %s; keeping this one" % new_peer)
++        try:
++          d = self.old_slave.slave.callRemote(
++              "print",
++              "master got a duplicate connection from %s; keeping this one"
++              % new_peer)
++        except pb.DeadReferenceError():
++          timeout()
++          return
+
