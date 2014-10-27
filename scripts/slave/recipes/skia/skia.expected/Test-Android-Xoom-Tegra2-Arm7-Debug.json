@@ -103,15 +103,6 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
-      "-s",
-      "014E1F310401C009",
-      "remount"
-    ],
-    "name": "adb remount"
-  },
-  {
-    "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_kill_skia",
       "-s",
       "014E1F310401C009"

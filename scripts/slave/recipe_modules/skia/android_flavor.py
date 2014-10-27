@@ -174,9 +174,6 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
   def install(self):
     """Run device-specific installation steps."""
     self._adb(name='adb root', serial=self.serial, cmd=['root'])
-    self._adb(name='adb remount',
-              serial=self.serial,
-              cmd=['remount'])
     # TODO(borenet): Set CPU scaling mode to 'performance'.
     self._skia_api.m.step(name='kill skia',
                           cmd=[self.android_bin.join('android_kill_skia'),
