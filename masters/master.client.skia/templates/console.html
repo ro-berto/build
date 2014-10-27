@@ -330,15 +330,23 @@ function addLinks(text) {
             /(https?:\/\/.+?)(\s|\t|<|\n|\r|$)/g, '<a href="$1" target="_blank">$1</a>$2');
     }
 
-    // Linkify instances of "skia:123".
-    var re = new RegExp("skia:[0-9]+");
-    var found_bugs = new_text.match(/skia:[0-9]+/g);
-    if (found_bugs) {
-        for (var i = 0; i < found_bugs.length; ++i) {
-            var found_bug = found_bugs[i];
-            var bug_number = found_bug.split(":")[1];
-            var bug_link = '<a href="https://code.google.com/p/skia/issues/detail?id=' + bug_number + '" target="_blank">' + found_bug + '</a>';
-            new_text = new_text.replace(found_bug, bug_link);
+    // Linkify instances of "skia:123" and "chromium:123".
+    var projects_to_issuetrackers = {
+        'chromium': 'http://crbug.com/',
+        'skia': 'https://code.google.com/p/skia/issues/detail?id=',
+    }
+    for (var project in projects_to_issuetrackers) {
+        var re = new RegExp(project + ":[0-9]+", "g")
+        var found_bugs = new_text.match(re);
+        if (found_bugs) {
+            for (var i = 0; i < found_bugs.length; ++i) {
+                var found_bug = found_bugs[i];
+                var bug_number = found_bug.split(":")[1];
+                var bug_link = '<a href="' + projects_to_issuetrackers[project] +
+                               bug_number + '" target="_blank">' + found_bug +
+                               '</a>';
+                new_text = new_text.replace(found_bug, bug_link);
+            }
         }
     }
     return new_text;
