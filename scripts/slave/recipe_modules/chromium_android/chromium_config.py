@@ -122,6 +122,10 @@ def tests_base(c):
 def tests_arm64(c):
   pass
 
+@CONFIG_CTX(includes=['x64_builder'])
+def tests_x64(c):
+  pass
+
 @CONFIG_CTX(includes=['tests_base'])
 def main_tests(c):
   pass
