@@ -140,23 +140,28 @@ class DartCommands(commands.FactoryCommands):
 
   def AddAnalyzerTests(self, options, name, timeout):
     compiler = 'dartanalyzer'
+    checked_configs = ['', '--checked']
     if name.startswith('analyzer_experimental'):
       compiler = 'dart2analyzer'
-    cmd = ('python ' + self._tools_dir + '/test.py '
-           ' --progress=line --report --time --mode=%s --arch=%s '
-           ' --compiler=%s --runtime=none --failure-summary %s'
-           ) % (options['mode'], options['arch'], compiler,
-                self.standard_flags)
-    self._factory.addStep(shell.ShellCommand,
-                          name='tests',
-                          description='tests',
-                          timeout=timeout,
-                          env = self._custom_env,
-                          haltOnFailure=False,
-                          workdir=self._dart_build_dir,
-                          command=cmd,
-                          logfiles=self.logfiles,
-                          lazylogfiles=True)
+      checked_configs.append('--host-checked')
+      checked_configs.append('--host-checked --checked')
+
+    for checked_config in checked_configs:
+      cmd = ('python ' + self._tools_dir + '/test.py '
+             ' --progress=line --report --time --mode=%s --arch=%s '
+             ' --compiler=%s --runtime=none --failure-summary %s %s'
+             ) % (options['mode'], options['arch'], compiler, checked_config,
+                  self.standard_flags)
+      self._factory.addStep(shell.ShellCommand,
+                            name='tests',
+                            description='tests',
+                            timeout=timeout,
+                            env = self._custom_env,
+                            haltOnFailure=False,
+                            workdir=self._dart_build_dir,
+                            command=cmd,
+                            logfiles=self.logfiles,
+                            lazylogfiles=True)
 
   def AddDart2dartTests(self, options, name, timeout):
     shards = options.get('shards') or 1
