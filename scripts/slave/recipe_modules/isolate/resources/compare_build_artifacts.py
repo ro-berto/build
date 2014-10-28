@@ -53,7 +53,7 @@ def compare_build_artifacts(first_dir, second_dir):
   if diff:
     print >> sys.stderr, 'Different list of files in both directories'
     print >> sys.stderr, '\n'.join('  ' + i for i in sorted(diff))
-    res = 1
+    res += len(diff)
 
   for f in sorted(first_list & second_list):
     first_file = os.path.join(first_dir, f)
@@ -62,9 +62,12 @@ def compare_build_artifacts(first_dir, second_dir):
       print('%s: equal' % f)
     else:
       print('%s: DIFFERENT' % f)
-      res = 1
+      res += 1
 
-  return res
+  print '%d files are equal, %d are different.'  % (
+      len(first_list & second_list) - res, res)
+
+  return 0 if res == 0 else 1
 
 
 def main():
