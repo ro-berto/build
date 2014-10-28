@@ -94,30 +94,11 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
-      "-s",
-      "4d0032a5d8cb6125",
-      "root"
-    ],
-    "name": "adb root"
-  },
-  {
-    "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_kill_skia",
       "-s",
       "4d0032a5d8cb6125"
     ],
     "name": "kill skia"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
-      "-s",
-      "4d0032a5d8cb6125",
-      "shell",
-      "stop"
-    ],
-    "name": "stop shell"
   },
   {
     "cmd": [

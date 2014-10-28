@@ -94,30 +94,11 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
-      "-s",
-      "MedfieldBA149FC5",
-      "root"
-    ],
-    "name": "adb root"
-  },
-  {
-    "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_kill_skia",
       "-s",
       "MedfieldBA149FC5"
     ],
     "name": "kill skia"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
-      "-s",
-      "MedfieldBA149FC5",
-      "shell",
-      "stop"
-    ],
-    "name": "stop shell"
   },
   {
     "cmd": [

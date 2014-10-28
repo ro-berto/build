@@ -70,6 +70,7 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
     self.android_bin = self._skia_api.m.path['slave_build'].join(
         'skia', 'platform_tools', 'android', 'bin')
     self._adb = _ADBWrapper(self._skia_api.m.adb, self.android_bin)
+    self._has_root = self._skia_api.c.slave_cfg.get('has_root', True)
 
   @property
   def serial(self):
@@ -174,14 +175,17 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
 
   def install(self):
     """Run device-specific installation steps."""
-    self._adb(name='adb root', serial=self.serial, cmd=['root'])
+    if self._has_root:
+      self._adb(name='adb root', serial=self.serial, cmd=['root'])
+
     # TODO(borenet): Set CPU scaling mode to 'performance'.
     self._skia_api.m.step(name='kill skia',
                           cmd=[self.android_bin.join('android_kill_skia'),
                                '-s', self.serial])
-    self._adb(name='stop shell',
-              serial=self.serial,
-              cmd=['shell', 'stop'])
+    if self._has_root:
+      self._adb(name='stop shell',
+                serial=self.serial,
+                cmd=['shell', 'stop'])
 
   def get_device_dirs(self):
     """ Set the directories which will be used by the build steps."""
