@@ -6,7 +6,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/mojo.git'}]"
+      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/mojo.git'}]\ntarget_os = ['android']"
     ],
     "name": "gclient setup"
   },
@@ -46,27 +46,21 @@
   },
   {
     "cmd": [
-      "[DEPOT_TOOLS]/gn.py",
-      "gen",
-      "out/Debug"
+      "[SLAVE_BUILD]/src/mojo/tools/mojob.sh",
+      "--chromeos",
+      "--debug",
+      "gn"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "gn"
+    "name": "mojob gn"
   },
   {
     "cmd": [
       "[SLAVE_BUILD]/src/mojo/tools/mojob.sh",
+      "--chromeos",
       "--debug",
       "build"
     ],
     "name": "mojob build"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/src/mojo/tools/mojob.sh",
-      "--debug",
-      "test"
-    ],
-    "name": "mojob test"
   }
 ]

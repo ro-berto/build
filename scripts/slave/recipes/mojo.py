@@ -18,12 +18,17 @@ def _CheckoutSteps(api):
   api.gclient.runhooks()
 
 
-def _BuildSteps(api):
-  gn_path = api.path['depot_tools'].join('gn.py')
-  api.step('gn', [gn_path, "gen", "out/Debug"], cwd=api.path['checkout'])
-
+def _BuildSteps(api, buildername):
   mojob_path = api.path['checkout'].join('mojo', 'tools', 'mojob.sh')
-  api.step('mojob build', [mojob_path, '--debug', 'build'])
+  args = []
+  if 'Android' in buildername:
+    args += ['--android']
+  elif 'ChromeOS' in buildername:
+    args += ['--chromeos']
+  api.step('mojob gn',
+           [mojob_path] + args + ['--debug', 'gn'],
+           cwd=api.path['checkout'])
+  api.step('mojob build', [mojob_path] + args + ['--debug', 'build'])
 
 def _RunTests(api):
   mojob_path = api.path['checkout'].join('mojo', 'tools', 'mojob.sh')
@@ -31,8 +36,14 @@ def _RunTests(api):
 
 def GenSteps(api):
   _CheckoutSteps(api)
-  _BuildSteps(api)
-  _RunTests(api)
+  buildername = api.properties.get('buildername')
+  _BuildSteps(api, buildername)
+  if 'Linux' in buildername:
+    _RunTests(api)
 
 def GenTests(api):
-  yield api.test("mojo")
+  tests = [['mojo_linux', 'Mojo Linux (dbg)'],
+           ['mojo_android', 'Mojo Android (dbg)'],
+           ['mojo_chromeos', 'Mojo ChromeOS (dbg)']]
+  for t in tests:
+    yield(api.test(t[0]) + api.properties.generic(buildername=t[1]))
