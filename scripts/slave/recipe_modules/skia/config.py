@@ -5,9 +5,8 @@
 from slave.recipe_config import config_item_context, ConfigGroup
 from slave.recipe_config import Dict, Set, Single, Static
 from slave.recipe_config_types import Path
-
+from slave.skia import slaves_cfg
 from common.skia import builder_name_schema
-from . import slaves_cfg
 
 
 CONFIG_DEBUG = 'Debug'

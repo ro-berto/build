@@ -75,7 +75,7 @@
     "name": "List adb devices",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"014E1F310401C009\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"015d210a13480604\"@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -84,7 +84,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
-      "014E1F310401C009",
+      "015d210a13480604",
       "shell",
       "echo",
       "$EXTERNAL_STORAGE"
@@ -96,7 +96,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
-      "014E1F310401C009",
+      "015d210a13480604",
       "root"
     ],
     "name": "adb root"
@@ -105,7 +105,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_kill_skia",
       "-s",
-      "014E1F310401C009"
+      "015d210a13480604"
     ],
     "name": "kill skia"
   },
@@ -113,7 +113,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
-      "014E1F310401C009",
+      "015d210a13480604",
       "shell",
       "stop"
     ],
@@ -123,7 +123,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_push_if_needed",
       "-s",
-      "014E1F310401C009",
+      "015d210a13480604",
       "[SLAVE_BUILD]/skia/resources",
       "/storage/emulated/legacy/skiabot/skia_resources"
     ],
@@ -220,7 +220,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
-      "014E1F310401C009",
+      "015d210a13480604",
       "shell",
       "rm",
       "-r",
@@ -232,7 +232,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
-      "014E1F310401C009",
+      "015d210a13480604",
       "shell",
       "if",
       "[",
@@ -251,7 +251,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
-      "014E1F310401C009",
+      "015d210a13480604",
       "shell",
       "mkdir",
       "-p",
@@ -263,7 +263,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_push_if_needed",
       "-s",
-      "014E1F310401C009",
+      "015d210a13480604",
       "[SLAVE_BUILD]/playback/skps",
       "/storage/emulated/legacy/skiabot/skia_skp/skps"
     ],
@@ -276,7 +276,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
-      "014E1F310401C009",
+      "015d210a13480604",
       "shell",
       "rm",
       "-r",
@@ -288,7 +288,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
-      "014E1F310401C009",
+      "015d210a13480604",
       "shell",
       "if",
       "[",
@@ -307,7 +307,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
-      "014E1F310401C009",
+      "015d210a13480604",
       "shell",
       "mkdir",
       "-p",
@@ -333,7 +333,7 @@
       "-d",
       "nexus_7",
       "-s",
-      "014E1F310401C009",
+      "015d210a13480604",
       "--release",
       "nanobench",
       "-i",
@@ -371,7 +371,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_pull_if_needed",
       "-s",
-      "014E1F310401C009",
+      "015d210a13480604",
       "/storage/emulated/legacy/skiabot/skia_perf",
       "[SLAVE_BUILD]/perfdata/Perf-Android-Nexus7-Tegra3-Arm7-Release/data"
     ],

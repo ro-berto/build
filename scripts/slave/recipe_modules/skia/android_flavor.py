@@ -84,7 +84,8 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
                           'devices attached; unable to determine which serial '
                           'number to use.' % len(attached_devices))
       if serial not in attached_devices:
-        raise Exception('Device %s not attached!' % serial)
+        raise Exception('Device %s not attached! Devices: %s' % (
+                            serial, attached_devices))
       self._serial = serial
     return self._serial
 

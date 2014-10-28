@@ -7,9 +7,13 @@
 
 
 from common.skia import builder_name_schema
+from slave.skia import slaves_cfg
+
+import os
 
 
 DEPS = [
+  'json',
   'path',
   'platform',
   'properties',
@@ -22,9 +26,21 @@ def GenSteps(api):
   api.skia.gen_steps()
 
 
+def _getMasterAndSlaveForBuilder(builder):
+  masters_path = os.path.join(os.path.realpath(os.path.dirname(__file__)),
+                              os.pardir, os.pardir, os.pardir, os.pardir,
+                              'masters')
+  adj_builder = builder_name_schema.GetWaterfallBot(builder)
+  for master in os.listdir(masters_path):
+    if master.startswith('master.client.skia'):
+      adj_master = master[len('master.'):]
+      slaves = slaves_cfg.get(adj_master)
+      for slavename in slaves:
+        if adj_builder in slaves[slavename]['builder']:
+          return adj_master, slavename, slaves[slavename]
+
+
 def GenTests(api):
-  mastername = 'client.skia'
-  slavename = 'skiabot-shuttle-ubuntu12-003'
   builders = [
     'Build-Ubuntu13.10-GCC4.8-Arm7-Debug-CrOS_Daisy',
     'Build-Ubuntu13.10-GCC4.8-x86_64-Debug',
@@ -32,24 +48,29 @@ def GenTests(api):
     'Perf-ChromeOS-Daisy-MaliT604-Arm7-Release',
     'Perf-Win7-ShuttleA-HD2000-x86-Release',
     'Perf-Win7-ShuttleA-HD2000-x86-Release-Trybot',
+    'Test-Android-GalaxyS4-SGX544-Arm7-Debug',
     'Test-Android-Nexus10-MaliT604-Arm7-Release',
     'Test-Android-Xoom-Tegra2-Arm7-Debug',
     'Test-Android-Venue8-PowerVR-x86-Debug',
     'Test-ChromeOS-Alex-GMA3150-x86-Debug',
-    'Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes',
+    'Test-ChromeOS-Link-HD4000-x86_64-Debug',
     'Test-Mac10.8-MacMini4.1-GeForce320M-x86_64-Debug',
     'Test-Ubuntu12-ShuttleA-GTX550Ti-x86_64-Release-Valgrind',
     'Test-Ubuntu12-ShuttleA-GTX550Ti-x86_64-Debug-ZeroGPUCache',
-    'Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes',
-    'Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes-Trybot',
+    'Test-Ubuntu13.10-GCE-NoGPU-x86_64-Debug',
+    'Test-Ubuntu13.10-GCE-NoGPU-x86_64-Debug-Trybot',
     'Test-Ubuntu13.10-GCE-NoGPU-x86_64-Release-TSAN',
     'Test-Win7-ShuttleA-HD2000-x86-Release',
     'Test-Win7-ShuttleA-HD2000-x86-Release-ANGLE',
     'Test-Win7-ShuttleA-HD2000-x86_64-Release',
   ]
 
-  def AndroidTestData(builder):
+  def AndroidTestData(builder, slave_cfg):
+    expected_serial = slave_cfg.get('serial', 'abc123')
     test_data = (
+        api.override_step_data(
+            'List adb devices',
+            api.json.output([expected_serial])) +
         api.step_data(
             'get EXTERNAL_STORAGE dir',
             stdout=api.raw_io.output('/storage/emulated/legacy')) +
@@ -97,6 +118,7 @@ def GenTests(api):
     return test_data
 
   for builder in builders:
+    mastername, slavename, slave_cfg = _getMasterAndSlaveForBuilder(builder)
     test = (
       api.test(builder) +
       api.properties(buildername=builder,
@@ -118,7 +140,7 @@ def GenTests(api):
     if 'Android' in builder or 'NaCl' in builder:
       test += api.step_data('has ccache?', retcode=1)
     if 'Android' in builder:
-      test += AndroidTestData(builder)
+      test += AndroidTestData(builder, slave_cfg)
     if 'Trybot' in builder:
       test += api.properties(issue=500,
                              patchset=1,

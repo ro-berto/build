@@ -12,6 +12,7 @@ import sys
 from common.skia.global_constants import SKIA_REPO
 
 sys.path.insert(0, os.path.join(os.getcwd(), 'common'))
+# pylint:disable=F0401
 from py.utils import git_utils
 
 
@@ -33,10 +34,9 @@ def main(chrome_src_path, browser_executable):
   subprocess.check_call(['git', 'config', '--local', 'user.email',
                          SKIA_COMMITTER_EMAIL])
   if CHROMIUM_SKIA in subprocess.check_output(['git', 'remote', '-v']):
-    subprocess.check_call(['git', 'remote', 'set-url', 'origin', SKIA_GIT_URL,
+    subprocess.check_call(['git', 'remote', 'set-url', 'origin', SKIA_REPO,
                            CHROMIUM_SKIA])
 
-  version_file = 'SKP_VERSION'
   with git_utils.GitBranch(branch_name='update_skp_version',
                            commit_msg=COMMIT_MSG,
                            commit_queue=True):

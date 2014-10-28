@@ -55,7 +55,7 @@
       "ssh",
       "-p",
       "22",
-      "root@192.168.1.123",
+      "root@192.168.1.134",
       "rm",
       "-rf",
       "/usr/local/skiabot/bin"
@@ -67,7 +67,7 @@
       "ssh",
       "-p",
       "22",
-      "root@192.168.1.123",
+      "root@192.168.1.134",
       "mkdir",
       "-p",
       "/usr/local/skiabot/bin"
@@ -78,7 +78,7 @@
     "cmd": [
       "[BUILD]/scripts/slave/recipe_modules/skia/resources/scp_dir_contents.sh",
       "[SLAVE_BUILD]/skia/resources",
-      "root@192.168.1.123:/usr/local/skiabot/skia_resources"
+      "root@192.168.1.134:/usr/local/skiabot/skia_resources"
     ],
     "name": "scp [SLAVE_BUILD]/skia/resources"
   },
@@ -171,7 +171,7 @@
       "ssh",
       "-p",
       "22",
-      "root@192.168.1.123",
+      "root@192.168.1.134",
       "rm",
       "-rf",
       "/usr/local/skiabot/skia_skp/skps"
@@ -183,7 +183,7 @@
       "ssh",
       "-p",
       "22",
-      "root@192.168.1.123",
+      "root@192.168.1.134",
       "mkdir",
       "-p",
       "/usr/local/skiabot/skia_skp/skps"
@@ -194,7 +194,7 @@
     "cmd": [
       "[BUILD]/scripts/slave/recipe_modules/skia/resources/scp_dir_contents.sh",
       "[SLAVE_BUILD]/playback/skps",
-      "root@192.168.1.123:/usr/local/skiabot/skia_skp/skps"
+      "root@192.168.1.134:/usr/local/skiabot/skia_skp/skps"
     ],
     "name": "scp [SLAVE_BUILD]/playback/skps"
   },
@@ -203,7 +203,7 @@
       "ssh",
       "-p",
       "22",
-      "root@192.168.1.123",
+      "root@192.168.1.134",
       "rm",
       "-rf",
       "/usr/local/skiabot/skia_perf"
@@ -215,7 +215,7 @@
       "ssh",
       "-p",
       "22",
-      "root@192.168.1.123",
+      "root@192.168.1.134",
       "mkdir",
       "-p",
       "/usr/local/skiabot/skia_perf"
@@ -240,7 +240,7 @@
       "-P",
       "22",
       "[SLAVE_BUILD]/skia/out/config/chromeos-daisy/Release/nanobench",
-      "root@192.168.1.123:/usr/local/skiabot/bin/nanobench"
+      "root@192.168.1.134:/usr/local/skiabot/bin/nanobench"
     ],
     "name": "scp [SLAVE_BUILD]/skia/out/config/chromeos-daisy/Release/nanobench"
   },
@@ -249,7 +249,7 @@
       "ssh",
       "-p",
       "22",
-      "root@192.168.1.123",
+      "root@192.168.1.134",
       "/usr/local/skiabot/bin/nanobench",
       "-i",
       "/usr/local/skiabot/skia_resources",
@@ -280,7 +280,7 @@
   {
     "cmd": [
       "[BUILD]/scripts/slave/recipe_modules/skia/resources/scp_dir_contents.sh",
-      "root@192.168.1.123:/usr/local/skiabot/skia_perf",
+      "root@192.168.1.134:/usr/local/skiabot/skia_perf",
       "[SLAVE_BUILD]/perfdata/Perf-ChromeOS-Daisy-MaliT604-Arm7-Release/data"
     ],
     "name": "scp /usr/local/skiabot/skia_perf"

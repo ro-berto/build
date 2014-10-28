@@ -75,7 +75,7 @@
     "name": "List adb devices",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"014E1F310401C009\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"R32CB017X2L\"@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -84,7 +84,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
-      "014E1F310401C009",
+      "R32CB017X2L",
       "shell",
       "echo",
       "$EXTERNAL_STORAGE"
@@ -96,7 +96,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
-      "014E1F310401C009",
+      "R32CB017X2L",
       "root"
     ],
     "name": "adb root"
@@ -105,7 +105,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_kill_skia",
       "-s",
-      "014E1F310401C009"
+      "R32CB017X2L"
     ],
     "name": "kill skia"
   },
@@ -113,7 +113,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
-      "014E1F310401C009",
+      "R32CB017X2L",
       "shell",
       "stop"
     ],
@@ -123,7 +123,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_push_if_needed",
       "-s",
-      "014E1F310401C009",
+      "R32CB017X2L",
       "[SLAVE_BUILD]/skia/resources",
       "/storage/emulated/legacy/skiabot/skia_resources"
     ],
@@ -136,7 +136,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
-      "014E1F310401C009",
+      "R32CB017X2L",
       "shell",
       "rm",
       "-r",
@@ -148,7 +148,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
-      "014E1F310401C009",
+      "R32CB017X2L",
       "shell",
       "if",
       "[",
@@ -167,7 +167,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
-      "014E1F310401C009",
+      "R32CB017X2L",
       "shell",
       "mkdir",
       "-p",
@@ -219,7 +219,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
-      "014E1F310401C009",
+      "R32CB017X2L",
       "shell",
       "rm",
       "-r",
@@ -231,7 +231,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
-      "014E1F310401C009",
+      "R32CB017X2L",
       "shell",
       "if",
       "[",
@@ -250,7 +250,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
-      "014E1F310401C009",
+      "R32CB017X2L",
       "shell",
       "mkdir",
       "-p",
@@ -262,7 +262,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
-      "014E1F310401C009",
+      "R32CB017X2L",
       "push",
       "[SLAVE_BUILD]/skia/expectations/gm/ignored-tests.txt",
       "/storage/emulated/legacy/skiabot/skia_gm_expected/ignored-tests.txt"
@@ -273,7 +273,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
-      "014E1F310401C009",
+      "R32CB017X2L",
       "shell",
       "rm",
       "-r",
@@ -285,7 +285,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
-      "014E1F310401C009",
+      "R32CB017X2L",
       "shell",
       "if",
       "[",
@@ -304,7 +304,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
-      "014E1F310401C009",
+      "R32CB017X2L",
       "shell",
       "mkdir",
       "-p",
@@ -316,7 +316,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
-      "014E1F310401C009",
+      "R32CB017X2L",
       "push",
       "[SLAVE_BUILD]/skia/expectations/gm/Test-Android-Nexus10-MaliT604-Arm7-Release/expected-results.json",
       "/storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-Nexus10-MaliT604-Arm7-Release/expected-results.json"
@@ -327,7 +327,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
-      "014E1F310401C009",
+      "R32CB017X2L",
       "shell",
       "if",
       "[",
@@ -346,7 +346,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
-      "014E1F310401C009",
+      "R32CB017X2L",
       "shell",
       "if",
       "[",
@@ -367,7 +367,7 @@
       "-d",
       "nexus_10",
       "-s",
-      "014E1F310401C009",
+      "R32CB017X2L",
       "--release",
       "gm",
       "--verbose",
@@ -397,7 +397,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_pull_if_needed",
       "-s",
-      "014E1F310401C009",
+      "R32CB017X2L",
       "/storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-Nexus10-MaliT604-Arm7-Release",
       "[SLAVE_BUILD]/gm/actual/Test-Android-Nexus10-MaliT604-Arm7-Release"
     ],
@@ -473,7 +473,7 @@
       "-d",
       "nexus_10",
       "-s",
-      "014E1F310401C009",
+      "R32CB017X2L",
       "--release",
       "dm",
       "--verbose",
@@ -512,7 +512,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_pull_if_needed",
       "-s",
-      "014E1F310401C009",
+      "R32CB017X2L",
       "/storage/emulated/legacy/skiabot/skia_dm",
       "[SLAVE_BUILD]/dm"
     ],
@@ -624,7 +624,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
-      "014E1F310401C009",
+      "R32CB017X2L",
       "shell",
       "rm",
       "-r",
@@ -636,7 +636,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
-      "014E1F310401C009",
+      "R32CB017X2L",
       "shell",
       "if",
       "[",
@@ -655,7 +655,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
-      "014E1F310401C009",
+      "R32CB017X2L",
       "shell",
       "mkdir",
       "-p",
@@ -667,7 +667,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_push_if_needed",
       "-s",
-      "014E1F310401C009",
+      "R32CB017X2L",
       "[SLAVE_BUILD]/playback/skps",
       "/storage/emulated/legacy/skiabot/skia_skp/skps"
     ],
@@ -682,7 +682,7 @@
       "-d",
       "nexus_10",
       "-s",
-      "014E1F310401C009",
+      "R32CB017X2L",
       "--release",
       "render_pdfs",
       "--inputPaths",
@@ -751,7 +751,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_push_if_needed",
       "-s",
-      "014E1F310401C009",
+      "R32CB017X2L",
       "[SLAVE_BUILD]/skimage_in",
       "/storage/emulated/legacy/skiabot/skia_skimage_in"
     ],
@@ -804,7 +804,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
-      "014E1F310401C009",
+      "R32CB017X2L",
       "shell",
       "rm",
       "-r",
@@ -816,7 +816,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
-      "014E1F310401C009",
+      "R32CB017X2L",
       "shell",
       "if",
       "[",
@@ -835,7 +835,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
-      "014E1F310401C009",
+      "R32CB017X2L",
       "shell",
       "mkdir",
       "-p",
@@ -847,7 +847,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
-      "014E1F310401C009",
+      "R32CB017X2L",
       "shell",
       "rm",
       "-r",
@@ -859,7 +859,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
-      "014E1F310401C009",
+      "R32CB017X2L",
       "shell",
       "if",
       "[",
@@ -878,7 +878,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
-      "014E1F310401C009",
+      "R32CB017X2L",
       "shell",
       "mkdir",
       "-p",
@@ -890,7 +890,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
-      "014E1F310401C009",
+      "R32CB017X2L",
       "shell",
       "rm",
       "-r",
@@ -902,7 +902,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
-      "014E1F310401C009",
+      "R32CB017X2L",
       "shell",
       "if",
       "[",
@@ -921,7 +921,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
-      "014E1F310401C009",
+      "R32CB017X2L",
       "shell",
       "mkdir",
       "-p",
@@ -933,7 +933,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
       "-s",
-      "014E1F310401C009",
+      "R32CB017X2L",
       "push",
       "[SLAVE_BUILD]/skia/expectations/skimage/Test-Android-Nexus10-MaliT604-Arm7-Release/expected-results.json",
       "/storage/emulated/legacy/skiabot/skia_skimage_expected/Test-Android-Nexus10-MaliT604-Arm7-Release/expected-results.json"
@@ -946,7 +946,7 @@
       "-d",
       "nexus_10",
       "-s",
-      "014E1F310401C009",
+      "R32CB017X2L",
       "--release",
       "skimage",
       "-r",
@@ -971,7 +971,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_pull_if_needed",
       "-s",
-      "014E1F310401C009",
+      "R32CB017X2L",
       "/storage/emulated/legacy/skiabot/skia_skimage_out",
       "[SLAVE_BUILD]/skimage_out"
     ],

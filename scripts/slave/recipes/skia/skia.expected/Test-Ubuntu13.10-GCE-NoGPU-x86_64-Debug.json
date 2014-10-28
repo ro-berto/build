@@ -6,7 +6,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]\ntarget_os = ['chromeos']"
+      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]"
     ],
     "name": "gclient setup"
   },
@@ -38,80 +38,80 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/chromeos/bin/chromeos_make",
-      "-d",
-      "link",
+      "python",
+      "-u",
+      "\nimport os\nimport sys\nwith open(sys.argv[1], 'w') as f:\n  f.write(os.path.join(os.path.expanduser('~'), 'src'))\n",
+      "/path/to/tmp/"
+    ],
+    "name": "get CHROME_PATH",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@with open(sys.argv[1], 'w') as f:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  f.write(os.path.join(os.path.expanduser('~'), 'src'))@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "make",
       "most",
       "BUILDTYPE=Debug"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
-      "GYP_DEFINES": "skia_arch_width=64 skia_warnings_as_errors=0"
+      "CHROME_PATH": "/home/chrome-bot/src",
+      "GYP_DEFINES": "skia_arch_width=64 skia_gpu=0 skia_warnings_as_errors=0"
     },
     "name": "build most"
-  },
-  {
-    "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.123",
-      "rm",
-      "-rf",
-      "/usr/local/skiabot/bin"
-    ],
-    "name": "rmdir .../skiabot/bin"
-  },
-  {
-    "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.123",
-      "mkdir",
-      "-p",
-      "/usr/local/skiabot/bin"
-    ],
-    "name": "mkdir .../skiabot/bin"
-  },
-  {
-    "cmd": [
-      "[BUILD]/scripts/slave/recipe_modules/skia/resources/scp_dir_contents.sh",
-      "[SLAVE_BUILD]/skia/resources",
-      "root@192.168.1.123:/usr/local/skiabot/skia_resources"
-    ],
-    "name": "scp [SLAVE_BUILD]/skia/resources"
-  },
-  {
-    "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.123",
-      "rm",
-      "-rf",
-      "/usr/local/skiabot/skia_gm_actual"
-    ],
-    "name": "rmdir .../skiabot/skia_gm_actual"
-  },
-  {
-    "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.123",
-      "mkdir",
-      "-p",
-      "/usr/local/skiabot/skia_gm_actual"
-    ],
-    "name": "mkdir .../skiabot/skia_gm_actual"
   },
   {
     "cmd": [
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/gm/actual/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes"
+      "[SLAVE_BUILD]/gm/actual"
+    ],
+    "name": "rmtree .../gm/actual",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[SLAVE_BUILD]/gm/actual",
+      "511"
+    ],
+    "name": "makedirs .../gm/actual",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[SLAVE_BUILD]/gm/actual/Test-Ubuntu13.10-GCE-NoGPU-x86_64-Debug"
     ],
     "name": "rmtree .../actual/BUILDER",
     "~followup_annotations": [
@@ -129,7 +129,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/gm/actual/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes",
+      "[SLAVE_BUILD]/gm/actual/Test-Ubuntu13.10-GCE-NoGPU-x86_64-Debug",
       "511"
     ],
     "name": "makedirs .../actual/BUILDER",
@@ -148,148 +148,35 @@
   },
   {
     "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.123",
-      "rm",
-      "-rf",
-      "/usr/local/skiabot/skia_gm_expected"
-    ],
-    "name": "rmdir .../skiabot/skia_gm_expected"
-  },
-  {
-    "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.123",
-      "mkdir",
-      "-p",
-      "/usr/local/skiabot/skia_gm_expected"
-    ],
-    "name": "mkdir .../skiabot/skia_gm_expected"
-  },
-  {
-    "cmd": [
-      "scp",
-      "-P",
-      "22",
-      "[SLAVE_BUILD]/skia/expectations/gm/ignored-tests.txt",
-      "root@192.168.1.123:/usr/local/skiabot/skia_gm_expected/ignored-tests.txt"
-    ],
-    "name": "scp [SLAVE_BUILD]/skia/expectations/gm/ignored-tests.txt"
-  },
-  {
-    "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.123",
-      "rm",
-      "-rf",
-      "/usr/local/skiabot/skia_gm_expected/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes"
-    ],
-    "name": "rmdir .../skia_gm_expected/BUILDER"
-  },
-  {
-    "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.123",
-      "mkdir",
-      "-p",
-      "/usr/local/skiabot/skia_gm_expected/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes"
-    ],
-    "name": "mkdir .../skia_gm_expected/BUILDER"
-  },
-  {
-    "cmd": [
-      "scp",
-      "-P",
-      "22",
-      "[SLAVE_BUILD]/skia/expectations/gm/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes/expected-results.json",
-      "root@192.168.1.123:/usr/local/skiabot/skia_gm_expected/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes/expected-results.json"
-    ],
-    "name": "scp [SLAVE_BUILD]/skia/expectations/gm/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes/expected-results.json"
-  },
-  {
-    "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.123",
-      "test",
-      "-e",
-      "/usr/local/skiabot/skia_gm_expected/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes/expected-results.json"
-    ],
-    "name": "exists /usr/local/skiabot/skia_gm_expected/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes/expected-results.json"
-  },
-  {
-    "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.123",
-      "test",
-      "-e",
-      "/usr/local/skiabot/skia_gm_expected/ignored-tests.txt"
-    ],
-    "name": "exists /usr/local/skiabot/skia_gm_expected/ignored-tests.txt"
-  },
-  {
-    "cmd": [
-      "scp",
-      "-P",
-      "22",
-      "[SLAVE_BUILD]/skia/out/config/chromeos-link/Debug/gm",
-      "root@192.168.1.123:/usr/local/skiabot/bin/gm"
-    ],
-    "name": "scp [SLAVE_BUILD]/skia/out/config/chromeos-link/Debug/gm"
-  },
-  {
-    "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.123",
-      "/usr/local/skiabot/bin/gm",
+      "catchsegv",
+      "[SLAVE_BUILD]/skia/out/Debug/gm",
       "--verbose",
       "--writeChecksumBasedFilenames",
       "--mismatchPath",
-      "/usr/local/skiabot/skia_gm_actual/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes",
+      "[SLAVE_BUILD]/gm/actual/Test-Ubuntu13.10-GCE-NoGPU-x86_64-Debug",
       "--missingExpectationsPath",
-      "/usr/local/skiabot/skia_gm_actual/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes",
+      "[SLAVE_BUILD]/gm/actual/Test-Ubuntu13.10-GCE-NoGPU-x86_64-Debug",
       "--writeJsonSummaryPath",
-      "/usr/local/skiabot/skia_gm_actual/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes/actual-results.json",
+      "[SLAVE_BUILD]/gm/actual/Test-Ubuntu13.10-GCE-NoGPU-x86_64-Debug/actual-results.json",
       "--ignoreErrorTypes",
       "IntentionallySkipped",
       "MissingExpectations",
       "ExpectationsMismatch",
       "--resourcePath",
-      "/usr/local/skiabot/skia_resources",
+      "[SLAVE_BUILD]/skia/resources",
       "--readPath",
-      "/usr/local/skiabot/skia_gm_expected/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes/expected-results.json",
+      "[SLAVE_BUILD]/skia/expectations/gm/Test-Ubuntu13.10-GCE-NoGPU-x86_64-Debug/expected-results.json",
       "--ignoreFailuresFile",
-      "/usr/local/skiabot/skia_gm_expected/ignored-tests.txt"
+      "[SLAVE_BUILD]/skia/expectations/gm/ignored-tests.txt"
     ],
     "name": "gm"
-  },
-  {
-    "cmd": [
-      "[BUILD]/scripts/slave/recipe_modules/skia/resources/scp_dir_contents.sh",
-      "root@192.168.1.123:/usr/local/skiabot/skia_gm_actual/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes",
-      "[SLAVE_BUILD]/gm/actual/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes"
-    ],
-    "name": "scp /usr/local/skiabot/skia_gm_actual/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes"
   },
   {
     "cmd": [
       "python",
       "-u",
       "[SLAVE_BUILD]/skia/gm/display_json_results.py",
-      "[SLAVE_BUILD]/gm/actual/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes/actual-results.json"
+      "[SLAVE_BUILD]/gm/actual/Test-Ubuntu13.10-GCE-NoGPU-x86_64-Debug/actual-results.json"
     ],
     "name": "Compare GMs"
   },
@@ -298,8 +185,8 @@
       "python",
       "-u",
       "[BUILD]/scripts/slave/recipe_modules/skia/resources/upload_gm_results.py",
-      "[SLAVE_BUILD]/gm/actual/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes",
-      "Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes",
+      "[SLAVE_BUILD]/gm/actual/Test-Ubuntu13.10-GCE-NoGPU-x86_64-Debug",
+      "Test-Ubuntu13.10-GCE-NoGPU-x86_64-Debug",
       "[DEPOT_TOOLS]/third_party/gsutil/gsutil"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
@@ -347,28 +234,15 @@
   },
   {
     "cmd": [
-      "scp",
-      "-P",
-      "22",
-      "[SLAVE_BUILD]/skia/out/config/chromeos-link/Debug/dm",
-      "root@192.168.1.123:/usr/local/skiabot/bin/dm"
-    ],
-    "name": "scp [SLAVE_BUILD]/skia/out/config/chromeos-link/Debug/dm"
-  },
-  {
-    "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.123",
-      "/usr/local/skiabot/bin/dm",
+      "catchsegv",
+      "[SLAVE_BUILD]/skia/out/Debug/dm",
       "--verbose",
       "--resourcePath",
-      "/usr/local/skiabot/skia_resources",
+      "[SLAVE_BUILD]/skia/resources",
       "--skps",
-      "/usr/local/skiabot/skia_skp/skps",
+      "[SLAVE_BUILD]/playback/skps",
       "--writePath",
-      "/usr/local/skiabot/skia_dm_out",
+      "[SLAVE_BUILD]/dm",
       "--nameByHash",
       "--properties",
       "gitHash",
@@ -380,24 +254,14 @@
       "x86_64",
       "configuration",
       "Debug",
-      "extra_config",
-      "Recipes",
       "gpu",
-      "HD4000",
+      "NoGPU",
       "model",
-      "Link",
+      "GCE",
       "os",
-      "ChromeOS"
+      "Ubuntu13.10"
     ],
     "name": "dm"
-  },
-  {
-    "cmd": [
-      "[BUILD]/scripts/slave/recipe_modules/skia/resources/scp_dir_contents.sh",
-      "root@192.168.1.123:/usr/local/skiabot/skia_dm_out",
-      "[SLAVE_BUILD]/dm"
-    ],
-    "name": "scp /usr/local/skiabot/skia_dm_out"
   },
   {
     "cmd": [
@@ -406,7 +270,7 @@
       "[BUILD]/scripts/slave/recipe_modules/skia/resources/upload_dm_results.py",
       "[SLAVE_BUILD]/dm",
       "164710",
-      "Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes",
+      "Test-Ubuntu13.10-GCE-NoGPU-x86_64-Debug",
       "5",
       "",
       "[SLAVE_BUILD]/skia/common/py/utils"
@@ -500,55 +364,10 @@
   },
   {
     "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.123",
-      "rm",
-      "-rf",
-      "/usr/local/skiabot/skia_skp/skps"
-    ],
-    "name": "rmdir .../skia_skp/skps"
-  },
-  {
-    "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.123",
-      "mkdir",
-      "-p",
-      "/usr/local/skiabot/skia_skp/skps"
-    ],
-    "name": "mkdir .../skia_skp/skps"
-  },
-  {
-    "cmd": [
-      "[BUILD]/scripts/slave/recipe_modules/skia/resources/scp_dir_contents.sh",
-      "[SLAVE_BUILD]/playback/skps",
-      "root@192.168.1.123:/usr/local/skiabot/skia_skp/skps"
-    ],
-    "name": "scp [SLAVE_BUILD]/playback/skps"
-  },
-  {
-    "cmd": [
-      "scp",
-      "-P",
-      "22",
-      "[SLAVE_BUILD]/skia/out/config/chromeos-link/Debug/render_pdfs",
-      "root@192.168.1.123:/usr/local/skiabot/bin/render_pdfs"
-    ],
-    "name": "scp [SLAVE_BUILD]/skia/out/config/chromeos-link/Debug/render_pdfs"
-  },
-  {
-    "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.123",
-      "/usr/local/skiabot/bin/render_pdfs",
+      "catchsegv",
+      "[SLAVE_BUILD]/skia/out/Debug/render_pdfs",
       "--inputPaths",
-      "/usr/local/skiabot/skia_skp/skps"
+      "[SLAVE_BUILD]/playback/skps"
     ],
     "name": "render_pdfs"
   },
@@ -608,14 +427,6 @@
   },
   {
     "cmd": [
-      "[BUILD]/scripts/slave/recipe_modules/skia/resources/scp_dir_contents.sh",
-      "[SLAVE_BUILD]/skimage_in",
-      "root@192.168.1.123:/usr/local/skiabot/skia_skimage_in"
-    ],
-    "name": "scp [SLAVE_BUILD]/skimage_in"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
@@ -656,125 +467,102 @@
   },
   {
     "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.123",
-      "rm",
-      "-rf",
-      "/usr/local/skiabot/skia_skimage_out/images"
+      "python",
+      "-u",
+      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[SLAVE_BUILD]/skimage_out/images"
     ],
-    "name": "rmdir .../skia_skimage_out/images"
+    "name": "rmtree .../skimage_out/images",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
   },
   {
     "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.123",
-      "mkdir",
-      "-p",
-      "/usr/local/skiabot/skia_skimage_out/images"
+      "python",
+      "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[SLAVE_BUILD]/skimage_out/images",
+      "511"
     ],
-    "name": "mkdir .../skia_skimage_out/images"
+    "name": "makedirs .../skimage_out/images",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
   },
   {
     "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.123",
-      "rm",
-      "-rf",
-      "/usr/local/skiabot/skia_skimage_out/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes"
+      "python",
+      "-u",
+      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[SLAVE_BUILD]/skimage_out/Test-Ubuntu13.10-GCE-NoGPU-x86_64-Debug"
     ],
-    "name": "rmdir .../skia_skimage_out/BUILDER"
+    "name": "rmtree .../skimage_out/BUILDER",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
   },
   {
     "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.123",
-      "mkdir",
-      "-p",
-      "/usr/local/skiabot/skia_skimage_out/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes"
+      "python",
+      "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[SLAVE_BUILD]/skimage_out/Test-Ubuntu13.10-GCE-NoGPU-x86_64-Debug",
+      "511"
     ],
-    "name": "mkdir .../skia_skimage_out/BUILDER"
+    "name": "makedirs .../skimage_out/BUILDER",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
   },
   {
     "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.123",
-      "rm",
-      "-rf",
-      "/usr/local/skiabot/skia_skimage_expected/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes"
-    ],
-    "name": "rmdir .../skia_skimage_expected/BUILDER"
-  },
-  {
-    "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.123",
-      "mkdir",
-      "-p",
-      "/usr/local/skiabot/skia_skimage_expected/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes"
-    ],
-    "name": "mkdir .../skia_skimage_expected/BUILDER"
-  },
-  {
-    "cmd": [
-      "scp",
-      "-P",
-      "22",
-      "[SLAVE_BUILD]/skia/expectations/skimage/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes/expected-results.json",
-      "root@192.168.1.123:/usr/local/skiabot/skia_skimage_expected/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes/expected-results.json"
-    ],
-    "name": "scp [SLAVE_BUILD]/skia/expectations/skimage/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes/expected-results.json"
-  },
-  {
-    "cmd": [
-      "scp",
-      "-P",
-      "22",
-      "[SLAVE_BUILD]/skia/out/config/chromeos-link/Debug/skimage",
-      "root@192.168.1.123:/usr/local/skiabot/bin/skimage"
-    ],
-    "name": "scp [SLAVE_BUILD]/skia/out/config/chromeos-link/Debug/skimage"
-  },
-  {
-    "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.123",
-      "/usr/local/skiabot/bin/skimage",
+      "catchsegv",
+      "[SLAVE_BUILD]/skia/out/Debug/skimage",
       "-r",
-      "/usr/local/skiabot/skia_skimage_in",
+      "[SLAVE_BUILD]/skimage_in",
       "--noreencode",
       "--writeChecksumBasedFilenames",
       "--config",
       "8888",
       "--mismatchPath",
-      "/usr/local/skiabot/skia_skimage_out/images",
+      "[SLAVE_BUILD]/skimage_out/images",
       "--createExpectationsPath",
-      "/usr/local/skiabot/skia_skimage_out/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes/actual-results.json",
+      "[SLAVE_BUILD]/skimage_out/Test-Ubuntu13.10-GCE-NoGPU-x86_64-Debug/actual-results.json",
       "--readExpectationsPath",
-      "/usr/local/skiabot/skia_skimage_expected/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes/expected-results.json"
+      "[SLAVE_BUILD]/skia/expectations/skimage/Test-Ubuntu13.10-GCE-NoGPU-x86_64-Debug/expected-results.json"
     ],
     "name": "skimage"
-  },
-  {
-    "cmd": [
-      "[BUILD]/scripts/slave/recipe_modules/skia/resources/scp_dir_contents.sh",
-      "root@192.168.1.123:/usr/local/skiabot/skia_skimage_out",
-      "[SLAVE_BUILD]/skimage_out"
-    ],
-    "name": "scp /usr/local/skiabot/skia_skimage_out"
   },
   {
     "cmd": [
@@ -801,12 +589,12 @@
       "--",
       "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
       "cp",
-      "[SLAVE_BUILD]/skimage_out/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes/actual-results.json",
-      "gs://chromium-skia-gm/skimage/actuals/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes/actual-results.json"
+      "[SLAVE_BUILD]/skimage_out/Test-Ubuntu13.10-GCE-NoGPU-x86_64-Debug/actual-results.json",
+      "gs://chromium-skia-gm/skimage/actuals/Test-Ubuntu13.10-GCE-NoGPU-x86_64-Debug/actual-results.json"
     ],
     "name": "gsutil upload skimage actual summary",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-skia-gm/skimage/actuals/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes/actual-results.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-skia-gm/skimage/actuals/Test-Ubuntu13.10-GCE-NoGPU-x86_64-Debug/actual-results.json@@@"
     ]
   },
   {
@@ -814,8 +602,8 @@
       "python",
       "-u",
       "\nimport os\nimport sys\nif not os.path.isfile(sys.argv[1]):\n  print 'Missing expectations file %s.' % sys.argv[1]\n  print ('In order to blindly use the actual results as '\n         'the expectations, run the following commands:')\n  print ('$ gsutil cp -R '\n         'gs://chromium-skia-gm/skimage/actuals/%s '\n         'expectations/skimage/%s') % (sys.argv[2],\n                                       sys.argv[2])\n  print ('$ mv expectations/skimage/%s/actual-results.json '\n         'expectations/skimage/%s/%s') % (\n             sys.argv[2], sys.argv[2], sys.argv[3])\n  print ''\n  print 'Then check in using git.'\n  sys.exit(1)\n",
-      "[SLAVE_BUILD]/skia/expectations/skimage/Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes/expected-results.json",
-      "Test-ChromeOS-Link-HD4000-x86_64-Debug-Recipes",
+      "[SLAVE_BUILD]/skia/expectations/skimage/Test-Ubuntu13.10-GCE-NoGPU-x86_64-Debug/expected-results.json",
+      "Test-Ubuntu13.10-GCE-NoGPU-x86_64-Debug",
       "expected-results.json"
     ],
     "name": "assert skimage expectations",
@@ -842,25 +630,12 @@
   },
   {
     "cmd": [
-      "scp",
-      "-P",
-      "22",
-      "[SLAVE_BUILD]/skia/out/config/chromeos-link/Debug/nanobench",
-      "root@192.168.1.123:/usr/local/skiabot/bin/nanobench"
-    ],
-    "name": "scp [SLAVE_BUILD]/skia/out/config/chromeos-link/Debug/nanobench"
-  },
-  {
-    "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.123",
-      "/usr/local/skiabot/bin/nanobench",
+      "catchsegv",
+      "[SLAVE_BUILD]/skia/out/Debug/nanobench",
       "-i",
-      "/usr/local/skiabot/skia_resources",
+      "[SLAVE_BUILD]/skia/resources",
       "--skps",
-      "/usr/local/skiabot/skia_skp/skps",
+      "[SLAVE_BUILD]/playback/skps",
       "--scales",
       "1.0",
       "1.1"
