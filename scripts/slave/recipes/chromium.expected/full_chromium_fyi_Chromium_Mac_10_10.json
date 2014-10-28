@@ -129,20 +129,6 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/buildtools/checkdeps/checkdeps.py",
-      "--json",
-      "/path/to/tmp/json"
-    ],
-    "name": "checkdeps",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[SLAVE_BUILD]/src/chrome/test/nacl_test_injection/buildbot_nacl_integration.py",
       "--mode",
       "Release",

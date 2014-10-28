@@ -98,7 +98,8 @@ def GenTests(api):
         test += api.properties(
             parent_build_archive_url='gs://test-domain/test-archive.zip')
 
-      if bot_type in ['builder', 'builder_tester']:
+      if (bot_type in ['builder', 'builder_tester'] and
+          bot_config['testing']['platform'] == 'linux'):
         test += api.step_data('checkdeps', api.json.output([]))
 
       if mastername == 'client.v8':

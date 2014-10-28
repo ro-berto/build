@@ -125,19 +125,5 @@
       "chromium_builder_tests"
     ],
     "name": "compile"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/buildtools/checkdeps/checkdeps.py",
-      "--json",
-      "/path/to/tmp/json"
-    ],
-    "name": "checkdeps",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
   }
 ]
