@@ -315,7 +315,7 @@ class LocalGTestTest(Test):
 
 
 def generate_gtest(api, mastername, buildername, test_spec,
-                   enable_swarming=False):
+                   enable_swarming=False, scripts_compile_targets=None):
   def canonicalize_test(test):
     if isinstance(test, basestring):
       canonical_test = {'test': test}
@@ -345,6 +345,15 @@ def generate_gtest(api, mastername, buildername, test_spec,
     yield GTestTest(str(test['test']), args=args, flakiness_dash=True,
                     enable_swarming=use_swarming,
                     swarming_shards=swarming_shards)
+
+
+def generate_script(api, mastername, buildername, test_spec,
+                    enable_swarming=False, scripts_compile_targets=None):
+  for script_spec in test_spec.get(buildername, {}).get('scripts', []):
+    yield ScriptTest(
+        str(script_spec['name']),
+        script_spec['script'],
+        scripts_compile_targets)
 
 
 class DynamicPerfTests(Test):

@@ -220,6 +220,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # TODO(phajdan.jr): Bots should have no generators instead.
     if bot_config.get('disable_tests'):
       test_spec = {}
+      scripts_compile_targets = {}
     else:
       test_spec_result = self.m.json.read(
           'read test spec',
@@ -228,13 +229,18 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       test_spec_result.presentation.step_text = 'path: %s' % test_spec_path
       test_spec = test_spec_result.json.output
 
+      scripts_compile_targets = \
+          self.m.chromium.get_compile_targets_for_scripts().json.output
+
     for loop_buildername, builder_dict in master_dict.get(
         'builders', {}).iteritems():
       builder_dict.setdefault('tests', [])
+      # TODO(phajdan.jr): Switch everything to scripts generators and simplify.
       for generator in builder_dict.get('test_generators', []):
         builder_dict['tests'] = (
             list(generator(self.m, mastername, loop_buildername, test_spec,
-                           enable_swarming=enable_swarming)) +
+                           enable_swarming=enable_swarming,
+                           scripts_compile_targets=scripts_compile_targets)) +
             builder_dict['tests'])
 
     return update_step, master_dict, test_spec
