@@ -66,6 +66,16 @@ BUILDERS = {
       },
     },
   },
+  'chromium.chromiumos': {
+    'builders': {
+      'Linux ChromiumOS GN': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'chromeos',
+        },
+      },
+    },
+  },
   'chromium.linux': {
     'builders': {
       'Android GN': {
@@ -125,6 +135,19 @@ BUILDERS = {
       'linux_chromium_gn_dbg': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
+        },
+        'chromium_apply_config': ['gn_component_build'],
+      },
+      'linux_chromium_gn_chromeos_rel': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'chromeos',
+        },
+      },
+      'linux_chromium_gn_chromeos_dbg': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'chromeos',
         },
         'chromium_apply_config': ['gn_component_build'],
       },

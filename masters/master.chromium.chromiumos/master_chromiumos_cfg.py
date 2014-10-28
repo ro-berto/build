@@ -19,6 +19,7 @@ def Update(config, active_master, c):
           'Linux ChromiumOS Builder',
           'Linux ChromiumOS Ozone Builder',
           'Linux ChromiumOS Builder (dbg)',
+          'Linux ChromiumOS GN',
       ]),
       Triggerable(name='chromiumos_rel_trigger', builderNames=[
           'Linux ChromiumOS Tests (1)',
@@ -58,3 +59,10 @@ def Update(config, active_master, c):
           {'buildername': 'Linux ChromiumOS Tests (dbg)(1)'},
       ]
   ])
+
+  c['builders'].append({
+      'name': 'Linux ChromiumOS GN',
+      'factory': m_annotator.BaseFactory('chromium_gn'),
+      'notify_on_missing': True,
+      'category': '1linux',
+  })

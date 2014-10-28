@@ -434,8 +434,12 @@ class ChromiumApi(recipe_api.RecipeApi):
       gn_args.append('is_debug=true')
     if self.c.BUILD_CONFIG == 'Release':
       gn_args.append('is_debug=false')
+
     if self.c.TARGET_PLATFORM == 'android':
       gn_args.append('os="android"')
+    elif self.c.TARGET_PLATFORM == 'chromeos':
+      gn_args.append('os="chromeos"')
+
     if self.c.TARGET_ARCH == 'arm':
       gn_args.append('cpu_arch="arm"')
 
