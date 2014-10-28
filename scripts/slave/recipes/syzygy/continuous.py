@@ -23,6 +23,7 @@ DEPS = [
   'platform',
   'properties',
   'syzygy',
+  'trigger',
 ]
 
 
@@ -63,6 +64,17 @@ def GenSteps(api):
     assert build_config == 'Release'
     s.archive_binaries()
     s.upload_symbols()
+
+    # Sometimes these come as a tuple, sometimes as a list, which messes up the
+    # simulation unittests.
+    blamelist = api.properties['blamelist']
+    blamelist = list(blamelist) if type(blamelist) is tuple else blamelist
+
+    # Trigger a smoke test build for the same revision.
+    props = {'blamelist': blamelist,
+             'buildername': 'Syzygy Smoke Test',
+             'revision': api.properties['revision']}
+    api.trigger(props)
 
 
 def GenTests(api):

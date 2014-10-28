@@ -143,7 +143,7 @@ PATCH=1
                             test_data=self._FAKE_UNITTESTS_GYPI_DATA)
     gypi = ast.literal_eval(gypi)
     unittests = [t.split(':')[1] for t in gypi['variables']['unittests']]
-    return unittests
+    return sorted(unittests)
 
   def run_unittests(self, unittests):
     # Generate a test step for each unittest.

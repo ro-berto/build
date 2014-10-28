@@ -102,32 +102,6 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Syzygy Debug\", \"buildnumber\": 571, \"mastername\": \"master.client.syzygy\", \"recipe\": \"syzygy/continuous\", \"revision\": \"0e9f25b1098271be2b096fd1c095d6d907cf86f7\", \"slavename\": \"vm331-m3\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Syzygy Debug\", \"buildnumber\": 571, \"mastername\": \"master.client.syzygy\", \"recipe\": \"syzygy/continuous\", \"revision\": \"0e9f25b1098271be2b096fd1c095d6d907cf86f7\", \"slavename\": \"vm331-m3\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--test-type=foo_unittests",
-      "--builder-name=Syzygy Debug",
-      "--slave-name=vm331-m3",
-      "--build-number=571",
-      "--run-python-script",
-      "[SLAVE_BUILD]\\src\\syzygy\\build\\app_verifier.py",
-      "--on-waterfall",
-      "[SLAVE_BUILD]\\src\\build\\Debug\\foo_unittests.exe",
-      "--",
-      "--single-process-tests",
-      "--test-launcher-timeout=300000",
-      "--gtest_print_time"
-    ],
-    "name": "foo_unittests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]\\scripts\\slave\\runtest.py",
-      "--target",
-      "Debug",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Syzygy Debug\", \"buildnumber\": 571, \"mastername\": \"master.client.syzygy\", \"recipe\": \"syzygy/continuous\", \"revision\": \"0e9f25b1098271be2b096fd1c095d6d907cf86f7\", \"slavename\": \"vm331-m3\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Syzygy Debug\", \"buildnumber\": 571, \"mastername\": \"master.client.syzygy\", \"recipe\": \"syzygy/continuous\", \"revision\": \"0e9f25b1098271be2b096fd1c095d6d907cf86f7\", \"slavename\": \"vm331-m3\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--test-type=bar_unittests",
       "--builder-name=Syzygy Debug",
       "--slave-name=vm331-m3",
@@ -168,5 +142,31 @@
       "--gtest_print_time"
     ],
     "name": "baz_unittests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\runtest.py",
+      "--target",
+      "Debug",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Syzygy Debug\", \"buildnumber\": 571, \"mastername\": \"master.client.syzygy\", \"recipe\": \"syzygy/continuous\", \"revision\": \"0e9f25b1098271be2b096fd1c095d6d907cf86f7\", \"slavename\": \"vm331-m3\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Syzygy Debug\", \"buildnumber\": 571, \"mastername\": \"master.client.syzygy\", \"recipe\": \"syzygy/continuous\", \"revision\": \"0e9f25b1098271be2b096fd1c095d6d907cf86f7\", \"slavename\": \"vm331-m3\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--test-type=foo_unittests",
+      "--builder-name=Syzygy Debug",
+      "--slave-name=vm331-m3",
+      "--build-number=571",
+      "--run-python-script",
+      "[SLAVE_BUILD]\\src\\syzygy\\build\\app_verifier.py",
+      "--on-waterfall",
+      "[SLAVE_BUILD]\\src\\build\\Debug\\foo_unittests.exe",
+      "--",
+      "--single-process-tests",
+      "--test-launcher-timeout=300000",
+      "--gtest_print_time"
+    ],
+    "name": "foo_unittests"
   }
 ]
