@@ -153,8 +153,8 @@ class DartCommands(commands.FactoryCommands):
              ) % (options['mode'], options['arch'], compiler, checked_config,
                   self.standard_flags)
       self._factory.addStep(shell.ShellCommand,
-                            name='tests',
-                            description='tests',
+                            name='tests %s' % checked_config,
+                            description='tests %s' % checked_config,
                             timeout=timeout,
                             env = self._custom_env,
                             haltOnFailure=False,
