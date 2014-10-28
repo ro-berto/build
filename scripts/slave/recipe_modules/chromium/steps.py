@@ -126,6 +126,13 @@ class ScriptTest(Test):  # pylint: disable=W0232
     name = self.name
     if suffix:
       name += ' (%s)' % suffix
+
+    run_args = []
+    if suffix == 'without patch':
+      run_args.extend([
+          '--filter-file', api.json.input(self.failures(api, 'with patch'))
+      ])
+
     try:
       api.python(
           name,
@@ -134,7 +141,8 @@ class ScriptTest(Test):  # pylint: disable=W0232
           api.path['checkout'].join(
               'testing', 'scripts', api.path.basename(self._script)),
           args=(api.chromium.get_common_args_for_scripts() +
-                ['run', '--output', api.json.output()]),
+                ['run', '--output', api.json.output()] +
+                run_args),
           step_test_data=lambda: api.json.test_api.output(
               {'valid': True, 'failures': []}))
     finally:

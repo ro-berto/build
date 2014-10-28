@@ -460,7 +460,9 @@
       "{\"buildername\": \"linux_chromium_rel\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}",
       "run",
       "--output",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--filter-file",
+      "[\"foo: bar\"]"
     ],
     "name": "checkdeps (without patch)",
     "~followup_annotations": [
