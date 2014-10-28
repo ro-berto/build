@@ -150,7 +150,7 @@
       "-u",
       "[SLAVE_BUILD]/src/build/gyp_chromium",
       "--analyzer",
-      "{\"files\": [\"foo.cc\"], \"targets\": [\"android_webview_test_apk\", \"chrome_shell_test_apk\", \"content_shell_test_apk\", \"junit_unit_tests\"]}",
+      "{\"files\": [\"foo.cc\"], \"targets\": [\"android_webview_test_apk\", \"chrome_shell_test_apk\", \"content_shell_test_apk\", \"chrome_sync_shell_test_apk\", \"junit_unit_tests\"]}",
       "/path/to/tmp/json"
     ],
     "env": {

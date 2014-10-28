@@ -46,8 +46,18 @@ INSTRUMENTATION_TESTS = [
     'kwargs': {
       'test_data': 'content:content/test/data/android/device_files',
       'install_apk': {
-        'package': 'org.chromium.chontent_shell_apk',
+        'package': 'org.chromium.content_shell_apk',
         'apk': 'ContentShell.apk',
+      },
+    },
+  },
+  {
+    'test': 'ChromeSyncShellTest',
+    'gyp_target': 'chrome_sync_shell_test_apk',
+    'kwargs': {
+      'install_apk': {
+        'package': 'org.chromium.chrome.browser.sync',
+        'apk': 'ChromeSyncShell.apk',
       },
     },
   },
