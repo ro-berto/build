@@ -41,6 +41,10 @@ def GenSteps(api):
   api.git('status', name='git status cannot_fail_build',
           can_fail_build=False)
 
+  # You can use api.git.rebase to rebase the current branch onto another one
+  api.git.rebase(name_prefix='my repo', branch='origin/master',
+    dir_path=api.path['checkout'])
+
 
 def GenTests(api):
   yield api.test('basic')
@@ -71,3 +75,8 @@ def GenTests(api):
       api.step_data('set got_revision',
                     stdout=api.raw_io.output('deadbeef'))
   )
+
+  yield (
+    api.test('rebase_failed') +
+    api.step_data('my repo rebase', retcode=1)
+    )

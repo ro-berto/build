@@ -167,3 +167,17 @@ class GitApi(recipe_api.RecipeApi):
                 stdout=self.m.raw_io.output(),
                 step_test_data=step_test_data).stdout.rstrip()
 
+  def rebase(self, name_prefix, branch, dir_path, **kwargs):
+    """Run rebase HEAD onto branch
+    Args:
+    name_prefix (string): a prefix used for the step names
+    branch (string): a branch name or a hash to rebase onto
+    dir_path (Path): directory to clone into
+    """
+    try:
+      self('rebase', 'origin/master',
+          name="%s rebase" % name_prefix, cwd=dir_path, **kwargs)
+    except self.m.step.StepFailure:
+      self('rebase', '--abort', name='%s rebase abort' % name_prefix,
+          cwd=dir_path, **kwargs)
+      raise

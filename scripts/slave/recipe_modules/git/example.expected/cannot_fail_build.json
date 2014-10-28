@@ -100,5 +100,14 @@
       "step returned non-zero exit code: 1",
       "@@@STEP_EXCEPTION@@@"
     ]
+  },
+  {
+    "cmd": [
+      "git",
+      "rebase",
+      "origin/master"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "my repo rebase"
   }
 ]

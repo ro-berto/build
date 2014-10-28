@@ -100,5 +100,14 @@
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "git status cannot_fail_build"
+  },
+  {
+    "cmd": [
+      "git",
+      "rebase",
+      "origin/master"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "my repo rebase"
   }
 ]

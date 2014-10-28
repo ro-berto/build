@@ -98,5 +98,14 @@
     ],
     "cwd": "[SLAVE_BUILD]\\src",
     "name": "git status cannot_fail_build"
+  },
+  {
+    "cmd": [
+      "[DEPOT_TOOLS]\\git.bat",
+      "rebase",
+      "origin/master"
+    ],
+    "cwd": "[SLAVE_BUILD]\\src",
+    "name": "my repo rebase"
   }
 ]

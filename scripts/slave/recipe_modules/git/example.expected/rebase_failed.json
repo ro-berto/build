@@ -16,6 +16,7 @@
       "git",
       "fetch",
       "origin",
+      "master",
       "--recurse-submodules"
     ],
     "cwd": "[SLAVE_BUILD]/src",
@@ -26,7 +27,7 @@
       "git",
       "checkout",
       "-f",
-      "abcdef0123456789abcdef0123456789abcdef01"
+      "FETCH_HEAD"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "git checkout"
@@ -103,6 +104,24 @@
       "origin/master"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "my repo rebase"
+    "name": "my repo rebase",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_EXCEPTION@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "rebase",
+      "--abort"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "my repo rebase abort"
+  },
+  {
+    "name": "$final_result",
+    "reason": "Infra Failure: Step('my repo rebase') returned 1",
+    "status_code": 1
   }
 ]
