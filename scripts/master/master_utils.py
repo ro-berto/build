@@ -18,7 +18,6 @@ from zope.interface import implements
 from master.autoreboot_buildslave import AutoRebootBuildSlave
 from buildbot.status.web.authz import Authz
 from buildbot.status.web.baseweb import WebStatus
-from buildbot.status.web.baseweb import WebStatus
 
 import master.chromium_status_bb8 as chromium_status
 
