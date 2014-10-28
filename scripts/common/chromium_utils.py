@@ -1264,10 +1264,11 @@ def ListMasters(cue='master.cfg', include_public=True, include_internal=True):
   return [os.path.abspath(os.path.dirname(f)) for f in filenames]
 
 
-def GetAllSlaves(fail_hard=False):
+def GetAllSlaves(fail_hard=False, include_public=True, include_internal=True):
   """Return all slave objects from masters."""
   slaves = []
-  for master in ListMasters(cue='slaves.cfg'):
+  for master in ListMasters(cue='slaves.cfg', include_public=include_public,
+                            include_internal=include_internal):
     cur_slaves = RunSlavesCfg(os.path.join(master, 'slaves.cfg'),
                               fail_hard=fail_hard)
     for slave in cur_slaves:
