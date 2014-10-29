@@ -557,19 +557,6 @@ def find_test_named(test_name, tests):
   return [test for test in tests if test.name == test_name]
 
 
-def build_to_priority(build_properties):
-  """Returns the Swarming task priority for the build.
-
-  Does this by determining the build type. Lower is higher priority.
-  """
-  requester = build_properties.get('requester')
-  if requester == 'commit-bot@chromium.org':
-    # Commit queue job.
-    return 30
-  # Normal try job.
-  return 50
-
-
 def GenSteps(api):
   def swarming_shards_from_test_spec(test_spec, test_name):
     if isinstance(test_spec, dict):
@@ -859,27 +846,7 @@ def GenSteps(api):
   mastername = api.properties.get('mastername')
   buildername = api.properties.get('buildername')
   bot_config = get_bot_config(mastername, buildername)
-  api.swarming.set_default_dimension('pool', 'Chrome')
-  api.swarming.default_priority = build_to_priority(api.properties)
-  api.swarming.add_default_tag('project:chromium')
-  api.swarming.add_default_tag('purpose:pre-commit')
-  api.swarming.default_idempotent = True
-
-  # Differentiate between try jobs and CQ jobs. Always find out who made the CL.
-  requestor = api.properties.get('requestor')
-  if requestor == 'commit-bot@chromium.org':
-    api.swarming.add_default_tag('purpose:CQ')
-    blamelist = api.properties.get('blamelist')
-    if len(blamelist) == 1:
-      requestor = blamelist[0]
-  else:
-    api.swarming.add_default_tag('purpose:ManualTS')
-  api.swarming.default_user = requestor
-
-  # TODO(phajdan): uncomment once we have XP or 10.6 trybots.
-  #os_dimension = bot_config.get('swarming_dimensions', {}).get('os')
-  #if os_dimension:
-  #  api.swarming.set_default_dimension('os', os_dimension)
+  api.chromium_tests.configure_swarming('chromium', precommit=True)
 
   main_waterfall_config = bot_config.get('based_on_main_waterfall')
   if main_waterfall_config:
@@ -1149,12 +1116,8 @@ def GenTests(api):
 
   yield (
     api.test('arm') +
-    api.properties.generic(
-        mastername='tryserver.chromium.linux',
-        buildername='linux_arm',
-        requestor='commit-bot@chromium.org',
-        blamelist='joe@chromium.org',
-        blamelist_real=['joe@chromium.org']) +
+    props(buildername='linux_arm', requester='commit-bot@chromium.org',
+          blamelist='joe@chromium.org', blamelist_real=['joe@chromium.org']) +
     api.platform('linux', 64) +
     api.override_step_data('read test spec', api.json.output({
         'compile_targets': ['browser_tests_run'],
@@ -1228,7 +1191,8 @@ def GenTests(api):
   # commit queue job.
   yield (
     api.test('swarming_basic_cq') +
-    props(buildername='linux_chromium_rel') +
+    props(requester='commit-bot@chromium.org', blamelist='joe@chromium.org',
+          blamelist_real=['joe@chromium.org']) +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
         'gtest_tests': [
@@ -1301,7 +1265,8 @@ def GenTests(api):
   # One target (browser_tests) failed to produce *.isolated file.
   yield (
     api.test('swarming_missing_isolated') +
-    props(buildername='linux_chromium_rel') +
+    props(requester='commit-bot@chromium.org', blamelist='joe@chromium.org',
+          blamelist_real=['joe@chromium.org']) +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
         'gtest_tests': [
@@ -1333,7 +1298,8 @@ def GenTests(api):
   # deapplied patch.
   yield (
     api.test('swarming_deapply_patch') +
-    props(buildername='linux_chromium_rel') +
+    props(requester='commit-bot@chromium.org', blamelist='joe@chromium.org',
+          blamelist_real=['joe@chromium.org']) +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
         'gtest_tests': [

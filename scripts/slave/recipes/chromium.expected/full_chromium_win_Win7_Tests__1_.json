@@ -242,6 +242,8 @@
       "project:chromium",
       "--tag",
       "purpose:CI",
+      "--tag",
+      "purpose:post-commit",
       "--idempotent",
       "ffffffffffffffffffffffffffffffffffffffff",
       "--",

@@ -5,7 +5,9 @@
 DEPS = [
   'bot_update',
   'chromium',
+  'chromium_tests',
   'gclient',
+  'isolate',
   'json',
   'path',
   'platform',
@@ -14,6 +16,7 @@ DEPS = [
   'raw_io',
   'rietveld',
   'step',
+  'swarming',
   'test_utils',
 ]
 
@@ -271,66 +274,83 @@ def GenSteps(api):
   bot_update_step = api.bot_update.ensure_checkout(
       force=True, patch_root=bot_config.get('root_override'))
 
+  if bot_config['compile_only']:
+    api.chromium.runhooks()
+    api.chromium.compile()
+    return
+
+  api.chromium_tests.configure_swarming('blink', precommit=True)
+
+  # Swarming uses Isolate to transfer files to swarming bots.
+  # set_isolate_environment modifies GYP_DEFINES to enable test isolation.
+  api.isolate.set_isolate_environment(api.chromium.c)
+
+  # Ensure swarming_client is compatible with what recipes expect.
+  api.swarming.check_client_version()
+
   api.chromium.runhooks()
+
+  api.isolate.clean_isolated_files(api.chromium.output_dir)
   api.chromium.compile()
+  api.isolate.find_isolated_tests(api.chromium.output_dir)
 
-  if not bot_config['compile_only']:
-    api.python('webkit_lint', webkit_lint, [
-      '--build-dir', api.path['checkout'].join('out'),
-      '--target', api.chromium.c.BUILD_CONFIG
-    ])
-    api.python('webkit_python_tests', webkit_python_tests, [
-      '--build-dir', api.path['checkout'].join('out'),
-      '--target', api.chromium.c.BUILD_CONFIG,
-    ])
+  api.python('webkit_lint', webkit_lint, [
+    '--build-dir', api.path['checkout'].join('out'),
+    '--target', api.chromium.c.BUILD_CONFIG
+  ])
+  api.python('webkit_python_tests', webkit_python_tests, [
+    '--build-dir', api.path['checkout'].join('out'),
+    '--target', api.chromium.c.BUILD_CONFIG,
+  ])
 
-    # TODO(martiniss) this is pretty goofy
-    failed = False
-    exception = Exception() # So that pylint doesn't complain
-    try:
-      api.chromium.runtest('webkit_unit_tests', xvfb=True)
-    except api.step.StepFailure as f:
-      failed = True
-      exception = f
+  # TODO(martiniss) this is pretty goofy
+  failed = False
+  exception = Exception() # So that pylint doesn't complain
+  try:
+    api.chromium.runtest('webkit_unit_tests', xvfb=True)
+  except api.step.StepFailure as f:
+    failed = True
+    exception = f
 
-    try:
-      api.chromium.runtest('blink_platform_unittests')
-    except api.step.StepFailure as f:
-      failed = True
-      exception = f
+  try:
+    api.chromium.runtest('blink_platform_unittests')
+  except api.step.StepFailure as f:
+    failed = True
+    exception = f
 
-    try:
-      api.chromium.runtest('blink_heap_unittests')
-    except api.step.StepFailure as f:
-      failed = True
-      exception = f
+  try:
+    api.chromium.runtest('blink_heap_unittests')
+  except api.step.StepFailure as f:
+    failed = True
+    exception = f
 
-    try:
-      api.chromium.runtest('wtf_unittests')
-    except api.step.StepFailure as f:
-      failed = True
-      exception = f
+  try:
+    api.chromium.runtest('wtf_unittests')
+  except api.step.StepFailure as f:
+    failed = True
+    exception = f
 
-    if failed:
-      api.python.inline(
-        'Aborting due to failed build state',
-        "import sys; sys.exit(1)")
-      raise exception
+  if failed:
+    api.python.inline(
+      'Aborting due to failed build state',
+      "import sys; sys.exit(1)")
+    raise exception
 
-  if not bot_config['compile_only']:
-    def deapply_patch_fn(_failing_steps):
-      bot_update_json = bot_update_step.json.output
-      api.gclient.c.revisions['src'] = str(
-          bot_update_json['properties']['got_revision'])
-      api.gclient.c.revisions['src/third_party/WebKit'] = str(
-          bot_update_json['properties']['got_webkit_revision'])
+  def deapply_patch_fn(_failing_steps):
+    bot_update_json = bot_update_step.json.output
+    api.gclient.c.revisions['src'] = str(
+        bot_update_json['properties']['got_revision'])
+    api.gclient.c.revisions['src/third_party/WebKit'] = str(
+        bot_update_json['properties']['got_webkit_revision'])
 
-      api.bot_update.ensure_checkout(patch=False, force=True)
-      api.chromium.runhooks()
-      api.chromium.compile()
+    api.bot_update.ensure_checkout(patch=False, force=True)
+    api.chromium.runhooks()
+    api.isolate.clean_isolated_files(api.chromium.output_dir)
+    api.chromium.compile()
+    api.isolate.find_isolated_tests(api.chromium.output_dir)
 
-    api.test_utils.determine_new_failures(
-        api, [api.chromium.steps.BlinkTest(api)], deapply_patch_fn)
+  api.test_utils.determine_new_failures(
+      api, [api.chromium.steps.BlinkTest(api)], deapply_patch_fn)
 
 
 def _sanitize_nonalpha(text):
@@ -368,7 +388,8 @@ def GenTests(api):
 
       for test in tests:
         test += (
-          properties(mastername, buildername) +
+          properties(mastername, buildername,
+                     blamelist_real=['someone@chromium.org']) +
           api.platform(bot_config['testing']['platform'],
                        bot_config.get(
                            'chromium_config_kwargs', {}).get('TARGET_BITS', 64))
@@ -437,4 +458,11 @@ def GenTests(api):
                                        num_additional_failures=125)) +
     api.override_step_data(without_patch,
                            canned_test(passing=True, minimal=True))
+  )
+
+  yield (
+    api.test('non_cq_tryjob') +
+    properties('tryserver.blink', 'win_blink_rel',
+               requester='someone@chromium.org') +
+    api.step_data(with_patch, canned_test(passing=True))
   )

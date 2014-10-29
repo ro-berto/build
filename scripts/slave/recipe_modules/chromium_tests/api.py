@@ -475,6 +475,36 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return True, self.m.filter.matching_exes, compile_targets
 
+  def configure_swarming(self, project_name, precommit):
+    """Configures default swarming dimensions and tags.
+
+    Args:
+      project_name: Lowercase name of the project, e.g. "blink", "chromium".
+      precommit: Boolean flag to indicate whether the tests are running before
+          the changes are commited.
+    """
+    self.m.swarming.set_default_dimension('pool', 'Chrome')
+    self.m.swarming.add_default_tag('project:%s' % project_name)
+    self.m.swarming.default_idempotent = True
+
+    if precommit:
+      self.m.swarming.add_default_tag('purpose:pre-commit')
+      requester = self.m.properties.get('requester')
+      if requester == 'commit-bot@chromium.org':
+        self.m.swarming.default_priority = 30
+        self.m.swarming.add_default_tag('purpose:CQ')
+        blamelist = self.m.properties.get('blamelist')
+        if len(blamelist) == 1:
+          requester = blamelist[0]
+      else:
+        self.m.swarming.default_priority = 50
+        self.m.swarming.add_default_tag('purpose:ManualTS')
+      self.m.swarming.default_user = requester
+    else:
+      self.m.swarming.add_default_tag('purpose:post-commit')
+      self.m.swarming.add_default_tag('purpose:CI')
+      self.m.swarming.default_priority = 25
+
   # Used to build the Google Storage archive url.
   #
   # We need to special-case the logic for composing the archive url for a couple

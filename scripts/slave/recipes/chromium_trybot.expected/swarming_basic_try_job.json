@@ -311,6 +311,8 @@
       "--tag",
       "rietveld:https://codereview.chromium.org/12853011/#ps1",
       "--idempotent",
+      "--user",
+      "joe@chromium.org",
       "[dummy hash for base_unittests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
@@ -388,6 +390,8 @@
       "--tag",
       "rietveld:https://codereview.chromium.org/12853011/#ps1",
       "--idempotent",
+      "--user",
+      "joe@chromium.org",
       "[dummy hash for browser_tests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"

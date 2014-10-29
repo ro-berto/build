@@ -33,11 +33,7 @@ def GenSteps(api):
   if not tests:
     return
 
-  api.swarming.default_priority = 25
-  api.swarming.set_default_dimension('pool', 'Chrome')
-  api.swarming.add_default_tag('project:chromium')
-  api.swarming.add_default_tag('purpose:CI')
-  api.swarming.default_idempotent = True
+  api.chromium_tests.configure_swarming('chromium', precommit=False)
 
   def test_runner():
     failed_tests = []
