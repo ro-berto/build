@@ -1,0 +1,64 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/gitiles/resources/gerrit_client.py",
+      "--json-file",
+      "/path/to/tmp/json",
+      "--url",
+      "https://chromium.googlesource.com/chromium/src/+refs?format=json"
+    ],
+    "name": "refs",
+    "~followup_annotations": [
+      "@@@STEP_LINK@HEAD@https://chromium.googlesource.com/chromium/src/+/HEAD@@@",
+      "@@@STEP_LINK@refs/heads/A@https://chromium.googlesource.com/chromium/src/+/refs/heads/A@@@",
+      "@@@STEP_LINK@refs/tags/B@https://chromium.googlesource.com/chromium/src/+/refs/tags/B@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/gitiles/resources/gerrit_client.py",
+      "--json-file",
+      "/path/to/tmp/json",
+      "--url",
+      "https://chromium.googlesource.com/chromium/src/+log/HEAD?format=json&n=all"
+    ],
+    "name": "log: HEAD",
+    "~followup_annotations": [
+      "@@@STEP_LINK@fake hash %d@https://chromium.googlesource.com/chromium/src/+/fake hash %d@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/gitiles/resources/gerrit_client.py",
+      "--json-file",
+      "/path/to/tmp/json",
+      "--url",
+      "https://chromium.googlesource.com/chromium/src/+log/refs/heads/A?format=json&n=all"
+    ],
+    "name": "log: refs/heads/A",
+    "~followup_annotations": [
+      "@@@STEP_LINK@fake hash %d@https://chromium.googlesource.com/chromium/src/+/fake hash %d@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/gitiles/resources/gerrit_client.py",
+      "--json-file",
+      "/path/to/tmp/json",
+      "--url",
+      "https://chromium.googlesource.com/chromium/src/+log/refs/tags/B?format=json&n=all"
+    ],
+    "name": "log: refs/tags/B",
+    "~followup_annotations": [
+      "@@@STEP_LINK@fake hash %d@https://chromium.googlesource.com/chromium/src/+/fake hash %d@@@"
+    ]
+  }
+]
