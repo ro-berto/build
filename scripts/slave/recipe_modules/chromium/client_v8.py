@@ -77,7 +77,7 @@ SPEC = {
         steps.generate_gtest,
         steps.generate_script,
       ],
-      'parent_buildername': 'Linux ASan LSan Builder',
+      'parent_buildername': 'Linux ASAN Builder',
       'testing': {
         'platform': 'linux',
         'test_spec_file': 'chromium.memory.json',
