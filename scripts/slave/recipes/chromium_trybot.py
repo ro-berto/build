@@ -143,28 +143,6 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
-      'linux_chromium_clang_dbg': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'chromium_config': 'chromium_clang',
-        'compile_only': True,
-        'testing': {
-          'platform': 'linux',
-        },
-      },
-      'linux_chromium_clang_rel': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'chromium_config': 'chromium_clang',
-        'compile_only': True,
-        'testing': {
-          'platform': 'linux',
-        },
-      },
       'linux_chromium_chromeos_dbg': {
         'add_telemetry_tests': False,
         'chromium_config_kwargs': {
@@ -186,30 +164,6 @@ BUILDERS = {
         'enable_swarming': True,
         'chromium_config': 'chromium_chromeos',
         'compile_only': False,
-        'testing': {
-          'platform': 'linux',
-        },
-      },
-      'linux_chromium_chromeos_clang_dbg': {
-        'add_telemetry_tests': False,
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'chromium_config': 'chromium_chromeos_clang',
-        'compile_only': True,
-        'testing': {
-          'platform': 'linux',
-        },
-      },
-      'linux_chromium_chromeos_clang_rel': {
-        'add_telemetry_tests': False,
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'chromium_config': 'chromium_chromeos_clang',
-        'compile_only': True,
         'testing': {
           'platform': 'linux',
         },
