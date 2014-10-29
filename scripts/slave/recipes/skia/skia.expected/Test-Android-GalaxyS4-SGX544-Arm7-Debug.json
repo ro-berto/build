@@ -365,8 +365,7 @@
       "--resourcePath",
       "/storage/emulated/legacy/skiabot/skia_resources",
       "--config",
-      "defaults",
-      "msaa16"
+      "gpu"
     ],
     "env": {
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
@@ -478,7 +477,8 @@
       "model",
       "GalaxyS4",
       "os",
-      "Android"
+      "Android",
+      "--nocpu"
     ],
     "env": {
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
@@ -1036,7 +1036,8 @@
       "1.1",
       "--match",
       "~blurroundrect",
-      "~patch_grid"
+      "~patch_grid",
+      "--nocpu"
     ],
     "env": {
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"

@@ -500,7 +500,6 @@
       "Nexus10",
       "os",
       "Android",
-      "--match",
       "--nocpu"
     ],
     "env": {

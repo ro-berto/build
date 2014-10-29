@@ -304,6 +304,8 @@ class SkiaApi(recipe_api.RecipeApi):
       args.extend(['--config', 'defaults', 'msaa4'])
     elif 'ANGLE' in self.c.BUILDER_NAME:
       args.extend(['--config', 'angle'])
+    elif 'GalaxyS4' in self.c.BUILDER_NAME:
+      args.extend(['--config', 'gpu'])
     elif (not 'NoGPU' in self.c.BUILDER_NAME and
           not 'ChromeOS' in self.c.BUILDER_NAME and
           not 'IntelRhb' in self.c.BUILDER_NAME):
@@ -383,15 +385,17 @@ class SkiaApi(recipe_api.RecipeApi):
     if 'Xoom' in self.c.BUILDER_NAME:  # skia:1699
       match.append('~WritePixels')
 
-    # Though their GPUs are interesting, these don't test anything on
-    # the CPU that other ARMv7+NEON bots don't test faster (N5).
-    if ('Nexus10' in self.c.BUILDER_NAME or
-        'Nexus7'  in self.c.BUILDER_NAME):
-      match.append('--nocpu')
-
     if match:
       args.append('--match')
       args.extend(match)
+
+    # Though their GPUs are interesting, these don't test anything on
+    # the CPU that other ARMv7+NEON bots don't test faster (N5).
+    if ('Nexus10'  in self.c.BUILDER_NAME or
+        'Nexus7'   in self.c.BUILDER_NAME or
+        'GalaxyS4' in self.c.BUILDER_NAME):
+      args.append('--nocpu')
+
     self.run(self.flavor.step, 'dm', cmd=args, abort_on_failure=False)
 
     # Copy images and JSON to host machine if needed.
@@ -601,6 +605,9 @@ class SkiaApi(recipe_api.RecipeApi):
     if match:
       args.append('--match')
       args.extend(match)
+
+    if 'GalaxyS4' in self.c.BUILDER_NAME:
+      args.append('--nocpu')
 
     self.run(self.flavor.step, 'nanobench', cmd=args, abort_on_failure=False)
 
