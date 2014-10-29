@@ -384,13 +384,32 @@
     ],
     "https://build.chromium.org/p/chromium.fyi": [
       {
-        "tree_notify": [
-          "dbeam+closure-bots@chromium.org",
-          "vitalyp@chromium.org"
-        ],
-
         "builders": {
           "Closure Compilation Linux": {
+            "tree_notify": [
+              "dbeam+closure-bots@chromium.org",
+              "vitalyp@chromium.org"
+            ],
+            "forgiving_steps": [
+              "*"
+            ]
+          },
+          "Site Isolation Linux": {
+            "tree_notify": [
+              "nasko+fyi-bots@chromium.org",
+              "creis+fyi-bots@chromium.org",
+              "alexmos+fyi-bots@chromium.org"
+            ],
+            "forgiving_steps": [
+              "*"
+            ]
+          },
+          "Site Isolation Win": {
+            "tree_notify": [
+              "nasko+fyi-bots@chromium.org",
+              "creis+fyi-bots@chromium.org",
+              "alexmos+fyi-bots@chromium.org"
+            ],
             "forgiving_steps": [
               "*"
             ]
