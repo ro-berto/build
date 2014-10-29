@@ -29,6 +29,7 @@ SPEC = {
       'bot_type': 'tester',
       'test_generators': [
         steps.generate_gtest,
+        steps.generate_script,
       ],
       'parent_buildername': 'Linux ASan LSan Builder',
       'testing': {'platform': 'linux'},
@@ -48,6 +49,7 @@ SPEC = {
       'bot_type': 'tester',
       'test_generators': [
         steps.generate_gtest,
+        steps.generate_script,
       ],
       'parent_buildername': 'Linux ASan LSan Builder',
       'testing': {'platform': 'linux'},
@@ -73,6 +75,7 @@ SPEC = {
       'bot_type': 'tester',
       'test_generators': [
         steps.generate_gtest,
+        steps.generate_script,
       ],
       'parent_buildername': 'Mac ASan Builder',
       'testing': {'platform': 'mac'},
@@ -98,6 +101,7 @@ SPEC = {
       'bot_type': 'tester',
       'test_generators': [
         steps.generate_gtest,
+        steps.generate_script,
       ],
       'parent_buildername': 'Mac ASan 64 Builder',
       'testing': {'platform': 'mac'},
@@ -122,6 +126,7 @@ SPEC = {
       },
       'test_generators': [
         steps.generate_gtest,
+        steps.generate_script,
       ],
       'parent_buildername': 'Linux Chromium OS ASan LSan Builder',
       'bot_type': 'tester',

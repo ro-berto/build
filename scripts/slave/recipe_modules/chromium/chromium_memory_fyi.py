@@ -33,6 +33,7 @@ SPEC = {
       'bot_type': 'tester',
       'test_generators': [
         steps.generate_gtest,
+        steps.generate_script,
       ],
       'parent_buildername': 'Chromium Linux MSan Builder',
       'testing': {
@@ -48,6 +49,7 @@ SPEC = {
       'bot_type': 'tester',
       'test_generators': [
         steps.generate_gtest,
+        steps.generate_script,
       ],
       'parent_buildername': 'Chromium Linux MSan Builder',
       'testing': {
@@ -63,6 +65,7 @@ SPEC = {
       'bot_type': 'tester',
       'test_generators': [
         steps.generate_gtest,
+        steps.generate_script,
       ],
       'parent_buildername': 'Chromium Linux MSan Builder',
       'testing': {
@@ -78,6 +81,7 @@ SPEC = {
       'bot_type': 'tester',
       'test_generators': [
         steps.generate_gtest,
+        steps.generate_script,
       ],
       'parent_buildername': 'Chromium Linux MSan Builder',
       'testing': {

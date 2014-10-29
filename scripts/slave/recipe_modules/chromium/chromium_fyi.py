@@ -69,6 +69,7 @@ SPEC = {
        'bot_type': 'tester',
        'test_generators': [
          steps.generate_gtest,
+         steps.generate_script,
        ],
        'parent_buildername': 'Linux ChromiumOS Athena Builder',
        'testing': {
@@ -126,6 +127,7 @@ SPEC = {
       },
       'test_generators': [
         steps.generate_gtest,
+        steps.generate_script,
       ],
       'tests': [
         steps.NaclIntegrationTest(),
@@ -151,6 +153,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'test_generators': [
         steps.generate_gtest,
+        steps.generate_script,
       ],
       # TODO(phajdan.jr): Automatically add _run targets when used.
       'compile_targets': [
@@ -174,6 +177,7 @@ SPEC = {
       ],
       'test_generators': [
         steps.generate_gtest,
+        steps.generate_script,
       ],
       'tests': [
         steps.TelemetryUnitTests(),
@@ -195,6 +199,7 @@ SPEC = {
       ],
       'test_generators': [
         steps.generate_gtest,
+        steps.generate_script,
       ],
       'tests': [
         steps.TelemetryUnitTests(),
@@ -216,6 +221,7 @@ SPEC = {
       ],
       'test_generators': [
         steps.generate_gtest,
+        steps.generate_script,
       ],
       'tests': [
         steps.TelemetryUnitTests(),
@@ -237,6 +243,7 @@ SPEC = {
       ],
       'test_generators': [
         steps.generate_gtest,
+        steps.generate_script,
       ],
       'tests': [
         steps.TelemetryUnitTests(),
@@ -311,6 +318,7 @@ SPEC = {
       },
       'test_generators': [
         steps.generate_gtest,
+        steps.generate_script,
       ],
       'testing': {
         'platform': 'mac',
@@ -329,6 +337,7 @@ SPEC = {
       ],
       'test_generators': [
         steps.generate_gtest,
+        steps.generate_script,
       ],
       'testing': {
         'platform': 'linux',
@@ -349,6 +358,7 @@ SPEC = {
       ],
       'test_generators': [
         steps.generate_gtest,
+        steps.generate_script,
       ],
       'testing': {
         'platform': 'win',
@@ -379,6 +389,7 @@ SPEC = {
       'bot_type': 'tester',
       'test_generators': [
         steps.generate_gtest,
+        steps.generate_script,
       ],
       'parent_buildername': 'Chromium Linux ChromeOS MSan Builder',
       'testing': {
@@ -394,6 +405,7 @@ SPEC = {
       'bot_type': 'tester',
       'test_generators': [
         steps.generate_gtest,
+        steps.generate_script,
       ],
       'parent_buildername': 'Chromium Linux ChromeOS MSan Builder',
       'testing': {
@@ -409,6 +421,7 @@ SPEC = {
       'bot_type': 'tester',
       'test_generators': [
         steps.generate_gtest,
+        steps.generate_script,
       ],
       'parent_buildername': 'Chromium Linux ChromeOS MSan Builder',
       'testing': {
@@ -424,6 +437,7 @@ SPEC = {
       'bot_type': 'tester',
       'test_generators': [
         steps.generate_gtest,
+        steps.generate_script,
       ],
       'parent_buildername': 'Chromium Linux ChromeOS MSan Builder',
       'testing': {

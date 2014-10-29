@@ -72,6 +72,7 @@ SPEC = {
       'bot_type': 'tester',
       'test_generators': [
         steps.generate_gtest,
+        steps.generate_script,
       ],
       'tests': [
         steps.NaclIntegrationTest(),
@@ -105,6 +106,7 @@ SPEC = {
       'bot_type': 'tester',
       'test_generators': [
         steps.generate_gtest,
+        steps.generate_script,
       ],
       'tests': [
         steps.TelemetryUnitTests(),
@@ -129,6 +131,7 @@ SPEC = {
       ],
       'test_generators': [
         steps.generate_gtest,
+        steps.generate_script,
       ],
       'testing': {
         'platform': 'linux',

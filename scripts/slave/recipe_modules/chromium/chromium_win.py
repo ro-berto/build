@@ -35,6 +35,7 @@ SPEC = {
       'disable_runhooks': True,
       'test_generators': [
         steps.generate_gtest,
+        steps.generate_script,
       ],
       'tests': [
         steps.NaclIntegrationTest(),
@@ -61,6 +62,7 @@ SPEC = {
       'disable_runhooks': True,
       'test_generators': [
         steps.generate_gtest,
+        steps.generate_script,
       ],
       'tests': [
         steps.TelemetryUnitTests(),
@@ -85,6 +87,7 @@ SPEC = {
       'disable_runhooks': True,
       'test_generators': [
         steps.generate_gtest,
+        steps.generate_script,
       ],
       'tests': [
         steps.MiniInstallerTest(),
@@ -124,6 +127,7 @@ SPEC = {
       'disable_runhooks': True,
       'test_generators': [
         steps.generate_gtest,
+        steps.generate_script,
       ],
       'tests': [
         steps.TelemetryUnitTests(),
@@ -178,6 +182,7 @@ SPEC = {
       'disable_runhooks': True,
       'test_generators': [
         steps.generate_gtest,
+        steps.generate_script,
       ],
       'tests': [
         steps.TelemetryUnitTests(),
@@ -199,6 +204,7 @@ SPEC = {
       'disable_runhooks': True,
       'test_generators': [
         steps.generate_gtest,
+        steps.generate_script,
       ],
       'parent_buildername': 'Win Builder (dbg)',
       'testing': {

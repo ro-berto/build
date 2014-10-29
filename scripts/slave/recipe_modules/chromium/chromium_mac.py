@@ -33,6 +33,7 @@ SPEC = {
       },
       'test_generators': [
         steps.generate_gtest,
+        steps.generate_script,
       ],
       'tests': [
         steps.NaclIntegrationTest(),
@@ -57,6 +58,7 @@ SPEC = {
       },
       'test_generators': [
         steps.generate_gtest,
+        steps.generate_script,
       ],
       'tests': [
         steps.NaclIntegrationTest(),
@@ -94,6 +96,7 @@ SPEC = {
       },
       'test_generators': [
         steps.generate_gtest,
+        steps.generate_script,
       ],
       'tests': [
         steps.NaclIntegrationTest(),
@@ -118,6 +121,7 @@ SPEC = {
       },
       'test_generators': [
         steps.generate_gtest,
+        steps.generate_script,
       ],
       'tests': [
         steps.NaclIntegrationTest(),

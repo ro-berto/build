@@ -34,6 +34,7 @@ SPEC = {
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
       'test_generators': [
         steps.generate_gtest,
+        steps.generate_script,
       ],
       'parent_buildername': 'Linux Debug Builder',
       'testing': {
@@ -74,6 +75,7 @@ SPEC = {
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
       'test_generators': [
         steps.generate_gtest,
+        steps.generate_script,
       ],
       'parent_buildername': 'Linux ASan LSan Builder',
       'testing': {
