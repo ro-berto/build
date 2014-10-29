@@ -255,7 +255,7 @@ class ChromiumNotifier(MailNotifier):
     if (self._last_time_mail_sent and self._last_time_mail_sent >
         time.time() - self.minimum_delay_between_alert):
       # Rate limit tree alerts.
-      log.msg('Supressing repeat email')
+      log.msg('Suppressing repeat email')
       return
     log.msg('About to email')
     self._last_time_mail_sent = time.time()
