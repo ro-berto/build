@@ -846,9 +846,13 @@ def GenSteps(api):
         raise
       raise
 
-    # Collect *.isolated hashes for all isolated targets, used when triggering
-    # tests on swarming.
     if bot_config.get('use_isolate') or has_swarming_tests:
+      # Remove the build metadata from the binaries. Currently it's a noop on
+      # all platforms except Windows where it run zap_timestamp.exe on all the
+      # PE images.
+      api.isolate.remove_build_metadata()
+      # Collect *.isolated hashes for all isolated targets, used when triggering
+      # tests on swarming.
       api.isolate.find_isolated_tests(api.chromium.output_dir)
 
     if bot_config['compile_only']:
