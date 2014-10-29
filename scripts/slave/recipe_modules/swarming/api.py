@@ -54,8 +54,13 @@ class SwarmingApi(recipe_api.RecipeApi):
 
   def __init__(self, **kwargs):
     super(SwarmingApi, self).__init__(**kwargs)
-    # All tests default to a x86-64 bot.
-    self._default_dimensions = {'cpu': 'x86-64'}
+    # All tests default to a x86-64 bot running with no GPU. This simplifies
+    # management so that new tests are not executed on exotic bots by accidents
+    # even if misconfigured.
+    self._default_dimensions = {
+      'cpu': 'x86-64',
+      'gpu': 'none',
+    }
     # Expirations are set to mildly good values and will be tightened soon.
     self._default_expiration = 60*60
     self._default_env = {}
