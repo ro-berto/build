@@ -37,7 +37,6 @@ BUILDERS = {
         },
         'chromium_config': 'chromium',
         'compile_only': True,
-        'exclude_compile_all': True,
         'testing': {
           'platform': 'linux',
           'test_spec_file': 'chromium_arm.json',
@@ -47,7 +46,6 @@ BUILDERS = {
       'linux_arm_compile': {
         'GYP_DEFINES': {
           'arm_float_abi': 'hard',
-          'test_isolation_mode': 'archive',
         },
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -56,7 +54,6 @@ BUILDERS = {
         },
         'chromium_config': 'chromium',
         'compile_only': True,
-        'exclude_compile_all': True,
         'testing': {
           'platform': 'linux',
         },
