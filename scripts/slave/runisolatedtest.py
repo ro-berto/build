@@ -159,10 +159,6 @@ def main(argv):
     isolate_script = os.path.join(options.checkout_dir, 'src', 'tools',
                                   'swarming_client', 'isolate.py')
 
-    # Remove around 2013-12-01.
-    if not os.path.isfile(isolate_script):
-      isolate_script = os.path.join(options.checkout_dir, 'src', 'tools',
-                                    'swarm_client', 'isolate.py')
     return run_test_isolated(isolate_script, test_exe, original_command)
   else:
     logging.info('Running test normally')
