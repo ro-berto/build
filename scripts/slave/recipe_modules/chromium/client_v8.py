@@ -143,7 +143,7 @@ SPEC = {
     },
     'Chrome Mac10.6 Perf': {
       'disable_tests': True,
-      'recipe_config': 'official',
+      'recipe_config': 'chromium',
       'gclient_apply_config': [
         'perf',
         'v8_bleeding_edge_git',
