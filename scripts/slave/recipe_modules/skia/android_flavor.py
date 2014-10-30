@@ -11,9 +11,6 @@ import default_flavor
 """Android flavor utils, used for building for and running tests on Android."""
 
 
-DEFAULT_ANDROID_SDK_ROOT = '/home/chrome-bot/android-sdk-linux'
-
-
 def device_from_builder_dict(builder_dict):
   """Given a builder name dictionary, return an Android device name."""
   if 'Android' in builder_dict.get('extra_config', ''):
@@ -51,9 +48,9 @@ class _ADBWrapper(object):
   out on our bots. This wrapper ensures that we set a custom ADB path before
   attempting to use the module.
   """
-  def __init__(self, adb_api, android_bin):
+  def __init__(self, adb_api, path_to_adb):
     self._adb = adb_api
-    self._adb.set_adb_path(android_bin.join('linux', 'adb'))
+    self._adb.set_adb_path(path_to_adb)
 
   def devices(self):
     self._adb.list_devices()
@@ -70,9 +67,13 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
     self._serial = None  # Get this lazily.
     self.android_bin = self._skia_api.m.path['slave_build'].join(
         'skia', 'platform_tools', 'android', 'bin')
-    self._adb = _ADBWrapper(self._skia_api.m.adb, self.android_bin)
+    self._android_sdk_root = self._skia_api.c.slave_cfg['android_sdk_root']
+    self._adb = _ADBWrapper(
+        self._skia_api.m.adb,
+        self._skia_api.m.path.join(self._android_sdk_root,
+                                   'platform-tools', 'adb'))
     self._has_root = self._skia_api.c.slave_cfg.get('has_root', True)
-    self._default_env = {'ANDROID_SDK_ROOT': DEFAULT_ANDROID_SDK_ROOT,
+    self._default_env = {'ANDROID_SDK_ROOT': self._android_sdk_root,
                          'SKIA_ANDROID_VERBOSE_SETUP': 1}
 
   @property

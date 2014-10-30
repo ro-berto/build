@@ -69,7 +69,7 @@
       "python",
       "-u",
       "[BUILD]/scripts/slave/recipe_modules/adb/resources/list_devices.py",
-      "['[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb', 'devices']",
+      "['/home/chrome-bot/android-sdk-linux/platform-tools/adb', 'devices']",
       "/path/to/tmp/json"
     ],
     "name": "List adb devices",
@@ -82,7 +82,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "027c104942212397",
       "shell",
@@ -94,7 +94,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "027c104942212397",
       "root"
@@ -103,7 +103,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "027c104942212397",
       "wait-for-device"
@@ -124,7 +124,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "027c104942212397",
       "shell",
@@ -148,7 +148,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "027c104942212397",
       "shell",
@@ -160,7 +160,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "027c104942212397",
       "shell",
@@ -179,7 +179,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "027c104942212397",
       "shell",
@@ -231,7 +231,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "027c104942212397",
       "shell",
@@ -243,7 +243,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "027c104942212397",
       "shell",
@@ -262,7 +262,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "027c104942212397",
       "shell",
@@ -274,7 +274,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "027c104942212397",
       "push",
@@ -285,7 +285,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "027c104942212397",
       "shell",
@@ -297,7 +297,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "027c104942212397",
       "shell",
@@ -316,7 +316,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "027c104942212397",
       "shell",
@@ -328,7 +328,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "027c104942212397",
       "push",
@@ -339,7 +339,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "027c104942212397",
       "shell",
@@ -358,7 +358,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "027c104942212397",
       "shell",
@@ -639,7 +639,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "027c104942212397",
       "shell",
@@ -651,7 +651,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "027c104942212397",
       "shell",
@@ -670,7 +670,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "027c104942212397",
       "shell",
@@ -824,7 +824,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "027c104942212397",
       "shell",
@@ -836,7 +836,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "027c104942212397",
       "shell",
@@ -855,7 +855,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "027c104942212397",
       "shell",
@@ -867,7 +867,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "027c104942212397",
       "shell",
@@ -879,7 +879,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "027c104942212397",
       "shell",
@@ -898,7 +898,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "027c104942212397",
       "shell",
@@ -910,7 +910,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "027c104942212397",
       "shell",
@@ -922,7 +922,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "027c104942212397",
       "shell",
@@ -941,7 +941,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "027c104942212397",
       "shell",
@@ -953,7 +953,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "027c104942212397",
       "push",

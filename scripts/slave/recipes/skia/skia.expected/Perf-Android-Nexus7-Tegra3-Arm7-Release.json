@@ -69,7 +69,7 @@
       "python",
       "-u",
       "[BUILD]/scripts/slave/recipe_modules/adb/resources/list_devices.py",
-      "['[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb', 'devices']",
+      "['/home/chrome-bot/android-sdk-linux/platform-tools/adb', 'devices']",
       "/path/to/tmp/json"
     ],
     "name": "List adb devices",
@@ -82,7 +82,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "015d210a13480604",
       "shell",
@@ -94,7 +94,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "015d210a13480604",
       "root"
@@ -103,7 +103,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "015d210a13480604",
       "wait-for-device"
@@ -124,7 +124,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "015d210a13480604",
       "shell",
@@ -232,7 +232,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "015d210a13480604",
       "shell",
@@ -244,7 +244,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "015d210a13480604",
       "shell",
@@ -263,7 +263,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "015d210a13480604",
       "shell",
@@ -289,7 +289,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "015d210a13480604",
       "shell",
@@ -301,7 +301,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "015d210a13480604",
       "shell",
@@ -320,7 +320,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "015d210a13480604",
       "shell",

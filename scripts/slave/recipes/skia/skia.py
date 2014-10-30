@@ -166,8 +166,8 @@ def GenTests(api):
   yield (
     api.test('has_ccache_android') +
     api.properties(buildername='Build-Ubuntu13.10-GCC4.8-Arm7-Debug-Android',
-                   mastername=mastername,
-                   slavename=slavename) +
+                   mastername='client.skia.compile',
+                   slavename='skiabot-linux-compile-000') +
     api.step_data('has ccache?', retcode=0,
                   stdout=api.raw_io.output('/usr/bin/ccache'))
   )

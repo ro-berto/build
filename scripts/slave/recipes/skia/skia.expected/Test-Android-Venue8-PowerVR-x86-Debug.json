@@ -69,7 +69,7 @@
       "python",
       "-u",
       "[BUILD]/scripts/slave/recipe_modules/adb/resources/list_devices.py",
-      "['[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb', 'devices']",
+      "['/home/chrome-bot/android-sdk-linux/platform-tools/adb', 'devices']",
       "/path/to/tmp/json"
     ],
     "name": "List adb devices",
@@ -82,7 +82,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "MedfieldBA149FC5",
       "shell",
@@ -94,7 +94,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "MedfieldBA149FC5",
       "wait-for-device"
@@ -129,7 +129,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "MedfieldBA149FC5",
       "shell",
@@ -141,7 +141,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "MedfieldBA149FC5",
       "shell",
@@ -160,7 +160,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "MedfieldBA149FC5",
       "shell",
@@ -212,7 +212,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "MedfieldBA149FC5",
       "shell",
@@ -224,7 +224,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "MedfieldBA149FC5",
       "shell",
@@ -243,7 +243,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "MedfieldBA149FC5",
       "shell",
@@ -255,7 +255,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "MedfieldBA149FC5",
       "push",
@@ -266,7 +266,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "MedfieldBA149FC5",
       "shell",
@@ -278,7 +278,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "MedfieldBA149FC5",
       "shell",
@@ -297,7 +297,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "MedfieldBA149FC5",
       "shell",
@@ -309,7 +309,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "MedfieldBA149FC5",
       "push",
@@ -320,7 +320,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "MedfieldBA149FC5",
       "shell",
@@ -339,7 +339,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "MedfieldBA149FC5",
       "shell",
@@ -617,7 +617,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "MedfieldBA149FC5",
       "shell",
@@ -629,7 +629,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "MedfieldBA149FC5",
       "shell",
@@ -648,7 +648,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "MedfieldBA149FC5",
       "shell",
@@ -799,7 +799,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "MedfieldBA149FC5",
       "shell",
@@ -811,7 +811,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "MedfieldBA149FC5",
       "shell",
@@ -830,7 +830,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "MedfieldBA149FC5",
       "shell",
@@ -842,7 +842,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "MedfieldBA149FC5",
       "shell",
@@ -854,7 +854,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "MedfieldBA149FC5",
       "shell",
@@ -873,7 +873,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "MedfieldBA149FC5",
       "shell",
@@ -885,7 +885,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "MedfieldBA149FC5",
       "shell",
@@ -897,7 +897,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "MedfieldBA149FC5",
       "shell",
@@ -916,7 +916,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "MedfieldBA149FC5",
       "shell",
@@ -928,7 +928,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "MedfieldBA149FC5",
       "push",

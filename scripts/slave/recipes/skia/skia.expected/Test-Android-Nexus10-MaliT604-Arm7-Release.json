@@ -69,7 +69,7 @@
       "python",
       "-u",
       "[BUILD]/scripts/slave/recipe_modules/adb/resources/list_devices.py",
-      "['[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb', 'devices']",
+      "['/home/chrome-bot/android-sdk-linux/platform-tools/adb', 'devices']",
       "/path/to/tmp/json"
     ],
     "name": "List adb devices",
@@ -82,7 +82,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "R32CB017X2L",
       "shell",
@@ -94,7 +94,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "R32CB017X2L",
       "root"
@@ -103,7 +103,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "R32CB017X2L",
       "wait-for-device"
@@ -124,7 +124,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "R32CB017X2L",
       "shell",
@@ -148,7 +148,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "R32CB017X2L",
       "shell",
@@ -160,7 +160,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "R32CB017X2L",
       "shell",
@@ -179,7 +179,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "R32CB017X2L",
       "shell",
@@ -231,7 +231,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "R32CB017X2L",
       "shell",
@@ -243,7 +243,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "R32CB017X2L",
       "shell",
@@ -262,7 +262,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "R32CB017X2L",
       "shell",
@@ -274,7 +274,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "R32CB017X2L",
       "push",
@@ -285,7 +285,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "R32CB017X2L",
       "shell",
@@ -297,7 +297,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "R32CB017X2L",
       "shell",
@@ -316,7 +316,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "R32CB017X2L",
       "shell",
@@ -328,7 +328,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "R32CB017X2L",
       "push",
@@ -339,7 +339,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "R32CB017X2L",
       "shell",
@@ -358,7 +358,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "R32CB017X2L",
       "shell",
@@ -639,7 +639,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "R32CB017X2L",
       "shell",
@@ -651,7 +651,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "R32CB017X2L",
       "shell",
@@ -670,7 +670,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "R32CB017X2L",
       "shell",
@@ -822,7 +822,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "R32CB017X2L",
       "shell",
@@ -834,7 +834,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "R32CB017X2L",
       "shell",
@@ -853,7 +853,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "R32CB017X2L",
       "shell",
@@ -865,7 +865,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "R32CB017X2L",
       "shell",
@@ -877,7 +877,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "R32CB017X2L",
       "shell",
@@ -896,7 +896,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "R32CB017X2L",
       "shell",
@@ -908,7 +908,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "R32CB017X2L",
       "shell",
@@ -920,7 +920,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "R32CB017X2L",
       "shell",
@@ -939,7 +939,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "R32CB017X2L",
       "shell",
@@ -951,7 +951,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "R32CB017X2L",
       "push",
