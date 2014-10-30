@@ -12,6 +12,7 @@ import twisted.web.error as twe
 
 from common.twisted_util.authorizer import IAuthorizer
 from common.twisted_util.body_producers import IMIMEBodyProducer, \
+                                               IReusableBodyProducer, \
                                                StringBodyProducer
 from common.twisted_util.agent_util import CloneHeaders, RelativeURLJoin
 from twisted.internet import reactor
@@ -229,6 +230,9 @@ class Agent(twisted.web.client.Agent):
         log.msg("Query '%s' encountered transient error (%d); retrying "
                 "(%d remaining) in %s second(s)..." %
                     (url, response.code, retries_remaining, next_delay))
+        if (body_producer is not None and
+            IReusableBodyProducer.providedBy(body_producer)):
+          body_producer.reset()
         d = deferLater(
             reactor,
             next_delay,

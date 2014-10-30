@@ -22,17 +22,32 @@ class IMIMEBodyProducer(iweb.IBodyProducer):
     """
 
 
+# Disable missing '__init__' method | pylint: disable=W0232
+class IReusableBodyProducer(iweb.IBodyProducer):
+  """Interface that extends an 'IBodyProducer' allow it to reset its state."""
+
+  def reset(self):
+    """Resets body producer's state, so it can be reused."""
+
+
 class StringBodyProducer(object):
   """An IBodyProducer implementation that directly produces a string."""
-  implements(IMIMEBodyProducer)
+  implements(IMIMEBodyProducer, IReusableBodyProducer)
 
   def __init__(self, body_str, mime_type=None):
+    self._body_str = body_str
     self.body_str = body_str
-    self.length = len(self.body_str)
 
     self.mime_type = mime_type
     if self.mime_type is None:
       self.mime_type = 'text/plain'
+
+  @property
+  def length(self):
+    return len(self.body_str)
+
+  def reset(self):
+    self.body_str = self._body_str
 
   # IMIMEBodyProducer
   def getMIMEType(self):
@@ -41,7 +56,6 @@ class StringBodyProducer(object):
   def startProducing(self, consumer):
     consumer.write(self.body_str)
     self.body_str = ''
-    self.length = 0
     return defer.succeed(None)
 
   def stopProducing(self):
