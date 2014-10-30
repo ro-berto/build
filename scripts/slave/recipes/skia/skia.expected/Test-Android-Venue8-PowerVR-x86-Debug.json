@@ -98,6 +98,10 @@
       "-s",
       "MedfieldBA149FC5"
     ],
+    "env": {
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1"
+    },
     "name": "kill skia"
   },
   {
@@ -109,7 +113,8 @@
       "/storage/emulated/legacy/skiabot/skia_resources"
     ],
     "env": {
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
     "name": "push [SLAVE_BUILD]/skia/resources"
   },
@@ -369,7 +374,8 @@
       "msaa16"
     ],
     "env": {
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
     "name": "gm"
   },
@@ -382,7 +388,8 @@
       "[SLAVE_BUILD]/gm/actual/Test-Android-Venue8-PowerVR-x86-Debug"
     ],
     "env": {
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
     "name": "pull /storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-Venue8-PowerVR-x86-Debug"
   },
@@ -481,7 +488,8 @@
       "Android"
     ],
     "env": {
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
     "name": "dm"
   },
@@ -494,7 +502,8 @@
       "[SLAVE_BUILD]/dm"
     ],
     "env": {
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
     "name": "pull /storage/emulated/legacy/skiabot/skia_dm"
   },
@@ -649,7 +658,8 @@
       "/storage/emulated/legacy/skiabot/skia_skp/skps"
     ],
     "env": {
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
     "name": "push [SLAVE_BUILD]/playback/skps"
   },
@@ -665,7 +675,8 @@
       "/storage/emulated/legacy/skiabot/skia_skp/skps"
     ],
     "env": {
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
     "name": "render_pdfs"
   },
@@ -732,7 +743,8 @@
       "/storage/emulated/legacy/skiabot/skia_skimage_in"
     ],
     "env": {
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
     "name": "push [SLAVE_BUILD]/skimage_in"
   },
@@ -938,7 +950,8 @@
       "/storage/emulated/legacy/skiabot/skia_skimage_expected/Test-Android-Venue8-PowerVR-x86-Debug/expected-results.json"
     ],
     "env": {
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
     "name": "skimage"
   },
@@ -951,7 +964,8 @@
       "[SLAVE_BUILD]/skimage_out"
     ],
     "env": {
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
     "name": "pull /storage/emulated/legacy/skiabot/skia_skimage_out"
   },
@@ -1040,7 +1054,8 @@
       "~desk_carsvg"
     ],
     "env": {
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
     "name": "nanobench"
   }

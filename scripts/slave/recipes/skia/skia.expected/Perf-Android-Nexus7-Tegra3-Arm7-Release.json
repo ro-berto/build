@@ -107,6 +107,10 @@
       "-s",
       "015d210a13480604"
     ],
+    "env": {
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1"
+    },
     "name": "kill skia"
   },
   {
@@ -128,7 +132,8 @@
       "/storage/emulated/legacy/skiabot/skia_resources"
     ],
     "env": {
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
     "name": "push [SLAVE_BUILD]/skia/resources"
   },
@@ -268,7 +273,8 @@
       "/storage/emulated/legacy/skiabot/skia_skp/skps"
     ],
     "env": {
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
     "name": "push [SLAVE_BUILD]/playback/skps"
   },
@@ -363,7 +369,8 @@
       "skp"
     ],
     "env": {
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
     "name": "nanobench"
   },
@@ -376,7 +383,8 @@
       "[SLAVE_BUILD]/perfdata/Perf-Android-Nexus7-Tegra3-Arm7-Release/data"
     ],
     "env": {
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
     "name": "pull /storage/emulated/legacy/skiabot/skia_perf"
   },

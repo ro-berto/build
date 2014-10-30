@@ -98,6 +98,10 @@
       "-s",
       "4d0032a5d8cb6125"
     ],
+    "env": {
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1"
+    },
     "name": "kill skia"
   },
   {
@@ -109,7 +113,8 @@
       "/storage/emulated/legacy/skiabot/skia_resources"
     ],
     "env": {
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
     "name": "push [SLAVE_BUILD]/skia/resources"
   },
@@ -368,7 +373,8 @@
       "gpu"
     ],
     "env": {
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
     "name": "gm"
   },
@@ -381,7 +387,8 @@
       "[SLAVE_BUILD]/gm/actual/Test-Android-GalaxyS4-SGX544-Arm7-Debug"
     ],
     "env": {
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
     "name": "pull /storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-GalaxyS4-SGX544-Arm7-Debug"
   },
@@ -481,7 +488,8 @@
       "--nocpu"
     ],
     "env": {
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
     "name": "dm"
   },
@@ -494,7 +502,8 @@
       "[SLAVE_BUILD]/dm"
     ],
     "env": {
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
     "name": "pull /storage/emulated/legacy/skiabot/skia_dm"
   },
@@ -649,7 +658,8 @@
       "/storage/emulated/legacy/skiabot/skia_skp/skps"
     ],
     "env": {
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
     "name": "push [SLAVE_BUILD]/playback/skps"
   },
@@ -665,7 +675,8 @@
       "/storage/emulated/legacy/skiabot/skia_skp/skps"
     ],
     "env": {
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
     "name": "render_pdfs"
   },
@@ -732,7 +743,8 @@
       "/storage/emulated/legacy/skiabot/skia_skimage_in"
     ],
     "env": {
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
     "name": "push [SLAVE_BUILD]/skimage_in"
   },
@@ -938,7 +950,8 @@
       "/storage/emulated/legacy/skiabot/skia_skimage_expected/Test-Android-GalaxyS4-SGX544-Arm7-Debug/expected-results.json"
     ],
     "env": {
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
     "name": "skimage"
   },
@@ -951,7 +964,8 @@
       "[SLAVE_BUILD]/skimage_out"
     ],
     "env": {
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
     "name": "pull /storage/emulated/legacy/skiabot/skia_skimage_out"
   },
@@ -1040,7 +1054,8 @@
       "--nocpu"
     ],
     "env": {
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux"
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
     "name": "nanobench"
   }

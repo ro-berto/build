@@ -4,6 +4,7 @@
 
 
 import config
+import copy
 import default_flavor
 
 
@@ -71,6 +72,8 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
         'skia', 'platform_tools', 'android', 'bin')
     self._adb = _ADBWrapper(self._skia_api.m.adb, self.android_bin)
     self._has_root = self._skia_api.c.slave_cfg.get('has_root', True)
+    self._default_env = {'ANDROID_SDK_ROOT': DEFAULT_ANDROID_SDK_ROOT,
+                         'SKIA_ANDROID_VERBOSE_SETUP': 1}
 
   @property
   def serial(self):
@@ -91,7 +94,6 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
     return self._serial
 
   def step(self, name, cmd, **kwargs):
-    env = {'ANDROID_SDK_ROOT': DEFAULT_ANDROID_SDK_ROOT}
     args = [self.android_bin.join('android_run_skia'),
             '-d', self.device,
             '-s', self.serial,
@@ -99,13 +101,12 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
     if self._skia_api.c.configuration == config.CONFIG_RELEASE:
       args.append('--release')
 
-    return self._skia_api.m.step(name=name, cmd=args + cmd, env=env, **kwargs)
+    return self._skia_api.m.step(name=name, cmd=args + cmd,
+                                 env=self._default_env, **kwargs)
 
   def compile(self, target):
     """Build the given target."""
-    env = {}
-    env['SKIA_ANDROID_VERBOSE_SETUP'] = 1
-    env['ANDROID_SDK_ROOT'] = DEFAULT_ANDROID_SDK_ROOT
+    env = copy.deepcopy(self._default_env)
     env.update(self._skia_api.c.gyp_env.as_jsonish())
     env['BUILDTYPE'] = self._skia_api.c.configuration
     ccache = self._skia_api.ccache
@@ -152,7 +153,7 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
         name='push %s' % host_dir,
         cmd=[self.android_bin.join('adb_push_if_needed'),
              '-s', self.serial, host_dir, device_dir],
-        env={'ANDROID_SDK_ROOT': DEFAULT_ANDROID_SDK_ROOT})
+        env=self._default_env)
 
   def copy_directory_contents_to_host(self, device_dir, host_dir):
     """Like shutil.copytree(), but for copying from a connected device."""
@@ -160,7 +161,7 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
         name='pull %s' % device_dir,
         cmd=[self.android_bin.join('adb_pull_if_needed'),
              '-s', self.serial, device_dir, host_dir],
-        env={'ANDROID_SDK_ROOT': DEFAULT_ANDROID_SDK_ROOT})
+        env=self._default_env)
 
   def copy_file_to_device(self, host_path, device_path):
     """Like shutil.copyfile, but for copying to a connected device."""
@@ -181,7 +182,8 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
     # TODO(borenet): Set CPU scaling mode to 'performance'.
     self._skia_api.m.step(name='kill skia',
                           cmd=[self.android_bin.join('android_kill_skia'),
-                               '-s', self.serial])
+                               '-s', self.serial],
+                          env=self._default_env)
     if self._has_root:
       self._adb(name='stop shell',
                 serial=self.serial,
