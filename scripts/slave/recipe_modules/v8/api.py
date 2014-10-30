@@ -18,6 +18,9 @@ MAX_LABEL_SIZE = 23
 # Make sure that a step is not flooded with log lines.
 MAX_FAILURE_LOGS = 10
 
+MIPS_TOOLCHAIN = 'mips-2013.11-36-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2'
+MIPS_DIR = 'mips-2013.11'
+
 TEST_CONFIGS = {
   'benchmarks': {
     'name': 'Benchmarks',
@@ -172,6 +175,7 @@ class V8Api(recipe_api.RecipeApi):
     'linux_nosnap_dbg_archive': 'gs://chromium-v8/v8-linux-nosnap-dbg',
     'linux64_rel_archive': 'gs://chromium-v8/v8-linux64-rel',
     'linux64_dbg_archive': 'gs://chromium-v8/v8-linux64-dbg',
+    'mips_rel_archive': 'gs://chromium-v8/v8-mips-rel',
     'mips_sim_rel_archive': 'gs://chromium-v8/v8-mips-sim-rel',
     'win32_rel_archive': 'gs://chromium-v8/v8-win32-rel',
     'win32_dbg_archive': 'gs://chromium-v8/v8-win32-dbg',
@@ -253,6 +257,8 @@ class V8Api(recipe_api.RecipeApi):
 
   def runhooks(self, **kwargs):
     env = {}
+    if self.c.gyp_env.AR:
+      env['AR'] = self.c.gyp_env.AR
     if self.c.gyp_env.CC:
       env['CC'] = self.c.gyp_env.CC
     if self.c.gyp_env.CXX:
@@ -261,6 +267,8 @@ class V8Api(recipe_api.RecipeApi):
       env['CXX_host'] = self.c.gyp_env.CXX_host
     if self.c.gyp_env.LINK:
       env['LINK'] = self.c.gyp_env.LINK
+    if self.c.gyp_env.RANLIB:
+      env['RANLIB'] = self.c.gyp_env.RANLIB
     # TODO(machenbach): Make this the default on windows.
     if self.m.chromium.c.gyp_env.GYP_MSVS_VERSION:
       env['GYP_MSVS_VERSION'] = self.m.chromium.c.gyp_env.GYP_MSVS_VERSION
@@ -287,6 +295,23 @@ class V8Api(recipe_api.RecipeApi):
     self.c.gyp_env.CXX = self.m.path.join(clang_dir, 'clang++')
     self.c.gyp_env.CXX_host = self.m.path.join(clang_dir, 'clang++')
     self.c.gyp_env.LINK = self.m.path.join(clang_dir, 'clang++')
+
+  def setup_mips_toolchain(self):
+    mips_dir = self.m.path['slave_build'].join(MIPS_DIR, 'bin')
+    if not self.m.path.exists(mips_dir):
+      self.m.gsutil.download_url(
+          'gs://chromium-v8/%s' % MIPS_TOOLCHAIN,
+          self.m.path['slave_build'],
+          name='bootstrapping mips toolchain')
+      self.m.step('unzipping',
+               ['tar', 'xf', MIPS_TOOLCHAIN],
+               cwd=self.m.path['slave_build'])
+
+    self.c.gyp_env.CC = self.m.path.join(mips_dir, 'mips-linux-gnu-gcc')
+    self.c.gyp_env.CXX = self.m.path.join(mips_dir, 'mips-linux-gnu-g++')
+    self.c.gyp_env.AR = self.m.path.join(mips_dir, 'mips-linux-gnu-ar')
+    self.c.gyp_env.RANLIB = self.m.path.join(mips_dir, 'mips-linux-gnu-ranlib')
+    self.c.gyp_env.LINK = self.m.path.join(mips_dir, 'mips-linux-gnu-g++')
 
   def update_nacl_sdk(self):
     return self.m.python(

@@ -322,6 +322,8 @@
           "V8 Mac GC Stress - 2",
           "V8 Mac GC Stress - 3",
           "V8 Arm GC Stress",
+          "V8 Mips - builder",
+          "V8 Mips - big endian - nosnap",
           "V8 Random Deopt Fuzzer - debug",
           "NaCl V8 Linux64 - canary",
           "NaCl V8 Linux64 - stable",

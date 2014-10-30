@@ -24,11 +24,14 @@ def BaseConfig(**_kwargs):
       compile_extra_args = List(basestring),
     ),
     gyp_env = ConfigGroup(
+      AR = Single(basestring, required=False),
       CC = Single(basestring, required=False),
       CXX = Single(basestring, required=False),
       CXX_host = Single(basestring, required=False),
       LINK = Single(basestring, required=False),
+      RANLIB = Single(basestring, required=False),
     ),
+    mips_cross_compile = Single(bool, empty_val=False, required=False),
     nacl = ConfigGroup(
       update_nacl_sdk = Single(basestring, required=False),
       NACL_SDK_ROOT = Single(basestring, required=False),
@@ -120,6 +123,11 @@ def gc_stress(c):
 @config_ctx()
 def isolates(c):
   c.testing.test_args.add('--isolates=on')
+
+
+@config_ctx()
+def mips_cross_compile(c):
+  c.mips_cross_compile = True
 
 
 @config_ctx()

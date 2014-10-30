@@ -42,6 +42,8 @@ categories_steps = {
 exclusions = {
   'V8 Linux - mips - sim - builder': [],
   'V8 Linux - mips - sim': [],
+  'V8 Mips - builder': [],
+  'V8 Mips - big endian - nosnap': [],
   'V8 Linux - x87 - nosnap - debug': [],
   'V8 Linux - predictable': [],
   'NaCl V8 Linux64 - stable': [],

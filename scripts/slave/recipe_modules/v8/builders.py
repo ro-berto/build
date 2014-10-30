@@ -561,6 +561,32 @@ BUILDERS = {
         'tests': ['unittests', 'v8testing', 'webkit', 'optimize_for_size'],
         'testing': {'platform': 'linux'},
       },
+####### Category: MIPS
+      'V8 Mips - builder': {
+        'chromium_apply_config': ['no_snapshot', 'no_i18n'],
+        'v8_apply_config': ['mips_cross_compile', 'no_snapshot', 'no_i18n'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_ARCH': 'mipsel',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'build_gs_archive': 'mips_rel_archive',
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Mips - big endian - nosnap': {
+        'v8_apply_config': ['no_snapshot', 'no_i18n'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_ARCH': 'mipsel',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Mips - builder',
+        'build_gs_archive': 'mips_rel_archive',
+        'tests': ['unittests', 'v8testing'],
+        'testing': {'platform': 'linux'},
+      },
 ####### Category: Simulators
       'V8 Linux - arm - sim': {
         'chromium_apply_config': ['simulate_arm'],

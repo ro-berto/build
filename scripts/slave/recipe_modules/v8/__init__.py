@@ -3,6 +3,7 @@ DEPS = [
   'bot_update',
   'chromium',
   'gclient',
+  'gsutil',
   'json',
   'path',
   'perf_dashboard',
