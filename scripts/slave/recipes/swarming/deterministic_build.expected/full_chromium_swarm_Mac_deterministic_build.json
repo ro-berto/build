@@ -100,7 +100,7 @@
       "[BUILD]/goma",
       "--clobber",
       "--",
-      "chrome_run"
+      "chromium_swarm_tests"
     ],
     "name": "First build"
   },
@@ -154,7 +154,7 @@
       "[BUILD]/goma",
       "--clobber",
       "--",
-      "chrome_run"
+      "chromium_swarm_tests"
     ],
     "name": "Second build"
   },

@@ -77,7 +77,7 @@ def GenSteps(api):
   buildername = api.properties['buildername']
   recipe_config = DETERMINISTIC_BUILDERS[buildername]
 
-  target_name = 'chrome_run'
+  targets = ['chromium_swarm_tests']
 
   api.chromium.set_config(recipe_config['chromium_config'],
                           **recipe_config.get('chromium_config_kwargs',
@@ -96,16 +96,14 @@ def GenSteps(api):
 
   # Do a first build and move the build artifact to the temp directory.
   api.chromium.runhooks()
-  api.chromium.compile(targets=[target_name], force_clobber=True,
-                       name='First build')
+  api.chromium.compile(targets, force_clobber=True, name='First build')
   api.isolate.remove_build_metadata()
   MoveBuildDirectory(api, str(api.chromium.output_dir),
                      str(api.chromium.output_dir).rstrip('\\\/') + '.1')
 
   # Do the second build and move the build artifact to the temp directory.
   api.chromium.runhooks()
-  api.chromium.compile(targets=[target_name], force_clobber=True,
-                       name='Second build')
+  api.chromium.compile(targets, force_clobber=True, name='Second build')
   api.isolate.remove_build_metadata()
   MoveBuildDirectory(api, str(api.chromium.output_dir),
                      str(api.chromium.output_dir).rstrip('\\\/') + '.2')
