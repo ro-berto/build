@@ -158,7 +158,7 @@
       "[SLAVE_BUILD]\\src"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "remove_build_metadata.py"
+    "name": "remove_build_metadata"
   },
   {
     "cmd": [

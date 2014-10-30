@@ -247,10 +247,16 @@ class IsolateApi(recipe_api.RecipeApi):
         '--build-dir', self.m.chromium.output_dir,
         '--src-dir', self.m.path['checkout']
     ]
-    self.m.python('remove_build_metadata.py',
-                  self.resource('remove_build_metadata.py'),
-                  args=args,
-                  cwd=self.m.path['slave_build'])
+    # Turn the failures during this step into warnings, it's a best effort step
+    # that shouldn't break the build for now.
+    try:
+      self.m.python('remove_build_metadata',
+                    self.resource('remove_build_metadata.py'),
+                    args=args,
+                    cwd=self.m.path['slave_build'])
+    except self.m.step.StepFailure:
+      step_result = self.m.step.active_result
+      step_result.presentation.status = self.m.step.WARNING
 
   def compare_build_artifacts(self, first_dir, second_dir):
     """Compare the artifacts from 2 builds."""
@@ -258,7 +264,7 @@ class IsolateApi(recipe_api.RecipeApi):
         '--first-build-dir', first_dir,
         '--second-build-dir', second_dir
     ]
-    self.m.python('compare_build_artifacts.py',
+    self.m.python('compare_build_artifacts',
                   self.resource('compare_build_artifacts.py'),
                   args=args,
                   cwd=self.m.path['slave_build'])

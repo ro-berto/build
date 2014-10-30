@@ -117,7 +117,7 @@
       "[SLAVE_BUILD]/src"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "remove_build_metadata.py"
+    "name": "remove_build_metadata"
   },
   {
     "cmd": [
@@ -191,6 +191,6 @@
       "[SLAVE_BUILD]/src/out/Release.2"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "compare_build_artifacts.py"
+    "name": "compare_build_artifacts"
   }
 ]

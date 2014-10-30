@@ -133,5 +133,6 @@ def GenTests(api):
       api.properties.generic(buildername=buildername,
                              mastername=mastername) +
       api.platform(DETERMINISTIC_BUILDERS[buildername]['platform'], 32) +
-      api.properties(configuration='Release')
+      api.properties(configuration='Release') +
+      api.step_data('remove_build_metadata', retcode=1)
     )

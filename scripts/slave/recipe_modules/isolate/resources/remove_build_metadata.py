@@ -18,9 +18,14 @@ def RunZapTimestamp(src_dir, filename):
   syzygy_dir = os.path.join(
       src_dir, 'third_party', 'syzygy', 'binaries', 'exe')
   zap_timestamp_exe = os.path.join(syzygy_dir, 'zap_timestamp.exe')
-  return subprocess.call([zap_timestamp_exe,
-                          '--input-image=%s' % filename,
-                          '--overwrite'])
+  print 'Running zap_timestamp.exe on %s' % filename
+  proc = subprocess.Popen(
+      [zap_timestamp_exe, '--input-image=%s' % filename, '--overwrite'],
+      stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+  log, _ = proc.communicate()
+  if proc.returncode != 0:
+    print >> sys.stderr, log
+  return proc.returncode
 
 
 def RemovePEMetadata(build_dir, src_dir):
