@@ -70,6 +70,14 @@ def _sanitize_nonalpha(text):
 
 def GenTests(api):
   for mastername, master_config in api.chromium.builders.iteritems():
+
+    # parent builder name -> list of triggered builders.
+    triggered_by_parent = {}
+    for buildername, bot_config in master_config['builders'].iteritems():
+      parent = bot_config.get('parent_buildername')
+      if parent:
+        triggered_by_parent.setdefault(parent, []).append(buildername)
+
     for buildername, bot_config in master_config['builders'].iteritems():
       bot_type = bot_config.get('bot_type', 'builder_tester')
 
@@ -101,19 +109,27 @@ def GenTests(api):
       if mastername == 'client.v8':
         test += api.properties(revision='22135')
 
-      if bot_config.get('enable_swarming') and bot_type == 'tester':
-        test += api.properties(swarm_hashes={
-          'browser_tests': 'ffffffffffffffffffffffffffffffffffffffff',
-        })
+      if bot_config.get('enable_swarming'):
+        if bot_type in 'tester':
+          test += api.properties(swarm_hashes={
+            'browser_tests': 'ffffffffffffffffffffffffffffffffffffffff',
+          })
+
+        builders_with_tests = []
+        if bot_type == 'builder':
+          builders_with_tests = triggered_by_parent.get(buildername, [])
+        else:
+          builders_with_tests = [buildername]
+
         test += api.override_step_data('read test spec', api.json.output({
-          buildername: {
+            b: {
             'gtest_tests': [
               {
                 'test': 'browser_tests',
                 'swarming': {'can_use_on_swarming_builders': True},
               },
             ],
-          },
+          } for b in builders_with_tests
         }))
 
       yield test
