@@ -103,6 +103,15 @@
   },
   {
     "cmd": [
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "-s",
+      "R32CB017X2L",
+      "wait-for-device"
+    ],
+    "name": "wait for device"
+  },
+  {
+    "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_kill_skia",
       "-s",
       "R32CB017X2L"

@@ -179,6 +179,10 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
     if self._has_root:
       self._adb(name='adb root', serial=self.serial, cmd=['root'])
 
+    self._adb(name='wait for device',
+              serial=self.serial,
+              cmd=['wait-for-device'])
+
     # TODO(borenet): Set CPU scaling mode to 'performance'.
     self._skia_api.m.step(name='kill skia',
                           cmd=[self.android_bin.join('android_kill_skia'),

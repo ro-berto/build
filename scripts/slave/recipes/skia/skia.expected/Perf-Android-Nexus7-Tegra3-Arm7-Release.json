@@ -103,6 +103,15 @@
   },
   {
     "cmd": [
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/linux/adb",
+      "-s",
+      "015d210a13480604",
+      "wait-for-device"
+    ],
+    "name": "wait for device"
+  },
+  {
+    "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_kill_skia",
       "-s",
       "015d210a13480604"
