@@ -146,7 +146,7 @@ class Agent(twisted.web.client.Agent):
       body_producer: (IBodyProducer) If supplied, the 'IBodyProducer' instance
           that will be used to produce HTTP request's body; if None, the body
           will be of length '0'.
-      expected_code: (int) HTTP response code expected in reply.
+      expected_code: (int or tuple of ints) HTTP response code expected in reply.
       retry: (int) If non-zero, the number of times to retry when a transient
           error is encountered. If None, the default 'retry' value will be
           used.
@@ -162,6 +162,9 @@ class Agent(twisted.web.client.Agent):
        'twisted.web.client.Response' instance.
     """
     assert method in ('GET', 'PUT', 'POST', 'DELETE')
+    if (not isinstance(expected_code, tuple) and
+        not isinstance(expected_code, list)):
+      expected_code = (expected_code,)
     headers = CloneHeaders(headers) # Handles 'None' case
     url = self._buildRequest(path, headers)
 
@@ -211,12 +214,12 @@ class Agent(twisted.web.client.Agent):
           body_producer)
 
     def handle_response(response, retries_remaining, next_delay):
-      if response.code == expected_code:
+      if response.code in expected_code:
         return response
 
       error = twe.Error(
           response.code,
-          message="Response status (%s) didn't match expected (%d) for '%s'" %
+          message="Response status (%s) didn't match expected (%s) for '%s'" %
                   (response.code, expected_code, url))
       log.msg(error.message)
 
