@@ -177,9 +177,9 @@ def BASE(c):
     ('arm',   32): 'arm',
     ('arm',   64): 'arm64',
     ('mips',  32): 'mips',
-    ('mips',  64): 'mips',
+    ('mips',  64): 'mips64',
     ('mipsel',  32): 'mipsel',
-    ('mipsel',  64): 'mipsel',
+    ('mipsel',  64): 'mips64el',
   }.get((c.TARGET_ARCH, c.TARGET_BITS))
   if gyp_arch:
     c.gyp_env.GYP_DEFINES['target_arch'] = gyp_arch
