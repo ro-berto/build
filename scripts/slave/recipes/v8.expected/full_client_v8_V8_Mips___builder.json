@@ -75,7 +75,7 @@
       "CC": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-gcc",
       "CXX": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-g++",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "target_arch=mipsel v8_enable_i18n_support=0 v8_target_arch=mipsel v8_use_snapshot=false",
+      "GYP_DEFINES": "target_arch=mips v8_enable_i18n_support=0 v8_target_arch=mips v8_use_snapshot=false",
       "LINK": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-g++",
       "RANLIB": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-ranlib"
     },

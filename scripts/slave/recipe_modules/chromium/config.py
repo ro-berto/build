@@ -16,7 +16,7 @@ HOST_PLATFORMS = ('linux', 'win', 'mac')
 TARGET_PLATFORMS = HOST_PLATFORMS + ('ios', 'android', 'chromeos')
 HOST_TARGET_BITS = (32, 64)
 HOST_ARCHS = ('intel',)
-TARGET_ARCHS = HOST_ARCHS + ('arm', 'mipsel')
+TARGET_ARCHS = HOST_ARCHS + ('arm', 'mips', 'mipsel')
 TARGET_CROS_BOARDS = (None, 'x86-generic')
 BUILD_CONFIGS = ('Release', 'Debug', 'Coverage')
 MEMORY_TOOLS = ('memcheck', 'drmemory_full', 'drmemory_light')
@@ -176,6 +176,8 @@ def BASE(c):
     ('intel', 64): 'x64',
     ('arm',   32): 'arm',
     ('arm',   64): 'arm64',
+    ('mips',  32): 'mips',
+    ('mips',  64): 'mips',
     ('mipsel',  32): 'mipsel',
     ('mipsel',  64): 'mipsel',
   }.get((c.TARGET_ARCH, c.TARGET_BITS))

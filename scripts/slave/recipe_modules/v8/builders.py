@@ -567,7 +567,7 @@ BUILDERS = {
         'v8_apply_config': ['mips_cross_compile', 'no_snapshot', 'no_i18n'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_ARCH': 'mipsel',
+          'TARGET_ARCH': 'mips',
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder',
@@ -578,7 +578,7 @@ BUILDERS = {
         'v8_apply_config': ['no_snapshot', 'no_i18n'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_ARCH': 'mipsel',
+          'TARGET_ARCH': 'mips',
           'TARGET_BITS': 32,
         },
         'bot_type': 'tester',

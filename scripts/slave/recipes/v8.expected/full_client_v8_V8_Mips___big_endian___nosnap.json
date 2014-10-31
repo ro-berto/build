@@ -50,7 +50,7 @@
     ],
     "env": {
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "target_arch=mipsel v8_target_arch=mipsel"
+      "GYP_DEFINES": "target_arch=mips v8_target_arch=mips"
     },
     "name": "gclient runhooks"
   },
@@ -106,7 +106,7 @@
       "--target",
       "Release",
       "--arch",
-      "mipsel",
+      "mips",
       "--testname",
       "unittests",
       "--no-variants",
@@ -126,7 +126,7 @@
       "--target",
       "Release",
       "--arch",
-      "mipsel",
+      "mips",
       "--testname",
       "default",
       "--noi18n",
@@ -147,7 +147,7 @@
       "--target",
       "Release",
       "--arch",
-      "mipsel",
+      "mips",
       "--testname",
       "default",
       "--noi18n",
