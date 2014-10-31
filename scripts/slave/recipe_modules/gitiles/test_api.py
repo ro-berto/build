@@ -11,13 +11,13 @@ class GitilesTestApi(recipe_test_api.RecipeTestApi):
   def make_refs_test_data(self, *refs):
     return self._make_gitiles_response_json({ref: None for ref in refs})
 
-  def make_log_test_data(self, n=3):
+  def make_log_test_data(self, s, n=3):
     return self._make_gitiles_response_json({
       'log': [
         {
-          'commit': 'fake hash %d',
+          'commit': 'fake %s hash %d' % (s, i),
           'author': {
-            'email': 'fake email %d',
+            'email': 'fake %s email %d' % (s, i),
           },
         } for i in xrange(n)
       ],

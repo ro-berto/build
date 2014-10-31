@@ -23,14 +23,14 @@ def GenTests(api):
     ))
     + api.step_data(
       'log: HEAD',
-      api.gitiles.make_log_test_data(),
+      api.gitiles.make_log_test_data('HEAD'),
     )
     + api.step_data(
       'log: refs/heads/A',
-      api.gitiles.make_log_test_data(),
+      api.gitiles.make_log_test_data('A'),
     )
     + api.step_data(
       'log: refs/tags/B',
-      api.gitiles.make_log_test_data()
+      api.gitiles.make_log_test_data('B')
     )
   )

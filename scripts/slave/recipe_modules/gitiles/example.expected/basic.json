@@ -28,7 +28,9 @@
     ],
     "name": "log: HEAD",
     "~followup_annotations": [
-      "@@@STEP_LINK@fake hash %d@https://chromium.googlesource.com/chromium/src/+/fake hash %d@@@"
+      "@@@STEP_LINK@fake HEAD hash 0@https://chromium.googlesource.com/chromium/src/+/fake HEAD hash 0@@@",
+      "@@@STEP_LINK@fake HEAD hash 1@https://chromium.googlesource.com/chromium/src/+/fake HEAD hash 1@@@",
+      "@@@STEP_LINK@fake HEAD hash 2@https://chromium.googlesource.com/chromium/src/+/fake HEAD hash 2@@@"
     ]
   },
   {
@@ -43,7 +45,9 @@
     ],
     "name": "log: refs/heads/A",
     "~followup_annotations": [
-      "@@@STEP_LINK@fake hash %d@https://chromium.googlesource.com/chromium/src/+/fake hash %d@@@"
+      "@@@STEP_LINK@fake A hash 0@https://chromium.googlesource.com/chromium/src/+/fake A hash 0@@@",
+      "@@@STEP_LINK@fake A hash 1@https://chromium.googlesource.com/chromium/src/+/fake A hash 1@@@",
+      "@@@STEP_LINK@fake A hash 2@https://chromium.googlesource.com/chromium/src/+/fake A hash 2@@@"
     ]
   },
   {
@@ -58,7 +62,9 @@
     ],
     "name": "log: refs/tags/B",
     "~followup_annotations": [
-      "@@@STEP_LINK@fake hash %d@https://chromium.googlesource.com/chromium/src/+/fake hash %d@@@"
+      "@@@STEP_LINK@fake B hash 0@https://chromium.googlesource.com/chromium/src/+/fake B hash 0@@@",
+      "@@@STEP_LINK@fake B hash 1@https://chromium.googlesource.com/chromium/src/+/fake B hash 1@@@",
+      "@@@STEP_LINK@fake B hash 2@https://chromium.googlesource.com/chromium/src/+/fake B hash 2@@@"
     ]
   }
 ]
