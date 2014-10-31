@@ -7,7 +7,7 @@
       "--master",
       "client.v8",
       "--builder",
-      "V8 Linux - mips - sim",
+      "V8 Linux - test262-es6 - debug",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -49,7 +49,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "target_arch=ia32 v8_target_arch=mipsel"
+      "GYP_DEFINES": "target_arch=ia32 v8_optimized_debug=1 v8_target_arch=ia32"
     },
     "name": "gclient runhooks"
   },
@@ -66,7 +66,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/v8/out/Release"
+      "[SLAVE_BUILD]/v8/out/Debug"
     ],
     "name": "rmtree build directory",
     "~followup_annotations": [
@@ -85,15 +85,15 @@
       "-u",
       "[BUILD]/scripts/slave/extract_build.py",
       "--target",
-      "Release",
+      "Debug",
       "--build-url",
-      "gs://chromium-v8/v8-mips-sim-rel",
+      "gs://chromium-v8/v8-linux-dbg",
       "--src-dir",
       "v8",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8 Linux - mips - sim\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": \"V8 Linux - mips - sim - builder\", \"parent_got_revision\": \"54321\", \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8 Linux - test262-es6 - debug\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": \"V8 Linux - debug builder\", \"parent_got_revision\": \"54321\", \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8 Linux - mips - sim\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": \"V8 Linux - mips - sim - builder\", \"parent_got_revision\": \"54321\", \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8 Linux - test262-es6 - debug\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": \"V8 Linux - debug builder\", \"parent_got_revision\": \"54321\", \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "name": "extract build"
   },
@@ -103,90 +103,15 @@
       "-u",
       "[BUILD]/scripts/slave/v8/v8testing.py",
       "--target",
-      "Release",
+      "Debug",
       "--arch",
-      "mipsel",
-      "--testname",
-      "unittests",
-      "--no-variants",
-      "--json-test-results",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Unittests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/v8/v8testing.py",
-      "--target",
-      "Release",
-      "--arch",
-      "mipsel",
-      "--testname",
-      "default",
-      "--flaky-tests",
-      "skip",
-      "--json-test-results",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Check"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/v8/v8testing.py",
-      "--target",
-      "Release",
-      "--arch",
-      "mipsel",
-      "--testname",
-      "default",
-      "--flaky-tests",
-      "run",
-      "--json-test-results",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Check - flaky"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/v8/v8testing.py",
-      "--target",
-      "Release",
-      "--arch",
-      "mipsel",
-      "--testname",
-      "test262",
-      "--no-variants",
-      "--json-test-results",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Test262 - no variants"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/v8/v8testing.py",
-      "--target",
-      "Release",
-      "--arch",
-      "mipsel",
+      "ia32",
       "--testname",
       "test262-es6",
-      "--no-variants",
       "--json-test-results",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Test262-es6 - no variants"
+    "name": "Test262-es6"
   }
 ]

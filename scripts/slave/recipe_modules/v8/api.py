@@ -51,6 +51,15 @@ TEST_CONFIGS = {
     'name': 'Test262',
     'tests': 'test262',
   },
+  'test262_es6': {
+    'name': 'Test262-es6 - no variants',
+    'tests': 'test262-es6',
+    'test_args': ['--no-variants'],
+  },
+  'test262_es6_variants': {
+    'name': 'Test262-es6',
+    'tests': 'test262-es6',
+  },
   'unittests': {
     'name': 'Unittests',
     'tests': ('unittests'),
