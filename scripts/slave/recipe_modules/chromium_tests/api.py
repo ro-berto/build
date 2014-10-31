@@ -140,7 +140,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     self.m.chromium.c.gyp_env.GYP_DEFINES.update(
         bot_config.get('GYP_DEFINES', {}))
     if bot_config.get('use_isolate'):
-      self.m.isolate.set_isolate_environment(self.m.chromium.c)
+      self.m.isolate.set_isolate_environment(
+          self.m.chromium.c, mode=bot_config.get('isolation_mode', 'archive'))
     for c in recipe_config.get('chromium_apply_config', []):
       self.m.chromium.apply_config(c)
     for c in bot_config.get('chromium_apply_config', []):
@@ -192,7 +193,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       enable_swarming = bot_config.get('enable_swarming')
 
     if enable_swarming:
-      self.m.isolate.set_isolate_environment(self.m.chromium.c)
+      self.m.isolate.set_isolate_environment(
+          self.m.chromium.c, mode=bot_config.get('isolation_mode', 'archive'))
       self.m.swarming.check_client_version()
       self.m.swarming.default_priority = 50
       os_dimension = bot_config.get('swarming_dimensions', {}).get('os')
@@ -340,8 +342,19 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self.m.chromium_android.findbugs()
 
       if isolated_targets:
-        self.m.isolate.find_isolated_tests(
-            self.m.chromium.output_dir, targets=list(set(isolated_targets)))
+        isolation_mode = bot_config.get('isolation_mode', 'archive')
+        deduped_targets = list(set(isolated_targets))
+        # In 'archive' mode, 'compile' step does the archival, and we just need
+        # to find resulting *.isolated files.
+        if isolation_mode == 'archive':
+          self.m.isolate.find_isolated_tests(
+              self.m.chromium.output_dir, targets=deduped_targets)
+        else:
+          # In 'prepare' mode, 'compile' just prepares all information needed
+          # for isolation, and isolation is a separate step done here.
+          assert isolation_mode == 'prepare', isolation_mode
+          self.m.isolate.isolate_tests(
+              self.m.chromium.output_dir, targets=deduped_targets)
 
     got_revision = update_step.presentation.properties['got_revision']
 

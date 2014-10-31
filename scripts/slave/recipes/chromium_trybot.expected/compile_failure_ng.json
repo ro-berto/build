@@ -99,7 +99,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=archive test_isolation_outdir=https://isolateserver.appspot.com use_goma=1"
+      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1"
     },
     "name": "gclient runhooks (with patch)"
   },
@@ -300,7 +300,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=archive test_isolation_outdir=https://isolateserver.appspot.com use_goma=1"
+      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1"
     },
     "name": "gclient runhooks (without patch)"
   },
