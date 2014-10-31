@@ -6,14 +6,11 @@
 """A tool to package a checkout's source and upload it to Google Storage."""
 
 
-import fnmatch
 import json
 import optparse
 import os
 import re
 import Queue
-import shlex
-import shutil
 import sys
 import threading
 import time
@@ -28,22 +25,6 @@ GSBASE = 'gs://chromium-browser-csindex'
 GSACL = 'public-read'
 CONCURRENT_TASKS = 8
 UNIT_INDEXER = './clang_indexer/bin/external_corpus_compilation_indexer'
-
-
-def CreateJSONCompileCommands():
-  with open('compile_commands.json', 'wb') as json_commands_file:
-    json_commands_file.write('[\n')
-    commands_found = False
-    for root, _, filenames in os.walk('src/out'):
-      for filename in fnmatch.filter(filenames, '*.json-command'):
-        shutil.copyfileobj(open(os.path.join(root, filename), 'rb'),
-                           json_commands_file)
-        commands_found = True
-    if commands_found:
-      # Seek backwards 2 bytes to delete ",\n" from the last entry.
-      json_commands_file.seek(-2, 1)
-    json_commands_file.write('\n]\n')
-    json_commands_file.close()
 
 
 class IndexResult(object):
@@ -64,10 +45,8 @@ class IgnoreOutput(chromium_utils.RunCommandFilter):
   def FilterDone(self, _):
     return None
 
-def GenerateIndex():
-  CreateJSONCompileCommands()
-
-  with open('compile_commands.json', 'rb') as json_commands_file:
+def GenerateIndex(compdb_path):
+  with open(compdb_path, 'rb') as json_commands_file:
     json_commands = json.load(json_commands_file)
 
   if not os.path.exists(UNIT_INDEXER):
@@ -84,10 +63,22 @@ def GenerateIndex():
   def _Worker():
     while True:
       directory, command = queue.get()
+      command_list = command.split()
 
-      # Use str(command) as shlex does not support unicode.
+      # The command_list starts with the compiler that was used for the
+      # compilation. This is expected to be clang/clang++ by the indexer, so we
+      # need to modify |command_list| accordingly. Currently, |command_list|
+      # starts with the path to the goma executable followed by the path to the
+      # clang executable.
+      for i in range(len(command_list)):
+        if 'clang' in command_list[i]:
+          # Shorten the list of commands such that it starts with the path to
+          # the clang executable.
+          command_list = command_list[i:]
+          break
+
       run = [indexer, '--gid=', '--uid=', '--loas_pwd_fallback_in_corp',
-             '--logtostderr', '--'] + shlex.split(str(command))
+             '--logtostderr', '--'] + command_list
       try:
         # Ignore the result code - indexing success is monitored on a higher
         # level.
@@ -129,7 +120,11 @@ def DeleteIfExists(filename):
 def main():
   option_parser = optparse.OptionParser()
   chromium_utils.AddPropertiesOptions(option_parser)
+  option_parser.add_option('--path-to-compdb', default=None,
+                           help='path to the compilation database')
   options, _ = option_parser.parse_args()
+  if not options.path_to_compdb:
+    option_parser.error('--path-to-compdb is required')
 
   print '%s: Cleaning up old data...' % time.strftime('%X')
   # Clean up any source archives from previous runs.
@@ -161,7 +156,7 @@ def main():
     raise Exception('ERROR: %s already exists, exiting' % partial_filename)
 
   print '%s: Index generation...' % time.strftime('%X')
-  indexing_successful = GenerateIndex()
+  indexing_successful = GenerateIndex(options.path_to_compdb)
 
   print '%s: Creating tar file...' % time.strftime('%X')
   packaging_successful = True
@@ -250,12 +245,6 @@ def main():
     packaging_successful = False
 
   finally:
-    # Clean up .json-command files.
-    # TODO(akuegel): Move this to a separate cleanup step that runs before the
-    # compile step.
-    print '%s: Cleaning up locally...' % time.strftime('%X')
-    chromium_utils.RemoveFilesWildcards(
-        '*.json-command', os.path.join('src/out', os.curdir))
     print '%s: Done.' % time.strftime('%X')
 
   if not (indexing_successful and packaging_successful):
