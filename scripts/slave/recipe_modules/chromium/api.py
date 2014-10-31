@@ -439,6 +439,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       gn_args.append('os="android"')
     elif self.c.TARGET_PLATFORM == 'chromeos':
       gn_args.append('os="chromeos"')
+      gn_args.append('use_system_harfbuzz=false')
 
     if self.c.TARGET_ARCH == 'arm':
       gn_args.append('cpu_arch="arm"')
