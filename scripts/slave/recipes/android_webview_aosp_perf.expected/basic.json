@@ -216,8 +216,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
-      "list",
+      "[SLAVE_BUILD]/src/tools/perf/list_benchmarks",
       "--browser",
       "android-webview",
       "--json-output",
