@@ -1,0 +1,5 @@
+DEPS = [
+  'json',
+  'path',
+  'python',
+]
