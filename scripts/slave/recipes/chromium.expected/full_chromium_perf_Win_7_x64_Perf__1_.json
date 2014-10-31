@@ -160,7 +160,8 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\list_benchmarks",
+      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
+      "list",
       "--browser",
       "release_x64",
       "--json-output",
