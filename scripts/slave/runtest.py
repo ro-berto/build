@@ -1595,13 +1595,10 @@ def _UpdateRunBenchmarkArgs(args):
 
   if '--output-format=buildbot' in args:
     args[args.index('--output-format=buildbot')] = '--output-format=chartjson'
-  # Using NamedTemporaryFile instead of mkstemp because of windows issues
-  # with mkstemp.
 
-  handle = tempfile.NamedTemporaryFile(delete=False)
-  temp_filename = handle.name
-  handle.close()
-  args.extend(['--output=%s' % temp_filename])
+  output_dir = tempfile.mkdtemp()
+  args.extend(['--output-dir=%s' % output_dir])
+  temp_filename = os.path.join(output_dir, 'results-chart.json')
 
   return {'filename': temp_filename, 'is_ref': is_ref}
 

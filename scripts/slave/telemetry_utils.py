@@ -35,6 +35,11 @@ class TelemetryResultsProcessor(object):
     except OSError:
       logging.error('Unable to remove telemetry output file %s',
                     self._chart_filename)
+    try:
+      os.rmdir(os.path.dirname(self._chart_filename))
+    except OSError:
+      logging.error('Unable to remove telemetry output dir %s',
+                    os.path.dirname(self._chart_filename))
 
   def IsChartJson(self):
     """This is the new telemetry --chartjson output format."""
