@@ -4,7 +4,6 @@
 # found in the LICENSE file.
 """Compare the artifacts from two builds."""
 
-import filecmp
 import json
 import optparse
 import os
@@ -33,6 +32,29 @@ def get_files_to_compare(build_dir):
              check(os.path.join(build_dir, f)))
 
 
+def compare_files(first_filepath, second_filepath):
+  """Compare two binaries and return the number of differences between them.
+
+  Returns -1 if the files have a different size.
+  """
+  if os.stat(first_filepath).st_size != os.stat(second_filepath).st_size:
+    return -1
+
+  # Read the files by chunks of 1MB.
+  chunk_size = 1024 * 1024
+  diffs = 0
+  with open(first_filepath, 'rb') as lhs:
+    with open(second_filepath, 'rb') as rhs:
+      while True:
+        lhs_data = lhs.read(chunk_size)
+        rhs_data = rhs.read(chunk_size)
+        if not lhs_data:
+          break
+        diffs += sum(l != r for l, r in zip(lhs_data, rhs_data))
+
+  return diffs
+
+
 def compare_build_artifacts(first_dir, second_dir):
   """Compare the artifacts from two distinct builds."""
   if not os.path.isdir(first_dir):
@@ -55,14 +77,18 @@ def compare_build_artifacts(first_dir, second_dir):
     print >> sys.stderr, '\n'.join('  ' + i for i in sorted(diff))
     res += len(diff)
 
+  max_filepath_len = max(len(n) for n in first_list & second_list)
   for f in sorted(first_list & second_list):
     first_file = os.path.join(first_dir, f)
     second_file = os.path.join(second_dir, f)
-    if filecmp.cmp(first_file, second_file, shallow=False):
-      print('%s: equal' % f)
+    files_diffs = compare_files(first_file, second_file)
+    if not files_diffs:
+      result = 'equal'
     else:
-      print('%s: DIFFERENT' % f)
+      result = 'DIFFERENT: %s' % ('different size' if result == -1 else
+                                  '%d different bytes' % files_diffs)
       res += 1
+    print('%-*s: %s' % (max_filepath_len, f, result))
 
   print '%d files are equal, %d are different.'  % (
       len(first_list & second_list) - res, res)
