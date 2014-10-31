@@ -86,9 +86,13 @@ def compare_build_artifacts(first_dir, second_dir):
       result = 'equal'
     else:
       file_len = os.stat(first_file).st_size
-      difference = ('different size' if result == -1 else
-                    '%d out of %d bytes are different (%.2f%%)' %
-                    (files_diffs, file_len, 100.0 * files_diffs / file_len))
+      difference = ''
+      if files_diffs == -1:
+        difference = 'different size: %d != %d' % (file_len,
+                                                   os.stat(second_file).st_size)
+      else:
+        difference = '%d out of %d bytes are different (%.2f%%)' % (
+            files_diffs, file_len, 100.0 * files_diffs / file_len)
       result = 'DIFFERENT: %s' % difference
       res += 1
     print('%-*s: %s' % (max_filepath_len, f, result))
