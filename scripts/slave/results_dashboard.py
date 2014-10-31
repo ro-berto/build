@@ -250,7 +250,7 @@ def MakeDashboardJsonV1(chart_json, revision_data, bot, mastername,
   """
   if not chart_json:
     print 'Error: No json output from telemetry.'
-    print '@@@STEP_EXCEPTION@@@'
+    print '@@@STEP_FAILURE@@@'
   # The master name used for the dashboard is the CamelCase name returned by
   # GetActiveMaster(), and not the canonical master name with dots.
   master = slave_utils.GetActiveMaster()

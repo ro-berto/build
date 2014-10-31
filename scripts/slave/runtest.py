@@ -725,7 +725,7 @@ def _SendResultsToDashboard(log_processor, args):
           args['supplemental_columns'], log_processor.IsReferenceBuild())
     else:
       print 'Error: No json output from telemetry.'
-      print '@@@STEP_EXCEPTION@@@'
+      print '@@@STEP_FAILURE@@@'
     log_processor.Cleanup()
   else:
     charts = _GetDataFromLogProcessor(log_processor)
