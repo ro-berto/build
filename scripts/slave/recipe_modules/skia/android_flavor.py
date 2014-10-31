@@ -115,6 +115,8 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
       env['ANDROID_MAKE_CCACHE'] = ccache
 
     cmd = [self.android_bin.join('android_ninja'), target, '-d', self.device]
+    if 'Clang' in self._skia_api.c.BUILDER_NAME:
+      cmd.append('--clang')
     self._skia_api.m.step('build %s' % target, cmd, env=env,
                           cwd=self._skia_api.m.path['checkout'])
 
