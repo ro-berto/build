@@ -14,13 +14,13 @@ import sys
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
-def RunZapTimestamp(src_dir, filename):
+def RunZapTimestamp(src_dir, filepath):
   syzygy_dir = os.path.join(
       src_dir, 'third_party', 'syzygy', 'binaries', 'exe')
   zap_timestamp_exe = os.path.join(syzygy_dir, 'zap_timestamp.exe')
-  print 'Running zap_timestamp.exe on %s' % filename
+  print('Processing: %s' % os.path.basename(filepath))
   proc = subprocess.Popen(
-      [zap_timestamp_exe, '--input-image=%s' % filename, '--overwrite'],
+      [zap_timestamp_exe, '--input-image=%s' % filepath, '--overwrite'],
       stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
   log, _ = proc.communicate()
   if proc.returncode != 0:
@@ -39,7 +39,7 @@ def RemovePEMetadata(build_dir, src_dir):
   for filename in files:
     # Ignore the blacklisted files.
     if filename in blacklist:
-      print 'Ignoring blacklisted file %s' % filename
+      print('Ignored: %s' % filename)
       continue
     # Only run zap_timestamp on the PE files for which we have a PDB.
     if os.path.exists(os.path.join(build_dir, filename + '.pdb')):
