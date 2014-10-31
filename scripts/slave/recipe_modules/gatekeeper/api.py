@@ -14,9 +14,9 @@ class Gatekeeper(recipe_api.RecipeApi):
       step_test_data=self.test_api.test_data,
     ).json.output
 
-    args = ['-v', '--json', gatekeeper_json]
-
     for tree_name, tree_args in config.iteritems():
+      args = ['-v', '--json', gatekeeper_json]
+
       if tree_args.get('status-url'):
         args.extend(['--status-url', tree_args['status-url']])
       if tree_args.get('set-status'):
