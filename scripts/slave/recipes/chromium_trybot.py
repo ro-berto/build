@@ -152,6 +152,18 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
+      'linux_chromium_chromeos_compile_dbg_ng': {
+        'add_telemetry_tests': False,
+        'based_on_main_waterfall': {
+          'mastername': 'chromium.chromiumos',
+          'buildername': 'Linux ChromiumOS Builder (dbg)',
+          'testers': [],
+        },
+        'compile_only': True,
+        'testing': {
+          'platform': 'linux',
+        },
+      },
       'linux_chromium_chromeos_rel': {
         'add_telemetry_tests': False,
         'chromium_config_kwargs': {
@@ -161,6 +173,18 @@ BUILDERS = {
         'enable_swarming': True,
         'chromium_config': 'chromium_chromeos',
         'compile_only': False,
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'linux_chromium_chromeos_compile_rel_ng': {
+        'add_telemetry_tests': False,
+        'based_on_main_waterfall': {
+          'mastername': 'chromium.chromiumos',
+          'buildername': 'Linux ChromiumOS Builder',
+          'testers': [],
+        },
+        'compile_only': True,
         'testing': {
           'platform': 'linux',
         },
