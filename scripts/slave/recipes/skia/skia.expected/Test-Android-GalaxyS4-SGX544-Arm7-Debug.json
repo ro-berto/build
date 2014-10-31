@@ -1060,6 +1060,7 @@
       "--match",
       "~blurroundrect",
       "~patch_grid",
+      "~desk_carsvg",
       "--nocpu"
     ],
     "env": {

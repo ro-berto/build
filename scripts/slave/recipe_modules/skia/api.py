@@ -596,10 +596,9 @@ class SkiaApi(recipe_api.RecipeApi):
       # Segfaults when run as GPU bench. Very large texture?
       match.append('~blurroundrect')
       match.append('~patch_grid')  # skia:2847
+      match.append('~desk_carsvg')
     if 'HD2000' in self.c.BUILDER_NAME:
       match.extend(['~gradient', '~etc1bitmap'])  # skia:2895
-    if 'Xoom' in self.c.BUILDER_NAME or 'Venue8' in self.c.BUILDER_NAME:
-      match.append('~desk_carsvg')
     if 'Nexus7' in self.c.BUILDER_NAME:
       match = ['skp']  # skia:2774
     if match:
