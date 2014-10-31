@@ -600,12 +600,29 @@ BUILDERS = {
         'build_gs_archive': 'mips_rel_archive',
         'testing': {'platform': 'linux'},
       },
-      'V8 Mips - big endian - nosnap': {
+      'V8 Mips - big endian - nosnap - 1': {
         'v8_apply_config': ['no_snapshot', 'no_i18n'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_ARCH': 'mips',
           'TARGET_BITS': 32,
+          'SHARD_COUNT': 2,
+          'SHARD_RUN': 1,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Mips - builder',
+        'build_gs_archive': 'mips_rel_archive',
+        'tests': ['unittests', 'v8testing'],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Mips - big endian - nosnap - 2': {
+        'v8_apply_config': ['no_snapshot', 'no_i18n'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_ARCH': 'mips',
+          'TARGET_BITS': 32,
+          'SHARD_COUNT': 2,
+          'SHARD_RUN': 2,
         },
         'bot_type': 'tester',
         'parent_buildername': 'V8 Mips - builder',

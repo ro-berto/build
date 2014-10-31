@@ -7,7 +7,7 @@
       "--master",
       "client.v8",
       "--builder",
-      "V8 Mips - big endian - nosnap",
+      "V8 Mips - big endian - nosnap - 1",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -92,9 +92,9 @@
       "--src-dir",
       "v8",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8 Mips - big endian - nosnap\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": \"V8 Mips - builder\", \"parent_got_revision\": \"54321\", \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8 Mips - big endian - nosnap - 1\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": \"V8 Mips - builder\", \"parent_got_revision\": \"54321\", \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8 Mips - big endian - nosnap\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": \"V8 Mips - builder\", \"parent_got_revision\": \"54321\", \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8 Mips - big endian - nosnap - 1\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": \"V8 Mips - builder\", \"parent_got_revision\": \"54321\", \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "name": "extract build"
   },
@@ -112,6 +112,8 @@
       "--no-variants",
       "--noi18n",
       "--no-snap",
+      "--shard_count=2",
+      "--shard_run=1",
       "--json-test-results",
       "/path/to/tmp/json"
     ],
@@ -131,6 +133,8 @@
       "default",
       "--noi18n",
       "--no-snap",
+      "--shard_count=2",
+      "--shard_run=1",
       "--flaky-tests",
       "skip",
       "--json-test-results",
@@ -152,6 +156,8 @@
       "default",
       "--noi18n",
       "--no-snap",
+      "--shard_count=2",
+      "--shard_run=1",
       "--flaky-tests",
       "run",
       "--json-test-results",
