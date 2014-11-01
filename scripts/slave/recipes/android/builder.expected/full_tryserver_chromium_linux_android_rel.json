@@ -7,7 +7,7 @@
       "--master",
       "tryserver.chromium.linux",
       "--builder",
-      "blink_android_compile_rel_recipe",
+      "android_rel",
       "--slave",
       "TestSlavename",
       "--spec",

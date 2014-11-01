@@ -98,12 +98,7 @@ BUILDERS = {
       'try': True,
       'findbugs': FYIStep,
     },
-    'blink_android_compile_dbg_recipe': {
-      'recipe_config': 'main_builder',
-      'gclient_apply_config': ['android', 'chrome_internal'],
-      'try': True,
-    },
-    'blink_android_compile_rel_recipe': {
+    'android_rel': {
       'recipe_config': 'main_builder',
       'gclient_apply_config': ['android', 'chrome_internal'],
       'try': True,
