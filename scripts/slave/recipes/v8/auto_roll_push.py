@@ -36,6 +36,7 @@ def GenSteps(api):
       ['--author', 'v8-autoroll@chromium.org',
        '--reviewer', 'v8-autoroll@chromium.org',
        # TODO(machenbach): Activate pushing.
+       '--vc-interface', 'git',
        '--svn', api.path['slave_build'].join('v8.svn'),
        '--svn-config', api.path['slave_build'].join('svn_config')],
       cwd=api.path['checkout'],

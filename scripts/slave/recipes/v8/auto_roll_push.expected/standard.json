@@ -89,6 +89,8 @@
       "v8-autoroll@chromium.org",
       "--reviewer",
       "v8-autoroll@chromium.org",
+      "--vc-interface",
+      "git",
       "--svn",
       "[SLAVE_BUILD]/v8.svn",
       "--svn-config",
