@@ -89,6 +89,7 @@
       "v8-autoroll@chromium.org",
       "--reviewer",
       "v8-autoroll@chromium.org",
+      "--push",
       "--vc-interface",
       "git",
       "--svn",
