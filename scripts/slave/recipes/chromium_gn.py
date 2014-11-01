@@ -224,6 +224,10 @@ def GenSteps(api):
 
   api.chromium.runhooks()
 
+  # TODO(dpranke): re-enable on the waterfall when this actually works.
+  if buildername == 'Linux ChromiumOS GN':
+    return
+
   # TODO(scottmg): goma doesn't work on windows GN builds yet.
   is_windows = 'Windows' in buildername
   api.chromium.run_gn(use_goma=not is_windows)

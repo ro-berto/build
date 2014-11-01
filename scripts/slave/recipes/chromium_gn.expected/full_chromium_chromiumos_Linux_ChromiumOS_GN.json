@@ -82,37 +82,5 @@
       "GYP_CHROMIUM_NO_ACTION": "1"
     },
     "name": "gclient runhooks"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[DEPOT_TOOLS]/gn.py",
-      "--root=[SLAVE_BUILD]/src",
-      "gen",
-      "//out/Release",
-      "--args=is_debug=false os=\"chromeos\" use_system_harfbuzz=false use_goma=true goma_dir=\"[BUILD]/goma\""
-    ],
-    "name": "gn"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/compile.py",
-      "--target",
-      "Release",
-      "--src-dir",
-      "[SLAVE_BUILD]/src",
-      "--build-tool",
-      "ninja",
-      "--compiler",
-      "goma",
-      "--goma-dir",
-      "[BUILD]/goma",
-      "--",
-      "all"
-    ],
-    "name": "compile"
   }
 ]
