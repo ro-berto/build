@@ -314,9 +314,7 @@ class GpuApi(recipe_api.RecipeApi):
           # and crbug.com/408358
           '--blink-platform-log-channels=Timers,Media,'
               'ScriptedAnimationController',
-          '--vmodule=devtools_http_handler_impl=2,'
-              'devtools_system_info_handler=2,'
-              'gpu_data_manager_impl_private=2'
+          '--vmodule=thread_proxy=2,render_widget_compositor=2'
         ]))
 
     # Run extra D3D9 conformance in Windows FYI GPU bots
