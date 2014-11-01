@@ -308,14 +308,7 @@ class GpuApi(recipe_api.RecipeApi):
         name='pixel_test'))
 
     # WebGL conformance tests.
-    capture(self._run_isolated_telemetry_gpu_test('webgl_conformance',
-        extra_browser_args=[
-          # For diagnosing crbug.com/393331, crbug.com/407976,
-          # and crbug.com/408358
-          '--blink-platform-log-channels=Timers,Media,'
-              'ScriptedAnimationController',
-          '--vmodule=thread_proxy=2,render_widget_compositor=2'
-        ]))
+    capture(self._run_isolated_telemetry_gpu_test('webgl_conformance'))
 
     # Run extra D3D9 conformance in Windows FYI GPU bots
     # This ensures the ANGLE/D3D9 gets some testing
@@ -421,6 +414,14 @@ class GpuApi(recipe_api.RecipeApi):
     if args:
       test_args.extend(args)
     extra_browser_args_string = '--extra-browser-args=--enable-logging=stderr'
+    if self.m.platform.is_mac and not self.m.tryserver.is_tryserver:
+      #TODO(zmo): remove the vmodule flag after crbug.com/424024 is fixed.
+      vmodules = [
+        'devtools_http_handler_impl=2',
+        'devtools_system_info_handler=2',
+        'gpu_data_manager_impl_private=2'
+      ]
+      extra_browser_args_string += ' --vmodule=' + ','.join(vmodules)
     if extra_browser_args:
       extra_browser_args_string += ' ' + ' '.join(extra_browser_args)
     test_args.append(extra_browser_args_string)

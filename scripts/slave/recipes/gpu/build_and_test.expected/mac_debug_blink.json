@@ -293,7 +293,7 @@
       "170242",
       "--test-machine-name",
       "TestBuilder",
-      "--extra-browser-args=--enable-logging=stderr"
+      "--extra-browser-args=--enable-logging=stderr --vmodule=devtools_http_handler_impl=2,devtools_system_info_handler=2,gpu_data_manager_impl_private=2"
     ],
     "name": "maps_pixel_test"
   },
@@ -340,7 +340,7 @@
       "mac",
       "--test-machine-name",
       "TestBuilder",
-      "--extra-browser-args=--enable-logging=stderr"
+      "--extra-browser-args=--enable-logging=stderr --vmodule=devtools_http_handler_impl=2,devtools_system_info_handler=2,gpu_data_manager_impl_private=2"
     ],
     "name": "pixel_test"
   },
@@ -378,7 +378,7 @@
       "--browser=debug",
       "-v",
       "--use-devtools-active-port",
-      "--extra-browser-args=--enable-logging=stderr --blink-platform-log-channels=Timers,Media,ScriptedAnimationController --vmodule=thread_proxy=2,render_widget_compositor=2"
+      "--extra-browser-args=--enable-logging=stderr --vmodule=devtools_http_handler_impl=2,devtools_system_info_handler=2,gpu_data_manager_impl_private=2"
     ],
     "name": "webgl_conformance_tests"
   },
@@ -416,7 +416,7 @@
       "--browser=debug",
       "-v",
       "--use-devtools-active-port",
-      "--extra-browser-args=--enable-logging=stderr"
+      "--extra-browser-args=--enable-logging=stderr --vmodule=devtools_http_handler_impl=2,devtools_system_info_handler=2,gpu_data_manager_impl_private=2"
     ],
     "name": "context_lost_tests"
   },
@@ -454,7 +454,7 @@
       "--browser=debug",
       "-v",
       "--use-devtools-active-port",
-      "--extra-browser-args=--enable-logging=stderr"
+      "--extra-browser-args=--enable-logging=stderr --vmodule=devtools_http_handler_impl=2,devtools_system_info_handler=2,gpu_data_manager_impl_private=2"
     ],
     "name": "memory_test"
   },
@@ -492,7 +492,7 @@
       "--browser=debug",
       "-v",
       "--use-devtools-active-port",
-      "--extra-browser-args=--enable-logging=stderr"
+      "--extra-browser-args=--enable-logging=stderr --vmodule=devtools_http_handler_impl=2,devtools_system_info_handler=2,gpu_data_manager_impl_private=2"
     ],
     "name": "screenshot_sync_tests"
   },
@@ -530,7 +530,7 @@
       "--browser=debug",
       "-v",
       "--use-devtools-active-port",
-      "--extra-browser-args=--enable-logging=stderr"
+      "--extra-browser-args=--enable-logging=stderr --vmodule=devtools_http_handler_impl=2,devtools_system_info_handler=2,gpu_data_manager_impl_private=2"
     ],
     "name": "hardware_accelerated_feature_tests"
   },
@@ -568,7 +568,7 @@
       "--browser=debug",
       "-v",
       "--use-devtools-active-port",
-      "--extra-browser-args=--enable-logging=stderr"
+      "--extra-browser-args=--enable-logging=stderr --vmodule=devtools_http_handler_impl=2,devtools_system_info_handler=2,gpu_data_manager_impl_private=2"
     ],
     "name": "gpu_process_launch_tests"
   },
@@ -610,7 +610,7 @@
       "170242",
       "--test-machine-name",
       "TestBuilder",
-      "--extra-browser-args=--enable-logging=stderr"
+      "--extra-browser-args=--enable-logging=stderr --vmodule=devtools_http_handler_impl=2,devtools_system_info_handler=2,gpu_data_manager_impl_private=2"
     ],
     "name": "gpu_rasterization_tests"
   }
