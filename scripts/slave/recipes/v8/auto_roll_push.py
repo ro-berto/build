@@ -32,7 +32,7 @@ def GenSteps(api):
   api.python(
       'push candidate',
       api.path['checkout'].join(
-          'tools', 'push-to-trunk', 'push_to_trunk.py'),
+          'tools', 'push-to-trunk', 'auto_push.py'),
       ['--author', 'v8-autoroll@chromium.org',
        '--reviewer', 'v8-autoroll@chromium.org',
        # TODO(machenbach): Activate pushing.
