@@ -10,7 +10,7 @@ from slave import recipe_api
 from slave.recipe_modules.v8 import builders
 
 
-COMMIT_POSITION_PATTERN = re.compile(r'^([\w/-]+)@{#(\d+)}$')
+COMMIT_POSITION_PATTERN = re.compile(r'^([^@]+)@{#(\d+)}$')
 
 # With more than 23 letters, labels are to big for buildbot's popup boxes.
 MAX_LABEL_SIZE = 23
