@@ -2,8 +2,10 @@
 # Copyright 2014 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
+
 """Compare the artifacts from two builds."""
 
+import difflib
 import json
 import optparse
 import os
@@ -33,14 +35,15 @@ def get_files_to_compare(build_dir):
 
 
 def compare_files(first_filepath, second_filepath):
-  """Compare two binaries and return the number of differences between them.
+  """Compares two binaries and return the number of differences between them.
 
-  Returns -1 if the files have a different size.
+  Returns None if the files are equal, a string otherwise.
   """
-  if os.stat(first_filepath).st_size != os.stat(second_filepath).st_size:
-    return -1
+  file_len = os.stat(first_filepath).st_size
+  if file_len != os.stat(second_filepath).st_size:
+    return 'different size: %d != %d' % (
+        file_len, os.stat(second_filepath).st_size)
 
-  # Read the files by chunks of 1MB.
   chunk_size = 1024 * 1024
   diffs = 0
   with open(first_filepath, 'rb') as lhs:
@@ -51,8 +54,27 @@ def compare_files(first_filepath, second_filepath):
         if not lhs_data:
           break
         diffs += sum(l != r for l, r in zip(lhs_data, rhs_data))
+  if not diffs:
+    return None
 
-  return diffs
+  result = '%d out of %d bytes are different (%.2f%%)' % (
+        diffs, file_len, 100.0 * diffs / file_len)
+
+  if diffs and first_filepath.endswith('.isolated'):
+    # Unpack the files.
+    with open(first_filepath, 'rb') as f:
+      lhs = json.dumps(
+          json.load(f), indent=2, sort_keys=True,
+          separators=(',', ': ')).splitlines()
+    with open(second_filepath, 'rb') as f:
+      rhs = json.dumps(
+          json.load(f), indent=2, sort_keys=True,
+          separators=(',', ': ')).splitlines()
+
+    result += '\n' + '\n'.join(
+        line for line in difflib.unified_diff(lhs, rhs)
+        if not line.startswith(('---', '+++')))
+  return result
 
 
 def compare_build_artifacts(first_dir, second_dir):
@@ -81,19 +103,11 @@ def compare_build_artifacts(first_dir, second_dir):
   for f in sorted(first_list & second_list):
     first_file = os.path.join(first_dir, f)
     second_file = os.path.join(second_dir, f)
-    files_diffs = compare_files(first_file, second_file)
-    if not files_diffs:
+    result = compare_files(first_file, second_file)
+    if not result:
       result = 'equal'
     else:
-      file_len = os.stat(first_file).st_size
-      difference = ''
-      if files_diffs == -1:
-        difference = 'different size: %d != %d' % (file_len,
-                                                   os.stat(second_file).st_size)
-      else:
-        difference = '%d out of %d bytes are different (%.2f%%)' % (
-            files_diffs, file_len, 100.0 * files_diffs / file_len)
-      result = 'DIFFERENT: %s' % difference
+      result = 'DIFFERENT: %s' % result
       res += 1
     print('%-*s: %s' % (max_filepath_len, f, result))
 
@@ -105,8 +119,10 @@ def compare_build_artifacts(first_dir, second_dir):
 
 def main():
   parser = optparse.OptionParser(usage='%prog [options]')
-  parser.add_option('--first-build-dir', help='The first build directory.')
-  parser.add_option('--second-build-dir', help='The second build directory.')
+  parser.add_option(
+      '-f', '--first-build-dir', help='The first build directory.')
+  parser.add_option(
+      '-s', '--second-build-dir', help='The second build directory.')
   options, _ = parser.parse_args()
 
   if not options.first_build_dir:
