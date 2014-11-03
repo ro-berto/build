@@ -417,9 +417,11 @@ class GpuApi(recipe_api.RecipeApi):
     if self.m.platform.is_mac and not self.m.tryserver.is_tryserver:
       #TODO(zmo): remove the vmodule flag after crbug.com/424024 is fixed.
       vmodules = [
+        'chrome_browser_main=2',
         'devtools_http_handler_impl=2',
         'devtools_system_info_handler=2',
-        'gpu_data_manager_impl_private=2'
+        'gpu_data_manager_impl_private=2',
+        'remote_debugging_server=2'
       ]
       extra_browser_args_string += ' --vmodule=' + ','.join(vmodules)
     if extra_browser_args:
