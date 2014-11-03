@@ -79,7 +79,7 @@
     ],
     "env": {
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "arm_float_abi=hard component=static_library target_arch=arm test_isolation_mode=archive test_isolation_outdir=https://isolateserver.appspot.com"
+      "GYP_DEFINES": "arm_float_abi=hard component=static_library target_arch=arm test_isolation_mode=prepare"
     },
     "name": "gclient runhooks"
   },

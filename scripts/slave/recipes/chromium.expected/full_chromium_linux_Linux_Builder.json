@@ -208,6 +208,7 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
+      "--verbose",
       "[SLAVE_BUILD]/src/out/Release/browser_tests.isolated.gen.json"
     ],
     "name": "isolate tests",

@@ -24,7 +24,6 @@ SPEC = {
       },
       'use_isolate': True,
       'enable_swarming': True,
-      'isolation_mode': 'prepare',
     },
     'Linux Tests': {
       'recipe_config': 'chromium',
