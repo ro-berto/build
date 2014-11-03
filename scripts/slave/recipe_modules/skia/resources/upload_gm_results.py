@@ -79,7 +79,7 @@ def _GSUploadJsonFiles(src_dir, builder_name, gsutil_path='gsutil'):
     src_path = os.path.join(src_dir, filename)
     gs_dest_path = posixpath.join(gs_dest_dir, filename)
     subprocess.check_call(['python', gsutil_path, 'cp',
-                           '-v'
+                           '-v',
                            '-a', 'public-read',
                            src_path, gs_dest_path])
 
