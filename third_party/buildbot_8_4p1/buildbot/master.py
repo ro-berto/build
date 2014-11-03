@@ -217,16 +217,8 @@ class BuildMaster(service.MultiService):
                     bname, number_cancelled_builds))
 
     def noNewBuilds(self):
-        log.msg("stopping schedulers")
-        self.loadConfig_Schedulers([])
-        log.msg("stopping sources")
-        self.loadConfig_Sources([])
-        d = self.cancelAllPendingBuilds()
-        def doneStopping(res):
-          log.msg("new builds stopped")
-          return res
-        d.addCallback(doneStopping)
-        return d
+        log.msg("stopping build request driver")
+        return self.botmaster.brd.stopService()
 
     def loadTheConfigFile(self, configFile=None):
         if not configFile:

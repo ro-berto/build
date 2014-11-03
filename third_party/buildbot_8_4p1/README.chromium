@@ -4731,3 +4731,26 @@ index 7703e57..7a83ed7 100644
 +          timeout()
 +          return
 
+diff --git a/third_party/buildbot_8_4p1/buildbot/master.py b/third_party/buildbot_8_4p1/buildbot/master.py
+index 9a1b6d0..3618b3c 100644
+--- a/third_party/buildbot_8_4p1/buildbot/master.py
++++ b/third_party/buildbot_8_4p1/buildbot/master.py
+@@ -217,16 +217,8 @@ class BuildMaster(service.MultiService):
+                     bname, number_cancelled_builds))
+ 
+     def noNewBuilds(self):
+-        log.msg("stopping schedulers")
+-        self.loadConfig_Schedulers([])
+-        log.msg("stopping sources")
+-        self.loadConfig_Sources([])
+-        d = self.cancelAllPendingBuilds()
+-        def doneStopping(res):
+-          log.msg("new builds stopped")
+-          return res
+-        d.addCallback(doneStopping)
+-        return d
++        log.msg("stopping build request driver")
++        return self.botmaster.brd.stopService()
+ 
+     def loadTheConfigFile(self, configFile=None):
+         if not configFile:
