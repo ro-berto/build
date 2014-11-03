@@ -1259,7 +1259,6 @@ def AddBranchBuilder(branch_config, build_config, arch, bits, presubmit=False,
   if presubmit:
     tests = ['presubmit'] + tests
   return {
-    'gclient_apply_config': ['use_git'],
     'chromium_apply_config': ['no_optimized_debug'],
     # TODO(machenbach): Switch on test results presentation for branch builders
     # as soon as stable branch passes v8 revision 21358, where the feature was
@@ -1297,7 +1296,6 @@ BUILDERS['client.v8.branches'] = {'builders': BRANCH_BUILDERS}
 
 BUILDERS['client.dart.fyi'] = {'builders': {
   'v8-%s-release' % platform: {
-    'gclient_apply_config': ['use_git'],
     'chromium_apply_config': ['disassembler'],
     'v8_apply_config': ['stable_branch'],
     'v8_config_kwargs': {

@@ -205,8 +205,6 @@ RECOGNIZED_PATHS = {
         CHROMIUM_SRC_URL,
     '/chrome/trunk/deps/third_party/webrtc/webrtc.DEPS':
         CHROMIUM_GIT_HOST + '/chromium/deps/webrtc/webrtc.DEPS.git',
-    '/svn/branches/bleeding_edge':
-        CHROMIUM_GIT_HOST + '/v8/v8.git',
     '/chrome/trunk/src/tools/cros.DEPS':
         CHROMIUM_GIT_HOST + '/chromium/src/tools/cros.DEPS.git',
     '/webrtc/trunk':

@@ -25,8 +25,7 @@ def ChromiumSvnTrunkURL(c, *pieces):
 def v8(c):
   soln = c.solutions.add()
   soln.name = 'v8'
-  # TODO(machenbach): Switch to git after change source switches.
-  soln.url = 'http://v8.googlecode.com/svn/branches/bleeding_edge'
+  soln.url = 'https://chromium.googlesource.com/v8/v8'
   soln.custom_vars = {'chromium_trunk': ChromiumSvnTrunkURL(c)}
   c.got_revision_mapping['v8'] = 'got_revision'
   # Needed to get the testers to properly sync the right revision.
@@ -52,9 +51,3 @@ def mozilla_tests(c):
 def clang(c):
   c.solutions[0].custom_deps['v8/tools/clang/scripts'] = ChromiumSvnSubURL(
       c, 'chrome', 'trunk', 'src', 'tools', 'clang', 'scripts')
-
-
-@CONFIG_CTX(includes=['v8'])
-def use_git(c):
-  # TODO(machenbach): Make this the default.
-  c.solutions[0].url = 'https://chromium.googlesource.com/v8/v8'
