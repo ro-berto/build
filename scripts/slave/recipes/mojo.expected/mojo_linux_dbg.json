@@ -47,7 +47,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/mojo/tools/mojob.sh",
-      "--release",
+      "--debug",
       "gn"
     ],
     "cwd": "[SLAVE_BUILD]/src",
@@ -56,7 +56,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/mojo/tools/mojob.sh",
-      "--release",
+      "--debug",
       "build"
     ],
     "name": "mojob build"
@@ -64,17 +64,9 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/mojo/tools/mojob.sh",
-      "--release",
+      "--debug",
       "test"
     ],
     "name": "mojob test"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/mojo/tools/upload_shell_binary.py"
-    ],
-    "name": "upload shell binary"
   }
 ]
