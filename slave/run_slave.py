@@ -252,7 +252,7 @@ def SpawnSubdirBuildbotsIfNeeded():
     if subdir and not os.path.exists(botdir):
       print 'Creating %s' % botdir
       os.mkdir(botdir)
-      GClientCall(['config', gclient_solutions[0]['url'], '--git-deps'])
+      GClientCall(['config', gclient_solutions[0]['url']])
       GClientCall(['sync'])
       shutil.copyfile(
           os.path.join(BUILD_DIR, 'site_config', '.bot_password'),
