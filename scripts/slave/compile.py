@@ -106,7 +106,7 @@ def goma_setup(options, env):
   options.goma_dir and returns False
 
   """
-  if options.compiler not in ('goma', 'goma-clang', 'jsonclang'):
+  if options.compiler not in ('goma', 'goma-clang'):
     # Unset goma_dir to make sure we'll not use goma.
     options.goma_dir = None
     return False
@@ -158,8 +158,6 @@ def goma_setup(options, env):
   if options.compiler == 'goma':
     options.compiler = None
   # Reset options.goma_dir.
-  # options.goma_dir will be used to check if goma is ready
-  # when options.compiler=jsonclang.
   options.goma_dir = None
   env['GOMA_DISABLED'] = '1'
   # Upload compiler_proxy.INFO to investigate the reason of compiler_proxy
@@ -212,7 +210,7 @@ def UploadGomaCompilerProxyInfo():
 
 def goma_teardown(options, env):
   """Tears down goma if necessary. """
-  if (options.compiler in ('goma', 'goma-clang', 'jsonclang') and
+  if (options.compiler in ('goma', 'goma-clang') and
       options.goma_dir):
     if not chromium_utils.IsWindows():
       goma_ctl_cmd = [os.path.join(options.goma_dir, 'goma_ctl.sh')]
@@ -637,7 +635,7 @@ def common_make_settings(
   Sets desirable environment variables and command-line options that are used
   in the Make build.
   """
-  assert compiler in (None, 'clang', 'goma', 'goma-clang', 'jsonclang')
+  assert compiler in (None, 'clang', 'goma', 'goma-clang')
   maybe_set_official_build_envvars(options, env)
 
   # Don't stop at the first error.
@@ -668,7 +666,7 @@ def common_make_settings(
       command.append('-r')
       return
 
-  if compiler in ('goma', 'goma-clang', 'jsonclang'):
+  if compiler in ('goma', 'goma-clang'):
     print 'using', compiler
     goma_jobs = 50
     if jobs < goma_jobs:
@@ -844,24 +842,8 @@ def main_ninja(options, args):
     if options.compiler:
       print 'using', options.compiler
 
-    if options.compiler in ('goma', 'goma-clang', 'jsonclang'):
+    if options.compiler in ('goma', 'goma-clang'):
       assert options.goma_dir
-      if chromium_utils.IsWindows():
-        assert options.compiler != 'jsonclang', ('jsonclang does not use '
-            'CC_wrapper, so it cannot easily work on Windows.')
-
-      # Adjust the path for jsonclang, since it doesn't use CC_wrapper. Windows
-      # uses -t msvc and hardcodes the compiler path in build.ninja, so this
-      # doesn't have an effect there.
-      if options.compiler == 'jsonclang':
-        jsonclang_dir = os.path.join(SLAVE_SCRIPTS_DIR, 'chromium')
-        clang_dir = os.path.join(options.src_dir,
-            'third_party', 'llvm-build', 'Release+Asserts', 'bin')
-        if options.goma_dir:
-          env['PATH'] = os.pathsep.join(
-              [jsonclang_dir, options.goma_dir, clang_dir, env['PATH']])
-        else:
-          env['PATH'] = os.pathsep.join([jsonclang_dir, clang_dir, env['PATH']])
 
       def determine_goma_jobs():
         # We would like to speed up build on Windows a bit, since it is slowest.
