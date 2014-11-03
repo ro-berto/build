@@ -4,11 +4,12 @@
 
 DEPS = [
   'chromium',
+  'file',
   'git',
   'json',
   'path',
   'properties',
   'python',
-  'swarming_client',
   'step',
+  'swarming_client',
 ]

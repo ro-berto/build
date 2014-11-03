@@ -75,26 +75,10 @@ def GenSteps(api):
   api.chromium.compile(targets=['chromium_swarm_tests'])
   api.isolate.remove_build_metadata()
 
-  # Discover all targets prepared for isolation. Generally it's better to
-  # provide this list explicitly in the recipe. But on the canary we isolate
-  # everything we can.
-  paths = api.file.glob(
-      'find isolated targets',
-      api.chromium.output_dir.join('*.isolated.gen.json'),
-      test_data=[
-        api.chromium.output_dir.join('dummy_target_%d.isolated.gen.json' % i)
-        for i in (1, 2)
-      ])
-  targets = []
-  for p in paths:
-    name = api.path.basename(p)
-    assert name.endswith('.isolated.gen.json'), name
-    targets.append(name[:-len('.isolated.gen.json')])
-
-  # Perform the upload.
+  # Will search for *.isolated.gen.json files in the build directory and isolate
+  # corresponding targets.
   api.isolate.isolate_tests(
       api.chromium.output_dir,
-      targets,
       verbose=True,
       env={'SWARMING_PROFILE': '1'})
 

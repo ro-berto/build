@@ -819,7 +819,7 @@ def GenSteps(api):
     # Swarming uses Isolate to transfer files to swarming bots.
     # set_isolate_environment modifies GYP_DEFINES to enable test isolation.
     if bot_config.get('use_isolate') or has_swarming_tests:
-      api.isolate.set_isolate_environment(api.chromium.c)
+      api.isolate.set_isolate_environment(api.chromium.c, mode='prepare')
 
     # If going to use swarming_client (pinned in src/DEPS), ensure it is
     # compatible with what recipes expect.
@@ -862,9 +862,8 @@ def GenSteps(api):
       # all platforms except Windows where it run zap_timestamp.exe on all the
       # PE images.
       api.isolate.remove_build_metadata()
-      # Collect *.isolated hashes for all isolated targets, used when triggering
-      # tests on swarming.
-      api.isolate.find_isolated_tests(api.chromium.output_dir)
+      # Isolate all prepared targets, will look for *.isolated.gen.json files.
+      api.isolate.isolate_tests(api.chromium.output_dir, verbose=True)
 
     if bot_config['compile_only']:
       tests = []
@@ -979,7 +978,7 @@ def GenSteps(api):
         api.tryserver.set_transient_failure_tryjob_result()
         raise
       if bot_config.get('use_isolate') or has_failing_swarming_tests:
-        api.isolate.find_isolated_tests(api.chromium.output_dir)
+        api.isolate.isolate_tests(api.chromium.output_dir, verbose=True)
 
   return api.test_utils.determine_new_failures(api, tests, deapply_patch_fn)
 
@@ -1248,7 +1247,7 @@ def GenTests(api):
         },
      })) +
     api.override_step_data(
-        'find isolated tests',
+        'isolate tests',
         api.isolate.output_json(['base_unittests', 'browser_tests']))
   )
 
@@ -1286,7 +1285,7 @@ def GenTests(api):
         },
      })) +
     api.override_step_data(
-        'find isolated tests',
+        'isolate tests',
         api.isolate.output_json(['base_unittests', 'browser_tests']))
   )
 
@@ -1318,7 +1317,7 @@ def GenTests(api):
         },
      })) +
     api.override_step_data(
-        'find isolated tests',
+        'isolate tests',
         api.isolate.output_json(['base_unittests']))
   )
 
@@ -1351,12 +1350,12 @@ def GenTests(api):
         },
      })) +
     api.override_step_data(
-        'find isolated tests',
+        'isolate tests',
         api.isolate.output_json(['base_unittests', 'browser_tests'])) +
     api.override_step_data('base_unittests (with patch)',
                            canned_test(passing=False)) +
     api.override_step_data(
-        'find isolated tests (2)',
+        'isolate tests (2)',
         api.isolate.output_json(['base_unittests']))
   )
 

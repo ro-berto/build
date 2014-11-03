@@ -104,7 +104,7 @@ class IsolateApi(recipe_api.RecipeApi):
         step_result.presentation.status != self.m.step.FAILURE):
       step_result.presentation.status = self.m.step.WARNING
 
-  def isolate_tests(self, build_dir, targets, verbose=False, **kwargs):
+  def isolate_tests(self, build_dir, targets=None, verbose=False, **kwargs):
     """Archives prepared tests in |build_dir| to isolate server.
 
     Works only if Chromium was compiled with test_isolation_mode=='prepare'. See
@@ -121,6 +121,25 @@ class IsolateApi(recipe_api.RecipeApi):
     build property (also accessible as 'isolated_tests' property). This implies
     this step can currently only be run once per recipe.
     """
+    # TODO(vadimsh): Always require |targets| to be passed explicitly. Currently
+    # chromium_trybot and swarming/canary recipes rely on targets autodiscovery.
+    # The code path in chromium_trybot that needs it is being deprecated in
+    # favor of to *_ng builders, that pass targets explicitly.
+    if targets is None:
+      # Ninja builds <target>.isolated.gen.json files via isolate_driver.py.
+      paths = self.m.file.glob(
+          'find isolated targets',
+          build_dir.join('*.isolated.gen.json'),
+          test_data=[
+            build_dir.join('dummy_target_%d.isolated.gen.json' % i)
+            for i in (1, 2)
+          ])
+      targets = []
+      for p in paths:
+        name = self.m.path.basename(p)
+        assert name.endswith('.isolated.gen.json'), name
+        targets.append(name[:-len('.isolated.gen.json')])
+
     input_files = [build_dir.join('%s.isolated.gen.json' % t) for t in targets]
     try:
       # TODO(vadimsh): Differentiate between bad *.isolate and upload errors.
