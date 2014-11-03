@@ -343,6 +343,18 @@ def asan(c):
   c.gyp_env.GYP_DEFINES['asan'] = 1
   c.gyp_env.GYP_DEFINES['lsan'] = 1
 
+# TODO(infra,earthdok,glider): Make this a gyp variable. This is also not a
+# good name as only v8 builds release symbolized with -O2 while
+# chromium.lkgr uses -O1.
+@config_ctx()
+def asan_symbolized(c):
+  c.gyp_env.GYP_DEFINES['release_extra_cflags'] = (
+      '-gline-tables-only -O2 -fno-inline-functions -fno-inline')
+
+@config_ctx()
+def asan_coverage(c):
+  c.gyp_env.GYP_DEFINES['asan_coverage'] = 1
+
 @config_ctx()
 def no_lsan(c):
   c.gyp_env.GYP_DEFINES['lsan'] = 0
@@ -426,6 +438,10 @@ def chromium(c):
 @config_ctx(includes=['ninja', 'clang', 'goma', 'asan'])
 def chromium_asan(c):
   c.runtests.test_args.append('--test-launcher-print-test-stdio=always')
+
+@config_ctx(includes=['chromium_asan'])
+def chromium_asan_default_targets(c):
+  c.compile_py.default_targets = ['chromium_builder_asan']
 
 @config_ctx(includes=['chromium_asan'])
 def chromium_linux_asan(c):
@@ -599,6 +615,10 @@ def chrome_pgo_optimize(c):
 @config_ctx()
 def v8_optimize_medium(c):
   c.gyp_env.GYP_DEFINES['v8_optimized_debug'] = 1
+
+@config_ctx()
+def v8_verify_heap(c):
+  c.gyp_env.GYP_DEFINES['v8_enable_verify_heap'] = 1
 
 @config_ctx()
 def chromium_perf(c):

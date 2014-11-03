@@ -369,17 +369,26 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             buildername,
             self.m.properties.get('buildnumber'))
 
-      self.m.archive.zip_and_upload_build(
-          'package build',
-          self.m.chromium.c.build_config_fs,
-          build_url=self._build_gs_archive_url(mastername, master_config),
-          build_revision=got_revision,
-          cros_board=self.m.chromium.c.TARGET_CROS_BOARD,
-          # TODO(machenbach): Make asan a configuration switch.
-          package_dsym_files=(
-              self.m.chromium.c.gyp_env.GYP_DEFINES.get('asan') and
-              self.m.chromium.c.HOST_PLATFORM == 'mac'),
-      )
+      if bot_config.get('cf_archive_build'):
+        self.m.archive.clusterfuzz_archive(
+            'ClusterFuzz Archive ',
+            self.m.chromium.c.build_config_fs,
+            gs_bucket=bot_config.get('cf_gs_bucket'),
+            cf_archive_name=bot_config.get('cf_archive_name'),
+            revision_dir=bot_config.get('cf_revision_dir'),
+        )
+      else:
+        self.m.archive.zip_and_upload_build(
+            'package build',
+            self.m.chromium.c.build_config_fs,
+            build_url=self._build_gs_archive_url(mastername, master_config),
+            build_revision=got_revision,
+            cros_board=self.m.chromium.c.TARGET_CROS_BOARD,
+            # TODO(machenbach): Make asan a configuration switch.
+            package_dsym_files=(
+                self.m.chromium.c.gyp_env.GYP_DEFINES.get('asan') and
+                self.m.chromium.c.HOST_PLATFORM == 'mac'),
+        )
 
   def tests_for_builder(self, mastername, buildername, update_step, master_dict,
                         override_bot_type=None):

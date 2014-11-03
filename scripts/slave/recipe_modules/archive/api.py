@@ -38,6 +38,27 @@ class ArchiveApi(recipe_api.RecipeApi):
       **kwargs
     )
 
+  def clusterfuzz_archive(
+      self, step_name, target, gs_bucket=None, cf_archive_name=None,
+      revision_dir=None, **kwargs):
+    """Returns a step invoking cf_archive_build.py to zip up a Chromium build
+       and upload to clusterfuzz."""
+    args = ['--target', target]
+    if gs_bucket:
+      args.extend(['--gs_bucket', gs_bucket])
+    if cf_archive_name:
+      args.extend(['--cf_archive_name', cf_archive_name])
+    if revision_dir:
+      args.extend(['--revision_dir', revision_dir])
+    args.extend(['--gs_acl', 'public-read'])
+    self.m.python(
+      step_name,
+      self.m.path['build'].join(
+          'scripts', 'slave', 'chromium', 'cf_archive_build.py'),
+      args,
+      **kwargs
+    )
+
   def download_and_unzip_build(
       self, step_name, target, build_url, src_dir=None,
       build_revision=None, build_archive_url=None, **kwargs):

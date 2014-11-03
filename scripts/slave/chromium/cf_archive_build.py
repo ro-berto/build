@@ -104,7 +104,8 @@ def archive(options, args):
   src_dir = os.path.abspath(os.path.dirname(build_dir))
   build_dir = os.path.join(build_dir, options.target)
 
-  revision_dir = options.factory_properties.get('revision_dir')
+  revision_dir = (options.revision_dir or
+                  options.factory_properties.get('revision_dir'))
   primary_project = chromium_utils.GetPrimaryProject(options)
 
   build_sortkey_branch, build_sortkey_value = GetBuildSortKey(
@@ -122,8 +123,12 @@ def archive(options, args):
   zip_file_list = [f for f in os.listdir(build_dir)
                    if ShouldPackageFile(f, options.target)]
 
-  subdir_suffix = options.factory_properties.get('cf_archive_subdir_suffix',
-                                                 '')
+  if options.cf_archive_subdir_suffix is None:
+    subdir_suffix = options.factory_properties.get(
+        'cf_archive_subdir_suffix', '')
+  else:
+    subdir_suffix = options.cf_archive_subdir_suffix
+
   pieces = [chromium_utils.PlatformName(), options.target.lower()]
   if subdir_suffix:
     pieces.append(subdir_suffix)
@@ -134,7 +139,8 @@ def archive(options, args):
   if revision_dir:
     component = '-%s-component' % revision_dir
 
-  prefix = options.factory_properties.get('cf_archive_name', 'cf_archive')
+  prefix = (options.cf_archive_name or
+            options.factory_properties.get('cf_archive_name', 'cf_archive'))
   sortkey_path = chromium_utils.GetSortableUploadPathForSortKey(
       build_sortkey_branch, build_sortkey_value)
   zip_file_name = '%s-%s-%s%s-%s' % (prefix,
@@ -157,8 +163,9 @@ def archive(options, args):
   zip_size = os.stat(zip_file)[stat.ST_SIZE]
   print 'Zip file is %ld bytes' % zip_size
 
-  gs_bucket = options.factory_properties.get('gs_bucket', None)
-  gs_acl = options.factory_properties.get('gs_acl', None)
+  gs_bucket = (options.gs_bucket or
+               options.factory_properties.get('gs_bucket', None))
+  gs_acl = options.gs_acl or options.factory_properties.get('gs_acl', None)
 
   gs_metadata = {
       GS_COMMIT_POSITION_NUMBER_KEY: build_sortkey_value,
@@ -187,6 +194,18 @@ def main(argv):
   option_parser.add_option('--target', default='Release',
                            help='build target to archive (Debug or Release)')
   option_parser.add_option('--build-dir', help='ignored')
+  option_parser.add_option('--cf_archive_name',
+                           help='prefix of the archive zip file')
+  option_parser.add_option('--cf_archive_subdir_suffix',
+                           help='suffix of the archive directory')
+  option_parser.add_option('--gs_acl', help='ACLs to be used on upload')
+  option_parser.add_option('--gs_bucket',
+                           help='the google storage bucket name')
+  option_parser.add_option('--revision_dir',
+                           help=('component builds: if set, use directory '
+                                 'revision instead of chromium revision and '
+                                 'add "-component" to the archive name'))
+
   chromium_utils.AddPropertiesOptions(option_parser)
 
   options, args = option_parser.parse_args(argv)
