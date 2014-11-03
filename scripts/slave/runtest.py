@@ -1548,9 +1548,11 @@ def _MainAndroid(options, args, extra_env):
 
   # Assume it's a gtest apk, so use the android harness.
   test_suite = args[0]
-  gtest_args = args[1:]
-  command = ['src/build/android/test_runner.py', 'gtest', '-s', test_suite]
-  command.extend(gtest_args)
+  run_test_target_option = '--release'
+  if options.target == 'Debug':
+    run_test_target_option = '--debug'
+  command = ['src/build/android/test_runner.py', 'gtest',
+             run_test_target_option, '-s', test_suite]
   result = _RunGTestCommand(command, extra_env, log_processor=log_processor)
 
   if options.generate_json_file:
