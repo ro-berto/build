@@ -27,6 +27,7 @@ def GenSteps(api):
   bot_config = master_dict.get('builders', {}).get(buildername)
   assert bot_config, ('Unrecognized builder name "%r" for master "%r".' %
                       (buildername, mastername))
+
   bot_type = bot_config.get('bot_type', 'builder_tester')
   does_build = bot_type in ('builder', 'builder_tester')
   does_test = bot_type in ('builder_tester', 'tester')
@@ -36,19 +37,11 @@ def GenSteps(api):
   assert recipe_config, ('Cannot find recipe_config "%s" for builder "%r".' %
                          (recipe_config_name, buildername))
 
-  api.webrtc.set_config(recipe_config['webrtc_config'],
-                        PERF_CONFIG=master_settings.get('PERF_CONFIG'),
-                        **bot_config.get('webrtc_config_kwargs', {}))
-  for c in bot_config.get('gclient_apply_config', []):
-    api.gclient.apply_config(c)
-  for c in bot_config.get('chromium_apply_config', []):
-    api.chromium.apply_config(c)
+  api.webrtc.setup(bot_config, recipe_config,
+                   master_settings.get('PERF_CONFIG'))
 
   # Needed for the multiple webcam check steps to get unique names.
   api.step.auto_resolve_conflicts = True
-
-  if api.tryserver.is_tryserver:
-    api.chromium.apply_config('trybot_flavor')
 
   step_result = api.bot_update.ensure_checkout()
 
@@ -60,9 +53,7 @@ def GenSteps(api):
   if does_build:
     if api.chromium.c.project_generator.tool == 'gn':
       api.chromium.run_gn(use_goma=True)
-      api.chromium.compile(targets=['all'])
-    else:
-      api.chromium.compile()
+    api.chromium.compile()
 
     if api.chromium.c.gyp_env.GYP_DEFINES.get('syzyasan', 0) == 1:
       api.chromium.apply_syzyasan()
@@ -80,9 +71,7 @@ def GenSteps(api):
 
   if does_test:
     api.webrtc.cleanup()
-    test_suite = recipe_config.get('test_suite')
-    if test_suite:
-      api.webrtc.runtests(test_suite, got_revision)
+    api.webrtc.runtests(got_revision)
 
 
 def _sanitize_nonalpha(text):
@@ -104,16 +93,16 @@ def GenTests(api):
           'Unexpected parent_buildername for builder %r on master %r.' %
               (buildername, mastername))
 
-    webrtc_kwargs = bot_config.get('webrtc_config_kwargs', {})
+    chromium_kwargs = bot_config.get('chromium_config_kwargs', {})
     test = (
       api.test('%s_%s%s' % (_sanitize_nonalpha(mastername),
                             _sanitize_nonalpha(buildername), suffix)) +
       api.properties(mastername=mastername,
                      buildername=buildername,
                      slavename='slavename',
-                     BUILD_CONFIG=webrtc_kwargs['BUILD_CONFIG']) +
+                     BUILD_CONFIG=chromium_kwargs['BUILD_CONFIG']) +
       api.platform(bot_config['testing']['platform'],
-                   webrtc_kwargs.get('TARGET_BITS', 64))
+                   chromium_kwargs.get('TARGET_BITS', 64))
     )
 
     if bot_config.get('parent_buildername'):

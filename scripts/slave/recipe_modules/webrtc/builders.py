@@ -7,35 +7,45 @@
 
 RECIPE_CONFIGS = {
   'webrtc': {
-    'webrtc_config': 'webrtc',
+    'chromium_config': 'webrtc_standalone',
+    'gclient_config': 'webrtc',
     'test_suite': 'webrtc',
   },
   'webrtc_baremetal': {
-    'webrtc_config': 'webrtc',
+    'chromium_config': 'webrtc_standalone',
+    'gclient_config': 'webrtc',
     'test_suite': 'webrtc_baremetal',
   },
   'webrtc_clang': {
-    'webrtc_config': 'webrtc_clang',
+    'chromium_config': 'webrtc_clang',
+    'gclient_config': 'webrtc',
     'test_suite': 'webrtc',
   },
   'webrtc_parallel': {
-    'webrtc_config': 'webrtc',
+    'chromium_config': 'webrtc_standalone',
+    'gclient_config': 'webrtc',
     'test_suite': 'webrtc_parallel',
   },
   'webrtc_android': {
-    'webrtc_config': 'webrtc_android',
+    'chromium_config': 'android',
+    'chromium_android_config': 'base_config',
+    'gclient_config': 'webrtc',
+    'gclient_apply_config': ['android'],
     'test_suite': 'android',
   },
   'webrtc_android_clang': {
-    'webrtc_config': 'webrtc_android_clang',
+    'chromium_config': 'android_clang',
+    'chromium_android_config': 'base_config',
+    'gclient_config': 'webrtc',
+    'gclient_apply_config': ['android'],
   },
   'webrtc_ios': {
-    'webrtc_config': 'webrtc_ios',
+    'chromium_config': 'webrtc_ios',
+    'gclient_config': 'webrtc_ios',
   },
   'chromium_webrtc': {
     'chromium_config': 'chromium',
     'chromium_apply_config': ['dcheck', 'blink_logging_on'],
-    'webrtc_config': 'chromium',
     'gclient_config': 'chromium_webrtc',
     'compile_targets': ['chromium_builder_webrtc'],
     'test_suite': 'chromium',
@@ -43,7 +53,6 @@ RECIPE_CONFIGS = {
   'chromium_webrtc_tot': {
     'chromium_config': 'chromium',
     'chromium_apply_config': ['dcheck', 'blink_logging_on'],
-    'webrtc_config': 'chromium',
     'gclient_config': 'chromium_webrtc_tot',
     'compile_targets': ['chromium_builder_webrtc'],
     'test_suite': 'chromium',
@@ -51,13 +60,12 @@ RECIPE_CONFIGS = {
   'chromium_webrtc_tot_gn': {
     'chromium_config': 'chromium',
     'chromium_apply_config': ['gn'],
-    'webrtc_config': 'chromium',
     'gclient_config': 'chromium_webrtc_tot',
     'compile_targets': ['all'],
   },
   'chromium_webrtc_android': {
     'chromium_config': 'android',
-    'webrtc_config': 'chromium',
+    'chromium_android_config': 'base_config',
     'gclient_config': 'chromium_webrtc',
     'gclient_apply_config': ['android'],
     'compile_targets': ['android_builder_chromium_webrtc'],
@@ -65,7 +73,7 @@ RECIPE_CONFIGS = {
   },
   'chromium_webrtc_tot_android': {
     'chromium_config': 'android',
-    'webrtc_config': 'chromium',
+    'chromium_android_config': 'base_config',
     'gclient_config': 'chromium_webrtc_tot',
     'gclient_apply_config': ['android'],
     'compile_targets': ['android_builder_chromium_webrtc'],
@@ -74,7 +82,6 @@ RECIPE_CONFIGS = {
   'chromium_webrtc_tot_android_gn': {
     'chromium_config': 'android',
     'chromium_apply_config': ['gn'],
-    'webrtc_config': 'chromium',
     'gclient_config': 'chromium_webrtc_tot',
     'gclient_apply_config': ['android'],
     'compile_targets': ['all'],
@@ -417,7 +424,7 @@ BUILDERS = {
     'builders': {
       'Win32 Debug': {
         'recipe_config': 'webrtc',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
         },
@@ -426,7 +433,7 @@ BUILDERS = {
       },
       'Win32 Release': {
         'recipe_config': 'webrtc',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
@@ -436,7 +443,7 @@ BUILDERS = {
       'Win64 Debug': {
         'recipe_config': 'webrtc',
         'chromium_apply_config': ['static_library'],
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
         },
@@ -445,7 +452,7 @@ BUILDERS = {
       },
       'Win64 Release': {
         'recipe_config': 'webrtc',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
@@ -454,9 +461,11 @@ BUILDERS = {
       },
       'Win32 Release [large tests]': {
         'recipe_config': 'webrtc_baremetal',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
+        },
+        'webrtc_config_kwargs': {
           'PERF_ID': 'webrtc-win-large-tests',
         },
         'bot_type': 'builder_tester',
@@ -465,7 +474,7 @@ BUILDERS = {
       'Win DrMemory Full': {
         'recipe_config': 'webrtc',
         'chromium_apply_config': ['drmemory_full'],
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
         },
@@ -475,7 +484,7 @@ BUILDERS = {
       'Win DrMemory Light': {
         'recipe_config': 'webrtc',
         'chromium_apply_config': ['drmemory_light'],
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
         },
@@ -485,7 +494,7 @@ BUILDERS = {
       'Win SyzyASan': {
         'recipe_config': 'webrtc',
         'chromium_apply_config': ['syzyasan'],
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
@@ -494,7 +503,7 @@ BUILDERS = {
       },
       'Mac32 Debug': {
         'recipe_config': 'webrtc',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
         },
@@ -503,7 +512,7 @@ BUILDERS = {
       },
       'Mac32 Release': {
         'recipe_config': 'webrtc',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
@@ -512,7 +521,7 @@ BUILDERS = {
       },
       'Mac64 Debug': {
         'recipe_config': 'webrtc',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
         },
@@ -521,7 +530,7 @@ BUILDERS = {
       },
       'Mac64 Release': {
         'recipe_config': 'webrtc',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
@@ -531,7 +540,7 @@ BUILDERS = {
       'Mac Asan': {
         'recipe_config': 'webrtc_clang',
         'chromium_apply_config': ['asan'],
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
@@ -540,9 +549,11 @@ BUILDERS = {
       },
       'Mac32 Release [large tests]': {
         'recipe_config': 'webrtc_baremetal',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
+        },
+        'webrtc_config_kwargs': {
           'PERF_ID': 'webrtc-mac-large-tests',
         },
         'bot_type': 'builder_tester',
@@ -550,7 +561,7 @@ BUILDERS = {
       },
       'iOS Debug': {
         'recipe_config': 'webrtc_ios',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
           'TARGET_ARCH': 'arm',
@@ -561,7 +572,7 @@ BUILDERS = {
       },
       'iOS Release': {
         'recipe_config': 'webrtc_ios',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
           'TARGET_ARCH': 'arm',
@@ -572,7 +583,7 @@ BUILDERS = {
       },
       'Linux32 Debug': {
         'recipe_config': 'webrtc',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
         },
@@ -581,7 +592,7 @@ BUILDERS = {
       },
       'Linux32 Release': {
         'recipe_config': 'webrtc',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
@@ -590,7 +601,7 @@ BUILDERS = {
       },
       'Linux64 Debug': {
         'recipe_config': 'webrtc',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
         },
@@ -599,7 +610,7 @@ BUILDERS = {
       },
       'Linux64 Release': {
         'recipe_config': 'webrtc',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
@@ -608,7 +619,7 @@ BUILDERS = {
       },
       'Linux64 Debug (GN)': {
         'recipe_config': 'webrtc',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
         },
@@ -618,7 +629,7 @@ BUILDERS = {
       },
       'Linux64 Release (GN)': {
         'recipe_config': 'webrtc',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
@@ -629,7 +640,7 @@ BUILDERS = {
       'Linux Asan': {
         'recipe_config': 'webrtc_clang',
         'chromium_apply_config': ['asan'],
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
@@ -640,7 +651,7 @@ BUILDERS = {
         'recipe_config': 'webrtc',
         'chromium_apply_config': ['memcheck'],
         'gclient_apply_config': ['valgrind'],
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
@@ -651,7 +662,7 @@ BUILDERS = {
         'recipe_config': 'webrtc_clang',
         'chromium_apply_config': ['msan', 'msan_full_origin_tracking',
                                   'instrumented_libraries'],
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
@@ -661,7 +672,7 @@ BUILDERS = {
       'Linux Tsan v2': {
         'recipe_config': 'webrtc_clang',
         'chromium_apply_config': ['tsan2'],
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
@@ -670,9 +681,11 @@ BUILDERS = {
       },
       'Linux64 Release [large tests]': {
         'recipe_config': 'webrtc_baremetal',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
+        },
+        'webrtc_config_kwargs': {
           'PERF_ID': 'webrtc-linux-large-tests',
         },
         'bot_type': 'builder_tester',
@@ -680,7 +693,7 @@ BUILDERS = {
       },
       'Android Builder': {
         'recipe_config': 'webrtc_android',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
@@ -692,7 +705,7 @@ BUILDERS = {
       },
       'Android Builder (dbg)': {
         'recipe_config': 'webrtc_android',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
@@ -704,7 +717,7 @@ BUILDERS = {
       },
       'Android ARM64 (dbg)': {
         'recipe_config': 'webrtc_android',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
@@ -715,7 +728,7 @@ BUILDERS = {
       },
       'Android Clang (dbg)': {
         'recipe_config': 'webrtc_android_clang',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
@@ -726,7 +739,7 @@ BUILDERS = {
       },
       'Android GN': {
         'recipe_config': 'webrtc_android',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
@@ -738,7 +751,7 @@ BUILDERS = {
       },
       'Android GN (dbg)': {
         'recipe_config': 'webrtc_android',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
@@ -750,7 +763,7 @@ BUILDERS = {
       },
       'Android Tests (KK Nexus5)(dbg)': {
         'recipe_config': 'webrtc_android',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
@@ -763,7 +776,7 @@ BUILDERS = {
       },
       'Android Tests (KK Nexus5)': {
         'recipe_config': 'webrtc_android',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
@@ -776,7 +789,7 @@ BUILDERS = {
       },
       'Android Tests (JB Nexus7.2)(dbg)': {
         'recipe_config': 'webrtc_android',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
@@ -789,7 +802,7 @@ BUILDERS = {
       },
       'Android Tests (JB Nexus7.2)': {
         'recipe_config': 'webrtc_android',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
@@ -806,20 +819,20 @@ BUILDERS = {
     'builders':  {
       'Linux64 Debug (parallel)': {
         'recipe_config': 'webrtc_parallel',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
-     },
+    },
   },
   'tryserver.webrtc': {
     'builders': {
       'win': {
         'recipe_config': 'webrtc',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
         },
@@ -828,7 +841,7 @@ BUILDERS = {
       },
       'win_rel': {
         'recipe_config': 'webrtc',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
@@ -837,7 +850,7 @@ BUILDERS = {
       },
       'win_x64_rel': {
         'recipe_config': 'webrtc',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
@@ -846,7 +859,7 @@ BUILDERS = {
       },
       'win_baremetal': {
         'recipe_config': 'webrtc_baremetal',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
@@ -856,7 +869,7 @@ BUILDERS = {
       'win_asan': {
         'recipe_config': 'webrtc',
         'chromium_apply_config': ['syzyasan'],
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
@@ -866,7 +879,7 @@ BUILDERS = {
       'win_drmemory_light': {
         'recipe_config': 'webrtc',
         'chromium_apply_config': ['drmemory_light'],
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
         },
@@ -876,7 +889,7 @@ BUILDERS = {
       'win_drmemory_full': {
         'recipe_config': 'webrtc',
         'chromium_apply_config': ['drmemory_full'],
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
         },
@@ -885,7 +898,7 @@ BUILDERS = {
       },
       'mac': {
         'recipe_config': 'webrtc',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
         },
@@ -894,7 +907,7 @@ BUILDERS = {
       },
       'mac_rel': {
         'recipe_config': 'webrtc',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
@@ -903,7 +916,7 @@ BUILDERS = {
       },
       'mac_x64_rel': {
         'recipe_config': 'webrtc',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
@@ -913,7 +926,7 @@ BUILDERS = {
       'mac_asan': {
         'recipe_config': 'webrtc_clang',
         'chromium_apply_config': ['asan'],
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
@@ -922,7 +935,7 @@ BUILDERS = {
       },
       'mac_baremetal': {
         'recipe_config': 'webrtc_baremetal',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
@@ -931,7 +944,7 @@ BUILDERS = {
       },
       'ios': {
         'recipe_config': 'webrtc_ios',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
           'TARGET_ARCH': 'arm',
@@ -942,7 +955,7 @@ BUILDERS = {
       },
       'ios_rel': {
         'recipe_config': 'webrtc_ios',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
           'TARGET_ARCH': 'arm',
@@ -953,7 +966,7 @@ BUILDERS = {
       },
       'linux': {
         'recipe_config': 'webrtc',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
         },
@@ -962,7 +975,7 @@ BUILDERS = {
       },
       'linux_rel': {
         'recipe_config': 'webrtc',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
@@ -971,7 +984,7 @@ BUILDERS = {
       },
       'linux_gn': {
         'recipe_config': 'webrtc',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
         },
@@ -981,7 +994,7 @@ BUILDERS = {
       },
       'linux_gn_rel': {
         'recipe_config': 'webrtc',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
@@ -992,7 +1005,7 @@ BUILDERS = {
       'linux_asan': {
         'recipe_config': 'webrtc_clang',
         'chromium_apply_config': ['asan'],
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
@@ -1003,7 +1016,7 @@ BUILDERS = {
         'recipe_config': 'webrtc',
         'chromium_apply_config': ['memcheck'],
         'gclient_apply_config': ['valgrind'],
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
@@ -1014,7 +1027,7 @@ BUILDERS = {
         'recipe_config': 'webrtc_clang',
         'chromium_apply_config': ['msan', 'msan_full_origin_tracking',
                                   'instrumented_libraries'],
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
@@ -1024,7 +1037,7 @@ BUILDERS = {
       'linux_tsan2': {
         'recipe_config': 'webrtc_clang',
         'chromium_apply_config': ['tsan2'],
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
@@ -1033,7 +1046,7 @@ BUILDERS = {
       },
       'linux_baremetal': {
         'recipe_config': 'webrtc_baremetal',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
@@ -1042,7 +1055,7 @@ BUILDERS = {
       },
       'android': {
         'recipe_config': 'webrtc_android',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
@@ -1053,7 +1066,7 @@ BUILDERS = {
       },
       'android_rel': {
         'recipe_config': 'webrtc_android',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
@@ -1064,7 +1077,7 @@ BUILDERS = {
       },
       'android_clang': {
         'recipe_config': 'webrtc_android_clang',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
@@ -1075,7 +1088,7 @@ BUILDERS = {
       },
       'android_arm64': {
         'recipe_config': 'webrtc_android',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
@@ -1086,7 +1099,7 @@ BUILDERS = {
       },
       'android_gn': {
         'recipe_config': 'webrtc_android',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
@@ -1098,7 +1111,7 @@ BUILDERS = {
       },
       'android_gn_rel': {
         'recipe_config': 'webrtc_android',
-        'webrtc_config_kwargs': {
+        'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',

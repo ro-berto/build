@@ -3,14 +3,14 @@
 # found in the LICENSE file.
 
 from slave.recipe_config import config_item_context, ConfigGroup
-from slave.recipe_config import Single, Static, BadConf
-from slave.recipe_config_types import Path
+from slave.recipe_config import Static
 
 
-def BaseConfig(PERF_ID=None, PERF_CONFIG=None, **_kwargs):
+def BaseConfig(PERF_ID=None, PERF_CONFIG=None, TEST_SUITE=None, **_kwargs):
   return ConfigGroup(
     PERF_ID = Static(PERF_ID),
     PERF_CONFIG = Static(PERF_CONFIG),
+    TEST_SUITE = Static(TEST_SUITE),
   )
 
 VAR_TEST_MAP = {
@@ -23,27 +23,7 @@ def TEST_NAME_FORMAT(kwargs):
 
 config_ctx = config_item_context(BaseConfig, VAR_TEST_MAP, TEST_NAME_FORMAT)
 
-@config_ctx()
-def webrtc(c):
-  pass
-
-@config_ctx()
-def webrtc_clang(c):
-  pass
-
-@config_ctx()
-def webrtc_android(c):
-  pass
-
-@config_ctx()
-def webrtc_android_clang(c):
-  pass
-
-@config_ctx()
-def webrtc_ios(c):
-  pass
-
 # Only exists to be able to set the PERF_ID and PERF_CONFIG configurations.
 @config_ctx()
-def chromium(c):
+def webrtc(c):
   pass

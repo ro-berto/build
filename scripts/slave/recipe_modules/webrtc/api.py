@@ -67,7 +67,35 @@ class WebRTCApi(recipe_api.RecipeApi):
 
   DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
 
-  def runtests(self, test_suite=None, revision=None):
+  def setup(self, bot_config, recipe_config, perf_config=None):
+    self.set_config('webrtc', PERF_CONFIG=perf_config,
+                    TEST_SUITE=recipe_config.get('test_suite'),
+                    **bot_config.get('webrtc_config_kwargs', {}))
+
+    chromium_kwargs = bot_config.get('chromium_config_kwargs', {})
+    if recipe_config.get('chromium_android_config'):
+      self.m.chromium_android.set_config(
+          recipe_config['chromium_android_config'], **chromium_kwargs)
+
+    self.m.chromium.set_config(recipe_config['chromium_config'],
+                               **chromium_kwargs)
+    self.m.gclient.set_config(recipe_config['gclient_config'])
+
+    # Support applying configs both at the bot and the recipe config level.
+    for c in bot_config.get('chromium_apply_config', []):
+      self.m.chromium.apply_config(c)
+    for c in recipe_config.get('chromium_apply_config', []):
+      self.m.chromium.apply_config(c)
+
+    for c in bot_config.get('gclient_apply_config', []):
+      self.m.gclient.apply_config(c)
+    for c in recipe_config.get('gclient_apply_config', []):
+      self.m.gclient.apply_config(c)
+
+    if self.m.tryserver.is_tryserver:
+      self.m.chromium.apply_config('trybot_flavor')
+
+  def runtests(self, revision=None):
     """Add a suite of test steps.
 
     Args:
@@ -75,8 +103,8 @@ class WebRTCApi(recipe_api.RecipeApi):
       revision: Revision for the build. Mandatory for perf measuring tests.
     """
     with self.m.step.defer_results():
-      if test_suite in ('webrtc', 'webrtc_parallel'):
-        parallel = test_suite.endswith('_parallel')
+      if self.c.TEST_SUITE in ('webrtc', 'webrtc_parallel'):
+        parallel = self.c.TEST_SUITE.endswith('_parallel')
         for test in self.NORMAL_TESTS:
           self.add_test(test, parallel=parallel)
 
@@ -86,7 +114,7 @@ class WebRTCApi(recipe_api.RecipeApi):
                                   'libjingle_peerconnection_objc_test')
           self.add_test(test, name='libjingle_peerconnection_objc_test',
                         parallel=parallel)
-      elif test_suite == 'webrtc_baremetal':
+      elif self.c.TEST_SUITE == 'webrtc_baremetal':
         # Add baremetal tests, which are different depending on the platform.
         if self.m.platform.is_win or self.m.platform.is_mac:
           self.add_test('audio_device_tests')
@@ -121,7 +149,7 @@ class WebRTCApi(recipe_api.RecipeApi):
         self.virtual_webcam_check()
         self.add_test('video_capture_tests')
         self.add_test('webrtc_perf_tests', revision=revision, perf_test=True)
-      elif test_suite == 'chromium':
+      elif self.c.TEST_SUITE == 'chromium':
         # Many of these tests run in the Chromium WebRTC waterfalls are not run in
         # the main Chromium waterfalls as they are marked as MANUAL_. This is
         # because they rely on physical audio and video devices, which are only
@@ -148,7 +176,7 @@ class WebRTCApi(recipe_api.RecipeApi):
         self.add_test(
             'content_unittests',
             args=['--gtest_filter=WebRtc*:WebRTC*:RTC*:MediaStream*'])
-      elif test_suite == 'android':
+      elif self.c.TEST_SUITE == 'android':
         self.m.chromium_android.common_tests_setup_steps()
 
         for test in sorted(self.ANDROID_APK_TESTS.keys()):

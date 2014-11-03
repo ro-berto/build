@@ -12,7 +12,7 @@ SUPPORTED_TARGET_ARCHS = ('intel', 'arm')
 
 
 @CONFIG_CTX(includes=['chromium'])
-def webrtc(c):
+def webrtc_standalone(c):
   _compiler_defaults(c)
 
   c.runtests.memory_tests_runner = Path('[CHECKOUT]', 'tools',
@@ -24,14 +24,6 @@ def webrtc(c):
 @CONFIG_CTX(includes=['chromium_clang'])
 def webrtc_clang(c):
   _compiler_defaults(c)
-
-@CONFIG_CTX(includes=['android'])
-def webrtc_android(c):
-  pass
-
-@CONFIG_CTX(includes=['android_clang'])
-def webrtc_android_clang(c):
-  pass
 
 @CONFIG_CTX(includes=['chromium', 'static_library'])
 def webrtc_ios(c):
@@ -54,6 +46,7 @@ def webrtc_ios(c):
 
 @CONFIG_CTX(includes=['gn'])
 def webrtc_gn(c):
+  c.compile_py.default_targets = ['all']
   c.project_generator.args = ['build_with_chromium=false']
 
 def _compiler_defaults(c):

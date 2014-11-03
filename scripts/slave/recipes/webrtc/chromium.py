@@ -36,18 +36,8 @@ def GenSteps(api):
   assert recipe_config, ('Cannot find recipe_config "%s" for builder "%r".' %
                          (recipe_config_name, buildername))
 
-  api.webrtc.set_config(recipe_config['webrtc_config'],
-                        PERF_CONFIG=master_settings.get('PERF_CONFIG'),
-                        **bot_config.get('webrtc_config_kwargs', {}))
-  api.chromium.set_config(recipe_config['chromium_config'],
-                          **bot_config.get('chromium_config_kwargs', {}))
-
-  for c in recipe_config.get('chromium_apply_config', []):
-    api.chromium.apply_config(c)
-
-  api.gclient.set_config(recipe_config['gclient_config'])
-  for c in recipe_config.get('gclient_apply_config', []):
-    api.gclient.apply_config(c)
+  api.webrtc.setup(bot_config, recipe_config,
+                   master_settings.get('PERF_CONFIG'))
 
   if api.platform.is_win:
     api.chromium.taskkill()
@@ -91,8 +81,7 @@ def GenSteps(api):
           gtest_filter='WebRtc*')
       api.chromium_android.common_tests_final_steps()
     else:
-      test_runner = lambda: api.webrtc.runtests(recipe_config.get('test_suite'),
-                                                revision=got_revision)
+      test_runner = lambda: api.webrtc.runtests(revision=got_revision)
       api.chromium_tests.setup_chromium_tests(test_runner)
 
 
