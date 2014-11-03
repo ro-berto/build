@@ -35,7 +35,7 @@ def clang_release_builder(c):
   c.gyp_env.GYP_DEFINES['use_allocator'] = 'none'
   c.compile_py.default_targets = ['chrome_apk']
 
-@CONFIG_CTX(includes=['clang_release_builder','android_l'])
+@CONFIG_CTX(includes=['clang_release_builder'])
 def clang_release_builder_l(c):
   c.gyp_env.GYP_DEFINES['asan_coverage'] = 3
 
@@ -71,15 +71,7 @@ def cronet_builder(c):
                                 'cronet_sample_test_apk',
                                 'cronet_test_instrumentation_apk']
 
-@CONFIG_CTX()
-def android_l(c):
-  gyp_defs = c.gyp_env.GYP_DEFINES
-  gyp_defs['android_sdk_build_tools_version'] = 'android-5.0'
-  gyp_defs['android_sdk_version'] = '5.0'
-  gyp_defs['android_sdk_root'] = Path(
-    '[CHECKOUT]', 'third_party', 'android_tools', 'sdk')
-
-@CONFIG_CTX(includes=['main_builder', 'android_l'])
+@CONFIG_CTX(includes=['main_builder'])
 def arm_l_builder(c):
   pass
 
