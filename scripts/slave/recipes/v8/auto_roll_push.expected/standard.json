@@ -95,7 +95,9 @@
       "--svn",
       "[SLAVE_BUILD]/v8.svn",
       "--svn-config",
-      "[SLAVE_BUILD]/svn_config"
+      "[SLAVE_BUILD]/svn_config",
+      "--work-dir",
+      "[SLAVE_BUILD]/workdir"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "push candidate"

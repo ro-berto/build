@@ -38,7 +38,8 @@ def GenSteps(api):
        '--push',
        '--vc-interface', 'git',
        '--svn', api.path['slave_build'].join('v8.svn'),
-       '--svn-config', api.path['slave_build'].join('svn_config')],
+       '--svn-config', api.path['slave_build'].join('svn_config'),
+       '--work-dir', api.path['slave_build'].join('workdir')],
       cwd=api.path['checkout'],
     )
 

@@ -83,70 +83,6 @@
   },
   {
     "cmd": [
-      "git",
-      "svn",
-      "init",
-      "https://v8.googlecode.com/svn"
-    ],
-    "cwd": "[SLAVE_BUILD]/v8",
-    "name": "git svn init"
-  },
-  {
-    "cmd": [
-      "git",
-      "config",
-      "--unset-all",
-      "svn-remote.svn.fetch"
-    ],
-    "cwd": "[SLAVE_BUILD]/v8",
-    "name": "git config unset-all"
-  },
-  {
-    "cmd": [
-      "git",
-      "config",
-      "--add",
-      "svn-remote.svn.fetch",
-      "branches/bleeding_edge:refs/remotes/origin/master"
-    ],
-    "cwd": "[SLAVE_BUILD]/v8",
-    "name": "git config add master"
-  },
-  {
-    "cmd": [
-      "git",
-      "config",
-      "--add",
-      "svn-remote.svn.fetch",
-      "trunk:refs/remotes/origin/candidates"
-    ],
-    "cwd": "[SLAVE_BUILD]/v8",
-    "name": "git config add candidates"
-  },
-  {
-    "cmd": [
-      "git",
-      "config",
-      "--add",
-      "svn-remote.svn.fetch",
-      "branches/3.28:refs/remotes/branch-heads/3.28"
-    ],
-    "cwd": "[SLAVE_BUILD]/v8",
-    "name": "git config add 3.28"
-  },
-  {
-    "cmd": [
-      "git",
-      "config",
-      "--add",
-      "svn-remote.svn.fetch",
-      "branches/3.29:refs/remotes/branch-heads/3.29"
-    ],
-    "cwd": "[SLAVE_BUILD]/v8",
-    "name": "git config add 3.29"
-  },
-  {
-    "cmd": [
       "[SLAVE_BUILD]/v8/tools/push-to-trunk/releases.py",
       "-c",
       "[SLAVE_BUILD]/src",
@@ -155,7 +91,9 @@
       "--branch",
       "recent",
       "--vc-interface",
-      "git_read_svn_write"
+      "git_read_svn_write",
+      "--work-dir",
+      "[SLAVE_BUILD]/workdir"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "V8Releases"

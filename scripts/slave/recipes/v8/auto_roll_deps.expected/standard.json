@@ -109,7 +109,9 @@
       "v8-autoroll@chromium.org",
       "--reviewer",
       "machenbach@chromium.org",
-      "--roll"
+      "--roll",
+      "--work-dir",
+      "[SLAVE_BUILD]/workdir"
     ],
     "cwd": "[SLAVE_BUILD]/src/v8",
     "name": "roll deps"
