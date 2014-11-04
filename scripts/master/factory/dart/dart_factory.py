@@ -259,12 +259,9 @@ class DartFactory(gclient_factory.GClientFactory):
   def DartAnnotatedFactory(self, python_script,
                            target='Release', tests=None,
                            timeout=1200, factory_properties=None,
-                           env=None, triggers=(), secondAnnotatedRun=False,
-                           no_gclient_revision=False):
+                           env=None, triggers=(), secondAnnotatedRun=False):
     factory_properties = factory_properties or {}
     AddGeneralGClientProperties(factory_properties)
-    if no_gclient_revision:
-      factory_properties['no_gclient_revision'] = True
 
     tests = tests or []
     # Create the spec for the solutions
@@ -291,6 +288,39 @@ class DartFactory(gclient_factory.GClientFactory):
     dart_cmd_obj.AddKillStep(step_name="Taskkill after running")
 
     return factory
+
+
+class PackageFactory(gclient_factory.GClientFactory):
+  def __init__(self, build_dir='dart', target_platform='posix',
+               extra_deps=None):
+    self.target_platform = target_platform
+    deps_url =  'https://github.com/dart-lang/package-bots/trunk'
+    main =  gclient_factory.GClientSolution(deps_url,
+                                            custom_deps_list=extra_deps)
+    gclient_factory.GClientFactory.__init__(self, build_dir, [main],
+                                            target_platform=target_platform)
+
+  def PackagesAnnotatedFactory(self, python_script, target='Release',
+                               env=None):
+    factory_properties =  {}
+    factory_properties['no_gclient_revision'] = True
+    AddGeneralGClientProperties(factory_properties)
+    # Create the spec for the solutions
+    gclient_spec = self.BuildGClientSpec()
+
+    factory = self.BaseFactory(gclient_spec,
+                               factory_properties=factory_properties)
+    # Get the factory command object to create new steps to the factory.
+    dart_cmd_obj = dart_commands.DartCommands(factory,
+                                              target,
+                                              self._build_dir,
+                                              self.target_platform,
+                                              env=env)
+    dart_cmd_obj.AddKillStep(step_name="Taskkill before running")
+    dart_cmd_obj.AddAnnotatedSteps(python_script)
+    dart_cmd_obj.AddKillStep(step_name="Taskkill after running")
+    return factory
+
 
 class DartUtils(object):
   mac_options = ['--compiler=goma-clang',
@@ -570,10 +600,9 @@ class DartUtils(object):
             triggers=trigger_instances,
         )
       elif v['name'].startswith('packages'):
-        v['factory_builder'] = base.DartAnnotatedFactory(
+        v['factory_builder'] = base.PackagesAnnotatedFactory(
             python_script='third_party/package-bots/annotated_steps.py',
-            env=env,
-            no_gclient_revision=True, # Ignore passed in github revision
+            env=env
         )
       else:
         v['factory_builder'] = base.DartAnnotatedFactory(
@@ -586,9 +615,8 @@ class DartUtils(object):
     def setup_package_factory_base(v):
       extra_deps = v.get('deps', [])
       target_platform = 'win32' if v.get('os', '') == 'windows' else 'posix'
-      return DartFactory(channel=CHANNELS_BY_NAME['be'],
-                         custom_deps_list=extra_deps,
-                         target_platform=target_platform)
+      return PackageFactory(extra_deps=extra_deps,
+                            target_platform=target_platform)
 
     for v in variants:
       platform = v['platform']
