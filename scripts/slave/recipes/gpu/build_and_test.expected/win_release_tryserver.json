@@ -95,7 +95,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "archive_gpu_tests=1 blink_logging_always_on=1 chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' internal_gles2_conform_tests=1 target_arch=ia32 test_isolation_mode=archive test_isolation_outdir=https://isolateserver.appspot.com use_goma=1"
+      "GYP_DEFINES": "archive_gpu_tests=1 blink_logging_always_on=1 chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' internal_gles2_conform_tests=1 target_arch=ia32 test_isolation_mode=prepare use_goma=1"
     },
     "name": "gclient runhooks"
   },
@@ -153,7 +153,7 @@
       "/path/to/tmp/json"
     ],
     "env": {
-      "GYP_DEFINES": "archive_gpu_tests=1 blink_logging_always_on=1 chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' internal_gles2_conform_tests=1 target_arch=ia32 test_isolation_mode=archive test_isolation_outdir=https://isolateserver.appspot.com use_goma=1"
+      "GYP_DEFINES": "archive_gpu_tests=1 blink_logging_always_on=1 chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' internal_gles2_conform_tests=1 target_arch=ia32 test_isolation_mode=prepare use_goma=1"
     },
     "name": "analyze",
     "~followup_annotations": [
@@ -222,13 +222,23 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\recipe_modules\\isolate\\resources\\find_isolated_tests.py",
-      "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
-      "--output-json",
-      "/path/to/tmp/json"
+      "[SLAVE_BUILD]\\src\\tools\\swarming_client\\isolate.py",
+      "batcharchive",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--isolate-server",
+      "https://isolateserver.appspot.com",
+      "[SLAVE_BUILD]\\src\\out\\Release\\angle_unittests.isolated.gen.json",
+      "[SLAVE_BUILD]\\src\\out\\Release\\content_gl_tests.isolated.gen.json",
+      "[SLAVE_BUILD]\\src\\out\\Release\\content_unittests.isolated.gen.json",
+      "[SLAVE_BUILD]\\src\\out\\Release\\gl_tests.isolated.gen.json",
+      "[SLAVE_BUILD]\\src\\out\\Release\\gles2_conform_test.isolated.gen.json",
+      "[SLAVE_BUILD]\\src\\out\\Release\\gpu_unittests.isolated.gen.json",
+      "[SLAVE_BUILD]\\src\\out\\Release\\media_unittests.isolated.gen.json",
+      "[SLAVE_BUILD]\\src\\out\\Release\\tab_capture_end2end_tests.isolated.gen.json",
+      "[SLAVE_BUILD]\\src\\out\\Release\\telemetry_gpu_test.isolated.gen.json"
     ],
-    "name": "find isolated tests",
+    "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"angle_unittests\": \"[dummy hash for angle_unittests]\", @@@",
