@@ -59,7 +59,7 @@ def GenSteps(api):
   api.gclient.c.revisions['src/tools/swarming_client'] = 'HEAD'
 
   # Enable test isolation. Modifies GYP_DEFINES used in 'runhooks' below.
-  api.isolate.set_isolate_environment(api.chromium.c, mode='prepare')
+  api.isolate.set_isolate_environment(api.chromium.c)
 
   # Checkout chromium + deps (including 'master' of swarming_client).
   step_result = api.bot_update.ensure_checkout()

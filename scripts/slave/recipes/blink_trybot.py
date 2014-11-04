@@ -283,7 +283,7 @@ def GenSteps(api):
 
   # Swarming uses Isolate to transfer files to swarming bots.
   # set_isolate_environment modifies GYP_DEFINES to enable test isolation.
-  api.isolate.set_isolate_environment(api.chromium.c, mode='prepare')
+  api.isolate.set_isolate_environment(api.chromium.c)
 
   # Ensure swarming_client is compatible with what recipes expect.
   api.swarming.check_client_version()

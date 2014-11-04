@@ -23,7 +23,7 @@ class IsolateApi(recipe_api.RecipeApi):
     """Changes URL of Isolate server to use."""
     self._isolate_server = value
 
-  def set_isolate_environment(self, config, mode='archive'):
+  def set_isolate_environment(self, config, mode='prepare'):
     """Modifies the config to include isolate related GYP_DEFINES.
 
     Modifies the passed Config (which should generally be api.chromium.c)

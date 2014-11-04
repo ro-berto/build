@@ -78,7 +78,7 @@ class GpuApi(recipe_api.RecipeApi):
     self.m.chromium.c.gyp_env.GYP_DEFINES['internal_gles2_conform_tests'] = 1
 
     # This recipe requires the use of isolates for running tests.
-    self.m.isolate.set_isolate_environment(self.m.chromium.c, mode='prepare')
+    self.m.isolate.set_isolate_environment(self.m.chromium.c)
 
     # The FYI waterfall is being used to test top-of-tree ANGLE with
     # Chromium on all platforms.
