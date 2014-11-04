@@ -9,7 +9,9 @@ import difflib
 import json
 import optparse
 import os
+import struct
 import sys
+import time
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -34,47 +36,86 @@ def get_files_to_compare(build_dir):
              check(os.path.join(build_dir, f)))
 
 
+def diff_dict(a, b):
+  """Returns a yaml-like textural diff of two dict.
+
+  It is currently optimized for the .isolated format.
+  """
+  out = ''
+  for key in set(a) | set(b):
+    va = a.get(key)
+    vb = b.get(key)
+    if va.__class__ != vb.__class__:
+      out += '- %s:\n    %r != %r\n' % (key, va, vb)
+    elif isinstance(va, dict):
+      c = diff_dict(va, vb)
+      if c:
+        out += '- %s:\n%s\n' % (
+            key, '\n'.join('    ' + l for l in c.splitlines()))
+    elif va != vb:
+      out += '- %s:\n    %s != %s\n' % (key, va, vb)
+  return out.rstrip()
+
+
+def diff_binary(first_filepath, second_filepath, file_len):
+  """Returns a compact binary diff if the diff is small enough."""
+  CHUNK_SIZE = 32
+  MAX_STREAMS = 10
+  diffs = 0
+  streams = []
+  offset = 0
+  with open(first_filepath, 'rb') as lhs:
+    with open(second_filepath, 'rb') as rhs:
+      while True:
+        lhs_data = lhs.read(CHUNK_SIZE)
+        rhs_data = rhs.read(CHUNK_SIZE)
+        if not lhs_data:
+          break
+        if lhs_data != rhs_data:
+          diffs += sum(l != r for l, r in zip(lhs_data, rhs_data))
+          if streams is not None:
+            if len(streams) < MAX_STREAMS:
+              streams.append((offset, lhs_data, rhs_data))
+            else:
+              streams = None
+        offset += len(lhs_data)
+        del lhs_data
+        del rhs_data
+  if not diffs:
+    return None
+  result = '%d out of %d bytes are different (%.2f%%)' % (
+        diffs, file_len, 100.0 * diffs / file_len)
+  if streams:
+    encode = lambda text: ''.join(i if 31 < ord(i) < 128 else '.' for i in text)
+    for offset, lhs_data, rhs_data in streams:
+      lhs_line = '%s \'%s\'' % (lhs_data.encode('hex'), encode(lhs_data))
+      rhs_line = '%s \'%s\'' % (rhs_data.encode('hex'), encode(rhs_data))
+      diff = list(difflib.Differ().compare([lhs_line], [rhs_line]))[-1][2:-1]
+      result += '\n0x%-8x: %s\n            %s\n            %s' % (
+            offset, lhs_line, rhs_line, diff)
+  return result
+
+
 def compare_files(first_filepath, second_filepath):
   """Compares two binaries and return the number of differences between them.
 
   Returns None if the files are equal, a string otherwise.
   """
+  if first_filepath.endswith('.isolated'):
+    with open(first_filepath, 'rb') as f:
+      lhs = json.load(f)
+    with open(second_filepath, 'rb') as f:
+      rhs = json.load(f)
+    diff = diff_dict(lhs, rhs)
+    if diff:
+      return '\n' + diff
+
   file_len = os.stat(first_filepath).st_size
   if file_len != os.stat(second_filepath).st_size:
     return 'different size: %d != %d' % (
         file_len, os.stat(second_filepath).st_size)
 
-  chunk_size = 1024 * 1024
-  diffs = 0
-  with open(first_filepath, 'rb') as lhs:
-    with open(second_filepath, 'rb') as rhs:
-      while True:
-        lhs_data = lhs.read(chunk_size)
-        rhs_data = rhs.read(chunk_size)
-        if not lhs_data:
-          break
-        diffs += sum(l != r for l, r in zip(lhs_data, rhs_data))
-  if not diffs:
-    return None
-
-  result = '%d out of %d bytes are different (%.2f%%)' % (
-        diffs, file_len, 100.0 * diffs / file_len)
-
-  if diffs and first_filepath.endswith('.isolated'):
-    # Unpack the files.
-    with open(first_filepath, 'rb') as f:
-      lhs = json.dumps(
-          json.load(f), indent=2, sort_keys=True,
-          separators=(',', ': ')).splitlines()
-    with open(second_filepath, 'rb') as f:
-      rhs = json.dumps(
-          json.load(f), indent=2, sort_keys=True,
-          separators=(',', ': ')).splitlines()
-
-    result += '\n' + '\n'.join(
-        line for line in difflib.unified_diff(lhs, rhs)
-        if not line.startswith(('---', '+++')))
-  return result
+  return diff_binary(first_filepath, second_filepath, file_len)
 
 
 def compare_build_artifacts(first_dir, second_dir):
@@ -99,6 +140,9 @@ def compare_build_artifacts(first_dir, second_dir):
     print >> sys.stderr, '\n'.join('  ' + i for i in sorted(diff))
     res += len(diff)
 
+  epoch_hex = struct.pack('<I', int(time.time())).encode('hex')
+  print('Epoch: %s' %
+      ' '.join(epoch_hex[i:i+2] for i in xrange(0, len(epoch_hex), 2)))
   max_filepath_len = max(len(n) for n in first_list & second_list)
   for f in sorted(first_list & second_list):
     first_file = os.path.join(first_dir, f)
