@@ -16,7 +16,7 @@ _builders = [
 #  SPEC Module     Test Spec File         Builder Names
   (chromium_linux, 'chromium.linux.json', ['Linux Builder', 'Linux Tests']),
   (chromium_win,   'chromium.win.json',   ['Win Builder', 'Win7 Tests (1)']),
-  (chromium_mac,   'chromium.mac.json',   ['Mac Builder', 'Mac10.7 Tests (1)']),
+  (chromium_mac,   'chromium.mac.json',   ['Mac Builder', 'Mac10.9 Tests']),
 ]
 
 SPEC = {

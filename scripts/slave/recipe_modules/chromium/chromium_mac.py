@@ -25,7 +25,7 @@ SPEC = {
       'enable_swarming': True,
       'use_isolate': True,
     },
-    'Mac10.6 Tests (1)': {
+    'Mac10.6 Tests': {
       'recipe_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -45,7 +45,7 @@ SPEC = {
         'os': 'Mac-10.6',
       },
     },
-    'Mac10.7 Tests (1)': {
+    'Mac10.8 Tests': {
       'recipe_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -59,6 +59,25 @@ SPEC = {
       'parent_buildername': 'Mac Builder',
       'testing': {
         'platform': 'mac',
+        'os': 'Mac-10.8',
+      },
+      'enable_swarming': True,
+    },
+    'Mac10.9 Tests': {
+      'recipe_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+      ],
+      'bot_type': 'tester',
+      'parent_buildername': 'Mac Builder',
+      'testing': {
+        'platform': 'mac',
+        'os': 'Mac-10.9',
       },
       'enable_swarming': True,
     },
@@ -78,7 +97,7 @@ SPEC = {
       'enable_swarming': True,
       'use_isolate': True,
     },
-    'Mac 10.6 Tests (dbg)(1)': {
+    'Mac10.9 Tests (dbg)': {
       'recipe_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -95,25 +114,8 @@ SPEC = {
       },
       'enable_swarming': True,
       'swarming_dimensions': {
-        'os': 'Mac-10.6',
+        'os': 'Mac-10.9',
       },
-    },
-    'Mac 10.7 Tests (dbg)(1)': {
-      'recipe_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-      },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-      ],
-      'bot_type': 'tester',
-      'parent_buildername': 'Mac Builder (dbg)',
-      'testing': {
-        'platform': 'mac',
-      },
-      'enable_swarming': True,
     },
     'iOS Device': {
       'recipe_config': 'chromium_ios_device',

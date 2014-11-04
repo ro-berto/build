@@ -7,7 +7,7 @@
       "--master",
       "client.skia",
       "--builder",
-      "Mac10.7 Tests (1)-Trybot",
+      "Mac10.9 Tests",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -115,7 +115,7 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.mac.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Mac10.7 Tests (1)-Trybot\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Mac10.9 Tests\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -142,7 +142,7 @@
       "--paths",
       "{\"build\": \"[BUILD]\"}",
       "--properties",
-      "{\"buildername\": \"Mac10.7 Tests (1)-Trybot\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
+      "{\"buildername\": \"Mac10.9 Tests\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -186,9 +186,9 @@
       "--build-archive-url",
       "gs://test-domain/test-archive.zip",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac10.7 Tests (1)-Trybot\", \"buildnumber\": 571, \"mastername\": \"client.skia\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Mac Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"browser_tests\": \"ffffffffffffffffffffffffffffffffffffffff\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac10.9 Tests\", \"buildnumber\": 571, \"mastername\": \"client.skia\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Mac Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"browser_tests\": \"ffffffffffffffffffffffffffffffffffffffff\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac10.7 Tests (1)-Trybot\", \"buildnumber\": 571, \"mastername\": \"client.skia\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Mac Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"browser_tests\": \"ffffffffffffffffffffffffffffffffffffffff\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac10.9 Tests\", \"buildnumber\": 571, \"mastername\": \"client.skia\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Mac Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"browser_tests\": \"ffffffffffffffffffffffffffffffffffffffff\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "name": "extract build"
   },
@@ -207,7 +207,7 @@
       "--shards",
       "1",
       "--task-name",
-      "browser_tests/Mac-10.8/ffffffffff/Mac10.7 Tests (1)-Trybot/571",
+      "browser_tests/Mac-10.8/ffffffffff/Mac10.9 Tests/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -229,7 +229,7 @@
       "pool",
       "Chrome",
       "--tag",
-      "buildername:Mac10.7 Tests (1)-Trybot",
+      "buildername:Mac10.9 Tests",
       "--tag",
       "buildnumber:571",
       "--tag",
@@ -254,9 +254,9 @@
     "name": "[trigger] browser_tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"browser_tests/Mac-10.8/ffffffffff/Mac10.7 Tests (1)-Trybot/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"browser_tests/Mac-10.8/ffffffffff/Mac10.9 Tests/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"browser_tests/Mac-10.8/ffffffffff/Mac10.7 Tests (1)-Trybot/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"browser_tests/Mac-10.8/ffffffffff/Mac10.9 Tests/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -287,7 +287,7 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "browser_tests/Mac-10.8/ffffffffff/Mac10.7 Tests (1)-Trybot/571"
+      "browser_tests/Mac-10.8/ffffffffff/Mac10.9 Tests/571"
     ],
     "name": "browser_tests"
   }

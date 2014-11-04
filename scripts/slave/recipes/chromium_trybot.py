@@ -333,7 +333,7 @@ BUILDERS = {
         'based_on_main_waterfall': {
           'mastername': 'chromium.mac',
           'buildername': 'Mac Builder',
-          'testers': ['Mac10.7 Tests (1)'],
+          'testers': ['Mac10.8 Tests'],
         },
         'testing': {
           'platform': 'mac',
