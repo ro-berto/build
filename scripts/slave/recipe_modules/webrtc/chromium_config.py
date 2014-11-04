@@ -39,6 +39,7 @@ def webrtc_ios(c):
   gyp_defs['build_with_libjingle'] = 1
   gyp_defs['chromium_ios_signing'] = 0
   gyp_defs['key_id'] = ''
+  gyp_defs['target_arch'] = 'armv7'
   gyp_defs['OS'] = c.TARGET_PLATFORM
 
   _compiler_defaults(c)
