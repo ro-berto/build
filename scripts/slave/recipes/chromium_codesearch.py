@@ -6,6 +6,7 @@ DEPS = [
   'bot_update',
   'chromium',
   'gclient',
+  'gsutil',
   'json',
   'path',
   'properties',
@@ -97,6 +98,10 @@ def GenSteps(api):
   command += ['-t', 'compdb', 'cc', 'cxx', 'objc', 'objcxx']
   result = api.step('generate compilation database', command,
                     stdout=api.raw_io.output())
+  # Upload the result to google storage (it might be needed for debugging).
+  api.gsutil.upload(api.raw_io.input(data=result.stdout),
+                    'chromium-browser-csindex',
+                    api.path.join('json', 'compile_commands.json'))
   # Now compile the code for real.
   api.chromium.compile(targets, force_clobber=True)
 
