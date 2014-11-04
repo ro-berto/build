@@ -102,7 +102,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "clang=1 component=shared_library dcheck_always_on=1 enable_oilpan=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=ia32 test_isolation_mode=archive test_isolation_outdir=https://isolateserver.appspot.com use_goma=1"
+      "GYP_DEFINES": "clang=1 component=shared_library dcheck_always_on=1 enable_oilpan=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1"
     },
     "name": "gclient runhooks"
   },
@@ -141,13 +141,26 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/isolate/resources/find_isolated_tests.py",
-      "--build-dir",
-      "[SLAVE_BUILD]/src/out/Debug",
-      "--output-json",
-      "/path/to/tmp/json"
+      "\nimport glob\nimport sys\nwith open(sys.argv[1], 'w') as f:\n  f.write('\\n'.join(glob.glob(sys.argv[2])))\n",
+      "/path/to/tmp/",
+      "[SLAVE_BUILD]/src/out/Debug/*.isolated.gen.json"
     ],
-    "name": "find isolated tests",
+    "name": "find isolated targets"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/tools/swarming_client/isolate.py",
+      "batcharchive",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--isolate-server",
+      "https://isolateserver.appspot.com",
+      "[SLAVE_BUILD]/src/out/Debug/dummy_target_1.isolated.gen.json",
+      "[SLAVE_BUILD]/src/out/Debug/dummy_target_2.isolated.gen.json"
+    ],
+    "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"dummy_target_1\": \"[dummy hash for dummy_target_1]\", @@@",
@@ -399,7 +412,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "clang=1 component=shared_library dcheck_always_on=1 enable_oilpan=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=ia32 test_isolation_mode=archive test_isolation_outdir=https://isolateserver.appspot.com use_goma=1"
+      "GYP_DEFINES": "clang=1 component=shared_library dcheck_always_on=1 enable_oilpan=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1"
     },
     "name": "gclient runhooks (2)"
   },
@@ -438,13 +451,26 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/isolate/resources/find_isolated_tests.py",
-      "--build-dir",
-      "[SLAVE_BUILD]/src/out/Debug",
-      "--output-json",
-      "/path/to/tmp/json"
+      "\nimport glob\nimport sys\nwith open(sys.argv[1], 'w') as f:\n  f.write('\\n'.join(glob.glob(sys.argv[2])))\n",
+      "/path/to/tmp/",
+      "[SLAVE_BUILD]/src/out/Debug/*.isolated.gen.json"
     ],
-    "name": "find isolated tests (2)",
+    "name": "find isolated targets (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/tools/swarming_client/isolate.py",
+      "batcharchive",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--isolate-server",
+      "https://isolateserver.appspot.com",
+      "[SLAVE_BUILD]/src/out/Debug/dummy_target_1.isolated.gen.json",
+      "[SLAVE_BUILD]/src/out/Debug/dummy_target_2.isolated.gen.json"
+    ],
+    "name": "isolate tests (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"dummy_target_1\": \"[dummy hash for dummy_target_1]\", @@@",

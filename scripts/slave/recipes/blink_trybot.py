@@ -283,7 +283,7 @@ def GenSteps(api):
 
   # Swarming uses Isolate to transfer files to swarming bots.
   # set_isolate_environment modifies GYP_DEFINES to enable test isolation.
-  api.isolate.set_isolate_environment(api.chromium.c)
+  api.isolate.set_isolate_environment(api.chromium.c, mode='prepare')
 
   # Ensure swarming_client is compatible with what recipes expect.
   api.swarming.check_client_version()
@@ -292,7 +292,7 @@ def GenSteps(api):
 
   api.isolate.clean_isolated_files(api.chromium.output_dir)
   api.chromium.compile()
-  api.isolate.find_isolated_tests(api.chromium.output_dir)
+  api.isolate.isolate_tests(api.chromium.output_dir)
 
   api.python('webkit_lint', webkit_lint, [
     '--build-dir', api.path['checkout'].join('out'),
@@ -347,7 +347,7 @@ def GenSteps(api):
     api.chromium.runhooks()
     api.isolate.clean_isolated_files(api.chromium.output_dir)
     api.chromium.compile()
-    api.isolate.find_isolated_tests(api.chromium.output_dir)
+    api.isolate.isolate_tests(api.chromium.output_dir)
 
   api.test_utils.determine_new_failures(
       api, [api.chromium.steps.BlinkTest(api)], deapply_patch_fn)

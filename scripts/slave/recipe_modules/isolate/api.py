@@ -122,9 +122,9 @@ class IsolateApi(recipe_api.RecipeApi):
     this step can currently only be run once per recipe.
     """
     # TODO(vadimsh): Always require |targets| to be passed explicitly. Currently
-    # chromium_trybot and swarming/canary recipes rely on targets autodiscovery.
-    # The code path in chromium_trybot that needs it is being deprecated in
-    # favor of to *_ng builders, that pass targets explicitly.
+    # chromium_trybot, blink_trybot and swarming/canary recipes rely on targets
+    # autodiscovery. The code path in chromium_trybot that needs it is being
+    # deprecated in favor of to *_ng builders, that pass targets explicitly.
     if targets is None:
       # Ninja builds <target>.isolated.gen.json files via isolate_driver.py.
       paths = self.m.file.glob(
@@ -139,6 +139,10 @@ class IsolateApi(recipe_api.RecipeApi):
         name = self.m.path.basename(p)
         assert name.endswith('.isolated.gen.json'), name
         targets.append(name[:-len('.isolated.gen.json')])
+
+    # No isolated tests found.
+    if not targets:  # pragma: no cover
+      return
 
     input_files = [build_dir.join('%s.isolated.gen.json' % t) for t in targets]
     try:
