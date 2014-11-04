@@ -20,6 +20,7 @@ CHROMIUM_GIT_URL = 'https://chromium.googlesource.com'
 # Lists the additional repositories that should be checked out to be included
 # in the source archive that is indexed by Codesearch.
 ADDITIONAL_REPOS = {
+  'infra': '%s/infra/infra' % CHROMIUM_GIT_URL,
   'tools/build': '%s/chromium/tools/build' % CHROMIUM_GIT_URL,
   'tools/chrome-devtools-frontend':\
       '%s/chromium/tools/chrome-devtools-frontend' % CHROMIUM_GIT_URL,
