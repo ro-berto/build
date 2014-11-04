@@ -117,6 +117,12 @@ def SetupBuildersAndSchedulers(c, builders, slaves, ActiveMaster):
       # upstream and are therefore canaries.
       category = builder_name_schema.BUILDER_ROLE_CANARY
 
+    properties = builder.get('properties', {})
+    cc = builder.get('cc')
+    if cc:
+      if isinstance(cc, basestring):
+        cc = [cc]
+      properties['owners'] = cc
     builder_dict = {
       'name': builder_name,
       'gatekeeper': builder.get('gatekeeper_categories', ''),
@@ -124,6 +130,7 @@ def SetupBuildersAndSchedulers(c, builders, slaves, ActiveMaster):
       'slavenames': slaves.GetSlavesName(builder=builder['name']),
       'category': category,
       'recipe': builder.get('recipe', DEFAULT_RECIPE),
+      'properties': properties,
     }
     builder_dicts.append(builder_dict)
 
@@ -210,8 +217,11 @@ def SetupBuildersAndSchedulers(c, builders, slaves, ActiveMaster):
   for builder_dict in builder_dicts:
     triggers = ([trigger_name(builder_dict['name'])]
                 if builder_dict['name'] in triggered_builders else None)
-    builder_dict['factory'] = annotator.BaseFactory(builder_dict['recipe'],
-                                                    triggers=triggers)
+    factory = annotator.BaseFactory(
+        builder_dict['recipe'],
+        triggers=triggers)
+    factory.properties.update(builder_dict['properties'], 'BuildFactory')
+    builder_dict['factory'] = factory
 
   # Finished!
   c['builders'] = builder_dicts
