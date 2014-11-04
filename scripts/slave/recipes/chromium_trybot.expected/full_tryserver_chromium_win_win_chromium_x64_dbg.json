@@ -203,6 +203,30 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\src\\testing\\scripts\\telemetry_perf_unittests.py",
+      "--build-config-fs",
+      "Debug_x64",
+      "--paths",
+      "{\"build\": \"[BUILD]\"}",
+      "--properties",
+      "{\"buildername\": \"win_chromium_x64_dbg\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}",
+      "run",
+      "--output",
+      "/path/to/tmp/json"
+    ],
+    "name": "telemetry_perf_unittests (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"failures\": [], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"valid\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -247,6 +271,30 @@
       "browser_tests.exe"
     ],
     "name": "browser_tests (with patch)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\src\\testing\\scripts\\nacl_integration.py",
+      "--build-config-fs",
+      "Debug_x64",
+      "--paths",
+      "{\"build\": \"[BUILD]\"}",
+      "--properties",
+      "{\"buildername\": \"win_chromium_x64_dbg\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}",
+      "run",
+      "--output",
+      "/path/to/tmp/json"
+    ],
+    "name": "nacl_integration (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"failures\": [], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"valid\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "cmd": [

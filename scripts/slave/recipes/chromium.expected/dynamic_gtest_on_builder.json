@@ -168,7 +168,6 @@
       "--",
       "base_unittests",
       "browser_tests",
-      "chrome",
       "chromium_swarm_tests"
     ],
     "name": "compile"

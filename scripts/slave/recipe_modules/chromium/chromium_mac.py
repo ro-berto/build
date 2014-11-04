@@ -35,11 +35,6 @@ SPEC = {
         steps.generate_gtest,
         steps.generate_script,
       ],
-      'tests': [
-        steps.NaclIntegrationTest(),
-        steps.TelemetryUnitTests(),
-        steps.TelemetryPerfUnitTests(),
-      ],
       'bot_type': 'tester',
       'parent_buildername': 'Mac Builder',
       'testing': {
@@ -59,11 +54,6 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
-      ],
-      'tests': [
-        steps.NaclIntegrationTest(),
-        steps.TelemetryUnitTests(),
-        steps.TelemetryPerfUnitTests(),
       ],
       'bot_type': 'tester',
       'parent_buildername': 'Mac Builder',
@@ -98,11 +88,6 @@ SPEC = {
         steps.generate_gtest,
         steps.generate_script,
       ],
-      'tests': [
-        steps.NaclIntegrationTest(),
-        steps.TelemetryUnitTests(),
-        steps.TelemetryPerfUnitTests(),
-      ],
       'bot_type': 'tester',
       'parent_buildername': 'Mac Builder (dbg)',
       'testing': {
@@ -122,11 +107,6 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
-      ],
-      'tests': [
-        steps.NaclIntegrationTest(),
-        steps.TelemetryUnitTests(),
-        steps.TelemetryPerfUnitTests(),
       ],
       'bot_type': 'tester',
       'parent_buildername': 'Mac Builder (dbg)',

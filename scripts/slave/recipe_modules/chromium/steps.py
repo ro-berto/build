@@ -651,62 +651,6 @@ class PrintPreviewTests(PythonBasedTest):  # pylint: disable=W032
     return targets
 
 
-class TelemetryUnitTests(PythonBasedTest):  # pylint: disable=W0232
-  name = 'telemetry_unittests'
-
-  @staticmethod
-  def compile_targets(_):
-    return ['chrome']
-
-  def run_step(self, api, suffix, cmd_args, **kwargs):
-    return api.chromium.run_telemetry_unittests(suffix, cmd_args, **kwargs)
-
-
-class TelemetryPerfUnitTests(PythonBasedTest):
-  name = 'telemetry_perf_unittests'
-
-  @staticmethod
-  def compile_targets(_):
-    return ['chrome']
-
-  def run_step(self, api, suffix, cmd_args, **kwargs):
-    return api.chromium.run_telemetry_perf_unittests(suffix, cmd_args,
-                                                     **kwargs)
-
-
-class NaclIntegrationTest(Test):  # pylint: disable=W0232
-  name = 'nacl_integration'
-
-  @staticmethod
-  def compile_targets(_):
-    return ['chrome']
-
-  def run(self, api, suffix):
-    args = [
-        '--mode', api.chromium.c.build_config_fs,
-        '--json_build_results_output_file', api.json.output(),
-    ]
-
-    try:
-      api.python(
-        self._step_name(suffix),
-        api.path['checkout'].join('chrome',
-                          'test',
-                          'nacl_test_injection',
-                          'buildbot_nacl_integration.py'),
-        args,
-        step_test_data=lambda: api.m.json.test_api.output([]))
-    finally:
-      self._test_runs[suffix] = api.step.active_result
-
-  def has_valid_results(self, api, suffix):
-    return self._test_runs[suffix].json.output is not None
-
-  def failures(self, api, suffix):
-    failures = self._test_runs[suffix].json.output
-    return [f['raw_name'] for f in failures]
-
-
 class AndroidInstrumentationTest(Test):
   def __init__(self, name, compile_target, test_data=None,
                adb_install_apk=None):

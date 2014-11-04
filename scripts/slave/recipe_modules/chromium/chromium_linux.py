@@ -36,10 +36,6 @@ SPEC = {
         steps.generate_gtest,
         steps.generate_script,
       ],
-      'tests': [
-        steps.TelemetryUnitTests(),
-        steps.TelemetryPerfUnitTests(),
-      ],
       'parent_buildername': 'Linux Builder',
       'testing': {
         'platform': 'linux',
@@ -74,9 +70,6 @@ SPEC = {
         steps.generate_gtest,
         steps.generate_script,
       ],
-      'tests': [
-        steps.NaclIntegrationTest(),
-      ],
       'parent_buildername': 'Linux Builder (dbg)(32)',
       'testing': {
         'platform': 'linux',
@@ -107,11 +100,6 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
-      ],
-      'tests': [
-        steps.TelemetryUnitTests(),
-        steps.TelemetryPerfUnitTests(),
-        steps.NaclIntegrationTest(),
       ],
       'parent_buildername': 'Linux Builder (dbg)',
       'testing': {

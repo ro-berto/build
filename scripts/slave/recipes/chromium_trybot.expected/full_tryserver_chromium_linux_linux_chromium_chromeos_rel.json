@@ -175,7 +175,6 @@
       "all",
       "base_unittests",
       "browser_tests",
-      "chrome",
       "mojo_common_unittests",
       "sandbox_linux_unittests"
     ],
@@ -338,15 +337,23 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/chrome/test/nacl_test_injection/buildbot_nacl_integration.py",
-      "--mode",
+      "[SLAVE_BUILD]/src/testing/scripts/nacl_integration.py",
+      "--build-config-fs",
       "Release",
-      "--json_build_results_output_file",
+      "--paths",
+      "{\"build\": \"[BUILD]\"}",
+      "--properties",
+      "{\"buildername\": \"linux_chromium_chromeos_rel\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}",
+      "run",
+      "--output",
       "/path/to/tmp/json"
     ],
     "name": "nacl_integration (with patch)",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[]@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"failures\": [], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"valid\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   }

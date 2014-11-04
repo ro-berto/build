@@ -205,7 +205,6 @@
       "--",
       "browser_tests",
       "browser_tests_run",
-      "chrome",
       "chromium_builder_tests",
       "mini_installer"
     ],

@@ -209,7 +209,7 @@
       "-u",
       "[SLAVE_BUILD]\\src\\build\\gyp_chromium",
       "--analyzer",
-      "{\"files\": [\"foo.cc\"], \"targets\": [\"chrome\", \"mini_installer\"]}",
+      "{\"files\": [\"foo.cc\"], \"targets\": [\"mini_installer\"]}",
       "/path/to/tmp/json"
     ],
     "env": {

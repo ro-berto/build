@@ -759,13 +759,19 @@ def GenSteps(api):
     # Tests that are only run if their compile_targets are going to be built.
     conditional_tests = []
     if bot_config.get('add_nacl_integration_tests', True):
-      conditional_tests += [api.chromium.steps.NaclIntegrationTest()]
+      conditional_tests += [
+          api.chromium.steps.ScriptTest(
+              'nacl_integration', 'nacl_integration.py',
+              scripts_compile_targets),
+      ]
     if bot_config.get('add_telemetry_tests', True):
       conditional_tests += [
           api.chromium.steps.ScriptTest(
               'telemetry_unittests', 'telemetry_unittests.py',
               scripts_compile_targets),
-          api.chromium.steps.TelemetryPerfUnitTests()
+          api.chromium.steps.ScriptTest(
+              'telemetry_perf_unittests', 'telemetry_perf_unittests.py',
+              scripts_compile_targets),
       ]
 
     # See if the patch needs to compile on the current platform.
@@ -798,11 +804,9 @@ def GenSteps(api):
     conditional_tests = tests_in_compile_targets(
         api, compile_targets, conditional_tests)
     tests.extend(find_test_named('telemetry_unittests', conditional_tests))
-    tests.extend(find_test_named(api.chromium.steps.TelemetryPerfUnitTests.name,
-                                 conditional_tests))
+    tests.extend(find_test_named('telemetry_perf_unittests', conditional_tests))
     tests.extend(gtest_tests)
-    tests.extend(find_test_named(api.chromium.steps.NaclIntegrationTest.name,
-                                 conditional_tests))
+    tests.extend(find_test_named('nacl_integration', conditional_tests))
 
     if api.platform.is_win:
       tests.append(api.chromium.steps.MiniInstallerTest())

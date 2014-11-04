@@ -37,11 +37,6 @@ SPEC = {
         steps.generate_gtest,
         steps.generate_script,
       ],
-      'tests': [
-        steps.NaclIntegrationTest(),
-        steps.TelemetryUnitTests(),
-        steps.TelemetryPerfUnitTests(),
-      ],
       'parent_buildername': 'Win Builder',
       'testing': {
         'platform': 'win',
@@ -63,10 +58,6 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
-      ],
-      'tests': [
-        steps.TelemetryUnitTests(),
-        steps.TelemetryPerfUnitTests(),
       ],
       'parent_buildername': 'Win Builder',
       'testing': {
@@ -91,9 +82,6 @@ SPEC = {
       ],
       'tests': [
         steps.MiniInstallerTest(),
-        steps.NaclIntegrationTest(),
-        steps.TelemetryUnitTests(),
-        steps.TelemetryPerfUnitTests(),
       ],
       'parent_buildername': 'Win Builder',
       'testing': {
@@ -128,9 +116,6 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
-      ],
-      'tests': [
-        steps.TelemetryUnitTests(),
       ],
       'parent_buildername': 'Win x64 Builder',
       'testing': {
@@ -183,10 +168,6 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
-      ],
-      'tests': [
-        steps.TelemetryUnitTests(),
-        steps.TelemetryPerfUnitTests(),
       ],
       'parent_buildername': 'Win Builder (dbg)',
       'testing': {

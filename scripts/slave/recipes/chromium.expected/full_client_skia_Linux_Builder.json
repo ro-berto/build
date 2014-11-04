@@ -197,7 +197,6 @@
       "--",
       "browser_tests",
       "browser_tests_run",
-      "chrome",
       "chromium_swarm_tests"
     ],
     "name": "compile"

@@ -129,11 +129,6 @@ SPEC = {
         steps.generate_gtest,
         steps.generate_script,
       ],
-      'tests': [
-        steps.NaclIntegrationTest(),
-        steps.TelemetryUnitTests(),
-        steps.TelemetryPerfUnitTests(),
-      ],
       'testing': {
         'platform': 'mac',
       },
@@ -179,10 +174,6 @@ SPEC = {
         steps.generate_gtest,
         steps.generate_script,
       ],
-      'tests': [
-        steps.TelemetryUnitTests(),
-        steps.TelemetryPerfUnitTests(),
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -200,10 +191,6 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
-      ],
-      'tests': [
-        steps.TelemetryUnitTests(),
-        steps.TelemetryPerfUnitTests(),
       ],
       'testing': {
         'platform': 'linux',
@@ -223,10 +210,6 @@ SPEC = {
         steps.generate_gtest,
         steps.generate_script,
       ],
-      'tests': [
-        steps.TelemetryUnitTests(),
-        steps.TelemetryPerfUnitTests(),
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -244,10 +227,6 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
-      ],
-      'tests': [
-        steps.TelemetryUnitTests(),
-        steps.TelemetryPerfUnitTests(),
       ],
       'testing': {
         'platform': 'linux',

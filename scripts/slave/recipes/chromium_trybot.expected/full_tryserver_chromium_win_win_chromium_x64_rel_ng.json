@@ -209,7 +209,7 @@
       "-u",
       "[SLAVE_BUILD]\\src\\build\\gyp_chromium",
       "--analyzer",
-      "{\"files\": [\"foo.cc\"], \"targets\": [\"chrome\"]}",
+      "{\"files\": [\"foo.cc\"], \"targets\": []}",
       "/path/to/tmp/json"
     ],
     "env": {

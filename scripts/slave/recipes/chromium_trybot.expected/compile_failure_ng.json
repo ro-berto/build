@@ -225,7 +225,6 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "chrome",
       "chromium_swarm_tests"
     ],
     "name": "compile (with patch)",
@@ -320,7 +319,6 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "chrome",
       "chromium_swarm_tests"
     ],
     "name": "compile (without patch)"

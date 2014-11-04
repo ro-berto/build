@@ -187,8 +187,7 @@
       "--",
       "all",
       "browser_tests",
-      "browser_tests_run",
-      "chrome"
+      "browser_tests_run"
     ],
     "name": "compile"
   },

@@ -343,23 +343,20 @@ class ChromiumApi(recipe_api.RecipeApi):
         env=env,
         **kwargs)
 
-  def run_telemetry_unittests(self, suffix=None, cmd_args=None, **kwargs):
+  def run_telemetry_unittests(self, cmd_args=None, **kwargs):
     return self._run_telemetry_script(
         'telemetry_unittests',
         self.m.path['checkout'].join('tools', 'telemetry', 'run_tests'),
-        suffix, cmd_args, **kwargs)
+        cmd_args, **kwargs)
 
-  def run_telemetry_perf_unittests(self, suffix=None, cmd_args=None, **kwargs):
+  def run_telemetry_perf_unittests(self, cmd_args=None, **kwargs):
     return self._run_telemetry_script(
         'telemetry_perf_unittests',
         self.m.path['checkout'].join('tools', 'perf', 'run_tests'),
-        suffix, cmd_args, **kwargs)
+        cmd_args, **kwargs)
 
-  def _run_telemetry_script(self, name, script_path, suffix,
-                            cmd_args, **kwargs):
+  def _run_telemetry_script(self, name, script_path, cmd_args, **kwargs):
     test_type = name
-    if suffix:
-      name += ' (%s)' % suffix
     cmd_args = cmd_args or []
 
     args = ['--browser=%s' % self.c.build_config_fs.lower(),
