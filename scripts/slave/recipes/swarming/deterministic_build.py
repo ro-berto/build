@@ -31,6 +31,7 @@ DETERMINISTIC_BUILDERS = {
       'TARGET_PLATFORM': 'android',
     },
     'platform': 'linux',
+    'targets': ['all'],
   },
   'IOS deterministic build': {
     'chromium_apply_config': ['ninja'],
@@ -42,6 +43,7 @@ DETERMINISTIC_BUILDERS = {
     },
     'gclient_config': 'ios',
     'platform': 'mac',
+    'targets': ['all'],
   },
   'Linux deterministic build': {
     'chromium_config': 'chromium',
@@ -77,7 +79,7 @@ def GenSteps(api):
   buildername = api.properties['buildername']
   recipe_config = DETERMINISTIC_BUILDERS[buildername]
 
-  targets = ['chromium_swarm_tests']
+  targets = recipe_config.get('targets', ['chromium_swarm_tests'])
 
   api.chromium.set_config(recipe_config['chromium_config'],
                           **recipe_config.get('chromium_config_kwargs',

@@ -99,7 +99,7 @@
       "ninja",
       "--clobber",
       "--",
-      "chromium_swarm_tests"
+      "all"
     ],
     "name": "First build"
   },
@@ -149,7 +149,7 @@
       "ninja",
       "--clobber",
       "--",
-      "chromium_swarm_tests"
+      "all"
     ],
     "name": "Second build"
   },

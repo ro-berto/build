@@ -102,7 +102,7 @@
       "[BUILD]/goma",
       "--clobber",
       "--",
-      "chromium_swarm_tests"
+      "all"
     ],
     "name": "First build"
   },
@@ -156,7 +156,7 @@
       "[BUILD]/goma",
       "--clobber",
       "--",
-      "chromium_swarm_tests"
+      "all"
     ],
     "name": "Second build"
   },
