@@ -705,6 +705,7 @@
       "--inputPaths",
       "/storage/emulated/legacy/skiabot/skia_skp/skps",
       "--match",
+      "~desk_pokemonwiki",
       "~tabl_mozilla",
       "~tabl_nytimes"
     ],

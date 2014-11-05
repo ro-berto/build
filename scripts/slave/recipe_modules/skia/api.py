@@ -428,12 +428,12 @@ class SkiaApi(recipe_api.RecipeApi):
     """Render SKPs to PDFs."""
     self._run_once(self.download_and_copy_skps)
     args = ['render_pdfs', '--inputPaths', self.device_dirs.skp_dir]
-    if ('Nexus4' in self.c.BUILDER_NAME or
-        'NexusS' in self.c.BUILDER_NAME or
-        'Xoom' in self.c.BUILDER_NAME):
-      # On these devices, these SKPs usually make render_pdfs run out of
-      # memory.  See skia:2743.
-      args.extend(['--match', '~tabl_mozilla', '~tabl_nytimes'])
+    if ('Xoom'   in self.c.BUILDER_NAME or
+        'Nexus7' in self.c.BUILDER_NAME):
+      # Some SKPs run some Android bots out of memory.  See skia:3084.
+      args.extend(['--match', '~desk_pokemonwiki',
+                              '~tabl_mozilla',
+                              '~tabl_nytimes'])
     self.run(self.flavor.step, 'render_pdfs', cmd=args, abort_on_failure=False)
 
 
