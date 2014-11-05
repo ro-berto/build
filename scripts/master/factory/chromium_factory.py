@@ -53,7 +53,7 @@ def ForceComponent(target, project, gclient_env):
       # build_for_tool=drmemory wants the component build (crbug.com/137180).
       'build_for_tool=memcheck' not in gyp_defines and
       'build_for_tool=tsan' not in gyp_defines):
-    if target == 'Debug':
+    if target == 'Debug' or target == 'Debug_x64':
       component = 'shared_library'
     else:
       component = 'static_library'
