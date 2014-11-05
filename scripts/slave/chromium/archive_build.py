@@ -109,6 +109,7 @@ class StagerBase(object):
                                                            project='webkit')[1]
 
     self._v8_revision = chromium_utils.GetBuildSortKey(options, project='v8')[1]
+    self._v8_revision_git = chromium_utils.GetGitCommit(options, project='v8')
 
     self.last_change_file = os.path.join(self._staging_dir, 'LAST_CHANGE')
     # The REVISIONS file will record the revisions information of the main
@@ -263,6 +264,7 @@ class StagerBase(object):
             'chromium_revision': self._chromium_revision,
             'webkit_revision': self._webkit_revision,
             'v8_revision': self._v8_revision,
+            'v8_revision_git': self._v8_revision_git,
         })
     )
 
