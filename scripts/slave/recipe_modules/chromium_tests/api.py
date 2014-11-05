@@ -245,6 +245,50 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return update_step, master_dict, test_spec
 
+  def create_test_runner(self, api, tests, suffix=''):
+    """Creates a test runner to run a set of tests.
+
+    Args:
+      api: API of the calling recipe.
+      tests: List of step.Test objects to be run.
+      suffix: Suffix to be passed when running the tests.
+
+    Returns:
+      A function that can be passed to setup_chromium_tests or run directly.
+    """
+
+    def test_runner():
+      failed_tests = []
+
+      for t in tests:
+        try:
+          t.pre_run(api, suffix)
+        except api.step.StepFailure:  # pragma: no cover
+          failed_tests.append(t)
+
+      for t in tests:
+        try:
+          t.run(api, suffix)
+        except api.step.StepFailure:
+          failed_tests.append(t)
+          if t.abort_on_failure:
+            raise
+
+      for t in tests:
+        try:
+          t.post_run(api, suffix)
+        except api.step.StepFailure:  # pragma: no cover
+          failed_tests.append(t)
+          if t.abort_on_failure:
+            raise
+
+      if failed_tests:
+        failed_tests_names = [t.name for t in failed_tests]
+        raise self.m.step.StepFailure(
+            '%d tests failed: %r' % (len(failed_tests), failed_tests_names))
+
+    return test_runner
+
   def get_compile_targets_and_tests(
       self, mastername, buildername, master_dict, override_bot_type=None,
       override_tests=None):

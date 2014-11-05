@@ -34,33 +34,7 @@ def GenSteps(api):
     return
 
   api.chromium_tests.configure_swarming('chromium', precommit=False)
-
-  def test_runner():
-    failed_tests = []
-    #TODO(martiniss) convert loop
-    for t in tests:
-      try:
-        t.pre_run(api, '')
-      except api.step.StepFailure:  # pragma: no cover
-        failed_tests.append(t)
-    for t in tests:
-      try:
-        t.run(api, '')
-      except api.step.StepFailure:
-        failed_tests.append(t)
-        if t.abort_on_failure:
-          raise
-    for t in tests:
-      try:
-        t.post_run(api, '')
-      except api.step.StepFailure:  # pragma: no cover
-        failed_tests.append(t)
-        if t.abort_on_failure:
-          raise
-    if failed_tests:
-      failed_tests_names = [t.name for t in failed_tests]
-      raise api.step.StepFailure(
-          '%d tests failed: %r' % (len(failed_tests), failed_tests_names))
+  test_runner = api.chromium_tests.create_test_runner(api, tests)
   api.chromium_tests.setup_chromium_tests(test_runner)
 
 
