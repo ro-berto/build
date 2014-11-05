@@ -217,9 +217,7 @@ class IsolateApi(recipe_api.RecipeApi):
     return full_args
 
   def runtest(self, test, revision, webkit_revision, args=None, name=None,
-              annotate=None, results_url=None, perf_dashboard_id=None,
-              test_type=None, generate_json_file=False, results_directory=None,
-              master_class_name=None, **runtest_kwargs):
+              **runtest_kwargs):
     """Runs a test which has previously been isolated to the server.
 
     Uses runtest_args_list, above, and delegates to api.chromium.runtest.
@@ -230,20 +228,11 @@ class IsolateApi(recipe_api.RecipeApi):
         # We must use the name of the test as the name in order to avoid
         # duplicate steps called "run_isolated".
         name=name or test,
-        annotate=annotate,
-        results_url=results_url,
-        perf_dashboard_id=perf_dashboard_id,
-        test_type=test_type,
-        generate_json_file=generate_json_file,
-        results_directory=results_directory,
         revision=revision,
         webkit_revision=webkit_revision,
-        master_class_name=master_class_name,
         **runtest_kwargs)
 
-  def run_telemetry_test(self, isolate_name, test,
-                         revision, webkit_revision,
-                         args=None, name=None, master_class_name=None,
+  def run_telemetry_test(self, isolate_name, test, revision, webkit_revision,
                          **runtest_kwargs):
     """Runs a Telemetry test which has previously isolated to the server.
 
@@ -257,11 +246,8 @@ class IsolateApi(recipe_api.RecipeApi):
         # run_isolated.py the hash and isolate server first, and then give
         # the isolate the test name and other arguments separately.
         prefix_args=self.runtest_args_list(isolate_name),
-        args=args,
-        name=name,
         revision=revision,
         webkit_revision=webkit_revision,
-        master_class_name=master_class_name,
         **runtest_kwargs)
 
   def remove_build_metadata(self):
