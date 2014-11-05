@@ -21,13 +21,14 @@ def get_files_to_compare(build_dir, recursive=False):
   """Get the list of files to compare."""
   allowed = frozenset(
       ('', '.apk', '.app', '.dll', '.dylib', '.exe', '.nexe', '.so'))
+  non_x_ok_exts = frozenset(('.apk', '.isolated'))
   def check(f):
     if not os.path.isfile(f):
       return False
     if os.path.basename(f).startswith('.'):
       return False
     ext = os.path.splitext(f)[1]
-    if ext == '.isolated':
+    if ext in non_x_ok_exts:
       return True
     return ext in allowed and os.access(f, os.X_OK)
 
