@@ -46,14 +46,14 @@ def diff_dict(a, b):
     va = a.get(key)
     vb = b.get(key)
     if va.__class__ != vb.__class__:
-      out += '- %s:\n    %r != %r\n' % (key, va, vb)
+      out += '- %s:  %r != %r\n' % (key, va, vb)
     elif isinstance(va, dict):
       c = diff_dict(va, vb)
       if c:
         out += '- %s:\n%s\n' % (
-            key, '\n'.join('    ' + l for l in c.splitlines()))
+            key, '\n'.join('  ' + l for l in c.splitlines()))
     elif va != vb:
-      out += '- %s:\n    %s != %s\n' % (key, va, vb)
+      out += '- %s:  %s != %s\n' % (key, va, vb)
   return out.rstrip()
 
 
@@ -91,7 +91,7 @@ def diff_binary(first_filepath, second_filepath, file_len):
       lhs_line = '%s \'%s\'' % (lhs_data.encode('hex'), encode(lhs_data))
       rhs_line = '%s \'%s\'' % (rhs_data.encode('hex'), encode(rhs_data))
       diff = list(difflib.Differ().compare([lhs_line], [rhs_line]))[-1][2:-1]
-      result += '\n0x%-8x: %s\n            %s\n            %s' % (
+      result += '\n  0x%-8x: %s\n              %s\n              %s' % (
             offset, lhs_line, rhs_line, diff)
   return result
 
@@ -108,7 +108,8 @@ def compare_files(first_filepath, second_filepath):
       rhs = json.load(f)
     diff = diff_dict(lhs, rhs)
     if diff:
-      return '\n' + diff
+      return '\n' + '\n'.join('  ' + line for line in diff.splitlines())
+    # else, falls through binary comparison, it must be binary equal too.
 
   file_len = os.stat(first_filepath).st_size
   if file_len != os.stat(second_filepath).st_size:
