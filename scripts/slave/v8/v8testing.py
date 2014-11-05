@@ -111,7 +111,8 @@ def main():
            '--progress=verbose',
            '--outdir=' + outdir,
            '--arch=' + options.arch,
-           '--mode=' + options.target]
+           '--mode=' + options.target,
+           '--time']
     if options.testname:
       # Make testname hold a list of tests.
       options.testname = options.testname.split(' ')
