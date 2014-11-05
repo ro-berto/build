@@ -363,6 +363,10 @@ class DynamicPerfTests(Test):
     self.shard_index = shard_index
     self.num_shards = num_shards
 
+  @property
+  def name(self):
+    return 'dynamic_perf_tests'
+
   def run(self, api, suffix):
     exception = None
     tests = api.chromium.list_perf_tests(self.browser, self.num_shards)

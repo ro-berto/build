@@ -57,10 +57,10 @@ def GenSteps(api):
         failed_tests.append(t)
         if t.abort_on_failure:
           raise
-    # TODO(iannucci): Make this include the list of test names.
     if failed_tests:
-      raise api.step.StepFailure('Build failed due to %d test failures'
-                            % len(failed_tests))
+      failed_tests_names = [t.name for t in failed_tests]
+      raise api.step.StepFailure(
+          '%d tests failed: %r' % (len(failed_tests), failed_tests_names))
   api.chromium_tests.setup_chromium_tests(test_runner)
 
 

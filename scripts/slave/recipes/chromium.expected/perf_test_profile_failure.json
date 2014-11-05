@@ -246,7 +246,7 @@
   },
   {
     "name": "$final_result",
-    "reason": "Build failed due to 1 test failures",
+    "reason": "1 tests failed: ['dynamic_perf_tests']",
     "status_code": 1
   }
 ]
