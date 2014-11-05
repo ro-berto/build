@@ -17,11 +17,10 @@ import time
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
-def get_files_to_compare(build_dir):
+def get_files_to_compare(build_dir, recursive=False):
   """Get the list of files to compare."""
   allowed = frozenset(
       ('', '.apk', '.app', '.dll', '.dylib', '.exe', '.nexe', '.so'))
-
   def check(f):
     if not os.path.isfile(f):
       return False
@@ -32,8 +31,13 @@ def get_files_to_compare(build_dir):
       return True
     return ext in allowed and os.access(f, os.X_OK)
 
-  return set(f for f in os.listdir(build_dir) if
-             check(os.path.join(build_dir, f)))
+  ret_files = set()
+  for root, dirs, files in os.walk(build_dir):
+    if not recursive:
+      dirs[:] = [d for d in dirs if d.endswith('_apk')]
+    for f in (f for f in files if check(os.path.join(root, f))):
+      ret_files.add(os.path.relpath(os.path.join(root, f), build_dir))
+  return ret_files
 
 
 def diff_dict(a, b):
@@ -119,7 +123,7 @@ def compare_files(first_filepath, second_filepath):
   return diff_binary(first_filepath, second_filepath, file_len)
 
 
-def compare_build_artifacts(first_dir, second_dir):
+def compare_build_artifacts(first_dir, second_dir, recursive=False):
   """Compare the artifacts from two distinct builds."""
   if not os.path.isdir(first_dir):
     print >> sys.stderr, '%s isn\'t a valid directory.' % first_dir
@@ -132,8 +136,8 @@ def compare_build_artifacts(first_dir, second_dir):
     blacklist = frozenset(json.load(f))
 
   res = 0
-  first_list = get_files_to_compare(first_dir) - blacklist
-  second_list = get_files_to_compare(second_dir) - blacklist
+  first_list = get_files_to_compare(first_dir, recursive) - blacklist
+  second_list = get_files_to_compare(second_dir, recursive) - blacklist
 
   diff = first_list.symmetric_difference(second_list)
   if diff:
@@ -168,6 +172,8 @@ def main():
       '-f', '--first-build-dir', help='The first build directory.')
   parser.add_option(
       '-s', '--second-build-dir', help='The second build directory.')
+  parser.add_option('-r', '--recursive', action='store_true', default=False,
+                    help='Indicates if the comparison should be recursive.')
   options, _ = parser.parse_args()
 
   if not options.first_build_dir:
@@ -175,8 +181,9 @@ def main():
   if not options.second_build_dir:
     parser.error('--second-build-dir is required')
 
-  return compare_build_artifacts(options.first_build_dir,
-                                 options.second_build_dir)
+  return compare_build_artifacts(os.path.abspath(options.first_build_dir),
+                                 os.path.abspath(options.second_build_dir),
+                                 options.recursive)
 
 
 if __name__ == '__main__':
