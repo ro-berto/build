@@ -153,6 +153,21 @@ BUILDERS = {
       },
     },
   },
+  'tryserver.chromium.mac': {
+    'builders': {
+      'mac_chromium_gn_dbg': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+        },
+        'chromium_apply_config': ['gn_component_build'],
+      },
+      'mac_chromium_gn_rel': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+        },
+      },
+    },
+  },
   'tryserver.chromium.win': {
     'builders': {
       'win8_chromium_gn_dbg': {
