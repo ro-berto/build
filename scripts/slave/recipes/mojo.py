@@ -54,6 +54,7 @@ def GenTests(api):
   tests = [['mojo_linux', 'Mojo Linux'],
            ['mojo_linux_dbg', 'Mojo Linux (dbg)'],
            ['mojo_android_dbg', 'Mojo Android (dbg)'],
-           ['mojo_chromeos_dbg', 'Mojo ChromeOS (dbg)']]
+           ['mojo_chromeos_dbg', 'Mojo ChromeOS (dbg)'],
+           ['mojo_win_dbg', 'Mojo Win (dbg)']]
   for t in tests:
     yield(api.test(t[0]) + api.properties.generic(buildername=t[1]))
