@@ -701,7 +701,7 @@ def get_options():
                     default='https://chromium-build.appspot.com/mailer',
                     help='URL of the application to send email from')
   parser.add_option('--email-app-secret-file',
-                    default='.gatekeeper_secret',
+                    default='.mailer_password',
                     help='file containing secret used in email app auth')
   parser.add_option('--no-email-app', action='store_true',
                     help='don\'t send emails')
