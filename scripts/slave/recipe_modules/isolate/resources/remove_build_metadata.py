@@ -7,14 +7,39 @@
 import json
 import optparse
 import os
+import shutil
 import subprocess
 import sys
+import tempfile
+import zipfile
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
-def RunZapTimestamp(src_dir, filepath):
+def get_files_to_clean(build_dir, recursive=False):
+  """Get the list of files to clean."""
+  allowed = frozenset(
+      ('', '.apk', '.app', '.dll', '.dylib', '.exe', '.nexe', '.so'))
+  non_x_ok_exts = frozenset(('.apk', '.isolated'))
+  def check(f):
+    if not os.path.isfile(f) or os.path.basename(f).startswith('.'):
+      return False
+    ext = os.path.splitext(f)[1]
+    return (ext in non_x_ok_exts) or (ext in allowed and os.access(f, os.X_OK))
+
+  ret_files = set()
+  for root, dirs, files in os.walk(build_dir):
+    if not recursive:
+      dirs[:] = [d for d in dirs if d.endswith('_apk')]
+    for f in (f for f in files if check(os.path.join(root, f))):
+      ret_files.add(os.path.relpath(os.path.join(root, f), build_dir))
+  return ret_files
+
+
+def run_zap_timestamp(src_dir, filepath):
+  """Run zap_timestamp.exe on a PE binary."""
+  assert sys.platform == 'win32'
   syzygy_dir = os.path.join(
       src_dir, 'third_party', 'syzygy', 'binaries', 'exe')
   zap_timestamp_exe = os.path.join(syzygy_dir, 'zap_timestamp.exe')
@@ -28,31 +53,58 @@ def RunZapTimestamp(src_dir, filepath):
   return proc.returncode
 
 
-def RemovePEMetadata(build_dir, src_dir):
+def remove_pe_metadata(filename, src_dir):
   """Remove the build metadata from a PE file."""
-  files = (i for i in os.listdir(build_dir) if i.endswith(('.dll', '.exe')))
+  # Only run zap_timestamp on the PE files for which we have a PDB.
+  ret = 0
+  if os.path.exists(filename + '.pdb'):
+    ret = run_zap_timestamp(src_dir, filename)
+  return ret
 
+
+def remove_apk_timestamps(filename):
+  """Remove the timestamps embedded in an apk archive."""
+  print('Processing: %s' % os.path.basename(filename))
+  with zipfile.ZipFile(filename, 'r') as zf:
+    # Creates a temporary file.
+    out_file, out_filename = tempfile.mkstemp(prefix='remote_apk_timestamp')
+    os.close(out_file)
+    try:
+      with zipfile.ZipFile(out_filename, 'w') as zf_o:
+        # Copy the data from the original file to the new one.
+        for info in zf.infolist():
+          # Overwrite the timestamp with a constant value.
+          info.date_time = (1980, 1, 1, 0, 0, 0)
+          zf_o.writestr(info, zf.read(info.filename))
+      # Remove the original file and replace it by the modified one.
+      os.remove(filename)
+      shutil.move(out_filename, filename)
+    finally:
+      if os.path.isfile(out_filename):
+        os.remove(out_filename)
+
+
+def remove_metadata(build_dir, src_dir, recursive):
+  """Remove the build metadata from the artifacts of a build."""
   with open(os.path.join(BASE_DIR, 'deterministic_build_blacklist.json')) as f:
     blacklist = frozenset(json.load(f))
+  files = get_files_to_clean(build_dir, recursive) - blacklist
+  failed_files = []
+  ret = 0
+  for f in files:
+    if f.endswith(('.dll', '.exe')):
+      if remove_pe_metadata(os.path.join(build_dir, f), src_dir):
+        ret = 1
+        failed_files.append(f)
+    elif f.endswith('.apk'):
+      remove_apk_timestamps(os.path.join(build_dir, f))
 
-  failed = []
-  for filename in files:
-    # Ignore the blacklisted files.
-    if filename in blacklist:
-      print('Ignored: %s' % filename)
-      continue
-    # Only run zap_timestamp on the PE files for which we have a PDB.
-    if os.path.exists(os.path.join(build_dir, filename + '.pdb')):
-      ret = RunZapTimestamp(src_dir, os.path.join(build_dir, filename))
-      if ret != 0:
-        failed.append(filename)
-
-  if failed:
-    print >> sys.stderr, 'zap_timestamp.exe failed for the following files:'
-    print >> sys.stderr, '\n'.join('  ' + i for i in sorted(failed))
+  if failed_files:
+    print >> sys.stderr, 'Failed for the following files:'
+    print >> sys.stderr, '\n'.join('  ' + i for i in sorted(failed_files))
     return 1
 
-  return 0
+  return ret
 
 
 def main():
@@ -61,16 +113,17 @@ def main():
   # .isolated file.
   parser.add_option('--build-dir', help='The build directory.')
   parser.add_option('--src-dir', help='The source directory.')
+  parser.add_option('-r', '--recursive', action='store_true', default=False,
+                    help='Indicates if the script should be recursive.')
   options, _ = parser.parse_args()
 
   if not options.build_dir:
     parser.error('--build-dir is required')
-  if not options.src_dir:
+
+  if sys.platform == 'win32' and not options.src_dir:
     parser.error('--src-dir is required')
 
-  # There's nothing to do for the non-Windows platform yet.
-  if sys.platform == 'win32':
-    return RemovePEMetadata(options.build_dir, options.src_dir)
+  return remove_metadata(options.build_dir, options.src_dir, options.recursive)
 
 
 if __name__ == '__main__':
