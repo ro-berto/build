@@ -10,6 +10,7 @@ DEPS = [
   'path',
   'properties',
   'python',
+  'raw_io',
   'step',
   'zip',
 ]
@@ -29,6 +30,23 @@ def GenSteps(api):
   api.step('svn update',
            ['svn', 'update'],
            cwd=api.path['slave_build'].join('v8.svn'))
+
+  step_result = api.python(
+      'check roll status',
+      api.path['build'].join('scripts', 'tools', 'runit.py'),
+      [api.path['build'].join('scripts', 'tools', 'pycurl.py'),
+       'https://v8-roll.appspot.com/status'],
+      stdout=api.raw_io.output(),
+      step_test_data=lambda: api.raw_io.test_api.stream_output(
+          '1', stream='stdout')
+    )
+  step_result.presentation.logs['stdout'] = step_result.stdout.splitlines()
+  if step_result.stdout.strip() != '1':
+    step_result.presentation.step_text = "Pushing deactivated"
+    return
+  else:
+    step_result.presentation.step_text = "Pushing activated"
+
   api.python(
       'push candidate',
       api.path['checkout'].join(
@@ -46,3 +64,8 @@ def GenSteps(api):
 
 def GenTests(api):
   yield api.test('standard') + api.properties.generic(mastername='client.v8')
+  yield (api.test('rolling_deactivated') +
+      api.properties.generic(mastername='client.v8') +
+      api.override_step_data(
+          'check roll status', api.raw_io.stream_output('0', stream='stdout'))
+    )
