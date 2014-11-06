@@ -214,6 +214,7 @@ class WebRTCApi(recipe_api.RecipeApi):
       annotate = 'gtest'
       python_mode = False
       test_type = test
+      flakiness_dash = not self.m.tryserver.is_tryserver
       if parallel:
         test_executable = self.m.chromium.c.build_dir.join(
           self.m.chromium.c.build_config_fs, test)
@@ -222,10 +223,12 @@ class WebRTCApi(recipe_api.RecipeApi):
                                             'gtest-parallel')
         python_mode = True
         annotate = None  # The parallel script doesn't output gtest format.
+        flakiness_dash = False
 
       self.m.chromium.runtest(
           test=test, args=args, name=name, annotate=annotate, xvfb=True,
-          python_mode=python_mode, test_type=test_type, env=env)
+          flakiness_dash=flakiness_dash, python_mode=python_mode,
+          test_type=test_type, env=env)
 
   def test_runner(self, test, isolate_path):
     """Adds a test to run on Android devices.
