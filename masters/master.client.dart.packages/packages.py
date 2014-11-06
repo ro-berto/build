@@ -44,21 +44,81 @@ PACKAGES = [
   {
     'name' : 'web-components',
   },
+  {
+    'name' : 'custom-element-apigen',
+  },
+  {
+    'name' : 'smoke',
+  },
   # Packages in the github project google
   {
     'name' : 'serialization.dart',
     'github_project' : 'google'
   },
-  # Repo samples
+  # Github samples
   {
-    'name' : 'polymer_intl',
+    'name' : 'sample-dcat',
     'is_sample' : True,
-    'is_repo' : True
   },
   {
-    'name' : 'todomvc',
+    'name' : 'sample-dgrep',
     'is_sample' : True,
-    'is_repo' : True
+  },
+  {
+    'name' : 'sample-sunflower',
+    'is_sample' : True,
+  },
+  {
+    'name' : 'sample-todomvc-polymer',
+    'is_sample' : True,
+  },
+  {
+    'name' : 'sample-dartiverse-search',
+    'is_sample' : True,
+  },
+  {
+    'name' : 'sample-clock',
+    'is_sample' : True,
+  },
+  {
+    'name' : 'sample-gauge',
+    'is_sample' : True,
+  },
+  {
+    'name' : 'sample-google-maps',
+    'is_sample' : True,
+  },
+  {
+    'name' : 'sample-jsonp',
+    'is_sample' : True,
+  },
+  {
+    'name' : 'sample-multi-touch',
+    'is_sample' : True,
+  },
+  {
+    'name' : 'sample-polymer-intl',
+    'is_sample' : True,
+  },
+  {
+    'name' : 'sample-searchable-list',
+    'is_sample' : True,
+  },
+  {
+    'name' : 'sample-solar',
+    'is_sample' : True,
+  },
+  {
+    'name' : 'sample-spirodraw',
+    'is_sample' : True,
+  },
+  {
+    'name' : 'sample-swipe',
+    'is_sample' : True,
+  },
+  {
+    'name' : 'sample-tracker',
+    'is_sample' : True,
   },
 ]
 
@@ -66,6 +126,6 @@ GITHUB_PACKAGES = [
   p for p in PACKAGES if (not p.get('is_sample') and not p.get('is_repo'))
 ]
 
-DART_REPO_SAMPLES = [
-  p for p in PACKAGES if p.get('is_sample') and p.get('is_repo')
+GITHUB_SAMPLES = [
+  p for p in PACKAGES if (p.get('is_sample') and not p.get('is_repo'))
 ]
