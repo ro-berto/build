@@ -214,7 +214,8 @@ class WebRTCApi(recipe_api.RecipeApi):
       annotate = 'gtest'
       python_mode = False
       test_type = test
-      flakiness_dash = not self.m.tryserver.is_tryserver
+      flakiness_dash = (not self.m.tryserver.is_tryserver and
+                        not self.m.chromium.c.runtests.memory_tool)
       if parallel:
         test_executable = self.m.chromium.c.build_dir.join(
           self.m.chromium.c.build_config_fs, test)
