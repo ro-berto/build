@@ -237,19 +237,6 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/isolate/resources/remove_build_metadata.py",
-      "--build-dir",
-      "[SLAVE_BUILD]/src/out/Release",
-      "--src-dir",
-      "[SLAVE_BUILD]/src"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "remove_build_metadata"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "\nimport glob\nimport sys\nwith open(sys.argv[1], 'w') as f:\n  f.write('\\n'.join(glob.glob(sys.argv[2])))\n",
       "/path/to/tmp/",
       "[SLAVE_BUILD]/src/out/Release/*.isolated.gen.json"

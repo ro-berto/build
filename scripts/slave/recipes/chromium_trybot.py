@@ -922,10 +922,7 @@ def GenSteps(api):
       raise
 
     if bot_config.get('use_isolate') or has_swarming_tests:
-      # Remove the build metadata from the binaries. Currently it's a noop on
-      # all platforms except Windows where it run zap_timestamp.exe on all the
-      # PE images.
-      api.isolate.remove_build_metadata()
+      # TODO(sebmarchand): remove_build_metadata, http://crbug.com/314403 .
       # Isolate all prepared targets, will look for *.isolated.gen.json files.
       api.isolate.isolate_tests(api.chromium.output_dir, verbose=True)
 
