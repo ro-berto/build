@@ -258,12 +258,6 @@ class V8Api(recipe_api.RecipeApi):
     assert match, 'Invalid Cr-Commit-Position value: %s' % self.revision_cp
     self.revision_number = match.group(2)
 
-    # TODO (machenbach): Some masters have a revision field with a git hash.
-    # Others have an svn revision field and an additional got_revision_git
-    # property. Remove revision_git after the git switch.
-    self.revision_git = update_step.presentation.properties.get(
-        'got_revision_git', self.revision)
-
   def runhooks(self, **kwargs):
     env = {}
     if self.c.gyp_env.AR:
@@ -781,7 +775,7 @@ class V8Api(recipe_api.RecipeApi):
 
     # Make sure that bots that run perf tests have a revision property.
     if tests:
-      assert self.revision_number and self.revision_git, (
+      assert self.revision_number and self.revision, (
           'Revision must be specified for perf tests as '
           'they upload data to the perf dashboard.')
 
@@ -818,7 +812,7 @@ class V8Api(recipe_api.RecipeApi):
         p['units'] = trace['units']
         p['bot'] = category or p['bot']
         p['supplemental_columns'] = {'a_default_rev': 'r_v8_git',
-                                     'r_v8_git': self.revision_git}
+                                     'r_v8_git': self.revision}
 
         # A trace might provide a value for standard deviation if the test
         # driver already calculated it, otherwise calculate it here.

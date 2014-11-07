@@ -17,7 +17,7 @@ def GenSteps(api):
   api.perf_dashboard.set_config('testing')
   update_step = api.bot_update.ensure_checkout(force=True, no_shallow=True)
   api.v8.revision_number = '12345'
-  api.v8.revision_git = 'deadbeef'
+  api.v8.revision = 'deadbeef'
   perf_config = {
     'example1': {
       'name': 'Example1',
