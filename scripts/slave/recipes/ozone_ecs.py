@@ -38,7 +38,7 @@ OZONE_TESTS = [
     'sandbox_linux_unittests',
     'sql_unittests',
     'sync_unit_tests',
-    'ui_unittests',
+    'ui_base_unittests',
     # 'unit_tests',  Not sensible.
     'url_unittests',
     # 'sync_integration_tests', Not specified in bug.

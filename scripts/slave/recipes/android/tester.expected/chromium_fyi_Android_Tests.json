@@ -575,14 +575,14 @@
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "gtest",
       "-s",
-      "ui_unittests",
+      "ui_base_unittests",
       "--verbose",
       "--release"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "ui_unittests"
+    "name": "ui_base_unittests"
   },
   {
     "cmd": [

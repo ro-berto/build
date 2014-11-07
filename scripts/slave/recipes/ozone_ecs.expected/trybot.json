@@ -203,7 +203,7 @@
       "sandbox_linux_unittests",
       "sql_unittests",
       "sync_unit_tests",
-      "ui_unittests",
+      "ui_base_unittests",
       "url_unittests"
     ],
     "name": "compile tests"
@@ -644,9 +644,9 @@
       "--slave-name=TestSlavename",
       "--build-number=571",
       "--no-spawn-dbus",
-      "ui_unittests"
+      "ui_base_unittests"
     ],
-    "name": "ui_unittests"
+    "name": "ui_base_unittests"
   },
   {
     "cmd": [
