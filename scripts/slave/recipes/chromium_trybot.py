@@ -106,6 +106,16 @@ BUILDERS = {
           'test_spec_file': 'chromium_memory_trybot.json',
         },
       },
+      'linux_chromium_asan_rel_ng': {
+        'based_on_main_waterfall': {
+          'mastername': 'chromium.memory',
+          'buildername': 'Linux ASan LSan Builder',
+          'testers': ['Linux ASan LSan Tests (1)'],
+        },
+        'testing': {
+          'platform': 'linux',
+        },
+      },
       # Fake builder to provide testing coverage for non-bot_update.
       'linux_no_bot_update': {
         'chromium_config_kwargs': {
@@ -173,6 +183,16 @@ BUILDERS = {
         'enable_swarming': True,
         'chromium_config': 'chromium_chromeos',
         'compile_only': False,
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'linux_chromium_chromeos_rel_ng': {
+        'based_on_main_waterfall': {
+          'mastername': 'chromium.chromiumos',
+          'buildername': 'Linux ChromiumOS Builder',
+          'testers': ['Linux ChromiumOS Tests (1)'],
+        },
         'testing': {
           'platform': 'linux',
         },
@@ -302,6 +322,16 @@ BUILDERS = {
            'platform': 'linux',
          },
        },
+      'linux_chromium_compile_dbg_32_ng': {
+        'based_on_main_waterfall': {
+          'mastername': 'chromium.linux',
+          'buildername': 'Linux Builder (dbg)(32)',
+          'testers': [],
+        },
+         'testing': {
+           'platform': 'linux',
+         },
+       },
     },
   },
   'tryserver.chromium.mac': {
@@ -346,6 +376,16 @@ BUILDERS = {
         },
         'chromium_config': 'chromium',
         'compile_only': True,
+        'testing': {
+          'platform': 'mac',
+        },
+      },
+      'mac_chromium_compile_dbg_ng': {
+        'based_on_main_waterfall': {
+          'mastername': 'chromium.mac',
+          'buildername': 'Mac Builder (dbg)',
+          'testers': [],
+        },
         'testing': {
           'platform': 'mac',
         },
@@ -439,6 +479,16 @@ BUILDERS = {
           'platform': 'win',
         },
       },
+      'win_chromium_compile_dbg_ng': {
+        'based_on_main_waterfall': {
+          'mastername': 'chromium.win',
+          'buildername': 'Win Builder (dbg)',
+          'testers': [],
+        },
+        'testing': {
+          'platform': 'win',
+        },
+      },
       'win_chromium_compile_rel': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -515,6 +565,16 @@ BUILDERS = {
         },
         'swarming_dimensions': {
           'os': 'Windows-6.2',
+        },
+      },
+      'win8_chromium_ng': {
+        'based_on_main_waterfall': {
+          'mastername': 'chromium.win',
+          'buildername': 'Win8 Aura',
+          'testers': [],
+        },
+        'testing': {
+          'platform': 'win',
         },
       },
       # Fake builder to provide testing coverage for non-bot_update.
