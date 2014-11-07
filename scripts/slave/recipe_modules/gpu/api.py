@@ -411,7 +411,7 @@ class GpuApi(recipe_api.RecipeApi):
                                        extra_browser_args=None, **kwargs):
     if not self._should_run_test('telemetry_gpu_test'):
       return
-    test_args = ['-v', '--use-devtools-active-port']
+    test_args = ['-v', '--use-devtools-active-port', '--disable-crash-service']
     if args:
       test_args.extend(args)
     extra_browser_args_string = '--extra-browser-args=--enable-logging=stderr'

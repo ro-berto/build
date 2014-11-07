@@ -209,6 +209,7 @@
       "--browser=release",
       "-v",
       "--use-devtools-active-port",
+      "--disable-crash-service",
       "--build-revision",
       "170242",
       "--test-machine-name",
@@ -251,6 +252,7 @@
       "--browser=release",
       "-v",
       "--use-devtools-active-port",
+      "--disable-crash-service",
       "--build-revision",
       "170242",
       "--upload-refimg-to-cloud-storage",
@@ -298,6 +300,7 @@
       "--browser=release",
       "-v",
       "--use-devtools-active-port",
+      "--disable-crash-service",
       "--extra-browser-args=--enable-logging=stderr --vmodule=startup_browser_creator=2"
     ],
     "name": "webgl_conformance_tests"
@@ -336,6 +339,7 @@
       "--browser=release",
       "-v",
       "--use-devtools-active-port",
+      "--disable-crash-service",
       "--extra-browser-args=--enable-logging=stderr --vmodule=startup_browser_creator=2"
     ],
     "name": "context_lost_tests"
@@ -374,6 +378,7 @@
       "--browser=release",
       "-v",
       "--use-devtools-active-port",
+      "--disable-crash-service",
       "--extra-browser-args=--enable-logging=stderr --vmodule=startup_browser_creator=2"
     ],
     "name": "memory_test"
@@ -412,6 +417,7 @@
       "--browser=release",
       "-v",
       "--use-devtools-active-port",
+      "--disable-crash-service",
       "--extra-browser-args=--enable-logging=stderr --vmodule=startup_browser_creator=2"
     ],
     "name": "screenshot_sync_tests"
@@ -450,6 +456,7 @@
       "--browser=release",
       "-v",
       "--use-devtools-active-port",
+      "--disable-crash-service",
       "--extra-browser-args=--enable-logging=stderr --vmodule=startup_browser_creator=2"
     ],
     "name": "hardware_accelerated_feature_tests"
@@ -488,6 +495,7 @@
       "--browser=release",
       "-v",
       "--use-devtools-active-port",
+      "--disable-crash-service",
       "--extra-browser-args=--enable-logging=stderr --vmodule=startup_browser_creator=2"
     ],
     "name": "gpu_process_launch_tests"
@@ -526,6 +534,7 @@
       "--browser=release",
       "-v",
       "--use-devtools-active-port",
+      "--disable-crash-service",
       "--build-revision",
       "170242",
       "--test-machine-name",

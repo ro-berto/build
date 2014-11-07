@@ -397,6 +397,7 @@
       "--browser=release",
       "-v",
       "--use-devtools-active-port",
+      "--disable-crash-service",
       "--build-revision",
       "170242",
       "--test-machine-name",
@@ -443,6 +444,7 @@
       "--browser=release",
       "-v",
       "--use-devtools-active-port",
+      "--disable-crash-service",
       "--build-revision",
       "170242",
       "--download-refimg-from-cloud-storage",
@@ -494,6 +496,7 @@
       "--browser=release",
       "-v",
       "--use-devtools-active-port",
+      "--disable-crash-service",
       "--extra-browser-args=--enable-logging=stderr"
     ],
     "env": {
@@ -536,6 +539,7 @@
       "--browser=release",
       "-v",
       "--use-devtools-active-port",
+      "--disable-crash-service",
       "--extra-browser-args=--enable-logging=stderr"
     ],
     "env": {
@@ -578,6 +582,7 @@
       "--browser=release",
       "-v",
       "--use-devtools-active-port",
+      "--disable-crash-service",
       "--extra-browser-args=--enable-logging=stderr"
     ],
     "env": {
@@ -620,6 +625,7 @@
       "--browser=release",
       "-v",
       "--use-devtools-active-port",
+      "--disable-crash-service",
       "--extra-browser-args=--enable-logging=stderr"
     ],
     "env": {
@@ -662,6 +668,7 @@
       "--browser=release",
       "-v",
       "--use-devtools-active-port",
+      "--disable-crash-service",
       "--extra-browser-args=--enable-logging=stderr"
     ],
     "env": {
@@ -704,6 +711,7 @@
       "--browser=release",
       "-v",
       "--use-devtools-active-port",
+      "--disable-crash-service",
       "--extra-browser-args=--enable-logging=stderr"
     ],
     "env": {
@@ -746,6 +754,7 @@
       "--browser=release",
       "-v",
       "--use-devtools-active-port",
+      "--disable-crash-service",
       "--build-revision",
       "170242",
       "--test-machine-name",

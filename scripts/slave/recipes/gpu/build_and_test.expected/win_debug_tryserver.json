@@ -385,6 +385,7 @@
       "--browser=debug",
       "-v",
       "--use-devtools-active-port",
+      "--disable-crash-service",
       "--build-revision",
       "170242",
       "--test-machine-name",
@@ -427,6 +428,7 @@
       "--browser=debug",
       "-v",
       "--use-devtools-active-port",
+      "--disable-crash-service",
       "--build-revision",
       "170242",
       "--download-refimg-from-cloud-storage",
@@ -474,6 +476,7 @@
       "--browser=debug",
       "-v",
       "--use-devtools-active-port",
+      "--disable-crash-service",
       "--extra-browser-args=--enable-logging=stderr"
     ],
     "name": "webgl_conformance_tests"
@@ -512,6 +515,7 @@
       "--browser=debug",
       "-v",
       "--use-devtools-active-port",
+      "--disable-crash-service",
       "--extra-browser-args=--enable-logging=stderr"
     ],
     "name": "context_lost_tests"
@@ -550,6 +554,7 @@
       "--browser=debug",
       "-v",
       "--use-devtools-active-port",
+      "--disable-crash-service",
       "--extra-browser-args=--enable-logging=stderr"
     ],
     "name": "memory_test"
@@ -588,6 +593,7 @@
       "--browser=debug",
       "-v",
       "--use-devtools-active-port",
+      "--disable-crash-service",
       "--extra-browser-args=--enable-logging=stderr"
     ],
     "name": "screenshot_sync_tests"
@@ -626,6 +632,7 @@
       "--browser=debug",
       "-v",
       "--use-devtools-active-port",
+      "--disable-crash-service",
       "--extra-browser-args=--enable-logging=stderr"
     ],
     "name": "hardware_accelerated_feature_tests"
@@ -664,6 +671,7 @@
       "--browser=debug",
       "-v",
       "--use-devtools-active-port",
+      "--disable-crash-service",
       "--extra-browser-args=--enable-logging=stderr"
     ],
     "name": "gpu_process_launch_tests"
@@ -702,6 +710,7 @@
       "--browser=debug",
       "-v",
       "--use-devtools-active-port",
+      "--disable-crash-service",
       "--build-revision",
       "170242",
       "--test-machine-name",
