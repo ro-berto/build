@@ -117,10 +117,21 @@ def GenTests(api):
 
   yield api.test('basic') + api.properties.scheduled() + dependant_change
 
+  # The first time repo sync fails we retry.
+  yield (
+    api.test('retry_sync') +
+    api.properties.scheduled() +
+    api.step_data('repo sync', retcode=1) +
+    dependant_change
+  )
+
+  # The second time it's an infra failure.
   yield (
     api.test('repo_infra_failure') +
     api.properties.scheduled() +
-    api.step_data('repo sync', retcode=1)
+    api.step_data('repo sync', retcode=1) +
+    api.step_data('repo sync - retry', retcode=1) +
+    dependant_change
   )
 
   yield (

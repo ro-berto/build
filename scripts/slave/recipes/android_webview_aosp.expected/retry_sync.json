@@ -217,15 +217,142 @@
       "[SLAVE_BUILD]/src/android_webview/buildbot/aosp_manifest.xml"
     ],
     "cwd": "[SLAVE_BUILD]/android-src",
-    "name": "repo sync - retry",
+    "name": "repo sync - retry"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/android_webview/buildbot/deps_whitelist.py",
+      "--method",
+      "android_rsync_build",
+      "--path-to-deps",
+      "[SLAVE_BUILD]/src/DEPS",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "name": "calculate blacklist",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_EXCEPTION@@@"
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"blacklist\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"blacklist/project/1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"blacklist/project/2\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
-    "name": "$final_result",
-    "reason": "Infra Failure: Step('repo sync - retry') returned 1",
-    "status_code": 1
+    "cmd": [
+      "rsync",
+      "-rav",
+      "--delete",
+      "--delete-excluded",
+      "--exclude=.svn",
+      "--exclude=.git",
+      "--exclude=blacklist/project/1",
+      "--exclude=blacklist/project/2",
+      "[SLAVE_BUILD]/src/",
+      "[SLAVE_BUILD]/android-src/external/chromium_org"
+    ],
+    "name": "rsync chromium_org"
+  },
+  {
+    "cmd": [
+      "[BUILD]/scripts/slave/android/with_lunch",
+      "[SLAVE_BUILD]/android-src",
+      "full-eng",
+      "[SLAVE_BUILD]/android-src/external/chromium_org/android_webview/tools/gyp_webview",
+      "all"
+    ],
+    "cwd": "[SLAVE_BUILD]/android-src/external/chromium_org",
+    "name": "gyp_webview"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/android-src/external/chromium_org/android_webview/tools/webview_licenses.py",
+      "all_incompatible_directories"
+    ],
+    "name": "incompatible directories"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]/src/testing/buildbot/trybot_analyze_config.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "read filter exclusion spec",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@path: 'testing/buildbot/trybot_analyze_config.json'@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"android_webview\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"android_webview/.*\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "diff",
+      "--cached",
+      "--name-only"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "git diff to analyze patch",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/gyp_chromium",
+      "--analyzer",
+      "{\"files\": [\"foo.cc\"], \"targets\": [\"android_webview_apk\"]}",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "GYP_CROSSCOMPILE": "1",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 target_arch=arm"
+    },
+    "name": "analyze",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"some_target\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"status\": \"Found dependency\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"targets\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"android_webview_apk\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILD]/scripts/slave/android/with_lunch",
+      "[SLAVE_BUILD]/android-src",
+      "full-eng",
+      "[BUILD]/scripts/slave/compile.py",
+      "webviewchromium",
+      "--build-dir",
+      "[SLAVE_BUILD]",
+      "--src-dir",
+      "[SLAVE_BUILD]/android-src",
+      "--build-tool",
+      "make-android",
+      "--verbose"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "compile"
   }
 ]

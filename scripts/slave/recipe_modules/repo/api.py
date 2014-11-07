@@ -39,6 +39,16 @@ class RepoApi(recipe_api.RecipeApi):
     """Sync an already-init'd repo."""
     # NOTE: This does not set self.m.path['checkout']
     kwargs.setdefault('infra_step', True)
-    return self.m.step('repo sync',
+    suffix = kwargs.pop('suffix', None)
+    name = 'repo sync'
+    if suffix:
+      name += ' - ' + suffix
+    return self.m.step(name,
                        [self.repo_path, 'sync'] + list(args),
+                       **kwargs)
+
+  def clean(self, **kwargs):
+    """Clean an already-init'd repo."""
+    return self.m.step('repo forall git clean',
+                       [self.repo_path, 'forall', '-c', 'git', 'clean', '-f', '-d'],
                        **kwargs)

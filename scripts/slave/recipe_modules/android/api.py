@@ -74,7 +74,17 @@ class AOSPApi(recipe_api.RecipeApi):
     sync_flags = self.c.repo.sync_flags.as_jsonish()
     if self.c.sync_manifest_override:
       sync_flags.extend(['-m', self.c.sync_manifest_override])
-    self.m.repo.sync(*sync_flags, cwd=self.c.build_path)
+
+    try:
+      self.m.repo.sync(*sync_flags, cwd=self.c.build_path)
+    except self.m.step.StepFailure:
+      # Remove index.locks
+      self.m.gclient.break_locks()
+      # Clean checkouts.
+      self.m.repo.clean(cwd=self.c.build_path)
+      # Retry.
+      self.m.repo.sync(*sync_flags, cwd=self.c.build_path,
+                             suffix='retry')
 
   def rsync_chromium_into_android_tree_step(self):
     # Calculate the blacklist of files to not copy across.
