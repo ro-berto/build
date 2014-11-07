@@ -114,6 +114,7 @@
       "[SLAVE_BUILD]/src",
       "--build-tool",
       "ninja",
+      "--clobber",
       "--",
       "all"
     ],
