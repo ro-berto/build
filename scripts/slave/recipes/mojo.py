@@ -28,12 +28,15 @@ def _BuildSteps(api, buildername, build_type):
     args += ['--android']
   elif 'ChromeOS' in buildername:
     args += ['--chromeos']
+  if 'Win' in buildername:
+    # Until http://crbug.com/402648 is fixed, we need to do a clobber.
+    api.path.rmtree(
+      'build directory',
+      api.path['checkout'].join('out'))
   api.python('mojob gn',
              mojob_path,
              args=['gn', build_type] + args,
              cwd=api.path['checkout'])
-  if 'Win' in buildername:
-    return  # until http://crbug.com/402648 is fixed.
   api.python('mojob build', mojob_path, args=['build', build_type] + args)
 
 def _RunTests(api, build_type):
