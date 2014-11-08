@@ -30,6 +30,8 @@ def _BuildSteps(api, buildername, build_type):
              mojob_path,
              args=['gn', build_type] + args,
              cwd=api.path['checkout'])
+  if 'Win' in buildername:
+    return  # until http://crbug.com/402648 is fixed.
   api.python('mojob build', mojob_path, args=['build', build_type] + args)
 
 def _RunTests(api, build_type):

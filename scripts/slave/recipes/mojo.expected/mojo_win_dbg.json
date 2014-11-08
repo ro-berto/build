@@ -54,15 +54,5 @@
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "mojob gn"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/mojo/tools/mojob.py",
-      "build",
-      "--debug"
-    ],
-    "name": "mojob build"
   }
 ]
