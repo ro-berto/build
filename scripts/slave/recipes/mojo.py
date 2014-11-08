@@ -20,20 +20,21 @@ def _CheckoutSteps(api):
 
 
 def _BuildSteps(api, buildername, build_type):
-  mojob_path = api.path['checkout'].join('mojo', 'tools', 'mojob.sh')
+  mojob_path = api.path['checkout'].join('mojo', 'tools', 'mojob.py')
   args = []
   if 'Android' in buildername:
     args += ['--android']
   elif 'ChromeOS' in buildername:
     args += ['--chromeos']
-  api.step('mojob gn',
-           [mojob_path] + args + [build_type, 'gn'],
-           cwd=api.path['checkout'])
-  api.step('mojob build', [mojob_path] + args + [build_type, 'build'])
+  api.python('mojob gn',
+             mojob_path,
+             args=['gn', build_type] + args,
+             cwd=api.path['checkout'])
+  api.python('mojob build', mojob_path, args=['build', build_type] + args)
 
 def _RunTests(api, build_type):
-  mojob_path = api.path['checkout'].join('mojo', 'tools', 'mojob.sh')
-  api.step('mojob test', [mojob_path, build_type, 'test'])
+  mojob_path = api.path['checkout'].join('mojo', 'tools', 'mojob.py')
+  api.python('mojob test', mojob_path, args=['test', build_type])
 
 def _UploadShell(api):
   upload_path = api.path['checkout'].join('mojo', 'tools',

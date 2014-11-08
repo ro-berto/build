@@ -46,26 +46,32 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/mojo/tools/mojob.sh",
-      "--debug",
-      "gn"
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/mojo/tools/mojob.py",
+      "gn",
+      "--debug"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "mojob gn"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/mojo/tools/mojob.sh",
-      "--debug",
-      "build"
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/mojo/tools/mojob.py",
+      "build",
+      "--debug"
     ],
     "name": "mojob build"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/mojo/tools/mojob.sh",
-      "--debug",
-      "test"
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/mojo/tools/mojob.py",
+      "test",
+      "--debug"
     ],
     "name": "mojob test"
   }

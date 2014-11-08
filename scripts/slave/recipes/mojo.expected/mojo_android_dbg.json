@@ -46,20 +46,24 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/mojo/tools/mojob.sh",
-      "--android",
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/mojo/tools/mojob.py",
+      "gn",
       "--debug",
-      "gn"
+      "--android"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "mojob gn"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/mojo/tools/mojob.sh",
-      "--android",
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/mojo/tools/mojob.py",
+      "build",
       "--debug",
-      "build"
+      "--android"
     ],
     "name": "mojob build"
   }

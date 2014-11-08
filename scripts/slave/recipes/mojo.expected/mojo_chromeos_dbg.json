@@ -46,20 +46,24 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/mojo/tools/mojob.sh",
-      "--chromeos",
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/mojo/tools/mojob.py",
+      "gn",
       "--debug",
-      "gn"
+      "--chromeos"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "mojob gn"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/mojo/tools/mojob.sh",
-      "--chromeos",
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/mojo/tools/mojob.py",
+      "build",
       "--debug",
-      "build"
+      "--chromeos"
     ],
     "name": "mojob build"
   }
