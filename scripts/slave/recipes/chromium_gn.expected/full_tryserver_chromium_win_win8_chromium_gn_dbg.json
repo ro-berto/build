@@ -99,7 +99,7 @@
       "--root=[SLAVE_BUILD]/src",
       "gen",
       "//out/Debug",
-      "--args=is_component_build=true is_debug=true"
+      "--args=is_debug=true"
     ],
     "name": "gn"
   },

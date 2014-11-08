@@ -159,7 +159,6 @@ BUILDERS = {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
         },
-        'chromium_apply_config': ['gn_component_build'],
       },
       'mac_chromium_gn_rel': {
         'chromium_config_kwargs': {
@@ -174,7 +173,6 @@ BUILDERS = {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
         },
-        'chromium_apply_config': ['gn_component_build'],
       },
       'win8_chromium_gn_rel': {
         'chromium_config_kwargs': {
