@@ -12,9 +12,11 @@ DEPS = [
 ]
 
 
-def _CheckoutSteps(api):
+def _CheckoutSteps(api, buildername):
   # Checkout mojo and its dependencies (specified in DEPS) using gclient
   api.gclient.set_config('mojo')
+  if 'Android' in buildername:
+    api.gclient.apply_config('android')
   api.gclient.checkout()
   api.gclient.runhooks()
 
@@ -44,8 +46,8 @@ def _UploadShell(api):
   api.python('upload shell binary', upload_path)
 
 def GenSteps(api):
-  _CheckoutSteps(api)
   buildername = api.properties.get('buildername')
+  _CheckoutSteps(api, buildername)
   build_type = '--debug' if 'dbg' in buildername else '--release'
   _BuildSteps(api, buildername, build_type)
   if 'Linux' in buildername:

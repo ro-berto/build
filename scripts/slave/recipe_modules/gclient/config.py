@@ -354,7 +354,6 @@ def pdfium(c):
 @config_ctx()
 def mojo(c):
   soln = c.solutions.add()
-  c.target_os.add('android')
   soln.name = 'src'
   soln.url = 'https://chromium.googlesource.com/external/mojo.git'
 
