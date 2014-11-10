@@ -33,11 +33,21 @@ def _BuildSteps(api, buildername, build_type):
     api.path.rmtree(
       'build directory',
       api.path['checkout'].join('out'))
+
+  if 'Win' in buildername:
+    goma_dir = r'e:\b\build\goma'
+  else:
+    goma_dir = '/b/build/goma'
+  env = {'GOMA_DIR': goma_dir}
   api.python('mojob gn',
              mojob_path,
              args=['gn', build_type] + args,
-             cwd=api.path['checkout'])
-  api.python('mojob build', mojob_path, args=['build', build_type] + args)
+             cwd=api.path['checkout'],
+             env=env)
+  api.python('mojob build',
+             mojob_path,
+             args=['build', build_type] + args,
+             env = env)
 
 def _RunTests(api, build_type):
   mojob_path = api.path['checkout'].join('mojo', 'tools', 'mojob.py')

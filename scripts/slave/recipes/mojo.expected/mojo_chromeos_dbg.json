@@ -54,6 +54,9 @@
       "--chromeos"
     ],
     "cwd": "[SLAVE_BUILD]/src",
+    "env": {
+      "GOMA_DIR": "/b/build/goma"
+    },
     "name": "mojob gn"
   },
   {
@@ -65,6 +68,9 @@
       "--debug",
       "--chromeos"
     ],
+    "env": {
+      "GOMA_DIR": "/b/build/goma"
+    },
     "name": "mojob build"
   }
 ]

@@ -71,6 +71,9 @@
       "--debug"
     ],
     "cwd": "[SLAVE_BUILD]/src",
+    "env": {
+      "GOMA_DIR": "e:\\b\\build\\goma"
+    },
     "name": "mojob gn"
   },
   {
@@ -81,6 +84,9 @@
       "build",
       "--debug"
     ],
+    "env": {
+      "GOMA_DIR": "e:\\b\\build\\goma"
+    },
     "name": "mojob build"
   }
 ]
