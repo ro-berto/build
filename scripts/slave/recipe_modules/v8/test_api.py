@@ -36,6 +36,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       results.append({
         'flags': ['--opt42'],
         'result': 'FAIL',
+        'expected': ['PASS', 'SLOW'],
         'run': 1,
         'stdout': 'Some output.',
         'stderr': 'Some errput.',

@@ -522,6 +522,8 @@ class V8Api(recipe_api.RecipeApi):
       lines.append('Run #%d' % int(result['run']))
       lines.append('Exit code: %s' % result['exit_code'])
       lines.append('Result: %s' % result['result'])
+      if result.get('expected'):
+        lines.append('Expected outcomes: %s' % ", ".join(result['expected']))
       lines.append('')
       if result['stdout']:
         lines.append('Stdout:')
