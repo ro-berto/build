@@ -287,7 +287,7 @@
       "[SLAVE_BUILD]/android-src",
       "full-eng",
       "[BUILD]/scripts/slave/compile.py",
-      "webviewchromium",
+      "webview",
       "--build-dir",
       "[SLAVE_BUILD]",
       "--src-dir",

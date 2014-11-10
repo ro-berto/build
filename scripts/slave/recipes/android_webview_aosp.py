@@ -84,7 +84,7 @@ def GenSteps(api):
   # TODO(android): use api.chromium.compile for this
   droid.compile_step(
     build_tool='make-android',
-    targets=['webviewchromium'],
+    targets=['webview'],
     use_goma=True,
     force_clobber=force_clobber)
 
