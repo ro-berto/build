@@ -752,7 +752,7 @@ class V8Api(recipe_api.RecipeApi):
           step_test_data=step_test_data,
         )
       finally:
-        results_mapping[t][name] = step_result = self.m.step.active_result
+        results_mapping[test][name] = step_result = self.m.step.active_result
         errors = step_result.json.output['errors']
         if errors:
           step_result.presentation.logs['Errors'] = errors
