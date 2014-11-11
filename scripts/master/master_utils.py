@@ -186,7 +186,8 @@ class FilterDomain(util.ComparableMixin):
 
 def CreateWebStatus(port, templates=None, tagComparator=None,
                     customEndpoints=None, console_repo_filter=None,
-                    console_builder_filter=None, **kwargs):
+                    console_builder_filter=None, web_template_globals=None,
+                    **kwargs):
   webstatus = WebStatus(port, **kwargs)
   if templates:
     # Manipulate the search path for jinja templates
@@ -203,6 +204,8 @@ def CreateWebStatus(port, templates=None, tagComparator=None,
       webstatus, tagComparator, customEndpoints,
       console_repo_filter=console_repo_filter,
       console_builder_filter=console_builder_filter)
+  if web_template_globals:
+    webstatus.templates.globals.update(web_template_globals)
   return webstatus
 
 
@@ -223,7 +226,8 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
                     customEndpoints=None,
                     enable_http_status_push=False,
                     console_repo_filter=None,
-                    console_builder_filter=None):
+                    console_builder_filter=None,
+                    web_template_globals=None):
   """Add common settings and status services to a master.
 
   If you wonder what all these mean, PLEASE go check the official doc!
@@ -316,6 +320,7 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
         templates=templates,
         console_repo_filter=console_repo_filter,
         console_builder_filter=console_builder_filter,
+        web_template_globals=web_template_globals,
         **kwargs))
   if active_master.master_port_alt:
     c['status'].append(CreateWebStatus(
@@ -326,6 +331,7 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
         templates=templates,
         console_repo_filter=console_repo_filter,
         console_builder_filter=console_builder_filter,
+        web_template_globals=web_template_globals,
         **kwargs))
 
   # Add a status logger, which is only active if '.logstatus' is touched.
