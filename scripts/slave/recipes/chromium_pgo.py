@@ -41,23 +41,17 @@ _BENCHMARKS_TO_RUN = {
 }
 
 
-# Run a telemetry benchmark under the Windows PGO profiler.
-def RunTelemetryBenchmark(api, testname, pgosweep_path):
-  return api.python(
-      'Telemetry benchmark: %s' % testname,
-      api.path['checkout'].join('tools', 'perf', 'run_benchmark'),
-      args=['--profiler=win_pgo_profiler', '--use-live-sites', testname],
-      env={'PATH': '%s;%s' % (pgosweep_path, '%(PATH)s')}
-  )
-
-
 # Run the profiling benchmarks.
 def RunBenchmarks(api):
   pgosweep_path = api.path['depot_tools'].join(
       'win_toolchain', 'vs2013_files', 'VC', 'bin')
+  pgo_env = {'PATH': '%s;%s' % (pgosweep_path, '%(PATH)s')}
+  pgo_args = ['--profiler=win_pgo_profiler', '--use-live-sites']
 
   for benchmark in _BENCHMARKS_TO_RUN:
-    RunTelemetryBenchmark(api, benchmark, pgosweep_path)
+    api.chromium.run_telemetry_benchmark(benchmark_name=benchmark,
+                                         cmd_args=pgo_args,
+                                         env=pgo_env)
 
 
 def GenSteps(api):

@@ -387,6 +387,19 @@ class ChromiumApi(recipe_api.RecipeApi):
         xvfb=True,
         **kwargs)
 
+  def run_telemetry_benchmark(self, benchmark_name, cmd_args=None, env=None):
+    cmd_args = cmd_args or []
+    args = [
+        '--browser=%s' % self.c.build_config_fs.lower(),
+        benchmark_name
+    ]
+    return self.m.python(
+        'Telemetry benchmark: %s' % benchmark_name,
+        self.m.path['checkout'].join('tools', 'perf', 'run_benchmark'),
+        args=cmd_args + args,
+        env=env,
+    )
+
   def _commit_position(self, property_name):
       revision_str = self.m.bot_update.properties[property_name]
       m = re.match('.*@{#(\d+)}', revision_str)

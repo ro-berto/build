@@ -132,6 +132,7 @@
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
       "--use-live-sites",
+      "--browser=release",
       "jsgamebench"
     ],
     "env": {
@@ -146,6 +147,7 @@
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
       "--use-live-sites",
+      "--browser=release",
       "dromaeo.domcoretraverse"
     ],
     "env": {
@@ -160,6 +162,7 @@
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
       "--use-live-sites",
+      "--browser=release",
       "dromaeo.jslibtraverseprototype"
     ],
     "env": {
@@ -174,6 +177,7 @@
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
       "--use-live-sites",
+      "--browser=release",
       "dromaeo.domcorequery"
     ],
     "env": {
@@ -188,6 +192,7 @@
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
       "--use-live-sites",
+      "--browser=release",
       "dromaeo.jslibeventjquery"
     ],
     "env": {
@@ -202,6 +207,7 @@
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
       "--use-live-sites",
+      "--browser=release",
       "dromaeo.jslibtraversejquery"
     ],
     "env": {
@@ -216,6 +222,7 @@
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
       "--use-live-sites",
+      "--browser=release",
       "dromaeo.jslibmodifyprototype"
     ],
     "env": {
@@ -230,6 +237,7 @@
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
       "--use-live-sites",
+      "--browser=release",
       "peacekeeper.string"
     ],
     "env": {
@@ -244,6 +252,7 @@
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
       "--use-live-sites",
+      "--browser=release",
       "dromaeo.jslibattrprototype"
     ],
     "env": {
@@ -258,6 +267,7 @@
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
       "--use-live-sites",
+      "--browser=release",
       "dromaeo.jslibeventprototype"
     ],
     "env": {
@@ -272,6 +282,7 @@
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
       "--use-live-sites",
+      "--browser=release",
       "dromaeo.domcoreattr"
     ],
     "env": {
@@ -286,6 +297,7 @@
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
       "--use-live-sites",
+      "--browser=release",
       "dromaeo.jslibstyleprototype"
     ],
     "env": {
@@ -300,6 +312,7 @@
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
       "--use-live-sites",
+      "--browser=release",
       "dromaeo.jslibstylejquery"
     ],
     "env": {
@@ -314,6 +327,7 @@
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
       "--use-live-sites",
+      "--browser=release",
       "peacekeeper.dom"
     ],
     "env": {
@@ -328,6 +342,7 @@
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
       "--use-live-sites",
+      "--browser=release",
       "dromaeo.jslibmodifyjquery"
     ],
     "env": {
@@ -342,6 +357,7 @@
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
       "--use-live-sites",
+      "--browser=release",
       "dromaeo.domcoremodify"
     ],
     "env": {
@@ -356,6 +372,7 @@
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
       "--use-live-sites",
+      "--browser=release",
       "sunspider"
     ],
     "env": {
@@ -370,6 +387,7 @@
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
       "--use-live-sites",
+      "--browser=release",
       "peacekeeper.html5"
     ],
     "env": {
@@ -384,6 +402,7 @@
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
       "--use-live-sites",
+      "--browser=release",
       "peacekeeper.render"
     ],
     "env": {
@@ -398,6 +417,7 @@
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
       "--use-live-sites",
+      "--browser=release",
       "dromaeo.jslibattrjquery"
     ],
     "env": {
@@ -412,6 +432,7 @@
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
       "--use-live-sites",
+      "--browser=release",
       "peacekeeper.array"
     ],
     "env": {
