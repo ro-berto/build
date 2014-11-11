@@ -27,13 +27,9 @@
 
   {%- if show_builder_column %}
     <td>
-    {%- if s.builders|length < 6 %}
-      {%- for b in s.builders %}
-        <a href="{{ b.link }}">{{ b.name }}</a>
-      {%- endfor %}
-    {%- else %}
-      <a href="builders">General</a>
-    {%- endif -%}
+    {%- for entry in cros_builder_links(s.builders) %}
+      <a href="{{ entry.link }}">{{ entry.name }}</a>
+    {%- endfor %}
     </td>
   {%- endif %}
 

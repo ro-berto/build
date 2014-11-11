@@ -5,6 +5,59 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import urllib
+
+from common import chromium_utils
+
+
+def is_general_pre_cq_builder(cbb_name):
+  return cbb_name == 'pre-cq-group'
+
+
+def is_pre_cq_builder(cbb_name):
+  return (
+      is_general_pre_cq_builder(cbb_name) or
+      cbb_name.endswith('-pre-cq'))
+
+
+# Load all of Chromite's 'cbuildbot' config targets.
+configs = chromium_utils.GetCBuildbotConfigs()
+
+# Load builder sets from the 'cbuildbot' config.
+cbb_builders = set(cfg['name'] for cfg in configs)
+etc_builders = set(['etc'])
+all_builders = cbb_builders.union(etc_builders)
+precq_builders = set(filter(is_pre_cq_builder, all_builders))
+
+
+def cros_builder_links(slaves):
+  """BuildBot Jinja2 template function to style our slave groups into pools.
+
+  This function is called by our customized 'buildslaves.html' template. It is
+  evaluated for each slave, receiving 'slaves', a list containing template
+  information for each builder attached to that slave.
+
+  This function accepts and returns a list containing entries:
+    {'name': <name>, 'link': <link>}
+
+  Each entry is then used by the templating engine to populate that slave's
+  builder table cell. This function analyzes the list of builders for a
+  given slave and optionally returns a modified set of links to render.
+
+  This function summarizes known sets of builders, replacing individual builder
+  names/links with concise builder pool names/links.
+  """
+  slave_names = set(s['name'] for s in slaves)
+
+  if slave_names == all_builders:
+    return [{'link': 'builders', 'name': 'General'}]
+  elif slave_names == precq_builders:
+    query = '&'.join('builder=%s' % (urllib.quote(n),)
+                     for n in precq_builders)
+    return [{'link': 'builders?%s' % (query,), 'name': 'Pre-CQ'}]
+  else:
+    return slaves
+
 
 class NextSlaveAndBuild(object):
   """Callable BuildBot 'nextSlaveAndBuild' function for ChromeOS try server.
