@@ -1553,6 +1553,11 @@ def _MainAndroid(options, args, extra_env):
     run_test_target_option = '--debug'
   command = ['src/build/android/test_runner.py', 'gtest',
              run_test_target_option, '-s', test_suite]
+
+  if options.flakiness_dashboard_server:
+    command += ['--flakiness-dashboard-server=%s' %
+        options.flakiness_dashboard_server]
+
   result = _RunGTestCommand(command, extra_env, log_processor=log_processor)
 
   if options.generate_json_file:
@@ -1790,6 +1795,9 @@ def main():
   option_parser.add_option('--test-launcher-summary-output',
                            help='Path to test results file with all the info '
                                 'from the test launcher')
+  option_parser.add_option('--flakiness-dashboard-server',
+                           help='The flakiness dashboard server to which the '
+                                'results should be uploaded.')
   option_parser.add_option('--verbose', action='store_true', default=False,
                             help='Prints more information.')
 
