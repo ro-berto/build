@@ -34,11 +34,18 @@ def _BuildSteps(api, buildername, build_type):
       'build directory',
       api.path['checkout'].join('out'))
 
+  goma_dir = ''
   if 'Win' in buildername:
-    goma_dir = r'e:\b\build\goma'
+    # Disable Goma on Windows as it makes the build much slower (> 1 hour vs
+    # 15 minutes). Try renabling once we have trybots and the cache would be
+    # warm.
+    #goma_dir = r'e:\b\build\goma'
+    pass
   else:
     goma_dir = '/b/build/goma'
-  env = {'GOMA_DIR': goma_dir}
+  env = {}
+  if goma_dir:
+    env['GOMA_DIR'] = goma_dir
   api.python('mojob gn',
              mojob_path,
              args=['gn', build_type] + args,
