@@ -19,6 +19,8 @@ def Update(config, active_master, c):
           'Win x64 Builder',
           'Win x64 Builder (dbg)',
           'Win Builder (dbg)',
+          'Win8 GN',
+          'Win8 GN (dbg)',
       ]),
       Triggerable(name='win_rel_trigger', builderNames=[
           'XP Tests (1)',
@@ -53,13 +55,15 @@ def Update(config, active_master, c):
     },
     {'name': 'Win7 Tests (dbg)(1)'},
     {'name': 'Win8 Aura'},
+    {'name': 'Win8 GN', 'recipe': 'chromium_gn'},
+    {'name': 'Win8 GN (dbg)', 'recipe': 'chromium_gn'},
   ]
 
   c['builders'].extend([
       {
         'name': spec['name'],
         'factory': m_annotator.BaseFactory(
-            'chromium',
+            spec.get('recipe', 'chromium'),
             factory_properties=spec.get('factory_properties'),
             triggers=spec.get('triggers'),
             timeout=spec.get('timeout', 2400)),

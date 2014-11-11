@@ -109,6 +109,20 @@ BUILDERS = {
       },
     },
   },
+  'chromium.win': {
+    'builders': {
+      'Win8 GN': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+        },
+      },
+     'Win8 GN (dbg)': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+        },
+      },
+    },
+  },
   'tryserver.chromium.linux': {
     'builders': {
       'android_chromium_gn_compile_rel': {
@@ -238,8 +252,8 @@ def GenSteps(api):
 
   api.chromium.runhooks()
 
-  # TODO(scottmg): goma doesn't work on windows GN builds yet.
-  is_windows = ('Windows' in buildername or 'win8_' in buildername)
+  # TODO(scotmg): goma doesn't work on windows GN builds yet.
+  is_windows = ('Win8' in buildername or 'win8_' in buildername)
   api.chromium.run_gn(use_goma=not is_windows)
   if is_windows:
     api.chromium.c.compile_py.compiler = None
