@@ -82,5 +82,15 @@
       "--debug"
     ],
     "name": "mojob build"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/mojo/tools/mojob.py",
+      "test",
+      "--debug"
+    ],
+    "name": "mojob test"
   }
 ]

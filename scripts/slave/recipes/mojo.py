@@ -70,9 +70,9 @@ def GenSteps(api):
   _CheckoutSteps(api, buildername)
   build_type = '--debug' if 'dbg' in buildername else '--release'
   _BuildSteps(api, buildername, build_type)
-  if 'Linux' in buildername:
+  if 'Linux' in buildername or 'Win' in buildername:
     _RunTests(api, build_type)
-    if build_type == '--release':
+    if 'Linux' in buildername and build_type == '--release':
       _UploadShell(api)
 
 def GenTests(api):
