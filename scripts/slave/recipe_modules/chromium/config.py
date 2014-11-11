@@ -592,7 +592,7 @@ def codesearch(c):
     chromeos(c)
 
 @config_ctx(includes=['ninja', 'static_library'])
-def chrome_pgo_base(c):
+def chromium_pgo_base(c):
   c.gyp_env.GYP_DEFINES['buildtype'] = 'Official'
   c.gyp_env.GYP_DEFINES['optimize'] = 'max'
   c.gyp_env.GYP_DEFINES['use_goma'] = 0
@@ -600,16 +600,16 @@ def chrome_pgo_base(c):
   c.compile_py.default_targets = ['chrome']
 
 #### 'Full' configurations
-@config_ctx(includes=['chrome_pgo_base'])
-def chrome_pgo_instrument(c):
+@config_ctx(includes=['chromium_pgo_base'])
+def chromium_pgo_instrument(c):
   c.gyp_env.GYP_DEFINES['chrome_pgo_phase'] = 1
   # Some of the binaries needed by the PGO gets copied into the build directory
   # during the build, we need to augment the PATH variable so it can find them
   # during the profiling step.
   c.env.PATH.extend([c.build_dir.join(c.build_config_fs)])
 
-@config_ctx(includes=['chrome_pgo_base'])
-def chrome_pgo_optimize(c):
+@config_ctx(includes=['chromium_pgo_base'])
+def chromium_pgo_optimize(c):
   c.gyp_env.GYP_DEFINES['chrome_pgo_phase'] = 2
 
 @config_ctx()

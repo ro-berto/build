@@ -56,7 +56,7 @@ def RunBenchmarks(api):
 
 def GenSteps(api):
   api.step.auto_resolve_conflicts = True
-  api.chromium.set_config('chrome_pgo_instrument', BUILD_CONFIG='Release')
+  api.chromium.set_config('chromium_pgo_instrument', BUILD_CONFIG='Release')
   api.gclient.set_config('chromium_lkgr')
 
   api.chromium.taskkill()
@@ -75,7 +75,7 @@ def GenSteps(api):
 
   # Third step: Compilation of the optimized build, this will use the profile
   #     data files produced by the previous step.
-  api.chromium.set_config('chrome_pgo_optimize', BUILD_CONFIG='Release')
+  api.chromium.set_config('chromium_pgo_optimize', BUILD_CONFIG='Release')
   api.chromium.runhooks()
   api.chromium.compile()
 
