@@ -215,7 +215,17 @@ class GpuApi(recipe_api.RecipeApi):
         self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs),
         isolates_to_run)
 
-  def test_steps(self):
+  def run_tests(self, api, suffix=''):
+    tests = self.list_tests()
+    test_runner = self.m.chromium_tests.create_test_runner(api, tests, suffix)
+    test_runner()
+
+  def list_tests(self):
+    """Produces a list of tests to be run.
+
+    Returns:
+      A list of Test objects (from steps.py in chromium module).
+    """
     # TODO(kbr): currently some properties are passed to runtest.py via
     # factory_properties in the master.cfg: generate_gtest_json,
     # show_perf_results, test_results_server, and perf_id. runtest.py
@@ -233,19 +243,13 @@ class GpuApi(recipe_api.RecipeApi):
     if self.m.platform.is_linux:
       try:
         result = self.m.step('killall gnome-keyring-daemon',
-                        ['killall', '-9', 'gnome-keyring-daemon'])
+                             ['killall', '-9', 'gnome-keyring-daemon'])
       except self.m.step.StepFailure as f:
         result = f.result
       result.presentation.status = self.m.step.SUCCESS
 
-    # Accumulate a list of all the failed test names.
-    failures = []
-    #TODO(martiniss) change how this processes everything
-    def capture(failure):
-      if failure:
-        failures.append(failure)
+    tests = []
 
-    # Note: --no-xvfb is the default.
     # Copy the test list to avoid mutating it.
     basic_tests = list(SIMPLE_TESTS_TO_RUN)
     # Only run tests on the tree closers and on the CQ which are
@@ -255,22 +259,18 @@ class GpuApi(recipe_api.RecipeApi):
 
     #TODO(martiniss) convert loop
     for test in basic_tests:
-      capture(self._run_isolate(test, args=['--use-gpu-in-tests']))
+      tests.append(self._create_gtest(test, args=['--use-gpu-in-tests']))
 
     # Run closed source tests with ANGLE-D3D9
     if self.is_fyi_waterfall and self.m.platform.is_win:
       for test in SIMPLE_NON_OPEN_SOURCE_TESTS_TO_RUN:
-        capture(self._run_isolate(D3D9_TEST_NAME_MAPPING[test],
-          args=[
-            '--use-gpu-in-tests',
-            '--disable-d3d11'
-          ],
-          isolate_name=test,
-          name=D3D9_TEST_NAME_MAPPING[test]))
+        tests.append(self._create_gtest(
+            test, args=['--use-gpu-in-tests', '--disable-d3d11'],
+            display_name=D3D9_TEST_NAME_MAPPING[test]))
 
     # Google Maps Pixel tests.
-    capture(self._run_isolated_telemetry_gpu_test(
-      'maps', name='maps_pixel_test',
+    tests.append(self._create_telemetry_test(
+      'maps', display_name='maps_pixel_test',
       args=[
         '--build-revision',
         str(self.get_build_revision()),
@@ -294,7 +294,8 @@ class GpuApi(recipe_api.RecipeApi):
     if self.m.tryserver.is_tryserver:
       ref_img_arg = '--download-refimg-from-cloud-storage'
     cloud_storage_bucket = 'chromium-gpu-archive/reference-images'
-    capture(self._run_isolated_telemetry_gpu_test('pixel',
+    tests.append(self._create_telemetry_test(
+        'pixel', display_name='pixel_test',
         args=[
             '--build-revision',
             str(self.get_build_revision()),
@@ -305,67 +306,65 @@ class GpuApi(recipe_api.RecipeApi):
             self.m.chromium.c.TARGET_PLATFORM,
             '--test-machine-name',
             self.m.properties['buildername']
-        ],
-        name='pixel_test'))
+        ]))
 
     # WebGL conformance tests.
-    capture(self._run_isolated_telemetry_gpu_test('webgl_conformance'))
+    tests.append(self._create_telemetry_test('webgl_conformance'))
 
     # Run extra D3D9 conformance in Windows FYI GPU bots
     # This ensures the ANGLE/D3D9 gets some testing
     if self.is_fyi_waterfall and self.m.platform.is_win:
-      capture(self._run_isolated_telemetry_gpu_test('webgl_conformance',
-        extra_browser_args=[
-          '--disable-d3d11'
-        ],
-        name=D3D9_TEST_NAME_MAPPING['webgl_conformance']))
+      tests.append(self._create_telemetry_test(
+          'webgl_conformance',
+          display_name=D3D9_TEST_NAME_MAPPING['webgl_conformance'],
+          extra_browser_args=[
+            '--disable-d3d11'
+          ]))
 
     # Context lost tests.
-    capture(self._run_isolated_telemetry_gpu_test('context_lost'))
+    tests.append(self._create_telemetry_test('context_lost'))
 
     # Memory tests.
-    capture(self._run_isolated_telemetry_gpu_test('memory_test'))
+    tests.append(self._create_telemetry_test('memory_test'))
 
     # Screenshot synchronization tests.
-    capture(self._run_isolated_telemetry_gpu_test('screenshot_sync'))
+    tests.append(self._create_telemetry_test('screenshot_sync'))
 
     # Hardware acceleration tests.
-    capture(self._run_isolated_telemetry_gpu_test(
-      'hardware_accelerated_feature'))
+    tests.append(self._create_telemetry_test('hardware_accelerated_feature'))
 
     # GPU process launch tests.
-    capture(self._run_isolated_telemetry_gpu_test('gpu_process',
-                                                  name='gpu_process_launch'))
+    tests.append(self._create_telemetry_test('gpu_process',
+                                             display_name='gpu_process_launch'))
 
     # Smoke test for gpu rasterization of web content.
-    capture(self._run_isolated_telemetry_gpu_test(
-      'gpu_rasterization',
-      args=[
-        '--build-revision', str(self.get_build_revision()),
-        '--test-machine-name', self.m.properties['buildername']
-      ]))
+    tests.append(self._create_telemetry_test(
+        'gpu_rasterization',
+        args=[
+          '--build-revision', str(self.get_build_revision()),
+          '--test-machine-name', self.m.properties['buildername']
+        ]))
 
     # Tab capture end-to-end (correctness) tests.
     # This test is unfortunately disabled in Debug builds and the lack
     # of logs is causing alerts. Skip it on Debug bots. crbug.com/403012
     if self.m.chromium.is_release_build:
-      capture(self._run_isolate(
-          'tab_capture_end2end_tests',
-          name='tab_capture_end2end_tests',
-          spawn_dbus=True))
+      tests.append(self._create_gtest('tab_capture_end2end_tests'))
 
     # Run GPU unit tests on FYI bots.
     if self.is_fyi_waterfall:
-      capture(self._run_isolate('gpu_unittests', name='gpu_unittests'))
+      tests.append(self._create_gtest('gpu_unittests'))
 
     # Run the content and media unittests on the FYI bots
     # TODO(jmadill): Run them on all GPU bots once stable
     if self.is_fyi_waterfall:
-      capture(self._run_isolate('content_unittests', name='content_unittests'))
-      capture(self._run_isolate('media_unittests', name='media_unittests'))
+      tests.append(self._create_gtest('content_unittests'))
+      tests.append(self._create_gtest('media_unittests'))
 
-    if failures:
-      raise self.m.step.StepFailure('%d tests failed: %r' % (len(failures), failures))
+    # Remove empty entries as some tests may be skipped.
+    tests = [test for test in tests if test]
+
+    return tests
 
   def _should_run_test(self, isolate_name):
     if not self.m.tryserver.is_tryserver:
@@ -378,37 +377,34 @@ class GpuApi(recipe_api.RecipeApi):
     # cause a hard failure.
     return isolate_name in self.m.isolate.isolated_tests
 
-  def _run_isolate(self, test, isolate_name=None, **kwargs):
-    # The test_type must end in 'test' or 'tests' in order for the results to
+  def _create_gtest(self, test, args=[], display_name=None):
+    # The step test must end in 'test' or 'tests' in order for the results to
     # automatically show up on the flakiness dashboard.
     #
     # Currently all tests on the GPU bots follow this rule, so we can't add
     # code like in chromium/api.py, run_telemetry_test.
-    assert test.endswith('test') or test.endswith('tests')
-    test_to_run = isolate_name or test
-    if not self._should_run_test(test_to_run):
+    display_name = display_name or test
+    assert display_name.endswith('test') or display_name.endswith('tests')
+    if not self._should_run_test(test):
       return
-    # TODO(kbr): turn this into a temporary path. There were problems
-    # with the recipe simulation test in doing so and cleaning it up.
-    results_directory = self.m.path['slave_build'].join(
-      'gtest-results', test)
-    try:
-      self.m.isolate.runtest(
-        test_to_run,
-        self.get_build_revision(),
-        self.get_webkit_revision(),
-        annotate='gtest',
-        test_type=test,
+
+    results_directory = self.m.path['slave_build'].join('gtest-results',
+                                                        display_name)
+    return self.m.chromium.steps.LocalGTestTest(
+        test,
+        xvfb=False,
+        args=args,
+        display_name=display_name,
+        use_isolate=True,
         generate_json_file=True,
         results_directory=results_directory,
-        master_class_name=self._master_class_name_for_testing,
-        **kwargs)
-    except self.m.step.StepFailure:
-      # Return test name in the event of failure
-      return test
+        revision=self.get_build_revision(),
+        webkit_revision=self.get_webkit_revision(),
+        master_class_name=self._master_class_name_for_testing)
 
-  def _run_isolated_telemetry_gpu_test(self, test, args=None, name=None,
-                                       extra_browser_args=None, **kwargs):
+
+  def _create_telemetry_test(self, name, args=None, display_name=None,
+                             extra_browser_args=None):
     if not self._should_run_test('telemetry_gpu_test'):
       return
     test_args = ['-v', '--use-devtools-active-port', '--disable-crash-service']
@@ -424,17 +420,9 @@ class GpuApi(recipe_api.RecipeApi):
     if extra_browser_args:
       extra_browser_args_string += ' ' + ' '.join(extra_browser_args)
     test_args.append(extra_browser_args_string)
-    try:
-      self.m.isolate.run_telemetry_test(
-        'telemetry_gpu_test',
-        test,
-        self.get_build_revision(),
-        self.get_webkit_revision(),
+
+    return self.m.chromium.steps.LocalTelemetryGPUTest(
+        name, self.get_build_revision(), self.get_webkit_revision(),
         args=test_args,
-        name=name,
-        master_class_name=self._master_class_name_for_testing,
-        spawn_dbus=True,
-        **kwargs)
-    except self.m.step.StepFailure:
-      # Return test name in the event of failure
-      return test
+        display_name=display_name,
+        master_class_name=self._master_class_name_for_testing)

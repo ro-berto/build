@@ -6,6 +6,7 @@ DEPS = [
   'archive',
   'bot_update',
   'chromium',
+  'chromium_tests',
   'filter',
   'gclient',
   'isolate',

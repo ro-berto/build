@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import json
 import re
 
 
@@ -242,12 +243,29 @@ class ChecklicensesTest(Test):  # pylint: disable=W0232
 
 
 class LocalGTestTest(Test):
-  def __init__(self, name, args=None, compile_targets=None,
-               flakiness_dash=False):
+  def __init__(self, name, args=None, display_name=None, use_isolate=False,
+               revision=None, webkit_revision=None, **runtest_kwargs):
+    """Constructs an instance of LocalGTestTest.
+
+    Args:
+      name: Name of the test.
+      args: Arguments to be passed to the test.
+      display_name: Name used for display on the buildbot. Note that suffixes
+          are not appended to this name.
+      use_isolate: When set, uses api.isolate.runtest to invoke the test.
+          Calling recipe should have isolate in their DEPS.
+      revision: Revision of the Chrome checkout.
+      webkit_revision: Revision of the WebKit checkout.
+      runtest_kwargs: Additional keyword args forwarded to the runtest.
+    """
     super(LocalGTestTest, self).__init__()
     self._name = name
     self._args = args or []
-    self.flakiness_dash = flakiness_dash
+    self._display_name = display_name
+    self._use_isolate = use_isolate
+    self._revision = revision
+    self._webkit_revision = webkit_revision
+    self._runtest_kwargs = runtest_kwargs
 
   @property
   def name(self):
@@ -275,21 +293,27 @@ class LocalGTestTest(Test):
 
     if suffix == 'without patch':
       args.append(api.chromium.test_launcher_filter(
-                      self.failures(api, 'with patch')))
+          self.failures(api, 'with patch')))
 
     kwargs = {}
+    kwargs['name'] = self._display_name or self._step_name(suffix)
+    kwargs['xvfb'] = True
+    kwargs['test_type'] = self._display_name or self.name
+    kwargs['annotate'] = 'gtest'
+    kwargs['args'] = args
+    kwargs['step_test_data'] = lambda: api.json.test_api.canned_gtest_output(
+        True)
+    kwargs['test_launcher_summary_output'] = api.json.gtest_results(
+        add_json_log=False)
+    kwargs.update(self._runtest_kwargs)
 
     try:
-      api.chromium.runtest(
-          self.name, args,
-          annotate='gtest',
-          xvfb=True,
-          name=self._step_name(suffix),
-          test_type=self.name,
-          flakiness_dash=self.flakiness_dash,
-          step_test_data=lambda: api.json.test_api.canned_gtest_output(True),
-          test_launcher_summary_output=api.json.gtest_results(add_json_log=False),
-          **kwargs)
+      if self._use_isolate:
+        api.isolate.runtest(self._name, self._revision, self._webkit_revision,
+                            **kwargs)
+      else:
+        api.chromium.runtest(self._name, revision=self._revision,
+                             webkit_revision=self._webkit_revision, **kwargs)
     finally:
       step_result = api.step.active_result
       self._test_runs[suffix] = step_result
@@ -544,7 +568,7 @@ class GTestTest(Test):
     if enable_swarming:
       self._test = SwarmingGTestTest(name, args, swarming_shards)
     else:
-      self._test = LocalGTestTest(name, args, compile_targets, flakiness_dash)
+      self._test = LocalGTestTest(name, args, flakiness_dash=flakiness_dash)
 
   def force_swarming(self, swarming_shards=1):
     self._test = SwarmingGTestTest(self._name, self._args, swarming_shards)
@@ -653,6 +677,87 @@ class PrintPreviewTests(PythonBasedTest):  # pylint: disable=W032
       targets.append('crash_service')
 
     return targets
+
+
+class LocalTelemetryGPUTest(Test):  # pylint: disable=W0232
+  def __init__(self, name, revision, webkit_revision,
+               display_name=None, **runtest_kwargs):
+    """Constructs an instance of LocalTelemetryGPUTest.
+
+    Args:
+      name: Name of the test.
+      revision: Revision of the Chrome checkout.
+      webkit_revision: Revision of the WebKit checkout.
+      display_name: Name used for display on the buildbot. Note that suffixes
+          are not appended to this name.
+      runtest_kwargs: Additional keyword args forwarded to the runtest.
+    """
+    super(LocalTelemetryGPUTest, self).__init__()
+    self._name = name
+    self._display_name = display_name
+    self._revision = revision
+    self._webkit_revision = webkit_revision
+    self._failures = {}
+    self._valid = {}
+    self._runtest_kwargs = runtest_kwargs
+
+  @property
+  def name(self):
+    return self._name
+
+  def compile_targets(self, _):
+    # TODO(sergiyb): Build 'chrome_shell_apk' instead of 'chrome' on Android.
+    return ['chrome', 'telemetry_gpu_test_run']
+
+  def run(self, api, suffix):  # pylint: disable=R0201
+    kwargs = self._runtest_kwargs.copy()
+    kwargs['args'].extend(['--output-format', 'json',
+                           '--output-dir', api.raw_io.output_dir()])
+
+    mock_results = {
+      'per_page_values': [{'type': 'failure', 'page_id': 0},
+                          {'type': 'success', 'page_id': 1}],
+      'pages': {'0': {'name': 'Test.Test1'},
+                '1': {'name': 'Test.Test2'}},
+    }
+
+    try:
+      api.isolate.run_telemetry_test(
+          'telemetry_gpu_test',
+          self._name,
+          self._revision,
+          self._webkit_revision,
+          name=self._display_name,
+          spawn_dbus=True,
+          step_test_data=lambda: api.raw_io.test_api.output_dir(
+              {'results.json': json.dumps(mock_results)}),
+          **self._runtest_kwargs)
+    finally:
+      step_result = api.step.active_result
+      self._test_runs[suffix] = step_result
+
+      try:
+        res = json.loads(step_result.raw_io.output_dir['results.json'])
+        self._failures[suffix] = [res['pages'][str(value['page_id'])]['name']
+                                  for value in res['per_page_values']
+                                  if value['type'] == 'failure']
+
+        self._valid[suffix] = True
+      except (ValueError, KeyError):
+        self._valid[suffix] = False
+
+      if self._valid[suffix]:
+        step_result.presentation.step_text += api.test_utils.format_step_text([
+          ['failures:', self._failures[suffix]]
+        ])
+
+  def has_valid_results(self, api, suffix):
+    return suffix in self._valid and self._valid[suffix]
+
+  def failures(self, api, suffix):
+    assert self.has_valid_results(api, suffix)
+    assert suffix in self._failures
+    return self._failures[suffix]
 
 
 class AndroidInstrumentationTest(Test):

@@ -10,11 +10,17 @@
 
 DEPS = [
   'buildbot',
+  'chromium',
+  'isolate',
+  'json',
   'filter',
   'gpu',
   'path',
   'platform',
   'properties',
+  'raw_io',
+  'step',
+  'test_utils',
 ]
 
 def GenSteps(api):
@@ -35,7 +41,7 @@ def GenSteps(api):
   if not api.properties.get('skip_compile', False):
     api.gpu.compile_steps()
 
-  api.gpu.test_steps()
+  api.gpu.run_tests(api)
 
 def GenTests(api):
   for build_config in ['Release', 'Debug']:

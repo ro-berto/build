@@ -15,10 +15,14 @@ DEPS = [
   'chromium',
   'gpu',
   'isolate',
+  'json',
   'path',
   'platform',
   'properties',
+  'raw_io',
+  'step',
   'swarming_client',
+  'test_utils',
   'tryserver',
 ]
 
@@ -33,7 +37,7 @@ def GenSteps(api):
   api.swarming_client.checkout()
   api.chromium.get_vs_toolchain_if_necessary()
   api.buildbot.copy_parent_got_revision_to_got_revision()
-  api.gpu.test_steps()
+  api.gpu.run_tests(api)
 
 def GenTests(api):
   all_hashes = api.gpu.dummy_swarm_hashes

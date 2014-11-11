@@ -108,6 +108,8 @@
       "--test-type=content_gl_tests",
       "--generate-json-file",
       "--results-directory=[SLAVE_BUILD]/gtest-results/content_gl_tests",
+      "--test-launcher-summary-output",
+      "/path/to/tmp/json",
       "--builder-name=linux debug tester",
       "--slave-name=TestSlavename",
       "--build-number=776",
@@ -142,6 +144,8 @@
       "--test-type=gl_tests",
       "--generate-json-file",
       "--results-directory=[SLAVE_BUILD]/gtest-results/gl_tests",
+      "--test-launcher-summary-output",
+      "/path/to/tmp/json",
       "--builder-name=linux debug tester",
       "--slave-name=TestSlavename",
       "--build-number=776",
@@ -176,6 +180,8 @@
       "--test-type=angle_unittests",
       "--generate-json-file",
       "--results-directory=[SLAVE_BUILD]/gtest-results/angle_unittests",
+      "--test-launcher-summary-output",
+      "/path/to/tmp/json",
       "--builder-name=linux debug tester",
       "--slave-name=TestSlavename",
       "--build-number=776",
@@ -234,12 +240,19 @@
       "160000",
       "--test-machine-name",
       "linux debug tester",
-      "--extra-browser-args=--enable-logging=stderr"
+      "--extra-browser-args=--enable-logging=stderr",
+      "--output-format",
+      "json",
+      "--output-dir",
+      "/path/to/tmp/"
     ],
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
-    "name": "maps_pixel_test"
+    "name": "maps_pixel_test",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
+    ]
   },
   {
     "allow_subannotations": true,
@@ -287,12 +300,19 @@
       "linux",
       "--test-machine-name",
       "linux debug tester",
-      "--extra-browser-args=--enable-logging=stderr"
+      "--extra-browser-args=--enable-logging=stderr",
+      "--output-format",
+      "json",
+      "--output-dir",
+      "/path/to/tmp/"
     ],
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
-    "name": "pixel_test"
+    "name": "pixel_test",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
+    ]
   },
   {
     "allow_subannotations": true,
@@ -331,12 +351,19 @@
       "-v",
       "--use-devtools-active-port",
       "--disable-crash-service",
-      "--extra-browser-args=--enable-logging=stderr"
+      "--extra-browser-args=--enable-logging=stderr",
+      "--output-format",
+      "json",
+      "--output-dir",
+      "/path/to/tmp/"
     ],
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
-    "name": "webgl_conformance_tests"
+    "name": "webgl_conformance_tests",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
+    ]
   },
   {
     "allow_subannotations": true,
@@ -375,12 +402,19 @@
       "-v",
       "--use-devtools-active-port",
       "--disable-crash-service",
-      "--extra-browser-args=--enable-logging=stderr"
+      "--extra-browser-args=--enable-logging=stderr",
+      "--output-format",
+      "json",
+      "--output-dir",
+      "/path/to/tmp/"
     ],
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
-    "name": "context_lost_tests"
+    "name": "context_lost_tests",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
+    ]
   },
   {
     "allow_subannotations": true,
@@ -419,12 +453,19 @@
       "-v",
       "--use-devtools-active-port",
       "--disable-crash-service",
-      "--extra-browser-args=--enable-logging=stderr"
+      "--extra-browser-args=--enable-logging=stderr",
+      "--output-format",
+      "json",
+      "--output-dir",
+      "/path/to/tmp/"
     ],
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
-    "name": "memory_test"
+    "name": "memory_test",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
+    ]
   },
   {
     "allow_subannotations": true,
@@ -463,12 +504,19 @@
       "-v",
       "--use-devtools-active-port",
       "--disable-crash-service",
-      "--extra-browser-args=--enable-logging=stderr"
+      "--extra-browser-args=--enable-logging=stderr",
+      "--output-format",
+      "json",
+      "--output-dir",
+      "/path/to/tmp/"
     ],
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
-    "name": "screenshot_sync_tests"
+    "name": "screenshot_sync_tests",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
+    ]
   },
   {
     "allow_subannotations": true,
@@ -507,12 +555,19 @@
       "-v",
       "--use-devtools-active-port",
       "--disable-crash-service",
-      "--extra-browser-args=--enable-logging=stderr"
+      "--extra-browser-args=--enable-logging=stderr",
+      "--output-format",
+      "json",
+      "--output-dir",
+      "/path/to/tmp/"
     ],
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
-    "name": "hardware_accelerated_feature_tests"
+    "name": "hardware_accelerated_feature_tests",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
+    ]
   },
   {
     "allow_subannotations": true,
@@ -551,12 +606,19 @@
       "-v",
       "--use-devtools-active-port",
       "--disable-crash-service",
-      "--extra-browser-args=--enable-logging=stderr"
+      "--extra-browser-args=--enable-logging=stderr",
+      "--output-format",
+      "json",
+      "--output-dir",
+      "/path/to/tmp/"
     ],
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
-    "name": "gpu_process_launch_tests"
+    "name": "gpu_process_launch_tests",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
+    ]
   },
   {
     "allow_subannotations": true,
@@ -599,11 +661,18 @@
       "160000",
       "--test-machine-name",
       "linux debug tester",
-      "--extra-browser-args=--enable-logging=stderr"
+      "--extra-browser-args=--enable-logging=stderr",
+      "--output-format",
+      "json",
+      "--output-dir",
+      "/path/to/tmp/"
     ],
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
-    "name": "gpu_rasterization_tests"
+    "name": "gpu_rasterization_tests",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
+    ]
   }
 ]
