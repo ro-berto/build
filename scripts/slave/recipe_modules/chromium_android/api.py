@@ -214,6 +214,17 @@ class AndroidApi(recipe_api.RecipeApi):
       infra_step=True,
     )
 
+  def zip_and_upload_build(self, bucket, path):
+    # TODO(luqui): Unify make_zip_archive and upload_build with this
+    # (or at least make the difference clear).
+    self.m.python(
+        'zip_build',
+        self.m.path['build'].join('scripts', 'slave', 'zip_build.py'),
+        ['--src-dir', self.m.path['slave_build'].join('src'),
+         '--exclude-files', 'lib.target,gen,android_webview,jingle_unittests',
+         '--build-url', 'gs://%s/%s' % (bucket, path),
+         '--target', self.m.chromium.c.BUILD_CONFIG])
+
   def spawn_logcat_monitor(self):
     self.m.step(
         'spawn_logcat_monitor',

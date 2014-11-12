@@ -5,9 +5,9 @@
       "-u",
       "[BUILD]/scripts/slave/bot_update.py",
       "--master",
-      "chromium.fyi",
+      "chromium.linux",
       "--builder",
-      "Android Builder (dbg)",
+      "Android Builder",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -79,8 +79,8 @@
       "python",
       "-u",
       "\nimport shutil, sys, os\nshutil.rmtree(sys.argv[1], True)\nshutil.rmtree(sys.argv[2], True)\ntry:\n  os.remove(sys.argv[3])\nexcept OSError:\n  pass\nfor base, _dirs, files in os.walk(sys.argv[4]):\n  for f in files:\n    if f.endswith('.pyc'):\n      os.remove(os.path.join(base, f))\n",
-      "[SLAVE_BUILD]/src/out/Debug/debug_info_dumps",
-      "[SLAVE_BUILD]/src/out/Debug/test_logs",
+      "[SLAVE_BUILD]/src/out/Release/debug_info_dumps",
+      "[SLAVE_BUILD]/src/out/Release/test_logs",
       "[SLAVE_BUILD]/src/out/build_product.zip",
       "[SLAVE_BUILD]/src"
     ],
@@ -121,7 +121,7 @@
       "-u",
       "[BUILD]/scripts/slave/compile.py",
       "--target",
-      "Debug",
+      "Release",
       "--src-dir",
       "[SLAVE_BUILD]/src",
       "--build-tool",
@@ -141,57 +141,16 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/android_webview/tools/webview_licenses.py",
-      "scan"
-    ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "check licenses"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/src/build/android/findbugs_diff.py"
-    ],
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "findbugs"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/src/tools/android/findbugs_plugin/test/run_findbugs_plugin_tests.py"
-    ],
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "findbugs_tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/android/archive_build.py",
+      "[BUILD]/scripts/slave/zip_build.py",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
+      "--exclude-files",
+      "lib.target,gen,android_webview,jingle_unittests",
+      "--build-url",
+      "gs://chromium-android/android_main_rel/full-build-linux_267739.zip",
       "--target",
-      "Debug",
-      "--name",
-      "build_product.zip"
+      "Release"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "zip_build_product"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
-      "cp",
-      "[SLAVE_BUILD]/src/out/build_product.zip",
-      "gs://chromium-android/android_fyi_dbg/full-build-linux_267739.zip"
-    ],
-    "name": "gsutil upload_build_product",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-android/android_fyi_dbg/full-build-linux_267739.zip@@@"
-    ]
+    "name": "zip_build"
   }
 ]

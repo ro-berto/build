@@ -41,6 +41,12 @@ BUILDERS = {
       'findbugs': FYIStep,
       'gclient_apply_config': ['android', 'chrome_internal'],
     },
+    'Android Clang Builder (dbg)': {
+      'recipe_config': 'clang_builder',
+      'gclient_apply_config': ['android', 'chrome_internal'],
+    },
+  },
+  'chromium.linux': {
     'Android Builder (dbg)': {
       'recipe_config': 'main_builder',
       'gclient_apply_config': ['android', 'chrome_internal'],
@@ -48,28 +54,20 @@ BUILDERS = {
       'findbugs': NormalStep,
       'upload': {
         'bucket': 'chromium-android',
-        'path': lambda api: ('android_fyi_dbg/full-build-linux_%s.zip' %
+        'path': lambda api: ('android_main_dbg/full-build-linux_%s.zip' %
                              api.properties['revision']),
       },
     },
     'Android Builder': {
       'recipe_config': 'main_builder',
       'gclient_apply_config': ['android', 'chrome_internal'],
-      'check_licenses': NormalStep,
-      'findbugs': NormalStep,
-      'upload': {
+      'zip_and_upload': {
         'bucket': 'chromium-android',
-        'path': lambda api: ('android_fyi_rel/full-build-linux_%s.zip' %
+        'path': lambda api: ('android_main_rel/full-build-linux_%s.zip' %
                              api.properties['revision']),
       },
       'target': 'Release',
     },
-    'Android Clang Builder (dbg)': {
-      'recipe_config': 'clang_builder',
-      'gclient_apply_config': ['android', 'chrome_internal'],
-    },
-  },
-  'chromium.linux': {
     'Android Arm64 Builder (dbg)': {
       'recipe_config': 'arm64_builder',
       'check_licenses': FYIStep,
@@ -246,6 +244,11 @@ def GenSteps(api):
   if upload_config:
     droid.upload_build(upload_config['bucket'],
                        upload_config['path'](api))
+
+  upload_config = bot_config.get('zip_and_upload')
+  if upload_config:
+    droid.zip_and_upload_build(upload_config['bucket'],
+                               upload_config['path'](api))
 
 
 def _sanitize_nonalpha(text):
