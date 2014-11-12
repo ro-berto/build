@@ -5,7 +5,7 @@
 
 """Tool for viewing masters, their hosts and their ports.
 
-Has two main modes:
+Has three modes:
   a) In normal mode, simply prints the list of all known masters, sorted by
      hostname, along with their associated ports, for the perusal of the user.
   b) In --audit mode, tests to make sure that no masters conflict/overlap on
@@ -13,8 +13,21 @@ Has two main modes:
      ports (i.e. differences of more than 100 between master, slave, and alt).
      Audit mode returns non-zero error code if conflicts are found. In audit
      mode, --verbose causes it to print human-readable output as well.
+  c) In --find mode, prints a set of available ports for the given master.
 
-In both modes, --csv causes the output (if any) to be formatted as
+Ports are well-formed if they follow this spec:
+XYYZZ
+|| \__The last two digits identify the master, e.g. master.chromium
+|\____The second and third digits identify the master host, e.g. master1.golo
+\_____The first digit identifies the port type, e.g. master_port
+
+In particular,
+X==3: master_port (Web display)
+X==4: slave_port (for slave TCP/RCP connections)
+X==5: master_port_alt (Alt web display, with "force build" disabled)
+The values X==1,2, and 6 are not used due to too few free ports in those ranges.
+
+In all modes, --csv causes the output (if any) to be formatted as
 comma-separated values.
 """
 
@@ -32,15 +45,47 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'site_config'))
 import config_bootstrap
 from slave import bootstrap
 
-# These are ports likely to be running on a developer's machine, which may break
-# presubmit tests.
+
+# These are ports which are likely to be used by another service, or which have
+# been officially reserved by IANA.
 PORT_BLACKLIST = set([
-    8000,  # SimpleHTTPServer, dev_appserver.py
-    8080,  # dev_appserver.py
-    8088,  # goma
-    8103,  # sshd
-    8224,  # google-specific
+    # We don't care about reserved ports below 30000, the lowest port we use.
+    31457,  # TetriNET
+    31620,  # LM-MON
+    33434,  # traceroute
+    34567,  # EDI service
+    35357,  # OpenStack ID Service
+    40000,  # SafetyNET p Real-time Industrial Ethernet protocol
+    41794,  # Crestron Control Port
+    41795,  # Crestron Control Port
+    45824,  # Server for the DAI family of client-server products
+    47001,  # WinRM
+    47808,  # BACnet Building Automation and Control Networks
+    48653,  # Robot Raconteur transport
+    49151,  # Reserved
+    # There are no reserved ports in the 50000-65535 range.
 ])
+
+
+PORT_TYPE_MAP = {
+  'port': '3',
+  'slave_port': '4',
+  'alt_port': '5',
+}
+
+
+HOST_MACHINE_MAP = {
+  'master1.golo': '01',
+  'master2.golo': '02',
+  'master3.golo': '03',
+  'master4.golo': '04',
+  'master4a.golo': '14',
+  'master5.golo': '05',
+  'master6.golo': '06',
+  'master7.golo': '07',
+  'master.chrome': '10'
+}
+
 
 def get_args():
   """Process command-line arguments."""
@@ -54,9 +99,8 @@ def get_args():
                     help='Define the primary key by which rows are sorted. '
                     'Possible values are: "port", "alt_port", "slave_port", '
                     '"host", and "name". Only one value is allowed (for now).')
-  parser.add_option('--find', action='store', type='int', default=0,
-                    metavar='N',
-                    help='Output N sets of three available ports.')
+  parser.add_option('--find', action='store', metavar='NAME',
+                    help='Outputs three available ports for the given master.')
   parser.add_option('--audit', action='store_true', default=False,
                     help='Output conflict diagnostics and return an error '
                          'code if misconfigurations are found.')
@@ -117,7 +161,6 @@ def human_print(lines, verbose):
   if verbose:
     for line in lines:
       print(format_string % tuple(line))
-    print('\n')
 
 
 def csv_print(lines, verbose):
@@ -141,12 +184,11 @@ def master_map(masters, output, opts):
   """Display a list of masters and their associated hosts and ports."""
 
   lines = [['Master', 'Config Dir', 'Host', 'Web port', 'Slave port',
-            'Alt port', 'MSC', 'URL']]
+            'Alt port', 'URL']]
   for master in masters:
     lines.append([
         master['name'], master['dirname'], master['host'], master['port'],
-        master['slave_port'], master['alt_port'], master['msc'],
-        master['buildbot_url']])
+        master['slave_port'], master['alt_port'], master['buildbot_url']])
 
   output(lines, opts.verbose)
 
@@ -159,6 +201,31 @@ def master_audit(masters, output, opts):
   """
   # Return value. Will be set to 1 the first time we see an error.
   ret = 0
+
+  # Look for masters using the wrong ports for their port types.
+  lines = [['Masters with misconfigured ports based on port type:']]
+  for master in masters:
+    for port_type, port_digit in PORT_TYPE_MAP.iteritems():
+      if not str(master[port_type]).startswith(port_digit):
+        ret = 1
+        lines.append([master['name']])
+        break
+  output(lines, opts.verbose)
+  print
+
+  # Look for masters using the wrong ports for their port types.
+  lines = [['Masters with misconfigured ports based on hostname:']]
+  for master in masters:
+    host = format_host_name(master['host'])
+    digits = HOST_MACHINE_MAP.get(host)
+    if digits:
+      for port in PORT_TYPE_MAP.iterkeys():
+        if str(master[port])[1:3] != digits:
+          ret = 1
+          lines.append([master['name']])
+          break
+  output(lines, opts.verbose)
+  print
 
   # Look for masters configured to use the same ports.
   web_ports = {}
@@ -177,9 +244,11 @@ def master_audit(masters, output, opts):
   lines = [['Blacklisted port', 'Master', 'Host']]
   for port, lst in all_ports.iteritems():
     if port in PORT_BLACKLIST:
+      ret = 1
       for m in lst:
         lines.append([port, m['name'], m['host']])
   output(lines, opts.verbose)
+  print
 
   # Check for conflicting web ports.
   lines = [['Web port', 'Master', 'Host']]
@@ -189,6 +258,7 @@ def master_audit(masters, output, opts):
       for m in lst:
         lines.append([port, m['name'], m['host']])
   output(lines, opts.verbose)
+  print
 
   # Check for conflicting slave ports.
   lines = [['Slave port', 'Master', 'Host']]
@@ -198,6 +268,7 @@ def master_audit(masters, output, opts):
       for m in lst:
         lines.append([port, m['name'], m['host']])
   output(lines, opts.verbose)
+  print
 
   # Check for conflicting alt ports.
   lines = [['Alt port', 'Master', 'Host']]
@@ -207,12 +278,13 @@ def master_audit(masters, output, opts):
       for m in lst:
         lines.append([port, m['name'], m['host']])
   output(lines, opts.verbose)
+  print
 
-  # Look for masters whose port, slave_port, alt_port aren't separated by 100.
+  # Look for masters whose port, slave_port, alt_port aren't separated by 10000.
   lines = [['Master', 'Host', 'Web port', 'Slave port', 'Alt port']]
   for master in masters:
-    if (getint(master['slave_port']) - getint(master['port']) != 100 or
-        getint(master['alt_port']) - getint(master['slave_port']) != 100):
+    if (getint(master['slave_port']) - getint(master['port']) != 10000 or
+        getint(master['alt_port']) - getint(master['slave_port']) != 10000):
       ret = 1
       lines.append([master['name'], master['host'],
                    master['port'], master['slave_port'], master['alt_port']])
@@ -221,29 +293,47 @@ def master_audit(masters, output, opts):
   return ret
 
 
-def find_port(masters, output, opts):
-  """Lists triplets of available ports for easy discoverability."""
-  ports = set()
+def find_port(mastername, masters, output, opts):
+  """Finds a triplet of free ports appropriate for the given master."""
+  master = None
+  for m in masters:
+    if m['name'] != mastername:
+      continue
+    master = m
+  if not master:
+    lines = [['master %s not found' % mastername],
+             ['use the list function to see all masters.']]
+    output(lines, opts.verbose)
+    return 1
+
+  master_digits = HOST_MACHINE_MAP[master['host']]
+
+  used_ports = set()
   for master in masters:
     for port in ('port', 'slave_port', 'alt_port'):
-      ports.add(master[port])
+      used_ports.add(master.get(port, 0))
+  used_ports = used_ports | PORT_BLACKLIST
 
-  # Remove 0 from the set.
-  ports = ports - {0}
+  def _inner_loop():
+    for digits in xrange(0, 100):
+      port = '3%s%02d' % (master_digits, digits)
+      slave_port = '4%s%02d' % (master_digits, digits)
+      alt_port = '5%s%02d' % (master_digits, digits)
+      if all([
+          int(port) not in used_ports,
+          int(slave_port) not in used_ports,
+          int(alt_port) not in used_ports]):
+        return port, slave_port, alt_port
+    return None, None, None
+  port, slave_port, alt_port = _inner_loop()
 
-  # Add blacklisted ports.
-  ports = ports | PORT_BLACKLIST
+  if not all([port, slave_port, alt_port]):
+    lines = [['unable to find available ports on host %s' % master['host']]]
+    output(lines, opts.verbose)
+    return 1
 
   lines = [['Web port', 'Slave port', 'Alt port']]
-  # In case we've hit saturation, search one past the end of the port list.
-  for port in xrange(min(ports), max(ports) + 2):
-    if (port not in ports and
-        port + 100 not in ports and
-        port + 200 not in ports):
-      lines.append([port, port + 100, port + 200])
-      if len(lines) > opts.find:
-        break
-
+  lines.append([port, slave_port, alt_port])
   output(lines, opts.verbose)
 
 
@@ -279,19 +369,10 @@ def real_main(include_internal=False):
 
   bootstrap.ImportMasterConfigs(include_internal=include_internal)
 
-  # These are the masters that are configured in site_config/.
-  config_masters = extract_masters(
-      config_bootstrap.config_private.Master.__dict__)
-  for master in config_masters:
-    master['msc'] = ''
-
-  # These are the masters that have their own master_site_config.
-  msc_masters = extract_masters(config_bootstrap.Master.__dict__)
-  for master in msc_masters:
-    master['msc'] = 'Y'
+  masters = extract_masters(config_bootstrap.Master.__dict__)
 
   # Define sorting order
-  sort_keys = ['port', 'alt_port', 'slave_port', 'host', 'name']
+  sort_keys = ['host', 'port', 'alt_port', 'slave_port', 'name']
   # Move key specified on command-line to the front of the list
   if opts.sort_by is not None:
     try:
@@ -301,12 +382,11 @@ def real_main(include_internal=False):
     else:
       sort_keys.insert(0, sort_keys.pop(index))
 
-  sorted_masters = config_masters + msc_masters
   for key in reversed(sort_keys):
-    sorted_masters.sort(key = lambda m: m[key])
+    masters.sort(key = lambda m: m[key])
 
   if not opts.full_host_names:
-    for master in sorted_masters:
+    for master in masters:
       master['host'] = format_host_name(master['host'])
 
   if opts.csv:
@@ -316,17 +396,17 @@ def real_main(include_internal=False):
 
   if opts.list:
     if opts.json:
-      print json.dumps(sorted_masters,
+      print json.dumps(masters,
                        sort_keys=True, indent=2, separators=(',', ': '))
     else:
-      master_map(sorted_masters, printer, opts)
+      master_map(masters, printer, opts)
 
   ret = 0
   if opts.audit or opts.presubmit:
-    ret = master_audit(sorted_masters, printer, opts)
+    ret = master_audit(masters, printer, opts)
 
   if opts.find:
-    find_port(sorted_masters, printer, opts)
+    find_port(opts.find, masters, printer, opts)
 
   return ret
 
