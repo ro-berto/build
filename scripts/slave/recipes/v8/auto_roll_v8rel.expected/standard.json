@@ -90,8 +90,6 @@
       "[SLAVE_BUILD]/v8-releases-update.json",
       "--branch",
       "recent",
-      "--vc-interface",
-      "git_read_svn_write",
       "--work-dir",
       "[SLAVE_BUILD]/workdir"
     ],

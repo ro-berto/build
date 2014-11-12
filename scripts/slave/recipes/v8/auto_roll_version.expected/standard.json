@@ -54,43 +54,9 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
-      "cp",
-      "gs://chromium-v8-auto-roll/bootstrap/v8.svn.zip",
-      "[SLAVE_BUILD]"
-    ],
-    "name": "gsutil bootstrapping checkout"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/recipe_modules/zip/resources/unzip.py"
-    ],
-    "name": "unzipping",
-    "stdin": "{\"output\": \"[SLAVE_BUILD]/v8.svn\", \"use_python_zip\": false, \"zip_file\": \"[SLAVE_BUILD]/v8.svn.zip\"}"
-  },
-  {
-    "cmd": [
-      "svn",
-      "update"
-    ],
-    "cwd": "[SLAVE_BUILD]/v8.svn",
-    "name": "svn update"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[SLAVE_BUILD]/v8/tools/push-to-trunk/bump_up_version.py",
       "--author",
       "v8-autoroll@chromium.org",
-      "--svn",
-      "[SLAVE_BUILD]/v8.svn",
-      "--svn-config",
-      "[SLAVE_BUILD]/svn_config",
       "--work-dir",
       "[SLAVE_BUILD]/workdir"
     ],

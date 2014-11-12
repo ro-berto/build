@@ -6,30 +6,17 @@ DEPS = [
   'bot_update',
   'chromium',
   'gclient',
-  'gsutil',
   'path',
   'properties',
   'python',
   'raw_io',
   'step',
-  'zip',
 ]
 
 def GenSteps(api):
   api.chromium.cleanup_temp()
   api.gclient.set_config('v8')
   api.bot_update.ensure_checkout(force=True, no_shallow=True)
-  if not api.path.exists(api.path['slave_build'].join('v8.svn')):
-    api.gsutil.download_url(
-        'gs://chromium-v8-auto-roll/bootstrap/v8.svn.zip',
-        api.path['slave_build'],
-        name='bootstrapping checkout')
-    api.zip.unzip('unzipping',
-                  api.path['slave_build'].join('v8.svn.zip'),
-                  api.path['slave_build'].join('v8.svn'))
-  api.step('svn update',
-           ['svn', 'update'],
-           cwd=api.path['slave_build'].join('v8.svn'))
 
   step_result = api.python(
       'check roll status',
@@ -54,9 +41,6 @@ def GenSteps(api):
       ['--author', 'v8-autoroll@chromium.org',
        '--reviewer', 'v8-autoroll@chromium.org',
        '--push',
-       '--vc-interface', 'git',
-       '--svn', api.path['slave_build'].join('v8.svn'),
-       '--svn-config', api.path['slave_build'].join('svn_config'),
        '--work-dir', api.path['slave_build'].join('workdir')],
       cwd=api.path['checkout'],
     )

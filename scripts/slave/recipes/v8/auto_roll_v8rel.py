@@ -27,7 +27,6 @@ def GenSteps(api):
        '-c', api.path['checkout'],
        '--json', api.path['slave_build'].join('v8-releases-update.json'),
        '--branch', 'recent',
-       '--vc-interface', 'git_read_svn_write',
        '--work-dir', api.path['slave_build'].join('workdir')],
       cwd=api.path['slave_build'].join('v8'),
     )
