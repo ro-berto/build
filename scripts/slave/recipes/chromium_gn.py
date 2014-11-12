@@ -252,14 +252,16 @@ def GenSteps(api):
 
   api.chromium.runhooks()
 
-  # TODO(scotmg): goma doesn't work on windows GN builds yet.
+  # TODO(scottmg): goma doesn't work on windows GN builds yet.
   is_windows = ('Win8' in buildername or 'win8_' in buildername)
   api.chromium.run_gn(use_goma=not is_windows)
   if is_windows:
     api.chromium.c.compile_py.compiler = None
     api.chromium.c.compile_py.goma_dir = None
 
-  api.chromium.compile(targets=['all'], force_clobber=is_windows)
+  # TOOD(scottmg): crbug.com/432375 - we have win toolchain issues.
+  if not is_windows:
+    api.chromium.compile(targets=['all'], force_clobber=is_windows)
 
   if bot_config.get('should_run_gn_gyp_compare', False):
     api.chromium.run_gn_compare()
