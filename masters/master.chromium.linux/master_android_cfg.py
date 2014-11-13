@@ -52,7 +52,7 @@ F('f_android_arm64_dbg',
 B('Android Builder (dbg)', 'f_android_dbg', 'android', 'android',
   auto_reboot=False, notify_on_missing=True)
 F('f_android_dbg',
-  m_annotator.BaseFactory('android/builder', triggers='android_trigger_dbg'))
+  m_annotator.BaseFactory('android/builder', triggers=['android_trigger_dbg']))
 
 B('Android Tests (dbg)', 'f_android_dbg_tests', 'android',
   'android_trigger_dbg', notify_on_missing=True)
@@ -68,7 +68,7 @@ F('f_android_dbg_tests', linux_android().ChromiumAnnotationFactory(
 B('Android Builder', 'f_android_rel', 'android', 'android',
   notify_on_missing=True)
 F('f_android_rel',
-  m_annotator.BaseFactory('android/builder', triggers='android_trigger_rel'))
+  m_annotator.BaseFactory('android/builder', triggers=['android_trigger_rel']))
 
 B('Android Tests', 'f_android_rel_tests', 'android', 'android_trigger_rel',
   notify_on_missing=True)
