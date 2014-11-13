@@ -5,6 +5,7 @@
 """ActiveMaster definition."""
 
 
+from common.skia import global_constants
 from config_bootstrap import Master
 
 
@@ -13,6 +14,6 @@ class SkiaAndroid(Master.Master3):
   master_port = 8096
   slave_port = 8196
   master_port_alt = 8296
-  repo_url = 'https://skia.googlesource.com/skia.git'
+  repo_url = global_constants.SKIA_REPO
   buildbot_url = 'http://build.chromium.org/p/client.skia.android/'
   code_review_site = 'https://codereview.chromium.org'
