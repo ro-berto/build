@@ -52,7 +52,7 @@ BUILDERS = {
       'gclient_apply_config': ['android', 'chrome_internal'],
       'check_licenses': NormalStep,
       'findbugs': NormalStep,
-      'upload': {
+      'zip_and_upload': {
         'bucket': 'chromium-android',
         'path': lambda api: ('android_main_dbg/full-build-linux_%s.zip' %
                              api.properties['revision']),

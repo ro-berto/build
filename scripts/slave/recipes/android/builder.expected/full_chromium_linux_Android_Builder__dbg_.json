@@ -169,29 +169,16 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/android/archive_build.py",
+      "[BUILD]/scripts/slave/zip_build.py",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
+      "--exclude-files",
+      "lib.target,gen,android_webview,jingle_unittests",
+      "--build-url",
+      "gs://chromium-android/android_main_dbg/full-build-linux_267739.zip",
       "--target",
-      "Debug",
-      "--name",
-      "build_product.zip"
+      "Debug"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "zip_build_product"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
-      "cp",
-      "[SLAVE_BUILD]/src/out/build_product.zip",
-      "gs://chromium-android/android_main_dbg/full-build-linux_267739.zip"
-    ],
-    "name": "gsutil upload_build_product",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-android/android_main_dbg/full-build-linux_267739.zip@@@"
-    ]
+    "name": "zip_build"
   }
 ]
