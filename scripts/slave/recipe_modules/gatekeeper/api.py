@@ -11,7 +11,6 @@ class Gatekeeper(recipe_api.RecipeApi):
     config = self.m.json.read(
       'reading %s' % self.m.path.basename(gatekeeper_trees_json),
       gatekeeper_trees_json,
-      step_test_data=self.test_api.test_data,
     ).json.output
 
     for tree_name, tree_args in config.iteritems():

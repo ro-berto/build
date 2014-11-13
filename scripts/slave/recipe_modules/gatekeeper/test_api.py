@@ -2,10 +2,13 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import json
+
 from slave import recipe_test_api
 
+
 class GatekeeperTestApi(recipe_test_api.RecipeTestApi):
-  def test_data(self):
+  def fake_test_data(self):
     return self.m.json.output({
       'blink': {
         'build-db': 'blink_build_db.json',
@@ -23,3 +26,6 @@ class GatekeeperTestApi(recipe_test_api.RecipeTestApi):
         'use-project-email-address': True,
       },
     })
+
+  def read_real_config(self, f):
+    return self.m.json.output(json.loads(self.m.file.read_in_build(f)))
