@@ -54,8 +54,7 @@ BUILDERS = {
       'findbugs': NormalStep,
       'zip_and_upload': {
         'bucket': 'chromium-android',
-        'path': lambda api: ('android_main_dbg/full-build-linux_%s.zip' %
-                             api.properties['revision']),
+        'path': lambda api: ('android_main_dbg'),
       },
     },
     'Android Builder': {
@@ -63,8 +62,8 @@ BUILDERS = {
       'gclient_apply_config': ['android', 'chrome_internal'],
       'zip_and_upload': {
         'bucket': 'chromium-android',
-        'path': lambda api: ('android_main_rel/full-build-linux_%s.zip' %
-                             api.properties['revision']),
+        'path': lambda api: ('android_main_rel'),
+
       },
       'target': 'Release',
     },

@@ -147,7 +147,7 @@
       "--exclude-files",
       "lib.target,gen,android_webview,jingle_unittests",
       "--build-url",
-      "gs://chromium-android/android_main_rel/full-build-linux_267739.zip",
+      "gs://chromium-android/android_main_rel",
       "--target",
       "Release"
     ],
