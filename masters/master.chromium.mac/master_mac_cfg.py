@@ -17,6 +17,8 @@ def Update(config, active_master, c):
                             builderNames=[
           'Mac Builder',
           'Mac Builder (dbg)',
+          'Mac GN',
+          'Mac GN (dbg)',
       ]),
       Triggerable(name='mac_rel_trigger', builderNames=[
           'Mac10.6 Tests',
@@ -40,13 +42,21 @@ def Update(config, active_master, c):
       'triggers': ['mac_dbg_trigger'],
     },
     {'name': 'Mac10.9 Tests (dbg)'},
+    {
+      'name': 'Mac GN',
+      'recipe': 'chromium_gn',
+    },
+    {
+      'name': 'Mac GN (dbg)',
+      'recipe': 'chromium_gn',
+    },
   ]
 
   c['builders'].extend([
       {
         'name': spec['name'],
         'factory': m_annotator.BaseFactory(
-            'chromium',
+            spec.get('recipe', 'chromium'),
             factory_properties=spec.get('factory_properties'),
             triggers=spec.get('triggers')),
         'notify_on_missing': True,

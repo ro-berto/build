@@ -15,6 +15,20 @@ DEPS = [
 
 
 BUILDERS = {
+  'chromium.mac': {
+    'builders': {
+      'Mac GN': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+        },
+      },
+      'Mac GN (dbg)': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+        },
+      },
+    },
+  },
   'chromium.webkit': {
     'builders': {
       'Android GN': {
