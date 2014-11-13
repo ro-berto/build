@@ -450,9 +450,6 @@ class ChromiumApi(recipe_api.RecipeApi):
     elif self.c.TARGET_PLATFORM == 'chromeos':
       gn_args.append('os="chromeos"')
 
-      # TODO(dpranke): Use this until the non-ozone build works.
-      gn_args.append('use_ozone=true')
-
       # TODO(dpranke): The system harfbuzz on Precise is too old.
       gn_args.append('use_system_harfbuzz=false')
 
