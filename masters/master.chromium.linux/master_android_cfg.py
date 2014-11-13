@@ -51,14 +51,8 @@ F('f_android_arm64_dbg',
 
 B('Android Builder (dbg)', 'f_android_dbg', 'android', 'android',
   auto_reboot=False, notify_on_missing=True)
-F('f_android_dbg', linux_android().ChromiumAnnotationFactory(
-    target='Debug',
-    annotation_script='src/build/android/buildbot/bb_run_bot.py',
-    factory_properties={
-      'android_bot_id': 'main-builder-dbg',
-      'build_url': android_dbg_archive,
-      'trigger': 'android_trigger_dbg',
-    }))
+F('f_android_dbg',
+  m_annotator.BaseFactory('android/builder', triggers='android_trigger_dbg'))
 
 B('Android Tests (dbg)', 'f_android_dbg_tests', 'android',
   'android_trigger_dbg', notify_on_missing=True)
@@ -73,13 +67,8 @@ F('f_android_dbg_tests', linux_android().ChromiumAnnotationFactory(
 
 B('Android Builder', 'f_android_rel', 'android', 'android',
   notify_on_missing=True)
-F('f_android_rel', linux_android().ChromiumAnnotationFactory(
-    annotation_script='src/build/android/buildbot/bb_run_bot.py',
-    factory_properties={
-      'android_bot_id': 'main-builder-rel',
-      'build_url': android_rel_archive,
-      'trigger': 'android_trigger_rel',
-    }))
+F('f_android_rel',
+  m_annotator.BaseFactory('android/builder', triggers='android_trigger_rel'))
 
 B('Android Tests', 'f_android_rel_tests', 'android', 'android_trigger_rel',
   notify_on_missing=True)
