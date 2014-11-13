@@ -995,7 +995,8 @@ class BuildMaster(service.MultiService):
         """
         d = self.db.buildsets.addBuildset(**kwargs)
         def notify((bsid,brids)):
-            log.msg("added buildset %d to database" % bsid)
+            log.msg("added buildset %d to database (build requests: %s)" %
+                    (bsid, brids))
             # note that buildset additions are only reported on this master
             self._new_buildset_subs.deliver(bsid=bsid, **kwargs)
             # only deliver messages immediately if we're not polling

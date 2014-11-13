@@ -305,6 +305,7 @@ class BotMaster(service.MultiService):
 
     def startService(self):
         def buildRequestAdded(notif):
+            log.msg("Processing new build request: %s" % notif)
             self.maybeStartBuildsForBuilder(notif['buildername'])
         self.buildrequest_sub = \
             self.master.subscribeToBuildRequests(buildRequestAdded)

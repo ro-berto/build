@@ -4754,3 +4754,30 @@ index 9a1b6d0..3618b3c 100644
  
      def loadTheConfigFile(self, configFile=None):
          if not configFile:
+
+diff --git a/third_party/buildbot_8_4p1/buildbot/master.py b/third_party/buildbot_8_4p1/buildbot/master.py
+index 3618b3c..d045b1e 100644
+--- a/third_party/buildbot_8_4p1/buildbot/master.py
++++ b/third_party/buildbot_8_4p1/buildbot/master.py
+@@ -995,7 +995,8 @@ class BuildMaster(service.MultiService):
+         """
+         d = self.db.buildsets.addBuildset(**kwargs)
+         def notify((bsid,brids)):
+-            log.msg("added buildset %d to database" % bsid)
++            log.msg("added buildset %d to database (build requests: %s)" %
++                    (bsid, brids))
+             # note that buildset additions are only reported on this master
+             self._new_buildset_subs.deliver(bsid=bsid, **kwargs)
+             # only deliver messages immediately if we're not polling
+diff --git a/third_party/buildbot_8_4p1/buildbot/process/botmaster.py b/third_party/buildbot_8_4p1/buildbot/process/botmaster.py
+index 7a83ed7..0c0bcef 100644
+--- a/third_party/buildbot_8_4p1/buildbot/process/botmaster.py
++++ b/third_party/buildbot_8_4p1/buildbot/process/botmaster.py
+@@ -305,6 +305,7 @@ class BotMaster(service.MultiService):
+
+     def startService(self):
+         def buildRequestAdded(notif):
++            log.msg("Processing new build request: %s" % notif)
+             self.maybeStartBuildsForBuilder(notif['buildername'])
+         self.buildrequest_sub = \
+             self.master.subscribeToBuildRequests(buildRequestAdded)
