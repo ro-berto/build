@@ -88,6 +88,9 @@ class GpuApi(recipe_api.RecipeApi):
 
     self.m.step.auto_resolve_conflicts = True
 
+    self._enable_swarming = False
+    self._swarming_dimension_sets = None
+
   # TODO(martinis) change this to a property that grabs the revision
   # the first time its run, and then caches the value.
   def get_build_revision(self):
@@ -215,13 +218,46 @@ class GpuApi(recipe_api.RecipeApi):
         self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs),
         isolates_to_run)
 
+  def enable_swarming(self, swarming_dimension_sets):
+    """Enables swarming for all tests.
+
+    Args:
+      swarming_dimension_sets: List of dicts, where each dict is a set of
+          swarming dimensions on which each test must be triggered.
+    """
+    self._enable_swarming = True
+    self._swarming_dimension_sets = swarming_dimension_sets
+
   def run_tests(self, api, suffix=''):
-    tests = self.list_tests()
+    tests = self.create_tests()
     test_runner = self.m.chromium_tests.create_test_runner(api, tests, suffix)
     test_runner()
 
-  def list_tests(self):
-    """Produces a list of tests to be run.
+  def create_tests(self):
+    """Produces a list of the tests to be run.
+
+    Returns:
+      A list of Test objects (from steps.py in chromium module).
+    """
+    tests = []
+    if self._enable_swarming:
+      self.m.chromium_tests.configure_swarming(
+        project_name=self._configuration,
+        precommit=self.m.tryserver.is_tryserver)
+      self.m.swarming.check_client_version()
+      for swarming_dimensions in self._swarming_dimension_sets:
+        tests.extend(self._create_test_batch(swarming_dimensions))
+    else:
+      tests.extend(self._create_test_batch())
+    return tests
+
+  def _create_test_batch(self, swarming_dimensions=None):
+    """Produces a batch of tests to be run on given swarming dimensions.
+
+    Args:
+      swarming_dimensions: A dictionary that specifies which swarming dimensions
+          should be set before a swarming test is triggered. When set to None,
+          swarming is disabled.
 
     Returns:
       A list of Test objects (from steps.py in chromium module).
@@ -259,18 +295,21 @@ class GpuApi(recipe_api.RecipeApi):
 
     #TODO(martiniss) convert loop
     for test in basic_tests:
-      tests.append(self._create_gtest(test, args=['--use-gpu-in-tests']))
+      tests.append(self._create_gtest(test, args=['--use-gpu-in-tests'],
+                                      swarming_dimensions=swarming_dimensions))
 
     # Run closed source tests with ANGLE-D3D9
     if self.is_fyi_waterfall and self.m.platform.is_win:
       for test in SIMPLE_NON_OPEN_SOURCE_TESTS_TO_RUN:
         tests.append(self._create_gtest(
             test, args=['--use-gpu-in-tests', '--disable-d3d11'],
+            swarming_dimensions=swarming_dimensions,
             display_name=D3D9_TEST_NAME_MAPPING[test]))
 
     # Google Maps Pixel tests.
     tests.append(self._create_telemetry_test(
       'maps', display_name='maps_pixel_test',
+      swarming_dimensions=swarming_dimensions,
       args=[
         '--build-revision',
         str(self.get_build_revision()),
@@ -296,6 +335,7 @@ class GpuApi(recipe_api.RecipeApi):
     cloud_storage_bucket = 'chromium-gpu-archive/reference-images'
     tests.append(self._create_telemetry_test(
         'pixel', display_name='pixel_test',
+        swarming_dimensions=swarming_dimensions,
         args=[
             '--build-revision',
             str(self.get_build_revision()),
@@ -309,37 +349,44 @@ class GpuApi(recipe_api.RecipeApi):
         ]))
 
     # WebGL conformance tests.
-    tests.append(self._create_telemetry_test('webgl_conformance'))
+    tests.append(self._create_telemetry_test(
+        'webgl_conformance', swarming_dimensions=swarming_dimensions))
 
     # Run extra D3D9 conformance in Windows FYI GPU bots
     # This ensures the ANGLE/D3D9 gets some testing
     if self.is_fyi_waterfall and self.m.platform.is_win:
       tests.append(self._create_telemetry_test(
-          'webgl_conformance',
+          'webgl_conformance', swarming_dimensions=swarming_dimensions,
           display_name=D3D9_TEST_NAME_MAPPING['webgl_conformance'],
           extra_browser_args=[
             '--disable-d3d11'
           ]))
 
     # Context lost tests.
-    tests.append(self._create_telemetry_test('context_lost'))
+    tests.append(self._create_telemetry_test(
+        'context_lost', swarming_dimensions=swarming_dimensions))
 
     # Memory tests.
-    tests.append(self._create_telemetry_test('memory_test'))
+    tests.append(self._create_telemetry_test(
+        'memory_test', swarming_dimensions=swarming_dimensions))
 
     # Screenshot synchronization tests.
-    tests.append(self._create_telemetry_test('screenshot_sync'))
+    tests.append(self._create_telemetry_test(
+        'screenshot_sync', swarming_dimensions=swarming_dimensions))
 
     # Hardware acceleration tests.
-    tests.append(self._create_telemetry_test('hardware_accelerated_feature'))
+    tests.append(self._create_telemetry_test(
+        'hardware_accelerated_feature',
+        swarming_dimensions=swarming_dimensions))
 
     # GPU process launch tests.
-    tests.append(self._create_telemetry_test('gpu_process',
-                                             display_name='gpu_process_launch'))
+    tests.append(self._create_telemetry_test(
+        'gpu_process', display_name='gpu_process_launch',
+        swarming_dimensions=swarming_dimensions))
 
     # Smoke test for gpu rasterization of web content.
     tests.append(self._create_telemetry_test(
-        'gpu_rasterization',
+        'gpu_rasterization', swarming_dimensions=swarming_dimensions,
         args=[
           '--build-revision', str(self.get_build_revision()),
           '--test-machine-name', self.m.properties['buildername']
@@ -349,17 +396,21 @@ class GpuApi(recipe_api.RecipeApi):
     # This test is unfortunately disabled in Debug builds and the lack
     # of logs is causing alerts. Skip it on Debug bots. crbug.com/403012
     if self.m.chromium.is_release_build:
-      tests.append(self._create_gtest('tab_capture_end2end_tests'))
+      tests.append(self._create_gtest('tab_capture_end2end_tests',
+                                      swarming_dimensions=swarming_dimensions))
 
     # Run GPU unit tests on FYI bots.
     if self.is_fyi_waterfall:
-      tests.append(self._create_gtest('gpu_unittests'))
+      tests.append(self._create_gtest('gpu_unittests',
+                                      swarming_dimensions=swarming_dimensions))
 
     # Run the content and media unittests on the FYI bots
     # TODO(jmadill): Run them on all GPU bots once stable
     if self.is_fyi_waterfall:
-      tests.append(self._create_gtest('content_unittests'))
-      tests.append(self._create_gtest('media_unittests'))
+      tests.append(self._create_gtest('content_unittests',
+                                      swarming_dimensions=swarming_dimensions))
+      tests.append(self._create_gtest('media_unittests',
+                                      swarming_dimensions=swarming_dimensions))
 
     # Remove empty entries as some tests may be skipped.
     tests = [test for test in tests if test]
@@ -377,7 +428,8 @@ class GpuApi(recipe_api.RecipeApi):
     # cause a hard failure.
     return isolate_name in self.m.isolate.isolated_tests
 
-  def _create_gtest(self, test, args=[], display_name=None):
+  def _create_gtest(self, test, args=[], display_name=None,
+                    swarming_dimensions=None):
     # The step test must end in 'test' or 'tests' in order for the results to
     # automatically show up on the flakiness dashboard.
     #
@@ -388,25 +440,45 @@ class GpuApi(recipe_api.RecipeApi):
     if not self._should_run_test(test):
       return
 
-    results_directory = self.m.path['slave_build'].join('gtest-results',
-                                                        display_name)
-    return self.m.chromium.steps.LocalGTestTest(
-        test,
-        xvfb=False,
-        args=args,
-        display_name=display_name,
-        use_isolate=True,
-        generate_json_file=True,
-        results_directory=results_directory,
-        revision=self.get_build_revision(),
-        webkit_revision=self.get_webkit_revision(),
-        master_class_name=self._master_class_name_for_testing)
+    # TODO(sergiyb): We should not diverge here (this is what GTestTest was
+    # designed for). However, to avoid changing expectations we pass additional
+    # parameters to runtest.py as before. After we verify that swarming works,
+    # we can try removing additional parameters and unify this into a single
+    # call that only differs by enable_swarming argument.
+    if self._enable_swarming:
+      # TODO(sergiyb): Modify display name to include a GPU name in parentheses
+      # after the test name: test_name (ATI), test_name (NVIDIA). This will be
+      # more descriptive than just test_name (1), test_name (2).
+      return self.m.chromium.steps.GTestTest(
+          test, args=args, enable_swarming=True, display_name=display_name,
+          swarming_dimensions=swarming_dimensions)
+    else:
+      results_directory = self.m.path['slave_build'].join('gtest-results',
+                                                          display_name)
+      return self.m.chromium.steps.GTestTest(
+          test,
+          xvfb=False,
+          args=args,
+          display_name=display_name,
+          use_isolate=True,
+          generate_json_file=True,
+          results_directory=results_directory,
+          revision=self.get_build_revision(),
+          webkit_revision=self.get_webkit_revision(),
+          master_class_name=self._master_class_name_for_testing)
 
 
   def _create_telemetry_test(self, name, args=None, display_name=None,
-                             extra_browser_args=None):
+                             extra_browser_args=None, swarming_dimensions=None):
     if not self._should_run_test('telemetry_gpu_test'):
       return
+
+    if self._enable_swarming:
+      # TODO(sergiyb): Add support for swarmed telemetry tests.
+      # We do not return a local test when swarming is enabled, because a
+      # builder will typically have a different GPU than required.
+      return
+
     test_args = ['-v', '--use-devtools-active-port', '--disable-crash-service']
     if args:
       test_args.extend(args)

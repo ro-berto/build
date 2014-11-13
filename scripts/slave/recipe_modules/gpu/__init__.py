@@ -17,5 +17,6 @@ DEPS = [
   'platform',
   'python',
   'step',
+  'swarming',
   'tryserver',
 ]

@@ -449,12 +449,15 @@ class AndroidPerfTests(Test):
 
 
 class SwarmingGTestTest(Test):
-  def __init__(self, name, args=None, shards=1):
+  def __init__(self, name, args=None, shards=1, dimensions=None,
+               display_name=None):
     self._name = name
     self._args = args or []
     self._shards = shards
     self._tasks = {}
     self._results = {}
+    self._display_name = display_name
+    self._dimensions = dimensions
 
   @property
   def name(self):
@@ -496,17 +499,21 @@ class SwarmingGTestTest(Test):
 
     # Trigger the test on swarming.
     self._tasks[suffix] = api.swarming.gtest_task(
-        title=self._step_name(suffix),
+        title=self._display_name or self._step_name(suffix),
         isolated_hash=isolated_hash,
         shards=self._shards,
         test_launcher_summary_output=api.json.gtest_results(
             add_json_log=False),
         extra_args=args)
 
+    if self._dimensions:
+      self._tasks[suffix].dimensions.update(self._dimensions)
+
     # Set default value.
     if 'os' not in self._tasks[suffix].dimensions:
       self._tasks[suffix].dimensions['os'] = api.swarming.prefered_os_dimension(
           api.platform.name)
+
     return api.swarming.trigger_task(self._tasks[suffix])
 
   def run(self, api, suffix):  # pylint: disable=R0201
@@ -560,18 +567,23 @@ class SwarmingGTestTest(Test):
 
 
 class GTestTest(Test):
-  def __init__(self, name, args=None, compile_targets=None,
-               flakiness_dash=False, enable_swarming=False, swarming_shards=1):
+  def __init__(self, name, args=None, display_name=None, enable_swarming=False,
+               swarming_shards=1, swarming_dimensions=None, **runtest_kwargs):
     super(GTestTest, self).__init__()
     self._name = name
     self._args = args
+    self._display_name = display_name
+    self._swarming_dimensions = swarming_dimensions
     if enable_swarming:
-      self._test = SwarmingGTestTest(name, args, swarming_shards)
+      self._test = SwarmingGTestTest(name, args, swarming_shards,
+                                     swarming_dimensions, display_name)
     else:
-      self._test = LocalGTestTest(name, args, flakiness_dash=flakiness_dash)
+      self._test = LocalGTestTest(name, args, display_name, **runtest_kwargs)
 
   def force_swarming(self, swarming_shards=1):
-    self._test = SwarmingGTestTest(self._name, self._args, swarming_shards)
+    self._test = SwarmingGTestTest(self._name, self._args, swarming_shards,
+                                   self._swarming_dimensions,
+                                   self._display_name)
 
   @property
   def name(self):

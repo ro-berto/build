@@ -21,6 +21,7 @@ DEPS = [
   'properties',
   'raw_io',
   'step',
+  'swarming',
   'swarming_client',
   'test_utils',
   'tryserver',
@@ -37,6 +38,17 @@ def GenSteps(api):
   api.swarming_client.checkout()
   api.chromium.get_vs_toolchain_if_necessary()
   api.buildbot.copy_parent_got_revision_to_got_revision()
+
+  # TODO(sergiyb): Replace chromium.gpu.testing with a real master name
+  # (tryserver.chromium.gpu) once we'll have telemetry tests swarmed.
+  # TODO(sergiyb): This config should be read from an external JSON file in a
+  # custom step, which can then be mocked in the GetTests.
+  if (api.properties['mastername'] == 'chromium.gpu.testing' and
+      api.properties['buildername'] == 'mac_gpu_retina_triggered_tests'):
+    # Mac Retina with NVIDIA GeForce GT 750M GPU (10de:0fe9)
+    mac_retina_dimensions = {'os': 'Mac', 'hidpi': '1', 'gpu': '10de:0fe9'}
+    api.gpu.enable_swarming(swarming_dimension_sets=[mac_retina_dimensions])
+
   api.gpu.run_tests(api)
 
 def GenTests(api):
@@ -120,6 +132,19 @@ def GenTests(api):
       parent_got_webkit_revision=10000,
       parent_got_swarming_client_revision='feaaabcdef',
       swarm_hashes=''
+    ) +
+    api.platform.name('mac')
+  )
+
+  yield (
+    api.test('enable_swarming') +
+    api.properties.tryserver(
+      mastername='chromium.gpu.testing',
+      buildername='mac_gpu_retina_triggered_tests',
+      parent_got_revision=160000,
+      parent_got_webkit_revision=10000,
+      parent_got_swarming_client_revision='feaaabcdef',
+      swarm_hashes=all_hashes
     ) +
     api.platform.name('mac')
   )
