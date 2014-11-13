@@ -459,6 +459,26 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
       },
+      'Win64 Debug (GN)': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'chromium_apply_config': ['webrtc_gn'],
+        'bot_type': 'builder',
+        'testing': {'platform': 'win'},
+      },
+      'Win64 Release (GN)': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'chromium_apply_config': ['webrtc_gn'],
+        'bot_type': 'builder',
+        'testing': {'platform': 'win'},
+      },
       'Win32 Release [large tests]': {
         'recipe_config': 'webrtc_baremetal',
         'chromium_config_kwargs': {
@@ -535,6 +555,26 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
+        'testing': {'platform': 'mac'},
+      },
+      'Mac64 Debug (GN)': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'chromium_apply_config': ['webrtc_gn'],
+        'bot_type': 'builder',
+        'testing': {'platform': 'mac'},
+      },
+      'Mac64 Release (GN)': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'chromium_apply_config': ['webrtc_gn'],
+        'bot_type': 'builder',
         'testing': {'platform': 'mac'},
       },
       'Mac Asan': {
@@ -857,6 +897,26 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
       },
+      'win_x64_gn': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'chromium_apply_config': ['webrtc_gn'],
+        'bot_type': 'builder',
+        'testing': {'platform': 'win'},
+      },
+      'win_x64_gn_rel': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'chromium_apply_config': ['webrtc_gn'],
+        'bot_type': 'builder',
+        'testing': {'platform': 'win'},
+      },
       'win_baremetal': {
         'recipe_config': 'webrtc_baremetal',
         'chromium_config_kwargs': {
@@ -921,6 +981,26 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
+        'testing': {'platform': 'mac'},
+      },
+      'mac_x64_gn': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'chromium_apply_config': ['webrtc_gn'],
+        'bot_type': 'builder',
+        'testing': {'platform': 'mac'},
+      },
+      'mac_x64_gn_rel': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'chromium_apply_config': ['webrtc_gn'],
+        'bot_type': 'builder',
         'testing': {'platform': 'mac'},
       },
       'mac_asan': {
