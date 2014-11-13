@@ -44,7 +44,7 @@
       "--",
       "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
       "cp",
-      "http://storage.cloud.google.com/chromium-recipe-test/some/random/path/to/boom",
+      "gs://chromium-recipe-test/some/random/path/to/boom",
       "[SLAVE_BUILD]/boom"
     ],
     "name": "gsutil gsutil download url"
@@ -74,5 +74,17 @@
       "gs://chromium-recipe-test/some/random/path/to/boom"
     ],
     "name": "gsutil signed url"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
+      "rm",
+      "gs://chromium-recipe-test/staging/to/boom"
+    ],
+    "name": "gsutil remove"
   }
 ]

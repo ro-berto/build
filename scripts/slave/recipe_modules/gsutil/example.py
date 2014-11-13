@@ -26,7 +26,7 @@ def GenSteps(api):
                     'gs://chromium-recipe-test/staging'])
 
   api.gsutil.download_url(
-      'http://storage.cloud.google.com/' + bucket + '/' + cloud_file,
+      'https://storage.cloud.google.com/' + bucket + '/' + cloud_file,
       local_file,
       name='gsutil download url')
 
@@ -37,6 +37,7 @@ def GenSteps(api):
   private_key_file = 'path/to/key'
   signed_url = api.gsutil.signurl(private_key_file, bucket, cloud_file,
                                   name='signed url')
+  api.gsutil.remove_url('gs://%s/%s' % (bucket, new_cloud_file))
 
 
 def GenTests(api):

@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import re
+
 from slave import recipe_api
 from slave import recipe_util
 
@@ -65,7 +67,7 @@ class GSUtilApi(recipe_api.RecipeApi):
 
   def download_url(self, url, dest, args=None, **kwargs):
     args = args or []
-    url = url.replace('https://storage.cloud.google.com/', 'gs://')
+    url = self._normalize_url(url)
     cmd = ['cp'] + args + [url, dest]
     name = kwargs.pop('name', 'download')
     self(cmd, name, **kwargs)
@@ -94,6 +96,13 @@ class GSUtilApi(recipe_api.RecipeApi):
     name = kwargs.pop('name', 'signurl')
     return self(cmd, name, **kwargs)
 
+  def remove_url(self, url, args=None, **kwargs):
+    args = args or []
+    url = self._normalize_url(url)
+    cmd = ['rm'] + args + [url]
+    name = kwargs.pop('name', 'remove')
+    self(cmd, name, **kwargs)
+
   def _generate_metadata_args(self, metadata):
     result = []
     if metadata:
@@ -102,6 +111,14 @@ class GSUtilApi(recipe_api.RecipeApi):
         param = (field) if v is None else ('%s:%s' % (field, v))
         result += ['-h', param]
     return result
+
+  def _normalize_url(self, url):
+    gs_prefix = 'gs://'
+    # Defines the regex that matches a normalized URL.
+    url_regex = r'^(%s|https://storage.cloud.google.com/)' % gs_prefix
+    normalized_url, subs_made = re.subn(url_regex, gs_prefix, url, count=1)
+    assert subs_made == 1, "%s cannot be normalized" % url
+    return normalized_url
 
   @staticmethod
   def _get_metadata_field(name, provider_prefix=None):
