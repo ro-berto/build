@@ -61,6 +61,10 @@ PACKAGES = [
     'is_sample' : True,
   },
   {
+    'name' : 'sample-pop_pop_win',
+    'is_sample' : True,
+  },
+  {
     'name' : 'sample-dgrep',
     'is_sample' : True,
   },
