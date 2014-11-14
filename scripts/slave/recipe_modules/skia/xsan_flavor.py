@@ -19,7 +19,9 @@ class XSanFlavorUtils(default_flavor.DefaultFlavorUtils):
       # anywhere close to being able to do that.  Instead we start with a set of
       # checks that we know pass or nearly pass.  See here for more information:
       # http://clang.llvm.org/docs/UsersManual.html#controlling-code-generation
-      'UBSAN': 'bool,integer-divide-by-zero,null,object-size,return',
+      'UBSAN': ('bool,integer-divide-by-zero,null,object-size,return,'
+                'nonnull-attribute,returns-nonnull-attribute,unreachable,'
+                'vla-bound'),
     }[self._skia_api.c.builder_cfg['extra_config']]
 
   def compile(self, target):
