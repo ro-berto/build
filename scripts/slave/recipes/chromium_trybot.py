@@ -236,26 +236,12 @@ BUILDERS = {
       'linux_chromium_chromeos_athena_rel': {
         'add_nacl_integration_tests': False,
         'add_telemetry_tests': False,
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'chromium_config': 'chromium_chromeos_athena',
-        'compile_only': False,
-        'compile_targets': [
-          'chrome',
-        ],
-        'testing': {
-          'platform': 'linux',
-          'test_spec_file': 'chromium_athena.json',
-        },
-      },
-      'linux_chromium_chromeos_athena_dbg': {
-        'add_nacl_integration_tests': False,
-        'add_telemetry_tests': False,
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
+        'based_on_main_waterfall': {
+          'mastername': 'chromium.chromiumos',
+          'buildername': 'Linux ChromiumOS Athena Builder',
+          'testers': [
+            'Linux ChromiumOS Athena Tests (1)',
+          ],
         },
         'chromium_config': 'chromium_chromeos_athena',
         'compile_only': False,
