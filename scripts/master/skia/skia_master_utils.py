@@ -6,7 +6,7 @@
 """Skia-specific utilities for setting up build masters."""
 
 
-from buildbot.scheduler import AnyBranchScheduler
+from buildbot.scheduler import Scheduler
 from buildbot.scheduler import Triggerable
 from buildbot.schedulers import timed
 from common import chromium_utils
@@ -23,7 +23,6 @@ from master.try_job_rietveld import TryJobRietveld
 
 import collections
 import config
-import re
 
 
 DEFAULT_AUTO_REBOOT = False
@@ -32,8 +31,7 @@ DEFAULT_RECIPE = 'skia/skia'
 PERCOMMIT_SCHEDULER_NAME = 'skia_percommit'
 PERIODIC_15MINS_SCHEDULER_NAME = 'skia_periodic_15mins'
 NIGHTLY_SCHEDULER_NAME = 'skia_nightly'
-MASTER_BRANCH = 'master'
-POLLING_BRANCH = re.compile('refs/heads/.+')
+POLLING_BRANCH = 'master'
 TRY_SCHEDULER_NAME = 'try_job_rietveld_skia'
 TRY_SCHEDULER_PROJECT = 'skia'
 
@@ -171,15 +169,15 @@ def SetupBuildersAndSchedulers(c, builders, slaves, ActiveMaster):
 
   c['schedulers'] = []
 
-  s = AnyBranchScheduler(
-      name=PERCOMMIT_SCHEDULER_NAME,
-      treeStableTimer=60,
-      builderNames=builders_by_scheduler[PERCOMMIT_SCHEDULER_NAME])
+  s = Scheduler(name=PERCOMMIT_SCHEDULER_NAME,
+                branch=POLLING_BRANCH,
+                treeStableTimer=60,
+                builderNames=builders_by_scheduler[PERCOMMIT_SCHEDULER_NAME])
   c['schedulers'].append(s)
 
   s = timed.Nightly(
       name=PERIODIC_15MINS_SCHEDULER_NAME,
-      branch=MASTER_BRANCH,
+      branch=POLLING_BRANCH,
       builderNames=builders_by_scheduler[PERIODIC_15MINS_SCHEDULER_NAME],
       minute=[i*15 for i in xrange(60/15)],
       hour='*',
@@ -190,7 +188,7 @@ def SetupBuildersAndSchedulers(c, builders, slaves, ActiveMaster):
 
   s = timed.Nightly(
       name=NIGHTLY_SCHEDULER_NAME,
-      branch=MASTER_BRANCH,
+      branch=POLLING_BRANCH,
       builderNames=builders_by_scheduler[NIGHTLY_SCHEDULER_NAME],
       minute=0,
       hour=22,
@@ -240,7 +238,7 @@ def SetupMaster(ActiveMaster):
   # Polls config.Master.trunk_url for changes
   poller = GitilesPoller(
       repo_url=ActiveMaster.repo_url,
-      branches=[POLLING_BRANCH],
+      branches=['master'],
       pollInterval=10,
       revlinktmpl='https://skia.googlesource.com/skia/+/%s')
 
