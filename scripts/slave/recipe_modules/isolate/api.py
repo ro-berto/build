@@ -161,16 +161,19 @@ class IsolateApi(recipe_api.RecipeApi):
     finally:
       step_result = self.m.step.active_result
       self._isolated_tests = step_result.json.output
-      step_result.presentation.properties['swarm_hashes'] = self._isolated_tests
-      missing = sorted(t for t, h in self._isolated_tests.iteritems() if not h)
-      if missing:
-        step_result.presentation.logs['failed to isolate'] = (
-          ['Failed to isolate following targets:'] +
-          missing +
-          ['', 'See logs for more information.']
-        )
-        for k in missing:
-          self._isolated_tests.pop(k)
+      if self._isolated_tests:
+        presentation = step_result.presentation
+        presentation.properties['swarm_hashes'] = self._isolated_tests
+        missing = sorted(
+            t for t, h in self._isolated_tests.iteritems() if not h)
+        if missing:
+          step_result.presentation.logs['failed to isolate'] = (
+            ['Failed to isolate following targets:'] +
+            missing +
+            ['', 'See logs for more information.']
+          )
+          for k in missing:
+            self._isolated_tests.pop(k)
 
   @property
   def isolated_tests(self):
