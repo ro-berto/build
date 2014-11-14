@@ -29,3 +29,6 @@ class GatekeeperTestApi(recipe_test_api.RecipeTestApi):
 
   def read_real_config(self, f):
     return self.m.json.output(json.loads(self.m.file.read_in_build(f)))
+
+  def read_real_internal_config(self, f): # pragma nocover
+    return self.m.json.output(json.loads(self.m.file.read_in_build_internal(f)))
