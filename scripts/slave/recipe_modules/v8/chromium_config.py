@@ -8,7 +8,7 @@ from slave import recipe_config
 from RECIPE_MODULES.chromium import CONFIG_CTX
 
 
-@CONFIG_CTX()
+@CONFIG_CTX(group='builder')
 def v8(c):
   targ_arch = c.gyp_env.GYP_DEFINES.get('target_arch')
   if not targ_arch:  # pragma: no cover
