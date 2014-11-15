@@ -20,11 +20,13 @@ BUILDERS = {
       'Mac GN': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'mac',
         },
       },
       'Mac GN (dbg)': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'mac',
         },
       },
     },
@@ -50,12 +52,16 @@ BUILDERS = {
       'Linux GN': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'linux',
+          'TARGET_BITS': 64,
         },
         'gclient_apply_config': ['blink'],
       },
       'Linux GN (dbg)': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'linux',
+          'TARGET_BITS': 64,
         },
         'chromium_apply_config': ['gn_component_build'],
         'gclient_apply_config': ['blink'],
@@ -75,6 +81,8 @@ BUILDERS = {
       'linux_chromium_gn_rel': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'linux',
+          'TARGET_BITS': 64,
         },
         'gclient_apply_config': ['blink'],
       },
@@ -111,12 +119,16 @@ BUILDERS = {
       'Linux GN': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'linux',
+          'TARGET_BITS': 64,
         },
         'should_run_gn_gyp_compare': True,
       },
       'Linux GN (dbg)': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'linux',
+          'TARGET_BITS': 64,
         },
         'chromium_apply_config': ['gn_component_build'],
         'should_run_gn_gyp_compare': True,
@@ -128,11 +140,15 @@ BUILDERS = {
       'Win8 GN': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'win',
+          'TARGET_BITS': 32,
         },
       },
      'Win8 GN (dbg)': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'win',
+          'TARGET_BITS': 32,
         },
       },
     },
@@ -158,11 +174,15 @@ BUILDERS = {
       'linux_chromium_gn_rel': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'linux',
+          'TARGET_BITS': 64,
         },
       },
       'linux_chromium_gn_dbg': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'linux',
+          'TARGET_BITS': 64,
         },
         'chromium_apply_config': ['gn_component_build'],
       },
@@ -186,11 +206,13 @@ BUILDERS = {
       'mac_chromium_gn_dbg': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'mac',
         },
       },
       'mac_chromium_gn_rel': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'mac',
         },
       },
     },
@@ -200,11 +222,15 @@ BUILDERS = {
       'win8_chromium_gn_dbg': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'win',
+          'TARGET_BITS': 32,
         },
       },
       'win8_chromium_gn_rel': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'win',
+          'TARGET_BITS': 32,
         },
       },
     }
@@ -214,6 +240,8 @@ BUILDERS = {
       'V8 Linux GN': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'linux',
+          'TARGET_BITS': 64,
         },
         'gclient_apply_config': [
           'v8_bleeding_edge_git',
@@ -273,9 +301,7 @@ def GenSteps(api):
     api.chromium.c.compile_py.compiler = None
     api.chromium.c.compile_py.goma_dir = None
 
-  # TOOD(scottmg): crbug.com/432375 - we have win toolchain issues.
-  if not is_windows:
-    api.chromium.compile(targets=['all'], force_clobber=is_windows)
+  api.chromium.compile(targets=['all'], force_clobber=is_windows)
 
   if bot_config.get('should_run_gn_gyp_compare', False):
     api.chromium.run_gn_compare()
@@ -294,10 +320,16 @@ def GenTests(api):
 
   for mastername in BUILDERS:
     for buildername in BUILDERS[mastername]['builders']:
+      if 'mac' in buildername or 'Mac' in buildername:
+        platform_name = 'mac'
+      elif 'win' in buildername or 'Win' in buildername:
+        platform_name = 'win'
+      else:
+        platform_name = 'linux'
       test = (
           api.test('full_%s_%s' % (_sanitize_nonalpha(mastername),
                                    _sanitize_nonalpha(buildername))) +
-          api.platform.name('linux')
+          api.platform.name(platform_name)
       )
       if mastername.startswith('tryserver'):
         test += api.properties.tryserver(buildername=buildername,

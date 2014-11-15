@@ -451,7 +451,14 @@ class ChromiumApi(recipe_api.RecipeApi):
       gn_args.append('os="chromeos"')
 
       # TODO(dpranke): The system harfbuzz on Precise is too old.
+      # We can remove this when we upgrade the bots to Trusty.
       gn_args.append('use_system_harfbuzz=false')
+
+    elif self.c.TARGET_PLATFORM == 'win':
+      if self.c.TARGET_BITS == 64:
+        gn_args.append('cpu_arch="x64"')
+      else:
+        gn_args.append('cpu_arch="x86"')
 
     if self.c.TARGET_ARCH == 'arm':
       gn_args.append('cpu_arch="arm"')

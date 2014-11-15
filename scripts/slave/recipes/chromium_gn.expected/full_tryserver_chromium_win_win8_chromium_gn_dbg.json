@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/bot_update.py",
+      "[BUILD]\\scripts\\slave\\bot_update.py",
       "--master",
       "tryserver.chromium.win",
       "--builder",
@@ -83,7 +83,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/gclient.py",
+      "[DEPOT_TOOLS]\\gclient.py",
       "runhooks"
     ],
     "env": {
@@ -95,12 +95,29 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/gn.py",
-      "--root=[SLAVE_BUILD]/src",
+      "[DEPOT_TOOLS]\\gn.py",
+      "--root=[SLAVE_BUILD]\\src",
       "gen",
       "//out/Debug",
-      "--args=is_debug=true"
+      "--args=is_debug=true cpu_arch=\"x86\""
     ],
     "name": "gn"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\compile.py",
+      "--target",
+      "Debug",
+      "--src-dir",
+      "[SLAVE_BUILD]\\src",
+      "--build-tool",
+      "ninja",
+      "--clobber",
+      "--",
+      "all"
+    ],
+    "name": "compile"
   }
 ]

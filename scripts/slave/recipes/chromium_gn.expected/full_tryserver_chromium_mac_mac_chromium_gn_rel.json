@@ -115,7 +115,7 @@
       "--build-tool",
       "ninja",
       "--compiler",
-      "goma",
+      "goma-clang",
       "--goma-dir",
       "[BUILD]/goma",
       "--",
