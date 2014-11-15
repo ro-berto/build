@@ -102,22 +102,5 @@
       "--args=is_debug=false cpu_arch=\"x86\""
     ],
     "name": "gn"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]\\scripts\\slave\\compile.py",
-      "--target",
-      "Release",
-      "--src-dir",
-      "[SLAVE_BUILD]\\src",
-      "--build-tool",
-      "ninja",
-      "--clobber",
-      "--",
-      "all"
-    ],
-    "name": "compile"
   }
 ]
