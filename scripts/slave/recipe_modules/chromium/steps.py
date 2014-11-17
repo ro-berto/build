@@ -243,15 +243,14 @@ class ChecklicensesTest(Test):  # pylint: disable=W0232
 
 
 class LocalGTestTest(Test):
-  def __init__(self, name, args=None, display_name=None, use_isolate=False,
+  def __init__(self, name, args=None, target_name=None, use_isolate=False,
                revision=None, webkit_revision=None, **runtest_kwargs):
     """Constructs an instance of LocalGTestTest.
 
     Args:
-      name: Name of the test.
+      name: Displayed name of the test. May be modified by suffixes.
       args: Arguments to be passed to the test.
-      display_name: Name used for display on the buildbot. Note that suffixes
-          are not appended to this name.
+      target_name: Actual name of the test. Defaults to name.
       use_isolate: When set, uses api.isolate.runtest to invoke the test.
           Calling recipe should have isolate in their DEPS.
       revision: Revision of the Chrome checkout.
@@ -261,7 +260,7 @@ class LocalGTestTest(Test):
     super(LocalGTestTest, self).__init__()
     self._name = name
     self._args = args or []
-    self._display_name = display_name
+    self._target_name = target_name
     self._use_isolate = use_isolate
     self._revision = revision
     self._webkit_revision = webkit_revision
@@ -271,21 +270,24 @@ class LocalGTestTest(Test):
   def name(self):
     return self._name
 
+  @property
+  def target_name(self):
+    return self._target_name or self._name
+
   def compile_targets(self, api):
     if api.chromium.c.TARGET_PLATFORM == 'android':
-      return [self.name + '_apk']
+      return [self.target_name + '_apk']
 
     # On iOS we rely on 'All' target being compiled instead of using
     # individual targets.
     if api.chromium.c.TARGET_PLATFORM == 'ios':
       return []
 
-    return [self.name]
+    return [self.target_name]
 
   def run(self, api, suffix):
     if api.chromium.c.TARGET_PLATFORM == 'android':
-      return api.chromium_android.run_test_suite(
-          self.name, self._args)
+      return api.chromium_android.run_test_suite(self.target_name, self._args)
 
     # Copy the list because run can be invoked multiple times and we modify
     # the local copy.
@@ -296,9 +298,9 @@ class LocalGTestTest(Test):
           self.failures(api, 'with patch')))
 
     kwargs = {}
-    kwargs['name'] = self._display_name or self._step_name(suffix)
+    kwargs['name'] = self._step_name(suffix)
     kwargs['xvfb'] = True
-    kwargs['test_type'] = self._display_name or self.name
+    kwargs['test_type'] = self.name
     kwargs['annotate'] = 'gtest'
     kwargs['args'] = args
     kwargs['step_test_data'] = lambda: api.json.test_api.canned_gtest_output(
@@ -309,10 +311,10 @@ class LocalGTestTest(Test):
 
     try:
       if self._use_isolate:
-        api.isolate.runtest(self._name, self._revision, self._webkit_revision,
-                            **kwargs)
+        api.isolate.runtest(self.target_name, self._revision,
+                            self._webkit_revision, **kwargs)
       else:
-        api.chromium.runtest(self._name, revision=self._revision,
+        api.chromium.runtest(self.target_name, revision=self._revision,
                              webkit_revision=self._webkit_revision, **kwargs)
     finally:
       step_result = api.step.active_result
@@ -450,25 +452,29 @@ class AndroidPerfTests(Test):
 
 class SwarmingGTestTest(Test):
   def __init__(self, name, args=None, shards=1, dimensions=None,
-               display_name=None):
+               target_name=None):
     self._name = name
     self._args = args or []
     self._shards = shards
     self._tasks = {}
     self._results = {}
-    self._display_name = display_name
+    self._target_name = target_name
     self._dimensions = dimensions
 
   @property
   def name(self):
     return self._name
 
+  @property
+  def target_name(self):
+    return self._target_name or self._name
+
   def compile_targets(self, _):
     # <X>_run target depends on <X>, and then isolates it invoking isolate.py.
     # It is a convention, not a hard coded rule.
     # Also include name without the _run suffix to help recipes correctly
     # interpret results returned by "analyze".
-    return [self._name, self._name + '_run']
+    return [self.target_name, self.target_name + '_run']
 
   def pre_run(self, api, suffix):
     """Launches the test on Swarming."""
@@ -477,7 +483,7 @@ class SwarmingGTestTest(Test):
 
     # *.isolated may be missing if *_run target is misconfigured. It's a error
     # in gyp, not a recipe failure. So carry on with recipe execution.
-    isolated_hash = api.isolate.isolated_tests.get(self._name)
+    isolated_hash = api.isolate.isolated_tests.get(self.target_name)
     if not isolated_hash:
       return api.python.inline(
           '[error] %s' % self._step_name(suffix),
@@ -486,7 +492,7 @@ class SwarmingGTestTest(Test):
           print '*.isolated file for target %s is missing' % sys.argv[1]
           sys.exit(1)
           """,
-          args=[self._name])
+          args=[self.target_name])
 
     # For local tests test_args are added inside api.chromium.runtest.
     args = self._args[:]
@@ -499,7 +505,7 @@ class SwarmingGTestTest(Test):
 
     # Trigger the test on swarming.
     self._tasks[suffix] = api.swarming.gtest_task(
-        title=self._display_name or self._step_name(suffix),
+        title=self._step_name(suffix),
         isolated_hash=isolated_hash,
         shards=self._shards,
         test_launcher_summary_output=api.json.gtest_results(
@@ -535,7 +541,7 @@ class SwarmingGTestTest(Test):
           print '%s wasn\'t triggered' % sys.argv[1]
           sys.exit(1)
           """,
-          args=[self._name])
+          args=[self.target_name])
 
     # Wait for test on swarming to finish. If swarming infrastructure is
     # having issues, this step produces no valid *.json test summary, and
@@ -567,23 +573,23 @@ class SwarmingGTestTest(Test):
 
 
 class GTestTest(Test):
-  def __init__(self, name, args=None, display_name=None, enable_swarming=False,
+  def __init__(self, name, args=None, target_name=None, enable_swarming=False,
                swarming_shards=1, swarming_dimensions=None, **runtest_kwargs):
     super(GTestTest, self).__init__()
     self._name = name
     self._args = args
-    self._display_name = display_name
+    self._target_name = target_name
     self._swarming_dimensions = swarming_dimensions
     if enable_swarming:
       self._test = SwarmingGTestTest(name, args, swarming_shards,
-                                     swarming_dimensions, display_name)
+                                     swarming_dimensions, target_name)
     else:
-      self._test = LocalGTestTest(name, args, display_name, **runtest_kwargs)
+      self._test = LocalGTestTest(name, args, target_name, **runtest_kwargs)
 
   def force_swarming(self, swarming_shards=1):
     self._test = SwarmingGTestTest(self._name, self._args, swarming_shards,
                                    self._swarming_dimensions,
-                                   self._display_name)
+                                   self._target_name)
 
   @property
   def name(self):
@@ -693,20 +699,19 @@ class PrintPreviewTests(PythonBasedTest):  # pylint: disable=W032
 
 class LocalTelemetryGPUTest(Test):  # pylint: disable=W0232
   def __init__(self, name, revision, webkit_revision,
-               display_name=None, **runtest_kwargs):
+               target_name=None, **runtest_kwargs):
     """Constructs an instance of LocalTelemetryGPUTest.
 
     Args:
-      name: Name of the test.
+      name: Displayed name of the test. May be modified by suffixes.
       revision: Revision of the Chrome checkout.
       webkit_revision: Revision of the WebKit checkout.
-      display_name: Name used for display on the buildbot. Note that suffixes
-          are not appended to this name.
+      target_name: Actual name of the test. Defaults to name.
       runtest_kwargs: Additional keyword args forwarded to the runtest.
     """
     super(LocalTelemetryGPUTest, self).__init__()
     self._name = name
-    self._display_name = display_name
+    self._target_name = target_name
     self._revision = revision
     self._webkit_revision = webkit_revision
     self._failures = {}
@@ -716,6 +721,10 @@ class LocalTelemetryGPUTest(Test):  # pylint: disable=W0232
   @property
   def name(self):
     return self._name
+
+  @property
+  def target_name(self):
+    return self._target_name or self._name
 
   def compile_targets(self, _):
     # TODO(sergiyb): Build 'chrome_shell_apk' instead of 'chrome' on Android.
@@ -736,10 +745,10 @@ class LocalTelemetryGPUTest(Test):  # pylint: disable=W0232
     try:
       api.isolate.run_telemetry_test(
           'telemetry_gpu_test',
-          self._name,
+          self.target_name,
           self._revision,
           self._webkit_revision,
-          name=self._display_name,
+          name=self._step_name(suffix),
           spawn_dbus=True,
           step_test_data=lambda: api.raw_io.test_api.output_dir(
               {'results.json': json.dumps(mock_results)}),

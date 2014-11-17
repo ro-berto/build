@@ -302,13 +302,14 @@ class GpuApi(recipe_api.RecipeApi):
     if self.is_fyi_waterfall and self.m.platform.is_win:
       for test in SIMPLE_NON_OPEN_SOURCE_TESTS_TO_RUN:
         tests.append(self._create_gtest(
-            test, args=['--use-gpu-in-tests', '--disable-d3d11'],
+            D3D9_TEST_NAME_MAPPING[test],
+            args=['--use-gpu-in-tests', '--disable-d3d11'],
             swarming_dimensions=swarming_dimensions,
-            display_name=D3D9_TEST_NAME_MAPPING[test]))
+            target_name=test))
 
     # Google Maps Pixel tests.
     tests.append(self._create_telemetry_test(
-      'maps', display_name='maps_pixel_test',
+      'maps_pixel_test', target_name='maps',
       swarming_dimensions=swarming_dimensions,
       args=[
         '--build-revision',
@@ -334,7 +335,7 @@ class GpuApi(recipe_api.RecipeApi):
       ref_img_arg = '--download-refimg-from-cloud-storage'
     cloud_storage_bucket = 'chromium-gpu-archive/reference-images'
     tests.append(self._create_telemetry_test(
-        'pixel', display_name='pixel_test',
+        name='pixel_test', target_name='pixel',
         swarming_dimensions=swarming_dimensions,
         args=[
             '--build-revision',
@@ -356,8 +357,9 @@ class GpuApi(recipe_api.RecipeApi):
     # This ensures the ANGLE/D3D9 gets some testing
     if self.is_fyi_waterfall and self.m.platform.is_win:
       tests.append(self._create_telemetry_test(
-          'webgl_conformance', swarming_dimensions=swarming_dimensions,
-          display_name=D3D9_TEST_NAME_MAPPING['webgl_conformance'],
+          D3D9_TEST_NAME_MAPPING['webgl_conformance'],
+          swarming_dimensions=swarming_dimensions,
+          target_name='webgl_conformance',
           extra_browser_args=[
             '--disable-d3d11'
           ]))
@@ -381,7 +383,7 @@ class GpuApi(recipe_api.RecipeApi):
 
     # GPU process launch tests.
     tests.append(self._create_telemetry_test(
-        'gpu_process', display_name='gpu_process_launch',
+        'gpu_process_launch', target_name='gpu_process',
         swarming_dimensions=swarming_dimensions))
 
     # Smoke test for gpu rasterization of web content.
@@ -428,16 +430,16 @@ class GpuApi(recipe_api.RecipeApi):
     # cause a hard failure.
     return isolate_name in self.m.isolate.isolated_tests
 
-  def _create_gtest(self, test, args=[], display_name=None,
+  def _create_gtest(self, name, args=[], target_name=None,
                     swarming_dimensions=None):
     # The step test must end in 'test' or 'tests' in order for the results to
     # automatically show up on the flakiness dashboard.
     #
     # Currently all tests on the GPU bots follow this rule, so we can't add
     # code like in chromium/api.py, run_telemetry_test.
-    display_name = display_name or test
-    assert display_name.endswith('test') or display_name.endswith('tests')
-    if not self._should_run_test(test):
+    target_name = target_name or name
+    assert target_name.endswith('test') or target_name.endswith('tests')
+    if not self._should_run_test(name):
       return
 
     # TODO(sergiyb): We should not diverge here (this is what GTestTest was
@@ -450,16 +452,15 @@ class GpuApi(recipe_api.RecipeApi):
       # after the test name: test_name (ATI), test_name (NVIDIA). This will be
       # more descriptive than just test_name (1), test_name (2).
       return self.m.chromium.steps.GTestTest(
-          test, args=args, enable_swarming=True, display_name=display_name,
+          name, args=args, enable_swarming=True, target_name=target_name,
           swarming_dimensions=swarming_dimensions)
     else:
-      results_directory = self.m.path['slave_build'].join('gtest-results',
-                                                          display_name)
+      results_directory = self.m.path['slave_build'].join('gtest-results', name)
       return self.m.chromium.steps.GTestTest(
-          test,
+          name,
           xvfb=False,
           args=args,
-          display_name=display_name,
+          target_name=target_name,
           use_isolate=True,
           generate_json_file=True,
           results_directory=results_directory,
@@ -468,7 +469,7 @@ class GpuApi(recipe_api.RecipeApi):
           master_class_name=self._master_class_name_for_testing)
 
 
-  def _create_telemetry_test(self, name, args=None, display_name=None,
+  def _create_telemetry_test(self, name, args=None, target_name=None,
                              extra_browser_args=None, swarming_dimensions=None):
     if not self._should_run_test('telemetry_gpu_test'):
       return
@@ -495,6 +496,5 @@ class GpuApi(recipe_api.RecipeApi):
 
     return self.m.chromium.steps.LocalTelemetryGPUTest(
         name, self.get_build_revision(), self.get_webkit_revision(),
-        args=test_args,
-        display_name=display_name,
+        args=test_args, target_name=target_name,
         master_class_name=self._master_class_name_for_testing)

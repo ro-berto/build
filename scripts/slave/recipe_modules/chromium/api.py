@@ -291,7 +291,7 @@ class ChromiumApi(recipe_api.RecipeApi):
   def is_release_build(self):
     return self.c.BUILD_CONFIG == 'Release'
 
-  def run_telemetry_test(self, runner, test, name='', args=None,
+  def run_telemetry_test(self, runner, test, name, args=None,
                          prefix_args=None, results_directory='',
                          spawn_dbus=False, revision=None, webkit_revision=None,
                          master_class_name=None, **kwargs):
@@ -305,9 +305,6 @@ class ChromiumApi(recipe_api.RecipeApi):
     if self.m.platform.is_linux:
       env['CHROME_DEVEL_SANDBOX'] = self.m.path.join(
         '/opt', 'chromium', 'chrome_sandbox')
-
-    if not name:
-      name = test
 
     # The step name must end in 'test' or 'tests' in order for the results to
     # automatically show up on the flakiness dashboard.
