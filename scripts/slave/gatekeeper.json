@@ -315,6 +315,8 @@
           "V8 Linux - x87 - nosnap - debug",
           "V8 Linux - full debug",
           "V8 Linux - interpreted regexp",
+          "V8 Linux - arm - sim - novfp3",
+          "V8 Linux - arm - sim - debug - novfp3",
           "V8 Linux - arm64 - sim - nosnap - debug - 1",
           "V8 Linux - arm64 - sim - nosnap - debug - 2",
           "V8 Linux - arm64 - sim - gc stress",
