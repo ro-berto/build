@@ -58,7 +58,14 @@ def _BuildSteps(api, buildername, build_type):
 
 def _RunTests(api, build_type):
   mojob_path = api.path['checkout'].join('mojo', 'tools', 'mojob.py')
-  api.python('mojob test', mojob_path, args=['test', build_type])
+  api.python('mojob test', mojob_path, args=[
+    'test', build_type,
+    '--master-name', api.properties.get('mastername'),
+    '--builder-name', api.properties.get('buildername'),
+    '--build-number', api.properties.get('buildnumber'),
+    '--test-results-server', api.properties.get('test_results_server',
+        'test-results.appspot.com'),
+  ])
 
 def _UploadShell(api):
   upload_path = api.path['checkout'].join('mojo', 'tools',

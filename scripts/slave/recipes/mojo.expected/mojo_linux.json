@@ -77,7 +77,15 @@
       "-u",
       "[SLAVE_BUILD]/src/mojo/tools/mojob.py",
       "test",
-      "--release"
+      "--release",
+      "--master-name",
+      "chromium.testing.master",
+      "--builder-name",
+      "Mojo Linux",
+      "--build-number",
+      "571",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "name": "mojob test"
   },
