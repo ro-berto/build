@@ -761,7 +761,7 @@ class V8Api(recipe_api.RecipeApi):
         errors = step_result.json.output['errors']
         if errors:
           step_result.presentation.logs['Errors'] = errors
-        else:
+        elif upload:
           # Add a link to the dashboard. This assumes the naming convention
           # step name == suite name. If this convention didn't hold, we'd need
           # to use the path from the json output graphs here.
