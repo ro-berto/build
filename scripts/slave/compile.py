@@ -122,15 +122,6 @@ def goma_setup(options, env):
     if hostname in ['vm320-m4', 'vm770-m4']:
       env['NACL_GOMA_THREADS'] = '1'
 
-  # HACK(shinyak, goma): Enable GLOBAL_FILEID_CACHE_PATTERNS only in
-  # Chromium Win Ninja Goma and Chromium Win Ninja Goma (shared) builders,
-  # so that we can check whether this feature is not harmful and how much
-  # this feature can improve compile performance.
-  # If this experiment succeeds, I'll enable this in all Win/Mac platforms.
-  if hostname in ['build28-m1', 'build58-m1']:
-    patterns = r'win_toolchain\vs2013_files,third_party,src\chrome,src\content'
-    env['GOMA_GLOBAL_FILEID_CACHE_PATTERNS'] = patterns
-
   # goma is requested.
   goma_key = os.path.join(options.goma_dir, 'goma.key')
   if os.path.exists(goma_key):
