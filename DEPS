@@ -5,14 +5,30 @@ deps = {
   "build/scripts/private/data/reliability":
     "svn://svn.chromium.org/chrome/trunk/src/chrome/test/data/reliability",
 
+  "build/third_party/google_api_python_client":
+    ("https://chromium.googlesource.com/external/github.com/google/"
+     "google-api-python-client.git@49d45a6c3318b75e551c3022020f46c78655f365"),
+
   "build/third_party/gsutil":
     "svn://svn.chromium.org/gsutil/trunk/src@263",
 
   "build/third_party/gsutil/boto":
     "svn://svn.chromium.org/boto@7",
 
+  "build/third_party/httplib2":
+    ("https://chromium.googlesource.com/external/github.com/jcgregorio/httplib2"
+     ".git@058a1f9448d5c27c23772796f83a596caf9188e6"),
+
   "build/third_party/lighttpd":
     "svn://svn.chromium.org/chrome/trunk/deps/third_party/lighttpd@58968",
+
+  "build/third_party/oauth2client":
+    ("https://chromium.googlesource.com/external/github.com/google/"
+     "oauth2client.git@00c4c8057a34ee142e9729dbeb51855e0282f82e"),
+
+  "build/third_party/uritemplate":
+    ("https://chromium.googlesource.com/external/github.com/uri-templates/"
+     "uritemplate-py.git@1e780a49412cdbb273e9421974cb91845c124f3f"),
 
   "build/scripts/tools/deps2git":
     "svn://svn.chromium.org/chrome/trunk/tools/deps2git",

@@ -45,6 +45,10 @@ twistd.pid
 /tags
 /third_party/cbuildbot_chromite
 /third_party/gsutil
+/third_party/google_api_python_client/
+/third_party/httplib2/
+/third_party/oauth2client/
+/third_party/uritemplate/
 /third_party/lighttpd
 /third_party/psutils
 /third_party/swarm_client
