@@ -452,10 +452,9 @@ class ChromiumApi(recipe_api.RecipeApi):
       gn_args.append('use_system_harfbuzz=false')
 
     elif self.c.TARGET_PLATFORM == 'win':
-      if self.c.TARGET_BITS == 64:
-        gn_args.append('cpu_arch="x64"')
-      else:
-        gn_args.append('cpu_arch="x86"')
+      # TODO(dpranke): Make the 32-bit win build work also.
+      assert(self.c.TARGET_BITS == 64)
+      gn_args.append('cpu_arch="x64"')
 
     if self.c.TARGET_ARCH == 'arm':
       gn_args.append('cpu_arch="arm"')

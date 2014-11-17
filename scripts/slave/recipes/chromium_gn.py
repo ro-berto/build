@@ -141,14 +141,14 @@ BUILDERS = {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'win',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
       },
      'Win8 GN (dbg)': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'win',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
       },
     },
@@ -223,14 +223,14 @@ BUILDERS = {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'win',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
       },
       'win8_chromium_gn_rel': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'win',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
       },
     }
@@ -302,7 +302,7 @@ def GenSteps(api):
     api.chromium.c.compile_py.goma_dir = None
 
   # TODO(dpranke): Reenable when the toolchains are right.
-  if not is_windows:
+  if not is_windows or ('win8_' in buildername):
     api.chromium.compile(targets=['all'], force_clobber=is_windows)
 
   if bot_config.get('should_run_gn_gyp_compare', False):
