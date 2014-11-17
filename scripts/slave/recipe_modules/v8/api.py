@@ -781,7 +781,7 @@ class V8Api(recipe_api.RecipeApi):
       return math.sqrt(mean(variance(values, average)))
 
     # Make sure that bots that run perf tests have a revision property.
-    if tests:
+    if tests and upload:
       assert self.revision_number and self.revision, (
           'Revision must be specified for perf tests as '
           'they upload data to the perf dashboard.')
