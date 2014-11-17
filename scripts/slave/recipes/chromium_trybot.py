@@ -556,8 +556,8 @@ BUILDERS = {
       'win8_chromium_ng': {
         'based_on_main_waterfall': {
           'mastername': 'chromium.win',
-          'buildername': 'Win8 Aura',
-          'testers': [],
+          'buildername': 'Win Builder (dbg)',
+          'testers': ['Win8 Aura'],
         },
         'testing': {
           'platform': 'win',
