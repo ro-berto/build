@@ -160,7 +160,7 @@ def main():
 
   print '%s: Creating tar file...' % time.strftime('%X')
   packaging_successful = True
-  find_command = ['find', 'src/', 'infra/', 'tools/', '/usr/include/',
+  find_command = ['find', 'src/', 'build/', 'infra/', 'tools/', '/usr/include/',
                   '-type', 'f',
                   # The only files under src/out we want to package up
                   # are index files....
