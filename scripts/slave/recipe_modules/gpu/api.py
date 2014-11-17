@@ -480,7 +480,7 @@ class GpuApi(recipe_api.RecipeApi):
       # builder will typically have a different GPU than required.
       return
 
-    test_args = ['-v', '--use-devtools-active-port', '--disable-crash-service']
+    test_args = ['-v', '--use-devtools-active-port']
     if args:
       test_args.extend(args)
     extra_browser_args_string = '--extra-browser-args=--enable-logging=stderr'
