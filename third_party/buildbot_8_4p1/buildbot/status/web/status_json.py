@@ -27,7 +27,7 @@ from twisted.web import html, resource, server
 
 from buildbot.changes import changes
 from buildbot.status.web.base import HtmlResource
-from buildbot.util import json
+from buildbot.util import json, now
 
 
 _IS_INT = re.compile('^[-+]?\d+$')
@@ -82,6 +82,8 @@ EXAMPLES = """\
     - Builder information plus details information about its slaves. Neat eh?
   - /json/slaves/<A_SLAVE>
     - A specific slave.
+  - /json/buildstate
+    - The current build state.
   - /json?select=slaves/<A_SLAVE>/&select=project&select=builders/<A_BUILDER>/builds/<A_BUILD>
     - A selection of random unrelated stuff as an random example. :)
 """
@@ -265,7 +267,7 @@ class JsonResource(resource.Resource):
         if callback:
             # Only accept things that look like identifiers for now
             callback = callback[0]
-            if re.match(r'^[a-zA-Z$][a-zA-Z$0-9.]*$', callback):
+            if re.match(r'^[_a-zA-Z$][_a-zA-Z$0-9.]*$', callback):
                 data = '%s(%s);' % (callback, data)
         yield data
 
@@ -349,6 +351,7 @@ class HelpResource(HtmlResource):
         HtmlResource.__init__(self)
         self.text = text
         self.pageTitle = pageTitle
+        self.flags = getattr(parent_node, 'FLAGS', None) or FLAGS
         self.parent_level = parent_node.level
         self.parent_children = parent_node.children.keys()
 
@@ -356,7 +359,7 @@ class HelpResource(HtmlResource):
         cxt['level'] = self.parent_level
         cxt['text'] = ToHtml(self.text)
         cxt['children'] = [ n for n in self.parent_children if n != 'help' ]
-        cxt['flags'] = ToHtml(FLAGS)
+        cxt['flags'] = ToHtml(self.flags)
         cxt['examples'] = ToHtml(EXAMPLES).replace(
                 'href="/json',
                 'href="%sjson' % (self.level * '../'))
@@ -745,6 +748,204 @@ class MetricsJsonResource(JsonResource):
             return None
 
 
+class BuildStateJsonResource(JsonResource):
+    help = ('Holistic build state JSON endpoint.\n\n'
+            'This endpoint is a fast (unless otherwise noted) and '
+            'comprehensive source for full BuildBot state queries. Any '
+            'augmentations to this endpoint MUST keep this in mind.')
+
+    pageTitle = 'Build State JSON'
+
+    # Keyword for 'completed_builds' to indicate that all cached builds should
+    # be returned.
+    CACHED = 'cached'
+
+    EXTRA_FLAGS = """\
+  - builder
+    - A builder name to explicitly include in the results. This can be supplied
+      multiple times. If omitted, data for all builders will be returned.
+  - current_builds
+    - Controls whether the builder's current-running build data will be
+      returned. By default, no current build data will be returned; setting
+      current_builds=1 will enable this.
+  - completed_builds
+    - Controls whether the builder's completed build data will be returned. By
+      default, no completed build data will be retured. Setting
+      completed_builds=cached will return build data for all cached builds.
+      Setting it to a positive integer 'N' (e.g., completed_builds=3) will cause
+      data for the latest 'N' completed builds to be returned.
+  - pending_builds
+    - Controls whether the builder's pending build data will be
+      returned. By default, no pending build data will be returned; setting
+      pending_builds=1 will enable this.
+  - slaves
+    - Controls whether the builder's slave data will be returned. By default, no
+      slave build data will be returned; setting slaves=1 will enable this.
+"""
+    def __init__(self, status):
+        JsonResource.__init__(self, status)
+        self.FLAGS = FLAGS + self.EXTRA_FLAGS
+
+        self.putChild('project', ProjectJsonResource(status))
+
+    @classmethod
+    def _CountOrCachedRequestArg(cls, request, arg):
+        value = RequestArg(request, arg, 0)
+        if value == cls.CACHED:
+            return value
+        try:
+            value = int(value)
+        except ValueError:
+            return 0
+        return max(0, value)
+
+    @defer.deferredGenerator
+    def asDict(self, request):
+        builders = request.args.get('builder', ())
+        current_builds = RequestArgToBool(request, 'current_builds', False)
+        completed_builds = self._CountOrCachedRequestArg(request,
+                                                         'completed_builds')
+        pending_builds = RequestArgToBool(request, 'pending_builds', False)
+        slaves = RequestArgToBool(request, 'slaves', False)
+
+        builder_names = self.status.getBuilderNames()
+        if builders:
+            builder_names = [b for b in builder_names
+                             if b in set(builders)]
+
+        # Collect child endpoint data.
+        wfd = defer.waitForDeferred(
+                defer.maybeDeferred(JsonResource.asDict, self, request))
+        yield wfd
+        response = wfd.getResult()
+
+        # Collect builder data.
+        wfd = defer.waitForDeferred(
+                defer.gatherResults(
+                    [self._getBuilderData(self.status.getBuilder(builder_name),
+                                          current_builds, completed_builds,
+                                          pending_builds)
+                     for builder_name in builder_names]))
+        yield wfd
+        response['builders'] = wfd.getResult()
+
+        # Add slave data.
+        if slaves:
+            response['slaves'] = self._getAllSlavesData()
+
+        # Add timestamp and return.
+        response['timestamp'] = now()
+        yield response
+
+    @defer.deferredGenerator
+    def _getBuilderData(self, builder, current_builds, completed_builds,
+                        pending_builds):
+        # Load the builder dictionary. We use the synchronous path, since the
+        # asynchronous waits for pending builds to load. We handle that path
+        # explicitly via the 'pending_builds' option.
+        #
+        # This also causes the cache to be updated with recent builds, so we
+        # will call it first.
+        response = builder.asDict()
+        tasks = []
+
+        # Get current/completed builds.
+        if current_builds or completed_builds:
+            tasks.append(
+                    defer.maybeDeferred(self._loadBuildData, builder,
+                                        current_builds, completed_builds))
+
+        # Get pending builds.
+        if pending_builds:
+            tasks.append(
+                    self._loadPendingBuildData(builder))
+
+        # Collect a set of build data dictionaries to combine.
+        wfd = defer.waitForDeferred(
+                defer.gatherResults(tasks))
+        yield wfd
+        build_data_entries = wfd.getResult()
+
+        # Construct our build data from the various task entries.
+        build_state = response.setdefault('buildState', {})
+        for build_data_entry in build_data_entries:
+            build_state.update(build_data_entry)
+        yield response
+
+    def _loadBuildData(self, builder, current_builds, completed_builds):
+        build_state = {}
+        builds = set()
+        build_data_entries = []
+
+        current_build_numbers = set(b.getNumber()
+                                    for b in builder.currentBuilds)
+        if current_builds:
+            builds.update(current_build_numbers)
+            build_data_entries.append(('current', current_build_numbers))
+
+        if completed_builds:
+            if completed_builds == self.CACHED:
+                build_numbers = set(builder.buildCache.cache.keys())
+                build_numbers.difference_update(current_build_numbers)
+            else:
+                build_numbers = []
+                candidate = -1
+                while len(build_numbers) < completed_builds:
+                    build_number = builder._resolveBuildNumber(candidate)
+                    if not build_number:
+                        break
+
+                    candidate -= 1
+                    if build_number in current_build_numbers:
+                        continue
+                    build_numbers.append(build_number)
+            builds.update(build_numbers)
+            build_data_entries.append(('completed', build_numbers))
+
+        # Load all builds referenced by 'builds'.
+        builds = builder.getBuilds(builds)
+        build_map = dict((build_dict['number'], build_dict)
+                         for build_dict in [build.asDict()
+                                            for build in builds
+                                            if build])
+
+        # Map the collected builds to their repective keys. This dictionary
+        # takes the form: Build# => BuildDict.
+        for key, build_numbers in build_data_entries:
+            build_state[key] = dict((number, build_map.get(number, {}))
+                                    for number in build_numbers)
+        return build_state
+
+    def _loadPendingBuildData(self, builder):
+        d = builder.getPendingBuildRequestStatuses()
+
+        def cb_load_status(statuses):
+            statuses.sort(key=lambda s: s.getSubmitTime())
+            return defer.gatherResults([status.asDict_async()
+                                        for status in statuses])
+        d.addCallback(cb_load_status)
+
+        def cb_collect(status_dicts):
+            return {
+                    'pending': status_dicts,
+            }
+        d.addCallback(cb_collect)
+
+        return d
+
+    def _getAllSlavesData(self):
+        return dict((slavename, self._getSlaveData(slavename))
+                    for slavename in self.status.getSlaveNames())
+
+    def _getSlaveData(self, slavename):
+        slave = self.status.getSlave(slavename)
+        return {
+                'host': slave.getHost(),
+                'connected': slave.isConnected(),
+                'connect_times': slave.getConnectTimes(),
+                'last_message_received': slave.lastMessageReceived(),
+        }
+
 
 class JsonStatusResource(JsonResource):
     """Retrieves all json data."""
@@ -766,6 +967,7 @@ For help on any sub directory, use url /child/help
         self.putChild('project', ProjectJsonResource(status))
         self.putChild('slaves', SlavesJsonResource(status))
         self.putChild('metrics', MetricsJsonResource(status))
+        self.putChild('buildstate', BuildStateJsonResource(status))
         # This needs to be called before the first HelpResource().body call.
         self.hackExamples()
 

@@ -54,6 +54,8 @@ class SlaveStatus:
     def getConnectCount(self):
         then = time.time() - 3600
         return len([ t for t in self.connect_times if t > then ])
+    def getConnectTimes(self):
+        return self.connect_times
 
     def setAdmin(self, admin):
         self.admin = admin
