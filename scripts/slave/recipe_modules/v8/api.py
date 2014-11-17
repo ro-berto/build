@@ -715,7 +715,8 @@ class V8Api(recipe_api.RecipeApi):
     else:
       self._runtest(test['name'], test, **kwargs)
 
-  def runperf(self, tests, perf_configs, category=None):
+  def runperf(self, tests, perf_configs, category=None, suffix='',
+              upload=True):
     """Run v8 performance tests and upload results.
 
     Args:
@@ -724,6 +725,10 @@ class V8Api(recipe_api.RecipeApi):
       category: Optionally use bot nesting level as category. Bot names are
                 irrelevant if several different bots run in the same category
                 like ia32.
+      suffix: Optional name suffix to differentiate multiple runs of the same
+              step.
+      upload: If true, uploads results to the performance dashboard.
+    Returns: A mapping of test config name->step results.
     """
 
     results_mapping = collections.defaultdict(dict)
@@ -745,14 +750,14 @@ class V8Api(recipe_api.RecipeApi):
 
       try:
         self.m.python(
-          name,
+          '%s%s' % (name, suffix),
           self.m.path['checkout'].join('tools', 'run_perf.py'),
           full_args,
           cwd=self.m.path['checkout'],
           step_test_data=step_test_data,
         )
       finally:
-        results_mapping[test][name] = step_result = self.m.step.active_result
+        results_mapping[test] = step_result = self.m.step.active_result
         errors = step_result.json.output['errors']
         if errors:
           step_result.presentation.logs['Errors'] = errors
@@ -793,39 +798,42 @@ class V8Api(recipe_api.RecipeApi):
         failed = True
 
     # Collect all perf data of the previous steps.
-    points = []
-    for t in tests:
-      step = results_mapping[t][perf_configs[t]['name']]
-      for trace in step.json.output['traces']:
-        # Make 'v8' the root of all standalone v8 performance tests.
-        test_path = '/'.join(['v8'] + trace['graphs'])
+    if upload:
+      points = []
+      for t in tests:
+        step = results_mapping[t]
+        for trace in step.json.output['traces']:
+          # Make 'v8' the root of all standalone v8 performance tests.
+          test_path = '/'.join(['v8'] + trace['graphs'])
 
-        # Ignore empty traces.
-        # TODO(machenbach): Show some kind of failure on the waterfall on empty
-        # traces without skipping to upload.
-        if not trace['results']:
-          continue
+          # Ignore empty traces.
+          # TODO(machenbach): Show some kind of failure on the waterfall on empty
+          # traces without skipping to upload.
+          if not trace['results']:
+            continue
 
-        values = map(float, trace['results'])
-        average = mean(values)
+          values = map(float, trace['results'])
+          average = mean(values)
 
-        p = self.m.perf_dashboard.get_skeleton_point(
-            test_path, self.revision_number, str(average))
-        p['units'] = trace['units']
-        p['bot'] = category or p['bot']
-        p['supplemental_columns'] = {'a_default_rev': 'r_v8_git',
-                                     'r_v8_git': self.revision}
+          p = self.m.perf_dashboard.get_skeleton_point(
+              test_path, self.revision_number, str(average))
+          p['units'] = trace['units']
+          p['bot'] = category or p['bot']
+          p['supplemental_columns'] = {'a_default_rev': 'r_v8_git',
+                                       'r_v8_git': self.revision}
 
-        # A trace might provide a value for standard deviation if the test
-        # driver already calculated it, otherwise calculate it here.
-        p['error'] = (trace.get('stddev') or
-                      str(standard_deviation(values, average)))
+          # A trace might provide a value for standard deviation if the test
+          # driver already calculated it, otherwise calculate it here.
+          p['error'] = (trace.get('stddev') or
+                        str(standard_deviation(values, average)))
 
-        points.append(p)
+          points.append(p)
 
-    # Send all perf data to the perf dashboard in one step.
-    if points:
-      self.m.perf_dashboard.post(points)
+      # Send all perf data to the perf dashboard in one step.
+      if points:
+        self.m.perf_dashboard.post(points)
 
     if failed:
       raise self.m.step.StepFailure('One or more performance tests failed.')
+
+    return results_mapping
