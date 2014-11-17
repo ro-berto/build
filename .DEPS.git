@@ -17,12 +17,20 @@ deps = {
         Var('git_url') + '/chromium/src/chrome/test/data/reliability.git',
     'build/scripts/tools/deps2git':
         Var('git_url') + '/chromium/tools/deps2git.git',
+    'build/third_party/google_api_python_client':
+        Var('git_url') + '/external/github.com/google/google-api-python-client.git@49d45a6c3318b75e551c3022020f46c78655f365',
     'build/third_party/gsutil':
         Var('git_url') + '/external/gsutil/src.git@5cba434b828da428a906c8197a23c9ae120d2636',
     'build/third_party/gsutil/boto':
         Var('git_url') + '/external/boto.git@98fc59a5896f4ea990a4d527548204fed8f06c64',
+    'build/third_party/httplib2':
+        Var('git_url') + '/external/github.com/jcgregorio/httplib2.git@058a1f9448d5c27c23772796f83a596caf9188e6',
     'build/third_party/lighttpd':
         Var('git_url') + '/chromium/deps/lighttpd.git@9dfa55d15937a688a92cbf2b7a8621b0927d06eb',
+    'build/third_party/oauth2client':
+        Var('git_url') + '/external/github.com/google/oauth2client.git@00c4c8057a34ee142e9729dbeb51855e0282f82e',
+    'build/third_party/uritemplate':
+        Var('git_url') + '/external/github.com/uri-templates/uritemplate-py.git@1e780a49412cdbb273e9421974cb91845c124f3f',
     'depot_tools':
         Var('git_url') + '/chromium/tools/depot_tools.git',
 }
