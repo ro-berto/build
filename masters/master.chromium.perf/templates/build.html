@@ -120,7 +120,7 @@ Build #{{ b.getNumber() }}
       {% set item_class = cycler('alt', '') %}
       {% for l in s.logs %}
         <li class="{{ item_class.next() }}"><a href="{{ l.link }}">{{ l.name }}</a>
-          <a href="https://storage.cloud.google.com/chrome-build-logs-private/logs/{{
+          <a href="https://console.developers.google.com/m/cloudstorage/b/chrome-build-logs-private/o/logs/{{
                    b.getProperty('mastername') }}/{{ b.getBuilder().getName()
                    }}/{{ '%.7d' % b.getNumber() }}/{{ s.name|replace('/', '_') }}.{{
                    l.name|replace('/', '_') }}"
