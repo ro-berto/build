@@ -437,6 +437,11 @@ class ChromiumApi(recipe_api.RecipeApi):
 
   def run_gn(self, use_goma=False):
     gn_args = list(self.c.gn_args)
+
+    # TODO(dpranke): Figure out if we should use the '_x64' thing to
+    # consistent w/ GYP, or drop it to be consistent w/ the other platforms.
+    build_dir = '//out/%s' % self.c.build_config_fs
+
     if self.c.BUILD_CONFIG == 'Debug':
       gn_args.append('is_debug=true')
     if self.c.BUILD_CONFIG == 'Release':
@@ -476,7 +481,7 @@ class ChromiumApi(recipe_api.RecipeApi):
         args=[
             '--root=%s' % str(self.m.path['checkout']),
             'gen',
-            '//out/%s' % self.c.BUILD_CONFIG,
+            build_dir,
             '--args=%s' % ' '.join(gn_args),
         ])
 
