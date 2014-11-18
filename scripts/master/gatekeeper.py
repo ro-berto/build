@@ -64,7 +64,8 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
                      (the default) indicates that all branches are of interest.
 
     @type password: String.
-    @param password: Password for service.  If None, look in .status_password.
+    @param password: Password for service.  If None, look in
+        .chromium_status_password.
     """
     if throttle:
       adjective = 'throttled'
@@ -95,7 +96,8 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
 
     self.password = None
     if tree_status_url:
-      self.password = get_password.Password('.status_password').GetPassword()
+      self.password = get_password.Password(
+          '.chromium_status_password').GetPassword()
 
 
   @staticmethod

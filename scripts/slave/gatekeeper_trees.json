@@ -24,7 +24,7 @@
             "https://build.chromium.org/p/chromium.win"
         ],
         "open-tree": true,
-        "password-file": ".status_password",
+        "password-file": ".chromium_status_password",
         "revision-properties": "got_revision_cp",
         "set-status": true,
         "status-url": "https://chromium-status.appspot.com",
