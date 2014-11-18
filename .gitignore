@@ -40,8 +40,8 @@ twistd.pid
 /scripts/tools/deps2git_internal
 /site_config/.bot_password
 /slave/*/
+/slave/info/*
 !/slave/cert/
-!/slave/info/
 /tags
 /third_party/cbuildbot_chromite
 /third_party/gsutil
