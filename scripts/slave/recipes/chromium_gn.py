@@ -301,7 +301,9 @@ def GenSteps(api):
     api.chromium.c.compile_py.compiler = None
     api.chromium.c.compile_py.goma_dir = None
 
-  api.chromium.compile(targets=['all'], force_clobber=is_windows)
+  # TODO(dpranke): Reenable when the toolchains are right.
+  if not is_windows or ('win8_' in buildername):
+    api.chromium.compile(targets=['all'], force_clobber=is_windows)
 
   if bot_config.get('should_run_gn_gyp_compare', False):
     api.chromium.run_gn_compare()
