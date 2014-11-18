@@ -83,12 +83,8 @@ F('f_android_rel_tests', linux_android().ChromiumAnnotationFactory(
 
 B('Android Clang Builder (dbg)', 'f_android_clang_dbg', 'android', 'android',
   notify_on_missing=True)
-F('f_android_clang_dbg', linux_android().ChromiumAnnotationFactory(
-    target='Debug',
-    annotation_script='src/build/android/buildbot/bb_run_bot.py',
-    factory_properties={
-      'android_bot_id': 'main-clang-builder-dbg',
-    }))
+F('f_android_clang_dbg',
+  m_annotator.BaseFactory('android/builder'))
 
 B('Android Webview AOSP Builder', 'f_android_webview_aosp_rel', 'android',
   'android', notify_on_missing=True)

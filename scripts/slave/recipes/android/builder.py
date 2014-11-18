@@ -41,10 +41,6 @@ BUILDERS = {
       'findbugs': FYIStep,
       'gclient_apply_config': ['android', 'chrome_internal'],
     },
-    'Android Clang Builder (dbg)': {
-      'recipe_config': 'clang_builder',
-      'gclient_apply_config': ['android', 'chrome_internal'],
-    },
   },
   'chromium.linux': {
     'Android Builder (dbg)': {
@@ -72,6 +68,12 @@ BUILDERS = {
       'check_licenses': FYIStep,
       'findbugs': FYIStep,
       'gclient_apply_config': ['android', 'chrome_internal'],
+    },
+    'Android Clang Builder (dbg)': {
+      'recipe_config': 'clang_builder',
+      'gclient_apply_config': ['android', 'chrome_internal'],
+      'check_licenses': NormalStep,
+      'findbugs': NormalStep,
     },
   },
   'tryserver.chromium.linux': {
