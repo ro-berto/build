@@ -203,13 +203,14 @@ def SetupBuildersAndSchedulers(c, builders, slaves, ActiveMaster):
 
   pools = BuildersPools(TRY_SCHEDULER_NAME)
   pools[TRY_SCHEDULER_NAME].extend(builders_by_scheduler[TRY_SCHEDULER_NAME])
-  c['schedulers'].append(TryJobRietveld(
-        name=TRY_SCHEDULER_NAME,
-        code_review_sites={TRY_SCHEDULER_PROJECT:
-                               ActiveMaster.code_review_site},
-        pools=pools,
-        project=TRY_SCHEDULER_PROJECT,
-        filter_master=True))
+  if ActiveMaster.code_review_site:
+    c['schedulers'].append(TryJobRietveld(
+          name=TRY_SCHEDULER_NAME,
+          code_review_sites={TRY_SCHEDULER_PROJECT:
+                                 ActiveMaster.code_review_site},
+          pools=pools,
+          project=TRY_SCHEDULER_PROJECT,
+          filter_master=True))
 
   # Create the BuildFactorys.
   annotator = annotator_factory.AnnotatorFactory()
@@ -302,8 +303,9 @@ def SetupMaster(ActiveMaster):
         lookup=master_utils.UsersAreEmails()))
 
     # Rietveld status push.
-    c['status'].append(
-        TryServerHttpStatusPush(serverUrl=ActiveMaster.code_review_site))
+    if ActiveMaster.code_review_site:
+      c['status'].append(
+          TryServerHttpStatusPush(serverUrl=ActiveMaster.code_review_site))
 
   c['mergeRequests'] = CanMergeBuildRequests
 
