@@ -233,7 +233,7 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
-      'linux_chromium_chromeos_athena_rel': {
+      'linux_chromium_chromeos_athena_rel_ng': {
         'add_nacl_integration_tests': False,
         'add_telemetry_tests': False,
         'based_on_main_waterfall': {

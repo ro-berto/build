@@ -7,7 +7,7 @@
       "--master",
       "tryserver.chromium.linux",
       "--builder",
-      "linux_chromium_chromeos_athena_rel",
+      "linux_chromium_chromeos_athena_rel_ng",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -131,7 +131,7 @@
       "--paths",
       "{\"build\": \"[BUILD]\"}",
       "--properties",
-      "{\"buildername\": \"linux_chromium_chromeos_athena_rel\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
+      "{\"buildername\": \"linux_chromium_chromeos_athena_rel_ng\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
