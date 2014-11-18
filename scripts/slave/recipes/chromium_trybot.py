@@ -7,6 +7,7 @@ DEPS = [
   'chromium',
   'chromium_tests',
   'gclient',
+  'gpu',
   'isolate',
   'itertools',
   'json',
@@ -854,6 +855,25 @@ def GenSteps(api):
     tests.extend(gtest_tests)
     tests.extend(find_test_named('nacl_integration', conditional_tests))
 
+    # TODO(sergiyb): Flag enable_gpu_tests is used to enable GPU tests. This is
+    # however a temporary measure to enable them in GenTests, but not in
+    # production. Once telemetry tests are swarmed and ready for production,
+    # this flag should be removed.
+    if (api.properties['mastername'] == 'tryserver.chromium.mac' and
+        api.properties['buildername'] == 'mac_chromium_rel' and
+        api.properties.get('enable_gpu_tests', False)):
+      tests.extend(api.gpu.create_tests(
+          bot_update_step.presentation.properties['got_revision'],
+          bot_update_step.presentation.properties['got_webkit_revision'],
+          enable_swarming=True,
+          # TODO(sergiyb): This config should be read from an external JSON file
+          # in a custom step, which can then be mocked in the GenTests.
+          swarming_dimension_sets=[{
+              'os': 'Mac',
+              'hidpi': '0',
+              'gpu': '8086:0116'
+          }]))
+
     if api.platform.is_win:
       tests.append(api.chromium.steps.MiniInstallerTest())
 
@@ -1587,4 +1607,19 @@ def GenTests(api):
     api.override_step_data(
       'analyze',
       api.json.output({'invalid_targets': 'invalid target'}))
+  )
+
+  yield (
+    api.test('gpu_tests') +
+    api.properties.tryserver(
+      mastername='tryserver.chromium.mac',
+      buildername='mac_chromium_rel',
+      # TODO(sergiyb): Flag enable_gpu_tests is used to enable GPU tests. This
+      # is however a temporary measure to enable them in GenTests, but not in
+      # production. Once telemetry tests are swarmed and ready for production,
+      # this flag should be removed.
+      enable_gpu_tests=True,
+      swarm_hashes=api.gpu.dummy_swarm_hashes
+    ) +
+    api.platform.name('mac')
   )

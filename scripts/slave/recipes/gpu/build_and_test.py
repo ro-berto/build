@@ -41,7 +41,8 @@ def GenSteps(api):
   if not api.properties.get('skip_compile', False):
     api.gpu.compile_steps()
 
-  api.gpu.run_tests(api)
+  api.gpu.run_tests(api, api.gpu.get_build_revision(),
+                    api.gpu.get_webkit_revision())
 
 def GenTests(api):
   for build_config in ['Release', 'Debug']:
