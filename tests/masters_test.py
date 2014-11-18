@@ -259,6 +259,7 @@ def main(argv):
       'master.tryserver.chromium.win': 'TryServerChromiumWin',
       'master.tryserver.chromium.gpu': 'GpuTryServer',
       'master.tryserver.chromium.perf': 'ChromiumPerfTryServer',
+      'master.tryserver.client.mojo': 'MojoTryServer',
       'master.tryserver.blink': 'BlinkTryServer',
       'master.tryserver.libyuv': 'LibyuvTryServer',
       'master.tryserver.nacl': 'NativeClientTryServer',
