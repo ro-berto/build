@@ -79,3 +79,9 @@ def GenTests(api):
       buildername='Experimental Builder',
       slavename='somehost',
   )
+  yield api.test('svn_mode') + api.properties(
+      mastername='experimental.svn',
+      buildername='Experimental SVN Builder',
+      slavename='somehost',
+      force=1
+  )

@@ -18,11 +18,12 @@ def GenSteps(api):
 
   # TODO(iannucci): Pass the build repo info directly via properties
   repo_name = api.properties['repo_name']
+  force_checkout = api.properties.get('force_checkout', False)
 
   api.gclient.set_config(repo_name)
   api.step.auto_resolve_conflicts = True
 
-  bot_update_step = api.bot_update.ensure_checkout()
+  bot_update_step = api.bot_update.ensure_checkout(force=force_checkout)
   relative_root = '%s/%s' % (api.gclient.c.solutions[0].name, root)
   relative_root = relative_root.strip('/')
   got_revision_property = api.gclient.c.got_revision_mapping[relative_root]
@@ -73,3 +74,14 @@ def GenTests(api):
       api.step_data('presubmit', api.json.output([['chromium_presubmit',
                                                    ['compile']]]))
     )
+
+  yield (
+    api.test('fake_svn_master') +
+    api.properties.tryserver(
+        mastername='experimental.svn',
+        buildername='chromium_presubmit',
+        repo_name='chromium',
+        force_checkout=True) +
+    api.step_data('presubmit', api.json.output([['chromium_presubmit',
+                                                 ['compile']]]))
+  )

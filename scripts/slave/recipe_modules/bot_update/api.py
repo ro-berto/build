@@ -12,7 +12,9 @@ from slave import recipe_util
 
 # This is just for testing, to indicate if a master is using a Git scheduler
 # or not.
-GIT_MASTERS = []
+SVN_MASTERS = [
+    'experimental.svn',
+]
 
 
 def jsonish_to_python(spec, is_top=False):
@@ -157,7 +159,7 @@ class BotUpdateApi(recipe_api.RecipeApi):
       cmd.append('--with_branch_heads')
 
     # Inject Json output for testing.
-    git_mode = self.m.properties.get('mastername') in GIT_MASTERS
+    git_mode = self.m.properties.get('mastername') not in SVN_MASTERS
     first_sln = cfg.solutions[0].name
     step_test_data = lambda: self.test_api.output_json(
         master, builder, slave, root, first_sln, rev_map, git_mode, force,
