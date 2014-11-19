@@ -235,6 +235,24 @@ BUILDERS = {
       },
     }
   },
+  'tryserver.v8': {
+    'builders': {
+      'v8_linux_chromium_gn_rel': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'linux',
+          'TARGET_BITS': 64,
+        },
+        'gclient_apply_config': [
+          'v8_bleeding_edge_git',
+          'chromium_lkcr',
+          'show_v8_revision',
+        ],
+        'root_override': 'src/v8',
+        'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
+      },
+    },
+  },
   'client.v8': {
     'builders': {
       'V8 Linux GN': {
@@ -290,7 +308,8 @@ def GenSteps(api):
   if api.tryserver.is_tryserver:
     api.step.auto_resolve_conflicts = True
 
-  api.bot_update.ensure_checkout(force=True)
+  api.bot_update.ensure_checkout(
+      force=True, patch_root=bot_config.get('root_override'))
 
   api.chromium.runhooks()
 
