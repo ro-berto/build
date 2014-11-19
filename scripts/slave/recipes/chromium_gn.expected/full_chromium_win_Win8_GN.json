@@ -94,5 +94,22 @@
       "--args=is_debug=false cpu_arch=\"x64\""
     ],
     "name": "gn"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\compile.py",
+      "--target",
+      "Release_x64",
+      "--src-dir",
+      "[SLAVE_BUILD]\\src",
+      "--build-tool",
+      "ninja",
+      "--clobber",
+      "--",
+      "all"
+    ],
+    "name": "compile"
   }
 ]
