@@ -476,12 +476,6 @@ class GpuApi(recipe_api.RecipeApi):
     if not self._should_run_test('telemetry_gpu_test'):
       return
 
-    if enable_swarming:
-      # TODO(sergiyb): Add support for swarmed telemetry tests.
-      # We do not return a local test when swarming is enabled, because a
-      # builder will typically have a different GPU than required.
-      return
-
     test_args = ['-v', '--use-devtools-active-port']
     if args:
       test_args.extend(args)
@@ -496,7 +490,8 @@ class GpuApi(recipe_api.RecipeApi):
       extra_browser_args_string += ' ' + ' '.join(extra_browser_args)
     test_args.append(extra_browser_args_string)
 
-    return self.m.chromium.steps.LocalTelemetryGPUTest(
+    return self.m.chromium.steps.TelemetryGPUTest(
         name, chrome_revision, webkit_revision, args=test_args,
-        target_name=target_name,
+        target_name=target_name, enable_swarming=enable_swarming,
+        swarming_dimensions=swarming_dimensions,
         master_class_name=self._master_class_name_for_testing)

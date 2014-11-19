@@ -450,12 +450,9 @@ class AndroidPerfTests(Test):
     return []
 
 
-class SwarmingGTestTest(Test):
-  def __init__(self, name, args=None, shards=1, dimensions=None,
-               target_name=None):
+class SwarmingTest(Test):
+  def __init__(self, name, dimensions=None, target_name=None):
     self._name = name
-    self._args = args or []
-    self._shards = shards
     self._tasks = {}
     self._results = {}
     self._target_name = target_name
@@ -469,12 +466,20 @@ class SwarmingGTestTest(Test):
   def target_name(self):
     return self._target_name or self._name
 
-  def compile_targets(self, _):
-    # <X>_run target depends on <X>, and then isolates it invoking isolate.py.
-    # It is a convention, not a hard coded rule.
-    # Also include name without the _run suffix to help recipes correctly
-    # interpret results returned by "analyze".
-    return [self.target_name, self.target_name + '_run']
+  def create_task(self, api, suffix, args, shards, isolated_hash):
+    """Creates a swarming task. Must be overriden in subclasses.
+
+    Args:
+      api: Caller's API.
+      suffix: Suffix added to the test name.
+      args: Args to be passed to the test.
+      shards: Number of swarming shards that should be used to run test.
+      isolated_hash: Hash of the isolated test to be run.
+
+    Returns:
+      A SwarmingTask object.
+    """
+    raise NotImplementedError()
 
   def pre_run(self, api, suffix):
     """Launches the test on Swarming."""
@@ -494,24 +499,10 @@ class SwarmingGTestTest(Test):
           """,
           args=[self.target_name])
 
-    # For local tests test_args are added inside api.chromium.runtest.
-    args = self._args[:]
-    args.extend(api.chromium.c.runtests.test_args)
+    # Create task.
+    self._tasks[suffix] = self.create_task(api, suffix, isolated_hash)
 
-    # If rerunning without a patch, run only tests that failed.
-    if suffix == 'without patch':
-      failed_tests = sorted(self.failures(api, 'with patch'))
-      args.append('--gtest_filter=%s' % ':'.join(failed_tests))
-
-    # Trigger the test on swarming.
-    self._tasks[suffix] = api.swarming.gtest_task(
-        title=self._step_name(suffix),
-        isolated_hash=isolated_hash,
-        shards=self._shards,
-        test_launcher_summary_output=api.json.gtest_results(
-            add_json_log=False),
-        extra_args=args)
-
+    # Add custom dimensions.
     if self._dimensions:
       self._tasks[suffix].dimensions.update(self._dimensions)
 
@@ -525,6 +516,20 @@ class SwarmingGTestTest(Test):
   def run(self, api, suffix):  # pylint: disable=R0201
     """Not used. All logic in pre_run, post_run."""
     return []
+
+  def collect_task(self, api, task):
+    """Collects results from a swarming task. Must be overriden in subclasses.
+
+    Args:
+      api: Caller's API.
+      task: SwarmingTask previously created by the create_swarming_task.
+
+    Returns:
+      A tuple (valid, failures), where valid is True if valid results are
+      available and failures is a list of names of failed tests (ignored if
+      valid is False).
+    """
+    raise NotImplementedError()
 
   def post_run(self, api, suffix):
     """Waits for launched test to finish and collect the results."""
@@ -543,33 +548,74 @@ class SwarmingGTestTest(Test):
           """,
           args=[self.target_name])
 
-    # Wait for test on swarming to finish. If swarming infrastructure is
-    # having issues, this step produces no valid *.json test summary, and
-    # 'has_valid_results' returns False.
     try:
-      api.swarming.collect_task(self._tasks[suffix])
-    finally:
-      step_result = api.step.active_result
-      self._results[suffix] = step_result.json.gtest_results
+      valid, failures = self.collect_task(api, self._tasks[suffix])
+      self._results[suffix] = {'valid': valid, 'failures': failures}
+    except api.step.StepFailure as e:
+      self._results[suffix] = {'valid': False}
+      raise e
 
   def has_valid_results(self, api, suffix):
     # Test wasn't triggered or wasn't collected.
     if suffix not in self._tasks or not suffix in self._results:
       return False
-    # Test ran, but failed to produce valid *.json.
-    gtest_results = self._results[suffix]
-    if not gtest_results.valid:  # pragma: no cover
-      return False
-    global_tags = gtest_results.raw.get('global_tags', [])
-    return 'UNRELIABLE_RESULTS' not in global_tags
+    return self._results[suffix]['valid']
 
   def failures(self, api, suffix):
     assert self.has_valid_results(api, suffix)
-    return self._results[suffix].failures
+    return self._results[suffix]['failures']
 
   @property
   def uses_swarming(self):
     return True
+
+
+class SwarmingGTestTest(SwarmingTest):
+  def __init__(self, name, args=None, shards=1, dimensions=None,
+               target_name=None):
+    super(SwarmingGTestTest, self).__init__(name, dimensions, target_name)
+    self._args = args or []
+    self._shards = shards
+
+  def compile_targets(self, api):
+    # <X>_run target depends on <X>, and then isolates it invoking isolate.py.
+    # It is a convention, not a hard coded rule.
+    # Also include name without the _run suffix to help recipes correctly
+    # interpret results returned by "analyze".
+    return [self.target_name, self.target_name + '_run']
+
+  def create_task(self, api, suffix, isolated_hash):
+    # For local tests test_args are added inside api.chromium.runtest.
+    args = self._args[:]
+    args.extend(api.chromium.c.runtests.test_args)
+
+    # If rerunning without a patch, run only tests that failed.
+    if suffix == 'without patch':
+      failed_tests = sorted(self.failures(api, 'with patch'))
+      args.append('--gtest_filter=%s' % ':'.join(failed_tests))
+
+    return api.swarming.gtest_task(
+        title=self._step_name(suffix),
+        isolated_hash=isolated_hash,
+        shards=self._shards,
+        test_launcher_summary_output=api.json.gtest_results(add_json_log=False),
+        extra_args=args)
+
+  def collect_task(self, api, task):
+    try:
+      api.swarming.collect_task(task)
+    finally:
+      step_result = api.step.active_result
+
+      gtest_results = step_result.json.gtest_results
+      if not gtest_results:
+        return False, None
+
+      global_tags = gtest_results.raw.get('global_tags', [])
+      if 'UNRELIABLE_RESULTS' in global_tags:
+        return False, None
+
+      return True, gtest_results.failures
 
 
 class GTestTest(Test):
@@ -697,6 +743,46 @@ class PrintPreviewTests(PythonBasedTest):  # pylint: disable=W032
     return targets
 
 
+class TelemetryGPUTest(Test):  # pylint: disable=W0232
+  def __init__(self, name, revision=None, webkit_revision=None,
+               target_name=None, args=None, enable_swarming=False,
+               swarming_dimensions=None, **runtest_kwargs):
+    if enable_swarming:
+      self._test = SwarmingTelemetryGPUTest(name, args=args,
+                                            dimensions=swarming_dimensions,
+                                            target_name=target_name)
+    else:
+      self._test = LocalTelemetryGPUTest(name, revision, webkit_revision,
+                                         args=args, target_name=target_name,
+                                         **runtest_kwargs)
+
+  @property
+  def name(self):
+    return self._test.name
+
+  def compile_targets(self, api):
+    return self._test.compile_targets(api)
+
+  def pre_run(self, api, suffix):
+    return self._test.pre_run(api, suffix)
+
+  def run(self, api, suffix):
+    return self._test.run(api, suffix)
+
+  def post_run(self, api, suffix):
+    return self._test.post_run(api, suffix)
+
+  def has_valid_results(self, api, suffix):
+    return self._test.has_valid_results(api, suffix)
+
+  def failures(self, api, suffix):
+    return self._test.failures(api, suffix)
+
+  @property
+  def uses_swarming(self):
+    return self._test.uses_swarming
+
+
 class LocalTelemetryGPUTest(Test):  # pylint: disable=W0232
   def __init__(self, name, revision, webkit_revision,
                target_name=None, **runtest_kwargs):
@@ -734,13 +820,7 @@ class LocalTelemetryGPUTest(Test):  # pylint: disable=W0232
     kwargs = self._runtest_kwargs.copy()
     kwargs['args'].extend(['--output-format', 'json',
                            '--output-dir', api.raw_io.output_dir()])
-
-    mock_results = {
-      'per_page_values': [{'type': 'failure', 'page_id': 0},
-                          {'type': 'success', 'page_id': 1}],
-      'pages': {'0': {'name': 'Test.Test1'},
-                '1': {'name': 'Test.Test2'}},
-    }
+    canned_results = api.json.test_api.canned_telemetry_gpu_output(False)
 
     try:
       api.isolate.run_telemetry_test(
@@ -751,7 +831,7 @@ class LocalTelemetryGPUTest(Test):  # pylint: disable=W0232
           name=self._step_name(suffix),
           spawn_dbus=True,
           step_test_data=lambda: api.raw_io.test_api.output_dir(
-              {'results.json': json.dumps(mock_results)}),
+              {'results.json': json.dumps(canned_results)}),
           **self._runtest_kwargs)
     finally:
       step_result = api.step.active_result
@@ -780,6 +860,56 @@ class LocalTelemetryGPUTest(Test):  # pylint: disable=W0232
     assert suffix in self._failures
     return self._failures[suffix]
 
+
+class SwarmingTelemetryGPUTest(SwarmingTest):
+  def __init__(self, name, args=None, dimensions=None, target_name=None):
+    super(SwarmingTelemetryGPUTest, self).__init__(name, dimensions,
+                                                   'telemetry_gpu_test')
+    self._args = args
+    self._telemetry_target_name = target_name or name
+
+  def compile_targets(self, _):
+    # TODO(sergiyb): Build 'chrome_shell_apk' instead of 'chrome' on Android.
+    return ['chrome', 'telemetry_gpu_test_run']
+
+  def create_task(self, api, suffix, isolated_hash):
+    # For local tests args are added inside api.chromium.run_telemetry_test.
+    browser_config = api.chromium.c.BUILD_CONFIG.lower()
+    args = [self._telemetry_target_name, '--show-stdout',
+            '--browser=%s' % browser_config] + self._args
+
+    # If rerunning without a patch, run only tests that failed.
+    if suffix == 'without patch':
+      failed_tests = sorted(self.failures(api, 'with patch'))
+      # Telemetry test launcher uses re.compile to parse --page-filter argument,
+      # therefore we escape any special characters in test names.
+      failed_tests = [re.escape(test_name) for test_name in failed_tests]
+      args.append('--page-filter=%s' % '|'.join(failed_tests))
+
+    return api.swarming.telemetry_gpu_task(
+        title=self._step_name(suffix), isolated_hash=isolated_hash,
+        extra_args=args)
+
+  def collect_task(self, api, task):
+    results = api.swarming.collect_task(task)
+
+    try:
+      failures = [results['pages'][str(value['page_id'])]['name']
+                  for value in results['per_page_values']
+                  if value['type'] == 'failure']
+
+      valid = True
+    except (ValueError, KeyError):
+      valid = False
+      failures = None
+
+    if valid:
+      step_result = api.step.active_result
+      step_result.presentation.step_text += api.test_utils.format_step_text([
+        ['failures:', failures]
+      ])
+
+    return valid, failures
 
 class AndroidInstrumentationTest(Test):
   def __init__(self, name, compile_target, test_data=None,

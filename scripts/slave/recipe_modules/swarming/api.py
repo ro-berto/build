@@ -252,6 +252,30 @@ class SwarmingApi(recipe_api.RecipeApi):
         self._gtest_collect_step(test_launcher_summary_output, *args, **kw))
     return task
 
+  def telemetry_gpu_task(self, title, isolated_hash, extra_args=None, **kwargs):
+    """Returns a new SwarmingTask to run an isolated telemetry test on Swarming.
+
+    Swarming recipe module knows how collect JSON file with test execution
+    summary produced by telemetry test launcher. Since telemetry tests do not
+    support sharding, no merging of the results is performed. Parsed JSON
+    summary is returned from the collect step.
+
+    For meaning of the rest of the arguments see 'task' method.
+    """
+    extra_args = list(extra_args or [])
+
+    # Ensure --output-dir is not already passed. We are going to overwrite it.
+    bad_args = any(x.startswith('--output-dir') for x in extra_args)
+    if bad_args:  # pragma: no cover
+      raise ValueError('--output-dir should not be used.')
+
+    extra_args.extend(['--output-format', 'json',
+                       '--output-dir', '${ISOLATED_DIR}'])
+
+    task = self.task(title, isolated_hash, extra_args=extra_args, **kwargs)
+    task.collect_step = self._telemetry_gpu_collect_step
+    return task
+
   def check_client_version(self, step_test_data=None):
     """Yields steps to verify compatibility with swarming_client version."""
     return self.m.swarming_client.ensure_script_version(
@@ -476,6 +500,24 @@ class SwarmingApi(recipe_api.RecipeApi):
           p.step_text += self.m.test_utils.format_step_text([
             ['failures:', gtest_results.failures]
           ])
+
+  def _telemetry_gpu_collect_step(self, task, **kwargs):
+    step_test_data = kwargs.pop('step_test_data', None)
+    if not step_test_data:
+      step_test_data = self.m.json.test_api.canned_telemetry_gpu_output(True)
+
+    args=self._get_collect_cmd_args(task)
+    args.extend(['--task-output-dir', self.m.raw_io.output_dir()])
+
+    result = self.m.python(
+        name=self._get_step_name('', task),
+        script=self.m.swarming_client.path.join('swarming.py'),
+        args=args,
+        step_test_data=lambda: self.m.raw_io.test_api.output_dir(
+            {'results.json': self.m.json.dumps(step_test_data)}),
+        **kwargs)
+
+    return self.m.json.loads(result.raw_io.output_dir['results.json'])
 
   def _get_step_name(self, prefix, task):
     """SwarmingTask -> name of a step of a waterfall.
