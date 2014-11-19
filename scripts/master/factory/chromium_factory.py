@@ -465,10 +465,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddGTestTestStep('ui_base_unittests', fp)
     if R('ui_base_unittests_br'):
       f.AddBuildrunnerGTest('ui_base_unittests', fp)
-    if R('ui_unittests'):
-      f.AddGTestTestStep('ui_unittests', fp)
-    if R('ui_unittests_br'):
-      f.AddBuildrunnerGTest('ui_unittests', fp)
     if R('views', 'views_unittests'):
       f.AddGTestTestStep('views_unittests', fp)
     if R('views_br'):
