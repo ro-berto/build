@@ -291,6 +291,8 @@
       "ChromeShellTest",
       "--test_data",
       "chrome:chrome/test/data/android/device_files",
+      "--flakiness-dashboard-server",
+      "http://test-results.appspot.com",
       "--verbose"
     ],
     "name": "Instrumentation test ChromeShellTest"
@@ -304,7 +306,8 @@
       "-s",
       "breakpad_unittests",
       "--verbose",
-      "--isolate_file_path=[SLAVE_BUILD]/src/breakpad/breakpad_unittests.isolate"
+      "--isolate_file_path=[SLAVE_BUILD]/src/breakpad/breakpad_unittests.isolate",
+      "--flakiness-dashboard-server=http://test-results.appspot.com"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"

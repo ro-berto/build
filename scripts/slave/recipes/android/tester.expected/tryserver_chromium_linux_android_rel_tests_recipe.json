@@ -292,6 +292,8 @@
       "ChromeShellTest",
       "--test_data",
       "chrome:chrome/test/data/android/device_files",
+      "--flakiness-dashboard-server",
+      "http://test-results.appspot.com",
       "--verbose",
       "--release"
     ],

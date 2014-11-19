@@ -224,6 +224,8 @@
       "AndroidWebViewTest",
       "--test_data",
       "webview:android_webview/test/data/device_files",
+      "--flakiness-dashboard-server",
+      "http://test-results.appspot.com",
       "--verbose"
     ],
     "name": "Instrumentation test AndroidWebViewTest"
@@ -251,6 +253,8 @@
       "ChromeShellTest",
       "--test_data",
       "chrome:chrome/test/data/android/device_files",
+      "--flakiness-dashboard-server",
+      "http://test-results.appspot.com",
       "--verbose"
     ],
     "name": "Instrumentation test ChromeShellTest"
@@ -278,6 +282,8 @@
       "ContentShellTest",
       "--test_data",
       "content:content/test/data/android/device_files",
+      "--flakiness-dashboard-server",
+      "http://test-results.appspot.com",
       "--verbose"
     ],
     "name": "Instrumentation test ContentShellTest"
@@ -303,6 +309,8 @@
       "instrumentation",
       "--test-apk",
       "ChromeSyncShellTest",
+      "--flakiness-dashboard-server",
+      "http://test-results.appspot.com",
       "--verbose"
     ],
     "name": "Instrumentation test ChromeSyncShellTest"
@@ -315,7 +323,8 @@
       "gtest",
       "-s",
       "base_unittests",
-      "--verbose"
+      "--verbose",
+      "--flakiness-dashboard-server=http://test-results.appspot.com"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -331,7 +340,8 @@
       "-s",
       "breakpad_unittests",
       "--verbose",
-      "--isolate_file_path=[SLAVE_BUILD]/src/breakpad/breakpad_unittests.isolate"
+      "--isolate_file_path=[SLAVE_BUILD]/src/breakpad/breakpad_unittests.isolate",
+      "--flakiness-dashboard-server=http://test-results.appspot.com"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -346,7 +356,8 @@
       "gtest",
       "-s",
       "cc_unittests",
-      "--verbose"
+      "--verbose",
+      "--flakiness-dashboard-server=http://test-results.appspot.com"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -361,7 +372,8 @@
       "gtest",
       "-s",
       "components_unittests",
-      "--verbose"
+      "--verbose",
+      "--flakiness-dashboard-server=http://test-results.appspot.com"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -376,7 +388,8 @@
       "gtest",
       "-s",
       "content_browsertests",
-      "--verbose"
+      "--verbose",
+      "--flakiness-dashboard-server=http://test-results.appspot.com"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -391,7 +404,8 @@
       "gtest",
       "-s",
       "content_unittests",
-      "--verbose"
+      "--verbose",
+      "--flakiness-dashboard-server=http://test-results.appspot.com"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -406,7 +420,8 @@
       "gtest",
       "-s",
       "events_unittests",
-      "--verbose"
+      "--verbose",
+      "--flakiness-dashboard-server=http://test-results.appspot.com"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -421,7 +436,8 @@
       "gtest",
       "-s",
       "gl_tests",
-      "--verbose"
+      "--verbose",
+      "--flakiness-dashboard-server=http://test-results.appspot.com"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -436,7 +452,8 @@
       "gtest",
       "-s",
       "gpu_unittests",
-      "--verbose"
+      "--verbose",
+      "--flakiness-dashboard-server=http://test-results.appspot.com"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -451,7 +468,8 @@
       "gtest",
       "-s",
       "ipc_tests",
-      "--verbose"
+      "--verbose",
+      "--flakiness-dashboard-server=http://test-results.appspot.com"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -466,7 +484,8 @@
       "gtest",
       "-s",
       "media_unittests",
-      "--verbose"
+      "--verbose",
+      "--flakiness-dashboard-server=http://test-results.appspot.com"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -481,7 +500,8 @@
       "gtest",
       "-s",
       "net_unittests",
-      "--verbose"
+      "--verbose",
+      "--flakiness-dashboard-server=http://test-results.appspot.com"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -496,7 +516,8 @@
       "gtest",
       "-s",
       "sandbox_linux_unittests",
-      "--verbose"
+      "--verbose",
+      "--flakiness-dashboard-server=http://test-results.appspot.com"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -511,7 +532,8 @@
       "gtest",
       "-s",
       "sql_unittests",
-      "--verbose"
+      "--verbose",
+      "--flakiness-dashboard-server=http://test-results.appspot.com"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -526,7 +548,8 @@
       "gtest",
       "-s",
       "sync_unit_tests",
-      "--verbose"
+      "--verbose",
+      "--flakiness-dashboard-server=http://test-results.appspot.com"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -541,7 +564,8 @@
       "gtest",
       "-s",
       "ui_base_unittests",
-      "--verbose"
+      "--verbose",
+      "--flakiness-dashboard-server=http://test-results.appspot.com"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -556,7 +580,8 @@
       "gtest",
       "-s",
       "unit_tests",
-      "--verbose"
+      "--verbose",
+      "--flakiness-dashboard-server=http://test-results.appspot.com"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -571,7 +596,8 @@
       "gtest",
       "-s",
       "webkit_unit_tests",
-      "--verbose"
+      "--verbose",
+      "--flakiness-dashboard-server=http://test-results.appspot.com"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"

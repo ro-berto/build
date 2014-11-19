@@ -138,6 +138,8 @@ BUILDERS = {
 
 }
 
+FLAKINESS_DASHBOARD = 'http://test-results.appspot.com'
+
 def GenSteps(api):
   # Required for us to be able to use filter.
   api.chromium_android.set_config('base_config')
@@ -211,14 +213,17 @@ def GenSteps(api):
   with api.step.defer_results():
     for suite in instrumentation_tests:
       api.chromium_android.run_instrumentation_suite(
-          suite['test'], verbose=True, **suite.get('kwargs', {}))
+          suite['test'], verbose=True,
+          flakiness_dashboard=FLAKINESS_DASHBOARD,
+          **suite.get('kwargs', {}))
 
     for suite, isolate_path in unittests:
       if isolate_path:
         isolate_path = api.path['checkout'].join(*isolate_path)
       api.chromium_android.run_test_suite(
           suite,
-          isolate_file_path=isolate_path)
+          isolate_file_path=isolate_path,
+          flakiness_dashboard=FLAKINESS_DASHBOARD)
 
     if bot_config.get('telemetry_unittests'):
       api.chromium.run_telemetry_unittests()
