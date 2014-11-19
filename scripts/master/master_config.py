@@ -106,7 +106,7 @@ class Helper(object):
   def Update(self, c):
     global_schedulers = dict((s.name, s) for s in c['schedulers']
                              if s.name.startswith('global_'))
-    assert not (set(global_schedulers) & set(self._schedulers))
+    assert not set(global_schedulers) & set(self._schedulers)
 
     for builder in self._builders:
       # Update the schedulers with the builder.

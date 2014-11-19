@@ -5,7 +5,6 @@
 """Twisted implementation of an interface to the Gerrit REST API and
 associated JSON objects."""
 
-
 import json
 import urlparse
 
@@ -27,6 +26,7 @@ class GerritJsonResponse(JsonResponse):
   This class strips that off before allowing standard JSON processing to
   happen on the remainder of the body.
   """
+  # pylint: disable=no-init
 
   def _processBody(self, body):
     if not body.startswith(GERRIT_JSON_HEADER):
@@ -60,7 +60,7 @@ class GerritAgent(Agent):
     if (kwargs.get('authorizer') is None) and (is_https):
       log.msg("Using default 'NETRC' authorizer for HTTPS connection")
       kwargs['authorizer'] = NETRCAuthorizer()
-    super(GerritAgent, self).__init__(host, *args, **kwargs)
+    Agent.__init__(self, host, *args, **kwargs)
 
   # Overrides 'Agent._buildRequest'
   def _buildRequest(self, path, headers):
@@ -111,7 +111,8 @@ class GerritAgent(Agent):
     if default_json:
       protocol = GerritJsonResponse.Get
 
-    d = super(GerritAgent, self).request(
+    d = Agent.request(
+        self,
         method,
         path,
         **kwargs)

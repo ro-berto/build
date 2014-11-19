@@ -48,7 +48,7 @@ class AnnotatorFactory(object):
     cmd_obj.AddAnnotatedScript(
       factory_properties, timeout=timeout, max_time=max_time)
 
-    for t in (triggers or []):
+    for t in triggers or []:
       factory.addStep(commands.CreateTriggerStep(
           t, trigger_copy_properties=['swarm_hashes']))
 

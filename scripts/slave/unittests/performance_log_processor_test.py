@@ -55,6 +55,7 @@ class LogProcessorTest(unittest.TestCase):
     # Set custom percentiles. This will be used by GraphingLogProcessor, which
     # has and uses a private member attribute called _percentiles.
     if hasattr(processor, '_percentiles'):
+      # pylint: disable=protected-access
       processor._percentiles = TEST_PERCENTILES
 
     return processor

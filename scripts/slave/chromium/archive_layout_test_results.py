@@ -218,7 +218,7 @@ def archive_layout(options, args):
   else:
     # Where to save layout test results.
     dest_parent_dir = os.path.join(archive_utils.Config.www_dir_base,
-        results_dir_basename.replace('-','_'), build_name)
+        results_dir_basename.replace('-', '_'), build_name)
     dest_dir = os.path.join(dest_parent_dir, last_change)
 
     _MaybeMakeDirectoryOnArchiveHost(dest_dir)

@@ -17,17 +17,6 @@ from master import chromium_notifier
 
 class ChromiumNotifierTest(unittest.TestCase):
 
-  class fakeStep():
-    def __init__(self, name, text=None):
-      self.name = name
-      self.text = text
-
-    def getName(self):
-      return self.name
-
-    def getText(self):
-      return self.text
-
   def testChromiumNotifierCreation(self):
     notifier = chromium_notifier.ChromiumNotifier(
         fromaddr='buildbot@test',

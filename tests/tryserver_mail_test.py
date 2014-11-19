@@ -54,6 +54,7 @@ class TestMailNotifier(unittest.TestCase):
 
     steps = []
     for step_cfg in step_cfgs:
+      # pylint: disable=cell-var-from-loop
       step = mock.Mock(BuildStepStatus)
       step.urls = {}
       step_cfg.update({
@@ -169,6 +170,7 @@ def test_from_files(infile, expected, name):
   env = {'results': results, 'step': step_helper}
   def inner(self):
     with open(infile) as f:
+      # pylint: disable=eval-used
       data = eval(f.read(), {}, env)
     data['build_step']['getProperties()'] = FakeBuild(
         data['build_step_props']).getProperties()

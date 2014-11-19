@@ -34,7 +34,7 @@ class NativeClientPortsCommands(commands.FactoryCommands):
         'c:\\cygwin\\usr\\bin;'
         'c:\\WINDOWS\\system32;'
         'c:\\WINDOWS;'
-        'e:\\b\depot_tools;'
+        'e:\\b\\depot_tools;'
       ),
     }
     self._runhooks_env = None

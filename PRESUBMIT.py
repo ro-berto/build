@@ -19,6 +19,7 @@ def CommonChecks(input_api, output_api):
       r'.*slave/.*/build.*/.*',
       r'.*slave/.*/isolate.*/.*',
       r'.*depot_tools/.*',
+      r'.*goma/.*',
       r'.*scripts/release/.*',
       r'.*scripts/slave/recipe_modules/.*',
       r'.*scripts/gsd_generate_index/.*',

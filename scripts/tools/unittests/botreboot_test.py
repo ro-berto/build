@@ -54,14 +54,14 @@ class BotRebootTest(auto_stub.TestCase):
     super(BotRebootTest, self).setUp()
     self.log_messages = []
     self.subprocess_calls = []
-    if(hasattr(os.environ, 'TESTING_MASTER')):
+    if hasattr(os.environ, 'TESTING_MASTER'):
       del os.environ['TESTING_MASTER']
     self.mock(slave.reboot_tools, 'Log', self.MockLog)
     self.mock(subprocess, 'call', self.MockCall)
     self.mock(slave.reboot_tools, 'Sleep', MockSleep)
 
   def tearDown(self):
-    if(hasattr(os.environ, 'TESTING_MASTER')):
+    if hasattr(os.environ, 'TESTING_MASTER'):
       del os.environ['TESTING_MASTER']
     super(BotRebootTest, self).tearDown()
 

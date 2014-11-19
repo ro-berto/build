@@ -115,7 +115,7 @@ def KillProcessesUsingCurrentDirectory(handle_exe):
       continue
 
     if '.exe' in line:
-      match = re.match('.*pid: (\d+).*', line)
+      match = re.match(r'.*pid: (\d+).*', line)
       if match:
         pid = int(match.group(1))
 

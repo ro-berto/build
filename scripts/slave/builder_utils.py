@@ -255,14 +255,14 @@ def ListSteps(my_factory):
   return steps
 
 
-class FakeMaster:
+class FakeMaster(object):
   def __init__(self, mastername):
     self.db = None
     self.master_name = mastername
     self.master_incarnation = None
 
 
-class FakeBotmaster:
+class FakeBotmaster(object):
   def __init__(self, mastername, properties=Properties()):
     self.master = FakeMaster(mastername)
     self.parent = self

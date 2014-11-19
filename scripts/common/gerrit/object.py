@@ -94,19 +94,19 @@ class LabelInfo(GerritObject):
 
   def isApproved(self):
     """Returns 'True' if this label has an 'approved' field"""
-    return ('approved' in self.keys())
+    return 'approved' in self.keys()
 
   def isRejected(self):
     """Returns 'True' if this label has a 'rejected' field"""
-    return ('rejected' in self.keys())
+    return 'rejected' in self.keys()
 
   def isRecommended(self):
     """Returns 'True' if this label has a 'recommended' field"""
-    return ('recommended' in self.keys())
+    return 'recommended' in self.keys()
 
   def isDisliked(self):
     """Returns 'True' if this label has a 'disliked' field"""
-    return ('disliked' in self.keys())
+    return 'disliked' in self.keys()
 
 
 class AccountInfo(GerritObject):
@@ -138,7 +138,7 @@ class ApprovalInfo(AccountInfo):
   @property
   def isPermitted(self):
     """Returns whether or not the user is permitted to vote on this label."""
-    return (self.get('value') is not None)
+    return self.get('value') is not None
 
   @property
   def date(self):

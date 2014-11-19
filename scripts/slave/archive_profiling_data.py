@@ -64,9 +64,9 @@ def Archive(revision, build_dir, builder_name, test_name):
     print 'No profiling_file: ', src_profiling_file
     return True
 
-  revision = re.sub('\W+', '_', revision)
-  builder_name = re.sub('\W+', '_', builder_name)
-  test_name = re.sub('\W+', '_', test_name)
+  revision = re.sub(r'\W+', '_', revision)
+  builder_name = re.sub(r'\W+', '_', builder_name)
+  test_name = re.sub(r'\W+', '_', test_name)
 
   view_url = 'https://commondatastorage.googleapis.com/' + GOOGLE_STORAGE_BUCKET
   print 'See %s for this run\'s test results' % view_url

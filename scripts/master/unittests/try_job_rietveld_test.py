@@ -5,8 +5,8 @@
 
 """try_job_rietveld.py testcases."""
 
-import test_env
-from common import find_depot_tools
+import test_env # pylint: disable=unused-import
+from common import find_depot_tools # pylint: disable=unused-import
 
 import datetime
 import json
@@ -50,26 +50,26 @@ TEST_RIETVELD_PAGES = [
 
 class MockBuildSetsDB(object):
 
-    def __init__(self):
-      self._buildset_props = {}
+  def __init__(self):
+    self._buildset_props = {}
 
-    def addBuildSetProperties(self, bsid, buildset_props):
-      self._buildset_props[bsid] = buildset_props
+  def addBuildSetProperties(self, bsid, buildset_props):
+    self._buildset_props[bsid] = buildset_props
 
-    def getBuildsetProperties(self, bsid):
-      return self._buildset_props[bsid]
+  def getBuildsetProperties(self, bsid):
+    return self._buildset_props[bsid]
 
-    def getRecentBuildsets(self, count):
-      bsids_desc = sorted(self._buildset_props.keys(), reverse=True)
-      return [{'bsid': bsid} for bsid in bsids_desc][:count]
+  def getRecentBuildsets(self, count):
+    bsids_desc = sorted(self._buildset_props.keys(), reverse=True)
+    return [{'bsid': bsid} for bsid in bsids_desc][:count]
 
 
 class MockDBCollection(object):
 
-    buildsets = None
+  buildsets = None
 
-    def __init__(self):
-      self.buildsets = MockBuildSetsDB()
+  def __init__(self):
+    self.buildsets = MockBuildSetsDB()
 
 
 class MockBotMaster(object):
@@ -93,10 +93,11 @@ class MockTryJobRietveld(object):
     self.submitted_jobs = []
 
   def SubmitJobs(self, jobs):
-    self.submitted_jobs.extend(jobs);
+    self.submitted_jobs.extend(jobs)
     return defer.succeed(None)
 
-  def has_valid_user_list(self):
+  @staticmethod
+  def has_valid_user_list():
     return True
 
   def addService(self, service):
@@ -114,14 +115,16 @@ class MockValidUserPoller(object):
   def __init__(self, interval):
     pass
 
-  def contains(self, email):
+  @staticmethod
+  def contains(_):
     return True
 
   def valid(self):
     return self.mockValid
 
-  def setServiceParent(self, parent):
-    MockValidUserPoller.parent = parent
+  @classmethod
+  def setServiceParent(cls, parent):
+    cls.parent = parent
 
 
 class MockRietveldPollerWithCache(object):
@@ -135,8 +138,9 @@ class MockRietveldPollerWithCache(object):
   def poll(self):
     pass
 
-  def setServiceParent(self, parent):
-    MockRietveldPollerWithCache.parent = parent
+  @classmethod
+  def setServiceParent(cls, parent):
+    cls.parent = parent
 
 
 class MockServiceParent(object):
@@ -147,7 +151,7 @@ class MockServiceParent(object):
     pass
 
   def addService(self, service):
-    service.master = MockServiceParent.master
+    service.master = self.master
 
 
 class RietveldPollerWithCacheTest(auto_stub.TestCase):
@@ -193,6 +197,7 @@ class RietveldPollerWithCacheTest(auto_stub.TestCase):
     super(RietveldPollerWithCacheTest, self).setUp()
 
   def testRequestsAllPagesWithJobsFromRietveld(self):
+    # pylint: disable=protected-access
     poller = try_job_rietveld._RietveldPollerWithCache(TEST_BASE_URL, 60)
     poller.master = self._mockMaster
     poller.setServiceParent(self._mockTJR)
@@ -200,6 +205,7 @@ class RietveldPollerWithCacheTest(auto_stub.TestCase):
     self.assertEqual(self._numRequests, len(TEST_RIETVELD_PAGES) + 1)
 
   def testSubmitsNewJobsAndIgnoresOldOnes(self):
+    # pylint: disable=protected-access
     poller = try_job_rietveld._RietveldPollerWithCache(TEST_BASE_URL, 60)
     poller.master = self._mockMaster
     poller.setServiceParent(self._mockTJR)
@@ -209,6 +215,7 @@ class RietveldPollerWithCacheTest(auto_stub.TestCase):
     self.assertEquals(self._mockTJR.submitted_jobs[1]['key'], 'test_key_2')
 
   def testDoesNotResubmitPreviousJobs(self):
+    # pylint: disable=protected-access
     poller = try_job_rietveld._RietveldPollerWithCache(TEST_BASE_URL, 60)
     poller.master = self._mockMaster
     poller.setServiceParent(self._mockTJR)
@@ -218,6 +225,7 @@ class RietveldPollerWithCacheTest(auto_stub.TestCase):
     self.assertEquals(len(self._mockTJR.submitted_jobs), 0)
 
   def testDoesNotResubmitJobsAlreadyOnMaster(self):
+    # pylint: disable=protected-access
     poller = try_job_rietveld._RietveldPollerWithCache(TEST_BASE_URL, 60)
     self._mockMaster.db.buildsets.addBuildSetProperties(
         42, {'try_job_key': ('test_key_1', 'Try bot')})
@@ -228,6 +236,7 @@ class RietveldPollerWithCacheTest(auto_stub.TestCase):
     self.assertEquals(self._mockTJR.submitted_jobs[0]['key'], 'test_key_2')
 
   def testShouldLimitNumberOfBuildsetsUsedForInit(self):
+    # pylint: disable=protected-access
     self.mock(try_job_rietveld, 'MAX_RECENT_BUILDSETS_TO_INIT_CACHE', 1)
     poller = try_job_rietveld._RietveldPollerWithCache(TEST_BASE_URL, 60)
     self._mockMaster.db.buildsets.addBuildSetProperties(
@@ -241,6 +250,7 @@ class RietveldPollerWithCacheTest(auto_stub.TestCase):
     self.assertEquals(self._mockTJR.submitted_jobs[0]['key'], 'test_key_1')
 
   def testDoesNotPerformPollWhenThereAreNoValidUsers(self):
+    # pylint: disable=protected-access
     self.mock(self._mockTJR, 'has_valid_user_list', lambda: False)
     poller = try_job_rietveld._RietveldPollerWithCache(TEST_BASE_URL, 60)
     poller.master = self._mockMaster

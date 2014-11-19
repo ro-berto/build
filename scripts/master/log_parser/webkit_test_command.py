@@ -13,7 +13,7 @@ from buildbot.status import builder
 
 def _BasenameFromPath(path):
   """Extracts the basename of either a Unix- or Windows- style path,
-  assuming it contains either \ or / but not both.
+  assuming it contains either \\ or / but not both.
   """
   short_path = path.split('\\')[-1]
   short_path = short_path.split('/')[-1]
@@ -52,13 +52,13 @@ class TestObserver(buildstep.LogLineObserver):
     self._section_end = '-' * 78
     self._summary_end = '=> Tests '
 
-    self._test_path_line = re.compile('  (\S+)')
+    self._test_path_line = re.compile(r'  (\S+)')
 
     self._summary_start = re.compile(
-        '=> Tests to be fixed \((\d+)\):')
-    self._summary_skipped = re.compile('(\d+) skipped')
+        r'=> Tests to be fixed \((\d+)\):')
+    self._summary_skipped = re.compile(r'(\d+) skipped')
 
-    self._master_name_re = re.compile('--master-name ([^ ]*)')
+    self._master_name_re = re.compile(r'--master-name ([^ ]*)')
     self.master_name = ''
 
   def outLineReceived(self, line):

@@ -74,24 +74,24 @@ class GTestLogParser(object):
     # This regexp also matches SomeName.SomeTest/1, which should be harmless.
     test_name_regexp = r'((\w+/)?\w+\.\w+(/\d+)?)'
 
-    self._master_name_re = re.compile('\[Running for master: "([^"]*)"')
+    self._master_name_re = re.compile(r'\[Running for master: "([^"]*)"')
     self.master_name = ''
 
-    self._test_name    = re.compile(test_name_regexp)
-    self._test_start   = re.compile('\[\s+RUN\s+\] ' + test_name_regexp)
-    self._test_ok      = re.compile('\[\s+OK\s+\] ' + test_name_regexp)
-    self._test_fail    = re.compile('\[\s+FAILED\s+\] ' + test_name_regexp)
-    self._test_passed  = re.compile('\[\s+PASSED\s+\] \d+ tests?.')
+    self._test_name = re.compile(test_name_regexp)
+    self._test_start = re.compile(r'\[\s+RUN\s+\] ' + test_name_regexp)
+    self._test_ok = re.compile(r'\[\s+OK\s+\] ' + test_name_regexp)
+    self._test_fail = re.compile(r'\[\s+FAILED\s+\] ' + test_name_regexp)
+    self._test_passed = re.compile(r'\[\s+PASSED\s+\] \d+ tests?.')
     self._run_test_cases_line = re.compile(
-        '\[\s*\d+\/\d+\]\s+[0-9\.]+s ' + test_name_regexp + ' .+')
+        r'\[\s*\d+\/\d+\]\s+[0-9\.]+s ' + test_name_regexp + ' .+')
     self._test_timeout = re.compile(
-        'Test timeout \([0-9]+ ms\) exceeded for ' + test_name_regexp)
-    self._disabled     = re.compile('\s*YOU HAVE (\d+) DISABLED TEST')
-    self._flaky        = re.compile('\s*YOU HAVE (\d+) FLAKY TEST')
+        r'Test timeout \([0-9]+ ms\) exceeded for ' + test_name_regexp)
+    self._disabled = re.compile(r'\s*YOU HAVE (\d+) DISABLED TEST')
+    self._flaky = re.compile(r'\s*YOU HAVE (\d+) FLAKY TEST')
 
     self._suppression_start = re.compile(
-        'Suppression \(error hash=#([0-9A-F]+)#\):')
-    self._suppression_end   = re.compile('^}\s*$')
+        r'Suppression \(error hash=#([0-9A-F]+)#\):')
+    self._suppression_end = re.compile(r'^}\s*$')
 
     self._retry_message = re.compile('RETRYING FAILED TESTS:')
     self.retrying_failed = False

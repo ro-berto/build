@@ -43,7 +43,7 @@ class Master(config_private.Master):
   v8_branch_url = (v8_url + '/branches')
   v8_bleeding_edge = v8_branch_url + '/bleeding_edge'
   v8_trunk = v8_url + '/trunk'
-  es5conform_root_url =  "https://es5conform.svn.codeplex.com/svn/"
+  es5conform_root_url = "https://es5conform.svn.codeplex.com/svn/"
   es5conform_revision = 62998
 
   dart_url = config_private.Master.googlecode_url % 'dart'

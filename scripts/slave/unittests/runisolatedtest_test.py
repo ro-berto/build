@@ -37,14 +37,14 @@ class TestAll(unittest.TestCase):
 
     data = {
       'version': '1.0',
-      'command': [ '../testing/test_env.py',
-                   r'..\out\Release/browser_test.exe'],
-      'files': { r'out\Release\testdata': {} },
+      'command': ['../testing/test_env.py',
+                  r'..\out\Release/browser_test.exe'],
+      'files': {r'out\Release\testdata': {}},
 
       'variables' : {
-        'EXECUTABLE_SUFFIX' : '.exe',
-        'OS' : 'win',
-        'PRODUCT_DIR' : '../out/Release'
+        'EXECUTABLE_SUFFIX' :'.exe',
+        'OS' :'win',
+        'PRODUCT_DIR' :'../out/Release'
       },
     }
     with open(isolated, 'w') as f:
@@ -88,9 +88,9 @@ class TestAll(unittest.TestCase):
 
     expected_data = {
       'version': '1.0',
-      'command': [ '../testing/test_env.py',
-                   r'..\out\Release/browser_test.exe'],
-      'files': { r'out\Release\testdata': {} },
+      'command': ['../testing/test_env.py',
+                  r'..\out\Release/browser_test.exe'],
+      'files': {r'out\Release\testdata': {}},
       'variables' : {
         'EXECUTABLE_SUFFIX' : '.exe',
         'OS' : 'win',

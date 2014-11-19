@@ -103,7 +103,7 @@ class TestRepoPoller(unittest.TestCase):
       # when n==0 we're creating master, and 'checkout -b' will fail
       self.assertFalse(_cmd(['git', 'checkout', '-q', '-b', branch],
                             manifest_dir)
-                       and n!=0)
+                       and n != 0)
       fh = open(os.path.join(manifest_dir, 'default.xml'), 'w')
       fh.write(REPO_MANIFEST %
                {'branch': branch,
@@ -124,7 +124,7 @@ class TestRepoPoller(unittest.TestCase):
       for x, git_dir in enumerate(git_dirs):
         # when n==0 we're creating master, and 'checkout -b' will fail
         self.assertFalse(_cmd(['git', 'checkout', '-q', '-b', branch], git_dir)
-                         and n!=0)
+                         and n != 0)
         fh = open(os.path.join(git_dir, 'file%d.txt' % x), 'w')
         fh.write('Contents of file%d.txt in branch %s\n' % (x, branch))
         fh.close()

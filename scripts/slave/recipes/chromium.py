@@ -133,7 +133,7 @@ def GenTests(api):
       'Linux Tests': {
         'gtest_tests': [
           {'test': 'browser_tests',
-           'swarming': {'can_use_on_swarming_builders': True } },
+           'swarming': {'can_use_on_swarming_builders': True}},
         ],
       },
     }))

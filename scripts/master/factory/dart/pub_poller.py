@@ -69,7 +69,7 @@ class PubPoller(base.PollingChangeSource):
                                           self.versions[package])
           self.versions[package] = pulled_versions
           self.make_change(package, version)
-      except Exception :
+      except Exception:
         log.msg('Could not get version for package %s: %s' %
                 (package, traceback.format_exc()))
 
@@ -89,7 +89,7 @@ class PubPoller(base.PollingChangeSource):
         count = len(package_info['versions'])
         log.msg('Initial count for %s is %s' % (package, count))
         self.versions[package] = set(package_info['versions'])
-      except Exception :
+      except Exception:
         log.msg('Could not set initial value for package %s %s' %
                 (package, traceback.format_exc()))
         self.versions[package] = VALUE_NOT_SET

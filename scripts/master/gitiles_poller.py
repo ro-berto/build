@@ -124,7 +124,7 @@ class GitilesRevisionComparator(RevisionComparator):
 class GitilesPoller(PollingChangeSource):
   """Polls a git repository using the gitiles web interface. """
 
-  git_svn_id_re = re.compile('^git-svn-id: (.*)@([0-9]+) [0-9a-fA-F\-]*$')
+  git_svn_id_re = re.compile(r'^git-svn-id: (.*)@([0-9]+) [0-9a-fA-F\-]*$')
   re_pattern_type = type(re.compile(''))
 
   def __init__(
@@ -246,7 +246,7 @@ class GitilesPoller(PollingChangeSource):
     commit_msg = commit_json['message']
     repo_url = self.repo_url
     revision = commit_json['commit']
-    properties = { 'git_revision': revision }
+    properties = {'git_revision': revision}
     if self.svn_mode:
       revision = None
       for line in reversed(commit_msg.splitlines()):
@@ -352,7 +352,7 @@ class GitilesPoller(PollingChangeSource):
                'on branch %s:\n%s' % (
                    commit['commit'], branch, traceback.format_exc()))
         log.err(msg)
-    else:
+    if not all_commits:
       log.msg('GitilesPoller: No new commits.')
 
   def describe(self):

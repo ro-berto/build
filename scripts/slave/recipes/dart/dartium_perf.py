@@ -40,7 +40,7 @@ PERF_TESTS = [
 def GenSteps(api):
   config_vals = {}
   config_vals.update(
-    dict((str(k),v) for k,v in api.properties.iteritems() if k.isupper())
+    dict((str(k), v) for k, v in api.properties.iteritems() if k.isupper())
   )
 
   api.chromium.set_config('chromium', **config_vals)

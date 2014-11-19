@@ -106,7 +106,7 @@ def GenSteps(api):
       args=[adb, DEVICE_ROOT, test_data])
 
   lib_root = build_root.join('libs', 'armeabi-v7a')
-  api.step('push_so', [ adb, 'push', lib_root, DEVICE_ROOT])
+  api.step('push_so', [adb, 'push', lib_root, DEVICE_ROOT])
 
   step_result = api.python.inline(
       'adb_wrap', r"""

@@ -112,8 +112,8 @@ Note: t is replaced with 'tryserver', 'c' with chromium' and
   if options.kind:
     def kind_interested_in_any(builders):
       if isinstance(builders, basestring):
-        return any(builders.find(k) >=0 for k in options.kind)
-      return any(any(x.find(k) >=0 for k in options.kind) for x in builders)
+        return any(builders.find(k) >= 0 for k in options.kind)
+      return any(any(x.find(k) >= 0 for k in options.kind) for x in builders)
     slaves = [s for s in slaves if kind_interested_in_any(s.get('builder'))]
 
   if options.builder:

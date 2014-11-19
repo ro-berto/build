@@ -130,7 +130,7 @@ def shard_slaves(slaves, max_per_shard):
   return shards
 
 
-def run_ssh_command(slavepair, worklog, status,  errorlog, options):
+def run_ssh_command(slavepair, worklog, status, errorlog, options):
   """Execute an ssh command as chrome-bot."""
   slave, commands = slavepair
   needs_connect = slave.endswith('-c4')

@@ -136,7 +136,7 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
         if build_branch not in self.interesting_branches:
           return False
         # otherwise continue
-      except(KeyError):
+      except KeyError:
         pass  # Continue on if the 'branch' property is not defined.
 
     # Check if the slave is still alive. We should not close the tree for

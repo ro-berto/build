@@ -51,7 +51,7 @@ def main(argv):
     if afile in device_file_sizes and device_file_sizes[afile] == size:
       print afile + " found on device, and size matches, skipping"
       continue
-    files_to_transfer.append(os.path.join(local_root,  afile))
+    files_to_transfer.append(os.path.join(local_root, afile))
 
   for afile in files_to_transfer:
     print afile + " not found on device, pushing"

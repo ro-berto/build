@@ -9,7 +9,7 @@ import sys
 
 
 def main():
-  print('Heart beat succeeded on %s.' % sys.platform)
+  print 'Heart beat succeeded on %s.' % sys.platform
   return 0
 
 

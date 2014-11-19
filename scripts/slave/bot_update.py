@@ -595,8 +595,8 @@ def ensure_no_checkout(dir_names, scm_dirname):
   scm_dirname is expected to be either ['.svn', '.git']
   """
   assert scm_dirname in ['.svn', '.git', '*']
-  has_checkout = any(map(lambda dir_name: path.exists(
-      path.join(os.getcwd(), dir_name, scm_dirname)), dir_names))
+  has_checkout = any(path.exists(path.join(os.getcwd(), dir_name, scm_dirname))
+                     for dir_name in dir_names)
 
   if has_checkout or scm_dirname == '*':
     build_dir = os.getcwd()
@@ -623,7 +623,7 @@ def gclient_sync(with_branch_heads, shallow):
   os.close(fd)
   gclient_bin = 'gclient.bat' if sys.platform.startswith('win') else 'gclient'
   cmd = [gclient_bin, 'sync', '--verbose', '--reset', '--force',
-         '--ignore_locks', '--output-json', gclient_output_file ,
+         '--ignore_locks', '--output-json', gclient_output_file,
          '--nohooks', '--noprehooks', '--delete_unversioned_trees']
   if with_branch_heads:
     cmd += ['--with_branch_heads']
@@ -658,7 +658,7 @@ def get_commit_message_footer_map(message):
   for line in message.strip().splitlines():
     line = line.strip()
     if len(line) == 0:
-      del(lines[:])
+      del lines[:]
       continue
     lines.append(line)
 

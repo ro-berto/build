@@ -170,7 +170,7 @@ class GClientFactory(object):
         not factory_properties.get('no_kill')):
       factory_cmd_obj.AddSvnKillStep()
     extra_args = None
-    if (factory_properties.get('goma_canary')):
+    if factory_properties.get('goma_canary'):
       extra_args = ['--revision', 'build/goma@HEAD']
     factory_cmd_obj.AddUpdateScriptStep(
         gclient_jobs=factory_properties.get('update_scripts_gclient_jobs'),

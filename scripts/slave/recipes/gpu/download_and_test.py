@@ -84,7 +84,7 @@ def GenTests(api):
 
   # Tests that we only run the gpu_unittests isolate if that's all
   # that analyze said to rebuild.
-  angle_unittests_hash = { x: all_hashes[x] for x in ['gpu_unittests'] }
+  angle_unittests_hash = {x: all_hashes[x] for x in ['gpu_unittests']}
   yield (
     api.test('analyze_runs_only_gpu_unittests') +
     api.properties.tryserver(
@@ -125,3 +125,4 @@ def GenTests(api):
     ) +
     api.platform.name('mac')
   )
+

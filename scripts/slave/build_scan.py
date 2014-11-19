@@ -48,8 +48,8 @@ def find_new_builds(master_url, root_json, build_db):
 
   last_finished_build = {}
   for builder, builds in build_db.masters[master_url].iteritems():
-    finished = [int(y[0]) for y in filter(
-        lambda x: x[1].finished, builds.iteritems())]
+    finished = [int(y[0]) for y in builds.iteritems()
+                if y[1].finished]
     if finished:
       last_finished_build[builder] = max(finished)
 

@@ -218,7 +218,7 @@ def load_gatekeeper_config(filename):
 
         # Inherit any values from the categories.
         all_categories = (builder.get('categories', []) +
-                          master_section.get( 'categories', []))
+                          master_section.get('categories', []))
         for c in all_categories:
           for k in builder_keys:
             if k in strings:

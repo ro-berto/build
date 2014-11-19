@@ -96,12 +96,12 @@ class BotUpdateTest(unittest.TestCase):
 
   SVN_BOILERPLATE = [
     ('dep1', [
-      ('First commit', { 'path1/file1.txt': 'dep1 file 1 line 1.' }),
-      ('Second commit', { 'path2/file2.txt': 'dep1 file 2 line 1.' }),
+      ('First commit', {'path1/file1.txt': 'dep1 file 1 line 1.'}),
+      ('Second commit', {'path2/file2.txt': 'dep1 file 2 line 1.'}),
     ]),
     ('dep2', [
-      ('First commit', { 'path1/file1.txt': 'dep2 file 1 line 1.' }),
-      ('Second commit', { 'path2/file2.txt': 'dep2 file 2 line 1.' }),
+      ('First commit', {'path1/file1.txt': 'dep2 file 1 line 1.'}),
+      ('Second commit', {'path2/file2.txt': 'dep2 file 2 line 1.'}),
     ]),
     ('top', [
       ('DEPS commit', {
@@ -115,8 +115,8 @@ class BotUpdateTest(unittest.TestCase):
               'top/ext/dep1': '%(dep1_url)s@' + Var('dep1_revision'),
               'top/ext/dep2': '%(dep2_url)s@' + Var('dep2_revision'),
             }
-            ''') }),
-      ('.DEPS.git commit', { '.DEPS.git': dedent('''\
+            ''')}),
+      ('.DEPS.git commit', {'.DEPS.git': dedent('''\
            vars = {
              'dep1_revision': '%(dep1_git_revision_0)s',
              'dep2_revision': '%(dep2_git_revision_1)s',
@@ -125,18 +125,18 @@ class BotUpdateTest(unittest.TestCase):
              'top/ext/dep1': '%(dep1_mirror_url)s@' + Var('dep1_revision'),
              'top/ext/dep2': '%(dep2_mirror_url)s@' + Var('dep2_revision'),
            }
-           ''') }),
+           ''')}),
     ]),
   ]
 
   GIT_BOILERPLATE = [
     ('dep1', [
-      ('First commit', { 'path1/file1.txt': 'dep1 file 1 line 1.' }),
-      ('Second commit', { 'path2/file2.txt': 'dep1 file 2 line 1.' }),
+      ('First commit', {'path1/file1.txt': 'dep1 file 1 line 1.'}),
+      ('Second commit', {'path2/file2.txt': 'dep1 file 2 line 1.'}),
     ]),
     ('dep2', [
-      ('First commit', { 'path1/file1.txt': 'dep2 file 1 line 1.' }),
-      ('Second commit', { 'path2/file2.txt': 'dep2 file 2 line 1.' }),
+      ('First commit', {'path1/file1.txt': 'dep2 file 1 line 1.'}),
+      ('Second commit', {'path2/file2.txt': 'dep2 file 2 line 1.'}),
     ]),
     ('top', [
       ('DEPS commit', {
@@ -150,7 +150,7 @@ class BotUpdateTest(unittest.TestCase):
               'top/ext/dep1': '%(dep1_url)s@' + Var('dep1_revision'),
               'top/ext/dep2': '%(dep2_url)s@' + Var('dep2_revision'),
             }
-            ''') }),
+            ''')}),
     ]),
   ]
 
@@ -423,7 +423,7 @@ class BotUpdateTest(unittest.TestCase):
         os.path.join(self.builddir, 'out.json'), '--master',
         '%s_master' % self.test_name, '--builder_name',
         '%s_builder' % self.test_name, '--slave_name',
-        '%s_slave' % self.test_name ]
+        '%s_slave' % self.test_name]
     self.template_dict = {}
     self.populate_svn()
     self.populate_git()

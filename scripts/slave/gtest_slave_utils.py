@@ -34,10 +34,10 @@ class GTestUnexpectedDeathTracker(object):
   def __init__(self):
     self._current_test = None
     self._completed = False
-    self._test_start   = re.compile('\[\s+RUN\s+\] (\w+\.\w+)')
-    self._test_ok      = re.compile('\[\s+OK\s+\] (\w+\.\w+)')
-    self._test_fail    = re.compile('\[\s+FAILED\s+\] (\w+\.\w+)')
-    self._test_passed = re.compile('\[\s+PASSED\s+\] \d+ tests?.')
+    self._test_start = re.compile(r'\[\s+RUN\s+\] (\w+\.\w+)')
+    self._test_ok = re.compile(r'\[\s+OK\s+\] (\w+\.\w+)')
+    self._test_fail = re.compile(r'\[\s+FAILED\s+\] (\w+\.\w+)')
+    self._test_passed = re.compile(r'\[\s+PASSED\s+\] \d+ tests?.')
 
     self._failed_tests = set()
 

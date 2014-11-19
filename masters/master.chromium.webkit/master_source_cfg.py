@@ -9,7 +9,6 @@ from common import chromium_utils
 
 from master import build_utils
 from master import gitiles_poller
-from master import svn_poller_with_comparator
 
 def WebkitFileSplitter(path):
   """split_file for webkit.org repository."""
@@ -25,7 +24,7 @@ def Update(config, _active_master, c):
 
   webkit_url = 'http://src.chromium.org/viewvc/blink?view=rev&revision=%s'
   webkit_poller = svnpoller.SVNPoller(
-      svnurl = config.Master.webkit_root_url,
+      svnurl=config.Master.webkit_root_url,
       svnbin=chromium_utils.SVN_BIN,
       split_file=WebkitFileSplitter,
       pollinterval=30,

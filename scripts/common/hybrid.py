@@ -121,7 +121,7 @@ class _HybridReturnValue(Exception):
 class HybridBase(object):
   # Disable 'no __init__ method' warning | pylint: disable=W0232
 
-  class MixIn:
+  class MixIn(object):
     @staticmethod
     def _hybrid__getHybridContext():
       raise NotImplementedError()

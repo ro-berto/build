@@ -54,7 +54,7 @@ def _BuildSteps(api, buildername, build_type):
   api.python('mojob build',
              mojob_path,
              args=['build', build_type] + args,
-             env = env)
+             env=env)
 
 def _RunTests(api, build_type):
   mojob_path = api.path['checkout'].join('mojo', 'tools', 'mojob.py')
@@ -89,4 +89,4 @@ def GenTests(api):
            ['mojo_chromeos_dbg', 'Mojo ChromeOS (dbg)'],
            ['mojo_win_dbg', 'Mojo Win (dbg)']]
   for t in tests:
-    yield(api.test(t[0]) + api.properties.generic(buildername=t[1]))
+    yield api.test(t[0]) + api.properties.generic(buildername=t[1])

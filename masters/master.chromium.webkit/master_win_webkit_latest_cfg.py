@@ -96,7 +96,7 @@ F('f_webkit_win_oilpan_rel', win().ChromiumFactory(
     options=['--build-tool=ninja', '--', 'blink_tests'],
     factory_properties={
         'additional_expectations': [
-            ['third_party', 'WebKit', 'LayoutTests', 'OilpanExpectations' ],
+            ['third_party', 'WebKit', 'LayoutTests', 'OilpanExpectations'],
         ],
         'archive_webkit_results': ActiveMaster.is_production_host,
         'blink_config': 'blink',
@@ -166,7 +166,7 @@ F('f_webkit_win_oilpan_dbg', win().ChromiumFactory(
     options=['--build-tool=ninja', '--', 'blink_tests'],
     factory_properties={
         'additional_expectations': [
-            ['third_party', 'WebKit', 'LayoutTests', 'OilpanExpectations' ],
+            ['third_party', 'WebKit', 'LayoutTests', 'OilpanExpectations'],
         ],
         'archive_webkit_results': ActiveMaster.is_production_host,
         'blink_config': 'blink',

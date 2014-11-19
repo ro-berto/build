@@ -39,7 +39,7 @@ class FunctionTestCase(unittest.TestCase):
     )
 
     def delete():
-      del(frozen['b'])
+      del frozen['b']
     self.assertRaises(
         TypeError,
         delete

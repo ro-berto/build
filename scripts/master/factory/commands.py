@@ -52,7 +52,7 @@ def CreateTriggerStep(trigger_name, trigger_set_properties=None,
   trigger_set_properties = trigger_set_properties or {}
   trigger_copy_properties = trigger_copy_properties or []
 
-  set_properties =  {
+  set_properties = {
       # Here are the standard names of the parent build properties.
       'parent_buildername': WithProperties('%(buildername:-)s'),
       'parent_buildnumber': WithProperties('%(buildnumber:-)s'),
@@ -528,7 +528,7 @@ class FactoryCommands(object):
     else:
       # don't confuse CQ with duplicate step names
       # runbuild.py will strip this suffix out and add via annotator
-      test_name +=  '_buildrunner_ignore'
+      test_name += '_buildrunner_ignore'
     self._factory.addStep(
         command_class,
         name=test_name,
@@ -1070,7 +1070,7 @@ class FactoryCommands(object):
     cmd = [self._python, self._runhooks_tool]
 
     options = options or {}
-    if ('--compiler=goma' in options or '--compiler=goma-clang' in options):
+    if '--compiler=goma' in options or '--compiler=goma-clang' in options:
       cmd.append('--use-goma')
 
     self._factory.addStep(

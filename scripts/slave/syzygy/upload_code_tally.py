@@ -53,7 +53,7 @@ def main():
   parser = optparse.OptionParser('USAGE: %prog <server> <code tally json>')
   (_, args) = parser.parse_args()
 
-  if len(args) !=2:
+  if len(args) != 2:
     parser.error('Must specify <server> and <code tall json> as args')
 
   return UploadCodeTallyJson(args[0], args[1])

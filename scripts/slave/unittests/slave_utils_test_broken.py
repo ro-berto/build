@@ -19,7 +19,7 @@ class TestGypFlags(unittest.TestCase):
   def test_single_gyp_flag_one(self):
     self.assertEqual(
         slave_utils.GetGypFlag({'factory_properties': {
-            'gclient_env': { 'GYP_DEFINES' : 'chromeos=1' },
+            'gclient_env': {'GYP_DEFINES' : 'chromeos=1'},
             'trigger': 'chromiumos_dbg_trigger',
             'window_manager': False,
             }}, 'chromeos'), '1')
@@ -27,7 +27,7 @@ class TestGypFlags(unittest.TestCase):
   def test_single_gyp_flag_zero(self):
     self.assertEqual(
         slave_utils.GetGypFlag({'factory_properties': {
-            'gclient_env': { 'GYP_DEFINES' : 'chromeos=0' },
+            'gclient_env': {'GYP_DEFINES' : 'chromeos=0'},
             'trigger': 'chromiumos_dbg_trigger',
             'window_manager': False,
             }}, 'chromeos'), '0')
@@ -35,25 +35,25 @@ class TestGypFlags(unittest.TestCase):
   def test_triple_gyp_flag_center(self):
     self.assertEqual(
         slave_utils.GetGypFlag({'factory_properties': {
-            'gclient_env': { 'GYP_DEFINES' : 'bull tiger=x03 frog' },
+            'gclient_env': {'GYP_DEFINES' : 'bull tiger=x03 frog'},
             }}, 'tiger'), 'x03')
 
   def test_gyp_flag_not_present(self):
     self.AssertIsNone(
         slave_utils.GetGypFlag({'factory_properties': {
-            'gclient_env': { 'GYP_DEFINES' : 'tiger=1' },
+            'gclient_env': {'GYP_DEFINES' : 'tiger=1'},
             }}, 'chromeos'))
 
   def test_triple_gyp_flag_last(self):
     self.assertTrue(
         slave_utils.GetGypFlag({'factory_properties': {
-            'gclient_env': { 'GYP_DEFINES' : 'tiger=1 buffalo giraffe' }}},
+            'gclient_env': {'GYP_DEFINES' : 'tiger=1 buffalo giraffe'}}},
             'giraffe'))
 
   def test_no_gyp_flags_with_other(self):
     self.AssertIsNone(
         slave_utils.GetGypFlag({'factory_properties': {
-            'gclient_env': { 'OTHER_DEFINES' : 'tiger=1' }}},
+            'gclient_env': {'OTHER_DEFINES' : 'tiger=1'}}},
             'tiger'))
 
   def test_no_gyp_flags(self):
@@ -68,8 +68,8 @@ class TestGypFlags(unittest.TestCase):
 class TestGypFlagIsOn(unittest.TestCase):
 
   def testSample(self):
-    sample = {'factory_properties': {'gclient_env': { 'GYP_DEFINES' :
-        'tiger=1 buffalo=0 giraffe' }}}
+    sample = {'factory_properties': {'gclient_env': {'GYP_DEFINES' :
+        'tiger=1 buffalo=0 giraffe'}}}
     self.assertTrue(slave_utils.GypFlagIsOn(sample, 'tiger'))
     self.assertFalse(slave_utils.GypFlagIsOn(sample, 'buffalo'))
     self.assertTrue(slave_utils.GypFlagIsOn(sample, 'giraffe'))

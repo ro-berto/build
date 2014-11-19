@@ -52,7 +52,7 @@ def main_mac(options, args):
 
   result = 0
   # Work with either build type.
-  base_names = ( 'Chromium', 'Google Chrome' )
+  base_names = ('Chromium', 'Google Chrome')
   for base_name in base_names:
     app_bundle = base_name + '.app'
     framework_name = base_name + ' Framework'
@@ -76,10 +76,10 @@ def main_mac(options, args):
       print_dict = {
         # Remove spaces in the names so any downstream processing is less
         # likely to choke.
-        'app_name'         : re.sub('\s', '', base_name),
-        'app_bundle'       : re.sub('\s', '', app_bundle),
-        'framework_name'   : re.sub('\s', '', framework_name),
-        'framework_bundle' : re.sub('\s', '', framework_bundle),
+        'app_name'         : re.sub(r'\s', '', base_name),
+        'app_bundle'       : re.sub(r'\s', '', app_bundle),
+        'framework_name'   : re.sub(r'\s', '', framework_name),
+        'framework_bundle' : re.sub(r'\s', '', framework_bundle),
         'app_size'         : get_size(chromium_executable),
         'framework_size'   : get_size(chromium_framework_executable)
       }
@@ -87,18 +87,18 @@ def main_mac(options, args):
       # Collect the segment info out of the App
       result, stdout = run_process(result, ['size', chromium_executable])
       print_dict['app_text'], print_dict['app_data'], print_dict['app_objc'] = \
-          re.search('(\d+)\s+(\d+)\s+(\d+)', stdout).groups()
+          re.search(r'(\d+)\s+(\d+)\s+(\d+)', stdout).groups()
 
       # Collect the segment info out of the Framework
       result, stdout = run_process(result, ['size',
                                             chromium_framework_executable])
       print_dict['framework_text'], print_dict['framework_data'], \
         print_dict['framework_objc'] = \
-          re.search('(\d+)\s+(\d+)\s+(\d+)', stdout).groups()
+          re.search(r'(\d+)\s+(\d+)\s+(\d+)', stdout).groups()
 
       # Collect the whole size of the App bundle on disk (include the framework)
       result, stdout = run_process(result, ['du', '-s', '-k', chromium_app_dir])
-      du_s = re.search('(\d+)', stdout).group(1)
+      du_s = re.search(r'(\d+)', stdout).group(1)
       print_dict['app_bundle_size'] = (int(du_s) * 1024)
 
       # Count the number of files with at least one static initializer.
@@ -174,18 +174,18 @@ def check_linux_binary(target_dir, binary_name, options):
 
   def get_elf_section_size(readelf_stdout, section_name):
     # Matches: .ctors PROGBITS 000000000516add0 5169dd0 000010 00 WA 0 0 8
-    match = re.search('\.%s.*$' % re.escape(section_name),
+    match = re.search(r'\.%s.*$' % re.escape(section_name),
                       readelf_stdout, re.MULTILINE)
     if not match:
       return (False, -1)
-    size_str = re.split('\W+', match.group(0))[5]
+    size_str = re.split(r'\W+', match.group(0))[5]
     return (True, int(size_str, 16))
 
   sizes.append((binary_name, binary_name, 'size',
                 get_size(binary_file), 'bytes'))
 
   result, stdout = run_process(result, ['size', binary_file])
-  text, data, bss = re.search('(\d+)\s+(\d+)\s+(\d+)', stdout).groups()
+  text, data, bss = re.search(r'(\d+)\s+(\d+)\s+(\d+)', stdout).groups()
   sizes += [
       (binary_name + '-text', 'text', '', text, 'bytes'),
       (binary_name + '-data', 'data', '', data, 'bytes'),
@@ -196,7 +196,7 @@ def check_linux_binary(target_dir, binary_name, options):
   # First determine if we're 32 or 64 bit
   result, stdout = run_process(result, ['readelf', '-h', binary_file])
   elf_class_line = re.search('Class:.*$', stdout, re.MULTILINE).group(0)
-  elf_class = re.split('\W+', elf_class_line)[1]
+  elf_class = re.split(r'\W+', elf_class_line)[1]
   if elf_class == 'ELF32':
     word_size = 4
   else:

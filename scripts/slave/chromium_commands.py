@@ -261,7 +261,7 @@ class GClient(SourceBaseCommand):
     SourceBaseCommand.setup(self, args)
     self.vcexe = self.getCommand('gclient')
     self.svnurl = args['svnurl']
-    self.branch =  args.get('branch')
+    self.branch = args.get('branch')
     self.revision = args.get('revision')
     self.patch = args.get('patch')
     self.sudo_for_remove = args.get('sudo_for_remove')

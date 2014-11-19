@@ -25,7 +25,7 @@ from slave import slave_utils
 class StagingError(Exception): pass
 
 
-class SyzyASanWinFilter():
+class SyzyASanWinFilter(object):
   def __init__(self, build_dir, target):
     self.root = os.path.abspath(os.path.join(build_dir, target))
 

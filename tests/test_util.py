@@ -63,7 +63,7 @@ class LocalGitServer(object):
     os.makedirs(root)
     self.proc = Popen(
         ['git', 'daemon', '--export-all', '--reuseaddr', '--listen=localhost',
-         '--port=%d' % self.port, '--base-path=%s' % root,  root],
+         '--port=%d' % self.port, '--base-path=%s' % root, root],
         stdout=self.devnull, stderr=self.devnull)
 
   def stop(self):

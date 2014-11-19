@@ -941,7 +941,7 @@ class ChromiumCommands(commands.FactoryCommands):
       cmd = self.AddFactoryProperties(factory_properties, cmd)
 
       base_url = ("https://storage.googleapis.com/" +
-                  gs_bucket + "/%(build_name)s" )
+                  gs_bucket + "/%(build_name)s")
       self.AddArchiveStep(
           data_description='webkit_tests ' + result_str,
           base_url=base_url,

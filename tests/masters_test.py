@@ -46,7 +46,7 @@ def BackupPaths(base_path, path_globs):
   try:
     for path_glob in path_globs:
       for path in glob.glob(os.path.join(base_path, path_glob)):
-        bkup_path  = os.path.join(tmpdir, os.path.relpath(path, base_path))
+        bkup_path = os.path.join(tmpdir, os.path.relpath(path, base_path))
         os.rename(path, bkup_path)
         paths_to_restore.append((path, bkup_path))
     yield
@@ -266,7 +266,7 @@ def main(argv):
       'master.tryserver.v8': 'V8TryServer',
       'master.tryserver.webrtc': 'WebRTCTryServer',
   }
-  all_masters = { base_dir: public_masters }
+  all_masters = {base_dir: public_masters}
   if os.path.exists(build_internal):
     internal_test_data = chromium_utils.ParsePythonCfg(
         os.path.join(build_internal, 'tests', 'internal_masters_cfg.py'),

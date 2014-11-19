@@ -101,21 +101,21 @@ def GenSteps(api):
   api.chromium.compile(targets, force_clobber=True, name='First build')
   api.isolate.remove_build_metadata()
   MoveBuildDirectory(api, str(api.chromium.output_dir),
-                     str(api.chromium.output_dir).rstrip('\\\/') + '.1')
+                     str(api.chromium.output_dir).rstrip('\\/') + '.1')
 
   # Do the second build and move the build artifact to the temp directory.
   api.chromium.runhooks()
   api.chromium.compile(targets, force_clobber=True, name='Second build')
   api.isolate.remove_build_metadata()
   MoveBuildDirectory(api, str(api.chromium.output_dir),
-                     str(api.chromium.output_dir).rstrip('\\\/') + '.2')
+                     str(api.chromium.output_dir).rstrip('\\/') + '.2')
 
   # Compare the artifacts from the 2 builds, raise an exception if they're
   # not equals.
   # TODO(sebmarchand): Do a smarter comparison.
   api.isolate.compare_build_artifacts(
-      str(api.chromium.output_dir).rstrip('\\\/') + '.1',
-      str(api.chromium.output_dir).rstrip('\\\/') + '.2')
+      str(api.chromium.output_dir).rstrip('\\/') + '.1',
+      str(api.chromium.output_dir).rstrip('\\/') + '.2')
 
 
 def _sanitize_nonalpha(text):

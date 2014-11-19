@@ -29,30 +29,30 @@ FLAKY_FAILURES = ['SomeOtherTest.FLAKY_Baz']
 
 TIMEOUT_MESSAGE = 'Killed (timed out).'
 
-RELOAD_ERRORS = ('C:\b\slave\chrome-release-snappy\build\chrome\browser'
-'\navigation_controller_unittest.cc:381: Failure' + """
+RELOAD_ERRORS = (r'C:\b\slave\chrome-release-snappy\build\chrome\browser'
+r'\navigation_controller_unittest.cc:381: Failure' + """
 Value of: -1
 Expected: contents->controller()->GetPendingEntryIndex()
 Which is: 0
 
 """)
 
-SPDY_ERRORS = ('C:\b\slave\chrome-release-snappy\build\chrome\browser'
-'\navigation_controller_unittest.cc:439: Failure' + """
+SPDY_ERRORS = (r'C:\b\slave\chrome-release-snappy\build\chrome\browser'
+r'\navigation_controller_unittest.cc:439: Failure' + """
 Value of: -1
 Expected: contents->controller()->GetPendingEntryIndex()
 Which is: 0
 
 """)
 
-SWITCH_ERRORS = ('C:\b\slave\chrome-release-snappy\build\chrome\browser'
-'\navigation_controller_unittest.cc:615: Failure' + """
+SWITCH_ERRORS = (r'C:\b\slave\chrome-release-snappy\build\chrome\browser'
+r'\navigation_controller_unittest.cc:615: Failure' + """
 Value of: -1
 Expected: contents->controller()->GetPendingEntryIndex()
 Which is: 0
 
-""" + 'C:\b\slave\chrome-release-snappy\build\chrome\browser'
-'\navigation_controller_unittest.cc:617: Failure' + """
+""" + r'C:\b\slave\chrome-release-snappy\build\chrome\browser'
+r'\navigation_controller_unittest.cc:617: Failure' + """
 Value of: contents->controller()->GetPendingEntry()
   Actual: true
 Expected: false
@@ -850,13 +850,13 @@ class TestGTestJSONParserTests(auto_stub.TestCase):
 
   def testCompressList(self):
     CompressList = gtest_utils.CompressList
-    self.assertEqual(['foo'],          CompressList([1, 2, 3, 4], 0, 'foo'))
-    self.assertEqual(['foo', 4],       CompressList([1, 2, 3, 4], 1, 'foo'))
-    self.assertEqual([1, 'foo', 4],    CompressList([1, 2, 3, 4], 2, 'foo'))
+    self.assertEqual(['foo'], CompressList([1, 2, 3, 4], 0, 'foo'))
+    self.assertEqual(['foo', 4], CompressList([1, 2, 3, 4], 1, 'foo'))
+    self.assertEqual([1, 'foo', 4], CompressList([1, 2, 3, 4], 2, 'foo'))
     self.assertEqual([1, 'foo', 3, 4], CompressList([1, 2, 3, 4], 3, 'foo'))
-    self.assertEqual([1, 2, 3, 4],     CompressList([1, 2, 3, 4], 4, 'foo'))
-    self.assertEqual([1, 2, 3, 4],     CompressList([1, 2, 3, 4], 5, 'foo'))
-    self.assertEqual([1, 2, 3, 4],     CompressList([1, 2, 3, 4], 6, 'foo'))
+    self.assertEqual([1, 2, 3, 4], CompressList([1, 2, 3, 4], 4, 'foo'))
+    self.assertEqual([1, 2, 3, 4], CompressList([1, 2, 3, 4], 5, 'foo'))
+    self.assertEqual([1, 2, 3, 4], CompressList([1, 2, 3, 4], 6, 'foo'))
 
 
 if __name__ == '__main__':

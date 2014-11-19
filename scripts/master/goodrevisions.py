@@ -190,7 +190,7 @@ class GoodRevisions(base.StatusReceiverMultiService):
       succeeded_steps = revision_status[builder]
       for required_step in self.getInterestingBuildSteps(builder, build):
         if required_step not in succeeded_steps:
-          log.msg('Still missing step %s\%s to declare %s a good revision' %
+          log.msg('Still missing step %s/%s to declare %s a good revision' %
                   (builder, required_step, str(latest_revision)))
           return
 

@@ -71,9 +71,9 @@ HTTPD_CONF = {
     'win': 'httpd.conf'
 }
 # Regex matching git comment lines containing svn revision info.
-GIT_SVN_ID_RE = re.compile('^git-svn-id: .*@([0-9]+) .*$')
+GIT_SVN_ID_RE = re.compile(r'^git-svn-id: .*@([0-9]+) .*$')
 # Regex for the master branch commit position.
-GIT_CR_POS_RE = re.compile('^Cr-Commit-Position: refs/heads/master@{#(\d+)}$')
+GIT_CR_POS_RE = re.compile(r'^Cr-Commit-Position: refs/heads/master@{#(\d+)}$')
 
 # The directory that this script is in.
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -334,7 +334,7 @@ def _GenerateJSONForTestResults(options, log_processor):
         sys.stderr.write('using JSON summary output instead of gtest XML\n')
       else:
         sys.stderr.write(
-            ('"%s" \ "%s" doesn\'t exist: Unable to generate JSON from XML, '
+            ('"%s" \\ "%s" doesn\'t exist: Unable to generate JSON from XML, '
              'using log output.\n') % (os.getcwd(), options.test_output_xml))
       # The file did not get generated. See if we can generate a results map
       # from the log output.
@@ -1269,10 +1269,10 @@ def _MainLinux(options, args, extra_env):
   # Unset http_proxy and HTTPS_PROXY environment variables.  When set, this
   # causes some tests to hang.  See http://crbug.com/139638 for more info.
   if 'http_proxy' in os.environ:
-    del(os.environ['http_proxy'])
+    del os.environ['http_proxy']
     print 'Deleted http_proxy environment variable.'
   if 'HTTPS_PROXY' in os.environ:
-    del(os.environ['HTTPS_PROXY'])
+    del os.environ['HTTPS_PROXY']
     print 'Deleted HTTPS_PROXY environment variable.'
 
   # Decide whether to enable the suid sandbox for Chrome.

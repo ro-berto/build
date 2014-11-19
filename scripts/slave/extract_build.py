@@ -89,8 +89,8 @@ def GetBuildUrl(options, build_revision, webkit_revision=None):
 
 
 def real_main(options):
-  """ Download a build, extract it to build\BuildDir\full-build-win32
-      and rename it to build\BuildDir\Target
+  """ Download a build, extract it to build\\BuildDir\\full-build-win32
+      and rename it to build\\BuildDir\\Target
   """
   abs_build_dir = os.path.abspath(
       build_directory.GetBuildOutputDirectory(options.src_dir))

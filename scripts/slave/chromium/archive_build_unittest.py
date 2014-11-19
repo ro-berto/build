@@ -157,7 +157,7 @@ class ArchiveTest(unittest.TestCase):
 
     for tf in EXTRA_TEST_FILES:
       dir_part = os.path.dirname(tf)
-      if (dir_part):
+      if dir_part:
         dir_path = os.path.join(self.build_dir, dir_part)
         os.makedirs(dir_path)
 

@@ -80,7 +80,7 @@ class GitHelper(object):
     """Method called upon entering this object as a context manager."""
     return self
 
-  def __exit__(self):
+  def __exit__(self, _exc_type, _exc_value, _traceback):
     """Method called when the context is exited."""
     self.destroy()
 

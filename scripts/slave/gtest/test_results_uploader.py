@@ -9,7 +9,7 @@ from common import url_helper
 from slave.gtest.networktransaction import NetworkTransaction
 
 
-class TestResultsUploader:
+class TestResultsUploader(object):
   def __init__(self, host):
     self._host = host
 

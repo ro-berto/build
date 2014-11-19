@@ -53,7 +53,7 @@ class ChromiteFactory(object):
                chromite_patch=None, show_gclient_output=True,
                max_time=_default_max_time):
     if chromite_patch:
-      assert ('url' in chromite_patch and 'ref' in chromite_patch)
+      assert 'url' in chromite_patch and 'ref' in chromite_patch
 
     self.branch = branch
     self.chromite_patch = chromite_patch

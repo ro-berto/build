@@ -147,7 +147,8 @@ class Agent(twisted.web.client.Agent):
       body_producer: (IBodyProducer) If supplied, the 'IBodyProducer' instance
           that will be used to produce HTTP request's body; if None, the body
           will be of length '0'.
-      expected_code: (int or tuple of ints) HTTP response code expected in reply.
+      expected_code: (int or tuple of ints) HTTP response code expected in
+          reply.
       retry: (int) If non-zero, the number of times to retry when a transient
           error is encountered. If None, the default 'retry' value will be
           used.

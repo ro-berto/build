@@ -46,7 +46,7 @@ F('f_linux_tests_rel', linux().ChromiumFactory(
         'blink_config': 'blink',
         'build_name': 'Linux_x64',
         'generate_gtest_json': True,
-        'gclient_env': { 'GYP_GENERATORS': 'ninja' },
+        'gclient_env': {'GYP_GENERATORS': 'ninja'},
         'gs_bucket': 'gs://chromium-webkit-snapshots',
     }))
 
@@ -66,7 +66,7 @@ F('f_linux_tests_dbg', linux().ChromiumFactory(
     ],
     factory_properties={
         'generate_gtest_json': True,
-        'gclient_env': { 'GYP_GENERATORS': 'ninja' },
+        'gclient_env': {'GYP_GENERATORS': 'ninja'},
         'blink_config': 'blink',
     }))
 

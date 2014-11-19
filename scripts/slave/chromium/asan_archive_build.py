@@ -33,9 +33,9 @@ class StagingError(Exception): pass
 def ShouldPackageFile(filename, target):
   """Returns true if the file should be a part of the resulting archive."""
   if chromium_utils.IsMac():
-    file_filter = '^.+\.(a|dSYM)$'
+    file_filter = r'^.+\.(a|dSYM)$'
   elif chromium_utils.IsLinux():
-    file_filter = '^.+\.(o|a|d)$'
+    file_filter = r'^.+\.(o|a|d)$'
   else:
     raise NotImplementedError('%s is not supported.' % sys.platform)
   if re.match(file_filter, filename):

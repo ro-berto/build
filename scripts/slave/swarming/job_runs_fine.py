@@ -93,7 +93,7 @@ def main():
   # minutes.
   timeout = 10*60
 
-  print('Testing servers %s and %s' % (swarming_server, isolate_server))
+  print 'Testing servers %s and %s' % (swarming_server, isolate_server)
 
   code = 0
   client_dir = os.path.join(cwd, 'swarming.client')
@@ -104,7 +104,7 @@ def main():
         os.path.join(ROOT_DIR, 'payload', item),
         os.path.join(cwd, item))
 
-  print('Archiving...')
+  print 'Archiving...'
   start = time.time()
   cmd = [
     sys.executable,
@@ -115,7 +115,7 @@ def main():
     '--isolate-server', isolate_server,
   ]
   isolated_hash = subprocess.check_output(cmd, cwd=cwd).split()[0]
-  print('Archiving heartbeat.isolate took %3.1fs' % (time.time() - start))
+  print 'Archiving heartbeat.isolate took %3.1fs' % (time.time() - start)
 
   now = datetime.datetime.utcnow()
   if options.canary:
@@ -123,7 +123,7 @@ def main():
   else:
     task_name = 'heartbeat-%s' % now.strftime('%Y-%m-%d_%H:%M:%S')
 
-  print('Sending tasks named %s' % task_name)
+  print 'Sending tasks named %s' % task_name
   # Runs the tasks in parallel.
   suffixes_dict = {
     flatten_dict(dimensions): dimensions for dimensions in dimensions_to_test

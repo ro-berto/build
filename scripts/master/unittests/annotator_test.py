@@ -519,41 +519,9 @@ class AnnotatorCommandsTest(unittest.TestCase):
     self.assertTrue(preamble_step.isStarted())
     self.assertFalse(preamble_step.isFinished())
 
-  def testCannotClosePreamble(self):
-    self.assertRaises(ValueError, self.handleOutputLine, '@@@STEP_CLOSED@@@')
-
-  def testCannotClosePreambleUsingDoubleStepClose(self):
-    self.startNewStep()
-    self.handleOutputLine('@@@STEP_CLOSED@@@')
-    self.assertRaises(ValueError, self.handleOutputLine, '@@@STEP_CLOSED@@@')
-
-  def testPreambleNotClosedOnReturnCode(self):
-    self.startNewStep()
-    self.handleOutputLine('@@@STEP_CLOSED@@@')
-    self.step.script_observer.handleReturnCode(0)
-    preamble_step = self.step.script_observer.sections[0]['step']
-    self.assertTrue(preamble_step.isStarted())
-    self.assertFalse(preamble_step.isFinished())
-
   def testStopBuild(self):
     self.startNewStep()
     self.step.interrupt('it is time')
-
-  def testCannotClosePreamble(self):
-    self.assertRaises(ValueError, self.handleOutputLine, '@@@STEP_CLOSED@@@')
-
-  def testCannotClosePreambleUsingDoubleStepClose(self):
-    self.startNewStep()
-    self.handleOutputLine('@@@STEP_CLOSED@@@')
-    self.assertRaises(ValueError, self.handleOutputLine, '@@@STEP_CLOSED@@@')
-
-  def testPreambleNotClosedOnReturnCode(self):
-    self.startNewStep()
-    self.handleOutputLine('@@@STEP_CLOSED@@@')
-    self.step.script_observer.handleReturnCode(0)
-    preamble_step = self.step.script_observer.sections[0]['step']
-    self.assertTrue(preamble_step.isStarted())
-    self.assertFalse(preamble_step.isFinished())
 
   def testHandleRealOutput(self):
     with open(os.path.join(test_env.DATA_PATH,

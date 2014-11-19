@@ -20,7 +20,7 @@ def _CheckoutSteps(api):
 def _BuildSteps(api):
   # Generate build files for Ninja
   gyp_path = api.path['checkout'].join('build', 'gyp_pdfium')
-  api.step('gyp_pdfium', [gyp_path], env = {'GYP_GENERATORS': 'ninja'})
+  api.step('gyp_pdfium', [gyp_path], env={'GYP_GENERATORS': 'ninja'})
 
   # Build sample file using Ninja
   debug_path = api.path['checkout'].join('out', 'Debug')

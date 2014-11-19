@@ -29,7 +29,7 @@ def _ExpandArgs(args):
   @{BUILD_DIR} is replaced with the actual build directory.
   """
   build_dir = build_directory.GetBuildOutputDirectory()
-  eargs = [re.sub('@\{BUILD_DIR\}', build_dir, arg) for arg in args]
+  eargs = [re.sub(r'@\{BUILD_DIR\}', build_dir, arg) for arg in args]
   return eargs
 
 

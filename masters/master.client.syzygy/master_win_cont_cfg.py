@@ -6,7 +6,7 @@ from master import master_config
 from master.factory import annotator_factory
 
 
-defaults = { 'category': 'continuous' }
+defaults = {'category': 'continuous'}
 helper = master_config.Helper(defaults)
 B = helper.Builder
 D = helper.Dependent

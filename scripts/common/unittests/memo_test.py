@@ -47,7 +47,7 @@ class FunctionTestCase(MemoTestCase):
     @memo.memo()
     def func(a, b):
       self.tag((a, b))
-      return (a + b)
+      return a + b
 
     # Execute multiple rounds of two unique function executions.
     for _ in xrange(10):
@@ -62,7 +62,7 @@ class FunctionTestCase(MemoTestCase):
     @memo.memo(ignore=('b'))
     def func(a, b):
       self.tag(a)
-      return (a + b)
+      return a + b
 
     # Execute multiple rounds of two unique function executions.
     for _ in xrange(10):
@@ -78,6 +78,7 @@ class FunctionTestCase(MemoTestCase):
   def testOldClassMethod(self):
     class Test:
       # Disable 'no __init__ method' warning | pylint: disable=W0232
+      # pylint: disable=old-style-class
 
       @classmethod
       @memo.memo()
@@ -116,6 +117,7 @@ class FunctionTestCase(MemoTestCase):
   def testOldClassStaticMethod(self):
     class Test:
       # Disable 'no __init__ method' warning | pylint: disable=W0232
+      # pylint: disable=old-style-class
 
       @staticmethod
       @memo.memo()
@@ -155,7 +157,7 @@ class FunctionTestCase(MemoTestCase):
     @memo.memo()
     def func(a, b=10):
       self.tag((a, b))
-      return (a + b)
+      return a + b
 
     # First round
     self.assertEqual(func(1), 11)
@@ -189,6 +191,7 @@ class FunctionTestCase(MemoTestCase):
 class MemoInstanceMethodTestCase(MemoTestCase):
 
   class TestBaseOld:
+    # pylint: disable=old-style-class
     def __init__(self, test_case, name):
       self.test_case = test_case
       self.name = name
@@ -198,7 +201,7 @@ class MemoInstanceMethodTestCase(MemoTestCase):
       raise NotImplementedError()
 
 
-  class TestBaseNew:
+  class TestBaseNew(object):
     def __init__(self, test_case, name):
       self.test_case = test_case
       self.name = name
@@ -260,7 +263,7 @@ class MemoInstanceMethodTestCase(MemoTestCase):
       @memo.memo_i()
       def func(self, a, b):
         self.test_case.tag((self.name, a, b))
-        return (a + b)
+        return a + b
 
     t0 = Test(self, 't0')
     t1 = Test(self, 't1')
@@ -283,7 +286,7 @@ class MemoInstanceMethodTestCase(MemoTestCase):
       @memo.memo_i()
       def func(self, a, b):
         self.test_case.tag((self.name, a, b))
-        return (a + b)
+        return a + b
 
     t0 = Test(self, 't0')
     t1 = Test(self, 't1')

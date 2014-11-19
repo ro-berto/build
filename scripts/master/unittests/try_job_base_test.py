@@ -15,7 +15,7 @@ from master import try_job_base
 class PaseOptionsTest(unittest.TestCase):
   def setUp(self):
     self.DEFAULT = 'DEFAULT'
-    self.VALID_KEYS = ['linux', 'linux_chromeos',  'mac', 'win']
+    self.VALID_KEYS = ['linux', 'linux_chromeos', 'mac', 'win']
 
   @staticmethod
   def _get_default():

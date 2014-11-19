@@ -130,7 +130,7 @@ def main_win():
   if os.path.isdir('e:\\'):
     slave_path = 'e:\\b\\build\\slave'
   else:
-    slave_path =  'c:\\b\\build\\slave'
+    slave_path = 'c:\\b\\build\\slave'
   remove_build_dead(slave_path)
   remove_old_isolate_directories(slave_path)
   remove_old_isolate_execution_directories(slave_path)

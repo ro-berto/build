@@ -172,7 +172,7 @@ def processDirectory(path, options):
   print 'in dir %s:' % path
   builder = loadBuilder(os.path.join(path, options.builder_name))
   builds = [os.path.join(path, f) for f in os.listdir(path)
-            if re.match('^\d+$', f)]
+            if re.match(r'^\d+$', f)]
   if not builds:
     print '   no builds'
   for build in builds:

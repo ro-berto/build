@@ -150,7 +150,7 @@ F('f_webkit_mac_oilpan_rel', mac().ChromiumFactory(
         'blink_tests'],
     factory_properties={
         'additional_expectations': [
-            ['third_party', 'WebKit', 'LayoutTests', 'OilpanExpectations' ],
+            ['third_party', 'WebKit', 'LayoutTests', 'OilpanExpectations'],
         ],
         'archive_webkit_results': ActiveMaster.is_production_host,
         'blink_config': 'blink',
@@ -225,7 +225,7 @@ F('f_webkit_mac_oilpan_dbg', mac().ChromiumFactory(
         'blink_tests'],
     factory_properties={
         'additional_expectations': [
-            ['third_party', 'WebKit', 'LayoutTests', 'OilpanExpectations' ],
+            ['third_party', 'WebKit', 'LayoutTests', 'OilpanExpectations'],
         ],
         'archive_webkit_results': ActiveMaster.is_production_host,
         'blink_config': 'blink',

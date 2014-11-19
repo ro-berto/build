@@ -243,6 +243,7 @@ def SpawnSubdirBuildbotsIfNeeded():
 
     def GClientCall(command):
       # We just synced depot_tools, so disable gclient auto-sync.
+      # pylint: disable=cell-var-from-loop
       env = dict(os.environ, DEPOT_TOOLS_UPDATE='0')
       subprocess.check_call([GetGClientPath()] + command, env=env, cwd=botdir)
 
@@ -310,7 +311,7 @@ def main():
 
   # Make sure the current python path is absolute.
   old_pythonpath = os.environ.get('PYTHONPATH', '')
-  os.environ['PYTHONPATH']  = ''
+  os.environ['PYTHONPATH'] = ''
   for path in old_pythonpath.split(os.pathsep):
     if path:
       os.environ['PYTHONPATH'] += os.path.abspath(path) + os.pathsep

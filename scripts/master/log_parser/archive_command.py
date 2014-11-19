@@ -25,7 +25,7 @@ class ScriptObserver(buildstep.LogLineObserver):
     elif line.startswith('build number: '):
       self.build_number = line.split(' ')[2]
     elif line.startswith('build name: '):
-      self.build_name = line.split(' ',  2)[2]
+      self.build_name = line.split(' ', 2)[2]
 
 class ArchiveCommand(shell.ShellCommand):
   """Buildbot command that knows how to display archive_build/coverage/
@@ -57,7 +57,7 @@ class ArchiveCommand(shell.ShellCommand):
     self.more_link_text = kwargs.get('more_link_text', '')
 
   def createSummary(self, log):
-    if (self.base_url and self.link_text):
+    if self.base_url and self.link_text:
       url_prefix = self.base_url % {
           'build_name': self.script_observer.build_name}
 

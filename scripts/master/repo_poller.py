@@ -196,7 +196,7 @@ class RepoPoller(PollingChangeSource):
 
     d = defer.succeed(0)
     for repo_branch in self.repo_branches:
-      d.addCallback(log.msg,'RepoPoller: polling new changes for branch %s...'
+      d.addCallback(log.msg, 'RepoPoller: polling new changes for branch %s...'
                     % repo_branch)
       d.addCallback(lambda x, b=repo_branch: self.DoCheckoutRepoBranch(b))
       d.addCallback(self.DoLog, RepoPoller.TagFor(repo_branch))
@@ -274,7 +274,7 @@ class RepoPoller(PollingChangeSource):
       if line[:8] == 'project ':
         project = line[8:].rstrip('/')
         continue
-      assert(project)
+      assert project
       changes.setdefault(project, []).append(line)
 
     # Put changes in forward commit order, earliest-to-latest.

@@ -65,8 +65,8 @@ def GetBuildUrl(url, platform, revision):
 def real_main(options):
   """Download a build and extract.
 
-  Extract to build\BuildDir\full-build-win32 and rename it to
-  build\BuildDir\Target
+  Extract to build\\BuildDir\\full-build-win32 and rename it to
+  build\\BuildDir\\Target
   """
   target_build_output_dir = os.path.join(options.build_dir, options.target)
   platform = chromium_utils.PlatformName()

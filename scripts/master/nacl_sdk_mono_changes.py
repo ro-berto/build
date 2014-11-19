@@ -40,8 +40,8 @@ def LatestSDKVersion():
   versions = str(p_stdout).splitlines()
   latest = None
   for version in versions:
-    m = re.match('gs\:\/\/nativeclient\-mirror\/nacl\/nacl_sdk\/'
-                 'trunk\.(.*)/naclsdk_linux.tar.bz2', version)
+    m = re.match(r'gs://nativeclient-mirror/nacl/nacl_sdk/'
+                 r'trunk\.(.*)/naclsdk_linux.tar.bz2', version)
     svn_rev = int(m.group(1))
     if not latest or svn_rev > latest:
       latest = svn_rev

@@ -103,7 +103,7 @@ class Svn(object):
     SVN control.
     """
     stdout = self._RunSvnCommand(['status'])
-    new_regex = re.compile('^\?.....\s+(.+)$', re.MULTILINE)
+    new_regex = re.compile(r'^\?.....\s+(.+)$', re.MULTILINE)
     files = new_regex.findall(stdout)
     return files
 
@@ -112,7 +112,7 @@ class Svn(object):
     including those that are not (yet) under SVN control.
     """
     stdout = self._RunSvnCommand(['status'])
-    new_regex = re.compile('^[AM\?].....\s+(.+)$', re.MULTILINE)
+    new_regex = re.compile(r'^[AM\?].....\s+(.+)$', re.MULTILINE)
     files = new_regex.findall(stdout)
     return files
 

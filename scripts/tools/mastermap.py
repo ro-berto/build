@@ -3,7 +3,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-"""Tool for viewing masters, their hosts and their ports.
+r"""Tool for viewing masters, their hosts and their ports.
 
 Has three modes:
   a) In normal mode, simply prints the list of all known masters, sorted by
@@ -160,7 +160,7 @@ def human_print(lines, verbose):
 
   if verbose:
     for line in lines:
-      print(format_string % tuple(line))
+      print format_string % tuple(line)
 
 
 def csv_print(lines, verbose):
@@ -176,8 +176,8 @@ def csv_print(lines, verbose):
 
   if verbose:
     for line in lines:
-      print(','.join(str(t) for t in line))
-    print('\n')
+      print ','.join(str(t) for t in line)
+    print '\n'
 
 
 def master_map(masters, output, opts):
@@ -383,7 +383,7 @@ def real_main(include_internal=False):
       sort_keys.insert(0, sort_keys.pop(index))
 
   for key in reversed(sort_keys):
-    masters.sort(key = lambda m: m[key])
+    masters.sort(key=lambda m: m[key]) # pylint: disable=cell-var-from-loop
 
   if not opts.full_host_names:
     for master in masters:

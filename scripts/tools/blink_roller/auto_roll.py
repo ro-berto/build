@@ -51,7 +51,7 @@ CQ_EXTRA_TRYBOTS = 'CQ_EXTRA_TRYBOTS='
 
 # Does not support unicode or special characters.
 VALID_EMAIL_REGEXP = re.compile(r'^[A-Za-z0-9\.&\'\+-/=_]+@'
-                                '[A-Za-z0-9\.-]+$')
+                                r'[A-Za-z0-9\.\-]+$')
 
 
 def _get_skia_sheriff():

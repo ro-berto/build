@@ -43,3 +43,4 @@ def wait_for_crash_logs():
   print ('\nNote: Test finished with non zero status, sleeping for 90s to '
          'allow crash files to be written.')
   time.sleep(90)
+

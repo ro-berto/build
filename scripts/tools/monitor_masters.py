@@ -29,7 +29,7 @@ def hack_subprocess():
 
   See http://bugs.python.org/issue1731717 for more information.
   """
-  subprocess._cleanup = lambda: None
+  subprocess._cleanup = lambda: None # pylint: disable=protected-access
 
 
 def send_log(path, last_lines):

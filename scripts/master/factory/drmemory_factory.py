@@ -466,15 +466,15 @@ class CTest(Test):
           continue  # DR i#636: Spurious line from ctest
 
         # All tests passed for this config.
-        match = re.search('all (?P<passed>\d+) tests passed', line)
+        match = re.search(r'all (?P<passed>\d+) tests passed', line)
         if match:
           passed_count += int(match.group('passed'))
           continue
 
         # Some tests failed in this config.
         match = re.match(r'^[^:]*: (?P<passed>\d+) tests passed, '
-                          '\*\*\*\* (?P<failed>\d+) tests failed'
-                          '(, of which (?P<flaky>\d+) were flaky)?:',
+                         r'\*\*\*\* (?P<failed>\d+) tests failed'
+                         r'(, of which (?P<flaky>\d+) were flaky)?:',
                          line)
         if match:
           passed_count += int(match.group('passed'))
@@ -510,8 +510,8 @@ class CTest(Test):
       self.__result = SUCCESS
 
     got_revision = self.getProperty('got_revision')
-    buildnumber  = self.getProperty('buildnumber')
-    buildername  = self.getProperty('buildername')
+    buildnumber = self.getProperty('buildnumber')
+    buildername = self.getProperty('buildername')
     if 'drm' in buildername:
       self.addURL('test logs',
                   'http://build.chromium.org/p/client.drmemory/testlogs/' +
@@ -537,11 +537,11 @@ class DrMemoryTest(Test):
 
     # Don't use 'readlines' because we want both stdout and stderr.
     for line in log.getText().split('\n'):
-      m = re.match('\[  FAILED  \] (.*\..*) \([0-9]+ ms\)', line.strip())
+      m = re.match(r'\[  FAILED  \] (.*\..*) \([0-9]+ ms\)', line.strip())
       if m:
         failed_tests.append(m.groups()[0])  # Append failed test name.
 
-      DRM_PREFIX = '~~[Dr\.M0-9]+~~ '
+      DRM_PREFIX = r'~~[Dr\.M0-9]+~~ '
       # Only count non-ignored errors.
       m = re.match(DRM_PREFIX + 'ERRORS IGNORED:', line)
       if m:
@@ -556,7 +556,7 @@ class DrMemoryTest(Test):
         error_count = int(error_count)
         report_count += error_count
 
-      m = re.match(DRM_PREFIX + 'ASSERT FAILURE \(.*\): (.*)', line)
+      m = re.match(DRM_PREFIX + r'ASSERT FAILURE \(.*\): (.*)', line)
       if m:
         assert_failure = 'ASSERT FAILURE: ' + m.groups()[0]
 
@@ -653,8 +653,8 @@ def CreateWinChromeFactory(builder):
   def get_revision(rc, stdout, stderr):
     m = re.search(r'version \d+\.\d+\.(\d+)', stdout)
     if m:
-      return { 'got_revision': int(m.groups()[0]) }
-    return { 'failed_to_parse': stdout }
+      return {'got_revision': int(m.groups()[0])}
+    return {'failed_to_parse': stdout}
   ret.addStep(
       SetProperty(
           command=['unpacked\\bin\\drmemory', '-version'],

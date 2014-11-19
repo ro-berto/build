@@ -17,7 +17,7 @@ class PageSpeedFactory(gclient_factory.GClientFactory):
 
   DEFAULT_TARGET_PLATFORM = config.Master.default_platform
   REL_SRC_ROOT = 'src'
-  TEST_ARG_LIST = [ '--srcroot', REL_SRC_ROOT ]
+  TEST_ARG_LIST = ['--srcroot', REL_SRC_ROOT]
 
 
   def __init__(self, build_dir, target_platform=None):

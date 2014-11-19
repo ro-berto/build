@@ -83,7 +83,7 @@ class PerfCountNotifierTest(unittest.TestCase):
     self.old_getName = ChromiumNotifier.getName
     ChromiumNotifier.getName = self.getNameMock
     self.notifier.GenStepBox = lambda x, y, z: ''
-    self.notifier.BuildEmailObject = lambda a, b, c, d, e : b
+    self.notifier.BuildEmailObject = lambda a, b, c, d, e: b
     self.notifier.master_status = mock.Mock()
     self.notifier.master_status.getBuildbotURL.return_value = ''
     build_utils.EmailableBuildTable = mock.Mock(return_value='')

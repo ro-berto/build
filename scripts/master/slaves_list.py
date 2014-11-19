@@ -142,7 +142,7 @@ def Main(argv=None):
   options, _ = parser.parse_args(argv)
   if not options.filename:
     parser.print_help()
-    print('\nYou must specify a file to get the slave list from')
+    print '\nYou must specify a file to get the slave list from'
     return 1
   slaves = SlavesList(options.filename)
   for slave in slaves.GetSlavesName(options.master, options.builder,

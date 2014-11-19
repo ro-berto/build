@@ -320,7 +320,7 @@ F('telemetry_harness_upload',
 # http://dev.chromium.org/developers/testing/undefinedbehaviorsanitizer
 ubsan_gyp = ('ubsan=1')
 
-B('UBSan Release', 'linux_ubsan_rel', 'compile','chromium_lkgr')
+B('UBSan Release', 'linux_ubsan_rel', 'compile', 'chromium_lkgr')
 F('linux_ubsan_rel', linux().ChromiumFactory(
     clobber=True,
     target='Release',
@@ -334,7 +334,7 @@ F('linux_ubsan_rel', linux().ChromiumFactory(
 
 ubsan_vptr_gyp = ('ubsan_vptr=1')
 
-B('UBSan vptr Release', 'linux_ubsan_vptr_rel', 'compile','chromium_lkgr')
+B('UBSan vptr Release', 'linux_ubsan_vptr_rel', 'compile', 'chromium_lkgr')
 F('linux_ubsan_vptr_rel', linux().ChromiumFactory(
     clobber=True,
     target='Release',

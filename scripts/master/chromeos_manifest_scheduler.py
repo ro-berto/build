@@ -111,7 +111,7 @@ class CommentRespectingGitPoller(GitPoller):
   def _get_commit_comments(self, rev):
     args = ['log', rev, '--no-walk', r'--format=%B%n']
     d = utils.getProcessOutput(self.gitbin, args, path=self.workdir,
-        env=os.environ, errortoo=False )
+        env=os.environ, errortoo=False)
     def process(git_output):
       stripped_output = git_output.strip().decode(self.encoding)
       if len(stripped_output) == 0:

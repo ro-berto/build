@@ -31,7 +31,7 @@ class _UrlStatusCommand(shell.ShellCommand):
   def commandComplete(self, cmd):
     """On success, add the URL provided to our status."""
     if cmd.rc == 0 and self._extra_text:
-      (name, url) = self._extra_text
+      name, url = self._extra_text # pylint: disable=unpacking-non-sequence
       self.addURL(self.build.render(name), self.build.render(url))
 
 

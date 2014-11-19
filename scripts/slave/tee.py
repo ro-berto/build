@@ -21,7 +21,7 @@ def main():
     print_usage('Subcommand not specified')
 
   pipe = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-  outfiles = [ open(f, 'w') for f in files ]
+  outfiles = [open(f, 'w') for f in files]
 
   while True:
     buf = pipe.stdout.read(1024)

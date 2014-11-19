@@ -61,7 +61,7 @@ import tempfile
 import threading
 
 
-class TerminateMessageThread:  # pylint: disable=W0232
+class TerminateMessageThread(object):  # pylint: disable=W0232
   """Used as a semaphore to signal the message-printing loop to terminate."""
   pass
 

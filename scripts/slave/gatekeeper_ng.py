@@ -636,7 +636,7 @@ def notify_failures(failed_builds, sheriff_url, default_from_email,
 
   filtered_emails_to_send = []
   for email in emails_to_send:
-    new_watchers  = [x if '@' in x else (x + '@' + domain) for x in email[0]]
+    new_watchers = [x if '@' in x else (x + '@' + domain) for x in email[0]]
     if not disable_domain_filter:
       new_watchers = [x for x in new_watchers if x.split('@')[-1] in
                       filter_domain]

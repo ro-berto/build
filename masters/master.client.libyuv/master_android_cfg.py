@@ -24,8 +24,8 @@ def Update(c):
   specs = [
     {'name': 'Android Debug'},
     {'name': 'Android Release'},
-    {'name': 'Android Clang Debug', 'slavebuilddir': 'android_clang' },
-    {'name': 'Android ARM64 Debug', 'slavebuilddir': 'android_arm64' },
+    {'name': 'Android Clang Debug', 'slavebuilddir': 'android_clang'},
+    {'name': 'Android ARM64 Debug', 'slavebuilddir': 'android_arm64'},
   ]
 
   c['builders'].extend([

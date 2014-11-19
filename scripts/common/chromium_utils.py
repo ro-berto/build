@@ -147,7 +147,7 @@ def IsGitCommit(value):
   """
   if value is None:
     return False
-  return (GIT_COMMIT_HASH_RE.match(str(value)) is not None)
+  return GIT_COMMIT_HASH_RE.match(str(value)) is not None
 
 
 # GetParentClass allows a class instance to find its parent class using Python's
@@ -330,6 +330,7 @@ def _ComputePercentiles(buckets, total, percentiles):
   return result
 
 class InitializePartiallyWithArguments:
+  # pylint: disable=old-style-class
   """Function currying implementation.
 
   Works for constructors too. Primary use is to be able to construct a class
@@ -523,7 +524,7 @@ def RemoveDirectory(*path):
   remove_with_retry = RemoveWithRetry_non_win
 
   def RmTreeOnError(function, path, excinfo):
-    """This works around a problem whereby python 2.x on Windows has no ability
+    r"""This works around a problem whereby python 2.x on Windows has no ability
     to check for symbolic links.  os.path.islink always returns False.  But
     shutil.rmtree will fail if invoked on a symbolic link whose target was
     deleted before the link.  E.g., reproduce like this:
@@ -1809,4 +1810,4 @@ def DatabaseSetup(buildmaster_config, require_dbconfig=False):
         values['username'], values['password'],
         values.get('hostname', 'localhost'), values['dbname'])
   else:
-    assert(not require_dbconfig)
+    assert not require_dbconfig

@@ -135,7 +135,9 @@ class StatusEventLogger(StatusReceiverMultiService):
     self.log('logStarted', '%s, %d, %s, %s, %s',
              build_name, build_number, step_name, log_name, log_file)
     # Create an attr on the stateful log object to count its chunks.
+    # pylint: disable=protected-access
     log.__num_chunks = 0
+    # pylint: enable=protected-access
     # Must return self in order to subscribe to logChunk events.
     return self
 

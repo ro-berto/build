@@ -35,15 +35,15 @@ dartium_url = config.Master.dart_bleeding + '/deps/dartium.deps'
 android_tools_url = chromium_git + 'android_tools.git' + android_tools_rev
 if config.Master.v8_internal_url:
   android_resources_url = (config.Master.v8_internal_url +
-      '/buildbot_deps/android_testing_resources' + android_resources_rev )
+      '/buildbot_deps/android_testing_resources' + android_resources_rev)
 else:
   android_resources_url = None
 
 
 # We set these paths relative to the dart root, the scripts need to
 # fix these to be absolute if they don't run from there.
-linux_env =  {'BUILDBOT_JAVA_HOME': 'third_party/java/linux/j2sdk'}
-linux_clang_env =  {'BUILDBOT_JAVA_HOME': 'third_party/java/linux/j2sdk',
+linux_env = {'BUILDBOT_JAVA_HOME': 'third_party/java/linux/j2sdk'}
+linux_clang_env = {'BUILDBOT_JAVA_HOME': 'third_party/java/linux/j2sdk',
                     'CC': 'third_party/clang/linux/bin/clang',
                     'CXX': 'third_party/clang/linux/bin/clang++'}
 windows_env = {'BUILDBOT_JAVA_HOME': 'third_party\\java\\windows\\j2sdk',
@@ -103,8 +103,8 @@ def BuildChromiumFactory(channel, target_platform='win32'):
     return  gclient_factory.GClientSolution(
         deps_url,
         'dartium.deps',
-        custom_vars_list = custom_vars,
-        custom_deps_list = custom_deps)
+        custom_vars_list=custom_vars,
+        custom_deps_list=custom_deps)
 
   class DartiumFactory(chromium_factory.ChromiumFactory):
     def __init__(self, target_platform=None):
@@ -199,8 +199,8 @@ class DartFactory(gclient_factory.GClientFactory):
     main = gclient_factory.GClientSolution(
         deps_url,
         needed_components=self.NEEDED_COMPONENTS,
-        custom_deps_list = custom_deps_list,
-        custom_vars_list = custom_vars_list)
+        custom_deps_list=custom_deps_list,
+        custom_vars_list=custom_vars_list)
     solutions.append(main)
 
     gclient_factory.GClientFactory.__init__(self, build_dir, solutions,
@@ -294,15 +294,15 @@ class PackageFactory(gclient_factory.GClientFactory):
   def __init__(self, build_dir='dart', target_platform='posix',
                extra_deps=None):
     self.target_platform = target_platform
-    deps_url =  'https://github.com/dart-lang/package-bots/trunk'
-    main =  gclient_factory.GClientSolution(deps_url,
+    deps_url = 'https://github.com/dart-lang/package-bots/trunk'
+    main = gclient_factory.GClientSolution(deps_url,
                                             custom_deps_list=extra_deps)
     gclient_factory.GClientFactory.__init__(self, build_dir, [main],
                                             target_platform=target_platform)
 
   def PackagesAnnotatedFactory(self, python_script, target='Release',
                                env=None):
-    factory_properties =  {}
+    factory_properties = {}
     factory_properties['no_gclient_revision'] = True
     AddGeneralGClientProperties(factory_properties)
     # Create the spec for the solutions
@@ -670,7 +670,7 @@ class DartUtils(object):
   def get_builders_from_variants(variants,
                                  slaves,
                                  slave_locks,
-                                 auto_reboot = False):
+                                 auto_reboot=False):
     builders = []
     for v in variants:
       builder = {

@@ -69,7 +69,7 @@ class TryServerHttpStatusPush(status_push.HttpStatusPush):
 
       return data
 
-    extra_post_params = { 'password': pwd }
+    extra_post_params = {'password': pwd}
     status_push.HttpStatusPush.__init__(
         self,
         *args,

@@ -166,7 +166,7 @@ class PerformanceLogProcessor(object):
       # tools/perf_expectations/tests/perf_expectations_unittest.py should have
       # a matching regular expression.
       m = re.search(r'^' + self._perf_name + '/' + self._test_name +
-                   '/([\w\.-]+)/([\w\.-]+)$', perf_key)
+                    r'/([\w\.-]+)/([\w\.-]+)$', perf_key)
       if not m:
         continue
 
@@ -409,12 +409,12 @@ class GraphingLogProcessor(PerformanceLogProcessor):
   GRAPH_LIST = config.Master.perf_graph_list
 
   RESULTS_REGEX = re.compile(r'(?P<IMPORTANT>\*)?RESULT '
-                             '(?P<GRAPH>[^:]*): (?P<TRACE>[^=]*)= '
-                             '(?P<VALUE>[\{\[]?[-\d\., ]+[\}\]]?)('
-                             ' ?(?P<UNITS>.+))?')
+                             r'(?P<GRAPH>[^:]*): (?P<TRACE>[^=]*)= '
+                             r'(?P<VALUE>[\{\[]?[-\d\., ]+[\}\]]?)('
+                             r' ?(?P<UNITS>.+))?')
   HISTOGRAM_REGEX = re.compile(r'(?P<IMPORTANT>\*)?HISTOGRAM '
-                               '(?P<GRAPH>[^:]*): (?P<TRACE>[^=]*)= '
-                               '(?P<VALUE_JSON>{.*})(?P<UNITS>.+)?')
+                               r'(?P<GRAPH>[^:]*): (?P<TRACE>[^=]*)= '
+                               r'(?P<VALUE_JSON>{.*})(?P<UNITS>.+)?')
 
   class Trace(object):
     """Encapsulates data for one trace. Here, this means one point."""

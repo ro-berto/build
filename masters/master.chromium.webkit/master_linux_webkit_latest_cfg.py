@@ -61,7 +61,7 @@ F('f_webkit_linux_oilpan_rel', linux().ChromiumFactory(
     ],
     factory_properties={
         'additional_expectations': [
-            ['third_party', 'WebKit', 'LayoutTests', 'OilpanExpectations' ],
+            ['third_party', 'WebKit', 'LayoutTests', 'OilpanExpectations'],
         ],
         'archive_webkit_results': ActiveMaster.is_production_host,
         'gclient_env': {
@@ -85,7 +85,7 @@ F('f_webkit_linux_rel_asan', linux().ChromiumFactory(
     ],
     factory_properties={
         'additional_expectations': [
-            ['third_party', 'WebKit', 'LayoutTests', 'ASANExpectations' ],
+            ['third_party', 'WebKit', 'LayoutTests', 'ASANExpectations'],
         ],
         'archive_webkit_results': ActiveMaster.is_production_host,
         'asan': True,
@@ -113,7 +113,7 @@ F('f_webkit_linux_oilpan_rel_asan', linux().ChromiumFactory(
     ],
     factory_properties={
         'additional_expectations': [
-            ['third_party', 'WebKit', 'LayoutTests', 'ASANExpectations' ],
+            ['third_party', 'WebKit', 'LayoutTests', 'ASANExpectations'],
         ],
         'archive_webkit_results': ActiveMaster.is_production_host,
         'asan': True,
@@ -141,7 +141,7 @@ F('f_webkit_linux_leak_rel', linux().ChromiumFactory(
     ],
     factory_properties={
         'additional_expectations': [
-            ['third_party', 'WebKit', 'LayoutTests', 'LeakExpectations' ],
+            ['third_party', 'WebKit', 'LayoutTests', 'LeakExpectations'],
         ],
         'archive_webkit_results': ActiveMaster.is_production_host,
         'gclient_env': {
@@ -165,9 +165,9 @@ F('f_webkit_linux_oilpan_leak_rel', linux().ChromiumFactory(
     ],
     factory_properties={
         'additional_expectations': [
-            ['third_party', 'WebKit', 'LayoutTests', 'OilpanExpectations' ],
-            ['third_party', 'WebKit', 'LayoutTests', 'LeakExpectations' ],
-            ['third_party', 'WebKit', 'LayoutTests', 'OilpanLeakExpectations' ],
+            ['third_party', 'WebKit', 'LayoutTests', 'OilpanExpectations'],
+            ['third_party', 'WebKit', 'LayoutTests', 'LeakExpectations'],
+            ['third_party', 'WebKit', 'LayoutTests', 'OilpanLeakExpectations'],
         ],
         'archive_webkit_results': ActiveMaster.is_production_host,
         'generate_gtest_json': True,
@@ -223,7 +223,7 @@ F('f_webkit_linux_oilpan_dbg', linux().ChromiumFactory(
     ],
     factory_properties={
         'additional_expectations': [
-            ['third_party', 'WebKit', 'LayoutTests', 'OilpanExpectations' ],
+            ['third_party', 'WebKit', 'LayoutTests', 'OilpanExpectations'],
         ],
         'archive_webkit_results': ActiveMaster.is_production_host,
         'gclient_env': {

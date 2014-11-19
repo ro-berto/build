@@ -242,7 +242,7 @@ def wait_for_start(master, name, path, ports):
         return exception
       time.sleep(0.1)
       continue
-    (port, got_name) = result
+    port, got_name = result # pylint: disable=unpacking-non-sequence
     if got_name != name:
       return 'Wrong %s name, expected %s, got %s on port %d' % (
           master, name, got_name, port)

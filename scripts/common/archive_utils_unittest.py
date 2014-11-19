@@ -426,7 +426,7 @@ class ArchiveUtilsTest(unittest.TestCase):
     fparser = archive_utils.FilesCfgParser(files_cfg, buildtype, arch)
     files_list = fparser.ParseLegacyList()
     zip_dir, zip_file_path = archive_utils.CreateArchive(
-        self.build_dir , self.temp_dir, files_list, archive_name)
+        self.build_dir, self.temp_dir, files_list, archive_name)
     self.assertTrue(zip_dir)
     self.assertTrue(zip_file_path)
     self.assertTrue(os.path.exists(zip_file_path))
@@ -455,7 +455,7 @@ class ArchiveUtilsTest(unittest.TestCase):
     fparser = archive_utils.FilesCfgParser(files_cfg, buildtype, arch)
     files_list = fparser.ParseLegacyList()
     zip_dir, zip_file_path = archive_utils.CreateArchive(
-        self.build_dir , self.temp_dir, files_list, archive_name)
+        self.build_dir, self.temp_dir, files_list, archive_name)
     self.assertTrue(zip_dir)
     self.assertTrue(zip_file_path)
     self.assertTrue(os.path.exists(zip_file_path))
@@ -483,7 +483,7 @@ class ArchiveUtilsTest(unittest.TestCase):
     fparser = archive_utils.FilesCfgParser(files_cfg, buildtype, arch)
     files_list = fparser.ParseLegacyList()
     zip_dir, zip_file_path = archive_utils.CreateArchive(
-        self.build_dir , self.temp_dir, files_list, archive_name)
+        self.build_dir, self.temp_dir, files_list, archive_name)
     self.assertFalse(zip_dir)
     self.assertFalse(zip_file_path)
     self.assertFalse(os.path.exists(zip_file_path))

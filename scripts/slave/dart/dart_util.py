@@ -32,8 +32,8 @@ def main():
   if options.clobber:
     return clobber()
   else:
-    print("Nothing to do")
+    print "Nothing to do"
 
 
-if '__main__' == __name__ :
+if '__main__' == __name__:
   sys.exit(main())

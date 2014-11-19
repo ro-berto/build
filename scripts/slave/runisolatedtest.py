@@ -133,7 +133,7 @@ def main(argv):
   option_parser.add_option('--checkout_dir',
                            help='Checkout directory, used to locate the '
                            'swarm_client scripts.')
-  option_parser.add_option('-f', '--force-isolated',  action='store_true',
+  option_parser.add_option('-f', '--force-isolated', action='store_true',
                            help='Force test to run isolated. By default only '
                            'white listed builders and tests are run isolated.')
   option_parser.add_option('-v', '--verbose', action='count', default=0,

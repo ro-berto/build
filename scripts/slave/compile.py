@@ -230,7 +230,7 @@ def UploadNinjaLog(options, command, exit_status):
     st = os.stat(ninja_log_path)
     mtime = datetime.datetime.fromtimestamp(st.st_mtime)
   except OSError, e:
-    print(e)
+    print e
     return
 
   cwd = os.getcwd()
@@ -340,13 +340,13 @@ class XcodebuildFilter(chromium_utils.RunCommandFilter):
   # start of a "section" and buffers or sending on as needed.
 
   # Enum for the current mode.
-  class LineMode:
+  class LineMode(object):
     # Class has no __init__ method
     # pylint: disable=W0232
     BufferAsCommand, Unbuffered, DroppingFailures = range(3)
 
   # Enum for output types.
-  class LineType:
+  class LineType(object):
     # Class has no __init__ method
     # pylint: disable=W0232
     Header, Command, Info, Raw = range(4)
@@ -565,7 +565,7 @@ def main_xcode(options, args):
   # Note: this clobbers all targets, not just Debug or Release.
   if options.clobber:
     clobber_dir = os.path.dirname(options.target_output_dir)
-    print('Removing %s' % clobber_dir)
+    print 'Removing %s' % clobber_dir
     # Deleting output_dir would also delete all the .ninja files. iOS builds
     # generates ninja configuration inside the xcodebuild directory to be able
     # to run sub builds. crbug.com/138950 is tracking this issue.
@@ -703,7 +703,7 @@ def main_make(options, args):
   result = 0
 
   def clobber():
-    print('Removing %s' % options.target_output_dir)
+    print 'Removing %s' % options.target_output_dir
     chromium_utils.RemoveDirectory(options.target_output_dir)
 
   assert ',' not in options.target, (
@@ -772,7 +772,7 @@ def main_make_android(options, args):
   ]
 
   def clobber():
-    print('Removing %s' % options.target_output_dir)
+    print 'Removing %s' % options.target_output_dir
     chromium_utils.RemoveDirectory(options.target_output_dir)
 
   # The Android.mk build system handles deps differently than the 'regular'
@@ -784,7 +784,7 @@ def main_make_android(options, args):
   else:
     for path in bad_path_patterns:
       paths = chromium_utils.RemoveGlobbedPaths(path)
-      print('\n'.join(['Removed {}'.format(removed) for removed in paths]))
+      print '\n'.join(['Removed {}'.format(removed) for removed in paths])
 
   result = chromium_utils.RunCommand(command, env=env)
 
@@ -813,7 +813,7 @@ def main_ninja(options, args):
     command = ['ninja', '-C', options.target_output_dir]
 
     if options.clobber:
-      print('Removing %s' % options.target_output_dir)
+      print 'Removing %s' % options.target_output_dir
       # Deleting output_dir would also delete all the .ninja files necessary to
       # build. Clobbering should run before runhooks (which creates .ninja
       # files). For now, only delete all non-.ninja files.
@@ -931,7 +931,7 @@ def main_win(options, args):
       tool_options.extend(['/Project', options.project])
 
   def clobber():
-    print('Removing %s' % options.target_output_dir)
+    print 'Removing %s' % options.target_output_dir
     chromium_utils.RemoveDirectory(options.target_output_dir)
 
   if options.clobber:
@@ -1032,19 +1032,19 @@ def main_win(options, args):
   result = chromium_utils.RunCommand(
       command, parser_func=scan, env=env, universal_newlines=True)
   if errors:
-    print('\n\nRetrying a clobber build because of:')
-    print('\n'.join(('  ' + l for l in errors)))
-    print('Removing %s' % options.target_output_dir)
+    print '\n\nRetrying a clobber build because of:'
+    print '\n'.join(('  ' + l for l in errors))
+    print 'Removing %s' % options.target_output_dir
     for _ in range(3):
       try:
         chromium_utils.RemoveDirectory(options.target_output_dir)
         break
       except OSError, e:
-        print(e)
-        print('\nSleeping 15 seconds. Lovely windows file locks.')
+        print e
+        print '\nSleeping 15 seconds. Lovely windows file locks.'
         time.sleep(15)
     else:
-      print('Failed to delete a file 3 times in a row, aborting.')
+      print 'Failed to delete a file 3 times in a row, aborting.'
       return 1
     result = chromium_utils.RunCommand(command, env=env)
 
@@ -1194,7 +1194,7 @@ def real_main():
       main = main_ninja
       options.build_tool = 'ninja'
     else:
-      print('Please specify --build-tool.')
+      print 'Please specify --build-tool.'
       return 1
   else:
     build_tool_map = {

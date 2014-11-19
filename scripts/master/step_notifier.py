@@ -86,12 +86,12 @@ class StepNotifier(MailNotifier):
     * we care about steps on the builder with this name
     * we care about steps on any of this builder's categories
     """
-    if '*' in (self.interesting_steps or {}):
+    if '*' in self.interesting_steps or {}:
       self.watched.append(builder)
       self.log('Interested in %s (wildcard).' % builder.name)
       return True
 
-    if builder.name in (self.builders or []):
+    if builder.name in self.builders or []:
       self.watched.append(builder)
       self.log('Interested in %s (in builders).' % builder.name)
       return True

@@ -35,10 +35,10 @@ class frozendict(collections.Mapping):
     return '%s(%s)' % (type(self).__name__, str(self))
 
   def __eq__(self, other):
-    return (self._data == other)
+    return self._data == other
 
   def __ne__(self, other):
-    return (not self == other)
+    return not self == other
 
   def __deepcopy__(self, _memo):
     return copy.deepcopy(self._data)

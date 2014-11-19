@@ -229,7 +229,7 @@ class StagerBase(object):
     """Returns a list of extra files to package in the build output directory.
 
     For each of the paths in the extra_file_paths list, this function
-    checks to see if path\source_file_name exists. If so, it expects these
+    checks to see if path/source_file_name exists. If so, it expects these
     files to contain a list of newline-separated filenames that it returns
     in a list. The paths in extra_archive_paths are relative to the
     directory specified by --src-dir.

@@ -280,23 +280,24 @@ def SetupChromiumPages(webstatus, tagComparator=None, customEndpoints=None,
 
   def _tick_filter(n, stride):
     n = ((n / stride) + 1) * stride
-    return filter(lambda x: x % (n/stride) == 0, range(n+1))
+    return [x for x in range(n+1) if x % (n/stride) == 0]
 
   if not customEndpoints:
     customEndpoints = {}
   orig_shortrev = webstatus.templates.filters['shortrev']
 
   webstatus.templates.filters.update(
-      { 'shortrev': lambda rev, repo: orig_shortrev(rev, repo).rstrip('.'),
-        'longrev': lambda x, y: jinja2.escape(unicode(x)),
-        'numstrip': lambda x: jinja2.escape(unicode(x.lstrip('0123456789'))),
-        'quote': urllib.quote,
-        'max': lambda x: reduce(max, x, 0),
-        'average': lambda x: float(sum(x)) / float(max(len(x), 1)),
-        'ticks': lambda x: ["{v:%d}" % y for y in _tick_filter(x, 12)],
-        'addlinks': lambda x: re.sub(r'(http://[^\s@]+)', r'<a href="\1">\1</a>', x),
-        'fixname': lambda x: x.translate(None, ' -():'),
-        'extract_index': lambda x, i: [y[i] for y in x] })
+      {'shortrev': lambda rev, repo: orig_shortrev(rev, repo).rstrip('.'),
+       'longrev': lambda x, y: jinja2.escape(unicode(x)),
+       'numstrip': lambda x: jinja2.escape(unicode(x.lstrip('0123456789'))),
+       'quote': urllib.quote,
+       'max': lambda x: reduce(max, x, 0),
+       'average': lambda x: float(sum(x)) / float(max(len(x), 1)),
+       'ticks': lambda x: ["{v:%d}" % y for y in _tick_filter(x, 12)],
+       'addlinks': lambda x: re.sub(r'(http://[^\s@]+)', r'<a href="\1">\1</a>', x),
+       'fixname': lambda x: x.translate(None, ' -():'),
+       'extract_index': lambda x, i: [y[i] for y in x],
+      })
 
   kwargs = {}
   if console_repo_filter:

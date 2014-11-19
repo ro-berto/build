@@ -592,7 +592,7 @@ def RemoveChromeDesktopFiles():
   if chromium_utils.IsWindows():
     desktop_path = os.environ['USERPROFILE']
     desktop_path = os.path.join(desktop_path, 'Desktop')
-    LogAndRemoveFiles(desktop_path, '^(Chromium|chrome) \(.+\)?\.lnk$')
+    LogAndRemoveFiles(desktop_path, r'^(Chromium|chrome) \(.+\)?\.lnk$')
     RemoveOldSnapshots(desktop_path)
 
 
@@ -672,7 +672,7 @@ def RemoveChromeTemporaryFiles():
   # there is a lot to cleanup and also se we see the leaks in the
   # build logs.
   # At some point a leading dot got added, support with and without it.
-  kLogRegex = '^\.?(com\.google\.Chrome|org\.chromium)\.'
+  kLogRegex = r'^\.?(com\.google\.Chrome|org\.chromium)\.'
   if chromium_utils.IsWindows():
     RemoveTempDirContents()
     RemoveChromeDesktopFiles()

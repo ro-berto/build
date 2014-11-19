@@ -107,7 +107,7 @@ def DeleteIfExists(filename):
   if status != 0:
     raise Exception('ERROR: failed to get list of GSBASE, exiting' % GSBASE)
 
-  regex = re.compile('\s*\d+\s+([-:\w]+)\s+%s/%s\n' % (GSBASE, filename))
+  regex = re.compile(r'\s*\d+\s+([-:\w]+)\s+%s/%s\n' % (GSBASE, filename))
   if not regex.search(output):
     return
 
@@ -164,10 +164,10 @@ def main():
                   '-type', 'f',
                   # The only files under src/out we want to package up
                   # are index files....
-                  '(', '-regex', '^src/out/.*\.index$', '-o',
+                  '(', '-regex', r'^src/out/.*\.index$', '-o',
                       '(',
                          # ... and generated sources...
-                         '-regex', '^src/out/.*/gen/.*', '-a',
+                         '-regex', r'^src/out/.*/gen/.*', '-a',
                          '(', '-name', '*.h', '-o', '-name', '*.cc', '-o',
                               '-name', '*.cpp', '-o', '-name', '*.js',
                               ')', '-a',
@@ -181,13 +181,13 @@ def main():
                   # and the llvm build directory, and perf/data files.
                   '!', '-regex', r'.*/\.svn/.*', '-a',
                   '!', '-regex', r'.*/\.git/.*', '-a',
-                  '!', '-regex', '^src/native_client/toolchain/.*', '-a',
-                  '!', '-regex', '^src/native_client/.*/testdata/.*', '-a',
-                  '!', '-regex', '^src/third_party/llvm-build/.*', '-a',
-                  '!', '-regex', '^src/.*/\.cvsignore', '-a',
-                  '!', '-regex', '^src/chrome/tools/test/reference_build/.*',
+                  '!', '-regex', r'^src/native_client/toolchain/.*', '-a',
+                  '!', '-regex', r'^src/native_client/.*/testdata/.*', '-a',
+                  '!', '-regex', r'^src/third_party/llvm-build/.*', '-a',
+                  '!', '-regex', r'^src/.*/\.cvsignore', '-a',
+                  '!', '-regex', r'^src/chrome/tools/test/reference_build/.*',
                   '-a',
-                  '!', '-regex', '^tools/perf/data/.*']
+                  '!', '-regex', r'^tools/perf/data/.*']
 
   try:
     if chromium_utils.RunCommand(find_command,
@@ -218,8 +218,8 @@ def main():
     if status != 0:
       raise Exception('ERROR: failed to get list of GSBASE, exiting' % GSBASE)
 
-    regex = re.compile('\s*\d+\s+([-:\w]+)\s+%s/%s\n' % (GSBASE,
-                                                         completed_filename))
+    regex = re.compile(r'\s*\d+\s+([-:\w]+)\s+%s/%s\n' % (GSBASE,
+                                                          completed_filename))
     match_data = regex.search(output)
     modified_time = None
     if match_data:
@@ -229,7 +229,7 @@ def main():
     print 'Last modified time: %s' % modified_time
 
     print '%s: Deleting old archives on google storage...' % time.strftime('%X')
-    regex = re.compile('\s*\d+\s+([-:\w]+)\s+(%s/.*%s.*)\n' % (GSBASE, EXT))
+    regex = re.compile(r'\s*\d+\s+([-:\w]+)\s+(%s/.*%s.*)\n' % (GSBASE, EXT))
     last_week = int(time.time()) - 7 * 24 * 60 * 60
     for match_data in regex.finditer(output):
       timestamp = int(time.strftime(

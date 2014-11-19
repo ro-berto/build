@@ -53,3 +53,4 @@ def GenTests(api):
       api.override_step_data(
           'check roll status', api.raw_io.stream_output('0', stream='stdout'))
     )
+

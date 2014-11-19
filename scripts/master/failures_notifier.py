@@ -68,7 +68,7 @@ class FailuresNotifier(chromium_notifier.ChromiumNotifier):
       failure = l.getName()  # stdio or suppression hash or failed test or ?
 
       # TODO(timurrrr): put the gtest regexp into a common place.
-      if (not re.match('^[\dA-F]{16}$', failure) and
+      if (not re.match(r'^[\dA-F]{16}$', failure) and
           not re.match(r'((\w+/)?\w+\.\w+(/\d+)?)', failure)):  # gtest name
         if failure != 'stdio':
           log.msg('[failurenotifier] Log `%s` is ignored since doesn\'t look '

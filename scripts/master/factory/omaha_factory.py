@@ -14,7 +14,7 @@ class OmahaFactory(gclient_factory.GClientFactory):
   """Encapsulates data and methods common to the Omaha master.cfg files."""
 
   def __init__(self, build_dir='omaha', target_platform='win32'):
-    omaha_svn_url =  'http://omaha.googlecode.com/svn/trunk'
+    omaha_svn_url = 'http://omaha.googlecode.com/svn/trunk'
     main = gclient_factory.GClientSolution(omaha_svn_url,
                                            name='omaha')
     custom_deps_list = [main]
@@ -44,6 +44,6 @@ class OmahaFactory(gclient_factory.GClientFactory):
       omaha_cmd_obj.AddHammer(target, options)
 
     # We don't support running custom tests yet.
-    assert(tests == [])
+    assert tests == []
 
     return factory

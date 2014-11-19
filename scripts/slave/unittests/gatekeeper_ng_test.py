@@ -1200,7 +1200,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
 
     self.masters[0].builders[0].builds.append(
-        GatekeeperTest.create_generic_build(2,[
+        GatekeeperTest.create_generic_build(2, [
             'a_second_committer@chromium.org']))
     self.masters[0].builders[0].builds[1].steps[1].results = [2, None]
 

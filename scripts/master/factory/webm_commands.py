@@ -25,7 +25,7 @@ class WebMCommands(commands.FactoryCommands):
 
 
   def AddCloneOrFetchRepositoryStep(self, url, checkout_dir="."):
-    cmd =  'mkdir -p %s && ' % checkout_dir
+    cmd = 'mkdir -p %s && ' % checkout_dir
     cmd += 'cd %s && ' % checkout_dir
     cmd += 'git init && '
     cmd += 'git fetch origin +refs/*:refs/remotes/origin/*'
@@ -37,41 +37,41 @@ class WebMCommands(commands.FactoryCommands):
 
 
   def AddCheckoutRevisionStep(self, url, rev='%(revision)s', checkout_dir="."):
-    cmd =  'git reset --hard && git checkout %s && ' % rev
+    cmd = 'git reset --hard && git checkout %s && ' % rev
     cmd += 'git ls-files -o | xargs rm -f'
     msg = 'Checkout'
     self._factory.addStep(shell.ShellCommand,
                           command=['bash', '-c', WithProperties(cmd)],
-                          workdir=os.path.join(self._build_dir,checkout_dir),
+                          workdir=os.path.join(self._build_dir, checkout_dir),
                           name=msg,
                           description=msg)
 
 
   def AddConfigureStep(self, args="", checkout_dir="."):
-    cmd =  './configure %s' % args
+    cmd = './configure %s' % args
     msg = 'Configure'
     self._factory.addStep(shell.ShellCommand,
                           command=['bash', '-c', cmd],
-                          workdir=os.path.join(self._build_dir,checkout_dir),
+                          workdir=os.path.join(self._build_dir, checkout_dir),
                           name=msg,
                           description=msg)
 
 
   def AddMakeStep(self, args="", checkout_dir="."):
-    cmd =  'make'
+    cmd = 'make'
     msg = 'Make'
     self._factory.addStep(shell.ShellCommand,
                           command=['bash', '-c', cmd],
-                          workdir=os.path.join(self._build_dir,checkout_dir),
+                          workdir=os.path.join(self._build_dir, checkout_dir),
                           name=msg,
                           description=msg)
 
 
   def AddInstallStep(self, args="", checkout_dir="."):
-    cmd =  'make dist'
+    cmd = 'make dist'
     msg = 'Make Distribution'
     self._factory.addStep(shell.ShellCommand,
                           command=['bash', '-c', cmd],
-                          workdir=os.path.join(self._build_dir,checkout_dir),
+                          workdir=os.path.join(self._build_dir, checkout_dir),
                           name=msg,
                           description=msg)

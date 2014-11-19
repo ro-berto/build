@@ -15,7 +15,7 @@ from common import chromium_utils
 class PartiallyInitializeTest(unittest.TestCase):
 
   def testConstructorCurring(self):
-    class PartiallyConstructable:
+    class PartiallyConstructable(object):
       def __init__(self, arg1, named_arg1=None, named_arg2=None):
         self.arg1 = arg1
         self.named_arg1 = named_arg1
