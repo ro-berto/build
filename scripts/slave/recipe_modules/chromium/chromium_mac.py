@@ -80,7 +80,7 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'enable_swarming': False,
+      'enable_swarming': True,
       'swarming_dimensions': {
         'os': 'Mac-10.9',
       },
@@ -116,7 +116,7 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'enable_swarming': False,
+      'enable_swarming': True,
       'swarming_dimensions': {
         'os': 'Mac-10.9',
       },
