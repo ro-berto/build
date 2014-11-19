@@ -38,6 +38,7 @@ BUILDERS = {
         },
         'chromium_config': 'chromium',
         'compile_only': True,
+        'exclude_compile_all': True,
         'testing': {
           'platform': 'linux',
           'test_spec_file': 'chromium_arm.json',
