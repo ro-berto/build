@@ -2,6 +2,7 @@ DEPS = [
   'archive',
   'bot_update',
   'chromium',
+  'commit_position',
   'gclient',
   'gsutil',
   'json',

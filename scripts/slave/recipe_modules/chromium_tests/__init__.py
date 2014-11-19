@@ -3,6 +3,7 @@ DEPS = [
   'bot_update',
   'chromium',
   'chromium_android',
+  'commit_position',
   'filter',
   'gclient',
   'isolate',

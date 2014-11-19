@@ -318,6 +318,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return sorted(compile_targets), tests_including_triggered
 
+  def get_build_revision(self, properties, type):
+    if type == 'commit_position':
+      return self.m.commit_position.parse_revision(
+          properties['got_revision_cp'])
+    return properties['got_revision']
+
   def compile(self, mastername, buildername, update_step, master_dict,
               test_spec):
     """Runs compile and related steps for given builder."""
@@ -390,8 +396,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             targets=list(set(isolated_targets)),
             verbose=True)
 
-    got_revision = update_step.presentation.properties['got_revision']
-
     if bot_type == 'builder':
       if mastername == 'chromium.linux':
         # TODO(samuong): This is restricted to Linux for now until I have more
@@ -412,11 +416,15 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             revision_dir=bot_config.get('cf_revision_dir'),
         )
       else:
+        build_revision = self.get_build_revision(
+            update_step.presentation.properties,
+            bot_config.get('archive_key', 'got_revision'))
+
         self.m.archive.zip_and_upload_build(
             'package build',
             self.m.chromium.c.build_config_fs,
             build_url=self._build_gs_archive_url(mastername, master_config),
-            build_revision=got_revision,
+            build_revision=build_revision,
             cros_board=self.m.chromium.c.TARGET_CROS_BOARD,
             # TODO(machenbach): Make asan a configuration switch.
             package_dsym_files=(

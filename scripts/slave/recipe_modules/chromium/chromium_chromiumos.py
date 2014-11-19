@@ -268,6 +268,7 @@ SPEC = {
       'compile_targets': [
         'chrome',
       ],
+      'archive_key': 'commit_position',
       'testing': {
         'platform': 'linux',
       },

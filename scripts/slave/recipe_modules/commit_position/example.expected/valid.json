@@ -1,0 +1,23 @@
+[
+  {
+    "cmd": [
+      "/bin/echo",
+      "refs/heads/master"
+    ],
+    "name": "test branch parse"
+  },
+  {
+    "cmd": [
+      "/bin/echo",
+      "12345"
+    ],
+    "name": "test revision parse"
+  },
+  {
+    "cmd": [
+      "/bin/echo",
+      "refs/heads/master@{#12345}"
+    ],
+    "name": "test construction"
+  }
+]

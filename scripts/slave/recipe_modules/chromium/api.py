@@ -398,9 +398,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     )
 
   def _commit_position(self, property_name):
-      revision_str = self.m.bot_update.properties[property_name]
-      m = re.match('.*@{#(\d+)}', revision_str)
-      return m.group(1)
+    return self.m.commit_position.parse_revision(
+        self.m.bot_update.properties[property_name])
 
   def _get_cros_chrome_sdk_wrapper(self, clean=False):
     """Returns: a wrapper command for 'cros chrome-sdk'

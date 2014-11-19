@@ -10,8 +10,6 @@ from slave import recipe_api
 from slave.recipe_modules.v8 import builders
 
 
-COMMIT_POSITION_PATTERN = re.compile(r'^([^@]+)@{#(\d+)}$')
-
 # With more than 23 letters, labels are to big for buildbot's popup boxes.
 MAX_LABEL_SIZE = 23
 
@@ -254,9 +252,8 @@ class V8Api(recipe_api.RecipeApi):
     # Whatever step is run right before this line needs to emit got_revision.
     self.revision = update_step.presentation.properties['got_revision']
     self.revision_cp = update_step.presentation.properties['got_revision_cp']
-    match = COMMIT_POSITION_PATTERN.match(self.revision_cp)
-    assert match, 'Invalid Cr-Commit-Position value: %s' % self.revision_cp
-    self.revision_number = match.group(2)
+    self.revision_number = str(self.m.commit_position.parse_revision(
+        self.revision_cp))
 
   def runhooks(self, **kwargs):
     env = {}
