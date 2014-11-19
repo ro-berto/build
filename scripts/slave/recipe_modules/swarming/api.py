@@ -513,8 +513,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         name=self._get_step_name('', task),
         script=self.m.swarming_client.path.join('swarming.py'),
         args=args,
-        step_test_data=lambda: self.m.raw_io.test_api.output_dir(
-            {'results.json': self.m.json.dumps(step_test_data)}),
+        step_test_data=lambda: step_test_data,
         **kwargs)
 
     return self.m.json.loads(result.raw_io.output_dir['results.json'])

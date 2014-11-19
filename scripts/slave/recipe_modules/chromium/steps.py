@@ -2,7 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import json
 import re
 
 
@@ -820,8 +819,7 @@ class LocalTelemetryGPUTest(Test):  # pylint: disable=W0232
     kwargs = self._runtest_kwargs.copy()
     kwargs['args'].extend(['--output-format', 'json',
                            '--output-dir', api.raw_io.output_dir()])
-    canned_results = api.json.test_api.canned_telemetry_gpu_output(False)
-
+    step_test_data=lambda: api.json.test_api.canned_telemetry_gpu_output(False)
     try:
       api.isolate.run_telemetry_test(
           'telemetry_gpu_test',
@@ -830,15 +828,14 @@ class LocalTelemetryGPUTest(Test):  # pylint: disable=W0232
           self._webkit_revision,
           name=self._step_name(suffix),
           spawn_dbus=True,
-          step_test_data=lambda: api.raw_io.test_api.output_dir(
-              {'results.json': json.dumps(canned_results)}),
+          step_test_data=step_test_data,
           **self._runtest_kwargs)
     finally:
       step_result = api.step.active_result
       self._test_runs[suffix] = step_result
 
       try:
-        res = json.loads(step_result.raw_io.output_dir['results.json'])
+        res = api.json.loads(step_result.raw_io.output_dir['results.json'])
         self._failures[suffix] = [res['pages'][str(value['page_id'])]['name']
                                   for value in res['per_page_values']
                                   if value['type'] == 'failure']
