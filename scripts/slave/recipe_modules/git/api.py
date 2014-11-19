@@ -118,7 +118,7 @@ class GitApi(recipe_api.RecipeApi):
       fetch_env['GIT_CURL_VERBOSE'] = '1'
       fetch_stderr = self.m.raw_io.output(leak_to=curl_trace_file)
 
-    self('fetch', *fetch_args,
+    self('retry', 'fetch', *fetch_args,
       cwd=dir_path,
       name='git fetch%s' % step_suffix,
       env=fetch_env,

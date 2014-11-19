@@ -24,6 +24,7 @@
   {
     "cmd": [
       "[DEPOT_TOOLS]\\git.bat",
+      "retry",
       "fetch",
       "origin",
       "feaaabcdef"

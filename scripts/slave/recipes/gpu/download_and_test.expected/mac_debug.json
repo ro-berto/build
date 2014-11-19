@@ -22,6 +22,7 @@
   {
     "cmd": [
       "git",
+      "retry",
       "fetch",
       "origin",
       "feaaabcdef"
