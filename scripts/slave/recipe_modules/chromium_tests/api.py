@@ -194,7 +194,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if enable_swarming:
       self.m.isolate.set_isolate_environment(self.m.chromium.c)
       self.m.swarming.check_client_version()
-      self.m.swarming.default_priority = 50
       os_dimension = bot_config.get('swarming_dimensions', {}).get('os')
       if os_dimension:
         self.m.swarming.set_default_dimension('os', os_dimension)
