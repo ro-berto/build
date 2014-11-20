@@ -181,6 +181,10 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
     """Run device-specific installation steps."""
     if self._has_root:
       self._adb(name='adb root', serial=self.serial, cmd=['root'])
+      # Wait for the device to reconnect.
+      self._skia_api.m.step(
+          name='wait',
+          cmd=['sleep', '10'])
 
     self._adb(name='wait for device',
               serial=self.serial,

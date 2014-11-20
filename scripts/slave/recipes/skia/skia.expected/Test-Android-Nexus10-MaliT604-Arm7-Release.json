@@ -103,6 +103,13 @@
   },
   {
     "cmd": [
+      "sleep",
+      "10"
+    ],
+    "name": "wait"
+  },
+  {
+    "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "R32CB017X2L",
