@@ -64,6 +64,8 @@ def OsFullName(platform):
     return 'Windows'
   elif platform.startswith('linux'):
     return 'Linux'
+  elif platform.startswith('mac'):
+    return 'MacOS'
   else:
     raise ValueError('Unknown platform %s' % platform)
 
@@ -265,8 +267,10 @@ class DrCommands(object):
       src_file = 'DynamoRIO-Windows-*.%(got_revision)s-42.zip'
       dst_file = 'dynamorio-windows-r%(got_revision)s.zip'
     else:
-      src_file = 'DynamoRIO-Linux-*.%(got_revision)s-42.tar.gz'
-      dst_file = 'dynamorio-linux-r%(got_revision)s.tar.gz'
+      src_file = ('DynamoRIO-' + OsFullName(self.target_platform) +
+                  '-*.%(got_revision)s-42.tar.gz')
+      dst_file = ('dynamorio-' + OsShortName(self.target_platform) +
+                  '-r%(got_revision)s.tar.gz')
     self.AddFindFileIntoPropertyStep(src_file, 'package_name')
     self.AddStep(FileUpload,
                  slavesrc=WithProperties('%(package_name)s'),
@@ -335,9 +339,10 @@ class DrCommands(object):
                    masterdest=LATEST_WIN_BUILD,
                    name='upload latest build')
     else:
-      # For Linux, we just use the tgz that cpack made for us.
+      # For Linux or Mac, we just use the tgz that cpack made for us.
       src_file = package_name + '.tar.gz'
-      dst_file = 'drmemory-linux-r%(got_revision)s.tar.gz'
+      dst_file = ('drmemory-' + OsShortName(self.target_platform) +
+                  '-r%(got_revision)s.tar.gz')
     self.AddStep(FileUpload,
                  slavesrc=WithProperties(src_file),
                  masterdest=WithProperties('public_html/builds/' + dst_file),
