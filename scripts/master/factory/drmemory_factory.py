@@ -47,12 +47,16 @@ LINUX_CHROME_TESTS = [
 ]
 
 
-def WindowsToOs(windows):
-  """Takes a boolean windows value and returns a platform string."""
-  if windows:
+def BotToPlatform(bot_platform):
+  """Takes a bot platform value and returns a platform string."""
+  if bot_platform.startswith('win'):
     return 'windows'
-  else:
+  elif bot_platform.startswith('linux'):
     return 'linux'
+  elif bot_platform.startswith('mac'):
+    return 'mac'
+  else:
+    raise ValueError('Unknown platform %s' % platform)
 
 
 def OsFullName(platform):
@@ -69,6 +73,8 @@ def OsShortName(platform):
     return 'win'
   elif platform.startswith('linux'):
     return 'linux'
+  elif platform.startswith('mac'):
+    return 'mac'
   else:
     raise ValueError('Unknown platform %s' % platform)
 
@@ -105,7 +111,7 @@ class DrCommands(object):
 
   def IsMac(self):
     """Returns true if we're targetting Mac OSX."""
-    return self.target_platform.startswith('darwin')
+    return self.target_platform.startswith('mac')
 
   def PathJoin(self, *args):
     """Join paths using the separator of the os of the bot."""
@@ -619,9 +625,9 @@ def DynamoRIOPackageFactory(os='', os_version=''):
   return DrCommands(os, os_version).DynamoRIOPackage()
 
 
-def CreateDrMFactory(windows):
+def CreateDrMFactory(bot_platform):
   # Build and run the drmemory pre-commit suite.
-  cmds = DrCommands(WindowsToOs(windows))
+  cmds = DrCommands(BotToPlatform(bot_platform))
   cmds.DrMemorySuite()
   if cmds.IsWindows():
     cmds.AddTSanTestBuild()
@@ -631,8 +637,8 @@ def CreateDrMFactory(windows):
   return cmds.factory
 
 
-def CreateDrMPackageFactory(windows):
-  return DrCommands(WindowsToOs(windows)).DrMemoryPackage()
+def CreateDrMPackageFactory(bot_platform):
+  return DrCommands(BotToPlatform(bot_platform)).DrMemoryPackage()
 
 
 def CreateWinChromeFactory(builder):
