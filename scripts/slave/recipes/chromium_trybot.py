@@ -1588,5 +1588,11 @@ def GenTests(api):
       enable_gpu_tests=True,
       swarm_hashes=api.gpu.dummy_swarm_hashes
     ) +
-    api.platform.name('mac')
+    api.platform.name('mac') +
+    api.override_step_data(
+        'pixel_test (with patch) on Mac',
+        api.json.canned_telemetry_gpu_output(passing=False)) +
+    api.override_step_data(
+        'pixel_test (without patch) on Mac',
+        api.json.canned_telemetry_gpu_output(passing=False))
   )
