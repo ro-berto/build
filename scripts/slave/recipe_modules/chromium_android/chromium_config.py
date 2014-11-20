@@ -75,6 +75,11 @@ def cronet_builder(c):
 def arm_l_builder(c):
   pass
 
+@CONFIG_CTX(includes=['arm_l_builder'])
+def arm_l_builder_lto(c):
+  c.gyp_env.GYP_DEFINES['use_lto'] = 1
+  del c.gyp_env.GYP_DEFINES['component']
+
 @CONFIG_CTX(includes=['arm_l_builder'],
             config_vars={'BUILD_CONFIG': 'Release'})
 def arm_l_builder_rel(c):
