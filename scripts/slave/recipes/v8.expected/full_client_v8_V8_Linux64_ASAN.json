@@ -59,7 +59,7 @@
       "CC": "[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/clang",
       "CXX": "[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/clang++",
       "CXX_host": "[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/clang++",
-      "GYP_DEFINES": "asan=1 clang=1 lsan=1 target_arch=x64 use_allocator=none v8_target_arch=x64",
+      "GYP_DEFINES": "asan=1 clang=1 gomadir='[BUILD]/goma' lsan=1 target_arch=x64 use_allocator=none use_goma=1 v8_target_arch=x64",
       "LINK": "[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/clang++"
     },
     "name": "gclient runhooks"
@@ -84,7 +84,9 @@
       "--build-tool",
       "make",
       "--compiler",
-      "clang",
+      "goma-clang",
+      "--goma-dir",
+      "[BUILD]/goma",
       "--"
     ],
     "name": "compile"

@@ -901,7 +901,7 @@ BUILDERS = {
       },
       'V8 Linux64 ASAN': {
         'gclient_apply_config': ['clang'],
-        'chromium_apply_config': ['clang', 'asan'],
+        'chromium_apply_config': ['clang', 'asan', 'goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -912,7 +912,7 @@ BUILDERS = {
       },
       'V8 Linux64 TSAN': {
         'gclient_apply_config': ['clang'],
-        'chromium_apply_config': ['clang', 'tsan2'],
+        'chromium_apply_config': ['clang', 'tsan2', 'goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -925,7 +925,7 @@ BUILDERS = {
         'gclient_apply_config': ['clang'],
         # 'simulate_arm' is actually implied by 'msan'. We still set it
         # explicitly for the sake of consistency.
-        'chromium_apply_config': ['clang', 'msan', 'simulate_arm'],
+        'chromium_apply_config': ['clang', 'msan', 'simulate_arm', 'goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -1092,7 +1092,7 @@ BUILDERS = {
       },
       'v8_linux64_asan_rel': {
         'gclient_apply_config': ['clang'],
-        'chromium_apply_config': ['clang', 'asan'],
+        'chromium_apply_config': ['clang', 'asan', 'goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -1103,7 +1103,7 @@ BUILDERS = {
       },
       'v8_linux64_tsan_rel': {
         'gclient_apply_config': ['clang'],
-        'chromium_apply_config': ['clang', 'tsan2'],
+        'chromium_apply_config': ['clang', 'tsan2', 'goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
