@@ -465,14 +465,12 @@ class SwarmingTest(Test):
   def target_name(self):
     return self._target_name or self._name
 
-  def create_task(self, api, suffix, args, shards, isolated_hash):
-    """Creates a swarming task. Must be overriden in subclasses.
+  def create_task(self, api, suffix, isolated_hash):
+    """Creates a swarming task. Must be overridden in subclasses.
 
     Args:
       api: Caller's API.
       suffix: Suffix added to the test name.
-      args: Args to be passed to the test.
-      shards: Number of swarming shards that should be used to run test.
       isolated_hash: Hash of the isolated test to be run.
 
     Returns:
@@ -516,12 +514,14 @@ class SwarmingTest(Test):
     """Not used. All logic in pre_run, post_run."""
     return []
 
-  def collect_task(self, api, task):
-    """Collects results from a swarming task. Must be overriden in subclasses.
+  def validate_task_results(self, api, step_result):
+    """Interprets output of a task (provided as StepResult object).
+
+    Called for successful and failed tasks.
 
     Args:
       api: Caller's API.
-      task: SwarmingTask previously created by the create_swarming_task.
+      step_result: StepResult object to examine.
 
     Returns:
       A tuple (valid, failures), where valid is True if valid results are
@@ -531,7 +531,7 @@ class SwarmingTest(Test):
     raise NotImplementedError()
 
   def post_run(self, api, suffix):
-    """Waits for launched test to finish and collect the results."""
+    """Waits for launched test to finish and collects the results."""
     assert suffix not in self._results, (
         'Results of %s were already collected' % self._step_name(suffix))
 
@@ -548,11 +548,10 @@ class SwarmingTest(Test):
           args=[self.target_name])
 
     try:
-      valid, failures = self.collect_task(api, self._tasks[suffix])
+      api.swarming.collect_task(self._tasks[suffix])
+    finally:
+      valid, failures = self.validate_task_results(api, api.step.active_result)
       self._results[suffix] = {'valid': valid, 'failures': failures}
-    except api.step.StepFailure as e:
-      self._results[suffix] = {'valid': False}
-      raise e
 
   def has_valid_results(self, api, suffix):
     # Test wasn't triggered or wasn't collected.
@@ -600,21 +599,16 @@ class SwarmingGTestTest(SwarmingTest):
         test_launcher_summary_output=api.json.gtest_results(add_json_log=False),
         extra_args=args)
 
-  def collect_task(self, api, task):
-    try:
-      api.swarming.collect_task(task)
-    finally:
-      step_result = api.step.active_result
+  def validate_task_results(self, api, step_result):
+    gtest_results = step_result.json.gtest_results
+    if not gtest_results:
+      return False, None
 
-      gtest_results = step_result.json.gtest_results
-      if not gtest_results:
-        return False, None
+    global_tags = gtest_results.raw.get('global_tags', [])
+    if 'UNRELIABLE_RESULTS' in global_tags:
+      return False, None
 
-      global_tags = gtest_results.raw.get('global_tags', [])
-      if 'UNRELIABLE_RESULTS' in global_tags:
-        return False, None
-
-      return True, gtest_results.failures
+    return True, gtest_results.failures
 
 
 class GTestTest(Test):
@@ -882,8 +876,8 @@ class SwarmingTelemetryGPUTest(SwarmingTest):
         title=self._step_name(suffix), isolated_hash=isolated_hash,
         extra_args=args)
 
-  def collect_task(self, api, task):
-    results = api.swarming.collect_task(task)
+  def validate_task_results(self, api, step_result):
+    results = getattr(step_result, 'telemetry_results', None) or {}
 
     try:
       failures = [results['pages'][str(value['page_id'])]['name']
@@ -896,12 +890,12 @@ class SwarmingTelemetryGPUTest(SwarmingTest):
       failures = None
 
     if valid:
-      step_result = api.step.active_result
       step_result.presentation.step_text += api.test_utils.format_step_text([
         ['failures:', failures]
       ])
 
     return valid, failures
+
 
 class AndroidInstrumentationTest(Test):
   def __init__(self, name, compile_target, test_data=None,

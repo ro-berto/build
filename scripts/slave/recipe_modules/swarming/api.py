@@ -509,14 +509,20 @@ class SwarmingApi(recipe_api.RecipeApi):
     args=self._get_collect_cmd_args(task)
     args.extend(['--task-output-dir', self.m.raw_io.output_dir()])
 
-    result = self.m.python(
-        name=self._get_step_name('', task),
-        script=self.m.swarming_client.path.join('swarming.py'),
-        args=args,
-        step_test_data=lambda: step_test_data,
-        **kwargs)
-
-    return self.m.json.loads(result.raw_io.output_dir['results.json'])
+    try:
+      return self.m.python(
+          name=self._get_step_name('', task),
+          script=self.m.swarming_client.path.join('swarming.py'),
+          args=args,
+          step_test_data=lambda: step_test_data,
+          **kwargs)
+    finally:
+      step_result = self.m.step.active_result
+      try:
+        step_result.telemetry_results = self.m.json.loads(
+            step_result.raw_io.output_dir['results.json'])
+      except (IOError, ValueError):  # pragma: no cover
+        step_result.telemetry_results = None
 
   def _get_step_name(self, prefix, task):
     """SwarmingTask -> name of a step of a waterfall.
