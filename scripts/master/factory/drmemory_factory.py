@@ -56,7 +56,7 @@ def BotToPlatform(bot_platform):
   elif bot_platform.startswith('mac'):
     return 'mac'
   else:
-    raise ValueError('Unknown platform %s' % platform)
+    raise ValueError('Unknown platform %s' % bot_platform)
 
 
 def OsFullName(platform):
