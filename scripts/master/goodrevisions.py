@@ -64,7 +64,7 @@ class GoodRevisions(base.StatusReceiverMultiService):
     # The status object we must subscribe to.
     self.status = None
     self.password = get_password.Password(
-        '.chromium_status_password').GetPassword()
+        '.status_password').GetPassword()
 
   def setServiceParent(self, parent):
     base.StatusReceiverMultiService.setServiceParent(self, parent)

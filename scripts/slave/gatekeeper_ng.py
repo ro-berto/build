@@ -667,7 +667,7 @@ def get_options():
   parser.add_option('--skip-build-db-update', action='store_true',
                     help='don\' write to the build_db, overridden by sync and'
                          ' clear db options')
-  parser.add_option('--password-file', default='.chromium_status_password',
+  parser.add_option('--password-file', default='.status_password',
                     help='password file to update chromium-status')
   parser.add_option('-s', '--set-status', action='store_true',
                     help='close the tree by connecting to chromium-status')
