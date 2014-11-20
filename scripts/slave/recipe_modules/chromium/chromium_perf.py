@@ -119,7 +119,7 @@ SPEC = {
       'recipe_config': 'official',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
+        'TARGET_BITS': 64,
       },
       'bot_type': 'builder',
       'compile_targets': [
@@ -223,28 +223,28 @@ _AddBotSpec(
     platform='mac',
     parent_builder='Mac Builder',
     perf_id='chromium-rel-mac9',
-    target_bits=32,
+    target_bits=64,
     num_shards=5)
 _AddBotSpec(
     name='Mac 10.8 Perf',
     platform='mac',
     parent_builder='Mac Builder',
     perf_id='chromium-rel-mac8',
-    target_bits=32,
+    target_bits=64,
     num_shards=5)
 _AddBotSpec(
     name='Mac 10.7 Intel GPU Perf',
     platform='mac',
     parent_builder='Mac Builder',
     perf_id='chromium-rel-mac7-gpu-intel',
-    target_bits=32,
+    target_bits=64,
     num_shards=1)
 _AddBotSpec(
     name='Mac 10.6 Perf',
     platform='mac',
     parent_builder='Mac Builder',
     perf_id='chromium-rel-mac6',
-    target_bits=32,
+    target_bits=64,
     num_shards=5)
 
 _AndroidSpecs = {

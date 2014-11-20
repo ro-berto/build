@@ -327,7 +327,7 @@ BUILDERS = {
       'mac_chromium_dbg': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
         'chromium_config': 'chromium',
         'compile_only': False,
@@ -338,7 +338,7 @@ BUILDERS = {
       'mac_chromium_rel': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
         'enable_swarming': True,
         'chromium_config': 'chromium',
@@ -360,7 +360,7 @@ BUILDERS = {
       'mac_chromium_compile_dbg': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
         'chromium_config': 'chromium',
         'compile_only': True,
@@ -381,7 +381,7 @@ BUILDERS = {
       'mac_chromium_compile_rel': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
         'chromium_config': 'chromium',
         'compile_only': True,
@@ -392,7 +392,7 @@ BUILDERS = {
       'mac_chromium_openssl_dbg': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
         'GYP_DEFINES': {
           'use_openssl': '1',
@@ -406,7 +406,7 @@ BUILDERS = {
       'mac_chromium_openssl_rel': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
         'GYP_DEFINES': {
           'use_openssl': '1',

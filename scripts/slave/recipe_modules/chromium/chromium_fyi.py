@@ -123,7 +123,7 @@ SPEC = {
       'recipe_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
+        'TARGET_BITS': 64,
       },
       'test_generators': [
         steps.generate_gtest,
