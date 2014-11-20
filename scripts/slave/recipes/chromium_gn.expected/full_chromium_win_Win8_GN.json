@@ -78,8 +78,8 @@
       "[DEPOT_TOOLS]\\gn.py",
       "--root=[SLAVE_BUILD]\\src",
       "gen",
-      "//out/Release_x64",
-      "--args=is_debug=false cpu_arch=\"x64\""
+      "//out/Release",
+      "--args=is_debug=false cpu_arch=\"x86\""
     ],
     "name": "gn"
   },
@@ -89,7 +89,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\compile.py",
       "--target",
-      "Release_x64",
+      "Release",
       "--src-dir",
       "[SLAVE_BUILD]\\src",
       "--build-tool",

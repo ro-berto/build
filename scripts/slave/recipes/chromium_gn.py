@@ -141,14 +141,14 @@ BUILDERS = {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'win',
-          'TARGET_BITS': 64,
+          'TARGET_BITS': 32,
         },
       },
      'Win8 GN (dbg)': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'win',
-          'TARGET_BITS': 64,
+          'TARGET_BITS': 32,
         },
       },
     },
@@ -223,14 +223,14 @@ BUILDERS = {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'win',
-          'TARGET_BITS': 64,
+          'TARGET_BITS': 32,
         },
       },
       'win8_chromium_gn_rel': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'win',
-          'TARGET_BITS': 64,
+          'TARGET_BITS': 32,
         },
       },
     }
