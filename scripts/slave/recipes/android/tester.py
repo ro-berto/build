@@ -88,6 +88,11 @@ JAVA_UNIT_TESTS = [
   'junit_unit_tests',
 ]
 
+PYTHON_UNIT_TESTS = [
+  'gyp_py_unittests',
+  'pylib_py_unittests',
+]
+
 BUILDERS = {
   'tryserver.chromium.linux': {
     'android_dbg_tests_recipe': {
@@ -95,6 +100,7 @@ BUILDERS = {
       'instrumentation_tests': INSTRUMENTATION_TESTS,
       'unittests': UNIT_TESTS,
       'java_unittests': JAVA_UNIT_TESTS,
+      'python_unittests': PYTHON_UNIT_TESTS,
       'target': 'Debug',
       'try': True,
     },
@@ -105,6 +111,7 @@ BUILDERS = {
       'telemetry_unittests': True,
       'telemetry_perf_unittests': True,
       'java_unittests': JAVA_UNIT_TESTS,
+      'python_unittests': PYTHON_UNIT_TESTS,
       'target': 'Release',
       'try': True,
     },
@@ -167,6 +174,7 @@ def GenSteps(api):
   instrumentation_tests = bot_config.get('instrumentation_tests', [])
   unittests = bot_config.get('unittests', [])
   java_unittests = bot_config.get('java_unittests', [])
+  python_unittests = bot_config.get('python_unittests', [])
   is_trybot = bot_config.get('try', False)
   if is_trybot:
     api.tryserver.maybe_apply_issue()
@@ -211,6 +219,9 @@ def GenSteps(api):
   api.chromium_android.detect_and_setup_devices()
 
   with api.step.defer_results():
+    for suite in python_unittests:
+      api.chromium_android.run_python_unit_test_suite(suite)
+
     for suite in instrumentation_tests:
       api.chromium_android.run_instrumentation_suite(
           suite['test'], verbose=True,

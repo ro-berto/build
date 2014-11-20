@@ -548,11 +548,23 @@ class AndroidApi(recipe_api.RecipeApi):
       args.append('--release')
 
     self.m.python(
-      str(suite),
-      self.m.path['checkout'].join('build', 'android', 'test_runner.py'),
-      ['junit', '-s', suite] + args,
-      env=self.m.chromium.get_env(),
-      **kwargs)
+        str(suite),
+        self.m.path['checkout'].join('build', 'android', 'test_runner.py'),
+        ['junit', '-s', suite] + args,
+        env=self.m.chromium.get_env(),
+        **kwargs)
+
+  def run_python_unit_test_suite(self, suite, verbose=True, **kwargs):
+    args = []
+    if verbose:
+      args.append('--verbose')
+
+    self.m.python(
+        str(suite),
+        self.m.path['checkout'].join('build', 'android', 'test_runner.py'),
+        ['python', '-s', suite] + args,
+        env=self.m.chromium.get_env(),
+        **kwargs)
 
   def coverage_report(self, **kwargs):
     assert self.c.coverage, (
