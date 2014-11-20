@@ -494,6 +494,7 @@
         "Webkit",
         "Benchmarks",
         "Test262",
+        "Test262-es6",
         "Mozilla",
         "GCMole",
         "Simple Leak Check"
