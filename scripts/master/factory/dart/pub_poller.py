@@ -55,9 +55,7 @@ class PubPoller(base.PollingChangeSource):
     log.msg('Polling all packages on pub')
     for package in self.packages:
       try:
-        info = yield self.poll_package(package)
-        package_info = json.loads(info)
-        pulled_versions = set(package_info['versions'])
+        pulled_versions = yield self.getVersions(package)
         count = len(pulled_versions)
         # If we could not set the initial value, set it now
         if self.versions[package] == VALUE_NOT_SET:
@@ -74,7 +72,7 @@ class PubPoller(base.PollingChangeSource):
                 (package, traceback.format_exc()))
 
   def poll_package(self, package):
-    poll_url = 'http://pub.dartlang.org/packages/%s?format=json' % package
+    poll_url = 'http://pub.dartlang.org/api/packages/%s' % package
     log.msg('Polling pub package %s from %s' % (package, poll_url))
     return getPage(poll_url, timeout=self.pollInterval)
 
@@ -84,14 +82,20 @@ class PubPoller(base.PollingChangeSource):
     for package in self.packages:
       log.msg("doing initial poll for package %s" % package)
       try:
-        info = yield self.poll_package(package)
-        package_info = json.loads(info)
-        count = len(package_info['versions'])
+        versions = yield self.getVersions(package)
+        count = len(versions)
         log.msg('Initial count for %s is %s' % (package, count))
-        self.versions[package] = set(package_info['versions'])
+        self.versions[package] = versions
       except Exception:
         log.msg('Could not set initial value for package %s %s' %
                 (package, traceback.format_exc()))
         self.versions[package] = VALUE_NOT_SET
     base.PollingChangeSource.startService(self)
+
+  @defer.inlineCallbacks
+  def getVersions(self, package):
+    info = yield self.poll_package(package)
+    package_info = json.loads(info)
+    defer.returnValue(
+        set([package['version'] for package in package_info['versions']]))
 
