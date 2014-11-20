@@ -270,7 +270,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       raise ValueError('--output-dir should not be used.')
 
     extra_args.extend(['--output-format', 'json',
-                       '--output-dir', '${ISOLATED_DIR}'])
+                       '--output-dir', '${ISOLATED_OUTDIR}'])
 
     task = self.task(title, isolated_hash, extra_args=extra_args, **kwargs)
     task.collect_step = self._telemetry_gpu_collect_step

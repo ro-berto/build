@@ -580,7 +580,7 @@
       "--output-format",
       "json",
       "--output-dir",
-      "${ISOLATED_DIR}"
+      "${ISOLATED_OUTDIR}"
     ],
     "name": "[trigger] maps_pixel_test (with patch) on Mac",
     "~followup_annotations": [
@@ -680,7 +680,7 @@
       "--output-format",
       "json",
       "--output-dir",
-      "${ISOLATED_DIR}"
+      "${ISOLATED_OUTDIR}"
     ],
     "name": "[trigger] pixel_test (with patch) on Mac",
     "~followup_annotations": [
@@ -771,7 +771,7 @@
       "--output-format",
       "json",
       "--output-dir",
-      "${ISOLATED_DIR}"
+      "${ISOLATED_OUTDIR}"
     ],
     "name": "[trigger] webgl_conformance (with patch) on Mac",
     "~followup_annotations": [
@@ -862,7 +862,7 @@
       "--output-format",
       "json",
       "--output-dir",
-      "${ISOLATED_DIR}"
+      "${ISOLATED_OUTDIR}"
     ],
     "name": "[trigger] context_lost (with patch) on Mac",
     "~followup_annotations": [
@@ -953,7 +953,7 @@
       "--output-format",
       "json",
       "--output-dir",
-      "${ISOLATED_DIR}"
+      "${ISOLATED_OUTDIR}"
     ],
     "name": "[trigger] memory_test (with patch) on Mac",
     "~followup_annotations": [
@@ -1044,7 +1044,7 @@
       "--output-format",
       "json",
       "--output-dir",
-      "${ISOLATED_DIR}"
+      "${ISOLATED_OUTDIR}"
     ],
     "name": "[trigger] screenshot_sync (with patch) on Mac",
     "~followup_annotations": [
@@ -1135,7 +1135,7 @@
       "--output-format",
       "json",
       "--output-dir",
-      "${ISOLATED_DIR}"
+      "${ISOLATED_OUTDIR}"
     ],
     "name": "[trigger] hardware_accelerated_feature (with patch) on Mac",
     "~followup_annotations": [
@@ -1226,7 +1226,7 @@
       "--output-format",
       "json",
       "--output-dir",
-      "${ISOLATED_DIR}"
+      "${ISOLATED_OUTDIR}"
     ],
     "name": "[trigger] gpu_process_launch (with patch) on Mac",
     "~followup_annotations": [
@@ -1321,7 +1321,7 @@
       "--output-format",
       "json",
       "--output-dir",
-      "${ISOLATED_DIR}"
+      "${ISOLATED_OUTDIR}"
     ],
     "name": "[trigger] gpu_rasterization (with patch) on Mac",
     "~followup_annotations": [
@@ -1963,7 +1963,7 @@
       "--output-format",
       "json",
       "--output-dir",
-      "${ISOLATED_DIR}"
+      "${ISOLATED_OUTDIR}"
     ],
     "name": "[trigger] pixel_test (without patch) on Mac",
     "~followup_annotations": [
