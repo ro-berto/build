@@ -7,6 +7,7 @@ DEPS = [
   'chromium',
   'chromium_tests',
   'gclient',
+  'gpu',
   'isolate',
   'json',
   'path',
@@ -349,8 +350,28 @@ def GenSteps(api):
     api.chromium.compile()
     api.isolate.isolate_tests(api.chromium.output_dir)
 
-  api.test_utils.determine_new_failures(
-      api, [api.chromium.steps.BlinkTest(api)], deapply_patch_fn)
+  tests = [api.chromium.steps.BlinkTest(api)]
+
+  # TODO(sergiyb): Flag enable_gpu_tests is used to enable GPU tests. This
+  # is however a temporary measure to enable them in GenTests, but not in
+  # production. Once respective slaves are moved to swarming, this flag should
+  # be removed.
+  if (api.properties['mastername'] == 'tryserver.blink' and
+      api.properties['buildername'] == 'mac_blink_rel' and
+      api.properties.get('enable_gpu_tests', False)):
+    tests.extend(api.gpu.create_tests(
+        bot_update_step.presentation.properties['got_revision'],
+        bot_update_step.presentation.properties['got_webkit_revision'],
+        enable_swarming=True,
+        # TODO(sergiyb): This config should be read from an external JSON file
+        # in a custom step, which can then be mocked in the GenTests.
+        swarming_dimension_sets=[{
+          'os': 'Mac',
+          'hidpi': '0',
+          'gpu': '8086:0116'
+        }]))
+
+  api.test_utils.determine_new_failures(api, tests, deapply_patch_fn)
 
 
 def _sanitize_nonalpha(text):
@@ -465,4 +486,22 @@ def GenTests(api):
     properties('tryserver.blink', 'win_blink_rel',
                requester='someone@chromium.org') +
     api.step_data(with_patch, canned_test(passing=True))
+  )
+
+  yield (
+    api.test('gpu_tests') +
+    # TODO(sergiyb): Flag enable_gpu_tests is used to enable GPU tests. This
+    # is however a temporary measure to enable them in GenTests, but not in
+    # production. Once respective slaves are moved to swarming, this flag should
+    # be removed.
+    properties('tryserver.blink', 'mac_blink_rel', enable_gpu_tests=True,
+               swarm_hashes=api.gpu.dummy_swarm_hashes) +
+    api.platform.name('mac') +
+    api.step_data(with_patch, canned_test(passing=True)) +
+    api.override_step_data(
+        'pixel_test (with patch) on Mac',
+        api.json.canned_telemetry_gpu_output(passing=False)) +
+    api.override_step_data(
+        'pixel_test (without patch) on Mac',
+        api.json.canned_telemetry_gpu_output(passing=False))
   )
