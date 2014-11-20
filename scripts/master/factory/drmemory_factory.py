@@ -309,7 +309,7 @@ class DrCommands(object):
     package_name = 'DrMemory-package'
     cpack_arg = 'cpackappend=set(CPACK_PACKAGE_FILE_NAME "%s")' % package_name
     cmd = ['ctest', '-VV', '-S', '../drmemory/package.cmake,build=42;' +
-           cpack_arg]
+           'drmem_only;' + cpack_arg]
     self.AddToolStep(ShellCommand,
                      command=cmd,
                      description='Package Dr. Memory',
