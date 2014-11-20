@@ -1067,5 +1067,21 @@
       "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
     "name": "nanobench"
+  },
+  {
+    "cmd": [
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
+      "-s",
+      "MedfieldBA149FC5",
+      "reboot"
+    ],
+    "name": "reboot"
+  },
+  {
+    "cmd": [
+      "sleep",
+      "10"
+    ],
+    "name": "wait for reboot"
   }
 ]

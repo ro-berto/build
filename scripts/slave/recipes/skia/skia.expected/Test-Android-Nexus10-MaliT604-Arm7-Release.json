@@ -1065,5 +1065,21 @@
       "@@@STEP_LOG_LINE@python.inline@  sys.exit(1)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
+  },
+  {
+    "cmd": [
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
+      "-s",
+      "R32CB017X2L",
+      "reboot"
+    ],
+    "name": "reboot"
+  },
+  {
+    "cmd": [
+      "sleep",
+      "10"
+    ],
+    "name": "wait for reboot"
   }
 ]

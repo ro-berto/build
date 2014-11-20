@@ -1093,5 +1093,21 @@
       "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
     "name": "nanobench"
+  },
+  {
+    "cmd": [
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
+      "-s",
+      "027c104942212397",
+      "reboot"
+    ],
+    "name": "reboot"
+  },
+  {
+    "cmd": [
+      "sleep",
+      "10"
+    ],
+    "name": "wait for reboot"
   }
 ]

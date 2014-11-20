@@ -410,5 +410,21 @@
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "name": "Upload Nanobench Results"
+  },
+  {
+    "cmd": [
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
+      "-s",
+      "015d210a13480604",
+      "reboot"
+    ],
+    "name": "reboot"
+  },
+  {
+    "cmd": [
+      "sleep",
+      "10"
+    ],
+    "name": "wait for reboot"
   }
 ]

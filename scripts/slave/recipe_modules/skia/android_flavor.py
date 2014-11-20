@@ -196,6 +196,15 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
                 serial=self.serial,
                 cmd=['shell', 'stop'])
 
+  def cleanup_steps(self):
+    """Run any device-specific cleanup steps."""
+    self._adb(name='reboot',
+              serial=self.serial,
+              cmd=['reboot'])
+    self._skia_api.m.step(
+        name='wait for reboot',
+        cmd=['sleep', '10'])
+
   def get_device_dirs(self):
     """ Set the directories which will be used by the build steps."""
     device_scratch_dir = self._skia_api.m.adb(
