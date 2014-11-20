@@ -760,6 +760,14 @@ class BuildStateJsonResource(JsonResource):
     # be returned.
     CACHED = 'cached'
 
+    # Specific build fields that will be stripped unless requested. These map
+    # user-specified query parameters (lowercase) to
+    # buildbot.status.Build.asDict keyword arguments.
+    BUILD_FIELDS = ('blame', 'logs', 'sourceStamp', 'properties', 'steps',
+                    'eta',)
+    # Special build field to indicate all fields should be returned.
+    BUILD_FIELDS_ALL = 'all'
+
     EXTRA_FLAGS = """\
   - builder
     - A builder name to explicitly include in the results. This can be supplied
@@ -771,20 +779,32 @@ class BuildStateJsonResource(JsonResource):
   - completed_builds
     - Controls whether the builder's completed build data will be returned. By
       default, no completed build data will be retured. Setting
-      completed_builds=cached will return build data for all cached builds.
-      Setting it to a positive integer 'N' (e.g., completed_builds=3) will cause
-      data for the latest 'N' completed builds to be returned.
+      completed_builds=%(completed_builds_cached)s will return build data for
+      all cached builds.  Setting it to a positive integer 'N' (e.g.,
+      completed_builds=3) will cause data for the latest 'N' completed builds to
+      be returned.
   - pending_builds
     - Controls whether the builder's pending build data will be
       returned. By default, no pending build data will be returned; setting
       pending_builds=1 will enable this.
+  - build_field
+    - The specific build fields to include. Collecting and packaging more fields
+      will take more time. This can be supplied multiple times to request more
+      than one field. If '%(build_fields_all)s' is supplied, all build fields
+      will be included.  Available individual fields are: %(build_fields)s.
   - slaves
     - Controls whether the builder's slave data will be returned. By default, no
       slave build data will be returned; setting slaves=1 will enable this.
 """
     def __init__(self, status):
         JsonResource.__init__(self, status)
-        self.FLAGS = FLAGS + self.EXTRA_FLAGS
+        context = {
+                'completed_builds_cached': self.CACHED,
+                'build_fields_all': self.BUILD_FIELDS_ALL,
+                'build_fields': ', '.join(sorted([f.lower()
+                                                  for f in self.BUILD_FIELDS])),
+        }
+        self.FLAGS = FLAGS + self.EXTRA_FLAGS % context
 
         self.putChild('project', ProjectJsonResource(status))
 
@@ -802,6 +822,7 @@ class BuildStateJsonResource(JsonResource):
     @defer.deferredGenerator
     def asDict(self, request):
         builders = request.args.get('builder', ())
+        build_fields = request.args.get('build_field', ())
         current_builds = RequestArgToBool(request, 'current_builds', False)
         completed_builds = self._CountOrCachedRequestArg(request,
                                                          'completed_builds')
@@ -824,7 +845,7 @@ class BuildStateJsonResource(JsonResource):
                 defer.gatherResults(
                     [self._getBuilderData(self.status.getBuilder(builder_name),
                                           current_builds, completed_builds,
-                                          pending_builds)
+                                          pending_builds, build_fields)
                      for builder_name in builder_names]))
         yield wfd
         response['builders'] = wfd.getResult()
@@ -839,7 +860,7 @@ class BuildStateJsonResource(JsonResource):
 
     @defer.deferredGenerator
     def _getBuilderData(self, builder, current_builds, completed_builds,
-                        pending_builds):
+                        pending_builds, build_fields):
         # Load the builder dictionary. We use the synchronous path, since the
         # asynchronous waits for pending builds to load. We handle that path
         # explicitly via the 'pending_builds' option.
@@ -853,7 +874,8 @@ class BuildStateJsonResource(JsonResource):
         if current_builds or completed_builds:
             tasks.append(
                     defer.maybeDeferred(self._loadBuildData, builder,
-                                        current_builds, completed_builds))
+                                        current_builds, completed_builds,
+                                        build_fields))
 
         # Get pending builds.
         if pending_builds:
@@ -872,7 +894,8 @@ class BuildStateJsonResource(JsonResource):
             build_state.update(build_data_entry)
         yield response
 
-    def _loadBuildData(self, builder, current_builds, completed_builds):
+    def _loadBuildData(self, builder, current_builds, completed_builds,
+                       build_fields):
         build_state = {}
         builds = set()
         build_data_entries = []
@@ -902,10 +925,18 @@ class BuildStateJsonResource(JsonResource):
             builds.update(build_numbers)
             build_data_entries.append(('completed', build_numbers))
 
+        # Determine which build fields to request.
+        build_fields = [f.lower() for f in build_fields]
+        build_field_kwargs = {}
+        if self.BUILD_FIELDS_ALL not in build_fields:
+            build_field_kwargs.update(dict(
+                    (kwarg, kwarg.lower() in build_fields)
+                    for kwarg in self.BUILD_FIELDS))
+
         # Load all builds referenced by 'builds'.
         builds = builder.getBuilds(builds)
         build_map = dict((build_dict['number'], build_dict)
-                         for build_dict in [build.asDict()
+                         for build_dict in [build.asDict(**build_field_kwargs)
                                             for build in builds
                                             if build])
 

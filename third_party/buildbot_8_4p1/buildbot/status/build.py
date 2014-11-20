@@ -433,29 +433,36 @@ class BuildStatus(styles.Versioned):
                                                      self.number))
             log.err()
 
-    def asDict(self):
+    def asDict(self, blame=True, logs=True, properties=True, steps=True,
+               sourceStamp=True, eta=True):
         result = {}
         # Constant
         result['builderName'] = self.builder.name
         result['number'] = self.getNumber()
-        result['sourceStamp'] = self.getSourceStamp().asDict()
+        if sourceStamp:
+          result['sourceStamp'] = self.getSourceStamp().asDict()
         result['reason'] = self.getReason()
-        result['blame'] = self.getResponsibleUsers()
+        if blame:
+          result['blame'] = self.getResponsibleUsers()
 
         # Transient
-        result['properties'] = self.getProperties().asList()
+        if properties:
+          result['properties'] = self.getProperties().asList()
         result['times'] = self.getTimes()
         result['text'] = self.getText()
         result['results'] = self.getResults()
         result['slave'] = self.getSlavename()
         # TODO(maruel): Add.
         #result['test_results'] = self.getTestResults()
-        result['logs'] = [[l.getName(),
-            self.builder.status.getURLForThing(l)] for l in self.getLogs()]
-        result['eta'] = self.getETA()
-        result['steps'] = [bss.asDict() for bss in self.steps]
-        if self.getCurrentStep():
-            result['currentStep'] = self.getCurrentStep().asDict()
-        else:
-            result['currentStep'] = None
+        if logs:
+          result['logs'] = [[l.getName(),
+              self.builder.status.getURLForThing(l)] for l in self.getLogs()]
+        if eta:
+          result['eta'] = self.getETA()
+        if steps:
+          result['steps'] = [bss.asDict() for bss in self.steps]
+          if self.getCurrentStep():
+              result['currentStep'] = self.getCurrentStep().asDict()
+          else:
+              result['currentStep'] = None
         return result
