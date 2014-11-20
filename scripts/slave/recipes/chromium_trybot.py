@@ -967,25 +967,6 @@ def GenSteps(api):
           master_dict,
           override_bot_type='builder_tester'))
 
-    trybot_test_spec = get_test_spec(
-        mastername,
-        buildername,
-        name='read trybot test spec',
-        step_test_data=lambda: api.json.test_api.output([
-            {
-              'test': 'base_unittests',
-              'swarming': {
-                'can_use_on_swarming_builders': True,
-                'shards': 5,
-              },
-            },
-        ]))
-    for test in tests:
-      use_swarming, swarming_shards = swarming_shards_from_test_spec(
-          trybot_test_spec, test.name)
-      if use_swarming:
-        test.force_swarming(swarming_shards)
-
     compile_targets, tests_including_triggered = \
         api.chromium_tests.get_compile_targets_and_tests(
             main_waterfall_config['mastername'],
@@ -1084,21 +1065,6 @@ def GenTests(api):
                          'chromium_config_kwargs', {}).get('TARGET_BITS', 64)) +
         props(mastername=mastername, buildername=buildername)
       )
-
-  yield (
-    api.test('force_swarming') +
-    api.platform('linux', 64) +
-    api.properties.generic(mastername='tryserver.chromium.linux',
-                           buildername='linux_chromium_rel_ng') +
-    api.override_step_data('read test spec', api.json.output({
-        'Linux Tests': {
-          'gtest_tests': [
-            'base_unittests',
-          ],
-        },
-      })
-    )
-  )
 
   # It is important that even when steps related to deapplying the patch
   # fail, we either print the summary for all retried steps or do no

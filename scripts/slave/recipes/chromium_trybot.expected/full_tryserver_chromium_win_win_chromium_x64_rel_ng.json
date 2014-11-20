@@ -140,29 +140,6 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]\\src\\testing\\buildbot\\chromium_trybot.json",
-      "/path/to/tmp/json"
-    ],
-    "name": "read trybot test spec",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@path: testing\\buildbot\\chromium_trybot.json@@@",
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"can_use_on_swarming_builders\": true, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shards\": 5@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"test\": \"base_unittests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "[SLAVE_BUILD]\\src\\testing\\buildbot\\trybot_analyze_config.json",
       "/path/to/tmp/json"
     ],

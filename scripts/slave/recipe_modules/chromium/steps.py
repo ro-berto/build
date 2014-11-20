@@ -631,11 +631,6 @@ class GTestTest(Test):
     else:
       self._test = LocalGTestTest(name, args, target_name, **runtest_kwargs)
 
-  def force_swarming(self, swarming_shards=1):
-    self._test = SwarmingGTestTest(self._name, self._args, swarming_shards,
-                                   self._swarming_dimensions,
-                                   self._target_name)
-
   @property
   def name(self):
     return self._test.name
