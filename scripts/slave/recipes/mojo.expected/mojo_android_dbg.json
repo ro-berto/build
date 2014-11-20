@@ -55,7 +55,7 @@
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "env": {
-      "GOMA_DIR": "/b/build/goma"
+      "GOMA_DIR": "[BUILD]/goma"
     },
     "name": "mojob gn"
   },
@@ -69,7 +69,7 @@
       "--android"
     ],
     "env": {
-      "GOMA_DIR": "/b/build/goma"
+      "GOMA_DIR": "[BUILD]/goma"
     },
     "name": "mojob build"
   }
