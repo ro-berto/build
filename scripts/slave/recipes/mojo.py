@@ -67,6 +67,10 @@ def _RunTests(api, build_type):
         'test-results.appspot.com'),
   ])
 
+def _RunPerfTests(api, build_type):
+  mojob_path = api.path['checkout'].join('mojo', 'tools', 'mojob.py')
+  api.python('mojob perftest', mojob_path, args=['perftest', build_type])
+
 def _UploadShell(api):
   upload_path = api.path['checkout'].join('mojo', 'tools',
       'upload_shell_binary.py')
@@ -77,16 +81,20 @@ def GenSteps(api):
   _CheckoutSteps(api, buildername)
   build_type = '--debug' if 'dbg' in buildername else '--release'
   _BuildSteps(api, buildername, build_type)
-  if 'Linux' in buildername or 'Win' in buildername:
-    _RunTests(api, build_type)
-    if 'Linux' in buildername and build_type == '--release':
-      _UploadShell(api)
+  if 'Perf' not in buildername:
+    if 'Linux' in buildername or 'Win' in buildername:
+      _RunTests(api, build_type)
+      if 'Linux' in buildername and build_type == '--release':
+        _UploadShell(api)
+  else:
+    _RunPerfTests(api, build_type)
 
 def GenTests(api):
   tests = [['mojo_linux', 'Mojo Linux'],
            ['mojo_linux_dbg', 'Mojo Linux (dbg)'],
            ['mojo_android_dbg', 'Mojo Android (dbg)'],
            ['mojo_chromeos_dbg', 'Mojo ChromeOS (dbg)'],
-           ['mojo_win_dbg', 'Mojo Win (dbg)']]
+           ['mojo_win_dbg', 'Mojo Win (dbg)'],
+           ['mojo_linux_perf', 'Mojo Linux Perf']]
   for t in tests:
     yield api.test(t[0]) + api.properties.generic(buildername=t[1])
