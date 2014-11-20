@@ -69,6 +69,16 @@ class Master(object):
   class Base(object):
     """Master base template.
     Contains stubs for variables that all masters must define."""
+
+    # Base service offset for 'master_port'
+    MASTER_PORT = 2
+    # Base service offset for 'slave_port'
+    SLAVE_PORT = 3
+    # Base service offset for 'master_port_alt'
+    MASTER_PORT_ALT = 4
+    # Base service offset for 'try_job_port'
+    TRY_JOB_PORT = 5
+
     # Master address. You should probably copy this file in another svn repo
     # so you can override this value on both the slaves and the master.
     master_host = 'localhost'
@@ -89,20 +99,50 @@ class Master(object):
     # Additional email addresses to send gatekeeper (automatic tree closage)
     # notifications. Unnecessary for experimental masters and try servers.
     tree_closing_notification_recipients = []
-    # For the following values, they are used only if non-0. Do not set them
-    # here, set them in the actual master configuration class:
-    # Used for the waterfall URL and the waterfall's WebStatus object.
-    master_port = 0
-    # Which port slaves use to connect to the master.
-    slave_port = 0
-    # The alternate read-only page. Optional.
-    master_port_alt = 0
+
+    @classproperty
+    def master_port(cls):
+      return cls._compose_port(cls.MASTER_PORT)
+
+    @classproperty
+    def slave_port(cls):
+      # Which port slaves use to connect to the master.
+      return cls._compose_port(cls.SLAVE_PORT)
+
+    @classproperty
+    def master_port_alt(cls):
+      # The alternate read-only page. Optional.
+      return cls._compose_port(cls.MASTER_PORT_ALT)
+
+    @classproperty
+    def try_job_port(cls):
+      return cls._compose_port(cls.TRY_JOB_PORT)
+
+    @classmethod
+    def _compose_port(cls, service):
+      """Returns: The port number for 'service' from the master's static config.
+
+      Port numbers are mapped of the form:
+      XYYZZ
+      || \__The last two digits identify the master, e.g. master.chromium
+      |\____The second and third digits identify the master host, e.g.
+      |     master1.golo
+      \_____The first digit identifies the port type, e.g. master_port
+
+      If any configuration is missing (incremental migration), this method will
+      return '0' for that query, indicating no port.
+      """
+      return (
+          (service * 10000) + # X
+          (cls.master_port_base * 100) + # YY
+          cls.master_port_id) # ZZ
 
   ## Per-master configs.
 
   class Master1(Base):
     """Chromium master."""
     master_host = 'master1.golo.chromium.org'
+    master_port_base = 1
     from_address = 'buildbot@chromium.org'
     tree_closing_notification_recipients = [
         'chromium-build-failure@chromium-gatekeeper-sentry.appspotmail.com']
@@ -115,6 +155,7 @@ class Master(object):
   class Master2(Base):
     """Chromeos master."""
     master_host = 'master2.golo.chromium.org'
+    master_port_base = 2
     tree_closing_notification_recipients = [
         'chromeos-build-failures@google.com']
     from_address = 'buildbot@chromium.org'
@@ -122,12 +163,14 @@ class Master(object):
   class Master3(Base):
     """Client master."""
     master_host = 'master3.golo.chromium.org'
+    master_port_base = 3
     tree_closing_notification_recipients = []
     from_address = 'buildbot@chromium.org'
 
   class Master4(Base):
     """Try server master."""
     master_host = 'master4.golo.chromium.org'
+    master_port_base = 4
     tree_closing_notification_recipients = []
     from_address = 'tryserver@chromium.org'
     code_review_site = 'https://codereview.chromium.org'
@@ -135,6 +178,7 @@ class Master(object):
   class Master4a(Base):
     """Try server master."""
     master_host = 'master4a.golo.chromium.org'
+    master_port_base = 14
     tree_closing_notification_recipients = []
     from_address = 'tryserver@chromium.org'
     code_review_site = 'https://codereview.chromium.org'

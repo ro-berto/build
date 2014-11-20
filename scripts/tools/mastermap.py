@@ -43,6 +43,7 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'scripts'))
 sys.path.insert(0, os.path.join(BASE_DIR, 'site_config'))
 
 import config_bootstrap
+from config_bootstrap import Master
 from slave import bootstrap
 
 
@@ -68,23 +69,16 @@ PORT_BLACKLIST = set([
 
 
 PORT_TYPE_MAP = {
-  'port': '3',
-  'slave_port': '4',
-  'alt_port': '5',
+  'port': Master.Base.MASTER_PORT,
+  'slave_port': Master.Base.SLAVE_PORT,
+  'alt_port': Master.Base.MASTER_PORT_ALT,
 }
 
 
-HOST_MACHINE_MAP = {
-  'master1.golo': '01',
-  'master2.golo': '02',
-  'master3.golo': '03',
-  'master4.golo': '04',
-  'master4a.golo': '14',
-  'master5.golo': '05',
-  'master6.golo': '06',
-  'master7.golo': '07',
-  'master.chrome': '10'
-}
+# A map of (full) master host to master class used in 'get_master_class'
+# lookup.
+MASTER_HOST_MAP = dict((m.master_host, m)
+                       for m in Master.get_base_masters())
 
 
 def get_args():
@@ -183,14 +177,27 @@ def csv_print(lines, verbose):
 def master_map(masters, output, opts):
   """Display a list of masters and their associated hosts and ports."""
 
+  host_key = 'host' if not opts.full_host_names else 'fullhost'
+
   lines = [['Master', 'Config Dir', 'Host', 'Web port', 'Slave port',
             'Alt port', 'URL']]
   for master in masters:
     lines.append([
-        master['name'], master['dirname'], master['host'], master['port'],
+        master['name'], master['dirname'], master[host_key], master['port'],
         master['slave_port'], master['alt_port'], master['buildbot_url']])
 
   output(lines, opts.verbose)
+
+
+def get_master_class(master):
+  return MASTER_HOST_MAP.get(master['fullhost'])
+
+
+def get_master_port(master):
+  master_class = get_master_class(master)
+  if not master_class:
+    return None
+  return '%02d' % (master_class.master_port_base,)
 
 
 def master_audit(masters, output, opts):
@@ -206,7 +213,7 @@ def master_audit(masters, output, opts):
   lines = [['Masters with misconfigured ports based on port type:']]
   for master in masters:
     for port_type, port_digit in PORT_TYPE_MAP.iteritems():
-      if not str(master[port_type]).startswith(port_digit):
+      if not str(master[port_type]).startswith(str(port_digit)):
         ret = 1
         lines.append([master['name']])
         break
@@ -216,8 +223,7 @@ def master_audit(masters, output, opts):
   # Look for masters using the wrong ports for their port types.
   lines = [['Masters with misconfigured ports based on hostname:']]
   for master in masters:
-    host = format_host_name(master['host'])
-    digits = HOST_MACHINE_MAP.get(host)
+    digits = get_master_port(master)
     if digits:
       for port in PORT_TYPE_MAP.iterkeys():
         if str(master[port])[1:3] != digits:
@@ -293,32 +299,38 @@ def master_audit(masters, output, opts):
   return ret
 
 
+def build_port_str(master_class, port_type, digits):
+  port_base = PORT_TYPE_MAP[port_type]
+  port = '%d%02d%02d' % (port_base, master_class.master_port_base, digits)
+  assert len(port) == 5, "Invalid port generated (%s)" % (port,)
+  return port
+
+
 def find_port(mastername, masters, output, opts):
   """Finds a triplet of free ports appropriate for the given master."""
   master = None
-  for m in masters:
-    if m['name'] != mastername:
-      continue
-    master = m
-  if not master:
+  for master in masters:
+    if master['name'] == mastername:
+      break
+  else:
     lines = [['master %s not found' % mastername],
              ['use the list function to see all masters.']]
     output(lines, opts.verbose)
     return 1
 
-  master_digits = HOST_MACHINE_MAP[master['host']]
-
   used_ports = set()
-  for master in masters:
+  for m in masters:
     for port in ('port', 'slave_port', 'alt_port'):
-      used_ports.add(master.get(port, 0))
+      used_ports.add(m.get(port, 0))
   used_ports = used_ports | PORT_BLACKLIST
 
   def _inner_loop():
+    master_class = get_master_class(master)
+
     for digits in xrange(0, 100):
-      port = '3%s%02d' % (master_digits, digits)
-      slave_port = '4%s%02d' % (master_digits, digits)
-      alt_port = '5%s%02d' % (master_digits, digits)
+      port = build_port_str(master_class, 'port', digits)
+      slave_port = build_port_str(master_class, 'slave_port', digits)
+      alt_port = build_port_str(master_class, 'alt_port', digits)
       if all([
           int(port) not in used_ports,
           int(slave_port) not in used_ports,
@@ -328,7 +340,7 @@ def find_port(mastername, masters, output, opts):
   port, slave_port, alt_port = _inner_loop()
 
   if not all([port, slave_port, alt_port]):
-    lines = [['unable to find available ports on host %s' % master['host']]]
+    lines = [['unable to find available ports on host %s' % master['fullhost']]]
     output(lines, opts.verbose)
     return 1
 
@@ -344,17 +356,15 @@ def format_host_name(host):
   return host
 
 
-def extract_masters(masters):
+def extract_masters():
   """Extracts the data we want from a collection of possibly-masters."""
   good_masters = []
-  for master_name, master in masters.iteritems():
-    if not hasattr(master, 'master_port'):
-      # Not actually a master
-      continue
+  for master in config_bootstrap.Master.get_all_masters():
     host = getattr(master, 'master_host', '')
     good_masters.append({
-        'name': master_name,
-        'host': host,
+        'name': master.__name__,
+        'host': format_host_name(host),
+        'fullhost': host,
         'port': getattr(master, 'master_port', 0),
         'slave_port': getattr(master, 'slave_port', 0),
         'alt_port': getattr(master, 'master_port_alt', 0),
@@ -369,7 +379,7 @@ def real_main(include_internal=False):
 
   bootstrap.ImportMasterConfigs(include_internal=include_internal)
 
-  masters = extract_masters(config_bootstrap.Master.__dict__)
+  masters = extract_masters()
 
   # Define sorting order
   sort_keys = ['host', 'port', 'alt_port', 'slave_port', 'name']
@@ -384,10 +394,6 @@ def real_main(include_internal=False):
 
   for key in reversed(sort_keys):
     masters.sort(key=lambda m: m[key]) # pylint: disable=cell-var-from-loop
-
-  if not opts.full_host_names:
-    for master in masters:
-      master['host'] = format_host_name(master['host'])
 
   if opts.csv:
     printer = csv_print

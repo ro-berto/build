@@ -7,15 +7,19 @@ Site configuration information that is sufficient to configure a slave,
 without loading any buildbot or twisted code.
 """
 
+import inspect
 import os
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Override config_default with a config_private file.
+BASE_MASTERS = []
 try:
   import config_private # pylint: disable=F0401
+  BASE_MASTERS += [config_private.Master, config_private.PublicMaster]
 except ImportError:
   import config_default as config_private # pylint: disable=W0403
+  BASE_MASTERS += [config_private.Master,]
 
 
 class Master(config_private.Master):
@@ -104,3 +108,21 @@ class Master(config_private.Master):
       bot_password_path = os.path.join(BASE_DIR, '.bot_password')
       Master.bot_password = open(bot_password_path).read().strip('\n\r')
     return Master.bot_password
+
+  @staticmethod
+  def _extract_masters(master):
+    return [v for v in master.__dict__.itervalues()
+            if (inspect.isclass(v) and
+                issubclass(v, config_private.Master.Base) and
+                v != config_private.Master.Base)]
+
+  @classmethod
+  def get_base_masters(cls):
+    masters = []
+    for base_master in BASE_MASTERS:
+      masters += cls._extract_masters(base_master)
+    return masters
+
+  @classmethod
+  def get_all_masters(cls):
+    return cls._extract_masters(cls)

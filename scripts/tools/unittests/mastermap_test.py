@@ -23,6 +23,7 @@ class FakeOutput(object):
 
 class FakeOpts(object):
   verbose = None
+  full_host_names = False
 
 
 class HelperTest(unittest.TestCase):
@@ -65,6 +66,7 @@ class MapTest(unittest.TestCase):
       'name': 'Chromium',
       'dirname': 'master.chromium',
       'host': 'master1.golo',
+      'fullhost': 'master1.golo.chromium.org',
       'port': 30101,
       'slave_port': 40101,
       'alt_port': 50101,
@@ -83,9 +85,10 @@ class FindPortTest(unittest.TestCase):
         'name': 'Master%d' % i,
         'dirname': 'master.master%d' % i,
         'host': 'master1.golo',
-        'port': 30100 + i,
-        'slave_port': 40100 + i,
-        'alt_port': 50100 + i,
+        'fullhost': 'master1.golo.chromium.org',
+        'port': 20100 + i,
+        'slave_port': 30100 + i,
+        'alt_port': 40100 + i,
     } for i in xrange(num)]
 
   def test_master_not_found(self):
@@ -98,23 +101,23 @@ class FindPortTest(unittest.TestCase):
 
   def test_skip_used_ports(self):
     masters = self._gen_masters(5)
-    masters.append({'name': 'Master6', 'host': 'master1.golo'})
+    masters.append({'name': 'Master6', 'fullhost': 'master1.golo.chromium.org'})
     mastername = 'Master6'
     output = FakeOutput()
     res = mastermap.find_port(mastername, masters, output, FakeOpts())
     self.assertEquals(res, None)
     self.assertEquals(len(output.lines), 2)
-    self.assertEquals(output.lines[1][0], '30105')
-    self.assertEquals(output.lines[1][1], '40105')
-    self.assertEquals(output.lines[1][2], '50105')
+    self.assertEquals(output.lines[1][0], '20105')
+    self.assertEquals(output.lines[1][1], '30105')
+    self.assertEquals(output.lines[1][2], '40105')
 
   def test_skip_blacklisted_ports(self):
-    masters = [{'name': 'Master1', 'host': 'master1.golo'}]
+    masters = [{'name': 'Master1', 'fullhost': 'master1.golo.chromium.org'}]
     mastername = 'Master1'
     output = FakeOutput()
     _real_blacklist = mastermap.PORT_BLACKLIST
     try:
-      mastermap.PORT_BLACKLIST = set(range(50000, 60000))  # All alt_ports
+      mastermap.PORT_BLACKLIST = set(xrange(40000, 50000))  # All alt_ports
       res = mastermap.find_port(mastername, masters, output, FakeOpts())
       print output.lines
       self.assertTrue('unable to find' in output.lines[0][0])
