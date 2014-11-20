@@ -103,6 +103,10 @@ class DrCommands(object):
     """Returns true if we're targetting Windows."""
     return self.target_platform.startswith('win')
 
+  def IsMac(self):
+    """Returns true if we're targetting Mac OSX."""
+    return self.target_platform.startswith('darwin')
+
   def PathJoin(self, *args):
     """Join paths using the separator of the os of the bot."""
     if self.IsWindows():
@@ -406,11 +410,13 @@ class DrCommands(object):
     testlog_dirs = ['build_drmemory-dbg-32/logs',
                     'build_drmemory-dbg-32/Testing/Temporary',
                     'build_drmemory-rel-32/logs',
-                    'build_drmemory-rel-32/Testing/Temporary',
-                    'build_drmemory-dbg-64/logs',
-                    'build_drmemory-dbg-64/Testing/Temporary',
-                    'build_drmemory-rel-64/logs',
-                    'build_drmemory-rel-64/Testing/Temporary']
+                    'build_drmemory-rel-32/Testing/Temporary']
+    if not self.IsMac():
+      # We do not yet support 64-bit Mac builds.
+      testlog_dirs += ['build_drmemory-dbg-64/logs',
+                       'build_drmemory-dbg-64/Testing/Temporary',
+                       'build_drmemory-rel-64/logs',
+                       'build_drmemory-rel-64/Testing/Temporary']
     if self.IsWindows():
       testlog_dirs += ['xmlresults']
     else:
