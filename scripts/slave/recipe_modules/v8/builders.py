@@ -1031,7 +1031,14 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['unittests', 'v8testing', 'optimize_for_size', 'webkit'],
+        'tests': [
+          'unittests',
+          'v8testing',
+          'optimize_for_size',
+          'webkit',
+          'test262',
+          'test262_es6',
+        ],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_dbg': {
