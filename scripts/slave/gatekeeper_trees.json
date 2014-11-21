@@ -54,12 +54,16 @@
         "status-url": "https://webrtc-status.appspot.com",
         "track-revisions": true
     },
+    "chromium.perf": {
+        "masters": [
+            "https://build.chromium.org/p/chromium.perf"
+        ]
+    },
     "non-closers": {
         "masters": [
             "https://build.chromium.org/p/chromium.fyi",
             "https://build.chromium.org/p/chromium.lkgr",
             "https://build.chromium.org/p/chromium.memory.fyi",
-            "https://build.chromium.org/p/chromium.perf",
             "https://build.chromium.org/p/client.libvpx"
         ]
     }

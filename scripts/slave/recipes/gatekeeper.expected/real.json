@@ -41,12 +41,16 @@
       "@@@STEP_LOG_LINE@json.output@    \"status-url\": \"https://chromium-status.appspot.com\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"track-revisions\": true@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"chromium.perf\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"masters\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/chromium.perf\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"non-closers\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"masters\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/chromium.fyi\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/chromium.lkgr\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/chromium.memory.fyi\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/chromium.perf\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.libvpx\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
@@ -86,6 +90,56 @@
       "-v",
       "--json",
       "[BUILD]/scripts/slave/gatekeeper.json",
+      "https://build.chromium.org/p/chromium.fyi",
+      "https://build.chromium.org/p/chromium.lkgr",
+      "https://build.chromium.org/p/chromium.memory.fyi",
+      "https://build.chromium.org/p/client.libvpx"
+    ],
+    "name": "gatekeeper: non-closers"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/gatekeeper_ng.py",
+      "-v",
+      "--json",
+      "[BUILD]/scripts/slave/gatekeeper.json",
+      "https://build.chromium.org/p/chromium.perf"
+    ],
+    "name": "gatekeeper: chromium.perf"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/gatekeeper_ng.py",
+      "-v",
+      "--json",
+      "[BUILD]/scripts/slave/gatekeeper.json",
+      "--status-url",
+      "https://blink-status.appspot.com",
+      "--set-status",
+      "--open-tree",
+      "--track-revisions",
+      "--revision-properties",
+      "got_revision_cp,got_webkit_revision_cp",
+      "--build-db",
+      "blink_build_db.json",
+      "--password-file",
+      ".blink_status_password",
+      "https://build.chromium.org/p/chromium.webkit"
+    ],
+    "name": "gatekeeper: blink"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/gatekeeper_ng.py",
+      "-v",
+      "--json",
+      "[BUILD]/scripts/slave/gatekeeper.json",
       "--status-url",
       "https://v8-status.appspot.com",
       "--set-status",
@@ -100,22 +154,6 @@
       "https://build.chromium.org/p/client.v8"
     ],
     "name": "gatekeeper: v8"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/gatekeeper_ng.py",
-      "-v",
-      "--json",
-      "[BUILD]/scripts/slave/gatekeeper.json",
-      "https://build.chromium.org/p/chromium.fyi",
-      "https://build.chromium.org/p/chromium.lkgr",
-      "https://build.chromium.org/p/chromium.memory.fyi",
-      "https://build.chromium.org/p/chromium.perf",
-      "https://build.chromium.org/p/client.libvpx"
-    ],
-    "name": "gatekeeper: non-closers"
   },
   {
     "cmd": [
@@ -169,28 +207,5 @@
       "https://build.chromium.org/p/client.webrtc"
     ],
     "name": "gatekeeper: webrtc"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/gatekeeper_ng.py",
-      "-v",
-      "--json",
-      "[BUILD]/scripts/slave/gatekeeper.json",
-      "--status-url",
-      "https://blink-status.appspot.com",
-      "--set-status",
-      "--open-tree",
-      "--track-revisions",
-      "--revision-properties",
-      "got_revision_cp,got_webkit_revision_cp",
-      "--build-db",
-      "blink_build_db.json",
-      "--password-file",
-      ".blink_status_password",
-      "https://build.chromium.org/p/chromium.webkit"
-    ],
-    "name": "gatekeeper: blink"
   }
 ]
