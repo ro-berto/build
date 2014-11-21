@@ -500,8 +500,8 @@ def GenTests(api):
     api.step_data(with_patch, canned_test(passing=True)) +
     api.override_step_data(
         'pixel_test (with patch) on Mac',
-        api.json.canned_telemetry_gpu_output(passing=False)) +
+        api.json.canned_telemetry_gpu_output(passing=False, swarming=True)) +
     api.override_step_data(
         'pixel_test (without patch) on Mac',
-        api.json.canned_telemetry_gpu_output(passing=False))
+        api.json.canned_telemetry_gpu_output(passing=False, swarming=True))
   )

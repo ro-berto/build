@@ -504,7 +504,8 @@ class SwarmingApi(recipe_api.RecipeApi):
   def _telemetry_gpu_collect_step(self, task, **kwargs):
     step_test_data = kwargs.pop('step_test_data', None)
     if not step_test_data:
-      step_test_data = self.m.json.test_api.canned_telemetry_gpu_output(True)
+      step_test_data = self.m.json.test_api.canned_telemetry_gpu_output(
+          passing=True, swarming=True)
 
     args=self._get_collect_cmd_args(task)
     args.extend(['--task-output-dir', self.m.raw_io.output_dir()])
@@ -520,7 +521,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       step_result = self.m.step.active_result
       try:
         step_result.telemetry_results = self.m.json.loads(
-            step_result.raw_io.output_dir['results.json'])
+            step_result.raw_io.output_dir['0/results.json'])
       except (IOError, ValueError):  # pragma: no cover
         step_result.telemetry_results = None
 
