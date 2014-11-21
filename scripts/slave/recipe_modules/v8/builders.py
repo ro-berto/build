@@ -1038,6 +1038,7 @@ BUILDERS = {
           'webkit',
           'test262',
           'test262_es6',
+          'mozilla',
         ],
         'testing': {'platform': 'linux'},
       },
