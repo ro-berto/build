@@ -1043,12 +1043,18 @@ def GenTests(api):
   }
   canned_test = api.json.canned_gtest_output
   def props(config='Release', mastername='tryserver.chromium.linux',
-            buildername='linux_chromium_rel', **kwargs):
+            buildername='linux_chromium_rel', extra_swarmed_tests=None,
+            **kwargs):
     kwargs.setdefault('revision', None)
+    swarm_hashes = api.gpu.dummy_swarm_hashes
+    if extra_swarmed_tests:
+      for test in extra_swarmed_tests:
+        swarm_hashes[test] = '[dummy hash for %s]' % test
     return api.properties.tryserver(
       build_config=config,
       mastername=mastername,
       buildername=buildername,
+      swarm_hashes=swarm_hashes,
       **kwargs
     )
 
@@ -1253,7 +1259,8 @@ def GenTests(api):
   yield (
     api.test('swarming_basic_cq') +
     props(requester='commit-bot@chromium.org', blamelist='joe@chromium.org',
-          blamelist_real=['joe@chromium.org']) +
+          blamelist_real=['joe@chromium.org'],
+          extra_swarmed_tests=['base_unittests', 'browser_tests']) +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
         'gtest_tests': [
@@ -1279,19 +1286,15 @@ def GenTests(api):
         'chromium': {
           'exclusions': [],
         },
-     })) +
-    api.override_step_data(
-        'isolate tests',
-        api.isolate.output_json(['base_unittests', 'browser_tests']))
+     }))
   )
 
   # Successfully compiling, isolating and running two targets on swarming for a
   # manual try job.
   yield (
     api.test('swarming_basic_try_job') +
-    props(
-        buildername='linux_chromium_rel',
-        requester='joe@chromium.org') +
+    props(buildername='linux_chromium_rel', requester='joe@chromium.org',
+          extra_swarmed_tests=['base_unittests', 'browser_tests']) +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
         'gtest_tests': [
@@ -1317,17 +1320,15 @@ def GenTests(api):
         'chromium': {
           'exclusions': [],
         },
-     })) +
-    api.override_step_data(
-        'isolate tests',
-        api.isolate.output_json(['base_unittests', 'browser_tests']))
+     }))
   )
 
   # One target (browser_tests) failed to produce *.isolated file.
   yield (
     api.test('swarming_missing_isolated') +
     props(requester='commit-bot@chromium.org', blamelist='joe@chromium.org',
-          blamelist_real=['joe@chromium.org']) +
+          blamelist_real=['joe@chromium.org'],
+          extra_swarmed_tests=['base_unittests']) +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
         'gtest_tests': [
@@ -1349,10 +1350,7 @@ def GenTests(api):
         'chromium': {
           'exclusions': [],
         },
-     })) +
-    api.override_step_data(
-        'isolate tests',
-        api.isolate.output_json(['base_unittests']))
+     }))
   )
 
   # One test (base_unittest) failed on swarming. It is retried with
@@ -1360,7 +1358,8 @@ def GenTests(api):
   yield (
     api.test('swarming_deapply_patch') +
     props(requester='commit-bot@chromium.org', blamelist='joe@chromium.org',
-          blamelist_real=['joe@chromium.org']) +
+          blamelist_real=['joe@chromium.org'],
+          extra_swarmed_tests=['base_unittests', 'browser_tests']) +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
         'gtest_tests': [
@@ -1383,14 +1382,8 @@ def GenTests(api):
           'exclusions': [],
         },
      })) +
-    api.override_step_data(
-        'isolate tests',
-        api.isolate.output_json(['base_unittests', 'browser_tests'])) +
     api.override_step_data('base_unittests (with patch)',
-                           canned_test(passing=False)) +
-    api.override_step_data(
-        'isolate tests (2)',
-        api.isolate.output_json(['base_unittests']))
+                           canned_test(passing=False))
   )
 
   yield (
@@ -1578,7 +1571,7 @@ def GenTests(api):
 
   yield (
     api.test('gpu_tests') +
-    api.properties.tryserver(
+    props(
       mastername='tryserver.chromium.mac',
       buildername='mac_chromium_rel',
       # TODO(sergiyb): Flag enable_gpu_tests is used to enable GPU tests. This
@@ -1586,7 +1579,6 @@ def GenTests(api):
       # production. Once telemetry tests are swarmed and ready for production,
       # this flag should be removed.
       enable_gpu_tests=True,
-      swarm_hashes=api.gpu.dummy_swarm_hashes
     ) +
     api.platform.name('mac') +
     api.override_step_data(

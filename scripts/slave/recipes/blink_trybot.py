@@ -387,6 +387,7 @@ def GenTests(api):
     return api.properties.tryserver(mastername=mastername,
                                     buildername=buildername,
                                     root='src/third_party/WebKit',
+                                    swarm_hashes=api.gpu.dummy_swarm_hashes,
                                     **kwargs)
 
   for mastername, master_config in BUILDERS.iteritems():
@@ -494,8 +495,7 @@ def GenTests(api):
     # is however a temporary measure to enable them in GenTests, but not in
     # production. Once respective slaves are moved to swarming, this flag should
     # be removed.
-    properties('tryserver.blink', 'mac_blink_rel', enable_gpu_tests=True,
-               swarm_hashes=api.gpu.dummy_swarm_hashes) +
+    properties('tryserver.blink', 'mac_blink_rel', enable_gpu_tests=True) +
     api.platform.name('mac') +
     api.step_data(with_patch, canned_test(passing=True)) +
     api.override_step_data(
