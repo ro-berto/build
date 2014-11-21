@@ -142,7 +142,9 @@ BUILDERS = {
       'kwargs': {
         'BUILD_CONFIG': 'Release',
       },
-      'upload': {
+      # Perf bisect builders uses custom file names for binaries with
+      # DEPS changes, and the logic for this is in zip_build.py.
+      'zip_and_upload': {
         'bucket': 'chrome-perf',
         'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip'
                              % api.properties['revision']),
