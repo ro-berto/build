@@ -712,6 +712,18 @@ class V8Api(recipe_api.RecipeApi):
     else:
       self._runtest(test['name'], test, **kwargs)
 
+  @staticmethod
+  def mean(values):
+    return float(sum(values)) / len(values)
+
+  @staticmethod
+  def variance(values, average):
+    return map(lambda x: (x - average) ** 2, values)
+
+  @staticmethod
+  def standard_deviation(values, average):
+    return math.sqrt(V8Api.mean(V8Api.variance(values, average)))
+
   def runperf(self, tests, perf_configs, category=None, suffix='',
               upload=True):
     """Run v8 performance tests and upload results.
@@ -768,15 +780,6 @@ class V8Api(recipe_api.RecipeApi):
               self.revision_number,
               bot=category)
 
-    def mean(values):
-      return float(sum(values)) / len(values)
-
-    def variance(values, average):
-      return map(lambda x: (x - average) ** 2, values)
-
-    def standard_deviation(values, average):
-      return math.sqrt(mean(variance(values, average)))
-
     # Make sure that bots that run perf tests have a revision property.
     if tests and upload:
       assert self.revision_number and self.revision, (
@@ -810,7 +813,7 @@ class V8Api(recipe_api.RecipeApi):
             continue
 
           values = map(float, trace['results'])
-          average = mean(values)
+          average = V8Api.mean(values)
 
           p = self.m.perf_dashboard.get_skeleton_point(
               test_path, self.revision_number, str(average))
@@ -822,7 +825,7 @@ class V8Api(recipe_api.RecipeApi):
           # A trace might provide a value for standard deviation if the test
           # driver already calculated it, otherwise calculate it here.
           p['error'] = (trace.get('stddev') or
-                        str(standard_deviation(values, average)))
+                        str(V8Api.standard_deviation(values, average)))
 
           points.append(p)
 
