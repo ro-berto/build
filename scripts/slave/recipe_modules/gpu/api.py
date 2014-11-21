@@ -429,6 +429,20 @@ class GpuApi(recipe_api.RecipeApi):
     else:
       return True
 
+  def _add_gpu_suffix(self, name, dimensions):
+    gpu_vendor_id = dimensions.get('gpu', '').split(':')[0].lower()
+    if gpu_vendor_id == '8086':
+      return '%s on Intel GPU' % name
+    # TODO(sergiyb): Mocking various vendors IDs is currently difficult as they
+    # are hard coded in the recipe. When we'll move the configs to an external
+    # json file read in a dedicated step whose data can be overriden, we should
+    # create tests for all GPUs and remove no-cover pragmas below.
+    elif gpu_vendor_id == '10de':  # pragma: no cover
+      return '%s on NDIVIA GPU' % name
+    elif gpu_vendor_id == '1002':  # pragma: no cover
+      return '%s on ATI GPU' % name
+    return '%s on (%s) GPU' % (name, gpu_vendor_id) # pragma: no cover
+
   def _create_gtest(self, name, chrome_revision, webkit_revision,
                     enable_swarming, swarming_dimensions,
                     args=[], target_name=None):
@@ -449,9 +463,7 @@ class GpuApi(recipe_api.RecipeApi):
     # we can try removing additional parameters and unify this into a single
     # call that only differs by enable_swarming argument.
     if enable_swarming:
-      # TODO(sergiyb): Modify display name to include a GPU name in parentheses
-      # after the test name: test_name (ATI), test_name (NVIDIA). This will be
-      # more descriptive than just test_name (1), test_name (2).
+      name = self._add_gpu_suffix(name, swarming_dimensions)
       return self.m.chromium.steps.GTestTest(
           name, args=args, enable_swarming=True, target_name=target_name,
           swarming_dimensions=swarming_dimensions)
@@ -489,6 +501,9 @@ class GpuApi(recipe_api.RecipeApi):
     if extra_browser_args:
       extra_browser_args_string += ' ' + ' '.join(extra_browser_args)
     test_args.append(extra_browser_args_string)
+
+    if enable_swarming:
+      name = self._add_gpu_suffix(name, swarming_dimensions)
 
     return self.m.chromium.steps.TelemetryGPUTest(
         name, chrome_revision, webkit_revision, args=test_args,

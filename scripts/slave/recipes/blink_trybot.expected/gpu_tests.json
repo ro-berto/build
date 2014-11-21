@@ -269,7 +269,7 @@
       "--shards",
       "1",
       "--task-name",
-      "content_gl_tests (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "content_gl_tests on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -302,7 +302,7 @@
       "--tag",
       "master:tryserver.blink",
       "--tag",
-      "name:content_gl_tests (with patch)",
+      "name:content_gl_tests on Intel GPU (with patch)",
       "--tag",
       "os:Mac",
       "--tag",
@@ -321,12 +321,12 @@
       "--use-gpu-in-tests",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] content_gl_tests (with patch) on Mac",
+    "name": "[trigger] content_gl_tests on Intel GPU (with patch) on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"content_gl_tests (with patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"content_gl_tests on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"content_gl_tests (with patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"content_gl_tests on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -352,7 +352,7 @@
       "--shards",
       "1",
       "--task-name",
-      "gl_tests (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "gl_tests on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -385,7 +385,7 @@
       "--tag",
       "master:tryserver.blink",
       "--tag",
-      "name:gl_tests (with patch)",
+      "name:gl_tests on Intel GPU (with patch)",
       "--tag",
       "os:Mac",
       "--tag",
@@ -404,12 +404,12 @@
       "--use-gpu-in-tests",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] gl_tests (with patch) on Mac",
+    "name": "[trigger] gl_tests on Intel GPU (with patch) on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"gl_tests (with patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"gl_tests on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gl_tests (with patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gl_tests on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -435,7 +435,7 @@
       "--shards",
       "1",
       "--task-name",
-      "angle_unittests (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "angle_unittests on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -468,7 +468,7 @@
       "--tag",
       "master:tryserver.blink",
       "--tag",
-      "name:angle_unittests (with patch)",
+      "name:angle_unittests on Intel GPU (with patch)",
       "--tag",
       "os:Mac",
       "--tag",
@@ -487,12 +487,12 @@
       "--use-gpu-in-tests",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] angle_unittests (with patch) on Mac",
+    "name": "[trigger] angle_unittests on Intel GPU (with patch) on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"angle_unittests (with patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"angle_unittests on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"angle_unittests (with patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"angle_unittests on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -518,7 +518,7 @@
       "--shards",
       "1",
       "--task-name",
-      "maps_pixel_test (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "maps_pixel_test on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -551,7 +551,7 @@
       "--tag",
       "master:tryserver.blink",
       "--tag",
-      "name:maps_pixel_test (with patch)",
+      "name:maps_pixel_test on Intel GPU (with patch)",
       "--tag",
       "os:Mac",
       "--tag",
@@ -582,12 +582,12 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "name": "[trigger] maps_pixel_test (with patch) on Mac",
+    "name": "[trigger] maps_pixel_test on Intel GPU (with patch) on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"maps_pixel_test (with patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"maps_pixel_test on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"maps_pixel_test (with patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"maps_pixel_test on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -613,7 +613,7 @@
       "--shards",
       "1",
       "--task-name",
-      "pixel_test (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "pixel_test on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -646,7 +646,7 @@
       "--tag",
       "master:tryserver.blink",
       "--tag",
-      "name:pixel_test (with patch)",
+      "name:pixel_test on Intel GPU (with patch)",
       "--tag",
       "os:Mac",
       "--tag",
@@ -682,12 +682,12 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "name": "[trigger] pixel_test (with patch) on Mac",
+    "name": "[trigger] pixel_test on Intel GPU (with patch) on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"pixel_test (with patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"pixel_test on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"pixel_test (with patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"pixel_test on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -713,7 +713,7 @@
       "--shards",
       "1",
       "--task-name",
-      "webgl_conformance (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "webgl_conformance on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -746,7 +746,7 @@
       "--tag",
       "master:tryserver.blink",
       "--tag",
-      "name:webgl_conformance (with patch)",
+      "name:webgl_conformance on Intel GPU (with patch)",
       "--tag",
       "os:Mac",
       "--tag",
@@ -762,7 +762,7 @@
       "commit-bot@chromium.org",
       "[dummy hash for telemetry_gpu_test]",
       "--",
-      "webgl_conformance",
+      "webgl_conformance on Intel GPU",
       "--show-stdout",
       "--browser=release",
       "-v",
@@ -773,12 +773,12 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "name": "[trigger] webgl_conformance (with patch) on Mac",
+    "name": "[trigger] webgl_conformance on Intel GPU (with patch) on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"webgl_conformance (with patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"webgl_conformance on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"webgl_conformance (with patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"webgl_conformance on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -804,7 +804,7 @@
       "--shards",
       "1",
       "--task-name",
-      "context_lost (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "context_lost on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -837,7 +837,7 @@
       "--tag",
       "master:tryserver.blink",
       "--tag",
-      "name:context_lost (with patch)",
+      "name:context_lost on Intel GPU (with patch)",
       "--tag",
       "os:Mac",
       "--tag",
@@ -853,7 +853,7 @@
       "commit-bot@chromium.org",
       "[dummy hash for telemetry_gpu_test]",
       "--",
-      "context_lost",
+      "context_lost on Intel GPU",
       "--show-stdout",
       "--browser=release",
       "-v",
@@ -864,12 +864,12 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "name": "[trigger] context_lost (with patch) on Mac",
+    "name": "[trigger] context_lost on Intel GPU (with patch) on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"context_lost (with patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"context_lost on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"context_lost (with patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"context_lost on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -895,7 +895,7 @@
       "--shards",
       "1",
       "--task-name",
-      "memory_test (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "memory_test on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -928,7 +928,7 @@
       "--tag",
       "master:tryserver.blink",
       "--tag",
-      "name:memory_test (with patch)",
+      "name:memory_test on Intel GPU (with patch)",
       "--tag",
       "os:Mac",
       "--tag",
@@ -944,7 +944,7 @@
       "commit-bot@chromium.org",
       "[dummy hash for telemetry_gpu_test]",
       "--",
-      "memory_test",
+      "memory_test on Intel GPU",
       "--show-stdout",
       "--browser=release",
       "-v",
@@ -955,12 +955,12 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "name": "[trigger] memory_test (with patch) on Mac",
+    "name": "[trigger] memory_test on Intel GPU (with patch) on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"memory_test (with patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"memory_test on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"memory_test (with patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"memory_test on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -986,7 +986,7 @@
       "--shards",
       "1",
       "--task-name",
-      "screenshot_sync (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "screenshot_sync on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1019,7 +1019,7 @@
       "--tag",
       "master:tryserver.blink",
       "--tag",
-      "name:screenshot_sync (with patch)",
+      "name:screenshot_sync on Intel GPU (with patch)",
       "--tag",
       "os:Mac",
       "--tag",
@@ -1035,7 +1035,7 @@
       "commit-bot@chromium.org",
       "[dummy hash for telemetry_gpu_test]",
       "--",
-      "screenshot_sync",
+      "screenshot_sync on Intel GPU",
       "--show-stdout",
       "--browser=release",
       "-v",
@@ -1046,12 +1046,12 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "name": "[trigger] screenshot_sync (with patch) on Mac",
+    "name": "[trigger] screenshot_sync on Intel GPU (with patch) on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"screenshot_sync (with patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"screenshot_sync on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"screenshot_sync (with patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"screenshot_sync on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -1077,7 +1077,7 @@
       "--shards",
       "1",
       "--task-name",
-      "hardware_accelerated_feature (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "hardware_accelerated_feature on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1110,7 +1110,7 @@
       "--tag",
       "master:tryserver.blink",
       "--tag",
-      "name:hardware_accelerated_feature (with patch)",
+      "name:hardware_accelerated_feature on Intel GPU (with patch)",
       "--tag",
       "os:Mac",
       "--tag",
@@ -1126,7 +1126,7 @@
       "commit-bot@chromium.org",
       "[dummy hash for telemetry_gpu_test]",
       "--",
-      "hardware_accelerated_feature",
+      "hardware_accelerated_feature on Intel GPU",
       "--show-stdout",
       "--browser=release",
       "-v",
@@ -1137,12 +1137,12 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "name": "[trigger] hardware_accelerated_feature (with patch) on Mac",
+    "name": "[trigger] hardware_accelerated_feature on Intel GPU (with patch) on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"hardware_accelerated_feature (with patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"hardware_accelerated_feature on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"hardware_accelerated_feature (with patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"hardware_accelerated_feature on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -1168,7 +1168,7 @@
       "--shards",
       "1",
       "--task-name",
-      "gpu_process_launch (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "gpu_process_launch on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1201,7 +1201,7 @@
       "--tag",
       "master:tryserver.blink",
       "--tag",
-      "name:gpu_process_launch (with patch)",
+      "name:gpu_process_launch on Intel GPU (with patch)",
       "--tag",
       "os:Mac",
       "--tag",
@@ -1228,12 +1228,12 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "name": "[trigger] gpu_process_launch (with patch) on Mac",
+    "name": "[trigger] gpu_process_launch on Intel GPU (with patch) on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"gpu_process_launch (with patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"gpu_process_launch on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gpu_process_launch (with patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gpu_process_launch on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -1259,7 +1259,7 @@
       "--shards",
       "1",
       "--task-name",
-      "gpu_rasterization (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "gpu_rasterization on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1292,7 +1292,7 @@
       "--tag",
       "master:tryserver.blink",
       "--tag",
-      "name:gpu_rasterization (with patch)",
+      "name:gpu_rasterization on Intel GPU (with patch)",
       "--tag",
       "os:Mac",
       "--tag",
@@ -1308,7 +1308,7 @@
       "commit-bot@chromium.org",
       "[dummy hash for telemetry_gpu_test]",
       "--",
-      "gpu_rasterization",
+      "gpu_rasterization on Intel GPU",
       "--show-stdout",
       "--browser=release",
       "-v",
@@ -1323,12 +1323,12 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "name": "[trigger] gpu_rasterization (with patch) on Mac",
+    "name": "[trigger] gpu_rasterization on Intel GPU (with patch) on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"gpu_rasterization (with patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"gpu_rasterization on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gpu_rasterization (with patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gpu_rasterization on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -1354,7 +1354,7 @@
       "--shards",
       "1",
       "--task-name",
-      "tab_capture_end2end_tests (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "tab_capture_end2end_tests on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1387,7 +1387,7 @@
       "--tag",
       "master:tryserver.blink",
       "--tag",
-      "name:tab_capture_end2end_tests (with patch)",
+      "name:tab_capture_end2end_tests on Intel GPU (with patch)",
       "--tag",
       "os:Mac",
       "--tag",
@@ -1405,12 +1405,12 @@
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] tab_capture_end2end_tests (with patch) on Mac",
+    "name": "[trigger] tab_capture_end2end_tests on Intel GPU (with patch) on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"tab_capture_end2end_tests (with patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"tab_capture_end2end_tests on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"tab_capture_end2end_tests (with patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"tab_capture_end2end_tests on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -1497,9 +1497,9 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "content_gl_tests (with patch)/Mac/[dummy has/mac_blink_rel/571"
+      "content_gl_tests on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571"
     ],
-    "name": "content_gl_tests (with patch) on Mac"
+    "name": "content_gl_tests on Intel GPU (with patch) on Mac"
   },
   {
     "allow_subannotations": true,
@@ -1521,9 +1521,9 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "gl_tests (with patch)/Mac/[dummy has/mac_blink_rel/571"
+      "gl_tests on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571"
     ],
-    "name": "gl_tests (with patch) on Mac"
+    "name": "gl_tests on Intel GPU (with patch) on Mac"
   },
   {
     "allow_subannotations": true,
@@ -1545,9 +1545,9 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "angle_unittests (with patch)/Mac/[dummy has/mac_blink_rel/571"
+      "angle_unittests on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571"
     ],
-    "name": "angle_unittests (with patch) on Mac"
+    "name": "angle_unittests on Intel GPU (with patch) on Mac"
   },
   {
     "cmd": [
@@ -1561,11 +1561,11 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "maps_pixel_test (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "maps_pixel_test on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
       "--task-output-dir",
       "/path/to/tmp/"
     ],
-    "name": "maps_pixel_test (with patch) on Mac"
+    "name": "maps_pixel_test on Intel GPU (with patch) on Mac"
   },
   {
     "cmd": [
@@ -1579,11 +1579,11 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "pixel_test (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "pixel_test on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
       "--task-output-dir",
       "/path/to/tmp/"
     ],
-    "name": "pixel_test (with patch) on Mac",
+    "name": "pixel_test on Intel GPU (with patch) on Mac",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
     ]
@@ -1600,11 +1600,11 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "webgl_conformance (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "webgl_conformance on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
       "--task-output-dir",
       "/path/to/tmp/"
     ],
-    "name": "webgl_conformance (with patch) on Mac"
+    "name": "webgl_conformance on Intel GPU (with patch) on Mac"
   },
   {
     "cmd": [
@@ -1618,11 +1618,11 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "context_lost (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "context_lost on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
       "--task-output-dir",
       "/path/to/tmp/"
     ],
-    "name": "context_lost (with patch) on Mac"
+    "name": "context_lost on Intel GPU (with patch) on Mac"
   },
   {
     "cmd": [
@@ -1636,11 +1636,11 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "memory_test (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "memory_test on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
       "--task-output-dir",
       "/path/to/tmp/"
     ],
-    "name": "memory_test (with patch) on Mac"
+    "name": "memory_test on Intel GPU (with patch) on Mac"
   },
   {
     "cmd": [
@@ -1654,11 +1654,11 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "screenshot_sync (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "screenshot_sync on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
       "--task-output-dir",
       "/path/to/tmp/"
     ],
-    "name": "screenshot_sync (with patch) on Mac"
+    "name": "screenshot_sync on Intel GPU (with patch) on Mac"
   },
   {
     "cmd": [
@@ -1672,11 +1672,11 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "hardware_accelerated_feature (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "hardware_accelerated_feature on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
       "--task-output-dir",
       "/path/to/tmp/"
     ],
-    "name": "hardware_accelerated_feature (with patch) on Mac"
+    "name": "hardware_accelerated_feature on Intel GPU (with patch) on Mac"
   },
   {
     "cmd": [
@@ -1690,11 +1690,11 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "gpu_process_launch (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "gpu_process_launch on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
       "--task-output-dir",
       "/path/to/tmp/"
     ],
-    "name": "gpu_process_launch (with patch) on Mac"
+    "name": "gpu_process_launch on Intel GPU (with patch) on Mac"
   },
   {
     "cmd": [
@@ -1708,11 +1708,11 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "gpu_rasterization (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "gpu_rasterization on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
       "--task-output-dir",
       "/path/to/tmp/"
     ],
-    "name": "gpu_rasterization (with patch) on Mac"
+    "name": "gpu_rasterization on Intel GPU (with patch) on Mac"
   },
   {
     "allow_subannotations": true,
@@ -1734,9 +1734,9 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "tab_capture_end2end_tests (with patch)/Mac/[dummy has/mac_blink_rel/571"
+      "tab_capture_end2end_tests on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571"
     ],
-    "name": "tab_capture_end2end_tests (with patch) on Mac"
+    "name": "tab_capture_end2end_tests on Intel GPU (with patch) on Mac"
   },
   {
     "cmd": [
@@ -1895,7 +1895,7 @@
       "--shards",
       "1",
       "--task-name",
-      "pixel_test (without patch)/Mac/[dummy has/mac_blink_rel/571",
+      "pixel_test on Intel GPU (without patch)/Mac/[dummy has/mac_blink_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1928,7 +1928,7 @@
       "--tag",
       "master:tryserver.blink",
       "--tag",
-      "name:pixel_test (without patch)",
+      "name:pixel_test on Intel GPU (without patch)",
       "--tag",
       "os:Mac",
       "--tag",
@@ -1965,12 +1965,12 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "name": "[trigger] pixel_test (without patch) on Mac",
+    "name": "[trigger] pixel_test on Intel GPU (without patch) on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"pixel_test (without patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"pixel_test on Intel GPU (without patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"pixel_test (without patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"pixel_test on Intel GPU (without patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -1993,11 +1993,11 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "pixel_test (without patch)/Mac/[dummy has/mac_blink_rel/571",
+      "pixel_test on Intel GPU (without patch)/Mac/[dummy has/mac_blink_rel/571",
       "--task-output-dir",
       "/path/to/tmp/"
     ],
-    "name": "pixel_test (without patch) on Mac",
+    "name": "pixel_test on Intel GPU (without patch) on Mac",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
     ]
@@ -2009,7 +2009,7 @@
       "\nimport sys, json\nfailures = json.load(open(sys.argv[1], 'rb'))\n\nsuccess = True\n\nif failures['new']:\n  success = False\n  print 'New failures:'\n  for f in failures['new']:\n    print f\n\nif failures['ignored']:\n  print 'Ignored failures:'\n  for f in failures['ignored']:\n    print f\n\nsys.exit(0 if success else 1)\n",
       "{\"ignored\": [\"Test.Test1\"], \"new\": []}"
     ],
-    "name": "pixel_test",
+    "name": "pixel_test on Intel GPU",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>ignored:<br/>Test.Test1<br/>@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
