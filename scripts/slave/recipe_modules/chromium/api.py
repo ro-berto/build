@@ -51,7 +51,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       # gyp is one tool), we're taking a small risk and replicating the logic
       # here.
       'TARGET_BITS': (
-        32 if self.m.platform.name in ('mac', 'win')
+        32 if self.m.platform.name == 'win'
         else self.m.platform.bits),
 
       'BUILD_CONFIG': self.m.properties.get('build_config', 'Release'),
