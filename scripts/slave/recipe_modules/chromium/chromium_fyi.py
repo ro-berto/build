@@ -343,6 +343,25 @@ SPEC = {
         'platform': 'win',
       },
     },
+    'Browser Side Navigation Linux': {
+      'recipe_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder_tester',
+      'compile_targets': [
+        'content_unittests',
+        'content_browsertests',
+      ],
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+    },
     'Chromium Linux ChromeOS MSan Builder': {
       'recipe_config': 'chromium_msan',
       'chromium_apply_config': ['instrumented_libraries'],
