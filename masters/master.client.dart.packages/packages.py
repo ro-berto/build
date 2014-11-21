@@ -2,134 +2,176 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+class Package(object):
+  """A dart pub package, which may have been published on pub.dartlang.org."""
+
+  def __init__(self, name=None, github_project=None, github_repo=None,
+               published=True, dart_repo_package=False, sample=False,
+               run_tests=True, dependencies=()):
+    """Constructs a new package object.
+
+    Either name or github_repo must be supplied. If only github_repo is
+    supplied, name is the github_repo with '-' replace by '_'.
+
+    Keyword arguments:
+    @param name: pub package name
+    @param github_project: github project name (defaults to 'dart-lang')
+    @param github_repo: github repo name (defaults to name)
+    @param published: whether it has been published on pub.dartlang.org
+    @param dart_repo_package: whether this package lives in dart/pkg/*
+    @param sample: whether this package is a sample
+    @param run_tests: whether to run tests for this package
+    @param dependencies: the list of dependencies (if any)
+    """
+    if not name and not github_repo:
+      raise Exception('Either "name" or "github_repo" must be supplied');
+
+    if not name and github_repo:
+      name = github_repo.replace('-', '_')
+
+    if dart_repo_package:
+      assert github_project is None
+      assert github_repo is None
+    else:
+      if not github_project:
+        github_project = 'dart-lang'
+      if not github_repo:
+        github_repo= name
+
+    self.name = name
+    self.github_project = github_project
+    self.github_repo = github_repo
+    self.published = published
+    self.dart_repo_package = dart_repo_package
+    self.sample = sample
+    self.run_tests = run_tests
+    self.dependencies = dependencies
+
+  def isGithubPackage(self):
+    return self.github_repo is not None
+
+  def isDartRepoPackage(self):
+    return self.dart_repo_package
+
+  def isSample(self):
+    return self.sample
+
+  def builderName(self, system):
+    name = self.github_repo if self.isGithubPackage() else self.name
+    repo = '-repo' if self.isDartRepoPackage() else ''
+    sample = '-sample' if self.isSample() else ''
+    return 'packages-%s%s%s-%s' % (system, repo, sample, name)
+
+  def builderCategory(self):
+    if self.isGithubPackage():
+      return self.github_repo
+    return self.name
+
+  def __str__(self):
+    return 'Package(%s)' % self.name
+
 # Packages that we test:
 #   We default to github-project dart-lang
 #   is_sample means that we will append sample to the name
 #   is_repo means if something is living in the dart repository, we will add
 #     this to the name as well.
 PACKAGES = [
-  {
-    'name' : 'core-elements',
-  },
-  {
-    'name' : 'dart-protobuf',
-  },
-  {
-    'name' : 'gcloud',
-  },
-  {
-    'name' : 'googleapis_auth',
-  },
-  {
-    'name' : 'html5lib',
-  },
-  {
-    'name' : 'code-transformers',
-  },
-  {
-    'name' : 'observe',
-  },
-  {
-    'name' : 'paper-elements',
-  },
-  {
-    'name' : 'polymer-dart',
-  },
-  {
-    'name' : 'polymer-expressions',
-  },
-  {
-    'name' : 'template-binding',
-  },
-  {
-    'name' : 'web-components',
-  },
-  {
-    'name' : 'custom-element-apigen',
-  },
-  {
-    'name' : 'smoke',
-  },
-  # Packages in the github project google
-  {
-    'name' : 'serialization.dart',
-    'github_project' : 'google'
-  },
-  # Github samples
-  {
-    'name' : 'sample-dcat',
-    'is_sample' : True,
-  },
-  {
-    'name' : 'sample-pop_pop_win',
-    'is_sample' : True,
-  },
-  {
-    'name' : 'sample-dgrep',
-    'is_sample' : True,
-  },
-  {
-    'name' : 'sample-sunflower',
-    'is_sample' : True,
-  },
-  {
-    'name' : 'sample-todomvc-polymer',
-    'is_sample' : True,
-  },
-  {
-    'name' : 'sample-dartiverse-search',
-    'is_sample' : True,
-  },
-  {
-    'name' : 'sample-clock',
-    'is_sample' : True,
-  },
-  {
-    'name' : 'sample-gauge',
-    'is_sample' : True,
-  },
-  {
-    'name' : 'sample-google-maps',
-    'is_sample' : True,
-  },
-  {
-    'name' : 'sample-jsonp',
-    'is_sample' : True,
-  },
-  {
-    'name' : 'sample-multi-touch',
-    'is_sample' : True,
-  },
-  {
-    'name' : 'sample-polymer-intl',
-    'is_sample' : True,
-  },
-  {
-    'name' : 'sample-searchable-list',
-    'is_sample' : True,
-  },
-  {
-    'name' : 'sample-solar',
-    'is_sample' : True,
-  },
-  {
-    'name' : 'sample-spirodraw',
-    'is_sample' : True,
-  },
-  {
-    'name' : 'sample-swipe',
-    'is_sample' : True,
-  },
-  {
-    'name' : 'sample-tracker',
-    'is_sample' : True,
-  },
+  # Packages in the 'dart-lang' project which are published.
+  Package(github_repo='code-transformers'),
+  Package(github_repo='core-elements'),
+  Package(github_repo='custom-element-apigen'),
+  Package(github_repo='gcloud'),
+  Package(github_repo='googleapis_auth'),
+  Package(github_repo='html5lib'),
+  Package(github_repo='observe'),
+  Package(github_repo='paper-elements'),
+  Package(github_repo='polymer-expressions'),
+  Package(github_repo='smoke'),
+  Package(github_repo='template-binding'),
+  Package(github_repo='web-components'),
+  Package(name='protobuf', github_repo='dart-protobuf'),
+  Package(name='polymer', github_repo='polymer-dart'),
+
+  # These are living in the same repository but under a sub-directory.
+  # The test runner does not understand the directory layout, so we
+  # disable tests for googleapis/googleapis_beta.
+  Package(name='googleapis', run_tests=False),
+  Package(name='googleapis_beta', run_tests=False),
+
+  # Packages in the 'google' github project which are published.
+  Package(name='serialization',
+          github_project='google',
+          github_repo='serialization.dart'),
+
+  # Dart repository packages in dart/pkg/* which are published
+  Package(name="analysis_server", dart_repo_package=True),
+  Package(name="analysis_services", dart_repo_package=True),
+  Package(name="analysis_testing", dart_repo_package=True),
+  Package(name="analyzer", dart_repo_package=True),
+  Package(name="args", dart_repo_package=True),
+  Package(name="async", dart_repo_package=True),
+  Package(name="barback", dart_repo_package=True),
+  Package(name="browser", dart_repo_package=True),
+  Package(name="collection", dart_repo_package=True),
+  Package(name="compiler_unsupported", dart_repo_package=True),
+  Package(name="crypto", dart_repo_package=True),
+  Package(name="csslib", dart_repo_package=True),
+  Package(name="custom_element", dart_repo_package=True),
+  Package(name="docgen", dart_repo_package=True),
+  Package(name="fixnum", dart_repo_package=True),
+  Package(name="http_base", dart_repo_package=True),
+  Package(name="http", dart_repo_package=True),
+  Package(name="http_multi_server", dart_repo_package=True),
+  Package(name="http_parser", dart_repo_package=True),
+  Package(name="http_server", dart_repo_package=True),
+  Package(name="intl", dart_repo_package=True),
+  Package(name="json_rpc_2", dart_repo_package=True),
+  Package(name="logging", dart_repo_package=True),
+  Package(name="matcher", dart_repo_package=True),
+  Package(name="math", dart_repo_package=True),
+  Package(name="mime", dart_repo_package=True),
+  Package(name="mock", dart_repo_package=True),
+  Package(name="mutation_observer", dart_repo_package=True),
+  Package(name="oauth2", dart_repo_package=True),
+  Package(name="path", dart_repo_package=True),
+  Package(name="pool", dart_repo_package=True),
+  Package(name="scheduled_test", dart_repo_package=True),
+  Package(name="serialization", dart_repo_package=True),
+  Package(name="shelf", dart_repo_package=True),
+  Package(name="shelf_web_socket", dart_repo_package=True),
+  Package(name="source_maps", dart_repo_package=True),
+  Package(name="source_span", dart_repo_package=True),
+  Package(name="stack_trace", dart_repo_package=True),
+  Package(name="string_scanner", dart_repo_package=True),
+  Package(name="typed_data", dart_repo_package=True),
+  Package(name="typed_mock", dart_repo_package=True),
+  Package(name="unittest", dart_repo_package=True),
+  Package(name="utf", dart_repo_package=True),
+  Package(name="watcher", dart_repo_package=True),
+  Package(name="yaml", dart_repo_package=True),
+
+  # Github samples which are not published on pub.dartlang.org
+  Package(github_repo='sample-clock', sample=True, published=False),
+  Package(github_repo='sample-dartiverse-search', sample=True, published=False),
+  Package(github_repo='sample-dcat', sample=True, published=False),
+  Package(github_repo='sample-dgrep', sample=True, published=False),
+  Package(github_repo='sample-gauge', sample=True, published=False),
+  Package(github_repo='sample-google-maps', sample=True, published=False),
+  Package(github_repo='sample-jsonp', sample=True, published=False),
+  Package(github_repo='sample-multi-touch', sample=True, published=False),
+  Package(github_repo='sample-polymer-intl', sample=True, published=False),
+  Package(github_repo='sample-pop_pop_win', sample=True, published=False),
+  Package(github_repo='sample-searchable-list', sample=True, published=False),
+  Package(github_repo='sample-solar', sample=True, published=False),
+  Package(github_repo='sample-spirodraw', sample=True, published=False),
+  Package(github_repo='sample-sunflower', sample=True, published=False),
+  Package(github_repo='sample-swipe', sample=True, published=False),
+  Package(github_repo='sample-todomvc-polymer', sample=True, published=False),
+  Package(github_repo='sample-tracker', sample=True, published=False),
 ]
 
-GITHUB_PACKAGES = [
-  p for p in PACKAGES if (not p.get('is_sample') and not p.get('is_repo'))
-]
+GITHUB_TESTING_PACKAGES = [
+    p for p in PACKAGES if p.isGithubPackage() and p.run_tests]
 
-GITHUB_SAMPLES = [
-  p for p in PACKAGES if (p.get('is_sample') and not p.get('is_repo'))
-]
+PUBLISHED_PACKAGE_NAMES = [p.name for p in PACKAGES if p.published]
+

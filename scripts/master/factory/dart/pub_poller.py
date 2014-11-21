@@ -33,6 +33,7 @@ class PubPoller(base.PollingChangeSource):
 
   def make_change(self, package, version):
     repo = 'http://pub.dartlang.org/packages/%s/versions' % package
+
     self.master.addChange(author='Pub: %s' % package,
                           files=[],
                           repository=repo,
