@@ -929,7 +929,8 @@ def GenSteps(api):
       raise
 
     if bot_config.get('use_isolate') or has_swarming_tests:
-      # TODO(sebmarchand): remove_build_metadata, http://crbug.com/314403 .
+      # Remove the build metadata from the binaries.
+      api.isolate.remove_build_metadata()
       # Isolate all prepared targets, will look for *.isolated.gen.json files.
       api.isolate.isolate_tests(api.chromium.output_dir, verbose=True)
 
