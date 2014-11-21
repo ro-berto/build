@@ -339,7 +339,7 @@ def main():
   bb_ver, tw_ver = GetThirdPartyVersions(active_master)
   python_path.append(os.path.join(BUILD_DIR, 'third_party', bb_ver))
   python_path.append(os.path.join(BUILD_DIR, 'third_party', tw_ver))
-  sys.path.extend(python_path[-2:])
+  sys.path = python_path[-2:] + sys.path
 
   os.environ['PYTHONPATH'] = (
       os.pathsep.join(python_path) + os.pathsep + os.environ['PYTHONPATH'])

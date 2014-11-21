@@ -72,7 +72,9 @@ from twisted.spread.flavors import setFactoryForClass
 from twisted.spread.flavors import setCopierForClassTree
 
 
-MAX_BROKER_REFS = 1024
+# Chromium: We are starting to use more references. Up this count to
+# accommodate.
+MAX_BROKER_REFS = 8192 # (Originally 1024)
 
 portno = 8787
 
