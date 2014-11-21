@@ -7,13 +7,21 @@
       "--master",
       "chromium.testing.master",
       "--builder",
-      "Mojo Win (dbg)",
+      "Mojo Linux Try",
       "--slave",
       "TestSlavename",
       "--spec",
       "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/mojo.git'}]",
+      "--root",
+      "src",
       "--revision_mapping_file",
       "{}",
+      "--issue",
+      "12853011",
+      "--patchset",
+      "1",
+      "--rietveld_server",
+      "https://codereview.chromium.org",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -47,29 +55,14 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/src/out"
-    ],
-    "name": "rmtree build directory",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[SLAVE_BUILD]/src/mojo/tools/mojob.py",
       "gn",
-      "--debug"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]/src",
+    "env": {
+      "GOMA_DIR": "[BUILD]/goma"
+    },
     "name": "mojob gn"
   },
   {
@@ -78,8 +71,11 @@
       "-u",
       "[SLAVE_BUILD]/src/mojo/tools/mojob.py",
       "build",
-      "--debug"
+      "--release"
     ],
+    "env": {
+      "GOMA_DIR": "[BUILD]/goma"
+    },
     "name": "mojob build"
   },
   {
@@ -88,11 +84,11 @@
       "-u",
       "[SLAVE_BUILD]/src/mojo/tools/mojob.py",
       "test",
-      "--debug",
+      "--release",
       "--master-name",
       "chromium.testing.master",
       "--builder-name",
-      "Mojo Win (dbg)",
+      "Mojo Linux Try",
       "--build-number",
       "571",
       "--test-results-server",
