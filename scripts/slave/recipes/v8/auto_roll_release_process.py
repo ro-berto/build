@@ -31,7 +31,7 @@ def GenSteps(api):
   api.bot_update.ensure_checkout(force=True, no_shallow=True)
 
   # Update candidate ref.
-  api.git('fetch', repo, '%s:%s' % (REF, REF), cwd=api.path['checkout'])
+  api.git('fetch', repo, '+%s:%s' % (REF, REF), cwd=api.path['checkout'])
 
   # Get current candidate. Needs to be set manually once.
   step_result = api.git(
