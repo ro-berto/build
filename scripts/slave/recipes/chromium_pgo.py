@@ -49,9 +49,15 @@ def RunBenchmarks(api):
   pgo_args = ['--profiler=win_pgo_profiler', '--use-live-sites']
 
   for benchmark in _BENCHMARKS_TO_RUN:
-    api.chromium.run_telemetry_benchmark(benchmark_name=benchmark,
-                                         cmd_args=pgo_args,
-                                         env=pgo_env)
+    try:
+      api.chromium.run_telemetry_benchmark(benchmark_name=benchmark,
+                                           cmd_args=pgo_args,
+                                           env=pgo_env)
+    except api.step.StepFailure:
+      # Turn the failures into warning, we shouldn't stop the build for a
+      # benchmark.
+      step_result = api.step.active_result
+      step_result.presentation.status = api.step.WARNING
 
 
 def GenSteps(api):
@@ -92,4 +98,12 @@ def GenTests(api):
                              _sanitize_nonalpha(buildername))) +
     api.properties.generic(mastername=mastername, buildername=buildername) +
     api.platform('win', 32)
+  )
+
+  yield (
+    api.test('full_%s_%s_benchmark_failure' %
+        (_sanitize_nonalpha(mastername), _sanitize_nonalpha(buildername))) +
+    api.properties.generic(mastername=mastername, buildername=buildername) +
+    api.platform('win', 32) +
+    api.step_data('Telemetry benchmark: peacekeeper.dom', retcode=1)
   )
