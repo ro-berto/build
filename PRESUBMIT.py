@@ -37,6 +37,7 @@ def CommonChecks(input_api, output_api):
         join('third_party', 'buildbot_slave_8_4'),
         join('third_party', 'coverage-3.7.1'),
         join('third_party', 'decorator_3_3_1'),
+        join('third_party', 'google_api_python_client'),
         join('third_party', 'jinja2'),
         join('third_party', 'mock-1.0.1'),
         join('third_party', 'requests_1_2_3'),
