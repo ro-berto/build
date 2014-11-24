@@ -86,10 +86,17 @@ def android_arm(c):
 
 
 @config_ctx()
+def android_arm64(c):
+  # Make is executed in the out dir. Android points to the toplevel Makefile in
+  # the v8 dir.
+  c.compile_py.compile_extra_args.extend(
+      ['-C', '..' , 'android_arm64.release'])
+
+
+@config_ctx()
 def arm_hard_float(c):
   c.gyp_env.CXX = '/usr/bin/arm-linux-gnueabihf-g++'
   c.gyp_env.LINK = '/usr/bin/arm-linux-gnueabihf-g++'
-
 
 
 @config_ctx()

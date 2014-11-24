@@ -37,7 +37,10 @@ def v8(c):
 @CONFIG_CTX(includes=['v8'])
 def android_arm(c):
   if c.BUILD_CONFIG == 'Release':
-    c.build_config_fs = 'android_arm.release'
+    if c.TARGET_BITS == 64:
+      c.build_config_fs = 'android_arm64.release'
+    else:
+      c.build_config_fs = 'android_arm.release'
 
 
 @CONFIG_CTX(includes=['v8'])
