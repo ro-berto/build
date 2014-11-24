@@ -23,7 +23,7 @@
 
 {% for s in slaves %}
   <tr class="{{ loop.cycle('alt','') }}">
-  <td><b><a href="{{ s.link }}">{{ s.name }}</a></b></td>
+  <td><b><a href="{{ s.link }}">{{ cros_slave_name(s.name) }}</a></b></td>
 
   {%- if show_builder_column %}
     <td>

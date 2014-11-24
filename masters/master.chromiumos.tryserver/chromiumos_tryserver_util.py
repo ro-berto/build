@@ -30,11 +30,30 @@ all_builders = cbb_builders.union(etc_builders)
 precq_builders = set(filter(is_pre_cq_builder, all_builders))
 
 
-def cros_builder_links(slaves):
+class TestingSlavePool(object):
+
+  def __init__(self, testing_slaves=None):
+    self.testing_slaves = set(testing_slaves or ())
+
+  def is_testing_slave(self, slavename):
+    return slavename in self.testing_slaves
+
+  def cros_slave_name(self, slavename):
+    """BuildBot Jinja2 template function to style our slave groups into pools.
+
+    This function is called by our customized 'buildslaves.html' template. Given
+    a slave name, it returns the name to display for that slave.
+    """
+    if self.is_testing_slave(slavename):
+      return '%s (Testing)' % (slavename,)
+    return slavename
+
+
+def cros_builder_links(builders):
   """BuildBot Jinja2 template function to style our slave groups into pools.
 
   This function is called by our customized 'buildslaves.html' template. It is
-  evaluated for each slave, receiving 'slaves', a list containing template
+  evaluated for each slave, receiving 'builders', a list containing template
   information for each builder attached to that slave.
 
   This function accepts and returns a list containing entries:
@@ -47,16 +66,15 @@ def cros_builder_links(slaves):
   This function summarizes known sets of builders, replacing individual builder
   names/links with concise builder pool names/links.
   """
-  slave_names = set(s['name'] for s in slaves)
+  builder_names = set(s['name'] for s in builders)
 
-  if slave_names == all_builders:
-    return [{'link': 'builders', 'name': 'General'}]
-  elif slave_names == precq_builders:
+  if builder_names == all_builders:
+    builders = [{'link': 'builders', 'name': 'General'}]
+  elif builder_names == precq_builders:
     query = '&'.join('builder=%s' % (urllib.quote(n),)
                      for n in precq_builders)
-    return [{'link': 'builders?%s' % (query,), 'name': 'Pre-CQ'}]
-  else:
-    return slaves
+    builders = [{'link': 'builders?%s' % (query,), 'name': 'Pre-CQ'}]
+  return builders
 
 
 class NextSlaveAndBuild(object):
@@ -69,13 +87,15 @@ class NextSlaveAndBuild(object):
   - It prioritizes slaves with fewer builders (more specialized) over slaves
     with more builders.
   """
-  def __init__(self, testing_slaves=None):
+
+  def __init__(self, testing_slave_pool=None):
     """Initializes a new callable object.
 
     Args:
-      testing_slaves (None/list): If not None, a list of slaves not to assign.
+      testing_slave_pool (None/TestingSlavePool): If not None, the pool of
+          testing slaves.
     """
-    self.testing_slaves = testing_slaves or ()
+    self.testing_slave_pool = testing_slave_pool or TestingSlavePool()
 
   @staticmethod
   def get_buildrequest_category(br):
@@ -99,6 +119,14 @@ class NextSlaveAndBuild(object):
           builders.append(b)
     return builders
 
+  def is_testing_slave(self, slave):
+    """Returns: True if 'slave' is a testing slave.
+
+    Args:
+      slave (BuildSlave): The build slave to test.
+    """
+    return self.testing_slave_pool.is_testing_slave(slave.slavename)
+
   def __call__(self, slaves, buildrequests):
     """Called by master to determine which job to run and which slave to use.
 
@@ -107,7 +135,7 @@ class NextSlaveAndBuild(object):
     request to be run on specific slaves.
 
     Arguments:
-      slaves: A list of available BuilderSlave objects.
+      slaves: A list of candidate SlaveBuilder objects.
       buildrequests: A list of pending BuildRequest objects.
 
     Returns:
@@ -145,7 +173,7 @@ class NextSlaveAndBuild(object):
     # attached builders with the intention of using more-specialized (fewer
     # attached builders) slaves before using generic ones.
     normal_slaves = [s for s in slaves
-                     if s.slave.slavename not in self.testing_slaves]
+                     if not self.is_testing_slave(s.slave)]
 
     for br in remaining:
       builder = br.master.status.getBuilder(br.buildername)
