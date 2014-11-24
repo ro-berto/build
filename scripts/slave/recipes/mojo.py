@@ -32,11 +32,6 @@ def _BuildSteps(api, buildername, build_type):
     args += ['--android']
   elif 'ChromeOS' in buildername:
     args += ['--chromeos']
-  if 'Win' in buildername:
-    # Until http://crbug.com/402648 is fixed, we need to do a clobber.
-    api.path.rmtree(
-      'build directory',
-      api.path['checkout'].join('out'))
 
   goma_dir = ''
   if 'Win' not in buildername:
