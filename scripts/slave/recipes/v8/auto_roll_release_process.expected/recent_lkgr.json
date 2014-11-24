@@ -61,8 +61,8 @@
     "name": "git show-ref",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@candidate@0df953c9e12c1e3b0e37f2d4ef1ef8c319e095cb@@@",
-      "@@@STEP_LOG_END@candidate@@@"
+      "@@@STEP_LOG_LINE@ref@0df953c9e12c1e3b0e37f2d4ef1ef8c319e095cb@@@",
+      "@@@STEP_LOG_END@ref@@@"
     ]
   },
   {

@@ -16,52 +16,66 @@ DEPS = [
 ]
 
 REPO = 'https://chromium.googlesource.com/v8/v8'
-REF = 'refs/heads/candidate'
+CANDIDATE_REF = 'refs/heads/candidate'
 STATUS_URL = 'https://v8-status.appspot.com'
 SEC_TO_HOURS = 60 * 60
 TIME_LIMIT_HOURS = 8
 TIME_LIMIT_SEC = TIME_LIMIT_HOURS * SEC_TO_HOURS
 
-def GenSteps(api):
-  repo = api.properties.get('repo', REPO)
-  timestamp_file = api.path['slave_build'].join('timestamp.txt')
-  fail_on_exit = None
 
-  api.gclient.set_config('v8')
-  api.bot_update.ensure_checkout(force=True, no_shallow=True)
-
-  # Update candidate ref.
-  api.git('fetch', repo, '+%s:%s' % (REF, REF), cwd=api.path['checkout'])
-
-  # Get current candidate. Needs to be set manually once.
+def GetRef(api, repo, ref):
+  # Fetch ref from remote.
+  api.git(
+      'fetch', repo, '+%s:%s' % (ref, ref),
+      cwd=api.path['checkout'],
+  )
+  # Read ref locally.
   step_result = api.git(
-      'show-ref', '-s', REF, cwd=api.path['checkout'],
+      'show-ref', '-s', ref,
+      cwd=api.path['checkout'],
       stdout=api.raw_io.output(),
   )
-  current_candidate = step_result.stdout.strip()
-  step_result.presentation.logs['candidate'] = [current_candidate]
+  result = step_result.stdout.strip()
+  step_result.presentation.logs['ref'] = [result]
+  return result
 
-  try:
-    current_date = int(float(
-        api.file.read('check timestamp', timestamp_file).strip()))
-  except Exception:
-    # If anything goes wrong, the process restarts with a fresh timestamp.
-    current_date = api.time.time()
-    api.file.write('init timestamp', timestamp_file, str(current_date))
-    fail_on_exit = 'Timestamp file was missing. Starting new candidate cycle.'
 
-  new_date = api.time.time()
-  age = (new_date - current_date) / SEC_TO_HOURS
+def PushRef(api, repo, ref, hsh):
+  api.git(
+      'update-ref', ref, hsh,
+      cwd=api.path['checkout'],
+  )
+  api.git(
+      'push', repo, '%s:%s' % (ref, ref),
+      cwd=api.path['checkout'],
+  )
+
+
+def ReadTimeStamp(api, name):
+  return int(float(
+      api.file.read(
+          name,
+          api.path['slave_build'].join('timestamp.txt'),
+      ).strip()))
+
+
+def WriteTimeStamp(api, name, timestamp):
+  api.file.write(
+      name,
+      api.path['slave_build'].join('timestamp.txt'),
+      str(timestamp),
+  )
+
+
+def AgeLimitBailout(api, new_date, old_date):
+  age = (new_date - old_date) / SEC_TO_HOURS
   api.step('log', ['echo',
     'Current candidate is %dh old (limit: %dh).' % (age, TIME_LIMIT_HOURS),
   ])
-  if age < TIME_LIMIT_HOURS:
-    if fail_on_exit:
-      raise api.step.StepFailure(fail_on_exit)
-    else:
-      return
+  return age < TIME_LIMIT_HOURS
 
-  # Get new lkgr.
+
+def GetLKGR(api, new_date):
   step_result = api.python(
       'get new lkgr',
       api.path['build'].join('scripts', 'tools', 'runit.py'),
@@ -69,15 +83,43 @@ def GenSteps(api):
        '%s/lkgr' % STATUS_URL],
       stdout=api.raw_io.output(),
   )
-  new_candidate = step_result.stdout.strip()
+  lkgr = step_result.stdout.strip()
   step_result.presentation.logs['logs'] = [
-    'New candidate: %s (%s)' % (new_candidate, str(new_date)),
+    'New candidate: %s (%s)' % (lkgr, str(new_date)),
   ]
+  return step_result, lkgr
+
+def GenSteps(api):
+  repo = api.properties.get('repo', REPO)
+  fail_on_exit = None
+
+  api.gclient.set_config('v8')
+  api.bot_update.ensure_checkout(force=True, no_shallow=True)
+
+  # Get current candidate. Needs to be set manually once.
+  current_candidate = GetRef(api, repo, CANDIDATE_REF)
+
+  try:
+    current_date = ReadTimeStamp(api, 'check timestamp')
+  except Exception:
+    # If anything goes wrong, the process restarts with a fresh timestamp.
+    current_date = api.time.time()
+    WriteTimeStamp(api, 'init timestamp', current_date)
+    fail_on_exit = 'Timestamp file was missing. Starting new candidate cycle.'
+
+  new_date = api.time.time()
+  if AgeLimitBailout(api, new_date, current_date):
+    if fail_on_exit:
+      raise api.step.StepFailure(fail_on_exit)
+    else:
+      return
+
+  # Get new lkgr.
+  step_result, new_candidate = GetLKGR(api, new_date)
 
   if current_candidate != new_candidate:
-    api.git('update-ref', REF, new_candidate, cwd=api.path['checkout'])
-    api.git('push', repo, '%s:%s' % (REF, REF), cwd=api.path['checkout'])
-    api.file.write('update timestamp', timestamp_file, str(api.time.time()))
+    PushRef(api, repo, CANDIDATE_REF, new_candidate)
+    WriteTimeStamp(api, 'update timestamp', api.time.time())
   else:
     step_result.presentation.step_text = 'There is no new lkgr candidate.'
 
