@@ -5,15 +5,23 @@
       "-u",
       "[BUILD]/scripts/slave/bot_update.py",
       "--master",
-      "chromium.fyi",
+      "tryserver.chromium.linux",
       "--builder",
-      "Android x64 Builder (dbg)",
+      "android_clang_dbg_recipe_experimental",
       "--slave",
       "TestSlavename",
       "--spec",
       "cache_dir = None\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}, {'custom_deps': {'src/chrome/test/data/firefox2_profile/searchplugins': None, 'src/chrome/test/data/firefox2_searchplugins': None, 'src/chrome/test/data/firefox3_profile/searchplugins': None, 'src/chrome/test/data/firefox3_searchplugins': None, 'src/chrome/test/data/osdd': None, 'src/chrome/test/data/perf/frame_rate/private': None, 'src/chrome/test/data/plugin': None, 'src/chrome/test/data/ssl/certs': None, 'src/data/autodiscovery': None, 'src/data/esctf': None, 'src/data/mach_ports': None, 'src/data/memory_test': None, 'src/data/mozilla_js_tests': None, 'src/data/page_cycler': None, 'src/data/selenium_core': None, 'src/data/tab_switching': None, 'src/tools/grit/grit/test/data': None, 'src/webkit/data/bmp_decoder': None, 'src/webkit/data/ico_decoder': None, 'src/webkit/data/test_shell/plugins': None, 'src/webkit/data/xbm_decoder': None}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src-internal', 'url': 'svn://svn-mirror.golo.chromium.org/chrome-internal/trunk/src-internal'}]\ntarget_os = ['android']",
+      "--root",
+      "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\", \"src/native_client\": \"got_nacl_revision\", \"src/third_party/WebKit\": \"got_webkit_revision\", \"src/third_party/webrtc\": \"got_webrtc_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_v8_revision\"}",
+      "--issue",
+      "12853011",
+      "--patchset",
+      "1",
+      "--rietveld_server",
+      "https://codereview.chromium.org",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -93,10 +101,31 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 use_goma=1",
+      "GYP_CROSSCOMPILE": "1",
+      "GYP_DEFINES": "OS=android asan=1 clang=1 component=shared_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_allocator=none use_goma=1",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "gclient runhooks"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/apply_issue.py",
+      "-r",
+      "[SLAVE_BUILD]/src",
+      "-i",
+      "12853011",
+      "-p",
+      "1",
+      "-s",
+      "https://codereview.chromium.org",
+      "--no-auth"
+    ],
+    "name": "apply_issue",
+    "~followup_annotations": [
+      "@@@STEP_LINK@Applied issue 12853011@https://codereview.chromium.org/12853011@@@"
+    ]
   },
   {
     "cmd": [
@@ -106,10 +135,93 @@
       "scan"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "check licenses",
+    "name": "check licenses (with patch)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/compile.py",
+      "--target",
+      "Debug",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
+      "--build-tool",
+      "ninja",
+      "--compiler",
+      "goma-clang",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "--"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "compile (with patch)"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/build/android/findbugs_diff.py"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "findbugs (with patch)",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
       "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/bot_update.py",
+      "--master",
+      "tryserver.chromium.linux",
+      "--builder",
+      "android_clang_dbg_recipe_experimental",
+      "--slave",
+      "TestSlavename",
+      "--spec",
+      "cache_dir = None\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}, {'custom_deps': {'src/chrome/test/data/firefox2_profile/searchplugins': None, 'src/chrome/test/data/firefox2_searchplugins': None, 'src/chrome/test/data/firefox3_profile/searchplugins': None, 'src/chrome/test/data/firefox3_searchplugins': None, 'src/chrome/test/data/osdd': None, 'src/chrome/test/data/perf/frame_rate/private': None, 'src/chrome/test/data/plugin': None, 'src/chrome/test/data/ssl/certs': None, 'src/data/autodiscovery': None, 'src/data/esctf': None, 'src/data/mach_ports': None, 'src/data/memory_test': None, 'src/data/mozilla_js_tests': None, 'src/data/page_cycler': None, 'src/data/selenium_core': None, 'src/data/tab_switching': None, 'src/tools/grit/grit/test/data': None, 'src/webkit/data/bmp_decoder': None, 'src/webkit/data/ico_decoder': None, 'src/webkit/data/test_shell/plugins': None, 'src/webkit/data/xbm_decoder': None}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src-internal', 'url': 'svn://svn-mirror.golo.chromium.org/chrome-internal/trunk/src-internal'}]\ntarget_os = ['android']",
+      "--root",
+      "src",
+      "--revision_mapping_file",
+      "{\"src\": \"got_revision\", \"src/native_client\": \"got_nacl_revision\", \"src/third_party/WebKit\": \"got_webkit_revision\", \"src/third_party/webrtc\": \"got_webrtc_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_v8_revision\"}",
+      "--rietveld_server",
+      "https://codereview.chromium.org",
+      "--output_json",
+      "/path/to/tmp/json",
+      "--revision",
+      "src@f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "--force"
+    ],
+    "name": "bot_update (without patch)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Some step text@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"src\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision_cp\": \"refs/heads/master@{#170242}\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_v8_revision_cp\": \"refs/heads/master@{#43426}\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_webkit_revision\": \"5e2293dffc3cd07d37fbedea3b500f0eb650614d\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_webkit_revision_cp\": \"refs/heads/master@{#124383}\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"root\": \"src\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
@@ -124,7 +236,7 @@
       "--build-tool",
       "ninja",
       "--compiler",
-      "goma",
+      "goma-clang",
       "--goma-dir",
       "[BUILD]/goma",
       "--"
@@ -132,7 +244,7 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "compile"
+    "name": "compile (without patch)"
   },
   {
     "cmd": [
@@ -141,15 +253,16 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "findbugs"
+    "name": "findbugs (without patch)",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_FAILURE@@@",
+      "@@@SET_BUILD_PROPERTY@failure_type@\"TRANSIENT_FAILURE\"@@@"
+    ]
   },
   {
-    "cmd": [
-      "[SLAVE_BUILD]/src/tools/android/findbugs_plugin/test/run_findbugs_plugin_tests.py"
-    ],
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "findbugs_tests"
+    "name": "$final_result",
+    "reason": "Step('findbugs (without patch)') failed with return_code 1",
+    "status_code": 1
   }
 ]

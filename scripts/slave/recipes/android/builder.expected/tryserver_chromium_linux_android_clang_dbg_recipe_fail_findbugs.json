@@ -111,6 +111,16 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]/src/android_webview/tools/webview_licenses.py",
+      "scan"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "check licenses"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[DEPOT_TOOLS]/apply_issue.py",
       "-r",
       "[SLAVE_BUILD]/src",
@@ -148,16 +158,6 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "compile (with patch)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/android_webview/tools/webview_licenses.py",
-      "scan"
-    ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "check licenses"
   },
   {
     "cmd": [

@@ -111,48 +111,6 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/apply_issue.py",
-      "-r",
-      "[SLAVE_BUILD]/src",
-      "-i",
-      "12853011",
-      "-p",
-      "1",
-      "-s",
-      "https://codereview.chromium.org",
-      "--no-auth"
-    ],
-    "name": "apply_issue",
-    "~followup_annotations": [
-      "@@@STEP_LINK@Applied issue 12853011@https://codereview.chromium.org/12853011@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/compile.py",
-      "--target",
-      "Debug",
-      "--src-dir",
-      "[SLAVE_BUILD]/src",
-      "--build-tool",
-      "ninja",
-      "--compiler",
-      "goma-clang",
-      "--goma-dir",
-      "[BUILD]/goma",
-      "--"
-    ],
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "compile (with patch)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[SLAVE_BUILD]/src/android_webview/tools/webview_licenses.py",
       "scan"
     ],

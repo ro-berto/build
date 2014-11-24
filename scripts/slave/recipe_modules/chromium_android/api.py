@@ -143,20 +143,25 @@ class AndroidApi(recipe_api.RecipeApi):
     kwargs['env'] = self.m.chromium.get_env()
     self.m.chromium.compile(**kwargs)
 
-  def findbugs(self, findbugs_options=[]):
-    cmd = [self.m.path['checkout'].join('build', 'android', 'findbugs_diff.py')]
+  def findbugs(self, suffix='', findbugs_options=[]):
+    if suffix:
+      suffix = ' ' + suffix
+    cmd = [self.m.path['checkout'].join('build', 'android',
+                                        'findbugs_diff.py')]
     cmd.extend(findbugs_options)
 
     if self.m.chromium.c.BUILD_CONFIG == 'Release':
       cmd.append('--release-build')
 
-    self.m.step('findbugs', cmd, env=self.m.chromium.get_env())
+    self.m.step('findbugs%s' %  suffix,
+                cmd, env=self.m.chromium.get_env())
 
     cmd = [self.m.path['checkout'].join('tools', 'android', 'findbugs_plugin',
                'test', 'run_findbugs_plugin_tests.py')]
     if self.m.chromium.c.BUILD_CONFIG == 'Release':
       cmd.append('--release-build')
-    self.m.step('findbugs_tests', cmd, env=self.m.chromium.get_env())
+    self.m.step('findbugs_tests%s' % suffix,
+                cmd, env=self.m.chromium.get_env())
 
   def git_number(self, **kwargs):
     return self.m.step(
@@ -171,9 +176,11 @@ class AndroidApi(recipe_api.RecipeApi):
         infra_step=True,
         **kwargs)
 
-  def check_webview_licenses(self):
+  def check_webview_licenses(self, suffix=''):
+    if suffix:
+      suffix = ' ' + suffix
     self.m.python(
-        'check licenses',
+        'check licenses%s' % suffix,
         self.m.path['checkout'].join('android_webview',
                                      'tools',
                                      'webview_licenses.py'),
