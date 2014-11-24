@@ -77,7 +77,7 @@
       "GYP_DEFINES": "buildtype=Official chrome_pgo_phase=1 component=static_library fastbuild=0 optimize=max target_arch=ia32 use_goma=0",
       "PATH": "[SLAVE_BUILD]\\src\\out\\Release;%(PATH)s"
     },
-    "name": "gclient runhooks"
+    "name": "gclient Runhooks: Instrumentation phase."
   },
   {
     "cmd": [
@@ -111,7 +111,7 @@
       "--",
       "chrome"
     ],
-    "name": "compile"
+    "name": "Compile: Instrumentation phase."
   },
   {
     "cmd": [
@@ -442,7 +442,7 @@
     "env": {
       "GYP_DEFINES": "buildtype=Official chrome_pgo_phase=2 component=static_library fastbuild=0 optimize=max target_arch=ia32 use_goma=0"
     },
-    "name": "gclient runhooks (2)"
+    "name": "gclient Runhooks: Optimization phase."
   },
   {
     "cmd": [
@@ -458,6 +458,6 @@
       "--",
       "chrome"
     ],
-    "name": "compile (2)"
+    "name": "Compile: Optimization phase."
   }
 ]
