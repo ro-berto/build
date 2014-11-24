@@ -25,7 +25,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "v8@refs/branch-heads/3.28:20123",
+      "v8@refs/branch-heads/3.29:20123",
       "--no_shallow",
       "--with_branch_heads"
     ],
