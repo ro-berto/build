@@ -37,7 +37,7 @@ def clang_release_builder(c):
 
 @CONFIG_CTX(includes=['clang_release_builder'])
 def clang_release_builder_l(c):
-  c.gyp_env.GYP_DEFINES['asan_coverage'] = 3
+  c.gyp_env.GYP_DEFINES['asan_coverage'] = 1
 
 @CONFIG_CTX(includes=['main_builder'])
 def component_builder(c):
