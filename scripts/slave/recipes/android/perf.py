@@ -129,6 +129,12 @@ def GenSteps(api):
       browser='android-chrome-shell',
       num_shards=builder['num_device_shards'],
       devices=api.adb.devices[0:1]).json.output
+
+  # --upload-results makes the telemetry tests upload associated trace
+  # files to cloud storage.
+  for key in perf_tests['steps'].keys():
+    perf_tests['steps'][key]['cmd'] += ' --upload-results'
+
   try:
     api.chromium_android.run_sharded_perf_tests(
       config=api.json.input(data=perf_tests),
