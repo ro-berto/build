@@ -88,7 +88,7 @@ BUILDERS = {
       'mac_blink_dbg': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
         'compile_only': False,
         'testing': {
@@ -98,7 +98,7 @@ BUILDERS = {
       'mac_blink_rel': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
         'compile_only': False,
         'testing': {
@@ -108,7 +108,7 @@ BUILDERS = {
       'mac_blink_compile_dbg': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
         'compile_only': True,
         'testing': {
@@ -118,7 +118,7 @@ BUILDERS = {
       'mac_blink_compile_rel': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
         'compile_only': True,
         'testing': {
@@ -128,7 +128,7 @@ BUILDERS = {
       'mac_blink_oilpan_dbg': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
         'compile_only': False,
         'testing': {
@@ -138,7 +138,7 @@ BUILDERS = {
       'mac_blink_oilpan_rel': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
         'compile_only': False,
         'testing': {
