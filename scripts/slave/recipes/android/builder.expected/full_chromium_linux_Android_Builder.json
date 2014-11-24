@@ -134,10 +134,10 @@
       "[SLAVE_BUILD]/src",
       "--exclude-files",
       "lib.target,gen,android_webview,jingle_unittests",
-      "--build-url",
-      "gs://chromium-android/android_main_rel",
       "--target",
-      "Release"
+      "Release",
+      "--build-url",
+      "gs://chromium-android/android_main_rel"
     ],
     "name": "zip_build"
   }

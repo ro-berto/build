@@ -134,8 +134,6 @@
       "[SLAVE_BUILD]/src",
       "--exclude-files",
       "lib.target,gen,android_webview,jingle_unittests",
-      "--build-url",
-      "gs://chrome-perf/android_perf_rel/full-build-linux_267739.zip",
       "--target",
       "Release"
     ],

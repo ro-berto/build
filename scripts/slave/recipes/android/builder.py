@@ -146,8 +146,9 @@ BUILDERS = {
       # DEPS changes, and the logic for this is in zip_build.py.
       'zip_and_upload': {
         'bucket': 'chrome-perf',
-        'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip'
-                             % api.properties['revision']),
+        # We send None as the path so that zip_build.py gets it from factory
+        # properties.
+        'path': lambda api: None,
       }
     }
   },
