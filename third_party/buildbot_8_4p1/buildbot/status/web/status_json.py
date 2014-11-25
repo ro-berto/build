@@ -868,6 +868,7 @@ class BuildStateJsonResource(JsonResource):
         # This also causes the cache to be updated with recent builds, so we
         # will call it first.
         response = builder.asDict()
+        response['builderName'] = builder.getName()
         tasks = []
 
         # Get current/completed builds.
