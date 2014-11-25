@@ -151,4 +151,4 @@ def GenTests(api):
            example_result=1) +
          api.override_step_data(
           'analyze',
-          api.json.output({'invalid_targets': 'invalid'})))
+          api.json.output({'invalid_targets': ['invalid', 'another one']})))

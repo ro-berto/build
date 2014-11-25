@@ -47,14 +47,17 @@
     "name": "analyze",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"invalid_targets\": \"invalid\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"invalid_targets\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"invalid\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"another one\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
     "name": "$final_result",
-    "reason": "Error, following targets were not found: invalid",
+    "reason": "Error, following targets were not found: invalid, another one",
     "status_code": 1
   }
 ]

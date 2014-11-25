@@ -1567,7 +1567,7 @@ def GenTests(api):
     ) +
     api.override_step_data(
       'analyze',
-      api.json.output({'invalid_targets': 'invalid target'}))
+      api.json.output({'invalid_targets': ['invalid target', 'another one']}))
   )
 
   yield (

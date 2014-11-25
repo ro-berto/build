@@ -153,7 +153,7 @@ class FilterApi(recipe_api.RecipeApi):
     elif 'invalid_targets' in step_result.json.output:
       self._result = True
       raise self.m.step.StepFailure('Error, following targets were not ' + \
-          'found: ' + step_result.json.output['invalid_targets'])
+          'found: ' + ', '.join(step_result.json.output['invalid_targets']))
     elif step_result.json.output['status'] == 'Found dependency':
       self._result = True
       self._matching_exes = step_result.json.output['targets']
