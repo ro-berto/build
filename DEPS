@@ -24,7 +24,7 @@ deps = {
 
   "build/third_party/oauth2client":
     ("https://chromium.googlesource.com/external/github.com/google/"
-     "oauth2client.git@00c4c8057a34ee142e9729dbeb51855e0282f82e"),
+     "oauth2client.git@3d3f986044f5a7870a2c272be235cb2b8b052d0b"),
 
   "build/third_party/uritemplate":
     ("https://chromium.googlesource.com/external/github.com/uri-templates/"
