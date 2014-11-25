@@ -320,7 +320,7 @@ def GenSteps(api):
     api.chromium.c.compile_py.compiler = None
     api.chromium.c.compile_py.goma_dir = None
 
-  api.chromium.compile(targets=['all'], force_clobber=is_windows)
+  api.chromium.compile(targets=['all'])
 
   if bot_config.get('should_run_gn_gyp_compare', False):
     api.chromium.run_gn_compare()
