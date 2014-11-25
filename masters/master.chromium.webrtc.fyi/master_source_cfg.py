@@ -9,9 +9,11 @@ def Update(config, c):
   webrtc_repo_url = config.Master.git_server_url + '/external/webrtc/'
   webrtc_poller = gitiles_poller.GitilesPoller(
       webrtc_repo_url,
-      branches=['master'],
       project='trunk', # This translates to branch of changes.
-      pollInterval=10,
-      revlinktmpl='http://code.google.com/p/webrtc/source/detail?r=%s',
       svn_mode=True)
   c['change_source'].append(webrtc_poller)
+
+  samples_poller = gitiles_poller.GitilesPoller(
+      config.Master.git_server_url + '/external/webrtc-samples',
+      comparator=webrtc_poller.comparator)
+  c['change_source'].append(samples_poller)
