@@ -15,22 +15,13 @@ def Update(_config, active_master, c):
                             branch='master',
                             treeStableTimer=60,
                             builderNames=[
-          'Mac ASan Builder',
           'Mac ASan 64 Builder',
-      ]),
-      Triggerable(name='mac_asan_rel_trigger', builderNames=[
-          'Mac ASan Tests (1)',
       ]),
       Triggerable(name='mac_asan_64_rel_trigger', builderNames=[
           'Mac ASan 64 Tests (1)',
       ]),
   ])
   specs = [
-    {
-      'name': 'Mac ASan Builder',
-      'triggers': ['mac_asan_rel_trigger'],
-    },
-    {'name': 'Mac ASan Tests (1)'},
     {
       'name': 'Mac ASan 64 Builder',
       'triggers': ['mac_asan_64_rel_trigger'],
