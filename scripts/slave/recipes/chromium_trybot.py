@@ -199,6 +199,16 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
+      'linux_chromium_chromeos_asan_rel_ng': {
+        'based_on_main_waterfall': {
+          'mastername': 'chromium.memory',
+          'buildername': 'Linux Chromium OS ASan LSan Builder',
+          'testers': ['Linux Chromium OS ASan LSan Tests (1)'],
+        },
+        'testing': {
+          'platform': 'linux',
+        },
+      },
       'linux_chromium_chromeos_compile_rel_ng': {
         'add_telemetry_tests': False,
         'based_on_main_waterfall': {
@@ -413,6 +423,16 @@ BUILDERS = {
         },
         'chromium_config': 'chromium',
         'compile_only': False,
+        'testing': {
+          'platform': 'mac',
+        },
+      },
+      'mac_chromium_asan_rel_ng': {
+        'based_on_main_waterfall': {
+          'mastername': 'chromium.memory',
+          'buildername': 'Mac ASan 64 Builder',
+          'testers': ['Mac ASan 64 Tests (1)'],
+        },
         'testing': {
           'platform': 'mac',
         },
