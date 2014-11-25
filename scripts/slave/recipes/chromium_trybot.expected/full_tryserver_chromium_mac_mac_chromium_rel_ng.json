@@ -166,11 +166,11 @@
       "-u",
       "[SLAVE_BUILD]/src/build/gyp_chromium",
       "--analyzer",
-      "{\"files\": [\"foo.cc\"], \"targets\": []}",
+      "{\"files\": [\"foo.cc\"], \"targets\": [\"angle_unittests\", \"angle_unittests_run\", \"chrome\", \"content_gl_tests\", \"content_gl_tests_run\", \"gl_tests\", \"gl_tests_run\", \"tab_capture_end2end_tests\", \"tab_capture_end2end_tests_run\", \"telemetry_gpu_test_run\"]}",
       "/path/to/tmp/json"
     ],
     "env": {
-      "GYP_DEFINES": "clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1"
+      "GYP_DEFINES": "archive_gpu_tests=1 clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1"
     },
     "name": "analyze",
     "~followup_annotations": [
