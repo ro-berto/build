@@ -564,6 +564,17 @@ def blink_clang(c):
 def blink_logging_on(c, invert=False):
   c.gyp_env.GYP_DEFINES['blink_logging_always_on'] = int(not invert)
 
+@config_ctx()
+def gpu_tests(c):
+  # TODO(sergiyb): This is a hack to add a list of GPU tests in the blink_trybot
+  # recipe. Instead we should iterate over Test objects and call compile_targets
+  # to retrieve full list of targets and then pass this list to compile.
+  c.compile_py.default_targets.update([
+      'angle_unittests', 'angle_unittests_run', 'chrome','content_gl_tests',
+      'content_gl_tests_run', 'gl_tests', 'gl_tests_run',
+      'tab_capture_end2end_tests', 'telemetry_gpu_test_run',
+      'tab_capture_end2end_tests_run'])
+
 @config_ctx(includes=['android_common', 'ninja', 'static_library',
                       'default_compiler', 'goma'])
 def android(c):

@@ -166,7 +166,7 @@
       "-u",
       "[SLAVE_BUILD]/src/build/gyp_chromium",
       "--analyzer",
-      "{\"files\": [\"foo.cc\"], \"targets\": []}",
+      "{\"files\": [\"foo.cc\"], \"targets\": [\"angle_unittests\", \"angle_unittests_run\", \"chrome\", \"content_gl_tests\", \"content_gl_tests_run\", \"gl_tests\", \"gl_tests_run\", \"tab_capture_end2end_tests\", \"tab_capture_end2end_tests_run\", \"telemetry_gpu_test_run\"]}",
       "/path/to/tmp/json"
     ],
     "env": {
