@@ -28,7 +28,7 @@ deps = {
     'build/third_party/lighttpd':
         Var('git_url') + '/chromium/deps/lighttpd.git@9dfa55d15937a688a92cbf2b7a8621b0927d06eb',
     'build/third_party/oauth2client':
-        Var('git_url') + '/external/github.com/google/oauth2client.git@00c4c8057a34ee142e9729dbeb51855e0282f82e',
+        Var('git_url') + '/external/github.com/google/oauth2client.git@3d3f986044f5a7870a2c272be235cb2b8b052d0b',
     'build/third_party/uritemplate':
         Var('git_url') + '/external/github.com/uri-templates/uritemplate-py.git@1e780a49412cdbb273e9421974cb91845c124f3f',
     'depot_tools':
