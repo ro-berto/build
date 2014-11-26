@@ -15,6 +15,9 @@ import json
 import logging
 import os
 
+from slave.performance_log_processor import _FormatHumanReadable
+
+
 class TelemetryResultsProcessor(object):
 
   def __init__(self, filename, is_ref):
@@ -61,4 +64,20 @@ class TelemetryResultsProcessor(object):
     return []
 
   def PerformanceSummary(self):
-    return ''
+    """Writes the waterfall display text.
+
+    The waterfall contains lines for each important trace, in the form
+      tracename: value< (refvalue)>
+    """
+    if self._is_reference_build:
+      return []
+
+    results = []
+    for chart_name, chart_values in self.ChartJson()['charts'].iteritems():
+      if 'summary' in chart_values:
+        summary = chart_values['summary']
+        if summary['important']:
+          mean = sum(summary['values']) / float(len(summary['values']))
+          display = '%s: %s' % (chart_name, _FormatHumanReadable(mean))
+          results.append(display)
+    return results

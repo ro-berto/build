@@ -179,7 +179,7 @@ class ChromiumApi(recipe_api.RecipeApi):
               python_mode=False, spawn_dbus=True, parallel=False,
               revision=None, webkit_revision=None, master_class_name=None,
               test_launcher_summary_output=None, flakiness_dash=None,
-              perf_id=None, perf_config=None, **kwargs):
+              perf_id=None, perf_config=None, chartjson_file=False, **kwargs):
     """Return a runtest.py invocation."""
     args = args or []
     assert isinstance(args, list)
@@ -215,6 +215,10 @@ class ChromiumApi(recipe_api.RecipeApi):
       full_args.append('--test-type=%s' % test_type)
     if generate_json_file:
       full_args.append('--generate-json-file')
+    if chartjson_file:
+      full_args.append('--chartjson-file')
+      full_args.append(self.m.json.output())
+      kwargs['step_test_data'] = lambda: self.m.json.test_api.output([])
     if results_directory:
       full_args.append('--results-directory=%s' % results_directory)
     if test_launcher_summary_output:

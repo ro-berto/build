@@ -701,6 +701,43 @@ def _ResultsDashboardDict(options):
   return fields
 
 
+def _GenerateDashboardJson(log_processor, args):
+  """Generates chartjson to send to the dashboard.
+
+  Args:
+    log_processor: An instance of a log processor class, which has been used to
+        process the test output, so it contains the test results.
+    args: Dict of additional args to send to results_dashboard.
+  """
+  assert log_processor.IsChartJson()
+
+  chart_json = log_processor.ChartJson()
+  if chart_json:
+    return results_dashboard.MakeDashboardJsonV1(
+        chart_json,
+        args['revisions'], args['system'], args['mastername'],
+        args['buildername'], args['buildnumber'],
+        args['supplemental_columns'], log_processor.IsReferenceBuild())
+  return None
+
+
+def _WriteChartJsonToOutput(chartjson_file, log_processor, args):
+  """Writes the dashboard chartjson to a file for display in the waterfall.
+
+  Args:
+  chartjson_file: Path to the file to write the chartjson.
+    log_processor: An instance of a log processor class, which has been used to
+        process the test output, so it contains the test results.
+    args: Dict of additional args to send to results_dashboard.
+  """
+  assert log_processor.IsChartJson()
+
+  chartjson_data = _GenerateDashboardJson(log_processor, args)
+
+  with open(chartjson_file, 'w') as f:
+    json.dump(chartjson_data, f)
+
+
 def _SendResultsToDashboard(log_processor, args):
   """Sends results from a log processor instance to the dashboard.
 
@@ -716,14 +753,8 @@ def _SendResultsToDashboard(log_processor, args):
 
   results = None
   if log_processor.IsChartJson():
-    chart_json = log_processor.ChartJson()
-    if chart_json:
-      results = results_dashboard.MakeDashboardJsonV1(
-          chart_json,
-          args['revisions'], args['system'], args['mastername'],
-          args['buildername'], args['buildnumber'],
-          args['supplemental_columns'], log_processor.IsReferenceBuild())
-    else:
+    results = _GenerateDashboardJson(log_processor, args)
+    if not results:
       print 'Error: No json output from telemetry.'
       print '@@@STEP_FAILURE@@@'
     log_processor.Cleanup()
@@ -1120,6 +1151,11 @@ def _MainMac(options, args, extra_env):
         options.factory_properties.get('full_test_name'),
         perf_dashboard_id=options.perf_dashboard_id)
 
+  if options.chartjson_file and telemetry_info:
+    _WriteChartJsonToOutput(options.chartjson_file,
+                            log_processor,
+                            _ResultsDashboardDict(options))
+
   if options.results_url:
     _SendResultsToDashboard(log_processor, _ResultsDashboardDict(options))
 
@@ -1392,6 +1428,11 @@ def _MainLinux(options, args, extra_env):
         options.factory_properties.get('full_test_name'),
         perf_dashboard_id=options.perf_dashboard_id)
 
+  if options.chartjson_file and telemetry_info:
+    _WriteChartJsonToOutput(options.chartjson_file,
+                            log_processor,
+                            _ResultsDashboardDict(options))
+
   if options.results_url:
     _SendResultsToDashboard(log_processor, _ResultsDashboardDict(options))
 
@@ -1508,6 +1549,11 @@ def _MainWin(options, args, extra_env):
         options.test_type, result, log_processor,
         options.factory_properties.get('full_test_name'),
         perf_dashboard_id=options.perf_dashboard_id)
+
+  if options.chartjson_file and telemetry_info:
+    _WriteChartJsonToOutput(options.chartjson_file,
+                            log_processor,
+                            _ResultsDashboardDict(options))
 
   if options.results_url:
     _SendResultsToDashboard(log_processor, _ResultsDashboardDict(options))
@@ -1699,6 +1745,8 @@ def main():
                            help='Options to pass to sharding_supervisor.')
   option_parser.add_option('-o', '--results-directory', default='',
                            help='output results directory for JSON file.')
+  option_parser.add_option('--chartjson-file', default='',
+                           help='File to dump chartjson results.')
   option_parser.add_option('--builder-name', default=None,
                            help='The name of the builder running this script.')
   option_parser.add_option('--slave-name', default=None,
