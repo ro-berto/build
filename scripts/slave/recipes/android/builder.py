@@ -229,7 +229,6 @@ def GenSteps(api):
       droid.check_webview_licenses()
 
   if bot_config.get('try', False):
-    api.tryserver.maybe_apply_issue()
 
     # TODO(sheyang): Make 'without patch' step standard for findbugs and
     #                check licenses
