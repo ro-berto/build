@@ -40,6 +40,8 @@ def webrtc_ios(c):
   gyp_defs['chromium_ios_signing'] = 0
   gyp_defs['key_id'] = ''
   gyp_defs['OS'] = c.TARGET_PLATFORM
+  if c.TARGET_BITS == 64:
+    gyp_defs['target_subarch'] = 'arm64'
 
   _compiler_defaults(c)
 

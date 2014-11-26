@@ -621,6 +621,28 @@ BUILDERS = {
         'bot_type': 'builder',
         'testing': {'platform': 'mac'},
       },
+      'iOS ARM64 Debug': {
+        'recipe_config': 'webrtc_ios',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+          'TARGET_ARCH': 'arm',
+          'TARGET_PLATFORM': 'ios',
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'mac'},
+      },
+      'iOS ARM64 Release': {
+        'recipe_config': 'webrtc_ios',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+          'TARGET_ARCH': 'arm',
+          'TARGET_PLATFORM': 'ios',
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'mac'},
+      },
       'Linux32 Debug': {
         'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
@@ -1038,6 +1060,28 @@ BUILDERS = {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
+          'TARGET_ARCH': 'arm',
+          'TARGET_PLATFORM': 'ios',
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'mac'},
+      },
+      'ios_arm64': {
+        'recipe_config': 'webrtc_ios',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+          'TARGET_ARCH': 'arm',
+          'TARGET_PLATFORM': 'ios',
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'mac'},
+      },
+      'ios_arm64_rel': {
+        'recipe_config': 'webrtc_ios',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
           'TARGET_ARCH': 'arm',
           'TARGET_PLATFORM': 'ios',
         },
