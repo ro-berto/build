@@ -64,6 +64,7 @@ INSTRUMENTATION_TESTS = [
 ]
 
 UNIT_TESTS = [
+  ['android_webview_unittests', None],
   ['base_unittests', None],
   ['breakpad_unittests', ['breakpad', 'breakpad_unittests.isolate']],
   ['cc_unittests', None],
@@ -116,7 +117,7 @@ BUILDERS = {
       'try': True,
     },
   },
-  'chromium.fyi': {
+  'chromium.linux': {
     'Android Tests (dbg)': {
       'config': 'main_builder',
       'instrumentation_tests': INSTRUMENTATION_TESTS,
@@ -125,7 +126,7 @@ BUILDERS = {
       'target': 'Debug',
       'download': {
         'bucket': 'chromium-android',
-        'path': lambda api: ('android_fyi_dbg/full-build-linux_%s.zip' %
+        'path': lambda api: ('android_main_dbg/full-build-linux_%s.zip' %
                              api.properties['revision']),
       },
     },
@@ -137,7 +138,7 @@ BUILDERS = {
       'target': 'Release',
       'download': {
         'bucket': 'chromium-android',
-        'path': lambda api: ('android_fyi_rel/full-build-linux_%s.zip' %
+        'path': lambda api: ('android_main_rel/full-build-linux_%s.zip' %
                              api.properties['revision']),
       },
     },
@@ -207,6 +208,13 @@ def GenSteps(api):
   if bot_config.get('download'):
     api.chromium_android.download_build(bot_config['download']['bucket'],
                                         bot_config['download']['path'](api))
+    extract_location = api.chromium_android.out_path.join(
+                           api.chromium_android.c.BUILD_CONFIG)
+    api.step('remove extract location',
+             ['rm', '-rf', extract_location])
+    api.step('move extracted build',
+             ['mv', '-T', api.path['checkout'].join('full-build-linux'),
+                          extract_location])
   else:
     api.chromium_android.compile(targets=compile_targets)
 

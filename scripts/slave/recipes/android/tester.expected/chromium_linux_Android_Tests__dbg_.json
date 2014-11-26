@@ -5,9 +5,9 @@
       "-u",
       "[BUILD]/scripts/slave/bot_update.py",
       "--master",
-      "chromium.fyi",
+      "chromium.linux",
       "--builder",
-      "Android Tests",
+      "Android Tests (dbg)",
       "--slave",
       "slavename",
       "--spec",
@@ -63,8 +63,8 @@
       "python",
       "-u",
       "\nimport shutil, sys, os\nshutil.rmtree(sys.argv[1], True)\nshutil.rmtree(sys.argv[2], True)\ntry:\n  os.remove(sys.argv[3])\nexcept OSError:\n  pass\nfor base, _dirs, files in os.walk(sys.argv[4]):\n  for f in files:\n    if f.endswith('.pyc'):\n      os.remove(os.path.join(base, f))\n",
-      "[SLAVE_BUILD]/src/out/Release/debug_info_dumps",
-      "[SLAVE_BUILD]/src/out/Release/test_logs",
+      "[SLAVE_BUILD]/src/out/Debug/debug_info_dumps",
+      "[SLAVE_BUILD]/src/out/Debug/test_logs",
       "[SLAVE_BUILD]/src/out/build_product.zip",
       "[SLAVE_BUILD]/src"
     ],
@@ -117,7 +117,7 @@
       "--",
       "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
       "cp",
-      "gs://chromium-android/android_fyi_rel/full-build-linux_4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00.zip",
+      "gs://chromium-android/android_main_dbg/full-build-linux_4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00.zip",
       "[SLAVE_BUILD]/src/out/build_product.zip"
     ],
     "name": "gsutil download_build_product"
@@ -130,6 +130,23 @@
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "unzip_build_product"
+  },
+  {
+    "cmd": [
+      "rm",
+      "-rf",
+      "[SLAVE_BUILD]/src/out/Debug"
+    ],
+    "name": "remove extract location"
+  },
+  {
+    "cmd": [
+      "mv",
+      "-T",
+      "[SLAVE_BUILD]/src/full-build-linux",
+      "[SLAVE_BUILD]/src/out/Debug"
+    ],
+    "name": "move extracted build"
   },
   {
     "cmd": [
@@ -194,7 +211,7 @@
       "-u",
       "[SLAVE_BUILD]/src/build/android/provision_devices.py",
       "-t",
-      "Release"
+      "Debug"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -207,8 +224,7 @@
       "--apk",
       "AndroidWebView.apk",
       "--apk_package",
-      "org.chromium.android_webview.shell",
-      "--release"
+      "org.chromium.android_webview.shell"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -227,8 +243,7 @@
       "webview:android_webview/test/data/device_files",
       "--flakiness-dashboard-server",
       "http://test-results.appspot.com",
-      "--verbose",
-      "--release"
+      "--verbose"
     ],
     "name": "Instrumentation test AndroidWebViewTest"
   },
@@ -238,8 +253,7 @@
       "--apk",
       "ChromeShell.apk",
       "--apk_package",
-      "org.chromium.chrome.shell",
-      "--release"
+      "org.chromium.chrome.shell"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -258,8 +272,7 @@
       "chrome:chrome/test/data/android/device_files",
       "--flakiness-dashboard-server",
       "http://test-results.appspot.com",
-      "--verbose",
-      "--release"
+      "--verbose"
     ],
     "name": "Instrumentation test ChromeShellTest"
   },
@@ -269,8 +282,7 @@
       "--apk",
       "ContentShell.apk",
       "--apk_package",
-      "org.chromium.content_shell_apk",
-      "--release"
+      "org.chromium.content_shell_apk"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -289,8 +301,7 @@
       "content:content/test/data/android/device_files",
       "--flakiness-dashboard-server",
       "http://test-results.appspot.com",
-      "--verbose",
-      "--release"
+      "--verbose"
     ],
     "name": "Instrumentation test ContentShellTest"
   },
@@ -300,8 +311,7 @@
       "--apk",
       "ChromeSyncShell.apk",
       "--apk_package",
-      "org.chromium.chrome.browser.sync",
-      "--release"
+      "org.chromium.chrome.browser.sync"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -318,8 +328,7 @@
       "ChromeSyncShellTest",
       "--flakiness-dashboard-server",
       "http://test-results.appspot.com",
-      "--verbose",
-      "--release"
+      "--verbose"
     ],
     "name": "Instrumentation test ChromeSyncShellTest"
   },
@@ -330,9 +339,24 @@
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "gtest",
       "-s",
+      "android_webview_unittests",
+      "--verbose",
+      "--flakiness-dashboard-server=http://test-results.appspot.com"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "android_webview_unittests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
       "base_unittests",
       "--verbose",
-      "--release",
       "--flakiness-dashboard-server=http://test-results.appspot.com"
     ],
     "env": {
@@ -349,7 +373,6 @@
       "-s",
       "breakpad_unittests",
       "--verbose",
-      "--release",
       "--isolate_file_path=[SLAVE_BUILD]/src/breakpad/breakpad_unittests.isolate",
       "--flakiness-dashboard-server=http://test-results.appspot.com"
     ],
@@ -367,7 +390,6 @@
       "-s",
       "cc_unittests",
       "--verbose",
-      "--release",
       "--flakiness-dashboard-server=http://test-results.appspot.com"
     ],
     "env": {
@@ -384,7 +406,6 @@
       "-s",
       "components_unittests",
       "--verbose",
-      "--release",
       "--flakiness-dashboard-server=http://test-results.appspot.com"
     ],
     "env": {
@@ -401,7 +422,6 @@
       "-s",
       "content_browsertests",
       "--verbose",
-      "--release",
       "--flakiness-dashboard-server=http://test-results.appspot.com"
     ],
     "env": {
@@ -418,7 +438,6 @@
       "-s",
       "content_unittests",
       "--verbose",
-      "--release",
       "--flakiness-dashboard-server=http://test-results.appspot.com"
     ],
     "env": {
@@ -435,7 +454,6 @@
       "-s",
       "events_unittests",
       "--verbose",
-      "--release",
       "--flakiness-dashboard-server=http://test-results.appspot.com"
     ],
     "env": {
@@ -452,7 +470,6 @@
       "-s",
       "gl_tests",
       "--verbose",
-      "--release",
       "--flakiness-dashboard-server=http://test-results.appspot.com"
     ],
     "env": {
@@ -469,7 +486,6 @@
       "-s",
       "gpu_unittests",
       "--verbose",
-      "--release",
       "--flakiness-dashboard-server=http://test-results.appspot.com"
     ],
     "env": {
@@ -486,7 +502,6 @@
       "-s",
       "ipc_tests",
       "--verbose",
-      "--release",
       "--flakiness-dashboard-server=http://test-results.appspot.com"
     ],
     "env": {
@@ -503,7 +518,6 @@
       "-s",
       "media_unittests",
       "--verbose",
-      "--release",
       "--flakiness-dashboard-server=http://test-results.appspot.com"
     ],
     "env": {
@@ -520,7 +534,6 @@
       "-s",
       "net_unittests",
       "--verbose",
-      "--release",
       "--flakiness-dashboard-server=http://test-results.appspot.com"
     ],
     "env": {
@@ -537,7 +550,6 @@
       "-s",
       "sandbox_linux_unittests",
       "--verbose",
-      "--release",
       "--flakiness-dashboard-server=http://test-results.appspot.com"
     ],
     "env": {
@@ -554,7 +566,6 @@
       "-s",
       "sql_unittests",
       "--verbose",
-      "--release",
       "--flakiness-dashboard-server=http://test-results.appspot.com"
     ],
     "env": {
@@ -571,7 +582,6 @@
       "-s",
       "sync_unit_tests",
       "--verbose",
-      "--release",
       "--flakiness-dashboard-server=http://test-results.appspot.com"
     ],
     "env": {
@@ -588,7 +598,6 @@
       "-s",
       "ui_base_unittests",
       "--verbose",
-      "--release",
       "--flakiness-dashboard-server=http://test-results.appspot.com"
     ],
     "env": {
@@ -605,7 +614,6 @@
       "-s",
       "unit_tests",
       "--verbose",
-      "--release",
       "--flakiness-dashboard-server=http://test-results.appspot.com"
     ],
     "env": {
@@ -622,7 +630,6 @@
       "-s",
       "webkit_unit_tests",
       "--verbose",
-      "--release",
       "--flakiness-dashboard-server=http://test-results.appspot.com"
     ],
     "env": {
@@ -636,7 +643,7 @@
       "-u",
       "[SLAVE_BUILD]/src/build/android/adb_logcat_printer.py",
       "--output-path",
-      "[SLAVE_BUILD]/src/out/Release/full_log",
+      "[SLAVE_BUILD]/src/out/Debug/full_log",
       "[SLAVE_BUILD]/src/out/logcat"
     ],
     "name": "logcat_dump"
@@ -649,12 +656,12 @@
       "--",
       "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
       "cp",
-      "[SLAVE_BUILD]/src/out/Release/full_log",
-      "gs://chromium-android/logcat_dumps/Android Tests/1337"
+      "[SLAVE_BUILD]/src/out/Debug/full_log",
+      "gs://chromium-android/logcat_dumps/Android Tests (dbg)/1337"
     ],
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/Android Tests/1337@@@"
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/Android Tests (dbg)/1337@@@"
     ]
   },
   {
@@ -663,7 +670,7 @@
       "--arch",
       "arm",
       "--more-info",
-      "[SLAVE_BUILD]/src/out/Release/full_log"
+      "[SLAVE_BUILD]/src/out/Debug/full_log"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -687,7 +694,7 @@
       "python",
       "-u",
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
-      "[SLAVE_BUILD]/src/out/Release/test_logs/*.log"
+      "[SLAVE_BUILD]/src/out/Debug/test_logs/*.log"
     ],
     "name": "test_report",
     "~followup_annotations": [
