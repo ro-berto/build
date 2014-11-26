@@ -1147,6 +1147,15 @@ BUILDERS = {
         'tests': ['unittests', 'v8testing', 'webkit'],
         'testing': {'platform': 'win'},
       },
+      'v8_win_compile_dbg': {
+        'chromium_apply_config': ['msvs2013'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'win'},
+      },
       'v8_win64_compile_rel': {
         'chromium_apply_config': ['msvs2013'],
         'v8_config_kwargs': {
