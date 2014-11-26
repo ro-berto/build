@@ -18,6 +18,7 @@ DEPS = [
 REPO = 'https://chromium.googlesource.com/v8/v8'
 CANDIDATE_REF = 'refs/heads/candidate'
 LKGR_REF = 'refs/heads/lkgr'
+ROLL_REF = 'refs/heads/roll'
 STATUS_URL = 'https://v8-status.appspot.com'
 SEC_TO_HOURS = 60 * 60
 TIME_LIMIT_HOURS = 8
@@ -111,8 +112,9 @@ def GenSteps(api):
   else:
     LogStep(api, 'There is no new lkgr.')
 
-  # Get current candidate. Needs to be set manually once.
+  # Get current candidate and update roll ref.
   current_candidate = GetRef(api, repo, CANDIDATE_REF)
+  current_roll = GetRef(api, repo, ROLL_REF)
 
   try:
     current_date = ReadTimeStamp(api, 'check timestamp')
@@ -135,6 +137,13 @@ def GenSteps(api):
   else:
     LogStep(api, 'There is no new candidate.')
 
+  # Promote the successful candidate to the roll ref in order to get rolled.
+  # This is independent of a new lkgr. Every candidate that is more than 8h
+  # old is promoted. TODO(machenbach): Make this also dependent on clusterfuzz
+  # results.
+  if current_candidate != current_roll:
+    PushRef(api, repo, ROLL_REF, current_candidate)
+
 
 def GenTests(api):
   hsh_old = '74882b7a8e55268d1658f83efefa1c2585cee723'
@@ -144,7 +153,9 @@ def GenTests(api):
   date_recent = str(105.0 * SEC_TO_HOURS + 0.5)
   date_new = str(110.0 * SEC_TO_HOURS + 0.5)
 
-  def Test(name, current_lkgr, current_date, new_lkgr, new_date):
+  def Test(name, current_lkgr, current_date, new_lkgr, new_date,
+           current_roll=None):
+    current_roll = current_roll or current_lkgr
     return (
         api.test(name) +
         api.properties.generic(mastername='client.v8',
@@ -160,6 +171,10 @@ def GenTests(api):
         api.override_step_data(
             'git show-ref %s' % CANDIDATE_REF,
             api.raw_io.stream_output(current_lkgr, stream='stdout'),
+        ) +
+        api.override_step_data(
+            'git show-ref %s' % ROLL_REF,
+            api.raw_io.stream_output(current_roll, stream='stdout'),
         ) +
         api.override_step_data(
             'check timestamp',
@@ -189,6 +204,14 @@ def GenTests(api):
       date_old,
       hsh_new,
       date_new,
+  )
+  yield Test(
+      'update_roll_only',
+      hsh_recent,
+      date_old,
+      hsh_recent,
+      date_new,
+      current_roll=hsh_old,
   )
   yield Test(
       'new_lkgr_failed_timestamp',
