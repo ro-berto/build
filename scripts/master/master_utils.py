@@ -84,7 +84,9 @@ def AutoSetupSlaves(builders, bot_password, max_builds=1,
   return slaves
 
 
-def VerifySetup(c, slaves):
+# TODO(phajdan.jr): Make enforce_sane_slave_pools unconditional,
+# http://crbug.com/435559 . No new code should use it.
+def VerifySetup(c, slaves, enforce_sane_slave_pools=True):
   """Verify all the available slaves in the slave configuration are used and
   that all the builders have a slave."""
   # Extract the list of slaves associated to a builder and make sure each
@@ -92,6 +94,7 @@ def VerifySetup(c, slaves):
   # Verify each builder has at least one slave.
   builders_slaves = set()
   slaves_name = [s.slavename for s in c['slaves']]
+  slave_mapping = {}
   for b in c['builders']:
     builder_slaves = set()
     slavename = b.get('slavename')
@@ -107,9 +110,20 @@ def VerifySetup(c, slaves):
       if not s in slaves_name:
         raise InvalidConfig('Builder %s using undefined slave %s' % (b['name'],
                                                                      s))
+    slave_mapping[b['name']] = builder_slaves
     builders_slaves |= builder_slaves
   if len(builders_slaves) != len(slaves_name):
     raise InvalidConfig('Same slave defined multiple times')
+
+  # Make sure slave pools are either equal or disjoint. This makes capacity
+  # analysis and planning simpler, easier, and more reliable.
+  if enforce_sane_slave_pools:
+    for b1, b1_slaves in slave_mapping.iteritems():
+      for b2, b2_slaves in slave_mapping.iteritems():
+        if b1_slaves != b2_slaves and not b1_slaves.isdisjoint(b2_slaves):
+          raise InvalidConfig(
+              'Builders %r and %r should have either equal or disjoint slave '
+              'pools' % (b1, b2))
 
   # Make sure each slave has their builder.
   builders_name = [b['name'] for b in c['builders']]
