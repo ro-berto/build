@@ -4,7 +4,6 @@
 
 from slave import recipe_api
 
-
 # List of the benchmark that we run during the profiling step.
 #
 # TODO(sebmarchand): Move this into a BenchmarkSuite in telemetry, this way
@@ -93,7 +92,9 @@ class PGOApi(recipe_api.RecipeApi):
     """
     buildername = self.m.properties['buildername']
     mastername = self.m.properties['mastername']
-    recipe_config = self.m.chromium.builders[mastername][buildername]
+    master_dict = self.m.chromium.builders.get(mastername, {})
+    recipe_config = master_dict.get('builders', {}).get(buildername)
+
     self.m.gclient.set_config(recipe_config['gclient_config'])
 
     if self.m.properties.get('slavename') != 'fake_slave':

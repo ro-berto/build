@@ -11,23 +11,7 @@ DEPS = [
 ]
 
 
-PGO_BUILDERS = {
-  'chromium.fyi': {
-    'Chromium Win PGO Builder': {
-      'chromium_config_instrument': 'chromium_pgo_instrument',
-      'chromium_config_optimize': 'chromium_pgo_optimize',
-      'gclient_config': 'chromium_lkgr',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-    },
-  },
-}
-
-
 def GenSteps(api):
-  api.chromium.add_builders(PGO_BUILDERS)
   api.pgo.compile_pgo()
 
 

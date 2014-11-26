@@ -442,5 +442,18 @@ SPEC = {
         'platform': 'linux',
       },
     },
+    'Chromium Win PGO Builder': {
+      'recipe_config': 'chromium',
+      'chromium_config_instrument': 'chromium_pgo_instrument',
+      'chromium_config_optimize': 'chromium_pgo_optimize',
+      'gclient_config': 'chromium_lkgr',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'testing': {
+        'platform': 'win',
+      },
+    },
   },
 }
