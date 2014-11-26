@@ -42,10 +42,25 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/tools/runit.py",
+      "[BUILD]/scripts/tools/pycurl.py",
+      "https://v8-status.appspot.com/lkgr"
+    ],
+    "name": "get new lkgr",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@logs@New candidate: c1a7fd0c98a80c52fcf6763850d2ee1c41cfe8d6 (396002)@@@",
+      "@@@STEP_LOG_END@logs@@@"
+    ]
+  },
+  {
+    "cmd": [
       "git",
       "fetch",
       "https://chromium.googlesource.com/v8/v8",
-      "+refs/heads/candidate:refs/heads/candidate"
+      "+refs/heads/lkgr:refs/heads/lkgr"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "git fetch"
@@ -55,10 +70,55 @@
       "git",
       "show-ref",
       "-s",
+      "refs/heads/lkgr"
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "name": "git show-ref refs/heads/lkgr",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@ref@0df953c9e12c1e3b0e37f2d4ef1ef8c319e095cb@@@",
+      "@@@STEP_LOG_END@ref@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "update-ref",
+      "refs/heads/lkgr",
+      "c1a7fd0c98a80c52fcf6763850d2ee1c41cfe8d6"
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "name": "git update-ref"
+  },
+  {
+    "cmd": [
+      "git",
+      "push",
+      "https://chromium.googlesource.com/v8/v8",
+      "refs/heads/lkgr:refs/heads/lkgr"
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "name": "git push"
+  },
+  {
+    "cmd": [
+      "git",
+      "fetch",
+      "https://chromium.googlesource.com/v8/v8",
+      "+refs/heads/candidate:refs/heads/candidate"
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "name": "git fetch (2)"
+  },
+  {
+    "cmd": [
+      "git",
+      "show-ref",
+      "-s",
       "refs/heads/candidate"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "git show-ref",
+    "name": "git show-ref refs/heads/candidate",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@ref@0df953c9e12c1e3b0e37f2d4ef1ef8c319e095cb@@@",
@@ -84,7 +144,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "396002",
+      "396004",
       "[SLAVE_BUILD]/timestamp.txt"
     ],
     "name": "init timestamp"

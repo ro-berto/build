@@ -17,6 +17,7 @@ DEPS = [
 
 REPO = 'https://chromium.googlesource.com/v8/v8'
 CANDIDATE_REF = 'refs/heads/candidate'
+LKGR_REF = 'refs/heads/lkgr'
 STATUS_URL = 'https://v8-status.appspot.com'
 SEC_TO_HOURS = 60 * 60
 TIME_LIMIT_HOURS = 8
@@ -32,6 +33,7 @@ def GetRef(api, repo, ref):
   # Read ref locally.
   step_result = api.git(
       'show-ref', '-s', ref,
+      name='git show-ref %s' % ref,
       cwd=api.path['checkout'],
       stdout=api.raw_io.output(),
   )
@@ -67,15 +69,18 @@ def WriteTimeStamp(api, name, timestamp):
   )
 
 
+def LogStep(api, text):
+  api.step('log', ['echo', text])
+
+
 def AgeLimitBailout(api, new_date, old_date):
   age = (new_date - old_date) / SEC_TO_HOURS
-  api.step('log', ['echo',
-    'Current candidate is %dh old (limit: %dh).' % (age, TIME_LIMIT_HOURS),
-  ])
+  LogStep(api, 'Current candidate is %dh old (limit: %dh).' %
+               (age, TIME_LIMIT_HOURS))
   return age < TIME_LIMIT_HOURS
 
 
-def GetLKGR(api, new_date):
+def GetLKGR(api):
   step_result = api.python(
       'get new lkgr',
       api.path['build'].join('scripts', 'tools', 'runit.py'),
@@ -85,16 +90,26 @@ def GetLKGR(api, new_date):
   )
   lkgr = step_result.stdout.strip()
   step_result.presentation.logs['logs'] = [
-    'New candidate: %s (%s)' % (lkgr, str(new_date)),
+    'New candidate: %s (%s)' % (lkgr, str(api.time.time())),
   ]
-  return step_result, lkgr
+  return lkgr
+
 
 def GenSteps(api):
+  api.step.auto_resolve_conflicts = True
   repo = api.properties.get('repo', REPO)
   fail_on_exit = None
 
   api.gclient.set_config('v8')
   api.bot_update.ensure_checkout(force=True, no_shallow=True)
+
+  # Get current lkgr ref and update.
+  new_lkgr = GetLKGR(api)
+  current_lkgr = GetRef(api, repo, LKGR_REF)
+  if new_lkgr != current_lkgr:
+    PushRef(api, repo, LKGR_REF, new_lkgr)
+  else:
+    LogStep(api, 'There is no new lkgr.')
 
   # Get current candidate. Needs to be set manually once.
   current_candidate = GetRef(api, repo, CANDIDATE_REF)
@@ -114,14 +129,11 @@ def GenSteps(api):
     else:
       return
 
-  # Get new lkgr.
-  step_result, new_candidate = GetLKGR(api, new_date)
-
-  if current_candidate != new_candidate:
-    PushRef(api, repo, CANDIDATE_REF, new_candidate)
+  if current_candidate != new_lkgr:
+    PushRef(api, repo, CANDIDATE_REF, new_lkgr)
     WriteTimeStamp(api, 'update timestamp', api.time.time())
   else:
-    step_result.presentation.step_text = 'There is no new lkgr candidate.'
+    LogStep(api, 'There is no new candidate.')
 
 
 def GenTests(api):
@@ -133,12 +145,20 @@ def GenTests(api):
   date_new = str(110.0 * SEC_TO_HOURS + 0.5)
 
   def Test(name, current_lkgr, current_date, new_lkgr, new_date):
-    test = (
+    return (
         api.test(name) +
         api.properties.generic(mastername='client.v8',
                                buildername='Auto-roll - release process') +
         api.override_step_data(
-            'git show-ref',
+            'get new lkgr',
+            api.raw_io.stream_output(new_lkgr, stream='stdout'),
+        ) +
+        api.override_step_data(
+            'git show-ref %s' % LKGR_REF,
+            api.raw_io.stream_output(current_lkgr, stream='stdout'),
+        ) +
+        api.override_step_data(
+            'git show-ref %s' % CANDIDATE_REF,
             api.raw_io.stream_output(current_lkgr, stream='stdout'),
         ) +
         api.override_step_data(
@@ -147,13 +167,7 @@ def GenTests(api):
         ) +
         api.time.seed(int(float(new_date))) +
         api.time.step(2)
-      )
-    if int(float(current_date)) + TIME_LIMIT_SEC < int(float(new_date)):
-      test += api.override_step_data(
-          'get new lkgr',
-          api.raw_io.stream_output(new_lkgr, stream='stdout'),
-      )
-    return test
+    )
 
   yield Test(
       'same_lkgr',
