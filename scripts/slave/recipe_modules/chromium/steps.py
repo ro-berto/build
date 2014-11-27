@@ -25,6 +25,11 @@ class Test(object):
     """Name of the test."""
     raise NotImplementedError()
 
+  @property
+  def isolate_target(self):
+    """Returns isolate target name. Defaults to name."""
+    return self.name
+
   @staticmethod
   def compile_targets(api):
     """List of compile targets needed by this test."""
@@ -273,6 +278,10 @@ class LocalGTestTest(Test):
   def target_name(self):
     return self._target_name or self._name
 
+  @property
+  def isolate_target(self):
+    return self.target_name
+
   def compile_targets(self, api):
     if api.chromium.c.TARGET_PLATFORM == 'android':
       return [self.target_name + '_apk']
@@ -466,6 +475,10 @@ class SwarmingTest(Test):
   def target_name(self):
     return self._target_name or self._name
 
+  @property
+  def isolate_target(self):
+    return self.target_name
+
   def create_task(self, api, suffix, isolated_hash):
     """Creates a swarming task. Must be overridden in subclasses.
 
@@ -630,6 +643,10 @@ class GTestTest(Test):
   def name(self):
     return self._test.name
 
+  @property
+  def isolate_target(self):
+    return self._test.isolate_target
+
   def compile_targets(self, api):
     return self._test.compile_targets(api)
 
@@ -749,6 +766,10 @@ class TelemetryGPUTest(Test):  # pylint: disable=W0232
   def name(self):
     return self._test.name
 
+  @property
+  def isolate_target(self):
+    return self._test.isolate_target
+
   def compile_targets(self, api):
     return self._test.compile_targets(api)
 
@@ -800,6 +821,10 @@ class LocalTelemetryGPUTest(Test):  # pylint: disable=W0232
   @property
   def target_name(self):
     return self._target_name or self._name
+
+  @property
+  def isolate_target(self):
+    return self.target_name
 
   def compile_targets(self, _):
     # TODO(sergiyb): Build 'chrome_shell_apk' instead of 'chrome' on Android.

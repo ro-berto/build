@@ -353,7 +353,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     if bot_type in ['builder', 'builder_tester']:
       isolated_targets = [
-        t.name for t in tests_including_triggered if t.uses_swarming
+        t.isolate_target for t in tests_including_triggered if t.uses_swarming
       ]
 
       if isolated_targets:
