@@ -193,7 +193,7 @@
       "--shards",
       "1",
       "--task-name",
-      "browser_tests/Windows-5.1/ffffffffff/XP Tests (1)/571",
+      "browser_tests/Windows-XP-SP3/ffffffffff/XP Tests (1)/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -210,7 +210,7 @@
       "none",
       "--dimension",
       "os",
-      "Windows-5.1",
+      "Windows-XP-SP3",
       "--dimension",
       "pool",
       "Chrome",
@@ -225,7 +225,7 @@
       "--tag",
       "name:browser_tests",
       "--tag",
-      "os:Windows-5.1",
+      "os:Windows-XP-SP3",
       "--tag",
       "project:chromium",
       "--tag",
@@ -237,12 +237,12 @@
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] browser_tests on Windows-5.1",
+    "name": "[trigger] browser_tests on Windows-XP-SP3",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"browser_tests/Windows-5.1/ffffffffff/XP Tests (1)/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"browser_tests/Windows-XP-SP3/ffffffffff/XP Tests (1)/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"browser_tests/Windows-5.1/ffffffffff/XP Tests (1)/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"browser_tests/Windows-XP-SP3/ffffffffff/XP Tests (1)/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -273,9 +273,9 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "browser_tests/Windows-5.1/ffffffffff/XP Tests (1)/571"
+      "browser_tests/Windows-XP-SP3/ffffffffff/XP Tests (1)/571"
     ],
-    "name": "browser_tests on Windows-5.1"
+    "name": "browser_tests on Windows-XP-SP3"
   },
   {
     "cmd": [

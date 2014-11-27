@@ -556,7 +556,7 @@ BUILDERS = {
           'test_spec_file': 'chromium_win8_trybot.json',
         },
         'swarming_dimensions': {
-          'os': 'Windows-6.2',
+          'os': 'Windows-8-SP0',
         },
       },
       'win8_chromium_rel': {
@@ -572,7 +572,7 @@ BUILDERS = {
           'test_spec_file': 'chromium_win8_trybot.json',
         },
         'swarming_dimensions': {
-          'os': 'Windows-6.2',
+          'os': 'Windows-8-SP0',
         },
       },
       'win8_chromium_ng': {

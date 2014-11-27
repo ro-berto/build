@@ -132,7 +132,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     """Returns a copy of the default Swarming dimensions to run task on.
 
     Example:
-      {'cpu': 'x86-64', 'os': 'Windows-6.1'}
+      {'cpu': 'x86-64', 'os': 'Windows-XP-SP3'}
     """
     return ReadOnlyDict(self._default_dimensions)
 
@@ -178,12 +178,13 @@ class SwarmingApi(recipe_api.RecipeApi):
     dimension that represent this platform on Swarming by default.
 
     Recipes are free to use other OS dimension if there's a need for it. For
-    example WinXP try bot recipe may explicitly specify 'Windows-5.1' dimension.
+    example WinXP try bot recipe may explicitly specify 'Windows-XP-SP3'
+    dimension.
     """
     return {
       'linux': 'Ubuntu-12.04',
       'mac': 'Mac-10.8',
-      'win': 'Windows-6.1',
+      'win': 'Windows-7-SP1',
     }[platform]
 
   def task(self, title, isolated_hash, shards=None, extra_args=None):
@@ -543,7 +544,6 @@ class SwarmingApi(recipe_api.RecipeApi):
     """
     prefix = '[%s] ' % prefix if prefix else ''
 
-    # TODO(maruel): Differentiate Windows-6.1 from Windows-5.1, etc.
     task_os = task.dimensions['os']
     bot_os = self.prefered_os_dimension(self.m.platform.name)
     suffix = '' if task_os == bot_os else ' on %s' % task_os

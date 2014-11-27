@@ -193,7 +193,7 @@
       "--shards",
       "1",
       "--task-name",
-      "browser_tests/Windows-6.1/ffffffffff/Win 7 Tests x64 (1)/571",
+      "browser_tests/Windows-7-SP1/ffffffffff/Win 7 Tests x64 (1)/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -210,7 +210,7 @@
       "none",
       "--dimension",
       "os",
-      "Windows-6.1",
+      "Windows-7-SP1",
       "--dimension",
       "pool",
       "Chrome",
@@ -225,7 +225,7 @@
       "--tag",
       "name:browser_tests",
       "--tag",
-      "os:Windows-6.1",
+      "os:Windows-7-SP1",
       "--tag",
       "project:chromium",
       "--tag",
@@ -240,9 +240,9 @@
     "name": "[trigger] browser_tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"browser_tests/Windows-6.1/ffffffffff/Win 7 Tests x64 (1)/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"browser_tests/Windows-7-SP1/ffffffffff/Win 7 Tests x64 (1)/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"browser_tests/Windows-6.1/ffffffffff/Win 7 Tests x64 (1)/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"browser_tests/Windows-7-SP1/ffffffffff/Win 7 Tests x64 (1)/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -273,7 +273,7 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "browser_tests/Windows-6.1/ffffffffff/Win 7 Tests x64 (1)/571"
+      "browser_tests/Windows-7-SP1/ffffffffff/Win 7 Tests x64 (1)/571"
     ],
     "name": "browser_tests"
   },

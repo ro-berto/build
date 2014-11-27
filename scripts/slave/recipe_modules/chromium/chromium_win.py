@@ -44,7 +44,7 @@ SPEC = {
       'enable_swarming': True,
       'swarming_dimensions': {
         'cpu': 'x86-32',
-        'os': 'Windows-5.1',
+        'os': 'Windows-XP-SP3',
       },
     },
     'Vista Tests (1)': {
@@ -65,7 +65,7 @@ SPEC = {
       },
       'enable_swarming': True,
       'swarming_dimensions': {
-        'os': 'Windows-6.0',
+        'os': 'Windows-Vista-SP2',
       },
     },
     'Win7 Tests (1)': {
@@ -192,7 +192,7 @@ SPEC = {
         'platform': 'win',
       },
       'swarming_dimensions': {
-        'os': 'Windows-6.2',
+        'os': 'Windows-7-SP1',
       },
     },
   },
