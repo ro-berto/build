@@ -90,7 +90,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1"
+      "GYP_DEFINES": "archive_gpu_tests=1 clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1"
     },
     "name": "gclient runhooks"
   },
@@ -121,7 +121,13 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "blink_tests"
+      "angle_unittests_run",
+      "blink_tests",
+      "chrome",
+      "content_gl_tests_run",
+      "gl_tests_run",
+      "tab_capture_end2end_tests_run",
+      "telemetry_gpu_test_run"
     ],
     "name": "compile"
   },
@@ -190,9 +196,9 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"mac_blink_rel\", \"buildnumber\": 571, \"enable_gpu_tests\": true, \"issue\": 12853011, \"mastername\": \"tryserver.blink\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"blink_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src/third_party/WebKit\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"content_unittests\": \"[dummy hash for content_unittests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"gpu_unittests\": \"[dummy hash for gpu_unittests]\", \"media_unittests\": \"[dummy hash for media_unittests]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"mac_blink_rel\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.blink\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"blink_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src/third_party/WebKit\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"content_unittests\": \"[dummy hash for content_unittests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"gpu_unittests\": \"[dummy hash for gpu_unittests]\", \"media_unittests\": \"[dummy hash for media_unittests]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"mac_blink_rel\", \"buildnumber\": 571, \"enable_gpu_tests\": true, \"issue\": 12853011, \"mastername\": \"tryserver.blink\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"blink_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src/third_party/WebKit\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"content_unittests\": \"[dummy hash for content_unittests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"gpu_unittests\": \"[dummy hash for gpu_unittests]\", \"media_unittests\": \"[dummy hash for media_unittests]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"mac_blink_rel\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.blink\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"blink_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src/third_party/WebKit\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"content_unittests\": \"[dummy hash for content_unittests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"gpu_unittests\": \"[dummy hash for gpu_unittests]\", \"media_unittests\": \"[dummy hash for media_unittests]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--builder-name=mac_blink_rel",
       "--slave-name=TestSlavename",
       "--build-number=571",
@@ -208,9 +214,9 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"mac_blink_rel\", \"buildnumber\": 571, \"enable_gpu_tests\": true, \"issue\": 12853011, \"mastername\": \"tryserver.blink\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"blink_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src/third_party/WebKit\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"content_unittests\": \"[dummy hash for content_unittests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"gpu_unittests\": \"[dummy hash for gpu_unittests]\", \"media_unittests\": \"[dummy hash for media_unittests]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"mac_blink_rel\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.blink\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"blink_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src/third_party/WebKit\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"content_unittests\": \"[dummy hash for content_unittests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"gpu_unittests\": \"[dummy hash for gpu_unittests]\", \"media_unittests\": \"[dummy hash for media_unittests]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"mac_blink_rel\", \"buildnumber\": 571, \"enable_gpu_tests\": true, \"issue\": 12853011, \"mastername\": \"tryserver.blink\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"blink_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src/third_party/WebKit\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"content_unittests\": \"[dummy hash for content_unittests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"gpu_unittests\": \"[dummy hash for gpu_unittests]\", \"media_unittests\": \"[dummy hash for media_unittests]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"mac_blink_rel\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.blink\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"blink_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src/third_party/WebKit\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"content_unittests\": \"[dummy hash for content_unittests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"gpu_unittests\": \"[dummy hash for gpu_unittests]\", \"media_unittests\": \"[dummy hash for media_unittests]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--builder-name=mac_blink_rel",
       "--slave-name=TestSlavename",
       "--build-number=571",
@@ -226,9 +232,9 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"mac_blink_rel\", \"buildnumber\": 571, \"enable_gpu_tests\": true, \"issue\": 12853011, \"mastername\": \"tryserver.blink\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"blink_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src/third_party/WebKit\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"content_unittests\": \"[dummy hash for content_unittests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"gpu_unittests\": \"[dummy hash for gpu_unittests]\", \"media_unittests\": \"[dummy hash for media_unittests]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"mac_blink_rel\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.blink\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"blink_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src/third_party/WebKit\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"content_unittests\": \"[dummy hash for content_unittests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"gpu_unittests\": \"[dummy hash for gpu_unittests]\", \"media_unittests\": \"[dummy hash for media_unittests]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"mac_blink_rel\", \"buildnumber\": 571, \"enable_gpu_tests\": true, \"issue\": 12853011, \"mastername\": \"tryserver.blink\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"blink_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src/third_party/WebKit\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"content_unittests\": \"[dummy hash for content_unittests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"gpu_unittests\": \"[dummy hash for gpu_unittests]\", \"media_unittests\": \"[dummy hash for media_unittests]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"mac_blink_rel\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.blink\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"blink_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src/third_party/WebKit\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"content_unittests\": \"[dummy hash for content_unittests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"gpu_unittests\": \"[dummy hash for gpu_unittests]\", \"media_unittests\": \"[dummy hash for media_unittests]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--builder-name=mac_blink_rel",
       "--slave-name=TestSlavename",
       "--build-number=571",
@@ -244,9 +250,9 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"mac_blink_rel\", \"buildnumber\": 571, \"enable_gpu_tests\": true, \"issue\": 12853011, \"mastername\": \"tryserver.blink\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"blink_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src/third_party/WebKit\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"content_unittests\": \"[dummy hash for content_unittests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"gpu_unittests\": \"[dummy hash for gpu_unittests]\", \"media_unittests\": \"[dummy hash for media_unittests]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"mac_blink_rel\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.blink\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"blink_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src/third_party/WebKit\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"content_unittests\": \"[dummy hash for content_unittests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"gpu_unittests\": \"[dummy hash for gpu_unittests]\", \"media_unittests\": \"[dummy hash for media_unittests]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"mac_blink_rel\", \"buildnumber\": 571, \"enable_gpu_tests\": true, \"issue\": 12853011, \"mastername\": \"tryserver.blink\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"blink_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src/third_party/WebKit\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"content_unittests\": \"[dummy hash for content_unittests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"gpu_unittests\": \"[dummy hash for gpu_unittests]\", \"media_unittests\": \"[dummy hash for media_unittests]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"mac_blink_rel\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.blink\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"blink_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src/third_party/WebKit\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"content_unittests\": \"[dummy hash for content_unittests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"gpu_unittests\": \"[dummy hash for gpu_unittests]\", \"media_unittests\": \"[dummy hash for media_unittests]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--builder-name=mac_blink_rel",
       "--slave-name=TestSlavename",
       "--build-number=571",
@@ -269,7 +275,7 @@
       "--shards",
       "1",
       "--task-name",
-      "content_gl_tests on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "content_gl_tests on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -289,7 +295,7 @@
       "0",
       "--dimension",
       "os",
-      "Mac",
+      "Mac-10.8",
       "--dimension",
       "pool",
       "Chrome",
@@ -304,7 +310,7 @@
       "--tag",
       "name:content_gl_tests on Intel GPU (with patch)",
       "--tag",
-      "os:Mac",
+      "os:Mac-10.8",
       "--tag",
       "project:blink",
       "--tag",
@@ -321,12 +327,12 @@
       "--use-gpu-in-tests",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] content_gl_tests on Intel GPU (with patch) on Mac",
+    "name": "[trigger] content_gl_tests on Intel GPU (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"content_gl_tests on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"content_gl_tests on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"content_gl_tests on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"content_gl_tests on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -352,7 +358,7 @@
       "--shards",
       "1",
       "--task-name",
-      "gl_tests on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "gl_tests on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -372,7 +378,7 @@
       "0",
       "--dimension",
       "os",
-      "Mac",
+      "Mac-10.8",
       "--dimension",
       "pool",
       "Chrome",
@@ -387,7 +393,7 @@
       "--tag",
       "name:gl_tests on Intel GPU (with patch)",
       "--tag",
-      "os:Mac",
+      "os:Mac-10.8",
       "--tag",
       "project:blink",
       "--tag",
@@ -404,12 +410,12 @@
       "--use-gpu-in-tests",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] gl_tests on Intel GPU (with patch) on Mac",
+    "name": "[trigger] gl_tests on Intel GPU (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"gl_tests on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"gl_tests on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gl_tests on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gl_tests on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -435,7 +441,7 @@
       "--shards",
       "1",
       "--task-name",
-      "angle_unittests on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "angle_unittests on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -455,7 +461,7 @@
       "0",
       "--dimension",
       "os",
-      "Mac",
+      "Mac-10.8",
       "--dimension",
       "pool",
       "Chrome",
@@ -470,7 +476,7 @@
       "--tag",
       "name:angle_unittests on Intel GPU (with patch)",
       "--tag",
-      "os:Mac",
+      "os:Mac-10.8",
       "--tag",
       "project:blink",
       "--tag",
@@ -487,12 +493,12 @@
       "--use-gpu-in-tests",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] angle_unittests on Intel GPU (with patch) on Mac",
+    "name": "[trigger] angle_unittests on Intel GPU (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"angle_unittests on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"angle_unittests on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"angle_unittests on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"angle_unittests on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -518,7 +524,7 @@
       "--shards",
       "1",
       "--task-name",
-      "maps_pixel_test on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "maps_pixel_test on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -538,7 +544,7 @@
       "0",
       "--dimension",
       "os",
-      "Mac",
+      "Mac-10.8",
       "--dimension",
       "pool",
       "Chrome",
@@ -553,7 +559,7 @@
       "--tag",
       "name:maps_pixel_test on Intel GPU (with patch)",
       "--tag",
-      "os:Mac",
+      "os:Mac-10.8",
       "--tag",
       "project:blink",
       "--tag",
@@ -582,12 +588,12 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "name": "[trigger] maps_pixel_test on Intel GPU (with patch) on Mac",
+    "name": "[trigger] maps_pixel_test on Intel GPU (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"maps_pixel_test on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"maps_pixel_test on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"maps_pixel_test on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"maps_pixel_test on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -613,7 +619,7 @@
       "--shards",
       "1",
       "--task-name",
-      "pixel_test on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "pixel_test on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -633,7 +639,7 @@
       "0",
       "--dimension",
       "os",
-      "Mac",
+      "Mac-10.8",
       "--dimension",
       "pool",
       "Chrome",
@@ -648,7 +654,7 @@
       "--tag",
       "name:pixel_test on Intel GPU (with patch)",
       "--tag",
-      "os:Mac",
+      "os:Mac-10.8",
       "--tag",
       "project:blink",
       "--tag",
@@ -682,12 +688,12 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "name": "[trigger] pixel_test on Intel GPU (with patch) on Mac",
+    "name": "[trigger] pixel_test on Intel GPU (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"pixel_test on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"pixel_test on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"pixel_test on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"pixel_test on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -713,7 +719,7 @@
       "--shards",
       "1",
       "--task-name",
-      "webgl_conformance on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "webgl_conformance on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -733,7 +739,7 @@
       "0",
       "--dimension",
       "os",
-      "Mac",
+      "Mac-10.8",
       "--dimension",
       "pool",
       "Chrome",
@@ -748,7 +754,7 @@
       "--tag",
       "name:webgl_conformance on Intel GPU (with patch)",
       "--tag",
-      "os:Mac",
+      "os:Mac-10.8",
       "--tag",
       "project:blink",
       "--tag",
@@ -762,7 +768,7 @@
       "commit-bot@chromium.org",
       "[dummy hash for telemetry_gpu_test]",
       "--",
-      "webgl_conformance on Intel GPU",
+      "webgl_conformance",
       "--show-stdout",
       "--browser=release",
       "-v",
@@ -773,12 +779,12 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "name": "[trigger] webgl_conformance on Intel GPU (with patch) on Mac",
+    "name": "[trigger] webgl_conformance on Intel GPU (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"webgl_conformance on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"webgl_conformance on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"webgl_conformance on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"webgl_conformance on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -804,7 +810,7 @@
       "--shards",
       "1",
       "--task-name",
-      "context_lost on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "context_lost on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -824,7 +830,7 @@
       "0",
       "--dimension",
       "os",
-      "Mac",
+      "Mac-10.8",
       "--dimension",
       "pool",
       "Chrome",
@@ -839,7 +845,7 @@
       "--tag",
       "name:context_lost on Intel GPU (with patch)",
       "--tag",
-      "os:Mac",
+      "os:Mac-10.8",
       "--tag",
       "project:blink",
       "--tag",
@@ -853,7 +859,7 @@
       "commit-bot@chromium.org",
       "[dummy hash for telemetry_gpu_test]",
       "--",
-      "context_lost on Intel GPU",
+      "context_lost",
       "--show-stdout",
       "--browser=release",
       "-v",
@@ -864,12 +870,12 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "name": "[trigger] context_lost on Intel GPU (with patch) on Mac",
+    "name": "[trigger] context_lost on Intel GPU (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"context_lost on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"context_lost on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"context_lost on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"context_lost on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -895,7 +901,7 @@
       "--shards",
       "1",
       "--task-name",
-      "memory_test on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "memory_test on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -915,7 +921,7 @@
       "0",
       "--dimension",
       "os",
-      "Mac",
+      "Mac-10.8",
       "--dimension",
       "pool",
       "Chrome",
@@ -930,7 +936,7 @@
       "--tag",
       "name:memory_test on Intel GPU (with patch)",
       "--tag",
-      "os:Mac",
+      "os:Mac-10.8",
       "--tag",
       "project:blink",
       "--tag",
@@ -944,7 +950,7 @@
       "commit-bot@chromium.org",
       "[dummy hash for telemetry_gpu_test]",
       "--",
-      "memory_test on Intel GPU",
+      "memory_test",
       "--show-stdout",
       "--browser=release",
       "-v",
@@ -955,12 +961,12 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "name": "[trigger] memory_test on Intel GPU (with patch) on Mac",
+    "name": "[trigger] memory_test on Intel GPU (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"memory_test on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"memory_test on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"memory_test on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"memory_test on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -986,7 +992,7 @@
       "--shards",
       "1",
       "--task-name",
-      "screenshot_sync on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "screenshot_sync on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1006,7 +1012,7 @@
       "0",
       "--dimension",
       "os",
-      "Mac",
+      "Mac-10.8",
       "--dimension",
       "pool",
       "Chrome",
@@ -1021,7 +1027,7 @@
       "--tag",
       "name:screenshot_sync on Intel GPU (with patch)",
       "--tag",
-      "os:Mac",
+      "os:Mac-10.8",
       "--tag",
       "project:blink",
       "--tag",
@@ -1035,7 +1041,7 @@
       "commit-bot@chromium.org",
       "[dummy hash for telemetry_gpu_test]",
       "--",
-      "screenshot_sync on Intel GPU",
+      "screenshot_sync",
       "--show-stdout",
       "--browser=release",
       "-v",
@@ -1046,12 +1052,12 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "name": "[trigger] screenshot_sync on Intel GPU (with patch) on Mac",
+    "name": "[trigger] screenshot_sync on Intel GPU (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"screenshot_sync on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"screenshot_sync on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"screenshot_sync on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"screenshot_sync on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -1077,7 +1083,7 @@
       "--shards",
       "1",
       "--task-name",
-      "hardware_accelerated_feature on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "hardware_accelerated_feature on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1097,7 +1103,7 @@
       "0",
       "--dimension",
       "os",
-      "Mac",
+      "Mac-10.8",
       "--dimension",
       "pool",
       "Chrome",
@@ -1112,7 +1118,7 @@
       "--tag",
       "name:hardware_accelerated_feature on Intel GPU (with patch)",
       "--tag",
-      "os:Mac",
+      "os:Mac-10.8",
       "--tag",
       "project:blink",
       "--tag",
@@ -1126,7 +1132,7 @@
       "commit-bot@chromium.org",
       "[dummy hash for telemetry_gpu_test]",
       "--",
-      "hardware_accelerated_feature on Intel GPU",
+      "hardware_accelerated_feature",
       "--show-stdout",
       "--browser=release",
       "-v",
@@ -1137,12 +1143,12 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "name": "[trigger] hardware_accelerated_feature on Intel GPU (with patch) on Mac",
+    "name": "[trigger] hardware_accelerated_feature on Intel GPU (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"hardware_accelerated_feature on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"hardware_accelerated_feature on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"hardware_accelerated_feature on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"hardware_accelerated_feature on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -1168,7 +1174,7 @@
       "--shards",
       "1",
       "--task-name",
-      "gpu_process_launch on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "gpu_process_launch on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1188,7 +1194,7 @@
       "0",
       "--dimension",
       "os",
-      "Mac",
+      "Mac-10.8",
       "--dimension",
       "pool",
       "Chrome",
@@ -1203,7 +1209,7 @@
       "--tag",
       "name:gpu_process_launch on Intel GPU (with patch)",
       "--tag",
-      "os:Mac",
+      "os:Mac-10.8",
       "--tag",
       "project:blink",
       "--tag",
@@ -1228,12 +1234,12 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "name": "[trigger] gpu_process_launch on Intel GPU (with patch) on Mac",
+    "name": "[trigger] gpu_process_launch on Intel GPU (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"gpu_process_launch on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"gpu_process_launch on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gpu_process_launch on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gpu_process_launch on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -1259,7 +1265,7 @@
       "--shards",
       "1",
       "--task-name",
-      "gpu_rasterization on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "gpu_rasterization on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1279,7 +1285,7 @@
       "0",
       "--dimension",
       "os",
-      "Mac",
+      "Mac-10.8",
       "--dimension",
       "pool",
       "Chrome",
@@ -1294,7 +1300,7 @@
       "--tag",
       "name:gpu_rasterization on Intel GPU (with patch)",
       "--tag",
-      "os:Mac",
+      "os:Mac-10.8",
       "--tag",
       "project:blink",
       "--tag",
@@ -1308,7 +1314,7 @@
       "commit-bot@chromium.org",
       "[dummy hash for telemetry_gpu_test]",
       "--",
-      "gpu_rasterization on Intel GPU",
+      "gpu_rasterization",
       "--show-stdout",
       "--browser=release",
       "-v",
@@ -1323,12 +1329,12 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "name": "[trigger] gpu_rasterization on Intel GPU (with patch) on Mac",
+    "name": "[trigger] gpu_rasterization on Intel GPU (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"gpu_rasterization on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"gpu_rasterization on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gpu_rasterization on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gpu_rasterization on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -1354,7 +1360,7 @@
       "--shards",
       "1",
       "--task-name",
-      "tab_capture_end2end_tests on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "tab_capture_end2end_tests on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1374,7 +1380,7 @@
       "0",
       "--dimension",
       "os",
-      "Mac",
+      "Mac-10.8",
       "--dimension",
       "pool",
       "Chrome",
@@ -1389,7 +1395,7 @@
       "--tag",
       "name:tab_capture_end2end_tests on Intel GPU (with patch)",
       "--tag",
-      "os:Mac",
+      "os:Mac-10.8",
       "--tag",
       "project:blink",
       "--tag",
@@ -1405,12 +1411,12 @@
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] tab_capture_end2end_tests on Intel GPU (with patch) on Mac",
+    "name": "[trigger] tab_capture_end2end_tests on Intel GPU (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"tab_capture_end2end_tests on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"tab_capture_end2end_tests on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"tab_capture_end2end_tests on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"tab_capture_end2end_tests on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -1429,9 +1435,9 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"mac_blink_rel\", \"buildnumber\": 571, \"enable_gpu_tests\": true, \"issue\": 12853011, \"mastername\": \"tryserver.blink\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"blink_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src/third_party/WebKit\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"content_unittests\": \"[dummy hash for content_unittests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"gpu_unittests\": \"[dummy hash for gpu_unittests]\", \"media_unittests\": \"[dummy hash for media_unittests]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"mac_blink_rel\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.blink\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"blink_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src/third_party/WebKit\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"content_unittests\": \"[dummy hash for content_unittests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"gpu_unittests\": \"[dummy hash for gpu_unittests]\", \"media_unittests\": \"[dummy hash for media_unittests]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"mac_blink_rel\", \"buildnumber\": 571, \"enable_gpu_tests\": true, \"issue\": 12853011, \"mastername\": \"tryserver.blink\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"blink_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src/third_party/WebKit\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"content_unittests\": \"[dummy hash for content_unittests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"gpu_unittests\": \"[dummy hash for gpu_unittests]\", \"media_unittests\": \"[dummy hash for media_unittests]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"mac_blink_rel\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.blink\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"blink_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src/third_party/WebKit\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"content_unittests\": \"[dummy hash for content_unittests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"gpu_unittests\": \"[dummy hash for gpu_unittests]\", \"media_unittests\": \"[dummy hash for media_unittests]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--builder-name=mac_blink_rel",
       "--slave-name=TestSlavename",
       "--build-number=571",
@@ -1467,9 +1473,9 @@
       "--gs-bucket",
       "gs://chromium-layout-test-archives",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"mac_blink_rel\", \"buildnumber\": 571, \"enable_gpu_tests\": true, \"issue\": 12853011, \"mastername\": \"tryserver.blink\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"blink_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src/third_party/WebKit\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"content_unittests\": \"[dummy hash for content_unittests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"gpu_unittests\": \"[dummy hash for gpu_unittests]\", \"media_unittests\": \"[dummy hash for media_unittests]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"mac_blink_rel\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.blink\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"blink_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src/third_party/WebKit\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"content_unittests\": \"[dummy hash for content_unittests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"gpu_unittests\": \"[dummy hash for gpu_unittests]\", \"media_unittests\": \"[dummy hash for media_unittests]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"mac_blink_rel\", \"buildnumber\": 571, \"enable_gpu_tests\": true, \"issue\": 12853011, \"mastername\": \"tryserver.blink\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"blink_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src/third_party/WebKit\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"content_unittests\": \"[dummy hash for content_unittests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"gpu_unittests\": \"[dummy hash for gpu_unittests]\", \"media_unittests\": \"[dummy hash for media_unittests]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"mac_blink_rel\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.blink\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"blink_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src/third_party/WebKit\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"content_unittests\": \"[dummy hash for content_unittests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"gpu_unittests\": \"[dummy hash for gpu_unittests]\", \"media_unittests\": \"[dummy hash for media_unittests]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "name": "archive_webkit_tests_results",
     "~followup_annotations": [
@@ -1497,9 +1503,9 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "content_gl_tests on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571"
+      "content_gl_tests on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571"
     ],
-    "name": "content_gl_tests on Intel GPU (with patch) on Mac"
+    "name": "content_gl_tests on Intel GPU (with patch)"
   },
   {
     "allow_subannotations": true,
@@ -1521,9 +1527,9 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "gl_tests on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571"
+      "gl_tests on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571"
     ],
-    "name": "gl_tests on Intel GPU (with patch) on Mac"
+    "name": "gl_tests on Intel GPU (with patch)"
   },
   {
     "allow_subannotations": true,
@@ -1545,9 +1551,9 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "angle_unittests on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571"
+      "angle_unittests on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571"
     ],
-    "name": "angle_unittests on Intel GPU (with patch) on Mac"
+    "name": "angle_unittests on Intel GPU (with patch)"
   },
   {
     "cmd": [
@@ -1561,11 +1567,11 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "maps_pixel_test on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "maps_pixel_test on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571",
       "--task-output-dir",
       "/path/to/tmp/"
     ],
-    "name": "maps_pixel_test on Intel GPU (with patch) on Mac"
+    "name": "maps_pixel_test on Intel GPU (with patch)"
   },
   {
     "cmd": [
@@ -1579,11 +1585,11 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "pixel_test on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "pixel_test on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571",
       "--task-output-dir",
       "/path/to/tmp/"
     ],
-    "name": "pixel_test on Intel GPU (with patch) on Mac",
+    "name": "pixel_test on Intel GPU (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
     ]
@@ -1600,11 +1606,11 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "webgl_conformance on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "webgl_conformance on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571",
       "--task-output-dir",
       "/path/to/tmp/"
     ],
-    "name": "webgl_conformance on Intel GPU (with patch) on Mac"
+    "name": "webgl_conformance on Intel GPU (with patch)"
   },
   {
     "cmd": [
@@ -1618,11 +1624,11 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "context_lost on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "context_lost on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571",
       "--task-output-dir",
       "/path/to/tmp/"
     ],
-    "name": "context_lost on Intel GPU (with patch) on Mac"
+    "name": "context_lost on Intel GPU (with patch)"
   },
   {
     "cmd": [
@@ -1636,11 +1642,11 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "memory_test on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "memory_test on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571",
       "--task-output-dir",
       "/path/to/tmp/"
     ],
-    "name": "memory_test on Intel GPU (with patch) on Mac"
+    "name": "memory_test on Intel GPU (with patch)"
   },
   {
     "cmd": [
@@ -1654,11 +1660,11 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "screenshot_sync on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "screenshot_sync on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571",
       "--task-output-dir",
       "/path/to/tmp/"
     ],
-    "name": "screenshot_sync on Intel GPU (with patch) on Mac"
+    "name": "screenshot_sync on Intel GPU (with patch)"
   },
   {
     "cmd": [
@@ -1672,11 +1678,11 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "hardware_accelerated_feature on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "hardware_accelerated_feature on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571",
       "--task-output-dir",
       "/path/to/tmp/"
     ],
-    "name": "hardware_accelerated_feature on Intel GPU (with patch) on Mac"
+    "name": "hardware_accelerated_feature on Intel GPU (with patch)"
   },
   {
     "cmd": [
@@ -1690,11 +1696,11 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "gpu_process_launch on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "gpu_process_launch on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571",
       "--task-output-dir",
       "/path/to/tmp/"
     ],
-    "name": "gpu_process_launch on Intel GPU (with patch) on Mac"
+    "name": "gpu_process_launch on Intel GPU (with patch)"
   },
   {
     "cmd": [
@@ -1708,11 +1714,11 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "gpu_rasterization on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571",
+      "gpu_rasterization on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571",
       "--task-output-dir",
       "/path/to/tmp/"
     ],
-    "name": "gpu_rasterization on Intel GPU (with patch) on Mac"
+    "name": "gpu_rasterization on Intel GPU (with patch)"
   },
   {
     "allow_subannotations": true,
@@ -1734,9 +1740,9 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "tab_capture_end2end_tests on Intel GPU (with patch)/Mac/[dummy has/mac_blink_rel/571"
+      "tab_capture_end2end_tests on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571"
     ],
-    "name": "tab_capture_end2end_tests on Intel GPU (with patch) on Mac"
+    "name": "tab_capture_end2end_tests on Intel GPU (with patch)"
   },
   {
     "cmd": [
@@ -1812,7 +1818,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1"
+      "GYP_DEFINES": "archive_gpu_tests=1 clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1"
     },
     "name": "gclient runhooks (2)"
   },
@@ -1843,7 +1849,13 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "blink_tests"
+      "angle_unittests_run",
+      "blink_tests",
+      "chrome",
+      "content_gl_tests_run",
+      "gl_tests_run",
+      "tab_capture_end2end_tests_run",
+      "telemetry_gpu_test_run"
     ],
     "name": "compile (2)"
   },
@@ -1895,7 +1907,7 @@
       "--shards",
       "1",
       "--task-name",
-      "pixel_test on Intel GPU (without patch)/Mac/[dummy has/mac_blink_rel/571",
+      "pixel_test on Intel GPU (without patch)/Mac-10.8/[dummy has/mac_blink_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1915,7 +1927,7 @@
       "0",
       "--dimension",
       "os",
-      "Mac",
+      "Mac-10.8",
       "--dimension",
       "pool",
       "Chrome",
@@ -1930,7 +1942,7 @@
       "--tag",
       "name:pixel_test on Intel GPU (without patch)",
       "--tag",
-      "os:Mac",
+      "os:Mac-10.8",
       "--tag",
       "project:blink",
       "--tag",
@@ -1965,12 +1977,12 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "name": "[trigger] pixel_test on Intel GPU (without patch) on Mac",
+    "name": "[trigger] pixel_test on Intel GPU (without patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"pixel_test on Intel GPU (without patch)/Mac/[dummy has/mac_blink_rel/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"pixel_test on Intel GPU (without patch)/Mac-10.8/[dummy has/mac_blink_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"pixel_test on Intel GPU (without patch)/Mac/[dummy has/mac_blink_rel/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"pixel_test on Intel GPU (without patch)/Mac-10.8/[dummy has/mac_blink_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -1993,11 +2005,11 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "pixel_test on Intel GPU (without patch)/Mac/[dummy has/mac_blink_rel/571",
+      "pixel_test on Intel GPU (without patch)/Mac-10.8/[dummy has/mac_blink_rel/571",
       "--task-output-dir",
       "/path/to/tmp/"
     ],
-    "name": "pixel_test on Intel GPU (without patch) on Mac",
+    "name": "pixel_test on Intel GPU (without patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
     ]
