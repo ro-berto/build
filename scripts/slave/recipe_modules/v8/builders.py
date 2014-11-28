@@ -447,7 +447,6 @@ BUILDERS = {
       },
 ####### Category: Mac
       'V8 Mac': {
-        'gclient_apply_config': ['clang'],
         'chromium_apply_config': ['clang'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -458,7 +457,6 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'V8 Mac - debug': {
-        'gclient_apply_config': ['clang'],
         'chromium_apply_config': ['clang'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -469,7 +467,6 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'V8 Mac64': {
-        'gclient_apply_config': ['clang'],
         'chromium_apply_config': ['clang'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -480,7 +477,6 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'V8 Mac64 - debug': {
-        'gclient_apply_config': ['clang'],
         'chromium_apply_config': ['clang'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -848,7 +844,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Mac GC Stress - 1': {
-        'gclient_apply_config': ['clang'],
         'chromium_apply_config': ['clang'],
         'v8_apply_config': ['gc_stress'],
         'v8_config_kwargs': {
@@ -862,7 +857,6 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'V8 Mac GC Stress - 2': {
-        'gclient_apply_config': ['clang'],
         'chromium_apply_config': ['clang'],
         'v8_apply_config': ['gc_stress'],
         'v8_config_kwargs': {
@@ -876,7 +870,6 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'V8 Mac GC Stress - 3': {
-        'gclient_apply_config': ['clang'],
         'chromium_apply_config': ['clang'],
         'v8_apply_config': ['gc_stress'],
         'v8_config_kwargs': {
@@ -903,7 +896,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux clang': {
-        'gclient_apply_config': ['clang'],
         'chromium_apply_config': ['clang', 'goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -914,7 +906,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 ASAN': {
-        'gclient_apply_config': ['clang'],
         'chromium_apply_config': ['clang', 'asan', 'goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -925,7 +916,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 TSAN': {
-        'gclient_apply_config': ['clang'],
         'chromium_apply_config': ['clang', 'tsan2', 'goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -936,7 +926,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm64 - sim - MSAN': {
-        'gclient_apply_config': ['clang'],
         # 'simulate_arm' is actually implied by 'msan'. We still set it
         # explicitly for the sake of consistency.
         'chromium_apply_config': ['clang', 'msan', 'simulate_arm', 'goma'],
@@ -1106,7 +1095,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_asan_rel': {
-        'gclient_apply_config': ['clang'],
         'chromium_apply_config': ['clang', 'asan', 'goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -1117,7 +1105,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_tsan_rel': {
-        'gclient_apply_config': ['clang'],
         'chromium_apply_config': ['clang', 'tsan2', 'goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -1186,7 +1173,6 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'v8_mac_rel': {
-        'gclient_apply_config': ['clang'],
         'chromium_apply_config': ['clang'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -1197,7 +1183,6 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'v8_mac_dbg': {
-        'gclient_apply_config': ['clang'],
         'chromium_apply_config': ['clang'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',

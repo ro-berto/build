@@ -160,14 +160,6 @@ V8_NON_STANDARD_TESTS = {
 }
 
 
-# TODO(machenbach): This is copied from gclient's config.py and should be
-# unified somehow.
-def ChromiumSvnSubURL(c, *pieces):
-  BASES = ('https://src.chromium.org',
-           'svn://svn-mirror.golo.chromium.org')
-  return '/'.join((BASES[c.USE_MIRROR],) + pieces)
-
-
 class V8Api(recipe_api.RecipeApi):
   BUILDERS = builders.BUILDERS
 
@@ -264,8 +256,6 @@ class V8Api(recipe_api.RecipeApi):
       env['CC'] = self.c.gyp_env.CC
     if self.c.gyp_env.CXX:
       env['CXX'] = self.c.gyp_env.CXX
-    if self.c.gyp_env.CXX_host:
-      env['CXX_host'] = self.c.gyp_env.CXX_host
     if self.c.gyp_env.LINK:
       env['LINK'] = self.c.gyp_env.LINK
     if self.c.gyp_env.RANLIB:
@@ -274,28 +264,6 @@ class V8Api(recipe_api.RecipeApi):
     if self.m.chromium.c.gyp_env.GYP_MSVS_VERSION:
       env['GYP_MSVS_VERSION'] = self.m.chromium.c.gyp_env.GYP_MSVS_VERSION
     self.m.chromium.runhooks(env=env, **kwargs)
-
-  @property
-  def needs_clang(self):
-    return 'clang' in self.bot_config.get('gclient_apply_config', [])
-
-  def update_clang(self):
-    # TODO(machenbach): Implement this for windows or unify with chromium's
-    # update clang step as soon as it exists.
-    self.m.step(
-        'update clang',
-        [self.m.path['checkout'].join('tools', 'clang',
-                                      'scripts', 'update.sh')],
-        env={'LLVM_URL': ChromiumSvnSubURL(self.m.gclient.c,
-                                           'llvm-project')})
-
-    # TODO(machenbach): Move this path tweaking to the v8 gyp file.
-    clang_dir = self.m.path['checkout'].join(
-        'third_party', 'llvm-build', 'Release+Asserts', 'bin')
-    self.c.gyp_env.CC = self.m.path.join(clang_dir, 'clang')
-    self.c.gyp_env.CXX = self.m.path.join(clang_dir, 'clang++')
-    self.c.gyp_env.CXX_host = self.m.path.join(clang_dir, 'clang++')
-    self.c.gyp_env.LINK = self.m.path.join(clang_dir, 'clang++')
 
   def setup_mips_toolchain(self):
     mips_dir = self.m.path['slave_build'].join(MIPS_DIR, 'bin')

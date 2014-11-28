@@ -45,9 +45,3 @@ def dynamorio(c):
 def mozilla_tests(c):
   c.solutions[0].custom_deps['v8/test/mozilla/data'] = ChromiumSvnSubURL(
       c, 'chrome', 'trunk', 'deps', 'third_party', 'mozilla-tests')
-
-
-@CONFIG_CTX(includes=['v8'])
-def clang(c):
-  c.solutions[0].custom_deps['v8/tools/clang/scripts'] = ChromiumSvnSubURL(
-      c, 'chrome', 'trunk', 'src', 'tools', 'clang', 'scripts')

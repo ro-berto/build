@@ -30,8 +30,6 @@ def GenSteps(api):
 
   if v8.c.mips_cross_compile:
     v8.setup_mips_toolchain()
-  if v8.needs_clang:
-    v8.update_clang()
   v8.runhooks()
   api.chromium.cleanup_temp()
 

@@ -11,7 +11,7 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = None\nsolutions = [{'custom_deps': {'v8/test/mozilla/data': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/deps/third_party/mozilla-tests', 'v8/tools/clang/scripts': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src/tools/clang/scripts'}, 'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
+      "cache_dir = None\nsolutions = [{'custom_deps': {'v8/test/mozilla/data': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/deps/third_party/mozilla-tests'}, 'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
       "--revision_mapping_file",
       "{\"v8\": \"got_revision\"}",
       "--output_json",
@@ -41,26 +41,13 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/v8/tools/clang/scripts/update.sh"
-    ],
-    "env": {
-      "LLVM_URL": "svn://svn-mirror.golo.chromium.org/llvm-project"
-    },
-    "name": "update clang"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
     "env": {
-      "CC": "[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/clang",
-      "CXX": "[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/clang++",
-      "CXX_host": "[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/clang++",
-      "GYP_DEFINES": "clang=1 target_arch=ia32 v8_target_arch=ia32",
-      "LINK": "[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/clang++"
+      "GYP_DEFINES": "clang=1 target_arch=ia32 v8_target_arch=ia32"
     },
     "name": "gclient runhooks"
   },
