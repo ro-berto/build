@@ -31,6 +31,15 @@ from common import chromium_utils
 from slave import build_directory
 from slave import slave_utils
 
+# Define a bunch of directory paths (same as bot_update.py)
+CURRENT_DIR = os.path.abspath(os.getcwd())
+BUILDER_DIR = os.path.dirname(CURRENT_DIR)
+SLAVE_DIR = os.path.dirname(BUILDER_DIR)
+
+# Define goma_deps_cache directory.
+# Since out/Release will be erased in clobber build, we'd like to
+# have our own directory.
+DEPS_CACHE_DIR = os.path.join(SLAVE_DIR, 'goma_deps_cache')
 
 # Path of the scripts/slave/ checkout on the slave, found by looking at the
 # current compile.py script's path's dirname().
@@ -128,7 +137,9 @@ def goma_setup(options, env):
   # If this experiment suceeds, I'll enable this in all platforms.
   if hostname in ['vm657-m1', 'vm658-m1', 'build28-m1', 'build58-m1',
                   'vm191-m1', 'vm480-m1']:
-    env['GOMA_DEPS_CACHE_DIR'] = options.target_output_dir
+    if not os.path.exists(DEPS_CACHE_DIR):
+      os.mkdir(DEPS_CACHE_DIR, 0700)
+    env['GOMA_DEPS_CACHE_DIR'] = DEPS_CACHE_DIR
 
   # goma is requested.
   goma_key = os.path.join(options.goma_dir, 'goma.key')
