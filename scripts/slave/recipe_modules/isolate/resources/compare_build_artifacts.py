@@ -17,6 +17,58 @@ import time
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
+# List of files that are known to be non deterministic. This is a temporary
+# workaround to find regression on the deterministic builders.
+# TODO(sebmarchand): Remove this once all the files are deterministic.
+WHITELIST = {
+  'win': {
+    'base_unittests.exe',
+    'base_unittests.isolated',
+    'browser_tests.exe',
+    'browser_tests.isolated',
+    'chrome.dll',
+    'chrome.exe',
+    'chrome_child.dll',
+    'chrome_watcher.dll',
+    'clearkeycdm.dll',
+    'content_browsertests.exe',
+    'content_browsertests.isolated',
+    'content_unittests.exe',
+    'content_unittests.isolated',
+    'd8.exe',
+    'delegate_execute.exe',
+    'delegate_execute_unittests.exe',
+    'interactive_ui_tests.exe',
+    'interactive_ui_tests.isolated',
+    'metro_driver.dll',
+    'mock_nacl_gdb.exe',
+    'net_unittests.exe',
+    'net_unittests.isolated',
+    'npapi_test_plugin.dll',
+    'pdf.dll',
+    'peerconnection_server.exe',
+    'ppapi_nacl_tests_pnacl_newlib_x32.nexe',
+    'ppapi_nacl_tests_pnacl_newlib_x64.nexe',
+    'sync_integration_tests.exe',
+    'sync_integration_tests.isolated',
+    'test_registrar.exe',
+    'unit_tests.exe',
+    'unit_tests.isolated',
+  },
+  'linux': {
+    'browser_tests.isolated',
+    'nacl_helper_nonsfi',
+    'nacl_irt_x86_64.nexe',
+    'ppapi_nacl_tests_glibc_x64.nexe',
+    'ppapi_nacl_tests_newlib_x64.nexe',
+    'ppapi_nacl_tests_pnacl_newlib_x64.nexe',
+    'unit_tests.isolated',
+  },
+  'mac': { },
+  'android': { },
+  'ios': { },
+}
+
 def get_files_to_compare(build_dir, recursive=False):
   """Get the list of files to compare."""
   allowed = frozenset(
@@ -124,7 +176,8 @@ def compare_files(first_filepath, second_filepath):
   return diff_binary(first_filepath, second_filepath, file_len)
 
 
-def compare_build_artifacts(first_dir, second_dir, recursive=False):
+def compare_build_artifacts(first_dir, second_dir, target_platform,
+                            recursive=False):
   """Compare the artifacts from two distinct builds."""
   if not os.path.isdir(first_dir):
     print >> sys.stderr, '%s isn\'t a valid directory.' % first_dir
@@ -136,7 +189,10 @@ def compare_build_artifacts(first_dir, second_dir, recursive=False):
   with open(os.path.join(BASE_DIR, 'deterministic_build_blacklist.json')) as f:
     blacklist = frozenset(json.load(f))
 
-  res = 0
+  whitelist = WHITELIST[target_platform]
+
+  unexpected_failures = 0
+  expected_failures = 0
   first_list = get_files_to_compare(first_dir, recursive) - blacklist
   second_list = get_files_to_compare(second_dir, recursive) - blacklist
 
@@ -144,7 +200,7 @@ def compare_build_artifacts(first_dir, second_dir, recursive=False):
   if diff:
     print >> sys.stderr, 'Different list of files in both directories'
     print >> sys.stderr, '\n'.join('  ' + i for i in sorted(diff))
-    res += len(diff)
+    unexpected_failures += len(diff)
 
   epoch_hex = struct.pack('<I', int(time.time())).encode('hex')
   print('Epoch: %s' %
@@ -157,14 +213,20 @@ def compare_build_artifacts(first_dir, second_dir, recursive=False):
     if not result:
       result = 'equal'
     else:
-      result = 'DIFFERENT: %s' % result
-      res += 1
+      expected = 'unexpected'
+      if f in whitelist:
+        expected_failures += 1
+        expected = 'expected'
+      else:
+        unexpected_failures += 1
+      result = 'DIFFERENT (%s): %s' % (expected, result)
     print('%-*s: %s' % (max_filepath_len, f, result))
 
   print '%d files are equal, %d are different.'  % (
-      len(first_list & second_list) - res, res)
+      len(first_list & second_list) - expected_failures - unexpected_failures,
+      expected_failures + unexpected_failures)
 
-  return 0 if res == 0 else 1
+  return 0 if unexpected_failures == 0 else 1
 
 
 def main():
@@ -175,15 +237,19 @@ def main():
       '-s', '--second-build-dir', help='The second build directory.')
   parser.add_option('-r', '--recursive', action='store_true', default=False,
                     help='Indicates if the comparison should be recursive.')
+  parser.add_option('-t', '--target-platform', help='The target platform.')
   options, _ = parser.parse_args()
 
   if not options.first_build_dir:
     parser.error('--first-build-dir is required')
   if not options.second_build_dir:
     parser.error('--second-build-dir is required')
+  if not options.target_platform:
+    parser.error('--target-platform is required')
 
   return compare_build_artifacts(os.path.abspath(options.first_build_dir),
                                  os.path.abspath(options.second_build_dir),
+                                 options.target_platform,
                                  options.recursive)
 
 

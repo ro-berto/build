@@ -176,7 +176,9 @@
       "--first-build-dir",
       "[SLAVE_BUILD]/src/out/Release.1",
       "--second-build-dir",
-      "[SLAVE_BUILD]/src/out/Release.2"
+      "[SLAVE_BUILD]/src/out/Release.2",
+      "--target-platform",
+      "android"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compare_build_artifacts"

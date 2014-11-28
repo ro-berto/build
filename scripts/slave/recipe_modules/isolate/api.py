@@ -274,7 +274,8 @@ class IsolateApi(recipe_api.RecipeApi):
     """Compare the artifacts from 2 builds."""
     args = [
         '--first-build-dir', first_dir,
-        '--second-build-dir', second_dir
+        '--second-build-dir', second_dir,
+        '--target-platform', self.m.chromium.c.TARGET_PLATFORM
     ]
     self.m.python('compare_build_artifacts',
                   self.resource('compare_build_artifacts.py'),
