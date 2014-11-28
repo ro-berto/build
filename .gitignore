@@ -43,12 +43,16 @@ twistd.pid
 /slave/info/*
 !/slave/cert/
 /tags
+/third_party/google_api_python_client
 /third_party/cbuildbot_chromite
 /third_party/gsutil
+/third_party/httplib2
 /third_party/lighttpd
+/third_party/oauth2client
 /third_party/psutils
 /third_party/swarm_client
 /third_party/twisted_10_2/twisted/internet/test/fake_CAs/empty
 /third_party/twisted_10_2/twisted/trial/test/directory
+/third_party/uritemplate
 /third_party/xvfb
 /xvfb
