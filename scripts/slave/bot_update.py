@@ -203,12 +203,8 @@ RECOGNIZED_PATHS = {
     # If SVN path matches key, the entire URL is rewritten to the Git url.
     '/chrome/trunk/src':
         CHROMIUM_SRC_URL,
-    '/chrome/trunk/deps/third_party/webrtc/webrtc.DEPS':
-        CHROMIUM_GIT_HOST + '/chromium/deps/webrtc/webrtc.DEPS.git',
     '/chrome/trunk/src/tools/cros.DEPS':
         CHROMIUM_GIT_HOST + '/chromium/src/tools/cros.DEPS.git',
-    '/webrtc/trunk':
-        CHROMIUM_GIT_HOST + '/external/webrtc.git',
 }
 RECOGNIZED_PATHS.update(internal_data.get('RECOGNIZED_PATHS', {}))
 

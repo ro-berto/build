@@ -3,8 +3,8 @@
 # found in the LICENSE file.
 
 from RECIPE_MODULES.gclient import CONFIG_CTX
-from slave.recipe_modules.gclient.config import ChromeSvnSubURL,\
-  ChromiumSvnSubURL
+from slave.recipe_modules.gclient.config import ChromeInternalGitURL,\
+  ChromiumGitURL
 
 
 @CONFIG_CTX(includes=['_webrtc', '_webrtc_limited'])
@@ -22,8 +22,7 @@ def webrtc_ios(c):
 def valgrind(c):
   """Add Valgrind binaries to the gclient solution."""
   c.solutions[0].custom_deps['src/chromium/src/third_party/valgrind'] = \
-      ChromiumSvnSubURL(c, 'chrome', 'trunk', 'deps', 'third_party', 'valgrind',
-                        'binaries')
+      ChromiumGitURL(c, 'chromium', 'deps', 'valgrind', 'binaries')
 
 @CONFIG_CTX(includes=['chromium', '_webrtc_deps'])
 def chromium_webrtc(c):
@@ -64,7 +63,7 @@ def _webrtc(c):
   """
   s = c.solutions.add()
   s.name = 'src'
-  s.url = WebRTCSvnURL(c, 'trunk')
+  s.url = ChromiumGitURL(c, 'external', 'webrtc')
   s.deps_file = 'DEPS'
   c.got_revision_mapping['src'] = 'got_revision'
 
@@ -77,8 +76,7 @@ def _webrtc_deps(c):
   """
   s = c.solutions.add()
   s.name = 'webrtc.DEPS'
-  s.url = ChromiumSvnSubURL(c, 'chrome', 'trunk', 'deps', 'third_party',
-                            'webrtc', 'webrtc.DEPS')
+  s.url = ChromiumGitURL(c, 'chromium', 'deps', 'webrtc', 'webrtc.DEPS')
   s.deps_file = 'DEPS'
 
 @CONFIG_CTX()
@@ -89,10 +87,5 @@ def _webrtc_limited(c):
   """
   s = c.solutions.add()
   s.name = 'webrtc-limited'
-  s.url = ChromeSvnSubURL(c, 'chrome-internal', 'trunk', 'webrtc-limited')
+  s.url = ChromeInternalGitURL(c, 'chrome', 'deps', 'webrtc-limited')
   s.deps_file = 'DEPS'
-
-def WebRTCSvnURL(c, *pieces):
-  BASES = ('http://webrtc.googlecode.com/svn',
-           'svn://svn-mirror.golo.chromium.org/webrtc')
-  return '/'.join((BASES[c.USE_MIRROR],) + pieces)
