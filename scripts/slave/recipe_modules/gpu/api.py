@@ -463,14 +463,13 @@ class GpuApi(recipe_api.RecipeApi):
     # we can try removing additional parameters and unify this into a single
     # call that only differs by enable_swarming argument.
     if enable_swarming:
-      target_name = target_name or name
       name = self._add_gpu_suffix(name, swarming_dimensions)
-      return self.m.chromium.steps.GPUGTestTest(
+      return self.m.chromium.steps.GTestTest(
           name, args=args, enable_swarming=True, target_name=target_name,
           swarming_dimensions=swarming_dimensions)
     else:
       results_directory = self.m.path['slave_build'].join('gtest-results', name)
-      return self.m.chromium.steps.GPUGTestTest(
+      return self.m.chromium.steps.GTestTest(
           name,
           xvfb=False,
           args=args,
@@ -504,7 +503,6 @@ class GpuApi(recipe_api.RecipeApi):
     test_args.append(extra_browser_args_string)
 
     if enable_swarming:
-      target_name = target_name or name
       name = self._add_gpu_suffix(name, swarming_dimensions)
 
     return self.m.chromium.steps.TelemetryGPUTest(

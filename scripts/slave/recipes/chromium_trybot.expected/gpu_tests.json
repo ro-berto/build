@@ -7,7 +7,7 @@
       "--master",
       "tryserver.chromium.mac",
       "--builder",
-      "mac_chromium_rel_ng",
+      "mac_chromium_rel",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -25,7 +25,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD"
+      "src@HEAD",
+      "--force"
     ],
     "name": "bot_update",
     "~followup_annotations": [
@@ -70,6 +71,71 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]/src/testing/buildbot/chromium_trybot.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "read test spec",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@path: testing/buildbot/chromium_trybot.json@@@",
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_unittests\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"platforms\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"linux\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"mac\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ], @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test\": \"mojo_common_unittests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"args\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"--test-launcher-print-test-stdio=always\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ], @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"chromium_configs\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"chromium_chromeos\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"chromium_chromeos_clang\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"chromium_chromeos_ozone\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ], @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"platforms\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"linux\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ], @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test\": \"sandbox_linux_unittests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"exclude_builders\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"tryserver.chromium.win:win_chromium_x64_rel\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ], @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test\": \"browser_tests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/testing/scripts/get_compile_targets.py",
+      "--output",
+      "/path/to/tmp/json",
+      "--",
+      "--build-config-fs",
+      "Release",
+      "--paths",
+      "{\"build\": \"[BUILD]\"}",
+      "--properties",
+      "{\"buildername\": \"mac_chromium_rel\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
+    ],
+    "name": "get compile targets for scripts",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "--version"
     ],
@@ -87,124 +153,9 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "archive_gpu_tests=1 clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1"
+      "GYP_DEFINES": "clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1"
     },
     "name": "gclient runhooks (with patch)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/testing/buildbot/chromium.mac.json",
-      "/path/to/tmp/json"
-    ],
-    "name": "read test spec",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.mac.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/testing/scripts/get_compile_targets.py",
-      "--output",
-      "/path/to/tmp/json",
-      "--",
-      "--build-config-fs",
-      "Release",
-      "--paths",
-      "{\"build\": \"[BUILD]\"}",
-      "--properties",
-      "{\"buildername\": \"mac_chromium_rel_ng\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
-    ],
-    "name": "get compile targets for scripts",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/testing/buildbot/trybot_analyze_config.json",
-      "/path/to/tmp/json"
-    ],
-    "name": "read filter exclusion spec",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@path: 'testing/buildbot/trybot_analyze_config.json'@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"chromium\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "diff",
-      "--cached",
-      "--name-only"
-    ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "git diff to analyze patch",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/gyp_chromium",
-      "--analyzer",
-      "{\"files\": [\"foo.cc\"], \"targets\": [\"angle_unittests_run\", \"chrome\", \"content_gl_tests_run\", \"gl_tests_run\", \"tab_capture_end2end_tests_run\", \"telemetry_gpu_test_run\"]}",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "GYP_DEFINES": "archive_gpu_tests=1 clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1"
-    },
-    "name": "analyze",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"angle_unittests_run\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"chrome\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"chromium_builder_tests\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"content_gl_tests_run\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gl_tests_run\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"tab_capture_end2end_tests_run\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"telemetry_gpu_test_run\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"status\": \"Found dependency\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"targets\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"angle_unittests_run\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"chrome\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"chromium_builder_tests\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"content_gl_tests_run\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gl_tests_run\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"tab_capture_end2end_tests_run\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"telemetry_gpu_test_run\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/cleanup_temp.py"
-    ],
-    "name": "cleanup_temp"
   },
   {
     "cmd": [
@@ -233,15 +184,45 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
+      "all",
+      "angle_unittests",
       "angle_unittests_run",
-      "chromium_builder_tests",
+      "base_unittests",
+      "browser_tests",
       "chrome",
-      "telemetry_gpu_test_run",
-      "tab_capture_end2end_tests_run",
+      "content_gl_tests",
       "content_gl_tests_run",
-      "gl_tests_run"
+      "gl_tests",
+      "gl_tests_run",
+      "mojo_common_unittests",
+      "tab_capture_end2end_tests",
+      "tab_capture_end2end_tests_run",
+      "telemetry_gpu_test_run"
     ],
     "name": "compile (with patch)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/isolate/resources/remove_build_metadata.py",
+      "--build-dir",
+      "[SLAVE_BUILD]/src/out/Release",
+      "--src-dir",
+      "[SLAVE_BUILD]/src"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "remove_build_metadata"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport glob\nimport sys\nwith open(sys.argv[1], 'w') as f:\n  f.write('\\n'.join(glob.glob(sys.argv[2])))\n",
+      "/path/to/tmp/",
+      "[SLAVE_BUILD]/src/out/Release/*.isolated.gen.json"
+    ],
+    "name": "find isolated targets"
   },
   {
     "cmd": [
@@ -282,7 +263,7 @@
       "--shards",
       "1",
       "--task-name",
-      "content_gl_tests on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571",
+      "content_gl_tests on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -302,12 +283,12 @@
       "0",
       "--dimension",
       "os",
-      "Mac-10.8",
+      "Mac",
       "--dimension",
       "pool",
       "Chrome",
       "--tag",
-      "buildername:mac_chromium_rel_ng",
+      "buildername:mac_chromium_rel",
       "--tag",
       "buildnumber:571",
       "--tag",
@@ -317,7 +298,7 @@
       "--tag",
       "name:content_gl_tests on Intel GPU (with patch)",
       "--tag",
-      "os:Mac-10.8",
+      "os:Mac",
       "--tag",
       "project:chromium",
       "--tag",
@@ -334,12 +315,12 @@
       "--use-gpu-in-tests",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] content_gl_tests on Intel GPU (with patch)",
+    "name": "[trigger] content_gl_tests on Intel GPU (with patch) on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"content_gl_tests on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"content_gl_tests on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"content_gl_tests on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"content_gl_tests on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -365,7 +346,7 @@
       "--shards",
       "1",
       "--task-name",
-      "gl_tests on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571",
+      "gl_tests on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -385,12 +366,12 @@
       "0",
       "--dimension",
       "os",
-      "Mac-10.8",
+      "Mac",
       "--dimension",
       "pool",
       "Chrome",
       "--tag",
-      "buildername:mac_chromium_rel_ng",
+      "buildername:mac_chromium_rel",
       "--tag",
       "buildnumber:571",
       "--tag",
@@ -400,7 +381,7 @@
       "--tag",
       "name:gl_tests on Intel GPU (with patch)",
       "--tag",
-      "os:Mac-10.8",
+      "os:Mac",
       "--tag",
       "project:chromium",
       "--tag",
@@ -417,12 +398,12 @@
       "--use-gpu-in-tests",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] gl_tests on Intel GPU (with patch)",
+    "name": "[trigger] gl_tests on Intel GPU (with patch) on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"gl_tests on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"gl_tests on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gl_tests on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gl_tests on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -448,7 +429,7 @@
       "--shards",
       "1",
       "--task-name",
-      "angle_unittests on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571",
+      "angle_unittests on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -468,12 +449,12 @@
       "0",
       "--dimension",
       "os",
-      "Mac-10.8",
+      "Mac",
       "--dimension",
       "pool",
       "Chrome",
       "--tag",
-      "buildername:mac_chromium_rel_ng",
+      "buildername:mac_chromium_rel",
       "--tag",
       "buildnumber:571",
       "--tag",
@@ -483,7 +464,7 @@
       "--tag",
       "name:angle_unittests on Intel GPU (with patch)",
       "--tag",
-      "os:Mac-10.8",
+      "os:Mac",
       "--tag",
       "project:chromium",
       "--tag",
@@ -500,12 +481,12 @@
       "--use-gpu-in-tests",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] angle_unittests on Intel GPU (with patch)",
+    "name": "[trigger] angle_unittests on Intel GPU (with patch) on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"angle_unittests on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"angle_unittests on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"angle_unittests on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"angle_unittests on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -531,7 +512,7 @@
       "--shards",
       "1",
       "--task-name",
-      "maps_pixel_test on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571",
+      "maps_pixel_test on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -551,12 +532,12 @@
       "0",
       "--dimension",
       "os",
-      "Mac-10.8",
+      "Mac",
       "--dimension",
       "pool",
       "Chrome",
       "--tag",
-      "buildername:mac_chromium_rel_ng",
+      "buildername:mac_chromium_rel",
       "--tag",
       "buildnumber:571",
       "--tag",
@@ -566,7 +547,7 @@
       "--tag",
       "name:maps_pixel_test on Intel GPU (with patch)",
       "--tag",
-      "os:Mac-10.8",
+      "os:Mac",
       "--tag",
       "project:chromium",
       "--tag",
@@ -588,19 +569,19 @@
       "--build-revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--test-machine-name",
-      "mac_chromium_rel_ng",
+      "mac_chromium_rel",
       "--extra-browser-args=--enable-logging=stderr",
       "--output-format",
       "json",
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "name": "[trigger] maps_pixel_test on Intel GPU (with patch)",
+    "name": "[trigger] maps_pixel_test on Intel GPU (with patch) on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"maps_pixel_test on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"maps_pixel_test on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"maps_pixel_test on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"maps_pixel_test on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -626,7 +607,7 @@
       "--shards",
       "1",
       "--task-name",
-      "pixel_test on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571",
+      "pixel_test on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -646,12 +627,12 @@
       "0",
       "--dimension",
       "os",
-      "Mac-10.8",
+      "Mac",
       "--dimension",
       "pool",
       "Chrome",
       "--tag",
-      "buildername:mac_chromium_rel_ng",
+      "buildername:mac_chromium_rel",
       "--tag",
       "buildnumber:571",
       "--tag",
@@ -661,7 +642,7 @@
       "--tag",
       "name:pixel_test on Intel GPU (with patch)",
       "--tag",
-      "os:Mac-10.8",
+      "os:Mac",
       "--tag",
       "project:chromium",
       "--tag",
@@ -688,19 +669,19 @@
       "--os-type",
       "mac",
       "--test-machine-name",
-      "mac_chromium_rel_ng",
+      "mac_chromium_rel",
       "--extra-browser-args=--enable-logging=stderr",
       "--output-format",
       "json",
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "name": "[trigger] pixel_test on Intel GPU (with patch)",
+    "name": "[trigger] pixel_test on Intel GPU (with patch) on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"pixel_test on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"pixel_test on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"pixel_test on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"pixel_test on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -726,7 +707,7 @@
       "--shards",
       "1",
       "--task-name",
-      "webgl_conformance on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571",
+      "webgl_conformance on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -746,12 +727,12 @@
       "0",
       "--dimension",
       "os",
-      "Mac-10.8",
+      "Mac",
       "--dimension",
       "pool",
       "Chrome",
       "--tag",
-      "buildername:mac_chromium_rel_ng",
+      "buildername:mac_chromium_rel",
       "--tag",
       "buildnumber:571",
       "--tag",
@@ -761,7 +742,7 @@
       "--tag",
       "name:webgl_conformance on Intel GPU (with patch)",
       "--tag",
-      "os:Mac-10.8",
+      "os:Mac",
       "--tag",
       "project:chromium",
       "--tag",
@@ -775,7 +756,7 @@
       "commit-bot@chromium.org",
       "[dummy hash for telemetry_gpu_test]",
       "--",
-      "webgl_conformance",
+      "webgl_conformance on Intel GPU",
       "--show-stdout",
       "--browser=release",
       "-v",
@@ -786,12 +767,12 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "name": "[trigger] webgl_conformance on Intel GPU (with patch)",
+    "name": "[trigger] webgl_conformance on Intel GPU (with patch) on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"webgl_conformance on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"webgl_conformance on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"webgl_conformance on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"webgl_conformance on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -817,7 +798,7 @@
       "--shards",
       "1",
       "--task-name",
-      "context_lost on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571",
+      "context_lost on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -837,12 +818,12 @@
       "0",
       "--dimension",
       "os",
-      "Mac-10.8",
+      "Mac",
       "--dimension",
       "pool",
       "Chrome",
       "--tag",
-      "buildername:mac_chromium_rel_ng",
+      "buildername:mac_chromium_rel",
       "--tag",
       "buildnumber:571",
       "--tag",
@@ -852,7 +833,7 @@
       "--tag",
       "name:context_lost on Intel GPU (with patch)",
       "--tag",
-      "os:Mac-10.8",
+      "os:Mac",
       "--tag",
       "project:chromium",
       "--tag",
@@ -866,7 +847,7 @@
       "commit-bot@chromium.org",
       "[dummy hash for telemetry_gpu_test]",
       "--",
-      "context_lost",
+      "context_lost on Intel GPU",
       "--show-stdout",
       "--browser=release",
       "-v",
@@ -877,12 +858,12 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "name": "[trigger] context_lost on Intel GPU (with patch)",
+    "name": "[trigger] context_lost on Intel GPU (with patch) on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"context_lost on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"context_lost on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"context_lost on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"context_lost on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -908,7 +889,7 @@
       "--shards",
       "1",
       "--task-name",
-      "memory_test on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571",
+      "memory_test on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -928,12 +909,12 @@
       "0",
       "--dimension",
       "os",
-      "Mac-10.8",
+      "Mac",
       "--dimension",
       "pool",
       "Chrome",
       "--tag",
-      "buildername:mac_chromium_rel_ng",
+      "buildername:mac_chromium_rel",
       "--tag",
       "buildnumber:571",
       "--tag",
@@ -943,7 +924,7 @@
       "--tag",
       "name:memory_test on Intel GPU (with patch)",
       "--tag",
-      "os:Mac-10.8",
+      "os:Mac",
       "--tag",
       "project:chromium",
       "--tag",
@@ -957,7 +938,7 @@
       "commit-bot@chromium.org",
       "[dummy hash for telemetry_gpu_test]",
       "--",
-      "memory_test",
+      "memory_test on Intel GPU",
       "--show-stdout",
       "--browser=release",
       "-v",
@@ -968,12 +949,12 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "name": "[trigger] memory_test on Intel GPU (with patch)",
+    "name": "[trigger] memory_test on Intel GPU (with patch) on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"memory_test on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"memory_test on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"memory_test on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"memory_test on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -999,7 +980,7 @@
       "--shards",
       "1",
       "--task-name",
-      "screenshot_sync on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571",
+      "screenshot_sync on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1019,12 +1000,12 @@
       "0",
       "--dimension",
       "os",
-      "Mac-10.8",
+      "Mac",
       "--dimension",
       "pool",
       "Chrome",
       "--tag",
-      "buildername:mac_chromium_rel_ng",
+      "buildername:mac_chromium_rel",
       "--tag",
       "buildnumber:571",
       "--tag",
@@ -1034,7 +1015,7 @@
       "--tag",
       "name:screenshot_sync on Intel GPU (with patch)",
       "--tag",
-      "os:Mac-10.8",
+      "os:Mac",
       "--tag",
       "project:chromium",
       "--tag",
@@ -1048,7 +1029,7 @@
       "commit-bot@chromium.org",
       "[dummy hash for telemetry_gpu_test]",
       "--",
-      "screenshot_sync",
+      "screenshot_sync on Intel GPU",
       "--show-stdout",
       "--browser=release",
       "-v",
@@ -1059,12 +1040,12 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "name": "[trigger] screenshot_sync on Intel GPU (with patch)",
+    "name": "[trigger] screenshot_sync on Intel GPU (with patch) on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"screenshot_sync on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"screenshot_sync on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"screenshot_sync on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"screenshot_sync on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -1090,7 +1071,7 @@
       "--shards",
       "1",
       "--task-name",
-      "hardware_accelerated_feature on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571",
+      "hardware_accelerated_feature on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1110,12 +1091,12 @@
       "0",
       "--dimension",
       "os",
-      "Mac-10.8",
+      "Mac",
       "--dimension",
       "pool",
       "Chrome",
       "--tag",
-      "buildername:mac_chromium_rel_ng",
+      "buildername:mac_chromium_rel",
       "--tag",
       "buildnumber:571",
       "--tag",
@@ -1125,7 +1106,7 @@
       "--tag",
       "name:hardware_accelerated_feature on Intel GPU (with patch)",
       "--tag",
-      "os:Mac-10.8",
+      "os:Mac",
       "--tag",
       "project:chromium",
       "--tag",
@@ -1139,7 +1120,7 @@
       "commit-bot@chromium.org",
       "[dummy hash for telemetry_gpu_test]",
       "--",
-      "hardware_accelerated_feature",
+      "hardware_accelerated_feature on Intel GPU",
       "--show-stdout",
       "--browser=release",
       "-v",
@@ -1150,12 +1131,12 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "name": "[trigger] hardware_accelerated_feature on Intel GPU (with patch)",
+    "name": "[trigger] hardware_accelerated_feature on Intel GPU (with patch) on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"hardware_accelerated_feature on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"hardware_accelerated_feature on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"hardware_accelerated_feature on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"hardware_accelerated_feature on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -1181,7 +1162,7 @@
       "--shards",
       "1",
       "--task-name",
-      "gpu_process_launch on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571",
+      "gpu_process_launch on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1201,12 +1182,12 @@
       "0",
       "--dimension",
       "os",
-      "Mac-10.8",
+      "Mac",
       "--dimension",
       "pool",
       "Chrome",
       "--tag",
-      "buildername:mac_chromium_rel_ng",
+      "buildername:mac_chromium_rel",
       "--tag",
       "buildnumber:571",
       "--tag",
@@ -1216,7 +1197,7 @@
       "--tag",
       "name:gpu_process_launch on Intel GPU (with patch)",
       "--tag",
-      "os:Mac-10.8",
+      "os:Mac",
       "--tag",
       "project:chromium",
       "--tag",
@@ -1241,12 +1222,12 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "name": "[trigger] gpu_process_launch on Intel GPU (with patch)",
+    "name": "[trigger] gpu_process_launch on Intel GPU (with patch) on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"gpu_process_launch on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"gpu_process_launch on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gpu_process_launch on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gpu_process_launch on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -1272,7 +1253,7 @@
       "--shards",
       "1",
       "--task-name",
-      "gpu_rasterization on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571",
+      "gpu_rasterization on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1292,12 +1273,12 @@
       "0",
       "--dimension",
       "os",
-      "Mac-10.8",
+      "Mac",
       "--dimension",
       "pool",
       "Chrome",
       "--tag",
-      "buildername:mac_chromium_rel_ng",
+      "buildername:mac_chromium_rel",
       "--tag",
       "buildnumber:571",
       "--tag",
@@ -1307,7 +1288,7 @@
       "--tag",
       "name:gpu_rasterization on Intel GPU (with patch)",
       "--tag",
-      "os:Mac-10.8",
+      "os:Mac",
       "--tag",
       "project:chromium",
       "--tag",
@@ -1321,7 +1302,7 @@
       "commit-bot@chromium.org",
       "[dummy hash for telemetry_gpu_test]",
       "--",
-      "gpu_rasterization",
+      "gpu_rasterization on Intel GPU",
       "--show-stdout",
       "--browser=release",
       "-v",
@@ -1329,19 +1310,19 @@
       "--build-revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--test-machine-name",
-      "mac_chromium_rel_ng",
+      "mac_chromium_rel",
       "--extra-browser-args=--enable-logging=stderr",
       "--output-format",
       "json",
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "name": "[trigger] gpu_rasterization on Intel GPU (with patch)",
+    "name": "[trigger] gpu_rasterization on Intel GPU (with patch) on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"gpu_rasterization on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"gpu_rasterization on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gpu_rasterization on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gpu_rasterization on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -1367,7 +1348,7 @@
       "--shards",
       "1",
       "--task-name",
-      "tab_capture_end2end_tests on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571",
+      "tab_capture_end2end_tests on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1387,12 +1368,12 @@
       "0",
       "--dimension",
       "os",
-      "Mac-10.8",
+      "Mac",
       "--dimension",
       "pool",
       "Chrome",
       "--tag",
-      "buildername:mac_chromium_rel_ng",
+      "buildername:mac_chromium_rel",
       "--tag",
       "buildnumber:571",
       "--tag",
@@ -1402,7 +1383,7 @@
       "--tag",
       "name:tab_capture_end2end_tests on Intel GPU (with patch)",
       "--tag",
-      "os:Mac-10.8",
+      "os:Mac",
       "--tag",
       "project:chromium",
       "--tag",
@@ -1418,12 +1399,12 @@
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] tab_capture_end2end_tests on Intel GPU (with patch)",
+    "name": "[trigger] tab_capture_end2end_tests on Intel GPU (with patch) on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"tab_capture_end2end_tests on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"tab_capture_end2end_tests on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"tab_capture_end2end_tests on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"tab_capture_end2end_tests on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -1432,6 +1413,147 @@
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/testing/scripts/telemetry_unittests.py",
+      "--build-config-fs",
+      "Release",
+      "--paths",
+      "{\"build\": \"[BUILD]\"}",
+      "--properties",
+      "{\"buildername\": \"mac_chromium_rel\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}",
+      "run",
+      "--output",
+      "/path/to/tmp/json"
+    ],
+    "name": "telemetry_unittests (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"failures\": [], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"valid\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/testing/scripts/telemetry_perf_unittests.py",
+      "--build-config-fs",
+      "Release",
+      "--paths",
+      "{\"build\": \"[BUILD]\"}",
+      "--properties",
+      "{\"buildername\": \"mac_chromium_rel\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}",
+      "run",
+      "--output",
+      "/path/to/tmp/json"
+    ],
+    "name": "telemetry_perf_unittests (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"failures\": [], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"valid\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"build_config\": \"Release\", \"buildername\": \"mac_chromium_rel\", \"buildnumber\": 571, \"enable_gpu_tests\": true, \"issue\": 12853011, \"mastername\": \"tryserver.chromium.mac\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"chromium_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": null, \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"content_unittests\": \"[dummy hash for content_unittests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"gpu_unittests\": \"[dummy hash for gpu_unittests]\", \"media_unittests\": \"[dummy hash for media_unittests]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"build_config\": \"Release\", \"buildername\": \"mac_chromium_rel\", \"buildnumber\": 571, \"enable_gpu_tests\": true, \"issue\": 12853011, \"mastername\": \"tryserver.chromium.mac\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"chromium_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": null, \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"content_unittests\": \"[dummy hash for content_unittests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"gpu_unittests\": \"[dummy hash for gpu_unittests]\", \"media_unittests\": \"[dummy hash for media_unittests]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--annotate=gtest",
+      "--test-type=base_unittests",
+      "--test-launcher-summary-output",
+      "/path/to/tmp/json",
+      "--builder-name=mac_chromium_rel",
+      "--slave-name=TestSlavename",
+      "--build-number=571",
+      "base_unittests"
+    ],
+    "name": "base_unittests (with patch)"
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"build_config\": \"Release\", \"buildername\": \"mac_chromium_rel\", \"buildnumber\": 571, \"enable_gpu_tests\": true, \"issue\": 12853011, \"mastername\": \"tryserver.chromium.mac\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"chromium_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": null, \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"content_unittests\": \"[dummy hash for content_unittests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"gpu_unittests\": \"[dummy hash for gpu_unittests]\", \"media_unittests\": \"[dummy hash for media_unittests]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"build_config\": \"Release\", \"buildername\": \"mac_chromium_rel\", \"buildnumber\": 571, \"enable_gpu_tests\": true, \"issue\": 12853011, \"mastername\": \"tryserver.chromium.mac\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"chromium_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": null, \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"content_unittests\": \"[dummy hash for content_unittests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"gpu_unittests\": \"[dummy hash for gpu_unittests]\", \"media_unittests\": \"[dummy hash for media_unittests]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--annotate=gtest",
+      "--test-type=mojo_common_unittests",
+      "--test-launcher-summary-output",
+      "/path/to/tmp/json",
+      "--builder-name=mac_chromium_rel",
+      "--slave-name=TestSlavename",
+      "--build-number=571",
+      "mojo_common_unittests"
+    ],
+    "name": "mojo_common_unittests (with patch)"
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"build_config\": \"Release\", \"buildername\": \"mac_chromium_rel\", \"buildnumber\": 571, \"enable_gpu_tests\": true, \"issue\": 12853011, \"mastername\": \"tryserver.chromium.mac\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"chromium_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": null, \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"content_unittests\": \"[dummy hash for content_unittests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"gpu_unittests\": \"[dummy hash for gpu_unittests]\", \"media_unittests\": \"[dummy hash for media_unittests]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"build_config\": \"Release\", \"buildername\": \"mac_chromium_rel\", \"buildnumber\": 571, \"enable_gpu_tests\": true, \"issue\": 12853011, \"mastername\": \"tryserver.chromium.mac\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"chromium_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": null, \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"content_unittests\": \"[dummy hash for content_unittests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"gpu_unittests\": \"[dummy hash for gpu_unittests]\", \"media_unittests\": \"[dummy hash for media_unittests]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--annotate=gtest",
+      "--test-type=browser_tests",
+      "--test-launcher-summary-output",
+      "/path/to/tmp/json",
+      "--builder-name=mac_chromium_rel",
+      "--slave-name=TestSlavename",
+      "--build-number=571",
+      "browser_tests"
+    ],
+    "name": "browser_tests (with patch)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/testing/scripts/nacl_integration.py",
+      "--build-config-fs",
+      "Release",
+      "--paths",
+      "{\"build\": \"[BUILD]\"}",
+      "--properties",
+      "{\"buildername\": \"mac_chromium_rel\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}",
+      "run",
+      "--output",
+      "/path/to/tmp/json"
+    ],
+    "name": "nacl_integration (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"failures\": [], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"valid\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
@@ -1454,9 +1576,9 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "content_gl_tests on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571"
+      "content_gl_tests on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571"
     ],
-    "name": "content_gl_tests on Intel GPU (with patch)"
+    "name": "content_gl_tests on Intel GPU (with patch) on Mac"
   },
   {
     "allow_subannotations": true,
@@ -1478,9 +1600,9 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "gl_tests on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571"
+      "gl_tests on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571"
     ],
-    "name": "gl_tests on Intel GPU (with patch)"
+    "name": "gl_tests on Intel GPU (with patch) on Mac"
   },
   {
     "allow_subannotations": true,
@@ -1502,9 +1624,9 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "angle_unittests on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571"
+      "angle_unittests on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571"
     ],
-    "name": "angle_unittests on Intel GPU (with patch)"
+    "name": "angle_unittests on Intel GPU (with patch) on Mac"
   },
   {
     "cmd": [
@@ -1518,11 +1640,11 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "maps_pixel_test on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571",
+      "maps_pixel_test on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571",
       "--task-output-dir",
       "/path/to/tmp/"
     ],
-    "name": "maps_pixel_test on Intel GPU (with patch)"
+    "name": "maps_pixel_test on Intel GPU (with patch) on Mac"
   },
   {
     "cmd": [
@@ -1536,11 +1658,11 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "pixel_test on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571",
+      "pixel_test on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571",
       "--task-output-dir",
       "/path/to/tmp/"
     ],
-    "name": "pixel_test on Intel GPU (with patch)",
+    "name": "pixel_test on Intel GPU (with patch) on Mac",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
     ]
@@ -1557,11 +1679,11 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "webgl_conformance on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571",
+      "webgl_conformance on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571",
       "--task-output-dir",
       "/path/to/tmp/"
     ],
-    "name": "webgl_conformance on Intel GPU (with patch)"
+    "name": "webgl_conformance on Intel GPU (with patch) on Mac"
   },
   {
     "cmd": [
@@ -1575,11 +1697,11 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "context_lost on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571",
+      "context_lost on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571",
       "--task-output-dir",
       "/path/to/tmp/"
     ],
-    "name": "context_lost on Intel GPU (with patch)"
+    "name": "context_lost on Intel GPU (with patch) on Mac"
   },
   {
     "cmd": [
@@ -1593,11 +1715,11 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "memory_test on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571",
+      "memory_test on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571",
       "--task-output-dir",
       "/path/to/tmp/"
     ],
-    "name": "memory_test on Intel GPU (with patch)"
+    "name": "memory_test on Intel GPU (with patch) on Mac"
   },
   {
     "cmd": [
@@ -1611,11 +1733,11 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "screenshot_sync on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571",
+      "screenshot_sync on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571",
       "--task-output-dir",
       "/path/to/tmp/"
     ],
-    "name": "screenshot_sync on Intel GPU (with patch)"
+    "name": "screenshot_sync on Intel GPU (with patch) on Mac"
   },
   {
     "cmd": [
@@ -1629,11 +1751,11 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "hardware_accelerated_feature on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571",
+      "hardware_accelerated_feature on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571",
       "--task-output-dir",
       "/path/to/tmp/"
     ],
-    "name": "hardware_accelerated_feature on Intel GPU (with patch)"
+    "name": "hardware_accelerated_feature on Intel GPU (with patch) on Mac"
   },
   {
     "cmd": [
@@ -1647,11 +1769,11 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "gpu_process_launch on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571",
+      "gpu_process_launch on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571",
       "--task-output-dir",
       "/path/to/tmp/"
     ],
-    "name": "gpu_process_launch on Intel GPU (with patch)"
+    "name": "gpu_process_launch on Intel GPU (with patch) on Mac"
   },
   {
     "cmd": [
@@ -1665,11 +1787,11 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "gpu_rasterization on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571",
+      "gpu_rasterization on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571",
       "--task-output-dir",
       "/path/to/tmp/"
     ],
-    "name": "gpu_rasterization on Intel GPU (with patch)"
+    "name": "gpu_rasterization on Intel GPU (with patch) on Mac"
   },
   {
     "allow_subannotations": true,
@@ -1691,9 +1813,9 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "tab_capture_end2end_tests on Intel GPU (with patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571"
+      "tab_capture_end2end_tests on Intel GPU (with patch)/Mac/[dummy has/mac_chromium_rel/571"
     ],
-    "name": "tab_capture_end2end_tests on Intel GPU (with patch)"
+    "name": "tab_capture_end2end_tests on Intel GPU (with patch) on Mac"
   },
   {
     "cmd": [
@@ -1703,7 +1825,7 @@
       "--master",
       "tryserver.chromium.mac",
       "--builder",
-      "mac_chromium_rel_ng",
+      "mac_chromium_rel",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -1755,9 +1877,20 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "archive_gpu_tests=1 clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1"
+      "GYP_DEFINES": "clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1"
     },
     "name": "gclient runhooks (without patch)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/isolate/resources/find_isolated_tests.py",
+      "--build-dir",
+      "[SLAVE_BUILD]/src/out/Release",
+      "--clean-isolated-files"
+    ],
+    "name": "clean isolated files (2)"
   },
   {
     "cmd": [
@@ -1788,7 +1921,31 @@
       "/path/to/tmp/",
       "[SLAVE_BUILD]/src/out/Release/*.isolated.gen.json"
     ],
-    "name": "find isolated targets"
+    "name": "find isolated targets (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/tools/swarming_client/isolate.py",
+      "batcharchive",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--isolate-server",
+      "https://isolateserver.appspot.com",
+      "--verbose",
+      "[SLAVE_BUILD]/src/out/Release/dummy_target_1.isolated.gen.json",
+      "[SLAVE_BUILD]/src/out/Release/dummy_target_2.isolated.gen.json"
+    ],
+    "name": "isolate tests (2)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"dummy_target_1\": \"[dummy hash for dummy_target_1]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"dummy_target_2\": \"[dummy hash for dummy_target_2]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"dummy_target_1\": \"[dummy hash for dummy_target_1]\", \"dummy_target_2\": \"[dummy hash for dummy_target_2]\"}@@@"
+    ]
   },
   {
     "cmd": [
@@ -1805,7 +1962,7 @@
       "--shards",
       "1",
       "--task-name",
-      "pixel_test on Intel GPU (without patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571",
+      "pixel_test on Intel GPU (without patch)/Mac/[dummy has/mac_chromium_rel/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1825,12 +1982,12 @@
       "0",
       "--dimension",
       "os",
-      "Mac-10.8",
+      "Mac",
       "--dimension",
       "pool",
       "Chrome",
       "--tag",
-      "buildername:mac_chromium_rel_ng",
+      "buildername:mac_chromium_rel",
       "--tag",
       "buildnumber:571",
       "--tag",
@@ -1840,7 +1997,7 @@
       "--tag",
       "name:pixel_test on Intel GPU (without patch)",
       "--tag",
-      "os:Mac-10.8",
+      "os:Mac",
       "--tag",
       "project:chromium",
       "--tag",
@@ -1867,7 +2024,7 @@
       "--os-type",
       "mac",
       "--test-machine-name",
-      "mac_chromium_rel_ng",
+      "mac_chromium_rel",
       "--extra-browser-args=--enable-logging=stderr",
       "--page-filter=Test\\.Test1",
       "--output-format",
@@ -1875,12 +2032,12 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "name": "[trigger] pixel_test on Intel GPU (without patch)",
+    "name": "[trigger] pixel_test on Intel GPU (without patch) on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"pixel_test on Intel GPU (without patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"pixel_test on Intel GPU (without patch)/Mac/[dummy has/mac_chromium_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"pixel_test on Intel GPU (without patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"pixel_test on Intel GPU (without patch)/Mac/[dummy has/mac_chromium_rel/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -1903,11 +2060,11 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "pixel_test on Intel GPU (without patch)/Mac-10.8/[dummy has/mac_chromium_rel_ng/571",
+      "pixel_test on Intel GPU (without patch)/Mac/[dummy has/mac_chromium_rel/571",
       "--task-output-dir",
       "/path/to/tmp/"
     ],
-    "name": "pixel_test on Intel GPU (without patch)",
+    "name": "pixel_test on Intel GPU (without patch) on Mac",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
     ]

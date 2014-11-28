@@ -275,28 +275,6 @@ def GenSteps(api):
   bot_update_step = api.bot_update.ensure_checkout(
       force=True, patch_root=bot_config.get('root_override'))
 
-  tests = []
-
-  # TODO(sergiyb): Add other win_blink_rel and linux_blink_rel when we are
-  # confident that mac_blink_rel is working as intended.
-  if (api.properties['mastername'] == 'tryserver.blink' and
-      api.properties['buildername'] == 'mac_blink_rel'):
-    # TODO(sergiyb): This option should be removed/refactored, because it was
-    # originally created to prevent buidling GPU tests on Chromium waterfalls.
-    api.chromium.c.gyp_env.GYP_DEFINES['archive_gpu_tests'] = 1
-    api.chromium.apply_config('gpu_tests')
-    tests.extend(api.gpu.create_tests(
-        bot_update_step.presentation.properties['got_revision'],
-        bot_update_step.presentation.properties['got_webkit_revision'],
-        enable_swarming=True,
-        # TODO(sergiyb): This config should be read from an external JSON file
-        # in a custom step, which can then be mocked in the GenTests.
-        swarming_dimension_sets=[{
-          'gpu': '8086:0116',
-          'hidpi': '0',
-          'os': 'Mac-10.8',
-        }]))
-
   if bot_config['compile_only']:
     api.chromium.runhooks()
     api.chromium.compile()
@@ -372,7 +350,26 @@ def GenSteps(api):
     api.chromium.compile()
     api.isolate.isolate_tests(api.chromium.output_dir)
 
-  tests.append(api.chromium.steps.BlinkTest(api))
+  tests = [api.chromium.steps.BlinkTest(api)]
+
+  # TODO(sergiyb): Flag enable_gpu_tests is used to enable GPU tests. This
+  # is however a temporary measure to enable them in GenTests, but not in
+  # production. Once respective slaves are moved to swarming, this flag should
+  # be removed.
+  if (api.properties['mastername'] == 'tryserver.blink' and
+      api.properties['buildername'] == 'mac_blink_rel' and
+      api.properties.get('enable_gpu_tests', False)):
+    tests.extend(api.gpu.create_tests(
+        bot_update_step.presentation.properties['got_revision'],
+        bot_update_step.presentation.properties['got_webkit_revision'],
+        enable_swarming=True,
+        # TODO(sergiyb): This config should be read from an external JSON file
+        # in a custom step, which can then be mocked in the GenTests.
+        swarming_dimension_sets=[{
+          'os': 'Mac',
+          'hidpi': '0',
+          'gpu': '8086:0116'
+        }]))
 
   api.test_utils.determine_new_failures(api, tests, deapply_patch_fn)
 
@@ -494,13 +491,17 @@ def GenTests(api):
 
   yield (
     api.test('gpu_tests') +
-    properties(mastername='tryserver.blink', buildername='mac_blink_rel') +
+    # TODO(sergiyb): Flag enable_gpu_tests is used to enable GPU tests. This
+    # is however a temporary measure to enable them in GenTests, but not in
+    # production. Once respective slaves are moved to swarming, this flag should
+    # be removed.
+    properties('tryserver.blink', 'mac_blink_rel', enable_gpu_tests=True) +
     api.platform.name('mac') +
-    api.override_step_data(with_patch, canned_test(passing=True)) +
+    api.step_data(with_patch, canned_test(passing=True)) +
     api.override_step_data(
-        'pixel_test on Intel GPU (with patch)',
+        'pixel_test on Intel GPU (with patch) on Mac',
         api.json.canned_telemetry_gpu_output(passing=False, swarming=True)) +
     api.override_step_data(
-        'pixel_test on Intel GPU (without patch)',
+        'pixel_test on Intel GPU (without patch) on Mac',
         api.json.canned_telemetry_gpu_output(passing=False, swarming=True))
   )

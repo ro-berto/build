@@ -523,13 +523,12 @@ class SwarmingApi(recipe_api.RecipeApi):
       try:
         results_raw = step_result.raw_io.output_dir['0/results.json']
 
-        # GPU test launcher may bail out early with return code 0 and empty
-        # results file if there were no tests to run, e.g. when all tests are
-        # disabled on current platform.
-        # TODO(sergiyb): We should instead rewrite run_gpu_test.py to always
-        # write valid results.json regardless of the return code.
-        if step_result.retcode == 0 and not results_raw:
-          step_result.telemetry_results = {'per_page_values': [], 'pages': []}
+        # GPU test launcher may bail out early with return code 0 if there were
+        # no tests to run, e.g. when all tests are disabled on current platform.
+        # TODO(sergiyb): We should rewrite run_gpu_test.py to always write
+        # results.json regardless of the retcode.
+        if step_result.retcode == 0 and not results_raw:  # pragma: no cover
+          step_result.telemetry_results = []
         else:
           step_result.telemetry_results = self.m.json.loads(results_raw)
       except (IOError, ValueError):  # pragma: no cover
