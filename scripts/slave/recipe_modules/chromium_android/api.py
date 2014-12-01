@@ -326,10 +326,12 @@ class AndroidApi(recipe_api.RecipeApi):
   def _run_sharded_tests(self,
                          config='sharded_perf_tests.json',
                          flaky_config=None,
+                         chartjson_output=False,
                          **kwargs):
     args = ['perf', '--release', '--verbose', '--steps', config]
     if flaky_config:
       args.extend(['--flaky-steps', flaky_config])
+    args.extend(['--collect-chartjson-data'] if chartjson_output else [])
 
     self.m.python(
         'Sharded Perf Tests',
@@ -340,7 +342,8 @@ class AndroidApi(recipe_api.RecipeApi):
         **kwargs)
 
   def run_sharded_perf_tests(self, config, flaky_config=None, perf_id=None,
-                             test_type_transform=lambda x: x, **kwargs):
+                             test_type_transform=lambda x: x,
+                             chartjson_file=False, **kwargs):
     """Run the perf tests from the given config file.
 
     config: the path of the config file containing perf tests.
@@ -351,7 +354,7 @@ class AndroidApi(recipe_api.RecipeApi):
     """
     # test_runner.py actually runs the tests and records the results
     self._run_sharded_tests(config=config, flaky_config=flaky_config,
-                                  **kwargs)
+                            chartjson_output=chartjson_file, **kwargs)
 
     # now obtain the list of tests that were executed.
     result = self.m.step(
@@ -380,7 +383,8 @@ class AndroidApi(recipe_api.RecipeApi):
           annotate=annotate,
           results_url='https://chromeperf.appspot.com',
           perf_id=perf_id,
-          env=self.m.chromium.get_env())
+          env=self.m.chromium.get_env(),
+          chartjson_file=chartjson_file)
       except self.m.step.StepFailure as f:
         failures.append(f)
 

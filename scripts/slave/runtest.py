@@ -1073,7 +1073,7 @@ def _MainMac(options, args, extra_env):
   if len(args) < 1:
     raise chromium_utils.MissingArgument('Usage: %s' % USAGE)
 
-  telemetry_info = _UpdateRunBenchmarkArgs(args)
+  telemetry_info = _UpdateRunBenchmarkArgs(args, options)
   test_exe = args[0]
   if options.run_python_script:
     build_dir = os.path.normpath(os.path.abspath(options.build_dir))
@@ -1288,7 +1288,7 @@ def _MainLinux(options, args, extra_env):
   elif options.special_xvfb:
     special_xvfb_dir = options.special_xvfb_dir
 
-  telemetry_info = _UpdateRunBenchmarkArgs(args)
+  telemetry_info = _UpdateRunBenchmarkArgs(args, options)
   test_exe = args[0]
   if options.run_python_script:
     test_exe_path = test_exe
@@ -1457,7 +1457,7 @@ def _MainWin(options, args, extra_env):
   if len(args) < 1:
     raise chromium_utils.MissingArgument('Usage: %s' % USAGE)
 
-  telemetry_info = _UpdateRunBenchmarkArgs(args)
+  telemetry_info = _UpdateRunBenchmarkArgs(args, options)
   test_exe = args[0]
   build_dir = os.path.abspath(options.build_dir)
   if options.run_python_script:
@@ -1622,7 +1622,7 @@ def _MainAndroid(options, args, extra_env):
   return result
 
 
-def _UpdateRunBenchmarkArgs(args):
+def _UpdateRunBenchmarkArgs(args, options):
   """Updates the arguments for telemetry run_benchmark commands.
 
   Ensures that --output=chartjson is set and adds a --output argument.
@@ -1638,20 +1638,25 @@ def _UpdateRunBenchmarkArgs(args):
   # Temporarily revert while investigating crbug.com/423034
   # pylint: disable=W0101
   return {}
-  if not args[0].endswith('run_benchmark'):
-    # Not a telemetry run
-    return None
 
-  is_ref = '--browser=reference' in args
+  if args[0].endswith('run_benchmark'):
+    is_ref = '--browser=reference' in args
 
-  if '--output-format=buildbot' in args:
-    args[args.index('--output-format=buildbot')] = '--output-format=chartjson'
+    if '--output-format=buildbot' in args:
+      args[args.index('--output-format=buildbot')] = '--output-format=chartjson'
+    output_dir = tempfile.mkdtemp()
+    args.extend(['--output-dir=%s' % output_dir])
+    temp_filename = os.path.join(output_dir, 'results-chart.json')
+    return {'filename': temp_filename, 'is_ref': is_ref}
+  elif (args[0].endswith('test_runner.py') and
+        'perf' in args and
+        '--print-step' in args and
+        options.chartjson_file):
+    (_, temp_json_filename) = tempfile.mkstemp()
+    args.extend(['--output-chartjson-data=%s' % temp_json_filename])
+    return {'filename': temp_json_filename, 'is_ref': False}
 
-  output_dir = tempfile.mkdtemp()
-  args.extend(['--output-dir=%s' % output_dir])
-  temp_filename = os.path.join(output_dir, 'results-chart.json')
-
-  return {'filename': temp_filename, 'is_ref': is_ref}
+  return None
 
 
 def main():

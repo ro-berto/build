@@ -135,15 +135,27 @@ def GenSteps(api):
   for key in perf_tests['steps'].keys():
     perf_tests['steps'][key]['cmd'] += ' --upload-results'
 
+  for _, test_data in perf_tests['steps'].iteritems():
+    test_data['cmd'] = _UpdateRunBenchmarkArgs(test_data['cmd'])
+
   try:
     api.chromium_android.run_sharded_perf_tests(
       config=api.json.input(data=perf_tests),
-      perf_id=builder['perf_id'])
+      perf_id=builder['perf_id'],
+      chartjson_file=False)
 
   finally:
     api.chromium_android.logcat_dump()
     api.chromium_android.stack_tool_steps()
     api.chromium_android.test_report()
+
+def _UpdateRunBenchmarkArgs(cmd):
+  # FIXME(simonhatch): Temporarily disable until we're ready to switch to
+  # chartjson.
+  # if ('run_benchmark' in cmd and '--output-format=buildbot' in cmd):
+  #   return cmd.replace('--output-format=buildbot',
+  #                      '--output-format=chartjson')
+  return cmd
 
 def _sanitize_nonalpha(text):
   return ''.join(c if c.isalnum() else '_' for c in text)
