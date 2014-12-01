@@ -361,6 +361,10 @@ def extract_masters():
   good_masters = []
   for master in config_bootstrap.Master.get_all_masters():
     host = getattr(master, 'master_host', '')
+    local_config_path = getattr(master, 'local_config_path', '')
+    build_dir = os.path.basename(os.path.abspath(os.path.join(local_config_path,
+                                                        os.pardir, os.pardir)))
+    is_internal = build_dir == 'build_internal'
     good_masters.append({
         'name': master.__name__,
         'host': format_host_name(host),
@@ -369,7 +373,8 @@ def extract_masters():
         'slave_port': getattr(master, 'slave_port', 0),
         'alt_port': getattr(master, 'master_port_alt', 0),
         'buildbot_url': getattr(master, 'buildbot_url', ''),
-        'dirname': os.path.basename(getattr(master, 'local_config_path', ''))
+        'dirname': os.path.basename(local_config_path),
+        'internal': is_internal
     })
   return good_masters
 
