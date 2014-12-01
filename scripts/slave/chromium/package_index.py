@@ -91,6 +91,7 @@ class IndexPack(object):
   # {
   #   'analysis_target': <name of the cc or c file>,
   #   'argument': <list of compilation parameters>,
+  #   'cxx_arguments': {},
   #   'required_input': <list of input file dictionaries>
   # }
   # The input file dictionary looks like this:
@@ -113,6 +114,7 @@ class IndexPack(object):
       # above.
       unit_dictionary = {}
       unit_dictionary['analysis_target'] = entry['file']
+      unit_dictionary['cxx_arguments'] = {}
 
       command_list = entry['command'].split()
       # The |command_list| starts with the compiler that was used for the

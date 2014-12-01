@@ -117,6 +117,7 @@ class PackageIndexTest(unittest.TestCase):
         compilation_unit_dictionary = compilation_unit_wrapper['content']
         self.assertEquals(compilation_unit_dictionary['analysis_target'],
                           self.test_cc_file.name)
+        self.assertEquals(compilation_unit_dictionary['cxx_arguments'], {})
 
         self.assertEquals(len(compilation_unit_dictionary['required_input']), 2)
         self._CheckRequiredInput(
