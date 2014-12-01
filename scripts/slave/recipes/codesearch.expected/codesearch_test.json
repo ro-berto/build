@@ -72,6 +72,100 @@
   },
   {
     "cmd": [
+      "ninja",
+      "-C",
+      "[SLAVE_BUILD]/src/out/Debug",
+      "all",
+      "-t",
+      "compdb",
+      "cc",
+      "cxx",
+      "objc",
+      "objcxx"
+    ],
+    "name": "generate compilation database",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "cp",
+      "some compilation data",
+      "[SLAVE_BUILD]/src/out/Debug/compile_commands.json"
+    ],
+    "name": "copy compilation database"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/compile.py",
+      "--target",
+      "Debug",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
+      "--build-tool",
+      "ninja",
+      "--compiler",
+      "goma-clang",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "--clobber",
+      "--"
+    ],
+    "name": "compile"
+  },
+  {
+    "cmd": [
+      "tools/clang/scripts/update.sh",
+      "--force-local-build",
+      "--without-android",
+      "--with-chrome-tools",
+      "translation_unit"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "compile translation_unit clang tool"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/tools/clang/scripts/run_tool.py",
+      "[SLAVE_BUILD]/src/third_party/llvm-build/Release+Asserts/bin/translation_unit",
+      "[SLAVE_BUILD]/src/out/Debug",
+      "--all"
+    ],
+    "name": "run translation_unit clang tool"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/chromium/package_index.py",
+      "--path-to-compdb",
+      "[SLAVE_BUILD]/src/out/Debug/compile_commands.json",
+      "--path-to-archive-output",
+      "[SLAVE_BUILD]/src/out/Debug/index_pack.tar.gz"
+    ],
+    "name": "create index pack"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
+      "cp",
+      "[SLAVE_BUILD]/src/out/Debug/index_pack.tar.gz",
+      "gs://chrome-codesearch/index_pack.tar.gz"
+    ],
+    "name": "gsutil upload index pack",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/index_pack.tar.gz@@@"
+    ]
+  },
+  {
+    "cmd": [
       "[BUILD]/scripts/slave/archive_source_codesearch.py",
       "src",
       "src-internal",
