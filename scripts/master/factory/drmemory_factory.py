@@ -8,6 +8,7 @@ import re
 from buildbot.process import factory
 from buildbot.process.properties import WithProperties
 from buildbot.steps.source import SVN
+from buildbot.steps.source import Git
 from buildbot.steps.shell import Compile
 from buildbot.steps.shell import Configure
 from buildbot.steps.shell import ShellCommand
@@ -20,9 +21,13 @@ from buildbot.status.builder import SUCCESS, WARNINGS, FAILURE
 
 LATEST_WIN_BUILD = 'public_html/builds/drmemory-windows-latest-sfx.exe'
 
-dr_svnurl = 'http://dynamorio.googlecode.com/svn/trunk'
-drm_svnurl = 'http://drmemory.googlecode.com/svn/trunk'
-bot_tools_svnurl = 'http://drmemory.googlecode.com/svn/buildbot/bot_tools'
+# We moved DynamoRIO and Dr.Memory code from google code to GITHUB.
+# GITHUB supports svn checkout, so we just need update the dr_svnurl.
+# We have to use git instead of svn for Dr.Memory because it uses
+# external repositories.
+dr_svnurl = 'https://github.com/DynamoRIO/dynamorio/trunk'
+drm_giturl = 'https://github.com/DynamoRIO/drmemory.git'
+bot_tools_svnurl = 'https://github.com/DynamoRIO/buildbot/trunk/bot_tools'
 
 # TODO(rnk): Don't make assumptions about absolute path layout.  This won't work
 # on bare metal bots.  We can't use a relative path because we often configure
@@ -143,8 +148,9 @@ class DrCommands(object):
 
   def AddDrMemorySource(self):
     """Checks out or updates drmemory's sources."""
-    self.AddStep(SVN,
-                 svnurl=drm_svnurl,
+    self.AddStep(Git,
+                 repourl=drm_giturl,
+                 submodules=True,
                  workdir='drmemory',
                  mode='update',
                  name='Checkout Dr. Memory')
@@ -281,12 +287,7 @@ class DrCommands(object):
   def DrMemorySuite(self):
     """Build and test all configurations in the drmemory pre-commit suite."""
     self.AddDrMemorySource()
-    self.AddStep(SetProperty,
-                 command=['svnversion', '../drmemory/dynamorio'],
-                 property='dr_revision',
-                 name='Get DR revision',
-                 descriptionDone='Get DR revision',
-                 description='DR revision')
+    # There is no git equivalent of svnversion, so we do not set dr_revision.
     self.AddTools()
     cmd = ['ctest', '--timeout', '60', '-VV', '-S',
            WithProperties('../drmemory/tests/runsuite.cmake,' +
