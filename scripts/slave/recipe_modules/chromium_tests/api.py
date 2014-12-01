@@ -19,6 +19,10 @@ RECIPE_CONFIGS = {
     'chromium_config': 'chromium',
     'gclient_config': 'chromium',
   },
+  'chromium_blink_merged': {
+    'chromium_config': 'chromium',
+    'gclient_config': 'blink_merged',
+  },
   'chromium_android': {
     'chromium_config': 'android',
     'gclient_config': 'chromium',

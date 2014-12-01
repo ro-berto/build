@@ -210,6 +210,11 @@ def blink(c):
   del c.solutions[0].custom_deps
   c.revisions['src/third_party/WebKit'] = 'HEAD'
 
+@config_ctx(includes=['chromium'])
+def blink_merged(c):
+  c.solutions[0].url = \
+      'https://chromium.googlesource.com/playground/chromium-blink-merge.git'
+
 @config_ctx()
 def android(c):
   c.target_os.add('android')

@@ -120,7 +120,7 @@ def GenSteps(api):
     api.chromium.compile()
 
   api.test_utils.determine_new_failures(
-      api, [api.chromium.steps.BlinkTest(api)], component_pinned_fn)
+      api, [api.chromium.steps.BlinkTest()], component_pinned_fn)
 
 
 def _sanitize_nonalpha(text):
@@ -152,10 +152,10 @@ def GenTests(api):
               bot_config.get(
                   'chromium_config_kwargs', {}).get('TARGET_BITS', 64)) +
           api.test(test_name + suffix) +
-          api.step_data(with_patch, canned_test(passing=pass_first))
+          api.override_step_data(with_patch, canned_test(passing=pass_first))
         )
         if not pass_first:
-          test += api.step_data(
+          test += api.override_step_data(
               without_patch, canned_test(passing=False, minimal=True))
         tests.append(test)
 

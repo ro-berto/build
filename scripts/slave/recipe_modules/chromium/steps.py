@@ -956,15 +956,15 @@ class BlinkTest(Test):
 
   name = 'webkit_tests'
 
-  def __init__(self, api):
-    super(BlinkTest, self).__init__()
-    self.results_dir = api.path['slave_build'].join('layout-test-results')
-    self.layout_test_wrapper = api.path['build'].join(
-        'scripts', 'slave', 'chromium', 'layout_test_wrapper.py')
+  @staticmethod
+  def compile_targets(api):
+    return []
 
   def run(self, api, suffix):
+    results_dir = api.path['slave_build'].join('layout-test-results')
+
     args = ['--target', api.chromium.c.BUILD_CONFIG,
-            '-o', self.results_dir,
+            '-o', results_dir,
             '--build-dir', api.chromium.c.build_dir,
             '--json-test-results', api.json.test_results(add_json_log=False)]
     if suffix == 'without patch':
@@ -979,8 +979,12 @@ class BlinkTest(Test):
                                              'OilpanExpectations')])
 
     try:
-      step_result = api.chromium.runtest(self.layout_test_wrapper,
-                                         args, name=self._step_name(suffix))
+      step_result = api.chromium.runtest(
+          api.path['build'].join('scripts', 'slave', 'chromium',
+                                 'layout_test_wrapper.py'),
+          args, name=self._step_name(suffix),
+          step_test_data=lambda: api.json.test_api.canned_test_output(
+              passing=True, minimal=True))
     except api.step.StepFailure as f:
       step_result = f.result
 
@@ -1012,7 +1016,7 @@ class BlinkTest(Test):
         'archive_webkit_tests_results',
         archive_layout_test_results,
         [
-          '--results-dir', self.results_dir,
+          '--results-dir', results_dir,
           '--build-dir', api.chromium.c.build_dir,
           '--build-number', buildnumber,
           '--builder-name', buildername,

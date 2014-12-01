@@ -350,7 +350,7 @@ def GenSteps(api):
     api.chromium.compile()
     api.isolate.isolate_tests(api.chromium.output_dir)
 
-  tests = [api.chromium.steps.BlinkTest(api)]
+  tests = [api.chromium.steps.BlinkTest()]
 
   # TODO(sergiyb): Flag enable_gpu_tests is used to enable GPU tests. This
   # is however a temporary measure to enable them in GenTests, but not in
@@ -401,10 +401,10 @@ def GenTests(api):
         for pass_first in (True, False):
           test = (
             api.test(test_name + ('_pass' if pass_first else '_fail')) +
-            api.step_data(with_patch, canned_test(passing=pass_first))
+            api.override_step_data(with_patch, canned_test(passing=pass_first))
           )
           if not pass_first:
-            test += api.step_data(
+            test += api.override_step_data(
                 without_patch, canned_test(passing=False, minimal=True))
           tests.append(test)
 
@@ -486,7 +486,7 @@ def GenTests(api):
     api.test('non_cq_tryjob') +
     properties('tryserver.blink', 'win_blink_rel',
                requester='someone@chromium.org') +
-    api.step_data(with_patch, canned_test(passing=True))
+    api.override_step_data(with_patch, canned_test(passing=True))
   )
 
   yield (
@@ -497,7 +497,7 @@ def GenTests(api):
     # be removed.
     properties('tryserver.blink', 'mac_blink_rel', enable_gpu_tests=True) +
     api.platform.name('mac') +
-    api.step_data(with_patch, canned_test(passing=True)) +
+    api.override_step_data(with_patch, canned_test(passing=True)) +
     api.override_step_data(
         'pixel_test on Intel GPU (with patch) on Mac',
         api.json.canned_telemetry_gpu_output(passing=False, swarming=True)) +

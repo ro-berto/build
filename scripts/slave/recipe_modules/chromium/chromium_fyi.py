@@ -455,5 +455,31 @@ SPEC = {
         'platform': 'win',
       },
     },
+    'ChromiumPractice': {
+      'recipe_config': 'chromium_blink_merged',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+    'ChromiumPracticeTester': {
+      'recipe_config': 'chromium_blink_merged',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'tests': [
+        steps.BlinkTest(),
+      ],
+      'bot_type': 'tester',
+      'parent_buildername': 'ChromiumPractice',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
   },
 }
