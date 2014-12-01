@@ -216,7 +216,7 @@ def GenSteps(api):
     # dynamically set to either:
     # (1) 'revision' from the waterfall, or
     # (2) 'HEAD' for forced builds with unspecified 'revision'.
-    component_rev = api.properties.get('revision', 'HEAD')
+    component_rev = api.properties.get('revision') or 'HEAD'
     dep = bot_config.get('set_component_rev')
     api.gclient.c.revisions[dep['name']] = dep['rev_str'] % component_rev
 

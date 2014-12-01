@@ -86,7 +86,7 @@ def GenSteps(api):
     api.chromium.apply_config(c)
 
   # Sync component to current component revision.
-  component_revision = api.properties.get('revision', 'HEAD')
+  component_revision = api.properties.get('revision') or 'HEAD'
   api.gclient.c.revisions[bot_config['component']['path']] = (
       bot_config['component']['revision'] % component_revision)
 

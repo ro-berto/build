@@ -172,7 +172,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       # (3) 'HEAD' for forced builds with unspecified 'revision'.
       # TODO(machenbach): Use parent_got_cr_revision on testers with component
       # builds to match also the chromium revision from the builder.
-      component_rev = self.m.properties.get('revision', 'HEAD')
+      component_rev = self.m.properties.get('revision') or 'HEAD'
       if bot_type == 'tester':
         component_rev = self.m.properties.get(
             'parent_got_revision', component_rev)

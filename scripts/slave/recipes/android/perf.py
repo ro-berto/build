@@ -104,7 +104,7 @@ def GenSteps(api):
     # TODO(machenbach): Use parent_got_cr_revision on testers with component
     # builds to match also the chromium revision from the builder.
     component_rev = api.properties.get(
-        'parent_got_revision', api.properties.get('revision', 'HEAD'))
+        'parent_got_revision', api.properties.get('revision') or 'HEAD')
     dep = builder.get('set_component_rev')
     api.gclient.c.revisions[dep['name']] = dep['rev_str'] % component_rev
 
