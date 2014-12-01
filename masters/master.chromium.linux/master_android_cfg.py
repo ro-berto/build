@@ -56,14 +56,8 @@ F('f_android_dbg',
 
 B('Android Tests (dbg)', 'f_android_dbg_tests', 'android',
   'android_trigger_dbg', notify_on_missing=True)
-F('f_android_dbg_tests', linux_android().ChromiumAnnotationFactory(
-    target='Debug',
-    annotation_script='src/build/android/buildbot/bb_run_bot.py',
-    factory_properties={
-      'android_bot_id': 'main-tests-dbg',
-      'build_url': android_dbg_archive,
-      'generate_gtest_json': True,
-    }))
+F('f_android_dbg_tests',
+  m_annotator.BaseFactory('android/tester'))
 
 B('Android Builder', 'f_android_rel', 'android', 'android',
   notify_on_missing=True)
@@ -72,14 +66,8 @@ F('f_android_rel',
 
 B('Android Tests', 'f_android_rel_tests', 'android', 'android_trigger_rel',
   notify_on_missing=True)
-F('f_android_rel_tests', linux_android().ChromiumAnnotationFactory(
-    target='Release',
-    annotation_script='src/build/android/buildbot/bb_run_bot.py',
-    factory_properties={
-      'android_bot_id': 'main-tests-rel',
-      'build_url': android_rel_archive,
-      'generate_gtest_json': True,
-    }))
+F('f_android_rel_tests',
+  m_annotator.BaseFactory('android/tester'))
 
 B('Android Clang Builder (dbg)', 'f_android_clang_dbg', 'android', 'android',
   notify_on_missing=True)
