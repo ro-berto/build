@@ -150,6 +150,7 @@ class DrCommands(object):
     """Checks out or updates drmemory's sources."""
     self.AddStep(Git,
                  repourl=drm_giturl,
+                 submodules=True,
                  workdir='drmemory',
                  mode='update',
                  name='Checkout Dr. Memory')
