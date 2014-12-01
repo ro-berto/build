@@ -166,9 +166,6 @@ class IndexPack(object):
     self._GenerateUnitFiles()
 
   def CreateArchive(self, filename):
-    # Check if the file (still) exists.
-    if os.path.exists(filename):
-      raise Exception('ERROR: %s already exists, exiting' % filename)
     if chromium_utils.RunCommand(['tar', '-czf', filename, 'root']) != 0:
       raise Exception('ERROR: failed to create %s, exiting' % filename)
     # Remove the temporary index pack directory. If there was no exception so
