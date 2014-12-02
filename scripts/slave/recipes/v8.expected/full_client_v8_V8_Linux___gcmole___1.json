@@ -7,7 +7,7 @@
       "--master",
       "client.v8",
       "--builder",
-      "V8 Linux - gcmole",
+      "V8 Linux - gcmole - 1",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -89,22 +89,36 @@
       "--src-dir",
       "v8",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8 Linux - gcmole\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": \"V8 Linux - builder\", \"parent_got_revision\": \"54321\", \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8 Linux - gcmole - 1\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": \"V8 Linux - builder\", \"parent_got_revision\": \"54321\", \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8 Linux - gcmole\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": \"V8 Linux - builder\", \"parent_got_revision\": \"54321\", \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8 Linux - gcmole - 1\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": \"V8 Linux - builder\", \"parent_got_revision\": \"54321\", \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "name": "extract build"
   },
   {
     "cmd": [
       "lua",
-      "tools/gcmole/gcmole.lua"
+      "tools/gcmole/gcmole.lua",
+      "ia32"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "env": {
       "CLANG_BIN": "../../../../../gcmole/bin",
       "CLANG_PLUGINS": "../../../../../gcmole"
     },
-    "name": "GCMole"
+    "name": "GCMole ia32"
+  },
+  {
+    "cmd": [
+      "lua",
+      "tools/gcmole/gcmole.lua",
+      "x64"
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "env": {
+      "CLANG_BIN": "../../../../../gcmole/bin",
+      "CLANG_PLUGINS": "../../../../../gcmole"
+    },
+    "name": "GCMole x64"
   }
 ]

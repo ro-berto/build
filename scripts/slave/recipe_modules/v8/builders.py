@@ -227,7 +227,7 @@ BUILDERS = {
         'tests': ['unittests', 'v8testing', 'test262', 'mozilla'],
         'testing': {'platform': 'linux'},
       },
-      'V8 Linux - gcmole': {
+      'V8 Linux - gcmole - 1': {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -235,7 +235,18 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - builder',
         'build_gs_archive': 'linux_rel_archive',
-        'tests': ['gcmole'],
+        'tests': ['gcmole1'],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - gcmole - 2': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux - builder',
+        'build_gs_archive': 'linux_rel_archive',
+        'tests': ['gcmole2'],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - interpreted regexp': {

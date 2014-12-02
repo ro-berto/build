@@ -130,10 +130,20 @@ class V8DeoptFuzzer(object):
     pass
 
 
-class V8GCMole(object):
+class V8GCMole1(object):
   @staticmethod
   def run(api, **kwargs):
-    return api.gc_mole()
+    return api.gc_mole('ia32', 'x64')
+
+  @staticmethod
+  def gclient_apply_config(_):
+    pass
+
+
+class V8GCMole2(object):
+  @staticmethod
+  def run(api, **kwargs):
+    return api.gc_mole('arm', 'arm64')
 
   @staticmethod
   def gclient_apply_config(_):
@@ -153,7 +163,8 @@ class V8SimpleLeakCheck(object):
 V8_NON_STANDARD_TESTS = {
   'deopt': V8DeoptFuzzer,
   'fuzz': V8Fuzzer,
-  'gcmole': V8GCMole,
+  'gcmole1': V8GCMole1,
+  'gcmole2': V8GCMole2,
   'presubmit': V8Presubmit,
   'simpleleak': V8SimpleLeakCheck,
   'v8initializers': V8CheckInitializers,
@@ -415,7 +426,7 @@ class V8Api(recipe_api.RecipeApi):
       cwd=self.m.path['checkout'],
     )
 
-  def gc_mole(self):
+  def gc_mole(self, *archs):
     # TODO(machenbach): Make gcmole work with absolute paths. Currently, a
     # particular clang version is installed on one slave in '/b'.
     env = {
@@ -426,12 +437,13 @@ class V8Api(recipe_api.RecipeApi):
         self.m.path.join('..', '..', '..', '..', '..', 'gcmole')
       ),
     }
-    self.m.step(
-      'GCMole',
-      ['lua', self.m.path.join('tools', 'gcmole', 'gcmole.lua')],
-      cwd=self.m.path['checkout'],
-      env=env,
-    )
+    for arch in archs:
+      self.m.step(
+        'GCMole %s' % arch,
+        ['lua', self.m.path.join('tools', 'gcmole', 'gcmole.lua'), arch],
+        cwd=self.m.path['checkout'],
+        env=env,
+      )
 
   def simple_leak_check(self):
     # TODO(machenbach): Add task kill step for windows.
