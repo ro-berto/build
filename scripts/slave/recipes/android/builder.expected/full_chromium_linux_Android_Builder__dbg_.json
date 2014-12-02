@@ -154,18 +154,23 @@
     "name": "findbugs_tests"
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
       "[BUILD]/scripts/slave/zip_build.py",
+      "--target",
+      "Debug",
+      "--build-url",
+      "gs://chromium-android/android_main_dbg",
       "--src-dir",
       "[SLAVE_BUILD]/src",
       "--exclude-files",
       "lib.target,gen,android_webview,jingle_unittests",
-      "--target",
-      "Debug",
-      "--build-url",
-      "gs://chromium-android/android_main_dbg"
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Builder (dbg)\", \"buildnumber\": 257, \"got_revision\": \"267739\", \"issue\": \"8675309\", \"mastername\": \"chromium.linux\", \"patchset\": \"1\", \"recipe\": \"android/builder\", \"repository\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"267739\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Builder (dbg)\", \"buildnumber\": 257, \"got_revision\": \"267739\", \"issue\": \"8675309\", \"mastername\": \"chromium.linux\", \"patchset\": \"1\", \"recipe\": \"android/builder\", \"repository\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"267739\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "name": "zip_build"
   }

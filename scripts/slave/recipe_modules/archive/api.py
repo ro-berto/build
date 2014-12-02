@@ -15,7 +15,8 @@ class ArchiveApi(recipe_api.RecipeApi):
 
   def zip_and_upload_build(
       self, step_name, target, build_url=None, src_dir=None,
-      build_revision=None, cros_board=None, package_dsym_files=False, **kwargs):
+      build_revision=None, cros_board=None, package_dsym_files=False,
+      exclude_files=None, **kwargs):
     """Returns a step invoking zip_build.py to zip up a Chromium build.
        If build_url is specified, also uploads the build."""
     args = ['--target', target]
@@ -29,6 +30,8 @@ class ArchiveApi(recipe_api.RecipeApi):
       args.extend(['--cros-board', cros_board])
     if package_dsym_files:
       args.append('--package-dsym-files')
+    if exclude_files:
+      args.extend(['--exclude-files', exclude_files])
     args.extend(self.m.json.property_args())
     kwargs['allow_subannotations'] = True
     self.m.python(
