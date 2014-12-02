@@ -7,7 +7,7 @@
       "--master",
       "chromium.testing.master",
       "--builder",
-      "Mojo Android (dbg)",
+      "Mojo Android Builder Tests (dbg)",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -71,5 +71,23 @@
       "GOMA_DIR": "[BUILD]/goma"
     },
     "name": "mojob build"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/mojo/tools/mojob.py",
+      "test",
+      "--debug",
+      "--master-name",
+      "chromium.testing.master",
+      "--builder-name",
+      "Mojo Android Builder Tests (dbg)",
+      "--build-number",
+      "571",
+      "--test-results-server",
+      "test-results.appspot.com"
+    ],
+    "name": "mojob test"
   }
 ]

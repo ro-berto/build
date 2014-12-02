@@ -82,7 +82,8 @@ def GenSteps(api):
     return
   is_linux = 'Linux' in buildername
   is_win = 'Win' in buildername
-  if not is_linux and not is_win:
+  is_tester = 'Tests' in buildername
+  if not is_tester and not is_linux and not is_win:
     return
   _RunTests(api, build_type)
   is_try = api.tryserver.is_tryserver
@@ -90,12 +91,15 @@ def GenSteps(api):
     _UploadShell(api)
 
 def GenTests(api):
-  tests = [['mojo_linux', 'Mojo Linux'],
-           ['mojo_linux_dbg', 'Mojo Linux (dbg)'],
-           ['mojo_android_dbg', 'Mojo Android (dbg)'],
-           ['mojo_chromeos_dbg', 'Mojo ChromeOS (dbg)'],
-           ['mojo_win_dbg', 'Mojo Win (dbg)'],
-           ['mojo_linux_perf', 'Mojo Linux Perf']]
+  tests = [
+      ['mojo_linux', 'Mojo Linux'],
+      ['mojo_linux_dbg', 'Mojo Linux (dbg)'],
+      ['mojo_android_dbg', 'Mojo Android (dbg)'],
+      ['mojo_android_builder_tests_dbg', 'Mojo Android Builder Tests (dbg)'],
+      ['mojo_chromeos_dbg', 'Mojo ChromeOS (dbg)'],
+      ['mojo_win_dbg', 'Mojo Win (dbg)'],
+      ['mojo_linux_perf', 'Mojo Linux Perf']
+  ]
   for t in tests:
     yield(api.test(t[0]) + api.properties.generic(buildername=t[1]))
   yield(api.test('mojo_linux_try') +
