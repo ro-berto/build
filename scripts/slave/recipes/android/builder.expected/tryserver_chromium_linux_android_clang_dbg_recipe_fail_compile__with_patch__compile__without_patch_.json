@@ -115,7 +115,7 @@
       "scan"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "check licenses"
+    "name": "check licenses (with patch)"
   },
   {
     "cmd": [

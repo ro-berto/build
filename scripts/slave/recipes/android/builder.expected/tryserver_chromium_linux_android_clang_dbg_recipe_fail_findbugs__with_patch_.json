@@ -7,7 +7,7 @@
       "--master",
       "tryserver.chromium.linux",
       "--builder",
-      "android_clang_dbg_recipe_experimental",
+      "android_clang_dbg_recipe",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -137,7 +137,16 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "compile (with patch)",
+    "name": "compile (with patch)"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/build/android/findbugs_diff.py"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "findbugs (with patch)",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
       "@@@STEP_FAILURE@@@"
@@ -151,7 +160,7 @@
       "--master",
       "tryserver.chromium.linux",
       "--builder",
-      "android_clang_dbg_recipe_experimental",
+      "android_clang_dbg_recipe",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -218,8 +227,26 @@
     "name": "compile (without patch)"
   },
   {
+    "cmd": [
+      "[SLAVE_BUILD]/src/build/android/findbugs_diff.py"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "findbugs (without patch)"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/tools/android/findbugs_plugin/test/run_findbugs_plugin_tests.py"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "findbugs_tests (without patch)"
+  },
+  {
     "name": "$final_result",
-    "reason": "Step('compile (with patch)') failed with return_code 1",
+    "reason": "Step('findbugs (with patch)') failed with return_code 1",
     "status_code": 1
   }
 ]

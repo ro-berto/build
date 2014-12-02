@@ -7,7 +7,7 @@
       "--master",
       "tryserver.chromium.linux",
       "--builder",
-      "android_clang_dbg_recipe_experimental",
+      "android_clang_dbg_recipe",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -115,7 +115,38 @@
       "scan"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "check licenses (with patch)",
+    "name": "check licenses (with patch)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/compile.py",
+      "--target",
+      "Debug",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
+      "--build-tool",
+      "ninja",
+      "--compiler",
+      "goma-clang",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "--"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "compile (with patch)"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/build/android/findbugs_diff.py"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "findbugs (with patch)",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
       "@@@STEP_FAILURE@@@"
@@ -129,7 +160,7 @@
       "--master",
       "tryserver.chromium.linux",
       "--builder",
-      "android_clang_dbg_recipe_experimental",
+      "android_clang_dbg_recipe",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -177,11 +208,32 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/android_webview/tools/webview_licenses.py",
-      "scan"
+      "[BUILD]/scripts/slave/compile.py",
+      "--target",
+      "Debug",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
+      "--build-tool",
+      "ninja",
+      "--compiler",
+      "goma-clang",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "--"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "check licenses (without patch)",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "compile (without patch)"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/build/android/findbugs_diff.py"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "findbugs (without patch)",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
       "@@@STEP_FAILURE@@@",
@@ -190,7 +242,7 @@
   },
   {
     "name": "$final_result",
-    "reason": "Step('check licenses (without patch)') failed with return_code 1",
+    "reason": "Step('findbugs (without patch)') failed with return_code 1",
     "status_code": 1
   }
 ]

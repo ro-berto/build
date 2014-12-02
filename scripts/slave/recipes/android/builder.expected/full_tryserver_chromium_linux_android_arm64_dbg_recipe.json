@@ -111,7 +111,7 @@
       "scan"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "check licenses"
+    "name": "check licenses (with patch)"
   },
   {
     "cmd": [
@@ -142,7 +142,7 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "findbugs"
+    "name": "findbugs (with patch)"
   },
   {
     "cmd": [
@@ -151,6 +151,6 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "findbugs_tests"
+    "name": "findbugs_tests (with patch)"
   }
 ]
