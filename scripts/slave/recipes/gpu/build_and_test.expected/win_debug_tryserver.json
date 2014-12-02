@@ -83,7 +83,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "archive_gpu_tests=1 blink_logging_always_on=1 chromium_win_pch=0 component=shared_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' internal_gles2_conform_tests=1 target_arch=ia32 test_isolation_mode=prepare use_goma=1"
+      "GYP_DEFINES": "archive_gpu_tests=1 blink_logging_always_on=1 chromium_win_pch=0 component=shared_library dcheck_always_on=1 fastbuild=1 ffmpeg_branding=Chrome gomadir='[BUILD]\\goma' internal_gles2_conform_tests=1 proprietary_codecs=1 target_arch=ia32 test_isolation_mode=prepare use_goma=1"
     },
     "name": "gclient runhooks"
   },
@@ -141,7 +141,7 @@
       "/path/to/tmp/json"
     ],
     "env": {
-      "GYP_DEFINES": "archive_gpu_tests=1 blink_logging_always_on=1 chromium_win_pch=0 component=shared_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' internal_gles2_conform_tests=1 target_arch=ia32 test_isolation_mode=prepare use_goma=1"
+      "GYP_DEFINES": "archive_gpu_tests=1 blink_logging_always_on=1 chromium_win_pch=0 component=shared_library dcheck_always_on=1 fastbuild=1 ffmpeg_branding=Chrome gomadir='[BUILD]\\goma' internal_gles2_conform_tests=1 proprietary_codecs=1 target_arch=ia32 test_isolation_mode=prepare use_goma=1"
     },
     "name": "analyze",
     "~followup_annotations": [

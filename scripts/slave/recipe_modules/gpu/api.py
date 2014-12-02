@@ -85,9 +85,10 @@ class GpuApi(recipe_api.RecipeApi):
     if self.is_fyi_waterfall:
       self.m.gclient.c.solutions[0].custom_vars['angle_revision'] = (
           'refs/remotes/origin/master')
-      # The FYI waterfall also tests some proprietary codecs which
-      # can't be enabled on the tryservers or the main waterfall.
-      self.m.chromium.apply_config('chrome_with_codecs')
+
+    # The GPU bots must test the hardware-accelerated video decode
+    # paths in order to avoid breaking them in the product.
+    self.m.chromium.apply_config('chrome_with_codecs')
 
     self.m.step.auto_resolve_conflicts = True
 
