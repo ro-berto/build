@@ -41,6 +41,13 @@ class CronetApi(recipe_api.RecipeApi):
                                              droid.c.BUILD_CONFIG,
                                              'cronet')
     destdir = 'cronet-%s-%s' % (build_config, revision)
+    # Upload cronet version first to ensure that destdir is created.
+    self.m.gsutil.upload(
+        source=cronetdir.join('VERSION'),
+        bucket='chromium-cronet/android',
+        dest=destdir + '/VERSION',
+        name='upload_cronet_version',
+        link_name='Cronet version')
     self.m.gsutil.upload(
         source=cronetdir,
         bucket='chromium-cronet/android',

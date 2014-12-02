@@ -185,6 +185,22 @@
       "--",
       "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
       "cp",
+      "[SLAVE_BUILD]/src/out/Debug/cronet/VERSION",
+      "gs://chromium-cronet/android/cronet-Debug-4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00/VERSION"
+    ],
+    "name": "gsutil upload_cronet_version",
+    "~followup_annotations": [
+      "@@@STEP_LINK@Cronet version@https://storage.cloud.google.com/chromium-cronet/android/cronet-Debug-4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00/VERSION@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
+      "cp",
       "-R",
       "[SLAVE_BUILD]/src/out/Debug/cronet",
       "gs://chromium-cronet/android/cronet-Debug-4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00"
