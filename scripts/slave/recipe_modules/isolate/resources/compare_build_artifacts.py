@@ -44,6 +44,7 @@ WHITELIST = {
     'mock_nacl_gdb.exe',
     'net_unittests.exe',
     'net_unittests.isolated',
+    'np_test_netscape_plugin.dll',
     'npapi_test_plugin.dll',
     'pdf.dll',
     'peerconnection_server.exe',
