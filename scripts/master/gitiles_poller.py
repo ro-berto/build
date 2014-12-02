@@ -241,8 +241,12 @@ class GitilesPoller(PollingChangeSource):
     commit_tm = time_to_datetime(commit_json['committer']['time'])
     commit_files = []
     if 'tree_diff' in commit_json:
-      commit_files = [
-          x['new_path'] for x in commit_json['tree_diff'] if 'new_path' in x]
+      for diff_entry in commit_json['tree_diff']:
+        path = diff_entry.get('new_path')
+        if path == '/dev/null' and 'old_path' in diff_entry:
+          path = diff_entry['old_path']
+        if path:
+          commit_files.append(path)
     commit_msg = commit_json['message']
     repo_url = self.repo_url
     revision = commit_json['commit']
