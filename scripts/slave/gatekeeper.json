@@ -218,8 +218,7 @@
     "https://build.chromium.org/p/chromium.perf": [
       {
         "tree_notify": [
-          "stip@chromium.org",
-          "tonyg@chromium.org"
+          "stip@chromium.org"
         ],
 
         "sheriff_classes": ["sheriff_perf"],
