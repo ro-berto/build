@@ -21,13 +21,9 @@ from buildbot.status.builder import SUCCESS, WARNINGS, FAILURE
 
 LATEST_WIN_BUILD = 'public_html/builds/drmemory-windows-latest-sfx.exe'
 
-# We moved DynamoRIO and Dr.Memory code from google code to GITHUB.
-# GITHUB supports svn checkout, so we just need update the dr_svnurl.
-# We have to use git instead of svn for Dr.Memory because it uses
-# external repositories.
-dr_svnurl = 'https://github.com/DynamoRIO/dynamorio/trunk'
+dr_giturl = 'https://github.com/DynamoRIO/dynamorio.git'
 drm_giturl = 'https://github.com/DynamoRIO/drmemory.git'
-bot_tools_svnurl = 'https://github.com/DynamoRIO/buildbot/trunk/bot_tools'
+bot_tools_giturl = 'https://github.com/DynamoRIO/buildbot.git'
 
 # TODO(rnk): Don't make assumptions about absolute path layout.  This won't work
 # on bare metal bots.  We can't use a relative path because we often configure
@@ -140,8 +136,8 @@ class DrCommands(object):
 
   def AddDynamoRIOSource(self):
     """Checks out or updates DR's sources."""
-    self.AddStep(SVN,
-                 svnurl=dr_svnurl,
+    self.AddStep(Git,
+                 repourl=dr_giturl,
                  workdir='dynamorio',
                  mode='update',
                  name='Checkout DynamoRIO')
@@ -158,17 +154,21 @@ class DrCommands(object):
   def AddTools(self):
     """Add steps to update and unpack drmemory's custom tools."""
     if self.target_platform.startswith('win'):
-      # Using a SVN step breaks the console view because bb thinks we're at a
-      # different revision.  Therefore we run the checkout command manually.
+      # Using a GIT step may break the console view because bb thinks we're at
+      # a different revision.  Therefore we run the checkout command manually.
       self.AddStep(ShellCommand,
-                   command=['svn', 'checkout', '--force',
-                            bot_tools_svnurl, '.'],
-                   workdir='bot_tools',
+                   command=['rm', '-fr', '*'],
+                   workdir='buildbot',
+                   description='clear tools directory',
+                   name='clear tools directory')
+      self.AddStep(ShellCommand,
+                   command=['git', 'clone', bot_tools_giturl, '.'],
+                   workdir='buildbot',
                    description='update tools',
                    name='update tools')
       self.AddStep(ShellCommand,
                    command=['unpack.bat'],
-                   workdir='bot_tools',
+                   workdir='buildbot/bot_tools',
                    name='unpack tools',
                    description='unpack tools')
 
@@ -732,8 +732,8 @@ def CreateLinuxChromeFactory():
   cr_src = '../../linux-cr-builder/build/src'
   ret = factory.BuildFactory()
   ret.addStep(
-      SVN(
-          svnurl=dr_svnurl,
+      Git(
+          repourl=dr_giturl,
           workdir='dynamorio',
           mode='update',
           name='Checkout DynamoRIO'))
