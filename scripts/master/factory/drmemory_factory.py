@@ -157,18 +157,18 @@ class DrCommands(object):
       # Using a GIT step may break the console view because bb thinks we're at
       # a different revision.  Therefore we run the checkout command manually.
       self.AddStep(ShellCommand,
-                   command=['rm', '-fr', '*'],
-                   workdir='buildbot',
+                   command=['rd', '/q', '/s' 'buildbot'],
                    description='clear tools directory',
+                   workdir='tools',
                    name='clear tools directory')
       self.AddStep(ShellCommand,
-                   command=['git', 'clone', bot_tools_giturl, '.'],
-                   workdir='buildbot',
+                   command=['git', 'clone', bot_tools_giturl],
+                   workdir='tools',
                    description='update tools',
                    name='update tools')
       self.AddStep(ShellCommand,
                    command=['unpack.bat'],
-                   workdir='buildbot/bot_tools',
+                   workdir='tools/buildbot/bot_tools',
                    name='unpack tools',
                    description='unpack tools')
 
