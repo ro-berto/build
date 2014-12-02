@@ -129,6 +129,38 @@ F('f_webkit_linux_oilpan_rel_asan', linux().ChromiumFactory(
         'webkit_test_options': ['--enable-sanitizer'],
     }))
 
+B('WebKit Linux MSAN', 'f_webkit_linux_rel_msan', scheduler='global_scheduler',
+    auto_reboot=True)
+F('f_webkit_linux_rel_msan', linux().ChromiumFactory(
+    tests=['webkit'],
+    options=[
+        '--build-tool=ninja',
+        '--compiler=goma-clang',
+        '--',
+        'blink_tests'
+    ],
+    factory_properties={
+        'additional_expectations': [
+            ['third_party', 'WebKit', 'LayoutTests', 'MSANExpectations'],
+        ],
+        'archive_webkit_results': ActiveMaster.is_production_host,
+        'msan': True,
+        'blink_config': 'blink',
+        'gclient_env': {
+          'GYP_DEFINES': ('msan=1 '
+                          'msan_track_origins=2 '
+                          'use_instrumented_libraries=1 '
+                          'instrumented_libraries_jobs=20 '),
+          'GYP_GENERATORS': 'ninja',
+        },
+        'generate_gtest_json': True,
+        'test_results_server': 'test-results.appspot.com',
+        # Because JS code is run on a simulator, the slowdown in JS-heavy tests
+        # will be much higher than MSan's average of 3x.
+        'time_out_ms': '66000',
+        'webkit_test_options': ['--enable-sanitizer'],
+    }))
+
 B('WebKit Linux Leak', 'f_webkit_linux_leak_rel', scheduler='global_scheduler',
     category='oilpan')
 F('f_webkit_linux_leak_rel', linux().ChromiumFactory(
