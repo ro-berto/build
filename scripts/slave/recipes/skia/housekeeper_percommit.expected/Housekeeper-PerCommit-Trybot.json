@@ -90,15 +90,6 @@
   },
   {
     "cmd": [
-      "python",
-      "[BUILD]/scripts/slave/recipe_modules/skia/resources/generate_and_upload_doxygen.py",
-      "[DEPOT_TOOLS]/third_party/gsutil/gsutil"
-    ],
-    "cwd": "[SLAVE_BUILD]/skia",
-    "name": "generate and upload doxygen"
-  },
-  {
-    "cmd": [
       "git",
       "show",
       "HEAD",
@@ -120,7 +111,9 @@
       "--commit_ts",
       "1408633190",
       "--gsutil_path",
-      "[DEPOT_TOOLS]/third_party/gsutil/gsutil"
+      "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
+      "--issue_number",
+      "500"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "name": "generate and upload binary size data"

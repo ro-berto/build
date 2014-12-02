@@ -88,6 +88,10 @@ def gyp_defs_from_builder_dict(builder_dict):
   if skia_arch_width:
     gyp_defs['skia_arch_width'] = skia_arch_width
 
+  # housekeeper: build shared lib.
+  if builder_dict['role'] == builder_name_schema.BUILDER_ROLE_HOUSEKEEPER:
+    gyp_defs['skia_shared_lib'] = '1'
+
   # skia_gpu.
   if (builder_dict.get('gpu') == 'NoGPU' or
       builder_dict.get('model') == 'IntelRHB'):
@@ -167,8 +171,6 @@ def build_targets_from_builder_dict(builder_dict):
   elif (builder_dict['role'] == builder_name_schema.BUILDER_ROLE_TEST and
         builder_dict.get('extra_config') == 'TSAN'):
     return ['dm']
-  elif builder_dict['role'] == builder_name_schema.BUILDER_ROLE_HOUSEKEEPER:
-    return ['tools', 'gm', 'dm']
   else:
     return ['most']
 
@@ -181,8 +183,11 @@ def skia(c):
   """Base config for Skia."""
   c.builder_cfg = builder_name_schema.DictForBuilderName(c.BUILDER_NAME)
   c.build_targets = build_targets_from_builder_dict(c.builder_cfg)
-  c.configuration = c.builder_cfg.get('configuration', CONFIG_DEBUG)
   c.role = c.builder_cfg['role']
+  if c.role == builder_name_schema.BUILDER_ROLE_HOUSEKEEPER:
+    c.configuration = CONFIG_RELEASE
+  else:
+    c.configuration = c.builder_cfg.get('configuration', CONFIG_DEBUG)
   c.do_test_steps = c.role == builder_name_schema.BUILDER_ROLE_TEST
   c.do_perf_steps = (c.role == builder_name_schema.BUILDER_ROLE_PERF or
                      (c.role == builder_name_schema.BUILDER_ROLE_TEST and

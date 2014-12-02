@@ -45,9 +45,9 @@ def GenSteps(api):
 
   # TODO(borenet): Detect static initializers?
 
+  gsutil_path = api.path['depot_tools'].join('third_party', 'gsutil',
+                                             'gsutil')
   if not api.skia.c.is_trybot:
-    gsutil_path = api.path['depot_tools'].join('third_party', 'gsutil',
-                                               'gsutil')
     api.skia.run(
       api.step,
       'generate and upload doxygen',
@@ -56,6 +56,19 @@ def GenSteps(api):
       cwd=cwd,
       abort_on_failure=False)
 
+  cmd = ['python', api.skia.resource('run_binary_size_analysis.py'),
+         '--library', cwd.join('out', 'Release', 'lib', 'libskia.so'),
+         '--githash', api.skia.got_revision,
+         '--commit_ts', api.skia.m.git.get_timestamp(test_data='1408633190'),
+         '--gsutil_path', gsutil_path]
+  if api.skia.c.is_trybot:
+    cmd.extend(['--issue_number', str(api.skia.m.properties['issue'])])
+  api.skia.run(
+    api.step,
+    'generate and upload binary size data',
+    cmd=cmd,
+    cwd=cwd,
+    abort_on_failure=False)
 
 def GenTests(api):
   buildername = 'Housekeeper-PerCommit'
@@ -66,4 +79,13 @@ def GenTests(api):
     api.properties(buildername=buildername,
                    mastername=mastername,
                    slavename=slavename)
+  )
+
+  buildername = 'Housekeeper-PerCommit-Trybot'
+  yield (
+    api.test(buildername) +
+    api.properties(buildername=buildername,
+                   mastername=mastername,
+                   slavename=slavename,
+                   issue=500)
   )
