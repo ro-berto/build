@@ -157,7 +157,7 @@ class DrCommands(object):
       # Using a GIT step may break the console view because bb thinks we're at
       # a different revision.  Therefore we run the checkout command manually.
       self.AddStep(ShellCommand,
-                   command=['rd', '/q', '/s' 'buildbot'],
+                   command=['rd', '/q', '/s', 'buildbot'],
                    description='clear tools directory',
                    workdir='tools',
                    name='clear tools directory')
@@ -613,7 +613,7 @@ def ToolStep(step_class, os, **kwargs):
       env = dict(env)  # Copy
     else:
       env = {}
-    env['BOTTOOLS'] = WithProperties('%(workdir)s\\bot_tools')
+    env['BOTTOOLS'] = WithProperties('%(workdir)s\\tools\\buildbot\\bot_tools')
     kwargs['command'] = command
     kwargs['env'] = env
   return step_class(**kwargs)
