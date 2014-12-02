@@ -191,18 +191,17 @@ class TryJobGerritStatus(StatusReceiverMultiService):
         path = '/changes/%s/revisions/%s/review' % (change_id, revision)
         return self.agent.request('POST', path, body=review)
 
-  def _add_verified_label(self, change_id, revision, patchset_id):
+  @defer.inlineCallbacks
+  def _add_verified_label(self, change_id, revision, patchset_id, commit):
     message = 'All tryjobs have passed for patchset %s' % patchset_id
     path = '/changes/%s/revisions/%s/review' % (change_id, revision)
     body = {'message': message, 'labels': {'Verified': '+1'}}
-    d = self.agent.request('POST', path, body=body)
-    def _add_verified_label_callback(_):
-      # commit the change
+    yield self.agent.request('POST', path, body=body)
+    # commit the change
+    if commit:
       path = 'changes/%s/submit' % change_id
       body = {'wait_for_merge': True}
-      return self.agent.request('POST', path, body=body)
-    d.addCallback(_add_verified_label_callback)
-    return d
+      yield self.agent.request('POST', path, body=body)
 
   MESSAGE_REGEX_TRYJOB_RESULT = re.compile(
     'A try job has finished on builder (.+): SUCCESS', re.I | re.M)
@@ -219,15 +218,18 @@ class TryJobGerritStatus(StatusReceiverMultiService):
     revision = props.getProperty('revision')
     patchset_id = props.getProperty('event.patchSet.ref').rsplit('/', 1)[1]
     builders = [x for x in self.cq_builders if x != builder_name]
-    if len(builders) == 0:
-      self._add_verified_label(change_id, revision, patchset_id)
-      return
     o_params = '&'.join('o=%s' % x for x in (
-        'MESSAGES', 'ALL_REVISIONS', 'ALL_COMMITS', 'ALL_FILES'))
+        'MESSAGES', 'ALL_REVISIONS', 'ALL_COMMITS', 'ALL_FILES', 'LABELS'))
     path = '/changes/%s?%s' % (change_id, o_params)
     d = self.agent.request('GET', path)
     def _parse_messages(j):
-      if not j or 'messages' not in j:
+      if not j:
+        return
+      commit = 'approved' in j.get('labels', {}).get('Commit-Queue', {})
+      if len(builders) == 0:
+        self._add_verified_label(change_id, revision, patchset_id, commit)
+        return
+      if 'messages' not in j:
         return
       for m in reversed(j['messages']):
         if m['_revision_number'] == int(patchset_id):
@@ -237,7 +239,8 @@ class TryJobGerritStatus(StatusReceiverMultiService):
             if builder in builders:
               builders.remove(builder)
               if len(builders) == 0:
-                self._add_verified_label(change_id, revision, patchset_id)
+                self._add_verified_label(change_id, revision, patchset_id,
+                                         commit)
                 break
     d.addCallback(_parse_messages)
     return d
