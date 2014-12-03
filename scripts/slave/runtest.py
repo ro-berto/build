@@ -1635,10 +1635,6 @@ def _UpdateRunBenchmarkArgs(args, options):
     None if not a telemetry test, otherwise a
     dict containing the output filename and whether it is a reference build.
   """
-  # Temporarily revert while investigating crbug.com/423034
-  # pylint: disable=W0101
-  return {}
-
   if args[0].endswith('run_benchmark'):
     is_ref = '--browser=reference' in args
 

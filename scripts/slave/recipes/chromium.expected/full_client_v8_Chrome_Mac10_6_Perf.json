@@ -169,6 +169,8 @@
       "--perf-dashboard-id=blink_perf.all",
       "--perf-id=chromium-rel-mac6-v8",
       "--test-type=blink_perf.all",
+      "--chartjson-file",
+      "/path/to/tmp/json",
       "--builder-name=Chrome Mac10.6 Perf",
       "--slave-name=TestSlavename",
       "--build-number=571",
@@ -178,7 +180,11 @@
       "-v",
       "--b=2"
     ],
-    "name": "blink_perf.all.exact"
+    "name": "blink_perf.all.exact",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "allow_subannotations": true,
@@ -197,6 +203,8 @@
       "--perf-dashboard-id=blink_perf.all",
       "--perf-id=chromium-rel-mac6-v8",
       "--test-type=blink_perf.all",
+      "--chartjson-file",
+      "/path/to/tmp/json",
       "--builder-name=Chrome Mac10.6 Perf",
       "--slave-name=TestSlavename",
       "--build-number=571",
@@ -206,6 +214,10 @@
       "-v",
       "--b=2"
     ],
-    "name": "blink_perf.all.release"
+    "name": "blink_perf.all.release",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   }
 ]

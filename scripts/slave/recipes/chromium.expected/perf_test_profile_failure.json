@@ -188,6 +188,8 @@
       "--perf-dashboard-id=blink_perf.all",
       "--perf-id=linux-release",
       "--test-type=blink_perf.all",
+      "--chartjson-file",
+      "/path/to/tmp/json",
       "--builder-name=Linux Perf (1)",
       "--slave-name=TestSlavename",
       "--build-number=0",
@@ -197,7 +199,11 @@
       "-v",
       "--b=2"
     ],
-    "name": "blink_perf.all.exact"
+    "name": "blink_perf.all.exact",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "allow_subannotations": true,
@@ -217,6 +223,8 @@
       "--perf-dashboard-id=blink_perf.all",
       "--perf-id=linux-release",
       "--test-type=blink_perf.all",
+      "--chartjson-file",
+      "/path/to/tmp/json",
       "--builder-name=Linux Perf (1)",
       "--slave-name=TestSlavename",
       "--build-number=0",
@@ -229,6 +237,8 @@
     "name": "blink_perf.all.release",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
+      "@@@STEP_LOG_LINE@json.output@[]@@@",
+      "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },

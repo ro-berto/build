@@ -344,27 +344,7 @@ def GenTests(api):
                            buildnumber=0) +
     api.platform('linux', 64) +
     api.override_step_data(
-        'blink_perf.all.release', retcode=1)
-  )
-
-  yield (
-    api.test('test_chartjson_enabled') +
-    api.properties.generic(mastername='chromium.perf',
-                           buildername='Linux Perf (1)',
-                           parent_buildername='Linux Builder',
-                           buildnumber=0) +
-    api.platform('linux', 64) +
-    api.override_step_data(
-        'List Perf Tests',
-        api.json.output({
-          "steps": {
-            "blink_perf.all.exact": {
-              "cmd": "/usr/bin/python /path/to/run_benmark --a=1 -v --b=2",
-              "perf_dashboard_id": "blink_perf.all",
-              "device_affinity": 0,
-              "chartjson_file": True
-            }
-          },
-          "version": 2,
-        }))
+        'blink_perf.all.release',
+        api.json.output([]),
+        retcode=1)
   )

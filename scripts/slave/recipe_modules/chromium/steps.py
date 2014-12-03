@@ -422,7 +422,7 @@ class DynamicPerfTests(Test):
             perf_id=self.perf_id,
             test_type=test.get('perf_dashboard_id', test_name),
             xvfb=True,
-            chartjson_file=test.get('chartjson_file', False))
+            chartjson_file=True)
       except api.step.StepFailure as f:
         exception = f
     if exception:

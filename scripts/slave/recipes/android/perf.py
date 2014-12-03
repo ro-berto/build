@@ -142,7 +142,7 @@ def GenSteps(api):
     api.chromium_android.run_sharded_perf_tests(
       config=api.json.input(data=perf_tests),
       perf_id=builder['perf_id'],
-      chartjson_file=False)
+      chartjson_file=True)
 
   finally:
     api.chromium_android.logcat_dump()
@@ -150,12 +150,10 @@ def GenSteps(api):
     api.chromium_android.test_report()
 
 def _UpdateRunBenchmarkArgs(cmd):
-  # FIXME(simonhatch): Temporarily disable until we're ready to switch to
-  # chartjson.
-  # if ('run_benchmark' in cmd and '--output-format=buildbot' in cmd):
-  #   return cmd.replace('--output-format=buildbot',
-  #                      '--output-format=chartjson')
-  return cmd
+  # FIXME(simonhatch): Remove this once we switch telemetry to output
+  # chartjson by default.
+  return (cmd.replace('--output-format=buildbot', '--output-format=chartjson')
+      if 'run_benchmark' in cmd else cmd)
 
 def _sanitize_nonalpha(text):
   return ''.join(c if c.isalnum() else '_' for c in text)

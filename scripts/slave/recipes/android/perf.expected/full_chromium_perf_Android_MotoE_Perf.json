@@ -225,7 +225,8 @@
       "--release",
       "--verbose",
       "--steps",
-      "{\"steps\": {\"blink_perf.all.exact\": {\"cmd\": \"/usr/bin/python /path/to/run_benmark --a=1 -v --b=2 --upload-results\", \"device_affinity\": 0, \"perf_dashboard_id\": \"blink_perf.all\"}, \"blink_perf.all.release\": {\"cmd\": \"/usr/bin/python /path/to/run_benmark --a=1 -v --b=2 --upload-results\", \"device_affinity\": 0, \"perf_dashboard_id\": \"blink_perf.all\"}, \"dromaeo.cssqueryjquery\": {\"cmd\": \"/path/to/run_benmark --upload-results\", \"device_affinity\": 1}, \"dromaeo.cssqueryjquery.release\": {\"cmd\": \"/path/to/run_benmark --upload-results\", \"device_affinity\": 1, \"perf_dashboard_id\": \"dromaeo.cssqueryjquery\"}}, \"version\": 2}"
+      "{\"steps\": {\"blink_perf.all.exact\": {\"cmd\": \"/usr/bin/python /path/to/run_benmark --a=1 -v --b=2 --upload-results\", \"device_affinity\": 0, \"perf_dashboard_id\": \"blink_perf.all\"}, \"blink_perf.all.release\": {\"cmd\": \"/usr/bin/python /path/to/run_benmark --a=1 -v --b=2 --upload-results\", \"device_affinity\": 0, \"perf_dashboard_id\": \"blink_perf.all\"}, \"dromaeo.cssqueryjquery\": {\"cmd\": \"/path/to/run_benmark --upload-results\", \"device_affinity\": 1}, \"dromaeo.cssqueryjquery.release\": {\"cmd\": \"/path/to/run_benmark --upload-results\", \"device_affinity\": 1, \"perf_dashboard_id\": \"dromaeo.cssqueryjquery\"}}, \"version\": 2}",
+      "--collect-chartjson-data"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "env": {
@@ -272,6 +273,8 @@
       "--perf-dashboard-id=perf_test.foo",
       "--perf-id=android-motoe",
       "--test-type=perf_test.foo",
+      "--chartjson-file",
+      "/path/to/tmp/json",
       "--builder-name=Android MotoE Perf",
       "--slave-name=slavename",
       "--build-number=571",
@@ -285,7 +288,11 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "perf_test.foo"
+    "name": "perf_test.foo",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "allow_subannotations": true,
@@ -305,6 +312,8 @@
       "--perf-dashboard-id=page_cycler.foo",
       "--perf-id=android-motoe",
       "--test-type=page_cycler.foo",
+      "--chartjson-file",
+      "/path/to/tmp/json",
       "--builder-name=Android MotoE Perf",
       "--slave-name=slavename",
       "--build-number=571",
@@ -318,7 +327,11 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "page_cycler.foo"
+    "name": "page_cycler.foo",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "cmd": [

@@ -203,13 +203,19 @@
       "--perf-dashboard-id=dromaeo.cssqueryjquery",
       "--perf-id=chromium-rel-xp-dual",
       "--test-type=dromaeo.cssqueryjquery",
+      "--chartjson-file",
+      "/path/to/tmp/json",
       "--builder-name=Win XP Perf (2)",
       "--slave-name=TestSlavename",
       "--build-number=571",
       "--run-python-script",
       "/path/to/run_benmark"
     ],
-    "name": "dromaeo.cssqueryjquery"
+    "name": "dromaeo.cssqueryjquery",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "allow_subannotations": true,
@@ -228,13 +234,19 @@
       "--perf-dashboard-id=dromaeo.cssqueryjquery",
       "--perf-id=chromium-rel-xp-dual",
       "--test-type=dromaeo.cssqueryjquery",
+      "--chartjson-file",
+      "/path/to/tmp/json",
       "--builder-name=Win XP Perf (2)",
       "--slave-name=TestSlavename",
       "--build-number=571",
       "--run-python-script",
       "/path/to/run_benmark"
     ],
-    "name": "dromaeo.cssqueryjquery.release"
+    "name": "dromaeo.cssqueryjquery.release",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "cmd": [
