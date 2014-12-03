@@ -1642,6 +1642,8 @@ def _UpdateRunBenchmarkArgs(args, options):
       args[args.index('--output-format=buildbot')] = '--output-format=chartjson'
     output_dir = tempfile.mkdtemp()
     args.extend(['--output-dir=%s' % output_dir])
+    # Upload any generated traces to cloud storage.
+    args.extend(['--upload-results'])
     temp_filename = os.path.join(output_dir, 'results-chart.json')
     return {'filename': temp_filename, 'is_ref': is_ref}
   elif (args[0].endswith('test_runner.py') and
