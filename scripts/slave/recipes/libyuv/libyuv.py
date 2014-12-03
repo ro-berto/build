@@ -213,6 +213,106 @@ BUILDERS = {
         },
         'testing': {'platform': 'mac'},
       },
+      'iOS ARM64 Debug': {
+        'recipe_config': 'libyuv_ios',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+          'TARGET_ARCH': 'arm',
+          'TARGET_PLATFORM': 'ios',
+        },
+        'testing': {'platform': 'mac'},
+      },
+      'iOS ARM64 Release': {
+        'recipe_config': 'libyuv_ios',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+          'TARGET_ARCH': 'arm',
+          'TARGET_PLATFORM': 'ios',
+        },
+        'testing': {'platform': 'mac'},
+      },
+      'Mac32 Debug (XCode 6.1)': {
+        'recipe_config': 'libyuv',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'testing': {'platform': 'mac'},
+      },
+      'Mac32 Release (XCode 6.1)': {
+        'recipe_config': 'libyuv',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'testing': {'platform': 'mac'},
+      },
+      'Mac64 Debug (XCode 6.1)': {
+        'recipe_config': 'libyuv',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'testing': {'platform': 'mac'},
+      },
+      'Mac64 Release (XCode 6.1)': {
+        'recipe_config': 'libyuv',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'testing': {'platform': 'mac'},
+      },
+      'Mac Asan (XCode 6.1)': {
+        'recipe_config': 'libyuv_asan',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'testing': {'platform': 'mac'},
+      },
+      'iOS Debug (XCode 6.1)': {
+        'recipe_config': 'libyuv_ios',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+          'TARGET_ARCH': 'arm',
+          'TARGET_PLATFORM': 'ios',
+        },
+        'testing': {'platform': 'mac'},
+      },
+      'iOS Release (XCode 6.1)': {
+        'recipe_config': 'libyuv_ios',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+          'TARGET_ARCH': 'arm',
+          'TARGET_PLATFORM': 'ios',
+        },
+        'testing': {'platform': 'mac'},
+      },
+      'iOS ARM64 Debug (XCode 6.1)': {
+        'recipe_config': 'libyuv_ios',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+          'TARGET_ARCH': 'arm',
+          'TARGET_PLATFORM': 'ios',
+        },
+        'testing': {'platform': 'mac'},
+      },
+      'iOS ARM64 Release (XCode 6.1)': {
+        'recipe_config': 'libyuv_ios',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+          'TARGET_ARCH': 'arm',
+          'TARGET_PLATFORM': 'ios',
+        },
+        'testing': {'platform': 'mac'},
+      },
       'Linux32 Debug': {
         'recipe_config': 'libyuv',
         'chromium_config_kwargs': {
@@ -427,6 +527,98 @@ BUILDERS = {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
+          'TARGET_ARCH': 'arm',
+          'TARGET_PLATFORM': 'ios',
+        },
+        'testing': {'platform': 'mac'},
+      },
+      'ios_arm64': {
+        'recipe_config': 'libyuv_ios',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+          'TARGET_ARCH': 'arm',
+          'TARGET_PLATFORM': 'ios',
+        },
+        'testing': {'platform': 'mac'},
+      },
+      'ios_arm64_rel': {
+        'recipe_config': 'libyuv_ios',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+          'TARGET_ARCH': 'arm',
+          'TARGET_PLATFORM': 'ios',
+        },
+        'testing': {'platform': 'mac'},
+      },
+      'mac_xcode61': {
+        'recipe_config': 'libyuv',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'testing': {'platform': 'mac'},
+      },
+      'mac_rel_xcode61': {
+        'recipe_config': 'libyuv',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'testing': {'platform': 'mac'},
+      },
+      'mac_x64_rel_xcode61': {
+        'recipe_config': 'libyuv',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'testing': {'platform': 'mac'},
+      },
+      'mac_asan_xcode61': {
+        'recipe_config': 'libyuv_asan',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'testing': {'platform': 'mac'},
+      },
+      'ios_xcode61': {
+        'recipe_config': 'libyuv_ios',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+          'TARGET_ARCH': 'arm',
+          'TARGET_PLATFORM': 'ios',
+        },
+        'testing': {'platform': 'mac'},
+      },
+      'ios_rel_xcode61': {
+        'recipe_config': 'libyuv_ios',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+          'TARGET_ARCH': 'arm',
+          'TARGET_PLATFORM': 'ios',
+        },
+        'testing': {'platform': 'mac'},
+      },
+      'ios_arm64_xcode61': {
+        'recipe_config': 'libyuv_ios',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+          'TARGET_ARCH': 'arm',
+          'TARGET_PLATFORM': 'ios',
+        },
+        'testing': {'platform': 'mac'},
+      },
+      'ios_arm64_rel_xcode61': {
+        'recipe_config': 'libyuv_ios',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
           'TARGET_ARCH': 'arm',
           'TARGET_PLATFORM': 'ios',
         },

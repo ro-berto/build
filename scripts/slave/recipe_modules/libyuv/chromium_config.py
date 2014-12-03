@@ -45,8 +45,9 @@ def libyuv_ios(c):
   c.build_config_fs = c.BUILD_CONFIG + '-iphoneos'
 
   gyp_defs = c.gyp_env.GYP_DEFINES
-  gyp_defs['target_arch'] = 'armv7'
   gyp_defs['OS'] = c.TARGET_PLATFORM
+  if c.TARGET_BITS == 64:
+    gyp_defs['target_subarch'] = 'arm64'
 
   _libyuv_common(c)
 

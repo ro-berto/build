@@ -6,7 +6,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = None\nsolutions = [{'custom_vars': {'root_dir': 'src'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/libyuv/trunk'}]\ntarget_os = ['ios', 'mac']"
+      "cache_dir = None\nsolutions = [{'custom_vars': {'root_dir': 'src'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/libyuv/trunk'}]"
     ],
     "name": "gclient setup"
   },
@@ -85,9 +85,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=ios clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1",
-      "GYP_GENERATORS": "ninja"
+      "GYP_DEFINES": "asan=1 clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' lsan=1 target_arch=ia32 use_goma=1"
     },
     "name": "gclient runhooks"
   },
@@ -97,7 +95,7 @@
       "-u",
       "[BUILD]/scripts/slave/compile.py",
       "--target",
-      "Debug-iphoneos",
+      "Release",
       "--src-dir",
       "[SLAVE_BUILD]/src",
       "--build-tool",
@@ -110,5 +108,27 @@
       "All"
     ],
     "name": "compile"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"mac_asan_xcode61\", \"mastername\": \"tryserver.libyuv\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"mac_asan_xcode61\", \"mastername\": \"tryserver.libyuv\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--builder-name=mac_asan_xcode61",
+      "--slave-name=slavename",
+      "--enable-asan",
+      "--enable-lsan",
+      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
+      "libyuv_unittest",
+      "--test-launcher-print-test-stdio=always",
+      "--test-launcher-batch-limit=1"
+    ],
+    "name": "libyuv_unittest"
   }
 ]

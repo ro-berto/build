@@ -14,16 +14,6 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/gclient_safe_revert.py",
-      ".",
-      "[DEPOT_TOOLS]/gclient"
-    ],
-    "name": "gclient revert"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[DEPOT_TOOLS]/gclient.py",
       "sync",
       "--nohooks",
@@ -49,36 +39,6 @@
   },
   {
     "cmd": [
-      "svn",
-      "export",
-      "--force",
-      "try_job_svn_patch",
-      "/path/to/tmp/diff"
-    ],
-    "name": "download patch",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@patch.diff@fake patch.diff content (line 1)@@@",
-      "@@@STEP_LOG_LINE@patch.diff@fake patch.diff content (line 2)@@@",
-      "@@@STEP_LOG_LINE@patch.diff@@@@",
-      "@@@STEP_LOG_END@patch.diff@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "patch",
-      "--dir",
-      "[SLAVE_BUILD]/src",
-      "--force",
-      "--forward",
-      "--remove-empty-files",
-      "--strip",
-      "0"
-    ],
-    "name": "apply patch",
-    "stdin": "fake patch.diff content (line 1)\nfake patch.diff content (line 2)\n"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "[DEPOT_TOOLS]/gclient.py",
@@ -86,7 +46,7 @@
     ],
     "env": {
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=ios clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1",
+      "GYP_DEFINES": "OS=ios clang=1 component=static_library gomadir='[BUILD]/goma' target_arch=arm64 target_subarch=arm64 use_goma=1",
       "GYP_GENERATORS": "ninja"
     },
     "name": "gclient runhooks"
