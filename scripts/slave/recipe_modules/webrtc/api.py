@@ -238,7 +238,8 @@ class WebRTCApi(recipe_api.RecipeApi):
     chromium_android recipe module. It's needed since we need to alter the
     environment.
     """
-    script = self.m.path['checkout'].join('build', 'android', 'test_runner.py')
+    script = self.m.path['checkout'].join('webrtc', 'build', 'android',
+                                          'test_runner.py')
     args = ['gtest', '-s', test, '--verbose', '--isolate-file-path',
             isolate_path]
     if self.m.chromium.c.BUILD_CONFIG == 'Release':
