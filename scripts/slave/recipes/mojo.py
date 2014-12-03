@@ -66,10 +66,7 @@ def _GetTestConfig(api):
     test_config['target_os'] = 'win'
   assert 'target_os' in test_config
 
-  if 'dbg' in buildername:
-    test_config['build_type'] = 'debug'
-  else:
-    test_config['build_type'] = 'release'
+  test_config['is_debug'] = 'dbg' in buildername
 
   if 'Perf' in buildername:
     test_config['test_types'] = ['perf']

@@ -75,7 +75,7 @@
       "python",
       "-u",
       "[SLAVE_BUILD]/src/mojo/tools/get_test_list.py",
-      "{\"build_number\": 571, \"build_type\": \"release\", \"builder_name\": \"Mojo Linux Perf\", \"master_name\": \"chromium.testing.master\", \"target_os\": \"linux\", \"test_results_server\": \"test-results.appspot.com\", \"test_types\": [\"perf\"]}",
+      "{\"build_number\": 571, \"builder_name\": \"Mojo Linux Perf\", \"is_debug\": false, \"master_name\": \"chromium.testing.master\", \"target_os\": \"linux\", \"test_results_server\": \"test-results.appspot.com\", \"test_types\": [\"perf\"]}",
       "/path/to/tmp/json"
     ],
     "name": "get_test_list",
