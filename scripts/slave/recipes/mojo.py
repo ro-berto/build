@@ -5,6 +5,7 @@
 DEPS = [
   'bot_update',
   'gclient',
+  'json',
   'path',
   'platform',
   'properties',
@@ -52,42 +53,77 @@ def _BuildSteps(api, buildername, build_type):
              args=['build', build_type] + args,
              env=env)
 
-def _RunTests(api, build_type):
-  mojob_path = api.path['checkout'].join('mojo', 'tools', 'mojob.py')
-  api.python('mojob test', mojob_path, args=[
-    'test', build_type,
-    '--master-name', api.properties.get('mastername'),
-    '--builder-name', api.properties.get('buildername'),
-    '--build-number', api.properties.get('buildnumber'),
-    '--test-results-server', api.properties.get('test_results_server',
-        'test-results.appspot.com'),
-  ])
 
-def _RunPerfTests(api, build_type):
-  mojob_path = api.path['checkout'].join('mojo', 'tools', 'mojob.py')
-  api.python('mojob perftest', mojob_path, args=['perftest', build_type])
+def _GetTestConfig(api):
+  buildername = api.properties.get('buildername')
+
+  test_config = {}
+  if 'Android' in buildername:
+    test_config['target_os'] = 'android'
+  elif 'Linux' in buildername:
+    test_config['target_os'] = 'linux'
+  elif 'Win' in buildername:
+    test_config['target_os'] = 'win'
+  assert 'target_os' in test_config
+
+  if 'dbg' in buildername:
+    test_config['build_type'] = 'debug'
+  else:
+    test_config['build_type'] = 'release'
+
+  if 'Perf' in buildername:
+    test_config['test_types'] = ['perf']
+  else:
+    test_config['test_types'] = ['default']
+
+  test_config['master_name'] = api.properties.get('mastername')
+  test_config['builder_name'] = api.properties.get('buildername')
+  test_config['build_number'] = api.properties.get('buildnumber')
+  test_config['test_results_server'] = api.properties.get(
+      'test_results_server', 'test-results.appspot.com')
+
+  return test_config
+
+
+def _TestSteps(api):
+  get_test_list_path = api.path['checkout'].join('mojo', 'tools',
+                                                 'get_test_list.py')
+  test_config = _GetTestConfig(api)
+  test_out = [{'name': u'Hello', 'command': ['world']}]
+  result = api.python('get_test_list', get_test_list_path,
+                      args=[api.json.input(test_config), api.json.output()],
+                      step_test_data=lambda: api.json.test_api.output(test_out))
+  test_list = result.json.output
+
+  for entry in test_list:
+    name = str(entry['name'])  # api.step() wants a non-Unicode string.
+    command = entry['command']
+    api.step(name, command, cwd=api.path['checkout'])
+
 
 def _UploadShell(api):
   upload_path = api.path['checkout'].join('mojo', 'tools',
       'upload_shell_binary.py')
   api.python('upload shell binary', upload_path)
 
+
 def GenSteps(api):
   buildername = api.properties.get('buildername')
   _CheckoutSteps(api, buildername)
   build_type = '--debug' if 'dbg' in buildername else '--release'
   _BuildSteps(api, buildername, build_type)
-  if 'Perf' in buildername:
-    _RunPerfTests(api, build_type)
-    return
+
   is_linux = 'Linux' in buildername
   is_win = 'Win' in buildername
   is_tester = 'Tests' in buildername
   if not is_tester and not is_linux and not is_win:
     return
-  _RunTests(api, build_type)
+
+  _TestSteps(api)
+
   is_try = api.tryserver.is_tryserver
-  if is_linux and build_type == '--release' and not is_try:
+  is_perf = 'Perf' in buildername
+  if is_linux and build_type == '--release' and not is_try and not is_perf:
     _UploadShell(api)
 
 def GenTests(api):
