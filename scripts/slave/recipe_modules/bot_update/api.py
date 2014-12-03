@@ -84,13 +84,7 @@ class BotUpdateApi(recipe_api.RecipeApi):
 
     # Construct our bot_update command.  This basically be inclusive of
     # everything required for bot_update to know:
-    root = patch_root
-    if root is None:
-      root = cfg.solutions[0].name
-      additional = self.m.rietveld.calculate_issue_root()
-      if additional:
-        root = self.m.path.join(root, additional)
-
+    root = patch_root or self.m.properties.get('root')
     if patch:
       issue = self.m.properties.get('issue')
       patchset = self.m.properties.get('patchset')

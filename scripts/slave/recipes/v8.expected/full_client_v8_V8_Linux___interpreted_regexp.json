@@ -12,8 +12,6 @@
       "TestSlavename",
       "--spec",
       "cache_dir = None\nsolutions = [{'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
-      "--root",
-      "v8",
       "--revision_mapping_file",
       "{\"v8\": \"got_revision\"}",
       "--output_json",

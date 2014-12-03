@@ -35,8 +35,6 @@
       "TestSlavename",
       "--spec",
       "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'dartium.deps', 'url': 'https://dart.googlecode.com/svn/trunk/deps/dartium.deps'}]\ntarget_os = ['android']",
-      "--root",
-      "dartium.deps",
       "--revision_mapping_file",
       "{}",
       "--output_json",

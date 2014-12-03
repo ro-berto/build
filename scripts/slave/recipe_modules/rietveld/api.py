@@ -8,22 +8,14 @@ from slave import recipe_api
 
 class RietveldApi(recipe_api.RecipeApi):
   def calculate_issue_root(self):
-    """Returns path where a patch should be applied to based on "patch_project".
-
-    Maps Rietveld's "patch_project" to a path of directories relative to
-    api.gclient.c.solutions[0].name which describe where to place the patch.
-
-    Returns:
-      Relative path or empty string if patch_project is not set or path for a
-      given is unknown.
-    """
-    prop = self.m.properties.get('patch_project')
-    patch_project_roots = {
-      'blink': ['third_party', 'WebKit'],
-    }
-
-    path_parts = patch_project_roots.get(prop)
-    return self.m.path.join(*path_parts) if path_parts else ''
+    root = self.m.properties.get('root', '')
+    # FIXME: Rietveld passes the blink path as src/third_party/WebKit
+    #        so we have to strip the src bit off before passing to
+    #        api.checkout_path. :(
+    if root.startswith('src'):
+      root = root[3:].lstrip('/')
+    # Make remaining slashes platform independent.
+    return self.m.path.join(*root.split('/'))
 
   def apply_issue(self, *root_pieces, **kwargs):
     """Call apply_issue from depot_tools.
