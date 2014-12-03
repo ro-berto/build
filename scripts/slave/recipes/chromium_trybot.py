@@ -876,25 +876,6 @@ def GenSteps(api):
     tests.extend(gtest_tests)
     tests.extend(find_test_named('nacl_integration', conditional_tests))
 
-    # TODO(sergiyb): Flag enable_gpu_tests is used to enable GPU tests. This is
-    # however a temporary measure to enable them in GenTests, but not in
-    # production. Once telemetry tests are swarmed and ready for production,
-    # this flag should be removed.
-    if (api.properties['mastername'] == 'tryserver.chromium.mac' and
-        api.properties['buildername'] == 'mac_chromium_rel' and
-        api.properties.get('enable_gpu_tests', False)):
-      tests.extend(api.gpu.create_tests(
-          bot_update_step.presentation.properties['got_revision'],
-          bot_update_step.presentation.properties['got_webkit_revision'],
-          enable_swarming=True,
-          # TODO(sergiyb): This config should be read from an external JSON file
-          # in a custom step, which can then be mocked in the GenTests.
-          swarming_dimension_sets=[{
-              'os': 'Mac',
-              'hidpi': '0',
-              'gpu': '8086:0116'
-          }]))
-
     if api.platform.is_win:
       tests.append(api.chromium.steps.MiniInstallerTest())
 
@@ -966,13 +947,26 @@ def GenSteps(api):
 
   main_waterfall_config = bot_config.get('based_on_main_waterfall')
   if main_waterfall_config:
+    # TODO(sergiyb): This is a temporary hack to run GPU tests on tryserver
+    # only. This should be removed when we will convert chromium.gpu waterfall
+    # to swarming and be able to replicate the tests to tryserver automatically.
+    # TODO(sergiyb): Add win_blink_rel and linux_blink_rel when we are confident
+    # that mac_chromium_rel_ng is working as intended.
+    enable_gpu_tests = (
+        api.properties['mastername'] == 'tryserver.chromium.mac' and
+        api.properties['buildername'] == 'mac_chromium_rel_ng')
+
+    extra_chromium_configs = ['trybot_flavor']
+    if enable_gpu_tests:
+      extra_chromium_configs.append('archive_gpu_tests')
+
     bot_update_step, master_dict, test_spec = \
         api.chromium_tests.sync_and_configure_build(
             main_waterfall_config['mastername'],
             main_waterfall_config['buildername'],
             override_bot_type='builder_tester',
             enable_swarming=True,
-            chromium_apply_config=['trybot_flavor'])
+            chromium_apply_config=extra_chromium_configs)
 
     tests = api.chromium_tests.tests_for_builder(
         main_waterfall_config['mastername'],
@@ -987,6 +981,19 @@ def GenSteps(api):
           bot_update_step,
           master_dict,
           override_bot_type='builder_tester'))
+
+    if enable_gpu_tests:
+      tests.extend(api.gpu.create_tests(
+          bot_update_step.presentation.properties['got_revision'],
+          bot_update_step.presentation.properties['got_webkit_revision'],
+          enable_swarming=True,
+          # TODO(sergiyb): This config should be read from an external JSON file
+          # in a custom step, which can then be mocked in the GenTests.
+          swarming_dimension_sets=[{
+              'gpu': '8086:0116',
+              'hidpi': '0',
+              'os': 'Mac-10.8',
+          }]))
 
     compile_targets, tests_including_triggered = \
         api.chromium_tests.get_compile_targets_and_tests(
@@ -1590,22 +1597,39 @@ def GenTests(api):
       api.json.output({'invalid_targets': ['invalid target', 'another one']}))
   )
 
+  gpu_targets = ['angle_unittests_run', 'chrome', 'chromium_builder_tests',
+                 'content_gl_tests_run', 'gl_tests_run',
+                 'tab_capture_end2end_tests_run', 'telemetry_gpu_test_run']
   yield (
     api.test('gpu_tests') +
     props(
       mastername='tryserver.chromium.mac',
-      buildername='mac_chromium_rel',
-      # TODO(sergiyb): Flag enable_gpu_tests is used to enable GPU tests. This
-      # is however a temporary measure to enable them in GenTests, but not in
-      # production. Once telemetry tests are swarmed and ready for production,
-      # this flag should be removed.
-      enable_gpu_tests=True,
+      buildername='mac_chromium_rel_ng',
     ) +
     api.platform.name('mac') +
     api.override_step_data(
-        'pixel_test on Intel GPU (with patch) on Mac',
+        'pixel_test on Intel GPU (with patch)',
         api.json.canned_telemetry_gpu_output(passing=False, swarming=True)) +
     api.override_step_data(
-        'pixel_test on Intel GPU (without patch) on Mac',
-        api.json.canned_telemetry_gpu_output(passing=False, swarming=True))
+        'pixel_test on Intel GPU (without patch)',
+        api.json.canned_telemetry_gpu_output(passing=False, swarming=True)) +
+    api.override_step_data('analyze',
+                           api.json.output({'status': 'Found dependency',
+                                            'targets': gpu_targets,
+                                            'build_targets': gpu_targets}))
+  )
+
+  yield (
+    api.test('telemetry_gpu_no_results') +
+    props(
+      mastername='tryserver.chromium.mac',
+      buildername='mac_chromium_rel_ng',
+    ) +
+    api.platform.name('mac') +
+    api.override_step_data('pixel_test on Intel GPU (with patch)',
+                           api.raw_io.output_dir({'0/results.json': ''})) +
+    api.override_step_data('analyze',
+                           api.json.output({'status': 'Found dependency',
+                                            'targets': gpu_targets,
+                                            'build_targets': gpu_targets}))
   )

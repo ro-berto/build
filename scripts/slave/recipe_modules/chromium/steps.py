@@ -670,6 +670,15 @@ class GTestTest(Test):
     return self._test.uses_swarming
 
 
+# TODO(sergiyb): GPU Tests do not always follow the Chromium convetion to have
+# a 'test' target for each 'test_run' target. Instead they use gyp dependencies.
+# Chromium tests return both 'test' and 'test_run' to circumvent and issue with
+# analyze step, while GPU tests do not require this.
+class GPUGTestTest(GTestTest):
+  def compile_targets(self, api):
+    return ['%s_run' % self._test.target_name]
+
+
 class PythonBasedTest(Test):
   @staticmethod
   def compile_targets(_):
