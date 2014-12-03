@@ -63,7 +63,7 @@ def _GetTestConfig(api):
   elif 'Linux' in buildername:
     test_config['target_os'] = 'linux'
   elif 'Win' in buildername:
-    test_config['target_os'] = 'win'
+    test_config['target_os'] = 'windows'
   assert 'target_os' in test_config
 
   test_config['is_debug'] = 'dbg' in buildername

@@ -69,7 +69,7 @@
       "python",
       "-u",
       "[SLAVE_BUILD]/src/mojo/tools/get_test_list.py",
-      "{\"build_number\": 571, \"builder_name\": \"Mojo Win (dbg)\", \"is_debug\": true, \"master_name\": \"chromium.testing.master\", \"target_os\": \"win\", \"test_results_server\": \"test-results.appspot.com\", \"test_types\": [\"default\"]}",
+      "{\"build_number\": 571, \"builder_name\": \"Mojo Win (dbg)\", \"is_debug\": true, \"master_name\": \"chromium.testing.master\", \"target_os\": \"windows\", \"test_results_server\": \"test-results.appspot.com\", \"test_types\": [\"default\"]}",
       "/path/to/tmp/json"
     ],
     "name": "get_test_list",
