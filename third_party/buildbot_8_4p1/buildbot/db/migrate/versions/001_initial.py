@@ -213,10 +213,17 @@ def import_changes(migrate_engine):
         if not c.revision:
             continue
         try:
+            # Trim long comment fields to 1024 characters, but preserve header
+            # and footer with important tags such as Cr-Commit-Position.
+            trimmed_comments = c.comments
+            if len(trimmed_comments) > 1024:
+              header, footer = trimmed_comments[:506], trimmed_comments[-506:]
+              trimmed_comments = '%s\n...skip...\n%s' % (header, footer)
+
             values = dict(
                     changeid=c.number,
                     author=c.who[:256],
-                    comments=c.comments[:1024],
+                    comments=trimmed_comments,
                     is_dir=c.isdir,
                     branch=c.branch[:256],
                     revision=c.revision[:256],

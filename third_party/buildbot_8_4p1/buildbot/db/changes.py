@@ -127,10 +127,17 @@ class ChangesConnectorComponent(base.DBConnectorComponent):
 
             transaction = conn.begin()
 
+            # Trim long comment fields to 1024 characters, but preserve header
+            # and footer with important tags such as Cr-Commit-Position.
+            trimmed_comments = comments
+            if len(trimmed_comments) > 1024:
+              header, footer = trimmed_comments[:506], trimmed_comments[-506:]
+              trimmed_comments = '%s\n...skip...\n%s' % (header, footer)
+
             ins = self.db.model.changes.insert()
             r = conn.execute(ins, dict(
                 author=author,
-                comments=comments[:1024],
+                comments=trimmed_comments,
                 is_dir=is_dir,
                 branch=branch,
                 revision=revision,

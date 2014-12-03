@@ -5242,3 +5242,57 @@ index 9fe46ef..6c701ad 100644
          tasks = []
  
          # Get current/completed builds.
+
+Trim long comment fields to 1024 characters, but preserve important tags
+
+BUG=407345
+R=agable@chromium.org,iannucci@chromium.org
+
+Index: third_party/buildbot_8_4p1/buildbot/db/changes.py
+diff --git a/third_party/buildbot_8_4p1/buildbot/db/changes.py b/third_party/buildbot_8_4p1/buildbot/db/changes.py
+index c6516b6fd26c86bedee27d35fbaeca667ae5697a..eff93e417e28db0e4a57c592e1cb9c7047433017 100644
+--- a/third_party/buildbot_8_4p1/buildbot/db/changes.py
++++ b/third_party/buildbot_8_4p1/buildbot/db/changes.py
+@@ -127,10 +127,17 @@ class ChangesConnectorComponent(base.DBConnectorComponent):
+
+             transaction = conn.begin()
+
++            # Trim long comment fields to 1024 characters, but preserve header
++            # and footer with important tags such as Cr-Commit-Position.
++            trimmed_comments = comments
++            if len(trimmed_comments) > 1024:
++              header, footer = trimmed_comments[:506], trimmed_comments[-506:]
++              trimmed_comments = '%s\n...skip...\n%s' % (header, footer)
++
+             ins = self.db.model.changes.insert()
+             r = conn.execute(ins, dict(
+                 author=author,
+-                comments=comments[:1024],
++                comments=trimmed_comments,
+                 is_dir=is_dir,
+                 branch=branch,
+                 revision=revision,
+Index: third_party/buildbot_8_4p1/buildbot/db/migrate/versions/001_initial.py
+diff --git a/third_party/buildbot_8_4p1/buildbot/db/migrate/versions/001_initial.py b/third_party/buildbot_8_4p1/buildbot/db/migrate/versions/001_initial.py
+index 875c5ea0d6f33190c53a36a1e4790d441ef12493..c51a06f5f0769ddafe6fc184d859b6080fcacde7 100644
+--- a/third_party/buildbot_8_4p1/buildbot/db/migrate/versions/001_initial.py
++++ b/third_party/buildbot_8_4p1/buildbot/db/migrate/versions/001_initial.py
+@@ -213,10 +213,17 @@ def import_changes(migrate_engine):
+         if not c.revision:
+             continue
+         try:
++            # Trim long comment fields to 1024 characters, but preserve header
++            # and footer with important tags such as Cr-Commit-Position.
++            trimmed_comments = c.comments
++            if len(trimmed_comments) > 1024:
++              header, footer = trimmed_comments[:506], trimmed_comments[-506:]
++              trimmed_comments = '%s\n...skip...\n%s' % (header, footer)
++
+             values = dict(
+                     changeid=c.number,
+                     author=c.who[:256],
+-                    comments=c.comments[:1024],
++                    comments=trimmed_comments,
+                     is_dir=c.isdir,
+                     branch=c.branch[:256],
+                     revision=c.revision[:256],
