@@ -14,12 +14,6 @@ from common.chromium_utils import AddThirdPartyLibToPath
 from twisted.internet import defer, reactor
 from twisted.python import log as twistedLog
 from twisted.python.threadpool import ThreadPool
-
-AddThirdPartyLibToPath('google_api_python_client')
-AddThirdPartyLibToPath('httplib2/python2')
-AddThirdPartyLibToPath('oauth2client')
-AddThirdPartyLibToPath('uritemplate')
-
 import apiclient
 import httplib2
 
