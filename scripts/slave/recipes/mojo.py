@@ -60,11 +60,14 @@ def _GetTestConfig(api):
   test_config = {}
   if 'Android' in buildername:
     test_config['target_os'] = 'android'
+  elif 'ChromeOS' in buildername:
+    test_config['target_os'] = 'chromeos'  # pragma: no cover
   elif 'Linux' in buildername:
     test_config['target_os'] = 'linux'
   elif 'Win' in buildername:
     test_config['target_os'] = 'windows'
-  assert 'target_os' in test_config
+  else:
+    raise NotImplementedError('Unknown platform')  # pragma: no cover
 
   test_config['is_debug'] = 'dbg' in buildername
 
@@ -93,9 +96,12 @@ def _TestSteps(api):
   test_list = result.json.output
 
   for entry in test_list:
-    name = str(entry['name'])  # api.step() wants a non-Unicode string.
-    command = entry['command']
-    api.step(name, command, cwd=api.path['checkout'])
+    try:
+      name = str(entry['name'])  # api.step() wants a non-Unicode string.
+      command = entry['command']
+      api.step(name, command, cwd=api.path['checkout'])
+    except api.step.StepFailure:  # pragma: no cover
+      pass
 
 
 def _UploadShell(api):
