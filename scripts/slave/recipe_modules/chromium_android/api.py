@@ -279,12 +279,17 @@ class AndroidApi(recipe_api.RecipeApi):
       raise
 
   def provision_devices(self, skip_wipe=False, disable_location=False,
-                        **kwargs):
+                        min_battery_level=None, **kwargs):
     args = ['-t', self.m.chromium.c.BUILD_CONFIG]
     if skip_wipe:
       args.append('--skip-wipe')
     if disable_location:
       args.append('--disable-location')
+    if min_battery_level is not None:
+      assert isinstance(min_battery_level, int)
+      assert min_battery_level >= 0
+      assert min_battery_level <= 100
+      args.extend(['--min-battery-level', min_battery_level])
     self.m.python(
       'provision_devices',
       self.m.path['checkout'].join(

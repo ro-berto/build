@@ -50,6 +50,12 @@ BUILDERS = {
         'skip_wipe': False,
         'disable_location': True,
     },
+    'perf_runner_allow_low_battery': {
+        'perf_config': 'sharded_perf_tests.json',
+        'build': False,
+        'skip_wipe': False,
+        'min_battery_level': 50,
+    },
     'perf_adb_vendor_keys': {
         'adb_vendor_keys': True,
         'build': False,
@@ -104,7 +110,8 @@ def GenSteps(api):
 
     api.chromium_android.provision_devices(
         skip_wipe=config['skip_wipe'],
-        disable_location=config.get('disable_location', False))
+        disable_location=config.get('disable_location', False),
+        min_battery_level=config.get('min_battery_level'))
 
   except api.step.StepFailure as f:
     failure = f
