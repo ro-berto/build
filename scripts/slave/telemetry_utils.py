@@ -77,7 +77,17 @@ class TelemetryResultsProcessor(object):
       if 'summary' in chart_values:
         summary = chart_values['summary']
         if summary['important']:
-          mean = sum(summary['values']) / float(len(summary['values']))
-          display = '%s: %s' % (chart_name, _FormatHumanReadable(mean))
-          results.append(display)
+          if summary['type'] == 'list_of_scalar_values':
+            if not summary['values'] or None in summary['values']:
+              results.append('%s: %s' % (chart_name, 'NaN'))
+            else:
+              mean = sum(summary['values']) / float(len(summary['values']))
+              results.append('%s: %s' % (chart_name,
+                  _FormatHumanReadable(mean)))
+          elif summary['type'] == 'scalar':
+            if summary['value'] is None:
+              results.append('%s: %s' % (chart_name, 'NaN'))
+            else:
+              results.append('%s: %s' % (chart_name,
+                  _FormatHumanReadable(summary['value'])))
     return results
