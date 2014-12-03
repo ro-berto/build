@@ -313,12 +313,7 @@ def GenSteps(api):
 
   api.chromium.runhooks()
 
-  # TODO(scottmg): goma doesn't work on windows GN builds yet.
-  is_windows = ('Win8' in buildername or 'win8_' in buildername)
-  api.chromium.run_gn(use_goma=not is_windows)
-  if is_windows:
-    api.chromium.c.compile_py.compiler = None
-    api.chromium.c.compile_py.goma_dir = None
+  api.chromium.run_gn(use_goma=True)
 
   api.chromium.compile(targets=['all'])
 
