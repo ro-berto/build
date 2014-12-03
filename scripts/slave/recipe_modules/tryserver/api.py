@@ -70,7 +70,10 @@ class TryserverApi(recipe_api.RecipeApi):
     """Downloads patch from patch_url using svn-export and applies it"""
     # TODO(nodir): accept these properties as parameters
     patch_url = self.patch_url
-    root = self.m.properties.get('root') or cwd
+    root = cwd
+    if root is None:
+      issue_root = self.m.rietveld.calculate_issue_root()
+      root = self.m.path['checkout'].join(issue_root)
 
     patch_file = self.m.raw_io.output('.diff')
     ext = '.bat' if self.m.platform.is_win else ''

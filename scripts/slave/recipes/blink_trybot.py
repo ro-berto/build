@@ -389,7 +389,7 @@ def GenTests(api):
   def properties(mastername, buildername, **kwargs):
     return api.properties.tryserver(mastername=mastername,
                                     buildername=buildername,
-                                    root='src/third_party/WebKit',
+                                    patch_project='blink',
                                     swarm_hashes=api.gpu.dummy_swarm_hashes,
                                     **kwargs)
 

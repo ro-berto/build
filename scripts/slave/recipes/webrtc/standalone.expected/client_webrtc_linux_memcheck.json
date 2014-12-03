@@ -12,6 +12,8 @@
       "slavename",
       "--spec",
       "cache_dir = None\nsolutions = [{'custom_deps': {'src/chromium/src/third_party/valgrind': 'https://chromium.googlesource.com/chromium/deps/valgrind/binaries'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/webrtc'}, {'deps_file': 'DEPS', 'managed': True, 'name': 'webrtc-limited', 'url': 'https://chrome-internal.googlesource.com/chrome/deps/webrtc-limited'}]",
+      "--root",
+      "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\"}",
       "--output_json",

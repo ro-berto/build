@@ -846,7 +846,8 @@ def GenSteps(api):
     # Don't run analyze for other projects, such as blink, as there aren't that
     # many try jobs for them.
     requires_compile = True
-    if isinstance(test_spec, dict) and api.properties.get('root') == 'src':
+    if (isinstance(test_spec, dict) and
+        api.properties.get('patch_project') == 'chromium'):
       analyze_config_file = bot_config['testing'].get('analyze_config_file',
                                          'trybot_analyze_config.json')
       requires_compile, matching_exes, compile_targets = \
@@ -1427,7 +1428,7 @@ def GenTests(api):
   yield (
     api.test('dont_analyze_for_non_src_project') +
     props(buildername='linux_chromium_rel') +
-    props(root='blink') +
+    props(patch_project='blink') +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
       })

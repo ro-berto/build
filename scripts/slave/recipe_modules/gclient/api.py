@@ -146,12 +146,12 @@ class GclientApi(recipe_api.RecipeApi):
         # --with_branch_heads), whereas 'revert' uses default args for clone
         # operations.
         #
-        # TODO(mmoss): To be like current official builders, this step could just
-        # delete the whole <slave_name>/build/ directory and start each build
-        # from scratch. That might be the least bad solution, at least until we
-        # have a reliable gclient method to produce a pristine working dir for
-        # git-based builds (e.g. maybe some combination of 'git reset/clean -fx'
-        # and removing the 'out' directory).
+        # TODO(mmoss): To be like current official builders, this step could
+        # just delete the whole <slave_name>/build/ directory and start each
+        # build from scratch. That might be the least bad solution, at least
+        # until we have a reliable gclient method to produce a pristine working
+        # dir for git-based builds (e.g. maybe some combination of 'git
+        # reset/clean -fx' and removing the 'out' directory).
         j = '-j2' if self.m.platform.is_win else '-j8'
         args = ['sync', '--verbose', '--with_branch_heads', '--nohooks', j,
                 '--reset', '--force', '--upstream', '--no-nag-max']
@@ -214,7 +214,6 @@ class GclientApi(recipe_api.RecipeApi):
 
     self('setup', ['config', '--spec', spec_string], **kwargs)
 
-    revert_step = None
     sync_step = None
     try:
       if not cfg.GIT_MODE:
@@ -268,19 +267,12 @@ class GclientApi(recipe_api.RecipeApi):
     Chromium config. This may happen for one of two reasons:
     1. The builder is configured to always use TOT Blink. (factory property
        top_of_tree_blink=True)
-    2. A try job comes in that applies to the Blink tree. (root is
-       src/third_party/WebKit)
+    2. A try job comes in that applies to the Blink tree. (patch_project is
+       blink)
     """
-    if self.m.properties.get('top_of_tree_blink'):
-      return True
-
-    # Normalize slashes to take into account possible Windows paths.
-    root = self.m.properties.get('root', '').replace('\\', '/').lower()
-
-    if root.endswith('third_party/webkit'):
-      return True
-
-    return False
+    return (
+      self.m.properties.get('top_of_tree_blink') or
+      self.m.properties.get('patch_project') == 'blink')
 
   def break_locks(self):
     """Remove all index.lock files. If a previous run of git crashed, bot was
