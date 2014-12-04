@@ -12,7 +12,7 @@ class AdbApi(recipe_api.RecipeApi):
 
   def __call__(self, cmd, serial=None, **kwargs):
     """Run an ADB command."""
-    cmd_prefix = [self._adb_path()]
+    cmd_prefix = [self.adb_path()]
     if serial:
       cmd_prefix.extend(['-s', serial])
     return self.m.step(cmd=cmd_prefix + cmd, **kwargs)
@@ -20,15 +20,15 @@ class AdbApi(recipe_api.RecipeApi):
   def set_adb_path(self, adb_path):
     self._custom_adb_path = adb_path
 
-  def _adb_path(self):
+  def adb_path(self):
     if self._custom_adb_path:
-      return str(self._custom_adb_path)
-    return str(self.m.path['slave_build'].join(
-        'src', 'third_party', 'android_tools', 'sdk', 'platform-tools', 'adb'))
+      return self._custom_adb_path
+    return self.m.path['slave_build'].join(
+        'src', 'third_party', 'android_tools', 'sdk', 'platform-tools', 'adb')
 
   def list_devices(self, step_test_data=None, **kwargs):
     cmd = [
-        self._adb_path(),
+        str(self.adb_path()),
         'devices',
     ]
 
@@ -59,5 +59,5 @@ class AdbApi(recipe_api.RecipeApi):
           subprocess.check_call([adb_path, '-s', device, 'root'])
           subprocess.check_call([adb_path, '-s', device, 'wait-for-device'])
         """,
-        args=[self._adb_path()] + self.devices,
+        args=[self.adb_path()] + self.devices,
         **kwargs)
