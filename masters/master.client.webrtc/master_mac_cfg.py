@@ -22,6 +22,8 @@ def Update(c):
           'Mac Asan',
           'iOS Debug',
           'iOS Release',
+          'iOS ARM64 Debug',
+          'iOS ARM64 Release',
       ]),
   ])
 
@@ -38,8 +40,10 @@ def Update(c):
       'slavebuilddir': 'mac_baremetal',
     },
     {'name': 'Mac Asan', 'slavebuilddir': 'mac_asan'},
-    {'name': 'iOS Debug', 'slavebuilddir': 'ios'},
-    {'name': 'iOS Release', 'slavebuilddir': 'ios'},
+    {'name': 'iOS Debug', 'slavebuilddir': 'mac32'},
+    {'name': 'iOS Release', 'slavebuilddir': 'mac32'},
+    {'name': 'iOS ARM64 Debug', 'slavebuilddir': 'mac64'},
+    {'name': 'iOS ARM64 Release', 'slavebuilddir': 'mac64'},
   ]
 
   c['builders'].extend([
