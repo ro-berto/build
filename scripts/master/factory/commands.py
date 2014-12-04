@@ -157,30 +157,6 @@ class RunHooksShell(shell.ShellCommand):
     shell.ShellCommand.setupEnvironment(self, cmd)
 
 
-class CalculateIsolatedSha1s(shell.ShellCommand):
-  """Build step that prints out the sha-1 of each .isolated file found.
-
-  The script manifest_to_hash.py runs the equivalent of sha1sum on the specified
-  .isolated files, then deletes the files.
-
-  The values found are saved in the build property 'swarm_hashes'.
-
-  This class assumes the script it runs will output a list of property names and
-  hashvalues, with each pair on its own line.
-  """
-  RE_HASH_MAPPING = re.compile(r'^([a-z_]+) ([0-9a-f]{40})$')
-
-  def __init__(self, *args, **kwargs):
-    shell.ShellCommand.__init__(self, *args, **kwargs)
-
-  def commandComplete(self, cmd):
-    shell.ShellCommand.commandComplete(self, cmd)
-    matches = (
-        self.RE_HASH_MAPPING.match(l.strip())
-        for l in self.stdio_log.readlines())
-    self.setProperty('swarm_hashes', dict(x.groups() for x in matches if x))
-
-
 def GetSwarmTestsFromTestFilter(test_filters, run_default_swarm_tests):
   """Returns the dict of all the tests in the list that should be run with
   swarm.
@@ -1262,26 +1238,6 @@ class FactoryCommands(object):
           perf_id in self.PERF_TEST_MAPPINGS[self._target]):
         perf_name = self.PERF_TEST_MAPPINGS[self._target][perf_id]
     return perf_name
-
-  def AddGenerateIsolatedHashesStep(self, doStepIf):
-    """Adds a step to generate the .isolated files hashes.
-
-    This is used by swarming to download the dependent files on the swarming
-    slave via run_isolated.py.
-    """
-    if not self._target:
-      log.msg('No target specified, unable to find result files to '
-              'trigger swarm tests')
-      return
-
-    script_path = self.PathJoin(
-        self._script_dir, 'swarming', 'manifest_to_hash.py')
-    cmd = [self._python, script_path, '--target', self._target]
-    self._factory.addStep(CalculateIsolatedSha1s,
-                          name='manifests_to_hashes',
-                          description='manifests_to_hashes',
-                          command=cmd,
-                          doStepIf=doStepIf)
 
   def AddProfileCreationStep(self, profile_type_to_create):
     """Generate a profile for use by Telemetry tests.

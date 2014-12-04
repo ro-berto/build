@@ -182,9 +182,7 @@ def CreateBuilder(platform, builder_name, target,
         clobber=clobber,
         compile_timeout=compile_timeout,
         factory_properties=factory_properties,
-        # Forcibly disable default swarming tests until the Swarming
-        # infrastructure failure rate goes down to a reasonable level.
-        # Tracked as http://crbug.com/354263
+        # Swarming tests are only available to recipes.
         # run_default_swarm_tests=run_default_swarm_tests,
         build_url=build_url)
   builder_info = {
