@@ -280,8 +280,6 @@ class FactoryCommands(object):
       'chromium-rel-linux-hardy-lowmem': 'linux-release-lowmem',
       'chromium-rel-linux-webkit': 'linux-release-webkit-latest',
       'chromium-rel-mac': 'mac-release',
-      'chromium-rel-mac5': 'mac-release-10.5',
-      'chromium-rel-mac6': 'mac-release-10.6',
       'chromium-rel-mac5-v8': 'mac-release-10.5-v8-latest',
       'chromium-rel-mac6-v8': 'mac-release-10.6-v8-latest',
       'chromium-rel-mac6-webkit': 'mac-release-10.6-webkit-latest',

@@ -232,20 +232,6 @@ _AddBotSpec(
     perf_id='chromium-rel-mac8',
     target_bits=64,
     num_shards=5)
-_AddBotSpec(
-    name='Mac 10.7 Intel GPU Perf',
-    platform='mac',
-    parent_builder='Mac Builder',
-    perf_id='chromium-rel-mac7-gpu-intel',
-    target_bits=64,
-    num_shards=1)
-_AddBotSpec(
-    name='Mac 10.6 Perf',
-    platform='mac',
-    parent_builder='Mac Builder',
-    perf_id='chromium-rel-mac6',
-    target_bits=64,
-    num_shards=5)
 
 _AndroidSpecs = {
   'Android Nexus4 Perf': {
