@@ -373,7 +373,9 @@ class DrCommands(object):
                    # To support force builds we want to clear out the sfx
                    # (7z will add to existing and won't zero it out).
                    command=del_cmd + [WithProperties(sfx_file)],
-                   haltOnFailure=True,
+                   haltOnFailure=False,
+                   flunkOnFailure=False,
+                   warnOnFailure=True,
                    name='delete prior sfx archive',
                    description='delete prior sfx archive')
       self.AddToolStep(ShellCommand,
@@ -399,7 +401,7 @@ class DrCommands(object):
                   '-*%(pkg_buildnum)s.tar.gz')
       self.AddFindFileIntoPropertyStep(src_file, 'package_name')
       self.AddStep(FileUpload,
-                   slavesrc=WithProperties(src_file),
+                   slavesrc=WithProperties('%(package_name)s'),
                    masterdest=WithProperties('public_html/builds/' +
                                              '%(package_name)s'),
                    name='upload revision build')
