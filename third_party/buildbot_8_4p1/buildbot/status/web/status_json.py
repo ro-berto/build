@@ -18,6 +18,7 @@
 
 import collections
 import datetime
+import fnmatch
 import os
 import re
 
@@ -772,6 +773,7 @@ class BuildStateJsonResource(JsonResource):
   - builder
     - A builder name to explicitly include in the results. This can be supplied
       multiple times. If omitted, data for all builders will be returned.
+      Globbing via asterisk is permitted (e.g., "*_rel")
   - current_builds
     - Controls whether the builder's current-running build data will be
       returned. By default, no current build data will be returned; setting
@@ -831,8 +833,10 @@ class BuildStateJsonResource(JsonResource):
 
         builder_names = self.status.getBuilderNames()
         if builders:
+            builder_regex = re.compile('|'.join(fnmatch.translate(b)
+                                                for b in builders))
             builder_names = [b for b in builder_names
-                             if b in set(builders)]
+                             if builder_regex.match(b)]
 
         # Collect child endpoint data.
         wfd = defer.waitForDeferred(
