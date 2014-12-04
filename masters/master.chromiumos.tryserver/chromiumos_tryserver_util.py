@@ -10,6 +10,11 @@ import urllib
 from common import chromium_utils
 
 
+# Load all of Chromite's 'cbuildbot' config targets.
+configs = chromium_utils.GetCBuildbotConfigs()
+config_map = {c['name']: c for c in configs}
+
+
 def is_general_pre_cq_builder(cbb_name):
   return cbb_name == 'pre-cq-group'
 
@@ -20,14 +25,35 @@ def is_pre_cq_builder(cbb_name):
       cbb_name.endswith('-pre-cq'))
 
 
-# Load all of Chromite's 'cbuildbot' config targets.
-configs = chromium_utils.GetCBuildbotConfigs()
+def config_has_tests(config, test_property):
+  """Tests if a given named CBuildBot configuration runs VMTests.
+
+  A configuration runs VMTest if it or any of its children have VMTests
+  declared.
+
+  Args:
+    config: The CBuildBot configuration dictionary to check.
+    test_property: The name of the configuration dictionary property to test.
+  """
+  if config.get(test_property):
+    return True
+  for child_config in config['child_configs']:
+    if config_has_tests(child_config, test_property):
+      return True
+  return False
+
+is_vmtest_builder = lambda b: config_has_tests(config_map[b], 'vm_tests')
+is_hwtest_builder = lambda b: config_has_tests(config_map[b], 'hw_tests')
+
 
 # Load builder sets from the 'cbuildbot' config.
-cbb_builders = set(cfg['name'] for cfg in configs)
+cbb_builders = set(config_map.iterkeys())
 etc_builders = set(['etc'])
 all_builders = cbb_builders.union(etc_builders)
-precq_builders = set(filter(is_pre_cq_builder, all_builders))
+precq_builders = set(b for b in all_builders if is_pre_cq_builder(b))
+precq_novmtest_builders = set(b for b in precq_builders
+                              if not (is_vmtest_builder(b) or
+                                      is_hwtest_builder(b)))
 
 
 class TestingSlavePool(object):
@@ -47,6 +73,23 @@ class TestingSlavePool(object):
     if self.is_testing_slave(slavename):
       return '%s (Testing)' % (slavename,)
     return slavename
+
+
+def cros_builder_links_pool(name, builders):
+  """Returns a builder list for a pool, summarizing multiple builders in a
+  single entry (see cros_builder_links).
+
+  Args:
+    name: The name of the pool.
+    builders: The builders that compose the pool.
+
+  Returns:
+    A builder list (see cros_builder_links for description).
+  """
+
+  query = '&'.join('builder=%s' % (urllib.quote(n),)
+                   for n in sorted(builders))
+  return [{'link': 'builders?%s' % (query,), 'name': name}]
 
 
 def cros_builder_links(builders):
@@ -69,11 +112,12 @@ def cros_builder_links(builders):
   builder_names = set(s['name'] for s in builders)
 
   if builder_names == all_builders:
-    builders = [{'link': 'builders', 'name': 'General'}]
+    return [{'link': 'builders', 'name': 'General'}]
   elif builder_names == precq_builders:
-    query = '&'.join('builder=%s' % (urllib.quote(n),)
-                     for n in precq_builders)
-    builders = [{'link': 'builders?%s' % (query,), 'name': 'Pre-CQ'}]
+    return cros_builder_links_pool('Pre-CQ', precq_builders)
+  elif builder_names == precq_novmtest_builders:
+    return cros_builder_links_pool('Pre-CQ (No VMTest)',
+                                   precq_novmtest_builders)
   return builders
 
 
