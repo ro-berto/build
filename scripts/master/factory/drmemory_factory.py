@@ -93,6 +93,20 @@ def ArchToBits(arch):
   assert False, 'Unsupported architecture'
 
 
+def ShortHash(rc, stdout, stderr):
+  """Stores the shortened hash from stdout into the property pkg_buildnum."""
+  # Now that we're using git and our patchlevel is not unique (we're using
+  # just the date) we add the short hash as the build #.
+  short = "0x" + stdout[:7]
+  return {'pkg_buildnum': short}
+
+
+def RemoveExtension(rc, stdout, stderr):
+  """Stores the basename of the path in stdout to the property package_base."""
+  base = re.sub(r'\.[^.]+$', r'', stdout)
+  return {'package_base': base}
+
+
 class DrCommands(object):
 
   """Encapsulates state for adding commands to BuildFactories.
@@ -133,6 +147,16 @@ class DrCommands(object):
     Currently this includes cmake, ctest, and 7zip.
     """
     self.factory.addStep(ToolStep(step_class, self.target_platform, **kwargs))
+
+  def AddPkgBuildNumber(self):
+    """Returns the build number to use for packages."""
+    # TODO(bruening): is there a more direct way to process one property
+    # into another?
+    self.AddStep(SetProperty,
+                 name='get package build number',
+                 description='get package build number',
+                 command=WithProperties('echo %(got_revision)s'),
+                 extract_fn=ShortHash)
 
   def AddDynamoRIOSource(self):
     """Checks out or updates DR's sources."""
@@ -187,6 +211,22 @@ class DrCommands(object):
                  # Use a string command here to let the shell expand *.
                  command=WithProperties(ls_cmd + ' ' + pattern),
                  property=property_name)
+
+  def AddFindFileBaseIntoPropertyStep(self, pattern):
+    """Finds a file on the slave and stores the name minus extension
+    in the property .
+    TODO(rnk): This won't work if pattern matches more than one file.
+    """
+    if self.IsWindows():
+      ls_cmd = 'dir /B'  # /B means "bare", like ls with no -l.
+    else:
+      ls_cmd = 'ls'
+    self.AddStep(SetProperty,
+                 name='find package basename',
+                 description='find package basename',
+                 # Use a string command here to let the shell expand *.
+                 command=WithProperties(ls_cmd + ' ' + pattern),
+                 extract_fn=RemoveExtension)
 
   def AddDRSuite(self, step_name, suite_args):
     """Run DR's test suite with arguments."""
@@ -261,8 +301,10 @@ class DrCommands(object):
     """Build, package, and upload all configurations of DR."""
     self.AddDynamoRIOSource()
     self.AddTools()
-    package_cmd = '../dynamorio/make/package.cmake,build=42'
-    cmd = ['ctest', '-VV', '-S', package_cmd]
+    self.AddPkgBuildNumber()
+    package_cmd = ('../dynamorio/make/package.cmake,build=' +
+                   '%(pkg_buildnum)s')
+    cmd = ['ctest', '-VV', '-S', WithProperties(package_cmd)]
     self.AddToolStep(ShellCommand,
                      command=cmd,
                      description='Package DynamoRIO',
@@ -270,17 +312,15 @@ class DrCommands(object):
     # For DR, we use plain cpack archives since we don't have existing scripts
     # that expect sfx exes.
     if self.IsWindows():
-      src_file = 'DynamoRIO-Windows-*.%(got_revision)s-42.zip'
-      dst_file = 'dynamorio-windows-r%(got_revision)s.zip'
+      src_file = 'DynamoRIO-Windows-*%(pkg_buildnum)s.zip'
     else:
       src_file = ('DynamoRIO-' + OsFullName(self.target_platform) +
-                  '-*.%(got_revision)s-42.tar.gz')
-      dst_file = ('dynamorio-' + OsShortName(self.target_platform) +
-                  '-r%(got_revision)s.tar.gz')
+                  '-*%(pkg_buildnum)s.tar.gz')
     self.AddFindFileIntoPropertyStep(src_file, 'package_name')
     self.AddStep(FileUpload,
                  slavesrc=WithProperties('%(package_name)s'),
-                 masterdest=WithProperties('public_html/builds/' + dst_file),
+                 masterdest=WithProperties('public_html/builds/' +
+                                           '%(package_name)s'),
                  name='Upload DR package')
     return self.factory
 
@@ -306,15 +346,10 @@ class DrCommands(object):
     """Build the drmemory package."""
     self.AddDrMemorySource()
     self.AddTools()
-    # The default package name has the version and revision, so we override it
-    # to something we can predict.  package.cmake will complain if this does not
-    # start with 'DrMemory-'
-    # TODO(rnk): Instead of overriding the package name, have package.cmake
-    # output the name to stderr or in a symlink.
-    package_name = 'DrMemory-package'
-    cpack_arg = 'cpackappend=set(CPACK_PACKAGE_FILE_NAME "%s")' % package_name
-    cmd = ['ctest', '-VV', '-S', '../drmemory/package.cmake,build=42;' +
-           'drmem_only;' + cpack_arg]
+    self.AddPkgBuildNumber()
+    package_cmd = ('../drmemory/package.cmake,build=' +
+                   '%(pkg_buildnum)s;drmem_only')
+    cmd = ['ctest', '-VV', '-S', WithProperties(package_cmd)]
     self.AddToolStep(ShellCommand,
                      command=cmd,
                      description='Package Dr. Memory',
@@ -323,15 +358,31 @@ class DrCommands(object):
       # For Windows, our chromium scripts expect to find an sfx, so we figure
       # out where cpack installed everything before archiving it, and re-archive
       # it with 7z -sfx.
+      zip_file = 'DrMemory-Windows-*%(pkg_buildnum)s.zip'
+      self.AddFindFileBaseIntoPropertyStep(zip_file)
       install_dir = ('build_drmemory-debug-32\\' +
-                     '_CPack_Packages\\Windows\\ZIP\\' + package_name)
-      sfx_file = 'drmemory-windows-r%(got_revision)s-sfx.exe'
-      dst_file = sfx_file
-      src_file = self.PathJoin(install_dir, sfx_file)
+                     '_CPack_Packages\\Windows\\ZIP\\' +
+                     '%(package_base)s')
+      sfx_file = '%(package_base)s-sfx.exe'
+      src_file = sfx_file
+      if self.IsWindows():
+        del_cmd = ['del']
+      else:
+        del_cmd = ['rm', '-f']
+      self.AddStep(ShellCommand,
+                   # To support force builds we want to clear out the sfx
+                   # (7z will add to existing and won't zero it out).
+                   command=del_cmd + [WithProperties(sfx_file)],
+                   haltOnFailure=True,
+                   name='delete prior sfx archive',
+                   description='delete prior sfx archive')
       self.AddToolStep(ShellCommand,
-                       command=['7z', 'a', '-sfx',
-                                WithProperties(sfx_file), '*'],
-                       workdir='build\\' + install_dir,
+                       # ShellCommand doesn't support WithProperties on workdir,
+                       # so instead we pass the full dir to 7z in a way that 7z
+                       # will create relative paths in the archive (via ..):
+                       command=['7z', 'a', '-sfx', WithProperties(sfx_file),
+                                WithProperties('..\\build\\' + install_dir +
+                                               '\\*')],
                        haltOnFailure=True,
                        name='create sfx archive',
                        description='create sfx archive')
@@ -339,15 +390,19 @@ class DrCommands(object):
                    slavesrc=WithProperties(src_file),
                    masterdest=LATEST_WIN_BUILD,
                    name='upload latest build')
+      self.AddStep(FileUpload,
+                   slavesrc=WithProperties(src_file),
+                   masterdest=WithProperties('public_html/builds/' + sfx_file),
+                   name='upload revision build')
     else:
-      # For Linux or Mac, we just use the tgz that cpack made for us.
-      src_file = package_name + '.tar.gz'
-      dst_file = ('drmemory-' + OsShortName(self.target_platform) +
-                  '-r%(got_revision)s.tar.gz')
-    self.AddStep(FileUpload,
-                 slavesrc=WithProperties(src_file),
-                 masterdest=WithProperties('public_html/builds/' + dst_file),
-                 name='upload revision build')
+      src_file = ('DrMemory-' + OsFullName(self.target_platform) +
+                  '-*%(pkg_buildnum)s.tar.gz')
+      self.AddFindFileIntoPropertyStep(src_file, 'package_name')
+      self.AddStep(FileUpload,
+                   slavesrc=WithProperties(src_file),
+                   masterdest=WithProperties('public_html/builds/' +
+                                             '%(package_name)s'),
+                   name='upload revision build')
     return self.factory
 
   def AddTSanTestConfig(self, build_mode, run_mode, use_syms=True, **kwargs):
@@ -440,6 +495,7 @@ class DrCommands(object):
                      description='pack results')
     self.AddStep(FileUpload,
                  slavesrc='testlogs.7z',
+                 # We're ok with a git hash as revision here:
                  masterdest=WithProperties(
                      'public_html/testlogs/' +
                      'from_%(buildername)s/testlogs_r%(got_revision)s_b' +
@@ -527,6 +583,7 @@ class CTest(Test):
     else:
       self.__result = SUCCESS
 
+    # We're ok with a git hash as the revision here:
     got_revision = self.getProperty('got_revision')
     buildnumber = self.getProperty('buildnumber')
     buildername = self.getProperty('buildername')
