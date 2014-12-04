@@ -80,10 +80,9 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/swarming/job_runs_fine.py",
+      "[BUILD]/scripts/slave/recipe_modules/swarming_heartbeat/resources/job_runs_fine.py",
       "--canary"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "job_runs_fine.py"
   }
 ]

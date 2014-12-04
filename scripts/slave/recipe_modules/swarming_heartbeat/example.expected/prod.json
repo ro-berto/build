@@ -1,0 +1,10 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/swarming_heartbeat/resources/job_runs_fine.py"
+    ],
+    "name": "job_runs_fine.py"
+  }
+]

@@ -9,11 +9,10 @@ Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 """
 
 DEPS = [
-  'python',
   'properties',
-  'path',
   'swarming',
   'swarming_client',
+  'swarming_heartbeat',
 ]
 
 
@@ -23,12 +22,7 @@ def GenSteps(api):
     branch = 'master'
   api.swarming_client.checkout(branch, can_fail_build=False)
   api.swarming.check_client_version()
-  script = api.path['build'].join(
-      'scripts', 'slave', 'swarming', 'job_runs_fine.py')
-  args = []
-  if api.properties.get('target_environment') == 'canary':
-    args = ['--canary']
-  api.python('job_runs_fine.py', script, args=args, cwd=api.path['slave_build'])
+  api.swarming_heartbeat.run()
 
 
 def GenTests(api):
