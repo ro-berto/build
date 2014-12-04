@@ -175,7 +175,8 @@
       "--",
       "all",
       "browser_tests",
-      "browser_tests_run"
+      "browser_tests_run",
+      "mini_installer"
     ],
     "name": "compile"
   },

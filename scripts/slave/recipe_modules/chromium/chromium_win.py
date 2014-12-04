@@ -117,6 +117,9 @@ SPEC = {
         steps.generate_gtest,
         steps.generate_script,
       ],
+      'tests': [
+        steps.MiniInstallerTest(),
+      ],
       'parent_buildername': 'Win x64 Builder',
       'testing': {
         'platform': 'win',
