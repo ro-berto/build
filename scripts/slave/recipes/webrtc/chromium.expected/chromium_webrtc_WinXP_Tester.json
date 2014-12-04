@@ -180,7 +180,7 @@
       "--build-number=571",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "browser_tests.exe",
-      "--gtest_filter=WebRtc*:TabCapture*",
+      "--gtest_filter=WebRtc*:Webrtc*:TabCapture*:*MediaStream*",
       "--run-manual",
       "--ui-test-action-max-timeout=300000",
       "--test-launcher-jobs=1",
@@ -209,8 +209,7 @@
       "--builder-name=WinXP Tester",
       "--slave-name=TestSlavename",
       "--build-number=571",
-      "content_unittests.exe",
-      "--gtest_filter=WebRtc*:WebRTC*:RTC*:MediaStream*"
+      "content_unittests.exe"
     ],
     "name": "content_unittests"
   },

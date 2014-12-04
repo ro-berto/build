@@ -65,6 +65,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     'linux_rel_archive': 'gs://chromium-webrtc/Linux Builder',
   }
 
+  BROWSER_TESTS_GTEST_FILTER = 'WebRtc*:Webrtc*:TabCapture*:*MediaStream*'
   DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
 
   def setup(self, bot_config, recipe_config, perf_config=None):
@@ -166,16 +167,14 @@ class WebRTCApi(recipe_api.RecipeApi):
             # These tests needs --test-launcher-jobs=1 since some of them are
             # not able to run in parallel (due to the usage of the
             # peerconnection server).
-            args = ['--gtest_filter=WebRtc*:TabCapture*',
+            args = ['--gtest_filter=%s' % self.BROWSER_TESTS_GTEST_FILTER,
                     '--run-manual', '--ui-test-action-max-timeout=300000',
                     '--test-launcher-jobs=1',
                     '--test-launcher-bot-mode',
                     '--test-launcher-print-test-stdio=always'],
             revision=revision,
             perf_test=True)
-        self.add_test(
-            'content_unittests',
-            args=['--gtest_filter=WebRtc*:WebRTC*:RTC*:MediaStream*'])
+        self.add_test('content_unittests')
       elif self.c.TEST_SUITE == 'android':
         self.m.chromium_android.common_tests_setup_steps()
 
