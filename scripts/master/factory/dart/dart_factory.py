@@ -294,6 +294,7 @@ class PackageFactory(gclient_factory.GClientFactory):
   def __init__(self, build_dir='dart', target_platform='posix',
                extra_deps=None):
     self.target_platform = target_platform
+    self._build_dir = build_dir
     deps_url = 'https://github.com/dart-lang/package-bots/trunk'
     main = gclient_factory.GClientSolution(deps_url,
                                             custom_deps_list=extra_deps)
@@ -301,8 +302,8 @@ class PackageFactory(gclient_factory.GClientFactory):
                                             target_platform=target_platform)
 
   def PackagesAnnotatedFactory(self, python_script, target='Release',
-                               env=None):
-    factory_properties = {}
+                               env=None, factory_properties=None):
+    factory_properties = factory_properties or {}
     factory_properties['no_gclient_revision'] = True
     AddGeneralGClientProperties(factory_properties)
     # Create the spec for the solutions
@@ -641,10 +642,13 @@ class DartUtils(object):
       name = variant['name']
       variant['factory_builder'] = self.factory_base_dartium[name]
 
-  def get_web_statuses(self, order_console_by_time=False):
+  def get_web_statuses(self, order_console_by_time=False,
+                       extra_templates=None):
     public_html = '../master.chromium/public_html'
     templates = ['../master.client.dart/templates',
                  '../master.chromium/templates']
+    if extra_templates:
+      templates = extra_templates + templates
     master_port = self._active_master.master_port
     master_port_alt = self._active_master.master_port_alt
     kwargs = {
