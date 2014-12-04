@@ -26,7 +26,8 @@ from common.gerrit_agent import GerritAgent
 
 
 LOG_TEMPLATE = '%s/+log/%s?format=JSON&n=%d'
-DETAIL_TEMPLATE = '%s/+/%s?format=JSON'
+REFS_TEMPLATE = '%s/+refs?format=JSON'
+REVISION_DETAIL_TEMPLATE = '%s/+/%s?format=JSON'
 
 
 def time_to_datetime(tm):
@@ -203,19 +204,11 @@ class GitilesPoller(PollingChangeSource):
   @defer.inlineCallbacks
   def _get_branches(self):
     result = {}
+    path = REFS_TEMPLATE % (self.repo_path,)
     if self.dry_run:
-      refs = []
-    elif any([isinstance(b, self.re_pattern_type) for b in self.branches]):
-      refs = ['refs']
+      refs_json = {}
     else:
-      refs = self.branches
-
-    refs_json = {}
-    for ref in refs:
-      path = DETAIL_TEMPLATE % (self.repo_path, ref)
-      more_refs_json = yield self.agent.request('GET', path, retry=5)
-      refs_json.update(more_refs_json)
-
+      refs_json = yield self.agent.request('GET', path, retry=5)
     for ref, ref_head in refs_json.iteritems():
       for branch in self.branches:
         if (ref == branch or
@@ -354,7 +347,7 @@ class GitilesPoller(PollingChangeSource):
       if not self.svn_mode:
         self.comparator.addRevision(commit['commit'])
       try:
-        path = DETAIL_TEMPLATE % (self.repo_path, commit['commit'])
+        path = REVISION_DETAIL_TEMPLATE % (self.repo_path, commit['commit'])
         if not self.dry_run:
           detail = yield self.agent.request('GET', path, retry=5)
           yield self._create_change(detail, branch)
