@@ -72,22 +72,39 @@ class TelemetryResultsProcessor(object):
     if self._is_reference_build:
       return []
 
-    results = []
-    for chart_name, chart_values in self.ChartJson()['charts'].iteritems():
-      if 'summary' in chart_values:
-        summary = chart_values['summary']
-        if summary['important']:
-          if summary['type'] == 'list_of_scalar_values':
-            if not summary['values'] or None in summary['values']:
-              results.append('%s: %s' % (chart_name, 'NaN'))
-            else:
-              mean = sum(summary['values']) / float(len(summary['values']))
-              results.append('%s: %s' % (chart_name,
-                  _FormatHumanReadable(mean)))
-          elif summary['type'] == 'scalar':
-            if summary['value'] is None:
-              results.append('%s: %s' % (chart_name, 'NaN'))
-            else:
-              results.append('%s: %s' % (chart_name,
-                  _FormatHumanReadable(summary['value'])))
-    return results
+    chartjson_data = self.ChartJson()
+    if not chartjson_data:
+      return []
+
+    charts = chartjson_data.get('charts')
+    if not charts:
+      return []
+
+    def _summary_to_string(chart_name, chart_values):
+      summary = chart_values.get('summary')
+      if not summary:
+        return None
+
+      important = summary.get('important')
+      if not important:
+        return None
+
+      value_type = summary.get('type')
+      if value_type == 'list_of_scalar_values':
+        values = summary.get('values')
+        if not values or None in values:
+          return '%s: %s' % (chart_name, 'NaN')
+        else:
+          mean = sum(values) / float(len(values))
+          return '%s: %s' % (chart_name, _FormatHumanReadable(mean))
+      elif value_type == 'scalar':
+        value = summary.get('value')
+        if value is None:
+          return '%s: %s' % (chart_name, 'NaN')
+        else:
+          return '%s: %s' % (chart_name, _FormatHumanReadable(value))
+      return None
+
+    gen = (_summary_to_string(chart_name, chart_values)
+        for chart_name, chart_values in sorted(charts.iteritems()))
+    return [i for i in gen if i]
