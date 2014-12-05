@@ -82,7 +82,6 @@ UNIT_TESTS = [
   ['sync_unit_tests', None],
   ['ui_base_unittests', None],
   ['unit_tests', None],
-  ['webkit_unit_tests', None],
 ]
 
 JAVA_UNIT_TESTS = [
