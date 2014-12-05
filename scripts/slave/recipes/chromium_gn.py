@@ -66,7 +66,6 @@ BUILDERS = {
         },
         'chromium_apply_config': ['gn_component_build'],
         'gclient_apply_config': ['blink'],
-        'should_run_mojo_tests': True,
       },
     },
   },
@@ -188,7 +187,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'chromium_apply_config': ['gn_component_build'],
-        'should_run_mojo_tests': True,
       },
       'linux_chromium_gn_chromeos_rel': {
         'chromium_config_kwargs': {

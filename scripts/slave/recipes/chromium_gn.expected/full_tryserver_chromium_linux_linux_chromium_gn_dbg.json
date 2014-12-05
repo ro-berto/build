@@ -110,24 +110,5 @@
       "all"
     ],
     "name": "compile"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Debug",
-      "--no-xvfb",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"linux_chromium_gn_dbg\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium.linux\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"chromium_gn\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"linux_chromium_gn_dbg\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium.linux\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"chromium_gn\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--builder-name=linux_chromium_gn_dbg",
-      "--slave-name=TestSlavename",
-      "--build-number=571",
-      "html_viewer_unittests"
-    ],
-    "name": "html_viewer_unittests"
   }
 ]
