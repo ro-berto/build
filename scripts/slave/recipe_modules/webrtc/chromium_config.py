@@ -25,8 +25,16 @@ def webrtc_standalone(c):
 def webrtc_clang(c):
   _compiler_defaults(c)
 
-@CONFIG_CTX(includes=['chromium', 'static_library'])
-def webrtc_ios(c):
+@CONFIG_CTX(includes=['chromium', '_webrtc_ios'])
+def webrtc_ios32(c):
+  pass
+
+@CONFIG_CTX(includes=['chromium_no_goma', '_webrtc_ios'])
+def webrtc_ios64(c):
+  pass
+
+@CONFIG_CTX(includes=['static_library'])
+def _webrtc_ios(c):
   if c.HOST_PLATFORM != 'mac':
     raise BadConf('Only "mac" host platform is supported for iOS (got: "%s")' %
                   c.HOST_PLATFORM)
