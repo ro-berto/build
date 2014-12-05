@@ -130,7 +130,7 @@ def main():
       cmd.extend(['--msan'])
     if options.buildbot == 'True':
       cmd.extend(['--buildbot'])
-    if options.dcheck_always_on == 'True':
+    if options.dcheck_always_on:
       cmd.extend(['--dcheck-always-on'])
     if options.no_presubmit:
       cmd.extend(['--no-presubmit'])
