@@ -34,6 +34,9 @@ def _BuildSteps(api, buildername, build_type):
   elif 'ChromeOS' in buildername:
     args += ['--chromeos']
 
+  if 'ASan' in buildername:
+    args += ['--asan']
+
   goma_dir = ''
   if 'Win' not in buildername:
     # Disable Goma on Windows as it makes the build much slower (> 1 hour vs
@@ -75,6 +78,9 @@ def _GetTestConfig(api):
     test_config['test_types'] = ['perf']
   else:
     test_config['test_types'] = ['default']
+
+  if 'ASan' in buildername:
+    test_config['sanitizer'] = 'asan'
 
   test_config['master_name'] = api.properties.get('mastername')
   test_config['builder_name'] = api.properties.get('buildername')
@@ -132,6 +138,7 @@ def GenSteps(api):
 def GenTests(api):
   tests = [
       ['mojo_linux', 'Mojo Linux'],
+      ['mojo_linux_asan', 'Mojo Linux ASan'],
       ['mojo_linux_dbg', 'Mojo Linux (dbg)'],
       ['mojo_android_dbg', 'Mojo Android (dbg)'],
       ['mojo_android_builder_tests_dbg', 'Mojo Android Builder Tests (dbg)'],
