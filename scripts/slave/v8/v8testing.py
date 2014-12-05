@@ -65,9 +65,6 @@ def main():
   option_parser.add_option('--buildbot',
                            default='True',
                            help='Resolve paths to executables for buildbots')
-  option_parser.add_option('--dcheck-always-on',
-                           default='False',
-                           help='V8 was compiled with DCHECKs enabled')
   option_parser.add_option('--json-test-results',
                            help='File to write json results.')
   option_parser.add_option('--no-presubmit',
@@ -130,8 +127,6 @@ def main():
       cmd.extend(['--msan'])
     if options.buildbot == 'True':
       cmd.extend(['--buildbot'])
-    if options.dcheck_always_on == 'True':
-      cmd.extend(['--dcheck-always-on'])
     if options.no_presubmit:
       cmd.extend(['--no-presubmit'])
     if options.no_i18n:

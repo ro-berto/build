@@ -601,10 +601,6 @@ class V8Api(recipe_api.RecipeApi):
         'third_party', 'llvm-build', 'Release+Asserts', 'bin',
         'llvm-symbolizer')
 
-    # Indicate whether DCHECKs were enabled.
-    if self.m.chromium.c.gyp_env.GYP_DEFINES.get('dcheck_always_on') == 1:
-      full_args.append('--dcheck-always-on')
-
     # Arguments and environment for asan builds:
     if self.m.chromium.c.gyp_env.GYP_DEFINES.get('asan') == 1:
       full_args.append('--asan')

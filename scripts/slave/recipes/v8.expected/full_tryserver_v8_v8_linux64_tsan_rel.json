@@ -95,7 +95,6 @@
       "unittests",
       "--no-variants",
       "--flaky-tests=skip",
-      "--dcheck-always-on",
       "--tsan",
       "--json-test-results",
       "/path/to/tmp/json"
@@ -118,7 +117,6 @@
       "--testname",
       "default",
       "--flaky-tests=skip",
-      "--dcheck-always-on",
       "--tsan",
       "--json-test-results",
       "/path/to/tmp/json"
