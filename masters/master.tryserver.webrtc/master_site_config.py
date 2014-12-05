@@ -18,6 +18,6 @@ class WebRTCTryServer(Master.Master4):
   base_app_url = 'https://webrtc-status.appspot.com'
   tree_status_url = base_app_url + '/status'
   store_revisions_url = base_app_url + '/revisions'
-  last_good_url = base_app_url + '/lkgr'
+  last_good_url = None
   code_review_site = 'https://webrtc-codereview.appspot.com'
   buildbot_url = 'http://build.chromium.org/p/tryserver.webrtc/'
