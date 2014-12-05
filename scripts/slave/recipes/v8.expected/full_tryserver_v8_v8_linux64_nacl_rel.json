@@ -112,6 +112,7 @@
       "--command_prefix=tools/nacl-run.py",
       "--no-presubmit",
       "--buildbot=False",
+      "--dcheck-always-on",
       "--json-test-results",
       "/path/to/tmp/json"
     ],
@@ -137,6 +138,7 @@
       "--command_prefix=tools/nacl-run.py",
       "--no-presubmit",
       "--buildbot=False",
+      "--dcheck-always-on",
       "--json-test-results",
       "/path/to/tmp/json"
     ],
