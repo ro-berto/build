@@ -91,6 +91,7 @@
       "unittests",
       "--no-variants",
       "--flaky-tests=skip",
+      "--dcheck-always-on",
       "--json-test-results",
       "/path/to/tmp/json"
     ],
@@ -109,6 +110,7 @@
       "--testname",
       "default",
       "--flaky-tests=skip",
+      "--dcheck-always-on",
       "--json-test-results",
       "/path/to/tmp/json"
     ],
@@ -129,6 +131,7 @@
       "--no-variants",
       "--shell_flags=\"--optimize-for-size\"",
       "--flaky-tests=skip",
+      "--dcheck-always-on",
       "--json-test-results",
       "/path/to/tmp/json"
     ],
@@ -147,6 +150,7 @@
       "--testname",
       "webkit",
       "--flaky-tests=skip",
+      "--dcheck-always-on",
       "--json-test-results",
       "/path/to/tmp/json"
     ],
