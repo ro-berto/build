@@ -32,5 +32,5 @@ for spec_module, test_spec_file, builders_list in _builders:
       builder_cfg = copy.deepcopy(spec_module.SPEC['builders'][builder])
       builder_cfg['recipe_config'] = 'chromium_skia'
       builder_cfg['testing']['test_spec_file'] = test_spec_file
-      builder_cfg['patch_root'] = 'third_party/skia'
+      builder_cfg['patch_root'] = 'src/third_party/skia'
       SPEC['builders'][builder_name] = builder_cfg
