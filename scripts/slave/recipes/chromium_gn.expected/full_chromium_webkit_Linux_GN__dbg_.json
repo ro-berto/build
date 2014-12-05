@@ -104,5 +104,24 @@
       "all"
     ],
     "name": "compile"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Debug",
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux GN (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"recipe\": \"chromium_gn\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux GN (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"recipe\": \"chromium_gn\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--builder-name=Linux GN (dbg)",
+      "--slave-name=TestSlavename",
+      "--build-number=571",
+      "html_viewer_unittests"
+    ],
+    "name": "html_viewer_unittests"
   }
 ]

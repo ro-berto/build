@@ -56,6 +56,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'gclient_apply_config': ['blink'],
+        'should_run_mojo_tests': True,
       },
       'Linux GN (dbg)': {
         'chromium_config_kwargs': {
@@ -65,6 +66,7 @@ BUILDERS = {
         },
         'chromium_apply_config': ['gn_component_build'],
         'gclient_apply_config': ['blink'],
+        'should_run_mojo_tests': True,
       },
     },
   },
@@ -177,6 +179,7 @@ BUILDERS = {
           'TARGET_PLATFORM': 'linux',
           'TARGET_BITS': 64,
         },
+        'should_run_mojo_tests': True,
       },
       'linux_chromium_gn_dbg': {
         'chromium_config_kwargs': {
@@ -185,6 +188,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'chromium_apply_config': ['gn_component_build'],
+        'should_run_mojo_tests': True,
       },
       'linux_chromium_gn_chromeos_rel': {
         'chromium_config_kwargs': {
@@ -327,6 +331,8 @@ def GenSteps(api):
 
   # TODO(dpranke): crbug.com/353854. Run gn_unittests and other tests
   # when they are also being run as part of the try jobs.
+  if bot_config.get('should_run_mojo_tests', False):
+    api.chromium.runtest('html_viewer_unittests')
 
 
 def _sanitize_nonalpha(text):
