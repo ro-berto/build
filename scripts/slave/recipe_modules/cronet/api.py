@@ -14,9 +14,9 @@ class CronetApi(recipe_api.RecipeApi):
 
   def init_and_sync(self, recipe_config, kwargs, gyp_defs):
     default_kwargs = {
-      'REPO_URL': self.m.properties.get('repository') or '',
+      'REPO_URL': 'https://chromium.googlesource.com/chromium/src',
       'INTERNAL': False,
-      'REPO_NAME': self.m.properties.get('project') or '',
+      'REPO_NAME': 'src',
       'BUILD_CONFIG': 'Debug'
     }
     droid = self.m.chromium_android
