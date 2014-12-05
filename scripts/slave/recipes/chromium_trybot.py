@@ -367,6 +367,16 @@ BUILDERS = {
           'platform': 'mac',
         },
       },
+      'mac_chromium_10.6_rel_ng': {
+        'based_on_main_waterfall': {
+          'mastername': 'chromium.mac',
+          'buildername': 'Mac Builder',
+          'testers': ['Mac10.6 Tests'],
+        },
+        'testing': {
+          'platform': 'mac',
+        },
+      },
       'mac_chromium_compile_dbg': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -470,6 +480,30 @@ BUILDERS = {
           'buildername': 'Win Builder',
           'testers': [
             'Win7 Tests (1)',
+          ],
+        },
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'win_chromium_xp_rel_ng': {
+        'based_on_main_waterfall': {
+          'mastername': 'chromium.win',
+          'buildername': 'Win Builder',
+          'testers': [
+            'XP Tests (1)',
+          ],
+        },
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'win_chromium_vista_rel_ng': {
+        'based_on_main_waterfall': {
+          'mastername': 'chromium.win',
+          'buildername': 'Win Builder',
+          'testers': [
+            'Vista Tests (1)',
           ],
         },
         'testing': {
