@@ -13,7 +13,10 @@ def v8(c):
   targ_arch = c.gyp_env.GYP_DEFINES.get('target_arch')
   if not targ_arch:  # pragma: no cover
     raise recipe_config.BadConf('v8 must have a valid target_arch.')
-  c.gyp_env.GYP_DEFINES['v8_target_arch'] = targ_arch
+  if c.TARGET_PLATFORM == 'android':
+    c.gyp_env.GYP_DEFINES['v8_target_arch'] = 'android_' + targ_arch
+  else:
+    c.gyp_env.GYP_DEFINES['v8_target_arch'] = targ_arch
   del c.gyp_env.GYP_DEFINES['component']
   c.build_dir = Path('[CHECKOUT]', 'out')
   c.compile_py.build_tool = 'make'

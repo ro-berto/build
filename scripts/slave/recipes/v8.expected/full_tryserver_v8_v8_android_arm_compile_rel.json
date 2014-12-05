@@ -52,7 +52,7 @@
     ],
     "env": {
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "dcheck_always_on=1 fastbuild=1 target_arch=arm v8_target_arch=arm"
+      "GYP_DEFINES": "dcheck_always_on=1 fastbuild=1 target_arch=arm v8_target_arch=android_arm"
     },
     "name": "gclient runhooks"
   },

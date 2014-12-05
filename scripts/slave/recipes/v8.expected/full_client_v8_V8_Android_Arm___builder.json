@@ -48,7 +48,7 @@
     ],
     "env": {
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "target_arch=arm v8_target_arch=arm"
+      "GYP_DEFINES": "target_arch=arm v8_target_arch=android_arm"
     },
     "name": "gclient runhooks"
   },
