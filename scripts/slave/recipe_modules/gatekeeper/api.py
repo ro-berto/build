@@ -18,6 +18,8 @@ class Gatekeeper(recipe_api.RecipeApi):
 
       if tree_args.get('status-url'):
         args.extend(['--status-url', tree_args['status-url']])
+      if tree_args.get('sheriff-url'):
+        args.extend(['--sheriff-url', tree_args['sheriff-url']])
       if tree_args.get('set-status'):
         args.append('--set-status')
       if tree_args.get('open-tree'):

@@ -20,6 +20,7 @@ class GatekeeperTestApi(recipe_test_api.RecipeTestApi):
         'password-file': '.blink_status_password',
         'revision-properties': 'got_revision,got_webkit_revision',
         'set-status': True,
+        'sheriff-url': 'https://build.chromium.org/p/chromium/%s.js',
         'status-url': 'https://blink-status.appspot.com',
         'status-user': 'gatekeeper@google.com',
         'track-revisions': True,
