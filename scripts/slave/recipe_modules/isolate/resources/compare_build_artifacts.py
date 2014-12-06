@@ -21,6 +21,27 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # workaround to find regression on the deterministic builders.
 # TODO(sebmarchand): Remove this once all the files are deterministic.
 WHITELIST = {
+  # http://crbug.com/383340
+  'android': {
+    # Completed.
+  },
+
+  # http://crbug.com/383364
+  'ios': {
+    # TODO(maruel): Add files.
+  },
+
+  # http://crbug.com/330263
+  'linux': {
+    # Completed.
+  },
+
+  # http://crbug.com/330262
+  'mac': {
+    # TODO(maruel): Add files.
+  },
+
+  # http://crbug.com/330260
   'win': {
     'base_unittests.exe',
     'base_unittests.isolated',
@@ -56,18 +77,6 @@ WHITELIST = {
     'unit_tests.exe',
     'unit_tests.isolated',
   },
-  'linux': {
-    'browser_tests.isolated',
-    'nacl_helper_nonsfi',
-    'nacl_irt_x86_64.nexe',
-    'ppapi_nacl_tests_glibc_x64.nexe',
-    'ppapi_nacl_tests_newlib_x64.nexe',
-    'ppapi_nacl_tests_pnacl_newlib_x64.nexe',
-    'unit_tests.isolated',
-  },
-  'mac': { },
-  'android': { },
-  'ios': { },
 }
 
 def get_files_to_compare(build_dir, recursive=False):
