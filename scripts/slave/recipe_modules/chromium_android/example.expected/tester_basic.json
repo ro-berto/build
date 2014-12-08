@@ -172,7 +172,7 @@
       "[SLAVE_BUILD]/src/build/tree_truth.sh",
       "[SLAVE_BUILD]/src",
       "src",
-      "src-internal",
+      "foo",
       "src/repo"
     ],
     "name": "tree truth steps"

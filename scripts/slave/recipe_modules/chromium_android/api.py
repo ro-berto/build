@@ -121,10 +121,12 @@ class AndroidApi(recipe_api.RecipeApi):
         infra_step=True,
     )
 
-  def run_tree_truth(self):
+  def run_tree_truth(self, additional_repos=None):
     # TODO(sivachandra): The downstream ToT builder will require
     # 'Show Revisions' step.
-    repos = ['src', 'src-internal']
+    repos = ['src']
+    if additional_repos:
+      repos.extend(additional_repos)
     if self.c.REPO_NAME not in repos:
       repos.append(self.c.REPO_NAME)
     # TODO(sivachandra): Disable subannottations after cleaning up

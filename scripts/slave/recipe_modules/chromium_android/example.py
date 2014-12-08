@@ -88,7 +88,7 @@ def GenSteps(api):
   api.chromium_android.init_and_sync()
 
   api.chromium_android.runhooks()
-  api.chromium_android.run_tree_truth()
+  api.chromium_android.run_tree_truth(additional_repos=['foo'])
   assert 'MAJOR' in api.chromium.get_version()
 
   if config['build']:
