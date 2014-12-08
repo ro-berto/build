@@ -996,10 +996,8 @@ def GenSteps(api):
     tester = main_waterfall_config.get('tester', '')
     if tester:
       test_config = master_dict.get('builders', {}).get(tester)
-      swarming_dimensions = test_config.get('swarming_dimensions', {})
-      for dimension in swarming_dimensions:
-        api.swarming.set_default_dimension(dimension,
-                                           swarming_dimensions[dimension])
+      for key, value in test_config.get('swarming_dimensions', {}).iteritems():
+        api.swarming.set_default_dimension(key, value)
       tests.extend(api.chromium_tests.tests_for_builder(
           main_waterfall_config['mastername'],
           tester,

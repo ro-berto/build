@@ -199,10 +199,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if enable_swarming:
       self.m.isolate.set_isolate_environment(self.m.chromium.c)
       self.m.swarming.check_client_version()
-      swarming_dimensions = bot_config.get('swarming_dimensions', {})
-      for dimension in swarming_dimensions:
-        self.m.swarming.set_default_dimension(dimension,
-                                              swarming_dimensions[dimension])
+      for key, value in bot_config.get('swarming_dimensions', {}).iteritems():
+        self.m.swarming.set_default_dimension(key, value)
 
     if not bot_config.get('disable_runhooks'):
       if self.m.tryserver.is_tryserver:
