@@ -148,7 +148,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/webrtc/ensure_webcam_is_running.py"
+      "[BUILD]/scripts/slave/recipe_modules/webrtc/resources/ensure_webcam_is_running.py"
     ],
     "name": "webcam_check"
   },
@@ -184,7 +184,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/webrtc/ensure_webcam_is_running.py"
+      "[BUILD]/scripts/slave/recipe_modules/webrtc/resources/ensure_webcam_is_running.py"
     ],
     "name": "webcam_check (2)"
   },
@@ -248,7 +248,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/webrtc/ensure_webcam_is_running.py"
+      "[BUILD]/scripts/slave/recipe_modules/webrtc/resources/ensure_webcam_is_running.py"
     ],
     "name": "webcam_check (3)"
   },

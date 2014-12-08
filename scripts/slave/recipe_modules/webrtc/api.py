@@ -311,7 +311,4 @@ class WebRTCApi(recipe_api.RecipeApi):
       self.m.chromium.cleanup_temp()
 
   def virtual_webcam_check(self):
-    self.m.python(
-      'webcam_check',
-      self.m.path['build'].join('scripts', 'slave', 'webrtc',
-                                'ensure_webcam_is_running.py'))
+    self.m.python('webcam_check', self.resource('ensure_webcam_is_running.py'))
