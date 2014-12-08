@@ -66,7 +66,7 @@ def main():
                            default='True',
                            help='Resolve paths to executables for buildbots')
   option_parser.add_option('--dcheck-always-on',
-                           default='False', action='store_true',
+                           default=False, action='store_true',
                            help='V8 was compiled with DCHECKs enabled')
   option_parser.add_option('--json-test-results',
                            help='File to write json results.')
