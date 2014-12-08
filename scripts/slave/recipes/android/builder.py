@@ -97,7 +97,7 @@ BUILDERS = {
       'try': True,
       'findbugs': FYIStep,
     },
-    'android_rel': {
+    'android_compile_rel': {
       'recipe_config': 'main_builder',
       'gclient_apply_config': ['android', 'chrome_internal'],
       'try': True,

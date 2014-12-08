@@ -7,7 +7,7 @@
       "--master",
       "tryserver.chromium.linux",
       "--builder",
-      "android_rel",
+      "android_compile_rel",
       "--slave",
       "TestSlavename",
       "--spec",
