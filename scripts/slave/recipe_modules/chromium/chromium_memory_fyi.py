@@ -13,7 +13,7 @@ SPEC = {
       'recipe_config': 'chromium_msan',
       'chromium_apply_config': ['instrumented_libraries'],
       'GYP_DEFINES': {
-        'msan_track_origins': 0,
+        'msan_track_origins': 2,
       },
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
