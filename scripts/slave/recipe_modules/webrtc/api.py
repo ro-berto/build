@@ -181,14 +181,18 @@ class WebRTCApi(recipe_api.RecipeApi):
   def add_webrtc_browser_tests(self, revision, extra_args=None, suffix=None):
     extra_args = extra_args or []
     suffix = suffix or ''
-    self.add_test('content_browsertests%s' % suffix,
+    self.add_test(test='content_browsertests',
+                  name='content_browsertests%s' % suffix,
+                  perf_dashboard_id='content_browsertests%s' % suffix,
                   args=['--gtest_filter=WebRtc*', '--run-manual',
                         '--test-launcher-print-test-stdio=always',
                         '--test-launcher-bot-mode'] + extra_args,
         revision=revision,
         perf_test=True)
     self.add_test(
-        'browser_tests%s' % suffix,
+        test='browser_tests',
+        name='browser_tests%s' % suffix,
+        perf_dashboard_id='browser_tests%s' % suffix,
         # These tests needs --test-launcher-jobs=1 since some of them are
         # not able to run in parallel (due to the usage of the
         # peerconnection server).
@@ -217,9 +221,9 @@ class WebRTCApi(recipe_api.RecipeApi):
       self.m.chromium.runtest(
           test=test, args=args, name=name,
           results_url=self.DASHBOARD_UPLOAD_URL, annotate='graphing',
-          xvfb=True, perf_dashboard_id=perf_dashboard_id, test_type=test,
-          env=env, revision=revision, perf_id=self.c.PERF_ID,
-          perf_config=self.c.PERF_CONFIG)
+          xvfb=True, perf_dashboard_id=perf_dashboard_id,
+          test_type=perf_dashboard_id, env=env, revision=revision,
+          perf_id=self.c.PERF_ID, perf_config=self.c.PERF_CONFIG)
     else:
       annotate = 'gtest'
       python_mode = False

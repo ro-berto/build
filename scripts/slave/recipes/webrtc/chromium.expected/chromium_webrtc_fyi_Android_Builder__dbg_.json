@@ -124,7 +124,7 @@
       "--perf-id=chromium-webrtc-trunk-tot-dbg-android",
       "--perf-config",
       "{'a_default_rev': 'r_webrtc_rev'}",
-      "--test-type=[BUILD]/scripts/slave/chromium/sizes.py",
+      "--test-type=sizes",
       "--builder-name=Android Builder (dbg)",
       "--slave-name=TestSlavename",
       "--build-number=571",
