@@ -188,6 +188,10 @@ def main_linux():
 
 
 def main():
+  if os.environ.get('SWARMING_HEADLESS'):
+    # On Swarming, this script is run from a temporary directory. Eh.
+    print('Skipping temp cleanup when run from Swarming.')
+    return 0
   try:
     if chromium_utils.IsWindows():
       return main_win()

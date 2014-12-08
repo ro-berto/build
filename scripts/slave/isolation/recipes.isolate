@@ -1,0 +1,53 @@
+# Copyright 2014 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+#
+# This permits isolating the recipes so they can be run from a Swarming bot (or
+# anywhere, really).
+#
+# This file MUST be 4 directories down the root directory. It cannot be in
+# scripts/slave/. See recipe_modules/path/config.py.
+#
+# Expected trigger additional arguments:
+#   '--build-properties={...}' '--factory-properties={...}'
+#
+{
+  'variables': {
+    'command': [
+      'python', '../annotated_run.py',
+    ],
+    'files': [
+      '../../../../depot_tools/',
+      '../../../site_config/',
+      '../../../goma/',
+      '../../common/',
+      '../__init__.py',
+      '../annotated_run.py',
+      '../annotation_utils.py',
+      '../bootstrap.py',
+      '../bot_update.py',
+      '../build_directory.py',
+      '../cleanup_temp.py',
+      '../compile.py',
+      '../crash_utils.py',
+      '../gsutil',
+      '../gsutil.bat',
+      '../gtest_slave_utils.py',
+      '../performance_log_processor.py',
+      '../recipe_api.py',
+      '../recipe_config.py',
+      '../recipe_config_types.py',
+      '../recipe_loader.py',
+      '../recipe_modules/',
+      '../recipe_test_api.py',
+      '../recipe_util.py',
+      '../recipes/',
+      '../results_dashboard.py',
+      '../runtest.py',
+      '../skia/',
+      '../slave_utils.py',
+      '../telemetry_utils.py',
+      '../xvfb.py',
+    ],
+  },
+}
