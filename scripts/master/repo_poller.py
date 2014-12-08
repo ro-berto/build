@@ -341,7 +341,7 @@ class RepoPoller(PollingChangeSource):
             files=files,
             comments=comments,
             when_timestamp=timestamp,
-            branch=None,
+            branch=current_repo_branch,
             category=self.category,
             project=self.project,
             repository='/'.join([self.repo_url, project]),
