@@ -75,7 +75,7 @@
     "name": "List adb devices",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"MedfieldBA149FC5\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"8AB5139A\"@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -84,7 +84,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "MedfieldBA149FC5",
+      "8AB5139A",
       "shell",
       "echo",
       "$EXTERNAL_STORAGE"
@@ -96,7 +96,23 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "MedfieldBA149FC5",
+      "8AB5139A",
+      "root"
+    ],
+    "name": "adb root"
+  },
+  {
+    "cmd": [
+      "sleep",
+      "10"
+    ],
+    "name": "wait"
+  },
+  {
+    "cmd": [
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
+      "-s",
+      "8AB5139A",
       "wait-for-device"
     ],
     "name": "wait for device"
@@ -105,7 +121,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_kill_skia",
       "-s",
-      "MedfieldBA149FC5"
+      "8AB5139A"
     ],
     "env": {
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
@@ -115,9 +131,19 @@
   },
   {
     "cmd": [
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
+      "-s",
+      "8AB5139A",
+      "shell",
+      "stop"
+    ],
+    "name": "stop shell"
+  },
+  {
+    "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_push_if_needed",
       "-s",
-      "MedfieldBA149FC5",
+      "8AB5139A",
       "[SLAVE_BUILD]/skia/resources",
       "/storage/emulated/legacy/skiabot/skia_resources"
     ],
@@ -131,7 +157,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "MedfieldBA149FC5",
+      "8AB5139A",
       "shell",
       "rm",
       "-r",
@@ -143,7 +169,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "MedfieldBA149FC5",
+      "8AB5139A",
       "shell",
       "if",
       "[",
@@ -162,7 +188,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "MedfieldBA149FC5",
+      "8AB5139A",
       "shell",
       "mkdir",
       "-p",
@@ -175,7 +201,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/gm/actual/Test-Android-Venue8-PowerVR-x86-Debug"
+      "[SLAVE_BUILD]/gm/actual/Test-Android-NexusPlayer-PowerVR-x86-Debug"
     ],
     "name": "rmtree .../actual/BUILDER",
     "~followup_annotations": [
@@ -193,7 +219,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/gm/actual/Test-Android-Venue8-PowerVR-x86-Debug",
+      "[SLAVE_BUILD]/gm/actual/Test-Android-NexusPlayer-PowerVR-x86-Debug",
       "511"
     ],
     "name": "makedirs .../actual/BUILDER",
@@ -214,7 +240,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "MedfieldBA149FC5",
+      "8AB5139A",
       "shell",
       "rm",
       "-r",
@@ -226,7 +252,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "MedfieldBA149FC5",
+      "8AB5139A",
       "shell",
       "if",
       "[",
@@ -245,7 +271,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "MedfieldBA149FC5",
+      "8AB5139A",
       "shell",
       "mkdir",
       "-p",
@@ -257,7 +283,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "MedfieldBA149FC5",
+      "8AB5139A",
       "push",
       "[SLAVE_BUILD]/skia/expectations/gm/ignored-tests.txt",
       "/storage/emulated/legacy/skiabot/skia_gm_expected/ignored-tests.txt"
@@ -268,11 +294,11 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "MedfieldBA149FC5",
+      "8AB5139A",
       "shell",
       "rm",
       "-r",
-      "/storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-Venue8-PowerVR-x86-Debug"
+      "/storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-NexusPlayer-PowerVR-x86-Debug"
     ],
     "name": "rmdir .../skia_gm_expected/BUILDER"
   },
@@ -280,30 +306,30 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "MedfieldBA149FC5",
+      "8AB5139A",
       "shell",
       "if",
       "[",
       "-e",
-      "/storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-Venue8-PowerVR-x86-Debug",
+      "/storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-NexusPlayer-PowerVR-x86-Debug",
       "];",
       "then",
       "echo",
       "FILE_EXISTS;",
       "fi"
     ],
-    "name": "exists /storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-Venue8-PowerVR-x86-Debug",
+    "name": "exists /storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-NexusPlayer-PowerVR-x86-Debug",
     "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "MedfieldBA149FC5",
+      "8AB5139A",
       "shell",
       "mkdir",
       "-p",
-      "/storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-Venue8-PowerVR-x86-Debug"
+      "/storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-NexusPlayer-PowerVR-x86-Debug"
     ],
     "name": "mkdir .../skia_gm_expected/BUILDER"
   },
@@ -311,37 +337,37 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "MedfieldBA149FC5",
+      "8AB5139A",
       "push",
-      "[SLAVE_BUILD]/skia/expectations/gm/Test-Android-Venue8-PowerVR-x86-Debug/expected-results.json",
-      "/storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-Venue8-PowerVR-x86-Debug/expected-results.json"
+      "[SLAVE_BUILD]/skia/expectations/gm/Test-Android-NexusPlayer-PowerVR-x86-Debug/expected-results.json",
+      "/storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-NexusPlayer-PowerVR-x86-Debug/expected-results.json"
     ],
-    "name": "push [SLAVE_BUILD]/skia/expectations/gm/Test-Android-Venue8-PowerVR-x86-Debug/expected-results.json"
+    "name": "push [SLAVE_BUILD]/skia/expectations/gm/Test-Android-NexusPlayer-PowerVR-x86-Debug/expected-results.json"
   },
   {
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "MedfieldBA149FC5",
+      "8AB5139A",
       "shell",
       "if",
       "[",
       "-e",
-      "/storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-Venue8-PowerVR-x86-Debug/expected-results.json",
+      "/storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-NexusPlayer-PowerVR-x86-Debug/expected-results.json",
       "];",
       "then",
       "echo",
       "FILE_EXISTS;",
       "fi"
     ],
-    "name": "exists /storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-Venue8-PowerVR-x86-Debug/expected-results.json",
+    "name": "exists /storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-NexusPlayer-PowerVR-x86-Debug/expected-results.json",
     "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "MedfieldBA149FC5",
+      "8AB5139A",
       "shell",
       "if",
       "[",
@@ -362,16 +388,16 @@
       "-d",
       "x86",
       "-s",
-      "MedfieldBA149FC5",
+      "8AB5139A",
       "gm",
       "--verbose",
       "--writeChecksumBasedFilenames",
       "--mismatchPath",
-      "/storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-Venue8-PowerVR-x86-Debug",
+      "/storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-NexusPlayer-PowerVR-x86-Debug",
       "--missingExpectationsPath",
-      "/storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-Venue8-PowerVR-x86-Debug",
+      "/storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-NexusPlayer-PowerVR-x86-Debug",
       "--writeJsonSummaryPath",
-      "/storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-Venue8-PowerVR-x86-Debug/actual-results.json",
+      "/storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-NexusPlayer-PowerVR-x86-Debug/actual-results.json",
       "--ignoreErrorTypes",
       "IntentionallySkipped",
       "MissingExpectations",
@@ -392,22 +418,22 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_pull_if_needed",
       "-s",
-      "MedfieldBA149FC5",
-      "/storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-Venue8-PowerVR-x86-Debug",
-      "[SLAVE_BUILD]/gm/actual/Test-Android-Venue8-PowerVR-x86-Debug"
+      "8AB5139A",
+      "/storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-NexusPlayer-PowerVR-x86-Debug",
+      "[SLAVE_BUILD]/gm/actual/Test-Android-NexusPlayer-PowerVR-x86-Debug"
     ],
     "env": {
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
-    "name": "pull /storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-Venue8-PowerVR-x86-Debug"
+    "name": "pull /storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-NexusPlayer-PowerVR-x86-Debug"
   },
   {
     "cmd": [
       "python",
       "-u",
       "[SLAVE_BUILD]/skia/gm/display_json_results.py",
-      "[SLAVE_BUILD]/gm/actual/Test-Android-Venue8-PowerVR-x86-Debug/actual-results.json"
+      "[SLAVE_BUILD]/gm/actual/Test-Android-NexusPlayer-PowerVR-x86-Debug/actual-results.json"
     ],
     "name": "Compare GMs"
   },
@@ -416,8 +442,8 @@
       "python",
       "-u",
       "[BUILD]/scripts/slave/recipe_modules/skia/resources/upload_gm_results.py",
-      "[SLAVE_BUILD]/gm/actual/Test-Android-Venue8-PowerVR-x86-Debug",
-      "Test-Android-Venue8-PowerVR-x86-Debug",
+      "[SLAVE_BUILD]/gm/actual/Test-Android-NexusPlayer-PowerVR-x86-Debug",
+      "Test-Android-NexusPlayer-PowerVR-x86-Debug",
       "[DEPOT_TOOLS]/third_party/gsutil/gsutil"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
@@ -469,7 +495,7 @@
       "-d",
       "x86",
       "-s",
-      "MedfieldBA149FC5",
+      "8AB5139A",
       "dm",
       "--verbose",
       "--resourcePath",
@@ -492,7 +518,7 @@
       "gpu",
       "PowerVR",
       "model",
-      "Venue8",
+      "NexusPlayer",
       "os",
       "Android"
     ],
@@ -506,7 +532,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_pull_if_needed",
       "-s",
-      "MedfieldBA149FC5",
+      "8AB5139A",
       "/storage/emulated/legacy/skiabot/skia_dm",
       "[SLAVE_BUILD]/dm"
     ],
@@ -523,7 +549,7 @@
       "[BUILD]/scripts/slave/recipe_modules/skia/resources/upload_dm_results.py",
       "[SLAVE_BUILD]/dm",
       "164710",
-      "Test-Android-Venue8-PowerVR-x86-Debug",
+      "Test-Android-NexusPlayer-PowerVR-x86-Debug",
       "5",
       "",
       "[SLAVE_BUILD]/skia/common/py/utils"
@@ -619,7 +645,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "MedfieldBA149FC5",
+      "8AB5139A",
       "shell",
       "rm",
       "-r",
@@ -631,7 +657,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "MedfieldBA149FC5",
+      "8AB5139A",
       "shell",
       "if",
       "[",
@@ -650,7 +676,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "MedfieldBA149FC5",
+      "8AB5139A",
       "shell",
       "mkdir",
       "-p",
@@ -662,7 +688,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_push_if_needed",
       "-s",
-      "MedfieldBA149FC5",
+      "8AB5139A",
       "[SLAVE_BUILD]/playback/skps",
       "/storage/emulated/legacy/skiabot/skia_skp/skps"
     ],
@@ -678,7 +704,7 @@
       "-d",
       "x86",
       "-s",
-      "MedfieldBA149FC5",
+      "8AB5139A",
       "render_pdfs",
       "--inputPaths",
       "/storage/emulated/legacy/skiabot/skia_skp/skps"
@@ -747,7 +773,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_push_if_needed",
       "-s",
-      "MedfieldBA149FC5",
+      "8AB5139A",
       "[SLAVE_BUILD]/skimage_in",
       "/storage/emulated/legacy/skiabot/skia_skimage_in"
     ],
@@ -801,7 +827,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "MedfieldBA149FC5",
+      "8AB5139A",
       "shell",
       "rm",
       "-r",
@@ -813,7 +839,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "MedfieldBA149FC5",
+      "8AB5139A",
       "shell",
       "if",
       "[",
@@ -832,7 +858,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "MedfieldBA149FC5",
+      "8AB5139A",
       "shell",
       "mkdir",
       "-p",
@@ -844,11 +870,11 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "MedfieldBA149FC5",
+      "8AB5139A",
       "shell",
       "rm",
       "-r",
-      "/storage/emulated/legacy/skiabot/skia_skimage_out/Test-Android-Venue8-PowerVR-x86-Debug"
+      "/storage/emulated/legacy/skiabot/skia_skimage_out/Test-Android-NexusPlayer-PowerVR-x86-Debug"
     ],
     "name": "rmdir .../skia_skimage_out/BUILDER"
   },
@@ -856,30 +882,30 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "MedfieldBA149FC5",
+      "8AB5139A",
       "shell",
       "if",
       "[",
       "-e",
-      "/storage/emulated/legacy/skiabot/skia_skimage_out/Test-Android-Venue8-PowerVR-x86-Debug",
+      "/storage/emulated/legacy/skiabot/skia_skimage_out/Test-Android-NexusPlayer-PowerVR-x86-Debug",
       "];",
       "then",
       "echo",
       "FILE_EXISTS;",
       "fi"
     ],
-    "name": "exists /storage/emulated/legacy/skiabot/skia_skimage_out/Test-Android-Venue8-PowerVR-x86-Debug",
+    "name": "exists /storage/emulated/legacy/skiabot/skia_skimage_out/Test-Android-NexusPlayer-PowerVR-x86-Debug",
     "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "MedfieldBA149FC5",
+      "8AB5139A",
       "shell",
       "mkdir",
       "-p",
-      "/storage/emulated/legacy/skiabot/skia_skimage_out/Test-Android-Venue8-PowerVR-x86-Debug"
+      "/storage/emulated/legacy/skiabot/skia_skimage_out/Test-Android-NexusPlayer-PowerVR-x86-Debug"
     ],
     "name": "mkdir .../skia_skimage_out/BUILDER"
   },
@@ -887,11 +913,11 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "MedfieldBA149FC5",
+      "8AB5139A",
       "shell",
       "rm",
       "-r",
-      "/storage/emulated/legacy/skiabot/skia_skimage_expected/Test-Android-Venue8-PowerVR-x86-Debug"
+      "/storage/emulated/legacy/skiabot/skia_skimage_expected/Test-Android-NexusPlayer-PowerVR-x86-Debug"
     ],
     "name": "rmdir .../skia_skimage_expected/BUILDER"
   },
@@ -899,30 +925,30 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "MedfieldBA149FC5",
+      "8AB5139A",
       "shell",
       "if",
       "[",
       "-e",
-      "/storage/emulated/legacy/skiabot/skia_skimage_expected/Test-Android-Venue8-PowerVR-x86-Debug",
+      "/storage/emulated/legacy/skiabot/skia_skimage_expected/Test-Android-NexusPlayer-PowerVR-x86-Debug",
       "];",
       "then",
       "echo",
       "FILE_EXISTS;",
       "fi"
     ],
-    "name": "exists /storage/emulated/legacy/skiabot/skia_skimage_expected/Test-Android-Venue8-PowerVR-x86-Debug",
+    "name": "exists /storage/emulated/legacy/skiabot/skia_skimage_expected/Test-Android-NexusPlayer-PowerVR-x86-Debug",
     "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "MedfieldBA149FC5",
+      "8AB5139A",
       "shell",
       "mkdir",
       "-p",
-      "/storage/emulated/legacy/skiabot/skia_skimage_expected/Test-Android-Venue8-PowerVR-x86-Debug"
+      "/storage/emulated/legacy/skiabot/skia_skimage_expected/Test-Android-NexusPlayer-PowerVR-x86-Debug"
     ],
     "name": "mkdir .../skia_skimage_expected/BUILDER"
   },
@@ -930,12 +956,12 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "MedfieldBA149FC5",
+      "8AB5139A",
       "push",
-      "[SLAVE_BUILD]/skia/expectations/skimage/Test-Android-Venue8-PowerVR-x86-Debug/expected-results.json",
-      "/storage/emulated/legacy/skiabot/skia_skimage_expected/Test-Android-Venue8-PowerVR-x86-Debug/expected-results.json"
+      "[SLAVE_BUILD]/skia/expectations/skimage/Test-Android-NexusPlayer-PowerVR-x86-Debug/expected-results.json",
+      "/storage/emulated/legacy/skiabot/skia_skimage_expected/Test-Android-NexusPlayer-PowerVR-x86-Debug/expected-results.json"
     ],
-    "name": "push [SLAVE_BUILD]/skia/expectations/skimage/Test-Android-Venue8-PowerVR-x86-Debug/expected-results.json"
+    "name": "push [SLAVE_BUILD]/skia/expectations/skimage/Test-Android-NexusPlayer-PowerVR-x86-Debug/expected-results.json"
   },
   {
     "cmd": [
@@ -943,7 +969,7 @@
       "-d",
       "x86",
       "-s",
-      "MedfieldBA149FC5",
+      "8AB5139A",
       "skimage",
       "-r",
       "/storage/emulated/legacy/skiabot/skia_skimage_in",
@@ -954,9 +980,9 @@
       "--mismatchPath",
       "/storage/emulated/legacy/skiabot/skia_skimage_out/images",
       "--createExpectationsPath",
-      "/storage/emulated/legacy/skiabot/skia_skimage_out/Test-Android-Venue8-PowerVR-x86-Debug/actual-results.json",
+      "/storage/emulated/legacy/skiabot/skia_skimage_out/Test-Android-NexusPlayer-PowerVR-x86-Debug/actual-results.json",
       "--readExpectationsPath",
-      "/storage/emulated/legacy/skiabot/skia_skimage_expected/Test-Android-Venue8-PowerVR-x86-Debug/expected-results.json"
+      "/storage/emulated/legacy/skiabot/skia_skimage_expected/Test-Android-NexusPlayer-PowerVR-x86-Debug/expected-results.json"
     ],
     "env": {
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
@@ -968,7 +994,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_pull_if_needed",
       "-s",
-      "MedfieldBA149FC5",
+      "8AB5139A",
       "/storage/emulated/legacy/skiabot/skia_skimage_out",
       "[SLAVE_BUILD]/skimage_out"
     ],
@@ -1003,12 +1029,12 @@
       "--",
       "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
       "cp",
-      "[SLAVE_BUILD]/skimage_out/Test-Android-Venue8-PowerVR-x86-Debug/actual-results.json",
-      "gs://chromium-skia-gm/skimage/actuals/Test-Android-Venue8-PowerVR-x86-Debug/actual-results.json"
+      "[SLAVE_BUILD]/skimage_out/Test-Android-NexusPlayer-PowerVR-x86-Debug/actual-results.json",
+      "gs://chromium-skia-gm/skimage/actuals/Test-Android-NexusPlayer-PowerVR-x86-Debug/actual-results.json"
     ],
     "name": "gsutil upload skimage actual summary",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-skia-gm/skimage/actuals/Test-Android-Venue8-PowerVR-x86-Debug/actual-results.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-skia-gm/skimage/actuals/Test-Android-NexusPlayer-PowerVR-x86-Debug/actual-results.json@@@"
     ]
   },
   {
@@ -1016,8 +1042,8 @@
       "python",
       "-u",
       "\nimport os\nimport sys\nif not os.path.isfile(sys.argv[1]):\n  print 'Missing expectations file %s.' % sys.argv[1]\n  print ('In order to blindly use the actual results as '\n         'the expectations, run the following commands:')\n  print ('$ gsutil cp -R '\n         'gs://chromium-skia-gm/skimage/actuals/%s '\n         'expectations/skimage/%s') % (sys.argv[2],\n                                       sys.argv[2])\n  print ('$ mv expectations/skimage/%s/actual-results.json '\n         'expectations/skimage/%s/%s') % (\n             sys.argv[2], sys.argv[2], sys.argv[3])\n  print ''\n  print 'Then check in using git.'\n  sys.exit(1)\n",
-      "[SLAVE_BUILD]/skia/expectations/skimage/Test-Android-Venue8-PowerVR-x86-Debug/expected-results.json",
-      "Test-Android-Venue8-PowerVR-x86-Debug",
+      "[SLAVE_BUILD]/skia/expectations/skimage/Test-Android-NexusPlayer-PowerVR-x86-Debug/expected-results.json",
+      "Test-Android-NexusPlayer-PowerVR-x86-Debug",
       "expected-results.json"
     ],
     "name": "assert skimage expectations",
@@ -1048,7 +1074,7 @@
       "-d",
       "x86",
       "-s",
-      "MedfieldBA149FC5",
+      "8AB5139A",
       "nanobench",
       "-i",
       "/storage/emulated/legacy/skiabot/skia_resources",
@@ -1072,7 +1098,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "MedfieldBA149FC5",
+      "8AB5139A",
       "reboot"
     ],
     "name": "reboot"

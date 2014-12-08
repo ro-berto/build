@@ -34,8 +34,8 @@ def device_from_builder_dict(builder_dict):
       'Nexus7': 'nexus_7',
       'Nexus9': 'arm64',
       'Nexus10': 'nexus_10',
+      'NexusPlayer': 'x86',
       'Xoom': 'xoom',
-      'Venue8': 'x86',
     }[builder_dict['model']]
   # pragma: no cover
   raise Exception('No device found for builder: %s' % str(builder_dict))
