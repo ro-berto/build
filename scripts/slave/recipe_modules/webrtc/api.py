@@ -151,29 +151,18 @@ class WebRTCApi(recipe_api.RecipeApi):
         self.add_test('video_capture_tests')
         self.add_test('webrtc_perf_tests', revision=revision, perf_test=True)
       elif self.c.TEST_SUITE == 'chromium':
-        # Many of these tests run in the Chromium WebRTC waterfalls are not run in
-        # the main Chromium waterfalls as they are marked as MANUAL_. This is
-        # because they rely on physical audio and video devices, which are only
-        # available at bare-metal machines.
-        self.add_test(
-            'content_browsertests',
-            args=['--gtest_filter=WebRtc*', '--run-manual',
-                  '--test-launcher-print-test-stdio=always',
-                  '--test-launcher-bot-mode'],
-            revision=revision,
-            perf_test=True)
-        self.add_test(
-            'browser_tests',
-            # These tests needs --test-launcher-jobs=1 since some of them are
-            # not able to run in parallel (due to the usage of the
-            # peerconnection server).
-            args = ['--gtest_filter=%s' % self.BROWSER_TESTS_GTEST_FILTER,
-                    '--run-manual', '--ui-test-action-max-timeout=300000',
-                    '--test-launcher-jobs=1',
-                    '--test-launcher-bot-mode',
-                    '--test-launcher-print-test-stdio=always'],
-            revision=revision,
-            perf_test=True)
+        # Add WebRTC-specific browser tests that don't run in the main Chromium
+        # waterfalls (marked as MANUAL_) since they rely on special setup and/or
+        # physical audio/video devices.
+        self.add_webrtc_browser_tests(revision)
+
+        # Same tests but running with the new Video Engine API.
+        variations_server = 'https://clients4.google.com/chrome-variations/seed'
+        extra_args=['--variations-server-url=%s' % variations_server,
+                    '--fake-variations-channel=canary',
+                    '--force-fieldtrials=WebRTC-NewVideoAPI/Enabled/']
+        self.add_webrtc_browser_tests(revision, extra_args, suffix='_new_vie')
+
         self.add_test('content_unittests')
       elif self.c.TEST_SUITE == 'android':
         self.m.chromium_android.common_tests_setup_steps()
@@ -188,6 +177,28 @@ class WebRTCApi(recipe_api.RecipeApi):
         # Disable stack tools steps until crbug.com/411685 is fixed.
         #self.m.chromium_android.stack_tool_steps()
         self.m.chromium_android.test_report()
+
+  def add_webrtc_browser_tests(self, revision, extra_args=None, suffix=None):
+    extra_args = extra_args or []
+    suffix = suffix or ''
+    self.add_test('content_browsertests%s' % suffix,
+                  args=['--gtest_filter=WebRtc*', '--run-manual',
+                        '--test-launcher-print-test-stdio=always',
+                        '--test-launcher-bot-mode'] + extra_args,
+        revision=revision,
+        perf_test=True)
+    self.add_test(
+        'browser_tests%s' % suffix,
+        # These tests needs --test-launcher-jobs=1 since some of them are
+        # not able to run in parallel (due to the usage of the
+        # peerconnection server).
+        args = ['--gtest_filter=%s' % self.BROWSER_TESTS_GTEST_FILTER,
+                '--run-manual', '--ui-test-action-max-timeout=300000',
+                '--test-launcher-jobs=1',
+                '--test-launcher-bot-mode',
+                '--test-launcher-print-test-stdio=always'] + extra_args,
+        revision=revision,
+        perf_test=True)
 
   def add_test(self, test, name=None, args=None, revision=None, env=None,
                perf_test=False, perf_dashboard_id=None, parallel=False):
