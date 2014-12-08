@@ -180,5 +180,31 @@
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "git push"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "0df953c9e12c1e3b0e37f2d4ef1ef8c319e095cb 396006",
+      "[SLAVE_BUILD]/refs_heads_roll.log"
+    ],
+    "name": "Write refs_heads_roll.log"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
+      "cp",
+      "[SLAVE_BUILD]/refs_heads_roll.log",
+      "gs://chromium-v8-auto-roll/v8_release_process/refs_heads_roll.log"
+    ],
+    "name": "gsutil upload",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8-auto-roll/v8_release_process/refs_heads_roll.log@@@"
+    ]
   }
 ]

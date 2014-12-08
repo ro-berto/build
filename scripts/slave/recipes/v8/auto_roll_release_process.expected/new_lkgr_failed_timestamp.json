@@ -102,6 +102,42 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]/refs_heads_lkgr.log",
+      "/path/to/tmp/"
+    ],
+    "name": "Read refs_heads_lkgr.log"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "\nc1a7fd0c98a80c52fcf6763850d2ee1c41cfe8d6 396004",
+      "[SLAVE_BUILD]/refs_heads_lkgr.log"
+    ],
+    "name": "Write refs_heads_lkgr.log"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
+      "cp",
+      "[SLAVE_BUILD]/refs_heads_lkgr.log",
+      "gs://chromium-v8-auto-roll/v8_release_process/refs_heads_lkgr.log"
+    ],
+    "name": "gsutil upload",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8-auto-roll/v8_release_process/refs_heads_lkgr.log@@@"
+    ]
+  },
+  {
+    "cmd": [
       "git",
       "fetch",
       "https://chromium.googlesource.com/v8/v8",
@@ -169,7 +205,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "396004",
+      "396006",
       "[SLAVE_BUILD]/timestamp.txt"
     ],
     "name": "init timestamp"

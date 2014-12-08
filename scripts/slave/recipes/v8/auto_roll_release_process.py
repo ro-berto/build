@@ -7,6 +7,7 @@ DEPS = [
   'file',
   'gclient',
   'git',
+  'gsutil',
   'path',
   'properties',
   'python',
@@ -51,6 +52,21 @@ def PushRef(api, repo, ref, hsh):
   api.git(
       'push', repo, '%s:%s' % (ref, ref),
       cwd=api.path['checkout'],
+  )
+
+  # Upload log for debugging.
+  ref_log_file_name = ref.replace('/', '_') + '.log'
+  ref_log_path = api.path['slave_build'].join(ref_log_file_name)
+  log = []
+  if api.path.exists(ref_log_path):
+    log.append(api.file.read(
+      'Read %s' % ref_log_file_name, ref_log_path, test_data=''))
+  log.append('%s %s' % (hsh, str(api.time.time())))
+  api.file.write('Write %s' % ref_log_file_name, ref_log_path, '\n'.join(log))
+  api.gsutil.upload(
+      ref_log_path,
+      'chromium-v8-auto-roll',
+      api.path.join('v8_release_process', ref_log_file_name),
   )
 
 
@@ -181,7 +197,9 @@ def GenTests(api):
             api.raw_io.output(current_date),
         ) +
         api.time.seed(int(float(new_date))) +
-        api.time.step(2)
+        api.time.step(2) +
+        api.path.exists(api.path['slave_build'].join(
+            LKGR_REF.replace('/', '_') + '.log'))
     )
 
   yield Test(
