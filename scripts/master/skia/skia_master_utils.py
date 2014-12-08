@@ -6,7 +6,8 @@
 """Skia-specific utilities for setting up build masters."""
 
 
-from buildbot.scheduler import Scheduler
+from buildbot.changes import filter as change_filter
+from buildbot.scheduler import AnyBranchScheduler
 from buildbot.scheduler import Triggerable
 from buildbot.schedulers import timed
 from common import chromium_utils
@@ -23,6 +24,7 @@ from master.try_job_rietveld import TryJobRietveld
 
 import collections
 import config
+import re
 
 
 DEFAULT_AUTO_REBOOT = False
@@ -31,7 +33,8 @@ DEFAULT_RECIPE = 'skia/skia'
 PERCOMMIT_SCHEDULER_NAME = 'skia_percommit'
 PERIODIC_15MINS_SCHEDULER_NAME = 'skia_periodic_15mins'
 NIGHTLY_SCHEDULER_NAME = 'skia_nightly'
-POLLING_BRANCH = 'master'
+MASTER_BRANCH = 'master'
+POLLING_BRANCH = re.compile('refs/heads/.+')
 TRY_SCHEDULER_NAME = 'try_job_rietveld_skia'
 TRY_SCHEDULER_PROJECT = 'skia'
 
@@ -163,21 +166,24 @@ def SetupBuildersAndSchedulers(c, builders, slaves, ActiveMaster):
                     ', '.join(nonexistent_parents))
 
   # Create the schedulers.
+  skia_change_filter = change_filter.ChangeFilter(
+      project='skia', repository=ActiveMaster.repo_url)
   def trigger_name(parent_builder):
     """Given a parent builder name, return a triggerable scheduler name."""
     return 'triggers_%s' % parent_builder
 
   c['schedulers'] = []
 
-  s = Scheduler(name=PERCOMMIT_SCHEDULER_NAME,
-                branch=POLLING_BRANCH,
-                treeStableTimer=60,
-                builderNames=builders_by_scheduler[PERCOMMIT_SCHEDULER_NAME])
+  s = AnyBranchScheduler(
+      name=PERCOMMIT_SCHEDULER_NAME,
+      treeStableTimer=60,
+      change_filter=skia_change_filter,
+      builderNames=builders_by_scheduler[PERCOMMIT_SCHEDULER_NAME])
   c['schedulers'].append(s)
 
   s = timed.Nightly(
       name=PERIODIC_15MINS_SCHEDULER_NAME,
-      branch=POLLING_BRANCH,
+      branch=MASTER_BRANCH,
       builderNames=builders_by_scheduler[PERIODIC_15MINS_SCHEDULER_NAME],
       minute=[i*15 for i in xrange(60/15)],
       hour='*',
@@ -188,7 +194,7 @@ def SetupBuildersAndSchedulers(c, builders, slaves, ActiveMaster):
 
   s = timed.Nightly(
       name=NIGHTLY_SCHEDULER_NAME,
-      branch=POLLING_BRANCH,
+      branch=MASTER_BRANCH,
       builderNames=builders_by_scheduler[NIGHTLY_SCHEDULER_NAME],
       minute=0,
       hour=22,
@@ -239,7 +245,7 @@ def SetupMaster(ActiveMaster):
   # Polls config.Master.trunk_url for changes
   poller = GitilesPoller(
       repo_url=ActiveMaster.repo_url,
-      branches=['master'],
+      branches=[POLLING_BRANCH],
       pollInterval=10,
       revlinktmpl='https://skia.googlesource.com/skia/+/%s')
 
