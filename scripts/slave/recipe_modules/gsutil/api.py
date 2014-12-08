@@ -103,6 +103,32 @@ class GSUtilApi(recipe_api.RecipeApi):
     name = kwargs.pop('name', 'remove')
     self(cmd, name, **kwargs)
 
+  def download_with_polling(self, url, destination, poll_interval, timeout,
+                            name='Download GS file with polling'):
+    """Returns a step that downloads a Google Storage file via polling.
+
+    This step allows waiting for the presence of a file so that it can be
+    used as a signal to continue work.
+
+    Args:
+      url: The Google Storage URL of the file to download.
+      destination: The local path where the file will be stored.
+      poll_interval: How often, in seconds, to poll for the file.
+      timeout: How long, in seconds, to poll for the file before giving up.
+      name: The name of the step.
+    """
+    gsutil_download_path = self.m.path['build'].join(
+        'scripts', 'slave', 'gsutil_download.py')
+    args = ['--poll',
+            '--url', url,
+            '--dst', destination,
+            '--poll-interval', str(poll_interval),
+            '--timeout', str(timeout)]
+    return self.m.python(name,
+                         gsutil_download_path,
+                         args,
+                         cwd=self.m.path['slave_build'])
+
   def _generate_metadata_args(self, metadata):
     result = []
     if metadata:

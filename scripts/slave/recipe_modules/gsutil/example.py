@@ -39,6 +39,11 @@ def GenSteps(api):
                                   name='signed url')
   api.gsutil.remove_url('gs://%s/%s' % (bucket, new_cloud_file))
 
+  api.gsutil.download_with_polling('gs://chromium-recipe-test/foo/bar',
+                                   'local/path/for/download',
+                                   15,
+                                   600)
+
 
 def GenTests(api):
   yield api.test('basic')
