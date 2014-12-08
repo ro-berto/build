@@ -87,7 +87,7 @@ BUILDERS = {
         'based_on_main_waterfall': {
           'mastername': 'chromium.linux',
           'buildername': 'Linux Builder',
-          'testers': ['Linux Tests'],
+          'tester': 'Linux Tests',
         },
         'testing': {
           'platform': 'linux',
@@ -112,7 +112,7 @@ BUILDERS = {
         'based_on_main_waterfall': {
           'mastername': 'chromium.memory',
           'buildername': 'Linux ASan LSan Builder',
-          'testers': ['Linux ASan LSan Tests (1)'],
+          'tester': 'Linux ASan LSan Tests (1)',
         },
         'testing': {
           'platform': 'linux',
@@ -169,7 +169,6 @@ BUILDERS = {
         'based_on_main_waterfall': {
           'mastername': 'chromium.chromiumos',
           'buildername': 'Linux ChromiumOS Builder (dbg)',
-          'testers': [],
         },
         'compile_only': True,
         'testing': {
@@ -193,7 +192,7 @@ BUILDERS = {
         'based_on_main_waterfall': {
           'mastername': 'chromium.chromiumos',
           'buildername': 'Linux ChromiumOS Builder',
-          'testers': ['Linux ChromiumOS Tests (1)'],
+          'tester': 'Linux ChromiumOS Tests (1)',
         },
         'testing': {
           'platform': 'linux',
@@ -203,7 +202,7 @@ BUILDERS = {
         'based_on_main_waterfall': {
           'mastername': 'chromium.memory',
           'buildername': 'Linux Chromium OS ASan LSan Builder',
-          'testers': ['Linux Chromium OS ASan LSan Tests (1)'],
+          'tester': 'Linux Chromium OS ASan LSan Tests (1)',
         },
         'testing': {
           'platform': 'linux',
@@ -214,7 +213,6 @@ BUILDERS = {
         'based_on_main_waterfall': {
           'mastername': 'chromium.chromiumos',
           'buildername': 'Linux ChromiumOS Builder',
-          'testers': [],
         },
         'compile_only': True,
         'testing': {
@@ -251,9 +249,7 @@ BUILDERS = {
         'based_on_main_waterfall': {
           'mastername': 'chromium.chromiumos',
           'buildername': 'Linux ChromiumOS Athena Builder',
-          'testers': [
-            'Linux ChromiumOS Athena Tests (1)',
-          ],
+          'tester': 'Linux ChromiumOS Athena Tests (1)',
         },
         'chromium_config': 'chromium_chromeos_athena',
         'compile_only': False,
@@ -324,7 +320,6 @@ BUILDERS = {
         'based_on_main_waterfall': {
           'mastername': 'chromium.linux',
           'buildername': 'Linux Builder (dbg)(32)',
-          'testers': [],
         },
          'testing': {
            'platform': 'linux',
@@ -361,7 +356,7 @@ BUILDERS = {
         'based_on_main_waterfall': {
           'mastername': 'chromium.mac',
           'buildername': 'Mac Builder',
-          'testers': ['Mac10.8 Tests'],
+          'tester': 'Mac10.8 Tests',
         },
         'testing': {
           'platform': 'mac',
@@ -371,7 +366,7 @@ BUILDERS = {
         'based_on_main_waterfall': {
           'mastername': 'chromium.mac',
           'buildername': 'Mac Builder',
-          'testers': ['Mac10.6 Tests'],
+          'tester': 'Mac10.6 Tests',
         },
         'testing': {
           'platform': 'mac',
@@ -392,7 +387,6 @@ BUILDERS = {
         'based_on_main_waterfall': {
           'mastername': 'chromium.mac',
           'buildername': 'Mac Builder (dbg)',
-          'testers': [],
         },
         'testing': {
           'platform': 'mac',
@@ -441,7 +435,7 @@ BUILDERS = {
         'based_on_main_waterfall': {
           'mastername': 'chromium.memory',
           'buildername': 'Mac ASan 64 Builder',
-          'testers': ['Mac ASan 64 Tests (1)'],
+          'tester': 'Mac ASan 64 Tests (1)',
         },
         'testing': {
           'platform': 'mac',
@@ -478,9 +472,7 @@ BUILDERS = {
         'based_on_main_waterfall': {
           'mastername': 'chromium.win',
           'buildername': 'Win Builder',
-          'testers': [
-            'Win7 Tests (1)',
-          ],
+          'tester': 'Win7 Tests (1)',
         },
         'testing': {
           'platform': 'win',
@@ -490,9 +482,7 @@ BUILDERS = {
         'based_on_main_waterfall': {
           'mastername': 'chromium.win',
           'buildername': 'Win Builder',
-          'testers': [
-            'XP Tests (1)',
-          ],
+          'tester': 'XP Tests (1)',
         },
         'testing': {
           'platform': 'win',
@@ -502,9 +492,7 @@ BUILDERS = {
         'based_on_main_waterfall': {
           'mastername': 'chromium.win',
           'buildername': 'Win Builder',
-          'testers': [
-            'Vista Tests (1)',
-          ],
+          'tester': 'Vista Tests (1)',
         },
         'testing': {
           'platform': 'win',
@@ -525,7 +513,6 @@ BUILDERS = {
         'based_on_main_waterfall': {
           'mastername': 'chromium.win',
           'buildername': 'Win Builder (dbg)',
-          'testers': [],
         },
         'testing': {
           'platform': 'win',
@@ -569,9 +556,7 @@ BUILDERS = {
         'based_on_main_waterfall': {
           'mastername': 'chromium.win',
           'buildername': 'Win x64 Builder',
-          'testers': [
-            'Win 7 Tests x64 (1)',
-          ],
+          'tester': 'Win 7 Tests x64 (1)',
         },
         'testing': {
           'platform': 'win',
@@ -613,7 +598,7 @@ BUILDERS = {
         'based_on_main_waterfall': {
           'mastername': 'chromium.win',
           'buildername': 'Win Builder (dbg)',
-          'testers': ['Win8 Aura'],
+          'tester': 'Win8 Aura',
         },
         'testing': {
           'platform': 'win',
@@ -1008,7 +993,13 @@ def GenSteps(api):
         bot_update_step,
         master_dict,
         override_bot_type='builder_tester')
-    for tester in main_waterfall_config['testers']:
+    tester = main_waterfall_config.get('tester', '')
+    if tester:
+      test_config = master_dict.get('builders', {}).get(tester)
+      swarming_dimensions = test_config.get('swarming_dimensions', {})
+      for dimension in swarming_dimensions:
+        api.swarming.set_default_dimension(dimension,
+                                           swarming_dimensions[dimension])
       tests.extend(api.chromium_tests.tests_for_builder(
           main_waterfall_config['mastername'],
           tester,
