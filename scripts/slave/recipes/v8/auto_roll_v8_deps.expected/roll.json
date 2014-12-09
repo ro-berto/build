@@ -11,9 +11,9 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = None\nsolutions = [{'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
+      "cache_dir = None\nsolutions = [{'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}, {'custom_deps': {'src/chrome/test/data/pdf_private': None, 'src/native_client': None, 'src/third_party/WebKit': None, 'src/third_party/skia': None, 'src/third_party/webrtc': None, 'src/tools/valgrind': None, 'src/v8': None}, 'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]",
       "--revision_mapping_file",
-      "{\"v8\": \"got_revision\"}",
+      "{\"src\": \"got_revision\", \"src/native_client\": \"got_nacl_revision\", \"src/third_party/WebKit\": \"got_webkit_revision\", \"src/third_party/webrtc\": \"got_webrtc_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_v8_revision\", \"v8\": \"got_revision\"}",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -29,14 +29,34 @@
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"v8\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_revision_cp\": \"refs/heads/master@{#50110}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision_cp\": \"refs/heads/master@{#50110}\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_v8_revision_cp\": \"refs/heads/master@{#43426}\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_webkit_revision\": \"5e2293dffc3cd07d37fbedea3b500f0eb650614d\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_webkit_revision_cp\": \"refs/heads/master@{#124383}\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"root\": \"v8\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@got_nacl_revision@\"d998e125e8253980d76e269b7982aeeefc1b9b50\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_webkit_revision@\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_swarming_client_revision@\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_webrtc_revision@\"0f90628433546e61d9268596da93418c623137f4\"@@@",
       "@@@SET_BUILD_PROPERTY@got_revision@\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_nacl_revision_cp@\"refs/heads/master@{#274981}\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_webkit_revision_cp@\"refs/heads/master@{#124383}\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_v8_revision@\"801ada225ddc271c132c3a35f03975671d43e399\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_v8_revision_cp@\"refs/heads/master@{#43426}\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_swarming_client_revision_cp@\"refs/heads/master@{#276089}\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_webrtc_revision_cp@\"refs/heads/master@{#120644}\"@@@",
       "@@@SET_BUILD_PROPERTY@got_revision_cp@\"refs/heads/master@{#50110}\"@@@"
     ]
   },
@@ -80,23 +100,53 @@
   },
   {
     "cmd": [
-      "git",
-      "ls-remote",
-      "https://chromium.googlesource.com/chromium/src/tools/clang.git",
-      "HEAD"
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/gclient.py",
+      "revinfo",
+      "--deps",
+      "all",
+      "--spec",
+      "solutions=[{'managed':False,'name':'src','url':'https://chromium.googlesource.com/chromium/src','deps_file':'DEPS'}]"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
-    "name": "look up v8/tools/clang",
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "gclient get src deps",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@deadbeaf@@@"
+      "@@@STEP_LOG_LINE@deps@{@@@",
+      "@@@STEP_LOG_LINE@deps@  \"a/dep\": \"repo2@beefdead\", @@@",
+      "@@@STEP_LOG_LINE@deps@  \"yet/another/dep\": \"repo3@deadbeef\"@@@",
+      "@@@STEP_LOG_LINE@deps@}@@@",
+      "@@@STEP_LOG_END@deps@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/gclient.py",
+      "revinfo",
+      "--deps",
+      "all",
+      "--spec",
+      "solutions=[{'managed':False,'name':'v8','url':'https://chromium.googlesource.com/v8/v8','deps_file':'DEPS'}]"
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "name": "gclient get v8 deps",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@deps@{@@@",
+      "@@@STEP_LOG_LINE@deps@  \"a/dep\": \"repo2@deadbeef\", @@@",
+      "@@@STEP_LOG_LINE@deps@  \"another/dep\": \"repo3@deadbeef\"@@@",
+      "@@@STEP_LOG_LINE@deps@}@@@",
+      "@@@STEP_LOG_END@deps@@@"
     ]
   },
   {
     "cmd": [
       "roll-dep",
-      "v8/tools/clang",
-      "deadbeaf"
+      "v8/a/dep",
+      "beefdead"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "roll dependency"
@@ -121,6 +171,8 @@
       "-a",
       "-m",
       "Update V8 DEPS.",
+      "-m",
+      "Rolling v8/a/dep to beefdead",
       "-m",
       "TBR=machenbach@chromium.org"
     ],
