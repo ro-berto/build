@@ -225,6 +225,7 @@ def main(argv):
       'master.chromiumos.tryserver': 'ChromiumOSTryServer',
       'master.client.art': 'ART',
       'master.client.breakpad': 'Breakpad',
+      'master.client.crashpad': 'Crashpad',
       'master.client.dart': 'Dart',
       'master.client.dart.fyi': 'DartFYI',
       'master.client.dart.packages': 'DartPackages',

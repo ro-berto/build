@@ -362,6 +362,12 @@ def mojo(c):
   soln.name = 'src'
   soln.url = 'https://chromium.googlesource.com/external/mojo.git'
 
+@config_ctx()
+def crashpad(c):
+  soln = c.solutions.add()
+  soln.name = 'crashpad'
+  soln.url = 'https://chromium.googlesource.com/crashpad/crashpad.git'
+
 @config_ctx(config_vars={'GIT_MODE': True})
 def infra(c):
   soln = c.solutions.add()
