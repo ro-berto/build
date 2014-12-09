@@ -709,6 +709,47 @@ class V8Api(recipe_api.RecipeApi):
   def standard_deviation(values, average):
     return math.sqrt(V8Api.mean(V8Api.variance(values, average)))
 
+  def perf_upload(self, tests, results_mapping, category):
+    # Make sure that bots that run perf tests have a revision property.
+    if tests:
+      assert self.revision_number and self.revision, (
+          'Revision must be specified for perf tests as '
+          'they upload data to the perf dashboard.')
+
+    points = []
+    for test in tests:
+      for trace in results_mapping[test]['traces']:
+        # Make 'v8' the root of all standalone v8 performance tests.
+        test_path = '/'.join(['v8'] + trace['graphs'])
+
+        # Ignore empty traces.
+        # TODO(machenbach): Show some kind of failure on the waterfall on empty
+        # traces without skipping to upload.
+        if not trace['results']:
+          continue
+
+        values = map(float, trace['results'])
+        average = V8Api.mean(values)
+
+        p = self.m.perf_dashboard.get_skeleton_point(
+            test_path, self.revision_number, str(average))
+        p['units'] = trace['units']
+        p['bot'] = category or p['bot']
+        p['supplemental_columns'] = {'a_default_rev': 'r_v8_git',
+                                     'r_v8_git': self.revision}
+
+        # A trace might provide a value for standard deviation if the test
+        # driver already calculated it, otherwise calculate it here.
+        p['error'] = (trace.get('stddev') or
+                      str(V8Api.standard_deviation(values, average)))
+
+        points.append(p)
+
+    # Send all perf data to the perf dashboard in one step.
+    if points:
+      self.m.perf_dashboard.post(points)
+
+
   def runperf(self, tests, perf_configs, category=None, suffix='',
               upload=True):
     """Run v8 performance tests and upload results.
@@ -722,7 +763,8 @@ class V8Api(recipe_api.RecipeApi):
       suffix: Optional name suffix to differentiate multiple runs of the same
               step.
       upload: If true, uploads results to the performance dashboard.
-    Returns: A mapping of test config name->step results.
+    Returns: A mapping of test config name->results map. Each results map has
+             an errors and a traces item.
     """
 
     results_mapping = collections.defaultdict(dict)
@@ -751,7 +793,8 @@ class V8Api(recipe_api.RecipeApi):
           step_test_data=step_test_data,
         )
       finally:
-        results_mapping[test] = step_result = self.m.step.active_result
+        step_result = self.m.step.active_result
+        results_mapping[test] = step_result.json.output
         errors = step_result.json.output['errors']
         if errors:
           step_result.presentation.logs['Errors'] = errors
@@ -764,12 +807,6 @@ class V8Api(recipe_api.RecipeApi):
               'v8/%s' % name,
               self.revision_number,
               bot=category)
-
-    # Make sure that bots that run perf tests have a revision property.
-    if tests and upload:
-      assert self.revision_number and self.revision, (
-          'Revision must be specified for perf tests as '
-          'they upload data to the perf dashboard.')
 
     failed = False
     for t in tests:
@@ -784,39 +821,7 @@ class V8Api(recipe_api.RecipeApi):
 
     # Collect all perf data of the previous steps.
     if upload:
-      points = []
-      for t in tests:
-        step = results_mapping[t]
-        for trace in step.json.output['traces']:
-          # Make 'v8' the root of all standalone v8 performance tests.
-          test_path = '/'.join(['v8'] + trace['graphs'])
-
-          # Ignore empty traces.
-          # TODO(machenbach): Show some kind of failure on the waterfall on empty
-          # traces without skipping to upload.
-          if not trace['results']:
-            continue
-
-          values = map(float, trace['results'])
-          average = V8Api.mean(values)
-
-          p = self.m.perf_dashboard.get_skeleton_point(
-              test_path, self.revision_number, str(average))
-          p['units'] = trace['units']
-          p['bot'] = category or p['bot']
-          p['supplemental_columns'] = {'a_default_rev': 'r_v8_git',
-                                       'r_v8_git': self.revision}
-
-          # A trace might provide a value for standard deviation if the test
-          # driver already calculated it, otherwise calculate it here.
-          p['error'] = (trace.get('stddev') or
-                        str(V8Api.standard_deviation(values, average)))
-
-          points.append(p)
-
-      # Send all perf data to the perf dashboard in one step.
-      if points:
-        self.m.perf_dashboard.post(points)
+      self.perf_upload(tests, results_mapping, category)
 
     if failed:
       raise self.m.step.StepFailure('One or more performance tests failed.')
