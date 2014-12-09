@@ -130,14 +130,6 @@ def GenSteps(api):
       num_shards=builder['num_device_shards'],
       devices=api.adb.devices[0:1]).json.output
 
-  # --upload-results makes the telemetry tests upload associated trace
-  # files to cloud storage.
-  for key in perf_tests['steps'].keys():
-    perf_tests['steps'][key]['cmd'] += ' --upload-results'
-
-  for _, test_data in perf_tests['steps'].iteritems():
-    test_data['cmd'] = _UpdateRunBenchmarkArgs(test_data['cmd'])
-
   try:
     api.chromium_android.run_sharded_perf_tests(
       config=api.json.input(data=perf_tests),
@@ -148,12 +140,6 @@ def GenSteps(api):
     api.chromium_android.logcat_dump()
     api.chromium_android.stack_tool_steps()
     api.chromium_android.test_report()
-
-def _UpdateRunBenchmarkArgs(cmd):
-  # FIXME(simonhatch): Remove this once we switch telemetry to output
-  # chartjson by default.
-  return (cmd.replace('--output-format=buildbot', '--output-format=chartjson')
-      if 'run_benchmark' in cmd else cmd)
 
 def _sanitize_nonalpha(text):
   return ''.join(c if c.isalnum() else '_' for c in text)

@@ -1651,21 +1651,16 @@ def _UpdateRunBenchmarkArgs(args, options):
     None if not a telemetry test, otherwise a
     dict containing the output filename and whether it is a reference build.
   """
+  if not options.chartjson_file:
+    return {}
+
   if args[0].endswith('run_benchmark'):
     is_ref = '--browser=reference' in args
-
-    if '--output-format=buildbot' in args:
-      args[args.index('--output-format=buildbot')] = '--output-format=chartjson'
     output_dir = tempfile.mkdtemp()
     args.extend(['--output-dir=%s' % output_dir])
-    # Upload any generated traces to cloud storage.
-    args.extend(['--upload-results'])
     temp_filename = os.path.join(output_dir, 'results-chart.json')
     return {'filename': temp_filename, 'is_ref': is_ref}
-  elif (args[0].endswith('test_runner.py') and
-        'perf' in args and
-        '--print-step' in args and
-        options.chartjson_file):
+  elif args[0].endswith('test_runner.py'):
     (_, temp_json_filename) = tempfile.mkstemp()
     args.extend(['--output-chartjson-data=%s' % temp_json_filename])
     return {'filename': temp_json_filename, 'is_ref': False}
