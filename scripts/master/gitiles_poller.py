@@ -26,7 +26,7 @@ from common.gerrit_agent import GerritAgent
 
 
 LOG_TEMPLATE = '%s/+log/%s?format=JSON&n=%d'
-REFS_TEMPLATE = '%s/+refs?format=JSON'
+REFS_TEMPLATE = '%s/+%s?format=JSON'
 REVISION_DETAIL_TEMPLATE = '%s/+/%s?format=JSON'
 
 
@@ -204,11 +204,24 @@ class GitilesPoller(PollingChangeSource):
   @defer.inlineCallbacks
   def _get_branches(self):
     result = {}
-    path = REFS_TEMPLATE % (self.repo_path,)
     if self.dry_run:
-      refs_json = {}
+      refs = []
+    elif any([isinstance(b, self.re_pattern_type) for b in self.branches]):
+      refs = ['refs']
     else:
-      refs_json = yield self.agent.request('GET', path, retry=5)
+      refs = self.branches
+
+    refs_json_requests = []
+    for ref in refs:
+      path = REFS_TEMPLATE % (self.repo_path, ref)
+      refs_json_requests.append(self.agent.request('GET', path, retry=5))
+
+    refs_json = {}
+    refs_json_results = yield defer.DeferredList(refs_json_requests)
+    for ref_result in refs_json_results:
+      if ref_result[0] and ref_result[1]:
+        refs_json.update(ref_result[1])
+
     for ref, ref_head in refs_json.iteritems():
       for branch in self.branches:
         if (ref == branch or
