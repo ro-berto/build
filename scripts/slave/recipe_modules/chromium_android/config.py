@@ -28,6 +28,7 @@ def BaseConfig(INTERNAL=False, REPO_NAME=None, REPO_URL=None,
     extra_deploy_opts = List(inner_type=basestring),
     tests = List(inner_type=basestring),
     cr_build_android = Static(Path('[CHECKOUT]', 'build', 'android')),
+    test_runner = Single(Path),
     gclient_custom_deps = Dict(value_type=(basestring, types.NoneType)),
     storage_bucket = Single(basestring),
     channel = Single(basestring, empty_val='chrome'),
@@ -56,6 +57,7 @@ config_ctx = config_item_context(BaseConfig, VAR_TEST_MAP, TEST_NAME_FORMAT)
 @config_ctx(is_root=True)
 def base_config(c):
   c.internal_dir_name = 'clank'
+  c.test_runner = Path('[CHECKOUT]', 'build', 'android', 'test_runner.py')
 
 @config_ctx()
 def main_builder(c):

@@ -324,7 +324,7 @@ class AndroidApi(recipe_api.RecipeApi):
     ]
     return self.m.python(
         'Monkey Test',
-        str(self.m.path['checkout'].join('build', 'android', 'test_runner.py')),
+        self.c.test_runner,
         args,
         env={'BUILDTYPE': self.c.BUILD_CONFIG},
         **kwargs)
@@ -342,7 +342,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
     self.m.python(
         'Sharded Perf Tests',
-        self.m.path['checkout'].join('build', 'android', 'test_runner.py'),
+        self.c.test_runner,
         args,
         cwd=self.m.path['checkout'],
         env=self.m.chromium.get_env(),
@@ -366,7 +366,7 @@ class AndroidApi(recipe_api.RecipeApi):
     # now obtain the list of tests that were executed.
     result = self.m.step(
         'get perf test list',
-        [self.m.path['checkout'].join('build', 'android', 'test_runner.py'),
+        [self.c.test_runner,
          'perf', '--steps', config, '--output-json-list', self.m.json.output()],
         step_test_data=lambda: self.m.json.test_api.output([
             'perf_test.foo', 'page_cycler.foo']),
@@ -382,7 +382,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
       try:
         self.m.chromium.runtest(
-          self.m.path['checkout'].join('build', 'android', 'test_runner.py'),
+          self.c.test_runner,
           ['perf', '--print-step', test_name, '--verbose'],
           name=test_name,
           perf_dashboard_id=test_type,
@@ -433,7 +433,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
     self.m.python(
         'Instrumentation test %s' % (annotation or test_apk),
-        self.m.path['checkout'].join('build', 'android', 'test_runner.py'),
+        self.c.test_runner,
         args=['instrumentation'] + args,
         **kwargs)
 
@@ -556,7 +556,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
     self.m.python(
         str(suite),
-        self.m.path['checkout'].join('build', 'android', 'test_runner.py'),
+        self.c.test_runner,
         ['gtest', '-s', suite] + args,
         env=self.m.chromium.get_env(),
         **kwargs)
@@ -570,7 +570,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
     self.m.python(
         str(suite),
-        self.m.path['checkout'].join('build', 'android', 'test_runner.py'),
+        self.c.test_runner,
         ['junit', '-s', suite] + args,
         env=self.m.chromium.get_env(),
         **kwargs)
@@ -582,7 +582,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
     self.m.python(
         str(suite),
-        self.m.path['checkout'].join('build', 'android', 'test_runner.py'),
+        self.c.test_runner,
         ['python', '-s', suite] + args,
         env=self.m.chromium.get_env(),
         **kwargs)
