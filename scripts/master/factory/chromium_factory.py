@@ -272,10 +272,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddBuildrunnerGTest('interactive_ui_tests', factory_properties=fp,
                             arg_list=arg_list)
 
-    # Check for an early bail.  Do early since this may cancel other tests.
-    if R('check_lkgr'):
-      f.AddCheckLKGRStep()
-
     # Scripted checks to verify various properties of the codebase:
     if R('check_deps'):
       f.AddCheckDepsStep()

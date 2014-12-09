@@ -68,7 +68,6 @@ class ChromiumCommands(commands.FactoryCommands):
     self._cf_archive_tool = J(s_dir, 'cf_archive_build.py')
     self._archive_tool = J(s_dir, 'archive_build.py')
     self._sizes_tool = J(s_dir, 'sizes.py')
-    self._check_lkgr_tool = J(s_dir, 'check_lkgr.py')
     self._windows_syzyasan_tool = J(s_dir, 'win_apply_syzyasan.py')
     self._dynamorio_coverage_tool = J(s_dir, 'dynamorio_coverage.py')
     self._checkbins_tool = J(s_dir, 'checkbins_wrapper.py')
@@ -406,20 +405,6 @@ class ChromiumCommands(commands.FactoryCommands):
            '--root', self._repository_root]
     self.AddBuildrunnerTestStep(shell.ShellCommand, 'check_licenses', cmd,
         do_step_if=self.GetTestStepFilter(factory_properties))
-
-  def AddCheckLKGRStep(self):
-    """Check LKGR; if unchanged, cancel the build.
-
-    Unlike other "test step" commands, this one can cancel the build
-    while still keeping it green.
-
-    Note we use "." as a root (which is the same as self.working_dir)
-    to make sure a clobber step deletes the saved lkgr file.
-    """
-    cmd = [self._python, self._check_lkgr_tool, '--root', '.']
-    self.AddTestStep(commands.CanCancelBuildShellCommand,
-                     'check lkgr and stop build if unchanged',
-                     cmd)
 
   def AddMachPortsTests(self, factory_properties=None):
     self.AddAnnotatedPerfStep(
