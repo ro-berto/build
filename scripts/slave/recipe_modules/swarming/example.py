@@ -69,7 +69,8 @@ def GenSteps(api):
     # Create a task to run the isolated file on swarming, set OS dimension.
     # Also generate code coverage for multi-shard case by triggering multiple
     # shards on Linux.
-    task = api.swarming.task('hello_world', isolated_hash)
+    task = api.swarming.task('hello_world', isolated_hash,
+                             task_output_dir=temp_dir.join('task_output_dir'))
     task.dimensions['os'] = api.swarming.prefered_os_dimension(platform)
     task.shards = 2 if platform == 'linux' else 1
     task.tags.add('os:' + platform)

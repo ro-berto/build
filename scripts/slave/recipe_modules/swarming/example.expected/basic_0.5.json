@@ -376,7 +376,9 @@
       "--json",
       "{\"base_task_name\": \"hello_world/Windows-7-SP1/hash_for_w\", \"tasks\": {\"hello_world/Windows-7-SP1/hash_for_w\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10000\"}}}",
       "--task-summary-json",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--task-output-dir",
+      "[TMP_BASE]/hello_isolated_world_tmp_1/task_output_dir"
     ],
     "name": "hello_world on Windows-7-SP1",
     "~followup_annotations": [
@@ -432,7 +434,9 @@
       "--json",
       "{\"base_task_name\": \"hello_world/Ubuntu-12.04/hash_for_l\", \"tasks\": {\"hello_world/Ubuntu-12.04/hash_for_l:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10000\"}, \"hello_world/Ubuntu-12.04/hash_for_l:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10100\"}}}",
       "--task-summary-json",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--task-output-dir",
+      "[TMP_BASE]/hello_isolated_world_tmp_1/task_output_dir"
     ],
     "name": "hello_world",
     "~followup_annotations": [
@@ -519,7 +523,9 @@
       "--json",
       "{\"base_task_name\": \"hello_world/Mac-10.8/hash_for_m\", \"tasks\": {\"hello_world/Mac-10.8/hash_for_m\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10000\"}}}",
       "--task-summary-json",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--task-output-dir",
+      "[TMP_BASE]/hello_isolated_world_tmp_1/task_output_dir"
     ],
     "name": "hello_world on Mac-10.8",
     "~followup_annotations": [

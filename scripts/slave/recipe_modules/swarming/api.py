@@ -187,7 +187,8 @@ class SwarmingApi(recipe_api.RecipeApi):
       'win': 'Windows-7-SP1',
     }[platform]
 
-  def task(self, title, isolated_hash, shards=None, extra_args=None):
+  def task(self, title, isolated_hash, shards=None, task_output_dir=None,
+           extra_args=None):
     """Returns a new SwarmingTask instance to run an isolated executable on
     Swarming.
 
@@ -203,6 +204,8 @@ class SwarmingApi(recipe_api.RecipeApi):
           be already isolated there, see 'isolate' recipe module.
       shards: if defined, the number of shards to use for the task. By default
           this value is either 1 or based on the title.
+      task_output_dir: if defined, the directory where task results are placed.
+          The caller is responsible for removing this folder when finished.
       extra_args: list of command line arguments to pass to isolated tasks.
     """
     return SwarmingTask(
@@ -221,7 +224,8 @@ class SwarmingApi(recipe_api.RecipeApi):
         hard_timeout=self._default_hard_timeout,
         idempotent=self.default_idempotent,
         extra_args=extra_args,
-        collect_step=self._default_collect_step)
+        collect_step=self._default_collect_step,
+        task_output_dir=task_output_dir)
 
   def gtest_task(self, title, isolated_hash, test_launcher_summary_output=None,
                  extra_args=None, **kwargs):
@@ -434,6 +438,9 @@ class SwarmingApi(recipe_api.RecipeApi):
     """Produces a step that collects a result of an arbitrary task."""
     args = self._get_collect_cmd_args(task)
     args.extend(['--task-summary-json', self.m.json.output()])
+    if task.task_output_dir:
+      args.extend(['--task-output-dir', task.task_output_dir])
+
     try:
       return self.m.python(
           name=self._get_step_name('', task),
@@ -639,7 +646,7 @@ class SwarmingTask(object):
   def __init__(self, title, isolated_hash, dimensions, env, priority,
                shards, buildername, buildnumber, profile, expiration,
                user, io_timeout, hard_timeout, idempotent, extra_args,
-               collect_step):
+               collect_step, task_output_dir):
     """Configuration of a swarming task.
 
     Args:
@@ -675,10 +682,13 @@ class SwarmingTask(object):
       extra_args: list of command line arguments to pass to isolated tasks.
       collect_step: callback that will be called to collect and processes
           results of task execution, signature is collect_step(task, **kwargs).
+      task_output_dir: if defined, the directory where task results are placed
+          during the collect step.
     """
     self._trigger_output = None
     self.buildnumber = buildnumber
     self.buildername = buildername
+    self.task_output_dir = task_output_dir
     self.collect_step = collect_step
     self.dimensions = dimensions.copy()
     self.env = env.copy()

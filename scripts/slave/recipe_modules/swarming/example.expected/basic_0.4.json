@@ -371,7 +371,9 @@
       "1",
       "hello_world/Windows-7-SP1/hash_for_w",
       "--task-summary-json",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--task-output-dir",
+      "[TMP_BASE]/hello_isolated_world_tmp_1/task_output_dir"
     ],
     "name": "hello_world on Windows-7-SP1",
     "~followup_annotations": [
@@ -428,7 +430,9 @@
       "2",
       "hello_world/Ubuntu-12.04/hash_for_l",
       "--task-summary-json",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--task-output-dir",
+      "[TMP_BASE]/hello_isolated_world_tmp_1/task_output_dir"
     ],
     "name": "hello_world",
     "~followup_annotations": [
@@ -516,7 +520,9 @@
       "1",
       "hello_world/Mac-10.8/hash_for_m",
       "--task-summary-json",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--task-output-dir",
+      "[TMP_BASE]/hello_isolated_world_tmp_1/task_output_dir"
     ],
     "name": "hello_world on Mac-10.8",
     "~followup_annotations": [
