@@ -13,6 +13,7 @@ steps to close and which parties to notify are in a local gatekeeper.json file.
 
 from collections import defaultdict
 from contextlib import closing, contextmanager
+import fnmatch
 import getpass
 import hashlib
 import hmac
@@ -43,6 +44,17 @@ def get_pwd(password_file):
   if os.path.isfile(password_file):
     return open(password_file, 'r').read().strip()
   return getpass.getpass()
+
+
+def in_glob_list(value, glob_list):
+  """Returns True if 'value' matches any glob in 'glob_list'.
+
+  Args:
+    value: (str) The value to search for.
+    glob_list: (list) A list of glob strings to test.
+  """
+  return any(fnmatch.fnmatch(value, glob)
+             for glob in glob_list)
 
 
 def update_status(tree_message, status_url_root, username, password):
@@ -83,7 +95,7 @@ def get_builder_section(gatekeeper_section, builder):
   else:
     return None
 
-  if builder not in builder_section.get('excluded_builders', set()):
+  if not in_glob_list(builder, builder_section.get('excluded_builders', ())):
     return builder_section
   return None
 

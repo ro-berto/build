@@ -731,6 +731,23 @@ class GatekeeperTest(unittest.TestCase):
     urls = self.call_gatekeeper()
     self.assertNotIn(self.set_status_url, urls)
 
+  def testGlobbedExcludedBuildersDontCloseTree(self):
+    """Test that excluded builders don't call to the status app."""
+    sys.argv.extend([m.url for m in self.masters])
+    sys.argv.extend(['--skip-build-db-update',
+                     '--no-email-app', '--set-status',
+                     '--password-file', self.status_secret_file])
+
+    glob = '%s*' % (self.masters[0].builders[0].name[0], )
+    self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
+    self.add_gatekeeper_section(self.masters[0].url,
+                                self.masters[0].builders[0].name,
+                                {'closing_steps': ['step1'],
+                                 'excluded_builders': [glob]})
+
+    urls = self.call_gatekeeper()
+    self.assertNotIn(self.set_status_url, urls)
+
   def testOpenTree(self):
     """Test that we open the tree if no tracked failures."""
     sys.argv.extend([m.url for m in self.masters])

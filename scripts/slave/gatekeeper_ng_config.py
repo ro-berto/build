@@ -29,6 +29,11 @@ tree_closing to be false, which causes the section to only send out emails
 instead of closing the tree. A section or builder can also specify to respect
 a build's failure status with respect_build_status.
 
+The 'excluded_builders' key is a list of builder names that will not be
+processed even if they match a configuration. This is useful when the builder
+set is specified using the wildcard ('*'). Entries in this list may use
+filename-style globbing (e.g., *mybuilder*) to specify builder name patterns.
+
 The 'subject_template' key is the template used for the email subjects. Its
 formatting arguments are found at https://chromium.googlesource.com/chromium/
   tools/chromium-build/+/master/gatekeeper_mailer.py, but the list is
