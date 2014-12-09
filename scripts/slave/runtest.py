@@ -745,11 +745,14 @@ def _SendResultsToDashboard(log_processor, args):
     log_processor: An instance of a log processor class, which has been used to
         process the test output, so it contains the test results.
     args: Dict of additional args to send to results_dashboard.
+
+  Returns:
+    True if no errors occurred.
   """
   if args['system'] is None:
     # perf_id not specified in factory properties.
     print 'Error: No system name (perf_id) specified when sending to dashboard.'
-    return
+    return True
 
   results = None
   if log_processor.IsChartJson():
@@ -763,9 +766,14 @@ def _SendResultsToDashboard(log_processor, args):
     results = results_dashboard.MakeListOfPoints(
         charts, args['system'], args['test'], args['mastername'],
         args['buildername'], args['buildnumber'], args['supplemental_columns'])
-  if results:
-    logging.debug(json.dumps(results, indent=2))
-    results_dashboard.SendResults(results, args['url'], args['build_dir'])
+
+  if not results:
+    return False
+
+  logging.debug(json.dumps(results, indent=2))
+  results_dashboard.SendResults(results, args['url'], args['build_dir'])
+
+  return True
 
 
 def _GetDataFromLogProcessor(log_processor):
@@ -1157,7 +1165,9 @@ def _MainMac(options, args, extra_env):
                             _ResultsDashboardDict(options))
 
   if options.results_url:
-    _SendResultsToDashboard(log_processor, _ResultsDashboardDict(options))
+    if not _SendResultsToDashboard(
+        log_processor, _ResultsDashboardDict(options)):
+      return 1
 
   return result
 
@@ -1434,7 +1444,9 @@ def _MainLinux(options, args, extra_env):
                             _ResultsDashboardDict(options))
 
   if options.results_url:
-    _SendResultsToDashboard(log_processor, _ResultsDashboardDict(options))
+    if not _SendResultsToDashboard(
+        log_processor, _ResultsDashboardDict(options)):
+      return 1
 
   return result
 
@@ -1556,7 +1568,9 @@ def _MainWin(options, args, extra_env):
                             _ResultsDashboardDict(options))
 
   if options.results_url:
-    _SendResultsToDashboard(log_processor, _ResultsDashboardDict(options))
+    if not _SendResultsToDashboard(
+        log_processor, _ResultsDashboardDict(options)):
+      return 1
 
   return result
 
@@ -1617,7 +1631,9 @@ def _MainAndroid(options, args, extra_env):
         perf_dashboard_id=options.perf_dashboard_id)
 
   if options.results_url:
-    _SendResultsToDashboard(log_processor, _ResultsDashboardDict(options))
+    if not _SendResultsToDashboard(
+        log_processor, _ResultsDashboardDict(options)):
+      return 1
 
   return result
 
