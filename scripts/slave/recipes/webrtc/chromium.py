@@ -58,7 +58,8 @@ def GenSteps(api):
 
     compile_targets = recipe_config.get('compile_targets', [])
     api.chromium.compile(targets=compile_targets)
-    if mastername == 'chromium.webrtc.fyi' and not run_gn:
+    if (mastername == 'chromium.webrtc.fyi' and not run_gn and
+        api.chromium.c.TARGET_PLATFORM != 'android'):
       api.webrtc.sizes(got_revision)
 
   archive_revision = api.properties.get('parent_got_revision', got_revision)
