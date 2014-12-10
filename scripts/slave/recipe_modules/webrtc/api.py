@@ -201,7 +201,8 @@ class WebRTCApi(recipe_api.RecipeApi):
                 '--test-launcher-bot-mode',
                 '--test-launcher-print-test-stdio=always'] + extra_args,
         revision=revision,
-        perf_test=True)
+        # The WinXP tester doesn't run the audio quality perf test.
+        perf_test='winxp' not in self.c.PERF_ID )
 
   def add_test(self, test, name=None, args=None, revision=None, env=None,
                perf_test=False, perf_dashboard_id=None, parallel=False):
