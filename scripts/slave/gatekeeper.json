@@ -504,7 +504,10 @@
         "Test262",
         "Test262-es6",
         "Mozilla",
-        "GCMole",
+        "GCMole arm",
+        "GCMole arm64",
+        "GCMole ia32",
+        "GCMole x64",
         "Simple Leak Check"
       ],
       "forgiving_optional": [
