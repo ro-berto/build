@@ -31,8 +31,8 @@ In all modes, --csv causes the output (if any) to be formatted as
 comma-separated values.
 """
 
+import argparse
 import json
-import optparse
 import os
 import sys
 
@@ -83,33 +83,33 @@ MASTER_HOST_MAP = dict((m.master_host, m)
 
 def get_args():
   """Process command-line arguments."""
-  parser = optparse.OptionParser(
+  parser = argparse.ArgumentParser(
       description='Tool to list all masters along with their hosts and ports.')
 
-  parser.add_option('-l', '--list', action='store_true', default=False,
+  parser.add_argument('-l', '--list', action='store_true', default=False,
                     help='Output a list of all ports in use by all masters. '
                          'Default behavior if no other options are given.')
-  parser.add_option('--sort-by', action='store',
+  parser.add_argument('--sort-by', action='store',
                     help='Define the primary key by which rows are sorted. '
                     'Possible values are: "port", "alt_port", "slave_port", '
                     '"host", and "name". Only one value is allowed (for now).')
-  parser.add_option('--find', action='store', metavar='NAME',
+  parser.add_argument('--find', action='store', metavar='NAME',
                     help='Outputs three available ports for the given master.')
-  parser.add_option('--audit', action='store_true', default=False,
+  parser.add_argument('--audit', action='store_true', default=False,
                     help='Output conflict diagnostics and return an error '
                          'code if misconfigurations are found.')
-  parser.add_option('--presubmit', action='store_true', default=False,
+  parser.add_argument('--presubmit', action='store_true', default=False,
                     help='The same as --audit, but prints no output. '
                          'Overrides all other options.')
 
-  parser.add_option('--csv', action='store_true', default=False,
+  parser.add_argument('--csv', action='store_true', default=False,
                     help='Print output in comma-separated values format.')
-  parser.add_option('--json', action='store_true', default=False,
+  parser.add_argument('--json', action='store_true', default=False,
                     help='Print output in JSON format. Overrides --csv.')
-  parser.add_option('--full-host-names', action='store_true', default=False,
+  parser.add_argument('--full-host-names', action='store_true', default=False,
                     help='Refrain from truncating the master host names')
 
-  opts, _ = parser.parse_args()
+  opts = parser.parse_args()
 
   opts.verbose = True
 
@@ -398,7 +398,7 @@ def real_main(include_internal=False):
       sort_keys.insert(0, sort_keys.pop(index))
 
   for key in reversed(sort_keys):
-    masters.sort(key=lambda m: m[key]) # pylint: disable=cell-var-from-loop
+    masters.sort(key=lambda m: m[key])  # pylint: disable=cell-var-from-loop
 
   if opts.csv:
     printer = csv_print
