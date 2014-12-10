@@ -20,11 +20,13 @@ def CommonChecks(input_api, output_api):
       r'.*slave/.*/isolate.*/.*',
       r'.*depot_tools/.*',
       r'.*goma/.*',
+      r'.*scripts/tools/buildbot_tool_templates/.*',
       r'.*scripts/release/.*',
       r'.*scripts/slave/recipe_modules/.*',
       r'.*scripts/gsd_generate_index/.*',
       r'.*masters/.*/templates/.*\.html$',
       r'.*masters/.*/templates/.*\.css$',
+      r'.*masters/.*/builders.py',
       r'.*masters/.*/public_html/.*\.html$',
       r'.*masters/.*/public_html/.*\.css$',
   ]
