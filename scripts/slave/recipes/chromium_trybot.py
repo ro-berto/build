@@ -83,6 +83,16 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
+      'linux_chromium_dbg_ng': {
+        'based_on_main_waterfall': {
+          'mastername': 'chromium.linux',
+          'buildername': 'Linux Builder (dbg)',
+          'tester': 'Linux Tests (dbg)(1)',
+        },
+        'testing': {
+          'platform': 'linux',
+        },
+      },
       'linux_chromium_rel_ng': {
         'based_on_main_waterfall': {
           'mastername': 'chromium.linux',
