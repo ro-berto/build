@@ -420,6 +420,15 @@
           }
         }
       }
+    ],
+    "https://build.chromium.org/p/client.skia.compile": [
+      {
+        "builders": {
+          "*": {
+            "closing_optional": ["*"]
+          }
+        }
+      }
     ]
   },
 

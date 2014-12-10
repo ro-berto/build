@@ -128,7 +128,6 @@ def SetupBuildersAndSchedulers(c, builders, slaves, ActiveMaster):
       properties['owners'] = cc
     builder_dict = {
       'name': builder_name,
-      'gatekeeper': builder.get('gatekeeper_categories', ''),
       'auto_reboot': builder.get('auto_reboot', DEFAULT_AUTO_REBOOT),
       'slavenames': slaves.GetSlavesName(builder=builder['name']),
       'category': category,
