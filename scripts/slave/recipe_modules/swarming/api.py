@@ -73,7 +73,6 @@ class SwarmingApi(recipe_api.RecipeApi):
     self._default_tags = set()
     self._default_user = None
     self._pending_tasks = set()
-    self._profile = False
     self._swarming_server = 'https://chromium-swarm.appspot.com'
     self._verbose = False
 
@@ -86,17 +85,6 @@ class SwarmingApi(recipe_api.RecipeApi):
   def swarming_server(self, value):
     """Changes URL of Swarming server to use."""
     self._swarming_server = value
-
-  @property
-  def profile(self):
-    """True to run tasks with Swarming profiling enabled."""
-    return self._profile
-
-  @profile.setter
-  def profile(self, value):
-    """Enables or disables Swarming profiling."""
-    assert isinstance(value, bool)
-    self._profile = value
 
   @property
   def verbose(self):
@@ -217,7 +205,6 @@ class SwarmingApi(recipe_api.RecipeApi):
         shards=shards or TESTS_SHARDS.get(title, 1),
         buildername=self.m.properties.get('buildername'),
         buildnumber=self.m.properties.get('buildnumber'),
-        profile=self.profile,
         user=self.default_user,
         expiration=self._default_expiration,
         io_timeout=self._default_io_timeout,
@@ -351,8 +338,6 @@ class SwarmingApi(recipe_api.RecipeApi):
       assert ':' in tag, tag
       args.extend(['--tag', tag])
 
-    if task.profile:
-      args.append('--profile')
     if self.verbose:
       args.append('--verbose')
     if task.idempotent:
@@ -644,9 +629,9 @@ class SwarmingTask(object):
   """Definition of a task to run on swarming."""
 
   def __init__(self, title, isolated_hash, dimensions, env, priority,
-               shards, buildername, buildnumber, profile, expiration,
-               user, io_timeout, hard_timeout, idempotent, extra_args,
-               collect_step, task_output_dir):
+               shards, buildername, buildnumber, expiration, user, io_timeout,
+               hard_timeout, idempotent, extra_args, collect_step,
+               task_output_dir):
     """Configuration of a swarming task.
 
     Args:
@@ -669,7 +654,6 @@ class SwarmingTask(object):
           what shard to run.
       buildername: buildbot builder this task was triggered from.
       buildnumber: build number of a build this task was triggered from.
-      profile: True to enable swarming profiling.
       expiration: number of schedule until the task shouldn't even be run if it
           hadn't started yet.
       user: user that requested this task, if applicable.
@@ -699,7 +683,6 @@ class SwarmingTask(object):
     self.io_timeout = io_timeout
     self.isolated_hash = isolated_hash
     self.priority = priority
-    self.profile = profile
     self.shards = shards
     self.tags = set()
     self.title = title

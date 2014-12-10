@@ -29,7 +29,6 @@ def GenSteps(api):
   api.swarming.default_idempotent = True
   api.swarming.default_priority = 30
   api.swarming.default_user = 'joe'
-  api.swarming.profile = True
   api.swarming.set_default_env('TESTING', '1')
   api.swarming.verbose = True
 
