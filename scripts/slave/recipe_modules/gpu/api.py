@@ -496,7 +496,10 @@ class GpuApi(recipe_api.RecipeApi):
     test_args = ['-v', '--use-devtools-active-port']
     if args:
       test_args.extend(args)
-    extra_browser_args_string = '--extra-browser-args=--enable-logging=stderr'
+    # --expose-gc allows the WebGL conformance tests to more reliably
+    # reproduce GC-related bugs in the V8 bindings.
+    extra_browser_args_string = (
+        '--extra-browser-args=--enable-logging=stderr --js-flags=--expose-gc')
     if self.m.platform.is_mac and not self.m.tryserver.is_tryserver:
       #TODO(zmo): remove the vmodule flag after crbug.com/424024 is fixed.
       vmodules = [
