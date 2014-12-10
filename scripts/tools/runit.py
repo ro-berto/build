@@ -38,22 +38,26 @@ def add_build_paths(path_list):
   # First build the list of required paths
   build_paths = []
 
+  def append_if(x):
+    if os.path.isdir(x):
+      build_paths.append(x)
+
   third_party = os.path.join(BUILD_DIR, 'third_party')
+  if os.path.isdir(third_party):
+    # Put troublemakers first, which when prepended will put them last.
+    keyfunc = lambda x: (
+        1 if x not in troublemakers else -troublemakers.index(x))
+    for d in sorted(os.listdir(third_party), key=keyfunc):
+      full = os.path.join(third_party, d)
+      if os.path.isdir(full):
+        build_paths.append(full)
 
-  # Put troublemakers first, which when prepended will put them last.
-  keyfunc = lambda x: (1 if x not in troublemakers else -troublemakers.index(x))
-  for d in sorted(os.listdir(third_party), key=keyfunc):
-    full = os.path.join(third_party, d)
-    if os.path.isdir(full):
-      build_paths.append(full)
-
-  build_paths.append(os.path.join(BUILD_DIR, 'scripts'))
-  build_paths.append(third_party)
-  build_paths.append(os.path.join(BUILD_DIR, 'site_config'))
-  build_paths.append(os.path.join(BUILD_DIR,
-                                  '..', 'build_internal', 'site_config'))
-  build_paths.append(os.path.join(BUILD_DIR,
-                                  '..', 'build_internal', 'scripts', 'master'))
+  append_if(os.path.join(BUILD_DIR, 'scripts'))
+  append_if(third_party)
+  append_if(os.path.join(BUILD_DIR, 'site_config'))
+  append_if(os.path.join(BUILD_DIR, '..', 'build_internal', 'site_config'))
+  append_if(os.path.join(
+      BUILD_DIR, '..', 'build_internal', 'scripts', 'master'))
 
   # build_paths now contains all the required paths, in *reverse order*
   # of priority.
