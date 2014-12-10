@@ -40,7 +40,11 @@
       "--json",
       "[BUILD]/scripts/slave/gatekeeper.json"
     ],
-    "name": "gatekeeper: chromium"
+    "name": "gatekeeper: chromium",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [

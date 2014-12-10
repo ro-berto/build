@@ -38,3 +38,12 @@ def GenTests(api):
       ),
     )
   )
+
+  yield (
+    api.test('keep_going')
+    + api.step_data(
+      'reading gatekeeper_trees.json',
+      api.gatekeeper.fake_test_data(),
+    )
+    + api.step_data('gatekeeper: chromium', retcode=1)
+  )

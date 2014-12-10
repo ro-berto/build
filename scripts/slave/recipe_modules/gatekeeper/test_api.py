@@ -26,6 +26,7 @@ class GatekeeperTestApi(recipe_test_api.RecipeTestApi):
         'track-revisions': True,
         'use-project-email-address': True,
       },
+      'chromium': {},
     })
 
   def read_real_config(self, f):

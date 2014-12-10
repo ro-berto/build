@@ -45,8 +45,11 @@ class Gatekeeper(recipe_api.RecipeApi):
       if tree_args.get('masters'):
         args.extend(tree_args['masters'])
 
-      self.m.python(
-        'gatekeeper: %s' % str(tree_name),
-        self.m.path['build'].join('scripts', 'slave', 'gatekeeper_ng.py'),
-        args,
-      )
+      try:
+        self.m.python(
+          'gatekeeper: %s' % str(tree_name),
+          self.m.path['build'].join('scripts', 'slave', 'gatekeeper_ng.py'),
+          args,
+        )
+      except self.m.step.StepFailure:
+        pass
