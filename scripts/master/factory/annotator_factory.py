@@ -44,6 +44,7 @@ class AnnotatorFactory(object):
     factory_properties.update({'recipe': recipe})
     self._factory_properties = factory_properties
     factory = BuildFactory()
+    factory.properties.update(self._factory_properties, 'AnnotatorFactory')
     cmd_obj = annotator_commands.AnnotatorCommands(factory)
     cmd_obj.AddAnnotatedScript(
       factory_properties, timeout=timeout, max_time=max_time)
