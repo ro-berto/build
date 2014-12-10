@@ -57,6 +57,14 @@ def in_glob_list(value, glob_list):
              for glob in glob_list)
 
 
+def logging_urlopen(url, *args, **kwargs):
+  try:
+    return urllib2.urlopen(url, *args, **kwargs)
+  except urllib2.HTTPError as e:
+    logging.debug('error accessing url %s: %s' % (url, e))
+    raise
+
+
 def update_status(tree_message, status_url_root, username, password):
   """Connects to chromium-status and closes the tree."""
   #TODO(xusydoc): append status if status is already closed.
@@ -73,14 +81,15 @@ def update_status(tree_message, status_url_root, username, password):
   })
 
   # Standard urllib doesn't raise an exception on 403, urllib2 does.
-  f = urllib2.urlopen(status_url_root + "/status", params)
+  status_url = status_url_root + "/status"
+  f = logging_urlopen(status_url, params)
   f.close()
   logging.info('success')
 
 
 def get_tree_status(status_url_root):
   status_url = status_url_root + "/current?format=json"
-  return json.load(urllib2.urlopen(status_url))
+  return json.load(logging_urlopen(status_url))
 
 
 def get_builder_section(gatekeeper_section, builder):
@@ -413,7 +422,7 @@ def debounce_failures(failed_builds, current_builds_successful, build_db):
 
 def parse_sheriff_file(url):
   """Given a sheriff url, download and parse the appropirate sheriff list."""
-  with closing(urllib2.urlopen(url)) as f:
+  with closing(logging_urlopen(url)) as f:
     line = f.readline()
   usernames_matcher_ = re.compile(r'document.write\(\'([\w, ]+)\'\)')
   usernames_match = usernames_matcher_.match(line)
@@ -457,7 +466,7 @@ def submit_email(email_app, build_data, secret):
   data = hash_message(json.dumps(build_data, sort_keys=True), url, secret)
 
   req = urllib2.Request(url, urllib.urlencode({'json': json.dumps(data)}))
-  with closing(urllib2.urlopen(req)) as f:
+  with closing(logging_urlopen(req)) as f:
     code = f.getcode()
     if code != 200:
       response = f.read()
