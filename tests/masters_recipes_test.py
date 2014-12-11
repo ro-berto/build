@@ -120,7 +120,7 @@ def getMasterConfig(master):
     subprocess.check_call([
         os.path.join(BASE_DIR, 'scripts', 'tools', 'runit.py'),
         os.path.join(BASE_DIR, 'scripts', 'tools', 'dump_master_cfg.py'),
-        'masters/%s' % master,
+        os.path.join(BASE_DIR, 'masters/%s' % master),
         f.name])
     return json.load(f)
 
