@@ -827,3 +827,19 @@ class V8Api(recipe_api.RecipeApi):
       raise self.m.step.StepFailure('One or more performance tests failed.')
 
     return results_mapping
+
+  def merge_perf_results(self, *args, **kwargs):
+    """Merge perf results from a list of result files and return the resulting
+    json.
+    """
+    step_result = self.m.python(
+      'merge perf results',
+      self.resource('merge_perf_results.py'),
+      map(str, args),
+      stdout=self.m.json.output(),
+      **kwargs
+    )
+    results = step_result.stdout
+    step_result.presentation.logs['results'] = self.m.json.dumps(
+        results, indent=2).splitlines()
+    return results

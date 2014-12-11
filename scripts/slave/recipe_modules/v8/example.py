@@ -4,8 +4,11 @@
 
 DEPS = [
   'bot_update',
+  'json',
+  'path',
   'perf_dashboard',
   'properties',
+  'step',
   'v8',
 ]
 
@@ -29,6 +32,10 @@ def GenSteps(api):
     }
   }
   api.v8.runperf(api.v8.perf_tests, perf_config, category='ia32')
+  output1 = api.path['slave_build'].join('test_output1.json')
+  output2 = api.path['slave_build'].join('test_output2.json')
+  results = api.v8.merge_perf_results(output1, output2)
+  api.step('do something with the results', ['echo', results['res']])
 
 
 def GenTests(api):
@@ -43,5 +50,8 @@ def GenTests(api):
   yield (
     api.test('forced_build') +
     api.properties.generic(mastername='Fake_Master',
-                           buildername='Fake Builder')
+                           buildername='Fake Builder') +
+    api.step_data(
+      'merge perf results',
+      stdout=api.json.output({'res': 'the result'}))
   )

@@ -84,5 +84,33 @@
     ],
     "name": "perf dashboard post",
     "stdin": "{\"data\": [{\"bot\": \"ia32\", \"buildername\": \"Fake Builder\", \"buildnumber\": 571, \"error\": \"8.16496580928\", \"master\": \"Fake_Master\", \"masterid\": \"Fake_Master\", \"revision\": \"12345\", \"supplemental_columns\": {\"a_default_rev\": \"r_v8_git\", \"r_v8_git\": \"deadbeef\"}, \"test\": \"v8/v8/Richards\", \"units\": \"score\", \"value\": \"20.0\"}, {\"bot\": \"ia32\", \"buildername\": \"Fake Builder\", \"buildnumber\": 571, \"error\": \"0.0\", \"master\": \"Fake_Master\", \"masterid\": \"Fake_Master\", \"revision\": \"12345\", \"supplemental_columns\": {\"a_default_rev\": \"r_v8_git\", \"r_v8_git\": \"deadbeef\"}, \"test\": \"v8/v8/DeltaBlue\", \"units\": \"ms\", \"value\": \"1.2\"}, {\"bot\": \"ia32\", \"buildername\": \"Fake Builder\", \"buildnumber\": 571, \"error\": \"8.16496580928\", \"master\": \"Fake_Master\", \"masterid\": \"Fake_Master\", \"revision\": \"12345\", \"supplemental_columns\": {\"a_default_rev\": \"r_v8_git\", \"r_v8_git\": \"deadbeef\"}, \"test\": \"v8/v8/Richards\", \"units\": \"score\", \"value\": \"20.0\"}, {\"bot\": \"ia32\", \"buildername\": \"Fake Builder\", \"buildnumber\": 571, \"error\": \"0.0\", \"master\": \"Fake_Master\", \"masterid\": \"Fake_Master\", \"revision\": \"12345\", \"supplemental_columns\": {\"a_default_rev\": \"r_v8_git\", \"r_v8_git\": \"deadbeef\"}, \"test\": \"v8/v8/DeltaBlue\", \"units\": \"ms\", \"value\": \"1.2\"}], \"url\": \"https://chrome-perf.googleplex.com/add_point\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/v8/resources/merge_perf_results.py",
+      "[SLAVE_BUILD]/test_output1.json",
+      "[SLAVE_BUILD]/test_output2.json"
+    ],
+    "name": "merge perf results",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"res\": \"the result\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@results@{@@@",
+      "@@@STEP_LOG_LINE@results@  \"res\": \"the result\"@@@",
+      "@@@STEP_LOG_LINE@results@}@@@",
+      "@@@STEP_LOG_END@results@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "echo",
+      "the result"
+    ],
+    "name": "do something with the results"
   }
 ]
