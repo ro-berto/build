@@ -147,12 +147,10 @@
       "-s",
       "audio_decoder_unittests",
       "--verbose",
-      "--isolate-file-path",
-      "webrtc/modules/audio_coding/neteq/audio_decoder_unittests.isolate",
       "--release"
     ],
     "env": {
-      "CHECKOUT_SOURCE_ROOT": "[SLAVE_BUILD]/src"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "audio_decoder_unittests"
   },
@@ -165,12 +163,10 @@
       "-s",
       "common_audio_unittests",
       "--verbose",
-      "--isolate-file-path",
-      "webrtc/common_audio/common_audio_unittests.isolate",
       "--release"
     ],
     "env": {
-      "CHECKOUT_SOURCE_ROOT": "[SLAVE_BUILD]/src"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "common_audio_unittests"
   },
@@ -183,12 +179,10 @@
       "-s",
       "common_video_unittests",
       "--verbose",
-      "--isolate-file-path",
-      "webrtc/common_video/common_video_unittests.isolate",
       "--release"
     ],
     "env": {
-      "CHECKOUT_SOURCE_ROOT": "[SLAVE_BUILD]/src"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "common_video_unittests"
   },
@@ -201,12 +195,10 @@
       "-s",
       "modules_tests",
       "--verbose",
-      "--isolate-file-path",
-      "webrtc/modules/modules_tests.isolate",
       "--release"
     ],
     "env": {
-      "CHECKOUT_SOURCE_ROOT": "[SLAVE_BUILD]/src"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "modules_tests"
   },
@@ -219,12 +211,10 @@
       "-s",
       "modules_unittests",
       "--verbose",
-      "--isolate-file-path",
-      "webrtc/modules/modules_unittests.isolate",
       "--release"
     ],
     "env": {
-      "CHECKOUT_SOURCE_ROOT": "[SLAVE_BUILD]/src"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "modules_unittests"
   },
@@ -237,12 +227,10 @@
       "-s",
       "system_wrappers_unittests",
       "--verbose",
-      "--isolate-file-path",
-      "webrtc/system_wrappers/source/system_wrappers_unittests.isolate",
       "--release"
     ],
     "env": {
-      "CHECKOUT_SOURCE_ROOT": "[SLAVE_BUILD]/src"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "system_wrappers_unittests"
   },
@@ -255,12 +243,10 @@
       "-s",
       "test_support_unittests",
       "--verbose",
-      "--isolate-file-path",
-      "webrtc/test/test_support_unittests.isolate",
       "--release"
     ],
     "env": {
-      "CHECKOUT_SOURCE_ROOT": "[SLAVE_BUILD]/src"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "test_support_unittests"
   },
@@ -273,12 +259,10 @@
       "-s",
       "tools_unittests",
       "--verbose",
-      "--isolate-file-path",
-      "webrtc/tools/tools_unittests.isolate",
       "--release"
     ],
     "env": {
-      "CHECKOUT_SOURCE_ROOT": "[SLAVE_BUILD]/src"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "tools_unittests"
   },
@@ -291,12 +275,10 @@
       "-s",
       "video_capture_tests",
       "--verbose",
-      "--isolate-file-path",
-      "webrtc/modules/video_capture/video_capture_tests.isolate",
       "--release"
     ],
     "env": {
-      "CHECKOUT_SOURCE_ROOT": "[SLAVE_BUILD]/src"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "video_capture_tests"
   },
@@ -309,12 +291,10 @@
       "-s",
       "video_engine_core_unittests",
       "--verbose",
-      "--isolate-file-path",
-      "webrtc/video_engine/video_engine_core_unittests.isolate",
       "--release"
     ],
     "env": {
-      "CHECKOUT_SOURCE_ROOT": "[SLAVE_BUILD]/src"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "video_engine_core_unittests"
   },
@@ -327,12 +307,10 @@
       "-s",
       "video_engine_tests",
       "--verbose",
-      "--isolate-file-path",
-      "webrtc/video_engine_tests.isolate",
       "--release"
     ],
     "env": {
-      "CHECKOUT_SOURCE_ROOT": "[SLAVE_BUILD]/src"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "video_engine_tests"
   },
@@ -345,12 +323,10 @@
       "-s",
       "voice_engine_unittests",
       "--verbose",
-      "--isolate-file-path",
-      "webrtc/voice_engine/voice_engine_unittests.isolate",
       "--release"
     ],
     "env": {
-      "CHECKOUT_SOURCE_ROOT": "[SLAVE_BUILD]/src"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "voice_engine_unittests"
   },
@@ -363,14 +339,25 @@
       "-s",
       "webrtc_perf_tests",
       "--verbose",
-      "--isolate-file-path",
-      "webrtc/webrtc_perf_tests.isolate",
       "--release"
     ],
     "env": {
-      "CHECKOUT_SOURCE_ROOT": "[SLAVE_BUILD]/src"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "webrtc_perf_tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/webrtc/build/android/test_runner.py",
+      "instrumentation",
+      "--test-apk",
+      "libjingle_peerconnection_android_unittest",
+      "--verbose",
+      "--release"
+    ],
+    "name": "Instrumentation test libjingle_peerconnection_android_unittest"
   },
   {
     "cmd": [

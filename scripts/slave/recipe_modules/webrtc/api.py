@@ -33,22 +33,26 @@ class WebRTCApi(recipe_api.RecipeApi):
     'voice_engine_unittests',
   ]
 
-  # Android APK tests. Mapping between test name and isolate file location.
-  ANDROID_APK_TESTS = {
-    'audio_decoder_unittests': 'webrtc/modules/audio_coding/neteq',
-    'common_audio_unittests': 'webrtc/common_audio',
-    'common_video_unittests': 'webrtc/common_video',
-    'modules_tests': 'webrtc/modules',
-    'modules_unittests': 'webrtc/modules',
-    'system_wrappers_unittests': 'webrtc/system_wrappers/source',
-    'test_support_unittests': 'webrtc/test',
-    'tools_unittests': 'webrtc/tools',
-    'video_capture_tests': 'webrtc/modules/video_capture',
-    'video_engine_tests': 'webrtc',
-    'video_engine_core_unittests': 'webrtc/video_engine',
-    'voice_engine_unittests': 'webrtc/voice_engine',
-    'webrtc_perf_tests': 'webrtc',
-  }
+  # Android APK tests.
+  ANDROID_APK_TESTS = [
+    'audio_decoder_unittests',
+    'common_audio_unittests',
+    'common_video_unittests',
+    'modules_tests',
+    'modules_unittests',
+    'system_wrappers_unittests',
+    'test_support_unittests',
+    'tools_unittests',
+    'video_capture_tests',
+    'video_engine_core_unittests',
+    'video_engine_tests',
+    'voice_engine_unittests',
+    'webrtc_perf_tests',
+  ]
+
+  ANDROID_INSTRUMENTATION_TESTS = [
+     'libjingle_peerconnection_android_unittest',
+  ]
 
   # Map of GS archive names to urls.
   # TODO(kjellander): Convert to use the auto-generated URLs once we've setup a
@@ -165,13 +169,11 @@ class WebRTCApi(recipe_api.RecipeApi):
         self.add_test('content_unittests')
       elif self.c.TEST_SUITE == 'android':
         self.m.chromium_android.common_tests_setup_steps()
-
-        for test in sorted(self.ANDROID_APK_TESTS.keys()):
-          # Add the filename of the test.isolate files to the path.
-          isolate_file = self.m.path.join(self.ANDROID_APK_TESTS[test],
-                                          '%s.isolate' % test)
-          self.test_runner(test, isolate_file)
-
+        for test in self.ANDROID_APK_TESTS:
+          self.m.chromium_android.run_test_suite(test)
+        for test in self.ANDROID_INSTRUMENTATION_TESTS:
+          self.m.chromium_android.run_instrumentation_suite(test_apk=test,
+                                                            verbose=True)
         self.m.chromium_android.logcat_dump()
         # Disable stack tools steps until crbug.com/411685 is fixed.
         #self.m.chromium_android.stack_tool_steps()
@@ -244,22 +246,6 @@ class WebRTCApi(recipe_api.RecipeApi):
           test=test, args=args, name=name, annotate=annotate, xvfb=True,
           flakiness_dash=flakiness_dash, python_mode=python_mode,
           test_type=test_type, env=env)
-
-  def test_runner(self, test, isolate_path):
-    """Adds a test to run on Android devices.
-
-    This is a minimal version for WebRTC, similar to the methods in the
-    chromium_android recipe module. It's needed since we need to alter the
-    environment.
-    """
-    script = self.m.path['checkout'].join('webrtc', 'build', 'android',
-                                          'test_runner.py')
-    args = ['gtest', '-s', test, '--verbose', '--isolate-file-path',
-            isolate_path]
-    if self.m.chromium.c.BUILD_CONFIG == 'Release':
-      args.append('--release')
-    env = {'CHECKOUT_SOURCE_ROOT': self.m.path['checkout']}
-    self.m.python(test, script, args, env=env)
 
   def sizes(self, revision):
     # TODO(kjellander): Move this into a function of the chromium recipe

@@ -28,14 +28,14 @@ RECIPE_CONFIGS = {
   },
   'webrtc_android': {
     'chromium_config': 'android',
-    'chromium_android_config': 'base_config',
+    'chromium_android_config': 'webrtc',
     'gclient_config': 'webrtc',
     'gclient_apply_config': ['android'],
     'test_suite': 'android',
   },
   'webrtc_android_clang': {
     'chromium_config': 'android_clang',
-    'chromium_android_config': 'base_config',
+    'chromium_android_config': 'webrtc',
     'gclient_config': 'webrtc',
     'gclient_apply_config': ['android'],
   },
