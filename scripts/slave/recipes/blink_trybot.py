@@ -292,9 +292,13 @@ def GenSteps(api):
         # TODO(sergiyb): This config should be read from an external JSON file
         # in a custom step, which can then be mocked in the GenTests.
         swarming_dimension_sets=[{
-          'gpu': '8086:0116',
+          'gpu': '8086:0116',  # Intel HD Graphics 3000
           'hidpi': '0',
           'os': 'Mac-10.8',
+        }, {
+          'gpu': '10de:0fe9',  # NVIDIA GeForce GT 750M
+          'hidpi': '1',
+          'os': 'Mac-10.9',
         }]))
 
   if bot_config['compile_only']:
