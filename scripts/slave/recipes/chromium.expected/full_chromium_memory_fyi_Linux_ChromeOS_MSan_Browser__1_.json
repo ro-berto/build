@@ -5,9 +5,9 @@
       "-u",
       "[BUILD]/scripts/slave/bot_update.py",
       "--master",
-      "chromium.fyi",
+      "chromium.memory.fyi",
       "--builder",
-      "Linux ChromeOS MSan Tests",
+      "Linux ChromeOS MSan Browser (1)",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -75,12 +75,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/testing/buildbot/chromium.fyi.json",
+      "[SLAVE_BUILD]/src/testing/buildbot/chromium.memory.fyi.json",
       "/path/to/tmp/json"
     ],
     "name": "read test spec",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.fyi.json@@@",
+      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.memory.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -98,7 +98,7 @@
       "--paths",
       "{\"build\": \"[BUILD]\"}",
       "--properties",
-      "{\"buildername\": \"Linux ChromeOS MSan Tests\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
+      "{\"buildername\": \"Linux ChromeOS MSan Browser (1)\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -142,9 +142,9 @@
       "--build-archive-url",
       "gs://test-domain/test-archive.zip",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux ChromeOS MSan Tests\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Chromium Linux ChromeOS MSan Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux ChromeOS MSan Browser (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.memory.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Chromium Linux ChromeOS MSan Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux ChromeOS MSan Tests\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Chromium Linux ChromeOS MSan Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux ChromeOS MSan Browser (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.memory.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Chromium Linux ChromeOS MSan Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "name": "extract build"
   }
