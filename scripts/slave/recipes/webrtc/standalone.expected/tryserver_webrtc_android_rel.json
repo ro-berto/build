@@ -350,19 +350,6 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/webrtc/build/android/test_runner.py",
-      "instrumentation",
-      "--test-apk",
-      "libjingle_peerconnection_android_unittest",
-      "--verbose",
-      "--release"
-    ],
-    "name": "Instrumentation test libjingle_peerconnection_android_unittest"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[BUILD]/scripts/slave/tee.py",
       "[SLAVE_BUILD]/src/out/Release/full_log",
       "--",

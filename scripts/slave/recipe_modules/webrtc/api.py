@@ -51,7 +51,10 @@ class WebRTCApi(recipe_api.RecipeApi):
   ]
 
   ANDROID_INSTRUMENTATION_TESTS = [
-     'libjingle_peerconnection_android_unittest',
+     # Disabled due to error only occurring in Chrome infra:
+     # Test size not found in annotations for test
+     # 'org.webrtc.PeerConnectionAndroidTest#testCompleteSession
+     #'libjingle_peerconnection_android_unittest',
   ]
 
   # Map of GS archive names to urls.
@@ -171,9 +174,9 @@ class WebRTCApi(recipe_api.RecipeApi):
         self.m.chromium_android.common_tests_setup_steps()
         for test in self.ANDROID_APK_TESTS:
           self.m.chromium_android.run_test_suite(test)
-        for test in self.ANDROID_INSTRUMENTATION_TESTS:
-          self.m.chromium_android.run_instrumentation_suite(test_apk=test,
-                                                            verbose=True)
+        #for test in self.ANDROID_INSTRUMENTATION_TESTS:
+          #self.m.chromium_android.run_instrumentation_suite(test_apk=test,
+          #                                                  verbose=True)
         self.m.chromium_android.logcat_dump()
         # Disable stack tools steps until crbug.com/411685 is fixed.
         #self.m.chromium_android.stack_tool_steps()
