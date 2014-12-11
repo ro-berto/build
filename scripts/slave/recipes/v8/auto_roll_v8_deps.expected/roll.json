@@ -109,7 +109,7 @@
       "--spec",
       "solutions=[{'managed':False,'name':'src','url':'https://chromium.googlesource.com/chromium/src','deps_file':'DEPS'}]"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient get src deps",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -131,7 +131,7 @@
       "--spec",
       "solutions=[{'managed':False,'name':'v8','url':'https://chromium.googlesource.com/v8/v8','deps_file':'DEPS'}]"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient get v8 deps",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [

@@ -19,7 +19,7 @@ V8_REPO = BASE_URL + '/v8/v8'
 CR_REPO = BASE_URL + '/chromium/src'
 
 
-def GetDEPS(api, name, repo, path):
+def GetDEPS(api, name, repo):
   # Make a fake spec. Gclient is not nice to us when having two solutions
   # side by side. The latter checkout kills the former's gclient file.
   spec = ('solutions=[{'
@@ -33,7 +33,7 @@ def GetDEPS(api, name, repo, path):
   step_result = api.gclient(
       'get %s deps' % name,
       ['revinfo', '--deps', 'all', '--spec', spec],
-      cwd=path,
+      cwd=api.path['slave_build'],
       stdout=api.raw_io.output(),
   )
 
@@ -100,9 +100,9 @@ def GenSteps(api):
 
   # Get chromium's and v8's deps information.
   cr_deps = GetDEPS(
-      api, 'src', CR_REPO, api.path['slave_build'].join('src'))
+      api, 'src', CR_REPO)
   v8_deps = GetDEPS(
-      api, 'v8', V8_REPO, api.path['checkout'])
+      api, 'v8', V8_REPO)
 
   commit_message = []
 
@@ -114,13 +114,14 @@ def GenSteps(api):
     assert '@' in cr_value, 'Found cr value %s without pinned revision.' % name
     v8_repo, v8_rev = v8_value.split('@')
     cr_repo, cr_rev = cr_value.split('@')
-    assert v8_repo == cr_repo
+    assert v8_repo == cr_repo, 'Found v8 %s for src %s.' % (v8_repo, cr_repo)
 
     # Check if an update is necessary.
     if v8_rev != cr_rev:
       api.step(
           'roll dependency',
           ['roll-dep', 'v8/%s' % name, cr_rev],
+          ok_ret=any,
           cwd=api.path['checkout'],
       )
       commit_message.append('Rolling %s to %s' % ('v8/%s' % name, cr_rev))
