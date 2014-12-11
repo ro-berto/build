@@ -138,8 +138,9 @@ def GenSteps(api):
 def GenTests(api):
   tests = [
       ['mojo_linux', 'Mojo Linux'],
-      ['mojo_linux_asan', 'Mojo Linux ASan'],
       ['mojo_linux_dbg', 'Mojo Linux (dbg)'],
+      ['mojo_linux_asan', 'Mojo Linux ASan'],
+      ['mojo_linux_asan_dbg', 'Mojo Linux ASan (dbg)'],
       ['mojo_android_dbg', 'Mojo Android (dbg)'],
       ['mojo_android_builder_tests_dbg', 'Mojo Android Builder Tests (dbg)'],
       ['mojo_chromeos_dbg', 'Mojo ChromeOS (dbg)'],
