@@ -78,7 +78,7 @@ def arm_l_builder(c):
 @CONFIG_CTX(includes=['arm_l_builder'])
 def arm_l_builder_lto(c):
   c.gyp_env.GYP_DEFINES['use_lto'] = 1
-  del c.gyp_env.GYP_DEFINES['component']
+  c.gyp_env.GYP_DEFINES['component'] = 'shared_library'
 
 @CONFIG_CTX(includes=['arm_l_builder'],
             config_vars={'BUILD_CONFIG': 'Release'})
