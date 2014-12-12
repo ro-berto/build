@@ -13,6 +13,7 @@ import json
 import logging
 import sys
 import unittest
+import urlparse
 import uuid
 
 from testing_support import auto_stub
@@ -26,6 +27,9 @@ from master.builders_pools import BuildersPools
 
 TEST_BASE_URL = ('https://codereview.chromium.org/get_pending_try_patchsets?'
                  'limit=1000&offset=1&master=tryserver.chromium.linux')
+TEST_DUPE_BASE_URL = (
+    'https://codereview.chromium.org/get_pending_try_patchsets?'
+    'limit=1000&offset=1&master=tryserver.chromium.dupe')
 
 
 # Create timestamps both with microseconds=0 and !=0.
@@ -45,6 +49,12 @@ TEST_RIETVELD_PAGES = [
     'key': 'test_key_2'},
    {'timestamp': (utcnow_microsec - datetime.timedelta(hours=6, minutes=1)),
     'key': 'test_key_3'}]
+]
+
+
+TEST_DUPE_RIETVELD_PAGES = [
+  [{'timestamp': datetime.datetime.utcnow(), 'key': 'duplicate_key'}],
+  [{'timestamp': datetime.datetime.utcnow(), 'key': 'duplicate_key'}],
 ]
 
 
@@ -157,7 +167,8 @@ class MockServiceParent(object):
 class RietveldPollerWithCacheTest(auto_stub.TestCase):
 
   def _GetPage(self, url, **_):
-    self.assertTrue(url.startswith(TEST_BASE_URL))
+    self.assertTrue(url.startswith(TEST_BASE_URL) or
+                    url.startswith(TEST_DUPE_BASE_URL))
     self.assertIs(type(url), str)
 
     self._numRequests += 1
@@ -166,15 +177,25 @@ class RietveldPollerWithCacheTest(auto_stub.TestCase):
       cursor = str(uuid.uuid4())
       self._cursors[cursor] = 0
       jobs = TEST_RIETVELD_PAGES[0]
+    elif url == TEST_DUPE_BASE_URL:
+      cursor = str(uuid.uuid4())
+      self._cursors[cursor] = 0
+      jobs = TEST_DUPE_RIETVELD_PAGES[0]
     else:
-      prev_cursor = url[len(TEST_BASE_URL)+8:]
+      parsed_url = urlparse.urlparse(url)
+      parsed_qs = urlparse.parse_qs(parsed_url.query)
+      prev_cursor = parsed_qs.get('cursor', [''])[0]
       self.assertIn(prev_cursor, self._cursors,
                     'Requested incorrect cursor %s. Available cursors: %s' %
                     (prev_cursor, self._cursors))
-      if self._cursors[prev_cursor] + 1 < len(TEST_RIETVELD_PAGES):
+      if url.startswith(TEST_BASE_URL):
+        test_pages = TEST_RIETVELD_PAGES
+      elif url.startswith(TEST_DUPE_BASE_URL):
+        test_pages = TEST_DUPE_RIETVELD_PAGES
+      if self._cursors[prev_cursor] + 1 < len(test_pages):
         cursor = str(uuid.uuid4())
         self._cursors[cursor] = self._cursors[prev_cursor] + 1
-        jobs = TEST_RIETVELD_PAGES[self._cursors[cursor]]
+        jobs = test_pages[self._cursors[cursor]]
       else:
         cursor = prev_cursor
         jobs = []
@@ -213,6 +234,17 @@ class RietveldPollerWithCacheTest(auto_stub.TestCase):
     self.assertEqual(len(self._mockTJR.submitted_jobs), 2)
     self.assertEquals(self._mockTJR.submitted_jobs[0]['key'], 'test_key_1')
     self.assertEquals(self._mockTJR.submitted_jobs[1]['key'], 'test_key_2')
+
+  def testSubmitsNewJobsAndIgnoresDuplicateKeys(self):
+    # pylint: disable=protected-access
+    poller = try_job_rietveld._RietveldPollerWithCache(TEST_DUPE_BASE_URL, 60)
+    poller.master = self._mockMaster
+    poller.setServiceParent(self._mockTJR)
+    poller.poll()
+    # This part is critical: we verify only one job is submitted, not two
+    # with the same keys.
+    self.assertEqual(len(self._mockTJR.submitted_jobs), 1)
+    self.assertEquals(self._mockTJR.submitted_jobs[0]['key'], 'duplicate_key')
 
   def testDoesNotResubmitPreviousJobs(self):
     # pylint: disable=protected-access

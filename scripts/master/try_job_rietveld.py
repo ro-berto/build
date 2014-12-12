@@ -252,6 +252,7 @@ class _RietveldPollerWithCache(base.PollingChangeSource):
       if (parsed_timestamp > cutoff_timestamp and
           job['key'] not in self._processed_keys):
         new_jobs.append(job)
+        self._processed_keys[job['key']] = parsed_timestamp
 
     if new_jobs:
       log.msg('[RPWC] Submitting %d new jobs...' % len(new_jobs))
@@ -261,11 +262,6 @@ class _RietveldPollerWithCache(base.PollingChangeSource):
 
     # Update processed keys cache.
     new_processed_keys = {}
-    for job in new_jobs:
-      parsed_timestamp = str_to_datetime(job['timestamp'])
-      new_processed_keys[job['key']] = parsed_timestamp
-    log.msg('[RPWC] Added %d new jobs to the cache.' % len(new_processed_keys))
-
     num_removed = 0
     for processed_key, timestamp in self._processed_keys.iteritems():
       if timestamp > cutoff_timestamp:
