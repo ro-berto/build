@@ -559,7 +559,8 @@ class SkiaApi(recipe_api.RecipeApi):
     if ('TSAN'         not in self.c.BUILDER_NAME and
         'ZeroGPUCache' not in self.c.BUILDER_NAME):
       self.run_render_pdfs()
-      self.run_decoding_tests()
+      if 'GalaxyS4' not in self.c.BUILDER_NAME:
+        self.run_decoding_tests()
 
   def perf_steps(self):
     """Run Skia benchmarks."""

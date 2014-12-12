@@ -97,18 +97,20 @@ def GenTests(api):
         api.step_data(
             ('exists /storage/emulated/legacy/skiabot/skia_gm_expected/'
              'ignored-tests.txt'),
-            stdout=api.raw_io.output('')) +
-        api.step_data(
-            'exists /storage/emulated/legacy/skiabot/skia_skimage_out/images',
-            stdout=api.raw_io.output('')) +
-        api.step_data(
-            'exists /storage/emulated/legacy/skiabot/skia_skimage_out/%s' %
-                 builder,
-            stdout=api.raw_io.output('')) +
-        api.step_data(
-            ('exists /storage/emulated/legacy/skiabot/skia_skimage_expected/' +
-             builder),
-            stdout=api.raw_io.output(''))
+            stdout=api.raw_io.output('')))
+      if not 'GalaxyS4' in builder:
+        test_data += (
+          api.step_data(
+              'exists /storage/emulated/legacy/skiabot/skia_skimage_out/images',
+              stdout=api.raw_io.output('')) +
+          api.step_data(
+              'exists /storage/emulated/legacy/skiabot/skia_skimage_out/%s' %
+                   builder,
+              stdout=api.raw_io.output('')) +
+          api.step_data(
+              ('exists /storage/emulated/legacy/skiabot/skia_skimage_expected/'
+               + builder),
+              stdout=api.raw_io.output(''))
       )
 
     if 'Perf' in builder:
