@@ -30,6 +30,16 @@
         "status-url": "https://chromium-status.appspot.com",
         "track-revisions": true
     },
+    "skia": {
+        "build-db": "skia_build_db.json",
+        "masters": [
+            "https://build.chromium.org/p/client.skia.compile"
+        ],
+        "password-file": ".skia_status_password",
+        "revision-properties": "got_revision",
+        "set-status": true,
+        "status-url": "https://skia-tree-status.appspot.com"
+    },
     "v8": {
         "build-db": "v8_build_db.json",
         "masters": [

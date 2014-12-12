@@ -54,6 +54,16 @@
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.libvpx\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"skia\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"build-db\": \"skia_build_db.json\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"masters\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.skia.compile\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ], @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"password-file\": \".skia_status_password\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"revision-properties\": \"got_revision\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"set-status\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"status-url\": \"https://skia-tree-status.appspot.com\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"v8\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"build-db\": \"v8_build_db.json\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"masters\": [@@@",
@@ -154,6 +164,27 @@
       "https://build.chromium.org/p/client.v8"
     ],
     "name": "gatekeeper: v8"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/gatekeeper_ng.py",
+      "-v",
+      "--json",
+      "[BUILD]/scripts/slave/gatekeeper.json",
+      "--status-url",
+      "https://skia-tree-status.appspot.com",
+      "--set-status",
+      "--revision-properties",
+      "got_revision",
+      "--build-db",
+      "skia_build_db.json",
+      "--password-file",
+      ".skia_status_password",
+      "https://build.chromium.org/p/client.skia.compile"
+    ],
+    "name": "gatekeeper: skia"
   },
   {
     "cmd": [
