@@ -400,7 +400,13 @@
               "vitalyp@chromium.org"
             ],
             "forgiving_steps": [
-              "*"
+              "update_scripts",
+              "setup_build",
+              "bot_update"
+            ],
+            "closing_steps": [
+              "generate_gyp_files",
+              "compile"
             ]
           },
           "Site Isolation Linux": {
