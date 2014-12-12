@@ -709,16 +709,24 @@ class V8Api(recipe_api.RecipeApi):
   def standard_deviation(values, average):
     return math.sqrt(V8Api.mean(V8Api.variance(values, average)))
 
-  def perf_upload(self, tests, results_mapping, category):
+  def perf_upload(self, results, category):
+    """Upload performance results to the performance dashboard.
+
+    Args:
+      results: A list of result maps. Each result map has an errors and a
+               traces item.
+      category: Name of the perf category (e.g. ia32 or N5). The bot field
+                of the performance dashboard is used to hold this category.
+    """
     # Make sure that bots that run perf tests have a revision property.
-    if tests:
+    if results:
       assert self.revision_number and self.revision, (
           'Revision must be specified for perf tests as '
           'they upload data to the perf dashboard.')
 
     points = []
-    for test in tests:
-      for trace in results_mapping[test]['traces']:
+    for result in results:
+      for trace in result['traces']:
         # Make 'v8' the root of all standalone v8 performance tests.
         test_path = '/'.join(['v8'] + trace['graphs'])
 
@@ -821,7 +829,9 @@ class V8Api(recipe_api.RecipeApi):
 
     # Collect all perf data of the previous steps.
     if upload:
-      self.perf_upload(tests, results_mapping, category)
+      self.perf_upload(
+          [results_mapping[k] for k in sorted(results_mapping.keys())],
+          category)
 
     if failed:
       raise self.m.step.StepFailure('One or more performance tests failed.')
@@ -832,14 +842,10 @@ class V8Api(recipe_api.RecipeApi):
     """Merge perf results from a list of result files and return the resulting
     json.
     """
-    step_result = self.m.python(
+    return self.m.python(
       'merge perf results',
       self.resource('merge_perf_results.py'),
       map(str, args),
       stdout=self.m.json.output(),
       **kwargs
-    )
-    results = step_result.stdout
-    step_result.presentation.logs['results'] = self.m.json.dumps(
-        results, indent=2).splitlines()
-    return results
+    ).stdout

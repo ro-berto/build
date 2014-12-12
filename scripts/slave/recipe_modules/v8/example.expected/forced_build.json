@@ -99,11 +99,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"res\": \"the result\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@results@{@@@",
-      "@@@STEP_LOG_LINE@results@  \"res\": \"the result\"@@@",
-      "@@@STEP_LOG_LINE@results@}@@@",
-      "@@@STEP_LOG_END@results@@@"
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
