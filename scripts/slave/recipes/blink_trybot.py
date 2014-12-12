@@ -502,9 +502,9 @@ def GenTests(api):
     api.platform.name('mac') +
     api.override_step_data(with_patch, canned_test(passing=True)) +
     api.override_step_data(
-        'pixel_test on Intel GPU (with patch)',
+        'pixel_test on Intel GPU on Mac (with patch)',
         api.json.canned_telemetry_gpu_output(passing=False, swarming=True)) +
     api.override_step_data(
-        'pixel_test on Intel GPU (without patch)',
+        'pixel_test on Intel GPU on Mac (without patch)',
         api.json.canned_telemetry_gpu_output(passing=False, swarming=True))
   )

@@ -1645,10 +1645,10 @@ def GenTests(api):
     ) +
     api.platform.name('mac') +
     api.override_step_data(
-        'pixel_test on Intel GPU (with patch)',
+        'pixel_test on Intel GPU on Mac (with patch)',
         api.json.canned_telemetry_gpu_output(passing=False, swarming=True)) +
     api.override_step_data(
-        'pixel_test on Intel GPU (without patch)',
+        'pixel_test on Intel GPU on Mac (without patch)',
         api.json.canned_telemetry_gpu_output(passing=False, swarming=True)) +
     api.override_step_data('analyze',
                            api.json.output({'status': 'Found dependency',
@@ -1663,7 +1663,7 @@ def GenTests(api):
       buildername='mac_chromium_rel_ng',
     ) +
     api.platform.name('mac') +
-    api.override_step_data('pixel_test on Intel GPU (with patch)',
+    api.override_step_data('pixel_test on Intel GPU on Mac (with patch)',
                            api.raw_io.output_dir({'0/results.json': ''})) +
     api.override_step_data('analyze',
                            api.json.output({'status': 'Found dependency',

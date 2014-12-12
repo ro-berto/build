@@ -460,16 +460,21 @@ class AndroidPerfTests(Test):
 
 
 class SwarmingTest(Test):
-  def __init__(self, name, dimensions=None, target_name=None):
+  def __init__(self, name, dimensions=None, target_name=None,
+               extra_suffix=None):
     self._name = name
     self._tasks = {}
     self._results = {}
     self._target_name = target_name
     self._dimensions = dimensions
+    self._extra_suffix = extra_suffix
 
   @property
   def name(self):
-    return self._name
+    if self._extra_suffix:
+      return '%s %s' % (self._name, self._extra_suffix)
+    else:
+      return self._name
 
   @property
   def target_name(self):
@@ -584,8 +589,9 @@ class SwarmingTest(Test):
 
 class SwarmingGTestTest(SwarmingTest):
   def __init__(self, name, args=None, shards=1, dimensions=None,
-               target_name=None):
-    super(SwarmingGTestTest, self).__init__(name, dimensions, target_name)
+               target_name=None, extra_suffix=None):
+    super(SwarmingGTestTest, self).__init__(name, dimensions, target_name,
+                                            extra_suffix)
     self._args = args or []
     self._shards = shards
 
@@ -627,15 +633,13 @@ class SwarmingGTestTest(SwarmingTest):
 
 class GTestTest(Test):
   def __init__(self, name, args=None, target_name=None, enable_swarming=False,
-               swarming_shards=1, swarming_dimensions=None, **runtest_kwargs):
+               swarming_shards=1, swarming_dimensions=None,
+               swarming_extra_suffix=None, **runtest_kwargs):
     super(GTestTest, self).__init__()
-    self._name = name
-    self._args = args
-    self._target_name = target_name
-    self._swarming_dimensions = swarming_dimensions
     if enable_swarming:
       self._test = SwarmingGTestTest(name, args, swarming_shards,
-                                     swarming_dimensions, target_name)
+                                     swarming_dimensions, target_name,
+                                     extra_suffix=swarming_extra_suffix)
     else:
       self._test = LocalGTestTest(name, args, target_name, **runtest_kwargs)
 
@@ -761,15 +765,16 @@ class PrintPreviewTests(PythonBasedTest):  # pylint: disable=W032
 class TelemetryGPUTest(Test):  # pylint: disable=W0232
   def __init__(self, name, revision=None, webkit_revision=None,
                target_name=None, args=None, enable_swarming=False,
-               swarming_dimensions=None, **runtest_kwargs):
+               swarming_dimensions=None, swarming_extra_suffix=None,
+               **runtest_kwargs):
     if enable_swarming:
-      self._test = SwarmingTelemetryGPUTest(name, args=args,
-                                            dimensions=swarming_dimensions,
-                                            target_name=target_name)
+      self._test = SwarmingTelemetryGPUTest(
+          name, args=args, dimensions=swarming_dimensions,
+          target_name=target_name, extra_suffix=swarming_extra_suffix)
     else:
-      self._test = LocalTelemetryGPUTest(name, revision, webkit_revision,
-                                         args=args, target_name=target_name,
-                                         **runtest_kwargs)
+      self._test = LocalTelemetryGPUTest(
+          name, revision, webkit_revision, args=args, target_name=target_name,
+          **runtest_kwargs)
 
   @property
   def name(self):
@@ -883,9 +888,10 @@ class LocalTelemetryGPUTest(Test):  # pylint: disable=W0232
 
 
 class SwarmingTelemetryGPUTest(SwarmingTest):
-  def __init__(self, name, args=None, dimensions=None, target_name=None):
-    super(SwarmingTelemetryGPUTest, self).__init__(name, dimensions,
-                                                   'telemetry_gpu_test')
+  def __init__(self, name, args=None, dimensions=None, target_name=None,
+               extra_suffix=None):
+    super(SwarmingTelemetryGPUTest, self).__init__(
+        name, dimensions, 'telemetry_gpu_test', extra_suffix)
     self._args = args
     self._telemetry_target_name = target_name or name
 
