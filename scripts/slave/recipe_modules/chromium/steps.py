@@ -1118,6 +1118,7 @@ class GenerateTelemetryProfileStep(Test):
     return []
 
 IOS_TESTS = [
+  GTestTest('ios_chrome_unittests'),
   GTestTest('base_unittests'),
   GTestTest('components_unittests'),
   GTestTest('crypto_unittests'),
