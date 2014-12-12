@@ -20,7 +20,7 @@ def GenSteps(api):
   api.gclient.set_config('crashpad')
   api.gclient.checkout()
 
-  if api.properties.get('clobber'):
+  if 'clobber' in api.properties:
     api.path.rmtree('out', api.path['slave_build'].join('out'))
 
   api.gclient.runhooks()
