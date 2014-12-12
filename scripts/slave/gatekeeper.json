@@ -441,7 +441,10 @@
               "has ccache?"
             ]
           }
-        }
+        },
+        "excluded_builders": [
+          "*-Trybot"
+        ]
       }
     ]
   },
