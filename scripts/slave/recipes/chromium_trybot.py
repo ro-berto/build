@@ -60,29 +60,6 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
-      'linux_chromium_dbg': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'chromium_config': 'chromium',
-        'compile_only': False,
-        'testing': {
-          'platform': 'linux',
-        },
-      },
-      'linux_chromium_rel': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'enable_swarming': True,
-        'chromium_config': 'chromium',
-        'compile_only': False,
-        'testing': {
-          'platform': 'linux',
-        },
-      },
       'linux_chromium_dbg_ng': {
         'based_on_main_waterfall': {
           'mastername': 'chromium.linux',
@@ -124,18 +101,6 @@ BUILDERS = {
           'buildername': 'Linux ASan LSan Builder',
           'tester': 'Linux ASan LSan Tests (1)',
         },
-        'testing': {
-          'platform': 'linux',
-        },
-      },
-      # Fake builder to provide testing coverage for non-bot_update.
-      'linux_no_bot_update': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'chromium_config': 'chromium',
-        'compile_only': False,
         'testing': {
           'platform': 'linux',
         },
@@ -350,18 +315,6 @@ BUILDERS = {
           'platform': 'mac',
         },
       },
-      'mac_chromium_rel': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'enable_swarming': True,
-        'chromium_config': 'chromium',
-        'compile_only': False,
-        'testing': {
-          'platform': 'mac',
-        },
-      },
       'mac_chromium_rel_ng': {
         'based_on_main_waterfall': {
           'mastername': 'chromium.mac',
@@ -409,34 +362,6 @@ BUILDERS = {
         },
         'chromium_config': 'chromium',
         'compile_only': True,
-        'testing': {
-          'platform': 'mac',
-        },
-      },
-      'mac_chromium_openssl_dbg': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'GYP_DEFINES': {
-          'use_openssl': '1',
-        },
-        'chromium_config': 'chromium',
-        'compile_only': False,
-        'testing': {
-          'platform': 'mac',
-        },
-      },
-      'mac_chromium_openssl_rel': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'GYP_DEFINES': {
-          'use_openssl': '1',
-        },
-        'chromium_config': 'chromium',
-        'compile_only': False,
         'testing': {
           'platform': 'mac',
         },
@@ -611,18 +536,6 @@ BUILDERS = {
           'buildername': 'Win Builder (dbg)',
           'tester': 'Win8 Aura',
         },
-        'testing': {
-          'platform': 'win',
-        },
-      },
-      # Fake builder to provide testing coverage for non-bot_update.
-      'win_no_bot_update': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'chromium_config': 'chromium',
-        'compile_only': False,
         'testing': {
           'platform': 'win',
         },
@@ -1104,13 +1017,10 @@ def _sanitize_nonalpha(text):
 
 
 def GenTests(api):
-  canned_checkdeps = {
-    True: {'valid': True, 'failures': []},
-    False: {'valid': True, 'failures': ['foo: bar']},
-  }
   canned_test = api.json.canned_gtest_output
+
   def props(config='Release', mastername='tryserver.chromium.linux',
-            buildername='linux_chromium_rel', extra_swarmed_tests=None,
+            buildername='linux_chromium_rel_ng', extra_swarmed_tests=None,
             **kwargs):
     kwargs.setdefault('revision', None)
     swarm_hashes = api.gpu.dummy_swarm_hashes
@@ -1123,6 +1033,20 @@ def GenTests(api):
       buildername=buildername,
       swarm_hashes=swarm_hashes,
       **kwargs
+    )
+
+  def suppress_analyze():
+    """Overrides analyze step data so that all targets get compiled."""
+    return api.override_step_data(
+        'read filter exclusion spec',
+        api.json.output({
+            'base': {
+                'exclusions': ['f.*'],
+            },
+            'chromium': {
+                'exclusions': [],
+            },
+        })
     )
 
   # While not strictly required for coverage, record expectations for each
@@ -1154,19 +1078,41 @@ def GenTests(api):
   )
 
   yield (
-    api.test('invalid_json_without_patch') +
-    props(buildername='linux_chromium_rel') +
+    api.test('invalid_results') +
+    props() +
     api.platform.name('linux') +
-    api.override_step_data('checkdeps (with patch)',
-                           api.json.output(canned_checkdeps[False])) +
-    api.override_step_data('checkdeps (without patch)',
-                           api.json.output(None))
+    api.override_step_data('read test spec', api.json.output({
+        'Linux Tests': {
+            'gtest_tests': ['base_unittests'],
+        },
+    })) +
+    suppress_analyze() +
+    api.override_step_data('base_unittests (with patch)',
+                           canned_test(passing=False)) +
+    api.override_step_data('base_unittests (without patch)',
+                           api.json.raw_gtest_output(None, retcode=1))
+  )
+
+  yield (
+    api.test('compile_failure_without_patch_deapply_fn') +
+    props() +
+    api.platform.name('linux') +
+    api.override_step_data('read test spec', api.json.output({
+        'Linux Tests': {
+          'gtest_tests': ['base_unittests'],
+        },
+      })
+    ) +
+    suppress_analyze() +
+    api.override_step_data('base_unittests (with patch)',
+                           canned_test(passing=False)) +
+    api.override_step_data('compile (without patch)', retcode=1)
   )
 
   for step in ('bot_update', 'gclient runhooks (with patch)'):
     yield (
       api.test(_sanitize_nonalpha(step) + '_failure') +
-      props(buildername='win_no_bot_update',
+      props(buildername='win_chromium_rel',
             mastername='tryserver.chromium.win') +
       api.platform.name('win') +
       api.step_data(step, retcode=1)
@@ -1207,27 +1153,11 @@ def GenTests(api):
   )
 
   yield (
-    api.test('deapply_compile_failure_linux') +
-    props(buildername='linux_no_bot_update') +
-    api.platform.name('linux') +
-    api.override_step_data('base_unittests (with patch)',
-                           canned_test(passing=False)) +
-    api.step_data('compile (without patch)', retcode=1)
-  )
-
-  yield (
     api.test('compile_failure_ng') +
     api.platform('linux', 64) +
     props(mastername='tryserver.chromium.linux',
           buildername='linux_chromium_rel_ng') +
-    api.override_step_data('read filter exclusion spec', api.json.output({
-        'base': {
-          'exclusions': ['f.*'],
-        },
-        'chromium': {
-          'exclusions': [],
-        },
-     })) +
+    suppress_analyze() +
     api.step_data('compile (with patch)', retcode=1)
   )
 
@@ -1236,14 +1166,7 @@ def GenTests(api):
     api.platform('linux', 64) +
     props(mastername='tryserver.chromium.linux',
           buildername='linux_chromium_rel_ng') +
-    api.override_step_data('read filter exclusion spec', api.json.output({
-        'base': {
-          'exclusions': ['f.*'],
-        },
-        'chromium': {
-          'exclusions': [],
-        },
-     })) +
+    suppress_analyze() +
     api.step_data('compile (with patch)', retcode=1) +
     api.step_data('compile (without patch)', retcode=1)
   )
@@ -1269,23 +1192,9 @@ def GenTests(api):
   )
 
   yield (
-    api.test('checkperms_failure') +
-    props() +
-    api.platform.name('linux') +
-    api.override_step_data(
-        'checkperms (with patch)',
-        api.json.output([
-            {
-                'error': 'Must not have executable bit set',
-                'rel_path': 'base/basictypes.h',
-            },
-        ]))
-  )
-
-  yield (
     api.test('check_swarming_version_failure') +
-    props(buildername='linux_chromium_rel') +
-    api.platform.name('linux') +
+    props(mastername='tryserver.chromium.win', buildername='win_chromium_rel') +
+    api.platform.name('win') +
     api.step_data('swarming.py --version', retcode=1) +
     api.override_step_data('read test spec', api.json.output({
         'gtest_tests': [
@@ -1296,29 +1205,7 @@ def GenTests(api):
         ],
       })
       ) +
-    api.override_step_data('read filter exclusion spec', api.json.output({
-        'base': {
-          'exclusions': ['f.*'],
-        },
-        'chromium': {
-          'exclusions': [],
-        },
-     }))
-  )
-
-  yield (
-    api.test('checklicenses_failure') +
-    props() +
-    api.platform.name('linux') +
-    api.override_step_data('checklicenses', retcode=1) +
-    api.override_step_data(
-        'checklicenses (with patch)',
-        api.json.output([
-            {
-                'filename': 'base/basictypes.h',
-                'license': 'UNKNOWN',
-            },
-        ]))
+    suppress_analyze()
   )
 
   # Successfully compiling, isolating and running two targets on swarming for a
@@ -1346,21 +1233,14 @@ def GenTests(api):
         ],
       })
     ) +
-    api.override_step_data('read filter exclusion spec', api.json.output({
-        'base': {
-          'exclusions': ['f.*'],
-        },
-        'chromium': {
-          'exclusions': [],
-        },
-     }))
+    suppress_analyze()
   )
 
   # Successfully compiling, isolating and running two targets on swarming for a
   # manual try job.
   yield (
     api.test('swarming_basic_try_job') +
-    props(buildername='linux_chromium_rel', requester='joe@chromium.org',
+    props(buildername='linux_chromium_rel_ng', requester='joe@chromium.org',
           extra_swarmed_tests=['base_unittests', 'browser_tests']) +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
@@ -1380,14 +1260,7 @@ def GenTests(api):
         ],
       })
     ) +
-    api.override_step_data('read filter exclusion spec', api.json.output({
-        'base': {
-          'exclusions': ['f.*'],
-        },
-        'chromium': {
-          'exclusions': [],
-        },
-     }))
+    suppress_analyze()
   )
 
   # One target (browser_tests) failed to produce *.isolated file.
@@ -1410,52 +1283,12 @@ def GenTests(api):
         ],
       })
     ) +
-    api.override_step_data('read filter exclusion spec', api.json.output({
-        'base': {
-          'exclusions': ['f.*'],
-        },
-        'chromium': {
-          'exclusions': [],
-        },
-     }))
-  )
-
-  # One test (base_unittest) failed on swarming. It is retried with
-  # deapplied patch.
-  yield (
-    api.test('swarming_deapply_patch') +
-    props(requester='commit-bot@chromium.org', blamelist='joe@chromium.org',
-          blamelist_real=['joe@chromium.org'],
-          extra_swarmed_tests=['base_unittests', 'browser_tests']) +
-    api.platform.name('linux') +
-    api.override_step_data('read test spec', api.json.output({
-        'gtest_tests': [
-          {
-            'test': 'base_unittests',
-            'swarming': {'can_use_on_swarming_builders': True},
-          },
-          {
-            'test': 'browser_tests',
-            'swarming': {'can_use_on_swarming_builders': True},
-          },
-        ],
-      })
-    ) +
-    api.override_step_data('read filter exclusion spec', api.json.output({
-        'base': {
-          'exclusions': ['f.*'],
-        },
-        'chromium': {
-          'exclusions': [],
-        },
-     })) +
-    api.override_step_data('base_unittests (with patch)',
-                           canned_test(passing=False))
+    suppress_analyze()
   )
 
   yield (
     api.test('no_compile_because_of_analyze') +
-    props(buildername='linux_chromium_rel') +
+    props(buildername='linux_chromium_rel_ng') +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
       })
@@ -1465,7 +1298,7 @@ def GenTests(api):
   # Verifies analyze skips projects other than src.
   yield (
     api.test('dont_analyze_for_non_src_project') +
-    props(buildername='linux_chromium_rel') +
+    props(buildername='linux_chromium_rel_ng') +
     props(root='blink') +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
@@ -1476,24 +1309,16 @@ def GenTests(api):
   # This should result in a compile.
   yield (
     api.test('compile_because_of_analyze_matching_exclusion') +
-    props(buildername='linux_chromium_rel') +
+    props(buildername='linux_chromium_rel_ng') +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({})) +
-    api.override_step_data('read filter exclusion spec', api.json.output({
-        'base': {
-          'exclusions': ['f.*'],
-        },
-        'chromium': {
-          'exclusions': [],
-        },
-     })
-    )
+    suppress_analyze()
   )
 
   # This should result in a compile.
   yield (
     api.test('compile_because_of_analyze') +
-    props(buildername='linux_chromium_rel') +
+    props(buildername='linux_chromium_rel_ng') +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
       })
@@ -1506,7 +1331,7 @@ def GenTests(api):
 
   yield (
     api.test('compile_because_of_analyze_with_filtered_tests_no_builder') +
-    props(buildername='linux_chromium_rel') +
+    props(buildername='linux_chromium_rel_ng') +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
         'gtest_tests': [
@@ -1532,7 +1357,7 @@ def GenTests(api):
 
   yield (
     api.test('compile_because_of_analyze_with_filtered_tests') +
-    props(buildername='linux_chromium_rel') +
+    props(buildername='linux_chromium_rel_ng') +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
         'gtest_tests': [
@@ -1559,7 +1384,7 @@ def GenTests(api):
   # Tests compile_target portion of analyze module.
   yield (
     api.test('compile_because_of_analyze_with_filtered_compile_targets') +
-    props(buildername='linux_chromium_rel') +
+    props(buildername='linux_chromium_rel_ng') +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
         'gtest_tests': [

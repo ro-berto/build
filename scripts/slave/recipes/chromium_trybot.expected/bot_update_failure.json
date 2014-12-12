@@ -7,7 +7,7 @@
       "--master",
       "tryserver.chromium.win",
       "--builder",
-      "win_no_bot_update",
+      "win_chromium_rel",
       "--slave",
       "TestSlavename",
       "--spec",

@@ -148,16 +148,28 @@ def main(argv):
                                         if builders[b] == 'chromium']
 
 
+  exit_code = 0
+
   for master in TRYSERVER_MASTERS:
     builders = getBuildersAndRecipes(master)
+    recipe_side_builders = chromium_trybot.BUILDERS[
+        master.replace('master.', '')]['builders']
+
+    bogus_builders = set(recipe_side_builders.keys()).difference(
+        set(builders.keys()))
+    if bogus_builders:
+      exit_code = 1
+      print 'The following builders from chromium_trybot recipe'
+      print 'do not exist in master config for %s:' % master
+      print '\n'.join('\t%s' % b for b in sorted(bogus_builders))
+
     for builder, recipe in builders.iteritems():
       # Only the chromium_trybot recipe knows how to mirror a main waterfall
       # builder.
       if recipe != 'chromium_trybot':
         continue
 
-      bot_config = chromium_trybot.BUILDERS[
-          master.replace('master.', '')]['builders'].get(builder)
+      bot_config = recipe_side_builders.get(builder)
       if not bot_config:
         continue
       main_waterfall_config = bot_config.get('based_on_main_waterfall')
@@ -185,12 +197,12 @@ def main(argv):
     suppressed_builders.update((master, b) for b in builders)
   regressed_builders = not_covered_builders.difference(suppressed_builders)
   if regressed_builders:
+    exit_code = 1
     print 'Regression, the following builders lack in-sync tryserver coverage:'
     print '\n'.join(sorted(
         '\t%s:%s' % (b[0], b[1]) for b in regressed_builders))
-    return 1
 
-  return 0
+  return exit_code
 
 
 if __name__ == '__main__':

@@ -7,7 +7,7 @@
       "--master",
       "tryserver.chromium.win",
       "--builder",
-      "win_no_bot_update",
+      "win_chromium_rel",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -124,7 +124,7 @@
       "--paths",
       "{\"build\": \"[BUILD]\"}",
       "--properties",
-      "{\"buildername\": \"win_no_bot_update\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
+      "{\"buildername\": \"win_chromium_rel\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -164,7 +164,7 @@
       "--master",
       "tryserver.chromium.win",
       "--builder",
-      "win_no_bot_update",
+      "win_chromium_rel",
       "--slave",
       "TestSlavename",
       "--spec",
