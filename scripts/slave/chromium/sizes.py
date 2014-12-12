@@ -130,7 +130,7 @@ def main_mac(options, args):
         result, stdout = run_process(result, [dump_static_initializers,
                                               chromium_framework_dsym])
         print '\n# Static initializers in %s:' % chromium_framework_executable
-        print_si_fail_hint('tools/mac/dump_static_initializers.py')
+        print_si_fail_hint('tools/mac/dump-static-initializers.py')
         print stdout
 
 
@@ -223,7 +223,7 @@ def check_linux_binary(target_dir, binary_name, options):
     result, stdout = run_process(result, [dump_static_initializers,
                                           '-d', binary_file])
     print '\n# Static initializers in %s:' % binary_file
-    print_si_fail_hint('tools/linux/dump_static_initializers.py')
+    print_si_fail_hint('tools/linux/dump-static-initializers.py')
     print stdout
 
   # Determine if the binary has the DT_TEXTREL marker.
