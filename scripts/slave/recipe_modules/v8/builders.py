@@ -906,6 +906,16 @@ BUILDERS = {
         'tests': ['mjsunit', 'webkit'],
         'testing': {'platform': 'linux'},
       },
+      'V8 Linux gcc 4.8': {
+        'chromium_apply_config': ['no_clang'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['unittests', 'v8testing'],
+        'testing': {'platform': 'linux'},
+      },
       'V8 Linux clang': {
         'chromium_apply_config': ['clang', 'goma'],
         'v8_config_kwargs': {
