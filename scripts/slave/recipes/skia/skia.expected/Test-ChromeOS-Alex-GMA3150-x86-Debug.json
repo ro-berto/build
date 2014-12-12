@@ -309,115 +309,6 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/dm"
-    ],
-    "name": "rmtree [SLAVE_BUILD]/dm",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/dm",
-      "511"
-    ],
-    "name": "makedirs [SLAVE_BUILD]/dm",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
-      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
-      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
-      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
-      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
-      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "scp",
-      "-P",
-      "22",
-      "[SLAVE_BUILD]/skia/out/config/chromeos-x86-alex/Debug/dm",
-      "root@192.168.1.140:/usr/local/skiabot/bin/dm"
-    ],
-    "name": "scp [SLAVE_BUILD]/skia/out/config/chromeos-x86-alex/Debug/dm"
-  },
-  {
-    "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.140",
-      "/usr/local/skiabot/bin/dm",
-      "--verbose",
-      "--resourcePath",
-      "/usr/local/skiabot/skia_resources",
-      "--skps",
-      "/usr/local/skiabot/skia_skp/skps",
-      "--writePath",
-      "/usr/local/skiabot/skia_dm_out",
-      "--nameByHash",
-      "--properties",
-      "gitHash",
-      "164710",
-      "build_number",
-      "5",
-      "--key",
-      "arch",
-      "x86",
-      "configuration",
-      "Debug",
-      "gpu",
-      "GMA3150",
-      "model",
-      "Alex",
-      "os",
-      "ChromeOS",
-      "--threads",
-      "1"
-    ],
-    "name": "dm"
-  },
-  {
-    "cmd": [
-      "[BUILD]/scripts/slave/recipe_modules/skia/resources/scp_dir_contents.sh",
-      "root@192.168.1.140:/usr/local/skiabot/skia_dm_out",
-      "[SLAVE_BUILD]/dm"
-    ],
-    "name": "scp /usr/local/skiabot/skia_dm_out"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/recipe_modules/skia/resources/upload_dm_results.py",
-      "[SLAVE_BUILD]/dm",
-      "164710",
-      "Test-ChromeOS-Alex-GMA3150-x86-Debug",
-      "5",
-      "",
-      "[SLAVE_BUILD]/skia/common/py/utils"
-    ],
-    "cwd": "[SLAVE_BUILD]/skia",
-    "name": "Upload DM Results"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "[SLAVE_BUILD]/skia/SKP_VERSION",
       "/path/to/tmp/"
@@ -529,6 +420,115 @@
       "root@192.168.1.140:/usr/local/skiabot/skia_skp/skps"
     ],
     "name": "scp [SLAVE_BUILD]/playback/skps"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[SLAVE_BUILD]/dm"
+    ],
+    "name": "rmtree [SLAVE_BUILD]/dm",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[SLAVE_BUILD]/dm",
+      "511"
+    ],
+    "name": "makedirs [SLAVE_BUILD]/dm",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "scp",
+      "-P",
+      "22",
+      "[SLAVE_BUILD]/skia/out/config/chromeos-x86-alex/Debug/dm",
+      "root@192.168.1.140:/usr/local/skiabot/bin/dm"
+    ],
+    "name": "scp [SLAVE_BUILD]/skia/out/config/chromeos-x86-alex/Debug/dm"
+  },
+  {
+    "cmd": [
+      "ssh",
+      "-p",
+      "22",
+      "root@192.168.1.140",
+      "/usr/local/skiabot/bin/dm",
+      "--verbose",
+      "--resourcePath",
+      "/usr/local/skiabot/skia_resources",
+      "--skps",
+      "/usr/local/skiabot/skia_skp/skps",
+      "--writePath",
+      "/usr/local/skiabot/skia_dm_out",
+      "--nameByHash",
+      "--properties",
+      "gitHash",
+      "164710",
+      "build_number",
+      "5",
+      "--key",
+      "arch",
+      "x86",
+      "configuration",
+      "Debug",
+      "gpu",
+      "GMA3150",
+      "model",
+      "Alex",
+      "os",
+      "ChromeOS",
+      "--threads",
+      "1"
+    ],
+    "name": "dm"
+  },
+  {
+    "cmd": [
+      "[BUILD]/scripts/slave/recipe_modules/skia/resources/scp_dir_contents.sh",
+      "root@192.168.1.140:/usr/local/skiabot/skia_dm_out",
+      "[SLAVE_BUILD]/dm"
+    ],
+    "name": "scp /usr/local/skiabot/skia_dm_out"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/skia/resources/upload_dm_results.py",
+      "[SLAVE_BUILD]/dm",
+      "164710",
+      "Test-ChromeOS-Alex-GMA3150-x86-Debug",
+      "5",
+      "",
+      "[SLAVE_BUILD]/skia/common/py/utils"
+    ],
+    "cwd": "[SLAVE_BUILD]/skia",
+    "name": "Upload DM Results"
   },
   {
     "cmd": [

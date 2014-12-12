@@ -361,6 +361,7 @@ class SkiaApi(recipe_api.RecipeApi):
 
   def run_dm(self):
     """Run the DM test."""
+    self._run_once(self.download_and_copy_skps)
     # This must run before we write anything into self.device_dirs.dm_dir
     # or we may end up deleting our output on machines where they're the same.
     host_dm_dir = self.m.path['slave_build'].join('dm')
