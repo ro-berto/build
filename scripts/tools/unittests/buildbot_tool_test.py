@@ -18,63 +18,28 @@ from common import fake_filesystem
 from tools import buildbot_tool
 
 
-SAMPLE_MASTER_CFG_TEMPLATE = """\
-# builders_block
-%(builders_block)s
-
-# git_repo_url
-%(git_repo_url)s
-
-# master_dirname
-%(master_dirname)s
-
+FAKE_MASTER_CFG_TEMPLATE = """\
 # master_classname
 %(master_classname)s
 
-# master_base_class
-%(master_base_class)s
-
-# master_port
-%(master_port)s
-
-# master_port_alt
-%(master_port_alt)s
-
-# slave_port
-%(slave_port)s
+# buildbot_url
+%(buildbot_url)s
 """
 
-SAMPLE_SLAVES_CFG_TEMPLATE = """\
-%(slaves_block)s
+FAKE_SLAVES_CFG_TEMPLATE = """\
+# slaves.cfg
 """
 
-SAMPLE_BUILDERS_PY = """\
+# This is a fake file; a real builders.py contains 'builders'
+# and 'slave_pools' entries, but buildbot_tool doesn't care about those.
+FAKE_BUILDERS_PY = """\
 {
-  "builders": {
-    "Test Linux": {
-      "properties": {
-        "config": "Release"
-      },
-      "recipe": "test_recipe",
-      "slave_pools": ["main"],
-      "slavebuilddir": "test"
-    }
-  },
-  "git_repo_url": "https://chromium.googlesource.com/test/test.git",
+  "git_repo_url": "git://example.com/example.git",
   "master_base_class": "Master1",
-  "master_port": 20999,
-  "master_port_alt": 40999,
+  "master_port": 10999,
+  "master_port_alt": 20999,
   "slave_port": 30999,
-  "slave_pools": {
-    "main": {
-      "slave_data": {
-        "bits": 64,
-        "os":  "linux",
-        "version": "precise"
-      },
-      "slaves": ["vm9999-m1"]
-    }
-  }
+  "templates": ["templates"],
 }
 """
 
@@ -106,11 +71,11 @@ def _restore_constants(orig_values):
 
 
 class GenTest(unittest.TestCase):
-  def test_normal(self):
+  def _run_gen(self, builders_py, master_cfg=FAKE_MASTER_CFG_TEMPLATE):
     files = {
-      '/build/templates/master.cfg': SAMPLE_MASTER_CFG_TEMPLATE,
-      '/build/templates/slaves.cfg': SAMPLE_SLAVES_CFG_TEMPLATE,
-      '/build/masters/master.test/builders.py': SAMPLE_BUILDERS_PY,
+      '/build/templates/master.cfg': master_cfg,
+      '/build/templates/slaves.cfg': FAKE_SLAVES_CFG_TEMPLATE,
+      '/build/masters/master.test/builders.py': builders_py,
     }
     fs = fake_filesystem.FakeFilesystem(files=files.copy())
 
@@ -127,6 +92,11 @@ class GenTest(unittest.TestCase):
       out, err = _restore_output(orig_output)
       _restore_constants(orig_constants)
 
+    return ret, out, err, files, fs
+
+
+  def test_normal(self):
+    ret, out, err, files, fs = self._run_gen(FAKE_BUILDERS_PY)
     self.assertEqual(ret, 0)
     self.assertEqual(err, '')
     self.assertNotEqual(out, '')
@@ -138,70 +108,21 @@ class GenTest(unittest.TestCase):
     self.assertMultiLineEqual(
         fs.read_text_file('/build/masters/master.test/master.cfg'),
         textwrap.dedent("""\
-            # builders_block
-            c['builders'].append({
-              'name': 'Test Linux',
-              'factory': m_annotator.BaseFactory('test_recipe'),
-              'slavebuilddir': 'test'})
-
-
-            # git_repo_url
-            https://chromium.googlesource.com/test/test.git
-
-            # master_dirname
-            master.test
-
             # master_classname
             Test
 
-            # master_base_class
-            Master1
-
-            # master_port
-            20999
-
-            # master_port_alt
-            40999
-
-            # slave_port
-            30999
+            # buildbot_url
+            https://build.chromium.org/p/test/
             """))
 
     self.assertMultiLineEqual(
         fs.read_text_file('/build/masters/master.test/slaves.cfg'),
         textwrap.dedent("""\
-            slaves = [
-              {
-                'master': 'Test',
-                'hostname': 'vm9999-m1',
-                'builder': 'Test Linux',
-                'os': 'linux',
-                'version': 'precise',
-                'bits': '64',
-              },
-            ]
+            # slaves.cfg
             """))
 
   def test_not_found(self):
-    files = {
-      '/build/templates/master.cfg': SAMPLE_MASTER_CFG_TEMPLATE,
-      '/build/templates/slaves.cfg': SAMPLE_SLAVES_CFG_TEMPLATE,
-    }
-    fs = fake_filesystem.FakeFilesystem(files=files.copy())
-
-    orig_output = _trap_output()
-    orig_constants = _stub_constants({
-      'BASE_DIR': '/build',
-      'TEMPLATE_SUBPATH': 'templates',
-      'TEMPLATE_DIR': '/build/templates',
-    })
-
-    try:
-      ret = buildbot_tool.main(['gen', '/build/masters/master.test'], fs)
-    finally:
-      out, err = _restore_output(orig_output)
-      _restore_constants(orig_constants)
-
+    ret, out, err, _, _ = self._run_gen(None)
     self.assertEqual(ret, 1)
     self.assertEqual(out, '')
     self.assertEqual(err, '/build/masters/master.test not found\n')
@@ -209,7 +130,7 @@ class GenTest(unittest.TestCase):
   def test_bad_template(self):
     files = {
       '/build/templates/master.cfg': '%(unknown_key)s',
-      '/build/masters/master.test/builders.py': SAMPLE_BUILDERS_PY,
+      '/build/masters/master.test/builders.py': FAKE_BUILDERS_PY,
     }
     fs = fake_filesystem.FakeFilesystem(files=files.copy())
 

@@ -17,7 +17,7 @@ SCRIPTS_DIR = os.path.dirname(TOOLS_DIR)
 BASE_DIR = os.path.dirname(SCRIPTS_DIR)
 
 # This adjusts sys.path, so must be done before we import other modules.
-if not SCRIPTS_DIR in sys.path:
+if not SCRIPTS_DIR in sys.path:  # pragma: no cover
   sys.path.append(SCRIPTS_DIR)
 
 from common import filesystem
@@ -25,25 +25,6 @@ from common import filesystem
 
 TEMPLATE_SUBPATH = os.path.join('scripts', 'tools', 'buildbot_tool_templates')
 TEMPLATE_DIR = os.path.join(BASE_DIR, TEMPLATE_SUBPATH)
-
-BUILDER_TEMPLATE = """\
-c['builders'].append({
-  'name': '%(builder_name)s',
-  'factory': m_annotator.BaseFactory('%(recipe)s'),
-  'slavebuilddir': '%(slavebuilddir)s'})
-"""
-
-
-SLAVE_TEMPLATE = """\
-  {
-    'master': '%(master_classname)s',
-    'hostname': '%(hostname)s',
-    'builder': '%(builder_name)s',
-    'os': '%(os)s',
-    'version': '%(version)s',
-    'bits': '%(bits)s',
-  },
-"""
 
 
 def main(argv, fs):
@@ -105,36 +86,11 @@ def _values_from_file(fs, builders_path):
   builders = ast.literal_eval(fs.read_text_file(builders_path))
   master_dirname = fs.basename(fs.dirname(builders_path))
   master_name_comps = master_dirname.split('.')[1:]
+  buildbot_path =  '.'.join(master_name_comps)
   master_classname =  ''.join(c[0].upper() + c[1:] for c in master_name_comps)
 
-  builders_block = ""
-  slaves_block = "slaves = [\n"
-
-  for builder_name, builder_vals in builders['builders'].items():
-    builders_block += BUILDER_TEMPLATE % {
-      'builder_name': builder_name,
-      'recipe': builder_vals['recipe'],
-      'slavebuilddir': builder_vals['slavebuilddir']
-    }
-
-    for pool_name in builder_vals['slave_pools']:
-      pool = builders['slave_pools'][pool_name]
-      slave_data = pool['slave_data']
-      slaves = pool['slaves']
-      for slave in slaves:
-        slaves_block += SLAVE_TEMPLATE % {
-            'master_classname': master_classname,
-            'hostname': slave,
-            'builder_name': builder_name,
-            'os': slave_data['os'],
-            'version': slave_data['version'],
-            'bits': slave_data['bits'],
-        }
-
-  slaves_block += "]"
-
   v = {}
-  v['builders_block'] = builders_block
+  v['buildbot_url'] = 'https://build.chromium.org/p/%s/' % buildbot_path
   v['git_repo_url'] = builders['git_repo_url']
   v['master_dirname'] = master_dirname
   v['master_classname'] = master_classname
@@ -142,7 +98,7 @@ def _values_from_file(fs, builders_path):
   v['master_port'] = builders['master_port']
   v['master_port_alt'] = builders['master_port_alt']
   v['slave_port'] = builders['slave_port']
-  v['slaves_block'] = slaves_block
+  v['templates'] = builders['templates']
   return v
 
 
