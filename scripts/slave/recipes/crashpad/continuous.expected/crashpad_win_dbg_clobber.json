@@ -40,7 +40,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/out"
+      "[SLAVE_BUILD]/crashpad/out"
     ],
     "name": "rmtree out",
     "~followup_annotations": [
