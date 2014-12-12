@@ -20,9 +20,10 @@ from slave.performance_log_processor import _FormatHumanReadable
 
 class TelemetryResultsProcessor(object):
 
-  def __init__(self, filename, is_ref):
+  def __init__(self, filename, is_ref, cleanup_parent_dir):
     self._chart_filename = filename
     self._is_reference_build = is_ref
+    self._cleanup_parent_dir = cleanup_parent_dir
 
   def ChartJson(self):
     try:
@@ -38,11 +39,12 @@ class TelemetryResultsProcessor(object):
     except OSError:
       logging.error('Unable to remove telemetry output file %s',
                     self._chart_filename)
-    try:
-      os.rmdir(os.path.dirname(self._chart_filename))
-    except OSError:
-      logging.error('Unable to remove telemetry output dir %s',
-                    os.path.dirname(self._chart_filename))
+    if self._cleanup_parent_dir:
+      try:
+        os.rmdir(os.path.dirname(self._chart_filename))
+      except OSError:
+        logging.error('Unable to remove telemetry output dir %s',
+                      os.path.dirname(self._chart_filename))
 
   def IsChartJson(self):
     """This is the new telemetry --chartjson output format."""

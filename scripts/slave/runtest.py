@@ -629,7 +629,9 @@ def _CreateLogProcessor(log_processor_class, options, telemetry_info):
 
   if log_processor_class.__name__ == 'TelemetryResultsProcessor':
     tracker_obj = log_processor_class(
-        telemetry_info['filename'], telemetry_info['is_ref'])
+        telemetry_info['filename'],
+        telemetry_info['is_ref'],
+        telemetry_info['cleanup_dir'])
   elif log_processor_class.__name__ == 'GTestLogParser':
     tracker_obj = log_processor_class()
   elif log_processor_class.__name__ == 'GTestJSONParser':
@@ -1659,11 +1661,13 @@ def _UpdateRunBenchmarkArgs(args, options):
     output_dir = tempfile.mkdtemp()
     args.extend(['--output-dir=%s' % output_dir])
     temp_filename = os.path.join(output_dir, 'results-chart.json')
-    return {'filename': temp_filename, 'is_ref': is_ref}
+    return {'filename': temp_filename, 'is_ref': is_ref, 'cleanup_dir': True}
   elif args[0].endswith('test_runner.py'):
     (_, temp_json_filename) = tempfile.mkstemp()
     args.extend(['--output-chartjson-data=%s' % temp_json_filename])
-    return {'filename': temp_json_filename, 'is_ref': False}
+    return {'filename': temp_json_filename,
+            'is_ref': False,
+            'cleanup_dir': False}
 
   return None
 
