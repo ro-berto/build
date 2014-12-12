@@ -51,5 +51,14 @@
       "[SLAVE_BUILD]/crashpad/out/Release"
     ],
     "name": "compile with ninja"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/crashpad/build/run_tests.py",
+      "Release"
+    ],
+    "name": "run tests"
   }
 ]
