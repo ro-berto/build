@@ -239,6 +239,7 @@ def get_build_properties(build_json, properties):
   Sets a property to None if it's not in the build.
   """
 
+  properties = set(properties)
   result = dict.fromkeys(properties)  # Populates dict with {key: None}.
   for p in build_json.get('properties', []):
     if p[0] in properties:
@@ -567,9 +568,9 @@ def close_tree_if_necessary(failed_builds, username, password, status_url_root,
       'unsatisfied': ','.join(closing_builds[0]['unsatisfied']),
   }
 
-  # First populate un-transformed revision and got_revision.
+  # First populate un-transformed build properties
   revision_props = get_build_properties(closing_builds[0]['build'],
-    ['revision', 'got_revision'])
+    ['revision', 'got_revision', 'buildnumber',])
 
   # Second add in transformed specified revision_properties.
   revision_props.update(convert_revisions_to_positions(

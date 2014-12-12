@@ -75,6 +75,7 @@ class Build(object):
     self.blame = blame
     self.results = results
     self.properties = [
+        ['buildnumber', 1337, 'GatekeeperTest'],
         ['revision', 72453, 'GatekeeperTest'],
         ['got_webkit_revision', 100, 'GatekeeperTest'],
     ]
@@ -1067,7 +1068,7 @@ class GatekeeperTest(unittest.TestCase):
 
     template = ('Tree is radioactively melting due to %(unsatisfied)s on '
         '%(builder_name)s %(blamelist)s %(build_url)s %(project_name)s '
-        '%(revision)s %(got_webkit_revision)s')
+        '%(revision)s %(got_webkit_revision)s %(buildnumber)s')
 
     new_build = self.create_generic_build(1, ['a_committer@chromium.org'])
     new_builder = Builder('my builder', [new_build])
@@ -1094,6 +1095,7 @@ class GatekeeperTest(unittest.TestCase):
       'build_url': ('http://build.chromium.org/p/chromium.fyi/'
                     'builders/my%20builder/builds/1'),
       'builder_name': 'my builder',
+      'buildnumber': 1337,
       'got_webkit_revision': 100,
       'project_name': 'Chromium FYI',
       'revision': 72453,
