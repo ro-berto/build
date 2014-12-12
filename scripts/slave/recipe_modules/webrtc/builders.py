@@ -160,7 +160,7 @@ BUILDERS = {
         'recipe_config': 'chromium_webrtc',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
         'bot_type': 'builder',
         'build_gs_archive': 'mac_rel_archive',
@@ -172,7 +172,7 @@ BUILDERS = {
         'recipe_config': 'chromium_webrtc',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
         'webrtc_config_kwargs': {
           'PERF_ID': 'chromium-webrtc-rel-mac',
@@ -309,7 +309,7 @@ BUILDERS = {
         'recipe_config': 'chromium_webrtc_tot',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
         'webrtc_config_kwargs': {
           'PERF_ID': 'chromium-webrtc-trunk-tot-rel-mac',
