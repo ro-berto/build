@@ -17,6 +17,9 @@ DEPS = [
 BASE_URL = 'https://chromium.googlesource.com'
 V8_REPO = BASE_URL + '/v8/v8'
 CR_REPO = BASE_URL + '/chromium/src'
+V8_DEPS_DIFFS = {
+  'tools/gyp': 'build/gyp',
+}
 
 
 def GetDEPS(api, name, repo):
@@ -104,29 +107,48 @@ def GenSteps(api):
   v8_deps = GetDEPS(
       api, 'v8', V8_REPO)
 
+  # Transform deps names that exist in src but have a different path in v8.
+  cr_deps = dict((V8_DEPS_DIFFS.get(k, k), v) for k, v in cr_deps.iteritems())
+
   commit_message = []
 
-  # Iterate over all deps common to chromium and v8.
-  for name in set(cr_deps.keys()) & set(v8_deps.keys()):
-    v8_value = v8_deps[name]
-    cr_value = cr_deps[name]
-    assert '@' in v8_value, 'Found v8 value %s without pinned revision.' % name
-    assert '@' in cr_value, 'Found cr value %s without pinned revision.' % name
-    v8_repo, v8_rev = v8_value.split('@')
-    cr_repo, cr_rev = cr_value.split('@')
-    assert v8_repo == cr_repo, 'Found v8 %s for src %s.' % (v8_repo, cr_repo)
+  # Iterate over all v8 deps.
+  for name in sorted(v8_deps.keys()):
+    def SplitValue(solution_name, value):
+      assert '@' in value, (
+          'Found %s value %s without pinned revision.' % (solution_name, name))
+      return value.split('@')
+
+    v8_repo, v8_rev = SplitValue('v8', v8_deps[name])
+    cr_value = cr_deps.get(name)
+    if cr_value:
+      # Use the given revision from chromium's DEPS file.
+      cr_repo, new_rev = SplitValue('src', cr_value)
+      assert v8_repo == cr_repo, 'Found v8 %s for src %s.' % (v8_repo, cr_repo)
+    else:
+      # Use the HEAD of the deps repo.
+      step_result = api.git(
+        'ls-remote', v8_repo, 'HEAD',
+        name='look up %s' % name,
+        stdout=api.raw_io.output(),
+      )
+      new_rev = step_result.stdout.strip().split('\t')[0]
+      step_result.presentation.step_text = new_rev
 
     # Check if an update is necessary.
-    if v8_rev != cr_rev:
-      api.step(
-          'roll dependency',
-          ['roll-dep', 'v8/%s' % name, cr_rev],
+    if v8_rev != new_rev:
+      step_result = api.step(
+          'roll dependency %s' % name,
+          ['roll-dep', 'v8/%s' % name, new_rev],
           ok_ret=any,
           cwd=api.path['checkout'],
       )
-      commit_message.append('Rolling %s to %s' % ('v8/%s' % name, cr_rev))
+      if step_result.retcode == 0:
+        commit_message.append('Rolling %s to %s' % ('v8/%s' % name, new_rev))
+      else:
+        step_result.presentation.status = api.step.WARNING
 
-  # Check for a difference. If the no deps changed, the diff is empty.
+  # Check for a difference. If no deps changed, the diff is empty.
   step_result = api.git(
       'diff',
       stdout=api.raw_io.output(),
@@ -154,12 +176,14 @@ def GenTests(api):
   v8_deps_info = (
     'v8: repo1@v8_rev\n'
     'v8/a/dep: repo2@deadbeef\n'
+    'v8/odd/dep: odd@odd\n'
     'v8/another/dep: repo3@deadbeef\n'
   )
   cr_deps_info = (
     'src: repo3@cr_rev\n'
     'src/a/dep: repo2@beefdead\n'
     'src/yet/another/dep: repo3@deadbeef\n'
+    'src/odd/dep: odd@weird\n'
   )
   yield (
       api.test('roll') +
@@ -172,6 +196,14 @@ def GenTests(api):
       api.override_step_data(
           'gclient get src deps',
           api.raw_io.stream_output(cr_deps_info, stream='stdout'),
+      ) +
+      api.override_step_data(
+          'roll dependency odd/dep',
+          retcode=1,
+      ) +
+      api.override_step_data(
+          'look up another/dep',
+          api.raw_io.stream_output('deadbeaf\tHEAD', stream='stdout'),
       ) +
       api.override_step_data(
           'git diff',

@@ -115,6 +115,7 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@deps@{@@@",
       "@@@STEP_LOG_LINE@deps@  \"a/dep\": \"repo2@beefdead\", @@@",
+      "@@@STEP_LOG_LINE@deps@  \"odd/dep\": \"odd@weird\", @@@",
       "@@@STEP_LOG_LINE@deps@  \"yet/another/dep\": \"repo3@deadbeef\"@@@",
       "@@@STEP_LOG_LINE@deps@}@@@",
       "@@@STEP_LOG_END@deps@@@"
@@ -137,7 +138,8 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@deps@{@@@",
       "@@@STEP_LOG_LINE@deps@  \"a/dep\": \"repo2@deadbeef\", @@@",
-      "@@@STEP_LOG_LINE@deps@  \"another/dep\": \"repo3@deadbeef\"@@@",
+      "@@@STEP_LOG_LINE@deps@  \"another/dep\": \"repo3@deadbeef\", @@@",
+      "@@@STEP_LOG_LINE@deps@  \"odd/dep\": \"odd@odd\"@@@",
       "@@@STEP_LOG_LINE@deps@}@@@",
       "@@@STEP_LOG_END@deps@@@"
     ]
@@ -149,7 +151,42 @@
       "beefdead"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "roll dependency"
+    "name": "roll dependency a/dep"
+  },
+  {
+    "cmd": [
+      "git",
+      "ls-remote",
+      "repo3",
+      "HEAD"
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "name": "look up another/dep",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@deadbeaf@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "roll-dep",
+      "v8/another/dep",
+      "deadbeaf"
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "name": "roll dependency another/dep"
+  },
+  {
+    "cmd": [
+      "roll-dep",
+      "v8/odd/dep",
+      "weird"
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "name": "roll dependency odd/dep",
+    "~followup_annotations": [
+      "@@@STEP_WARNINGS@@@"
+    ]
   },
   {
     "cmd": [
@@ -173,6 +210,8 @@
       "Update V8 DEPS.",
       "-m",
       "Rolling v8/a/dep to beefdead",
+      "-m",
+      "Rolling v8/another/dep to deadbeaf",
       "-m",
       "TBR=machenbach@chromium.org"
     ],
