@@ -11,6 +11,7 @@ import urlparse
 from zope.interface import implements, Interface
 
 # Disable missing '__init__' method | pylint: disable=W0232
+# Disable zope.interface.Interface error | pylint:disable=inherit-non-class
 class IAuthorizer(Interface):
   """Interface to augment an HTTP request with implementation-specific
   authorization data.
