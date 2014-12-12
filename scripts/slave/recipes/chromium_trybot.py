@@ -524,6 +524,7 @@ BUILDERS = {
           'mastername': 'chromium.win',
           'buildername': 'Win Builder (dbg)',
         },
+        'disable_isolate': True,
         'testing': {
           'platform': 'win',
         },
@@ -1059,7 +1060,8 @@ def GenSteps(api):
           test_spec,
           compile_targets,
           tests_including_triggered,
-          override_bot_type='builder_tester')
+          override_bot_type='builder_tester',
+          disable_isolate=bot_config.get('disable_isolate', False))
     else:
       # Even though the patch doesn't require compile, we'd still like to
       # run tests not depending on compiled targets (that's obviously not

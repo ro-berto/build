@@ -339,7 +339,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def compile_specific_targets(
       self, mastername, buildername, update_step, master_dict, test_spec,
-      compile_targets, tests_including_triggered, override_bot_type=None):
+      compile_targets, tests_including_triggered, override_bot_type=None,
+      disable_isolate=False):
     """Runs compile and related steps for given builder.
 
     Allows finer-grained control about exact compile targets used."""
@@ -353,9 +354,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.chromium_android.clean_local_files()
 
     if bot_type in ['builder', 'builder_tester']:
-      isolated_targets = [
-        t.isolate_target for t in tests_including_triggered if t.uses_swarming
-      ]
+      isolated_targets = []
+      if not disable_isolate:
+        isolated_targets = [
+          t.isolate_target for t in tests_including_triggered if t.uses_swarming
+        ]
 
       if isolated_targets:
         self.m.isolate.clean_isolated_files(self.m.chromium.output_dir)
