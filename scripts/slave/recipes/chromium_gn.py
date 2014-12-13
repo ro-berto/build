@@ -5,12 +5,8 @@
 DEPS = [
   'bot_update',
   'chromium',
-  'gclient',
-  'path',
   'platform',
   'properties',
-  'step',
-  'tryserver',
 ]
 
 
@@ -275,48 +271,15 @@ BUILDERS = {
 }
 
 def GenSteps(api):
-  # TODO: crbug.com/358481 . The build_config should probably be a property
-  # passed in from slaves.cfg, but that doesn't exist today, so we need a
-  # lookup mechanism to map bot name to build_config.
-  mastername = api.properties.get('mastername')
-  buildername = api.properties.get('buildername')
-  master_dict = BUILDERS.get(mastername, {})
-  bot_config = master_dict.get('builders', {}).get(buildername)
-
-  api.chromium.set_config('chromium',
-                          **bot_config.get('chromium_config_kwargs', {}))
-  for c in bot_config.get('chromium_apply_config', []):
-    api.chromium.apply_config(c)
-
-  api.chromium.apply_config('gn')
-
-  # Note that we have to call gclient.set_config() and apply_config() *after*
-  # calling chromium.set_config(), above, because otherwise the chromium
-  # call would reset the gclient config to its defaults.
-  api.gclient.set_config('chromium')
-  for c in bot_config.get('gclient_apply_config', []):
-    api.gclient.apply_config(c)
-
-  if bot_config.get('set_component_rev'):
-    # If this is a component build and the main revision is e.g. blink,
-    # webrtc, or v8, the custom deps revision of this component must be
-    # dynamically set to either:
-    # (1) 'revision' from the waterfall, or
-    # (2) 'HEAD' for forced builds with unspecified 'revision'.
-    component_rev = api.properties.get('revision') or 'HEAD'
-    dep = bot_config.get('set_component_rev')
-    api.gclient.c.revisions[dep['name']] = dep['rev_str'] % component_rev
-
-  if api.tryserver.is_tryserver:
-    api.step.auto_resolve_conflicts = True
+  buildername, bot_config = api.chromium.configure_bot(BUILDERS, ['gn'])
 
   api.bot_update.ensure_checkout(
       force=True, patch_root=bot_config.get('root_override'))
 
   api.chromium.runhooks()
 
-  # TODO(scottmg): goma doesn't work on windows GN builds yet.
-  is_windows = ('Win8' in buildername or 'win8_' in buildername)
+  # TODO(dpranke): goma doesn't work on windows GN builds yet.
+  is_windows = ('Win' in buildername or 'win' in buildername)
   api.chromium.run_gn(use_goma=not is_windows)
   if is_windows:
     api.chromium.c.compile_py.compiler = None
@@ -333,34 +296,9 @@ def GenSteps(api):
     api.chromium.runtest('html_viewer_unittests')
 
 
-def _sanitize_nonalpha(text):
-  return ''.join(c if c.isalnum() else '_' for c in text)
-
-
 def GenTests(api):
-  # TODO: crbug.com/354674. Figure out where to put "simulation"
-  # tests. We should have one test for each bot this recipe runs on.
-
-  for mastername in BUILDERS:
-    for buildername in BUILDERS[mastername]['builders']:
-      if 'mac' in buildername or 'Mac' in buildername:
-        platform_name = 'mac'
-      elif 'win' in buildername or 'Win' in buildername:
-        platform_name = 'win'
-      else:
-        platform_name = 'linux'
-      test = (
-          api.test('full_%s_%s' % (_sanitize_nonalpha(mastername),
-                                   _sanitize_nonalpha(buildername))) +
-          api.platform.name(platform_name)
-      )
-      if mastername.startswith('tryserver'):
-        test += api.properties.tryserver(buildername=buildername,
-                                         mastername=mastername)
-      else:
-        test += api.properties.generic(buildername=buildername,
-                                       mastername=mastername)
-      yield test
+  for test in api.chromium.gen_tests_for_builders(BUILDERS):
+    yield test
 
   yield (
     api.test('compile_failure') +

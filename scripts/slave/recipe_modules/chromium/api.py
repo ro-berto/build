@@ -113,6 +113,59 @@ class ChromiumApi(recipe_api.RecipeApi):
     """Adds builders to our builder map"""
     self._builders.update(builders)
 
+  def configure_bot(self, builders_dict, additional_configs=None):
+    """Sets up the configurations and gclient to be ready for bot update.
+
+    builders_dict is a dict of mastername -> 'builders' -> buildername ->
+        bot_config.
+
+    The current mastername and buildername are looked up from the
+    build properties; we then apply the configs specified in bot_config
+    as appropriate.
+
+    Returns a tuple of (buildername, bot_config) for subsequent use in
+       the recipe.
+    """
+    additional_configs = additional_configs or []
+
+    # TODO: crbug.com/358481 . The build_config should probably be a property
+    # passed in from the slave config, but that doesn't exist today, so we
+    # need a lookup mechanism to map bot name to build_config.
+    mastername = self.m.properties.get('mastername')
+    buildername = self.m.properties.get('buildername')
+    master_dict = builders_dict.get(mastername, {})
+    bot_config = master_dict.get('builders', {}).get(buildername)
+
+    self.set_config('chromium', **bot_config.get('chromium_config_kwargs', {}))
+
+    for c in bot_config.get('chromium_apply_config', []):
+      self.apply_config(c)
+
+    for c in additional_configs:
+      self.apply_config(c)
+
+    # Note that we have to call gclient.set_config() and apply_config() *after*
+    # calling chromium.set_config(), above, because otherwise the chromium
+    # call would reset the gclient config to its defaults.
+    self.m.gclient.set_config('chromium')
+    for c in bot_config.get('gclient_apply_config', []):
+      self.m.gclient.apply_config(c)
+
+    if bot_config.get('set_component_rev'):
+      # If this is a component build and the main revision is e.g. blink,
+      # webrtc, or v8, the custom deps revision of this component must be
+      # dynamically set to either:
+      # (1) 'revision' from the waterfall, or
+      # (2) 'HEAD' for forced builds with unspecified 'revision'.
+      component_rev = self.m.properties.get('revision') or 'HEAD'
+      dep = bot_config.get('set_component_rev')
+      self.m.gclient.c.revisions[dep['name']] = dep['rev_str'] % component_rev
+
+    if self.m.tryserver.is_tryserver:
+      self.m.step.auto_resolve_conflicts = True
+
+    return (buildername, bot_config)
+
   def compile(self, targets=None, name=None,
               force_clobber=False, **kwargs):
     """Return a compile.py invocation."""
