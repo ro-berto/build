@@ -22,6 +22,7 @@ from slave.chromium import package_index
 TEST_CC_FILE_CONTENT = '#include "test.h"\nint main() {\nreturn 0;\n}\n'
 TEST_H_FILE_CONTENT = '#ifndef TEST_H_\n#define TEST_H_\n#endif\n'
 COMPILE_ARGUMENTS = 'clang++ -fsyntax-only -std=c++11 -c test.cc'
+INCLUDE_PATH = '/usr/include'
 
 
 class PackageIndexTest(unittest.TestCase):
@@ -97,7 +98,7 @@ class PackageIndexTest(unittest.TestCase):
         test_h_file_fullpath: len(TEST_H_FILE_CONTENT)
     }
     # Now _GenerateUnitFiles() can be called.
-    self.index_pack._GenerateUnitFiles()
+    self.index_pack._GenerateUnitFiles([INCLUDE_PATH])
 
     # Because we only called _GenerateUnitFiles(), the index pack directory
     # should only contain the one unit file for the one compilation unit in our
@@ -127,8 +128,9 @@ class PackageIndexTest(unittest.TestCase):
             compilation_unit_dictionary['required_input'][1],
             self.test_h_file.name, TEST_H_FILE_CONTENT)
 
-        self.assertEquals(compilation_unit_dictionary['argument'],
-                          COMPILE_ARGUMENTS.split()[1:])
+        self.assertEquals(
+            compilation_unit_dictionary['argument'],
+            ['-I%s' % INCLUDE_PATH] + COMPILE_ARGUMENTS.split()[1:])
 
 
 if __name__ == '__main__':

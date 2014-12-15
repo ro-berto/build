@@ -43,10 +43,14 @@ class IndexPack(object):
     os.makedirs(self.files_directory)
     os.makedirs(self.units_directory)
 
-  # A function which produces the data files. Each "*.data" file corresponds to
-  # a source file which is needed for at least one compilation unit. It contains
-  # gzip compressed contents of the source file.
   def _GenerateDataFiles(self):
+    """A function which produces the data files for the index pack.
+
+    Each '*.data' file corresponds to a source file which is needed for at least
+    one compilation unit. It contains gzip compressed contents of the source
+    file.
+    """
+
     # Keeps track of the '*.filepaths' files already processed.
     filepaths = set()
     # Process all entries in the compilation database.
@@ -86,21 +90,28 @@ class IndexPack(object):
             with gzip.open(compressed_file_name, 'wb') as compressed_file:
               compressed_file.writelines(content)
 
-  # A function which produces the unit files. A unit file consists of a gzip
-  # compressed JSON dump of the following kind of dictionary:
-  # {
-  #   'analysis_target': <name of the cc or c file>,
-  #   'argument': <list of compilation parameters>,
-  #   'cxx_arguments': {},
-  #   'required_input': <list of input file dictionaries>
-  # }
-  # The input file dictionary looks like this:
-  # {
-  #   'path': <path to the source file>,
-  #   'size': <size of the source file>,
-  #   'digest': <SHA256 hash of the contents of the source file>
-  # }
-  def _GenerateUnitFiles(self):
+  def _GenerateUnitFiles(self, include_paths):
+    """A function which produces the unit files for the index pack.
+
+    A unit file consists of a gzip compressed JSON dump of the following kind of
+    dictionary:
+    {
+      'analysis_target': <name of the cc or c file>,
+      'argument': <list of compilation parameters>,
+      'cxx_arguments': {},
+      'required_input': <list of input file dictionaries>
+    }
+    The input file dictionary looks like this:
+    {
+      'path': <path to the source file>,
+      'size': <size of the source file>,
+      'digest': <SHA256 hash of the contents of the source file>
+    }
+
+    Args:
+      include_paths: List of paths to the directories containing system headers.
+    """
+
     # Keeps track of the '*.filepaths' files already processed.
     filepaths = set()
     # Process all entries in the compilation database.
@@ -131,7 +142,10 @@ class IndexPack(object):
           command_list = command_list[i+1:]
           break
 
-      unit_dictionary['argument'] = command_list
+      # Modify the include paths list to add '-I' in front.
+      include_paths = map(lambda x: '-I%s' % x, include_paths)
+
+      unit_dictionary['argument'] = include_paths + command_list
       required_inputs = []
       with open(filepath, 'rb') as filepaths_file:
         for line in filepaths_file:
@@ -157,15 +171,26 @@ class IndexPack(object):
       with gzip.open(unit_file_path, 'wb') as unit_file:
         unit_file.writelines(unit_file_content)
 
-  def GenerateIndexPack(self):
+  def GenerateIndexPack(self, include_paths):
+    """Generates the index pack.
+
+    An index pack consists of data files (the source and header files) and unit
+    files (describing one compilation unit each).
+
+    Args:
+      include_paths: List of paths to the directories containing system headers.
+    """
+
     # Generate the compressed source files (*.data).
     # This needs to be called first before calling _GenerateUnitFiles()
     self._GenerateDataFiles()
 
     # Generate the compressed unit files (*.unit).
-    self._GenerateUnitFiles()
+    self._GenerateUnitFiles(include_paths)
 
   def CreateArchive(self, filename):
+    """Creates a gzipped archive containing the index pack."""
+
     if chromium_utils.RunCommand(['tar', '-czf', filename, 'root']) != 0:
       raise Exception('ERROR: failed to create %s, exiting' % filename)
     # Remove the temporary index pack directory. If there was no exception so
@@ -181,11 +206,14 @@ def main():
   parser.add_argument('--path-to-compdb',
                            default=None, required=True,
                            help='path to the compilation database')
+  parser.add_argument(
+      '--include-paths', default=None, required=True,
+      help='Paths where system headers are located, separated by ":"')
   options = parser.parse_args()
 
   print '%s: Index generation...' % time.strftime('%X')
   index_pack = IndexPack(options.path_to_compdb)
-  index_pack.GenerateIndexPack()
+  index_pack.GenerateIndexPack(options.include_paths.split(':'))
 
   # Clean up the *.filepaths files.
   chromium_utils.RemoveFilesWildcards(
