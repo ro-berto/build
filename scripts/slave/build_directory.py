@@ -78,7 +78,7 @@ def GetBuildOutputDirectory(src_dir=None, cros_board=None):
   raise NotImplementedError('Unexpected platform %s' % sys.platform)
 
 
-def RmtreeExceptNinjaFiles(build_output_dir):
+def RmtreeExceptNinjaOrGomaFiles(build_output_dir):
   """Recursively removes everything but ninja files from a build directory."""
   for root, _, files in os.walk(build_output_dir, topdown=False):
     for f in files:
@@ -91,6 +91,9 @@ def RmtreeExceptNinjaFiles(build_output_dir):
           f.startswith('msvc') or  # VS runtime DLLs.
           f in ('gyp-mac-tool', 'gyp-win-tool',
                 'environment.x86', 'environment.x64')):
+        continue
+      # Keep goma related files.
+      if f == '.goma_deps':
         continue
       os.unlink(os.path.join(root, f))
     # Delete the directory if empty; this works because the walk is bottom-up.

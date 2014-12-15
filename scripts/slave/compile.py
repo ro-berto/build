@@ -31,16 +31,6 @@ from common import chromium_utils
 from slave import build_directory
 from slave import slave_utils
 
-# Define a bunch of directory paths (same as bot_update.py)
-CURRENT_DIR = os.path.abspath(os.getcwd())
-BUILDER_DIR = os.path.dirname(CURRENT_DIR)
-SLAVE_DIR = os.path.dirname(BUILDER_DIR)
-
-# Define goma_deps_cache directory.
-# Since out/Release will be erased in clobber build, we'd like to
-# have our own directory.
-DEPS_CACHE_DIR = os.path.join(SLAVE_DIR, 'goma_deps_cache')
-
 # Path of the scripts/slave/ checkout on the slave, found by looking at the
 # current compile.py script's path's dirname().
 SLAVE_SCRIPTS_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -135,12 +125,12 @@ def goma_setup(options, env):
   # so that we can check if this feature is not harmful and how much
   # this feature can improve build performance.
   # If this experiment suceeds, I'll enable this in all platforms.
+  # Put .goma_deps in target directory, since some try bots shares various
+  # configurations. We don't want to share goma cache for those.
   if hostname in ['vm657-m1', 'vm658-m1', 'build28-m1', 'build58-m1',
                   'vm191-m1', 'vm480-m1', 'vm821-m1', 'vm649-m1', 'vm650-m1',
                   'vm912-m1', 'vm992-m1']:
-    if not os.path.exists(DEPS_CACHE_DIR):
-      os.mkdir(DEPS_CACHE_DIR, 0700)
-    env['GOMA_DEPS_CACHE_DIR'] = DEPS_CACHE_DIR
+    env['GOMA_DEPS_CACHE_DIR'] = options.target_output_dir
 
   # goma is requested.
   goma_key = os.path.join(options.goma_dir, 'goma.key')
@@ -593,7 +583,7 @@ def main_xcode(options, args):
     # .ninja files). For now, only delete all non-.ninja files.
     # TODO(thakis): Make "clobber" a step that runs before "runhooks". Once the
     # master has been restarted, remove all clobber handling from compile.py.
-    build_directory.RmtreeExceptNinjaFiles(clobber_dir)
+    build_directory.RmtreeExceptNinjaOrGomaFiles(clobber_dir)
 
   common_xcode_settings(command, options, env, options.compiler)
   maybe_set_official_build_envvars(options, env)
@@ -840,7 +830,7 @@ def main_ninja(options, args):
       # TODO(thakis): Make "clobber" a step that runs before "runhooks".
       # Once the master has been restarted, remove all clobber handling
       # from compile.py.
-      build_directory.RmtreeExceptNinjaFiles(options.target_output_dir)
+      build_directory.RmtreeExceptNinjaOrGomaFiles(options.target_output_dir)
 
     if options.verbose:
       command.append('-v')
