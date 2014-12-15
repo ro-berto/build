@@ -146,6 +146,7 @@ BUILDERS = {
           'buildername': 'Linux ChromiumOS Builder (dbg)',
         },
         'compile_only': True,
+        'disable_isolate': True,
         'testing': {
           'platform': 'linux',
         },
@@ -190,6 +191,7 @@ BUILDERS = {
           'buildername': 'Linux ChromiumOS Builder',
         },
         'compile_only': True,
+        'disable_isolate': True,
         'testing': {
           'platform': 'linux',
         },
@@ -296,10 +298,11 @@ BUILDERS = {
           'mastername': 'chromium.linux',
           'buildername': 'Linux Builder (dbg)(32)',
         },
-         'testing': {
-           'platform': 'linux',
-         },
-       },
+        'disable_isolate': True,
+        'testing': {
+          'platform': 'linux',
+        },
+      },
     },
   },
   'tryserver.chromium.mac': {
@@ -351,6 +354,7 @@ BUILDERS = {
           'mastername': 'chromium.mac',
           'buildername': 'Mac Builder (dbg)',
         },
+        'disable_isolate': True,
         'testing': {
           'platform': 'mac',
         },
