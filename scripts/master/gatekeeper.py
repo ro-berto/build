@@ -99,7 +99,6 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
       self.password = get_password.Password(
           '.status_password').GetPassword()
 
-
   @staticmethod
   def msg(message, **kwargs):
     log.msg('[gatekeeper] ' + message, **kwargs)

@@ -1,0 +1,20 @@
+[
+  {
+    "cmd": [],
+    "name": "trigger cross-compiler",
+    "trigger_specs": [
+      {
+        "properties": {
+          "buildbot.changes": [
+            {
+              "author": "someone@chromium.org",
+              "comments": "hello world!",
+              "revision": "deadbeef"
+            }
+          ],
+          "buildername": "cross-compiler"
+        }
+      }
+    ]
+  }
+]

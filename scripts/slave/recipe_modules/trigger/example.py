@@ -9,7 +9,15 @@ DEPS = [
 
 
 def GenSteps(api):
-  api.trigger(*api.properties['trigger_props_list'])
+
+  def normalize_properties(props):
+    props = dict(props)
+    if 'buildbot.changes' in props:
+      props['buildbot.changes'] = list(props['buildbot.changes'])
+    return props
+
+  prop_list = map(normalize_properties, api.properties['trigger_props_list'])
+  api.trigger(*prop_list)
 
 
 def GenTests(api):
@@ -29,5 +37,17 @@ def GenTests(api):
         }, {
           'buildername': 'cross-compiler',
           'a': 2,
+        }])
+      )
+
+  yield (
+      api.test('buildbot.changes') +
+      api.properties(trigger_props_list=[{
+          'buildername': 'cross-compiler',
+          'buildbot.changes': [{
+              'author': 'someone@chromium.org',
+              'revision': 'deadbeef',
+              'comments': 'hello world!',
+          }],
         }])
       )

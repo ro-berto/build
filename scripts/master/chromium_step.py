@@ -4,6 +4,7 @@
 
 """Subclasses of various slave command classes."""
 
+from datetime import datetime
 import copy
 import errno
 import json
@@ -15,11 +16,13 @@ from twisted.internet import defer
 from twisted.python import log
 
 from buildbot import interfaces, util
+from buildbot.changes.changes import Change
 from buildbot.process import buildstep
 from buildbot.process.properties import WithProperties
 from buildbot.status import builder
 from buildbot.steps import shell
 from buildbot.steps import source
+import sqlalchemy as sa
 
 from common import annotator
 from common import chromium_utils
@@ -1135,16 +1138,34 @@ class AnnotationObserver(buildstep.LogLineObserver):
       self.startStep(section)
       self.cursor = section
 
+  def normalizeChangeSpec(self, change):
+    assert isinstance(change, dict), 'Change must be a dict'
+    change = change.copy()
+
+    # Sort files.
+    files = change.get('files')
+    if files:
+      change['files'] = sorted(files)
+
+    return change
+
   def STEP_TRIGGER(self, spec):
     # Support: @@@STEP_TRIGGER <json spec>@@@ (trigger build(s)).
     try:
       spec = json.loads(spec)
       builder_names = spec.get('builderNames')
+
+      changes = spec.get('changes')
+      if changes:
+        assert isinstance(changes, list)
+        changes = map(self.normalizeChangeSpec, changes)
+
       if not builder_names:
         raise ValueError('builderNames is not specified: %r' % (spec,))
 
       # Start builds.
-      d = self.triggerBuilds(builder_names, spec.get('properties') or {})
+      d = self.triggerBuilds(builder_names, spec.get('properties') or {},
+                             changes)
       # addAsyncOpToCursor expects a deferred to return a build result. If a
       # buildset is added, then it is a success. This lambda function returns a
       # tuple, which is received by addAsyncOpToCursor.
@@ -1166,18 +1187,105 @@ class AnnotationObserver(buildstep.LogLineObserver):
             for k, v in props.iteritems())
 
   @defer.inlineCallbacks
-  def triggerBuilds(self, builder_names, properties):
+  def insertSourceStamp(self, master, changes_spec):
+    """Inserts a new SourceStamp.
+
+    For each change in changes_spec, finds an existing or creates a new Change
+    object. Then creates a SourceStamp with these changes.
+
+    Args:
+      master: an instance of buildbot.master.BuildMaster.
+      changes_spec (list of dict): a list of change dicts, where each contains
+        keyword arguments for
+        buildbot.db.changes.ChangesConnectorComponent.addChange() function,
+        except when_timestamp is int instead of datetime. The first change
+        is used to populate source stamp properties.
+    """
+    def find_changes_by_revision(revision):
+      """Searches for Changes in db by |revision| and returns change ids."""
+      def find(conn):
+        table = master.db.model.changes
+        q = sa.select([table.c.changeid]).where(table.c.revision == revision)
+        return [c.changeid for c in conn.execute(q)]
+      return master.db.pool.do(find)
+
+    @defer.inlineCallbacks
+    def get_change_by_id(change_id):
+      chdict = yield master.db.changes.getChange(change_id)
+      change = yield Change.fromChdict(master, chdict)
+      defer.returnValue(change)
+
+    def does_change_match(change, spec):
+      chdict = {
+          'branch': change.branch,
+          'category': change.category,
+          'author': change.getShortAuthor(),
+          'comments': change.comments,
+          'revision': change.revision,
+          'when_timestamp': change.when, # int, seconds since UNIX epoch.
+          'files': sorted(change.files),
+          'revlink': getattr(change, 'revlink', None),
+          'properties': change.properties.asDict(),
+          'repository': getattr(change, 'repository', None),
+          'project': getattr(change, 'project', None),
+      }
+
+      for key, value in spec.iteritems():
+        assert key in chdict, 'Unexpected change spec key: %s' % key
+        if chdict[key] != value:
+          return False
+      return True
+
+    @defer.inlineCallbacks
+    def getChangeForSpec(spec):
+      assert 'revision' in spec, 'No revision in change spec'
+      candidates = yield find_changes_by_revision(spec['revision'])
+      for change_id in candidates:
+        change = yield get_change_by_id(change_id)
+        if does_change_match(change, spec):
+          defer.returnValue(change)
+          return
+
+      add_args = spec.copy()
+      when_timestamp = add_args.get('when_timestamp')
+      if isinstance(when_timestamp, int):
+        add_args['when_timestamp'] = datetime.utcfromtimestamp(when_timestamp)
+
+      change_id = yield master.db.changes.addChange(**add_args)
+      change = yield get_change_by_id(change_id)
+      defer.returnValue(change)
+
+    changes = []
+    for spec in changes_spec:
+      change = yield getChangeForSpec(spec)
+      changes.append(change)
+    main_change = changes[0]
+    ssid = yield master.db.sourcestamps.addSourceStamp(
+        branch=main_change.branch,
+        revision=main_change.revision,
+        repository=main_change.repository,
+        project=main_change.project,
+        changeids=[c.number for c in changes],
+    )
+    defer.returnValue(ssid)
+
+  @defer.inlineCallbacks
+  def triggerBuilds(self, builder_names, properties, changes=None):
     """Creates a new buildset."""
     build = self.command.build
     master = build.builder.botmaster.parent
     current_properties = build.getProperties()
 
-    # Use the same source stamp.
-    source_stamp = build.getSourceStamp()
-    revision = current_properties.getProperty('got_revision')
-    if revision:
-      source_stamp = source_stamp.getAbsoluteSourceStamp(revision)
-    ssid = yield source_stamp.getSourceStampId(master)
+    if changes:
+      # Changes have been specified explicitly.
+      ssid = yield self.insertSourceStamp(master, changes)
+    else:
+      # Use the same source stamp.
+      source_stamp = build.getSourceStamp()
+      revision = current_properties.getProperty('got_revision')
+      if revision:
+        source_stamp = source_stamp.getAbsoluteSourceStamp(revision)
+      ssid = yield source_stamp.getSourceStampId(master)
 
     properties = self.getPropertiesForTriggeredBuild(current_properties,
                                                      properties)
