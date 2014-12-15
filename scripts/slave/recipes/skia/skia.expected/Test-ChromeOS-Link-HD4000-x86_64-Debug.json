@@ -477,6 +477,30 @@
   },
   {
     "cmd": [
+      "ssh",
+      "-p",
+      "22",
+      "root@192.168.1.123",
+      "rm",
+      "-rf",
+      "/usr/local/skiabot/skia_images"
+    ],
+    "name": "rmdir .../skiabot/skia_images"
+  },
+  {
+    "cmd": [
+      "ssh",
+      "-p",
+      "22",
+      "root@192.168.1.123",
+      "mkdir",
+      "-p",
+      "/usr/local/skiabot/skia_images"
+    ],
+    "name": "mkdir .../skiabot/skia_images"
+  },
+  {
+    "cmd": [
       "[BUILD]/scripts/slave/recipe_modules/skia/resources/scp_dir_contents.sh",
       "[SLAVE_BUILD]/images",
       "root@192.168.1.123:/usr/local/skiabot/skia_images"

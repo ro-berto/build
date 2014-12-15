@@ -81,6 +81,9 @@ def GenTests(api):
     if 'Test' in builder:
       test_data += (
         api.step_data(
+            'exists /storage/emulated/legacy/skiabot/skia_images',
+            stdout=api.raw_io.output('')) +
+        api.step_data(
             'exists /storage/emulated/legacy/skiabot/skia_gm_actual',
             stdout=api.raw_io.output('')) +
         api.step_data(

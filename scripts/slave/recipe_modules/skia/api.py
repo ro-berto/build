@@ -184,6 +184,8 @@ class SkiaApi(recipe_api.RecipeApi):
                            self.images_dir,
                            name='Download test images',
                            args=['-R'])
+    if str(self.images_dir) != str(self.device_dirs.images_dir):
+      self.flavor.create_clean_device_dir(self.device_dirs.images_dir)
     self.flavor.copy_directory_contents_to_device(
         self.images_dir,
         self.device_dirs.images_dir)
