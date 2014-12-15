@@ -52,7 +52,7 @@
     "cmd": [
       "ninja",
       "-C",
-      "out/Debug",
+      "out/Release",
       "chrome"
     ],
     "cwd": "[SLAVE_BUILD]/src",
@@ -63,7 +63,7 @@
       "python",
       "[BUILD]/scripts/slave/skia/recreate_skps.py",
       "[SLAVE_BUILD]/src",
-      "[SLAVE_BUILD]/src/out/Debug/chrome"
+      "[SLAVE_BUILD]/src/out/Release/chrome"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "name": "Recreate SKPs"

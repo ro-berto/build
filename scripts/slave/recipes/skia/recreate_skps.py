@@ -33,7 +33,7 @@ def GenSteps(api):
 
   # Build Chrome.
   api.step('Build Chrome',
-           ['ninja', '-C', 'out/Debug', 'chrome'],
+           ['ninja', '-C', 'out/Release', 'chrome'],
            cwd=api.path['checkout'])
 
   # Capture the SKPs.
@@ -41,7 +41,7 @@ def GenSteps(api):
            ['python', api.path['build'].join('scripts', 'slave', 'skia',
                                              'recreate_skps.py'),
             api.path['checkout'],
-            api.path['checkout'].join('out', 'Debug', 'chrome'),
+            api.path['checkout'].join('out', 'Release', 'chrome'),
            ],
            cwd=api.path['slave_build'].join('skia'),
   )
