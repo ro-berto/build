@@ -543,6 +543,18 @@ def generate_build_url(build):
   )
 
 
+def get_results_string(result_value):
+  """Returns a string for a BuildBot result value (SUCCESS, FAILURE, etc.)."""
+  return {
+      SUCCESS: 'success',
+      WARNINGS: 'warnings',
+      FAILURE: 'failure',
+      SKIPPED: 'skipped',
+      EXCEPTION: 'exception',
+      RETRY: 'retry',
+  }.get(result_value, 'unknown')
+
+
 def close_tree_if_necessary(failed_builds, username, password, status_url_root,
                             set_status, revision_properties):
   """Given a list of failed builds, close the tree if necessary."""
@@ -560,26 +572,28 @@ def close_tree_if_necessary(failed_builds, username, password, status_url_root,
   logging.info('%d failed builds found, closing the tree...' %
                len(closing_builds))
 
+  template_build = closing_builds[0]
   template_vars = {
-      'blamelist': ','.join(closing_builds[0]['build']['blame']),
-      'build_url': generate_build_url(closing_builds[0]),
-      'builder_name': closing_builds[0]['build']['builderName'],
-      'project_name': closing_builds[0]['project_name'],
-      'unsatisfied': ','.join(closing_builds[0]['unsatisfied']),
+      'blamelist': ','.join(template_build['build']['blame']),
+      'build_url': generate_build_url(template_build),
+      'builder_name': template_build['build']['builderName'],
+      'project_name': template_build['project_name'],
+      'unsatisfied': ','.join(template_build['unsatisfied']),
+      'result': get_results_string(template_build['build'].get('results')),
   }
 
   # First populate un-transformed build properties
-  revision_props = get_build_properties(closing_builds[0]['build'],
+  revision_props = get_build_properties(template_build['build'],
     ['revision', 'got_revision', 'buildnumber',])
 
   # Second add in transformed specified revision_properties.
   revision_props.update(convert_revisions_to_positions(
-      get_build_properties(closing_builds[0]['build'], revision_properties)))
+      get_build_properties(template_build['build'], revision_properties)))
 
   template_vars.update(revision_props)
 
   # Close on first failure seen.
-  tree_status = closing_builds[0]['status_template'] % template_vars
+  tree_status = template_build['status_template'] % template_vars
 
   logging.info('closing the tree with message: \'%s\'' % tree_status)
   if set_status:

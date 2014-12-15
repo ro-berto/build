@@ -1068,9 +1068,10 @@ class GatekeeperTest(unittest.TestCase):
 
     template = ('Tree is radioactively melting due to %(unsatisfied)s on '
         '%(builder_name)s %(blamelist)s %(build_url)s %(project_name)s '
-        '%(revision)s %(got_webkit_revision)s %(buildnumber)s')
+        '%(revision)s %(got_webkit_revision)s %(buildnumber)s %(result)s')
 
     new_build = self.create_generic_build(1, ['a_committer@chromium.org'])
+    new_build.results = gatekeeper_ng.WARNINGS
     new_builder = Builder('my builder', [new_build])
     self.masters[0].builders.append(new_builder)
 
@@ -1100,6 +1101,7 @@ class GatekeeperTest(unittest.TestCase):
       'project_name': 'Chromium FYI',
       'revision': 72453,
       'unsatisfied': 'step1',
+      'result': 'warnings',
     }
     self.assertEquals(gatekeeper_data['message'], [msg])
 
