@@ -72,9 +72,7 @@ class ChromeOSFlavorUtils(ssh_flavor.SSHFlavorUtils):
         dm_dir=join('dm_out'),  # 'dm' conflicts with the binary
         perf_data_dir=join('perf'),
         resource_dir=join('resources'),
-        skimage_expected_dir=join('skimage_expected'),
-        skimage_in_dir=join('skimage_in'),
-        skimage_out_dir=join('skimage_out'),
+        images_dir=join('images'),
         skp_dirs=default_flavor.SKPDirs(
             join('skp'), self._skia_api.c.BUILDER_NAME, '/'),
         skp_perf_dir=join('skp_perf'),

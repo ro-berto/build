@@ -98,20 +98,6 @@ def GenTests(api):
             ('exists /storage/emulated/legacy/skiabot/skia_gm_expected/'
              'ignored-tests.txt'),
             stdout=api.raw_io.output('')))
-      if not 'GalaxyS4' in builder:
-        test_data += (
-          api.step_data(
-              'exists /storage/emulated/legacy/skiabot/skia_skimage_out/images',
-              stdout=api.raw_io.output('')) +
-          api.step_data(
-              'exists /storage/emulated/legacy/skiabot/skia_skimage_out/%s' %
-                   builder,
-              stdout=api.raw_io.output('')) +
-          api.step_data(
-              ('exists /storage/emulated/legacy/skiabot/skia_skimage_expected/'
-               + builder),
-              stdout=api.raw_io.output(''))
-      )
 
     if 'Perf' in builder:
       test_data += api.step_data(
@@ -134,8 +120,6 @@ def GenTests(api):
               'expected-results.json'),
           api.path['slave_build'].join('skia', 'expectations', 'gm',
                                        'ignored-tests.txt'),
-          api.path['slave_build'].join('skia', 'expectations', 'skimage',
-                                       builder, 'expected-results.json'),
           api.path['slave_build'].join('playback', 'skps', 'SKP_VERSION')
       )
     )
@@ -158,10 +142,6 @@ def GenTests(api):
                    mastername=mastername,
                    slavename=slavename,
                    buildnumber=6) +
-    api.path.exists(
-        api.path['slave_build'].join('skia', 'expectations', 'skimage',
-                                     builder, 'expected-results.json')
-    ) +
     api.step_data('gm', retcode=1)
   )
 
@@ -181,13 +161,4 @@ def GenTests(api):
                    slavename=slavename) +
     api.step_data('has ccache?', retcode=0,
                   stdout=api.raw_io.output('/usr/bin/ccache'))
-  )
-
-  yield (
-    api.test('no_skimage_expectations') +
-    api.properties(buildername=builder,
-                   mastername=mastername,
-                   slavename=slavename,
-                   buildnumber=7) +
-    api.step_data('assert skimage expectations', retcode=1)
   )

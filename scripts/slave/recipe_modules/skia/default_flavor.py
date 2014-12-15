@@ -50,9 +50,7 @@ class DeviceDirs(object):
                dm_dir,
                perf_data_dir,
                resource_dir,
-               skimage_expected_dir,
-               skimage_in_dir,
-               skimage_out_dir,
+               images_dir,
                skp_dirs,
                skp_perf_dir,
                tmp_dir):
@@ -64,9 +62,7 @@ class DeviceDirs(object):
     self._playback_actual_summaries_dir = skp_dirs.actual_summaries_dir
     self._playback_expected_summaries_dir = skp_dirs.expected_summaries_dir
     self._resource_dir = resource_dir
-    self._skimage_expected_dir = skimage_expected_dir
-    self._skimage_in_dir = skimage_in_dir
-    self._skimage_out_dir = skimage_out_dir
+    self._images_dir = images_dir
     self._skp_dir = skp_dirs.skp_dir()
     self._skp_perf_dir = skp_perf_dir
     self._tmp_dir = tmp_dir
@@ -110,16 +106,8 @@ class DeviceDirs(object):
     return self._resource_dir
 
   @property
-  def skimage_in_dir(self):
-    return self._skimage_in_dir
-
-  @property
-  def skimage_expected_dir(self):
-    return self._skimage_expected_dir
-
-  @property
-  def skimage_out_dir(self):
-    return self._skimage_out_dir
+  def images_dir(self):
+    return self._images_dir
 
   @property
   def skp_dir(self):
@@ -272,9 +260,7 @@ class DefaultFlavorUtils(base_flavor.BaseFlavorUtils):
         dm_dir=join('dm'),
         perf_data_dir=self._skia_api.perf_data_dir,
         resource_dir=self._skia_api.resource_dir,
-        skimage_expected_dir=join('skia', 'expectations', 'skimage'),
-        skimage_in_dir=self._skia_api.skimage_in_dir,
-        skimage_out_dir=self._skia_api.skimage_out_dir,
+        images_dir=join('images'),
         skp_dirs=self._skia_api.local_skp_dirs,
         skp_perf_dir=self._skia_api.perf_data_dir,
         tmp_dir=join('tmp'))

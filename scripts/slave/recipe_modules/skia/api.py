@@ -84,9 +84,7 @@ class SkiaApi(recipe_api.RecipeApi):
       self.perf_data_dir = slave_dir.join('perfdata', self.c.BUILDER_NAME,
                                           'data')
     self.resource_dir = skia_dir.join('resources')
-    self.skimage_expected_dir = skia_dir.join('expectations', 'skimage')
-    self.skimage_in_dir = slave_dir.join('skimage_in')
-    self.skimage_out_dir = slave_dir.join('skimage_out')
+    self.images_dir = slave_dir.join('images')
     self.local_skp_dirs = default_flavor.SKPDirs(
         str(slave_dir.join('playback')),
         self.c.BUILDER_NAME, self.m.path.sep)
@@ -176,6 +174,19 @@ class SkiaApi(recipe_api.RecipeApi):
         raise  # pragma: no cover
       if fail_build_on_failure:
         self.failed.append(e)
+
+  def download_and_copy_images(self):
+    """Download test images if needed."""
+    # TODO(mtklein,borenet): only copy when modified
+    self.flavor.create_clean_host_dir(self.images_dir)
+    self.m.gsutil.download(global_constants.GS_GM_BUCKET,
+                           '/'.join(('skimage', 'input', '*')),
+                           self.images_dir,
+                           name='Download test images',
+                           args=['-R'])
+    self.flavor.copy_directory_contents_to_device(
+        self.images_dir,
+        self.device_dirs.images_dir)
 
   def download_and_copy_skps(self):
     """Download the SKPs if needed."""
@@ -362,6 +373,7 @@ class SkiaApi(recipe_api.RecipeApi):
   def run_dm(self):
     """Run the DM test."""
     self._run_once(self.download_and_copy_skps)
+    self._run_once(self.download_and_copy_images)
     # This must run before we write anything into self.device_dirs.dm_dir
     # or we may end up deleting our output on machines where they're the same.
     host_dm_dir = self.m.path['slave_build'].join('dm')
@@ -372,6 +384,7 @@ class SkiaApi(recipe_api.RecipeApi):
       '--verbose',
       '--resourcePath', self.device_dirs.resource_dir,
       '--skps',         self.device_dirs.skp_dir,
+      '--images',       self.device_dirs.images_dir,
       '--writePath',    self.device_dirs.dm_dir,
       '--nameByHash',
       '--properties',  'gitHash',      self.got_revision,
@@ -442,114 +455,6 @@ class SkiaApi(recipe_api.RecipeApi):
     self.run(self.flavor.step, 'render_pdfs', cmd=args, abort_on_failure=False)
 
 
-  def run_decoding_tests(self):
-    """Run the skimage decoding tests."""
-    # Download the input files.
-    # TODO(borenet): Only copy when modified.
-    self.flavor.create_clean_host_dir(self.skimage_in_dir)
-    self.m.gsutil.download(global_constants.GS_GM_BUCKET,
-                           '/'.join(('skimage', 'input', '*')),
-                           self.skimage_in_dir,
-                           name='download skimage files',
-                           args=['-R'])
-
-    # Copy input files.
-    self.flavor.copy_directory_contents_to_device(
-        self.skimage_in_dir,
-        self.device_dirs.skimage_in_dir)
-
-    # Create output dirs.
-    actual_image_subdir = 'images'
-    self.flavor.create_clean_host_dir(self.skimage_out_dir)
-    skimage_image_out_dir = self.flavor.device_path_join(
-        self.device_dirs.skimage_out_dir, actual_image_subdir)
-    self.flavor.create_clean_device_dir(skimage_image_out_dir)
-    skimage_summary_out_dir = self.flavor.device_path_join(
-        self.device_dirs.skimage_out_dir, self.c.BUILDER_NAME)
-    self.flavor.create_clean_device_dir(skimage_summary_out_dir)
-
-    # Copy expectations.
-    repo_expectations_path = self.m.path['checkout'].join(
-        'expectations', 'skimage',
-        builder_name_schema.GetWaterfallBot(self.c.BUILDER_NAME),
-        global_constants.GM_EXPECTATIONS_FILENAME)
-    device_expectations_path = None
-    if self.m.path.exists(repo_expectations_path):
-      device_expectations_dir = self.flavor.device_path_join(
-          self.device_dirs.skimage_expected_dir,
-          builder_name_schema.GetWaterfallBot(self.c.BUILDER_NAME))
-      device_expectations_path = self.flavor.device_path_join(
-          device_expectations_dir,
-          global_constants.GM_EXPECTATIONS_FILENAME)
-      if str(device_expectations_path) != str(repo_expectations_path):
-        self.flavor.create_clean_device_dir(device_expectations_dir)
-        self.flavor.copy_file_to_device(repo_expectations_path,
-                                        device_expectations_path)
-
-    # Run the tests.
-    args = ['skimage', '-r', self.device_dirs.skimage_in_dir, '--noreencode',
-            '--writeChecksumBasedFilenames', '--config', '8888',
-            '--mismatchPath', skimage_image_out_dir,
-            '--createExpectationsPath', self.flavor.device_path_join(
-                skimage_summary_out_dir, global_constants.GM_ACTUAL_FILENAME)]
-    if device_expectations_path:
-      args.extend(['--readExpectationsPath', device_expectations_path])
-
-    self.run(self.flavor.step, 'skimage', cmd=args, abort_on_failure=False)
-
-    # Copy the results back.
-    self.flavor.copy_directory_contents_to_host(
-        self.device_dirs.skimage_out_dir,
-        self.skimage_out_dir)
-
-    # Upload results.
-    # Actual images.
-    self.m.gsutil.upload(self.skimage_out_dir.join(actual_image_subdir),
-                         global_constants.GS_GM_BUCKET,
-                         '/'.join(('skimage', 'output')),
-                         args=['-R'],
-                         name='upload skimage actual images')
-    # JSON Summary file.
-    self.m.gsutil.upload(
-        self.skimage_out_dir.join(self.c.BUILDER_NAME,
-                                  global_constants.GM_ACTUAL_FILENAME),
-        global_constants.GS_GM_BUCKET,
-        '/'.join(('skimage', 'actuals', self.c.BUILDER_NAME,
-                  global_constants.GM_ACTUAL_FILENAME)),
-        name='upload skimage actual summary')
-
-    # If there is no expectations file, still run the tests, and then report a
-    # failure. Then we'll know to update the expectations with the results of
-    # running the tests.
-    # TODO(scroggo): Skipping the TSAN bot, where we'll never have
-    # expectations. A better way might be to have empty expectations. See
-    # https://code.google.com/p/skia/issues/detail?id=1711
-    if not 'TSAN' in self.c.BUILDER_NAME:
-      self.m.python.inline(
-          'assert skimage expectations',
-          '''
-          import os
-          import sys
-          if not os.path.isfile(sys.argv[1]):
-            print 'Missing expectations file %s.' % sys.argv[1]
-            print ('In order to blindly use the actual results as '
-                   'the expectations, run the following commands:')
-            print ('$ gsutil cp -R '
-                   'gs://chromium-skia-gm/skimage/actuals/%s '
-                   'expectations/skimage/%s') % (sys.argv[2],
-                                                 sys.argv[2])
-            print ('$ mv expectations/skimage/%s/actual-results.json '
-                   'expectations/skimage/%s/%s') % (
-                       sys.argv[2], sys.argv[2], sys.argv[3])
-            print ''
-            print 'Then check in using git.'
-            sys.exit(1)
-            ''',
-            args=[repo_expectations_path,
-                  self.c.BUILDER_NAME,
-                  global_constants.GM_EXPECTATIONS_FILENAME])
-
-
   def test_steps(self):
     """Run all Skia test executables."""
     self._run_once(self.install)
@@ -560,8 +465,6 @@ class SkiaApi(recipe_api.RecipeApi):
     if ('TSAN'         not in self.c.BUILDER_NAME and
         'ZeroGPUCache' not in self.c.BUILDER_NAME):
       self.run_render_pdfs()
-      if 'GalaxyS4' not in self.c.BUILDER_NAME:
-        self.run_decoding_tests()
 
   def perf_steps(self):
     """Run Skia benchmarks."""

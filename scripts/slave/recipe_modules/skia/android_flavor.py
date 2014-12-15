@@ -224,9 +224,7 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
         dm_dir=prefix + 'dm',
         perf_data_dir=prefix + 'perf',
         resource_dir=prefix + 'resources',
-        skimage_expected_dir=prefix + 'skimage_expected',
-        skimage_in_dir=prefix + 'skimage_in',
-        skimage_out_dir=prefix + 'skimage_out',
+        images_dir=prefix + 'images',
         skp_dirs=default_flavor.SKPDirs(
             prefix + 'skp', self._skia_api.c.BUILDER_NAME, '/'),
         skp_perf_dir=prefix + 'skp_perf',
