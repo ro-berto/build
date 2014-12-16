@@ -404,10 +404,7 @@
       "MissingExpectations",
       "ExpectationsMismatch",
       "--resourcePath",
-      "/storage/emulated/legacy/skiabot/skia_resources",
-      "--config",
-      "defaults",
-      "msaa4"
+      "/storage/emulated/legacy/skiabot/skia_resources"
     ],
     "env": {
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",

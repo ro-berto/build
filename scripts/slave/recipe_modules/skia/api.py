@@ -315,17 +315,13 @@ class SkiaApi(recipe_api.RecipeApi):
     if 'Mac' in self.c.BUILDER_NAME:
       # msaa16 is flaky on Macs (driver bug?) so we skip the test for now
       args.extend(['--config', 'defaults', '~msaa16'])
-    elif ('RazrI' in self.c.BUILDER_NAME or
-          'Nexus10' in self.c.BUILDER_NAME or
-          'Nexus4' in self.c.BUILDER_NAME):
-      args.extend(['--config', 'defaults', 'msaa4'])
     elif 'ANGLE' in self.c.BUILDER_NAME:
       args.extend(['--config', 'angle'])
     elif 'GalaxyS4' in self.c.BUILDER_NAME:
       args.extend(['--config', 'gpu'])
     elif (not 'NoGPU' in self.c.BUILDER_NAME and
           not 'ChromeOS' in self.c.BUILDER_NAME and
-          not 'IntelRhb' in self.c.BUILDER_NAME):
+          not 'Nexus10' in self.c.BUILDER_NAME):
       args.extend(['--config', 'defaults', 'msaa16'])
     if 'Valgrind' in self.c.BUILDER_NAME:
       # Poppler has lots of memory errors. Skip PDF rasterisation so we don't
