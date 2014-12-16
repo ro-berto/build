@@ -53,7 +53,7 @@
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_ninja",
       "most",
       "-d",
-      "xoom"
+      "nexus_5"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
@@ -75,7 +75,7 @@
     "name": "List adb devices",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"027c104942212397\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"018dff3520c970f6\"@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -84,7 +84,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "027c104942212397",
+      "018dff3520c970f6",
       "shell",
       "echo",
       "$EXTERNAL_STORAGE"
@@ -96,7 +96,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "027c104942212397",
+      "018dff3520c970f6",
       "root"
     ],
     "name": "adb root"
@@ -112,7 +112,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "027c104942212397",
+      "018dff3520c970f6",
       "wait-for-device"
     ],
     "name": "wait for device"
@@ -121,7 +121,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_kill_skia",
       "-s",
-      "027c104942212397"
+      "018dff3520c970f6"
     ],
     "env": {
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
@@ -133,7 +133,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "027c104942212397",
+      "018dff3520c970f6",
       "shell",
       "stop"
     ],
@@ -143,7 +143,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_push_if_needed",
       "-s",
-      "027c104942212397",
+      "018dff3520c970f6",
       "[SLAVE_BUILD]/skia/resources",
       "/storage/emulated/legacy/skiabot/skia_resources"
     ],
@@ -157,7 +157,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "027c104942212397",
+      "018dff3520c970f6",
       "shell",
       "rm",
       "-r",
@@ -169,7 +169,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "027c104942212397",
+      "018dff3520c970f6",
       "shell",
       "if",
       "[",
@@ -188,7 +188,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "027c104942212397",
+      "018dff3520c970f6",
       "shell",
       "mkdir",
       "-p",
@@ -201,7 +201,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/gm/actual/Test-Android-Xoom-Tegra2-Arm7-Debug"
+      "[SLAVE_BUILD]/gm/actual/Test-Android-Nexus5-Adreno330-Arm7-Debug"
     ],
     "name": "rmtree .../actual/BUILDER",
     "~followup_annotations": [
@@ -219,7 +219,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/gm/actual/Test-Android-Xoom-Tegra2-Arm7-Debug",
+      "[SLAVE_BUILD]/gm/actual/Test-Android-Nexus5-Adreno330-Arm7-Debug",
       "511"
     ],
     "name": "makedirs .../actual/BUILDER",
@@ -240,7 +240,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "027c104942212397",
+      "018dff3520c970f6",
       "shell",
       "rm",
       "-r",
@@ -252,7 +252,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "027c104942212397",
+      "018dff3520c970f6",
       "shell",
       "if",
       "[",
@@ -271,7 +271,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "027c104942212397",
+      "018dff3520c970f6",
       "shell",
       "mkdir",
       "-p",
@@ -283,7 +283,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "027c104942212397",
+      "018dff3520c970f6",
       "push",
       "[SLAVE_BUILD]/skia/expectations/gm/ignored-tests.txt",
       "/storage/emulated/legacy/skiabot/skia_gm_expected/ignored-tests.txt"
@@ -294,11 +294,11 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "027c104942212397",
+      "018dff3520c970f6",
       "shell",
       "rm",
       "-r",
-      "/storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-Xoom-Tegra2-Arm7-Debug"
+      "/storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-Nexus5-Adreno330-Arm7-Debug"
     ],
     "name": "rmdir .../skia_gm_expected/BUILDER"
   },
@@ -306,30 +306,30 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "027c104942212397",
+      "018dff3520c970f6",
       "shell",
       "if",
       "[",
       "-e",
-      "/storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-Xoom-Tegra2-Arm7-Debug",
+      "/storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-Nexus5-Adreno330-Arm7-Debug",
       "];",
       "then",
       "echo",
       "FILE_EXISTS;",
       "fi"
     ],
-    "name": "exists /storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-Xoom-Tegra2-Arm7-Debug",
+    "name": "exists /storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-Nexus5-Adreno330-Arm7-Debug",
     "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "027c104942212397",
+      "018dff3520c970f6",
       "shell",
       "mkdir",
       "-p",
-      "/storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-Xoom-Tegra2-Arm7-Debug"
+      "/storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-Nexus5-Adreno330-Arm7-Debug"
     ],
     "name": "mkdir .../skia_gm_expected/BUILDER"
   },
@@ -337,37 +337,37 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "027c104942212397",
+      "018dff3520c970f6",
       "push",
-      "[SLAVE_BUILD]/skia/expectations/gm/Test-Android-Xoom-Tegra2-Arm7-Debug/expected-results.json",
-      "/storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-Xoom-Tegra2-Arm7-Debug/expected-results.json"
+      "[SLAVE_BUILD]/skia/expectations/gm/Test-Android-Nexus5-Adreno330-Arm7-Debug/expected-results.json",
+      "/storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-Nexus5-Adreno330-Arm7-Debug/expected-results.json"
     ],
-    "name": "push [SLAVE_BUILD]/skia/expectations/gm/Test-Android-Xoom-Tegra2-Arm7-Debug/expected-results.json"
+    "name": "push [SLAVE_BUILD]/skia/expectations/gm/Test-Android-Nexus5-Adreno330-Arm7-Debug/expected-results.json"
   },
   {
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "027c104942212397",
+      "018dff3520c970f6",
       "shell",
       "if",
       "[",
       "-e",
-      "/storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-Xoom-Tegra2-Arm7-Debug/expected-results.json",
+      "/storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-Nexus5-Adreno330-Arm7-Debug/expected-results.json",
       "];",
       "then",
       "echo",
       "FILE_EXISTS;",
       "fi"
     ],
-    "name": "exists /storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-Xoom-Tegra2-Arm7-Debug/expected-results.json",
+    "name": "exists /storage/emulated/legacy/skiabot/skia_gm_expected/Test-Android-Nexus5-Adreno330-Arm7-Debug/expected-results.json",
     "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "027c104942212397",
+      "018dff3520c970f6",
       "shell",
       "if",
       "[",
@@ -386,25 +386,24 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_run_skia",
       "-d",
-      "xoom",
+      "nexus_5",
       "-s",
-      "027c104942212397",
+      "018dff3520c970f6",
       "gm",
       "--verbose",
       "--writeChecksumBasedFilenames",
       "--mismatchPath",
-      "/storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-Xoom-Tegra2-Arm7-Debug",
+      "/storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-Nexus5-Adreno330-Arm7-Debug",
       "--missingExpectationsPath",
-      "/storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-Xoom-Tegra2-Arm7-Debug",
+      "/storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-Nexus5-Adreno330-Arm7-Debug",
       "--writeJsonSummaryPath",
-      "/storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-Xoom-Tegra2-Arm7-Debug/actual-results.json",
+      "/storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-Nexus5-Adreno330-Arm7-Debug/actual-results.json",
       "--ignoreErrorTypes",
       "IntentionallySkipped",
       "MissingExpectations",
       "ExpectationsMismatch",
       "--resourcePath",
       "/storage/emulated/legacy/skiabot/skia_resources",
-      "--resetGpuContext",
       "--config",
       "defaults",
       "msaa16"
@@ -419,22 +418,22 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_pull_if_needed",
       "-s",
-      "027c104942212397",
-      "/storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-Xoom-Tegra2-Arm7-Debug",
-      "[SLAVE_BUILD]/gm/actual/Test-Android-Xoom-Tegra2-Arm7-Debug"
+      "018dff3520c970f6",
+      "/storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-Nexus5-Adreno330-Arm7-Debug",
+      "[SLAVE_BUILD]/gm/actual/Test-Android-Nexus5-Adreno330-Arm7-Debug"
     ],
     "env": {
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
-    "name": "pull /storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-Xoom-Tegra2-Arm7-Debug"
+    "name": "pull /storage/emulated/legacy/skiabot/skia_gm_actual/Test-Android-Nexus5-Adreno330-Arm7-Debug"
   },
   {
     "cmd": [
       "python",
       "-u",
       "[SLAVE_BUILD]/skia/gm/display_json_results.py",
-      "[SLAVE_BUILD]/gm/actual/Test-Android-Xoom-Tegra2-Arm7-Debug/actual-results.json"
+      "[SLAVE_BUILD]/gm/actual/Test-Android-Nexus5-Adreno330-Arm7-Debug/actual-results.json"
     ],
     "name": "Compare GMs"
   },
@@ -443,8 +442,8 @@
       "python",
       "-u",
       "[BUILD]/scripts/slave/recipe_modules/skia/resources/upload_gm_results.py",
-      "[SLAVE_BUILD]/gm/actual/Test-Android-Xoom-Tegra2-Arm7-Debug",
-      "Test-Android-Xoom-Tegra2-Arm7-Debug",
+      "[SLAVE_BUILD]/gm/actual/Test-Android-Nexus5-Adreno330-Arm7-Debug",
+      "Test-Android-Nexus5-Adreno330-Arm7-Debug",
       "[DEPOT_TOOLS]/third_party/gsutil/gsutil"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
@@ -538,7 +537,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "027c104942212397",
+      "018dff3520c970f6",
       "shell",
       "rm",
       "-r",
@@ -550,7 +549,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "027c104942212397",
+      "018dff3520c970f6",
       "shell",
       "if",
       "[",
@@ -569,7 +568,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "027c104942212397",
+      "018dff3520c970f6",
       "shell",
       "mkdir",
       "-p",
@@ -581,7 +580,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_push_if_needed",
       "-s",
-      "027c104942212397",
+      "018dff3520c970f6",
       "[SLAVE_BUILD]/playback/skps",
       "/storage/emulated/legacy/skiabot/skia_skp/skps"
     ],
@@ -649,7 +648,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "027c104942212397",
+      "018dff3520c970f6",
       "shell",
       "rm",
       "-r",
@@ -661,7 +660,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "027c104942212397",
+      "018dff3520c970f6",
       "shell",
       "if",
       "[",
@@ -680,7 +679,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "027c104942212397",
+      "018dff3520c970f6",
       "shell",
       "mkdir",
       "-p",
@@ -692,7 +691,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_push_if_needed",
       "-s",
-      "027c104942212397",
+      "018dff3520c970f6",
       "[SLAVE_BUILD]/images",
       "/storage/emulated/legacy/skiabot/skia_images"
     ],
@@ -746,9 +745,9 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_run_skia",
       "-d",
-      "xoom",
+      "nexus_5",
       "-s",
-      "027c104942212397",
+      "018dff3520c970f6",
       "dm",
       "--verbose",
       "--resourcePath",
@@ -771,15 +770,13 @@
       "configuration",
       "Debug",
       "gpu",
-      "Tegra2",
+      "Adreno330",
       "model",
-      "Xoom",
+      "Nexus5",
       "os",
       "Android",
       "--match",
-      "~WritePixels",
-      "~tabl_mozilla_0",
-      "~desk_yahoonews_0"
+      "~tabl_mozilla_0"
     ],
     "env": {
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
@@ -791,7 +788,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_pull_if_needed",
       "-s",
-      "027c104942212397",
+      "018dff3520c970f6",
       "/storage/emulated/legacy/skiabot/skia_dm",
       "[SLAVE_BUILD]/dm"
     ],
@@ -808,7 +805,7 @@
       "[BUILD]/scripts/slave/recipe_modules/skia/resources/upload_dm_results.py",
       "[SLAVE_BUILD]/dm",
       "164710",
-      "Test-Android-Xoom-Tegra2-Arm7-Debug",
+      "Test-Android-Nexus5-Adreno330-Arm7-Debug",
       "5",
       "",
       "[SLAVE_BUILD]/skia/common/py/utils"
@@ -820,16 +817,12 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_run_skia",
       "-d",
-      "xoom",
+      "nexus_5",
       "-s",
-      "027c104942212397",
+      "018dff3520c970f6",
       "render_pdfs",
       "--inputPaths",
-      "/storage/emulated/legacy/skiabot/skia_skp/skps",
-      "--match",
-      "~desk_pokemonwiki",
-      "~tabl_mozilla",
-      "~tabl_nytimes"
+      "/storage/emulated/legacy/skiabot/skia_skp/skps"
     ],
     "env": {
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
@@ -841,9 +834,9 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_run_skia",
       "-d",
-      "xoom",
+      "nexus_5",
       "-s",
-      "027c104942212397",
+      "018dff3520c970f6",
       "nanobench",
       "-i",
       "/storage/emulated/legacy/skiabot/skia_resources",
@@ -867,7 +860,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "027c104942212397",
+      "018dff3520c970f6",
       "reboot"
     ],
     "name": "reboot"

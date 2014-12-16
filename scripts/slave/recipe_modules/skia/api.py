@@ -401,6 +401,13 @@ class SkiaApi(recipe_api.RecipeApi):
     if 'Xoom' in self.c.BUILDER_NAME:  # skia:1699
       match.append('~WritePixels')
 
+    # skia:3249: these images/device pairs won't decode properly.
+    if 'Nexus5' in self.c.BUILDER_NAME:
+      match.append('~tabl_mozilla_0')
+    if 'Xoom' in self.c.BUILDER_NAME:
+      match.append('~tabl_mozilla_0')
+      match.append('~desk_yahoonews_0')
+
     if match:
       args.append('--match')
       args.extend(match)

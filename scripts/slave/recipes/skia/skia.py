@@ -49,6 +49,7 @@ def GenTests(api):
     'Perf-Win7-ShuttleA-HD2000-x86-Release',
     'Perf-Win7-ShuttleA-HD2000-x86-Release-Trybot',
     'Test-Android-GalaxyS4-SGX544-Arm7-Debug',
+    'Test-Android-Nexus5-Adreno330-Arm7-Debug',
     'Test-Android-Nexus10-MaliT604-Arm7-Release',
     'Test-Android-Xoom-Tegra2-Arm7-Debug',
     'Test-Android-NexusPlayer-PowerVR-x86-Debug',
