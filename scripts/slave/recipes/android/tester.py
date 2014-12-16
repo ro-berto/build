@@ -80,6 +80,7 @@ UNIT_TESTS = [
   ['sandbox_linux_unittests', None],
   ['sql_unittests', None],
   ['sync_unit_tests', None],
+  ['ui_android_unittests', None],
   ['ui_base_unittests', None],
   ['unit_tests', None],
 ]

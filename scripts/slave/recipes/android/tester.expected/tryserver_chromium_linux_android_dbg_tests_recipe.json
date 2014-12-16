@@ -138,7 +138,7 @@
       "-u",
       "[SLAVE_BUILD]/src/build/gyp_chromium",
       "--analyzer",
-      "{\"files\": [\"foo.cc\"], \"targets\": [\"android_webview_test_apk\", \"chrome_shell_test_apk\", \"content_shell_test_apk\", \"chrome_sync_shell_test_apk\", \"android_webview_unittests\", \"base_unittests\", \"breakpad_unittests\", \"cc_unittests\", \"components_unittests\", \"content_browsertests\", \"content_unittests\", \"events_unittests\", \"gl_tests\", \"gpu_unittests\", \"ipc_tests\", \"media_unittests\", \"net_unittests\", \"sandbox_linux_unittests\", \"sql_unittests\", \"sync_unit_tests\", \"ui_base_unittests\", \"unit_tests\", \"junit_unit_tests\"]}",
+      "{\"files\": [\"foo.cc\"], \"targets\": [\"android_webview_test_apk\", \"chrome_shell_test_apk\", \"content_shell_test_apk\", \"chrome_sync_shell_test_apk\", \"android_webview_unittests\", \"base_unittests\", \"breakpad_unittests\", \"cc_unittests\", \"components_unittests\", \"content_browsertests\", \"content_unittests\", \"events_unittests\", \"gl_tests\", \"gpu_unittests\", \"ipc_tests\", \"media_unittests\", \"net_unittests\", \"sandbox_linux_unittests\", \"sql_unittests\", \"sync_unit_tests\", \"ui_android_unittests\", \"ui_base_unittests\", \"unit_tests\", \"junit_unit_tests\"]}",
       "/path/to/tmp/json"
     ],
     "env": {
