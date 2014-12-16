@@ -173,18 +173,16 @@ SPEC = {
         'platform': 'linux',
       },
     },
-    'Linux ChromiumOS Ozone Tests (2)': {
+    'Linux ChromiumOS Ozone Builder (dbg)': {
       'recipe_config': 'chromium_chromeos_ozone',
       'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
+        'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
       },
-      'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
+      'bot_type': 'builder',
+      'compile_targets': [
+        'aura_builder',
       ],
-      'parent_buildername': 'Linux ChromiumOS Ozone Builder',
       'testing': {
         'platform': 'linux',
       },

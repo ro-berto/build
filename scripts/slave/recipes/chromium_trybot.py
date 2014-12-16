@@ -220,6 +220,25 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
+      'linux_chromium_chromeos_ozone_rel_ng': {
+        'based_on_main_waterfall': {
+          'mastername': 'chromium.chromiumos',
+          'buildername': 'Linux ChromiumOS Ozone Builder',
+          'tester': 'Linux ChromiumOS Ozone Tests (1)',
+        },
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'linux_chromium_chromeos_ozone_dbg_ng': {
+        'based_on_main_waterfall': {
+          'mastername': 'chromium.chromiumos',
+          'buildername': 'Linux ChromiumOS Ozone Builder (dbg)',
+        },
+        'testing': {
+          'platform': 'linux',
+        },
+      },
       'linux_chromium_chromeos_athena_rel_ng': {
         'add_nacl_integration_tests': False,
         'add_telemetry_tests': False,

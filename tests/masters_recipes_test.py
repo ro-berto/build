@@ -48,9 +48,6 @@ SUPPRESSIONS = {
     'master.chromium.chromiumos': [
         'Linux ChromiumOS Full',
         'Linux ChromiumOS GN',
-        'Linux ChromiumOS Ozone Builder',
-        'Linux ChromiumOS Ozone Tests (1)',
-        'Linux ChromiumOS Ozone Tests (2)',
         'Linux ChromiumOS Tests (dbg)(1)',
     ],
     'master.chromium.gpu': [
