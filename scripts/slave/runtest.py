@@ -207,8 +207,8 @@ def _RunGTestCommand(command, extra_env, log_processor=None, pipes=None):
 
 
 def _GetMaster():
-  """Returns a master name as listed in the slaves.cfg file."""
-  return slave_utils.GetActiveMaster()
+  """Return the master name for the current host."""
+  return chromium_utils.GetActiveMaster()
 
 
 def _GetMasterString(master):
@@ -1777,7 +1777,8 @@ def main():
                                 'categorize results. See buildershandler.py '
                                 'in the flakiness dashboard code '
                                 '(use codesearch) for the known values. '
-                                'Defaults to fetching it from slaves.cfg.')
+                                'Defaults to fetching it from '
+                                'slaves.cfg/builders.pyl.')
   option_parser.add_option('--build-number', default=None,
                            help=('The build number of the builder running'
                                  'this script.'))

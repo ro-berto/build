@@ -39,7 +39,7 @@ def parse_args(argv):
   subp = subps.add_parser('gen', help=run_gen.__doc__)
   subp.add_argument('master_dirname', nargs=1,
                     help='Path to master config directory (must contain '
-                         'a builders.py file).')
+                         'a builders.pyl file).')
   subp.set_defaults(func=run_gen)
 
   subp = subps.add_parser('help', help=run_help.__doc__)
@@ -55,7 +55,7 @@ def run_gen(args, fs):
 
   master_dirname = args.master_dirname[0]
   master_subpath = fs.relpath(master_dirname, BASE_DIR)
-  builders_path = fs.join(BASE_DIR, master_subpath, 'builders.py')
+  builders_path = fs.join(BASE_DIR, master_subpath, 'builders.pyl')
 
   if not fs.exists(builders_path):
     print("%s not found" % master_dirname, file=sys.stderr)

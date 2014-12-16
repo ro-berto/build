@@ -5,6 +5,7 @@
 """ Set of basic operations/utilities that are used by the build. """
 
 from contextlib import contextmanager
+import ast
 import copy
 import cStringIO
 import errno
@@ -1265,13 +1266,25 @@ def ListMasters(cue='master.cfg', include_public=True, include_internal=True):
   return [os.path.abspath(os.path.dirname(f)) for f in filenames]
 
 
+def ListMastersWithSlaves(include_public=True, include_internal=True):
+  masters_path = ListMasters('builders.pyl', include_public, include_internal)
+  masters_path.extend(ListMasters('slaves.cfg', include_public,
+                                  include_internal))
+  return masters_path
+
+
+def GetSlavesFromMasterPath(path, fail_hard=False):
+  builders_path = os.path.join(path, 'builders.pyl')
+  if os.path.exists(builders_path):
+    return GetSlavesFromBuildersFile(builders_path)
+  return RunSlavesCfg(os.path.join(path, 'slaves.cfg'), fail_hard=fail_hard)
+
+
 def GetAllSlaves(fail_hard=False, include_public=True, include_internal=True):
   """Return all slave objects from masters."""
   slaves = []
-  for master in ListMasters(cue='slaves.cfg', include_public=include_public,
-                            include_internal=include_internal):
-    cur_slaves = RunSlavesCfg(os.path.join(master, 'slaves.cfg'),
-                              fail_hard=fail_hard)
+  for master in ListMastersWithSlaves(include_public, include_internal):
+    cur_slaves = GetSlavesFromMasterPath(master, fail_hard)
     for slave in cur_slaves:
       slave['mastername'] = os.path.basename(master)
     slaves.extend(cur_slaves)
@@ -1283,12 +1296,7 @@ def GetSlavesForHost():
   hostname = os.getenv('TESTING_SLAVENAME')
   if not hostname:
     hostname = socket.getfqdn().split('.', 1)[0].lower()
-  slaves = []
-  for master in ListMasters(cue='slaves.cfg'):
-    slaves.extend(
-        s for s in RunSlavesCfg(os.path.join(master, 'slaves.cfg'))
-        if s.get('hostname') == hostname)
-  return slaves
+  return [s for s in GetAllSlaves() if s.get('hostname') == hostname]
 
 
 def GetActiveSubdir():
@@ -1317,11 +1325,10 @@ def EntryToSlaveName(entry):
 
 
 def GetActiveMaster(slavename=None, default=None):
-  """Parses all the slaves.cfg and returns the name of the active master
-  determined by the hostname. Returns None otherwise.
+  """Returns the name of the Active master serving the current host.
 
-  It will be matched against *both* the 'slavename' and 'hostname' fields
-  in slaves.cfg.
+  Parse all of the active masters with slaves matching the current hostname
+  and optional slavename. Returns |default| if no match found.
   """
   slavename = slavename or GetActiveSlavename()
   for slave in GetAllSlaves():
@@ -1811,3 +1818,72 @@ def DatabaseSetup(buildmaster_config, require_dbconfig=False):
         values.get('hostname', 'localhost'), values['dbname'])
   else:
     assert not require_dbconfig
+
+
+def ReadBuildersFile(builders_path):
+  with open(builders_path) as fp:
+    builders = ast.literal_eval(fp.read())
+
+  # Set some additional derived fields that are derived from the
+  # file's location in the filesystem.
+  basedir = os.path.dirname(os.path.abspath(builders_path))
+  master_dirname = os.path.basename(basedir)
+  master_name_comps = master_dirname.split('.')[1:]
+  buildbot_path =  '.'.join(master_name_comps)
+  master_classname =  ''.join(c[0].upper() + c[1:] for c in master_name_comps)
+
+  # TODO: These probably shouldn't be completely hard-coded like this.
+  builders['master_dirname'] = master_dirname
+  builders['master_classname'] = master_classname
+  builders['buildbot_url'] = 'https://build.chromium.org/p/%s' % buildbot_path
+
+  return builders
+
+
+def GetSlavesFromBuildersFile(builders_path):
+  """Read builders_path and return a list of slave dicts."""
+  builders = ReadBuildersFile(builders_path)
+  return GetSlavesFromBuilders(builders)
+
+
+def GetSlavesFromBuilders(builders):
+  """Returns a list of slave dicts derived from the builders dict."""
+  builders_in_pool = {}
+
+  # builders.pyl contains a list of builders -> slave_pools
+  # and a list of slave_pools -> slaves.
+  # We require that each slave is in a single pool, but each slave
+  # may have multiple builders, so we need to build up the list of
+  # builders each slave pool supports.
+  for builder_name, builder_vals in builders['builders'].items():
+    pool_names = builder_vals['slave_pools']
+    for pool_name in pool_names:
+     if pool_name not in builders_in_pool:
+       builders_in_pool[pool_name] = set()
+     pool_data = builders['slave_pools'][pool_name]
+     for slave in pool_data['slaves']:
+       builders_in_pool[pool_name].add(builder_name)
+
+  # Now we can generate the list of slaves using the above lookup table.
+  slaves = []
+  for pool_name, pool_data in builders['slave_pools'].items():
+    slave_data = pool_data['slave_data']
+    builder_names = sorted(builders_in_pool[pool_name])
+    for slave in pool_data['slaves']:
+      slaves.append({
+          'hostname': slave,
+          'builder_name': builder_names,
+          'os': slave_data['os'],
+          'version': slave_data['version'],
+          'bits': slave_data['bits'],
+      })
+
+  return slaves
+
+def GetSlaveNamesForBuilder(builders, builder_name):
+  """Returns a list of slave hostnames for the given builder name."""
+  slaves = []
+  pool_names = builders['builders'][builder_name]['slave_pools']
+  for pool_name in pool_names:
+    slaves.extend(builders['slave_pools'][pool_name]['slaves'])
+  return slaves

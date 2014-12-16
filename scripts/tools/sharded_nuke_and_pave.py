@@ -48,7 +48,7 @@ def get_slaves(master_paths, slavelist):
 
   slavedict = {}
   for path in master_paths:
-    for slave in chromium_utils.RunSlavesCfg(os.path.join(path, 'slaves.cfg')):
+    for slave in chromium_utils.GetSlavesFromMasterPath(path):
       if 'hostname' in slave:
         slavedict[slave['hostname']] = slave
   slaves = slaves_list.BaseSlavesList(slavedict.values())

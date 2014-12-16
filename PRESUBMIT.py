@@ -26,7 +26,6 @@ def CommonChecks(input_api, output_api):
       r'.*scripts/gsd_generate_index/.*',
       r'.*masters/.*/templates/.*\.html$',
       r'.*masters/.*/templates/.*\.css$',
-      r'.*masters/.*/builders.py',
       r'.*masters/.*/public_html/.*\.html$',
       r'.*masters/.*/public_html/.*\.css$',
   ]

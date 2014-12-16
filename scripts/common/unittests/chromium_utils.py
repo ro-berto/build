@@ -5,7 +5,9 @@
 
 """Unit tests for classes in chromium_utils.py."""
 
+import os
 import sys
+import tempfile
 import unittest
 
 import test_env  # pylint: disable=W0611
@@ -104,6 +106,57 @@ class TestRunCommand(unittest.TestCase):
                                        pipes=[secondcmd],
                                        filter_obj=filter_obj)
     self.assertEqual(1, retval)
+
+
+SAMPLE_BUILDERS_PY = """\
+{
+  "builders": {
+    "Test Linux": {
+      "properties": {
+        "config": "Release"
+      },
+      "recipe": "test_recipe",
+      "slave_pools": ["main"],
+      "slavebuilddir": "test"
+    }
+  },
+  "git_repo_url": "https://chromium.googlesource.com/test/test.git",
+  "master_base_class": "_FakeMaster",
+  "master_port": 20999,
+  "master_port_alt": 40999,
+  "slave_port": 30999,
+  "slave_pools": {
+    "main": {
+      "slave_data": {
+        "bits": 64,
+        "os":  "linux",
+        "version": "precise"
+      },
+      "slaves": ["vm9999-m1"],
+    },
+  },
+  "templates": ["templates"],
+}
+"""
+
+
+class GetSlavesFromBuilders(unittest.TestCase):
+  def test_normal(self):
+    try:
+      fp = tempfile.NamedTemporaryFile(delete=False)
+      fp.write(SAMPLE_BUILDERS_PY)
+      fp.close()
+
+      slaves = chromium_utils.GetSlavesFromBuilders(fp.name)
+      self.assertEqual(slaves, [{
+          'hostname': 'vm9999-m1',
+          'builder_name': ['Test Linux'],
+          'os': 'linux',
+          'version': 'precise',
+          'bits': 64,
+      }])
+    finally:
+      os.remove(fp.name)
 
 
 if __name__ == '__main__':

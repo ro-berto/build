@@ -244,14 +244,12 @@ Note: t is replaced with 'tryserver', 'c' with chromium' and
       slaves = []
       for m_p in masters_path:
         if os.path.isfile(os.path.join(m_p, 'twistd.pid')):
-          slaves.extend(
-              chromium_utils.RunSlavesCfg(os.path.join(m_p, 'slaves.cfg')))
+          slaves.extend(chromium_utils.GetSlavesFromMasterPath(m_p))
       slaves = slaves_list.BaseSlavesList(slaves)
     elif options.master == 'all':
       slaves = []
       for m_p in masters_path:
-        slaves.extend(
-            chromium_utils.RunSlavesCfg(os.path.join(m_p, 'slaves.cfg')))
+        slaves.extend(chromium_utils.GetSlavesFromMasterPath(m_p))
       slaves = slaves_list.BaseSlavesList(slaves)
     else:
       if not options.master in masters:
@@ -260,7 +258,7 @@ Note: t is replaced with 'tryserver', 'c' with chromium' and
           parser.error('Unknown master \'%s\'.\nChoices are: %s' % (
             options.master, ', '.join(masters)))
       master_path = masters_path[masters.index(options.master)]
-      slaves = slaves_list.SlavesList(os.path.join(master_path, 'slaves.cfg'))
+      slaves = chromium_utils.GetSlaveListFromMasterPath(master_path)
     def F(os_type):
       out = slaves.GetSlaves(os=os_type, bits=options.bits,
           version=options.version, builder=options.builder)

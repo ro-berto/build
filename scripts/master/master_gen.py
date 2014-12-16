@@ -20,36 +20,11 @@ from master.factory import annotator_factory
 
 def PopulateBuildmasterConfig(BuildmasterConfig, builders_path,
                               master_cls=None):
-  """Read builders.py and populate a build master config dict."""
+  """Read builders_path and populate a build master config dict."""
   master_cls = master_cls or Master
-  builders = _ReadBuilders(builders_path)
+  builders = chromium_utils.ReadBuildersFile(builders_path)
   _Populate(BuildmasterConfig, builders, master_cls)
 
-
-def GetSlavesFromBuilders(builders_path):
-  """Read builders.py in basedir and return a list of slaves."""
-  builders = _ReadBuilders(builders_path)
-  return _GetSlaves(builders)
-
-
-def _ReadBuilders(builders_path):
-  with open(builders_path) as fp:
-    builders = ast.literal_eval(fp.read())
-
-  # Set some additional derived fields that are derived from the
-  # file's location in the filesystem.
-  basedir = os.path.dirname(os.path.abspath(builders_path))
-  master_dirname = os.path.basename(basedir)
-  master_name_comps = master_dirname.split('.')[1:]
-  buildbot_path =  '.'.join(master_name_comps)
-  master_classname =  ''.join(c[0].upper() + c[1:] for c in master_name_comps)
-
-  # TODO: These probably shouldn't be completely hard-coded like this.
-  builders['master_dirname'] = master_dirname
-  builders['master_classname'] = master_classname
-  builders['buildbot_url'] = 'https://build.chromium.org/p/%s' % buildbot_path
-
-  return builders
 
 
 def _Populate(BuildmasterConfig, builders, master_cls):
@@ -64,7 +39,7 @@ def _Populate(BuildmasterConfig, builders, master_cls):
       })
 
   # TODO: Modify this and the factory call, below, so that we can pass the
-  # path to the builders.py file through the annotator to the slave so that
+  # path to the builders.pyl file through the annotator to the slave so that
   # the slave can get the recipe name and the factory properties dynamically
   # without needing the master to re-read things.
   m_annotator = annotator_factory.AnnotatorFactory()
@@ -91,7 +66,8 @@ def _Populate(BuildmasterConfig, builders, master_cls):
         'name': builder_name,
         'factory': m_annotator.BaseFactory(builder_data['recipe']),
         'slavebuilddir': builder_data['slavebuilddir'],
-        'slavenames': _GetSlavesForBuilder(builders, builder_name),
+        'slavenames': chromium_utils.GetSlaveNamesForBuilder(builders,
+                                                             builder_name),
     })
 
   c['schedulers'] = [
@@ -109,8 +85,9 @@ def _Populate(BuildmasterConfig, builders, master_cls):
       missing_recipients=['buildbot@chromium-build-health.appspotmail.com'])
 
   # This does some sanity checks on the configuration.
-  slaves = slaves_list.BaseSlavesList(_GetSlaves(builders),
-                                      builders['master_classname'])
+  slaves = slaves_list.BaseSlavesList(
+      chromium_utils.GetSlavesFromBuilders(builders),
+      builders['master_classname'])
   master_utils.VerifySetup(c, slaves)
 
   # Adds common status and tools to this master.
@@ -128,46 +105,3 @@ def _Populate(BuildmasterConfig, builders, master_cls):
   c['logHorizon'] = 3000
   # Must be at least 2x the number of slaves.
   c['eventHorizon'] = 200
-
-
-def _GetSlaves(builders):
-  builders_in_pool = {}
-
-  # builders.py contains a list of builders -> slave_pools
-  # and a list of slave_pools -> slaves.
-  # We require that each slave is in a single pool, but each slave
-  # may have multiple builders, so we need to build up the list of
-  # builders each slave pool supports.
-  for builder_name, builder_vals in builders['builders'].items():
-    pool_names = builder_vals['slave_pools']
-    for pool_name in pool_names:
-     if pool_name not in builders_in_pool:
-       builders_in_pool[pool_name] = set()
-     pool_data = builders['slave_pools'][pool_name]
-     for slave in pool_data['slaves']:
-       builders_in_pool[pool_name].add(builder_name)
-
-  # Now we can generate the list of slaves using the above lookup table.
-
-  slaves = []
-  for pool_name, pool_data in builders['slave_pools'].items():
-    slave_data = pool_data['slave_data']
-    builder_names = sorted(builders_in_pool[pool_name])
-    for slave in pool_data['slaves']:
-      slaves.append({
-          'hostname': slave,
-          'builder_name': builder_names,
-          'os': slave_data['os'],
-          'version': slave_data['version'],
-          'bits': slave_data['bits'],
-      })
-
-  return slaves
-
-
-def _GetSlavesForBuilder(builders, builder_name):
-  slaves = []
-  pool_names = builders['builders'][builder_name]['slave_pools']
-  for pool_name in pool_names:
-    slaves.extend(builders['slave_pools'][pool_name]['slaves'])
-  return slaves

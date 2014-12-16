@@ -27,10 +27,10 @@ def ProcessShortName(master):
 
 
 def LoadMaster(slaves, path):
+  cur_slaves = chromium_utils.GetSlavesFromMasterPath(path)
   cur_master = os.path.basename(path)
-  cur_slaves = chromium_utils.RunSlavesCfg(os.path.join(path, 'slaves.cfg'))
-  for slave in cur_slaves:
-    slave['mastername'] = cur_master
+  for cur_slave in cur_slaves:
+    cur_slave['mastername'] = cur_master
   slaves.extend(cur_slaves)
 
 
@@ -40,8 +40,8 @@ def Main(argv):
 Note: t is replaced with 'tryserver', 'c' with chromium' and
       co with 'chromiumos', 'cr' with chrome, 'cros' with 'chromeos'."""
 
-  # Generate the list of available masters.  We want any with slaves.
-  masters_path = chromium_utils.ListMasters(cue='slaves.cfg')
+  masters_path = chromium_utils.ListMastersWithSlaves()
+
   masters = [os.path.basename(f) for f in masters_path]
   # Strip off 'master.'
   masters = [re.match(r'(master\.|)(.*)', m).group(2) for m in masters]

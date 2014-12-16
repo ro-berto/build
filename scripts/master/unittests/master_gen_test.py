@@ -79,26 +79,6 @@ class PopulateBuildmasterConfigTest(unittest.TestCase):
       os.remove(fp.name)
 
 
-class GetSlavesFromBuilders(unittest.TestCase):
-  def test_normal(self):
-    try:
-      fp = tempfile.NamedTemporaryFile(delete=False)
-      fp.write(SAMPLE_BUILDERS_PY)
-      fp.close()
-
-      slaves = master_gen.GetSlavesFromBuilders(fp.name)
-      self.assertEqual(slaves, [{
-          'hostname': 'vm9999-m1',
-          'builder_name': ['Test Linux'],
-          'os': 'linux',
-          'version': 'precise',
-          'bits': 64,
-      }])
-    finally:
-      os.remove(fp.name)
-
-
-
 if __name__ == '__main__':
   unittest.TestCase.maxDiff = None
   unittest.main()

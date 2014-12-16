@@ -14,9 +14,9 @@ def AddSchedulersAndTriggers(buildmaster_config=None,
                              scheduler_name=None,
                              branch=None):
   """Adds schedulers and triggers to the BuildmasterConfig based on
-  the contents of slaves.cfg, passed in as a slave_list.
+  the the slave_list.
 
-  This function relies on certain structure in the slaves.cfg, in
+  This function relies on certain structure in the slave_list, in
   particular the custom 'triggered_by' property, which is not yet
   commonly used to define triggers.
 
@@ -34,7 +34,7 @@ def AddSchedulersAndTriggers(buildmaster_config=None,
     buildmaster_config: a BuildmasterConfig into which the
       'schedulers' property will be defined.
 
-    slave_list: a SlavesList constructed from slaves.cfg.
+    slave_list: a SlavesList constructed from slaves.cfg or builders.pyl.
 
     scheduler_name: the name of the Scheduler for the polling (not
       triggered) builders.
@@ -83,7 +83,7 @@ def AddRecipeBasedBuilders(buildmaster_config=None,
     buildmaster_config: a BuildmasterConfig into which the
       'builders' property will be defined.
 
-    slave_list: a SlavesList constructed from slaves.cfg.
+    slave_list: a SlavesList constructed from slaves.cfg or builders.pyl.
 
     annotator: an AnnotatorFactory instance.
 
@@ -110,7 +110,7 @@ def AddRecipeBasedBuilders(buildmaster_config=None,
           [trigger_name_map[name]] if name in trigger_name_map else None),
         'gatekeeper': slave.get('gatekeeper_categories', ''),
       }
-      # Don't specify auto_reboot unless slaves.cfg does, to let
+      # Don't specify auto_reboot unless the slave does, to let
       # master_utils' default take effect.
       if 'auto_reboot' in slave:
         builder['auto_reboot'] = slave['auto_reboot']

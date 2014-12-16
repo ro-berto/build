@@ -26,13 +26,9 @@ FAKE_MASTER_CFG_TEMPLATE = """\
 %(buildbot_url)s
 """
 
-FAKE_SLAVES_CFG_TEMPLATE = """\
-# slaves.cfg
-"""
-
-# This is a fake file; a real builders.py contains 'builders'
+# This is a fake file; a real builders.pyl contains 'builders'
 # and 'slave_pools' entries, but buildbot_tool doesn't care about those.
-FAKE_BUILDERS_PY = """\
+FAKE_BUILDERS_PYL = """\
 {
   "git_repo_url": "git://example.com/example.git",
   "master_base_class": "Master1",
@@ -71,11 +67,10 @@ def _restore_constants(orig_values):
 
 
 class GenTest(unittest.TestCase):
-  def _run_gen(self, builders_py, master_cfg=FAKE_MASTER_CFG_TEMPLATE):
+  def _run_gen(self, builders_pyl, master_cfg=FAKE_MASTER_CFG_TEMPLATE):
     files = {
       '/build/templates/master.cfg': master_cfg,
-      '/build/templates/slaves.cfg': FAKE_SLAVES_CFG_TEMPLATE,
-      '/build/masters/master.test/builders.py': builders_py,
+      '/build/masters/master.test/builders.pyl': builders_pyl,
     }
     fs = fake_filesystem.FakeFilesystem(files=files.copy())
 
@@ -96,14 +91,13 @@ class GenTest(unittest.TestCase):
 
 
   def test_normal(self):
-    ret, out, err, files, fs = self._run_gen(FAKE_BUILDERS_PY)
+    ret, out, err, files, fs = self._run_gen(FAKE_BUILDERS_PYL)
     self.assertEqual(ret, 0)
     self.assertEqual(err, '')
     self.assertNotEqual(out, '')
     self.assertEqual(set(fs.files.keys()),
                      set(files.keys() +
-                         ['/build/masters/master.test/master.cfg',
-                          '/build/masters/master.test/slaves.cfg']))
+                         ['/build/masters/master.test/master.cfg']))
 
     self.assertMultiLineEqual(
         fs.read_text_file('/build/masters/master.test/master.cfg'),
@@ -115,12 +109,6 @@ class GenTest(unittest.TestCase):
             https://build.chromium.org/p/test/
             """))
 
-    self.assertMultiLineEqual(
-        fs.read_text_file('/build/masters/master.test/slaves.cfg'),
-        textwrap.dedent("""\
-            # slaves.cfg
-            """))
-
   def test_not_found(self):
     ret, out, err, _, _ = self._run_gen(None)
     self.assertEqual(ret, 1)
@@ -130,7 +118,7 @@ class GenTest(unittest.TestCase):
   def test_bad_template(self):
     files = {
       '/build/templates/master.cfg': '%(unknown_key)s',
-      '/build/masters/master.test/builders.py': FAKE_BUILDERS_PY,
+      '/build/masters/master.test/builders.pyl': FAKE_BUILDERS_PYL,
     }
     fs = fake_filesystem.FakeFilesystem(files=files.copy())
 

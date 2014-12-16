@@ -14,20 +14,6 @@ from buildbot.scheduler import Triggerable
 from master import slaves_list
 from master.url_poller import URLPoller
 
-def GetArchiveUrl(project, machine_name, builder_name, zip_os_name,
-                  static_host=None):
-  # static host can be used for connections made through an intermediary
-  if static_host:
-    host = static_host
-  else:
-    # This is slightly tricky since it depends on os.getcwd() being right.
-    slaves = slaves_list.SlavesList('slaves.cfg', project)
-    host = slaves.GetSlaveName(project, machine_name)
-    if not host:
-      raise ValueError("%s isn't reachable" % machine_name)
-  return ('http://%s/b/build/slave/%s/chrome_staging/full-build-%s.zip' % (
-              host, builder_name, zip_os_name))
-
 def GetGSUtilUrl(gs_bucket, root_folder):
   return 'gs://%s/%s' % (gs_bucket, root_folder)
 
