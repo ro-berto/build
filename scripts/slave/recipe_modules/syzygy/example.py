@@ -39,6 +39,9 @@ def GenSteps(api):
   api.syzygy.randomly_reorder_chrome()
   api.syzygy.benchmark_chrome()
 
+  # Archive metrics. All builders can do this.
+  api.syzygy.archive_metrics()
+
   if buildername == 'Syzygy Coverage':
     # These can only run in coverage builds and have asserts to enforce it.
     api.syzygy.capture_unittest_coverage()

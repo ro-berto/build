@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import ast
+import os
 import re
 
 from slave import recipe_api
@@ -106,6 +107,25 @@ PATCH=1
     args = [src_dir, dst_dir]
     return self.m.python(step_name, gsutil_cp_dir_py, args)
 
+  def _gen_step_gs_util_cp(self, step_name, src_path, dst_rel_path):
+    """Returns a gsutil.py step. Internal use only.
+
+    Args:
+      step_name: The step name as a string.
+      src_path: The source path on the local file system. This should be a
+          Path object.
+      dst_rel_path: The destination path relative to the syzygy_archive root.
+          This should be a string.
+
+    Returns:
+      The generated python step.
+    """
+    gsutil_py = self.m.path['build'].join(
+        'scripts', 'slave', 'gsutil.py')
+    dst_dir = '%s/%s' % (self._SYZYGY_GS, dst_rel_path)
+    args = ['cp', '-t', '-a', 'public-read', src_path, dst_dir]
+    return self.m.python(step_name, gsutil_py, args)
+
   def taskkill(self):
     """Run chromium.taskkill.
 
@@ -146,6 +166,10 @@ PATCH=1
     return sorted(unittests)
 
   def run_unittests(self, unittests):
+    # Set up the environment. This ensures that the tests emit metrics to both
+    # a global log and the waterfall.
+    os.environ['SYZYGY_UNITTEST_METRICS'] = '--emit-to-log --emit-to-waterfall'
+
     # Generate a test step for each unittest.
     app_verifier_py = self.public_scripts_dir.join('app_verifier.py')
     for unittest in unittests:
@@ -199,7 +223,7 @@ PATCH=1
     """
     assert self.m.chromium.c.BUILD_CONFIG == 'Coverage'
     cov_dir = self.output_dir.join('cov')
-    archive_path = 'builds/coverage/%s' % self.m.properties['revision']
+    archive_path = 'builds/coverage/%s' % self.m.properties['got_revision']
     if self.m.properties['slavename'] == 'fake_slave':
       archive_path = 'test/' + archive_path
     report_url = '%s/%s/index.html' % (self._SYZYGY_ARCHIVE_URL, archive_path)
@@ -215,7 +239,7 @@ PATCH=1
     """
     assert self.m.chromium.c.BUILD_CONFIG == 'Release' and self.c.official_build
     bin_dir = self.output_dir.join('archive')
-    archive_path = 'builds/official/%s' % self.m.properties['revision']
+    archive_path = 'builds/official/%s' % self.m.properties['got_revision']
     if self.m.properties['slavename'] == 'fake_slave':
       archive_path = 'test/' + archive_path
     bin_url = '%s/index.html?path=%s/' % (
@@ -239,14 +263,29 @@ PATCH=1
     args = ['-s', '-b', asan_rtl_dll, client_dlls]
     return self.m.python('upload_symbols', archive_symbols_py, args)
 
+  def archive_metrics(self):
+    """Returns a step that archives any metrics collected by the unittests.
+    This can be called from any build configuration.
+    """
+    # Determine the name of the local file.
+    metrics_csv = self.output_dir.join('metrics.csv')
+
+    # Determine the name of the archive.
+    config = self.m.chromium.c.BUILD_CONFIG
+    if config == 'Release' and self.c.official_build:
+      config = 'Official'
+    archive_path = 'builds/metrics/%s/%s.csv' % (
+        self.m.properties['got_revision'], config.lower())
+    return self._gen_step_gs_util_cp(
+        'archive_metrics', metrics_csv, archive_path)
+
   def download_binaries(self):
     """Returns a step that downloads the current official binaries."""
-    revision = self.m.properties['revision']
     get_syzygy_binaries_py = self.public_scripts_dir.join(
         'get_syzygy_binaries.py')
     output_dir = self.m.path['checkout'].join('syzygy', 'binaries')
     args = ['--output-dir', output_dir,
-            '--revision', revision,
+            '--revision', self.m.properties['got_revision'],
             '--overwrite',
             '--verbose']
     return self.m.python('download_binaries', get_syzygy_binaries_py, args)

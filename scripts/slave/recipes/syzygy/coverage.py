@@ -49,6 +49,7 @@ def GenSteps(api):
 
   s.capture_unittest_coverage()
   s.archive_coverage()
+  s.archive_metrics()
 
 
 def GenTests(api):

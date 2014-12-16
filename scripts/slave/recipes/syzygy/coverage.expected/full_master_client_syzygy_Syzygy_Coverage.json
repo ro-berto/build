@@ -105,5 +105,19 @@
     "~followup_annotations": [
       "@@@STEP_LINK@coverage_report@https://syzygy-archive.commondatastorage.googleapis.com/builds/coverage/0e9f25b1098271be2b096fd1c095d6d907cf86f7/index.html@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\gsutil.py",
+      "cp",
+      "-t",
+      "-a",
+      "public-read",
+      "[SLAVE_BUILD]\\src\\build\\Coverage\\metrics.csv",
+      "gs://syzygy-archive/builds/metrics/0e9f25b1098271be2b096fd1c095d6d907cf86f7/coverage.csv"
+    ],
+    "name": "archive_metrics"
   }
 ]

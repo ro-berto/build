@@ -54,6 +54,7 @@ def GenSteps(api):
   # Load and run the unittests.
   unittests = s.read_unittests_gypi()
   s.run_unittests(unittests)
+  s.archive_metrics()
 
   build_config = api.chromium.c.BUILD_CONFIG
   if build_config == 'Release':

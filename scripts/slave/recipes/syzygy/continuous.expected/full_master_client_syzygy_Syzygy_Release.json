@@ -99,9 +99,9 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Syzygy Release\", \"buildnumber\": 571, \"mastername\": \"master.client.syzygy\", \"recipe\": \"syzygy/continuous\", \"revision\": \"0e9f25b1098271be2b096fd1c095d6d907cf86f7\", \"slavename\": \"vm331-m3\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Syzygy Release\", \"buildnumber\": 571, \"got_revision\": \"0e9f25b1098271be2b096fd1c095d6d907cf86f7\", \"mastername\": \"master.client.syzygy\", \"recipe\": \"syzygy/continuous\", \"revision\": \"0e9f25b1098271be2b096fd1c095d6d907cf86f7\", \"slavename\": \"vm331-m3\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Syzygy Release\", \"buildnumber\": 571, \"mastername\": \"master.client.syzygy\", \"recipe\": \"syzygy/continuous\", \"revision\": \"0e9f25b1098271be2b096fd1c095d6d907cf86f7\", \"slavename\": \"vm331-m3\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Syzygy Release\", \"buildnumber\": 571, \"got_revision\": \"0e9f25b1098271be2b096fd1c095d6d907cf86f7\", \"mastername\": \"master.client.syzygy\", \"recipe\": \"syzygy/continuous\", \"revision\": \"0e9f25b1098271be2b096fd1c095d6d907cf86f7\", \"slavename\": \"vm331-m3\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--test-type=bar_unittests",
       "--builder-name=Syzygy Release",
       "--slave-name=vm331-m3",
@@ -125,9 +125,9 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Syzygy Release\", \"buildnumber\": 571, \"mastername\": \"master.client.syzygy\", \"recipe\": \"syzygy/continuous\", \"revision\": \"0e9f25b1098271be2b096fd1c095d6d907cf86f7\", \"slavename\": \"vm331-m3\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Syzygy Release\", \"buildnumber\": 571, \"got_revision\": \"0e9f25b1098271be2b096fd1c095d6d907cf86f7\", \"mastername\": \"master.client.syzygy\", \"recipe\": \"syzygy/continuous\", \"revision\": \"0e9f25b1098271be2b096fd1c095d6d907cf86f7\", \"slavename\": \"vm331-m3\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Syzygy Release\", \"buildnumber\": 571, \"mastername\": \"master.client.syzygy\", \"recipe\": \"syzygy/continuous\", \"revision\": \"0e9f25b1098271be2b096fd1c095d6d907cf86f7\", \"slavename\": \"vm331-m3\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Syzygy Release\", \"buildnumber\": 571, \"got_revision\": \"0e9f25b1098271be2b096fd1c095d6d907cf86f7\", \"mastername\": \"master.client.syzygy\", \"recipe\": \"syzygy/continuous\", \"revision\": \"0e9f25b1098271be2b096fd1c095d6d907cf86f7\", \"slavename\": \"vm331-m3\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--test-type=baz_unittests",
       "--builder-name=Syzygy Release",
       "--slave-name=vm331-m3",
@@ -151,9 +151,9 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Syzygy Release\", \"buildnumber\": 571, \"mastername\": \"master.client.syzygy\", \"recipe\": \"syzygy/continuous\", \"revision\": \"0e9f25b1098271be2b096fd1c095d6d907cf86f7\", \"slavename\": \"vm331-m3\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Syzygy Release\", \"buildnumber\": 571, \"got_revision\": \"0e9f25b1098271be2b096fd1c095d6d907cf86f7\", \"mastername\": \"master.client.syzygy\", \"recipe\": \"syzygy/continuous\", \"revision\": \"0e9f25b1098271be2b096fd1c095d6d907cf86f7\", \"slavename\": \"vm331-m3\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Syzygy Release\", \"buildnumber\": 571, \"mastername\": \"master.client.syzygy\", \"recipe\": \"syzygy/continuous\", \"revision\": \"0e9f25b1098271be2b096fd1c095d6d907cf86f7\", \"slavename\": \"vm331-m3\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Syzygy Release\", \"buildnumber\": 571, \"got_revision\": \"0e9f25b1098271be2b096fd1c095d6d907cf86f7\", \"mastername\": \"master.client.syzygy\", \"recipe\": \"syzygy/continuous\", \"revision\": \"0e9f25b1098271be2b096fd1c095d6d907cf86f7\", \"slavename\": \"vm331-m3\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--test-type=foo_unittests",
       "--builder-name=Syzygy Release",
       "--slave-name=vm331-m3",
@@ -168,6 +168,20 @@
       "--gtest_print_time"
     ],
     "name": "foo_unittests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\gsutil.py",
+      "cp",
+      "-t",
+      "-a",
+      "public-read",
+      "[SLAVE_BUILD]\\src\\build\\Release\\metrics.csv",
+      "gs://syzygy-archive/builds/metrics/0e9f25b1098271be2b096fd1c095d6d907cf86f7/release.csv"
+    ],
+    "name": "archive_metrics"
   },
   {
     "cmd": [
