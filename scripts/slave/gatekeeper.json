@@ -340,6 +340,21 @@
           "Chrome Linux Perf"
         ],
         "builders": {
+          "V8 Linux64 ASAN": {
+            "tree_notify": [
+              "svenpanne@chromium.org"
+            ]
+          },
+          "V8 Linux64 TSAN": {
+            "tree_notify": [
+              "svenpanne@chromium.org"
+            ]
+          },
+          "Linux - arm64 - sim - MSAN": {
+            "tree_notify": [
+              "svenpanne@chromium.org"
+            ]
+          },
           "V8 Linux - predictable": {
             "excluded_steps": [
               "Mjsunit",
