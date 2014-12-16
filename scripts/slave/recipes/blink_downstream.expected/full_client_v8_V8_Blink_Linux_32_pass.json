@@ -138,7 +138,8 @@
       "--build-dir",
       "[SLAVE_BUILD]/src/out",
       "--json-test-results",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--no-pixel-tests"
     ],
     "name": "webkit_tests (with patch)",
     "~followup_annotations": [

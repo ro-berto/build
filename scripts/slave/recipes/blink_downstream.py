@@ -51,6 +51,7 @@ def V8Builder(config, bits, platform):
       'BUILD_CONFIG': config,
       'TARGET_BITS': bits,
     },
+    'test_args': ['--no-pixel-tests'],
     'component': {'path': 'src/v8', 'revision': '%s'},
     'testing': {'platform': platform},
   }
@@ -119,8 +120,10 @@ def GenSteps(api):
     api.chromium.runhooks()
     api.chromium.compile()
 
-  api.test_utils.determine_new_failures(
-      api, [api.chromium.steps.BlinkTest()], component_pinned_fn)
+  tests = [
+    api.chromium.steps.BlinkTest(extra_args=bot_config.get('test_args')),
+  ]
+  api.test_utils.determine_new_failures(api, tests, component_pinned_fn)
 
 
 def _sanitize_nonalpha(text):

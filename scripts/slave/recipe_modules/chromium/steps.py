@@ -968,6 +968,9 @@ class AndroidInstrumentationTest(Test):
 class BlinkTest(Test):
   # TODO(dpranke): This should be converted to a PythonBasedTest, although it
   # will need custom behavior because we archive the results as well.
+  def __init__(self, extra_args=None):
+    super(BlinkTest, self).__init__()
+    self._extra_args = extra_args
 
   name = 'webkit_tests'
 
@@ -982,6 +985,8 @@ class BlinkTest(Test):
             '-o', results_dir,
             '--build-dir', api.chromium.c.build_dir,
             '--json-test-results', api.json.test_results(add_json_log=False)]
+    if self._extra_args:
+      args.extend(self._extra_args)
     if suffix == 'without patch':
       test_list = "\n".join(self.failures(api, 'with patch'))
       args.extend(['--test-list', api.raw_io.input(test_list),
