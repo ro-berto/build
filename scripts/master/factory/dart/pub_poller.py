@@ -64,8 +64,8 @@ class PubPoller(base.PollingChangeSource):
           self.versions[package] = pulled_versions
         elif len(self.versions[package]) != count:
           log.msg('Package %s has new version' % package)
-          version = self.find_new_version(pulled_versions,
-                                          self.versions[package])
+          version = self.find_new_versions(pulled_versions,
+                                           self.versions[package])
           self.versions[package] = pulled_versions
           self.make_change(package, version)
       except Exception:
