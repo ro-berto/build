@@ -204,23 +204,22 @@ def GenTests(api):
     }))
   )
 
-  # Tests that the memory mac testers are using the correct test flags.
-  for bits, bit_txt in ((32, ''), (64, ' 64')):
-    yield (
-      api.test('dynamic_gtest_memory_mac%d' % bits) +
-      api.properties.generic(
-          mastername='chromium.memory',
-          buildername='Mac ASan%s Tests (1)' % bit_txt,
-          parent_buildername='Mac ASan%s Builder' % bit_txt) +
-      api.platform('mac', bits) +
-      api.override_step_data('read test spec', api.json.output({
-        'Mac ASan%s Tests (1)' % bit_txt: {
-          'gtest_tests': [
-            'browser_tests',
-          ],
-        },
-      }))
-    )
+  # Tests that the memory mac tester is using the correct test flags.
+  yield (
+    api.test('dynamic_gtest_memory_mac64') +
+    api.properties.generic(
+        mastername='chromium.memory',
+        buildername='Mac ASan 64 Tests (1)',
+        parent_buildername='Mac ASan 64 Builder') +
+    api.platform('mac', 64) +
+    api.override_step_data('read test spec', api.json.output({
+      'Mac ASan 64 Tests (1)': {
+        'gtest_tests': [
+          'browser_tests',
+        ],
+      },
+    }))
+  )
 
   yield (
     api.test('arm') +

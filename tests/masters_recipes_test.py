@@ -13,10 +13,13 @@ import tempfile
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-orig_sys_path = sys.path
+sys.path.insert(0, os.path.join(BASE_DIR, 'scripts'))
 sys.path.insert(0, os.path.join(BASE_DIR, 'scripts', 'slave', 'recipes'))
+sys.path.insert(
+    0, os.path.join(BASE_DIR, 'scripts', 'slave', 'recipe_modules'))
+
 import chromium_trybot
-sys.path = orig_sys_path
+from chromium.builders import BUILDERS
 
 
 MAIN_WATERFALL_MASTERS = [
@@ -132,6 +135,8 @@ def main(argv):
   covered_builders = set()
   all_builders = set()
 
+  exit_code = 0
+
   for master in MAIN_WATERFALL_MASTERS:
     builders = getBuildersAndRecipes(master)
     all_builders.update((master, b) for b in builders)
@@ -141,8 +146,27 @@ def main(argv):
     chromium_recipe_builders[master] = [b for b in builders
                                         if builders[b] == 'chromium']
 
+    # TODO(phajdan.jr): Also run this check for chromium.chromiumos.
+    # For now there are several builders being added to it in a deprecated
+    # way.
+    if master == 'master.chromium.chromiumos':
+      continue
 
-  exit_code = 0
+    # TODO(phajdan.jr): Also consider it an error if configured builders
+    # are not using chromium recipe. This might make it harder to experiment
+    # with switching bots over to chromium recipe though, so it may be better
+    # to just wait until the switch is done.
+    recipe_side_builders = BUILDERS.get(
+        master.replace('master.', ''), {}).get('builders')
+    if recipe_side_builders is not None:
+      bogus_builders = set(recipe_side_builders.keys()).difference(
+          set(builders.keys()))
+      if bogus_builders:
+        exit_code = 1
+        print 'The following builders from chromium recipe'
+        print 'do not exist in master config for %s:' % master
+        print '\n'.join('\t%s' % b for b in sorted(bogus_builders))
+
 
   for master in TRYSERVER_MASTERS:
     builders = getBuildersAndRecipes(master)

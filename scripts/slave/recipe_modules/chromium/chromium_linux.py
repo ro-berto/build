@@ -108,24 +108,6 @@ SPEC = {
       'enable_swarming': True,
     },
 
-    'Linux Clang (dbg)': {
-      'recipe_config': 'chromium_clang',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 64,
-      },
-      'compile_targets': [
-        'all',
-      ],
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-      ],
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-
     'Android Builder (dbg)': {
       'recipe_config': 'chromium_android',
       'chromium_config_kwargs': {

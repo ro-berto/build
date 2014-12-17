@@ -55,32 +55,6 @@ SPEC = {
       'testing': {'platform': 'linux'},
       'enable_swarming': True,
     },
-    'Mac ASan Builder': {
-      'recipe_config': 'chromium_mac_asan',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'builder',
-      'testing': {'platform': 'mac'},
-      'enable_swarming': True,
-      'use_isolate': True,
-    },
-    'Mac ASan Tests (1)': {
-      'recipe_config': 'chromium_mac_asan',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-      ],
-      'parent_buildername': 'Mac ASan Builder',
-      'testing': {'platform': 'mac'},
-      'enable_swarming': True,
-    },
     'Mac ASan 64 Builder': {
       'recipe_config': 'chromium_mac_asan',
       'chromium_config_kwargs': {
