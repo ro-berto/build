@@ -399,6 +399,33 @@ BUILDERS = {
           'platform': 'mac',
         },
       },
+      'ios_rel_device_ng': {
+        'based_on_main_waterfall': {
+          'mastername': 'chromium.mac',
+          'buildername': 'iOS Device',
+        },
+        'testing': {
+          'platform': 'mac',
+        },
+      },
+      'ios_dbg_simulator_ng': {
+        'based_on_main_waterfall': {
+          'mastername': 'chromium.mac',
+          'buildername': 'iOS Simulator (dbg)',
+        },
+        'testing': {
+          'platform': 'mac',
+        },
+      },
+      'ios_rel_device_ninja_ng': {
+        'based_on_main_waterfall': {
+          'mastername': 'chromium.mac',
+          'buildername': 'iOS Device (ninja)',
+        },
+        'testing': {
+          'platform': 'mac',
+        },
+      },
     },
   },
   'tryserver.chromium.win': {

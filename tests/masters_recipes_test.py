@@ -94,9 +94,6 @@ SUPPRESSIONS = {
         'Mac10.6 Tests',
         'Mac10.9 Tests',
         'Mac10.9 Tests (dbg)',
-        'iOS Device',
-        'iOS Device (ninja)',
-        'iOS Simulator (dbg)',
     ],
     'master.chromium.memory': [
         'Linux ASan Tests (sandboxed)',
