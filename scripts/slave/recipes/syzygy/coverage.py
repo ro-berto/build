@@ -47,6 +47,7 @@ def GenSteps(api):
   s.runhooks()
   s.compile()
 
+  s.clobber_metrics()
   s.capture_unittest_coverage()
   s.archive_coverage()
   s.archive_metrics()

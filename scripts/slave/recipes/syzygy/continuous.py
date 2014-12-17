@@ -52,6 +52,7 @@ def GenSteps(api):
   s.compile()
 
   # Load and run the unittests.
+  s.clobber_metrics()
   unittests = s.read_unittests_gypi()
   s.run_unittests(unittests)
   s.archive_metrics()

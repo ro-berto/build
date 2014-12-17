@@ -86,6 +86,24 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport sys\nfrom common import chromium_utils\n\nchromium_utils.RemoveFilesWildcards(sys.argv[1], root=sys.argv[2])\n",
+      "metrics.csv",
+      "[SLAVE_BUILD]\\src\\build\\Coverage"
+    ],
+    "name": "rmwildcard metrics.csv in [SLAVE_BUILD]\\src\\build\\Coverage",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@chromium_utils.RemoveFilesWildcards(sys.argv[1], root=sys.argv[2])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]\\src\\syzygy\\build\\generate_coverage.py",
       "--verbose",
       "--syzygy",
@@ -109,9 +127,7 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[BUILD]\\scripts\\slave\\gsutil.py",
+      "[BUILD]\\scripts\\slave\\gsutil.bat",
       "cp",
       "-t",
       "-a",

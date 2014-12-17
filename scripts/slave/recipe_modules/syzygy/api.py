@@ -137,11 +137,11 @@ PATCH=1
     Returns:
       The generated python step.
     """
-    gsutil_py = self.m.path['build'].join(
-        'scripts', 'slave', 'gsutil.py')
+    gsutil_bat = self.m.path['build'].join(
+        'scripts', 'slave', 'gsutil.bat')
     dst_dir = '%s/%s' % (self._SYZYGY_GS, dst_rel_path)
     args = ['cp', '-t', '-a', 'public-read', src_path, dst_dir]
-    return self.m.python(step_name, gsutil_py, args)
+    return self.m.step(step_name, [gsutil_bat] + list(args or []))
 
   def taskkill(self):
     """Run chromium.taskkill.
@@ -276,20 +276,22 @@ PATCH=1
     args = ['-s', '-b', asan_rtl_dll, client_dlls]
     return self.m.python('upload_symbols', archive_symbols_py, args)
 
+  def clobber_metrics(self):
+    """Returns a step that clobbers an existing metrics file."""
+    # TODO(chrisha): Make this whole thing use the JSON output mechanism.
+    return self.m.path.rmwildcard('metrics.csv', self.output_dir)
+
   def archive_metrics(self):
     """Returns a step that archives any metrics collected by the unittests.
     This can be called from any build configuration.
     """
-    # Determine the name of the local file.
-    metrics_csv = self.output_dir.join('metrics.csv')
-
     # Determine the name of the archive.
     config = self.m.chromium.c.BUILD_CONFIG
     if config == 'Release' and self.c.official_build:
       config = 'Official'
     archive_path = 'builds/metrics/%s/%s.csv' % (self.revision, config.lower())
     return self._gen_step_gs_util_cp(
-        'archive_metrics', metrics_csv, archive_path)
+        'archive_metrics', self.output_dir.join('metrics.csv'), archive_path)
 
   def download_binaries(self):
     """Returns a step that downloads the current official binaries."""

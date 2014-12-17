@@ -34,12 +34,11 @@ def GenSteps(api):
   api.syzygy.compile()
 
   # Run every possible test. Most builders also run a subset of these.
+  api.syzygy.clobber_metrics()
   unittests = api.syzygy.read_unittests_gypi()
   api.syzygy.run_unittests(unittests)
   api.syzygy.randomly_reorder_chrome()
   api.syzygy.benchmark_chrome()
-
-  # Archive metrics. All builders can do this.
   api.syzygy.archive_metrics()
 
   if buildername == 'Syzygy Coverage':
