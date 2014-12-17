@@ -28,6 +28,11 @@ RECIPE_CONFIGS = {
     'gclient_config': 'chromium',
     'gclient_apply_config': ['android'],
   },
+  'chromium_android_clang': {
+    'chromium_config': 'android_clang',
+    'gclient_config': 'chromium',
+    'gclient_apply_config': ['android'],
+  },
   'chromium_clang': {
     'chromium_config': 'chromium_clang',
     'gclient_config': 'chromium',
@@ -363,14 +368,17 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if isolated_targets:
         self.m.isolate.clean_isolated_files(self.m.chromium.output_dir)
 
+      compile_step = self.m.chromium.compile
+      if self.m.chromium.c.TARGET_PLATFORM == 'android':
+        compile_step = self.m.chromium_android.compile
+
       if self.m.tryserver.is_tryserver:
         try:
-          self.m.chromium.compile(compile_targets, name='compile (with patch)')
+          compile_step(compile_targets, name='compile (with patch)')
         except self.m.step.StepFailure:
           self.deapply_patch(update_step)
           try:
-            self.m.chromium.compile(
-                compile_targets, name='compile (without patch)')
+            compile_step(compile_targets, name='compile (without patch)')
 
             # TODO(phajdan.jr): Set failed tryjob result after recognizing infra
             # compile failures. We've seen cases of compile with patch failing
@@ -382,7 +390,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             raise
           raise
       else:
-        self.m.chromium.compile(compile_targets)
+        compile_step(compile_targets)
 
       # Step 'checkdeps' is same on all platforms, no need to run it everywhere.
       if self.m.platform.is_linux:

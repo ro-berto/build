@@ -139,11 +139,11 @@ class AndroidApi(recipe_api.RecipeApi):
   def runhooks(self, extra_env={}):
     self.m.chromium.runhooks(env=extra_env)
 
-  def compile(self, **kwargs):
+  def compile(self, *args, **kwargs):
     assert 'env' not in kwargs, (
         "chromium_andoid compile clobbers env in keyword arguments")
     kwargs['env'] = self.m.chromium.get_env()
-    self.m.chromium.compile(**kwargs)
+    self.m.chromium.compile(*args, **kwargs)
 
   def findbugs(self, suffix='', findbugs_options=[]):
     if suffix:

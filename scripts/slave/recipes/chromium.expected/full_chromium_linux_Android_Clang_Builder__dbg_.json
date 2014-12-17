@@ -7,7 +7,7 @@
       "--master",
       "chromium.linux",
       "--builder",
-      "Android Builder",
+      "Android Clang Builder (dbg)",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -67,7 +67,7 @@
     ],
     "env": {
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1",
+      "GYP_DEFINES": "OS=android asan=1 clang=1 component=shared_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_allocator=none use_goma=1",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "gclient runhooks"
@@ -96,11 +96,11 @@
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
-      "Release",
+      "Debug",
       "--paths",
       "{\"build\": \"[BUILD]\"}",
       "--properties",
-      "{\"buildername\": \"Android Builder\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
+      "{\"buildername\": \"Android Clang Builder (dbg)\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -121,8 +121,8 @@
       "python",
       "-u",
       "\nimport shutil, sys, os\nshutil.rmtree(sys.argv[1], True)\nshutil.rmtree(sys.argv[2], True)\ntry:\n  os.remove(sys.argv[3])\nexcept OSError:\n  pass\nfor base, _dirs, files in os.walk(sys.argv[4]):\n  for f in files:\n    if f.endswith('.pyc'):\n      os.remove(os.path.join(base, f))\n",
-      "[SLAVE_BUILD]/src/out/Release/debug_info_dumps",
-      "[SLAVE_BUILD]/src/out/Release/test_logs",
+      "[SLAVE_BUILD]/src/out/Debug/debug_info_dumps",
+      "[SLAVE_BUILD]/src/out/Debug/test_logs",
       "[SLAVE_BUILD]/src/out/build_product.zip",
       "[SLAVE_BUILD]/src"
     ],
@@ -149,20 +149,16 @@
       "-u",
       "[BUILD]/scripts/slave/compile.py",
       "--target",
-      "Release",
+      "Debug",
       "--src-dir",
       "[SLAVE_BUILD]/src",
       "--build-tool",
       "ninja",
       "--compiler",
-      "goma",
+      "goma-clang",
       "--goma-dir",
       "[BUILD]/goma",
-      "--",
-      "android_webview_test_apk",
-      "base_unittests_apk",
-      "chrome_shell_test_apk",
-      "content_shell_test_apk"
+      "--"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -195,8 +191,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/build/android/findbugs_diff.py",
-      "--release-build"
+      "[SLAVE_BUILD]/src/build/android/findbugs_diff.py"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -205,49 +200,11 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/tools/android/findbugs_plugin/test/run_findbugs_plugin_tests.py",
-      "--release-build"
+      "[SLAVE_BUILD]/src/tools/android/findbugs_plugin/test/run_findbugs_plugin_tests.py"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "findbugs_tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/archive_dependencies.py",
-      "--src-dir",
-      "[SLAVE_BUILD]/src",
-      "--target",
-      "Release",
-      "--master",
-      "chromium.linux",
-      "--builder",
-      "Android Builder",
-      "--build",
-      "571"
-    ],
-    "name": "archive dependencies"
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/zip_build.py",
-      "--target",
-      "Release",
-      "--build-url",
-      "gs://chromium-linux-archive/chromium.linux/Android Builder",
-      "--build_revision",
-      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.linux\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.linux\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
-    ],
-    "name": "package build"
   }
 ]

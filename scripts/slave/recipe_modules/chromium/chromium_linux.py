@@ -217,5 +217,19 @@ SPEC = {
         'platform': 'linux',
       },
     },
+
+    'Android Clang Builder (dbg)': {
+      'recipe_config': 'chromium_android_clang',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 32,
+        'TARGET_PLATFORM': 'android',
+      },
+      'android_config': 'clang_builder',
+      'bot_type': 'builder_tester',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
   },
 }
