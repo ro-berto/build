@@ -64,7 +64,7 @@
       "--root=[SLAVE_BUILD]/src",
       "gen",
       "//out/Debug",
-      "--args=is_debug=true use_goma=true goma_dir=\"[BUILD]/goma\" build_with_chromium=false"
+      "--args=cpu_arch=\"x64\" is_debug=true use_goma=true goma_dir=\"[BUILD]/goma\" build_with_chromium=false"
     ],
     "name": "gn"
   },

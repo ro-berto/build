@@ -55,6 +55,16 @@ def _webrtc_ios(c):
 
 @CONFIG_CTX(includes=['gn'])
 def webrtc_gn(c):
+  # Explicitly set cpu_arch for Mac since linking fails on 32-bit. See
+  # http://goo.gl/jZpCxy for more info.
+  # TODO(kjellander): Remove when the above thread is figured out.
+  if c.TARGET_PLATFORM == 'mac':
+    assert c.TARGET_BITS in (32, 64)
+    if c.TARGET_BITS == 64:
+      c.gn_args.append('cpu_arch="x64"')
+    else:
+      c.gn_args.append('cpu_arch="x86"')
+
   c.compile_py.default_targets = ['all']
   c.project_generator.args = ['build_with_chromium=false']
 
