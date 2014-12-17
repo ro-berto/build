@@ -222,28 +222,6 @@
       "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Linux64 Debug (parallel)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Linux64 Debug (parallel)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--test-type=libjingle_unittest",
-      "--builder-name=Linux64 Debug (parallel)",
-      "--slave-name=slavename",
-      "--build-number=1337",
-      "--run-python-script",
-      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Debug/libjingle_unittest"
-    ],
-    "name": "libjingle_unittest"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Debug",
-      "--xvfb",
-      "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Linux64 Debug (parallel)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--build-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Linux64 Debug (parallel)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--test-type=modules_tests",
       "--builder-name=Linux64 Debug (parallel)",
       "--slave-name=slavename",
