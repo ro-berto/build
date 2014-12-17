@@ -17,7 +17,6 @@ class SyzygyTestApi(recipe_test_api.RecipeTestApi):
     return {'mastername': 'master.client.syzygy',
             # A known good revision that builds and passes all unittests.
             'revision': '0e9f25b1098271be2b096fd1c095d6d907cf86f7',
-            'got_revision': '0e9f25b1098271be2b096fd1c095d6d907cf86f7',
             'slavename': 'vm331-m3'}
 
   def generate_test(self, api, buildername, slavename=None):

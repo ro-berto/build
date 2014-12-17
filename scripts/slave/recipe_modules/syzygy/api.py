@@ -14,6 +14,7 @@ class SyzygyApi(recipe_api.RecipeApi):
   _SYZYGY_ARCHIVE_URL = (
       'https://syzygy-archive.commondatastorage.googleapis.com')
   _SYZYGY_GS = 'gs://syzygy-archive'
+  _SYZYGY_GITHUB = 'https://github.com/google/syzygy/commit/'
 
   # Fake unittests.gypi contents.
   _FAKE_UNITTESTS_GYPI_DATA = repr({
@@ -45,6 +46,8 @@ PATCH=1
     super(SyzygyApi, self).__init__(*args, **kwargs)
     # This is populated by the first call to 'version'.
     self._version = None
+    # This is populated by the sync step.
+    self._revision = None
 
   @property
   def build_dir(self):
@@ -87,6 +90,20 @@ PATCH=1
 
     # Return the cached value.
     return self._version
+
+  @property
+  def revision(self):
+    """Returns the revision that is inferred by the gclient step.
+
+    If this is not yet set then returns the global 'revision' property. If this
+    is not yet set, then simply returns an empty string.
+    """
+    r = ''
+    if 'revision' in self.m.properties:
+      r = self.m.properties['revision']
+    if self._revision:
+      r = self._revision
+    return r
 
   def _gen_step_gs_util_cp_dir(self, step_name, src_dir, dst_rel_path):
     """Returns a gsutil_cp_dir step. Internal use only.
@@ -138,22 +155,18 @@ PATCH=1
 
   def checkout(self):
     """Checks out the Syzygy code using the current gclient configuration."""
-    self.m.gclient.checkout()
+    step = self.m.gclient.checkout()
+    self._revision = step.presentation.properties['got_revision']
+    github_url = self._SYZYGY_GITHUB + str(self._revision)
+    step.presentation.links[self._revision] = github_url
+    return step
 
   def runhooks(self):
     return self.m.chromium.runhooks()
 
   def compile(self):
     """Generates a step to compile the project."""
-    # Compile the project. This is done by manually invoking compile.py for now,
-    # as chromium.compile doesn't support MSVS.
-    # TODO(chrisha): Fix this once we build with Ninja!
-    #compile_py = self.m.path['build'].join('scripts', 'slave', 'compile.py')
-    #args = ['--solution', self.c.solution,
-    #        '--project', self.c.project,
-    #        '--target',self.c.build_config,
-    #        '--build-tool=vs']
-    #return self.m.python('compile', compile_py, args)
+    # TODO(chrisha): Migrate this to Ninja!
     return self.m.chromium.compile()
 
   def read_unittests_gypi(self):
@@ -166,9 +179,9 @@ PATCH=1
     return sorted(unittests)
 
   def run_unittests(self, unittests):
-    # Set up the environment. This ensures that the tests emit metrics to both
-    # a global log and the waterfall.
-    os.environ['SYZYGY_UNITTEST_METRICS'] = '--emit-to-log --emit-to-waterfall'
+    # Set up the environment. This ensures that the tests emit metrics to a
+    # global log.
+    os.environ['SYZYGY_UNITTEST_METRICS'] = '--emit-to-log'
 
     # Generate a test step for each unittest.
     app_verifier_py = self.public_scripts_dir.join('app_verifier.py')
@@ -223,7 +236,7 @@ PATCH=1
     """
     assert self.m.chromium.c.BUILD_CONFIG == 'Coverage'
     cov_dir = self.output_dir.join('cov')
-    archive_path = 'builds/coverage/%s' % self.m.properties['got_revision']
+    archive_path = 'builds/coverage/%s' % self.revision
     if self.m.properties['slavename'] == 'fake_slave':
       archive_path = 'test/' + archive_path
     report_url = '%s/%s/index.html' % (self._SYZYGY_ARCHIVE_URL, archive_path)
@@ -239,7 +252,7 @@ PATCH=1
     """
     assert self.m.chromium.c.BUILD_CONFIG == 'Release' and self.c.official_build
     bin_dir = self.output_dir.join('archive')
-    archive_path = 'builds/official/%s' % self.m.properties['got_revision']
+    archive_path = 'builds/official/%s' % self.revision
     if self.m.properties['slavename'] == 'fake_slave':
       archive_path = 'test/' + archive_path
     bin_url = '%s/index.html?path=%s/' % (
@@ -274,8 +287,7 @@ PATCH=1
     config = self.m.chromium.c.BUILD_CONFIG
     if config == 'Release' and self.c.official_build:
       config = 'Official'
-    archive_path = 'builds/metrics/%s/%s.csv' % (
-        self.m.properties['got_revision'], config.lower())
+    archive_path = 'builds/metrics/%s/%s.csv' % (self.revision, config.lower())
     return self._gen_step_gs_util_cp(
         'archive_metrics', metrics_csv, archive_path)
 
@@ -285,7 +297,7 @@ PATCH=1
         'get_syzygy_binaries.py')
     output_dir = self.m.path['checkout'].join('syzygy', 'binaries')
     args = ['--output-dir', output_dir,
-            '--revision', self.m.properties['got_revision'],
+            '--revision', self.revision,
             '--overwrite',
             '--verbose']
     return self.m.python('download_binaries', get_syzygy_binaries_py, args)
