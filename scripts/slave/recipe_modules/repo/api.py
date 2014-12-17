@@ -47,8 +47,17 @@ class RepoApi(recipe_api.RecipeApi):
                        [self.repo_path, 'sync'] + list(args),
                        **kwargs)
 
-  def clean(self, **kwargs):
+  def clean(self, *args, **kwargs):
     """Clean an already-init'd repo."""
+    kwargs.setdefault('infra_step', True)
     return self.m.step('repo forall git clean',
-                       [self.repo_path, 'forall', '-c', 'git', 'clean', '-f', '-d'],
+                       [self.repo_path, 'forall', '-c', 'git', 'clean',
+                        '-f', '-d'] + list(args),
+                       **kwargs)
+
+  def reset(self, **kwargs):
+    """Reset to HEAD an already-init'd repo."""
+    return self.m.step('repo forall git reset',
+                       [self.repo_path, 'forall', '-c', 'git', 'reset',
+                        '--hard', 'HEAD'],
                        **kwargs)

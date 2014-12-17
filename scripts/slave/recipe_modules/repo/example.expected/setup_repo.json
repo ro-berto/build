@@ -1,0 +1,45 @@
+[
+  {
+    "cmd": [
+      "[DEPOT_TOOLS]/repo",
+      "init",
+      "-u",
+      "http://manifest_url/manifest",
+      "-b",
+      "branch"
+    ],
+    "name": "repo init"
+  },
+  {
+    "cmd": [
+      "[DEPOT_TOOLS]/repo",
+      "forall",
+      "-c",
+      "git",
+      "reset",
+      "--hard",
+      "HEAD"
+    ],
+    "name": "repo forall git reset"
+  },
+  {
+    "cmd": [
+      "[DEPOT_TOOLS]/repo",
+      "forall",
+      "-c",
+      "git",
+      "clean",
+      "-f",
+      "-d",
+      "-x"
+    ],
+    "name": "repo forall git clean"
+  },
+  {
+    "cmd": [
+      "[DEPOT_TOOLS]/repo",
+      "sync"
+    ],
+    "name": "repo sync"
+  }
+]
