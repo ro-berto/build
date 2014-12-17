@@ -5328,3 +5328,17 @@ index 6c701ad..36f8806 100644
  
          # Collect child endpoint data.
          wfd = defer.waitForDeferred(
+
+diff --git a/third_party/buildbot_8_4p1/buildbot/status/web/status_json.py b/third_party/buildbot_8_4p1/buildbot/status/web/status_json.py
+index 36f8806..36b1899 100644
+--- a/third_party/buildbot_8_4p1/buildbot/status/web/status_json.py
++++ b/third_party/buildbot_8_4p1/buildbot/status/web/status_json.py
+@@ -678,7 +678,7 @@ class SlaveJsonResource(JsonResource):
+                 for build_status in builds:
+                     if not build_status or not build_status.isFinished():
+                         # If not finished, it will appear in runningBuilds.
+-                        break
++                        continue
+                     slave = buildcache[build_status.getSlavename()]
+                     slave.setdefault(builderName, []).append(
+                             build_status.getNumber())

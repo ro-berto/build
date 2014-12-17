@@ -678,7 +678,7 @@ class SlaveJsonResource(JsonResource):
                 for build_status in builds:
                     if not build_status or not build_status.isFinished():
                         # If not finished, it will appear in runningBuilds.
-                        break
+                        continue
                     slave = buildcache[build_status.getSlavename()]
                     slave.setdefault(builderName, []).append(
                             build_status.getNumber())
