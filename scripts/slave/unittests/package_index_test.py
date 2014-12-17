@@ -14,7 +14,7 @@ import shutil
 import tempfile
 import unittest
 
-import test_env # pylint: disable=W0403,W0611
+import test_env  # pylint: disable=W0403,W0611
 
 from slave.chromium import package_index
 
@@ -26,6 +26,7 @@ INCLUDE_PATH = '/usr/include'
 
 
 class PackageIndexTest(unittest.TestCase):
+
   def setUp(self):
     # Create the test.cc and test.h files (not necessarily named like that).
     with tempfile.NamedTemporaryFile(
@@ -59,7 +60,8 @@ class PackageIndexTest(unittest.TestCase):
         os.path.join(self.index_pack.index_directory, 'units')))
 
   def tearDown(self):
-    shutil.rmtree(self.index_pack.index_directory)
+    if os.path.exists(self.index_pack.index_directory):
+      shutil.rmtree(self.index_pack.index_directory)
     os.remove(self.compdb_file.name)
     os.remove(self.test_cc_file.name)
     os.remove(self.test_h_file.name)
@@ -130,7 +132,17 @@ class PackageIndexTest(unittest.TestCase):
 
         self.assertEquals(
             compilation_unit_dictionary['argument'],
-            ['-I%s' % INCLUDE_PATH] + COMPILE_ARGUMENTS.split()[1:])
+            ['-I%s' % INCLUDE_PATH] + ['-w'] + COMPILE_ARGUMENTS.split()[1:])
+
+  def testCreateArchive(self):
+    index_pack_path = os.path.join(os.getcwd(), 'index_pack.tar.gz')
+    try:
+      self.assertFalse(os.path.exists(index_pack_path))
+      self.index_pack.CreateArchive(index_pack_path)
+      self.assertTrue(os.path.exists(index_pack_path))
+    finally:
+      if os.path.exists(index_pack_path):
+        os.remove(index_pack_path)
 
 
 if __name__ == '__main__':

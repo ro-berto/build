@@ -20,6 +20,7 @@ from common import chromium_utils
 
 
 class IndexPack(object):
+
   def __init__(self, compdb_path):
     with open(compdb_path, 'rb') as json_commands_file:
       # The list of JSON dictionaries, each describing one compilation unit.
@@ -114,6 +115,10 @@ class IndexPack(object):
 
     # Keeps track of the '*.filepaths' files already processed.
     filepaths = set()
+
+    # Modify the include paths list to add '-I' in front.
+    include_paths = map(lambda x: '-I%s' % x, include_paths)
+
     # Process all entries in the compilation database.
     for entry in self.json_dictionaries:
       filepath = os.path.join(entry['directory'], entry['file'] + '.filepaths')
@@ -139,20 +144,21 @@ class IndexPack(object):
         if 'clang' in command_list[i]:
           # Shorten the list of commands such that it starts after the path to
           # the clang executable with the first real parameter.
-          command_list = command_list[i+1:]
+          command_list = command_list[i + 1:]
           break
 
-      # Modify the include paths list to add '-I' in front.
-      include_paths = map(lambda x: '-I%s' % x, include_paths)
-
-      unit_dictionary['argument'] = include_paths + command_list
+      # Add the include paths to the list of compile arguments; also disable all
+      # warnings so that the indexer can run successfully. The job of the
+      # indexer is to index the code, not to verify it. Warnings we actually
+      # care about would show up in the compile step.
+      unit_dictionary['argument'] = include_paths + ['-w'] + command_list
       required_inputs = []
       with open(filepath, 'rb') as filepaths_file:
         for line in filepaths_file:
           fname = line.strip()
           fname_fullpath = os.path.join(entry['directory'], fname)
           required_input = {
-              'path': fname,
+              'path': os.path.normpath(fname),
               'size': self.filesizes[fname_fullpath],
               'digest': self.filehashes[fname_fullpath]
           }
@@ -188,24 +194,35 @@ class IndexPack(object):
     # Generate the compressed unit files (*.unit).
     self._GenerateUnitFiles(include_paths)
 
-  def CreateArchive(self, filename):
-    """Creates a gzipped archive containing the index pack."""
+  def CreateArchive(self, filepath):
+    """Creates a gzipped archive containing the index pack.
 
-    if chromium_utils.RunCommand(['tar', '-czf', filename, 'root']) != 0:
-      raise Exception('ERROR: failed to create %s, exiting' % filename)
+    Args:
+      filepath: The filepath where the index pack archive should be stored.
+    """
+
+    # Run the command in the parent directory of the index pack and use a
+    # relative path for the index pack to get rid of any path prefix. The format
+    # specification requires that the archive contains one folder with an
+    # arbitrary name directly containing the 'units' and 'files' directories.
+    if chromium_utils.RunCommand(
+        ['tar', '-czf', filepath, os.path.basename(self.index_directory)],
+        cwd=os.path.dirname(self.index_directory)) != 0:
+      raise Exception('ERROR: failed to create %s, exiting' % filepath)
     # Remove the temporary index pack directory. If there was no exception so
     # far, the archive has been created successfully, so the temporary index
     # pack directory is not needed anymore.
     shutil.rmtree(self.index_directory)
 
+
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('--path-to-archive-output',
-                           default=None, required=True,
-                           help='path to index pack archive to be generated')
+                      default=None, required=True,
+                      help='path to index pack archive to be generated')
   parser.add_argument('--path-to-compdb',
-                           default=None, required=True,
-                           help='path to the compilation database')
+                      default=None, required=True,
+                      help='path to the compilation database')
   parser.add_argument(
       '--include-paths', default=None, required=True,
       help='Paths where system headers are located, separated by ":"')
