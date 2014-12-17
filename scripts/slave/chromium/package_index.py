@@ -158,7 +158,10 @@ class IndexPack(object):
           fname = line.strip()
           fname_fullpath = os.path.join(entry['directory'], fname)
           required_input = {
-              'path': os.path.normpath(fname),
+              # Note that although the paths seem to contain redundancy (e. g.
+              # '/path/to/lib/../include') we can't use os.path.normpath() here,
+              # otherwise the indexer will not work.
+              'path': fname,
               'size': self.filesizes[fname_fullpath],
               'digest': self.filehashes[fname_fullpath]
           }
