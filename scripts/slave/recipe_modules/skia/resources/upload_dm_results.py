@@ -49,7 +49,7 @@ def main(dm_dir, git_hash, builder_name, build_number, try_issue, import_path):
 
 
   # /dm-json-v1/year/month/day/hour/git-hash/builder/build-number/dm.json
-  now = datetime.datetime.now()
+  now = datetime.datetime.utcnow()
   summary_dest_dir = '/'.join(['dm-json-v1',
                                str(now.year ).zfill(4),
                                str(now.month).zfill(2),
