@@ -520,7 +520,7 @@ class AndroidApi(recipe_api.RecipeApi):
     self.stack_tool_steps()
     self.test_report()
 
-  def run_bisect_script(self, extra_src='', path_to_config=''):
+  def run_bisect_script(self, extra_src='', path_to_config='', **kwargs):
     self.m.step('prepare bisect perf regression',
         [self.m.path['checkout'].join('tools',
                                       'prepare-bisect-perf-regression.py'),
@@ -534,7 +534,7 @@ class AndroidApi(recipe_api.RecipeApi):
     self.m.step('run bisect perf regression',
         [self.m.path['checkout'].join('tools',
                                       'run-bisect-perf-regression.py'),
-         '-w', self.m.path['slave_build']] + args)
+         '-w', self.m.path['slave_build']] + args, **kwargs)
 
   def run_test_suite(self, suite, verbose=True, isolate_file_path=None,
                      gtest_filter=None, tool=None, flakiness_dashboard=None,
