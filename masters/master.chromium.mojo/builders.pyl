@@ -1,0 +1,28 @@
+{
+  "builders": {
+    "Chromium Mojo Linux": {
+      "properties": {
+        "config": "Release",
+      },
+      "recipe": "chromium_mojo",
+      "slave_pools": ["linux_precise"],
+      "slavebuilddir": "chromium_mojo",
+    },
+  },
+  "git_repo_url": "https://chromium.googlesource.com/chromium/src.git",
+  "master_base_class": "Master1",
+  "master_port": 20100,
+  "master_port_alt": 40100,
+  "slave_port": 30100,
+  "slave_pools": {
+    "linux_precise": {
+      "slave_data": {
+        "bits": 64,
+        "os":  "linux",
+        "version": "precise",
+      },
+      "slaves": ["vm46-m1"],
+    },
+  },
+  "templates": ["../master.chromium/templates"],
+}
