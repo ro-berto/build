@@ -75,7 +75,8 @@
       "runhooks"
     ],
     "env": {
-      "GYP_CHROMIUM_NO_ACTION": "1"
+      "GYP_CHROMIUM_NO_ACTION": "1",
+      "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library gomadir='[BUILD]/goma' target_arch=ia32 use_goma=1"
     },
     "name": "gclient runhooks"
   },
@@ -115,7 +116,7 @@
   },
   {
     "cmd": [
-      "[BUILD]/Release/gn",
+      "[SLAVE_BUILD]/src/out/Release/gn",
       "--version"
     ],
     "name": "gn version"
@@ -144,7 +145,7 @@
       "python",
       "-u",
       "\nimport hashlib\nimport sys\nsha1 = hashlib.sha1()\nwith open(sys.argv[1], 'rb') as f:\n  while True:\n    chunk = f.read(1024*1024)\n    if not chunk:\n      break\n  sha1.update(chunk)\nwith open(sys.argv[2], 'w') as f:\n  f.write(sha1.hexdigest())\n",
-      "[BUILD]/Release/gn",
+      "[SLAVE_BUILD]/src/out/Release/gn",
       "/path/to/tmp/"
     ],
     "name": "compute sha1",
@@ -160,7 +161,7 @@
       "--",
       "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
       "cp",
-      "[BUILD]/Release/gn",
+      "[SLAVE_BUILD]/src/out/Release/gn",
       "gs://chromium-gn/12345"
     ],
     "name": "gsutil upload",

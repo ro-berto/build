@@ -70,13 +70,16 @@ def GenSteps(api):
   api.bot_update.ensure_checkout(
       force=True, patch_root=bot_config.get('root_override'))
 
-  api.chromium.runhooks()
+  # We need to explicitly pass in the GYP_DEFINES in an environment
+  # since we do not normally set it when GN is the project generator.
+  # (and the GYP_DEFINES need to be set to pull the right sysroots on Linux).
+  api.chromium.runhooks(env=api.chromium.c.gyp_env.as_jsonish())
 
   api.chromium.run_gn()
 
   api.chromium.compile(targets=['gn', 'gn_unittests'], force_clobber=True)
 
-  path_to_binary = str(api.path['build'].join('Release').join('gn'))
+  path_to_binary = str(api.path['checkout'].join('out', 'Release', 'gn'))
   if api.platform.is_win:
     path_to_binary += '.exe'
 
