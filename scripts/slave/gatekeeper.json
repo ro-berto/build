@@ -447,6 +447,18 @@
         }
       }
     ],
+    "https://build.chromium.org/p/client.skia": [
+      {
+        "builders": {
+          "*Valgrind*": {
+            "closing_optional": ["*"]
+          }
+        },
+        "excluded_builders": [
+          "*-Trybot"
+        ]
+      }
+    ],
     "https://build.chromium.org/p/client.skia.compile": [
       {
         "builders": {
