@@ -13,8 +13,9 @@ chromium/src/tools/binary_size/run_binary_size_analysis.py. Main changes:
 -- Instead of outputting the standalone HTML/CSS/JS filesets, writes the
     TreeMap JSON data into a Google Storage bucket.
 -- Adds githash and total_size to the JSON data.
+-- Outputs another summary data in JSON Bench format for skiaperf ingestion.
 
-The JSON data is in the following format:
+The output JSON data for visualization is in the following format:
 
 {
   "githash": 123abc,
@@ -32,6 +33,42 @@ The JSON data is in the following format:
                "n":"etc_encode_subblock_helper(unsigned char const*, ...)"
               },
           ......
+  }
+}
+
+Another JSON file is generated for size summaries to be used in skiaperf. The
+JSON format details can be found at:
+  https://github.com/google/skia/blob/master/bench/ResultsWriter.h#L54
+and:
+  https://skia.googlesource.com/buildbot/+/master/perf/go/ingester/nanobench.go
+
+In the binary size case, outputs look like:
+
+{
+  "githash": "123abc",
+  "key": {
+    "source_type": "binarysize"
+  }
+  "results: {
+    "src_lazy_global_weak_symbol": {
+      "memory": {
+        "bytes": 41,
+        "options": {
+          "path": "src_lazy",
+          "symbol": "global_weak_symbol"
+        }
+      }
+    },
+    "src_lazy_global_read_only_data": {
+      "memory": {
+        "bytes": 13476,
+        "options": {
+          "path": "src_lazy",
+          "symbol": "global_read_only_data"
+        }
+      }
+    },
+    ...
   }
 }
 
@@ -79,6 +116,38 @@ BIG_BUCKET_LIMIT = 3000
 
 # Skia addition: relative dir for libskia.so from code base.
 LIBSKIA_RELATIVE_PATH = os.path.join('out', 'Release', 'lib')
+
+# Skia addition: dictionary mapping symbol type code to symbol name.
+# See
+# https://code.google.com/p/chromium/codesearch#chromium/src/tools/binary_size/template/D3SymbolTreeMap.js&l=74
+SYMBOL_MAP = {
+    'A': 'global_absolute',
+    'B': 'global_uninitialized_data',
+    'b': 'local_uninitialized_data',
+    'C': 'global_uninitialized_common',
+    'D': 'global_initialized_data',
+    'd': 'local_initialized_data',
+    'G': 'global_small initialized_data',
+    'g': 'local_small_initialized_data',
+    'i': 'indirect_function',
+    'N': 'debugging',
+    'p': 'stack_unwind',
+    'R': 'global_read_only_data',
+    'r': 'local_read_only_data',
+    'S': 'global_small_uninitialized_data',
+    's': 'local_small_uninitialized_data',
+    'T': 'global_code',
+    't': 'local_code',
+    'U': 'undefined',
+    'u': 'unique',
+    'V': 'global_weak_object',
+    'v': 'local_weak_object',
+    'W': 'global_weak_symbol',
+    'w': 'local_weak_symbol',
+    '@': 'vtable_entry',
+    '-': 'stabs_debugging',
+    '?': 'unrecognized',
+}
 
 
 def _MkChild(node, name):
@@ -208,13 +277,46 @@ def MakeCompactTree(symbols, symbol_path_origin_dir):
   return result
 
 
-# Skia added: calculates total tree size.
-# Note: tried to aggregate the total size in MakeCompactTree, but the numbers
-# did not match, probably due to depth limit and bucket splitting.
-def GetTreeSize(node):
-  if 'children' not in node:
-    return node['value']
-  return sum([GetTreeSize(i) for i in node['children']])
+# Skia added: summarizes tree size by symbol type for the given root node.
+# Returns a dict keyed by symbol type, and value the type's overall size.
+# e.g., {"t": 12345, "W": 543}.
+def GetTreeSizes(node):
+  if 'children' not in node or not node['children']:
+    return {node['t']: node['value']}
+  dic = {}
+  for i in node['children']:
+    for k, v in GetTreeSizes(i).items():
+      dic.setdefault(k, 0)
+      dic[k] += v
+
+  return dic
+
+
+# Skia added: creates dict to be converted to JSON in bench format.
+# See top of file for the structure description.
+def GetBenchDict(githash, tree_root):
+  dic = {'githash': githash,
+         'key': {'source_type': 'binarysize'},
+         'results': {},}
+  for i in tree_root['children']:
+    if '(No Path)' == i['n']:  # Already at symbol summary level.
+      for k, v in GetTreeSizes(i).items():
+        dic['results']['no_path_' + SYMBOL_MAP[k]] = {
+            'memory': {
+              'bytes': v,
+              'options': {'path': 'no_path',
+                          'symbol': SYMBOL_MAP[k],},}}
+    else:  # We need to go deeper.
+      for c in i['children']:
+        path = i['n'] + '_' + c['n']
+        for k, v in GetTreeSizes(c).items():
+          dic['results'][path + '_' + SYMBOL_MAP[k]] = {
+              'memory': {
+                'bytes': v,
+                'options': {'path': path,
+                            'symbol': SYMBOL_MAP[k],}}}
+
+  return dic
 
 
 # Skia added: constructs 'gsutil cp' subprocess command list.
@@ -222,13 +324,14 @@ def GetGsCopyCommandList(gsutil, src, dst):
   return [gsutil, '-h', 'Content-Type:application/json', 'cp', '-a',
           'public-read', src, dst]
 
+
 def DumpCompactTree(symbols, symbol_path_origin_dir, ha, ts, issue, gsutil):
   tree_root = MakeCompactTree(symbols, symbol_path_origin_dir)
   json_data = {'tree_data': tree_root,
                'githash': ha,
                'commit_ts': ts,
                'key': {'source_type': 'binary_size'},
-               'total_size': GetTreeSize(tree_root),}
+               'total_size': sum(GetTreeSizes(tree_root).values()),}
   tmpfile = tempfile.NamedTemporaryFile(delete=False).name
   with open(tmpfile, 'w') as out:
     # Use separators without whitespace to get a smaller file.
@@ -243,14 +346,16 @@ def DumpCompactTree(symbols, symbol_path_origin_dir, ha, ts, issue, gsutil):
     subprocess.check_call(GetGsCopyCommandList(gsutil, tmpfile,
                                                GS_PREFIX + 'size/latest.json'))
   # Writes an extra copy using year/month/day/hour path for easy ingestion.
+  with open(tmpfile, 'w') as out:
+    json.dump(GetBenchDict(ha, tree_root), out, separators=(',', ':'))
   now = datetime.datetime.utcnow()
-  ingest_path = '/'.join(('size-json-v1', str(now.year).zfill(4),
+  ingest_path = '/'.join(('nano-json-v1', str(now.year).zfill(4),
                           str(now.month).zfill(2), str(now.day).zfill(2),
                           str(now.hour).zfill(2)))
   if issue:
     ingest_path = '/'.join('trybot', ingest_path, issue)
   subprocess.check_call(GetGsCopyCommandList(gsutil, tmpfile,
-      GS_PREFIX + ingest_path + '/' + ha + '.json'))
+      GS_PREFIX + ingest_path + '/binarysize_' + ha + '.json'))
 
 
 def MakeSourceMap(symbols):
