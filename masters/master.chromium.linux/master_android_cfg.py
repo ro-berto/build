@@ -72,7 +72,7 @@ F('f_android_rel_tests',
 B('Android Clang Builder (dbg)', 'f_android_clang_dbg', 'android', 'android',
   notify_on_missing=True)
 F('f_android_clang_dbg',
-  m_annotator.BaseFactory('android/builder'))
+  m_annotator.BaseFactory('chromium'))
 
 B('Android Webview AOSP Builder', 'f_android_webview_aosp_rel', 'android',
   'android', notify_on_missing=True)
