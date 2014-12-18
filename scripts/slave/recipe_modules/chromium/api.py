@@ -413,7 +413,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     test_type = name
     cmd_args = cmd_args or []
 
-    args = ['--browser=%s' % self.c.build_config_fs.lower(),
+    args = ['--browser=android-chrome-shell',
             '--retry-limit=3']
 
     if not self.m.tryserver.is_tryserver:
