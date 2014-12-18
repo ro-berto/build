@@ -21,7 +21,7 @@ BUILDERS = {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'linux',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
 
         # We need this to pull the Linux sysroots.

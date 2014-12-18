@@ -512,7 +512,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       # We can remove this when we upgrade the bots to Trusty.
       gn_args.append('use_system_harfbuzz=false')
 
-    elif self.c.TARGET_PLATFORM == 'win':
+    elif self.c.TARGET_PLATFORM in ('linux', 'mac', 'win'):
       assert self.c.TARGET_BITS in (32, 64)
       if self.c.TARGET_BITS == 64:
         gn_args.append('cpu_arch="x64"')
