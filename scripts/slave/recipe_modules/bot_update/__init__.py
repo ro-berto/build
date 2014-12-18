@@ -5,6 +5,7 @@ DEPS = [
   'platform',
   'properties',
   'python',
+  'rietveld',
   'step',
   'tryserver',
 ]

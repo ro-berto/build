@@ -12,6 +12,8 @@
       "slavename",
       "--spec",
       "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/webrtc'}, {'deps_file': 'DEPS', 'managed': True, 'name': 'webrtc-limited', 'url': 'https://chrome-internal.googlesource.com/chrome/deps/webrtc-limited'}]\ntarget_os = ['ios', 'mac']",
+      "--root",
+      "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\"}",
       "--issue",

@@ -28,6 +28,7 @@ class PaseOptionsTest(unittest.TestCase):
         'name': 'Unnamed',
         'orig_revision': None,
         'patch': None,
+        'patch_project': None,
         'patchlevel': 0,
         'patchset': None,
         'project': None,

@@ -61,16 +61,13 @@ def GenSteps(api):
 
 def GenTests(api):
   for repo_name in ['blink', 'chromium']:
-    extra = {}
-    if 'blink' in repo_name:
-      extra['root'] = 'src/third_party/WebKit'
-
     yield (
       api.test(repo_name) +
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
           buildername='chromium_presubmit',
-          repo_name=repo_name, **extra) +
+          repo_name=repo_name,
+          patch_project=repo_name) +
       api.step_data('presubmit', api.json.output([['chromium_presubmit',
                                                    ['compile']]]))
     )

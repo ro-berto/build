@@ -126,6 +126,7 @@ def parse_options(options, builders, pools):
 
     flatten(options, 'patch', None)
     flatten(options, 'root', None)
+    flatten(options, 'patch_project', None)
     try_int(options, 'patchlevel', 0)
     flatten(options, 'branch', None)
 
@@ -217,6 +218,7 @@ class TryJobBase(TryBase):
       'patch_repo_url',
       'patch_storage',
       'patch_url',
+      'patch_project',
       'patchset',
       'requester',
       'rietveld',
