@@ -116,6 +116,17 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
+      'linux_chromium_compile_dbg_ng': {
+        'based_on_main_waterfall': {
+          'mastername': 'chromium.linux',
+          'buildername': 'Linux Builder (dbg)',
+        },
+        # Skip somewhat expensive isolate step where it's not needed.
+        'disable_isolate': True,
+        'testing': {
+          'platform': 'linux',
+        },
+      },
       'linux_chromium_compile_rel': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -123,6 +134,17 @@ BUILDERS = {
         },
         'chromium_config': 'chromium',
         'compile_only': True,
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'linux_chromium_compile_rel_ng': {
+        'based_on_main_waterfall': {
+          'mastername': 'chromium.linux',
+          'buildername': 'Linux Builder',
+        },
+        # Skip somewhat expensive isolate step where it's not needed.
+        'disable_isolate': True,
         'testing': {
           'platform': 'linux',
         },
@@ -139,6 +161,16 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
+      'linux_chromium_chromeos_dbg_ng': {
+        'based_on_main_waterfall': {
+          'mastername': 'chromium.chromiumos',
+          'buildername': 'Linux ChromiumOS Builder (dbg)',
+          'tester': 'Linux ChromiumOS Tests (dbg)(1)',
+        },
+        'testing': {
+          'platform': 'linux',
+        },
+      },
       'linux_chromium_chromeos_compile_dbg_ng': {
         'add_telemetry_tests': False,
         'based_on_main_waterfall': {
@@ -146,6 +178,7 @@ BUILDERS = {
           'buildername': 'Linux ChromiumOS Builder (dbg)',
         },
         'compile_only': True,
+        # Skip somewhat expensive isolate step where it's not needed.
         'disable_isolate': True,
         'testing': {
           'platform': 'linux',
@@ -191,6 +224,7 @@ BUILDERS = {
           'buildername': 'Linux ChromiumOS Builder',
         },
         'compile_only': True,
+        # Skip somewhat expensive isolate step where it's not needed.
         'disable_isolate': True,
         'testing': {
           'platform': 'linux',
@@ -317,6 +351,7 @@ BUILDERS = {
           'mastername': 'chromium.linux',
           'buildername': 'Linux Builder (dbg)(32)',
         },
+        # Skip somewhat expensive isolate step where it's not needed.
         'disable_isolate': True,
         'testing': {
           'platform': 'linux',
@@ -333,6 +368,16 @@ BUILDERS = {
         },
         'chromium_config': 'chromium',
         'compile_only': False,
+        'testing': {
+          'platform': 'mac',
+        },
+      },
+      'mac_chromium_dbg_ng': {
+        'based_on_main_waterfall': {
+          'mastername': 'chromium.mac',
+          'buildername': 'Mac Builder (dbg)',
+          'tester': 'Mac10.9 Tests (dbg)',
+        },
         'testing': {
           'platform': 'mac',
         },
@@ -373,6 +418,7 @@ BUILDERS = {
           'mastername': 'chromium.mac',
           'buildername': 'Mac Builder (dbg)',
         },
+        # Skip somewhat expensive isolate step where it's not needed.
         'disable_isolate': True,
         'testing': {
           'platform': 'mac',
@@ -385,6 +431,17 @@ BUILDERS = {
         },
         'chromium_config': 'chromium',
         'compile_only': True,
+        'testing': {
+          'platform': 'mac',
+        },
+      },
+      'mac_chromium_compile_rel_ng': {
+        'based_on_main_waterfall': {
+          'mastername': 'chromium.mac',
+          'buildername': 'Mac Builder',
+        },
+        # Skip somewhat expensive isolate step where it's not needed.
+        'disable_isolate': True,
         'testing': {
           'platform': 'mac',
         },
@@ -437,6 +494,16 @@ BUILDERS = {
         },
         'chromium_config': 'chromium',
         'compile_only': False,
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'win_chromium_dbg_ng': {
+        'based_on_main_waterfall': {
+          'mastername': 'chromium.win',
+          'buildername': 'Win Builder (dbg)',
+          'tester': 'Win7 Tests (dbg)(1)',
+        },
         'testing': {
           'platform': 'win',
         },
@@ -499,6 +566,7 @@ BUILDERS = {
           'mastername': 'chromium.win',
           'buildername': 'Win Builder (dbg)',
         },
+        # Skip somewhat expensive isolate step where it's not needed.
         'disable_isolate': True,
         'testing': {
           'platform': 'win',
@@ -511,6 +579,17 @@ BUILDERS = {
         },
         'chromium_config': 'chromium',
         'compile_only': True,
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'win_chromium_compile_rel_ng': {
+        'based_on_main_waterfall': {
+          'mastername': 'chromium.win',
+          'buildername': 'Win Builder',
+        },
+        # Skip somewhat expensive isolate step where it's not needed.
+        'disable_isolate': True,
         'testing': {
           'platform': 'win',
         },
