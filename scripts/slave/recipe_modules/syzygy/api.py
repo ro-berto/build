@@ -181,6 +181,8 @@ PATCH=1
   def run_unittests(self, unittests):
     # Set up the environment. This ensures that the tests emit metrics to a
     # global log.
+    # TODO(chrisha): Make this use JSON, and make the log be specified on the
+    #     command-line.
     os.environ['SYZYGY_UNITTEST_METRICS'] = '--emit-to-log'
 
     # Generate a test step for each unittest.
@@ -290,8 +292,12 @@ PATCH=1
     if config == 'Release' and self.c.official_build:
       config = 'Official'
     archive_path = 'builds/metrics/%s/%s.csv' % (self.revision, config.lower())
-    return self._gen_step_gs_util_cp(
+    step = self._gen_step_gs_util_cp(
         'archive_metrics', self.output_dir.join('metrics.csv'), archive_path)
+    url = '%s/index.html?path=%s/' % (
+        self._SYZYGY_ARCHIVE_URL, archive_path)
+    step.presentation.links['archive'] = url
+    return step
 
   def download_binaries(self):
     """Returns a step that downloads the current official binaries."""

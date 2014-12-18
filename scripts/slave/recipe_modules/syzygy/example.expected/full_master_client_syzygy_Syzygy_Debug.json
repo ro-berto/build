@@ -224,7 +224,10 @@
       "[SLAVE_BUILD]\\src\\build\\Debug\\metrics.csv",
       "gs://syzygy-archive/builds/metrics/170242/debug.csv"
     ],
-    "name": "archive_metrics"
+    "name": "archive_metrics",
+    "~followup_annotations": [
+      "@@@STEP_LINK@archive@https://syzygy-archive.commondatastorage.googleapis.com/index.html?path=builds/metrics/170242/debug.csv/@@@"
+    ]
   },
   {
     "cmd": [

@@ -228,7 +228,10 @@
       "[SLAVE_BUILD]\\src\\build\\Coverage\\metrics.csv",
       "gs://syzygy-archive/builds/metrics/170242/coverage.csv"
     ],
-    "name": "archive_metrics"
+    "name": "archive_metrics",
+    "~followup_annotations": [
+      "@@@STEP_LINK@archive@https://syzygy-archive.commondatastorage.googleapis.com/index.html?path=builds/metrics/170242/coverage.csv/@@@"
+    ]
   },
   {
     "cmd": [
