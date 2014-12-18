@@ -49,10 +49,14 @@ def estimate_capacity(builds):
   for build in builds:
     build_time = build['times'][1] - build['times'][0]
 
-    # TODO(phajdan.jr): use timestamp of the build request being created
-    # Using timestamp of build starting doesn't take pending queues
-    # into account, and so is less accurate.
-    timestamp = datetime.datetime.utcfromtimestamp(build['times'][0])
+    changes = build['sourceStamp']['changes']
+    if changes:
+      assert len(changes) == 1
+      timestamp = datetime.datetime.utcfromtimestamp(changes[0]['when'])
+    else:
+      # Fallback for builds that don't have blamelist/source stamp,
+      # e.g. win_pgo.
+      timestamp = datetime.datetime.utcfromtimestamp(build['times'][0])
 
     hourly_bucket = timestamp.strftime('%Y-%m-%d-%H')
     hourly_buckets.setdefault(hourly_bucket, []).append(build_time)
