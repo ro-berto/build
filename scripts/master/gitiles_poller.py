@@ -219,7 +219,9 @@ class GitilesPoller(PollingChangeSource):
     refs_json = {}
     refs_json_results = yield defer.DeferredList(refs_json_requests)
     for ref_result in refs_json_results:
-      if ref_result[0] and ref_result[1]:
+      if not ref_result[0]:
+        log.msg('GitilesPoller: failed to fetch ref with result %s' % ref_result[1])
+      elif ref_result[1]:
         refs_json.update(ref_result[1])
 
     for ref, ref_head in refs_json.iteritems():
@@ -233,7 +235,10 @@ class GitilesPoller(PollingChangeSource):
     deleted_branches = []
     for branch in self.branch_heads:
       if branch not in result:
-        deleted_branches.append(branch)
+        # for now we don't delete any branches, just warn
+        # TODO(tandrii) http://crbug.com/443561
+        # deleted_branches.append(branch)
+        log.msg("GitilesPoller: branch %s to be deleted; result: %s" % (branch, result))
     for branch in deleted_branches:
       log.msg('GitilesPoller: Deleting branch head for %s' % (branch,))
       del self.branch_heads[branch]
