@@ -149,6 +149,7 @@
   {
     "cmd": [
       "roll-dep",
+      "--no-verify-revision",
       "v8/a/dep",
       "beefdead"
     ],
@@ -172,6 +173,7 @@
   {
     "cmd": [
       "roll-dep",
+      "--no-verify-revision",
       "v8/another/dep",
       "deadbeaf"
     ],
@@ -181,6 +183,7 @@
   {
     "cmd": [
       "roll-dep",
+      "--no-verify-revision",
       "v8/odd/dep",
       "weird"
     ],
