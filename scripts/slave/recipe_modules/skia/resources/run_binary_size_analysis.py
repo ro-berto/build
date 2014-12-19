@@ -45,7 +45,7 @@ and:
 In the binary size case, outputs look like:
 
 {
-  "githash": "123abc",
+  "gitHash": "123abc",
   "key": {
     "source_type": "binarysize"
   }
@@ -295,7 +295,7 @@ def GetTreeSizes(node):
 # Skia added: creates dict to be converted to JSON in bench format.
 # See top of file for the structure description.
 def GetBenchDict(githash, tree_root):
-  dic = {'githash': githash,
+  dic = {'gitHash': githash,
          'key': {'source_type': 'binarysize'},
          'results': {},}
   for i in tree_root['children']:
