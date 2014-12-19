@@ -85,7 +85,9 @@ def GenSteps(api):
 
   api.step('gn version', [path_to_binary, '--version'])
 
-  api.chromium.runtest('gn_unittests')
+  # TODO: crbug.com/443813 - if gn_unittests is run from any dir other
+  # than the checkout root, it'll fail.
+  api.chromium.runtest('gn_unittests', cwd=api.path['checkout'])
 
   sha1 = api.file.sha1('compute sha1', path_to_binary, display_result=True)
 
