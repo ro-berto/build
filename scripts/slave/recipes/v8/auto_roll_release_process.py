@@ -166,6 +166,9 @@ def GenSteps(api):
     WriteTimeStamp(api, 'init timestamp', current_date)
     fail_on_exit = 'Timestamp file was missing. Starting new candidate cycle.'
 
+  # Check for clusterfuzz problems before bailout to be more informative.
+  clusterfuzz_has_issues = ClusterfuzzHasIssues(api)
+
   new_date = api.time.time()
   if AgeLimitBailout(api, new_date, current_date):
     if fail_on_exit:
@@ -182,7 +185,7 @@ def GenSteps(api):
   # Promote the successful candidate to the roll ref in order to get rolled.
   # This is independent of a new lkgr. Every candidate that is more than 8h
   # old is promoted.
-  if current_candidate != current_roll and not ClusterfuzzHasIssues(api):
+  if current_candidate != current_roll and not clusterfuzz_has_issues:
     PushRef(api, repo, ROLL_REF, current_candidate)
 
 

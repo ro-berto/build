@@ -151,20 +151,6 @@
   },
   {
     "cmd": [
-      "echo",
-      "Current candidate is 10h old (limit: 8h)."
-    ],
-    "name": "log (2)"
-  },
-  {
-    "cmd": [
-      "echo",
-      "There is no new candidate."
-    ],
-    "name": "log (3)"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "[SLAVE_BUILD]/v8/tools/push-to-trunk/check_clusterfuzz.py",
@@ -181,5 +167,19 @@
       "@@@STEP_LINK@2@https://cluster-fuzz.appspot.com/testcase?key=2@@@",
       "@@@STEP_FAILURE@@@"
     ]
+  },
+  {
+    "cmd": [
+      "echo",
+      "Current candidate is 10h old (limit: 8h)."
+    ],
+    "name": "log (2)"
+  },
+  {
+    "cmd": [
+      "echo",
+      "There is no new candidate."
+    ],
+    "name": "log (3)"
   }
 ]

@@ -214,6 +214,20 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/v8/tools/push-to-trunk/check_clusterfuzz.py",
+      "--key-file",
+      "[SLAVE_BUILD]/.cf_key",
+      "--results-file",
+      "/path/to/tmp/json"
+    ],
+    "name": "check clusterfuzz",
+    "stderr": "/path/to/tmp/err",
+    "stdout": "/path/to/tmp/out"
+  },
+  {
+    "cmd": [
       "echo",
       "Current candidate is 0h old (limit: 8h)."
     ],
