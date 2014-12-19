@@ -38,7 +38,7 @@ def ShouldPackageFile(filename, target):
   # Disable 'unused argument' warning for 'target' | pylint: disable=W0613
   """Returns true if the file should be a part of the resulting archive."""
   if chromium_utils.IsMac():
-    file_filter = r'^.+\.(a|dSYM)$'
+    file_filter = r'^.+\.(a)$'
   elif chromium_utils.IsLinux():
     file_filter = r'^.+\.(o|a|d)$'
   elif chromium_utils.IsWindows():
