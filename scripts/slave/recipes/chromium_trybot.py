@@ -1038,7 +1038,6 @@ def GenSteps(api):
             main_waterfall_config['mastername'],
             main_waterfall_config['buildername'],
             override_bot_type='builder_tester',
-            enable_swarming=True,
             chromium_apply_config=extra_chromium_configs)
 
     tests = api.chromium_tests.tests_for_builder(

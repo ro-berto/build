@@ -127,7 +127,7 @@ RECIPE_CONFIGS = {
 
 class ChromiumTestsApi(recipe_api.RecipeApi):
   def sync_and_configure_build(self, mastername, buildername,
-                               override_bot_type=None, enable_swarming=False,
+                               override_bot_type=None,
                                chromium_apply_config=None):
     # Make an independent copy so that we don't overwrite global state
     # with updates made dynamically based on the test specs.
@@ -198,9 +198,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # HACK(dnj): Remove after 'crbug.com/398105' has landed
     self.m.chromium.set_build_properties(update_step.json.output['properties'])
 
-    if not enable_swarming:
-      enable_swarming = bot_config.get('enable_swarming')
-
+    enable_swarming = bot_config.get('enable_swarming')
     if enable_swarming:
       self.m.isolate.set_isolate_environment(self.m.chromium.c)
       self.m.swarming.check_client_version()
