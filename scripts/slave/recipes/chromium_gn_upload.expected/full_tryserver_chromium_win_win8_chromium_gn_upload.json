@@ -125,25 +125,6 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\runtest.py",
-      "--target",
-      "Release",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"win8_chromium_gn_upload\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium.win\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"chromium_gn_upload\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"win8_chromium_gn_upload\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium.win\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"chromium_gn_upload\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--builder-name=win8_chromium_gn_upload",
-      "--slave-name=TestSlavename",
-      "--build-number=571",
-      "gn_unittests.exe"
-    ],
-    "cwd": "[SLAVE_BUILD]\\src",
-    "name": "gn_unittests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "\nimport hashlib\nimport sys\nsha1 = hashlib.sha1()\nwith open(sys.argv[1], 'rb') as f:\n  while True:\n    chunk = f.read(1024*1024)\n    if not chunk:\n      break\n  sha1.update(chunk)\nwith open(sys.argv[2], 'w') as f:\n  f.write(sha1.hexdigest())\n",
       "[SLAVE_BUILD]\\src\\out\\Release\\gn.exe",
       "/path/to/tmp/"
