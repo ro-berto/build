@@ -48,15 +48,27 @@ class _ADBWrapper(object):
   out on our bots. This wrapper ensures that we set a custom ADB path before
   attempting to use the module.
   """
-  def __init__(self, adb_api, path_to_adb):
+  def __init__(self, adb_api, path_to_adb, serial):
     self._adb = adb_api
     self._adb.set_adb_path(path_to_adb)
+    self._serial = serial
+    self._wait_count = 0
 
-  def devices(self):
-    self._adb.list_devices()
-    return self._adb.devices
+  def wait_for_device(self):
+    """Run 'adb wait-for-device'."""
+    self._wait_count += 1
+    self._adb(name='wait for device %s (%d)' % (self._serial,
+                                                self._wait_count),
+              serial=self._serial,
+              cmd=['wait-for-device'])
+
+  def maybe_wait_for_device(self):
+    """Run 'adb wait-for-device' if it hasn't already been run."""
+    if self._wait_count == 0:
+      self.wait_for_device()
 
   def __call__(self, *args, **kwargs):
+    self.maybe_wait_for_device()
     return self._adb(*args, **kwargs)
 
 
@@ -64,37 +76,21 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
   def __init__(self, skia_api):
     super(AndroidFlavorUtils, self).__init__(skia_api)
     self.device = device_from_builder_dict(self._skia_api.c.builder_cfg)
-    self._serial = None  # Get this lazily.
+    self.serial = self._skia_api.c.slave_cfg.get('serial')
     self.android_bin = self._skia_api.m.path['slave_build'].join(
         'skia', 'platform_tools', 'android', 'bin')
     self._android_sdk_root = self._skia_api.c.slave_cfg['android_sdk_root']
     self._adb = _ADBWrapper(
         self._skia_api.m.adb,
         self._skia_api.m.path.join(self._android_sdk_root,
-                                   'platform-tools', 'adb'))
+                                   'platform-tools', 'adb'),
+        self.serial)
     self._has_root = self._skia_api.c.slave_cfg.get('has_root', True)
     self._default_env = {'ANDROID_SDK_ROOT': self._android_sdk_root,
                          'SKIA_ANDROID_VERBOSE_SETUP': 1}
 
-  @property
-  def serial(self):
-    if not self._serial:
-      serial = self._skia_api.c.slave_cfg.get('serial')
-      attached_devices = self._adb.devices()
-      if not serial:
-        if len(attached_devices) == 1:
-          serial = attached_devices[0]
-        else:
-          raise Exception('No serial number specified in slaves.cfg and %d '
-                          'devices attached; unable to determine which serial '
-                          'number to use.' % len(attached_devices))
-      if serial not in attached_devices:
-        raise Exception('Device %s not attached! Devices: %s' % (
-                            serial, attached_devices))
-      self._serial = serial
-    return self._serial
-
   def step(self, name, cmd, **kwargs):
+    self._adb.maybe_wait_for_device()
     args = [self.android_bin.join('android_run_skia'),
             '-d', self.device,
             '-s', self.serial,
@@ -185,10 +181,7 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
       self._skia_api.m.step(
           name='wait',
           cmd=['sleep', '10'])
-
-    self._adb(name='wait for device',
-              serial=self.serial,
-              cmd=['wait-for-device'])
+      self._adb.wait_for_device()
 
     # TODO(borenet): Set CPU scaling mode to 'performance'.
     self._skia_api.m.step(name='kill skia',
@@ -208,10 +201,11 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
     self._skia_api.m.step(
         name='wait for reboot',
         cmd=['sleep', '10'])
+    self._adb.wait_for_device()
 
   def get_device_dirs(self):
     """ Set the directories which will be used by the build steps."""
-    device_scratch_dir = self._skia_api.m.adb(
+    device_scratch_dir = self._adb(
         name='get EXTERNAL_STORAGE dir',
         serial=self.serial,
         cmd=['shell', 'echo', '$EXTERNAL_STORAGE'],

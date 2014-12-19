@@ -66,19 +66,12 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/recipe_modules/adb/resources/list_devices.py",
-      "['/home/chrome-bot/android-sdk-linux/platform-tools/adb', 'devices']",
-      "/path/to/tmp/json"
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
+      "-s",
+      "018dff3520c970f6",
+      "wait-for-device"
     ],
-    "name": "List adb devices",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"018dff3520c970f6\"@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
+    "name": "wait for device 018dff3520c970f6 (1)"
   },
   {
     "cmd": [
@@ -115,7 +108,7 @@
       "018dff3520c970f6",
       "wait-for-device"
     ],
-    "name": "wait for device"
+    "name": "wait for device 018dff3520c970f6 (2)"
   },
   {
     "cmd": [
@@ -871,5 +864,14 @@
       "10"
     ],
     "name": "wait for reboot"
+  },
+  {
+    "cmd": [
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
+      "-s",
+      "018dff3520c970f6",
+      "wait-for-device"
+    ],
+    "name": "wait for device 018dff3520c970f6 (3)"
   }
 ]

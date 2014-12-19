@@ -66,19 +66,12 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/recipe_modules/adb/resources/list_devices.py",
-      "['/home/chrome-bot/android-sdk-linux/platform-tools/adb', 'devices']",
-      "/path/to/tmp/json"
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
+      "-s",
+      "8AB5139A",
+      "wait-for-device"
     ],
-    "name": "List adb devices",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"8AB5139A\"@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
+    "name": "wait for device 8AB5139A (1)"
   },
   {
     "cmd": [
@@ -115,7 +108,7 @@
       "8AB5139A",
       "wait-for-device"
     ],
-    "name": "wait for device"
+    "name": "wait for device 8AB5139A (2)"
   },
   {
     "cmd": [
@@ -869,5 +862,14 @@
       "10"
     ],
     "name": "wait for reboot"
+  },
+  {
+    "cmd": [
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
+      "-s",
+      "8AB5139A",
+      "wait-for-device"
+    ],
+    "name": "wait for device 8AB5139A (3)"
   }
 ]

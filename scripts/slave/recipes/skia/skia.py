@@ -67,11 +67,7 @@ def GenTests(api):
   ]
 
   def AndroidTestData(builder, slave_cfg):
-    expected_serial = slave_cfg.get('serial', 'abc123')
     test_data = (
-        api.override_step_data(
-            'List adb devices',
-            api.json.output([expected_serial])) +
         api.step_data(
             'get EXTERNAL_STORAGE dir',
             stdout=api.raw_io.output('/storage/emulated/legacy')) +

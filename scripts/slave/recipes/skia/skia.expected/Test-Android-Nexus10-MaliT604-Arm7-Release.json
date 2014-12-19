@@ -66,19 +66,12 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/recipe_modules/adb/resources/list_devices.py",
-      "['/home/chrome-bot/android-sdk-linux/platform-tools/adb', 'devices']",
-      "/path/to/tmp/json"
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
+      "-s",
+      "R32CB017X2L",
+      "wait-for-device"
     ],
-    "name": "List adb devices",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"R32CB017X2L\"@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
+    "name": "wait for device R32CB017X2L (1)"
   },
   {
     "cmd": [
@@ -115,7 +108,7 @@
       "R32CB017X2L",
       "wait-for-device"
     ],
-    "name": "wait for device"
+    "name": "wait for device R32CB017X2L (2)"
   },
   {
     "cmd": [
@@ -844,5 +837,14 @@
       "10"
     ],
     "name": "wait for reboot"
+  },
+  {
+    "cmd": [
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
+      "-s",
+      "R32CB017X2L",
+      "wait-for-device"
+    ],
+    "name": "wait for device R32CB017X2L (3)"
   }
 ]
