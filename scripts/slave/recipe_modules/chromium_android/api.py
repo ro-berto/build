@@ -58,6 +58,7 @@ INSTRUMENTATION_TESTS = [
 class AndroidApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
     super(AndroidApi, self).__init__(**kwargs)
+    self._devices = None
 
   def get_config_defaults(self):
     return {
@@ -66,6 +67,12 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def get_env(self):
     return self.m.chromium.get_env()
+
+  @property
+  def devices(self):
+    assert self._devices is not None,\
+        'devices is only available after device_status_check()'
+    return self._devices
 
   @property
   def out_path(self):
@@ -292,18 +299,41 @@ class AndroidApi(recipe_api.RecipeApi):
       skip_wipe=skip_wipe, disable_location=disable_location)
 
   def device_status_check(self, restart_usb=False, **kwargs):
-    args = []
+    args = ['--json-output', self.m.json.output()]
     if restart_usb:
-      args = ['--restart-usb']
+      args += ['--restart-usb']
 
     try:
-      self.m.step(
+      result = self.m.step(
           'device_status_check',
           [self.m.path['checkout'].join('build', 'android', 'buildbot',
                                 'bb_device_status_check.py')] + args,
+          step_test_data=lambda: self.m.json.test_api.output([{
+              "battery": {
+                  "status": "5",
+                  "scale": "100",
+                  "temperature": "249",
+                  "level": "100",
+                  "AC powered": "false",
+                  "health": "2",
+                  "voltage": "4286",
+                  "Wireless powered": "false",
+                  "USB powered": "true",
+                  "technology": "Li-ion",
+                  "present": "true"
+              },
+              "wifi_ip": "",
+              "imei_slice": "Unknown",
+              "build": "LRX21O",
+              "build_detail":
+                  "google/razor/flo:5.0/LRX21O/1570415:userdebug/dev-keys",
+              "serial": "07a00ca4",
+              "type": "flo"
+          }]),
           env=self.m.chromium.get_env(),
           infra_step=True,
           **kwargs)
+      self._devices = [d['serial'] for d in result.json.output]
     except self.m.step.InfraFailure as f:
       params = {
         'summary': ('Device Offline on %s %s' %

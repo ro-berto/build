@@ -115,20 +115,16 @@ def GenSteps(api):
   api.chromium_android.download_build(bucket=builder['bucket'],
     path=builder['path'](api))
 
-  api.chromium_android.spawn_logcat_monitor()
-  api.chromium_android.device_status_check()
-  api.chromium_android.provision_devices()
+  api.chromium_android.common_tests_setup_steps()
 
   api.chromium_android.adb_install_apk(
       'ChromeShell.apk',
       'org.chromium.chrome.shell')
 
-  # TODO(zty): remove this in favor of device_status_check
-  api.adb.list_devices()
   perf_tests = api.chromium.list_perf_tests(
       browser='android-chrome-shell',
       num_shards=builder['num_device_shards'],
-      devices=api.adb.devices[0:1]).json.output
+      devices=api.chromium_android.devices[0:1]).json.output
 
   try:
     api.chromium_android.run_sharded_perf_tests(
@@ -137,9 +133,7 @@ def GenSteps(api):
       chartjson_file=True)
 
   finally:
-    api.chromium_android.logcat_dump()
-    api.chromium_android.stack_tool_steps()
-    api.chromium_android.test_report()
+    api.chromium_android.common_tests_final_steps()
 
 def _sanitize_nonalpha(text):
   return ''.join(c if c.isalnum() else '_' for c in text)
@@ -160,24 +154,7 @@ def GenTests(api):
               parent_revision='deadbeef',
               revision='deadbeef',
               slavename='slavename',
-              target='Release') +
-          api.override_step_data('List adb devices', api.json.output([
-            "014E1F310401C009", "014E1F310401C010"
-          ]))
-      )
-  yield (api.test('device_status_check') +
-      api.properties.generic(
-          repo_name='src',
-              repo_url=REPO_URL,
-              mastername='chromium.perf',
-              buildername='Android Nexus5 Perf',
-              parent_buildername='parent_buildername',
-              parent_buildnumber='1729',
-              parent_revision='deadbeef',
-              revision='deadbeef',
-              slavename='slavename',
-              target='Release')
-      + api.step_data('device_status_check', retcode=1))
+              target='Release'))
   yield (api.test('provision_devices') +
       api.properties.generic(
           repo_name='src',

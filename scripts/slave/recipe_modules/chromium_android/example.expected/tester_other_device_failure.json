@@ -267,7 +267,9 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/build/android/buildbot/bb_device_status_check.py"
+      "[SLAVE_BUILD]/src/build/android/buildbot/bb_device_status_check.py",
+      "--json-output",
+      "/path/to/tmp/json"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -275,6 +277,30 @@
     "name": "device_status_check",
     "~followup_annotations": [
       "step returned non-zero exit code: 2",
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"battery\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"AC powered\": \"false\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"USB powered\": \"true\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"Wireless powered\": \"false\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"health\": \"2\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"level\": \"100\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"present\": \"true\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"scale\": \"100\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"status\": \"5\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"technology\": \"Li-ion\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"temperature\": \"249\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"voltage\": \"4286\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"build\": \"LRX21O\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"build_detail\": \"google/razor/flo:5.0/LRX21O/1570415:userdebug/dev-keys\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"imei_slice\": \"Unknown\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"serial\": \"07a00ca4\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"type\": \"flo\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"wifi_ip\": \"\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LINK@report a bug@https://code.google.com/p/chromium/issues/entry?comment=Buildbot%3A+tester%0A%28Please+do+not+change+any+labels%29&labels=Restrict-View-Google%2COS-Android%2CInfra%2CInfra-Labs&summary=Device+Offline+on+chromium.testing.master+tehslave@@@",
       "@@@STEP_EXCEPTION@@@"
     ]
