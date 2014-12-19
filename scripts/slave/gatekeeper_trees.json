@@ -33,6 +33,7 @@
     "skia": {
         "build-db": "skia_build_db.json",
         "masters": [
+            "https://build.chromium.org/p/client.skia",
             "https://build.chromium.org/p/client.skia.compile"
         ],
         "password-file": ".skia_status_password",

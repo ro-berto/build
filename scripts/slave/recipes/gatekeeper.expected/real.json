@@ -57,6 +57,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"skia\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"build-db\": \"skia_build_db.json\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"masters\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.skia\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.skia.compile\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ], @@@",
       "@@@STEP_LOG_LINE@json.output@    \"password-file\": \".skia_status_password\", @@@",
@@ -182,6 +183,7 @@
       "skia_build_db.json",
       "--password-file",
       ".skia_status_password",
+      "https://build.chromium.org/p/client.skia",
       "https://build.chromium.org/p/client.skia.compile"
     ],
     "name": "gatekeeper: skia"
