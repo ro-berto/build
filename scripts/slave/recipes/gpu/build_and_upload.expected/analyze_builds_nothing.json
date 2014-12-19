@@ -15,7 +15,7 @@
       "--master",
       "tryserver.chromium.gpu",
       "--builder",
-      "mac_gpu",
+      "win_gpu",
       "--slave",
       "TestSlavename",
       "--spec",
