@@ -181,5 +181,10 @@
       "There is no new candidate."
     ],
     "name": "log (3)"
+  },
+  {
+    "name": "$final_result",
+    "reason": "Clusterfuzz had issues.",
+    "status_code": 1
   }
 ]

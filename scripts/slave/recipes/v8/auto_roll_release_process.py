@@ -141,7 +141,7 @@ def ClusterfuzzHasIssues(api):
 def GenSteps(api):
   api.step.auto_resolve_conflicts = True
   repo = api.properties.get('repo', REPO)
-  fail_on_exit = None
+  fail_on_exit = []
 
   api.gclient.set_config('v8')
   api.bot_update.ensure_checkout(force=True, no_shallow=True)
@@ -164,29 +164,30 @@ def GenSteps(api):
     # If anything goes wrong, the process restarts with a fresh timestamp.
     current_date = api.time.time()
     WriteTimeStamp(api, 'init timestamp', current_date)
-    fail_on_exit = 'Timestamp file was missing. Starting new candidate cycle.'
+    fail_on_exit.append(
+        'Timestamp file was missing. Starting new candidate cycle.')
 
   # Check for clusterfuzz problems before bailout to be more informative.
   clusterfuzz_has_issues = ClusterfuzzHasIssues(api)
+  if clusterfuzz_has_issues:
+    fail_on_exit.append('Clusterfuzz had issues.')
 
   new_date = api.time.time()
-  if AgeLimitBailout(api, new_date, current_date):
-    if fail_on_exit:
-      raise api.step.StepFailure(fail_on_exit)
+  if not AgeLimitBailout(api, new_date, current_date):
+    if current_candidate != new_lkgr:
+      PushRef(api, repo, CANDIDATE_REF, new_lkgr)
+      WriteTimeStamp(api, 'update timestamp', api.time.time())
     else:
-      return
+      LogStep(api, 'There is no new candidate.')
 
-  if current_candidate != new_lkgr:
-    PushRef(api, repo, CANDIDATE_REF, new_lkgr)
-    WriteTimeStamp(api, 'update timestamp', api.time.time())
-  else:
-    LogStep(api, 'There is no new candidate.')
+    # Promote the successful candidate to the roll ref in order to get rolled.
+    # This is independent of a new lkgr. Every candidate that is more than 8h
+    # old is promoted.
+    if current_candidate != current_roll and not clusterfuzz_has_issues:
+      PushRef(api, repo, ROLL_REF, current_candidate)
 
-  # Promote the successful candidate to the roll ref in order to get rolled.
-  # This is independent of a new lkgr. Every candidate that is more than 8h
-  # old is promoted.
-  if current_candidate != current_roll and not clusterfuzz_has_issues:
-    PushRef(api, repo, ROLL_REF, current_candidate)
+  if fail_on_exit:
+    raise api.step.StepFailure(' '.join(fail_on_exit))
 
 
 def GenTests(api):
