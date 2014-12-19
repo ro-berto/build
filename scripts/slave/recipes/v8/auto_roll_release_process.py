@@ -8,6 +8,7 @@ DEPS = [
   'gclient',
   'git',
   'gsutil',
+  'json',
   'path',
   'properties',
   'python',
@@ -17,6 +18,8 @@ DEPS = [
 ]
 
 REPO = 'https://chromium.googlesource.com/v8/v8'
+CLUSTERFUZZ = 'https://cluster-fuzz.appspot.com/testcase?key=%d'
+SHOW_MAX_ISSUES = 5
 CANDIDATE_REF = 'refs/heads/candidate'
 LKGR_REF = 'refs/heads/lkgr'
 ROLL_REF = 'refs/heads/roll'
@@ -112,6 +115,29 @@ def GetLKGR(api):
   return lkgr
 
 
+def ClusterfuzzHasIssues(api):
+  step_test_data = lambda: api.json.test_api.output([])
+  step_result = api.python(
+      'check clusterfuzz',
+      api.path['checkout'].join(
+          'tools', 'push-to-trunk', 'check_clusterfuzz.py'),
+      ['--key-file', api.path['slave_build'].join('.cf_key'),
+       '--results-file', api.json.output(add_json_log=False)],
+      # Note: Output is suppressed for security reasons.
+      stdout=api.raw_io.output('out'),
+      stderr=api.raw_io.output('err'),
+      step_test_data=step_test_data,
+  )
+  results = step_result.json.output
+  if results:
+    step_result.presentation.text = 'Found %s issues.' % len(results)
+    for result in results[:SHOW_MAX_ISSUES]:
+      step_result.presentation.links[str(result)] = CLUSTERFUZZ % int(result)
+    step_result.presentation.status = api.step.FAILURE
+    return True
+  return False
+
+
 def GenSteps(api):
   api.step.auto_resolve_conflicts = True
   repo = api.properties.get('repo', REPO)
@@ -155,9 +181,8 @@ def GenSteps(api):
 
   # Promote the successful candidate to the roll ref in order to get rolled.
   # This is independent of a new lkgr. Every candidate that is more than 8h
-  # old is promoted. TODO(machenbach): Make this also dependent on clusterfuzz
-  # results.
-  if current_candidate != current_roll:
+  # old is promoted.
+  if current_candidate != current_roll and not ClusterfuzzHasIssues(api):
     PushRef(api, repo, ROLL_REF, current_candidate)
 
 
@@ -231,6 +256,14 @@ def GenTests(api):
       date_new,
       current_roll=hsh_old,
   )
+  yield Test(
+      'clusterfuzz_issues',
+      hsh_recent,
+      date_old,
+      hsh_recent,
+      date_new,
+      current_roll=hsh_old,
+  ) + api.override_step_data('check clusterfuzz', api.json.output([1, 2]))
   yield Test(
       'new_lkgr_failed_timestamp',
       hsh_recent,
