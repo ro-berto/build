@@ -7,6 +7,54 @@ import urllib
 
 from slave import recipe_api
 
+INSTRUMENTATION_TESTS = [
+  {
+    'test': 'AndroidWebViewTest',
+    'gyp_target': 'android_webview_test_apk',
+    'kwargs': {
+      'test_data': 'webview:android_webview/test/data/device_files',
+      'install_apk': {
+        'package': 'org.chromium.android_webview.shell',
+        'apk': 'AndroidWebView.apk'
+      },
+    },
+  },
+  {
+    'test': 'ChromeShellTest',
+    'gyp_target': 'chrome_shell_test_apk',
+    'kwargs': {
+      'test_data': 'chrome:chrome/test/data/android/device_files',
+      'install_apk': {
+        'package': 'org.chromium.chrome.shell',
+        'apk': 'ChromeShell.apk',
+      },
+      # TODO(luqui): find out if host_driven_root is necessary
+    },
+  },
+  {
+    'test': 'ContentShellTest',
+    'gyp_target': 'content_shell_test_apk',
+    'kwargs': {
+      'test_data': 'content:content/test/data/android/device_files',
+      'install_apk': {
+        'package': 'org.chromium.content_shell_apk',
+        'apk': 'ContentShell.apk',
+      },
+    },
+  },
+  {
+    'test': 'ChromeSyncShellTest',
+    'gyp_target': 'chrome_sync_shell_test_apk',
+    'kwargs': {
+      'install_apk': {
+        'package': 'org.chromium.chrome.browser.sync',
+        'apk': 'ChromeSyncShell.apk',
+      },
+    },
+  },
+]
+
+
 class AndroidApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
     super(AndroidApi, self).__init__(**kwargs)
@@ -388,6 +436,13 @@ class AndroidApi(recipe_api.RecipeApi):
 
     if failures:
       raise self.m.step.StepFailure('sharded perf tests failed %s' % failures)
+
+  @recipe_api.non_step
+  def get_instrumentation_suite(self, suite_name):
+    for suite in INSTRUMENTATION_TESTS:
+      if suite['test'] == suite_name:
+        return suite
+    return None
 
   def run_instrumentation_suite(self, test_apk, test_data=None,
                                 flakiness_dashboard=None,

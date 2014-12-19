@@ -64,7 +64,7 @@ BUILDERS = {
     'gerrit_try_builder': {
       'build': True,
       'skip_wipe': True,
-    }
+    },
 }
 
 def GenSteps(api):
@@ -126,15 +126,18 @@ def GenSteps(api):
   except api.step.StepFailure as f:
     failure = f
 
-  api.chromium_android.run_instrumentation_suite(
-      test_apk='AndroidWebViewTest',
-      test_data='webview:android_webview/test/data/device_files',
-      flakiness_dashboard='test-results.appspot.com',
-      annotation='SmallTest',
-      except_annotation='FlakyTest',
-      screenshot=True,
-      official_build=True,
-      host_driven_root=api.path['checkout'].join('chrome', 'test'))
+  for suite_name in ('AndroidWebViewTest', 'FooBarTest'):
+    suite = api.chromium_android.get_instrumentation_suite(suite_name)
+    if suite:
+      api.chromium_android.run_instrumentation_suite(
+          test_apk=suite['test'],
+          test_data=suite['kwargs']['test_data'],
+          flakiness_dashboard='test-results.appspot.com',
+          annotation='SmallTest',
+          except_annotation='FlakyTest',
+          screenshot=True,
+          official_build=True,
+          host_driven_root=api.path['checkout'].join('chrome', 'test'))
   api.chromium_android.run_test_suite(
       'unittests',
       isolate_file_path=api.path['checkout'].join('some_file.isolate'),
