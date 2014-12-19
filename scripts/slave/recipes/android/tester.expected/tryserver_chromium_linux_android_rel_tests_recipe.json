@@ -361,7 +361,8 @@
       "--metadata",
       "blink_revision=124383",
       "--metadata",
-      "build_number=1337"
+      "build_number=1337",
+      "--device=014E1F310401C009"
     ],
     "name": "telemetry_unittests"
   },
@@ -396,7 +397,8 @@
       "--metadata",
       "blink_revision=124383",
       "--metadata",
-      "build_number=1337"
+      "build_number=1337",
+      "--device=014E1F310401C009"
     ],
     "name": "telemetry_perf_unittests"
   },

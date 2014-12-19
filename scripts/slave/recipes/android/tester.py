@@ -207,9 +207,11 @@ def GenSteps(api):
           flakiness_dashboard=FLAKINESS_DASHBOARD)
 
     if bot_config.get('telemetry_unittests'):
-      api.chromium.run_telemetry_unittests()
+      args = ['--device=%s' % api.adb.devices.get_result()[0]]
+      api.chromium.run_telemetry_unittests(cmd_args=args)
     if bot_config.get('telemetry_perf_unittests'):
-      api.chromium.run_telemetry_perf_unittests()
+      args = ['--device=%s' % api.adb.devices.get_result()[0]]
+      api.chromium.run_telemetry_perf_unittests(cmd_args=args)
 
     for suite in java_unittests:
       api.chromium_android.run_java_unit_test_suite(suite)
