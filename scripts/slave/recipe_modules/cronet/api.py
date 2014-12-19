@@ -29,9 +29,8 @@ class CronetApi(recipe_api.RecipeApi):
 
 
   def build(self, use_revision=True):
-    droid = self.m.chromium_android
-    droid.runhooks()
-    droid.compile()
+    self.m.chromium.runhooks()
+    self.m.chromium.compile()
 
 
   def upload_package(self, build_config):

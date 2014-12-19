@@ -6,6 +6,7 @@ from contextlib import contextmanager
 from slave import recipe_api
 
 DEPS = [
+  'chromium',
   'chromium_android',
   'bot_update',
   'gclient',
@@ -216,7 +217,7 @@ def GenSteps(api):
   bot_update_step = api.bot_update.ensure_checkout()
   api.chromium_android.clean_local_files()
 
-  droid.runhooks()
+  api.chromium.runhooks()
 
   if bot_config.get('try', False):
 
@@ -235,12 +236,12 @@ def GenSteps(api):
         raise
 
     try:
-      droid.compile(name='compile (with patch)')
+      api.chromium.compile(name='compile (with patch)')
     except api.step.StepFailure:
       without_patch_update()
       try:
-        droid.runhooks()
-        droid.compile(name='compile (without patch)')
+        api.chromium.runhooks()
+        api.chromium.compile(name='compile (without patch)')
 
         # TODO(phajdan.jr): Set failed tryjob result after recognizing infra
         # compile failures. We've seen cases of compile with patch failing
@@ -258,8 +259,8 @@ def GenSteps(api):
       except api.step.StepFailure:
         without_patch_update()
         try:
-          droid.runhooks()
-          droid.compile(name='compile (without patch)')
+          api.chromium.runhooks()
+          api.chromium.compile(name='compile (without patch)')
           with bot_config['findbugs']():
             droid.findbugs(suffix='(without patch)')
         except api.step.StepFailure:
@@ -270,7 +271,7 @@ def GenSteps(api):
     if bot_config.get('check_licenses'):
       with bot_config['check_licenses']():
         droid.check_webview_licenses()
-    droid.compile()
+    api.chromium.compile()
     if bot_config.get('findbugs'):
       with bot_config['findbugs']():
         droid.findbugs()

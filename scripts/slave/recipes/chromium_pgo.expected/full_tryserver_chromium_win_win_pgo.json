@@ -113,6 +113,9 @@
       "--",
       "chrome"
     ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]\\src\\out\\Release;%(PATH)s"
+    },
     "name": "Compile: Instrumentation phase."
   },
   {

@@ -46,7 +46,7 @@ def GenSteps(api):
   api.chromium_android.clean_local_files()
 
   # Gyp the chromium checkout.
-  api.chromium_android.runhooks()
+  api.chromium.runhooks()
 
   # Build the WebView apk, WebView shell and Android testing tools.
   api.chromium.compile(targets=['system_webview_apk',

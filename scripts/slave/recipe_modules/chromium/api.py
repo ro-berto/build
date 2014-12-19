@@ -217,10 +217,15 @@ class ChromiumApi(recipe_api.RecipeApi):
       # Wrap 'compile' through 'cros chrome-sdk'
       kwargs['wrapper'] = self._get_cros_chrome_sdk_wrapper()
 
+    env = self.get_env()
+    env.update(kwargs.pop('env', {}))
+
     self.m.python(name or 'compile',
                   self.m.path['build'].join('scripts', 'slave',
                                             'compile.py'),
-                  args, **kwargs)
+                  args,
+                  env=env,
+                  **kwargs)
 
   @recipe_util.returns_placeholder
   def test_launcher_filter(self, tests):

@@ -169,7 +169,7 @@ def GenSteps(api):
 
   api.bot_update.ensure_checkout()
   api.chromium_android.clean_local_files()
-  api.chromium_android.runhooks()
+  api.chromium.runhooks()
 
   compile_targets = None
   instrumentation_tests = bot_config.get('instrumentation_tests', [])
@@ -216,7 +216,7 @@ def GenSteps(api):
              ['mv', '-T', api.path['checkout'].join('full-build-linux'),
                           extract_location])
   else:
-    api.chromium_android.compile(targets=compile_targets)
+    api.chromium.compile(targets=compile_targets)
 
   if not instrumentation_tests and not unittests and not java_unittests:
     return

@@ -161,6 +161,9 @@
       "--",
       "blink_tests"
     ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
     "name": "compile",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
@@ -301,6 +304,9 @@
       "--",
       "blink_tests"
     ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
     "name": "compile (2)"
   }
 ]

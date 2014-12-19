@@ -87,12 +87,12 @@ def GenSteps(api):
 
   api.chromium_android.init_and_sync()
 
-  api.chromium_android.runhooks()
+  api.chromium.runhooks()
   api.chromium_android.run_tree_truth(additional_repos=['foo'])
   assert 'MAJOR' in api.chromium.get_version()
 
   if config['build']:
-    api.chromium_android.compile()
+    api.chromium.compile()
     api.chromium_android.make_zip_archive('zip_build_proudct', 'archive.zip',
         filters=['*.apk'])
   else:

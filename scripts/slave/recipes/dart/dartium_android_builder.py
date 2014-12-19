@@ -24,8 +24,8 @@ def GenSteps(api):
 
   api.chromium_android.init_and_sync()
   # TODO(iannucci): Remove when dartium syncs chromium to >= crrev.com/252649
-  api.chromium_android.runhooks({'GYP_CROSSCOMPILE': "1"})
-  api.chromium_android.compile(targets=['content_shell_apk'])
+  api.chromium.runhooks(env={'GYP_CROSSCOMPILE': "1"})
+  api.chromium.compile(targets=['content_shell_apk'])
 
   build_products_dir = \
       api.chromium.c.build_dir.join(api.chromium.c.build_config_fs)

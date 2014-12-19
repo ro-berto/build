@@ -122,6 +122,9 @@
       "android_webview_telemetry_shell_apk",
       "android_tools"
     ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
     "name": "compile"
   },
   {

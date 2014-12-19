@@ -368,17 +368,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if isolated_targets:
         self.m.isolate.clean_isolated_files(self.m.chromium.output_dir)
 
-      compile_step = self.m.chromium.compile
-      if self.m.chromium.c.TARGET_PLATFORM == 'android':
-        compile_step = self.m.chromium_android.compile
-
       if self.m.tryserver.is_tryserver:
         try:
-          compile_step(compile_targets, name='compile (with patch)')
+          self.m.chromium.compile(compile_targets, name='compile (with patch)')
         except self.m.step.StepFailure:
           self.deapply_patch(update_step)
           try:
-            compile_step(compile_targets, name='compile (without patch)')
+            self.m.chromium.compile(compile_targets, name='compile (without patch)')
 
             # TODO(phajdan.jr): Set failed tryjob result after recognizing infra
             # compile failures. We've seen cases of compile with patch failing
@@ -390,7 +386,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             raise
           raise
       else:
-        compile_step(compile_targets)
+        self.m.chromium.compile(compile_targets)
 
       # Step 'checkdeps' is same on all platforms, no need to run it everywhere.
       if self.m.platform.is_linux:
