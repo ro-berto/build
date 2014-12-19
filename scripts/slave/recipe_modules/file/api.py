@@ -59,7 +59,7 @@ class FileApi(recipe_api.RecipeApi):
           chunk = f.read(1024*1024)
           if not chunk:
             break
-        sha1.update(chunk)
+          sha1.update(chunk)
       with open(sys.argv[2], 'w') as f:
         f.write(sha1.hexdigest())
       """,

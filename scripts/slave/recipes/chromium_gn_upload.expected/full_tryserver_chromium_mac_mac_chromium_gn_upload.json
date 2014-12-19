@@ -125,7 +125,7 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport hashlib\nimport sys\nsha1 = hashlib.sha1()\nwith open(sys.argv[1], 'rb') as f:\n  while True:\n    chunk = f.read(1024*1024)\n    if not chunk:\n      break\n  sha1.update(chunk)\nwith open(sys.argv[2], 'w') as f:\n  f.write(sha1.hexdigest())\n",
+      "\nimport hashlib\nimport sys\nsha1 = hashlib.sha1()\nwith open(sys.argv[1], 'rb') as f:\n  while True:\n    chunk = f.read(1024*1024)\n    if not chunk:\n      break\n    sha1.update(chunk)\nwith open(sys.argv[2], 'w') as f:\n  f.write(sha1.hexdigest())\n",
       "[SLAVE_BUILD]/src/out/Release/gn",
       "/path/to/tmp/"
     ],
