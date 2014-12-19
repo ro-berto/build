@@ -7,7 +7,7 @@
       "--master",
       "chromium.fyi",
       "--builder",
-      "ChromiumOS Codesearch",
+      "ChromiumOS Codesearch Staging",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -138,7 +138,7 @@
       "--path-to-compdb",
       "some compilation data",
       "--environment",
-      "prod"
+      "staging"
     ],
     "name": "package_source"
   }

@@ -51,6 +51,7 @@ SPEC = {
       'compile_targets': [
         'all',
       ],
+      'environment': 'prod',
       'package_filename': 'chromium-src',
     },
     'ChromiumOS Codesearch': {
@@ -61,6 +62,28 @@ SPEC = {
       'compile_targets': [
         'all',
       ],
+      'environment': 'prod',
+      'package_filename': 'chromiumos-src',
+    },
+    'Chromium Linux Codesearch Staging': {
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+      },
+      'compile_targets': [
+        'all',
+      ],
+      'environment': 'staging',
+      'package_filename': 'chromium-src',
+    },
+    'ChromiumOS Codesearch Staging': {
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_PLATFORM': 'chromeos',
+      },
+      'compile_targets': [
+        'all',
+      ],
+      'environment': 'staging',
       'package_filename': 'chromiumos-src',
     },
   },
@@ -116,6 +139,7 @@ def GenSteps(api):
       '--build-properties', api.json.dumps(api.chromium.build_properties),
       '--factory-properties', api.json.dumps(fake_factory_properties),
       '--path-to-compdb', api.raw_io.input(data=result.stdout),
+      '--environment', bot_config.get('environment', ''),
   ]
   api.python('package_source',
              api.path['build'].join('scripts', 'slave', 'chromium',

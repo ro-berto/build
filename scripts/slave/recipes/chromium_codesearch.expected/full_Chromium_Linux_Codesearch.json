@@ -135,7 +135,9 @@
       "--factory-properties",
       "{\"package_filename\": \"chromium-src\"}",
       "--path-to-compdb",
-      "some compilation data"
+      "some compilation data",
+      "--environment",
+      "prod"
     ],
     "name": "package_source"
   }

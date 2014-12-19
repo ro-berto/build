@@ -101,20 +101,20 @@ def GenerateIndex(compdb_path):
   return result
 
 
-def DeleteIfExists(filename):
-  """Deletes the file (relative to GSBASE), if it exists."""
-  (status, output) = slave_utils.GSUtilListBucket(GSBASE, ['-l'])
+def DeleteIfExists(filename, gs_prefix):
+  """Deletes the file (relative to gs_prefix), if it exists."""
+  (status, output) = slave_utils.GSUtilListBucket(gs_prefix, ['-l'])
   if status != 0:
-    raise Exception('ERROR: failed to get list of GSBASE, exiting' % GSBASE)
+    raise Exception('ERROR: failed to get list of files, exiting')
 
-  regex = re.compile(r'\s*\d+\s+([-:\w]+)\s+%s/%s\n' % (GSBASE, filename))
+  regex = re.compile(r'\s*\d+\s+([-:\w]+)\s+%s/%s\n' % (gs_prefix, filename))
   if not regex.search(output):
     return
 
-  status = slave_utils.GSUtilDeleteFile('%s/%s' % (GSBASE, filename))
+  status = slave_utils.GSUtilDeleteFile('%s/%s' % (gs_prefix, filename))
   if status != 0:
     raise Exception('ERROR: GSUtilDeleteFile error %d. "%s"' % (
-        status, '%s/%s' % (GSBASE, filename)))
+        status, '%s/%s' % (gs_prefix, filename)))
 
 
 def main():
@@ -122,9 +122,14 @@ def main():
   chromium_utils.AddPropertiesOptions(option_parser)
   option_parser.add_option('--path-to-compdb', default=None,
                            help='path to the compilation database')
+  option_parser.add_option(
+      '--environment', default=None,
+      help='Environment, used as path prefix for the GS bucket')
   options, _ = option_parser.parse_args()
   if not options.path_to_compdb:
     option_parser.error('--path-to-compdb is required')
+  if not options.environment:
+    option_parser.error('--environment is required')
 
   print '%s: Cleaning up old data...' % time.strftime('%X')
   # Clean up any source archives from previous runs.
@@ -195,30 +200,35 @@ def main():
                                          partial_filename]]) != 0:
       raise Exception('ERROR: failed to create %s, exiting' % partial_filename)
 
+    gs_prefix = GSBASE
+    if options.environment != 'prod':
+      gs_prefix = '%s/%s' % (GSBASE, options.environment)
     print '%s: Cleaning up google storage...' % time.strftime('%X')
-    DeleteIfExists(completed_filename)
-    DeleteIfExists(partial_filename)
+    DeleteIfExists(completed_filename, gs_prefix)
+    DeleteIfExists(partial_filename, gs_prefix)
 
     print '%s: Uploading...' % time.strftime('%X')
-    status = slave_utils.GSUtilCopyFile(partial_filename, GSBASE, gs_acl=GSACL)
+    status = slave_utils.GSUtilCopyFile(
+        partial_filename, gs_prefix, gs_acl=GSACL)
     if status != 0:
       raise Exception('ERROR: GSUtilCopyFile error %d. "%s" -> "%s"' % (
-          status, partial_filename, GSBASE))
+          status, partial_filename, gs_prefix))
 
     print '%s: Finalizing google storage...' % time.strftime('%X')
-    status = slave_utils.GSUtilMoveFile('%s/%s' % (GSBASE, partial_filename),
-                                        '%s/%s' % (GSBASE, completed_filename),
-                                        gs_acl=GSACL)
+    status = slave_utils.GSUtilMoveFile(
+        '%s/%s' % (gs_prefix, partial_filename),
+        '%s/%s' % (gs_prefix, completed_filename),
+        gs_acl=GSACL)
     if status != 0:
       raise Exception('ERROR: GSUtilMoveFile error %d. "%s" -> "%s"' % (
-          status, '%s/%s' % (GSBASE, partial_filename),
-          '%s/%s' % (GSBASE, completed_filename)))
+          status, '%s/%s' % (gs_prefix, partial_filename),
+          '%s/%s' % (gs_prefix, completed_filename)))
 
-    (status, output) = slave_utils.GSUtilListBucket(GSBASE, ['-l'])
+    (status, output) = slave_utils.GSUtilListBucket(gs_prefix, ['-l'])
     if status != 0:
-      raise Exception('ERROR: failed to get list of GSBASE, exiting' % GSBASE)
+      raise Exception('ERROR: failed to get list of files, exiting')
 
-    regex = re.compile(r'\s*\d+\s+([-:\w]+)\s+%s/%s\n' % (GSBASE,
+    regex = re.compile(r'\s*\d+\s+([-:\w]+)\s+%s/%s\n' % (gs_prefix,
                                                           completed_filename))
     match_data = regex.search(output)
     modified_time = None
@@ -229,7 +239,7 @@ def main():
     print 'Last modified time: %s' % modified_time
 
     print '%s: Deleting old archives on google storage...' % time.strftime('%X')
-    regex = re.compile(r'\s*\d+\s+([-:\w]+)\s+(%s/.*%s.*)\n' % (GSBASE, EXT))
+    regex = re.compile(r'\s*\d+\s+([-:\w]+)\s+(%s/.*%s.*)\n' % (gs_prefix, EXT))
     last_week = int(time.time()) - 7 * 24 * 60 * 60
     for match_data in regex.finditer(output):
       timestamp = int(time.strftime(
