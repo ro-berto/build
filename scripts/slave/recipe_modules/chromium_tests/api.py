@@ -272,7 +272,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       for t in tests:
         try:
           t.run(api, suffix)
-        except api.step.StepFailure:
+        except api.step.StepFailure:  # pragma: no cover
           failed_tests.append(t)
           if t.abort_on_failure:
             raise

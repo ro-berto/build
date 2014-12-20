@@ -98,9 +98,6 @@ SPEC = {
         'chromium_builder_perf',
       ],
       'tests': [
-        steps.GenerateTelemetryProfileStep(
-            'Release',
-            'small_profile'),
         steps.DynamicPerfTests(
             'release',
             'chromium-rel-linux-v8', 0, 1),
@@ -129,9 +126,6 @@ SPEC = {
         'chromium_builder_perf',
       ],
       'tests': [
-        steps.GenerateTelemetryProfileStep(
-            'Release',
-            'small_profile'),
         steps.DynamicPerfTests(
             'release',
             'chromium-rel-win7-dual-v8', 0, 1),
@@ -160,9 +154,6 @@ SPEC = {
         'chromium_builder_perf',
       ],
       'tests': [
-        steps.GenerateTelemetryProfileStep(
-            'Release',
-            'small_profile'),
         steps.DynamicPerfTests(
             'release',
             'chromium-rel-mac6-v8', 0, 1),

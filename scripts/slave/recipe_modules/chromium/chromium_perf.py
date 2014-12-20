@@ -23,9 +23,6 @@ def _Spec(platform, parent_builder, perf_id, index, num_shards, target_bits):
       'platform': platform,
     },
     'tests': [
-      steps.GenerateTelemetryProfileStep(
-          _GetTargetName(platform, target_bits),
-          'small_profile'),
       steps.DynamicPerfTests(
           _GetTargetName(platform, target_bits).lower(),
           perf_id, index, num_shards),

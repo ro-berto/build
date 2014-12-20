@@ -136,20 +136,6 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\runtest.py",
-      "--run-python-script",
-      "--target",
-      "Release_x64",
-      "[BUILD]\\scripts\\slave\\generate_profile_shim.py",
-      "--target=Release_x64",
-      "--profile-type-to-generate=small_profile"
-    ],
-    "name": "generate_telemetry_profiles"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "list",
       "--browser",
