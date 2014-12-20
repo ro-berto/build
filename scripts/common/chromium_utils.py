@@ -1822,20 +1822,26 @@ def DatabaseSetup(buildmaster_config, require_dbconfig=False):
 
 def ReadBuildersFile(builders_path):
   with open(builders_path) as fp:
-    builders = ast.literal_eval(fp.read())
+    contents = fp.read()
+  return ParseBuildersFileContents(builders_path, contents)
+
+
+def ParseBuildersFileContents(path, contents):
+  builders = ast.literal_eval(contents)
 
   # Set some additional derived fields that are derived from the
   # file's location in the filesystem.
-  basedir = os.path.dirname(os.path.abspath(builders_path))
+  basedir = os.path.dirname(os.path.abspath(path))
   master_dirname = os.path.basename(basedir)
   master_name_comps = master_dirname.split('.')[1:]
   buildbot_path =  '.'.join(master_name_comps)
   master_classname =  ''.join(c[0].upper() + c[1:] for c in master_name_comps)
 
   # TODO: These probably shouldn't be completely hard-coded like this.
+  builders['master'] = master_classname
   builders['master_dirname'] = master_dirname
   builders['master_classname'] = master_classname
-  builders['buildbot_url'] = 'https://build.chromium.org/p/%s' % buildbot_path
+  builders['buildbot_url'] = 'https://build.chromium.org/p/%s/' % buildbot_path
 
   return builders
 
@@ -1873,6 +1879,7 @@ def GetSlavesFromBuilders(builders):
       slaves.append({
           'hostname': slave,
           'builder_name': builder_names,
+          'master': builders['master'],
           'os': slave_data['os'],
           'version': slave_data['version'],
           'bits': slave_data['bits'],

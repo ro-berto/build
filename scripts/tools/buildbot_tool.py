@@ -20,6 +20,7 @@ BASE_DIR = os.path.dirname(SCRIPTS_DIR)
 if not SCRIPTS_DIR in sys.path:  # pragma: no cover
   sys.path.append(SCRIPTS_DIR)
 
+from common import chromium_utils
 from common import filesystem
 
 
@@ -61,7 +62,9 @@ def run_gen(args, fs):
     print("%s not found" % master_dirname, file=sys.stderr)
     return 1
 
-  values = _values_from_file(fs, builders_path)
+  values = chromium_utils.ParseBuildersFileContents(
+      builders_path,
+      fs.read_text_file(builders_path))
 
   for filename in fs.listfiles(TEMPLATE_DIR):
     template = fs.read_text_file(fs.join(TEMPLATE_DIR, filename))
@@ -80,26 +83,6 @@ def run_help(args, fs):
   if args.subcommand:
     return main([args.subcommand, '--help'], fs)
   return main(['--help'], fs)
-
-
-def _values_from_file(fs, builders_path):
-  builders = ast.literal_eval(fs.read_text_file(builders_path))
-  master_dirname = fs.basename(fs.dirname(builders_path))
-  master_name_comps = master_dirname.split('.')[1:]
-  buildbot_path =  '.'.join(master_name_comps)
-  master_classname =  ''.join(c[0].upper() + c[1:] for c in master_name_comps)
-
-  v = {}
-  v['buildbot_url'] = 'https://build.chromium.org/p/%s/' % buildbot_path
-  v['git_repo_url'] = builders['git_repo_url']
-  v['master_dirname'] = master_dirname
-  v['master_classname'] = master_classname
-  v['master_base_class'] = builders['master_base_class']
-  v['master_port'] = builders['master_port']
-  v['master_port_alt'] = builders['master_port_alt']
-  v['slave_port'] = builders['slave_port']
-  v['templates'] = builders['templates']
-  return v
 
 
 def _expand(template, values, source, master_subpath):

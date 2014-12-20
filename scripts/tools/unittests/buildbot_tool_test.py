@@ -19,6 +19,9 @@ from tools import buildbot_tool
 
 
 FAKE_MASTER_CFG_TEMPLATE = """\
+# master
+%(master)s
+
 # master_classname
 %(master_classname)s
 
@@ -102,6 +105,9 @@ class GenTest(unittest.TestCase):
     self.assertMultiLineEqual(
         fs.read_text_file('/build/masters/master.test/master.cfg'),
         textwrap.dedent("""\
+            # master
+            Test
+
             # master_classname
             Test
 
