@@ -10,6 +10,7 @@ DEPS = [
   'path',
   'platform',
   'properties',
+  'python',
   'step',
 ]
 
@@ -92,9 +93,13 @@ def GenSteps(api):
   # incorrectly and fails to find it :(.
   # api.chromium.runtest('gn_unittests', cwd=api.path['checkout'])
 
-  sha1 = api.file.sha1('compute sha1', path_to_binary, display_result=True)
+  api.python('upload',
+             api.path['depot_tools'].join('upload_to_google_storage.py'),
+             ['-b', 'chromium-gn', path_to_binary])
 
-  api.gsutil.upload(path_to_binary, 'chromium-gn', sha1)
+  sha1 = api.file.read('gn sha1', path_to_binary + '.sha1',
+                       test_data='0123456789abcdeffedcba987654321012345678')
+  api.step.active_result.presentation.step_text = sha1
 
 
 def GenTests(api):

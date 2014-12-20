@@ -47,29 +47,6 @@ class FileApi(recipe_api.RecipeApi):
     return self.copy(name, path, self.m.raw_io.output(),
                      step_test_data=step_test_data).raw_io.output
 
-  def sha1(self, name, path, display_result=False, **kwargs):
-    """Compute the sha-1 of a file and return it."""
-    result = self.m.python.inline(name,
-      """
-      import hashlib
-      import sys
-      sha1 = hashlib.sha1()
-      with open(sys.argv[1], 'rb') as f:
-        while True:
-          chunk = f.read(1024*1024)
-          if not chunk:
-            break
-          sha1.update(chunk)
-      with open(sys.argv[2], 'w') as f:
-        f.write(sha1.hexdigest())
-      """,
-      args=[path, self.m.raw_io.output()],
-      step_test_data=lambda: self.m.raw_io.test_api.output('12345'),
-      add_python_log=False)
-    if display_result:
-      result.presentation.step_text = result.raw_io.output
-    return result.raw_io.output
-
   def write(self, name, path, data, **kwargs):
     """Write the given data to a file."""
     return self.m.python.inline(

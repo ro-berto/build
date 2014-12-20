@@ -125,29 +125,24 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport hashlib\nimport sys\nsha1 = hashlib.sha1()\nwith open(sys.argv[1], 'rb') as f:\n  while True:\n    chunk = f.read(1024*1024)\n    if not chunk:\n      break\n    sha1.update(chunk)\nwith open(sys.argv[2], 'w') as f:\n  f.write(sha1.hexdigest())\n",
-      "[SLAVE_BUILD]\\src\\out\\Release\\gn.exe",
-      "/path/to/tmp/"
+      "[DEPOT_TOOLS]\\upload_to_google_storage.py",
+      "-b",
+      "chromium-gn",
+      "[SLAVE_BUILD]\\src\\out\\Release\\gn.exe"
     ],
-    "name": "compute sha1",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@12345@@@"
-    ]
+    "name": "upload"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\recipe_modules\\gsutil\\resources\\gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]\\third_party\\gsutil\\gsutil",
-      "cp",
-      "[SLAVE_BUILD]\\src\\out\\Release\\gn.exe",
-      "gs://chromium-gn/12345"
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]\\src\\out\\Release\\gn.exe.sha1",
+      "/path/to/tmp/"
     ],
-    "name": "gsutil upload",
+    "name": "gn sha1",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-gn/12345@@@"
+      "@@@STEP_TEXT@0123456789abcdeffedcba987654321012345678@@@"
     ]
   }
 ]
