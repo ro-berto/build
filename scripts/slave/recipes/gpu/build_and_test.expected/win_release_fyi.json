@@ -116,8 +116,7 @@
       "gpu_unittests_run",
       "media_unittests_run",
       "tab_capture_end2end_tests_run",
-      "telemetry_gpu_test_run",
-      "angle_end2end_tests_run"
+      "telemetry_gpu_test_run"
     ],
     "name": "compile"
   },
@@ -139,13 +138,11 @@
       "[SLAVE_BUILD]\\src\\out\\Release\\gpu_unittests.isolated.gen.json",
       "[SLAVE_BUILD]\\src\\out\\Release\\media_unittests.isolated.gen.json",
       "[SLAVE_BUILD]\\src\\out\\Release\\tab_capture_end2end_tests.isolated.gen.json",
-      "[SLAVE_BUILD]\\src\\out\\Release\\telemetry_gpu_test.isolated.gen.json",
-      "[SLAVE_BUILD]\\src\\out\\Release\\angle_end2end_tests.isolated.gen.json"
+      "[SLAVE_BUILD]\\src\\out\\Release\\telemetry_gpu_test.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"angle_end2end_tests\": \"[dummy hash for angle_end2end_tests]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"angle_unittests\": \"[dummy hash for angle_unittests]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"content_unittests\": \"[dummy hash for content_unittests]\", @@@",
@@ -157,7 +154,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"angle_end2end_tests\": \"[dummy hash for angle_end2end_tests]\", \"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"content_unittests\": \"[dummy hash for content_unittests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"gpu_unittests\": \"[dummy hash for gpu_unittests]\", \"media_unittests\": \"[dummy hash for media_unittests]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}@@@"
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"content_unittests\": \"[dummy hash for content_unittests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"gpu_unittests\": \"[dummy hash for gpu_unittests]\", \"media_unittests\": \"[dummy hash for media_unittests]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}@@@"
     ]
   },
   {
@@ -295,40 +292,6 @@
       "--use-gpu-in-tests"
     ],
     "name": "gles2_conform_test"
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]\\scripts\\slave\\runtest.py",
-      "--target",
-      "Release",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"TestBranch\", \"build_config\": \"Release\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"mastername\": \"chromium.gpu.fyi\", \"project\": \"\", \"recipe\": \"gpu/build_and_test\", \"repository\": \"svn://svn-mirror.golo.chromium.org/chrome/trunk\", \"revision\": \"204787\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"TestBranch\", \"build_config\": \"Release\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"mastername\": \"chromium.gpu.fyi\", \"project\": \"\", \"recipe\": \"gpu/build_and_test\", \"repository\": \"svn://svn-mirror.golo.chromium.org/chrome/trunk\", \"revision\": \"204787\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--annotate=gtest",
-      "--test-type=angle_end2end_tests",
-      "--generate-json-file",
-      "--results-directory=[SLAVE_BUILD]\\gtest-results\\angle_end2end_tests",
-      "--test-launcher-summary-output",
-      "/path/to/tmp/json",
-      "--builder-name=TestBuilder",
-      "--slave-name=TestSlavename",
-      "--build-number=571",
-      "--run-python-script",
-      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "--webkit-revision=5e2293dffc3cd07d37fbedea3b500f0eb650614d",
-      "[SLAVE_BUILD]\\src\\tools\\swarming_client\\run_isolated.py",
-      "-H",
-      "[dummy hash for angle_end2end_tests]",
-      "-I",
-      "https://isolateserver.appspot.com",
-      "--",
-      "--use-gpu-in-tests"
-    ],
-    "name": "angle_end2end_tests"
   },
   {
     "allow_subannotations": true,
