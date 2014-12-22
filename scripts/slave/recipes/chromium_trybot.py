@@ -673,6 +673,25 @@ BUILDERS = {
   },
 }
 
+# TODO(sergiyb): This config should be read from an external JSON file
+# in a custom step, which can then be mocked in the GenTests.
+# TODO(sergiyb): Add Windows and Linux dimensions.
+CHROMIUM_GPU_DIMENSION_SETS = {
+  'tryserver.chromium.mac': {
+    'mac_chromium_rel_ng': [
+      {
+        'gpu': '8086:0116',  # Intel HD Graphics 3000
+        'hidpi': '0',
+        'os': 'Mac-10.8',
+      }, {
+        'gpu': '10de:0fe9',  # NVIDIA GeForce GT 750M
+        'hidpi': '1',
+        'os': 'Mac-10.9',
+      },
+    ],
+  },
+}
+
 
 def get_test_names(tests):
   """Returns the names of each of the tests in |tests|."""
@@ -1023,11 +1042,9 @@ def GenSteps(api):
     # TODO(sergiyb): This is a temporary hack to run GPU tests on tryserver
     # only. This should be removed when we will convert chromium.gpu waterfall
     # to swarming and be able to replicate the tests to tryserver automatically.
-    # TODO(sergiyb): Add win_blink_rel and linux_blink_rel when we are confident
-    # that mac_chromium_rel_ng is working as intended.
-    enable_gpu_tests = (
-        api.properties['mastername'] == 'tryserver.chromium.mac' and
-        api.properties['buildername'] == 'mac_chromium_rel_ng')
+    master = api.properties['mastername']
+    builder = api.properties['buildername']
+    enable_gpu_tests = builder in CHROMIUM_GPU_DIMENSION_SETS.get(master, {})
 
     extra_chromium_configs = ['trybot_flavor']
     if enable_gpu_tests:
@@ -1063,17 +1080,7 @@ def GenSteps(api):
           bot_update_step.presentation.properties['got_revision'],
           bot_update_step.presentation.properties['got_webkit_revision'],
           enable_swarming=True,
-          # TODO(sergiyb): This config should be read from an external JSON file
-          # in a custom step, which can then be mocked in the GenTests.
-          swarming_dimension_sets=[{
-            'gpu': '8086:0116',  # Intel HD Graphics 3000
-            'hidpi': '0',
-            'os': 'Mac-10.8',
-          }, {
-            'gpu': '10de:0fe9',  # NVIDIA GeForce GT 750M
-            'hidpi': '1',
-            'os': 'Mac-10.9',
-          }]))
+          swarming_dimension_sets=CHROMIUM_GPU_DIMENSION_SETS[master][builder]))
 
     compile_targets, tests_including_triggered = \
         api.chromium_tests.get_compile_targets_and_tests(

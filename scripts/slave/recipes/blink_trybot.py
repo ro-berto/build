@@ -244,6 +244,26 @@ BUILDERS = {
 }
 
 
+# TODO(sergiyb): This config should be read from an external JSON file
+# in a custom step, which can then be mocked in the GenTests.
+# TODO(sergiyb): Add Windows and Linux dimensions.
+BLINK_GPU_DIMENSION_SETS = {
+  'tryserver.blink': {
+    'mac_blink_rel': [
+      {
+        'gpu': '8086:0116',  # Intel HD Graphics 3000
+        'hidpi': '0',
+        'os': 'Mac-10.8',
+      }, {
+        'gpu': '10de:0fe9',  # NVIDIA GeForce GT 750M
+        'hidpi': '1',
+        'os': 'Mac-10.9',
+      },
+    ],
+  },
+}
+
+
 def GenSteps(api):
   mastername = api.properties.get('mastername')
   buildername = api.properties.get('buildername')
@@ -277,10 +297,9 @@ def GenSteps(api):
 
   tests = []
 
-  # TODO(sergiyb): Add other win_blink_rel and linux_blink_rel when we are
-  # confident that mac_blink_rel is working as intended.
-  if (api.properties['mastername'] == 'tryserver.blink' and
-      api.properties['buildername'] == 'mac_blink_rel'):
+  master = api.properties['mastername']
+  builder = api.properties['buildername']
+  if builder in BLINK_GPU_DIMENSION_SETS.get(master, {}):
     # TODO(sergiyb): This option should be removed/refactored, because it was
     # originally created to prevent buidling GPU tests on Chromium waterfalls.
     api.chromium.c.gyp_env.GYP_DEFINES['archive_gpu_tests'] = 1
@@ -289,17 +308,7 @@ def GenSteps(api):
         bot_update_step.presentation.properties['got_revision'],
         bot_update_step.presentation.properties['got_webkit_revision'],
         enable_swarming=True,
-        # TODO(sergiyb): This config should be read from an external JSON file
-        # in a custom step, which can then be mocked in the GenTests.
-        swarming_dimension_sets=[{
-          'gpu': '8086:0116',  # Intel HD Graphics 3000
-          'hidpi': '0',
-          'os': 'Mac-10.8',
-        }, {
-          'gpu': '10de:0fe9',  # NVIDIA GeForce GT 750M
-          'hidpi': '1',
-          'os': 'Mac-10.9',
-        }]))
+        swarming_dimension_sets=BLINK_GPU_DIMENSION_SETS[master][builder]))
 
   if bot_config['compile_only']:
     api.chromium.runhooks()
