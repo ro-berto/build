@@ -502,6 +502,7 @@ def GenTests(api):
     api.test('non_cq_tryjob') +
     properties('tryserver.blink', 'win_blink_rel',
                requester='someone@chromium.org') +
+    api.platform.name('win') +
     api.override_step_data(with_patch, canned_test(passing=True))
   )
 
