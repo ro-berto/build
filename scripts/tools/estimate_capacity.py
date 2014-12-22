@@ -96,14 +96,15 @@ def main(argv):
   builder_pools = []
   for builder in master_config['builders']:
     slave_set = set(builder['slavenames'])
+    builddir = builder.get('slavebuilddir', builder['name'])
     for pool in builder_pools:
       if pool['slave_set'] == slave_set:
-        pool['builders'].append(builder['name'])
+        pool['builders'].setdefault(builddir, []).append(builder['name'])
         break
     else:
       builder_pools.append({
         'slave_set': slave_set,
-        'builders': [builder['name']],
+        'builders': {builddir: [builder['name']]},
       })
 
   days = []
@@ -116,16 +117,18 @@ def main(argv):
       'daily_bots': 0.0,
     }
     # TODO(phajdan.jr): use multiprocessing pool to speed this up.
-    for builder in pool['builders']:
-      builds = get_builds(args.master.replace('master.', ''), builder, days)
-      capacity = estimate_capacity(builds)
-      for key in ('hourly_bots', 'daily_bots'):
-        pool_capacity[key] += capacity[key]
-      print '\t%-45s %5.1f %5.1f' % (
-          builder,
-          capacity['daily_bots'],
-          capacity['hourly_bots'])
-    print '\t%-45s %5.1f %5.1f %5.1f' % (
+    for builddir, builders in pool['builders'].iteritems():
+      print '  builddir "%s":' % builddir
+      for builder in builders:
+        builds = get_builds(args.master.replace('master.', ''), builder, days)
+        capacity = estimate_capacity(builds)
+        for key in ('hourly_bots', 'daily_bots'):
+          pool_capacity[key] += capacity[key]
+        print '    %-45s %5.1f %5.1f' % (
+            builder,
+            capacity['daily_bots'],
+            capacity['hourly_bots'])
+    print '  %-45s   %5.1f %5.1f %5.1f' % (
         'total',
         pool_capacity['daily_bots'],
         pool_capacity['hourly_bots'],
