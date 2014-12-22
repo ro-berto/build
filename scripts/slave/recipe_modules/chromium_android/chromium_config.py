@@ -32,12 +32,13 @@ def clang_builder(c):
 def clang_release_builder(c):
   c.gyp_env.GYP_DEFINES['component'] = 'shared_library'
   c.gyp_env.GYP_DEFINES['asan'] = 1
+  c.gyp_env.GYP_DEFINES['asan_coverage'] = 1
   c.gyp_env.GYP_DEFINES['use_allocator'] = 'none'
   c.compile_py.default_targets = ['chrome_apk']
 
 @CONFIG_CTX(includes=['clang_release_builder'])
 def clang_release_builder_l(c):
-  c.gyp_env.GYP_DEFINES['asan_coverage'] = 1
+  pass
 
 @CONFIG_CTX(includes=['main_builder'])
 def component_builder(c):
