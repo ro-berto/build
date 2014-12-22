@@ -63,22 +63,6 @@ SPEC = {
       },
       'chromium_apply_config': ['chromium_perf']
     },
-    'Linux Oilpan Builder': {
-      'disable_tests': True,
-      'recipe_config': 'chromium_oilpan',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'builder',
-      'compile_targets': [
-        'chromium_builder_perf',
-      ],
-      'testing': {
-        'platform': 'linux',
-      },
-      'chromium_apply_config': ['chromium_perf']
-    },
     'Win Builder': {
       'disable_tests': True,
       'recipe_config': 'official',
@@ -152,13 +136,6 @@ _AddBotSpec(
     perf_id='linux-release',
     target_bits=64,
     num_shards=5)
-_AddBotSpec(
-    name='Linux Oilpan Perf',
-    platform='linux',
-    parent_builder='Linux Oilpan Builder',
-    perf_id='linux-oilpan-release',
-    target_bits=64,
-    num_shards=4)
 _AddBotSpec(
     name='Win 8 Perf',
     platform='win',
