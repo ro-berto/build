@@ -16,6 +16,10 @@ SIMPLE_NON_OPEN_SOURCE_TESTS_TO_RUN = [
   'gles2_conform_test',
 ]
 
+SIMPLE_WIN_ONLY_FYI_ONLY_TESTS = [
+  'angle_end2end_tests',
+]
+
 D3D9_TEST_NAME_MAPPING = {
   'gles2_conform_test': 'gles2_conform_d3d9_test',
   'webgl_conformance': 'webgl_conformance_d3d9'
@@ -172,7 +176,13 @@ class GpuApi(recipe_api.RecipeApi):
     # aren't supported on the current configuration (because the component
     # build is used).
     is_tryserver = self.m.tryserver.is_tryserver
-    targets = [u'%s_run' % test for test in common.GPU_ISOLATES]
+    if self.is_fyi_waterfall and self.m.platform.is_win:
+      # TODO(kbr): run these tests on the trybots as soon as there is
+      # capacity to do so, and on all platforms as soon as ANGLE does.
+      isolates = common.GPU_ISOLATES + common.WIN_ONLY_GPU_ISOLATES
+    else:
+      isolates = common.GPU_ISOLATES
+    targets = [u'%s_run' % test for test in isolates]
     self.m.isolate.clean_isolated_files(
         self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
     if is_tryserver:
@@ -283,10 +293,15 @@ class GpuApi(recipe_api.RecipeApi):
 
     # Copy the test list to avoid mutating it.
     basic_tests = list(SIMPLE_TESTS_TO_RUN)
-    # Only run tests on the tree closers and on the CQ which are
-    # available in the open-source repository.
     if self.is_fyi_waterfall:
+      # Only run tests on the tree closers and on the CQ which are
+      # available in the open-source repository.
       basic_tests += SIMPLE_NON_OPEN_SOURCE_TESTS_TO_RUN
+      if self.m.platform.is_win:
+        # TODO(kbr): run these tests on the trybots as soon as there
+        # is capacity to do so, and on all platforms as soon as ANGLE
+        # does.
+        basic_tests += SIMPLE_WIN_ONLY_FYI_ONLY_TESTS
 
     #TODO(martiniss) convert loop
     for test in basic_tests:
