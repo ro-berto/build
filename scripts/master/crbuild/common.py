@@ -2,11 +2,22 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import datetime
 import logging
 
 from twisted.python import log as twistedLog
 
 LOG_PREFIX = '[crbuild] '
+
+# Buildbot-related constants.
+CHANGE_CATEGORY = 'crbuild'
+CHANGE_REASON = 'crbuild'
+CRBUILD_CHANGE_ID_PROPERTY = 'change_id'
+INFO_PROPERTY = 'crbuild'  # A Buildbot property for crbuild-specific info.
+LEASE_KEY_PROPERTY = 'lease_key'
+
+# UTC datetime corresponding to zero Unix timestamp.
+EPOCH = datetime.datetime.utcfromtimestamp(0)
 
 
 class CrbuildError(Exception):
@@ -15,3 +26,26 @@ class CrbuildError(Exception):
 
 def log(message, level=logging.INFO):
   twistedLog.msg('%s%s' % (LOG_PREFIX, message), loglevel=level)
+
+
+# Copied from "utils" appengine component
+# https://chromium.googlesource.com/infra/swarming/+/master/appengine/components/components/utils.py
+def datetime_to_timestamp(value):
+  """Converts UTC datetime to integer timestamp in microseconds since epoch."""
+  if not isinstance(value, datetime.datetime):
+    raise ValueError(
+        'Expecting datetime object, got %s instead' % type(value).__name__)
+  if value.tzinfo is not None:
+    raise ValueError('Only UTC datetime is supported')
+  dt = value - EPOCH
+  return dt.microseconds + 1000 * 1000 * (dt.seconds + 24 * 3600 * dt.days)
+
+
+# Copied from "utils" appengine component
+# https://chromium.googlesource.com/infra/swarming/+/master/appengine/components/components/utils.py
+def timestamp_to_datetime(value):
+  """Converts integer timestamp in microseconds since epoch to UTC datetime."""
+  if not isinstance(value, (int, long, float)):
+    raise ValueError(
+        'Expecting a number, got %s instead' % type(value).__name__)
+  return EPOCH + datetime.timedelta(microseconds=value)
