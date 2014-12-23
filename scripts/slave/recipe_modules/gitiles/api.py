@@ -10,7 +10,7 @@ class Gitiles(recipe_api.RecipeApi):
   def _curl(self, url, step_name):
     step_result = self.m.python(step_name,
       self.resource('gerrit_client.py'), [
-      '--json-file', self.m.json.output(add_json_log=False),
+      '--json-file', self.m.json.output(),
       '--url', url,
     ])
 
@@ -24,10 +24,7 @@ class Gitiles(recipe_api.RecipeApi):
     )
 
     refs = sorted(str(ref) for ref in step_result.json.output)
-
-    for ref in refs:
-      step_result.presentation.links[ref] = self.m.url.join(url, '+', ref)
-
+    step_result.presentation.logs['refs'] = refs
     return refs
 
   def log(self, url, ref, num='all', step_name=None):
@@ -56,9 +53,6 @@ class Gitiles(recipe_api.RecipeApi):
       for commit in step_result.json.output['log']
     ]
 
-    for commit in commits:
-      step_result.presentation.links[commit[0]] = self.m.url.join(
-        url, '+', commit[0]
-      )
-
+    step_result.presentation.logs['log'] = [commit[0] for commit in commits]
+    step_result.presentation.step_text = '<br />%d new commits' % len(commits)
     return commits
