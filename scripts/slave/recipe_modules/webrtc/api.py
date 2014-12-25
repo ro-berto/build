@@ -244,10 +244,6 @@ class WebRTCApi(recipe_api.RecipeApi):
         annotate = None  # The parallel script doesn't output gtest format.
         flakiness_dash = False
 
-      # TODO(kjellander): Remove once webrtc:4106 is fixed.
-      if self.m.chromium.c.gyp_env.GYP_DEFINES.get('tsan') == 1:
-        env['TSAN_OPTIONS'] = 'detect_deadlocks=0'
-
       self.m.chromium.runtest(
           test=test, args=args, name=name, annotate=annotate, xvfb=True,
           flakiness_dash=flakiness_dash, python_mode=python_mode,

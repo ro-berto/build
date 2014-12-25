@@ -106,9 +106,6 @@
       "--enable-tsan",
       "audio_decoder_unittests"
     ],
-    "env": {
-      "TSAN_OPTIONS": "detect_deadlocks=0"
-    },
     "name": "audio_decoder_unittests"
   },
   {
@@ -131,9 +128,6 @@
       "--enable-tsan",
       "common_audio_unittests"
     ],
-    "env": {
-      "TSAN_OPTIONS": "detect_deadlocks=0"
-    },
     "name": "common_audio_unittests"
   },
   {
@@ -156,9 +150,6 @@
       "--enable-tsan",
       "common_video_unittests"
     ],
-    "env": {
-      "TSAN_OPTIONS": "detect_deadlocks=0"
-    },
     "name": "common_video_unittests"
   },
   {
@@ -181,9 +172,6 @@
       "--enable-tsan",
       "libjingle_media_unittest"
     ],
-    "env": {
-      "TSAN_OPTIONS": "detect_deadlocks=0"
-    },
     "name": "libjingle_media_unittest"
   },
   {
@@ -206,9 +194,6 @@
       "--enable-tsan",
       "libjingle_p2p_unittest"
     ],
-    "env": {
-      "TSAN_OPTIONS": "detect_deadlocks=0"
-    },
     "name": "libjingle_p2p_unittest"
   },
   {
@@ -231,9 +216,6 @@
       "--enable-tsan",
       "libjingle_peerconnection_unittest"
     ],
-    "env": {
-      "TSAN_OPTIONS": "detect_deadlocks=0"
-    },
     "name": "libjingle_peerconnection_unittest"
   },
   {
@@ -256,9 +238,6 @@
       "--enable-tsan",
       "modules_tests"
     ],
-    "env": {
-      "TSAN_OPTIONS": "detect_deadlocks=0"
-    },
     "name": "modules_tests"
   },
   {
@@ -281,9 +260,6 @@
       "--enable-tsan",
       "modules_unittests"
     ],
-    "env": {
-      "TSAN_OPTIONS": "detect_deadlocks=0"
-    },
     "name": "modules_unittests"
   },
   {
@@ -306,9 +282,6 @@
       "--enable-tsan",
       "rtc_unittests"
     ],
-    "env": {
-      "TSAN_OPTIONS": "detect_deadlocks=0"
-    },
     "name": "rtc_unittests"
   },
   {
@@ -331,9 +304,6 @@
       "--enable-tsan",
       "system_wrappers_unittests"
     ],
-    "env": {
-      "TSAN_OPTIONS": "detect_deadlocks=0"
-    },
     "name": "system_wrappers_unittests"
   },
   {
@@ -356,9 +326,6 @@
       "--enable-tsan",
       "test_support_unittests"
     ],
-    "env": {
-      "TSAN_OPTIONS": "detect_deadlocks=0"
-    },
     "name": "test_support_unittests"
   },
   {
@@ -381,9 +348,6 @@
       "--enable-tsan",
       "tools_unittests"
     ],
-    "env": {
-      "TSAN_OPTIONS": "detect_deadlocks=0"
-    },
     "name": "tools_unittests"
   },
   {
@@ -406,9 +370,6 @@
       "--enable-tsan",
       "video_engine_core_unittests"
     ],
-    "env": {
-      "TSAN_OPTIONS": "detect_deadlocks=0"
-    },
     "name": "video_engine_core_unittests"
   },
   {
@@ -431,9 +392,6 @@
       "--enable-tsan",
       "video_engine_tests"
     ],
-    "env": {
-      "TSAN_OPTIONS": "detect_deadlocks=0"
-    },
     "name": "video_engine_tests"
   },
   {
@@ -456,9 +414,6 @@
       "--enable-tsan",
       "voice_engine_unittests"
     ],
-    "env": {
-      "TSAN_OPTIONS": "detect_deadlocks=0"
-    },
     "name": "voice_engine_unittests"
   }
 ]
