@@ -5,9 +5,9 @@
       "-u",
       "[BUILD]/scripts/slave/bot_update.py",
       "--master",
-      "chromium.fyi",
+      "chromium.perf.fyi",
       "--builder",
-      "Linux Oilpan Perf (3)",
+      "Linux Oilpan Perf (4)",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -108,9 +108,9 @@
       "--build-archive-url",
       "gs://test-domain/test-archive.zip",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux Oilpan Perf (3)\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Linux Oilpan Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux Oilpan Perf (4)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Linux Oilpan Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux Oilpan Perf (3)\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Linux Oilpan Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux Oilpan Perf (4)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Linux Oilpan Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "name": "extract build"
   },

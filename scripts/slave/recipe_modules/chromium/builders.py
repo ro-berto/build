@@ -10,6 +10,7 @@ from . import chromium_mac
 from . import chromium_memory
 from . import chromium_memory_fyi
 from . import chromium_perf
+from . import chromium_perf_fyi
 from . import chromium_webkit
 from . import chromium_win
 from . import client_skia
@@ -30,6 +31,7 @@ BUILDERS = {
   'chromium.memory': chromium_memory.SPEC,
   'chromium.memory.fyi': chromium_memory_fyi.SPEC,
   'chromium.perf': chromium_perf.SPEC,
+  'chromium.perf.fyi': chromium_perf_fyi.SPEC,
   'chromium.webkit': chromium_webkit.SPEC,
   'chromium.win': chromium_win.SPEC,
   'client.skia': client_skia.SPEC,
