@@ -228,7 +228,6 @@
       "purpose:CI",
       "--tag",
       "purpose:post-commit",
-      "--idempotent",
       "ffffffffffffffffffffffffffffffffffffffff",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
