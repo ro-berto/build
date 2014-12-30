@@ -44,7 +44,7 @@ def _AddBotSpec(name, platform, parent_builder, perf_id, target_bits,
 
 SPEC = {
   'settings': {
-    'build_gs_bucket': 'chromium-perf-archive',
+    'build_gs_bucket': 'chrome-perf',
   },
   'builders': {
     'android_nexus5_oilpan_perf': {

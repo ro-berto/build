@@ -129,7 +129,7 @@
       "--target",
       "Release",
       "--build-url",
-      "gs://chromium-perf-archive/chromium.perf.fyi/android_oilpan_builder",
+      "gs://chrome-perf/android_oilpan_builder",
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--factory-properties",
