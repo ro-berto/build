@@ -15,6 +15,7 @@ from twisted.internet import defer, reactor
 from twisted.python import log as twistedLog
 from twisted.python.threadpool import ThreadPool
 import apiclient
+import apiclient.discovery
 import httplib2
 
 

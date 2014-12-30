@@ -22,6 +22,7 @@ from buildbot.status.web.baseweb import WebStatus
 import master.chromium_status_bb8 as chromium_status
 
 from common import chromium_utils
+from master import cbe_json_status_push
 from master import status_logger
 import config
 
@@ -305,6 +306,21 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
     c['status'].append(HttpStatusPush(
         'https://chromium-build-logs.appspot.com/status_receiver',
         blackList=blacklist))
+
+  # Enable Chrome Build Extract status push if configured. This requires the
+  # configuration file to be defined and valid for this master.
+  status_push = None
+  try:
+    status_push = cbe_json_status_push.StatusPush.load(
+        active_master,
+        pushInterval=30, # Push every 30 seconds.
+    )
+  except cbe_json_status_push.ConfigError as e:
+    log.err(None, 'Failed to load configuration; not installing CBE status '
+            'push: %s' % (e.message,))
+  if status_push:
+    # A status push configuration was identified.
+    c['status'].append(status_push)
 
   kwargs = {}
   if public_html:

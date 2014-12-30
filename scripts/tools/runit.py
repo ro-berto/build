@@ -38,9 +38,10 @@ def add_build_paths(path_list):
   # First build the list of required paths
   build_paths = []
 
-  def append_if(x):
-    if os.path.isdir(x):
-      build_paths.append(x)
+  def append_if(*x):
+    path = os.path.join(*x)
+    if os.path.isdir(path):
+      build_paths.append(path)
 
   third_party = os.path.join(BUILD_DIR, 'third_party')
   if os.path.isdir(third_party):
@@ -52,12 +53,15 @@ def add_build_paths(path_list):
       if os.path.isdir(full):
         build_paths.append(full)
 
-  append_if(os.path.join(BUILD_DIR, 'scripts'))
+  append_if(BUILD_DIR, 'scripts')
   append_if(third_party)
-  append_if(os.path.join(BUILD_DIR, 'site_config'))
-  append_if(os.path.join(BUILD_DIR, '..', 'build_internal', 'site_config'))
-  append_if(os.path.join(
-      BUILD_DIR, '..', 'build_internal', 'scripts', 'master'))
+  append_if(third_party, 'google_api_python_client')
+  append_if(third_party, 'httplib2', 'python2')
+  append_if(third_party, 'httplib2', 'oauth2client')
+  append_if(third_party, 'httplib2', 'uritemplate')
+  append_if(BUILD_DIR, 'site_config')
+  append_if(BUILD_DIR, '..', 'build_internal', 'site_config')
+  append_if(BUILD_DIR, '..', 'build_internal', 'scripts', 'master')
 
   # build_paths now contains all the required paths, in *reverse order*
   # of priority.
