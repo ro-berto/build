@@ -1,13 +1,13 @@
-# Copyright 2014 The Chromium Authors. All rights reserved.
+# Copyright 2015 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
 from buildbot.status import builder as build_results
 from buildbot.status.base import StatusReceiverMultiService
-from master.crbuild.integration import BUILD_ETA_UPDATE_INTERVAL_SECONDS
+from master.buildbucket.integration import BUILD_ETA_UPDATE_INTERVAL
 from twisted.internet.defer import inlineCallbacks, returnValue
 
-# Map (Buildbot-specific build result -> crbuild-specific build status)
+
 BUILD_STATUS_NAMES = {
     build_results.SUCCESS: 'SUCCESS',
     build_results.EXCEPTION: 'EXCEPTION',
@@ -15,8 +15,8 @@ BUILD_STATUS_NAMES = {
 }
 
 
-class CrbuildStatus(StatusReceiverMultiService):
-  """Updates build status on crbuild."""
+class BuildBucketStatus(StatusReceiverMultiService):
+  """Updates build status on buildbucket."""
 
   def __init__(self, integrator):
     StatusReceiverMultiService.__init__(self)
@@ -32,12 +32,12 @@ class CrbuildStatus(StatusReceiverMultiService):
     return self
 
   def buildStarted(self, builder_name, build):
-    if not self.integrator.is_crbuild_build(build):
+    if not self.integrator.is_buildbucket_build(build):
       return None
 
     self.integrator.on_build_started(build)
     # Tell Buildbot to call self.buildETAUpdate every 10 seconds.
-    return (self, BUILD_ETA_UPDATE_INTERVAL_SECONDS)
+    return (self, BUILD_ETA_UPDATE_INTERVAL.total_seconds())
 
   def buildETAUpdate(self, build, eta_seconds):
     self.integrator.on_build_eta_update(build, eta_seconds)

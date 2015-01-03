@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright 2014 The Chromium Authors. All rights reserved.
+# Copyright 2015 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -10,7 +10,7 @@ import unittest
 
 import test_env  # pylint: disable=W0611
 
-from master.crbuild import common, changes
+from master.buildbucket import common, changestore
 from master.unittests.deferred_resource_test import run_deferred
 from mock import Mock
 from twisted.internet import defer
@@ -18,7 +18,7 @@ from twisted.internet import defer
 
 class ChangeStoreTest(unittest.TestCase):
   buildbot = None
-  crbuild_change = {
+  buildbucket_change = {
       'id': '1',
       'author': {'email': 'johndoe@chromium.org'},
       'message': 'hello world',
@@ -38,7 +38,7 @@ class ChangeStoreTest(unittest.TestCase):
     self.buildbot.get_cache.return_value = self.buildbot.change_cache
     self.buildbot.change_cache.get.return_value = self.buildbot.change
 
-    self.store = changes.ChangeStore(self.buildbot)
+    self.store = changestore.ChangeStore(self.buildbot)
 
   def test_find_change_in_db(self):
     change = Mock()
@@ -67,40 +67,40 @@ class ChangeStoreTest(unittest.TestCase):
   def test_get_change(self):
     cache = self.buildbot.change_cache
     cache.get.return_value = None
-    result = run_deferred(self.store.get_change(self.crbuild_change))
+    result = run_deferred(self.store.get_change(self.buildbucket_change))
 
     info = {
-        common.CRBUILD_CHANGE_ID_PROPERTY: '1',
+        common.BUILDBUCKET_CHANGE_ID_PROPERTY: '1',
     }
     self.buildbot.add_change_to_db.assert_called_once_with(
-        author=self.crbuild_change['author']['email'],
+        author=self.buildbucket_change['author']['email'],
         files=[],
-        comments=self.crbuild_change['message'],
-        revision=self.crbuild_change['revision'],
+        comments=self.buildbucket_change['message'],
+        revision=self.buildbucket_change['revision'],
         when_timestamp=datetime.datetime(2014, 12, 22),
-        branch=self.crbuild_change['branch'],
+        branch=self.buildbucket_change['branch'],
         category=common.CHANGE_CATEGORY,
-        revlink=self.crbuild_change['url'],
+        revlink=self.buildbucket_change['url'],
         properties={
             common.INFO_PROPERTY: (info, 'Change'),
         },
-        repository=self.crbuild_change.get('repo_url'),
-        project=self.crbuild_change.get('project'),
+        repository=self.buildbucket_change.get('repo_url'),
+        project=self.buildbucket_change.get('project'),
     )
     self.assertEqual(result, self.buildbot.get_change_by_id.return_value)
 
   def test_get_change_with_cached_value(self):
     cache = self.buildbot.change_cache
-    result = run_deferred(self.store.get_change(self.crbuild_change))
+    result = run_deferred(self.store.get_change(self.buildbucket_change))
     self.assertEqual(result, cache.get.return_value)
     self.assertFalse(self.buildbot.add_change_to_db.called)
 
   def test_get_source_stamp(self):
     result = run_deferred(
-        self.store.get_source_stamp([self.crbuild_change]))
+        self.store.get_source_stamp([self.buildbucket_change]))
     cache = self.buildbot.change_cache
     cache.get.assert_called_once_with(
-        (self.crbuild_change['revision'], self.crbuild_change['id']))
+        (self.buildbucket_change['revision'], self.buildbucket_change['id']))
     bb_change = cache.get.return_value
     self.buildbot.insert_source_stamp_to_db.assert_called_once_with(
         branch=bb_change.branch,
@@ -115,10 +115,10 @@ class ChangeStoreTest(unittest.TestCase):
   def test_get_source_stamp_with_cache(self):
     ssid = Mock()
     ss_cache = {
-        (self.crbuild_change['id'],): ssid,
+        (self.buildbucket_change['id'],): ssid,
     }
     result = run_deferred(
-        self.store.get_source_stamp([self.crbuild_change], cache=ss_cache))
+        self.store.get_source_stamp([self.buildbucket_change], cache=ss_cache))
     self.assertFalse(self.buildbot.change_cache.get.called)
     self.assertFalse(self.buildbot.insert_source_stamp_to_db.called)
     self.assertEqual(result, ssid)

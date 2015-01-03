@@ -1,4 +1,4 @@
-# Copyright 2014 The Chromium Authors. All rights reserved.
+# Copyright 2015 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -7,24 +7,26 @@ import logging
 
 from twisted.python import log as twistedLog
 
-LOG_PREFIX = '[crbuild] '
+LOG_PREFIX = '[buildbucket] '
 
 # Buildbot-related constants.
-CHANGE_CATEGORY = 'crbuild'
-CHANGE_REASON = 'crbuild'
-CRBUILD_CHANGE_ID_PROPERTY = 'change_id'
-INFO_PROPERTY = 'crbuild'  # A Buildbot property for crbuild-specific info.
+CHANGE_CATEGORY = 'buildbucket'
+CHANGE_REASON = 'buildbucket'
+BUILDBUCKET_CHANGE_ID_PROPERTY = 'change_id'
+INFO_PROPERTY = 'buildbucket'  # A Buildbot property for buildbucket info.
 LEASE_KEY_PROPERTY = 'lease_key'
 
 # UTC datetime corresponding to zero Unix timestamp.
 EPOCH = datetime.datetime.utcfromtimestamp(0)
 
 
-class CrbuildError(Exception):
-  """crbuild-specific error."""
+class Error(Exception):
+  """Buildbucket-specific error."""
 
 
-def log(message, level=logging.INFO):
+def log(message, level=None):
+  if level is None:
+    level = logging.INFO
   twistedLog.msg('%s%s' % (LOG_PREFIX, message), loglevel=level)
 
 

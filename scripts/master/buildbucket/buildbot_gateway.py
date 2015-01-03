@@ -1,17 +1,18 @@
-# Copyright 2014 The Chromium Authors. All rights reserved.
+# Copyright 2015 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-"""This file encapsulates most of buildbot API for CrbuildIntegrator."""
+"""This file encapsulates most of buildbot API for BuildBucketIntegrator."""
 
 from buildbot.changes.changes import Change
+from buildbot.interfaces import IControl
 from buildbot.status import builder as build_results
 from twisted.internet.defer import inlineCallbacks, returnValue
 import sqlalchemy as sa
 
 
 class BuildbotGateway(object):
-  """All buildbot APIs needed by CrbuildIntegrator to function.
+  """All buildbot APIs needed by BuildBucketIntegrator to function.
 
   Handy to mock.
   """
@@ -103,3 +104,13 @@ class BuildbotGateway(object):
   def get_build_url(self, build):
     """Returns a URL for the |build|."""
     return self.master.getStatus().getURLForThing(build)
+
+  def stop_build(self, build, reason):
+    """Stops the |build|."""
+    assert IControl.providedBy(self.master)
+    control = IControl(self.master)
+    builder_control = control.getBuilder(build.getBuilder().getName())
+    assert builder_control
+    build_control = builder_control.getBuild(build.getNumber())
+    assert build_control
+    build_control.stopBuild(reason)
