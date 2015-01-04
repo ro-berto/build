@@ -883,6 +883,24 @@ BUILDERS = {
   },
   'client.webrtc.fyi': {
     'builders':  {
+      'Win32 Debug (parallel)': {
+        'recipe_config': 'webrtc_parallel',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'win'},
+      },
+      'Mac64 Debug (parallel)': {
+        'recipe_config': 'webrtc_parallel',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'mac'},
+      },
       'Linux64 Debug (parallel)': {
         'recipe_config': 'webrtc_parallel',
         'chromium_config_kwargs': {
