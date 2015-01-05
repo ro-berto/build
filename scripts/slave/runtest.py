@@ -1971,10 +1971,17 @@ def main():
       # Set the path to llvm-symbolizer to be used by asan_symbolize.py
       extra_env['LLVM_SYMBOLIZER_PATH'] = symbolizer_path
 
+    def AddToExistingEnv(env_dict, key, options_list):
+      # Adds a key to the supplied environment dictionary but appends it to
+      # existing environment variables if it already contains values.
+      assert type(env_dict) is dict
+      assert type(options_list) is list
+      env_dict[key] = ' '.join(filter(bool, [os.environ.get(key)]+options_list))
+
     # ThreadSanitizer
     if options.enable_tsan:
       tsan_options = symbolization_options
-      extra_env['TSAN_OPTIONS'] = ' '.join(tsan_options)
+      AddToExistingEnv(extra_env, 'TSAN_OPTIONS', tsan_options)
       # Disable sandboxing under TSan for now. http://crbug.com/223602.
       args.append(disable_sandbox_flag)
 
@@ -1984,7 +1991,8 @@ def main():
       lsan_options = symbolization_options + \
                      ['suppressions=%s' % options.lsan_suppressions_file,
                       'print_suppressions=1']
-      extra_env['LSAN_OPTIONS'] = ' '.join(lsan_options)
+      AddToExistingEnv(extra_env, 'LSAN_OPTIONS', lsan_options)
+
       # Disable sandboxing under LSan.
       args.append(disable_sandbox_flag)
 
@@ -1999,7 +2007,7 @@ def main():
                       'strip_path_prefix=%s ' % strip_path_prefix]
       if options.enable_lsan:
         asan_options += ['detect_leaks=1']
-      extra_env['ASAN_OPTIONS'] = ' '.join(asan_options)
+      AddToExistingEnv(extra_env, 'ASAN_OPTIONS', asan_options)
 
       # ASan is not yet sandbox-friendly on Windows (http://crbug.com/382867).
       if sys.platform == 'win32':
@@ -2010,7 +2018,7 @@ def main():
       msan_options = symbolization_options
       if options.enable_lsan:
         msan_options += ['detect_leaks=1']
-      extra_env['MSAN_OPTIONS'] = ' '.join(msan_options)
+      AddToExistingEnv(extra_env, 'MSAN_OPTIONS', msan_options)
 
     # Set the number of shards environement variables.
     if options.total_shards and options.shard_index:
