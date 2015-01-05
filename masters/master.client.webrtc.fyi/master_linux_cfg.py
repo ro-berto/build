@@ -21,7 +21,7 @@ def Update(c):
   specs = [
     {
       'name': 'Linux Asan (parallel)',
-      'slavebuilddir': 'linux',
+      'slavebuilddir': 'linux_asan',
     },
   ]
 

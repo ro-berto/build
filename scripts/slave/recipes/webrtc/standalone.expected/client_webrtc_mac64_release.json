@@ -81,7 +81,6 @@
     "name": "cleanup_temp"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -92,20 +91,17 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
       "--test-type=audio_decoder_unittests",
-      "--generate-json-file",
-      "-o",
-      "gtest-results/audio_decoder_unittests",
       "--builder-name=Mac64 Release",
       "--slave-name=slavename",
       "--build-number=1337",
-      "audio_decoder_unittests"
+      "--run-python-script",
+      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[SLAVE_BUILD]/src/out/Release/audio_decoder_unittests"
     ],
     "name": "audio_decoder_unittests"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -116,20 +112,17 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
       "--test-type=common_audio_unittests",
-      "--generate-json-file",
-      "-o",
-      "gtest-results/common_audio_unittests",
       "--builder-name=Mac64 Release",
       "--slave-name=slavename",
       "--build-number=1337",
-      "common_audio_unittests"
+      "--run-python-script",
+      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[SLAVE_BUILD]/src/out/Release/common_audio_unittests"
     ],
     "name": "common_audio_unittests"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -140,20 +133,17 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
       "--test-type=common_video_unittests",
-      "--generate-json-file",
-      "-o",
-      "gtest-results/common_video_unittests",
       "--builder-name=Mac64 Release",
       "--slave-name=slavename",
       "--build-number=1337",
-      "common_video_unittests"
+      "--run-python-script",
+      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[SLAVE_BUILD]/src/out/Release/common_video_unittests"
     ],
     "name": "common_video_unittests"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -164,20 +154,17 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
       "--test-type=libjingle_media_unittest",
-      "--generate-json-file",
-      "-o",
-      "gtest-results/libjingle_media_unittest",
       "--builder-name=Mac64 Release",
       "--slave-name=slavename",
       "--build-number=1337",
-      "libjingle_media_unittest"
+      "--run-python-script",
+      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[SLAVE_BUILD]/src/out/Release/libjingle_media_unittest"
     ],
     "name": "libjingle_media_unittest"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -188,20 +175,17 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
       "--test-type=libjingle_p2p_unittest",
-      "--generate-json-file",
-      "-o",
-      "gtest-results/libjingle_p2p_unittest",
       "--builder-name=Mac64 Release",
       "--slave-name=slavename",
       "--build-number=1337",
-      "libjingle_p2p_unittest"
+      "--run-python-script",
+      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[SLAVE_BUILD]/src/out/Release/libjingle_p2p_unittest"
     ],
     "name": "libjingle_p2p_unittest"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -212,20 +196,17 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
       "--test-type=libjingle_peerconnection_unittest",
-      "--generate-json-file",
-      "-o",
-      "gtest-results/libjingle_peerconnection_unittest",
       "--builder-name=Mac64 Release",
       "--slave-name=slavename",
       "--build-number=1337",
-      "libjingle_peerconnection_unittest"
+      "--run-python-script",
+      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[SLAVE_BUILD]/src/out/Release/libjingle_peerconnection_unittest"
     ],
     "name": "libjingle_peerconnection_unittest"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -236,20 +217,17 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
       "--test-type=modules_tests",
-      "--generate-json-file",
-      "-o",
-      "gtest-results/modules_tests",
       "--builder-name=Mac64 Release",
       "--slave-name=slavename",
       "--build-number=1337",
-      "modules_tests"
+      "--run-python-script",
+      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[SLAVE_BUILD]/src/out/Release/modules_tests"
     ],
     "name": "modules_tests"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -260,20 +238,17 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
       "--test-type=modules_unittests",
-      "--generate-json-file",
-      "-o",
-      "gtest-results/modules_unittests",
       "--builder-name=Mac64 Release",
       "--slave-name=slavename",
       "--build-number=1337",
-      "modules_unittests"
+      "--run-python-script",
+      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[SLAVE_BUILD]/src/out/Release/modules_unittests"
     ],
     "name": "modules_unittests"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -284,20 +259,17 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
       "--test-type=rtc_unittests",
-      "--generate-json-file",
-      "-o",
-      "gtest-results/rtc_unittests",
       "--builder-name=Mac64 Release",
       "--slave-name=slavename",
       "--build-number=1337",
-      "rtc_unittests"
+      "--run-python-script",
+      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[SLAVE_BUILD]/src/out/Release/rtc_unittests"
     ],
     "name": "rtc_unittests"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -308,20 +280,17 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
       "--test-type=system_wrappers_unittests",
-      "--generate-json-file",
-      "-o",
-      "gtest-results/system_wrappers_unittests",
       "--builder-name=Mac64 Release",
       "--slave-name=slavename",
       "--build-number=1337",
-      "system_wrappers_unittests"
+      "--run-python-script",
+      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[SLAVE_BUILD]/src/out/Release/system_wrappers_unittests"
     ],
     "name": "system_wrappers_unittests"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -332,20 +301,17 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
       "--test-type=test_support_unittests",
-      "--generate-json-file",
-      "-o",
-      "gtest-results/test_support_unittests",
       "--builder-name=Mac64 Release",
       "--slave-name=slavename",
       "--build-number=1337",
-      "test_support_unittests"
+      "--run-python-script",
+      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[SLAVE_BUILD]/src/out/Release/test_support_unittests"
     ],
     "name": "test_support_unittests"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -356,20 +322,17 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
       "--test-type=tools_unittests",
-      "--generate-json-file",
-      "-o",
-      "gtest-results/tools_unittests",
       "--builder-name=Mac64 Release",
       "--slave-name=slavename",
       "--build-number=1337",
-      "tools_unittests"
+      "--run-python-script",
+      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[SLAVE_BUILD]/src/out/Release/tools_unittests"
     ],
     "name": "tools_unittests"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -380,20 +343,17 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
       "--test-type=video_engine_core_unittests",
-      "--generate-json-file",
-      "-o",
-      "gtest-results/video_engine_core_unittests",
       "--builder-name=Mac64 Release",
       "--slave-name=slavename",
       "--build-number=1337",
-      "video_engine_core_unittests"
+      "--run-python-script",
+      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[SLAVE_BUILD]/src/out/Release/video_engine_core_unittests"
     ],
     "name": "video_engine_core_unittests"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -404,20 +364,17 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
       "--test-type=video_engine_tests",
-      "--generate-json-file",
-      "-o",
-      "gtest-results/video_engine_tests",
       "--builder-name=Mac64 Release",
       "--slave-name=slavename",
       "--build-number=1337",
-      "video_engine_tests"
+      "--run-python-script",
+      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[SLAVE_BUILD]/src/out/Release/video_engine_tests"
     ],
     "name": "video_engine_tests"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -428,20 +385,17 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
       "--test-type=voice_engine_unittests",
-      "--generate-json-file",
-      "-o",
-      "gtest-results/voice_engine_unittests",
       "--builder-name=Mac64 Release",
       "--slave-name=slavename",
       "--build-number=1337",
-      "voice_engine_unittests"
+      "--run-python-script",
+      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[SLAVE_BUILD]/src/out/Release/voice_engine_unittests"
     ],
     "name": "voice_engine_unittests"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -452,15 +406,13 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
       "--test-type=libjingle_peerconnection_objc_test.app/Contents/MacOS/libjingle_peerconnection_objc_test",
-      "--generate-json-file",
-      "-o",
-      "gtest-results/libjingle_peerconnection_objc_test.app/Contents/MacOS/libjingle_peerconnection_objc_test",
       "--builder-name=Mac64 Release",
       "--slave-name=slavename",
       "--build-number=1337",
-      "libjingle_peerconnection_objc_test.app/Contents/MacOS/libjingle_peerconnection_objc_test"
+      "--run-python-script",
+      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[SLAVE_BUILD]/src/out/Release/libjingle_peerconnection_objc_test.app/Contents/MacOS/libjingle_peerconnection_objc_test"
     ],
     "name": "libjingle_peerconnection_objc_test"
   }
