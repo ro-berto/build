@@ -14,13 +14,13 @@ def Update(c):
                             branch='trunk',
                             treeStableTimer=0,
                             builderNames=[
-                                'Linux64 Debug (parallel)',
+                                'Linux Asan (parallel)',
       ]),
   ])
 
   specs = [
     {
-      'name': 'Linux64 Debug (parallel)',
+      'name': 'Linux Asan (parallel)',
       'slavebuilddir': 'linux',
     },
   ]

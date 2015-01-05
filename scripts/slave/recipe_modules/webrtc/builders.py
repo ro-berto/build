@@ -26,6 +26,11 @@ RECIPE_CONFIGS = {
     'gclient_config': 'webrtc',
     'test_suite': 'webrtc_parallel',
   },
+  'webrtc_parallel_clang': {
+    'chromium_config': 'webrtc_clang',
+    'gclient_config': 'webrtc',
+    'test_suite': 'webrtc_parallel',
+  },
   'webrtc_android': {
     'chromium_config': 'android',
     'chromium_android_config': 'webrtc',
@@ -648,7 +653,7 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'Linux32 Debug': {
-        'recipe_config': 'webrtc',
+        'recipe_config': 'webrtc_parallel',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -657,7 +662,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'Linux32 Release': {
-        'recipe_config': 'webrtc',
+        'recipe_config': 'webrtc_parallel',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -666,7 +671,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'Linux64 Debug': {
-        'recipe_config': 'webrtc',
+        'recipe_config': 'webrtc_parallel',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -675,7 +680,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'Linux64 Release': {
-        'recipe_config': 'webrtc',
+        'recipe_config': 'webrtc_parallel',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -901,10 +906,11 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
       },
-      'Linux64 Debug (parallel)': {
-        'recipe_config': 'webrtc_parallel',
+      'Linux Asan (parallel)': {
+        'recipe_config': 'webrtc_parallel_clang',
+        'chromium_apply_config': ['asan'],
         'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
+          'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
@@ -1111,7 +1117,7 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'linux': {
-        'recipe_config': 'webrtc',
+        'recipe_config': 'webrtc_parallel',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -1120,7 +1126,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'linux_rel': {
-        'recipe_config': 'webrtc',
+        'recipe_config': 'webrtc_parallel',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
