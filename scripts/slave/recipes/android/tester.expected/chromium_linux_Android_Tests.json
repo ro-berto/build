@@ -116,9 +116,7 @@
       "-u",
       "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
       "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "--force-version",
-      "3.4",
+      "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
       "cp",
       "gs://chromium-android/android_main_rel/full-build-linux_4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00.zip",
       "[SLAVE_BUILD]/src/out/build_product.zip"
@@ -712,9 +710,7 @@
       "-u",
       "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
       "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "--force-version",
-      "3.4",
+      "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
       "cp",
       "[SLAVE_BUILD]/src/out/Release/full_log",
       "gs://chromium-android/logcat_dumps/Android Tests/1337"

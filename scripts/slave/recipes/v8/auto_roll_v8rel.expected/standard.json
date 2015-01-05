@@ -92,9 +92,7 @@
       "-u",
       "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
       "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "--force-version",
-      "3.4",
+      "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
       "cp",
       "[SLAVE_BUILD]/v8-releases-update.json",
       "gs://chromium-v8-auto-roll/v8rel/v8-releases-update.json"

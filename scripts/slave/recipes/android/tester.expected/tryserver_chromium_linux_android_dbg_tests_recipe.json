@@ -405,9 +405,7 @@
       "-u",
       "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
       "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "--force-version",
-      "3.4",
+      "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
       "cp",
       "[SLAVE_BUILD]/src/out/Debug/full_log",
       "gs://chromium-android/logcat_dumps/android_dbg_tests_recipe/1337"
