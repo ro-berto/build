@@ -128,7 +128,8 @@
       "-u",
       "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
       "--",
-      "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--",
       "cp",
       "[SLAVE_BUILD]/refs_heads_lkgr.log",
       "gs://chromium-v8-auto-roll/v8_release_process/refs_heads_lkgr.log"
@@ -255,7 +256,8 @@
       "-u",
       "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
       "--",
-      "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--",
       "cp",
       "[SLAVE_BUILD]/refs_heads_candidate.log",
       "gs://chromium-v8-auto-roll/v8_release_process/refs_heads_candidate.log"

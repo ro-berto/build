@@ -25,6 +25,10 @@ def GenSteps(api):
                     'gs://chromium-recipe-test/some/random/path/**',
                     'gs://chromium-recipe-test/staging'])
 
+  api.gsutil(['cp',
+                    'gs://chromium-recipe-test/some/random/path/**',
+                    'gs://chromium-recipe-test/staging'], version='3.25')
+
   api.gsutil.download_url(
       'https://storage.cloud.google.com/' + bucket + '/' + cloud_file,
       local_file,
