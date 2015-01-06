@@ -210,6 +210,10 @@ class DartCommands(commands.FactoryCommands):
     if channel and (channel.name == 'be' or channel.name == 'dev'):
       cmd += ' --exclude-suite=pkg'
 
+    name = options.get('name') or ''
+    if 'asan' in name:
+      cmd += ' --builder-tag=asan'
+
     checked_config = options.get('checked_config')
     if not checked_config:
       checked_config = 'both'
