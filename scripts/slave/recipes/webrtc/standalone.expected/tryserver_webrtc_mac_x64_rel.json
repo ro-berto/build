@@ -87,6 +87,7 @@
     "name": "cleanup_temp"
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -97,16 +98,16 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"mac_x64_rel\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"mac_x64_rel\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
       "--test-type=audio_decoder_unittests",
       "--builder-name=mac_x64_rel",
       "--slave-name=slavename",
-      "--run-python-script",
-      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/audio_decoder_unittests"
+      "audio_decoder_unittests"
     ],
     "name": "audio_decoder_unittests"
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -117,16 +118,16 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"mac_x64_rel\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"mac_x64_rel\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
       "--test-type=common_audio_unittests",
       "--builder-name=mac_x64_rel",
       "--slave-name=slavename",
-      "--run-python-script",
-      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/common_audio_unittests"
+      "common_audio_unittests"
     ],
     "name": "common_audio_unittests"
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -137,16 +138,16 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"mac_x64_rel\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"mac_x64_rel\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
       "--test-type=common_video_unittests",
       "--builder-name=mac_x64_rel",
       "--slave-name=slavename",
-      "--run-python-script",
-      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/common_video_unittests"
+      "common_video_unittests"
     ],
     "name": "common_video_unittests"
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -157,16 +158,16 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"mac_x64_rel\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"mac_x64_rel\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
       "--test-type=libjingle_media_unittest",
       "--builder-name=mac_x64_rel",
       "--slave-name=slavename",
-      "--run-python-script",
-      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/libjingle_media_unittest"
+      "libjingle_media_unittest"
     ],
     "name": "libjingle_media_unittest"
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -177,16 +178,16 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"mac_x64_rel\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"mac_x64_rel\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
       "--test-type=libjingle_p2p_unittest",
       "--builder-name=mac_x64_rel",
       "--slave-name=slavename",
-      "--run-python-script",
-      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/libjingle_p2p_unittest"
+      "libjingle_p2p_unittest"
     ],
     "name": "libjingle_p2p_unittest"
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -197,16 +198,16 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"mac_x64_rel\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"mac_x64_rel\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
       "--test-type=libjingle_peerconnection_unittest",
       "--builder-name=mac_x64_rel",
       "--slave-name=slavename",
-      "--run-python-script",
-      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/libjingle_peerconnection_unittest"
+      "libjingle_peerconnection_unittest"
     ],
     "name": "libjingle_peerconnection_unittest"
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -217,16 +218,16 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"mac_x64_rel\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"mac_x64_rel\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
       "--test-type=modules_tests",
       "--builder-name=mac_x64_rel",
       "--slave-name=slavename",
-      "--run-python-script",
-      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/modules_tests"
+      "modules_tests"
     ],
     "name": "modules_tests"
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -237,16 +238,16 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"mac_x64_rel\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"mac_x64_rel\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
       "--test-type=modules_unittests",
       "--builder-name=mac_x64_rel",
       "--slave-name=slavename",
-      "--run-python-script",
-      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/modules_unittests"
+      "modules_unittests"
     ],
     "name": "modules_unittests"
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -257,16 +258,16 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"mac_x64_rel\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"mac_x64_rel\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
       "--test-type=rtc_unittests",
       "--builder-name=mac_x64_rel",
       "--slave-name=slavename",
-      "--run-python-script",
-      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/rtc_unittests"
+      "rtc_unittests"
     ],
     "name": "rtc_unittests"
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -277,16 +278,16 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"mac_x64_rel\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"mac_x64_rel\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
       "--test-type=system_wrappers_unittests",
       "--builder-name=mac_x64_rel",
       "--slave-name=slavename",
-      "--run-python-script",
-      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/system_wrappers_unittests"
+      "system_wrappers_unittests"
     ],
     "name": "system_wrappers_unittests"
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -297,16 +298,16 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"mac_x64_rel\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"mac_x64_rel\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
       "--test-type=test_support_unittests",
       "--builder-name=mac_x64_rel",
       "--slave-name=slavename",
-      "--run-python-script",
-      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/test_support_unittests"
+      "test_support_unittests"
     ],
     "name": "test_support_unittests"
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -317,16 +318,16 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"mac_x64_rel\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"mac_x64_rel\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
       "--test-type=tools_unittests",
       "--builder-name=mac_x64_rel",
       "--slave-name=slavename",
-      "--run-python-script",
-      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/tools_unittests"
+      "tools_unittests"
     ],
     "name": "tools_unittests"
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -337,16 +338,16 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"mac_x64_rel\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"mac_x64_rel\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
       "--test-type=video_engine_core_unittests",
       "--builder-name=mac_x64_rel",
       "--slave-name=slavename",
-      "--run-python-script",
-      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/video_engine_core_unittests"
+      "video_engine_core_unittests"
     ],
     "name": "video_engine_core_unittests"
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -357,16 +358,16 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"mac_x64_rel\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"mac_x64_rel\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
       "--test-type=video_engine_tests",
       "--builder-name=mac_x64_rel",
       "--slave-name=slavename",
-      "--run-python-script",
-      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/video_engine_tests"
+      "video_engine_tests"
     ],
     "name": "video_engine_tests"
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -377,16 +378,16 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"mac_x64_rel\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"mac_x64_rel\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
       "--test-type=voice_engine_unittests",
       "--builder-name=mac_x64_rel",
       "--slave-name=slavename",
-      "--run-python-script",
-      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/voice_engine_unittests"
+      "voice_engine_unittests"
     ],
     "name": "voice_engine_unittests"
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -397,12 +398,11 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"mac_x64_rel\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"mac_x64_rel\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
       "--test-type=libjingle_peerconnection_objc_test.app/Contents/MacOS/libjingle_peerconnection_objc_test",
       "--builder-name=mac_x64_rel",
       "--slave-name=slavename",
-      "--run-python-script",
-      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/libjingle_peerconnection_objc_test.app/Contents/MacOS/libjingle_peerconnection_objc_test"
+      "libjingle_peerconnection_objc_test.app/Contents/MacOS/libjingle_peerconnection_objc_test"
     ],
     "name": "libjingle_peerconnection_objc_test"
   }
