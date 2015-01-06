@@ -47,9 +47,9 @@ class RepoPoller(PollingChangeSource):
 
   def __init__(self, repo_url, repo_branches=None, workdir=None,
                pollInterval=5*60, repo_bin='repo', git_bin='git',
-               category='', project='', revlinktmpl=None,
-               encoding='utf-8', from_addr=None, to_addrs=None,
-               smtp_host=None, manifest='manifest'):
+               category='', revlinktmpl=None, encoding='utf-8',
+               from_addr=None, to_addrs=None, smtp_host=None,
+               manifest='manifest'):
     # In 'dry_run' mode poller won't fetch the repository.
     # Used when running master smoke tests.
     self.dry_run = 'POLLER_DRY_RUN' in os.environ
@@ -69,7 +69,6 @@ class RepoPoller(PollingChangeSource):
     self.repo_bin = repo_bin
     self.git_bin = git_bin
     self.category = category
-    self.project = project
     self.revlinktmpl = revlinktmpl
     self.encoding = encoding
     self.from_addr = from_addr
@@ -343,7 +342,7 @@ class RepoPoller(PollingChangeSource):
             when_timestamp=timestamp,
             branch=current_repo_branch,
             category=self.category,
-            project=self.project,
+            project=project,
             repository='/'.join([self.repo_url, project]),
             revlink=revlink,
             properties={'manifest_url': self.manifest_url,
