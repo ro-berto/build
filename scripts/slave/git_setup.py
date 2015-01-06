@@ -29,12 +29,13 @@ def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('--path', help='Path to prospective git repo.',
                       required=True)
-  parser.add_argument('--remote', help='Name of the git remote.', required=True)
   parser.add_argument('--url', help='URL of remote to make origin.',
                       required=True)
   parser.add_argument('--git_cmd_path',
                       help='Path to the git command to run.',
                       default='git')
+  parser.add_argument('--remote', help='Name of the git remote.',
+                      default='origin')
   parser.add_argument('-v', '--verbose', action='store_true')
   opts = parser.parse_args()
 
