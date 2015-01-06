@@ -26,10 +26,11 @@ def GenSteps(api):
       ref=api.properties.get('revision'),
       recursive=True,
       set_got_revision=api.properties.get('set_got_revision'),
-      curl_trace_file=curl_trace_file)
+      curl_trace_file=curl_trace_file,
+      remote_name=api.properties.get('remote_name'))
 
-  # You can use api.git.fetch_tags to fetch all tags from the origin
-  api.git.fetch_tags()
+  # You can use api.git.fetch_tags to fetch all tags from the remote
+  api.git.fetch_tags(api.properties.get('remote_name'))
 
   # If you need to run more arbitrary git commands, you can use api.git itself,
   # which behaves like api.step(), but automatically sets the name of the step.
@@ -43,7 +44,8 @@ def GenSteps(api):
 
   # You can use api.git.rebase to rebase the current branch onto another one
   api.git.rebase(name_prefix='my repo', branch='origin/master',
-    dir_path=api.path['checkout'])
+                 dir_path=api.path['checkout'],
+                 remote_name=api.properties.get('remote_name'))
 
 
 def GenTests(api):
@@ -68,7 +70,6 @@ def GenTests(api):
     api.step_data('git status cannot_fail_build', retcode=1)
   )
 
-
   yield (
       api.test('set_got_revision') +
       api.properties(set_got_revision=True) +
@@ -79,4 +80,6 @@ def GenTests(api):
   yield (
     api.test('rebase_failed') +
     api.step_data('my repo rebase', retcode=1)
-    )
+  )
+
+  yield api.test('remote_not_origin') + api.properties(remote_name='not_origin')

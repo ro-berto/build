@@ -28,31 +28,33 @@ class GitApi(recipe_api.RecipeApi):
       else:
         return f.result
 
-  def fetch_tags(self, **kwargs):
-    """Fetches all tags from the origin."""
+  def fetch_tags(self, remote_name=None, **kwargs):
+    """Fetches all tags from the remote."""
     kwargs.setdefault('name', 'git fetch tags')
-    self('fetch', 'origin', '--tags', **kwargs)
+    remote_name = remote_name or 'origin'
+    self('fetch', remote_name, '--tags', **kwargs)
 
   def checkout(self, url, ref=None, dir_path=None, recursive=False,
                submodules=True, keep_paths=None, step_suffix=None,
                curl_trace_file=None, can_fail_build=True,
-               set_got_revision=False):
+               set_got_revision=False, remote_name=None):
     """Returns an iterable of steps to perform a full git checkout.
     Args:
-      url (string): url of remote repo to use as upstream
-      ref (string): ref to fetch and check out
+      url (str): url of remote repo to use as upstream
+      ref (str): ref to fetch and check out
       dir_path (Path): optional directory to clone into
       recursive (bool): whether to recursively fetch submodules or not
       submodules (bool): whether to sync and update submodules or not
       keep_paths (iterable of strings): paths to ignore during git-clean;
           paths are gitignore-style patterns relative to checkout_path.
-      step_suffix (string): suffix to add to a each step name
+      step_suffix (str): suffix to add to a each step name
       curl_trace_file (Path): if not None, dump GIT_CURL_VERBOSE=1 trace to that
           file. Useful for debugging git issue reproducible only on bots. It has
           a side effect of all stderr output of 'git fetch' going to that file.
       can_fail_build (bool): if False, ignore errors during fetch or checkout.
       set_got_revision (bool): if True, resolves HEAD and sets got_revision
           property.
+      remote_name (str): name of the git remote to use
     """
     if not dir_path:
       dir_path = url.rsplit('/', 1)[-1]
@@ -68,6 +70,12 @@ class GitApi(recipe_api.RecipeApi):
       self.m.path['checkout'] = dir_path
 
     git_setup_args = ['--path', dir_path, '--url', url]
+
+    if remote_name:
+      git_setup_args += ['--remote', remote_name]
+    else:
+      remote_name = 'origin'
+
     if self.m.platform.is_win:
       git_setup_args += ['--git_cmd_path',
                          self.m.path['depot_tools'].join('git.bat')]
@@ -92,19 +100,19 @@ class GitApi(recipe_api.RecipeApi):
     # one ref here, so this is safe.
     fetch_args = []
     if not ref:                                  # Case 0
-      fetch_remote = 'origin'
+      fetch_remote = remote_name
       fetch_ref = self.m.properties.get('branch') or 'master'
       checkout_ref = 'FETCH_HEAD'
     elif self._GIT_HASH_RE.match(ref):        # Case 1.
-      fetch_remote = 'origin'
+      fetch_remote = remote_name
       fetch_ref = ''
       checkout_ref = ref
     elif ref.startswith('refs/heads/'):       # Case 3.
-      fetch_remote = 'origin'
+      fetch_remote = remote_name
       fetch_ref = ref[len('refs/heads/'):]
       checkout_ref = 'FETCH_HEAD'
     else:                                     # Cases 2 and 4.
-      fetch_remote = 'origin'
+      fetch_remote = remote_name
       fetch_ref = ref
       checkout_ref = 'FETCH_HEAD'
 
@@ -167,15 +175,18 @@ class GitApi(recipe_api.RecipeApi):
                 stdout=self.m.raw_io.output(),
                 step_test_data=step_test_data).stdout.rstrip()
 
-  def rebase(self, name_prefix, branch, dir_path, **kwargs):
+  def rebase(self, name_prefix, branch, dir_path, remote_name=None,
+             **kwargs):
     """Run rebase HEAD onto branch
     Args:
-    name_prefix (string): a prefix used for the step names
-    branch (string): a branch name or a hash to rebase onto
+    name_prefix (str): a prefix used for the step names
+    branch (str): a branch name or a hash to rebase onto
     dir_path (Path): directory to clone into
+    remote_name (str): the remote name to rebase from if not origin
     """
+    remote_name = remote_name or 'origin'
     try:
-      self('rebase', 'origin/master',
+      self('rebase', '%s/master' % remote_name,
           name="%s rebase" % name_prefix, cwd=dir_path, **kwargs)
     except self.m.step.StepFailure:
       self('rebase', '--abort', name='%s rebase abort' % name_prefix,

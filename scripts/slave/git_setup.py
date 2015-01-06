@@ -29,6 +29,7 @@ def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('--path', help='Path to prospective git repo.',
                       required=True)
+  parser.add_argument('--remote', help='Name of the git remote.', required=True)
   parser.add_argument('--url', help='URL of remote to make origin.',
                       required=True)
   parser.add_argument('--git_cmd_path',
@@ -38,6 +39,7 @@ def main():
   opts = parser.parse_args()
 
   path = opts.path
+  remote = opts.remote
   url = opts.url
 
   logging.getLogger().setLevel(logging.DEBUG if opts.verbose else logging.WARN)
@@ -46,11 +48,11 @@ def main():
     os.makedirs(path)
 
   if os.path.exists(os.path.join(path, '.git')):
-    run_git(opts.git_cmd_path, 'config', '--remove-section', 'remote.origin',
-            cwd=path)
+    run_git(opts.git_cmd_path, 'config', '--remove-section',
+            'remote.%s' % remote, cwd=path)
   else:
     run_git(opts.git_cmd_path, 'init', cwd=path)
-  run_git(opts.git_cmd_path, 'remote', 'add', 'origin', url, cwd=path)
+  run_git(opts.git_cmd_path, 'remote', 'add', remote, url, cwd=path)
   return 0
 
 
