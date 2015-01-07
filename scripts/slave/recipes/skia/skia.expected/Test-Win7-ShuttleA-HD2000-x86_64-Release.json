@@ -2,15 +2,6 @@
   {
     "cmd": [
       "git.bat",
-      "rebase",
-      "--abort"
-    ],
-    "cwd": "[SLAVE_BUILD]\\skia",
-    "name": "abort rebase"
-  },
-  {
-    "cmd": [
-      "git.bat",
       "fetch"
     ],
     "cwd": "[SLAVE_BUILD]\\skia",

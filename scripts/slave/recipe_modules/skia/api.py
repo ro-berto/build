@@ -124,9 +124,6 @@ class SkiaApi(recipe_api.RecipeApi):
         git = 'git.bat'
       else:
         git = 'git'
-      self.run(self.m.step, 'abort rebase', abort_on_failure=False,
-               fail_build_on_failure=False, cmd=[git, 'rebase', '--abort'],
-               cwd=self.skia_dir)
       self.run(self.m.step, 'git fetch', cmd=[git, 'fetch'], cwd=self.skia_dir)
       target_rev = self.m.properties.get('revision')
       if target_rev:
