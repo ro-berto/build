@@ -10,13 +10,6 @@
   {
     "cmd": [
       "git",
-      "fetch"
-    ],
-    "name": "git fetch"
-  },
-  {
-    "cmd": [
-      "git",
       "clean",
       "-d",
       "-f"

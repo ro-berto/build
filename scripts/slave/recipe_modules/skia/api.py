@@ -118,18 +118,13 @@ class SkiaApi(recipe_api.RecipeApi):
 
   def checkout_steps(self):
     """Run the steps to obtain a checkout of Skia."""
-    if 'Win' in self.c.BUILDER_NAME:
-      git = 'git.bat'
-    else:
-      git = 'git'
-    self.run(self.m.step, 'abort rebase', abort_on_failure=False,
-             fail_build_on_failure=False, cmd=[git, 'rebase', '--abort'])
-    self.run(self.m.step, 'git fetch', cmd=[git, 'fetch'])
     target_rev = self.m.properties.get('revision')
+    self.run(self.m.step, 'abort rebase', abort_on_failure=False,
+             fail_build_on_failure=False, cmd=['git', 'rebase', '--abort'])
     if target_rev:
       self.run(self.m.step, 'git reset',
-               cmd=[git, 'reset', '--hard', target_rev])
-    self.run(self.m.step, 'git clean', cmd=[git, 'clean', '-d', '-f'])
+               cmd=['git', 'reset', '--hard', target_rev])
+    self.run(self.m.step, 'git clean', cmd=['git', 'clean', '-d', '-f'])
     gclient_cfg = self.m.gclient.make_config()
     skia = gclient_cfg.solutions.add()
     skia.name = 'skia'

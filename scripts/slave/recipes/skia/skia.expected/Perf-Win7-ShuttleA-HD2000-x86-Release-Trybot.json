@@ -1,7 +1,7 @@
 [
   {
     "cmd": [
-      "git.bat",
+      "git",
       "rebase",
       "--abort"
     ],
@@ -9,14 +9,7 @@
   },
   {
     "cmd": [
-      "git.bat",
-      "fetch"
-    ],
-    "name": "git fetch"
-  },
-  {
-    "cmd": [
-      "git.bat",
+      "git",
       "reset",
       "--hard",
       "abc123"
@@ -25,7 +18,7 @@
   },
   {
     "cmd": [
-      "git.bat",
+      "git",
       "clean",
       "-d",
       "-f"
