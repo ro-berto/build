@@ -199,7 +199,8 @@ class SkiaApi(recipe_api.RecipeApi):
                            '/'.join(('skimage', 'input', '*')),
                            self.images_dir,
                            name='Download test images',
-                           args=['-R'])
+                           args=['-R'],
+                           version='3.25')
     if str(self.images_dir) != str(self.device_dirs.images_dir):
       self.flavor.create_clean_device_dir(self.device_dirs.images_dir)
     self.flavor.copy_directory_contents_to_device(
@@ -227,7 +228,8 @@ class SkiaApi(recipe_api.RecipeApi):
       skp_dest = self.m.path.split(local_skp_path)[0]
       remote_skp_path = self.storage_skp_dirs.skp_dir(expected_skp_version)
       self.m.gsutil.download(global_constants.GS_GM_BUCKET, remote_skp_path,
-                             skp_dest, args=['-R'], name='download skps')
+                             skp_dest, args=['-R'], name='download skps',
+                             version='3.25')
       self._writefile(actual_version_file, expected_skp_version)
 
     # Copy SKPs to device.

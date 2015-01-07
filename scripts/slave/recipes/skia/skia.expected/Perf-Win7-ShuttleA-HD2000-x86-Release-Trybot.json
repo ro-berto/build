@@ -194,6 +194,8 @@
       "[BUILD]\\scripts\\slave\\recipe_modules\\gsutil\\resources\\gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]\\gsutil.py",
+      "--force-version",
+      "3.25",
       "--",
       "cp",
       "-R",
