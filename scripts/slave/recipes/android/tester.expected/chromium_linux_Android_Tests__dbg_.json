@@ -271,6 +271,8 @@
       "AndroidWebViewTest",
       "--test_data",
       "webview:android_webview/test/data/device_files",
+      "--isolate-file-path",
+      "android_webview/android_webview_test_apk.isolate",
       "--flakiness-dashboard-server",
       "http://test-results.appspot.com",
       "--verbose"
@@ -300,6 +302,8 @@
       "ChromeShellTest",
       "--test_data",
       "chrome:chrome/test/data/android/device_files",
+      "--isolate-file-path",
+      "chrome/chrome_shell_test_apk.isolate",
       "--flakiness-dashboard-server",
       "http://test-results.appspot.com",
       "--verbose"
@@ -329,6 +333,8 @@
       "ContentShellTest",
       "--test_data",
       "content:content/test/data/android/device_files",
+      "--isolate-file-path",
+      "content/content_shell_test_apk.isolate",
       "--flakiness-dashboard-server",
       "http://test-results.appspot.com",
       "--verbose"

@@ -17,6 +17,7 @@ INSTRUMENTATION_TESTS = [
         'package': 'org.chromium.android_webview.shell',
         'apk': 'AndroidWebView.apk'
       },
+      'isolate_file_path': 'android_webview/android_webview_test_apk.isolate',
     },
   },
   {
@@ -28,7 +29,7 @@ INSTRUMENTATION_TESTS = [
         'package': 'org.chromium.chrome.shell',
         'apk': 'ChromeShell.apk',
       },
-      # TODO(luqui): find out if host_driven_root is necessary
+      'isolate_file_path': 'chrome/chrome_shell_test_apk.isolate',
     },
   },
   {
@@ -40,6 +41,7 @@ INSTRUMENTATION_TESTS = [
         'package': 'org.chromium.content_shell_apk',
         'apk': 'ContentShell.apk',
       },
+      'isolate_file_path': 'content/content_shell_test_apk.isolate',
     },
   },
   {
@@ -475,6 +477,7 @@ class AndroidApi(recipe_api.RecipeApi):
     return None
 
   def run_instrumentation_suite(self, test_apk, test_data=None,
+                                isolate_file_path=None,
                                 flakiness_dashboard=None,
                                 annotation=None, except_annotation=None,
                                 screenshot=False, verbose=False,
@@ -485,8 +488,12 @@ class AndroidApi(recipe_api.RecipeApi):
       self.adb_install_apk(install_apk['apk'], install_apk['package'])
 
     args = ['--test-apk', test_apk]
+    # TODO(jbudorick): Remove --test_data once tests look for test data in the
+    # correct locations.
     if test_data:
       args.extend(['--test_data', test_data])
+    if isolate_file_path:
+      args.extend(['--isolate-file-path', isolate_file_path])
     if flakiness_dashboard:
       args.extend(['--flakiness-dashboard-server', flakiness_dashboard])
     if annotation:
