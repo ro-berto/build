@@ -49,9 +49,7 @@ def add_build_paths(path_list):
     keyfunc = lambda x: (
         1 if x not in troublemakers else -troublemakers.index(x))
     for d in sorted(os.listdir(third_party), key=keyfunc):
-      full = os.path.join(third_party, d)
-      if os.path.isdir(full):
-        build_paths.append(full)
+      append_if(third_party, d)
 
   append_if(BUILD_DIR, 'scripts')
   append_if(third_party)
