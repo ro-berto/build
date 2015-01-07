@@ -171,7 +171,6 @@
       "--config",
       "defaults",
       "msaa16",
-      "--useDocumentInsteadOfDevice",
       "--forcePerspectiveMatrix",
       "--match",
       "~scaled_tilemodes",

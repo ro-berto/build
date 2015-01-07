@@ -332,8 +332,7 @@ class SkiaApi(recipe_api.RecipeApi):
       args.extend(['--gpuCacheSize', '0', '0', '--config', 'gpu'])
     if self.c.BUILDER_NAME in ('Test-Win7-ShuttleA-HD2000-x86-Release',
                                'Test-Win7-ShuttleA-HD2000-x86-Release-Trybot'):
-      args.extend(['--useDocumentInsteadOfDevice',
-                   '--forcePerspectiveMatrix',
+      args.extend(['--forcePerspectiveMatrix',
                    # Disabling the following tests because they crash GM in
                    # perspective mode.
                    # See https://code.google.com/p/skia/issues/detail?id=1665
