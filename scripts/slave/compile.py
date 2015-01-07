@@ -121,16 +121,10 @@ def goma_setup(options, env):
     if hostname in ['vm320-m4', 'vm770-m4']:
       env['NACL_GOMA_THREADS'] = '1'
 
-  # HACK(shinyak, goma): Enable DepsCache only in some bots of Goma Canary,
-  # so that we can check if this feature is not harmful and how much
-  # this feature can improve build performance.
-  # If this experiment suceeds, I'll enable this in all platforms.
-  # Put .goma_deps in target directory, since some try bots shares various
-  # configurations. We don't want to share goma cache for those.
-  if hostname in ['vm657-m1', 'vm658-m1', 'build28-m1', 'build58-m1',
-                  'vm191-m1', 'vm480-m1', 'vm821-m1', 'vm649-m1', 'vm650-m1',
-                  'vm912-m1', 'vm992-m1']:
-    env['GOMA_DEPS_CACHE_DIR'] = options.target_output_dir
+  # Enable DepsCache. DepsCache caches the list of files to send goma server.
+  # This will greatly improve build speed when cache is warmed.
+  # The cache file is stored in the target output directory.
+  env['GOMA_DEPS_CACHE_DIR'] = options.target_output_dir
 
   # goma is requested.
   goma_key = os.path.join(options.goma_dir, 'goma.key')
