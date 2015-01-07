@@ -78,12 +78,12 @@ class SkiaApi(recipe_api.RecipeApi):
 
     # Set some important paths.
     slave_dir = self.m.path['slave_build']
-    skia_dir = slave_dir.join('skia')
+    self.skia_dir = slave_dir.join('skia')
     self.perf_data_dir = None
     if self.c.role == builder_name_schema.BUILDER_ROLE_PERF:
       self.perf_data_dir = slave_dir.join('perfdata', self.c.BUILDER_NAME,
                                           'data')
-    self.resource_dir = skia_dir.join('resources')
+    self.resource_dir = self.skia_dir.join('resources')
     self.images_dir = slave_dir.join('images')
     self.local_skp_dirs = default_flavor.SKPDirs(
         str(slave_dir.join('playback')),
@@ -118,6 +118,25 @@ class SkiaApi(recipe_api.RecipeApi):
 
   def checkout_steps(self):
     """Run the steps to obtain a checkout of Skia."""
+    # Initial cleanup.
+    if self.m.path.exists(self.skia_dir):
+      if 'Win' in self.c.BUILDER_NAME:
+        git = 'git.bat'
+      else:
+        git = 'git'
+      self.run(self.m.step, 'abort rebase', abort_on_failure=False,
+               fail_build_on_failure=False, cmd=[git, 'rebase', '--abort'],
+               cwd=self.skia_dir)
+      self.run(self.m.step, 'git fetch', cmd=[git, 'fetch'], cwd=self.skia_dir)
+      target_rev = self.m.properties.get('revision')
+      if target_rev:
+        self.run(self.m.step, 'git reset',
+                 cmd=[git, 'reset', '--hard', target_rev],
+                 cwd=self.skia_dir)
+      self.run(self.m.step, 'git clean', cmd=[git, 'clean', '-d', '-f'],
+               cwd=self.skia_dir)
+
+    # Run 'gclient sync'.
     gclient_cfg = self.m.gclient.make_config()
     skia = gclient_cfg.solutions.add()
     skia.name = 'skia'
