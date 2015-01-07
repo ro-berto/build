@@ -1,6 +1,32 @@
 [
   {
     "cmd": [
+      "git",
+      "rebase",
+      "--abort"
+    ],
+    "name": "abort rebase"
+  },
+  {
+    "cmd": [
+      "git",
+      "reset",
+      "--hard",
+      "abc123"
+    ],
+    "name": "git reset"
+  },
+  {
+    "cmd": [
+      "git",
+      "clean",
+      "-d",
+      "-f"
+    ],
+    "name": "git clean"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "[DEPOT_TOOLS]/gclient.py",
@@ -30,6 +56,8 @@
       "--force",
       "--verbose",
       "--delete_unversioned_trees",
+      "--revision",
+      "skia@abc123",
       "--output-json",
       "/path/to/tmp/json"
     ],
