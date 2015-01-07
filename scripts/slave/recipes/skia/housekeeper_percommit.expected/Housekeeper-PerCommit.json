@@ -1,23 +1,6 @@
 [
   {
     "cmd": [
-      "git",
-      "rebase",
-      "--abort"
-    ],
-    "name": "abort rebase"
-  },
-  {
-    "cmd": [
-      "git",
-      "clean",
-      "-d",
-      "-f"
-    ],
-    "name": "git clean"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "[DEPOT_TOOLS]/gclient.py",
