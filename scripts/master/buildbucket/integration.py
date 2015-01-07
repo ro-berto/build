@@ -81,10 +81,17 @@ class BuildBucketIntegrator(object):
   @staticmethod
   def _validate_change(change):
     """Raises ValueError if change dict is invalid."""
-    if change.get('id') is None:
-      raise ValueError('id is not specified')
-    if change.get('revision') is None:
-      raise ValueError('revision is not specified')
+    if not isinstance(change, dict):
+      raise ValueError('change is not a dict')
+    if 'id' in change:
+      change_id = change['id']
+      if not isinstance(change_id, basestring):
+        raise ValueError('Id is not a string: "%s"' % change_id)
+      if not change_id:
+        raise ValueError('Invalid id: "%s"' % change_id)
+    if 'author' in change:
+      if not isinstance(change.get('author'), dict):
+        raise ValueError('Author is not a dict')
 
   def _validate_build(self, build):
     """Raises ValueError in build dict is invalid."""

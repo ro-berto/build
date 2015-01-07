@@ -89,6 +89,34 @@ class ChangeStoreTest(unittest.TestCase):
     )
     self.assertEqual(result, self.buildbot.get_change_by_id.return_value)
 
+  def test_get_change_without_id(self):
+    cache = self.buildbot.change_cache
+    cache.get.return_value = None
+    result = run_deferred(self.store.get_change({
+        'author': {
+            'email': 'johndoe@chromium.org',
+        },
+        'message': 'Hello world',
+    }))
+
+    expected_info = {'change_id': None}
+    self.buildbot.add_change_to_db.assert_called_once_with(
+        author='johndoe@chromium.org',
+        files=[],
+        comments='Hello world',
+        revision='',
+        when_timestamp=None,
+        branch=None,
+        category=common.CHANGE_CATEGORY,
+        revlink='',
+        properties={
+            common.INFO_PROPERTY: (expected_info, 'Change'),
+        },
+        repository='',
+        project='',
+    )
+    self.assertEqual(result, self.buildbot.get_change_by_id.return_value)
+
   def test_get_change_with_cached_value(self):
     cache = self.buildbot.change_cache
     result = run_deferred(self.store.get_change(self.buildbucket_change))

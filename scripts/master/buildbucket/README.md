@@ -45,11 +45,14 @@ Buildbot-buildbucket integration supports the following build parameters:
   found, the build is skipped.
 * properties (dict): arbitrary build properties. Property 'buildbucket' is
   reserved.
-* changes (list of dict): list of changes to be associated with the build. Each
-  change is a dict with keys:
-    * id (str): a unique identity of the change. REQUIRED.
+* changes (list of dict): list of changes to be associated with the build, used
+  to create Buildbot changes for builds.
+  Each change is a dict with keys:
+    * id (str): a unique identity of the change.
+      If id and revision are specified, buildbot master will search for an
+      existing buildbot change prior creating a new one. Also see implementation
+      details below.
     * revision (str): change revision, such as commit sha or svn revision.
-      REQUIRED.
     * author (dict): author of the change
         * email (str)
         * name (str): full name
@@ -71,8 +74,12 @@ Buildbot-buildbucket integration supports the following build parameters:
   build namespace(s). This allows parallel build processing.
 
 ### Implementation details
-Buildbucket-specific information, such as build id and lease key, is stored in
-"buildbucket" property of Buidlbot entities.
+
+* Buildbucket-specific information, such as build id and lease key, is stored in
+  "buildbucket" property of Buidlbot entities.
+* When change id and revision are specified, buildbot master executes a database
+  query to find all changes matching a revision, assuming revision is uniquish,
+  and then searches in memory for change by id.
 
 [api_peek]: https://cr-buildbucket.appspot.com/_ah/api/explorer/#p/buildbucket/v1/buildbucket.peek
 [api_start]: https://cr-buildbucket.appspot.com/_ah/api/explorer/#p/buildbucket/v1/buildbucket.start

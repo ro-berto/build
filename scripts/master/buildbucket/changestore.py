@@ -43,17 +43,17 @@ class ChangeStore(object):
     return self.buildbot.add_change_to_db(
         author=author.get('email') or author.get('name'),
         files=[f['path'] for f in buildbucket_change.get('files', [])],
-        comments=buildbucket_change.get('message'),
-        revision=buildbucket_change.get('revision'),
+        comments=buildbucket_change.get('message') or '',
+        revision=buildbucket_change.get('revision') or '',
         when_timestamp=when_timestamp,
         branch=buildbucket_change.get('branch'),
         category=common.CHANGE_CATEGORY,
-        revlink=buildbucket_change.get('url'),
+        revlink=buildbucket_change.get('url') or '',
         properties={
             common.INFO_PROPERTY: (info, 'Change'),
         },
-        repository=buildbucket_change.get('repo_url'),
-        project=buildbucket_change.get('project'),
+        repository=buildbucket_change.get('repo_url') or '',
+        project=buildbucket_change.get('project') or '',
     )
 
   @defer.inlineCallbacks
@@ -77,9 +77,9 @@ class ChangeStore(object):
       buildbot.changes.change.Change object as Deferred.
     """
     revision, buildbucket_change_id = revision_and_id
-    bb_change_ids = yield self.buildbot.find_changes_by_revision(revision)
-    for bb_change_id in bb_change_ids:
-      change = yield self.buildbot.get_change_by_id(bb_change_id)
+    buildbot_change_ids = yield self.buildbot.find_changes_by_revision(revision)
+    for buildbot_change_id in buildbot_change_ids:
+      change = yield self.buildbot.get_change_by_id(buildbot_change_id)
       info = change.properties.getProperty(common.INFO_PROPERTY)
       if info is None:
         continue
@@ -105,31 +105,35 @@ class ChangeStore(object):
     Returns:
       buildbot.changes.change.Change object as Deferred.
     """
-    bb_change = yield self._find_change(
-        buildbucket_change['revision'], buildbucket_change['id'])
-    if bb_change is None:
+    buildbot_change = None
+
+    if buildbucket_change.get('revision') and buildbucket_change.get('id'):
+      buildbot_change = yield self._find_change(
+          buildbucket_change['revision'], buildbucket_change['id'])
+
+    if buildbot_change is None:
       change_id = yield self._insert_change(buildbucket_change)
-      bb_change = yield self.buildbot.get_change_by_id(change_id)
-    defer.returnValue(bb_change)
+      buildbot_change = yield self.buildbot.get_change_by_id(change_id)
+    defer.returnValue(buildbot_change)
 
   @defer.inlineCallbacks
   def _insert_source_stamp(self, buildbucket_changes):
     """Inserts a new SourceStamp for the list of changes and returns ssid."""
     assert isinstance(buildbucket_changes, list)
-    bb_changes = []
+    buildbot_changes = []
     for buildbucket_change in buildbucket_changes:
-      bb_change = yield self.get_change(buildbucket_change)
-      bb_changes.append(bb_change)
+      buildbot_change = yield self.get_change(buildbucket_change)
+      buildbot_changes.append(buildbot_change)
 
     ss_params = {
-        'changeids': [c.number for c in bb_changes],
+        'changeids': [c.number for c in buildbot_changes],
         'branch': '',
         'revision': '',
         'repository': '',
         'project': '',
     }
-    if bb_changes:
-      main_change = bb_changes[0]
+    if buildbot_changes:
+      main_change = buildbot_changes[0]
       ss_params.update({
           'branch': main_change.branch,
           'revision': main_change.revision,
@@ -148,7 +152,7 @@ class ChangeStore(object):
       SourceStamp ID as Deferred.
     """
     assert isinstance(buildbucket_changes, list)
-    if cache is not None:
+    if cache is not None and all('id' in c for c in buildbucket_changes):
       cache_key = tuple(sorted([c['id'] for c in buildbucket_changes]))
       ssid = cache.get(cache_key)
       if ssid:
