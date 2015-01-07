@@ -897,7 +897,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
       },
-      'Mac64 Debug (parallel)': {
+      'Mac Asan (parallel)': {
         'recipe_config': 'webrtc_parallel',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
