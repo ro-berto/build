@@ -103,7 +103,8 @@
       "--slave-name=slavename",
       "--run-python-script",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/audio_decoder_unittests"
+      "[SLAVE_BUILD]/src/out/Release/audio_decoder_unittests",
+      "--"
     ],
     "name": "audio_decoder_unittests"
   },
@@ -124,7 +125,8 @@
       "--slave-name=slavename",
       "--run-python-script",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/common_audio_unittests"
+      "[SLAVE_BUILD]/src/out/Release/common_audio_unittests",
+      "--"
     ],
     "name": "common_audio_unittests"
   },
@@ -145,7 +147,8 @@
       "--slave-name=slavename",
       "--run-python-script",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/common_video_unittests"
+      "[SLAVE_BUILD]/src/out/Release/common_video_unittests",
+      "--"
     ],
     "name": "common_video_unittests"
   },
@@ -166,7 +169,8 @@
       "--slave-name=slavename",
       "--run-python-script",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/libjingle_media_unittest"
+      "[SLAVE_BUILD]/src/out/Release/libjingle_media_unittest",
+      "--"
     ],
     "name": "libjingle_media_unittest"
   },
@@ -187,7 +191,8 @@
       "--slave-name=slavename",
       "--run-python-script",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/libjingle_p2p_unittest"
+      "[SLAVE_BUILD]/src/out/Release/libjingle_p2p_unittest",
+      "--"
     ],
     "name": "libjingle_p2p_unittest"
   },
@@ -208,7 +213,8 @@
       "--slave-name=slavename",
       "--run-python-script",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/libjingle_peerconnection_unittest"
+      "[SLAVE_BUILD]/src/out/Release/libjingle_peerconnection_unittest",
+      "--"
     ],
     "name": "libjingle_peerconnection_unittest"
   },
@@ -229,7 +235,8 @@
       "--slave-name=slavename",
       "--run-python-script",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/modules_tests"
+      "[SLAVE_BUILD]/src/out/Release/modules_tests",
+      "--"
     ],
     "name": "modules_tests"
   },
@@ -250,7 +257,8 @@
       "--slave-name=slavename",
       "--run-python-script",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/modules_unittests"
+      "[SLAVE_BUILD]/src/out/Release/modules_unittests",
+      "--"
     ],
     "name": "modules_unittests"
   },
@@ -271,7 +279,8 @@
       "--slave-name=slavename",
       "--run-python-script",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/rtc_unittests"
+      "[SLAVE_BUILD]/src/out/Release/rtc_unittests",
+      "--"
     ],
     "name": "rtc_unittests"
   },
@@ -292,7 +301,8 @@
       "--slave-name=slavename",
       "--run-python-script",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/system_wrappers_unittests"
+      "[SLAVE_BUILD]/src/out/Release/system_wrappers_unittests",
+      "--"
     ],
     "name": "system_wrappers_unittests"
   },
@@ -313,7 +323,8 @@
       "--slave-name=slavename",
       "--run-python-script",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/test_support_unittests"
+      "[SLAVE_BUILD]/src/out/Release/test_support_unittests",
+      "--"
     ],
     "name": "test_support_unittests"
   },
@@ -334,7 +345,8 @@
       "--slave-name=slavename",
       "--run-python-script",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/tools_unittests"
+      "[SLAVE_BUILD]/src/out/Release/tools_unittests",
+      "--"
     ],
     "name": "tools_unittests"
   },
@@ -355,7 +367,8 @@
       "--slave-name=slavename",
       "--run-python-script",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/video_engine_core_unittests"
+      "[SLAVE_BUILD]/src/out/Release/video_engine_core_unittests",
+      "--"
     ],
     "name": "video_engine_core_unittests"
   },
@@ -376,7 +389,8 @@
       "--slave-name=slavename",
       "--run-python-script",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/video_engine_tests"
+      "[SLAVE_BUILD]/src/out/Release/video_engine_tests",
+      "--"
     ],
     "name": "video_engine_tests"
   },
@@ -397,7 +411,8 @@
       "--slave-name=slavename",
       "--run-python-script",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/voice_engine_unittests"
+      "[SLAVE_BUILD]/src/out/Release/voice_engine_unittests",
+      "--"
     ],
     "name": "voice_engine_unittests"
   }
