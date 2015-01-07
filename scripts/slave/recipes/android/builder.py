@@ -290,6 +290,7 @@ def GenSteps(api):
 def _sanitize_nonalpha(text):
   return ''.join(c if c.isalnum() else '_' for c in text)
 
+
 def GenTests(api):
   # tests bots in BUILDERS
   for mastername, builders in BUILDERS.iteritems():
