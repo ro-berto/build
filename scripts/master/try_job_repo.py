@@ -10,7 +10,7 @@ from master.try_job_base import TryJobBase
 class TryJobRepoBase(TryJobBase):
   """A base class for try job schedulers based on a repository with patches.
 
-  Used by TryJobSubversion and TryJobGit.
+  Used by TryJobSubversion.
   """
   watcher = None
 
