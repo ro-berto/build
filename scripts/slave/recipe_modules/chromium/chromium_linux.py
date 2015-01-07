@@ -130,9 +130,9 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'Android Builder (dbg)',
-      'android_config': 'tests_base',
+      'android_config': 'main_builder',
+      'root_devices': True,
       'tests': [
-        steps.GTestTest('base_unittests'),
         steps.AndroidInstrumentationTest(
             'AndroidWebViewTest', 'android_webview_test_apk',
             test_data='webview:android_webview/test/data/device_files',
@@ -148,6 +148,31 @@ SPEC = {
             test_data='content:content/test/data/android/device_files',
             adb_install_apk=(
                 'ContentShell.apk', 'org.chromium.content_shell_apk')),
+        steps.AndroidInstrumentationTest(
+            'ChromeSyncShellTest', 'chrome_sync_shell_test_apk',
+            adb_install_apk=(
+                'ChromeSyncShell.apk', 'org.chromium.chrome.browser.sync')),
+        steps.GTestTest('android_webview_unittests'),
+        steps.GTestTest('base_unittests'),
+        steps.GTestTest(
+            'breakpad_unittests',
+            android_isolate_path='breakpad/breakpad_unittests.isolate'),
+        steps.GTestTest('cc_unittests'),
+        steps.GTestTest('components_unittests'),
+        steps.GTestTest('content_browsertests'),
+        steps.GTestTest('content_unittests'),
+        steps.GTestTest('events_unittests'),
+        steps.GTestTest('gl_tests'),
+        steps.GTestTest('gpu_unittests'),
+        steps.GTestTest('ipc_tests'),
+        steps.GTestTest('media_unittests'),
+        steps.GTestTest('net_unittests'),
+        steps.GTestTest('sandbox_linux_unittests'),
+        steps.GTestTest('sql_unittests'),
+        steps.GTestTest('sync_unit_tests'),
+        steps.GTestTest('ui_android_unittests'),
+        steps.GTestTest('ui_base_unittests'),
+        steps.GTestTest('unit_tests'),
       ],
       'testing': {
         'platform': 'linux',
@@ -176,9 +201,9 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'Android Builder',
-      'android_config': 'tests_base',
+      'android_config': 'main_builder',
+      'root_devices': True,
       'tests': [
-        steps.GTestTest('base_unittests'),
         steps.AndroidInstrumentationTest(
             'AndroidWebViewTest', 'android_webview_test_apk',
             test_data='webview:android_webview/test/data/device_files',
@@ -194,6 +219,31 @@ SPEC = {
             test_data='content:content/test/data/android/device_files',
             adb_install_apk=(
                 'ContentShell.apk', 'org.chromium.content_shell_apk')),
+        steps.AndroidInstrumentationTest(
+            'ChromeSyncShellTest', 'chrome_sync_shell_test_apk',
+            adb_install_apk=(
+                'ChromeSyncShell.apk', 'org.chromium.chrome.browser.sync')),
+        steps.GTestTest('android_webview_unittests'),
+        steps.GTestTest('base_unittests'),
+        steps.GTestTest(
+            'breakpad_unittests',
+            android_isolate_path='breakpad/breakpad_unittests.isolate'),
+        steps.GTestTest('cc_unittests'),
+        steps.GTestTest('components_unittests'),
+        steps.GTestTest('content_browsertests'),
+        steps.GTestTest('content_unittests'),
+        steps.GTestTest('events_unittests'),
+        steps.GTestTest('gl_tests'),
+        steps.GTestTest('gpu_unittests'),
+        steps.GTestTest('ipc_tests'),
+        steps.GTestTest('media_unittests'),
+        steps.GTestTest('net_unittests'),
+        steps.GTestTest('sandbox_linux_unittests'),
+        steps.GTestTest('sql_unittests'),
+        steps.GTestTest('sync_unit_tests'),
+        steps.GTestTest('ui_android_unittests'),
+        steps.GTestTest('ui_base_unittests'),
+        steps.GTestTest('unit_tests'),
       ],
       'testing': {
         'platform': 'linux',

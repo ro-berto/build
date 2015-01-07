@@ -182,7 +182,7 @@ class AndroidApi(recipe_api.RecipeApi):
     repos = ['src']
     if additional_repos:
       repos.extend(additional_repos)
-    if self.c.REPO_NAME not in repos:
+    if self.c.REPO_NAME not in repos and self.c.REPO_NAME:
       repos.append(self.c.REPO_NAME)
     # TODO(sivachandra): Disable subannottations after cleaning up
     # tree_truth.sh.
@@ -591,8 +591,8 @@ class AndroidApi(recipe_api.RecipeApi):
     self.device_status_check()
     self.provision_devices()
 
-  def common_tests_final_steps(self):
-    self.logcat_dump()
+  def common_tests_final_steps(self, logcat_gs_bucket=None):
+    self.logcat_dump(gs_bucket=logcat_gs_bucket)
     self.stack_tool_steps()
     self.test_report()
 

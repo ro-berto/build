@@ -248,7 +248,8 @@ class ChecklicensesTest(Test):  # pylint: disable=W0232
 
 class LocalGTestTest(Test):
   def __init__(self, name, args=None, target_name=None, use_isolate=False,
-               revision=None, webkit_revision=None, **runtest_kwargs):
+               revision=None, webkit_revision=None, android_isolate_path=None,
+               **runtest_kwargs):
     """Constructs an instance of LocalGTestTest.
 
     Args:
@@ -268,6 +269,7 @@ class LocalGTestTest(Test):
     self._use_isolate = use_isolate
     self._revision = revision
     self._webkit_revision = webkit_revision
+    self._android_isolate_path = android_isolate_path
     self._runtest_kwargs = runtest_kwargs
 
   @property
@@ -295,7 +297,14 @@ class LocalGTestTest(Test):
 
   def run(self, api, suffix):
     if api.chromium.c.TARGET_PLATFORM == 'android':
-      return api.chromium_android.run_test_suite(self.target_name, self._args)
+      isolate_file_path = None
+      if self._android_isolate_path:
+        isolate_file_path = api.path['checkout'].join(
+            self._android_isolate_path)
+      return api.chromium_android.run_test_suite(
+          self.target_name,
+          flakiness_dashboard='http://test-results.appspot.com',
+          isolate_file_path=isolate_file_path)
 
     # Copy the list because run can be invoked multiple times and we modify
     # the local copy.
@@ -958,7 +967,7 @@ class AndroidInstrumentationTest(Test):
           self.adb_install_apk[0], self.adb_install_apk[1])
     api.chromium_android.run_instrumentation_suite(
         self.name, test_data=self.test_data,
-        flakiness_dashboard='test-results.appspot.com',
+        flakiness_dashboard='http://test-results.appspot.com',
         verbose=True)
 
   def compile_targets(self, _):

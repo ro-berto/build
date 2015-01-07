@@ -35,7 +35,7 @@ def GenSteps(api):
 
   api.chromium_tests.configure_swarming('chromium', precommit=False)
   test_runner = api.chromium_tests.create_test_runner(api, tests)
-  api.chromium_tests.setup_chromium_tests(test_runner)
+  api.chromium_tests.setup_chromium_tests(test_runner, mastername=mastername)
 
 
 def _sanitize_nonalpha(text):

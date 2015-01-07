@@ -146,6 +146,15 @@
     ]
   },
   {
+    "allow_subannotations": false,
+    "cmd": [
+      "[SLAVE_BUILD]/src/build/tree_truth.sh",
+      "[SLAVE_BUILD]/src",
+      "src"
+    ],
+    "name": "tree truth steps"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -162,9 +171,28 @@
       "[BUILD]/goma",
       "--",
       "android_webview_test_apk",
+      "android_webview_unittests_apk",
       "base_unittests_apk",
+      "breakpad_unittests_apk",
+      "cc_unittests_apk",
       "chrome_shell_test_apk",
-      "content_shell_test_apk"
+      "chrome_sync_shell_test_apk",
+      "components_unittests_apk",
+      "content_browsertests_apk",
+      "content_shell_test_apk",
+      "content_unittests_apk",
+      "events_unittests_apk",
+      "gl_tests_apk",
+      "gpu_unittests_apk",
+      "ipc_tests_apk",
+      "media_unittests_apk",
+      "net_unittests_apk",
+      "sandbox_linux_unittests_apk",
+      "sql_unittests_apk",
+      "sync_unit_tests_apk",
+      "ui_android_unittests_apk",
+      "ui_base_unittests_apk",
+      "unit_tests_apk"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -214,24 +242,6 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "findbugs_tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/archive_dependencies.py",
-      "--src-dir",
-      "[SLAVE_BUILD]/src",
-      "--target",
-      "Release",
-      "--master",
-      "chromium.linux",
-      "--builder",
-      "Android Builder",
-      "--build",
-      "571"
-    ],
-    "name": "archive dependencies"
   },
   {
     "allow_subannotations": true,

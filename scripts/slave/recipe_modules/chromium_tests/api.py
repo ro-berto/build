@@ -355,6 +355,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     self.m.chromium.cleanup_temp()
     if self.m.chromium.c.TARGET_PLATFORM == 'android':
       self.m.chromium_android.clean_local_files()
+      self.m.chromium_android.run_tree_truth()
 
     if bot_type in ['builder', 'builder_tester']:
       isolated_targets = []
@@ -403,7 +404,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             verbose=True)
 
     if bot_type == 'builder':
-      if mastername == 'chromium.linux':
+      if (mastername == 'chromium.linux' and
+          self.m.chromium.c.TARGET_PLATFORM != 'android'):
         # TODO(samuong): This is restricted to Linux for now until I have more
         # confidence that it is not totally broken.
         self.m.archive.archive_dependencies(
@@ -471,6 +473,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         build_archive_url=self.m.properties.get('parent_build_archive_url'),
         )
 
+      if (self.m.chromium.c.TARGET_PLATFORM == 'android' and
+          bot_config.get('root_devices')):
+        self.m.adb.root_devices()
+
     tests = bot_config.get('tests', [])
 
     # TODO(phajdan.jr): bots should just leave tests empty instead of this.
@@ -479,7 +485,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return tests
 
-  def setup_chromium_tests(self, test_runner):
+  def setup_chromium_tests(self, test_runner, mastername=None):
     if self.m.chromium.c.TARGET_PLATFORM == 'android':
       self.m.chromium_android.common_tests_setup_steps()
 
@@ -493,7 +499,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self.m.chromium.process_dumps()
 
       if self.m.chromium.c.TARGET_PLATFORM == 'android':
-        self.m.chromium_android.common_tests_final_steps()
+        # TODO(phajdan.jr): Configure logcat GS bucket in cleaner way.
+        logcat_gs_bucket = None
+        if mastername == 'chromium.linux':
+          logcat_gs_bucket = 'chromium-android'
+        self.m.chromium_android.common_tests_final_steps(
+            logcat_gs_bucket=logcat_gs_bucket)
 
   def deapply_patch(self, bot_update_step):
     assert self.m.tryserver.is_tryserver
