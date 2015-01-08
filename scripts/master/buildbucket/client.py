@@ -24,17 +24,18 @@ def buildbucket_api_discovery_url(hostname=None):
   return (
       'https://%s/_ah/api/discovery/v1/apis/{api}/{apiVersion}/rest' % hostname)
 
-def create_buildbucket_service(master, hostname=None):
+def create_buildbucket_service(master, hostname=None, verbose=None):
   """Asynchronously creates buildbucket API resource.
 
   Returns:
     A DeferredResource as Deferred.
   """
+  hostname = hostname or BUILDBUCKET_HOSTNAME
   return DeferredResource.build(
       'buildbucket',
       'v1',
       http_factory=lambda: auth.create_http(master),
       discoveryServiceUrl=buildbucket_api_discovery_url(hostname),
-      verbose=True,
+      verbose=verbose or False,
       log_prefix=common.LOG_PREFIX,
   )

@@ -28,7 +28,7 @@ from . import client
 
 def setup(
     config, active_master, build_namespaces, poll_interval=10,
-    buildbucket_hostname=None, dry_run=None):
+    buildbucket_hostname=None, verbose=None, dry_run=None):
   """Configures a master to lease, schedule and update builds on buildbucket.
 
   Args:
@@ -39,6 +39,7 @@ def setup(
     poll_interval (int): frequency of polling, in seconds. Defaults to 10.
     buildbucket_hostname (str): if not None, override the default buildbucket
       service url.
+    verbose (bool): log more than usual. Defaults to False.
     dry_run (bool): whether to run buildbucket in a dry-run mode.
   """
   assert isinstance(config, dict), 'config must be a dict'
@@ -47,7 +48,7 @@ def setup(
   assert build_namespaces, 'build namespaces are not specified'
   assert isinstance(build_namespaces, list), 'build_namespaces must be a list'
   assert all(isinstance(n, basestring) for n in build_namespaces), (
-        'all build namespaces must be strings')
+      'all build namespaces must be strings')
 
   if dry_run is None:
     dry_run = 'POLLER_DRY_RUN' in os.environ
@@ -55,7 +56,8 @@ def setup(
   integrator = BuildBucketIntegrator(build_namespaces)
 
   buildbucket_service_factory = functools.partial(
-      client.create_buildbucket_service, active_master, buildbucket_hostname)
+      client.create_buildbucket_service, active_master, buildbucket_hostname,
+      verbose)
 
   poller = BuildBucketPoller(
       integrator=integrator,
