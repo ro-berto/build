@@ -57,8 +57,9 @@ Buildbot-buildbucket integration supports the following build parameters:
         * email (str)
         * name (str): full name
     * create_ts (int): change creation timestamp, in microseconds since Epoch.
-    * files (list of dict): list of changed files
-        * path (str)
+    * files (list of dict): list of changed files.
+      Each file is a dict with keys:
+        * path (str): file path relative to the repository root.
     * message (str): change description.
     * branch (str)
     * url (str): url to human-viewable change page.
