@@ -501,6 +501,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddGTestTestStep('events_unittests', fp)
     if R('events_br'):
       f.AddBuildrunnerGTest('events_unittests', fp)
+    if R('ui_touch_selection'):
+      f.AddGTestTestStep('ui_touch_selection_unittests', fp)
+    if R('ui_touch_selection_br'):
+      f.AddBuildrunnerGTest('ui_touch_selection_unittests', fp)
 
     # Medium-sized tests (unit and browser):
     if R('unit'):

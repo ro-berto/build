@@ -43,6 +43,7 @@ sharded_tests = [
   #'sync_integration_tests',
   'sync_unit_tests',
   'ui_base_unittests',
+  'ui_touch_selection_unittests',
   'unit_tests',
   'views_unittests',
 ]
