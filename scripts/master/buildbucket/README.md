@@ -47,7 +47,7 @@ Buildbot-buildbucket integration supports the following build parameters:
   reserved.
 * changes (list of dict): list of changes to be associated with the build, used
   to create Buildbot changes for builds.
-  Each change is a dict with keys:
+  Each change is a dict with optional keys:
     * id (str): a unique identity of the change.
       If id and revision are specified, buildbot master will search for an
       existing buildbot change prior creating a new one. Also see implementation
@@ -61,7 +61,7 @@ Buildbot-buildbucket integration supports the following build parameters:
       Each file is a dict with keys:
         * path (str): file path relative to the repository root.
     * message (str): change description.
-    * branch (str)
+    * branch (str): change branch.
     * url (str): url to human-viewable change page.
     * project (str): name of project this change refers to.
 
