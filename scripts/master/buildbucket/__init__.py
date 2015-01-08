@@ -26,37 +26,36 @@ from .status import BuildBucketStatus
 from . import client
 
 
-def setup(config, build_namespaces, service_json_key_filename,
-          poll_interval=10, buildbucket_hostname=None, dry_run=None):
+def setup(
+    config, active_master, build_namespaces, poll_interval=10,
+    buildbucket_hostname=None, dry_run=None):
   """Configures a master to lease, schedule and update builds on buildbucket.
 
   Args:
     config (dict): master configuration dict.
+    active_master (config.Master): Master site config.
     build_namespaces (list of str): a list of build namespaces to poll.
       Namespaces are specified at build submission time.
-    service_json_key_filename (str): JSON key for buildbucket authentication.
-      Can be received from a buildbucket maintainer.
     poll_interval (int): frequency of polling, in seconds. Defaults to 10.
     buildbucket_hostname (str): if not None, override the default buildbucket
       service url.
     dry_run (bool): whether to run buildbucket in a dry-run mode.
   """
   assert isinstance(config, dict), 'config must be a dict'
+  assert active_master
+  assert active_master.service_account_path, 'Service account is not assigned'
   assert build_namespaces, 'build namespaces are not specified'
   assert isinstance(build_namespaces, list), 'build_namespaces must be a list'
   assert all(isinstance(n, basestring) for n in build_namespaces), (
         'all build namespaces must be strings')
-  assert service_json_key_filename, 'service_json_key_filename not specified'
 
   if dry_run is None:
     dry_run = 'POLLER_DRY_RUN' in os.environ
 
   integrator = BuildBucketIntegrator(build_namespaces)
 
-  create_http = functools.partial(
-      client.create_authorized_http, service_json_key_filename)
   buildbucket_service_factory = functools.partial(
-      client.create_buildbucket_service, create_http, buildbucket_hostname)
+      client.create_buildbucket_service, active_master, buildbucket_hostname)
 
   poller = BuildBucketPoller(
       integrator=integrator,

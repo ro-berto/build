@@ -2,28 +2,20 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import apiclient
 import ConfigParser
 import collections
 import datetime
 import functools
-import httplib2
 import json
 import os
-import pprint
-import urlparse
 
 from buildbot.status.base import StatusReceiverMultiService
-from common.twisted_util import agent, body_producers, authorizer
+from master import auth
 from master.deferred_resource import DeferredResource
-from oauth2client.client import SignedJwtAssertionCredentials
 from twisted.internet import defer, reactor
 from twisted.python import log
-from zope.interface import implements
 
 
-# Authorization scope to request.
-AUTH_SCOPE = 'https://www.googleapis.com/auth/userinfo.email'
 CBE_URL = 'https://chrome-build-extract.appspot.com'
 CBE_DISCOVERY_SERVICE_URL = (
     '%s/_ah/api/discovery/v1/apis/{api}/{apiVersion}/rest' % CBE_URL
@@ -81,7 +73,7 @@ class StatusPush(StatusReceiverMultiService):
   verbose = False
 
   def __init__(self, activeMaster, server=None, master=None,
-               discoveryUrlTemplate=None, serviceAccountJsonPath=None,
+               discoveryUrlTemplate=None,
                pushInterval=None):
     """
     Instantiates a new StatusPush service.
@@ -97,8 +89,6 @@ class StatusPush(StatusReceiverMultiService):
       master: (str) The master name.
       discoveryUrlTemplate: (str) If not None, the discovery URL template to use
           for 'chrome-build-extract' cloud endpoint API service discovery.
-      serviceAccountJsonPath: (str) If not None, the path to the service account
-          JSON file to use for cloud endpoints authentication.
       pushInterval: (number/timedelta) The data push interval. If a number is
           supplied, it is the number of seconds.
     """
@@ -119,15 +109,8 @@ class StatusPush(StatusReceiverMultiService):
     self.master = master
     self.discoveryUrlTemplate = (discoveryUrlTemplate or
                                  CBE_DISCOVERY_SERVICE_URL)
-    self.serviceAccountJsonPath = serviceAccountJsonPath
     self.pushInterval = self._getTimeDelta(pushInterval or
                                            self.DEFAULT_PUSH_INTERVAL_SEC)
-
-    # If we're a live master and there is no configured service account path,
-    # that is an error.
-    if self.activeMaster.is_production_host and not self.serviceAccountJsonPath:
-      raise ConfigError('Production instances must have a service account '
-                        'configured.')
 
     self._status = None
     self._res = None
@@ -197,7 +180,6 @@ class StatusPush(StatusReceiverMultiService):
     getprop('master', 'master')
     getprop('push_interval_sec', 'pushInterval',
             typ=lambda v: datetime.timedelta(seconds=int(v)))
-    getprop('service_account_json_path', 'serviceAccountJsonPath')
 
     return cls(activeMaster, **kwargs)
 
@@ -250,36 +232,11 @@ class StatusPush(StatusReceiverMultiService):
   @defer.inlineCallbacks
   def _loadResource(self):
     """Loads and instantiates a cloud endpoints resource to CBE master push."""
-    creds_json = None
-    if self.serviceAccountJsonPath:
-      # Load and validate our key JSON data.
-      with open(self.serviceAccountJsonPath, 'r') as fd:
-        creds_json = json.load(fd)
-      for key in ('type', 'client_email', 'private_key'):
-        assert key in creds_json, (
-            'Credential JSON missing required key: %s' % (key,))
-      assert creds_json['type'] == 'service_account', (
-          'Key JSON type is not service account (%s)' % (creds_json['type'],))
-
-    def create_authorized_http(creds_json):
-      http = httplib2.Http()
-      if creds_json:
-         # Create and authorize the credentials.
-         creds = SignedJwtAssertionCredentials(
-             creds_json['client_email'],
-             creds_json['private_key'],
-             AUTH_SCOPE)
-         http = creds.authorize(http)
-      elif self.activeMaster.is_production_host:
-        raise ConfigError('Refusing to configure non-authenticated endpoint '
-                          'on a production master.')
-      return http
-
     # Construct our DeferredResource.
     service = yield DeferredResource.build(
         'master_push',
         'v0',
-        http_factory=lambda: create_authorized_http(creds_json),
+        http_factory=lambda: auth.create_http(self.activeMaster),
         discoveryServiceUrl=self.discoveryUrlTemplate,
         verbose=self.verbose,
         log_prefix='CBEStatusPush')

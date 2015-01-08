@@ -64,6 +64,7 @@ class Master(object):
   git_internal_server_url = None
   syzygy_internal_url = None
   v8_internal_url = None
+  service_account_path = None
 
 
   class Base(object):
