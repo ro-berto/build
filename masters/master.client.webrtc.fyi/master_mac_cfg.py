@@ -13,10 +13,22 @@ def Update(c):
       SingleBranchScheduler(name='webrtc_mac_scheduler',
                             branch='trunk',
                             treeStableTimer=0,
-                            builderNames=['Mac Asan (parallel)']),
+                            builderNames=[
+                                'Mac64 Debug (parallel)',
+                                'Mac64 Release (parallel)',
+                                'Mac Asan (parallel)',
+                            ]),
   ])
 
   specs = [
+    {
+      'name': 'Mac64 Debug (parallel)',
+      'slavebuilddir': 'mac64',
+    },
+    {
+      'name': 'Mac64 Release (parallel)',
+      'slavebuilddir': 'mac64',
+    },
     {
       'name': 'Mac Asan (parallel)',
       'slavebuilddir': 'mac_asan',
