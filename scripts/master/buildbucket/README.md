@@ -8,11 +8,11 @@ Configuring a buildbot master is straightforward:
 
     buildbucket.setup(
         c,
-        build_namespaces=['chromium'],
+        buckets=['chromium'],
         service_json_key_filename='my_secret_key.json',
     )
 
-* build_namespaces (list of str): list of build namespaces to peek and build.
+* buckets (list of str): list of buckets to peek and build.
 * service_json_key_filename (str): path to a json key file, such as
   [cr-buildbucket-dev-9c9efb83ec4b.json](cr-buildbucket-dev-9c9efb83ec4b.json).
   A production json key can be obtained by
@@ -26,10 +26,10 @@ be used to authenticate to cr-buildbucket-dev.
 
 ## How it works in the nutshell
 Every ten seconds a Buildbot master checks if it has capacity to run more
-builds. If it does, it [peeks](api_peek) builds in the specified build
-namespaces. For each valid peeked build master checks if the builder has
-capacity to run a build right away. If master decides to run a peeked build, it
-leases it. If leased successfully, master schedules a build.
+builds. If it does, it [peeks](api_peek) builds in the specified buckets.
+For each valid peeked build master checks if the builder has capacity to run a
+build right away. If master decides to run a peeked build, it leases it.
+If leased successfully, master schedules a build.
 
 During build lifetime master reports build
 status back to buildbucket. When the build starts, master calls
@@ -72,7 +72,7 @@ Buildbot-buildbucket integration supports the following build parameters:
   trigger builds using buildbucket.
 * Parallel masters: since buildbot master does not lease/schedule a build that
   it cannot handle right away, multiple masters can be setup to poll the same
-  build namespace(s). This allows parallel build processing.
+  buckets(s). This allows parallel build processing.
 
 ### Implementation details
 

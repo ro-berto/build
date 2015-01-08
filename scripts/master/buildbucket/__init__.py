@@ -11,7 +11,7 @@ scheduled on buildbucket service.
 Example:
   buildbucket.setup(
       c,  # Configuration object.
-      build_namespaces=['qo'],
+      buckets=['qo'],
       service_json_key_filename=ActiveMaster.buildbucket_json_key_filename,
   )
 
@@ -27,15 +27,14 @@ from . import client
 
 
 def setup(
-    config, active_master, build_namespaces, poll_interval=10,
+    config, active_master, buckets, poll_interval=10,
     buildbucket_hostname=None, verbose=None, dry_run=None):
   """Configures a master to lease, schedule and update builds on buildbucket.
 
   Args:
     config (dict): master configuration dict.
     active_master (config.Master): Master site config.
-    build_namespaces (list of str): a list of build namespaces to poll.
-      Namespaces are specified at build submission time.
+    buckets (list of str): a list of buckets to poll.
     poll_interval (int): frequency of polling, in seconds. Defaults to 10.
     buildbucket_hostname (str): if not None, override the default buildbucket
       service url.
@@ -45,15 +44,15 @@ def setup(
   assert isinstance(config, dict), 'config must be a dict'
   assert active_master
   assert active_master.service_account_path, 'Service account is not assigned'
-  assert build_namespaces, 'build namespaces are not specified'
-  assert isinstance(build_namespaces, list), 'build_namespaces must be a list'
-  assert all(isinstance(n, basestring) for n in build_namespaces), (
-      'all build namespaces must be strings')
+  assert buckets, 'Buckets are not specified'
+  assert isinstance(buckets, list), 'Buckets must be a list'
+  assert all(isinstance(b, basestring) for b in buckets), (
+        'all buckets must be strings')
 
   if dry_run is None:
     dry_run = 'POLLER_DRY_RUN' in os.environ
 
-  integrator = BuildBucketIntegrator(build_namespaces)
+  integrator = BuildBucketIntegrator(buckets)
 
   buildbucket_service_factory = functools.partial(
       client.create_buildbucket_service, active_master, buildbucket_hostname,

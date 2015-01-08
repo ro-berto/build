@@ -39,15 +39,14 @@ class BuildBucketIntegrator(object):
   BuildbucketPoller does that in startService/stopService.
   """
 
-  def __init__(self, build_namespaces):
+  def __init__(self, buckets):
     """Creates a BuildBucketIntegrator.
 
     Args:
-      build_namespaces (list of str): poll only builds in any of
-        |build_namespaces|.
+      buckets (list of str): poll only builds in any of |buckets|.
     """
-    assert build_namespaces, 'Build namespaces not specified'
-    self.build_namespaces = build_namespaces[:]
+    assert buckets, 'Buckets not specified'
+    self.buckets = buckets[:]
     self.buildbot = None
     self.buildbucket_service = None
     self._find_change_cache = None
@@ -289,7 +288,7 @@ class BuildBucketIntegrator(object):
 
       self.log('peeking builds...')
       peek_resp = yield self.buildbucket_service.api.peek(
-          namespace=self.build_namespaces,
+          bucket=self.buckets,
           max_builds=max_builds,
           start_cursor=start_cursor,
       )

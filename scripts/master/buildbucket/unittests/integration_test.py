@@ -86,7 +86,7 @@ def fake_buildbucket():
 
 class IntegratorTest(unittest.TestCase):
   ssid = 1
-  namespaces = ['chromium']
+  buckets = ['chromium']
   integrator = None
   buildbot = None
   buildbucket = None
@@ -124,7 +124,7 @@ class IntegratorTest(unittest.TestCase):
   def create_integrator(self, buildbot=None):
     self.buildbucket = fake_buildbucket()
     self.buildbot = buildbot or fake_buildbot()
-    self.integrator = integration.BuildBucketIntegrator(self.namespaces)
+    self.integrator = integration.BuildBucketIntegrator(self.buckets)
     def log(msg, level=logging.INFO):
       logging.log(level, msg)
     self.integrator.log = log
