@@ -1282,9 +1282,16 @@ class AnnotationObserver(buildstep.LogLineObserver):
     else:
       # Use the same source stamp.
       source_stamp = build.getSourceStamp()
-      revision = current_properties.getProperty('got_revision')
-      if revision:
-        source_stamp = source_stamp.getAbsoluteSourceStamp(revision)
+      if source_stamp.revision is None:
+        revision = current_properties.getProperty('got_revision')
+        if revision:
+          # The source stamp is relative, but we have the "got_revision", so
+          # make it absolute.
+          source_stamp = source_stamp.getAbsoluteSourceStamp(revision)
+      else:
+        # The sourcestamp is absolute. DO NOT CALL getAbsoluteSourceStamp on it
+        # because that would wipe changes and therefore the blamelist.
+        pass
       ssid = yield source_stamp.getSourceStampId(master)
 
     properties = self.getPropertiesForTriggeredBuild(current_properties,
