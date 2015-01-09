@@ -101,7 +101,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/v8/v8testing.py",
+      "[BUILD]/scripts/slave/recipe_modules/v8/resources/v8testing.py",
       "--target",
       "Debug",
       "--arch",
@@ -120,7 +120,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/v8/v8testing.py",
+      "[BUILD]/scripts/slave/recipe_modules/v8/resources/v8testing.py",
       "--target",
       "Debug",
       "--arch",
@@ -140,7 +140,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/v8/v8testing.py",
+      "[BUILD]/scripts/slave/recipe_modules/v8/resources/v8testing.py",
       "--target",
       "Debug",
       "--arch",
@@ -160,7 +160,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/v8/v8testing.py",
+      "[BUILD]/scripts/slave/recipe_modules/v8/resources/v8testing.py",
       "--target",
       "Debug",
       "--arch",
@@ -179,7 +179,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/v8/v8testing.py",
+      "[BUILD]/scripts/slave/recipe_modules/v8/resources/v8testing.py",
       "--target",
       "Debug",
       "--arch",
