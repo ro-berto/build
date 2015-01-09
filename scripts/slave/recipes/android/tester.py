@@ -42,6 +42,7 @@ UNIT_TESTS = [
   ['sync_unit_tests', None],
   ['ui_android_unittests', None],
   ['ui_base_unittests', None],
+  ['ui_touch_selection_unittests', None],
   ['unit_tests', None],
 ]
 

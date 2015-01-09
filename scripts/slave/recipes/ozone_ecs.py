@@ -48,6 +48,7 @@ OZONE_TESTS = [
     'compositor_unittests',
     'events_unittests',
     'gfx_unittests',
+    'ui_touch_selection_unittests',
 ]
 
 tests_that_do_not_compile = [
