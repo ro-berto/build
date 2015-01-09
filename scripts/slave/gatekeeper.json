@@ -460,7 +460,10 @@
       {
         "builders": {
           "*Valgrind*": {
-            "closing_optional": ["*"]
+            "closing_optional": ["*"],
+            "excluded_steps": [
+               "abort rebase"
+            ]
           }
         },
         "excluded_builders": [
@@ -474,12 +477,14 @@
           "*": {
             "closing_optional": ["*"],
             "excluded_steps": [
+              "abort rebase",
               "has ccache?"
             ]
           }
         },
         "excluded_builders": [
-          "*-Trybot"
+          "*-Trybot",
+          "*ANGLE*"
         ]
       }
     ]
