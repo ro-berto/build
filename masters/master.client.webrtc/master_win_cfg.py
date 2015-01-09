@@ -19,6 +19,8 @@ def Update(c):
           'Win64 Debug',
           'Win64 Release',
           'Win32 Release [large tests]',
+          'Win64 Debug (GN)',
+          'Win64 Release (GN)',
           'Win DrMemory Light',
           'Win DrMemory Full',
           'Win SyzyASan',
@@ -37,6 +39,8 @@ def Update(c):
       'category': 'compile|baremetal|windows',
       'slavebuilddir': 'win_baremetal',
     },
+    {'name': 'Win64 Debug (GN)', 'slavebuilddir': 'win64_gn'},
+    {'name': 'Win64 Release (GN)', 'slavebuilddir': 'win64_gn'},
     {
       'name': 'Win DrMemory Light',
       'category': 'compile',
