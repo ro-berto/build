@@ -419,7 +419,8 @@ class SkiaApi(recipe_api.RecipeApi):
       match.append('~WritePixels')
 
     # skia:3249: these images/device pairs won't decode properly.
-    if 'Nexus5' in self.c.BUILDER_NAME:
+    if ('Nexus5' in self.c.BUILDER_NAME or
+        'NexusPlayer' in self.c.BUILDER_NAME):
       match.append('~tabl_mozilla_0')
     if 'Xoom' in self.c.BUILDER_NAME:
       match.append('~tabl_mozilla_0')

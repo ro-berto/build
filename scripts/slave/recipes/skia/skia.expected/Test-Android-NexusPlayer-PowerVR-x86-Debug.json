@@ -803,7 +803,9 @@
       "model",
       "NexusPlayer",
       "os",
-      "Android"
+      "Android",
+      "--match",
+      "~tabl_mozilla_0"
     ],
     "env": {
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
