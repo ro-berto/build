@@ -661,6 +661,7 @@ def chromium_pgo_optimize(c):
 @config_ctx()
 def v8_optimize_medium(c):
   c.gyp_env.GYP_DEFINES['v8_optimized_debug'] = 1
+  c.gyp_env.GYP_DEFINES['v8_enable_slow_dchecks'] = 1
 
 @config_ctx()
 def v8_verify_heap(c):

@@ -29,6 +29,7 @@ def v8(c):
 
   if c.BUILD_CONFIG == 'Debug':
     c.gyp_env.GYP_DEFINES['v8_optimized_debug'] = 1
+    c.gyp_env.GYP_DEFINES['v8_enable_slow_dchecks'] = 1
 
   # Chromium adds '_x64' to the output folder, which is neither needed nor
   # understood when compiling v8 standalone.
