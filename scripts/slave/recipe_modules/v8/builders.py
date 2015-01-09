@@ -854,40 +854,12 @@ BUILDERS = {
         'tests': ['mjsunit', 'webkit'],
         'testing': {'platform': 'linux'},
       },
-      'V8 Mac GC Stress - 1': {
+      'V8 Mac GC Stress': {
         'chromium_apply_config': ['clang'],
         'v8_apply_config': ['gc_stress'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
-          'SHARD_COUNT': 3,
-          'SHARD_RUN': 1,
-        },
-        'bot_type': 'builder_tester',
-        'tests': ['mjsunit', 'webkit'],
-        'testing': {'platform': 'mac'},
-      },
-      'V8 Mac GC Stress - 2': {
-        'chromium_apply_config': ['clang'],
-        'v8_apply_config': ['gc_stress'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-          'SHARD_COUNT': 3,
-          'SHARD_RUN': 2,
-        },
-        'bot_type': 'builder_tester',
-        'tests': ['mjsunit', 'webkit'],
-        'testing': {'platform': 'mac'},
-      },
-      'V8 Mac GC Stress - 3': {
-        'chromium_apply_config': ['clang'],
-        'v8_apply_config': ['gc_stress'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-          'SHARD_COUNT': 3,
-          'SHARD_RUN': 3,
         },
         'bot_type': 'builder_tester',
         'tests': ['mjsunit', 'webkit'],
@@ -968,6 +940,16 @@ BUILDERS = {
         'build_gs_archive': 'linux_dbg_archive',
         'tests': ['simpleleak'],
         'testing': {'platform': 'linux'},
+      },
+      'V8 Mac64 ASAN': {
+        'chromium_apply_config': ['clang', 'asan'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['unittests', 'v8testing'],
+        'testing': {'platform': 'mac'},
       },
 ####### Category: FYI
       'V8 Linux - vtunejit': {

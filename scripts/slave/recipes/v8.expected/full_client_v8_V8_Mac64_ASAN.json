@@ -7,7 +7,7 @@
       "--master",
       "client.v8",
       "--builder",
-      "V8 Mac GC Stress - 1",
+      "V8 Mac64 ASAN",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -49,7 +49,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "clang=1 target_arch=ia32 v8_optimized_debug=1 v8_target_arch=ia32"
+      "GYP_DEFINES": "asan=1 clang=1 lsan=1 target_arch=x64 v8_target_arch=x64"
     },
     "name": "gclient runhooks"
   },
@@ -67,7 +67,7 @@
       "-u",
       "[BUILD]/scripts/slave/compile.py",
       "--target",
-      "Debug",
+      "Release",
       "--src-dir",
       "[SLAVE_BUILD]/v8",
       "--build-tool",
@@ -84,21 +84,44 @@
       "-u",
       "[BUILD]/scripts/slave/recipe_modules/v8/resources/v8testing.py",
       "--target",
-      "Debug",
+      "Release",
       "--arch",
-      "ia32",
+      "x64",
       "--testname",
-      "mjsunit",
-      "--gc-stress",
-      "--shard_count=3",
-      "--shard_run=1",
+      "unittests",
+      "--no-variants",
+      "--asan",
+      "--json-test-results",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "env": {
+      "ASAN_OPTIONS": "external_symbolizer_path=[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+    },
+    "name": "Unittests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/v8/resources/v8testing.py",
+      "--target",
+      "Release",
+      "--arch",
+      "x64",
+      "--testname",
+      "default",
       "--flaky-tests",
       "skip",
+      "--asan",
       "--json-test-results",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Mjsunit"
+    "env": {
+      "ASAN_OPTIONS": "external_symbolizer_path=[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+    },
+    "name": "Check"
   },
   {
     "cmd": [
@@ -106,64 +129,21 @@
       "-u",
       "[BUILD]/scripts/slave/recipe_modules/v8/resources/v8testing.py",
       "--target",
-      "Debug",
+      "Release",
       "--arch",
-      "ia32",
+      "x64",
       "--testname",
-      "mjsunit",
-      "--gc-stress",
-      "--shard_count=3",
-      "--shard_run=1",
+      "default",
       "--flaky-tests",
       "run",
+      "--asan",
       "--json-test-results",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Mjsunit - flaky"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/recipe_modules/v8/resources/v8testing.py",
-      "--target",
-      "Debug",
-      "--arch",
-      "ia32",
-      "--testname",
-      "webkit",
-      "--gc-stress",
-      "--shard_count=3",
-      "--shard_run=1",
-      "--flaky-tests",
-      "skip",
-      "--json-test-results",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Webkit"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/recipe_modules/v8/resources/v8testing.py",
-      "--target",
-      "Debug",
-      "--arch",
-      "ia32",
-      "--testname",
-      "webkit",
-      "--gc-stress",
-      "--shard_count=3",
-      "--shard_run=1",
-      "--flaky-tests",
-      "run",
-      "--json-test-results",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Webkit - flaky"
+    "env": {
+      "ASAN_OPTIONS": "external_symbolizer_path=[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+    },
+    "name": "Check - flaky"
   }
 ]
