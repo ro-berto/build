@@ -81,9 +81,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/v8/resources/v8testing.py",
-      "--testname",
-      "presubmit"
+      "[SLAVE_BUILD]/v8/tools/presubmit.py"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Presubmit"

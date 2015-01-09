@@ -398,8 +398,7 @@ class V8Api(recipe_api.RecipeApi):
   def presubmit(self):
     self.m.python(
       'Presubmit',
-      self.resource('v8testing.py'),
-      ['--testname', 'presubmit'],
+      self.m.path['checkout'].join('tools', 'presubmit.py'),
       cwd=self.m.path['checkout'],
     )
 

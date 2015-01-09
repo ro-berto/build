@@ -107,82 +107,79 @@ def main():
 
   os.environ['LD_LIBRARY_PATH'] = os.environ.get('PWD')
 
-  if options.testname == 'presubmit':
-    cmd = ['python', 'tools/presubmit.py']
+  cmd = ['python', 'tools/run-tests.py',
+         '--progress=verbose',
+         '--outdir=' + outdir,
+         '--arch=' + options.arch,
+         '--mode=' + options.target,
+         '--time']
+  if options.testname:
+    # Make testname hold a list of tests.
+    options.testname = options.testname.split(' ')
+    cmd.extend(options.testname)
   else:
-    cmd = ['python', 'tools/run-tests.py',
-           '--progress=verbose',
-           '--outdir=' + outdir,
-           '--arch=' + options.arch,
-           '--mode=' + options.target,
-           '--time']
-    if options.testname:
-      # Make testname hold a list of tests.
-      options.testname = options.testname.split(' ')
-      cmd.extend(options.testname)
+    options.testname = []
+  if options.asan:
+    cmd.extend(['--asan'])
+  if options.tsan:
+    cmd.extend(['--tsan'])
+  if options.msan:
+    cmd.extend(['--msan'])
+  if options.buildbot == 'True':
+    cmd.extend(['--buildbot'])
+  if options.dcheck_always_on:
+    cmd.extend(['--dcheck-always-on'])
+  if options.no_presubmit:
+    cmd.extend(['--no-presubmit'])
+  if options.no_i18n:
+    cmd.extend(['--no-i18n'])
+  if options.no_snap:
+    cmd.extend(['--no-snap'])
+  if options.no_variants:
+    cmd.extend(['--no-variants'])
+  if 'benchmarks' in options.testname:
+    cmd.extend(['--download-data'])
+  if 'test262' in options.testname:
+    cmd.extend(['--download-data'])
+  if 'test262-es6' in options.testname:
+    cmd.extend(['--download-data'])
+  if 'mozilla' in options.testname:
+    # Mozilla tests requires a number of tests to timeout, set it a bit lower.
+    if options.arch in ('arm', 'mipsel'):
+      cmd.extend(['--timeout=180'])
     else:
-      options.testname = []
-    if options.asan:
-      cmd.extend(['--asan'])
-    if options.tsan:
-      cmd.extend(['--tsan'])
-    if options.msan:
-      cmd.extend(['--msan'])
-    if options.buildbot == 'True':
-      cmd.extend(['--buildbot'])
-    if options.dcheck_always_on:
-      cmd.extend(['--dcheck-always-on'])
-    if options.no_presubmit:
-      cmd.extend(['--no-presubmit'])
-    if options.no_i18n:
-      cmd.extend(['--no-i18n'])
-    if options.no_snap:
-      cmd.extend(['--no-snap'])
-    if options.no_variants:
-      cmd.extend(['--no-variants'])
-    if 'benchmarks' in options.testname:
-      cmd.extend(['--download-data'])
-    if 'test262' in options.testname:
-      cmd.extend(['--download-data'])
-    if 'test262-es6' in options.testname:
-      cmd.extend(['--download-data'])
-    if 'mozilla' in options.testname:
-      # Mozilla tests requires a number of tests to timeout, set it a bit lower.
-      if options.arch in ('arm', 'mipsel'):
-        cmd.extend(['--timeout=180'])
-      else:
-        cmd.extend(['--timeout=120'])
-    elif options.shell_flags and '--gc-interval' in options.shell_flags:
-      # GC Stress testing takes much longer, set generous timeout.
-      if options.arch in ('arm', 'mipsel'):
-        cmd.extend(['--timeout=1200'])
-      else:
-        cmd.extend(['--timeout=900'])
+      cmd.extend(['--timeout=120'])
+  elif options.shell_flags and '--gc-interval' in options.shell_flags:
+    # GC Stress testing takes much longer, set generous timeout.
+    if options.arch in ('arm', 'mipsel'):
+      cmd.extend(['--timeout=1200'])
     else:
-      if options.arch in ('arm', 'mipsel'):
-        cmd.extend(['--timeout=600'])
-      else:
-        cmd.extend(['--timeout=200'])
-    if options.isolates:
-      cmd.extend(['--isolates'])
-    if options.shell_flags:
-      cmd.extend(['--extra-flags', options.shell_flags.replace("\"", "")])
-    if options.command_prefix:
-      cmd.extend(['--command-prefix', options.command_prefix])
-    if options.flaky_tests:
-      cmd.extend(['--flaky-tests', options.flaky_tests])
-    if options.gc_stress:
-      cmd.extend(['--gc-stress'])
-    if options.quickcheck:
-      cmd.extend(['--quickcheck'])
-    if options.json_test_results:
-      # Rerun failures to test for flakes when presenting test results.
-      # TODO(machenbach): Both flags should be default as soon as the feature
-      # makes it into all branches.
-      cmd.extend(['--rerun-failures-count=2'])
-      cmd.extend(['--json-test-results', options.json_test_results])
-    if options.predictable:
-      cmd.extend(['--predictable'])
+      cmd.extend(['--timeout=900'])
+  else:
+    if options.arch in ('arm', 'mipsel'):
+      cmd.extend(['--timeout=600'])
+    else:
+      cmd.extend(['--timeout=200'])
+  if options.isolates:
+    cmd.extend(['--isolates'])
+  if options.shell_flags:
+    cmd.extend(['--extra-flags', options.shell_flags.replace("\"", "")])
+  if options.command_prefix:
+    cmd.extend(['--command-prefix', options.command_prefix])
+  if options.flaky_tests:
+    cmd.extend(['--flaky-tests', options.flaky_tests])
+  if options.gc_stress:
+    cmd.extend(['--gc-stress'])
+  if options.quickcheck:
+    cmd.extend(['--quickcheck'])
+  if options.json_test_results:
+    # Rerun failures to test for flakes when presenting test results.
+    # TODO(machenbach): Both flags should be default as soon as the feature
+    # makes it into all branches.
+    cmd.extend(['--rerun-failures-count=2'])
+    cmd.extend(['--json-test-results', options.json_test_results])
+  if options.predictable:
+    cmd.extend(['--predictable'])
 
   if options.shard_count > 1:
     cmd.extend(['--shard-count=%s' % options.shard_count,
