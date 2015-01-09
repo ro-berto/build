@@ -7,8 +7,12 @@
 The recommended way is to fork this file and use a custom DEPS forked from
 config/XXX/DEPS with the right configuration data."""
 
+import os
 import re
 import socket
+
+
+CREDENTIALS_PATH = '/creds'
 
 
 class classproperty(object):
@@ -64,7 +68,6 @@ class Master(object):
   git_internal_server_url = None
   syzygy_internal_url = None
   v8_internal_url = None
-  service_account_path = None
 
 
   class Base(object):
@@ -137,6 +140,14 @@ class Master(object):
           (service * 10000) + # X
           (cls.master_port_base * 100) + # YY
           cls.master_port_id) # ZZ
+
+    service_account_file = None
+
+    @property
+    def service_account_path(self):
+      if self.service_account_file is None:
+        return None
+      return os.path.join(CREDENTIALS_PATH, self.service_account_file)
 
   ## Per-master configs.
 
