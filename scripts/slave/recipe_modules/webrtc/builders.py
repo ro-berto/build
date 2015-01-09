@@ -432,7 +432,7 @@ BUILDERS = {
     },
     'builders': {
       'Win32 Debug': {
-        'recipe_config': 'webrtc',
+        'recipe_config': 'webrtc_parallel',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -441,7 +441,7 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'Win32 Release': {
-        'recipe_config': 'webrtc',
+        'recipe_config': 'webrtc_parallel',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -450,7 +450,7 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'Win64 Debug': {
-        'recipe_config': 'webrtc',
+        'recipe_config': 'webrtc_parallel',
         'chromium_apply_config': ['static_library'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -460,7 +460,7 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'Win64 Release': {
-        'recipe_config': 'webrtc',
+        'recipe_config': 'webrtc_parallel',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
