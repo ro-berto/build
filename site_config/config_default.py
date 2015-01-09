@@ -143,11 +143,11 @@ class Master(object):
 
     service_account_file = None
 
-    @property
-    def service_account_path(self):
-      if self.service_account_file is None:
+    @classproperty
+    def service_account_path(cls):
+      if cls.service_account_file is None:
         return None
-      return os.path.join(CREDENTIALS_PATH, self.service_account_file)
+      return os.path.join(CREDENTIALS_PATH, cls.service_account_file)
 
   ## Per-master configs.
 
