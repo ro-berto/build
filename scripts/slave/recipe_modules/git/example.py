@@ -8,6 +8,7 @@ DEPS = [
   'platform',
   'properties',
   'raw_io',
+  'step',
 ]
 
 
@@ -27,10 +28,24 @@ def GenSteps(api):
       recursive=True,
       set_got_revision=api.properties.get('set_got_revision'),
       curl_trace_file=curl_trace_file,
-      remote_name=api.properties.get('remote_name'))
+      remote_name=api.properties.get('remote_name'),
+      display_fetch_size=api.properties.get('display_fetch_size'))
+
+  # count_objects shows number and size of objects in .git dir.
+  api.git.count_objects(
+      name='count-objects',
+      can_fail_build=api.properties.get('count_objects_can_fail_build'))
+
+  delta_report_target = api.step('count_objects_delta_report', ['echo', 'noop'])
+  delta_report_target.presentation.step_text = (
+      'Some text for coverage in count_objects')
+  # count_objects_delta_report shows delta between count_objects results.
+  api.git.count_objects_delta_report(
+      {'size': 1000, 'size-pack': 1000},
+      {'size': 2000, 'size-pack': 2000})
 
   # You can use api.git.fetch_tags to fetch all tags from the remote
-  api.git.fetch_tags(api.properties.get('remote_name'))
+  fetch_tags_step = api.git.fetch_tags(api.properties.get('remote_name'))
 
   # If you need to run more arbitrary git commands, you can use api.git itself,
   # which behaves like api.step(), but automatically sets the name of the step.
@@ -83,3 +98,24 @@ def GenTests(api):
   )
 
   yield api.test('remote_not_origin') + api.properties(remote_name='not_origin')
+
+  yield (
+      api.test('count-objects_delta') +
+      api.properties(display_fetch_size=True))
+
+  yield (
+      api.test('count-objects_failed') +
+      api.step_data('count-objects', retcode=1))
+
+  yield (
+      api.test('count-objects_with_bad_output') +
+      api.step_data(
+          'count-objects',
+          stdout=api.raw_io.output(api.git.count_objects_output('xxx'))))
+
+  yield (
+      api.test('count-objects_with_bad_output_fails_build') +
+      api.step_data(
+          'count-objects',
+          stdout=api.raw_io.output(api.git.count_objects_output('xxx'))) +
+      api.properties(count_objects_can_fail_build=True))

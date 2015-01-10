@@ -71,6 +71,39 @@
   {
     "cmd": [
       "git",
+      "count-objects",
+      "-v"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "count-objects",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "echo",
+      "noop"
+    ],
+    "name": "count_objects_delta_report",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Some text for coverage in count_objects",
+      "object size delta: 1.95 MiB@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@before:@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@  size-pack: 1000@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@  size: 1000@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@after:@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@  size-pack: 2000@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@  size: 2000@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@delta:@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@  size-pack: 1000@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@  size: 1000@@@",
+      "@@@STEP_LOG_END@count-objects delta@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
       "fetch",
       "origin",
       "--tags"

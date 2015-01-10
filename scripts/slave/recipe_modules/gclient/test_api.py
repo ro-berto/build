@@ -35,4 +35,3 @@ class GclientTestApi(recipe_test_api.RecipeTestApi):
     else:
       import struct
       return struct.unpack('!I', h.digest()[:4])[0] % 300000
-

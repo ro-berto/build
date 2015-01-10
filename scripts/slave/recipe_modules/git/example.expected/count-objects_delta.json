@@ -14,14 +14,67 @@
   {
     "cmd": [
       "git",
+      "count-objects",
+      "-v"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "count-objects before git fetch",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "git",
       "retry",
       "fetch",
       "origin",
-      "refs/foo/bar",
+      "master",
       "--recurse-submodules"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "git fetch"
+  },
+  {
+    "cmd": [
+      "git",
+      "count-objects",
+      "-v"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "count-objects after git fetch",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@object size delta: 1.95 MiB@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@before:@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@  count: 1000@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@  garbage: 1000@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@  packs: 1000@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@  in_pack: 1000@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@  size-pack: 1000@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@  size-garbage: 1000@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@  prune-packable: 1000@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@  size: 1000@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@after:@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@  count: 2000@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@  garbage: 2000@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@  packs: 2000@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@  in_pack: 2000@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@  size-pack: 2000@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@  size-garbage: 2000@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@  prune-packable: 2000@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@  size: 2000@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@delta:@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@  count: 1000@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@  garbage: 1000@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@  packs: 1000@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@  prune-packable: 1000@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@  size-pack: 1000@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@  size-garbage: 1000@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@  in_pack: 1000@@@",
+      "@@@STEP_LOG_LINE@count-objects delta@  size: 1000@@@",
+      "@@@STEP_LOG_END@count-objects delta@@@"
+    ]
   },
   {
     "cmd": [
