@@ -119,10 +119,10 @@ class AndroidApi(recipe_api.RecipeApi):
       **kwargs
     )
 
-  def init_and_sync(self):
+  def init_and_sync(self, gclient_config='android_bare'):
     # TODO(sivachandra): Move the setting of the gclient spec below to an
     # internal config extension when they are supported by the recipe system.
-    spec = self.m.gclient.make_config('android_bare')
+    spec = self.m.gclient.make_config(gclient_config)
     spec.target_os = ['android']
     s = spec.solutions[0]
     s.name = self.c.deps_dir
