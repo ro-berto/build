@@ -230,6 +230,7 @@ ENABLED_MASTERS = [
     'chromium.win',
     'client.drmemory',
     'client.mojo',
+    'client.nacl',
     'client.nacl.sdk',
     'client.nacl.sdk.mono',
     'client.skia',
