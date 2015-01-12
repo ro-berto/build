@@ -153,6 +153,9 @@ PACKAGES = [
   Package(name="typed_mock", dart_repo_package=True),
   Package(name="utf", dart_repo_package=True),
 
+  # Packages in the dart-lang project which are not published.
+  Package(github_repo='rpc', published=False),
+
   # Github samples which are not published on pub.dartlang.org
   Package(github_repo='sample-clock', sample=True, published=False),
   Package(github_repo='sample-dartiverse-search', sample=True, published=False),
