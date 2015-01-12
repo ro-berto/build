@@ -235,7 +235,8 @@ def SetupBuildersAndSchedulers(c, builders, slaves, ActiveMaster):
                 if builder_dict['name'] in triggered_builders else None)
     factory = annotator.BaseFactory(
         builder_dict['recipe'],
-        triggers=triggers)
+        triggers=triggers,
+        timeout=2400)
     factory.properties.update(builder_dict['properties'], 'BuildFactory')
     builder_dict['factory'] = factory
 
