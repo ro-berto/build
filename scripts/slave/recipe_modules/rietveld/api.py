@@ -17,13 +17,20 @@ class RietveldApi(recipe_api.RecipeApi):
       Relative path or empty string if patch_project is not set or path for a
       given is unknown.
     """
-    prop = self.m.properties.get('patch_project')
+    patch_project = self.m.properties.get('patch_project')
     patch_project_roots = {
       'blink': ['third_party', 'WebKit'],
     }
 
-    path_parts = patch_project_roots.get(prop)
-    return self.m.path.join(*path_parts) if path_parts else ''
+    path_parts = patch_project_roots.get(patch_project)
+    if path_parts:
+      patch_root = self.m.path.join(*path_parts)
+    else:
+      patch_root = self.m.properties.get('root') or ''
+      if patch_root.startswith('src'):
+        patch_root = patch_root[3:].lstrip('/')
+
+    return patch_root
 
   def apply_issue(self, *root_pieces, **kwargs):
     """Call apply_issue from depot_tools.
