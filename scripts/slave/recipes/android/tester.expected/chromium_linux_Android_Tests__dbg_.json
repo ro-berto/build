@@ -600,6 +600,22 @@
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "gtest",
       "-s",
+      "skia_unittests",
+      "--verbose",
+      "--flakiness-dashboard-server=http://test-results.appspot.com"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "skia_unittests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
       "sql_unittests",
       "--verbose",
       "--flakiness-dashboard-server=http://test-results.appspot.com"

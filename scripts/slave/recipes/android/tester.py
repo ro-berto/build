@@ -38,6 +38,7 @@ UNIT_TESTS = [
   ['media_unittests', None],
   ['net_unittests', None],
   ['sandbox_linux_unittests', None],
+  ['skia_unittests', None],
   ['sql_unittests', None],
   ['sync_unit_tests', None],
   ['ui_android_unittests', None],
