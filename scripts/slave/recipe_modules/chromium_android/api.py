@@ -336,6 +336,7 @@ class AndroidApi(recipe_api.RecipeApi):
           infra_step=True,
           **kwargs)
       self._devices = [d['serial'] for d in result.json.output]
+      result.presentation.step_text = 'Online devices: %s' % len(self._devices)
     except self.m.step.InfraFailure as f:
       params = {
         'summary': ('Device Offline on %s %s' %

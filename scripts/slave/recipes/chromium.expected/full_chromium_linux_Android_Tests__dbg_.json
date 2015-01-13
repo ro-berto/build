@@ -247,6 +247,7 @@
     },
     "name": "device_status_check",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Online devices: 1@@@",
       "@@@STEP_LOG_LINE@json.output@[@@@",
       "@@@STEP_LOG_LINE@json.output@  {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"battery\": {@@@",
