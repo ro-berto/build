@@ -5,6 +5,7 @@
 DEPS = [
   'bot_update',
   'chromium',
+  'chromium_android',
   'chromium_tests',
   'gclient',
   'gpu',
