@@ -249,7 +249,7 @@ class ChecklicensesTest(Test):  # pylint: disable=W0232
 class LocalGTestTest(Test):
   def __init__(self, name, args=None, target_name=None, use_isolate=False,
                revision=None, webkit_revision=None, android_isolate_path=None,
-               **runtest_kwargs):
+               override_compile_targets=None, **runtest_kwargs):
     """Constructs an instance of LocalGTestTest.
 
     Args:
@@ -260,6 +260,8 @@ class LocalGTestTest(Test):
           Calling recipe should have isolate in their DEPS.
       revision: Revision of the Chrome checkout.
       webkit_revision: Revision of the WebKit checkout.
+      override_compile_targets: List of compile targets for this test
+          (for tests that don't follow target naming conventions).
       runtest_kwargs: Additional keyword args forwarded to the runtest.
     """
     super(LocalGTestTest, self).__init__()
@@ -270,6 +272,7 @@ class LocalGTestTest(Test):
     self._revision = revision
     self._webkit_revision = webkit_revision
     self._android_isolate_path = android_isolate_path
+    self._override_compile_targets = override_compile_targets
     self._runtest_kwargs = runtest_kwargs
 
   @property
@@ -285,6 +288,9 @@ class LocalGTestTest(Test):
     return self.target_name
 
   def compile_targets(self, api):
+    if self._override_compile_targets:
+      return self._override_compile_targets
+
     if api.chromium.c.TARGET_PLATFORM == 'android':
       return [self.target_name + '_apk']
 
@@ -949,12 +955,13 @@ class SwarmingTelemetryGPUTest(SwarmingTest):
 
 class AndroidInstrumentationTest(Test):
   def __init__(self, name, compile_target, test_data=None,
-               adb_install_apk=None):
+               adb_install_apk=None, isolate_file_path=None):
     self._name = name
     self.compile_target = compile_target
 
     self.test_data = test_data
     self.adb_install_apk = adb_install_apk
+    self.isolate_file_path = isolate_file_path
 
   @property
   def name(self):
@@ -968,7 +975,7 @@ class AndroidInstrumentationTest(Test):
     api.chromium_android.run_instrumentation_suite(
         self.name, test_data=self.test_data,
         flakiness_dashboard='http://test-results.appspot.com',
-        verbose=True)
+        verbose=True, isolate_file_path=self.isolate_file_path)
 
   def compile_targets(self, _):
     return [self.compile_target]

@@ -173,7 +173,7 @@
       "android_webview_test_apk",
       "android_webview_unittests_apk",
       "base_unittests_apk",
-      "breakpad_unittests_apk",
+      "breakpad_unittests_deps",
       "cc_unittests_apk",
       "chrome_shell_test_apk",
       "chrome_sync_shell_test_apk",
@@ -187,11 +187,12 @@
       "ipc_tests_apk",
       "media_unittests_apk",
       "net_unittests_apk",
-      "sandbox_linux_unittests_apk",
+      "sandbox_linux_unittests_deps",
       "sql_unittests_apk",
       "sync_unit_tests_apk",
       "ui_android_unittests_apk",
       "ui_base_unittests_apk",
+      "ui_touch_selection_unittests_apk",
       "unit_tests_apk"
     ],
     "env": {
@@ -222,26 +223,6 @@
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "check licenses"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/src/build/android/findbugs_diff.py",
-      "--release-build"
-    ],
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "findbugs"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/src/tools/android/findbugs_plugin/test/run_findbugs_plugin_tests.py",
-      "--release-build"
-    ],
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "findbugs_tests"
   },
   {
     "allow_subannotations": true,

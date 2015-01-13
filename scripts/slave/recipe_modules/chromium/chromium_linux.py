@@ -135,16 +135,19 @@ SPEC = {
       'tests': [
         steps.AndroidInstrumentationTest(
             'AndroidWebViewTest', 'android_webview_test_apk',
+            isolate_file_path='android_webview/android_webview_test_apk.isolate',
             test_data='webview:android_webview/test/data/device_files',
             adb_install_apk=(
                 'AndroidWebView.apk', 'org.chromium.android_webview.shell')),
         steps.AndroidInstrumentationTest(
             'ChromeShellTest', 'chrome_shell_test_apk',
+            isolate_file_path='chrome/chrome_shell_test_apk.isolate',
             test_data='chrome:chrome/test/data/android/device_files',
             adb_install_apk=(
                 'ChromeShell.apk', 'org.chromium.chrome.shell')),
         steps.AndroidInstrumentationTest(
             'ContentShellTest', 'content_shell_test_apk',
+            isolate_file_path='content/content_shell_test_apk.isolate',
             test_data='content:content/test/data/android/device_files',
             adb_install_apk=(
                 'ContentShell.apk', 'org.chromium.content_shell_apk')),
@@ -156,6 +159,7 @@ SPEC = {
         steps.GTestTest('base_unittests'),
         steps.GTestTest(
             'breakpad_unittests',
+            override_compile_targets=['breakpad_unittests_deps'],
             android_isolate_path='breakpad/breakpad_unittests.isolate'),
         steps.GTestTest('cc_unittests'),
         steps.GTestTest('components_unittests'),
@@ -167,11 +171,14 @@ SPEC = {
         steps.GTestTest('ipc_tests'),
         steps.GTestTest('media_unittests'),
         steps.GTestTest('net_unittests'),
-        steps.GTestTest('sandbox_linux_unittests'),
+        steps.GTestTest(
+            'sandbox_linux_unittests',
+            override_compile_targets=['sandbox_linux_unittests_deps']),
         steps.GTestTest('sql_unittests'),
         steps.GTestTest('sync_unit_tests'),
         steps.GTestTest('ui_android_unittests'),
         steps.GTestTest('ui_base_unittests'),
+        steps.GTestTest('ui_touch_selection_unittests'),
         steps.GTestTest('unit_tests'),
       ],
       'testing': {
@@ -206,16 +213,19 @@ SPEC = {
       'tests': [
         steps.AndroidInstrumentationTest(
             'AndroidWebViewTest', 'android_webview_test_apk',
+            isolate_file_path='android_webview/android_webview_test_apk.isolate',
             test_data='webview:android_webview/test/data/device_files',
             adb_install_apk=(
                 'AndroidWebView.apk', 'org.chromium.android_webview.shell')),
         steps.AndroidInstrumentationTest(
             'ChromeShellTest', 'chrome_shell_test_apk',
+            isolate_file_path='chrome/chrome_shell_test_apk.isolate',
             test_data='chrome:chrome/test/data/android/device_files',
             adb_install_apk=(
                 'ChromeShell.apk', 'org.chromium.chrome.shell')),
         steps.AndroidInstrumentationTest(
             'ContentShellTest', 'content_shell_test_apk',
+            isolate_file_path='content/content_shell_test_apk.isolate',
             test_data='content:content/test/data/android/device_files',
             adb_install_apk=(
                 'ContentShell.apk', 'org.chromium.content_shell_apk')),
@@ -227,6 +237,7 @@ SPEC = {
         steps.GTestTest('base_unittests'),
         steps.GTestTest(
             'breakpad_unittests',
+            override_compile_targets=['breakpad_unittests_deps'],
             android_isolate_path='breakpad/breakpad_unittests.isolate'),
         steps.GTestTest('cc_unittests'),
         steps.GTestTest('components_unittests'),
@@ -238,11 +249,14 @@ SPEC = {
         steps.GTestTest('ipc_tests'),
         steps.GTestTest('media_unittests'),
         steps.GTestTest('net_unittests'),
-        steps.GTestTest('sandbox_linux_unittests'),
+        steps.GTestTest(
+            'sandbox_linux_unittests',
+            override_compile_targets=['sandbox_linux_unittests_deps']),
         steps.GTestTest('sql_unittests'),
         steps.GTestTest('sync_unit_tests'),
         steps.GTestTest('ui_android_unittests'),
         steps.GTestTest('ui_base_unittests'),
+        steps.GTestTest('ui_touch_selection_unittests'),
         steps.GTestTest('unit_tests'),
       ],
       'testing': {

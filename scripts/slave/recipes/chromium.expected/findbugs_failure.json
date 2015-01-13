@@ -173,7 +173,7 @@
       "android_webview_test_apk",
       "android_webview_unittests_apk",
       "base_unittests_apk",
-      "breakpad_unittests_apk",
+      "breakpad_unittests_deps",
       "cc_unittests_apk",
       "chrome_shell_test_apk",
       "chrome_sync_shell_test_apk",
@@ -187,11 +187,12 @@
       "ipc_tests_apk",
       "media_unittests_apk",
       "net_unittests_apk",
-      "sandbox_linux_unittests_apk",
+      "sandbox_linux_unittests_deps",
       "sql_unittests_apk",
       "sync_unit_tests_apk",
       "ui_android_unittests_apk",
       "ui_base_unittests_apk",
+      "ui_touch_selection_unittests_apk",
       "unit_tests_apk"
     ],
     "env": {

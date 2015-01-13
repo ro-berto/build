@@ -393,7 +393,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       if self.m.chromium.c.TARGET_PLATFORM == 'android':
         self.m.chromium_android.check_webview_licenses()
-        self.m.chromium_android.findbugs()
+        if self.m.chromium.c.BUILD_CONFIG == 'Debug':
+          self.m.chromium_android.findbugs()
 
       if isolated_targets:
         # 'compile' just prepares all information needed for the isolation,
