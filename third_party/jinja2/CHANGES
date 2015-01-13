@@ -1,9 +1,74 @@
 Jinja2 Changelog
 ================
 
+Version 2.7.3
+-------------
+(bugfix release, released on June 6th 2014)
+
+- Security issue: Corrected the security fix for the cache folder.  This
+  fix was provided by RedHat.
+
+Version 2.7.2
+-------------
+(bugfix release, released on January 10th 2014)
+
+- Prefix loader was not forwarding the locals properly to
+  inner loaders.  This is now fixed.
+- Security issue: Changed the default folder for the filesystem cache to be
+  user specific and read and write protected on UNIX systems.  See `Debian bug
+  734747`_ for more information.
+
+.. _Debian bug 734747: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=734747
+
+Version 2.7.1
+-------------
+(bugfix release, released on August 7th 2013)
+
+- Fixed a bug with ``call_filter`` not working properly on environment
+  and context filters.
+- Fixed lack of Python 3 support for bytecode caches.
+- Reverted support for defining blocks in included templates as this
+  broke existing templates for users.
+- Fixed some warnings with hashing of undefineds and nodes if Python
+  is run with warnings for Python 3.
+- Added support for properly hashing undefined objects.
+- Fixed a bug with the title filter not working on already uppercase
+  strings.
+
+Version 2.7
+-----------
+(codename Translation, released on May 20th 2013)
+
+- Choice and prefix loaders now dispatch source and template lookup
+  separately in order to work in combination with module loaders as
+  advertised.
+- Fixed filesizeformat.
+- Added a non-silent option for babel extraction.
+- Added `urlencode` filter that automatically quotes values for
+  URL safe usage with utf-8 as only supported encoding.  If applications
+  want to change this encoding they can override the filter.
+- Added `keep-trailing-newline` configuration to environments and
+  templates to optionally preserve the final trailing newline.
+- Accessing `last` on the loop context no longer causes the iterator
+  to be consumed into a list.
+- Python requirement changed: 2.6, 2.7 or >= 3.3 are required now,
+  supported by same source code, using the "six" compatibility library.
+- Allow `contextfunction` and other decorators to be applied to `__call__`.
+- Added support for changing from newline to different signs in the `wordwrap`
+  filter.
+- Added support for ignoring memcache errors silently.
+- Added support for keeping the trailing newline in templates.
+- Added finer grained support for stripping whitespace on the left side
+  of blocks.
+- Added `map`, `select`, `reject`, `selectattr` and `rejectattr`
+  filters.
+- Added support for `loop.depth` to figure out how deep inside a recursive
+  loop the code is.
+- Disabled py_compile for pypy and python 3.
+
 Version 2.6
 -----------
-(codename to be selected, release date to be announced)
+(codename Convolution, released on July 24th 2011)
 
 - internal attributes now raise an internal attribute error now instead
   of returning an undefined.  This fixes problems when passing undefined
@@ -15,7 +80,7 @@ Version 2.6
   integers instead of longs)
 - groupby filter now supports dotted notation for grouping by attributes
   of attributes.
-- scoped blocks not properly treat toplevel assignments and imports.
+- scoped blocks now properly treat toplevel assignments and imports.
   Previously an import suddenly "disappeared" in a scoped block.
 - automatically detect newer Python interpreter versions before loading code
   from bytecode caches to prevent segfaults on invalid opcodes.  The segfault
@@ -32,6 +97,8 @@ Version 2.6
 - like sum and sort, join now also is able to join attributes of objects
   as string.
 - the internal eval context now has a reference to the environment.
+- added a mapping test to see if an object is a dict or an object with
+  a similar interface.
 
 Version 2.5.5
 -------------

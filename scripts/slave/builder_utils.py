@@ -29,6 +29,7 @@ chromium_utils.AddThirdPartyLibToPath('twisted_10_2', override=True)
 chromium_utils.AddThirdPartyLibToPath('sqlalchemy_0_7_1', override=True)
 chromium_utils.AddThirdPartyLibToPath('sqlalchemy_migrate_0_7_1', override=True)
 chromium_utils.AddThirdPartyLibToPath('jinja2', override=True)
+chromium_utils.AddThirdPartyLibToPath('markupsafe', override=True)
 chromium_utils.AddThirdPartyLibToPath('decorator_3_3_1', override=True)
 chromium_utils.AddThirdPartyLibToPath('requests_1_2_3', override=True)
 

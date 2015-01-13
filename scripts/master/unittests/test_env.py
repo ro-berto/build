@@ -21,6 +21,7 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'third_party',
                                 'google_api_python_client'))
 sys.path.insert(0, os.path.join(BASE_DIR, 'third_party', 'httplib2/python2'))
 sys.path.insert(0, os.path.join(BASE_DIR, 'third_party', 'jinja2'))
+sys.path.insert(0, os.path.join(BASE_DIR, 'third_party', 'markupsafe'))
 sys.path.insert(0, os.path.join(BASE_DIR, 'third_party', 'mock-1.0.1'))
 sys.path.insert(0, os.path.join(BASE_DIR, 'third_party', 'oauth2client'))
 sys.path.insert(0, os.path.join(BASE_DIR, 'third_party', 'sqlalchemy_0_7_1'))

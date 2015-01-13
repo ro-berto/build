@@ -33,7 +33,7 @@ def GetMasterCmds(masters, blacklist, pythonpaths):
   pythonpaths = list(pythonpaths or [])
   buildpaths = ['scripts', 'third_party', 'site_config']
   thirdpartypaths = ['buildbot_8_4p1', 'buildbot_slave_8_4', 'jinja2',
-                     'mock-1.0.1', 'twisted_10_2']
+                     'markupsafe', 'mock-1.0.1', 'twisted_10_2']
 
   pythonpaths.extend(os.path.join(BASE_DIR, p) for p in buildpaths)
   pythonpaths.extend(os.path.join(BASE_DIR, 'third_party', p)

@@ -22,6 +22,7 @@ BUILDBOT8_DEPS :=               \
     buildbot_8_4p1              \
     twisted_10_2                \
     jinja2                      \
+    markupsafe                  \
     sqlalchemy_0_7_1            \
     sqlalchemy_migrate_0_7_1    \
     tempita_0_5                 \
