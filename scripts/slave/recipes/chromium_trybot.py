@@ -26,6 +26,26 @@ DEPS = [
 BUILDERS = {
   'tryserver.chromium.linux': {
     'builders': {
+      'linux_android_dbg_ng': {
+        'based_on_main_waterfall': {
+          'mastername': 'chromium.linux',
+          'buildername': 'Android Builder (dbg)',
+          'tester': 'Android Tests (dbg)',
+        },
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'linux_android_rel_ng': {
+        'based_on_main_waterfall': {
+          'mastername': 'chromium.linux',
+          'buildername': 'Android Builder',
+          'tester': 'Android Tests',
+        },
+        'testing': {
+          'platform': 'linux',
+        },
+      },
       'linux_arm': {
         'GYP_DEFINES': {
           'arm_float_abi': 'hard',
