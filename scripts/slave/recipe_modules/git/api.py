@@ -34,16 +34,24 @@ class GitApi(recipe_api.RecipeApi):
     remote_name = remote_name or 'origin'
     return self('fetch', remote_name, '--tags', **kwargs)
 
-  def count_objects(self, can_fail_build=False, **kwargs):
+  def count_objects(self, previous_result=None, can_fail_build=False, **kwargs):
     """Returns `git count-objects` result as a dict.
 
     Args:
+      previous_result (dict): the result of previous count_objects call.
+        If passed, delta is reported in the log and step text.
       can_fail_build (bool): if True, may fail the build and/or raise an
         exception. Defaults to False.
 
     Returns:
       A dict of count-object values, or None if count-object run failed.
     """
+    if previous_result:
+      assert isinstance(previous_result, dict)
+      assert all(isinstance(v, long) for v in previous_result.itervalues())
+      assert 'size' in previous_result
+      assert 'size-pack' in previous_result
+
     step_result = self(
         'count-objects', '-v', stdout=self.m.raw_io.output(),
         can_fail_build=can_fail_build, **kwargs)
@@ -55,7 +63,7 @@ class GitApi(recipe_api.RecipeApi):
     for line in step_result.stdout.splitlines():
       name, value = line.split(':', 1)
       try:
-        result[name] = int(value.strip())
+        result[name] = long(value.strip())
       except ValueError as ex:
         if can_fail_build:
           raise recipe_api.InfraFailure('Failed to parse output.')
@@ -64,46 +72,30 @@ class GitApi(recipe_api.RecipeApi):
         step_result.presentation.status = self.m.step.WARNING
         return None
 
-    return result
-
-  def count_objects_delta_report(self, before, after, dest_step_result=None):
-    """Reports count-objects size delta in the destination step result.
-
-    Adds "count-objects delta" log and puts "count size delta" line to step
-    text of the destination step result.
-
-    Args:
-      before (dict): result of count_objects before a change.
-      after (dict): result of count_objects after a change.
-      dest_step_result (StepResult): a step result that will contain the report.
-        Defaults to the active step result.
-    """
-    assert isinstance(before, dict)
-    assert isinstance(after, dict)
-    dest_step_result = dest_step_result or self.m.step.active_result
-
-    delta = {
-        key: value - before[key]
-        for key, value in after.iteritems()
-        if key in after}
     def results_to_text(results):
       return ['  %s: %s' % (k, v) for k, v in results.iteritems()]
-    dest_step_result.presentation.logs['count-objects delta'] = (
-        ['before:'] + results_to_text(before) +
-        ['', 'after:'] + results_to_text(after) +
-        ['', 'delta:'] + results_to_text(delta)
-    )
 
-    size_delta = (
-        after['size'] + after['size-pack']
-        - before['size'] - before['size-pack'])
-    dest_step_result.presentation.step_text
-    if dest_step_result.presentation.step_text:
-      dest_step_result.presentation.step_text += '\n'
+    step_result.presentation.logs['result'] = results_to_text(result)
 
-    # size_delta is in KiB.
-    dest_step_result.presentation.step_text += (
-        'object size delta: %.2f MiB' % (size_delta / 1024.0))
+    if previous_result:
+      delta = {
+          key: value - previous_result[key]
+          for key, value in result.iteritems()
+          if key in previous_result}
+      step_result.presentation.logs['delta'] = (
+          ['before:'] + results_to_text(previous_result) +
+          ['', 'after:'] + results_to_text(result) +
+          ['', 'delta:'] + results_to_text(delta)
+      )
+
+      size_delta = (
+          result['size'] + result['size-pack']
+          - previous_result['size'] - previous_result['size-pack'])
+      # size_delta is in KiB.
+      step_result.presentation.step_text = (
+          'size delta: %+.2f MiB' % (size_delta / 1024.0))
+
+    return result
 
   def checkout(self, url, ref=None, dir_path=None, recursive=False,
                submodules=True, keep_paths=None, step_suffix=None,
@@ -215,14 +207,12 @@ class GitApi(recipe_api.RecipeApi):
       stderr=fetch_stderr,
       can_fail_build=can_fail_build)
     if display_fetch_size:
-      count_objects_after_fetch = self.count_objects(
+      self.count_objects(
           name='count-objects after %s' % fetch_step_name,
           cwd=dir_path,
+          previous_result=count_objects_before_fetch,
           step_test_data=lambda: self.m.raw_io.test_api.stream_output(
               self.test_api.count_objects_output(2000)))
-      if count_objects_before_fetch and count_objects_after_fetch:
-        self.count_objects_delta_report(
-            count_objects_before_fetch, count_objects_after_fetch)
 
     self('checkout', '-f', checkout_ref,
       cwd=dir_path,

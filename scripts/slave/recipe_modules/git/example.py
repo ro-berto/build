@@ -36,14 +36,6 @@ def GenSteps(api):
       name='count-objects',
       can_fail_build=api.properties.get('count_objects_can_fail_build'))
 
-  delta_report_target = api.step('count_objects_delta_report', ['echo', 'noop'])
-  delta_report_target.presentation.step_text = (
-      'Some text for coverage in count_objects')
-  # count_objects_delta_report shows delta between count_objects results.
-  api.git.count_objects_delta_report(
-      {'size': 1000, 'size-pack': 1000},
-      {'size': 2000, 'size-pack': 2000})
-
   # You can use api.git.fetch_tags to fetch all tags from the remote
   fetch_tags_step = api.git.fetch_tags(api.properties.get('remote_name'))
 
