@@ -377,6 +377,15 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
+      'linux_chromium_practice_rel_ng': {
+        'based_on_main_waterfall': {
+          'mastername': 'chromium.fyi',
+          'buildername': 'ChromiumPracticeFullTester',
+        },
+        'testing': {
+          'platform': 'linux',
+        },
+      },
     },
   },
   'tryserver.chromium.mac': {

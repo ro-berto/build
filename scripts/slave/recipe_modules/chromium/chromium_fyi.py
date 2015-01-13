@@ -366,5 +366,27 @@ SPEC = {
         'platform': 'linux',
       },
     },
+    'ChromiumPracticeFullTester': {
+      'recipe_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder_tester',
+      'compile_targets': [
+        'blink_tests',
+        'chromium_swarm_tests',
+      ],
+      'tests': [
+        steps.BlinkTest(),
+      ],
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+    },
   },
 }
