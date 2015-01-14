@@ -400,7 +400,7 @@ SPEC = {
       },
     },
     'CrWinClang tester': {
-      'recipe_config': 'chromium_win_clang',
+      'recipe_config': 'chromium_no_goma',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
