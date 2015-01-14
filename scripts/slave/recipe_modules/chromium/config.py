@@ -467,13 +467,7 @@ def chromium(c):
 
 @config_ctx(includes=['ninja', 'clang'])  # Intentionally no goma yet.
 def chromium_win_clang(c):
-  # Note: This is all targets, not the 'All' target.  Ideally, this would
-  # just run `ninja -C out/Release` without other arguments, but I can't figure
-  # out how to do that with recipes -- it seems to add all test targets
-  # from src/testing/buildbot/foo.json as explicit build targets always.
-  # 'all' is the implicit default target, so mention it explicitly to make sure
-  # everything gets built despite these added targets,as a workaround.
-  c.compile_py.default_targets = ['all']
+  pass
 
 @config_ctx(includes=['ninja', 'clang', 'goma', 'asan'])
 def chromium_asan(c):

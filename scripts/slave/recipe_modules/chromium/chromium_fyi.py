@@ -398,6 +398,9 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      # Workaround so that recipes doesn't add random build targets to our
+      # compile line. We want to build everything.
+      'disable_tests': True
     },
     'CrWinClang tester': {
       'recipe_config': 'chromium_no_goma',

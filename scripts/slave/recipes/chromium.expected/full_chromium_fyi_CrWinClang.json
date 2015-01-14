@@ -84,42 +84,6 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.fyi.json",
-      "/path/to/tmp/json"
-    ],
-    "name": "read test spec",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@path: [SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.fyi.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\testing\\scripts\\get_compile_targets.py",
-      "--output",
-      "/path/to/tmp/json",
-      "--",
-      "--build-config-fs",
-      "Release",
-      "--paths",
-      "{\"build\": \"[BUILD]\"}",
-      "--properties",
-      "{\"buildername\": \"CrWinClang\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
-    ],
-    "name": "get compile targets for scripts",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[BUILD]\\scripts\\slave\\cleanup_temp.py"
     ],
     "name": "cleanup_temp"
@@ -137,8 +101,7 @@
       "ninja",
       "--compiler",
       "clang",
-      "--",
-      "all"
+      "--"
     ],
     "name": "compile"
   },
