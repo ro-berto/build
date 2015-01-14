@@ -235,7 +235,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]\\src\\syzygy\\VERSION",
+      "[SLAVE_BUILD]\\src\\syzygy\\SYZYGY_VERSION",
       "/path/to/tmp/"
     ],
     "name": "read_version"

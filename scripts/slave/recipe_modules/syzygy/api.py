@@ -74,7 +74,7 @@ PATCH=1
     """Returns the version tuple associated with the checkout."""
     # Only read the value if it hasn't yet been read.
     if not self._version:
-      version = self.m.path['checkout'].join('syzygy', 'VERSION')
+      version = self.m.path['checkout'].join('syzygy', 'SYZYGY_VERSION')
       version = self.m.file.read('read_version', version,
                                  test_data=self._FAKE_VERSION_DATA)
       d = {}
