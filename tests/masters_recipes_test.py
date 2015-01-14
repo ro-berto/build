@@ -146,12 +146,6 @@ def main(argv):
     chromium_recipe_builders[master] = [b for b in builders
                                         if builders[b] == 'chromium']
 
-    # TODO(phajdan.jr): Also run this check for chromium.chromiumos.
-    # For now there are several builders being added to it in a deprecated
-    # way.
-    if master == 'master.chromium.chromiumos':
-      continue
-
     # TODO(phajdan.jr): Also consider it an error if configured builders
     # are not using chromium recipe. This might make it harder to experiment
     # with switching bots over to chromium recipe though, so it may be better
@@ -161,7 +155,8 @@ def main(argv):
     if recipe_side_builders is not None:
       bogus_builders = set(recipe_side_builders.keys()).difference(
           set(builders.keys()))
-      if bogus_builders:
+      # TODO(phajdan.jr): Clean up bogus chromiumos builders.
+      if bogus_builders and master != 'master.chromium.chromiumos':
         exit_code = 1
         print 'The following builders from chromium recipe'
         print 'do not exist in master config for %s:' % master
