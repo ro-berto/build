@@ -467,7 +467,7 @@ def chromium(c):
 
 @config_ctx(includes=['ninja', 'clang'])  # Intentionally no goma yet.
 def chromium_win_clang(c):
-  pass
+  c.compile_py.default_targets = []
 
 @config_ctx(includes=['ninja', 'clang', 'goma', 'asan'])
 def chromium_asan(c):
