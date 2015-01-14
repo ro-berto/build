@@ -388,5 +388,31 @@ SPEC = {
         'platform': 'linux',
       },
     },
+    'CrWinClang': {
+      'recipe_config': 'chromium_win_clang',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'win',
+      },
+    },
+    'CrWinClang tester': {
+      'recipe_config': 'chromium_win_clang',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'test_generators': [
+        steps.generate_gtest,
+      ],
+      'bot_type': 'tester',
+      'parent_buildername': 'CrWinClang',
+      'testing': {
+        'platform': 'win',
+      },
+    },
   },
 }

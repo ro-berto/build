@@ -465,6 +465,10 @@ def chromium_no_goma(c):
 def chromium(c):
   c.compile_py.default_targets = ['All', 'chromium_builder_tests']
 
+@config_ctx(includes=['ninja', 'clang'])  # Intentionally no goma yet.
+def chromium_win_clang(c):
+  pass
+
 @config_ctx(includes=['ninja', 'clang', 'goma', 'asan'])
 def chromium_asan(c):
   c.runtests.test_args.append('--test-launcher-print-test-stdio=always')

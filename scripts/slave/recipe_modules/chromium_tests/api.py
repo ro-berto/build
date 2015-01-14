@@ -113,6 +113,11 @@ RECIPE_CONFIGS = {
     'chromium_config': 'chromium',
     'gclient_config': 'chromium_skia',
   },
+  'chromium_win_clang': {
+    'chromium_config': 'chromium_win_clang',
+    'gclient_config': 'chromium',
+  },
+
   'official': {
     'chromium_config': 'chromium_official',
     'gclient_config': 'chromium',
