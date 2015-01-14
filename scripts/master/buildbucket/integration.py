@@ -88,9 +88,14 @@ class BuildBucketIntegrator(object):
         raise ValueError('Id is not a string: "%s"' % change_id)
       if not change_id:
         raise ValueError('Invalid id: "%s"' % change_id)
-    if 'author' in change:
-      if not isinstance(change.get('author'), dict):
-        raise ValueError('Author is not a dict')
+
+    author = change.get('author')
+    if author is None:
+      raise ValueError('Author is not specified')
+    if not isinstance(author, dict):
+      raise ValueError('Author is not a dict')
+    if not author.get('email'):
+      raise ValueError('Author email is not specified')
 
   def _validate_build(self, build):
     """Raises ValueError in build dict is invalid."""

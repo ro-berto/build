@@ -92,7 +92,7 @@ class IntegratorTest(unittest.TestCase):
   buildbucket = None
   buildbucket_change = {
       'id': '1',
-      'committer': {'email': 'johndoe@chromium.org'},
+      'author': {'email': 'johndoe@chromium.org'},
       'message': 'hello world',
       'revision': 'deadbeef',
       'branch': 'master',

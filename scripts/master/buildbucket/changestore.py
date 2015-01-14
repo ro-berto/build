@@ -31,7 +31,7 @@ class ChangeStore(object):
     Returns:
       Buildbot change id as Deferred.
     """
-    author = buildbucket_change.get('author', {})
+    author_email = buildbucket_change['author']['email']
     when_timestamp = buildbucket_change.get('create_ts')
     if when_timestamp:
       when_timestamp = common.timestamp_to_datetime(when_timestamp)
@@ -41,7 +41,7 @@ class ChangeStore(object):
     }
 
     return self.buildbot.add_change_to_db(
-        author=author.get('email') or author.get('name'),
+        author=author_email,
         files=[f['path'] for f in buildbucket_change.get('files', [])],
         comments=buildbucket_change.get('message') or '',
         revision=buildbucket_change.get('revision') or '',

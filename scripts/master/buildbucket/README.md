@@ -47,15 +47,14 @@ Buildbot-buildbucket integration supports the following build parameters:
   reserved.
 * changes (list of dict): list of changes to be associated with the build, used
   to create Buildbot changes for builds.
-  Each change is a dict with optional keys:
+  Each change is a dict with keys:
     * id (str): a unique identity of the change.
       If id and revision are specified, buildbot master will search for an
       existing buildbot change prior creating a new one. Also see implementation
       details below.
     * revision (str): change revision, such as commit sha or svn revision.
-    * author (dict): author of the change
-        * email (str)
-        * name (str): full name
+    * author (dict): author of the change. REQUIRED.
+        * email (str): change author's email. REQUIRED.
     * create_ts (int): change creation timestamp, in microseconds since Epoch.
     * files (list of dict): list of changed files.
       Each file is a dict with keys:
