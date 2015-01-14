@@ -12,12 +12,12 @@ AF = annotator_factory.AnnotatorFactory()
 
 def _VersionFileFilter(change):
   """A change filter function that disregards all changes that don't
-  touch src/syzygy/VERSION.
+  touch src/syzygy/SYZYGY_VERSION.
 
   Args:
       change: a buildbot Change object.
   """
-  return change.branch == 'master' and 'syzygy/VERSION' in change.files
+  return change.branch == 'master' and 'syzygy/SYZYGY_VERSION' in change.files
 
 
 # Official build scheduler for Syzygy
