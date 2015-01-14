@@ -572,9 +572,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     """
     self.m.swarming.set_default_dimension('pool', 'Chrome')
     self.m.swarming.add_default_tag('project:%s' % project_name)
-    # TODO(vadimsh): Temporary disable task deduplication until it is fixed.
-    # See crbug.com/445293.
-    self.m.swarming.default_idempotent = False
+    self.m.swarming.default_idempotent = True
 
     if precommit:
       self.m.swarming.add_default_tag('purpose:pre-commit')
