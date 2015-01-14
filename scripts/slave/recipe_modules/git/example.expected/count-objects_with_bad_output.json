@@ -74,7 +74,8 @@
     "name": "count-objects",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Failed to parse output.@@@",
+      "@@@STEP_LOG_LINE@exception@ValueError(\"invalid literal for long() with base 10: 'xxx'\",)@@@",
+      "@@@STEP_LOG_END@exception@@@",
       "@@@STEP_WARNINGS@@@"
     ]
   },

@@ -52,50 +52,51 @@ class GitApi(recipe_api.RecipeApi):
       assert 'size' in previous_result
       assert 'size-pack' in previous_result
 
-    step_result = self(
-        'count-objects', '-v', stdout=self.m.raw_io.output(),
-        can_fail_build=can_fail_build, **kwargs)
+    step_result = None
+    try:
+      step_result = self(
+          'count-objects', '-v', stdout=self.m.raw_io.output(),
+          can_fail_build=can_fail_build, **kwargs)
 
-    if not step_result.stdout:
-      return None
-
-    result = {}
-    for line in step_result.stdout.splitlines():
-      name, value = line.split(':', 1)
-      try:
-        result[name] = long(value.strip())
-      except ValueError as ex:
-        if can_fail_build:
-          raise recipe_api.InfraFailure('Failed to parse output.')
-        step_result.presentation.step_text = (
-            'Failed to parse output.')
-        step_result.presentation.status = self.m.step.WARNING
+      if not step_result.stdout:
         return None
 
-    def results_to_text(results):
-      return ['  %s: %s' % (k, v) for k, v in results.iteritems()]
+      result = {}
+      for line in step_result.stdout.splitlines():
+        name, value = line.split(':', 1)
+        result[name] = long(value.strip())
 
-    step_result.presentation.logs['result'] = results_to_text(result)
+      def results_to_text(results):
+        return ['  %s: %s' % (k, v) for k, v in results.iteritems()]
 
-    if previous_result:
-      delta = {
-          key: value - previous_result[key]
-          for key, value in result.iteritems()
-          if key in previous_result}
-      step_result.presentation.logs['delta'] = (
-          ['before:'] + results_to_text(previous_result) +
-          ['', 'after:'] + results_to_text(result) +
-          ['', 'delta:'] + results_to_text(delta)
-      )
+      step_result.presentation.logs['result'] = results_to_text(result)
 
-      size_delta = (
-          result['size'] + result['size-pack']
-          - previous_result['size'] - previous_result['size-pack'])
-      # size_delta is in KiB.
-      step_result.presentation.step_text = (
-          'size delta: %+.2f MiB' % (size_delta / 1024.0))
+      if previous_result:
+        delta = {
+            key: value - previous_result[key]
+            for key, value in result.iteritems()
+            if key in previous_result}
+        step_result.presentation.logs['delta'] = (
+            ['before:'] + results_to_text(previous_result) +
+            ['', 'after:'] + results_to_text(result) +
+            ['', 'delta:'] + results_to_text(delta)
+        )
 
-    return result
+        size_delta = (
+            result['size'] + result['size-pack']
+            - previous_result['size'] - previous_result['size-pack'])
+        # size_delta is in KiB.
+        step_result.presentation.step_text = (
+            'size delta: %+.2f MiB' % (size_delta / 1024.0))
+
+      return result
+    except Exception as ex:
+      if step_result:
+        step_result.presentation.logs['exception'] = ['%r' % ex]
+        step_result.presentation.status = self.m.step.WARNING
+      if can_fail_build:
+        raise recipe_api.InfraFailure('count-objects failed: %s' % ex)
+      return None
 
   def checkout(self, url, ref=None, dir_path=None, recursive=False,
                submodules=True, keep_paths=None, step_suffix=None,
