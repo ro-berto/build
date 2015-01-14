@@ -137,7 +137,8 @@
       "ninja",
       "--compiler",
       "clang",
-      "--"
+      "--",
+      "all"
     ],
     "name": "compile"
   },
