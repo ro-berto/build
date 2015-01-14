@@ -51,7 +51,6 @@ SUPPRESSIONS = {
     'master.chromium.chromiumos': [
         'Linux ChromiumOS Full',
         'Linux ChromiumOS GN',
-        'Linux ChromiumOS Tests (dbg)(1)',
     ],
     'master.chromium.gpu': [
         'Android Debug (Nexus 7)',
@@ -78,36 +77,25 @@ SUPPRESSIONS = {
     ],
     'master.chromium.linux': [
         'Android Arm64 Builder (dbg)',
-        'Android Builder',
-        'Android Builder (dbg)',
         'Android Clang Builder (dbg)',
         'Android GN',
-        'Android Tests',
-        'Android Tests (dbg)',
         'Android Webview AOSP Builder',
-        'Linux Builder (dbg)',
         'Linux GN',
         'Linux GN (dbg)',
-        'Linux Tests (dbg)(1)',
         'Linux Tests (dbg)(1)(32)',
     ],
     'master.chromium.mac': [
         'Mac GN',
         'Mac GN (dbg)',
-        'Mac10.6 Tests',
         'Mac10.9 Tests',
-        'Mac10.9 Tests (dbg)',
     ],
     'master.chromium.memory': [
         'Linux ASan Tests (sandboxed)',
     ],
     'master.chromium.win': [
-        'Vista Tests (1)',
         'Win x64 Builder (dbg)',
-        'Win7 Tests (dbg)(1)',
         'Win8 GN',
         'Win8 GN (dbg)',
-        'XP Tests (1)',
     ],
 }
 
@@ -208,12 +196,20 @@ def main(argv):
   suppressed_builders = set()
   for master, builders in SUPPRESSIONS.iteritems():
     suppressed_builders.update((master, b) for b in builders)
+
   regressed_builders = not_covered_builders.difference(suppressed_builders)
   if regressed_builders:
     exit_code = 1
     print 'Regression, the following builders lack in-sync tryserver coverage:'
     print '\n'.join(sorted(
         '\t%s:%s' % (b[0], b[1]) for b in regressed_builders))
+
+  unused_suppressions = suppressed_builders.difference(not_covered_builders)
+  if unused_suppressions:
+    exit_code = 1
+    print 'Unused suppressions:'
+    print '\n'.join(sorted(
+        '\t%s:%s' % (b[0], b[1]) for b in unused_suppressions))
 
   return exit_code
 
