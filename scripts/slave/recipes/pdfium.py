@@ -24,13 +24,20 @@ def _BuildSteps(api):
 
   # Build sample file using Ninja
   debug_path = api.path['checkout'].join('out', 'Debug')
-  api.step('compile with ninja',
-      ['ninja', '-C', debug_path, 'pdfium_test'])
+  api.step('compile with ninja', ['ninja', '-C', debug_path])
+
+
+def _RunTests(api):
+  test_path = str(api.path['checkout'].join('out', 'Debug', 'pdfium_unittests'))
+  if api.platform.is_win:
+    test_path += '.exe'
+  api.step('pdfium_unittests', [test_path])
 
 
 def GenSteps(api):
   _CheckoutSteps(api)
   _BuildSteps(api)
+  _RunTests(api)
 
 
 def GenTests(api):

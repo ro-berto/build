@@ -48,9 +48,14 @@
     "cmd": [
       "ninja",
       "-C",
-      "[SLAVE_BUILD]\\pdfium\\out\\Debug",
-      "pdfium_test"
+      "[SLAVE_BUILD]\\pdfium\\out\\Debug"
     ],
     "name": "compile with ninja"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]\\pdfium\\out\\Debug\\pdfium_unittests.exe"
+    ],
+    "name": "pdfium_unittests"
   }
 ]
