@@ -423,6 +423,15 @@ class IntegratorTest(unittest.TestCase):
           }
       )
 
+  def test_build_retried(self):
+    with self.create_integrator(), self.mock_existing_build() as build:
+      self.integrator.on_build_finished(build, 'RETRY')
+      self.assertFalse(self.buildbucket.api.fail.called)
+
+  def test_build_skipped(self):
+    with self.create_integrator(), self.mock_existing_build() as build:
+      self.integrator.on_build_finished(build, 'SKIPPED')
+      self.assertFalse(self.buildbucket.api.fail.called)
 
 if __name__ == '__main__':
   logging.basicConfig(

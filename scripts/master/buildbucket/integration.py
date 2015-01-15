@@ -384,9 +384,23 @@ class BuildBucketIntegrator(object):
     })
 
   def on_build_finished(self, build, status):
+    assert status in ('SUCCESS', 'FAILURE', 'EXCEPTION', 'RETRY', 'SKIPPED')
     if not self.is_buildbucket_build(build):
       return
-    assert status in ('SUCCESS', 'FAILURE', 'EXCEPTION')
+    self.log(
+        'Build %s finished with status "%s"' % (build, status),
+        level=logging.DEBUG)
+    if status == 'RETRY':
+      # Do not mark this build as failed. Either it will be retried when master
+      # starts again and the build lease is still held, or the build lease will
+      # expire.
+      return
+    if status == 'SKIPPED':
+      # Build lease will expire on its own.
+      # TODO(nodir): implement unlease API http://crbug.com/448984 and call it
+      # here.
+      return
+
     properties_to_send = build.getProperties().asDict()
     del properties_to_send[common.INFO_PROPERTY]
     body = {
