@@ -40,6 +40,7 @@ class BuildBucketStatus(StatusReceiverMultiService):
     return (self, BUILD_ETA_UPDATE_INTERVAL.total_seconds())
 
   def buildETAUpdate(self, build, eta_seconds):
+    print 'ETAAAAAAAAAA'
     self.integrator.on_build_eta_update(build, eta_seconds)
 
   def buildFinished(self, builder_name, build, result):

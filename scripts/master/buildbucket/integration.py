@@ -20,7 +20,7 @@ LEASE_DURATION = datetime.timedelta(minutes=5)
 MAX_LEASE_DURATION = datetime.timedelta(minutes=10)
 
 # Buildbot-related constants.
-BUILD_ETA_UPDATE_INTERVAL = datetime.timedelta(minutes=5)
+BUILD_ETA_UPDATE_INTERVAL = datetime.timedelta(seconds=5)
 BUILD_ID_PROPERTY = 'build_id'
 BUILDSET_REASON = 'buildbucket'
 LEASE_KEY_PROPERTY = 'lease_key'
@@ -349,9 +349,9 @@ class BuildBucketIntegrator(object):
     if build.isFinished():
       return
     error_msg = (
-        'Build %s/%s has started, but an attempt to notify buildbucket about '
+        'Build %d (%s) has started, but an attempt to notify buildbucket about '
         'it has failed with error "%s" (reason: %s).' % (
-            build.getBuilder().getName(), build.getNumber(),
+            build.getNumber(), build.getBuilder().getName(),
             error_dict.get('message'),
             error_dict.get('reason')))
     self.log('%s Stopping the build.' % error_msg, level=logging.ERROR)
