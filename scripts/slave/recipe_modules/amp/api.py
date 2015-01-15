@@ -40,23 +40,27 @@ class AmpApi(recipe_api.RecipeApi):
     Returns:
       A list of command-line arguments as strings.
     """
-    gtest_args= ['-s', suite]
+    gtest_args = ['-s', suite]
     if isolate_file_path:
       gtest_args += ['--isolate-file-path', isolate_file_path]
     return gtest_args
 
   @recipe_api.non_step
-  def uirobot_arguments(self, minutes=5):
+  def uirobot_arguments(self, apk_under_test=None, minutes=5):
     """Generate command-line arguments for running uirobot tests.
 
     Args:
+      apk_under_test: The APK to run uirobot tests on.
       minutes: The number of minutes for which the uirobot tests should be
         run. Defaults to 5.
 
     Returns:
       A list of command-line arguments as strings.
     """
-    return ['--minutes', minutes]
+    uirobot_args = ['--minutes', minutes]
+    if apk_under_test:
+      uirobot_args += ['--apk-under-test', apk_under_test]
+    return uirobot_args
 
   @recipe_api.non_step
   def amp_arguments(

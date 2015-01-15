@@ -91,7 +91,8 @@ def GenSteps(api):
                                 trigger=trigger_file(suite)))
     api.amp.run_android_test_suite(
         'uirobot (trigger)', 'uirobot',
-        api.amp.uirobot_arguments(minutes=5),
+        api.amp.uirobot_arguments(apk_under_test='apks/ChromeShell.apk',
+                                  minutes=5),
         api.amp.amp_arguments(api_address=AMP_INSTANCE_ADDRESS,
                               api_port=AMP_INSTANCE_PORT,
                               api_protocol=AMP_INSTANCE_PROTOCOL,

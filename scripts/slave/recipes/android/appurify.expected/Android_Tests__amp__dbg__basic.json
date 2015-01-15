@@ -241,6 +241,8 @@
       "uirobot",
       "--minutes",
       "5",
+      "--apk-under-test",
+      "apks/ChromeShell.apk",
       "--enable-platform-mode",
       "-e",
       "remote_device",
