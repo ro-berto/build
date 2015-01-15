@@ -56,6 +56,9 @@
       "chrome"
     ],
     "cwd": "[SLAVE_BUILD]/src",
+    "env": {
+      "CPPFLAGS": "-DSK_ALLOW_CROSSPROCESS_PICTUREIMAGEFILTERS=1"
+    },
     "name": "Build Chrome"
   },
   {

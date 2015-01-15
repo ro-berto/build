@@ -34,6 +34,7 @@ def GenSteps(api):
   # Build Chrome.
   api.step('Build Chrome',
            ['ninja', '-C', 'out/Release', 'chrome'],
+           env={'CPPFLAGS': '-DSK_ALLOW_CROSSPROCESS_PICTUREIMAGEFILTERS=1'},
            cwd=api.path['checkout'])
 
   # Capture the SKPs.
