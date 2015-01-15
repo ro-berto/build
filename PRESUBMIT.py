@@ -52,6 +52,7 @@ def CommonChecks(input_api, output_api):
         # pylint is fetched in memory with setuptools, it seems it caches
         # sys.path so modifications to sys.path aren't kept.
         join('scripts', 'master', 'unittests'),
+        join('scripts', 'master', 'buildbucket', 'unittests'),
         join('scripts', 'slave', 'unittests'),
         join('scripts', 'tools', 'deps2git'),
         join('site_config'),
