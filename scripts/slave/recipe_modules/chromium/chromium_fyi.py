@@ -9,39 +9,7 @@ SPEC = {
     'build_gs_bucket': 'chromium-fyi-archive',
   },
   'builders': {
-     'Linux ChromiumOS Athena Builder': {
-       'recipe_config': 'chromium_chromeos_athena',
-       'chromium_config_kwargs': {
-         'BUILD_CONFIG': 'Release',
-         'TARGET_BITS': 64,
-       },
-       'bot_type': 'builder',
-       'compile_targets': [
-         'athena_unittests',
-         'browser_tests',
-         'chrome',
-       ],
-       'testing': {
-         'platform': 'linux',
-       },
-     },
-     'Linux ChromiumOS Athena Tests (1)': {
-       'recipe_config': 'chromium_chromeos_athena',
-       'chromium_config_kwargs': {
-         'BUILD_CONFIG': 'Release',
-         'TARGET_BITS': 64,
-       },
-       'bot_type': 'tester',
-       'test_generators': [
-         steps.generate_gtest,
-         steps.generate_script,
-       ],
-       'parent_buildername': 'Linux ChromiumOS Athena Builder',
-       'testing': {
-         'platform': 'linux',
-       },
-     },
-    'Chromium iOS Device': {
+     'Chromium iOS Device': {
       'recipe_config': 'chromium_ios_device',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',

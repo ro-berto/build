@@ -347,10 +347,6 @@ def ozone(c):
   c.gyp_env.GYP_DEFINES['use_ozone'] = 1
 
 @config_ctx()
-def athena(c):
-  c.gyp_env.GYP_DEFINES['use_athena'] = 1
-
-@config_ctx()
 def oilpan(c):
   c.gyp_env.GYP_DEFINES['enable_oilpan'] = 1
 
@@ -519,13 +515,6 @@ def chromium_chromeos_clang(c):
 @config_ctx(includes=['chromium_chromeos', 'ozone'])
 def chromium_chromeos_ozone(c):
   c.compile_py.default_targets = ['All', 'chromium_builder_tests']
-
-@config_ctx(includes=['chromium_chromeos', 'athena'])
-def chromium_chromeos_athena(c):
-  c.compile_py.default_targets = ['chrome',
-                                  'browser_tests',
-                                  'athena_unittests',
-                                  'athena_main' ]
 
 @config_ctx(includes=['ninja', 'clang', 'goma'])
 def chromium_clang(c):

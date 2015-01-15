@@ -187,37 +187,6 @@ SPEC = {
         'platform': 'linux',
       },
     },
-    'Linux ChromiumOS Athena Builder': {
-       'recipe_config': 'chromium_chromeos_athena',
-       'chromium_config_kwargs': {
-         'BUILD_CONFIG': 'Release',
-         'TARGET_BITS': 64,
-       },
-       'bot_type': 'builder',
-       'compile_targets': [
-         'athena_unittests',
-         'browser_tests',
-         'chrome',
-       ],
-       'testing': {
-         'platform': 'linux',
-       },
-     },
-     'Linux ChromiumOS Athena Tests (1)': {
-       'recipe_config': 'chromium_chromeos_athena',
-       'chromium_config_kwargs': {
-         'BUILD_CONFIG': 'Release',
-         'TARGET_BITS': 64,
-       },
-       'bot_type': 'tester',
-       'test_generators': [
-         steps.generate_gtest,
-       ],
-       'parent_buildername': 'Linux ChromiumOS Athena Builder',
-       'testing': {
-         'platform': 'linux',
-       },
-     },
     'Linux ChromiumOS Builder (dbg)': {
       'recipe_config': 'chromium_chromeos',
       'chromium_config_kwargs': {
