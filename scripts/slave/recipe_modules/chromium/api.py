@@ -641,21 +641,6 @@ class ChromiumApi(recipe_api.RecipeApi):
         step_test_data=lambda: self.m.json.test_api.output([]),
         **kwargs)
 
-  def checklicenses(self, suffix=None, **kwargs):
-    name = 'checklicenses'
-    if suffix:
-      name += ' (%s)' % suffix
-    return self.m.python(
-        name,
-        self.m.path['checkout'].join(
-            'tools', 'checklicenses', 'checklicenses.py'),
-        args=[
-            '--root', self.m.path['checkout'],
-            '--json', self.m.json.output(),
-        ],
-        step_test_data=lambda: self.m.json.test_api.output([]),
-        **kwargs)
-
   def list_perf_tests(self, browser, num_shards, devices=[]):
     args = ['list', '--browser', browser, '--json-output',
             self.m.json.output(), '--num-shards', num_shards]

@@ -207,22 +207,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/tools/checklicenses/checklicenses.py",
-      "--root",
-      "[SLAVE_BUILD]/src",
-      "--json",
-      "/path/to/tmp/json"
-    ],
-    "name": "checklicenses (with patch)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
     "allow_subannotations": true,
     "cmd": [
       "python",

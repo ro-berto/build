@@ -220,31 +220,6 @@ class CheckpermsTest(Test):  # pylint: disable=W0232
       result_set.add((result['rel_path'], result['error']))
     return ['%s: %s' % (r[0], r[1]) for r in result_set]
 
-class ChecklicensesTest(Test):  # pylint: disable=W0232
-  name = 'checklicenses'
-
-  @staticmethod
-  def compile_targets(_):
-    return []
-
-  def run(self, api, suffix):
-    try:
-      api.chromium.checklicenses(suffix)
-    finally:
-      self._test_runs[suffix] = api.step.active_result
-
-    return self._test_runs[suffix]
-
-  def has_valid_results(self, api, suffix):
-    return self._test_runs[suffix].json.output is not None
-
-  def failures(self, api, suffix):
-    results = self._test_runs[suffix].json.output
-    result_set = set()
-    for result in results:
-      result_set.add((result['filename'], result['license']))
-    return ['%s: %s' % (r[0], r[1]) for r in result_set]
-
 
 class LocalGTestTest(Test):
   def __init__(self, name, args=None, target_name=None, use_isolate=False,

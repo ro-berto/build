@@ -970,7 +970,6 @@ def GenSteps(api):
           api.chromium.steps.ScriptTest('checkdeps', 'checkdeps.py',
                                         scripts_compile_targets),
           api.chromium.steps.CheckpermsTest(),
-          api.chromium.steps.ChecklicensesTest(),
       ])
 
     conditional_tests = tests_in_compile_targets(
