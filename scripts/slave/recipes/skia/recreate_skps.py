@@ -29,12 +29,12 @@ def GenSteps(api):
   skia.url = global_constants.SKIA_REPO
   gclient_cfg.got_revision_mapping['skia'] = 'got_revision'
   api.gclient.checkout(gclient_config=gclient_cfg)
-  api.gclient.runhooks()
+  api.gclient.runhooks(
+      env={'CPPFLAGS': '-DSK_ALLOW_CROSSPROCESS_PICTUREIMAGEFILTERS=1'})
 
   # Build Chrome.
   api.step('Build Chrome',
            ['ninja', '-C', 'out/Release', 'chrome'],
-           env={'CPPFLAGS': '-DSK_ALLOW_CROSSPROCESS_PICTUREIMAGEFILTERS=1'},
            cwd=api.path['checkout'])
 
   # Capture the SKPs.
