@@ -408,11 +408,22 @@ class SkiaApi(recipe_api.RecipeApi):
     args.append('--key')
     args.extend(self._KeyParams())
 
+    blacklist = []
+
+    # This image is too large to be a texture for many GPUs.
+    blacklist.append('gpu _ PANO_20121023_214540.jpg')
+    blacklist.append('msaa _ PANO_20121023_214540.jpg')
+
     # Drawing SKPs, images, or image subsets into GPU canvases is a New Thing.
     # It seems like we're running out of RAM on some Android bots, so start off
     # with a very wide blacklist disabling all these tests on all Android bots.
     if 'Android' in self.c.BUILDER_NAME:  # skia:3255
-      args.append('--blacklist gpu skp _ gpu image _ gpu subset _')
+      blacklist.append('gpu skp _ gpu image _ gpu subset _')
+      blacklist.append('msaa skp _ msaa image _ msaa subset _')
+
+    if blacklist:
+      args.append('--blacklist')
+      args.extend(blacklist)
 
     match = []
     if 'Alex' in self.c.BUILDER_NAME:  # skia:2793
@@ -425,10 +436,10 @@ class SkiaApi(recipe_api.RecipeApi):
       match.append('~WritePixels')
 
     # skia:3249: these images/device pairs won't decode properly.
-    if ('Nexus5' in self.c.BUILDER_NAME or
-        'NexusPlayer' in self.c.BUILDER_NAME):
+    if 'NexusPlayer' in self.c.BUILDER_NAME:
       match.append('~tabl_mozilla_0')
-    if 'Xoom' in self.c.BUILDER_NAME:
+    if ('Nexus5' in self.c.BUILDER_NAME or
+        'Xoom' in self.c.BUILDER_NAME):
       match.append('~tabl_mozilla_0')
       match.append('~desk_yahoonews_0')
 

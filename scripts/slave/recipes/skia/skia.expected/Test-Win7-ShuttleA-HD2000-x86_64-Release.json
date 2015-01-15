@@ -437,7 +437,10 @@
       "model",
       "ShuttleA",
       "os",
-      "Win7"
+      "Win7",
+      "--blacklist",
+      "gpu _ PANO_20121023_214540.jpg",
+      "msaa _ PANO_20121023_214540.jpg"
     ],
     "name": "dm"
   },

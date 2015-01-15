@@ -626,6 +626,9 @@
       "Alex",
       "os",
       "ChromeOS",
+      "--blacklist",
+      "gpu _ PANO_20121023_214540.jpg",
+      "msaa _ PANO_20121023_214540.jpg",
       "--threads",
       "1"
     ],

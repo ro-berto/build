@@ -803,7 +803,11 @@
       "Nexus10",
       "os",
       "Android",
-      "--blacklist gpu skp _ gpu image _ gpu subset _",
+      "--blacklist",
+      "gpu _ PANO_20121023_214540.jpg",
+      "msaa _ PANO_20121023_214540.jpg",
+      "gpu skp _ gpu image _ gpu subset _",
+      "msaa skp _ msaa image _ msaa subset _",
       "--nocpu"
     ],
     "env": {

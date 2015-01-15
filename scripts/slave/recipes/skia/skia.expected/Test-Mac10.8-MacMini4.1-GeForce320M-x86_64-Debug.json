@@ -438,7 +438,10 @@
       "model",
       "MacMini4.1",
       "os",
-      "Mac10.8"
+      "Mac10.8",
+      "--blacklist",
+      "gpu _ PANO_20121023_214540.jpg",
+      "msaa _ PANO_20121023_214540.jpg"
     ],
     "name": "dm"
   },
