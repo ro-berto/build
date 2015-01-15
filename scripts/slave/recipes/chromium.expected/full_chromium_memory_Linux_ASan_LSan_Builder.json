@@ -200,6 +200,19 @@
     "cmd": [
       "python",
       "-u",
+      "[BUILD]/scripts/slave/recipe_modules/isolate/resources/remove_build_metadata.py",
+      "--build-dir",
+      "[SLAVE_BUILD]/src/out/Release",
+      "--src-dir",
+      "[SLAVE_BUILD]/src"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "remove_build_metadata"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/tools/swarming_client/isolate.py",
       "batcharchive",
       "--dump-json",

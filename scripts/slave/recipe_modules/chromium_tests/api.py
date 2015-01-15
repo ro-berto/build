@@ -398,6 +398,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           self.m.chromium_android.findbugs()
 
       if isolated_targets:
+        self.m.isolate.remove_build_metadata()
         # 'compile' just prepares all information needed for the isolation,
         # and the isolation is a separate step.
         self.m.isolate.isolate_tests(
