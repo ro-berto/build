@@ -24,7 +24,7 @@ CHROMIUM_AMP_UNITTESTS = [
 ]
 
 BUILDERS = {
-  'amp-tests': {
+  'Android Tests (amp)(dbg)': {
     'config': 'main_builder',
     'target': 'Debug',
     'download': {
@@ -115,10 +115,13 @@ def GenSteps(api):
                             api_protocol=AMP_INSTANCE_PROTOCOL,
                             collect=trigger_file('uirobot')))
 
+
 def GenTests(api):
+  sanitize = lambda s: ''.join(c if c.isalnum() else '_' for c in s)
+
   for buildername in BUILDERS:
     yield (
-        api.test('%s_basic' % buildername) +
+        api.test('%s_basic' % sanitize(buildername)) +
         api.properties.generic(
             revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
             parent_buildername='parent_buildername',

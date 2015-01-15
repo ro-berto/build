@@ -7,7 +7,7 @@
       "--master",
       "tryserver.chromium.linux",
       "--builder",
-      "amp-tests",
+      "Android Tests (amp)(dbg)",
       "--slave",
       "slavename",
       "--spec",
