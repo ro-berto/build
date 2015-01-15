@@ -804,6 +804,7 @@
       "NexusPlayer",
       "os",
       "Android",
+      "--blacklist gpu skp _ gpu image _ gpu subset _",
       "--match",
       "~tabl_mozilla_0"
     ],

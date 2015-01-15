@@ -805,6 +805,7 @@
       "Xoom",
       "os",
       "Android",
+      "--blacklist gpu skp _ gpu image _ gpu subset _",
       "--match",
       "~WritePixels",
       "~tabl_mozilla_0",

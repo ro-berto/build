@@ -408,6 +408,12 @@ class SkiaApi(recipe_api.RecipeApi):
     args.append('--key')
     args.extend(self._KeyParams())
 
+    # Drawing SKPs, images, or image subsets into GPU canvases is a New Thing.
+    # It seems like we're running out of RAM on some Android bots, so start off
+    # with a very wide blacklist disabling all these tests on all Android bots.
+    if 'Android' in self.c.BUILDER_NAME:  # skia:3255
+      args.append('--blacklist gpu skp _ gpu image _ gpu subset _')
+
     match = []
     if 'Alex' in self.c.BUILDER_NAME:  # skia:2793
       # This machine looks to be running out of heap.

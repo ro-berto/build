@@ -768,6 +768,7 @@
       "GalaxyS4",
       "os",
       "Android",
+      "--blacklist gpu skp _ gpu image _ gpu subset _",
       "--nocpu"
     ],
     "env": {
