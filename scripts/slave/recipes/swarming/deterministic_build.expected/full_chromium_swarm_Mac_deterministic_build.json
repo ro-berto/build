@@ -69,7 +69,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "clang=1 component=static_library dont_embed_build_metadata=1 gomadir='[BUILD]/goma' target_arch=ia32 use_goma=1"
+      "GYP_DEFINES": "clang=1 component=static_library dont_embed_build_metadata=1 target_arch=ia32"
     },
     "name": "gclient runhooks"
   },
@@ -85,9 +85,7 @@
       "--build-tool",
       "ninja",
       "--compiler",
-      "goma-clang",
-      "--goma-dir",
-      "[BUILD]/goma",
+      "clang",
       "--clobber",
       "--",
       "chromium_swarm_tests"
@@ -139,9 +137,7 @@
       "--build-tool",
       "ninja",
       "--compiler",
-      "goma-clang",
-      "--goma-dir",
-      "[BUILD]/goma",
+      "clang",
       "--clobber",
       "--",
       "chromium_swarm_tests"

@@ -53,7 +53,9 @@ DETERMINISTIC_BUILDERS = {
     'platform': 'linux',
   },
   'Mac deterministic build': {
-    'chromium_config': 'chromium',
+    # TODO(sebmarchand): Reactivate goma once the indeterminism coming from
+    # it has been fixed.
+    'chromium_config': 'chromium_no_goma',
     'gclient_config': 'chromium',
     'platform': 'mac',
   },
