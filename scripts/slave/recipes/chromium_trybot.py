@@ -963,10 +963,6 @@ def GenSteps(api):
       gtest_tests = filter_tests(gtest_tests, matching_exes)
 
     tests = []
-    if api.platform.is_linux:
-      tests.extend([
-          api.chromium.steps.CheckpermsTest(),
-      ])
 
     conditional_tests = tests_in_compile_targets(
         api, compile_targets, conditional_tests)

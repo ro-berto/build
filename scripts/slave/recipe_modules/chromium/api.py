@@ -619,20 +619,6 @@ class ChromiumApi(recipe_api.RecipeApi):
       infra_step=True,
       **kwargs)
 
-  def checkperms(self, suffix=None, **kwargs):
-    name = 'checkperms'
-    if suffix:
-      name += ' (%s)' % suffix
-    return self.m.python(
-        name,
-        self.m.path['checkout'].join('tools', 'checkperms', 'checkperms.py'),
-        args=[
-            '--root', self.m.path['checkout'],
-            '--json', self.m.json.output(),
-        ],
-        step_test_data=lambda: self.m.json.test_api.output([]),
-        **kwargs)
-
   def list_perf_tests(self, browser, num_shards, devices=[]):
     args = ['list', '--browser', browser, '--json-output',
             self.m.json.output(), '--num-shards', num_shards]
