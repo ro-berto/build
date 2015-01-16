@@ -6,8 +6,9 @@ import urlparse
 
 from slave import recipe_api
 
+
 class RietveldApi(recipe_api.RecipeApi):
-  def calculate_issue_root(self):
+  def calculate_issue_root(self, patch_project_roots=None):
     """Returns path where a patch should be applied to based on "patch_project".
 
     Maps Rietveld's "patch_project" to a path of directories relative to
@@ -17,8 +18,11 @@ class RietveldApi(recipe_api.RecipeApi):
       Relative path or empty string if patch_project is not set or path for a
       given is unknown.
     """
-    patch_project = self.m.properties.get('patch_project')
-    patch_project_roots = {
+    # Property 'patch_project' is set by Rietveld, 'project' is set by git-try
+    # when TRYSERVER_PROJECT is present in codereview.settings.
+    patch_project = (self.m.properties.get('patch_project') or
+                     self.m.properties.get('project'))
+    patch_project_roots = patch_project_roots or {
       'blink': ['third_party', 'WebKit'],
     }
 

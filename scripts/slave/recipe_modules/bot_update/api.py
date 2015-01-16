@@ -70,7 +70,7 @@ class BotUpdateApi(recipe_api.RecipeApi):
                       patch=True, update_presentation=True,
                       force=False, patch_root=None, no_shallow=False,
                       with_branch_heads=False, refs=None,
-                      **kwargs):
+                      patch_project_roots=None, **kwargs):
     refs = refs or []
     # We can re-use the gclient spec from the gclient module, since all the
     # data bot_update needs is already configured into the gclient spec.
@@ -87,7 +87,7 @@ class BotUpdateApi(recipe_api.RecipeApi):
     root = patch_root
     if root is None:
       root = cfg.solutions[0].name
-      additional = self.m.rietveld.calculate_issue_root()
+      additional = self.m.rietveld.calculate_issue_root(patch_project_roots)
       if additional:
         root = self.m.path.join(root, additional)
 
