@@ -318,8 +318,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if builder_dict.get('parent_buildername') == buildername:
         tests_including_triggered.extend(builder_dict.get('tests', []))
 
-    for t in tests_including_triggered:
-      compile_targets.update(t.compile_targets(self.m))
+    if bot_config.get('add_tests_as_compile_targets', True):
+      for t in tests_including_triggered:
+        compile_targets.update(t.compile_targets(self.m))
 
     return sorted(compile_targets), tests_including_triggered
 

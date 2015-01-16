@@ -366,9 +366,11 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'use_isolate': True,
+      'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
-      'disable_tests': True
+      'add_tests_as_compile_targets': False,
     },
     'CrWinClang tester': {
       'recipe_config': 'chromium_no_goma',
@@ -384,6 +386,7 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'enable_swarming': True,
     },
   },
 }
