@@ -101,7 +101,7 @@
       "--build-config-fs",
       "Release-iphoneos",
       "--paths",
-      "{\"build\": \"[BUILD]\"}",
+      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
       "{\"buildername\": \"Chromium iOS Device (ninja)\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
     ],

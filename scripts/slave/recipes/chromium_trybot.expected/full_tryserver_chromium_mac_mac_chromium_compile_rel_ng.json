@@ -117,7 +117,7 @@
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"build\": \"[BUILD]\"}",
+      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
       "{\"buildername\": \"mac_chromium_compile_rel_ng\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
     ],

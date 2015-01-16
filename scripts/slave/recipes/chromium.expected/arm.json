@@ -116,7 +116,7 @@
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"build\": \"[BUILD]\"}",
+      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
       "{\"buildername\": \"Linux ARM Cross-Compile\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
     ],

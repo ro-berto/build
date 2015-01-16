@@ -100,7 +100,7 @@
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"build\": \"[BUILD]\"}",
+      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
       "{\"buildername\": \"Android Builder\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
     ],

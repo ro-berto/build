@@ -118,7 +118,7 @@
       "--build-config-fs",
       "Debug",
       "--paths",
-      "{\"build\": \"[BUILD]\"}",
+      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]\\\\src\"}",
       "--properties",
       "{\"buildername\": \"Win7 Tests (dbg)(1)\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
     ],

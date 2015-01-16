@@ -125,7 +125,7 @@
       "--build-config-fs",
       "Debug",
       "--paths",
-      "{\"build\": \"[BUILD]\"}",
+      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]\\\\src\"}",
       "--properties",
       "{\"buildername\": \"win_chromium_compile_dbg_ng\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
     ],

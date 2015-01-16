@@ -106,7 +106,7 @@
       "--build-config-fs",
       "Release_x64",
       "--paths",
-      "{\"build\": \"[BUILD]\"}",
+      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]\\\\src\"}",
       "--properties",
       "{\"buildername\": \"Site Isolation Win\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
     ],

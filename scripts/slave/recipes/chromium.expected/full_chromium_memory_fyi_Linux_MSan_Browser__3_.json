@@ -98,7 +98,7 @@
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"build\": \"[BUILD]\"}",
+      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
       "{\"buildername\": \"Linux MSan Browser (3)\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
     ],

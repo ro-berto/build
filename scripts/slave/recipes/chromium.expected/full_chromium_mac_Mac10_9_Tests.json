@@ -122,7 +122,7 @@
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"build\": \"[BUILD]\"}",
+      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
       "{\"buildername\": \"Mac10.9 Tests\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
     ],

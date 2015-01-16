@@ -122,7 +122,7 @@
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"build\": \"[BUILD]\"}",
+      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
       "{\"buildername\": \"linux_chromium_asan_rel\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
     ],
@@ -277,7 +277,7 @@
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"build\": \"[BUILD]\"}",
+      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
       "{\"buildername\": \"linux_chromium_asan_rel\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}",
       "run",

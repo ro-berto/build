@@ -98,7 +98,7 @@
       "--build-config-fs",
       "Debug",
       "--paths",
-      "{\"build\": \"[BUILD]\"}",
+      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
       "{\"buildername\": \"Linux ChromiumOS Ozone Builder (dbg)\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
     ],

@@ -695,7 +695,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     args.extend(['--build-config-fs', self.c.build_config_fs])
 
     paths = {}
-    for path in ('build',):
+    for path in ('build', 'checkout'):
       paths[path] = self.m.path[path]
     args.extend(['--paths', self.m.json.input(paths)])
 

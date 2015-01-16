@@ -101,7 +101,7 @@
       "--build-config-fs",
       "Release-iphoneos",
       "--paths",
-      "{\"build\": \"[BUILD]\"}",
+      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
       "{\"buildername\": \"ios_rel_device_ninja\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
     ],

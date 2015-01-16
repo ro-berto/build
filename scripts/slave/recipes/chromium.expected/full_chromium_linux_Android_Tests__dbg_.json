@@ -100,7 +100,7 @@
       "--build-config-fs",
       "Debug",
       "--paths",
-      "{\"build\": \"[BUILD]\"}",
+      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
       "{\"buildername\": \"Android Tests (dbg)\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
     ],

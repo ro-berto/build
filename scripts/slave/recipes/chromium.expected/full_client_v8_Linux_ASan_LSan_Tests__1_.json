@@ -96,7 +96,7 @@
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"build\": \"[BUILD]\"}",
+      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
       "{\"buildername\": \"Linux ASan LSan Tests (1)\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
     ],

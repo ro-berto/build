@@ -118,7 +118,7 @@
       "--build-config-fs",
       "Release_x64",
       "--paths",
-      "{\"build\": \"[BUILD]\"}",
+      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]\\\\src\"}",
       "--properties",
       "{\"buildername\": \"Win 7 Tests x64 (1)\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
     ],
