@@ -271,120 +271,6 @@ class SkiaApi(recipe_api.RecipeApi):
           pass
     return self._ccache
 
-  def run_gm(self):
-    """Run the Skia GM test."""
-    # Setup
-    self.flavor.create_clean_device_dir(self.device_dirs.gm_actual_dir)
-    host_gm_actual_dir = self.m.path['slave_build'].join('gm', 'actual',
-                                                         self.c.BUILDER_NAME)
-    self.flavor.create_clean_host_dir(host_gm_actual_dir)
-
-    repo_gm_expected_root = self.m.path['checkout'].join('expectations', 'gm')
-    device_ignore_tests_path = self.flavor.device_path_join(
-        self.device_dirs.gm_expected_dir,
-        global_constants.GM_IGNORE_TESTS_FILENAME)
-    repo_ignore_tests_path = repo_gm_expected_root.join(
-        global_constants.GM_IGNORE_TESTS_FILENAME)
-    if self.m.path.exists(repo_ignore_tests_path):
-      if str(self.device_dirs.gm_expected_dir) !=  str(repo_gm_expected_root):
-        self.flavor.create_clean_device_dir(self.device_dirs.gm_expected_dir)
-      self.flavor.copy_file_to_device(repo_ignore_tests_path,
-                                      device_ignore_tests_path)
-
-    device_gm_expected_dir = self.flavor.device_path_join(
-        self.device_dirs.gm_expected_dir,
-        builder_name_schema.GetWaterfallBot(self.c.BUILDER_NAME))
-    device_gm_expectations_path = self.flavor.device_path_join(
-        device_gm_expected_dir, global_constants.GM_EXPECTATIONS_FILENAME)
-    repo_gm_expectations_path = repo_gm_expected_root.join(
-        builder_name_schema.GetWaterfallBot(self.c.BUILDER_NAME),
-        global_constants.GM_EXPECTATIONS_FILENAME)
-    if self.m.path.exists(repo_gm_expectations_path):
-      if str(device_gm_expectations_path) != str(repo_gm_expectations_path):
-        self.flavor.create_clean_device_dir(device_gm_expected_dir)
-        self.flavor.copy_file_to_device(repo_gm_expectations_path,
-                                        device_gm_expectations_path)
-
-    # Run the test.
-    output_dir = self.flavor.device_path_join(self.device_dirs.gm_actual_dir,
-                                              self.c.BUILDER_NAME)
-    json_summary_path = self.flavor.device_path_join(
-        output_dir, global_constants.GM_ACTUAL_FILENAME)
-    args = ['gm', '--verbose', '--writeChecksumBasedFilenames',
-            '--mismatchPath', output_dir,
-            '--missingExpectationsPath', output_dir,
-            '--writeJsonSummaryPath', json_summary_path,
-            '--ignoreErrorTypes',
-                'IntentionallySkipped', 'MissingExpectations',
-                'ExpectationsMismatch',
-            '--resourcePath', self.device_dirs.resource_dir]
-
-    if self.flavor.device_path_exists(device_gm_expectations_path):
-      args.extend(['--readPath', device_gm_expectations_path])
-
-    if self.flavor.device_path_exists(device_ignore_tests_path):
-      args.extend(['--ignoreFailuresFile', device_ignore_tests_path])
-
-    if 'Xoom' in self.c.BUILDER_NAME:
-      # The Xoom's GPU will crash on some tests if we don't use this flag.
-      # http://code.google.com/p/skia/issues/detail?id=1434
-      args.append('--resetGpuContext')
-
-    if 'Mac' in self.c.BUILDER_NAME:
-      # msaa16 is flaky on Macs (driver bug?) so we skip the test for now
-      args.extend(['--config', 'defaults', '~msaa16'])
-    elif 'ANGLE' in self.c.BUILDER_NAME:
-      args.extend(['--config', 'angle'])
-    elif 'GalaxyS4' in self.c.BUILDER_NAME:
-      args.extend(['--config', 'gpu'])
-    elif (not 'NoGPU' in self.c.BUILDER_NAME and
-          not 'ChromeOS' in self.c.BUILDER_NAME and
-          not 'Nexus10' in self.c.BUILDER_NAME):
-      args.extend(['--config', 'defaults', 'msaa16'])
-    if 'Valgrind' in self.c.BUILDER_NAME:
-      # Poppler has lots of memory errors. Skip PDF rasterisation so we don't
-      # have to see them
-      # Bug: https://code.google.com/p/skia/issues/detail?id=1806
-      args.extend(['--pdfRasterizers'])
-    if 'ZeroGPUCache' in self.c.BUILDER_NAME:
-      args.extend(['--gpuCacheSize', '0', '0', '--config', 'gpu'])
-    if self.c.BUILDER_NAME in ('Test-Win7-ShuttleA-HD2000-x86-Release',
-                               'Test-Win7-ShuttleA-HD2000-x86-Release-Trybot'):
-      args.extend(['--forcePerspectiveMatrix',
-                   # Disabling the following tests because they crash GM in
-                   # perspective mode.
-                   # See https://code.google.com/p/skia/issues/detail?id=1665
-                   '--match',
-                   '~scaled_tilemodes',
-                   '~convexpaths',
-                   '~clipped-bitmap',
-                   '~xfermodes3'])
-    self.run(self.flavor.step, 'gm', cmd=args, abort_on_failure=False)
-
-    # Teardown.
-    self.flavor.copy_directory_contents_to_host(output_dir,
-                                                host_gm_actual_dir)
-
-    # Compare results to expectations.
-    # TODO(borenet): Display a link to the rebaseline server. See
-    # LIVE_REBASELINE_SERVER_BASEURL in
-    # https://skia.googlesource.com/buildbot/+/3de60f3003e3/slave/skia_slave_scripts/compare_gms.py
-    results_file = host_gm_actual_dir.join(global_constants.GM_ACTUAL_FILENAME)
-    compare_script = self.m.path['checkout'].join('gm',
-                                                  'display_json_results.py')
-    self.run(self.m.python, 'Compare GMs', script=compare_script,
-             args=[results_file], abort_on_failure=False)
-
-    # Upload results.
-    gsutil_path = self.m.path['depot_tools'].join(
-        'third_party', 'gsutil', 'gsutil')
-    self.run(self.m.python,
-             'Upload GM Results',
-             script=self.resource('upload_gm_results.py'),
-             args=[str(host_gm_actual_dir), self.c.BUILDER_NAME, gsutil_path],
-             cwd=self.m.path['checkout'],
-             abort_on_failure=False)
-
   def run_dm(self):
     """Run the DM test."""
     self._run_once(self.download_and_copy_skps)
@@ -498,10 +384,7 @@ class SkiaApi(recipe_api.RecipeApi):
   def test_steps(self):
     """Run all Skia test executables."""
     self._run_once(self.install)
-    if 'TSAN' not in self.c.BUILDER_NAME:
-      self.run_gm()
-    if 'ZeroGPUCache' not in self.c.BUILDER_NAME:
-      self.run_dm()
+    self.run_dm()
     if ('TSAN'         not in self.c.BUILDER_NAME and
         'ZeroGPUCache' not in self.c.BUILDER_NAME):
       self.run_render_pdfs()

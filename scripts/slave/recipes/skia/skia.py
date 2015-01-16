@@ -79,24 +79,6 @@ def GenTests(api):
       test_data += (
         api.step_data(
             'exists /storage/emulated/legacy/skiabot/skia_images',
-            stdout=api.raw_io.output('')) +
-        api.step_data(
-            'exists /storage/emulated/legacy/skiabot/skia_gm_actual',
-            stdout=api.raw_io.output('')) +
-        api.step_data(
-            'exists /storage/emulated/legacy/skiabot/skia_gm_expected',
-            stdout=api.raw_io.output('')) +
-        api.step_data(
-            ('exists /storage/emulated/legacy/skiabot/skia_gm_expected/' +
-             builder),
-            stdout=api.raw_io.output('')) +
-        api.step_data(
-            ('exists /storage/emulated/legacy/skiabot/skia_gm_expected/' +
-             builder + '/expected-results.json'),
-            stdout=api.raw_io.output('')) +
-        api.step_data(
-            ('exists /storage/emulated/legacy/skiabot/skia_gm_expected/'
-             'ignored-tests.txt'),
             stdout=api.raw_io.output('')))
 
     if 'Perf' in builder:
@@ -115,12 +97,7 @@ def GenTests(api):
                      buildnumber=5,
                      revision='abc123') +
       api.path.exists(
-          api.path['slave_build'].join(
-              'skia', 'expectations', 'gm',
-              builder_name_schema.GetWaterfallBot(builder),
-              'expected-results.json'),
-          api.path['slave_build'].join('skia', 'expectations', 'gm',
-                                       'ignored-tests.txt'),
+          api.path['slave_build'].join('skia'),
           api.path['slave_build'].join('playback', 'skps', 'SKP_VERSION')
       )
     )
@@ -138,12 +115,12 @@ def GenTests(api):
 
   builder = 'Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes'
   yield (
-    api.test('failed_gm') +
+    api.test('failed_dm') +
     api.properties(buildername=builder,
                    mastername=mastername,
                    slavename=slavename,
                    buildnumber=6) +
-    api.step_data('gm', retcode=1)
+    api.step_data('dm', retcode=1)
   )
 
   yield (
