@@ -411,15 +411,15 @@ class SkiaApi(recipe_api.RecipeApi):
     blacklist = []
 
     # This image is too large to be a texture for many GPUs.
-    blacklist.append('gpu _ PANO_20121023_214540.jpg')
-    blacklist.append('msaa _ PANO_20121023_214540.jpg')
+    blacklist.extend('gpu _ PANO_20121023_214540.jpg'.split(' '))
+    blacklist.extend('msaa _ PANO_20121023_214540.jpg'.split(' '))
 
     # Drawing SKPs, images, or image subsets into GPU canvases is a New Thing.
     # It seems like we're running out of RAM on some Android bots, so start off
     # with a very wide blacklist disabling all these tests on all Android bots.
     if 'Android' in self.c.BUILDER_NAME:  # skia:3255
-      blacklist.append('gpu skp _ gpu image _ gpu subset _')
-      blacklist.append('msaa skp _ msaa image _ msaa subset _')
+      blacklist.extend('gpu skp _ gpu image _ gpu subset _'.split(' '))
+      blacklist.extend('msaa skp _ msaa image _ msaa subset _'.split(' '))
 
     if blacklist:
       args.append('--blacklist')

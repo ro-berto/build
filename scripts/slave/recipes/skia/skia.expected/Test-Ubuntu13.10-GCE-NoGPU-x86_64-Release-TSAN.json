@@ -295,8 +295,12 @@
       "os",
       "Ubuntu13.10",
       "--blacklist",
-      "gpu _ PANO_20121023_214540.jpg",
-      "msaa _ PANO_20121023_214540.jpg"
+      "gpu",
+      "_",
+      "PANO_20121023_214540.jpg",
+      "msaa",
+      "_",
+      "PANO_20121023_214540.jpg"
     ],
     "env": {
       "ASAN_OPTIONS": "symbolize=1 detect_leaks=1",
