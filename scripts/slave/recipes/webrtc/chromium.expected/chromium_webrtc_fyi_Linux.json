@@ -77,6 +77,14 @@
     "cmd": [
       "python",
       "-u",
+      "[BUILD]/scripts/slave/cleanup_temp.py"
+    ],
+    "name": "cleanup_temp"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
@@ -137,14 +145,6 @@
       "linux"
     ],
     "name": "sizes"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/cleanup_temp.py"
-    ],
-    "name": "cleanup_temp"
   },
   {
     "allow_subannotations": true,

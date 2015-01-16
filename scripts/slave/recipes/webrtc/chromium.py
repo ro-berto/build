@@ -48,6 +48,7 @@ def GenSteps(api):
   step_result = api.bot_update.ensure_checkout(force=True)
   got_revision = step_result.presentation.properties['got_revision']
 
+  api.webrtc.cleanup()
   if not bot_config.get('disable_runhooks'):
     api.chromium.runhooks()
 
@@ -74,7 +75,6 @@ def GenSteps(api):
         archive_revision)
 
   if bot_type in ('builder_tester', 'tester'):
-    api.webrtc.cleanup()
     if api.chromium.c.TARGET_PLATFORM == 'android':
       api.chromium_android.common_tests_setup_steps()
       api.chromium_android.run_test_suite(

@@ -85,6 +85,14 @@
     "cmd": [
       "python",
       "-u",
+      "[BUILD]\\scripts\\slave\\cleanup_temp.py"
+    ],
+    "name": "cleanup_temp"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[DEPOT_TOOLS]\\gclient.py",
       "runhooks"
     ],
@@ -128,14 +136,6 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Win7 Tester\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc.fyi\", \"parent_buildername\": \"Win Builder\", \"parent_got_revision\": \"12345\", \"recipe\": \"webrtc/chromium\", \"revision\": null, \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "name": "extract build"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]\\scripts\\slave\\cleanup_temp.py"
-    ],
-    "name": "cleanup_temp"
   },
   {
     "cmd": [

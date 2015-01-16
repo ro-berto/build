@@ -48,6 +48,7 @@ def GenSteps(api):
   # Whatever step is run right before this line needs to emit got_revision.
   got_revision = step_result.presentation.properties['got_revision']
 
+  api.webrtc.cleanup()
   api.chromium.runhooks()
 
   if does_build:
@@ -70,7 +71,6 @@ def GenSteps(api):
         archive_revision)
 
   if does_test:
-    api.webrtc.cleanup()
     api.webrtc.runtests(got_revision)
 
 
