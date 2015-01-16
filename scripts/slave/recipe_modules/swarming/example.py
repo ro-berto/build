@@ -32,6 +32,8 @@ def GenSteps(api):
   api.swarming.set_default_env('TESTING', '1')
   api.swarming.verbose = True
 
+  api.swarming.set_default_dimension('inexistent', None)
+
   try:
     # Testing ReadOnlyDict.__setattr__() coverage.
     api.swarming.default_dimensions['invalid'] = 'foo'

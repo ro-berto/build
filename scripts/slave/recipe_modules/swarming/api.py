@@ -127,8 +127,11 @@ class SwarmingApi(recipe_api.RecipeApi):
   def set_default_dimension(self, key, value):
     """Sets Swarming OS dimension to run task on by default."""
     assert isinstance(key, basestring), key
-    assert isinstance(value, basestring), value
-    self._default_dimensions[key] = value
+    assert isinstance(value, basestring) or value is None, value
+    if value is None:
+      self._default_dimensions.pop(key, None)
+    else:
+      self._default_dimensions[key] = value
 
   @property
   def default_env(self):
