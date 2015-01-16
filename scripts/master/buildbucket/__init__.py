@@ -60,10 +60,11 @@ def setup(
 
   poller = BuildBucketPoller(
       integrator=integrator,
-      buildbucket_service_factory=buildbucket_service_factory,
       poll_interval=poll_interval,
-      dry_run=dry_run,
-  )
-  status = BuildBucketStatus(integrator)
+      dry_run=dry_run)
+  status = BuildBucketStatus(
+      integrator,
+      buildbucket_service_factory=buildbucket_service_factory,
+      dry_run=dry_run)
   config.setdefault('change_source', []).append(poller)
   config.setdefault('status', []).append(status)

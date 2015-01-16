@@ -30,6 +30,17 @@ def log(message, level=None):
   twistedLog.msg('%s%s' % (LOG_PREFIX, message), loglevel=level)
 
 
+def log_on_error(deferred, msg_prefix=None):
+  msg_prefix = msg_prefix or ''
+  def on_failure(failure):
+    msg = msg_prefix
+    if msg:
+      msg += ': '
+    msg += '%s' % failure
+    log(msg, level=logging.ERROR)
+  deferred.addErrback(on_failure)
+
+
 # Copied from "utils" appengine component
 # https://chromium.googlesource.com/infra/swarming/+/master/appengine/components/components/utils.py
 def datetime_to_timestamp(value):

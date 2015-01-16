@@ -9,8 +9,10 @@ import json
 import logging
 import traceback
 
+from buildbot.util import deferredLocked
 from master.buildbucket import common, changestore
 from master.buildbucket.common import log
+from twisted.internet import defer
 from twisted.internet.defer import inlineCallbacks, returnValue
 
 
@@ -52,6 +54,7 @@ class BuildBucketIntegrator(object):
     self._find_change_cache = None
     self.started = False
     self.changes = None
+    self.poll_lock = defer.DeferredLock()
 
   def log(self, message, level=None):
     common.log(message, level)
@@ -69,7 +72,7 @@ class BuildBucketIntegrator(object):
     self.log('integrator started')
 
   def stop(self):
-    if self.started is None:
+    if not self.started:
       return
     self.buildbot = None
     self.buildbucket_service.stop()
@@ -275,6 +278,7 @@ class BuildBucketIntegrator(object):
     properties = params.get('properties')
     yield self._schedule(builder_name, properties, build_id, ssid, lease_key)
 
+  @deferredLocked('poll_lock')
   @inlineCallbacks
   def poll_builds(self):
     """Polls buildbucket and schedules builds."""
