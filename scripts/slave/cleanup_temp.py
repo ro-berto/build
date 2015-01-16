@@ -134,8 +134,7 @@ def main_win():
   remove_build_dead(slave_path)
   remove_old_isolate_directories(slave_path)
   remove_old_isolate_execution_directories(slave_path)
-  # TODO(maruel): Temporary, add back.
-  #cleanup_directory(os.environ['TEMP'])
+  cleanup_directory(os.environ['TEMP'])
   check_free_space_path('c:\\')
   if os.path.isdir('e:\\'):
     check_free_space_path('e:\\')
@@ -178,8 +177,7 @@ def main_linux():
   remove_build_dead('/b/build/slave')
   remove_old_isolate_directories('/b/build/slave')
   remove_old_isolate_execution_directories('/b/build/slave')
-  # TODO(maruel): Temporary, add back.
-  # cleanup_directory('/tmp')
+  cleanup_directory('/tmp')
   if os.path.isdir('/b'):
     check_free_space_path('/b')
   check_free_space_path(os.environ['HOME'])
