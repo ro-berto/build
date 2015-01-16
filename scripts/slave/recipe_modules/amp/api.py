@@ -7,6 +7,91 @@ from slave import recipe_api
 
 class AmpApi(recipe_api.RecipeApi):
 
+  def __init__(self, *args, **kwargs):
+    super(AmpApi, self).__init__(*args, **kwargs)
+    self._trigger_file_dir = None
+
+  @recipe_api.non_step
+  def _get_trigger_dir(self):
+    if not self._trigger_file_dir:
+      self._trigger_file_dir = self.m.path.mkdtemp('amp_trigger')
+    return self._trigger_file_dir
+
+  @recipe_api.non_step
+  def _get_trigger_file_for_suite(self, suite):
+    return self._get_trigger_dir().join('%s.json' % suite)
+
+  @recipe_api.composite_step
+  def trigger_android_test_suite(
+      self, suite, test_type, test_type_args, amp_args, verbose=True):
+    args = ([test_type] + test_type_args + amp_args
+        + ['--trigger', self.m.json.output()])
+    if verbose:
+      args += ['--verbose']
+
+    step_test_data = lambda: self.m.json.test_api.output({
+      'env': {
+        'device': {
+          'brand': 'Foo',
+          'name': 'Fone',
+          'os_version': '1.2.3',
+        },
+      },
+    })
+    step_result = self.m.python(
+        '[trigger] %s' % suite,
+        self.m.path['checkout'].join('build', 'android', 'test_runner.py'),
+        args=args,
+        step_test_data=step_test_data)
+    trigger_data = step_result.json.output
+    try:
+      device_data = trigger_data['env']['device']
+      step_result.presentation.step_text = 'on %s %s %s' % (
+          device_data['brand'],
+          device_data['name'],
+          device_data['os_version'])
+    except KeyError:
+      step_result.presentation.status = self.m.step.WARNING
+      step_result.presentation.step_text = 'unable to find device info'
+
+    self.m.file.write(
+        '[trigger] save %s data' % suite,
+        self._get_trigger_file_for_suite(suite),
+        self.m.json.dumps(trigger_data))
+
+  @recipe_api.composite_step
+  def collect_android_test_suite(
+      self, suite, test_type, test_type_args, amp_args, verbose=True):
+    args = ([test_type] + test_type_args + amp_args
+        + ['--collect', self._get_trigger_file_for_suite(suite)])
+    trigger_data = self.m.json.read(
+        '[collect] load %s data' % suite,
+        self._get_trigger_file_for_suite(suite),
+        step_test_data=lambda: self.m.json.test_api.output({
+          'env': {
+            'device': {
+              'brand': 'Foo',
+              'name': 'Fone',
+              'os_version': '1.2.3',
+            }
+          }
+        })).json.output
+    if verbose:
+      args += ['--verbose']
+    step_result = self.m.python(
+        '[collect] %s' % suite,
+        self.m.path['checkout'].join('build', 'android', 'test_runner.py'),
+        args=args)
+    try:
+      device_data = trigger_data['env']['device']
+      step_result.presentation.step_text = 'on %s %s %s' % (
+          device_data['brand'],
+          device_data['name'],
+          device_data['os_version'])
+    except KeyError:
+      step_result.presentation.status = self.m.step.WARNING
+      step_result.presentation.step_text = 'unable to find device info'
+
   def run_android_test_suite(self, step_name, test_type, test_type_args,
                              amp_args, verbose=True):
     """Runs an android test suite on AMP.
@@ -22,7 +107,7 @@ class AmpApi(recipe_api.RecipeApi):
     args = [test_type] + test_type_args + amp_args
     if verbose:
       args += ['--verbose']
-    self.m.python(
+    return self.m.python(
         step_name,
         self.m.path['checkout'].join('build', 'android', 'test_runner.py'),
         args=args)

@@ -11,6 +11,7 @@ DEPS = [
   'chromium_android',
   'gclient',
   'gsutil',
+  'json',
   'path',
   'properties',
   'python',
@@ -75,46 +76,38 @@ def GenSteps(api):
                         extract_location])
 
   with api.step.defer_results():
-    trigger_dir = api.path.mkdtemp('amp_trigger')
-    def trigger_file(suite):
-      return trigger_dir.join('%s.pickle' % suite)
     for suite, isolate_file in builder.get('unittests', []):
       isolate_file_path = (
           api.path['checkout'].join(*isolate_file) if isolate_file else None)
-      api.amp.run_android_test_suite(
-          '%s (trigger)' % suite,
-          'gtest',
+      api.amp.trigger_android_test_suite(
+          suite, 'gtest',
           api.amp.gtest_arguments(suite, isolate_file_path=isolate_file_path),
           api.amp.amp_arguments(api_address=AMP_INSTANCE_ADDRESS,
                                 api_port=AMP_INSTANCE_PORT,
-                                api_protocol=AMP_INSTANCE_PROTOCOL,
-                                trigger=trigger_file(suite)))
-    api.amp.run_android_test_suite(
-        'uirobot (trigger)', 'uirobot',
+                                api_protocol=AMP_INSTANCE_PROTOCOL))
+
+    api.amp.trigger_android_test_suite(
+        'uirobot', 'uirobot',
         api.amp.uirobot_arguments(apk_under_test='apks/ChromeShell.apk',
                                   minutes=5),
         api.amp.amp_arguments(api_address=AMP_INSTANCE_ADDRESS,
                               api_port=AMP_INSTANCE_PORT,
-                              api_protocol=AMP_INSTANCE_PROTOCOL,
-                              trigger=trigger_file('uirobot')))
+                              api_protocol=AMP_INSTANCE_PROTOCOL))
 
     for suite, isolate_file in builder.get('unittests', []):
-      api.amp.run_android_test_suite(
-          '%s (collect)' % suite,
-          'gtest',
+      api.amp.collect_android_test_suite(
+          suite, 'gtest',
           api.amp.gtest_arguments(suite),
           api.amp.amp_arguments(api_address=AMP_INSTANCE_ADDRESS,
                                 api_port=AMP_INSTANCE_PORT,
-                                api_protocol=AMP_INSTANCE_PROTOCOL,
-                                collect=trigger_file(suite)))
+                                api_protocol=AMP_INSTANCE_PROTOCOL))
 
-    api.amp.run_android_test_suite(
-      'uirobot (collect)', 'uirobot',
-      api.amp.uirobot_arguments(),
-      api.amp.amp_arguments(api_address=AMP_INSTANCE_ADDRESS,
-                            api_port=AMP_INSTANCE_PORT,
-                            api_protocol=AMP_INSTANCE_PROTOCOL,
-                            collect=trigger_file('uirobot')))
+    api.amp.collect_android_test_suite(
+        'uirobot', 'uirobot',
+        api.amp.uirobot_arguments(),
+        api.amp.amp_arguments(api_address=AMP_INSTANCE_ADDRESS,
+                              api_port=AMP_INSTANCE_PORT,
+                              api_protocol=AMP_INSTANCE_PROTOCOL))
 
 
 def GenTests(api):

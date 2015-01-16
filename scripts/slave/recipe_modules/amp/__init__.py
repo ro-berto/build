@@ -3,6 +3,8 @@
 # found in the LICENSE file.
 
 DEPS = [
+    'file',
+    'json',
     'path',
     'python',
     'step',

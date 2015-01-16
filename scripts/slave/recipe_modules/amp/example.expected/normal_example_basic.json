@@ -27,5 +27,67 @@
       "--verbose"
     ],
     "name": "example_gtest_suite step"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
+      "example_gtest_suite",
+      "--enable-platform-mode",
+      "-e",
+      "remote_device",
+      "--api-key-file",
+      "[BUILD]/site_config/.amp_api_key",
+      "--api-secret-file",
+      "[BUILD]/site_config/.amp_api_secret",
+      "--api-address",
+      "127.0.0.1",
+      "--api-port",
+      "80",
+      "--api-protocol",
+      "http",
+      "--remote-device",
+      "SampleDevice",
+      "--remote-device-os",
+      "SampleDeviceOS",
+      "--trigger",
+      "test_trigger_file.json",
+      "--verbose"
+    ],
+    "name": "example_gtest_suite (trigger)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
+      "example_gtest_suite",
+      "--enable-platform-mode",
+      "-e",
+      "remote_device",
+      "--api-key-file",
+      "[BUILD]/site_config/.amp_api_key",
+      "--api-secret-file",
+      "[BUILD]/site_config/.amp_api_secret",
+      "--api-address",
+      "127.0.0.1",
+      "--api-port",
+      "80",
+      "--api-protocol",
+      "http",
+      "--remote-device",
+      "SampleDevice",
+      "--remote-device-os",
+      "SampleDeviceOS",
+      "--collect",
+      "test_trigger_file.json",
+      "--verbose"
+    ],
+    "name": "example_gtest_suite (collect)"
   }
 ]

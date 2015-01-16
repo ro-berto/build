@@ -174,10 +174,33 @@
       "--api-protocol",
       "http",
       "--trigger",
-      "[TMP_BASE]/amp_trigger_tmp_1/base_unittests.pickle",
+      "/path/to/tmp/json",
       "--verbose"
     ],
-    "name": "base_unittests (trigger)"
+    "name": "[trigger] base_unittests",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"device\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"brand\": \"Foo\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
+      "[TMP_BASE]/amp_trigger_tmp_1/base_unittests.json"
+    ],
+    "name": "[trigger] save base_unittests data"
   },
   {
     "cmd": [
@@ -201,10 +224,33 @@
       "--api-protocol",
       "http",
       "--trigger",
-      "[TMP_BASE]/amp_trigger_tmp_1/cc_unittests.pickle",
+      "/path/to/tmp/json",
       "--verbose"
     ],
-    "name": "cc_unittests (trigger)"
+    "name": "[trigger] cc_unittests",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"device\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"brand\": \"Foo\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
+      "[TMP_BASE]/amp_trigger_tmp_1/cc_unittests.json"
+    ],
+    "name": "[trigger] save cc_unittests data"
   },
   {
     "cmd": [
@@ -228,10 +274,33 @@
       "--api-protocol",
       "http",
       "--trigger",
-      "[TMP_BASE]/amp_trigger_tmp_1/events_unittests.pickle",
+      "/path/to/tmp/json",
       "--verbose"
     ],
-    "name": "events_unittests (trigger)"
+    "name": "[trigger] events_unittests",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"device\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"brand\": \"Foo\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
+      "[TMP_BASE]/amp_trigger_tmp_1/events_unittests.json"
+    ],
+    "name": "[trigger] save events_unittests data"
   },
   {
     "cmd": [
@@ -257,10 +326,55 @@
       "--api-protocol",
       "http",
       "--trigger",
-      "[TMP_BASE]/amp_trigger_tmp_1/uirobot.pickle",
+      "/path/to/tmp/json",
       "--verbose"
     ],
-    "name": "uirobot (trigger)"
+    "name": "[trigger] uirobot",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"device\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"brand\": \"Foo\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
+      "[TMP_BASE]/amp_trigger_tmp_1/uirobot.json"
+    ],
+    "name": "[trigger] save uirobot data"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[TMP_BASE]/amp_trigger_tmp_1/base_unittests.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "[collect] load base_unittests data",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"device\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"brand\": \"Foo\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "cmd": [
@@ -284,10 +398,35 @@
       "--api-protocol",
       "http",
       "--collect",
-      "[TMP_BASE]/amp_trigger_tmp_1/base_unittests.pickle",
+      "[TMP_BASE]/amp_trigger_tmp_1/base_unittests.json",
       "--verbose"
     ],
-    "name": "base_unittests (collect)"
+    "name": "[collect] base_unittests",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[TMP_BASE]/amp_trigger_tmp_1/cc_unittests.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "[collect] load cc_unittests data",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"device\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"brand\": \"Foo\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "cmd": [
@@ -311,10 +450,35 @@
       "--api-protocol",
       "http",
       "--collect",
-      "[TMP_BASE]/amp_trigger_tmp_1/cc_unittests.pickle",
+      "[TMP_BASE]/amp_trigger_tmp_1/cc_unittests.json",
       "--verbose"
     ],
-    "name": "cc_unittests (collect)"
+    "name": "[collect] cc_unittests",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[TMP_BASE]/amp_trigger_tmp_1/events_unittests.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "[collect] load events_unittests data",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"device\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"brand\": \"Foo\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "cmd": [
@@ -338,10 +502,35 @@
       "--api-protocol",
       "http",
       "--collect",
-      "[TMP_BASE]/amp_trigger_tmp_1/events_unittests.pickle",
+      "[TMP_BASE]/amp_trigger_tmp_1/events_unittests.json",
       "--verbose"
     ],
-    "name": "events_unittests (collect)"
+    "name": "[collect] events_unittests",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[TMP_BASE]/amp_trigger_tmp_1/uirobot.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "[collect] load uirobot data",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"device\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"brand\": \"Foo\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "cmd": [
@@ -365,9 +554,12 @@
       "--api-protocol",
       "http",
       "--collect",
-      "[TMP_BASE]/amp_trigger_tmp_1/uirobot.pickle",
+      "[TMP_BASE]/amp_trigger_tmp_1/uirobot.json",
       "--verbose"
     ],
-    "name": "uirobot (collect)"
+    "name": "[collect] uirobot",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
+    ]
   }
 ]
