@@ -28,10 +28,17 @@ def _BuildSteps(api):
 
 
 def _RunTests(api):
-  test_path = str(api.path['checkout'].join('out', 'Debug', 'pdfium_unittests'))
+  unittests_path = str(api.path['checkout'].join('out', 'Debug',
+                                                 'pdfium_unittests'))
   if api.platform.is_win:
-    test_path += '.exe'
-  api.step('pdfium_unittests', [test_path])
+    unittests_path += '.exe'
+  api.step('pdfium_unittests', [unittests_path])
+
+  embeddertests_path = str(api.path['checkout'].join('out', 'Debug',
+                                                     'pdfium_embeddertests'))
+  if api.platform.is_win:
+    embeddertests_path += '.exe'
+  api.step('pdfium_embeddertests', [embeddertests_path])
 
 
 def GenSteps(api):

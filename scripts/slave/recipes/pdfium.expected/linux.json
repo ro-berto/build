@@ -57,5 +57,11 @@
       "[SLAVE_BUILD]/pdfium/out/Debug/pdfium_unittests"
     ],
     "name": "pdfium_unittests"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/pdfium/out/Debug/pdfium_embeddertests"
+    ],
+    "name": "pdfium_embeddertests"
   }
 ]

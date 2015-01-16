@@ -57,5 +57,11 @@
       "[SLAVE_BUILD]\\pdfium\\out\\Debug\\pdfium_unittests.exe"
     ],
     "name": "pdfium_unittests"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]\\pdfium\\out\\Debug\\pdfium_embeddertests.exe"
+    ],
+    "name": "pdfium_embeddertests"
   }
 ]
