@@ -546,14 +546,11 @@ def solutions_to_git(input_solutions):
                                         '.DEPS.git')
     elif parsed_path in RECOGNIZED_PATHS:
       solution['url'] = RECOGNIZED_PATHS[parsed_path]
+      solution['deps_file'] = '.DEPS.git'
     elif parsed_url.scheme == 'https' and 'googlesource' in parsed_url.netloc:
       pass
     else:
       print 'Warning: %s' % ('path %r not recognized' % parsed_path,)
-
-    # Point .DEPS.git is the git version of the DEPS file.
-    if not buildspec:
-      solution['deps_file'] = '.DEPS.git'
 
     # Strip out deps containing $$V8_REV$$, etc.
     if 'custom_deps' in solution:

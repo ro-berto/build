@@ -20,6 +20,8 @@ def _CheckoutSteps(api, buildername):
   api.gclient.set_config('mojo')
   if 'Android' in buildername:
     api.gclient.apply_config('android')
+  if 'NaCl' in buildername:
+    api.gclient.c.solutions[0].deps_file = 'DEPS.nacl'
   if api.tryserver.is_tryserver:
     api.step.auto_resolve_conflicts = True
   api.bot_update.ensure_checkout(force=True)
@@ -33,6 +35,9 @@ def _BuildSteps(api, buildername, build_type):
     args += ['--android']
   elif 'ChromeOS' in buildername:
     args += ['--chromeos']
+
+  if 'NaCl' in buildername:
+    args += ['--nacl']
 
   if 'ASan' in buildername:
     args += ['--asan']
@@ -76,6 +81,8 @@ def _GetTestConfig(api):
 
   if 'Perf' in buildername:
     test_config['test_types'] = ['perf']
+  elif 'NaCl' in buildername:
+    test_config['test_types'] = ['default', 'nacl']
   else:
     test_config['test_types'] = ['default']
 
@@ -132,7 +139,9 @@ def GenSteps(api):
 
   is_try = api.tryserver.is_tryserver
   is_perf = 'Perf' in buildername
-  if is_linux and build_type == '--release' and not is_try and not is_perf:
+  is_nacl = 'NaCl' in buildername
+  if (is_linux and build_type == '--release' and not is_try and not is_perf and
+      not is_nacl):
     _UploadShell(api)
 
 def GenTests(api):
@@ -141,6 +150,8 @@ def GenTests(api):
       ['mojo_linux_dbg', 'Mojo Linux (dbg)'],
       ['mojo_linux_asan', 'Mojo Linux ASan'],
       ['mojo_linux_asan_dbg', 'Mojo Linux ASan (dbg)'],
+      ['mojo_linux_nacl', 'Mojo Linux NaCl'],
+      ['mojo_linux_nacl_dbg', 'Mojo Linux NaCl (dbg)'],
       ['mojo_android_dbg', 'Mojo Android (dbg)'],
       ['mojo_android_builder_tests_dbg', 'Mojo Android Builder Tests (dbg)'],
       ['mojo_chromeos_dbg', 'Mojo ChromeOS (dbg)'],
