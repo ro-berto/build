@@ -600,6 +600,8 @@
       "22",
       "root@192.168.1.140",
       "/usr/local/skiabot/bin/dm",
+      "--config",
+      "565 8888 gpu nvprmsaa4 serialize-8888 tiles-8888 tiles_rt-8888 pipe-8888 pipe_xp-8888 pipe_sa-8888",
       "--verbose",
       "--resourcePath",
       "/usr/local/skiabot/skia_resources",

@@ -394,8 +394,13 @@ class SkiaApi(recipe_api.RecipeApi):
     host_dm_dir = self.m.path['slave_build'].join('dm')
     self.flavor.create_clean_host_dir(host_dm_dir)
 
+    configs = ('565 8888 gpu nvprmsaa4 ' +
+               'serialize-8888 tiles-8888 tiles_rt-8888 ' +
+               'pipe-8888 pipe_xp-8888 pipe_sa-8888')
+
     args = [
       'dm',
+      '--config', configs,
       '--verbose',
       '--resourcePath', self.device_dirs.resource_dir,
       '--skps',         self.device_dirs.skp_dir,

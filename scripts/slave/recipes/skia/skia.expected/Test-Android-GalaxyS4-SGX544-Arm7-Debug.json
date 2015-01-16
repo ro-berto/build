@@ -742,6 +742,8 @@
       "-s",
       "4d00353cd8ed61c3",
       "dm",
+      "--config",
+      "565 8888 gpu nvprmsaa4 serialize-8888 tiles-8888 tiles_rt-8888 pipe-8888 pipe_xp-8888 pipe_sa-8888",
       "--verbose",
       "--resourcePath",
       "/storage/emulated/legacy/skiabot/skia_resources",
