@@ -965,10 +965,6 @@ def GenSteps(api):
     tests = []
     if api.platform.is_linux:
       tests.extend([
-          # Step 'checkdeps' is same on all platforms, no need to run it
-          # everywhere.
-          api.chromium.steps.ScriptTest('checkdeps', 'checkdeps.py',
-                                        scripts_compile_targets),
           api.chromium.steps.CheckpermsTest(),
       ])
 

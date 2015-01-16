@@ -388,10 +388,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       else:
         self.m.chromium.compile(compile_targets)
 
-      # Step 'checkdeps' is same on all platforms, no need to run it everywhere.
-      if self.m.platform.is_linux:
-        self.m.chromium.checkdeps()
-
       if self.m.chromium.c.TARGET_PLATFORM == 'android':
         self.m.chromium_android.check_webview_licenses()
         if self.m.chromium.c.BUILD_CONFIG == 'Debug':

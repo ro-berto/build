@@ -619,14 +619,6 @@ class ChromiumApi(recipe_api.RecipeApi):
       infra_step=True,
       **kwargs)
 
-  def checkdeps(self, **kwargs):
-    return self.m.python(
-        'checkdeps',
-        self.m.path['checkout'].join('buildtools', 'checkdeps', 'checkdeps.py'),
-        args=['--json', self.m.json.output()],
-        step_test_data=lambda: self.m.json.test_api.output([]),
-        **kwargs)
-
   def checkperms(self, suffix=None, **kwargs):
     name = 'checkperms'
     if suffix:

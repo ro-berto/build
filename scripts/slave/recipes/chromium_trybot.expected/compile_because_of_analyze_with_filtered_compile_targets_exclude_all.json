@@ -216,30 +216,6 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/testing/scripts/checkdeps.py",
-      "--build-config-fs",
-      "Release",
-      "--paths",
-      "{\"build\": \"[BUILD]\"}",
-      "--properties",
-      "{\"buildername\": \"linux_chromium_asan_rel\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}",
-      "run",
-      "--output",
-      "/path/to/tmp/json"
-    ],
-    "name": "checkdeps (with patch)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"failures\": [], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"valid\": true@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[SLAVE_BUILD]/src/tools/checkperms/checkperms.py",
       "--root",
       "[SLAVE_BUILD]/src",

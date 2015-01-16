@@ -168,33 +168,6 @@ class ScriptTest(Test):  # pylint: disable=W0232
     return self._test_runs[suffix].json.output['failures']
 
 
-class CheckdepsTest(Test):  # pylint: disable=W0232
-  name = 'checkdeps'
-
-  @staticmethod
-  def compile_targets(_):
-    return []
-
-  def run(self, api, suffix):
-    try:
-      api.chromium.checkdeps(suffix)
-    finally:
-      self._test_runs[suffix] = api.step.active_result
-
-    return self._test_runs[suffix]
-
-  def has_valid_results(self, api, suffix):
-    return self._test_runs[suffix].json.output is not None
-
-  def failures(self, api, suffix):
-    results = self._test_runs[suffix].json.output
-    result_set = set()
-    for result in results:
-      for violation in result['violations']:
-        result_set.add((result['dependee_path'], violation['include_path']))
-    return ['%s: %s' % (r[0], r[1]) for r in result_set]
-
-
 class CheckpermsTest(Test):  # pylint: disable=W0232
   name = 'checkperms'
 

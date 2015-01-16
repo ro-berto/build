@@ -193,20 +193,6 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/buildtools/checkdeps/checkdeps.py",
-      "--json",
-      "/path/to/tmp/json"
-    ],
-    "name": "checkdeps",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[BUILD]/scripts/slave/recipe_modules/isolate/resources/remove_build_metadata.py",
       "--build-dir",
       "[SLAVE_BUILD]/src/out/Release",
