@@ -4,8 +4,6 @@
 
 """Launches the gatekeeper."""
 
-import os
-
 
 DEPS = [
   'gatekeeper',
@@ -21,6 +19,10 @@ def GenSteps(api):
 
 
 def GenTests(api):
+  # It is okay to use os here because we are reading the file immediately
+  # on the simulating machine.
+  import os
+
   yield (
     api.test('basic')
     + api.step_data(

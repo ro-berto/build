@@ -9,8 +9,6 @@
 from common.skia import builder_name_schema
 from slave.skia import slaves_cfg
 
-import os
-
 
 DEPS = [
   'json',
@@ -27,6 +25,10 @@ def GenSteps(api):
 
 
 def _getMasterAndSlaveForBuilder(builder):
+  # Filesystem access is okay here because it is executed on the testing
+  # machine.
+  import os
+
   masters_path = os.path.join(os.path.realpath(os.path.dirname(__file__)),
                               os.pardir, os.pardir, os.pardir, os.pardir,
                               'masters')

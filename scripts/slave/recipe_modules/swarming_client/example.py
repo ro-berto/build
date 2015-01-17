@@ -7,8 +7,6 @@ DEPS = [
   'swarming_client',
 ]
 
-from slave import recipe_util
-
 def GenSteps(api):
   # Code coverage for these methods.
   api.swarming_client.checkout('master')
