@@ -331,8 +331,6 @@
           "V8 Mips - big endian - nosnap - 1",
           "V8 Mips - big endian - nosnap - 2",
           "V8 Random Deopt Fuzzer - debug",
-          "NaCl V8 Linux64 - canary",
-          "NaCl V8 Linux64 - stable",
           "Linux Snapshot Builder",
           "Chrome Win7 Perf",
           "Chrome Mac10.6 Perf",

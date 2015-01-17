@@ -47,8 +47,6 @@ exclusions = {
   'V8 Mips - big endian - nosnap - 2': [],
   'V8 Linux - x87 - nosnap - debug': [],
   'V8 Linux - predictable': [],
-  'NaCl V8 Linux64 - stable': [],
-  'NaCl V8 Linux64 - canary': [],
 }
 
 forgiving_steps = ['update_scripts', 'update', 'svnkill', 'taskkill',
