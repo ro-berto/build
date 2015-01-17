@@ -101,13 +101,5 @@
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "Hello"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/mojo/tools/upload_shell_binary.py"
-    ],
-    "name": "upload shell binary"
   }
 ]

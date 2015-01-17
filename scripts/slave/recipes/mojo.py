@@ -138,10 +138,11 @@ def GenSteps(api):
   _TestSteps(api)
 
   is_try = api.tryserver.is_tryserver
+  is_asan = 'ASan' in buildername
   is_perf = 'Perf' in buildername
   is_nacl = 'NaCl' in buildername
   if (is_linux and build_type == '--release' and not is_try and not is_perf and
-      not is_nacl):
+      not is_asan and not is_nacl):
     _UploadShell(api)
 
 def GenTests(api):
