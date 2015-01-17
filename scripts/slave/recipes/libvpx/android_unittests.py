@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from infra.libs.infra_types import freeze
+
 DEPS = [
     'git',
     'json',
@@ -20,17 +22,17 @@ TEST_FILES_URL = 'http://downloads.webmproject.org/test_data/libvpx'
 
 # Device root is a special folder on the device which we have permissions to
 # read / write
-DEVICE_ROOT = "/data/local/tmp"
+DEVICE_ROOT = '/data/local/tmp'
 
 # TODO (joshualitt) the configure script is messed up so we need a relative
 # path.  Essentially, it must be using argv[0] when invoking some of the
 # scripts in the libvpx directory
 CONFIGURE_PATH_REL = './libvpx/configure'
 
-BUILDER_TO_DEVICE = {
-  "Nexus 5 Builder" : "nexus_5",
-  "Nexus 7 Builder" : "nexus_7"
-}
+BUILDER_TO_DEVICE = freeze({
+  'Nexus 5 Builder' : 'nexus_5',
+  'Nexus 7 Builder': 'nexus_7'
+})
 
 def GenSteps(api):
   api.step.auto_resolve_conflicts = True

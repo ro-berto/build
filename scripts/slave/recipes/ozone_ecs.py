@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from infra.libs.infra_types import freeze
+
 DEPS = [
   'bot_update',
   'chromium',
@@ -13,7 +15,7 @@ DEPS = [
   'tryserver',
 ]
 
-OZONE_TESTS = [
+OZONE_TESTS = freeze([
     # Linux tests.
     'base_unittests',
     # 'browser_tests', Not sensible.
@@ -49,17 +51,17 @@ OZONE_TESTS = [
     'events_unittests',
     'gfx_unittests',
     'ui_touch_selection_unittests',
-]
+])
 
-tests_that_do_not_compile = [
-]
+tests_that_do_not_compile = freeze([
+])
 
-tests_that_do_not_pass = [
-]
+tests_that_do_not_pass = freeze([
+])
 
-dbus_tests = [
+dbus_tests = freeze([
     'dbus_unittests',
-]
+])
 
 def GenSteps(api):
 

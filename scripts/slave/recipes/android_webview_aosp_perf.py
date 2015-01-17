@@ -6,6 +6,8 @@
 Performance testing for the WebView.
 """
 
+from infra.libs.infra_types import freeze
+
 DEPS = [
   'adb',
   'bot_update',
@@ -27,10 +29,10 @@ WEBVIEW_PACKAGE = 'com.android.webview'
 TELEMETRY_SHELL_APK = 'AndroidWebViewTelemetryShell.apk'
 TELEMETRY_SHELL_PACKAGE = 'org.chromium.telemetry_shell'
 
-BUILDER = {
+BUILDER = freeze({
   'perf_id': 'android-webview',
   'num_device_shards': 5,
-}
+})
 
 def GenSteps(api):
   api.chromium_android.configure_from_properties('webview_perf',

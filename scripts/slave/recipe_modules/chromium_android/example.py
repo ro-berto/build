@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from infra.libs.infra_types import freeze
+
 DEPS = [
     'adb',
     'chromium',
@@ -12,7 +14,7 @@ DEPS = [
     'step',
 ]
 
-BUILDERS = {
+BUILDERS = freeze({
     'basic_builder': {
         'target': 'Release',
         'build': True,
@@ -65,7 +67,7 @@ BUILDERS = {
       'build': True,
       'skip_wipe': True,
     },
-}
+})
 
 def GenSteps(api):
   config = BUILDERS[api.properties['buildername']]

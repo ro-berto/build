@@ -2,13 +2,15 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from infra.libs.infra_types import freeze
+
 DEPS = [
   'cronet',
   'path',
   'properties',
 ]
 
-BUILDERS = {
+BUILDERS = freeze({
   'local_test': {
     'recipe_config': 'main_builder',
     'run_tests': True,
@@ -90,7 +92,7 @@ BUILDERS = {
       'BUILD_CONFIG': 'Release',
     },
   },
-}
+})
 
 def GenSteps(api):
   buildername = api.properties['buildername']

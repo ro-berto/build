@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from infra.libs.infra_types import freeze
+
 DEPS = [
   'bot_update',
   'chromium',
@@ -19,7 +21,7 @@ CHROMIUM_GIT_URL = 'https://chromium.googlesource.com'
 
 # Lists the additional repositories that should be checked out to be included
 # in the source archive that is indexed by Codesearch.
-ADDITIONAL_REPOS = {
+ADDITIONAL_REPOS = freeze({
   'infra': '%s/infra/infra' % CHROMIUM_GIT_URL,
   'tools/chrome-devtools-frontend':\
       '%s/chromium/tools/chrome-devtools-frontend' % CHROMIUM_GIT_URL,
@@ -35,9 +37,9 @@ ADDITIONAL_REPOS = {
   'tools/gsd_generate_index':\
       '%s/chromium/tools/gsd_generate_index' % CHROMIUM_GIT_URL,
   'tools/perf': '%s/chromium/tools/perf' % CHROMIUM_GIT_URL,
-}
+})
 
-SPEC = {
+SPEC = freeze({
   # The builders have the following parameters:
   # - chromium_config_kwargs: parameters for the config of the chromium module.
   # - chromium_runhooks_kwargs: parameters for the runhooks step.
@@ -87,7 +89,7 @@ SPEC = {
       'package_filename': 'chromiumos-src',
     },
   },
-}
+})
 
 
 def GenSteps(api):
@@ -116,7 +118,7 @@ def GenSteps(api):
   api.chromium.runhooks()
   targets = bot_config.get('compile_targets', [])
   debug_path = api.path['checkout'].join('out', api.chromium.c.BUILD_CONFIG)
-  command = ['ninja', '-C', debug_path] + targets
+  command = ['ninja', '-C', debug_path] + list(targets)
   # Add the parameters for creating the compilation database.
   command += ['-t', 'compdb', 'cc', 'cxx', 'objc', 'objcxx']
   result = api.step('generate compilation database', command,

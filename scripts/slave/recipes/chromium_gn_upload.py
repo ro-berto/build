@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from infra.libs.infra_types import freeze
+
 DEPS = [
   'bot_update',
   'chromium',
@@ -15,7 +17,7 @@ DEPS = [
 ]
 
 
-BUILDERS = {
+BUILDERS = freeze({
   'tryserver.chromium.linux': {
     'builders': {
       'linux_chromium_gn_upload_x64': {
@@ -62,7 +64,7 @@ BUILDERS = {
       },
     },
   },
-}
+})
 
 
 def GenSteps(api):

@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from infra.libs.infra_types import freeze
 
 DEPS = [
   'file',
@@ -10,7 +11,7 @@ DEPS = [
 ]
 
 
-TEST_CONTENTS = {
+TEST_CONTENTS = freeze({
   'simple': 'abcde',
   'spaces': 'abcde fgh',
   'symbols': '! ~&&',
@@ -18,7 +19,7 @@ TEST_CONTENTS = {
 cd
 efg
 ''',
-}
+})
 
 
 def GenSteps(api):

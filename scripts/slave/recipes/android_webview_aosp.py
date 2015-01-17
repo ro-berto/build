@@ -14,7 +14,7 @@ DEPS = [
 ]
 
 AOSP_MANIFEST_PATH = 'android_webview/buildbot/aosp_manifest.xml'
-WEBVIEW_EXES = ['android_webview_apk']
+WEBVIEW_EXES = ('android_webview_apk',)
 
 # This recipe describes building the Android framework WebView component inside
 # an Android build environment.

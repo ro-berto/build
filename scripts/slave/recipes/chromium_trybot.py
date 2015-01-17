@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from infra.libs.infra_types import freeze
+
 DEPS = [
   'bot_update',
   'chromium',
@@ -24,7 +26,7 @@ DEPS = [
 ]
 
 
-BUILDERS = {
+BUILDERS = freeze({
   'tryserver.chromium.linux': {
     'builders': {
       'linux_android_dbg_ng': {
@@ -683,12 +685,12 @@ BUILDERS = {
       },
     },
   },
-}
+})
 
 # TODO(sergiyb): This config should be read from an external JSON file
 # in a custom step, which can then be mocked in the GenTests.
 # TODO(sergiyb): Add Windows and Linux dimensions.
-CHROMIUM_GPU_DIMENSION_SETS = {
+CHROMIUM_GPU_DIMENSION_SETS = freeze({
   'tryserver.chromium.mac': {
     'mac_chromium_rel_ng': [
       {
@@ -702,7 +704,7 @@ CHROMIUM_GPU_DIMENSION_SETS = {
       },
     ],
   },
-}
+})
 
 
 def get_test_names(tests):
@@ -1060,12 +1062,12 @@ def GenSteps(api):
             override_bot_type='builder_tester',
             chromium_apply_config=extra_chromium_configs)
 
-    tests = api.chromium_tests.tests_for_builder(
+    tests = list(api.chromium_tests.tests_for_builder(
         main_waterfall_config['mastername'],
         main_waterfall_config['buildername'],
         bot_update_step,
         master_dict,
-        override_bot_type='builder_tester')
+        override_bot_type='builder_tester'))
     tester = main_waterfall_config.get('tester', '')
     if tester:
       test_config = master_dict.get('builders', {}).get(tester)

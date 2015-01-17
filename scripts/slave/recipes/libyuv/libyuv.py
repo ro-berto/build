@@ -2,7 +2,11 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-# Recipe for building and running tests for Libyuv stand-alone.
+"""
+Recipe for building and running tests for Libyuv stand-alone.
+"""
+
+from infra.libs.infra_types import freeze
 
 DEPS = [
   'chromium',
@@ -15,7 +19,7 @@ DEPS = [
   'tryserver',
 ]
 
-RECIPE_CONFIGS = {
+RECIPE_CONFIGS = freeze({
   'libyuv': {
     'chromium_config': 'libyuv',
     'gclient_config': 'libyuv',
@@ -40,9 +44,9 @@ RECIPE_CONFIGS = {
     'chromium_config': 'libyuv_ios',
     'gclient_config': 'libyuv_ios',
   },
-}
+})
 
-BUILDERS = {
+BUILDERS = freeze({
   'client.libyuv': {
     'builders': {
       'Win32 Debug (VS2010)': {
@@ -749,7 +753,7 @@ BUILDERS = {
       },
     },
   },
-}
+})
 
 def GenSteps(api):
   mastername = api.properties.get('mastername')

@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-GPU_ISOLATES = [
+GPU_ISOLATES = (
   'angle_unittests',
   'content_gl_tests',
   'content_unittests',
@@ -12,10 +12,10 @@ GPU_ISOLATES = [
   'media_unittests',
   'tab_capture_end2end_tests',
   'telemetry_gpu_test',
-]
+)
 
 # This will be folded into the list above once ANGLE is running on all
 # platforms.
-WIN_ONLY_GPU_ISOLATES = [
+WIN_ONLY_GPU_ISOLATES = (
   'angle_end2end_tests',
-]
+)

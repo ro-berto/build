@@ -30,13 +30,14 @@ import sys
 import time
 
 
-WEBCAM_WIN = ['schtasks', '/run', '/tn', 'ManyCam']
-WEBCAM_MAC = ['open', '/Applications/ManyCam/ManyCam.app']
+WEBCAM_WIN = ('schtasks', '/run', '/tn', 'ManyCam')
+WEBCAM_MAC = ('open', '/Applications/ManyCam/ManyCam.app')
 E = os.path.expandvars
-WEBCAM_LINUX = [
+WEBCAM_LINUX = (
     E('$HOME/fake-webcam-driver/linux/v4l2_file_player/v4l2_file_player'),
     E('$HOME/webrtc_video_quality/reference_video.yuv'),
-    '640', '480', '/dev/video0']
+    '640', '480', '/dev/video0',
+)
 
 
 def IsWebCamRunning():

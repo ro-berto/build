@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from infra.libs.infra_types import freeze
+
 DEPS = [
   'bot_update',
   'gclient',
@@ -17,9 +19,9 @@ DEPS = [
 BASE_URL = 'https://chromium.googlesource.com'
 V8_REPO = BASE_URL + '/v8/v8'
 CR_REPO = BASE_URL + '/chromium/src'
-V8_DEPS_DIFFS = {
+V8_DEPS_DIFFS = freeze({
   'tools/gyp': 'build/gyp',
-}
+})
 
 
 def GetDEPS(api, name, repo):

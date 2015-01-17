@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from infra.libs.infra_types import freeze
+
 DEPS = [
   'bot_update',
   'chromium',
@@ -10,7 +12,7 @@ DEPS = [
 ]
 
 
-BUILDERS = {
+BUILDERS = freeze({
   'chromium.mac': {
     'builders': {
       'Mac GN': {
@@ -268,7 +270,7 @@ BUILDERS = {
       },
     },
   },
-}
+})
 
 def GenSteps(api):
   buildername, bot_config = api.chromium.configure_bot(BUILDERS, ['gn'])

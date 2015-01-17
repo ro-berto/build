@@ -3,6 +3,8 @@
 # found in the LICENSE file.
 import json
 
+from infra.libs.infra_types import freeze
+
 DEPS = [
   'chromium',
   'gclient',
@@ -12,7 +14,7 @@ DEPS = [
   'python',
 ]
 
-PERF_TESTS = [
+PERF_TESTS = freeze([
   'blink_perf.animation',
   'dromaeo.domcoreattr',
   'dromaeo.domcoremodify',
@@ -33,7 +35,7 @@ PERF_TESTS = [
   'octane',
   'spaceport',
   'sunspider',
-]
+])
 
 
 def GenSteps(api):

@@ -5,7 +5,9 @@
 # Contains the bulk of the WebRTC builder configurations so they can be reused
 # from multiple recipes.
 
-RECIPE_CONFIGS = {
+from infra.libs.infra_types import freeze
+
+RECIPE_CONFIGS = freeze({
   'webrtc': {
     'chromium_config': 'webrtc_standalone',
     'gclient_config': 'webrtc',
@@ -95,11 +97,11 @@ RECIPE_CONFIGS = {
     'gclient_apply_config': ['android'],
     'compile_targets': ['all'],
   },
-}
+})
 
 WEBRTC_REVISION_PERF_CONFIG = '{\'a_default_rev\': \'r_webrtc_rev\'}'
 
-BUILDERS = {
+BUILDERS = freeze({
   'chromium.webrtc': {
     'builders': {
       'Win Builder': {
@@ -1294,5 +1296,5 @@ BUILDERS = {
       },
     },
   },
-}
+})
 

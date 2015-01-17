@@ -12,9 +12,9 @@ from slave import recipe_util
 
 # This is just for testing, to indicate if a master is using a Git scheduler
 # or not.
-SVN_MASTERS = [
+SVN_MASTERS = (
     'experimental.svn',
-]
+)
 
 
 def jsonish_to_python(spec, is_top=False):

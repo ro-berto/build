@@ -13,6 +13,7 @@ import struct
 import sys
 import time
 
+from infra.libs.infra_types import freeze
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -20,7 +21,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # List of files that are known to be non deterministic. This is a temporary
 # workaround to find regression on the deterministic builders.
 # TODO(sebmarchand): Remove this once all the files are deterministic.
-WHITELIST = {
+WHITELIST = freeze({
   # http://crbug.com/383340
   'android': {
     # Completed.
@@ -77,7 +78,7 @@ WHITELIST = {
     'unit_tests.exe',
     'unit_tests.isolated',
   },
-}
+})
 
 def get_files_to_compare(build_dir, recursive=False):
   """Get the list of files to compare."""

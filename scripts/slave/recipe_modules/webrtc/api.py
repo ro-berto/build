@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from infra.libs.infra_types import freeze
 from slave import recipe_api
 from slave.recipe_modules.webrtc import builders
 
@@ -14,7 +15,7 @@ class WebRTCApi(recipe_api.RecipeApi):
   BUILDERS = builders.BUILDERS
   RECIPE_CONFIGS = builders.RECIPE_CONFIGS
 
-  NORMAL_TESTS = [
+  NORMAL_TESTS = (
     'audio_decoder_unittests',
     'common_audio_unittests',
     'common_video_unittests',
@@ -30,10 +31,10 @@ class WebRTCApi(recipe_api.RecipeApi):
     'video_engine_core_unittests',
     'video_engine_tests',
     'voice_engine_unittests',
-  ]
+  )
 
   # Android APK tests.
-  ANDROID_APK_TESTS = [
+  ANDROID_APK_TESTS = (
     'audio_decoder_unittests',
     'common_audio_unittests',
     'common_video_unittests',
@@ -47,19 +48,19 @@ class WebRTCApi(recipe_api.RecipeApi):
     'video_engine_tests',
     'voice_engine_unittests',
     'webrtc_perf_tests',
-  ]
+  )
 
-  ANDROID_INSTRUMENTATION_TESTS = [
+  ANDROID_INSTRUMENTATION_TESTS = (
      # Disabled due to error only occurring in Chrome infra:
      # Test size not found in annotations for test
      # 'org.webrtc.PeerConnectionAndroidTest#testCompleteSession
      #'libjingle_peerconnection_android_unittest',
-  ]
+  )
 
   # Map of GS archive names to urls.
   # TODO(kjellander): Convert to use the auto-generated URLs once we've setup a
   # separate bucket per master.
-  GS_ARCHIVES = {
+  GS_ARCHIVES = freeze({
     'android_dbg_archive': 'gs://chromium-webrtc/android_chromium_dbg',
     'android_dbg_archive_fyi': ('gs://chromium-webrtc/'
                                 'android_chromium_trunk_dbg'),
@@ -69,7 +70,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     'win_rel_archive_fyi': 'gs://chromium-webrtc/win_rel-fyi',
     'mac_rel_archive': 'gs://chromium-webrtc/Mac Builder',
     'linux_rel_archive': 'gs://chromium-webrtc/Linux Builder',
-  }
+  })
 
   BROWSER_TESTS_GTEST_FILTER = 'WebRtc*:Webrtc*:TabCapture*:*MediaStream*'
   DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'

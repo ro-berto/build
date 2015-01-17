@@ -25,6 +25,8 @@ Revision Y will be the revision property as provided by buildbot or HEAD (i.e.
 in a forced build with no revision provided).
 """
 
+from infra.libs.infra_types import freeze
+
 DEPS = [
   'bot_update',
   'chromium',
@@ -57,7 +59,7 @@ def V8Builder(config, bits, platform):
   }
 
 
-BUILDERS = {
+BUILDERS = freeze({
   'client.v8': {
     'builders': {
       'V8-Blink Win': V8Builder('Release', 32, 'win'),
@@ -67,7 +69,7 @@ BUILDERS = {
       'V8-Blink Linux 64 (dbg)': V8Builder('Debug', 64, 'linux'),
     },
   },
-}
+})
 
 
 def GenSteps(api):

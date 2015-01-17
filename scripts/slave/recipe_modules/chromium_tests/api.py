@@ -4,11 +4,12 @@
 
 import copy
 
+from infra.libs.infra_types import freeze, thaw
 from slave import recipe_api
 
 
 # Different types of builds this recipe module can do.
-RECIPE_CONFIGS = {
+RECIPE_CONFIGS = freeze({
   'chromeos_official': {
     'chromium_config': 'chromium_official',
     'chromium_apply_config': ['chromeos'],
@@ -123,7 +124,7 @@ RECIPE_CONFIGS = {
     'chromium_config': 'chromium_official',
     'gclient_config': 'perf',
   }
-}
+})
 
 
 class ChromiumTestsApi(recipe_api.RecipeApi):
@@ -132,7 +133,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                chromium_apply_config=None):
     # Make an independent copy so that we don't overwrite global state
     # with updates made dynamically based on the test specs.
-    master_dict = copy.deepcopy(self.m.chromium.builders.get(mastername, {}))
+    master_dict = thaw(self.m.chromium.builders.get(mastername, {}))
 
     bot_config = master_dict.get('builders', {}).get(buildername)
     master_config = master_dict.get('settings', {})
@@ -247,7 +248,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                            scripts_compile_targets=scripts_compile_targets)) +
             builder_dict['tests'])
 
-    return update_step, master_dict, test_spec
+    return update_step, freeze(master_dict), test_spec
 
   def create_test_runner(self, api, tests, suffix=''):
     """Creates a test runner to run a set of tests.
@@ -312,7 +313,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       return [], []
 
     compile_targets = set(bot_config.get('compile_targets', []))
-    tests_including_triggered = tests[:]
+    tests_including_triggered = list(tests)
     for loop_buildername, builder_dict in master_dict.get(
         'builders', {}).iteritems():
       if builder_dict.get('parent_buildername') == buildername:

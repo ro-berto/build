@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from infra.libs.infra_types import freeze
+
 DEPS = [
     'adb',
     'bot_update',
@@ -16,14 +18,14 @@ DEPS = [
     'tryserver',
 ]
 
-INSTRUMENTATION_TESTS = [
+INSTRUMENTATION_TESTS = freeze([
   'AndroidWebViewTest',
   'ChromeShellTest',
   'ContentShellTest',
   'ChromeSyncShellTest',
-]
+])
 
-UNIT_TESTS = [
+UNIT_TESTS = freeze([
   ['android_webview_unittests', None],
   ['base_unittests', None],
   ['breakpad_unittests', ['breakpad', 'breakpad_unittests.isolate']],
@@ -45,18 +47,18 @@ UNIT_TESTS = [
   ['ui_base_unittests', None],
   ['ui_touch_selection_unittests', None],
   ['unit_tests', None],
-]
+])
 
-JAVA_UNIT_TESTS = [
+JAVA_UNIT_TESTS = freeze([
   'junit_unit_tests',
-]
+])
 
-PYTHON_UNIT_TESTS = [
+PYTHON_UNIT_TESTS = freeze([
   'gyp_py_unittests',
   'pylib_py_unittests',
-]
+])
 
-BUILDERS = {
+BUILDERS = freeze({
   'tryserver.chromium.linux': {
     'android_dbg_tests_recipe': {
       'config': 'main_builder',
@@ -105,8 +107,7 @@ BUILDERS = {
       },
     },
   }
-
-}
+})
 
 FLAKINESS_DASHBOARD = 'http://test-results.appspot.com'
 

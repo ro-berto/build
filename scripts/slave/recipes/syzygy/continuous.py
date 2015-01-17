@@ -16,6 +16,8 @@ To be tested using a command-line like:
 Places resulting output in build/slave/fake_slave.
 """
 
+from infra.libs.infra_types import freeze
+
 # Recipe module dependencies.
 DEPS = [
   'chromium',
@@ -28,19 +30,21 @@ DEPS = [
 
 
 # Valid continuous builders and the Syzygy configurations they load.
-_BUILDERS = {'Syzygy Debug': ('syzygy', {'BUILD_CONFIG': 'Debug'}),
-             'Syzygy Release': ('syzygy', {'BUILD_CONFIG': 'Release'}),
-             'Syzygy Official': ('syzygy_official', {})}
+BUILDERS = freeze({
+  'Syzygy Debug': ('syzygy', {'BUILD_CONFIG': 'Debug'}),
+  'Syzygy Release': ('syzygy', {'BUILD_CONFIG': 'Release'}),
+  'Syzygy Official': ('syzygy_official', {}),
+})
 
 
 def GenSteps(api):
   """Generates the sequence of steps that will be run by the slave."""
   buildername = api.properties['buildername']
-  assert buildername in _BUILDERS
+  assert buildername in BUILDERS
 
   # Configure the build environment.
   s = api.syzygy
-  config, kwargs = _BUILDERS[buildername]
+  config, kwargs = BUILDERS[buildername]
   s.set_config(config, **kwargs)
 
   # Clean up any running processes on the slave.
@@ -81,5 +85,5 @@ def GenSteps(api):
 
 def GenTests(api):
   """Generates an end-to-end successful test for each builder."""
-  for buildername in _BUILDERS.iterkeys():
+  for buildername in BUILDERS.iterkeys():
     yield api.syzygy.generate_test(api, buildername)

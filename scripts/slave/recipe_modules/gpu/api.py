@@ -2,28 +2,29 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from infra.libs.infra_types import freeze
 from slave import recipe_api
 
 import common
 
-SIMPLE_TESTS_TO_RUN = [
+SIMPLE_TESTS_TO_RUN = freeze([
   'content_gl_tests',
   'gl_tests',
   'angle_unittests'
-]
+])
 
-SIMPLE_NON_OPEN_SOURCE_TESTS_TO_RUN = [
+SIMPLE_NON_OPEN_SOURCE_TESTS_TO_RUN = freeze([
   'gles2_conform_test',
-]
+])
 
-SIMPLE_WIN_ONLY_FYI_ONLY_TESTS = [
+SIMPLE_WIN_ONLY_FYI_ONLY_TESTS = freeze([
   'angle_end2end_tests',
-]
+])
 
-D3D9_TEST_NAME_MAPPING = {
+D3D9_TEST_NAME_MAPPING = freeze({
   'gles2_conform_test': 'gles2_conform_d3d9_test',
   'webgl_conformance': 'webgl_conformance_d3d9'
-}
+})
 
 class GpuApi(recipe_api.RecipeApi):
   def setup(self):

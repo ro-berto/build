@@ -4,6 +4,7 @@
 
 from contextlib import contextmanager
 from slave import recipe_api
+from infra.libs.infra_types import freeze
 
 DEPS = [
   'chromium',
@@ -28,7 +29,7 @@ def FYIStep():
   except recipe_api.StepFailure:
     pass
 
-BUILDERS = {
+BUILDERS = freeze({
   'chromium.fyi': {
     'Android x64 Builder (dbg)': {
       'recipe_config': 'x64_builder',
@@ -174,7 +175,7 @@ BUILDERS = {
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
     }
   },
-}
+})
 
 def GenSteps(api):
   def without_patch_update():

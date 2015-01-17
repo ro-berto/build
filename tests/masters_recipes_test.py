@@ -17,6 +17,7 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'scripts'))
 sys.path.insert(0, os.path.join(BASE_DIR, 'scripts', 'slave', 'recipes'))
 sys.path.insert(
     0, os.path.join(BASE_DIR, 'scripts', 'slave', 'recipe_modules'))
+sys.path.insert(0, os.path.join(BASE_DIR, 'third_party'))
 
 import chromium_trybot
 from chromium.builders import BUILDERS

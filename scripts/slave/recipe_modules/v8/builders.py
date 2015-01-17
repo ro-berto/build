@@ -5,6 +5,8 @@
 # Contains the bulk of the V8 builder configurations so they can be reused
 # from multiple recipes.
 
+from infra.libs.infra_types import freeze
+
 BUILDERS = {
 ####### Waterfall: client.v8
   'client.v8': {
@@ -1327,3 +1329,6 @@ BUILDERS['client.dart.fyi'] = {'builders': {
     'testing': {'platform': platform},
   } for platform in ('win', 'linux', 'mac')
 }}
+
+BUILDERS = freeze(BUILDERS)
+BRANCH_BUILDERS = freeze(BRANCH_BUILDERS)

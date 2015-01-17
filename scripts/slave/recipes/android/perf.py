@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from infra.libs.infra_types import freeze
+
 DEPS = [
     'adb',
     'bot_update',
@@ -16,7 +18,7 @@ DEPS = [
 
 REPO_URL = 'https://chromium.googlesource.com/chromium/src.git'
 
-BUILDERS = {
+BUILDERS = freeze({
   'chromium.perf': {
     'Android Nexus4 Perf': {
       'perf_id': 'android-nexus4',
@@ -80,7 +82,7 @@ BUILDERS = {
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
     },
   },
-}
+})
 
 def GenSteps(api):
   mastername = api.properties['mastername']

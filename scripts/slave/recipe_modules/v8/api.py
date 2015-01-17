@@ -6,6 +6,7 @@ import collections
 import math
 import re
 
+from infra.libs.infra_types import freeze
 from slave import recipe_api
 from slave.recipe_modules.v8 import builders
 
@@ -19,7 +20,7 @@ MAX_FAILURE_LOGS = 10
 MIPS_TOOLCHAIN = 'mips-2013.11-36-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2'
 MIPS_DIR = 'mips-2013.11'
 
-TEST_CONFIGS = {
+TEST_CONFIGS = freeze({
   'benchmarks': {
     'name': 'Benchmarks',
     'tests': 'benchmarks',
@@ -73,7 +74,7 @@ TEST_CONFIGS = {
     'tests': 'webkit',
     'add_flaky_step': True,
   },
-}
+})
 
 
 # TODO(machenbach): Clean up api indirection. "Run" needs the v8 api while
@@ -160,7 +161,7 @@ class V8SimpleLeakCheck(object):
     pass
 
 
-V8_NON_STANDARD_TESTS = {
+V8_NON_STANDARD_TESTS = freeze({
   'deopt': V8DeoptFuzzer,
   'fuzz': V8Fuzzer,
   'gcmole1': V8GCMole1,
@@ -168,7 +169,7 @@ V8_NON_STANDARD_TESTS = {
   'presubmit': V8Presubmit,
   'simpleleak': V8SimpleLeakCheck,
   'v8initializers': V8CheckInitializers,
-}
+})
 
 
 class V8Api(recipe_api.RecipeApi):

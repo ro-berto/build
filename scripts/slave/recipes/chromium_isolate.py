@@ -6,6 +6,8 @@
 Isolating a test is required in order to run it using this recipe.
 """
 
+from infra.libs.infra_types import freeze
+
 DEPS = [
     'chromium',
     'isolate',
@@ -15,10 +17,10 @@ DEPS = [
 
 # TODO(nodir): pass these arguments from builder to tester once triggering from
 # recipes lands. This is needed for ARM testers http://crbug.com/359338
-test_args = {
+TEST_ARGS = freeze({
     'browser_tests': ['--gtest_filter=*NaCl*.*'],
     'sandbox_linux_unittests': ['--test-launcher-print-test-stdio=always'],
-}
+})
 
 
 def GenSteps(api):
@@ -31,7 +33,7 @@ def GenSteps(api):
   webkit_revision = api.properties['parent_got_webkit_revision']
   for test in sorted(api.isolate.isolated_tests):
     api.isolate.runtest(test, revision, webkit_revision,
-                        args=test_args.get(test))
+                        args=TEST_ARGS.get(test))
 
 
 def GenTests(api):

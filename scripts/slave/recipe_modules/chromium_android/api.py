@@ -5,9 +5,10 @@
 import os
 import urllib
 
+from infra.libs.infra_types import freeze
 from slave import recipe_api
 
-INSTRUMENTATION_TESTS = [
+INSTRUMENTATION_TESTS = freeze([
   {
     'test': 'AndroidWebViewTest',
     'gyp_target': 'android_webview_test_apk',
@@ -54,7 +55,7 @@ INSTRUMENTATION_TESTS = [
       },
     },
   },
-]
+])
 
 
 class AndroidApi(recipe_api.RecipeApi):

@@ -38,11 +38,11 @@ class GpuTestApi(recipe_test_api.RecipeTestApi):
     return self.m.json.output({
         'status': 'Found dependency',
         'targets': [u'%s_run' % test for test in common.GPU_ISOLATES],
-        'build_targets': sorted([
+        'build_targets': sorted((
           # A few random targets from the Chrome build to try to
           # confuse the recipe
           'All', 'app_list_demo', 'app_list_unittests', 'app_shell',
-          'chrome_initial'] +
+          'chrome_initial') +
           # The names of our isolates (even though telemetry_gpu_test
           # won't actually be reported by analyze)
           common.GPU_ISOLATES )

@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from infra.libs.infra_types import freeze
+
 from . import chromium_chrome
 from . import chromium_chromiumos
 from . import chromium_fyi
@@ -21,8 +23,7 @@ from . import tryserver_chromium_mac
 from . import tryserver_chromium_perf
 from . import tryserver_chromium_win
 
-
-BUILDERS = {
+BUILDERS = freeze({
   'chromium.chrome': chromium_chrome.SPEC,
   'chromium.chromiumos': chromium_chromiumos.SPEC,
   'chromium.fyi': chromium_fyi.SPEC,
@@ -41,4 +42,4 @@ BUILDERS = {
   'tryserver.chromium.mac': tryserver_chromium_mac.SPEC,
   'tryserver.chromium.perf': tryserver_chromium_perf.SPEC,
   'tryserver.chromium.win': tryserver_chromium_win.SPEC,
-}
+})

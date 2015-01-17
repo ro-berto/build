@@ -7,6 +7,8 @@
 Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 """
 
+from infra.libs.infra_types import freeze
+
 DEPS = [
   'bot_update',
   'chromium',
@@ -20,7 +22,7 @@ DEPS = [
   'step',
 ]
 
-DETERMINISTIC_BUILDERS = {
+DETERMINISTIC_BUILDERS = freeze({
   'Android deterministic build': {
     'chromium_config': 'android',
     'gclient_config': 'chromium',
@@ -66,7 +68,7 @@ DETERMINISTIC_BUILDERS = {
     'gclient_config': 'chromium',
     'platform': 'win',
   },
-}
+})
 
 
 def MoveBuildDirectory(api, src_dir, dst_dir):

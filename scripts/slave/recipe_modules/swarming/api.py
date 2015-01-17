@@ -4,6 +4,7 @@
 
 import functools
 
+from infra.libs.infra_types import freeze
 from slave import recipe_api
 
 
@@ -19,12 +20,12 @@ MINIMAL_SWARMING_VERSION = (0, 4, 10)
 # Anything not listed defaults to 1 shard.
 # TODO(vadimsh): Get rid of this. chromium_trybot.py recipe is reading sharding
 # config from test spec in src/. Swarming canary builder should do the same.
-TESTS_SHARDS = {
+TESTS_SHARDS = freeze({
   'browser_tests': 5,
   'interactive_ui_tests': 3,
   'sync_integration_tests': 4,
   'unit_tests': 2,
-}
+})
 
 
 class ReadOnlyDict(dict):
