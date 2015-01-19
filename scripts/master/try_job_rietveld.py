@@ -369,10 +369,10 @@ class TryJobRietveld(TryJobBase):
             'try_job_key': job['key'],
         }
         # Transform some properties as is expected by parse_options().
-        for key in (
-            'name', 'user', 'root', 'reason', 'clobber', 'patchset', 'issue',
-            'requester', 'revision', 'patch_project'):
-          options[key] = [job[key]]
+        for key in ('name', 'user', 'root', 'reason', 'clobber', 'patchset',
+                    'issue', 'requester', 'revision', 'patch_project'):
+          if key in job:
+            options[key] = [job[key]]
 
         # Now cleanup the job dictionary and submit it.
         cleaned_job = self.parse_options(options)
