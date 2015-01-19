@@ -27,6 +27,7 @@ def Update(c):
       Triggerable(name='android_trigger_dbg', builderNames=[
           'Android Tests (dbg) (KK Nexus5)',
           'Android Tests (dbg) (JB Nexus7.2)',
+          'Android Tests (dbg) (KK Nexus5, pending N9)',
       ]),
   ])
 
@@ -37,6 +38,7 @@ def Update(c):
     },
     {'name': 'Android Tests (dbg) (KK Nexus5)'},
     {'name': 'Android Tests (dbg) (JB Nexus7.2)'},
+    {'name': 'Android Tests (dbg) (KK Nexus5, pending N9)'},
     {
       'name': 'Android GN',
       'slavebuilddir': 'android_gn',
