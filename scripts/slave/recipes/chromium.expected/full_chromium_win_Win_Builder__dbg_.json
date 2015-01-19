@@ -222,8 +222,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"browser_tests\": \"[dummy hash for browser_tests]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"browser_tests\": \"[dummy hash for browser_tests]\"}@@@"
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {

@@ -282,8 +282,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}@@@"
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {

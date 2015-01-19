@@ -104,7 +104,8 @@ class IsolateApi(recipe_api.RecipeApi):
         step_result.presentation.status != self.m.step.FAILURE):
       step_result.presentation.status = self.m.step.WARNING
 
-  def isolate_tests(self, build_dir, targets=None, verbose=False, **kwargs):
+  def isolate_tests(self, build_dir, targets=None, verbose=False,
+                    set_swarm_hashes=True, **kwargs):
     """Archives prepared tests in |build_dir| to isolate server.
 
     Works only if Chromium was compiled with test_isolation_mode=='prepare'. See
@@ -163,7 +164,8 @@ class IsolateApi(recipe_api.RecipeApi):
       self._isolated_tests = step_result.json.output
       if self._isolated_tests:
         presentation = step_result.presentation
-        presentation.properties['swarm_hashes'] = self._isolated_tests
+        if set_swarm_hashes:
+          presentation.properties['swarm_hashes'] = self._isolated_tests
         missing = sorted(
             t for t, h in self._isolated_tests.iteritems() if not h)
         if missing:

@@ -402,7 +402,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self.m.isolate.isolate_tests(
             self.m.chromium.output_dir,
             targets=list(set(isolated_targets)),
-            verbose=True)
+            verbose=True,
+            set_swarm_hashes=False)
 
     if bot_type == 'builder':
       if (mastername == 'chromium.linux' and
@@ -483,6 +484,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # TODO(phajdan.jr): bots should just leave tests empty instead of this.
     if bot_config.get('do_not_run_tests'):
       tests = []
+
+    if bot_type in ('tester', 'builder_tester'):
+      isolated_targets = [t.isolate_target for t in tests if t.uses_swarming]
+      if isolated_targets:
+        self.m.isolate.find_isolated_tests(self.m.chromium.output_dir)
 
     return tests
 
