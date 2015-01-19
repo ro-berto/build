@@ -25,6 +25,8 @@ def Update(c):
       Triggerable(name='android_trigger_dbg', builderNames=[
           'Android Tests (KK Nexus5)(dbg)',
           'Android Tests (JB Nexus7.2)(dbg)',
+      ]),
+      Triggerable(name='android_trigger_arm64_dbg', builderNames=[
           'Android Tests (L Nexus9)(dbg)',
       ]),
       Triggerable(name='android_trigger_rel', builderNames=[
@@ -50,6 +52,7 @@ def Update(c):
     },
     {
       'name': 'Android ARM64 Builder (dbg)',
+      'triggers': ['android_trigger_arm64_dbg'],
       'slavebuilddir': 'android_arm64',
     },
     {
