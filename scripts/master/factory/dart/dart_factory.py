@@ -295,10 +295,10 @@ class DartFactory(gclient_factory.GClientFactory):
 
 class PackageFactory(gclient_factory.GClientFactory):
   def __init__(self, build_dir='dart', target_platform='posix',
-               extra_deps=None):
+               extra_deps=None, deps_file=None):
     self.target_platform = target_platform
     self._build_dir = build_dir
-    deps_url = 'https://github.com/dart-lang/package-bots/trunk'
+    deps_url = deps_file or 'https://github.com/dart-lang/package-bots/trunk'
     main = gclient_factory.GClientSolution(deps_url,
                                             custom_deps_list=extra_deps)
     gclient_factory.GClientFactory.__init__(self, build_dir, [main],
