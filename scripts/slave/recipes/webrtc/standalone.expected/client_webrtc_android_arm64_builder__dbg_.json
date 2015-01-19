@@ -7,7 +7,7 @@
       "--master",
       "client.webrtc",
       "--builder",
-      "Android ARM64 (dbg)",
+      "Android ARM64 Builder (dbg)",
       "--slave",
       "slavename",
       "--spec",
@@ -102,5 +102,24 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "compile"
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/zip_build.py",
+      "--target",
+      "Debug",
+      "--build-url",
+      "gs://chromium-webrtc/android_arm64_dbg",
+      "--build_revision",
+      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Android ARM64 Builder (dbg)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Android ARM64 Builder (dbg)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}"
+    ],
+    "name": "package build"
   }
 ]
