@@ -215,51 +215,6 @@ BUILDERS = freeze({
         'parent_buildername': 'Linux Builder',
         'testing': {'platform': 'linux'},
       },
-      'Android Builder (dbg)': {
-        'recipe_config': 'chromium_webrtc_android',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-
-        },
-        'bot_type': 'builder',
-        'build_gs_archive': 'android_dbg_archive',
-        'testing': {'platform': 'linux'},
-      },
-      'Android Tests (dbg) (KK Nexus5)': {
-        'recipe_config': 'chromium_webrtc_android',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'webrtc_config_kwargs': {
-          'PERF_ID': 'chromium-webrtc-dbg-android-nexus5',
-        },
-        'bot_type': 'tester',
-        'build_gs_archive': 'android_dbg_archive',
-        'parent_buildername': 'Android Builder (dbg)',
-        'testing': {'platform': 'linux'},
-      },
-      'Android Tests (dbg) (JB Nexus7.2)': {
-        'recipe_config': 'chromium_webrtc_android',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'webrtc_config_kwargs': {
-          'PERF_ID': 'chromium-webrtc-dbg-android-nexus72',
-        },
-        'bot_type': 'tester',
-        'build_gs_archive': 'android_dbg_archive',
-        'parent_buildername': 'Android Builder (dbg)',
-        'testing': {'platform': 'linux'},
-      },
     },
   },
   'chromium.webrtc.fyi': {
@@ -397,6 +352,19 @@ BUILDERS = freeze({
         },
         'webrtc_config_kwargs': {
           'PERF_ID': 'chromium-webrtc-trunk-tot-dbg-android-nexus72',
+        },
+        'bot_type': 'tester',
+        'build_gs_archive': 'android_dbg_archive_fyi',
+        'parent_buildername': 'Android Builder (dbg)',
+        'testing': {'platform': 'linux'},
+      },
+      'Android Tests (dbg) (KK Nexus5, pending N9)': {
+        'recipe_config': 'chromium_webrtc_tot_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
         },
         'bot_type': 'tester',
         'build_gs_archive': 'android_dbg_archive_fyi',
