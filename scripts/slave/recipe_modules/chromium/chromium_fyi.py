@@ -335,7 +335,7 @@ SPEC = {
       },
     },
     'ChromiumPracticeFullTester': {
-      'recipe_config': 'chromium',
+      'recipe_config': 'chromium_blink_merged',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
