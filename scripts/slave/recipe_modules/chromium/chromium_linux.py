@@ -108,6 +108,18 @@ SPEC = {
       'enable_swarming': True,
     },
 
+    'Android Arm64 Builder (dbg)': {
+      'recipe_config': 'chromium_android',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 64,
+        'TARGET_PLATFORM': 'android',
+      },
+      'android_config': 'arm64_builder',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
     'Android Builder (dbg)': {
       'recipe_config': 'chromium_android',
       'chromium_config_kwargs': {
