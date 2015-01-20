@@ -11,8 +11,8 @@ scheduled on buildbucket service.
 Example:
   buildbucket.setup(
       c,  # Configuration object.
+      ActiveMaster,
       buckets=['qo'],
-      service_json_key_filename=ActiveMaster.buildbucket_json_key_filename,
   )
 
 """
@@ -28,16 +28,19 @@ from . import client
 
 def setup(
     config, active_master, buckets, poll_interval=10,
-    buildbucket_hostname=None, verbose=None, dry_run=None):
+    buildbucket_hostname=None, max_lease_count=None, verbose=None,
+    dry_run=None):
   """Configures a master to lease, schedule and update builds on buildbucket.
 
   Args:
     config (dict): master configuration dict.
-    active_master (config.Master): Master site config.
+    active_master (config.Master.Base): master site config.
     buckets (list of str): a list of buckets to poll.
     poll_interval (int): frequency of polling, in seconds. Defaults to 10.
     buildbucket_hostname (str): if not None, override the default buildbucket
       service url.
+    max_lease_count (int): maximum number of builds that can be leased at a
+      time. Defaults to the number of connected slaves.
     verbose (bool): log more than usual. Defaults to False.
     dry_run (bool): whether to run buildbucket in a dry-run mode.
   """
@@ -52,7 +55,7 @@ def setup(
   if dry_run is None:
     dry_run = 'POLLER_DRY_RUN' in os.environ
 
-  integrator = BuildBucketIntegrator(buckets)
+  integrator = BuildBucketIntegrator(buckets, max_lease_count=max_lease_count)
 
   buildbucket_service_factory = functools.partial(
       client.create_buildbucket_service, active_master, buildbucket_hostname,

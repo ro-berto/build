@@ -33,39 +33,25 @@ def fake_buildbot(one_slave=False):
   buildbot = Mock()
 
   # Slaves
-  buildbot.get_slaves.return_value = [buildbot.slave]
+  buildbot.get_connected_slaves.return_value = [buildbot.slave]
   if not one_slave:
-    buildbot.get_slaves.return_value.append(buildbot.slave2)
-  buildbot.get_available_slaves.return_value = buildbot.get_slaves.return_value
-  buildbot.is_slave_available.return_value = True
+    buildbot.get_connected_slaves.return_value.append(buildbot.slave2)
 
   # Builders
-  def mock_builder():
-    builder = Mock()
-    builder.getSlaves.return_value = buildbot.get_slaves.return_value
-    builder.pending_builds = []
-    get_pending = builder.getPendingBuildRequestStatuses
-    get_pending.return_value = builder.pending_builds
-    return builder
-
   builders = {
-      'Debug': mock_builder(),
-      'Release': mock_builder(),
+      'Debug': Mock(),
+      'Release': Mock(),
   }
   buildbot.get_builders.return_value = builders
 
-  # Buildsets
-  pending_builds = []
-  def add_buildset(*args, **kwargs):
-    bsid, brid = len(pending_builds), len(pending_builds)
-    builder_names = kwargs['builderNames']
-    for builder_name in builder_names:
-      pending_build = Mock()
-      pending_builds.append(pending_build)
-      builder = builders[builder_name]
-      builder.pending_builds.append(pending_build)
-    return (bsid, brid)
-  buildbot.add_buildset.side_effect = add_buildset
+  # Build requests.
+  build_requests = []
+  buildbot.get_incomplete_build_requests.return_value = build_requests
+  def add_build_request(*_, **__):
+    req = Mock()
+    build_requests.append(req)
+    return req
+  buildbot.add_build_request.side_effect = add_build_request
 
   return buildbot
 
@@ -80,6 +66,7 @@ def fake_buildbucket():
         }
     }
   service.api.lease.side_effect = lease
+  service.api.heartbeat.return_value = {}  # Not a Mock.
 
   return service
 
@@ -121,10 +108,12 @@ class IntegratorTest(unittest.TestCase):
     self.changes.get_source_stamp.return_value = self.ssid
 
   @contextlib.contextmanager
-  def create_integrator(self, buildbot=None):
+  def create_integrator(self, buildbot=None, max_lease_count=None):
     self.buildbucket = fake_buildbucket()
     self.buildbot = buildbot or fake_buildbot()
-    self.integrator = integration.BuildBucketIntegrator(self.buckets)
+    self.integrator = integration.BuildBucketIntegrator(
+        self.buckets, max_lease_count=max_lease_count,
+        heartbeat_interval=datetime.timedelta(microseconds=1))
     def log(msg, level=logging.INFO):
       logging.log(level, msg)
     self.integrator.log = log
@@ -140,15 +129,9 @@ class IntegratorTest(unittest.TestCase):
     with self.create_integrator():
       self.buildbucket.api.peek.return_value = {'builds': []}
       run_deferred(self.integrator.poll_builds())
-      self.assertFalse(self.buildbot.add_buildset.called)
+      self.assertFalse(self.buildbot.add_build_request.called)
       self.assertTrue(self.buildbucket.api.peek.called)
       self.assertFalse(self.buildbucket.api.lease.called)
-
-  def test_no_leasing_without_available_slaves(self):
-    with self.create_integrator():
-      self.buildbot.get_available_slaves.return_value = []
-      run_deferred(self.integrator.poll_builds())
-      self.assertFalse(self.buildbucket.api.peek.called)
 
   def test_error_in_peek_response(self):
     with self.create_integrator():
@@ -171,7 +154,7 @@ class IntegratorTest(unittest.TestCase):
       }
       self.buildbucket.api.lease.side_effect = None
       run_deferred(self.integrator.poll_builds())
-      self.assertFalse(self.buildbot.add_buildset.called)
+      self.assertFalse(self.buildbot.add_build_request.called)
 
   @contextlib.contextmanager
   def mock_build_peek(self, lease=True):
@@ -183,7 +166,7 @@ class IntegratorTest(unittest.TestCase):
     self.assertTrue(
         self.buildbucket.api.peek.called, 'build.peek was not called')
 
-  def assert_added_buildset(
+  def assert_added_build_request(
       self, build_id, builder_name, ssid, properties=None):
     expected_build_info = {
         'build_id': build_id,
@@ -195,17 +178,20 @@ class IntegratorTest(unittest.TestCase):
         k: (v, 'buildbucket') for k, v in properties.iteritems()
     }
 
-    self.integrator.buildbot.add_buildset.assert_any_call(
+    self.integrator.buildbot.add_build_request.assert_any_call(
         ssid=ssid,
         reason=common.CHANGE_REASON,
-        builderNames=[builder_name],
-        properties=properties,
+        builder_name=builder_name,
+        properties_with_source=properties,
         external_idstring=build_id,
     )
 
   def assert_leased(self, build_id):
     ten_second_from_now = common.datetime_to_timestamp(
         datetime.datetime.utcnow() + datetime.timedelta(seconds=10))
+
+    self.assertTrue(build_id in self.integrator._leases)
+    self.assertTrue(self.integrator._leases[build_id]['key'] == LEASE_KEY)
 
     for _, kwargs in self.buildbucket.api.lease.call_args_list:
       body = kwargs['body']
@@ -229,7 +215,7 @@ class IntegratorTest(unittest.TestCase):
       run_deferred(self.integrator.poll_builds())
 
       self.assert_leased('1')
-      self.assert_added_buildset('1', 'Release', self.ssid)
+      self.assert_added_build_request('1', 'Release', self.ssid)
 
   def test_build_with_properties(self):
     with self.create_integrator():
@@ -248,7 +234,7 @@ class IntegratorTest(unittest.TestCase):
       run_deferred(self.integrator.poll_builds())
 
       self.assert_leased('1')
-      self.assert_added_buildset(
+      self.assert_added_build_request(
           '1', 'Release', self.ssid, properties={'a': 'b'})
 
   def test_all_scheduled(self):
@@ -259,11 +245,11 @@ class IntegratorTest(unittest.TestCase):
       self.assert_leased(self.buildbucket_build_rel['id'])
       self.assert_leased(self.buildbucket_build_dbg['id'])
 
-      # Assert added two buildsets
-      self.assertEqual(self.buildbot.add_buildset.call_count, 2)
-      self.assert_added_buildset(
+      # Assert added two buildsets.
+      self.assertEqual(self.buildbot.add_build_request.call_count, 2)
+      self.assert_added_build_request(
           self.buildbucket_build_rel['id'], 'Release', self.ssid)
-      self.assert_added_buildset(
+      self.assert_added_build_request(
           self.buildbucket_build_dbg['id'], 'Debug', self.ssid)
 
   def test_polling_with_cursor(self):
@@ -289,26 +275,39 @@ class IntegratorTest(unittest.TestCase):
       self.assert_leased(self.buildbucket_build_rel['id'])
       self.assert_leased(self.buildbucket_build_dbg['id'])
 
-      # Assert added two buildsets
-      self.assertEqual(self.buildbot.add_buildset.call_count, 2)
-      self.assert_added_buildset(
+      # Assert added two buildsets.
+      self.assertEqual(self.buildbot.add_build_request.call_count, 2)
+      self.assert_added_build_request(
           self.buildbucket_build_rel['id'], 'Release', self.ssid)
-      self.assert_added_buildset(
+      self.assert_added_build_request(
           self.buildbucket_build_dbg['id'], 'Debug', self.ssid)
 
-  def test_one_slave_for_two_builders(self):
+  def test_honor_max_lease_count(self):
+    with self.create_integrator():
+      self.buildbucket.api.peek.return_value = {
+          'builds': [
+              self.buildbucket_build_rel,
+              self.buildbucket_build_dbg,
+              self.buildbucket_build_dbg
+          ],
+      }
+      run_deferred(self.integrator.poll_builds())
+      # Assert only two builds were leased.
+      self.assertEqual(self.buildbucket.api.lease.call_count, 2)
+
+  def test_max_one_lease(self):
     bb = fake_buildbot(one_slave=True)
-    with self.create_integrator(bb):
+    with self.create_integrator(bb, max_lease_count=1):
       with self.mock_build_peek():
         run_deferred(self.integrator.poll_builds())
-      # Assert only on build was leased and scheduled
-      self.assertEqual(bb.add_buildset.call_count, 1)
+      # Assert only one build was leased and scheduled.
+      self.assertEqual(bb.add_build_request.call_count, 1)
       self.assertEqual(self.buildbucket.api.lease.call_count, 1)
 
   def test_build_not_scheduled_if_builder_name_is_wrong(self):
     with self.create_integrator():
       bb = self.integrator.buildbot
-      bb.add_buildset.return_value = (1, 1)
+      bb.add_build_request.return_value = (1, 1)
 
       # No Debug builder.
       del bb.get_builders.return_value['Debug']
@@ -318,42 +317,22 @@ class IntegratorTest(unittest.TestCase):
 
       # Assert added one buildset of two.
       self.assertEqual(self.buildbucket.api.lease.call_count, 1)
-      self.assertEqual(bb.add_buildset.call_count, 1)
+      self.assertEqual(bb.add_build_request.call_count, 1)
 
-  def test_nothing_is_scheduled_if_builders_do_not_have_available_slaves(self):
+  def test_nothing_is_scheduled_if_builders_do_not_have_connected_slaves(self):
     with self.create_integrator():
-      bb = self.integrator.buildbot
+      self.buildbot.get_connected_slaves.return_value = []
 
-      # Add one more slave, not assigned to builders,
-      # and make others unavailable.
-      available_slave = Mock()
-      bb.getSlaves.return_value.append(available_slave)
-      bb.is_slave_available.side_effect = lambda s: s == available_slave
+      run_deferred(self.integrator.poll_builds())
 
-      with self.mock_build_peek():
-        run_deferred(self.integrator.poll_builds())
+      self.assertFalse(self.buildbucket.api.peek.called)
+      self.assertFalse(self.buildbot.add_build_request.called)
 
-      self.assertFalse(bb.add_buildset.called, 'A build was scheduled')
-
-  def test_nothing_is_scheduled_if_builders_have_many_pending_builds(self):
-    with self.create_integrator():
-      bb = self.integrator.buildbot
-
-      # Add some pending builds to each builder.
-      for builder in bb.get_builders.return_value.itervalues():
-        many_builds = [Mock() for _ in range(100)]
-        builder.getPendingBuildRequestStatuses.side_effect = lambda: many_builds
-
-      with self.mock_build_peek():
-        run_deferred(self.integrator.poll_builds())
-
-      self.assertFalse(self.buildbucket.api.lease.called, 'A build was leased')
-      self.assertFalse(bb.add_buildset.called, 'A build was scheduled')
-
-  @contextlib.contextmanager
   def mock_existing_build(self):
     build = Mock()
     build.id = '123321'
+    build.getNumber.return_value = 42
+    build.isFinished.return_value = False
     info = {
        'build_id': build.id,
        'lease_key': LEASE_KEY,
@@ -368,12 +347,63 @@ class IntegratorTest(unittest.TestCase):
     build.expected_result_details_json = json.dumps(
         {'properties': properties}, sort_keys=True)
 
-    yield build
+    self.integrator._leases = self.integrator._leases or {}
+    self.integrator._leases[build.id] = {
+        'key': LEASE_KEY,
+        'build_request': Mock(),
+        'build': build,
+    }
 
-    build.properties.getProperty.assert_any_call(common.INFO_PROPERTY)
+    return build
+
+  def test_heartbeats(self):
+    def test():
+      test_finished = defer.Deferred()
+      self.integrator.poll_builds()
+      def assert_heartbeat_sent():
+        try:
+          self.assertTrue(self.buildbucket.api.heartbeat.called)
+        finally:
+          test_finished.callback(None)  # Finish test.
+      reactor.callLater(0.001, assert_heartbeat_sent)
+      return test_finished
+
+    with self.create_integrator(), self.mock_build_peek():
+      run_deferred(test())
+
+  @contextlib.contextmanager
+  def mock_heartbeat_lease_expired(self):
+    self.buildbucket.api.heartbeat.return_value = {
+        'error': {
+            'reason': 'LEASE_EXPIRED',
+        }
+    }
+    yield
+    self.assertTrue(self.buildbucket.api.heartbeat.called)
+
+  def test_lease_for_build_expired(self):
+    with self.create_integrator(), self.mock_heartbeat_lease_expired():
+      self.mock_existing_build()
+      run_deferred(self.integrator.send_heartbeats())
+      self.assertTrue(self.buildbot.stop_build.called)
+
+  def test_lease_for_build_request_expired(self):
+    with self.create_integrator(), self.mock_heartbeat_lease_expired():
+      build_request = Mock()
+      self.integrator._leases = {
+          '1': {
+            'key': LEASE_KEY,
+            'build_request': build_request,
+          },
+      }
+
+      run_deferred(self.integrator.send_heartbeats())
+
+      self.assertTrue(build_request.cancel.called)
 
   def test_build_started(self):
-    with self.create_integrator(), self.mock_existing_build() as build:
+    with self.create_integrator():
+      build = self.mock_existing_build()
       self.buildbucket.api.start.return_value = {}
       self.integrator.on_build_started(build)
 
@@ -385,7 +415,8 @@ class IntegratorTest(unittest.TestCase):
           })
 
   def test_build_started_error_response(self):
-    with self.create_integrator(), self.mock_existing_build() as build:
+    with self.create_integrator():
+      build = self.mock_existing_build()
       self.buildbucket.api.start.return_value = {
           'error': {
               'reason': 'BAD',
@@ -393,13 +424,16 @@ class IntegratorTest(unittest.TestCase):
           },
       }
       self.integrator.on_build_started(build)
+      self.assertTrue(self.buildbot.stop_build.called)
 
   def test_build_succeeded(self):
-    with self.create_integrator(), self.mock_existing_build() as build:
+    with self.create_integrator():
+      build = self.mock_existing_build()
       self.buildbucket.api.succeed.return_value = {}
 
-      self.integrator.on_build_finished(build, 'SUCCESS')
+      run_deferred(self.integrator.on_build_finished(build, 'SUCCESS'))
 
+      self.assertFalse(build.id in self.integrator._leases)
       self.buildbucket.api.succeed.assert_called_once_with(
           id=build.id,
           body={
@@ -409,11 +443,13 @@ class IntegratorTest(unittest.TestCase):
       )
 
   def test_build_failed(self):
-    with self.create_integrator(), self.mock_existing_build() as build:
+    with self.create_integrator():
+      build = self.mock_existing_build()
       self.buildbucket.api.fail.return_value = {}
 
-      self.integrator.on_build_finished(build, 'FAILURE')
+      run_deferred(self.integrator.on_build_finished(build, 'FAILURE'))
 
+      self.assertFalse(build.id in self.integrator._leases)
       self.buildbucket.api.fail.assert_called_once_with(
           id=build.id,
           body={
@@ -424,14 +460,20 @@ class IntegratorTest(unittest.TestCase):
       )
 
   def test_build_retried(self):
-    with self.create_integrator(), self.mock_existing_build() as build:
-      self.integrator.on_build_finished(build, 'RETRY')
+    with self.create_integrator():
+      build = self.mock_existing_build()
+      run_deferred(self.integrator.on_build_finished(build, 'RETRY'))
+      # Do not delete lease for RETRY builds.
+      self.assertTrue(build.id in self.integrator._leases)
       self.assertFalse(self.buildbucket.api.fail.called)
 
   def test_build_skipped(self):
-    with self.create_integrator(), self.mock_existing_build() as build:
-      self.integrator.on_build_finished(build, 'SKIPPED')
+    with self.create_integrator():
+      build = self.mock_existing_build()
+      run_deferred(self.integrator.on_build_finished(build, 'SKIPPED'))
+      self.assertFalse(build.id in self.integrator._leases)
       self.assertFalse(self.buildbucket.api.fail.called)
+
 
 if __name__ == '__main__':
   logging.basicConfig(

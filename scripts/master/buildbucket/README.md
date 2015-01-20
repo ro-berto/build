@@ -2,43 +2,57 @@ buildbucket module can be used to connect a Buildbot master to buildbucket.
 
 ## Configuration
 
-Configuring a buildbot master is straightforward:
+Configuring a buildbot master is trivial:
 
     from master import buildbucket
 
     buildbucket.setup(
         c,
+        ActiveMaster,
         buckets=['chromium'],
-        service_json_key_filename='my_secret_key.json',
     )
 
-* buckets (list of str): list of buckets to peek and build.
-* service_json_key_filename (str): path to a json key file, such as
-  [cr-buildbucket-dev-9c9efb83ec4b.json](cr-buildbucket-dev-9c9efb83ec4b.json).
-  A production json key can be obtained by
-  [filing ticket](buildbucket-service-account-bug).
+Arguments:
+
+* config (dict): master configuration dict.
+* active_master (config.Master.Base): master site config.
+* buckets (list of str): a list of buckets to poll.
+* poll_interval (int): frequency of polling, in seconds. Defaults to 10.
+* buildbucket_hostname (str): if not None, overrides the default buildbucket
+  service url. Use ```'cr-buildbucket-dev.appspot.com'``` to run against the dev
+  server.
+* max_lease_count (int): maximum number of builds that can be leased at a
+  time. Defaults to the number of connected slaves.
+* verbose (bool): log more than usual. Defaults to False.
+* dry_run (bool): whether to run buildbucket in a dry-run mode.
+  Defaults to False.
+
+Note: make sure your master has a service account configured. Write to
+[infra-dev@chromium.org](mailto:infra-dev@chromium.org) if it doesn't.
 
 ### Playing with build bucket
 When testing, ```'cr-buildbucket-dev.appspot.com'``` development server can be
-specified in ```buildbucket_hostname``` parameter.
-[cr-buildbucket-dev-9c9efb83ec4b.json](cr-buildbucket-dev-9c9efb83ec4b.json) can
-be used to authenticate to cr-buildbucket-dev.
+specified in ```buildbucket_hostname``` parameter. The service account in
+[cr-buildbucket-dev-9c9efb83ec4b.json](cr-buildbucket-dev-9c9efb83ec4b.json)
+can be used to authenticate to cr-buildbucket-dev (set
+```service_account_path``` attribute in ```master_site_config.py```).
 
 ## How it works in the nutshell
-Every ten seconds a Buildbot master checks if it has capacity to run more
-builds. If it does, it [peeks](api_peek) builds in the specified buckets.
-For each valid peeked build master checks if the builder has capacity to run a
-build right away. If master decides to run a peeked build, it leases it.
-If leased successfully, master schedules a build.
+Every ten seconds the Buildbot master [peeks](api_peek) builds from the
+specified buckets until it has reached lease count limit. For each valid peeked
+build the master tries to lease it. If leased successfully, master schedules a
+build.
 
-During build lifetime master reports build
-status back to buildbucket. When the build starts, master calls
-[start](api_start) API, and when build finishes, it calls [succeed](api_succeed)
-or [fail](api_fail) APIs. Buildbot master subscribes to build ETA update and
-calls [heartbeat](api_heartbeat) API every 10 seconds. If master discovers that
-a build lease expired, it stops the build.
+During build lifetime master reports build status back to buildbucket. When the
+build starts, master calls [start](api_start) API, and when build finishes, it
+calls [succeed](api_succeed) or [fail](api_fail) APIs. For SKIPPED and RETRY
+builds the master does not notify buidbucket, so the lease expires soon and the
+build will be rescheduled.
 
-### Parameters
+Every minute buildbot [sends heartbeats](api_heartbeat) for currently held
+leases. If the master discovers that a build lease expired, it stops the build.
+
+### Build parameters
 Buildbot-buildbucket integration supports the following build parameters:
 
 * builder_name (str): required name of a builder to trigger. If builder is not
@@ -64,6 +78,15 @@ Buildbot-buildbucket integration supports the following build parameters:
     * url (str): url to human-viewable change page.
     * project (str): name of project this change refers to.
 
+## Limitations
+
+Current implementation has the following limitations:
+
+* Only one buildbucket instance configuration per buildbot master is supported.
+* Build request merging is not supported. If build requests are merged,
+  only one buildbucket build will be updated.
+  TODO(nodir): remove this limitation.
+
 ### Applications
 
 * Scheduling code does not have to be hosted on buildbot.
@@ -80,6 +103,9 @@ Buildbot-buildbucket integration supports the following build parameters:
 * When change id and revision are specified, buildbot master executes a database
   query to find all changes matching a revision, assuming revision is uniquish,
   and then searches in memory for change by id.
+* Current leases are stored in memory. On startup, buildbot master loads them
+  from the database, which can be long if there is a lot of pending build
+  requests (will not happen if only buildbucket is used).
 
 [api_peek]: https://cr-buildbucket.appspot.com/_ah/api/explorer/#p/buildbucket/v1/buildbucket.peek
 [api_start]: https://cr-buildbucket.appspot.com/_ah/api/explorer/#p/buildbucket/v1/buildbucket.start

@@ -12,7 +12,7 @@ import traceback
 from buildbot.util import deferredLocked
 from master.buildbucket import common, changestore
 from master.buildbucket.common import log
-from twisted.internet import defer
+from twisted.internet import defer, reactor
 from twisted.internet.defer import inlineCallbacks, returnValue
 
 
@@ -20,13 +20,14 @@ from twisted.internet.defer import inlineCallbacks, returnValue
 # time enough to schedule and start a build.
 LEASE_DURATION = datetime.timedelta(minutes=5)
 MAX_LEASE_DURATION = datetime.timedelta(minutes=10)
+DEFAULT_HEARTBEAT_INTERVAL = datetime.timedelta(minutes=1)
 
 # Buildbot-related constants.
-BUILD_ETA_UPDATE_INTERVAL = datetime.timedelta(seconds=5)
 BUILD_ID_PROPERTY = 'build_id'
 BUILDSET_REASON = 'buildbucket'
 LEASE_KEY_PROPERTY = 'lease_key'
 PROPERTY_SOURCE = 'buildbucket'
+LEASE_CLEANUP_INTERVAL = datetime.timedelta(minutes=5)
 
 
 class BuildBucketIntegrator(object):
@@ -41,13 +42,29 @@ class BuildBucketIntegrator(object):
   BuildbucketPoller does that in startService/stopService.
   """
 
-  def __init__(self, buckets):
+  # _leases attribute stores currently held leases.
+  # It is a dict build_id -> lease, where lease is a dict with keys:
+  # - key: lease key
+  # - build_request: BuildRequestGateway
+  # - build: if build_started with same build_id was called,
+  #          the associated build.
+  # _lease is None on creation, but it gets loaded from the database in
+  # _ensure_leases_loaded().
+
+  def __init__(self, buckets, max_lease_count=None, heartbeat_interval=None):
     """Creates a BuildBucketIntegrator.
 
     Args:
       buckets (list of str): poll only builds in any of |buckets|.
+      max_lease_count (int): maximum number of builds that can be leased at a
+        time. Defaults to the number of connected slaves.
+      heartbeat_interval (datetime.timedelta): frequency of build heartbeats.
+        Defaults to 1 minute.
     """
     assert buckets, 'Buckets not specified'
+    assert max_lease_count is None or isinstance(max_lease_count, int)
+    if max_lease_count is not None:
+      assert max_lease_count >= 1
     self.buckets = buckets[:]
     self.buildbot = None
     self.buildbucket_service = None
@@ -55,6 +72,16 @@ class BuildBucketIntegrator(object):
     self.started = False
     self.changes = None
     self.poll_lock = defer.DeferredLock()
+    self._max_lease_count = max_lease_count
+    self._leases = None
+    self.heartbeat_interval = heartbeat_interval or DEFAULT_HEARTBEAT_INTERVAL
+
+  def get_max_lease_count(self):
+    if self._max_lease_count:
+      return self._max_lease_count
+    if not self.buildbot:
+      return 0
+    return len(self.buildbot.get_connected_slaves())
 
   def log(self, message, level=None):
     common.log(message, level)
@@ -70,6 +97,61 @@ class BuildBucketIntegrator(object):
     self.changes = change_store_factory(buildbot)
     self.started = True
     self.log('integrator started')
+    self._do_until_stopped(self.heartbeat_interval, self.send_heartbeats)
+    self._do_until_stopped(
+        LEASE_CLEANUP_INTERVAL, self._clean_completed_build_requests)
+
+  @inlineCallbacks
+  def _get_leases_from_db(self):
+    """Returns currently held leases from the database.
+
+    Queries for not-completed-yet build requests. This may take a long time.
+
+    Returns:
+      A dict of the same structure, as self._leases. See its description.
+    """
+    assert self.started
+    self.log(
+        ('Requesting for all not yet completed build requests. '
+          'This may take a long time...'),
+        level=logging.DEBUG)
+    build_requests = yield self.buildbot.get_incomplete_build_requests()
+    self.log(
+        'Received %d build requests' % len(build_requests),
+        level=logging.DEBUG)
+
+    leases = {}
+    for build_request in build_requests:
+      info = yield build_request.get_property(common.INFO_PROPERTY)
+      if not info:
+        # Not a buildbucket build request.
+        continue
+      build_id = info.get('build_id')
+      lease_key = info.get('lease_key')
+      if not (build_id and lease_key):
+        self.log(
+            'build_id or lease_key are not found in %r' % build_request,
+            level=logging.WARNING)
+        continue
+      if build_id in leases:
+        self.log(
+          'more than one non-completed build request for build %s' % build_id,
+          level=logging.WARNING)
+        continue
+      leases[build_id] = {
+          'key': lease_key,
+          'build_request': build_request,
+      }
+    returnValue(leases)
+
+  @inlineCallbacks
+  def _ensure_leases_loaded(self):
+    if self._leases is None:
+      self._leases = yield self._get_leases_from_db()
+      self.log(
+          'Loaded current leases from the database: %r' % self._leases,
+          level=logging.DEBUG)
+      self.send_heartbeats()
 
   def stop(self):
     if not self.started:
@@ -140,7 +222,7 @@ class BuildBucketIntegrator(object):
             raise ValueError(
                 'A change is invalid: %s\nChange:%s' % (ex, change))
 
-  def check_error(self, res):
+  def _check_error(self, res):
     """If |res| contains an error, logs it and returns True.
 
     Args:
@@ -159,41 +241,6 @@ class BuildBucketIntegrator(object):
     return True
 
   @inlineCallbacks
-  def _builder_can_accept_more_builds(self, builder):
-    """Returns True if there is space for one more build in a builder.
-
-    There is space for one more build if capacity >= workload + 1,
-    where capacity is the number of available slaves assigned to the |builder|
-    and workload is the number of pending builds that these slaves will process.
-
-    The builder-slave relationship is many-to-many. A slave assigned to the
-    |builder| may be also assigned to other builders. Other builders may also
-    have pending builds and _other_ slaves attached. Workload is the number of
-    pending build that slaves of the |builder| will definitely process. We
-    can't predict which slaves will run which pending build, so in this general
-    case, we will compute the expected workload.
-
-    For each builder B the expected number of its pending builds to be
-    dispatched to slaves of |builder| is
-      B.pending_build_count * percentage_of_common_slaves
-    where "common slaves" are assigned to both B and |builder|.
-    """
-    slaves = set(builder.getSlaves())
-
-    capacity = len(filter(self.buildbot.is_slave_available, slaves))
-
-    workload = 0.0
-    for b in self.buildbot.get_builders().itervalues():
-      other_slaves = b.getSlaves()
-      common_slaves = slaves.intersection(other_slaves)
-      # What portion of other_builder's pending builds will be scheduled
-      # to builder's slaves.
-      ratio = float(len(common_slaves)) / len(slaves)
-      build_requests = yield b.getPendingBuildRequestStatuses()
-      workload += ratio * len(build_requests)
-    returnValue(capacity >= workload + 1)
-
-  @inlineCallbacks
   def _try_lease_build(self, build):
     lease_expiration_ts = common.datetime_to_timestamp(
         datetime.datetime.utcnow() + LEASE_DURATION)
@@ -204,7 +251,7 @@ class BuildBucketIntegrator(object):
     if lease_error and lease_error['reason'] == 'CANNOT_LEASE_BUILD':
       self.log('Could not lease build %s' % build['id'])
       return
-    if self.check_error(lease_resp):
+    if self._check_error(lease_resp):
       return
     lease_key = lease_resp.get('build', {}).get('lease_key')
     if not lease_key:
@@ -217,6 +264,7 @@ class BuildBucketIntegrator(object):
   @inlineCallbacks
   def _schedule(self, builder_name, properties, build_id, ssid, lease_key):
     """Schedules a build and returns (bsid, brid) tuple as Deferred."""
+    assert self._leases is not None
     info = {
         BUILD_ID_PROPERTY: build_id,
         LEASE_KEY_PROPERTY: lease_key,
@@ -227,16 +275,21 @@ class BuildBucketIntegrator(object):
     properties_with_source = {
         k:(v, PROPERTY_SOURCE) for k, v in properties.iteritems()
     }
-    bsid, brid = yield self.buildbot.add_buildset(
+    build_request = yield self.buildbot.add_build_request(
         ssid=ssid,
         reason=BUILDSET_REASON,
-        builderNames=[builder_name],
-        properties=properties_with_source,
+        builder_name=builder_name,
+        properties_with_source=properties_with_source,
         external_idstring=build_id,
     )
+    self._leases[build_id] = {
+        'key': lease_key,
+        'build_request': build_request,
+    }
+    self.log('Scheduled a build for buildbucket build %s' % build_id)
     self.log(
-        'Scheduled a buildset %s for buildbucket build %s' % (bsid, build_id))
-    returnValue((bsid, brid))
+        'Lease count: %d/%d' % (len(self._leases), self.get_max_lease_count()),
+        level=logging.DEBUG)
 
   @inlineCallbacks
   def _try_schedule_build(self, build, ssid_cache):
@@ -252,6 +305,7 @@ class BuildBucketIntegrator(object):
     try:
       self._validate_build(build)
     except ValueError as ex:
+      # TODO: mark the build as failed on buildbucket.
       self.log(
           'Build is invalid: %s.\nBuild definition: %s' %
           (ex, json.dumps(build)))
@@ -259,17 +313,13 @@ class BuildBucketIntegrator(object):
 
     build_id = build['id']
     params = json.loads(build['parameters_json'])
-    builder_name = params['builder_name']
-    builder = self.buildbot.get_builders()[builder_name]
-    has_capacity = yield self._builder_can_accept_more_builds(builder)
-    if not has_capacity:
-      self.log('Cannot schedule %s: no available slaves' % builder_name)
-      return
 
     lease_key = yield self._try_lease_build(build)
     if not lease_key:
       self.log('Could not lease build %s' % build_id)
       return
+
+    builder_name = params['builder_name']
     self.log('Scheduling build %s (%s)...' % (build_id, builder_name))
 
     changes = params.get('changes') or []
@@ -286,22 +336,29 @@ class BuildBucketIntegrator(object):
     start_cursor = None
     ssid_cache = {}
 
+    # Check current leases before polling.
+    yield self._ensure_leases_loaded()
+    max_lease_count = self.get_max_lease_count()
+    if len(self._leases) >= max_lease_count:
+      self.log(
+          ('Not polling because reached lease count limit: %d/%d' %
+           (len(self._leases), max_lease_count)),
+          level=logging.DEBUG)
+      return
+
     # Assume in the worst case 2 builds out of 3 will not be scheduled.
     # max_builds is computed only once, before the loop, because
     # query parameters must not be changed between pages.
-    max_builds = len(self.buildbot.get_available_slaves()) * 3
+    max_builds = (max_lease_count - len(self._leases)) * 3
 
-    while True:
-      if not self.buildbot.get_available_slaves():
-        break
-
-      self.log('peeking builds...')
+    self.log('polling builds...')
+    while len(self._leases) < self.get_max_lease_count():
       peek_resp = yield self.buildbucket_service.api.peek(
           bucket=self.buckets,
           max_builds=max_builds,
           start_cursor=start_cursor,
       )
-      if self.check_error(peek_resp):
+      if self._check_error(peek_resp):
         break
       start_cursor = peek_resp.get('next_cursor')
 
@@ -309,8 +366,12 @@ class BuildBucketIntegrator(object):
       self.log('got %d builds' % len(builds))
 
       for build in builds:
-        if build:
-          yield self._try_schedule_build(build, ssid_cache)
+        if not build:
+          continue
+        yield self._try_schedule_build(build, ssid_cache)
+        if len(self._leases) >= self.get_max_lease_count():
+          self.log('Reached the maximum number of leases', level=logging.DEBUG)
+          break
       if not start_cursor:
         break
 
@@ -344,6 +405,63 @@ class BuildBucketIntegrator(object):
         duration + datetime.timedelta(minutes=5))
     return min(duration, MAX_LEASE_DURATION)
 
+  def send_heartbeats(self):
+    # TODO(nodir): send heartbeats in a batch.
+    @inlineCallbacks
+    def send_one_heartbeat(build_id, lease):
+      resp = yield self.buildbucket_service.api.heartbeat(
+          id=build_id,
+          body={
+              'lease_key': lease['key'],
+              'lease_expiration_ts': self.get_lease_expiration_ts(
+                  self.heartbeat_interval),
+          },
+      )
+      if self._check_error(resp):
+        build = lease.get('build')
+        if build:
+          yield self._stop_build(build, resp['error'])
+        else:
+          yield lease['build_request'].cancel()
+      # end of send_one_heartbeat
+
+    if self._leases is None:
+      return
+    send_deferreds = []
+    for build_id, lease in self._leases.iteritems():
+      # Send heartbeats in parallel.
+      send_deferreds.append(send_one_heartbeat(build_id, lease))
+    return defer.DeferredList(send_deferreds)
+
+  @inlineCallbacks
+  def _clean_completed_build_requests(self):
+    """Deletes leases that point to completed build requests.
+
+    Since Buildbot's requestCancelled notifcation does not work,
+    we have to periodically check for canceled build requests.
+    """
+    if not self._leases:
+      return
+    for build_id, lease in self._leases.items():
+      request = lease['build_request']
+      is_compelte = yield request.is_complete()
+      if is_compelte:
+        self.log(('Build request %r is complete. Deleting lease for build %s' %
+                  (request, build_id)),
+                 level=logging.DEBUG)
+        del self._leases[build_id]
+
+  def _do_until_stopped(self, interval, fn):
+    def loop_iteration():
+      if not self.started:
+        return
+      try:
+        fn()
+      finally:
+        if self.started:
+          reactor.callLater(interval.total_seconds(), loop_iteration)
+    loop_iteration()
+
   @classmethod
   def get_lease_expiration_ts(cls, lease_duration):
     return common.datetime_to_timestamp(
@@ -374,26 +492,43 @@ class BuildBucketIntegrator(object):
     if 'error' in resp:
       self._stop_build(build, resp['error'])
 
+  @inlineCallbacks
   def on_build_started(self, build):
-    return self._leased_build_call('start', build, {
+    assert self.started
+    build_id, lease_key = self._get_build_id_and_lease_key(build)
+    if not build_id:
+      return
+
+    yield self._ensure_leases_loaded()
+    assert build_id in self._leases
+    assert self._leases[build_id]['key'] == lease_key
+    self._leases[build_id]['build'] = build
+
+    yield self._leased_build_call('start', build, {
         'url': self.buildbot.get_build_url(build),
     })
 
-  def on_build_eta_update(self, build, eta_seconds):
-    lease_duration = max(
-        BUILD_ETA_UPDATE_INTERVAL,
-        datetime.timedelta(seconds=eta_seconds))
-    return self._leased_build_call('hearbeat', build, {
-        'lease_expiration_ts': self.get_lease_expiration_ts(lease_duration),
-    })
-
+  @inlineCallbacks
   def on_build_finished(self, build, status):
+    assert self.started
     assert status in ('SUCCESS', 'FAILURE', 'EXCEPTION', 'RETRY', 'SKIPPED')
-    if not self.is_buildbucket_build(build):
+    build_id, lease_key = self._get_build_id_and_lease_key(build)
+    if not build_id or not lease_key:
       return
+    assert self.is_buildbucket_build(build)
     self.log(
-        'Build %s finished with status "%s"' % (build, status),
+        'Build %s finished with status "%s"' % (build_id, status),
         level=logging.DEBUG)
+
+    # Update leases.
+    yield self._ensure_leases_loaded()
+    if build_id not in self._leases:
+      self.log(
+          'build %s is not among current leases' % build_id,
+          level=logging.WARNING)
+    elif status != 'RETRY':
+      del self._leases[build_id]
+
     if status == 'RETRY':
       # Do not mark this build as failed. Either it will be retried when master
       # starts again and the build lease is still held, or the build lease will
@@ -413,9 +548,9 @@ class BuildBucketIntegrator(object):
         }, sort_keys=True),
     }
     if status == 'SUCCESS':
-      return self._leased_build_call('succeed', build, body)
+      yield self._leased_build_call('succeed', build, body)
     else:
       body['failure_reason'] = (
           'BUILD_FAILURE' if status == 'FAILURE'
           else 'INFRA_FAILURE')
-      return self._leased_build_call('fail', build, body)
+      yield self._leased_build_call('fail', build, body)

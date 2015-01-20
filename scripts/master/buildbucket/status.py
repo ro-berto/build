@@ -8,7 +8,6 @@ from twisted.internet.defer import inlineCallbacks, returnValue
 
 from . import common
 from .buildbot_gateway import BuildbotGateway
-from .integration import BUILD_ETA_UPDATE_INTERVAL
 
 
 BUILD_STATUS_NAMES = {
@@ -72,24 +71,11 @@ class BuildBucketStatus(StatusReceiverMultiService):
   def buildStarted(self, builder_name, build):
     if self.dry_run:
       return
-
-    if not self.integrator.is_buildbucket_build(build):
-      return None
-
     self._run_when_started(self.integrator.on_build_started, build)
-    # Tell Buildbot to call self.buildETAUpdate every 10 seconds.
-    return (self, BUILD_ETA_UPDATE_INTERVAL.total_seconds())
-
-  def buildETAUpdate(self, build, eta_seconds):
-    if self.dry_run:
-      return
-    self._run_when_started(
-        self.integrator.on_build_eta_update, build, eta_seconds)
 
   def buildFinished(self, builder_name, build, result):
     if self.dry_run:
       return
     assert result in BUILD_STATUS_NAMES
     status = BUILD_STATUS_NAMES[result]
-    self._run_when_started(
-        self.integrator.on_build_finished, build, status)
+    self._run_when_started(self.integrator.on_build_finished, build, status)
