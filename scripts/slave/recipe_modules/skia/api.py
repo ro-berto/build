@@ -291,6 +291,15 @@ class SkiaApi(recipe_api.RecipeApi):
       '--properties',  'gitHash',      self.got_revision,
                        'build_number', self.m.properties['buildnumber'],
     ]
+
+    configs = ['565', '8888', 'gpu', 'nvprmsaa4']
+    for via in ['serialize', 'tiles', 'tiles_rt', 'pipe', 'pipe_xp', 'pipe_sa']:
+      configs.append(via + '-8888')
+    if 'ANGLE' in self.c.BUILDER_NAME:
+      configs.append('angle')
+    args.append('--config')
+    args.extend(configs)
+
     args.append('--key')
     args.extend(self._KeyParams())
 
