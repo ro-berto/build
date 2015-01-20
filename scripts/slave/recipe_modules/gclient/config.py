@@ -381,3 +381,12 @@ def infra_internal(c):
   soln.name = 'infra_internal'
   soln.url = 'https://chrome-internal.googlesource.com/infra/infra_internal.git'
   c.got_revision_mapping['infra_internal'] = 'got_revision'
+
+@config_ctx()
+def chrome_from_buildspec(c):
+  soln = c.solutions.add()
+  soln.name = 'src'
+  soln.url = ('svn://svn-mirror.golo.chromium.org/chrome-internal/trunk/tools/'
+      'buildspec/build/chrome-official')
+  soln.custom_vars['svn_url'] = 'svn://svn-mirror.golo.chromium.org'
+  soln.custom_deps = {}
