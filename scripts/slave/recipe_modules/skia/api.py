@@ -293,11 +293,12 @@ class SkiaApi(recipe_api.RecipeApi):
     ]
 
     configs = ['565', '8888', 'gpu', 'nvprmsaa4']
-    modes   = ['serialize', 'tiles', 'tiles_rt', 'pipe', 'pipe_xp', 'pipe_sa']
     # Xoom and NP are running out of RAM when we run all these modes.  skia:3255
     if ('Xoom'        not in self.c.BUILDER_NAME and
         'NexusPlayer' not in self.c.BUILDER_NAME):
-      configs.extend(mode + '-8888' for mode in modes)
+      configs.extend(mode + '-8888' for mode in
+                     ['serialize', 'tiles_rt', 'pipe', 'pipe_xp', 'pipe_sa'])
+      configs.append('tiles_rt-gpu')
     if 'ANGLE' in self.c.BUILDER_NAME:
       configs.append('angle')
     args.append('--config')
