@@ -166,10 +166,9 @@ def build_targets_from_builder_dict(builder_dict):
   """Return a list of targets to build, depending on the builder type."""
   if builder_dict.get('target_arch') == 'NaCl':
     return ['skia_lib', 'debugger']
-  elif builder_dict.get('extra_config') == 'ZeroGPUCache':
-    return ['gm']
   elif (builder_dict['role'] == builder_name_schema.BUILDER_ROLE_TEST and
-        builder_dict.get('extra_config') == 'TSAN'):
+        (builder_dict.get('extra_config') == 'TSAN' or
+         builder_dict.get('extra_config') == 'ZeroGPUCache')):
     return ['dm']
   else:
     return ['most']
