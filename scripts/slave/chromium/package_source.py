@@ -22,7 +22,6 @@ from slave import slave_utils
 FILENAME = 'chromium-src'
 EXT = 'tar.bz2'
 GSBASE = 'gs://chromium-browser-csindex'
-GSACL = 'public-read'
 CONCURRENT_TASKS = 8
 UNIT_INDEXER = './clang_indexer/bin/external_corpus_compilation_indexer'
 
@@ -209,7 +208,7 @@ def main():
 
     print '%s: Uploading...' % time.strftime('%X')
     status = slave_utils.GSUtilCopyFile(
-        partial_filename, gs_prefix, gs_acl=GSACL)
+        partial_filename, gs_prefix)
     if status != 0:
       raise Exception('ERROR: GSUtilCopyFile error %d. "%s" -> "%s"' % (
           status, partial_filename, gs_prefix))
@@ -217,8 +216,7 @@ def main():
     print '%s: Finalizing google storage...' % time.strftime('%X')
     status = slave_utils.GSUtilMoveFile(
         '%s/%s' % (gs_prefix, partial_filename),
-        '%s/%s' % (gs_prefix, completed_filename),
-        gs_acl=GSACL)
+        '%s/%s' % (gs_prefix, completed_filename))
     if status != 0:
       raise Exception('ERROR: GSUtilMoveFile error %d. "%s" -> "%s"' % (
           status, '%s/%s' % (gs_prefix, partial_filename),
