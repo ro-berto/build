@@ -58,54 +58,21 @@ def GenSteps(api):
   builder = BUILDERS[api.properties['buildername']]
   api.path['checkout'] = api.path['slave_build'].join('src')
 
-  if api.properties['buildername'].startswith('split'):
-    api.amp.trigger_android_test_suite(
-        'example_gtest_suite', 'gtest',
-        api.amp.gtest_arguments('example_gtest_suite'),
-        api.amp.amp_arguments(device_name=builder.get('device_name', None),
-                              device_os=builder.get('device_os', None),
-                              api_address=builder.get('api_address', None),
-                              api_port=builder.get('api_port', None),
-                              api_protocol=builder.get('api_protocol', None)))
+  api.amp.trigger_android_test_suite(
+      'example_gtest_suite', 'gtest',
+      api.amp.gtest_arguments('example_gtest_suite'),
+      api.amp.amp_arguments(device_name=builder.get('device_name', None),
+                            device_os=builder.get('device_os', None),
+                            api_address=builder.get('api_address', None),
+                            api_port=builder.get('api_port', None),
+                            api_protocol=builder.get('api_protocol', None)))
 
-    api.amp.collect_android_test_suite(
-        'example_gtest_suite', 'gtest',
-        api.amp.gtest_arguments('example_gtest_suite'),
-        api.amp.amp_arguments(api_address=builder.get('api_address', None),
-                              api_port=builder.get('api_port', None),
-                              api_protocol=builder.get('api_protocol', None)))
-  else:
-    api.amp.run_android_test_suite(
-        'example_gtest_suite step',
-        'gtest',
-        api.amp.gtest_arguments('example_gtest_suite'),
-        api.amp.amp_arguments(device_name=builder.get('device_name', None),
-                              device_os=builder.get('device_os', None),
-                              api_address=builder.get('api_address', None),
-                              api_port=builder.get('api_port', None),
-                              api_protocol=builder.get('api_protocol', None)))
-
-    api.amp.run_android_test_suite(
-        'example_gtest_suite (trigger)',
-        'gtest',
-        api.amp.gtest_arguments('example_gtest_suite'),
-        api.amp.amp_arguments(device_name=builder.get('device_name', None),
-                              device_os=builder.get('device_os', None),
-                              api_address=builder.get('api_address', None),
-                              api_port=builder.get('api_port', None),
-                              api_protocol=builder.get('api_protocol', None),
-                              trigger='test_trigger_file.json'))
-
-    api.amp.run_android_test_suite(
-        'example_gtest_suite (collect)',
-        'gtest',
-        api.amp.gtest_arguments('example_gtest_suite'),
-        api.amp.amp_arguments(device_name=builder.get('device_name', None),
-                              device_os=builder.get('device_os', None),
-                              api_address=builder.get('api_address', None),
-                              api_port=builder.get('api_port', None),
-                              api_protocol=builder.get('api_protocol', None),
-                              collect='test_trigger_file.json'))
+  api.amp.collect_android_test_suite(
+      'example_gtest_suite', 'gtest',
+      api.amp.gtest_arguments('example_gtest_suite'),
+      api.amp.amp_arguments(api_address=builder.get('api_address', None),
+                            api_port=builder.get('api_port', None),
+                            api_protocol=builder.get('api_protocol', None)))
 
 def GenTests(api):
   for buildername in BUILDERS:

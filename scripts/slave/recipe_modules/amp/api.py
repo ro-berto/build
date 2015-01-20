@@ -92,26 +92,6 @@ class AmpApi(recipe_api.RecipeApi):
       step_result.presentation.status = self.m.step.WARNING
       step_result.presentation.step_text = 'unable to find device info'
 
-  def run_android_test_suite(self, step_name, test_type, test_type_args,
-                             amp_args, verbose=True):
-    """Runs an android test suite on AMP.
-
-    Args:
-      step_name: The user-visible name of the step.
-      test_type: The type of test to run
-        (e.g. 'gtest', 'instrumentation', etc.)
-      test_type_args: A list of command-line arguments specific to the test
-        type.
-      amp_args: A list of command-line arguments specific to AMP.
-    """
-    args = [test_type] + test_type_args + amp_args
-    if verbose:
-      args += ['--verbose']
-    return self.m.python(
-        step_name,
-        self.m.path['checkout'].join('build', 'android', 'test_runner.py'),
-        args=args)
-
   @recipe_api.non_step
   def gtest_arguments(
       self, suite, isolate_file_path=None):
@@ -149,8 +129,8 @@ class AmpApi(recipe_api.RecipeApi):
 
   @recipe_api.non_step
   def amp_arguments(
-      self, device_name=None, device_os=None, trigger=None, collect=None,
-      api_address=None, api_port=None, api_protocol=None):
+      self, device_name=None, device_os=None, api_address=None, api_port=None,
+      api_protocol=None):
     """Generate command-line arguments for running tests on AMP.
 
     Args:
@@ -158,11 +138,6 @@ class AmpApi(recipe_api.RecipeApi):
         Selects a device at random if unspecified.
       device_os: The OS version to use (e.g. '4.4.2'). Selects an OS version
         at random if unspecified.
-      trigger: If set, the file to test run information should be loaded.
-        Indicates that the scripts should only start the tests.
-      collect: If set, the file from which test run information should be
-        loaded. Indicates that the scripts should only collect the test
-        results.
       api_address: The IP address of the AMP API endpoint.
       api_port: The port of the AMP API endpoint.
       api_protocol: The protocol to use to connect to the AMP API endpoint.
@@ -192,10 +167,6 @@ class AmpApi(recipe_api.RecipeApi):
       amp_args += ['--remote-device', device_name]
     if device_os:
       amp_args += ['--remote-device-os', device_os]
-    if trigger:
-      amp_args += ['--trigger', trigger]
-    if collect:
-      amp_args += ['--collect', collect]
 
     return amp_args
 
