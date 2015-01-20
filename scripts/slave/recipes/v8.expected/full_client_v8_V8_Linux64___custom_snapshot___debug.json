@@ -49,7 +49,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "embedscript='[SLAVE_BUILD]/v8/test/mjsunit/mjsunit.js' target_arch=x64 v8_enable_slow_dchecks=1 v8_optimized_debug=1 v8_target_arch=x64"
+      "GYP_DEFINES": "embed_script='[SLAVE_BUILD]/v8/test/mjsunit/mjsunit.js' target_arch=x64 v8_enable_slow_dchecks=1 v8_optimized_debug=1 v8_target_arch=x64"
     },
     "name": "gclient runhooks"
   },

@@ -60,8 +60,8 @@ def disassembler(c):
 
 
 @CONFIG_CTX(includes=['v8'])
-def embedscript_mjsunit(c):
-  c.gyp_env.GYP_DEFINES['embedscript'] = Path(
+def embed_script_mjsunit(c):
+  c.gyp_env.GYP_DEFINES['embed_script'] = Path(
       '[CHECKOUT]', 'test', 'mjsunit', 'mjsunit.js')
 
 

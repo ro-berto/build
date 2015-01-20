@@ -987,7 +987,7 @@ BUILDERS = {
       },
       'V8 Linux64 - custom snapshot - debug': {
         'v8_apply_config': ['gc_stress', 'no_harness'],
-        'chromium_apply_config': ['embedscript_mjsunit'],
+        'chromium_apply_config': ['embed_script_mjsunit'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
