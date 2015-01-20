@@ -47,6 +47,7 @@ exclusions = {
   'V8 Mips - big endian - nosnap - 2': [],
   'V8 Linux - x87 - nosnap - debug': [],
   'V8 Linux - predictable': [],
+  'V8 Linux64 - custom snapshot - debug': [],
 }
 
 forgiving_steps = ['update_scripts', 'update', 'svnkill', 'taskkill',
@@ -56,6 +57,7 @@ x87_categories_steps = {'x87': ['runhooks', 'compile', 'Check']}
 vtunejit_categories_steps = {'vtunejit': ['runhooks', 'compile']}
 mem_sheriff_categories_steps = {'mem_sheriff': v8_steps}
 predictable_categories_steps = {'predictable': v8_steps}
+custom_snapshot_categories_steps = {'custom_snapshot': v8_steps}
 
 class V8Notifier(chromium_notifier.ChromiumNotifier):
   def isInterestingStep(self, build_status, step_status, results):
@@ -110,6 +112,16 @@ def Update(config, active_master, c):
       relayhost=config.Master.smtp,
       sendToInterestedUsers=False,
       extraRecipients=['ishell@chromium.org'],
+      status_header='buildbot failure in %(project)s on %(builder)s, %(steps)s',
+      lookup=master_utils.FilterDomain(),
+      forgiving_steps=forgiving_steps))
+  c['status'].append(V8Notifier(
+      fromaddr=active_master.from_address,
+      categories_steps=custom_snapshot_categories_steps,
+      exclusions={},
+      relayhost=config.Master.smtp,
+      sendToInterestedUsers=False,
+      extraRecipients=['yangguo@chromium.org'],
       status_header='buildbot failure in %(project)s on %(builder)s, %(steps)s',
       lookup=master_utils.FilterDomain(),
       forgiving_steps=forgiving_steps))

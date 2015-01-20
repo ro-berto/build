@@ -192,6 +192,11 @@ def nosse4(c):
 
 
 @config_ctx()
+def no_harness(c):
+  c.testing.test_args.add('--no-harness')
+
+
+@config_ctx()
 def no_test_results(c):
   c.testing.show_test_results = False
 

@@ -70,6 +70,9 @@ def main():
                            help='V8 was compiled with DCHECKs enabled')
   option_parser.add_option('--json-test-results',
                            help='File to write json results.')
+  option_parser.add_option('--no-harness',
+                           default=False, action='store_true',
+                           help='Run without test harness of a given suite')
   option_parser.add_option('--no-presubmit',
                            default=False, action='store_true',
                            help='Skip presubmit checks')
@@ -129,6 +132,8 @@ def main():
     cmd.extend(['--buildbot'])
   if options.dcheck_always_on:
     cmd.extend(['--dcheck-always-on'])
+  if options.no_harness:
+    cmd.extend(['--no-harness'])
   if options.no_presubmit:
     cmd.extend(['--no-presubmit'])
   if options.no_i18n:

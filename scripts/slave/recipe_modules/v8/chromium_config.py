@@ -60,6 +60,12 @@ def disassembler(c):
 
 
 @CONFIG_CTX(includes=['v8'])
+def embedscript_mjsunit(c):
+  c.gyp_env.GYP_DEFINES['embedscript'] = Path(
+      '[CHECKOUT]', 'test', 'mjsunit', 'mjsunit.js')
+
+
+@CONFIG_CTX(includes=['v8'])
 def interpreted_regexp(c):
   c.gyp_env.GYP_DEFINES['v8_interpreted_regexp'] = 1
 

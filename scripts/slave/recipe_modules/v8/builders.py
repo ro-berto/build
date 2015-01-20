@@ -985,6 +985,17 @@ BUILDERS = {
         'tests': ['mjsunit', 'webkit', 'benchmarks', 'mozilla'],
         'testing': {'platform': 'linux'},
       },
+      'V8 Linux64 - custom snapshot - debug': {
+        'v8_apply_config': ['gc_stress', 'no_harness'],
+        'chromium_apply_config': ['embedscript_mjsunit'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['mjsunit'],
+        'testing': {'platform': 'linux'},
+      },
       'V8 Linux - full debug': {
         'chromium_apply_config': ['no_optimized_debug'],
         'v8_config_kwargs': {
