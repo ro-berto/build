@@ -66,6 +66,11 @@ def embed_script_mjsunit(c):
 
 
 @CONFIG_CTX(includes=['v8'])
+def enable_slow_dchecks(c):
+  c.gyp_env.GYP_DEFINES['v8_enable_slow_dchecks'] = 1
+
+
+@CONFIG_CTX(includes=['v8'])
 def interpreted_regexp(c):
   c.gyp_env.GYP_DEFINES['v8_interpreted_regexp'] = 1
 

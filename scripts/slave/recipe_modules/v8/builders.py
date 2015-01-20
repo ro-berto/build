@@ -1045,6 +1045,7 @@ BUILDERS = {
   'tryserver.v8': {
     'builders': {
       'v8_linux_rel': {
+        'chromium_apply_config': ['enable_slow_dchecks'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -1071,7 +1072,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_nosnap_rel': {
-        'chromium_apply_config': ['no_snapshot'],
+        'chromium_apply_config': ['enable_slow_dchecks', 'no_snapshot'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -1091,6 +1092,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_rel': {
+        'chromium_apply_config': ['enable_slow_dchecks'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -1131,7 +1133,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_win_rel': {
-        'chromium_apply_config': ['msvs2013'],
+        'chromium_apply_config': ['enable_slow_dchecks', 'msvs2013'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -1169,7 +1171,7 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'v8_win64_rel': {
-        'chromium_apply_config': ['msvs2013'],
+        'chromium_apply_config': ['enable_slow_dchecks', 'msvs2013'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -1189,7 +1191,7 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'v8_mac_rel': {
-        'chromium_apply_config': ['clang'],
+        'chromium_apply_config': ['enable_slow_dchecks', 'clang'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -1209,7 +1211,7 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'v8_linux_arm_rel': {
-        'chromium_apply_config': ['simulate_arm'],
+        'chromium_apply_config': ['enable_slow_dchecks', 'simulate_arm'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -1229,7 +1231,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm64_rel': {
-        'chromium_apply_config': ['simulate_arm'],
+        'chromium_apply_config': ['enable_slow_dchecks', 'simulate_arm'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
