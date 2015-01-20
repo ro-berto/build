@@ -293,8 +293,11 @@ class SkiaApi(recipe_api.RecipeApi):
     ]
 
     configs = ['565', '8888', 'gpu', 'nvprmsaa4']
-    for via in ['serialize', 'tiles', 'tiles_rt', 'pipe', 'pipe_xp', 'pipe_sa']:
-      configs.append(via + '-8888')
+    modes   = ['serialize', 'tiles', 'tiles_rt', 'pipe', 'pipe_xp', 'pipe_sa']
+    # Xoom and NP are running out of RAM when we run all these modes.  skia:3255
+    if ('Xoom'        not in self.c.BUILDER_NAME and
+        'NexusPlayer' not in self.c.BUILDER_NAME):
+      configs.extend(mode + '-8888' for mode in modes)
     if 'ANGLE' in self.c.BUILDER_NAME:
       configs.append('angle')
     args.append('--config')
@@ -309,12 +312,12 @@ class SkiaApi(recipe_api.RecipeApi):
     blacklist.extend('gpu _ PANO_20121023_214540.jpg'.split(' '))
     blacklist.extend('msaa _ PANO_20121023_214540.jpg'.split(' '))
 
-    # Drawing SKPs, images, or image subsets into GPU canvases is a New Thing.
+    # Drawing SKPs or images into GPU canvases is a New Thing.
     # It seems like we're running out of RAM on some Android bots, so start off
     # with a very wide blacklist disabling all these tests on all Android bots.
     if 'Android' in self.c.BUILDER_NAME:  # skia:3255
-      blacklist.extend('gpu skp _ gpu image _ gpu subset _'.split(' '))
-      blacklist.extend('msaa skp _ msaa image _ msaa subset _'.split(' '))
+      blacklist.extend('gpu skp _ gpu image _'.split(' '))
+      blacklist.extend('msaa skp _ msaa image _'.split(' '))
 
     if blacklist:
       args.append('--blacklist')
@@ -330,11 +333,8 @@ class SkiaApi(recipe_api.RecipeApi):
     if 'Xoom' in self.c.BUILDER_NAME:  # skia:1699
       match.append('~WritePixels')
 
-    # skia:3249: these images/device pairs won't decode properly.
-    if 'NexusPlayer' in self.c.BUILDER_NAME:
-      match.append('~tabl_mozilla_0')
-    if ('Nexus5' in self.c.BUILDER_NAME or
-        'Xoom' in self.c.BUILDER_NAME):
+    # skia:3249: these images flakily don't decode on Android.
+    if 'Android' in self.c.BUILDER_NAME:
       match.append('~tabl_mozilla_0')
       match.append('~desk_yahoonews_0')
 
