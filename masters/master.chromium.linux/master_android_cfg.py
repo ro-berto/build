@@ -47,7 +47,7 @@ T('android_trigger_rel')
 B('Android Arm64 Builder (dbg)', 'f_android_arm64_dbg', 'android', 'android',
   auto_reboot=False, notify_on_missing=True)
 F('f_android_arm64_dbg',
-  m_annotator.BaseFactory('android/builder'))
+  m_annotator.BaseFactory('chromium'))
 
 B('Android Builder (dbg)', 'f_android_dbg', 'android', 'android',
   auto_reboot=False, notify_on_missing=True)
