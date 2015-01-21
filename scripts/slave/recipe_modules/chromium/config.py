@@ -222,6 +222,12 @@ def gn_for_uploads(c):
     c.gn_args.append('is_official_build=true')
     c.gn_args.append('symbol_level=2')
 
+@config_ctx()
+def win_analyze(c):
+  c.gyp_env.GYP_DEFINES['win_analyze'] = '1'
+  c.gyp_env.GYP_DEFINES['fastbuild'] = '2'
+  c.gyp_env.GYP_DEFINES['use_goma'] = 0
+
 @config_ctx(group='builder')
 def ninja(c):
   if c.TARGET_PLATFORM == 'ios':
