@@ -254,7 +254,8 @@ class AndroidApi(recipe_api.RecipeApi):
         name='upload_build_product',
         source=zipfile,
         bucket=bucket,
-        dest=path)
+        dest=path,
+        version='4.7')
 
   def download_build(self, bucket, path, extract_path=None):
     zipfile = self.m.path['checkout'].join('out', 'build_product.zip')
@@ -262,7 +263,8 @@ class AndroidApi(recipe_api.RecipeApi):
         name='download_build_product',
         bucket=bucket,
         source=path,
-        dest=zipfile
+        dest=zipfile,
+        version='4.7',
     )
     extract_path = extract_path or self.m.path['checkout']
     self.m.step(
@@ -537,7 +539,8 @@ class AndroidApi(recipe_api.RecipeApi):
           gs_bucket,
           'logcat_dumps/%s/%s' % (self.m.properties['buildername'],
                                   self.m.properties['buildnumber']),
-          link_name='logcat dump')
+          link_name='logcat dump',
+          version='4.7')
     else:
       self.m.python(
           'logcat_dump',
@@ -697,4 +700,5 @@ class AndroidApi(recipe_api.RecipeApi):
         args=['-R'],
         name='upload coverage report',
         link_name='Coverage report',
+        version='4.7',
         **kwargs)
