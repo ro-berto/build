@@ -97,6 +97,9 @@ class PGOApi(recipe_api.RecipeApi):
 
     self.m.gclient.set_config(recipe_config['gclient_config'])
 
+    # Augment the solution if needed.
+    self.m.gclient.c.solutions[0].url += recipe_config.get('url_suffix', '')
+
     if self.m.properties.get('slavename') != 'fake_slave':
       self.m.chromium.taskkill()
 

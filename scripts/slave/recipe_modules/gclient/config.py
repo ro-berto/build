@@ -386,7 +386,9 @@ def infra_internal(c):
 def chrome_from_buildspec(c):
   soln = c.solutions.add()
   soln.name = 'src'
+  # This URL has to be augmented with the appropriate bucket by the recipe using
+  # it.
   soln.url = ('svn://svn-mirror.golo.chromium.org/chrome-internal/trunk/tools/'
-      'buildspec/build/chrome-official')
+      'buildspec/build/')
   soln.custom_vars['svn_url'] = 'svn://svn-mirror.golo.chromium.org'
   soln.custom_deps = {}
