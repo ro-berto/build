@@ -48,6 +48,8 @@ exclusions = {
   'V8 Linux - x87 - nosnap - debug': [],
   'V8 Linux - predictable': [],
   'V8 Linux64 - custom snapshot - debug': [],
+  'Chrome Mac10.6 Perf': [],
+  'Chrome Win7 Perf': [],
 }
 
 forgiving_steps = ['update_scripts', 'update', 'svnkill', 'taskkill',
