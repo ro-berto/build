@@ -505,8 +505,6 @@
       "serialize-8888",
       "tiles_rt-8888",
       "pipe-8888",
-      "pipe_xp-8888",
-      "pipe_sa-8888",
       "tiles_rt-gpu",
       "--key",
       "arch",

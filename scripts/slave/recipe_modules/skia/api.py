@@ -297,7 +297,7 @@ class SkiaApi(recipe_api.RecipeApi):
     if ('Xoom'        not in self.c.BUILDER_NAME and
         'NexusPlayer' not in self.c.BUILDER_NAME):
       configs.extend(mode + '-8888' for mode in
-                     ['serialize', 'tiles_rt', 'pipe', 'pipe_xp', 'pipe_sa'])
+                     ['serialize', 'tiles_rt', 'pipe'])
       configs.append('tiles_rt-gpu')
     if 'ANGLE' in self.c.BUILDER_NAME:
       configs.append('angle')
