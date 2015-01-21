@@ -213,8 +213,6 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
     ).stdout.rstrip()
     prefix = self.device_path_join(device_scratch_dir, 'skiabot', 'skia_')
     return default_flavor.DeviceDirs(
-        gm_actual_dir=prefix + 'gm_actual',
-        gm_expected_dir=prefix + 'gm_expected',
         dm_dir=prefix + 'dm',
         perf_data_dir=prefix + 'perf',
         resource_dir=prefix + 'resources',

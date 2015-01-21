@@ -30,13 +30,6 @@ def GenSteps(api):
 
   api.skia.run(
     api.step,
-    'gm self-tests',
-    cmd=[cwd.join('gm', 'tests', 'run.sh')],
-    cwd=cwd,
-    abort_on_failure=False)
-
-  api.skia.run(
-    api.step,
     'android platform self-tests',
     cmd=['python',
          cwd.join('platform_tools', 'android', 'tests', 'run_all.py')],

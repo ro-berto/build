@@ -75,13 +75,6 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/gm/tests/run.sh"
-    ],
-    "cwd": "[SLAVE_BUILD]/skia",
-    "name": "gm self-tests"
-  },
-  {
-    "cmd": [
       "python",
       "[SLAVE_BUILD]/skia/platform_tools/android/tests/run_all.py"
     ],

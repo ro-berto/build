@@ -45,8 +45,6 @@ class SKPDirs(object):
 
 class DeviceDirs(object):
   def __init__(self,
-               gm_actual_dir,
-               gm_expected_dir,
                dm_dir,
                perf_data_dir,
                resource_dir,
@@ -54,8 +52,6 @@ class DeviceDirs(object):
                skp_dirs,
                skp_perf_dir,
                tmp_dir):
-    self._gm_actual_dir = gm_actual_dir
-    self._gm_expected_dir = gm_expected_dir
     self._dm_dir = dm_dir
     self._perf_data_dir = perf_data_dir
     self._playback_actual_images_dir = skp_dirs.actual_images_dir
@@ -66,16 +62,6 @@ class DeviceDirs(object):
     self._skp_dir = skp_dirs.skp_dir()
     self._skp_perf_dir = skp_perf_dir
     self._tmp_dir = tmp_dir
-
-  @property
-  def gm_actual_dir(self):
-    """Holds images and JSON summary written out by the 'gm' tool."""
-    return self._gm_actual_dir
-
-  @property
-  def gm_expected_dir(self):
-    """Holds expectations JSON summary read by the 'gm' tool."""
-    return self._gm_expected_dir
 
   @property
   def dm_dir(self):
@@ -255,8 +241,6 @@ class DefaultFlavorUtils(base_flavor.BaseFlavorUtils):
     pardir = self._skia_api.m.path.pardir
     join = self._skia_api.m.path['slave_build'].join
     return DeviceDirs(
-        gm_actual_dir=join('gm', 'actual'),
-        gm_expected_dir=join('skia', 'expectations', 'gm'),
         dm_dir=join('dm'),
         perf_data_dir=self._skia_api.perf_data_dir,
         resource_dir=self._skia_api.resource_dir,

@@ -67,8 +67,6 @@ class ChromeOSFlavorUtils(ssh_flavor.SSHFlavorUtils):
     def join(suffix):
       return ''.join((prefix, suffix))
     return default_flavor.DeviceDirs(
-        gm_actual_dir=join('gm_actual'),
-        gm_expected_dir=join('gm_expected'),
         dm_dir=join('dm_out'),  # 'dm' conflicts with the binary
         perf_data_dir=join('perf'),
         resource_dir=join('resources'),
