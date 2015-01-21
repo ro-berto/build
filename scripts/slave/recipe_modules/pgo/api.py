@@ -99,6 +99,7 @@ class PGOApi(recipe_api.RecipeApi):
 
     if self.m.properties.get('slavename') != 'fake_slave':
       self.m.chromium.taskkill()
+
     self.m.bot_update.ensure_checkout()
 
     # First step: compilation of the instrumented build.
@@ -106,6 +107,15 @@ class PGOApi(recipe_api.RecipeApi):
 
     # Second step: profiling of the instrumented build.
     self._run_pgo_benchmarks()
+
+    # Increase the stack size of pgomgr.exe.
+    #
+    # TODO(sebmarchand): Remove this once the bug has been fixed.
+    self.m.python('increase pgomgr.exe stack size',
+        self.resource('increase_pgomgr_stack_size.py'),
+        args=[self.m.path['depot_tools'].join(
+            'win_toolchain', 'vs2013_files', 'VC', 'bin', 'amd64_x86')],
+        cwd=self.m.path['slave_build'])
 
     # Third step: Compilation of the optimized build, this will use the profile
     #     data files produced by the previous step.
