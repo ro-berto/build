@@ -11,7 +11,11 @@ from master.factory import annotator_factory
 m_annotator = annotator_factory.AnnotatorFactory()
 
 def Update(c):
-  buildernames_list = ['Win Builder']
+  buildernames_list = [
+      'Win Builder',
+      'Win GN',
+      'Win GN (dbg)',
+  ]
   c['schedulers'].extend([
       SingleBranchScheduler(name='win_webrtc_scheduler',
                             branch='trunk',
@@ -32,6 +36,14 @@ def Update(c):
     },
     {'name': 'WinXP Tester'},
     {'name': 'Win7 Tester'},
+    {
+      'name': 'Win GN',
+      'slavebuilddir': 'win_gn',
+    },
+    {
+      'name': 'Win GN (dbg)',
+      'slavebuilddir': 'win_gn',
+    },
   ]
 
   c['builders'].extend([
@@ -42,5 +54,6 @@ def Update(c):
             triggers=spec.get('triggers')),
         'category': 'win',
         'notify_on_missing': True,
+        'slavebuilddir': spec.get('slavebuilddir', 'win'),
       } for spec in specs
   ])

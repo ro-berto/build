@@ -267,6 +267,24 @@ BUILDERS = freeze({
         'parent_buildername': 'Win Builder',
         'testing': {'platform': 'win'},
       },
+      'Win GN': {
+        'recipe_config': 'chromium_webrtc_tot_gn',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'win'},
+      },
+      'Win GN (dbg)': {
+        'recipe_config': 'chromium_webrtc_tot_gn',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'win'},
+      },
       'Mac': {
         'recipe_config': 'chromium_webrtc_tot',
         'chromium_config_kwargs': {
@@ -277,9 +295,25 @@ BUILDERS = freeze({
           'PERF_ID': 'chromium-webrtc-trunk-tot-rel-mac',
         },
         'bot_type': 'builder_tester',
-        'testing': {
-          'platform': 'mac',
-        }
+        'testing': {'platform': 'mac'},
+      },
+      'Mac GN': {
+        'recipe_config': 'chromium_webrtc_tot_gn',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'mac'},
+      },
+      'Mac GN (dbg)': {
+        'recipe_config': 'chromium_webrtc_tot_gn',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'mac'},
       },
       'Linux': {
         'recipe_config': 'chromium_webrtc_tot',
