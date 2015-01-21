@@ -20,9 +20,9 @@ from slave.chromium import package_index
 
 
 TEST_CC_FILE_CONTENT = '#include "test.h"\nint main() {\nreturn 0;\n}\n'
-TEST_H_FILE_CONTENT = '#ifndef TEST_H_\n#define TEST_H_\n#endif\n'
+TEST_H_FILE_CONTENT = '#ifndef TEST_H\n#define TEST_H\n#include <set>\n#endif\n'
 COMPILE_ARGUMENTS = 'clang++ -fsyntax-only -std=c++11 -c test.cc'
-INCLUDE_PATH = '/usr/include'
+INCLUDE_PATH = '/usr/include/c++/4.8.2'
 
 
 class PackageIndexTest(unittest.TestCase):
@@ -31,10 +31,10 @@ class PackageIndexTest(unittest.TestCase):
     # Create the test.cc and test.h files (not necessarily named like that).
     with tempfile.NamedTemporaryFile(
         suffix='.cc', prefix='test', delete=False) as self.test_cc_file:
-      self.test_cc_file.writelines(TEST_CC_FILE_CONTENT)
+      self.test_cc_file.write(TEST_CC_FILE_CONTENT)
     with tempfile.NamedTemporaryFile(
         suffix='.h', prefix='test', delete=False) as self.test_h_file:
-      self.test_h_file.writelines(TEST_H_FILE_CONTENT)
+      self.test_h_file.write(TEST_H_FILE_CONTENT)
     compdb_dictionary = {
         'directory': '.',
         'command': COMPILE_ARGUMENTS,
@@ -43,13 +43,14 @@ class PackageIndexTest(unittest.TestCase):
     # Write a compilation database to a file.
     with tempfile.NamedTemporaryFile(
         suffix='.json', delete=False) as self.compdb_file:
-      self.compdb_file.writelines(json.dumps([compdb_dictionary]))
+      self.compdb_file.write(json.dumps([compdb_dictionary]))
 
     # Create the test.cc.filepaths file referenced through the compilation
     # database
     with open(self.test_cc_file.name + '.filepaths', 'wb') as filepaths_file:
-      filepaths_file.writelines(
-          self.test_cc_file.name + '\n' + self.test_h_file.name + '\n')
+      filepaths_file.write('\n'.join([self.test_cc_file.name,
+                                      self.test_h_file.name,
+                                      '%s//set' % INCLUDE_PATH]))
 
     self.index_pack = package_index.IndexPack(
         os.path.realpath(self.compdb_file.name))
@@ -91,16 +92,19 @@ class PackageIndexTest(unittest.TestCase):
     # Setup some dictionaries which are usually filled by _GenerateDataFiles()
     test_cc_file_fullpath = os.path.join('.', self.test_cc_file.name)
     test_h_file_fullpath = os.path.join('.', self.test_h_file.name)
+    set_fullpath = '%s/set' % INCLUDE_PATH
     self.index_pack.filehashes = {
         test_cc_file_fullpath: hashlib.sha256(TEST_CC_FILE_CONTENT).hexdigest(),
-        test_h_file_fullpath: hashlib.sha256(TEST_H_FILE_CONTENT).hexdigest()
+        test_h_file_fullpath: hashlib.sha256(TEST_H_FILE_CONTENT).hexdigest(),
+        set_fullpath: hashlib.sha256('').hexdigest()
     }
     self.index_pack.filesizes = {
         test_cc_file_fullpath: len(TEST_CC_FILE_CONTENT),
-        test_h_file_fullpath: len(TEST_H_FILE_CONTENT)
+        test_h_file_fullpath: len(TEST_H_FILE_CONTENT),
+        set_fullpath: 0
     }
     # Now _GenerateUnitFiles() can be called.
-    self.index_pack._GenerateUnitFiles([INCLUDE_PATH])
+    self.index_pack._GenerateUnitFiles()
 
     # Because we only called _GenerateUnitFiles(), the index pack directory
     # should only contain the one unit file for the one compilation unit in our
@@ -122,7 +126,8 @@ class PackageIndexTest(unittest.TestCase):
                           self.test_cc_file.name)
         self.assertEquals(compilation_unit_dictionary['cxx_arguments'], {})
 
-        self.assertEquals(len(compilation_unit_dictionary['required_input']), 2)
+        self.assertEquals(len(compilation_unit_dictionary['required_input']),
+                          len(self.index_pack.filesizes))
         self._CheckRequiredInput(
             compilation_unit_dictionary['required_input'][0],
             self.test_cc_file.name, TEST_CC_FILE_CONTENT)
@@ -130,9 +135,10 @@ class PackageIndexTest(unittest.TestCase):
             compilation_unit_dictionary['required_input'][1],
             self.test_h_file.name, TEST_H_FILE_CONTENT)
 
+        real_compile_arguments = COMPILE_ARGUMENTS.split()[1:]
         self.assertEquals(
             compilation_unit_dictionary['argument'],
-            ['-I%s' % INCLUDE_PATH] + ['-w'] + COMPILE_ARGUMENTS.split()[1:])
+            ['-isystem%s' % INCLUDE_PATH] + ['-w'] + real_compile_arguments)
 
   def testCreateArchive(self):
     index_pack_path = os.path.join(os.getcwd(), 'index_pack.tar.gz')

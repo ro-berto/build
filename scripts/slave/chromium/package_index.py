@@ -78,7 +78,8 @@ class IndexPack(object):
         # Each line in the '*.filepaths' file references the path to a source
         # file involved in the compilation.
         for line in filepaths_file:
-          fname = os.path.join(entry['directory'], line.strip())
+          fname = os.path.join(entry['directory'],
+                               line.strip().replace('//', '/'))
           if not fname in self.filehashes:
             # Derive the new filename from the SHA256 hash.
             with open(fname, 'rb') as source_file:
@@ -91,7 +92,7 @@ class IndexPack(object):
             with gzip.open(compressed_file_name, 'wb') as compressed_file:
               compressed_file.writelines(content)
 
-  def _GenerateUnitFiles(self, include_paths):
+  def _GenerateUnitFiles(self):
     """A function which produces the unit files for the index pack.
 
     A unit file consists of a gzip compressed JSON dump of the following kind of
@@ -108,16 +109,10 @@ class IndexPack(object):
       'size': <size of the source file>,
       'digest': <SHA256 hash of the contents of the source file>
     }
-
-    Args:
-      include_paths: List of paths to the directories containing system headers.
     """
 
     # Keeps track of the '*.filepaths' files already processed.
     filepaths = set()
-
-    # Modify the include paths list to add '-I' in front.
-    include_paths = map(lambda x: '-I%s' % x, include_paths)
 
     # Process all entries in the compilation database.
     for entry in self.json_dictionaries:
@@ -147,15 +142,18 @@ class IndexPack(object):
           command_list = command_list[i + 1:]
           break
 
-      # Add the include paths to the list of compile arguments; also disable all
-      # warnings so that the indexer can run successfully. The job of the
-      # indexer is to index the code, not to verify it. Warnings we actually
-      # care about would show up in the compile step.
-      unit_dictionary['argument'] = include_paths + ['-w'] + command_list
       required_inputs = []
+      include_paths = set()
       with open(filepath, 'rb') as filepaths_file:
         for line in filepaths_file:
           fname = line.strip()
+          # The clang tool uses '//' to separate the system path where system
+          # headers can be found from the relative path used in the #include
+          # statement.
+          if '//' in fname:
+            path = fname.split('//')
+            include_paths.add('-isystem%s' % os.path.normpath(path[0]))
+            fname = '/'.join(path)
           fname_fullpath = os.path.join(entry['directory'], fname)
           required_input = {
               # Note that although the paths seem to contain redundancy (e. g.
@@ -166,6 +164,11 @@ class IndexPack(object):
               'digest': self.filehashes[fname_fullpath]
           }
           required_inputs.append(required_input)
+      # Add the include paths to the list of compile arguments; also disable all
+      # warnings so that the indexer can run successfully. The job of the
+      # indexer is to index the code, not to verify it. Warnings we actually
+      # care about would show up in the compile step.
+      unit_dictionary['argument'] = list(include_paths) + ['-w'] + command_list
       unit_dictionary['required_input'] = required_inputs
       wrapper = {
           'format': 'grok',
@@ -180,14 +183,11 @@ class IndexPack(object):
       with gzip.open(unit_file_path, 'wb') as unit_file:
         unit_file.writelines(unit_file_content)
 
-  def GenerateIndexPack(self, include_paths):
+  def GenerateIndexPack(self):
     """Generates the index pack.
 
     An index pack consists of data files (the source and header files) and unit
     files (describing one compilation unit each).
-
-    Args:
-      include_paths: List of paths to the directories containing system headers.
     """
 
     # Generate the compressed source files (*.data).
@@ -195,7 +195,7 @@ class IndexPack(object):
     self._GenerateDataFiles()
 
     # Generate the compressed unit files (*.unit).
-    self._GenerateUnitFiles(include_paths)
+    self._GenerateUnitFiles()
 
   def CreateArchive(self, filepath):
     """Creates a gzipped archive containing the index pack.
@@ -226,14 +226,11 @@ def main():
   parser.add_argument('--path-to-compdb',
                       default=None, required=True,
                       help='path to the compilation database')
-  parser.add_argument(
-      '--include-paths', default=None, required=True,
-      help='Paths where system headers are located, separated by ":"')
   options = parser.parse_args()
 
   print '%s: Index generation...' % time.strftime('%X')
   index_pack = IndexPack(options.path_to_compdb)
-  index_pack.GenerateIndexPack(options.include_paths.split(':'))
+  index_pack.GenerateIndexPack()
 
   # Clean up the *.filepaths files.
   chromium_utils.RemoveFilesWildcards(
