@@ -93,6 +93,7 @@ PACKAGES = [
   Package(github_repo='http_multi_server'),
   Package(github_repo='http_parser'),
   Package(github_repo='http_throttle'),
+  Package(github_repo='initialize'),
   Package(github_repo='intl'),
   Package(github_repo='json_rpc_2'),
   Package(github_repo='logging'),
