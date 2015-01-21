@@ -6,7 +6,6 @@
 
 from buildbot.changes.changes import Change
 from buildbot.interfaces import IControl
-from buildbot.master import Control
 from buildbot.process.buildrequest import BuildRequest
 from buildbot.status import builder as build_results
 from twisted.internet.defer import inlineCallbacks, returnValue
@@ -172,7 +171,7 @@ class BuildbotGateway(object):
 
   def stop_build(self, build, reason):
     """Stops the |build|."""
-    control = Control(self.master)
+    control = IControl(self.master)  # request IControl from self.master.
     builder_control = control.getBuilder(build.getBuilder().getName())
     assert builder_control
     build_control = builder_control.getBuild(build.getNumber())

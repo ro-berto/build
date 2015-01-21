@@ -66,7 +66,7 @@ def fake_buildbucket():
         }
     }
   service.api.lease.side_effect = lease
-  service.api.heartbeat.return_value = {}  # Not a Mock.
+  service.api.heartbeat_batch.return_value = {}  # Not a Mock.
 
   return service
 
@@ -362,7 +362,7 @@ class IntegratorTest(unittest.TestCase):
       self.integrator.poll_builds()
       def assert_heartbeat_sent():
         try:
-          self.assertTrue(self.buildbucket.api.heartbeat.called)
+          self.assertTrue(self.buildbucket.api.heartbeat_batch.called)
         finally:
           test_finished.callback(None)  # Finish test.
       reactor.callLater(0.001, assert_heartbeat_sent)
@@ -372,23 +372,27 @@ class IntegratorTest(unittest.TestCase):
       run_deferred(test())
 
   @contextlib.contextmanager
-  def mock_heartbeat_lease_expired(self):
-    self.buildbucket.api.heartbeat.return_value = {
-        'error': {
-            'reason': 'LEASE_EXPIRED',
-        }
+  def mock_heartbeat_lease_expired(self, build_id):
+    self.buildbucket.api.heartbeat_batch.return_value = {
+      'results': [{
+          'build_id': build_id,
+          'error': {
+              'reason': 'LEASE_EXPIRED',
+          },
+      }],
     }
     yield
-    self.assertTrue(self.buildbucket.api.heartbeat.called)
+    self.assertTrue(self.buildbucket.api.heartbeat_batch.called)
 
   def test_lease_for_build_expired(self):
-    with self.create_integrator(), self.mock_heartbeat_lease_expired():
-      self.mock_existing_build()
-      run_deferred(self.integrator.send_heartbeats())
+    with self.create_integrator():
+      build = self.mock_existing_build()
+      with self.mock_heartbeat_lease_expired(build.id):
+        run_deferred(self.integrator.send_heartbeats())
       self.assertTrue(self.buildbot.stop_build.called)
 
   def test_lease_for_build_request_expired(self):
-    with self.create_integrator(), self.mock_heartbeat_lease_expired():
+    with self.create_integrator():
       build_request = Mock()
       self.integrator._leases = {
           '1': {
@@ -397,7 +401,8 @@ class IntegratorTest(unittest.TestCase):
           },
       }
 
-      run_deferred(self.integrator.send_heartbeats())
+      with self.mock_heartbeat_lease_expired('1'):
+        run_deferred(self.integrator.send_heartbeats())
 
       self.assertTrue(build_request.cancel.called)
 

@@ -405,33 +405,47 @@ class BuildBucketIntegrator(object):
         duration + datetime.timedelta(minutes=5))
     return min(duration, MAX_LEASE_DURATION)
 
+  @inlineCallbacks
   def send_heartbeats(self):
-    # TODO(nodir): send heartbeats in a batch.
-    @inlineCallbacks
-    def send_one_heartbeat(build_id, lease):
-      resp = yield self.buildbucket_service.api.heartbeat(
-          id=build_id,
-          body={
-              'lease_key': lease['key'],
-              'lease_expiration_ts': self.get_lease_expiration_ts(
-                  self.heartbeat_interval),
-          },
-      )
-      if self._check_error(resp):
+    if not self._leases:
+      return
+    leases = self._leases.copy()
+    self.log(
+        'Sending heartbeats for %d leases' % len(leases),
+        level=logging.DEBUG)
+    lease_expiration_ts = self.get_lease_expiration_ts(self.heartbeat_interval)
+
+    heartbeats = [{
+        'build_id': build_id,
+        'lease_key': lease['key'],
+        'lease_expiration_ts': lease_expiration_ts,
+    } for build_id, lease in leases.iteritems()]
+    resp = yield self.buildbucket_service.api.heartbeat_batch(
+        body={'heartbeats': heartbeats},
+    )
+
+    results = resp.get('results') or []
+    returned_build_ids = set(r['build_id'] for r in results)
+    if returned_build_ids != set(leases):
+      self.log(
+          ('Unexpected build ids during heartbeat.\nExpected: %r.\nActual: %r'
+            % (sorted(leases), sorted(returned_build_ids))),
+          level=logging.WARNING)
+
+    for result in results:
+      build_id = result.get('build_id')
+      lease = leases.get(build_id)
+      if not lease:
+        continue
+      if self._check_error(result):
+        self.log('Canceling build request for build "%s"' % build_id)
+        if build_id in self._leases:
+          del self._leases[build_id]
         build = lease.get('build')
         if build:
-          yield self._stop_build(build, resp['error'])
+          yield self._stop_build(build, result['error'])
         else:
           yield lease['build_request'].cancel()
-      # end of send_one_heartbeat
-
-    if self._leases is None:
-      return
-    send_deferreds = []
-    for build_id, lease in self._leases.iteritems():
-      # Send heartbeats in parallel.
-      send_deferreds.append(send_one_heartbeat(build_id, lease))
-    return defer.DeferredList(send_deferreds)
 
   @inlineCallbacks
   def _clean_completed_build_requests(self):
