@@ -27,6 +27,7 @@ twistd.pid
 /masters/*/*/
 !/masters/*/templates/
 !/masters/*/public_html/
+/masters/*/public_html/auto-*
 /masters/*/.*
 /masters/*/actions.log
 /masters/*/actions_parser.timestamp

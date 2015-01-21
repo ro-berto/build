@@ -210,42 +210,17 @@
       </td>
       <td width="72%">
         <table width="100%">
+          <script src='./auto-builder.js'></script>,
           <script language="javascript">
-            var closer = [
-                "builder=x86-generic+incremental",
-                "builder=amd64-generic+incremental",
-                "builder=daisy+incremental",
-                "builder=x86-generic+full",
-                "builder=amd64-generic+full",
-                "builder=daisy+full",
-                "builder=arm-generic+full",
-                "builder=chromiumos+sdk",
-                "builder=x86-generic+ASAN",
-                "builder=amd64-generic+ASAN",
-                "reload=30",
-            ].join("&");
+            closer += "&titles=off";
+            arm += "&titles=off";
+            x86 += "&titles=off";
+            commit_queue += "&titles=off";
             var chromiumos_chromium = [
                 "builder=X86+(chromium)",
                 "builder=AMD64+(chromium)",
                 "builder=Daisy+(chromium)",
                 "titles=on",
-            ].join("&");
-            var arm = [
-                "builder=daisy+incremental",
-                "builder=arm-generic+full",
-                "builder=daisy+full",
-                "reload=30",
-            ].join("&");
-            var x86 = [
-                "builder=x86-generic+incremental",
-                "builder=amd64-generic+incremental",
-                "builder=x86-generic+full",
-                "builder=amd64-generic+full",
-                "reload=30",
-            ].join("&");
-            var commit_queue = [
-                "builder=x86-generic+paladin",
-                "builder=amd64-generic+paladin",
             ].join("&");
 
             var bar = "https://build.chromium.org/p/chromiumos/horizontal_one_box_per_builder"
