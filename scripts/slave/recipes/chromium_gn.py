@@ -316,7 +316,10 @@ def GenSteps(api):
     api.chromium.c.compile_py.compiler = None
     api.chromium.c.compile_py.goma_dir = None
 
-  api.chromium.compile(targets=['all'])
+  # crbug.com/451227 - the android compile is taking up too much
+  # disk space, so temporarily disable it on the try servers.
+  if 'android_chromium_gn' not in buildername:
+    api.chromium.compile(targets=['all'])
 
   # TODO(dpranke): Ensure that every bot runs w/ --check, then make
   # it be on by default.

@@ -95,26 +95,6 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/compile.py",
-      "--target",
-      "Release",
-      "--src-dir",
-      "[SLAVE_BUILD]/src",
-      "--build-tool",
-      "ninja",
-      "--compiler",
-      "goma",
-      "--goma-dir",
-      "[BUILD]/goma",
-      "--",
-      "all"
-    ],
-    "name": "compile"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[DEPOT_TOOLS]/gn.py",
       "--root=[SLAVE_BUILD]/src",
       "check",
