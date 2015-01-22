@@ -477,6 +477,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_run_skia",
+      "--logcat",
       "-d",
       "nexus_5",
       "-s",
@@ -578,6 +579,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_run_skia",
+      "--logcat",
       "-d",
       "nexus_5",
       "-s",
@@ -595,6 +597,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_run_skia",
+      "--logcat",
       "-d",
       "nexus_5",
       "-s",

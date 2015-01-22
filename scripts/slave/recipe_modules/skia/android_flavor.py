@@ -92,6 +92,7 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
   def step(self, name, cmd, **kwargs):
     self._adb.maybe_wait_for_device()
     args = [self.android_bin.join('android_run_skia'),
+            '--logcat',
             '-d', self.device,
             '-s', self.serial,
     ]

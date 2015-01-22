@@ -477,6 +477,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_run_skia",
+      "--logcat",
       "-d",
       "xoom",
       "-s",
@@ -575,6 +576,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_run_skia",
+      "--logcat",
       "-d",
       "xoom",
       "-s",
@@ -596,6 +598,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_run_skia",
+      "--logcat",
       "-d",
       "xoom",
       "-s",
