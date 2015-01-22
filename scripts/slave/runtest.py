@@ -1448,7 +1448,7 @@ def _MainLinux(options, args, extra_env):
     if start_xvfb:
       xvfb.StopVirtualX(slave_name)
     if _UsingGtestJson(options):
-      if options.use_symbolization_script():
+      if options.use_symbolization_script:
         _SymbolizeSnippetsInJSON(options, json_file_name)
       if json_file_name:
         _UploadGtestJsonSummary(json_file_name,
