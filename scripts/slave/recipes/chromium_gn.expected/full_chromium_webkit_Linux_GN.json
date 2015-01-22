@@ -111,6 +111,17 @@
     "cmd": [
       "python",
       "-u",
+      "[DEPOT_TOOLS]/gn.py",
+      "--root=[SLAVE_BUILD]/src",
+      "check",
+      "//out/Release"
+    ],
+    "name": "gn check"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[BUILD]/scripts/slave/runtest.py",
       "--target",
       "Release",

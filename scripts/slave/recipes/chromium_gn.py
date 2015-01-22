@@ -318,6 +318,11 @@ def GenSteps(api):
 
   api.chromium.compile(targets=['all'])
 
+  # TODO(dpranke): Ensure that every bot runs w/ --check, then make
+  # it be on by default.
+  if bot_config.get('should_run_gn_check', True):
+      api.chromium.run_gn_check()
+
   if bot_config.get('should_run_gn_gyp_compare', False):
     api.chromium.run_gn_compare()
 

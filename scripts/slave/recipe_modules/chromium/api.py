@@ -548,6 +548,20 @@ class ChromiumApi(recipe_api.RecipeApi):
             '--args=%s' % ' '.join(gn_args),
         ])
 
+  def run_gn_check(self):
+    # TODO(dpranke): Figure out if we should use the '_x64' thing to
+    # consistent w/ GYP, or drop it to be consistent w/ the other platforms.
+    build_dir = '//out/%s' % self.c.build_config_fs
+
+    self.m.python(
+        name='gn check',
+        script=self.m.path['depot_tools'].join('gn.py'),
+        args=[
+            '--root=%s' % str(self.m.path['checkout']),
+            'check',
+            build_dir,
+        ])
+
   def run_gn_compare(self):
     """Run the gyp/GN flag comparison tool to generate a report on flag
     differences between the builds."""

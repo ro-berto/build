@@ -110,5 +110,16 @@
       "all"
     ],
     "name": "compile"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/gn.py",
+      "--root=[SLAVE_BUILD]/src",
+      "check",
+      "//out/Release"
+    ],
+    "name": "gn check"
   }
 ]
