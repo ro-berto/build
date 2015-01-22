@@ -1029,6 +1029,34 @@ def _GetPerfID(options):
   return perf_id
 
 
+def _GetSanitizerSymbolizeCommand(strip_path_prefix=None, json_file_name=None):
+  script_path = os.path.abspath(os.path.join('src', 'tools', 'valgrind',
+                                             'asan', 'asan_symbolize.py'))
+  command = [sys.executable, script_path]
+  if strip_path_prefix:
+    command.append(strip_path_prefix)
+  if json_file_name:
+    command.append('--test-summary-json-file=%s' % json_file_name)
+  return command
+
+
+def _SymbolizeSnippetsInJSON(options, json_file_name):
+  if not json_file_name:
+    return
+  symbolize_command = _GetSanitizerSymbolizeCommand(
+      strip_path_prefix=options.strip_path_prefix,
+      json_file_name=json_file_name)
+  try:
+    p = subprocess.popen(symbolize_command, stderr=subprocess.PIPE)
+    (_, stderr) = p.communicate()
+  except OSError as e:
+      print 'Exception while symbolizing snippets: %s' % e
+
+  if p.returncode != 0:
+    print "Error: failed to symbolize snippets in JSON:\n"
+    print stderr
+
+
 def _MainParse(options, _args):
   """Run input through annotated test parser.
 
@@ -1134,9 +1162,8 @@ def _MainMac(options, args, extra_env):
 
     pipes = []
     if options.enable_asan:
-      symbolize = os.path.abspath(os.path.join('src', 'tools', 'valgrind',
-                                               'asan', 'asan_symbolize.py'))
-      pipes = [[sys.executable, symbolize], ['c++filt']]
+      symbolize_command = _GetSanitizerSymbolizeCommand()
+      pipes = [symbolize_command, ['c++filt']]
 
     command = _GenerateRunIsolatedCommand(build_dir, test_exe_path, options,
                                           command)
@@ -1406,13 +1433,10 @@ def _MainLinux(options, args, extra_env):
 
     pipes = []
     # See the comment in main() regarding offline symbolization.
-    if (options.enable_asan or options.enable_msan) and not options.enable_lsan:
-      symbolize = os.path.abspath(os.path.join('src', 'tools', 'valgrind',
-                                               'asan', 'asan_symbolize.py'))
-      asan_symbolize = [sys.executable, symbolize]
-      if options.strip_path_prefix:
-        asan_symbolize.append(options.strip_path_prefix)
-      pipes = [asan_symbolize]
+    if options.use_symbolization_script:
+      symbolize_command = _GetSanitizerSymbolizeCommand(
+          strip_path_prefix=options.strip_path_prefix)
+      pipes = [symbolize_command]
 
     command = _GenerateRunIsolatedCommand(build_dir, test_exe_path, options,
                                           command)
@@ -1424,6 +1448,8 @@ def _MainLinux(options, args, extra_env):
     if start_xvfb:
       xvfb.StopVirtualX(slave_name)
     if _UsingGtestJson(options):
+      if options.use_symbolization_script:
+        _SymbolizeSnippetsInJSON(options, json_file_name)
       if json_file_name:
         _UploadGtestJsonSummary(json_file_name,
                                 options.build_properties,
@@ -1963,13 +1989,15 @@ def main():
       symbolization_options = ['symbolize=1',
                                'external_symbolizer_path=%s' % symbolizer_path,
                                'strip_path_prefix=%s' %  strip_path_prefix]
-    else:
+      options.use_symbolization_script = False
+    elif options.enable_asan or options.enable_msan:
       # ASan and MSan use a script for offline symbolization.
       # Important note: when running ASan or MSan with leak detection enabled,
       # we must use the LSan symbolization options above.
       symbolization_options = ['symbolize=0']
       # Set the path to llvm-symbolizer to be used by asan_symbolize.py
       extra_env['LLVM_SYMBOLIZER_PATH'] = symbolizer_path
+      options.use_symbolization_script = True
 
     def AddToExistingEnv(env_dict, key, options_list):
       # Adds a key to the supplied environment dictionary but appends it to
