@@ -60,6 +60,7 @@ WHITELIST = freeze({
     'd8.exe',
     'delegate_execute.exe',
     'delegate_execute_unittests.exe',
+    'ipc_mojo_unittests.exe',
     'interactive_ui_tests.exe',
     'interactive_ui_tests.isolated',
     'metro_driver.dll',
