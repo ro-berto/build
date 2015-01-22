@@ -1047,7 +1047,7 @@ def _SymbolizeSnippetsInJSON(options, json_file_name):
       strip_path_prefix=options.strip_path_prefix,
       json_file_name=json_file_name)
   try:
-    p = subprocess.popen(symbolize_command, stderr=subprocess.PIPE)
+    p = subprocess.Popen(symbolize_command, stderr=subprocess.PIPE)
     (_, stderr) = p.communicate()
   except OSError as e:
       print 'Exception while symbolizing snippets: %s' % e
