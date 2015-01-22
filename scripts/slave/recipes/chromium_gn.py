@@ -251,6 +251,21 @@ BUILDERS = freeze({
         'root_override': 'src/v8',
         'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
       },
+      'v8_android_chromium_gn_dbg': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+        },
+        'gclient_apply_config': [
+          'android',
+          'v8_bleeding_edge_git',
+          'chromium_lkcr',
+          'show_v8_revision',
+        ],
+        'root_override': 'src/v8',
+        'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
+      },
     },
   },
   'client.v8': {
@@ -262,6 +277,20 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'gclient_apply_config': [
+          'v8_bleeding_edge_git',
+          'chromium_lkcr',
+          'show_v8_revision',
+        ],
+        'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
+      },
+      'V8 Android GN (dbg)': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+        },
+        'gclient_apply_config': [
+          'android',
           'v8_bleeding_edge_git',
           'chromium_lkcr',
           'show_v8_revision',
