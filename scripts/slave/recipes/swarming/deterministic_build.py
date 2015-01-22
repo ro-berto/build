@@ -95,6 +95,9 @@ def GenSteps(api):
   for c in recipe_config.get('gclient_apply_config', []):
     api.gclient.apply_config(c)
 
+  # Enable test isolation. Modifies GYP_DEFINES used in 'runhooks' below.
+  api.isolate.set_isolate_environment(api.chromium.c)
+
   # Checkout chromium.
   api.bot_update.ensure_checkout(force=True)
 
@@ -102,6 +105,8 @@ def GenSteps(api):
   api.chromium.runhooks()
   api.chromium.compile(targets, force_clobber=True, name='First build')
   api.isolate.remove_build_metadata()
+  # This archives the results and regenerate the .isolated files.
+  api.isolate.isolate_tests(api.chromium.output_dir)
   MoveBuildDirectory(api, str(api.chromium.output_dir),
                      str(api.chromium.output_dir).rstrip('\\/') + '.1')
 
@@ -109,6 +114,8 @@ def GenSteps(api):
   api.chromium.runhooks()
   api.chromium.compile(targets, force_clobber=True, name='Second build')
   api.isolate.remove_build_metadata()
+  # This should be quick if the build is indeed deterministic.
+  api.isolate.isolate_tests(api.chromium.output_dir)
   MoveBuildDirectory(api, str(api.chromium.output_dir),
                      str(api.chromium.output_dir).rstrip('\\/') + '.2')
 
