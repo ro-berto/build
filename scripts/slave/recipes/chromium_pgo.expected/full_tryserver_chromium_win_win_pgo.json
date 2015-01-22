@@ -347,16 +347,6 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\recipe_modules\\pgo\\resources\\increase_pgomgr_stack_size.py",
-      "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin\\amd64_x86"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "increase pgomgr.exe stack size"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[DEPOT_TOOLS]\\gclient.py",
       "runhooks"
     ],
@@ -364,6 +354,16 @@
       "GYP_DEFINES": "buildtype=Official chrome_pgo_phase=2 component=static_library fastbuild=0 optimize=max target_arch=ia32 use_goma=0"
     },
     "name": "gclient Runhooks: Optimization phase."
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\recipe_modules\\pgo\\resources\\increase_pgomgr_stack_size.py",
+      "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin\\amd64_x86"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "increase pgomgr.exe stack size"
   },
   {
     "cmd": [

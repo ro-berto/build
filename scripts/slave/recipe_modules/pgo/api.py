@@ -76,6 +76,16 @@ class PGOApi(recipe_api.RecipeApi):
     self.m.chromium.set_config(recipe_config['chromium_config_optimize'],
                             **recipe_config.get('chromium_config_kwargs'))
     self.m.chromium.runhooks(name='Runhooks: Optimization phase.')
+
+    # Increase the stack size of pgomgr.exe.
+    #
+    # TODO(sebmarchand): Remove this once the bug has been fixed.
+    self.m.python('increase pgomgr.exe stack size',
+        self.resource('increase_pgomgr_stack_size.py'),
+        args=[self.m.path['depot_tools'].join(
+            'win_toolchain', 'vs2013_files', 'VC', 'bin', 'amd64_x86')],
+        cwd=self.m.path['slave_build'])
+
     self.m.chromium.compile(name='Compile: Optimization phase.')
 
 
@@ -105,15 +115,6 @@ class PGOApi(recipe_api.RecipeApi):
 
     # Second step: profiling of the instrumented build.
     self._run_pgo_benchmarks()
-
-    # Increase the stack size of pgomgr.exe.
-    #
-    # TODO(sebmarchand): Remove this once the bug has been fixed.
-    self.m.python('increase pgomgr.exe stack size',
-        self.resource('increase_pgomgr_stack_size.py'),
-        args=[self.m.path['depot_tools'].join(
-            'win_toolchain', 'vs2013_files', 'VC', 'bin', 'amd64_x86')],
-        cwd=self.m.path['slave_build'])
 
     # Third step: Compilation of the optimized build, this will use the profile
     #     data files produced by the previous step.
