@@ -38,6 +38,7 @@ class ArchiveApi(recipe_api.RecipeApi):
       step_name,
       self.m.path['build'].join('scripts', 'slave', 'zip_build.py'),
       args,
+      infra_step=True,
       **kwargs
     )
 
@@ -59,6 +60,7 @@ class ArchiveApi(recipe_api.RecipeApi):
       self.m.path['build'].join(
           'scripts', 'slave', 'chromium', 'cf_archive_build.py'),
       args,
+      infra_step=True,
       **kwargs
     )
 
@@ -81,6 +83,7 @@ class ArchiveApi(recipe_api.RecipeApi):
       step_name,
       self.m.path['build'].join('scripts', 'slave', 'extract_build.py'),
       args,
+      infra_step=True,
       **kwargs
     )
 
@@ -163,6 +166,6 @@ class ArchiveApi(recipe_api.RecipeApi):
       args.extend(['--master', master])
       args.extend(['--builder', builder])
       args.extend(['--build', build])
-      self.m.python(step_name, script, args, **kwargs)
+      self.m.python(step_name, script, args, infra_step=True, **kwargs)
     except self.m.step.StepFailure:
       pass
