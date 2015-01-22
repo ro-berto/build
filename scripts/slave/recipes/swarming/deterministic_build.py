@@ -53,9 +53,7 @@ DETERMINISTIC_BUILDERS = freeze({
     'platform': 'linux',
   },
   'Mac deterministic build': {
-    # TODO(sebmarchand): Reactivate goma once the indeterminism coming from
-    # it has been fixed.
-    'chromium_config': 'chromium_no_goma',
+    'chromium_config': 'chromium',
     'gclient_config': 'chromium',
     'platform': 'mac',
   },
