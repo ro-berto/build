@@ -27,14 +27,7 @@ class RietveldApi(recipe_api.RecipeApi):
     }
 
     path_parts = patch_project_roots.get(patch_project)
-    if path_parts:
-      patch_root = self.m.path.join(*path_parts)
-    else:
-      patch_root = self.m.properties.get('root') or ''
-      if patch_root.startswith('src'):
-        patch_root = patch_root[3:].lstrip('/')
-
-    return patch_root
+    return self.m.path.join(*path_parts) if path_parts else ''
 
   def apply_issue(self, *root_pieces, **kwargs):
     """Call apply_issue from depot_tools.

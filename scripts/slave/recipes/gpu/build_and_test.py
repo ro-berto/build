@@ -86,7 +86,7 @@ def GenTests(api):
     api.test('mac_release_tryserver_blink') +
     api.properties.tryserver(
         build_config='Release',
-        root='src/third_party/WebKit') +
+        patch_project='blink') +
     api.override_step_data('analyze', api.gpu.analyze_builds_everything) +
     api.platform.name('mac')
   )
