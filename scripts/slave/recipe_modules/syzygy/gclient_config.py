@@ -28,3 +28,7 @@ def syzygy(c):
 @CONFIG_CTX(includes=['syzygy'])
 def syzygy_official(dummy_c):
   pass
+
+@CONFIG_CTX(includes=['syzygy'])
+def kasko_official(dummy_c):
+  pass

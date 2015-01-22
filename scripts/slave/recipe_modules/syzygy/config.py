@@ -5,12 +5,15 @@
 import types
 
 from slave.recipe_config import config_item_context, ConfigGroup, Single
+from slave.recipe_config_types import Path
 from RECIPE_MODULES.syzygy import api as syzygy_api
 
 
 def BaseConfig(**dummy_kwargs):
   return ConfigGroup(
     official_build = Single(bool, empty_val=False, required=False),
+    unittests_gypi = Single(Path, required=False),
+    version_file = Single(Path, required=False),
   )
 
 
@@ -25,8 +28,19 @@ def BASE(c):
 @config_ctx()
 def syzygy(c):
   c.official_build = False
+  c.unittests_gypi = Path('[CHECKOUT]', 'syzygy', 'unittests.gypi')
+  c.version_file = Path('[CHECKOUT]', 'syzygy', 'SYZYGY_VERSION')
 
 
 @config_ctx()
 def syzygy_official(c):
   c.official_build = True
+  c.unittests_gypi = Path('[CHECKOUT]', 'syzygy', 'unittests.gypi')
+  c.version_file = Path('[CHECKOUT]', 'syzygy', 'SYZYGY_VERSION')
+
+
+@config_ctx()
+def kasko_official(c):
+  c.official_build = True
+  c.unittests_gypi = Path('[CHECKOUT]', 'syzygy', 'kasko', 'unittests.gypi')
+  c.version_file = Path('[CHECKOUT]', 'syzygy', 'kasko', 'VERSION')

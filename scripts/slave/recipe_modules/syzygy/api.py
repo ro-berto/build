@@ -74,7 +74,7 @@ PATCH=1
     """Returns the version tuple associated with the checkout."""
     # Only read the value if it hasn't yet been read.
     if not self._version:
-      version = self.m.path['checkout'].join('syzygy', 'SYZYGY_VERSION')
+      version = self.c.version_file
       version = self.m.file.read('read_version', version,
                                  test_data=self._FAKE_VERSION_DATA)
       d = {}
@@ -171,7 +171,7 @@ PATCH=1
 
   def read_unittests_gypi(self):
     """Reads and parses unittests.gypi from the checkout, returning a list."""
-    gypi = self.m.path['checkout'].join('syzygy', 'unittests.gypi')
+    gypi = self.c.unittests_gypi
     gypi = self.m.file.read('read_unittests_gypi', gypi,
                             test_data=self._FAKE_UNITTESTS_GYPI_DATA)
     gypi = ast.literal_eval(gypi)
@@ -276,6 +276,18 @@ PATCH=1
     asan_rtl_dll = self.output_dir.join('*asan_rtl.dll')
     client_dlls = self.output_dir.join('*client.dll')
     args = ['-s', '-b', asan_rtl_dll, client_dlls]
+    return self.m.python('upload_symbols', archive_symbols_py, args)
+
+  def upload_kasko_symbols(self):
+    """Returns a step that source indexes and uploads symbols for Kasko.
+
+    Only meant to be called from an official build.
+    """
+    assert self.m.chromium.c.BUILD_CONFIG == 'Release' and self.c.official_build
+    archive_symbols_py = self.m.path['checkout'].join(
+        'syzygy', 'internal', 'scripts', 'archive_symbols.py')
+    kasko_dll = self.output_dir.join('*kasko.dll')
+    args = ['-s', '-b', kasko_dll]
     return self.m.python('upload_symbols', archive_symbols_py, args)
 
   def clobber_metrics(self):
