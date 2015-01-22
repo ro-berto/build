@@ -126,21 +126,6 @@
       "--profiler=win_pgo_profiler",
       "--use-live-sites",
       "--browser=release",
-      "jsgamebench"
-    ],
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
-    },
-    "name": "Telemetry benchmark: jsgamebench"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--use-live-sites",
-      "--browser=release",
       "dromaeo.domcoretraverse"
     ],
     "env": {
@@ -231,21 +216,6 @@
       "--profiler=win_pgo_profiler",
       "--use-live-sites",
       "--browser=release",
-      "peacekeeper.string"
-    ],
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
-    },
-    "name": "Telemetry benchmark: peacekeeper.string"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--use-live-sites",
-      "--browser=release",
       "dromaeo.jslibattrprototype"
     ],
     "env": {
@@ -321,25 +291,6 @@
       "--profiler=win_pgo_profiler",
       "--use-live-sites",
       "--browser=release",
-      "peacekeeper.dom"
-    ],
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
-    },
-    "name": "Telemetry benchmark: peacekeeper.dom",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_WARNINGS@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--use-live-sites",
-      "--browser=release",
       "dromaeo.jslibmodifyjquery"
     ],
     "env": {
@@ -375,37 +326,11 @@
     "env": {
       "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
     },
-    "name": "Telemetry benchmark: sunspider"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--use-live-sites",
-      "--browser=release",
-      "peacekeeper.html5"
-    ],
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
-    },
-    "name": "Telemetry benchmark: peacekeeper.html5"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--use-live-sites",
-      "--browser=release",
-      "peacekeeper.render"
-    ],
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
-    },
-    "name": "Telemetry benchmark: peacekeeper.render"
+    "name": "Telemetry benchmark: sunspider",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_WARNINGS@@@"
+    ]
   },
   {
     "cmd": [
@@ -421,21 +346,6 @@
       "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
     },
     "name": "Telemetry benchmark: dromaeo.jslibattrjquery"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--use-live-sites",
-      "--browser=release",
-      "peacekeeper.array"
-    ],
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
-    },
-    "name": "Telemetry benchmark: peacekeeper.array"
   },
   {
     "cmd": [

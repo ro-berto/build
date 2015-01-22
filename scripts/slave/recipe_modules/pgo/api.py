@@ -9,11 +9,6 @@ from slave import recipe_api
 # TODO(sebmarchand): Move this into a BenchmarkSuite in telemetry, this way
 # only have to run one benchmark.
 _BENCHMARKS_TO_RUN = {
-  'peacekeeper.dom',
-  'peacekeeper.array',
-  'peacekeeper.html5',
-  'peacekeeper.string',
-  'peacekeeper.render',
   'dromaeo.domcoreattr',
   'dromaeo.domcoremodify',
   'dromaeo.domcorequery',
@@ -29,7 +24,6 @@ _BENCHMARKS_TO_RUN = {
   'dromaeo.jslibtraversejquery',
   'dromaeo.jslibtraverseprototype',
   'sunspider',
-  'jsgamebench',
 }
 
 
@@ -103,7 +97,8 @@ class PGOApi(recipe_api.RecipeApi):
     if self.m.properties.get('slavename') != 'fake_slave':
       self.m.chromium.taskkill()
 
-    self.m.bot_update.ensure_checkout()
+    self.m.bot_update.ensure_checkout(
+        patch_root=recipe_config.get('patch_root', None))
 
     # First step: compilation of the instrumented build.
     self._compile_instrumented_image(recipe_config)

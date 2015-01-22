@@ -40,5 +40,5 @@ def GenTests(api):
     api.properties.generic(mastername='chromium.fyi',
                            buildername='Chromium Win PGO Builder') +
     api.platform('win', 32) +
-    api.step_data('Telemetry benchmark: peacekeeper.dom', retcode=1)
+    api.step_data('Telemetry benchmark: sunspider', retcode=1)
   )
