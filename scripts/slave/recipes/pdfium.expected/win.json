@@ -62,6 +62,7 @@
     "cmd": [
       "[SLAVE_BUILD]\\pdfium\\out\\Debug\\pdfium_embeddertests.exe"
     ],
+    "cwd": "[SLAVE_BUILD]\\pdfium",
     "name": "pdfium_embeddertests"
   }
 ]

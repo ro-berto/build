@@ -38,7 +38,8 @@ def _RunTests(api):
                                                      'pdfium_embeddertests'))
   if api.platform.is_win:
     embeddertests_path += '.exe'
-  api.step('pdfium_embeddertests', [embeddertests_path])
+  api.step('pdfium_embeddertests', [embeddertests_path],
+           cwd=api.path['checkout'])
 
 
 def GenSteps(api):
