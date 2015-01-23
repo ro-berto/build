@@ -384,6 +384,11 @@ class GpuApi(recipe_api.RecipeApi):
         'memory_test', chrome_revision, webkit_revision, enable_swarming,
         swarming_dimensions))
 
+    # Tracing tests.
+    tests.append(self._create_telemetry_test(
+        'trace_test', chrome_revision, webkit_revision, enable_swarming,
+        swarming_dimensions))
+
     # Screenshot synchronization tests.
     tests.append(self._create_telemetry_test(
         'screenshot_sync', chrome_revision, webkit_revision, enable_swarming,
