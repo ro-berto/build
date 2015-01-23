@@ -1558,20 +1558,27 @@ def checkout(options, git_slns, specs, buildspec, master,
 
   # Revision is an svn revision, unless it's a git master.
   use_svn_rev = master not in GIT_MASTERS
+
   # Take care of got_revisions outputs.
   revision_mapping = dict(GOT_REVISION_MAPPINGS.get(svn_root, {}))
   if options.revision_mapping:
     revision_mapping.update(options.revision_mapping)
 
+  # If the repo is not in the default GOT_REVISION_MAPPINGS and no
+  # revision_mapping were specified on the command line then
+  # default to setting 'got_revision' based on the first solution.
+  if not revision_mapping:
+    revision_mapping[first_sln] = 'got_revision'
+
   got_revisions = parse_got_revision(gclient_output, revision_mapping,
                                      use_svn_rev)
 
-  if not got_revisions and options.revision:
-    # If we have no revision_mapping, then just pass through the first revision
-    # as the got_revision.
-    got_revisions = {
-        'got_revision': options.revision[0],
-    }
+  if not got_revisions:
+    # TODO(hinoka): We should probably bail out here, but in the interest
+    # of giving mis-configured bots some time to get fixed use a dummy
+    # revision here.
+    got_revisions = { 'got_revision': 'BOT_UPDATE_NO_REV_FOUND' }
+    #raise Exception('No got_revision(s) found in gclient output')
 
   if options.output_json:
     # Tell recipes information such as root, got_revision, etc.
