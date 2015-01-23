@@ -436,7 +436,7 @@ BUILDERS = freeze({
     },
     'builders': {
       'Win32 Debug': {
-        'recipe_config': 'webrtc_parallel',
+        'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -445,7 +445,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'win'},
       },
       'Win32 Release': {
-        'recipe_config': 'webrtc_parallel',
+        'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -454,7 +454,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'win'},
       },
       'Win64 Debug': {
-        'recipe_config': 'webrtc_parallel',
+        'recipe_config': 'webrtc',
         'chromium_apply_config': ['static_library'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -464,7 +464,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'win'},
       },
       'Win64 Release': {
-        'recipe_config': 'webrtc_parallel',
+        'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -958,7 +958,7 @@ BUILDERS = freeze({
   'tryserver.webrtc': {
     'builders': {
       'win': {
-        'recipe_config': 'webrtc_parallel',
+        'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -967,7 +967,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'win'},
       },
       'win_rel': {
-        'recipe_config': 'webrtc_parallel',
+        'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -976,7 +976,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'win'},
       },
       'win_x64_rel': {
-        'recipe_config': 'webrtc_parallel',
+        'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
