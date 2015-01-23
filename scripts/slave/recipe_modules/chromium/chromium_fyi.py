@@ -388,5 +388,213 @@ SPEC = {
       },
       'enable_swarming': True,
     },
+    'CrWinClang(dbg)': {
+      'recipe_config': 'chromium_win_clang',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 32,
+      },
+      # Recipes builds Debug builds with component=shared_library by default.
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'win',
+      },
+      # Workaround so that recipes doesn't add random build targets to our
+      # compile line. We want to build everything.
+      'add_tests_as_compile_targets': False,
+    },
+    'CrWinClang(dbg) tester': {
+      'recipe_config': 'chromium_no_goma',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 32,
+      },
+      'test_generators': [
+        steps.generate_gtest,
+      ],
+      'bot_type': 'tester',
+      'parent_buildername': 'CrWinClang(dbg)',
+      'testing': {
+        'platform': 'win',
+      },
+    },
+    'CrWinClang(shared)': {
+      'recipe_config': 'chromium_win_clang',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'GYP_DEFINES': { 'component': 'shared_library' },
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'win',
+      },
+      # Workaround so that recipes doesn't add random build targets to our
+      # compile line. We want to build everything.
+      'add_tests_as_compile_targets': False,
+    },
+    'CrWinClang(shared) tester': {
+      'recipe_config': 'chromium_no_goma',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'test_generators': [
+        steps.generate_gtest,
+      ],
+      'bot_type': 'tester',
+      'parent_buildername': 'CrWinClang(shared)',
+      'testing': {
+        'platform': 'win',
+      },
+    },
+    'CrWinClang64': {
+      'recipe_config': 'chromium_win_clang',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'win',
+      },
+      # Workaround so that recipes doesn't add random build targets to our
+      # compile line. We want to build everything.
+      'add_tests_as_compile_targets': False,
+    },
+    'CrWinClang64 tester': {
+      'recipe_config': 'chromium_no_goma',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'test_generators': [
+        steps.generate_gtest,
+      ],
+      'bot_type': 'tester',
+      'parent_buildername': 'CrWinClang64',
+      'testing': {
+        'platform': 'win',
+      },
+    },
+    'CrWinClang64(dbg)': {
+      'recipe_config': 'chromium_win_clang',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 64,
+      },
+      # Recipes builds Debug builds with component=shared_library by default.
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'win',
+      },
+      # Workaround so that recipes doesn't add random build targets to our
+      # compile line. We want to build everything.
+      'add_tests_as_compile_targets': False,
+    },
+    'CrWinClang64(dbg) tester': {
+      'recipe_config': 'chromium_no_goma',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 64,
+      },
+      'test_generators': [
+        steps.generate_gtest,
+      ],
+      'bot_type': 'tester',
+      'parent_buildername': 'CrWinClang64(dbg)',
+      'testing': {
+        'platform': 'win',
+      },
+    },
+    'CrWinClang64(dll)': {
+      'recipe_config': 'chromium_win_clang',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'GYP_DEFINES': { 'component': 'shared_library' },
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'win',
+      },
+      # Workaround so that recipes doesn't add random build targets to our
+      # compile line. We want to build everything.
+      'add_tests_as_compile_targets': False,
+    },
+    'CrWinClang64(dll) tester': {
+      'recipe_config': 'chromium_no_goma',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'test_generators': [
+        steps.generate_gtest,
+      ],
+      'bot_type': 'tester',
+      'parent_buildername': 'CrWinClang64(dll)',
+      'testing': {
+        'platform': 'win',
+      },
+    },
+    'CrWinClangLLD': {
+      'recipe_config': 'chromium_win_clang',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'GYP_DEFINES': { 'component': 'shared_library', 'use_lld': 1 },
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'win',
+      },
+      # Workaround so that recipes doesn't add random build targets to our
+      # compile line. We want to build everything.
+      'add_tests_as_compile_targets': False,
+    },
+    'CrWinClangLLD tester': {
+      'recipe_config': 'chromium_no_goma',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'test_generators': [
+        steps.generate_gtest,
+      ],
+      'bot_type': 'tester',
+      'parent_buildername': 'CrWinClangLLD',
+      'testing': {
+        'platform': 'win',
+      },
+    },
+    'CrWinClang(asan)': {
+      'recipe_config': 'chromium_win_clang_asan',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'win',
+      },
+      # Workaround so that recipes doesn't add random build targets to our
+      # compile line. We want to build everything.
+      'add_tests_as_compile_targets': False,
+    },
+    'CrWinClang(asan) tester': {
+      'recipe_config': 'chromium_win_asan',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'test_generators': [
+        steps.generate_gtest,
+      ],
+      'bot_type': 'tester',
+      'parent_buildername': 'CrWinClang(asan)',
+      'testing': {
+        'platform': 'win',
+      },
+    },
   },
 }

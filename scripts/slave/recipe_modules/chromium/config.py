@@ -58,6 +58,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
     env = ConfigGroup(
       PATH = List(Path),
       ADB_VENDOR_KEYS = Single(Path, required=False),
+      LLVM_FORCE_HEAD_REVISION = Single(basestring, required=False),
     ),
     project_generator = ConfigGroup(
       tool = Single(basestring, empty_val='gyp'),
@@ -470,6 +471,28 @@ def chromium(c):
 @config_ctx(includes=['ninja', 'clang'])  # Intentionally no goma yet.
 def chromium_win_clang(c):
   pass
+
+@config_ctx(includes=['chromium_win_clang', 'asan', 'static_library'])
+def chromium_win_clang_asan(c):
+  # TODO(thakis): Consider using chromium_builder_asan instead?
+  c.compile_py.default_targets = ['chromium_builder_tests']
+  # Clear lsan configuration for win.
+  del c.gyp_env.GYP_DEFINES['lsan']
+
+  # clang is pinned to a fixed revision on Win if asan is set. Override that.
+  c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
+
+  # disable_nacl doesn't work with isolates, see	
+  # http://crbug.com/416078	
+  # TODO(thakis): Only enable asan for the 32bit part of the build and remove
+  # this; swarming requires the default test_isolation_mode.
+  c.gyp_env.GYP_DEFINES['disable_nacl'] = '1'
+  c.gyp_env.GYP_DEFINES['test_isolation_mode'] = 'noop'
+
+@config_ctx(includes=['chromium_win_clang_asan'])
+def chromium_win_asan(c):
+  # This config is for testers. Don't build clang on a tester bot.
+  del c.gyp_env.GYP_DEFINES['clang']
 
 @config_ctx(includes=['ninja', 'clang', 'goma', 'asan'])
 def chromium_asan(c):
