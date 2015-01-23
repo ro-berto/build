@@ -20,6 +20,7 @@ Example:
 import functools
 import os
 
+from .common import Error
 from .integration import BuildBucketIntegrator
 from .poller import BuildBucketPoller
 from .status import BuildBucketStatus
@@ -32,6 +33,8 @@ def setup(
     dry_run=None):
   """Configures a master to lease, schedule and update builds on buildbucket.
 
+  Requires config to have 'mergeRequests' set to False.
+
   Args:
     config (dict): master configuration dict.
     active_master (config.Master.Base): master site config.
@@ -43,6 +46,9 @@ def setup(
       time. Defaults to the number of connected slaves.
     verbose (bool): log more than usual. Defaults to False.
     dry_run (bool): whether to run buildbucket in a dry-run mode.
+
+  Raises:
+    buildbucket.Error if config['mergeRequests'] is not False.
   """
   assert isinstance(config, dict), 'config must be a dict'
   assert active_master
@@ -54,6 +60,12 @@ def setup(
 
   if dry_run is None:
     dry_run = 'POLLER_DRY_RUN' in os.environ
+
+  if config['mergeRequests'] != False:
+    raise Error(
+        'Build request merging is not supported by buildbucket. '
+        'Set mergeRequests to False explicitly:\n'
+        '  c[\'mergeRequests\'] = False')
 
   integrator = BuildBucketIntegrator(buckets, max_lease_count=max_lease_count)
 

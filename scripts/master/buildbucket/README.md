@@ -6,6 +6,8 @@ Configuring a buildbot master is trivial:
 
     from master import buildbucket
 
+    c['mergeReqests'] = False  # buildbucket does not support it.
+
     buildbucket.setup(
         c,
         ActiveMaster,
@@ -85,7 +87,7 @@ Current implementation has the following limitations:
 * Only one buildbucket instance configuration per buildbot master is supported.
 * Build request merging is not supported. If build requests are merged,
   only one buildbucket build will be updated.
-  TODO(nodir): remove this limitation.
+  Bug: http://crbug.com/451259
 
 ### Applications
 
