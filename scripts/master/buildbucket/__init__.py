@@ -61,7 +61,7 @@ def setup(
   if dry_run is None:
     dry_run = 'POLLER_DRY_RUN' in os.environ
 
-  if config['mergeRequests'] != False:
+  if config.get('mergeRequests') != False:
     raise Error(
         'Build request merging is not supported by buildbucket. '
         'Set mergeRequests to False explicitly:\n'
