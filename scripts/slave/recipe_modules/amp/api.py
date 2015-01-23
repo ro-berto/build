@@ -111,11 +111,11 @@ class AmpApi(recipe_api.RecipeApi):
     return gtest_args
 
   @recipe_api.non_step
-  def uirobot_arguments(self, apk_under_test=None, minutes=5):
+  def uirobot_arguments(self, app_under_test=None, minutes=5):
     """Generate command-line arguments for running uirobot tests.
 
     Args:
-      apk_under_test: The APK to run uirobot tests on.
+      app_under_test: The app to run uirobot tests on.
       minutes: The number of minutes for which the uirobot tests should be
         run. Defaults to 5.
 
@@ -123,8 +123,8 @@ class AmpApi(recipe_api.RecipeApi):
       A list of command-line arguments as strings.
     """
     uirobot_args = ['--minutes', minutes]
-    if apk_under_test:
-      uirobot_args += ['--apk-under-test', apk_under_test]
+    if app_under_test:
+      uirobot_args += ['--app-under-test', app_under_test]
     return uirobot_args
 
   @recipe_api.non_step
