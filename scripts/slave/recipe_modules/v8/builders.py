@@ -890,16 +890,6 @@ BUILDERS = {
         'tests': ['unittests', 'v8testing'],
         'testing': {'platform': 'linux'},
       },
-      'V8 Linux clang': {
-        'chromium_apply_config': ['clang', 'goma'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'tests': ['unittests', 'v8testing'],
-        'testing': {'platform': 'linux'},
-      },
       'V8 Linux64 ASAN': {
         'chromium_apply_config': ['clang', 'asan', 'goma'],
         'v8_config_kwargs': {
