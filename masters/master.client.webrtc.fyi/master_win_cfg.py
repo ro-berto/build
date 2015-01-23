@@ -21,6 +21,18 @@ def Update(c):
       'name': 'Win32 Debug (parallel)',
       'slavebuilddir': 'win',
     },
+    {
+      'name': 'Win32 Release (parallel)',
+      'slavebuilddir': 'win',
+    },
+    {
+      'name': 'Win64 Debug (parallel)',
+      'slavebuilddir': 'win',
+    },
+    {
+      'name': 'Win64 Release (parallel)',
+      'slavebuilddir': 'win',
+    },
   ]
 
   c['builders'].extend([
