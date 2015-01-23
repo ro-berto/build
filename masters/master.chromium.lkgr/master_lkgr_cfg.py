@@ -65,7 +65,8 @@ F('win_x64_full', win_out().ChromiumFactory(
     }))
 
 # ASan/Win supports neither the component build nor NaCL at the moment.
-asan_win_gyp = 'clang=1 asan=1 component=static_library disable_nacl=1'
+asan_win_gyp = ('clang=1 asan=1 component=static_library disable_nacl=1 '
+                'enable_ipc_fuzzer=1 v8_enable_verify_heap=1')
 
 # Clang is not stable enough on Windows to use a gatekeeper yet.
 B('Win ASan Release', 'win_asan_rel', scheduler='chromium_lkgr')
