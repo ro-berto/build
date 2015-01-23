@@ -4,6 +4,7 @@
 
 DEPS = [
   'gitiles',
+  'raw_io'
 ]
 
 
@@ -11,6 +12,7 @@ def GenSteps(api):
   url = 'https://chromium.googlesource.com/chromium/src'
   for ref in api.gitiles.refs(url):
     api.gitiles.log(url, ref)
+  api.gitiles.download_file(url, 'OWNERS')
 
 
 def GenTests(api):
@@ -32,5 +34,9 @@ def GenTests(api):
     + api.step_data(
       'log: refs/tags/B',
       api.gitiles.make_log_test_data('B')
+    )
+    + api.step_data(
+      'Gitiles fetch OWNERS',
+      api.raw_io.output('Zm9vYmFy')
     )
   )

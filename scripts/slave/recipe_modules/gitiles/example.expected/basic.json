@@ -148,5 +148,16 @@
       "@@@STEP_LOG_LINE@log@fake B hash 2@@@",
       "@@@STEP_LOG_END@log@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/tools/pycurl.py",
+      "https://chromium.googlesource.com/chromium/src/+/master/OWNERS?format=text",
+      "--outfile",
+      "/path/to/tmp/"
+    ],
+    "name": "Gitiles fetch OWNERS"
   }
 ]

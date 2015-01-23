@@ -4,6 +4,8 @@
 
 from slave import recipe_api
 
+import base64
+
 
 class Gitiles(recipe_api.RecipeApi):
   """Module for polling a git repository using the Gitiles web interface."""
@@ -56,3 +58,19 @@ class Gitiles(recipe_api.RecipeApi):
     step_result.presentation.logs['log'] = [commit[0] for commit in commits]
     step_result.presentation.step_text = '<br />%d new commits' % len(commits)
     return commits
+
+  def download_file(self, repository_url, file_path, branch='master', **kwargs):
+    """Downloads raw file content from a Gitiles repository.
+
+    Args:
+      repository_url: Full URL to the repository.
+      file_path: Relative path to the file from the repository root.
+
+    Returns:
+      Raw file content.
+    """
+    kwargs.setdefault('step_name', 'Gitiles fetch %s' % file_path)
+    full_url = '%s/+/%s/%s?format=text' % (repository_url.rstrip('/'), branch,
+                                           file_path.lstrip('/'))
+    b64_data = self.m.url.fetch(full_url, **kwargs)
+    return base64.b64decode(b64_data)
