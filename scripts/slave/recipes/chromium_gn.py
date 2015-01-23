@@ -32,6 +32,7 @@ BUILDERS = freeze({
   'chromium.webkit': {
     'builders': {
       'Android GN': {
+        'chromium_apply_config': ['gn_minimal_symbols'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
@@ -40,6 +41,7 @@ BUILDERS = freeze({
         'gclient_apply_config': ['android', 'blink'],
       },
       'Android GN (dbg)': {
+        'chromium_apply_config': ['gn_minimal_symbols'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'android',
@@ -57,12 +59,12 @@ BUILDERS = freeze({
         'should_run_mojo_tests': True,
       },
       'Linux GN (dbg)': {
+        'chromium_apply_config': ['gn_component_build'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'linux',
           'TARGET_BITS': 64,
         },
-        'chromium_apply_config': ['gn_component_build'],
         'gclient_apply_config': ['blink'],
       },
     },
@@ -70,6 +72,7 @@ BUILDERS = freeze({
   'tryserver.blink': {
     'builders': {
       'android_chromium_gn_compile_rel': {
+        'chromium_apply_config': ['gn_minimal_symbols'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
@@ -100,6 +103,7 @@ BUILDERS = freeze({
   'chromium.linux': {
     'builders': {
       'Android GN': {
+        'chromium_apply_config': ['gn_minimal_symbols'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
@@ -108,6 +112,7 @@ BUILDERS = freeze({
         'gclient_apply_config': ['android'],
       },
       'Android GN (dbg)': {
+        'chromium_apply_config': ['gn_minimal_symbols'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'android',
@@ -124,12 +129,12 @@ BUILDERS = freeze({
         'should_run_gn_gyp_compare': True,
       },
       'Linux GN (dbg)': {
+        'chromium_apply_config': ['gn_component_build'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'linux',
           'TARGET_BITS': 64,
         },
-        'chromium_apply_config': ['gn_component_build'],
         'should_run_gn_gyp_compare': True,
       },
     },
@@ -155,6 +160,7 @@ BUILDERS = freeze({
   'tryserver.chromium.linux': {
     'builders': {
       'android_chromium_gn_compile_rel': {
+        'chromium_apply_config': ['gn_minimal_symbols'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
@@ -163,6 +169,7 @@ BUILDERS = freeze({
         'gclient_apply_config': ['android'],
       },
       'android_chromium_gn_compile_dbg': {
+        'chromium_apply_config': ['gn_minimal_symbols'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'android',
@@ -179,12 +186,12 @@ BUILDERS = freeze({
         'should_run_mojo_tests': True,
       },
       'linux_chromium_gn_dbg': {
+        'chromium_apply_config': ['gn_component_build'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'linux',
           'TARGET_BITS': 64,
         },
-        'chromium_apply_config': ['gn_component_build'],
       },
       'linux_chromium_gn_chromeos_rel': {
         'chromium_config_kwargs': {
@@ -193,11 +200,11 @@ BUILDERS = freeze({
         },
       },
       'linux_chromium_gn_chromeos_dbg': {
+        'chromium_apply_config': ['gn_component_build'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'chromeos',
         },
-        'chromium_apply_config': ['gn_component_build'],
       },
     },
   },
@@ -252,6 +259,7 @@ BUILDERS = freeze({
         'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
       },
       'v8_android_chromium_gn_dbg': {
+        'chromium_apply_config': ['gn_minimal_symbols'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'android',
@@ -284,6 +292,7 @@ BUILDERS = freeze({
         'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
       },
       'V8 Android GN (dbg)': {
+        'chromium_apply_config': ['gn_minimal_symbols'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'android',
@@ -316,10 +325,15 @@ def GenSteps(api):
     api.chromium.c.compile_py.compiler = None
     api.chromium.c.compile_py.goma_dir = None
 
-  # crbug.com/451227 - the android compile is taking up too much
-  # disk space, so temporarily disable it on the try servers.
-  if 'android_chromium_gn' not in buildername:
-    api.chromium.compile(targets=['all'])
+  # crbug.com/451227 - building 'all' on android builds too many
+  # things. Really we should be building the 'default' target
+  # on all platforms but that isn't properly defined yet.
+  is_android = ('Android' in buildername or 'android' in buildername)
+  if is_android:
+    targets = ['chrome_shell_apk']
+  else:
+    targets = ['all']
+  api.chromium.compile(targets)
 
   # TODO(dpranke): Ensure that every bot runs w/ --check, then make
   # it be on by default.

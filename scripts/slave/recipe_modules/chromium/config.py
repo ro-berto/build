@@ -460,6 +460,10 @@ def trybot_flavor(c):
 def gn_component_build(c):
   c.gn_args.append('is_component_build=true')
 
+@config_ctx()
+def gn_minimal_symbols(c):
+  c.gn_args.append('symbol_level=1')
+
 #### 'Full' configurations
 @config_ctx(includes=['ninja', 'default_compiler'])
 def chromium_no_goma(c):
@@ -483,8 +487,8 @@ def chromium_win_clang_asan(c):
   # clang is pinned to a fixed revision on Win if asan is set. Override that.
   c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
 
-  # disable_nacl doesn't work with isolates, see	
-  # http://crbug.com/416078	
+  # disable_nacl doesn't work with isolates, see
+  # http://crbug.com/416078
   # TODO(thakis): Only enable asan for the 32bit part of the build and remove
   # this; swarming requires the default test_isolation_mode.
   c.gyp_env.GYP_DEFINES['disable_nacl'] = '1'
