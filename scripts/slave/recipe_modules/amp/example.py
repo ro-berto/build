@@ -67,10 +67,28 @@ def GenSteps(api):
                             api_port=builder.get('api_port', None),
                             api_protocol=builder.get('api_protocol', None)))
 
+  api.amp.trigger_android_test_suite(
+      'example_uirobot_suite', 'uirobot',
+      api.amp.uirobot_arguments(app_under_test='Example.apk'),
+      api.amp.amp_arguments(device_name=builder.get('device_name', None),
+                            device_os=builder.get('device_os', None),
+                            api_address=builder.get('api_address', None),
+                            api_port=builder.get('api_port', None),
+                            api_protocol=builder.get('api_protocol', None)))
+
   api.amp.collect_android_test_suite(
       'example_gtest_suite', 'gtest',
       api.amp.gtest_arguments('example_gtest_suite'),
       api.amp.amp_arguments(api_address=builder.get('api_address', None),
+                            api_port=builder.get('api_port', None),
+                            api_protocol=builder.get('api_protocol', None)))
+
+  api.amp.collect_android_test_suite(
+      'example_uirobot_suite', 'uirobot',
+      api.amp.uirobot_arguments(),
+      api.amp.amp_arguments(device_name=builder.get('device_name', None),
+                            device_os=builder.get('device_os', None),
+                            api_address=builder.get('api_address', None),
                             api_port=builder.get('api_port', None),
                             api_protocol=builder.get('api_protocol', None)))
 

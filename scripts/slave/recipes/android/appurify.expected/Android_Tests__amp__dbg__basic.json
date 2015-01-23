@@ -308,58 +308,6 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "uirobot",
-      "--minutes",
-      "5",
-      "--app-under-test",
-      "apks/ChromeShell.apk",
-      "--enable-platform-mode",
-      "-e",
-      "remote_device",
-      "--api-key-file",
-      "[BUILD]/site_config/.amp_api_key",
-      "--api-secret-file",
-      "[BUILD]/site_config/.amp_api_secret",
-      "--api-address",
-      "172.22.21.180",
-      "--api-port",
-      "80",
-      "--api-protocol",
-      "http",
-      "--trigger",
-      "/path/to/tmp/json",
-      "--verbose"
-    ],
-    "name": "[trigger] uirobot",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"device\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"brand\": \"Foo\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
-      "[TMP_BASE]/amp_trigger_tmp_1/uirobot.json"
-    ],
-    "name": "[trigger] save uirobot data"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "[TMP_BASE]/amp_trigger_tmp_1/base_unittests.json",
       "/path/to/tmp/json"
@@ -508,60 +456,6 @@
       "--verbose"
     ],
     "name": "[collect] events_unittests",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/amp_trigger_tmp_1/uirobot.json",
-      "/path/to/tmp/json"
-    ],
-    "name": "[collect] load uirobot data",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"device\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"brand\": \"Foo\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "uirobot",
-      "--minutes",
-      "5",
-      "--app-under-test",
-      "apks/ChromeShell.apk",
-      "--enable-platform-mode",
-      "-e",
-      "remote_device",
-      "--api-key-file",
-      "[BUILD]/site_config/.amp_api_key",
-      "--api-secret-file",
-      "[BUILD]/site_config/.amp_api_secret",
-      "--api-address",
-      "172.22.21.180",
-      "--api-port",
-      "80",
-      "--api-protocol",
-      "http",
-      "--collect",
-      "[TMP_BASE]/amp_trigger_tmp_1/uirobot.json",
-      "--verbose"
-    ],
-    "name": "[collect] uirobot",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
     ]
