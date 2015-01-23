@@ -53,8 +53,6 @@ def setup(
   assert isinstance(config, dict), 'config must be a dict'
   assert active_master
   assert active_master.service_account_path, 'Service account is not assigned'
-  assert os.path.isfile(active_master.service_account_path), (
-      'Service account file not found')
   assert buckets, 'Buckets are not specified'
   assert isinstance(buckets, list), 'Buckets must be a list'
   assert all(isinstance(b, basestring) for b in buckets), (
