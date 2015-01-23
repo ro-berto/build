@@ -71,6 +71,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       memory_tests_runner = Single(Path),
       lsan_suppressions_file = Single(Path),
       test_args = List(basestring),
+      run_asan_test = Single(bool, required=False),
     ),
 
     # Some platforms do not have a 1:1 correlation of BUILD_CONFIG to what is
@@ -489,10 +490,11 @@ def chromium_win_clang_asan(c):
   c.gyp_env.GYP_DEFINES['disable_nacl'] = '1'
   c.gyp_env.GYP_DEFINES['test_isolation_mode'] = 'noop'
 
-@config_ctx(includes=['chromium_win_clang_asan'])
+# GYP_DEFINES must not include 'asan' or 'clang', else the tester bot will try
+# to compile clang.
+@config_ctx(includes=['chromium_no_goma'])
 def chromium_win_asan(c):
-  # This config is for testers. Don't build clang on a tester bot.
-  del c.gyp_env.GYP_DEFINES['clang']
+  c.runtests.run_asan_test = True
 
 @config_ctx(includes=['ninja', 'clang', 'goma', 'asan'])
 def chromium_asan(c):

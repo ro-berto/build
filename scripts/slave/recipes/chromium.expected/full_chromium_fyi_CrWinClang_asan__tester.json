@@ -76,8 +76,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "asan=1 component=static_library disable_nacl=1 target_arch=ia32 test_isolation_mode=noop",
-      "LLVM_FORCE_HEAD_REVISION": "YES"
+      "GYP_DEFINES": "component=static_library target_arch=ia32"
     },
     "name": "gclient runhooks"
   },

@@ -122,7 +122,6 @@ RECIPE_CONFIGS = freeze({
     'chromium_config': 'chromium_win_asan',
     'gclient_config': 'chromium',
   },
-
   'official': {
     'chromium_config': 'chromium_official',
     'gclient_config': 'chromium',

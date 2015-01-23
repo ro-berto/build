@@ -317,7 +317,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     if master_class_name:
       full_args.append('--master-class-name=%s' % master_class_name)
 
-    if self.c.gyp_env.GYP_DEFINES.get('asan', 0) == 1:
+    if (self.c.gyp_env.GYP_DEFINES.get('asan', 0) == 1 or
+        self.c.runtests.run_asan_test):
       full_args.append('--enable-asan')
     if self.c.gyp_env.GYP_DEFINES.get('lsan', 0) == 1:  # pragma: no cover
       full_args.append('--enable-lsan')
