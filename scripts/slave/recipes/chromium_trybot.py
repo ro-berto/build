@@ -83,6 +83,16 @@ BUILDERS = freeze({
           'platform': 'linux',
         },
       },
+      'linux_chromium_dbg_32_ng': {
+        'based_on_main_waterfall': {
+          'mastername': 'chromium.linux',
+          'buildername': 'Linux Builder (dbg)(32)',
+          'tester': 'Linux Tests (dbg)(1)(32)',
+        },
+        'testing': {
+          'platform': 'linux',
+        },
+      },
       'linux_chromium_dbg_ng': {
         'based_on_main_waterfall': {
           'mastername': 'chromium.linux',

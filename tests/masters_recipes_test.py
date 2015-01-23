@@ -83,7 +83,6 @@ SUPPRESSIONS = {
         'Android Webview AOSP Builder',
         'Linux GN',
         'Linux GN (dbg)',
-        'Linux Tests (dbg)(1)(32)',
     ],
     'master.chromium.mac': [
         'Mac GN',
