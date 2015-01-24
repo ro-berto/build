@@ -34,7 +34,6 @@ class Status:
     def __init__(self, master):
         self.master = master
         self.botmaster = master.botmaster
-        self.db = None
         self.basedir = master.basedir
         self.watchers = []
         # compress logs bigger than 4k, a good default on linux

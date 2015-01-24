@@ -5342,3 +5342,90 @@ index 36f8806..36b1899 100644
                      slave = buildcache[build_status.getSlavename()]
                      slave.setdefault(builderName, []).append(
                              build_status.getNumber())
+
+
+commit c956c1bf5b7c3726d80675d311e0a61d6d3f759c
+Author: Ryan Kubiak <rkubiak@google.com>
+Date:   Thu Jan 22 17:19:49 2015 -0800
+
+    Fix MailNotifier bug for buildsets
+    
+    Implementing a fix from buildbot 0.8.6p1.
+    http://trac.buildbot.net/ticket/2254
+    https://github.com/buildbot/buildbot/commit/4d3b0318025ca38c148a09e2fec5f2f97f61be57
+    
+    I wasn't entirely sure of the implications of removing self.db from
+    status/master.py.  I found two files using status.master.db
+    (buildbot/status/builder.py, buildbot/status/web/status_json.py).
+    Neither of these are imports and they both seem to still work by
+    inherting status from their parent.
+    
+    I've run this patch on a testing instance and everything seems to still
+    work, although I have not tested the MailNotifier.
+
+diff --git a/third_party/buildbot_8_4p1/buildbot/status/mail.py b/third_party/buildbot_8_4p1/buildbot/status/mail.py
+index fd62b52..c03f609 100644
+--- a/third_party/buildbot_8_4p1/buildbot/status/mail.py
++++ b/third_party/buildbot_8_4p1/buildbot/status/mail.py
+@@ -332,12 +332,13 @@ class MailNotifier(base.StatusReceiverMultiService):
+     def setup(self):
+         self.master_status = self.parent.getStatus()
+         self.master_status.subscribe(self)
++        self.master = self.master_status.master
+ 
+ 
+     def startService(self):
+         if self.buildSetSummary:
+             self.buildSetSubscription = \
+-            self.parent.subscribeToBuildsetCompletions(self.buildsetFinished)
++            self.master.subscribeToBuildsetCompletions(self.buildsetFinished)
+ 
+         base.StatusReceiverMultiService.startService(self)
+ 
+@@ -428,18 +429,18 @@ class MailNotifier(base.StatusReceiverMultiService):
+         for breq in breqs:
+             buildername = breq['buildername']
+             builders.append(self.master_status.getBuilder(buildername))
+-            d = self.parent.db.builds.getBuildsForRequest(breq['brid'])
++            d = self.master.db.builds.getBuildsForRequest(breq['brid'])
+             d.addCallback(builddicts.append)
+             dl.append(d)
+         d = defer.DeferredList(dl)
+         d.addCallback(self._gotBuilds, builddicts, buildset, builders)
+ 
+     def _gotBuildSet(self, buildset, bsid):
+-        d = self.parent.db.buildrequests.getBuildRequests(bsid=bsid)
++        d = self.master.db.buildrequests.getBuildRequests(bsid=bsid)
+         d.addCallback(self._gotBuildRequests, buildset)
+ 
+     def buildsetFinished(self, bsid, result):
+-        d = self.parent.db.buildsets.getBuildset(bsid=bsid)
++        d = self.master.db.buildsets.getBuildset(bsid=bsid)
+         d.addCallback(self._gotBuildSet, bsid)
+ 
+         return d
+diff --git a/third_party/buildbot_8_4p1/buildbot/status/master.py b/third_party/buildbot_8_4p1/buildbot/status/master.py
+index 1df47a0..7864e2a 100644
+--- a/third_party/buildbot_8_4p1/buildbot/status/master.py
++++ b/third_party/buildbot_8_4p1/buildbot/status/master.py
+@@ -34,7 +34,6 @@ class Status:
+     def __init__(self, master):
+         self.master = master
+         self.botmaster = master.botmaster
+-        self.db = None
+         self.basedir = master.basedir
+         self.watchers = []
+         # compress logs bigger than 4k, a good default on linux
+diff --git a/third_party/buildbot_8_4p1/buildbot/test/unit/test_status_mail_MailNotifier.py b/third_party/buildbot_8_4p1/buildbot/test/unit/test_status_mail_MailNotifier.py
+index 3c8a70b..3ee4f49 100644
+--- a/third_party/buildbot_8_4p1/buildbot/test/unit/test_status_mail_MailNotifier.py
++++ b/third_party/buildbot_8_4p1/buildbot/test/unit/test_status_mail_MailNotifier.py
+@@ -140,7 +140,7 @@ class TestMailNotifier(unittest.TestCase):
+                                                     buildername='Builder'),
+                                 fakedb.Build(number=0, brid=11, results=SUCCESS)
+                                 ])
+-        mn.parent = self
++        mn.master = self # FIXME: Should be FakeMaster
+         
+         self.status = Mock()
+         mn.master_status = Mock()

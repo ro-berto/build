@@ -140,7 +140,7 @@ class TestMailNotifier(unittest.TestCase):
                                                     buildername='Builder'),
                                 fakedb.Build(number=0, brid=11, results=SUCCESS)
                                 ])
-        mn.parent = self
+        mn.master = self # FIXME: Should be FakeMaster
         
         self.status = Mock()
         mn.master_status = Mock()

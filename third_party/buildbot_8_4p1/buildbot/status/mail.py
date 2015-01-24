@@ -332,12 +332,13 @@ class MailNotifier(base.StatusReceiverMultiService):
     def setup(self):
         self.master_status = self.parent.getStatus()
         self.master_status.subscribe(self)
+        self.master = self.master_status.master
 
 
     def startService(self):
         if self.buildSetSummary:
             self.buildSetSubscription = \
-            self.parent.subscribeToBuildsetCompletions(self.buildsetFinished)
+            self.master.subscribeToBuildsetCompletions(self.buildsetFinished)
 
         base.StatusReceiverMultiService.startService(self)
 
@@ -428,18 +429,18 @@ class MailNotifier(base.StatusReceiverMultiService):
         for breq in breqs:
             buildername = breq['buildername']
             builders.append(self.master_status.getBuilder(buildername))
-            d = self.parent.db.builds.getBuildsForRequest(breq['brid'])
+            d = self.master.db.builds.getBuildsForRequest(breq['brid'])
             d.addCallback(builddicts.append)
             dl.append(d)
         d = defer.DeferredList(dl)
         d.addCallback(self._gotBuilds, builddicts, buildset, builders)
 
     def _gotBuildSet(self, buildset, bsid):
-        d = self.parent.db.buildrequests.getBuildRequests(bsid=bsid)
+        d = self.master.db.buildrequests.getBuildRequests(bsid=bsid)
         d.addCallback(self._gotBuildRequests, buildset)
 
     def buildsetFinished(self, bsid, result):
-        d = self.parent.db.buildsets.getBuildset(bsid=bsid)
+        d = self.master.db.buildsets.getBuildset(bsid=bsid)
         d.addCallback(self._gotBuildSet, bsid)
 
         return d
