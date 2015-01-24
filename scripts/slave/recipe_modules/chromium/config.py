@@ -479,8 +479,6 @@ def chromium_win_clang(c):
 
 @config_ctx(includes=['chromium_win_clang', 'asan', 'static_library'])
 def chromium_win_clang_asan(c):
-  # TODO(thakis): Consider using chromium_builder_asan instead?
-  c.compile_py.default_targets = ['chromium_builder_tests']
   # Clear lsan configuration for win.
   del c.gyp_env.GYP_DEFINES['lsan']
 

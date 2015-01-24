@@ -597,9 +597,10 @@ SPEC = {
       },
       'use_isolate': True,
       'enable_swarming': True,
-      # Workaround so that recipes doesn't add random build targets to our
-      # compile line. We want to build everything.
-      'add_tests_as_compile_targets': False,
+      # TODO(thakis): Consider using chromium_builder_asan instead?
+      'compile_targets': [ 'chromium_builder_tests' ],
+      # add_tests_as_compile_targets not needed for the asan bot, it does't
+      # build everything.
     },
     'CrWinClang(asan) tester': {
       'recipe_config': 'chromium_win_asan',
