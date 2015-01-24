@@ -71,6 +71,14 @@
   },
   {
     "cmd": [
+      "killall",
+      "-9",
+      "gnome-keyring-daemon"
+    ],
+    "name": "killall gnome-keyring-daemon"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
@@ -90,7 +98,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1"
+      "GYP_DEFINES": "archive_gpu_tests=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1"
     },
     "name": "gclient runhooks"
   },
@@ -121,7 +129,13 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "blink_tests"
+      "angle_unittests_run",
+      "blink_tests",
+      "chrome",
+      "content_gl_tests_run",
+      "gl_tests_run",
+      "tab_capture_end2end_tests_run",
+      "telemetry_gpu_test_run"
     ],
     "name": "compile"
   },

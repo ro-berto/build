@@ -87,7 +87,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1"
+      "GYP_DEFINES": "archive_gpu_tests=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1"
     },
     "name": "gclient runhooks (with patch)"
   },
@@ -126,6 +126,14 @@
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
+  },
+  {
+    "cmd": [
+      "killall",
+      "-9",
+      "gnome-keyring-daemon"
+    ],
+    "name": "killall gnome-keyring-daemon"
   },
   {
     "cmd": [
@@ -178,6 +186,17 @@
     "cmd": [
       "python",
       "-u",
+      "[BUILD]/scripts/slave/recipe_modules/isolate/resources/find_isolated_tests.py",
+      "--build-dir",
+      "[SLAVE_BUILD]/src/out/Release",
+      "--clean-isolated-files"
+    ],
+    "name": "clean isolated files"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[BUILD]/scripts/slave/compile.py",
       "--target",
       "Release",
@@ -190,6 +209,12 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
+      "angle_unittests_run",
+      "chrome",
+      "telemetry_gpu_test_run",
+      "tab_capture_end2end_tests_run",
+      "content_gl_tests_run",
+      "gl_tests_run",
       "chromium_swarm_tests"
     ],
     "name": "compile (with patch)",
@@ -258,7 +283,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1"
+      "GYP_DEFINES": "archive_gpu_tests=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1"
     },
     "name": "gclient runhooks (without patch)"
   },
@@ -278,6 +303,12 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
+      "angle_unittests_run",
+      "chrome",
+      "telemetry_gpu_test_run",
+      "tab_capture_end2end_tests_run",
+      "content_gl_tests_run",
+      "gl_tests_run",
       "chromium_swarm_tests"
     ],
     "name": "compile (without patch)",
