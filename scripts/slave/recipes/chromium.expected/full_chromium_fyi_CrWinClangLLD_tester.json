@@ -72,11 +72,24 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]\\src\\tools\\swarming_client\\swarming.py",
+      "--version"
+    ],
+    "name": "swarming.py --version",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@0.4.10@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[DEPOT_TOOLS]\\gclient.py",
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "component=static_library target_arch=ia32"
+      "GYP_DEFINES": "component=static_library target_arch=ia32 test_isolation_mode=prepare"
     },
     "name": "gclient runhooks"
   },
@@ -91,7 +104,18 @@
     "name": "read test spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.fyi.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"CrWinClangLLD tester\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@        }, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"test\": \"browser_tests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
@@ -152,10 +176,149 @@
       "--build-archive-url",
       "gs://test-domain/test-archive.zip",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"CrWinClangLLD tester\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"CrWinClangLLD\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"CrWinClangLLD tester\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"CrWinClangLLD\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"browser_tests\": \"ffffffffffffffffffffffffffffffffffffffff\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"CrWinClangLLD tester\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"CrWinClangLLD\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"CrWinClangLLD tester\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"CrWinClangLLD\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"browser_tests\": \"ffffffffffffffffffffffffffffffffffffffff\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "name": "extract build"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\recipe_modules\\isolate\\resources\\find_isolated_tests.py",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "name": "find isolated tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"dummy_target_1\": \"[dummy hash for dummy_target_1]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"dummy_target_2\": \"[dummy hash for dummy_target_2]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"dummy_target_1\": \"[dummy hash for dummy_target_1]\", \"dummy_target_2\": \"[dummy hash for dummy_target_2]\"}@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\chromium\\run_crash_handler.py",
+      "--target",
+      "Release"
+    ],
+    "name": "start_crash_service"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\src\\tools\\swarming_client\\swarming.py",
+      "trigger",
+      "--swarming",
+      "https://chromium-swarm.appspot.com",
+      "--isolate-server",
+      "https://isolateserver.appspot.com",
+      "--priority",
+      "25",
+      "--shards",
+      "1",
+      "--task-name",
+      "browser_tests/Windows-7-SP1/ffffffffff/CrWinClangLLD tester/571",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--expiration",
+      "3600",
+      "--io-timeout",
+      "1200",
+      "--hard-timeout",
+      "3600",
+      "--dimension",
+      "cpu",
+      "x86-64",
+      "--dimension",
+      "gpu",
+      "none",
+      "--dimension",
+      "os",
+      "Windows-7-SP1",
+      "--dimension",
+      "pool",
+      "Chrome",
+      "--tag",
+      "buildername:CrWinClangLLD tester",
+      "--tag",
+      "buildnumber:571",
+      "--tag",
+      "data:ffffffffffffffffffffffffffffffffffffffff",
+      "--tag",
+      "master:chromium.fyi",
+      "--tag",
+      "name:browser_tests",
+      "--tag",
+      "os:Windows-7-SP1",
+      "--tag",
+      "project:chromium",
+      "--tag",
+      "purpose:CI",
+      "--tag",
+      "purpose:post-commit",
+      "--idempotent",
+      "ffffffffffffffffffffffffffffffffffffffff",
+      "--",
+      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
+    ],
+    "name": "[trigger] browser_tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"browser_tests/Windows-7-SP1/ffffffffff/CrWinClangLLD tester/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"browser_tests/Windows-7-SP1/ffffffffff/CrWinClangLLD tester/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+    ]
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\recipe_modules\\swarming\\resources\\collect_gtest_task.py",
+      "--swarming-client-dir",
+      "[SLAVE_BUILD]\\src\\tools\\swarming_client",
+      "--temp-root-dir",
+      "[TMP_BASE]",
+      "--merged-test-output",
+      "/path/to/tmp/json",
+      "--",
+      "collect",
+      "--swarming",
+      "https://chromium-swarm.appspot.com",
+      "--decorate",
+      "--print-status-updates",
+      "--shards",
+      "1",
+      "browser_tests/Windows-7-SP1/ffffffffff/CrWinClangLLD tester/571"
+    ],
+    "name": "browser_tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\process_dumps.py",
+      "--target",
+      "Release"
+    ],
+    "name": "process_dumps"
   }
 ]

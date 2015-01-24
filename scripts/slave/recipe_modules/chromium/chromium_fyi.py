@@ -399,6 +399,8 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'use_isolate': True,
+      'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -417,6 +419,7 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'enable_swarming': True,
     },
     'CrWinClang(shared)': {
       'recipe_config': 'chromium_win_clang',
@@ -429,6 +432,8 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'use_isolate': True,
+      'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -447,6 +452,7 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'enable_swarming': True,
     },
     'CrWinClang64': {
       'recipe_config': 'chromium_win_clang',
@@ -458,6 +464,8 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'use_isolate': True,
+      'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -476,6 +484,7 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'enable_swarming': True,
     },
     'CrWinClang64(dbg)': {
       'recipe_config': 'chromium_win_clang',
@@ -488,6 +497,8 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'use_isolate': True,
+      'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -506,6 +517,7 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'enable_swarming': True,
     },
     'CrWinClang64(dll)': {
       'recipe_config': 'chromium_win_clang',
@@ -518,6 +530,8 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'use_isolate': True,
+      'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -536,6 +550,7 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'enable_swarming': True,
     },
     'CrWinClangLLD': {
       'recipe_config': 'chromium_win_clang',
@@ -548,6 +563,8 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'use_isolate': True,
+      'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -566,6 +583,7 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'enable_swarming': True,
     },
     'CrWinClang(asan)': {
       'recipe_config': 'chromium_win_clang_asan',
@@ -577,6 +595,8 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'use_isolate': True,
+      'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -595,6 +615,7 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'enable_swarming': True,
     },
   },
 }
