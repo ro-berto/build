@@ -487,13 +487,6 @@ def chromium_win_clang_asan(c):
   # clang is pinned to a fixed revision on Win if asan is set. Override that.
   c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
 
-  # disable_nacl doesn't work with isolates, see
-  # http://crbug.com/416078
-  # TODO(thakis): Only enable asan for the 32bit part of the build and remove
-  # this; swarming requires the default test_isolation_mode.
-  c.gyp_env.GYP_DEFINES['disable_nacl'] = '1'
-  c.gyp_env.GYP_DEFINES['test_isolation_mode'] = 'noop'
-
 # GYP_DEFINES must not include 'asan' or 'clang', else the tester bot will try
 # to compile clang.
 @config_ctx(includes=['chromium_no_goma'])
