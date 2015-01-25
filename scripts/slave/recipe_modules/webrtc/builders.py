@@ -524,16 +524,6 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
       },
-      'Win SyzyASan': {
-        'recipe_config': 'webrtc',
-        'chromium_apply_config': ['syzyasan'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'win'},
-      },
       'Mac32 Debug': {
         'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
@@ -942,6 +932,16 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
       },
+      'Win SyzyASan': {
+        'recipe_config': 'webrtc',
+        'chromium_apply_config': ['syzyasan'],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'win'},
+      },
       'Mac64 Debug (parallel)': {
         'recipe_config': 'webrtc_parallel',
         'chromium_config_kwargs': {
@@ -1033,16 +1033,6 @@ BUILDERS = freeze({
       },
       'win_baremetal': {
         'recipe_config': 'webrtc_baremetal',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'win'},
-      },
-      'win_asan': {
-        'recipe_config': 'webrtc',
-        'chromium_apply_config': ['syzyasan'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,

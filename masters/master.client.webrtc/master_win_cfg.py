@@ -23,7 +23,6 @@ def Update(c):
           'Win64 Release (GN)',
           'Win DrMemory Light',
           'Win DrMemory Full',
-          'Win SyzyASan',
       ]),
   ])
 
@@ -51,7 +50,6 @@ def Update(c):
       'category': 'compile',
       'slavebuilddir': 'win-drmem',
     },
-    {'name': 'Win SyzyASan', 'slavebuilddir': 'win-syzyasan'},
   ]
 
   c['builders'].extend([
