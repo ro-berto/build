@@ -13,7 +13,12 @@ def Update(c):
       SingleBranchScheduler(name='webrtc_windows_scheduler',
                             branch='trunk',
                             treeStableTimer=0,
-                            builderNames=['Win32 Debug (parallel)']),
+                            builderNames=[
+                              'Win32 Debug (parallel)',
+                              'Win32 Release (parallel)',
+                              'Win64 Debug (parallel)',
+                              'Win64 Release (parallel)',
+                            ]),
   ])
 
   specs = [
