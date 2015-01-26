@@ -13,6 +13,7 @@ m_annotator = annotator_factory.AnnotatorFactory()
 def Update(c):
   buildernames_list = [
       'Android Builder (dbg)',
+      'Android Builder ARM64 (dbg)',
       'Android GN',
       'Android GN (dbg)',
   ]
@@ -27,7 +28,9 @@ def Update(c):
       Triggerable(name='android_trigger_dbg', builderNames=[
           'Android Tests (dbg) (KK Nexus5)',
           'Android Tests (dbg) (JB Nexus7.2)',
-          'Android Tests (dbg) (KK Nexus5, pending N9)',
+      ]),
+      Triggerable(name='android_trigger_arm64_dbg', builderNames=[
+          'Android Tests (dbg) (L Nexus9)',
       ]),
   ])
 
@@ -36,9 +39,14 @@ def Update(c):
       'name': 'Android Builder (dbg)',
       'triggers': ['android_trigger_dbg'],
     },
+    {
+      'name': 'Android Builder ARM64 (dbg)',
+      'triggers': ['android_trigger_arm_64_dbg'],
+      'slavebuilddir': 'android_arm64',
+    },
     {'name': 'Android Tests (dbg) (KK Nexus5)'},
     {'name': 'Android Tests (dbg) (JB Nexus7.2)'},
-    {'name': 'Android Tests (dbg) (KK Nexus5, pending N9)'},
+    {'name': 'Android Tests (dbg) (L Nexus9)'},
     {
       'name': 'Android GN',
       'slavebuilddir': 'android_gn',

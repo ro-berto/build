@@ -360,6 +360,21 @@ BUILDERS = freeze({
         'build_gs_archive': 'android_dbg_archive_fyi',
         'testing': {'platform': 'linux'},
       },
+      'Android Builder ARM64 (dbg)': {
+        'recipe_config': 'chromium_webrtc_tot_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 64,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'chromium-webrtc-trunk-tot-dbg-android-arm64',
+        },
+        'bot_type': 'builder',
+        'build_gs_archive': 'android_dbg_archive_arm64_fyi',
+        'testing': {'platform': 'linux'},
+      },
       'Android Tests (dbg) (KK Nexus5)': {
         'recipe_config': 'chromium_webrtc_tot_android',
         'chromium_config_kwargs': {
@@ -392,17 +407,17 @@ BUILDERS = freeze({
         'parent_buildername': 'Android Builder (dbg)',
         'testing': {'platform': 'linux'},
       },
-      'Android Tests (dbg) (KK Nexus5, pending N9)': {
+      'Android Tests (dbg) (L Nexus9)': {
         'recipe_config': 'chromium_webrtc_tot_android',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
         'bot_type': 'tester',
-        'build_gs_archive': 'android_dbg_archive_fyi',
-        'parent_buildername': 'Android Builder (dbg)',
+        'build_gs_archive': 'android_dbg_archive_arm64_fyi',
+        'parent_buildername': 'Android Builder ARM64 (dbg)',
         'testing': {'platform': 'linux'},
       },
       'Android GN': {
