@@ -34,7 +34,7 @@ def GenSteps(api):
   api.chromium.c.compile_py.compiler = None
   api.chromium.c.compile_py.goma_dir = None
 
-  api.chromium.compile(targets=['all'])
+  api.chromium.compile(targets=['all'], force_clobber=True)
 
 
 def GenTests(api):
