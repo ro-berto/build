@@ -250,7 +250,8 @@ class V8Api(recipe_api.RecipeApi):
     update_step = self.m.bot_update.ensure_checkout(
         no_shallow=True,
         patch_root=[None, 'v8'][bool(self.m.tryserver.is_tryserver)],
-        with_branch_heads=bool(self.c.branch))
+        with_branch_heads=bool(self.c.branch),
+        patch_project_roots={'v8': []})
 
     assert update_step.json.output['did_run']
 
