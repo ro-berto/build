@@ -44,40 +44,6 @@ BUILDERS = freeze({
       'gclient_apply_config': ['android', 'chrome_internal'],
     },
   },
-  'chromium.linux': {
-    'Android Builder (dbg)': {
-      'recipe_config': 'main_builder',
-      'gclient_apply_config': ['android', 'chrome_internal'],
-      'check_licenses': NormalStep,
-      'findbugs': NormalStep,
-      'zip_and_upload': {
-        'bucket': 'chromium-android',
-        'path': lambda api: ('android_main_dbg'),
-      },
-    },
-    'Android Builder': {
-      'recipe_config': 'main_builder',
-      'gclient_apply_config': ['android', 'chrome_internal'],
-      'zip_and_upload': {
-        'bucket': 'chromium-android',
-        'path': lambda api: ('android_main_rel'),
-
-      },
-      'target': 'Release',
-    },
-    'Android Arm64 Builder (dbg)': {
-      'recipe_config': 'arm64_builder',
-      'check_licenses': FYIStep,
-      'findbugs': FYIStep,
-      'gclient_apply_config': ['android', 'chrome_internal'],
-    },
-    'Android Clang Builder (dbg)': {
-      'recipe_config': 'clang_builder',
-      'gclient_apply_config': ['android', 'chrome_internal'],
-      'check_licenses': NormalStep,
-      'findbugs': NormalStep,
-    },
-  },
   'tryserver.chromium.linux': {
     'android_clang_dbg_recipe': {
       'recipe_config': 'clang_builder',
@@ -148,9 +114,6 @@ BUILDERS = freeze({
       # DEPS changes, and the logic for this is in zip_build.py.
       'zip_and_upload': {
         'bucket': 'chrome-perf',
-        # We send None as the path so that zip_build.py gets it from factory
-        # properties.
-        'path': lambda api: None,
       }
     }
   },
@@ -284,8 +247,7 @@ def GenSteps(api):
 
   upload_config = bot_config.get('zip_and_upload')
   if upload_config:
-    droid.zip_and_upload_build(upload_config['bucket'],
-                               upload_config['path'](api))
+    droid.zip_and_upload_build(upload_config['bucket'])
 
 
 def _sanitize_nonalpha(text):

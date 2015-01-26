@@ -81,32 +81,6 @@ BUILDERS = freeze({
       'try': True,
     },
   },
-  'chromium.linux': {
-    'Android Tests (dbg)': {
-      'config': 'main_builder',
-      'instrumentation_tests': INSTRUMENTATION_TESTS,
-      'unittests': UNIT_TESTS,
-      'java_unittests': [],
-      'target': 'Debug',
-      'download': {
-        'bucket': 'chromium-android',
-        'path': lambda api: ('android_main_dbg/full-build-linux_%s.zip' %
-                             api.properties['revision']),
-      },
-    },
-    'Android Tests': {
-      'config': 'main_builder',
-      'instrumentation_tests': INSTRUMENTATION_TESTS,
-      'unittests': UNIT_TESTS,
-      'java_unittests': [],
-      'target': 'Release',
-      'download': {
-        'bucket': 'chromium-android',
-        'path': lambda api: ('android_main_rel/full-build-linux_%s.zip' %
-                             api.properties['revision']),
-      },
-    },
-  }
 })
 
 FLAKINESS_DASHBOARD = 'http://test-results.appspot.com'
@@ -170,18 +144,7 @@ def GenSteps(api):
 
   api.chromium_android.run_tree_truth()
 
-  if bot_config.get('download'):
-    api.chromium_android.download_build(bot_config['download']['bucket'],
-                                        bot_config['download']['path'](api))
-    extract_location = api.chromium_android.out_path.join(
-                           api.chromium_android.c.BUILD_CONFIG)
-    api.step('remove extract location',
-             ['rm', '-rf', extract_location])
-    api.step('move extracted build',
-             ['mv', '-T', api.path['checkout'].join('full-build-linux'),
-                          extract_location])
-  else:
-    api.chromium.compile(targets=compile_targets)
+  api.chromium.compile(targets=compile_targets)
 
   if not instrumentation_tests and not unittests and not java_unittests:
     return
