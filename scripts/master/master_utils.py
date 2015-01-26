@@ -182,6 +182,10 @@ class FilterDomain(util.ComparableMixin):
     self.domain = domain or config.Master.master_domain
     self.permitted_domains = (permitted_domains or
                               config.Master.permitted_domains)
+    if self.permitted_domains:
+      assert isinstance(self.permitted_domains, tuple), (
+          'permitted_domains must be a tuple, now it is a %s (value: %s)' %
+          (type(self.permitted_domains), self.permitted_domains))
 
   def getAddress(self, name):
     """If name is already an email address, pass it through."""
