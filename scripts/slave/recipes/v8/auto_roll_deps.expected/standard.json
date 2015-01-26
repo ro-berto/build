@@ -92,7 +92,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/v8/tools/push-to-trunk/auto_roll.py",
+      "[SLAVE_BUILD]/src/v8/tools/release/auto_roll.py",
       "--chromium",
       "[SLAVE_BUILD]/src",
       "--author",

@@ -120,7 +120,7 @@ def ClusterfuzzHasIssues(api):
   step_result = api.python(
       'check clusterfuzz',
       api.path['checkout'].join(
-          'tools', 'push-to-trunk', 'check_clusterfuzz.py'),
+          'tools', 'release', 'check_clusterfuzz.py'),
       ['--key-file', api.path['slave_build'].join('.cf_key'),
        '--results-file', api.json.output(add_json_log=False)],
       # Note: Output is suppressed for security reasons.

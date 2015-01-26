@@ -23,7 +23,7 @@ def GenSteps(api):
   api.step(
       'V8Releases',
       [api.path['slave_build'].join(
-           'v8', 'tools', 'push-to-trunk', 'releases.py'),
+           'v8', 'tools', 'release', 'releases.py'),
        '-c', api.path['checkout'],
        '--json', api.path['slave_build'].join('v8-releases-update.json'),
        '--branch', 'recent',

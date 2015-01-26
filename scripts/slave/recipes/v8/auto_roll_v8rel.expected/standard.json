@@ -73,7 +73,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/v8/tools/push-to-trunk/releases.py",
+      "[SLAVE_BUILD]/v8/tools/release/releases.py",
       "-c",
       "[SLAVE_BUILD]/src",
       "--json",

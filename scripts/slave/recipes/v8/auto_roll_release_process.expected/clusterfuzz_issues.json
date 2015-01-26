@@ -153,7 +153,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/push-to-trunk/check_clusterfuzz.py",
+      "[SLAVE_BUILD]/v8/tools/release/check_clusterfuzz.py",
       "--key-file",
       "[SLAVE_BUILD]/.cf_key",
       "--results-file",

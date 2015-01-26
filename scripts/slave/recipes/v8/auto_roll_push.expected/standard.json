@@ -70,7 +70,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/push-to-trunk/auto_push.py",
+      "[SLAVE_BUILD]/v8/tools/release/auto_push.py",
       "--author",
       "v8-autoroll@chromium.org",
       "--reviewer",

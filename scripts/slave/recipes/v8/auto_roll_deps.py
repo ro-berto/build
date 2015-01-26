@@ -37,7 +37,7 @@ def GenSteps(api):
   api.python(
       'roll deps',
       api.path['checkout'].join(
-          'v8', 'tools', 'push-to-trunk', 'auto_roll.py'),
+          'v8', 'tools', 'release', 'auto_roll.py'),
       ['--chromium', api.path['checkout'],
        '--author', 'v8-autoroll@chromium.org',
        '--reviewer', 'machenbach@chromium.org',

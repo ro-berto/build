@@ -37,7 +37,7 @@ def GenSteps(api):
   api.python(
       'push candidate',
       api.path['checkout'].join(
-          'tools', 'push-to-trunk', 'auto_push.py'),
+          'tools', 'release', 'auto_push.py'),
       ['--author', 'v8-autoroll@chromium.org',
        '--reviewer', 'v8-autoroll@chromium.org',
        '--push',
