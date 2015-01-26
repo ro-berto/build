@@ -41,7 +41,7 @@ def Update(c):
     },
     {
       'name': 'Android Builder ARM64 (dbg)',
-      'triggers': ['android_trigger_arm_64_dbg'],
+      'triggers': ['android_trigger_arm64_dbg'],
       'slavebuilddir': 'android_arm64',
     },
     {'name': 'Android Tests (dbg) (KK Nexus5)'},
