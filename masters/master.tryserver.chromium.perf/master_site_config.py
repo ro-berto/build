@@ -20,3 +20,4 @@ class ChromiumPerfTryServer(Master.Master4):
   store_revisions_url = base_app_url + '/revisions'
   svn_url = 'svn://svn-mirror.golo.chromium.org/chrome-try/try-perf'
   last_good_url = base_app_url + '/lkgr'
+  service_account_file = 'service-account-chromium-tryserver.json'

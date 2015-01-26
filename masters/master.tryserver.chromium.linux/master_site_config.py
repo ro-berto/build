@@ -21,3 +21,4 @@ class TryServerChromiumLinux(Master.Master4a):
   last_good_blink_url = None
   svn_url = 'svn://svn-mirror.golo.chromium.org/chrome-try/try'
   buildbot_url = 'http://build.chromium.org/p/tryserver.chromium.linux/'
+  service_account_file = 'service-account-chromium-tryserver.json'

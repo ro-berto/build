@@ -17,3 +17,4 @@ class GpuTryServer(Master.Master4):
   store_revisions_url = base_app_url + '/revisions'
   last_good_url = base_app_url + '/lkgr'
   buildbot_url = 'http://build.chromium.org/p/tryserver.chromium.gpu/'
+  service_account_file = 'service-account-chromium-tryserver.json'
