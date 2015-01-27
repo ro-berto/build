@@ -1864,6 +1864,9 @@ def main():
                                 'results should be uploaded.')
   option_parser.add_option('--verbose', action='store_true', default=False,
                             help='Prints more information.')
+  # TODO(earthdok): remove this once all masters that use it have restarted.
+  option_parser.add_option('--parallel', action='store_true', default=False,
+                            help='Deprecated.')
 
   chromium_utils.AddPropertiesOptions(option_parser)
   options, args = option_parser.parse_args()
