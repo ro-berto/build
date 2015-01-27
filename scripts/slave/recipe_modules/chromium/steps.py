@@ -878,6 +878,8 @@ class SwarmingTelemetryGPUTest(SwarmingTest):
 class AndroidInstrumentationTest(Test):
   def __init__(self, name, compile_target, test_data=None,
                adb_install_apk=None, isolate_file_path=None):
+    super(AndroidInstrumentationTest, self).__init__()
+
     self._name = name
     self.compile_target = compile_target
 
@@ -889,18 +891,68 @@ class AndroidInstrumentationTest(Test):
   def name(self):
     return self._name
 
+  def _get_failing_tests(self, json_results):
+    """Parses test results and returns a list of failed tests.
+
+    Args:
+      json_results: Parsed JSON output file returned from the test runner.
+
+    Returns:
+      None if results are invalid, a list of failures otherwise (may be empty).
+    """
+    try:
+      # Extract test results.
+      test_results = {test_name: test_data[0]['status']
+                      for result_dict in json_results['per_iteration_data']
+                      for test_name, test_data in result_dict.iteritems()}
+
+      # TODO(sergiyb): Figure out how to handle status UNKNOWN.
+      return [test_name for test_name, test_status in test_results.iteritems()
+                        if test_status not in ['SUCCESS', 'SKIPPED']]
+    except (KeyError, IndexError, TypeError):
+      return None
+
   def run(self, api, suffix):
     assert api.chromium.c.TARGET_PLATFORM == 'android'
     if self.adb_install_apk:
       api.chromium_android.adb_install_apk(
           self.adb_install_apk[0], self.adb_install_apk[1])
-    api.chromium_android.run_instrumentation_suite(
-        self.name, test_data=self.test_data,
-        flakiness_dashboard='http://test-results.appspot.com',
-        verbose=True, isolate_file_path=self.isolate_file_path)
+
+    mock_test_results = {
+      'per_iteration_data': [{'TestA': [{'status': 'SUCCESS'}]},
+                             {'TestB': [{'status': 'FAILURE'}]}]
+    }
+
+    try:
+      api.chromium_android.run_instrumentation_suite(
+          self.name, test_data=self.test_data, suffix=suffix,
+          flakiness_dashboard='http://test-results.appspot.com',
+          verbose=True, isolate_file_path=self.isolate_file_path,
+          json_results_file=api.json.output(add_json_log=False),
+          step_test_data=lambda: api.json.test_api.output(mock_test_results))
+    finally:
+      step_result = api.step.active_result
+      failures = self._get_failing_tests(step_result.json.output)
+      if failures is None:
+        self._test_runs[suffix] = {'valid': False}
+      else:
+        self._test_runs[suffix] = {'valid': True, 'failures': failures}
+
+        step_result.presentation.step_text += api.test_utils.format_step_text([
+          ['failures:', failures]
+        ])
 
   def compile_targets(self, _):
     return [self.compile_target]
+
+  def has_valid_results(self, api, suffix):
+    if suffix not in self._test_runs:
+      return False
+    return self._test_runs[suffix]['valid']
+
+  def failures(self, api, suffix):
+    assert self.has_valid_results(api, suffix)
+    return self._test_runs[suffix]['failures']
 
 
 class BlinkTest(Test):

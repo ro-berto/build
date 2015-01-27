@@ -316,9 +316,14 @@
       "--flakiness-dashboard-server",
       "http://test-results.appspot.com",
       "--verbose",
-      "--release"
+      "--release",
+      "--json-results-file",
+      "/path/to/tmp/json"
     ],
-    "name": "Instrumentation test AndroidWebViewTest"
+    "name": "Instrumentation test AndroidWebViewTest",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+    ]
   },
   {
     "cmd": [
@@ -349,9 +354,14 @@
       "--flakiness-dashboard-server",
       "http://test-results.appspot.com",
       "--verbose",
-      "--release"
+      "--release",
+      "--json-results-file",
+      "/path/to/tmp/json"
     ],
-    "name": "Instrumentation test ChromeShellTest"
+    "name": "Instrumentation test ChromeShellTest",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+    ]
   },
   {
     "cmd": [
@@ -382,9 +392,14 @@
       "--flakiness-dashboard-server",
       "http://test-results.appspot.com",
       "--verbose",
-      "--release"
+      "--release",
+      "--json-results-file",
+      "/path/to/tmp/json"
     ],
-    "name": "Instrumentation test ContentShellTest"
+    "name": "Instrumentation test ContentShellTest",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+    ]
   },
   {
     "cmd": [
@@ -411,9 +426,14 @@
       "--flakiness-dashboard-server",
       "http://test-results.appspot.com",
       "--verbose",
-      "--release"
+      "--release",
+      "--json-results-file",
+      "/path/to/tmp/json"
     ],
-    "name": "Instrumentation test ChromeSyncShellTest"
+    "name": "Instrumentation test ChromeSyncShellTest",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+    ]
   },
   {
     "cmd": [

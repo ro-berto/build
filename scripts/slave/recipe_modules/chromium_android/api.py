@@ -485,7 +485,7 @@ class AndroidApi(recipe_api.RecipeApi):
                                 screenshot=False, verbose=False,
                                 apk_package=None, host_driven_root=None,
                                 official_build=False, install_apk=None,
-                                **kwargs):
+                                json_results_file=None, suffix=None, **kwargs):
     if install_apk:
       self.adb_install_apk(install_apk['apk'], install_apk['package'])
 
@@ -515,9 +515,12 @@ class AndroidApi(recipe_api.RecipeApi):
       args.extend(['--host-driven-root', host_driven_root])
     if official_build:
       args.extend(['--official-build'])
+    if json_results_file:
+      args.extend(['--json-results-file', json_results_file])
 
-    self.m.python(
-        'Instrumentation test %s' % (annotation or test_apk),
+    return self.m.python(
+        'Instrumentation test %s%s' % (annotation or test_apk,
+                                       ' %s' % suffix if suffix else ''),
         self.c.test_runner,
         args=['instrumentation'] + args,
         **kwargs)
