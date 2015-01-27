@@ -23,10 +23,17 @@ deps = {
 
 deps_os = {
   "unix": {
-    "build/third_party/cbuildbot_chromite":
-      "https://chromium.googlesource.com/chromiumos/chromite.git",
-
     "build/third_party/xvfb":
       "svn://svn.chromium.org/chrome/trunk/tools/third_party/xvfb",
   },
 }
+
+hooks = [
+  {
+    "pattern": r".*/cros_chromite\.py",
+    "action": [
+      "./build/scripts/tools/runit.py",
+          "./build/scripts/common/cros_chromite.py", "-v",
+    ],
+  },
+]

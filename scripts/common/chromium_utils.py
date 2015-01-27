@@ -1388,41 +1388,6 @@ def SafeTranslate(inputstr):
   return inputstr.translate(badchars_map)
 
 
-def GetCBuildbotConfigs(chromite_path=None):
-  """Get the sorted cbuildbot configs from cbuildbot_view_config.
-
-  Args:
-    chromite_path: The path to the chromite/ directory.
-
-  Returns:
-    A list of config definition dictionaries sorted with left-most config first.
-  """
-  if sys.platform == 'win32':
-    return {}
-  try:
-    if chromite_path is None:
-      # Chromite is in the DEPS file, and pulled down as part of 'gclient sync'.
-      import cbuildbot_chromite as chromite  # pylint: disable=F0401
-      chromite_path = os.path.dirname(os.path.abspath(chromite.__file__))
-
-    chromite_path = os.path.abspath(chromite_path)
-    config_path = os.path.join(chromite_path, 'bin', 'cbuildbot_view_config')
-    proc = subprocess.Popen([config_path, '--dump', '--for-buildbot'],
-                            stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                            close_fds=True, cwd=os.path.dirname(config_path))
-    output, error = proc.communicate()
-    if proc.returncode != 0:
-      raise ExternalError('%s failed with error %s\n' % (config_path, error))
-
-    config_list = json.loads(output).values()  # pylint: disable=E1103
-    config_list.sort(key=lambda cfg: cfg['display_position'])
-    return config_list
-  except ImportError:
-    # To get around CQ pylint failures, because CQ doesn't check out chromite.
-    # TODO(maruel): Remove this try block when this issue is resolved.
-    return {}
-
-
 def GetPrimaryProject(options):
   """Returns: (str) the key of the primary project, or 'None' if none exists.
   """

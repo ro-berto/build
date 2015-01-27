@@ -7,7 +7,7 @@
 
 import os
 import sys
-path = os.path.join(os.path.dirname(__file__), os.path.pardir)
+path = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir))
 sys.path.append(path)
 
 from tools import list_slaves

@@ -7,53 +7,30 @@
 
 import urllib
 
-from common import chromium_utils
+from common import cros_chromite
 
-
-# Load all of Chromite's 'cbuildbot' config targets.
-configs = chromium_utils.GetCBuildbotConfigs()
-config_map = {c['name']: c for c in configs}
-
-
-def is_general_pre_cq_builder(cbb_name):
-  return cbb_name == 'pre-cq-group'
-
-
-def is_pre_cq_builder(cbb_name):
-  return (
-      is_general_pre_cq_builder(cbb_name) or
-      cbb_name.endswith('-pre-cq'))
-
-
-def config_has_tests(config, test_property):
-  """Tests if a given named CBuildBot configuration runs VMTests.
-
-  A configuration runs VMTest if it or any of its children have VMTests
-  declared.
-
-  Args:
-    config: The CBuildBot configuration dictionary to check.
-    test_property: The name of the configuration dictionary property to test.
-  """
-  if config.get(test_property):
-    return True
-  for child_config in config['child_configs']:
-    if config_has_tests(child_config, test_property):
-      return True
-  return False
-
-is_vmtest_builder = lambda b: config_has_tests(config_map[b], 'vm_tests')
-is_hwtest_builder = lambda b: config_has_tests(config_map[b], 'hw_tests')
-
+# Load all of Chromite's 'cbuildbot' config targets from ToT.
+# NOTE: This uses a pinned Chromite configuration. To update the Chromite
+#       configuration and, thorugh it, the master configuration, the pinned
+#       hash should be updated in "<build>/scripts/common/cros_chromite.py".
+#       (See cros_chromite.PINS documentation).
+# TODO(dnj): We allow fetching here because neither the CQ nor masters will run
+#            `gclient runhooks` automatically. I'd prefer it not do this so
+#            master restarts are deterministic and fast. However, since the
+#            loaded configuration is pinned and cached, this shouldn't have a
+#            significant impact in practice.
+configs = cros_chromite.Get(allow_fetch=True)
 
 # Load builder sets from the 'cbuildbot' config.
-cbb_builders = set(config_map.iterkeys())
+cbb_builders = set(configs.iterkeys())
 etc_builders = set(['etc'])
 all_builders = cbb_builders.union(etc_builders)
-precq_builders = set(b for b in all_builders if is_pre_cq_builder(b))
+
+target_builders = set(b for b in all_builders if b in configs)
+precq_builders = set(b for b in target_builders if configs[b].IsPreCqBuilder())
 precq_novmtest_builders = set(b for b in precq_builders
-                              if not (is_vmtest_builder(b) or
-                                      is_hwtest_builder(b)))
+                              if not (configs[b].HasVmTests() or
+                                      configs[b].HasHwTests()))
 
 
 class TestingSlavePool(object):

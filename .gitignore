@@ -23,6 +23,7 @@ status.log*
 twistd.hostname
 twistd.log*
 twistd.pid
+/.config_cache/**
 /goma
 /masters/*/*/
 !/masters/*/templates/
@@ -45,7 +46,6 @@ twistd.pid
 !/slave/cert/
 /tags
 /third_party/google_api_python_client
-/third_party/cbuildbot_chromite
 /third_party/gsutil
 /third_party/httplib2
 /third_party/lighttpd

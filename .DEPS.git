@@ -30,8 +30,6 @@ deps = {
 deps_os = {
     'unix':
     {
-        'build/third_party/cbuildbot_chromite':
-            Var('git_url') + '/chromiumos/chromite.git',
         'build/third_party/xvfb':
             Var('git_url') + '/chromium/tools/third_party/xvfb.git',
     },
