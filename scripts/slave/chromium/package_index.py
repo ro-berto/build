@@ -57,6 +57,7 @@ class IndexPack(object):
     # Process all entries in the compilation database.
     for entry in self.json_dictionaries:
       filepath = os.path.join(entry['directory'], entry['file'] + '.filepaths')
+      print 'Extract source files from %s' % filepath
 
       # We don't want to fail if one of the filepaths doesn't exist. However we
       # keep track of it.
@@ -126,6 +127,7 @@ class IndexPack(object):
       unit_dictionary = {}
       unit_dictionary['analysis_target'] = entry['file']
       unit_dictionary['cxx_arguments'] = {}
+      print 'Generating Translation Unit data for %s' % entry['file']
 
       command_list = entry['command'].split()
       # The |command_list| starts with the compiler that was used for the
