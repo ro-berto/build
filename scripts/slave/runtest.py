@@ -85,30 +85,6 @@ LOG_PROCESSOR_CLASSES = {
 }
 
 
-def _ShouldEnableSandbox(sandbox_path):
-  """Checks whether the current slave should use the sandbox.
-
-  This is based on should_enable_sandbox in src/testing/test_env.py.
-
-  Args:
-    sandbox_path: Path to sandbox file.
-
-  Returns:
-    True iff the slave is a Linux host with the sandbox file both present and
-    configured correctly.
-  """
-  if not (sys.platform.startswith('linux') and
-          os.path.exists(sandbox_path)):
-    return False
-  sandbox_stat = os.stat(sandbox_path)
-  if ((sandbox_stat.st_mode & stat.S_ISUID) and
-      (sandbox_stat.st_mode & stat.S_IRUSR) and
-      (sandbox_stat.st_mode & stat.S_IXUSR) and
-      (sandbox_stat.st_uid == 0)):
-    return True
-  return False
-
-
 def _GetTempCount():
   """Returns the number of files and directories inside the temporary dir."""
   return len(os.listdir(tempfile.gettempdir()))
@@ -1337,17 +1313,8 @@ def _MainLinux(options, args, extra_env):
     del os.environ['HTTPS_PROXY']
     print 'Deleted HTTPS_PROXY environment variable.'
 
-  # Decide whether to enable the suid sandbox for Chrome.
-  if (_ShouldEnableSandbox(CHROME_SANDBOX_PATH) and
-      not options.enable_tsan and
-      not options.enable_lsan):
-    print 'Enabling sandbox.  Setting environment variable:'
-    print '  CHROME_DEVEL_SANDBOX="%s"' % CHROME_SANDBOX_PATH
-    extra_env['CHROME_DEVEL_SANDBOX'] = CHROME_SANDBOX_PATH
-  else:
-    print 'Disabling sandbox.  Setting environment variable:'
-    print '  CHROME_DEVEL_SANDBOX=""'
-    extra_env['CHROME_DEVEL_SANDBOX'] = ''
+  # Path to SUID sandbox binary. This must be installed on all bots.
+  extra_env['CHROME_DEVEL_SANDBOX'] = CHROME_SANDBOX_PATH
 
   # Nuke anything that appears to be stale chrome items in the temporary
   # directory from previous test runs (i.e.- from crashes or unittest leaks).
