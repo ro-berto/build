@@ -7,7 +7,7 @@
       "--master",
       "chromium.fyi",
       "--builder",
-      "Chromium Linux Codesearch",
+      "Chromium Mac Codesearch",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -119,18 +119,85 @@
   },
   {
     "cmd": [
+      "tools/clang/scripts/update.sh",
+      "--force-local-build",
+      "--without-android",
+      "--with-chrome-tools",
+      "translation_unit"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "compile translation_unit clang tool"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/chromium/package_source.py",
-      "--build-properties",
-      "{\"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/master@{#170242}\", \"got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", \"got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/master@{#43426}\", \"got_webkit_revision\": \"5e2293dffc3cd07d37fbedea3b500f0eb650614d\", \"got_webkit_revision_cp\": \"refs/heads/master@{#124383}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\"}",
-      "--factory-properties",
-      "{\"package_filename\": \"chromium-src\"}",
-      "--path-to-compdb",
-      "some compilation data",
-      "--environment",
-      "prod"
+      "[SLAVE_BUILD]/src/tools/clang/scripts/run_tool.py",
+      "[SLAVE_BUILD]/src/third_party/llvm-build/Release+Asserts/bin/translation_unit",
+      "[SLAVE_BUILD]/src/out/Debug",
+      "--all"
     ],
-    "name": "package_source"
+    "name": "run translation_unit clang tool"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/chromium/package_index.py",
+      "--path-to-compdb",
+      "[SLAVE_BUILD]/src/out/Debug/compile_commands.json",
+      "--path-to-archive-output",
+      "[SLAVE_BUILD]/src/out/Debug/index_pack_mac_170242.tar.gz"
+    ],
+    "name": "create index pack"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--",
+      "cp",
+      "[SLAVE_BUILD]/src/out/Debug/index_pack_mac_170242.tar.gz",
+      "gs://chrome-codesearch/staging/index_pack_mac_170242.tar.gz"
+    ],
+    "name": "gsutil upload index pack",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/staging/index_pack_mac_170242.tar.gz@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/archive_source_codesearch.py",
+      "src",
+      "build",
+      "infra",
+      "tools",
+      "/usr/include",
+      "-f",
+      "chromium_src_mac_170242.tar.bz2"
+    ],
+    "name": "archive source"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--",
+      "cp",
+      "[SLAVE_BUILD]/chromium_src_mac_170242.tar.bz2",
+      "gs://chrome-codesearch/staging/chromium_src_mac_170242.tar.bz2"
+    ],
+    "name": "gsutil upload source tarball",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/staging/chromium_src_mac_170242.tar.bz2@@@"
+    ]
   }
 ]
