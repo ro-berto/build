@@ -44,5 +44,14 @@ skip_child_includes = [
 ]
 
 hooks = [
-    
+    {
+    'action':
+         [
+    './build/scripts/tools/runit.py',
+    './build/scripts/common/cros_chromite.py',
+    '-v'
+],
+    'pattern':
+         '.*/cros_chromite\\.py'
+}
 ]
