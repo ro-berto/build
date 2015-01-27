@@ -61,12 +61,6 @@ def setup(
   if dry_run is None:
     dry_run = 'POLLER_DRY_RUN' in os.environ
 
-  if config.get('mergeRequests') != False:
-    raise Error(
-        'Build request merging is not supported by buildbucket. '
-        'Set mergeRequests to False explicitly:\n'
-        '  c[\'mergeRequests\'] = False')
-
   integrator = BuildBucketIntegrator(buckets, max_lease_count=max_lease_count)
 
   buildbucket_service_factory = functools.partial(
