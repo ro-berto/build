@@ -679,12 +679,6 @@ class FactoryCommands(object):
       cmd.extend(['--total-shards', str(total_shards),
                   '--shard-index', str(shard_index)])
 
-    if test_name in factory_properties.get('sharded_tests', []):
-      cmd.append('--parallel')
-      sharding_args = factory_properties.get('sharding_args')
-      if sharding_args:
-        cmd.extend(['--sharding-args', sharding_args])
-
     env = factory_properties.get('testing_env')
 
     cmd.append(self.GetExecutableName(test_name))

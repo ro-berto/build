@@ -663,11 +663,6 @@ class ChromiumCommands(commands.FactoryCommands):
       numshards = int(matched.group(2))
       wrapper_args.extend(['--shard-index', str(shard),
                            '--total-shards', str(numshards)])
-      if test_name in factory_properties.get('sharded_tests', []):
-        wrapper_args.append('--parallel')
-        sharding_args = factory_properties.get('sharding_args')
-        if sharding_args:
-          wrapper_args.extend(['--sharding-args', sharding_args])
 
     # Memory tests runner script path is relative to build dir.
     if self._target_platform != 'win32':

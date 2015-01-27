@@ -402,8 +402,8 @@ def _GenerateJSONForTestResults(options, log_processor):
   return True
 
 
-def _BuildParallelCommand(build_dir, test_exe_path, options):
-  """Builds a command to run a command in a parallel manner.
+def _BuildTestBinaryCommand(build_dir, test_exe_path, options):
+  """Builds a command to run a test binary.
 
   Args:
     build_dir: Path to the tools/build directory.
@@ -415,24 +415,15 @@ def _BuildParallelCommand(build_dir, test_exe_path, options):
   """
   command = [
       test_exe_path,
-      '--test-launcher-bot-mode',
   ]
 
-  if options.total_shards and options.shard_index:
-    command.extend([
-        '--test-launcher-total-shards=%d' % options.total_shards,
-        '--test-launcher-shard-index=%d' % (options.shard_index - 1)])
+  if options.annotate == 'gtest':
+    command.append('--test-launcher-bot-mode')
 
-  if options.sharding_args:
-    command.extend(options.sharding_args.split())
-
-  # Extra options for run_test_cases.py must be passed after the exe path.
-  # TODO(earthdok): pass '--test-launcher-batch-limit' in extra_sharding_args.
-  # No need for a separate factory property.
-  cluster_size = options.factory_properties.get('cluster_size')
-  if cluster_size is not None:
-    command.append('--test-launcher-batch-limit=%s' % str(cluster_size))
-  command.extend(options.extra_sharding_args.split())
+    if options.total_shards and options.shard_index:
+      command.extend([
+          '--test-launcher-total-shards=%d' % options.total_shards,
+          '--test-launcher-shard-index=%d' % (options.shard_index - 1)])
 
   return command
 
@@ -1124,16 +1115,12 @@ def _MainMac(options, args, extra_env):
   # directory from previous test runs (i.e.- from crashes or unittest leaks).
   slave_utils.RemoveChromeTemporaryFiles()
 
-  if options.parallel:
-    command = _BuildParallelCommand(build_dir, test_exe_path, options)
-  elif options.run_shell_script:
+  if options.run_shell_script:
     command = ['bash', test_exe_path]
   elif options.run_python_script:
     command = [sys.executable, test_exe]
   else:
-    command = [test_exe_path]
-    if options.annotate == 'gtest':
-      command.extend(['--brave-new-test-launcher', '--test-launcher-bot-mode'])
+    command = _BuildTestBinaryCommand(build_dir, test_exe_path, options)
   command.extend(args[1:])
 
   # If --annotate=list was passed, list the log processor classes and exit.
@@ -1379,16 +1366,12 @@ def _MainLinux(options, args, extra_env):
   if options.llvmpipe_dir and os.path.exists(options.llvmpipe_dir):
     extra_env['LD_LIBRARY_PATH'] += ':' + options.llvmpipe_dir
 
-  if options.parallel:
-    command = _BuildParallelCommand(build_dir, test_exe_path, options)
-  elif options.run_shell_script:
+  if options.run_shell_script:
     command = ['bash', test_exe_path]
   elif options.run_python_script:
     command = [sys.executable, test_exe]
   else:
-    command = [test_exe_path]
-    if options.annotate == 'gtest':
-      command.extend(['--brave-new-test-launcher', '--test-launcher-bot-mode'])
+    command = _BuildTestBinaryCommand(build_dir, test_exe_path, options)
   command.extend(args[1:])
 
   # If --annotate=list was passed, list the log processor classes and exit.
@@ -1515,14 +1498,10 @@ def _MainWin(options, args, extra_env):
   if options.enable_pageheap:
     slave_utils.SetPageHeap(build_dir, 'chrome.exe', True)
 
-  if options.parallel:
-    command = _BuildParallelCommand(build_dir, test_exe_path, options)
-  elif options.run_python_script:
+  if options.run_python_script:
     command = [sys.executable, test_exe]
   else:
-    command = [test_exe_path]
-    if options.annotate == 'gtest':
-      command.extend(['--brave-new-test-launcher', '--test-launcher-bot-mode'])
+    command = _BuildTestBinaryCommand(build_dir, test_exe_path, options)
 
   # The ASan tests needs to run under agent_logger in order to get the stack
   # traces. The win SyzyASan builder is responsible to put it in the
@@ -1756,9 +1735,6 @@ def main():
   option_parser.add_option('--generate-json-file', action='store_true',
                            default=False,
                            help='output JSON results file if specified.')
-  option_parser.add_option('--parallel', action='store_true',
-                           help='Shard and run tests in parallel for speed '
-                                'with sharding_supervisor.')
   option_parser.add_option('--llvmpipe', action='store_const',
                            const=xvfb_path, dest='llvmpipe_dir',
                            help='Use software gpu pipe directory.')
@@ -1784,9 +1760,6 @@ def main():
                            help='Start virtual X server on Linux.')
   option_parser.add_option('--no-xvfb', action='store_false', dest='xvfb',
                            help='Do not start virtual X server on Linux.')
-  option_parser.add_option('--sharding-args', dest='sharding_args',
-                           default='',
-                           help='Options to pass to sharding_supervisor.')
   option_parser.add_option('-o', '--results-directory', default='',
                            help='output results directory for JSON file.')
   option_parser.add_option('--chartjson-file', default='',
@@ -1876,8 +1849,6 @@ def main():
                            help='Source paths in stack traces will be stripped '
                            'of prefixes ending with this substring. This '
                            'option is used by sanitizer tools.')
-  option_parser.add_option('--extra-sharding-args', default='',
-                           help='Extra options for run_test_cases.py.')
   option_parser.add_option('--no-spawn-dbus', action='store_true',
                            default=False,
                            help='Disable GLib DBus bug workaround: '
@@ -1942,24 +1913,10 @@ def main():
     options.enable_lsan = (options.enable_lsan or
                            options.factory_properties.get('lsan', False))
 
-    extra_sharding_args_list = options.extra_sharding_args.split()
-
-    # run_test_cases.py and the brave new test launcher need different flags to
-    # enable verbose output. We support both.
-    always_print_test_output = ['--verbose',
-                                '--test-launcher-print-test-stdio=always']
-    if options.enable_asan:
-      extra_sharding_args_list.extend(always_print_test_output)
     if options.enable_tsan:
-      # Print ThreadSanitizer reports; don't cluster the tests so that TSan exit
-      # code denotes a test failure.
-      extra_sharding_args_list.extend(always_print_test_output)
-      extra_sharding_args_list.append('--clusters=1')
-      # Data races may be flaky, but we don't want to restart the test if
-      # there's been a race report.
-      options.sharding_args += ' --retries 0'
-
-    options.extra_sharding_args = ' '.join(extra_sharding_args_list)
+      # TODO(glider): switch TSan to recipes and move this flag into the recipe
+      # config.
+      args.append('--test-launcher-print-test-stdio=always')
 
     # We will use this to accumulate overrides for the command under test,
     # That we may not need or want for other support commands.
@@ -2048,7 +2005,9 @@ def main():
         msan_options += ['detect_leaks=1']
       AddToExistingEnv(extra_env, 'MSAN_OPTIONS', msan_options)
 
-    # Set the number of shards environement variables.
+    # Set the number of shards environment variables.
+    # NOTE: Chromium's test launcher will ignore these in favor of the command
+    # line flags passed in _BuildTestBinaryCommand.
     if options.total_shards and options.shard_index:
       extra_env['GTEST_TOTAL_SHARDS'] = str(options.total_shards)
       extra_env['GTEST_SHARD_INDEX'] = str(options.shard_index - 1)
