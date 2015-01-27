@@ -186,20 +186,16 @@ class IntegratorTest(unittest.TestCase):
         external_idstring=build_id,
     )
 
-  def assert_leased(self, build_id):
-    ten_second_from_now = common.datetime_to_timestamp(
-        datetime.datetime.utcnow() + datetime.timedelta(seconds=10))
-
-    self.assertTrue(build_id in self.integrator._leases)
-    self.assertTrue(self.integrator._leases[build_id]['key'] == LEASE_KEY)
-
+  def assert_buildbucket_lease_was_called(self, build_id):
     for _, kwargs in self.buildbucket.api.lease.call_args_list:
-      body = kwargs['body']
       if kwargs['id'] == build_id:
-        self.assertGreaterEqual(
-            body['lease_expiration_ts'], ten_second_from_now)
         return
     self.fail('Build %s was not leased' % build_id)
+
+  def assert_leased(self, build_id):
+    self.assertTrue(build_id in self.integrator._leases)
+    self.assertTrue(self.integrator._leases[build_id]['key'] == LEASE_KEY)
+    self.assert_buildbucket_lease_was_called(build_id)
 
   def test_minimalistic_build(self):
     with self.create_integrator():
@@ -216,6 +212,31 @@ class IntegratorTest(unittest.TestCase):
 
       self.assert_leased('1')
       self.assert_added_build_request('1', 'Release', self.ssid)
+
+  def test_invalid_build_def(self):
+    with self.create_integrator():
+      self.buildbucket.api.peek.return_value = {
+          'builds': [{
+              'id': '1',
+          }],
+      }
+
+      run_deferred(self.integrator.poll_builds())
+
+      self.assert_buildbucket_lease_was_called('1')
+      self.buildbucket.api.fail.assert_called_once_with(
+          id='1',
+          body={
+              'lease_key': LEASE_KEY,
+              'failure_reason': 'INVALID_BUILD_DEFINITION',
+              'result_details_json': json.dumps({
+                  'error': {
+                      'message': (
+                          'Build parameters (parameters_json) are not set'),
+                  }
+              }, sort_keys=True)
+          })
+      self.assertFalse(self.buildbot.add_build_request.called)
 
   def test_build_with_properties(self):
     with self.create_integrator():
@@ -316,7 +337,6 @@ class IntegratorTest(unittest.TestCase):
         run_deferred(self.integrator.poll_builds())
 
       # Assert added one buildset of two.
-      self.assertEqual(self.buildbucket.api.lease.call_count, 1)
       self.assertEqual(bb.add_build_request.call_count, 1)
 
   def test_nothing_is_scheduled_if_builders_do_not_have_connected_slaves(self):

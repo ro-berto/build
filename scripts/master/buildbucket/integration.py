@@ -298,27 +298,40 @@ class BuildBucketIntegrator(object):
     Args:
       build (dict): a build received from buildbucket.peek api.
     """
-    self.log(
-        'Will try to schedule buildbucket build %s' % build.get('id'),
-        level=logging.DEBUG)
-
-    try:
-      self._validate_build(build)
-    except ValueError as ex:
-      # TODO: mark the build as failed on buildbucket.
+    build_id = build.get('id')
+    if build_id is None:
       self.log(
-          'Build is invalid: %s.\nBuild definition: %s' %
-          (ex, json.dumps(build)))
+          'Received a build without an id: %r' % build,
+          level=logging.WARNING)
       return
 
-    build_id = build['id']
-    params = json.loads(build['parameters_json'])
+    self.log(
+        'Will try to schedule buildbucket build %s' % build_id,
+        level=logging.DEBUG)
 
     lease_key = yield self._try_lease_build(build)
     if not lease_key:
       self.log('Could not lease build %s' % build_id)
       return
 
+    try:
+      self._validate_build(build)
+    except ValueError as ex:
+      self.log('Definition of build %s is invalid: %s.' % (build_id, ex))
+      self.buildbucket_service.api.fail(
+          id=build_id,
+          body={
+              'lease_key': lease_key,
+              'failure_reason': 'INVALID_BUILD_DEFINITION',
+              'result_details_json': json.dumps({
+                  'error': {
+                      'message': str(ex),
+                  },
+              }, sort_keys=True),
+          })
+      return
+
+    params = json.loads(build['parameters_json'])
     builder_name = params['builder_name']
     self.log('Scheduling build %s (%s)...' % (build_id, builder_name))
 
