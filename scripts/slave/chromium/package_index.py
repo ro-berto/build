@@ -155,6 +155,9 @@ class IndexPack(object):
             include_paths.add('-isystem%s' % os.path.normpath(path[0]))
             fname = '/'.join(path)
           fname_fullpath = os.path.join(entry['directory'], fname)
+          if fname_fullpath not in self.filesizes:
+            print 'No information about required input file %s' % fname_fullpath
+            continue
           required_input = {
               # Note that although the paths seem to contain redundancy (e. g.
               # '/path/to/lib/../include') we can't use os.path.normpath() here,
