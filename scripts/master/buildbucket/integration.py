@@ -27,7 +27,7 @@ BUILD_ID_PROPERTY = 'build_id'
 BUILDSET_REASON = 'buildbucket'
 LEASE_KEY_PROPERTY = 'lease_key'
 PROPERTY_SOURCE = 'buildbucket'
-LEASE_CLEANUP_INTERVAL = datetime.timedelta(minutes=5)
+LEASE_CLEANUP_INTERVAL = datetime.timedelta(minutes=1)
 
 
 class BuildBucketIntegrator(object):
@@ -99,7 +99,7 @@ class BuildBucketIntegrator(object):
     self.log('integrator started')
     self._do_until_stopped(self.heartbeat_interval, self.send_heartbeats)
     self._do_until_stopped(
-        LEASE_CLEANUP_INTERVAL, self._clean_completed_build_requests)
+        LEASE_CLEANUP_INTERVAL, self.clean_completed_build_requests)
 
   @inlineCallbacks
   def _get_leases_from_db(self):
@@ -448,7 +448,7 @@ class BuildBucketIntegrator(object):
           yield lease['build_request'].cancel()
 
   @inlineCallbacks
-  def _clean_completed_build_requests(self):
+  def clean_completed_build_requests(self):
     """Deletes leases that point to completed build requests.
 
     Since Buildbot's requestCancelled notifcation does not work,
@@ -457,13 +457,19 @@ class BuildBucketIntegrator(object):
     if not self._leases:
       return
     for build_id, lease in self._leases.items():
+      # Check that build_id is still in self._leases because this loop iteration
+      # is async and self._leases may be modified in the meantime.
+      if build_id not in self._leases:
+        continue
+
       request = lease['build_request']
-      is_compelte = yield request.is_complete()
-      if is_compelte:
+      is_complete = yield request.is_complete()
+      if is_complete and build_id in self._leases:
         self.log(('Build request %r is complete. Deleting lease for build %s' %
                   (request, build_id)),
                  level=logging.DEBUG)
         del self._leases[build_id]
+        yield self.buildbucket_service.api.cancel(id=build_id)
 
   def _do_until_stopped(self, interval, fn):
     def loop_iteration():

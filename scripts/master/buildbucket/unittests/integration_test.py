@@ -406,6 +406,28 @@ class IntegratorTest(unittest.TestCase):
 
       self.assertTrue(build_request.cancel.called)
 
+  def test_clean_completed_build_requests(self):
+    with self.create_integrator():
+      def make_build_request(complete):
+        result = Mock()
+        result.is_complete.return_value = complete
+        return result
+      self.integrator._leases = {
+          '1': {
+              'lease_key': LEASE_KEY,
+              'build_request': make_build_request(True),
+          },
+          '2': {
+              'lease_key': LEASE_KEY,
+              'build_request': make_build_request(False),
+          },
+      }
+
+      run_deferred(self.integrator.clean_completed_build_requests())
+
+      self.assertEqual(1, self.buildbucket.api.cancel.call_count)
+      self.buildbucket.api.cancel.assert_called_once_with(id='1')
+
   def test_build_started(self):
     with self.create_integrator():
       build = self.mock_existing_build()
