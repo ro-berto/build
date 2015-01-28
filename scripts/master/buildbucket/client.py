@@ -17,20 +17,24 @@ import httplib2
 import apiclient
 
 
-BUILDBUCKET_HOSTNAME = 'cr-buildbucket.appspot.com'
+BUILDBUCKET_HOSTNAME_PRODUCTION = 'cr-buildbucket.appspot.com'
+BUILDBUCKET_HOSTNAME_TESTING = 'cr-buildbucket-test.appspot.com'
 
 
 def buildbucket_api_discovery_url(hostname=None):
   return (
       'https://%s/_ah/api/discovery/v1/apis/{api}/{apiVersion}/rest' % hostname)
 
-def create_buildbucket_service(master, hostname=None, verbose=None):
+def create_buildbucket_service(
+    master, hostname=None, verbose=None, is_production=False):
   """Asynchronously creates buildbucket API resource.
 
   Returns:
     A DeferredResource as Deferred.
   """
-  hostname = hostname or BUILDBUCKET_HOSTNAME
+  hostname = hostname or (
+      BUILDBUCKET_HOSTNAME_PRODUCTION if is_production
+      else BUILDBUCKET_HOSTNAME_TESTING)
   return DeferredResource.build(
       'buildbucket',
       'v1',
