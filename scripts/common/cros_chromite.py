@@ -406,7 +406,7 @@ def main():
   logging.getLogger().setLevel(loglevel)
 
   pm = DefaultChromitePinManager
-  cm = _GetCacheManager(pm, cache_dir=args.cache_directory)
+  cm = _GetCacheManager(pm, allow_fetch=True, cache_dir=args.cache_directory)
   updated = _UpdateCache(cm, pm, force=args.force)
   logging.info('Updated %d cache artifact(s).', len(updated))
   return 0
