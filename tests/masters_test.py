@@ -244,7 +244,6 @@ def main(argv):
       'master.client.nacl.toolchain': 'NativeClientToolchain',
       'master.client.pagespeed': 'PageSpeed',
       'master.client.pdfium': 'Pdfium',
-      'master.client.polymer': 'Polymer',
       'master.client.sfntly': 'Sfntly',
       'master.client.skia': 'Skia',
       'master.client.skia.android': 'SkiaAndroid',
