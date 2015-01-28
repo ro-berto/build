@@ -23,8 +23,17 @@ import json
 import logging
 import sys
 
-import requests
-import requests.exceptions
+try:
+  import requests
+  import requests.exceptions
+except ImportError:
+  # TODO(dnj): Remove me.
+  #
+  # crbug.com/452528: Inconsistent PYTHONPATH environments sometimes cause
+  # slaves.cfg (and thus this file) to be parsed without 'third_party/requests'
+  # present. We will add logic to gracefully become read-only when 'requests'
+  # is missing so bots don't show errors.
+  requests = None
 
 from common import configcache
 
@@ -319,13 +328,12 @@ def Get(branch=None, allow_fetch=False):
     branch: (str) The name of the branch to retrieve. If None, use tip-of-tree.
     allow_fetch: (bool) If True, allow a Get miss to fetch a new cache value.
   """
-  cache_manager = configcache.CacheManager(
-      'chromite',
-      fetcher=(ChromiteFetcher(DefaultChromitePinManager) if allow_fetch
-                                                          else None),
-  )
+  cache_manager = _GetCacheManager(
+      DefaultChromitePinManager,
+      allow_fetch=allow_fetch)
+
   try:
-    _Fetch(cache_manager, DefaultChromitePinManager)
+    _UpdateCache(cache_manager, DefaultChromitePinManager)
   except configcache.ReadOnlyError as e:
     raise ChromiteError("Cannot update read-only config cache. Run "
                         "`gclient runhooks --force`: %s" % (e,))
@@ -336,7 +344,7 @@ def Get(branch=None, allow_fetch=False):
   ).GetConfig(branch)
 
 
-def _Fetch(cache_manager, pin_manager, force=False):
+def _UpdateCache(cache_manager, pin_manager, force=False):
   """Fetches all default pinned versions.
 
   Args:
@@ -360,6 +368,24 @@ def _Fetch(cache_manager, pin_manager, force=False):
   return updated
 
 
+def _GetCacheManager(pin_manager, allow_fetch=False, **kwargs):
+  """Returns: (CacheManager) A CacheManager instance.
+
+  This function will return a configured CacheManager instance. If 'allow_fetch'
+  is None or if the 'requests' module could not be imported (crbug.com/452528),
+  the returned CacheManager will be read-only (i.e., no ChromiteFetcher).
+
+  Args:
+    pin_manager: The ChromitePinManager to use.
+  """
+  return configcache.CacheManager(
+      'chromite',
+      # TODO(dnj): Remove the 'requests' test (crbug.com/452258).
+      fetcher=(ChromiteFetcher(pin_manager) if allow_fetch and requests
+                                            else None),
+      **kwargs)
+
+
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('-v', '--verbose', action='count', default=0,
@@ -380,11 +406,8 @@ def main():
   logging.getLogger().setLevel(loglevel)
 
   pm = DefaultChromitePinManager
-  cm = configcache.CacheManager(
-      'chromite',
-      fetcher=ChromiteFetcher(pm),
-      cache_dir=args.cache_directory)
-  updated = _Fetch(cm, pm, force=args.force)
+  cm = _GetCacheManager(pm, cache_dir=args.cache_directory)
+  updated = _UpdateCache(cm, pm, force=args.force)
   logging.info('Updated %d cache artifact(s).', len(updated))
   return 0
 
