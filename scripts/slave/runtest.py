@@ -1647,7 +1647,7 @@ def _ConfigureSanitizerTools(options, args, extra_env):
   # Support factory properties as an alternative to command line flags.
   for sanitizer_name in ['asan', 'msan', 'tsan', 'lsan']:
     if options.factory_properties.get(sanitizer_name, False):
-      options['enable_%s' % sanitizer_name] = True
+      setattr(options, 'enable_%s' % sanitizer_name, True)
 
   if options.enable_tsan:
     # TODO(glider): switch TSan to recipes and move this flag into the recipe
