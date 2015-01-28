@@ -138,17 +138,6 @@ BUILDERS = freeze({
           'platform': 'linux',
         },
       },
-      'linux_chromium_compile_dbg': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'chromium_config': 'chromium',
-        'compile_only': True,
-        'testing': {
-          'platform': 'linux',
-        },
-      },
       'linux_chromium_compile_dbg_ng': {
         'based_on_main_waterfall': {
           'mastername': 'chromium.linux',
@@ -182,18 +171,6 @@ BUILDERS = freeze({
           'platform': 'linux',
         },
       },
-      'linux_chromium_chromeos_dbg': {
-        'add_telemetry_tests': False,
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'chromium_config': 'chromium_chromeos',
-        'compile_only': False,
-        'testing': {
-          'platform': 'linux',
-        },
-      },
       'linux_chromium_chromeos_dbg_ng': {
         'based_on_main_waterfall': {
           'mastername': 'chromium.chromiumos',
@@ -213,19 +190,6 @@ BUILDERS = freeze({
         'compile_only': True,
         # Skip somewhat expensive isolate step where it's not needed.
         'disable_isolate': True,
-        'testing': {
-          'platform': 'linux',
-        },
-      },
-      'linux_chromium_chromeos_rel': {
-        'add_telemetry_tests': False,
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'enable_swarming': True,
-        'chromium_config': 'chromium_chromeos',
-        'compile_only': False,
         'testing': {
           'platform': 'linux',
         },
@@ -259,30 +223,6 @@ BUILDERS = freeze({
         'compile_only': True,
         # Skip somewhat expensive isolate step where it's not needed.
         'disable_isolate': True,
-        'testing': {
-          'platform': 'linux',
-        },
-      },
-      'linux_chromium_chromeos_ozone_rel': {
-        'add_telemetry_tests': False,
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'chromium_config': 'chromium_chromeos_ozone',
-        'compile_only': False,
-        'testing': {
-          'platform': 'linux',
-        },
-      },
-      'linux_chromium_chromeos_ozone_dbg': {
-        'add_telemetry_tests': False,
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'chromium_config': 'chromium_chromeos_ozone',
-        'compile_only': False,
         'testing': {
           'platform': 'linux',
         },
@@ -350,17 +290,6 @@ BUILDERS = freeze({
           'platform': 'linux',
         },
       },
-      'linux_chromium_compile_dbg_32': {
-         'chromium_config_kwargs': {
-           'BUILD_CONFIG': 'Debug',
-           'TARGET_BITS': 32,
-         },
-         'chromium_config': 'chromium',
-         'compile_only': True,
-         'testing': {
-           'platform': 'linux',
-         },
-       },
       'linux_chromium_compile_dbg_32_ng': {
         'based_on_main_waterfall': {
           'mastername': 'chromium.linux',
@@ -385,17 +314,6 @@ BUILDERS = freeze({
   },
   'tryserver.chromium.mac': {
     'builders': {
-      'mac_chromium_dbg': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'chromium_config': 'chromium',
-        'compile_only': False,
-        'testing': {
-          'platform': 'mac',
-        },
-      },
       'mac_chromium_dbg_ng': {
         'based_on_main_waterfall': {
           'mastername': 'chromium.mac',
@@ -426,17 +344,6 @@ BUILDERS = freeze({
           'platform': 'mac',
         },
       },
-      'mac_chromium_compile_dbg': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'chromium_config': 'chromium',
-        'compile_only': True,
-        'testing': {
-          'platform': 'mac',
-        },
-      },
       'mac_chromium_compile_dbg_ng': {
         'based_on_main_waterfall': {
           'mastername': 'chromium.mac',
@@ -444,17 +351,6 @@ BUILDERS = freeze({
         },
         # Skip somewhat expensive isolate step where it's not needed.
         'disable_isolate': True,
-        'testing': {
-          'platform': 'mac',
-        },
-      },
-      'mac_chromium_compile_rel': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'chromium_config': 'chromium',
-        'compile_only': True,
         'testing': {
           'platform': 'mac',
         },
@@ -511,35 +407,12 @@ BUILDERS = freeze({
   },
   'tryserver.chromium.win': {
     'builders': {
-      'win_chromium_dbg': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'chromium_config': 'chromium',
-        'compile_only': False,
-        'testing': {
-          'platform': 'win',
-        },
-      },
       'win_chromium_dbg_ng': {
         'based_on_main_waterfall': {
           'mastername': 'chromium.win',
           'buildername': 'Win Builder (dbg)',
           'tester': 'Win7 Tests (dbg)(1)',
         },
-        'testing': {
-          'platform': 'win',
-        },
-      },
-      'win_chromium_rel': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'enable_swarming': True,
-        'chromium_config': 'chromium',
-        'compile_only': False,
         'testing': {
           'platform': 'win',
         },
@@ -570,17 +443,6 @@ BUILDERS = freeze({
           'buildername': 'Win Builder',
           'tester': 'Vista Tests (1)',
         },
-        'testing': {
-          'platform': 'win',
-        },
-      },
-      'win_chromium_compile_dbg': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'chromium_config': 'chromium',
-        'compile_only': True,
         'testing': {
           'platform': 'win',
         },
@@ -623,18 +485,6 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
         },
-        'chromium_config': 'chromium',
-        'compile_only': False,
-        'testing': {
-          'platform': 'win',
-        },
-      },
-      'win_chromium_x64_rel': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'enable_swarming': True,
         'chromium_config': 'chromium',
         'compile_only': False,
         'testing': {
@@ -1222,20 +1072,6 @@ def GenTests(api):
         props(mastername=mastername, buildername=buildername)
       )
 
-  # It is important that even when steps related to deapplying the patch
-  # fail, we either print the summary for all retried steps or do no
-  # retries at all.
-  yield (
-    api.test('persistent_failure_and_runhooks_2_fail_test') +
-    props(buildername='win_chromium_rel', mastername='tryserver.chromium.win') +
-    api.platform.name('win') +
-    api.override_step_data('base_unittests (with patch)',
-                           canned_test(passing=False)) +
-    api.override_step_data('base_unittests (without patch)',
-                           canned_test(passing=False)) +
-    api.step_data('gclient runhooks (without patch)', retcode=1)
-  )
-
   yield (
     api.test('invalid_results') +
     props() +
@@ -1271,15 +1107,15 @@ def GenTests(api):
   for step in ('bot_update', 'gclient runhooks (with patch)'):
     yield (
       api.test(_sanitize_nonalpha(step) + '_failure') +
-      props(buildername='win_chromium_rel',
-            mastername='tryserver.chromium.win') +
-      api.platform.name('win') +
+      props(buildername='linux_chromium_asan_rel',
+            mastername='tryserver.chromium.linux') +
+      api.platform.name('linux') +
       api.step_data(step, retcode=1)
     )
 
   yield (
     api.test('runhooks_failure') +
-    props(buildername='win_chromium_rel',
+    props(buildername='win_chromium_rel_ng',
           mastername='tryserver.chromium.win') +
     api.platform.name('win') +
     api.step_data('gclient runhooks (with patch)', retcode=1) +
@@ -1296,17 +1132,17 @@ def GenTests(api):
 
   yield (
     api.test('compile_failure') +
-    props(buildername='win_chromium_rel',
-          mastername='tryserver.chromium.win') +
-    api.platform.name('win') +
+    props(buildername='linux_chromium_asan_rel',
+          mastername='tryserver.chromium.linux') +
+    api.platform.name('linux') +
     api.step_data('compile (with patch)', retcode=1)
   )
 
   yield (
     api.test('compile_failure_without_patch') +
-    props(buildername='win_chromium_rel',
-          mastername='tryserver.chromium.win') +
-    api.platform.name('win') +
+    props(buildername='linux_chromium_asan_rel',
+          mastername='tryserver.chromium.linux') +
+    api.platform.name('linux') +
     api.step_data('compile (with patch)', retcode=1) +
     api.step_data('compile (without patch)', retcode=1)
   )
@@ -1352,14 +1188,21 @@ def GenTests(api):
 
   yield (
     api.test('check_swarming_version_failure') +
-    props(mastername='tryserver.chromium.win', buildername='win_chromium_rel') +
-    api.platform.name('win') +
+    props(mastername='tryserver.chromium.linux',
+          buildername='linux_chromium_asan_rel') +
+    api.platform.name('linux') +
     api.step_data('swarming.py --version', retcode=1) +
     api.override_step_data('read test spec', api.json.output({
         'gtest_tests': [
           {
             'test': 'base_unittests',
             'swarming': {'can_use_on_swarming_builders': True},
+          },
+          {
+            'test': 'browser_tests',
+            'exclude_builders': [
+              'tryserver.chromium.linux:linux_chromium_asan_rel'
+            ],
           },
         ],
       })

@@ -3,11 +3,19 @@
     "cmd": [
       "python",
       "-u",
+      "[BUILD]\\scripts\\slave\\kill_processes.py"
+    ],
+    "name": "taskkill"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[BUILD]\\scripts\\slave\\bot_update.py",
       "--master",
       "tryserver.chromium.win",
       "--builder",
-      "win_chromium_rel",
+      "win_chromium_rel_ng",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -25,8 +33,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD",
-      "--force"
+      "src@HEAD"
     ],
     "name": "bot_update",
     "~followup_annotations": [
@@ -71,65 +78,13 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]\\src\\testing\\buildbot\\chromium_trybot.json",
-      "/path/to/tmp/json"
+      "[SLAVE_BUILD]\\src\\tools\\swarming_client\\swarming.py",
+      "--version"
     ],
-    "name": "read test spec",
+    "name": "swarming.py --version",
+    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: testing\\buildbot\\chromium_trybot.json@@@",
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_unittests\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"platforms\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"linux\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"mac\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    ], @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"test\": \"mojo_common_unittests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"args\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"--test-launcher-print-test-stdio=always\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    ], @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"chromium_configs\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"chromium_chromeos\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"chromium_chromeos_clang\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"chromium_chromeos_ozone\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    ], @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"platforms\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"linux\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    ], @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"test\": \"sandbox_linux_unittests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"exclude_builders\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"tryserver.chromium.win:win_chromium_x64_rel\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    ], @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"test\": \"browser_tests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\testing\\scripts\\get_compile_targets.py",
-      "--output",
-      "/path/to/tmp/json",
-      "--",
-      "--build-config-fs",
-      "Release",
-      "--paths",
-      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]\\\\src\"}",
-      "--properties",
-      "{\"buildername\": \"win_chromium_rel\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
-    ],
-    "name": "get compile targets for scripts",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_TEXT@0.4.10@@@"
     ]
   },
   {
@@ -140,7 +95,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 use_goma=1"
+      "GYP_DEFINES": "chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1"
     },
     "name": "gclient runhooks (with patch)",
     "~followup_annotations": [
@@ -152,19 +107,11 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\kill_processes.py"
-    ],
-    "name": "taskkill"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[BUILD]\\scripts\\slave\\bot_update.py",
       "--master",
       "tryserver.chromium.win",
       "--builder",
-      "win_chromium_rel",
+      "win_chromium_rel_ng",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -216,7 +163,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 use_goma=1"
+      "GYP_DEFINES": "chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1"
     },
     "name": "gclient runhooks (without patch)",
     "~followup_annotations": [

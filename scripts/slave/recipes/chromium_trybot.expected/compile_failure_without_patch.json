@@ -3,11 +3,11 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\bot_update.py",
+      "[BUILD]/scripts/slave/bot_update.py",
       "--master",
-      "tryserver.chromium.win",
+      "tryserver.chromium.linux",
       "--builder",
-      "win_chromium_rel",
+      "linux_chromium_asan_rel",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -72,12 +72,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]\\src\\testing\\buildbot\\chromium_trybot.json",
+      "[SLAVE_BUILD]/src/testing/buildbot/chromium_memory_trybot.json",
       "/path/to/tmp/json"
     ],
     "name": "read test spec",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: testing\\buildbot\\chromium_trybot.json@@@",
+      "@@@STEP_TEXT@path: testing/buildbot/chromium_memory_trybot.json@@@",
       "@@@STEP_LOG_LINE@json.output@[@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_unittests\", @@@",
       "@@@STEP_LOG_LINE@json.output@  {@@@",
@@ -115,16 +115,16 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\testing\\scripts\\get_compile_targets.py",
+      "[SLAVE_BUILD]/src/testing/scripts/get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]\\\\src\"}",
+      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
-      "{\"buildername\": \"win_chromium_rel\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
+      "{\"buildername\": \"linux_chromium_asan_rel\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -136,11 +136,11 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]\\gclient.py",
+      "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 use_goma=1"
+      "GYP_DEFINES": "asan=1 clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' lsan=1 target_arch=x64 use_allocator=none use_goma=1"
     },
     "name": "gclient runhooks (with patch)"
   },
@@ -148,21 +148,21 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\compile.py",
+      "[BUILD]/scripts/slave/compile.py",
       "--target",
       "Release",
       "--src-dir",
-      "[SLAVE_BUILD]\\src",
+      "[SLAVE_BUILD]/src",
       "--build-tool",
       "ninja",
       "--compiler",
-      "goma",
+      "goma-clang",
       "--goma-dir",
-      "[BUILD]\\goma",
+      "[BUILD]/goma",
       "--",
       "base_unittests",
       "browser_tests",
-      "mini_installer"
+      "mojo_common_unittests"
     ],
     "name": "compile (with patch)",
     "~followup_annotations": [
@@ -174,19 +174,11 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\kill_processes.py"
-    ],
-    "name": "taskkill"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]\\scripts\\slave\\bot_update.py",
+      "[BUILD]/scripts/slave/bot_update.py",
       "--master",
-      "tryserver.chromium.win",
+      "tryserver.chromium.linux",
       "--builder",
-      "win_chromium_rel",
+      "linux_chromium_asan_rel",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -234,11 +226,11 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]\\gclient.py",
+      "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 use_goma=1"
+      "GYP_DEFINES": "asan=1 clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' lsan=1 target_arch=x64 use_allocator=none use_goma=1"
     },
     "name": "gclient runhooks (without patch)"
   },
@@ -246,21 +238,21 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\compile.py",
+      "[BUILD]/scripts/slave/compile.py",
       "--target",
       "Release",
       "--src-dir",
-      "[SLAVE_BUILD]\\src",
+      "[SLAVE_BUILD]/src",
       "--build-tool",
       "ninja",
       "--compiler",
-      "goma",
+      "goma-clang",
       "--goma-dir",
-      "[BUILD]\\goma",
+      "[BUILD]/goma",
       "--",
       "base_unittests",
       "browser_tests",
-      "mini_installer"
+      "mojo_common_unittests"
     ],
     "name": "compile (without patch)",
     "~followup_annotations": [

@@ -3,11 +3,11 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\bot_update.py",
+      "[BUILD]/scripts/slave/bot_update.py",
       "--master",
-      "tryserver.chromium.win",
+      "tryserver.chromium.linux",
       "--builder",
-      "win_chromium_rel",
+      "linux_chromium_asan_rel",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -72,12 +72,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]\\src\\testing\\buildbot\\chromium_trybot.json",
+      "[SLAVE_BUILD]/src/testing/buildbot/chromium_memory_trybot.json",
       "/path/to/tmp/json"
     ],
     "name": "read test spec",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: testing\\buildbot\\chromium_trybot.json@@@",
+      "@@@STEP_TEXT@path: testing/buildbot/chromium_memory_trybot.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
@@ -85,6 +85,12 @@
       "@@@STEP_LOG_LINE@json.output@        \"can_use_on_swarming_builders\": true@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"test\": \"base_unittests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"exclude_builders\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"tryserver.chromium.linux:linux_chromium_asan_rel\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      ], @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"test\": \"browser_tests\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -95,16 +101,16 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\testing\\scripts\\get_compile_targets.py",
+      "[SLAVE_BUILD]/src/testing/scripts/get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]\\\\src\"}",
+      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
-      "{\"buildername\": \"win_chromium_rel\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
+      "{\"buildername\": \"linux_chromium_asan_rel\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -117,12 +123,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]\\src\\testing\\buildbot\\trybot_analyze_config.json",
+      "[SLAVE_BUILD]/src/testing/buildbot/trybot_analyze_config.json",
       "/path/to/tmp/json"
     ],
     "name": "read filter exclusion spec",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: 'testing\\\\buildbot\\\\trybot_analyze_config.json'@@@",
+      "@@@STEP_TEXT@path: 'testing/buildbot/trybot_analyze_config.json'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"exclusions\": [@@@",
@@ -138,12 +144,12 @@
   },
   {
     "cmd": [
-      "[DEPOT_TOOLS]\\git.bat",
+      "git",
       "diff",
       "--cached",
       "--name-only"
     ],
-    "cwd": "[SLAVE_BUILD]\\src",
+    "cwd": "[SLAVE_BUILD]/src",
     "name": "git diff to analyze patch",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -155,7 +161,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\swarming_client\\swarming.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "--version"
     ],
     "name": "swarming.py --version",
