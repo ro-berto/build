@@ -1124,9 +1124,8 @@ def _MainMac(options, args, extra_env):
       command.append('--test-launcher-summary-output=%s' % json_file_name)
 
     pipes = []
-    if options.enable_asan:
-      symbolize_command = _GetSanitizerSymbolizeCommand()
-      pipes = [symbolize_command, ['c++filt']]
+    if options.use_symbolization_script:
+      pipes = [_GetSanitizerSymbolizeCommand()]
 
     command = _GenerateRunIsolatedCommand(build_dir, test_exe_path, options,
                                           command)
@@ -1644,6 +1643,96 @@ def _UpdateRunBenchmarkArgs(args, options):
   return None
 
 
+def _ConfigureSanitizerTools(options, args, extra_env):
+  # Support factory properties as an alternative to command line flags.
+  for sanitizer_name in ['asan', 'msan', 'tsan', 'lsan']:
+    if options.factory_properties.get(sanitizer_name, False):
+      options['enable_%s' % sanitizer_name] = True
+
+  if options.enable_tsan:
+    # TODO(glider): switch TSan to recipes and move this flag into the recipe
+    # config.
+    args.append('--test-launcher-print-test-stdio=always')
+
+  if (options.enable_asan or options.enable_tsan or
+      options.enable_msan or options.enable_lsan):
+    # Instruct GTK to use malloc while running ASan, TSan, MSan or LSan tests.
+    extra_env['G_SLICE'] = 'always-malloc'
+    extra_env['NSS_DISABLE_ARENA_FREE_LIST'] = '1'
+    extra_env['NSS_DISABLE_UNLOAD'] = '1'
+
+  symbolizer_path = os.path.abspath(os.path.join('src', 'third_party',
+      'llvm-build', 'Release+Asserts', 'bin', 'llvm-symbolizer'))
+  disable_sandbox_flag = '--no-sandbox'
+  if args and 'layout_test_wrapper' in args[0]:
+    disable_sandbox_flag = '--additional-drt-flag=%s' % disable_sandbox_flag
+
+  # Symbolization of sanitizer reports.
+  if options.enable_tsan or options.enable_lsan:
+    # TSan and LSan are not sandbox-compatible, so we can use online
+    # symbolization. In fact, they need symbolization to be able to apply
+    # suppressions.
+    symbolization_options = ['symbolize=1',
+                             'external_symbolizer_path=%s' % symbolizer_path,
+                             'strip_path_prefix=%s' % options.strip_path_prefix]
+  elif options.enable_asan or options.enable_msan:
+    # ASan and MSan use a script for offline symbolization.
+    # Important note: when running ASan or MSan with leak detection enabled,
+    # we must use the LSan symbolization options above.
+    symbolization_options = ['symbolize=0']
+    # Set the path to llvm-symbolizer to be used by asan_symbolize.py
+    extra_env['LLVM_SYMBOLIZER_PATH'] = symbolizer_path
+    options.use_symbolization_script = True
+
+  def AddToExistingEnv(env_dict, key, options_list):
+    # Adds a key to the supplied environment dictionary but appends it to
+    # existing environment variables if it already contains values.
+    assert type(env_dict) is dict
+    assert type(options_list) is list
+    env_dict[key] = ' '.join(filter(bool, [os.environ.get(key)]+options_list))
+
+  # ThreadSanitizer
+  if options.enable_tsan:
+    tsan_options = symbolization_options
+    AddToExistingEnv(extra_env, 'TSAN_OPTIONS', tsan_options)
+    # Disable sandboxing under TSan for now. http://crbug.com/223602.
+    args.append(disable_sandbox_flag)
+
+  # LeakSanitizer
+  if options.enable_lsan:
+    # Symbolization options set here take effect only for standalone LSan.
+    lsan_options = symbolization_options + \
+                   ['suppressions=%s' % options.lsan_suppressions_file,
+                    'print_suppressions=1']
+    AddToExistingEnv(extra_env, 'LSAN_OPTIONS', lsan_options)
+
+    # Disable sandboxing under LSan.
+    args.append(disable_sandbox_flag)
+
+  # AddressSanitizer
+  if options.enable_asan:
+    # Avoid aggressive memcmp checks until http://crbug.com/178677 is
+    # fixed.  Also do not replace memcpy/memmove/memset to suppress a
+    # report in OpenCL, see http://crbug.com/162461.
+    asan_options = symbolization_options + \
+                   ['strict_memcmp=0',
+                    'replace_intrin=0']
+    if options.enable_lsan:
+      asan_options += ['detect_leaks=1']
+    AddToExistingEnv(extra_env, 'ASAN_OPTIONS', asan_options)
+
+    # ASan is not yet sandbox-friendly on Windows (http://crbug.com/382867).
+    if sys.platform == 'win32':
+      args.append(disable_sandbox_flag)
+
+  # MemorySanitizer
+  if options.enable_msan:
+    msan_options = symbolization_options
+    if options.enable_lsan:
+      msan_options += ['detect_leaks=1']
+    AddToExistingEnv(extra_env, 'MSAN_OPTIONS', msan_options)
+
+
 def main():
   """Entry point for runtest.py.
 
@@ -1874,106 +1963,15 @@ def main():
     if options.pass_build_dir:
       args.extend(['--build-dir', options.build_dir])
 
-    options.enable_asan = (options.enable_asan or
-                           options.factory_properties.get('asan', False))
-    options.enable_msan = (options.enable_msan or
-                           options.factory_properties.get('msan', False))
-    options.enable_tsan = (options.enable_tsan or
-                           options.factory_properties.get('tsan', False))
-    options.enable_lsan = (options.enable_lsan or
-                           options.factory_properties.get('lsan', False))
-
-    if options.enable_tsan:
-      # TODO(glider): switch TSan to recipes and move this flag into the recipe
-      # config.
-      args.append('--test-launcher-print-test-stdio=always')
-
     # We will use this to accumulate overrides for the command under test,
     # That we may not need or want for other support commands.
     extra_env = {}
 
-    if (options.enable_asan or options.enable_tsan or
-        options.enable_msan or options.enable_lsan):
-      # Instruct GTK to use malloc while running ASan, TSan, MSan or LSan tests.
-      extra_env['G_SLICE'] = 'always-malloc'
-      extra_env['NSS_DISABLE_ARENA_FREE_LIST'] = '1'
-      extra_env['NSS_DISABLE_UNLOAD'] = '1'
-
-    # TODO(glider): remove the symbolizer path once
-    # https://code.google.com/p/address-sanitizer/issues/detail?id=134 is fixed.
-    symbolizer_path = os.path.abspath(os.path.join('src', 'third_party',
-        'llvm-build', 'Release+Asserts', 'bin', 'llvm-symbolizer'))
-    strip_path_prefix = options.strip_path_prefix
-    disable_sandbox_flag = '--no-sandbox'
-    if args and 'layout_test_wrapper' in args[0]:
-      disable_sandbox_flag = '--additional-drt-flag=%s' % disable_sandbox_flag
-
-    # Symbolization of sanitizer reports.
+    # This option is used by sanitizer code. There is no corresponding command
+    # line flag.
     options.use_symbolization_script = False
-    if options.enable_tsan or options.enable_lsan:
-      # TSan and LSan are not sandbox-compatible, so we can use online
-      # symbolization. In fact, they need symbolization to be able to apply
-      # suppressions.
-      symbolization_options = ['symbolize=1',
-                               'external_symbolizer_path=%s' % symbolizer_path,
-                               'strip_path_prefix=%s' %  strip_path_prefix]
-    elif options.enable_asan or options.enable_msan:
-      # ASan and MSan use a script for offline symbolization.
-      # Important note: when running ASan or MSan with leak detection enabled,
-      # we must use the LSan symbolization options above.
-      symbolization_options = ['symbolize=0']
-      # Set the path to llvm-symbolizer to be used by asan_symbolize.py
-      extra_env['LLVM_SYMBOLIZER_PATH'] = symbolizer_path
-      options.use_symbolization_script = True
-
-    def AddToExistingEnv(env_dict, key, options_list):
-      # Adds a key to the supplied environment dictionary but appends it to
-      # existing environment variables if it already contains values.
-      assert type(env_dict) is dict
-      assert type(options_list) is list
-      env_dict[key] = ' '.join(filter(bool, [os.environ.get(key)]+options_list))
-
-    # ThreadSanitizer
-    if options.enable_tsan:
-      tsan_options = symbolization_options
-      AddToExistingEnv(extra_env, 'TSAN_OPTIONS', tsan_options)
-      # Disable sandboxing under TSan for now. http://crbug.com/223602.
-      args.append(disable_sandbox_flag)
-
-    # LeakSanitizer
-    if options.enable_lsan:
-      # Symbolization options set here take effect only for standalone LSan.
-      lsan_options = symbolization_options + \
-                     ['suppressions=%s' % options.lsan_suppressions_file,
-                      'print_suppressions=1']
-      AddToExistingEnv(extra_env, 'LSAN_OPTIONS', lsan_options)
-
-      # Disable sandboxing under LSan.
-      args.append(disable_sandbox_flag)
-
-    # AddressSanitizer
-    if options.enable_asan:
-      # Avoid aggressive memcmp checks until http://crbug.com/178677 is
-      # fixed.  Also do not replace memcpy/memmove/memset to suppress a
-      # report in OpenCL, see http://crbug.com/162461.
-      asan_options = symbolization_options + \
-                     ['strict_memcmp=0',
-                      'replace_intrin=0',
-                      'strip_path_prefix=%s ' % strip_path_prefix]
-      if options.enable_lsan:
-        asan_options += ['detect_leaks=1']
-      AddToExistingEnv(extra_env, 'ASAN_OPTIONS', asan_options)
-
-      # ASan is not yet sandbox-friendly on Windows (http://crbug.com/382867).
-      if sys.platform == 'win32':
-        args.append(disable_sandbox_flag)
-
-    # MemorySanitizer
-    if options.enable_msan:
-      msan_options = symbolization_options
-      if options.enable_lsan:
-        msan_options += ['detect_leaks=1']
-      AddToExistingEnv(extra_env, 'MSAN_OPTIONS', msan_options)
+    # Set up extra environment and args for sanitizer tools.
+    _ConfigureSanitizerTools(options, args, extra_env)
 
     # Set the number of shards environment variables.
     # NOTE: Chromium's test launcher will ignore these in favor of the command
