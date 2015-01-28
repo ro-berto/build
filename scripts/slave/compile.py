@@ -796,6 +796,19 @@ def main_make_android(options, args):
 
   return result
 
+
+class EnsureUpToDateFilter(chromium_utils.RunCommandFilter):
+  """Filter for RunCommand that checks whether the output contains ninja's
+  message for a no-op build."""
+  def __init__(self):
+    self.was_up_to_date = False
+
+  def FilterLine(self, a_line):
+    if 'ninja: no work to do.' in a_line:
+      self.was_up_to_date = True
+    return a_line
+
+
 def main_ninja(options, args):
   """Interprets options, clobbers object files, and calls ninja."""
 
@@ -870,6 +883,15 @@ def main_ninja(options, args):
     # Run the build.
     env.print_overrides()
     exit_status = chromium_utils.RunCommand(command, env=env)
+    if exit_status == 0 and options.ninja_ensure_up_to_date:
+      # Run the build again if we want to check that the no-op build is clean.
+      filter_obj = EnsureUpToDateFilter()
+      # Append `-d explain` to help diagnose in the failure case.
+      command += ['-d', '-explain']
+      chromium_utils.RunCommand(command, env=env, filter_obj=filter_obj)
+      if not filter_obj.was_up_to_date:
+        print 'failing build because ninja reported work to do.'
+        return 1
     return exit_status
   finally:
     goma_teardown(options, env)
@@ -1143,6 +1165,10 @@ def real_main():
                            default=os.path.join(BUILD_DIR, 'goma'),
                            help='specify goma directory')
   option_parser.add_option('--verbose', action='store_true')
+  option_parser.add_option('--ninja-ensure-up-to-date', action='store_true',
+                           help='Checks the output of the ninja builder to '
+                                'confirm that a second compile immediately '
+                                'the first is a no-op.')
 
   options, args = option_parser.parse_args()
 

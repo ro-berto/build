@@ -101,6 +101,7 @@ F('linux_clobber', linux().ChromiumFactory(
     options=['--compiler=goma', '--', 'all'],
     factory_properties={
       'archive_build': ActiveMaster.is_production_host,
+      'confirm_noop_compile': True,
       'gs_bucket': 'gs://chromium-browser-snapshots',
       'gs_acl': 'public-read',
       'show_perf_results': True,
@@ -123,6 +124,7 @@ F('linux64_clobber', linux().ChromiumFactory(
     options=['--compiler=goma', '--', 'all'],
     factory_properties={
       'archive_build': ActiveMaster.is_production_host,
+      'confirm_noop_compile': True,
       'gs_bucket': 'gs://chromium-browser-snapshots',
       'gs_acl': 'public-read',
       'show_perf_results': True,

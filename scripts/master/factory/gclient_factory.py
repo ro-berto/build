@@ -272,6 +272,10 @@ class GClientFactory(object):
         # Look for a solution named for its enclosing directory.
         project = project or os.path.basename(self._build_dir) + '.sln'
 
+      # If we want to confirm that two successive compiles result in a no-op
+      # build, tell the compile step to verify that.
+      if factory_properties.get('confirm_noop_compile'):
+        options = ['--ninja-ensure-up-to-date'] + options
       factory_cmd_obj.AddCompileStep(
           project,
           clobber,
