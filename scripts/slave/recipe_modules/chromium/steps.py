@@ -397,13 +397,14 @@ class AndroidPerfTests(Test):
 
 
 class SwarmingTest(Test):
-  def __init__(self, name, dimensions=None, target_name=None,
+  def __init__(self, name, dimensions=None, tags=None, target_name=None,
                extra_suffix=None):
     self._name = name
     self._tasks = {}
     self._results = {}
     self._target_name = target_name
     self._dimensions = dimensions
+    self._tags = tags
     self._extra_suffix = extra_suffix
 
   @property
@@ -458,6 +459,10 @@ class SwarmingTest(Test):
     # Add custom dimensions.
     if self._dimensions:
       self._tasks[suffix].dimensions.update(self._dimensions)
+
+    # Add custom tags.
+    if self._tags:
+      self._tasks[suffix].tags.update(self._tags)
 
     # Set default value.
     if 'os' not in self._tasks[suffix].dimensions:
@@ -525,9 +530,9 @@ class SwarmingTest(Test):
 
 
 class SwarmingGTestTest(SwarmingTest):
-  def __init__(self, name, args=None, shards=1, dimensions=None,
-               target_name=None, extra_suffix=None):
-    super(SwarmingGTestTest, self).__init__(name, dimensions, target_name,
+  def __init__(self, name, args=None, target_name=None, shards=1,
+               dimensions=None, tags=None, extra_suffix=None):
+    super(SwarmingGTestTest, self).__init__(name, dimensions, tags, target_name,
                                             extra_suffix)
     self._args = args or []
     self._shards = shards
@@ -570,13 +575,13 @@ class SwarmingGTestTest(SwarmingTest):
 
 class GTestTest(Test):
   def __init__(self, name, args=None, target_name=None, enable_swarming=False,
-               swarming_shards=1, swarming_dimensions=None,
+               swarming_shards=1, swarming_dimensions=None, swarming_tags=None,
                swarming_extra_suffix=None, **runtest_kwargs):
     super(GTestTest, self).__init__()
     if enable_swarming:
-      self._test = SwarmingGTestTest(name, args, swarming_shards,
-                                     swarming_dimensions, target_name,
-                                     extra_suffix=swarming_extra_suffix)
+      self._test = SwarmingGTestTest(
+          name, args, target_name, swarming_shards, swarming_dimensions,
+          swarming_tags, swarming_extra_suffix)
     else:
       self._test = LocalGTestTest(name, args, target_name, **runtest_kwargs)
 
@@ -611,11 +616,16 @@ class GTestTest(Test):
     return self._test.uses_swarming
 
 
-# TODO(sergiyb): GPU Tests do not always follow the Chromium convetion to have
+# TODO(sergiyb): GPU Tests do not always follow the Chromium convention to have
 # a 'test' target for each 'test_run' target. Instead they use gyp dependencies.
 # Chromium tests return both 'test' and 'test_run' to circumvent and issue with
 # analyze step, while GPU tests do not require this.
 class GPUGTestTest(GTestTest):
+  def __init__(self, name, **kwargs):
+    kwargs['swarming_tags'] = set(kwargs.get('swarming_tags') or [])
+    kwargs['swarming_tags'] |= {'gpu_test:1'}
+    super(GPUGTestTest, self).__init__(name, **kwargs)
+
   def compile_targets(self, api):
     return ['%s_run' % self._test.target_name]
 
@@ -828,7 +838,7 @@ class SwarmingTelemetryGPUTest(SwarmingTest):
   def __init__(self, name, args=None, dimensions=None, target_name=None,
                extra_suffix=None):
     super(SwarmingTelemetryGPUTest, self).__init__(
-        name, dimensions, 'telemetry_gpu_test', extra_suffix)
+        name, dimensions, {'gpu_test:1'}, 'telemetry_gpu_test', extra_suffix)
     self._args = args
     self._telemetry_target_name = target_name or name
 
