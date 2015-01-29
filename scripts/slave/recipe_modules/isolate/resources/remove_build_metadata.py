@@ -22,8 +22,14 @@ def get_files_to_clean(build_dir, recursive=False):
   allowed = frozenset(
       ('', '.apk', '.app', '.dll', '.dylib', '.exe', '.nexe', '.so'))
   non_x_ok_exts = frozenset(('.apk', '.isolated'))
+  min_timestamp = 0
+  if os.path.exists(os.path.join(build_dir, 'build.ninja')):
+    min_timestamp = os.path.getmtime(os.path.join(build_dir, 'build.ninja'))
+
   def check(f):
     if not os.path.isfile(f) or os.path.basename(f).startswith('.'):
+      return False
+    if os.path.getmtime(os.path.join(build_dir, f)) < min_timestamp:
       return False
     ext = os.path.splitext(f)[1]
     return (ext in non_x_ok_exts) or (ext in allowed and os.access(f, os.X_OK))
