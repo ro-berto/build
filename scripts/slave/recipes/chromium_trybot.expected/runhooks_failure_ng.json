@@ -157,7 +157,10 @@
     "env": {
       "GYP_DEFINES": "archive_gpu_tests=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1"
     },
-    "name": "gclient runhooks (without patch)"
+    "name": "gclient runhooks (without patch)",
+    "~followup_annotations": [
+      "@@@SET_BUILD_PROPERTY@failure_hash@\"e21d0f2b4dd4945720174b0d0fa3a010820898d7\"@@@"
+    ]
   },
   {
     "name": "$final_result",

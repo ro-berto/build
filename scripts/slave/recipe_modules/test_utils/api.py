@@ -78,12 +78,13 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     run('with patch', tests)
 
-    for t in tests:
-      if not t.has_valid_results(caller_api, 'with patch'):
-        self.m.tryserver.maybe_set_transient_failure_tryjob_result()
-        self.m.python.failing_step(t.name, 'TEST RESULTS WERE INVALID')
-      elif t.failures(caller_api, 'with patch'):
-        failing_tests.append(t)
+    with self.m.step.defer_results():
+      for t in tests:
+        if not t.has_valid_results(caller_api, 'with patch'):
+          self.m.tryserver.maybe_set_transient_failure_tryjob_result()
+          self.m.python.failing_step(t.name, 'TEST RESULTS WERE INVALID')
+        elif t.failures(caller_api, 'with patch'):
+          failing_tests.append(t)
     if not failing_tests:
       return
 
@@ -94,8 +95,9 @@ class TestUtilsApi(recipe_api.RecipeApi):
       raise
     finally:
       run('without patch', failing_tests)
-      for t in failing_tests:
-        self._summarize_retried_test(caller_api, t)
+      with self.m.step.defer_results():
+        for t in failing_tests:
+          self._summarize_retried_test(caller_api, t)
 
   def _summarize_retried_test(self, caller_api, test):
     if not test.has_valid_results(caller_api, 'without patch'):
@@ -104,6 +106,11 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     ignored_failures = set(test.failures(caller_api, 'without patch'))
     new_failures = set(test.failures(caller_api, 'with patch')) - ignored_failures
+
+    self.m.tryserver.add_failure_reason({
+      'test_name': test.name,
+      'new_failures': sorted(new_failures),
+    })
 
     try:
       self.m.python.inline(

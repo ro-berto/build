@@ -169,7 +169,8 @@
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@0.4.10@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_FAILURE@@@",
+      "@@@SET_BUILD_PROPERTY@failure_hash@\"d263d3961e134a9db54b635705e234a976cb9ca6\"@@@"
     ]
   },
   {

@@ -622,7 +622,7 @@ def find_test_named(test_name, tests):
   return [test for test in tests if test.name == test_name]
 
 
-def GenSteps(api):
+def _GenStepsInternal(api):
   def swarming_shards_from_test_spec(test_spec, test_name):
     if isinstance(test_spec, dict):
       gtest_tests_spec = test_spec.get('gtest_tests', [])
@@ -1019,6 +1019,11 @@ def GenSteps(api):
         api.isolate.isolate_tests(api.chromium.output_dir, verbose=True)
 
   return api.test_utils.determine_new_failures(api, tests, deapply_patch_fn)
+
+
+def GenSteps(api):
+  with api.tryserver.set_failure_hash():
+    return _GenStepsInternal(api)
 
 
 def _sanitize_nonalpha(text):

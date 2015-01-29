@@ -172,7 +172,8 @@
       "@@@STEP_LOG_LINE@json.output@    \"another one\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@failure_hash@\"3908b365fae78e6b96f5e3b38db5b33131cde606\"@@@"
     ]
   },
   {

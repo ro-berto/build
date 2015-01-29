@@ -4,6 +4,7 @@
 
 DEPS = [
   'git',
+  'json',
   'path',
   'platform',
   'properties',

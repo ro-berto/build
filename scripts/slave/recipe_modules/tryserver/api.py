@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import contextlib
+import hashlib
 
 from slave import recipe_api
 
@@ -12,6 +14,10 @@ PATCH_STORAGE_SVN = 'svn'
 
 
 class TryserverApi(recipe_api.RecipeApi):
+  def __init__(self, *args, **kwargs):
+    super(TryserverApi, self).__init__(*args, **kwargs)
+    self._failure_reasons = []
+
   @property
   def patch_url(self):
     """Reads patch_url property and corrects it if needed."""
@@ -182,3 +188,36 @@ class TryserverApi(recipe_api.RecipeApi):
     """Set transient failure result if we're tryserver."""
     if self.is_tryserver:
       self.set_transient_failure_tryjob_result()
+
+  def add_failure_reason(self, reason):
+    """
+    Records a more detailed reason why build is failing.
+
+    The reason can be any JSON-serializable object.
+    """
+    assert self.m.json.is_serializable(reason)
+    self._failure_reasons.append(reason)
+
+  @contextlib.contextmanager
+  def set_failure_hash(self):
+    """
+    Context manager that sets a failure_hash build property on StepFailure.
+
+    This can be used to easily compare whether two builds have failed
+    for the same reason. For example, if a patch is bad (breaks something),
+    we'd expect it to always break in the same way. Different failures
+    for the same patch are usually a sign of flakiness.
+    """
+    try:
+      yield
+    except self.m.step.StepFailure as e:
+      self.add_failure_reason(e.reason)
+
+      failure_hash = hashlib.sha1()
+      failure_hash.update(self.m.json.dumps(self._failure_reasons))
+
+      step_result = self.m.step.active_result
+      step_result.presentation.properties['failure_hash'] = \
+          failure_hash.hexdigest()
+
+      raise
