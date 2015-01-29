@@ -7,7 +7,7 @@ class Package(object):
 
   def __init__(self, name=None, github_project=None, github_repo=None,
                published=True, dart_repo_package=False, sample=False,
-               run_tests=True, dependencies=()):
+               run_tests=True, dependencies=(), extra_branches=None):
     """Constructs a new package object.
 
     Either name or github_repo must be supplied. If only github_repo is
@@ -22,6 +22,7 @@ class Package(object):
     @param sample: whether this package is a sample
     @param run_tests: whether to run tests for this package
     @param dependencies: the list of dependencies (if any)
+    @param extra_branches: extra branches in the git repo that needs testing
     """
     if not name and not github_repo:
       raise Exception('Either "name" or "github_repo" must be supplied');
@@ -46,6 +47,7 @@ class Package(object):
     self.sample = sample
     self.run_tests = run_tests
     self.dependencies = dependencies
+    self.extra_branches = extra_branches or []
 
   def isGithubPackage(self):
     return self.github_repo is not None
@@ -56,11 +58,18 @@ class Package(object):
   def isSample(self):
     return self.sample
 
-  def builderName(self, system):
+  def builderNames(self, system):
+    all_names = [self.builderName(system)]
+    for branch in self.extra_branches:
+      all_names.append(self.builderName(system, branch))
+    return all_names
+
+  def builderName(self, system, branch=None):
     name = self.github_repo if self.isGithubPackage() else self.name
     repo = '-repo' if self.isDartRepoPackage() else ''
     sample = '-sample' if self.isSample() else ''
-    return 'packages-%s%s%s-%s' % (system, repo, sample, name)
+    branch = '-%s' % branch if branch else ''
+    return 'packages-%s%s%s-%s%s' % (system, repo, sample, name, branch)
 
   def builderCategory(self):
     if self.isGithubPackage():
@@ -115,7 +124,7 @@ PACKAGES = [
   Package(github_repo='stack_trace'),
   Package(github_repo='string_scanner'),
   Package(github_repo='template-binding'),
-  Package(github_repo='unittest'),
+  Package(github_repo='unittest', extra_branches=['stable']),
   Package(github_repo='watcher'),
   Package(github_repo='web-components'),
   Package(github_repo='yaml'),

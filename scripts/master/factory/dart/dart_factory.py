@@ -536,11 +536,15 @@ class DartUtils(object):
 
 
   @staticmethod
-  def get_git_poller(repo, project, revlink):
+  def get_git_poller(repo, project, revlink, branch=None):
+    project = '%s-%s' % (project, branch) if branch else project
+    branch = branch or 'master'
+    workdir = '/tmp/git_workdir_%s_%s' % (project, branch)
     return gitpoller.GitPoller(repourl=repo,
                                pollinterval=10,
                                project=project,
-                               workdir='/tmp/git_workdir_%s' % project,
+                               branch=branch,
+                               workdir=workdir,
                                revlinktmpl=revlink)
 
 
@@ -549,10 +553,10 @@ class DartUtils(object):
     return 'https://github.com/%s/%s.git' % (project, name)
 
   @staticmethod
-  def get_github_poller(project, name):
+  def get_github_poller(project, name, branch=None):
     repository = 'https://github.com/%s/%s.git' % (project, name)
     revlink = ('https://github.com/' + project + '/' + name + '/commit/%s')
-    return DartUtils.get_git_poller(repository, name, revlink)
+    return DartUtils.get_git_poller(repository, name, revlink, branch)
 
   @staticmethod
   def prioritize_builders(buildmaster, builders):
