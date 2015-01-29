@@ -86,7 +86,7 @@
       "ninja",
       "--clobber",
       "--",
-      "all"
+      "chrome"
     ],
     "name": "compile"
   }
