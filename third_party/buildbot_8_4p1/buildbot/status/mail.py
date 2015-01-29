@@ -327,21 +327,19 @@ class MailNotifier(base.StatusReceiverMultiService):
         @type  parent: L{buildbot.master.BuildMaster}
         """
         base.StatusReceiverMultiService.setServiceParent(self, parent)
-        self.setup()
 
     def setup(self):
         self.master_status = self.parent.getStatus()
         self.master_status.subscribe(self)
         self.master = self.master_status.master
 
-
     def startService(self):
+        self.setup()
         if self.buildSetSummary:
             self.buildSetSubscription = \
             self.master.subscribeToBuildsetCompletions(self.buildsetFinished)
 
         base.StatusReceiverMultiService.startService(self)
-
 
     def stopService(self):
         if self.buildSetSubscription is not None:

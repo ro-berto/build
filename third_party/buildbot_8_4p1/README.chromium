@@ -5429,3 +5429,39 @@ index 3c8a70b..3ee4f49 100644
          
          self.status = Mock()
          mn.master_status = Mock()
+
+
+commit eabc3bfef4de0456ef66a3eecac1689b4c18b4ea
+Author: Ryan Kubiak <rkubiak@google.com>
+Date:   Mon Jan 26 12:10:52 2015 -0800
+
+    Fix MailNotifier startup when buildsets are enabled
+
+diff --git a/third_party/buildbot_8_4p1/buildbot/status/mail.py b/third_party/buildbot_8_4p1/buildbot/status/mail.py
+index c03f609..cd86e86 100644
+--- a/third_party/buildbot_8_4p1/buildbot/status/mail.py
++++ b/third_party/buildbot_8_4p1/buildbot/status/mail.py
+@@ -327,22 +327,20 @@ class MailNotifier(base.StatusReceiverMultiService):
+         @type  parent: L{buildbot.master.BuildMaster}
+         """
+         base.StatusReceiverMultiService.setServiceParent(self, parent)
+-        self.setup()
+ 
+     def setup(self):
+         self.master_status = self.parent.getStatus()
+         self.master_status.subscribe(self)
+         self.master = self.master_status.master
+ 
+-
+     def startService(self):
++        self.setup()
+         if self.buildSetSummary:
+             self.buildSetSubscription = \
+             self.master.subscribeToBuildsetCompletions(self.buildsetFinished)
+ 
+         base.StatusReceiverMultiService.startService(self)
+ 
+-
+     def stopService(self):
+         if self.buildSetSubscription is not None:
+             self.buildSetSubscription.unsubscribe()
