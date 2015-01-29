@@ -19,7 +19,8 @@ class AOSPApi(recipe_api.RecipeApi):
             self.c.lunch_flavor]
 
   def create_spec(self):
-    spec = self.m.gclient.make_config('chromium')
+    spec = self.m.gclient.make_config(
+      'chromium', PATCH_PROJECT=self.m.properties.get('patch_project'))
     spec.target_os = ['android']
 
     svn_revision = 'HEAD'

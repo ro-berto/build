@@ -281,7 +281,8 @@ def GenSteps(api):
   api.chromium.set_config('blink',
                           **bot_config.get('chromium_config_kwargs', {}))
   api.chromium.apply_config('trybot_flavor')
-  api.gclient.set_config('blink_internal')
+  api.gclient.set_config('blink_internal',
+                         PATCH_PROJECT=api.properties.get('patch_project'))
   if bot_config.get('v8_blink_flavor'):
     api.gclient.apply_config('v8_blink_flavor')
     api.gclient.apply_config('show_v8_revision')
@@ -407,10 +408,10 @@ def GenTests(api):
   with_patch = 'webkit_tests (with patch)'
   without_patch = 'webkit_tests (without patch)'
 
-  def properties(mastername, buildername, **kwargs):
+  def properties(mastername, buildername, patch_project='blink', **kwargs):
     return api.properties.tryserver(mastername=mastername,
                                     buildername=buildername,
-                                    patch_project='blink',
+                                    patch_project=patch_project,
                                     swarm_hashes=api.gpu.dummy_swarm_hashes,
                                     **kwargs)
 
@@ -525,4 +526,12 @@ def GenTests(api):
     api.override_step_data(
         'pixel_test on Intel GPU on Mac (without patch)',
         api.json.canned_telemetry_gpu_output(passing=False, swarming=True))
+  )
+
+  yield (
+    api.test('use_v8_patch_on_blink_trybot') +
+    properties(buildername='mac_blink_rel',
+               mastername='tryserver.blink',
+               patch_project='v8') +
+    api.platform.name('mac')
   )

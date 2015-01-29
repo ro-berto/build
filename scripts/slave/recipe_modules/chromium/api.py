@@ -149,7 +149,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     # Note that we have to call gclient.set_config() and apply_config() *after*
     # calling chromium.set_config(), above, because otherwise the chromium
     # call would reset the gclient config to its defaults.
-    self.m.gclient.set_config('chromium')
+    self.m.gclient.set_config(
+        'chromium', PATCH_PROJECT=self.m.properties.get('patch_project'))
     for c in bot_config.get('gclient_apply_config', []):
       self.m.gclient.apply_config(c)
 
@@ -159,6 +160,8 @@ class ChromiumApi(recipe_api.RecipeApi):
       # dynamically set to either:
       # (1) 'revision' from the waterfall, or
       # (2) 'HEAD' for forced builds with unspecified 'revision'.
+      # TODO(machenbach): If this method is used on testers it also needs case
+      # (3) parent_got_revision.
       component_rev = self.m.properties.get('revision') or 'HEAD'
       dep = bot_config.get('set_component_rev')
       self.m.gclient.c.revisions[dep['name']] = dep['rev_str'] % component_rev

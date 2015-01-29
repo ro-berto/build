@@ -184,3 +184,10 @@ def GenTests(api):
     api.properties.tryserver() +
     chrome_change
   )
+
+  yield (
+    api.test('use_v8_patch_on_webview_trybot') +
+    api.properties.tryserver() +
+    api.properties(patch_project='v8') +
+    dependant_change
+  )

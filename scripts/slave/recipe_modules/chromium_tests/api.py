@@ -168,6 +168,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self.m.chromium.apply_config(c)
     self.m.gclient.set_config(
         recipe_config['gclient_config'],
+        PATCH_PROJECT=self.m.properties.get('patch_project'),
         **bot_config.get('gclient_config_kwargs', {}))
     for c in recipe_config.get('gclient_apply_config', []):
       self.m.gclient.apply_config(c)

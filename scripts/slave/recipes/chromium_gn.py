@@ -361,3 +361,12 @@ def GenTests(api):
         mastername='tryserver.chromium.linux') +
     api.step_data('compile', retcode=1)
   )
+
+  yield (
+    api.test('use_v8_patch_on_chromium_gn_trybot') +
+    api.platform.name('linux') +
+    api.properties.tryserver(
+        buildername='linux_chromium_gn_rel',
+        mastername='tryserver.chromium.linux',
+        patch_project='v8')
+  )

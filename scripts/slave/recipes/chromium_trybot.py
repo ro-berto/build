@@ -763,7 +763,8 @@ def _GenStepsInternal(api):
     if bot_config['compile_only']:
       api.chromium.c.gyp_env.GYP_DEFINES['fastbuild'] = 2
     api.chromium.apply_config('trybot_flavor')
-    api.gclient.set_config('chromium')
+    api.gclient.set_config('chromium',
+                           PATCH_PROJECT=api.properties.get('patch_project'))
     api.step.auto_resolve_conflicts = True
 
     bot_update_step = api.bot_update.ensure_checkout(force=True)
@@ -1503,4 +1504,12 @@ def GenTests(api):
                            api.json.output({'status': 'Found dependency',
                                             'targets': gpu_targets,
                                             'build_targets': gpu_targets}))
+  )
+
+  yield (
+    api.test('use_v8_patch_on_chromium_trybot') +
+    props(buildername='win_chromium_rel_ng',
+          mastername='tryserver.chromium.win',
+          patch_project='v8') +
+    api.platform.name('win')
   )

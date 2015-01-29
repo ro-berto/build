@@ -9,7 +9,8 @@ from slave.recipe_config import ConfigList, Dict, Single, Static, Set, List
 
 from RECIPE_MODULES.gclient import api as gclient_api
 
-def BaseConfig(USE_MIRROR=True, GIT_MODE=False, CACHE_DIR=None, **_kwargs):
+def BaseConfig(USE_MIRROR=True, GIT_MODE=False, CACHE_DIR=None,
+               PATCH_PROJECT=None, **_kwargs):
   deps = '.DEPS.git' if GIT_MODE else 'DEPS'
   cache_dir = str(CACHE_DIR) if GIT_MODE and CACHE_DIR else None
   return ConfigGroup(
@@ -56,17 +57,23 @@ def BaseConfig(USE_MIRROR=True, GIT_MODE=False, CACHE_DIR=None, **_kwargs):
 
     GIT_MODE = Static(bool(GIT_MODE)),
     USE_MIRROR = Static(bool(USE_MIRROR)),
+    PATCH_PROJECT = Static(str(PATCH_PROJECT), hidden=True),
   )
 
 VAR_TEST_MAP = {
   'USE_MIRROR': (True, False),
   'GIT_MODE':   (True, False),
   'CACHE_DIR':  (None, 'CACHE_DIR'),
+  'PATCH_PROJECT': (None, 'v8'),
 }
 
 TEST_NAME_FORMAT = lambda kwargs: (
-  'using_mirror-%(USE_MIRROR)s-git_mode-%(GIT_MODE)s-cache_dir-%(using)s' %
-  dict(using=bool(kwargs['CACHE_DIR']), **kwargs)
+  'using_mirror-%(USE_MIRROR)s-git_mode-%(GIT_MODE)s-cache_dir-%(using)s'
+  '-patch_project-%(patch_project)s' %
+  dict(using=bool(kwargs['CACHE_DIR']),
+       patch_project=bool(kwargs['PATCH_PROJECT']),
+       **kwargs
+  )
 )
 
 config_ctx = config_item_context(BaseConfig, VAR_TEST_MAP, TEST_NAME_FORMAT)
@@ -133,6 +140,18 @@ def chromium_bare(c):
   p['parent_got_v8_revision'] = 'v8_revision'
   p['parent_got_webkit_revision'] = 'webkit_revision'
   p['parent_got_webrtc_revision'] = 'webrtc_revision'
+
+  # Patch project revisions are applied whenever patch_project is set. E.g. if
+  # a v8 stand-alone patch is sent to a chromium trybot, patch_project is v8
+  # and can be used to sync v8 to HEAD instead of the pinned chromium
+  # version.
+  patch_project_revisions = {
+    'v8': ('src/v8', 'HEAD'),
+  }
+
+  patch_revision = patch_project_revisions.get(c.PATCH_PROJECT)
+  if patch_revision:
+    c.revisions[patch_revision[0]] = patch_revision[1]
 
 @config_ctx(includes=['chromium_bare'])
 def chromium_empty(c):
