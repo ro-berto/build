@@ -224,16 +224,6 @@ class LocalGTestTest(Test):
     return [self.target_name]
 
   def run(self, api, suffix):
-    if api.chromium.c.TARGET_PLATFORM == 'android':
-      isolate_file_path = None
-      if self._android_isolate_path:
-        isolate_file_path = api.path['checkout'].join(
-            self._android_isolate_path)
-      return api.chromium_android.run_test_suite(
-          self.target_name,
-          flakiness_dashboard='http://test-results.appspot.com',
-          isolate_file_path=isolate_file_path)
-
     # Copy the list because run can be invoked multiple times and we modify
     # the local copy.
     args = self._args[:]
@@ -242,20 +232,34 @@ class LocalGTestTest(Test):
       args.append(api.chromium.test_launcher_filter(
           self.failures(api, 'with patch')))
 
+    gtest_results_file = api.json.gtest_results(add_json_log=False)
+    step_test_data = lambda: api.json.test_api.canned_gtest_output(True)
+
     kwargs = {}
     kwargs['name'] = self._step_name(suffix)
-    kwargs['xvfb'] = True
-    kwargs['test_type'] = self.name
-    kwargs['annotate'] = 'gtest'
     kwargs['args'] = args
-    kwargs['step_test_data'] = lambda: api.json.test_api.canned_gtest_output(
-        True)
-    kwargs['test_launcher_summary_output'] = api.json.gtest_results(
-        add_json_log=False)
-    kwargs.update(self._runtest_kwargs)
+    kwargs['step_test_data'] = step_test_data
+
+    if api.chromium.c.TARGET_PLATFORM == 'android':
+      # TODO(sergiyb): Figure out if we can reuse isolate module for running
+      # isolated Android tests, rather than using custom solution in Android
+      # test launcher.
+      if self._android_isolate_path:
+        isolate_path = api.path['checkout'].join(self._android_isolate_path)
+        kwargs['isolate_file_path'] = isolate_path
+      kwargs['json_results_file'] = gtest_results_file
+      kwargs['flakiness_dashboard'] = 'http://test-results.appspot.com'
+    else:
+      kwargs['xvfb'] = True
+      kwargs['test_type'] = self.name
+      kwargs['annotate'] = 'gtest'
+      kwargs['test_launcher_summary_output'] = gtest_results_file
+      kwargs.update(self._runtest_kwargs)
 
     try:
-      if self._use_isolate:
+      if api.chromium.c.TARGET_PLATFORM == 'android':
+        api.chromium_android.run_test_suite(self.target_name, **kwargs)
+      elif self._use_isolate:
         api.isolate.runtest(self.target_name, self._revision,
                             self._webkit_revision, **kwargs)
       else:
@@ -272,6 +276,7 @@ class LocalGTestTest(Test):
         p.step_text += api.test_utils.format_step_text([
             ['failures:', r.failures]
         ])
+
     return step_result
 
   def has_valid_results(self, api, suffix):

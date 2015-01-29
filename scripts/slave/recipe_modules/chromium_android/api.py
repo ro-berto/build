@@ -627,8 +627,9 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def run_test_suite(self, suite, verbose=True, isolate_file_path=None,
                      gtest_filter=None, tool=None, flakiness_dashboard=None,
+                     name=None, json_results_file=None, args=None,
                      **kwargs):
-    args = []
+    args = args or []
     if verbose:
       args.append('--verbose')
     if self.c.BUILD_CONFIG == 'Release':
@@ -642,9 +643,11 @@ class AndroidApi(recipe_api.RecipeApi):
     if flakiness_dashboard:
       args.append('--flakiness-dashboard-server=%s' %
           flakiness_dashboard)
+    if json_results_file:
+      args.extend(['--json-results-file', json_results_file])
 
     self.m.python(
-        str(suite),
+        name or str(suite),
         self.c.test_runner,
         ['gtest', '-s', suite] + args,
         env=self.m.chromium.get_env(),
