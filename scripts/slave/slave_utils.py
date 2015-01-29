@@ -706,3 +706,30 @@ def WriteLogLines(logname, lines, perf=None):
     print '@@@STEP_LOG_END_PERF@%s@%s@@@' % (logname, perf)
   else:
     print '@@@STEP_LOG_END@%s@@@' % logname
+
+
+def ZipAndUpload(bucket, archive, *targets):
+  """Uploads a zipped archive to the specified Google Storage bucket.
+
+  Args:
+    bucket: Google Storage bucket to upload to.
+    archive: Name of the .zip archive.
+    *targets: List of targets that should be included in the archive.
+
+  Returns:
+    Path to the uploaded archive on Google Storage.
+  """
+  local_archive = os.path.join(tempfile.mkdtemp(archive), archive)
+  zip_cmd = [
+    'zip',
+    '-9',
+    '--filesync',
+    '--recurse-paths',
+    '--symlinks',
+    local_archive,
+  ]
+  zip_cmd.extend(targets)
+
+  chromium_utils.RunCommand(zip_cmd)
+  GSUtilCopy(local_archive, 'gs://%s/%s' % (bucket, archive))
+  return 'https://storage.cloud.google.com/%s/%s' % (bucket, archive)
