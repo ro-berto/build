@@ -101,10 +101,9 @@ def gyp_defs_from_builder_dict(builder_dict):
   werr = False
   if builder_dict['role'] == builder_name_schema.BUILDER_ROLE_BUILD:
     if 'Win' in builder_dict.get('os', ''):
-      if arch == 'x86':
-        if not ('GDI' in builder_dict.get('extra_config', '') or
-                'Exceptions' in builder_dict.get('extra_config', '')):
-          werr = True
+      if not ('GDI' in builder_dict.get('extra_config', '') or
+              'Exceptions' in builder_dict.get('extra_config', '')):
+        werr = True
     elif 'Mac' in builder_dict.get('os', ''):
       if 'iOS' in builder_dict.get('extra_config', ''):
         werr = True
