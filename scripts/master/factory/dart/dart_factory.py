@@ -83,6 +83,13 @@ if config.Master.trunk_internal_url:
   custom_deps_list_win = [CUSTOM_DEPS_WIN7_SDK,
                           CUSTOM_DEPS_WIN8_SDK,
                           CUSTOM_DEPS_DIRECTX_SDK]
+  CUSTOM_DEPS_JAVA = ('dart/third_party/java',
+                      config.Master.trunk_internal_url +
+                      '/third_party/openjdk')
+  # Fix broken ubuntu OpenJDK by importing windows TZ files
+  CUSTOM_TZ = ('dart/third_party/java/linux/j2sdk/jre/lib/zi',
+               config.Master.trunk_internal_url +
+               '/third_party/openjdk/windows/j2sdk/jre/lib/zi')
 else:
   custom_deps_list_win = []
 
@@ -163,15 +170,6 @@ class DartFactory(gclient_factory.GClientFactory):
   NEEDED_COMPONENTS_INTERNAL = {
   }
 
-  if config.Master.trunk_internal_url:
-    CUSTOM_DEPS_JAVA = ('dart/third_party/java',
-                        config.Master.trunk_internal_url +
-                        '/third_party/openjdk')
-    # Fix broken ubuntu OpenJDK by importing windows TZ files
-    CUSTOM_TZ = ('dart/third_party/java/linux/j2sdk/jre/lib/zi',
-                 config.Master.trunk_internal_url +
-                 '/third_party/openjdk/windows/j2sdk/jre/lib/zi')
-
   def __init__(self, channel=None, build_dir='dart', target_platform='posix',
                target_os=None, custom_deps_list=None,
                nohooks_on_update=False, is_standalone=False):
@@ -196,8 +194,8 @@ class DartFactory(gclient_factory.GClientFactory):
       custom_deps_list = []
 
     if config.Master.trunk_internal_url:
-      custom_deps_list.append(self.CUSTOM_DEPS_JAVA)
-      custom_deps_list.append(self.CUSTOM_TZ)
+      custom_deps_list.append(CUSTOM_DEPS_JAVA)
+      custom_deps_list.append(CUSTOM_TZ)
 
     main = gclient_factory.GClientSolution(
         deps_url,
@@ -295,12 +293,17 @@ class DartFactory(gclient_factory.GClientFactory):
 
 class PackageFactory(gclient_factory.GClientFactory):
   def __init__(self, build_dir='dart', target_platform='posix',
-               extra_deps=None, deps_file=None):
+               extra_deps=None, deps_file=None, java=False):
     self.target_platform = target_platform
     self._build_dir = build_dir
     deps_url = deps_file or 'https://github.com/dart-lang/package-bots/trunk'
+    custom_deps_list = extra_deps
+    if config.Master.trunk_internal_url and java:
+      custom_deps_list.append(CUSTOM_DEPS_JAVA)
+      custom_deps_list.append(CUSTOM_TZ)
+
     main = gclient_factory.GClientSolution(deps_url,
-                                            custom_deps_list=extra_deps)
+                                           custom_deps_list=custom_deps_list)
     gclient_factory.GClientFactory.__init__(self, build_dir, [main],
                                             target_platform=target_platform)
 
