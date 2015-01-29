@@ -599,7 +599,7 @@ SPEC = {
       'enable_swarming': True,
       # TODO(thakis): Consider using chromium_builder_asan instead?
       'compile_targets': [ 'chromium_builder_tests' ],
-      # add_tests_as_compile_targets not needed for the asan bot, it does't
+      # add_tests_as_compile_targets not needed for the asan bot, it doesn't
       # build everything.
     },
     'CrWinClang(asan) tester': {
@@ -613,6 +613,40 @@ SPEC = {
       ],
       'bot_type': 'tester',
       'parent_buildername': 'CrWinClang(asan)',
+      'testing': {
+        'platform': 'win',
+      },
+      'enable_swarming': True,
+    },
+    'CrWinAsan(dll)': {
+      'recipe_config': 'chromium_win_clang_asan',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'GYP_DEFINES': { 'component': 'shared_library' },
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'win',
+      },
+      'use_isolate': True,
+      'enable_swarming': True,
+      # TODO(thakis): Consider using chromium_builder_asan instead?
+      'compile_targets': [ 'chromium_builder_tests' ],
+      # add_tests_as_compile_targets not needed for the asan bot, it doesn't
+      # build everything.
+    },
+    'CrWinAsan(dll) tester': {
+      'recipe_config': 'chromium_win_asan',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'test_generators': [
+        steps.generate_gtest,
+      ],
+      'bot_type': 'tester',
+      'parent_buildername': 'CrWinAsan(dll)',
       'testing': {
         'platform': 'win',
       },
