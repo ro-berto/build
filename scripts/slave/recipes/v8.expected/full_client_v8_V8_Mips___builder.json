@@ -48,6 +48,8 @@
       "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
+      "--force-version",
+      "3.25",
       "--",
       "cp",
       "gs://chromium-v8/mips-2013.11-36-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2",

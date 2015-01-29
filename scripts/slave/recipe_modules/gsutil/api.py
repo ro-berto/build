@@ -8,7 +8,7 @@ from slave import recipe_api
 from slave import recipe_util
 
 class GSUtilApi(recipe_api.RecipeApi):
-  def __call__(self, cmd, name=None, use_retry_wrapper=True, version=None,
+  def __call__(self, cmd, name=None, use_retry_wrapper=True, version='3.25',
                **kwargs):
     """A step to run arbitrary gsutil commands.
 
@@ -38,8 +38,7 @@ class GSUtilApi(recipe_api.RecipeApi):
       cmd_prefix = ['--', gsutil_path]
       gsutil_path = self.resource('gsutil_wrapper.py')
 
-    if version:
-      cmd_prefix.extend(['--force-version', version])
+    cmd_prefix.extend(['--force-version', version])
 
     cmd_prefix.append('--')
 
