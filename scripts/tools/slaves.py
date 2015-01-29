@@ -258,7 +258,8 @@ Note: t is replaced with 'tryserver', 'c' with chromium' and
           parser.error('Unknown master \'%s\'.\nChoices are: %s' % (
             options.master, ', '.join(masters)))
       master_path = masters_path[masters.index(options.master)]
-      slaves = chromium_utils.GetSlaveListFromMasterPath(master_path)
+      slaves = chromium_utils.GetSlavesFromMasterPath(master_path)
+      slaves = slaves_list.BaseSlavesList(slaves)
     def F(os_type):
       out = slaves.GetSlaves(os=os_type, bits=options.bits,
           version=options.version, builder=options.builder)
