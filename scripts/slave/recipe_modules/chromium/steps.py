@@ -275,6 +275,8 @@ class LocalGTestTest(Test):
     return step_result
 
   def has_valid_results(self, api, suffix):
+    if suffix not in self._test_runs:
+      return False
     gtest_results = self._test_runs[suffix].json.gtest_results
     if not gtest_results.valid:  # pragma: no cover
       return False

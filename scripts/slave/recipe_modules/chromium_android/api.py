@@ -520,7 +520,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
     return self.m.python(
         'Instrumentation test %s%s' % (annotation or test_apk,
-                                       ' %s' % suffix if suffix else ''),
+                                       ' (%s)' % suffix if suffix else ''),
         self.c.test_runner,
         args=['instrumentation'] + args,
         **kwargs)
