@@ -457,6 +457,18 @@
     "https://build.chromium.org/p/client.skia": [
       {
         "builders": {
+          "*ASAN*": {
+            "closing_optional": ["*"],
+            "excluded_steps": [
+              "abort rebase"
+            ]
+          },
+          "*UBSAN*": {
+            "closing_optional": ["*"],
+            "excluded_steps": [
+              "abort rebase"
+            ]
+          },
           "*Valgrind*": {
             "closing_optional": ["*"],
             "excluded_steps": [
