@@ -347,6 +347,7 @@ class SkiaApi(recipe_api.RecipeApi):
     # the CPU that other ARMv7+NEON bots don't test faster (N5).
     if ('Nexus10'  in self.c.BUILDER_NAME or
         'Nexus7'   in self.c.BUILDER_NAME or
+        'GalaxyS3' in self.c.BUILDER_NAME or
         'GalaxyS4' in self.c.BUILDER_NAME):
       args.append('--nocpu')
 
@@ -447,7 +448,8 @@ class SkiaApi(recipe_api.RecipeApi):
       args.append('--match')
       args.extend(match)
 
-    if 'GalaxyS4' in self.c.BUILDER_NAME:
+    if ('GalaxyS3' in self.c.BUILDER_NAME or
+        'GalaxyS4' in self.c.BUILDER_NAME):
       args.append('--nocpu')
 
     self.run(self.flavor.step, 'nanobench', cmd=args, abort_on_failure=False)
