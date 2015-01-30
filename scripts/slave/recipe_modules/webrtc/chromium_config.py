@@ -45,7 +45,7 @@ def _webrtc_ios(c):
 
   gyp_defs = c.gyp_env.GYP_DEFINES
   gyp_defs['build_with_libjingle'] = 1
-  gyp_defs['chromium_ios_signing'] = 0
+  gyp_defs['chromium_ios_signing'] = 1
   gyp_defs['key_id'] = ''
   gyp_defs['OS'] = c.TARGET_PLATFORM
   if c.TARGET_BITS == 64:

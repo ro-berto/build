@@ -63,7 +63,7 @@
     ],
     "env": {
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=ios build_with_libjingle=1 chromium_ios_signing=0 clang=1 component=static_library dcheck_always_on=1 fastbuild=1 key_id='' mac_sdk=10.9 target_arch=arm64 target_subarch=arm64",
+      "GYP_DEFINES": "OS=ios build_with_libjingle=1 chromium_ios_signing=1 clang=1 component=static_library dcheck_always_on=1 fastbuild=1 key_id='' mac_sdk=10.9 target_arch=arm64 target_subarch=arm64",
       "GYP_GENERATORS": "ninja"
     },
     "name": "gclient runhooks"
