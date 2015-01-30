@@ -1,5 +1,3 @@
-recursion = 1
-
 deps = {
   "build/scripts/gsd_generate_index":
     "svn://svn.chromium.org/chrome/trunk/tools/gsd_generate_index",
@@ -34,8 +32,8 @@ hooks = [
   {
     "pattern": r".*/cros_chromite\.py",
     "action": [
-      "python", "build/scripts/tools/runit.py",
-          "build/scripts/common/cros_chromite.py", "-v",
+      "./build/scripts/tools/runit.py",
+          "./build/scripts/common/cros_chromite.py", "-v",
     ],
   },
 ]
