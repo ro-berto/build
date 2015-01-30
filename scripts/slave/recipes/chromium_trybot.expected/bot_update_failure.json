@@ -7,7 +7,7 @@
       "--master",
       "tryserver.chromium.linux",
       "--builder",
-      "linux_chromium_asan_rel",
+      "linux_chromium_rel_ng",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -25,8 +25,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD",
-      "--force"
+      "src@HEAD"
     ],
     "name": "bot_update",
     "~followup_annotations": [
