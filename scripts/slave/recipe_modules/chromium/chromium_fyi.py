@@ -585,7 +585,7 @@ SPEC = {
       },
       'enable_swarming': True,
     },
-    'CrWinClang(asan)': {
+    'CrWinAsan': {
       'recipe_config': 'chromium_win_clang_asan',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -602,7 +602,7 @@ SPEC = {
       # add_tests_as_compile_targets not needed for the asan bot, it doesn't
       # build everything.
     },
-    'CrWinClang(asan) tester': {
+    'CrWinAsan tester': {
       'recipe_config': 'chromium_win_asan',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -612,7 +612,7 @@ SPEC = {
         steps.generate_gtest,
       ],
       'bot_type': 'tester',
-      'parent_buildername': 'CrWinClang(asan)',
+      'parent_buildername': 'CrWinAsan',
       'testing': {
         'platform': 'win',
       },
