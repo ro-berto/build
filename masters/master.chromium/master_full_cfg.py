@@ -46,6 +46,7 @@ F('win_clobber', win().ChromiumFactory(
     options=['--compiler=goma'],
     factory_properties={
       'archive_build': ActiveMaster.is_production_host,
+      'confirm_noop_compile': True,
       'gs_bucket': 'gs://chromium-browser-snapshots',
       'gs_acl': 'public-read',
       'show_perf_results': True,
@@ -74,6 +75,7 @@ F('mac_clobber', mac().ChromiumFactory(
     options=['--compiler=goma-clang'],
     factory_properties={
       'archive_build': ActiveMaster.is_production_host,
+      'confirm_noop_compile': True,
       'gs_bucket': 'gs://chromium-browser-snapshots',
       'gs_acl': 'public-read',
       'show_perf_results': True,
