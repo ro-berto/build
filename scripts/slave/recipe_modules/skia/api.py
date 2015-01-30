@@ -317,8 +317,8 @@ class SkiaApi(recipe_api.RecipeApi):
     # It seems like we're running out of RAM on some Android bots, so start off
     # with a very wide blacklist disabling all these tests on all Android bots.
     if 'Android' in self.c.BUILDER_NAME:  # skia:3255
-      blacklist.extend('gpu skp _ gpu image _'.split(' '))
-      blacklist.extend('msaa skp _ msaa image _'.split(' '))
+      blacklist.extend('gpu skp _ gpu image _ gpu subset _'.split(' '))
+      blacklist.extend('msaa skp _ msaa image _ gpu subset _'.split(' '))
 
     if blacklist:
       args.append('--blacklist')
