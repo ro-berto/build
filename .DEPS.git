@@ -47,8 +47,9 @@ hooks = [
     {
     'action':
          [
-    './build/scripts/tools/runit.py',
-    './build/scripts/common/cros_chromite.py',
+    'python',
+    'build/scripts/tools/runit.py',
+    'build/scripts/common/cros_chromite.py',
     '-v'
 ],
     'pattern':
