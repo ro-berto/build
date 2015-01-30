@@ -32,8 +32,8 @@ hooks = [
   {
     "pattern": r".*/cros_chromite\.py",
     "action": [
-      "./build/scripts/tools/runit.py",
-          "./build/scripts/common/cros_chromite.py", "-v",
+      "python", "build/scripts/tools/runit.py",
+          "build/scripts/common/cros_chromite.py", "-v",
     ],
   },
 ]
