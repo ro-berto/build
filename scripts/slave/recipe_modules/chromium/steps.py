@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import json
 import re
 
 
@@ -759,6 +760,37 @@ class TelemetryGPUTest(Test):  # pylint: disable=W0232
   @property
   def uses_swarming(self):
     return self._test.uses_swarming
+
+
+class BisectTest(Test):  # pylint: disable=W0232
+  name = 'bisect_test'
+
+  @property
+  def abort_on_failure(self):
+    return True
+
+  @staticmethod
+  def compile_targets(_):
+    return ['chrome'] # Bisect always uses a separate bot for building.
+
+  def pre_run(self, api, _):
+    self.test_config = api.bisect_tester.load_config_from_dict(
+        api.properties.get('bisect_config'))
+
+  def run(self, api, _):
+    self._run_results = api.bisect_tester.run_test(self.test_config)
+
+  def post_run(self, api, _):
+    self.values = api.bisect_tester.digest_run_results(self._run_results,
+                                                       self.test_config)
+    api.bisect_tester.upload_results('Test output omitted for now',
+                                     self.values)
+
+  def has_valid_results(self, *_):
+    return len(getattr(self, 'values', [])) > 0
+
+  def failures(self, *_):
+    return self._failures
 
 
 class LocalTelemetryGPUTest(Test):  # pylint: disable=W0232

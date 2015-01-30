@@ -45,6 +45,9 @@ class GSUtilApi(recipe_api.RecipeApi):
     return self.m.python(full_name, gsutil_path, cmd_prefix + cmd,
                          infra_step=True, **kwargs)
 
+  def get_gsutil_path(self):
+    return self.m.path['depot_tools'].join('gsutil.py')
+
   def upload(self, source, bucket, dest, args=None, link_name='gsutil.upload',
              metadata=None, **kwargs):
     args = [] if args is None else args[:]
@@ -74,6 +77,13 @@ class GSUtilApi(recipe_api.RecipeApi):
     cmd = ['cp'] + args + [url, dest]
     name = kwargs.pop('name', 'download')
     self(cmd, name, **kwargs)
+
+  def cat(self, url, args=None, **kwargs):
+    args = args or []
+    url = self._normalize_url(url)
+    cmd = ['cat'] + args + [url]
+    name = kwargs.pop('name', 'download')
+    return self(cmd, name, **kwargs)
 
   def copy(self, source_bucket, source, dest_bucket, dest, args=None,
            link_name='gsutil.copy', metadata=None, **kwargs):

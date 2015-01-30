@@ -10,6 +10,7 @@ from slave import recipe_api
 class CommitPositionApi(recipe_api.RecipeApi):
   """Recipe module providing commit position parsing and manipulation."""
   RE_COMMIT_POSITION = re.compile('(?P<branch>.+)@{#(?P<revision>\d+)}')
+  COMMIT_POS_STR = 'Cr-Commit-Position: refs/heads/master@{#%d}'
 
   @classmethod
   def parse(cls, value):
@@ -35,3 +36,41 @@ class CommitPositionApi(recipe_api.RecipeApi):
         'branch': branch,
         'value': value,
     }
+
+  def chromium_hash_from_commit_position(self, commit_pos):
+    """Resolve a commit position in the chromium repo to its commit hash."""
+    try:
+      int_pos = int(commit_pos)
+    except ValueError:  #pragma: no cover
+      raise ValueError('Invalid commit position (%s).' % (commit_pos,))
+    step_result = self.m.git('log', '--format=%H', '--grep', self.COMMIT_POS_STR
+                             % int_pos, '-1', 'refs/heads/master',
+                             stdout=self.m.raw_io.output(),
+                             name='resolving commit_pos ' + str(commit_pos))
+    result = step_result.stdout.splitlines()[0]
+    try:
+      assert int(result, 16)
+    except (AssertionError, ValueError):  #pragma: no cover
+      raise ValueError('Could not parse commit hash from git log output' +
+                       result)
+    return result
+
+
+  def chromium_commit_position_from_hash(self, sha):
+    """Resolve a chromium commit hash to its commit position."""
+    try:
+      assert int(sha, 16)
+      sha = str(sha)  # Unicode would break the step when passed in the name
+    except (AssertionError, ValueError):  #pragma: no cover
+      raise ValueError('Invalid commit hash: ' + sha)
+    step_result = self.m.git('footers', '--position', sha,
+                             stdout=self.m.raw_io.output(),
+                             name='resolving hash ' + sha)
+    result = self.parse_revision(str(step_result.stdout))
+    try:
+      result = int(result)
+    except ValueError:  #pragma: no cover
+      raise ValueError('Could not parse commit position from git output: ' +
+                       result)
+    return result
+

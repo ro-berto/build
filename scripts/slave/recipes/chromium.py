@@ -4,6 +4,7 @@
 
 DEPS = [
   'adb',
+  'bisect_tester',
   'chromium',
   'chromium_android',
   'chromium_tests',
@@ -13,6 +14,7 @@ DEPS = [
   'platform',
   'properties',
   'python',
+  'raw_io',
   'test_utils',
   'step',
   'swarming',
@@ -22,6 +24,10 @@ DEPS = [
 def GenSteps(api):
   mastername = api.properties.get('mastername')
   buildername = api.properties.get('buildername')
+
+  if mastername == 'tryserver.chromium.perf' and api.chromium.builders[
+      mastername]['builders'][buildername]['bot_type'] == 'tester':
+    api.bisect_tester.upload_job_url()
 
   update_step, master_dict, test_spec = \
       api.chromium_tests.sync_and_configure_build(mastername, buildername)
@@ -71,6 +77,29 @@ def GenTests(api):
                      bot_config.get(
                          'chromium_config_kwargs', {}).get('TARGET_BITS', 64))
       )
+      if(bot_type == 'tester' and 'linux_perf' in buildername):
+        bisect_config = {
+            'test_type': 'perf',
+            'command': 'tools/perf/run_benchmark -v '
+                       '--browser=release page_cycler.intl_ar_fa_he',
+            'good_revision': '300138',
+            'bad_revision': '300148',
+            'metric': 'warm_times/page_load_time',
+            'repeat_count': '2',
+            'max_time_minutes': '5',
+            'truncate_percent': '25',
+            'bug_id': '425582',
+            'gs_bucket': 'chrome-perf',
+            'builder_host': 'master4.golo.chromium.org',
+            'builder_port': '8341',
+        }
+        test += api.step_data('saving url to temp file',
+                              stdout=api.raw_io.output('/tmp/dummy1'))
+        test += api.step_data('saving json to temp file',
+                              stdout=api.raw_io.output('/tmp/dummy2'))
+        test += api.properties(bisect_config=bisect_config)
+        test += api.properties(job_name='f7a7b4135624439cbd27fdd5133d74ec')
+        test += api.bisect_tester(tempfile='/tmp/dummy')
       if bot_config.get('parent_buildername'):
         test += api.properties(parent_got_revision='1111111')
         test += api.properties(

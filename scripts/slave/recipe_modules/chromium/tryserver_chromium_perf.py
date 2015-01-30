@@ -15,6 +15,40 @@ SPEC = {
         chromium_perf.SPEC['builders']['Linux Builder'],
     'win_perf_bisect_builder': chromium_perf.SPEC['builders']['Win Builder'],
     'mac_perf_bisect_builder': chromium_perf.SPEC['builders']['Mac Builder'],
-  },
+    'linux_perf_tester':{
+      'recipe_config': 'official',
+      'parent_buildername': 'Linux Builder',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'compile_targets': [
+        'chromium_builder_perf',
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+      'tests':[steps.BisectTest()],
+      'chromium_apply_config': ['chromium_perf']
+    },
+    'linux_perf_bisector':{
+      'recipe_config': 'official',
+      'parent_buildername': 'Linux Builder',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'compile_targets': [
+        'chromium_builder_perf',
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+      'tests':[steps.BisectTest()],
+      'chromium_apply_config': ['chromium_perf']
+    },
+  }
 }
 
