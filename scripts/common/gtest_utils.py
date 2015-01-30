@@ -43,8 +43,8 @@ class GTestLogParser(object):
     self.completed = False
     self._current_test = ''
     self._failure_description = []
-    self._current_suppression_hash = ''
-    self._current_suppression = []
+    self._current_report_hash = ''
+    self._current_report = []
     self._parsing_failures = False
 
     # Line number currently being processed.
@@ -60,8 +60,8 @@ class GTestLogParser(object):
     # a list of lines detailing the test's error, as reported in the log.
     self._test_status = {}
 
-    # Suppressions are stored here as 'hash': [suppression].
-    self._suppressions = {}
+    # Reports are stored here as 'hash': [report].
+    self._memory_tool_reports = {}
 
     # This may be either text or a number. It will be used in the phrase
     # '%s disabled' or '%s flaky' on the waterfall display.
@@ -89,9 +89,10 @@ class GTestLogParser(object):
     self._disabled = re.compile(r'\s*YOU HAVE (\d+) DISABLED TEST')
     self._flaky = re.compile(r'\s*YOU HAVE (\d+) FLAKY TEST')
 
-    self._suppression_start = re.compile(
-        r'Suppression \(error hash=#([0-9A-F]+)#\):')
-    self._suppression_end = re.compile(r'^}\s*$')
+    self._report_start = re.compile(
+        r'### BEGIN MEMORY TOOL REPORT \(error hash=#([0-9A-F]+)#\)')
+    self._report_end = re.compile(
+        r'### END MEMORY TOOL REPORT \(error hash=#([0-9A-F]+)#\)')
 
     self._retry_message = re.compile('RETRYING FAILED TESTS:')
     self.retrying_failed = False
@@ -203,16 +204,16 @@ class GTestLogParser(object):
     test_status = self._test_status.get(test, ('', []))
     return ['%s: ' % test] + test_status[1]
 
-  def SuppressionHashes(self):
-    """Returns list of suppression hashes found in the log."""
-    return self._suppressions.keys()
+  def MemoryToolReportHashes(self):
+    """Returns list of report hashes found in the log."""
+    return self._memory_tool_reports.keys()
 
-  def Suppression(self, suppression_hash):
-    """Returns a list containing the suppression for a given hash.
+  def MemoryToolReport(self, report_hash):
+    """Returns a list containing the report for a given hash.
 
-    If the suppression hash doesn't exist, returns [].
+    If the report hash doesn't exist, returns [].
     """
-    return self._suppressions.get(suppression_hash, [])
+    return self._memory_tool_reports.get(report_hash, [])
 
   def CompletedWithoutFailure(self):
     """Returns True if all tests completed and no tests failed unexpectedly."""
@@ -375,25 +376,31 @@ class GTestLogParser(object):
       self._current_test = ''
       return
 
-    # Is it the start of a new valgrind suppression?
-    results = self._suppression_start.match(line)
+    # Is it the start of a new memory tool report?
+    results = self._report_start.match(line)
     if results:
-      suppression_hash = results.group(1)
-      if suppression_hash in self._suppressions:
-        self._RecordError(line, 'suppression reported more than once')
-      self._suppressions[suppression_hash] = []
-      self._current_suppression_hash = suppression_hash
-      self._current_suppression = [line]
+      report_hash = results.group(1)
+      if report_hash in self._memory_tool_reports:
+        self._RecordError(line, 'multiple reports for this hash')
+      self._memory_tool_reports[report_hash] = []
+      self._current_report_hash = report_hash
+      self._current_report = []
       return
 
-    # Is it the end of a valgrind suppression?
-    results = self._suppression_end.match(line)
-    if results and self._current_suppression_hash:
-      self._current_suppression.append(line)
-      self._suppressions[self._current_suppression_hash] = (
-          self._current_suppression)
-      self._current_suppression_hash = ''
-      self._current_suppression = []
+    # Is it the end of a memory tool report?
+    results = self._report_end.match(line)
+    if results:
+      report_hash = results.group(1)
+      if not self._current_report_hash:
+        self._RecordError(line, 'no BEGIN matches this END')
+      elif report_hash != self._current_report_hash:
+        self._RecordError(line, 'expected (error hash=#%s#)' %
+            self._current_report_hash)
+      else:
+        self._memory_tool_reports[self._current_report_hash] = (
+            self._current_report)
+      self._current_report_hash = ''
+      self._current_report = []
       return
 
     # Is it the start of the retry tests?
@@ -402,11 +409,11 @@ class GTestLogParser(object):
       self.retrying_failed = True
       return
 
-    # Random line: if we're in a suppression, collect it. Suppressions are
+    # Random line: if we're in a report, collect it. Reports are
     # generated after all tests are finished, so this should always belong to
-    # the current suppression hash.
-    if self._current_suppression_hash:
-      self._current_suppression.append(line)
+    # the current report hash.
+    if self._current_report_hash:
+      self._current_report.append(line)
       return
 
     # Random line: if we're in a test, collect it for the failure description.
@@ -484,7 +491,7 @@ class GTestJSONParser(object):
     return sorted(self.ignored_failed_tests)
 
   @staticmethod
-  def SuppressionHashes():
+  def MemoryToolReportHashes():
     return []
 
   def ParsingErrors(self):

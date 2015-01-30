@@ -192,7 +192,11 @@ Oops, this test crashed!
 
 VALGRIND_HASH = 'B254345E4D3B6A00'
 
-VALGRIND_SUPPRESSION = """Suppression (error hash=#%(hash)s#):
+VALGRIND_REPORT = """Leak_DefinitelyLost
+1 (1 direct, 0 indirect) bytes in 1 blocks are lost in loss record 1 of 1
+  operator new(unsigned long) (m_replacemalloc/vg_replace_malloc.c:1140)
+  content::NavigationControllerTest_Reload::TestBody() (a/b/c/d.cc:1150)
+Suppression (error hash=#%(hash)s#):
 {
    <insert_a_suppression_name_here>
    Memcheck:Leak
@@ -223,9 +227,12 @@ TEST_DATA_VALGRIND = """
 [==========] 5 tests from 1 test cases ran. (136 ms total)
 [  PASSED  ] 5 tests.
 
-%(suppression)s
+### BEGIN MEMORY TOOL REPORT (error hash=#%(hash)s#)
+%(report)s
+### END MEMORY TOOL REPORT (error hash=#%(hash)s#)
 program finished with exit code 255
-""" % {'suppression': VALGRIND_SUPPRESSION}
+
+""" % {'report': VALGRIND_REPORT, 'hash': VALGRIND_HASH}
 
 
 FAILING_TESTS_OUTPUT = """
@@ -601,9 +608,9 @@ class TestGTestLogParserTests(auto_stub.TestCase):
     self.assertEqual(0, len(parser.ParsingErrors()))
     self.assertFalse(parser.RunningTests())
     self.assertFalse(parser.FailedTests())
-    self.assertEqual([VALGRIND_HASH], parser.SuppressionHashes())
-    self.assertEqual(VALGRIND_SUPPRESSION,
-                     '\n'.join(parser.Suppression(VALGRIND_HASH)))
+    self.assertEqual([VALGRIND_HASH], parser.MemoryToolReportHashes())
+    self.assertEqual(VALGRIND_REPORT,
+                     '\n'.join(parser.MemoryToolReport(VALGRIND_HASH)))
     self.assertEqual(['SUCCESS'], parser.TriesForTest('HunspellTest.All'))
 
     parser = gtest_utils.GTestLogParser()

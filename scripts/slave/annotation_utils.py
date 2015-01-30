@@ -91,9 +91,9 @@ def annotate(test_name, result, log_processor, full_name=False,
       testabbr = re.sub(r'[^\w\.\-]', '_', failure.split('.')[-1])
     slave_utils.WriteLogLines(testabbr,
                               log_processor.FailureDescription(failure))
-  for suppression_hash in sorted(log_processor.SuppressionHashes()):
-    slave_utils.WriteLogLines(suppression_hash,
-                              log_processor.Suppression(suppression_hash))
+  for report_hash in sorted(log_processor.MemoryToolReportHashes()):
+    slave_utils.WriteLogLines(report_hash,
+                              log_processor.MemoryToolReport(report_hash))
 
   if log_processor.ParsingErrors():
     # Generate a log file containing the list of errors.
@@ -110,7 +110,7 @@ def annotate(test_name, result, log_processor, full_name=False,
   if result == performance_log_processor.SUCCESS:
     if (len(log_processor.ParsingErrors()) or
         len(log_processor.FailedTests()) or
-        len(log_processor.SuppressionHashes())):
+        len(log_processor.MemoryToolReportHashes())):
       print '@@@STEP_WARNINGS@@@'
       get_text_result = performance_log_processor.WARNINGS
   elif result == slave_utils.WARNING_EXIT_CODE:

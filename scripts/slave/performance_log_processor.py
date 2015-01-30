@@ -145,7 +145,7 @@ class PerformanceLogProcessor(object):
   def FailedTests(self):  # pylint: disable=R0201
     return []
 
-  def SuppressionHashes(self):  # pylint: disable=R0201
+  def MemoryToolReportHashes(self):  # pylint: disable=R0201
     return []
 
   def ParsingErrors(self):  # pylint: disable=R0201
