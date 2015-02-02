@@ -123,5 +123,14 @@
       "html_viewer_unittests"
     ],
     "name": "html_viewer_unittests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/mojo/tools/apptest_runner.py",
+      "[BUILD]/mojo/tools/data/apptests",
+    ],
+    "name": "run apptests"
   }
 ]
