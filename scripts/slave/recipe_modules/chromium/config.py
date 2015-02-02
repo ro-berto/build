@@ -373,6 +373,9 @@ def asan(c):
                                            'suppressions.txt')
   if c.TARGET_PLATFORM == 'linux':
     c.gyp_env.GYP_DEFINES['use_allocator'] = 'none'
+  if c.TARGET_PLATFORM == 'mac':
+    # Set fastbuild=0 and prevent other configs from changing it.
+    fastbuild(c, invert=True, optional=False)
 
   c.gyp_env.GYP_DEFINES['asan'] = 1
   c.gyp_env.GYP_DEFINES['lsan'] = 1

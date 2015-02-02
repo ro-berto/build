@@ -49,7 +49,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "asan=1 clang=1 lsan=1 target_arch=x64 v8_target_arch=x64"
+      "GYP_DEFINES": "asan=1 clang=1 fastbuild=0 lsan=1 target_arch=x64 v8_target_arch=x64"
     },
     "name": "gclient runhooks"
   },
