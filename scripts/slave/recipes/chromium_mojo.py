@@ -7,8 +7,6 @@ from infra.libs.infra_types import freeze
 DEPS = [
   'bot_update',
   'chromium',
-  'path',
-  'python',
 ]
 
 
@@ -25,13 +23,6 @@ BUILDERS = freeze({
   },
 })
 
-def _RunApptests(api):
-  apptest_runner = api.path['checkout'].join('mojo', 'tools',
-      'apptest_runner.py')
-  apptest_config = api.path['checkout'].join('mojo', 'tools',
-      'data', 'apptests')
-  api.python('run apptests', apptest_runner, [apptest_config])
-
 
 def GenSteps(api):
   _, bot_config = api.chromium.configure_bot(BUILDERS, ['gn'])
@@ -43,15 +34,9 @@ def GenSteps(api):
 
   api.chromium.run_gn(use_goma=True)
 
-  api.chromium.compile(
-      targets=['html_viewer_unittests',
-               'mojo/services/network',
-               'mojo/services/network:apptests',
-               'third_party/mojo/src/mojo/public/tools:copy_mojo_shell'])
+  api.chromium.compile(targets=['html_viewer_unittests'])
 
   api.chromium.runtest('html_viewer_unittests')
-
-  _RunApptests(api)
 
 
 def GenTests(api):
