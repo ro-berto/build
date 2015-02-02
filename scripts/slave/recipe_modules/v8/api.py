@@ -213,6 +213,8 @@ class V8Api(recipe_api.RecipeApi):
     self.set_config('v8',
                     optional=True,
                     **self.bot_config.get('v8_config_kwargs', {}))
+    if self.m.tryserver.is_tryserver:
+      self.init_tryserver()
     for c in self.bot_config.get('gclient_apply_config', []):
       self.m.gclient.apply_config(c)
     for c in self.bot_config.get('chromium_apply_config', []):

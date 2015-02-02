@@ -91,6 +91,11 @@ def no_clang(c):
 
 
 @CONFIG_CTX(includes=['v8'])
+def no_dcheck(c):
+  c.gyp_env.GYP_DEFINES['dcheck_always_on'] = 0
+
+
+@CONFIG_CTX(includes=['v8'])
 def no_i18n(c):
   c.gyp_env.GYP_DEFINES['v8_enable_i18n_support'] = 0
 

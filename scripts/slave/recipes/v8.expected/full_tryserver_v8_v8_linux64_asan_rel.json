@@ -51,7 +51,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "asan=1 clang=1 dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' lsan=1 target_arch=x64 use_allocator=none use_goma=1 v8_target_arch=x64"
+      "GYP_DEFINES": "asan=1 clang=1 dcheck_always_on=0 fastbuild=1 gomadir='[BUILD]/goma' lsan=1 target_arch=x64 use_allocator=none use_goma=1 v8_target_arch=x64"
     },
     "name": "gclient runhooks"
   },
@@ -95,7 +95,6 @@
       "unittests",
       "--no-variants",
       "--flaky-tests=skip",
-      "--dcheck-always-on",
       "--asan",
       "--json-test-results",
       "/path/to/tmp/json"
@@ -118,7 +117,6 @@
       "--testname",
       "default",
       "--flaky-tests=skip",
-      "--dcheck-always-on",
       "--asan",
       "--json-test-results",
       "/path/to/tmp/json"

@@ -20,9 +20,6 @@ def GenSteps(api):
   v8 = api.v8
   v8.apply_bot_config(v8.BUILDERS)
 
-  if api.tryserver.is_tryserver:
-    v8.init_tryserver()
-
   if api.platform.is_win:
     api.chromium.taskkill()
 
