@@ -141,6 +141,13 @@ def simulate_arm(c):
     c.gyp_env.GYP_DEFINES['v8_target_arch'] = 'arm'
 
 
+@CONFIG_CTX(group='compiler', includes=['v8', 'goma'])
+def v8_goma(c):
+  # This configuration connects the compiler group constraint with chromium's
+  # goma config.
+  pass
+
+
 @CONFIG_CTX(includes=['v8'])
 def verify_heap(c):
   c.gyp_env.GYP_DEFINES['v8_enable_verify_heap'] = 1

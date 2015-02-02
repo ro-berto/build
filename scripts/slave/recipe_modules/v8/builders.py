@@ -13,6 +13,7 @@ BUILDERS = {
     'builders': {
 ####### Category: Linux
       'V8 Linux - builder': {
+        'chromium_apply_config': ['v8_goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -22,6 +23,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - debug builder': {
+        'chromium_apply_config': ['v8_goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -31,7 +33,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - nosnap builder': {
-        'chromium_apply_config': ['no_snapshot'],
+        'chromium_apply_config': ['no_snapshot', 'v8_goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -41,7 +43,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - nosnap debug builder': {
-        'chromium_apply_config': ['no_snapshot'],
+        'chromium_apply_config': ['no_snapshot', 'v8_goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -106,7 +108,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - shared': {
-        'chromium_apply_config': ['shared_library', 'verify_heap'],
+        'chromium_apply_config': ['shared_library', 'verify_heap', 'v8_goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -252,7 +254,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - interpreted regexp': {
-        'chromium_apply_config': ['interpreted_regexp'],
+        'chromium_apply_config': ['interpreted_regexp', 'v8_goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -263,7 +265,7 @@ BUILDERS = {
       },
       'V8 Linux - noi18n - debug': {
         'v8_apply_config': ['no_i18n'],
-        'chromium_apply_config': ['no_i18n'],
+        'chromium_apply_config': ['no_i18n', 'v8_goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -286,6 +288,7 @@ BUILDERS = {
       },
 ####### Category: Linux64
       'V8 Linux64 - builder': {
+        'chromium_apply_config': ['v8_goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -295,6 +298,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 - debug builder': {
+        'chromium_apply_config': ['v8_goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -945,7 +949,7 @@ BUILDERS = {
       },
 ####### Category: FYI
       'V8 Linux - vtunejit': {
-        'chromium_apply_config': ['vtunejit'],
+        'chromium_apply_config': ['vtunejit', 'v8_goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -955,7 +959,7 @@ BUILDERS = {
       },
       'V8 Linux - x87 - nosnap - debug': {
         'v8_apply_config': ['no_snapshot'],
-        'chromium_apply_config': ['no_snapshot', 'x87'],
+        'chromium_apply_config': ['no_snapshot', 'v8_goma', 'x87'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -966,7 +970,7 @@ BUILDERS = {
       },
       'V8 Linux - predictable': {
         'v8_apply_config': ['predictable'],
-        'chromium_apply_config': ['predictable'],
+        'chromium_apply_config': ['predictable', 'v8_goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -977,7 +981,7 @@ BUILDERS = {
       },
       'V8 Linux64 - custom snapshot - debug': {
         'v8_apply_config': ['gc_stress', 'no_harness'],
-        'chromium_apply_config': ['embed_script_mjsunit'],
+        'chromium_apply_config': ['embed_script_mjsunit', 'v8_goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -987,7 +991,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - full debug': {
-        'chromium_apply_config': ['no_optimized_debug'],
+        'chromium_apply_config': ['no_optimized_debug', 'v8_goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -997,6 +1001,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Random Deopt Fuzzer - debug': {
+        'chromium_apply_config': ['v8_goma'],
         'v8_apply_config': ['deopt_fuzz_random'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
