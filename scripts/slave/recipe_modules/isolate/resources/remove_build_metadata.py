@@ -5,12 +5,15 @@
 """Remove the build metadata embedded in the artifacts of a build."""
 
 import json
+import multiprocessing
 import optparse
 import os
+import Queue
 import shutil
 import subprocess
 import sys
 import tempfile
+import threading
 import zipfile
 
 
@@ -49,13 +52,13 @@ def run_zap_timestamp(src_dir, filepath):
   syzygy_dir = os.path.join(
       src_dir, 'third_party', 'syzygy', 'binaries', 'exe')
   zap_timestamp_exe = os.path.join(syzygy_dir, 'zap_timestamp.exe')
-  print('Processing: %s' % os.path.basename(filepath))
+  sys.stdout.write('Processing: %s\n' % os.path.basename(filepath))
   proc = subprocess.Popen(
       [zap_timestamp_exe, '--input-image=%s' % filepath, '--overwrite'],
       stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
   log, _ = proc.communicate()
   if proc.returncode != 0:
-    print >> sys.stderr, log
+    sys.stderr.write('%s failed:\n%s\n' % (os.path.basename(filepath), log))
   return proc.returncode
 
 
@@ -70,7 +73,7 @@ def remove_pe_metadata(filename, src_dir):
 
 def remove_apk_timestamps(filename):
   """Remove the timestamps embedded in an apk archive."""
-  print('Processing: %s' % os.path.basename(filename))
+  sys.stdout.write('Processing: %s\n' % os.path.basename(filepath))
   with zipfile.ZipFile(filename, 'r') as zf:
     # Creates a temporary file.
     out_file, out_filename = tempfile.mkstemp(prefix='remote_apk_timestamp')
@@ -90,27 +93,47 @@ def remove_apk_timestamps(filename):
         os.remove(out_filename)
 
 
+def remove_metadata_worker(file_queue, failed_queue, build_dir, src_dir):
+  """Worker thread for the remove_metadata function."""
+  while True:
+    f = file_queue.get()
+    if f.endswith(('.dll', '.exe')):
+      if remove_pe_metadata(os.path.join(build_dir, f), src_dir):
+        ret = 1
+        failed_queue.put(f)
+    elif f.endswith('.apk'):
+      remove_apk_timestamps(os.path.join(build_dir, f))
+    file_queue.task_done()
+
+
 def remove_metadata(build_dir, src_dir, recursive):
   """Remove the build metadata from the artifacts of a build."""
   with open(os.path.join(BASE_DIR, 'deterministic_build_blacklist.json')) as f:
     blacklist = frozenset(json.load(f))
-  files = get_files_to_clean(build_dir, recursive) - blacklist
-  failed_files = []
-  ret = 0
-  for f in files:
-    if f.endswith(('.dll', '.exe')):
-      if remove_pe_metadata(os.path.join(build_dir, f), src_dir):
-        ret = 1
-        failed_files.append(f)
-    elif f.endswith('.apk'):
-      remove_apk_timestamps(os.path.join(build_dir, f))
+  files = Queue.Queue()
+  for f in get_files_to_clean(build_dir, recursive) - blacklist:
+    files.put(f)
+  failed_files = Queue.Queue()
 
-  if failed_files:
+  for _ in xrange(multiprocessing.cpu_count()):
+    worker = threading.Thread(target=remove_metadata_worker,
+                              args=(files,
+                                    failed_files,
+                                    build_dir,
+                                    src_dir))
+    worker.daemon = True
+    worker.start()
+
+  files.join()
+  if not failed_files.empty():
     print >> sys.stderr, 'Failed for the following files:'
-    print >> sys.stderr, '\n'.join('  ' + i for i in sorted(failed_files))
+    failed_files_list = []
+    while not failed_files.empty():
+      failed_files_list.append(failed_files.get())
+    print >> sys.stderr, '\n'.join('  ' + i for i in sorted(failed_files_list))
     return 1
 
-  return ret
+  return 0
 
 
 def main():
