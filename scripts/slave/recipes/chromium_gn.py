@@ -142,6 +142,7 @@ BUILDERS = freeze({
   'chromium.win': {
     'builders': {
       'Win8 GN': {
+        'chromium_apply_config': ['gn_minimal_symbols'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'win',
@@ -234,6 +235,7 @@ BUILDERS = freeze({
         },
       },
       'win8_chromium_gn_rel': {
+        'chromium_apply_config': ['gn_minimal_symbols'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'win',

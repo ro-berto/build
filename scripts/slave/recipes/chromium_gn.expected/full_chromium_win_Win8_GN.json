@@ -81,7 +81,7 @@
       "--root=[SLAVE_BUILD]\\src",
       "gen",
       "//out/Release",
-      "--args=is_debug=false cpu_arch=\"x86\""
+      "--args=symbol_level=1 is_debug=false cpu_arch=\"x86\""
     ],
     "name": "gn"
   },
