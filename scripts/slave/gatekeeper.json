@@ -308,6 +308,25 @@
         }
       }
     ],
+    "https://build.chromium.org/p/client.nacl": [
+      {
+        "forgive_all": true,
+        "categories": [
+          "nacl_all"
+        ],
+        "excluded_builders" : [
+            "precise_64-newlib-arm_qemu-pnacl-buildonly-spec",
+            "oneiric_32-newlib-arm_hw-pnacl-panda-spec"
+        ],
+        "builders": {
+          "*": {}
+        },
+        "tree_notify": [
+            "tandrii+nacl-gatekeeper@chromium.org",
+            "bradnelson+nacl-gatekeeper@chromium.org"
+        ]
+      }
+    ],
     "https://build.chromium.org/p/client.v8": [
       {
         "categories": [
@@ -554,6 +573,36 @@
         "slave_steps"
       ],
       "sheriff_classes": ["sheriff_android"]
+    },
+    "nacl_all": {
+      "closing_optional": [
+        "compile",
+        "gn",
+        "gclient runhooks",
+        "runhooks",
+        "Presubmit",
+        "Static-Initializers",
+        "Check",
+        "Unittests",
+        "OptimizeForSize",
+        "Mjsunit",
+        "Webkit",
+        "Benchmarks",
+        "Test262",
+        "Test262-es6",
+        "Mozilla",
+        "GCMole arm",
+        "GCMole arm64",
+        "GCMole ia32",
+        "GCMole x64",
+        "Simple Leak Check"
+      ],
+      "forgiving_optional": [
+        "update_scripts",
+        "update",
+        "annotate"
+      ],
+      "subject_template": "buildbot %(result)s in %(projectName)s on %(builder)s, revision %(revision)s"
     },
     "v8_all": {
       "closing_optional": [
