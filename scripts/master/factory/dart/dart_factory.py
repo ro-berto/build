@@ -541,7 +541,7 @@ class DartUtils(object):
     branch = branch or 'master'
     workdir = '/tmp/git_workdir_%s_%s' % (project, branch)
     return gitpoller.GitPoller(repourl=repo,
-                               pollinterval=10,
+                               pollinterval=90,
                                project=project,
                                branch=branch,
                                workdir=workdir,
