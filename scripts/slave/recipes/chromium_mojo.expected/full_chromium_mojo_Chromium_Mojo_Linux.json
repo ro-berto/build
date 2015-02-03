@@ -81,7 +81,7 @@
       "--root=[SLAVE_BUILD]/src",
       "gen",
       "//out/Release",
-      "--args=is_debug=false cpu_arch=\"x64\" use_goma=true goma_dir=\"[BUILD]/goma\""
+      "--args=use_prebuilt_mojo_shell=true is_debug=false cpu_arch=\"x64\" use_goma=true goma_dir=\"[BUILD]/goma\""
     ],
     "name": "gn"
   },
@@ -101,7 +101,9 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "html_viewer_unittests"
+      "html_viewer_unittests",
+      "mojo/services/network",
+      "mojo/services/network:apptests"
     ],
     "name": "compile"
   },
@@ -123,5 +125,15 @@
       "html_viewer_unittests"
     ],
     "name": "html_viewer_unittests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/mojo/tools/apptest_runner.py",
+      "[SLAVE_BUILD]/src/mojo/tools/data/apptests",
+      "[SLAVE_BUILD]/src/out/Release"
+    ],
+    "name": "run apptests"
   }
 ]
