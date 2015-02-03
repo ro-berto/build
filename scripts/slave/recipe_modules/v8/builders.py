@@ -659,7 +659,7 @@ BUILDERS = {
       },
 ####### Category: Simulators
       'V8 Linux - arm - sim': {
-        'chromium_apply_config': ['simulate_arm'],
+        'chromium_apply_config': ['simulate_arm', 'v8_goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -676,7 +676,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm - sim - debug': {
-        'chromium_apply_config': ['simulate_arm'],
+        'chromium_apply_config': ['simulate_arm', 'v8_goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -687,7 +687,7 @@ BUILDERS = {
       },
       'V8 Linux - arm - sim - novfp3': {
         # TODO(machenbach): Can these configs be reduced to one?
-        'chromium_apply_config': ['simulate_arm', 'novfp3'],
+        'chromium_apply_config': ['simulate_arm', 'novfp3', 'v8_goma'],
         'v8_apply_config': ['novfp3'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -698,7 +698,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm - sim - debug - novfp3': {
-        'chromium_apply_config': ['simulate_arm', 'novfp3'],
+        'chromium_apply_config': ['simulate_arm', 'novfp3', 'v8_goma'],
         'v8_apply_config': ['novfp3'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -709,7 +709,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm64 - sim': {
-        'chromium_apply_config': ['simulate_arm'],
+        'chromium_apply_config': ['simulate_arm', 'v8_goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -726,7 +726,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm64 - sim - debug': {
-        'chromium_apply_config': ['simulate_arm'],
+        'chromium_apply_config': ['simulate_arm', 'v8_goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -736,7 +736,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm64 - sim - nosnap - debug - 1': {
-        'chromium_apply_config': ['simulate_arm', 'no_snapshot'],
+        'chromium_apply_config': ['simulate_arm', 'no_snapshot', 'v8_goma'],
         'v8_apply_config': ['no_snapshot'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -749,7 +749,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm64 - sim - nosnap - debug - 2': {
-        'chromium_apply_config': ['simulate_arm', 'no_snapshot'],
+        'chromium_apply_config': ['simulate_arm', 'no_snapshot', 'v8_goma'],
         'v8_apply_config': ['no_snapshot'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -762,7 +762,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm64 - sim - gc stress': {
-        'chromium_apply_config': ['simulate_arm'],
+        'chromium_apply_config': ['simulate_arm', 'v8_goma'],
         'v8_apply_config': ['gc_stress'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -773,7 +773,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - mips - sim - builder': {
-        'chromium_apply_config': ['simulate_mips'],
+        'chromium_apply_config': ['simulate_mips', 'v8_goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -1040,6 +1040,7 @@ BUILDERS = {
   'tryserver.v8': {
     'builders': {
       'v8_linux_rel': {
+        'chromium_apply_config': ['v8_goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -1057,7 +1058,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_nodcheck_rel': {
-        'chromium_apply_config': ['no_dcheck'],
+        'chromium_apply_config': ['no_dcheck', 'v8_goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -1067,6 +1068,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_dbg': {
+        'chromium_apply_config': ['v8_goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -1076,7 +1078,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_nosnap_rel': {
-        'chromium_apply_config': ['no_snapshot'],
+        'chromium_apply_config': ['no_snapshot', 'v8_goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -1086,7 +1088,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_nosnap_dbg': {
-        'chromium_apply_config': ['no_snapshot'],
+        'chromium_apply_config': ['no_snapshot', 'v8_goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -1096,6 +1098,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_rel': {
+        'chromium_apply_config': ['v8_goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -1214,7 +1217,7 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'v8_linux_arm_rel': {
-        'chromium_apply_config': ['simulate_arm'],
+        'chromium_apply_config': ['simulate_arm', 'v8_goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -1224,7 +1227,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm_dbg': {
-        'chromium_apply_config': ['simulate_arm'],
+        'chromium_apply_config': ['simulate_arm', 'v8_goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -1234,7 +1237,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm64_rel': {
-        'chromium_apply_config': ['simulate_arm'],
+        'chromium_apply_config': ['simulate_arm', 'v8_goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -1244,7 +1247,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm64_dbg': {
-        'chromium_apply_config': ['simulate_arm'],
+        'chromium_apply_config': ['simulate_arm', 'v8_goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,

@@ -49,7 +49,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "target_arch=x64 v8_enable_slow_dchecks=1 v8_optimized_debug=1 v8_target_arch=arm64 v8_use_snapshot=false"
+      "GYP_DEFINES": "gomadir='[BUILD]/goma' target_arch=x64 use_goma=1 v8_enable_slow_dchecks=1 v8_optimized_debug=1 v8_target_arch=arm64 v8_use_snapshot=false"
     },
     "name": "gclient runhooks"
   },
@@ -72,6 +72,10 @@
       "[SLAVE_BUILD]/v8",
       "--build-tool",
       "make",
+      "--compiler",
+      "goma",
+      "--goma-dir",
+      "[BUILD]/goma",
       "--"
     ],
     "name": "compile"
