@@ -13,7 +13,8 @@ from common.twisted_util.agent import Agent
 from common.twisted_util.agent_util import ToRelativeURL, RelativeURLJoin
 from common.twisted_util.response import JsonResponse, StringResponse
 from common.twisted_util.body_producers import JsonBodyProducer
-from common.twisted_util.authorizer import NETRCAuthorizer
+from common.twisted_util.netrc_authorizer import NETRCAuthorizer
+from common.twisted_util.gce_authorizer import GCEAuthorizer
 from twisted.python import log
 
 
@@ -41,8 +42,7 @@ class GerritJsonResponse(JsonResponse):
 
 
 class GerritAgent(Agent):
-  """An 'Agent' that is specialized to query Gerrit servers.
-  """
+  """An 'Agent' that is specialized to query Gerrit servers."""
 
   def __init__(self, host, *args, **kwargs):
     # Use 'HTTPS' as the default protocol (backwards compatibility)
@@ -56,10 +56,15 @@ class GerritAgent(Agent):
       is_https = False
 
     # Use 'NETRCAuthorizer' if none is provided (backwards-compatibility), but
-    # only for HTTPS.
+    # only for HTTPS. For GCE hosts, use custom mechanism to retrieve token as
+    # GCE machines do not use .netrc.
     if (kwargs.get('authorizer') is None) and (is_https):
-      log.msg("Using default 'NETRC' authorizer for HTTPS connection")
-      kwargs['authorizer'] = NETRCAuthorizer()
+      if GCEAuthorizer.is_gce_host():
+        log.msg("Using default 'GCE' authorizer for HTTPS connection")
+        kwargs['authorizer'] = GCEAuthorizer(GCEAuthorizer.get_token_dict())
+      else:
+        log.msg("Using default 'NETRC' authorizer for HTTPS connection")
+        kwargs['authorizer'] = NETRCAuthorizer()
     Agent.__init__(self, host, *args, **kwargs)
 
   # Overrides 'Agent._buildRequest'

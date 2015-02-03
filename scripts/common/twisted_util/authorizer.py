@@ -2,13 +2,10 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-"""IAuthorizer class implementations"""
+"""IAuthorizer interface"""
 
-import base64
-import netrc
-import urlparse
+from zope.interface import Interface
 
-from zope.interface import implements, Interface
 
 # Disable missing '__init__' method | pylint: disable=W0232
 # Disable zope.interface.Interface error | pylint:disable=inherit-non-class
@@ -29,29 +26,3 @@ class IAuthorizer(Interface):
 
     Returns: (bool) True if authorization was added, False if not.
     """
-
-
-class NETRCAuthorizer(object):
-  """An Authorizer implementation that loads its authorization from a '.netrc'
-  file.
-  """
-  implements(IAuthorizer)
-
-  def __init__(self, netrc_path=None):
-    """Initializes a new NetRC Authorizer
-
-    Args:
-      netrc_path: (str) If not None, use this as the 'netrc' file path;
-          otherwise, use '~/.netrc'.
-    """
-    self._netrc = netrc.netrc(netrc_path)
-
-  def addAuthHeadersForURL(self, headers, url):
-    parsed_url = urlparse.urlparse(url)
-    auth_entry = self._netrc.authenticators(parsed_url.hostname)
-    if auth_entry is not None:
-      auth_token = 'Basic %s' % \
-        base64.b64encode('%s:%s' % (auth_entry[0], auth_entry[2]))
-      headers.setRawHeaders('Authorization', [auth_token])
-      return True
-    return False
