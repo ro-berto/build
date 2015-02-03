@@ -150,6 +150,7 @@ BUILDERS = freeze({
         },
       },
      'Win8 GN (dbg)': {
+        'chromium_apply_config': ['gn_minimal_symbols'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'win',
@@ -228,6 +229,7 @@ BUILDERS = freeze({
   'tryserver.chromium.win': {
     'builders': {
       'win8_chromium_gn_dbg': {
+        'chromium_apply_config': ['gn_minimal_symbols'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'win',
