@@ -5,6 +5,9 @@
 
 """Common utility functions."""
 
+# pylint: disable=W0611
+import environment_setup
+
 import collections
 import copy
 import os
