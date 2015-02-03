@@ -1067,7 +1067,6 @@ def _MainParse(options, _args):
   if options.annotate:
     annotation_utils.annotate(
         options.test_type, options.parse_result, log_processor,
-        options.factory_properties.get('full_test_name'),
         perf_dashboard_id=options.perf_dashboard_id)
 
   return options.parse_result
@@ -1147,7 +1146,6 @@ def _MainMac(options, args, extra_env):
   if options.annotate:
     annotation_utils.annotate(
         options.test_type, result, log_processor,
-        options.factory_properties.get('full_test_name'),
         perf_dashboard_id=options.perf_dashboard_id)
 
   if options.chartjson_file and telemetry_info:
@@ -1412,7 +1410,6 @@ def _MainLinux(options, args, extra_env):
   if options.annotate:
     annotation_utils.annotate(
         options.test_type, result, log_processor,
-        options.factory_properties.get('full_test_name'),
         perf_dashboard_id=options.perf_dashboard_id)
 
   if options.chartjson_file and telemetry_info:
@@ -1532,7 +1529,6 @@ def _MainWin(options, args, extra_env):
   if options.annotate:
     annotation_utils.annotate(
         options.test_type, result, log_processor,
-        options.factory_properties.get('full_test_name'),
         perf_dashboard_id=options.perf_dashboard_id)
 
   if options.chartjson_file and telemetry_info:
@@ -1600,7 +1596,6 @@ def _MainAndroid(options, args, extra_env):
   if options.annotate:
     annotation_utils.annotate(
         options.test_type, result, log_processor,
-        options.factory_properties.get('full_test_name'),
         perf_dashboard_id=options.perf_dashboard_id)
 
   if options.results_url:

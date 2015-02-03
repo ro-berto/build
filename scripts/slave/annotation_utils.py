@@ -73,8 +73,7 @@ def getText(result, observer, name):
   return basic_info + failure_text
 
 
-def annotate(test_name, result, log_processor, full_name=False,
-             perf_dashboard_id=None):
+def annotate(test_name, result, log_processor, perf_dashboard_id=None):
   """Given a test result and tracker, update the waterfall with test results."""
 
   # Always print raw exit code of the subprocess. This is very helpful
@@ -85,11 +84,8 @@ def annotate(test_name, result, log_processor, full_name=False,
   get_text_result = performance_log_processor.SUCCESS
 
   for failure in sorted(log_processor.FailedTests()):
-    if full_name:
-      testabbr = re.sub(r'[^\w\.\-]', '_', failure)
-    else:
-      testabbr = re.sub(r'[^\w\.\-]', '_', failure.split('.')[-1])
-    slave_utils.WriteLogLines(testabbr,
+    test_name = re.sub(r'[^\w\.\-]', '_', failure)
+    slave_utils.WriteLogLines(test_name,
                               log_processor.FailureDescription(failure))
   for report_hash in sorted(log_processor.MemoryToolReportHashes()):
     slave_utils.WriteLogLines(report_hash,

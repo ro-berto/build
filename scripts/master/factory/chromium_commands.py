@@ -644,7 +644,6 @@ class ChromiumCommands(commands.FactoryCommands):
                     factory_properties=None,
                     wrapper_args=None, addmethod=None):
     factory_properties = factory_properties or {}
-    factory_properties['full_test_name'] = True
     if not wrapper_args:
       wrapper_args = []
     wrapper_args.extend([
