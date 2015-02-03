@@ -322,12 +322,7 @@ def GenSteps(api):
 
   api.chromium.runhooks()
 
-  # TODO(dpranke): goma doesn't work on windows GN builds yet.
-  is_windows = ('Win' in buildername or 'win' in buildername)
-  api.chromium.run_gn(use_goma=not is_windows)
-  if is_windows:
-    api.chromium.c.compile_py.compiler = None
-    api.chromium.c.compile_py.goma_dir = None
+  api.chromium.run_gn(use_goma=True)
 
   # crbug.com/451227 - building 'all' on android builds too many
   # things. Really we should be building the 'default' target
