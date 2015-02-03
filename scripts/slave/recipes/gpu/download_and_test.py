@@ -89,13 +89,13 @@ def GenTests(api):
     api.test('analyze_runs_only_gpu_unittests') +
     api.properties.tryserver(
       mastername='tryserver.chromium.gpu',
-      buildername='mac_gpu',
+      buildername='win_gpu',
       parent_got_revision=160000,
       parent_got_webkit_revision=10000,
       parent_got_swarming_client_revision='feaaabcdef',
       swarm_hashes=angle_unittests_hash
     ) +
-    api.platform.name('mac')
+    api.platform.name('win')
   )
 
   # Tests that we run nothing if analyze said we didn't have to run anything.
@@ -103,13 +103,13 @@ def GenTests(api):
     api.test('analyze_runs_nothing') +
     api.properties.tryserver(
       mastername='tryserver.chromium.gpu',
-      buildername='mac_gpu',
+      buildername='win_gpu',
       parent_got_revision=160000,
       parent_got_webkit_revision=10000,
       parent_got_swarming_client_revision='feaaabcdef',
       swarm_hashes={}
     ) +
-    api.platform.name('mac')
+    api.platform.name('win')
   )
 
   # Tests that swarm_hashes='' doesn't throw an exception.
@@ -117,12 +117,12 @@ def GenTests(api):
     api.test('analyze_does_not_throw_exception') +
     api.properties.tryserver(
       mastername='tryserver.chromium.gpu',
-      buildername='mac_gpu',
+      buildername='win_gpu',
       parent_got_revision=160000,
       parent_got_webkit_revision=10000,
       parent_got_swarming_client_revision='feaaabcdef',
       swarm_hashes=''
     ) +
-    api.platform.name('mac')
+    api.platform.name('win')
   )
 
