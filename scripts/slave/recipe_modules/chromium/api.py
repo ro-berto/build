@@ -518,11 +518,6 @@ class ChromiumApi(recipe_api.RecipeApi):
       gn_args.append('os="android"')
     elif self.c.TARGET_PLATFORM == 'chromeos':
       gn_args.append('os="chromeos"')
-
-      # TODO(dpranke): The system harfbuzz on Precise is too old.
-      # We can remove this when we upgrade the bots to Trusty.
-      gn_args.append('use_system_harfbuzz=false')
-
     elif self.c.TARGET_PLATFORM in ('linux', 'mac', 'win'):
       assert self.c.TARGET_BITS in (32, 64)
       if self.c.TARGET_BITS == 64:
