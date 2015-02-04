@@ -676,8 +676,7 @@ class GatekeeperTest(unittest.TestCase):
   def testFailedBuildClosesTree(self):
     """Test that a failed build calls to the status app."""
     sys.argv.extend([m.url for m in self.masters])
-    sys.argv.extend(['--skip-build-db-update',
-                     '--no-email-app', '--set-status',
+    sys.argv.extend(['--no-email-app', '--set-status',
                      '--password-file', self.status_secret_file])
 
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
@@ -687,6 +686,9 @@ class GatekeeperTest(unittest.TestCase):
 
     urls = self.call_gatekeeper()
     self.assertIn(self.set_status_url, urls)
+    # Check that written build_db_file contains tree closing message.
+    build_db = build_scan_db.get_build_db(self.build_db_file)
+    self.assertIn('closed', build_db.aux['closed_tree']['message'])
 
   def testIgnoredStepsDontCloseTree(self):
     """Test that ignored steps don't call to the status app."""
@@ -775,6 +777,7 @@ class GatekeeperTest(unittest.TestCase):
     })
 
     # Open the tree if it was previously automatically closed.
+    # This is the old way to distinguish human and gatekeeper_ng.
     self.handle_url_json(self.get_status_url, {
       'message': 'closed (automatic)',
       'general_state': 'closed',
@@ -807,6 +810,25 @@ class GatekeeperTest(unittest.TestCase):
     })
     urls = self.call_gatekeeper(build_db=build_db)
     self.assertNotIn(self.set_status_url, urls)
+
+    # Yet open the tree if gatekeeper_ng set previous tree status message.
+    # This is the new way to distinguish human and gatekeeper_ng.
+    sys.argv.remove('--skip-build-db-update')
+    closed_message = 'closed by gatekeeper_ng'
+    self.handle_url_json(self.get_status_url, {
+      'message': closed_message,
+      'general_state': 'closed',
+    })
+    build_db.aux['closed_tree'] = {'message': closed_message}
+    self.call_gatekeeper(build_db=build_db)
+    self.assertEquals(self.url_calls[-1]['url'], self.set_status_url)
+    status_data = urlparse.parse_qs(self.url_calls[-1]['params'])
+    self.assertTrue(status_data['message'][0].startswith(
+      "Tree is open (Automatic"))
+    written_build_db = build_scan_db.get_build_db(self.build_db_file)
+    self.assertDictEqual(written_build_db.aux.get('closed_tree', {}), {})
+    build_db.aux.pop('closed_tree')
+    sys.argv.append('--skip-build-db-update')
 
     # Only change the tree status if it's currently 'closed'
     self.handle_url_json(self.get_status_url, {

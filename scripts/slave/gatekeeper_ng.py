@@ -532,9 +532,14 @@ def open_tree_if_possible(build_db, master_jsons, successful_builder_steps,
     return
 
   # Don't override human closures.
-  # FIXME: We could check that we closed the tree instead?
-  if not re.search(r"automatic", status['message'], re.IGNORECASE):
-    return
+  last_gatekeeper_closure = build_db.aux.get('closed_tree')
+  if last_gatekeeper_closure:
+    if last_gatekeeper_closure['message'] != status['message']:
+      return
+  else:
+    # Backwards compatability hack.
+    if not re.search(r"automatic", status['message'], re.IGNORECASE):
+      return
 
   logging.info('All builders are green, opening the tree...')
 
@@ -545,6 +550,7 @@ def open_tree_if_possible(build_db, master_jsons, successful_builder_steps,
       random_emoji += ' '
     tree_status = 'Tree is open (Automatic: %s)' % random_emoji
   logging.info('Opening tree with message: \'%s\'' % tree_status)
+  build_db.aux['closed_tree'] = {}
   if set_status:
     update_status(tree_status, status_url_root, username, password)
   else:
@@ -572,8 +578,8 @@ def get_results_string(result_value):
   }.get(result_value, 'unknown')
 
 
-def close_tree_if_necessary(failed_builds, username, password, status_url_root,
-                            set_status, revision_properties):
+def close_tree_if_necessary(build_db, failed_builds, username, password,
+                            status_url_root, set_status, revision_properties):
   """Given a list of failed builds, close the tree if necessary."""
 
   closing_builds = [b for b in failed_builds if b['close_tree']]
@@ -615,6 +621,9 @@ def close_tree_if_necessary(failed_builds, username, password, status_url_root,
   logging.info('closing the tree with message: \'%s\'' % tree_status)
   if set_status:
     update_status(tree_status, status_url_root, username, password)
+    build_db.aux['closed_tree'] = {
+        'message': tree_status,
+    }
   else:
     logging.info('set-status not set, not connecting to chromium-status!')
 
@@ -888,7 +897,8 @@ def main():
       build_db.aux['triggered_revisions'] = dict.fromkeys(properties)
     new_failures = reject_old_revisions(new_failures, build_db)
 
-  close_tree_if_necessary(new_failures, options.status_user, options.password,
+  close_tree_if_necessary(build_db, new_failures,
+                          options.status_user, options.password,
                           options.status_url, options.set_status,
                           options.revision_properties.split(','))
   notify_failures(new_failures, options.sheriff_url, options.default_from_email,
