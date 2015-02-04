@@ -73,6 +73,30 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport os, sys\nout_dir = sys.argv[1]\nif os.path.isdir(out_dir):\n  for filename in os.listdir(out_dir):\n    file_path = os.path.join(out_dir, filename)\n    if os.path.isfile(file_path):\n      try:\n        os.remove(file_path)\n        print 'Removed %s' % file_path\n      except OSError as e:\n        print e\n",
+      "[SLAVE_BUILD]/src/out"
+    ],
+    "name": "clean test output files",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@out_dir = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.isdir(out_dir):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  for filename in os.listdir(out_dir):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    file_path = os.path.join(out_dir, filename)@@@",
+      "@@@STEP_LOG_LINE@python.inline@    if os.path.isfile(file_path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@      try:@@@",
+      "@@@STEP_LOG_LINE@python.inline@        os.remove(file_path)@@@",
+      "@@@STEP_LOG_LINE@python.inline@        print 'Removed %s' % file_path@@@",
+      "@@@STEP_LOG_LINE@python.inline@      except OSError as e:@@@",
+      "@@@STEP_LOG_LINE@python.inline@        print e@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[BUILD]/scripts/slave/cleanup_temp.py"
     ],
     "name": "cleanup_temp"
