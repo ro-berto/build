@@ -10,5 +10,6 @@ def Update(config, c):
   poller = gitiles_poller.GitilesPoller(
       webrtc_repo_url,
       svn_branch='trunk',
+      revlinktmpl='http://code.google.com/p/webrtc/source/detail?r=%s',
       svn_mode=True)
   c['change_source'].append(poller)
