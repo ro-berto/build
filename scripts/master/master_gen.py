@@ -64,7 +64,7 @@ def _Populate(BuildmasterConfig, builders, master_cls):
   for builder_name, builder_data in builders['builders'].items():
     c['builders'].append({
         'name': builder_name,
-        'factory': m_annotator.BaseFactory(builder_data['recipe']),
+        'factory': m_annotator.BaseFactory(),
         'slavebuilddir': builder_data['slavebuilddir'],
         'slavenames': chromium_utils.GetSlaveNamesForBuilder(builders,
                                                              builder_name),

@@ -20,7 +20,7 @@ class AnnotatorFactory(object):
   def __init__(self):
     self._factory_properties = None
 
-  def BaseFactory(self, recipe, factory_properties=None, triggers=None,
+  def BaseFactory(self, recipe=None, factory_properties=None, triggers=None,
                   timeout=1200, max_time=None):
     """The primary input for the factory is the |recipe|, which specifies the
     name of a recipe file to search for. The recipe file will fill in the rest
@@ -32,6 +32,10 @@ class AnnotatorFactory(object):
     vast majority of cases. Think very carefully before adding any
     |factory_properties| here, as changing them will require a master restart.
 
+    |recipe| is the name of the recipe to pass to annotated_run.  If omitted,
+    annotated_run will attempt to look up the recipe from builders.pyl in the
+    master.
+
     |timeout| refers to the maximum number of seconds a step should be allowed
     to run without output. After no output for |timeout| seconds, the step is
     forcibly killed.
@@ -41,7 +45,8 @@ class AnnotatorFactory(object):
     killed.
     """
     factory_properties = factory_properties or {}
-    factory_properties.update({'recipe': recipe})
+    if recipe:
+      factory_properties.update({'recipe': recipe})
     self._factory_properties = factory_properties
     factory = BuildFactory()
     factory.properties.update(self._factory_properties, 'AnnotatorFactory')

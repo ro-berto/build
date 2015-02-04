@@ -1266,6 +1266,18 @@ def ListMasters(cue='master.cfg', include_public=True, include_internal=True):
   return [os.path.abspath(os.path.dirname(f)) for f in filenames]
 
 
+def MasterPath(mastername, include_public=True, include_internal=True):
+  path = os.path.join(BUILD_DIR, 'masters', 'master.%s' % mastername)
+  path_internal = os.path.join(
+      BUILD_DIR, os.pardir, 'build_internal', 'masters',
+      'master.%s' % mastername)
+  if include_public and os.path.isdir(path):
+    return path
+  if include_internal and os.path.isdir(path_internal):
+    return path_internal
+  raise LookupError('Path for master %s not found' % mastername)
+
+
 def ListMastersWithSlaves(include_public=True, include_internal=True):
   masters_path = ListMasters('builders.pyl', include_public, include_internal)
   masters_path.extend(ListMasters('slaves.cfg', include_public,
