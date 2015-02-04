@@ -145,7 +145,7 @@ def GenTests(api):
   yield generate_builder(mastername, 'Android Builder', revision=None,
                          suffix='_forced')
 
-  buildername = 'Android Tests (KK Nexus5)'
+  buildername = 'Android Tests (L Nexus5)'
   yield generate_builder(mastername, buildername, revision=None,
                          parent_got_revision='12345', suffix='_forced')
   yield generate_builder(mastername, buildername, revision=None,

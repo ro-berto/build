@@ -7,7 +7,7 @@
       "--master",
       "client.webrtc",
       "--builder",
-      "Android Tests (KK Nexus5)",
+      "Android Tests (L Nexus7.2)",
       "--slave",
       "slavename",
       "--spec",
@@ -111,9 +111,9 @@
       "--build_revision",
       "12345",
       "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Android Tests (KK Nexus5)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"parent_buildername\": \"Android Builder\", \"parent_got_revision\": \"12345\", \"recipe\": \"webrtc/standalone\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Android Tests (L Nexus7.2)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"parent_buildername\": \"Android Builder\", \"parent_got_revision\": \"12345\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Android Tests (KK Nexus5)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"parent_buildername\": \"Android Builder\", \"parent_got_revision\": \"12345\", \"recipe\": \"webrtc/standalone\", \"slavename\": \"slavename\"}"
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Android Tests (L Nexus7.2)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"parent_buildername\": \"Android Builder\", \"parent_got_revision\": \"12345\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}"
     ],
     "name": "extract build"
   },

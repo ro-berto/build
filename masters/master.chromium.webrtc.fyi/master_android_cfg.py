@@ -26,8 +26,8 @@ def Update(c):
                periodicBuildTimer=30*60,
                builderNames=buildernames_list),
       Triggerable(name='android_trigger_dbg', builderNames=[
-          'Android Tests (dbg) (KK Nexus5)',
-          'Android Tests (dbg) (JB Nexus7.2)',
+          'Android Tests (dbg) (L Nexus5)',
+          'Android Tests (dbg) (L Nexus7.2)',
       ]),
       Triggerable(name='android_trigger_arm64_dbg', builderNames=[
           'Android Tests (dbg) (L Nexus9)',
@@ -44,8 +44,8 @@ def Update(c):
       'triggers': ['android_trigger_arm64_dbg'],
       'slavebuilddir': 'android_arm64',
     },
-    {'name': 'Android Tests (dbg) (KK Nexus5)'},
-    {'name': 'Android Tests (dbg) (JB Nexus7.2)'},
+    {'name': 'Android Tests (dbg) (L Nexus5)'},
+    {'name': 'Android Tests (dbg) (L Nexus7.2)'},
     {'name': 'Android Tests (dbg) (L Nexus9)'},
     {
       'name': 'Android GN',

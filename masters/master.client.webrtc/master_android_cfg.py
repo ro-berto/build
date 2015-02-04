@@ -23,15 +23,15 @@ def Update(c):
           'Android GN (dbg)',
       ]),
       Triggerable(name='android_trigger_dbg', builderNames=[
-          'Android Tests (KK Nexus5)(dbg)',
-          'Android Tests (JB Nexus7.2)(dbg)',
+          'Android Tests (L Nexus5)(dbg)',
+          'Android Tests (L Nexus7.2)(dbg)',
       ]),
       Triggerable(name='android_trigger_arm64_dbg', builderNames=[
           'Android Tests (L Nexus9)(dbg)',
       ]),
       Triggerable(name='android_trigger_rel', builderNames=[
-          'Android Tests (KK Nexus5)',
-          'Android Tests (JB Nexus7.2)',
+          'Android Tests (L Nexus5)',
+          'Android Tests (L Nexus7.2)',
       ]),
   ])
 
@@ -63,11 +63,11 @@ def Update(c):
       'name': 'Android GN (dbg)',
       'slavebuilddir': 'android_gn',
     },
-    {'name': 'Android Tests (KK Nexus5)(dbg)'},
-    {'name': 'Android Tests (JB Nexus7.2)(dbg)'},
+    {'name': 'Android Tests (L Nexus5)(dbg)'},
+    {'name': 'Android Tests (L Nexus7.2)(dbg)'},
     {'name': 'Android Tests (L Nexus9)(dbg)'},
-    {'name': 'Android Tests (KK Nexus5)'},
-    {'name': 'Android Tests (JB Nexus7.2)'},
+    {'name': 'Android Tests (L Nexus5)'},
+    {'name': 'Android Tests (L Nexus7.2)'},
   ]
 
   c['builders'].extend([

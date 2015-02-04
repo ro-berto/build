@@ -378,7 +378,7 @@ BUILDERS = freeze({
         'build_gs_archive': 'android_dbg_archive_arm64_fyi',
         'testing': {'platform': 'linux'},
       },
-      'Android Tests (dbg) (KK Nexus5)': {
+      'Android Tests (dbg) (L Nexus5)': {
         'recipe_config': 'chromium_webrtc_tot_android',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -394,7 +394,7 @@ BUILDERS = freeze({
         'parent_buildername': 'Android Builder (dbg)',
         'testing': {'platform': 'linux'},
       },
-      'Android Tests (dbg) (JB Nexus7.2)': {
+      'Android Tests (dbg) (L Nexus7.2)': {
         'recipe_config': 'chromium_webrtc_tot_android',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -845,7 +845,7 @@ BUILDERS = freeze({
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
       },
-      'Android Tests (KK Nexus5)(dbg)': {
+      'Android Tests (L Nexus5)(dbg)': {
         'recipe_config': 'webrtc_android',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -858,7 +858,7 @@ BUILDERS = freeze({
         'build_gs_archive': 'android_apk_dbg_archive',
         'testing': {'platform': 'linux'},
       },
-      'Android Tests (KK Nexus5)': {
+      'Android Tests (L Nexus5)': {
         'recipe_config': 'webrtc_android',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -871,7 +871,7 @@ BUILDERS = freeze({
         'build_gs_archive': 'android_apk_rel_archive',
         'testing': {'platform': 'linux'},
       },
-      'Android Tests (JB Nexus7.2)(dbg)': {
+      'Android Tests (L Nexus7.2)(dbg)': {
         'recipe_config': 'webrtc_android',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -884,7 +884,7 @@ BUILDERS = freeze({
         'build_gs_archive': 'android_apk_dbg_archive',
         'testing': {'platform': 'linux'},
       },
-      'Android Tests (JB Nexus7.2)': {
+      'Android Tests (L Nexus7.2)': {
         'recipe_config': 'webrtc_android',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
