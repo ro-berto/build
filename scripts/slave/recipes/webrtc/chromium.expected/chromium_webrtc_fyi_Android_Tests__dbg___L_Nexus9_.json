@@ -77,6 +77,29 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport os\nout_dir = sys.argv[1]\nfor filename in os.listdir(out_dir):\n  file_path = os.path.join(out_dir, filename)\n  if os.path.isfile(file_path):\n    try:\n      os.remove(file_path)\n      print 'Removed %s' % file_path\n    except OSError as e:\n      print e\n",
+      "[SLAVE_BUILD]/src/out"
+    ],
+    "name": "clean test output files",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os@@@",
+      "@@@STEP_LOG_LINE@python.inline@out_dir = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@for filename in os.listdir(out_dir):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  file_path = os.path.join(out_dir, filename)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.isfile(file_path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    try:@@@",
+      "@@@STEP_LOG_LINE@python.inline@      os.remove(file_path)@@@",
+      "@@@STEP_LOG_LINE@python.inline@      print 'Removed %s' % file_path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    except OSError as e:@@@",
+      "@@@STEP_LOG_LINE@python.inline@      print e@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport shutil, sys, os\nshutil.rmtree(sys.argv[1], True)\nshutil.rmtree(sys.argv[2], True)\ntry:\n  os.remove(sys.argv[3])\nexcept OSError:\n  pass\nfor base, _dirs, files in os.walk(sys.argv[4]):\n  for f in files:\n    if f.endswith('.pyc'):\n      os.remove(os.path.join(base, f))\n",
       "[SLAVE_BUILD]/src/out/Debug/debug_info_dumps",
       "[SLAVE_BUILD]/src/out/Debug/test_logs",
