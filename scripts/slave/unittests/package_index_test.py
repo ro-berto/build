@@ -140,16 +140,5 @@ class PackageIndexTest(unittest.TestCase):
             compilation_unit_dictionary['argument'],
             ['-isystem%s' % INCLUDE_PATH] + ['-w'] + real_compile_arguments)
 
-  def testCreateArchive(self):
-    index_pack_path = os.path.join(os.getcwd(), 'index_pack.tar.gz')
-    try:
-      self.assertFalse(os.path.exists(index_pack_path))
-      self.index_pack.CreateArchive(index_pack_path)
-      self.assertTrue(os.path.exists(index_pack_path))
-    finally:
-      if os.path.exists(index_pack_path):
-        os.remove(index_pack_path)
-
-
 if __name__ == '__main__':
   unittest.main()

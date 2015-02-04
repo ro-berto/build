@@ -214,7 +214,7 @@ class IndexPack(object):
     # specification requires that the archive contains one folder with an
     # arbitrary name directly containing the 'units' and 'files' directories.
     if chromium_utils.RunCommand(
-        ['tar', '-czf', filepath, os.path.basename(self.index_directory)],
+        ['zip', '-r', filepath, os.path.basename(self.index_directory)],
         cwd=os.path.dirname(self.index_directory)) != 0:
       raise Exception('ERROR: failed to create %s, exiting' % filepath)
     # Remove the temporary index pack directory. If there was no exception so

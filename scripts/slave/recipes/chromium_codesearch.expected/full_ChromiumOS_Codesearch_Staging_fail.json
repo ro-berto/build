@@ -7,7 +7,7 @@
       "--master",
       "chromium.fyi",
       "--builder",
-      "Chromium Mac Codesearch",
+      "ChromiumOS Codesearch Staging",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -68,7 +68,8 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "clang=1 component=shared_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
+      "GYP_CROSSCOMPILE": "1",
+      "GYP_DEFINES": "chromeos=1 clang=1 component=shared_library fastbuild=1 ffmpeg_branding=ChromeOS gomadir='[BUILD]/goma' proprietary_codecs=1 target_arch=x64 use_goma=1"
     },
     "name": "gclient runhooks"
   },
@@ -152,7 +153,7 @@
       "--path-to-compdb",
       "[SLAVE_BUILD]/src/out/Debug/compile_commands.json",
       "--path-to-archive-output",
-      "[SLAVE_BUILD]/src/out/Debug/index_pack_mac_170242.tar.gz"
+      "[SLAVE_BUILD]/src/out/Debug/index_pack_chromeos_170242.zip"
     ],
     "name": "create index pack"
   },
@@ -167,12 +168,12 @@
       "3.25",
       "--",
       "cp",
-      "[SLAVE_BUILD]/src/out/Debug/index_pack_mac_170242.tar.gz",
-      "gs://chrome-codesearch/staging/index_pack_mac_170242.tar.gz"
+      "[SLAVE_BUILD]/src/out/Debug/index_pack_chromeos_170242.zip",
+      "gs://chrome-codesearch/staging/index_pack_chromeos_170242.zip"
     ],
     "name": "gsutil upload index pack",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/staging/index_pack_mac_170242.tar.gz@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/staging/index_pack_chromeos_170242.zip@@@"
     ]
   },
   {
@@ -186,7 +187,7 @@
       "tools",
       "/usr/include",
       "-f",
-      "chromium_src_mac_170242.tar.bz2"
+      "chromium_src_chromeos_170242.tar.bz2"
     ],
     "name": "archive source"
   },
@@ -201,12 +202,12 @@
       "3.25",
       "--",
       "cp",
-      "[SLAVE_BUILD]/chromium_src_mac_170242.tar.bz2",
-      "gs://chrome-codesearch/staging/chromium_src_mac_170242.tar.bz2"
+      "[SLAVE_BUILD]/chromium_src_chromeos_170242.tar.bz2",
+      "gs://chrome-codesearch/staging/chromium_src_chromeos_170242.tar.bz2"
     ],
     "name": "gsutil upload source tarball",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/staging/chromium_src_mac_170242.tar.bz2@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/staging/chromium_src_chromeos_170242.tar.bz2@@@"
     ]
   }
 ]

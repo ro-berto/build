@@ -101,17 +101,6 @@ SPEC = freeze({
       'package_filename': 'chromiumos-src',
       'platform': 'chromeos',
     },
-    'Chromium Mac Codesearch': {
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-      },
-      'compile_targets': [
-        'all',
-      ],
-      'create_index_pack': True,
-      'environment': 'staging',
-      'platform': 'mac',
-    },
   },
 })
 
@@ -187,7 +176,7 @@ def GenSteps(api):
     got_revision_cp = api.chromium.build_properties.get('got_revision_cp')
     commit_position = api.commit_position.parse_revision(got_revision_cp)
     platform = bot_config.get('platform', 'linux')
-    index_pack_name = 'index_pack_%s_%s.tar.gz' % (platform, commit_position)
+    index_pack_name = 'index_pack_%s_%s.zip' % (platform, commit_position)
     api.python('create index pack',
                api.path['build'].join('scripts', 'slave', 'chromium',
                                       'package_index.py'),
@@ -254,10 +243,11 @@ def GenTests(api):
     yield test
 
   yield (
-    api.test('full_%s_fail' % (_sanitize_nonalpha('Chromium Mac Codesearch'))) +
+    api.test(
+        'full_%s_fail' % _sanitize_nonalpha('ChromiumOS Codesearch Staging')) +
     api.step_data('generate compilation database',
                   stdout=api.raw_io.output('some compilation data')) +
     api.step_data('run translation_unit clang tool', retcode=2) +
-    api.properties.generic(buildername='Chromium Mac Codesearch',
+    api.properties.generic(buildername='ChromiumOS Codesearch Staging',
                            mastername='chromium.fyi')
   )
