@@ -109,7 +109,7 @@
       "--root=[SLAVE_BUILD]\\src",
       "gen",
       "//out/Debug",
-      "--args=is_debug=true cpu_arch=\"x86\" use_goma=true goma_dir=\"[BUILD]\\goma\""
+      "--args=symbol_level=1 is_debug=true cpu_arch=\"x86\" use_goma=true goma_dir=\"[BUILD]\\goma\""
     ],
     "name": "gn"
   },

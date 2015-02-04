@@ -92,7 +92,7 @@ RECIPE_CONFIGS = freeze({
   },
   'chromium_webrtc_tot_android_gn': {
     'chromium_config': 'android',
-    'chromium_apply_config': ['gn'],
+    'chromium_apply_config': ['gn', 'gn_minimal_symbols'],
     'gclient_config': 'chromium_webrtc_tot',
     'gclient_apply_config': ['android'],
     'compile_targets': ['all'],
@@ -269,6 +269,7 @@ BUILDERS = freeze({
       },
       'Win GN': {
         'recipe_config': 'chromium_webrtc_tot_gn',
+        'chromium_apply_config': ['gn_minimal_symbols'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -278,6 +279,7 @@ BUILDERS = freeze({
       },
       'Win GN (dbg)': {
         'recipe_config': 'chromium_webrtc_tot_gn',
+        'chromium_apply_config': ['gn_minimal_symbols'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -338,6 +340,7 @@ BUILDERS = freeze({
       },
       'Linux GN (dbg)': {
         'recipe_config': 'chromium_webrtc_tot_gn',
+        'chromium_apply_config': ['gn_component_build'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
