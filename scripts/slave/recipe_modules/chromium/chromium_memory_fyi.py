@@ -20,9 +20,9 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder',
-      'testing': {
-        'platform': 'linux',
-      },
+      'testing': {'platform': 'linux'},
+      'enable_swarming': True,
+      'use_isolate': True,
     },
     'Linux MSan Tests': {
       'recipe_config': 'chromium_msan',
@@ -36,9 +36,8 @@ SPEC = {
         steps.generate_script,
       ],
       'parent_buildername': 'Chromium Linux MSan Builder',
-      'testing': {
-        'platform': 'linux',
-      },
+      'testing': {'platform': 'linux'},
+      'enable_swarming': True,
     },
     'Linux MSan Browser (1)': {
       'recipe_config': 'chromium_msan',
