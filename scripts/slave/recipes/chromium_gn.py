@@ -185,7 +185,6 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'linux',
           'TARGET_BITS': 64,
         },
-        'should_run_mojo_tests': True,
       },
       'linux_chromium_gn_dbg': {
         'chromium_apply_config': ['gn_component_build'],
@@ -346,11 +345,6 @@ def GenSteps(api):
 
   if bot_config.get('should_run_gn_gyp_compare', False):
     api.chromium.run_gn_compare()
-
-  # TODO(dpranke): crbug.com/353854. Run gn_unittests and other tests
-  # when they are also being run as part of the try jobs.
-  if bot_config.get('should_run_mojo_tests', False):
-    api.chromium.runtest('html_viewer_unittests')
 
 
 def GenTests(api):
