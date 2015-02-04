@@ -2800,5 +2800,5 @@ class GatekeeperTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-  with utils.print_coverage(include=[__file__]):
+  with utils.print_coverage(include=['gatekeeper_ng.py']):
     unittest.main()
