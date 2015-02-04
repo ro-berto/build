@@ -256,7 +256,6 @@ def main_linux(options, args):
       'libffmpegsumo.so',
       'libgcflashplayer.so',
       'lib/libpeerconnection.so',
-      'libpdf.so',
       'libppGoogleNaClPluginChrome.so',
   ]
 

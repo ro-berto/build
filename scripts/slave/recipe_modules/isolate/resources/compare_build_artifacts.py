@@ -69,7 +69,6 @@ WHITELIST = freeze({
     'net_unittests.isolated',
     'np_test_netscape_plugin.dll',
     'npapi_test_plugin.dll',
-    'pdf.dll',
     'peerconnection_server.exe',
     'ppapi_nacl_tests_pnacl_newlib_x32.nexe',
     'ppapi_nacl_tests_pnacl_newlib_x64.nexe',
