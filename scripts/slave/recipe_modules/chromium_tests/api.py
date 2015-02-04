@@ -61,6 +61,11 @@ RECIPE_CONFIGS = freeze({
     'gclient_config': 'chromium',
     'gclient_apply_config': ['chrome_internal'],
   },
+  'chrome_chromeos_buildspec': {
+    'chromium_config': 'chromium',
+    'chromium_apply_config': ['chromeos', 'chrome_internal'],
+    'gclient_config': 'chrome_from_release_buildspec',
+  },
   'chromium_chromeos_ozone': {
     'chromium_config': 'chromium',
     'chromium_apply_config': ['chromeos', 'ozone'],
@@ -150,6 +155,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             buildername, mastername))
     recipe_config = RECIPE_CONFIGS[recipe_config_name]
 
+    # Get the buildspec version. It can be supplied as a build property or as
+    # a recipe config value.
+    buildspec_version = (self.m.properties.get('buildspec_version') or
+                         bot_config.get('buildspec_version'))
+
     self.m.chromium.set_config(
         recipe_config['chromium_config'],
         **bot_config.get('chromium_config_kwargs', {}))
@@ -169,11 +179,18 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     self.m.gclient.set_config(
         recipe_config['gclient_config'],
         PATCH_PROJECT=self.m.properties.get('patch_project'),
+        BUILDSPEC_VERSION=buildspec_version,
         **bot_config.get('gclient_config_kwargs', {}))
     for c in recipe_config.get('gclient_apply_config', []):
       self.m.gclient.apply_config(c)
     for c in bot_config.get('gclient_apply_config', []):
       self.m.gclient.apply_config(c)
+
+    # If a source root is specified, use it. Overrides the first-solution
+    # assignment used by 'bot_update'.
+    if self.m.gclient.c.src_root:
+      self.m.path['checkout'] = self.m.path['slave_build'].join(
+          self.m.gclient.c.src_root)
 
     if 'android_config' in bot_config:
       self.m.chromium_android.set_config(

@@ -13,6 +13,7 @@ from . import chromium_memory
 from . import chromium_memory_fyi
 from . import chromium_perf
 from . import chromium_perf_fyi
+from . import chromium_recipe_coverage
 from . import chromium_webkit
 from . import chromium_win
 from . import client_skia
@@ -42,4 +43,7 @@ BUILDERS = freeze({
   'tryserver.chromium.mac': tryserver_chromium_mac.SPEC,
   'tryserver.chromium.perf': tryserver_chromium_perf.SPEC,
   'tryserver.chromium.win': tryserver_chromium_win.SPEC,
+
+  # "Master" for testing specs that aren't exercised in the public repository.
+  'bot_update.always_on': chromium_recipe_coverage.SPEC,
 })

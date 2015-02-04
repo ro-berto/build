@@ -10,7 +10,8 @@ from slave.recipe_config import ConfigList, Dict, Single, Static, Set, List
 from RECIPE_MODULES.gclient import api as gclient_api
 
 def BaseConfig(USE_MIRROR=True, GIT_MODE=False, CACHE_DIR=None,
-               PATCH_PROJECT=None, **_kwargs):
+               PATCH_PROJECT=None, BUILDSPEC_VERSION=None,
+               **_kwargs):
   deps = '.DEPS.git' if GIT_MODE else 'DEPS'
   cache_dir = str(CACHE_DIR) if GIT_MODE and CACHE_DIR else None
   return ConfigGroup(
@@ -35,6 +36,10 @@ def BaseConfig(USE_MIRROR=True, GIT_MODE=False, CACHE_DIR=None,
     target_os_only = Single(bool, empty_val=False, required=False),
     cache_dir = Static(cache_dir, hidden=False),
 
+    # If supplied, use this as the source root (instead of the first solution's
+    # checkout).
+    src_root = Single(basestring, required=False, hidden=True),
+
     # Maps 'solution' -> build_property
     got_revision_mapping = Dict(hidden=True),
 
@@ -58,6 +63,7 @@ def BaseConfig(USE_MIRROR=True, GIT_MODE=False, CACHE_DIR=None,
     GIT_MODE = Static(bool(GIT_MODE)),
     USE_MIRROR = Static(bool(USE_MIRROR)),
     PATCH_PROJECT = Static(str(PATCH_PROJECT), hidden=True),
+    BUILDSPEC_VERSION= Static(BUILDSPEC_VERSION, hidden=True),
   )
 
 VAR_TEST_MAP = {
@@ -65,6 +71,7 @@ VAR_TEST_MAP = {
   'GIT_MODE':   (True, False),
   'CACHE_DIR':  (None, 'CACHE_DIR'),
   'PATCH_PROJECT': (None, 'v8'),
+  'BUILDSPEC_VERSION': ('40.0.0.1',)
 }
 
 TEST_NAME_FORMAT = lambda kwargs: (
@@ -411,3 +418,18 @@ def chrome_from_buildspec(c):
       'buildspec/build/')
   soln.custom_vars['svn_url'] = 'svn://svn-mirror.golo.chromium.org'
   soln.custom_deps = {}
+
+@config_ctx()
+def chrome_from_release_buildspec(c):
+  assert c.BUILDSPEC_VERSION, "A buildspec version must be supplied."
+  soln = c.solutions.add()
+  soln.name = 'chrome_from_buildspec'
+  soln.revision = 'HEAD'
+  # This URL has to be augmented with the appropriate bucket by the recipe using
+  # it.
+  soln.url = ('svn://svn-mirror.golo.chromium.org/chrome-internal/trunk/tools/'
+      'buildspec/releases/' + c.BUILDSPEC_VERSION)
+  soln.custom_vars['svn_url'] = 'svn://svn-mirror.golo.chromium.org'
+  soln.custom_deps = {}
+  c.src_root = 'src'
+  c.got_revision_mapping['chrome_from_buildspec'] = 'got_revision'
