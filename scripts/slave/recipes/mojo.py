@@ -117,10 +117,14 @@ def _TestSteps(api):
       pass
 
 
-def _UploadShell(api):
+def _UploadShell(api, buildername):
   upload_path = api.path['checkout'].join('mojo', 'tools',
       'upload_shell_binary.py')
-  api.python('upload shell binary', upload_path)
+  is_android = 'Android' in buildername
+  args = []
+  if is_android:
+    args.append('--android')
+  api.python('upload shell binary', upload_path, args)
 
 
 def GenSteps(api):
@@ -131,19 +135,28 @@ def GenSteps(api):
 
   is_linux = 'Linux' in buildername
   is_win = 'Win' in buildername
+  is_android = 'Android' in buildername
   is_tester = 'Tests' in buildername
-  if not is_tester and not is_linux and not is_win:
-    return
-
-  _TestSteps(api)
-
   is_try = api.tryserver.is_tryserver
   is_asan = 'ASan' in buildername
   is_perf = 'Perf' in buildername
   is_nacl = 'NaCl' in buildername
-  if (is_linux and build_type == '--release' and not is_try and not is_perf and
-      not is_asan and not is_nacl):
-    _UploadShell(api)
+  upload_shell = ((is_linux or is_android) and build_type == '--release'
+      and not is_try and not is_perf and not is_asan and not is_nacl)
+  if not is_tester and not is_linux and not is_win:
+    # TODO(blundell): Eliminate this special case
+    # once there's an Android release tester bot.
+    if upload_shell and is_android:
+      _UploadShell(api, buildername)
+    return
+
+  _TestSteps(api)
+
+  # TODO(blundell): Remove the "and not is_android" once there's an
+  # Android release tester bot and I've removed the logic uploading the
+  # shell on Android above.
+  if upload_shell and not is_android:
+    _UploadShell(api, buildername)
 
 def GenTests(api):
   tests = [
@@ -153,6 +166,7 @@ def GenTests(api):
       ['mojo_linux_asan_dbg', 'Mojo Linux ASan (dbg)'],
       ['mojo_linux_nacl', 'Mojo Linux NaCl'],
       ['mojo_linux_nacl_dbg', 'Mojo Linux NaCl (dbg)'],
+      ['mojo_android_builder', 'Mojo Android Builder'],
       ['mojo_android_dbg', 'Mojo Android (dbg)'],
       ['mojo_android_builder_tests_dbg', 'Mojo Android Builder Tests (dbg)'],
       ['mojo_chromeos_dbg', 'Mojo ChromeOS (dbg)'],
