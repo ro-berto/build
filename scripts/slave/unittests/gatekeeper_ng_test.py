@@ -372,7 +372,7 @@ class GatekeeperTest(unittest.TestCase):
     self.url_calls.append(call)
 
     if url in self.urls:
-      return copy.copy(self.urls[url])
+      return copy.copy(self.urls[url](params))
     else:
       raise urllib2.HTTPError(url, 404, 'Not Found: %s' % url,
                               None, StringIO.StringIO(''))
@@ -386,7 +386,11 @@ class GatekeeperTest(unittest.TestCase):
   def handle_url_fp(self, url, fp):
     """Add a file object to handle a mocked URL."""
     setattr(fp, 'getcode', lambda: 200)
-    self.urls[url] = fp
+    self.urls[url] = lambda _: fp
+
+  def handle_url_custom(self, url, handler):
+    """Handler func will be called with params as first argument."""
+    self.urls[url] = handler
 
   def handle_url_str(self, url, response):
     """Add a string to handle a mocked URL."""
@@ -777,6 +781,21 @@ class GatekeeperTest(unittest.TestCase):
     })
     self.call_gatekeeper(build_db=build_db)
     self.assertEquals(self.url_calls[-1]['url'], self.set_status_url)
+    status_data = urlparse.parse_qs(self.url_calls[-1]['params'])
+    self.assertTrue(status_data['message'][0].startswith(
+      "Tree is open (Automatic"))
+
+    # Same as above and get_status_url requires bot login.
+    json_handler = self.urls.pop(self.get_status_url)
+    def handler(params):
+      if params == None:
+        return StringIO.StringIO("<blabla>Login Required</blabla>")
+      else:
+        return json_handler(params)
+    self.handle_url_custom(self.get_status_url, handler)
+    self.call_gatekeeper(build_db=build_db)
+    self.assertEquals(self.url_calls[-2]['url'], self.get_status_url)
+    self.assertIsNotNone(self.url_calls[-2]['params'])
     status_data = urlparse.parse_qs(self.url_calls[-1]['params'])
     self.assertTrue(status_data['message'][0].startswith(
       "Tree is open (Automatic"))

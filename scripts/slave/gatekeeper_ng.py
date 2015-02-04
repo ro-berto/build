@@ -87,9 +87,26 @@ def update_status(tree_message, status_url_root, username, password):
   logging.info('success')
 
 
-def get_tree_status(status_url_root):
+def get_tree_status(status_url_root, username, password):
   status_url = status_url_root + "/current?format=json"
-  return json.load(logging_urlopen(status_url))
+  data = logging_urlopen(status_url).read()
+  try:
+    return json.loads(data)
+  except ValueError:
+    if 'Login Required' not in data:
+      raise
+  # try using bot password to authenticate
+  params = urllib.urlencode({
+      'username': username,
+      'password': password
+  })
+  try:
+    data = logging_urlopen(status_url, params).read()
+  except urllib2.HTTPError, e:
+    if e.code == 405:
+      logging.warn("update your chromium_status app.")
+    raise
+  return json.loads(data)
 
 
 def get_builder_section(gatekeeper_section, builder):
@@ -509,7 +526,7 @@ def open_tree_if_possible(build_db, master_jsons, successful_builder_steps,
       logging.debug('  %s' % build)
     return
 
-  status = get_tree_status(status_url_root)
+  status = get_tree_status(status_url_root, username, password)
   # Don't change the status unless the tree is currently closed.
   if status['general_state'] != 'closed':
     return
@@ -564,7 +581,7 @@ def close_tree_if_necessary(failed_builds, username, password, status_url_root,
     logging.info('no tree-closing failures!')
     return
 
-  status = get_tree_status(status_url_root)
+  status = get_tree_status(status_url_root, username, password)
   # Don't change the status unless the tree is currently open.
   if status['general_state'] != 'open':
     return
