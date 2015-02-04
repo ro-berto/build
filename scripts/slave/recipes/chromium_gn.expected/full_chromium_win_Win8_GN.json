@@ -81,7 +81,7 @@
       "--root=[SLAVE_BUILD]\\src",
       "gen",
       "//out/Release",
-      "--args=symbol_level=1 is_debug=false cpu_arch=\"x86\" use_goma=true goma_dir=\"[BUILD]\\goma\""
+      "--args=symbol_level=1 is_debug=false cpu_arch=\"x86\""
     ],
     "name": "gn"
   },
@@ -96,10 +96,6 @@
       "[SLAVE_BUILD]\\src",
       "--build-tool",
       "ninja",
-      "--compiler",
-      "goma",
-      "--goma-dir",
-      "[BUILD]\\goma",
       "--",
       "all"
     ],

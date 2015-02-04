@@ -148,6 +148,7 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'win',
           'TARGET_BITS': 32,
         },
+        'use_goma': False,
       },
      'Win8 GN (dbg)': {
         'chromium_apply_config': ['gn_minimal_symbols'],
@@ -156,6 +157,7 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'win',
           'TARGET_BITS': 32,
         },
+        'use_goma': False,
       },
     },
   },
@@ -321,7 +323,12 @@ def GenSteps(api):
 
   api.chromium.runhooks()
 
-  api.chromium.run_gn(use_goma=True)
+  # TODO(dpranke): goma doesn't work on the Win waterfall bots for some reason.
+  use_goma = bot_config.get('use_goma', True)
+  api.chromium.run_gn(use_goma=use_goma)
+  if not use_goma:
+    api.chromium.c.compile_py.compiler = None
+    api.chromium.c.compile_py.goma_dir = None
 
   # crbug.com/451227 - building 'all' on android builds too many
   # things. Really we should be building the 'default' target
