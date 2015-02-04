@@ -22,7 +22,7 @@ class AmpApi(recipe_api.RecipeApi):
     return self._get_trigger_dir().join('%s.json' % suite)
 
   @recipe_api.composite_step
-  def trigger_android_test_suite(
+  def trigger_test_suite(
       self, suite, test_type, test_type_args, amp_args, verbose=True):
     args = ([test_type] + test_type_args + amp_args
         + ['--trigger', self.m.json.output()])
@@ -59,8 +59,7 @@ class AmpApi(recipe_api.RecipeApi):
         self._get_trigger_file_for_suite(suite),
         self.m.json.dumps(trigger_data))
 
-  @recipe_api.composite_step
-  def collect_android_test_suite(
+  def collect_test_suite(
       self, suite, test_type, test_type_args, amp_args, verbose=True):
     args = ([test_type] + test_type_args + amp_args
         + ['--collect', self._get_trigger_file_for_suite(suite)])
@@ -129,8 +128,8 @@ class AmpApi(recipe_api.RecipeApi):
 
   @recipe_api.non_step
   def amp_arguments(
-      self, device_name=None, device_os=None, api_address=None, api_port=None,
-      api_protocol=None):
+      self, device_type='Android', device_name=None, device_os=None,
+      api_address=None, api_port=None, api_protocol=None):
     """Generate command-line arguments for running tests on AMP.
 
     Args:
@@ -162,11 +161,15 @@ class AmpApi(recipe_api.RecipeApi):
         '--api-address', api_address,
         '--api-port', api_port,
         '--api-protocol', api_protocol,
+        '--device-type', device_type,
     ]
     if device_name:
-      amp_args += ['--remote-device', device_name]
+      for d in device_name:
+        amp_args += ['--remote-device', d]
+
     if device_os:
-      amp_args += ['--remote-device-os', device_os]
+      for d in device_os:
+        amp_args += ['--remote-device-os', d]
 
     return amp_args
 

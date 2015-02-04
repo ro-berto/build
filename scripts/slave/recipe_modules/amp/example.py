@@ -8,49 +8,63 @@ DEPS = [
 
 BUILDERS = {
   'normal_example': {
-    'device_name': 'SampleDevice',
-    'device_os': 'SampleDeviceOS',
+    'device_name': ['SampleDevice'],
+    'device_os': ['SampleDeviceOS'],
     'api_address': '127.0.0.1',
     'api_port': '80',
     'api_protocol': 'http',
   },
   'no_device_name': {
-    'device_os': 'SampleDeviceOS',
+    'device_os': ['SampleDeviceOS'],
     'api_address': '127.0.0.1',
     'api_port': '80',
     'api_protocol': 'http',
   },
   'no_device_os': {
-    'device_name': 'SampleDevice',
+    'device_name': ['SampleDevice'],
     'api_address': '127.0.0.1',
     'api_port': '80',
     'api_protocol': 'http',
   },
   'no_api_address': {
-    'device_name': 'SampleDevice',
-    'device_os': 'SampleDeviceOS',
+    'device_name': ['SampleDevice'],
+    'device_os': ['SampleDeviceOS'],
     'api_port': '80',
     'api_protocol': 'http',
   },
   'no_api_port': {
-    'device_name': 'SampleDevice',
-    'device_os': 'SampleDeviceOS',
+    'device_name': ['SampleDevice'],
+    'device_os': ['SampleDeviceOS'],
     'api_address': '127.0.0.1',
     'api_protocol': 'http',
   },
   'no_api_protocol': {
-    'device_name': 'SampleDevice',
-    'device_os': 'SampleDeviceOS',
+    'device_name': ['SampleDevice'],
+    'device_os': ['SampleDeviceOS'],
     'api_address': '127.0.0.1',
     'api_port': '80',
   },
   'split_example': {
-    'device_name': 'SampleDevice',
-    'device_os': 'SampleDeviceOS',
+    'device_name': ['SampleDevice'],
+    'device_os': ['SampleDeviceOS'],
     'api_address': '127.0.0.1',
     'api_port': '80',
     'api_protocol': 'http',
-  }
+  },
+  'multiple_devices': {
+    'device_name': ['SampleDevice0', 'SampleDevice1'],
+    'device_os': ['SampleDeviceOS'],
+    'api_address': '127.0.0.1',
+    'api_port': '80',
+    'api_protocol': 'http',
+  },
+  'multiple_device_oses': {
+    'device_name': ['SampleDevice'],
+    'device_os': ['SampleDeviceOS0', 'SampleDeviceOS1'],
+    'api_address': '127.0.0.1',
+    'api_port': '80',
+    'api_protocol': 'http',
+  },
 }
 
 
@@ -58,7 +72,7 @@ def GenSteps(api):
   builder = BUILDERS[api.properties['buildername']]
   api.path['checkout'] = api.path['slave_build'].join('src')
 
-  api.amp.trigger_android_test_suite(
+  api.amp.trigger_test_suite(
       'example_gtest_suite', 'gtest',
       api.amp.gtest_arguments('example_gtest_suite'),
       api.amp.amp_arguments(device_name=builder.get('device_name', None),
@@ -67,7 +81,7 @@ def GenSteps(api):
                             api_port=builder.get('api_port', None),
                             api_protocol=builder.get('api_protocol', None)))
 
-  api.amp.trigger_android_test_suite(
+  api.amp.trigger_test_suite(
       'example_uirobot_suite', 'uirobot',
       api.amp.uirobot_arguments(app_under_test='Example.apk'),
       api.amp.amp_arguments(device_name=builder.get('device_name', None),
@@ -76,14 +90,14 @@ def GenSteps(api):
                             api_port=builder.get('api_port', None),
                             api_protocol=builder.get('api_protocol', None)))
 
-  api.amp.collect_android_test_suite(
+  api.amp.collect_test_suite(
       'example_gtest_suite', 'gtest',
       api.amp.gtest_arguments('example_gtest_suite'),
       api.amp.amp_arguments(api_address=builder.get('api_address', None),
                             api_port=builder.get('api_port', None),
                             api_protocol=builder.get('api_protocol', None)))
 
-  api.amp.collect_android_test_suite(
+  api.amp.collect_test_suite(
       'example_uirobot_suite', 'uirobot',
       api.amp.uirobot_arguments(),
       api.amp.amp_arguments(device_name=builder.get('device_name', None),

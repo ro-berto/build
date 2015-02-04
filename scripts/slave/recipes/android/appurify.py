@@ -33,6 +33,9 @@ BUILDERS = {
       'path': lambda api: ('android_fyi_dbg/full-build-linux_%s.zip' %
                            api.properties['revision']),
     },
+    'device_name': ['Nexus 4', 'Nexus 5', 'Nexus 6', 'Nexus 7', 'Nexus 9',
+                    'Nexus 10'],
+    'device_os': ['4.1.1', '4.2.1', '4.2.2', '4.3', '4.4.2', '4.4.3', '5.0'],
     'unittests': CHROMIUM_AMP_UNITTESTS,
     'instrumentation_tests': [],
   },
@@ -79,20 +82,24 @@ def GenSteps(api):
     for suite, isolate_file in builder.get('unittests', []):
       isolate_file_path = (
           api.path['checkout'].join(*isolate_file) if isolate_file else None)
-      api.amp.trigger_android_test_suite(
+      api.amp.trigger_test_suite(
           suite, 'gtest',
           api.amp.gtest_arguments(suite, isolate_file_path=isolate_file_path),
           api.amp.amp_arguments(api_address=AMP_INSTANCE_ADDRESS,
                                 api_port=AMP_INSTANCE_PORT,
-                                api_protocol=AMP_INSTANCE_PROTOCOL))
+                                api_protocol=AMP_INSTANCE_PROTOCOL,
+                                device_name=builder.get('device_name'),
+                                device_os=builder.get('device_os')))
 
     for suite, isolate_file in builder.get('unittests', []):
-      api.amp.collect_android_test_suite(
+      api.amp.collect_test_suite(
           suite, 'gtest',
           api.amp.gtest_arguments(suite),
           api.amp.amp_arguments(api_address=AMP_INSTANCE_ADDRESS,
                                 api_port=AMP_INSTANCE_PORT,
-                                api_protocol=AMP_INSTANCE_PROTOCOL))
+                                api_protocol=AMP_INSTANCE_PROTOCOL,
+                                device_name=builder.get('device_name'),
+                                device_os=builder.get('device_os')))
 
 
 def GenTests(api):
