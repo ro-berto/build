@@ -32,7 +32,8 @@ Usage:
       "path": "/Applications/Xcode6.0.1.app",
       "version": "6.0.1",
       "build": "6A317",
-    }
+    },
+    "found": true,
   }
 """
 
@@ -102,8 +103,15 @@ def get_current_xcode_info():
   }
 
 
-def main(args):
-  """Finds and switches to the given Xcode version."""
+def find_xcode(target_version):
+  """Finds and switches to the given Xcode version.
+
+  Args:
+    target_version: The version of Xcode to find and switch to.
+
+  Returns:
+    A summary dict as described in the usage section above.
+  """
   xcode_info = {
     'installations': {
     },
@@ -112,12 +120,11 @@ def main(args):
     'previous version': {
     },
     'current version': {
-    }
+    },
+    'found': False,
   }
 
   xcode_info['previous version'] = get_current_xcode_info()
-
-  switched = False
 
   for app in os.listdir(os.path.join('/', 'Applications')):
     if app.startswith('Xcode'):
@@ -132,14 +139,14 @@ def main(args):
           build_version,
         )
 
-        if version == args.version:
+        if version == target_version:
           xcode_info['matches'][installation_path] = "%s (%s)" % (
             version,
             build_version,
           )
 
           # If this is the first match, switch to it.
-          if not switched:
+          if not xcode_info['found']:
             utils.call(
               'sudo',
               'xcode-select',
@@ -147,14 +154,20 @@ def main(args):
               os.path.join('/', 'Applications', app),
             )
 
-            switched = True
+            xcode_info['found'] = True
 
   xcode_info['current version'] = get_current_xcode_info()
+
+  return xcode_info
+
+
+def main(args):
+  xcode_info = find_xcode(args.version)
 
   with open(args.json_file, 'w') as json_file:
     json.dump(xcode_info, json_file)
 
-  return 0 if switched else 1
+  return 0 if xcode_info['found'] else 1
 
 
 if __name__ == '__main__':
