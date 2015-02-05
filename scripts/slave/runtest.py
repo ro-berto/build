@@ -1716,10 +1716,6 @@ def _ConfigureSanitizerTools(options, args, extra_env):
       asan_options += ['detect_leaks=1']
     AddToExistingEnv(extra_env, 'ASAN_OPTIONS', asan_options)
 
-    # ASan is not yet sandbox-friendly on Windows (http://crbug.com/382867).
-    if sys.platform == 'win32':
-      args.append(disable_sandbox_flag)
-
   # MemorySanitizer
   if options.enable_msan:
     msan_options = symbolization_options
