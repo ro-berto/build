@@ -128,6 +128,31 @@ class TestRunner(object):
     return TearDownMethodCall
 
   @staticmethod
+  def GetKIFTestFilter(tests, blacklist):
+    """Returns the KIF test filter to run or exclude only the given tests.
+
+    Args:
+      tests: The list of tests to run or exclude.
+      blacklist: Whether to run all except the given tests or not.
+
+    Returns:
+      A string which can be supplied to GKIF_SCENARIO_FILTER.
+    """
+    if blacklist:
+      blacklist = '-'
+    else:
+      blacklist = ''
+
+    # For KIF tests, a pipe-separated list of tests will run just those tests.
+    # However, we also need to remove the "KIF." prefix from these tests.
+    # Using a single minus ahead of NAME will instead run everything other than
+    # the listed tests.
+    return '%sNAME:%s' % (
+      blacklist,
+      '|'.join(test.split('KIF.', 1)[-1] for test in tests),
+    )
+
+  @staticmethod
   def GetGTestFilter(tests, blacklist):
     """Returns the GTest filter to run or exclude only the given tests.
 
@@ -517,9 +542,13 @@ class SimulatorTestRunner(TestRunner):
     args = []
 
     if test_filter is not None:
-      args.append(
-        '--gtest_filter=%s' % self.GetGTestFilter(test_filter, blacklist)
-      )
+      kif_filter = self.GetKIFTestFilter(test_filter, blacklist)
+      gtest_filter = self.GetGTestFilter(test_filter, blacklist)
+
+      cmd.extend([
+       '-e', 'GKIF_SCENARIO_FILTER=%s' % kif_filter,
+      ])
+      args.append('--gtest_filter=%s' % gtest_filter)
 
     cmd.append(self.app_path)
     cmd.extend(args)

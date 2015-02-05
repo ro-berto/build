@@ -81,21 +81,35 @@ class TestRunnerTest(unittest.TestCase):
     self.assertRaises(NotImplementedError, t.ExceptionRaiser)
     self.assertListEqual(t.values, ['abc', '123', 'teardown', 'teardown'])
 
-  def testGetGTestFilter(self):
-    """Tests the results of GetGTestFilter."""
+  def testGetFilter(self):
+    """Tests the results of GetGTestFilter and GetKIFTestFilter."""
     tests = [
       'Test 1',
       'Test 2',
+      'KIF.Test A',
+      'KIF.Test B',
     ]
 
-    expected = 'Test 1:Test 2'
-    expected_inverted = '-Test 1:Test 2'
+    expected_gtest = 'Test 1:Test 2:KIF.Test A:KIF.Test B'
+    expected_inverted_gtest = '-Test 1:Test 2:KIF.Test A:KIF.Test B'
+    expected_kif = 'NAME:Test 1|Test 2|Test A|Test B'
+    expected_inverted_kif = '-NAME:Test 1|Test 2|Test A|Test B'
 
     self.assertEqual(
-      test_runner.TestRunner.GetGTestFilter(tests, False), expected,
+      test_runner.TestRunner.GetGTestFilter(tests, False),
+      expected_gtest,
     )
     self.assertEqual(
-      test_runner.TestRunner.GetGTestFilter(tests, True), expected_inverted,
+      test_runner.TestRunner.GetGTestFilter(tests, True),
+      expected_inverted_gtest,
+    )
+    self.assertEqual(
+      test_runner.TestRunner.GetKIFTestFilter(tests, False),
+      expected_kif,
+    )
+    self.assertEqual(
+      test_runner.TestRunner.GetKIFTestFilter(tests, True),
+      expected_inverted_kif,
     )
 
 
