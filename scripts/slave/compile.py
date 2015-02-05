@@ -191,10 +191,8 @@ def UploadGomaCompilerProxyInfo():
   hostname = GetShortHostname()
   # Since a filename of compiler_proxy.INFO is fairly unique,
   # we might be able to upload it as-is.
-  log_path = ('%s/%s/%s.gz' % (
+  goma_log_gs_path = ('gs://chrome-goma-log/%s/%s/%s.gz' % (
       today.strftime('%Y/%m/%d'), hostname, os.path.basename(latest_info)))
-  goma_log_gs_path = 'gs://chrome-goma-log/' + log_path
-  viewer_url = 'http://chromium-build-stats.appspot.com/ninja_log/' + log_path
   try:
     fd, output_filename = tempfile.mkstemp()
     with open(latest_info) as f_in:
@@ -204,7 +202,6 @@ def UploadGomaCompilerProxyInfo():
 
     slave_utils.GSUtilCopy(output_filename, goma_log_gs_path)
     print "Copied log file to %s" % goma_log_gs_path
-    print "For visualization visit: %s" % viewer_url
   finally:
     os.remove(output_filename)
 
@@ -266,8 +263,10 @@ def UploadNinjaLog(options, command, exit_status):
   ninja_log_filename = 'ninja_log.%s.%s.%s.%d' % (
       hostname, username, mtime.strftime('%Y%m%d-%H%M%S'), pid)
   today = datetime.datetime.utcnow().date()
-  ninja_log_gs_path = ('gs://chrome-goma-log/%s/%s/%s.gz' % (
+  log_path = ('%s/%s/%s.gz' % (
       today.strftime('%Y/%m/%d'), hostname, ninja_log_filename))
+  ninja_log_gs_path = 'gs://chrome-goma-log/' + log_path
+  viewer_url = 'http://chromium-build-stats.appspot.com/ninja_log/' + log_path
   try:
     fd, output_filename = tempfile.mkstemp()
     with open(ninja_log_path) as f_in:
@@ -279,6 +278,7 @@ def UploadNinjaLog(options, command, exit_status):
 
     slave_utils.GSUtilCopy(output_filename, ninja_log_gs_path)
     print "Copied log file to %s" % ninja_log_gs_path
+    print "Visualization at %s" % viewer_url
   finally:
     os.remove(output_filename)
 
