@@ -209,6 +209,7 @@ class GTestResult(unittest.TestCase):
     self.failIf(gtest_result.failed_tests)
     self.failIf(gtest_result.flaked_tests)
     self.failIf(gtest_result.passed_tests)
+    self.failIf(gtest_result.perf_links)
     self.failUnless(gtest_result.return_code is None)
     self.failUnless(gtest_result.success is None)
 
@@ -241,13 +242,18 @@ class GTestResult(unittest.TestCase):
     gtest_result.passed_tests.append('test 2')
     self.assertListEqual(gtest_result.passed_tests, ['test 1', 'test 2'])
 
+    gtest_result.perf_links['trace 1'] = 'https://chromeperf.appspot.com'
+    self.assertEqual(len(gtest_result.perf_links), 1)
+    self.assertEqual(
+      gtest_result.perf_links['trace 1'], 'https://chromeperf.appspot.com')
+
     gtest_result.finalize(0, True)
     self.assertEqual(gtest_result.return_code, 0)
     self.assertTrue(gtest_result.success)
 
     # After finalization, we get a deepcopy back, so we can no longer
     # modify gtest_result.failed_tests, gtest_result.flaked_tests,
-    # gtest_result.passed_tests.
+    # gtest_result.passed_tests, or gtest_result.perf_links.
 
     gtest_result.failed_tests['test 1'].append('line 3')
     gtest_result.failed_tests['test 2'] = ['line 4', 'line 5']
@@ -266,6 +272,13 @@ class GTestResult(unittest.TestCase):
     gtest_result.passed_tests.append('test 3')
     gtest_result.passed_tests.append('test 4')
     self.assertListEqual(gtest_result.passed_tests, ['test 1', 'test 2'])
+
+    gtest_result.perf_links['trace 1'] = 'localhost'
+    gtest_result.perf_links['trace 2'] = 'example.com'
+    gtest_result.perf_links['trace 1'] = 'https://chromeperf.appspot.com'
+    self.assertEqual(len(gtest_result.perf_links), 1)
+    self.assertEqual(
+      gtest_result.perf_links['trace 1'], 'https://chromeperf.appspot.com')
 
 
 class GTestTest(unittest.TestCase):

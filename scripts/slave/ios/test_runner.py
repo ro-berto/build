@@ -184,6 +184,7 @@ class TestRunner(object):
     failed_tests = result.failed_tests
     flaked_tests = result.flaked_tests
     passed_tests = result.passed_tests
+    perf_links = result.perf_links
 
     try:
       while (result.crashed
@@ -211,6 +212,7 @@ class TestRunner(object):
         failed_tests.update(result.failed_tests)
         flaked_tests.update(result.flaked_tests)
         passed_tests.extend(result.passed_tests)
+        perf_links.update(result.perf_links)
 
       if failed_tests and not result.crashed and not kwargs.get('retries'):
         # If the app failed without crashing, retry the failed tests in case of
@@ -237,13 +239,14 @@ class TestRunner(object):
         self.Print(
           'Unexpected OSError: %s.' % e.errno, blank_lines=1, time_to_sleep=0)
 
-    self.InterpretResult(failed_tests, flaked_tests, passed_tests)
+    self.InterpretResult(failed_tests, flaked_tests, passed_tests, perf_links)
 
     # At this point, all the tests have run, so used failed_tests to determine
     # the success/failure.
     return not failed_tests
 
-  def InterpretResult(self, failed_tests, flaked_tests, passed_tests):
+  def InterpretResult(self, failed_tests, flaked_tests, passed_tests,
+                      perf_links):
     """Interprets the given GTestResult.
 
     Args:
@@ -251,6 +254,7 @@ class TestRunner(object):
       flaked_tests: A dict of failed flaky test names mapping to lines of
         output.
       passed_tests: A list of passed test names.
+      perf_links: A dict of trace names mapping to perf dashboard URLs.
     """
     for test, log_lines in failed_tests.iteritems():
       self.summary['logs'][test] = log_lines
@@ -260,6 +264,9 @@ class TestRunner(object):
 
     for test in passed_tests:
       self.summary['logs']['passed tests'] = passed_tests
+
+    for trace, graph_url in perf_links.iteritems():
+      self.summary['links'][trace] = graph_url
 
 
 class SimulatorTestRunner(TestRunner):
