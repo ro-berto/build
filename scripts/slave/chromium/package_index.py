@@ -7,7 +7,6 @@
 
 
 import argparse
-import gzip
 import hashlib
 import json
 import os
@@ -15,6 +14,7 @@ import shutil
 import sys
 import tempfile
 import time
+import zlib
 
 from common import chromium_utils
 
@@ -88,10 +88,16 @@ class IndexPack(object):
             content_hash = hashlib.sha256(content).hexdigest()
             self.filehashes[fname] = content_hash
             self.filesizes[fname] = len(content)
-            compressed_file_name = os.path.join(
-                self.files_directory, content_hash + '.data')
-            with gzip.open(compressed_file_name, 'wb') as compressed_file:
-              compressed_file.writelines(content)
+            # Use zlib instead of gzip, because gzip is horribly slow. The
+            # configuration is chosen to make it gzip compatible.
+            gzip_compress = zlib.compressobj(
+                9, zlib.DEFLATED, zlib.MAX_WBITS | 16)
+            compressed_content = gzip_compress.compress(content)
+            compressed_content += gzip_compress.flush()
+            file_name = os.path.join(self.files_directory,
+                                     content_hash + '.data')
+            with open(file_name, 'wb') as f:
+              f.write(compressed_content)
 
   def _GenerateUnitFiles(self):
     """A function which produces the unit files for the index pack.
@@ -185,8 +191,11 @@ class IndexPack(object):
       unit_file_content_hash = hashlib.sha256(unit_file_content).hexdigest()
       unit_file_path = os.path.join(
           self.units_directory, unit_file_content_hash + '.unit')
-      with gzip.open(unit_file_path, 'wb') as unit_file:
-        unit_file.writelines(unit_file_content)
+      gzip_compress = zlib.compressobj(9, zlib.DEFLATED, zlib.MAX_WBITS | 16)
+      unit_file_compressed = gzip_compress.compress(unit_file_content)
+      unit_file_compressed += gzip_compress.flush()
+      with open(unit_file_path, 'wb') as unit_file:
+        unit_file.write(unit_file_compressed)
 
   def GenerateIndexPack(self):
     """Generates the index pack.
@@ -203,7 +212,7 @@ class IndexPack(object):
     self._GenerateUnitFiles()
 
   def CreateArchive(self, filepath):
-    """Creates a gzipped archive containing the index pack.
+    """Creates a zip archive containing the index pack.
 
     Args:
       filepath: The filepath where the index pack archive should be stored.
