@@ -65,6 +65,29 @@ BUILDERS = {
     'api_port': '80',
     'api_protocol': 'http',
   },
+  'device_oem': {
+    'device_name': ['SampleDevice'],
+    'device_oem': ['SampleDeviceOEM'],
+    'device_os': ['SampleDeviceOS'],
+    'api_address': '127.0.0.1',
+    'api_port': '80',
+    'api_protocol': 'http',
+  },
+  'minimum_device_os': {
+    'device_minimum_os': 'MinimumSampleDeviceOS',
+    'device_name': ['SampleDevice'],
+    'api_address': '127.0.0.1',
+    'api_port': '80',
+    'api_protocol': 'http',
+  },
+  'device_os_and_minimum_device_os': {
+    'device_minimum_os': 'MinimumSampleDeviceOS',
+    'device_name': ['SampleDevice'],
+    'device_os': ['SampleDeviceOS'],
+    'api_address': '127.0.0.1',
+    'api_port': '80',
+    'api_protocol': 'http',
+  }
 }
 
 
@@ -75,20 +98,26 @@ def GenSteps(api):
   api.amp.trigger_test_suite(
       'example_gtest_suite', 'gtest',
       api.amp.gtest_arguments('example_gtest_suite'),
-      api.amp.amp_arguments(device_name=builder.get('device_name', None),
-                            device_os=builder.get('device_os', None),
-                            api_address=builder.get('api_address', None),
-                            api_port=builder.get('api_port', None),
-                            api_protocol=builder.get('api_protocol', None)))
+      api.amp.amp_arguments(
+          device_minimum_os=builder.get('device_minimum_os', None),
+          device_name=builder.get('device_name', None),
+          device_oem=builder.get('device_oem', None),
+          device_os=builder.get('device_os', None),
+          api_address=builder.get('api_address', None),
+          api_port=builder.get('api_port', None),
+          api_protocol=builder.get('api_protocol', None)))
 
   api.amp.trigger_test_suite(
       'example_uirobot_suite', 'uirobot',
       api.amp.uirobot_arguments(app_under_test='Example.apk'),
-      api.amp.amp_arguments(device_name=builder.get('device_name', None),
-                            device_os=builder.get('device_os', None),
-                            api_address=builder.get('api_address', None),
-                            api_port=builder.get('api_port', None),
-                            api_protocol=builder.get('api_protocol', None)))
+      api.amp.amp_arguments(
+          device_minimum_os=builder.get('device_minimum_os', None),
+          device_name=builder.get('device_name', None),
+          device_oem=builder.get('device_oem', None),
+          device_os=builder.get('device_os', None),
+          api_address=builder.get('api_address', None),
+          api_port=builder.get('api_port', None),
+          api_protocol=builder.get('api_protocol', None)))
 
   api.amp.collect_test_suite(
       'example_gtest_suite', 'gtest',
@@ -100,9 +129,7 @@ def GenSteps(api):
   api.amp.collect_test_suite(
       'example_uirobot_suite', 'uirobot',
       api.amp.uirobot_arguments(),
-      api.amp.amp_arguments(device_name=builder.get('device_name', None),
-                            device_os=builder.get('device_os', None),
-                            api_address=builder.get('api_address', None),
+      api.amp.amp_arguments(api_address=builder.get('api_address', None),
                             api_port=builder.get('api_port', None),
                             api_protocol=builder.get('api_protocol', None)))
 

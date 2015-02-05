@@ -128,15 +128,21 @@ class AmpApi(recipe_api.RecipeApi):
 
   @recipe_api.non_step
   def amp_arguments(
-      self, device_type='Android', device_name=None, device_os=None,
-      api_address=None, api_port=None, api_protocol=None):
+      self, device_type='Android', device_minimum_os=None, device_name=None,
+      device_oem=None, device_os=None, api_address=None, api_port=None,
+      api_protocol=None):
     """Generate command-line arguments for running tests on AMP.
 
     Args:
-      device_name: The name of the device to use (e.g. 'Galaxy S4').
+      device_name: A list of names of devices to use (e.g. 'Galaxy S4').
         Selects a device at random if unspecified.
-      device_os: The OS version to use (e.g. '4.4.2'). Selects an OS version
-        at random if unspecified.
+      device_minimum_os: A string containing the minimum OS version to use.
+        Should not be specified with |device_os|.
+      device_oem: A list of names of device OEMs to use (e.g. 'Samsung').
+        Selects an OEM at random is unspecified.
+      device_os: A list of OS versions to use (e.g. '4.4.2'). Selects an OS
+        version at random if unspecified. Should not be specified with
+        |device_minimum_os|.
       api_address: The IP address of the AMP API endpoint.
       api_port: The port of the AMP API endpoint.
       api_protocol: The protocol to use to connect to the AMP API endpoint.
@@ -150,6 +156,9 @@ class AmpApi(recipe_api.RecipeApi):
       raise self.m.step.StepFailure('api_port not specified')
     if not api_protocol:
       raise self.m.step.StepFailure('api_protocol not specified')
+    if device_minimum_os and device_os:
+      raise self.m.step.StepFailure(
+          'cannot specify both device_minimum_os and device_os')
 
     amp_args = [
         '--enable-platform-mode',
@@ -163,13 +172,17 @@ class AmpApi(recipe_api.RecipeApi):
         '--api-protocol', api_protocol,
         '--device-type', device_type,
     ]
-    if device_name:
-      for d in device_name:
-        amp_args += ['--remote-device', d]
+    if device_minimum_os:
+      amp_args += ['--remote-device-minimum-os', device_minimum_os]
 
-    if device_os:
-      for d in device_os:
-        amp_args += ['--remote-device-os', d]
+    for d in device_name or []:
+      amp_args += ['--remote-device', d]
+
+    for d in device_oem or []:
+      amp_args += ['--device-oem', d]
+
+    for d in device_os or []:
+      amp_args += ['--remote-device-os', d]
 
     return amp_args
 

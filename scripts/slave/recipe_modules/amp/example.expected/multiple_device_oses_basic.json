@@ -216,12 +216,6 @@
       "http",
       "--device-type",
       "Android",
-      "--remote-device",
-      "SampleDevice",
-      "--remote-device-os",
-      "SampleDeviceOS0",
-      "--remote-device-os",
-      "SampleDeviceOS1",
       "--collect",
       "[TMP_BASE]/amp_trigger_tmp_1/example_uirobot_suite.json",
       "--verbose"

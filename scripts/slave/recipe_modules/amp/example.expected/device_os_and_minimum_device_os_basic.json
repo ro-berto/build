@@ -1,0 +1,7 @@
+[
+  {
+    "name": "$final_result",
+    "reason": "cannot specify both device_minimum_os and device_os",
+    "status_code": 1
+  }
+]
