@@ -104,8 +104,8 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/mojo/tools/upload_shell_binary.py"
+      "[SLAVE_BUILD]/src/mojo/tools/upload_binaries.py"
     ],
-    "name": "upload shell binary"
+    "name": "upload shell and app binaries"
   }
 ]
