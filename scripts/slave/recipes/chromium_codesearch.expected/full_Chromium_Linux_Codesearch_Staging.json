@@ -143,6 +143,18 @@
     "cmd": [
       "python",
       "-u",
+      "[BUILD]/scripts/slave/chromium/package_index.py",
+      "--path-to-compdb",
+      "[SLAVE_BUILD]/src/out/Debug/compile_commands.json",
+      "--path-to-archive-output",
+      "[SLAVE_BUILD]/src/out/Debug/index_pack_linux_170242.zip"
+    ],
+    "name": "create index pack"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/src/third_party/llvm-build"
     ],
@@ -156,18 +168,6 @@
       "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/chromium/package_index.py",
-      "--path-to-compdb",
-      "[SLAVE_BUILD]/src/out/Debug/compile_commands.json",
-      "--path-to-archive-output",
-      "[SLAVE_BUILD]/src/out/Debug/index_pack_linux_170242.zip"
-    ],
-    "name": "create index pack"
   },
   {
     "cmd": [
