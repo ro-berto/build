@@ -517,7 +517,8 @@ class SwarmingApi(recipe_api.RecipeApi):
     finally:
       step_result = self.m.step.active_result
       try:
-        results_raw = step_result.raw_io.output_dir['0/results.json']
+        results_path = self.m.path.join('0', 'results.json')
+        results_raw = step_result.raw_io.output_dir[results_path]
 
         # GPU test launcher may bail out early with return code 0 and empty
         # results file if there were no tests to run, e.g. when all tests are
