@@ -124,6 +124,18 @@ def goma_setup(options, env):
     if hostname in ['vm320-m4', 'vm770-m4']:
       env['NACL_GOMA_THREADS'] = '1'
 
+  # HACK(yyanagisawa, goma): GOMA_HERMETIC=error (crbug.com/366967)
+  # Building with GOMA_HERMETIC=error prevents anybody to roll a compiler
+  # that is not installed in goma server. We do not think we see false-positive
+  # but not 100% confident.
+  # Let me enable GOMA_HERMETIC=error on several trybots to confirm
+  # it works.
+  if hostname in ['vm160-m4', 'vm240-m4', # win
+                  'slave250-c4', 'slave-260-c4', # linux
+                  'vm690-m4', 'vm700-m4', #mac
+                  ]:
+    env['GOMA_HERMETIC'] = 'error'
+
   # Enable DepsCache. DepsCache caches the list of files to send goma server.
   # This will greatly improve build speed when cache is warmed.
   # The cache file is stored in the target output directory.
