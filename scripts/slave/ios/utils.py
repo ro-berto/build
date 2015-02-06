@@ -15,9 +15,6 @@ import subprocess
 import sys
 import tempfile
 
-from common import gtest_utils
-from slave import slave_utils
-
 
 # This script is located in build/scripts/slave/ios.
 # Update this path if the script is moved.
@@ -208,54 +205,3 @@ class GTestResult(object):
         self._crashed_test = test
 
     self.__finalized = True
-
-
-def gtest(command):
-  """Runs the specified command, parsing GTest output.
-
-  Args:
-    command: The shell command to execute, as a list of arguments.
-
-  Returns:
-    A GTestResult instance.
-  """
-  result = GTestResult(command)
-
-  print ' '.join(command)
-  print 'cwd:', os.getcwd()
-  sys.stdout.flush()
-
-  proc = subprocess.Popen(
-    command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-
-  parser = gtest_utils.GTestLogParser()
-
-  while True:
-    line = proc.stdout.readline()
-    if not line:
-      break
-    line = line.rstrip()
-    parser.ProcessLine(line)
-    print line
-    sys.stdout.flush()
-
-  proc.wait()
-
-  for test in parser.FailedTests(include_flaky=True):
-    # Tests are named as TestCase.TestName.
-    # A TestName starting with FLAKY_ should not turn the build red.
-    if '.' in test and test.split('.', 1)[1].startswith('FLAKY_'):
-      result.flaked_tests[test] = parser.FailureDescription(test)
-    else:
-      result.failed_tests[test] = parser.FailureDescription(test)
-
-  result.passed_tests.extend(parser.PassedTests(include_flaky=True))
-
-  print command[0], 'returned', proc.returncode
-  print
-  sys.stdout.flush()
-
-  # iossim can return 5 if it exits noncleanly, even if no tests failed.
-  # Therefore we cannot rely on this returncode to determine success or failure.
-  result.finalize(proc.returncode, parser.CompletedWithoutFailure())
-  return result

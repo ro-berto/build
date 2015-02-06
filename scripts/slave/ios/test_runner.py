@@ -11,11 +11,13 @@ import environment_setup
 import collections
 import errno
 import os
+import subprocess
 import sys
 import tempfile
 import time
 import utils
 
+from common import gtest_utils
 from slave import slave_utils
 
 
@@ -186,6 +188,58 @@ class TestRunner(object):
     """
     raise NotImplementedError
 
+  @staticmethod
+  def _Run(command):
+    """Runs the specified command, parsing GTest output.
+
+    Args:
+      command: The shell command to execute, as a list of arguments.
+
+    Returns:
+      A GTestResult instance.
+    """
+    result = utils.GTestResult(command)
+
+    print ' '.join(command)
+    print 'cwd:', os.getcwd()
+    sys.stdout.flush()
+
+    proc = subprocess.Popen(
+      command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+    )
+
+    parser = gtest_utils.GTestLogParser()
+
+    while True:
+      line = proc.stdout.readline()
+      if not line:
+        break
+      line = line.rstrip()
+      parser.ProcessLine(line)
+      print line
+      sys.stdout.flush()
+
+    proc.wait()
+
+    for test in parser.FailedTests(include_flaky=True):
+      # Tests are named as TestCase.TestName.
+      # A TestName starting with FLAKY_ should not turn the build red.
+      if '.' in test and test.split('.', 1)[1].startswith('FLAKY_'):
+        result.flaked_tests[test] = parser.FailureDescription(test)
+      else:
+        result.failed_tests[test] = parser.FailureDescription(test)
+
+    result.passed_tests.extend(parser.PassedTests(include_flaky=True))
+
+    print command[0], 'returned', proc.returncode
+    print
+    sys.stdout.flush()
+
+    # iossim can return 5 if it exits noncleanly, even if no tests failed.
+    # Therefore we can't rely on this exit code to determine success or failure.
+    result.finalize(proc.returncode, parser.CompletedWithoutFailure())
+    return result
+
   def Launch(self):
     """Launches the test."""
     raise NotImplementedError
@@ -227,7 +281,7 @@ class TestRunner(object):
 
         # Now run again, filtering out every test that ran. This is equivalent
         # to starting at the next test.
-        result = utils.gtest(self.GetLaunchCommand(
+        result = self._Run(self.GetLaunchCommand(
           test_filter=passed_tests + failed_tests.keys() + flaked_tests.keys(),
           blacklist=True,
         ), *args, **kwargs)
@@ -250,7 +304,7 @@ class TestRunner(object):
         msg.append('Retrying...')
         self.Print('\n'.join(msg), blank_lines=2, time_to_sleep=5)
 
-        utils.gtest(self.GetLaunchCommand(
+        self._Run(self.GetLaunchCommand(
           test_filter=failed_tests.keys(),
         ), *args, **kwargs)
     except OSError as e:
@@ -559,7 +613,7 @@ class SimulatorTestRunner(TestRunner):
     """Launches the test."""
     self.SetUp()
 
-    result = utils.gtest(self.GetLaunchCommand(), *args, **kwargs)
+    result = self._Run(self.GetLaunchCommand(), *args, **kwargs)
 
     if result.crashed and not result.crashed_test:
       # If the app crashed, but there is no specific test which crashed,
@@ -574,6 +628,6 @@ class SimulatorTestRunner(TestRunner):
       self.KillSimulators()
       self.CreateNewHomeDirectory()
 
-      result = utils.gtest(self.GetLaunchCommand(), *args, **kwargs)
+      result = self._Run(self.GetLaunchCommand(), *args, **kwargs)
 
     return self.RunAllTests(result, *args, **kwargs)
