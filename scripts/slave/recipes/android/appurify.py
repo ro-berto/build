@@ -19,9 +19,15 @@ DEPS = [
 ]
 
 CHROMIUM_AMP_UNITTESTS = [
+  ['android_webview_unittests', None],
   ['base_unittests', ['base', 'base_unittests.isolate']],
   ['cc_unittests', None],
+  ['components_unittests', ['components', 'components_unittests.isolate']],
   ['events_unittests', None],
+  ['skia_unittests', None],
+  ['sql_unittests', ['sql', 'sql_unittests.isolate']],
+  ['ui_android_unittests', None],
+  ['ui_touch_selection_unittests', None],
 ]
 
 BUILDERS = {
