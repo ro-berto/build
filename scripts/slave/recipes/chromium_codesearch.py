@@ -172,6 +172,12 @@ def GenSteps(api):
       # support for the files where it works.
       api.step.active_result.presentation.step_text = f.reason_message()
 
+    # Remove the llvm-build directory, so that gclient runhooks will download
+    # the pre-built clang binary and not use the locally compiled binary from
+    # the 'compile translation_unit clang tool' step.
+    api.path.rmtree('llvm-build',
+                    api.path['checkout'].join('third_party', 'llvm-build'))
+
     # Create the index pack
     got_revision_cp = api.chromium.build_properties.get('got_revision_cp')
     commit_position = api.commit_position.parse_revision(got_revision_cp)
