@@ -9,17 +9,16 @@ Usage:
   ./utils_test.py
 """
 
-# pylint: disable=W0611
+# pylint: disable=relative-import
 import environment_setup
 
-# pylint: disable=F0401
 import mock
 import os
-import utils
 import unittest
 
+from slave.ios import utils
 
-# pylint: disable=W0212
+
 class GetLinesTest(unittest.TestCase):
   """Unit tests for utils.CallResult._get_lines."""
   def testGetLinesEmptyOutput(self):

@@ -9,18 +9,16 @@ Usage:
   ./test_runner_test.py
 """
 
-# pylint: disable=W0611
+# pylint: disable=relative-import
 import environment_setup
 
-# pylint: disable=F0401
 import mock
 import os
 import tempfile
-import test_runner
 import unittest
 
+from slave.ios import test_runner
 
-# pylint: disable=W0212
 class TestRunnerTest(unittest.TestCase):
   """Unit tests for test_runner.TestRunner."""
 

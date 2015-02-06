@@ -5,7 +5,7 @@
 
 """Contains test runners for launching tests on simulators and devices."""
 
-# pylint: disable=W0611
+# pylint: disable=relative-import
 import environment_setup
 
 import collections
@@ -15,10 +15,10 @@ import subprocess
 import sys
 import tempfile
 import time
-import utils
 
 from common import gtest_utils
 from slave import slave_utils
+from slave.ios import utils
 
 
 class Error(Exception):
@@ -394,7 +394,7 @@ class SimulatorTestRunner(TestRunner):
     """Creates a new home directory for the simulator."""
     self.homedir = tempfile.mkdtemp()
 
-  def KillSimulators(self): # pylint: disable=R0201
+  def KillSimulators(self):
     """Forcibly kills any running iOS simulator instances."""
     kill_cmd = [
       'pkill',

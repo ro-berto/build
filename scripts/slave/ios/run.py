@@ -22,10 +22,10 @@ import argparse
 import json
 import sys
 
+# pylint: disable=relative-import
 from test_runner import SimulatorTestRunner, TestRunnerError
 
 
-# pylint: disable=W0621
 def main(args):
   summary = {}
   test_runner = None

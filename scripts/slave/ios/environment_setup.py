@@ -20,6 +20,6 @@ BUILD_DIR = os.path.abspath(os.path.join(
 
 sys.path.insert(0, os.path.join(BUILD_DIR, 'scripts', 'tools'))
 
-import runit #pylint: disable=F0401
+import runit
 
 runit.add_build_paths(sys.path)

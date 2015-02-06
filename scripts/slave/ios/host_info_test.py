@@ -9,8 +9,9 @@ Usage:
   ./host_info_test.py
 """
 
-import host_info
 import unittest
+
+from slave.ios import host_info
 
 
 class ExtractXcodeVersionTest(unittest.TestCase):

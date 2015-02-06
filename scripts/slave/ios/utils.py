@@ -5,7 +5,7 @@
 
 """Common utility functions."""
 
-# pylint: disable=W0611
+# pylint: disable=relative-import
 import environment_setup
 
 import collections

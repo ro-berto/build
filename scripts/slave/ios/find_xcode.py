@@ -42,7 +42,7 @@ import json
 import os
 import sys
 
-import utils
+from slave.ios import utils
 
 
 def get_xcodebuild_path(xcode_app):
