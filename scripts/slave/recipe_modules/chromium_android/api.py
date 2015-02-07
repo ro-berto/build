@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import os
+import re
 import urllib
 
 from infra.libs.infra_types import freeze
@@ -194,9 +195,7 @@ class AndroidApi(recipe_api.RecipeApi):
                 self.m.path['checkout']] + repos,
                 allow_subannotations=False)
 
-  def findbugs(self, suffix='', findbugs_options=[]):
-    if suffix:
-      suffix = ' ' + suffix
+  def findbugs(self, name='findbugs', findbugs_options=[]):
     cmd = [self.m.path['checkout'].join('build', 'android',
                                         'findbugs_diff.py')]
     cmd.extend(findbugs_options)
@@ -204,15 +203,16 @@ class AndroidApi(recipe_api.RecipeApi):
     if self.m.chromium.c.BUILD_CONFIG == 'Release':
       cmd.append('--release-build')
 
-    self.m.step('findbugs%s' %  suffix,
-                cmd, env=self.m.chromium.get_env())
+    self.m.step(name, cmd, env=self.m.chromium.get_env())
 
     cmd = [self.m.path['checkout'].join('tools', 'android', 'findbugs_plugin',
                'test', 'run_findbugs_plugin_tests.py')]
     if self.m.chromium.c.BUILD_CONFIG == 'Release':
       cmd.append('--release-build')
-    self.m.step('findbugs_tests%s' % suffix,
-                cmd, env=self.m.chromium.get_env())
+
+    # TODO(luqui): Allow scoped steps so we don't have to do this bad jazz.
+    findbugs_tests_name = re.sub('findbugs', 'findbugs_tests', name)
+    self.m.step(findbugs_tests_name, cmd, env=self.m.chromium.get_env())
 
   def git_number(self, **kwargs):
     return self.m.step(
@@ -227,11 +227,9 @@ class AndroidApi(recipe_api.RecipeApi):
         infra_step=True,
         **kwargs)
 
-  def check_webview_licenses(self, suffix=''):
-    if suffix:
-      suffix = ' ' + suffix
+  def check_webview_licenses(self, name='check licenses'):
     self.m.python(
-        'check licenses%s' % suffix,
+        name,
         self.m.path['checkout'].join('android_webview',
                                      'tools',
                                      'webview_licenses.py'),

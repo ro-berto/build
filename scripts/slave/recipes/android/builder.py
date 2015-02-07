@@ -17,11 +17,6 @@ DEPS = [
   'tryserver',
 ]
 
-# Step types
-@contextmanager
-def NormalStep():
-  yield
-
 @contextmanager
 def FYIStep():
   try:
@@ -42,36 +37,6 @@ BUILDERS = freeze({
       'check_licenses': FYIStep,
       'findbugs': FYIStep,
       'gclient_apply_config': ['android', 'chrome_internal'],
-    },
-  },
-  'tryserver.chromium.linux': {
-    'android_clang_dbg_recipe': {
-      'recipe_config': 'clang_builder',
-      'gclient_apply_config': ['android', 'chrome_internal'],
-      'try': True,
-      'check_licenses': NormalStep,
-      'findbugs': NormalStep,
-    },
-    'android_arm64_dbg_recipe': {
-      'recipe_config': 'arm64_builder',
-      'gclient_apply_config': ['android', 'chrome_internal'],
-      'try': True,
-      'check_licenses': FYIStep,
-      'findbugs': FYIStep,
-    },
-    'android_x86_dbg_recipe': {
-      'recipe_config': 'x86_builder',
-      'gclient_apply_config': ['android', 'chrome_internal'],
-      'try': True,
-      'findbugs': FYIStep,
-    },
-    'android_compile_rel': {
-      'recipe_config': 'main_builder',
-      'gclient_apply_config': ['android', 'chrome_internal'],
-      'try': True,
-      'kwargs': {
-        'BUILD_CONFIG': 'Release',
-      },
     },
   },
   'chromium.perf.fyi': {
@@ -141,14 +106,6 @@ BUILDERS = freeze({
 })
 
 def GenSteps(api):
-  def without_patch_update():
-    bot_update_json = bot_update_step.json.output
-    api.gclient.c.revisions['src'] = str(
-        bot_update_json['properties']['got_revision'])
-    api.bot_update.ensure_checkout(force=True,
-                                   patch=False,
-                                   update_presentation=False)
-
   mastername = api.properties['mastername']
   buildername = api.properties['buildername']
   bot_config = BUILDERS[mastername][buildername]
@@ -178,67 +135,18 @@ def GenSteps(api):
     dep = bot_config.get('set_component_rev')
     api.gclient.c.revisions[dep['name']] = dep['rev_str'] % component_rev
 
-  bot_update_step = api.bot_update.ensure_checkout()
+  api.bot_update.ensure_checkout()
   api.chromium_android.clean_local_files()
 
   api.chromium.runhooks()
 
-  if bot_config.get('try', False):
-
-    if bot_config.get('check_licenses'):
-      try:
-        with bot_config['check_licenses']():
-          droid.check_webview_licenses(suffix='(with patch)')
-      except api.step.StepFailure:
-        without_patch_update()
-        try:
-          with bot_config['check_licenses']():
-            droid.check_webview_licenses(suffix='(without patch)')
-        except api.step.StepFailure:
-          api.tryserver.set_transient_failure_tryjob_result()
-          raise
-        raise
-
-    try:
-      api.chromium.compile(name='compile (with patch)')
-    except api.step.StepFailure:
-      without_patch_update()
-      try:
-        api.chromium.runhooks()
-        api.chromium.compile(name='compile (without patch)')
-
-        # TODO(phajdan.jr): Set failed tryjob result after recognizing infra
-        # compile failures. We've seen cases of compile with patch failing
-        # with build steps getting killed, compile without patch succeeding,
-        # and compile with patch succeeding on another attempt with same patch.
-      except api.step.StepFailure:
-        api.tryserver.set_transient_failure_tryjob_result()
-        raise
-      raise
-
-    if bot_config.get('findbugs'):
-      try:
-        with bot_config['findbugs']():
-          droid.findbugs(suffix='(with patch)')
-      except api.step.StepFailure:
-        without_patch_update()
-        try:
-          api.chromium.runhooks()
-          api.chromium.compile(name='compile (without patch)')
-          with bot_config['findbugs']():
-            droid.findbugs(suffix='(without patch)')
-        except api.step.StepFailure:
-          api.tryserver.set_transient_failure_tryjob_result()
-          raise
-        raise
-  else:
-    if bot_config.get('check_licenses'):
-      with bot_config['check_licenses']():
-        droid.check_webview_licenses()
-    api.chromium.compile()
-    if bot_config.get('findbugs'):
-      with bot_config['findbugs']():
-        droid.findbugs()
+  if bot_config.get('check_licenses'):
+    with bot_config['check_licenses']():
+      droid.check_webview_licenses()
+  api.chromium.compile()
+  if bot_config.get('findbugs'):
+    with bot_config['findbugs']():
+      droid.findbugs()
 
   upload_config = bot_config.get('upload')
   if upload_config:
@@ -289,29 +197,3 @@ def GenTests(api):
                      buildername='Android x64 Builder (dbg)',
                      steps=['check licenses'])
 
-  yield step_failure(mastername='tryserver.chromium.linux',
-                     buildername='android_clang_dbg_recipe',
-                     steps=['compile (with patch)'],
-                     tryserver=True)
-  yield step_failure(mastername='tryserver.chromium.linux',
-                     buildername='android_clang_dbg_recipe',
-                     steps=['compile (with patch)', 'compile (without patch)'],
-                     tryserver=True)
-  yield step_failure(mastername='tryserver.chromium.linux',
-                     buildername='android_clang_dbg_recipe',
-                     steps=['findbugs (with patch)'],
-                     tryserver=True)
-  yield step_failure(mastername='tryserver.chromium.linux',
-                     buildername='android_clang_dbg_recipe',
-                     steps=['findbugs (with patch)',
-                            'findbugs (without patch)'],
-                     tryserver=True)
-  yield step_failure(mastername='tryserver.chromium.linux',
-                     buildername='android_clang_dbg_recipe',
-                     steps=['check licenses (with patch)'],
-                     tryserver=True)
-  yield step_failure(mastername='tryserver.chromium.linux',
-                     buildername='android_clang_dbg_recipe',
-                     steps=['check licenses (with patch)',
-                            'check licenses (without patch)'],
-                     tryserver=True)

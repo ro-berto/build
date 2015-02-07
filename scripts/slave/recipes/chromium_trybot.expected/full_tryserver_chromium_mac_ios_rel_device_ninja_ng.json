@@ -130,7 +130,9 @@
       "@@@STEP_TEXT@path: 'testing/buildbot/trybot_analyze_config.json'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"f.*\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"chromium\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
@@ -148,32 +150,34 @@
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "git diff to analyze patch",
-    "stdout": "/path/to/tmp/"
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@excluded_files@foo.cc (regex = 'f.*')@@@",
+      "@@@STEP_LOG_END@excluded_files@@@"
+    ]
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/gyp_chromium",
-      "--analyzer",
-      "{\"files\": [\"foo.cc\"], \"targets\": []}",
-      "/path/to/tmp/json"
+      "[BUILD]/scripts/slave/cleanup_temp.py"
     ],
-    "env": {
-      "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=ios chromium_ios_signing=0 clang_xcode=0 component=static_library dcheck_always_on=1 fastbuild=1 target_subarch=both",
-      "GYP_GENERATORS": "ninja",
-      "GYP_GENERATOR_FLAGS": "xcode_project_version=3.2"
-    },
-    "name": "analyze",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@No compile necessary@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"status\": \"No dependency\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"targets\": []@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
+    "name": "cleanup_temp"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/compile.py",
+      "--target",
+      "Release-iphoneos",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
+      "--build-tool",
+      "ninja",
+      "--",
+      "All"
+    ],
+    "name": "compile (with patch)"
   }
 ]

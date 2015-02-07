@@ -356,6 +356,27 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           properties['got_revision_cp'])
     return properties['got_revision']
 
+  def transient_check(self, update_step, command):
+    """Runs command, checking for transience if this is a try job.
+
+    * command is a function which takes an argument of type (str -> str),
+      which is a test name transformation (it adds "with patch" or "without
+      patch") and runs the command.
+    * update_step is the bot_update step used for deapplying the patch.
+    """
+    if self.m.tryserver.is_tryserver:
+      try:
+        command(lambda name: '%s (with patch)' % name)
+      except self.m.step.StepFailure:
+        self.deapply_patch(update_step)
+        try:
+          command(lambda name: '%s (without patch)' % name)
+        except self.m.step.StepFailure:
+          self.m.tryserver.set_transient_failure_tryjob_result()
+    else:
+      command(lambda name: name)
+
+
   def compile(self, mastername, buildername, update_step, master_dict,
               test_spec):
     """Runs compile and related steps for given builder."""
@@ -395,30 +416,17 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if isolated_targets:
         self.m.isolate.clean_isolated_files(self.m.chromium.output_dir)
 
-      if self.m.tryserver.is_tryserver:
-        try:
-          self.m.chromium.compile(compile_targets, name='compile (with patch)')
-        except self.m.step.StepFailure:
-          self.deapply_patch(update_step)
-          try:
-            self.m.chromium.compile(compile_targets, name='compile (without patch)')
-
-            # TODO(phajdan.jr): Set failed tryjob result after recognizing infra
-            # compile failures. We've seen cases of compile with patch failing
-            # with build steps getting killed, compile without patch succeeding,
-            # and compile with patch succeeding on another attempt with same
-            # patch.
-          except self.m.step.StepFailure:
-            self.m.tryserver.set_transient_failure_tryjob_result()
-            raise
-          raise
-      else:
-        self.m.chromium.compile(compile_targets)
+      self.transient_check(update_step, lambda transform_name:
+        self.m.chromium.compile(compile_targets,
+                                name=transform_name('compile')))
 
       if self.m.chromium.c.TARGET_PLATFORM == 'android':
-        self.m.chromium_android.check_webview_licenses()
+        self.transient_check(update_step, lambda transform_name:
+          self.m.chromium_android.check_webview_licenses(
+              name=transform_name('check licenses')))
         if self.m.chromium.c.BUILD_CONFIG == 'Debug':
-          self.m.chromium_android.findbugs()
+          self.transient_check(update_step, lambda transform_name:
+              self.m.chromium_android.findbugs(name=transform_name('findbugs')))
 
       if isolated_targets:
         self.m.isolate.remove_build_metadata()

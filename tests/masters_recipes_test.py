@@ -77,8 +77,6 @@ SUPPRESSIONS = {
         'Win8 Release (NVIDIA)',
     ],
     'master.chromium.linux': [
-        'Android Arm64 Builder (dbg)',
-        'Android Clang Builder (dbg)',
         'Android GN',
         'Android Webview AOSP Builder',
         'Linux GN',
@@ -99,6 +97,12 @@ SUPPRESSIONS = {
     ],
 }
 
+UNUSED_MAIN_WATERFALL_BUILDERS = {
+    'master.chromium.linux': [
+        'Android x86 Builder (dbg)',
+    ],
+}
+
 
 def getMasterConfig(master):
   with tempfile.NamedTemporaryFile() as f:
@@ -116,6 +120,10 @@ def getBuildersAndRecipes(master):
           'recipe', [None])[0]
       for builder in getMasterConfig(master)['builders']
   }
+
+
+def mutualDifference(a, b):
+  return a - b, b - a
 
 
 def main(argv):
@@ -143,12 +151,20 @@ def main(argv):
     if recipe_side_builders is not None:
       bogus_builders = set(recipe_side_builders.keys()).difference(
           set(builders.keys()))
+      bogus_builders, unused = mutualDifference(
+          bogus_builders,
+          set(UNUSED_MAIN_WATERFALL_BUILDERS.get(master, [])))
       # TODO(phajdan.jr): Clean up bogus chromiumos builders.
       if bogus_builders and master != 'master.chromium.chromiumos':
         exit_code = 1
         print 'The following builders from chromium recipe'
         print 'do not exist in master config for %s:' % master
         print '\n'.join('\t%s' % b for b in sorted(bogus_builders))
+      if unused:
+        exit_code = 1
+        print 'The following unused declarations are superfluous '
+        print 'on %s' % master
+        print '\n'.join('\t%s' % b for b in sorted(unused))
 
 
   for master in TRYSERVER_MASTERS:

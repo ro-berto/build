@@ -289,5 +289,19 @@ SPEC = {
         'platform': 'linux',
       },
     },
+
+    'Android x86 Builder (dbg)': {
+      'recipe_config': 'chromium_android',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 32,
+        'TARGET_PLATFORM': 'android',
+      },
+      'android_config': 'x86_builder',
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
   },
 }

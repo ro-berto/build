@@ -29,6 +29,42 @@ DEPS = [
 BUILDERS = freeze({
   'tryserver.chromium.linux': {
     'builders': {
+      'android_arm64_dbg_recipe': {
+        'based_on_main_waterfall': {
+          'mastername': 'chromium.linux',
+          'buildername': 'Android Arm64 Builder (dbg)',
+        },
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'android_clang_dbg_recipe': {
+        'based_on_main_waterfall': {
+          'mastername': 'chromium.linux',
+          'buildername': 'Android Clang Builder (dbg)',
+        },
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'android_compile_rel': {
+        'based_on_main_waterfall': {
+          'mastername': 'chromium.linux',
+          'buildername': 'Android Builder',
+        },
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'android_x86_dbg_recipe': {
+        'based_on_main_waterfall': {
+          'mastername': 'chromium.linux',
+          'buildername': 'Android x86 Builder (dbg)',
+        },
+        'testing': {
+          'platform': 'linux',
+        },
+      },
       'linux_android_dbg_ng': {
         'based_on_main_waterfall': {
           'mastername': 'chromium.linux',
@@ -601,15 +637,19 @@ def GenTests(api):
   # of the configs so we can see when and how they change.
   for mastername, master_config in BUILDERS.iteritems():
     for buildername, bot_config in master_config['builders'].iteritems():
-      test_name = 'full_%s_%s' % (_sanitize_nonalpha(mastername),
-                                  _sanitize_nonalpha(buildername))
-      yield (
-        api.test(test_name) +
-        api.platform(bot_config['testing']['platform'],
-                     bot_config.get(
-                         'chromium_config_kwargs', {}).get('TARGET_BITS', 64)) +
-        props(mastername=mastername, buildername=buildername)
-      )
+      for analyze in ['', '_analyze']:
+        test_name = 'full_%s_%s%s' % (_sanitize_nonalpha(mastername),
+                                      _sanitize_nonalpha(buildername),
+                                      analyze)
+        yield (
+          api.test(test_name) +
+          api.platform(
+              bot_config['testing']['platform'],
+              bot_config.get(
+                  'chromium_config_kwargs', {}).get('TARGET_BITS', 64)) +
+          (api.empty_test_data() if analyze else suppress_analyze()) +
+          props(mastername=mastername, buildername=buildername)
+        )
 
   yield (
     api.test('invalid_results') +
@@ -984,3 +1024,43 @@ def GenTests(api):
           patch_project='v8') +
     api.platform.name('win')
   )
+
+  def step_failure(mastername, buildername, steps, tryserver=False):
+    props = api.properties.tryserver if tryserver else api.properties.generic
+    return (
+      api.test('%s_%s_fail_%s' % (
+        _sanitize_nonalpha(mastername),
+        _sanitize_nonalpha(buildername),
+        '_'.join(_sanitize_nonalpha(step) for step in steps))) +
+      props(mastername=mastername, buildername=buildername) +
+      suppress_analyze() +
+      reduce(lambda a, b: a + b,
+             (api.step_data(step, retcode=1) for step in steps))
+    )
+
+  yield step_failure(mastername='tryserver.chromium.linux',
+                     buildername='android_clang_dbg_recipe',
+                     steps=['compile (with patch)'],
+                     tryserver=True)
+  yield step_failure(mastername='tryserver.chromium.linux',
+                     buildername='android_clang_dbg_recipe',
+                     steps=['compile (with patch)', 'compile (without patch)'],
+                     tryserver=True)
+  yield step_failure(mastername='tryserver.chromium.linux',
+                     buildername='android_clang_dbg_recipe',
+                     steps=['findbugs (with patch)'],
+                     tryserver=True)
+  yield step_failure(mastername='tryserver.chromium.linux',
+                     buildername='android_clang_dbg_recipe',
+                     steps=['findbugs (with patch)',
+                            'findbugs (without patch)'],
+                     tryserver=True)
+  yield step_failure(mastername='tryserver.chromium.linux',
+                     buildername='android_clang_dbg_recipe',
+                     steps=['check licenses (with patch)'],
+                     tryserver=True)
+  yield step_failure(mastername='tryserver.chromium.linux',
+                     buildername='android_clang_dbg_recipe',
+                     steps=['check licenses (with patch)',
+                            'check licenses (without patch)'],
+                     tryserver=True)
