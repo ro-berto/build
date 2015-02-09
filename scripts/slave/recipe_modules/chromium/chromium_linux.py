@@ -58,6 +58,10 @@ SPEC = {
       },
       'use_isolate': True,
       'enable_swarming': True,
+      # Temporary hack because the binaries are too large to be isolated.
+      'GYP_DEFINES': {
+        'fastbuild': 2,
+      },
     },
     'Linux Tests (dbg)(1)(32)': {
       'recipe_config': 'chromium',
