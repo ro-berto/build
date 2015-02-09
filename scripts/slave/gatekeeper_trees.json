@@ -38,7 +38,7 @@
         "open-tree": true,
         "password-file": ".nacl_status_password",
         "revision-properties": "got_revision_cp",
-        "set-status": false,
+        "set-status": true,
         "status-url": "https://nativeclient-status.appspot.com",
         "track-revisions": true
     },

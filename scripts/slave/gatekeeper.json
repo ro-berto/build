@@ -310,7 +310,6 @@
     ],
     "https://build.chromium.org/p/client.nacl": [
       {
-        "forgive_all": true,
         "categories": [
           "nacl_all"
         ],
