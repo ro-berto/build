@@ -99,9 +99,9 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder',
-      'testing': {
-        'platform': 'linux',
-      },
+      'testing': {'platform': 'linux'},
+      'enable_swarming': True,
+      'use_isolate': True,
     },
     'Linux ChromeOS MSan Tests': {
       'recipe_config': 'chromium_msan',
@@ -115,9 +115,8 @@ SPEC = {
         steps.generate_script,
       ],
       'parent_buildername': 'Chromium Linux ChromeOS MSan Builder',
-      'testing': {
-        'platform': 'linux',
-      },
+      'testing': {'platform': 'linux'},
+      'enable_swarming': True,
     },
     'Linux ChromeOS MSan Browser (1)': {
       'recipe_config': 'chromium_msan',
