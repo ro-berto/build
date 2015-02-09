@@ -7,7 +7,7 @@
       "--master",
       "tryserver.chromium.linux",
       "--builder",
-      "android_rel_tests_recipe",
+      "EXAMPLE_android_rel_telemetry_tests_recipe",
       "--slave",
       "slavename",
       "--spec",
@@ -96,74 +96,10 @@
     ],
     "env": {
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "gclient runhooks"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/testing/buildbot/trybot_analyze_config.json",
-      "/path/to/tmp/json"
-    ],
-    "name": "read filter exclusion spec",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@path: 'testing/buildbot/trybot_analyze_config.json'@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"chromium\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "diff",
-      "--cached",
-      "--name-only"
-    ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "git diff to analyze patch",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/gyp_chromium",
-      "--analyzer",
-      "{\"files\": [\"foo.cc\"], \"targets\": [\"android_webview_test_apk\", \"chrome_shell_test_apk\", \"content_shell_test_apk\", \"chrome_sync_shell_test_apk\", \"android_webview_unittests\", \"base_unittests\", \"breakpad_unittests\", \"cc_unittests\", \"components_unittests\", \"content_browsertests\", \"content_unittests\", \"events_unittests\", \"gl_tests\", \"gpu_unittests\", \"ipc_tests\", \"media_unittests\", \"net_unittests\", \"sandbox_linux_unittests\", \"skia_unittests\", \"sql_unittests\", \"sync_unit_tests\", \"ui_android_unittests\", \"ui_base_unittests\", \"ui_touch_selection_unittests\", \"unit_tests\", \"junit_unit_tests\"]}",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1"
-    },
-    "name": "analyze",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"breakpad_unittests\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"chrome_shell_test_apk\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"junit_unit_tests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"status\": \"Found dependency\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"targets\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"breakpad_unittests\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"chrome_shell_test_apk\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"junit_unit_tests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
   },
   {
     "allow_subannotations": false,
@@ -189,10 +125,7 @@
       "goma",
       "--goma-dir",
       "[BUILD]/goma",
-      "--",
-      "breakpad_unittests",
-      "chrome_shell_test_apk",
-      "junit_unit_tests"
+      "--"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -299,101 +232,76 @@
     "name": "provision_devices"
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "python",
-      "-s",
-      "gyp_py_unittests",
-      "--verbose"
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--xvfb",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"EXAMPLE_android_rel_telemetry_tests_recipe\", \"buildnumber\": \"1337\", \"mastername\": \"tryserver.chromium.linux\", \"parent_buildername\": \"parent_buildername\", \"parent_buildnumber\": \"1729\", \"recipe\": \"android/tester\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"slavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"EXAMPLE_android_rel_telemetry_tests_recipe\", \"buildnumber\": \"1337\", \"mastername\": \"tryserver.chromium.linux\", \"parent_buildername\": \"parent_buildername\", \"parent_buildnumber\": \"1729\", \"recipe\": \"android/tester\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"slavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--annotate=gtest",
+      "--test-type=telemetry_unittests",
+      "--builder-name=EXAMPLE_android_rel_telemetry_tests_recipe",
+      "--slave-name=slavename",
+      "--build-number=1337",
+      "--run-python-script",
+      "[SLAVE_BUILD]/src/tools/telemetry/run_tests",
+      "--browser=android-chrome-shell",
+      "--retry-limit=3",
+      "--builder-name=EXAMPLE_android_rel_telemetry_tests_recipe",
+      "--master-name=tryserver.chromium.linux",
+      "--test-results-server=test-results.appspot.com",
+      "--test-type=telemetry_unittests",
+      "--metadata",
+      "chromium_revision=170242",
+      "--metadata",
+      "blink_revision=124383",
+      "--metadata",
+      "build_number=1337",
+      "--device=014E1F310401C009"
     ],
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "gyp_py_unittests"
+    "name": "telemetry_unittests"
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "python",
-      "-s",
-      "pylib_py_unittests",
-      "--verbose"
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--xvfb",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"EXAMPLE_android_rel_telemetry_tests_recipe\", \"buildnumber\": \"1337\", \"mastername\": \"tryserver.chromium.linux\", \"parent_buildername\": \"parent_buildername\", \"parent_buildnumber\": \"1729\", \"recipe\": \"android/tester\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"slavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"EXAMPLE_android_rel_telemetry_tests_recipe\", \"buildnumber\": \"1337\", \"mastername\": \"tryserver.chromium.linux\", \"parent_buildername\": \"parent_buildername\", \"parent_buildnumber\": \"1729\", \"recipe\": \"android/tester\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"slavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--annotate=gtest",
+      "--test-type=telemetry_perf_unittests",
+      "--builder-name=EXAMPLE_android_rel_telemetry_tests_recipe",
+      "--slave-name=slavename",
+      "--build-number=1337",
+      "--run-python-script",
+      "[SLAVE_BUILD]/src/tools/perf/run_tests",
+      "--browser=android-chrome-shell",
+      "--retry-limit=3",
+      "--builder-name=EXAMPLE_android_rel_telemetry_tests_recipe",
+      "--master-name=tryserver.chromium.linux",
+      "--test-results-server=test-results.appspot.com",
+      "--test-type=telemetry_perf_unittests",
+      "--metadata",
+      "chromium_revision=170242",
+      "--metadata",
+      "blink_revision=124383",
+      "--metadata",
+      "build_number=1337",
+      "--device=014E1F310401C009"
     ],
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "pylib_py_unittests"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "--apk",
-      "ChromeShell.apk",
-      "--apk_package",
-      "org.chromium.chrome.shell",
-      "--release"
-    ],
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "install ChromeShell.apk"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--test-apk",
-      "ChromeShellTest",
-      "--test_data",
-      "chrome:chrome/test/data/android/device_files",
-      "--isolate-file-path",
-      "chrome/chrome_shell_test_apk.isolate",
-      "--flakiness-dashboard-server",
-      "http://test-results.appspot.com",
-      "--verbose",
-      "--release"
-    ],
-    "name": "Instrumentation test ChromeShellTest"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "gtest",
-      "-s",
-      "breakpad_unittests",
-      "--verbose",
-      "--release",
-      "--isolate_file_path=[SLAVE_BUILD]/src/breakpad/breakpad_unittests.isolate",
-      "--flakiness-dashboard-server=http://test-results.appspot.com"
-    ],
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "breakpad_unittests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "junit",
-      "-s",
-      "junit_unit_tests",
-      "--verbose",
-      "--release"
-    ],
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "junit_unit_tests"
+    "name": "telemetry_perf_unittests"
   },
   {
     "cmd": [
@@ -418,11 +326,11 @@
       "--",
       "cp",
       "[SLAVE_BUILD]/src/out/Release/full_log",
-      "gs://chromium-android/logcat_dumps/android_rel_tests_recipe/1337"
+      "gs://chromium-android/logcat_dumps/EXAMPLE_android_rel_telemetry_tests_recipe/1337"
     ],
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/android_rel_tests_recipe/1337@@@"
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/EXAMPLE_android_rel_telemetry_tests_recipe/1337@@@"
     ]
   },
   {

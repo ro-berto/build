@@ -72,13 +72,21 @@ BUILDERS = freeze({
     'android_rel_tests_recipe': {
       'config': 'trybot_builder',
       'instrumentation_tests': INSTRUMENTATION_TESTS,
-      'unittests': [],
-      'telemetry_unittests': True,
-      'telemetry_perf_unittests': True,
+      'unittests': UNIT_TESTS,
       'java_unittests': JAVA_UNIT_TESTS,
       'python_unittests': PYTHON_UNIT_TESTS,
       'target': 'Release',
       'try': True,
+    },
+    'EXAMPLE_android_rel_telemetry_tests_recipe': {
+      'config': 'main_builder',
+      'instrumentation_tests': [],
+      'unittests': [],
+      'telemetry_unittests': True,
+      'telemetry_perf_unittests': True,
+      'java_unittests': [],
+      'python_unittests': [],
+      'target': 'Release',
     },
   },
 })
@@ -146,7 +154,10 @@ def GenSteps(api):
 
   api.chromium.compile(targets=compile_targets)
 
-  if not instrumentation_tests and not unittests and not java_unittests:
+  run_telemetry_unittests = bot_config.get('telemetry_unittests')
+  run_telemetry_perf_unittests = bot_config.get('telemetry_perf_unittests')
+  if (not instrumentation_tests and not unittests and not java_unittests
+      and not run_telemetry_unittests and not run_telemetry_perf_unittests):
     return
 
   api.adb.root_devices()
@@ -172,10 +183,10 @@ def GenSteps(api):
           isolate_file_path=isolate_path,
           flakiness_dashboard=FLAKINESS_DASHBOARD)
 
-    if bot_config.get('telemetry_unittests'):
+    if run_telemetry_unittests:
       args = ['--device=%s' % api.adb.devices.get_result()[0]]
       api.chromium.run_telemetry_unittests(cmd_args=args)
-    if bot_config.get('telemetry_perf_unittests'):
+    if run_telemetry_perf_unittests:
       args = ['--device=%s' % api.adb.devices.get_result()[0]]
       api.chromium.run_telemetry_perf_unittests(cmd_args=args)
 
