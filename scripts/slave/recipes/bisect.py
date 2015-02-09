@@ -41,8 +41,19 @@ def GenSteps(api):
 def GenTests(api):
   basic_test = api.test('basic')
   encoded_config_test = api.test('encoded_config_test')
+  broken_cp_test = api.test('broken_cp_test')
+  broken_hash_test = api.test('broken_hash_test')
+  invalid_config_test = api.test('invalid_config_test')
   basic_test += api.properties.generic(mastername='tryserver.chromium.perf',
                                        buildername='linux_perf_bisect_builder')
+  broken_cp_test += api.properties.generic(mastername='tryserver.chromium.perf',
+                                       buildername='linux_perf_bisect_builder')
+  broken_hash_test += api.properties.generic(
+      mastername='tryserver.chromium.perf',
+      buildername='linux_perf_bisect_builder')
+  invalid_config_test += api.properties.generic(
+      mastername='tryserver.chromium.perf',
+      buildername='linux_perf_bisect_builder')
   encoded_config_test += api.properties.generic(
       mastername='tryserver.chromium.perf',
       buildername='linux_perf_bisect_builder')
@@ -64,7 +75,13 @@ def GenTests(api):
       'poll_sleep': 0,
       'dummy_builds': True,
   }
+  invalid_cp_bisect_config = dict(bisect_config)
+  invalid_cp_bisect_config ['good_revision'] = 'XXX'
+
   basic_test += api.properties(bisect_config=bisect_config)
+  broken_cp_test += api.properties(bisect_config=bisect_config)
+  broken_hash_test += api.properties(bisect_config=bisect_config)
+  invalid_config_test += api.properties(bisect_config=invalid_cp_bisect_config)
   encoded_config_test += api.properties(bcb32=base64.b32encode(json.dumps(
       bisect_config)).replace('=', '0'))
   # This data represents fake results for a basic scenario, the items in it are
@@ -109,28 +126,50 @@ def GenTests(api):
       },
   ]
 
+
+
   for revision_data in test_data:
     for step_data in _get_step_data_for_revision(api, revision_data):
       basic_test += step_data
       encoded_config_test += step_data
+    for step_data in _get_step_data_for_revision(api, revision_data,
+                                                 broken_cp='306475'):
+      broken_cp_test += step_data
+    for step_data in _get_step_data_for_revision(
+        api, revision_data,
+        broken_hash='e28dc0d49c331def2a3bbf3ddd0096eb51551155'):
+      broken_hash_test += step_data
 
   yield basic_test
   yield encoded_config_test
+  yield broken_hash_test
+  yield broken_cp_test
+  yield invalid_config_test
 
 
 
-def _get_step_data_for_revision(api, revision_data):
+
+
+def _get_step_data_for_revision(api, revision_data, broken_cp=None,
+                                broken_hash=None):
   """Generator that produces step patches for fake results."""
   commit_pos = revision_data['commit_pos']
   commit_hash = revision_data['hash']
   test_results = revision_data['test_results']
 
   step_name ='resolving commit_pos ' + commit_pos
-  yield api.step_data(step_name, stdout=api.raw_io.output(commit_hash))
+  if commit_pos == broken_cp:
+    yield api.step_data(step_name, stdout=api.raw_io.output(''))
+  else:
+    yield api.step_data(step_name, stdout=api.raw_io.output('hash:' +
+                                                            commit_hash))
 
   step_name ='resolving hash ' + commit_hash
-  commit_pos_str = 'refs/heads/master@{#%s}' % commit_pos
-  yield api.step_data(step_name, stdout=api.raw_io.output(commit_pos_str))
+  if commit_hash == broken_hash:
+    yield api.step_data(step_name, stdout=api.raw_io.output('UnCastable'))
+  else:
+    commit_pos_str = 'refs/heads/master@{#%s}' % commit_pos
+    yield api.step_data(step_name, stdout=api.raw_io.output(commit_pos_str))
 
   step_name ='gsutil Get test results for build ' + commit_hash
   yield api.step_data(step_name, stdout=api.raw_io.output(json.dumps(

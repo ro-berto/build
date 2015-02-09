@@ -41,36 +41,39 @@ class CommitPositionApi(recipe_api.RecipeApi):
     """Resolve a commit position in the chromium repo to its commit hash."""
     try:
       int_pos = int(commit_pos)
-    except ValueError:  #pragma: no cover
-      raise ValueError('Invalid commit position (%s).' % (commit_pos,))
-    step_result = self.m.git('log', '--format=%H', '--grep', self.COMMIT_POS_STR
-                             % int_pos, '-1', 'refs/heads/master',
+    except ValueError:
+      raise self.m.step.StepFailure('Invalid commit position (%s).'
+                                    % (commit_pos,))
+    step_result = self.m.git('log', '--format=hash:%H', '--grep',
+                             self.COMMIT_POS_STR % int_pos, '-1',
+                             'refs/heads/master',
                              stdout=self.m.raw_io.output(),
                              name='resolving commit_pos ' + str(commit_pos))
-    result = step_result.stdout.splitlines()[0]
     try:
-      assert int(result, 16)
-    except (AssertionError, ValueError):  #pragma: no cover
-      raise ValueError('Could not parse commit hash from git log output' +
-                       result)
-    return result
-
+      result_line = [line for line in step_result.stdout.splitlines()
+                     if line.startswith('hash:')][0]
+      result = result_line.split(':')[1]
+      int(result, 16)
+      return result
+    except (IndexError, ValueError):
+      raise self.m.step.StepFailure(
+          'Could not parse commit hash from git log output' + step_result.stdout)
 
   def chromium_commit_position_from_hash(self, sha):
     """Resolve a chromium commit hash to its commit position."""
     try:
       assert int(sha, 16)
       sha = str(sha)  # Unicode would break the step when passed in the name
-    except (AssertionError, ValueError):  #pragma: no cover
-      raise ValueError('Invalid commit hash: ' + sha)
+    except (AssertionError, ValueError):
+      raise self.m.step.StepFailure('Invalid commit hash: ' + sha)
     step_result = self.m.git('footers', '--position', sha,
                              stdout=self.m.raw_io.output(),
                              name='resolving hash ' + sha)
-    result = self.parse_revision(str(step_result.stdout))
     try:
-      result = int(result)
-    except ValueError:  #pragma: no cover
-      raise ValueError('Could not parse commit position from git output: ' +
-                       result)
+      result = int(self.parse_revision(str(step_result.stdout)))
+    except ValueError:
+      raise self.m.step.StepFailure(
+          'Could not parse commit position from git output: ' +
+          (step_result.stdout or ''))
     return result
 

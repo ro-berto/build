@@ -42,10 +42,16 @@ class BisectorTest(unittest.TestCase):
   class MockRevisionClass(object):
     def __init__(self, rev_string, bisector):
       self.commit_pos = int(rev_string)
+      self.revision_string = rev_string
       self.bisector = bisector
       self.previous_revision = None
       self.next_revision = None
       self.values = []
+
+    def get_next_url(self):
+      if self.in_progress:
+        return 'mockurl'
+      return None
 
   def test_create_bisector(self):
     new_bisector = Bisector(self.dummy_api, self.bisect_config,
@@ -162,6 +168,7 @@ class BisectorTest(unittest.TestCase):
         s.in_progress = False
         return
       s.mock_verified = True
+      s.tested = True
 
     # Plug in mock update_status method
     with mock.patch(

@@ -87,7 +87,7 @@
     "cmd": [
       "git",
       "log",
-      "--format=%H",
+      "--format=hash:%H",
       "--grep",
       "Cr-Commit-Position: refs/heads/master@{#306478}",
       "-1",
@@ -101,7 +101,7 @@
     "cmd": [
       "git",
       "log",
-      "--format=%H",
+      "--format=hash:%H",
       "--grep",
       "Cr-Commit-Position: refs/heads/master@{#306475}",
       "-1",
@@ -126,7 +126,7 @@
     "cmd": [
       "git",
       "log",
-      "--format=%H",
+      "--format=hash:%H",
       "--grep",
       "Cr-Commit-Position: refs/heads/master@{#306476}",
       "-1",
@@ -151,7 +151,7 @@
     "cmd": [
       "git",
       "log",
-      "--format=%H",
+      "--format=hash:%H",
       "--grep",
       "Cr-Commit-Position: refs/heads/master@{#306477}",
       "-1",

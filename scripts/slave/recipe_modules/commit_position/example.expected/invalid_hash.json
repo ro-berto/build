@@ -1,0 +1,7 @@
+[
+  {
+    "name": "$final_result",
+    "reason": "Invalid commit hash: foo",
+    "status_code": 1
+  }
+]

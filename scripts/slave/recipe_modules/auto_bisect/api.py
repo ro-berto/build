@@ -40,7 +40,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
     else: #pragma: no cover
       raise NotImplementedError()
 
-  def gsutil_file_exists(self, path): 
+  def gsutil_file_exists(self, path):
     """Returns True if a file exists at the given GS path."""
     try:
       self.m.gsutil(['ls', path])

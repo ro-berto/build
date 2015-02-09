@@ -15,6 +15,16 @@ INVALID_CP_BAD_FORMAT = 'foo/var@{missing-hash}'
 INVALID_CP_NON_NUMERIC = 'refs/heads/master@{#foo}'
 
 def GenSteps(api):
+  # Try to resolve a commit position to a hash
+  if 'revision_to_resolve' in api.properties.keys():
+    api.commit_position.chromium_hash_from_commit_position(
+        api.properties['revision_to_resolve'])
+
+  # Try to resolve a hash to a commit_position
+  if 'hash_to_resolve' in api.properties.keys():
+    api.commit_position.chromium_commit_position_from_hash(
+        api.properties['hash_to_resolve'])
+
   cp = api.properties['cp']
   expect_revision = api.properties.get('revision')
   expect_branch = api.properties.get('branch')
@@ -56,3 +66,13 @@ def GenTests(api):
       api.test('invalid_non_numeric') +
       api.properties(
         cp=INVALID_CP_NON_NUMERIC))
+
+  yield (
+      api.test('invalid_commit_position') +
+      api.properties(
+        revision_to_resolve='foo'))
+
+  yield (
+      api.test('invalid_hash') +
+      api.properties(
+        hash_to_resolve='foo'))
