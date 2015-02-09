@@ -61,7 +61,7 @@ PYTHON_UNIT_TESTS = freeze([
 BUILDERS = freeze({
   'tryserver.chromium.linux': {
     'android_dbg_tests_recipe': {
-      'config': 'main_builder',
+      'config': 'trybot_builder',
       'instrumentation_tests': INSTRUMENTATION_TESTS,
       'unittests': UNIT_TESTS,
       'java_unittests': JAVA_UNIT_TESTS,
@@ -70,7 +70,7 @@ BUILDERS = freeze({
       'try': True,
     },
     'android_rel_tests_recipe': {
-      'config': 'main_builder',
+      'config': 'trybot_builder',
       'instrumentation_tests': INSTRUMENTATION_TESTS,
       'unittests': [],
       'telemetry_unittests': True,
