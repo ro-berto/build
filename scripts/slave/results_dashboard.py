@@ -305,6 +305,10 @@ def _RevisionNumberColumns(data, master, prefix):
   git_hash = None
   try:
     revision = int(data['rev'])
+    if revision and revision > 300000 and revision < 1000000:
+      # Revision is the commit pos.
+      # TODO(sullivan,qyearsley): use got_revision_cp when available.
+      revision_supplemental_columns[prefix + 'commit_pos'] = revision
   except ValueError:
     # The dashboard requires ordered integer revision numbers. If the revision
     # is not an integer, assume it's a git hash and send a timestamp.

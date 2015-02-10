@@ -44,12 +44,15 @@ class ResultsDashboardFormatTest(unittest.TestCase):
     slave_utils.GetActiveMaster().AndReturn('ChromiumPerf')
     self.mox.StubOutWithMock(results_dashboard, '_GetTimestamp')
     # pylint: disable=W0212
-    results_dashboard._GetTimestamp().AndReturn(12345)
-    results_dashboard._GetTimestamp().AndReturn(12345)
+    results_dashboard._GetTimestamp().AndReturn(307226)
+    results_dashboard._GetTimestamp().AndReturn(307226)
     self.mox.ReplayAll()
     v1json = results_dashboard.MakeDashboardJsonV1(
         {'some_json': 'from_telemetry'},
-        {'rev': 'f46bf3c', 'git_revision': 'f46bf3c', 'v8_rev': '73a34f'},
+        {'rev': 'f46bf3c',
+         'git_revision': 'f46bf3c',
+         'v8_rev': '73a34f',
+         'commit_pos': 307226},
         'win7', 'chromium.perf', 'Windows Builder (1)', '432', {'x': 'y'},
         True)
     self.assertEqual({
@@ -60,7 +63,7 @@ class ResultsDashboardFormatTest(unittest.TestCase):
         'buildnumber': '432',
         'chart_data': {'some_json': 'from_telemetry'},
         'is_ref': True,
-        'point_id': 12345,
+        'point_id': 307226,
         'supplemental': {'x': 'y'},
         'versions': {'v8_rev': '73a34f', 'chromium': 'f46bf3c'}},
         v1json)
@@ -78,7 +81,7 @@ class ResultsDashboardFormatTest(unittest.TestCase):
         {
             'bar': {
                 'traces': {'baz': ["100.0", "5.0"]},
-                'rev': '12345',
+                'rev': '307226',
             }
         },
         'my-bot', 'foo_test', 'my.master', 'Builder', 10, {})
@@ -87,13 +90,13 @@ class ResultsDashboardFormatTest(unittest.TestCase):
             'master': 'MyMaster',
             'bot': 'my-bot',
             'test': 'foo_test/bar/baz',
-            'revision': 12345,
+            'revision': 307226,
             'value': '100.0',
             'error': '5.0',
             'masterid': 'my.master',
             'buildername': 'Builder',
             'buildnumber': 10,
-            'supplemental_columns': {},
+            'supplemental_columns': {'r_commit_pos': 307226},
         }
     ]
     self.assertEqual(expected_points, actual_points)
