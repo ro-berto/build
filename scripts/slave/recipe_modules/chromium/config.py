@@ -373,7 +373,7 @@ def asan(c):
                                            'suppressions.txt')
   if c.TARGET_PLATFORM == 'linux':
     c.gyp_env.GYP_DEFINES['use_allocator'] = 'none'
-  if c.TARGET_PLATFORM == 'mac':
+  if c.TARGET_PLATFORM in ['mac', 'win']:
     # Set fastbuild=0 and prevent other configs from changing it.
     fastbuild(c, invert=True, optional=False)
 
@@ -480,10 +480,9 @@ def chromium_no_goma(c):
 def chromium(c):
   c.compile_py.default_targets = ['All', 'chromium_builder_tests']
 
-@config_ctx(includes=['ninja', 'clang',
-                      'fastbuild'])  # Intentionally no goma yet.
+@config_ctx(includes=['ninja', 'clang'])  # Intentionally no goma yet.
 def chromium_win_clang(c):
-  pass
+  fastbuild(c, final=False)  # final=False so win_clang_asan can override it.
 
 @config_ctx(includes=['chromium_win_clang', 'asan', 'static_library'])
 def chromium_win_clang_asan(c):
