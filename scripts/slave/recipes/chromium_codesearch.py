@@ -137,7 +137,7 @@ def GenSteps(api):
   result = api.step('generate compilation database', command,
                     stdout=api.raw_io.output())
 
-  api.chromium.compile(targets, force_clobber=True)
+  api.chromium.compile(targets)
 
   # Copy the created output to the correct directory. When running the clang
   # tool, it is assumed by the scripts that the compilation database is in the
@@ -176,7 +176,9 @@ def GenSteps(api):
     got_revision_cp = api.chromium.build_properties.get('got_revision_cp')
     commit_position = api.commit_position.parse_revision(got_revision_cp)
     platform = bot_config.get('platform', 'linux')
-    index_pack_name = 'index_pack_%s_%s.zip' % (platform, commit_position)
+    index_pack_name = 'index_pack_%s.zip' % platform
+    index_pack_name_with_revision = 'index_pack_%s_%s.zip' % (
+        platform, commit_position)
     api.python('create index pack',
                api.path['build'].join('scripts', 'slave', 'chromium',
                                       'package_index.py'),
@@ -195,11 +197,13 @@ def GenSteps(api):
         name='upload index pack',
         source=debug_path.join(index_pack_name),
         bucket=BUCKET_NAME,
-        dest='%s/%s' % (environment, index_pack_name)
+        dest='%s/%s' % (environment, index_pack_name_with_revision)
     )
 
     # Package the source code.
-    tarball_name = 'chromium_src_%s_%s.tar.bz2' % (platform, commit_position)
+    tarball_name = 'chromium_src_%s.tar.bz2' % platform
+    tarball_name_with_revision = 'chromium_src_%s_%s.tar.bz2' % (
+        platform,commit_position)
     api.python('archive source',
                api.path['build'].join('scripts','slave',
                                       'archive_source_codesearch.py'),
@@ -211,7 +215,7 @@ def GenSteps(api):
         name='upload source tarball',
         source=api.path['slave_build'].join(tarball_name),
         bucket=BUCKET_NAME,
-        dest='%s/%s' % (environment, tarball_name)
+        dest='%s/%s' % (environment, tarball_name_with_revision)
     )
   else:
     # Run the package_source.py script that creates and uploads the source

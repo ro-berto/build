@@ -104,7 +104,6 @@
       "goma-clang",
       "--goma-dir",
       "[BUILD]/goma",
-      "--clobber",
       "--",
       "all"
     ],
@@ -148,7 +147,7 @@
       "--path-to-compdb",
       "[SLAVE_BUILD]/src/out/Debug/compile_commands.json",
       "--path-to-archive-output",
-      "[SLAVE_BUILD]/src/out/Debug/index_pack_chromeos_170242.zip"
+      "[SLAVE_BUILD]/src/out/Debug/index_pack_chromeos.zip"
     ],
     "name": "create index pack"
   },
@@ -181,7 +180,7 @@
       "3.25",
       "--",
       "cp",
-      "[SLAVE_BUILD]/src/out/Debug/index_pack_chromeos_170242.zip",
+      "[SLAVE_BUILD]/src/out/Debug/index_pack_chromeos.zip",
       "gs://chrome-codesearch/staging/index_pack_chromeos_170242.zip"
     ],
     "name": "gsutil upload index pack",
@@ -200,7 +199,7 @@
       "tools",
       "/usr/include",
       "-f",
-      "chromium_src_chromeos_170242.tar.bz2"
+      "chromium_src_chromeos.tar.bz2"
     ],
     "name": "archive source"
   },
@@ -215,7 +214,7 @@
       "3.25",
       "--",
       "cp",
-      "[SLAVE_BUILD]/chromium_src_chromeos_170242.tar.bz2",
+      "[SLAVE_BUILD]/chromium_src_chromeos.tar.bz2",
       "gs://chrome-codesearch/staging/chromium_src_chromeos_170242.tar.bz2"
     ],
     "name": "gsutil upload source tarball",

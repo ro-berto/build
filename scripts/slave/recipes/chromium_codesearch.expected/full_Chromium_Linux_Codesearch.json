@@ -103,7 +103,6 @@
       "goma-clang",
       "--goma-dir",
       "[BUILD]/goma",
-      "--clobber",
       "--",
       "all"
     ],
