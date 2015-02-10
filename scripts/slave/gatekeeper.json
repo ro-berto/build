@@ -209,14 +209,8 @@
         "builders": {
           "Chromium Linux MSan Builder": {},
           "Linux MSan Tests": {},
-          "Linux MSan Browser (1)": {},
-          "Linux MSan Browser (2)": {},
-          "Linux MSan Browser (3)": {},
           "Chromium Linux ChromeOS MSan Builder": {},
-          "Linux ChromeOS MSan Tests": {},
-          "Linux ChromeOS MSan Browser (1)": {},
-          "Linux ChromeOS MSan Browser (2)": {},
-          "Linux ChromeOS MSan Browser (3)": {}
+          "Linux ChromeOS MSan Tests": {}
         }
       }
     ],
