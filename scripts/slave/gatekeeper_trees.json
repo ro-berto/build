@@ -49,6 +49,18 @@
         "revision-properties": "got_revision_cp",
         "track-revisions": true
     },
+    "nacl-ports": {
+        "build-db": "nacl_ports_build_db.json",
+        "masters": [
+            "https://build.chromium.org/p/client.nacl.ports"
+        ],
+        "open-tree": true,
+        "password-file": ".nacl_ports_status_password",
+        "revision-properties": "got_revision_cp",
+        "set-status": true,
+        "status-url": "https://naclports-status.appspot.com",
+        "track-revisions": false
+    },
     "skia": {
         "build-db": "skia_build_db.json",
         "masters": [

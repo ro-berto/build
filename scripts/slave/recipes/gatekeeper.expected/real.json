@@ -58,6 +58,18 @@
       "@@@STEP_LOG_LINE@json.output@    \"status-url\": \"https://nativeclient-status.appspot.com\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"track-revisions\": true@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"nacl-ports\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"build-db\": \"nacl_ports_build_db.json\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"masters\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.nacl.ports\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ], @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"open-tree\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"password-file\": \".nacl_ports_status_password\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"revision-properties\": \"got_revision_cp\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"set-status\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"status-url\": \"https://naclports-status.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"track-revisions\": false@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"nacl-sdk-mono\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"masters\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.nacl.sdk.mono\"@@@",
@@ -111,6 +123,28 @@
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/gatekeeper_ng.py",
+      "-v",
+      "--json",
+      "[BUILD]/scripts/slave/gatekeeper.json",
+      "--status-url",
+      "https://naclports-status.appspot.com",
+      "--set-status",
+      "--open-tree",
+      "--revision-properties",
+      "got_revision_cp",
+      "--build-db",
+      "nacl_ports_build_db.json",
+      "--password-file",
+      ".nacl_ports_status_password",
+      "https://build.chromium.org/p/client.nacl.ports"
+    ],
+    "name": "gatekeeper: nacl-ports"
   },
   {
     "cmd": [

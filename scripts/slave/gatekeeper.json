@@ -336,6 +336,20 @@
         ]
       }
     ],
+    "https://build.chromium.org/p/client.nacl.ports": [
+      {
+        "categories": [
+          "nacl_all"
+        ],
+        "builders": {
+          "*": {}
+        },
+        "tree_notify": [
+            "tandrii+nacl-gatekeeper@chromium.org",
+            "bradnelson@chromium.org"
+        ]
+      }
+    ],
     "https://build.chromium.org/p/client.v8": [
       {
         "categories": [
