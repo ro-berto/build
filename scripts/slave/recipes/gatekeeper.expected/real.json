@@ -58,6 +58,18 @@
       "@@@STEP_LOG_LINE@json.output@    \"status-url\": \"https://nativeclient-status.appspot.com\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"track-revisions\": true@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"nacl-sdk\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"build-db\": \"nacl_sdk_build_db.json\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"masters\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.nacl.sdk\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ], @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"open-tree\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"password-file\": \".naclsdk_status_password\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"revision-properties\": \"got_revision_cp\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"set-status\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"status-url\": \"https://naclsdk-status.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"track-revisions\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"non-closers\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"masters\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/chromium.fyi\", @@@",
@@ -119,6 +131,29 @@
       "https://build.chromium.org/p/client.libvpx"
     ],
     "name": "gatekeeper: non-closers"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/gatekeeper_ng.py",
+      "-v",
+      "--json",
+      "[BUILD]/scripts/slave/gatekeeper.json",
+      "--status-url",
+      "https://naclsdk-status.appspot.com",
+      "--set-status",
+      "--open-tree",
+      "--track-revisions",
+      "--revision-properties",
+      "got_revision_cp",
+      "--build-db",
+      "nacl_sdk_build_db.json",
+      "--password-file",
+      ".naclsdk_status_password",
+      "https://build.chromium.org/p/client.nacl.sdk"
+    ],
+    "name": "gatekeeper: nacl-sdk"
   },
   {
     "cmd": [

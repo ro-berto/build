@@ -42,6 +42,18 @@
         "status-url": "https://nativeclient-status.appspot.com",
         "track-revisions": true
     },
+    "nacl-sdk": {
+        "build-db": "nacl_sdk_build_db.json",
+        "masters": [
+            "https://build.chromium.org/p/client.nacl.sdk"
+        ],
+        "open-tree": true,
+        "password-file": ".naclsdk_status_password",
+        "revision-properties": "got_revision_cp",
+        "set-status": true,
+        "status-url": "https://naclsdk-status.appspot.com",
+        "track-revisions": true
+    },
     "skia": {
         "build-db": "skia_build_db.json",
         "masters": [
