@@ -89,7 +89,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "clang=1 component=static_library target_arch=ia32 test_isolation_mode=prepare"
+      "GYP_DEFINES": "clang=1 component=static_library fastbuild=1 target_arch=ia32 test_isolation_mode=prepare"
     },
     "name": "gclient runhooks"
   },

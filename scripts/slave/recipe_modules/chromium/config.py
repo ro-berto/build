@@ -480,7 +480,8 @@ def chromium_no_goma(c):
 def chromium(c):
   c.compile_py.default_targets = ['All', 'chromium_builder_tests']
 
-@config_ctx(includes=['ninja', 'clang'])  # Intentionally no goma yet.
+@config_ctx(includes=['ninja', 'clang',
+                      'fastbuild'])  # Intentionally no goma yet.
 def chromium_win_clang(c):
   pass
 
