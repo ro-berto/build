@@ -90,6 +90,7 @@ BUILDERS = {
   }
 }
 
+AMP_RESULTS_BUCKET = 'chrome-amp-results'
 
 def GenSteps(api):
   builder = BUILDERS[api.properties['buildername']]
@@ -126,12 +127,16 @@ def GenSteps(api):
                             api_port=builder.get('api_port', None),
                             api_protocol=builder.get('api_protocol', None)))
 
+  api.amp.upload_logcat_to_gs(AMP_RESULTS_BUCKET, 'example_gtest_suite')
+
   api.amp.collect_test_suite(
       'example_uirobot_suite', 'uirobot',
       api.amp.uirobot_arguments(),
       api.amp.amp_arguments(api_address=builder.get('api_address', None),
                             api_port=builder.get('api_port', None),
                             api_protocol=builder.get('api_protocol', None)))
+
+  api.amp.upload_logcat_to_gs(AMP_RESULTS_BUCKET, 'example_uirobot_suite')
 
 def GenTests(api):
   for buildername in BUILDERS:
@@ -150,3 +155,9 @@ def GenTests(api):
       api.properties.generic(buildername='split_example') +
       api.override_step_data('[collect] load example_gtest_suite data',
                              api.json.output({})))
+
+  yield (
+    api.test('bad_test_id_data_for_upload') +
+    api.properties.generic(buildername='split_example') +
+    api.override_step_data('[upload logcat] load example_gtest_suite data',
+                           api.json.output({})))

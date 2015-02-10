@@ -25,9 +25,7 @@
       "--remote-device",
       "SampleDevice",
       "--remote-device-os",
-      "SampleDeviceOS0",
-      "--remote-device-os",
-      "SampleDeviceOS1",
+      "SampleDeviceOS",
       "--trigger",
       "/path/to/tmp/json",
       "--verbose"
@@ -85,9 +83,7 @@
       "--remote-device",
       "SampleDevice",
       "--remote-device-os",
-      "SampleDeviceOS0",
-      "--remote-device-os",
-      "SampleDeviceOS1",
+      "SampleDeviceOS",
       "--trigger",
       "/path/to/tmp/json",
       "--verbose"
@@ -183,40 +179,10 @@
     ],
     "name": "[upload logcat] load example_gtest_suite data",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"test_run\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"test_run_id\": \"12345abcde\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/recipe_modules/zip/resources/unzip.py"
-    ],
-    "name": "[upload logcat] unzip results for example_gtest_suite",
-    "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/example_gtest_suite\", \"use_python_zip\": false, \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/example_gtest_suite/results.zip\"}"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "--force-version",
-      "3.25",
-      "--",
-      "cp",
-      "[TMP_BASE]/amp_results_tmp_2/example_gtest_suite/appurify_results/logcat.txt",
-      "gs://chrome-amp-results/logcats/logcat_example_gtest_suite_12345abcde.txt"
-    ],
-    "name": "gsutil [upload logcat] example_gtest_suite",
-    "~followup_annotations": [
-      "@@@STEP_LINK@logcat@https://storage.cloud.google.com/chrome-amp-results/logcats/logcat_example_gtest_suite_12345abcde.txt@@@"
+      "@@@STEP_TEXT@unable to find test run id@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_EXCEPTION@@@"
     ]
   },
   {

@@ -153,11 +153,59 @@
       "Android",
       "--collect",
       "[TMP_BASE]/amp_trigger_tmp_1/example_gtest_suite.json",
+      "--results-path",
+      "[TMP_BASE]/amp_results_tmp_2/example_gtest_suite/results.zip",
       "--verbose"
     ],
     "name": "[collect] example_gtest_suite",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[TMP_BASE]/amp_trigger_tmp_1/example_gtest_suite.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "[upload logcat] load example_gtest_suite data",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_run\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test_run_id\": \"12345abcde\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/zip/resources/unzip.py"
+    ],
+    "name": "[upload logcat] unzip results for example_gtest_suite",
+    "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/example_gtest_suite\", \"use_python_zip\": false, \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/example_gtest_suite/results.zip\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--force-version",
+      "3.25",
+      "--",
+      "cp",
+      "[TMP_BASE]/amp_results_tmp_2/example_gtest_suite/appurify_results/logcat.txt",
+      "gs://chrome-amp-results/logcats/logcat_example_gtest_suite_12345abcde.txt"
+    ],
+    "name": "gsutil [upload logcat] example_gtest_suite",
+    "~followup_annotations": [
+      "@@@STEP_LINK@logcat@https://storage.cloud.google.com/chrome-amp-results/logcats/logcat_example_gtest_suite_12345abcde.txt@@@"
     ]
   },
   {
@@ -207,11 +255,59 @@
       "Android",
       "--collect",
       "[TMP_BASE]/amp_trigger_tmp_1/example_uirobot_suite.json",
+      "--results-path",
+      "[TMP_BASE]/amp_results_tmp_2/example_uirobot_suite/results.zip",
       "--verbose"
     ],
     "name": "[collect] example_uirobot_suite",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[TMP_BASE]/amp_trigger_tmp_1/example_uirobot_suite.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "[upload logcat] load example_uirobot_suite data",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_run\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test_run_id\": \"12345abcde\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/zip/resources/unzip.py"
+    ],
+    "name": "[upload logcat] unzip results for example_uirobot_suite",
+    "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/example_uirobot_suite\", \"use_python_zip\": false, \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/example_uirobot_suite/results.zip\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--force-version",
+      "3.25",
+      "--",
+      "cp",
+      "[TMP_BASE]/amp_results_tmp_2/example_uirobot_suite/appurify_results/logcat.txt",
+      "gs://chrome-amp-results/logcats/logcat_example_uirobot_suite_12345abcde.txt"
+    ],
+    "name": "gsutil [upload logcat] example_uirobot_suite",
+    "~followup_annotations": [
+      "@@@STEP_LINK@logcat@https://storage.cloud.google.com/chrome-amp-results/logcats/logcat_example_uirobot_suite_12345abcde.txt@@@"
     ]
   }
 ]

@@ -52,7 +52,7 @@ REPO_URL = 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'
 AMP_INSTANCE_ADDRESS = '172.22.21.180'
 AMP_INSTANCE_PORT = '80'
 AMP_INSTANCE_PROTOCOL = 'http'
-
+AMP_RESULTS_BUCKET = 'chrome-amp-results'
 
 def GenSteps(api):
   builder = BUILDERS[api.properties['buildername']]
@@ -106,6 +106,7 @@ def GenSteps(api):
                                 api_protocol=AMP_INSTANCE_PROTOCOL,
                                 device_name=builder.get('device_name'),
                                 device_os=builder.get('device_os')))
+      api.amp.upload_logcat_to_gs(AMP_RESULTS_BUCKET, suite)
 
 
 def GenTests(api):

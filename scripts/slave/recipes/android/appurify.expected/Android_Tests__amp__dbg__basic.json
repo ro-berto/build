@@ -933,11 +933,59 @@
       "5.0",
       "--collect",
       "[TMP_BASE]/amp_trigger_tmp_1/android_webview_unittests.json",
+      "--results-path",
+      "[TMP_BASE]/amp_results_tmp_2/android_webview_unittests/results.zip",
       "--verbose"
     ],
     "name": "[collect] android_webview_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[TMP_BASE]/amp_trigger_tmp_1/android_webview_unittests.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "[upload logcat] load android_webview_unittests data",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_run\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test_run_id\": \"12345abcde\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/zip/resources/unzip.py"
+    ],
+    "name": "[upload logcat] unzip results for android_webview_unittests",
+    "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/android_webview_unittests\", \"use_python_zip\": false, \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/android_webview_unittests/results.zip\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--force-version",
+      "3.25",
+      "--",
+      "cp",
+      "[TMP_BASE]/amp_results_tmp_2/android_webview_unittests/appurify_results/logcat.txt",
+      "gs://chrome-amp-results/logcats/logcat_android_webview_unittests_12345abcde.txt"
+    ],
+    "name": "gsutil [upload logcat] android_webview_unittests",
+    "~followup_annotations": [
+      "@@@STEP_LINK@logcat@https://storage.cloud.google.com/chrome-amp-results/logcats/logcat_android_webview_unittests_12345abcde.txt@@@"
     ]
   },
   {
@@ -1013,11 +1061,59 @@
       "5.0",
       "--collect",
       "[TMP_BASE]/amp_trigger_tmp_1/base_unittests.json",
+      "--results-path",
+      "[TMP_BASE]/amp_results_tmp_2/base_unittests/results.zip",
       "--verbose"
     ],
     "name": "[collect] base_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[TMP_BASE]/amp_trigger_tmp_1/base_unittests.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "[upload logcat] load base_unittests data",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_run\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test_run_id\": \"12345abcde\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/zip/resources/unzip.py"
+    ],
+    "name": "[upload logcat] unzip results for base_unittests",
+    "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/base_unittests\", \"use_python_zip\": false, \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/base_unittests/results.zip\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--force-version",
+      "3.25",
+      "--",
+      "cp",
+      "[TMP_BASE]/amp_results_tmp_2/base_unittests/appurify_results/logcat.txt",
+      "gs://chrome-amp-results/logcats/logcat_base_unittests_12345abcde.txt"
+    ],
+    "name": "gsutil [upload logcat] base_unittests",
+    "~followup_annotations": [
+      "@@@STEP_LINK@logcat@https://storage.cloud.google.com/chrome-amp-results/logcats/logcat_base_unittests_12345abcde.txt@@@"
     ]
   },
   {
@@ -1093,11 +1189,59 @@
       "5.0",
       "--collect",
       "[TMP_BASE]/amp_trigger_tmp_1/cc_unittests.json",
+      "--results-path",
+      "[TMP_BASE]/amp_results_tmp_2/cc_unittests/results.zip",
       "--verbose"
     ],
     "name": "[collect] cc_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[TMP_BASE]/amp_trigger_tmp_1/cc_unittests.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "[upload logcat] load cc_unittests data",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_run\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test_run_id\": \"12345abcde\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/zip/resources/unzip.py"
+    ],
+    "name": "[upload logcat] unzip results for cc_unittests",
+    "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/cc_unittests\", \"use_python_zip\": false, \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/cc_unittests/results.zip\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--force-version",
+      "3.25",
+      "--",
+      "cp",
+      "[TMP_BASE]/amp_results_tmp_2/cc_unittests/appurify_results/logcat.txt",
+      "gs://chrome-amp-results/logcats/logcat_cc_unittests_12345abcde.txt"
+    ],
+    "name": "gsutil [upload logcat] cc_unittests",
+    "~followup_annotations": [
+      "@@@STEP_LINK@logcat@https://storage.cloud.google.com/chrome-amp-results/logcats/logcat_cc_unittests_12345abcde.txt@@@"
     ]
   },
   {
@@ -1173,11 +1317,59 @@
       "5.0",
       "--collect",
       "[TMP_BASE]/amp_trigger_tmp_1/components_unittests.json",
+      "--results-path",
+      "[TMP_BASE]/amp_results_tmp_2/components_unittests/results.zip",
       "--verbose"
     ],
     "name": "[collect] components_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[TMP_BASE]/amp_trigger_tmp_1/components_unittests.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "[upload logcat] load components_unittests data",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_run\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test_run_id\": \"12345abcde\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/zip/resources/unzip.py"
+    ],
+    "name": "[upload logcat] unzip results for components_unittests",
+    "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/components_unittests\", \"use_python_zip\": false, \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/components_unittests/results.zip\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--force-version",
+      "3.25",
+      "--",
+      "cp",
+      "[TMP_BASE]/amp_results_tmp_2/components_unittests/appurify_results/logcat.txt",
+      "gs://chrome-amp-results/logcats/logcat_components_unittests_12345abcde.txt"
+    ],
+    "name": "gsutil [upload logcat] components_unittests",
+    "~followup_annotations": [
+      "@@@STEP_LINK@logcat@https://storage.cloud.google.com/chrome-amp-results/logcats/logcat_components_unittests_12345abcde.txt@@@"
     ]
   },
   {
@@ -1253,11 +1445,59 @@
       "5.0",
       "--collect",
       "[TMP_BASE]/amp_trigger_tmp_1/events_unittests.json",
+      "--results-path",
+      "[TMP_BASE]/amp_results_tmp_2/events_unittests/results.zip",
       "--verbose"
     ],
     "name": "[collect] events_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[TMP_BASE]/amp_trigger_tmp_1/events_unittests.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "[upload logcat] load events_unittests data",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_run\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test_run_id\": \"12345abcde\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/zip/resources/unzip.py"
+    ],
+    "name": "[upload logcat] unzip results for events_unittests",
+    "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/events_unittests\", \"use_python_zip\": false, \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/events_unittests/results.zip\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--force-version",
+      "3.25",
+      "--",
+      "cp",
+      "[TMP_BASE]/amp_results_tmp_2/events_unittests/appurify_results/logcat.txt",
+      "gs://chrome-amp-results/logcats/logcat_events_unittests_12345abcde.txt"
+    ],
+    "name": "gsutil [upload logcat] events_unittests",
+    "~followup_annotations": [
+      "@@@STEP_LINK@logcat@https://storage.cloud.google.com/chrome-amp-results/logcats/logcat_events_unittests_12345abcde.txt@@@"
     ]
   },
   {
@@ -1333,11 +1573,59 @@
       "5.0",
       "--collect",
       "[TMP_BASE]/amp_trigger_tmp_1/skia_unittests.json",
+      "--results-path",
+      "[TMP_BASE]/amp_results_tmp_2/skia_unittests/results.zip",
       "--verbose"
     ],
     "name": "[collect] skia_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[TMP_BASE]/amp_trigger_tmp_1/skia_unittests.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "[upload logcat] load skia_unittests data",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_run\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test_run_id\": \"12345abcde\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/zip/resources/unzip.py"
+    ],
+    "name": "[upload logcat] unzip results for skia_unittests",
+    "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/skia_unittests\", \"use_python_zip\": false, \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/skia_unittests/results.zip\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--force-version",
+      "3.25",
+      "--",
+      "cp",
+      "[TMP_BASE]/amp_results_tmp_2/skia_unittests/appurify_results/logcat.txt",
+      "gs://chrome-amp-results/logcats/logcat_skia_unittests_12345abcde.txt"
+    ],
+    "name": "gsutil [upload logcat] skia_unittests",
+    "~followup_annotations": [
+      "@@@STEP_LINK@logcat@https://storage.cloud.google.com/chrome-amp-results/logcats/logcat_skia_unittests_12345abcde.txt@@@"
     ]
   },
   {
@@ -1413,11 +1701,59 @@
       "5.0",
       "--collect",
       "[TMP_BASE]/amp_trigger_tmp_1/sql_unittests.json",
+      "--results-path",
+      "[TMP_BASE]/amp_results_tmp_2/sql_unittests/results.zip",
       "--verbose"
     ],
     "name": "[collect] sql_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[TMP_BASE]/amp_trigger_tmp_1/sql_unittests.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "[upload logcat] load sql_unittests data",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_run\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test_run_id\": \"12345abcde\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/zip/resources/unzip.py"
+    ],
+    "name": "[upload logcat] unzip results for sql_unittests",
+    "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/sql_unittests\", \"use_python_zip\": false, \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/sql_unittests/results.zip\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--force-version",
+      "3.25",
+      "--",
+      "cp",
+      "[TMP_BASE]/amp_results_tmp_2/sql_unittests/appurify_results/logcat.txt",
+      "gs://chrome-amp-results/logcats/logcat_sql_unittests_12345abcde.txt"
+    ],
+    "name": "gsutil [upload logcat] sql_unittests",
+    "~followup_annotations": [
+      "@@@STEP_LINK@logcat@https://storage.cloud.google.com/chrome-amp-results/logcats/logcat_sql_unittests_12345abcde.txt@@@"
     ]
   },
   {
@@ -1493,11 +1829,59 @@
       "5.0",
       "--collect",
       "[TMP_BASE]/amp_trigger_tmp_1/ui_android_unittests.json",
+      "--results-path",
+      "[TMP_BASE]/amp_results_tmp_2/ui_android_unittests/results.zip",
       "--verbose"
     ],
     "name": "[collect] ui_android_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[TMP_BASE]/amp_trigger_tmp_1/ui_android_unittests.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "[upload logcat] load ui_android_unittests data",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_run\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test_run_id\": \"12345abcde\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/zip/resources/unzip.py"
+    ],
+    "name": "[upload logcat] unzip results for ui_android_unittests",
+    "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/ui_android_unittests\", \"use_python_zip\": false, \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/ui_android_unittests/results.zip\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--force-version",
+      "3.25",
+      "--",
+      "cp",
+      "[TMP_BASE]/amp_results_tmp_2/ui_android_unittests/appurify_results/logcat.txt",
+      "gs://chrome-amp-results/logcats/logcat_ui_android_unittests_12345abcde.txt"
+    ],
+    "name": "gsutil [upload logcat] ui_android_unittests",
+    "~followup_annotations": [
+      "@@@STEP_LINK@logcat@https://storage.cloud.google.com/chrome-amp-results/logcats/logcat_ui_android_unittests_12345abcde.txt@@@"
     ]
   },
   {
@@ -1573,11 +1957,59 @@
       "5.0",
       "--collect",
       "[TMP_BASE]/amp_trigger_tmp_1/ui_touch_selection_unittests.json",
+      "--results-path",
+      "[TMP_BASE]/amp_results_tmp_2/ui_touch_selection_unittests/results.zip",
       "--verbose"
     ],
     "name": "[collect] ui_touch_selection_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[TMP_BASE]/amp_trigger_tmp_1/ui_touch_selection_unittests.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "[upload logcat] load ui_touch_selection_unittests data",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_run\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test_run_id\": \"12345abcde\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/zip/resources/unzip.py"
+    ],
+    "name": "[upload logcat] unzip results for ui_touch_selection_unittests",
+    "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/ui_touch_selection_unittests\", \"use_python_zip\": false, \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/ui_touch_selection_unittests/results.zip\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--force-version",
+      "3.25",
+      "--",
+      "cp",
+      "[TMP_BASE]/amp_results_tmp_2/ui_touch_selection_unittests/appurify_results/logcat.txt",
+      "gs://chrome-amp-results/logcats/logcat_ui_touch_selection_unittests_12345abcde.txt"
+    ],
+    "name": "gsutil [upload logcat] ui_touch_selection_unittests",
+    "~followup_annotations": [
+      "@@@STEP_LINK@logcat@https://storage.cloud.google.com/chrome-amp-results/logcats/logcat_ui_touch_selection_unittests_12345abcde.txt@@@"
     ]
   }
 ]

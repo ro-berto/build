@@ -10,6 +10,7 @@ class AmpApi(recipe_api.RecipeApi):
   def __init__(self, *args, **kwargs):
     super(AmpApi, self).__init__(*args, **kwargs)
     self._trigger_file_dir = None
+    self._base_results_dir = None
 
   @recipe_api.non_step
   def _get_trigger_dir(self):
@@ -20,6 +21,20 @@ class AmpApi(recipe_api.RecipeApi):
   @recipe_api.non_step
   def _get_trigger_file_for_suite(self, suite):
     return self._get_trigger_dir().join('%s.json' % suite)
+
+  @recipe_api.non_step
+  def _get_results_dir(self, suite):
+    if not self._base_results_dir:
+      self._base_results_dir = self.m.path.mkdtemp('amp_results')
+    return self._base_results_dir.join(suite)
+
+  @recipe_api.non_step
+  def _get_results_zip_path(self, suite):
+    return self._get_results_dir(suite).join('results.zip')
+
+  @recipe_api.non_step
+  def _get_results_logcat_path(self, suite):
+    return self._get_results_dir(suite).join('appurify_results', 'logcat.txt')
 
   @recipe_api.composite_step
   def trigger_test_suite(
@@ -62,7 +77,8 @@ class AmpApi(recipe_api.RecipeApi):
   def collect_test_suite(
       self, suite, test_type, test_type_args, amp_args, verbose=True):
     args = ([test_type] + test_type_args + amp_args
-        + ['--collect', self._get_trigger_file_for_suite(suite)])
+        + ['--collect', self._get_trigger_file_for_suite(suite)]
+        + ['--results-path', self._get_results_zip_path(suite)])
     trigger_data = self.m.json.read(
         '[collect] load %s data' % suite,
         self._get_trigger_file_for_suite(suite),
@@ -90,6 +106,35 @@ class AmpApi(recipe_api.RecipeApi):
     except KeyError:
       step_result.presentation.status = self.m.step.WARNING
       step_result.presentation.step_text = 'unable to find device info'
+
+  def upload_logcat_to_gs(self, bucket, suite):
+    """Upload the logcat file returned from the appurify results to
+    Google Storage.
+    """
+    step_result = self.m.json.read(
+        '[upload logcat] load %s data' % suite,
+        self._get_trigger_file_for_suite(suite),
+        step_test_data=lambda: self.m.json.test_api.output({
+          'test_run': {
+            'test_run_id': '12345abcde',
+          }
+        }))
+    trigger_data = step_result.json.output
+    try:
+      test_run_id = trigger_data['test_run']['test_run_id']
+      self.m.zip.unzip(
+          step_name='[upload logcat] unzip results for %s' % suite,
+          zip_file=self._get_results_zip_path(suite),
+          output=self._get_results_dir(suite))
+      self.m.gsutil.upload(
+          name='[upload logcat] %s' % suite,
+          source=self._get_results_logcat_path(suite),
+          bucket=bucket,
+          dest='logcats/logcat_%s_%s.txt' % (suite, test_run_id),
+          link_name='logcat')
+    except KeyError:
+      step_result.presentation.status = self.m.step.EXCEPTION
+      step_result.presentation.step_text = 'unable to find test run id'
 
   @recipe_api.non_step
   def gtest_arguments(

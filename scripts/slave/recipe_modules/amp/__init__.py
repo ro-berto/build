@@ -4,8 +4,10 @@
 
 DEPS = [
     'file',
+    'gsutil',
     'json',
     'path',
     'python',
     'step',
+    'zip',
 ]
