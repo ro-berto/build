@@ -31,7 +31,8 @@ def GenSteps(api):
   gclient_cfg.got_revision_mapping['skia'] = 'got_revision'
   api.gclient.checkout(gclient_config=gclient_cfg)
   api.gclient.runhooks(
-      env={'CPPFLAGS': '-DSK_ALLOW_CROSSPROCESS_PICTUREIMAGEFILTERS=1'})
+      env={'CPPFLAGS': ('-DSK_ALLOW_CROSSPROCESS_PICTUREIMAGEFILTERS=1 ' +
+                        '-DSK_PICTURE_FORCE_FONT_EMBEDDING') })
 
   # Build Chrome.
   api.step('Build Chrome',

@@ -47,7 +47,7 @@
       "runhooks"
     ],
     "env": {
-      "CPPFLAGS": "-DSK_ALLOW_CROSSPROCESS_PICTUREIMAGEFILTERS=1"
+      "CPPFLAGS": "-DSK_ALLOW_CROSSPROCESS_PICTUREIMAGEFILTERS=1 -DSK_PICTURE_FORCE_FONT_EMBEDDING"
     },
     "name": "gclient runhooks"
   },
