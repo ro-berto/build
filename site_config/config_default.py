@@ -12,7 +12,7 @@ import re
 import socket
 
 
-CREDENTIALS_PATH = '/creds'
+SERVICE_ACCOUNTS_PATH = '/creds/service_accounts'
 
 
 class classproperty(object):
@@ -147,7 +147,7 @@ class Master(object):
     def service_account_path(cls):
       if cls.service_account_file is None:
         return None
-      return os.path.join(CREDENTIALS_PATH, cls.service_account_file)
+      return os.path.join(SERVICE_ACCOUNTS_PATH, cls.service_account_file)
 
   ## Per-master configs.
 
