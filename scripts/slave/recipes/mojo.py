@@ -108,13 +108,11 @@ def _TestSteps(api):
                       step_test_data=lambda: api.json.test_api.output(test_out))
   test_list = result.json.output
 
-  for entry in test_list:
-    try:
+  with api.step.defer_results():
+    for entry in test_list:
       name = str(entry['name'])  # api.step() wants a non-Unicode string.
       command = entry['command']
       api.step(name, command, cwd=api.path['checkout'])
-    except api.step.StepFailure:  # pragma: no cover
-      pass
 
 
 def _UploadShellAndApps(api, buildername):
