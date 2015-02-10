@@ -21,8 +21,7 @@ DOXYGEN_BINARY = 'doxygen'
 WORKDIR = os.path.join(os.pardir, 'doxygen_workdir')
 DOXYGEN_CONFIG_DIR = os.path.join(WORKDIR, 'doxygen-config')
 DOXYGEN_WORKING_DIR = os.path.join(WORKDIR, 'doxygen')
-DOXYGEN_GS_PATH = '/'.join(['gs:/', global_constants.GS_GM_BUCKET,
-                            'doxygen', 'doxygen'])
+DOXYGEN_GS_PATH = '/'.join(['gs:/', global_constants.GS_GM_BUCKET, 'doxygen'])
 
 IFRAME_FOOTER_TEMPLATE = """
 <html><body><address style="text-align: right;"><small>
