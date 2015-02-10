@@ -439,7 +439,6 @@ def _GenStepsInternal(api):
     # See if the patch needs to compile on the current platform.
     # Don't run analyze for other projects, such as blink, as there aren't that
     # many try jobs for them.
-    requires_compile = True
     if (isinstance(test_spec, dict) and
         api.properties.get('patch_project') == 'chromium'):
       analyze_config_file = bot_config['testing'].get('analyze_config_file',
@@ -450,6 +449,9 @@ def _GenStepsInternal(api):
                   all_compile_targets(api, conditional_tests),
               compile_targets,
               analyze_config_file)
+
+      if not requires_compile:
+        return [], bot_update_step
 
       gtest_tests = filter_tests(gtest_tests, matching_exes)
 
@@ -464,13 +466,6 @@ def _GenStepsInternal(api):
 
     if api.platform.is_win:
       tests.append(api.chromium.steps.MiniInstallerTest())
-
-    if not requires_compile:
-      # Even though the patch doesn't require compile, we'd still like to
-      # run tests not depending on compiled targets (that's obviously not
-      # covered by the "analyze" step).
-      tests = [t for t in tests if not t.compile_targets(api)]
-      return tests, bot_update_step
 
     has_swarming_tests = any(t.uses_swarming for t in tests)
 

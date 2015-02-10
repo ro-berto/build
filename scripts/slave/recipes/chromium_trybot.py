@@ -544,26 +544,23 @@ def _GenStepsInternal(api):
           compile_targets,
           'trybot_analyze_config.json')
 
-  if requires_compile:
-    tests = tests_in_compile_targets(api, compile_targets, tests)
-    tests_including_triggered = tests_in_compile_targets(
-        api, compile_targets, tests_including_triggered)
+  if not requires_compile:
+    return
 
-    api.chromium_tests.compile_specific_targets(
-        main_waterfall_config['mastername'],
-        main_waterfall_config['buildername'],
-        bot_update_step,
-        master_dict,
-        test_spec,
-        compile_targets,
-        tests_including_triggered,
-        override_bot_type='builder_tester',
-        disable_isolate=bot_config.get('disable_isolate', False))
-  else:
-    # Even though the patch doesn't require compile, we'd still like to
-    # run tests not depending on compiled targets (that's obviously not
-    # covered by the "analyze" step).
-    tests = [t for t in tests if not t.compile_targets(api)]
+  tests = tests_in_compile_targets(api, compile_targets, tests)
+  tests_including_triggered = tests_in_compile_targets(
+      api, compile_targets, tests_including_triggered)
+
+  api.chromium_tests.compile_specific_targets(
+      main_waterfall_config['mastername'],
+      main_waterfall_config['buildername'],
+      bot_update_step,
+      master_dict,
+      test_spec,
+      compile_targets,
+      tests_including_triggered,
+      override_bot_type='builder_tester',
+      disable_isolate=bot_config.get('disable_isolate', False))
 
   def deapply_patch_fn(failing_tests):
     api.chromium_tests.deapply_patch(bot_update_step)
