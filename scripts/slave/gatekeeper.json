@@ -320,23 +320,6 @@
         ]
       }
     ],
-    "https://build.chromium.org/p/client.nacl.sdk": [
-      {
-        "forgive_all": true,
-        "categories": [
-          "nacl_all"
-        ],
-        "builders": {
-          "*": {}
-        },
-        "tree_notify": [
-            "tandrii+nacl-gatekeeper@chromium.org",
-            "bradnelson@chromium.org",
-            "sbc@chromium.org",
-            "binji@chromium.org"
-        ]
-      }
-    ],
     "https://build.chromium.org/p/client.v8": [
       {
         "categories": [
