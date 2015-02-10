@@ -42,6 +42,9 @@ def _BuildSteps(api, buildername, build_type):
   if 'ASan' in buildername:
     args += ['--asan']
 
+  if api.tryserver.is_tryserver:
+    args += ['--dcheck_always_on']
+
   goma_dir = ''
   if 'Win' not in buildername:
     # Disable Goma on Windows as it makes the build much slower (> 1 hour vs

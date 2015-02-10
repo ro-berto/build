@@ -57,7 +57,8 @@
       "-u",
       "[SLAVE_BUILD]/src/mojo/tools/mojob.py",
       "gn",
-      "--release"
+      "--release",
+      "--dcheck_always_on"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "env": {
@@ -71,7 +72,8 @@
       "-u",
       "[SLAVE_BUILD]/src/mojo/tools/mojob.py",
       "build",
-      "--release"
+      "--release",
+      "--dcheck_always_on"
     ],
     "env": {
       "GOMA_DIR": "[BUILD]/goma"
