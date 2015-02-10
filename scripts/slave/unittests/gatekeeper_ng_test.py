@@ -792,7 +792,7 @@ class GatekeeperTest(unittest.TestCase):
     json_handler = self.urls.pop(self.get_status_url)
     def handler(params):
       if params == None:
-        return StringIO.StringIO("<blabla>Login Required</blabla>")
+        return StringIO.StringIO("<blabla>login</blabla>")
       else:
         return json_handler(params)
     self.handle_url_custom(self.get_status_url, handler)

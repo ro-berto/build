@@ -93,9 +93,10 @@ def get_tree_status(status_url_root, username, password):
   try:
     return json.loads(data)
   except ValueError:
-    if 'Login Required' not in data:
+    # Failed due to authentication error?
+    if 'login' not in data:
       raise
-  # try using bot password to authenticate
+  # Try using bot password to authenticate.
   params = urllib.urlencode({
       'username': username,
       'password': password
