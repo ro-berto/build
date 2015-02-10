@@ -5,6 +5,7 @@
 """Create a CL to update the SKP version."""
 
 
+import argparse
 import os
 import subprocess
 import sys
@@ -24,11 +25,14 @@ Automatic commit by the RecreateSKPs bot.
 
 TBR=
 '''
-SKIA_COMMITTER_EMAIL = 'borenet@google.com'
-SKIA_COMMITTER_NAME = 'Eric Boren'
+SKIA_COMMITTER_EMAIL = 'skia.buildbots@gmail.com'
+SKIA_COMMITTER_NAME = 'skia.buildbots'
 
 
-def main(chrome_src_path, browser_executable):
+def main(chrome_src_path, browser_executable, dry_run=False):
+  if dry_run:
+    print 'Not committing results since --dry-run was provided'
+
   subprocess.check_call(['git', 'config', '--local', 'user.name',
                          SKIA_COMMITTER_NAME])
   subprocess.check_call(['git', 'config', '--local', 'user.email',
@@ -39,11 +43,16 @@ def main(chrome_src_path, browser_executable):
 
   with git_utils.GitBranch(branch_name='update_skp_version',
                            commit_msg=COMMIT_MSG,
-                           commit_queue=True):
+                           commit_queue=not dry_run):
     subprocess.check_call(['python', os.path.join('tools', 'skp',
                                                   'recreate_skps.py'),
                            chrome_src_path, browser_executable])
 
 
 if '__main__' == __name__:
-  main(*sys.argv[1:])
+  parser = argparse.ArgumentParser()
+  parser.add_argument("chrome_src_path")
+  parser.add_argument("browser_executable")
+  parser.add_argument("--dry-run", action="store_true")
+  args = parser.parse_args()
+  main(args.chrome_src_path, args.browser_executable, args.dry_run)

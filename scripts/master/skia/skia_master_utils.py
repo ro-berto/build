@@ -35,6 +35,7 @@ PERCOMMIT_SCHEDULER_NAME = 'skia_percommit'
 MASTER_ONLY_SCHEDULER_NAME = 'skia_master_only'
 PERIODIC_15MINS_SCHEDULER_NAME = 'skia_periodic_15mins'
 NIGHTLY_SCHEDULER_NAME = 'skia_nightly'
+WEEKLY_SCHEDULER_NAME = 'skia_weekly'
 MASTER_BRANCH = 'master'
 POLLING_BRANCH = re.compile('refs/heads/.+')
 TRY_SCHEDULER_NAME = 'try_job_rietveld_skia'
@@ -46,6 +47,7 @@ SCHEDULERS = [
   TRY_SCHEDULER_NAME,
   PERIODIC_15MINS_SCHEDULER_NAME,
   NIGHTLY_SCHEDULER_NAME,
+  WEEKLY_SCHEDULER_NAME,
 ]
 
 
@@ -210,6 +212,17 @@ def SetupBuildersAndSchedulers(c, builders, slaves, ActiveMaster):
       dayOfMonth='*',
       month='*',
       dayOfWeek='*')
+  c['schedulers'].append(s)
+
+  s = timed.Nightly(
+      name=WEEKLY_SCHEDULER_NAME,
+      branch=MASTER_BRANCH,
+      builderNames=builders_by_scheduler[WEEKLY_SCHEDULER_NAME],
+      minute=0,
+      hour=0,
+      dayOfMonth='*',
+      month='*',
+      dayOfWeek=6) # Sunday (Monday = 0).
   c['schedulers'].append(s)
 
   for parent, builders_to_trigger in triggered_builders.iteritems():

@@ -12,6 +12,7 @@ from common.skia import global_constants
 DEPS = [
   'gclient',
   'path',
+  'properties',
   'python',
   'raw_io',
   'step',
@@ -38,16 +39,23 @@ def GenSteps(api):
            cwd=api.path['checkout'])
 
   # Capture the SKPs.
+  cmd = ['python', api.path['build'].join('scripts', 'slave', 'skia',
+                                          'recreate_skps.py'),
+         api.path['checkout'],
+         api.path['checkout'].join('out', 'Release', 'chrome')]
+  if 'Canary' in api.properties['buildername']:
+    cmd.append('--dry-run')
   api.step('Recreate SKPs',
-           ['python', api.path['build'].join('scripts', 'slave', 'skia',
-                                             'recreate_skps.py'),
-            api.path['checkout'],
-            api.path['checkout'].join('out', 'Release', 'chrome'),
-           ],
+           cmd=cmd,
            cwd=api.path['slave_build'].join('skia'),
   )
 
 def GenTests(api):
   yield (
-    api.test('RecreateSKPs')
+    api.test('RecreateSKPs') +
+    api.properties(buildername='Housekeeper-Weekly-RecreateSKPs')
+  )
+  yield (
+    api.test('RecreateSKPs_dryrun') +
+    api.properties(buildername='Housekeeper-Nightly-RecreateSKPs_Canary')
   )
