@@ -373,6 +373,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           command(lambda name: '%s (without patch)' % name)
         except self.m.step.StepFailure:
           self.m.tryserver.set_transient_failure_tryjob_result()
+          raise
+        raise
     else:
       command(lambda name: name)
 

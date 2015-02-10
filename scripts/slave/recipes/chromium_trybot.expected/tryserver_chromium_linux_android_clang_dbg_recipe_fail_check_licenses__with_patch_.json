@@ -309,24 +309,14 @@
       "scan"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "check licenses (without patch)"
+    "name": "check licenses (without patch)",
+    "~followup_annotations": [
+      "@@@SET_BUILD_PROPERTY@failure_hash@\"964d2868db9b4d462c57678eb7355531d40c3e02\"@@@"
+    ]
   },
   {
-    "cmd": [
-      "[SLAVE_BUILD]/src/build/android/findbugs_diff.py"
-    ],
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "findbugs (with patch)"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/src/tools/android/findbugs_plugin/test/run_findbugs_plugin_tests.py"
-    ],
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "findbugs_tests (with patch)"
+    "name": "$final_result",
+    "reason": "Step('check licenses (with patch)') failed with return_code 1",
+    "status_code": 1
   }
 ]

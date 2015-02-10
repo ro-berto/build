@@ -326,6 +326,14 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "findbugs_tests (without patch)"
+    "name": "findbugs_tests (without patch)",
+    "~followup_annotations": [
+      "@@@SET_BUILD_PROPERTY@failure_hash@\"afa77728b42c262c786e289a104d2ca536172611\"@@@"
+    ]
+  },
+  {
+    "name": "$final_result",
+    "reason": "Step('findbugs (with patch)') failed with return_code 1",
+    "status_code": 1
   }
 ]

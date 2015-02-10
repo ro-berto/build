@@ -321,7 +321,13 @@
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
       "@@@STEP_FAILURE@@@",
-      "@@@SET_BUILD_PROPERTY@failure_type@\"TRANSIENT_FAILURE\"@@@"
+      "@@@SET_BUILD_PROPERTY@failure_type@\"TRANSIENT_FAILURE\"@@@",
+      "@@@SET_BUILD_PROPERTY@failure_hash@\"28cdc4dd741679ede9f35f7642e97debead980c2\"@@@"
     ]
+  },
+  {
+    "name": "$final_result",
+    "reason": "Step('findbugs (without patch)') failed with return_code 1",
+    "status_code": 1
   }
 ]
