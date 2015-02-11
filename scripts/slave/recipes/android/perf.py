@@ -172,3 +172,18 @@ def GenTests(api):
               slavename='slavename',
               target='Release')
       + api.step_data('provision_devices', retcode=1))
+  yield (api.test('get_perf_test_list_old_data') +
+      api.properties.generic(
+          repo_name='src',
+          repo_url=REPO_URL,
+          mastername='chromium.perf',
+          buildername='Android Nexus5 Perf',
+          parent_buildername='parent_buildername',
+          parent_buildnumber='1729',
+          parent_revision='deadbeef',
+          revision='deadbeef',
+          slavename='slavename',
+          target='Release') +
+      api.override_step_data(
+        'get perf test list',
+        api.json.output(['perf_test.foo', 'page_cycler.foo'])))

@@ -370,8 +370,14 @@
     "name": "get perf test list",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"perf_test.foo\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"page_cycler.foo\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"device_affinity\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test\": \"perf_test.foo\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"device_affinity\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test\": \"page_cycler.foo\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -406,7 +412,10 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "perf_test.foo"
+    "name": "perf_test.foo",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>Device Affinity: 0<br/>@@@"
+    ]
   },
   {
     "allow_subannotations": true,
@@ -438,7 +447,10 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "page_cycler.foo"
+    "name": "page_cycler.foo",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>Device Affinity: 0<br/>@@@"
+    ]
   },
   {
     "cmd": [

@@ -440,14 +440,20 @@ class AndroidApi(recipe_api.RecipeApi):
         [self.c.test_runner,
          'perf', '--steps', config, '--output-json-list', self.m.json.output()],
         step_test_data=lambda: self.m.json.test_api.output([
-            'perf_test.foo', 'page_cycler.foo']),
+            {'test': 'perf_test.foo', 'device_affinity': 0},
+            {'test': 'page_cycler.foo', 'device_affinity': 0}]),
         env=self.m.chromium.get_env()
     )
     perf_tests = result.json.output
 
+    if perf_tests and isinstance(perf_tests[0], dict):
+      perf_tests = sorted(perf_tests, key=lambda x: x['device_affinity'])
+    else:
+      perf_tests = [{'test': v} for v in perf_tests]
+
     failures = []
-    for test_name in perf_tests:
-      test_name = str(test_name)  # un-unicode
+    for test_data in perf_tests:
+      test_name = str(test_data['test'])  # un-unicode
       test_type = test_type_transform(test_name)
       annotate = self.m.chromium.get_annotate_by_test_name(test_name)
 
@@ -463,6 +469,12 @@ class AndroidApi(recipe_api.RecipeApi):
           perf_id=perf_id,
           env=self.m.chromium.get_env(),
           chartjson_file=chartjson_file)
+
+        if 'device_affinity' in test_data:
+          step_result = self.m.step.active_result
+          step_result.presentation.step_text += (
+              self.m.test_utils.format_step_text(
+                  [['Device Affinity: %s' % test_data['device_affinity']]]))
       except self.m.step.StepFailure as f:
         failures.append(f)
 
