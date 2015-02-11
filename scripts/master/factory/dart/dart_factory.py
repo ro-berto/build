@@ -297,6 +297,7 @@ class PackageFactory(gclient_factory.GClientFactory):
     self.target_platform = target_platform
     self._build_dir = build_dir
     deps_url = deps_file or 'https://github.com/dart-lang/package-bots/trunk'
+    extra_deps = extra_deps or []
     custom_deps_list = extra_deps
     if config.Master.trunk_internal_url and java:
       custom_deps_list.append(CUSTOM_DEPS_JAVA)
