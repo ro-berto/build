@@ -266,7 +266,7 @@
       "[BUILD]/scripts/slave/recipe_modules/zip/resources/unzip.py"
     ],
     "name": "[upload logcat] unzip results for example_uirobot_suite",
-    "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/example_uirobot_suite\", \"use_python_zip\": false, \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/example_uirobot_suite/results.zip\"}"
+    "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/example_uirobot_suite/unzipped_results\", \"use_python_zip\": false, \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/example_uirobot_suite/results.zip\"}"
   },
   {
     "cmd": [
@@ -279,7 +279,7 @@
       "3.25",
       "--",
       "cp",
-      "[TMP_BASE]/amp_results_tmp_2/example_uirobot_suite/appurify_results/logcat.txt",
+      "[TMP_BASE]/amp_results_tmp_2/example_uirobot_suite/unzipped_results/appurify_results/logcat.txt",
       "gs://chrome-amp-results/logcats/logcat_example_uirobot_suite_12345abcde.txt"
     ],
     "name": "gsutil [upload logcat] example_uirobot_suite",

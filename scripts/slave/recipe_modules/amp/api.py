@@ -33,8 +33,13 @@ class AmpApi(recipe_api.RecipeApi):
     return self._get_results_dir(suite).join('results.zip')
 
   @recipe_api.non_step
+  def _get_results_unzipped_path(self, suite):
+    return self._get_results_dir(suite).join('unzipped_results')
+
+  @recipe_api.non_step
   def _get_results_logcat_path(self, suite):
-    return self._get_results_dir(suite).join('appurify_results', 'logcat.txt')
+    return self._get_results_unzipped_path(suite).join(
+        'appurify_results', 'logcat.txt')
 
   @recipe_api.composite_step
   def trigger_test_suite(
@@ -125,7 +130,7 @@ class AmpApi(recipe_api.RecipeApi):
       self.m.zip.unzip(
           step_name='[upload logcat] unzip results for %s' % suite,
           zip_file=self._get_results_zip_path(suite),
-          output=self._get_results_dir(suite))
+          output=self._get_results_unzipped_path(suite))
       self.m.gsutil.upload(
           name='[upload logcat] %s' % suite,
           source=self._get_results_logcat_path(suite),
