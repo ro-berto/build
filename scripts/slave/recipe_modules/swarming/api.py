@@ -502,7 +502,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     step_test_data = kwargs.pop('step_test_data', None)
     if not step_test_data:
       step_test_data = self.m.test_utils.test_api.canned_telemetry_gpu_output(
-          passing=True, swarming=True)
+          passing=True, is_win=self.m.platform.is_win, swarming=True)
 
     args=self._get_collect_cmd_args(task)
     args.extend(['--task-output-dir', self.m.raw_io.output_dir()])

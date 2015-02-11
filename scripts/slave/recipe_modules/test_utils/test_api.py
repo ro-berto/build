@@ -103,7 +103,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     ret.retcode = retcode
     return ret
 
-  def canned_telemetry_gpu_output(self, passing, swarming=False):
+  def canned_telemetry_gpu_output(self, passing, is_win, swarming=False):
     """Produces a 'json test results' compatible object for telemetry tests."""
     jsonish_results = {
       'per_page_values': [{'type': 'success' if passing else 'failure',
@@ -114,7 +114,8 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
                 '1': {'name': 'Test.Test2'}},
     }
 
-    results_path = '0/results.json' if swarming else 'results.json'
+    swarming_path = '0\\results.json' if is_win else '0/results.json'
+    results_path = swarming_path if swarming else 'results.json'
     files_dict = {results_path: json.dumps(jsonish_results)}
     return self.m.raw_io.output_dir(files_dict)
 

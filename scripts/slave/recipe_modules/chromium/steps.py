@@ -834,7 +834,8 @@ class LocalTelemetryGPUTest(Test):  # pylint: disable=W0232
     kwargs = self._runtest_kwargs.copy()
     kwargs['args'].extend(['--output-format', 'json',
                            '--output-dir', api.raw_io.output_dir()])
-    step_test_data=lambda: api.test_utils.test_api.canned_telemetry_gpu_output(False)
+    step_test_data=lambda: api.test_utils.test_api.canned_telemetry_gpu_output(
+        passing=False, is_win=api.platform.is_win)
     try:
       api.isolate.run_telemetry_test(
           'telemetry_gpu_test',

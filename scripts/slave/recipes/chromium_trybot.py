@@ -995,12 +995,12 @@ def GenTests(api):
     api.platform.name('mac') +
     api.override_step_data(
         'pixel_test on Intel GPU on Mac (with patch)',
-        api.test_utils.canned_telemetry_gpu_output(passing=False,
-                                                   swarming=True)) +
+        api.test_utils.canned_telemetry_gpu_output(
+            passing=False, is_win=False, swarming=True)) +
     api.override_step_data(
         'pixel_test on Intel GPU on Mac (without patch)',
-        api.test_utils.canned_telemetry_gpu_output(passing=False,
-                                                   swarming=True)) +
+        api.test_utils.canned_telemetry_gpu_output(
+            passing=False, is_win=False, swarming=True)) +
     api.override_step_data('analyze',
                            api.json.output({'status': 'Found dependency',
                                             'targets': gpu_targets,
