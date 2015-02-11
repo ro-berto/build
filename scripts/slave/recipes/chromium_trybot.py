@@ -544,6 +544,12 @@ def _GenStepsInternal(api):
           compile_targets,
           'trybot_analyze_config.json')
 
+  # TODO(pgervais): this is a quick hack to unstuck the ios builder that should
+  # not rely on analyze.py crbug.com/457659.
+  if buildername == 'ios_rel_device_ng':
+    requires_compile = True
+    compile_targets = ['All']
+
   if not requires_compile:
     return
 
