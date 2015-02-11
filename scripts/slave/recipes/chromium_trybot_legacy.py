@@ -564,7 +564,7 @@ def _sanitize_nonalpha(text):
 
 
 def GenTests(api):
-  canned_test = api.json.canned_gtest_output
+  canned_test = api.test_utils.canned_gtest_output
 
   def props(config='Release', mastername='tryserver.chromium.linux',
             buildername='linux_chromium_asan_rel', extra_swarmed_tests=None,

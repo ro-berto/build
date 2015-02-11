@@ -87,7 +87,8 @@ def GenSteps(api):
         test,
         isolated_hash,
         shards=2,
-        test_launcher_summary_output=api.json.gtest_results(add_json_log=False))
+        test_launcher_summary_output=api.test_utils.gtest_results(
+            add_json_log=False))
     for test, isolated_hash in sorted(api.isolate.isolated_tests.iteritems())
   ]
 
@@ -119,7 +120,7 @@ def GenTests(api):
     api.properties(configuration='Debug') +
     api.override_step_data(
         'dummy_target_1 on Ubuntu',
-        api.json.canned_gtest_output(
+        api.test_utils.canned_gtest_output(
             passing=False,
             minimal=True,
             extra_json={'missing_shards': [1]}),

@@ -133,7 +133,7 @@ def _sanitize_nonalpha(text):
 
 
 def GenTests(api):
-  canned_test = api.json.canned_test_output
+  canned_test = api.test_utils.canned_test_output
   with_patch = 'webkit_tests (with patch)'
   without_patch = 'webkit_tests (without patch)'
 

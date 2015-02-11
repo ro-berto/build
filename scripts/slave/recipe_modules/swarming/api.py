@@ -466,7 +466,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     if merged_test_output:
       args.extend(['--merged-test-output', merged_test_output])
       if not step_test_data:
-        step_test_data = lambda: self.m.json.test_api.canned_gtest_output(True)
+        step_test_data = lambda: self.m.test_utils.test_api.canned_gtest_output(True)
 
     # Arguments for actual 'collect' command.
     args.append('--')
@@ -483,11 +483,11 @@ class SwarmingApi(recipe_api.RecipeApi):
           step_test_data=step_test_data,
           **kwargs)
     finally:
-      # HACK: it is assumed that caller used 'api.json.gtest_results'
+      # HACK: it is assumed that caller used 'api.test_utils.gtest_results'
       # placeholder for 'test_launcher_summary_output' parameter when calling
       # gtest_task(...). It's not enforced in any way.
       step_result = self.m.step.active_result
-      gtest_results = getattr(step_result.json, 'gtest_results', None)
+      gtest_results = getattr(step_result.test_utils, 'gtest_results', None)
       if gtest_results and gtest_results.raw:
         p = step_result.presentation
         missing_shards = gtest_results.raw.get('missing_shards') or []
@@ -501,7 +501,7 @@ class SwarmingApi(recipe_api.RecipeApi):
   def _telemetry_gpu_collect_step(self, task, **kwargs):
     step_test_data = kwargs.pop('step_test_data', None)
     if not step_test_data:
-      step_test_data = self.m.json.test_api.canned_telemetry_gpu_output(
+      step_test_data = self.m.test_utils.test_api.canned_telemetry_gpu_output(
           passing=True, swarming=True)
 
     args=self._get_collect_cmd_args(task)

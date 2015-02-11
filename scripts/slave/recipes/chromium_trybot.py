@@ -604,7 +604,7 @@ def _sanitize_nonalpha(text):
 
 
 def GenTests(api):
-  canned_test = api.json.canned_gtest_output
+  canned_test = api.test_utils.canned_gtest_output
 
   def props(config='Release', mastername='tryserver.chromium.linux',
             buildername='linux_chromium_rel_ng', extra_swarmed_tests=None,
@@ -667,7 +667,7 @@ def GenTests(api):
     api.override_step_data('base_unittests (with patch)',
                            canned_test(passing=False)) +
     api.override_step_data('base_unittests (without patch)',
-                           api.json.raw_gtest_output(None, retcode=1))
+                           api.test_utils.raw_gtest_output(None, retcode=1))
   )
 
   yield (
@@ -995,10 +995,12 @@ def GenTests(api):
     api.platform.name('mac') +
     api.override_step_data(
         'pixel_test on Intel GPU on Mac (with patch)',
-        api.json.canned_telemetry_gpu_output(passing=False, swarming=True)) +
+        api.test_utils.canned_telemetry_gpu_output(passing=False,
+                                                   swarming=True)) +
     api.override_step_data(
         'pixel_test on Intel GPU on Mac (without patch)',
-        api.json.canned_telemetry_gpu_output(passing=False, swarming=True)) +
+        api.test_utils.canned_telemetry_gpu_output(passing=False,
+                                                   swarming=True)) +
     api.override_step_data('analyze',
                            api.json.output({'status': 'Found dependency',
                                             'targets': gpu_targets,

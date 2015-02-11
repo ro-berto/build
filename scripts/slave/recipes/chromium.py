@@ -336,7 +336,7 @@ def GenTests(api):
                            buildername='iOS Simulator (dbg)') +
     api.platform('mac', 32) +
     api.override_step_data(
-        'gfx_unittests', api.json.canned_gtest_output(True), retcode=1)
+        'gfx_unittests', api.test_utils.canned_gtest_output(True), retcode=1)
   )
 
   yield (
@@ -345,8 +345,8 @@ def GenTests(api):
                            buildername='Linux Builder',
                            buildnumber=0) +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'archive dependencies', api.json.canned_gtest_output(True), retcode=1)
+    api.override_step_data('archive dependencies',
+                           api.test_utils.canned_gtest_output(True), retcode=1)
   )
 
   yield (

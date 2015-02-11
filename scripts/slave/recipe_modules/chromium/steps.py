@@ -233,8 +233,8 @@ class LocalGTestTest(Test):
       args.append(api.chromium.test_launcher_filter(
           self.failures(api, 'with patch')))
 
-    gtest_results_file = api.json.gtest_results(add_json_log=False)
-    step_test_data = lambda: api.json.test_api.canned_gtest_output(True)
+    gtest_results_file = api.test_utils.gtest_results(add_json_log=False)
+    step_test_data = lambda: api.test_utils.test_api.canned_gtest_output(True)
 
     kwargs = {}
     kwargs['name'] = self._step_name(suffix)
@@ -270,7 +270,7 @@ class LocalGTestTest(Test):
       step_result = api.step.active_result
       self._test_runs[suffix] = step_result
 
-      r = step_result.json.gtest_results
+      r = step_result.test_utils.gtest_results
       p = step_result.presentation
 
       if r.valid:
@@ -283,14 +283,14 @@ class LocalGTestTest(Test):
   def has_valid_results(self, api, suffix):
     if suffix not in self._test_runs:
       return False
-    gtest_results = self._test_runs[suffix].json.gtest_results
+    gtest_results = self._test_runs[suffix].test_utils.gtest_results
     if not gtest_results.valid:  # pragma: no cover
       return False
     global_tags = gtest_results.raw.get('global_tags', [])
     return 'UNRELIABLE_RESULTS' not in global_tags
 
   def failures(self, api, suffix):
-    return self._test_runs[suffix].json.gtest_results.failures
+    return self._test_runs[suffix].test_utils.gtest_results.failures
 
 
 def generate_gtest(api, mastername, buildername, test_spec,
@@ -566,11 +566,11 @@ class SwarmingGTestTest(SwarmingTest):
         title=self._step_name(suffix),
         isolated_hash=isolated_hash,
         shards=self._shards,
-        test_launcher_summary_output=api.json.gtest_results(add_json_log=False),
+        test_launcher_summary_output=api.test_utils.gtest_results(add_json_log=False),
         extra_args=args)
 
   def validate_task_results(self, api, step_result):
-    gtest_results = step_result.json.gtest_results
+    gtest_results = step_result.test_utils.gtest_results
     if not gtest_results:
       return False, None
 
@@ -648,7 +648,7 @@ class PythonBasedTest(Test):
 
   def run(self, api, suffix):
     cmd_args = ['--write-full-results-to',
-                api.json.test_results(add_json_log=False)]
+                api.test_utils.test_results(add_json_log=False)]
     if suffix == 'without patch':
       cmd_args.extend(self.failures(api, 'with patch'))
 
@@ -657,10 +657,10 @@ class PythonBasedTest(Test):
           api,
           suffix,
           cmd_args,
-          step_test_data=lambda: api.json.test_api.canned_test_output(True))
+          step_test_data=lambda: api.test_utils.test_api.canned_test_output(True))
     finally:
       step_result = api.step.active_result
-      r = step_result.json.test_results
+      r = step_result.test_utils.test_results
       p = step_result.presentation
       p.step_text += api.test_utils.format_step_text([
         ['unexpected_failures:', r.unexpected_failures.keys()],
@@ -673,12 +673,12 @@ class PythonBasedTest(Test):
     # TODO(dpranke): we should just return zero/nonzero for success/fail.
     # crbug.com/357866
     step = self._test_runs[suffix]
-    return (step.json.test_results.valid and
-            step.retcode <= step.json.test_results.MAX_FAILURES_EXIT_STATUS and
+    return (step.test_utils.test_results.valid and
+            step.retcode <= step.test_utils.test_results.MAX_FAILURES_EXIT_STATUS and
             (step.retcode == 0) or self.failures(api, suffix))
 
   def failures(self, api, suffix):
-    return self._test_runs[suffix].json.test_results.unexpected_failures
+    return self._test_runs[suffix].test_utils.test_results.unexpected_failures
 
 
 class PrintPreviewTests(PythonBasedTest):  # pylint: disable=W032
@@ -834,7 +834,7 @@ class LocalTelemetryGPUTest(Test):  # pylint: disable=W0232
     kwargs = self._runtest_kwargs.copy()
     kwargs['args'].extend(['--output-format', 'json',
                            '--output-dir', api.raw_io.output_dir()])
-    step_test_data=lambda: api.json.test_api.canned_telemetry_gpu_output(False)
+    step_test_data=lambda: api.test_utils.test_api.canned_telemetry_gpu_output(False)
     try:
       api.isolate.run_telemetry_test(
           'telemetry_gpu_test',
@@ -1023,7 +1023,7 @@ class BlinkTest(Test):
     args = ['--target', api.chromium.c.BUILD_CONFIG,
             '-o', results_dir,
             '--build-dir', api.chromium.c.build_dir,
-            '--json-test-results', api.json.test_results(add_json_log=False)]
+            '--json-test-results', api.test_utils.test_results(add_json_log=False)]
     if self._extra_args:
       args.extend(self._extra_args)
     if suffix == 'without patch':
@@ -1042,7 +1042,7 @@ class BlinkTest(Test):
           api.path['build'].join('scripts', 'slave', 'chromium',
                                  'layout_test_wrapper.py'),
           args, name=self._step_name(suffix),
-          step_test_data=lambda: api.json.test_api.canned_test_output(
+          step_test_data=lambda: api.test_utils.test_api.canned_test_output(
               passing=True, minimal=True))
     except api.step.StepFailure as f:
       step_result = f.result
@@ -1050,7 +1050,7 @@ class BlinkTest(Test):
     self._test_runs[suffix] = step_result
 
     if step_result:
-      r = step_result.json.test_results
+      r = step_result.test_utils.test_results
       p = step_result.presentation
 
       p.step_text += api.test_utils.format_step_text([
@@ -1103,11 +1103,11 @@ class BlinkTest(Test):
     # would bail out early with --exit-after-n-failures) or lower
     # if we bailed out after 100 crashes w/ -exit-after-n-crashes, in
     # which case the retcode is actually 130
-    return (step.json.test_results.valid and
-            step.retcode <= step.json.test_results.MAX_FAILURES_EXIT_STATUS)
+    return (step.test_utils.test_results.valid and
+            step.retcode <= step.test_utils.test_results.MAX_FAILURES_EXIT_STATUS)
 
   def failures(self, api, suffix):
-    return self._test_runs[suffix].json.test_results.unexpected_failures
+    return self._test_runs[suffix].test_utils.test_results.unexpected_failures
 
 
 class MiniInstallerTest(PythonBasedTest):  # pylint: disable=W0232

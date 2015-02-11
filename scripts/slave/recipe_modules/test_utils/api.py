@@ -3,6 +3,24 @@
 # found in the LICENSE file.
 
 from slave import recipe_api
+from slave import recipe_util
+
+from .util import GTestResults, TestResults
+
+from RECIPE_MODULES.json.api import JsonOutputPlaceholder
+
+class TestResultsOutputPlaceholder(JsonOutputPlaceholder):
+  def result(self, presentation, test):
+    ret = super(TestResultsOutputPlaceholder, self).result(presentation, test)
+    return TestResults(ret)
+
+
+# TODO(martiniss) replace this with step.AggregateResults once
+# aggregate steps lands
+class GTestResultsOutputPlaceholder(JsonOutputPlaceholder):
+  def result(self, presentation, test):
+    ret = super(GTestResultsOutputPlaceholder, self).result(presentation, test)
+    return GTestResults(ret)
 
 class TestUtilsApi(recipe_api.RecipeApi):
   @staticmethod
@@ -105,7 +123,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
       self.m.python.failing_step(test.name, 'TEST RESULTS WERE INVALID')
 
     ignored_failures = set(test.failures(caller_api, 'without patch'))
-    new_failures = set(test.failures(caller_api, 'with patch')) - ignored_failures
+    new_failures = (
+      set(test.failures(caller_api, 'with patch')) - ignored_failures)
 
     self.m.tryserver.add_failure_reason({
       'test_name': test.name,
@@ -153,3 +172,26 @@ class TestUtilsApi(recipe_api.RecipeApi):
         p.status = self.m.step.FAILURE
       elif ignored_failures:
         p.status = self.m.step.WARNING
+
+  @recipe_util.returns_placeholder
+  def test_results(self, add_json_log=True):
+    """A placeholder which will expand to '/tmp/file'.
+
+    The recipe must provide the expected --json-test-results flag.
+
+    The test_results will be an instance of the TestResults class.
+    """
+    return TestResultsOutputPlaceholder(self, add_json_log)
+
+  @recipe_util.returns_placeholder
+  def gtest_results(self, add_json_log=True):
+    """A placeholder which will expand to
+    '--test-launcher-summary-output=/tmp/file'.
+
+    Provides the --test-launcher-summary-output flag since --flag=value
+    (i.e. a single token in the command line) is the required format.
+
+    The test_results will be an instance of the GTestResults class.
+    """
+    return GTestResultsOutputPlaceholder(self, add_json_log)
+
