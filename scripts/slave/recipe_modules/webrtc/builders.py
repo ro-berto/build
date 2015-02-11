@@ -95,7 +95,7 @@ RECIPE_CONFIGS = freeze({
     'chromium_apply_config': ['gn', 'gn_minimal_symbols'],
     'gclient_config': 'chromium_webrtc_tot',
     'gclient_apply_config': ['android'],
-    'compile_targets': ['all'],
+    'compile_targets': ['chrome_shell_apk'],
   },
 })
 
