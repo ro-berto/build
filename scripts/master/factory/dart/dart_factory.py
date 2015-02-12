@@ -554,6 +554,12 @@ class DartUtils(object):
                                workdir=workdir,
                                revlinktmpl=revlink)
 
+  @staticmethod
+  def get_github_gclient_repo(project, name, branch=None):
+    repo = DartUtils.get_github_repo(project, name)
+    if branch:
+      repo = '%s@refs/remotes/origin/%s' % (repo, branch)
+    return repo
 
   @staticmethod
   def get_github_repo(project, name):
