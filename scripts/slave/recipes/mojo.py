@@ -98,6 +98,8 @@ def _GetTestConfig(api):
   test_config['test_results_server'] = api.properties.get(
       'test_results_server', 'test-results.appspot.com')
 
+  test_config['dcheck_always_on'] = api.tryserver.is_tryserver
+
   return test_config
 
 
