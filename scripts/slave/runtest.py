@@ -1663,7 +1663,10 @@ def _ConfigureSanitizerTools(options, args, extra_env):
     disable_sandbox_flag = '--additional-drt-flag=%s' % disable_sandbox_flag
 
   # Symbolization of sanitizer reports.
-  if options.enable_tsan or options.enable_lsan:
+  if sys.platform in ['win32', 'cygwin']:
+    # On Windows, the in-process symbolizer works even when sandboxed.
+    symbolization_options = []
+  elif options.enable_tsan or options.enable_lsan:
     # TSan and LSan are not sandbox-compatible, so we can use online
     # symbolization. In fact, they need symbolization to be able to apply
     # suppressions.
