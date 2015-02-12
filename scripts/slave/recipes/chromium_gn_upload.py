@@ -88,12 +88,7 @@ def GenSteps(api):
 
   api.step('gn version', [path_to_binary, '--version'])
 
-  # TODO: crbug.com/443813 - if gn_unittests is run from any dir other
-  # than the checkout root, it'll fail. Unfortunately, if runtest
-  # is run from any place other than the checkout root (the directory
-  # above api.path['checkout']), it computes the path to the binary
-  # incorrectly and fails to find it :(.
-  # api.chromium.runtest('gn_unittests', cwd=api.path['checkout'])
+  api.chromium.runtest('gn_unittests', cwd=api.path['checkout'])
 
   api.python('upload',
              api.path['depot_tools'].join('upload_to_google_storage.py'),
