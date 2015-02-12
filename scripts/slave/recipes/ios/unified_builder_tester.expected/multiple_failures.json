@@ -145,7 +145,7 @@
       "-configuration",
       "Debug",
       "-project",
-      "[SLAVE_BUILD]/src/ios/build/all.xcodeproj",
+      "[SLAVE_BUILD]/src/build/all.xcodeproj",
       "-sdk",
       "iphonesimulator7.1"
     ],

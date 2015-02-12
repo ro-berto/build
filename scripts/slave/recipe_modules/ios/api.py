@@ -149,7 +149,6 @@ class iOSApi(recipe_api.RecipeApi):
         'xcodebuild',
         '-configuration', self.configuration,
         '-project', self.m.path['checkout'].join(
-          'ios',
           'build',
           'all.xcodeproj',
         ),
