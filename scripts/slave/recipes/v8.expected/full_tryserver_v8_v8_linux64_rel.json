@@ -84,6 +84,15 @@
   },
   {
     "cmd": [
+      "bash",
+      "[SLAVE_BUILD]/v8/tools/check-static-initializers.sh",
+      "out/Release/d8"
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "name": "Static-Initializers"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "[BUILD]/scripts/slave/recipe_modules/v8/resources/v8testing.py",

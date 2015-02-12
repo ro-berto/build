@@ -1104,7 +1104,13 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['unittests', 'v8testing', 'optimize_for_size', 'webkit'],
+        'tests': [
+          'v8initializers',
+          'unittests',
+          'v8testing',
+          'optimize_for_size',
+          'webkit',
+        ],
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_nacl_rel': {
