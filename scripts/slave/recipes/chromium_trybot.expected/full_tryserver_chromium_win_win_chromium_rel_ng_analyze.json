@@ -95,7 +95,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1"
+      "GYP_DEFINES": "archive_gpu_tests=1 chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1"
     },
     "name": "gclient runhooks (with patch)"
   },
@@ -174,11 +174,11 @@
       "-u",
       "[SLAVE_BUILD]\\src\\build\\gyp_chromium",
       "--analyzer",
-      "{\"files\": [\"foo.cc\"], \"targets\": [\"mini_installer\"]}",
+      "{\"files\": [\"foo.cc\"], \"targets\": [\"angle_unittests_run\", \"chrome\", \"content_gl_tests_run\", \"gl_tests_run\", \"mini_installer\", \"tab_capture_end2end_tests_run\", \"telemetry_gpu_test_run\"]}",
       "/path/to/tmp/json"
     ],
     "env": {
-      "GYP_DEFINES": "chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1"
+      "GYP_DEFINES": "archive_gpu_tests=1 chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1"
     },
     "name": "analyze",
     "~followup_annotations": [

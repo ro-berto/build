@@ -427,7 +427,6 @@ BUILDERS = freeze({
 
 # TODO(sergiyb): This config should be read from an external JSON file
 # in a custom step, which can then be mocked in the GenTests.
-# TODO(sergiyb): Add Windows dimensions.
 CHROMIUM_GPU_DIMENSION_SETS = freeze({
   'tryserver.chromium.linux': {
     'linux_chromium_rel_ng': [
@@ -448,6 +447,14 @@ CHROMIUM_GPU_DIMENSION_SETS = freeze({
         'hidpi': '1',
         'os': 'Mac-10.9',
       },
+    ],
+  },
+  'tryserver.chromium.win': {
+    'win_chromium_rel_ng': [
+      {
+        'gpu': '10de:104a',  # NVIDIA GeForce GT 610
+        'os': 'Windows',
+      }
     ],
   },
 })

@@ -248,7 +248,6 @@ BUILDERS = freeze({
 
 # TODO(sergiyb): This config should be read from an external JSON file
 # in a custom step, which can then be mocked in the GenTests.
-# TODO(sergiyb): Add Windows dimensions.
 BLINK_GPU_DIMENSION_SETS = {
   'tryserver.blink': {
     'linux_blink_rel': [
@@ -267,6 +266,12 @@ BLINK_GPU_DIMENSION_SETS = {
         'hidpi': '1',
         'os': 'Mac-10.9',
       },
+    ],
+    'win_blink_rel': [
+      {
+        'gpu': '10de:104a',  # NVIDIA GeForce GT 610
+        'os': 'Windows',
+      }
     ],
   },
 }
