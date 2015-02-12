@@ -75,18 +75,21 @@ def gyp_defs_from_builder_dict(builder_dict):
     arch = None
   else:
     arch = builder_dict['arch']
-  skia_arch_width = {
-    'x86': '32',
-    'x86_64': '64',
-    'Arm7': '32',
-    'Arm64': '64',
-    'Mips': '32',
-    'Mips64': '64',
-    'MipsDSP2': '32',
-    'NaCl': None,
-  }.get(arch)
-  if skia_arch_width:
+
+  #TODO(scroggo + mtklein): when safe, only set skia_arch_type
+  arch_widths_and_types = {
+    'x86':      ('32', 'x86'),
+    'x86_64':   ('64', 'x86_64'),
+    'Arm7':     ('32', 'arm'),
+    'Arm64':    ('64', 'arm64'),
+    'Mips':     ('32', 'mips'),
+    'Mips64':   ('64', 'mips'),
+    'MipsDSP2': ('32', 'mips'),
+  }
+  if arch in arch_widths_and_types:
+    skia_arch_width, skia_arch_type = arch_widths_and_types[arch]
     gyp_defs['skia_arch_width'] = skia_arch_width
+    gyp_defs['skia_arch_type']  = skia_arch_type
 
   # housekeeper: build shared lib.
   if builder_dict['role'] == builder_name_schema.BUILDER_ROLE_HOUSEKEEPER:

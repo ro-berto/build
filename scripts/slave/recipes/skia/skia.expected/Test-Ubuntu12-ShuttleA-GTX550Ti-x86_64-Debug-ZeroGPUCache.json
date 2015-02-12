@@ -92,7 +92,7 @@
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "CHROME_PATH": "/home/chrome-bot/src",
-      "GYP_DEFINES": "skia_arch_width=64 skia_warnings_as_errors=0"
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_arch_width=64 skia_warnings_as_errors=0"
     },
     "name": "build dm"
   },

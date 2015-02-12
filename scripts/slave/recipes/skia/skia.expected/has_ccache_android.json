@@ -56,7 +56,7 @@
       "ANDROID_MAKE_CCACHE": "/usr/bin/ccache",
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "BUILDTYPE": "Debug",
-      "GYP_DEFINES": "skia_arch_width=32 skia_warnings_as_errors=1",
+      "GYP_DEFINES": "skia_arch_type=arm skia_arch_width=32 skia_warnings_as_errors=1",
       "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
     "name": "build most"
