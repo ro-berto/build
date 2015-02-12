@@ -310,24 +310,10 @@ class WebRTCApi(recipe_api.RecipeApi):
   def clean_test_output(self):
     """Remove all test output in out/, since we have tests leaking files."""
     out_dir = self.m.path['checkout'].join('out')
-    self.m.python.inline(
-        'clean test output files',
-        """
-          import os, sys
-          out_dir = sys.argv[1]
-          if os.path.isdir(out_dir):
-            for filename in os.listdir(out_dir):
-              file_path = os.path.join(out_dir, filename)
-              if os.path.isfile(file_path):
-                try:
-                  os.remove(file_path)
-                  print 'Removed %s' % file_path
-                except OSError as e:
-                  print e
-        """,
-        args=[out_dir],
-        infra_step=True,
-    )
+    self.m.python('clean test output files',
+                  script=self.resource('cleanup_files.py'),
+                  args=[out_dir],
+                  infra_step=True)
 
   def virtual_webcam_check(self):
     self.m.python('webcam_check', self.resource('ensure_webcam_is_running.py'))
