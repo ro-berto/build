@@ -504,24 +504,21 @@ class GpuApi(recipe_api.RecipeApi):
     # parameters to runtest.py as before. After we verify that swarming works,
     # we can try removing additional parameters and unify this into a single
     # call that only differs by enable_swarming argument.
-    if enable_swarming:
-      return self.m.chromium.steps.GPUGTestTest(
-          name, args=args, enable_swarming=True, target_name=target_name,
-          swarming_dimensions=swarming_dimensions,
-          swarming_extra_suffix=self._get_gpu_suffix(swarming_dimensions))
-    else:
-      results_directory = self.m.path['slave_build'].join('gtest-results', name)
-      return self.m.chromium.steps.GPUGTestTest(
-          name,
-          xvfb=False,
-          args=args,
-          target_name=target_name,
-          use_isolate=True,
-          generate_json_file=True,
-          results_directory=results_directory,
-          revision=chrome_revision,
-          webkit_revision=webkit_revision,
-          master_class_name=self._master_class_name_for_testing)
+    results_directory = self.m.path['slave_build'].join('gtest-results', name)
+    return self.m.chromium.steps.GPUGTestTest(
+        name,
+        xvfb=False,
+        args=args,
+        target_name=target_name,
+        use_isolate=True,
+        generate_json_file=True,
+        results_directory=results_directory,
+        revision=chrome_revision,
+        webkit_revision=webkit_revision,
+        master_class_name=self._master_class_name_for_testing,
+        enable_swarming=enable_swarming,
+        swarming_dimensions=swarming_dimensions,
+        swarming_extra_suffix=self._get_gpu_suffix(swarming_dimensions))
 
   def _create_telemetry_test(self, name, chrome_revision, webkit_revision,
                              enable_swarming, swarming_dimensions,
