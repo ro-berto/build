@@ -21,6 +21,7 @@ def device_from_builder_dict(builder_dict):
     if 'Neon' in builder_dict['extra_config']:
       return 'nexus_4'
     return {
+      'Arm64': 'arm64',
       'x86': 'x86',
       'x86_64': 'x86_64',
       'Mips': 'mips',
