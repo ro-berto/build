@@ -492,6 +492,11 @@ def chromium_win_clang_asan(c):
   # clang is pinned to a fixed revision on Win if asan is set. Override that.
   c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
 
+@config_ctx(includes=['ninja', 'clang'])  # No goma.
+def clang_tot_linux(c):
+  # Use ToT Clang.
+  c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
+
 # GYP_DEFINES must not include 'asan' or 'clang', else the tester bot will try
 # to compile clang.
 @config_ctx(includes=['chromium_no_goma'])

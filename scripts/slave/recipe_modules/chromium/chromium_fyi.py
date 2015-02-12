@@ -652,5 +652,42 @@ SPEC = {
       },
       'enable_swarming': True,
     },
+    'ClangToTLinux': {
+      'recipe_config': 'clang_tot_linux',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'GYP_DEFINES': {
+        'component': 'shared_library',
+        'werror': '',
+      },
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'linux',
+      },
+      'use_isolate': True,
+      'enable_swarming': True,
+      # Workaround so that recipes doesn't add random build targets to our
+      # compile line. We want to build everything.
+      'add_tests_as_compile_targets': False,
+    },
+    'ClangToTLinux tester': {
+      'recipe_config': 'clang_tot_linux',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+      ],
+      'bot_type': 'tester',
+      'parent_buildername': 'ClangToTLinux',
+      'testing': {
+        'platform': 'linux',
+      },
+      'enable_swarming': True,
+    },
   },
 }
