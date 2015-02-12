@@ -98,6 +98,22 @@ SPEC = {
       },
       'chromium_apply_config': ['chromium_perf']
     },
+    'Win x64 FYI Builder': {
+      'disable_tests': True,
+      'recipe_config': 'official',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder',
+      'compile_targets': [
+        'chromium_builder_perf',
+      ],
+      'testing': {
+        'platform': 'win',
+      },
+      'chromium_apply_config': ['chromium_perf']
+    },
   },
 }
 
@@ -108,3 +124,26 @@ _AddBotSpec(
     perf_id='linux-oilpan-release',
     target_bits=64,
     num_shards=4)
+
+_AddBotSpec(
+    name='Win 7 ATI GPU Perf',
+    platform='win',
+    parent_builder='Win x64 FYI Builder',
+    perf_id='chromium-rel-win7-gpu-ati',
+    target_bits=64,
+    num_shards=1)
+# TODO(eakuefner): Rotate roles for evaluation.
+# _AddBotSpec(
+#     name='Win 7 Intel GPU Perf',
+#     platform='win',
+#     parent_builder='Win x64 FYI Builder',
+#     perf_id='chromium-rel-win7-gpu-intel',
+#     target_bits=64,
+#     num_shards=1)
+_AddBotSpec(
+    name='Win 7 Nvidia GPU Perf',
+    platform='win',
+    parent_builder='Win x64 FYI Builder',
+    perf_id='chromium-rel-win7-gpu-nvidia',
+    target_bits=64,
+    num_shards=1)
