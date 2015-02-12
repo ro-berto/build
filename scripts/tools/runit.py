@@ -86,7 +86,7 @@ def main():
     print 'Set PYTHONPATH: %s' % os.environ['PYTHONPATH']
 
   # Use subprocess instead of execv because otherwise windows destroys quoting.
-  p = subprocess.Popen([sys.executable] + args)
+  p = subprocess.Popen(args)
   p.wait()
   return p.returncode
 
