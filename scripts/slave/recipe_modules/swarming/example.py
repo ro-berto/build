@@ -89,6 +89,10 @@ def GenSteps(api):
   # Wait for all tasks to complete.
   for task in tasks:
     step_result = api.swarming.collect_task(task)
+    state = step_result.json.output['shards'][0]['state']
+    assert api.swarming.State.COMPLETED == state, state
+    state_name = api.swarming.State.to_string(state)
+    assert 'Completed' == state_name, state_name
     assert step_result.swarming_task in tasks
 
   # Cleanup.

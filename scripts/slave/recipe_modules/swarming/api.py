@@ -12,22 +12,6 @@ from slave import recipe_api
 MINIMAL_SWARMING_VERSION = (0, 4, 10)
 
 
-# The goal here is to take ~5m of actual test run per shard, e.g. the 'RunTest'
-# section in the logs, so that the trade-off of setup time overhead vs latency
-# is reasonable. The overhead is in the 15~90s range, with the vast majority
-# being downloading the executable files. While it can be lowered, it'll stay in
-# the "few seconds" range due to the sheer size of the executables to map.
-# Anything not listed defaults to 1 shard.
-# TODO(vadimsh): Get rid of this. chromium_trybot.py recipe is reading sharding
-# config from test spec in src/. Swarming canary builder should do the same.
-TESTS_SHARDS = freeze({
-  'browser_tests': 5,
-  'interactive_ui_tests': 3,
-  'sync_integration_tests': 4,
-  'unit_tests': 2,
-})
-
-
 class ReadOnlyDict(dict):
   def __setitem__(self, key, value):
     raise TypeError('ReadOnlyDict is immutable')
@@ -52,6 +36,43 @@ class SwarmingApi(recipe_api.RecipeApi):
 
   See also example.py for concrete code.
   """
+
+  class State(object):
+    """Copied from appengine/swarming/server/task_result.py.
+
+    KEEP IN SYNC.
+
+    Used to parse the 'state' value in task result.
+    """
+    RUNNING = 0x10    # 16
+    PENDING = 0x20    # 32
+    EXPIRED = 0x30    # 48
+    TIMED_OUT = 0x40  # 64
+    BOT_DIED = 0x50   # 80
+    CANCELED = 0x60   # 96
+    COMPLETED = 0x70  # 112
+
+    STATES = (
+        RUNNING, PENDING, EXPIRED, TIMED_OUT, BOT_DIED, CANCELED, COMPLETED)
+    STATES_RUNNING = (RUNNING, PENDING)
+    STATES_NOT_RUNNING = (EXPIRED, TIMED_OUT, BOT_DIED, CANCELED, COMPLETED)
+    STATES_DONE = (TIMED_OUT, COMPLETED)
+    STATES_ABANDONED = (EXPIRED, BOT_DIED, CANCELED)
+
+    _NAMES = {
+      RUNNING: 'Running',
+      PENDING: 'Pending',
+      EXPIRED: 'Expired',
+      TIMED_OUT: 'Execution timed out',
+      BOT_DIED: 'Bot died',
+      CANCELED: 'User canceled',
+      COMPLETED: 'Completed',
+    }
+
+    @classmethod
+    def to_string(cls, state):
+      """Returns a user-readable string representing a State."""
+      return cls._NAMES[state]
 
   def __init__(self, **kwargs):
     super(SwarmingApi, self).__init__(**kwargs)
@@ -179,7 +200,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       'win': 'Windows-7-SP1',
     }[platform]
 
-  def task(self, title, isolated_hash, shards=None, task_output_dir=None,
+  def task(self, title, isolated_hash, shards=1, task_output_dir=None,
            extra_args=None):
     """Returns a new SwarmingTask instance to run an isolated executable on
     Swarming.
@@ -190,8 +211,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     results.
 
     Args:
-      title: name of the test, used as part of a task ID, also used as a key
-          in TESTS_SHARDS mapping.
+      title: name of the test, used as part of a task ID.
       isolated_hash: hash of isolated test on isolate server, the test should
           be already isolated there, see 'isolate' recipe module.
       shards: if defined, the number of shards to use for the task. By default
@@ -206,7 +226,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         dimensions=self._default_dimensions,
         env=self._default_env,
         priority=self.default_priority,
-        shards=shards or TESTS_SHARDS.get(title, 1),
+        shards=shards,
         buildername=self.m.properties.get('buildername'),
         buildnumber=self.m.properties.get('buildnumber'),
         user=self.default_user,
