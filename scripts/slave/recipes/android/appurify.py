@@ -39,8 +39,7 @@ BUILDERS = {
       'path': lambda api: ('android_fyi_dbg/full-build-linux_%s.zip' %
                            api.properties['revision']),
     },
-    'device_name': ['Nexus 4', 'Nexus 5', 'Nexus 6', 'Nexus 7', 'Nexus 9',
-                    'Nexus 10'],
+    'device_name': ['Nexus 4', 'Nexus 5', 'Nexus 7', 'Nexus 9', 'Nexus 10'],
     'device_os': ['4.1.1', '4.2.1', '4.2.2', '4.3', '4.4.2', '4.4.3', '5.0'],
     'unittests': CHROMIUM_AMP_UNITTESTS,
     'instrumentation_tests': [],
