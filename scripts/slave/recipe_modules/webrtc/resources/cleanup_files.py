@@ -16,8 +16,8 @@ def main(args):
 
   clean_dir = args[0]
   if not os.path.isdir(clean_dir):
-    print >> sys.stderr, '%s does not exist or is not a directory!' % clean_dir
-    return 2
+    print 'Cannot find any directory at %s. Skipping cleaning.' % clean_dir
+    return 0
 
   for filename in os.listdir(clean_dir):
     file_path = os.path.join(clean_dir, filename)
