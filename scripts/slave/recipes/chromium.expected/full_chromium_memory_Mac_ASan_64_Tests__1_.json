@@ -231,6 +231,8 @@
       "pool",
       "Chrome",
       "--tag",
+      "asan:1",
+      "--tag",
       "buildername:Mac ASan 64 Tests (1)",
       "--tag",
       "buildnumber:571",

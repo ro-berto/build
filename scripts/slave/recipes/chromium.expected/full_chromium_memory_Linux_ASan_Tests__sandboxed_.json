@@ -231,6 +231,8 @@
       "pool",
       "Chrome",
       "--tag",
+      "asan:1",
+      "--tag",
       "buildername:Linux ASan Tests (sandboxed)",
       "--tag",
       "buildnumber:571",

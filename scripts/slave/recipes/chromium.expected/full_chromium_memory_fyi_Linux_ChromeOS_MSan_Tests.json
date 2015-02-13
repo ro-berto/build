@@ -239,6 +239,8 @@
       "--tag",
       "master:chromium.memory.fyi",
       "--tag",
+      "msan:1",
+      "--tag",
       "name:browser_tests",
       "--tag",
       "os:Ubuntu-12.04",

@@ -72,6 +72,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       lsan_suppressions_file = Single(Path),
       test_args = List(basestring),
       run_asan_test = Single(bool, required=False),
+      swarming_tags = Set(basestring),
     ),
 
     # Some platforms do not have a 1:1 correlation of BUILD_CONFIG to what is
@@ -369,6 +370,7 @@ def official(c):
 def asan(c):
   if 'clang' not in c.compile_py.compiler:  # pragma: no cover
     raise BadConf('asan requires clang')
+  c.runtests.swarming_tags |= {'asan:1'}
   c.runtests.lsan_suppressions_file = Path('[CHECKOUT]', 'tools', 'lsan',
                                            'suppressions.txt')
   if c.TARGET_PLATFORM == 'linux':
@@ -400,6 +402,7 @@ def no_lsan(c):
 def msan(c):
   if 'clang' not in c.compile_py.compiler:  # pragma: no cover
     raise BadConf('msan requires clang')
+  c.runtests.swarming_tags |= {'msan:1'}
   c.gyp_env.GYP_DEFINES['msan'] = 1
 
 @config_ctx()
@@ -421,6 +424,7 @@ def memcheck(c):
 def tsan2(c):
   if 'clang' not in c.compile_py.compiler:  # pragma: no cover
     raise BadConf('tsan2 requires clang')
+  c.runtests.swarming_tags |= {'tsan:1'}
   gyp_defs = c.gyp_env.GYP_DEFINES
   gyp_defs['tsan'] = 1
   gyp_defs['use_allocator'] = 'none'

@@ -468,6 +468,9 @@ class SwarmingTest(Test):
     if self._dimensions:
       self._tasks[suffix].dimensions.update(self._dimensions)
 
+    # Add config-specific tags.
+    self._tasks[suffix].tags.update(api.chromium.c.runtests.swarming_tags)
+
     # Add custom tags.
     if self._tags:
       self._tasks[suffix].tags.update(self._tags)
