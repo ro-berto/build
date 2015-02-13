@@ -208,7 +208,11 @@
       "-u",
       "[SLAVE_BUILD]/src/build/android/provision_devices.py",
       "-t",
-      "Release"
+      "Release",
+      "--min-battery-level",
+      "95",
+      "--disable-network",
+      "--disable-java-debug"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"

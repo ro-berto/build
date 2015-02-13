@@ -57,7 +57,9 @@ def GenSteps(api):
 
   api.chromium_android.spawn_logcat_monitor()
   api.chromium_android.device_status_check()
-  api.chromium_android.provision_devices()
+  api.chromium_android.provision_devices(
+      min_battery_level=95, disable_network=True, disable_java_debug=True,
+      reboot_timeout=180)
 
   # Install WebView
   api.chromium_android.adb_install_apk(WEBVIEW_APK, WEBVIEW_PACKAGE)

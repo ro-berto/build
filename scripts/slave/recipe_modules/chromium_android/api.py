@@ -294,10 +294,14 @@ class AndroidApi(recipe_api.RecipeApi):
         infra_step=True)
 
   def detect_and_setup_devices(self, restart_usb=False, skip_wipe=False,
-                               disable_location=False):
+                               disable_location=False, min_battery_level=None,
+                               disable_network=False, disable_java_debug=False,
+                               reboot_timeout=None):
     self.device_status_check(restart_usb=restart_usb)
     self.provision_devices(
-      skip_wipe=skip_wipe, disable_location=disable_location)
+      skip_wipe=skip_wipe, disable_location=disable_location,
+      min_battery_level=min_battery_level, disable_network=disable_network,
+      disable_java_debug=disable_java_debug, reboot_timeout=reboot_timeout)
 
   def device_status_check(self, restart_usb=False, **kwargs):
     args = ['--json-output', self.m.json.output()]
@@ -352,17 +356,27 @@ class AndroidApi(recipe_api.RecipeApi):
       raise
 
   def provision_devices(self, skip_wipe=False, disable_location=False,
-                        min_battery_level=None, **kwargs):
+                        min_battery_level=None, disable_network=False,
+                        disable_java_debug=False, reboot_timeout=None,
+                        **kwargs):
     args = ['-t', self.m.chromium.c.BUILD_CONFIG]
     if skip_wipe:
       args.append('--skip-wipe')
     if disable_location:
       args.append('--disable-location')
+    if reboot_timeout is not None:
+      assert isinstance(reboot_timeout, int)
+      assert reboot_timeout > 0
+      args.extend(['--reboot-timeout', reboot_timeout])
     if min_battery_level is not None:
       assert isinstance(min_battery_level, int)
       assert min_battery_level >= 0
       assert min_battery_level <= 100
       args.extend(['--min-battery-level', min_battery_level])
+    if disable_network:
+      args.append('--disable-network')
+    if disable_java_debug:
+      args.append('--disable-java-debug')
     self.m.python(
       'provision_devices',
       self.m.path['checkout'].join(
@@ -609,10 +623,17 @@ class AndroidApi(recipe_api.RecipeApi):
                                             '*.log')],
     )
 
-  def common_tests_setup_steps(self):
+  def common_tests_setup_steps(self, perf_setup=False):
     self.spawn_logcat_monitor()
     self.device_status_check()
-    self.provision_devices()
+    if perf_setup:
+      kwargs = {
+          'min_battery_level': 95,
+          'disable_network': True,
+          'disable_java_debug': True}
+    else:
+      kwargs = {}
+    self.provision_devices(**kwargs)
 
   def common_tests_final_steps(self, logcat_gs_bucket=None):
     self.logcat_dump(gs_bucket=logcat_gs_bucket)

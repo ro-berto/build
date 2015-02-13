@@ -533,7 +533,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def setup_chromium_tests(self, test_runner, mastername=None):
     if self.m.chromium.c.TARGET_PLATFORM == 'android':
-      self.m.chromium_android.common_tests_setup_steps()
+      self.m.chromium_android.common_tests_setup_steps(
+          perf_setup=mastername.startswith('chromium.perf'))
 
     if self.m.platform.is_win:
       self.m.chromium.crash_handler()

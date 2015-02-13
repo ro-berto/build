@@ -119,7 +119,7 @@ def GenSteps(api):
   api.chromium_android.download_build(bucket=builder['bucket'],
     path=builder['path'](api))
 
-  api.chromium_android.common_tests_setup_steps()
+  api.chromium_android.common_tests_setup_steps(perf_setup=True)
 
   api.chromium_android.adb_install_apk(
       'ChromeShell.apk',
