@@ -323,20 +323,27 @@ def oilpan_internal(c):
 
 @config_ctx()
 def nacl(c):
-  if c.GIT_MODE:
-    raise BadConf('nacl only supports svn')
   s = c.solutions.add()
   s.name = 'native_client'
-  s.url = ChromiumSvnSubURL(c, 'native_client', 'trunk', 'src', 'native_client')
-  s.custom_vars = mirror_only(c, {
-    'webkit_trunk': BlinkURL(c),
-    'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s',
-    'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s'})
+  s.url = ChromiumGitURL(c, 'native_client', 'src', 'native_client.git')
+  m = c.got_revision_mapping
+  m['native_client'] = 'got_revision'
 
+@config_ctx()
+def naclports(c):
   s = c.solutions.add()
-  s.name = 'supplement.DEPS'
-  s.url = ChromiumSvnSubURL(c, 'native_client', 'trunk', 'deps',
-                            'supplement.DEPS')
+  s.name = 'src'
+  s.url = ChromiumGitURL(c, 'external', 'naclports.git')
+  m = c.got_revision_mapping
+  m['src'] = 'got_revision'
+
+@config_ctx()
+def gyp(c):
+  s = c.solutions.add()
+  s.name = 'trunk'
+  s.url = ChromiumGitURL(c, 'external', 'gyp.git')
+  m = c.got_revision_mapping
+  m['trunk'] = 'got_revision'
 
 @config_ctx(config_vars={'GIT_MODE': True})
 def tools_build(c):

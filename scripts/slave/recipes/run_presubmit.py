@@ -64,8 +64,8 @@ def GenSteps(api):
 def GenTests(api):
   # TODO(machenbach): This uses the same tryserver for all repos, which doesn't
   # reflect reality (cosmetical problem only). It also misses some repos that
-  # use the recipe like tools_build and nacl.
-  for repo_name in ['blink', 'chromium', 'v8']:
+  # use the recipe like tools_build.
+  for repo_name in ['blink', 'chromium', 'v8', 'nacl', 'naclports', 'gyp']:
     yield (
       api.test(repo_name) +
       api.properties.tryserver(
