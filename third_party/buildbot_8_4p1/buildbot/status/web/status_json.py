@@ -31,6 +31,22 @@ from buildbot.status.web.base import HtmlResource
 from buildbot.util import json, now
 
 
+def get_timeblock():
+    def dt_to_ts(date):
+        return (date - datetime.datetime.utcfromtimestamp(0)).total_seconds()
+
+    utcnow = datetime.datetime.utcnow()
+
+    return {
+            'local': datetime.datetime.now().isoformat(),
+            'utc': utcnow.isoformat(),
+            'utc_ts': dt_to_ts(utcnow),
+    }
+
+
+SERVER_STARTED = get_timeblock()
+
+
 _IS_INT = re.compile('^[-+]?\d+$')
 
 
@@ -983,6 +999,23 @@ class BuildStateJsonResource(JsonResource):
         }
 
 
+class MasterClockResource(JsonResource):
+    help = """Show current time, boot time and uptime of the master."""
+    pageTitle = 'MasterClock'
+
+    def asDict(self, _request):
+        # The only reason we include local time is because the buildbot UI
+        # displays it. Any computations on time should be done in UTC.
+        current_timeblock = get_timeblock()
+
+        return {
+            'server_started': SERVER_STARTED,
+            'current': current_timeblock,
+            'server_uptime': (
+                    current_timeblock['utc_ts'] - SERVER_STARTED['utc_ts'])
+        }
+
+
 class JsonStatusResource(JsonResource):
     """Retrieves all json data."""
     help = """JSON status
@@ -1003,6 +1036,7 @@ For help on any sub directory, use url /child/help
         self.putChild('project', ProjectJsonResource(status))
         self.putChild('slaves', SlavesJsonResource(status))
         self.putChild('metrics', MetricsJsonResource(status))
+        self.putChild('clock', MasterClockResource(status))
         self.putChild('buildstate', BuildStateJsonResource(status))
         # This needs to be called before the first HelpResource().body call.
         self.hackExamples()
