@@ -499,11 +499,6 @@ class GpuApi(recipe_api.RecipeApi):
     if not self._should_run_test(name):
       return
 
-    # TODO(sergiyb): We should not diverge here (this is what GTestTest was
-    # designed for). However, to avoid changing expectations we pass additional
-    # parameters to runtest.py as before. After we verify that swarming works,
-    # we can try removing additional parameters and unify this into a single
-    # call that only differs by enable_swarming argument.
     results_directory = self.m.path['slave_build'].join('gtest-results', name)
     return self.m.chromium.steps.GPUGTestTest(
         name,
