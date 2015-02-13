@@ -205,7 +205,7 @@
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--priority",
-      "25",
+      "27",
       "--shards",
       "1",
       "--task-name",

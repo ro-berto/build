@@ -39,7 +39,8 @@ def GenSteps(api):
   if not tests:
     return
 
-  api.chromium_tests.configure_swarming('chromium', precommit=False)
+  api.chromium_tests.configure_swarming('chromium', precommit=False,
+                                        mastername=mastername)
   test_runner = api.chromium_tests.create_test_runner(api, tests)
   api.chromium_tests.setup_chromium_tests(test_runner, mastername=mastername)
 

@@ -603,7 +603,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return True, self.m.filter.matching_exes, compile_targets
 
-  def configure_swarming(self, project_name, precommit):
+  def configure_swarming(self, project_name, precommit, mastername=None):
     """Configures default swarming dimensions and tags.
 
     Args:
@@ -629,9 +629,15 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self.m.swarming.add_default_tag('purpose:ManualTS')
       self.m.swarming.default_user = requester
     else:
+      if mastername == 'chromium.fyi':
+        # This should be lower than the CQ.
+        self.m.swarming.default_priority = 35
+      elif mastername == 'chromium.memory.fyi':
+        self.m.swarming.default_priority = 27
+      else:
+        self.m.swarming.default_priority = 25
       self.m.swarming.add_default_tag('purpose:post-commit')
       self.m.swarming.add_default_tag('purpose:CI')
-      self.m.swarming.default_priority = 25
 
   # Used to build the Google Storage archive url.
   #
