@@ -483,14 +483,14 @@ class AndroidApi(recipe_api.RecipeApi):
           perf_id=perf_id,
           env=self.m.chromium.get_env(),
           chartjson_file=chartjson_file)
-
+      except self.m.step.StepFailure as f:
+        failures.append(f)
+      finally:
         if 'device_affinity' in test_data:
           step_result = self.m.step.active_result
           step_result.presentation.step_text += (
               self.m.test_utils.format_step_text(
                   [['Device Affinity: %s' % test_data['device_affinity']]]))
-      except self.m.step.StepFailure as f:
-        failures.append(f)
 
     if failures:
       raise self.m.step.StepFailure('sharded perf tests failed %s' % failures)

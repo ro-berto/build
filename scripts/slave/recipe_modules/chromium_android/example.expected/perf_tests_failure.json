@@ -413,6 +413,7 @@
     "name": "perf_test.foo",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>Device Affinity: 0<br/>@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
