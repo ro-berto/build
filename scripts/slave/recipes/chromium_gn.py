@@ -341,7 +341,8 @@ def GenSteps(api):
   if bot_config.get('should_run_gn_gyp_compare', False):
     api.chromium.run_gn_compare()
 
-  api.chromium.runtest('gn_unittests')
+  if not is_android:
+    api.chromium.runtest('gn_unittests')
 
 def GenTests(api):
   for test in api.chromium.gen_tests_for_builders(BUILDERS):
