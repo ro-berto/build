@@ -661,6 +661,10 @@ SPEC = {
       'GYP_DEFINES': {
         'component': 'shared_library',
         'werror': '',
+
+        # Plugin flags often need to be changed when using a plugin newer than
+        # the latest Clang package, so disable plugins.
+        'clang_use_chrome_plugins': '0',
       },
       'bot_type': 'builder',
       'testing': {
