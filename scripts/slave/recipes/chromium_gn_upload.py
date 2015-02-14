@@ -88,7 +88,7 @@ def GenSteps(api):
 
   api.step('gn version', [path_to_binary, '--version'])
 
-  api.chromium.runtest('gn_unittests', cwd=api.path['checkout'])
+  api.chromium.runtest('gn_unittests')
 
   api.python('upload',
              api.path['depot_tools'].join('upload_to_google_storage.py'),

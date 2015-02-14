@@ -115,5 +115,23 @@
       "//out/Release"
     ],
     "name": "gn check"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\runtest.py",
+      "--target",
+      "Release",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Win8 GN\", \"buildnumber\": 571, \"mastername\": \"chromium.win\", \"recipe\": \"chromium_gn\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Win8 GN\", \"buildnumber\": 571, \"mastername\": \"chromium.win\", \"recipe\": \"chromium_gn\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--builder-name=Win8 GN",
+      "--slave-name=TestSlavename",
+      "--build-number=571",
+      "gn_unittests.exe"
+    ],
+    "name": "gn_unittests"
   }
 ]

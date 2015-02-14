@@ -117,5 +117,24 @@
       "//out/Release"
     ],
     "name": "gn check"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux GN\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"recipe\": \"chromium_gn\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux GN\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"recipe\": \"chromium_gn\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--builder-name=Linux GN",
+      "--slave-name=TestSlavename",
+      "--build-number=571",
+      "gn_unittests"
+    ],
+    "name": "gn_unittests"
   }
 ]

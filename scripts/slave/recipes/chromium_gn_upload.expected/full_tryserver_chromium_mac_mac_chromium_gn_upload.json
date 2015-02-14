@@ -137,7 +137,6 @@
       "--build-number=571",
       "gn_unittests"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
     "name": "gn_unittests"
   },
   {
