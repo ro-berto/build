@@ -12,6 +12,22 @@ from common.twisted_util.authorizer import IAuthorizer
 from zope.interface import implements
 
 
+class EmptyNetrc(object):
+  def authenticators(self, _):
+    return None
+
+  def __repr__(self):
+    return ''
+
+  @property
+  def hosts(self):
+    return {}
+
+  @property
+  def macros(self):
+    return {}
+
+
 class NETRCAuthorizer(object):
   """An Authorizer implementation that loads its authorization from a '.netrc'
   file.
@@ -25,7 +41,10 @@ class NETRCAuthorizer(object):
       netrc_path: (str) If not None, use this as the 'netrc' file path;
           otherwise, use '~/.netrc'.
     """
-    self._netrc = netrc.netrc(netrc_path)
+    try:
+      self._netrc = netrc.netrc(netrc_path)
+    except IOError:
+      self._netrc = EmptyNetrc()
 
   def addAuthHeadersForURL(self, headers, url):
     parsed_url = urlparse.urlparse(url)
