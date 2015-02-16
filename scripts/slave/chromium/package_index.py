@@ -218,6 +218,11 @@ class IndexPack(object):
       filepath: The filepath where the index pack archive should be stored.
     """
 
+    # Remove the old zip archive (if it exists). This avoids that the new index
+    # pack is just added to the old zip archive.
+    if os.path.exists(filepath):
+      os.remove(filepath)
+
     # Run the command in the parent directory of the index pack and use a
     # relative path for the index pack to get rid of any path prefix. The format
     # specification requires that the archive contains one folder with an
