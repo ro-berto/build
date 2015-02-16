@@ -13,8 +13,12 @@ SPEC = {
     # This is intended to build in the same way as the main perf builder.
     'linux_perf_bisect_builder':
         chromium_perf.SPEC['builders']['Linux Builder'],
-    'win_perf_bisect_builder': chromium_perf.SPEC['builders']['Win Builder'],
-    'mac_perf_bisect_builder': chromium_perf.SPEC['builders']['Mac Builder'],
+    'win_perf_bisect_builder':
+        chromium_perf.SPEC['builders']['Win Builder'],
+    'win_x64_perf_bisect_builder':
+        chromium_perf.SPEC['builders']['Win x64 Builder'],
+    'mac_perf_bisect_builder':
+        chromium_perf.SPEC['builders']['Mac Builder'],
     'linux_perf_tester':{
       'recipe_config': 'official',
       'parent_buildername': 'Linux Builder',
