@@ -234,8 +234,7 @@
       "--",
       "base_unittests",
       "base_unittests_run",
-      "browser_tests",
-      "chrome"
+      "browser_tests"
     ],
     "name": "compile (with patch)"
   },

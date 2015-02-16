@@ -598,8 +598,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # with chrome_run as a compile_target and not chrome (since chrome_run
     # depends upon chrome). This results in not picking up
     # NaclIntegrationTest as it depends upon chrome not chrome_run.
-    compile_targets = list(set(self.m.filter.matching_exes +
-                               self.m.filter.compile_targets))
+    compile_targets = list(set(self.m.filter.matching_exes + compile_targets))
 
     return True, self.m.filter.matching_exes, compile_targets
 
