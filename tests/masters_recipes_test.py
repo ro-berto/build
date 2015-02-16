@@ -189,16 +189,13 @@ def main(argv):
       bot_config = recipe_side_builders.get(builder)
       if not bot_config:
         continue
-      main_waterfall_config = bot_config.get('based_on_main_waterfall')
-      if not main_waterfall_config:
-        continue
 
       # TODO(phajdan.jr): Make it an error if any builders referenced here
       # are not using chromium recipe.
-      main_waterfall_master = 'master.' + main_waterfall_config['mastername']
-      bots = [main_waterfall_config['buildername']]
-      if main_waterfall_config.get('tester'):
-        bots.append(main_waterfall_config['tester'])
+      main_waterfall_master = 'master.' + bot_config['mastername']
+      bots = [bot_config['buildername']]
+      if bot_config.get('tester'):
+        bots.append(bot_config['tester'])
       for mw_builder in bots:
         if mw_builder in chromium_recipe_builders.get(
             main_waterfall_master, []):

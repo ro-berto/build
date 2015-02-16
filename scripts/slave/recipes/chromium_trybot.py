@@ -30,396 +30,184 @@ BUILDERS = freeze({
   'tryserver.chromium.linux': {
     'builders': {
       'android_arm64_dbg_recipe': {
-        'based_on_main_waterfall': {
-          'mastername': 'chromium.linux',
-          'buildername': 'Android Arm64 Builder (dbg)',
-        },
-        'testing': {
-          'platform': 'linux',
-        },
+        'mastername': 'chromium.linux',
+        'buildername': 'Android Arm64 Builder (dbg)',
       },
       'android_clang_dbg_recipe': {
-        'based_on_main_waterfall': {
-          'mastername': 'chromium.linux',
-          'buildername': 'Android Clang Builder (dbg)',
-        },
-        'testing': {
-          'platform': 'linux',
-        },
+        'mastername': 'chromium.linux',
+        'buildername': 'Android Clang Builder (dbg)',
       },
       'android_compile_rel': {
-        'based_on_main_waterfall': {
-          'mastername': 'chromium.linux',
-          'buildername': 'Android Builder',
-        },
-        'testing': {
-          'platform': 'linux',
-        },
+        'mastername': 'chromium.linux',
+        'buildername': 'Android Builder',
       },
       'android_x86_dbg_recipe': {
-        'based_on_main_waterfall': {
-          'mastername': 'chromium.linux',
-          'buildername': 'Android x86 Builder (dbg)',
-        },
-        'testing': {
-          'platform': 'linux',
-        },
+        'mastername': 'chromium.linux',
+        'buildername': 'Android x86 Builder (dbg)',
       },
       'linux_android_dbg_ng': {
-        'based_on_main_waterfall': {
-          'mastername': 'chromium.linux',
-          'buildername': 'Android Builder (dbg)',
-          'tester': 'Android Tests (dbg)',
-        },
-        'testing': {
-          'platform': 'linux',
-        },
+        'mastername': 'chromium.linux',
+        'buildername': 'Android Builder (dbg)',
+        'tester': 'Android Tests (dbg)',
       },
       'linux_android_rel_ng': {
-        'based_on_main_waterfall': {
-          'mastername': 'chromium.linux',
-          'buildername': 'Android Builder',
-          'tester': 'Android Tests',
-        },
-        'testing': {
-          'platform': 'linux',
-        },
+        'mastername': 'chromium.linux',
+        'buildername': 'Android Builder',
+        'tester': 'Android Tests',
       },
       'linux_chromium_dbg_32_ng': {
-        'based_on_main_waterfall': {
-          'mastername': 'chromium.linux',
-          'buildername': 'Linux Builder (dbg)(32)',
-          'tester': 'Linux Tests (dbg)(1)(32)',
-        },
-        'testing': {
-          'platform': 'linux',
-        },
+        'mastername': 'chromium.linux',
+        'buildername': 'Linux Builder (dbg)(32)',
+        'tester': 'Linux Tests (dbg)(1)(32)',
       },
       'linux_chromium_dbg_ng': {
-        'based_on_main_waterfall': {
-          'mastername': 'chromium.linux',
-          'buildername': 'Linux Builder (dbg)',
-          'tester': 'Linux Tests (dbg)(1)',
-        },
-        'testing': {
-          'platform': 'linux',
-        },
+        'mastername': 'chromium.linux',
+        'buildername': 'Linux Builder (dbg)',
+        'tester': 'Linux Tests (dbg)(1)',
       },
       'linux_chromium_rel_ng': {
-        'based_on_main_waterfall': {
-          'mastername': 'chromium.linux',
-          'buildername': 'Linux Builder',
-          'tester': 'Linux Tests',
-        },
-        'testing': {
-          'platform': 'linux',
-        },
+        'mastername': 'chromium.linux',
+        'buildername': 'Linux Builder',
+        'tester': 'Linux Tests',
       },
       'linux_chromium_asan_rel_ng': {
-        'based_on_main_waterfall': {
-          'mastername': 'chromium.memory',
-          'buildername': 'Linux ASan LSan Builder',
-          'tester': 'Linux ASan LSan Tests (1)',
-        },
-        'testing': {
-          'platform': 'linux',
-        },
+        'mastername': 'chromium.memory',
+        'buildername': 'Linux ASan LSan Builder',
+        'tester': 'Linux ASan LSan Tests (1)',
       },
       'linux_chromium_compile_dbg_ng': {
-        'based_on_main_waterfall': {
-          'mastername': 'chromium.linux',
-          'buildername': 'Linux Builder (dbg)',
-        },
-        # Skip somewhat expensive isolate step where it's not needed.
-        'disable_isolate': True,
-        'testing': {
-          'platform': 'linux',
-        },
+        'mastername': 'chromium.linux',
+        'buildername': 'Linux Builder (dbg)',
       },
       'linux_chromium_compile_rel_ng': {
-        'based_on_main_waterfall': {
-          'mastername': 'chromium.linux',
-          'buildername': 'Linux Builder',
-        },
-        # Skip somewhat expensive isolate step where it's not needed.
-        'disable_isolate': True,
-        'testing': {
-          'platform': 'linux',
-        },
+        'mastername': 'chromium.linux',
+        'buildername': 'Linux Builder',
       },
       'linux_chromium_chromeos_dbg_ng': {
-        'based_on_main_waterfall': {
-          'mastername': 'chromium.chromiumos',
-          'buildername': 'Linux ChromiumOS Builder (dbg)',
-          'tester': 'Linux ChromiumOS Tests (dbg)(1)',
-        },
-        'testing': {
-          'platform': 'linux',
-        },
+        'mastername': 'chromium.chromiumos',
+        'buildername': 'Linux ChromiumOS Builder (dbg)',
+        'tester': 'Linux ChromiumOS Tests (dbg)(1)',
       },
       'linux_chromium_chromeos_compile_dbg_ng': {
-        'add_telemetry_tests': False,
-        'based_on_main_waterfall': {
-          'mastername': 'chromium.chromiumos',
-          'buildername': 'Linux ChromiumOS Builder (dbg)',
-        },
-        'compile_only': True,
-        # Skip somewhat expensive isolate step where it's not needed.
-        'disable_isolate': True,
-        'testing': {
-          'platform': 'linux',
-        },
+        'mastername': 'chromium.chromiumos',
+        'buildername': 'Linux ChromiumOS Builder (dbg)',
       },
       'linux_chromium_chromeos_rel_ng': {
-        'based_on_main_waterfall': {
-          'mastername': 'chromium.chromiumos',
-          'buildername': 'Linux ChromiumOS Builder',
-          'tester': 'Linux ChromiumOS Tests (1)',
-        },
-        'testing': {
-          'platform': 'linux',
-        },
+        'mastername': 'chromium.chromiumos',
+        'buildername': 'Linux ChromiumOS Builder',
+        'tester': 'Linux ChromiumOS Tests (1)',
       },
       'linux_chromium_chromeos_asan_rel_ng': {
-        'based_on_main_waterfall': {
-          'mastername': 'chromium.memory',
-          'buildername': 'Linux Chromium OS ASan LSan Builder',
-          'tester': 'Linux Chromium OS ASan LSan Tests (1)',
-        },
-        'testing': {
-          'platform': 'linux',
-        },
+        'mastername': 'chromium.memory',
+        'buildername': 'Linux Chromium OS ASan LSan Builder',
+        'tester': 'Linux Chromium OS ASan LSan Tests (1)',
       },
       'linux_chromium_chromeos_compile_rel_ng': {
-        'add_telemetry_tests': False,
-        'based_on_main_waterfall': {
-          'mastername': 'chromium.chromiumos',
-          'buildername': 'Linux ChromiumOS Builder',
-        },
-        'compile_only': True,
-        # Skip somewhat expensive isolate step where it's not needed.
-        'disable_isolate': True,
-        'testing': {
-          'platform': 'linux',
-        },
+        'mastername': 'chromium.chromiumos',
+        'buildername': 'Linux ChromiumOS Builder',
       },
       'linux_chromium_chromeos_ozone_rel_ng': {
-        'based_on_main_waterfall': {
-          'mastername': 'chromium.chromiumos',
-          'buildername': 'Linux ChromiumOS Ozone Builder',
-          'tester': 'Linux ChromiumOS Ozone Tests (1)',
-        },
-        'testing': {
-          'platform': 'linux',
-        },
+        'mastername': 'chromium.chromiumos',
+        'buildername': 'Linux ChromiumOS Ozone Builder',
+        'tester': 'Linux ChromiumOS Ozone Tests (1)',
       },
       'linux_chromium_chromeos_ozone_dbg_ng': {
-        'based_on_main_waterfall': {
-          'mastername': 'chromium.chromiumos',
-          'buildername': 'Linux ChromiumOS Ozone Builder (dbg)',
-        },
-        'testing': {
-          'platform': 'linux',
-        },
+        'mastername': 'chromium.chromiumos',
+        'buildername': 'Linux ChromiumOS Ozone Builder (dbg)',
       },
       'linux_chromium_compile_dbg_32_ng': {
-        'based_on_main_waterfall': {
-          'mastername': 'chromium.linux',
-          'buildername': 'Linux Builder (dbg)(32)',
-        },
-        # Skip somewhat expensive isolate step where it's not needed.
-        'disable_isolate': True,
-        'testing': {
-          'platform': 'linux',
-        },
+        'mastername': 'chromium.linux',
+        'buildername': 'Linux Builder (dbg)(32)',
       },
       'linux_chromium_practice_rel_ng': {
-        'based_on_main_waterfall': {
-          'mastername': 'chromium.fyi',
-          'buildername': 'ChromiumPracticeFullTester',
-        },
-        'testing': {
-          'platform': 'linux',
-        },
+        'mastername': 'chromium.fyi',
+        'buildername': 'ChromiumPracticeFullTester',
       },
     },
   },
   'tryserver.chromium.mac': {
     'builders': {
       'mac_chromium_dbg_ng': {
-        'based_on_main_waterfall': {
-          'mastername': 'chromium.mac',
-          'buildername': 'Mac Builder (dbg)',
-          'tester': 'Mac10.9 Tests (dbg)',
-        },
-        'testing': {
-          'platform': 'mac',
-        },
+        'mastername': 'chromium.mac',
+        'buildername': 'Mac Builder (dbg)',
+        'tester': 'Mac10.9 Tests (dbg)',
       },
       'mac_chromium_rel_ng': {
-        'based_on_main_waterfall': {
-          'mastername': 'chromium.mac',
-          'buildername': 'Mac Builder',
-          'tester': 'Mac10.8 Tests',
-        },
-        'testing': {
-          'platform': 'mac',
-        },
+        'mastername': 'chromium.mac',
+        'buildername': 'Mac Builder',
+        'tester': 'Mac10.8 Tests',
       },
       'mac_chromium_10.6_rel_ng': {
-        'based_on_main_waterfall': {
-          'mastername': 'chromium.mac',
-          'buildername': 'Mac Builder',
-          'tester': 'Mac10.6 Tests',
-        },
-        'testing': {
-          'platform': 'mac',
-        },
+        'mastername': 'chromium.mac',
+        'buildername': 'Mac Builder',
+        'tester': 'Mac10.6 Tests',
       },
       'mac_chromium_compile_dbg_ng': {
-        'based_on_main_waterfall': {
-          'mastername': 'chromium.mac',
-          'buildername': 'Mac Builder (dbg)',
-        },
-        # Skip somewhat expensive isolate step where it's not needed.
-        'disable_isolate': True,
-        'testing': {
-          'platform': 'mac',
-        },
+        'mastername': 'chromium.mac',
+        'buildername': 'Mac Builder (dbg)',
       },
       'mac_chromium_compile_rel_ng': {
-        'based_on_main_waterfall': {
-          'mastername': 'chromium.mac',
-          'buildername': 'Mac Builder',
-        },
-        # Skip somewhat expensive isolate step where it's not needed.
-        'disable_isolate': True,
-        'testing': {
-          'platform': 'mac',
-        },
+        'mastername': 'chromium.mac',
+        'buildername': 'Mac Builder',
       },
       'mac_chromium_asan_rel_ng': {
-        'based_on_main_waterfall': {
-          'mastername': 'chromium.memory',
-          'buildername': 'Mac ASan 64 Builder',
-          'tester': 'Mac ASan 64 Tests (1)',
-        },
-        'testing': {
-          'platform': 'mac',
-        },
+        'mastername': 'chromium.memory',
+        'buildername': 'Mac ASan 64 Builder',
+        'tester': 'Mac ASan 64 Tests (1)',
       },
       'ios_rel_device_ng': {
-        'based_on_main_waterfall': {
-          'mastername': 'chromium.mac',
-          'buildername': 'iOS Device',
-        },
-        'testing': {
-          'platform': 'mac',
-        },
+        'mastername': 'chromium.mac',
+        'buildername': 'iOS Device',
       },
       'ios_dbg_simulator_ng': {
-        'based_on_main_waterfall': {
-          'mastername': 'chromium.mac',
-          'buildername': 'iOS Simulator (dbg)',
-        },
-        'testing': {
-          'platform': 'mac',
-        },
+        'mastername': 'chromium.mac',
+        'buildername': 'iOS Simulator (dbg)',
       },
       'ios_rel_device_ninja_ng': {
-        'based_on_main_waterfall': {
-          'mastername': 'chromium.mac',
-          'buildername': 'iOS Device (ninja)',
-        },
-        'testing': {
-          'platform': 'mac',
-        },
+        'mastername': 'chromium.mac',
+        'buildername': 'iOS Device (ninja)',
       },
     },
   },
   'tryserver.chromium.win': {
     'builders': {
       'win_chromium_dbg_ng': {
-        'based_on_main_waterfall': {
-          'mastername': 'chromium.win',
-          'buildername': 'Win Builder (dbg)',
-          'tester': 'Win7 Tests (dbg)(1)',
-        },
-        'testing': {
-          'platform': 'win',
-        },
+        'mastername': 'chromium.win',
+        'buildername': 'Win Builder (dbg)',
+        'tester': 'Win7 Tests (dbg)(1)',
       },
       'win_chromium_rel_ng': {
-        'based_on_main_waterfall': {
-          'mastername': 'chromium.win',
-          'buildername': 'Win Builder',
-          'tester': 'Win7 Tests (1)',
-        },
-        'testing': {
-          'platform': 'win',
-        },
+        'mastername': 'chromium.win',
+        'buildername': 'Win Builder',
+        'tester': 'Win7 Tests (1)',
       },
       'win_chromium_xp_rel_ng': {
-        'based_on_main_waterfall': {
-          'mastername': 'chromium.win',
-          'buildername': 'Win Builder',
-          'tester': 'XP Tests (1)',
-        },
-        'testing': {
-          'platform': 'win',
-        },
+        'mastername': 'chromium.win',
+        'buildername': 'Win Builder',
+        'tester': 'XP Tests (1)',
       },
       'win_chromium_vista_rel_ng': {
-        'based_on_main_waterfall': {
-          'mastername': 'chromium.win',
-          'buildername': 'Win Builder',
-          'tester': 'Vista Tests (1)',
-        },
-        'testing': {
-          'platform': 'win',
-        },
+        'mastername': 'chromium.win',
+        'buildername': 'Win Builder',
+        'tester': 'Vista Tests (1)',
       },
       'win_chromium_compile_dbg_ng': {
-        'based_on_main_waterfall': {
-          'mastername': 'chromium.win',
-          'buildername': 'Win Builder (dbg)',
-        },
-        # Skip somewhat expensive isolate step where it's not needed.
-        'disable_isolate': True,
-        'testing': {
-          'platform': 'win',
-        },
+        'mastername': 'chromium.win',
+        'buildername': 'Win Builder (dbg)',
       },
       'win_chromium_compile_rel_ng': {
-        'based_on_main_waterfall': {
-          'mastername': 'chromium.win',
-          'buildername': 'Win Builder',
-        },
-        # Skip somewhat expensive isolate step where it's not needed.
-        'disable_isolate': True,
-        'testing': {
-          'platform': 'win',
-        },
+        'mastername': 'chromium.win',
+        'buildername': 'Win Builder',
       },
       'win_chromium_x64_rel_ng': {
-        'based_on_main_waterfall': {
-          'mastername': 'chromium.win',
-          'buildername': 'Win x64 Builder',
-          'tester': 'Win 7 Tests x64 (1)',
-        },
-        'testing': {
-          'platform': 'win',
-        },
+        'mastername': 'chromium.win',
+        'buildername': 'Win x64 Builder',
+        'tester': 'Win 7 Tests x64 (1)',
       },
       'win8_chromium_ng': {
-        'based_on_main_waterfall': {
-          'mastername': 'chromium.win',
-          'buildername': 'Win Builder (dbg)',
-          'tester': 'Win8 Aura',
-        },
-        'testing': {
-          'platform': 'win',
-        },
+        'mastername': 'chromium.win',
+        'buildername': 'Win Builder (dbg)',
+        'tester': 'Win8 Aura',
       },
     },
   },
@@ -493,7 +281,6 @@ def _GenStepsInternal(api):
   bot_config = get_bot_config(mastername, buildername)
   api.chromium_tests.configure_swarming('chromium', precommit=True)
 
-  main_waterfall_config = bot_config.get('based_on_main_waterfall')
   # TODO(sergiyb): This is a temporary hack to run GPU tests on tryserver
   # only. This should be removed when we will convert chromium.gpu waterfall
   # to swarming and be able to replicate the tests to tryserver automatically.
@@ -507,24 +294,24 @@ def _GenStepsInternal(api):
 
   bot_update_step, master_dict, test_spec = \
       api.chromium_tests.sync_and_configure_build(
-          main_waterfall_config['mastername'],
-          main_waterfall_config['buildername'],
+          bot_config['mastername'],
+          bot_config['buildername'],
           override_bot_type='builder_tester',
           chromium_apply_config=extra_chromium_configs)
 
   tests = list(api.chromium_tests.tests_for_builder(
-      main_waterfall_config['mastername'],
-      main_waterfall_config['buildername'],
+      bot_config['mastername'],
+      bot_config['buildername'],
       bot_update_step,
       master_dict,
       override_bot_type='builder_tester'))
-  tester = main_waterfall_config.get('tester', '')
+  tester = bot_config.get('tester', '')
   if tester:
     test_config = master_dict.get('builders', {}).get(tester)
     for key, value in test_config.get('swarming_dimensions', {}).iteritems():
       api.swarming.set_default_dimension(key, value)
     tests.extend(api.chromium_tests.tests_for_builder(
-        main_waterfall_config['mastername'],
+        bot_config['mastername'],
         tester,
         bot_update_step,
         master_dict,
@@ -539,8 +326,8 @@ def _GenStepsInternal(api):
 
   compile_targets, tests_including_triggered = \
       api.chromium_tests.get_compile_targets_and_tests(
-          main_waterfall_config['mastername'],
-          main_waterfall_config['buildername'],
+          bot_config['mastername'],
+          bot_config['buildername'],
           master_dict,
           override_bot_type='builder_tester',
           override_tests=tests)
@@ -559,15 +346,14 @@ def _GenStepsInternal(api):
       api, compile_targets, tests_including_triggered)
 
   api.chromium_tests.compile_specific_targets(
-      main_waterfall_config['mastername'],
-      main_waterfall_config['buildername'],
+      bot_config['mastername'],
+      bot_config['buildername'],
       bot_update_step,
       master_dict,
       test_spec,
       compile_targets,
       tests_including_triggered,
-      override_bot_type='builder_tester',
-      disable_isolate=bot_config.get('disable_isolate', False))
+      override_bot_type='builder_tester')
 
   def deapply_patch_fn(failing_tests):
     api.chromium_tests.deapply_patch(bot_update_step)
@@ -576,12 +362,9 @@ def _GenStepsInternal(api):
     if compile_targets:
       # Remove duplicate targets.
       compile_targets = sorted(set(compile_targets))
-      # Search for *.isolated only if enabled in bot config or if some
-      # swarming test is being recompiled.
-      bot_config = get_bot_config(mastername, buildername)
       has_failing_swarming_tests = [
           t for t in failing_tests if t.uses_swarming]
-      if bot_config.get('use_isolate') or has_failing_swarming_tests:
+      if has_failing_swarming_tests:
         api.isolate.clean_isolated_files(api.chromium.output_dir)
       try:
         api.chromium.compile(
@@ -589,7 +372,7 @@ def _GenStepsInternal(api):
       except api.step.StepFailure:
         api.tryserver.set_transient_failure_tryjob_result()
         raise
-      if bot_config.get('use_isolate') or has_failing_swarming_tests:
+      if has_failing_swarming_tests:
         api.isolate.isolate_tests(api.chromium.output_dir, verbose=True)
 
   return api.test_utils.determine_new_failures(api, tests, deapply_patch_fn)
@@ -647,10 +430,8 @@ def GenTests(api):
                                       analyze)
         yield (
           api.test(test_name) +
-          api.platform(
-              bot_config['testing']['platform'],
-              bot_config.get(
-                  'chromium_config_kwargs', {}).get('TARGET_BITS', 64)) +
+          api.chromium_tests.platform(
+              bot_config['mastername'], bot_config['buildername']) +
           (api.empty_test_data() if analyze else suppress_analyze()) +
           props(mastername=mastername, buildername=buildername)
         )
