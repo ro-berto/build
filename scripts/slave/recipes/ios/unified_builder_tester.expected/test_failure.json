@@ -1,6 +1,16 @@
 [
   {
     "cmd": [
+      "rm",
+      "-f",
+      "-r",
+      "-v",
+      "/tmp/com.apple.iphonesimulator.launchd.*"
+    ],
+    "name": "clean up simulators"
+  },
+  {
+    "cmd": [
       "[BUILD]/scripts/slave/ios/host_info.py",
       "--json-file",
       "/path/to/tmp/json"

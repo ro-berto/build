@@ -6,9 +6,21 @@ DEPS = [
   'ios',
   'platform',
   'properties',
+  'step',
 ]
 
 def GenSteps(api):
+  # The Xcode 5 simulator is leaving artifacts around, causing disk space
+  # issues. Clean them up here. Remove this when we move to Xcode 6.
+  # https://crbug.com/440857.
+  api.step('clean up simulators', [
+    'rm',
+    '-f',
+    '-r',
+    '-v',
+    '/tmp/com.apple.iphonesimulator.launchd.*',
+  ])
+
   api.ios.host_info()
   api.ios.checkout()
   api.ios.read_build_config()
