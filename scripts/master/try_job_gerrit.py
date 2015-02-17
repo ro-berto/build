@@ -142,7 +142,8 @@ class TryJobGerritScheduler(BaseScheduler):
 class TryJobGerritStatus(StatusReceiverMultiService):
   """Posts results of a try job back to a Gerrit change."""
 
-  def __init__(self, gerrit_host, review_factory=None, cq_builders=None):
+  def __init__(self, gerrit_host, review_factory=None, cq_builders=None,
+               **kwargs):
     """Creates a TryJobGerritStatus.
 
     Args:
@@ -152,10 +153,11 @@ class TryJobGerritStatus(StatusReceiverMultiService):
         https://gerrit-review.googlesource.com/Documentation/rest-api-changes.html#review-input
       cq_builders: a list of buildernames, if specified, patchset will be
           submitted if all builders have completed successfully.
+      kwargs: keyword arguments passed to GerritAgent.
     """
     StatusReceiverMultiService.__init__(self)
     self.review_factory = review_factory or TryJobGerritStatus.createReview
-    self.agent = GerritAgent(gerrit_host)
+    self.agent = GerritAgent(gerrit_host, **kwargs)
     self.status = None
     self.cq_builders = cq_builders
 
