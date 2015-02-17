@@ -1070,7 +1070,7 @@ class ChromiumCommands(commands.FactoryCommands):
   def AddMiniInstallerTestStep(self, factory_properties):
     cmd = [self._python, self._mini_installer_tests_tool,
            '--target', self._target]
-    self.AddTestStep(chromium_step.AnnotatedCommand, 'test_mini_installer', cmd,
+    self.AddTestStep(chromium_step.AnnotatedCommand, 'test_installer', cmd,
                      halt_on_failure=True, timeout=600,
                      do_step_if=self.TestStepFilter)
 
@@ -1083,7 +1083,7 @@ class ChromiumCommands(commands.FactoryCommands):
       cmd.extend(['--buildbot', buildbot_preset])
 
     self.AddBuildrunnerTestStep(chromium_step.AnnotatedCommand,
-                                'test_mini_installer', cmd,
+                                'test_installer', cmd,
                                 halt_on_failure=True, timeout=timeout,
                                 do_step_if=self.TestStepFilter)
 

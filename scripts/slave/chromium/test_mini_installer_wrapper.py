@@ -26,7 +26,6 @@ def main():
   return chromium_utils.RunCommand([
       sys.executable,
       os.path.join(mini_installer_dir, 'test_installer.py'),
-      '-v',
       '--config', mini_installer_tests_config,
       '--build-dir', build_directory.GetBuildOutputDirectory(),
       '--target', options.target,
