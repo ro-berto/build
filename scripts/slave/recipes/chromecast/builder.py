@@ -78,11 +78,12 @@ def GenSteps(api):
   api.chromium.compile(bot_config.get('targets'), name='compile cast_shell')
 
   tests = bot_config.get('tests', [])
-  api.chromium.compile(tests, name='compile tests')
+  if len(tests) > 0:
+    api.chromium.compile(tests, name='compile tests')
 
-  with api.step.defer_results():
-    for x in tests:
-      api.chromium.runtest(x, xvfb=False)
+    with api.step.defer_results():
+      for x in tests:
+        api.chromium.runtest(x, xvfb=False)
 
 def GenTests(api):
   for buildername in BUILDERS:
