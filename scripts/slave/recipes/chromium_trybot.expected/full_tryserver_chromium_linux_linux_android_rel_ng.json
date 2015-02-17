@@ -247,16 +247,6 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/android_webview/tools/webview_licenses.py",
-      "scan"
-    ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "check licenses (with patch)"
-  },
-  {
-    "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
       "--apk",
       "AndroidWebView.apk",

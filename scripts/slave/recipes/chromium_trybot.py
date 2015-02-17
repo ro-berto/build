@@ -842,12 +842,3 @@ def GenTests(api):
                      steps=['findbugs (with patch)',
                             'findbugs (without patch)'],
                      tryserver=True)
-  yield step_failure(mastername='tryserver.chromium.linux',
-                     buildername='android_clang_dbg_recipe',
-                     steps=['check licenses (with patch)'],
-                     tryserver=True)
-  yield step_failure(mastername='tryserver.chromium.linux',
-                     buildername='android_clang_dbg_recipe',
-                     steps=['check licenses (with patch)',
-                            'check licenses (without patch)'],
-                     tryserver=True)
