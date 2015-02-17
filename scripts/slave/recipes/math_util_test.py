@@ -28,6 +28,12 @@ def GenSteps(api):
          < 1.34)
   assert(0 == api.math_utils.pooled_standard_error([[0]]))
   assert(0 == api.math_utils.standard_error([1]))
+  try:
+    api.math_utils.truncated_mean([1, 2, 3], 0.5)
+  except ValueError:
+    pass
+  else:  # pragma: no cover
+    raise AssertionError('Truncated mean allows truncating more than 100%.')
 
 def GenTests(api):
   yield api.test('math_utils_test')
