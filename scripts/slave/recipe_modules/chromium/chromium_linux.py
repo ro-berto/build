@@ -197,6 +197,10 @@ SPEC = {
         steps.GTestTest('ui_touch_selection_unittests'),
         steps.GTestTest('unit_tests'),
       ],
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+      ],
       'testing': {
         'platform': 'linux',
       },
@@ -274,6 +278,10 @@ SPEC = {
         steps.GTestTest('ui_base_unittests'),
         steps.GTestTest('ui_touch_selection_unittests'),
         steps.GTestTest('unit_tests'),
+      ],
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
       ],
       'testing': {
         'platform': 'linux',
