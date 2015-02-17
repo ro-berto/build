@@ -10,11 +10,8 @@ DEPS = [
   'chromium',
   'chromium_android',
   'gclient',
-  'gsutil',
-  'json',
   'path',
   'properties',
-  'python',
   'step',
 ]
 
