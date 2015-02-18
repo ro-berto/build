@@ -56,13 +56,27 @@
     "cmd": [
       "[SLAVE_BUILD]\\pdfium\\out\\Debug\\pdfium_unittests.exe"
     ],
-    "name": "pdfium_unittests"
+    "name": "unittests"
   },
   {
     "cmd": [
       "[SLAVE_BUILD]\\pdfium\\out\\Debug\\pdfium_embeddertests.exe"
     ],
     "cwd": "[SLAVE_BUILD]\\pdfium",
-    "name": "pdfium_embeddertests"
+    "name": "embeddertests"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]\\pdfium\\testing\\tools\\run_javascript_tests.py"
+    ],
+    "cwd": "[SLAVE_BUILD]\\pdfium",
+    "name": "javascript tests"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]\\pdfium\\testing\\tools\\run_pixel_tests.py"
+    ],
+    "cwd": "[SLAVE_BUILD]\\pdfium",
+    "name": "pixel tests"
   }
 ]

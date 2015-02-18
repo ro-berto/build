@@ -32,14 +32,22 @@ def _RunTests(api):
                                                  'pdfium_unittests'))
   if api.platform.is_win:
     unittests_path += '.exe'
-  api.step('pdfium_unittests', [unittests_path])
+  api.step('unittests', [unittests_path])
 
   embeddertests_path = str(api.path['checkout'].join('out', 'Debug',
                                                      'pdfium_embeddertests'))
   if api.platform.is_win:
     embeddertests_path += '.exe'
-  api.step('pdfium_embeddertests', [embeddertests_path],
+  api.step('embeddertests', [embeddertests_path],
            cwd=api.path['checkout'])
+
+  javascript_path = str(api.path['checkout'].join('testing', 'tools',
+                                                  'run_javascript_tests.py'))
+  api.step('javascript tests', [javascript_path], cwd=api.path['checkout'])
+
+  pixel_tests_path = str(api.path['checkout'].join('testing', 'tools',
+                                                   'run_pixel_tests.py'))
+  api.step('pixel tests', [pixel_tests_path], cwd=api.path['checkout'])
 
 
 def GenSteps(api):
