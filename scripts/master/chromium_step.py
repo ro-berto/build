@@ -895,7 +895,7 @@ class AnnotationObserver(buildstep.LogLineObserver):
         stdio = step.addLog('stdio')
         section['log'] = stdio
 
-  def addSection(self, step_name, step=None):
+  def addSection(self, step_name, step=None, legacy=False):
     """Adds a new section to annotator sections, does not change cursor."""
     if not step:
       step = self.command.step_status.getBuild().addStepWithName(step_name)
@@ -912,6 +912,7 @@ class AnnotationObserver(buildstep.LogLineObserver):
         'step_text': [],
         'started': None,
         'async_ops': [],
+        'legacy': legacy,
     })
 
     return self.sections[-1]
@@ -1133,8 +1134,9 @@ class AnnotationObserver(buildstep.LogLineObserver):
     if step_name != self.sections[-1]['name']:
       # When using BUILD_STEP, close the last section, unless it is a preamble.
       if not (self.cursor['step'].isFinished() or self.cursorIsPreamble()):
-        self.closeCursor()
-      section = self.addSection(step_name)
+        if self.cursor['legacy']:
+          self.closeCursor()
+      section = self.addSection(step_name, legacy=True)
       self.startStep(section)
       self.cursor = section
 

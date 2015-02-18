@@ -543,6 +543,22 @@ class AnnotatorCommandsTest(unittest.TestCase):
       for line in f.readlines():
         self.handleOutputLine(line.rstrip())
 
+  def testMixingStepCursorWithLegacyBuildStep(self):
+    self.handleOutputLine('@@@SEED_STEP annotated_steps@@@')
+    self.handleOutputLine('@@@STEP_CURSOR annotated_steps@@@')
+    self.handleOutputLine('@@@STEP_STARTED@@@')
+
+    self.handleOutputLine('@@@BUILD_STEP step1@@@')
+    self.handleOutputLine('@@@BUILD_STEP step2@@@')
+
+    self.handleOutputLine('@@@STEP_CURSOR annotated_steps@@@')
+    self.handleOutputLine('@@@STEP_CURSOR annotated_steps@@@')
+    self.handleOutputLine('@@@STEP_CLOSED@@@')
+
+    self.step.script_observer.handleReturnCode(0)
+
+    self.assertNothingToWait()
+
 
 if __name__ == '__main__':
   unittest.main()
