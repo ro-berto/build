@@ -29,7 +29,8 @@ def GenSteps(api):
       set_got_revision=api.properties.get('set_got_revision'),
       curl_trace_file=curl_trace_file,
       remote_name=api.properties.get('remote_name'),
-      display_fetch_size=api.properties.get('display_fetch_size'))
+      display_fetch_size=api.properties.get('display_fetch_size'),
+      file_name=api.properties.get('checkout_file_name'))
 
   # count_objects shows number and size of objects in .git dir.
   api.git.count_objects(
@@ -54,6 +55,13 @@ def GenSteps(api):
                  dir_path=api.path['checkout'],
                  remote_name=api.properties.get('remote_name'))
 
+  if api.properties.get('cat_file', None):
+    step_result = api.git.cat_file_at_commit(api.properties['cat_file'],
+                                             api.properties['revision'],
+                                             stdout=api.raw_io.output())
+    if 'TestOutput' in step_result.stdout:
+      pass  # Success!
+
 
 def GenTests(api):
   yield api.test('basic')
@@ -61,6 +69,7 @@ def GenTests(api):
   yield api.test('basic_branch') + api.properties(revision='refs/heads/testing')
   yield api.test('basic_hash') + api.properties(
       revision='abcdef0123456789abcdef0123456789abcdef01')
+  yield api.test('basic_file_name') + api.properties(checkout_file_name='DEPS')
 
   yield api.test('platform_win') + api.platform.name('win')
 
@@ -111,3 +120,8 @@ def GenTests(api):
           'count-objects',
           stdout=api.raw_io.output(api.git.count_objects_output('xxx'))) +
       api.properties(count_objects_can_fail_build=True))
+  yield (
+      api.test('cat-file_test') +
+      api.step_data('git cat-file abcdef12345:TestFile',
+                    stdout=api.raw_io.output('TestOutput')) +
+      api.properties(revision='abcdef12345', cat_file='TestFile'))

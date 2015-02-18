@@ -34,6 +34,14 @@ class GitApi(recipe_api.RecipeApi):
     remote_name = remote_name or 'origin'
     return self('fetch', remote_name, '--tags', **kwargs)
 
+  def cat_file_at_commit(self, file_path, commit_hash, remote_name=None,
+                         **kwargs):
+    """Outputs the contents of a file at a given revision."""
+    self.fetch_tags(remote_name=remote_name, **kwargs)
+    kwargs.setdefault('name', 'git cat-file %s:%s' % (commit_hash, file_path))
+    return self('cat-file', 'blob', '%s:%s' % (commit_hash, file_path),
+                **kwargs)
+
   def count_objects(self, previous_result=None, can_fail_build=False, **kwargs):
     """Returns `git count-objects` result as a dict.
 
@@ -102,7 +110,7 @@ class GitApi(recipe_api.RecipeApi):
                submodules=True, keep_paths=None, step_suffix=None,
                curl_trace_file=None, can_fail_build=True,
                set_got_revision=False, remote_name=None,
-               display_fetch_size=None):
+               display_fetch_size=None, file_name=None):
     """Returns an iterable of steps to perform a full git checkout.
     Args:
       url (str): url of remote repo to use as upstream
@@ -122,7 +130,12 @@ class GitApi(recipe_api.RecipeApi):
       remote_name (str): name of the git remote to use
       display_fetch_size (bool): if True, run `git count-objects` before and
         after fetch and display delta. Adds two more steps. Defaults to False.
+      file_name (str): optional path to a single file to checkout.
     """
+    # TODO(robertocn): Break this function and refactor calls to it.
+    #     The problem is that there are way too many unrealated use cases for
+    #     it, and the function's signature is getting unwieldy and its body
+    #     unreadable.
     display_fetch_size = display_fetch_size or False
     if not dir_path:
       dir_path = url.rsplit('/', 1)[-1]
@@ -215,10 +228,17 @@ class GitApi(recipe_api.RecipeApi):
           step_test_data=lambda: self.m.raw_io.test_api.stream_output(
               self.test_api.count_objects_output(2000)))
 
-    self('checkout', '-f', checkout_ref,
-      cwd=dir_path,
-      name='git checkout%s' % step_suffix,
-      can_fail_build=can_fail_build)
+    if file_name:
+      self('checkout', '-f', checkout_ref, '--', file_name,
+        cwd=dir_path,
+        name='git checkout%s' % step_suffix,
+        can_fail_build=can_fail_build)
+
+    else:
+      self('checkout', '-f', checkout_ref,
+        cwd=dir_path,
+        name='git checkout%s' % step_suffix,
+        can_fail_build=can_fail_build)
 
     if set_got_revision:
       rev_parse_step = self('rev-parse', 'HEAD',
