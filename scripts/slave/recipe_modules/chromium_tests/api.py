@@ -127,6 +127,11 @@ RECIPE_CONFIGS = freeze({
     'chromium_config': 'chromium_win_asan',
     'gclient_config': 'chromium',
   },
+  'chromium_linux_goma_canary': {
+    'chromium_config': 'chromium',
+    'chromium_apply_config': ['goma_canary'],
+    'gclient_config': 'chromium',
+  },
   'official': {
     'chromium_config': 'chromium_official',
     'gclient_config': 'chromium',
@@ -427,6 +432,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           self.m.chromium.c.BUILD_CONFIG == 'Debug'):
         self.transient_check(update_step, lambda transform_name:
             self.m.chromium_android.findbugs(name=transform_name('findbugs')))
+
+      goma_canary = bot_config.get('goma_canary')
+      if goma_canary:
+        self.m.goma.diagnose_goma()
 
       if isolated_targets:
         self.m.isolate.remove_build_metadata()

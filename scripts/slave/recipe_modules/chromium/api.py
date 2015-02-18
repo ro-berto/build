@@ -191,6 +191,8 @@ class ChromiumApi(recipe_api.RecipeApi):
       args += ['--mode', self.c.compile_py.mode]
     if self.c.compile_py.goma_dir:
       args += ['--goma-dir', self.c.compile_py.goma_dir]
+    if self.c.compile_py.goma_hermetic:
+      args += ['--goma-hermetic', self.c.compile_py.goma_hermetic]
     if (self.m.properties.get('clobber') is not None or
         self.c.compile_py.clobber or
         force_clobber):

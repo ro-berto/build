@@ -7,6 +7,7 @@ DEPS = [
   'commit_position',
   'filter',
   'gclient',
+  'goma',
   'isolate',
   'json',
   'path',

@@ -39,6 +39,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       compiler = Single(basestring, required=False),
       mode = Single(basestring, required=False),
       goma_dir = Single(Path, required=False),
+      goma_hermetic = Single(basestring, required=False),
       clobber = Single(bool, empty_val=False, required=False, hidden=False),
       pass_arch_flag = Single(bool, empty_val=False, required=False),
       xcode_sdk = Single(basestring, required=False),
@@ -265,6 +266,10 @@ def msvs2012(c):
 @config_ctx()
 def msvs2013(c):
   c.gyp_env.GYP_MSVS_VERSION = '2013'
+
+@config_ctx()
+def goma_canary(c):
+  c.compile_py.goma_hermetic = 'error'
 
 @config_ctx(group='builder')
 def xcode(c):

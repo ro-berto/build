@@ -141,6 +141,9 @@ def goma_setup(options, env):
   # The cache file is stored in the target output directory.
   env['GOMA_DEPS_CACHE_DIR'] = options.target_output_dir
 
+  if options.goma_hermetic:
+    env['GOMA_HERMETIC'] = options.goma_hermetic
+
   # goma is requested.
   goma_key = os.path.join(options.goma_dir, 'goma.key')
   if os.path.exists(goma_key):
@@ -1182,6 +1185,8 @@ def real_main():
   option_parser.add_option('--goma-dir',
                            default=os.path.join(BUILD_DIR, 'goma'),
                            help='specify goma directory')
+  option_parser.add_option('--goma_hermetic', default=None,
+                           help='Set goma hermetic mode')
   option_parser.add_option('--verbose', action='store_true')
   option_parser.add_option('--ninja-ensure-up-to-date', action='store_true',
                            help='Checks the output of the ninja builder to '
