@@ -533,7 +533,8 @@ def open_tree_if_possible(build_db, master_jsons, successful_builder_steps,
     return
 
   # Don't override human closures.
-  last_gatekeeper_closure = build_db.aux.get('closed_tree')
+  closed_tree_key = 'closed_tree-%s' % status_url_root
+  last_gatekeeper_closure = build_db.aux.get(closed_tree_key)
   if last_gatekeeper_closure:
     if last_gatekeeper_closure['message'] != status['message']:
       return
@@ -551,7 +552,7 @@ def open_tree_if_possible(build_db, master_jsons, successful_builder_steps,
       random_emoji += ' '
     tree_status = 'Tree is open (Automatic: %s)' % random_emoji
   logging.info('Opening tree with message: \'%s\'' % tree_status)
-  build_db.aux['closed_tree'] = {}
+  build_db.aux[closed_tree_key] = {}
   if set_status:
     update_status(tree_status, status_url_root, username, password)
   else:
@@ -622,7 +623,8 @@ def close_tree_if_necessary(build_db, failed_builds, username, password,
   logging.info('closing the tree with message: \'%s\'' % tree_status)
   if set_status:
     update_status(tree_status, status_url_root, username, password)
-    build_db.aux['closed_tree'] = {
+    closed_tree_key = 'closed_tree-%s' % status_url_root
+    build_db.aux[closed_tree_key] = {
         'message': tree_status,
     }
   else:

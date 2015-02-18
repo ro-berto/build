@@ -137,9 +137,9 @@ class GatekeeperTest(unittest.TestCase):
 
     self.url_calls = []
 
-    self.get_status_url = \
-      'https://chromium-status.appspot.com/current?format=json'
-    self.set_status_url = 'https://chromium-status.appspot.com/status'
+    self.status_url_root = 'https://chromium-status.appspot.com'
+    self.get_status_url = self.status_url_root + '/current?format=json'
+    self.set_status_url = self.status_url_root + '/status'
     # Default to "open" to break fewer unittests.
     self.handle_url_json(self.get_status_url, {
       'message': 'tree is open',
@@ -688,7 +688,8 @@ class GatekeeperTest(unittest.TestCase):
     self.assertIn(self.set_status_url, urls)
     # Check that written build_db_file contains tree closing message.
     build_db = build_scan_db.get_build_db(self.build_db_file)
-    self.assertIn('closed', build_db.aux['closed_tree']['message'])
+    self.assertIn('closed',
+        build_db.aux['closed_tree-%s' % self.status_url_root]['message'])
 
   def testIgnoredStepsDontCloseTree(self):
     """Test that ignored steps don't call to the status app."""
@@ -819,15 +820,16 @@ class GatekeeperTest(unittest.TestCase):
       'message': closed_message,
       'general_state': 'closed',
     })
-    build_db.aux['closed_tree'] = {'message': closed_message}
+    closed_tree_key = 'closed_tree-%s' % self.status_url_root
+    build_db.aux[closed_tree_key] = {'message': closed_message}
     self.call_gatekeeper(build_db=build_db)
     self.assertEquals(self.url_calls[-1]['url'], self.set_status_url)
     status_data = urlparse.parse_qs(self.url_calls[-1]['params'])
     self.assertTrue(status_data['message'][0].startswith(
       "Tree is open (Automatic"))
     written_build_db = build_scan_db.get_build_db(self.build_db_file)
-    self.assertDictEqual(written_build_db.aux.get('closed_tree', {}), {})
-    build_db.aux.pop('closed_tree')
+    self.assertDictEqual(written_build_db.aux.get(closed_tree_key, {}), {})
+    build_db.aux.pop(closed_tree_key)
     sys.argv.append('--skip-build-db-update')
 
     # Only change the tree status if it's currently 'closed'
