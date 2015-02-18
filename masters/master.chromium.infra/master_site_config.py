@@ -8,6 +8,6 @@ from config_bootstrap import Master
 
 class Infra(Master.Master1):
   project_name = 'Infra'
-  master_port_id= 1
+  master_port_id = 11
   buildbot_url = 'https://build.chromium.org/p/chromium.infra/'
   service_account_file = 'service-account-infra.json'
