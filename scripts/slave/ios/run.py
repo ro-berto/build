@@ -36,6 +36,7 @@ def main(args):
       args.iossim,
       args.platform,
       args.version,
+      xcode_version=args.xcode_version,
       gs_bucket=args.bucket,
     )
 
@@ -102,6 +103,14 @@ if __name__ == '__main__':
     '-v',
     '--version',
     help='Version of iOS the simulator should run.',
+    metavar='ver',
+    required=True,
+    type=str,
+  )
+  parser.add_argument(
+    '-x',
+    '--xcode-version',
+    help='Version of Xcode to use.',
     metavar='ver',
     required=True,
     type=str,

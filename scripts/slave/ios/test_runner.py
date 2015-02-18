@@ -18,6 +18,7 @@ import time
 
 from common import gtest_utils
 from slave import slave_utils
+from slave.ios import find_xcode
 from slave.ios import utils
 
 
@@ -33,7 +34,16 @@ class AppNotFoundError(TestRunnerError):
   """The app intended to be run was not found."""
   def __init__(self, app_path):
     super(AppNotFoundError, self).__init__(
-      'App does not exist: %s.' % app_path)
+      'App does not exist: %s.' % app_path
+    )
+
+
+class XcodeVersionNotFoundError(TestRunnerError):
+  """The Xcode version intended to be used was not found."""
+  def __init__(self, xcode_version):
+    super(XcodeVersionNotFoundError, self).__init__(
+      'Xcode with the specified version not found: %s.' % xcode_version
+    )
 
 
 class UnexpectedAppExtensionError(TestRunnerError):
@@ -65,11 +75,12 @@ class AppLaunchError(TestRunnerError):
 
 class TestRunner(object):
   """Base class containing common TestRunner functionality."""
-  def __init__(self, app_path, gs_bucket=None):
+  def __init__(self, app_path, xcode_version=None, gs_bucket=None):
     """Initializes a new instance of the TestRunner class.
 
     Args:
       app_path: Full path to the compiled app to run.
+      xcode_version: Version of Xcode to use.
       gs_bucket: Google Storage bucket to upload test data to, or None if the
         test data should not be uploaded.
 
@@ -85,6 +96,12 @@ class TestRunner(object):
 
     if ext not in ('.app', '.ipa'):
       raise UnexpectedAppExtensionError(app_path, ['.app', '.ipa'])
+
+    if xcode_version is not None:
+      xcode_summary = find_xcode.find_xcode(xcode_version)
+
+      if not xcode_summary['found']:
+        raise XcodeVersionNotFoundError(xcode_version)
 
     self.gs_bucket = gs_bucket
 
@@ -350,7 +367,8 @@ class TestRunner(object):
 
 class SimulatorTestRunner(TestRunner):
   """Class for running a test app on an iOS simulator."""
-  def __init__(self, app_path, iossim_path, platform, version, gs_bucket=None):
+  def __init__(self, app_path, iossim_path, platform, version,
+               xcode_version=None, gs_bucket=None):
     """Initializes an instance of the SimulatorTestRunner class.
 
     Args:
@@ -360,13 +378,18 @@ class SimulatorTestRunner(TestRunner):
         running 'iossim -l'. e.g. 'iPhone 5', 'iPhone 5s'.
       version: The iOS version the simulator should be running. Supported values
         can be found by running 'iossim -l'. e.g. '8.0', '7.1'.
+      xcode_version: Version of Xcode to use.
       gs_bucket: Google Storage bucket to upload test data to, or None if the
         test data should not be uploaded.
 
     Raises:
       SimulatorNotFoundError: If the given iossim path cannot be found.
     """
-    super(SimulatorTestRunner, self).__init__(app_path, gs_bucket)
+    super(SimulatorTestRunner, self).__init__(
+      app_path,
+      xcode_version=xcode_version,
+      gs_bucket=gs_bucket,
+    )
 
     if not os.path.exists(iossim_path):
       raise SimulatorNotFoundError(iossim_path)
