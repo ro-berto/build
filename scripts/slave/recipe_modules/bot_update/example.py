@@ -20,10 +20,9 @@ def GenSteps(api):
   force = True if api.properties.get('force') else False
   with_branch_heads = api.properties.get('with_branch_heads', False)
   refs = api.properties.get('refs', [])
-  oauth2 = api.properties.get('oauth2', False)
   api.bot_update.ensure_checkout(force=force,
                                  with_branch_heads=with_branch_heads,
-                                 refs=refs, patch_oauth2=oauth2)
+                                 refs=refs)
 
 
 def GenTests(api):
@@ -51,12 +50,6 @@ def GenTests(api):
       buildername='linux_rel',
       slavename='totallyaslave-c4',
       refs=['+refs/change/1/2/333'],
-  )
-  yield api.test('trychange_oauth2') + api.properties(
-      mastername='tryserver.chromium.linux',
-      buildername='linux_rel',
-      slavename='totallyaslave-c4',
-      oauth2=True,
   )
   yield api.test('tryjob_fail') + api.properties(
       mastername='tryserver.chromium.linux',

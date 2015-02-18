@@ -1062,7 +1062,7 @@ def apply_svn_patch(patch_root, patches, whitelist=None, blacklist=None):
       raise PatchFailed(e.message, e.code, e.output)
 
 def apply_rietveld_issue(issue, patchset, root, server, _rev_map, _revision,
-                         email_file, key_file, whitelist=None, blacklist=None):
+                         whitelist=None, blacklist=None):
   apply_issue_bin = ('apply_issue.bat' if sys.platform.startswith('win')
                      else 'apply_issue')
   cmd = [apply_issue_bin,
@@ -1070,6 +1070,7 @@ def apply_rietveld_issue(issue, patchset, root, server, _rev_map, _revision,
          '--root_dir', root,
          # Tell apply_issue how to fetch the patch.
          '--issue', issue,
+         '--no-auth',
          '--server', server,
          # Always run apply_issue.py, otherwise it would see update.flag
          # and then bail out.
@@ -1077,12 +1078,6 @@ def apply_rietveld_issue(issue, patchset, root, server, _rev_map, _revision,
          # Don't run gclient sync when it sees a DEPS change.
          '--ignore_deps',
   ]
-  # Use an oauth key file if specified.
-  if email_file and key_file:
-    cmd.extend(['--email-file', email_file, '--key-file', key_file])
-  else:
-    cmd.append('--no-auth')
-
   if patchset:
     cmd.extend(['--patchset', patchset])
   if whitelist:
@@ -1250,8 +1245,7 @@ def ensure_deps_revisions(deps_url_mapping, solutions, revisions):
 
 def ensure_checkout(solutions, revisions, first_sln, target_os, target_os_only,
                     patch_root, issue, patchset, patch_url, rietveld_server,
-                    revision_mapping, apply_issue_email_file,
-                    apply_issue_key_file, buildspec, gyp_env, shallow, runhooks,
+                    revision_mapping, buildspec, gyp_env, shallow, runhooks,
                     refs):
   # Get a checkout of each solution, without DEPS or hooks.
   # Calling git directly because there is no way to run Gclient without
@@ -1276,8 +1270,7 @@ def ensure_checkout(solutions, revisions, first_sln, target_os, target_os_only,
         already_patched.append(target)
       elif issue:
         apply_rietveld_issue(issue, patchset, patch_root, rietveld_server,
-                             revision_mapping, git_ref, apply_issue_email_file,
-                             apply_issue_key_file, whitelist=[target])
+                            revision_mapping, git_ref, whitelist=[target])
         already_patched.append(target)
 
   if buildspec:
@@ -1317,8 +1310,7 @@ def ensure_checkout(solutions, revisions, first_sln, target_os, target_os_only,
     apply_svn_patch(patch_root, patches, blacklist=already_patched)
   elif issue:
     apply_rietveld_issue(issue, patchset, patch_root, rietveld_server,
-                         revision_mapping, git_ref, apply_issue_email_file,
-                         apply_issue_key_file, blacklist=already_patched)
+                         revision_mapping, git_ref, blacklist=already_patched)
 
   # Reset the deps_file point in the solutions so that hooks get run properly.
   for sln in solutions:
@@ -1382,11 +1374,6 @@ def parse_args():
   parse.add_option('--issue', help='Issue number to patch from.')
   parse.add_option('--patchset',
                    help='Patchset from issue to patch from, if applicable.')
-  parse.add_option('--apply_issue_email_file',
-                   help='--email-file option passthrough for apply_patch.py.')
-  parse.add_option('--apply_issue_key_file',
-                   help='--private-key-file option passthrough for '
-                        'apply_patch.py.')
   parse.add_option('--patch_url', help='Optional URL to SVN patch.')
   parse.add_option('--root', dest='patch_root',
                    help='DEPRECATED: Use --patch_root.')
@@ -1540,8 +1527,6 @@ def checkout(options, git_slns, specs, buildspec, master,
           patch_url=options.patch_url,
           rietveld_server=options.rietveld_server,
           revision_mapping=options.revision_mapping,
-          patch_email=options.apply_issue_email_file,
-          patch_key=options.apply_issue_key_file,
 
           # For official builders.
           buildspec=buildspec,
