@@ -7,7 +7,7 @@
       "--master",
       "chromium.memory.fyi",
       "--builder",
-      "Linux TSan Builder",
+      "Chromium Linux TSan Builder",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -113,7 +113,7 @@
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
-      "{\"buildername\": \"Linux TSan Builder\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
+      "{\"buildername\": \"Chromium Linux TSan Builder\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -159,13 +159,13 @@
       "--target",
       "Release",
       "--build-url",
-      "gs://chromium-memory-fyi-archive/chromium.memory.fyi/Linux TSan Builder",
+      "gs://chromium-memory-fyi-archive/chromium.memory.fyi/Chromium Linux TSan Builder",
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux TSan Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.memory.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Chromium Linux TSan Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.memory.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux TSan Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.memory.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Chromium Linux TSan Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.memory.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "name": "package build"
   }

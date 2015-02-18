@@ -70,7 +70,7 @@ SPEC = {
       'testing': {'platform': 'linux'},
       'enable_swarming': True,
     },
-    'Linux TSan Builder': {
+    'Chromium Linux TSan Builder': {
       'recipe_config': 'chromium_tsan2',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
