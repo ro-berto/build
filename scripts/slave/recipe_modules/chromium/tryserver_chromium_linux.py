@@ -11,6 +11,6 @@ SPEC = {
   'settings': chromium_linux.SPEC['settings'],
   'builders': {
     # This is intended to build in the same was as the main linux builder.
-    'bisect_builder': chromium_linux.SPEC['builders']['Linux Builder'],
+    'linux_full_bisect_builder': chromium_linux.SPEC['builders']['Linux Builder'],
   },
 }

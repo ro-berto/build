@@ -7,7 +7,7 @@
       "--master",
       "tryserver.chromium.linux",
       "--builder",
-      "bisect_builder",
+      "linux_full_bisect_builder",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -113,7 +113,7 @@
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
-      "{\"buildername\": \"bisect_builder\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
+      "{\"buildername\": \"linux_full_bisect_builder\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -158,13 +158,13 @@
       "--target",
       "Release",
       "--build-url",
-      "gs://chromium-linux-archive/tryserver.chromium.linux/bisect_builder",
+      "gs://chromium-linux-archive/tryserver.chromium.linux/linux_full_bisect_builder",
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"bisect_builder\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.linux\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"linux_full_bisect_builder\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.linux\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"bisect_builder\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.linux\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"linux_full_bisect_builder\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.linux\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "name": "package build"
   }
