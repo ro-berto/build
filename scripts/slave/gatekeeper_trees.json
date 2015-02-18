@@ -42,6 +42,13 @@
         "status-url": "https://nativeclient-status.appspot.com",
         "track-revisions": true
     },
+    "nacl-sdk": {
+        "masters": [
+            "https://build.chromium.org/p/client.nacl.sdk"
+        ],
+        "revision-properties": "got_revision_cp",
+        "track-revisions": true
+    },
     "nacl-sdk-mono": {
         "masters": [
             "https://build.chromium.org/p/client.nacl.sdk.mono"

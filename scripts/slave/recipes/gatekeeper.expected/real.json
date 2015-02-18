@@ -70,6 +70,13 @@
       "@@@STEP_LOG_LINE@json.output@    \"status-url\": \"https://naclports-status.appspot.com\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"track-revisions\": false@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"nacl-sdk\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"masters\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.nacl.sdk\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ], @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"revision-properties\": \"got_revision_cp\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"track-revisions\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"nacl-sdk-mono\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"masters\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.nacl.sdk.mono\"@@@",
@@ -172,6 +179,21 @@
       "https://build.chromium.org/p/chromium.perf"
     ],
     "name": "gatekeeper: chromium.perf"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/gatekeeper_ng.py",
+      "-v",
+      "--json",
+      "[BUILD]/scripts/slave/gatekeeper.json",
+      "--track-revisions",
+      "--revision-properties",
+      "got_revision_cp",
+      "https://build.chromium.org/p/client.nacl.sdk"
+    ],
+    "name": "gatekeeper: nacl-sdk"
   },
   {
     "cmd": [
