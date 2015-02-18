@@ -1,3 +1,4 @@
+
 # Copyright 2014 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -91,7 +92,7 @@ def GenSteps(api):
   )
   api.git(
       'branch', '-D', 'roll',
-      ok_ret=any,
+      ok_ret='any',
       cwd=api.path['checkout'],
   )
   api.git(
@@ -142,7 +143,7 @@ def GenSteps(api):
       step_result = api.step(
           'roll dependency %s' % name,
           ['roll-dep', '--no-verify-revision', 'v8/%s' % name, new_rev],
-          ok_ret=any,
+          ok_ret='any',
           cwd=api.path['checkout'],
       )
       if step_result.retcode == 0:
