@@ -7,7 +7,7 @@
       "--master",
       "chromium.memory.fyi",
       "--builder",
-      "Linux ChromeOS MSan Tests",
+      "Linux TSan Tests",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -81,7 +81,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "clang=1 component=static_library gomadir='[BUILD]/goma' msan=1 target_arch=x64 test_isolation_mode=prepare use_goma=1"
+      "GYP_DEFINES": "clang=1 component=static_library disable_nacl=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare tsan=1 use_goma=1"
     },
     "name": "gclient runhooks"
   },
@@ -97,7 +97,7 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.memory.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Linux ChromeOS MSan Tests\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Linux TSan Tests\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -124,7 +124,7 @@
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
-      "{\"buildername\": \"Linux ChromeOS MSan Tests\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
+      "{\"buildername\": \"Linux TSan Tests\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -168,9 +168,9 @@
       "--build-archive-url",
       "gs://test-domain/test-archive.zip",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux ChromeOS MSan Tests\", \"buildnumber\": 571, \"mastername\": \"chromium.memory.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Chromium Linux ChromeOS MSan Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"browser_tests\": \"ffffffffffffffffffffffffffffffffffffffff\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux TSan Tests\", \"buildnumber\": 571, \"mastername\": \"chromium.memory.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Chromium TSan Build\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"browser_tests\": \"ffffffffffffffffffffffffffffffffffffffff\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux ChromeOS MSan Tests\", \"buildnumber\": 571, \"mastername\": \"chromium.memory.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Chromium Linux ChromeOS MSan Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"browser_tests\": \"ffffffffffffffffffffffffffffffffffffffff\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux TSan Tests\", \"buildnumber\": 571, \"mastername\": \"chromium.memory.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Chromium TSan Build\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"browser_tests\": \"ffffffffffffffffffffffffffffffffffffffff\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "name": "extract build"
   },
@@ -209,7 +209,7 @@
       "--shards",
       "1",
       "--task-name",
-      "browser_tests/Ubuntu-12.04/ffffffffff/Linux ChromeOS MSan Tests/571",
+      "browser_tests/Ubuntu-12.04/ffffffffff/Linux TSan Tests/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -231,15 +231,13 @@
       "pool",
       "Chrome",
       "--tag",
-      "buildername:Linux ChromeOS MSan Tests",
+      "buildername:Linux TSan Tests",
       "--tag",
       "buildnumber:571",
       "--tag",
       "data:ffffffffffffffffffffffffffffffffffffffff",
       "--tag",
       "master:chromium.memory.fyi",
-      "--tag",
-      "msan:1",
       "--tag",
       "name:browser_tests",
       "--tag",
@@ -250,6 +248,8 @@
       "purpose:CI",
       "--tag",
       "purpose:post-commit",
+      "--tag",
+      "tsan:1",
       "--idempotent",
       "ffffffffffffffffffffffffffffffffffffffff",
       "--",
@@ -259,9 +259,9 @@
     "name": "[trigger] browser_tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"browser_tests/Ubuntu-12.04/ffffffffff/Linux ChromeOS MSan Tests/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"browser_tests/Ubuntu-12.04/ffffffffff/Linux TSan Tests/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"browser_tests/Ubuntu-12.04/ffffffffff/Linux ChromeOS MSan Tests/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"browser_tests/Ubuntu-12.04/ffffffffff/Linux TSan Tests/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -292,7 +292,7 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "browser_tests/Ubuntu-12.04/ffffffffff/Linux ChromeOS MSan Tests/571"
+      "browser_tests/Ubuntu-12.04/ffffffffff/Linux TSan Tests/571"
     ],
     "name": "browser_tests"
   }

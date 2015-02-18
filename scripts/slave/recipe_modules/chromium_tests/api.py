@@ -88,6 +88,10 @@ RECIPE_CONFIGS = freeze({
     'chromium_config': 'chromium_ios_simulator',
     'gclient_config': 'ios',
   },
+  'chromium_tsan2': {
+    'chromium_config': 'chromium_tsan2',
+    'gclient_config': 'chromium',
+  },
   'chromium_msan': {
     'chromium_config': 'chromium_msan',
     'gclient_config': 'chromium',

@@ -70,5 +70,36 @@ SPEC = {
       'testing': {'platform': 'linux'},
       'enable_swarming': True,
     },
+    'Linux TSan Builder': {
+      'recipe_config': 'chromium_tsan2',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'linux',
+      },
+      'enable_swarming': True,
+      'use_isolate': True,
+    },
+    'Linux TSan Tests': {
+      'recipe_config': 'chromium_tsan2',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+      ],
+      'parent_buildername': 'Chromium TSan Build',
+      'testing': {
+        'platform': 'linux',
+      },
+      'enable_swarming': True,
+      'use_isolate': True,
+    },
   },
 }

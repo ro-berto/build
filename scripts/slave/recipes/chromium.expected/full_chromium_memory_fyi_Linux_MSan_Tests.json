@@ -253,6 +253,7 @@
       "--idempotent",
       "ffffffffffffffffffffffffffffffffffffffff",
       "--",
+      "--test-launcher-print-test-stdio=always",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "name": "[trigger] browser_tests",

@@ -7,7 +7,7 @@
       "--master",
       "chromium.memory.fyi",
       "--builder",
-      "Linux MSan Tests",
+      "Linux TSan Builder",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -81,7 +81,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "clang=1 component=static_library gomadir='[BUILD]/goma' msan=1 target_arch=x64 test_isolation_mode=prepare use_goma=1"
+      "GYP_DEFINES": "clang=1 component=static_library disable_nacl=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare tsan=1 use_goma=1"
     },
     "name": "gclient runhooks"
   },
@@ -96,16 +96,7 @@
     "name": "read test spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.memory.fyi.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Linux MSan Tests\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"base_unittests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    ], @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"base_unittests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
@@ -122,7 +113,7 @@
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
-      "{\"buildername\": \"Linux MSan Tests\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
+      "{\"buildername\": \"Linux TSan Builder\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -142,65 +133,40 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/src/out/Release"
-    ],
-    "name": "rmtree build directory",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/extract_build.py",
+      "[BUILD]/scripts/slave/compile.py",
       "--target",
       "Release",
-      "--build-url",
-      "gs://chromium-memory-fyi-archive/chromium.memory.fyi/Chromium Linux MSan Builder/full-build-linux.zip",
-      "--build_revision",
-      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux MSan Tests\", \"buildnumber\": 571, \"mastername\": \"chromium.memory.fyi\", \"parent_buildername\": \"Chromium Linux MSan Builder\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux MSan Tests\", \"buildnumber\": 571, \"mastername\": \"chromium.memory.fyi\", \"parent_buildername\": \"Chromium Linux MSan Builder\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
+      "--build-tool",
+      "ninja",
+      "--compiler",
+      "goma-clang",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "--",
+      "All",
+      "chromium_builder_tests"
     ],
-    "name": "extract build"
+    "name": "compile"
   },
   {
     "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "[BUILD]/scripts/slave/zip_build.py",
       "--target",
       "Release",
-      "--xvfb",
+      "--build-url",
+      "gs://chromium-memory-fyi-archive/chromium.memory.fyi/Linux TSan Builder",
+      "--build_revision",
+      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux MSan Tests\", \"buildnumber\": 571, \"mastername\": \"chromium.memory.fyi\", \"parent_buildername\": \"Chromium Linux MSan Builder\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux TSan Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.memory.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux MSan Tests\", \"buildnumber\": 571, \"mastername\": \"chromium.memory.fyi\", \"parent_buildername\": \"Chromium Linux MSan Builder\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--annotate=gtest",
-      "--test-type=base_unittests",
-      "--test-launcher-summary-output",
-      "/path/to/tmp/json",
-      "--generate-json-file",
-      "-o",
-      "gtest-results/base_unittests",
-      "--builder-name=Linux MSan Tests",
-      "--slave-name=TestSlavename",
-      "--build-number=571",
-      "--enable-msan",
-      "base_unittests",
-      "--test-launcher-print-test-stdio=always"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux TSan Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.memory.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
-    "name": "base_unittests"
+    "name": "package build"
   }
 ]

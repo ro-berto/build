@@ -51,7 +51,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "clang=1 dcheck_always_on=0 disable_nacl=1 fastbuild=1 gomadir='[BUILD]/goma' release_extra_cflags=-gline-tables-only target_arch=x64 tsan=1 use_allocator=none use_aura=1 use_goma=1 v8_target_arch=x64"
+      "GYP_DEFINES": "clang=1 dcheck_always_on=0 disable_nacl=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 tsan=1 use_goma=1 v8_target_arch=x64"
     },
     "name": "gclient runhooks"
   },

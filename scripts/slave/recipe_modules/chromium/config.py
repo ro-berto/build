@@ -432,9 +432,6 @@ def tsan2(c):
   c.runtests.swarming_tags |= {'tsan:1'}
   gyp_defs = c.gyp_env.GYP_DEFINES
   gyp_defs['tsan'] = 1
-  gyp_defs['use_allocator'] = 'none'
-  gyp_defs['use_aura'] = 1
-  gyp_defs['release_extra_cflags'] = '-gline-tables-only'
   gyp_defs['disable_nacl'] = 1
 
 @config_ctx(deps=['compiler'], group='memory_tool')
@@ -512,9 +509,13 @@ def clang_tot_linux(c):
 def chromium_win_asan(c):
   c.runtests.run_asan_test = True
 
-@config_ctx(includes=['ninja', 'clang', 'goma', 'asan'])
-def chromium_asan(c):
+@config_ctx()
+def chromium_sanitizer(c):
   c.runtests.test_args.append('--test-launcher-print-test-stdio=always')
+
+@config_ctx(includes=['ninja', 'clang', 'goma', 'asan', 'chromium_sanitizer'])
+def chromium_asan(c):
+  pass
 
 @config_ctx(includes=['chromium_asan'])
 def chromium_asan_default_targets(c):
@@ -535,7 +536,7 @@ def chromium_mac_asan(c):
   if c.gyp_env.GYP_DEFINES['target_arch'] == 'x64':
     c.gyp_env.GYP_DEFINES['host_arch'] = 'x64'
 
-@config_ctx(includes=['ninja', 'clang', 'goma', 'msan'])
+@config_ctx(includes=['ninja', 'clang', 'goma', 'msan', 'chromium_sanitizer'])
 def chromium_msan(c):
   c.compile_py.default_targets = ['All', 'chromium_builder_tests']
 
@@ -543,7 +544,7 @@ def chromium_msan(c):
 def chromium_syzyasan(c):
   c.compile_py.default_targets = ['All', 'chromium_builder_tests']
 
-@config_ctx(includes=['ninja', 'clang', 'goma', 'tsan2'])
+@config_ctx(includes=['ninja', 'clang', 'goma', 'tsan2', 'chromium_sanitizer'])
 def chromium_tsan2(c):
   c.compile_py.default_targets = ['All', 'chromium_builder_tests']
 
