@@ -5,7 +5,7 @@
             "https://build.chromium.org/p/chromium.webkit"
         ],
         "open-tree": true,
-        "password-file": ".blink_status_password",
+        "password-file": "/creds/gatekeeper/blink_status_password",
         "revision-properties": "got_revision_cp,got_webkit_revision_cp",
         "set-status": true,
         "status-url": "https://blink-status.appspot.com",
@@ -24,7 +24,7 @@
             "https://build.chromium.org/p/chromium.win"
         ],
         "open-tree": true,
-        "password-file": ".chromium_status_password",
+        "password-file": "/creds/gatekeeper/chromium_status_password",
         "revision-properties": "got_revision_cp",
         "set-status": true,
         "status-url": "https://chromium-status.appspot.com",
@@ -36,7 +36,7 @@
             "https://build.chromium.org/p/client.nacl"
         ],
         "open-tree": true,
-        "password-file": ".nacl_status_password",
+        "password-file": "/creds/gatekeeper/nacl_status_password",
         "revision-properties": "got_revision_cp",
         "set-status": true,
         "status-url": "https://nativeclient-status.appspot.com",
@@ -55,7 +55,7 @@
             "https://build.chromium.org/p/client.nacl.ports"
         ],
         "open-tree": true,
-        "password-file": ".nacl_ports_status_password",
+        "password-file": "/creds/gatekeeper/nacl_ports_status_password",
         "revision-properties": "got_revision_cp",
         "set-status": true,
         "status-url": "https://naclports-status.appspot.com",
@@ -67,7 +67,7 @@
             "https://build.chromium.org/p/client.skia",
             "https://build.chromium.org/p/client.skia.compile"
         ],
-        "password-file": ".skia_status_password",
+        "password-file": "/creds/gatekeeper/skia_status_password",
         "revision-properties": "got_revision",
         "set-status": true,
         "status-url": "https://skia-tree-status.appspot.com"
@@ -78,7 +78,7 @@
             "https://build.chromium.org/p/client.v8"
         ],
         "open-tree": true,
-        "password-file": ".v8_status_password",
+        "password-file": "/creds/gatekeeper/v8_status_password",
         "revision-properties": "got_revision_cp",
         "set-status": true,
         "status-url": "https://v8-status.appspot.com",
@@ -90,7 +90,7 @@
             "https://build.chromium.org/p/client.webrtc"
         ],
         "open-tree": true,
-        "password-file": ".webrtc_status_password",
+        "password-file": "/creds/gatekeeper/webrtc_status_password",
         "revision-properties": "got_revision",
         "set-status": true,
         "status-url": "https://webrtc-status.appspot.com",

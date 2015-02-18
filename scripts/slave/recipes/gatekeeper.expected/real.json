@@ -16,7 +16,7 @@
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/chromium.webkit\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ], @@@",
       "@@@STEP_LOG_LINE@json.output@    \"open-tree\": true, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"password-file\": \".blink_status_password\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"password-file\": \"/creds/gatekeeper/blink_status_password\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"revision-properties\": \"got_revision_cp,got_webkit_revision_cp\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"set-status\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"status-url\": \"https://blink-status.appspot.com\", @@@",
@@ -35,7 +35,7 @@
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/chromium.win\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ], @@@",
       "@@@STEP_LOG_LINE@json.output@    \"open-tree\": true, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"password-file\": \".chromium_status_password\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"password-file\": \"/creds/gatekeeper/chromium_status_password\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"revision-properties\": \"got_revision_cp\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"set-status\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"status-url\": \"https://chromium-status.appspot.com\", @@@",
@@ -52,7 +52,7 @@
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.nacl\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ], @@@",
       "@@@STEP_LOG_LINE@json.output@    \"open-tree\": true, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"password-file\": \".nacl_status_password\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"password-file\": \"/creds/gatekeeper/nacl_status_password\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"revision-properties\": \"got_revision_cp\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"set-status\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"status-url\": \"https://nativeclient-status.appspot.com\", @@@",
@@ -64,7 +64,7 @@
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.nacl.ports\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ], @@@",
       "@@@STEP_LOG_LINE@json.output@    \"open-tree\": true, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"password-file\": \".nacl_ports_status_password\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"password-file\": \"/creds/gatekeeper/nacl_ports_status_password\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"revision-properties\": \"got_revision_cp\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"set-status\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"status-url\": \"https://naclports-status.appspot.com\", @@@",
@@ -91,7 +91,7 @@
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.skia\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.skia.compile\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ], @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"password-file\": \".skia_status_password\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"password-file\": \"/creds/gatekeeper/skia_status_password\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"revision-properties\": \"got_revision\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"set-status\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"status-url\": \"https://skia-tree-status.appspot.com\"@@@",
@@ -102,7 +102,7 @@
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.v8\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ], @@@",
       "@@@STEP_LOG_LINE@json.output@    \"open-tree\": true, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"password-file\": \".v8_status_password\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"password-file\": \"/creds/gatekeeper/v8_status_password\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"revision-properties\": \"got_revision_cp\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"set-status\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"status-url\": \"https://v8-status.appspot.com\", @@@",
@@ -114,7 +114,7 @@
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.webrtc\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ], @@@",
       "@@@STEP_LOG_LINE@json.output@    \"open-tree\": true, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"password-file\": \".webrtc_status_password\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"password-file\": \"/creds/gatekeeper/webrtc_status_password\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"revision-properties\": \"got_revision\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"set-status\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"status-url\": \"https://webrtc-status.appspot.com\", @@@",
@@ -141,7 +141,7 @@
       "--build-db",
       "nacl_ports_build_db.json",
       "--password-file",
-      ".nacl_ports_status_password",
+      "/creds/gatekeeper/nacl_ports_status_password",
       "https://build.chromium.org/p/client.nacl.ports"
     ],
     "name": "gatekeeper: nacl-ports"
@@ -206,7 +206,7 @@
       "--build-db",
       "blink_build_db.json",
       "--password-file",
-      ".blink_status_password",
+      "/creds/gatekeeper/blink_status_password",
       "https://build.chromium.org/p/chromium.webkit"
     ],
     "name": "gatekeeper: blink"
@@ -229,7 +229,7 @@
       "--build-db",
       "v8_build_db.json",
       "--password-file",
-      ".v8_status_password",
+      "/creds/gatekeeper/v8_status_password",
       "https://build.chromium.org/p/client.v8"
     ],
     "name": "gatekeeper: v8"
@@ -252,7 +252,7 @@
       "--build-db",
       "nacl_build_db.json",
       "--password-file",
-      ".nacl_status_password",
+      "/creds/gatekeeper/nacl_status_password",
       "https://build.chromium.org/p/client.nacl"
     ],
     "name": "gatekeeper: nacl"
@@ -273,7 +273,7 @@
       "--build-db",
       "skia_build_db.json",
       "--password-file",
-      ".skia_status_password",
+      "/creds/gatekeeper/skia_status_password",
       "https://build.chromium.org/p/client.skia",
       "https://build.chromium.org/p/client.skia.compile"
     ],
@@ -297,7 +297,7 @@
       "--build-db",
       "waterfall_build_db.json",
       "--password-file",
-      ".chromium_status_password",
+      "/creds/gatekeeper/chromium_status_password",
       "https://build.chromium.org/p/chromium",
       "https://build.chromium.org/p/chromium.chrome",
       "https://build.chromium.org/p/chromium.chromiumos",
@@ -327,7 +327,7 @@
       "--build-db",
       "webrtc_build_db.json",
       "--password-file",
-      ".webrtc_status_password",
+      "/creds/gatekeeper/webrtc_status_password",
       "https://build.chromium.org/p/client.webrtc"
     ],
     "name": "gatekeeper: webrtc"
