@@ -55,8 +55,8 @@ def GenTests(api):
   yield (
     api.test('compile_with_patch_fail') +
     api.properties.tryserver(
-      mastername='tryserver.chromium.gpu',
-      buildername='win_gpu') +
+      mastername='tryserver.chromium.win',
+      buildername='win_chromium_rel_ng') +
     api.override_step_data('analyze', api.gpu.analyze_builds_everything) +
     api.step_data('compile (with patch)', retcode=1) +
     api.platform.name('win')
@@ -65,8 +65,8 @@ def GenTests(api):
   yield (
     api.test('compile_without_patch_fail') +
     api.properties.tryserver(
-      mastername='tryserver.chromium.gpu',
-      buildername='win_gpu') +
+      mastername='tryserver.chromium.win',
+      buildername='win_chromium_rel_ng') +
     api.override_step_data('analyze', api.gpu.analyze_builds_everything) +
     api.step_data('compile (with patch)', retcode=1) +
     api.step_data('compile (without patch)', retcode=1) +
@@ -88,8 +88,8 @@ def GenTests(api):
   yield (
     api.test('analyze_builds_nothing') +
     api.properties.tryserver(
-      mastername='tryserver.chromium.gpu',
-      buildername='win_gpu') +
+      mastername='tryserver.chromium.win',
+      buildername='win_chromium_rel_ng') +
     api.override_step_data(
         'analyze',
         api.gpu.analyze_builds_nothing)
@@ -100,8 +100,8 @@ def GenTests(api):
   yield (
     api.test('analyze_builds_only_gpu_unittests') +
     api.properties.tryserver(
-      mastername='tryserver.chromium.gpu',
-      buildername='win_gpu') +
+      mastername='tryserver.chromium.win',
+      buildername='win_chromium_rel_ng') +
     api.override_step_data(
         'analyze',
         api.gpu.analyze_builds_gpu_unittests)

@@ -242,7 +242,6 @@ ENABLED_MASTERS = [
     'client.webrtc.fyi',
     'tryserver.blink',
     'tryserver.client.mojo',
-    'tryserver.chromium.gpu',
     'tryserver.chromium.linux',
     'tryserver.chromium.mac',
     'tryserver.chromium.perf',

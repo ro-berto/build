@@ -2,7 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import json
 import re
 
 
@@ -270,18 +269,21 @@ class LocalGTestTest(Test):
       step_result = api.step.active_result
       self._test_runs[suffix] = step_result
 
-      r = step_result.test_utils.gtest_results
-      p = step_result.presentation
+      if hasattr(step_result, 'test_utils'):
+        r = step_result.test_utils.gtest_results
+        p = step_result.presentation
 
-      if r.valid:
-        p.step_text += api.test_utils.format_step_text([
+        if r.valid:
+          p.step_text += api.test_utils.format_step_text([
             ['failures:', r.failures]
-        ])
+          ])
 
     return step_result
 
   def has_valid_results(self, api, suffix):
     if suffix not in self._test_runs:
+      return False
+    if not hasattr(self._test_runs[suffix], 'test_utils'):
       return False
     gtest_results = self._test_runs[suffix].test_utils.gtest_results
     if not gtest_results.valid:  # pragma: no cover
@@ -573,6 +575,9 @@ class SwarmingGTestTest(SwarmingTest):
         extra_args=args)
 
   def validate_task_results(self, api, step_result):
+    if not hasattr(step_result, 'test_utils'):
+      return False, None
+
     gtest_results = step_result.test_utils.gtest_results
     if not gtest_results:
       return False, None
@@ -663,12 +668,14 @@ class PythonBasedTest(Test):
           step_test_data=lambda: api.test_utils.test_api.canned_test_output(True))
     finally:
       step_result = api.step.active_result
-      r = step_result.test_utils.test_results
-      p = step_result.presentation
-      p.step_text += api.test_utils.format_step_text([
-        ['unexpected_failures:', r.unexpected_failures.keys()],
-      ])
       self._test_runs[suffix] = step_result
+
+      if hasattr(step_result, 'test_utils'):
+        r = step_result.test_utils.test_results
+        p = step_result.presentation
+        p.step_text += api.test_utils.format_step_text([
+          ['unexpected_failures:', r.unexpected_failures.keys()],
+        ])
 
     return step_result
 
@@ -676,6 +683,8 @@ class PythonBasedTest(Test):
     # TODO(dpranke): we should just return zero/nonzero for success/fail.
     # crbug.com/357866
     step = self._test_runs[suffix]
+    if not hasattr(step, 'test_utils'):
+      return False
     return (step.test_utils.test_results.valid and
             step.retcode <= step.test_utils.test_results.MAX_FAILURES_EXIT_STATUS and
             (step.retcode == 0) or self.failures(api, suffix))
@@ -860,7 +869,7 @@ class LocalTelemetryGPUTest(Test):  # pylint: disable=W0232
                                   if value['type'] == 'failure']
 
         self._valid[suffix] = True
-      except (ValueError, KeyError):
+      except (ValueError, KeyError, AttributeError):
         self._valid[suffix] = False
 
       if self._valid[suffix]:
@@ -944,17 +953,18 @@ class AndroidInstrumentationTest(Test):
   def name(self):
     return self._name
 
-  def _get_failing_tests(self, json_results):
+  def _get_failing_tests(self, step_result):
     """Parses test results and returns a list of failed tests.
 
     Args:
-      json_results: Parsed JSON output file returned from the test runner.
+      step_result: Result returned from the test.
 
     Returns:
       None if results are invalid, a list of failures otherwise (may be empty).
     """
     try:
       # Extract test results.
+      json_results = step_result.json.output
       test_results = {test_name: test_data[0]['status']
                       for result_dict in json_results['per_iteration_data']
                       for test_name, test_data in result_dict.iteritems()}
@@ -962,7 +972,7 @@ class AndroidInstrumentationTest(Test):
       # TODO(sergiyb): Figure out how to handle status UNKNOWN.
       return [test_name for test_name, test_status in test_results.iteritems()
                         if test_status not in ['SUCCESS', 'SKIPPED']]
-    except (KeyError, IndexError, TypeError):
+    except (KeyError, IndexError, TypeError, AttributeError):
       return None
 
   def run(self, api, suffix):
@@ -985,7 +995,8 @@ class AndroidInstrumentationTest(Test):
           step_test_data=lambda: api.json.test_api.output(mock_test_results))
     finally:
       step_result = api.step.active_result
-      failures = self._get_failing_tests(step_result.json.output)
+      failures = self._get_failing_tests(step_result)
+
       if failures is None:
         self._test_runs[suffix] = {'valid': False}
       else:

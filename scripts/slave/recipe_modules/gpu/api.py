@@ -442,18 +442,6 @@ class GpuApi(recipe_api.RecipeApi):
 
     return tests
 
-  def _should_run_test(self, isolate_name):
-    # Check to see if analyze.py excluded this isolate from the
-    # compile targets. If so, skip running it. (It isn't possible to
-    # run analyze.py on the testers because they don't check out the
-    # Chromium workspace.) We prefer to not run this logic on the main
-    # waterfall bots so that forgetting an isolate's hash there will
-    # cause a hard failure.
-    if self.m.properties['mastername'] == 'tryserver.chromium.gpu':
-      return isolate_name in self.m.isolate.isolated_tests
-    else:
-      return True
-
   def _get_gpu_suffix(self, dimensions):
     if dimensions is None:
       return None
@@ -496,8 +484,6 @@ class GpuApi(recipe_api.RecipeApi):
 
     target_name = target_name or name
     assert target_name.endswith('test') or target_name.endswith('tests')
-    if not self._should_run_test(name):
-      return
 
     results_directory = self.m.path['slave_build'].join('gtest-results', name)
     return self.m.chromium.steps.GPUGTestTest(
@@ -519,9 +505,6 @@ class GpuApi(recipe_api.RecipeApi):
                              enable_swarming, swarming_dimensions,
                              args=None, target_name=None,
                              extra_browser_args=None):
-    if not self._should_run_test('telemetry_gpu_test'):
-      return
-
     test_args = ['-v', '--use-devtools-active-port']
     if args:
       test_args.extend(args)

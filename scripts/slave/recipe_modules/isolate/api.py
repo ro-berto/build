@@ -188,7 +188,7 @@ class IsolateApi(recipe_api.RecipeApi):
     # Be robust in the case where swarm_hashes is an empty string
     # instead of an empty dictionary, or similar.
     if not hashes:
-      return {}
+      return {} # pragma: no covergae
     return {
       k.encode('ascii'): v.encode('ascii')
       for k, v in hashes.iteritems()
