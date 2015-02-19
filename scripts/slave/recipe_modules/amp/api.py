@@ -96,21 +96,31 @@ class AmpApi(recipe_api.RecipeApi):
             }
           }
         })).json.output
-    if verbose:
-      args += ['--verbose']
-    step_result = self.m.python(
-        '[collect] %s' % suite,
-        self.m.path['checkout'].join('build', 'android', 'test_runner.py'),
-        args=args)
     try:
       device_data = trigger_data['env']['device']
-      step_result.presentation.step_text = 'on %s %s %s' % (
+      device_info_text = 'on %s %s %s' % (
           device_data['brand'],
           device_data['name'],
           device_data['os_version'])
     except KeyError:
-      step_result.presentation.status = self.m.step.WARNING
-      step_result.presentation.step_text = 'unable to find device info'
+      device_data = None
+      device_info_text = 'unable to find device info'
+
+    if verbose:
+      args += ['--verbose']
+    try:
+      step_result = self.m.python(
+          '[collect] %s' % suite,
+          self.m.path['checkout'].join('build', 'android', 'test_runner.py'),
+          args=args)
+    except self.m.step.StepFailure as f:
+      step_result = f.result
+      raise
+    finally:
+      step_result.presentation.step_text = device_info_text
+      if (not device_data and
+          step_result.presentation.status != self.m.step.FAILURE):
+        step_result.presentation.status = self.m.step.WARNING
 
   def upload_logcat_to_gs(self, bucket, suite):
     """Upload the logcat file returned from the appurify results to

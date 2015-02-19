@@ -94,7 +94,7 @@ def GenSteps(api):
                                 device_os=builder.get('device_os')))
 
     for suite, isolate_file in builder.get('unittests', []):
-      api.amp.collect_test_suite(
+      deferred_step_result = api.amp.collect_test_suite(
           suite, 'gtest',
           api.amp.gtest_arguments(suite),
           api.amp.amp_arguments(api_address=AMP_INSTANCE_ADDRESS,
@@ -102,7 +102,8 @@ def GenSteps(api):
                                 api_protocol=AMP_INSTANCE_PROTOCOL,
                                 device_name=builder.get('device_name'),
                                 device_os=builder.get('device_os')))
-      api.amp.upload_logcat_to_gs(AMP_RESULTS_BUCKET, suite)
+      if not deferred_step_result.is_ok:
+        api.amp.upload_logcat_to_gs(AMP_RESULTS_BUCKET, suite)
 
 
 def GenTests(api):
@@ -121,3 +122,15 @@ def GenTests(api):
             buildnumber='1337')
     )
 
+    yield (
+      api.test('%s_test_failure' % sanitize(buildername)) +
+      api.properties.generic(
+          revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
+          parent_buildername='parent_buildername',
+          parent_buildnumber='1729',
+          buildername=buildername,
+          slavename='slavename',
+          mastername='tryserver.chromium.linux',
+          buildnumber='1337') +
+      api.step_data('[collect] android_webview_unittests', retcode=1)
+    )
