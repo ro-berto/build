@@ -242,7 +242,6 @@ def main(argv):
       'master.client.nacl.sdk.addin': 'NativeClientSDKAddIn',
       'master.client.nacl.sdk.mono': 'NativeClientSDKMono',
       'master.client.nacl.toolchain': 'NativeClientToolchain',
-      'master.client.pagespeed': 'PageSpeed',
       'master.client.pdfium': 'Pdfium',
       'master.client.sfntly': 'Sfntly',
       'master.client.skia': 'Skia',
