@@ -11,6 +11,7 @@ import environment_setup
 import collections
 import errno
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -417,6 +418,12 @@ class SimulatorTestRunner(TestRunner):
     """Creates a new home directory for the simulator."""
     self.homedir = tempfile.mkdtemp()
 
+  def RemoveHomeDirectory(self):
+    """Recursively removes the home directory being used by the simulator."""
+    if os.path.exists(self.homedir):
+      shutil.rmtree(self.homedir)
+      self.homedir = ''
+
   def KillSimulators(self):
     """Forcibly kills any running iOS simulator instances."""
     kill_cmd = [
@@ -442,6 +449,7 @@ class SimulatorTestRunner(TestRunner):
     self.UploadTestData()
     self.GetCrashReports()
     self.KillSimulators()
+    self.RemoveHomeDirectory()
 
   def FindTestDocumentsDirectory(self, apps_dir):
     """Finds the test's Documents directory in the given Applications directory.
