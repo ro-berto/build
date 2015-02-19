@@ -9,6 +9,7 @@ DEPS = [
   'chromium',
   'platform',
   'properties',
+  'tryserver',
 ]
 
 
@@ -313,7 +314,8 @@ BUILDERS = freeze({
   },
 })
 
-def GenSteps(api):
+
+def _GenStepsInternal(api):
   buildername, bot_config = api.chromium.configure_bot(BUILDERS, ['gn'])
 
   api.bot_update.ensure_checkout(
@@ -343,6 +345,12 @@ def GenSteps(api):
 
   if not is_android:
     api.chromium.runtest('gn_unittests')
+
+
+def GenSteps(api):
+  with api.tryserver.set_failure_hash():
+    return _GenStepsInternal(api)
+
 
 def GenTests(api):
   for test in api.chromium.gen_tests_for_builders(BUILDERS):

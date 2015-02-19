@@ -285,7 +285,8 @@
     "name": "Aborting due to failed build state",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@import sys; sys.exit(1)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
+      "@@@STEP_LOG_END@python.inline@@@",
+      "@@@SET_BUILD_PROPERTY@failure_hash@\"8bcc0f083de6368de427b224ac996bf0d27ea660\"@@@"
     ]
   },
   {

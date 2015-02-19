@@ -21,6 +21,7 @@ DEPS = [
   'step',
   'swarming',
   'test_utils',
+  'tryserver',
 ]
 
 
@@ -277,7 +278,7 @@ BLINK_GPU_DIMENSION_SETS = {
 }
 
 
-def GenSteps(api):
+def _GenStepsInternal(api):
   mastername = api.properties.get('mastername')
   buildername = api.properties.get('buildername')
   master_dict = BUILDERS.get(mastername, {})
@@ -402,6 +403,11 @@ def GenSteps(api):
   tests.append(api.chromium.steps.BlinkTest())
 
   api.test_utils.determine_new_failures(api, tests, deapply_patch_fn)
+
+
+def GenSteps(api):
+  with api.tryserver.set_failure_hash():
+    return _GenStepsInternal(api)
 
 
 def _sanitize_nonalpha(text):

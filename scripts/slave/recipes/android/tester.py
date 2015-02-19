@@ -93,7 +93,8 @@ BUILDERS = freeze({
 
 FLAKINESS_DASHBOARD = 'http://test-results.appspot.com'
 
-def GenSteps(api):
+
+def _GenStepsInternal(api):
   # Required for us to be able to use filter.
   api.chromium_android.set_config('base_config')
 
@@ -196,6 +197,11 @@ def GenSteps(api):
     api.chromium_android.logcat_dump(gs_bucket='chromium-android')
     api.chromium_android.stack_tool_steps()
     api.chromium_android.test_report()
+
+
+def GenSteps(api):
+  with api.tryserver.set_failure_hash():
+    return _GenStepsInternal(api)
 
 
 def _sanitize_nonalpha(text):

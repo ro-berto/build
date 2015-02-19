@@ -11,9 +11,11 @@ DEPS = [
   'properties',
   'rietveld',
   'step',
+  'tryserver',
 ]
 
-def GenSteps(api):
+
+def _GenStepsInternal(api):
   root = api.rietveld.calculate_issue_root(
       extra_patch_project_roots={'v8': []})
 
@@ -59,6 +61,11 @@ def GenSteps(api):
     '--rietveld_fetch',
     '--upstream', upstream,  # '' if not in bot_update mode.
     '--trybot-json', api.json.output()])
+
+
+def GenSteps(api):
+  with api.tryserver.set_failure_hash():
+    return _GenStepsInternal(api)
 
 
 def GenTests(api):

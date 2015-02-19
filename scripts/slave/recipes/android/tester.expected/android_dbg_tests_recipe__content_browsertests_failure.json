@@ -413,7 +413,8 @@
       "@@@STEP_LOG_LINE@python.inline@    for l in f.readlines():@@@",
       "@@@STEP_LOG_LINE@python.inline@      print l@@@",
       "@@@STEP_LOG_LINE@python.inline@  os.remove(report)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
+      "@@@STEP_LOG_END@python.inline@@@",
+      "@@@SET_BUILD_PROPERTY@failure_hash@\"b5a6c7eed43c417c562d3aad09e14f3ebf88ed8b\"@@@"
     ]
   },
   {

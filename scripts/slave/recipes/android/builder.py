@@ -105,7 +105,8 @@ BUILDERS = freeze({
   },
 })
 
-def GenSteps(api):
+
+def _GenStepsInternal(api):
   mastername = api.properties['mastername']
   buildername = api.properties['buildername']
   bot_config = BUILDERS[mastername][buildername]
@@ -156,6 +157,11 @@ def GenSteps(api):
   upload_config = bot_config.get('zip_and_upload')
   if upload_config:
     droid.zip_and_upload_build(upload_config['bucket'])
+
+
+def GenSteps(api):
+  with api.tryserver.set_failure_hash():
+    return _GenStepsInternal(api)
 
 
 def _sanitize_nonalpha(text):
