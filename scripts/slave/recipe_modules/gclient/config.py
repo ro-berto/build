@@ -401,6 +401,13 @@ def crashpad(c):
   soln.name = 'crashpad'
   soln.url = 'https://chromium.googlesource.com/crashpad/crashpad.git'
 
+@config_ctx()
+def boringssl(c):
+  soln = c.solutions.add()
+  soln.name = 'boringssl'
+  soln.url = 'https://boringssl.googlesource.com/boringssl.git'
+  soln.deps_file = 'util/bot/DEPS'
+
 @config_ctx(config_vars={'GIT_MODE': True})
 def infra(c):
   soln = c.solutions.add()
