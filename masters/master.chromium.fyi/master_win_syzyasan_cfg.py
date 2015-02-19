@@ -175,18 +175,5 @@ F('win_syzyasan_lkgr_rel', win().ChromiumASANFactory(
     factory_properties=lkgr_factory_properties))
 
 
-def Update(update_config, active_master, c):
-  c['status'].append(gatekeeper.GateKeeper(
-      tree_status_url=None,
-      fromaddr=active_master.from_address,
-      categories_steps={
-        'lkgr': ['compile']
-      },
-      relayhost=update_config.Master.smtp,
-      subject='buildbot %(result)s in %(projectName)s on %(builder)s, '
-              'revision %(revision)s',
-      sheriffs=None,
-      extraRecipients=['syzygy-team@chromium.org'],
-      lookup=master_utils.FilterDomain(),
-      use_getname=True))
+def Update(_update_config, _active_master, c):
   return helper.Update(c)
