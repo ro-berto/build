@@ -112,7 +112,6 @@ if __name__ == '__main__':
     '--xcode-version',
     help='Version of Xcode to use.',
     metavar='ver',
-    required=True,
     type=str,
   )
 
