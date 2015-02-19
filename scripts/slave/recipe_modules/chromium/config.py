@@ -364,11 +364,14 @@ def ozone(c):
 def oilpan(c):
   c.gyp_env.GYP_DEFINES['enable_oilpan'] = 1
 
-@config_ctx(includes=['static_library'])
+@config_ctx()
+def clobber(c):
+  c.compile_py.clobber = True
+
+@config_ctx(includes=['static_library', 'clobber'])
 def official(c):
   c.gyp_env.GYP_DEFINES['branding'] = 'Chrome'
   c.gyp_env.GYP_DEFINES['buildtype'] = 'Official'
-  c.compile_py.clobber = True
   c.compile_py.mode = 'official'
 
 @config_ctx(deps=['compiler'])

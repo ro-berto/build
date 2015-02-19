@@ -708,5 +708,19 @@ SPEC = {
       },
       'enable_swarming': True,
     },
+    'Linux Builder (clobber)': {
+      'recipe_config': 'chromium',
+      'chromium_apply_config': ['clobber'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'compile_targets': [
+        'chromium_swarm_tests',
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+    },
   },
 }
