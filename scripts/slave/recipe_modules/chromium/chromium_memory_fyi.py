@@ -94,12 +94,11 @@ SPEC = {
         steps.generate_gtest,
         steps.generate_script,
       ],
-      'parent_buildername': 'Chromium TSan Build',
+      'parent_buildername': 'Chromium Linux TSan Builder',
       'testing': {
         'platform': 'linux',
       },
       'enable_swarming': True,
-      'use_isolate': True,
     },
   },
 }
