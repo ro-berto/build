@@ -13,10 +13,10 @@ from master.factory import gclient_factory
 
 
 class GYPFactory(gclient_factory.GClientFactory):
-  svn_url = config.Master.gyp_trunk_url
+  gyp_url = 'https://chromium.googlesource.com/external/gyp.git'
 
   def __init__(self, build_dir, **kw):
-    main = gclient_factory.GClientSolution(self.svn_url)
+    main = gclient_factory.GClientSolution(self.gyp_url)
     super(GYPFactory, self).__init__(build_dir, [main], **kw)
 
   def GYPFactory(self):
