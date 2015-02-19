@@ -37,6 +37,10 @@ BUILDERS = freeze({
         'mastername': 'chromium.linux',
         'buildername': 'Android Clang Builder (dbg)',
       },
+      'android_compile_dbg': {
+        'mastername': 'chromium.linux',
+        'buildername': 'Android Builder (dbg)',
+      },
       'android_compile_rel': {
         'mastername': 'chromium.linux',
         'buildername': 'Android Builder',
