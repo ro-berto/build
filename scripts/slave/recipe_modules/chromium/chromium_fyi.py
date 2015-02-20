@@ -708,6 +708,43 @@ SPEC = {
       },
       'enable_swarming': True,
     },
+    'ClangToTLinuxASan': {
+      'recipe_config': 'clang_tot_linux_asan',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'chromium_apply_config': ['lsan'],
+      'GYP_DEFINES': {
+        'werror': '',
+        # Plugin flags often need to be changed when using a plugin newer than
+        # the latest Clang package, so disable plugins.
+        'clang_use_chrome_plugins': '0',
+      },
+      'bot_type': 'builder',
+      'testing': { 'platform': 'linux', },
+      'use_isolate': True,
+      'enable_swarming': True,
+      # Workaround so that recipes doesn't add random build targets to our
+      # compile line. We want to build everything.
+      'add_tests_as_compile_targets': False,
+    },
+    'ClangToTLinuxASan tester': {
+      'recipe_config': 'clang_tot_linux_asan',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'chromium_apply_config': ['lsan'],
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+      ],
+      'bot_type': 'tester',
+      'parent_buildername': 'ClangToTLinuxASan',
+      'testing': { 'platform': 'linux', },
+      'enable_swarming': True,
+    },
     'Linux Builder (clobber)': {
       'recipe_config': 'chromium',
       'chromium_apply_config': ['clobber'],

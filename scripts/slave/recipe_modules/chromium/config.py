@@ -514,6 +514,16 @@ def clang_tot_linux(c):
   # Use ToT Clang.
   c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
 
+@config_ctx()
+def asan_test_batch(c):
+  c.runtests.test_args.append('--test-launcher-batch-limit=1')
+
+@config_ctx(includes=['clang_tot_linux', 'asan', 'chromium_sanitizer',
+                      'asan_test_batch'])
+def clang_tot_linux_asan(c):
+  # Like chromium_linux_asan, without goma.
+  pass
+
 # GYP_DEFINES must not include 'asan' or 'clang', else the tester bot will try
 # to compile clang.
 @config_ctx(includes=['chromium_no_goma'])
@@ -532,9 +542,9 @@ def chromium_asan(c):
 def chromium_asan_default_targets(c):
   c.compile_py.default_targets = ['chromium_builder_asan']
 
-@config_ctx(includes=['chromium_asan'])
+@config_ctx(includes=['chromium_asan', 'asan_test_batch'])
 def chromium_linux_asan(c):
-  c.runtests.test_args.append('--test-launcher-batch-limit=1')
+  pass
 
 @config_ctx(includes=['chromium_asan', 'static_library'])
 def chromium_mac_asan(c):
@@ -563,9 +573,9 @@ def chromium_tsan2(c):
 def chromium_chromeos(c):
   c.compile_py.default_targets = ['All', 'chromium_builder_tests']
 
-@config_ctx(includes=['chromium_asan', 'chromiumos'])
+@config_ctx(includes=['chromium_asan', 'chromiumos', 'asan_test_batch'])
 def chromium_chromiumos_asan(c):
-  c.runtests.test_args.append('--test-launcher-batch-limit=1')
+  pass
 
 @config_ctx(includes=['ninja', 'clang', 'goma', 'chromeos'])
 def chromium_chromeos_clang(c):
