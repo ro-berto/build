@@ -568,6 +568,12 @@ class AnnotationObserver(buildstep.LogLineObserver):
   # of graph names for use by the JS doing the plotting.
   GRAPH_LIST = config.Master.perf_graph_list
 
+  # Maximum number of individual log entries per step before we start
+  # abbreviating.
+  _STEP_MAX_LOGS = 50
+  # Label used to indicate more logs.
+  _STEP_MORE_LOGS_LABEL = 'More Logs'
+
   # --------------------------------------------------------------------------
   # PERF TEST SETTINGS
   # In each mapping below, the first key is the target and the second is the
@@ -729,6 +735,9 @@ class AnnotationObserver(buildstep.LogLineObserver):
               section['status']]
 
     self.ensureStepIsStarted(section)
+    # If we have a 'more' log, finalize it.
+    if self._STEP_MORE_LOGS_LABEL in section['annotated_logs']:
+      self.finalizeLogLines(section, self._STEP_MORE_LOGS_LABEL)
     # Final update of text.
     updateText(section)
     # Add timing info.
@@ -906,6 +915,7 @@ class AnnotationObserver(buildstep.LogLineObserver):
         'closed': False,
         'log': None,
         'annotated_logs': {},
+        'finished_logs': [],
         'status': builder.SUCCESS,
         'links': [],
         'step_summary_text': [],
@@ -1000,6 +1010,14 @@ class AnnotationObserver(buildstep.LogLineObserver):
 
     annotator.MatchAnnotation(line.rstrip(), self)
 
+  def addLogLines(self, log_label, log_lines):
+    self.cursor['annotated_logs'].setdefault(log_label, []).extend(log_lines)
+
+  def finalizeLogLines(self, section, log_label):
+    section['finished_logs'].append(log_label)
+    logs = section['annotated_logs'].pop(log_label, ())
+    addLogToStep(section['step'], log_label, '\n'.join(logs))
+
   def SET_BUILD_PROPERTY(self, name, value):
     # Support: @@@SET_BUILD_PROPERTY@<name>@<json>@@@
     # Sets the property and indicates that it came from an annoation on the
@@ -1011,14 +1029,17 @@ class AnnotationObserver(buildstep.LogLineObserver):
     # Support: @@@STEP_LOG_LINE@<label>@<line>@@@ (add log to step)
     # Appends a line to the log's array. When STEP_LOG_END is called,
     # that will finalize the log and call addCompleteLog().
-    current_logs = self.cursor['annotated_logs']
-    current_logs[log_label] = current_logs.get(log_label, []) + [log_line]
+    self.addLogLines(log_label, (log_line,))
 
   def STEP_LOG_END(self, log_label):
     # Support: @@@STEP_LOG_END@<label>@@@ (finalizes log to step)
-    current_logs = self.cursor['annotated_logs']
-    log_text = '\n'.join(current_logs.get(log_label, []))
-    addLogToStep(self.cursor['step'], log_label, log_text)
+    if (len(self.cursor['finished_logs'])+1) >= self._STEP_MAX_LOGS:
+      logs = self.cursor['annotated_logs'].pop(log_label, ())
+      self.addLogLines(
+          self._STEP_MORE_LOGS_LABEL,
+          ['%s: %s' % (log_label, log_line) for log_line in logs])
+    else:
+      self.finalizeLogLines(self.cursor, log_label)
 
   def STEP_LOG_END_PERF(self, log_label, perf_dashboard_name):
     # Support: @@@STEP_LOG_END_PERF@<label>@<line>@@@
