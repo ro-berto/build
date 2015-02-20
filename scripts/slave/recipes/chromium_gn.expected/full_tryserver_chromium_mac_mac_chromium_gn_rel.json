@@ -106,6 +106,8 @@
       "goma-clang",
       "--goma-dir",
       "[BUILD]/goma",
+      "--goma-hermetic",
+      "error",
       "--",
       "all"
     ],

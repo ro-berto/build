@@ -271,6 +271,10 @@ def msvs2013(c):
 def goma_canary(c):
   c.compile_py.goma_hermetic = 'error'
 
+@config_ctx()
+def goma_hermetic_error(c):
+  c.compile_py.goma_hermetic = 'error'
+
 @config_ctx(group='builder')
 def xcode(c):
   if c.HOST_PLATFORM != 'mac':
