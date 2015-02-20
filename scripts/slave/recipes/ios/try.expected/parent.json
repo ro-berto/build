@@ -61,7 +61,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/ios/build/bots/chromium.mac/ios.json",
+      "[SLAVE_BUILD]/src/ios/build/bots/tryserver.fake/ios.json",
       "/path/to/tmp/json"
     ],
     "name": "read build config",
@@ -84,7 +84,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/ios/build/bots/chromium.mac/parent.json",
+      "[SLAVE_BUILD]/src/ios/build/bots/tryserver.fake/parent.json",
       "/path/to/tmp/json"
     ],
     "name": "read parent build config (parent)",

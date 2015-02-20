@@ -61,7 +61,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/ios/build/bots/chromium.mac/ios.json",
+      "[SLAVE_BUILD]/src/ios/build/bots/tryserver.fake/ios.json",
       "/path/to/tmp/json"
     ],
     "name": "read build config",

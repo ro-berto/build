@@ -11,11 +11,7 @@ DEPS = [
 def GenSteps(api):
   api.ios.host_info()
   api.ios.checkout()
-
-  # A try bot gets its config by reading a build config file as if it were
-  # running on the main waterfall. This ensures try bots always match the
-  # main waterfall config.
-  api.ios.read_build_config(master_name='chromium.mac')
+  api.ios.read_build_config()
   api.ios.build()
   api.ios.test()
 
