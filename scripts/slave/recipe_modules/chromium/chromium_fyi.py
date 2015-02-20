@@ -745,6 +745,26 @@ SPEC = {
       'testing': { 'platform': 'linux', },
       'enable_swarming': True,
     },
+    'ClangToTAndroidASan': {
+      'recipe_config': 'clang_tot_android_asan',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_ARCH': 'arm',
+        'TARGET_BITS': 32,
+      },
+      'GYP_DEFINES': {
+        'component': 'shared_library',
+        'werror': '',
+        # Plugin flags often need to be changed when using a plugin newer than
+        # the latest Clang package, so disable plugins.
+        'clang_use_chrome_plugins': '0',
+      },
+      'bot_type': 'builder',
+      'testing': { 'platform': 'linux', },
+      # Workaround so that recipes doesn't add random build targets to our
+      # compile line. We want to build everything.
+      'add_tests_as_compile_targets': False,
+    },
     'Linux Builder (clobber)': {
       'recipe_config': 'chromium',
       'chromium_apply_config': ['clobber'],

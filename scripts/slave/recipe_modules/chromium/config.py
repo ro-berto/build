@@ -524,6 +524,12 @@ def clang_tot_linux_asan(c):
   # Like chromium_linux_asan, without goma.
   pass
 
+@config_ctx(includes=['android_common', 'ninja', 'clang', 'asan'])
+def clang_tot_android_asan(c):
+  # Like android_clang, minus goma, minus static_libarary, plus asan.
+  # Use ToT Clang.
+  c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
+
 # GYP_DEFINES must not include 'asan' or 'clang', else the tester bot will try
 # to compile clang.
 @config_ctx(includes=['chromium_no_goma'])
