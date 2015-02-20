@@ -149,10 +149,12 @@ def _ShutdownDBus():
     print ' cleared DBUS_SESSION_BUS_ADDRESS environment variable'
 
 
-def _RunGTestCommand(command, extra_env, log_processor=None, pipes=None):
+def _RunGTestCommand(
+    options, command, extra_env, log_processor=None, pipes=None):
   """Runs a test, printing and possibly processing the output.
 
   Args:
+    options: Options passed for this invocation of runtest.py.
     command: A list of strings in a command (the command and its arguments).
     extra_env: A dictionary of extra environment variables to set.
     log_processor: A log processor instance which has the ProcessLine method.
@@ -175,11 +177,26 @@ def _RunGTestCommand(command, extra_env, log_processor=None, pipes=None):
   # TODO(phajdan.jr): Clean this up when internal waterfalls are fixed.
   env.update({'CHROMIUM_TEST_LAUNCHER_BOT_MODE': '1'})
 
+  log_processors = {}
   if log_processor:
-    return chromium_utils.RunCommand(
-        command, pipes=pipes, parser_func=log_processor.ProcessLine, env=env)
-  else:
-    return chromium_utils.RunCommand(command, pipes=pipes, env=env)
+    log_processors[log_processor.__class__.__name__] = log_processor
+
+  if (not 'GTestLogParser' in log_processors and
+      options.log_processor_output_file):
+    log_processors['GTestLogParser'] = gtest_utils.GTestLogParser()
+
+  def _ProcessLine(line):
+    for current_log_processor in log_processors.values():
+      current_log_processor.ProcessLine(line)
+
+  result = chromium_utils.RunCommand(
+      command, pipes=pipes, parser_func=_ProcessLine, env=env)
+
+  if options.log_processor_output_file:
+    _WriteLogProcessorResultsToOutput(
+        log_processors['GTestLogParser'], options.log_processor_output_file)
+
+  return result
 
 
 def _GetMaster():
@@ -690,6 +707,23 @@ def _GenerateDashboardJson(log_processor, args):
   return None
 
 
+def _WriteLogProcessorResultsToOutput(log_processor, log_output_file):
+  """Writes the log processor's results to a file.
+
+  Args:
+  chartjson_file: Path to the file to write the results.
+    log_processor: An instance of a log processor class, which has been used to
+        process the test output, so it contains the test results.
+  """
+  with open(log_output_file, 'w') as f:
+    results = {
+      'passed': log_processor.PassedTests(),
+      'failed': log_processor.FailedTests(),
+      'flakes': log_processor.FlakyTests(),
+    }
+    json.dump(results, f)
+
+
 def _WriteChartJsonToOutput(chartjson_file, log_processor, args):
   """Writes the dashboard chartjson to a file for display in the waterfall.
 
@@ -1128,7 +1162,7 @@ def _MainMac(options, args, extra_env):
 
     command = _GenerateRunIsolatedCommand(build_dir, test_exe_path, options,
                                           command)
-    result = _RunGTestCommand(command, extra_env, pipes=pipes,
+    result = _RunGTestCommand(options, command, extra_env, pipes=pipes,
                               log_processor=log_processor)
   finally:
     if http_server:
@@ -1234,7 +1268,7 @@ def _MainIOS(options, args, extra_env):
   crash_files_after = set([])
   crash_files_before = set(crash_utils.list_crash_logs())
 
-  result = _RunGTestCommand(command, extra_env, log_processor)
+  result = _RunGTestCommand(options, command, extra_env, log_processor)
 
   # Because test apps kill themselves, iossim sometimes returns non-zero
   # status even though all tests have passed.  Check the log_processor to
@@ -1387,7 +1421,7 @@ def _MainLinux(options, args, extra_env):
 
     command = _GenerateRunIsolatedCommand(build_dir, test_exe_path, options,
                                           command)
-    result = _RunGTestCommand(command, extra_env, pipes=pipes,
+    result = _RunGTestCommand(options, command, extra_env, pipes=pipes,
                               log_processor=log_processor)
   finally:
     if http_server:
@@ -1509,7 +1543,7 @@ def _MainWin(options, args, extra_env):
 
     command = _GenerateRunIsolatedCommand(build_dir, test_exe_path, options,
                                           command)
-    result = _RunGTestCommand(command, extra_env, log_processor)
+    result = _RunGTestCommand(options, command, extra_env, log_processor)
   finally:
     if http_server:
       http_server.StopServer()
@@ -1587,7 +1621,8 @@ def _MainAndroid(options, args, extra_env):
     command += ['--flakiness-dashboard-server=%s' %
         options.flakiness_dashboard_server]
 
-  result = _RunGTestCommand(command, extra_env, log_processor=log_processor)
+  result = _RunGTestCommand(
+      options, command, extra_env, log_processor=log_processor)
 
   if options.generate_json_file:
     if not _GenerateJSONForTestResults(options, log_processor):
@@ -1814,6 +1849,8 @@ def main():
                            help='output results directory for JSON file.')
   option_parser.add_option('--chartjson-file', default='',
                            help='File to dump chartjson results.')
+  option_parser.add_option('--log-processor-output-file', default='',
+                           help='File to dump gtest log processor results.')
   option_parser.add_option('--builder-name', default=None,
                            help='The name of the builder running this script.')
   option_parser.add_option('--slave-name', default=None,
