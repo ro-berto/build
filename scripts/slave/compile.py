@@ -1182,7 +1182,7 @@ def real_main():
   option_parser.add_option('--goma-dir',
                            default=os.path.join(BUILD_DIR, 'goma'),
                            help='specify goma directory')
-  option_parser.add_option('--goma_hermetic', default=None,
+  option_parser.add_option('--goma-hermetic', default=None,
                            help='Set goma hermetic mode')
   option_parser.add_option('--verbose', action='store_true')
   option_parser.add_option('--ninja-ensure-up-to-date', action='store_true',
