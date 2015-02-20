@@ -359,13 +359,12 @@ class IntegratorTest(unittest.TestCase):
     }
     build.properties.getProperty.return_value = info
     properties = {
-        'a': 'b',
+        'a': ('b', 'ValueSource')
     }
     as_dict_result = properties.copy()
-    as_dict_result[common.INFO_PROPERTY] = info
+    as_dict_result[common.INFO_PROPERTY] = (info, 'buildbucket')
     build.getProperties.return_value.asDict.return_value = as_dict_result
-    build.expected_result_details_json = json.dumps(
-        {'properties': properties}, sort_keys=True)
+    build.expected_result_details_json = json.dumps({'properties': {'a': 'b'}})
 
     self.integrator._leases = self.integrator._leases or {}
     self.integrator._leases[build.id] = {

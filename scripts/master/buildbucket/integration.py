@@ -574,6 +574,8 @@ class BuildBucketIntegrator(object):
       return
 
     properties_to_send = build.getProperties().asDict()
+    # Strip property source.
+    properties_to_send = {k:v for k, (v, s) in properties_to_send.iteritems()}
     del properties_to_send[common.INFO_PROPERTY]
     body = {
         'result_details_json': json.dumps({
