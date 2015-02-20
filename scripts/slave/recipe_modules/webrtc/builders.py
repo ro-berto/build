@@ -722,7 +722,7 @@ BUILDERS = freeze({
       },
       'Linux Asan': {
         'recipe_config': 'webrtc_clang',
-        'chromium_apply_config': ['asan'],
+        'chromium_apply_config': ['asan', 'lsan'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -990,7 +990,7 @@ BUILDERS = freeze({
       },
       'Linux Asan (parallel)': {
         'recipe_config': 'webrtc_parallel_clang',
-        'chromium_apply_config': ['asan'],
+        'chromium_apply_config': ['asan', 'lsan'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -1237,7 +1237,7 @@ BUILDERS = freeze({
       },
       'linux_asan': {
         'recipe_config': 'webrtc_clang',
-        'chromium_apply_config': ['asan'],
+        'chromium_apply_config': ['asan', 'lsan'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,

@@ -325,7 +325,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     if (self.c.gyp_env.GYP_DEFINES.get('asan', 0) == 1 or
         self.c.runtests.run_asan_test):
       full_args.append('--enable-asan')
-    if self.c.gyp_env.GYP_DEFINES.get('lsan', 0) == 1:  # pragma: no cover
+    if self.c.runtests.enable_lsan:
       full_args.append('--enable-lsan')
       full_args.append('--lsan-suppressions-file=%s' %
                        self.c.runtests.lsan_suppressions_file)

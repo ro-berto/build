@@ -22,7 +22,7 @@ def libyuv(c):
 def libyuv_clang(c):
   _libyuv_common(c)
 
-@CONFIG_CTX(includes=['chromium_linux_asan'])
+@CONFIG_CTX(includes=['chromium_linux_asan', 'lsan'])
 def libyuv_asan(c):
   _libyuv_common(c)
 

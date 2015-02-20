@@ -70,9 +70,11 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
     runtests = ConfigGroup(
       memory_tool = Single(basestring, required=False),
       memory_tests_runner = Single(Path),
+      enable_lsan = Single(bool, empty_val=False, required=False),
       lsan_suppressions_file = Single(Path),
       test_args = List(basestring),
       run_asan_test = Single(bool, required=False),
+      swarming_extra_args = List(basestring),
       swarming_tags = Set(basestring),
     ),
 
@@ -379,8 +381,6 @@ def asan(c):
   if 'clang' not in c.compile_py.compiler:  # pragma: no cover
     raise BadConf('asan requires clang')
   c.runtests.swarming_tags |= {'asan:1'}
-  c.runtests.lsan_suppressions_file = Path('[CHECKOUT]', 'tools', 'lsan',
-                                           'suppressions.txt')
   if c.TARGET_PLATFORM == 'linux':
     c.gyp_env.GYP_DEFINES['use_allocator'] = 'none'
   if c.TARGET_PLATFORM in ['mac', 'win']:
@@ -389,6 +389,14 @@ def asan(c):
 
   c.gyp_env.GYP_DEFINES['asan'] = 1
   c.gyp_env.GYP_DEFINES['lsan'] = 1
+
+@config_ctx(deps=['compiler'])
+def lsan(c):
+  c.runtests.enable_lsan = True
+  c.runtests.lsan_suppressions_file = Path('[CHECKOUT]', 'tools', 'lsan',
+                                           'suppressions.txt')
+  c.runtests.swarming_extra_args += ['--lsan=1']
+  c.runtests.swarming_tags |= {'lsan:1'}
 
 # TODO(infra,earthdok,glider): Make this a gyp variable. This is also not a
 # good name as only v8 builds release symbolized with -O2 while

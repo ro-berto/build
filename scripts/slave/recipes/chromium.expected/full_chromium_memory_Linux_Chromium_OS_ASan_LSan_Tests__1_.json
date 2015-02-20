@@ -239,6 +239,8 @@
       "--tag",
       "data:ffffffffffffffffffffffffffffffffffffffff",
       "--tag",
+      "lsan:1",
+      "--tag",
       "master:chromium.memory",
       "--tag",
       "name:browser_tests",
@@ -255,6 +257,7 @@
       "--",
       "--test-launcher-print-test-stdio=always",
       "--test-launcher-batch-limit=1",
+      "--lsan=1",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "name": "[trigger] browser_tests",

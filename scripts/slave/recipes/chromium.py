@@ -198,7 +198,7 @@ def GenTests(api):
 
   # Tests switching on asan and swiching off lsan for sandbox tester.
   yield (
-    api.test('dynamic_gtest_memory') +
+    api.test('dynamic_gtest_memory_asan_no_lsan') +
     api.properties.generic(mastername='chromium.memory',
                            buildername='Linux ASan Tests (sandboxed)',
                            parent_buildername='Linux ASan LSan Builder') +

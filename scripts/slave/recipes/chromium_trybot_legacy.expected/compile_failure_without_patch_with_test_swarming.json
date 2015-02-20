@@ -300,6 +300,8 @@
       "--tag",
       "data:[dummy hash for base_unittests]",
       "--tag",
+      "lsan:1",
+      "--tag",
       "master:tryserver.chromium.linux",
       "--tag",
       "name:base_unittests (with patch)",
@@ -320,6 +322,7 @@
       "--",
       "--test-launcher-print-test-stdio=always",
       "--test-launcher-batch-limit=1",
+      "--lsan=1",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "name": "[trigger] base_unittests (with patch)",
@@ -537,6 +540,8 @@
       "--tag",
       "data:[dummy hash for base_unittests]",
       "--tag",
+      "lsan:1",
+      "--tag",
       "master:tryserver.chromium.linux",
       "--tag",
       "name:base_unittests (without patch)",
@@ -558,6 +563,7 @@
       "--test-launcher-print-test-stdio=always",
       "--test-launcher-batch-limit=1",
       "--gtest_filter=Test.Two",
+      "--lsan=1",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "name": "[trigger] base_unittests (without patch)",

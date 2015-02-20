@@ -73,6 +73,7 @@ BUILDERS = freeze({
         'exclude_compile_all': True,
         'chromium_config': 'chromium_linux_asan',
         'compile_only': False,
+        'use_lsan': True,
         'testing': {
           'platform': 'linux',
           'test_spec_file': 'chromium_memory_trybot.json',
@@ -384,6 +385,8 @@ def _GenStepsInternal(api):
     if bot_config['compile_only']:
       api.chromium.c.gyp_env.GYP_DEFINES['fastbuild'] = 2
     api.chromium.apply_config('trybot_flavor')
+    if bot_config.get('use_lsan', False):
+      api.chromium.apply_config('lsan')
     api.gclient.set_config('chromium')
     api.step.auto_resolve_conflicts = True
 

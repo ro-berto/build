@@ -15,6 +15,8 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
+      # Build for both LSan and non-LSan testers.
+      'chromium_apply_config': ['lsan'],
       'bot_type': 'builder',
       'testing': {'platform': 'linux'},
       'enable_swarming': True,
@@ -26,6 +28,7 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
+      'chromium_apply_config': ['lsan'],
       'bot_type': 'tester',
       'test_generators': [
         steps.generate_gtest,
@@ -87,6 +90,7 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
+      'chromium_apply_config': ['lsan'],
       'bot_type': 'builder',
       'testing': {'platform': 'linux'},
       'enable_swarming': True,
@@ -98,6 +102,7 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
+      'chromium_apply_config': ['lsan'],
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,

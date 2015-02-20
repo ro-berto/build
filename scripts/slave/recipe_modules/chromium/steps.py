@@ -567,6 +567,8 @@ class SwarmingGTestTest(SwarmingTest):
       failed_tests = sorted(self.failures(api, 'with patch'))
       args.append('--gtest_filter=%s' % ':'.join(failed_tests))
 
+    args.extend(api.chromium.c.runtests.swarming_extra_args)
+
     return api.swarming.gtest_task(
         title=self._step_name(suffix),
         isolated_hash=isolated_hash,
