@@ -321,7 +321,7 @@ class ChromiteFetcher(object):
 DefaultChromitePinManager = ChromitePinManager(PINS)
 
 
-def Get(branch=None, allow_fetch=False):
+def Get(branch=None, allow_fetch=True):
   """Returns: (ChromiteConfig) the Chromite configuration for a given branch.
 
   Args:

@@ -85,6 +85,10 @@ def main():
   if options.show_path:
     print 'Set PYTHONPATH: %s' % os.environ['PYTHONPATH']
 
+  # If the first argument is 'python', replace it with the system executable.
+  if args[0] == 'python':
+    args[0] = sys.executable
+
   # Use subprocess instead of execv because otherwise windows destroys quoting.
   p = subprocess.Popen(args)
   p.wait()

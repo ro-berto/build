@@ -19,7 +19,7 @@ from common import cros_chromite
 #            master restarts are deterministic and fast. However, since the
 #            loaded configuration is pinned and cached, this shouldn't have a
 #            significant impact in practice.
-configs = cros_chromite.Get(allow_fetch=True)
+configs = cros_chromite.Get()
 
 # Load builder sets from the 'cbuildbot' config.
 cbb_builders = set(configs.iterkeys())
