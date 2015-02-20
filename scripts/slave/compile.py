@@ -111,18 +111,15 @@ def goma_setup(options, env):
     return False
 
   hostname = GetShortHostname()
-  # HACK(yyanagisawa, goma): Windows NO_NACL_GOMA (crbug.com/390764)
+  # HACK(shinyak, yyanagisawa, goma): Windows NO_NACL_GOMA (crbug.com/390764)
   # Building NaCl untrusted code using goma brings large performance
   # improvement but it sometimes cause build failure by race condition.
-  # Let me enable goma build on several buildslaves to confirm the issue
+  # Let me enable goma build on goma canary buildslaves to confirm the issue
   # has been fixed by a workaround.
   # vm*-m4 are trybots. build*-m1 and vm*-m1 are all goma canary bots.
-  if hostname in ['vm245-m4', 'vm320-m4', 'vm400-m4', 'vm770-m4',
-                  'build28-m1', 'build58-m1', 'vm191-m1', 'vm480-m1',
+  if hostname in ['build28-m1', 'build58-m1', 'vm191-m1', 'vm480-m1',
                   'vm820-m1', 'vm821-m1', 'vm848-m1']:
     env['NO_NACL_GOMA'] = 'false'
-    if hostname in ['vm320-m4', 'vm770-m4']:
-      env['NACL_GOMA_THREADS'] = '1'
 
   # HACK(yyanagisawa, goma): GOMA_HERMETIC=error (crbug.com/366967)
   # Building with GOMA_HERMETIC=error prevents anybody to roll a compiler
