@@ -1,5 +1,3 @@
-recursion = 1
-
 deps = {
   "build/scripts/gsd_generate_index":
     "svn://svn.chromium.org/chrome/trunk/tools/gsd_generate_index",
