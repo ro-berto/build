@@ -168,7 +168,6 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     if self.m.tryserver.is_tryserver:
       self.m.step.auto_resolve_conflicts = True
-      self.apply_config('goma_hermetic_error')
 
     return (buildername, bot_config)
 
