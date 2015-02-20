@@ -18,7 +18,7 @@ def GenSteps(api):
   api.chromium.set_config('chromium')
   api.bot_update.ensure_checkout(force=True)
   api.tryserver.maybe_apply_issue()
-  api.gclient.runhooks()
+  api.chromium.runhooks()
   api.chromium.cleanup_temp()
   api.chromium.compile(['chromium_builder_tests'])
   api.python(
