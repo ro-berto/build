@@ -457,7 +457,7 @@ def real_main(include_internal=False):
     print
 
   def output_json(spec, data):
-    print json.dumps(data, indent=2, separators=(',', ': '))
+    print json.dumps(data, sort_keys=True, indent=2, separators=(',', ': '))
 
   output = {
       'csv': output_csv,
