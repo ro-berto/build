@@ -13,7 +13,8 @@ Has three modes:
      ports (i.e. differences of more than 100 between master, slave, and alt).
      Audit mode returns non-zero error code if conflicts are found. In audit
      mode, --verbose causes it to print human-readable output as well.
-  c) In --find mode, prints a set of available ports for the given master.
+  c) In --find mode, prints a set of available ports for the given master
+     class.
 
 Ports are well-formed if they follow this spec:
 XYYZZ
@@ -86,28 +87,33 @@ def get_args():
   parser = argparse.ArgumentParser(
       description='Tool to list all masters along with their hosts and ports.')
 
-  parser.add_argument('-l', '--list', action='store_true', default=False,
-                    help='Output a list of all ports in use by all masters. '
-                         'Default behavior if no other options are given.')
-  parser.add_argument('--sort-by', action='store',
-                    help='Define the primary key by which rows are sorted. '
-                    'Possible values are: "port", "alt_port", "slave_port", '
-                    '"host", and "name". Only one value is allowed (for now).')
-  parser.add_argument('--find', action='store', metavar='NAME',
-                    help='Outputs three available ports for the given master.')
-  parser.add_argument('--audit', action='store_true', default=False,
-                    help='Output conflict diagnostics and return an error '
-                         'code if misconfigurations are found.')
-  parser.add_argument('--presubmit', action='store_true', default=False,
-                    help='The same as --audit, but prints no output. '
-                         'Overrides all other options.')
+  parser.add_argument(
+      '-l', '--list', action='store_true', default=False,
+      help='Output a list of all ports in use by all masters. Default behavior'
+           ' if no other options are given.')
+  parser.add_argument(
+      '--sort-by', action='store',
+      help='Define the primary key by which rows are sorted. Possible values '
+           'are: "port", "alt_port", "slave_port", "host", and "name". Only '
+           'one value is allowed (for now).')
+  parser.add_argument(
+      '--find', action='store', metavar='NAME',
+      help='Outputs three available ports for the given master class.')
+  parser.add_argument(
+      '--audit', action='store_true', default=False,
+      help='Output conflict diagnostics and return an error code if '
+           'misconfigurations are found.')
+  parser.add_argument(
+      '--presubmit', action='store_true', default=False,
+      help='The same as --audit, but prints no output. Overrides all other '
+           'options.')
 
-  parser.add_argument('--csv', action='store_true', default=False,
-                    help='Print output in comma-separated values format.')
-  parser.add_argument('--json', action='store_true', default=False,
-                    help='Print output in JSON format. Overrides --csv.')
-  parser.add_argument('--full-host-names', action='store_true', default=False,
-                    help='Refrain from truncating the master host names')
+  parser.add_argument(
+      '-f', '--format', choices=['human', 'csv', 'json'],
+      default='human', help='Print output in the given format')
+  parser.add_argument(
+      '--full-host-names', action='store_true', default=False,
+      help='Refrain from truncating the master host names')
 
   opts = parser.parse_args()
 
@@ -134,7 +140,7 @@ def getint(string):
   return ret
 
 
-def human_print(lines, verbose):
+def print_columns_human(lines, verbose):
   """Given a list of lists of tokens, pretty prints them in columns.
 
   Requires all lines to have the same number of tokens, as otherwise the desired
@@ -157,7 +163,7 @@ def human_print(lines, verbose):
       print format_string % tuple(line)
 
 
-def csv_print(lines, verbose):
+def print_columns_csv(lines, verbose):
   """Given a list of lists of tokens, prints them as comma-separated values.
 
   Requires all lines to have the same number of tokens, as otherwise the desired
@@ -174,19 +180,46 @@ def csv_print(lines, verbose):
     print '\n'
 
 
+def extract_columns(spec, data):
+  """Transforms some data into a format suitable for print_columns_...
+
+  The data is a list of anything, to which the spec functions will be applied.
+
+  The spec is a list of tuples representing the column names
+  and how to the column from a row of data.  E.g.
+
+  [ ('Master', lambda m: m['name']),
+    ('Config Dir', lambda m: m['dirname']),
+    ...
+  ]
+  """
+
+  lines = [ [ s[0] for s in spec ] ]  # Column titles.
+
+  for item in data:
+    lines.append([ s[1](item) for s in spec ])
+  return lines
+
+
+
+def field(name):
+  """Returns a function that extracts a particular field of a dictionary."""
+  return lambda d: d[name]
+
+
 def master_map(masters, output, opts):
   """Display a list of masters and their associated hosts and ports."""
 
   host_key = 'host' if not opts.full_host_names else 'fullhost'
 
-  lines = [['Master', 'Config Dir', 'Host', 'Web port', 'Slave port',
-            'Alt port', 'URL']]
-  for master in masters:
-    lines.append([
-        master['name'], master['dirname'], master[host_key], master['port'],
-        master['slave_port'], master['alt_port'], master['buildbot_url']])
-
-  output(lines, opts.verbose)
+  output([ ('Master', field('name')),
+           ('Config Dir', field('dirname')),
+           ('Host', field(host_key)),
+           ('Web port', field('port')),
+           ('Slave port', field('slave_port')),
+           ('Alt port', field('alt_port')),
+           ('URL', field('buildbot_url')) ],
+         masters)
 
 
 def get_master_class(master):
@@ -206,32 +239,35 @@ def master_audit(masters, output, opts):
   Outputs lists of masters whose ports conflict and who have misconfigured
   ports. If any misconfigurations are found, returns a non-zero error code.
   """
+
   # Return value. Will be set to 1 the first time we see an error.
   ret = 0
 
   # Look for masters using the wrong ports for their port types.
-  lines = [['Masters with misconfigured ports based on port type:']]
+  bad_port_masters = []
   for master in masters:
     for port_type, port_digit in PORT_TYPE_MAP.iteritems():
       if not str(master[port_type]).startswith(str(port_digit)):
         ret = 1
-        lines.append([master['name']])
+        bad_port_masters.append(master)
         break
-  output(lines, opts.verbose)
-  print
+  output([ ('Masters with misconfigured ports based on port type',
+            field('name')) ],
+         bad_port_masters)
 
-  # Look for masters using the wrong ports for their port types.
-  lines = [['Masters with misconfigured ports based on hostname:']]
+  # Look for masters using the wrong ports for their hostname.
+  bad_host_masters = []
   for master in masters:
     digits = get_master_port(master)
     if digits:
       for port in PORT_TYPE_MAP.iterkeys():
         if str(master[port])[1:3] != digits:
           ret = 1
-          lines.append([master['name']])
+          bad_host_masters.append(master)
           break
-  output(lines, opts.verbose)
-  print
+  output([ ('Masters with misconfigured ports based on hostname',
+            field('name')) ],
+         bad_host_masters)
 
   # Look for masters configured to use the same ports.
   web_ports = {}
@@ -247,54 +283,70 @@ def master_audit(masters, output, opts):
       all_ports.setdefault(master[port_type], []).append(master)
 
   # Check for blacklisted ports.
-  lines = [['Blacklisted port', 'Master', 'Host']]
+  blacklisted_ports = []
   for port, lst in all_ports.iteritems():
     if port in PORT_BLACKLIST:
       ret = 1
       for m in lst:
-        lines.append([port, m['name'], m['host']])
-  output(lines, opts.verbose)
-  print
+        blacklisted_ports.append(
+            { 'port': port, 'name': m['name'], 'host': m['host'] })
+  output([ ('Blacklisted port', field('port')),
+           ('Master', field('name')),
+           ('Host', field('host')) ],
+         blacklisted_ports)
 
   # Check for conflicting web ports.
-  lines = [['Web port', 'Master', 'Host']]
+  conflicting_web_ports = []
   for port, lst in web_ports.iteritems():
     if len(lst) > 1:
       ret = 1
       for m in lst:
-        lines.append([port, m['name'], m['host']])
-  output(lines, opts.verbose)
-  print
+        conflicting_web_ports.append(
+            { 'web_port': port, 'name': m['name'], 'host': m['host'] })
+  output([ ('Web port', field('web_port')),
+           ('Master', field('name')),
+           ('Host', field('host')) ],
+         conflicting_web_ports)
 
   # Check for conflicting slave ports.
-  lines = [['Slave port', 'Master', 'Host']]
+  conflicting_slave_ports = []
   for port, lst in slave_ports.iteritems():
     if len(lst) > 1:
       ret = 1
       for m in lst:
-        lines.append([port, m['name'], m['host']])
-  output(lines, opts.verbose)
-  print
+        conflicting_slave_ports.append(
+            { 'slave_port': port, 'name': m['name'], 'host': m['host'] })
+  output([ ('Slave port', field('slave_port') ),
+           ('Master', field('name')),
+           ('Host', field('host')) ],
+         conflicting_slave_ports)
 
   # Check for conflicting alt ports.
-  lines = [['Alt port', 'Master', 'Host']]
+  conflicting_alt_ports = []
   for port, lst in alt_ports.iteritems():
     if len(lst) > 1:
       ret = 1
       for m in lst:
-        lines.append([port, m['name'], m['host']])
-  output(lines, opts.verbose)
-  print
+        conflicting_alt_ports.append(
+            { 'alt_port': port, 'name': m['name'], 'host': m['host'] })
+  output([ ('Alt port', field('alt_port')),
+           ('Master', field('name')),
+           ('Host', field('host')) ],
+         conflicting_alt_ports)
 
   # Look for masters whose port, slave_port, alt_port aren't separated by 10000.
-  lines = [['Master', 'Host', 'Web port', 'Slave port', 'Alt port']]
+  bad_sep_masters = []
   for master in masters:
     if (getint(master['slave_port']) - getint(master['port']) != 10000 or
         getint(master['alt_port']) - getint(master['slave_port']) != 10000):
       ret = 1
-      lines.append([master['name'], master['host'],
-                   master['port'], master['slave_port'], master['alt_port']])
-  output(lines, opts.verbose)
+      bad_sep_masters.append(master)
+  output([ ('Master', field('name')),
+           ('Host', field('host')),
+           ('Web port', field('port')),
+           ('Slave port', field('slave_port')),
+           ('Alt port', field('alt_port')) ],
+         bad_sep_masters)
 
   return ret
 
@@ -306,17 +358,12 @@ def build_port_str(master_class, port_type, digits):
   return port
 
 
-def find_port(mastername, masters, output, opts):
+def find_port(master_class_name, masters, output, opts):
   """Finds a triplet of free ports appropriate for the given master."""
-  master = None
-  for master in masters:
-    if master['name'] == mastername:
-      break
-  else:
-    lines = [['master %s not found' % mastername],
-             ['use the list function to see all masters.']]
-    output(lines, opts.verbose)
-    return 1
+  try:
+    master_class = getattr(Master, master_class_name)
+  except AttributeError:
+    raise ValueError('Master class %s does not exist' % master_class_name)
 
   used_ports = set()
   for m in masters:
@@ -325,8 +372,6 @@ def find_port(mastername, masters, output, opts):
   used_ports = used_ports | PORT_BLACKLIST
 
   def _inner_loop():
-    master_class = get_master_class(master)
-
     for digits in xrange(0, 100):
       port = build_port_str(master_class, 'port', digits)
       slave_port = build_port_str(master_class, 'slave_port', digits)
@@ -340,13 +385,16 @@ def find_port(mastername, masters, output, opts):
   port, slave_port, alt_port = _inner_loop()
 
   if not all([port, slave_port, alt_port]):
-    lines = [['unable to find available ports on host %s' % master['fullhost']]]
-    output(lines, opts.verbose)
-    return 1
+    raise RuntimeError('Unable to find available ports on host')
 
-  lines = [['Web port', 'Slave port', 'Alt port']]
-  lines.append([port, slave_port, alt_port])
-  output(lines, opts.verbose)
+  output([ ('Master', field('master_base_class')),
+           ('Port', field('master_port')),
+           ('Alt port', field('master_port_alt')),
+           ('Slave port', field('slave_port')) ],
+         [ { 'master_base_class': master_class_name,
+           'master_port': port,
+           'master_port_alt': alt_port,
+           'slave_port': slave_port } ])
 
 
 def format_host_name(host):
@@ -400,24 +448,32 @@ def real_main(include_internal=False):
   for key in reversed(sort_keys):
     masters.sort(key=lambda m: m[key])  # pylint: disable=cell-var-from-loop
 
-  if opts.csv:
-    printer = csv_print
-  else:
-    printer = human_print
+  def output_csv(spec, data):
+    print_columns_csv(extract_columns(spec, data), opts.verbose)
+    print
+
+  def output_human(spec, data):
+    print_columns_human(extract_columns(spec, data), opts.verbose)
+    print
+
+  def output_json(spec, data):
+    print json.dumps(data, indent=2, separators=(',', ': '))
+
+  output = {
+      'csv': output_csv,
+      'human': output_human,
+      'json': output_json,
+    }[opts.format]
 
   if opts.list:
-    if opts.json:
-      print json.dumps(masters,
-                       sort_keys=True, indent=2, separators=(',', ': '))
-    else:
-      master_map(masters, printer, opts)
+    master_map(masters, output, opts)
 
   ret = 0
   if opts.audit or opts.presubmit:
-    ret = master_audit(masters, printer, opts)
+    ret = master_audit(masters, output, opts)
 
   if opts.find:
-    find_port(opts.find, masters, printer, opts)
+    find_port(opts.find, masters, output, opts)
 
   return ret
 
