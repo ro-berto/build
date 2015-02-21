@@ -88,6 +88,7 @@ class FakeRequest(object):
 
   reason = 'Because'
   properties = Properties()
+  submittedAt = None
 
   def __init__(self, buildargs):
     self.source = FakeSource(buildargs)

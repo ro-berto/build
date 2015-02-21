@@ -5532,3 +5532,38 @@ index 36b1899..ff2758f 100644
          self.putChild('buildstate', BuildStateJsonResource(status))
          # This needs to be called before the first HelpResource().body call.
          self.hackExamples()
+
+commit 343c20bf0aff6a5240670a415e3ee41d7c488e8a
+Author: Mike Stipicevic <stip@chromium.org>
+Date:   Fri Feb 20 14:44:41 2015 -0800
+
+    Record submittedAt as a buildproperty.
+
+diff --git a/third_party/buildbot_8_4p1/buildbot/process/build.py b/third_party/buildbot_8_4p1/buildbot/process/build.py
+index 04cf472..3376b5b 100644
+--- a/third_party/buildbot_8_4p1/buildbot/process/build.py
++++ b/third_party/buildbot_8_4p1/buildbot/process/build.py
+@@ -60,11 +60,15 @@ class Build:
+     finished = False
+     results = None
+     stopped = False
++    requestedAt = None
+
+     def __init__(self, requests):
+         self.requests = requests
+         self.locks = []
+
++        self.requestedAt = (
++            sorted(r.submittedAt for r in requests) or [None])[0]
++
+         # build a source stamp
+         self.source = requests[0].mergeWith(requests[1:])
+         self.reason = requests[0].mergeReasons(requests[1:])
+@@ -183,6 +187,7 @@ class Build:
+         props.setProperty("revision", self.source.revision, "Build")
+         props.setProperty("repository", self.source.repository, "Build")
+         props.setProperty("project", self.source.project, "Build")
++        props.setProperty("requestedAt", self.requestedAt, "Build")
+         self.builder.setupProperties(props)
+
+     def setupSlaveBuilder(self, slavebuilder):

@@ -60,10 +60,14 @@ class Build:
     finished = False
     results = None
     stopped = False
+    requestedAt = None
 
     def __init__(self, requests):
         self.requests = requests
         self.locks = []
+
+        self.requestedAt = (
+            sorted(r.submittedAt for r in requests) or [None])[0]
 
         # build a source stamp
         self.source = requests[0].mergeWith(requests[1:])
@@ -183,6 +187,7 @@ class Build:
         props.setProperty("revision", self.source.revision, "Build")
         props.setProperty("repository", self.source.repository, "Build")
         props.setProperty("project", self.source.project, "Build")
+        props.setProperty("requestedAt", self.requestedAt, "Build")
         self.builder.setupProperties(props)
 
     def setupSlaveBuilder(self, slavebuilder):
