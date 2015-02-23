@@ -14,12 +14,18 @@ DEPS = [
   'file',
   'gclient',
   'gsutil',
+  'json',
   'path',
+  'properties',
+  'python',
   'raw_io',
   'step',
 ]
 
 
+APPENGINE_IS_STOPPED_URL = 'http://skia-tree-status.appspot.com/arb_is_stopped'
+APPENGINE_SET_STATUS_URL = (
+    'https://skia-tree-status.appspot.com/set_arb_status')
 DEPS_ROLL_AUTHOR = 'skia-deps-roller@chromium.org'
 DEPS_ROLL_NAME = 'Skia DEPS Roller'
 HTML_CONTENT = '''
@@ -37,6 +43,9 @@ ISSUE_URL_TEMPLATE = 'https://codereview.chromium.org/%(issue)s/'
 FILENAME_CURRENT_ATTEMPT = 'depsroll.html'
 FILENAME_ROLL_STATUS = 'arb_status.html'
 
+METATADATA_STATUS_PASSWORD_URL = ('http://metadata/computeMetadata/v1/project/'
+                                  'attributes/skia_tree_status')
+
 REGEXP_ISSUE_CREATED = (
     r'Issue created. URL: https://codereview.chromium.org/(?P<issue>\d+)')
 REGEXP_ROLL_ACTIVE = (
@@ -50,7 +59,8 @@ ROLL_STATUS_IN_PROGRESS = (
     'In progress - <a href="{0}" target="_blank">{0}</a>'.format(
         ISSUE_URL_TEMPLATE)
 )
-ROLL_STATUS_STOPPED = (
+ROLL_STATUS_STOPPED = 'Stopped'
+ROLL_STATUS_STOPPED_URL = (
     'Stopped - <a href="{0}" target="_blank">{0}</a>'.format(
         ISSUE_URL_TEMPLATE)
 )
@@ -58,7 +68,7 @@ ROLL_STATUS_IDLE = 'Idle'
 ROLL_STATUSES = (
     (REGEXP_ISSUE_CREATED, ROLL_STATUS_IN_PROGRESS),
     (REGEXP_ROLL_ACTIVE, ROLL_STATUS_IN_PROGRESS),
-    (REGEXP_ROLL_STOPPED, ROLL_STATUS_STOPPED),
+    (REGEXP_ROLL_STOPPED, ROLL_STATUS_STOPPED_URL),
     (REGEXP_ROLL_TOO_OLD, ROLL_STATUS_IDLE),
 )
 
@@ -81,41 +91,63 @@ def GenSteps(api):
            ['git', 'config', '--local', 'user.email', DEPS_ROLL_AUTHOR],
            cwd=src_dir)
 
-  auto_roll = api.path['build'].join('scripts', 'tools', 'blink_roller',
-                                     'auto_roll.py')
+  res = api.python.inline(
+      'is_stopped',
+      '''
+      import urllib2
+      import sys
+      with open(sys.argv[2], 'w') as f:
+        f.write(urllib2.urlopen(sys.argv[1]).read())
+      ''',
+      args=[APPENGINE_IS_STOPPED_URL, api.json.output()],
+      step_test_data=lambda: api.json.test_api.output({
+        'is_stopped': api.properties['test_arb_is_stopped'],
+       }))
+  is_stopped = res.json.output['is_stopped']
+
+  output = ''
   error = None
-  try:
-    output = api.step(
-        'do auto_roll',
-        ['python', auto_roll, 'skia', DEPS_ROLL_AUTHOR, src_dir],
-        cwd=src_dir,
-        stdout=api.raw_io.output()).stdout
-  except api.step.StepFailure as f:
-    output = f.result.stdout
-    # Suppress failure for "refusing to roll backwards."
-    if not re.search(REGEXP_ROLL_TOO_OLD, output):
-      error = f
+  issue = None
+  if not is_stopped:
+    auto_roll = api.path['build'].join('scripts', 'tools', 'blink_roller',
+                                       'auto_roll.py')
+    try:
+      output = api.step(
+          'do auto_roll',
+          ['python', auto_roll, 'skia', DEPS_ROLL_AUTHOR, src_dir],
+          cwd=src_dir,
+          stdout=api.raw_io.output()).stdout
+    except api.step.StepFailure as f:
+      output = f.result.stdout
+      # Suppress failure for "refusing to roll backwards."
+      if not re.search(REGEXP_ROLL_TOO_OLD, output):
+        error = f
 
-  match = re.search(REGEXP_ISSUE_CREATED, output)
-  if match:
-    issue = match.group('issue')
-    file_contents = HTML_CONTENT % (ISSUE_URL_TEMPLATE % {'issue': issue})
-    api.file.write('write %s' % FILENAME_CURRENT_ATTEMPT,
-                   FILENAME_CURRENT_ATTEMPT,
-                   file_contents)
-    api.gsutil.upload(FILENAME_CURRENT_ATTEMPT,
-                      global_constants.GS_GM_BUCKET,
-                      FILENAME_CURRENT_ATTEMPT,
-                      args=['-a', 'public-read'])
-
-  roll_status = None
-  for regexp, status_msg in ROLL_STATUSES:
-    match = re.search(regexp, output)
+    match = re.search(REGEXP_ISSUE_CREATED, output)
     if match:
-      roll_status = status_msg % match.groupdict()
-      break
+      issue = match.group('issue')
+      # Upload the issue URL to a file in GS.
+      file_contents = HTML_CONTENT % (ISSUE_URL_TEMPLATE % {'issue': issue})
+      api.file.write('write %s' % FILENAME_CURRENT_ATTEMPT,
+                     FILENAME_CURRENT_ATTEMPT,
+                     file_contents)
+      api.gsutil.upload(FILENAME_CURRENT_ATTEMPT,
+                        global_constants.GS_GM_BUCKET,
+                        FILENAME_CURRENT_ATTEMPT,
+                        args=['-a', 'public-read'])
+
+  if is_stopped:
+    roll_status = ROLL_STATUS_STOPPED
+  else:
+    roll_status = None
+    for regexp, status_msg in ROLL_STATUSES:
+      match = re.search(regexp, output)
+      if match:
+        roll_status = status_msg % match.groupdict()
+        break
 
   if roll_status:
+    # Upload status the old way.
     api.file.write('write %s' % FILENAME_ROLL_STATUS,
                    FILENAME_ROLL_STATUS,
                    roll_status)
@@ -123,6 +155,29 @@ def GenSteps(api):
                       global_constants.GS_GM_BUCKET,
                       FILENAME_ROLL_STATUS,
                       args=['-a', 'public-read'])
+
+    # POST status to appengine.
+    api.python.inline(
+      'is_stopped',
+      '''
+      import urllib
+      import urllib2
+      import sys
+      password = urllib2.urlopen(urllib2.Request(
+          sys.argv[2],
+          headers={'Metadata-Flavor': 'Google'})).read()
+      params = {'status': sys.argv[1],
+                'password': password}
+      if sys.argv[3] != '':
+        params['deps_roll_link'] = sys.argv[3]
+      urllib2.urlopen(urllib2.Request(
+          sys.argv[4],
+          urllib.urlencode(params)))
+      ''',
+      args=[roll_status,
+            METATADATA_STATUS_PASSWORD_URL,
+            ISSUE_URL_TEMPLATE % {'issue': issue} if issue else '',
+            APPENGINE_SET_STATUS_URL])
 
   if error:
     # Pylint complains about raising NoneType, but that's exactly what we're
@@ -134,10 +189,16 @@ def GenSteps(api):
 def GenTests(api):
   yield (
     api.test('AutoRoll_upload') +
+    api.properties(test_arb_is_stopped=False) +
     api.step_data('do auto_roll', retcode=0, stdout=api.raw_io.output(
         'Issue created. URL: https://codereview.chromium.org/1234'))
   )
   yield (
     api.test('AutoRoll_failed') +
+    api.properties(test_arb_is_stopped=False) +
     api.step_data('do auto_roll', retcode=1, stdout=api.raw_io.output('fail'))
+  )
+  yield (
+    api.test('AutoRoll_stopped') +
+    api.properties(test_arb_is_stopped=True)
   )

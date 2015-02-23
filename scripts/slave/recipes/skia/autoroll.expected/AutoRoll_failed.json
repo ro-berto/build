@@ -64,6 +64,28 @@
   {
     "cmd": [
       "python",
+      "-u",
+      "\nimport urllib2\nimport sys\nwith open(sys.argv[2], 'w') as f:\n  f.write(urllib2.urlopen(sys.argv[1]).read())\n",
+      "http://skia-tree-status.appspot.com/arb_is_stopped",
+      "/path/to/tmp/json"
+    ],
+    "name": "is_stopped",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"is_stopped\": false@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import urllib2@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@with open(sys.argv[2], 'w') as f:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  f.write(urllib2.urlopen(sys.argv[1]).read())@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
       "[BUILD]/scripts/tools/blink_roller/auto_roll.py",
       "skia",
       "skia-deps-roller@chromium.org",
