@@ -189,8 +189,8 @@ class AmpApi(recipe_api.RecipeApi):
   @recipe_api.non_step
   def amp_arguments(
       self, device_type='Android', device_minimum_os=None, device_name=None,
-      device_oem=None, device_os=None, api_address=None, api_port=None,
-      api_protocol=None):
+      device_oem=None, device_os=None, device_timeout=None, api_address=None,
+      api_port=None, api_protocol=None):
     """Generate command-line arguments for running tests on AMP.
 
     Args:
@@ -203,6 +203,8 @@ class AmpApi(recipe_api.RecipeApi):
       device_os: A list of OS versions to use (e.g. '4.4.2'). Selects an OS
         version at random if unspecified. Should not be specified with
         |device_minimum_os|.
+      device_timeout: An optional number of seconds to wait for a device
+        meeting the given criteria to be available.
       api_address: The IP address of the AMP API endpoint.
       api_port: The port of the AMP API endpoint.
       api_protocol: The protocol to use to connect to the AMP API endpoint.
@@ -243,6 +245,9 @@ class AmpApi(recipe_api.RecipeApi):
 
     for d in device_os or []:
       amp_args += ['--remote-device-os', d]
+
+    if device_timeout:
+      amp_args += ['--remote-device-timeout', device_timeout]
 
     return amp_args
 

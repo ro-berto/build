@@ -68,6 +68,7 @@ BUILDERS = freeze({
       },
       'device_name': ['Nexus 4', 'Nexus 5', 'Nexus 6', 'Nexus 7', 'Nexus 10'],
       'device_os': ['4.1.1', '4.2.1', '4.2.2', '4.3', '4.4.2', '4.4.3', '5.0'],
+      'device_timeout': 60,
       'unittests': CHROMIUM_AMP_UNITTESTS,
       'instrumentation_tests': [],
     },
@@ -183,7 +184,8 @@ def GenSteps(api):
                                 api_port=AMP_INSTANCE_PORT,
                                 api_protocol=AMP_INSTANCE_PROTOCOL,
                                 device_name=builder.get('device_name'),
-                                device_os=builder.get('device_os')))
+                                device_os=builder.get('device_os'),
+                                device_timeout=builder.get('device_timeout')))
 
     # TODO(jbudorick): Add support for instrumentation tests.
 
@@ -201,7 +203,8 @@ def GenSteps(api):
                                 api_port=AMP_INSTANCE_PORT,
                                 api_protocol=AMP_INSTANCE_PROTOCOL,
                                 device_name=builder.get('device_name'),
-                                device_os=builder.get('device_os')))
+                                device_os=builder.get('device_os'),
+                                device_timeout=builder.get('device_timeout')))
       if not deferred_step_result.is_ok:
         api.amp.upload_logcat_to_gs(AMP_RESULTS_BUCKET, suite)
 

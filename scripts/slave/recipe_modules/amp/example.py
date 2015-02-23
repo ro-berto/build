@@ -87,7 +87,15 @@ BUILDERS = {
     'api_address': '127.0.0.1',
     'api_port': '80',
     'api_protocol': 'http',
-  }
+  },
+  'underspecified_with_timeout': {
+    'device_minimum_os': 'MinimumSampleDeviceOS',
+    'device_name': ['SampleDevice0', 'SampleDevice1'],
+    'device_timeout': 60,
+    'api_address': '127.0.0.1',
+    'api_port': '80',
+    'api_protocol': 'http',
+  },
 }
 
 AMP_RESULTS_BUCKET = 'chrome-amp-results'
@@ -104,6 +112,7 @@ def GenSteps(api):
           device_name=builder.get('device_name', None),
           device_oem=builder.get('device_oem', None),
           device_os=builder.get('device_os', None),
+          device_timeout=builder.get('device_timeout', None),
           api_address=builder.get('api_address', None),
           api_port=builder.get('api_port', None),
           api_protocol=builder.get('api_protocol', None)))
@@ -116,6 +125,7 @@ def GenSteps(api):
           device_name=builder.get('device_name', None),
           device_oem=builder.get('device_oem', None),
           device_os=builder.get('device_os', None),
+          device_timeout=builder.get('device_timeout', None),
           api_address=builder.get('api_address', None),
           api_port=builder.get('api_port', None),
           api_protocol=builder.get('api_protocol', None)))
