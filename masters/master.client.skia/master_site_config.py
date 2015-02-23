@@ -17,3 +17,5 @@ class Skia(Master.Master3):
   repo_url = global_constants.SKIA_REPO
   buildbot_url = 'http://build.chromium.org/p/client.skia/'
   code_review_site = 'https://codereview.chromium.org'
+  service_account_file = global_constants.SERVICE_ACCOUNT_FILE
+  buildbucket_bucket = 'master.client.skia'
