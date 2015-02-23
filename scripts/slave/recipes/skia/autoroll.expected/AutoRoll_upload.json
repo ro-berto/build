@@ -141,7 +141,7 @@
       "python",
       "-u",
       "\nimport urllib\nimport urllib2\nimport sys\npassword = urllib2.urlopen(urllib2.Request(\n    sys.argv[2],\n    headers={'Metadata-Flavor': 'Google'})).read()\nparams = {'status': sys.argv[1],\n          'password': password}\nif sys.argv[3] != '':\n  params['deps_roll_link'] = sys.argv[3]\nurllib2.urlopen(urllib2.Request(\n    sys.argv[4],\n    urllib.urlencode(params)))\n",
-      "In progress - <a href=\"https://codereview.chromium.org/1234/\" target=\"_blank\">https://codereview.chromium.org/1234/</a>",
+      "In progress",
       "http://metadata/computeMetadata/v1/project/attributes/skia_tree_status",
       "https://codereview.chromium.org/1234/",
       "https://skia-tree-status.appspot.com/set_arb_status"

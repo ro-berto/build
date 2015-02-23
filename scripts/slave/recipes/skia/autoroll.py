@@ -55,7 +55,8 @@ REGEXP_ROLL_STOPPED = (
 # This occurs when the ARB has "caught up" and has nothing new to roll, or when
 # a different roll (typically a manual roll) has already rolled past it.
 REGEXP_ROLL_TOO_OLD = r'Already at .+ refusing to roll backwards to .+'
-ROLL_STATUS_IN_PROGRESS = (
+ROLL_STATUS_IN_PROGRESS = 'In progress'
+ROLL_STATUS_IN_PROGRESS_URL = (
     'In progress - <a href="{0}" target="_blank">{0}</a>'.format(
         ISSUE_URL_TEMPLATE)
 )
@@ -66,10 +67,10 @@ ROLL_STATUS_STOPPED_URL = (
 )
 ROLL_STATUS_IDLE = 'Idle'
 ROLL_STATUSES = (
-    (REGEXP_ISSUE_CREATED, ROLL_STATUS_IN_PROGRESS),
-    (REGEXP_ROLL_ACTIVE, ROLL_STATUS_IN_PROGRESS),
-    (REGEXP_ROLL_STOPPED, ROLL_STATUS_STOPPED_URL),
-    (REGEXP_ROLL_TOO_OLD, ROLL_STATUS_IDLE),
+  (REGEXP_ISSUE_CREATED, ROLL_STATUS_IN_PROGRESS, ROLL_STATUS_IN_PROGRESS_URL),
+  (REGEXP_ROLL_ACTIVE,   ROLL_STATUS_IN_PROGRESS, ROLL_STATUS_IN_PROGRESS_URL),
+  (REGEXP_ROLL_STOPPED,  ROLL_STATUS_STOPPED,     ROLL_STATUS_STOPPED_URL),
+  (REGEXP_ROLL_TOO_OLD,  ROLL_STATUS_IDLE,        ROLL_STATUS_IDLE),
 )
 
 
@@ -123,7 +124,9 @@ def GenSteps(api):
       if not re.search(REGEXP_ROLL_TOO_OLD, output):
         error = f
 
-    match = re.search(REGEXP_ISSUE_CREATED, output)
+    match = (re.search(REGEXP_ISSUE_CREATED, output) or
+             re.search(REGEXP_ROLL_ACTIVE, output) or
+             re.search(REGEXP_ROLL_STOPPED, output))
     if match:
       issue = match.group('issue')
       # Upload the issue URL to a file in GS.
@@ -138,19 +141,22 @@ def GenSteps(api):
 
   if is_stopped:
     roll_status = ROLL_STATUS_STOPPED
+    roll_status_detail = ROLL_STATUS_STOPPED
   else:
     roll_status = None
-    for regexp, status_msg in ROLL_STATUSES:
+    roll_status_detail = None
+    for regexp, status_msg, status_detail_msg in ROLL_STATUSES:
       match = re.search(regexp, output)
       if match:
-        roll_status = status_msg % match.groupdict()
+        roll_status = status_msg
+        roll_status_detail = status_detail_msg % match.groupdict()
         break
 
   if roll_status:
     # Upload status the old way.
     api.file.write('write %s' % FILENAME_ROLL_STATUS,
                    FILENAME_ROLL_STATUS,
-                   roll_status)
+                   roll_status_detail)
     api.gsutil.upload(FILENAME_ROLL_STATUS,
                       global_constants.GS_GM_BUCKET,
                       FILENAME_ROLL_STATUS,
