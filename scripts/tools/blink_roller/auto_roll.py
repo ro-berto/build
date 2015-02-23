@@ -47,7 +47,7 @@ BLINK_SHERIFF_URL = (
 CHROMIUM_SHERIFF_URL = (
   'http://build.chromium.org/p/chromium.webkit/sheriff.js')
 
-CQ_EXTRA_TRYBOTS = 'CQ_EXTRA_TRYBOTS='
+CQ_INCLUDE_TRYBOTS = 'CQ_INCLUDE_TRYBOTS='
 
 # Does not support unicode or special characters.
 VALID_EMAIL_REGEXP = re.compile(r'^[A-Za-z0-9\.&\'\+-/=_]+@'
@@ -269,7 +269,7 @@ class AutoRoller(object):
       upload_cmd = ['git', 'cl', 'upload', '--bypass-hooks',
                     '--use-commit-queue', '-f']
       if self._cq_extra_trybots:
-        commit_msg += ('\n\n' + CQ_EXTRA_TRYBOTS +
+        commit_msg += ('\n\n' + CQ_INCLUDE_TRYBOTS +
                        ','.join(self._cq_extra_trybots))
       tbr = '\nTBR='
       emails = self._emails_to_cc_on_rolls()

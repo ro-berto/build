@@ -341,7 +341,7 @@ Please email (eseidel@chromium.org) if the Rollbot is causing trouble.
     svn_range_str = ''
     commit_msg = self._make_issue(self.OLD_REV, self.NEW_REV,
                                   svn_range_str=svn_range_str)['description']
-    commit_msg += '\n\nCQ_EXTRA_TRYBOTS=sometrybot'
+    commit_msg += '\n\nCQ_INCLUDE_TRYBOTS=sometrybot'
     self._upload_issue(custom_message=commit_msg)
     self.mox.ReplayAll()
     self.assertEquals(self._arb.main(), 0)
