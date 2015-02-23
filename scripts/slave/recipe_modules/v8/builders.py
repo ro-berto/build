@@ -772,25 +772,35 @@ BUILDERS = {
         'tests': ['mjsunit', 'webkit'],
         'testing': {'platform': 'linux'},
       },
-      'V8 Linux - mips - sim - builder': {
-        'chromium_apply_config': ['simulate_mips', 'v8_goma'],
+      'V8 Linux - mipsel - sim - builder': {
+        'chromium_apply_config': ['simulate_mipsel', 'v8_goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder',
-        'build_gs_archive': 'mips_sim_rel_archive',
+        'build_gs_archive': 'mipsel_sim_rel_archive',
         'testing': {'platform': 'linux'},
       },
-      'V8 Linux - mips - sim': {
-        'chromium_apply_config': ['simulate_mips'],
+      'V8 Linux - mips64el - sim - builder': {
+        'chromium_apply_config': ['simulate_mipsel', 'v8_goma'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'build_gs_archive': 'mips64el_sim_rel_archive',
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - mipsel - sim': {
+        'chromium_apply_config': ['simulate_mipsel'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
         'bot_type': 'tester',
-        'parent_buildername': 'V8 Linux - mips - sim - builder',
-        'build_gs_archive': 'mips_sim_rel_archive',
+        'parent_buildername': 'V8 Linux - mipsel - sim - builder',
+        'build_gs_archive': 'mipsel_sim_rel_archive',
         'tests': ['unittests', 'v8testing', 'test262', 'test262_es6'],
         'testing': {'platform': 'linux'},
       },

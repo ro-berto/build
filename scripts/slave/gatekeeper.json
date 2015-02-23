@@ -373,8 +373,9 @@
           "v8_all"
         ],
         "excluded_builders" : [
-          "V8 Linux - mips - sim - builder",
-          "V8 Linux - mips - sim",
+          "V8 Linux - mipsel - sim - builder",
+          "V8 Linux - mips64el - sim - builder",
+          "V8 Linux - mipsel - sim",
           "V8 Linux - x87 - nosnap - debug",
           "V8 Linux64 - custom snapshot - debug",
           "V8 Linux - full debug",

@@ -128,9 +128,11 @@ def predictable(c):
 
 
 @CONFIG_CTX(includes=['v8'])
-def simulate_mips(c):
-  # TODO(machenbach): Add mips64.
-  c.gyp_env.GYP_DEFINES['v8_target_arch'] = 'mipsel'
+def simulate_mipsel(c):
+  if c.TARGET_BITS == 64:
+    c.gyp_env.GYP_DEFINES['v8_target_arch'] = 'mips64el'
+  else:
+    c.gyp_env.GYP_DEFINES['v8_target_arch'] = 'mipsel'
 
 
 @CONFIG_CTX(includes=['v8'])
