@@ -166,9 +166,16 @@ def GenSteps(api):
     api.python.inline(
       'update_status',
       '''
+      import json
+      import shlex
+      import subprocess
+      import sys
       import urllib
       import urllib2
-      import sys
+
+      def full_hash(short):
+        return subprocess.check_output(['git', 'rev-parse', short]).rstrip()
+
       password = urllib2.urlopen(urllib2.Request(
           sys.argv[2],
           headers={'Metadata-Flavor': 'Google'})).read()
@@ -176,6 +183,14 @@ def GenSteps(api):
                 'password': password}
       if sys.argv[3] != '':
         params['deps_roll_link'] = sys.argv[3]
+        split = sys.argv[3].split('/')
+        split.insert(-2, 'api')
+        api_url = '/'.join(split)
+        issue_details = json.load(urllib2.urlopen(api_url))
+        old, new = shlex.split(issue_details['subject'])[-1].split(':')
+        params['last_roll_rev'] = full_hash(old)
+        params['curr_roll_rev'] = full_hash(new)
+
       urllib2.urlopen(urllib2.Request(
           sys.argv[4],
           urllib.urlencode(params)))
@@ -183,7 +198,8 @@ def GenSteps(api):
       args=[roll_status,
             METATADATA_STATUS_PASSWORD_URL,
             ISSUE_URL_TEMPLATE % {'issue': issue} if issue else '',
-            APPENGINE_SET_STATUS_URL])
+            APPENGINE_SET_STATUS_URL],
+      cwd=src_dir.join('third_party/skia'))
 
   if error:
     # Pylint complains about raising NoneType, but that's exactly what we're
