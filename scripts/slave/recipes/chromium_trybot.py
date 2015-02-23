@@ -444,6 +444,17 @@ def GenTests(api):
           props(mastername=mastername, buildername=buildername)
         )
 
+  # Regression test for http://crbug.com/453471#c16
+  yield (
+    api.test('clobber_analyze') +
+    props(buildername='linux_chromium_clobber_rel_ng') +
+    api.platform.name('linux') +
+    api.override_step_data(
+      'analyze',
+      api.json.output({'status': 'Found dependency', 'targets': [],
+                       'build_targets': ['base_unittests', 'net_unittests']}))
+  )
+
   yield (
     api.test('invalid_results') +
     props() +

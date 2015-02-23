@@ -178,7 +178,7 @@
       "[BUILD]/goma",
       "--clobber",
       "--",
-      "chromium_swarm_tests"
+      "all"
     ],
     "name": "compile (with patch)"
   }
