@@ -112,7 +112,7 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'chromium_apply_config': ['chromium_perf']
+      'chromium_apply_config': ['chromium_perf_fyi']
     },
   },
 }

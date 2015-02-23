@@ -744,5 +744,13 @@ def chromium_perf(c):
   c.compile_py.clobber = False
 
 @config_ctx()
+def chromium_perf_fyi(c):
+  c.compile_py.clobber = False
+  if c.HOST_PLATFORM == 'win':
+    c.compile_py.compiler = None
+    c.compile_py.goma_dir = None
+    c.gyp_env.GYP_DEFINES['use_goma'] = 0
+
+@config_ctx()
 def chromium_deterministic_build(c):
   c.gyp_env.GYP_DEFINES['dont_embed_build_metadata'] = 1
