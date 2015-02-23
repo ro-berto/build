@@ -10,5 +10,6 @@ def Update(config, c):
   poller = gitiles_poller.GitilesPoller(
       libyuv_repo_url,
       svn_branch='trunk',
+      revlinktmpl='http://code.google.com/p/libyuv/source/detail?r=%s',
       svn_mode=True)
   c['change_source'].append(poller)
