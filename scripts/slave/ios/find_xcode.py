@@ -147,6 +147,17 @@ def find_xcode(target_version):
               version,
               build_version,
             )
+
+            # If this is the first match, switch to it.
+            if not xcode_info['found']:
+              utils.call(
+                'sudo',
+                'xcode-select',
+                '-switch',
+                os.path.join('/', 'Applications', app),
+              )
+
+              xcode_info['found'] = True
         else:
           if version == target_version:
             xcode_info['matches'][installation_path] = "%s (%s)" % (
@@ -154,16 +165,16 @@ def find_xcode(target_version):
               build_version,
             )
 
-          # If this is the first match, switch to it.
-          if not xcode_info['found']:
-            utils.call(
-              'sudo',
-              'xcode-select',
-              '-switch',
-              os.path.join('/', 'Applications', app),
-            )
+            # If this is the first match, switch to it.
+            if not xcode_info['found']:
+              utils.call(
+                'sudo',
+                'xcode-select',
+                '-switch',
+                os.path.join('/', 'Applications', app),
+              )
 
-            xcode_info['found'] = True
+              xcode_info['found'] = True
 
   xcode_info['current version'] = get_current_xcode_info()
 
