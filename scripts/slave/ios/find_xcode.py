@@ -139,11 +139,20 @@ def find_xcode(target_version):
           build_version,
         )
 
-        if version == target_version:
-          xcode_info['matches'][installation_path] = "%s (%s)" % (
-            version,
-            build_version,
-          )
+        # TODO(smut): Remove prefix matching hack when http://crbug.com/461005
+        # is fixed.
+        if os.environ.get('BUILDBOT_MASTERNAME') == 'tryserver.chromium.mac':
+          if version.startswith(target_version):
+            xcode_info['matches'][installation_path] = "%s (%s)" % (
+              version,
+              build_version,
+            )
+        else:
+          if version == target_version:
+            xcode_info['matches'][installation_path] = "%s (%s)" % (
+              version,
+              build_version,
+            )
 
           # If this is the first match, switch to it.
           if not xcode_info['found']:
