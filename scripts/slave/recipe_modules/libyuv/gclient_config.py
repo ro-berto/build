@@ -3,14 +3,14 @@
 # found in the LICENSE file.
 
 from RECIPE_MODULES.gclient import CONFIG_CTX
-from slave.recipe_modules.gclient.config import ChromiumSvnSubURL
+from slave.recipe_modules.gclient.config import ChromiumGitURL
 
 
 @CONFIG_CTX()
 def libyuv(c):
   s = c.solutions.add()
   s.name = 'src'
-  s.url = LibyuvSvnURL(c, 'trunk')
+  s.url = ChromiumGitURL(c, 'external', 'libyuv')
   s.deps_file = 'DEPS'
   s.custom_vars['root_dir'] = 'src'
 
@@ -26,10 +26,4 @@ def libyuv_ios(c):
 @CONFIG_CTX(includes=['libyuv'])
 def libyuv_valgrind(c):
   c.solutions[0].custom_deps['src/chromium/src/third_party/valgrind'] = \
-      ChromiumSvnSubURL(c, 'chrome', 'trunk', 'deps', 'third_party', 'valgrind',
-                        'binaries')
-
-def LibyuvSvnURL(c, *pieces):
-  BASES = ('http://libyuv.googlecode.com/svn',
-           'svn://svn-mirror.golo.chromium.org/libyuv')
-  return '/'.join((BASES[c.USE_MIRROR],) + pieces)
+      ChromiumGitURL(c, 'chromium', 'deps', 'valgrind', 'binaries')

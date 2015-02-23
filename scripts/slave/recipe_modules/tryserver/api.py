@@ -90,23 +90,6 @@ class TryserverApi(recipe_api.RecipeApi):
     result.presentation.logs['patch.diff'] = (
         result.raw_io.output.split('\n'))
 
-    if self.m.platform.is_win:
-      patch_content = self.m.raw_io.input(result.raw_io.output)
-      result = self.m.python.inline(
-          'convert line endings (win32)',
-          r"""
-            import sys
-            out = open(sys.argv[1], "w")
-            for line in sys.stdin:
-              out.write(line)
-          """,
-          args=[self.m.raw_io.output()],
-          stdin=patch_content,
-          step_test_data=self.test_api.patch_content_windows,
-      )
-      result.presentation.logs['patch.diff'] = (
-          result.raw_io.output.split('\n'))
-
     patch_content = self.m.raw_io.input(result.raw_io.output)
     self._apply_patch_step(patch_content=patch_content, root=root)
 

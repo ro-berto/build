@@ -9,6 +9,7 @@ Recipe for building and running tests for Libyuv stand-alone.
 from infra.libs.infra_types import freeze
 
 DEPS = [
+  'bot_update',
   'chromium',
   'gclient',
   'libyuv',
@@ -778,9 +779,7 @@ def GenSteps(api):
   if api.tryserver.is_tryserver:
     api.chromium.apply_config('trybot_flavor')
 
-  # TODO(kjellander): Convert to use bot_update instead.
-  api.gclient.checkout()
-  api.tryserver.maybe_apply_issue()
+  api.bot_update.ensure_checkout(force=True)
   api.chromium.runhooks()
 
   if api.chromium.c.project_generator.tool == 'gn':
