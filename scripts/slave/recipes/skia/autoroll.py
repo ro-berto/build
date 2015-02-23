@@ -158,7 +158,7 @@ def GenSteps(api):
 
     # POST status to appengine.
     api.python.inline(
-      'is_stopped',
+      'update_status',
       '''
       import urllib
       import urllib2
