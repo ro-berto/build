@@ -13,7 +13,7 @@ SPEC = {
       'recipe_config': 'chromium_linux_asan',
       'chromium_apply_config': [
         'asan_symbolized',
-        'asan_coverage',
+        'sanitizer_coverage',
         'chromium_asan_default_targets',
         'v8_verify_heap',
       ],

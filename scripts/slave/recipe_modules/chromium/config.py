@@ -408,8 +408,8 @@ def asan_symbolized(c):
       '-gline-tables-only -O2 -fno-inline-functions -fno-inline')
 
 @config_ctx()
-def asan_coverage(c):
-  c.gyp_env.GYP_DEFINES['asan_coverage'] = 1
+def sanitizer_coverage(c):
+  c.gyp_env.GYP_DEFINES['sanitizer_coverage'] = 3
 
 @config_ctx()
 def no_lsan(c):
