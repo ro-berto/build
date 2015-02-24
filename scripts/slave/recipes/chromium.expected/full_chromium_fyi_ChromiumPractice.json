@@ -132,8 +132,7 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "All",
-      "chromium_builder_tests"
+      "blink_tests"
     ],
     "name": "compile"
   },

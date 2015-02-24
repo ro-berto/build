@@ -1032,7 +1032,7 @@ class BlinkTest(Test):
 
   @staticmethod
   def compile_targets(api):
-    return []
+    return ['blink_tests']
 
   def run(self, api, suffix):
     results_dir = api.path['slave_build'].join('layout-test-results')
