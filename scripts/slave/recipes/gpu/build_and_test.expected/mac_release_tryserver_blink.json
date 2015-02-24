@@ -129,7 +129,7 @@
       "--cached",
       "--name-only"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[SLAVE_BUILD]/src/third_party/WebKit",
     "name": "git diff to analyze patch",
     "stdout": "/path/to/tmp/"
   },

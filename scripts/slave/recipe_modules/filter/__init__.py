@@ -10,5 +10,6 @@ DEPS = [
   'properties',
   'python',
   'raw_io',
+  'rietveld',
   'step',
 ]

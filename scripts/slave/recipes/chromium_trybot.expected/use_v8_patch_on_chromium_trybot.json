@@ -166,7 +166,7 @@
       "--cached",
       "--name-only"
     ],
-    "cwd": "[SLAVE_BUILD]\\src",
+    "cwd": "[SLAVE_BUILD]\\src\\v8",
     "name": "git diff to analyze patch",
     "stdout": "/path/to/tmp/"
   },

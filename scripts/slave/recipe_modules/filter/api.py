@@ -102,11 +102,16 @@ class FilterApi(recipe_api.RecipeApi):
                                             else []
 
     # Get the set of files in the current patch.
+    git_diff_kwargs = {}
+    issue_root = self.m.rietveld.calculate_issue_root()
+    if issue_root:
+      git_diff_kwargs['cwd'] = self.m.path['checkout'].join(issue_root)
     step_result = self.m.git('diff', '--cached', '--name-only',
                              name='git diff to analyze patch',
                              stdout=self.m.raw_io.output(),
                              step_test_data=lambda:
-                               self.m.raw_io.test_api.stream_output('foo.cc'))
+                               self.m.raw_io.test_api.stream_output('foo.cc'),
+                             **git_diff_kwargs)
     self._paths = step_result.stdout.split()
 
     # Check the path of each file against the exclusion list. If found, no need
