@@ -365,6 +365,23 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/skia/tools/nanobench_flags.py",
+      "/path/to/tmp/json",
+      "Perf-Android-Nexus7-Tegra3-Arm7-Release"
+    ],
+    "cwd": "[SLAVE_BUILD]/skia",
+    "name": "exec [SLAVE_BUILD]/skia/tools/nanobench_flags.py",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"--dummy-flags\"@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "git",
       "show",
       "HEAD",
@@ -389,9 +406,7 @@
       "/storage/emulated/legacy/skiabot/skia_resources",
       "--skps",
       "/storage/emulated/legacy/skiabot/skia_skp/skps",
-      "--scales",
-      "1.0",
-      "1.1",
+      "--dummy-flags",
       "--outResultsFile",
       "/storage/emulated/legacy/skiabot/skia_perf/nanobench_164710_1408633190.json",
       "--properties",
@@ -407,9 +422,7 @@
       "model",
       "Nexus7",
       "os",
-      "Android",
-      "--match",
-      "skp"
+      "Android"
     ],
     "env": {
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",

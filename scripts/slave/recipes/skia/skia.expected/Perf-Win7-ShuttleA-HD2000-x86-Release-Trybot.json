@@ -256,6 +256,23 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\skia\\tools/nanobench_flags.py",
+      "/path/to/tmp/json",
+      "Perf-Win7-ShuttleA-HD2000-x86-Release-Trybot"
+    ],
+    "cwd": "[SLAVE_BUILD]\\skia",
+    "name": "exec [SLAVE_BUILD]\\skia\\tools/nanobench_flags.py",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"--dummy-flags\"@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "[DEPOT_TOOLS]\\git.bat",
       "show",
       "HEAD",
@@ -273,9 +290,7 @@
       "[SLAVE_BUILD]\\skia\\resources",
       "--skps",
       "[SLAVE_BUILD]\\playback\\skps",
-      "--scales",
-      "1.0",
-      "1.1",
+      "--dummy-flags",
       "--outResultsFile",
       "[SLAVE_BUILD]\\perfdata\\Perf-Win7-ShuttleA-HD2000-x86-Release-Trybot\\data\\nanobench_164710_1408633190.json",
       "--properties",
@@ -291,10 +306,7 @@
       "model",
       "ShuttleA",
       "os",
-      "Win7",
-      "--match",
-      "~gradient",
-      "~etc1bitmap"
+      "Win7"
     ],
     "name": "nanobench"
   },

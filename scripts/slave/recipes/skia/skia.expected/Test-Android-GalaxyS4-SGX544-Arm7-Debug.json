@@ -548,6 +548,23 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/skia/tools/nanobench_flags.py",
+      "/path/to/tmp/json",
+      "Test-Android-GalaxyS4-SGX544-Arm7-Debug"
+    ],
+    "cwd": "[SLAVE_BUILD]/skia",
+    "name": "exec [SLAVE_BUILD]/skia/tools/nanobench_flags.py",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"--dummy-flags\"@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_run_skia",
       "--logcat",
       "-d",
@@ -559,14 +576,7 @@
       "/storage/emulated/legacy/skiabot/skia_resources",
       "--skps",
       "/storage/emulated/legacy/skiabot/skia_skp/skps",
-      "--scales",
-      "1.0",
-      "1.1",
-      "--match",
-      "~blurroundrect",
-      "~patch_grid",
-      "~desk_carsvg",
-      "--nocpu"
+      "--dummy-flags"
     ],
     "env": {
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",

@@ -323,15 +323,30 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/skia/tools/nanobench_flags.py",
+      "/path/to/tmp/json",
+      "Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes"
+    ],
+    "cwd": "[SLAVE_BUILD]/skia",
+    "name": "exec [SLAVE_BUILD]/skia/tools/nanobench_flags.py",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"--dummy-flags\"@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "catchsegv",
       "[SLAVE_BUILD]/skia/out/Debug/nanobench",
       "-i",
       "[SLAVE_BUILD]/skia/resources",
       "--skps",
       "[SLAVE_BUILD]/playback/skps",
-      "--scales",
-      "1.0",
-      "1.1"
+      "--dummy-flags"
     ],
     "name": "nanobench"
   },

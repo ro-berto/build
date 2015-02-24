@@ -366,10 +366,9 @@ class SkiaApi(recipe_api.RecipeApi):
 
     # Run nanobench.
     args = ['nanobench', '-i', self.device_dirs.resource_dir,
-            '--skps', self.device_dirs.skp_dir,
-            '--scales', '1.0', '1.1']
-    if 'Valgrind' in self.c.BUILDER_NAME:
-      args.extend(['--loops', '1'])  # Don't care about Valgrind performance.
+            '--skps', self.device_dirs.skp_dir]
+    args.extend(self.flags_from_file(self.skia_dir.join(
+        'tools/nanobench_flags.py')))
     if is_perf:
       git_timestamp = self.m.git.get_timestamp(test_data='1408633190')
       json_path = self.flavor.device_path_join(
@@ -385,24 +384,6 @@ class SkiaApi(recipe_api.RecipeApi):
       for k in sorted(self.c.builder_cfg.keys()):
         if not k in keys_blacklist:
           args.extend([k, self.c.builder_cfg[k]])
-
-    match = []
-    if 'Android' in self.c.BUILDER_NAME:
-      # Segfaults when run as GPU bench. Very large texture?
-      match.append('~blurroundrect')
-      match.append('~patch_grid')  # skia:2847
-      match.append('~desk_carsvg')
-    if 'HD2000' in self.c.BUILDER_NAME:
-      match.extend(['~gradient', '~etc1bitmap'])  # skia:2895
-    if 'Nexus7' in self.c.BUILDER_NAME:
-      match = ['skp']  # skia:2774
-    if match:
-      args.append('--match')
-      args.extend(match)
-
-    if ('GalaxyS3' in self.c.BUILDER_NAME or
-        'GalaxyS4' in self.c.BUILDER_NAME):
-      args.append('--nocpu')
 
     self.run(self.flavor.step, 'nanobench', cmd=args, abort_on_failure=False)
 

@@ -257,6 +257,23 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/skia/tools/nanobench_flags.py",
+      "/path/to/tmp/json",
+      "Perf-ChromeOS-Daisy-MaliT604-Arm7-Release"
+    ],
+    "cwd": "[SLAVE_BUILD]/skia",
+    "name": "exec [SLAVE_BUILD]/skia/tools/nanobench_flags.py",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"--dummy-flags\"@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "git",
       "show",
       "HEAD",
@@ -288,9 +305,7 @@
       "/usr/local/skiabot/skia_resources",
       "--skps",
       "/usr/local/skiabot/skia_skp/skps",
-      "--scales",
-      "1.0",
-      "1.1",
+      "--dummy-flags",
       "--outResultsFile",
       "/usr/local/skiabot/skia_perf/nanobench_164710_1408633190.json",
       "--properties",
