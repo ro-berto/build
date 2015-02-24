@@ -37,7 +37,8 @@ HTML_CONTENT = '''
 </head>
 </html>
 '''
-ISSUE_URL_TEMPLATE = 'https://codereview.chromium.org/%(issue)s/'
+RIETVELD_URL = 'https://codereview.chromium.org'
+ISSUE_URL_TEMPLATE = RIETVELD_URL + '/%(issue)s/'
 # TODO(borenet): Find a way to share these filenames (or their full GS URL) with
 # the webstatus which links to them.
 FILENAME_CURRENT_ATTEMPT = 'depsroll.html'
@@ -47,11 +48,11 @@ METATADATA_STATUS_PASSWORD_URL = ('http://metadata/computeMetadata/v1/project/'
                                   'attributes/skia_tree_status')
 
 REGEXP_ISSUE_CREATED = (
-    r'Issue created. URL: https://codereview.chromium.org/(?P<issue>\d+)')
+    r'Issue created. URL: %s/(?P<issue>\d+)' % RIETVELD_URL)
 REGEXP_ROLL_ACTIVE = (
-    r'https://codereview.chromium.org/(?P<issue>\d+)/ is still active')
+    r'%s/(?P<issue>\d+)/ is still active' % RIETVELD_URL)
 REGEXP_ROLL_STOPPED = (
-    r'https://codereview.chromium.org/(?P<issue>\d+)/: Rollbot was stopped by')
+    r'%s/(?P<issue>\d+)/: Rollbot was stopped by' % RIETVELD_URL)
 # This occurs when the ARB has "caught up" and has nothing new to roll, or when
 # a different roll (typically a manual roll) has already rolled past it.
 REGEXP_ROLL_TOO_OLD = r'Already at .+ refusing to roll backwards to .+'
@@ -109,7 +110,43 @@ def GenSteps(api):
   output = ''
   error = None
   issue = None
-  if not is_stopped:
+  if is_stopped:
+    # Find any active roll and stop it.
+    issue = api.python.inline(
+      'stop_roll',
+      '''
+      import json
+      import re
+      import sys
+      import urllib2
+
+      sys.path.insert(0, sys.argv[4])
+      import rietveld
+
+      # Find the active roll, if it exists.
+      res = json.load(urllib2.urlopen(
+          '%s/search?closed=3&owner=%s&format=json' % (sys.argv[1], sys.argv[2])
+      ))['results']
+      issue = None
+      for i in res:
+        if re.search('Roll src/third_party/skia .*:.*', i['subject']):
+          issue = i
+          break
+
+      # Report back the issue number.
+      with open(sys.argv[3], 'w') as f:
+        json.dump({'issue': issue['issue'] if issue else None}, f)
+
+      # Uncheck the 'commit' box.
+      if issue and issue['commit']:
+        r = rietveld.Rietveld(sys.argv[1], sys.argv[2], None, None)
+        r.set_flag(issue['issue'], issue['patchsets'][-1], 'commit', False)
+      ''',
+      args=[RIETVELD_URL, DEPS_ROLL_AUTHOR, api.json.output(),
+            api.path['depot_tools']],
+      step_test_data=lambda: api.json.test_api.output({'issue': 1234})
+    ).json.output['issue']
+  else:
     auto_roll = api.path['build'].join('scripts', 'tools', 'blink_roller',
                                        'auto_roll.py')
     try:
@@ -213,7 +250,7 @@ def GenTests(api):
     api.test('AutoRoll_upload') +
     api.properties(test_arb_is_stopped=False) +
     api.step_data('do auto_roll', retcode=0, stdout=api.raw_io.output(
-        'Issue created. URL: https://codereview.chromium.org/1234'))
+        'Issue created. URL: %s/1234' % RIETVELD_URL))
   )
   yield (
     api.test('AutoRoll_failed') +
