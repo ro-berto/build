@@ -1734,9 +1734,7 @@ def _ConfigureSanitizerTools(options, args, extra_env):
   # LeakSanitizer
   if options.enable_lsan:
     # Symbolization options set here take effect only for standalone LSan.
-    lsan_options = symbolization_options + \
-                   ['suppressions=%s' % options.lsan_suppressions_file,
-                    'print_suppressions=1']
+    lsan_options = symbolization_options
     AddToExistingEnv(extra_env, 'LSAN_OPTIONS', lsan_options)
 
     # Disable sandboxing under LSan.
@@ -1919,10 +1917,6 @@ def main():
                            help='Enable memory leak detection (LeakSanitizer). '
                                 'Can also be enabled with the factory '
                                 'property "lsan" (deprecated).')
-  option_parser.add_option('--lsan-suppressions-file',
-                           default='src/tools/lsan/suppressions.txt',
-                           help='Suppression file for LeakSanitizer. '
-                                'Default: %default.')
   option_parser.add_option('--enable-msan', action='store_true', default=False,
                            help='Enable uninitialized memory reads detection '
                                 '(MemorySanitizer). Can also enabled with the '

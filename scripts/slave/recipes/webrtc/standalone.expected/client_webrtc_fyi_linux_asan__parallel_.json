@@ -108,7 +108,6 @@
       "--run-python-script",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
       "[SLAVE_BUILD]/src/out/Release/audio_decoder_unittests",
       "--"
@@ -134,7 +133,6 @@
       "--run-python-script",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
       "[SLAVE_BUILD]/src/out/Release/common_audio_unittests",
       "--"
@@ -160,7 +158,6 @@
       "--run-python-script",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
       "[SLAVE_BUILD]/src/out/Release/common_video_unittests",
       "--"
@@ -186,7 +183,6 @@
       "--run-python-script",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
       "[SLAVE_BUILD]/src/out/Release/libjingle_media_unittest",
       "--"
@@ -212,7 +208,6 @@
       "--run-python-script",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
       "[SLAVE_BUILD]/src/out/Release/libjingle_p2p_unittest",
       "--"
@@ -238,7 +233,6 @@
       "--run-python-script",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
       "[SLAVE_BUILD]/src/out/Release/libjingle_peerconnection_unittest",
       "--"
@@ -264,7 +258,6 @@
       "--run-python-script",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
       "[SLAVE_BUILD]/src/out/Release/modules_tests",
       "--"
@@ -290,7 +283,6 @@
       "--run-python-script",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
       "[SLAVE_BUILD]/src/out/Release/modules_unittests",
       "--"
@@ -316,7 +308,6 @@
       "--run-python-script",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
       "[SLAVE_BUILD]/src/out/Release/rtc_unittests",
       "--"
@@ -342,7 +333,6 @@
       "--run-python-script",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
       "[SLAVE_BUILD]/src/out/Release/system_wrappers_unittests",
       "--"
@@ -368,7 +358,6 @@
       "--run-python-script",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
       "[SLAVE_BUILD]/src/out/Release/test_support_unittests",
       "--"
@@ -394,7 +383,6 @@
       "--run-python-script",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
       "[SLAVE_BUILD]/src/out/Release/tools_unittests",
       "--"
@@ -420,7 +408,6 @@
       "--run-python-script",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
       "[SLAVE_BUILD]/src/out/Release/video_engine_core_unittests",
       "--"
@@ -446,7 +433,6 @@
       "--run-python-script",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
       "[SLAVE_BUILD]/src/out/Release/video_engine_tests",
       "--"
@@ -472,7 +458,6 @@
       "--run-python-script",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
       "[SLAVE_BUILD]/src/out/Release/voice_engine_unittests",
       "--"

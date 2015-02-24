@@ -328,8 +328,6 @@ class ChromiumApi(recipe_api.RecipeApi):
       full_args.append('--enable-asan')
     if self.c.runtests.enable_lsan:
       full_args.append('--enable-lsan')
-      full_args.append('--lsan-suppressions-file=%s' %
-                       self.c.runtests.lsan_suppressions_file)
     if self.c.gyp_env.GYP_DEFINES.get('msan', 0) == 1:
       full_args.append('--enable-msan')
     if self.c.gyp_env.GYP_DEFINES.get('tsan', 0) == 1:

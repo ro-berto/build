@@ -84,7 +84,6 @@
       "--slave-name=slavename",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "libyuv_unittest",
       "--test-launcher-print-test-stdio=always",
       "--test-launcher-batch-limit=1"

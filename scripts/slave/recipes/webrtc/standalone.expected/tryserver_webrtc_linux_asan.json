@@ -114,7 +114,6 @@
       "--slave-name=slavename",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "audio_decoder_unittests"
     ],
     "name": "audio_decoder_unittests"
@@ -138,7 +137,6 @@
       "--slave-name=slavename",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "common_audio_unittests"
     ],
     "name": "common_audio_unittests"
@@ -162,7 +160,6 @@
       "--slave-name=slavename",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "common_video_unittests"
     ],
     "name": "common_video_unittests"
@@ -186,7 +183,6 @@
       "--slave-name=slavename",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "libjingle_media_unittest"
     ],
     "name": "libjingle_media_unittest"
@@ -210,7 +206,6 @@
       "--slave-name=slavename",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "libjingle_p2p_unittest"
     ],
     "name": "libjingle_p2p_unittest"
@@ -234,7 +229,6 @@
       "--slave-name=slavename",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "libjingle_peerconnection_unittest"
     ],
     "name": "libjingle_peerconnection_unittest"
@@ -258,7 +252,6 @@
       "--slave-name=slavename",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "modules_tests"
     ],
     "name": "modules_tests"
@@ -282,7 +275,6 @@
       "--slave-name=slavename",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "modules_unittests"
     ],
     "name": "modules_unittests"
@@ -306,7 +298,6 @@
       "--slave-name=slavename",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "rtc_unittests"
     ],
     "name": "rtc_unittests"
@@ -330,7 +321,6 @@
       "--slave-name=slavename",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "system_wrappers_unittests"
     ],
     "name": "system_wrappers_unittests"
@@ -354,7 +344,6 @@
       "--slave-name=slavename",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "test_support_unittests"
     ],
     "name": "test_support_unittests"
@@ -378,7 +367,6 @@
       "--slave-name=slavename",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "tools_unittests"
     ],
     "name": "tools_unittests"
@@ -402,7 +390,6 @@
       "--slave-name=slavename",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "video_engine_core_unittests"
     ],
     "name": "video_engine_core_unittests"
@@ -426,7 +413,6 @@
       "--slave-name=slavename",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "video_engine_tests"
     ],
     "name": "video_engine_tests"
@@ -450,7 +436,6 @@
       "--slave-name=slavename",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "voice_engine_unittests"
     ],
     "name": "voice_engine_unittests"

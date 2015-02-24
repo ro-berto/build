@@ -112,7 +112,6 @@
       "--build-number=1337",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "audio_decoder_unittests"
     ],
     "name": "audio_decoder_unittests"
@@ -140,7 +139,6 @@
       "--build-number=1337",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "common_audio_unittests"
     ],
     "name": "common_audio_unittests"
@@ -168,7 +166,6 @@
       "--build-number=1337",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "common_video_unittests"
     ],
     "name": "common_video_unittests"
@@ -196,7 +193,6 @@
       "--build-number=1337",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "libjingle_media_unittest"
     ],
     "name": "libjingle_media_unittest"
@@ -224,7 +220,6 @@
       "--build-number=1337",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "libjingle_p2p_unittest"
     ],
     "name": "libjingle_p2p_unittest"
@@ -252,7 +247,6 @@
       "--build-number=1337",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "libjingle_peerconnection_unittest"
     ],
     "name": "libjingle_peerconnection_unittest"
@@ -280,7 +274,6 @@
       "--build-number=1337",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "modules_tests"
     ],
     "name": "modules_tests"
@@ -308,7 +301,6 @@
       "--build-number=1337",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "modules_unittests"
     ],
     "name": "modules_unittests"
@@ -336,7 +328,6 @@
       "--build-number=1337",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "rtc_unittests"
     ],
     "name": "rtc_unittests"
@@ -364,7 +355,6 @@
       "--build-number=1337",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "system_wrappers_unittests"
     ],
     "name": "system_wrappers_unittests"
@@ -392,7 +382,6 @@
       "--build-number=1337",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "test_support_unittests"
     ],
     "name": "test_support_unittests"
@@ -420,7 +409,6 @@
       "--build-number=1337",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "tools_unittests"
     ],
     "name": "tools_unittests"
@@ -448,7 +436,6 @@
       "--build-number=1337",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "video_engine_core_unittests"
     ],
     "name": "video_engine_core_unittests"
@@ -476,7 +463,6 @@
       "--build-number=1337",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "video_engine_tests"
     ],
     "name": "video_engine_tests"
@@ -504,7 +490,6 @@
       "--build-number=1337",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "voice_engine_unittests"
     ],
     "name": "voice_engine_unittests"

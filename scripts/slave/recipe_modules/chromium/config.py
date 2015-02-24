@@ -71,7 +71,6 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       memory_tool = Single(basestring, required=False),
       memory_tests_runner = Single(Path),
       enable_lsan = Single(bool, empty_val=False, required=False),
-      lsan_suppressions_file = Single(Path),
       test_args = List(basestring),
       run_asan_test = Single(bool, required=False),
       swarming_extra_args = List(basestring),
@@ -397,8 +396,6 @@ def asan(c):
 @config_ctx(deps=['compiler'])
 def lsan(c):
   c.runtests.enable_lsan = True
-  c.runtests.lsan_suppressions_file = Path('[CHECKOUT]', 'tools', 'lsan',
-                                           'suppressions.txt')
   c.runtests.swarming_extra_args += ['--lsan=1']
   c.runtests.swarming_tags |= {'lsan:1'}
 

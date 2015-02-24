@@ -188,7 +188,6 @@
       "--build-number=571",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "base_unittests",
       "--test-launcher-print-test-stdio=always",
       "--test-launcher-batch-limit=1"
@@ -217,7 +216,6 @@
       "--build-number=571",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "mojo_common_unittests",
       "--test-launcher-print-test-stdio=always",
       "--test-launcher-batch-limit=1"
@@ -246,7 +244,6 @@
       "--build-number=571",
       "--enable-asan",
       "--enable-lsan",
-      "--lsan-suppressions-file=[SLAVE_BUILD]/src/tools/lsan/suppressions.txt",
       "browser_tests",
       "--test-launcher-print-test-stdio=always",
       "--test-launcher-batch-limit=1"
