@@ -108,6 +108,7 @@ PACKAGES = [
   Package(github_repo='logging'),
   Package(github_repo='matcher'),
   Package(github_repo='metatest'),
+  Package(github_repo='mime'),
   Package(github_repo='oauth2'),
   Package(github_repo='observe'),
   Package(github_repo='paper-elements'),
