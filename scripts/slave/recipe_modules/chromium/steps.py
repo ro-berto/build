@@ -227,20 +227,24 @@ class LocalGTestTest(Test):
     # Copy the list because run can be invoked multiple times and we modify
     # the local copy.
     args = self._args[:]
+    is_android = api.chromium.c.TARGET_PLATFORM == 'android'
 
+    kwargs = {}
     if suffix == 'without patch':
-      args.append(api.chromium.test_launcher_filter(
-          self.failures(api, 'with patch')))
+      failures = self.failures(api, 'with patch')
+      if is_android:
+        kwargs['gtest_filter'] = ':'.join(failures)
+      else:
+        args.append(api.chromium.test_launcher_filter(failures))
 
     gtest_results_file = api.test_utils.gtest_results(add_json_log=False)
     step_test_data = lambda: api.test_utils.test_api.canned_gtest_output(True)
 
-    kwargs = {}
     kwargs['name'] = self._step_name(suffix)
     kwargs['args'] = args
     kwargs['step_test_data'] = step_test_data
 
-    if api.chromium.c.TARGET_PLATFORM == 'android':
+    if is_android:
       # TODO(sergiyb): Figure out if we can reuse isolate module for running
       # isolated Android tests, rather than using custom solution in Android
       # test launcher.
@@ -257,7 +261,7 @@ class LocalGTestTest(Test):
       kwargs.update(self._runtest_kwargs)
 
     try:
-      if api.chromium.c.TARGET_PLATFORM == 'android':
+      if is_android:
         api.chromium_android.run_test_suite(self.target_name, **kwargs)
       elif self._use_isolate:
         api.isolate.runtest(self.target_name, self._revision,
