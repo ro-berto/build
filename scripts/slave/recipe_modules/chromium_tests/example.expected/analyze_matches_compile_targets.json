@@ -129,7 +129,31 @@
       "@@@STEP_LOG_LINE@json.output@    \"exe0\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@analyze_details@{@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"exe0\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"target0\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"target1\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"original_compile_targets\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"target0\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"target1\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"original_exes\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"exe0\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"exe1\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"target0\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"target1\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"target2\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.matching_exes\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"exe0\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ]@@@",
+      "@@@STEP_LOG_LINE@analyze_details@}@@@",
+      "@@@STEP_LOG_END@analyze_details@@@"
     ]
   }
 ]

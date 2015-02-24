@@ -2,10 +2,13 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import contextlib
 import copy
+import json
 
 from infra.libs.infra_types import freeze, thaw
 from slave import recipe_api
+from slave import recipe_util
 
 
 # Different types of builds this recipe module can do.
@@ -593,6 +596,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       - list of matching exes (see filter recipe module)
       - list of targets that need to be compiled (see filter recipe module)"""
 
+    original_exes = exes[:]
+    original_compile_targets = compile_targets[:]
+
     self.m.filter.does_patch_require_compile(
         exes=exes,
         compile_targets=compile_targets,
@@ -620,6 +626,19 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # depends upon chrome). This results in not picking up
     # NaclIntegrationTest as it depends upon chrome not chrome_run.
     compile_targets = list(set(self.m.filter.matching_exes + compile_targets))
+
+    # Emit more detailed output useful for debugging.
+    analyze_details = {
+        'original_exes': original_exes,
+        'original_compile_targets': original_compile_targets,
+        'compile_targets': compile_targets,
+        'self.m.filter.compile_targets': self.m.filter.compile_targets,
+        'self.m.filter.matching_exes': self.m.filter.matching_exes,
+    }
+    with contextlib.closing(recipe_util.StringListIO()) as listio:
+      json.dump(analyze_details, listio, indent=2, sort_keys=True)
+    step_result = self.m.step.active_result
+    step_result.presentation.logs['analyze_details'] = listio.lines
 
     return True, self.m.filter.matching_exes, compile_targets
 
