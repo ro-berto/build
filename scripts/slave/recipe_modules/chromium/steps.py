@@ -1061,55 +1061,52 @@ class BlinkTest(Test):
           args, name=self._step_name(suffix),
           step_test_data=lambda: api.test_utils.test_api.canned_test_output(
               passing=True, minimal=True))
-    except api.step.StepFailure as f:
-      step_result = f.result
+    finally:
+      step_result = api.step.active_result
+      self._test_runs[suffix] = step_result
 
-    self._test_runs[suffix] = step_result
+      if step_result:
+        r = step_result.test_utils.test_results
+        p = step_result.presentation
 
-    if step_result:
-      r = step_result.test_utils.test_results
-      p = step_result.presentation
+        p.step_text += api.test_utils.format_step_text([
+          ['unexpected_flakes:', r.unexpected_flakes.keys()],
+          ['unexpected_failures:', r.unexpected_failures.keys()],
+          ['Total executed: %s' % r.num_passes],
+        ])
 
-      p.step_text += api.test_utils.format_step_text([
-        ['unexpected_flakes:', r.unexpected_flakes.keys()],
-        ['unexpected_failures:', r.unexpected_failures.keys()],
-        ['Total executed: %s' % r.num_passes],
-      ])
+        if not (r.unexpected_flakes or r.unexpected_failures):
+          p.status = api.step.SUCCESS
 
-      if r.unexpected_flakes or r.unexpected_failures:
-        p.status = api.step.WARNING
-      else:
-        p.status = api.step.SUCCESS
+      if suffix == 'with patch':
+        buildername = api.properties['buildername']
+        buildnumber = api.properties['buildnumber']
 
-    if suffix == 'with patch':
-      buildername = api.properties['buildername']
-      buildnumber = api.properties['buildnumber']
+        archive_layout_test_results = api.path['build'].join(
+            'scripts', 'slave', 'chromium', 'archive_layout_test_results.py')
 
-      archive_layout_test_results = api.path['build'].join(
-          'scripts', 'slave', 'chromium', 'archive_layout_test_results.py')
+        archive_result = api.python(
+          'archive_webkit_tests_results',
+          archive_layout_test_results,
+          [
+            '--results-dir', results_dir,
+            '--build-dir', api.chromium.c.build_dir,
+            '--build-number', buildnumber,
+            '--builder-name', buildername,
+            '--gs-bucket', 'gs://chromium-layout-test-archives',
+          ] + api.json.property_args(),
+        )
 
-      archive_result = api.python(
-        'archive_webkit_tests_results',
-        archive_layout_test_results,
-        [
-          '--results-dir', results_dir,
-          '--build-dir', api.chromium.c.build_dir,
-          '--build-number', buildnumber,
-          '--builder-name', buildername,
-          '--gs-bucket', 'gs://chromium-layout-test-archives',
-        ] + api.json.property_args(),
-      )
+        # TODO(infra): http://crbug.com/418946 .
+        sanitized_buildername = re.sub('[ .()]', '_', buildername)
+        base = (
+          "https://storage.googleapis.com/chromium-layout-test-archives/%s/%s"
+          % (sanitized_buildername, buildnumber))
 
-      # TODO(infra): http://crbug.com/418946 .
-      sanitized_buildername = re.sub('[ .()]', '_', buildername)
-      base = (
-        "https://storage.googleapis.com/chromium-layout-test-archives/%s/%s"
-        % (sanitized_buildername, buildnumber))
-
-      archive_result.presentation.links['layout_test_results'] = (
-          base + '/layout-test-results/results.html')
-      archive_result.presentation.links['(zip)'] = (
-          base + '/layout-test-results.zip')
+        archive_result.presentation.links['layout_test_results'] = (
+            base + '/layout-test-results/results.html')
+        archive_result.presentation.links['(zip)'] = (
+            base + '/layout-test-results.zip')
 
   def has_valid_results(self, api, suffix):
     step = self._test_runs[suffix]
