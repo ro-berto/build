@@ -8,6 +8,7 @@ DEPS = [
   'gclient',
   'git',
   'gsutil',
+  'json',
   'path',
   'platform',
   'properties',

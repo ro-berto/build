@@ -312,6 +312,23 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/skia/tools/dm_flags.py",
+      "/path/to/tmp/json",
+      "Test-Ubuntu13.10-GCE-NoGPU-x86_64-Debug-Trybot"
+    ],
+    "cwd": "[SLAVE_BUILD]/skia",
+    "name": "exec [SLAVE_BUILD]/skia/tools/dm_flags.py",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"--dummy-flags\"@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "catchsegv",
       "[SLAVE_BUILD]/skia/out/Debug/dm",
       "--verbose",
@@ -329,15 +346,6 @@
       "164710",
       "build_number",
       "5",
-      "--config",
-      "565",
-      "8888",
-      "gpu",
-      "nvprmsaa4",
-      "serialize-8888",
-      "tiles_rt-8888",
-      "pipe-8888",
-      "tiles_rt-gpu",
       "--key",
       "arch",
       "x86_64",
@@ -349,13 +357,7 @@
       "GCE",
       "os",
       "Ubuntu13.10",
-      "--blacklist",
-      "gpu",
-      "_",
-      "PANO_20121023_214540.jpg",
-      "msaa",
-      "_",
-      "PANO_20121023_214540.jpg"
+      "--dummy-flags"
     ],
     "name": "dm"
   },

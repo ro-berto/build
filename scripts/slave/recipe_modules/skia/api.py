@@ -271,6 +271,15 @@ class SkiaApi(recipe_api.RecipeApi):
           pass
     return self._ccache
 
+  def flags_from_file(self, filename):
+    """Execute the given script to obtain flags to pass to a test."""
+    return self.m.python(
+        'exec %s' % filename,
+        filename,
+        args=[self.m.json.output(), self.c.BUILDER_NAME],
+        step_test_data=lambda: self.m.json.test_api.output(['--dummy-flags']),
+        cwd=self.skia_dir).json.output
+
   def run_dm(self):
     """Run the DM test."""
     self._run_once(self.download_and_copy_skps)
@@ -291,66 +300,9 @@ class SkiaApi(recipe_api.RecipeApi):
       '--properties',  'gitHash',      self.got_revision,
                        'build_number', self.m.properties['buildnumber'],
     ]
-
-    configs = ['565', '8888', 'gpu', 'nvprmsaa4']
-    # Xoom and NP are running out of RAM when we run all these modes.  skia:3255
-    if ('Xoom'        not in self.c.BUILDER_NAME and
-        'NexusPlayer' not in self.c.BUILDER_NAME):
-      configs.extend(mode + '-8888' for mode in
-                     ['serialize', 'tiles_rt', 'pipe'])
-      configs.append('tiles_rt-gpu')
-    if 'ANGLE' in self.c.BUILDER_NAME:
-      configs.append('angle')
-    args.append('--config')
-    args.extend(configs)
-
     args.append('--key')
     args.extend(self._KeyParams())
-
-    blacklist = []
-
-    # This image is too large to be a texture for many GPUs.
-    blacklist.extend('gpu _ PANO_20121023_214540.jpg'.split(' '))
-    blacklist.extend('msaa _ PANO_20121023_214540.jpg'.split(' '))
-
-    # Drawing SKPs or images into GPU canvases is a New Thing.
-    # It seems like we're running out of RAM on some Android bots, so start off
-    # with a very wide blacklist disabling all these tests on all Android bots.
-    if 'Android' in self.c.BUILDER_NAME:  # skia:3255
-      blacklist.extend('gpu skp _ gpu image _ gpu subset _'.split(' '))
-      blacklist.extend('msaa skp _ msaa image _ gpu subset _'.split(' '))
-
-    if blacklist:
-      args.append('--blacklist')
-      args.extend(blacklist)
-
-    match = []
-    if 'Alex' in self.c.BUILDER_NAME:  # skia:2793
-      # This machine looks to be running out of heap.
-      # Running with fewer threads may help.
-      args.extend(['--threads', '1'])
-    if 'Valgrind' in self.c.BUILDER_NAME: # skia:3021
-      match.append('~Threaded')
-    if 'Xoom' in self.c.BUILDER_NAME:  # skia:1699
-      match.append('~WritePixels')
-
-    # skia:3249: these images flakily don't decode on Android.
-    if 'Android' in self.c.BUILDER_NAME:
-      match.append('~tabl_mozilla_0')
-      match.append('~desk_yahoonews_0')
-
-    if match:
-      args.append('--match')
-      args.extend(match)
-
-    # Though their GPUs are interesting, these don't test anything on
-    # the CPU that other ARMv7+NEON bots don't test faster (N5).
-    if ('Nexus10'  in self.c.BUILDER_NAME or
-        'Nexus7'   in self.c.BUILDER_NAME or
-        'GalaxyS3' in self.c.BUILDER_NAME or
-        'GalaxyS4' in self.c.BUILDER_NAME):
-      args.append('--nocpu')
-
+    args.extend(self.flags_from_file(self.skia_dir.join('tools/dm_flags.py')))
     self.run(self.flavor.step, 'dm', cmd=args, abort_on_failure=False)
 
     # Copy images and JSON to host machine if needed.
