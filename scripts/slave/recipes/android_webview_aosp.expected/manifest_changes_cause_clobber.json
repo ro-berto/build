@@ -259,6 +259,8 @@
     "name": "git diff to analyze patch",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
+      "@@@STEP_LOG_LINE@files@android_webview/buildbot/aosp_manifest.xml@@@",
+      "@@@STEP_LOG_END@files@@@",
       "@@@STEP_LOG_LINE@excluded_files@android_webview/buildbot/aosp_manifest.xml (regex = 'android_webview/.*')@@@",
       "@@@STEP_LOG_END@excluded_files@@@"
     ]

@@ -257,7 +257,11 @@
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "git diff to analyze patch",
-    "stdout": "/path/to/tmp/"
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@files@chrome/common/my_file.cc@@@",
+      "@@@STEP_LOG_END@files@@@"
+    ]
   },
   {
     "cmd": [

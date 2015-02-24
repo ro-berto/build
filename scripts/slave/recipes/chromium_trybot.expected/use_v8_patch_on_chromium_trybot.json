@@ -168,7 +168,11 @@
     ],
     "cwd": "[SLAVE_BUILD]\\src\\v8",
     "name": "git diff to analyze patch",
-    "stdout": "/path/to/tmp/"
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@files@v8\\foo.cc@@@",
+      "@@@STEP_LOG_END@files@@@"
+    ]
   },
   {
     "cmd": [
@@ -176,7 +180,7 @@
       "-u",
       "[SLAVE_BUILD]\\src\\build\\gyp_chromium",
       "--analyzer",
-      "{\"files\": [\"foo.cc\"], \"targets\": [\"angle_unittests_run\", \"chrome\", \"content_gl_tests_run\", \"gl_tests_run\", \"mini_installer\", \"tab_capture_end2end_tests_run\", \"telemetry_gpu_test_run\"]}",
+      "{\"files\": [\"v8\\\\foo.cc\"], \"targets\": [\"angle_unittests_run\", \"chrome\", \"content_gl_tests_run\", \"gl_tests_run\", \"mini_installer\", \"tab_capture_end2end_tests_run\", \"telemetry_gpu_test_run\"]}",
       "/path/to/tmp/json"
     ],
     "env": {

@@ -30,7 +30,11 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "git diff to analyze patch",
-    "stdout": "/path/to/tmp/"
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@files@yy@@@",
+      "@@@STEP_LOG_END@files@@@"
+    ]
   },
   {
     "cmd": [

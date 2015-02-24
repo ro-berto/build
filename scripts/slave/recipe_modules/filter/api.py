@@ -113,6 +113,10 @@ class FilterApi(recipe_api.RecipeApi):
                                self.m.raw_io.test_api.stream_output('foo.cc'),
                              **git_diff_kwargs)
     self._paths = step_result.stdout.split()
+    if issue_root:
+      self._paths = [self.m.path.join(issue_root, path) for path in self._paths]
+
+    step_result.presentation.logs['files'] = self.paths
 
     # Check the path of each file against the exclusion list. If found, no need
     # to check dependencies.
