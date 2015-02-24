@@ -27,6 +27,14 @@ DEPS = [
 
 
 BUILDERS = freeze({
+  'tryserver.blink': {
+    'builders': {
+      'linux_blink_rel_ng': {
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Linux',
+      },
+    },
+  },
   'tryserver.chromium.linux': {
     'builders': {
       'android_arm64_dbg_recipe': {
