@@ -18,4 +18,4 @@ class SkiaCompile(Master.Master3):
   buildbot_url = 'http://build.chromium.org/p/client.skia.compile/'
   code_review_site = 'https://codereview.chromium.org'
   service_account_file = global_constants.SERVICE_ACCOUNT_FILE
-  buildbucket_bucket = 'master.client.compile'
+  buildbucket_bucket = 'master.client.skia.compile'

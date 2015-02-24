@@ -18,4 +18,4 @@ class SkiaFYI(Master.Master3):
   buildbot_url = 'http://build.chromium.org/p/client.skia.fyi/'
   code_review_site = 'https://codereview.chromium.org'
   service_account_file = global_constants.SERVICE_ACCOUNT_FILE
-  buildbucket_bucket = 'master.client.fyi'
+  buildbucket_bucket = 'master.client.skia.fyi'
