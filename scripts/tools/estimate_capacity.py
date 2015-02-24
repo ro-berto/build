@@ -82,6 +82,7 @@ def main(argv):
   parser = argparse.ArgumentParser()
   parser.add_argument('master')
   parser.add_argument('--days', type=int, default=14)
+  parser.add_argument('--ignore-cls-by', action='append')
 
   args = parser.parse_args(argv)
 
@@ -120,7 +121,20 @@ def main(argv):
     for builddir, builders in pool['builders'].iteritems():
       print '  builddir "%s":' % builddir
       for builder in builders:
-        builds = get_builds(args.master.replace('master.', ''), builder, days)
+        raw_builds = get_builds(
+            args.master.replace('master.', ''), builder, days)
+
+        builds = []
+        for build in raw_builds:
+          blamelist = build.get('blame', [])
+          ignore_cl = False
+          for entry in blamelist:
+            if entry in args.ignore_cls_by:
+              ignore_cl = True
+              break
+          if not ignore_cl:
+            builds.append(build)
+
         capacity = estimate_capacity(builds)
         for key in ('hourly_bots', 'daily_bots'):
           pool_capacity[key] += capacity[key]
