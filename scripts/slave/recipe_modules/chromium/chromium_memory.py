@@ -10,13 +10,12 @@ SPEC = {
   },
   'builders': {
     'Linux ASan LSan Builder': {
+      # Build for both LSan and non-LSan testers.
       'recipe_config': 'chromium_linux_asan',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      # Build for both LSan and non-LSan testers.
-      'chromium_apply_config': ['lsan'],
       'bot_type': 'builder',
       'testing': {'platform': 'linux'},
       'enable_swarming': True,
@@ -28,6 +27,8 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
+      # Enable LSan at runtime. This disables the sandbox in browser tests.
+      # http://crbug.com/336218
       'chromium_apply_config': ['lsan'],
       'bot_type': 'tester',
       'test_generators': [
@@ -44,11 +45,8 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      # LSan is not sandbox-compatible, which is why testers 1-3 have the
-      # sandbox disabled. This tester runs the same tests again with the sandbox
-      # on and LSan disabled. This only affects browser tests. See
-      # http://crbug.com/336218
-      'chromium_apply_config': ['no_lsan'],
+      # We want to test ASan+sandbox as well, so run browser tests again, this
+      # time with LSan disabled.
       'bot_type': 'tester',
       'test_generators': [
         steps.generate_gtest,
@@ -90,7 +88,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'chromium_apply_config': ['lsan'],
       'bot_type': 'builder',
       'testing': {'platform': 'linux'},
       'enable_swarming': True,

@@ -411,10 +411,6 @@ def asan_symbolized(c):
 def sanitizer_coverage(c):
   c.gyp_env.GYP_DEFINES['sanitizer_coverage'] = 3
 
-@config_ctx()
-def no_lsan(c):
-  c.gyp_env.GYP_DEFINES['lsan'] = 0
-
 @config_ctx(deps=['compiler'])
 def msan(c):
   if 'clang' not in c.compile_py.compiler:  # pragma: no cover
