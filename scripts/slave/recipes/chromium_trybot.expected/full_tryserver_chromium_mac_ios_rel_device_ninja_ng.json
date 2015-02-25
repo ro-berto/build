@@ -185,6 +185,8 @@
       "[SLAVE_BUILD]/src",
       "--build-tool",
       "ninja",
+      "--goma-hermetic",
+      "error",
       "--",
       "All"
     ],

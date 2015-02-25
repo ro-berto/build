@@ -267,6 +267,8 @@
       "goma",
       "--goma-dir",
       "[BUILD]/goma",
+      "--goma-hermetic",
+      "error",
       "--",
       "angle_unittests_run",
       "chrome",
@@ -1952,6 +1954,8 @@
       "goma",
       "--goma-dir",
       "[BUILD]/goma",
+      "--goma-hermetic",
+      "error",
       "--",
       "base_unittests"
     ],

@@ -283,6 +283,8 @@
       "goma-clang",
       "--goma-dir",
       "[BUILD]/goma",
+      "--goma-hermetic",
+      "error",
       "--",
       "angle_unittests_run",
       "chromium_builder_tests",
@@ -3537,6 +3539,8 @@
       "goma-clang",
       "--goma-dir",
       "[BUILD]/goma",
+      "--goma-hermetic",
+      "error",
       "--",
       "chrome",
       "telemetry_gpu_test_run"

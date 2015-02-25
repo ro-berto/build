@@ -270,6 +270,8 @@
       "goma",
       "--goma-dir",
       "[BUILD]/goma",
+      "--goma-hermetic",
+      "error",
       "--",
       "base_unittests",
       "browser_tests"

@@ -261,6 +261,8 @@
       "goma",
       "--goma-dir",
       "[BUILD]\\goma",
+      "--goma-hermetic",
+      "error",
       "--",
       "angle_unittests_run",
       "chromium_builder_tests",

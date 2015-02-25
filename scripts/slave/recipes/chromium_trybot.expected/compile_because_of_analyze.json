@@ -240,6 +240,8 @@
       "goma",
       "--goma-dir",
       "[BUILD]/goma",
+      "--goma-hermetic",
+      "error",
       "--",
       "All",
       "chromium_builder_tests"

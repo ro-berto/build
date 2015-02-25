@@ -199,6 +199,8 @@
       "goma",
       "--goma-dir",
       "[BUILD]/goma",
+      "--goma-hermetic",
+      "error",
       "--",
       "chromium_swarm_tests",
       "blink_tests"

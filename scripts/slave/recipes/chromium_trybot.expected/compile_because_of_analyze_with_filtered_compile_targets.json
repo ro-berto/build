@@ -284,6 +284,8 @@
       "goma",
       "--goma-dir",
       "[BUILD]/goma",
+      "--goma-hermetic",
+      "error",
       "--",
       "chrome",
       "base_unittests",

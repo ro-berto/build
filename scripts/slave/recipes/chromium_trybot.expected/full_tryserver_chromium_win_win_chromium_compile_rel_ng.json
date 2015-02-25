@@ -220,6 +220,8 @@
       "goma",
       "--goma-dir",
       "[BUILD]\\goma",
+      "--goma-hermetic",
+      "error",
       "--",
       "chromium_builder_tests",
       "mini_installer"

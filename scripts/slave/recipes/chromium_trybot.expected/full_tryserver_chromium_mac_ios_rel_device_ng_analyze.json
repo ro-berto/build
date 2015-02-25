@@ -197,6 +197,8 @@
       "[SLAVE_BUILD]/src",
       "--build-tool",
       "xcode",
+      "--goma-hermetic",
+      "error",
       "--",
       "-target",
       "All",

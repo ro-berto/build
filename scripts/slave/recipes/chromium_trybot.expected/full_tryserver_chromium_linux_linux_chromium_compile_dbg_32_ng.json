@@ -208,6 +208,8 @@
       "goma",
       "--goma-dir",
       "[BUILD]/goma",
+      "--goma-hermetic",
+      "error",
       "--",
       "sync_integration_tests",
       "google_apis_unittests"

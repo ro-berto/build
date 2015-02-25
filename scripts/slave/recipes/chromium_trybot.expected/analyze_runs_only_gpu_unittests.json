@@ -254,6 +254,8 @@
       "goma",
       "--goma-dir",
       "[BUILD]\\goma",
+      "--goma-hermetic",
+      "error",
       "--",
       "gpu_unittests_run"
     ],

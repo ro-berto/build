@@ -215,6 +215,8 @@
       "goma",
       "--goma-dir",
       "[BUILD]/goma",
+      "--goma-hermetic",
+      "error",
       "--clobber",
       "--",
       "base_unittests",
