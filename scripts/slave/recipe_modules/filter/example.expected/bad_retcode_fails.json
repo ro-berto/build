@@ -57,14 +57,12 @@
       "@@@STEP_LOG_LINE@json.output@  \"targets\": []@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_WARNINGS@@@"
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
-    "cmd": [
-      "echo",
-      "Why hello, there."
-    ],
-    "name": "hello"
+    "name": "$final_result",
+    "reason": "Step('analyze') failed with return_code -1",
+    "status_code": -1
   }
 ]

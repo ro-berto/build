@@ -138,22 +138,14 @@ class FilterApi(recipe_api.RecipeApi):
     kwargs.setdefault('env', {})
     kwargs['env'].update(self.m.chromium.c.gyp_env.as_jsonish())
 
-    try:
-      step_result = self.m.python('analyze',
-                          self.m.path['checkout'].join('build', 'gyp_chromium'),
-                          args=['--analyzer',
-                                self.m.json.input(analyze_input),
-                                self.m.json.output()],
-                          step_test_data=lambda: self.m.json.test_api.output(
-                            test_output),
-                          **kwargs)
-    except self.m.step.StepFailure as f:
-      # Continue on if there is an error executing python. Most likely runhooks
-      # will fail too, but errors there are more well understood than here.
-      self._result = True
-      step_result = f.result
-      step_result.presentation.status = 'WARNING'
-      return
+    step_result = self.m.python('analyze',
+                        self.m.path['checkout'].join('build', 'gyp_chromium'),
+                        args=['--analyzer',
+                              self.m.json.input(analyze_input),
+                              self.m.json.output()],
+                        step_test_data=lambda: self.m.json.test_api.output(
+                          test_output),
+                        **kwargs)
 
     if 'error' in step_result.json.output:
       self._result = True

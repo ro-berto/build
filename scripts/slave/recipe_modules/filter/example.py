@@ -136,7 +136,7 @@ def GenTests(api):
           api.json.output({'error': 'ERROR'})))
 
   # Analyze with python returning bad status.
-  yield (api.test('bad_retcode_doesnt_fail') +
+  yield (api.test('bad_retcode_fails') +
          api.properties(
            matching_exes=[],
            example_result=1) +
