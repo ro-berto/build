@@ -37,7 +37,6 @@ def clang_release_builder(c):
   c.gyp_env.GYP_DEFINES['component'] = 'shared_library'
   c.gyp_env.GYP_DEFINES['asan'] = 1
   c.gyp_env.GYP_DEFINES['sanitizer_coverage'] = 3
-  c.gyp_env.GYP_DEFINES['fastbuild'] = 0
   c.gyp_env.GYP_DEFINES['use_allocator'] = 'none'
   c.compile_py.default_targets = ['chrome_apk']
 
