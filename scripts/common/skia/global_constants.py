@@ -17,5 +17,6 @@ GS_GM_BUCKET = 'chromium-skia-gm'
 GS_SUMMARIES_BUCKET = 'chromium-skia-gm-summaries'
 
 SKIA_REPO = 'https://skia.googlesource.com/skia.git'
+INFRA_REPO = 'https://skia.googlesource.com/buildbot.git'
 
 SERVICE_ACCOUNT_FILE = 'service-account-skia.json'
