@@ -14,22 +14,22 @@ def Update(config, active_master, c):
                             branch='master',
                             treeStableTimer=60,
                             builderNames=[
-          'iOS_Device',
-          'iOS_Simulator_(dbg)',
-          'iOS_Device_(ninja)',
+          'iOS Device',
+          'iOS Simulator (dbg)',
+          'iOS Device (ninja)',
       ]),
   ])
   specs = [
-    {'name': 'iOS_Device'},
-    {'name': 'iOS_Simulator_(dbg)'},
-    {'name': 'iOS_Device_(ninja)'},
+    {'name': 'iOS Device'},
+    {'name': 'iOS Simulator (dbg)'},
+    {'name': 'iOS Device (ninja)'},
   ]
 
   c['builders'].extend([
       {
         'name': spec['name'],
         'factory': m_annotator.BaseFactory(
-            'ios/unified_builder_tester',
+            'chromium',
             factory_properties=spec.get('factory_properties'),
             triggers=spec.get('triggers')),
         'notify_on_missing': True,
