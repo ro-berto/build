@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import os
 import re
 
 from slave import recipe_api
@@ -113,6 +114,8 @@ class FilterApi(recipe_api.RecipeApi):
                                self.m.raw_io.test_api.stream_output('foo.cc'),
                              **git_diff_kwargs)
     self._paths = step_result.stdout.split()
+    if self.m.platform.is_win:
+      self._paths = [path.replace('/', os.sep) for path in self._paths]
     if issue_root:
       self._paths = [self.m.path.join(issue_root, path) for path in self._paths]
 

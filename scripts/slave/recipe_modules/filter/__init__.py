@@ -7,6 +7,7 @@ DEPS = [
   'git',
   'json',
   'path',
+  'platform',
   'properties',
   'python',
   'raw_io',
