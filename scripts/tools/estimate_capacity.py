@@ -82,7 +82,8 @@ def main(argv):
   parser = argparse.ArgumentParser()
   parser.add_argument('master')
   parser.add_argument('--days', type=int, default=14)
-  parser.add_argument('--ignore-cls-by', action='append')
+  parser.add_argument('--filter-by-blamelist')
+  parser.add_argument('--filter-by-patch-project')
 
   args = parser.parse_args(argv)
 
@@ -126,14 +127,15 @@ def main(argv):
 
         builds = []
         for build in raw_builds:
+          properties = {p[0]: p[1] for p in build.get('properties', [])}
+          if (args.filter_by_patch_project and
+              properties.get('patch_project') != args.filter_by_patch_project):
+            continue
+
           blamelist = build.get('blame', [])
-          ignore_cl = False
-          for entry in blamelist:
-            if entry in args.ignore_cls_by:
-              ignore_cl = True
-              break
-          if not ignore_cl:
-            builds.append(build)
+          if (args.filter_by_blamelist and
+              args.filter_by_blamelist not in blamelist):
+            continue
 
         capacity = estimate_capacity(builds)
         for key in ('hourly_bots', 'daily_bots'):
