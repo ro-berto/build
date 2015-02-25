@@ -15,8 +15,9 @@ from master.factory import commands
 class AnnotatorCommands(commands.FactoryCommands):
   """Encapsulates methods to add annotator commands to a factory."""
 
-  def __init__(self, factory=None):
+  def __init__(self, factory=None, active_master=None):
     self._call_counts = {}
+    self.active_master = active_master
     # Set self._script_dir and self._python, among other things.
     commands.FactoryCommands.__init__(self, factory)
 
@@ -36,4 +37,5 @@ class AnnotatorCommands(commands.FactoryCommands):
                           timeout=timeout,
                           maxTime=max_time,
                           haltOnFailure=True,
-                          command=cmd)
+                          command=cmd,
+                          active_master=self.active_master)

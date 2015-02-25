@@ -625,7 +625,8 @@ class AnnotationObserver(buildstep.LogLineObserver):
     },
   }
   def __init__(self, command=None, show_perf=False, perf_id=None,
-               perf_report_url_suffix=None, target=None, *args, **kwargs):
+               perf_report_url_suffix=None, target=None, active_master=None,
+               *args, **kwargs):
     buildstep.LogLineObserver.__init__(self, *args, **kwargs)
     self.command = command
     self.sections = []
@@ -638,6 +639,7 @@ class AnnotationObserver(buildstep.LogLineObserver):
     self.perf_id = perf_id
     self.perf_report_url_suffix = perf_report_url_suffix
     self.target = target
+    self.active_master = active_master
 
   def initialSection(self):
     """Initializes the annotator's sections.
@@ -1375,7 +1377,8 @@ class AnnotationObserver(buildstep.LogLineObserver):
 class AnnotatedCommand(ProcessLogShellStep):
   """Buildbot command that knows how to display annotations."""
 
-  def __init__(self, target=None, *args, **kwargs):
+  def __init__(self, target=None, active_master=None, *args, **kwargs):
+    self.active_master = active_master
     clobber = ''
     perf_id = None
     perf_report_url_suffix = None
@@ -1415,7 +1418,8 @@ class AnnotatedCommand(ProcessLogShellStep):
     ProcessLogShellStep.__init__(self, *args, **kwargs)
     self.script_observer = AnnotationObserver(
         self, show_perf=show_perf, perf_id=perf_id,
-        perf_report_url_suffix=perf_report_url_suffix, target=target)
+        perf_report_url_suffix=perf_report_url_suffix, target=target,
+        active_master=active_master)
     self.addLogObserver('stdio', self.script_observer)
 
   def describe(self, done=False):

@@ -17,8 +17,9 @@ from master.factory.build_factory import BuildFactory
 class AnnotatorFactory(object):
   """Encapsulates data and methods common to all annotators."""
 
-  def __init__(self):
+  def __init__(self, active_master=None):
     self._factory_properties = None
+    self.active_master = active_master
 
   def BaseFactory(self, recipe=None, factory_properties=None, triggers=None,
                   timeout=1200, max_time=None):
@@ -50,7 +51,8 @@ class AnnotatorFactory(object):
     self._factory_properties = factory_properties
     factory = BuildFactory()
     factory.properties.update(self._factory_properties, 'AnnotatorFactory')
-    cmd_obj = annotator_commands.AnnotatorCommands(factory)
+    cmd_obj = annotator_commands.AnnotatorCommands(
+        factory, active_master=self.active_master)
     cmd_obj.AddAnnotatedScript(
       factory_properties, timeout=timeout, max_time=max_time)
 
