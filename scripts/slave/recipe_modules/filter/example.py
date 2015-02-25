@@ -7,6 +7,7 @@ DEPS = [
   'filter',
   'json',
   'path',
+  'platform',
   'properties',
   'raw_io',
   'step',
@@ -137,6 +138,16 @@ def GenTests(api):
 
   # Analyze with python returning bad status.
   yield (api.test('bad_retcode_fails') +
+         api.properties(
+           matching_exes=[],
+           example_result=1) +
+         api.step_data(
+          'analyze',
+          retcode=-1))
+
+  # Analyze with python returning bad status on Mac (http://crbug.com/461811).
+  yield (api.test('bad_retcode_is_nonfatal_on_mac') +
+         api.platform.name('mac') +
          api.properties(
            matching_exes=[],
            example_result=1) +
