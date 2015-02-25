@@ -174,10 +174,11 @@ def GenSteps(api):
                           extract_location])
 
   with api.step.defer_results():
+    trigger_successful = {}
     for suite, isolate_file in native_unittests:
       isolate_file_path = (
           api.path['checkout'].join(*isolate_file) if isolate_file else None)
-      api.amp.trigger_test_suite(
+      deferred_trigger_result = api.amp.trigger_test_suite(
           suite, 'gtest',
           api.amp.gtest_arguments(suite, isolate_file_path=isolate_file_path),
           api.amp.amp_arguments(api_address=AMP_INSTANCE_ADDRESS,
@@ -186,6 +187,7 @@ def GenSteps(api):
                                 device_name=builder.get('device_name'),
                                 device_os=builder.get('device_os'),
                                 device_timeout=builder.get('device_timeout')))
+      trigger_successful[suite] = deferred_trigger_result.is_ok
 
     # TODO(jbudorick): Add support for instrumentation tests.
 
@@ -196,6 +198,9 @@ def GenSteps(api):
       api.chromium_android.run_python_unit_test_suite(suite)
 
     for suite, isolate_file in native_unittests:
+      # Skip collection if test was not triggered successfully.
+      if not trigger_successful[suite]:
+        continue
       deferred_step_result = api.amp.collect_test_suite(
           suite, 'gtest',
           api.amp.gtest_arguments(suite),
@@ -246,6 +251,7 @@ def GenTests(api):
                 'status': 'Found dependency',
                 'targets': ['android_webview_unittests'],
                 'build_targets': ['android_webview_unittests_apk']})) +
+        api.step_data('[trigger] components_unittests', retcode=1) +
         api.step_data('[collect] android_webview_unittests', retcode=1)
       )
 
