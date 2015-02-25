@@ -171,18 +171,6 @@ BUILDERS = freeze({
         'buildername': 'Mac ASan 64 Builder',
         'tester': 'Mac ASan 64 Tests (1)',
       },
-      'ios_rel_device_ng': {
-        'mastername': 'chromium.mac',
-        'buildername': 'iOS Device',
-      },
-      'ios_dbg_simulator_ng': {
-        'mastername': 'chromium.mac',
-        'buildername': 'iOS Simulator (dbg)',
-      },
-      'ios_rel_device_ninja_ng': {
-        'mastername': 'chromium.mac',
-        'buildername': 'iOS Device (ninja)',
-      },
     },
   },
   'tryserver.chromium.win': {

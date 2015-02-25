@@ -606,11 +606,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         additional_name='chromium',
         config_file_name=config_file_name)
 
-    # xcode doesn't support specifying targets that are not present
-    # in all.gyp.
-    if self.m.chromium.c.compile_py.build_tool == 'xcode':
-      return True, exes, compile_targets
-
     if not self.m.filter.result:
       # Patch does not require compile.
       return False, [], []

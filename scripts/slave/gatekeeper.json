@@ -174,15 +174,15 @@
           "chromium_tree_closer"
         ],
         "builders": {
-          "iOS Device": {
+          "iOS_Device": {
             "sheriff_classes": ["sheriff_ios_europe", "sheriff_ios_us"]
           },
-          "iOS Simulator (dbg)": {
+          "iOS_Simulator_(dbg)": {
             "sheriff_classes": ["sheriff_ios_europe", "sheriff_ios_us"],
             "closing_optional": [],
             "comment": ["closing_optional due to crbug.com/393861"]
           },
-          "iOS Device (ninja)": {
+          "iOS_Device_(ninja)": {
             "sheriff_classes": ["sheriff_ios_europe", "sheriff_ios_us"]
           },
           "*": {}

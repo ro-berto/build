@@ -121,48 +121,5 @@ SPEC = {
         'os': 'Mac-10.9',
       },
     },
-    'iOS Device': {
-      'recipe_config': 'chromium_ios_device',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_PLATFORM': 'ios',
-        'TARGET_BITS': 32,
-      },
-      'gclient_config_kwargs': {
-        'GIT_MODE': True,
-      },
-      'testing': {
-        'platform': 'mac',
-      }
-    },
-    'iOS Simulator (dbg)': {
-      'recipe_config': 'chromium_ios_simulator',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_PLATFORM': 'ios',
-        'TARGET_BITS': 32,
-      },
-      'gclient_config_kwargs': {
-        'GIT_MODE': True,
-      },
-      'tests': steps.IOS_TESTS,
-      'testing': {
-        'platform': 'mac',
-      }
-    },
-    'iOS Device (ninja)': {
-      'recipe_config': 'chromium_ios_ninja',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_PLATFORM': 'ios',
-        'TARGET_BITS': 64,
-      },
-      'gclient_config_kwargs': {
-        'GIT_MODE': True,
-      },
-      'testing': {
-        'platform': 'mac',
-      }
-    },
   },
 }

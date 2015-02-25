@@ -135,7 +135,9 @@ def main(argv):
 
   for master in MAIN_WATERFALL_MASTERS:
     builders = getBuildersAndRecipes(master)
-    all_builders.update((master, b) for b in builders)
+    # iOS bots are excluded, because they enforce that there is a try bot
+    # version of each main waterfall bot in a different way.
+    all_builders.update((master, b) for b in builders if 'iOS' not in b)
 
     # We only have a standardized way to mirror builders using the chromium
     # recipe on the tryserver.
