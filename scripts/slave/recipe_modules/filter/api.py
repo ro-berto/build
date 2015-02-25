@@ -114,10 +114,12 @@ class FilterApi(recipe_api.RecipeApi):
                                self.m.raw_io.test_api.stream_output('foo.cc'),
                              **git_diff_kwargs)
     self._paths = step_result.stdout.split()
-    if self.m.platform.is_win:
-      self._paths = [path.replace('/', os.sep) for path in self._paths]
     if issue_root:
       self._paths = [self.m.path.join(issue_root, path) for path in self._paths]
+    if self.m.platform.is_win:
+      # Looks like "analyze" wants POSIX slashes even on Windows (since git
+      # uses that format even on Windows).
+      self._paths = [path.replace('\\', '/') for path in self._paths]
 
     step_result.presentation.logs['files'] = self.paths
 
