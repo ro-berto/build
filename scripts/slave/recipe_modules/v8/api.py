@@ -131,20 +131,10 @@ class V8DeoptFuzzer(object):
     pass
 
 
-class V8GCMole1(object):
+class V8GCMole(object):
   @staticmethod
   def run(api, **kwargs):
-    return api.gc_mole('ia32', 'x64')
-
-  @staticmethod
-  def gclient_apply_config(_):
-    pass
-
-
-class V8GCMole2(object):
-  @staticmethod
-  def run(api, **kwargs):
-    return api.gc_mole('arm', 'arm64')
+    return api.gc_mole('ia32', 'x64', 'arm', 'arm64')
 
   @staticmethod
   def gclient_apply_config(_):
@@ -164,8 +154,7 @@ class V8SimpleLeakCheck(object):
 V8_NON_STANDARD_TESTS = freeze({
   'deopt': V8DeoptFuzzer,
   'fuzz': V8Fuzzer,
-  'gcmole1': V8GCMole1,
-  'gcmole2': V8GCMole2,
+  'gcmole': V8GCMole,
   'presubmit': V8Presubmit,
   'simpleleak': V8SimpleLeakCheck,
   'v8initializers': V8CheckInitializers,
