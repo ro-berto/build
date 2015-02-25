@@ -97,6 +97,7 @@ def GenSteps(api):
 
   # Enable test isolation. Modifies GYP_DEFINES used in 'runhooks' below.
   api.isolate.set_isolate_environment(api.chromium.c)
+  api.chromium.cleanup_temp()
 
   # Checkout chromium.
   api.bot_update.ensure_checkout(force=True)
