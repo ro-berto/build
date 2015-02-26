@@ -148,6 +148,28 @@ class TryserverApi(recipe_api.RecipeApi):
       # Since this method is "maybe", we don't raise an Exception.
       pass
 
+  def get_files_affected_by_patch(self):
+    git_diff_kwargs = {}
+    issue_root = self.m.rietveld.calculate_issue_root()
+    if issue_root:
+      git_diff_kwargs['cwd'] = self.m.path['checkout'].join(issue_root)
+    step_result = self.m.git('diff', '--cached', '--name-only',
+                             name='git diff to analyze patch',
+                             stdout=self.m.raw_io.output(),
+                             step_test_data=lambda:
+                               self.m.raw_io.test_api.stream_output('foo.cc'),
+                             **git_diff_kwargs)
+    paths = step_result.stdout.split()
+    if issue_root:
+      paths = [self.m.path.join(issue_root, path) for path in paths]
+    if self.m.platform.is_win:
+      # Looks like "analyze" wants POSIX slashes even on Windows (since git
+      # uses that format even on Windows).
+      paths = [path.replace('\\', '/') for path in paths]
+
+    step_result.presentation.logs['files'] = paths
+    return paths
+
   def set_transient_failure_tryjob_result(self):
     """Mark the tryjob result as a transient failure.
 

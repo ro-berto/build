@@ -102,26 +102,7 @@ class FilterApi(recipe_api.RecipeApi):
     self._compile_targets = compile_targets if compile_targets is not None \
                                             else []
 
-    # Get the set of files in the current patch.
-    git_diff_kwargs = {}
-    issue_root = self.m.rietveld.calculate_issue_root()
-    if issue_root:
-      git_diff_kwargs['cwd'] = self.m.path['checkout'].join(issue_root)
-    step_result = self.m.git('diff', '--cached', '--name-only',
-                             name='git diff to analyze patch',
-                             stdout=self.m.raw_io.output(),
-                             step_test_data=lambda:
-                               self.m.raw_io.test_api.stream_output('foo.cc'),
-                             **git_diff_kwargs)
-    self._paths = step_result.stdout.split()
-    if issue_root:
-      self._paths = [self.m.path.join(issue_root, path) for path in self._paths]
-    if self.m.platform.is_win:
-      # Looks like "analyze" wants POSIX slashes even on Windows (since git
-      # uses that format even on Windows).
-      self._paths = [path.replace('\\', '/') for path in self._paths]
-
-    step_result.presentation.logs['files'] = self.paths
+    self._paths = self.m.tryserver.get_files_affected_by_patch()
 
     # Check the path of each file against the exclusion list. If found, no need
     # to check dependencies.
@@ -129,6 +110,10 @@ class FilterApi(recipe_api.RecipeApi):
     for path in self.paths:
       first_match = self.__is_path_in_exclusion_list(path, exclusion_regexs)
       if first_match:
+        step_result = self.m.python.inline(
+            'analyze',
+            'import sys; sys.exit(0)',
+            add_python_log=False)
         step_result.presentation.logs.setdefault('excluded_files', []).append(
             '%s (regex = \'%s\')' % (path, first_match))
         self._result = True
