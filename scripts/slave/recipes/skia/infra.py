@@ -65,7 +65,8 @@ def GenSteps(api):
 
   # Fetch Go dependencies.
   env = {'GOPATH': go_dir,
-         'GIT_USER_AGENT': 'git/1.9.1'} # I don't think this version matters.
+         'GIT_USER_AGENT': 'git/1.9.1', # I don't think this version matters.
+         'PATH': api.path.pathsep.join([str(go_dir.join('bin')), '%(PATH)s'])}
   api.step('update_deps', cmd=['go', 'get', './...'], cwd=infra_dir, env=env)
 
   # More prerequisites.

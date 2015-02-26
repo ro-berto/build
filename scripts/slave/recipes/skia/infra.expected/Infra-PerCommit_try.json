@@ -88,7 +88,8 @@
     "cwd": "[SLAVE_BUILD]/go/src/skia.googlesource.com/buildbot.git",
     "env": {
       "GIT_USER_AGENT": "git/1.9.1",
-      "GOPATH": "[SLAVE_BUILD]/go"
+      "GOPATH": "[SLAVE_BUILD]/go",
+      "PATH": "[SLAVE_BUILD]/go/bin:%(PATH)s"
     },
     "name": "update_deps"
   },
@@ -101,7 +102,8 @@
     "cwd": "[SLAVE_BUILD]/go/src/skia.googlesource.com/buildbot.git",
     "env": {
       "GIT_USER_AGENT": "git/1.9.1",
-      "GOPATH": "[SLAVE_BUILD]/go"
+      "GOPATH": "[SLAVE_BUILD]/go",
+      "PATH": "[SLAVE_BUILD]/go/bin:%(PATH)s"
     },
     "name": "install goimports"
   },
@@ -112,7 +114,8 @@
     "cwd": "[SLAVE_BUILD]/go/src/skia.googlesource.com/buildbot.git/go/database",
     "env": {
       "GIT_USER_AGENT": "git/1.9.1",
-      "GOPATH": "[SLAVE_BUILD]/go"
+      "GOPATH": "[SLAVE_BUILD]/go",
+      "PATH": "[SLAVE_BUILD]/go/bin:%(PATH)s"
     },
     "name": "setup database"
   },
@@ -125,7 +128,8 @@
     "cwd": "[SLAVE_BUILD]/go/src/skia.googlesource.com/buildbot.git",
     "env": {
       "GIT_USER_AGENT": "git/1.9.1",
-      "GOPATH": "[SLAVE_BUILD]/go"
+      "GOPATH": "[SLAVE_BUILD]/go",
+      "PATH": "[SLAVE_BUILD]/go/bin:%(PATH)s"
     },
     "name": "run_unittests"
   }
