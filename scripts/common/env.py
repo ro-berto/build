@@ -71,8 +71,8 @@ def SetPythonPathEnv(value):
   """
   # Since we can't assign None to the environment "dictionary", we have to
   # either set or delete the key depending on the original value.
-  if value:
-    os.environ['PYTHONPATH'] = value
+  if value is not None:
+    os.environ['PYTHONPATH'] = str(value)
   else:
     os.environ.pop('PYTHONPATH', None)
 

@@ -228,7 +228,6 @@ class InfraPythonPathTestCase(unittest.TestCase):
     sys.modules = self._orig_modules
 
   def testGenerate(self):
-    print env.GetInfraPythonPath()
     self.assertIsNotNone(env.GetInfraPythonPath(hermetic=True))
     self.assertIsNotNone(env.GetInfraPythonPath(hermetic=False))
     self.assertIsNotNone(env.GetInfraPythonPath(
