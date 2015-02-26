@@ -1016,6 +1016,16 @@ class MasterClockResource(JsonResource):
         }
 
 
+class AcceptingBuildsResource(JsonResource):
+    help = """Show whether the master is scheduling new builds."""
+    pageTitle = 'AcceptingBuilds'
+
+    def asDict(self, _request):
+        return {
+            'accepting_builds': bool(self.status.master.botmaster.brd.running),
+        }
+
+
 class JsonStatusResource(JsonResource):
     """Retrieves all json data."""
     help = """JSON status
@@ -1037,6 +1047,7 @@ For help on any sub directory, use url /child/help
         self.putChild('slaves', SlavesJsonResource(status))
         self.putChild('metrics', MetricsJsonResource(status))
         self.putChild('clock', MasterClockResource(status))
+        self.putChild('accepting_builds', AcceptingBuildsResource(status))
         self.putChild('buildstate', BuildStateJsonResource(status))
         # This needs to be called before the first HelpResource().body call.
         self.hackExamples()

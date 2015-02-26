@@ -5567,3 +5567,40 @@ index 04cf472..3376b5b 100644
          self.builder.setupProperties(props)
 
      def setupSlaveBuilder(self, slavebuilder):
+
+
+commit d543bc773c6066d1a06ccd147020384429f67c57
+Author: Mike Stipicevic <stip@chromium.org>
+Date:   Wed Feb 25 15:16:54 2015 -0800
+
+    Report no-new-builds status.
+
+diff --git a/third_party/buildbot_8_4p1/buildbot/status/web/status_json.py b/third_party/buildbot_8_4p1/buildbot/status/web/status_json.py
+index ff2758f..8469c25 100644
+--- a/third_party/buildbot_8_4p1/buildbot/status/web/status_json.py
++++ b/third_party/buildbot_8_4p1/buildbot/status/web/status_json.py
+@@ -1016,6 +1016,16 @@ class MasterClockResource(JsonResource):
+         }
+
+
++class AcceptingBuildsResource(JsonResource):
++    help = """Show whether the master is scheduling new builds."""
++    pageTitle = 'AcceptingBuilds'
++
++    def asDict(self, _request):
++        return {
++            'accepting_builds': bool(self.status.master.botmaster.brd.running),
++        }
++
++
+ class JsonStatusResource(JsonResource):
+     """Retrieves all json data."""
+     help = """JSON status
+@@ -1037,6 +1047,7 @@ For help on any sub directory, use url /child/help
+         self.putChild('slaves', SlavesJsonResource(status))
+         self.putChild('metrics', MetricsJsonResource(status))
+         self.putChild('clock', MasterClockResource(status))
++        self.putChild('accepting_builds', AcceptingBuildsResource(status))
+         self.putChild('buildstate', BuildStateJsonResource(status))
+         # This needs to be called before the first HelpResource().body call.
+         self.hackExamples()
