@@ -23,15 +23,6 @@ def Update(c):
           'iOS Release',
           'iOS ARM64 Debug',
           'iOS ARM64 Release',
-          'Mac32 Debug (XCode 6.1)',
-          'Mac32 Release (XCode 6.1)',
-          'Mac64 Debug (XCode 6.1)',
-          'Mac64 Release (XCode 6.1)',
-          'Mac Asan (XCode 6.1)',
-          'iOS Debug (XCode 6.1)',
-          'iOS Release (XCode 6.1)',
-          'iOS ARM64 Debug (XCode 6.1)',
-          'iOS ARM64 Release (XCode 6.1)',
       ]),
   ])
 
@@ -45,15 +36,6 @@ def Update(c):
     {'name': 'iOS Release', 'slavebuilddir': 'mac32'},
     {'name': 'iOS ARM64 Debug', 'slavebuilddir': 'mac64'},
     {'name': 'iOS ARM64 Release', 'slavebuilddir': 'mac64'},
-    {'name': 'Mac32 Debug (XCode 6.1)', 'slavebuilddir': 'mac32'},
-    {'name': 'Mac32 Release (XCode 6.1)', 'slavebuilddir': 'mac32'},
-    {'name': 'Mac64 Debug (XCode 6.1)', 'slavebuilddir': 'mac64'},
-    {'name': 'Mac64 Release (XCode 6.1)', 'slavebuilddir': 'mac64'},
-    {'name': 'Mac Asan (XCode 6.1)', 'slavebuilddir': 'mac_asan'},
-    {'name': 'iOS Debug (XCode 6.1)', 'slavebuilddir': 'mac32'},
-    {'name': 'iOS Release (XCode 6.1)', 'slavebuilddir': 'mac32'},
-    {'name': 'iOS ARM64 Debug (XCode 6.1)', 'slavebuilddir': 'mac64'},
-    {'name': 'iOS ARM64 Release (XCode 6.1)', 'slavebuilddir': 'mac64'},
   ]
 
   c['builders'].extend([
