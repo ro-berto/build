@@ -294,8 +294,15 @@ class ChromiteFetcher(object):
       GitilesError: If there was an unexpected failure with the Gitiles service.
     """
     logging.warning('Loading Chromite configuration from: %s', url)
+
     try:
-      return requests.get(url, verify=True).text
+      # Force no authentication. Chromite is public! By default, 'requests' will
+      # use 'netrc' for authentication. This can cause the load to fail if
+      # the '.netrc' has an invalid entry, failing authentication.
+      return requests.get(
+          url,
+          verify=True,
+          auth=lambda r: r).text
     except requests.exceptions.RequestException as e:
       raise GitilesError(url, 'Request raised exception: %s' % (e,))
 
@@ -319,7 +326,7 @@ class ChromiteFetcher(object):
     data = self._GetText(url)
     try:
       data = base64.b64decode(data)
-    except TypeError as e:
+    except (TypeError, UnicodeEncodeError) as e:
       raise GitilesError(url, 'Failed to decode Base64: %s' % (e,))
     return data, version
 
@@ -399,7 +406,7 @@ def main():
       help='Increase process verbosity. This can be specified multiple times.')
   parser.add_argument('-D', '--cache-directory',
       help='The base cache directory to download pinned configurations into.')
-  parser.add_argument('-f', '--force',
+  parser.add_argument('-f', '--force', action='store_true',
       help='Forces an update, even if the cached already contains an artifact.')
   args = parser.parse_args()
 
