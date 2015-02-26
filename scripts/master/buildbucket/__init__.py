@@ -65,7 +65,7 @@ def setup(
 
   buildbucket_service_factory = functools.partial(
       client.create_buildbucket_service, active_master, buildbucket_hostname,
-      verbose, is_production=active_master.is_production_host)
+      verbose)
 
   poller = BuildBucketPoller(
       integrator=integrator,
