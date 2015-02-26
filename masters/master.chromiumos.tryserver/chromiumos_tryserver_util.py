@@ -30,7 +30,8 @@ target_builders = set(b for b in all_builders if b in configs)
 precq_builders = set(b for b in target_builders if configs[b].IsPreCqBuilder())
 precq_novmtest_builders = set(b for b in precq_builders
                               if not (configs[b].HasVmTests() or
-                                      configs[b].HasHwTests()))
+                                      configs[b].HasHwTests() or
+                                      configs[b].get('unittests')))
 
 
 class TestingSlavePool(object):
@@ -93,7 +94,7 @@ def cros_builder_links(builders):
   elif builder_names == precq_builders:
     return cros_builder_links_pool('Pre-CQ', precq_builders)
   elif builder_names == precq_novmtest_builders:
-    return cros_builder_links_pool('Pre-CQ (No VMTest)',
+    return cros_builder_links_pool('Pre-CQ (GCE)',
                                    precq_novmtest_builders)
   return builders
 
