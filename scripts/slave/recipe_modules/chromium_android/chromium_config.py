@@ -33,15 +33,16 @@ def clang_builder(c):
   c.gyp_env.GYP_DEFINES['use_allocator'] = 'none'
 
 @CONFIG_CTX(includes=['base_config', 'clang', 'goma'])
-def clang_release_builder(c):
+def clang_asan_release_builder(c):
   c.gyp_env.GYP_DEFINES['component'] = 'shared_library'
   c.gyp_env.GYP_DEFINES['asan'] = 1
   c.gyp_env.GYP_DEFINES['sanitizer_coverage'] = 3
+  c.gyp_env.GYP_DEFINES['fastbuild'] = 0
   c.gyp_env.GYP_DEFINES['use_allocator'] = 'none'
   c.compile_py.default_targets = ['chrome_apk']
 
-@CONFIG_CTX(includes=['clang_release_builder'])
-def clang_release_builder_l(c):
+@CONFIG_CTX(includes=['clang_asan_release_builder'])
+def clang_asan_release_builder_l(c):
   pass
 
 @CONFIG_CTX(includes=['main_builder'])
