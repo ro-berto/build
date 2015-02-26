@@ -280,7 +280,8 @@
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "instrumentation",
       "--test-apk",
-      "CronetTestInstrumentation"
+      "CronetTestInstrumentation",
+      "-v"
     ],
     "name": "test CronetTest"
   },

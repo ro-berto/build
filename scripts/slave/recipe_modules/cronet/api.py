@@ -80,6 +80,7 @@ class CronetApi(recipe_api.RecipeApi):
     self.m.python('test CronetTest', test_cmd,
         args = ['instrumentation'] +
                build_arg +
-               ['--test-apk','CronetTestInstrumentation'])
+               ['--test-apk','CronetTestInstrumentation'] +
+               ['-v'])
     droid.common_tests_final_steps()
 

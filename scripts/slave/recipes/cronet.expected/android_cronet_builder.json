@@ -323,7 +323,8 @@
       "instrumentation",
       "--release",
       "--test-apk",
-      "CronetTestInstrumentation"
+      "CronetTestInstrumentation",
+      "-v"
     ],
     "name": "test CronetTest"
   },
