@@ -132,7 +132,7 @@
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]\\\\src\"}",
       "--properties",
-      "{\"buildername\": \"Win x64 Builder\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
+      "{\"buildername\": \"Win x64 Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.win\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [

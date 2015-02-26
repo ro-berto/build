@@ -108,7 +108,7 @@
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]\\\\src\"}",
       "--properties",
-      "{\"buildername\": \"Google Chrome Win\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
+      "{\"buildername\": \"Google Chrome Win\", \"buildnumber\": 571, \"mastername\": \"chromium.chrome\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [

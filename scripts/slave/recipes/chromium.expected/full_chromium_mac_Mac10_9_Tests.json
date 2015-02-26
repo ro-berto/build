@@ -124,7 +124,7 @@
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
-      "{\"buildername\": \"Mac10.9 Tests\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
+      "{\"buildername\": \"Mac10.9 Tests\", \"buildnumber\": 571, \"mastername\": \"chromium.mac\", \"slavename\": \"TestSlavename\", \"target_platform\": \"mac\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [

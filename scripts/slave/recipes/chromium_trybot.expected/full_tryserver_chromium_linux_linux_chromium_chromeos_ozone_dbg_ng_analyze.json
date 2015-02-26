@@ -106,7 +106,7 @@
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
-      "{\"buildername\": \"linux_chromium_chromeos_ozone_dbg_ng\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
+      "{\"buildername\": \"linux_chromium_chromeos_ozone_dbg_ng\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.linux\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [

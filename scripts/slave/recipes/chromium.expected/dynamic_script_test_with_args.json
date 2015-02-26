@@ -3,19 +3,11 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\kill_processes.py"
-    ],
-    "name": "taskkill"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]\\scripts\\slave\\bot_update.py",
+      "[BUILD]/scripts/slave/bot_update.py",
       "--master",
-      "tryserver.chromium.win",
+      "chromium.linux",
       "--builder",
-      "win8_chromium_ng",
+      "Linux Tests",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -24,12 +16,6 @@
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\", \"src/native_client\": \"got_nacl_revision\", \"src/third_party/WebKit\": \"got_webkit_revision\", \"src/third_party/webrtc\": \"got_webrtc_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_v8_revision\"}",
-      "--issue",
-      "12853011",
-      "--patchset",
-      "1",
-      "--rietveld_server",
-      "https://codereview.chromium.org",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -78,7 +64,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\swarming_client\\swarming.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "--version"
     ],
     "name": "swarming.py --version",
@@ -91,26 +77,39 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]\\gclient.py",
+      "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "chromium_win_pch=0 component=shared_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1"
+      "GYP_DEFINES": "component=static_library gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1"
     },
-    "name": "gclient runhooks (with patch)"
+    "name": "gclient runhooks"
   },
   {
     "cmd": [
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.win.json",
+      "[SLAVE_BUILD]/src/testing/buildbot/chromium.linux.json",
       "/path/to/tmp/json"
     ],
     "name": "read test spec",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.win.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.linux.json@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Linux Tests\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"scripts\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"args\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"media_perftests\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"--single-process-tests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        ], @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"name\": \"media_perftests\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"script\": \"gtest_perf_test.py\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
@@ -118,16 +117,16 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\testing\\scripts\\get_compile_targets.py",
+      "[SLAVE_BUILD]/src/testing/scripts/get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
-      "Debug",
+      "Release",
       "--paths",
-      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]\\\\src\"}",
+      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
-      "{\"buildername\": \"win8_chromium_ng\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.win\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
+      "{\"buildername\": \"Linux Tests\", \"buildnumber\": 571, \"mastername\": \"chromium.linux\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -139,58 +138,68 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]\\src\\testing\\buildbot\\trybot_analyze_config.json",
-      "/path/to/tmp/json"
+      "[BUILD]/scripts/slave/cleanup_temp.py"
     ],
-    "name": "read filter exclusion spec",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@path: 'testing\\\\buildbot\\\\trybot_analyze_config.json'@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"chromium\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
+    "name": "cleanup_temp"
   },
   {
     "cmd": [
-      "[DEPOT_TOOLS]\\git.bat",
-      "diff",
-      "--cached",
-      "--name-only"
+      "python",
+      "-u",
+      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[SLAVE_BUILD]/src/out/Release"
     ],
-    "cwd": "[SLAVE_BUILD]\\src",
-    "name": "git diff to analyze patch",
-    "stdout": "/path/to/tmp/",
+    "name": "rmtree build directory",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@files@foo.cc@@@",
-      "@@@STEP_LOG_END@files@@@"
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
     ]
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\build\\gyp_chromium",
-      "--analyzer",
-      "{\"files\": [\"foo.cc\"], \"targets\": []}",
+      "[BUILD]/scripts/slave/extract_build.py",
+      "--target",
+      "Release",
+      "--build-url",
+      "gs://chromium-linux-archive/chromium.linux/Linux Builder/full-build-linux.zip",
+      "--build_revision",
+      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux Tests\", \"buildnumber\": 571, \"mastername\": \"chromium.linux\", \"parent_buildername\": \"Linux Builder\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux Tests\", \"buildnumber\": 571, \"mastername\": \"chromium.linux\", \"parent_buildername\": \"Linux Builder\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+    ],
+    "name": "extract build"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/testing/scripts/gtest_perf_test.py",
+      "--build-config-fs",
+      "Release",
+      "--paths",
+      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
+      "--properties",
+      "{\"buildername\": \"Linux Tests\", \"buildnumber\": 571, \"mastername\": \"chromium.linux\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}",
+      "--args",
+      "[\"media_perftests\", \"--single-process-tests\"]",
+      "run",
+      "--output",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GYP_DEFINES": "chromium_win_pch=0 component=shared_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1"
-    },
-    "name": "analyze",
+    "name": "media_perftests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@No compile necessary@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"status\": \"No dependency\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"targets\": []@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"failures\": [], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"valid\": true@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]

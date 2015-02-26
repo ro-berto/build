@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import re
+import string
 
 
 class Test(object):
@@ -103,11 +104,12 @@ class ScriptTest(Test):  # pylint: disable=W0232
   All new tests are strongly encouraged to use this infrastructure.
   """
 
-  def __init__(self, name, script, all_compile_targets):
+  def __init__(self, name, script, all_compile_targets, script_args=None):
     super(ScriptTest, self).__init__()
     self._name = name
     self._script = script
     self._all_compile_targets = all_compile_targets
+    self._script_args = script_args
 
   @property
   def name(self):
@@ -115,7 +117,10 @@ class ScriptTest(Test):  # pylint: disable=W0232
 
   def compile_targets(self, api):
     try:
-      return self._all_compile_targets[self._script]
+      substitutions = {'name': self._name}
+
+      return [string.Template(s).safe_substitute(substitutions)
+              for s in self._all_compile_targets[self._script]]
     except KeyError:
       # Not all scripts will have test data inside recipes,
       # so return a default value.
@@ -139,6 +144,9 @@ class ScriptTest(Test):  # pylint: disable=W0232
       ])  # pragma: no cover
 
     try:
+      script_args = []
+      if self._script_args:
+        script_args = ['--args', api.json.input(self._script_args)]
       api.python(
           name,
           # Enforce that all scripts are in the specified directory
@@ -146,6 +154,7 @@ class ScriptTest(Test):  # pylint: disable=W0232
           api.path['checkout'].join(
               'testing', 'scripts', api.path.basename(self._script)),
           args=(api.chromium.get_common_args_for_scripts() +
+                script_args +
                 ['run', '--output', api.json.output()] +
                 run_args),
           step_test_data=lambda: api.json.test_api.output(
@@ -338,7 +347,8 @@ def generate_script(api, mastername, buildername, test_spec,
     yield ScriptTest(
         str(script_spec['name']),
         script_spec['script'],
-        scripts_compile_targets)  # pragma: no cover
+        scripts_compile_targets,  # pragma: no cover
+        script_spec.get('args', []))
 
 
 class DynamicPerfTests(Test):

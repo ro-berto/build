@@ -367,3 +367,22 @@ def GenTests(api):
         api.json.output([]),
         retcode=1)
   )
+
+  yield (
+    api.test('dynamic_script_test_with_args') +
+    api.properties.generic(mastername='chromium.linux',
+                           buildername='Linux Tests',
+                           parent_buildername='Linux Builder') +
+    api.platform('linux', 64) +
+    api.override_step_data('read test spec', api.json.output({
+      'Linux Tests': {
+        "scripts": [
+          {
+            "name": "media_perftests",
+            "script": "gtest_perf_test.py",
+            "args": ["media_perftests", "--single-process-tests"]
+          },
+        ],
+      },
+    }))
+  )

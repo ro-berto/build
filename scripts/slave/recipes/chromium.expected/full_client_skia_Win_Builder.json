@@ -148,7 +148,7 @@
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]\\\\src\"}",
       "--properties",
-      "{\"buildername\": \"Win Builder\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
+      "{\"buildername\": \"Win Builder\", \"buildnumber\": 571, \"mastername\": \"client.skia\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [

@@ -127,7 +127,7 @@
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]\\\\src\"}",
       "--properties",
-      "{\"buildername\": \"win_chromium_vista_rel_ng\", \"buildnumber\": 571, \"slavename\": \"TestSlavename\"}"
+      "{\"buildername\": \"win_chromium_vista_rel_ng\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.win\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [

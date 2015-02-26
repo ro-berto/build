@@ -270,35 +270,52 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     test_spec_file = bot_config.get('testing', {}).get('test_spec_file',
                                                        '%s.json' % mastername)
-    test_spec_path = self.m.path['checkout'].join('testing', 'buildbot',
-                                               test_spec_file)
+
     # TODO(phajdan.jr): Bots should have no generators instead.
     if bot_config.get('disable_tests'):
       test_spec = {}
       scripts_compile_targets = {}
     else:
-      test_spec_result = self.m.json.read(
-          'read test spec',
-          test_spec_path,
-          step_test_data=lambda: self.m.json.test_api.output({}))
-      test_spec_result.presentation.step_text = 'path: %s' % test_spec_path
-      test_spec = test_spec_result.json.output
+      test_spec = self.read_test_spec(self.m, test_spec_file)
+      test_spec_path = self.m.path['checkout'].join('testing', 'buildbot',
+                                                 test_spec_file)
 
       scripts_compile_targets = \
           self.m.chromium.get_compile_targets_for_scripts().json.output
 
     for loop_buildername, builder_dict in master_dict.get(
         'builders', {}).iteritems():
-      builder_dict.setdefault('tests', [])
-      # TODO(phajdan.jr): Switch everything to scripts generators and simplify.
-      for generator in builder_dict.get('test_generators', []):
-        builder_dict['tests'] = (
-            list(generator(self.m, mastername, loop_buildername, test_spec,
-                           enable_swarming=enable_swarming,
-                           scripts_compile_targets=scripts_compile_targets)) +
-            builder_dict['tests'])
+      builder_dict['tests'] = self.generate_tests_from_test_spec(
+          self.m, test_spec, builder_dict,
+          loop_buildername, mastername, enable_swarming,
+          scripts_compile_targets, builder_dict.get('test_generators', []))
 
     return update_step, freeze(master_dict), test_spec
+
+  def generate_tests_from_test_spec(self, api, test_spec, builder_dict,
+      buildername, mastername, enable_swarming, scripts_compile_targets,
+      generators):
+    tests = builder_dict.get('tests', [])
+    # TODO(phajdan.jr): Switch everything to scripts generators and simplify.
+    for generator in generators:
+      tests = (
+          list(generator(api, mastername, buildername, test_spec,
+                         enable_swarming=enable_swarming,
+                         scripts_compile_targets=scripts_compile_targets)) +
+          tests)
+    return tests
+
+  def read_test_spec(self, api, test_spec_file):
+    test_spec_path = api.path['checkout'].join('testing', 'buildbot',
+                                               test_spec_file)
+    test_spec_result = api.json.read(
+        'read test spec',
+        test_spec_path,
+        step_test_data=lambda: api.json.test_api.output({}))
+    test_spec_result.presentation.step_text = 'path: %s' % test_spec_path
+    test_spec = test_spec_result.json.output
+
+    return test_spec
 
   def create_test_runner(self, api, tests, suffix=''):
     """Creates a test runner to run a set of tests.

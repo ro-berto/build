@@ -11,7 +11,7 @@ def _GetTargetName(platform, target_bits):
 
 def _Spec(platform, parent_builder, perf_id, index, num_shards, target_bits):
   return {
-    'disable_tests': True,
+    'disable_tests': False,
     'bot_type': 'tester',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -22,11 +22,17 @@ def _Spec(platform, parent_builder, perf_id, index, num_shards, target_bits):
     'testing': {
       'platform': platform,
     },
+    'test_spec_file': 'chromium.perf.json',
+    'test_generators': [
+      steps.generate_script,
+    ],
     'tests': [
       steps.DynamicPerfTests(
           _GetTargetName(platform, target_bits).lower(),
           perf_id, index, num_shards),
     ],
+    'perf-id': perf_id,
+    'results-url': 'https://chromeperf.appspot.com',
   }
 
 
@@ -249,4 +255,6 @@ for k, v in _AndroidSpecs.iteritems():
     'tests': [
       steps.AndroidPerfTests(v['perf_id'], v['num_device_shards']),
     ],
+    'perf-id': v['perf_id'],
+    'results-url': 'https://chromeperf.appspot.com',
   }

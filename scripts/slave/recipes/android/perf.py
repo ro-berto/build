@@ -2,18 +2,20 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from infra.libs.infra_types import freeze
+from infra.libs.infra_types import freeze, thaw
 
 DEPS = [
     'adb',
     'bot_update',
     'chromium',
     'chromium_android',
+    'chromium_tests',
     'gclient',
     'json',
     'step',
     'path',
     'properties',
+    'python',
 ]
 
 REPO_URL = 'https://chromium.googlesource.com/chromium/src.git'
@@ -26,6 +28,7 @@ BUILDERS = freeze({
       'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
                            api.properties['parent_revision']),
       'num_device_shards': 8,
+      'test_spec_file': 'chromium.perf.json',
     },
     'Android Nexus5 Perf': {
       'perf_id': 'android-nexus5',
@@ -33,6 +36,7 @@ BUILDERS = freeze({
       'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
                            api.properties['parent_revision']),
       'num_device_shards': 8,
+      'test_spec_file': 'chromium.perf.json',
     },
     'Android Nexus7v2 Perf': {
       'perf_id': 'android-nexus7v2',
@@ -40,6 +44,7 @@ BUILDERS = freeze({
       'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
                            api.properties['parent_revision']),
       'num_device_shards': 8,
+      'test_spec_file': 'chromium.perf.json',
     },
     'Android Nexus10 Perf': {
       'perf_id': 'android-nexus10',
@@ -47,6 +52,7 @@ BUILDERS = freeze({
       'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
                            api.properties['parent_revision']),
       'num_device_shards': 8,
+      'test_spec_file': 'chromium.perf.json',
     },
     'Android MotoE Perf': {
       'perf_id': 'android-motoe',
@@ -54,6 +60,7 @@ BUILDERS = freeze({
       'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
                            api.properties['parent_revision']),
       'num_device_shards': 8,
+      'test_spec_file': 'chromium.perf.json',
     },
   },
   'chromium.perf.fyi': {
@@ -87,12 +94,13 @@ BUILDERS = freeze({
 def GenSteps(api):
   mastername = api.properties['mastername']
   buildername = api.properties['buildername']
-  builder = BUILDERS[mastername][buildername]
+  builder = thaw(BUILDERS[mastername][buildername])
   api.chromium_android.configure_from_properties('base_config',
                                                  REPO_NAME='src',
                                                  REPO_URL=REPO_URL,
                                                  INTERNAL=False,
-                                                 BUILD_CONFIG='Release')
+                                                 BUILD_CONFIG='Release',
+                                                 TARGET_PLATFORM='android')
   api.gclient.set_config('perf')
   api.gclient.apply_config('android')
   for c in builder.get('gclient_apply_config', []):
@@ -113,6 +121,19 @@ def GenSteps(api):
     api.gclient.c.revisions[dep['name']] = dep['rev_str'] % component_rev
 
   api.bot_update.ensure_checkout()
+
+  test_spec_file = builder.get('test_spec_file')
+  test_spec = {}
+  if test_spec_file:
+    test_spec = api.chromium_tests.read_test_spec(api, test_spec_file)
+
+    scripts_compile_targets = \
+        api.chromium.get_compile_targets_for_scripts().json.output
+
+    builder['tests'] = api.chromium_tests.generate_tests_from_test_spec(
+        api, test_spec, builder, buildername, mastername, False,
+        scripts_compile_targets, [api.chromium.steps.generate_script])
+
   api.path['checkout'] = api.path['slave_build'].join('src')
   api.chromium_android.clean_local_files()
 
@@ -125,17 +146,20 @@ def GenSteps(api):
       'ChromeShell.apk',
       'org.chromium.chrome.shell')
 
+  test_runner = api.chromium_tests.create_test_runner(
+      api, builder.get('tests', []))
+
   perf_tests = api.chromium.list_perf_tests(
       browser='android-chrome-shell',
       num_shards=builder['num_device_shards'],
       devices=api.chromium_android.devices[0:1]).json.output
-
   try:
+    if test_runner:
+      test_runner()
     api.chromium_android.run_sharded_perf_tests(
       config=api.json.input(data=perf_tests),
       perf_id=builder['perf_id'],
       chartjson_file=True)
-
   finally:
     api.chromium_android.common_tests_final_steps()
 
