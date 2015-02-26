@@ -20,19 +20,6 @@ import sys
 
 from common import chromium_utils
 
-# slaves are currently set to buildbot 0.7, while masters to 0.8
-# these are required to override 0.7 and are necessary until slaves
-# have been transitioned to 0.8
-chromium_utils.AddThirdPartyLibToPath('buildbot_8_4p1', override=True)
-chromium_utils.AddThirdPartyLibToPath('buildbot_slave_8_4', override=True)
-chromium_utils.AddThirdPartyLibToPath('twisted_10_2', override=True)
-chromium_utils.AddThirdPartyLibToPath('sqlalchemy_0_7_1', override=True)
-chromium_utils.AddThirdPartyLibToPath('sqlalchemy_migrate_0_7_1', override=True)
-chromium_utils.AddThirdPartyLibToPath('jinja2', override=True)
-chromium_utils.AddThirdPartyLibToPath('markupsafe', override=True)
-chromium_utils.AddThirdPartyLibToPath('decorator_3_3_1', override=True)
-chromium_utils.AddThirdPartyLibToPath('requests_1_2_3', override=True)
-
 from buildbot.process import base
 from buildbot.process import builder as real_builder
 from buildbot.process.properties import Properties

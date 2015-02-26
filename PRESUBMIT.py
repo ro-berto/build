@@ -30,24 +30,12 @@ def CommonChecks(input_api, output_api):
       r'.*masters/.*/public_html/.*\.css$',
   ]
   tests = []
+
+  infra_path = input_api.subprocess.check_output(
+      ['python', 'scripts/common/env.py', 'print']).split()
   sys_path_backup = sys.path
   try:
-    sys.path = [
-        join('third_party'),
-        join('third_party', 'buildbot_8_4p1'),
-        join('third_party', 'buildbot_slave_8_4'),
-        join('third_party', 'coverage-3.7.1'),
-        join('third_party', 'decorator_3_3_1'),
-        join('third_party', 'google_api_python_client'),
-        join('third_party', 'jinja2'),
-        join('third_party', 'markupsafe'),
-        join('third_party', 'mock-1.0.1'),
-        join('third_party', 'requests_1_2_3'),
-        join('third_party', 'sqlalchemy_0_7_1'),
-        join('third_party', 'sqlalchemy_migrate_0_7_1'),
-        join('third_party', 'tempita_0_5'),
-        join('third_party', 'twisted_10_2'),
-        join('scripts'),
+    sys.path = infra_path + [
         # Initially, a separate run was done for unit tests but now that
         # pylint is fetched in memory with setuptools, it seems it caches
         # sys.path so modifications to sys.path aren't kept.
@@ -55,7 +43,6 @@ def CommonChecks(input_api, output_api):
         join('scripts', 'master', 'buildbucket', 'unittests'),
         join('scripts', 'slave', 'unittests'),
         join('scripts', 'tools', 'deps2git'),
-        join('site_config'),
         join('tests'),
     ] + sys.path
 
@@ -71,6 +58,12 @@ def CommonChecks(input_api, output_api):
         disabled_warnings=disabled_warnings))
   finally:
     sys.path = sys_path_backup
+
+  # Run our 'test_env.py' script to generate any required binaries before
+  # executing the tests in parallel. Otherwise, individual tests may attempt to
+  # generate the binaries at the same time, causing race conflicts.
+  input_api.subprocess.check_output(
+      ['python', 'scripts/slave/unittests/test_env.py'])
 
   whitelist = [r'.+_test\.py$']
   blacklist = [r'bot_update_test.py$']
@@ -113,7 +106,7 @@ def CommonChecks(input_api, output_api):
         whitelist))
 
   try:
-    sys.path = [join('scripts', 'common')] + sys.path
+    sys.path = infra_path + sys.path
     import master_cfg_utils  # pylint: disable=F0401
     # Run the tests.
     with master_cfg_utils.TemporaryMasterPasswords():

@@ -10,7 +10,6 @@ import time
 import threading
 import traceback
 
-from common.chromium_utils import AddThirdPartyLibToPath
 from twisted.internet import defer, reactor
 from twisted.python import log as twistedLog
 from twisted.python.threadpool import ThreadPool

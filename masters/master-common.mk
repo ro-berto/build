@@ -9,37 +9,14 @@
 # For example: while we transition from buildbot 0.7.12 to buildbot 0.8.x ,
 # some masters will override BUILDBOT_PATH in their local Makefiles.
 TOPLEVEL_DIR ?= ../..
-THIRDPARTY_DIR ?= $(TOPLEVEL_DIR)/third_party
 SCRIPTS_DIR ?= $(TOPLEVEL_DIR)/scripts
-PUBLICCONFIG_DIR ?= $(TOPLEVEL_DIR)/site_config
-PRIVATECONFIG_DIR ?= $(TOPLEVEL_DIR)/../build_internal/site_config
 
 GCLIENT = $(shell which gclient || echo "$(TOPLEVEL_DIR)/../depot_tools/gclient")
 
-
-# Packages needed by buildbot8
-BUILDBOT8_DEPS :=               \
-    buildbot_8_4p1              \
-    twisted_10_2                \
-    jinja2                      \
-    markupsafe                  \
-    sqlalchemy_0_7_1            \
-    sqlalchemy_migrate_0_7_1    \
-    tempita_0_5                 \
-    decorator_3_3_1
-
-nullstring :=
-space := $(nullstring) #
-BUILDBOT8_PATH = $(subst $(space),:,$(BUILDBOT8_DEPS:%=$(THIRDPARTY_DIR)/%))
-
+BUILDBOT8_PATH = $(shell $(SCRIPTS_DIR)/common/env.py -M "$(PWD)" echo)
 BUILDBOT_PATH ?= $(BUILDBOT8_PATH)
 
 # Define PYTHONPATH.
-PYTHONPATH := $(BUILDBOT_PATH):$(SCRIPTS_DIR):$(THIRDPARTY_DIR)
-PYTHONPATH := $(PYTHONPATH):$(THIRDPARTY_DIR)/google_api_python_client
-PYTHONPATH := $(PYTHONPATH):$(THIRDPARTY_DIR)/httplib2/python2
-PYTHONPATH := $(PYTHONPATH):$(THIRDPARTY_DIR)/oauth2client
-PYTHONPATH := $(PYTHONPATH):$(THIRDPARTY_DIR)/uritemplate
-PYTHONPATH := $(PYTHONPATH):$(PUBLICCONFIG_DIR):$(PRIVATECONFIG_DIR):.
+PYTHONPATH := $(BUILDBOT8_PATH)
 
 include $(TOPLEVEL_DIR)/masters/master-common-rules.mk

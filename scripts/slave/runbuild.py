@@ -23,10 +23,9 @@ import time
 
 # Bootstrap PYTHONPATH from runit
 SCRIPT_DIR = os.path.abspath(os.path.dirname(__file__))
-BASE_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, '..', '..'))
-sys.path.insert(0, os.path.join(BASE_DIR, 'scripts'))
-from tools import runit
-runit.add_build_paths(sys.path)
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), os.pardir))
+import common.env
+common.env.Install()
 
 from common import master_cfg_utils
 from common import chromium_utils

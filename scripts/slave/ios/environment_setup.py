@@ -13,13 +13,12 @@ import sys
 # Update this path if the script is moved.
 BUILD_DIR = os.path.abspath(os.path.join(
   os.path.dirname(__file__),
-  '..',
-  '..',
-  '..',
+  os.pardir,
+  os.pardir,
+  os.pardir,
 ))
 
-sys.path.insert(0, os.path.join(BUILD_DIR, 'scripts', 'tools'))
+sys.path.insert(0, os.path.join(BUILD_DIR, 'scripts'))
 
-import runit
-
-runit.add_build_paths(sys.path)
+import common.env #pylint: disable=F0401
+common.env.Install()

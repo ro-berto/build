@@ -25,13 +25,14 @@ import traceback
 BASE_DIR = os.path.abspath(os.path.join(
     os.path.dirname(os.path.abspath(__file__)), os.pardir, os.pardir))
 
-sys.path.insert(0, os.path.join(BASE_DIR, 'scripts'))
+# Install the common Infra environment (main only).
+if __name__ == '__main__':
+  sys.path.insert(0, os.path.join(BASE_DIR, 'scripts'))
+  print sys.path[0]
+  import common.env
+  common.env.Install()
 
 from common import chromium_utils
-
-# this is required for master.cfg to be loaded properly, since setuptools
-# is only required by runbuild.py at the moment.
-chromium_utils.AddThirdPartyLibToPath('setuptools-0.6c11')
 
 
 @contextlib.contextmanager

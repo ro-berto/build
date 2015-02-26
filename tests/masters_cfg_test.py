@@ -14,6 +14,8 @@ import time
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(BASE_DIR, 'scripts'))
+import common.env
+common.env.Install()
 
 from common import chromium_utils
 from common import master_cfg_utils
@@ -29,21 +31,21 @@ Cmd = collections.namedtuple('Cmd', ['name', 'path', 'env'])
 
 def GetMasterCmds(masters, blacklist, pythonpaths):
   assert blacklist <= set(m for m, _ in masters)
-  env = os.environ.copy()
-  pythonpaths = list(pythonpaths or [])
-  buildpaths = ['scripts', 'third_party', 'site_config']
-  thirdpartypaths = ['buildbot_8_4p1', 'buildbot_slave_8_4', 'jinja2',
-                     'markupsafe', 'mock-1.0.1', 'twisted_10_2']
+  cmds = []
+  for name, path in masters:
+    if name in blacklist:
+      continue
 
-  pythonpaths.extend(os.path.join(BASE_DIR, p) for p in buildpaths)
-  pythonpaths.extend(os.path.join(BASE_DIR, 'third_party', p)
-                     for p in thirdpartypaths)
-  if env.get('PYTHONPATH'):
-    pythonpaths.append(env.get('PYTHONPATH'))
-  env['PYTHONPATH'] = os.pathsep.join(pythonpaths)
+    master_pythonpath = common.env.PythonPath.FromPaths(*(pythonpaths or []))
+    master_pythonpath += common.env.GetInfraPythonPath(master_dir=path)
 
-  return [Cmd(name, path, env)
-      for name, path in masters if name not in blacklist]
+    env = os.environ.copy()
+    env_pythonpath = env.get('PYTHONPATH')
+    if env_pythonpath:
+      master_pythonpath += common.env.PythonPath.FromPathStr(env_pythonpath)
+    env['PYTHONPATH'] = master_pythonpath.pathstr
+    cmds.append(Cmd(name, path, env))
+  return cmds
 
 
 def main(argv):

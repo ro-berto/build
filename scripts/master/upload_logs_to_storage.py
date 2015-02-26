@@ -24,9 +24,10 @@ ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(SCRIPT_DIR)))
 assert os.path.isdir(os.path.join(ROOT_DIR, 'build')), \
                      'Script may have moved in the hierarchy'
 
-sys.path.insert(0, os.path.join(ROOT_DIR, 'build', 'scripts', 'tools'))
-import runit  # pylint: disable=F0401
-runit.add_build_paths(sys.path)
+sys.path.insert(0, os.path.join(ROOT_DIR, 'build', 'scripts'))
+import common.env
+common.env.Install()
+
 import requests  # pylint: disable=F0401
 import pytz  # pylint: disable=F0401
 

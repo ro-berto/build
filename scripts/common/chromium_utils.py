@@ -32,6 +32,8 @@ try:
 except ImportError:
   import simplejson as json
 
+from common import env
+
 
 BUILD_DIR = os.path.realpath(os.path.join(
     os.path.dirname(__file__), os.pardir, os.pardir))
@@ -1349,31 +1351,52 @@ def GetActiveMaster(slavename=None, default=None):
   return default
 
 
+@contextmanager
+def MasterEnvironment(master_dir):
+  """Context manager that enters an enviornment similar to a master's.
+
+  This involves:
+    - Modifying 'sys.path' to include paths available to the master.
+    - Changing directory (via os.chdir()) to the master's base directory.
+
+  These changes will be reverted after the context manager completes.
+
+  Args:
+    master_dir: (str) The master's base directory.
+  """
+  master_dir = os.path.abspath(master_dir)
+
+  # Setup a 'sys.path' that is adequate for loading 'slaves.cfg'.
+  old_cwd = os.getcwd()
+
+  with env.GetInfraPythonPath(master_dir=master_dir).Enter():
+    try:
+      os.chdir(master_dir)
+      yield
+    finally:
+      os.chdir(old_cwd)
+
+
 def ParsePythonCfg(cfg_filepath, fail_hard=False):
   """Retrieves data from a python config file."""
   if not os.path.exists(cfg_filepath):
     return None
-  base_path = os.path.dirname(os.path.abspath(cfg_filepath))
-  old_sys_path = sys.path
-  sys.path = sys.path + [base_path]
-  old_cwd = os.getcwd()
-  try:
-    os.chdir(base_path)
-    local_vars = {}
-    execfile(os.path.join(cfg_filepath), local_vars)
-    del local_vars['__builtins__']
-    return local_vars
-  except Exception as e:
-    # pylint: disable=C0323
-    print >>sys.stderr, 'An error occurred while parsing %s: %s' % (
-        cfg_filepath, e)
-    print >>sys.stderr, traceback.format_exc()  # pylint: disable=C0323
-    if fail_hard:
-      raise
-    return {}
-  finally:
-    os.chdir(old_cwd)
-    sys.path = old_sys_path
+
+  # Execute 'slaves.sfg' in the master path environment.
+  with MasterEnvironment(os.path.dirname(os.path.abspath(cfg_filepath))):
+    try:
+      local_vars = {}
+      execfile(os.path.join(cfg_filepath), local_vars)
+      del local_vars['__builtins__']
+      return local_vars
+    except Exception as e:
+      # pylint: disable=C0323
+      print >>sys.stderr, 'An error occurred while parsing %s: %s' % (
+          cfg_filepath, e)
+      print >>sys.stderr, traceback.format_exc()  # pylint: disable=C0323
+      if fail_hard:
+        raise
+      return {}
 
 
 def RunSlavesCfg(slaves_cfg, fail_hard=False):
@@ -1611,6 +1634,12 @@ def AddThirdPartyLibToPath(lib, override=False):
 
   Setting 'override' to true will place the directory in the beginning of
   sys.path, useful for overriding previously set packages.
+
+  NOTE: We would like to deprecate this method, as it allows (encourages?)
+      scripts to define their own one-off Python path sequences, creating a
+      difficult-to-manage state where different scripts and libraries have
+      different path expectations. Please don't use this method if possible;
+      it preferred to augment 'common.env' instead.
   """
   libpath = os.path.abspath(os.path.join(BUILD_DIR, 'third_party', lib))
   if override:

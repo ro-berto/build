@@ -10,15 +10,17 @@ directory (e.g., chrome-release/build/). The required pepper bundle will be
 requested and copied to nacl_sdk/pepper_current.
 """
 
-from common import chromium_utils
-chromium_utils.AddThirdPartyLibToPath('requests_1_2_3', override=True)
-
 import hashlib
 import optparse
 import os
 import shutil
 import sys
 
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), os.pardir))
+import common.env
+common.env.Install()
+
+from common import chromium_utils
 import requests # pylint: disable=F0401
 
 NACL_SDK_UPDATE_HOST = 'https://storage.googleapis.com'
