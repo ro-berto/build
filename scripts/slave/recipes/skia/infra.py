@@ -11,6 +11,7 @@ DEPS = [
   'platform',
   'properties',
   'python',
+  'rietveld',
   'step',
 ]
 
@@ -54,7 +55,14 @@ def GenSteps(api):
       INFRA_GIT_URL,
       dest=infra_dir,
       ref=api.properties.get('revision', 'origin/master'))
-  # TODO(borenet): Apply patch for trybots!
+  api.path['checkout'] = infra_dir
+
+  # Maybe apply a patch.
+  if (api.properties.get('rietveld') and
+      api.properties.get('issue') and
+      api.properties.get('patchset')):
+    api.rietveld.apply_issue()
+
   # Fetch Go dependencies.
   env = {'GOPATH': go_dir,
          'GIT_USER_AGENT': 'git/1.9.1'} # I don't think this version matters.
@@ -84,4 +92,10 @@ def GenTests(api):
   )
   yield (
       api.test('Infra-PerCommit_initialcheckout')
+  )
+  yield (
+      api.test('Infra-PerCommit_try') +
+      api.properties(rietveld='https://codereview.chromium.org',
+                     issue=1234,
+                     patchset=1)
   )
