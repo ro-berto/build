@@ -82,7 +82,7 @@ def GenSteps(api):
           gtest_filter='WebRtc*')
       api.chromium_android.common_tests_final_steps()
     else:
-      test_runner = lambda: api.webrtc.runtests(revision=got_revision)
+      test_runner = lambda: api.webrtc.runtests(revision_number=got_revision)
       api.chromium_tests.setup_chromium_tests(test_runner)
 
 

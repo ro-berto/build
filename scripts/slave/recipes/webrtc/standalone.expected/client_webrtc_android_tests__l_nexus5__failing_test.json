@@ -386,9 +386,30 @@
     "name": "voice_engine_unittests"
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--xvfb",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Android Tests (L Nexus5)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"parent_buildername\": \"Android Builder\", \"parent_got_revision\": \"12345\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Android Tests (L Nexus5)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"parent_buildername\": \"Android Builder\", \"parent_got_revision\": \"12345\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--annotate=graphing",
+      "--results-url=https://chromeperf.appspot.com",
+      "--perf-dashboard-id=webrtc_perf_tests",
+      "--perf-id=webrtc-android-tests-nexus5",
+      "--perf-config",
+      "{'a_default_rev': 'r_webrtc_rev'}",
+      "--test-type=webrtc_perf_tests",
+      "--builder-name=Android Tests (L Nexus5)",
+      "--slave-name=slavename",
+      "--build-number=1337",
+      "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]/src/webrtc/build/android/test_runner.py",
       "gtest",
       "-s",
@@ -396,9 +417,6 @@
       "--verbose",
       "--release"
     ],
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
     "name": "webrtc_perf_tests"
   },
   {

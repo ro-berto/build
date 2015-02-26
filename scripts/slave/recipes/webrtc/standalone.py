@@ -71,7 +71,7 @@ def GenSteps(api):
         archive_revision)
 
   if does_test:
-    api.webrtc.runtests(got_revision)
+    api.webrtc.runtests(revision_number=got_revision)
 
 
 def _sanitize_nonalpha(text):

@@ -866,6 +866,9 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'webrtc-android-tests-nexus5',
+        },
         'bot_type': 'tester',
         'parent_buildername': 'Android Builder',
         'build_gs_archive': 'android_apk_rel_archive',
@@ -891,6 +894,9 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'webrtc-android-tests-nexus72',
         },
         'bot_type': 'tester',
         'parent_buildername': 'Android Builder',
