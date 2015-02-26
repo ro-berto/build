@@ -10,12 +10,14 @@ SPEC = {
   },
   'builders': {
     'Linux ASan LSan Builder': {
-      # Build for both LSan and non-LSan testers.
       'recipe_config': 'chromium_linux_asan',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
+      # This doesn't affect the build, but ensures that trybots get the right
+      # runtime flags.
+      'chromium_apply_config': ['lsan'],
       'bot_type': 'builder',
       'testing': {'platform': 'linux'},
       'enable_swarming': True,
@@ -88,6 +90,7 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
+      'chromium_apply_config': ['lsan'],
       'bot_type': 'builder',
       'testing': {'platform': 'linux'},
       'enable_swarming': True,
