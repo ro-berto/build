@@ -201,7 +201,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     }[platform]
 
   def task(self, title, isolated_hash, shards=1, task_output_dir=None,
-           extra_args=None):
+           extra_args=None, idempotent=None):
     """Returns a new SwarmingTask instance to run an isolated executable on
     Swarming.
 
@@ -219,7 +219,11 @@ class SwarmingApi(recipe_api.RecipeApi):
       task_output_dir: if defined, the directory where task results are placed.
           The caller is responsible for removing this folder when finished.
       extra_args: list of command line arguments to pass to isolated tasks.
+      idempotent: whether this task is considered idempotent. Defaults
+          to self.default_idempotent if not specified.
     """
+    if idempotent is None:
+      idempotent = self.default_idempotent
     return SwarmingTask(
         title=title,
         isolated_hash=isolated_hash,
@@ -233,7 +237,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         expiration=self._default_expiration,
         io_timeout=self._default_io_timeout,
         hard_timeout=self._default_hard_timeout,
-        idempotent=self.default_idempotent,
+        idempotent=idempotent,
         extra_args=extra_args,
         collect_step=self._default_collect_step,
         task_output_dir=task_output_dir)
@@ -288,7 +292,14 @@ class SwarmingApi(recipe_api.RecipeApi):
     extra_args.extend(['--output-format', 'json',
                        '--output-dir', '${ISOLATED_OUTDIR}'])
 
-    task = self.task(title, isolated_hash, extra_args=extra_args, **kwargs)
+    # For the time being, assume that all Telemetry tests are not
+    # idempotent. As of this writing, Telemetry itself downloads some
+    # data from remote servers; additionally, some tests like the
+    # pixel_tests download reference images from cloud storage. It's
+    # safest to assume that these tests aren't idempotent, though we
+    # should work toward making them so.
+    task = self.task(title, isolated_hash, extra_args=extra_args,
+                     idempotent=False, **kwargs)
     task.collect_step = self._telemetry_gpu_collect_step
     return task
 
