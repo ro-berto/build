@@ -328,6 +328,12 @@ def _GenStepsInternal(api):
         enable_swarming=True,
         swarming_dimension_sets=CHROMIUM_GPU_DIMENSION_SETS[master][builder]))
 
+  # TODO(phajdan.jr): Remove special case for layout tests.
+  # This could be done by moving layout tests to main waterfall.
+  affected_files = api.tryserver.get_files_affected_by_patch()
+  if any([f.startswith('third_party/WebKit') for f in affected_files]):
+    tests.append(api.chromium.steps.BlinkTest())
+
   compile_targets, tests_including_triggered = \
       api.chromium_tests.get_compile_targets_and_tests(
           bot_config['mastername'],
@@ -338,6 +344,7 @@ def _GenStepsInternal(api):
 
   requires_compile, _, compile_targets = \
       api.chromium_tests.analyze(
+          affected_files,
           all_compile_targets(api, tests + tests_including_triggered),
           compile_targets,
           'trybot_analyze_config.json')

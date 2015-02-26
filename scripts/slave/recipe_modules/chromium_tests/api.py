@@ -606,7 +606,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.tryserver.set_transient_failure_tryjob_result()
       raise
 
-  def analyze(self, exes, compile_targets, config_file_name):
+  def analyze(self, affected_files, exes, compile_targets, config_file_name):
     """Runs "analyze" step to determine targets affected by the patch.
 
     Returns a tuple of:
@@ -618,6 +618,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     original_compile_targets = compile_targets[:]
 
     self.m.filter.does_patch_require_compile(
+        affected_files,
         exes=exes,
         compile_targets=compile_targets,
         additional_name='chromium',

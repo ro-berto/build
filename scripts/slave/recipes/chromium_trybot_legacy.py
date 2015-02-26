@@ -448,6 +448,7 @@ def _GenStepsInternal(api):
                                          'trybot_analyze_config.json')
       requires_compile, matching_exes, compile_targets = \
           api.chromium_tests.analyze(
+              api.tryserver.get_files_affected_by_patch(),
               get_test_names(gtest_tests) +
                   all_compile_targets(api, conditional_tests),
               compile_targets,

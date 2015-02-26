@@ -9,6 +9,7 @@ DEPS = [
   'filter',
   'json',
   'properties',
+  'tryserver',
 ]
 
 
@@ -20,6 +21,7 @@ def GenSteps(api):
   compile_targets = list(api.m.properties.get('compile_targets', []))
 
   out_result, out_exes, out_compile_targets = api.chromium_tests.analyze(
+      api.tryserver.get_files_affected_by_patch(),
       exes, compile_targets, 'foo.json')
 
   if 'all' in compile_targets:

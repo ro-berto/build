@@ -135,6 +135,7 @@ def GenSteps(api):
       api.tryserver.maybe_apply_issue()
 
       api.filter.does_patch_require_compile(
+          api.tryserver.get_files_affected_by_patch(),
           exes=test_names,
           compile_targets=compile_targets,
           additional_name='chromium',

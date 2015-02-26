@@ -136,6 +136,7 @@ def _GenStepsInternal(api):
 
     compile_targets = api.chromium.c.compile_py.default_targets
     api.filter.does_patch_require_compile(
+        api.tryserver.get_files_affected_by_patch(),
         exes=test_names,
         compile_targets=compile_targets,
         additional_name='chromium',

@@ -19,9 +19,11 @@ def GenSteps(api):
 
   api.path['checkout'] = api.path['slave_build']
   api.chromium.set_config('chromium')
-  api.filter.does_patch_require_compile(exes=exes,
-                                        compile_targets=compile_targets,
-                                        additional_name='chromium')
+  api.filter.does_patch_require_compile(
+      affected_files=list(api.m.properties.get('affected_files', ['foo.cc'])),
+      exes=exes,
+      compile_targets=compile_targets,
+      additional_name='chromium')
 
   assert (list(api.properties.get('example_changed_paths', ['foo.cc'])) == \
           api.filter.paths)
@@ -37,6 +39,7 @@ def GenTests(api):
   # Trivial test with no exclusions and nothing matching.
   yield (api.test('basic') +
          api.properties(
+           affected_files=['yy'],
            filter_exclusions=[],
            example_changed_paths=['yy'],
            example_result=None) +
@@ -44,48 +47,37 @@ def GenTests(api):
           'read filter exclusion spec',
           api.json.output({
            'base': { 'exclusions': [] },
-           'chromium': { 'exclusions': [] }})) +
-         api.override_step_data(
-          'git diff to analyze patch',
-          api.raw_io.stream_output('yy')))
+           'chromium': { 'exclusions': [] }})))
 
   # Matches exclusions
   yield (api.test('match_exclusion') +
-         api.properties(example_result=1) +
+         api.properties(affected_files=['foo.cc'], example_result=1) +
          api.override_step_data(
           'read filter exclusion spec',
           api.json.output({
            'base': { 'exclusions': ['fo.*'] },
-           'chromium': { 'exclusions': [] }})) +
-         api.override_step_data(
-          'git diff to analyze patch',
-          api.raw_io.stream_output('foo.cc')))
+           'chromium': { 'exclusions': [] }})))
 
   # Matches exclusions in additional_name key
   yield (api.test('match_additional_name_exclusion') +
-         api.properties(example_result=1) +
+         api.properties(affected_files=['foo.cc'], example_result=1) +
          api.override_step_data(
           'read filter exclusion spec',
           api.json.output({
            'base': { 'exclusions': [] },
-           'chromium': { 'exclusions': ['fo.*'] }})) +
-         api.override_step_data(
-          'git diff to analyze patch',
-          api.raw_io.stream_output('foo.cc')))
+           'chromium': { 'exclusions': ['fo.*'] }})))
 
   # Doesnt match exclusion.
   yield (api.test('doesnt_match_exclusion') +
          api.properties(
+           affected_files=['bar.cc'],
            example_changed_paths=['bar.cc'],
            example_result=None) +
          api.override_step_data(
           'read filter exclusion spec',
           api.json.output({
            'base': { 'exclusions': ['fo.*'] },
-           'chromium': { 'exclusions': [] }})) +
-         api.override_step_data(
-          'git diff to analyze patch',
-          api.raw_io.stream_output('bar.cc')))
+           'chromium': { 'exclusions': [] }})))
 
   # Analyze returns matching result.
   yield (api.test('analyzes_returns_true') +

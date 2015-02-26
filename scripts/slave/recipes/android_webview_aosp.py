@@ -72,8 +72,10 @@ def GenSteps(api):
   droid.all_incompatible_directories_check_step()
 
   # Early out if we haven't changed any relevant code.
-  api.filter.does_patch_require_compile(exes=WEBVIEW_EXES,
-                                        additional_name='android_webview')
+  api.filter.does_patch_require_compile(
+      api.tryserver.get_files_affected_by_patch(),
+      exes=WEBVIEW_EXES,
+      additional_name='android_webview')
   needs_compile = not api.filter.result or not api.filter.matching_exes
   if api.tryserver.is_tryserver and needs_compile:
     return

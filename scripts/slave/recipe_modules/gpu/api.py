@@ -188,6 +188,7 @@ class GpuApi(recipe_api.RecipeApi):
         self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
     if is_tryserver:
       self.m.filter.does_patch_require_compile(
+          self.m.tryserver.get_files_affected_by_patch(),
           exes=targets,
           compile_targets=targets,
           additional_name='chromium',

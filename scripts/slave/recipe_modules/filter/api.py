@@ -71,7 +71,10 @@ class FilterApi(recipe_api.RecipeApi):
       exclusions.extend(file_contents[name]['exclusions'])
     return exclusions
 
-  def does_patch_require_compile(self, exes=None, compile_targets=None,
+  def does_patch_require_compile(self,
+                                 affected_files,
+                                 exes=None,
+                                 compile_targets=None,
                                  additional_name=None,
                                  config_file_name='trybot_analyze_config.json',
                                  **kwargs):
@@ -79,6 +82,8 @@ class FilterApi(recipe_api.RecipeApi):
     Return value can be accessed by call to result().
 
     Args:
+      affected_files: list of files affected by the current patch; paths
+                      should only use forward slashes ("/") on all platforms
       exes: the possible set of executables that are desired to run. When done
       matching_exes() returns the set of exes that are effected by the files
       that have changed.
@@ -102,7 +107,7 @@ class FilterApi(recipe_api.RecipeApi):
     self._compile_targets = compile_targets if compile_targets is not None \
                                             else []
 
-    self._paths = self.m.tryserver.get_files_affected_by_patch()
+    self._paths = affected_files
 
     # Check the path of each file against the exclusion list. If found, no need
     # to check dependencies.
