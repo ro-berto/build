@@ -989,6 +989,26 @@ BUILDERS = {
         'tests': ['mjsunit'],
         'testing': {'platform': 'linux'},
       },
+      'V8 Linux - ppc - sim': {
+        'chromium_apply_config': ['simulate_ppc', 'v8_goma'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['unittests', 'v8testing'],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - ppc64 - sim': {
+        'chromium_apply_config': ['simulate_ppc', 'v8_goma'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['unittests', 'v8testing'],
+        'testing': {'platform': 'linux'},
+      },
       'V8 Linux - full debug': {
         'chromium_apply_config': ['no_optimized_debug', 'v8_goma'],
         'v8_config_kwargs': {

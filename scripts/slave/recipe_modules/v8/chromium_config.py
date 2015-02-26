@@ -143,6 +143,14 @@ def simulate_arm(c):
     c.gyp_env.GYP_DEFINES['v8_target_arch'] = 'arm'
 
 
+@CONFIG_CTX(includes=['v8'])
+def simulate_ppc(c):
+  if c.TARGET_BITS == 64:
+    c.gyp_env.GYP_DEFINES['v8_target_arch'] = 'ppc64'
+  else:
+    c.gyp_env.GYP_DEFINES['v8_target_arch'] = 'ppc'
+
+
 @CONFIG_CTX(group='compiler', includes=['v8', 'goma'])
 def v8_goma(c):
   # This configuration connects the compiler group constraint with chromium's
