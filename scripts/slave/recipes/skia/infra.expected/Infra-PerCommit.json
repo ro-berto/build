@@ -69,9 +69,10 @@
     ],
     "cwd": "[SLAVE_BUILD]/go/src/skia.googlesource.com/buildbot.git",
     "env": {
+      "GIT_USER_AGENT": "git/1.9.1",
       "GOPATH": "[SLAVE_BUILD]/go"
     },
-    "name": "Update"
+    "name": "update_deps"
   },
   {
     "cmd": [
@@ -81,6 +82,7 @@
     ],
     "cwd": "[SLAVE_BUILD]/go/src/skia.googlesource.com/buildbot.git",
     "env": {
+      "GIT_USER_AGENT": "git/1.9.1",
       "GOPATH": "[SLAVE_BUILD]/go"
     },
     "name": "run_unittests"

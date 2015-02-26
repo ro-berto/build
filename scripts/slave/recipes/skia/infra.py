@@ -56,8 +56,9 @@ def GenSteps(api):
       ref=api.properties.get('revision', 'origin/master'))
   # TODO(borenet): Apply patch for trybots!
   # Fetch Go dependencies.
-  env = {'GOPATH': go_dir}
-  api.step('Update', cmd=['go', 'get', './...'], cwd=infra_dir, env=env)
+  env = {'GOPATH': go_dir,
+         'GIT_USER_AGENT': 'git/1.9.1'} # I don't think this version matters.
+  api.step('update_deps', cmd=['go', 'get', './...'], cwd=infra_dir, env=env)
 
   # Run tests.
   api.python('run_unittests', 'run_unittests', cwd=infra_dir, env=env)
