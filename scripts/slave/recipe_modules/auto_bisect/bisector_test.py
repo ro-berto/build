@@ -19,7 +19,7 @@ import mock
 
 from auto_bisect.bisector import Bisector
 
-class BisectorTest(unittest.TestCase):
+class BisectorTest(unittest.TestCase):  # pragma: no cover
   def setUp(self):
     self.bisect_config = {
         'test_type': 'perf',
@@ -249,4 +249,4 @@ class BisectorTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-  unittest.main()
+  unittest.main()  # pragma: no cover

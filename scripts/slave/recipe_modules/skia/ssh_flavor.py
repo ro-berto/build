@@ -59,7 +59,7 @@ class SSHFlavorUtils(default_flavor.DefaultFlavorUtils):
     """Like os.path.join(), but for paths on a remote machine."""
     return posixpath.join(*args)
 
-  def device_path_exists(self, path):
+  def device_path_exists(self, path):  # pragma: no cover
     """Like os.path.exists(), but for paths on a remote device."""
     try:
       self.ssh('exists %s' % path, ['test', '-e', path])

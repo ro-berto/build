@@ -3,7 +3,7 @@ import re
 # The following has largely been copied from bisect_perf_regression.py
 # TODO(robertocn): Look into the possibility of getting structured data from
 # run_benchmark and similar scripts instead of this markup.
-def parse_metric(out, err, metric):
+def parse_metric(out, err, metric):  # pragma: no cover
   """Tries to parse the output in RESULT line format or HISTOGRAM format.
 
   Args:
@@ -19,7 +19,7 @@ def parse_metric(out, err, metric):
     result = _TryParseHistogramValuesFromOutput(metric, text)
   return len(result), result
 
-def _TryParseResultValuesFromOutput(metric, text):
+def _TryParseResultValuesFromOutput(metric, text):  # pragma: no cover
   """Attempts to parse a metric in the format RESULT <graph>: <trace>= ...
 
   Args:
@@ -96,7 +96,7 @@ def _TryParseResultValuesFromOutput(metric, text):
   return values_list
 
 
-def _TryParseHistogramValuesFromOutput(metric, text):
+def _TryParseHistogramValuesFromOutput(metric, text):  # pragma: no cover
   """Attempts to parse a metric in the format HISTOGRAM <graph: <trace>.
 
   Args:

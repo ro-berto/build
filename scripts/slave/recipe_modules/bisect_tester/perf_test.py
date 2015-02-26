@@ -24,11 +24,11 @@ def run_perf_test(api, test_config):
       if out is None and err is None:
         #dummy value when running test TODO: replace with a mock
         values.append(0)
-      else:
+      else:  # pragma: no cover
         valid_value, value = parse_metric.parse_metric(out, err, metric)
         assert valid_value
         values.extend(value)
-    else:
+    else:  # pragma: no cover
       break
   return values
 

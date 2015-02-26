@@ -126,10 +126,10 @@ def BASE(c):
 
   for (plat, arch, bits) in host_targ_tuples:
     if plat == 'ios':
-      if arch not in ('arm', 'intel'):
+      if arch not in ('arm', 'intel'):  # pragma: no cover
         raise BadConf('%s/%s arch is not supported on %s' % (arch, bits, plat))
     elif plat in ('win', 'mac'):
-      if arch != 'intel':
+      if arch != 'intel':  # pragma: no cover
         raise BadConf('%s arch is not supported on %s' % (arch, plat))
     elif plat in ('chromeos', 'android', 'linux'):
       pass  # no arch restrictions
@@ -148,17 +148,17 @@ def BASE(c):
 
   if c.TARGET_PLATFORM not in potential_platforms:
     raise BadConf('Can not compile "%s" on "%s"' %
-                  (c.TARGET_PLATFORM, c.HOST_PLATFORM))
+                  (c.TARGET_PLATFORM, c.HOST_PLATFORM))  # pragma: no cover
 
   if c.TARGET_CROS_BOARD:
-    if not c.TARGET_PLATFORM == 'chromeos':
+    if not c.TARGET_PLATFORM == 'chromeos':  # pragma: no cover
       raise BadConf("Cannot specify CROS board for non-'chromeos' platform")
 
   if c.HOST_PLATFORM != c.TARGET_PLATFORM or c.HOST_ARCH != c.TARGET_ARCH:
     c.gyp_env.GYP_CROSSCOMPILE = 1
 
   if c.HOST_BITS < c.TARGET_BITS:
-    raise BadConf('host bits < targ bits')
+    raise BadConf('host bits < targ bits')  # pragma: no cover
 
   c.build_config_fs = c.BUILD_CONFIG
   if c.HOST_PLATFORM == 'win':
@@ -247,7 +247,7 @@ def ninja(c):
 
 @config_ctx(group='builder')
 def msvs(c):
-  if c.HOST_PLATFORM != 'win':
+  if c.HOST_PLATFORM != 'win':  # pragma: no cover
     raise BadConf('can not use msvs on "%s"' % c.HOST_PLATFORM)
   # If compile.py is invoking devenv it needs to refer to a solution file.
   # For chrome this defaults to ['CHECKOUT']/build/all.sln.
@@ -277,7 +277,7 @@ def goma_hermetic_error(c):
   c.compile_py.goma_hermetic = 'error'
 
 @config_ctx(group='builder')
-def xcode(c):
+def xcode(c):  # pragma: no cover
   if c.HOST_PLATFORM != 'mac':
     raise BadConf('can not use xcodebuild on "%s"' % c.HOST_PLATFORM)
   c.gyp_env.GYP_GENERATORS.add('xcode')
@@ -565,7 +565,7 @@ def chromium_msan(c):
   c.compile_py.default_targets = ['All', 'chromium_builder_tests']
 
 @config_ctx(includes=['ninja', 'clang', 'goma', 'syzyasan'])
-def chromium_syzyasan(c):
+def chromium_syzyasan(c):  # pragma: no cover
   c.compile_py.default_targets = ['All', 'chromium_builder_tests']
 
 @config_ctx(includes=['ninja', 'clang', 'goma', 'tsan2', 'chromium_sanitizer'])
@@ -573,7 +573,7 @@ def chromium_tsan2(c):
   c.compile_py.default_targets = ['All', 'chromium_builder_tests']
 
 @config_ctx(includes=['ninja', 'default_compiler', 'goma', 'chromeos'])
-def chromium_chromeos(c):
+def chromium_chromeos(c):  # pragma: no cover
   c.compile_py.default_targets = ['All', 'chromium_builder_tests']
 
 @config_ctx(includes=['chromium_asan', 'chromiumos', 'asan_test_batch'])
@@ -581,11 +581,11 @@ def chromium_chromiumos_asan(c):
   pass
 
 @config_ctx(includes=['ninja', 'clang', 'goma', 'chromeos'])
-def chromium_chromeos_clang(c):
+def chromium_chromeos_clang(c):  # pragma: no cover
   c.compile_py.default_targets = ['All', 'chromium_builder_tests']
 
 @config_ctx(includes=['chromium_chromeos', 'ozone'])
-def chromium_chromeos_ozone(c):
+def chromium_chromeos_ozone(c):  # pragma: no cover
   c.compile_py.default_targets = ['All', 'chromium_builder_tests']
 
 @config_ctx(includes=['ninja', 'clang', 'goma'])
@@ -593,7 +593,7 @@ def chromium_clang(c):
   c.compile_py.default_targets = ['All', 'chromium_builder_tests']
 
 @config_ctx(includes=['xcode', 'static_library'])
-def chromium_xcode(c):
+def chromium_xcode(c):  # pragma: no cover
   c.compile_py.build_tool = 'xcode'
   c.compile_py.default_targets = ['All']
   c.compile_py.xcode_project = Path('[CHECKOUT]', 'build', 'all.xcodeproj')

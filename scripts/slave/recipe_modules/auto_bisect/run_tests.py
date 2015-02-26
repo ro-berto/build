@@ -13,7 +13,7 @@ import logging
 SRC = os.path.join(os.path.dirname(__file__), os.path.pardir, os.path.pardir)
 
 
-def main():
+def main():  # pragma: no cover
   if 'full-log' in sys.argv:
     # Configure logging to show line numbers and logging level
     fmt = '%(module)s:%(lineno)d - %(levelname)s: %(message)s'
@@ -42,4 +42,4 @@ def main():
 
 
 if __name__ == '__main__':
-  sys.exit(main())
+  sys.exit(main())  # pragma: no cover

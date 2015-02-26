@@ -162,7 +162,7 @@ def chromium_bare(c):
 
 @config_ctx(includes=['chromium_bare'])
 def chromium_empty(c):
-  c.solutions[0].deps_file = ''
+  c.solutions[0].deps_file = ''  # pragma: no cover
 
 @config_ctx(includes=['chromium_bare'])
 def chromium(c):
@@ -174,7 +174,7 @@ def chromium_lkcr(c):
   # TODO(phajdan.jr): Add git hashes for LKCR crbug.com/349277.
   if c.GIT_MODE:
     raise BadConf('Git has problems with safesync_url and LKCR, '
-                  'crbug.com/349277 crbug.com/109191')
+                  'crbug.com/349277 crbug.com/109191')  # pragma: no cover
   s = c.solutions[0]
   s.safesync_url = 'https://build.chromium.org/p/chromium/lkcr-status/lkgr'
   # TODO(hinoka): Once lkcr exists and is a tag, it should just be lkcr
@@ -185,7 +185,7 @@ def chromium_lkcr(c):
 def chromium_lkgr(c):
   s = c.solutions[0]
   safesync_url = 'https://chromium-status.appspot.com/lkgr'
-  if c.GIT_MODE:
+  if c.GIT_MODE:  # pragma: no cover
     safesync_url = 'https://chromium-status.appspot.com/git-lkgr'
     raise BadConf('Git has problems with safesync_url, crbug.com/109191.')
   s.safesync_url = safesync_url
@@ -270,7 +270,7 @@ def v8_blink_flavor(c):
   del c.revisions['src/third_party/WebKit']
 
 @config_ctx(includes=['chromium'])
-def oilpan(c):
+def oilpan(c):  # pragma: no cover
   if c.GIT_MODE:
     raise BadConf("Oilpan requires SVN for now")
   c.solutions[0].custom_vars = {
@@ -306,7 +306,7 @@ def blink_internal(c):
     del c.solutions[1].custom_deps[key]
 
 @config_ctx(includes=['oilpan', 'chrome_internal'])
-def oilpan_internal(c):
+def oilpan_internal(c):  # pragma: no cover
   # Add back the oilpan data dependencies
   needed_components_internal = [
     "src/data/memory_test",
@@ -346,7 +346,7 @@ def gyp(c):
   m['trunk'] = 'got_revision'
 
 @config_ctx(config_vars={'GIT_MODE': True})
-def tools_build(c):
+def tools_build(c):  # pragma: no cover
   if not c.GIT_MODE:
     raise BadConf('tools_build only supports git')
   s = c.solutions.add()
@@ -416,14 +416,14 @@ def infra(c):
   c.got_revision_mapping['infra'] = 'got_revision'
 
 @config_ctx(config_vars={'GIT_MODE': True})
-def infra_internal(c):
+def infra_internal(c):  # pragma: no cover
   soln = c.solutions.add()
   soln.name = 'infra_internal'
   soln.url = 'https://chrome-internal.googlesource.com/infra/infra_internal.git'
   c.got_revision_mapping['infra_internal'] = 'got_revision'
 
 @config_ctx()
-def chrome_from_buildspec(c):
+def chrome_from_buildspec(c):  # pragma: no cover
   soln = c.solutions.add()
   soln.name = 'chrome_from_buildspec'
   # This URL has to be augmented with the appropriate bucket by the recipe using

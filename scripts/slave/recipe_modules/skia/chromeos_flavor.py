@@ -13,9 +13,9 @@ import ssh_flavor
 def board_from_builder_dict(builder_dict):
   if 'CrOS' in builder_dict.get('extra_config', ''):
     if 'Alex' in builder_dict['extra_config']:
-      return 'x86-alex'
+      return 'x86-alex'  # pragma: no cover
     if 'Link' in builder_dict['extra_config']:
-      return 'link'
+      return 'link'  # pragma: no cover
     if 'Daisy' in builder_dict['extra_config']:
       return 'daisy'
   elif builder_dict['os'] == 'ChromeOS':
@@ -24,8 +24,8 @@ def board_from_builder_dict(builder_dict):
       'Link': 'link',
       'Daisy': 'daisy',
     }[builder_dict['model']]
-  # pragma: no cover
-  raise Exception('No board found for builder: %s' % builder_cfg)
+  raise Exception(
+      'No board found for builder: %s' % builder_cfg)  # pragma: no cover
 
 
 class ChromeOSFlavorUtils(ssh_flavor.SSHFlavorUtils):

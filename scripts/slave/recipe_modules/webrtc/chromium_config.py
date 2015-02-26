@@ -37,10 +37,10 @@ def webrtc_ios64(c):
 def _webrtc_ios(c):
   if c.HOST_PLATFORM != 'mac':
     raise BadConf('Only "mac" host platform is supported for iOS (got: "%s")' %
-                  c.HOST_PLATFORM)
+                  c.HOST_PLATFORM)  # pragma: no cover
   if c.TARGET_PLATFORM != 'ios':
     raise BadConf('Only "ios" target platform is supported (got: "%s")' %
-                  c.TARGET_PLATFORM)
+                  c.TARGET_PLATFORM)  # pragma: no cover
   c.build_config_fs = c.BUILD_CONFIG + '-iphoneos'
 
   gyp_defs = c.gyp_env.GYP_DEFINES

@@ -67,7 +67,7 @@ def embed_script_mjsunit(c):
 
 @CONFIG_CTX(includes=['v8'])
 def enable_slow_dchecks(c):
-  c.gyp_env.GYP_DEFINES['v8_enable_slow_dchecks'] = 1
+  c.gyp_env.GYP_DEFINES['v8_enable_slow_dchecks'] = 1  # pragma: no cover
 
 
 @CONFIG_CTX(includes=['v8'])
@@ -77,7 +77,7 @@ def interpreted_regexp(c):
 
 @CONFIG_CTX(includes=['v8'])
 def nacl_ia32(c):
-  c.gyp_env.GYP_DEFINES['v8_target_arch'] = 'nacl_ia32'
+  c.gyp_env.GYP_DEFINES['v8_target_arch'] = 'nacl_ia32'  # pragma: no cover
 
 
 @CONFIG_CTX(includes=['v8'])
@@ -118,7 +118,7 @@ def no_optimized_debug(c):
 
 @CONFIG_CTX(includes=['v8'])
 def optimized_debug(c):
-  if c.BUILD_CONFIG == 'Debug':
+  if c.BUILD_CONFIG == 'Debug':  # pragma: no cover
     c.gyp_env.GYP_DEFINES['v8_optimized_debug'] = 2
 
 

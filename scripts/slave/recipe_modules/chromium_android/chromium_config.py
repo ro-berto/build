@@ -13,12 +13,12 @@ from RECIPE_MODULES.chromium import CONFIG_CTX
 def base_config(c):
   c.compile_py.default_targets=[]
 
-  if c.HOST_PLATFORM != 'linux':
+  if c.HOST_PLATFORM != 'linux':  # pragma: no cover
     raise recipe_config.BadConf('Can only build android on linux.')
 
 @CONFIG_CTX(includes=['base_config', 'default_compiler', 'goma'])
 def main_builder(c):
-  if c.TARGET_ARCH != 'arm':
+  if c.TARGET_ARCH != 'arm':  # pragma: no cover
     raise recipe_config.BadConf(
       'Cannot target arm with TARGET_ARCH == %s' % c.TARGET_ARCH)
 
@@ -33,7 +33,7 @@ def clang_builder(c):
   c.gyp_env.GYP_DEFINES['use_allocator'] = 'none'
 
 @CONFIG_CTX(includes=['base_config', 'clang', 'goma'])
-def clang_asan_release_builder(c):
+def clang_asan_release_builder(c):  # pragma: no cover
   c.gyp_env.GYP_DEFINES['component'] = 'shared_library'
   c.gyp_env.GYP_DEFINES['asan'] = 1
   c.gyp_env.GYP_DEFINES['sanitizer_coverage'] = 3
@@ -42,24 +42,24 @@ def clang_asan_release_builder(c):
   c.compile_py.default_targets = ['chrome_apk']
 
 @CONFIG_CTX(includes=['clang_asan_release_builder'])
-def clang_asan_release_builder_l(c):
+def clang_asan_release_builder_l(c):  # pragma: no cover
   pass
 
 @CONFIG_CTX(includes=['main_builder'])
 def component_builder(c):
-  c.gyp_env.GYP_DEFINES['component'] = 'shared_library'
+  c.gyp_env.GYP_DEFINES['component'] = 'shared_library'  # pragma: no cover
 
 @CONFIG_CTX(includes=['base_config', 'default_compiler', 'goma'],
             config_vars={'TARGET_ARCH': 'intel'})
 def x86_builder(c):
-  if c.TARGET_ARCH != 'intel':
+  if c.TARGET_ARCH != 'intel':  # pragma: no cover
     raise recipe_config.BadConf(
       'Cannot target x86 with TARGET_ARCH == %s' % c.TARGET_ARCH)
 
 @CONFIG_CTX(includes=['base_config', 'default_compiler'],
             config_vars={'TARGET_ARCH': 'mipsel'})
 def mipsel_builder(c):
-  if c.TARGET_ARCH != 'mipsel':
+  if c.TARGET_ARCH != 'mipsel':  # pragma: no cover
     raise recipe_config.BadConf('I dunno what to put in a mips builder!')
 
 @CONFIG_CTX(includes=['main_builder'])
@@ -78,17 +78,17 @@ def cronet_builder(c):
                                 'cronet_test_instrumentation_apk']
 
 @CONFIG_CTX(includes=['main_builder'])
-def arm_l_builder(c):
+def arm_l_builder(c):  # pragma: no cover
   pass
 
 @CONFIG_CTX(includes=['arm_l_builder'])
-def arm_l_builder_lto(c):
+def arm_l_builder_lto(c):  # pragma: no cover
   c.gyp_env.GYP_DEFINES['use_lto'] = 1
   c.gyp_env.GYP_DEFINES['component'] = 'shared_library'
 
 @CONFIG_CTX(includes=['arm_l_builder'],
             config_vars={'BUILD_CONFIG': 'Release'})
-def arm_l_builder_rel(c):
+def arm_l_builder_rel(c):  # pragma: no cover
   pass
 
 @CONFIG_CTX(includes=['base_config', 'default_compiler', 'goma'],
@@ -97,7 +97,7 @@ def x64_builder(c):
   if c.TARGET_ARCH != 'intel' or c.TARGET_BITS != 64:
     raise recipe_config.BadConf(
       'Cannot target x64 with TARGET_ARCH == %s, TARGET_BITS == %d'
-       % (c.TARGET_ARCH, c.TARGET_BITS))
+       % (c.TARGET_ARCH, c.TARGET_BITS))  # pragma: no cover
 
 @CONFIG_CTX(includes=['base_config', 'default_compiler', 'goma'])
 def arm64_builder(c):
@@ -106,52 +106,52 @@ def arm64_builder(c):
 
 @CONFIG_CTX(includes=['arm64_builder'],
             config_vars={'BUILD_CONFIG': 'Release'})
-def arm64_builder_rel(c):
+def arm64_builder_rel(c):  # pragma: no cover
   pass
 
 @CONFIG_CTX(includes=['main_builder'])
 def try_builder(c):
-  pass
+  pass  # pragma: no cover
 
 @CONFIG_CTX(includes=['x86_builder'])
 def x86_try_builder(c):
-  pass
+  pass  # pragma: no cover
 
 @CONFIG_CTX(includes=['base_config'])
 def tests_base(c):
-  pass
+  pass  # pragma: no cover
 
 @CONFIG_CTX(includes=['arm64_builder_rel'])
-def tests_arm64(c):
+def tests_arm64(c):  # pragma: no cover
   pass
 
 @CONFIG_CTX(includes=['x64_builder'])
-def tests_x64(c):
+def tests_x64(c):  # pragma: no cover
   pass
 
 @CONFIG_CTX(includes=['tests_base'])
 def main_tests(c):
-  pass
+  pass  # pragma: no cover
 
 @CONFIG_CTX(includes=['tests_base'])
 def clang_tests(c):
-  pass
+  pass  # pragma: no cover
 
 @CONFIG_CTX(includes=['tests_base'])
 def enormous_tests(c):
-  pass
+  pass  # pragma: no cover
 
 @CONFIG_CTX(includes=['tests_base'])
 def try_instrumentation_tests(c):
-  pass
+  pass  # pragma: no cover
 
 @CONFIG_CTX(includes=['x86_builder'])
 def x86_try_instrumentation_tests(c):
-  pass
+  pass  # pragma: no cover
 
 @CONFIG_CTX(includes=['main_builder'],
             config_vars={'BUILD_CONFIG': 'Debug'})
-def coverage_builder_tests(c):
+def coverage_builder_tests(c):  # pragma: no cover
   gyp_defs = c.gyp_env.GYP_DEFINES
   gyp_defs['emma_coverage'] = 1
   gyp_defs['emma_filter'] = 'com.google.android.apps.chrome.*'

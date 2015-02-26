@@ -73,7 +73,7 @@ class Bisector(object):
     """
     if revision_to_expand is not None:
       # TODO: Implement this path (insert revisions when deps change)
-      raise NotImplementedError()
+      raise NotImplementedError()  # pragma: no cover
     rev_list = self._commit_pos_range(
         self.good_rev.commit_pos, self.bad_rev.commit_pos)
     intermediate_revs = [self.revision_class(str(x), self) for x in rev_list]
@@ -86,7 +86,7 @@ class Bisector(object):
       if i < len(self.revisions) - 1:
         self.revisions[i].next_revision = self.revisions[i + 1]
 
-  def check_improvement_direction(self):
+  def check_improvement_direction(self):  # pragma: no cover
     """Verifies that the change from 'good' to 'bad' is in the right direction.
 
     The change between the test results obtained for the given 'good' and 'bad'
@@ -105,7 +105,7 @@ class Bisector(object):
       return False
     return True
 
-  def _set_failed_direction_results(self):
+  def _set_failed_direction_results(self):  # pragma: no cover
     self.failed_direction = True
     self.warnings.append('The initial regression range appears to represent '
                          'an improvement rather than a regression, given the '
@@ -122,27 +122,29 @@ class Bisector(object):
     is used instead.
     """
     if self.test_type != 'perf':
-      raise NotImplementedError()
+      raise NotImplementedError()  # pragma: no cover
 
     if self.required_regression_confidence is None:
-      return True
+      return True  # pragma: no cover
 
     if self.dummy_regression_confidence is not None:
       regression_confidence = float(self.dummy_regression_confidence)
-    else:
+    else:  # pragma: no cover
       regression_confidence = self.api.m.math_utils.confidence_score(
           self.good_rev.values,
           self.bad_rev.values)
-    if regression_confidence < self.required_regression_confidence:
+    if (regression_confidence <
+        self.required_regression_confidence):  # pragma: no cover
       self._set_insufficient_confidence_warning(regression_confidence)
       return False
     return True
 
   def get_exception(self):
-    raise NotImplementedError()
+    raise NotImplementedError()  # pragma: no cover
     # TODO: should return an exception with the details of the failure.
 
-  def _set_insufficient_confidence_warning(self, actual_confidence):
+  def _set_insufficient_confidence_warning(
+      self, actual_confidence):  # pragma: no cover
     """Adds a warning about the lack of initial regression confidence."""
     self.failed_confidence = True
     self.warnings.append(('Bisect failed to reproduce the regression with '
@@ -182,7 +184,7 @@ class Bisector(object):
     does not contain a deps change.
     """
     if (revision.bad and revision.previous_revision and
-        revision.previous_revision.good):
+        revision.previous_revision.good):  # pragma: no cover
       if revision.deps_change():
         self._expand_revision_range(revision)
         return False
@@ -190,7 +192,7 @@ class Bisector(object):
       return True
     if (revision.good and revision.next_revision and
         revision.next_revision.bad):
-      if revision.next_revision.deps_change():
+      if revision.next_revision.deps_change():  # pragma: no cover
         self._expand_revision_range(revision.next_revision)
         return False
       self.culprit = revision.next_revision
@@ -223,7 +225,7 @@ class Bisector(object):
     """Waits for any of the revisions in the list to finish its job(s)."""
     while True:
       if not revision_list or not any(
-          r.in_progress or r.tested for r in revision_list):
+          r.in_progress or r.tested for r in revision_list):  # pragma: no cover
         break
       self.sleep_until_next_revision_ready(revision_list)
       for revision in revision_list:
@@ -241,14 +243,14 @@ class Bisector(object):
       if r == self.lkgr:
         break
       if not r.tested:
-        r.good = True
+        r.good = True  # pragma: no cover
       if r.in_progress:
-        r.abort()
+        r.abort()  # pragma: no cover
     for r in self.revisions[self.fkbr.list_index + 1:]:
       if not r.tested:
-        r.bad = True
+        r.bad = True  # pragma: no cover
       if r.in_progress:
-        r.abort()
+        r.abort()  # pragma: no cover
 
   def _update_candidate_range(self):
     """Updates lkgr and fkbr (last known good/first known bad) revisions.

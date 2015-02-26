@@ -59,7 +59,7 @@ VAR_TEST_MAP = {
 
 def get_extra_env_vars(builder_dict):
   env = {}
-  if builder_dict.get('compiler') == 'Clang':
+  if builder_dict.get('compiler') == 'Clang':  # pragma: no cover
     env['CC'] = '/usr/bin/clang'
     env['CXX'] = '/usr/bin/clang++'
   return env
@@ -103,12 +103,12 @@ def gyp_defs_from_builder_dict(builder_dict):
   # skia_warnings_as_errors.
   werr = False
   if builder_dict['role'] == builder_name_schema.BUILDER_ROLE_BUILD:
-    if 'Win' in builder_dict.get('os', ''):
+    if 'Win' in builder_dict.get('os', ''):  # pragma: no cover
       if not ('GDI' in builder_dict.get('extra_config', '') or
               'Exceptions' in builder_dict.get('extra_config', '')):
         werr = True
     elif 'Mac' in builder_dict.get('os', ''):
-      if 'iOS' in builder_dict.get('extra_config', ''):
+      if 'iOS' in builder_dict.get('extra_config', ''):  # pragma: no cover
         werr = True
     else:
       werr = True
@@ -120,7 +120,7 @@ def gyp_defs_from_builder_dict(builder_dict):
 
   # Qt SDK (Win).
   if 'Win' in builder_dict.get('os', ''):
-    if builder_dict.get('os') == 'Win8':
+    if builder_dict.get('os') == 'Win8':  # pragma: no cover
       gyp_defs['qt_sdk'] = 'C:/Qt/Qt5.1.0/5.1.0/msvc2012_64/'
     else:
       gyp_defs['qt_sdk'] = 'C:/Qt/4.8.5/'
@@ -131,31 +131,31 @@ def gyp_defs_from_builder_dict(builder_dict):
 
   # GDI.
   if builder_dict.get('extra_config') == 'GDI':
-    gyp_defs['skia_gdi'] = '1'
+    gyp_defs['skia_gdi'] = '1'  # pragma: no cover
 
   # Build with Exceptions on Windows.
   if ('Win' in builder_dict.get('os', '') and
       builder_dict.get('extra_config') == 'Exceptions'):
-    gyp_defs['skia_win_exceptions'] = '1'
+    gyp_defs['skia_win_exceptions'] = '1'  # pragma: no cover
 
   # iOS.
   if (builder_dict.get('os') == 'iOS' or
       builder_dict.get('extra_config') == 'iOS'):
-    gyp_defs['skia_os'] = 'ios'
+    gyp_defs['skia_os'] = 'ios'  # pragma: no cover
 
   # Shared library build.
   if builder_dict.get('extra_config') == 'Shared':
-    gyp_defs['skia_shared_lib'] = '1'
+    gyp_defs['skia_shared_lib'] = '1'  # pragma: no cover
 
   # PDF viewer in GM.
   if (builder_dict.get('os') == 'Mac10.8' and
       builder_dict.get('arch') == 'x86_64' and
       builder_dict.get('configuration') == 'Release'):
-    gyp_defs['skia_run_pdfviewer_in_gm'] = '1'
+    gyp_defs['skia_run_pdfviewer_in_gm'] = '1'  # pragma: no cover
 
   # Clang.
   if builder_dict.get('compiler') == 'Clang':
-    gyp_defs['skia_clang_build'] = '1'
+    gyp_defs['skia_clang_build'] = '1'  # pragma: no cover
 
   # Valgrind.
   if builder_dict.get('extra_config') == 'Valgrind':

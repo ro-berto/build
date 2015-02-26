@@ -19,7 +19,7 @@ VAR_TEST_MAP = {
 }
 
 def TEST_NAME_FORMAT(kwargs):
-  return 'webrtc'
+  return 'webrtc'  # pragma: no cover
 
 config_ctx = config_item_context(BaseConfig, VAR_TEST_MAP, TEST_NAME_FORMAT)
 

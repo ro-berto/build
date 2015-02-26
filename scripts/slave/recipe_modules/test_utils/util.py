@@ -83,7 +83,7 @@ class TestResults(object):
       entry = entry.setdefault(token, {})
     entry['expected'] = expected
     entry['actual'] = actual
-    if expected != actual:
+    if expected != actual:  # pragma: no cover
       entry['is_unexpected'] = True
       # TODO(dpranke): crbug.com/357866 - this test logic is overly-simplified
       # and is counting unexpected passes and flakes as regressions when it

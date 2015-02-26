@@ -15,11 +15,11 @@ def device_from_builder_dict(builder_dict):
   """Given a builder name dictionary, return an Android device name."""
   if 'Android' in builder_dict.get('extra_config', ''):
     if 'NoThumb' in builder_dict['extra_config']:
-      return 'arm_v7'
+      return 'arm_v7'  # pragma: no cover
     if 'NoNeon' in builder_dict['extra_config']:
-      return 'xoom'
+      return 'xoom'  # pragma: no cover
     if 'Neon' in builder_dict['extra_config']:
-      return 'nexus_4'
+      return 'nexus_4'  # pragma: no cover
     return {
       'Arm64': 'arm64',
       'x86': 'x86',
@@ -39,8 +39,8 @@ def device_from_builder_dict(builder_dict):
       'NexusPlayer': 'x86',
       'Xoom': 'xoom',
     }[builder_dict['model']]
-  # pragma: no cover
-  raise Exception('No device found for builder: %s' % str(builder_dict))
+  raise Exception(
+      'No device found for builder: %s' % str(builder_dict))  # pragma: no cover
 
 
 class _ADBWrapper(object):
@@ -115,7 +115,7 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
 
     cmd = [self.android_bin.join('android_ninja'), target, '-d', self.device]
     if 'Clang' in self._skia_api.c.BUILDER_NAME:
-      cmd.append('--clang')
+      cmd.append('--clang')  # pragma: no cover
     self._skia_api.m.step('build %s' % target, cmd, env=env,
                           cwd=self._skia_api.m.path['checkout'])
 
@@ -141,7 +141,7 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
               cmd=['shell', 'rm', '-r', path])
     # Sometimes the removal fails silently. Verify that it worked.
     if self.device_path_exists(path):
-      raise Exception('Failed to remove %s!' % path)
+      raise Exception('Failed to remove %s!' % path)  # pragma: no cover
 
   def _create_device_dir(self, path):
     """Create the directory on the device."""
@@ -169,7 +169,7 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
     """Like shutil.copyfile, but for copying to a connected device."""
     self._adb(name='push %s' % host_path,
               serial=self.serial,
-              cmd=['push', host_path, device_path])
+              cmd=['push', host_path, device_path])  # pragma: no cover
 
   def create_clean_device_dir(self, path):
     """Like shutil.rmtree() + os.makedirs(), but on a connected device."""

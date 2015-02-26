@@ -75,17 +75,17 @@ class DeviceDirs(object):
   @property
   def playback_actual_images_dir(self):
     """Holds image files written out by the 'render_pictures' tool."""
-    return self._playback_actual_images_dir
+    return self._playback_actual_images_dir  # pragma: no cover
 
   @property
   def playback_actual_summaries_dir(self):
     """Holds actual-result JSON summaries written by 'render_pictures' tool."""
-    return self._playback_actual_summaries_dir
+    return self._playback_actual_summaries_dir  # pragma: no cover
 
   @property
   def playback_expected_summaries_dir(self):
     """Holds expected-result JSON summaries read by 'render_pictures' tool."""
-    return self._playback_expected_summaries_dir
+    return self._playback_expected_summaries_dir  # pragma: no cover
 
   @property
   def resource_dir(self):
@@ -102,11 +102,11 @@ class DeviceDirs(object):
 
   @property
   def skp_perf_dir(self):
-    return self._skp_perf_dir
+    return self._skp_perf_dir  # pragma: no cover
 
   @property
   def tmp_dir(self):
-    return self._tmp_dir
+    return self._tmp_dir  # pragma: no cover
 
 
 class DefaultFlavorUtils(base_flavor.BaseFlavorUtils):
@@ -180,7 +180,7 @@ class DefaultFlavorUtils(base_flavor.BaseFlavorUtils):
 
   def device_path_exists(self, path):
     """Like os.path.exists(), but for paths on a connected device."""
-    return self._skia_api.m.path.exists(path)
+    return self._skia_api.m.path.exists(path)  # pragma: no cover
 
   def copy_directory_contents_to_device(self, host_dir, device_dir):
     """Like shutil.copytree(), but for copying to a connected device."""
@@ -190,7 +190,7 @@ class DefaultFlavorUtils(base_flavor.BaseFlavorUtils):
       raise ValueError('For builders who do not have attached devices, copying '
                        'from host to device is undefined and only allowed if '
                        'host_path and device_path are the same (%s vs %s).' % (
-                       str(host_path), str(device_path)))
+                       str(host_path), str(device_path)))  # pragma: no cover
 
   def copy_directory_contents_to_host(self, device_dir, host_dir):
     """Like shutil.copytree(), but for copying from a connected device."""
@@ -200,13 +200,13 @@ class DefaultFlavorUtils(base_flavor.BaseFlavorUtils):
       raise ValueError('For builders who do not have attached devices, copying '
                        'from device to host is undefined and only allowed if '
                        'host_path and device_path are the same (%s vs %s).' % (
-                       str(host_path), str(device_path)))
+                       str(host_path), str(device_path)))  # pragma: no cover
 
   def copy_file_to_device(self, host_path, device_path):
     """Like shutil.copyfile, but for copying to a connected device."""
     # For "normal" builders who don't have an attached device, we expect
     # host_dir and device_dir to be the same.
-    if str(host_path) != str(device_path):
+    if str(host_path) != str(device_path):  # pragma: no cover
       raise ValueError('For builders who do not have attached devices, copying '
                        'from host to device is undefined and only allowed if '
                        'host_path and device_path are the same (%s vs %s).' % (

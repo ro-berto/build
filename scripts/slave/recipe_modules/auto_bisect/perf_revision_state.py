@@ -53,7 +53,7 @@ class PerfRevisionState(revision_state.RevisionState):
     bot_name = self.bisector.get_builder_bot_for_this_platform()
     if self.bisector.dummy_builds:
       self.build_job_name = self.commit_hash + '-build'
-    else:
+    else:  # pragma: no cover
       self.build_job_name = uuid.uuid4().hex
     try_cmd = [
         'try',
@@ -88,7 +88,7 @@ class PerfRevisionState(revision_state.RevisionState):
     """Posts a request to buildbot to download and perf-test this build."""
     if self.bisector.dummy_builds:
       self.test_job_name = self.commit_hash + '-test'
-    else:
+    else:  # pragma: no cover
       self.test_job_name = uuid.uuid4().hex
     api = self.bisector.api
     perf_test_properties = {
@@ -109,7 +109,7 @@ class PerfRevisionState(revision_state.RevisionState):
       name = 'Get test status for build ' + self.commit_hash
       step_result = api.m.python(name, api.resource('check_job_status.py'),
                                  args=[self.build_status_url], stdout=stdout)
-    except api.m.step.StepFailure:
+    except api.m.step.StepFailure:  # pragma: no cover
       return None
     else:
       return step_result.stdout
@@ -132,7 +132,7 @@ class PerfRevisionState(revision_state.RevisionState):
       stdout = api.m.raw_io.output()
       name = 'Get test status url for build ' + self.commit_hash
       step_result = api.m.gsutil.cat(url_file_url, stdout=stdout, name=name)
-    except api.m.step.StepFailure:
+    except api.m.step.StepFailure:  # pragma: no cover
       return None
     else:
       return step_result.stdout
@@ -145,7 +145,7 @@ class PerfRevisionState(revision_state.RevisionState):
     if not self.build_status_url:
       # The file that will eventually contain the buildbot job url
       return self.bisector.api.GS_RESULTS_URL + self.test_job_name
-    return self.build_status_url
+    return self.build_status_url  # pragma: no cover
 
   def _get_test_results(self):
     """Tries to get the results of a test job from cloud storage."""
@@ -157,7 +157,7 @@ class PerfRevisionState(revision_state.RevisionState):
       name = 'Get test results for build ' + self.commit_hash
       step_result = api.m.gsutil.cat(results_file_url, stdout=stdout,
                                      name=name)
-    except api.m.step.StepFailure:
+    except api.m.step.StepFailure:  # pragma: no cover
       return None
     else:
       return json.loads(step_result.stdout)

@@ -63,7 +63,7 @@ class RevisionState(object):
     self._good = not value
 
   @tested.setter
-  def _set_tested(self, _):
+  def _set_tested(self, _):  # pragma: no cover
     raise Exception('The tested property cannot be set. '
                     'Use the .good or .bad properties instead.')
 
@@ -77,7 +77,7 @@ class RevisionState(object):
       self._request_build()
       self.in_progress = True
 
-  def abort(self):
+  def abort(self):  # pragma: no cover
     """Aborts the job.
 
     This method is typically called when the bisect no longer requires it. Such
@@ -96,9 +96,9 @@ class RevisionState(object):
                self.commit_hash, stdout=api.m.raw_io.output())
     if self.bisector.dummy_builds:
       return False
-    if 'DEPS' in step_result.stdout.splitlines():
+    if 'DEPS' in step_result.stdout.splitlines():  # pragma: no cover
       return True
-    return False
+    return False  # pragma: no cover
 
   def update_status(self):
     """Checks on the pending jobs and updates status accordingly.
@@ -130,7 +130,7 @@ class RevisionState(object):
     result = api.gsutil_file_exists(self.build_url)
     if self.bisector.dummy_builds:
       return self.in_progress
-    return result
+    return result  # pragma: no cover
 
   def _gs_suffix(self):
     """Provides the expected right half of the build filename.
@@ -147,7 +147,7 @@ class RevisionState(object):
     either the position or hash"""
     pieces = self.revision_string.split(',')
     if len(pieces) > 1:
-      return None, None
+      return None, None  # pragma: no cover
     if (pieces[0].startswith('chromium@') or
         pieces[0].startswith('src@') or
         not '@' in pieces[0]):
@@ -167,7 +167,7 @@ class RevisionState(object):
         int(s)
         # If the cast did not raise an error, assume s is a commit position.
         return False
-      except ValueError:
+      except ValueError:  # pragma: no cover
         pass
     # If the following cast raises an error then s does not represent a valid
     # SHA hash, therefore, we let the error bubble up.

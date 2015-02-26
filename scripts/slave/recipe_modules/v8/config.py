@@ -158,7 +158,7 @@ def nacl_canary(c):
 
 
 @config_ctx(includes=['nacl'])
-def nacl_ia32(c):
+def nacl_ia32(c):  # pragma: no cover
   # Make is executed in the out dir. NaCl points to the toplevel Makefile in
   # the v8 dir.
   c.compile_py.compile_extra_args.extend(['-C', '..' , 'nacl_ia32.release'])

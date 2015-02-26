@@ -45,7 +45,7 @@ VAR_TEST_MAP = {
   'BUILD_CONFIG': ['Debug', 'Release'],
 }
 
-def TEST_NAME_FORMAT(kwargs):
+def TEST_NAME_FORMAT(kwargs):  # pragma: no cover
   name = 'repo-%(REPO_NAME)s-from-url-%(REPO_URL)s' % kwargs
   if kwargs['INTERNAL']:
     return name + '-internal'
@@ -72,13 +72,13 @@ def clang_builder(c):
   pass
 
 @config_ctx(config_vars={'BUILD_CONFIG': 'Release'})
-def clang_asan_release_builder(c):
+def clang_asan_release_builder(c):  # pragma: no cover
   c.asan_symbolize = True
   c.storage_bucket = 'chrome-test-builds/android'
   c.upload_dest_prefix = 'asan-android-release-'
 
 @config_ctx(config_vars={'BUILD_CONFIG': 'Release'})
-def clang_asan_release_builder_l(c):
+def clang_asan_release_builder_l(c):  # pragma: no cover
   c.asan_symbolize = True
   c.storage_bucket = 'chrome-test-builds/android'
   c.upload_dest_prefix = 'asan-android-release-l-'
@@ -111,15 +111,15 @@ def dartium_builder(c):
   c.managed = True
 
 @config_ctx()
-def arm_l_builder(c):
+def arm_l_builder(c):  # pragma: no cover
   pass
 
 @config_ctx()
-def arm_l_builder_lto(c):
+def arm_l_builder_lto(c):  # pragma: no cover
   pass
 
 @config_ctx()
-def arm_l_builder_rel(c):
+def arm_l_builder_rel(c):  # pragma: no cover
   pass
 
 @config_ctx()
@@ -135,35 +135,35 @@ def arm64_builder(c):
   pass
 
 @config_ctx()
-def arm64_builder_rel(c):
+def arm64_builder_rel(c):  # pragma: no cover
   pass
 
 @config_ctx()
 def try_base(c):
-  pass
+  pass  # pragma: no cover
 
 @config_ctx(includes=['try_base'])
 def try_builder(c):
-  pass
+  pass  # pragma: no cover
 
 @config_ctx(includes=['x86_builder', 'try_builder'])
 def x86_try_builder(c):
-  pass
+  pass  # pragma: no cover
 
 @config_ctx()
-def tests_base(c):
+def tests_base(c):  # pragma: no cover
   pass
 
 @config_ctx(includes=['arm64_builder_rel'])
-def tests_arm64(c):
+def tests_arm64(c):  # pragma: no cover
   pass
 
 @config_ctx(includes=['x64_builder'])
-def tests_x64(c):
+def tests_x64(c):  # pragma: no cover
   pass
 
 @config_ctx(includes=['tests_base'])
-def instrumentation_tests(c):
+def instrumentation_tests(c):  # pragma: no cover
   c.tests.append('smoke_instrumentation_tests')
   c.tests.append('small_instrumentation_tests')
   c.tests.append('medium_instrumentation_tests')
@@ -171,28 +171,28 @@ def instrumentation_tests(c):
 
 @config_ctx(includes=['instrumentation_tests'])
 def main_tests(c):
-  pass
+  pass  # pragma: no cover
 
 @config_ctx(includes=['tests_base'])
-def clang_tests(c):
+def clang_tests(c):  # pragma: no cover
   c.tests.append('smoke_instrumentation_tests')
   c.asan_symbolize = True
 
 @config_ctx(includes=['tests_base'])
-def enormous_tests(c):
+def enormous_tests(c):  # pragma: no cover
   c.extra_deploy_opts = ['--await-internet']
   c.tests.append('enormous_instrumentation_tests')
 
 @config_ctx(includes=['try_base', 'instrumentation_tests'])
 def try_instrumentation_tests(c):
-  pass
+  pass  # pragma: no cover
 
 @config_ctx(includes=['x86_base', 'try_base', 'instrumentation_tests'])
 def x86_try_instrumentation_tests(c):
-  c.extra_deploy_opts.append('--non-rooted')
+  c.extra_deploy_opts.append('--non-rooted')  # pragma: no cover
 
 @config_ctx(includes=['main_builder'])
-def coverage_builder_tests(c):
+def coverage_builder_tests(c):  # pragma: no cover
   pass
 
 @config_ctx(includes=['component_builder'])

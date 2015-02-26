@@ -18,7 +18,7 @@ class BaseFlavorUtils(object):
 
   def step(self, name, cmd, **kwargs):
     """Wrapper for the Step API; runs a step as appropriate for this flavor."""
-    raise NotImplementedError
+    raise NotImplementedError  # pragma: no cover
 
   def __repr__(self):
-    return '<%s object>' % self.__class__.__name__
+    return '<%s object>' % self.__class__.__name__  # pragma: no cover

@@ -8,8 +8,9 @@ class BisectResults(object):
   def __init__(self, bisector):
     """Create a new results object from a finished bisect job."""
     if not bisector.bisect_over:
-      raise ValueError('Invalid parameter, the bisect must be over by the time'
-                       ' the BisectResults constructor is called')
+      raise ValueError(
+          'Invalid parameter, the bisect must be over by the time the '
+          'BisectResults constructor is called')  # pragma: no cover
     self._bisector = bisector
     self._results_dict = {}
     self._prepare_results()
@@ -21,16 +22,19 @@ class BisectResults(object):
     """Checks several flags to compose the results output."""
     # TODO: Format this more like the current bisect
     if self._bisector.failed:
-      self._results_dict['header'] = 'Failed bisect.'
+      self._results_dict['header'] = 'Failed bisect.'  # pragma: no cover
     elif self._bisector.failed_confidence or self._bisector.failed_direction:
-      self._results_dict['header'] = 'Aborted early. See warnings.'
+      self._results_dict['header'] = (
+          'Aborted early. See warnings.')  # pragma: no cover
     elif self._bisector.warnings:
-      self._results_dict['header'] = 'Succeeded with warnings.'
+      self._results_dict['header'] = (
+          'Succeeded with warnings.')  # pragma: no cover
     else:
       self._results_dict['header'] = 'Succeeded.'
 
     if self._bisector.warnings:
-      self._results_dict['warnings'] = list(self._bisector.warnings)
+      self._results_dict['warnings'] = list(
+          self._bisector.warnings)  # pragma: no cover
 
     self._= '\n'.join(['%s: %s' % (k, v) for k, v in
                        self._bisector.bad_rev.test_info().iteritems()])

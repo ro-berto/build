@@ -28,12 +28,12 @@ class Test(object):
   @property
   def isolate_target(self):
     """Returns isolate target name. Defaults to name."""
-    return self.name
+    return self.name  # pragma: no cover
 
   @staticmethod
   def compile_targets(api):
     """List of compile targets needed by this test."""
-    raise NotImplementedError()
+    raise NotImplementedError()  # pragma: no cover
 
   def pre_run(self, api, suffix):  # pragma: no cover
     """Steps to execute before running the test."""
@@ -125,7 +125,7 @@ class ScriptTest(Test):  # pylint: disable=W0232
       if api.chromium._test_data.enabled:
         return []
 
-      raise
+      raise  # pragma: no cover
 
   def run(self, api, suffix):
     name = self.name
@@ -136,7 +136,7 @@ class ScriptTest(Test):  # pylint: disable=W0232
     if suffix == 'without patch':
       run_args.extend([
           '--filter-file', api.json.input(self.failures(api, 'with patch'))
-      ])
+      ])  # pragma: no cover
 
     try:
       api.python(
@@ -161,7 +161,7 @@ class ScriptTest(Test):  # pylint: disable=W0232
       self.failures(api, suffix)
 
       return self._test_runs[suffix].json.output['valid']
-    except Exception:
+    except Exception:  # pragma: no cover
       return False
 
   def failures(self, api, suffix):
@@ -207,7 +207,7 @@ class LocalGTestTest(Test):
 
   @property
   def isolate_target(self):
-    return self.target_name
+    return self.target_name  # pragma: no cover
 
   def compile_targets(self, api):
     if self._override_compile_targets:
@@ -233,7 +233,7 @@ class LocalGTestTest(Test):
     if suffix == 'without patch':
       failures = self.failures(api, 'with patch')
       if is_android:
-        kwargs['gtest_filter'] = ':'.join(failures)
+        kwargs['gtest_filter'] = ':'.join(failures)  # pragma: no cover
       else:
         args.append(api.chromium.test_launcher_filter(failures))
 
@@ -286,9 +286,9 @@ class LocalGTestTest(Test):
 
   def has_valid_results(self, api, suffix):
     if suffix not in self._test_runs:
-      return False
+      return False  # pragma: no cover
     if not hasattr(self._test_runs[suffix], 'test_utils'):
-      return False
+      return False  # pragma: no cover
     gtest_results = self._test_runs[suffix].test_utils.gtest_results
     if not gtest_results.valid:  # pragma: no cover
       return False
@@ -338,7 +338,7 @@ def generate_script(api, mastername, buildername, test_spec,
     yield ScriptTest(
         str(script_spec['name']),
         script_spec['script'],
-        scripts_compile_targets)
+        scripts_compile_targets)  # pragma: no cover
 
 
 class DynamicPerfTests(Test):
@@ -400,10 +400,10 @@ class AndroidPerfTests(Test):
       api.chromium_android.run_sharded_perf_tests(
         config=api.json.input(data=perf_tests),
         perf_id=self.perf_id)
-    except api.step.StepFailure as f:
+    except api.step.StepFailure as f:  # pragma: no cover
       exception = f
     if exception:
-      raise exception
+      raise exception  # pragma: no cover
 
   @staticmethod
   def compile_targets(_):
@@ -447,7 +447,7 @@ class SwarmingTest(Test):
     Returns:
       A SwarmingTask object.
     """
-    raise NotImplementedError()
+    raise NotImplementedError()  # pragma: no cover
 
   def pre_run(self, api, suffix):
     """Launches the test on Swarming."""
@@ -506,7 +506,7 @@ class SwarmingTest(Test):
       available and failures is a list of names of failed tests (ignored if
       valid is False).
     """
-    raise NotImplementedError()
+    raise NotImplementedError()  # pragma: no cover
 
   def post_run(self, api, suffix):
     """Waits for launched test to finish and collects the results."""
@@ -582,15 +582,15 @@ class SwarmingGTestTest(SwarmingTest):
 
   def validate_task_results(self, api, step_result):
     if not hasattr(step_result, 'test_utils'):
-      return False, None
+      return False, None  # pragma: no cover
 
     gtest_results = step_result.test_utils.gtest_results
     if not gtest_results:
-      return False, None
+      return False, None  # pragma: no cover
 
     global_tags = gtest_results.raw.get('global_tags', [])
     if 'UNRELIABLE_RESULTS' in global_tags:
-      return False, None
+      return False, None  # pragma: no cover
 
     return True, gtest_results.failures
 
@@ -655,16 +655,16 @@ class GPUGTestTest(GTestTest):
 class PythonBasedTest(Test):
   @staticmethod
   def compile_targets(_):
-    return []
+    return []  # pragma: no cover
 
   def run_step(self, api, suffix, cmd_args, **kwargs):
-    raise NotImplementedError()
+    raise NotImplementedError()  # pragma: no cover
 
   def run(self, api, suffix):
     cmd_args = ['--write-full-results-to',
                 api.test_utils.test_results(add_json_log=False)]
     if suffix == 'without patch':
-      cmd_args.extend(self.failures(api, 'with patch'))
+      cmd_args.extend(self.failures(api, 'with patch'))  # pragma: no cover
 
     try:
       self.run_step(
@@ -690,7 +690,7 @@ class PythonBasedTest(Test):
     # crbug.com/357866
     step = self._test_runs[suffix]
     if not hasattr(step, 'test_utils'):
-      return False
+      return False  # pragma: no cover
     return (step.test_utils.test_results.valid and
             step.retcode <= step.test_utils.test_results.MAX_FAILURES_EXIT_STATUS and
             (step.retcode == 0) or self.failures(api, suffix))
@@ -785,10 +785,10 @@ class BisectTest(Test):  # pylint: disable=W0232
 
   @property
   def abort_on_failure(self):
-    return True
+    return True  # pragma: no cover
 
   @staticmethod
-  def compile_targets(_):
+  def compile_targets(_):  # pragma: no cover
     return ['chrome'] # Bisect always uses a separate bot for building.
 
   def pre_run(self, api, _):
@@ -805,10 +805,10 @@ class BisectTest(Test):  # pylint: disable=W0232
                                      self.values)
 
   def has_valid_results(self, *_):
-    return len(getattr(self, 'values', [])) > 0
+    return len(getattr(self, 'values', [])) > 0  # pragma: no cover
 
   def failures(self, *_):
-    return self._failures
+    return self._failures  # pragma: no cover
 
 
 class LocalTelemetryGPUTest(Test):  # pylint: disable=W0232
@@ -842,11 +842,11 @@ class LocalTelemetryGPUTest(Test):  # pylint: disable=W0232
 
   @property
   def isolate_target(self):
-    return self.target_name
+    return self.target_name  # pragma: no cover
 
   def compile_targets(self, _):
     # TODO(sergiyb): Build 'chrome_shell_apk' instead of 'chrome' on Android.
-    return ['chrome', 'telemetry_gpu_test_run']
+    return ['chrome', 'telemetry_gpu_test_run']  # pragma: no cover
 
   def run(self, api, suffix):  # pylint: disable=R0201
     kwargs = self._runtest_kwargs.copy()
@@ -875,7 +875,7 @@ class LocalTelemetryGPUTest(Test):  # pylint: disable=W0232
                                   if value['type'] == 'failure']
 
         self._valid[suffix] = True
-      except (ValueError, KeyError, AttributeError):
+      except (ValueError, KeyError, AttributeError):  # pragma: no cover
         self._valid[suffix] = False
 
       if self._valid[suffix]:
@@ -884,9 +884,9 @@ class LocalTelemetryGPUTest(Test):  # pylint: disable=W0232
         ])
 
   def has_valid_results(self, api, suffix):
-    return suffix in self._valid and self._valid[suffix]
+    return suffix in self._valid and self._valid[suffix]  # pragma: no cover
 
-  def failures(self, api, suffix):
+  def failures(self, api, suffix):  # pragma: no cover
     assert self.has_valid_results(api, suffix)
     assert suffix in self._failures
     return self._failures[suffix]
@@ -931,7 +931,7 @@ class SwarmingTelemetryGPUTest(SwarmingTest):
                   if value['type'] == 'failure']
 
       valid = True
-    except (ValueError, KeyError):
+    except (ValueError, KeyError):  # pragma: no cover
       valid = False
       failures = None
 
@@ -978,7 +978,8 @@ class AndroidInstrumentationTest(Test):
       # TODO(sergiyb): Figure out how to handle status UNKNOWN.
       return [test_name for test_name, test_status in test_results.iteritems()
                         if test_status not in ['SUCCESS', 'SKIPPED']]
-    except (KeyError, IndexError, TypeError, AttributeError):
+    except (KeyError, IndexError, TypeError,
+            AttributeError):  # pragma: no cover
       return None
 
   def run(self, api, suffix):
@@ -1004,7 +1005,7 @@ class AndroidInstrumentationTest(Test):
       failures = self._get_failing_tests(step_result)
 
       if failures is None:
-        self._test_runs[suffix] = {'valid': False}
+        self._test_runs[suffix] = {'valid': False}  # pragma: no cover
       else:
         self._test_runs[suffix] = {'valid': True, 'failures': failures}
 
@@ -1017,7 +1018,7 @@ class AndroidInstrumentationTest(Test):
 
   def has_valid_results(self, api, suffix):
     if suffix not in self._test_runs:
-      return False
+      return False  # pragma: no cover
     return self._test_runs[suffix]['valid']
 
   def failures(self, api, suffix):
