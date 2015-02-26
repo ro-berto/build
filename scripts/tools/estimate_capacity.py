@@ -137,6 +137,8 @@ def main(argv):
               args.filter_by_blamelist not in blamelist):
             continue
 
+          builds.append(build)
+
         capacity = estimate_capacity(builds)
         for key in ('hourly_bots', 'daily_bots'):
           pool_capacity[key] += capacity[key]
