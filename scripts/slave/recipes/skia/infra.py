@@ -60,6 +60,18 @@ def GenSteps(api):
          'GIT_USER_AGENT': 'git/1.9.1'} # I don't think this version matters.
   api.step('update_deps', cmd=['go', 'get', './...'], cwd=infra_dir, env=env)
 
+  # More prerequisites.
+  api.step(
+      'install goimports',
+      cmd=['go', 'get', 'code.google.com/p/go.tools/cmd/goimports'],
+      cwd=infra_dir,
+      env=env)
+  api.step(
+      'setup database',
+      cmd=['./setup_test_db'],
+      cwd=infra_dir.join('go', 'database'),
+      env=env)
+
   # Run tests.
   api.python('run_unittests', 'run_unittests', cwd=infra_dir, env=env)
 
