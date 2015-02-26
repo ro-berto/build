@@ -64,22 +64,24 @@ class ChromiteTarget(object):
   # Sentinel value to indicate a missing key.
   _MISSING = object()
 
-  def __init__(self, name, config, default=None):
+  def __init__(self, name, config, children=None, default=None):
     self._name = name
     self._config = config
+    self._children = tuple(children)
     self._default = default
-    self._children = ()
 
   @classmethod
   def FromConfigDict(cls, name, config, default=None):
     """Returns: (ChromiteTarget) A target instance parsed from a config dict.
     """
-    target = cls(name, config, default=default)
-
     # Wrap and add any child configurations in ChromiteTarget instances.
-    target._children += tuple(cls.FromConfigDict(None, child, default=default)
-                              for child in target.get('child_configs', ()))
-    return target
+    children = tuple(cls.FromConfigDict(None, child, default=default)
+                     for child in config.get('child_configs', ()))
+    if children:
+      # If a configuration has children, use its first child as its default
+      # source.
+      default = children[0]
+    return cls(name, config, children=children, default=default)
 
   @property
   def name(self):
@@ -129,14 +131,19 @@ class ChromiteTarget(object):
     return False
 
   def HasVmTests(self):
-    """Returns: (bool) whether this target or any of its children have VM tests.
+    """Returns: (bool) if this target or any of its children have VM tests.
     """
     return self._HasTests('vm_tests')
 
   def HasHwTests(self):
-    """Returns: (bool) whether this target or any of its children have VM tests.
+    """Returns: (bool) if this target or any of its children have VM tests.
     """
     return self._HasTests('hw_tests')
+
+  def HasUnitTests(self):
+    """Returns: (bool) if this target or any of its children have unit tests.
+    """
+    return self._HasTests('unittests')
 
   def IsGeneralPreCqBuilder(self):
     return self.name == 'pre-cq-group'

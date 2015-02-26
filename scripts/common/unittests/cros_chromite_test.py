@@ -35,16 +35,17 @@ class ChromiteConfigTestCase(unittest.TestCase):
     },
     'parent': {
       'child_configs': [
-        {'name': 'alice'},
         {
-          'name': 'bob',
+          'name': 'alice',
           'vm_tests': [
             'test',
           ],
           'hw_tests': [
             'test',
           ],
-        }
+          'unittests': True,
+        },
+        {'name': 'bob'}
       ],
     },
     'baremetal-pre-cq': {
@@ -54,6 +55,7 @@ class ChromiteConfigTestCase(unittest.TestCase):
       'hw_tests': [
         'test',
       ],
+      'unittests': True,
     },
     'pre-cq-group': {}
   }
@@ -78,15 +80,22 @@ class ChromiteConfigTestCase(unittest.TestCase):
   def testDefaultFallthrough_UsesDefaultWhenMissing(self):
     self.assertEqual(self.test['key'], 'value')
 
+  def testDefaultFallthrough_UsesFirstChild(self):
+    self.assertEqual(self.parent['vm_tests'], ['test'])
+
   def testHasTests(self):
     self.assertFalse(self.test.HasVmTests())
     self.assertFalse(self.test.HasHwTests())
+    self.assertFalse(self.test.HasUnitTests())
+
     self.assertTrue(self.baremetal.HasVmTests())
     self.assertTrue(self.baremetal.HasHwTests())
+    self.assertTrue(self.baremetal.HasUnitTests())
 
   def testHasTests_DetectsInChildren(self):
     self.assertTrue(self.parent.HasVmTests())
     self.assertTrue(self.parent.HasHwTests())
+    self.assertTrue(self.baremetal.HasUnitTests())
 
   def testPreCqDetection(self):
     self.assertFalse(self.test.IsPreCqBuilder())
