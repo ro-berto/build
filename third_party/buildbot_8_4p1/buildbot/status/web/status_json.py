@@ -876,6 +876,8 @@ class BuildStateJsonResource(JsonResource):
 
         # Add timestamp and return.
         response['timestamp'] = now()
+        response['accepting_builds'] = bool(
+                self.status.master.botmaster.brd.running)
         yield response
 
     @defer.deferredGenerator

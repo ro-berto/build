@@ -5604,3 +5604,16 @@ index ff2758f..8469c25 100644
          self.putChild('buildstate', BuildStateJsonResource(status))
          # This needs to be called before the first HelpResource().body call.
          self.hackExamples()
+diff --git a/third_party/buildbot_8_4p1/buildbot/status/web/status_json.py b/third_party/buildbot_8_4p1/buildbot/status/web/status_json.py
+index 8469c25..531199b 100644
+--- a/third_party/buildbot_8_4p1/buildbot/status/web/status_json.py
++++ b/third_party/buildbot_8_4p1/buildbot/status/web/status_json.py
+@@ -876,6 +876,8 @@ class BuildStateJsonResource(JsonResource):
+ 
+         # Add timestamp and return.
+         response['timestamp'] = now()
++        response['accepting_builds'] = bool(
++                self.status.master.botmaster.brd.running)
+         yield response
+ 
+     @defer.deferredGenerator
