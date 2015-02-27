@@ -770,7 +770,7 @@ class ChromiumCommands(commands.FactoryCommands):
                              'prepare-bisect-perf-regression.py')
     cmd = [self._python, cmd_name, '-w', '.']
     self.AddTestStep(chromium_step.AnnotatedCommand, 'Preparing for Bisection',
-                     cmd)
+                     cmd, timeout=60*60, max_time=4*60*60)
 
     cmd_name = self.PathJoin('src', 'tools', 'run-bisect-perf-regression.py')
     cmd_args = ['-w', '.', '-p', self.PathJoin('..', '..', '..', 'goma')]
