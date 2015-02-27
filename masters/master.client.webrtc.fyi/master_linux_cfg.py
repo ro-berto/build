@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from buildbot.scheduler import Triggerable
 from buildbot.schedulers.basic import SingleBranchScheduler
 
 from master.factory import annotator_factory
@@ -14,13 +15,21 @@ def Update(c):
                             branch='trunk',
                             treeStableTimer=0,
                             builderNames=[
-                                'Linux Asan (parallel)',
+                                'Linux Asan Builder',
+      ]),
+      Triggerable(name='linux_trigger', builderNames=[
+          'Linux Asan Tester (parallel)',
       ]),
   ])
 
   specs = [
     {
-      'name': 'Linux Asan (parallel)',
+      'name': 'Linux Asan Builder',
+      'triggers': ['linux_trigger'],
+      'slavebuilddir': 'linux_asan',
+    },
+    {
+      'name': 'Linux Asan Tester (parallel)',
       'slavebuilddir': 'linux_asan',
     },
   ]
@@ -28,7 +37,8 @@ def Update(c):
   c['builders'].extend([
       {
         'name': spec['name'],
-        'factory': m_annotator.BaseFactory('webrtc/standalone'),
+        'factory': m_annotator.BaseFactory('webrtc/standalone',
+                                           triggers=spec.get('triggers')),
         'notify_on_missing': True,
         'category': 'linux',
         'slavebuilddir': spec['slavebuilddir'],

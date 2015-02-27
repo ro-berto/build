@@ -994,14 +994,26 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
       },
-      'Linux Asan (parallel)': {
+      'Linux Asan Builder': {
         'recipe_config': 'webrtc_parallel_clang',
         'chromium_apply_config': ['asan', 'lsan'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
-        'bot_type': 'builder_tester',
+        'bot_type': 'builder',
+        'build_gs_archive': 'fyi_linux_asan_archive',
+        'testing': {'platform': 'linux'},
+      },
+      'Linux Asan Tester (parallel)': {
+        'recipe_config': 'webrtc_parallel_clang',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'build_gs_archive': 'fyi_linux_asan_archive',
+        'parent_buildername': 'Linux Asan Builder',
         'testing': {'platform': 'linux'},
       },
     },
