@@ -42,5 +42,6 @@ def Update(c):
         'notify_on_missing': True,
         'category': 'linux',
         'slavebuilddir': spec['slavebuilddir'],
+        'auto_reboot': False,
       } for spec in specs
   ])
