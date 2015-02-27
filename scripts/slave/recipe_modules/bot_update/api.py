@@ -70,7 +70,7 @@ class BotUpdateApi(recipe_api.RecipeApi):
                       patch=True, update_presentation=True,
                       force=False, patch_root=None, no_shallow=False,
                       with_branch_heads=False, refs=None,
-                      patch_project_roots=None, **kwargs):
+                      patch_project_roots=None, patch_oauth2=False, **kwargs):
     refs = refs or []
     # We can re-use the gclient spec from the gclient module, since all the
     # data bot_update needs is already configured into the gclient spec.
@@ -98,7 +98,7 @@ class BotUpdateApi(recipe_api.RecipeApi):
     else:
       # The trybot recipe sometimes wants to de-apply the patch. In which case
       # we pretend the issue/patchset/patch_url never existed.
-      issue = patchset = patch_url = None
+      issue = patchset = patch_url = email_file = key_file = None
     # Issue and patchset must come together.
     if issue:
       assert patchset
@@ -107,6 +107,16 @@ class BotUpdateApi(recipe_api.RecipeApi):
     if patch_url:
       # If patch_url is present, bot_update will actually ignore issue/ps.
       issue = patchset = None
+
+    # Point to the oauth2 auth files if specified.
+    # These paths are where the bots put their credential files.
+    if patch_oauth2:
+      email_file = self.m.path['build'].join(
+          'site_config', '.rietveld_client_email')
+      key_file = self.m.path['build'].join(
+          'site_config', '.rietveld_secret_key')
+    else:
+      email_file = key_file = None
 
     rev_map = {}
     if self.m.gclient.c:
@@ -128,6 +138,8 @@ class BotUpdateApi(recipe_api.RecipeApi):
         ['--patchset', patchset],
         ['--patch_url', patch_url],
         ['--rietveld_server', self.m.properties.get('rietveld')],
+        ['--apply_issue_email_file', email_file],
+        ['--apply_issue_key_file', key_file],
 
         # 4. Hookups to JSON output back into recipes.
         ['--output_json', self.m.json.output()],]
