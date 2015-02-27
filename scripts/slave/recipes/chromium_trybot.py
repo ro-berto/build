@@ -252,6 +252,15 @@ CHROMIUM_GPU_DIMENSION_SETS = freeze({
 })
 
 
+# TODO(phajdan.jr): Remove special case for layout tests.
+# This could be done by moving layout tests to main waterfall.
+CHROMIUM_BLINK_TESTS_BUILDERS = freeze([
+  'linux_chromium_rel_ng',
+  'mac_chromium_rel_ng',
+  'win_chromium_rel_ng',
+])
+
+
 def tests_in_compile_targets(api, compile_targets, tests):
   """Returns the tests in |tests| that have at least one of their compile
   targets in |compile_targets|."""
@@ -331,7 +340,8 @@ def _GenStepsInternal(api):
   # TODO(phajdan.jr): Remove special case for layout tests.
   # This could be done by moving layout tests to main waterfall.
   affected_files = api.tryserver.get_files_affected_by_patch()
-  if any([f.startswith('third_party/WebKit') for f in affected_files]):
+  if (any([f.startswith('third_party/WebKit') for f in affected_files]) and
+      buildername in CHROMIUM_BLINK_TESTS_BUILDERS):
     tests.append(api.chromium.steps.BlinkTest())
 
   compile_targets, tests_including_triggered = \
