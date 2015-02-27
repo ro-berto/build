@@ -4,9 +4,12 @@
 
 DEPS = [
   'bot_update',
+  'chromium',
+  'chromium_tests',
   'gclient',
   'json',
   'path',
   'properties',
   'step',
+  'tryserver',
 ]

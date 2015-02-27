@@ -35,7 +35,7 @@ def GenTests(api):
         'fake gyp define 1': 'fake value 1',
         'fake gyp define 2': 'fake value 2',
       },
-      'compiler': 'xcodebuild',
+      'compiler': 'ninja',
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.0',
       'tests': [

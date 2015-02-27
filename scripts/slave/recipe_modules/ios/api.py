@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import copy
+
 from slave import recipe_api
 
 
@@ -122,7 +124,13 @@ class iOSApi(recipe_api.RecipeApi):
       '--version', self.__config['xcode version'],
     ], step_test_data=lambda: self.m.json.test_api.output({}))
 
-  def build(self, official=False):
+    cfg = self.m.chromium.make_config()
+    cfg.gyp_env.GYP_DEFINES = copy.deepcopy(
+      self.__config['GYP_DEFINES']
+    )
+    self.m.chromium.c = cfg
+
+  def build(self):
     """Builds from this bot's build config."""
     assert self.__config is not None
 
@@ -170,6 +178,17 @@ class iOSApi(recipe_api.RecipeApi):
     step_result.presentation.step_text = (
       '<br />GYP_DEFINES:<br />%s' % '<br />'.join(gyp_defines)
     )
+
+    if self.compiler == 'ninja' and self.m.tryserver.is_tryserver:
+      affected_files = self.m.tryserver.get_files_affected_by_patch()
+      tests = [test['app'] for test in self.__config['tests']]
+
+      self.m.chromium_tests.analyze(
+        affected_files,
+        tests,
+        tests,
+       'trybot_analyze_config.json',
+      )
 
     self.m.step('compile', cmd, cwd=cwd)
 

@@ -71,7 +71,7 @@
       "@@@STEP_LOG_LINE@json.output@    \"fake gyp define 1\": \"fake value 1\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"fake gyp define 2\": \"fake value 2\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"compiler\": \"xcodebuild\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"compiler\": \"ninja\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Debug\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"sdk\": \"iphonesimulator8.0\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tests\": [@@@",
@@ -108,9 +108,9 @@
       "runhooks"
     ],
     "env": {
+      "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "component=static_library OS=ios fake gyp define 1=fake value 1 fake gyp define 2=fake value 2",
-      "GYP_GENERATORS": "xcode",
-      "GYP_GENERATOR_FLAGS": "xcode_project_version=3.2",
+      "GYP_GENERATORS": "ninja",
       "LANDMINES_VERBOSE": "1"
     },
     "name": "gclient runhooks",
@@ -120,26 +120,82 @@
   },
   {
     "cmd": [
-      "xcodebuild",
-      "-configuration",
-      "Debug",
-      "-project",
-      "[SLAVE_BUILD]/src/build/all.xcodeproj",
-      "-sdk",
-      "iphonesimulator8.0"
+      "git",
+      "diff",
+      "--cached",
+      "--name-only"
     ],
-    "cwd": "[SLAVE_BUILD]/src/xcodebuild",
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "git diff to analyze patch",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@files@foo.cc@@@",
+      "@@@STEP_LOG_END@files@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]/src/testing/buildbot/trybot_analyze_config.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "read filter exclusion spec",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@path: 'testing/buildbot/trybot_analyze_config.json'@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"chromium\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/gyp_chromium",
+      "--analyzer",
+      "{\"files\": [\"foo.cc\"], \"targets\": [\"fake tests\"]}",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "GYP_DEFINES": "fake gyp define 1='fake value 1' fake gyp define 2='fake value 2'"
+    },
+    "name": "analyze",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@No compile necessary@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"status\": \"No dependency\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"targets\": []@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "ninja",
+      "-C",
+      "[SLAVE_BUILD]/src/out/Debug-iphonesimulator"
+    ],
+    "cwd": "[SLAVE_BUILD]/src/out/Debug-iphonesimulator",
     "name": "compile"
   },
   {
     "cmd": [
       "[BUILD]/scripts/slave/ios/run.py",
       "--app",
-      "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake tests.app",
+      "[SLAVE_BUILD]/src/out/Debug-iphonesimulator/fake tests.app",
       "--json_file",
       "/path/to/tmp/json",
       "--iossim",
-      "[SLAVE_BUILD]/src/xcodebuild/ninja-iossim/Debug/iossim",
+      "[SLAVE_BUILD]/src/out/Debug-iphonesimulator/iossim",
       "--platform",
       "fake device",
       "--version",
