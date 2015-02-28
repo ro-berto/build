@@ -10,9 +10,12 @@ from twisted.python import log as twistedLog
 LOG_PREFIX = '[buildbucket] '
 
 # Buildbot-related constants.
+BUCKET_PROPERTY = 'bucket'
+BUILD_ID_PROPERTY = 'build_id'
+BUILDBUCKET_BUILDSET_PROPERTY = 'buildset'
+BUILDBUCKET_CHANGE_ID_PROPERTY = 'change_id'
 CHANGE_CATEGORY = 'buildbucket'
 CHANGE_REASON = 'buildbucket'
-BUILDBUCKET_CHANGE_ID_PROPERTY = 'change_id'
 INFO_PROPERTY = 'buildbucket'  # A Buildbot property for buildbucket info.
 LEASE_KEY_PROPERTY = 'lease_key'
 

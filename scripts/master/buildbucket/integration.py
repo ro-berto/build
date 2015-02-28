@@ -23,9 +23,7 @@ MAX_LEASE_DURATION = datetime.timedelta(minutes=10)
 DEFAULT_HEARTBEAT_INTERVAL = datetime.timedelta(minutes=1)
 
 # Buildbot-related constants.
-BUILD_ID_PROPERTY = 'build_id'
 BUILDSET_REASON = 'buildbucket'
-LEASE_KEY_PROPERTY = 'lease_key'
 PROPERTY_SOURCE = 'buildbucket'
 LEASE_CLEANUP_INTERVAL = datetime.timedelta(minutes=1)
 
@@ -262,12 +260,16 @@ class BuildBucketIntegrator(object):
     returnValue(lease_key)
 
   @inlineCallbacks
-  def _schedule(self, builder_name, properties, build_id, ssid, lease_key):
+  def _schedule(
+      self, builder_name, properties, build_id, ssid, bucket, lease_key,
+      buildset=None):
     """Schedules a build and returns (bsid, brid) tuple as Deferred."""
     assert self._leases is not None
     info = {
-        BUILD_ID_PROPERTY: build_id,
-        LEASE_KEY_PROPERTY: lease_key,
+        common.BUCKET_PROPERTY: bucket,
+        common.BUILD_ID_PROPERTY: build_id,
+        common.BUILDBUCKET_BUILDSET_PROPERTY: buildset,
+        common.LEASE_KEY_PROPERTY: lease_key,
     }
 
     properties = (properties or {}).copy()
@@ -331,15 +333,19 @@ class BuildBucketIntegrator(object):
           })
       return
 
+    bucket = build['bucket']
     params = json.loads(build['parameters_json'])
     builder_name = params['builder_name']
+    tags = dict(t.split(':', 1) for t in build.get('tags', []))
     self.log('Scheduling build %s (%s)...' % (build_id, builder_name))
 
     changes = params.get('changes') or []
     ssid = yield self.changes.get_source_stamp(changes)
 
     properties = params.get('properties')
-    yield self._schedule(builder_name, properties, build_id, ssid, lease_key)
+    yield self._schedule(
+        builder_name, properties, build_id, ssid, bucket, lease_key,
+        buildset=tags.get('buildset'))
 
   @deferredLocked('poll_lock')
   @inlineCallbacks
@@ -400,8 +406,8 @@ class BuildBucketIntegrator(object):
     info = build.properties.getProperty(common.INFO_PROPERTY)
     if info is None:
       return None, None
-    build_id = info.get(BUILD_ID_PROPERTY)
-    lease_key = info.get(LEASE_KEY_PROPERTY)
+    build_id = info.get(common.BUILD_ID_PROPERTY)
+    lease_key = info.get(common.LEASE_KEY_PROPERTY)
     assert build_id
     assert lease_key
     return build_id, lease_key

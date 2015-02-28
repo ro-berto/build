@@ -26,6 +26,9 @@ from twisted.internet import defer, reactor
 import apiclient
 
 
+BUCKET = 'chromium'
+BUILDSET = 'patch/rietveld/codereview.chromium.org/1/2'
+BUILDSET_TAG = 'buildset:%s' % BUILDSET
 LEASE_KEY = 42
 
 
@@ -73,7 +76,7 @@ def fake_buildbucket():
 
 class IntegratorTest(unittest.TestCase):
   ssid = 1
-  buckets = ['chromium']
+  buckets = [BUCKET]
   integrator = None
   buildbot = None
   buildbucket = None
@@ -89,6 +92,8 @@ class IntegratorTest(unittest.TestCase):
   }
   buildbucket_build_rel = {
       'id': '1',
+      'bucket': BUCKET,
+      'tags': [BUILDSET_TAG],
       'parameters_json': json.dumps({
             'builder_name': 'Release',
             'changes': [buildbucket_change],
@@ -96,6 +101,8 @@ class IntegratorTest(unittest.TestCase):
   }
   buildbucket_build_dbg = {
       'id': '2',
+      'bucket': BUCKET,
+      'tags': [BUILDSET_TAG],
       'parameters_json': json.dumps({
             'builder_name': 'Debug',
             'changes': [buildbucket_change],
@@ -167,9 +174,11 @@ class IntegratorTest(unittest.TestCase):
         self.buildbucket.api.peek.called, 'build.peek was not called')
 
   def assert_added_build_request(
-      self, build_id, builder_name, ssid, properties=None):
+      self, build_id, builder_name, ssid, properties=None, buildset=None):
     expected_build_info = {
+        'bucket': BUCKET,
         'build_id': build_id,
+        'buildset': buildset,
         'lease_key': LEASE_KEY,
     }
     properties = (properties or {}).copy()
@@ -202,6 +211,7 @@ class IntegratorTest(unittest.TestCase):
       self.buildbucket.api.peek.return_value = {
           'builds': [{
               'id': '1',
+              'bucket': BUCKET,
               'parameters_json': json.dumps({
                     'builder_name': 'Release',
               }),
@@ -243,6 +253,7 @@ class IntegratorTest(unittest.TestCase):
       self.buildbucket.api.peek.return_value = {
           'builds': [{
               'id': '1',
+              'bucket': BUCKET,
               'parameters_json': json.dumps({
                     'builder_name': 'Release',
                     'properties': {
@@ -269,9 +280,11 @@ class IntegratorTest(unittest.TestCase):
       # Assert added two buildsets.
       self.assertEqual(self.buildbot.add_build_request.call_count, 2)
       self.assert_added_build_request(
-          self.buildbucket_build_rel['id'], 'Release', self.ssid)
+          self.buildbucket_build_rel['id'], 'Release', self.ssid,
+          buildset=BUILDSET)
       self.assert_added_build_request(
-          self.buildbucket_build_dbg['id'], 'Debug', self.ssid)
+          self.buildbucket_build_dbg['id'], 'Debug', self.ssid,
+          buildset=BUILDSET)
 
   def test_polling_with_cursor(self):
     with self.create_integrator():
@@ -299,9 +312,11 @@ class IntegratorTest(unittest.TestCase):
       # Assert added two buildsets.
       self.assertEqual(self.buildbot.add_build_request.call_count, 2)
       self.assert_added_build_request(
-          self.buildbucket_build_rel['id'], 'Release', self.ssid)
+          self.buildbucket_build_rel['id'], 'Release', self.ssid,
+          buildset=BUILDSET)
       self.assert_added_build_request(
-          self.buildbucket_build_dbg['id'], 'Debug', self.ssid)
+          self.buildbucket_build_dbg['id'], 'Debug', self.ssid,
+          buildset=BUILDSET)
 
   def test_honor_max_lease_count(self):
     with self.create_integrator():
