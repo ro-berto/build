@@ -677,6 +677,10 @@ SPEC = {
         'component': 'shared_library',
         'werror': '',
 
+        # Enable debug info, as on official builders, to catch issues with
+        # optimized debug info.
+        'linux_dump_symbols': '1',
+
         # Plugin flags often need to be changed when using a plugin newer than
         # the latest Clang package, so disable plugins.
         'clang_use_chrome_plugins': '0',
