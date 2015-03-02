@@ -34,6 +34,7 @@ DEFAULT_AUTO_REBOOT = False
 DEFAULT_DO_TRYBOT = True
 DEFAULT_RECIPE = 'skia/skia'
 PERCOMMIT_SCHEDULER_NAME = 'skia_percommit'
+MASTER_ONLY_SCHEDULER_NAME = 'skia_master_only'
 PERIODIC_15MINS_SCHEDULER_NAME = 'skia_periodic_15mins'
 NIGHTLY_SCHEDULER_NAME = 'skia_nightly'
 WEEKLY_SCHEDULER_NAME = 'skia_weekly'
@@ -45,6 +46,7 @@ TRY_SCHEDULER_PROJECT = 'skia'
 
 SCHEDULERS = [
   PERCOMMIT_SCHEDULER_NAME,
+  MASTER_ONLY_SCHEDULER_NAME,
   TRY_SCHEDULER_NAME,
   PERIODIC_15MINS_SCHEDULER_NAME,
   NIGHTLY_SCHEDULER_NAME,
@@ -187,6 +189,13 @@ def SetupBuildersAndSchedulers(c, builders, slaves, ActiveMaster):
       treeStableTimer=60,
       change_filter=skia_change_filter,
       builderNames=builders_by_scheduler[PERCOMMIT_SCHEDULER_NAME])
+  c['schedulers'].append(s)
+
+  s = Scheduler(
+      name=MASTER_ONLY_SCHEDULER_NAME,
+      branch=MASTER_BRANCH,
+      treeStableTimer=60,
+      builderNames=builders_by_scheduler[MASTER_ONLY_SCHEDULER_NAME])
   c['schedulers'].append(s)
 
   s = timed.Nightly(
