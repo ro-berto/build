@@ -26,6 +26,9 @@ SPEC['builders'].update({
       steps.generate_gtest,
       steps.generate_script,
     ],
+    'tests': [
+      steps.BlinkTest(),
+    ],
     'testing': {
       'platform': 'linux',
     },
