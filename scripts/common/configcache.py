@@ -8,7 +8,8 @@
 import logging
 import os
 
-BUILD_PATH = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+BUILD_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__),
+                                          os.pardir, os.pardir))
 
 
 class ConfigCacheError(RuntimeError):

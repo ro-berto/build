@@ -57,7 +57,10 @@ class ChromiteConfigTestCase(unittest.TestCase):
       ],
       'unittests': True,
     },
-    'pre-cq-group': {}
+    'pre-cq-group': {},
+    'master-thing': {
+      'master': True,
+    },
   }
 
   def setUp(self):
@@ -66,7 +69,6 @@ class ChromiteConfigTestCase(unittest.TestCase):
     self.test = self.config['test']
     self.parent = self.config['parent']
     self.baremetal = self.config['baremetal-pre-cq']
-    self.pre_cq_group = self.config['pre-cq-group']
 
   def testChildren(self):
     self.assertEqual(len(self.test.children), 0)
@@ -103,8 +105,48 @@ class ChromiteConfigTestCase(unittest.TestCase):
     self.assertTrue(self.baremetal.IsPreCqBuilder())
     self.assertFalse(self.baremetal.IsGeneralPreCqBuilder())
 
-    self.assertTrue(self.pre_cq_group.IsPreCqBuilder())
-    self.assertTrue(self.pre_cq_group.IsGeneralPreCqBuilder())
+    pre_cq_group = self.config['pre-cq-group']
+    self.assertTrue(pre_cq_group.IsPreCqBuilder())
+    self.assertTrue(pre_cq_group.IsGeneralPreCqBuilder())
+
+  def testIsMaster(self):
+    self.assertTrue(self.config['master-thing'].is_master)
+
+  def testCategorize(self):
+    # Type-based: name, build_type => base, suffix, category
+    expectations = (
+    )
+    # Name-based: name => base, suffix, category
+    expectations = (
+      # (With Board Type)
+      ('pre-cq-launcher', 'priest', 'pre-cq-launcher', None, 'PRE_CQ_LAUNCHER'),
+      # The canary board type should override the name-based inferences,
+      # marking this board as a canary.
+      ('odd-name-paladin', 'canary', 'odd-name-paladin', None, 'CANARY'),
+
+      ('my-board-pre-cq', None, 'my-board', 'pre-cq', 'PRE_CQ'),
+      ('my-board-chrome-pfq', None, 'my-board', 'chrome-pfq', 'PFQ'),
+      ('my-board-chromium-pfq', None, 'my-board', 'chromium-pfq', 'PFQ'),
+      ('my-board-paladin', None, 'my-board', 'paladin', 'PALADIN'),
+      ('my-board-release', None, 'my-board', 'release', 'CANARY'),
+      ('my-board-release-group', None, 'my-board', 'release-group', 'CANARY'),
+      ('my-board-firmware', None, 'my-board', 'firmware', 'FIRMWARE'),
+      ('my-board-incremental', None, 'my-board', 'incremental', 'INCREMENTAL'),
+      ('my-board-factory', None, 'my-board', 'factory', 'FACTORY'),
+      ('my-board-project-sdk', None, 'my-board-project', 'sdk', 'SDK'),
+      ('my-board-toolchain-major', None,
+          'my-board', 'toolchain-major', 'TOOLCHAIN'),
+      ('my-board-toolchain-minor', None,
+          'my-board', 'toolchain-minor', 'TOOLCHAIN'),
+    )
+
+    for name, build_type, exp_base, exp_suffix, exp_cat_attr in expectations:
+      exp_category = getattr(cros_chromite.ChromiteTarget, exp_cat_attr)
+      base, suffix, category = cros_chromite.ChromiteTarget.Categorize(
+          name,
+          build_type=build_type)
+      self.assertEqual(
+          (base, suffix, category), (exp_base, exp_suffix, exp_category))
 
 
 class ChromitePinManagerTestCase(unittest.TestCase):

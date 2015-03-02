@@ -37,7 +37,6 @@ except ImportError:
 
 from common import configcache
 
-
 # The name of the branch associated with tip-of-tree.
 TOT_BRANCH = 'master'
 
@@ -58,8 +57,55 @@ class ChromiteError(RuntimeError):
   pass
 
 
+# Slave pool allocation types.
+class SlaveType(object):
+  """Slave configuration expression enumeration."""
+  BAREMETAL = 'baremetal'
+  VM = 'vm'
+  GCE = 'gce'
+
+
 class ChromiteTarget(object):
-  """Wraps a single Chromite target."""
+  """Wraps a single Chromite target.
+
+  Reproduces some core logic from Chromite's 'cbuildbot' libraries to access
+  various configuration parameters.
+  """
+
+  PRE_CQ_LAUNCHER = 'pre-cq-launcher'
+  PRE_CQ = 'pre-cq'
+  PFQ = 'pfq'
+  PALADIN = 'paladin'
+  CANARY = 'canary'
+  FIRMWARE = 'firmware'
+  INCREMENTAL = 'incremental'
+  FACTORY = 'factory'
+  SDK = 'sdk'
+  TOOLCHAIN = 'toolchain'
+
+  # Maps cbuildbot's "build_type" field to target constants. This is used in the
+  # first pass prior to attempting to infer the class from the target's name.
+  # (see Categorize)
+  BUILD_TYPE_CATEGORY_MAP = {
+    'priest': PRE_CQ_LAUNCHER,
+    'paladin': PALADIN,
+    'canary': CANARY,
+    'chrome': PFQ,
+  }
+
+  # Maps configuration name suffixes to target type constants.
+  # (see Categorize)
+  SUFFIX_MAP = collections.OrderedDict((
+    (PRE_CQ, ('pre-cq',)),
+    (PFQ, ('chrome-pfq', 'chromium-pfq',)),
+    (PALADIN, ('paladin',)),
+    (CANARY, ('release', 'release-group',)),
+    (FIRMWARE, ('firmware',)),
+    (INCREMENTAL, ('incremental',)),
+    (FACTORY, ('factory',)),
+    (SDK, ('sdk',)),
+    (TOOLCHAIN, ('toolchain-major', 'toolchain-minor',)),
+  ))
 
   # Sentinel value to indicate a missing key.
   _MISSING = object()
@@ -69,6 +115,9 @@ class ChromiteTarget(object):
     self._config = config
     self._children = tuple(children)
     self._default = default
+    self._base, self._suffix, self._category = self.Categorize(
+        name,
+        build_type=self.get('build_type'))
 
   @classmethod
   def FromConfigDict(cls, name, config, default=None):
@@ -88,6 +137,39 @@ class ChromiteTarget(object):
     """Returns: (str) The target's name. This may be None for child targets.
     """
     return self._name
+
+  @property
+  def board(self):
+    boards = self.get('boards')
+    if not boards or len(boards) != 1:
+      return None
+    return boards[0]
+
+  @property
+  def base(self):
+    """Returns: (str) The base board name."""
+    return self._base
+
+  @property
+  def suffix(self):
+    """Returns: (str) The base board name."""
+    return self._suffix
+
+  @property
+  def category(self):
+    """Returns: (enum) A category enumeration based on the name or None.
+    """
+    return self._category
+
+  @property
+  def is_master(self):
+    return self['master']
+
+  @property
+  def is_public(self):
+    return (
+        self.get('prebuilts') == 'public' and
+        not self.is_master)
 
   @property
   def children(self):
@@ -149,7 +231,48 @@ class ChromiteTarget(object):
     return self.name == 'pre-cq-group'
 
   def IsPreCqBuilder(self):
-    return self.IsGeneralPreCqBuilder() or self.name.endswith('-pre-cq')
+    return self.IsGeneralPreCqBuilder() or self.category == self.PRE_CQ
+
+  @classmethod
+  def Categorize(cls, name, build_type=None):
+    """Returns: (base, suffix, typ)
+      base: (str) The base board name
+      suffix: (str) The board type suffix, if identifed. Otherwise, None.
+      category: (enum) The config typecategory if identified. Otherwise, None.
+
+    This method attempts to identify the type of build based on the build name.
+    If no type can be inferred, None will be returned.
+
+    Args:
+      name (str): The configuration name.
+      build_type (str): If not None, the configuration build type.
+    """
+    name = name or ''
+
+    category = None
+    if build_type:
+      category = cls.BUILD_TYPE_CATEGORY_MAP.get(build_type)
+
+    if not category:
+      # Attempt to infer the category from the name.
+      def get_category():
+        for typ, suffixes in cls.SUFFIX_MAP.iteritems():
+          for suffix in suffixes:
+            if name.endswith('-' + suffix):
+              return typ
+        return None
+      category = get_category()
+
+    # If we couldn't categorize, fail.
+    if not category:
+      return None, None, None
+
+    # Split any suffix.
+    suffixes = cls.SUFFIX_MAP.get(category, ())
+    for suffix in suffixes:
+      if name.endswith('-' + suffix):
+        return name[:-(len(suffix)+1)], suffix, category
+    return name, None, category
 
 
 class ChromiteConfig(collections.OrderedDict):
