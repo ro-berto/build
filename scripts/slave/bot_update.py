@@ -1078,7 +1078,7 @@ def apply_rietveld_issue(issue, patchset, root, server, _rev_map, _revision,
   ]
   # Use an oauth key file if specified.
   if email_file and key_file:
-    cmd.extend(['--email-file', email_file, '--key-file', key_file])
+    cmd.extend(['--email-file', email_file, '--private-key-file', key_file])
   else:
     cmd.append('--no-auth')
 
