@@ -409,7 +409,7 @@ class BuildBucketIntegrator(object):
     """Returns buildbucket build def a buildbot build."""
     info = build.properties.getProperty(common.INFO_PROPERTY)
     if info is None:
-      return None, None
+      return None
     return info.get(common.BUILD_PROPERTY)
 
   @staticmethod
