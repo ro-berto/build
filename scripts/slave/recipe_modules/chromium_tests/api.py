@@ -681,6 +681,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self.m.swarming.default_priority = 50
         self.m.swarming.add_default_tag('purpose:ManualTS')
       self.m.swarming.default_user = requester
+
+      patch_project = self.m.properties.get('patch_project')
+      if patch_project:
+        self.m.swarming.add_default_tag('patch_project:%s' % patch_project)
     else:
       if mastername == 'chromium.fyi':
         # This should be lower than the CQ.
