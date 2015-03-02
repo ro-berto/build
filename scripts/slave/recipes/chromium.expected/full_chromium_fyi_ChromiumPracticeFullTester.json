@@ -167,5 +167,31 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Total executed: 9001<br/>@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/chromium/archive_layout_test_results.py",
+      "--results-dir",
+      "[SLAVE_BUILD]/layout-test-results",
+      "--build-dir",
+      "[SLAVE_BUILD]/src/out",
+      "--build-number",
+      "571",
+      "--builder-name",
+      "ChromiumPracticeFullTester",
+      "--gs-bucket",
+      "gs://chromium-layout-test-archives",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"ChromiumPracticeFullTester\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"ChromiumPracticeFullTester\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+    ],
+    "name": "archive_webkit_tests_results",
+    "~followup_annotations": [
+      "@@@STEP_LINK@layout_test_results@https://storage.googleapis.com/chromium-layout-test-archives/ChromiumPracticeFullTester/571/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://storage.googleapis.com/chromium-layout-test-archives/ChromiumPracticeFullTester/571/layout-test-results.zip@@@"
+    ]
   }
 ]
