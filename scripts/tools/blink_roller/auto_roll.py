@@ -116,7 +116,7 @@ PROJECT_CONFIGS = {
     'project_alias': 'webkit',
   },
   'skia': {
-    'cq_extra_trybots': ['tryserver.blink:linux_blink_rel,linux_blink_dbg'],
+    'cq_extra_trybots': ['tryserver.blink:linux_blink_rel'],
     'extra_emails_fn': lambda: [_get_skia_sheriff()],
     'path_to_project': os.path.join('third_party', 'skia'),
   },
