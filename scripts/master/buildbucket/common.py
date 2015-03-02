@@ -10,14 +10,11 @@ from twisted.python import log as twistedLog
 LOG_PREFIX = '[buildbucket] '
 
 # Buildbot-related constants.
-BUCKET_PROPERTY = 'bucket'
-BUILD_ID_PROPERTY = 'build_id'
-BUILDBUCKET_BUILDSET_PROPERTY = 'buildset'
+BUILD_PROPERTY = 'build'
 BUILDBUCKET_CHANGE_ID_PROPERTY = 'change_id'
 CHANGE_CATEGORY = 'buildbucket'
 CHANGE_REASON = 'buildbucket'
 INFO_PROPERTY = 'buildbucket'  # A Buildbot property for buildbucket info.
-LEASE_KEY_PROPERTY = 'lease_key'
 
 # UTC datetime corresponding to zero Unix timestamp.
 EPOCH = datetime.datetime.utcfromtimestamp(0)

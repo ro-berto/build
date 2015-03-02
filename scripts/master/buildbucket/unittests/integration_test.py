@@ -21,7 +21,7 @@ import test_env  # pylint: disable=W0611
 from buildbot.status import builder as build_results
 from master.buildbucket import common, integration
 from master.unittests.deferred_resource_test import run_deferred
-from mock import Mock, call
+from mock import Mock, call, ANY
 from twisted.internet import defer, reactor
 import apiclient
 
@@ -175,14 +175,8 @@ class IntegratorTest(unittest.TestCase):
 
   def assert_added_build_request(
       self, build_id, builder_name, ssid, properties=None, buildset=None):
-    expected_build_info = {
-        'bucket': BUCKET,
-        'build_id': build_id,
-        'buildset': buildset,
-        'lease_key': LEASE_KEY,
-    }
     properties = (properties or {}).copy()
-    properties['buildbucket'] =  expected_build_info
+    properties['buildbucket'] =  {'build': ANY}
     properties = {
         k: (v, 'buildbucket') for k, v in properties.iteritems()
     }
@@ -369,8 +363,10 @@ class IntegratorTest(unittest.TestCase):
     build.getNumber.return_value = 42
     build.isFinished.return_value = False
     info = {
-       'build_id': build.id,
-       'lease_key': LEASE_KEY,
+       'build': {
+            'id': build.id,
+            'lease_key': LEASE_KEY,
+        },
     }
     build.properties.getProperty.return_value = info
     properties = {

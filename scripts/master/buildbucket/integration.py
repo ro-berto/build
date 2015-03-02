@@ -259,21 +259,28 @@ class BuildBucketIntegrator(object):
       return
     returnValue(lease_key)
 
+  @staticmethod
+  def _strip_build_def(build):
+    property_whitelist = set([
+        'bucket',
+        'build_id',
+        'created_by',
+        'created_ts',
+        'id',
+        'lease_key',
+        'parameters_json',
+        'tags',
+    ])
+    return {k: v for k, v in build.iteritems() if k in property_whitelist}
+
   @inlineCallbacks
-  def _schedule(
-      self, builder_name, properties, build_id, ssid, bucket, lease_key,
-      buildset=None):
+  def _schedule(self, builder_name, properties, build, ssid):
     """Schedules a build and returns (bsid, brid) tuple as Deferred."""
     assert self._leases is not None
-    info = {
-        common.BUCKET_PROPERTY: bucket,
-        common.BUILD_ID_PROPERTY: build_id,
-        common.BUILDBUCKET_BUILDSET_PROPERTY: buildset,
-        common.LEASE_KEY_PROPERTY: lease_key,
-    }
-
     properties = (properties or {}).copy()
-    properties[common.INFO_PROPERTY] = info
+    properties[common.INFO_PROPERTY] = {
+        common.BUILD_PROPERTY: self._strip_build_def(build),
+    }
     properties_with_source = {
         k:(v, PROPERTY_SOURCE) for k, v in properties.iteritems()
     }
@@ -282,13 +289,13 @@ class BuildBucketIntegrator(object):
         reason=BUILDSET_REASON,
         builder_name=builder_name,
         properties_with_source=properties_with_source,
-        external_idstring=build_id,
+        external_idstring=build['id'],
     )
-    self._leases[build_id] = {
-        'key': lease_key,
+    self._leases[build['id']] = {
+        'key': build['lease_key'],
         'build_request': build_request,
     }
-    self.log('Scheduled a build for buildbucket build %s' % build_id)
+    self.log('Scheduled a build for buildbucket build %s' % build['id'])
     self.log(
         'Lease count: %d/%d' % (len(self._leases), self.get_max_lease_count()),
         level=logging.DEBUG)
@@ -315,6 +322,7 @@ class BuildBucketIntegrator(object):
     if not lease_key:
       self.log('Could not lease build %s' % build_id)
       return
+    build['lease_key'] = lease_key
 
     try:
       self._validate_build(build)
@@ -323,7 +331,7 @@ class BuildBucketIntegrator(object):
       self.buildbucket_service.api.fail(
           id=build_id,
           body={
-              'lease_key': lease_key,
+              'lease_key': build['lease_key'],
               'failure_reason': 'INVALID_BUILD_DEFINITION',
               'result_details_json': json.dumps({
                   'error': {
@@ -333,19 +341,15 @@ class BuildBucketIntegrator(object):
           })
       return
 
-    bucket = build['bucket']
     params = json.loads(build['parameters_json'])
     builder_name = params['builder_name']
-    tags = dict(t.split(':', 1) for t in build.get('tags', []))
     self.log('Scheduling build %s (%s)...' % (build_id, builder_name))
 
     changes = params.get('changes') or []
     ssid = yield self.changes.get_source_stamp(changes)
 
     properties = params.get('properties')
-    yield self._schedule(
-        builder_name, properties, build_id, ssid, bucket, lease_key,
-        buildset=tags.get('buildset'))
+    yield self._schedule(builder_name, properties, build, ssid)
 
   @deferredLocked('poll_lock')
   @inlineCallbacks
@@ -401,16 +405,12 @@ class BuildBucketIntegrator(object):
     return info is not None
 
   @staticmethod
-  def _get_build_id_and_lease_key(build):
-    """Returns buildbucket build id and lease_key from a buildbot build."""
+  def _get_build_def(build):
+    """Returns buildbucket build def a buildbot build."""
     info = build.properties.getProperty(common.INFO_PROPERTY)
     if info is None:
       return None, None
-    build_id = info.get(common.BUILD_ID_PROPERTY)
-    lease_key = info.get(common.LEASE_KEY_PROPERTY)
-    assert build_id
-    assert lease_key
-    return build_id, lease_key
+    return info.get(common.BUILD_PROPERTY)
 
   @staticmethod
   def adjust_lease_duration(duration):
@@ -520,27 +520,28 @@ class BuildBucketIntegrator(object):
 
   @inlineCallbacks
   def _leased_build_call(self, method_name, build, body):
-    build_id, lease_key = self._get_build_id_and_lease_key(build)
-    if not build_id:
+    build_def = self._get_build_def(build)
+    if not build_def:
       return
 
     method = getattr(self.buildbucket_service.api, method_name)
     body = body.copy()
-    body['lease_key'] = lease_key
-    resp = yield method(id=build_id, body=body)
+    body['lease_key'] = build_def['lease_key']
+    resp = yield method(id=build_def['id'], body=body)
     if 'error' in resp:
       self._stop_build(build, resp['error'])
 
   @inlineCallbacks
   def on_build_started(self, build):
     assert self.started
-    build_id, lease_key = self._get_build_id_and_lease_key(build)
-    if not build_id:
+    build_def = self._get_build_def(build)
+    if not build_def:
       return
+    build_id = build_def['id']
 
     yield self._ensure_leases_loaded()
     assert build_id in self._leases
-    assert self._leases[build_id]['key'] == lease_key
+    assert self._leases[build_id]['key'] == build_def['lease_key']
     self._leases[build_id]['build'] = build
 
     yield self._leased_build_call('start', build, {
@@ -551,9 +552,10 @@ class BuildBucketIntegrator(object):
   def on_build_finished(self, build, status):
     assert self.started
     assert status in ('SUCCESS', 'FAILURE', 'EXCEPTION', 'RETRY', 'SKIPPED')
-    build_id, lease_key = self._get_build_id_and_lease_key(build)
-    if not build_id or not lease_key:
+    build_def = self._get_build_def(build)
+    if not build_def:
       return
+    build_id = build_def['id']
     assert self.is_buildbucket_build(build)
     self.log(
         'Build %s finished with status "%s"' % (build_id, status),
