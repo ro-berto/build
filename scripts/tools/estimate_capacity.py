@@ -17,6 +17,7 @@ import tempfile
 import urllib
 import urllib2
 
+import numpy
 
 BASE_DIR = os.path.dirname(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -46,8 +47,10 @@ def get_builds(mastername, buildername, days):
 def estimate_capacity(builds):
   hourly_buckets = {}
   daily_buckets = {}
+  build_times = []
   for build in builds:
     build_time = build['times'][1] - build['times'][0]
+    build_times.append(build_time)
 
     changes = build['sourceStamp']['changes']
     if changes:
@@ -75,6 +78,7 @@ def estimate_capacity(builds):
   return {
     'hourly_bots': min_bots(hourly_buckets, 3600),
     'daily_bots': min_bots(daily_buckets, 3600 * 24),
+    'build_times_s': build_times,
   }
 
 
@@ -142,11 +146,23 @@ def main(argv):
         capacity = estimate_capacity(builds)
         for key in ('hourly_bots', 'daily_bots'):
           pool_capacity[key] += capacity[key]
-        print '    %-45s %5.1f %5.1f' % (
+
+        if capacity['build_times_s']:
+          avg_build_time = str(datetime.timedelta(
+              seconds=int(numpy.mean(capacity['build_times_s']))))
+          median_build_time = str(datetime.timedelta(
+              seconds=int(numpy.median(capacity['build_times_s']))))
+        else:
+          avg_build_time = 'n/a'
+          median_build_time = 'n/a'
+
+        print '    %-45s %-9s %-9s %5.1f %5.1f' % (
             builder,
+            avg_build_time,
+            median_build_time,
             capacity['daily_bots'],
             capacity['hourly_bots'])
-    print '  %-45s   %5.1f %5.1f %5.1f' % (
+    print '  %-45s                       %5.1f %5.1f %5.1f' % (
         'total',
         pool_capacity['daily_bots'],
         pool_capacity['hourly_bots'],
