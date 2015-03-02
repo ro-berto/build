@@ -272,6 +272,7 @@
       "[BUILD]/goma",
       "--goma-hermetic",
       "error",
+      "--ninja-ensure-up-to-date",
       "--",
       "base_unittests",
       "browser_tests"

@@ -305,7 +305,11 @@ def _GenStepsInternal(api):
   builder = api.properties['buildername']
   enable_gpu_tests = builder in CHROMIUM_GPU_DIMENSION_SETS.get(master, {})
 
-  extra_chromium_configs = ['trybot_flavor', 'goma_hermetic_error']
+  extra_chromium_configs = [
+      'trybot_flavor',
+      'goma_hermetic_error',
+      'ninja_confirm_noop'
+  ]
   if enable_gpu_tests:
     extra_chromium_configs.append('archive_gpu_tests')
 

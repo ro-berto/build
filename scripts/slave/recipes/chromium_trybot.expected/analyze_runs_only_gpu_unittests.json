@@ -256,6 +256,7 @@
       "[BUILD]\\goma",
       "--goma-hermetic",
       "error",
+      "--ninja-ensure-up-to-date",
       "--",
       "gpu_unittests_run"
     ],

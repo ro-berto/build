@@ -285,6 +285,7 @@
       "[BUILD]/goma",
       "--goma-hermetic",
       "error",
+      "--ninja-ensure-up-to-date",
       "--",
       "angle_unittests_run",
       "chromium_builder_tests",
@@ -3577,6 +3578,7 @@
       "[BUILD]/goma",
       "--goma-hermetic",
       "error",
+      "--ninja-ensure-up-to-date",
       "--",
       "chrome",
       "telemetry_gpu_test_run"

@@ -211,6 +211,7 @@
       "[BUILD]/goma",
       "--goma-hermetic",
       "error",
+      "--ninja-ensure-up-to-date",
       "--",
       "All",
       "chromium_builder_tests"

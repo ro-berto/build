@@ -223,6 +223,7 @@
       "[BUILD]/goma",
       "--goma-hermetic",
       "error",
+      "--ninja-ensure-up-to-date",
       "--",
       "blink_tests"
     ],

@@ -908,7 +908,11 @@ def main_ninja(options, args):
       command += ['-d', 'explain']
       chromium_utils.RunCommand(command, env=env, filter_obj=filter_obj)
       if not filter_obj.was_up_to_date:
-        print 'failing build because ninja reported work to do.'
+        print 'Failing build because ninja reported work to do.'
+        print 'This means that after completing a compile, another was run and'
+        print 'it resulted in still having work to do (that is, a no-op build'
+        print 'wasn\'t a no-op). Consult the first "ninja explain:" line for a'
+        print 'likely culprit.'
         return 1
     return exit_status
   finally:

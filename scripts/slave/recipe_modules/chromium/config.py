@@ -45,6 +45,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       xcode_sdk = Single(basestring, required=False),
       xcode_project = Single(Path, required=False),
       solution = Single(Path, required=False),
+      ninja_confirm_noop = Single(bool, empty_val=False, required=False),
     ),
     gyp_env = ConfigGroup(
       GYP_CROSSCOMPILE = Single(int, jsonish_fn=str, required=False),
@@ -275,6 +276,10 @@ def goma_canary(c):
 @config_ctx()
 def goma_hermetic_error(c):
   c.compile_py.goma_hermetic = 'error'
+
+@config_ctx()
+def ninja_confirm_noop(c):
+  c.compile_py.ninja_confirm_noop = True
 
 @config_ctx(group='builder')
 def xcode(c):  # pragma: no cover

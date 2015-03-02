@@ -217,6 +217,7 @@
       "[BUILD]/goma",
       "--goma-hermetic",
       "error",
+      "--ninja-ensure-up-to-date",
       "--clobber",
       "--",
       "base_unittests",
