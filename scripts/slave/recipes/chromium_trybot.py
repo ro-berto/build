@@ -135,6 +135,10 @@ BUILDERS = freeze({
         'mastername': 'chromium.linux',
         'buildername': 'Linux Builder (dbg)(32)',
       },
+      'linux_site_isolation': {
+        'mastername': 'chromium.fyi',
+        'buildername': 'Site Isolation Linux',
+      },
       'linux_chromium_practice_rel_ng': {
         'mastername': 'chromium.fyi',
         'buildername': 'ChromiumPracticeFullTester',
