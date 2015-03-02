@@ -11,6 +11,7 @@ DEPS = [
   'platform',
   'properties',
   'python',
+  'raw_io',
   'rietveld',
   'step',
 ]
@@ -22,7 +23,7 @@ INFRA_GIT_URL = 'https://skia.googlesource.com/buildbot'
 
 def git(api, *cmd, **kwargs):
   git_cmd = 'git.bat' if api.platform.is_win else 'git'
-  api.step(
+  return api.step(
       'git %s' % cmd[0],
       cmd=[git_cmd] + list(cmd),
       **kwargs)
@@ -41,6 +42,13 @@ def git_checkout(api, url, dest, ref=None):
   git(api, 'fetch', 'origin', cwd=dest)
   git(api, 'clean', '-d', '-f', cwd=dest)
   git(api, 'reset', '--hard', ref or 'origin/master', cwd=dest)
+
+  # Set got_revision.
+  test_data = lambda: api.raw_io.test_api.stream_output('abc123')
+  rev_parse = git(api, 'rev-parse', 'HEAD',
+                  cwd=dest, stdout=api.raw_io.output(),
+                  step_test_data=test_data)
+  rev_parse.presentation.properties['got_revision'] = rev_parse.stdout.strip()
 
 
 def GenSteps(api):

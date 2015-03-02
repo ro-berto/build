@@ -63,6 +63,19 @@
   },
   {
     "cmd": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "cwd": "[SLAVE_BUILD]/go/src/skia.googlesource.com/buildbot.git",
+    "name": "git rev-parse",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@SET_BUILD_PROPERTY@got_revision@\"abc123\"@@@"
+    ]
+  },
+  {
+    "cmd": [
       "go",
       "get",
       "./..."
