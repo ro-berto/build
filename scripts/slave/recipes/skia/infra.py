@@ -17,7 +17,7 @@ DEPS = [
 ]
 
 
-INFRA_GO = 'skia.googlesource.com/buildbot.git'
+INFRA_GO = 'go.skia.org/infra'
 INFRA_GIT_URL = 'https://skia.googlesource.com/buildbot'
 
 

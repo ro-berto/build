@@ -29,7 +29,7 @@
       "origin",
       "https://skia.googlesource.com/buildbot"
     ],
-    "cwd": "[SLAVE_BUILD]/go/src/skia.googlesource.com/buildbot.git",
+    "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra",
     "name": "git remote"
   },
   {
@@ -38,7 +38,7 @@
       "fetch",
       "origin"
     ],
-    "cwd": "[SLAVE_BUILD]/go/src/skia.googlesource.com/buildbot.git",
+    "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra",
     "name": "git fetch"
   },
   {
@@ -48,7 +48,7 @@
       "-d",
       "-f"
     ],
-    "cwd": "[SLAVE_BUILD]/go/src/skia.googlesource.com/buildbot.git",
+    "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra",
     "name": "git clean"
   },
   {
@@ -58,7 +58,7 @@
       "--hard",
       "origin/master"
     ],
-    "cwd": "[SLAVE_BUILD]/go/src/skia.googlesource.com/buildbot.git",
+    "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra",
     "name": "git reset"
   },
   {
@@ -67,7 +67,7 @@
       "rev-parse",
       "HEAD"
     ],
-    "cwd": "[SLAVE_BUILD]/go/src/skia.googlesource.com/buildbot.git",
+    "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra",
     "name": "git rev-parse",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -80,7 +80,7 @@
       "get",
       "./..."
     ],
-    "cwd": "[SLAVE_BUILD]/go/src/skia.googlesource.com/buildbot.git",
+    "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra",
     "env": {
       "GIT_USER_AGENT": "git/1.9.1",
       "GOPATH": "[SLAVE_BUILD]/go",
@@ -94,7 +94,7 @@
       "get",
       "code.google.com/p/go.tools/cmd/goimports"
     ],
-    "cwd": "[SLAVE_BUILD]/go/src/skia.googlesource.com/buildbot.git",
+    "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra",
     "env": {
       "GIT_USER_AGENT": "git/1.9.1",
       "GOPATH": "[SLAVE_BUILD]/go",
@@ -106,7 +106,7 @@
     "cmd": [
       "./setup_test_db"
     ],
-    "cwd": "[SLAVE_BUILD]/go/src/skia.googlesource.com/buildbot.git/go/database",
+    "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra/go/database",
     "env": {
       "GIT_USER_AGENT": "git/1.9.1",
       "GOPATH": "[SLAVE_BUILD]/go",
@@ -120,7 +120,7 @@
       "-u",
       "run_unittests"
     ],
-    "cwd": "[SLAVE_BUILD]/go/src/skia.googlesource.com/buildbot.git",
+    "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra",
     "env": {
       "GIT_USER_AGENT": "git/1.9.1",
       "GOPATH": "[SLAVE_BUILD]/go",
