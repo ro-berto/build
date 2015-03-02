@@ -44,10 +44,7 @@ def GenSteps(api):
 
   bot_type = bot_config.get('bot_type', 'builder_tester')
 
-  # Bot Update re-uses the gclient configs.
-  step_result = api.bot_update.ensure_checkout(force=True)
-  got_revision = step_result.presentation.properties['got_revision']
-
+  api.webrtc.checkout()
   api.webrtc.cleanup()
   if not bot_config.get('disable_runhooks'):
     api.chromium.runhooks()
@@ -61,18 +58,15 @@ def GenSteps(api):
     api.chromium.compile(targets=compile_targets)
     if (mastername == 'chromium.webrtc.fyi' and not run_gn and
         api.chromium.c.TARGET_PLATFORM != 'android'):
-      api.webrtc.sizes(got_revision)
+      api.webrtc.sizes()
 
-  archive_revision = api.properties.get('parent_got_revision', got_revision)
   if bot_type == 'builder' and bot_config.get('build_gs_archive'):
     api.webrtc.package_build(
-        api.webrtc.GS_ARCHIVES[bot_config['build_gs_archive']],
-        archive_revision)
+        api.webrtc.GS_ARCHIVES[bot_config['build_gs_archive']])
 
   if bot_type == 'tester':
     api.webrtc.extract_build(
-        api.webrtc.GS_ARCHIVES[bot_config['build_gs_archive']],
-        archive_revision)
+        api.webrtc.GS_ARCHIVES[bot_config['build_gs_archive']])
 
   if bot_type in ('builder_tester', 'tester'):
     if api.chromium.c.TARGET_PLATFORM == 'android':
@@ -82,8 +76,7 @@ def GenSteps(api):
           gtest_filter='WebRtc*')
       api.chromium_android.common_tests_final_steps()
     else:
-      test_runner = lambda: api.webrtc.runtests(revision_number=got_revision)
-      api.chromium_tests.setup_chromium_tests(test_runner)
+      api.chromium_tests.setup_chromium_tests(api.webrtc.runtests)
 
 
 def _sanitize_nonalpha(text):

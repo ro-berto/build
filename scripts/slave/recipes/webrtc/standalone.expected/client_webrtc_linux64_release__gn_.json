@@ -19,7 +19,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@12345"
+      "src@12345",
+      "--force"
     ],
     "name": "bot_update",
     "~followup_annotations": [

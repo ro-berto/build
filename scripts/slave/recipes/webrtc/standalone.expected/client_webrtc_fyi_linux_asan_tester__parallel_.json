@@ -19,7 +19,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@12345"
+      "src@12345",
+      "--force"
     ],
     "name": "bot_update",
     "~followup_annotations": [
@@ -97,7 +98,7 @@
       "--build-url",
       "gs://chromium-webrtc/Linux ASan Builder",
       "--build_revision",
-      "12345",
+      "170242",
       "--factory-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux Asan Tester (parallel)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.fyi\", \"parent_buildername\": \"Linux Asan Builder\", \"parent_got_revision\": \"12345\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",

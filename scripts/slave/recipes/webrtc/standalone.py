@@ -43,11 +43,7 @@ def GenSteps(api):
   # Needed for the multiple webcam check steps to get unique names.
   api.step.auto_resolve_conflicts = True
 
-  step_result = api.bot_update.ensure_checkout()
-
-  # Whatever step is run right before this line needs to emit got_revision.
-  got_revision = step_result.presentation.properties['got_revision']
-
+  api.webrtc.checkout()
   api.webrtc.cleanup()
   api.chromium.runhooks()
 
@@ -59,19 +55,16 @@ def GenSteps(api):
     if api.chromium.c.gyp_env.GYP_DEFINES.get('syzyasan', 0) == 1:
       api.chromium.apply_syzyasan()
 
-  archive_revision = api.properties.get('parent_got_revision', got_revision)
   if bot_type == 'builder' and bot_config.get('build_gs_archive'):
     api.webrtc.package_build(
-        api.webrtc.GS_ARCHIVES[bot_config['build_gs_archive']],
-        archive_revision)
+        api.webrtc.GS_ARCHIVES[bot_config['build_gs_archive']])
 
   if bot_type == 'tester':
     api.webrtc.extract_build(
-        api.webrtc.GS_ARCHIVES[bot_config['build_gs_archive']],
-        archive_revision)
+        api.webrtc.GS_ARCHIVES[bot_config['build_gs_archive']])
 
   if does_test:
-    api.webrtc.runtests(revision_number=got_revision)
+    api.webrtc.runtests()
 
 
 def _sanitize_nonalpha(text):
