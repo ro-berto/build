@@ -48,7 +48,8 @@ class BisectResults(object):
         'mean_value': r.mean_value if r.mean_value is not None else 'N/A',
         'std_err': r.std_err if r.std_err is not None else 'N/A',
         'good_or_bad': 'good' if r.good else 'bad' if r.bad else 'unknown',
-        'tested': 'tested' if r.tested else 'aborted' if r.aborted else 'untested',
+        'tested': 'tested' if r.tested else ('aborted' if r.aborted
+                                             else 'untested'),
         'culprit': self._bisector.culprit == r
     } for r in self._bisector.revisions]
 
