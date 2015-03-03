@@ -4,15 +4,15 @@
     "name": "trigger cross-compiler",
     "trigger_specs": [
       {
+        "builder_name": "cross-compiler",
         "properties": {
-          "a": 1,
-          "buildername": "cross-compiler"
+          "a": 1
         }
       },
       {
+        "builder_name": "cross-compiler",
         "properties": {
-          "a": 2,
-          "buildername": "cross-compiler"
+          "a": 2
         }
       }
     ]

@@ -230,6 +230,7 @@
     "name": "Triggering test job for 306475",
     "trigger_specs": [
       {
+        "builder_name": "linux_perf_tester",
         "properties": {
           "bisect_config": {
             "command": "tools/perf/run_benchmark -v --browser=release page_cycler.intl_ar_fa_he",
@@ -239,7 +240,6 @@
             "test_type": "perf",
             "truncate_percent": "25"
           },
-          "buildername": "linux_perf_tester",
           "job_name": "e28dc0d49c331def2a3bbf3ddd0096eb51551155-test",
           "parent_build_archive_url": "gs://chrome-perf/Linux Builder/full-build-linux_e28dc0d49c331def2a3bbf3ddd0096eb51551155.zip",
           "revision": "306475"
@@ -294,6 +294,7 @@
     "name": "Triggering test job for src@a6298e4afedbf2cd461755ea6f45b0ad64222222",
     "trigger_specs": [
       {
+        "builder_name": "linux_perf_tester",
         "properties": {
           "bisect_config": {
             "command": "tools/perf/run_benchmark -v --browser=release page_cycler.intl_ar_fa_he",
@@ -303,7 +304,6 @@
             "test_type": "perf",
             "truncate_percent": "25"
           },
-          "buildername": "linux_perf_tester",
           "job_name": "a6298e4afedbf2cd461755ea6f45b0ad64222222-test",
           "parent_build_archive_url": "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip",
           "revision": "src@a6298e4afedbf2cd461755ea6f45b0ad64222222"
@@ -382,6 +382,7 @@
     "name": "Triggering test job for 306477",
     "trigger_specs": [
       {
+        "builder_name": "linux_perf_tester",
         "properties": {
           "bisect_config": {
             "command": "tools/perf/run_benchmark -v --browser=release page_cycler.intl_ar_fa_he",
@@ -391,7 +392,6 @@
             "test_type": "perf",
             "truncate_percent": "25"
           },
-          "buildername": "linux_perf_tester",
           "job_name": "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test",
           "parent_build_archive_url": "gs://chrome-perf/Linux Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip",
           "revision": "306477"
@@ -470,6 +470,7 @@
     "name": "Triggering test job for 306476",
     "trigger_specs": [
       {
+        "builder_name": "linux_perf_tester",
         "properties": {
           "bisect_config": {
             "command": "tools/perf/run_benchmark -v --browser=release page_cycler.intl_ar_fa_he",
@@ -479,7 +480,6 @@
             "test_type": "perf",
             "truncate_percent": "25"
           },
-          "buildername": "linux_perf_tester",
           "job_name": "fc6dfc7ff5b1073408499478969261b826441144-test",
           "parent_build_archive_url": "gs://chrome-perf/Linux Builder/full-build-linux_fc6dfc7ff5b1073408499478969261b826441144.zip",
           "revision": "306476"

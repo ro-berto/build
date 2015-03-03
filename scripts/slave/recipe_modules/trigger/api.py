@@ -26,36 +26,59 @@ class TriggerApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
     super(TriggerApi, self).__init__(**kwargs)
 
-  def __call__(self, *propertiesList, **kwargs):
+  def _port_from_properties_only(self, trigger_spec):
+    """Convert from previous "properties-only" mode to trigger spec."""
+    builder_name = trigger_spec.get('buildername')
+    if not builder_name:
+      return trigger_spec
+
+    props = trigger_spec.copy()
+    del props['buildername']
+    return {
+        'builder_name': builder_name,
+        'properties': props,
+    }
+
+  def __call__(self, *trigger_specs, **kwargs):
     """Triggers new builds by builder names.
 
     Args:
-      propertiesList: a list of build property dicts for the builds to
-        trigger. Each dict triggers a build. See "Known properties" below.
-      name: (in kwargs) name of the step. If not specified, it is generated
-        automatically, its format may change in future.
+      trigger_specs: a list of trigger dicts, where each dict specifies a build
+        to trigger. Supported keys:
+          builder_name (str): in BuildBot context, builder name
+          properties (dict): build properties for a new build.
+          buildbot_changes (list of dict): list of Buildbot changes to create.
+            See below.
+      name: name of the step. If not specified, it is generated
+        automatically. Its format may change in future.
 
-    Known properties:
-      buildername (str): Buildbot-specific, required in Buildbot environment.
-      buildbot.changes (a list of dicts): Buildbot-specific, changes for the
-        triggered builds. Each change is a dict with keys (all optional):
-          author (str)
-          revision
-          revlink (str): link to a web view of the revision.
-          comment
-          when_timestamp (int): timestamp of the change, in seconds since Unix
-            Epoch.
-          branch
-          category (str): Buildbot change category
-          files (list of str): list of changed filenames
-        The first change is used to populate source stamp properties.
+    Buildbot changes:
+      buildbot_changes (a list of dicts) is a list of changes for the
+      triggered builds. Each change is a dict with keys (all optional):
+        author (str)
+        revision
+        revlink (str): link to a web view of the revision.
+        comment
+        when_timestamp (int): timestamp of the change, in seconds since Unix
+          Epoch.
+        branch
+        category (str): Buildbot change category
+        files (list of str): list of changed filenames
+      The first change is used to populate source stamp properties.
 
     Examples:
+      Basic:
+        api.trigger({
+            'builder_name': 'Release',
+            'properties': {
+                'my_prop': 123,
+            },
+        })
+
       Create Buildbot changes:
         api.trigger({
-            'builderName': 'Release',
-            'my_prop': 123,
-            'buildbot.changes': [{
+            'builder_name': 'Release',
+            'buildbot_changes': [{
                 'author': 'someone@chromium.org',
                 'branch': 'master',
                 'files': ['a.txt.'],
@@ -67,21 +90,19 @@ class TriggerApi(recipe_api.RecipeApi):
             }]
         })
     """
-    builder_names = []
-    for properties in propertiesList:
-      assert isinstance(properties, dict), ('properties must be a dict: %s'
-                                            % (properties,))
-      builder_name = properties.get('buildername')
-      assert builder_name, 'buildername property is missing: %s' % (properties,)
-      if builder_name not in builder_names:
-        builder_names.append(builder_name)
+    # Backward-compatibility:
+    trigger_specs = map(self._port_from_properties_only, trigger_specs)
 
-    name = kwargs.get('name') or ('trigger %s' % ', '.join(builder_names))
-    trigger_specs = [
-        {
-          'properties': properties,
-        } for properties in propertiesList
-    ]
+    builder_names = set()
+    for trigger in trigger_specs:
+      assert isinstance(trigger, dict), ('trigger spec must be a dict: %s'
+                                          % (trigger,))
+      builder_name = trigger.get('builder_name')
+      assert builder_name, 'builder_name is missing: %s' % (trigger,)
+      builder_names.add(builder_name)
+
+    name = (
+        kwargs.get('name') or ('trigger %s' % ', '.join(sorted(builder_names))))
     return self.m.step(
         name,
         cmd=[],
