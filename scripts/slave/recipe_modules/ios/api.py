@@ -179,17 +179,24 @@ class iOSApi(recipe_api.RecipeApi):
       affected_files = self.m.tryserver.get_files_affected_by_patch()
       tests = [test['app'] for test in self.__config['tests']]
 
-      requires_compile, _, compile_targets = self.m.chromium_tests.analyze(
-        affected_files,
-        tests,
-        tests,
-        'trybot_analyze_config.json',
+      requires_compile, test_targets, compile_targets = (
+        self.m.chromium_tests.analyze(
+          affected_files,
+          tests,
+          tests,
+          'trybot_analyze_config.json',
+        )
       )
+
+      test_targets = set(test_targets)
+
+      for test in self.__config['tests']:
+        if test['app'] not in test_targets:
+          test['skip'] = True
 
       if requires_compile: # pragma: no cover
         cmd.extend(compile_targets)
       else:
-        self.m.step('nothing to compile', [])
         return
 
     self.m.step('compile', cmd, cwd=cwd)
@@ -237,6 +244,12 @@ class iOSApi(recipe_api.RecipeApi):
         )
 
       cmd.extend(args)
+
+      if test.get('skip'):
+        step_result = self.m.step('[skipped] %s' % str(step_name), [])
+        step_result.presentation.step_text = (
+          'This test was skipped because it was not affected.'
+        )
 
       try:
         step_result = self.m.step(

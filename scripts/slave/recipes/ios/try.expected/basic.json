@@ -181,7 +181,10 @@
   },
   {
     "cmd": [],
-    "name": "nothing to compile"
+    "name": "[skipped] fake tests (fake device iOS 8.1)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@This test was skipped because it was not affected.@@@"
+    ]
   },
   {
     "cmd": [
