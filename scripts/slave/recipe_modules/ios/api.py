@@ -127,9 +127,8 @@ class iOSApi(recipe_api.RecipeApi):
     ], step_test_data=lambda: self.m.json.test_api.output({}))
 
     cfg = self.m.chromium.make_config()
-    cfg.gyp_env.GYP_DEFINES = copy.deepcopy(
-      self.__config['GYP_DEFINES']
-    )
+    cfg.gyp_env.GYP_CROSSCOMPILE = 1
+    cfg.gyp_env.GYP_DEFINES = copy.deepcopy(self.__config['GYP_DEFINES'])
     self.m.chromium.c = cfg
 
   def build(self):

@@ -165,6 +165,7 @@
       "/path/to/tmp/json"
     ],
     "env": {
+      "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=ios component=static_library fake gyp define 1='fake value 1' fake gyp define 2='fake value 2'"
     },
     "name": "analyze",
