@@ -19,8 +19,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@12345",
-      "--force"
+      "src@12345"
     ],
     "name": "bot_update",
     "~followup_annotations": [
@@ -124,7 +123,7 @@
       "--build-url",
       "gs://chromium-webrtc/android_arm64_dbg",
       "--build_revision",
-      "170242",
+      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--factory-properties",
       "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Android ARM64 Builder (dbg)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",

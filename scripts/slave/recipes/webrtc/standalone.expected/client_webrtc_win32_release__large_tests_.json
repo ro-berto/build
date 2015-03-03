@@ -19,8 +19,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@12345",
-      "--force"
+      "src@12345"
     ],
     "name": "bot_update",
     "~followup_annotations": [
@@ -227,7 +226,7 @@
       "--builder-name=Win32 Release [large tests]",
       "--slave-name=slavename",
       "--build-number=1337",
-      "--revision=170242",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "webrtc_perf_tests.exe"
     ],
     "name": "webrtc_perf_tests"

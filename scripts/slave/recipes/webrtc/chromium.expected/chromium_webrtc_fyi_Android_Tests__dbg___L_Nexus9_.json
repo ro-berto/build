@@ -151,7 +151,7 @@
       "--build-url",
       "gs://chromium-webrtc/android_chromium_trunk_arm64_dbg",
       "--build_revision",
-      "120644",
+      "12345",
       "--factory-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Tests (dbg) (L Nexus9)\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc.fyi\", \"parent_buildername\": \"Android Builder ARM64 (dbg)\", \"parent_got_revision\": \"12345\", \"recipe\": \"webrtc/chromium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
