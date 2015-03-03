@@ -129,14 +129,14 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "component=static_library OS=ios fake gyp define 1=fake value 1 fake gyp define 2=fake value 2",
+      "GYP_DEFINES": "fake gyp define 1=fake value 1 fake gyp define 2=fake value 2 component=static_library OS=ios",
       "GYP_GENERATORS": "xcode",
       "GYP_GENERATOR_FLAGS": "xcode_project_version=3.2",
       "LANDMINES_VERBOSE": "1"
     },
     "name": "gclient runhooks",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br />GYP_DEFINES:<br />component=static_library<br />OS=ios<br />fake gyp define 1=fake value 1<br />fake gyp define 2=fake value 2@@@"
+      "@@@STEP_TEXT@<br />GYP_DEFINES:<br />fake gyp define 1=fake value 1<br />fake gyp define 2=fake value 2<br />component=static_library<br />OS=ios@@@"
     ]
   },
   {

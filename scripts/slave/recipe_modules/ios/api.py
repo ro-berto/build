@@ -78,9 +78,6 @@ class iOSApi(recipe_api.RecipeApi):
       ),
     ).json.output
 
-    if self._test_data.enabled:
-      self.__config = self._test_data['build_config']
-
     # If this bot is triggered by another bot, then the build configuration
     # has to be read from the parent's build config. A triggered bot only
     # specifies the tests.
@@ -103,6 +100,11 @@ class iOSApi(recipe_api.RecipeApi):
         'sdk',
       ):
         self.__config[key] = parent_config[key]
+
+    # We set some default GYP_DEFINES so developers don't have to set them
+    # manually on every bot. Add them in here.
+    self.__config['GYP_DEFINES']['component'] = 'static_library'
+    self.__config['GYP_DEFINES']['OS'] = 'ios'
 
     # Because build configs are only required to specify "triggered bots" or
     # "tests", one of them may not be specified. In order to simplify the code
@@ -136,13 +138,8 @@ class iOSApi(recipe_api.RecipeApi):
 
     # Add the default GYP_DEFINES.
     gyp_defines = [
-      'component=static_library',
-      'OS=ios',
-    ]
-
-    gyp_defines.extend(
       '%s=%s' % (k, v) for k, v in self.__config['GYP_DEFINES'].iteritems()
-    )
+    ]
 
     env = {
       'GYP_DEFINES': ' '.join(gyp_defines),
