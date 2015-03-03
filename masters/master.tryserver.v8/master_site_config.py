@@ -21,3 +21,5 @@ class V8TryServer(Master.Master4):
   store_revisions_url = base_app_url + '/revisions'
   last_good_url = None
   code_review_site = 'http://codereview.chromium.org'
+  service_account_file = 'service-account-v8.json'
+  buildbucket_bucket = 'master.tryserver.v8'
