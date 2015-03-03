@@ -161,10 +161,12 @@ def main(argv):
           avg_build_time = 'n/a'
           median_build_time = 'n/a'
 
-        print '    %-45s %-9s %-9s %5.1f %5.1f' % (
+        print '    %-45s %-9s %-9s (%4s/%4s builds) %5.1f %5.1f' % (
             builder,
             avg_build_time,
             median_build_time,
+            len(builds),
+            len(raw_builds),
             capacity['daily_bots'],
             capacity['hourly_bots'])
         if args.print_builds:
@@ -173,8 +175,9 @@ def main(argv):
             print '        build #%-9s %-9s' % (
                 build['number'],
                 str(datetime.timedelta(seconds=build_time)))
-    print '  %-45s                       %5.1f %5.1f %5.1f' % (
+    print '  %-45s %s %5.1f %5.1f %5.1f' % (
         'total',
+        ' ' * 40,
         pool_capacity['daily_bots'],
         pool_capacity['hourly_bots'],
         len(pool['slave_set']))
