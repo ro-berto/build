@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 from master import master_config
+from master.factory import annotator_factory
 from master.factory import chromium_factory
 
 import master_site_config
@@ -18,6 +19,8 @@ F = helper.Factory
 def linux():
   return chromium_factory.ChromiumFactory('src/out', 'linux2')
 
+m_annotator = annotator_factory.AnnotatorFactory()
+
 defaults['category'] = 'layout'
 
 
@@ -29,7 +32,10 @@ defaults['category'] = 'layout'
 # Linux Rel Builder/Tester
 #
 B('WebKit Linux', 'f_webkit_linux_rel', scheduler='global_scheduler')
-F('f_webkit_linux_rel', linux().ChromiumFactory(
+F('f_webkit_linux_rel', m_annotator.BaseFactory('chromium'))
+
+B('WebKit Linux 32', 'f_webkit_linux_rel_32', scheduler='global_scheduler')
+F('f_webkit_linux_rel_32', linux().ChromiumFactory(
     tests=chromium_factory.blink_tests,
     options=[
         '--build-tool=ninja',
@@ -46,8 +52,6 @@ F('f_webkit_linux_rel', linux().ChromiumFactory(
         'test_results_server': 'test-results.appspot.com',
         'blink_config': 'blink',
     }))
-
-B('WebKit Linux 32', 'f_webkit_linux_rel', scheduler='global_scheduler')
 
 B('WebKit Linux Oilpan', 'f_webkit_linux_oilpan_rel',
     scheduler='global_scheduler', category='oilpan')
