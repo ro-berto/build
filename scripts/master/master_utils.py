@@ -22,6 +22,7 @@ from buildbot.status.web.baseweb import WebStatus
 import master.chromium_status_bb8 as chromium_status
 
 from common import chromium_utils
+from master import buildbucket
 from master import cbe_json_status_push
 from master import status_logger
 import config
@@ -413,6 +414,13 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
     elif 'port' in values:
       c['manhole'] = manhole.AuthorizedKeysManhole(interface,
           os.path.expanduser("~/.ssh/authorized_keys"))
+
+  if active_master.buildbucket_bucket and active_master.service_account_path:
+    buildbucket.setup(
+        c,
+        active_master,
+        buckets=[active_master.buildbucket_bucket],
+    )
 
 def DumpSetup(c, important=None, filename='config.current.txt'):
   """Writes a flattened version of the setup to a text file.

@@ -53,6 +53,7 @@ class _FakeMaster(object):
   is_production_host = False
   project_name = 'test'
   project_url = 'https://example.com/'
+  buildbucket_bucket = None
 
   @classmethod
   def GetBotPassword(cls):

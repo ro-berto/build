@@ -22,3 +22,4 @@ class TryServerChromiumMac(Master.Master4a):
   svn_url = 'svn://svn-mirror.golo.chromium.org/chrome-try/try'
   buildbot_url = 'http://build.chromium.org/p/tryserver.chromium.mac/'
   service_account_file = 'service-account-chromium-tryserver.json'
+  buildbucket_bucket = 'master.tryserver.chromium.mac'

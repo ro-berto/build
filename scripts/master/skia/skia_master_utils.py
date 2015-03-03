@@ -14,7 +14,6 @@ from buildbot.schedulers import timed
 from common import chromium_utils
 from common.skia import builder_name_schema
 from common.skia import global_constants
-from master import buildbucket
 from master import master_utils
 from master import slaves_list
 from master.builders_pools import BuildersPools
@@ -356,14 +355,4 @@ def SetupMaster(ActiveMaster):
           TryServerHttpStatusPush(serverUrl=ActiveMaster.code_review_site))
 
   c['mergeRequests'] = CanMergeBuildRequests
-
-  # Connect master to BuildBucket (http://cr-buildbucket.appspot.com)
-  if (ActiveMaster.service_account_file and
-      getattr(ActiveMaster, 'buildbucket_bucket', None)):
-    buildbucket.setup(
-        c,
-        ActiveMaster,
-        buckets=[ActiveMaster.buildbucket_bucket],
-    )
-
   return c

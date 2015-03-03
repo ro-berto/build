@@ -83,6 +83,9 @@ class Master(object):
     # Base service offset for 'try_job_port'
     TRY_JOB_PORT = 5
 
+    # A BuildBucket bucket to poll.
+    buildbucket_bucket = None
+
     # Master address. You should probably copy this file in another svn repo
     # so you can override this value on both the slaves and the master.
     master_host = 'localhost'

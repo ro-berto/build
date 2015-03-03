@@ -11,3 +11,4 @@ class Infra(Master.Master1):
   master_port_id = 11
   buildbot_url = 'https://build.chromium.org/p/chromium.infra/'
   service_account_file = 'service-account-infra.json'
+  buildbucket_bucket = 'master.chromium.infra'

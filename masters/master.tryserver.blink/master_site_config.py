@@ -20,3 +20,4 @@ class BlinkTryServer(Master.Master4):
   last_good_url = base_app_url + '/lkgr'
   last_good_blink_url = 'http://blink-status.appspot.com/lkgr'
   service_account_file = 'service-account-chromium-tryserver.json'
+  buildbucket_bucket = 'master.tryserver.blink'
