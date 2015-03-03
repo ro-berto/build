@@ -30,8 +30,7 @@ target_builders = set(b for b in all_builders if b in configs)
 precq_builders = set(b for b in target_builders if configs[b].IsPreCqBuilder())
 precq_novmtest_builders = set(b for b in precq_builders
                               if not (configs[b].HasVmTests() or
-                                      configs[b].HasHwTests() or
-                                      configs[b].HasUnitTests()))
+                                      configs[b].HasHwTests()))
 
 
 class TestingSlavePool(object):
