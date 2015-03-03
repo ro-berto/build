@@ -135,7 +135,7 @@ SPEC = {
         'platform': 'win',
       },
     },
-    'Chrome Mac10.6 Perf': {
+    'Chrome Mac10.9 Perf': {
       'disable_tests': True,
       'recipe_config': 'chromium',
       'gclient_apply_config': [
@@ -147,7 +147,7 @@ SPEC = {
       'chromium_apply_config': ['chromium_perf'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
+        'TARGET_BITS': 64,
       },
       'bot_type': 'builder_tester',
       'compile_targets': [
@@ -156,7 +156,7 @@ SPEC = {
       'tests': [
         steps.DynamicPerfTests(
             'release',
-            'chromium-rel-mac6-v8', 0, 1),
+            'chromium-rel-mac9-v8', 0, 1),
       ],
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
       'testing': {
