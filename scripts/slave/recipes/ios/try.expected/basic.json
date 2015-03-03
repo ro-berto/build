@@ -185,39 +185,5 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@This test was skipped because it was not affected.@@@"
     ]
-  },
-  {
-    "cmd": [
-      "[BUILD]/scripts/slave/ios/run.py",
-      "--app",
-      "[SLAVE_BUILD]/src/out/Debug-iphonesimulator/fake tests.app",
-      "--json_file",
-      "/path/to/tmp/json",
-      "--iossim",
-      "[SLAVE_BUILD]/src/out/Debug-iphonesimulator/iossim",
-      "--platform",
-      "fake device",
-      "--version",
-      "8.1"
-    ],
-    "name": "fake tests (fake device iOS 8.1)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"links\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"fake URL text\": \"fake URL\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"logs\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"fake log\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"fake log line 1\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"fake log line 2\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@fake log@fake log line 1@@@",
-      "@@@STEP_LOG_LINE@fake log@fake log line 2@@@",
-      "@@@STEP_LOG_END@fake log@@@",
-      "@@@STEP_LINK@fake URL text@fake URL@@@"
-    ]
   }
 ]

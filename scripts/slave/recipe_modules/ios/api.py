@@ -250,6 +250,7 @@ class iOSApi(recipe_api.RecipeApi):
         step_result.presentation.step_text = (
           'This test was skipped because it was not affected.'
         )
+        continue
 
       try:
         step_result = self.m.step(
