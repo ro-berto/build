@@ -101,6 +101,8 @@ BUILDERS = {
 AMP_RESULTS_BUCKET = 'chrome-amp-results'
 
 def GenSteps(api):
+  api.amp.setup()
+
   builder = BUILDERS[api.properties['buildername']]
   api.path['checkout'] = api.path['slave_build'].join('src')
 

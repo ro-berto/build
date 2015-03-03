@@ -1060,7 +1060,55 @@
     ],
     "name": "[collect] base_unittests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
+      "step returned non-zero exit code: 87",
+      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
+      "@@@STEP_EXCEPTION@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[TMP_BASE]/amp_trigger_tmp_1/base_unittests.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "[upload logcat] load base_unittests data",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_run\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test_run_id\": \"12345abcde\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/zip/resources/unzip.py"
+    ],
+    "name": "[upload logcat] unzip results for base_unittests",
+    "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/base_unittests/unzipped_results\", \"use_python_zip\": false, \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/base_unittests/results.zip\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--force-version",
+      "3.25",
+      "--",
+      "cp",
+      "[TMP_BASE]/amp_results_tmp_2/base_unittests/unzipped_results/appurify_results/logcat.txt",
+      "gs://chrome-amp-results/logcats/logcat_base_unittests_12345abcde.txt"
+    ],
+    "name": "gsutil [upload logcat] base_unittests",
+    "~followup_annotations": [
+      "@@@STEP_LINK@logcat@https://storage.cloud.google.com/chrome-amp-results/logcats/logcat_base_unittests_12345abcde.txt@@@"
     ]
   },
   {
@@ -1142,7 +1190,55 @@
     ],
     "name": "[collect] cc_unittests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
+      "step returned non-zero exit code: 88",
+      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
+      "@@@STEP_WARNINGS@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[TMP_BASE]/amp_trigger_tmp_1/cc_unittests.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "[upload logcat] load cc_unittests data",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_run\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test_run_id\": \"12345abcde\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/zip/resources/unzip.py"
+    ],
+    "name": "[upload logcat] unzip results for cc_unittests",
+    "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/cc_unittests/unzipped_results\", \"use_python_zip\": false, \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/cc_unittests/results.zip\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--force-version",
+      "3.25",
+      "--",
+      "cp",
+      "[TMP_BASE]/amp_results_tmp_2/cc_unittests/unzipped_results/appurify_results/logcat.txt",
+      "gs://chrome-amp-results/logcats/logcat_cc_unittests_12345abcde.txt"
+    ],
+    "name": "gsutil [upload logcat] cc_unittests",
+    "~followup_annotations": [
+      "@@@STEP_LINK@logcat@https://storage.cloud.google.com/chrome-amp-results/logcats/logcat_cc_unittests_12345abcde.txt@@@"
     ]
   },
   {
@@ -1557,7 +1653,7 @@
   },
   {
     "name": "$final_result",
-    "reason": "2 out of 18 aggregated steps failed. Failures: Step('[trigger] components_unittests') failed with return_code 1, Step('[collect] android_webview_unittests') failed with return_code 1",
+    "reason": "4 out of 20 aggregated steps failed. Failures: Step('[trigger] components_unittests') failed with return_code 1, Step('[collect] android_webview_unittests') failed with return_code 1, Step('[collect] base_unittests') failed with return_code 87, Step('[collect] cc_unittests') failed with return_code 88",
     "status_code": 1
   }
 ]

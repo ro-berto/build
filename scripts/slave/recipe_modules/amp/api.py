@@ -12,6 +12,10 @@ class AmpApi(recipe_api.RecipeApi):
     self._trigger_file_dir = None
     self._base_results_dir = None
 
+  def setup(self):
+    """Sets up necessary configs."""
+    self.m.chromium_android.set_config('base_config')
+
   @recipe_api.non_step
   def _get_trigger_dir(self):
     if not self._trigger_file_dir:
@@ -58,9 +62,8 @@ class AmpApi(recipe_api.RecipeApi):
         },
       },
     })
-    step_result = self.m.python(
+    step_result = self.m.chromium_android.test_runner(
         '[trigger] %s' % suite,
-        self.m.path['checkout'].join('build', 'android', 'test_runner.py'),
         args=args,
         step_test_data=step_test_data)
     trigger_data = step_result.json.output
@@ -109,9 +112,8 @@ class AmpApi(recipe_api.RecipeApi):
     if verbose:
       args += ['--verbose']
     try:
-      step_result = self.m.python(
+      step_result = self.m.chromium_android.test_runner(
           '[collect] %s' % suite,
-          self.m.path['checkout'].join('build', 'android', 'test_runner.py'),
           args=args)
     except self.m.step.StepFailure as f:
       step_result = f.result
@@ -119,7 +121,7 @@ class AmpApi(recipe_api.RecipeApi):
     finally:
       step_result.presentation.step_text = device_info_text
       if (not device_data and
-          step_result.presentation.status != self.m.step.FAILURE):
+          step_result.presentation.status == self.m.step.SUCCESS):
         step_result.presentation.status = self.m.step.WARNING
 
   def upload_logcat_to_gs(self, bucket, suite):

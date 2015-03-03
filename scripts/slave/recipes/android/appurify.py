@@ -96,6 +96,8 @@ AMP_INSTANCE_PROTOCOL = 'http'
 AMP_RESULTS_BUCKET = 'chrome-amp-results'
 
 def GenSteps(api):
+  api.amp.setup()
+
   mastername = api.properties['mastername']
   buildername = api.properties['buildername']
   builder = BUILDERS[mastername][buildername]
@@ -253,7 +255,12 @@ def GenTests(api):
                 'targets': ['android_webview_unittests'],
                 'build_targets': ['android_webview_unittests_apk']})) +
         api.step_data('[trigger] components_unittests', retcode=1) +
-        api.step_data('[collect] android_webview_unittests', retcode=1)
+        # Test runner error
+        api.step_data('[collect] android_webview_unittests', retcode=1) +
+        # Test runner infrastructure error
+        api.step_data('[collect] base_unittests', retcode=87) +
+        # Test runner warning
+        api.step_data('[collect] cc_unittests', retcode=88)
       )
 
   yield (

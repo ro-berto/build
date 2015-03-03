@@ -407,9 +407,8 @@ class AndroidApi(recipe_api.RecipeApi):
         '--package=%s' % self.c.channel,
         '--event-count=50000'
     ]
-    return self.m.python(
+    return self.test_runner(
         'Monkey Test',
-        self.c.test_runner,
         args,
         env={'BUILDTYPE': self.c.BUILD_CONFIG},
         **kwargs)
@@ -425,9 +424,8 @@ class AndroidApi(recipe_api.RecipeApi):
       args.extend(['--flaky-steps', flaky_config])
     args.extend(['--collect-chartjson-data'] if chartjson_output else [])
 
-    self.m.python(
+    self.test_runner(
         'Sharded Perf Tests',
-        self.c.test_runner,
         args,
         cwd=self.m.path['checkout'],
         env=self.m.chromium.get_env(),
@@ -542,10 +540,9 @@ class AndroidApi(recipe_api.RecipeApi):
     if json_results_file:
       args.extend(['--json-results-file', json_results_file])
 
-    return self.m.python(
+    return self.test_runner(
         'Instrumentation test %s%s' % (annotation or test_apk,
                                        ' (%s)' % suffix if suffix else ''),
-        self.c.test_runner,
         args=['instrumentation'] + args,
         **kwargs)
 
@@ -677,9 +674,8 @@ class AndroidApi(recipe_api.RecipeApi):
     if json_results_file:
       args.extend(['--json-results-file', json_results_file])
 
-    self.m.python(
+    self.test_runner(
         name or str(suite),
-        self.c.test_runner,
         ['gtest', '-s', suite] + args,
         env=self.m.chromium.get_env(),
         **kwargs)
@@ -691,9 +687,8 @@ class AndroidApi(recipe_api.RecipeApi):
     if self.c.BUILD_CONFIG == 'Release':
       args.append('--release')
 
-    self.m.python(
+    self.test_runner(
         str(suite),
-        self.c.test_runner,
         ['junit', '-s', suite] + args,
         env=self.m.chromium.get_env(),
         **kwargs)
@@ -703,9 +698,8 @@ class AndroidApi(recipe_api.RecipeApi):
     if verbose:
       args.append('--verbose')
 
-    self.m.python(
+    self.test_runner(
         str(suite),
-        self.c.test_runner,
         ['python', '-s', suite] + args,
         env=self.m.chromium.get_env(),
         **kwargs)
@@ -737,3 +731,30 @@ class AndroidApi(recipe_api.RecipeApi):
         link_name='Coverage report',
         version='4.7',
         **kwargs)
+
+  def test_runner(self, step_name, args=None, **kwargs):
+    """Wrapper for the python testrunner script.
+
+    Args:
+      step_name: Name of the step.
+      args: Testrunner arguments.
+    """
+    EXIT_CODES = {
+      'error': 1,
+      'infra': 87,
+      'warning': 88,
+    }
+    try:
+      step_result = self.m.python(
+          step_name, self.c.test_runner, args, **kwargs)
+      return step_result
+    except self.m.step.StepFailure as f:
+      step_result = f.result
+      raise
+    finally:
+      if (step_result.retcode == EXIT_CODES['error']):
+        step_result.presentation.status = self.m.step.FAILURE
+      elif (step_result.retcode == EXIT_CODES['infra']):
+        step_result.presentation.status = self.m.step.EXCEPTION
+      elif (step_result.retcode == EXIT_CODES['warning']):
+        step_result.presentation.status = self.m.step.WARNING

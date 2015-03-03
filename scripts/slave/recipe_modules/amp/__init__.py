@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+    'chromium_android',
     'file',
     'gsutil',
     'json',
