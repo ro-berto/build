@@ -86,6 +86,7 @@ def main(argv):
   parser = argparse.ArgumentParser()
   parser.add_argument('master')
   parser.add_argument('--days', type=int, default=14)
+  parser.add_argument('--exclude-by-blamelist')
   parser.add_argument('--filter-by-blamelist')
   parser.add_argument('--filter-by-patch-project')
   parser.add_argument('--print-builds', action='store_true')
@@ -138,6 +139,9 @@ def main(argv):
             continue
 
           blamelist = build.get('blame', [])
+          if (args.exclude_by_blamelist and
+              args.exclude_by_blamelist in blamelist):
+            continue
           if (args.filter_by_blamelist and
               args.filter_by_blamelist not in blamelist):
             continue
