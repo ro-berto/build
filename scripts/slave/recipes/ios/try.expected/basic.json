@@ -180,13 +180,8 @@
     ]
   },
   {
-    "cmd": [
-      "ninja",
-      "-C",
-      "[SLAVE_BUILD]/src/out/Debug-iphonesimulator"
-    ],
-    "cwd": "[SLAVE_BUILD]/src/out/Debug-iphonesimulator",
-    "name": "compile"
+    "cmd": [],
+    "name": "nothing to compile"
   },
   {
     "cmd": [

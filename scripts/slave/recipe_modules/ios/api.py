@@ -179,12 +179,18 @@ class iOSApi(recipe_api.RecipeApi):
       affected_files = self.m.tryserver.get_files_affected_by_patch()
       tests = [test['app'] for test in self.__config['tests']]
 
-      self.m.chromium_tests.analyze(
+      requires_compile, _, compile_targets = self.m.chromium_tests.analyze(
         affected_files,
         tests,
         tests,
-       'trybot_analyze_config.json',
+        'trybot_analyze_config.json',
       )
+
+      if requires_compile: # pragma: no cover
+        cmd.extend(compile_targets)
+      else:
+        self.m.step('nothing to compile', [])
+        return
 
     self.m.step('compile', cmd, cwd=cwd)
 
