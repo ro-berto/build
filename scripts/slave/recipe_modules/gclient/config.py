@@ -9,6 +9,7 @@ from slave.recipe_config import ConfigList, Dict, Single, Static, Set, List
 
 from RECIPE_MODULES.gclient import api as gclient_api
 
+
 def BaseConfig(USE_MIRROR=True, GIT_MODE=False, CACHE_DIR=None,
                PATCH_PROJECT=None, BUILDSPEC_VERSION=None,
                **_kwargs):
@@ -26,8 +27,11 @@ def BaseConfig(USE_MIRROR=True, GIT_MODE=False, CACHE_DIR=None,
         custom_vars = Dict(value_type=basestring),
         safesync_url = Single(basestring, required=False),
 
-        revision = Single((basestring, gclient_api.RevisionFallbackChain),
-                          required=False, hidden=True),
+        revision = Single(
+            (basestring,
+             gclient_api.RevisionFallbackChain,
+             gclient_api.ProjectRevisionResolver),
+            required=False, hidden=True),
       )
     ),
     deps_os = Dict(value_type=basestring),
@@ -46,8 +50,11 @@ def BaseConfig(USE_MIRROR=True, GIT_MODE=False, CACHE_DIR=None,
     # Addition revisions we want to pass in.  For now theres a duplication
     # of code here of setting custom vars AND passing in --revision. We hope
     # to remove custom vars later.
-    revisions = Dict(value_type=(basestring, gclient_api.RevisionFallbackChain),
-                     hidden=True),
+    revisions = Dict(value_type=(
+        basestring,
+        gclient_api.RevisionFallbackChain,
+        gclient_api.ProjectRevisionResolver),
+        hidden=True),
 
     # TODO(iannucci): HACK! The use of None here to indicate that we apply this
     #   to the solution.revision field is really terrible. I mostly blame
@@ -235,6 +242,13 @@ def blink(c):
   c.solutions[0].revision = 'HEAD'
   del c.solutions[0].custom_deps
   c.revisions['src/third_party/WebKit'] = 'HEAD'
+
+@config_ctx(includes=['chromium'])
+def blink_or_chromium(c):
+  c.solutions[0].revision = gclient_api.ProjectRevisionResolver('chromium')
+  del c.solutions[0].custom_deps
+  c.revisions['src/third_party/WebKit'] = \
+      gclient_api.ProjectRevisionResolver('webkit')
 
 @config_ctx(includes=['chromium'])
 def blink_merged(c):

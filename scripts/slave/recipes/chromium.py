@@ -386,3 +386,22 @@ def GenTests(api):
       },
     }))
   )
+
+  yield (
+    api.test('chromium_webkit_revision_webkit') +
+    api.properties.generic(mastername='chromium.webkit',
+                           buildername='WebKit Linux',
+                           project='webkit',
+                           revision='191187') +
+    api.platform('linux', 64)
+  )
+
+  yield (
+    api.test('chromium_webkit_revision_chromium') +
+    api.properties.generic(
+        mastername='chromium.webkit',
+        buildername='WebKit Linux',
+        project='chromium',
+        revision='3edb4989f8f69c968c0df14cb1c26d21dd19bf1f') +
+    api.platform('linux', 64)
+  )
