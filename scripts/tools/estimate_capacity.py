@@ -88,6 +88,7 @@ def main(argv):
   parser.add_argument('--days', type=int, default=14)
   parser.add_argument('--filter-by-blamelist')
   parser.add_argument('--filter-by-patch-project')
+  parser.add_argument('--print-builds', action='store_true')
 
   args = parser.parse_args(argv)
 
@@ -162,6 +163,12 @@ def main(argv):
             median_build_time,
             capacity['daily_bots'],
             capacity['hourly_bots'])
+        if args.print_builds:
+          for build in builds:
+            build_time = build['times'][1] - build['times'][0]
+            print '        build #%-9s %-9s' % (
+                build['number'],
+                str(datetime.timedelta(seconds=build_time)))
     print '  %-45s                       %5.1f %5.1f %5.1f' % (
         'total',
         pool_capacity['daily_bots'],
