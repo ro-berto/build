@@ -487,6 +487,8 @@
           "Closure Compilation Linux": {
             "tree_notify": [
               "dbeam+closure-bots@chromium.org",
+              "fukino+closure-bots@chromium.org",
+              "hirono+closure-bots@chromium.org",
               "vitalyp@chromium.org"
             ],
             "forgiving_steps": [
