@@ -189,7 +189,8 @@
       "--",
       "blink_tests",
       "browser_tests",
-      "browser_tests_run"
+      "browser_tests_run",
+      "crash_service"
     ],
     "name": "compile"
   },
