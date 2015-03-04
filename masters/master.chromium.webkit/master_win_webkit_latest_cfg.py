@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 from master import master_config
+from master.factory import annotator_factory
 from master.factory import chromium_factory
 
 import master_site_config
@@ -18,6 +19,8 @@ T = helper.Triggerable
 
 def win():
   return chromium_factory.ChromiumFactory('src/out', 'win32')
+
+m_annotator = annotator_factory.AnnotatorFactory()
 
 defaults['category'] = 'layout'
 
@@ -40,35 +43,15 @@ T('s4_webkit_rel_trigger')
 B('WebKit Win Builder', 'f_webkit_win_rel',
   scheduler='global_scheduler', builddir='webkit-win-latest-rel',
   auto_reboot=False)
-F('f_webkit_win_rel', win().ChromiumFactory(
-    slave_type='Builder',
-    build_url=rel_archive,
-    options=['--build-tool=ninja', '--compiler=goma', '--', 'blink_tests'],
-    factory_properties={
-        'trigger': 's4_webkit_rel_trigger',
-        'blink_config': 'blink',
-        'gclient_env': {
-            'GYP_GENERATORS':'ninja',
-            'GYP_DEFINES': 'fastbuild=1',
-        },
-    }))
+F('f_webkit_win_rel', m_annotator.BaseFactory(
+    'chromium', triggers=['s4_webkit_rel_trigger']))
 
 #
 # Win Rel WebKit testers
 #
 B('WebKit XP', 'f_webkit_rel_tests', scheduler='s4_webkit_rel_trigger')
-F('f_webkit_rel_tests', win().ChromiumFactory(
-    slave_type='Tester',
-    build_url=rel_archive,
-    tests=chromium_factory.blink_tests,
-    factory_properties={
-        'archive_webkit_results': ActiveMaster.is_production_host,
-        'generate_gtest_json': True,
-        'test_results_server': 'test-results.appspot.com',
-        'blink_config': 'blink',
-    }))
-
 B('WebKit Win7', 'f_webkit_rel_tests', scheduler='s4_webkit_rel_trigger')
+F('f_webkit_rel_tests', m_annotator.BaseFactory('chromium'))
 
 #
 # Win x64 Rel Builder (note: currently no x64 testers)
