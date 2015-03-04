@@ -27,16 +27,18 @@ class RevisionFallbackChain(object):
 
 class ProjectRevisionResolver(object):
   """Revision resolver that takes into account the project."""
-  def __init__(self, project):
+  def __init__(self, project, parent_got_revision=None):
     self.project = project
+    self.parent_got_revision = parent_got_revision or 'parent_got_revision'
 
   def resolve(self, properties):
     """Resolve the revision if project matches, otherwise default to HEAD."""
     if properties.get('project') == self.project:
-      return (properties.get('parent_got_revision') or
+      return (properties.get(self.parent_got_revision) or
               properties.get('revision') or
               'HEAD')
-    return 'HEAD'
+    return (properties.get(self.parent_got_revision) or
+            'HEAD')
 
 
 def jsonish_to_python(spec, is_top=False):

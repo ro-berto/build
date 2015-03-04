@@ -14,6 +14,64 @@ for b in SPEC['builders'].itervalues():
 SPEC['settings']['build_gs_bucket'] = 'chromium-webkit-archive'
 
 SPEC['builders'].update({
+  'WebKit Win Builder': {
+    'recipe_config': 'chromium',
+    'gclient_apply_config': ['blink_or_chromium'],
+    'chromium_config_kwargs': {
+      'BUILD_CONFIG': 'Release',
+      'TARGET_BITS': 32,
+    },
+    'bot_type': 'builder',
+    'testing': {
+      'platform': 'win',
+    },
+    'enable_swarming': True,
+    'use_isolate': True,
+  },
+  'WebKit XP': {
+    'recipe_config': 'chromium',
+    'gclient_apply_config': ['blink_or_chromium'],
+    'chromium_config_kwargs': {
+      'BUILD_CONFIG': 'Release',
+      'TARGET_BITS': 32,
+    },
+    'bot_type': 'tester',
+    'parent_buildername': 'WebKit Win Builder',
+    'test_generators': [
+      steps.generate_gtest,
+      steps.generate_script,
+    ],
+    'tests': [
+      steps.BlinkTest(),
+    ],
+    'testing': {
+      'platform': 'win',
+    },
+    'enable_swarming': True,
+    'use_isolate': True,
+  },
+  'WebKit Win7': {
+    'recipe_config': 'chromium',
+    'gclient_apply_config': ['blink_or_chromium'],
+    'chromium_config_kwargs': {
+      'BUILD_CONFIG': 'Release',
+      'TARGET_BITS': 32,
+    },
+    'bot_type': 'tester',
+    'parent_buildername': 'WebKit Win Builder',
+    'test_generators': [
+      steps.generate_gtest,
+      steps.generate_script,
+    ],
+    'tests': [
+      steps.BlinkTest(),
+    ],
+    'testing': {
+      'platform': 'win',
+    },
+    'enable_swarming': True,
+    'use_isolate': True,
+  },
   'WebKit Linux': {
     'recipe_config': 'chromium',
     'gclient_apply_config': ['blink_or_chromium'],
