@@ -25,6 +25,7 @@ from .integration import BuildBucketIntegrator
 from .poller import BuildBucketPoller
 from .status import BuildBucketStatus
 from . import client
+from . import trigger
 
 
 def setup(

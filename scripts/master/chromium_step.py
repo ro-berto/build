@@ -25,6 +25,7 @@ from buildbot.steps import source
 import sqlalchemy as sa
 
 from common import annotator
+from master import buildbucket
 from common import chromium_utils
 import config
 
@@ -640,6 +641,7 @@ class AnnotationObserver(buildstep.LogLineObserver):
     self.perf_report_url_suffix = perf_report_url_suffix
     self.target = target
     self.active_master = active_master
+    self.bb_triggering_service = None
 
   def initialSection(self):
     """Initializes the annotator's sections.
@@ -788,7 +790,7 @@ class AnnotationObserver(buildstep.LogLineObserver):
     if async_ops:
       op_list = '\n'.join('* %s' % o['description']
                           for o in async_ops)
-      msg = 'Will wait till async operations complete:\n%s' % (op_list,)
+      msg = 'Will wait till async operations complete:\n%s\n\n' % (op_list,)
       section['log'].addStdout(msg)
 
     d = defer.DeferredList([o['deferred'] for o in async_ops])
@@ -1178,8 +1180,9 @@ class AnnotationObserver(buildstep.LogLineObserver):
     # Support: @@@STEP_TRIGGER <json spec>@@@ (trigger build(s)).
     try:
       spec = json.loads(spec)
+      bucket = spec.get('bucket')
       builder_names = spec.get('builderNames')
-
+      properties = spec.get('properties') or {}
       changes = spec.get('changes')
       if changes:
         assert isinstance(changes, list)
@@ -1188,9 +1191,16 @@ class AnnotationObserver(buildstep.LogLineObserver):
       if not builder_names:
         raise ValueError('builderNames is not specified: %r' % (spec,))
 
-      # Start builds.
-      d = self.triggerBuilds(builder_names, spec.get('properties') or {},
-                             changes)
+      build = self.command.build
+      build_is_from_buildbucket = bool(
+          build.getProperties().getProperty(buildbucket.common.INFO_PROPERTY))
+      trigger_via_buildbucket = bucket or build_is_from_buildbucket
+
+      if trigger_via_buildbucket:
+        d = self.triggerBuildsViaBuildBucket(
+            bucket, builder_names, properties, changes)
+      else:
+        d = self.triggerBuildsLocally(builder_names, properties, changes)
       # addAsyncOpToCursor expects a deferred to return a build result. If a
       # buildset is added, then it is a success. This lambda function returns a
       # tuple, which is received by addAsyncOpToCursor.
@@ -1223,8 +1233,8 @@ class AnnotationObserver(buildstep.LogLineObserver):
       changes_spec (list of dict): a list of change dicts, where each contains
         keyword arguments for
         buildbot.db.changes.ChangesConnectorComponent.addChange() function,
-        except when_timestamp is int instead of datetime. The first change
-        is used to populate source stamp properties.
+        except when_timestamp is int (seconds since Unix Epoch) instead of
+        datetime. The first change is used to populate source stamp properties.
     """
     def find_changes_by_revision(revision):
       """Searches for Changes in db by |revision| and returns change ids."""
@@ -1295,15 +1305,42 @@ class AnnotationObserver(buildstep.LogLineObserver):
     defer.returnValue(ssid)
 
   @defer.inlineCallbacks
-  def triggerBuilds(self, builder_names, properties, changes=None):
+  def triggerBuildsViaBuildBucket(
+      self, bucket_name, builder_names, properties, changes_spec=None):
+    """Schedules builds on buildbucket."""
+    if self.active_master is None:
+      raise buildbucket.Error(
+          'In order to trigger builds through buildbucket, '
+          'ActiveMaster must be passed to AnnotatorFactory')
+    build = self.command.build
+    section = self.cursor
+    if not self.bb_triggering_service:
+      self.bb_triggering_service = yield (
+          buildbucket.trigger.get_triggering_service(self.active_master))
+    changes = map(
+        buildbucket.trigger.change_from_change_spec, changes_spec or [])
+    for builder_name in builder_names:
+      result = yield self.bb_triggering_service.trigger(
+          build, bucket_name, builder_name, properties, changes)
+      response = result['response']
+      section['log'].addStdout(
+          'BuildBucket.put API response: %s\n' % json.dumps(response, indent=4))
+      build_url = result.get('build_url')
+      if build_url:
+        section['log'].addStdout('See %s\n\n' % build_url)
+
+
+  @defer.inlineCallbacks
+  def triggerBuildsLocally(
+      self, builder_names, properties, changes_spec=None):
     """Creates a new buildset."""
     build = self.command.build
     master = build.builder.botmaster.parent
     current_properties = build.getProperties()
 
-    if changes:
+    if changes_spec:
       # Changes have been specified explicitly.
-      ssid = yield self.insertSourceStamp(master, changes)
+      ssid = yield self.insertSourceStamp(master, changes_spec)
     else:
       # Use the same source stamp.
       source_stamp = build.getSourceStamp()
