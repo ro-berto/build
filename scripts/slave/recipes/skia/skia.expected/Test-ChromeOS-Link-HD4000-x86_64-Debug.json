@@ -449,28 +449,6 @@
   },
   {
     "cmd": [
-      "scp",
-      "-P",
-      "22",
-      "[SLAVE_BUILD]/skia/out/config/chromeos-link/Debug/render_pdfs",
-      "root@192.168.1.123:/usr/local/skiabot/bin/render_pdfs"
-    ],
-    "name": "scp [SLAVE_BUILD]/skia/out/config/chromeos-link/Debug/render_pdfs"
-  },
-  {
-    "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.123",
-      "/usr/local/skiabot/bin/render_pdfs",
-      "--inputPaths",
-      "/usr/local/skiabot/skia_skp/skps"
-    ],
-    "name": "render_pdfs"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "[SLAVE_BUILD]/skia/tools/nanobench_flags.py",

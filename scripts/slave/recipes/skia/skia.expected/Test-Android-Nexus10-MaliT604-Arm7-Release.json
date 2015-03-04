@@ -566,25 +566,6 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_run_skia",
-      "--logcat",
-      "-d",
-      "nexus_10",
-      "-s",
-      "R32CB017X2L",
-      "--release",
-      "render_pdfs",
-      "--inputPaths",
-      "/storage/emulated/legacy/skiabot/skia_skp/skps"
-    ],
-    "env": {
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
-      "SKIA_ANDROID_VERBOSE_SETUP": "1"
-    },
-    "name": "render_pdfs"
-  },
-  {
-    "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "R32CB017X2L",

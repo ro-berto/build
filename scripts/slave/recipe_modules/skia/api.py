@@ -331,26 +331,10 @@ class SkiaApi(recipe_api.RecipeApi):
       self.run(self.flavor.step, 'dm --abandonGpuContext',
                cmd=abandonGpuContext, abort_on_failure=False)
 
-  def run_render_pdfs(self):
-    """Render SKPs to PDFs."""
-    self._run_once(self.download_and_copy_skps)
-    args = ['render_pdfs', '--inputPaths', self.device_dirs.skp_dir]
-    if ('Xoom'   in self.c.BUILDER_NAME or
-        'Nexus7' in self.c.BUILDER_NAME):
-      # Some SKPs run some Android bots out of memory.  See skia:3084.
-      args.extend(['--match', '~desk_pokemonwiki',
-                              '~tabl_mozilla',
-                              '~tabl_nytimes'])
-    self.run(self.flavor.step, 'render_pdfs', cmd=args, abort_on_failure=False)
-
-
   def test_steps(self):
     """Run all Skia test executables."""
     self._run_once(self.install)
     self.run_dm()
-    if ('TSAN'         not in self.c.BUILDER_NAME and
-        'ZeroGPUCache' not in self.c.BUILDER_NAME):
-      self.run_render_pdfs()
 
   def perf_steps(self):
     """Run Skia benchmarks."""

@@ -345,13 +345,5 @@
     ],
     "cwd": "[SLAVE_BUILD]\\skia",
     "name": "Upload DM Results"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]\\skia\\out\\Release_x64\\render_pdfs",
-      "--inputPaths",
-      "[SLAVE_BUILD]\\playback\\skps"
-    ],
-    "name": "render_pdfs"
   }
 ]

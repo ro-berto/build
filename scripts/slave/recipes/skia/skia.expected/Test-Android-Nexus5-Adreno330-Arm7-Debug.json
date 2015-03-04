@@ -565,24 +565,6 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_run_skia",
-      "--logcat",
-      "-d",
-      "nexus_5",
-      "-s",
-      "018dff3520c970f6",
-      "render_pdfs",
-      "--inputPaths",
-      "/storage/emulated/legacy/skiabot/skia_skp/skps"
-    ],
-    "env": {
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
-      "SKIA_ANDROID_VERBOSE_SETUP": "1"
-    },
-    "name": "render_pdfs"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "[SLAVE_BUILD]/skia/tools/nanobench_flags.py",

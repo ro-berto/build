@@ -314,15 +314,6 @@
   },
   {
     "cmd": [
-      "catchsegv",
-      "[SLAVE_BUILD]/skia/out/Debug/render_pdfs",
-      "--inputPaths",
-      "[SLAVE_BUILD]/playback/skps"
-    ],
-    "name": "render_pdfs"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "[SLAVE_BUILD]/skia/tools/nanobench_flags.py",
