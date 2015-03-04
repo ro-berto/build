@@ -141,6 +141,12 @@
       "[SLAVE_BUILD]/src/out",
       "--json-test-results",
       "/path/to/tmp/json",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--build-number",
+      "571",
+      "--builder-name",
+      "V8-Blink Linux 64 (dbg)",
       "--no-pixel-tests"
     ],
     "name": "webkit_tests (with patch)",

@@ -1545,7 +1545,13 @@
       "--build-dir",
       "[SLAVE_BUILD]\\src\\out",
       "--json-test-results",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--build-number",
+      "571",
+      "--builder-name",
+      "win_blink_rel"
     ],
     "name": "webkit_tests (with patch)",
     "~followup_annotations": [
@@ -2028,6 +2034,12 @@
       "[SLAVE_BUILD]\\src\\out",
       "--json-test-results",
       "/path/to/tmp/json",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--build-number",
+      "571",
+      "--builder-name",
+      "win_blink_rel",
       "--test-list",
       "bad/totally-bad-probably.html\ntricky/totally-maybe-not-awesome.html",
       "--skipped",

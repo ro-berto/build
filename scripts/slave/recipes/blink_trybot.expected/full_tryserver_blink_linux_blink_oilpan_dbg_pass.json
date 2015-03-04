@@ -283,6 +283,12 @@
       "[SLAVE_BUILD]/src/out",
       "--json-test-results",
       "/path/to/tmp/json",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--build-number",
+      "571",
+      "--builder-name",
+      "linux_blink_oilpan_dbg",
       "--additional-expectations",
       "[SLAVE_BUILD]/src/third_party/WebKit/LayoutTests/OilpanExpectations"
     ],

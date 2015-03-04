@@ -1052,10 +1052,15 @@ class BlinkTest(Test):
   def run(self, api, suffix):
     results_dir = api.path['slave_build'].join('layout-test-results')
 
-    args = ['--target', api.chromium.c.BUILD_CONFIG,
-            '-o', results_dir,
-            '--build-dir', api.chromium.c.build_dir,
-            '--json-test-results', api.test_utils.test_results(add_json_log=False)]
+    args = [
+        '--target', api.chromium.c.BUILD_CONFIG,
+        '-o', results_dir,
+        '--build-dir', api.chromium.c.build_dir,
+        '--json-test-results', api.test_utils.test_results(add_json_log=False),
+        '--test-results-server', 'test-results.appspot.com',
+        '--build-number', str(api.properties['buildnumber']),
+        '--builder-name', api.properties['buildername'],
+    ]
     if self._extra_args:
       args.extend(self._extra_args)
     if suffix == 'without patch':

@@ -161,7 +161,13 @@
       "--build-dir",
       "[SLAVE_BUILD]/src/out",
       "--json-test-results",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--build-number",
+      "571",
+      "--builder-name",
+      "ChromiumPracticeFullTester"
     ],
     "name": "webkit_tests",
     "~followup_annotations": [
