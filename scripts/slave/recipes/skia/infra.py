@@ -20,6 +20,9 @@ DEPS = [
 INFRA_GO = 'go.skia.org/infra'
 INFRA_GIT_URL = 'https://skia.googlesource.com/buildbot'
 
+REF_HEAD = 'HEAD'
+REF_ORIGIN_MASTER = 'origin/master'
+
 
 def git(api, *cmd, **kwargs):
   git_cmd = 'git.bat' if api.platform.is_win else 'git'
@@ -41,7 +44,9 @@ def git_checkout(api, url, dest, ref=None):
   # Ensure that the correct ref is checked out.
   git(api, 'fetch', 'origin', cwd=dest)
   git(api, 'clean', '-d', '-f', cwd=dest)
-  git(api, 'reset', '--hard', ref or 'origin/master', cwd=dest)
+  if ref == REF_HEAD:
+    ref = REF_ORIGIN_MASTER
+  git(api, 'reset', '--hard', ref or REF_ORIGIN_MASTER, cwd=dest)
 
   # Set got_revision.
   test_data = lambda: api.raw_io.test_api.stream_output('abc123')
@@ -106,5 +111,6 @@ def GenTests(api):
       api.test('Infra-PerCommit_try') +
       api.properties(rietveld='https://codereview.chromium.org',
                      issue=1234,
-                     patchset=1)
+                     patchset=1,
+                     revision=REF_HEAD)
   )
