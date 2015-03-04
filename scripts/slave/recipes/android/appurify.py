@@ -214,7 +214,10 @@ def GenSteps(api):
                                 device_os=builder.get('device_os'),
                                 device_timeout=builder.get('device_timeout')))
       if not deferred_step_result.is_ok:
-        api.amp.upload_logcat_to_gs(AMP_RESULTS_BUCKET, suite)
+        # We only want to upload the logcat if there was a test failure.
+        step_failure = deferred_step_result.get_error()
+        if step_failure.result.presentation.status == api.step.FAILURE:
+          api.amp.upload_logcat_to_gs(AMP_RESULTS_BUCKET, suite)
 
 
 def GenTests(api):
