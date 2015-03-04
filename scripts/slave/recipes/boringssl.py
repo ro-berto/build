@@ -18,6 +18,8 @@ def _GetToolSuffix(platform):
   if platform.is_linux:
     if platform.bits == 64:
       return 'linux64'
+  elif platform.is_mac:
+    return 'mac'
   # TODO(davidben): Add other platforms as they're ready.
 
 
@@ -65,6 +67,16 @@ def GenTests(api):
     api.test('linux') +
     api.platform('linux', 64) +
     api.properties.generic(mastername='client.boringssl', buildername='linux',
+                           slavename='slavename') +
+    api.override_step_data('unit tests',
+                           api.test_utils.canned_test_output(True)) +
+    api.override_step_data('ssl tests', api.test_utils.canned_test_output(True))
+  )
+
+  yield (
+    api.test('mac') +
+    api.platform('mac', 64) +
+    api.properties.generic(mastername='client.boringssl', buildername='mac',
                            slavename='slavename') +
     api.override_step_data('unit tests',
                            api.test_utils.canned_test_output(True)) +
