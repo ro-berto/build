@@ -65,8 +65,9 @@ BUILDSPEC_COMMIT_RE = (
 # Regular expression that matches a single commit footer line.
 COMMIT_FOOTER_ENTRY_RE = re.compile(r'([^:]+):\s+(.+)')
 
-# Footer metadata key for commit position.
+# Footer metadata keys for regular and gsubtreed mirrored commit positions.
 COMMIT_POSITION_FOOTER_KEY = 'Cr-Commit-Position'
+COMMIT_ORIGINAL_POSITION_FOOTER_KEY = 'Cr-Original-Commit-Position'
 # Regular expression to parse a commit position
 COMMIT_POSITION_RE = re.compile(r'(.+)@\{#(\d+)\}')
 
@@ -1166,7 +1167,8 @@ def get_commit_position(git_path, revision='HEAD'):
   footer_map = get_commit_message_footer_map(git_log)
 
   # Search for commit position metadata
-  value = footer_map.get(COMMIT_POSITION_FOOTER_KEY)
+  value = (footer_map.get(COMMIT_POSITION_FOOTER_KEY) or
+           footer_map.get(COMMIT_ORIGINAL_POSITION_FOOTER_KEY))
   if value:
     return value
 
