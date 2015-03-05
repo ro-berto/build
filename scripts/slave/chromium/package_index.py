@@ -150,6 +150,15 @@ class IndexPack(object):
           command_list = command_list[i + 1:]
           break
 
+      # Extract the output file argument
+      output_file = None
+      for i in range(len(command_list)):
+        if command_list[i] == '-o' and i + 1 < len(command_list):
+          output_file = command_list[i + 1]
+          break
+      if not output_file:
+        print 'No output file path found for %s' % entry['file']
+
       required_inputs = []
       include_paths = set()
       with open(filepath, 'rb') as filepaths_file:
@@ -181,6 +190,7 @@ class IndexPack(object):
       # care about would show up in the compile step.
       unit_dictionary['argument'] = list(include_paths) + ['-w'] + command_list
       unit_dictionary['required_input'] = required_inputs
+      unit_dictionary['output_path'] = output_file
       wrapper = {
           'format': 'grok',
           'content': unit_dictionary

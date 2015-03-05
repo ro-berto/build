@@ -21,7 +21,7 @@ from slave.chromium import package_index
 
 TEST_CC_FILE_CONTENT = '#include "test.h"\nint main() {\nreturn 0;\n}\n'
 TEST_H_FILE_CONTENT = '#ifndef TEST_H\n#define TEST_H\n#include <set>\n#endif\n'
-COMPILE_ARGUMENTS = 'clang++ -fsyntax-only -std=c++11 -c test.cc'
+COMPILE_ARGUMENTS = 'clang++ -fsyntax-only -std=c++11 -c test.cc -o test.o'
 INCLUDE_PATH = '/usr/include/c++/4.8.2'
 
 
@@ -125,6 +125,7 @@ class PackageIndexTest(unittest.TestCase):
         self.assertEquals(compilation_unit_dictionary['analysis_target'],
                           self.test_cc_file.name)
         self.assertEquals(compilation_unit_dictionary['cxx_arguments'], {})
+        self.assertEquals(compilation_unit_dictionary['output_path'], 'test.o')
 
         self.assertEquals(len(compilation_unit_dictionary['required_input']),
                           len(self.index_pack.filesizes))
