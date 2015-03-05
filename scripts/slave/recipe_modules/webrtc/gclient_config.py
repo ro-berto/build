@@ -50,12 +50,8 @@ def chromium_webrtc_tot(c):
   # for the Chromium revision.
   c.got_revision_mapping['src'] = 'got_chromium_revision'
 
-  # Needed to get the testers to properly sync the right revision for all three
-  # repos that the builder are syncing to 'HEAD'.
-  p = c.parent_got_revision_mapping
-  p['parent_got_chromium_revision'] = 'got_chromium_revision'
-  p['parent_got_webrtc_revision'] = 'got_webrtc_revision'
-  p['parent_got_libjingle_revision'] = 'got_libjingle_revision'
+  # Needed to get the testers to properly sync the right revision.
+  c.parent_got_revision_mapping['parent_got_revision'] = 'got_revision'
 
 @CONFIG_CTX()
 def _webrtc(c):
