@@ -429,6 +429,124 @@
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "gtest",
       "-s",
+      "gl_tests",
+      "--enable-platform-mode",
+      "-e",
+      "remote_device",
+      "--api-key-file",
+      "[BUILD]/site_config/.amp_api_key",
+      "--api-secret-file",
+      "[BUILD]/site_config/.amp_api_secret",
+      "--api-address",
+      "172.22.21.180",
+      "--api-port",
+      "80",
+      "--api-protocol",
+      "http",
+      "--device-type",
+      "Android",
+      "--remote-device",
+      "Nexus 5",
+      "--remote-device-os",
+      "4.4.2",
+      "--remote-device-os",
+      "4.4.3",
+      "--trigger",
+      "/path/to/tmp/json",
+      "--verbose",
+      "--release"
+    ],
+    "name": "[trigger] gl_tests",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"device\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"brand\": \"Foo\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
+      "[TMP_BASE]/amp_trigger_tmp_1/gl_tests.json"
+    ],
+    "name": "[trigger] save gl_tests data"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
+      "ipc_tests",
+      "--enable-platform-mode",
+      "-e",
+      "remote_device",
+      "--api-key-file",
+      "[BUILD]/site_config/.amp_api_key",
+      "--api-secret-file",
+      "[BUILD]/site_config/.amp_api_secret",
+      "--api-address",
+      "172.22.21.180",
+      "--api-port",
+      "80",
+      "--api-protocol",
+      "http",
+      "--device-type",
+      "Android",
+      "--remote-device",
+      "Nexus 5",
+      "--remote-device-os",
+      "4.4.2",
+      "--remote-device-os",
+      "4.4.3",
+      "--trigger",
+      "/path/to/tmp/json",
+      "--verbose",
+      "--release"
+    ],
+    "name": "[trigger] ipc_tests",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"device\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"brand\": \"Foo\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
+      "[TMP_BASE]/amp_trigger_tmp_1/ipc_tests.json"
+    ],
+    "name": "[trigger] save ipc_tests data"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
       "skia_unittests",
       "--enable-platform-mode",
       "-e",
@@ -541,6 +659,67 @@
       "[TMP_BASE]/amp_trigger_tmp_1/sql_unittests.json"
     ],
     "name": "[trigger] save sql_unittests data"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
+      "sync_unit_tests",
+      "--isolate-file-path",
+      "[SLAVE_BUILD]/src/sync/sync_unit_tests.isolate",
+      "--enable-platform-mode",
+      "-e",
+      "remote_device",
+      "--api-key-file",
+      "[BUILD]/site_config/.amp_api_key",
+      "--api-secret-file",
+      "[BUILD]/site_config/.amp_api_secret",
+      "--api-address",
+      "172.22.21.180",
+      "--api-port",
+      "80",
+      "--api-protocol",
+      "http",
+      "--device-type",
+      "Android",
+      "--remote-device",
+      "Nexus 5",
+      "--remote-device-os",
+      "4.4.2",
+      "--remote-device-os",
+      "4.4.3",
+      "--trigger",
+      "/path/to/tmp/json",
+      "--verbose",
+      "--release"
+    ],
+    "name": "[trigger] sync_unit_tests",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"device\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"brand\": \"Foo\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
+      "[TMP_BASE]/amp_trigger_tmp_1/sync_unit_tests.json"
+    ],
+    "name": "[trigger] save sync_unit_tests data"
   },
   {
     "cmd": [
@@ -1015,6 +1194,132 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[TMP_BASE]/amp_trigger_tmp_1/gl_tests.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "[collect] load gl_tests data",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"device\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"brand\": \"Foo\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
+      "gl_tests",
+      "--enable-platform-mode",
+      "-e",
+      "remote_device",
+      "--api-key-file",
+      "[BUILD]/site_config/.amp_api_key",
+      "--api-secret-file",
+      "[BUILD]/site_config/.amp_api_secret",
+      "--api-address",
+      "172.22.21.180",
+      "--api-port",
+      "80",
+      "--api-protocol",
+      "http",
+      "--device-type",
+      "Android",
+      "--remote-device",
+      "Nexus 5",
+      "--remote-device-os",
+      "4.4.2",
+      "--remote-device-os",
+      "4.4.3",
+      "--collect",
+      "[TMP_BASE]/amp_trigger_tmp_1/gl_tests.json",
+      "--results-path",
+      "[TMP_BASE]/amp_results_tmp_2/gl_tests/results.zip",
+      "--verbose",
+      "--release"
+    ],
+    "name": "[collect] gl_tests",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[TMP_BASE]/amp_trigger_tmp_1/ipc_tests.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "[collect] load ipc_tests data",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"device\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"brand\": \"Foo\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
+      "ipc_tests",
+      "--enable-platform-mode",
+      "-e",
+      "remote_device",
+      "--api-key-file",
+      "[BUILD]/site_config/.amp_api_key",
+      "--api-secret-file",
+      "[BUILD]/site_config/.amp_api_secret",
+      "--api-address",
+      "172.22.21.180",
+      "--api-port",
+      "80",
+      "--api-protocol",
+      "http",
+      "--device-type",
+      "Android",
+      "--remote-device",
+      "Nexus 5",
+      "--remote-device-os",
+      "4.4.2",
+      "--remote-device-os",
+      "4.4.3",
+      "--collect",
+      "[TMP_BASE]/amp_trigger_tmp_1/ipc_tests.json",
+      "--results-path",
+      "[TMP_BASE]/amp_results_tmp_2/ipc_tests/results.zip",
+      "--verbose",
+      "--release"
+    ],
+    "name": "[collect] ipc_tests",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "[TMP_BASE]/amp_trigger_tmp_1/skia_unittests.json",
       "/path/to/tmp/json"
     ],
@@ -1132,6 +1437,69 @@
       "--release"
     ],
     "name": "[collect] sql_unittests",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[TMP_BASE]/amp_trigger_tmp_1/sync_unit_tests.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "[collect] load sync_unit_tests data",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"device\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"brand\": \"Foo\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
+      "sync_unit_tests",
+      "--enable-platform-mode",
+      "-e",
+      "remote_device",
+      "--api-key-file",
+      "[BUILD]/site_config/.amp_api_key",
+      "--api-secret-file",
+      "[BUILD]/site_config/.amp_api_secret",
+      "--api-address",
+      "172.22.21.180",
+      "--api-port",
+      "80",
+      "--api-protocol",
+      "http",
+      "--device-type",
+      "Android",
+      "--remote-device",
+      "Nexus 5",
+      "--remote-device-os",
+      "4.4.2",
+      "--remote-device-os",
+      "4.4.3",
+      "--collect",
+      "[TMP_BASE]/amp_trigger_tmp_1/sync_unit_tests.json",
+      "--results-path",
+      "[TMP_BASE]/amp_results_tmp_2/sync_unit_tests/results.zip",
+      "--verbose",
+      "--release"
+    ],
+    "name": "[collect] sync_unit_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
     ]
@@ -1264,7 +1632,7 @@
   },
   {
     "name": "$final_result",
-    "reason": "4 out of 21 aggregated steps failed. Failures: Step('[trigger] components_unittests') failed with return_code 1, Step('[collect] android_webview_unittests') failed with return_code 1, Step('[collect] base_unittests') failed with return_code 87, Step('[collect] cc_unittests') failed with return_code 88",
+    "reason": "4 out of 27 aggregated steps failed. Failures: Step('[trigger] components_unittests') failed with return_code 1, Step('[collect] android_webview_unittests') failed with return_code 1, Step('[collect] base_unittests') failed with return_code 87, Step('[collect] cc_unittests') failed with return_code 88",
     "status_code": 1
   }
 ]

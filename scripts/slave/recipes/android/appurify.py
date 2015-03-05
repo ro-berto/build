@@ -26,8 +26,11 @@ CHROMIUM_AMP_UNITTESTS = freeze([
   ['cc_unittests', None],
   ['components_unittests', ['components', 'components_unittests.isolate']],
   ['events_unittests', None],
+  ['gl_tests', None],
+  ['ipc_tests', None],
   ['skia_unittests', None],
   ['sql_unittests', ['sql', 'sql_unittests.isolate']],
+  ['sync_unit_tests', ['sync', 'sync_unit_tests.isolate']],
   ['ui_android_unittests', None],
   ['ui_touch_selection_unittests', None],
 ])
