@@ -59,6 +59,9 @@ class FilterApi(recipe_api.RecipeApi):
           'chromium': {
             'exclusions': [],
           },
+          'ios': {
+            'exclusions': [],
+          },
         })
       )
     step_result.presentation.step_text = 'path: %r' % config_path

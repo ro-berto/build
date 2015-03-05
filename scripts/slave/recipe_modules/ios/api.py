@@ -185,6 +185,7 @@ class iOSApi(recipe_api.RecipeApi):
           tests,
           tests,
           'trybot_analyze_config.json',
+          additional_names=['chromium', 'ios'],
         )
       )
 

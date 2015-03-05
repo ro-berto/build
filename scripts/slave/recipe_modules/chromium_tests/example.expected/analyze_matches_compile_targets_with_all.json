@@ -99,6 +99,9 @@
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"chromium\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"ios\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
