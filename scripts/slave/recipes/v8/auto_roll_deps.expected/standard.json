@@ -98,7 +98,7 @@
       "--author",
       "v8-autoroll@chromium.org",
       "--reviewer",
-      "machenbach@chromium.org",
+      "hablich@chromium.org,machenbach@chromium.org,yangguo@chromium.org,vogelheim@chromium.org",
       "--roll",
       "--work-dir",
       "[SLAVE_BUILD]/workdir"

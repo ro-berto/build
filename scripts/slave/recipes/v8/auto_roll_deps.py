@@ -40,7 +40,9 @@ def GenSteps(api):
           'v8', 'tools', 'release', 'auto_roll.py'),
       ['--chromium', api.path['checkout'],
        '--author', 'v8-autoroll@chromium.org',
-       '--reviewer', 'machenbach@chromium.org',
+       '--reviewer',
+       'hablich@chromium.org,machenbach@chromium.org,'
+       'yangguo@chromium.org,vogelheim@chromium.org',
        '--roll',
        '--work-dir', api.path['slave_build'].join('workdir')],
       cwd=api.path['checkout'].join('v8'),
