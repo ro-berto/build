@@ -48,7 +48,8 @@ linux_clang_env = {'BUILDBOT_JAVA_HOME': 'third_party/java/linux/j2sdk',
                     'CXX': 'third_party/clang/linux/bin/clang++'}
 clang_asan = 'third_party/clang/linux/bin/clang++ -fsanitize=address -fPIC'
 linux_asan_env = {'CXX': clang_asan,
-                  'ASAN_OPTIONS': 'handle_segv=0'}
+                  'ASAN_OPTIONS':
+                      'handle_segv=0:detect_stack_use_after_return=1'}
 windows_env = {'BUILDBOT_JAVA_HOME': 'third_party\\java\\windows\\j2sdk',
                'LOGONSERVER': '\\\\AD1'}
 dart2dart_backend_env = {'BUILDBOT_JAVA_HOME': 'third_party/java/linux/j2sdk',

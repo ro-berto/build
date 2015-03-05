@@ -213,7 +213,7 @@ class DartCommands(commands.FactoryCommands):
 
     name = options.get('name') or ''
     if 'asan' in name:
-      cmd += ' --builder-tag=asan'
+      cmd += ' --builder-tag=asan --timeout=240'
 
     checked_config = options.get('checked_config')
     if not checked_config:
