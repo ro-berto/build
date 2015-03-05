@@ -1,4 +1,5 @@
 DEPS = [
+  'gclient',
   'path',
   'python'
 ]

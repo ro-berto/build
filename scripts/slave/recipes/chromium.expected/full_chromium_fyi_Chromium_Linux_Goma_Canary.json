@@ -3,6 +3,19 @@
     "cmd": [
       "python",
       "-u",
+      "[DEPOT_TOOLS]/gclient.py",
+      "sync",
+      "--verbose",
+      "--force",
+      "--revision",
+      "build/goma@HEAD"
+    ],
+    "name": "gclient update goma canary"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[BUILD]/scripts/slave/bot_update.py",
       "--master",
       "chromium.fyi",

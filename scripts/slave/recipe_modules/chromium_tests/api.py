@@ -211,6 +211,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     for c in bot_config.get('gclient_apply_config', []):
       self.m.gclient.apply_config(c)
 
+    if bot_config.get('goma_canary'):
+      self.m.goma.update_goma_canary()
+
     # If a source root is specified, use it. Overrides the first-solution
     # assignment used by 'bot_update'.
     if self.m.gclient.c.src_root:
@@ -466,8 +469,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self.transient_check(update_step, lambda transform_name:
             self.m.chromium_android.findbugs(name=transform_name('findbugs')))
 
-      goma_canary = bot_config.get('goma_canary')
-      if goma_canary:
+      if bot_config.get('goma_canary'):
         self.m.goma.diagnose_goma()
 
       if isolated_targets:
