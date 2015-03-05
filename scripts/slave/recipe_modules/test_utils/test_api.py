@@ -12,7 +12,8 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
   def canned_test_output(self, passing, minimal=False, passes=9001,
                          num_additional_failures=0,
                          path_separator=None,
-                         retcode=None):
+                         retcode=None,
+                         unexpected_flakes=False):
     """Produces a 'json test results' compatible object with some canned tests.
     Args:
       passing - Determines if this test result is passing or not.
@@ -42,6 +43,8 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
       t.add_result('good%stotally-awesome.html' % sep, 'PASS')
     for i in xrange(num_additional_failures):
         t.add_result('bad%sfailing%d.html' % (sep, i), 'PASS', 'FAIL')
+    if unexpected_flakes:
+      t.add_result('flake%sflakey.html' % sep, 'PASS', 'FAIL PASS')
     ret = self.test_results(t)
     if retcode is not None:
         ret.retcode = retcode

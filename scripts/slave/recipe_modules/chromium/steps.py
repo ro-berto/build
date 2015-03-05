@@ -1075,6 +1075,12 @@ class BlinkTest(Test):
           args, name=self._step_name(suffix),
           step_test_data=lambda: api.test_utils.test_api.canned_test_output(
               passing=True, minimal=True))
+
+      # Mark steps with unexpected flakes as warnings. Do this here instead of
+      # "finally" blocks because we only want to do this if step was successful.
+      # We don't want to possibly change failing steps to warnings.
+      if step_result and step_result.test_utils.test_results.unexpected_flakes:
+        step_result.presentation.status = api.step.WARNING
     finally:
       step_result = api.step.active_result
       self._test_runs[suffix] = step_result
@@ -1088,9 +1094,6 @@ class BlinkTest(Test):
           ['unexpected_failures:', r.unexpected_failures.keys()],
           ['Total executed: %s' % r.num_passes],
         ])
-
-        if not (r.unexpected_flakes or r.unexpected_failures):
-          p.status = api.step.SUCCESS
 
       if suffix in ('', 'with patch'):
         buildername = api.properties['buildername']
