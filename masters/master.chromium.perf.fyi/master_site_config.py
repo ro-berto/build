@@ -12,3 +12,5 @@ class ChromiumPerfFyi(Master.Master1):
   slave_port = 8161
   master_port_alt = 8261
   buildbot_url = 'http://build.chromium.org/p/chromium.perf.fyi/'
+  service_account_file = 'service-account-chromium.json'
+  buildbucket_bucket = 'master.chromium.perf.fyi'
