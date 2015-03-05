@@ -74,6 +74,8 @@ class WebRTCApi(recipe_api.RecipeApi):
     'mac_rel_archive': 'gs://chromium-webrtc/Mac Builder',
     'linux_rel_archive': 'gs://chromium-webrtc/Linux Builder',
     'fyi_linux_asan_archive': 'gs://chromium-webrtc/Linux ASan Builder',
+    'fyi_linux_chromium_rel_archive': 'gs://chromium-webrtc/Linux Chromium FYI',
+
   })
 
   BROWSER_TESTS_GTEST_FILTER = 'WebRtc*:Webrtc*:TabCapture*:*MediaStream*'

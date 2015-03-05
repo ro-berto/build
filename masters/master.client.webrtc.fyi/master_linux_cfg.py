@@ -16,28 +16,45 @@ def Update(c):
                             treeStableTimer=0,
                             builderNames=[
                                 'Linux Asan Builder',
+                                'Linux Chromium Builder',
       ]),
-      Triggerable(name='linux_trigger', builderNames=[
+      Triggerable(name='linux_asan_trigger', builderNames=[
           'Linux Asan Tester (parallel)',
+      ]),
+      Triggerable(name='linux_chromium_trigger', builderNames=[
+          'Linux Chromium Tester',
       ]),
   ])
 
   specs = [
     {
       'name': 'Linux Asan Builder',
-      'triggers': ['linux_trigger'],
+      'triggers': ['linux_asan_trigger'],
+      'recipe': 'webrtc/standalone',
       'slavebuilddir': 'linux_asan',
     },
     {
       'name': 'Linux Asan Tester (parallel)',
+      'recipe': 'webrtc/standalone',
       'slavebuilddir': 'linux_asan',
+    },
+    {
+      'name': 'Linux Chromium Builder',
+      'triggers': ['linux_chromium_trigger'],
+      'recipe': 'webrtc/chromium',
+      'slavebuilddir': 'linux_chromium',
+    },
+    {
+      'name': 'Linux Chromium Tester',
+      'recipe': 'webrtc/chromium',
+      'slavebuilddir': 'linux_chromium',
     },
   ]
 
   c['builders'].extend([
       {
         'name': spec['name'],
-        'factory': m_annotator.BaseFactory('webrtc/standalone',
+        'factory': m_annotator.BaseFactory(spec.get('recipe'),
                                            triggers=spec.get('triggers')),
         'notify_on_missing': True,
         'category': 'linux',

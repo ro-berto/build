@@ -151,3 +151,10 @@ def GenTests(api):
   yield generate_builder(mastername, 'Win7 Tester', revision=None,
                          parent_got_revision='12345',
                          suffix='_periodic_triggered')
+
+  # Builder+tester running in client.webrtc.fyi during preparations for Git.
+  mastername = 'client.webrtc.fyi'
+  yield generate_builder(mastername, 'Linux Chromium Builder',
+                         revision='deadbeef')
+  yield generate_builder(mastername, 'Linux Chromium Tester',
+                         parent_got_revision='deadbeef')

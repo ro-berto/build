@@ -68,6 +68,13 @@ RECIPE_CONFIGS = freeze({
     'compile_targets': ['chromium_builder_webrtc'],
     'test_suite': 'chromium',
   },
+  # Temporary config to try out the complicated FYI builders pre-Git switch
+  # (runs a tiny compile target and no test to save time and resources).
+  'chromium_webrtc_tot_git_switch_testing': {
+    'chromium_config': 'chromium',
+    'gclient_config': 'chromium_webrtc_tot',
+    'compile_targets': ['gtest'],
+  },
   'chromium_webrtc_tot_gn': {
     'chromium_config': 'chromium',
     'chromium_apply_config': ['gn'],
@@ -1014,6 +1021,27 @@ BUILDERS = freeze({
         'bot_type': 'tester',
         'build_gs_archive': 'fyi_linux_asan_archive',
         'parent_buildername': 'Linux Asan Builder',
+        'testing': {'platform': 'linux'},
+      },
+      'Linux Chromium Builder': {
+        'recipe_config': 'chromium_webrtc_tot_git_switch_testing',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'build_gs_archive': 'fyi_linux_chromium_rel_archive',
+        'testing': {'platform': 'linux'},
+      },
+      'Linux Chromium Tester': {
+        'recipe_config': 'chromium_webrtc_tot_git_switch_testing',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'build_gs_archive': 'fyi_linux_chromium_rel_archive',
+        'parent_buildername': 'Linux Chromium Builder',
         'testing': {'platform': 'linux'},
       },
     },
