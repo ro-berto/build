@@ -1,5 +1,6 @@
 agable@chromium.org
 iannucci@chromium.org
+per-file boringssl.py=davidben@chromium.org
 per-file mojo.py=jamesr@chromium.org
 per-file mojo.py=sky@chromium.org
 per-file polymer.py=dfreedm@chromium.org
