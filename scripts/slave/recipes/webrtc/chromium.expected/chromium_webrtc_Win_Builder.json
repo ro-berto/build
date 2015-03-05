@@ -27,7 +27,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@321321",
+      "src@c1051e10",
       "--force"
     ],
     "name": "bot_update",
@@ -139,9 +139,9 @@
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Win Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc\", \"parent_buildername\": null, \"recipe\": \"webrtc/chromium\", \"revision\": \"321321\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Win Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc\", \"parent_buildername\": null, \"recipe\": \"webrtc/chromium\", \"revision\": \"c1051e10\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Win Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc\", \"parent_buildername\": null, \"recipe\": \"webrtc/chromium\", \"revision\": \"321321\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Win Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc\", \"parent_buildername\": null, \"recipe\": \"webrtc/chromium\", \"revision\": \"c1051e10\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "name": "package build"
   }

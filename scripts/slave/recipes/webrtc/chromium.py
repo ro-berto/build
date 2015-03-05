@@ -39,10 +39,24 @@ def GenSteps(api):
   api.webrtc.setup(bot_config, recipe_config,
                    master_settings.get('PERF_CONFIG'))
 
+  bot_type = bot_config.get('bot_type', 'builder_tester')
+
+  # These testers are triggered by a builder's build being available, but the
+  # revisions are configured to be HEAD instead of the DEPS-pinned versions.
+  # Override that and make sure the exact same set of revisions as the builder
+  # used is synced.
+  if mastername == 'chromium.webrtc.fyi' and bot_type == 'tester':
+    path_props = {
+      'src': 'parent_got_chromium_revision',
+      'src/third_party/webrtc': 'parent_got_webrtc_revision',
+      'src/third_party/libjingle/source/talk': 'parent_got_libjingle_revision',
+    }
+    for path, property_name in path_props.iteritems():
+      assert api.properties.get(property_name), 'Missing %s' % property_name
+      api.gclient.c.revisions[path] = api.properties[property_name]
+
   if api.platform.is_win:
     api.chromium.taskkill()
-
-  bot_type = bot_config.get('bot_type', 'builder_tester')
 
   # Bot Update re-uses the gclient configs.
   step_result = api.bot_update.ensure_checkout(force=True)
@@ -119,7 +133,10 @@ def GenTests(api):
     if bot_type == 'tester':
       parent_rev = parent_got_revision or revision
       test += api.properties(parent_got_revision=parent_rev)
-
+      if mastername == 'chromium.webrtc.fyi':
+        test += api.properties(parent_got_chromium_revision='c1051e10',
+                               parent_got_webrtc_revision='7eb27c',
+                               parent_got_libjingle_revision='11b11c61e')
     if failing_test:
       test += api.step_data(failing_test, retcode=1)
 
@@ -128,7 +145,7 @@ def GenTests(api):
   for mastername in ('chromium.webrtc', 'chromium.webrtc.fyi'):
     master_config = builders[mastername]
     for buildername in master_config['builders'].keys():
-      revision = '12345' if mastername == 'chromium.webrtc.fyi' else '321321'
+      revision = '7eb27c' if mastername == 'chromium.webrtc.fyi' else 'c1051e10'
       yield generate_builder(mastername, buildername, revision)
 
   # Forced build (not specifying any revision) and failing tests.
@@ -139,7 +156,7 @@ def GenTests(api):
   buildername = 'Linux Tester'
   yield generate_builder(mastername, buildername, revision=None,
                          suffix='_forced_invalid')
-  yield generate_builder(mastername, buildername, revision='321321',
+  yield generate_builder(mastername, buildername, revision='c1051e10',
                          failing_test='browser_tests', suffix='_failing_test')
 
   # Periodic scheduler triggered builds also don't contain revision.
@@ -149,7 +166,7 @@ def GenTests(api):
 
   # Testers gets got_revision value from builder passed as parent_got_revision.
   yield generate_builder(mastername, 'Win7 Tester', revision=None,
-                         parent_got_revision='12345',
+                         parent_got_revision='7eb27c',
                          suffix='_periodic_triggered')
 
   # Builder+tester running in client.webrtc.fyi during preparations for Git.
