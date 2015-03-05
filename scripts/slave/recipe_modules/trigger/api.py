@@ -46,6 +46,8 @@ class TriggerApi(recipe_api.RecipeApi):
       trigger_specs: a list of trigger dicts, where each dict specifies a build
         to trigger. Supported keys:
           builder_name (str): in BuildBot context, builder name
+          bucket (str): buildbucket bucket where the triggered builds will be
+            placed.
           properties (dict): build properties for a new build.
           buildbot_changes (list of dict): list of Buildbot changes to create.
             See below.
@@ -70,6 +72,15 @@ class TriggerApi(recipe_api.RecipeApi):
       Basic:
         api.trigger({
             'builder_name': 'Release',
+            'properties': {
+                'my_prop': 123,
+            },
+        })
+
+      Using BuildBucket:
+        api.trigger({
+            'builder_name': 'Release',
+            'bucket': 'master.tryserver.chromium.linux',
             'properties': {
                 'my_prop': 123,
             },
