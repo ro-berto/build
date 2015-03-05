@@ -1068,12 +1068,6 @@ class BlinkTest(Test):
       args.extend(['--test-list', api.raw_io.input(test_list),
                    '--skipped', 'always'])
 
-    if 'oilpan' in api.properties['buildername']:
-      args.extend(['--additional-expectations',
-                   api.path['checkout'].join('third_party', 'WebKit',
-                                             'LayoutTests',
-                                             'OilpanExpectations')])
-
     try:
       step_result = api.chromium.runtest(
           api.path['build'].join('scripts', 'slave', 'chromium',

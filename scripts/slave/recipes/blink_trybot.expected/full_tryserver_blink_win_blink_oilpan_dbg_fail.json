@@ -492,12 +492,12 @@
       "571",
       "--builder-name",
       "win_blink_oilpan_dbg",
+      "--additional-expectations",
+      "[SLAVE_BUILD]\\src\\third_party\\WebKit\\LayoutTests\\OilpanExpectations",
       "--test-list",
       "bad/totally-bad-probably.html\ntricky/totally-maybe-not-awesome.html",
       "--skipped",
-      "always",
-      "--additional-expectations",
-      "[SLAVE_BUILD]\\src\\third_party\\WebKit\\LayoutTests\\OilpanExpectations"
+      "always"
     ],
     "name": "webkit_tests (without patch)",
     "~followup_annotations": [

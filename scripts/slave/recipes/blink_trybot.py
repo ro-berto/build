@@ -400,7 +400,13 @@ def _GenStepsInternal(api):
     api.chromium.compile()
     api.isolate.isolate_tests(api.chromium.output_dir)
 
-  tests.append(api.chromium.steps.BlinkTest())
+  extra_args = []
+  if 'oilpan' in buildername:
+    extra_args.extend(['--additional-expectations',
+                       api.path['checkout'].join('third_party', 'WebKit',
+                                                 'LayoutTests',
+                                                 'OilpanExpectations')])
+  tests.append(api.chromium.steps.BlinkTest(extra_args=extra_args))
 
   api.test_utils.determine_new_failures(api, tests, deapply_patch_fn)
 
