@@ -43,8 +43,9 @@ def GenSteps(api):
   # Build BoringSSL itself.
   cmake = bot_utils.join('cmake-' + _GetToolSuffix(api.platform), 'bin',
                          'cmake' + _GetExeSuffix(api.platform))
-  api.step('cmake', [cmake, '-GNinja', api.path['checkout']], cwd=build_dir)
-  api.step('ninja', ['ninja', '-C', build_dir])
+  api.python('cmake', go_env, [cmake, '-GNinja', api.path['checkout']],
+             cwd=build_dir)
+  api.python('ninja', go_env, ['ninja', '-C', build_dir])
 
   # Run the unit tests.
   api.python('unit tests', go_env,

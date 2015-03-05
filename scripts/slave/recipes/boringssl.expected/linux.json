@@ -69,6 +69,9 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/boringssl/util/bot/go/env.py",
       "[SLAVE_BUILD]/boringssl/util/bot/cmake-linux64/bin/cmake",
       "-GNinja",
       "[SLAVE_BUILD]/boringssl"
@@ -78,6 +81,9 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/boringssl/util/bot/go/env.py",
       "ninja",
       "-C",
       "[SLAVE_BUILD]/boringssl/build"
