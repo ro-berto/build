@@ -81,8 +81,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "asan=1 clang=1 component=static_library lsan=1 target_arch=x64 test_isolation_mode=prepare use_allocator=none",
-      "LLVM_FORCE_HEAD_REVISION": "YES"
+      "GYP_DEFINES": "asan=1 clang=1 component=static_library gomadir='[BUILD]/goma' lsan=1 target_arch=x64 test_isolation_mode=prepare use_allocator=none use_goma=1"
     },
     "name": "gclient runhooks"
   },

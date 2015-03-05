@@ -696,7 +696,7 @@ SPEC = {
       'add_tests_as_compile_targets': False,
     },
     'ClangToTLinux tester': {
-      'recipe_config': 'clang_tot_linux',
+      'recipe_config': 'chromium_no_goma',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -755,7 +755,7 @@ SPEC = {
       'add_tests_as_compile_targets': False,
     },
     'ClangToTLinuxASan tester': {
-      'recipe_config': 'clang_tot_linux_asan',
+      'recipe_config': 'chromium_linux_asan',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,

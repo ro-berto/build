@@ -81,8 +81,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "clang=1 component=static_library target_arch=x64 test_isolation_mode=prepare",
-      "LLVM_FORCE_HEAD_REVISION": "YES"
+      "GYP_DEFINES": "component=static_library target_arch=x64 test_isolation_mode=prepare"
     },
     "name": "gclient runhooks"
   },
