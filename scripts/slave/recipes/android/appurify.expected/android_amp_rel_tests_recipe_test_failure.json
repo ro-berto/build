@@ -228,7 +228,8 @@
       "4.4.3",
       "--trigger",
       "/path/to/tmp/json",
-      "--verbose"
+      "--verbose",
+      "--release"
     ],
     "name": "[trigger] android_webview_unittests",
     "~followup_annotations": [
@@ -340,7 +341,8 @@
       "[TMP_BASE]/amp_trigger_tmp_1/android_webview_unittests.json",
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/android_webview_unittests/results.zip",
-      "--verbose"
+      "--verbose",
+      "--release"
     ],
     "name": "[collect] android_webview_unittests",
     "~followup_annotations": [

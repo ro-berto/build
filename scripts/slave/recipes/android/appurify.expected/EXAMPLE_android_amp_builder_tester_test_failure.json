@@ -163,7 +163,8 @@
       "4.4.3",
       "--trigger",
       "/path/to/tmp/json",
-      "--verbose"
+      "--verbose",
+      "--release"
     ],
     "name": "[trigger] android_webview_unittests",
     "~followup_annotations": [
@@ -223,7 +224,8 @@
       "4.4.3",
       "--trigger",
       "/path/to/tmp/json",
-      "--verbose"
+      "--verbose",
+      "--release"
     ],
     "name": "[trigger] base_unittests",
     "~followup_annotations": [
@@ -281,7 +283,8 @@
       "4.4.3",
       "--trigger",
       "/path/to/tmp/json",
-      "--verbose"
+      "--verbose",
+      "--release"
     ],
     "name": "[trigger] cc_unittests",
     "~followup_annotations": [
@@ -341,7 +344,8 @@
       "4.4.3",
       "--trigger",
       "/path/to/tmp/json",
-      "--verbose"
+      "--verbose",
+      "--release"
     ],
     "name": "[trigger] components_unittests",
     "~followup_annotations": [
@@ -390,7 +394,8 @@
       "4.4.3",
       "--trigger",
       "/path/to/tmp/json",
-      "--verbose"
+      "--verbose",
+      "--release"
     ],
     "name": "[trigger] events_unittests",
     "~followup_annotations": [
@@ -448,7 +453,8 @@
       "4.4.3",
       "--trigger",
       "/path/to/tmp/json",
-      "--verbose"
+      "--verbose",
+      "--release"
     ],
     "name": "[trigger] skia_unittests",
     "~followup_annotations": [
@@ -508,7 +514,8 @@
       "4.4.3",
       "--trigger",
       "/path/to/tmp/json",
-      "--verbose"
+      "--verbose",
+      "--release"
     ],
     "name": "[trigger] sql_unittests",
     "~followup_annotations": [
@@ -566,7 +573,8 @@
       "4.4.3",
       "--trigger",
       "/path/to/tmp/json",
-      "--verbose"
+      "--verbose",
+      "--release"
     ],
     "name": "[trigger] ui_android_unittests",
     "~followup_annotations": [
@@ -624,7 +632,8 @@
       "4.4.3",
       "--trigger",
       "/path/to/tmp/json",
-      "--verbose"
+      "--verbose",
+      "--release"
     ],
     "name": "[trigger] ui_touch_selection_unittests",
     "~followup_annotations": [
@@ -752,7 +761,8 @@
       "[TMP_BASE]/amp_trigger_tmp_1/android_webview_unittests.json",
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/android_webview_unittests/results.zip",
-      "--verbose"
+      "--verbose",
+      "--release"
     ],
     "name": "[collect] android_webview_unittests",
     "~followup_annotations": [
@@ -862,7 +872,8 @@
       "[TMP_BASE]/amp_trigger_tmp_1/base_unittests.json",
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/base_unittests/results.zip",
-      "--verbose"
+      "--verbose",
+      "--release"
     ],
     "name": "[collect] base_unittests",
     "~followup_annotations": [
@@ -926,7 +937,8 @@
       "[TMP_BASE]/amp_trigger_tmp_1/cc_unittests.json",
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/cc_unittests/results.zip",
-      "--verbose"
+      "--verbose",
+      "--release"
     ],
     "name": "[collect] cc_unittests",
     "~followup_annotations": [
@@ -990,7 +1002,8 @@
       "[TMP_BASE]/amp_trigger_tmp_1/events_unittests.json",
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/events_unittests/results.zip",
-      "--verbose"
+      "--verbose",
+      "--release"
     ],
     "name": "[collect] events_unittests",
     "~followup_annotations": [
@@ -1052,7 +1065,8 @@
       "[TMP_BASE]/amp_trigger_tmp_1/skia_unittests.json",
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/skia_unittests/results.zip",
-      "--verbose"
+      "--verbose",
+      "--release"
     ],
     "name": "[collect] skia_unittests",
     "~followup_annotations": [
@@ -1114,7 +1128,8 @@
       "[TMP_BASE]/amp_trigger_tmp_1/sql_unittests.json",
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/sql_unittests/results.zip",
-      "--verbose"
+      "--verbose",
+      "--release"
     ],
     "name": "[collect] sql_unittests",
     "~followup_annotations": [
@@ -1176,7 +1191,8 @@
       "[TMP_BASE]/amp_trigger_tmp_1/ui_android_unittests.json",
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/ui_android_unittests/results.zip",
-      "--verbose"
+      "--verbose",
+      "--release"
     ],
     "name": "[collect] ui_android_unittests",
     "~followup_annotations": [
@@ -1238,7 +1254,8 @@
       "[TMP_BASE]/amp_trigger_tmp_1/ui_touch_selection_unittests.json",
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/ui_touch_selection_unittests/results.zip",
-      "--verbose"
+      "--verbose",
+      "--release"
     ],
     "name": "[collect] ui_touch_selection_unittests",
     "~followup_annotations": [

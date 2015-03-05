@@ -52,6 +52,8 @@ class AmpApi(recipe_api.RecipeApi):
         + ['--trigger', self.m.json.output()])
     if verbose:
       args += ['--verbose']
+    if self.m.chromium.c.BUILD_CONFIG == 'Release':
+      args += ['--release']
 
     step_test_data = lambda: self.m.json.test_api.output({
       'env': {
@@ -111,6 +113,8 @@ class AmpApi(recipe_api.RecipeApi):
 
     if verbose:
       args += ['--verbose']
+    if self.m.chromium.c.BUILD_CONFIG == 'Release':
+      args += ['--release']
     try:
       step_result = self.m.chromium_android.test_runner(
           '[collect] %s' % suite,

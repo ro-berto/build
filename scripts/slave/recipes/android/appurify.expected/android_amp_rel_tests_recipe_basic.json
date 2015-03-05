@@ -233,7 +233,8 @@
       "4.4.3",
       "--trigger",
       "/path/to/tmp/json",
-      "--verbose"
+      "--verbose",
+      "--release"
     ],
     "name": "[trigger] base_unittests",
     "~followup_annotations": [
@@ -361,7 +362,8 @@
       "[TMP_BASE]/amp_trigger_tmp_1/base_unittests.json",
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/base_unittests/results.zip",
-      "--verbose"
+      "--verbose",
+      "--release"
     ],
     "name": "[collect] base_unittests",
     "~followup_annotations": [
