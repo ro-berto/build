@@ -139,7 +139,7 @@ def _GenStepsInternal(api):
         api.tryserver.get_files_affected_by_patch(),
         exes=test_names,
         compile_targets=compile_targets,
-        additional_name='chromium',
+        additional_names=['chromium'],
         config_file_name='trybot_analyze_config.json')
     if not api.filter.result:
       return

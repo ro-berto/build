@@ -23,7 +23,7 @@ def GenSteps(api):
       affected_files=list(api.m.properties.get('affected_files', ['foo.cc'])),
       exes=exes,
       compile_targets=compile_targets,
-      additional_name='chromium')
+      additional_names=['chromium'])
 
   assert (list(api.properties.get('example_changed_paths', ['foo.cc'])) == \
           api.filter.paths)
@@ -58,7 +58,7 @@ def GenTests(api):
            'base': { 'exclusions': ['fo.*'] },
            'chromium': { 'exclusions': [] }})))
 
-  # Matches exclusions in additional_name key
+  # Matches exclusions in additional_names key
   yield (api.test('match_additional_name_exclusion') +
          api.properties(affected_files=['foo.cc'], example_result=1) +
          api.override_step_data(

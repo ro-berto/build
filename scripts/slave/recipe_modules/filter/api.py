@@ -75,7 +75,7 @@ class FilterApi(recipe_api.RecipeApi):
                                  affected_files,
                                  exes=None,
                                  compile_targets=None,
-                                 additional_name=None,
+                                 additional_names=None,
                                  config_file_name='trybot_analyze_config.json',
                                  **kwargs):
     """Return true if the current patch requires a build (and exes to run).
@@ -88,19 +88,19 @@ class FilterApi(recipe_api.RecipeApi):
       matching_exes() returns the set of exes that are effected by the files
       that have changed.
       compile_targets: proposed set of targets to compile.
-      additional_name: an additional top level key to look up exclusoions in,
+      additional_names: additional top level keys to look up exclusions in,
       see |config_file_name|.
       conconfig_file_name: the config file to look up exclusions in.
       Within the file we concatenate "base.exclusions" and
-      "|additional_name|.exclusions" (if |additional_name| is not none) to get
+      "|additional_names|.exclusions" (if |additional_names| is not none) to get
       the full list of exclusions.
       the exclusions should be list of python regular expressions (as strings).
       If any of the files in the current patch match one of the values in
       |exclusions| True is returned (by way of result()).
       """
     names = ['base']
-    if additional_name is not None:
-      names.append(additional_name)
+    if additional_names is not None:
+      names.extend(additional_names)
     exclusions = self._load_exclusions(names, config_file_name)
 
     self._matching_exes = exes if exes is not None else []

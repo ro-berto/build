@@ -191,7 +191,7 @@ class GpuApi(recipe_api.RecipeApi):
           self.m.tryserver.get_files_affected_by_patch(),
           exes=targets,
           compile_targets=targets,
-          additional_name='chromium',
+          additional_names=['chromium'],
           config_file_name='trybot_analyze_config.json')
       if not self.m.filter.result:
         # Early out if no work to do.
