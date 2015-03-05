@@ -94,7 +94,14 @@ def get_triggering_service(active_master):
       return service
     d.addCallback(start)
     _master_triggering_service_map[active_master] = d
-  return d
+
+  result = defer.Deferred()
+  def udpate_result(service):
+    result.callback(service)
+    return service
+  d.addCallback(udpate_result)
+  d.addErrback(result.errback)
+  return result
 
 
 def change_from_change_spec(self, change):
