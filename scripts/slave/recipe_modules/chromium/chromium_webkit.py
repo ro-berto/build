@@ -77,6 +77,92 @@ SPEC['builders'].update({
     'enable_swarming': True,
     'use_isolate': True,
   },
+  'WebKit Win x64 Builder': {
+    'recipe_config': 'chromium',
+    'chromium_apply_config': ['shared_library'],
+    'gclient_apply_config': ['blink_or_chromium'],
+    'chromium_config_kwargs': {
+      'BUILD_CONFIG': 'Release',
+      'TARGET_BITS': 64,
+    },
+    'compile_targets': [
+      # TODO(phajdan.jr): Shouldn't be needed once we have 64-bit testers.
+      'blink_tests',
+
+      # TODO(phajdan.jr): Find a way to automatically add crash_service
+      # to Windows builds (so that start_crash_service step works).
+      'crash_service',
+    ],
+    'bot_type': 'builder',
+    'testing': {
+      'platform': 'win',
+    },
+    'enable_swarming': True,
+    'use_isolate': True,
+  },
+  'WebKit Win Builder (dbg)': {
+    'recipe_config': 'chromium',
+    'gclient_apply_config': ['blink_or_chromium'],
+    'chromium_config_kwargs': {
+      'BUILD_CONFIG': 'Debug',
+      'TARGET_BITS': 32,
+    },
+    'compile_targets': [
+      # TODO(phajdan.jr): Find a way to automatically add crash_service
+      # to Windows builds (so that start_crash_service step works).
+      'crash_service',
+    ],
+    'bot_type': 'builder',
+    'testing': {
+      'platform': 'win',
+    },
+    'enable_swarming': True,
+    'use_isolate': True,
+  },
+  'WebKit Win7 (dbg)': {
+    'recipe_config': 'chromium',
+    'gclient_apply_config': ['blink_or_chromium'],
+    'chromium_config_kwargs': {
+      'BUILD_CONFIG': 'Debug',
+      'TARGET_BITS': 32,
+    },
+    'bot_type': 'tester',
+    'parent_buildername': 'WebKit Win Builder (dbg)',
+    'test_generators': [
+      steps.generate_gtest,
+      steps.generate_script,
+    ],
+    'tests': [
+      steps.BlinkTest(),
+    ],
+    'testing': {
+      'platform': 'win',
+    },
+    'enable_swarming': True,
+    'use_isolate': True,
+  },
+  'WebKit Win x64 Builder (dbg)': {
+    'recipe_config': 'chromium',
+    'gclient_apply_config': ['blink_or_chromium'],
+    'chromium_config_kwargs': {
+      'BUILD_CONFIG': 'Debug',
+      'TARGET_BITS': 64,
+    },
+    'compile_targets': [
+      # TODO(phajdan.jr): Shouldn't be needed once we have 64-bit testers.
+      'blink_tests',
+
+      # TODO(phajdan.jr): Find a way to automatically add crash_service
+      # to Windows builds (so that start_crash_service step works).
+      'crash_service',
+    ],
+    'bot_type': 'builder',
+    'testing': {
+      'platform': 'win',
+    },
+    'enable_swarming': True,
+    'use_isolate': True,
+  },
   'WebKit Linux': {
     'recipe_config': 'chromium',
     'gclient_apply_config': ['blink_or_chromium'],
