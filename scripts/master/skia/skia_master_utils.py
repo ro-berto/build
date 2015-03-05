@@ -253,7 +253,7 @@ def SetupBuildersAndSchedulers(c, builders, slaves, ActiveMaster):
           filter_master=True))
 
   # Create the BuildFactorys.
-  annotator = annotator_factory.AnnotatorFactory()
+  annotator = annotator_factory.AnnotatorFactory(ActiveMaster)
 
   for builder_dict in builder_dicts:
     triggers = ([trigger_name(builder_dict['name'])]

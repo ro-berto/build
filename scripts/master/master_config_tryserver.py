@@ -46,8 +46,6 @@ m_chromium_android = chromium_factory.ChromiumFactory(
     nohooks_on_update=True,
     target_os='android')
 
-m_annotator = annotator_factory.AnnotatorFactory()
-
 # Tests that are single-machine shard-safe.
 sharded_tests = [
   'accessibility_unittests',
