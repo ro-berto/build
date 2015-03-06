@@ -12,3 +12,5 @@ class Mojo(Master.Master3):
   slave_port = 8119
   master_port_alt = 8219
   buildbot_url = 'http://build.chromium.org/p/client.mojo/'
+  service_account_file = 'service-account-chromium-tryserver.json'
+  buidlbucket_build = 'master.tryserver.client.mojo'
