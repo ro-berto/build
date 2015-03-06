@@ -75,7 +75,6 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - builder',
         'build_gs_archive': 'linux_rel_archive',
         'tests': [
-          'presubmit',
           'v8initializers',
           'unittests',
           'v8testing',

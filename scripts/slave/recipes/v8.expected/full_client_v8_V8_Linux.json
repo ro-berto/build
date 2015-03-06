@@ -99,15 +99,6 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/v8/tools/presubmit.py"
-    ],
-    "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Presubmit"
-  },
-  {
-    "cmd": [
       "bash",
       "[SLAVE_BUILD]/v8/tools/check-static-initializers.sh",
       "out/Release/d8"
