@@ -459,7 +459,8 @@ class AndroidApi(recipe_api.RecipeApi):
     perf_tests = result.json.output
 
     if perf_tests and isinstance(perf_tests[0], dict):
-      perf_tests = sorted(perf_tests, key=lambda x: x['device_affinity'])
+      perf_tests = sorted(perf_tests,
+          key=lambda x: (x['device_affinity'], x['test']))
     else:
       perf_tests = [{'test': v} for v in perf_tests]
 
