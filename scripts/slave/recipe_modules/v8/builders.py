@@ -357,6 +357,10 @@ BUILDERS = {
         'bot_type': 'builder',
         'build_gs_archive': 'win32_rel_archive',
         'testing': {'platform': 'win'},
+        'triggers': [
+          'V8 Win32 - 1',
+          'V8 Win32 - 2',
+        ],
       },
       'V8 Win32 - debug builder': {
         'chromium_apply_config': ['msvs2013'],
