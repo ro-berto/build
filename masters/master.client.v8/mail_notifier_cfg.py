@@ -40,6 +40,7 @@ categories_steps = {
 }
 
 exclusions = {
+  'V8 Linux - presubmit': [],
   'V8 Linux - mipsel - sim - builder': [],
   'V8 Linux - mips64el - sim - builder': [],
   'V8 Linux - mipsel - sim': [],

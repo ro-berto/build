@@ -842,3 +842,15 @@ class V8Api(recipe_api.RecipeApi):
       stdout=self.m.json.output(),
       **kwargs
     ).stdout
+
+  def maybe_trigger(self):
+    triggers = self.bot_config.get('triggers')
+    if triggers:
+      self.m.trigger(*[{
+        'builder_name': builder_name,
+        'properties': {
+          'revision': self.revision,
+          'parent_got_revision': self.revision,
+          'parent_got_revision_cp': self.revision_cp,
+        },
+      } for builder_name in triggers])

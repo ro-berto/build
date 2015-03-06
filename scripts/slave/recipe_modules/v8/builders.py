@@ -21,6 +21,9 @@ BUILDERS = {
         'bot_type': 'builder',
         'build_gs_archive': 'linux_rel_archive',
         'testing': {'platform': 'linux'},
+        'triggers': [
+          'V8 Linux - presubmit',
+        ],
       },
       'V8 Linux - debug builder': {
         'chromium_apply_config': ['v8_goma'],
@@ -50,6 +53,17 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'build_gs_archive': 'linux_nosnap_dbg_archive',
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - presubmit': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux - builder',
+        'build_gs_archive': 'linux_rel_archive',
+        'tests': ['presubmit'],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux': {

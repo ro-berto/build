@@ -48,6 +48,8 @@ def GenSteps(api):
   if v8.should_test:
     v8.runtests()
 
+  v8.maybe_trigger()
+
 
 def _sanitize_nonalpha(text):
   return ''.join(c if c.isalnum() else '_' for c in text)

@@ -14,5 +14,6 @@ DEPS = [
   'raw_io',
   'step',
   'test_utils',
+  'trigger',
   'tryserver',
 ]
