@@ -324,6 +324,7 @@ ubsan_gyp = ('ubsan=1 sanitizer_coverage=3 ')
 B('UBSan Release', 'linux_ubsan_rel', 'compile', 'chromium_lkgr')
 F('linux_ubsan_rel', linux().ChromiumFactory(
     clobber=True,
+    compile_timeout=5400, # UBSan builds very slowly with edge level coverage
     target='Release',
     options=['--compiler=goma-clang', 'chromium_builder_asan'],
     factory_properties={
