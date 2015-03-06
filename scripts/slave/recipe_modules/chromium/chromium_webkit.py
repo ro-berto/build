@@ -250,8 +250,9 @@ SPEC['builders'].update({
       'BUILD_CONFIG': 'Release',
       'TARGET_BITS': 64,
     },
-    'bot_type': 'tester',
-    'parent_buildername': 'WebKit Mac Builder',
+    'compile_targets': [
+      'blink_tests',
+    ],
     'test_generators': [
       steps.generate_gtest,
       steps.generate_script,
