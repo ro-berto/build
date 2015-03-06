@@ -222,8 +222,16 @@ _AndroidSpecs = {
     'perf_id': 'android-nexus5',
     'num_device_shards': 8,
   },
+  'Android Nexus6 Perf': {
+    'perf_id': 'android-nexus6',
+    'num_device_shards': 8,
+  },
   'Android Nexus7v2 Perf': {
     'perf_id': 'android-nexus7v2',
+    'num_device_shards': 8,
+  },
+  'Android Nexus9 Perf': {
+    'perf_id': 'android-nexus9',
     'num_device_shards': 8,
   },
   'Android Nexus10 Perf': {
@@ -232,6 +240,10 @@ _AndroidSpecs = {
   },
   'Android MotoE Perf': {
     'perf_id': 'android-motoe',
+    'num_device_shards': 8,
+  },
+  'Android One Perf': {
+    'perf_id': 'android-one',
     'num_device_shards': 8,
   },
 }

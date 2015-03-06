@@ -38,8 +38,24 @@ BUILDERS = freeze({
       'num_device_shards': 8,
       'test_spec_file': 'chromium.perf.json',
     },
+    'Android Nexus6 Perf': {
+      'perf_id': 'android-nexus6',
+      'bucket': 'chrome-perf',
+      'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
+                           api.properties['parent_revision']),
+      'num_device_shards': 8,
+      'test_spec_file': 'chromium.perf.json',
+    },
     'Android Nexus7v2 Perf': {
       'perf_id': 'android-nexus7v2',
+      'bucket': 'chrome-perf',
+      'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
+                           api.properties['parent_revision']),
+      'num_device_shards': 8,
+      'test_spec_file': 'chromium.perf.json',
+    },
+    'Android Nexus9 Perf': {
+      'perf_id': 'android-nexus9',
       'bucket': 'chrome-perf',
       'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
                            api.properties['parent_revision']),
@@ -56,6 +72,14 @@ BUILDERS = freeze({
     },
     'Android MotoE Perf': {
       'perf_id': 'android-motoe',
+      'bucket': 'chrome-perf',
+      'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
+                           api.properties['parent_revision']),
+      'num_device_shards': 8,
+      'test_spec_file': 'chromium.perf.json',
+    },
+    'Android One Perf': {
+      'perf_id': 'android-one',
       'bucket': 'chrome-perf',
       'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
                            api.properties['parent_revision']),
