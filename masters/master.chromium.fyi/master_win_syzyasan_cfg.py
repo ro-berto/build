@@ -4,7 +4,6 @@
 
 from master import master_config
 from master import master_utils
-from master import gatekeeper
 from master.factory import chromium_factory
 
 import config
