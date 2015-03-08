@@ -80,7 +80,7 @@ class SlaveAllocator(object):
     self._pools = {}
     self._classes = {}
     self._membership = {}
-    self._all_slaves = set()
+    self._all_slaves = {}
 
   def LoadStateDict(self, state_class_map=None):
     """Loads previous allocation state from a state dictionary.
@@ -163,18 +163,18 @@ class SlaveAllocator(object):
       name (str): The slave pool name.
       slaves: Slave name strings that belong to this pool.
     """
-    slave_set = set(slaves)
-
-    # Make sure no slaves in the new pool overlap.
-    overlapping_slaves = slave_set.intersection(self._all_slaves)
-    assert not overlapping_slaves, (
-        "Duplicate slaves registered: %s" % (sorted(overlapping_slaves),))
-
     pool = self._pools.get(name)
     if not pool:
       pool = self._pools[name] = set()
-    pool.update(slave_set)
-    self._all_slaves.update(slave_set)
+    for slave in slaves:
+      current_pool = self._all_slaves.get(slave)
+      if current_pool is not None:
+        if current_pool != name:
+          raise ValueError("Cannot register slave '%s' with multiple pools "
+                           "(%s, %s)" % (slave, current_pool, name))
+      else:
+        self._all_slaves[slave] = name
+    pool.update(slaves)
     return name
 
   def GetPool(self, name):
@@ -242,10 +242,11 @@ class SlaveAllocator(object):
     result is a dictionary mapping slave names to a tuple of keys belonging
     to that slave.
     """
+    all_slaves = set(self._all_slaves.iterkeys())
     n_state = SlaveState(
         class_map={},
-        unallocated=self._all_slaves.copy())
-    lru = self._all_slaves.copy()
+        unallocated=all_slaves.copy())
+    lru = all_slaves.copy()
     exclusive = set()
 
     # The remaining classes to allocate. We keep this sorted for determinism.
@@ -262,7 +263,7 @@ class SlaveAllocator(object):
       n_state.unallocated.difference_update(slaves)
       if len(lru) == 0:
         # Reload LRU.
-        lru.update(self._all_slaves)
+        lru.update(all_slaves)
       return class_slaves
 
     def candidate_slaves(config, state):

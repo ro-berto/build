@@ -128,10 +128,11 @@ class SlavePoolTestCase(unittest.TestCase):
     sa.AddPool('test', 'a1')
     self.assertSetEqual(sa.GetPool('test'), set(['a0', 'a1']))
 
-  def testAddPool_DuplicateSlaveNamesRaisesAssertion(self):
+  def testAddPool_SlaveInMultiplePoolsRaisesAssertion(self):
     sa = slave_alloc.SlaveAllocator()
     sa.AddPool('test', 'a0')
-    self.assertRaises(AssertionError, sa.AddPool, 'test2', 'a0')
+    sa.AddPool('test', 'a0') # Can add to same pool without a problem.
+    self.assertRaises(ValueError, sa.AddPool, 'test2', 'a0')
 
   def testAlloc_ClassAllocationWithInvalidPoolsRaisesAssertion(self):
     sa = slave_alloc.SlaveAllocator()
