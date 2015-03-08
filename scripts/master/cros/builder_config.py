@@ -94,8 +94,6 @@ class BuilderConfig(object):
       builder_name = self.MASTER_BUILDER_NAME or self._GetBuilderName()
     else:
       builder_name = self._GetBuilderName()
-      if self.is_experimental:
-        builder_name += ' (experimental)'
     return str(builder_name)
 
   @property
