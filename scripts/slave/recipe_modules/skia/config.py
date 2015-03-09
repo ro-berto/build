@@ -44,7 +44,7 @@ VAR_TEST_MAP = {
                    u'Housekeeper-PerCommit',
                    u'Test-Mac10.8-MacMini4.1-GeForce320M-x86_64-Release',
                    u'Test-Ubuntu12-ShuttleA-GTX550Ti-x86_64-Debug-ZeroGPUCache',
-                   u'Test-Ubuntu12-ShuttleA-GTX550Ti-x86_64-Release-Valgrind',
+                   u'Test-Ubuntu14-ShuttleA-GTX550Ti-x86_64-Release-Valgrind_GPU',
                    u'Test-Ubuntu13.10-GCE-NoGPU-x86_64-Release-Shared',
                    u'Test-Ubuntu13.10-GCE-NoGPU-x86_64-Release-TSAN',
                    u'Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes',
@@ -158,7 +158,7 @@ def gyp_defs_from_builder_dict(builder_dict):
     gyp_defs['skia_clang_build'] = '1'  # pragma: no cover
 
   # Valgrind.
-  if builder_dict.get('extra_config') == 'Valgrind':
+  if 'Valgrind' in builder_dict.get('extra_config', ''):
     gyp_defs['skia_release_optimization_level'] = '1'
 
   return gyp_defs

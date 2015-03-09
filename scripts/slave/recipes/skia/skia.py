@@ -58,7 +58,7 @@ def GenTests(api):
     'Test-ChromeOS-Alex-GMA3150-x86-Debug',
     'Test-ChromeOS-Link-HD4000-x86_64-Debug',
     'Test-Mac10.8-MacMini4.1-GeForce320M-x86_64-Debug',
-    'Test-Ubuntu12-ShuttleA-GTX550Ti-x86_64-Release-Valgrind',
+    'Test-Ubuntu14-ShuttleA-GTX550Ti-x86_64-Release-Valgrind_GPU',
     'Test-Ubuntu12-ShuttleA-GTX550Ti-x86_64-Debug-ZeroGPUCache',
     'Test-Ubuntu13.10-GCE-NoGPU-x86_64-Debug',
     'Test-Ubuntu13.10-GCE-NoGPU-x86_64-Debug-Trybot',
