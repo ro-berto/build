@@ -24,57 +24,38 @@ DEPS = [
 
 
 def GenSteps(api):
-  mastername = api.properties.get('mastername')
-  buildername = api.properties.get('buildername')
-  master_dict = api.webrtc.BUILDERS.get(mastername, {})
-  master_settings = master_dict.get('settings', {})
-  bot_config = master_dict.get('builders', {}).get(buildername)
-  assert bot_config, ('Unrecognized builder name "%r" for master "%r".' %
-                      (buildername, mastername))
-  recipe_config_name = bot_config['recipe_config']
-  recipe_config = api.webrtc.RECIPE_CONFIGS.get(recipe_config_name)
-  assert recipe_config, ('Cannot find recipe_config "%s" for builder "%r".' %
-                         (recipe_config_name, buildername))
-
-  api.webrtc.setup(bot_config, recipe_config,
-                   master_settings.get('PERF_CONFIG'))
+  webrtc = api.webrtc
+  webrtc.apply_bot_config(webrtc.BUILDERS, webrtc.RECIPE_CONFIGS)
 
   if api.platform.is_win:
     api.chromium.taskkill()
-
-  bot_type = bot_config.get('bot_type', 'builder_tester')
 
   # Bot Update re-uses the gclient configs.
   step_result = api.bot_update.ensure_checkout(force=True)
   got_revision = step_result.presentation.properties['got_revision']
 
-  api.webrtc.cleanup()
-  if not bot_config.get('disable_runhooks'):
+  webrtc.cleanup()
+  if webrtc.should_run_hooks:
     api.chromium.runhooks()
 
-  if bot_type in ('builder', 'builder_tester'):
+  if webrtc.should_build:
     run_gn = api.chromium.c.project_generator.tool == 'gn'
     if run_gn:
       api.chromium.run_gn(use_goma=True)
 
-    compile_targets = recipe_config.get('compile_targets', [])
-    api.chromium.compile(targets=compile_targets)
-    if (mastername == 'chromium.webrtc.fyi' and not run_gn and
+    webrtc.compile()
+    if (api.properties.get('mastername') == 'chromium.webrtc.fyi' and
+        not run_gn and
         api.chromium.c.TARGET_PLATFORM != 'android'):
-      api.webrtc.sizes(got_revision)
+      webrtc.sizes(got_revision)
 
   archive_revision = api.properties.get('parent_got_revision', got_revision)
-  if bot_type == 'builder' and bot_config.get('build_gs_archive'):
-    api.webrtc.package_build(
-        api.webrtc.GS_ARCHIVES[bot_config['build_gs_archive']],
-        archive_revision)
+  if webrtc.should_upload_build:
+    webrtc.package_build(archive_revision)
+  if webrtc.should_download_build:
+    webrtc.extract_build(archive_revision)
 
-  if bot_type == 'tester':
-    api.webrtc.extract_build(
-        api.webrtc.GS_ARCHIVES[bot_config['build_gs_archive']],
-        archive_revision)
-
-  if bot_type in ('builder_tester', 'tester'):
+  if webrtc.should_test:
     if api.chromium.c.TARGET_PLATFORM == 'android':
       api.chromium_android.common_tests_setup_steps()
       api.chromium_android.run_test_suite(
@@ -82,7 +63,7 @@ def GenSteps(api):
           gtest_filter='WebRtc*')
       api.chromium_android.common_tests_final_steps()
     else:
-      test_runner = lambda: api.webrtc.runtests(revision_number=got_revision)
+      test_runner = lambda: webrtc.runtests(revision_number=got_revision)
       api.chromium_tests.setup_chromium_tests(test_runner)
 
 

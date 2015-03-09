@@ -20,58 +20,33 @@ DEPS = [
 
 
 def GenSteps(api):
-  mastername = api.properties.get('mastername')
-  buildername = api.properties.get('buildername')
-  master_dict = api.webrtc.BUILDERS.get(mastername, {})
-  master_settings = master_dict.get('settings', {})
-  bot_config = master_dict.get('builders', {}).get(buildername)
-  assert bot_config, ('Unrecognized builder name "%r" for master "%r".' %
-                      (buildername, mastername))
-
-  bot_type = bot_config.get('bot_type', 'builder_tester')
-  does_build = bot_type in ('builder', 'builder_tester')
-  does_test = bot_type in ('builder_tester', 'tester')
-
-  recipe_config_name = bot_config['recipe_config']
-  recipe_config = api.webrtc.RECIPE_CONFIGS.get(recipe_config_name)
-  assert recipe_config, ('Cannot find recipe_config "%s" for builder "%r".' %
-                         (recipe_config_name, buildername))
-
-  api.webrtc.setup(bot_config, recipe_config,
-                   master_settings.get('PERF_CONFIG'))
-
-  # Needed for the multiple webcam check steps to get unique names.
-  api.step.auto_resolve_conflicts = True
+  webrtc = api.webrtc
+  webrtc.apply_bot_config(webrtc.BUILDERS, webrtc.RECIPE_CONFIGS)
 
   step_result = api.bot_update.ensure_checkout()
 
   # Whatever step is run right before this line needs to emit got_revision.
   got_revision = step_result.presentation.properties['got_revision']
 
-  api.webrtc.cleanup()
+  webrtc.cleanup()
   api.chromium.runhooks()
 
-  if does_build:
+  if webrtc.should_build:
     if api.chromium.c.project_generator.tool == 'gn':
       api.chromium.run_gn(use_goma=True)
-    api.chromium.compile()
+    webrtc.compile()
 
     if api.chromium.c.gyp_env.GYP_DEFINES.get('syzyasan', 0) == 1:
       api.chromium.apply_syzyasan()
 
   archive_revision = api.properties.get('parent_got_revision', got_revision)
-  if bot_type == 'builder' and bot_config.get('build_gs_archive'):
-    api.webrtc.package_build(
-        api.webrtc.GS_ARCHIVES[bot_config['build_gs_archive']],
-        archive_revision)
+  if webrtc.should_upload_build:
+    webrtc.package_build(archive_revision)
+  if webrtc.should_download_build:
+    webrtc.extract_build(archive_revision)
 
-  if bot_type == 'tester':
-    api.webrtc.extract_build(
-        api.webrtc.GS_ARCHIVES[bot_config['build_gs_archive']],
-        archive_revision)
-
-  if does_test:
-    api.webrtc.runtests(revision_number=got_revision)
+  if webrtc.should_test:
+    webrtc.runtests(revision_number=got_revision)
 
 
 def _sanitize_nonalpha(text):

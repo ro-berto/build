@@ -81,33 +81,75 @@ class WebRTCApi(recipe_api.RecipeApi):
   BROWSER_TESTS_GTEST_FILTER = 'WebRtc*:Webrtc*:TabCapture*:*MediaStream*'
   DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
 
-  def setup(self, bot_config, recipe_config, perf_config=None):
+  @property
+  def should_build(self):
+    return self.bot_type in ('builder', 'builder_tester')
+
+  @property
+  def should_test(self):
+    return self.bot_type in ('tester', 'builder_tester')
+
+  @property
+  def should_run_hooks(self):
+    return not self.bot_config.get('disable_runhooks')
+
+  @property
+  def should_upload_build(self):
+    return self.bot_type == 'builder'
+
+  @property
+  def should_download_build(self):
+    return self.bot_type == 'tester'
+
+  def apply_bot_config(self, builders, recipe_configs, perf_config=None):
+    self.m.step.auto_resolve_conflicts = True
+    mastername = self.m.properties.get('mastername')
+    buildername = self.m.properties.get('buildername')
+    master_dict = builders.get(mastername, {})
+    master_settings = master_dict.get('settings', {})
+    perf_config = master_settings.get('PERF_CONFIG')
+
+    self.bot_config = master_dict.get('builders', {}).get(buildername)
+    assert self.bot_config, ('Unrecognized builder name "%r" for master "%r".' %
+                             (buildername, mastername))
+
+    self.bot_type = self.bot_config.get('bot_type', 'builder_tester')
+    recipe_config_name = self.bot_config['recipe_config']
+    self.recipe_config = recipe_configs.get(recipe_config_name)
+    assert self.recipe_config, (
+        'Cannot find recipe_config "%s" for builder "%r".' %
+        (recipe_config_name, buildername))
+
     self.set_config('webrtc', PERF_CONFIG=perf_config,
-                    TEST_SUITE=recipe_config.get('test_suite'),
-                    **bot_config.get('webrtc_config_kwargs', {}))
+                    TEST_SUITE=self.recipe_config.get('test_suite'),
+                    **self.bot_config.get('webrtc_config_kwargs', {}))
 
-    chromium_kwargs = bot_config.get('chromium_config_kwargs', {})
-    if recipe_config.get('chromium_android_config'):
+    chromium_kwargs = self.bot_config.get('chromium_config_kwargs', {})
+    if self.recipe_config.get('chromium_android_config'):
       self.m.chromium_android.set_config(
-          recipe_config['chromium_android_config'], **chromium_kwargs)
+          self.recipe_config['chromium_android_config'], **chromium_kwargs)
 
-    self.m.chromium.set_config(recipe_config['chromium_config'],
+    self.m.chromium.set_config(self.recipe_config['chromium_config'],
                                **chromium_kwargs)
-    self.m.gclient.set_config(recipe_config['gclient_config'])
+    self.m.gclient.set_config(self.recipe_config['gclient_config'])
 
     # Support applying configs both at the bot and the recipe config level.
-    for c in bot_config.get('chromium_apply_config', []):
+    for c in self.bot_config.get('chromium_apply_config', []):
       self.m.chromium.apply_config(c)
-    for c in recipe_config.get('chromium_apply_config', []):
+    for c in self.recipe_config.get('chromium_apply_config', []):
       self.m.chromium.apply_config(c)
 
-    for c in bot_config.get('gclient_apply_config', []):
+    for c in self.bot_config.get('gclient_apply_config', []):
       self.m.gclient.apply_config(c)
-    for c in recipe_config.get('gclient_apply_config', []):
+    for c in self.recipe_config.get('gclient_apply_config', []):
       self.m.gclient.apply_config(c)
 
     if self.m.tryserver.is_tryserver:
       self.m.chromium.apply_config('trybot_flavor')
+
+  def compile(self):
+    compile_targets = self.recipe_config.get('compile_targets', [])
+    self.m.chromium.compile(targets=compile_targets)
 
   def runtests(self, revision_number=None):
     """Add a suite of test steps.
@@ -302,14 +344,15 @@ class WebRTCApi(recipe_api.RecipeApi):
         revision_number=revision_number,
         perf_test=True)
 
-  def package_build(self, gs_url, revision):
-    self.m.archive.zip_and_upload_build(
-        'package build',
-        self.m.chromium.c.build_config_fs,
-        gs_url,
-        build_revision=revision)
+  def package_build(self, revision):
+    if self.bot_config.get('build_gs_archive'):
+      self.m.archive.zip_and_upload_build(
+          'package build',
+          self.m.chromium.c.build_config_fs,
+          self.GS_ARCHIVES[self.bot_config['build_gs_archive']],
+          build_revision=revision)
 
-  def extract_build(self, gs_url, revision):
+  def extract_build(self, revision):
     # Ensure old build directory is not used is by removing it.
     self.m.path.rmtree(
         'build directory',
@@ -318,7 +361,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     self.m.archive.download_and_unzip_build(
         'extract build',
         self.m.chromium.c.build_config_fs,
-        gs_url,
+        self.GS_ARCHIVES[self.bot_config['build_gs_archive']],
         build_revision=revision)
 
     if not self.m.properties.get('parent_got_revision'):
