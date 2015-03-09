@@ -50,7 +50,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/webrtc/resources/cleanup_files.py",
+      "RECIPE_MODULE[webrtc]/resources/cleanup_files.py",
       "[SLAVE_BUILD]/src/out"
     ],
     "name": "clean test output files"
@@ -151,7 +151,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/webrtc/resources/ensure_webcam_is_running.py"
+      "RECIPE_MODULE[webrtc]/resources/ensure_webcam_is_running.py"
     ],
     "name": "webcam_check"
   },
@@ -183,7 +183,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/webrtc/resources/ensure_webcam_is_running.py"
+      "RECIPE_MODULE[webrtc]/resources/ensure_webcam_is_running.py"
     ],
     "name": "webcam_check (2)"
   },
@@ -236,7 +236,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/webrtc/resources/ensure_webcam_is_running.py"
+      "RECIPE_MODULE[webrtc]/resources/ensure_webcam_is_running.py"
     ],
     "name": "webcam_check (3)"
   },

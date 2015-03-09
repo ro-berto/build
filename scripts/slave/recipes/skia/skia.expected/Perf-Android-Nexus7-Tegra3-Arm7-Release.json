@@ -240,7 +240,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
@@ -448,7 +448,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/skia/resources/upload_bench_results.py",
+      "RECIPE_MODULE[skia]/resources/upload_bench_results.py",
       "Perf-Android-Nexus7-Tegra3-Arm7-Release",
       "5",
       "[SLAVE_BUILD]/perfdata/Perf-Android-Nexus7-Tegra3-Arm7-Release/data",

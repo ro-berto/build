@@ -176,7 +176,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
@@ -219,7 +219,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/auto_bisect/resources/wait_for_any.py",
+      "RECIPE_MODULE[auto_bisect]/resources/wait_for_any.py",
       "[DEPOT_TOOLS]/gsutil.py",
       "gs://chrome-perf/bisect-results/a6298e4afedbf2cd461755ea6f45b0ad64222222-test"
     ],
@@ -251,7 +251,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
@@ -267,7 +267,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/auto_bisect/resources/check_job_status.py",
+      "RECIPE_MODULE[auto_bisect]/resources/check_job_status.py",
       "dummy/url"
     ],
     "name": "Get test status for build e28dc0d49c331def2a3bbf3ddd0096eb51551155",
@@ -277,7 +277,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
@@ -315,7 +315,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
@@ -331,7 +331,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/auto_bisect/resources/check_job_status.py",
+      "RECIPE_MODULE[auto_bisect]/resources/check_job_status.py",
       "dummy/url"
     ],
     "name": "Get test status for build a6298e4afedbf2cd461755ea6f45b0ad64222222",
@@ -341,7 +341,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
@@ -371,7 +371,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/auto_bisect/resources/wait_for_any.py",
+      "RECIPE_MODULE[auto_bisect]/resources/wait_for_any.py",
       "[DEPOT_TOOLS]/gsutil.py",
       "gs://chrome-perf/bisect-results/00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test"
     ],
@@ -403,7 +403,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
@@ -419,7 +419,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/auto_bisect/resources/check_job_status.py",
+      "RECIPE_MODULE[auto_bisect]/resources/check_job_status.py",
       "dummy/url"
     ],
     "name": "Get test status for build 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
@@ -429,7 +429,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
@@ -459,7 +459,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/auto_bisect/resources/wait_for_any.py",
+      "RECIPE_MODULE[auto_bisect]/resources/wait_for_any.py",
       "[DEPOT_TOOLS]/gsutil.py",
       "gs://chrome-perf/bisect-results/fc6dfc7ff5b1073408499478969261b826441144-test"
     ],
@@ -491,7 +491,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
@@ -507,7 +507,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/auto_bisect/resources/check_job_status.py",
+      "RECIPE_MODULE[auto_bisect]/resources/check_job_status.py",
       "dummy/url"
     ],
     "name": "Get test status for build fc6dfc7ff5b1073408499478969261b826441144",
@@ -517,7 +517,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
@@ -546,7 +546,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/auto_bisect/resources/annotated_results.py"
+      "RECIPE_MODULE[auto_bisect]/resources/annotated_results.py"
     ],
     "name": "results",
     "stdin": "{\"header\": \"Succeeded.\", \"revisions\": [{\"std_err\": 10, \"culprit\": false, \"good_or_bad\": \"good\", \"mean_value\": 80, \"tested\": \"tested\", \"revision_string\": \"306475\", \"commit_pos\": 306475}, {\"std_err\": 2, \"culprit\": false, \"good_or_bad\": \"good\", \"mean_value\": 70, \"tested\": \"tested\", \"revision_string\": \"306476\", \"commit_pos\": 306476}, {\"std_err\": 1, \"culprit\": true, \"good_or_bad\": \"bad\", \"mean_value\": 15, \"tested\": \"tested\", \"revision_string\": \"306477\", \"commit_pos\": 306477}, {\"std_err\": 1, \"culprit\": false, \"good_or_bad\": \"bad\", \"mean_value\": 20, \"tested\": \"tested\", \"revision_string\": \"src@a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"commit_pos\": 306478}]}"

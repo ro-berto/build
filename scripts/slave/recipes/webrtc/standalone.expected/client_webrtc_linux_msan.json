@@ -44,7 +44,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/webrtc/resources/cleanup_files.py",
+      "RECIPE_MODULE[webrtc]/resources/cleanup_files.py",
       "[SLAVE_BUILD]/src/out"
     ],
     "name": "clean test output files"

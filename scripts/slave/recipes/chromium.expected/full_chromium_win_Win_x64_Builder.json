@@ -152,7 +152,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\recipe_modules\\isolate\\resources\\find_isolated_tests.py",
+      "RECIPE_MODULE[isolate]\\resources\\find_isolated_tests.py",
       "--build-dir",
       "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--clean-isolated-files"
@@ -186,7 +186,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\recipe_modules\\isolate\\resources\\remove_build_metadata.py",
+      "RECIPE_MODULE[isolate]\\resources\\remove_build_metadata.py",
       "--build-dir",
       "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--src-dir",

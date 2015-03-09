@@ -161,7 +161,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\recipe_modules\\gsutil\\resources\\gsutil_wrapper.py",
+      "RECIPE_MODULE[gsutil]\\resources\\gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]\\gsutil.py",
       "--force-version",
@@ -228,7 +228,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\recipe_modules\\gsutil\\resources\\gsutil_wrapper.py",
+      "RECIPE_MODULE[gsutil]\\resources\\gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]\\gsutil.py",
       "--force-version",
@@ -335,7 +335,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\recipe_modules\\skia\\resources\\upload_dm_results.py",
+      "RECIPE_MODULE[skia]\\resources\\upload_dm_results.py",
       "[SLAVE_BUILD]\\dm",
       "164710",
       "Test-Win7-ShuttleA-HD2000-x86_64-Release",

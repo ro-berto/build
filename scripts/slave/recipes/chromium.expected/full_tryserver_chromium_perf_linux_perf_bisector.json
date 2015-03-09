@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/bisect_tester/resources/put_temp.py"
+      "RECIPE_MODULE[bisect_tester]/resources/put_temp.py"
     ],
     "name": "saving url to temp file",
     "stdin": "http://build.chromium.org/p/tryserver.chromium.perf/json/builders/linux_perf_bisector/builds/571",
@@ -13,7 +13,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
@@ -205,7 +205,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/bisect_tester/resources/put_temp.py"
+      "RECIPE_MODULE[bisect_tester]/resources/put_temp.py"
     ],
     "name": "saving json to temp file",
     "stdin": "{\"output\": \"Test output omitted for now\", \"results\": {\"std_err\": 0.0, \"values\": [0, 0], \"mean\": 0.0}}",
@@ -215,7 +215,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",

@@ -228,7 +228,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/adb/resources/list_devices.py",
+      "RECIPE_MODULE[adb]/resources/list_devices.py",
       "['[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb', 'devices']",
       "/path/to/tmp/json"
     ],

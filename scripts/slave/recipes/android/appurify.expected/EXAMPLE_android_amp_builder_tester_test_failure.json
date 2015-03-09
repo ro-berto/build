@@ -972,7 +972,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/zip/resources/unzip.py"
+      "RECIPE_MODULE[zip]/resources/unzip.py"
     ],
     "name": "[upload logcat] unzip results for android_webview_unittests",
     "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/android_webview_unittests/unzipped_results\", \"use_python_zip\": false, \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/android_webview_unittests/results.zip\"}"
@@ -981,7 +981,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",

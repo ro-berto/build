@@ -263,7 +263,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/zip/resources/unzip.py"
+      "RECIPE_MODULE[zip]/resources/unzip.py"
     ],
     "name": "[upload logcat] unzip results for example_uirobot_suite",
     "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/example_uirobot_suite/unzipped_results\", \"use_python_zip\": false, \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/example_uirobot_suite/results.zip\"}"
@@ -272,7 +272,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",

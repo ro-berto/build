@@ -101,7 +101,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/v8/resources/v8testing.py",
+      "RECIPE_MODULE[v8]/resources/v8testing.py",
       "--target",
       "Release",
       "--arch",
@@ -528,7 +528,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/v8/resources/v8testing.py",
+      "RECIPE_MODULE[v8]/resources/v8testing.py",
       "--target",
       "Release",
       "--arch",
@@ -958,7 +958,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/v8/resources/v8testing.py",
+      "RECIPE_MODULE[v8]/resources/v8testing.py",
       "--target",
       "Release",
       "--arch",

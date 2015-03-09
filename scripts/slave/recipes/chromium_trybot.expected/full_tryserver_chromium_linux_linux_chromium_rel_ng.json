@@ -244,7 +244,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/isolate/resources/find_isolated_tests.py",
+      "RECIPE_MODULE[isolate]/resources/find_isolated_tests.py",
       "--build-dir",
       "[SLAVE_BUILD]/src/out/Release",
       "--clean-isolated-files"
@@ -284,7 +284,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/isolate/resources/remove_build_metadata.py",
+      "RECIPE_MODULE[isolate]/resources/remove_build_metadata.py",
       "--build-dir",
       "[SLAVE_BUILD]/src/out/Release",
       "--src-dir",
@@ -1589,7 +1589,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/swarming/resources/collect_gtest_task.py",
+      "RECIPE_MODULE[swarming]/resources/collect_gtest_task.py",
       "--swarming-client-dir",
       "[SLAVE_BUILD]/src/tools/swarming_client",
       "--temp-root-dir",
@@ -1613,7 +1613,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/swarming/resources/collect_gtest_task.py",
+      "RECIPE_MODULE[swarming]/resources/collect_gtest_task.py",
       "--swarming-client-dir",
       "[SLAVE_BUILD]/src/tools/swarming_client",
       "--temp-root-dir",
@@ -1637,7 +1637,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/swarming/resources/collect_gtest_task.py",
+      "RECIPE_MODULE[swarming]/resources/collect_gtest_task.py",
       "--swarming-client-dir",
       "[SLAVE_BUILD]/src/tools/swarming_client",
       "--temp-root-dir",
@@ -1841,7 +1841,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/swarming/resources/collect_gtest_task.py",
+      "RECIPE_MODULE[swarming]/resources/collect_gtest_task.py",
       "--swarming-client-dir",
       "[SLAVE_BUILD]/src/tools/swarming_client",
       "--temp-root-dir",

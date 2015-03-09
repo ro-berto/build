@@ -89,7 +89,7 @@
   {
     "cmd": [
       "python",
-      "[BUILD]/scripts/slave/recipe_modules/skia/resources/run_binary_size_analysis.py",
+      "RECIPE_MODULE[skia]/resources/run_binary_size_analysis.py",
       "--library",
       "[SLAVE_BUILD]/skia/out/Release/lib/libskia.so",
       "--githash",

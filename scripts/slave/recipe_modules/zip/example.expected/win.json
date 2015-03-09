@@ -46,7 +46,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\recipe_modules\\zip\\resources\\zip.py"
+      "RECIPE_MODULE[zip]\\resources\\zip.py"
     ],
     "name": "zipping",
     "stdin": "{\"entries\": [{\"path\": \"[TMP_BASE]\\\\zip-example_tmp_1\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\output.zip\", \"root\": \"[TMP_BASE]\\\\zip-example_tmp_1\", \"use_python_zip\": true}"
@@ -55,7 +55,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\recipe_modules\\zip\\resources\\zip.py"
+      "RECIPE_MODULE[zip]\\resources\\zip.py"
     ],
     "name": "zipping more",
     "stdin": "{\"entries\": [{\"path\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\a\", \"type\": \"file\"}, {\"path\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\b\", \"type\": \"file\"}, {\"path\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\sub\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\more.zip\", \"root\": \"[TMP_BASE]\\\\zip-example_tmp_1\", \"use_python_zip\": true}"
@@ -71,7 +71,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\recipe_modules\\zip\\resources\\unzip.py"
+      "RECIPE_MODULE[zip]\\resources\\unzip.py"
     ],
     "name": "unzipping",
     "stdin": "{\"output\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\output\", \"use_python_zip\": true, \"zip_file\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\output.zip\"}"

@@ -106,7 +106,7 @@
   },
   {
     "cmd": [
-      "[BUILD]/scripts/slave/recipe_modules/skia/resources/scp_dir_contents.sh",
+      "RECIPE_MODULE[skia]/resources/scp_dir_contents.sh",
       "[SLAVE_BUILD]/skia/resources",
       "root@192.168.1.123:/usr/local/skiabot/skia_resources"
     ],
@@ -176,7 +176,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
@@ -225,7 +225,7 @@
   },
   {
     "cmd": [
-      "[BUILD]/scripts/slave/recipe_modules/skia/resources/scp_dir_contents.sh",
+      "RECIPE_MODULE[skia]/resources/scp_dir_contents.sh",
       "[SLAVE_BUILD]/playback/skps",
       "root@192.168.1.123:/usr/local/skiabot/skia_skp/skps"
     ],
@@ -275,7 +275,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/gsutil/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
@@ -314,7 +314,7 @@
   },
   {
     "cmd": [
-      "[BUILD]/scripts/slave/recipe_modules/skia/resources/scp_dir_contents.sh",
+      "RECIPE_MODULE[skia]/resources/scp_dir_contents.sh",
       "[SLAVE_BUILD]/images",
       "root@192.168.1.123:/usr/local/skiabot/skia_images"
     ],
@@ -426,7 +426,7 @@
   },
   {
     "cmd": [
-      "[BUILD]/scripts/slave/recipe_modules/skia/resources/scp_dir_contents.sh",
+      "RECIPE_MODULE[skia]/resources/scp_dir_contents.sh",
       "root@192.168.1.123:/usr/local/skiabot/skia_dm_out",
       "[SLAVE_BUILD]/dm"
     ],
@@ -436,7 +436,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/skia/resources/upload_dm_results.py",
+      "RECIPE_MODULE[skia]/resources/upload_dm_results.py",
       "[SLAVE_BUILD]/dm",
       "164710",
       "Test-ChromeOS-Link-HD4000-x86_64-Debug",

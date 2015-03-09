@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/recipe_modules/disk/resources/statvfs.py",
+      "RECIPE_MODULE[disk]/resources/statvfs.py",
       "[SLAVE_BUILD]"
     ],
     "name": "usage1",
