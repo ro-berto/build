@@ -78,6 +78,15 @@ BUILDERS = freeze({
       'target': 'Release',
       'try': True,
     },
+    'android_n5_rel_tests_recipe': {
+      'config': 'trybot_builder',
+      'instrumentation_tests': INSTRUMENTATION_TESTS,
+      'unittests': UNIT_TESTS,
+      'java_unittests': JAVA_UNIT_TESTS,
+      'python_unittests': PYTHON_UNIT_TESTS,
+      'target': 'Release',
+      'try': True,
+    },
     'EXAMPLE_android_rel_telemetry_tests_recipe': {
       'config': 'main_builder',
       'instrumentation_tests': [],
