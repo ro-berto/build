@@ -424,15 +424,6 @@
               "Mozilla"
             ]
           },
-          "Auto-roll - release process": {
-            "tree_notify": [
-              "jarin@chromium.org",
-              "mstarzinger@chromium.org",
-              "machenbach@chromium.org"
-            ],
-            "sheriff_classes": ["sheriff_v8"],
-            "forgiving_optional": ["*"]
-          },
           "*": {}
         }
       }
