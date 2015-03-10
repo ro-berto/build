@@ -177,6 +177,8 @@ def SetupBuildersAndSchedulers(c, builders, slaves, ActiveMaster):
       project='skia', repository=ActiveMaster.repo_url)
   infra_change_filter = change_filter.ChangeFilter(
       project='buildbot', repository=global_constants.INFRA_REPO)
+  skia_master_only_change_filter = change_filter.ChangeFilter(
+      project='skia', repository=ActiveMaster.repo_url, branch=MASTER_BRANCH)
   def trigger_name(parent_builder):
     """Given a parent builder name, return a triggerable scheduler name."""
     return 'triggers_%s' % parent_builder
@@ -192,8 +194,8 @@ def SetupBuildersAndSchedulers(c, builders, slaves, ActiveMaster):
 
   s = Scheduler(
       name=MASTER_ONLY_SCHEDULER_NAME,
-      branch=MASTER_BRANCH,
       treeStableTimer=60,
+      change_filter=skia_master_only_change_filter,
       builderNames=builders_by_scheduler[MASTER_ONLY_SCHEDULER_NAME])
   c['schedulers'].append(s)
 
