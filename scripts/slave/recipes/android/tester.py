@@ -89,6 +89,17 @@ BUILDERS = freeze({
       'target': 'Release',
     },
   },
+  'chromium.fyi': {
+    'Android Tests (N5)': {
+      'config': 'trybot_builder',
+      'instrumentation_tests': INSTRUMENTATION_TESTS,
+      'unittests': UNIT_TESTS,
+      'java_unittests': JAVA_UNIT_TESTS,
+      'python_unittests': PYTHON_UNIT_TESTS,
+      'target': 'Release',
+      'try': True,
+    },
+  },
 })
 
 FLAKINESS_DASHBOARD = 'http://test-results.appspot.com'
