@@ -393,10 +393,50 @@
       "os",
       "Ubuntu14",
       "--dummy-flags",
-      "--abandonGpuContext",
-      "--nocpu"
+      "--abandonGpuContext"
     ],
     "name": "dm --abandonGpuContext"
+  },
+  {
+    "cmd": [
+      "valgrind",
+      "--gen-suppressions=all",
+      "--leak-check=full",
+      "--track-origins=yes",
+      "--error-exitcode=1",
+      "--num-callers=40",
+      "--suppressions=[SLAVE_BUILD]/skia/tools/valgrind.supp",
+      "[SLAVE_BUILD]/skia/out/Release/dm",
+      "--verbose",
+      "--resourcePath",
+      "[SLAVE_BUILD]/skia/resources",
+      "--skps",
+      "[SLAVE_BUILD]/playback/skps",
+      "--images",
+      "[SLAVE_BUILD]/images",
+      "--nameByHash",
+      "--properties",
+      "gitHash",
+      "164710",
+      "build_number",
+      "5",
+      "--key",
+      "arch",
+      "x86_64",
+      "configuration",
+      "Release",
+      "extra_config",
+      "Valgrind_GPU",
+      "gpu",
+      "GTX550Ti",
+      "model",
+      "ShuttleA",
+      "os",
+      "Ubuntu14",
+      "--dummy-flags",
+      "--preAbandonGpuContext"
+    ],
+    "name": "dm --preAbandonGpuContext"
   },
   {
     "cmd": [

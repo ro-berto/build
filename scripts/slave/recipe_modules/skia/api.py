@@ -324,12 +324,21 @@ class SkiaApi(recipe_api.RecipeApi):
              abort_on_failure=False)
 
     # See skia:2789.
-    if 'Valgrind' in self.c.BUILDER_NAME:
+    if 'Valgrind_GPU' in self.c.BUILDER_NAME:
       abandonGpuContext = list(args)
       abandonGpuContext.append('--abandonGpuContext')
-      abandonGpuContext.append('--nocpu')
       self.run(self.flavor.step, 'dm --abandonGpuContext',
                cmd=abandonGpuContext, abort_on_failure=False)
+      # preAbandonGpuContext does not write out any images
+      preAbandonGpuContext = list(args)
+      index = 0
+      for i, x in enumerate(preAbandonGpuContext):
+        if isinstance(x, basestring) and x == '--writePath':
+          index = i
+      del preAbandonGpuContext[index:index+2]
+      preAbandonGpuContext.append('--preAbandonGpuContext')
+      self.run(self.flavor.step, 'dm --preAbandonGpuContext',
+               cmd=preAbandonGpuContext, abort_on_failure=False)
 
   def test_steps(self):
     """Run all Skia test executables."""
