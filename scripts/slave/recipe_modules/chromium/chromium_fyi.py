@@ -242,6 +242,9 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
+      'GYP_DEFINES': {
+        'dcheck_always_on': '1',
+      },
       'bot_type': 'builder_tester',
       'compile_targets': [
         'content_unittests',
@@ -261,6 +264,9 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_PLATFORM': 'win',
         'TARGET_BITS': 64,
+      },
+      'GYP_DEFINES': {
+        'dcheck_always_on': '1',
       },
       'bot_type': 'builder_tester',
       'compile_targets': [
