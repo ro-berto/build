@@ -73,10 +73,7 @@ def query_for_builds(service, branch, target):
     print 'Querying Android Build APIs for recent builds of {} on {}'.format(target, branch)
     return service.build().list(buildType='submitted', branch=branch,
                                 target=target, extraFields='changeInfo',
-                                maxResults='40',
-                                fields=('builds(buildAttemptStatus,buildId,'
-                                        'changes(latestRevision,project),'
-                                        'successful)')).execute()
+                                maxResults='40').execute()
   except errors.HttpError as error:
     print 'HTTP Error while attempting to query the build status.'
     print error
@@ -120,6 +117,9 @@ def find_build(service, branch, target, git_revision):
   if build_list is None:
     return None
   for build in build_list['builds']:
+    # short circuit this iteration if the query does not return any changes
+    if 'changes' not in build:
+      continue
     for change in build['changes']:
       if change['latestRevision'] == git_revision:
         print 'Build ID found. ID: {}'.format(build['buildId'])
@@ -151,7 +151,14 @@ def find_completed_build(service, branch, target, git_revision):
     print ('Current build status is {}. Waiting for'
            ' build to complete...').format(build['buildAttemptStatus'])
     time.sleep(120)
-    build = query_for_build(service, target, build_id)
+
+    for i in range(2):
+      build = query_for_build(service, target, build_id)
+      if build is not None:
+        break;
+      print 'Failed to find a valid build status. Retrying...'
+      time.sleep(30)
+
     if build is None:
       sys.exit('Unable to query the status of the build.')
   return build
