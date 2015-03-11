@@ -4,17 +4,7 @@
 
 """This recipe module allows triggering builds within the same master.
 
-Example:
-    api.trigger({
-        'buildername': 'My Builder',
-        'another_property': 'value',
-    })
-
-    # This triggers a new build on "My Builder" builder with "another_property"
-    property set to "value".
-
-    You can trigger multiple builds in one steps:
-    api.trigger({'buildername': 'Release'}, {'buildername': 'Debug'})
+See README.md.
 """
 
 from slave import recipe_api

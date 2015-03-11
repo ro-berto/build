@@ -4,44 +4,23 @@ buildbucket module can be used to connect a Buildbot master to buildbucket.
 
 Configuring a buildbot master is trivial:
 
-    from master import buildbucket
+    # master_site_config.py
 
-    c['mergeReqests'] = False  # buildbucket does not support it.
+    class MyMaster(Master3):
+        service_account_file = 'service-account-<name>.json'
+        buildbucket_bucket = '<your-bucket-name>'
 
-    buildbucket.setup(
-        c,
-        ActiveMaster,
-        buckets=['chromium'],
-    )
 
-Arguments:
+Chromium masters use "service-account-chromium.json" and
+"service-account-chromium-tryserver.json" service accounts. For other projects,
+write to [infra-dev@chromium.org](mailto:infra-dev@chromium.org).
 
-* config (dict): master configuration dict.
-* active_master (config.Master.Base): master site config.
-* buckets (list of str): a list of buckets to poll.
-* poll_interval (int): frequency of polling, in seconds. Defaults to 10.
-* buildbucket_hostname (str): if not None, overrides the default buildbucket
-  service url. Use ```'cr-buildbucket-dev.appspot.com'``` to run against the dev
-  server.
-* max_lease_count (int): maximum number of builds that can be leased at a
-  time. Defaults to the number of connected slaves.
-* verbose (bool): log more than usual. Defaults to False.
-* dry_run (bool): whether to run buildbucket in a dry-run mode.
-  Defaults to False.
-
-Note: make sure your master has a service account configured. Write to
-[infra-dev@chromium.org](mailto:infra-dev@chromium.org) if it doesn't.
-
-### Playing with build bucket
-When testing, ```'cr-buildbucket-dev.appspot.com'``` development server can be
-specified in ```buildbucket_hostname``` parameter. The service account in
-[cr-buildbucket-dev-9c9efb83ec4b.json](cr-buildbucket-dev-9c9efb83ec4b.json)
-can be used to authenticate to cr-buildbucket-dev (set
-```service_account_path``` attribute in ```master_site_config.py```).
+`buildbucket_bucket` is a name of the bucket on buildbucket. Ping
+nodir@chromium.org to get one set up.
 
 ## How it works in the nutshell
-Every ten seconds the Buildbot master [peeks](api_peek) builds from the
-specified buckets until it has reached lease count limit. For each valid peeked
+Every ten seconds the Buildbot master [peeks](api_peek) builds in the
+specified bucket until it reaches lease count limit. For each valid peeked
 build the master tries to lease it. If leased successfully, master schedules a
 build.
 
@@ -89,14 +68,13 @@ Current implementation has the following limitations:
   only one buildbucket build will be updated.
   Bug: http://crbug.com/451259
 
-### Applications
+### Implications of using buildbucket.
 
 * Scheduling code does not have to be hosted on buildbot.
-* Triggering build across masters: trigger recipe module will be updated to
-  trigger builds using buildbucket.
-* Parallel masters: since buildbot master does not lease/schedule a build that
-  it cannot handle right away, multiple masters can be setup to poll the same
-  buckets(s). This allows parallel build processing.
+* [trigger](trigger_module) recipe module can trigger builds on different
+  masters.
+* Multiple masters can be setup to poll the same buckets(s). This allows
+  parallel build processing.
 
 ### Implementation details
 
@@ -111,8 +89,9 @@ Current implementation has the following limitations:
 
 [api_peek]: https://cr-buildbucket.appspot.com/_ah/api/explorer/#p/buildbucket/v1/buildbucket.peek
 [api_start]: https://cr-buildbucket.appspot.com/_ah/api/explorer/#p/buildbucket/v1/buildbucket.start
-[api_heartbeat]: https://cr-buildbucket.appspot.com/_ah/api/explorer/#p/buildbucket/v1/buildbucket.heartbeat
+[api_heartbeat]: https://cr-buildbucket.appspot.com/_ah/api/explorer/#p/buildbucket/v1/buildbucket.heartbeat_batch
 [api_succeed]: https://cr-buildbucket.appspot.com/_ah/api/explorer/#p/buildbucket/v1/buildbucket.succeed
 [api_fail]: https://cr-buildbucket.appspot.com/_ah/api/explorer/#p/buildbucket/v1/buildbucket.fail
 [cr-buildbucket-dev-9c9efb83ec4b.json]: http://storage.googleapis.com/cr-buildbucket-dev/cr-buildbucket-dev-9c9efb83ec4b.json
 [buildbucket-service-account-bug]: https://go/buildbucket-service-account-bug
+[trigger_module]: ../../slave/recipe_modules/trigger/
