@@ -58,7 +58,7 @@ def gce_authenticate():
 def query_for_build(service, target, build_id):
   """Query Android Build Service for the state of a specific build"""
   try:
-    return service.build().get(target=target, buildID=build_id).execute()
+    return service.build().get(target=target, buildId=build_id).execute()
   except errors.HttpError as error:
     print 'HTTP Error while attempting to query the build status.'
     print error
