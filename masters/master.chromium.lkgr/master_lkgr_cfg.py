@@ -81,9 +81,27 @@ F('win_asan_rel', win_out().ChromiumASANFactory(
        'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': asan_win_gyp}}))
 
+# ASan/Win supports neither the component build nor NaCL at the moment.
+proprietary_codecs_gyp = (' proprietary_codecs=1 ffmpeg_branding=Chrome')
+asan_win_proprietary_codecs_gyp = asan_win_gyp + proprietary_codecs_gyp
+
+# Clang is not stable enough on Windows to use a gatekeeper yet.
+B('Win Asan Release Proprietary Codecs', 'win_asan_rel_prop_codecs',
+   scheduler='chromium_lkgr')
+F('win_asan_rel_prop_codecs', win_out().ChromiumASANFactory(
+    compile_timeout=8*3600,  # We currently use a VM, which is extremely slow.
+    clobber=True,
+    options=['--build-tool=ninja', '--', 'chromium_builder_asan'],
+    factory_properties={
+       'cf_archive_build': ActiveMaster.is_production_host,
+       'cf_archive_name': 'asan',
+       'gs_bucket': 'gs://chrome-test-builds/media/win32-release',
+       'gclient_env': {'GYP_DEFINES': asan_win_proprietary_codecs_gyp}}))
 ################################################################################
 ## Mac
 ################################################################################
+
+asan_mac_gyp = 'asan=1 '
 
 B('Mac', 'mac_full', 'compile|testers', 'chromium_lkgr')
 F('mac_full', mac().ChromiumFactory(
@@ -101,7 +119,18 @@ F('mac_asan_rel', linux().ChromiumASANFactory(
        'cf_archive_name': 'asan',
        'gs_bucket': 'gs://chromium-browser-asan',
        'gs_acl': 'public-read',
-       'gclient_env': {'GYP_DEFINES': 'asan=1 '}}))
+       'gclient_env': {'GYP_DEFINES': asan_mac_gyp}}))
+
+B('Mac ASAN Release Proprietary Codecs', 'mac_asan_rel_prop_codecs','compile',
+  'chromium_lkgr')
+F('mac_asan_rel_prop_codecs', linux().ChromiumASANFactory(
+    clobber=True,
+    options=['--compiler=goma-clang', '--', '-target', 'chromium_builder_asan'],
+    factory_properties={
+       'cf_archive_build': ActiveMaster.is_production_host,
+       'cf_archive_name': 'asan',
+       'gs_bucket': 'gs://chrome-test-builds/media/mac-release',
+       'gclient_env': {'GYP_DEFINES': asan_mac_gyp + proprietary_codecs_gyp}}))
 
 B('Mac ASAN Debug', 'mac_asan_dbg', 'compile', 'chromium_lkgr')
 F('mac_asan_dbg', linux().ChromiumASANFactory(
@@ -113,7 +142,8 @@ F('mac_asan_dbg', linux().ChromiumASANFactory(
        'cf_archive_name': 'asan',
        'gs_bucket': 'gs://chromium-browser-asan',
        'gs_acl': 'public-read',
-       'gclient_env': {'GYP_DEFINES': 'asan=1 component=static_library '}}))
+       'gclient_env': {'GYP_DEFINES': asan_mac_gyp +
+                                      ' component=static_library '}}))
 
 ################################################################################
 ## Linux
@@ -149,6 +179,21 @@ F('linux_asan_rel', linux().ChromiumASANFactory(
        'gs_bucket': 'gs://chromium-browser-asan',
        'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': asan_rel_gyp}}))
+
+linux_proprietary_codecs_gyp = (' proprietary_codecs=1 '
+                                'ffmpeg_branding=ChromeOS')
+B('ASAN Release Proprietary Codecs', 'linux_asan_rel_prop_codecs',
+  'compile', 'chromium_lkgr')
+F('linux_asan_rel_prop_codecs', linux().ChromiumASANFactory(
+    compile_timeout=2400,  # We started seeing 29 minute links, bug 360158
+    clobber=True,
+    options=['--compiler=clang', 'chromium_builder_asan'],
+    factory_properties={
+       'cf_archive_build': ActiveMaster.is_production_host,
+       'cf_archive_name': 'asan',
+       'gs_bucket': 'gs://chrome-test-builds/media/linux-release',
+       'gclient_env': {'GYP_DEFINES': asan_rel_gyp +
+                       linux_proprietary_codecs_gyp}}))
 
 asan_rel_sym_gyp = ('asan=1 lsan=1 sanitizer_coverage=3 '
                     'v8_enable_verify_heap=1 enable_ipc_fuzzer=1 '
