@@ -7,6 +7,7 @@ Configuring a buildbot master is trivial:
     # master_site_config.py
 
     class MyMaster(Master3):
+        # ...
         service_account_file = 'service-account-<name>.json'
         buildbucket_bucket = '<your-bucket-name>'
 
@@ -19,18 +20,18 @@ write to [infra-dev@chromium.org](mailto:infra-dev@chromium.org).
 nodir@chromium.org to get one set up.
 
 ## How it works in the nutshell
-Every ten seconds the Buildbot master [peeks](api_peek) builds in the
+Every ten seconds the Buildbot master [peeks][api_peek] builds in the
 specified bucket until it reaches lease count limit. For each valid peeked
 build the master tries to lease it. If leased successfully, master schedules a
 build.
 
 During build lifetime master reports build status back to buildbucket. When the
-build starts, master calls [start](api_start) API, and when build finishes, it
-calls [succeed](api_succeed) or [fail](api_fail) APIs. For SKIPPED and RETRY
+build starts, master calls [start][api_start] API, and when build finishes, it
+calls [succeed][api_succeed] or [fail][api_fail] APIs. For SKIPPED and RETRY
 builds the master does not notify buidbucket, so the lease expires soon and the
 build will be rescheduled.
 
-Every minute buildbot [sends heartbeats](api_heartbeat) for currently held
+Every minute buildbot [sends heartbeats][api_heartbeat] for currently held
 leases. If the master discovers that a build lease expired, it stops the build.
 
 ### Build parameters
@@ -68,15 +69,15 @@ Current implementation has the following limitations:
   only one buildbucket build will be updated.
   Bug: http://crbug.com/451259
 
-### Implications of using buildbucket.
+## Implications of using buildbucket.
 
 * Scheduling code does not have to be hosted on buildbot.
-* [trigger](trigger_module) recipe module can trigger builds on different
-  masters.
+* [trigger](../../slave/recipe_modules/trigger) recipe module can trigger
+  builds on different masters.
 * Multiple masters can be setup to poll the same buckets(s). This allows
   parallel build processing.
 
-### Implementation details
+## Implementation details
 
 * Buildbucket-specific information, such as build id and lease key, is stored in
   "buildbucket" property of Buidlbot entities.
@@ -94,4 +95,3 @@ Current implementation has the following limitations:
 [api_fail]: https://cr-buildbucket.appspot.com/_ah/api/explorer/#p/buildbucket/v1/buildbucket.fail
 [cr-buildbucket-dev-9c9efb83ec4b.json]: http://storage.googleapis.com/cr-buildbucket-dev/cr-buildbucket-dev-9c9efb83ec4b.json
 [buildbucket-service-account-bug]: https://go/buildbucket-service-account-bug
-[trigger_module]: ../../slave/recipe_modules/trigger/

@@ -1,6 +1,5 @@
 # trigger recipe module
 
-
 Trigger recipe allows you to trigger new builds and pass arbitrary properties.
 
 ## Examples
@@ -30,7 +29,7 @@ You can trigger a build on a different buildbot master:
         'bucket': 'master.tryserver.chromium.linux', # specify master name here.
     })
 
-This uses [buildbucket][../../../master/buildbucket] underneath and must be
+This uses [buildbucket](../../../master/buildbucket) underneath and must be
 configured.
 
 Specify different Buildbot changes:
