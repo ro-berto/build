@@ -130,9 +130,9 @@ def find_build(service, branch, target, git_revision):
 def find_completed_build(service, branch, target, git_revision):
   """Find the completed Android build with the branch/target combo that contains
      the requested git revision. If the found build is not complete this
-     function will block until it has completed."""
+     function will block until it has completed or 30 minutes has expired."""
   build = None
-  for i in range(2):
+  for i in range(15):
     build = find_build(service, branch, target, git_revision)
     if build is not None:
       break
@@ -199,7 +199,6 @@ def main(argv):
   service = discovery.build('androidbuildinternal', 'v2beta1', http=http)
 
   # Find the Android Build ID in master-skia that contains the request git revision
-  # If not found then sleep for 2 minutes and rerun
   build = find_completed_build(service, 'git_master-skia', flags.target, flags.git_revision)
   if build['successful'] is True:
     print 'The build completed successfully!'
