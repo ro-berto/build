@@ -16,7 +16,6 @@ BUILDERS = freeze({
   'chromium.mojo': {
     'builders': {
       'Chromium Mojo Linux': {
-        'chromium_apply_config': ['gn_use_prebuilt_mojo_shell'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'linux',
@@ -31,7 +30,7 @@ def _RunApptests(api):
       'apptest_runner.py')
   apptest_config = api.path['checkout'].join('mojo', 'tools',
       'data', 'apptests')
-  api.python('run apptests', apptest_runner,
+  api.python('app_tests', apptest_runner,
              [apptest_config, api.chromium.output_dir])
 
 

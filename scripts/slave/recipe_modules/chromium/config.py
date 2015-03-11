@@ -486,10 +486,6 @@ def gn_component_build(c):
 def gn_minimal_symbols(c):
   c.gn_args.append('symbol_level=1')
 
-@config_ctx()
-def gn_use_prebuilt_mojo_shell(c):
-  c.gn_args.append('use_prebuilt_mojo_shell=true')
-
 #### 'Full' configurations
 @config_ctx(includes=['ninja', 'default_compiler'])
 def chromium_no_goma(c):
