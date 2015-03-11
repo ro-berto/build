@@ -138,7 +138,7 @@ class SendResultsToDashboardTest(unittest.TestCase):
     GetDataFromLogProcessor.return_value = fake_charts_data
     MakeListOfPoints.return_value = fake_points_data
 
-    runtest._SendResultsToDashboard(
+    result = runtest._SendResultsToDashboard(
         fake_results_tracker, {
             'system': 'linux',
             'test': 'sunspider',
@@ -160,6 +160,9 @@ class SendResultsToDashboardTest(unittest.TestCase):
     SendResults.assert_called_with(
         fake_points_data, 'http://x.com', 'builddir')
 
+    # No errors, should return True.
+    self.assertTrue(result)
+
   @mock.patch('slave.results_dashboard.MakeDashboardJsonV1')
   @mock.patch('slave.results_dashboard.SendResults')
   def test_SendResultsToDashboard_Telemetry(
@@ -175,7 +178,7 @@ class SendResultsToDashboardTest(unittest.TestCase):
     fake_results_tracker.Cleanup = mock.MagicMock()
     MakeDashboardJsonV1.return_value = {'doesnt': 'matter'}
 
-    runtest._SendResultsToDashboard(
+    result = runtest._SendResultsToDashboard(
         fake_results_tracker, {
             'system': 'linux',
             'test': 'sunspider',
@@ -196,6 +199,9 @@ class SendResultsToDashboardTest(unittest.TestCase):
     SendResults.assert_called_with(
         {'doesnt': 'matter'}, 'http://x.com', 'builddir')
     fake_results_tracker.Cleanup.assert_called_with()
+
+    # No errors, should return True.
+    self.assertTrue(result)
 
   @mock.patch('slave.results_dashboard.MakeDashboardJsonV1')
   @mock.patch('slave.results_dashboard.SendResults')

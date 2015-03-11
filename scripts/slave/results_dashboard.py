@@ -58,6 +58,8 @@ def SendResults(data, url, build_dir):
   if fatal_error:
     print 'Error uploading to dashboard.'
     print '@@@STEP_EXCEPTION@@@'
+    return False
+  return True
 
 
 def _GetCacheFileName(build_dir):

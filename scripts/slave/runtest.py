@@ -774,9 +774,7 @@ def _SendResultsToDashboard(log_processor, args):
     return False
 
   logging.debug(json.dumps(results, indent=2))
-  results_dashboard.SendResults(results, args['url'], args['build_dir'])
-
-  return True
+  return results_dashboard.SendResults(results, args['url'], args['build_dir'])
 
 
 def _GetDataFromLogProcessor(log_processor):

@@ -299,7 +299,7 @@ class ResultsDashboardSendDataTest(unittest.TestCase):
     self.mox.UnsetStubs()
     shutil.rmtree(self.build_dir)
 
-  def _TestSendResults(self, new_data, expected_json, errors):
+  def _TestSendResults(self, new_data, expected_json, errors, expected_result):
     """Test one call of SendResults with the given set of arguments.
 
     This method will fail a test case if the JSON that gets sent and the
@@ -310,6 +310,7 @@ class ResultsDashboardSendDataTest(unittest.TestCase):
       new_data: The new (not cached) data to send.
       expected_json_sent: A list of JSON string expected to be sent.
       errors: A list of corresponding errors expected to be received.
+      expected_result: Expected return value of SendResults
     """
     self.mox.UnsetStubs()
     # urllib2.urlopen is the function that's called to send data to
@@ -324,7 +325,9 @@ class ResultsDashboardSendDataTest(unittest.TestCase):
       else:
         urllib2.urlopen(IsEncodedJson(json_line))
     self.mox.ReplayAll()
-    results_dashboard.SendResults(new_data, 'https:/x.com', self.build_dir)
+    result = results_dashboard.SendResults(
+        new_data, 'https:/x.com', self.build_dir)
+    self.assertEqual(expected_result, result)
     self.mox.VerifyAll()
 
   def test_FailureRetried(self):
@@ -335,7 +338,7 @@ class ResultsDashboardSendDataTest(unittest.TestCase):
          'chart_data': {'benchmark_name': 'b'}, 'point_id': 1234},
         [('{"sample": 1, "master": "m", "bot": "b", '
           '"chart_data": {"benchmark_name": "b"}, "point_id": 1234}')],
-        [urllib2.URLError('some reason')])
+        [urllib2.URLError('some reason')], True)
 
     # The next time, the old data is sent with the new data.
     self._TestSendResults(
@@ -345,7 +348,7 @@ class ResultsDashboardSendDataTest(unittest.TestCase):
           '"chart_data": {"benchmark_name": "b"}, "point_id": 1234}'),
          ('{"sample": 2, "master": "m2", "bot": "b2", '
           '"chart_data": {"benchmark_name": "b"}, "point_id": 1234}')],
-        [None, None])
+        [None, None], True)
 
   def test_SuccessNotRetried(self):
     """After being successfully sent, data is not re-sent."""
@@ -355,7 +358,7 @@ class ResultsDashboardSendDataTest(unittest.TestCase):
          'chart_data': {'benchmark_name': 'b'}, 'point_id': 1234},
         [('{"sample": 1, "master": "m", "bot": "b", '
           '"chart_data": {"benchmark_name": "b"}, "point_id": 1234}')],
-        [None])
+        [None], True)
 
     # The next time, the old data is not sent with the new data.
     self._TestSendResults(
@@ -363,7 +366,25 @@ class ResultsDashboardSendDataTest(unittest.TestCase):
          'chart_data': {'benchmark_name': 'b'}, 'point_id': 1234},
         [('{"sample": 2, "master": "m2", "bot": "b2", '
           '"chart_data": {"benchmark_name": "b"}, "point_id": 1234}')],
-        [None])
+        [None], True)
+
+  def test_DoubleFailureFatal(self):
+    """After two failures, SendResults should return False."""
+    # First, some data is sent but it fails for some reason.
+    self._TestSendResults(
+        {'sample': 1, 'master': 'm', 'bot': 'b',
+         'chart_data': {'benchmark_name': 'b'}, 'point_id': 1234},
+        [('{"sample": 1, "master": "m", "bot": "b", '
+          '"chart_data": {"benchmark_name": "b"}, "point_id": 1234}')],
+        [urllib2.URLError('some reason')], True)
+    # Next, data is sent again, another failure.
+    self._TestSendResults(
+        {'sample': 1, 'master': 'm', 'bot': 'b',
+         'chart_data': {'benchmark_name': 'b'}, 'point_id': 1234},
+        [('{"sample": 1, "master": "m", "bot": "b", '
+          '"chart_data": {"benchmark_name": "b"}, "point_id": 1234}')],
+        [urllib2.URLError('some reason'), urllib2.URLError('some reason')],
+        False)
 
 
 class ResultsDashboardTest(unittest.TestCase):
