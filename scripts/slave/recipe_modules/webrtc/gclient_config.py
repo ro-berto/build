@@ -43,16 +43,6 @@ def chromium_webrtc_tot(c):
   c.revisions['src/third_party/webrtc'] = 'HEAD'
   c.revisions['src/third_party/libjingle/source/talk'] = 'HEAD'
 
-  # Have the WebRTC revision appear in the web UI instead of Chromium's.
-  c.got_revision_mapping['src/third_party/webrtc'] = 'got_revision'
-
-  # Since got_revision is occupied by the WebRTC revision, add a new property
-  # for the Chromium revision.
-  c.got_revision_mapping['src'] = 'got_chromium_revision'
-
-  # Needed to get the testers to properly sync the right revision.
-  c.parent_got_revision_mapping['parent_got_revision'] = 'got_revision'
-
 @CONFIG_CTX()
 def _webrtc(c):
   """Add the main solution for WebRTC standalone builds.
