@@ -3,8 +3,17 @@
 # found in the LICENSE file.
 
 DEPS = [
-    'repo'
+    'raw_io',
+    'repo',
+    'step',
 ]
+
+
+REPO_LIST_OUTPUT = """\
+src/foo : foo
+src/bar : bar
+badline
+"""
 
 
 def GenSteps(api):
@@ -15,6 +24,12 @@ def GenSteps(api):
   api.repo.clean('-x')
   api.repo.sync()
 
+  repos = api.repo.list()
+  assert repos == [('src/foo', 'foo'), ('src/bar', 'bar')]
+  api.step('repo list echo', ['echo', str(repos)])
+
 
 def GenTests(api):
-  yield api.test('setup_repo')
+  yield (api.test('setup_repo') +
+      api.step_data('repo list',
+                    api.raw_io.stream_output(REPO_LIST_OUTPUT)))

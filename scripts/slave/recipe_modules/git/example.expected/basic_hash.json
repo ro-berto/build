@@ -76,6 +76,17 @@
   {
     "cmd": [
       "git",
+      "config",
+      "--get",
+      "remote.origin.url"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "git config remote.origin.url",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "git",
       "fetch",
       "origin",
       "--tags"
@@ -115,5 +126,16 @@
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "my repo rebase"
+  },
+  {
+    "cmd": [
+      "git",
+      "bundle",
+      "create",
+      "[SLAVE_BUILD]/all.bundle",
+      "--all"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "git bundle"
   }
 ]

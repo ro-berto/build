@@ -23,7 +23,7 @@
     ],
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-recipe-test/some/random/path/to/boom@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.googleapis.com/chromium-recipe-test/some/random/path/to/boom@@@"
     ]
   },
   {

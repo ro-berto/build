@@ -77,6 +77,17 @@
   {
     "cmd": [
       "git",
+      "config",
+      "--get",
+      "remote.origin.url"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "git config remote.origin.url",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "git",
       "fetch",
       "origin",
       "--tags"

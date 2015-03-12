@@ -11,7 +11,6 @@ class GitApi(recipe_api.RecipeApi):
 
   def __call__(self, *args, **kwargs):
     """Return a git command step."""
-    run = kwargs.pop('run', True)
     name = kwargs.pop('name', 'git '+args[0])
     if 'cwd' not in kwargs:
       kwargs.setdefault('cwd', self.m.path['checkout'])
@@ -295,3 +294,43 @@ class GitApi(recipe_api.RecipeApi):
       self('rebase', '--abort', name='%s rebase abort' % name_prefix,
           cwd=dir_path, **kwargs)
       raise
+
+  def config_get(self, prop_name, **kwargs):
+    """Returns: (str) The Git config output, or None if no output was generated.
+
+    Args:
+      prop_name: (str) The name of the config property to query.
+      kwargs: Forwarded to '__call__'.
+    """
+    kwargs['name'] = kwargs.get('name', 'git config %s' % (prop_name,))
+    result = self('config', '--get', prop_name, stdout=self.m.raw_io.output(),
+                  **kwargs)
+
+    value = result.stdout
+    if value:
+      value = value.strip()
+      result.presentation.step_text = value
+    return value
+
+  def get_remote_url(self, remote_name=None, **kwargs):
+    """Returns: (str) The URL of the remote Git repository, or None.
+
+    Args:
+      remote_name: (str) The name of the remote to query, defaults to 'origin'.
+      kwargs: Forwarded to '__call__'.
+    """
+    remote_name = remote_name or 'origin'
+    return self.config_get('remote.%s.url' % (remote_name,), **kwargs)
+
+  def bundle_create(self, bundle_path, rev_list_args=None, **kwargs):
+    """Run 'git bundle create' on a Git repository.
+
+    Args:
+      bundle_path (Path): The path of the output bundle.
+      refs (list): The list of refs to include in the bundle. If None, all
+          refs in the Git checkout will be bundled.
+      kwargs: Forwarded to '__call__'.
+    """
+    if not rev_list_args:
+      rev_list_args = ['--all']
+    self('bundle', 'create', bundle_path, *rev_list_args, **kwargs)

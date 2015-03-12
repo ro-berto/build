@@ -37,6 +37,9 @@ def GenSteps(api):
       name='count-objects',
       can_fail_build=api.properties.get('count_objects_can_fail_build'))
 
+  # Get the remote URL.
+  api.git.get_remote_url()
+
   # You can use api.git.fetch_tags to fetch all tags from the remote
   fetch_tags_step = api.git.fetch_tags(api.properties.get('remote_name'))
 
@@ -61,6 +64,10 @@ def GenSteps(api):
                                              stdout=api.raw_io.output())
     if 'TestOutput' in step_result.stdout:
       pass  # Success!
+
+  # Bundle the repository.
+  api.git.bundle_create(
+        api.path['slave_build'].join('all.bundle'))
 
 
 def GenTests(api):

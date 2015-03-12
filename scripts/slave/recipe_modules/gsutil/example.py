@@ -19,7 +19,8 @@ def GenSteps(api):
         'Remove-Me': None,
         'x-custom-field': 'custom-value',
         'Cache-Control': 'no-cache',
-      })
+      },
+      unauthenticated_url=True)
 
   api.gsutil(['cp',
                     'gs://chromium-recipe-test/some/random/path/**',
@@ -33,6 +34,15 @@ def GenSteps(api):
       'https://storage.cloud.google.com/' + bucket + '/' + cloud_file,
       local_file,
       name='gsutil download url')
+
+  # Non-normalized URL.
+  try:
+    api.gsutil.download_url(
+        'https://someotherservice.localhost',
+        local_file,
+        name='gsutil download url')
+  except AssertionError:
+    pass
 
   new_cloud_file = 'staging/to/boom'
   new_local_file = api.path['slave_build'].join('erang')

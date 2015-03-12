@@ -49,7 +49,7 @@ class GSUtilApi(recipe_api.RecipeApi):
     return self.m.path['depot_tools'].join('gsutil.py')
 
   def upload(self, source, bucket, dest, args=None, link_name='gsutil.upload',
-             metadata=None, **kwargs):
+             metadata=None, unauthenticated_url=False, **kwargs):
     args = [] if args is None else args[:]
     args += self._generate_metadata_args(metadata)
     full_dest = 'gs://%s/%s' % (bucket, dest)
@@ -59,9 +59,8 @@ class GSUtilApi(recipe_api.RecipeApi):
     result = self(cmd, name, **kwargs)
 
     if link_name:
-      result.presentation.links[link_name] = (
-        'https://storage.cloud.google.com/%s/%s' % (bucket, dest)
-      )
+      result.presentation.links[link_name] = self._http_url(
+          bucket, dest, unauthenticated_url=unauthenticated_url)
     return result
 
   def download(self, bucket, source, dest, args=None, **kwargs):
@@ -86,7 +85,8 @@ class GSUtilApi(recipe_api.RecipeApi):
     return self(cmd, name, **kwargs)
 
   def copy(self, source_bucket, source, dest_bucket, dest, args=None,
-           link_name='gsutil.copy', metadata=None, **kwargs):
+           link_name='gsutil.copy', metadata=None, unauthenticated_url=False,
+           **kwargs):
     args = args or []
     args += self._generate_metadata_args(metadata)
     full_source = 'gs://%s/%s' % (source_bucket, source)
@@ -97,9 +97,8 @@ class GSUtilApi(recipe_api.RecipeApi):
     result = self(cmd, name, **kwargs)
 
     if link_name:
-      result.presentation.links[link_name] = (
-        'https://storage.cloud.google.com/%s/%s' % (dest_bucket, dest)
-      )
+      result.presentation.links[link_name] = self._http_url(
+          dest_bucket, dest, unauthenticated_url=unauthenticated_url)
 
   def signurl(self, private_key_file, bucket, dest, args=None,
               **kwargs):
@@ -154,10 +153,22 @@ class GSUtilApi(recipe_api.RecipeApi):
   def _normalize_url(self, url):
     gs_prefix = 'gs://'
     # Defines the regex that matches a normalized URL.
-    url_regex = r'^(%s|https://storage.cloud.google.com/)' % gs_prefix
-    normalized_url, subs_made = re.subn(url_regex, gs_prefix, url, count=1)
-    assert subs_made == 1, "%s cannot be normalized" % url
-    return normalized_url
+    for prefix in (
+        gs_prefix,
+        'https://storage.cloud.google.com/',
+        'https://storage.googleapis.com/',
+        ):
+      if url.startswith(prefix):
+        return gs_prefix + url[len(prefix):]
+    raise AssertionError("%s cannot be normalized" % url)
+
+  @classmethod
+  def _http_url(cls, bucket, dest, unauthenticated_url=False):
+    if unauthenticated_url:
+      base = 'https://storage.googleapis.com/%s/%s'
+    else:
+      base = 'https://storage.cloud.google.com/%s/%s'
+    return base % (bucket, dest)
 
   @staticmethod
   def _get_metadata_field(name, provider_prefix=None):
