@@ -363,7 +363,7 @@ SPEC = {
       },
     },
     'CrWinClang': {
-      'recipe_config': 'chromium_win_clang_official',
+      'recipe_config': 'chromium_win_clang',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -461,7 +461,7 @@ SPEC = {
       'enable_swarming': True,
     },
     'CrWinClang64': {
-      'recipe_config': 'chromium_win_clang_official',
+      'recipe_config': 'chromium_win_clang',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
