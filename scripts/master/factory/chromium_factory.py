@@ -457,12 +457,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddTelemetryPerfUnitTests()
     if R('telemetry_perf_unittests_br'):
       f.AddBuildrunnerTelemetryPerfUnitTests()
-    # TODO: Remove 'ui_unittests' once M41 becomes stable (crbug.com/434498)
-    if R('ui_unittests'):
-      f.AddGTestTestStep('ui_unittests', fp)
-    # TODO: Remove 'ui_unittests_br' once M41 becomes stable (crbug.com/434498)
-    if R('ui_unittests_br'):
-      f.AddBuildrunnerGTest('ui_unittests', fp)
     if R('ui_base_unittests'):
       f.AddGTestTestStep('ui_base_unittests', fp)
     if R('ui_base_unittests_br'):
