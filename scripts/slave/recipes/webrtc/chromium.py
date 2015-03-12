@@ -30,9 +30,26 @@ def GenSteps(api):
   if api.platform.is_win:
     api.chromium.taskkill()
 
-  # Bot Update re-uses the gclient configs.
-  step_result = api.bot_update.ensure_checkout(force=True)
-  got_revision = step_result.presentation.properties['got_revision']
+  if api.properties.get('mastername') == 'client.webrtc.fyi':
+    # Sync HEAD revisions for Chromium, WebRTC and Libjingle.
+    # This is used for some bots to provide data about which revisions are green
+    # to roll into Chromium.
+    p = api.properties
+    revs = {
+      'src': p.get('parent_got_revision', 'HEAD'),
+      'src/third_party/webrtc': p.get('parent_got_webrtc_revision', 'HEAD'),
+      'src/third_party/libjingle/source/talk': p.get(
+          'parent_got_libjingle_revision', 'HEAD'),
+    }
+    for path, revision in revs.iteritems():
+      api.gclient.c.revisions[path] = revision
+
+    # TODO(kjellander): Switch all builders to use the checkout function.
+    webrtc.checkout()
+    got_revision = None
+  else:
+    step_result = api.bot_update.ensure_checkout(force=True)
+    got_revision = step_result.presentation.properties['got_revision']
 
   webrtc.cleanup()
   if webrtc.should_run_hooks:
@@ -66,6 +83,10 @@ def GenSteps(api):
       test_runner = lambda: webrtc.runtests(revision_number=got_revision)
       api.chromium_tests.setup_chromium_tests(test_runner)
 
+  # TODO(kjellander): Enable for all builders once confirmed working.
+  if api.properties.get('mastername') == 'client.webrtc.fyi':
+    webrtc.maybe_trigger()
+
 
 def _sanitize_nonalpha(text):
   return ''.join(c if c.isalnum() else '_' for c in text)
@@ -74,6 +95,7 @@ def _sanitize_nonalpha(text):
 def GenTests(api):
   builders = api.webrtc.BUILDERS
   CR_REV = 'c321321'
+  LIBJINGLE_REV = '1161aa63'
   WEBRTC_REV = 'deadbeef'
 
   def generate_builder(mastername, buildername, revision=None,
@@ -101,6 +123,17 @@ def GenTests(api):
     if bot_config.get('parent_buildername'):
       test += api.properties(parent_got_revision=CR_REV)
 
+      # TODO(kjellander): Enable for builders in chromium.webrtc.fyi once
+      # confirmed working.
+      if mastername == 'client.webrtc.fyi':
+        test += api.properties(parent_got_libjingle_revision=LIBJINGLE_REV,
+                               parent_got_webrtc_revision=WEBRTC_REV)
+    # TODO(kjellander): Enable for builders in chromium.webrtc.fyi once
+    # confirmed working.
+    if mastername == 'client.webrtc.fyi':
+      test += api.properties(got_revision=CR_REV,
+                             got_libjingle_revision=LIBJINGLE_REV,
+                             got_webrtc_revision=WEBRTC_REV)
     if failing_test:
       test += api.step_data(failing_test, retcode=1)
 

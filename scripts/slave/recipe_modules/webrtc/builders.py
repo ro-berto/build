@@ -1011,6 +1011,9 @@ BUILDERS = freeze({
         'bot_type': 'builder',
         'build_gs_archive': 'fyi_linux_asan_archive',
         'testing': {'platform': 'linux'},
+        'triggers': [
+          'Linux Asan Tester (parallel)',
+        ],
       },
       'Linux Asan Tester (parallel)': {
         'recipe_config': 'webrtc_parallel_clang',
@@ -1032,6 +1035,9 @@ BUILDERS = freeze({
         'bot_type': 'builder',
         'build_gs_archive': 'fyi_linux_chromium_rel_archive',
         'testing': {'platform': 'linux'},
+        'triggers': [
+          'Linux Chromium Tester',
+        ],
       },
       'Linux Chromium Tester': {
         'recipe_config': 'chromium_webrtc_tot_git_switch_testing',

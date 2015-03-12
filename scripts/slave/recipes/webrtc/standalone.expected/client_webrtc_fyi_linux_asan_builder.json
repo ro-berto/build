@@ -100,12 +100,26 @@
       "--build-url",
       "gs://chromium-webrtc/Linux ASan Builder",
       "--build_revision",
-      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "170242",
       "--factory-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux Asan Builder\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux Asan Builder\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}"
     ],
     "name": "package build"
+  },
+  {
+    "cmd": [],
+    "name": "trigger Linux Asan Tester (parallel)",
+    "trigger_specs": [
+      {
+        "builder_name": "Linux Asan Tester (parallel)",
+        "properties": {
+          "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+          "parent_got_revision_cp": "refs/heads/master@{#170242}",
+          "revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
+        }
+      }
+    ]
   }
 ]

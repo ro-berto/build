@@ -147,6 +147,23 @@ class WebRTCApi(recipe_api.RecipeApi):
     if self.m.tryserver.is_tryserver:
       self.m.chromium.apply_config('trybot_flavor')
 
+  def checkout(self, **kwargs):
+    update_step = self.m.bot_update.ensure_checkout(**kwargs)
+    assert update_step.json.output['did_run']
+
+    # Whatever step is run right before this line needs to emit got_revision.
+    revs = update_step.presentation.properties
+    self.revision = revs['got_revision']
+    self.revision_cp = revs['got_revision_cp']
+    self.revision_number = str(self.m.commit_position.parse_revision(
+        self.revision_cp))
+
+    # Check for properties specific to our Chromium builds.
+    self.libjingle_revision = revs.get('got_libjingle_revision')
+    self.libjingle_revision_cp = revs.get('got_libjingle_revision_cp')
+    self.webrtc_revision = revs.get('got_webrtc_revision')
+    self.webrtc_revision_cp = revs.get('got_webrtc_revision_cp')
+
   def compile(self):
     compile_targets = self.recipe_config.get('compile_targets', [])
     self.m.chromium.compile(targets=compile_targets)
@@ -159,6 +176,9 @@ class WebRTCApi(recipe_api.RecipeApi):
       revision_number: A monotonically increasing revision number for the build.
         Mandatory only for perf measuring tests.
     """
+    # TODO(kjellander): Remove when all recipes use webrtc.checkout().
+    revision_number = revision_number or self.revision_number
+
     with self.m.step.defer_results():
       if self.c.TEST_SUITE in ('webrtc', 'webrtc_parallel'):
         parallel = self.c.TEST_SUITE.endswith('_parallel')
@@ -210,15 +230,15 @@ class WebRTCApi(recipe_api.RecipeApi):
         # Add WebRTC-specific browser tests that don't run in the main Chromium
         # waterfalls (marked as MANUAL_) since they rely on special setup and/or
         # physical audio/video devices.
-        self.add_webrtc_browser_tests(revision_number)
+        self._add_webrtc_browser_tests(revision_number)
 
         # Same tests but running with the new Video Engine API.
         variations_server = 'https://clients4.google.com/chrome-variations/seed'
         extra_args=['--variations-server-url=%s' % variations_server,
                     '--fake-variations-channel=canary',
                     '--force-fieldtrials=WebRTC-NewVideoAPI/Enabled/']
-        self.add_webrtc_browser_tests(revision_number, extra_args,
-                                      suffix='_new_vie')
+        self._add_webrtc_browser_tests(revision_number, extra_args,
+                                       suffix='_new_vie')
 
         self.add_test('content_unittests')
       elif self.c.TEST_SUITE == 'android':
@@ -226,7 +246,7 @@ class WebRTCApi(recipe_api.RecipeApi):
         for test in self.ANDROID_APK_TESTS:
           self.m.chromium_android.run_test_suite(test)
         for test in self.ANDROID_APK_PERF_TESTS:
-          self.add_android_perf_test(test, revision_number=revision_number)
+          self._add_android_perf_test(test, revision_number=revision_number)
         for test in self.ANDROID_INSTRUMENTATION_TESTS:
           self.m.chromium_android.run_instrumentation_suite(test_apk=test,
                                                             verbose=True)
@@ -235,7 +255,7 @@ class WebRTCApi(recipe_api.RecipeApi):
         #self.m.chromium_android.stack_tool_steps()
         self.m.chromium_android.test_report()
 
-  def add_webrtc_browser_tests(self, revision_number, extra_args=None,
+  def _add_webrtc_browser_tests(self, revision_number, extra_args=None,
                                suffix=None):
     extra_args = extra_args or []
     suffix = suffix or ''
@@ -275,6 +295,8 @@ class WebRTCApi(recipe_api.RecipeApi):
     env = env or {}
     if self.c.PERF_ID and perf_test:
       perf_dashboard_id = perf_dashboard_id or test
+      # TODO(kjellander): Remove when all recipes use webrtc.checkout().
+      revision_number = revision_number or self.revision_number
       assert revision_number, (
           'A monotonically increasing revision number must be specified for perf '
           'tests as they upload data to the perf dashboard.')
@@ -309,7 +331,7 @@ class WebRTCApi(recipe_api.RecipeApi):
           flakiness_dash=flakiness_dash, python_mode=python_mode,
           test_type=test_type, env=env)
 
-  def add_android_perf_test(self, test, revision_number):
+  def _add_android_perf_test(self, test, revision_number):
     """Adds a test to run on Android devices.
 
     Basically just wrap what happens in chromium_android.run_test_suite to run
@@ -327,6 +349,9 @@ class WebRTCApi(recipe_api.RecipeApi):
                     perf_dashboard_id=test)
 
   def sizes(self, revision_number):
+    # TODO(kjellander): Remove when all recipes use webrtc.checkout().
+    revision_number = revision_number or self.revision_number
+
     # TODO(kjellander): Move this into a function of the chromium recipe
     # module instead.
     assert self.c.PERF_ID, ('You must specify PERF_ID for the builder that '
@@ -344,7 +369,29 @@ class WebRTCApi(recipe_api.RecipeApi):
         revision_number=revision_number,
         perf_test=True)
 
+  def maybe_trigger(self):
+    triggers = self.bot_config.get('triggers')
+    if triggers:
+      properties = {
+        'revision': self.revision,
+        'parent_got_revision': self.revision,
+        'parent_got_revision_cp': self.revision_cp,
+      }
+      if self.webrtc_revision:
+        properties.update({
+          'parent_got_libjingle_revision': self.libjingle_revision,
+          'parent_got_libjingle_revision_cp': self.libjingle_revision_cp,
+          'parent_got_webrtc_revision': self.webrtc_revision,
+          'parent_got_webrtc_revision_cp': self.webrtc_revision_cp,
+        })
+      self.m.trigger(*[{
+        'builder_name': builder_name,
+        'properties': properties,
+      } for builder_name in triggers])
+
   def package_build(self, revision):
+    # TODO(kjellander): Remove when all recipes use webrtc.checkout().
+    revision = revision or self.revision_number
     if self.bot_config.get('build_gs_archive'):
       self.m.archive.zip_and_upload_build(
           'package build',
@@ -353,6 +400,15 @@ class WebRTCApi(recipe_api.RecipeApi):
           build_revision=revision)
 
   def extract_build(self, revision):
+    if not self.m.properties.get('parent_got_revision'):
+      raise self.m.step.StepFailure(
+         'Testers cannot be forced without providing revision information.'
+         'Please select a previous build and click [Rebuild] or force a build'
+         'for a Builder instead (will trigger new runs for the testers).')
+
+    # TODO(kjellander): Remove when all recipes use webrtc.checkout().
+    revision = revision or self.revision_number
+
     # Ensure old build directory is not used is by removing it.
     self.m.path.rmtree(
         'build directory',
@@ -364,11 +420,6 @@ class WebRTCApi(recipe_api.RecipeApi):
         self.GS_ARCHIVES[self.bot_config['build_gs_archive']],
         build_revision=revision)
 
-    if not self.m.properties.get('parent_got_revision'):
-      raise self.m.step.StepFailure(
-         'Testers cannot be forced without providing revision information.'
-         'Please select a previous build and click [Rebuild] or force a build'
-         'for a Builder instead (will trigger new runs for the testers).')
 
   def cleanup(self):
     self.clean_test_output()

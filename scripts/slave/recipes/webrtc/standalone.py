@@ -23,10 +23,13 @@ def GenSteps(api):
   webrtc = api.webrtc
   webrtc.apply_bot_config(webrtc.BUILDERS, webrtc.RECIPE_CONFIGS)
 
-  step_result = api.bot_update.ensure_checkout()
-
-  # Whatever step is run right before this line needs to emit got_revision.
-  got_revision = step_result.presentation.properties['got_revision']
+  # TODO(kjellander): Enable for all builders once confirmed working.
+  if api.properties.get('mastername') == 'client.webrtc.fyi':
+    webrtc.checkout()
+    got_revision = None
+  else:
+    step_result = api.bot_update.ensure_checkout()
+    got_revision = step_result.presentation.properties['got_revision']
 
   webrtc.cleanup()
   api.chromium.runhooks()
@@ -47,6 +50,10 @@ def GenSteps(api):
 
   if webrtc.should_test:
     webrtc.runtests(revision_number=got_revision)
+
+  # TODO(kjellander): Enable for all builders once confirmed working.
+  if api.properties.get('mastername') == 'client.webrtc.fyi':
+    webrtc.maybe_trigger()
 
 
 def _sanitize_nonalpha(text):

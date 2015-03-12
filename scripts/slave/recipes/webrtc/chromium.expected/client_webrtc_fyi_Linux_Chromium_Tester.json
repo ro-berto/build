@@ -19,12 +19,11 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD",
+      "src@c321321",
       "--revision",
-      "src/third_party/libjingle/source/talk@HEAD",
+      "src/third_party/libjingle/source/talk@1161aa63",
       "--revision",
-      "src/third_party/webrtc@HEAD",
-      "--force"
+      "src/third_party/webrtc@deadbeef"
     ],
     "name": "bot_update",
     "~followup_annotations": [
@@ -132,9 +131,9 @@
       "--build_revision",
       "c321321",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux Chromium Tester\", \"buildnumber\": 571, \"mastername\": \"client.webrtc.fyi\", \"parent_buildername\": \"Linux Chromium Builder\", \"parent_got_revision\": \"c321321\", \"recipe\": \"webrtc/chromium\", \"revision\": null, \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux Chromium Tester\", \"buildnumber\": 571, \"got_libjingle_revision\": \"1161aa63\", \"got_revision\": \"c321321\", \"got_webrtc_revision\": \"deadbeef\", \"mastername\": \"client.webrtc.fyi\", \"parent_buildername\": \"Linux Chromium Builder\", \"parent_got_libjingle_revision\": \"1161aa63\", \"parent_got_revision\": \"c321321\", \"parent_got_webrtc_revision\": \"deadbeef\", \"recipe\": \"webrtc/chromium\", \"revision\": null, \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux Chromium Tester\", \"buildnumber\": 571, \"mastername\": \"client.webrtc.fyi\", \"parent_buildername\": \"Linux Chromium Builder\", \"parent_got_revision\": \"c321321\", \"recipe\": \"webrtc/chromium\", \"revision\": null, \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux Chromium Tester\", \"buildnumber\": 571, \"got_libjingle_revision\": \"1161aa63\", \"got_revision\": \"c321321\", \"got_webrtc_revision\": \"deadbeef\", \"mastername\": \"client.webrtc.fyi\", \"parent_buildername\": \"Linux Chromium Builder\", \"parent_got_libjingle_revision\": \"1161aa63\", \"parent_got_revision\": \"c321321\", \"parent_got_webrtc_revision\": \"deadbeef\", \"recipe\": \"webrtc/chromium\", \"revision\": null, \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "name": "extract build"
   }
