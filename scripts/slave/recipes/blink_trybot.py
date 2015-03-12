@@ -295,7 +295,6 @@ def _GenStepsInternal(api):
   if api.properties['revision']:
     for dep, rev in bot_config.get('set_custom_revs', {}).iteritems():
       api.gclient.c.revisions[dep] = rev % api.properties
-  api.step.auto_resolve_conflicts = True
 
   if 'oilpan' in buildername:
     api.chromium.apply_config('oilpan')

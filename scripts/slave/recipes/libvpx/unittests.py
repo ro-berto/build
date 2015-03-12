@@ -17,8 +17,6 @@ DEPS = [
 CONFIGURE_PATH_REL = './libvpx/configure'
 
 def GenSteps(api):
-  api.step.auto_resolve_conflicts = True
-
   # Paths and other constants
   build_root = api.path['slave_build']
 

@@ -107,6 +107,14 @@
     "cmd": [
       "python",
       "-u",
+      "[BUILD]\\scripts\\slave\\kill_processes.py"
+    ],
+    "name": "taskkill (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[BUILD]\\scripts\\slave\\bot_update.py",
       "--master",
       "tryserver.chromium.win",

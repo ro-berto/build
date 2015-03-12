@@ -82,8 +82,7 @@
       "--tags"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "git fetch tags",
-    "stdout": "/path/to/tmp/"
+    "name": "git fetch tags"
   },
   {
     "cmd": [
@@ -117,6 +116,17 @@
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "my repo rebase"
+  },
+  {
+    "cmd": [
+      "git",
+      "fetch",
+      "origin",
+      "--tags"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "git fetch tags (2)",
+    "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [

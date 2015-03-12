@@ -118,12 +118,12 @@
       "cp",
       "-a",
       "public-read",
-      "arb_status.html",
-      "gs://chromium-skia-gm/arb_status.html"
+      "depsroll.html",
+      "gs://chromium-skia-gm/depsroll.html"
     ],
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-skia-gm/arb_status.html@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-skia-gm/depsroll.html@@@"
     ]
   },
   {
@@ -135,6 +135,27 @@
       "arb_status.html"
     ],
     "name": "write arb_status.html"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--force-version",
+      "3.25",
+      "--",
+      "cp",
+      "-a",
+      "public-read",
+      "arb_status.html",
+      "gs://chromium-skia-gm/arb_status.html"
+    ],
+    "name": "gsutil upload (2)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-skia-gm/arb_status.html@@@"
+    ]
   },
   {
     "cmd": [

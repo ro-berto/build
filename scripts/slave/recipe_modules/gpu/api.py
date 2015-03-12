@@ -95,8 +95,6 @@ class GpuApi(recipe_api.RecipeApi):
     # paths in order to avoid breaking them in the product.
     self.m.chromium.apply_config('chrome_with_codecs')
 
-    self.m.step.auto_resolve_conflicts = True
-
     self._enable_swarming = False
     self._swarming_dimension_sets = None
 

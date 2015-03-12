@@ -4,11 +4,20 @@
       "[DEPOT_TOOLS]/repo",
       "init",
       "-u",
+      "http://manifest_url"
+    ],
+    "name": "repo init"
+  },
+  {
+    "cmd": [
+      "[DEPOT_TOOLS]/repo",
+      "init",
+      "-u",
       "http://manifest_url/manifest",
       "-b",
       "branch"
     ],
-    "name": "repo init"
+    "name": "repo init (2)"
   },
   {
     "cmd": [
@@ -30,10 +39,22 @@
       "git",
       "clean",
       "-f",
+      "-d"
+    ],
+    "name": "repo forall git clean"
+  },
+  {
+    "cmd": [
+      "[DEPOT_TOOLS]/repo",
+      "forall",
+      "-c",
+      "git",
+      "clean",
+      "-f",
       "-d",
       "-x"
     ],
-    "name": "repo forall git clean"
+    "name": "repo forall git clean (2)"
   },
   {
     "cmd": [

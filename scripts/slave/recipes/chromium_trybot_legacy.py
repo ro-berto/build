@@ -388,7 +388,6 @@ def _GenStepsInternal(api):
     if bot_config.get('use_lsan', False):
       api.chromium.apply_config('lsan')
     api.gclient.set_config('chromium')
-    api.step.auto_resolve_conflicts = True
 
     bot_update_step = api.bot_update.ensure_checkout(force=True)
 

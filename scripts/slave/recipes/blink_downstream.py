@@ -96,8 +96,6 @@ def GenSteps(api):
   # Ensure we remember the chromium revision.
   api.gclient.c.got_revision_mapping['src'] = 'got_cr_revision'
 
-  api.step.auto_resolve_conflicts = True
-
   step_result = api.bot_update.ensure_checkout(force=True)
 
   api.chromium.runhooks()

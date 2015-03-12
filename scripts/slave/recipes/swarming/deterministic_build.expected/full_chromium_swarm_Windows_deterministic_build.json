@@ -113,7 +113,11 @@
       "[SLAVE_BUILD]\\src"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "remove_build_metadata"
+    "name": "remove_build_metadata",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_WARNINGS@@@"
+    ]
   },
   {
     "cmd": [
@@ -172,6 +176,18 @@
     "cmd": [
       "python",
       "-u",
+      "[DEPOT_TOOLS]\\gclient.py",
+      "runhooks"
+    ],
+    "env": {
+      "GYP_DEFINES": "chromium_win_pch=0 component=static_library dont_embed_build_metadata=1 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1"
+    },
+    "name": "gclient runhooks (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[BUILD]\\scripts\\slave\\compile.py",
       "--target",
       "Release",
@@ -188,6 +204,52 @@
       "chromium_swarm_tests"
     ],
     "name": "Second build"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[isolate]\\resources\\remove_build_metadata.py",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
+      "--src-dir",
+      "[SLAVE_BUILD]\\src"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "remove_build_metadata (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport glob\nimport sys\nwith open(sys.argv[1], 'w') as f:\n  f.write('\\n'.join(glob.glob(sys.argv[2])))\n",
+      "/path/to/tmp/",
+      "[SLAVE_BUILD]\\src\\out\\Release\\*.isolated.gen.json"
+    ],
+    "name": "find isolated targets (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\src\\tools\\swarming_client\\isolate.py",
+      "batcharchive",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--isolate-server",
+      "https://isolateserver.appspot.com",
+      "[SLAVE_BUILD]\\src\\out\\Release\\dummy_target_1.isolated.gen.json",
+      "[SLAVE_BUILD]\\src\\out\\Release\\dummy_target_2.isolated.gen.json"
+    ],
+    "name": "isolate tests (2)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"dummy_target_1\": \"[dummy hash for dummy_target_1]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"dummy_target_2\": \"[dummy hash for dummy_target_2]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"dummy_target_1\": \"[dummy hash for dummy_target_1]\", \"dummy_target_2\": \"[dummy hash for dummy_target_2]\"}@@@"
+    ]
   },
   {
     "cmd": [

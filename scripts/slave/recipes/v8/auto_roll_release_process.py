@@ -139,7 +139,6 @@ def ClusterfuzzHasIssues(api):
 
 
 def GenSteps(api):
-  api.step.auto_resolve_conflicts = True
   repo = api.properties.get('repo', REPO)
   fail_on_exit = []
 

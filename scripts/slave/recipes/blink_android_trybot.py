@@ -19,7 +19,6 @@ def GenSteps(api):
   api.chromium.apply_config('trybot_flavor')
   api.chromium.apply_config('android')
   api.gclient.apply_config('android')
-  api.step.auto_resolve_conflicts = True
 
   # TODO(dpranke): crbug.com/348435. We need to figure out how to separate
   # out the retry and recovery logic from the rest of the recipe.

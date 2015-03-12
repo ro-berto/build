@@ -191,7 +191,6 @@ class V8Api(recipe_api.RecipeApi):
     This bot_config will be used to refine other api methods.
     """
 
-    self.m.step.auto_resolve_conflicts = True
     mastername = self.m.properties.get('mastername')
     buildername = self.m.properties.get('buildername')
     master_dict = builders.get(mastername, {})

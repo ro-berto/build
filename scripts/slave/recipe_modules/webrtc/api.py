@@ -102,7 +102,6 @@ class WebRTCApi(recipe_api.RecipeApi):
     return self.bot_type == 'tester'
 
   def apply_bot_config(self, builders, recipe_configs, perf_config=None):
-    self.m.step.auto_resolve_conflicts = True
     mastername = self.m.properties.get('mastername')
     buildername = self.m.properties.get('buildername')
     master_dict = builders.get(mastername, {})

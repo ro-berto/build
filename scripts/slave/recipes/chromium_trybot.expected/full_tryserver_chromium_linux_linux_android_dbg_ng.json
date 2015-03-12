@@ -1003,6 +1003,19 @@
   },
   {
     "cmd": [
+      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "--apk",
+      "AndroidWebView.apk",
+      "--apk_package",
+      "org.chromium.android_webview.shell"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "install AndroidWebView.apk (2)"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
@@ -1023,6 +1036,19 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
     ]
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "--apk",
+      "ChromeShell.apk",
+      "--apk_package",
+      "org.chromium.chrome.shell"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "install ChromeShell.apk (2)"
   },
   {
     "cmd": [
@@ -1049,6 +1075,19 @@
   },
   {
     "cmd": [
+      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "--apk",
+      "ContentShell.apk",
+      "--apk_package",
+      "org.chromium.content_shell_apk"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "install ContentShell.apk (2)"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
@@ -1069,6 +1108,19 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
     ]
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "--apk",
+      "ChromeSyncShell.apk",
+      "--apk_package",
+      "org.chromium.chrome.browser.sync"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "install ChromeSyncShell.apk (2)"
   },
   {
     "cmd": [

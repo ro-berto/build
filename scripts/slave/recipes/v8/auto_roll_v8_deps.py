@@ -67,8 +67,6 @@ def GetDEPS(api, name, repo):
 
 
 def GenSteps(api):
-  api.step.auto_resolve_conflicts = True
-
   api.gclient.set_config('v8')
   api.gclient.apply_config('chromium')
 

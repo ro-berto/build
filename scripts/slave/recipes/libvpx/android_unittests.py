@@ -35,8 +35,6 @@ BUILDER_TO_DEVICE = freeze({
 })
 
 def GenSteps(api):
-  api.step.auto_resolve_conflicts = True
-
   # Paths and other constants
   build_root = api.path['slave_build']
 

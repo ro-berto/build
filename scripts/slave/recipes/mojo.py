@@ -22,8 +22,6 @@ def _CheckoutSteps(api, buildername):
     api.gclient.apply_config('android')
   if 'NaCl' in buildername:
     api.gclient.c.solutions[0].deps_file = 'DEPS.nacl'
-  if api.tryserver.is_tryserver:
-    api.step.auto_resolve_conflicts = True
   api.bot_update.ensure_checkout(force=True)
   api.gclient.runhooks()
 

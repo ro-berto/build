@@ -24,7 +24,6 @@ def _GenStepsInternal(api):
   force_checkout = api.properties.get('force_checkout', False)
 
   api.gclient.set_config(repo_name)
-  api.step.auto_resolve_conflicts = True
 
   bot_update_step = api.bot_update.ensure_checkout(
       force=force_checkout, patch_project_roots={'v8': []})

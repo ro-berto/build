@@ -53,6 +53,22 @@
       "3.25",
       "--",
       "cp",
+      "gs://chromium-recipe-test/some/random/path/**",
+      "gs://chromium-recipe-test/staging"
+    ],
+    "name": "gsutil cp (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--force-version",
+      "3.25",
+      "--",
+      "cp",
       "gs://chromium-recipe-test/some/random/path/to/boom",
       "[SLAVE_BUILD]/boom"
     ],
