@@ -89,6 +89,11 @@ def GenSteps(api):
       cwd=infra_dir,
       env=env)
   api.step(
+      'install errcheck',
+      cmd=['go', 'get', 'github.com/kisielk/errcheck'],
+      cwd=infra_dir,
+      env=env)
+  api.step(
       'setup database',
       cmd=['./setup_test_db'],
       cwd=infra_dir.join('go', 'database'),

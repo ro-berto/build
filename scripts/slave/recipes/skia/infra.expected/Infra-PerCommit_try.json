@@ -122,6 +122,20 @@
   },
   {
     "cmd": [
+      "go",
+      "get",
+      "github.com/kisielk/errcheck"
+    ],
+    "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra",
+    "env": {
+      "GIT_USER_AGENT": "git/1.9.1",
+      "GOPATH": "[SLAVE_BUILD]/go",
+      "PATH": "[SLAVE_BUILD]/go/bin:%(PATH)s"
+    },
+    "name": "install errcheck"
+  },
+  {
+    "cmd": [
       "./setup_test_db"
     ],
     "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra/go/database",
