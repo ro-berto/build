@@ -391,7 +391,7 @@ class WebRTCApi(recipe_api.RecipeApi):
 
   def package_build(self, revision):
     # TODO(kjellander): Remove when all recipes use webrtc.checkout().
-    revision = revision or self.revision_number
+    revision = revision or self.revision
     if self.bot_config.get('build_gs_archive'):
       self.m.archive.zip_and_upload_build(
           'package build',
@@ -407,7 +407,7 @@ class WebRTCApi(recipe_api.RecipeApi):
          'for a Builder instead (will trigger new runs for the testers).')
 
     # TODO(kjellander): Remove when all recipes use webrtc.checkout().
-    revision = revision or self.revision_number
+    revision = revision or self.revision
 
     # Ensure old build directory is not used is by removing it.
     self.m.path.rmtree(
