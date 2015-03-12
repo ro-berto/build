@@ -81,13 +81,13 @@ def query_for_builds(service, branch, target):
 
 
 def query_for_build_status(service, branch, target, starting_build_id):
-  """Query Android Build Service for the status of the 2 builds in the target
+  """Query Android Build Service for the status of the 4 builds in the target
      branch whose build IDs are >= to the provided build ID"""
   try:
     print ('Querying Android Build APIs for builds of {} on {} starting at'
            ' buildID {}').format(target, branch, starting_build_id)
     return service.build().list(buildType='submitted',
-                                branch=branch, target=target, maxResults='2',
+                                branch=branch, target=target, maxResults='4',
                                 startBuildId=starting_build_id).execute()
   except errors.HttpError as error:
     print 'HTTP Error while attempting to query the build status.'
@@ -101,9 +101,10 @@ def query_for_completed_build(service, branch, target):
   try:
     print ('Querying Android Build APIs for last completed build of {}'
            ' on {}').format(target, branch)
-    return service.build().list(buildType='submitted',
-                                branch=branch, target=target, maxResults='1',
-                                buildAttemptStatus='complete').execute()
+    result = service.build().list(buildType='submitted',
+                                  branch=branch, target=target, maxResults='1',
+                                  buildAttemptStatus='complete').execute()
+    return result['builds'][0]
   except errors.HttpError as error:
     print 'HTTP Error while attempting to query the build status.'
     print error
