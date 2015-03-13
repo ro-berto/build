@@ -178,12 +178,20 @@ def GenSteps(api):
       num_shards=builder['num_device_shards'],
       devices=api.chromium_android.devices[0:1]).json.output
   try:
+    failures = []
     if test_runner:
-      test_runner()
+      try:
+        test_runner()
+      except api.step.StepFailure as f:
+        failures.append(f)
+
     api.chromium_android.run_sharded_perf_tests(
       config=api.json.input(data=perf_tests),
       perf_id=builder['perf_id'],
       chartjson_file=True)
+
+    if failures:
+      raise api.step.StepFailure('src-side perf tests failed %s' % failures)
   finally:
     api.chromium_android.common_tests_final_steps()
 
@@ -235,3 +243,25 @@ def GenTests(api):
       api.override_step_data(
         'get perf test list',
         api.json.output(['perf_test.foo', 'page_cycler.foo'])))
+  yield (api.test('src_side_script_fails') +
+      api.properties.generic(
+          repo_name='src',
+          repo_url=REPO_URL,
+          mastername='chromium.perf',
+          buildername='Android Nexus5 Perf',
+          parent_buildername='parent_buildername',
+          parent_buildnumber='1729',
+          parent_revision='deadbeef',
+          revision='deadbeef',
+          slavename='slavename',
+          target='Release') +
+      api.override_step_data(
+        'read test spec',
+        api.json.output({
+            "Android Nexus5 Perf": {
+              "scripts": [
+                {
+                  "name": "host_info",
+                  "script": "host_info.py"
+                }]}})) +
+      api.step_data('host_info', retcode=1))
