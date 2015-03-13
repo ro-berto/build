@@ -230,10 +230,6 @@ _AndroidSpecs = {
     'perf_id': 'android-nexus7v2',
     'num_device_shards': 8,
   },
-  'Android Nexus9 Perf': {
-    'perf_id': 'android-nexus9',
-    'num_device_shards': 8,
-  },
   'Android Nexus10 Perf': {
     'perf_id': 'android-nexus10',
     'num_device_shards': 8,
