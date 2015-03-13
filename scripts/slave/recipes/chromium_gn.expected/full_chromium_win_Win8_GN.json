@@ -80,8 +80,8 @@
       "[DEPOT_TOOLS]\\gn.py",
       "--root=[SLAVE_BUILD]\\src",
       "gen",
-      "//out/Release",
-      "--args=symbol_level=1 is_debug=false cpu_arch=\"x86\" use_goma=true goma_dir=\"[BUILD]\\goma\""
+      "//out/Release_x64",
+      "--args=symbol_level=1 is_debug=false cpu_arch=\"x64\" use_goma=true goma_dir=\"[BUILD]\\goma\""
     ],
     "name": "gn"
   },
@@ -91,7 +91,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\compile.py",
       "--target",
-      "Release",
+      "Release_x64",
       "--src-dir",
       "[SLAVE_BUILD]\\src",
       "--build-tool",
@@ -112,7 +112,7 @@
       "[DEPOT_TOOLS]\\gn.py",
       "--root=[SLAVE_BUILD]\\src",
       "check",
-      "//out/Release"
+      "//out/Release_x64"
     ],
     "name": "gn check"
   },
@@ -122,7 +122,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\runtest.py",
       "--target",
-      "Release",
+      "Release_x64",
       "--factory-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Win8 GN\", \"buildnumber\": 571, \"mastername\": \"chromium.win\", \"recipe\": \"chromium_gn\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",

@@ -147,7 +147,7 @@ BUILDERS = freeze({
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'win',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
       },
      'Win8 GN (dbg)': {
@@ -155,7 +155,7 @@ BUILDERS = freeze({
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'win',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
       },
     },
