@@ -20,11 +20,11 @@ def _GetCompilationDatabase(compdb_path):
 
 def main(argv):
   parser = argparse.ArgumentParser()
-  parser.add_argument('--compdb_input', default=None, required=True,
+  parser.add_argument('--compdb-input', default=None, required=True,
                       help='path to the compilation database to be filtered')
-  parser.add_argument('--compdb_filter', default=None, required=True,
+  parser.add_argument('--compdb-filter', default=None, required=True,
                       help='path to compilation database used for filtering')
-  parser.add_argument('--compdb_output', default=None, required=True,
+  parser.add_argument('--compdb-output', default=None, required=True,
                       help='path of resulting filtered compilation database')
   options = parser.parse_args(argv)
   compilation_database = _GetCompilationDatabase(options.compdb_input)

@@ -48,9 +48,9 @@ class FilterCompilationsTest(unittest.TestCase):
     # For simplicity, we will always use the same input and output file.
     # The filter_compilations.py script supports that (and should continue to
     # support it).
-    argv = ['--compdb_input=%s' % self.test_compdb.name,
-            '--compdb_filter=%s' % compdb_filter,
-            '--compdb_output=%s' % self.test_compdb.name]
+    argv = ['--compdb-input=%s' % self.test_compdb.name,
+            '--compdb-filter=%s' % compdb_filter,
+            '--compdb-output=%s' % self.test_compdb.name]
     filter_compilations.main(argv)
 
   def _CheckOutputFile(self, expected_output):
