@@ -499,6 +499,10 @@ def chromium(c):
 def chromium_win_clang(c):
   fastbuild(c, final=False)  # final=False so win_clang_asan can override it.
 
+@config_ctx(includes=['chromium_win_clang', 'official'])
+def chromium_win_clang_official(c):
+  pass
+
 @config_ctx(includes=['chromium_win_clang', 'asan', 'static_library'])
 def chromium_win_clang_asan(c):
   # Clear lsan configuration for win.
