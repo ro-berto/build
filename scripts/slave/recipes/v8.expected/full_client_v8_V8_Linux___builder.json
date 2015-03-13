@@ -101,8 +101,64 @@
   },
   {
     "cmd": [],
-    "name": "trigger V8 Linux - presubmit",
+    "name": "trigger V8 Deopt Fuzzer, V8 Linux, V8 Linux - deadcode, V8 Linux - gcmole, V8 Linux - isolates, V8 Linux - nosse3, V8 Linux - nosse4, V8 Linux - presubmit",
     "trigger_specs": [
+      {
+        "builder_name": "V8 Deopt Fuzzer",
+        "properties": {
+          "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
+          "parent_got_revision_cp": "refs/heads/master@{#50110}",
+          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
+        }
+      },
+      {
+        "builder_name": "V8 Linux",
+        "properties": {
+          "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
+          "parent_got_revision_cp": "refs/heads/master@{#50110}",
+          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
+        }
+      },
+      {
+        "builder_name": "V8 Linux - deadcode",
+        "properties": {
+          "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
+          "parent_got_revision_cp": "refs/heads/master@{#50110}",
+          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
+        }
+      },
+      {
+        "builder_name": "V8 Linux - gcmole",
+        "properties": {
+          "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
+          "parent_got_revision_cp": "refs/heads/master@{#50110}",
+          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
+        }
+      },
+      {
+        "builder_name": "V8 Linux - isolates",
+        "properties": {
+          "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
+          "parent_got_revision_cp": "refs/heads/master@{#50110}",
+          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
+        }
+      },
+      {
+        "builder_name": "V8 Linux - nosse3",
+        "properties": {
+          "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
+          "parent_got_revision_cp": "refs/heads/master@{#50110}",
+          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
+        }
+      },
+      {
+        "builder_name": "V8 Linux - nosse4",
+        "properties": {
+          "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
+          "parent_got_revision_cp": "refs/heads/master@{#50110}",
+          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
+        }
+      },
       {
         "builder_name": "V8 Linux - presubmit",
         "properties": {

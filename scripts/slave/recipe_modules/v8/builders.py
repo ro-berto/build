@@ -22,6 +22,13 @@ BUILDERS = {
         'build_gs_archive': 'linux_rel_archive',
         'testing': {'platform': 'linux'},
         'triggers': [
+          'V8 Deopt Fuzzer',
+          'V8 Linux',
+          'V8 Linux - deadcode',
+          'V8 Linux - gcmole',
+          'V8 Linux - isolates',
+          'V8 Linux - nosse3',
+          'V8 Linux - nosse4',
           'V8 Linux - presubmit',
         ],
       },
@@ -34,6 +41,19 @@ BUILDERS = {
         'bot_type': 'builder',
         'build_gs_archive': 'linux_dbg_archive',
         'testing': {'platform': 'linux'},
+        'triggers': [
+          'V8 GC Stress - 1',
+          'V8 GC Stress - 2',
+          'V8 GC Stress - 3',
+          'V8 Linux - debug',
+          'V8 Linux - debug - code serializer',
+          'V8 Linux - debug - isolates',
+          'V8 Linux - debug - nosse3',
+          'V8 Linux - debug - nosse4',
+          'V8 Linux - memcheck',
+          'V8 Linux - test262 - debug',
+          'V8 Linux - test262-es6 - debug',
+        ],
       },
       'V8 Linux - nosnap builder': {
         'chromium_apply_config': ['no_snapshot', 'v8_goma'],
@@ -44,6 +64,9 @@ BUILDERS = {
         'bot_type': 'builder',
         'build_gs_archive': 'linux_nosnap_rel_archive',
         'testing': {'platform': 'linux'},
+        'triggers': [
+          'V8 Linux - nosnap',
+        ],
       },
       'V8 Linux - nosnap debug builder': {
         'chromium_apply_config': ['no_snapshot', 'v8_goma'],
@@ -54,6 +77,9 @@ BUILDERS = {
         'bot_type': 'builder',
         'build_gs_archive': 'linux_nosnap_dbg_archive',
         'testing': {'platform': 'linux'},
+        'triggers': [
+          'V8 Linux - nosnap - debug',
+        ],
       },
       'V8 Linux - presubmit': {
         'v8_config_kwargs': {
@@ -298,6 +324,9 @@ BUILDERS = {
         'bot_type': 'builder',
         'build_gs_archive': 'linux64_rel_archive',
         'testing': {'platform': 'linux'},
+        'triggers': [
+          'V8 Linux64',
+        ],
       },
       'V8 Linux64 - debug builder': {
         'chromium_apply_config': ['v8_goma'],
@@ -308,6 +337,10 @@ BUILDERS = {
         'bot_type': 'builder',
         'build_gs_archive': 'linux64_dbg_archive',
         'testing': {'platform': 'linux'},
+        'triggers': [
+          'V8 Fuzzer',
+          'V8 Linux64 - debug',
+        ],
       },
       'V8 Linux64': {
         'v8_config_kwargs': {
@@ -371,6 +404,11 @@ BUILDERS = {
         'bot_type': 'builder',
         'build_gs_archive': 'win32_dbg_archive',
         'testing': {'platform': 'win'},
+        'triggers': [
+          'V8 Win32 - debug - 1',
+          'V8 Win32 - debug - 2',
+          'V8 Win32 - debug - 3'
+        ],
       },
       'V8 Win32 - 1': {
         'v8_config_kwargs': {
@@ -521,6 +559,9 @@ BUILDERS = {
         'bot_type': 'builder',
         'build_gs_archive': 'arm_rel_archive',
         'testing': {'platform': 'linux'},
+        'triggers': [
+          'V8 Arm',
+        ],
       },
       'V8 Arm - debug builder': {
         'chromium_apply_config': ['arm_hard_float'],
@@ -533,6 +574,11 @@ BUILDERS = {
         'bot_type': 'builder',
         'build_gs_archive': 'arm_dbg_archive',
         'testing': {'platform': 'linux'},
+        'triggers': [
+          'V8 Arm - debug - 1',
+          'V8 Arm - debug - 2',
+          'V8 Arm GC Stress',
+        ],
       },
       'V8 Android Arm - builder': {
         'gclient_apply_config': ['android'],
@@ -632,6 +678,10 @@ BUILDERS = {
         'bot_type': 'builder',
         'build_gs_archive': 'mips_rel_archive',
         'testing': {'platform': 'linux'},
+        'triggers': [
+          'V8 Mips - big endian - nosnap - 1',
+          'V8 Mips - big endian - nosnap - 2',
+        ],
       },
       'V8 Mips - big endian - nosnap - 1': {
         'v8_apply_config': ['no_snapshot', 'no_i18n'],
@@ -787,6 +837,9 @@ BUILDERS = {
         'bot_type': 'builder',
         'build_gs_archive': 'mipsel_sim_rel_archive',
         'testing': {'platform': 'linux'},
+        'triggers': [
+          'V8 Linux - mipsel - sim',
+        ],
       },
       'V8 Linux - mips64el - sim - builder': {
         'chromium_apply_config': ['simulate_mipsel', 'v8_goma'],
