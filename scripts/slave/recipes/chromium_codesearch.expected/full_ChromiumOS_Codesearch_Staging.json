@@ -71,7 +71,7 @@
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "chromeos=1 clang=1 component=shared_library fastbuild=1 ffmpeg_branding=ChromeOS gomadir='[BUILD]/goma' proprietary_codecs=1 target_arch=x64 use_goma=1"
     },
-    "name": "gclient runhooks"
+    "name": "gclient runhooks for chromeos"
   },
   {
     "cmd": [
@@ -86,7 +86,7 @@
       "objc",
       "objcxx"
     ],
-    "name": "generate compilation database",
+    "name": "generate compilation database for chromeos",
     "stdout": "/path/to/tmp/"
   },
   {
@@ -116,6 +116,48 @@
       "[SLAVE_BUILD]/src/out/Debug/compile_commands.json"
     ],
     "name": "copy compilation database"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/gclient.py",
+      "runhooks"
+    ],
+    "env": {
+      "GYP_DEFINES": "clang=1 component=shared_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
+    },
+    "name": "gclient runhooks for linux"
+  },
+  {
+    "cmd": [
+      "ninja",
+      "-C",
+      "[SLAVE_BUILD]/src/out/Debug",
+      "all",
+      "-t",
+      "compdb",
+      "cc",
+      "cxx",
+      "objc",
+      "objcxx"
+    ],
+    "name": "generate compilation database for linux",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/chromium/filter_compilations.py",
+      "--compdb-input",
+      "[SLAVE_BUILD]/src/out/Debug/compile_commands.json",
+      "--compdb-filter",
+      "some compilation data",
+      "--compdb-output",
+      "[SLAVE_BUILD]/src/out/Debug/compile_commands.json"
+    ],
+    "name": "Filter out duplicate compilation units"
   },
   {
     "cmd": [

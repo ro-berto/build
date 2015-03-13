@@ -104,11 +104,21 @@ SPEC = freeze({
   },
 })
 
+def GenerateCompilationDatabase(api, debug_path, targets, platform):
+  api.chromium.runhooks(name='runhooks for %s' % platform)
+  command = ['ninja', '-C', debug_path] + list(targets)
+  # Add the parameters for creating the compilation database.
+  command += ['-t', 'compdb', 'cc', 'cxx', 'objc', 'objcxx']
+  return api.step('generate compilation database for %s' % platform,
+                  command,
+                  stdout=api.raw_io.output())
+
 
 def GenSteps(api):
   buildername = api.properties.get('buildername')
 
   bot_config = SPEC.get('builders', {}).get(buildername)
+  platform = bot_config.get('platform', 'linux')
 
   # Checkout the repositories that are either directly needed or should be
   # included in the source archive.
@@ -125,17 +135,12 @@ def GenSteps(api):
   update_step = api.bot_update.ensure_checkout()
   api.chromium.set_build_properties(update_step.json.output['properties'])
 
-  # Compile the code using clang.
-  api.chromium.set_config('codesearch',
-                          **bot_config.get('chromium_config_kwargs', {}))
-  api.chromium.runhooks()
+  debug_path = api.path['checkout'].join('out', 'Debug')
   targets = bot_config.get('compile_targets', [])
-  debug_path = api.path['checkout'].join('out', api.chromium.c.BUILD_CONFIG)
-  command = ['ninja', '-C', debug_path] + list(targets)
-  # Add the parameters for creating the compilation database.
-  command += ['-t', 'compdb', 'cc', 'cxx', 'objc', 'objcxx']
-  result = api.step('generate compilation database', command,
-                    stdout=api.raw_io.output())
+
+  api.chromium.set_config('codesearch',
+                          **bot_config.get('chromium_config_kwargs',{}))
+  result = GenerateCompilationDatabase(api, debug_path, targets, platform)
 
   api.chromium.compile(targets)
 
@@ -146,8 +151,17 @@ def GenSteps(api):
            ['cp', api.raw_io.input(data=result.stdout),
             debug_path.join('compile_commands.json')])
 
-  # Now compile the code for real.
   if bot_config.get('create_index_pack'):
+    if platform == 'chromeos':
+      api.chromium.set_config('codesearch', BUILD_CONFIG='Debug')
+      result = GenerateCompilationDatabase(api, debug_path, targets, 'linux')
+      api.python('Filter out duplicate compilation units',
+                 api.path['build'].join('scripts', 'slave', 'chromium',
+                                        'filter_compilations.py'),
+                 ['--compdb-input', debug_path.join('compile_commands.json'),
+                  '--compdb-filter', api.raw_io.input(data=result.stdout),
+                  '--compdb-output', debug_path.join('compile_commands.json')])
+
     # Compile the clang tool
     script_path = api.path.sep.join(['tools', 'clang', 'scripts', 'update.sh'])
     api.step('compile translation_unit clang tool',
@@ -175,7 +189,6 @@ def GenSteps(api):
     # Create the index pack
     got_revision_cp = api.chromium.build_properties.get('got_revision_cp')
     commit_position = api.commit_position.parse_revision(got_revision_cp)
-    platform = bot_config.get('platform', 'linux')
     index_pack_name = 'index_pack_%s.zip' % platform
     index_pack_name_with_revision = 'index_pack_%s_%s.zip' % (
         platform, commit_position)
@@ -242,20 +255,25 @@ def _sanitize_nonalpha(text):
 
 
 def GenTests(api):
-  for buildername, _ in SPEC['builders'].iteritems():
-    test = (
-      api.test('full_%s' % (_sanitize_nonalpha(buildername))) +
-      api.step_data('generate compilation database',
-                    stdout=api.raw_io.output('some compilation data')) +
-      api.properties.generic(buildername=buildername, mastername='chromium.fyi')
-    )
+  for buildername, config in SPEC['builders'].iteritems():
+    platform = config.get('platform')
+    test = api.test('full_%s' % (_sanitize_nonalpha(buildername)))
+    test += api.step_data('generate compilation database for %s' % platform,
+                          stdout=api.raw_io.output('some compilation data'))
+    if platform == 'chromeos' and config.get('create_index_pack'):
+      test += api.step_data('generate compilation database for linux',
+                            stdout=api.raw_io.output('some compilation data'))
+    test += api.properties.generic(buildername=buildername,
+                                   mastername='chromium.fyi')
 
     yield test
 
   yield (
     api.test(
         'full_%s_fail' % _sanitize_nonalpha('ChromiumOS Codesearch Staging')) +
-    api.step_data('generate compilation database',
+    api.step_data('generate compilation database for chromeos',
+                  stdout=api.raw_io.output('some compilation data')) +
+    api.step_data('generate compilation database for linux',
                   stdout=api.raw_io.output('some compilation data')) +
     api.step_data('run translation_unit clang tool', retcode=2) +
     api.properties.generic(buildername='ChromiumOS Codesearch Staging',

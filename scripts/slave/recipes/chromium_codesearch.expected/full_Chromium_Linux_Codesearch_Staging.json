@@ -70,7 +70,7 @@
     "env": {
       "GYP_DEFINES": "clang=1 component=shared_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
     },
-    "name": "gclient runhooks"
+    "name": "gclient runhooks for linux"
   },
   {
     "cmd": [
@@ -85,7 +85,7 @@
       "objc",
       "objcxx"
     ],
-    "name": "generate compilation database",
+    "name": "generate compilation database for linux",
     "stdout": "/path/to/tmp/"
   },
   {

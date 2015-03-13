@@ -71,7 +71,7 @@
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "chromeos=1 clang=1 component=shared_library fastbuild=1 ffmpeg_branding=ChromeOS gomadir='[BUILD]/goma' proprietary_codecs=1 target_arch=x64 use_goma=1"
     },
-    "name": "gclient runhooks"
+    "name": "gclient runhooks for chromeos"
   },
   {
     "cmd": [
@@ -86,7 +86,7 @@
       "objc",
       "objcxx"
     ],
-    "name": "generate compilation database",
+    "name": "generate compilation database for chromeos",
     "stdout": "/path/to/tmp/"
   },
   {
