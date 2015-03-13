@@ -421,7 +421,7 @@ class SimulatorTestRunner(TestRunner):
   def RemoveHomeDirectory(self):
     """Recursively removes the home directory being used by the simulator."""
     if os.path.exists(self.homedir):
-      shutil.rmtree(self.homedir)
+      shutil.rmtree(self.homedir, ignore_errors=True)
       self.homedir = ''
 
   def KillSimulators(self):
