@@ -69,8 +69,7 @@ BUILDERS = freeze({
         'path': lambda api: ('android_fyi_dbg/full-build-linux_%s.zip' %
                              api.properties['revision']),
       },
-      'device_name': ['Nexus 4', 'Nexus 5', 'Nexus 6', 'Nexus 7', 'Nexus 10'],
-      'device_os': ['4.1.1', '4.2.1', '4.2.2', '4.3', '4.4.2', '4.4.3', '5.0'],
+      'device_minimum_os': '4.0',
       'device_timeout': 60,
       'unittests': CHROMIUM_AMP_UNITTESTS,
       'instrumentation_tests': [],
@@ -187,12 +186,14 @@ def GenSteps(api):
       deferred_trigger_result = api.amp.trigger_test_suite(
           suite, 'gtest',
           api.amp.gtest_arguments(suite, isolate_file_path=isolate_file_path),
-          api.amp.amp_arguments(api_address=AMP_INSTANCE_ADDRESS,
-                                api_port=AMP_INSTANCE_PORT,
-                                api_protocol=AMP_INSTANCE_PROTOCOL,
-                                device_name=builder.get('device_name'),
-                                device_os=builder.get('device_os'),
-                                device_timeout=builder.get('device_timeout')))
+          api.amp.amp_arguments(
+              api_address=AMP_INSTANCE_ADDRESS,
+              api_port=AMP_INSTANCE_PORT,
+              api_protocol=AMP_INSTANCE_PROTOCOL,
+              device_minimum_os=builder.get('device_minimum_os'),
+              device_name=builder.get('device_name'),
+              device_os=builder.get('device_os'),
+              device_timeout=builder.get('device_timeout')))
       trigger_successful[suite] = deferred_trigger_result.is_ok
 
     # TODO(jbudorick): Add support for instrumentation tests.
@@ -210,12 +211,14 @@ def GenSteps(api):
       deferred_step_result = api.amp.collect_test_suite(
           suite, 'gtest',
           api.amp.gtest_arguments(suite),
-          api.amp.amp_arguments(api_address=AMP_INSTANCE_ADDRESS,
-                                api_port=AMP_INSTANCE_PORT,
-                                api_protocol=AMP_INSTANCE_PROTOCOL,
-                                device_name=builder.get('device_name'),
-                                device_os=builder.get('device_os'),
-                                device_timeout=builder.get('device_timeout')))
+          api.amp.amp_arguments(
+              api_address=AMP_INSTANCE_ADDRESS,
+              api_port=AMP_INSTANCE_PORT,
+              api_protocol=AMP_INSTANCE_PROTOCOL,
+              device_minimum_os=builder.get('device_minimum_os'),
+              device_name=builder.get('device_name'),
+              device_os=builder.get('device_os'),
+              device_timeout=builder.get('device_timeout')))
       if not deferred_step_result.is_ok:
         # We only want to upload the logcat if there was a test failure.
         step_failure = deferred_step_result.get_error()
