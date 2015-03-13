@@ -839,6 +839,27 @@ def GenTests(api):
   )
 
   yield (
+    api.test('telemetry_gpu_with_results_but_bad_exit_code') +
+    props(
+      mastername='tryserver.chromium.mac',
+      buildername='mac_chromium_rel_ng',
+    ) +
+    api.platform.name('mac') +
+    # passing=True, but exit code != 0.
+    api.override_step_data(
+        'pixel_test on Intel GPU on Mac (with patch)',
+        api.test_utils.canned_telemetry_gpu_output(
+            passing=True, is_win=False, swarming=True),
+        retcode=255
+    ) +
+    api.override_step_data('analyze',
+                           api.json.output({'status': 'Found dependency',
+                                            'targets': gpu_targets,
+                                            'build_targets': gpu_targets}))
+  )
+
+
+  yield (
     api.test('use_v8_patch_on_chromium_trybot') +
     props(buildername='win_chromium_rel_ng',
           mastername='tryserver.chromium.win',
