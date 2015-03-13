@@ -53,13 +53,9 @@ class WebRTCApi(recipe_api.RecipeApi):
     'webrtc_perf_tests',
   )
 
-  # Instrumentation tests may require installing a separate APK to be tested.
-  # The key in the dict is assumed to contain a tuple with the APK name and the
-  # package name.
-  ANDROID_INSTRUMENTATION_TESTS = {
-     'AppRTCDemoTest': ('AppRTCDemo', 'org.appspot.apprtc'),
-     'libjingle_peerconnection_android_unittest': None,
-  }
+  ANDROID_INSTRUMENTATION_TESTS = (
+     'libjingle_peerconnection_android_unittest',
+  )
 
   # Map of GS archive names to urls.
   # TODO(kjellander): Convert to use the auto-generated URLs once we've setup a
@@ -250,10 +246,7 @@ class WebRTCApi(recipe_api.RecipeApi):
           self.m.chromium_android.run_test_suite(test)
         for test in self.ANDROID_APK_PERF_TESTS:
           self._add_android_perf_test(test, revision_number=revision_number)
-        for test, apk_under_test in self.ANDROID_INSTRUMENTATION_TESTS.items():
-          if apk_under_test:
-            apk_name, package = apk_under_test
-            self.m.chromium_android.adb_install_apk(apk_name, package)
+        for test in self.ANDROID_INSTRUMENTATION_TESTS:
           self.m.chromium_android.run_instrumentation_suite(test_apk=test,
                                                             verbose=True)
         self.m.chromium_android.logcat_dump()
