@@ -530,6 +530,14 @@ class ChromiumApi(recipe_api.RecipeApi):
     if self.c.TARGET_ARCH == 'arm':
       gn_args.append('cpu_arch="arm"')
 
+    # TODO(dpranke): crbug.com/467159 ... the way v8 builds work
+    # on windows is currently broken. In order to work around this,
+    # we force the build to compile everything with the 32-bit toolchain.
+    # This probably causes other problems, but at least the compiles should
+    # succeed.
+    if self.c.TARGET_PLATFORM == 'win' and self.c.TARGET_BITS == 32:
+      gn_args.append('host_cpu="x86"')
+
     # TODO: crbug.com/395784.
     # Consider getting the flags to use via the project_generator config
     # and/or modifying the goma config to modify the gn flags directly,
