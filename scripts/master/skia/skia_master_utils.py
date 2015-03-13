@@ -141,6 +141,7 @@ def SetupBuildersAndSchedulers(c, builders, slaves, ActiveMaster):
       'category': category,
       'recipe': builder.get('recipe', DEFAULT_RECIPE),
       'properties': properties,
+      'mergeRequests': builder.get('can_merge_requests', True),
     }
     builder_dicts.append(builder_dict)
 
