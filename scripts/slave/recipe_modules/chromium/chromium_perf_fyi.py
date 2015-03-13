@@ -114,6 +114,22 @@ SPEC = {
       },
       'chromium_apply_config': ['chromium_perf_fyi']
     },
+    'Win Clang Builder': {
+      'disable_tests': True,
+      'recipe_config': 'chromium_win_clang_official',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'bot_type': 'builder',
+      'compile_targets': [
+        'chromium_builder_perf',
+      ],
+      'testing': {
+        'platform': 'win',
+      },
+      'chromium_apply_config': ['chromium_perf_fyi']
+    },
   },
 }
 
@@ -145,4 +161,12 @@ _AddBotSpec(
     parent_builder='Win x64 FYI Builder',
     perf_id='chromium-rel-win7-gpu-nvidia',
     target_bits=64,
+    num_shards=1)
+
+_AddBotSpec(
+    name='Win Clang Perf',
+    platform='win',
+    parent_builder='Win Clang Builder',
+    perf_id='chromium-win-clang',
+    target_bits=32,
     num_shards=1)
