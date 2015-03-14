@@ -391,6 +391,30 @@
   },
   {
     "cmd": [
+      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "[SLAVE_BUILD]/src/out/Release/apks/AppRTCDemo.apk",
+      "--release"
+    ],
+    "env": {
+      "CHECKOUT_SOURCE_ROOT": "[SLAVE_BUILD]/src"
+    },
+    "name": "install AppRTCDemo"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/webrtc/build/android/test_runner.py",
+      "instrumentation",
+      "--test-apk",
+      "AppRTCDemoTest",
+      "--verbose",
+      "--release"
+    ],
+    "name": "Instrumentation test AppRTCDemoTest"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "[SLAVE_BUILD]/src/webrtc/build/android/test_runner.py",

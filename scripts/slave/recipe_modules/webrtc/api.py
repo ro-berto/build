@@ -53,9 +53,12 @@ class WebRTCApi(recipe_api.RecipeApi):
     'webrtc_perf_tests',
   )
 
-  ANDROID_INSTRUMENTATION_TESTS = (
-     'libjingle_peerconnection_android_unittest',
-  )
+  # Instrumentation tests may target a separate APK to be tested. In that case,
+  # specify the APK name (without the .apk extension) as key in the dict below.
+  ANDROID_INSTRUMENTATION_TESTS = {
+     'AppRTCDemoTest': 'AppRTCDemo',
+     'libjingle_peerconnection_android_unittest': None,
+  }
 
   # Map of GS archive names to urls.
   # TODO(kjellander): Convert to use the auto-generated URLs once we've setup a
@@ -246,7 +249,9 @@ class WebRTCApi(recipe_api.RecipeApi):
           self.m.chromium_android.run_test_suite(test)
         for test in self.ANDROID_APK_PERF_TESTS:
           self._add_android_perf_test(test, revision_number=revision_number)
-        for test in self.ANDROID_INSTRUMENTATION_TESTS:
+        for test, apk_under_test in self.ANDROID_INSTRUMENTATION_TESTS.items():
+          if apk_under_test:
+            self._adb_install_apk(apk_under_test)
           self.m.chromium_android.run_instrumentation_suite(test_apk=test,
                                                             verbose=True)
         self.m.chromium_android.logcat_dump()
@@ -329,6 +334,28 @@ class WebRTCApi(recipe_api.RecipeApi):
           test=test, args=args, name=name, annotate=annotate, xvfb=True,
           flakiness_dash=flakiness_dash, python_mode=python_mode,
           test_type=test_type, env=env)
+
+  def _adb_install_apk(self, apk_name):
+    """Installs an APK on an Android device.
+
+    We cannot use chromium_android.adb_install_apk since it will fail due to
+    the automatic path creation becomes invalid due to WebRTC's usage of
+    symlinks and the Chromium checkout in chromium/src combined with
+    assumptions in the Android test tool chain.
+    """
+    apk_path = str(self.m.chromium.c.build_dir.join(
+        self.m.chromium.c.build_config_fs, 'apks', '%s.apk' % apk_name))
+    install_cmd = [
+        self.m.path['checkout'].join('build',
+                                     'android',
+                                     'adb_install_apk.py'),
+        apk_path,
+    ]
+    if self.m.chromium.c.BUILD_CONFIG == 'Release':
+      install_cmd.append('--release')
+    env = { 'CHECKOUT_SOURCE_ROOT': self.m.path['checkout']}
+    return self.m.step('install ' + apk_name, install_cmd, infra_step=True,
+                       env=env)
 
   def _add_android_perf_test(self, test, revision_number):
     """Adds a test to run on Android devices.
