@@ -102,10 +102,11 @@ class TriggerApi(recipe_api.RecipeApi):
       assert builder_name, 'builder_name is missing: %s' % (trigger,)
       builder_names.add(builder_name)
 
-    name = (
-        kwargs.get('name') or ('trigger %s' % ', '.join(sorted(builder_names))))
-    return self.m.step(
-        name,
+    result = self.m.step(
+        kwargs.get('name', 'trigger'),
         cmd=[],
         trigger_specs=trigger_specs,
     )
+    if 'name' not in kwargs:
+      result.presentation.step_text = "<br />".join(sorted(builder_names))
+    return result

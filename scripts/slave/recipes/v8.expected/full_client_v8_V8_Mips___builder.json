@@ -128,7 +128,7 @@
   },
   {
     "cmd": [],
-    "name": "trigger V8 Mips - big endian - nosnap - 1, V8 Mips - big endian - nosnap - 2",
+    "name": "trigger",
     "trigger_specs": [
       {
         "builder_name": "V8 Mips - big endian - nosnap - 1",
@@ -146,6 +146,9 @@
           "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
         }
       }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@V8 Mips - big endian - nosnap - 1<br />V8 Mips - big endian - nosnap - 2@@@"
     ]
   }
 ]

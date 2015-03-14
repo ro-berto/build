@@ -101,7 +101,7 @@
   },
   {
     "cmd": [],
-    "name": "trigger V8 Fuzzer, V8 Linux64 - debug",
+    "name": "trigger",
     "trigger_specs": [
       {
         "builder_name": "V8 Fuzzer",
@@ -119,6 +119,9 @@
           "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
         }
       }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@V8 Fuzzer<br />V8 Linux64 - debug@@@"
     ]
   }
 ]

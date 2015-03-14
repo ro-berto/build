@@ -110,7 +110,7 @@
   },
   {
     "cmd": [],
-    "name": "trigger Linux Asan Tester (parallel)",
+    "name": "trigger",
     "trigger_specs": [
       {
         "builder_name": "Linux Asan Tester (parallel)",
@@ -120,6 +120,9 @@
           "revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
         }
       }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Linux Asan Tester (parallel)@@@"
     ]
   }
 ]

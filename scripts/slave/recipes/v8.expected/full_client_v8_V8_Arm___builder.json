@@ -104,7 +104,7 @@
   },
   {
     "cmd": [],
-    "name": "trigger V8 Arm",
+    "name": "trigger",
     "trigger_specs": [
       {
         "builder_name": "V8 Arm",
@@ -114,6 +114,9 @@
           "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
         }
       }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@V8 Arm@@@"
     ]
   }
 ]

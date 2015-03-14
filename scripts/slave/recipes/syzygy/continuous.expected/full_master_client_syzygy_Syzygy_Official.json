@@ -267,7 +267,7 @@
   },
   {
     "cmd": [],
-    "name": "trigger Syzygy Smoke Test",
+    "name": "trigger",
     "trigger_specs": [
       {
         "builder_name": "Syzygy Smoke Test",
@@ -279,6 +279,9 @@
           "revision": "0e9f25b1098271be2b096fd1c095d6d907cf86f7"
         }
       }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Syzygy Smoke Test@@@"
     ]
   }
 ]
