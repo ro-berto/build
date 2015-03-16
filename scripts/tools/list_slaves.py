@@ -59,6 +59,8 @@ Note: t is replaced with 'tryserver', 'c' with chromium' and
   group.add_option('--os-version', action='append', default=[],
                    help='Only slaves using a specific OS version')
   group.add_option('-s', '--slave', action='append', default=[])
+  group.add_option('--cq',
+                   help='Only slaves used by specific CQ (commit queue) config')
   parser.add_option_group(group)
   group = optparse.OptionGroup(parser, 'Output format')
   group.add_option('-n', '--name', default='host',
@@ -135,6 +137,29 @@ Note: t is replaced with 'tryserver', 'c' with chromium' and
   if options.slave:
     selected = set(options.slave)
     slaves = [s for s in slaves if s.get('hostname') in selected]
+
+  if options.cq:
+    with open(options.cq) as f:
+      cq_config = json.load(f)
+
+    # Handle CQ configs still remaining in the CQ repo (as opposed to project
+    # repos, see http://crbug.com/443613 .
+    legacy_config = cq_config.get(
+        'verifiers_no_patch', {}).get('try_job_verifier')
+    if not legacy_config:
+      legacy_config = cq_config.get(
+          'verifiers', {}).get('try_job_verifier')
+    if legacy_config:
+      cq_config = {'trybots': legacy_config}
+
+    def is_used_by_cq(slave):
+      def get_cq_builders(key):
+        return cq_config.get('trybots', {}).get(key, {}).get(
+            slave['mastername'].replace('master.', ''), {}).keys()
+      cq_builders = set(
+          get_cq_builders('launched') + get_cq_builders('triggered'))
+      return bool(cq_builders.intersection(set(slave.get('builder', []))))
+    slaves = [s for s in slaves if is_used_by_cq(s)]
 
   if options.fmt == 'json':
     normalized = []
