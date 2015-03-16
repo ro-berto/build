@@ -25,7 +25,8 @@ DEPS = [
 
 def GenSteps(api):
   webrtc = api.webrtc
-  webrtc.apply_bot_config(webrtc.BUILDERS, webrtc.RECIPE_CONFIGS)
+  webrtc.apply_bot_config(webrtc.BUILDERS, webrtc.RECIPE_CONFIGS,
+                          git_hashes_as_perf_revisions=True)
 
   if api.platform.is_win:
     api.chromium.taskkill()
@@ -80,7 +81,7 @@ def GenSteps(api):
           gtest_filter='WebRtc*')
       api.chromium_android.common_tests_final_steps()
     else:
-      test_runner = lambda: webrtc.runtests(revision_number=got_revision)
+      test_runner = lambda: webrtc.runtests(revision=got_revision)
       api.chromium_tests.setup_chromium_tests(test_runner)
 
   # TODO(kjellander): Enable for all builders once confirmed working.

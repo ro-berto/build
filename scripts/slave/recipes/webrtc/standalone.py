@@ -49,7 +49,7 @@ def GenSteps(api):
     webrtc.extract_build(archive_revision)
 
   if webrtc.should_test:
-    webrtc.runtests(revision_number=got_revision)
+    webrtc.runtests(revision=got_revision)
 
   # TODO(kjellander): Enable for all builders once confirmed working.
   if api.properties.get('mastername') == 'client.webrtc.fyi':
