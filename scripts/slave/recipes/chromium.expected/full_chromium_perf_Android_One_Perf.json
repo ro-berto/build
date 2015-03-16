@@ -166,6 +166,19 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/android/authorize_adb_devices.py",
+      "--adb-path",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "authorize_adb_devices"
+  },
+  {
+    "cmd": [
       "[SLAVE_BUILD]/src/build/android/buildbot/bb_device_status_check.py",
       "--json-output",
       "/path/to/tmp/json"

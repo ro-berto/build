@@ -293,10 +293,21 @@ class AndroidApi(recipe_api.RecipeApi):
         env=self.m.chromium.get_env(),
         infra_step=True)
 
+
+  def authorize_adb_devices(self):
+    script = self.m.path['build'].join('scripts', 'slave', 'android',
+                                    'authorize_adb_devices.py')
+    args = ['--adb-path', self.m.path['checkout'].join('third_party',
+                               'android_tools', 'sdk', 'platform-tools', 'adb')]
+    return self.m.python('authorize_adb_devices', script, args, infra_step=True,
+                       env=self.m.chromium.get_env())
+
+
   def detect_and_setup_devices(self, restart_usb=False, skip_wipe=False,
                                disable_location=False, min_battery_level=None,
                                disable_network=False, disable_java_debug=False,
                                reboot_timeout=None):
+    self.authorize_adb_devices()
     self.device_status_check(restart_usb=restart_usb)
     self.provision_devices(
       skip_wipe=skip_wipe, disable_location=disable_location,
@@ -623,6 +634,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def common_tests_setup_steps(self, perf_setup=False):
     self.spawn_logcat_monitor()
+    self.authorize_adb_devices()
     self.device_status_check()
     if perf_setup:
       kwargs = {
