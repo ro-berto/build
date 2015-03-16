@@ -95,7 +95,7 @@ F('win_asan_rel_prop_codecs', win_out().ChromiumASANFactory(
     factory_properties={
        'cf_archive_build': ActiveMaster.is_production_host,
        'cf_archive_name': 'asan',
-       'gs_bucket': 'gs://chrome-test-builds/media/win32-release',
+       'gs_bucket': 'gs://chrome-test-builds/media',
        'gclient_env': {'GYP_DEFINES': asan_win_proprietary_codecs_gyp}}))
 ################################################################################
 ## Mac
@@ -129,7 +129,7 @@ F('mac_asan_rel_prop_codecs', linux().ChromiumASANFactory(
     factory_properties={
        'cf_archive_build': ActiveMaster.is_production_host,
        'cf_archive_name': 'asan',
-       'gs_bucket': 'gs://chrome-test-builds/media/mac-release',
+       'gs_bucket': 'gs://chrome-test-builds/media',
        'gclient_env': {'GYP_DEFINES': asan_mac_gyp + proprietary_codecs_gyp}}))
 
 B('Mac ASAN Debug', 'mac_asan_dbg', 'compile', 'chromium_lkgr')
@@ -191,7 +191,7 @@ F('linux_asan_rel_prop_codecs', linux().ChromiumASANFactory(
     factory_properties={
        'cf_archive_build': ActiveMaster.is_production_host,
        'cf_archive_name': 'asan',
-       'gs_bucket': 'gs://chrome-test-builds/media/linux-release',
+       'gs_bucket': 'gs://chrome-test-builds/media',
        'gclient_env': {'GYP_DEFINES': asan_rel_gyp +
                        linux_proprietary_codecs_gyp}}))
 
@@ -281,6 +281,20 @@ F('linux_asan_rel_ia32_v8_arm', linux().ChromiumASANFactory(
        'gs_bucket': 'gs://chromium-browser-asan',
        'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': asan_ia32_v8_arm_rel}}))
+
+B('ASan Release Proprietary Codecs (32-bit x86 with V8-ARM)',
+  'linux_asan_rel_prop_codecs_ia32_v8_arm',
+  'compile', 'chromium_lkgr')
+F('linux_asan_rel_prop_codecs_ia32_v8_arm', linux().ChromiumASANFactory(
+    clobber=True,
+    options=['--compiler=goma-clang', 'chromium_builder_asan'],
+    factory_properties={
+       'cf_archive_build': ActiveMaster.is_production_host,
+       'cf_archive_subdir_suffix': 'v8-arm',
+       'cf_archive_name': 'asan-v8-arm',
+       'gs_bucket': 'gs://chrome-test-builds/media',
+       'gclient_env': {'GYP_DEFINES': asan_ia32_v8_arm_rel +
+                       linux_proprietary_codecs_gyp}}))
 
 B('ASan Release (32-bit x86 with V8-ARM, symbolized)',
   'linux_asan_rel_sym_ia32_v8_arm',
