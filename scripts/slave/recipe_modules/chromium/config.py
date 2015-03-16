@@ -706,6 +706,7 @@ def codesearch(c):
   gyp_defs['fastbuild'] = 1
   if c.TARGET_PLATFORM == 'chromeos':
     chromeos(c)
+    ozone(c)
 
 @config_ctx(includes=['ninja', 'static_library'])
 def chromium_pgo_base(c):
