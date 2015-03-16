@@ -255,10 +255,7 @@ class WebRTCApi(recipe_api.RecipeApi):
             self._adb_install_apk(apk_under_test)
           self.m.chromium_android.run_instrumentation_suite(test_apk=test,
                                                             verbose=True)
-        self.m.chromium_android.logcat_dump()
-        # Disable stack tools steps until crbug.com/411685 is fixed.
-        #self.m.chromium_android.stack_tool_steps()
-        self.m.chromium_android.test_report()
+        self.m.chromium_android.common_tests_final_steps()
 
   def _add_webrtc_browser_tests(self, revision_number, extra_args=None,
                                suffix=None):
