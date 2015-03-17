@@ -49,6 +49,9 @@ def _RunTests(api):
                                                    'run_pixel_tests.py'))
   api.step('pixel tests', [pixel_tests_path], cwd=api.path['checkout'])
 
+  corpus_tests_path = str(api.path['checkout'].join('testing', 'tools',
+                                                    'run_corpus_tests.py'))
+  api.step('corpus tests', [corpus_tests_path], cwd=api.path['checkout'])
 
 def GenSteps(api):
   _CheckoutSteps(api)

@@ -78,5 +78,12 @@
     ],
     "cwd": "[SLAVE_BUILD]/pdfium",
     "name": "pixel tests"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/pdfium/testing/tools/run_corpus_tests.py"
+    ],
+    "cwd": "[SLAVE_BUILD]/pdfium",
+    "name": "corpus tests"
   }
 ]
