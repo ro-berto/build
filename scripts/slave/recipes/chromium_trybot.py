@@ -404,7 +404,11 @@ def _GenStepsInternal(api):
       if has_failing_swarming_tests:
         api.isolate.isolate_tests(api.chromium.output_dir, verbose=True)
 
-  return api.test_utils.determine_new_failures(api, tests, deapply_patch_fn)
+  if not tests:
+    return
+
+  with api.chromium_tests.wrap_chromium_tests(mastername):
+    return api.test_utils.determine_new_failures(api, tests, deapply_patch_fn)
 
 
 def GenSteps(api):

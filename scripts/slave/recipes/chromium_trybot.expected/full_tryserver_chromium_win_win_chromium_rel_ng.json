@@ -332,6 +332,16 @@
     "cmd": [
       "python",
       "-u",
+      "[BUILD]\\scripts\\slave\\chromium\\run_crash_handler.py",
+      "--target",
+      "Release"
+    ],
+    "name": "start_crash_service"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]\\src\\tools\\swarming_client\\swarming.py",
       "trigger",
       "--swarming",
@@ -1882,5 +1892,15 @@
       "tab_capture_end2end_tests on NVIDIA GPU on Windows (with patch)/Windows/[dummy has/win_chromium_rel_ng/571"
     ],
     "name": "tab_capture_end2end_tests on NVIDIA GPU on Windows (with patch) on Windows"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\process_dumps.py",
+      "--target",
+      "Release"
+    ],
+    "name": "process_dumps"
   }
 ]

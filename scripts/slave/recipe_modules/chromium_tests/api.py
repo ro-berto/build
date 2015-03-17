@@ -575,7 +575,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return tests
 
-  def setup_chromium_tests(self, test_runner, mastername=None):
+  @contextlib.contextmanager
+  def wrap_chromium_tests(self, mastername):
     if self.m.chromium.c.TARGET_PLATFORM == 'android':
       self.m.chromium_android.common_tests_setup_steps(
           perf_setup=mastername.startswith('chromium.perf'))
@@ -584,7 +585,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.chromium.crash_handler()
 
     try:
-      return test_runner()
+      yield
     finally:
       if self.m.platform.is_win:
         self.m.chromium.process_dumps()
@@ -596,6 +597,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           logcat_gs_bucket = 'chromium-android'
         self.m.chromium_android.common_tests_final_steps(
             logcat_gs_bucket=logcat_gs_bucket)
+
+  # TODO(phajdan.jr): Clean up internal calls and remove.
+  def setup_chromium_tests(self, test_runner, mastername=None):
+    with self.wrap_chromium_tests(mastername):
+      test_runner()
 
   def deapply_patch(self, bot_update_step):
     assert self.m.tryserver.is_tryserver
