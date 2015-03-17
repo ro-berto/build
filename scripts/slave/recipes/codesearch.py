@@ -30,7 +30,7 @@ def GenSteps(api):
   # Many following steps depends on checkout being set as 'src'
   api.path['checkout'] = api.path['slave_build'].join('src')
   api.chromium.set_config('android_clang', BUILD_CONFIG='Debug',
-                          TARGET_ARCH='arm')
+                          TARGET_ARCH='arm', TARGET_BITS=32)
   api.chromium.runhooks()
 
   # Create the compilation database.
