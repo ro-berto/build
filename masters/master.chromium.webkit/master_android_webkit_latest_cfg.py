@@ -4,7 +4,7 @@
 
 
 from master import master_config
-from master.factory import chromium_factory
+from master.factory import annotator_factory
 
 import master_site_config
 
@@ -17,9 +17,7 @@ B = helper.Builder
 F = helper.Factory
 T = helper.Triggerable
 
-def linux_android():
-  return chromium_factory.ChromiumFactory('',
-    'linux2', full_checkout=True, nohooks_on_update=True, target_os='android')
+m_annotator = annotator_factory.AnnotatorFactory()
 
 
 ################################################################################
@@ -33,34 +31,16 @@ defaults['category'] = 'layout'
 #
 T('android_rel_trigger')
 
-android_rel_archive = master_config.GetGSUtilUrl(
-    'chromium-android', 'webkit_latest_rel')
 #
 # Android Rel Builder
 #
 B('Android Builder', 'f_android_rel', scheduler='global_scheduler')
-F('f_android_rel', linux_android().ChromiumAnnotationFactory(
-    annotation_script='src/build/android/buildbot/bb_run_bot.py',
-    factory_properties={
-        'android_bot_id': 'webkit-latest-builder-rel',
-        'build_url': android_rel_archive,
-        'trigger': 'android_rel_trigger',
-        'blink_config': 'blink',
-        }))
+F('f_android_rel', m_annotator.BaseFactory(
+    'chromium', triggers=['android_rel_trigger']))
 
 B('WebKit Android (Nexus4)', 'f_webkit_android_tests', None,
   'android_rel_trigger')
-F('f_webkit_android_tests',
-  linux_android().ChromiumAnnotationFactory(
-    annotation_script='src/build/android/buildbot/bb_run_bot.py',
-    factory_properties={
-        'android_bot_id': 'webkit-latest-webkit-tests-rel',
-        'archive_webkit_results': ActiveMaster.is_production_host,
-        'build_url': android_rel_archive,
-        'generate_gtest_json': True,
-        'test_results_server': 'test-results.appspot.com',
-        'blink_config': 'blink',
-        }))
+F('f_webkit_android_tests', m_annotator.BaseFactory('chromium'))
 
 def Update(_config, _active_master, c):
   return helper.Update(c)
