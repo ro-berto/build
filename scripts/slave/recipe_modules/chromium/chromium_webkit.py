@@ -470,6 +470,7 @@ SPEC['builders'].update({
   },
   'Android Builder': {
     'recipe_config': 'chromium_android',
+    'gclient_apply_config': ['blink_or_chromium'],
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
       'TARGET_BITS': 32,
@@ -483,6 +484,7 @@ SPEC['builders'].update({
   },
   'WebKit Android (Nexus4)': {
     'recipe_config': 'chromium_android',
+    'gclient_apply_config': ['blink_or_chromium'],
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
       'TARGET_BITS': 32,

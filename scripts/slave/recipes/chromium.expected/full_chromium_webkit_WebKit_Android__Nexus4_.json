@@ -19,7 +19,9 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@1111111"
+      "src@1111111",
+      "--revision",
+      "src/third_party/WebKit@HEAD"
     ],
     "name": "bot_update",
     "~followup_annotations": [
