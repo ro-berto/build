@@ -72,6 +72,123 @@
   },
   {
     "cmd": [
+      "ninja",
+      "-C",
+      "[SLAVE_BUILD]/src/out/Debug",
+      "all",
+      "-t",
+      "compdb",
+      "cc",
+      "cxx",
+      "objc",
+      "objcxx"
+    ],
+    "name": "generate compilation database",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/compile.py",
+      "--target",
+      "Debug",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
+      "--build-tool",
+      "ninja",
+      "--compiler",
+      "goma-clang",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "--",
+      "all"
+    ],
+    "name": "compile"
+  },
+  {
+    "cmd": [
+      "cp",
+      "some compilation data",
+      "[SLAVE_BUILD]/src/out/Debug/compile_commands.json"
+    ],
+    "name": "copy compilation database"
+  },
+  {
+    "cmd": [
+      "tools/clang/scripts/update.sh",
+      "--force-local-build",
+      "--without-android",
+      "--with-chrome-tools",
+      "translation_unit"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "compile translation_unit clang tool"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/tools/clang/scripts/run_tool.py",
+      "[SLAVE_BUILD]/src/third_party/llvm-build/Release+Asserts/bin/translation_unit",
+      "[SLAVE_BUILD]/src/out/Debug",
+      "--all"
+    ],
+    "name": "run translation_unit clang tool"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/chromium/package_index.py",
+      "--path-to-compdb",
+      "[SLAVE_BUILD]/src/out/Debug/compile_commands.json",
+      "--path-to-archive-output",
+      "[SLAVE_BUILD]/src/out/Debug/index_pack.zip"
+    ],
+    "name": "create index pack"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[SLAVE_BUILD]/src/third_party/llvm-build"
+    ],
+    "name": "rmtree llvm-build",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--force-version",
+      "3.25",
+      "--",
+      "cp",
+      "[SLAVE_BUILD]/src/out/Debug/index_pack.zip",
+      "gs://chrome-codesearch/index_pack_571.zip"
+    ],
+    "name": "gsutil upload index pack",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/index_pack_571.zip@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[BUILD]/scripts/slave/archive_source_codesearch.py",
       "src",
       "src-internal",
@@ -92,11 +209,11 @@
       "--",
       "cp",
       "[SLAVE_BUILD]/src.tar.bz2",
-      "gs://chrome-codesearch/src.tar.bz2"
+      "gs://chrome-codesearch/src_571.tar.bz2"
     ],
     "name": "gsutil upload source tarball",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/src.tar.bz2@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/src_571.tar.bz2@@@"
     ]
   }
 ]
