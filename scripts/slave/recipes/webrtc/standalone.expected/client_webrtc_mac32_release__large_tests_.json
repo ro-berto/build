@@ -226,7 +226,7 @@
       "--builder-name=Mac32 Release [large tests]",
       "--slave-name=slavename",
       "--build-number=1337",
-      "--revision=170242",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "webrtc_perf_tests"
     ],
     "name": "webrtc_perf_tests"

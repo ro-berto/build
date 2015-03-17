@@ -75,7 +75,6 @@ def GenSteps(api):
       api.chromium_android.common_tests_final_steps()
     else:
       api.chromium_tests.setup_chromium_tests(webrtc.runtests)
-
   webrtc.maybe_trigger()
 
 

@@ -118,7 +118,7 @@
       "--build-url",
       "gs://chromium-webrtc/android_arm64_dbg",
       "--build_revision",
-      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "12345",
       "--factory-properties",
       "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Android Tests (L Nexus9)(dbg)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"parent_buildername\": \"Android ARM64 Builder (dbg)\", \"parent_got_revision\": \"12345\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",

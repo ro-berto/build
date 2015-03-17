@@ -23,7 +23,14 @@ def GenSteps(api):
   webrtc = api.webrtc
   webrtc.apply_bot_config(webrtc.BUILDERS, webrtc.RECIPE_CONFIGS)
 
-  webrtc.checkout()
+  # TODO(kjellander): Enable for all builders once confirmed working.
+  if api.properties.get('mastername') == 'client.webrtc.fyi':
+    webrtc.checkout()
+    got_revision = None
+  else:
+    step_result = api.bot_update.ensure_checkout()
+    got_revision = step_result.presentation.properties['got_revision']
+
   webrtc.cleanup()
   api.chromium.runhooks()
 
@@ -35,15 +42,18 @@ def GenSteps(api):
     if api.chromium.c.gyp_env.GYP_DEFINES.get('syzyasan', 0) == 1:
       api.chromium.apply_syzyasan()
 
+  archive_revision = api.properties.get('parent_got_revision', got_revision)
   if webrtc.should_upload_build:
-    webrtc.package_build()
+    webrtc.package_build(archive_revision)
   if webrtc.should_download_build:
-    webrtc.extract_build()
+    webrtc.extract_build(archive_revision)
 
   if webrtc.should_test:
-    webrtc.runtests()
+    webrtc.runtests(revision=got_revision)
 
-  webrtc.maybe_trigger()
+  # TODO(kjellander): Enable for all builders once confirmed working.
+  if api.properties.get('mastername') == 'client.webrtc.fyi':
+    webrtc.maybe_trigger()
 
 
 def _sanitize_nonalpha(text):
@@ -123,8 +133,7 @@ def GenTests(api):
                          parent_got_revision='12345', suffix='_forced')
   yield generate_builder(mastername, buildername, revision=None,
                          suffix='_forced_invalid')
-  yield generate_builder(mastername, buildername, revision=None,
-                         parent_got_revision='12345',
+  yield generate_builder(mastername, buildername, revision='12345',
                          failing_test='tools_unittests', suffix='_failing_test')
 
   # Legacy trybot (SVN-based).

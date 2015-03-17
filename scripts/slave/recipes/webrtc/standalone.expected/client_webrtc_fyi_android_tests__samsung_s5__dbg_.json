@@ -118,7 +118,7 @@
       "--build-url",
       "gs://chromium-webrtc/fyi_android_dbg",
       "--build_revision",
-      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "12345",
       "--factory-properties",
       "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Android Tests (Samsung S5)(dbg)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.fyi\", \"parent_buildername\": \"Android Builder (dbg)\", \"parent_got_revision\": \"12345\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
