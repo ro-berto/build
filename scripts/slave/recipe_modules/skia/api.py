@@ -10,7 +10,6 @@ from common.skia import global_constants
 from . import android_flavor
 from . import chromeos_flavor
 from . import default_flavor
-from . import nacl_flavor
 from . import valgrind_flavor
 from . import xsan_flavor
 
@@ -31,11 +30,6 @@ def is_chromeos(builder_cfg):
   return ('CrOS' in builder_cfg.get('extra_config', '') or
           builder_cfg.get('os') == 'ChromeOS')
 
-
-def is_nacl(builder_cfg):
-  return 'NaCl' in builder_cfg.get('target_arch', '')
-
-
 def is_valgrind(builder_cfg):
   return 'Valgrind' in builder_cfg.get('extra_config', '')
 
@@ -54,8 +48,6 @@ class SkiaApi(recipe_api.RecipeApi):
       self.flavor = android_flavor.AndroidFlavorUtils(self)
     elif is_chromeos(self.c.builder_cfg):
       self.flavor = chromeos_flavor.ChromeOSFlavorUtils(self)
-    elif is_nacl(self.c.builder_cfg):
-      self.flavor = nacl_flavor.NaClFlavorUtils(self)
     elif is_valgrind(self.c.builder_cfg):
       self.flavor = valgrind_flavor.ValgrindFlavorUtils(self)
     elif is_xsan(self.c.builder_cfg):

@@ -103,7 +103,7 @@ def GenTests(api):
           api.path['slave_build'].join('playback', 'skps', 'SKP_VERSION')
       )
     )
-    if 'Android' in builder or 'NaCl' in builder:
+    if 'Android' in builder:
       test += api.step_data('has ccache?', retcode=1)
     if 'Android' in builder:
       test += AndroidTestData(builder, slave_cfg)
@@ -130,15 +130,6 @@ def GenTests(api):
     api.properties(buildername='Build-Ubuntu13.10-GCC4.8-Arm7-Debug-Android',
                    mastername='client.skia.compile',
                    slavename='skiabot-linux-compile-000') +
-    api.step_data('has ccache?', retcode=0,
-                  stdout=api.raw_io.output('/usr/bin/ccache'))
-  )
-
-  yield (
-    api.test('has_ccache_nacl') +
-    api.properties(buildername='Build-Ubuntu13.10-GCC4.8-NaCl-Debug',
-                   mastername=mastername,
-                   slavename=slavename) +
     api.step_data('has ccache?', retcode=0,
                   stdout=api.raw_io.output('/usr/bin/ccache'))
   )

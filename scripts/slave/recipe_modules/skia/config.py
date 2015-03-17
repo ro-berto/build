@@ -37,7 +37,6 @@ def BaseConfig(BUILDER_NAME, MASTER_NAME, SLAVE_NAME, **_kwargs):
 
 VAR_TEST_MAP = {
   'BUILDER_NAME': (u'Build-Mac10.7-Clang-Arm7-Debug-iOS',
-                   u'Build-Ubuntu13.10-GCC4.8-NaCl-Debug',
                    u'Build-Ubuntu13.10-GCC4.8-x86_64-Debug',
                    u'Build-Win-VS2013-x86-Release',
                    u'Build-Win-VS2013-x86-Debug-Exceptions',
@@ -166,9 +165,7 @@ def gyp_defs_from_builder_dict(builder_dict):
 
 def build_targets_from_builder_dict(builder_dict):
   """Return a list of targets to build, depending on the builder type."""
-  if builder_dict.get('target_arch') == 'NaCl':
-    return ['skia_lib', 'debugger']
-  elif (builder_dict['role'] == builder_name_schema.BUILDER_ROLE_TEST and
+  if (builder_dict['role'] == builder_name_schema.BUILDER_ROLE_TEST and
         (builder_dict.get('extra_config') == 'TSAN' or
          builder_dict.get('extra_config') == 'ZeroGPUCache')):
     return ['dm']
