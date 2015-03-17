@@ -3,12 +3,14 @@
 # found in the LICENSE file.
 
 from infra.libs.infra_types import freeze
+from slave import recipe_api
 
 DEPS = [
   'bot_update',
   'chromium',
   'path',
   'python',
+  'step',
 ]
 
 
@@ -25,13 +27,12 @@ BUILDERS = freeze({
   },
 })
 
+
+@recipe_api.composite_step
 def _RunApptests(api):
-  apptest_runner = api.path['checkout'].join('mojo', 'tools',
-      'apptest_runner.py')
-  apptest_config = api.path['checkout'].join('mojo', 'tools',
-      'data', 'apptests')
-  api.python('app_tests', apptest_runner,
-             [apptest_config, api.chromium.output_dir])
+  runner = api.path['checkout'].join('mojo', 'tools', 'apptest_runner.py')
+  tests = api.path['checkout'].join('mojo', 'tools', 'data', 'apptests')
+  api.python('app_tests', runner, [tests, api.chromium.output_dir])
 
 
 def GenSteps(api):
@@ -48,9 +49,9 @@ def GenSteps(api):
                                 'mojo/services/network',
                                 'mojo/services/network:apptests'])
 
-  api.chromium.runtest('html_viewer_unittests')
-
-  _RunApptests(api)
+  with api.step.defer_results():
+    api.chromium.runtest('html_viewer_unittests')
+    _RunApptests(api)
 
 
 def GenTests(api):
