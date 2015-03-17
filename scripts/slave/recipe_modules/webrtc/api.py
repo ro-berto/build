@@ -377,7 +377,7 @@ class WebRTCApi(recipe_api.RecipeApi):
                     args=args, revision=revision, perf_test=True,
                     perf_dashboard_id=test)
 
-  def sizes(self, revision):
+  def sizes(self, revision=None):
     # TODO(kjellander): Remove when all recipes use webrtc.checkout().
     revision = revision or self.perf_revision
 
@@ -418,7 +418,7 @@ class WebRTCApi(recipe_api.RecipeApi):
         'properties': properties,
       } for builder_name in triggers])
 
-  def package_build(self, revision):
+  def package_build(self, revision=None):
     # TODO(kjellander): Remove when all recipes use webrtc.checkout().
     revision = revision or self.revision
     if self.bot_config.get('build_gs_archive'):
@@ -428,7 +428,7 @@ class WebRTCApi(recipe_api.RecipeApi):
           self.GS_ARCHIVES[self.bot_config['build_gs_archive']],
           build_revision=revision)
 
-  def extract_build(self, revision):
+  def extract_build(self, revision=None):
     if not self.m.properties.get('parent_got_revision'):
       raise self.m.step.StepFailure(
          'Testers cannot be forced without providing revision information.'
@@ -448,7 +448,6 @@ class WebRTCApi(recipe_api.RecipeApi):
         self.m.chromium.c.build_config_fs,
         self.GS_ARCHIVES[self.bot_config['build_gs_archive']],
         build_revision=revision)
-
 
   def cleanup(self):
     self.clean_test_output()

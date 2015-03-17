@@ -31,7 +31,7 @@ def GenSteps(api):
   if api.platform.is_win:
     api.chromium.taskkill()
 
-  if api.properties.get('mastername') == 'client.webrtc.fyi':
+  if api.properties.get('mastername').endswith('webrtc.fyi'):
     # Sync HEAD revisions for Chromium, WebRTC and Libjingle.
     # This is used for some bots to provide data about which revisions are green
     # to roll into Chromium.
@@ -45,13 +45,7 @@ def GenSteps(api):
     for path, revision in revs.iteritems():
       api.gclient.c.revisions[path] = revision
 
-    # TODO(kjellander): Switch all builders to use the checkout function.
-    webrtc.checkout()
-    got_revision = None
-  else:
-    step_result = api.bot_update.ensure_checkout(force=True)
-    got_revision = step_result.presentation.properties['got_revision']
-
+  webrtc.checkout()
   webrtc.cleanup()
   if webrtc.should_run_hooks:
     api.chromium.runhooks()
@@ -65,13 +59,12 @@ def GenSteps(api):
     if (api.properties.get('mastername') == 'chromium.webrtc.fyi' and
         not run_gn and
         api.chromium.c.TARGET_PLATFORM != 'android'):
-      webrtc.sizes(got_revision)
+      webrtc.sizes()
 
-  archive_revision = api.properties.get('parent_got_revision', got_revision)
   if webrtc.should_upload_build:
-    webrtc.package_build(archive_revision)
+    webrtc.package_build()
   if webrtc.should_download_build:
-    webrtc.extract_build(archive_revision)
+    webrtc.extract_build()
 
   if webrtc.should_test:
     if api.chromium.c.TARGET_PLATFORM == 'android':
@@ -81,12 +74,8 @@ def GenSteps(api):
           gtest_filter='WebRtc*')
       api.chromium_android.common_tests_final_steps()
     else:
-      test_runner = lambda: webrtc.runtests(revision=got_revision)
-      api.chromium_tests.setup_chromium_tests(test_runner)
-
-  # TODO(kjellander): Enable for all builders once confirmed working.
-  if api.properties.get('mastername') == 'client.webrtc.fyi':
-    webrtc.maybe_trigger()
+      api.chromium_tests.setup_chromium_tests(webrtc.runtests)
+  webrtc.maybe_trigger()
 
 
 def _sanitize_nonalpha(text):
@@ -124,14 +113,11 @@ def GenTests(api):
     if bot_config.get('parent_buildername'):
       test += api.properties(parent_got_revision=CR_REV)
 
-      # TODO(kjellander): Enable for builders in chromium.webrtc.fyi once
-      # confirmed working.
-      if mastername == 'client.webrtc.fyi':
+      if mastername.endswith('.fyi'):
         test += api.properties(parent_got_libjingle_revision=LIBJINGLE_REV,
                                parent_got_webrtc_revision=WEBRTC_REV)
-    # TODO(kjellander): Enable for builders in chromium.webrtc.fyi once
-    # confirmed working.
-    if mastername == 'client.webrtc.fyi':
+
+    if mastername.endswith('.fyi'):
       test += api.properties(got_revision=CR_REV,
                              got_libjingle_revision=LIBJINGLE_REV,
                              got_webrtc_revision=WEBRTC_REV)

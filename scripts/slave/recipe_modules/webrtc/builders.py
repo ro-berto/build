@@ -120,6 +120,11 @@ BUILDERS = freeze({
         'bot_type': 'builder',
         'build_gs_archive': 'win_rel_archive',
         'testing': {'platform': 'win'},
+        'triggers': [
+          'WinXP Tester',
+          'Win7 Tester',
+          'Win8 Tester',
+        ],
       },
       'WinXP Tester': {
         'recipe_config': 'chromium_webrtc',
@@ -178,9 +183,8 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder',
         'build_gs_archive': 'mac_rel_archive',
-        'testing': {
-          'platform': 'mac',
-        }
+        'testing': {'platform': 'mac'},
+        'triggers': ['Mac Tester'],
       },
       'Mac Tester': {
         'recipe_config': 'chromium_webrtc',
@@ -194,9 +198,7 @@ BUILDERS = freeze({
         'bot_type': 'tester',
         'build_gs_archive': 'mac_rel_archive',
         'parent_buildername': 'Mac Builder',
-        'testing': {
-          'platform': 'mac',
-        }
+        'testing': {'platform': 'mac'},
       },
       'Linux Builder': {
         'recipe_config': 'chromium_webrtc',
@@ -207,6 +209,7 @@ BUILDERS = freeze({
         'bot_type': 'builder',
         'build_gs_archive': 'linux_rel_archive',
         'testing': {'platform': 'linux'},
+        'triggers': ['Linux Tester'],
       },
       'Linux Tester': {
         'recipe_config': 'chromium_webrtc',
@@ -241,6 +244,10 @@ BUILDERS = freeze({
         'bot_type': 'builder',
         'build_gs_archive': 'win_rel_archive_fyi',
         'testing': {'platform': 'win'},
+        'triggers': [
+          'WinXP Tester',
+          'Win7 Tester',
+        ],
       },
       'WinXP Tester': {
         'recipe_config': 'chromium_webrtc_tot',
@@ -369,6 +376,10 @@ BUILDERS = freeze({
         'bot_type': 'builder',
         'build_gs_archive': 'android_dbg_archive_fyi',
         'testing': {'platform': 'linux'},
+        'triggers': [
+          'Android Tests (dbg) (L Nexus5)',
+          'Android Tests (dbg) (L Nexus7.2)',
+        ],
       },
       'Android Builder ARM64 (dbg)': {
         'recipe_config': 'chromium_webrtc_tot_android',
@@ -384,6 +395,9 @@ BUILDERS = freeze({
         'bot_type': 'builder',
         'build_gs_archive': 'android_dbg_archive_arm64_fyi',
         'testing': {'platform': 'linux'},
+        'triggers': [
+          'Android Tests (dbg) (L Nexus9)',
+        ],
       },
       'Android Tests (dbg) (L Nexus5)': {
         'recipe_config': 'chromium_webrtc_tot_android',

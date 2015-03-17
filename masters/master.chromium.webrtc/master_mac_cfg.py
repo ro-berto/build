@@ -2,7 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from buildbot.scheduler import Triggerable
 from buildbot.schedulers.basic import SingleBranchScheduler
 
 from master.factory import annotator_factory
@@ -15,23 +14,16 @@ def Update(c):
                             branch='master',
                             treeStableTimer=60,
                             builderNames=['Mac Builder']),
-      Triggerable(name='mac_rel_trigger',
-                  builderNames=['Mac Tester']),
   ])
   specs = [
-    {
-      'name': 'Mac Builder',
-      'triggers': ['mac_rel_trigger'],
-    },
+    {'name': 'Mac Builder'},
     {'name': 'Mac Tester'},
   ]
 
   c['builders'].extend([
       {
         'name': spec['name'],
-        'factory': m_annotator.BaseFactory(
-            'webrtc/chromium',
-            triggers=spec.get('triggers')),
+        'factory': m_annotator.BaseFactory('webrtc/chromium'),
         'category': 'mac',
         'notify_on_missing': True,
       } for spec in specs

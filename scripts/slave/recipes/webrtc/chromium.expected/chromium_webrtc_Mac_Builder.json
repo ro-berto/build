@@ -19,8 +19,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@c321321",
-      "--force"
+      "src@c321321"
     ],
     "name": "bot_update",
     "~followup_annotations": [
@@ -136,5 +135,26 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc\", \"parent_buildername\": null, \"recipe\": \"webrtc/chromium\", \"revision\": \"c321321\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "name": "package build"
+  },
+  {
+    "cmd": [],
+    "name": "trigger",
+    "trigger_specs": [
+      {
+        "builder_name": "Mac Tester",
+        "properties": {
+          "parent_got_libjingle_revision": "8e938c8836c7ed23d7fbcddf1dcc2abcb13667d7",
+          "parent_got_libjingle_revision_cp": "refs/heads/master@{#134440}",
+          "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+          "parent_got_revision_cp": "refs/heads/master@{#170242}",
+          "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
+          "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}",
+          "revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
+        }
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Mac Tester@@@"
+    ]
   }
 ]

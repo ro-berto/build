@@ -3,7 +3,6 @@
 # found in the LICENSE file.
 
 from buildbot.scheduler import Periodic
-from buildbot.scheduler import Triggerable
 from buildbot.schedulers.basic import SingleBranchScheduler
 
 from master.factory import annotator_factory
@@ -24,16 +23,9 @@ def Update(c):
       Periodic(name='win_periodic_scheduler',
                periodicBuildTimer=4*60*60,
                builderNames=buildernames_list),
-      Triggerable(name='win_rel_trigger', builderNames=[
-          'WinXP Tester',
-          'Win7 Tester',
-      ]),
   ])
   specs = [
-    {
-      'name': 'Win Builder',
-      'triggers': ['win_rel_trigger'],
-    },
+    {'name': 'Win Builder'},
     {'name': 'WinXP Tester'},
     {'name': 'Win7 Tester'},
     {

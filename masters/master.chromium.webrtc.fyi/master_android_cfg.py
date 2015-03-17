@@ -3,7 +3,6 @@
 # found in the LICENSE file.
 
 from buildbot.scheduler import Periodic
-from buildbot.scheduler import Triggerable
 from buildbot.schedulers.basic import SingleBranchScheduler
 
 from master.factory import annotator_factory
@@ -25,23 +24,12 @@ def Update(c):
       Periodic(name='android_periodic_scheduler',
                periodicBuildTimer=30*60,
                builderNames=buildernames_list),
-      Triggerable(name='android_trigger_dbg', builderNames=[
-          'Android Tests (dbg) (L Nexus5)',
-          'Android Tests (dbg) (L Nexus7.2)',
-      ]),
-      Triggerable(name='android_trigger_arm64_dbg', builderNames=[
-          'Android Tests (dbg) (L Nexus9)',
-      ]),
   ])
 
   specs = [
-    {
-      'name': 'Android Builder (dbg)',
-      'triggers': ['android_trigger_dbg'],
-    },
+    {'name': 'Android Builder (dbg)'},
     {
       'name': 'Android Builder ARM64 (dbg)',
-      'triggers': ['android_trigger_arm64_dbg'],
       'slavebuilddir': 'android_arm64',
     },
     {'name': 'Android Tests (dbg) (L Nexus5)'},
@@ -60,9 +48,7 @@ def Update(c):
   c['builders'].extend([
       {
         'name': spec['name'],
-        'factory': m_annotator.BaseFactory(
-            'webrtc/chromium',
-            triggers=spec.get('triggers')),
+        'factory': m_annotator.BaseFactory('webrtc/chromium'),
         'category': 'android',
         'notify_on_missing': True,
         'slavebuilddir': spec.get('slavebuilddir', 'android'),

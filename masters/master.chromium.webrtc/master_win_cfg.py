@@ -2,7 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from buildbot.scheduler import Triggerable
 from buildbot.schedulers.basic import SingleBranchScheduler
 
 from master.factory import annotator_factory
@@ -15,17 +14,9 @@ def Update(c):
                             branch='master',
                             treeStableTimer=60,
                             builderNames=['Win Builder']),
-      Triggerable(name='win_rel_trigger', builderNames=[
-          'WinXP Tester',
-          'Win7 Tester',
-          'Win8 Tester',
-      ]),
   ])
   specs = [
-    {
-      'name': 'Win Builder',
-      'triggers': ['win_rel_trigger'],
-    },
+    {'name': 'Win Builder'},
     {'name': 'WinXP Tester'},
     {'name': 'Win7 Tester'},
     {'name': 'Win8 Tester'},
@@ -34,9 +25,7 @@ def Update(c):
   c['builders'].extend([
       {
         'name': spec['name'],
-        'factory': m_annotator.BaseFactory(
-            'webrtc/chromium',
-            triggers=spec.get('triggers')),
+        'factory': m_annotator.BaseFactory('webrtc/chromium'),
         'category': 'win',
         'notify_on_missing': True,
       } for spec in specs

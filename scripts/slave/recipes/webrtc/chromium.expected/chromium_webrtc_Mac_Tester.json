@@ -19,8 +19,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@c321321",
-      "--force"
+      "src@c321321"
     ],
     "name": "bot_update",
     "~followup_annotations": [
@@ -126,7 +125,7 @@
       "--build-url",
       "gs://chromium-webrtc/Mac Builder",
       "--build_revision",
-      "c321321",
+      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--factory-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac Tester\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc\", \"parent_buildername\": \"Mac Builder\", \"parent_got_revision\": \"c321321\", \"recipe\": \"webrtc/chromium\", \"revision\": \"c321321\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
