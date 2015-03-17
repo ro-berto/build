@@ -468,4 +468,41 @@ SPEC['builders'].update({
     'enable_swarming': True,
     'use_isolate': True,
   },
+  'Android Builder': {
+    'recipe_config': 'chromium_android',
+    'chromium_config_kwargs': {
+      'BUILD_CONFIG': 'Release',
+      'TARGET_BITS': 32,
+      'TARGET_PLATFORM': 'android',
+    },
+    'android_config': 'main_builder',
+    'bot_type': 'builder',
+    'testing': {
+      'platform': 'linux',
+    },
+  },
+  'WebKit Android (Nexus4)': {
+    'recipe_config': 'chromium_android',
+    'chromium_config_kwargs': {
+      'BUILD_CONFIG': 'Release',
+      'TARGET_BITS': 32,
+      'TARGET_PLATFORM': 'android',
+    },
+    'bot_type': 'tester',
+    'parent_buildername': 'Android Builder',
+    'android_config': 'main_builder',
+    'root_devices': True,
+    'tests': [
+      steps.GTestTest('blink_heap_unittests'),
+      steps.GTestTest('webkit_unit_tests'),
+      steps.BlinkTest(),
+    ],
+    'test_generators': [
+      steps.generate_gtest,
+      steps.generate_script,
+    ],
+    'testing': {
+      'platform': 'linux',
+    },
+  },
 })

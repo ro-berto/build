@@ -1070,6 +1070,8 @@ class BlinkTest(Test):
         '--build-number', str(api.properties['buildnumber']),
         '--builder-name', api.properties['buildername'],
     ]
+    if api.chromium.c.TARGET_PLATFORM == 'android':
+      args.extend(['--platform', 'android'])
     if self._extra_args:
       args.extend(self._extra_args)
     if suffix == 'without patch':
