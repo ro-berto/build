@@ -29,7 +29,8 @@ def GenSteps(api):
   api.gclient.checkout(spec)
   # Many following steps depends on checkout being set as 'src'
   api.path['checkout'] = api.path['slave_build'].join('src')
-  api.chromium.set_config('android_clang', BUILD_CONFIG='Debug')
+  api.chromium.set_config('android_clang', BUILD_CONFIG='Debug',
+                          TARGET_ARCH='arm')
   api.chromium.runhooks()
 
   # Create the compilation database.
