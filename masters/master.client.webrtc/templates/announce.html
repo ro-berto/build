@@ -185,7 +185,7 @@
             <td colspan="2" style="text-align: left;">
               <script>
               document.write([
-                a("http://dev.chromium.org/developers/testing/chromium-build-infrastructure/tour-of-the-chromium-buildbot", "about", ""),
+                a("https://dev.chromium.org/developers/testing/chromium-build-infrastructure/tour-of-the-chromium-buildbot", "about", ""),
                 a("./waterfall/help", "customize", ""),
                 a("./waterfall", "waterfall", ""),
                 a("./console", "console", ""),
@@ -217,7 +217,8 @@
              * @returns {String} The URL.
              */
             function BarUrl(x) {
-              return '/p/' + x + '/horizontal_one_box_per_builder';
+              return 'https://build.chromium.org/p/' + x +
+                     '/horizontal_one_box_per_builder';
             }
             c.bar_webrtc = BarUrl('client.webrtc')
             c.bar_chromium = BarUrl('chromium.webrtc');
