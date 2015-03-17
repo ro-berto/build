@@ -116,11 +116,9 @@ def goma_setup(options, env):
   # improvement but it sometimes cause build failure by race condition.
   # Let me enable goma build on goma canary buildslaves to confirm the issue
   # has been fixed by a workaround.
-  # vm*-m4 are win_chromium_compile_rel tryservers.
-  # build*-m1 and vm*-m1 are all goma canary bots.
+  # vm*-m4 are trybots. build*-m1 and vm*-m1 are all goma canary bots.
   if hostname in ['build28-m1', 'build58-m1', 'vm191-m1', 'vm480-m1',
-                  'vm820-m1', 'vm821-m1', 'vm848-m1',
-                  'vm177-m4', 'vm187-m4', 'vm192-m4', 'vm197-m4', 'vm202-m4']:
+                  'vm820-m1', 'vm821-m1', 'vm848-m1']:
     env['NO_NACL_GOMA'] = 'false'
 
   # HACK(yyanagisawa, goma): GOMA_HERMETIC=error (crbug.com/366967)
