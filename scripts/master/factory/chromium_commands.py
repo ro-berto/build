@@ -57,7 +57,6 @@ class ChromiumCommands(commands.FactoryCommands):
     # Scripts in the chromium scripts dir.
     self._process_coverage_tool = J(s_dir, 'process_coverage.py')
     self._layout_archive_tool = J(s_dir, 'archive_layout_test_results.py')
-    self._package_source_tool = J(s_dir, 'package_source.py')
     self._crash_handler_tool = J(s_dir, 'run_crash_handler.py')
     self._upload_parity_tool = J(s_dir, 'upload_parity_data.py')
     self._target_tests_tool = J(s_dir, 'target-tests.py')
@@ -244,28 +243,6 @@ class ChromiumCommands(commands.FactoryCommands):
 
     self.AddTestStep(retcode_command.ReturnCodeCommand,
                      'ClusterFuzz Archive', cmd)
-
-  def AddPackageSource(self, factory_properties=None):
-    """Adds a step to the factory to package and upload the source directory."""
-    factory_properties = factory_properties or {}
-    factory_properties.setdefault('package_filename', 'chromium-src')
-
-    cmd = [self._python, self._package_source_tool]
-
-    cmd = self.AddBuildProperties(cmd)
-    cmd = self.AddFactoryProperties(factory_properties, cmd)
-
-    self._factory.addStep(archive_command.ArchiveCommand,
-                          name='package_source',
-                          timeout=1200,
-                          maxTime=10*60*60,
-                          description='packaging source',
-                          descriptionDone='packaged source',
-                          base_url=None,
-                          link_text=None,
-                          more_link_url=None,
-                          more_link_text=None,
-                          command=cmd)
 
   def GetAnnotatedPerfCmd(self, gtest_filter, log_type, test_name,
                           cmd_name, tool_opts=None,

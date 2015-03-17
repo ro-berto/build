@@ -961,10 +961,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       chromium_cmd_obj.AddCFArchiveBuild(
           factory_properties=factory_properties)
 
-    # Add the package source step.
-    if slave_type == 'Indexer':
-      chromium_cmd_obj.AddPackageSource(factory_properties=factory_properties)
-
     # Add a trigger step if needed.
     self.TriggerFactory(factory, slave_type=slave_type,
                         factory_properties=factory_properties)
