@@ -2,7 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from buildbot.scheduler import Triggerable
 from buildbot.schedulers.basic import SingleBranchScheduler
 
 from master.factory import annotator_factory
@@ -15,31 +14,15 @@ def Update(c):
                             branch='trunk',
                             treeStableTimer=0,
                             builderNames=[
-                                'Linux Asan Builder',
-                                'Linux Chromium Builder',
+                                'Linux Asan (parallel)',
       ]),
   ])
 
   specs = [
     {
-      'name': 'Linux Asan Builder',
+      'name': 'Linux Asan (parallel)',
       'recipe': 'webrtc/standalone',
       'slavebuilddir': 'linux_asan',
-    },
-    {
-      'name': 'Linux Asan Tester (parallel)',
-      'recipe': 'webrtc/standalone',
-      'slavebuilddir': 'linux_asan',
-    },
-    {
-      'name': 'Linux Chromium Builder',
-      'recipe': 'webrtc/chromium',
-      'slavebuilddir': 'linux_chromium',
-    },
-    {
-      'name': 'Linux Chromium Tester',
-      'recipe': 'webrtc/chromium',
-      'slavebuilddir': 'linux_chromium',
     },
   ]
 

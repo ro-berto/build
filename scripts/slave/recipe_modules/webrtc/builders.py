@@ -1015,53 +1015,14 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
       },
-      'Linux Asan Builder': {
+      'Linux Asan (parallel)': {
         'recipe_config': 'webrtc_parallel_clang',
         'chromium_apply_config': ['asan', 'lsan'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
-        'bot_type': 'builder',
-        'build_gs_archive': 'fyi_linux_asan_archive',
-        'testing': {'platform': 'linux'},
-        'triggers': [
-          'Linux Asan Tester (parallel)',
-        ],
-      },
-      'Linux Asan Tester (parallel)': {
-        'recipe_config': 'webrtc_parallel_clang',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'tester',
-        'build_gs_archive': 'fyi_linux_asan_archive',
-        'parent_buildername': 'Linux Asan Builder',
-        'testing': {'platform': 'linux'},
-      },
-      'Linux Chromium Builder': {
-        'recipe_config': 'chromium_webrtc_tot_git_switch_testing',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder',
-        'build_gs_archive': 'fyi_linux_chromium_rel_archive',
-        'testing': {'platform': 'linux'},
-        'triggers': [
-          'Linux Chromium Tester',
-        ],
-      },
-      'Linux Chromium Tester': {
-        'recipe_config': 'chromium_webrtc_tot_git_switch_testing',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'tester',
-        'build_gs_archive': 'fyi_linux_chromium_rel_archive',
-        'parent_buildername': 'Linux Chromium Builder',
+        'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
       'Android Builder (dbg)': {

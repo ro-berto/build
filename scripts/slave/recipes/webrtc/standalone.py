@@ -103,8 +103,7 @@ def GenTests(api):
   for mastername in ('client.webrtc', 'client.webrtc.fyi', 'tryserver.webrtc'):
     master_config = builders[mastername]
     for buildername in master_config['builders'].keys():
-      if 'Chromium' not in buildername:
-        yield generate_builder(mastername, buildername, revision='12345')
+      yield generate_builder(mastername, buildername, revision='12345')
 
   # Forced builds (not specifying any revision) and test failures.
   mastername = 'client.webrtc'

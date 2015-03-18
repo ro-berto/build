@@ -31,7 +31,7 @@ def GenSteps(api):
   if api.platform.is_win:
     api.chromium.taskkill()
 
-  if api.properties.get('mastername').endswith('webrtc.fyi'):
+  if api.properties.get('mastername') == 'chromium.webrtc.fyi':
     # Sync HEAD revisions for Chromium, WebRTC and Libjingle.
     # This is used for some bots to provide data about which revisions are green
     # to roll into Chromium.
@@ -155,9 +155,3 @@ def GenTests(api):
   # Testers gets got_revision value from builder passed as parent_got_revision.
   yield generate_builder(mastername, 'Win7 Tester',
                          suffix='_periodic_triggered')
-
-  # Builder+tester running in client.webrtc.fyi during preparations for Git.
-  mastername = 'client.webrtc.fyi'
-  yield generate_builder(mastername, 'Linux Chromium Builder',
-                         revision=WEBRTC_REV)
-  yield generate_builder(mastername, 'Linux Chromium Tester')
