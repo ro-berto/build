@@ -329,7 +329,7 @@ def goma(c):
   c.gyp_env.GYP_DEFINES['gomadir'] = goma_dir
   c.compile_py.goma_dir = goma_dir
 
-  if c.TARGET_PLATFORM == 'win':
+  if c.TARGET_PLATFORM == 'win' and c.compile_py.compiler != 'goma-clang':
     fastbuild(c)
     pch(c, invert=True)
 
@@ -521,6 +521,12 @@ def chromium_win_clang_asan(c):
 
   # clang is pinned to a fixed revision on Win if asan is set. Override that.
   c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
+
+@config_ctx(includes=['chromium_win_clang_asan', 'goma'])
+def chromium_win_clang_goma(c):
+  # For goma, clang must be pinned. goma server side might not have
+  # the latest clang.
+  del c.env.LLVM_FORCE_HEAD_REVISION
 
 @config_ctx(includes=['ninja', 'clang'])  # No goma.
 def clang_tot_linux(c):

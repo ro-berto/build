@@ -139,6 +139,26 @@ RECIPE_CONFIGS = freeze({
     'chromium_config': 'chromium_win_asan',
     'gclient_config': 'chromium',
   },
+  'chromium_win_goma_canary': {
+    'chromium_config': 'chromium',
+    'chromium_apply_config': ['goma_canary'],
+    'gclient_config': 'chromium',
+  },
+  'chromium_win_goma_canary_dll': {
+    'chromium_config': 'chromium',
+    'chromium_apply_config': ['goma_canary', 'shared_library'],
+    'gclient_config': 'chromium',
+  },
+  'chromium_win_goma_canary_clobber': {
+    'chromium_config': 'chromium',
+    'chromium_apply_config': ['goma_canary', 'clobber', 'shared_library'],
+    'gclient_config': 'chromium',
+  },
+  'chromium_win_goma_canary_clang': {
+    'chromium_config': 'chromium_win_clang_goma',
+    'chromium_apply_config': ['goma_canary', 'clobber'],
+    'gclient_config': 'chromium',
+  },
   'chromium_linux_goma_canary': {
     'chromium_config': 'chromium',
     'chromium_apply_config': ['goma_canary'],

@@ -658,6 +658,93 @@ SPEC = {
       },
       'enable_swarming': True,
     },
+    'CrWinGoma': {
+      'recipe_config': 'chromium_win_goma_canary',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'compile_targets': [ 'chromium_builder_tests' ],
+      'goma_canary': True,
+      'testing': {
+        'platform': 'win'
+      }
+    },
+    'CrWinGoma(dll)': {
+      'recipe_config': 'chromium_win_goma_canary_dll',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'compile_targets': [ 'chromium_builder_tests' ],
+      'goma_canary': True,
+      'testing': {
+        'platform': 'win'
+      }
+    },
+    'CrWin7Goma': {
+      'recipe_config': 'chromium_win_goma_canary',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'compile_targets': [ 'chromium_builder_tests' ],
+      'goma_canary': True,
+      'testing': {
+        'platform': 'win'
+      }
+    },
+    'CrWin7Goma(dll)': {
+      'recipe_config': 'chromium_win_goma_canary_dll',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'compile_targets': [ 'chromium_builder_tests' ],
+      'goma_canary': True,
+      'testing': {
+        'platform': 'win'
+      }
+    },
+    'CrWin7Goma(dbg)': {
+      'recipe_config': 'chromium_win_goma_canary',
+      'GYP_DEFINES': {
+        'win_z7': '1'
+      },
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 32,
+      },
+      'compile_targets': [ 'chromium_builder_tests' ],
+      'goma_canary': True,
+      'testing': {
+        'platform': 'win'
+      }
+    },
+    'CrWin7Goma(clbr)': {
+      'recipe_config': 'chromium_win_goma_canary_clobber',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'compile_targets': [ 'chromium_builder_tests' ],
+      'goma_canary': True,
+      'testing': {
+        'platform': 'win'
+      }
+    },
+    'CrWinClangGoma': {
+      'recipe_config': 'chromium_win_goma_canary_clang',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'compile_targets': [ 'chromium_builder_tests' ],
+      'goma_canary': True,
+      'testing': {
+        'platform': 'win'
+      }
+    },
     'Chromium Linux Goma Canary': {
       'recipe_config': 'chromium_linux_goma_canary',
       'chromium_config_kwargs': {
