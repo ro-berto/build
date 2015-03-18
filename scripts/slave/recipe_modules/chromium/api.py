@@ -521,18 +521,18 @@ class ChromiumApi(recipe_api.RecipeApi):
       gn_args.append('is_debug=false')
 
     if self.c.TARGET_PLATFORM == 'android':
-      gn_args.append('os="android"')
+      gn_args.append('target_os="android"')
     elif self.c.TARGET_PLATFORM == 'chromeos':
-      gn_args.append('os="chromeos"')
+      gn_args.append('target_os="chromeos"')
     elif self.c.TARGET_PLATFORM in ('linux', 'mac', 'win'):
       assert self.c.TARGET_BITS in (32, 64)
       if self.c.TARGET_BITS == 64:
-        gn_args.append('cpu_arch="x64"')
+        gn_args.append('target_cpu="x64"')
       else:
-        gn_args.append('cpu_arch="x86"')
+        gn_args.append('target_cpu="x86"')
 
     if self.c.TARGET_ARCH == 'arm':
-      gn_args.append('cpu_arch="arm"')
+      gn_args.append('target_cpu="arm"')
 
     # TODO(dpranke): crbug.com/467159 ... the way v8 builds work
     # on windows is currently broken. In order to work around this,

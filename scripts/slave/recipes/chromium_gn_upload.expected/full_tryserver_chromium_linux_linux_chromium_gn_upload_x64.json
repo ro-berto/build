@@ -88,7 +88,7 @@
       "--root=[SLAVE_BUILD]/src",
       "gen",
       "//out/Release",
-      "--args=is_chrome_branded=true is_official_build=true symbol_level=0 is_debug=false cpu_arch=\"x64\""
+      "--args=is_chrome_branded=true is_official_build=true symbol_level=0 is_debug=false target_cpu=\"x64\""
     ],
     "name": "gn"
   },

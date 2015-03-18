@@ -85,7 +85,7 @@
       "--root=[SLAVE_BUILD]/src",
       "gen",
       "//out/Release",
-      "--args=is_debug=false cpu_arch=\"x64\" use_goma=true goma_dir=\"[BUILD]/goma\""
+      "--args=is_debug=false target_cpu=\"x64\" use_goma=true goma_dir=\"[BUILD]/goma\""
     ],
     "name": "gn"
   },
