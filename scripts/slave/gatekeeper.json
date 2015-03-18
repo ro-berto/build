@@ -238,7 +238,6 @@
     "https://build.chromium.org/p/chromium.webkit": [
       {
         "tree_notify": [
-          "eseidel@chromium.org",
           "stip@chromium.org"
         ],
 
