@@ -205,6 +205,7 @@ def UploadGomaCompilerProxyInfo():
   # we might be able to upload it as-is.
   goma_log_gs_path = ('gs://chrome-goma-log/%s/%s/%s.gz' % (
       today.strftime('%Y/%m/%d'), hostname, os.path.basename(latest_info)))
+  output_filename = None
   try:
     fd, output_filename = tempfile.mkstemp()
     with open(latest_info) as f_in:
@@ -215,7 +216,8 @@ def UploadGomaCompilerProxyInfo():
     slave_utils.GSUtilCopy(output_filename, goma_log_gs_path)
     print "Copied log file to %s" % goma_log_gs_path
   finally:
-    os.remove(output_filename)
+    if output_filename:
+      os.remove(output_filename)
 
 
 def goma_teardown(options, env):
