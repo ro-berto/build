@@ -44,28 +44,18 @@ def get_builds(mastername, buildername, days):
   return results
 
 
-def estimate_capacity(builds):
+def estimate_capacity(requests):
   hourly_buckets = {}
   daily_buckets = {}
   build_times = []
-  for build in builds:
-    build_time = build['times'][1] - build['times'][0]
-    build_times.append(build_time)
+  for request in requests:
+    build_times.append(request['build_time_s'])
 
-    changes = build['sourceStamp']['changes']
-    if changes:
-      assert len(changes) == 1
-      timestamp = datetime.datetime.utcfromtimestamp(changes[0]['when'])
-    else:
-      # Fallback for builds that don't have blamelist/source stamp,
-      # e.g. win_pgo.
-      timestamp = datetime.datetime.utcfromtimestamp(build['times'][0])
+    hourly_bucket = request['timestamp'].strftime('%Y-%m-%d-%H')
+    hourly_buckets.setdefault(hourly_bucket, []).append(request['build_time_s'])
 
-    hourly_bucket = timestamp.strftime('%Y-%m-%d-%H')
-    hourly_buckets.setdefault(hourly_bucket, []).append(build_time)
-
-    daily_bucket = timestamp.strftime('%Y-%m-%d')
-    daily_buckets.setdefault(daily_bucket, []).append(build_time)
+    daily_bucket = request['timestamp'].strftime('%Y-%m-%d')
+    daily_buckets.setdefault(daily_bucket, []).append(request['build_time_s'])
 
   def min_bots(buckets, resolution_s):
     result = 0
@@ -80,6 +70,26 @@ def estimate_capacity(builds):
     'daily_bots': min_bots(daily_buckets, 3600 * 24),
     'build_times_s': build_times,
   }
+
+
+def estimate_buildbot_capacity(builds):
+  requests = []
+  for build in builds:
+    changes = build['sourceStamp']['changes']
+    if changes:
+      assert len(changes) == 1
+      timestamp = datetime.datetime.utcfromtimestamp(changes[0]['when'])
+    else:
+      # Fallback for builds that don't have blamelist/source stamp,
+      # e.g. win_pgo.
+      timestamp = datetime.datetime.utcfromtimestamp(build['times'][0])
+
+    requests.append({
+        'build_time_s': build['times'][1] - build['times'][0],
+        'timestamp': timestamp,
+    })
+
+  return estimate_capacity(requests)
 
 
 def main(argv):
@@ -148,7 +158,7 @@ def main(argv):
 
           builds.append(build)
 
-        capacity = estimate_capacity(builds)
+        capacity = estimate_buildbot_capacity(builds)
         for key in ('hourly_bots', 'daily_bots'):
           pool_capacity[key] += capacity[key]
 
