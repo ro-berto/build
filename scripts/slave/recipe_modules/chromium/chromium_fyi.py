@@ -665,10 +665,43 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'compile_targets': [ 'chromium_builder_tests' ],
-      'bot_type': 'builder_tester',
       'goma_canary': True,
-      'do_not_run_tests': True,
-      'disable_tests': True,
+      'testing': {
+        'platform': 'linux'
+      }
+    },
+    'Chromium Linux Goma Canary (clobber)': {
+      'recipe_config': 'chromium_linux_goma_canary_clobber',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'compile_targets': [ 'chromium_builder_tests' ],
+      'goma_canary': True,
+      'testing': {
+        'platform': 'linux'
+      }
+    },
+    'Chromium Linux32 Goma Canary (clobber)': {
+      'recipe_config': 'chromium_linux_goma_canary_clobber',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'compile_targets': [ 'chromium_builder_tests' ],
+      'goma_canary': True,
+      'testing': {
+        'platform': 'linux'
+      }
+    },
+    'Chromium Linux Precise Goma LinkTest': {
+      'recipe_config': 'chromium_linux_goma_canary_linktest',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'compile_targets': [ 'chromium_builder_tests' ],
+      'goma_canary': True,
       'testing': {
         'platform': 'linux'
       }

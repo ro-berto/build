@@ -40,6 +40,8 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       mode = Single(basestring, required=False),
       goma_dir = Single(Path, required=False),
       goma_hermetic = Single(basestring, required=False),
+      goma_enable_remote_link = Single(bool, empty_val=False, required=False),
+      goma_store_local_run_output = Single(bool, empty_val=False, required=False),
       clobber = Single(bool, empty_val=False, required=False, hidden=False),
       pass_arch_flag = Single(bool, empty_val=False, required=False),
       xcode_sdk = Single(basestring, required=False),
@@ -280,6 +282,11 @@ def goma_hermetic_error(c):
 @config_ctx()
 def goma_hermetic_fallback(c):
   c.compile_py.goma_hermetic = 'fallback'
+
+@config_ctx()
+def goma_linktest(c):
+  c.compile_py.goma_enable_remote_link = True
+  c.compile_py.goma_store_local_run_output = True
 
 @config_ctx()
 def ninja_confirm_noop(c):

@@ -193,6 +193,10 @@ class ChromiumApi(recipe_api.RecipeApi):
       args += ['--goma-dir', self.c.compile_py.goma_dir]
     if self.c.compile_py.goma_hermetic:
       args += ['--goma-hermetic', self.c.compile_py.goma_hermetic]
+    if self.c.compile_py.goma_enable_remote_link:
+      args += ['--goma-enable-remote-link']
+    if self.c.compile_py.goma_store_local_run_output:
+      args += ['--goma-store-local-run-output']
     if self.c.compile_py.ninja_confirm_noop:
       args.append('--ninja-ensure-up-to-date')
     if (self.m.properties.get('clobber') is not None or

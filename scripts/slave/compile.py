@@ -128,6 +128,10 @@ def goma_setup(options, env):
 
   if not env.get('GOMA_HERMETIC'):
     env['GOMA_HERMETIC'] = options.goma_hermetic
+  if options.goma_enable_remote_link:
+    env['GOMA_ENABLE_REMOTE_LINK'] = options.goma_enable_remote_link
+  if options.goma_store_local_run_output:
+    env['GOMA_STORE_LOCAL_RUN_OUTPUT'] = options.goma_store_local_run_output
 
   # goma is requested.
   goma_key = os.path.join(options.goma_dir, 'goma.key')
@@ -1178,6 +1182,10 @@ def real_main():
                            help='specify goma directory')
   option_parser.add_option('--goma-hermetic', default='error',
                            help='Set goma hermetic mode')
+  option_parser.add_option('--goma-enable-remote-link', default=None,
+                           help='Enable goma remote link.')
+  option_parser.add_option('--goma-store-local-run-output', default=None,
+                           help='Store local run output to goma servers.')
   option_parser.add_option('--verbose', action='store_true')
   option_parser.add_option('--ninja-ensure-up-to-date', action='store_true',
                            help='Checks the output of the ninja builder to '

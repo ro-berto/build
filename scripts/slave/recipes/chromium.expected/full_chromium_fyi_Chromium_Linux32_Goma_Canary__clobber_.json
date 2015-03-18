@@ -20,7 +20,7 @@
       "--master",
       "chromium.fyi",
       "--builder",
-      "Chromium Linux Goma Canary",
+      "Chromium Linux32 Goma Canary (clobber)",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -81,7 +81,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "component=static_library gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
+      "GYP_DEFINES": "component=static_library gomadir='[BUILD]/goma' target_arch=ia32 use_goma=1"
     },
     "name": "gclient runhooks"
   },
@@ -113,7 +113,7 @@
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
-      "{\"buildername\": \"Chromium Linux Goma Canary\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
+      "{\"buildername\": \"Chromium Linux32 Goma Canary (clobber)\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -146,6 +146,7 @@
       "[BUILD]/goma",
       "--goma-hermetic",
       "error",
+      "--clobber",
       "--",
       "chromium_builder_tests"
     ],

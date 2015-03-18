@@ -20,7 +20,7 @@
       "--master",
       "chromium.fyi",
       "--builder",
-      "Chromium Linux Goma Canary",
+      "Chromium Linux Goma Canary (clobber)",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -113,7 +113,7 @@
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
-      "{\"buildername\": \"Chromium Linux Goma Canary\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
+      "{\"buildername\": \"Chromium Linux Goma Canary (clobber)\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -146,6 +146,7 @@
       "[BUILD]/goma",
       "--goma-hermetic",
       "error",
+      "--clobber",
       "--",
       "chromium_builder_tests"
     ],
