@@ -121,24 +121,12 @@ def goma_setup(options, env):
                   'vm820-m1', 'vm821-m1', 'vm848-m1']:
     env['NO_NACL_GOMA'] = 'false'
 
-  # HACK(yyanagisawa, goma): GOMA_HERMETIC=error (crbug.com/366967)
-  # Building with GOMA_HERMETIC=error prevents anybody to roll a compiler
-  # that is not installed in goma server. We do not think we see false-positive
-  # but not 100% confident.
-  # Let me enable GOMA_HERMETIC=error on several trybots to confirm
-  # it works.
-  if hostname in ['vm160-m4', 'vm240-m4', # win
-                  'slave250-c4', 'slave-260-c4', # linux
-                  'vm690-m4', 'vm700-m4', #mac
-                  ]:
-    env['GOMA_HERMETIC'] = 'error'
-
   # Enable DepsCache. DepsCache caches the list of files to send goma server.
   # This will greatly improve build speed when cache is warmed.
   # The cache file is stored in the target output directory.
   env['GOMA_DEPS_CACHE_DIR'] = options.target_output_dir
 
-  if options.goma_hermetic:
+  if not env.get('GOMA_HERMETIC'):
     env['GOMA_HERMETIC'] = options.goma_hermetic
 
   # goma is requested.
@@ -1188,7 +1176,7 @@ def real_main():
   option_parser.add_option('--goma-dir',
                            default=os.path.join(BUILD_DIR, 'goma'),
                            help='specify goma directory')
-  option_parser.add_option('--goma-hermetic', default=None,
+  option_parser.add_option('--goma-hermetic', default='error',
                            help='Set goma hermetic mode')
   option_parser.add_option('--verbose', action='store_true')
   option_parser.add_option('--ninja-ensure-up-to-date', action='store_true',
