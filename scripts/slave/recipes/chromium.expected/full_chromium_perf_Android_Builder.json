@@ -99,6 +99,8 @@
       "official",
       "--goma-dir",
       "[BUILD]/goma",
+      "--goma-hermetic",
+      "fallback",
       "--"
     ],
     "env": {

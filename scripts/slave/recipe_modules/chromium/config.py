@@ -278,6 +278,10 @@ def goma_hermetic_error(c):
   c.compile_py.goma_hermetic = 'error'
 
 @config_ctx()
+def goma_hermetic_fallback(c):
+  c.compile_py.goma_hermetic = 'fallback'
+
+@config_ctx()
 def ninja_confirm_noop(c):
   c.compile_py.ninja_confirm_noop = True
 

@@ -67,7 +67,7 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'chromium_apply_config': ['chromium_perf']
+      'chromium_apply_config': ['chromium_perf', 'goma_hermetic_fallback']
     },
     'Win Builder': {
       'disable_tests': True,
@@ -83,7 +83,7 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'chromium_apply_config': ['chromium_perf']
+      'chromium_apply_config': ['chromium_perf', 'goma_hermetic_fallback']
     },
     'Win x64 Builder': {
       'disable_tests': True,
@@ -99,7 +99,7 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'chromium_apply_config': ['chromium_perf']
+      'chromium_apply_config': ['chromium_perf', 'goma_hermetic_fallback']
     },
     'Mac Builder': {
       'disable_tests': True,
@@ -115,7 +115,7 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'chromium_apply_config': ['chromium_perf']
+      'chromium_apply_config': ['chromium_perf', 'goma_hermetic_fallback']
     },
     'Android Builder': {
       'disable_tests': True,
@@ -129,7 +129,9 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'chromium_apply_config': ['chromium_perf', 'android'],
+      'chromium_apply_config': [
+        'chromium_perf', 'android', 'goma_hermetic_fallback',
+      ],
       'gclient_apply_config': ['android', 'perf'],
     },
   }
