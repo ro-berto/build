@@ -154,6 +154,16 @@ RECIPE_CONFIGS = freeze({
     'chromium_apply_config': ['goma_canary', 'goma_linktest'],
     'gclient_config': 'chromium',
   },
+  'chromium_mac_goma_canary': {
+    'chromium_config': 'chromium',
+    'chromium_apply_config': ['goma_canary'],
+    'gclient_config': 'chromium',
+  },
+  'chromium_mac_goma_canary_clobber': {
+    'chromium_config': 'chromium',
+    'chromium_apply_config': ['goma_canary', 'clobber'],
+    'gclient_config': 'chromium',
+  },
   'official': {
     'chromium_config': 'chromium_official',
     'gclient_config': 'chromium',

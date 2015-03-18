@@ -706,6 +706,54 @@ SPEC = {
         'platform': 'linux'
       }
     },
+    'Chromium Mac 10.6 Goma Canary': {
+      'recipe_config': 'chromium_mac_goma_canary',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'compile_targets': [ 'chromium_builder_tests' ],
+      'goma_canary': True,
+      'testing': {
+        'platform': 'mac'
+      }
+    },
+    'Chromium Mac 10.7 Goma Canary': {
+      'recipe_config': 'chromium_mac_goma_canary',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'compile_targets': [ 'chromium_builder_tests' ],
+      'goma_canary': True,
+      'testing': {
+        'platform': 'mac'
+      }
+    },
+    'Chromium Mac 10.6 Goma Canary (clobber)': {
+      'recipe_config': 'chromium_mac_goma_canary_clobber',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'compile_targets': [ 'chromium_builder_tests' ],
+      'goma_canary': True,
+      'testing': {
+        'platform': 'mac'
+      }
+    },
+    'Chromium Mac 10.7 Goma Canary (clobber)': {
+      'recipe_config': 'chromium_mac_goma_canary_clobber',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'compile_targets': [ 'chromium_builder_tests' ],
+      'goma_canary': True,
+      'testing': {
+        'platform': 'mac'
+      }
+    },
     'ClangToTLinux': {
       'recipe_config': 'clang_tot_linux',
       'chromium_config_kwargs': {
