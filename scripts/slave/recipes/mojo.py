@@ -29,13 +29,14 @@ def _CheckoutSteps(api, buildername):
 def _BuildSteps(api, buildername, build_type):
   mojob_path = api.path['checkout'].join('mojo', 'tools', 'mojob.py')
   args = []
+  gn_args = []
   if 'Android' in buildername:
     args += ['--android']
   elif 'ChromeOS' in buildername:
     args += ['--chromeos']
 
   if 'NaCl' in buildername:
-    args += ['--nacl']
+    gn_args += ['--nacl']
 
   if 'ASan' in buildername:
     args += ['--asan']
@@ -54,7 +55,7 @@ def _BuildSteps(api, buildername, build_type):
     env['GOMA_DIR'] = goma_dir
   api.python('mojob gn',
              mojob_path,
-             args=['gn', build_type] + args,
+             args=['gn', build_type] + args + gn_args,
              cwd=api.path['checkout'],
              env=env)
   api.python('mojob build',

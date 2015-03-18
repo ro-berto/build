@@ -66,8 +66,7 @@
       "-u",
       "[SLAVE_BUILD]/src/mojo/tools/mojob.py",
       "build",
-      "--release",
-      "--nacl"
+      "--release"
     ],
     "env": {
       "GOMA_DIR": "[BUILD]/goma"
