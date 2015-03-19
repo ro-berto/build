@@ -11,7 +11,7 @@ m_annotator = annotator_factory.AnnotatorFactory()
 def Update(c):
   c['schedulers'].extend([
       SingleBranchScheduler(name='webrtc_mac_scheduler',
-                            branch='trunk',
+                            branch='master',
                             treeStableTimer=30,
                             builderNames=[
           'Mac32 Debug',

@@ -17,7 +17,7 @@ def Update(c):
   ]
   c['schedulers'].extend([
       SingleBranchScheduler(name='mac_webrtc_scheduler',
-                            branch='trunk',
+                            branch='master',
                             treeStableTimer=0,
                             builderNames=buildernames_list),
       Periodic(name='mac_periodic_scheduler',

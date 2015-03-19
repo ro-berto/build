@@ -17,7 +17,7 @@ def Update(c):
   ]
   c['schedulers'].extend([
       SingleBranchScheduler(name='win_webrtc_scheduler',
-                            branch='trunk',
+                            branch='master',
                             treeStableTimer=0,
                             builderNames=buildernames_list),
       Periodic(name='win_periodic_scheduler',

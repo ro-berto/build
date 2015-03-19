@@ -18,7 +18,7 @@ def Update(c):
   ]
   c['schedulers'].extend([
       SingleBranchScheduler(name='android_webrtc_scheduler',
-                            branch='trunk',
+                            branch='master',
                             treeStableTimer=0,
                             builderNames=buildernames_list),
       Periodic(name='android_periodic_scheduler',
