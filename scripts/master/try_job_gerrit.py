@@ -9,6 +9,7 @@ import urllib
 from twisted.internet import defer
 from twisted.python import log
 
+from buildbot.process.properties import Properties
 from buildbot.schedulers.base import BaseScheduler
 from buildbot.status import results
 from buildbot.status.base import StatusReceiverMultiService
@@ -20,9 +21,10 @@ from master.gerrit_poller import GerritPoller
 
 class JobDefinition(object):
   """Describes a try job posted on Gerrit."""
-  def __init__(self, builder_names=None):
+  def __init__(self, builder_names=None, build_properties=None):
     # Force str type and remove empty builder names.
     self.builder_names = [str(b) for b in (builder_names or []) if b]
+    self.build_properties = build_properties
 
   def __repr__(self):
     return repr(self.__dict__)
@@ -48,7 +50,10 @@ class JobDefinition(object):
     elif not isinstance(job, dict):
       raise ValueError('Job definition must be a JSON object or array.')
 
-    return JobDefinition(job.get('builderNames'))
+    return JobDefinition(
+        builder_names=job.get('builderNames'),
+        build_properties=job.get('build_properties')
+    )
 
 
 class _TryJobGerritPoller(GerritPoller):
@@ -129,11 +134,17 @@ class TryJobGerritScheduler(BaseScheduler):
 
   @defer.inlineCallbacks
   def submitJob(self, change, job):
+    props = Properties()
+    if change.properties:
+      props.updateFromProperties(change.properties)
+    if job.build_properties:
+      props.update(job.build_properties, 'Gerrit')
+
     bsid = yield self.addBuildsetForChanges(
         reason='tryjob',
         changeids=[change.number],
         builderNames=job.builder_names,
-        properties=change.properties)
+        properties=props)
     log.msg('Successfully submitted a Gerrit try job for %s: %s.' %
             (change.who, job))
     defer.returnValue(bsid)
