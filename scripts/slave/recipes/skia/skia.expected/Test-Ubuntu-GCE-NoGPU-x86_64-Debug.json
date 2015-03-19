@@ -286,7 +286,7 @@
       "-u",
       "[SLAVE_BUILD]/skia/tools/dm_flags.py",
       "/path/to/tmp/json",
-      "Test-Ubuntu13.10-GCE-NoGPU-x86_64-Debug"
+      "Test-Ubuntu-GCE-NoGPU-x86_64-Debug"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "name": "exec [SLAVE_BUILD]/skia/tools/dm_flags.py",
@@ -326,7 +326,7 @@
       "model",
       "GCE",
       "os",
-      "Ubuntu13.10",
+      "Ubuntu",
       "--dummy-flags"
     ],
     "name": "dm"
@@ -338,7 +338,7 @@
       "RECIPE_MODULE[skia]/resources/upload_dm_results.py",
       "[SLAVE_BUILD]/dm",
       "164710",
-      "Test-Ubuntu13.10-GCE-NoGPU-x86_64-Debug",
+      "Test-Ubuntu-GCE-NoGPU-x86_64-Debug",
       "5",
       "",
       "[SLAVE_BUILD]/skia/common/py/utils"
@@ -352,7 +352,7 @@
       "-u",
       "[SLAVE_BUILD]/skia/tools/nanobench_flags.py",
       "/path/to/tmp/json",
-      "Test-Ubuntu13.10-GCE-NoGPU-x86_64-Debug"
+      "Test-Ubuntu-GCE-NoGPU-x86_64-Debug"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "name": "exec [SLAVE_BUILD]/skia/tools/nanobench_flags.py",
