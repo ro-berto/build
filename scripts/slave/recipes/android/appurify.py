@@ -225,6 +225,8 @@ def GenSteps(api):
         if step_failure.result.presentation.status == api.step.FAILURE:
           api.amp.upload_logcat_to_gs(AMP_RESULTS_BUCKET, suite)
 
+    api.chromium_android.test_report()
+
 
 def GenTests(api):
   sanitize = lambda s: ''.join(c if c.isalnum() else '_' for c in s)
