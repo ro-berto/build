@@ -169,17 +169,14 @@ class IndexPack(object):
           # statement.
           if '//' in fname:
             path = fname.split('//')
-            include_paths.add('-isystem%s' % path[0])
+            include_paths.add('-isystem%s' % os.path.normpath(path[0]))
             fname = '/'.join(path)
           fname_fullpath = os.path.join(entry['directory'], fname)
           if fname_fullpath not in self.filesizes:
             print 'No information about required input file %s' % fname_fullpath
             continue
           required_input = {
-              # Note that although the paths seem to contain redundancy (e. g.
-              # '/path/to/lib/../include') we can't use os.path.normpath() here,
-              # otherwise the indexer will not work.
-              'path': fname,
+              'path': os.path.normpath(fname),
               'size': self.filesizes[fname_fullpath],
               'digest': self.filehashes[fname_fullpath]
           }
@@ -187,8 +184,12 @@ class IndexPack(object):
       # Add the include paths to the list of compile arguments; also disable all
       # warnings so that the indexer can run successfully. The job of the
       # indexer is to index the code, not to verify it. Warnings we actually
-      # care about would show up in the compile step.
-      unit_dictionary['argument'] = list(include_paths) + ['-w'] + command_list
+      # care about would show up in the compile step. And the -nostdinc++ flag
+      # tells the indexer that it does not need to add any additional -isystem
+      # arguments itself.
+      unit_dictionary['argument'] = (
+          list(include_paths) + command_list + ['-w', '-nostdinc++']
+      )
       unit_dictionary['required_input'] = required_inputs
       unit_dictionary['output_path'] = output_file
       wrapper = {

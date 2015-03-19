@@ -139,7 +139,10 @@ class PackageIndexTest(unittest.TestCase):
         real_compile_arguments = COMPILE_ARGUMENTS.split()[1:]
         self.assertEquals(
             compilation_unit_dictionary['argument'],
-            ['-isystem%s' % INCLUDE_PATH] + ['-w'] + real_compile_arguments)
+            (
+                ['-isystem%s' % INCLUDE_PATH] + real_compile_arguments +
+                ['-w', '-nostdinc++']
+            ))
 
 if __name__ == '__main__':
   unittest.main()
