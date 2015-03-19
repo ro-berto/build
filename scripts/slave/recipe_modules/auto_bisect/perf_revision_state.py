@@ -3,9 +3,14 @@
 # found in the LICENSE file.
 
 import json
+import tempfile
+import os
 import uuid
 
 from . import revision_state
+
+if 'CACHE_TEST_RESULTS' in os.environ:  # pragma: no cover
+  from . import test_results_cache
 
 
 class PerfRevisionState(revision_state.RevisionState):
@@ -16,6 +21,7 @@ class PerfRevisionState(revision_state.RevisionState):
     self.values = []
     self.mean_value = None
     self.std_err = None
+    self._test_config = None
 
   def test_info(self):
     """Returns a dictionary with information that describes this test.
@@ -45,27 +51,47 @@ class PerfRevisionState(revision_state.RevisionState):
       else:
         self.bad = True
 
+  def _write_deps_patch_file(self, build_name):
+    api = self.bisector.api
+    file_name = os.path.join(tempfile.gettempdir(), build_name + '.diff')
+    api.m.file.write('Saving diff patch for ' + str(self.revision_string),
+                     file_name, self.deps_patch + self.deps_sha_patch)
+    return file_name
+
   def _request_build(self):
     """Posts a request to buildbot to build this revision and archive it."""
     # TODO: Rewrite using the trigger module.
-    # TODO: Send a diff patch when appropriate
     api = self.bisector.api
     bot_name = self.bisector.get_builder_bot_for_this_platform()
     if self.bisector.dummy_builds:
       self.build_job_name = self.commit_hash + '-build'
     else:  # pragma: no cover
       self.build_job_name = uuid.uuid4().hex
+    if self.needs_patch:
+      self.patch_file = self._write_deps_patch_file(
+          self.build_job_name)
+    else:
+      self.patch_file = '/dev/null'
     try_cmd = [
         'try',
-        '--bot=%s' % bot_name,
-        '--revision=%s' % self.commit_hash,
-        '--name=%s' % self.build_job_name,
-        '--svn_repo=%s' % api.SVN_REPO_URL,
-        '--diff',
-        '/dev/null',
+        '--bot', bot_name,
+        '--revision', self.commit_hash,
+        '--name', self.build_job_name,
+        '--svn_repo', api.SVN_REPO_URL,
+        '--diff', self.patch_file,
     ]
-    api.m.git(*try_cmd, name='Requesting build for %s via git try.'
-              % str(self.commit_hash))
+    try:
+      if not self.bisector.bisect_config.get('skip_gclient_ops'):
+        api.m.bot_update.ensure_checkout()
+      api.m.git(*try_cmd, name='Requesting build for %s via git try.'
+                % str(self.commit_hash))
+    finally:
+      if (self.patch_file != '/dev/null' and not 'TESTING_SLAVENAME' in
+          os.environ):
+        try:
+          api.m.step('cleaning up patch', ['rm', self.patch_file])
+        except api.m.step.StepFailure:  # pragma: no cover
+          print 'Could not clean up ' + self.patch_file
 
   def _get_bisect_config_for_tester(self):
     """Copies the key-value pairs required by a tester bot to a new dict."""
@@ -88,6 +114,9 @@ class PerfRevisionState(revision_state.RevisionState):
     """Posts a request to buildbot to download and perf-test this build."""
     if self.bisector.dummy_builds:
       self.test_job_name = self.commit_hash + '-test'
+    elif 'CACHE_TEST_RESULTS' in os.environ:  # pragma: no cover
+      self.test_job_name = test_results_cache.make_id(
+          self.revision_string, self._get_bisect_config_for_tester())
     else:  # pragma: no cover
       self.test_job_name = uuid.uuid4().hex
     api = self.bisector.api
@@ -98,6 +127,9 @@ class PerfRevisionState(revision_state.RevisionState):
         'bisect_config': self._get_bisect_config_for_tester(),
         'job_name': self.test_job_name,
     }
+    if 'CACHE_TEST_RESULTS' in os.environ and test_results_cache.has_results(
+        self.test_job_name):  # pragma: no cover
+      return
     step_name = 'Triggering test job for ' + str(self.revision_string)
     api.m.trigger(perf_test_properties, name=step_name)
 
@@ -135,7 +167,10 @@ class PerfRevisionState(revision_state.RevisionState):
     except api.m.step.StepFailure:  # pragma: no cover
       return None
     else:
-      return step_result.stdout
+      url = step_result.stdout
+      if 'CACHE_TEST_RESULTS' in os.environ:  # pragma: no cover
+        test_results_cache.save_results(self.test_job_name, url)
+      return url
 
   def get_next_url(self):
     if not self.in_progress:

@@ -32,7 +32,8 @@ def GenSteps(api):
   _ensure_checkout(api)
   if (not bisector.failed and bisector.check_improvement_direction() and
       bisector.check_regression_confidence()):
-    _bisect_main_loop(bisector)
+    if not bisector.check_bisect_finished(bisector.good_rev):
+      _bisect_main_loop(bisector)
   else: #pragma: no cover
     bisector.bisect_over = True
   bisector.print_result()
