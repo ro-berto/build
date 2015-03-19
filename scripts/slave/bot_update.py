@@ -71,6 +71,9 @@ COMMIT_ORIGINAL_POSITION_FOOTER_KEY = 'Cr-Original-Commit-Position'
 # Regular expression to parse a commit position
 COMMIT_POSITION_RE = re.compile(r'(.+)@\{#(\d+)\}')
 
+# Regular expression to parse gclient's revinfo entries.
+REVINFO_RE = re.compile(r'^([^:]+):\s+([^@]+)@(.+)$')
+
 # Used by 'ResolveSvnRevisionFromGitiles'
 GIT_SVN_PROJECT_MAP = {
   'webkit': {
@@ -648,6 +651,26 @@ def gclient_runhooks(gyp_envs):
   gclient_bin = 'gclient.bat' if sys.platform.startswith('win') else 'gclient'
   env = dict([env_var.split('=', 1) for env_var in gyp_envs])
   call(gclient_bin, 'runhooks', env=env)
+
+
+def gclient_revinfo():
+  gclient_bin = 'gclient.bat' if sys.platform.startswith('win') else 'gclient'
+  return call(gclient_bin, 'revinfo', '-a') or ''
+
+
+def create_manifest():
+  manifest = {}
+  output = gclient_revinfo()
+  for line in output.strip().splitlines():
+    match = REVINFO_RE.match(line.strip())
+    if match:
+      manifest[match.group(1)] = {
+        'repository': match.group(2),
+        'revision': match.group(3),
+      }
+    else:
+      print "WARNING: Couldn't match revinfo line:\n%s" % line
+  return manifest
 
 
 def get_commit_message_footer_map(message):
@@ -1233,7 +1256,7 @@ def emit_json(out_file, did_run, gclient_output=None, **kwargs):
   output.update({'did_run': did_run})
   output.update(kwargs)
   with open(out_file, 'wb') as f:
-    f.write(json.dumps(output))
+    f.write(json.dumps(output, sort_keys=True))
 
 
 def ensure_deps_revisions(deps_url_mapping, solutions, revisions):
@@ -1415,6 +1438,8 @@ def parse_args():
                         'svn url. To specify Tip of Tree, set rev to HEAD.'
                         'To specify a git branch and an SVN rev, <rev> can be '
                         'set to <branch>:<revision>.')
+  parse.add_option('--output_manifest', action='store_true',
+                   help=('Add manifest json to the json output.'))
   parse.add_option('--slave_name', default=socket.getfqdn().split('.')[0],
                    help='Hostname of the current machine, '
                    'used for determining whether or not to activate.')
@@ -1600,13 +1625,15 @@ def checkout(options, git_slns, specs, buildspec, master,
     #raise Exception('No got_revision(s) found in gclient output')
 
   if options.output_json:
+    manifest = create_manifest() if options.output_manifest else None
     # Tell recipes information such as root, got_revision, etc.
     emit_json(options.output_json,
               did_run=True,
               root=first_sln,
               patch_root=options.patch_root,
               step_text=step_text,
-              properties=got_revisions)
+              properties=got_revisions,
+              manifest=manifest)
   else:
     # If we're not on recipes, tell annotator about our got_revisions.
     emit_properties(got_revisions)
