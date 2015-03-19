@@ -397,6 +397,10 @@ def Archive(options):
     gs_acl = options.factory_properties.get('gs_acl')
     zip_url = UploadToGoogleStorage(
         versioned_file, revision_file, build_url, gs_acl)
+
+    storage_url = ('https://storage.googleapis.com/%s/%s' %
+        (build_url[len('gs://'):], os.path.basename(versioned_file)))
+    print '@@@STEP_LINK@download@%s@@@' % storage_url
   else:
     slavename = options.build_properties['slavename']
     staging_path = (
