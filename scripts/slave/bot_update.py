@@ -286,8 +286,10 @@ HEAD_BUILDERS.update(internal_data.get('HEAD_BUILDERS', {}))
 GIT_MASTERS = [
     'client.v8',
     'client.v8.branches',
+    'client.webrtc',
     'client.webrtc.fyi',
     'tryserver.v8',
+    'tryserver.webrtc',
 ]
 GIT_MASTERS += internal_data.get('GIT_MASTERS', [])
 
