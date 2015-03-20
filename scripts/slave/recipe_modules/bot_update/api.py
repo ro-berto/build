@@ -70,7 +70,8 @@ class BotUpdateApi(recipe_api.RecipeApi):
                       patch=True, update_presentation=True,
                       force=False, patch_root=None, no_shallow=False,
                       with_branch_heads=False, refs=None,
-                      patch_project_roots=None, patch_oauth2=False, **kwargs):
+                      patch_project_roots=None, patch_oauth2=False,
+                      output_manifest=False, **kwargs):
     refs = refs or []
     # We can re-use the gclient spec from the gclient module, since all the
     # data bot_update needs is already configured into the gclient spec.
@@ -173,6 +174,8 @@ class BotUpdateApi(recipe_api.RecipeApi):
       cmd.append('--force')
     if no_shallow:
       cmd.append('--no_shallow')
+    if output_manifest:
+      cmd.append('--output_manifest')
     if with_branch_heads:
       cmd.append('--with_branch_heads')
 
@@ -181,7 +184,8 @@ class BotUpdateApi(recipe_api.RecipeApi):
     first_sln = cfg.solutions[0].name
     step_test_data = lambda: self.test_api.output_json(
         master, builder, slave, root, first_sln, rev_map, git_mode, force,
-        self.m.properties.get('fail_patch', False))
+        self.m.properties.get('fail_patch', False),
+        output_manifest=output_manifest)
 
     # Add suffixes to the step name, if specified.
     name = 'bot_update'
