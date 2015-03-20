@@ -78,7 +78,6 @@ SUPPRESSIONS = {
     ],
     'master.chromium.linux': [
         'Android GN',
-        'Android Webview AOSP Builder',
         'Linux GN',
         'Linux GN (dbg)',
     ],
