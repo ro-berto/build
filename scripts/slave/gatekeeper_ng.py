@@ -904,14 +904,15 @@ def main():
                           options.status_user, options.password,
                           options.status_url, options.set_status,
                           options.revision_properties.split(','))
-  notify_failures(new_failures, options.sheriff_url, options.default_from_email,
-                  options.email_app_url, options.email_app_secret,
-                  options.email_domain, options.filter_domain,
-                  options.disable_domain_filter)
-
-  if not options.skip_build_db_update:
-    build_scan_db.save_build_db(build_db, gatekeeper_config,
-                             options.build_db)
+  try:
+    notify_failures(new_failures, options.sheriff_url,
+                    options.default_from_email, options.email_app_url,
+                    options.email_app_secret, options.email_domain,
+                    options.filter_domain, options.disable_domain_filter)
+  finally:
+    if not options.skip_build_db_update:
+      build_scan_db.save_build_db(build_db, gatekeeper_config,
+                               options.build_db)
 
   return 0
 
