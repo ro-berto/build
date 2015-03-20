@@ -62,14 +62,6 @@ BUILDERS = freeze({
       'num_device_shards': 8,
       'test_spec_file': 'chromium.perf.json',
     },
-    'Android MotoE Perf': {
-      'perf_id': 'android-motoe',
-      'bucket': 'chrome-perf',
-      'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
-                           api.properties['parent_revision']),
-      'num_device_shards': 8,
-      'test_spec_file': 'chromium.perf.json',
-    },
     'Android One Perf': {
       'perf_id': 'android-one',
       'bucket': 'chrome-perf',

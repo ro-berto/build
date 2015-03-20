@@ -236,10 +236,6 @@ _AndroidSpecs = {
     'perf_id': 'android-nexus10',
     'num_device_shards': 8,
   },
-  'Android MotoE Perf': {
-    'perf_id': 'android-motoe',
-    'num_device_shards': 8,
-  },
   'Android One Perf': {
     'perf_id': 'android-one',
     'num_device_shards': 8,
