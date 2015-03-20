@@ -286,7 +286,7 @@
       "-u",
       "[SLAVE_BUILD]/skia/tools/dm_flags.py",
       "/path/to/tmp/json",
-      "Test-Ubuntu12-ShuttleA-GTX550Ti-x86_64-Debug-ZeroGPUCache"
+      "Test-Ubuntu-ShuttleA-GTX550Ti-x86_64-Debug-ZeroGPUCache"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "name": "exec [SLAVE_BUILD]/skia/tools/dm_flags.py",
@@ -328,7 +328,7 @@
       "model",
       "ShuttleA",
       "os",
-      "Ubuntu12",
+      "Ubuntu",
       "--dummy-flags"
     ],
     "name": "dm"
@@ -340,7 +340,7 @@
       "RECIPE_MODULE[skia]/resources/upload_dm_results.py",
       "[SLAVE_BUILD]/dm",
       "164710",
-      "Test-Ubuntu12-ShuttleA-GTX550Ti-x86_64-Debug-ZeroGPUCache",
+      "Test-Ubuntu-ShuttleA-GTX550Ti-x86_64-Debug-ZeroGPUCache",
       "5",
       "",
       "[SLAVE_BUILD]/skia/common/py/utils"

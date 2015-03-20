@@ -44,8 +44,8 @@ def _getMasterAndSlaveForBuilder(builder):
 
 def GenTests(api):
   builders = [
-    'Build-Ubuntu13.10-GCC4.8-Arm7-Debug-CrOS_Daisy',
-    'Build-Ubuntu13.10-GCC4.8-x86_64-Debug',
+    'Build-Ubuntu-GCC-Arm7-Debug-CrOS_Daisy',
+    'Build-Ubuntu-GCC-x86_64-Debug',
     'Perf-Android-Nexus7-Tegra3-Arm7-Release',
     'Perf-ChromeOS-Daisy-MaliT604-Arm7-Release',
     'Perf-Win7-ShuttleA-HD2000-x86-Release',
@@ -58,11 +58,11 @@ def GenTests(api):
     'Test-ChromeOS-Alex-GMA3150-x86-Debug',
     'Test-ChromeOS-Link-HD4000-x86_64-Debug',
     'Test-Mac10.8-MacMini4.1-GeForce320M-x86_64-Debug',
-    'Test-Ubuntu14-ShuttleA-GTX550Ti-x86_64-Release-Valgrind_GPU',
-    'Test-Ubuntu12-ShuttleA-GTX550Ti-x86_64-Debug-ZeroGPUCache',
-    'Test-Ubuntu13.10-GCE-NoGPU-x86_64-Debug',
-    'Test-Ubuntu13.10-GCE-NoGPU-x86_64-Debug-Trybot',
-    'Test-Ubuntu13.10-GCE-NoGPU-x86_64-Release-TSAN',
+    'Test-Ubuntu-ShuttleA-GTX550Ti-x86_64-Release-Valgrind_GPU',
+    'Test-Ubuntu-ShuttleA-GTX550Ti-x86_64-Debug-ZeroGPUCache',
+    'Test-Ubuntu-GCE-NoGPU-x86_64-Debug',
+    'Test-Ubuntu-GCE-NoGPU-x86_64-Debug-Trybot',
+    'Test-Ubuntu-GCE-NoGPU-x86_64-Release-TSAN',
     'Test-Win7-ShuttleA-HD2000-x86-Release',
     'Test-Win7-ShuttleA-HD2000-x86-Release-ANGLE',
     'Test-Win7-ShuttleA-HD2000-x86_64-Release',
@@ -115,7 +115,7 @@ def GenTests(api):
       test += api.platform('win', 64)
     yield test
 
-  builder = 'Test-Ubuntu13.10-ShuttleA-NoGPU-x86_64-Debug-Recipes'
+  builder = 'Test-Ubuntu-ShuttleA-NoGPU-x86_64-Debug-Recipes'
   yield (
     api.test('failed_dm') +
     api.properties(buildername=builder,
@@ -127,7 +127,7 @@ def GenTests(api):
 
   yield (
     api.test('has_ccache_android') +
-    api.properties(buildername='Build-Ubuntu13.10-GCC4.8-Arm7-Debug-Android',
+    api.properties(buildername='Build-Ubuntu-GCC-Arm7-Debug-Android',
                    mastername='client.skia.compile',
                    slavename='skiabot-linux-compile-000') +
     api.step_data('has ccache?', retcode=0,

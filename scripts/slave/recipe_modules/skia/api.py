@@ -340,7 +340,7 @@ class SkiaApi(recipe_api.RecipeApi):
   def perf_steps(self):
     """Run Skia benchmarks."""
     if self.c.BUILDER_NAME == (
-        'Test-Ubuntu12-ShuttleA-GTX550Ti-x86_64-Debug-ZeroGPUCache'):
+        'Test-Ubuntu-ShuttleA-GTX550Ti-x86_64-Debug-ZeroGPUCache'):
       return
 
     self._run_once(self.install)
