@@ -22,6 +22,7 @@ import optparse
 import os
 import re
 import shlex
+import shutil
 import socket
 import sys
 import tempfile
@@ -37,6 +38,8 @@ SLAVE_SCRIPTS_DIR = os.path.dirname(os.path.abspath(__file__))
 # Path of the build/ checkout on the slave, found relative to the
 # scripts/slave/ directory.
 BUILD_DIR = os.path.dirname(os.path.dirname(SLAVE_SCRIPTS_DIR))
+# The Google Cloud Storage bucket to store logs related to goma.
+GOMA_LOG_GS_BUCKET = 'chrome-goma-log'
 
 
 class EchoDict(dict):
@@ -188,28 +191,46 @@ def GetLatestGomaCompilerProxyInfo():
   return sorted(candidates, reverse=True)[0]
 
 
+def UploadToGomaLogGS(file_path, gs_filename, text_to_append=None):
+  """Upload a file to Google Cloud Storage (gs://chrome-goma-log).
+
+  Note that the uploaded file would automatically be gzip compressed.
+
+  Args:
+    file_path: a path of a file to be uploaded.
+    gs_filename: a name of a file in Google Storage.
+    text_to_append: an addtional text to be added to a file in GS.
+
+  Returns:
+    a stored path name without the bucket name in GS.
+  """
+  hostname = GetShortHostname()
+  today = datetime.datetime.utcnow().date()
+  log_path = '%s/%s/%s.gz' % (
+    today.strftime('%Y/%m/%d'), hostname, gs_filename)
+  gs_path = 'gs://%s/%s' % (GOMA_LOG_GS_BUCKET, log_path)
+  temp = tempfile.NamedTemporaryFile(delete=False)
+  try:
+    with temp as f_out:
+      with gzip.GzipFile(fileobj=f_out) as gzipf_out:
+        with open(file_path) as f_in:
+          shutil.copyfileobj(f_in, gzipf_out)
+        if text_to_append:
+          gzipf_out.write('\n')
+          gzipf_out.write(text_to_append)
+    slave_utils.GSUtilCopy(temp.name, gs_path)
+    print "Copied log file to %s" % gs_path
+  finally:
+    os.remove(temp.name)
+  return log_path
+
+
 def UploadGomaCompilerProxyInfo():
   """Upload goma compiler_proxy.INFO to Google Storage."""
   latest_info = GetLatestGomaCompilerProxyInfo()
-  today = datetime.datetime.utcnow().date()
-  hostname = GetShortHostname()
   # Since a filename of compiler_proxy.INFO is fairly unique,
   # we might be able to upload it as-is.
-  goma_log_gs_path = ('gs://chrome-goma-log/%s/%s/%s.gz' % (
-      today.strftime('%Y/%m/%d'), hostname, os.path.basename(latest_info)))
-  output_filename = None
-  try:
-    fd, output_filename = tempfile.mkstemp()
-    with open(latest_info) as f_in:
-      with os.fdopen(fd, 'w') as f_out:
-        with gzip.GzipFile(fileobj=f_out, compresslevel=9) as gzipf:
-          gzipf.writelines(f_in)
-
-    slave_utils.GSUtilCopy(output_filename, goma_log_gs_path)
-    print "Copied log file to %s" % goma_log_gs_path
-  finally:
-    if output_filename:
-      os.remove(output_filename)
+  UploadToGomaLogGS(latest_info, os.path.basename(latest_info))
 
 
 def goma_teardown(options, env):
@@ -268,25 +289,11 @@ def UploadNinjaLog(options, command, exit_status):
   pid = os.getpid()
   ninja_log_filename = 'ninja_log.%s.%s.%s.%d' % (
       hostname, username, mtime.strftime('%Y%m%d-%H%M%S'), pid)
-  today = datetime.datetime.utcnow().date()
-  log_path = ('%s/%s/%s.gz' % (
-      today.strftime('%Y/%m/%d'), hostname, ninja_log_filename))
-  ninja_log_gs_path = 'gs://chrome-goma-log/' + log_path
+  additional_text = '# end of ninja log\n' + json.dumps(info)
+  log_path = UploadToGomaLogGS(
+    ninja_log_path, ninja_log_filename, additional_text)
   viewer_url = 'http://chromium-build-stats.appspot.com/ninja_log/' + log_path
-  try:
-    fd, output_filename = tempfile.mkstemp()
-    with open(ninja_log_path) as f_in:
-      with os.fdopen(fd, 'w') as f_out:
-        with gzip.GzipFile(fileobj=f_out, compresslevel=9) as gzipf:
-          gzipf.writelines(f_in)
-          gzipf.write('# end of ninja log\n')
-          gzipf.write(json.dumps(info))
-
-    slave_utils.GSUtilCopy(output_filename, ninja_log_gs_path)
-    print "Copied log file to %s" % ninja_log_gs_path
-    print "Visualization at %s" % viewer_url
-  finally:
-    os.remove(output_filename)
+  print "Visualization at %s" % viewer_url
 
 
 def common_xcode_settings(command, options, env, compiler=None):
