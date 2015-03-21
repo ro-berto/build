@@ -99,7 +99,7 @@ class BuilderConfig(object):
   @property
   def is_experimental(self):
     """Returns (bool): If this builder is experimental."""
-    return not self.config.get('important')
+    return not (self.config.is_master or self.config.get('important'))
 
   def _GetBuilderName(self):
     """Returns (str): Returns the generated builder name.
