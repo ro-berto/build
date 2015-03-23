@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+  'archive',
   'chromium',
   'pgo',
   'platform',
@@ -13,6 +14,10 @@ DEPS = [
 
 def GenSteps(api):
   api.pgo.compile_pgo()
+  api.archive.zip_and_upload_build(
+      'package build',
+      api.chromium.c.build_config_fs,
+      'gs://chromium-fyi-archive/win_pgo_builds')
 
 
 def GenTests(api):

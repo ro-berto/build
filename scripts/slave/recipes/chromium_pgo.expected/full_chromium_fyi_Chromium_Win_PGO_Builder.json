@@ -380,5 +380,22 @@
       "chrome"
     ],
     "name": "Compile: Optimization phase."
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\zip_build.py",
+      "--target",
+      "Release",
+      "--build-url",
+      "gs://chromium-fyi-archive/win_pgo_builds",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Chromium Win PGO Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"recipe\": \"chromium_pgo\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Chromium Win PGO Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"recipe\": \"chromium_pgo\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+    ],
+    "name": "package build"
   }
 ]
