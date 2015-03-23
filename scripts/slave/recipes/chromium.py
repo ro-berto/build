@@ -267,14 +267,6 @@ def GenTests(api):
   )
 
   yield (
-    api.test('findbugs_failure') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Android Builder (dbg)') +
-    api.platform('linux', 32) +
-    api.step_data('findbugs', retcode=1)
-  )
-
-  yield (
     api.test('tsan') +
     api.properties.generic(mastername='chromium.memory.fyi',
                            buildername='Linux TSan Tests',

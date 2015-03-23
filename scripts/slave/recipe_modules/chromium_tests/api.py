@@ -509,11 +509,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self.m.chromium.compile(compile_targets,
                                 name=transform_name('compile')))
 
-      if (self.m.chromium.c.TARGET_PLATFORM == 'android' and
-          self.m.chromium.c.BUILD_CONFIG == 'Debug'):
-        self.transient_check(update_step, lambda transform_name:
-            self.m.chromium_android.findbugs(name=transform_name('findbugs')))
-
       if bot_config.get('goma_canary'):
         self.m.goma.diagnose_goma()
 

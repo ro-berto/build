@@ -26,7 +26,7 @@ def main_builder(c):
 def trybot_builder(c):
   pass
 
-@CONFIG_CTX(includes=['base_config', 'clang', 'goma'])
+@CONFIG_CTX(includes=['base_config', 'clang', 'goma', 'android_findbugs'])
 def clang_builder(c):
   c.gyp_env.GYP_DEFINES['component'] = 'shared_library'
   c.gyp_env.GYP_DEFINES['asan'] = 1

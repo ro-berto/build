@@ -919,12 +919,3 @@ def GenTests(api):
                      buildername='android_clang_dbg_recipe',
                      steps=['compile (with patch)', 'compile (without patch)'],
                      tryserver=True)
-  yield step_failure(mastername='tryserver.chromium.linux',
-                     buildername='android_clang_dbg_recipe',
-                     steps=['findbugs (with patch)'],
-                     tryserver=True)
-  yield step_failure(mastername='tryserver.chromium.linux',
-                     buildername='android_clang_dbg_recipe',
-                     steps=['findbugs (with patch)',
-                            'findbugs (without patch)'],
-                     tryserver=True)

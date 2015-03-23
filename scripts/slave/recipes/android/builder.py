@@ -29,13 +29,11 @@ BUILDERS = freeze({
     'Android x64 Builder (dbg)': {
       'recipe_config': 'x64_builder',
       'check_licenses': FYIStep,
-      'findbugs': FYIStep,
       'gclient_apply_config': ['android', 'chrome_internal'],
     },
     'Android MIPS Builder (dbg)': {
       'recipe_config': 'mipsel_builder',
       'check_licenses': FYIStep,
-      'findbugs': FYIStep,
       'gclient_apply_config': ['android', 'chrome_internal'],
     },
   },
@@ -145,9 +143,6 @@ def _GenStepsInternal(api):
     with bot_config['check_licenses']():
       droid.check_webview_licenses()
   api.chromium.compile()
-  if bot_config.get('findbugs'):
-    with bot_config['findbugs']():
-      droid.findbugs()
 
   upload_config = bot_config.get('upload')
   if upload_config:
@@ -196,9 +191,6 @@ def GenTests(api):
              (api.step_data(step, retcode=1) for step in steps))
     )
 
-  yield step_failure(mastername='chromium.fyi',
-                     buildername='Android x64 Builder (dbg)',
-                     steps=['findbugs'])
   yield step_failure(mastername='chromium.fyi',
                      buildername='Android x64 Builder (dbg)',
                      steps=['check licenses'])

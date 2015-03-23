@@ -717,6 +717,10 @@ def android_common(c):
            'platform-tools'),
       Path('[CHECKOUT]', 'build', 'android')])
 
+@config_ctx()
+def android_findbugs(c):
+  c.gyp_env.GYP_DEFINES['run_findbugs'] = 1
+
 @config_ctx(includes=['ninja', 'shared_library', 'clang', 'goma'])
 def codesearch(c):
   gyp_defs = c.gyp_env.GYP_DEFINES
