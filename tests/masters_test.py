@@ -240,7 +240,6 @@ def main(argv):
       'master.client.nacl.ports': 'NativeClientPorts',
       'master.client.nacl.sdk': 'NativeClientSDK',
       'master.client.nacl.sdk.addin': 'NativeClientSDKAddIn',
-      'master.client.nacl.sdk.mono': 'NativeClientSDKMono',
       'master.client.nacl.toolchain': 'NativeClientToolchain',
       'master.client.pdfium': 'Pdfium',
       'master.client.sfntly': 'Sfntly',
