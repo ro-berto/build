@@ -241,6 +241,7 @@ class V8Api(recipe_api.RecipeApi):
     update_step = self.m.bot_update.ensure_checkout(
         no_shallow=True,
         patch_root=[None, 'v8'][bool(self.m.tryserver.is_tryserver)],
+        output_manifest=True,
         with_branch_heads=bool(self.c.branch),
         patch_project_roots={'v8': []})
 
