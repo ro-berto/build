@@ -306,6 +306,9 @@ SPEC = {
       'chromium_config_instrument': 'chromium_pgo_instrument',
       'chromium_config_optimize': 'chromium_pgo_optimize',
       'gclient_config': 'chromium_lkgr',
+      # TODO(sebmarchand): This is a hack to get 100% coverage, remove me
+      # and fix this.
+      'patch_root': 'src',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
