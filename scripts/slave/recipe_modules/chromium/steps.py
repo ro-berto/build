@@ -1189,3 +1189,8 @@ IOS_TESTS = [
   GTestTest('sync_unit_tests'),
   GTestTest('sql_unittests'),
 ]
+
+GOMA_TESTS = [
+  GTestTest('base_unittests'),
+  GTestTest('content_unittests'),
+]

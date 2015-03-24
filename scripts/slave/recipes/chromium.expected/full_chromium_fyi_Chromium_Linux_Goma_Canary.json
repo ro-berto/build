@@ -147,14 +147,66 @@
       "--goma-hermetic",
       "error",
       "--",
-      "chromium_builder_tests"
+      "base_unittests",
+      "chromium_builder_tests",
+      "content_unittests"
     ],
     "name": "compile"
   },
   {
     "cmd": [
-      "python", "-u", "[BUILD]/goma/diagnose_goma_log.py"
+      "python",
+      "-u",
+      "[BUILD]/goma/diagnose_goma_log.py"
     ],
     "name": "diagnose_goma"
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--xvfb",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Chromium Linux Goma Canary\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Chromium Linux Goma Canary\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--annotate=gtest",
+      "--test-type=base_unittests",
+      "--test-launcher-summary-output",
+      "/path/to/tmp/json",
+      "--builder-name=Chromium Linux Goma Canary",
+      "--slave-name=TestSlavename",
+      "--build-number=571",
+      "base_unittests"
+    ],
+    "name": "base_unittests"
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--xvfb",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Chromium Linux Goma Canary\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Chromium Linux Goma Canary\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--annotate=gtest",
+      "--test-type=content_unittests",
+      "--test-launcher-summary-output",
+      "/path/to/tmp/json",
+      "--builder-name=Chromium Linux Goma Canary",
+      "--slave-name=TestSlavename",
+      "--build-number=571",
+      "content_unittests"
+    ],
+    "name": "content_unittests"
   }
 ]

@@ -666,6 +666,7 @@ SPEC = {
       },
       'compile_targets': [ 'chromium_builder_tests' ],
       'goma_canary': True,
+      'tests': steps.GOMA_TESTS,
       'testing': {
         'platform': 'win'
       }
@@ -678,6 +679,7 @@ SPEC = {
       },
       'compile_targets': [ 'chromium_builder_tests' ],
       'goma_canary': True,
+      'tests': steps.GOMA_TESTS,
       'testing': {
         'platform': 'win'
       }
@@ -690,6 +692,7 @@ SPEC = {
       },
       'compile_targets': [ 'chromium_builder_tests' ],
       'goma_canary': True,
+      'tests': steps.GOMA_TESTS,
       'testing': {
         'platform': 'win'
       }
@@ -702,6 +705,7 @@ SPEC = {
       },
       'compile_targets': [ 'chromium_builder_tests' ],
       'goma_canary': True,
+      'tests': steps.GOMA_TESTS,
       'testing': {
         'platform': 'win'
       }
@@ -717,6 +721,7 @@ SPEC = {
       },
       'compile_targets': [ 'chromium_builder_tests' ],
       'goma_canary': True,
+      'tests': steps.GOMA_TESTS,
       'testing': {
         'platform': 'win'
       }
@@ -729,6 +734,7 @@ SPEC = {
       },
       'compile_targets': [ 'chromium_builder_tests' ],
       'goma_canary': True,
+      'tests': steps.GOMA_TESTS,
       'testing': {
         'platform': 'win'
       }
@@ -741,6 +747,7 @@ SPEC = {
       },
       'compile_targets': [ 'chromium_builder_tests' ],
       'goma_canary': True,
+      'tests': steps.GOMA_TESTS,
       'testing': {
         'platform': 'win'
       }
@@ -753,6 +760,7 @@ SPEC = {
       },
       'compile_targets': [ 'chromium_builder_tests' ],
       'goma_canary': True,
+      'tests': steps.GOMA_TESTS,
       'testing': {
         'platform': 'linux'
       }
@@ -765,6 +773,7 @@ SPEC = {
       },
       'compile_targets': [ 'chromium_builder_tests' ],
       'goma_canary': True,
+      'tests': steps.GOMA_TESTS,
       'testing': {
         'platform': 'linux'
       }
@@ -777,6 +786,7 @@ SPEC = {
       },
       'compile_targets': [ 'chromium_builder_tests' ],
       'goma_canary': True,
+      'tests': steps.GOMA_TESTS,
       'testing': {
         'platform': 'linux'
       }
@@ -789,6 +799,7 @@ SPEC = {
       },
       'compile_targets': [ 'chromium_builder_tests' ],
       'goma_canary': True,
+      'tests': steps.GOMA_TESTS,
       'testing': {
         'platform': 'linux'
       }
@@ -801,6 +812,7 @@ SPEC = {
       },
       'compile_targets': [ 'chromium_builder_tests' ],
       'goma_canary': True,
+      'tests': steps.GOMA_TESTS,
       'testing': {
         'platform': 'mac'
       }
@@ -813,6 +825,7 @@ SPEC = {
       },
       'compile_targets': [ 'chromium_builder_tests' ],
       'goma_canary': True,
+      'tests': steps.GOMA_TESTS,
       'testing': {
         'platform': 'mac'
       }
@@ -825,6 +838,7 @@ SPEC = {
       },
       'compile_targets': [ 'chromium_builder_tests' ],
       'goma_canary': True,
+      'tests': steps.GOMA_TESTS,
       'testing': {
         'platform': 'mac'
       }
@@ -837,6 +851,7 @@ SPEC = {
       },
       'compile_targets': [ 'chromium_builder_tests' ],
       'goma_canary': True,
+      'tests': steps.GOMA_TESTS,
       'testing': {
         'platform': 'mac'
       }
