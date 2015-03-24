@@ -314,6 +314,46 @@ SPEC = {
         'platform': 'win',
       },
     },
+    'Cast Linux': {
+      'recipe_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'GYP_DEFINES': {
+        'component': 'shared_library',
+        'chromecast': 1,
+      },
+      'compile_targets': [
+        'cast_shell'
+      ],
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+    'Cast Android (dbg)': {
+      'recipe_config': 'chromium_android',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 32,
+        'TARGET_PLATFORM': 'android',
+      },
+      'android_config': 'main_builder',
+      'GYP_DEFINES': {
+        'component': 'shared_library',
+        'chromecast': 1,
+      },
+      'compile_targets': [
+        'cast_shell_apk'
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+    },
     'ChromiumPractice': {
       'recipe_config': 'chromium_blink_merged',
       'chromium_config_kwargs': {

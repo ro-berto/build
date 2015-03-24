@@ -57,6 +57,14 @@ BUILDERS = freeze({
         'mastername': 'chromium.linux',
         'buildername': 'Android x86 Builder (dbg)',
       },
+      'cast_shell_linux': {
+        'mastername': 'chromium.fyi',
+        'buildername': 'Cast Linux',
+      },
+      'cast_shell_android': {
+        'mastername': 'chromium.fyi',
+        'buildername': 'Cast Android (dbg)',
+      },
       'linux_android_dbg_ng': {
         'mastername': 'chromium.linux',
         'buildername': 'Android Builder (dbg)',
