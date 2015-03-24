@@ -507,4 +507,243 @@ SPEC['builders'].update({
       'platform': 'linux',
     },
   },
+  'WebKit Win Oilpan': {
+    'recipe_config': 'chromium',
+    'gclient_apply_config': ['blink_or_chromium'],
+    'chromium_apply_config': ['oilpan'],
+    'chromium_config_kwargs': {
+      'BUILD_CONFIG': 'Release',
+      'TARGET_BITS': 32,
+    },
+    'test_generators': [
+      steps.generate_gtest,
+      steps.generate_script,
+    ],
+    'tests': [
+      steps.BlinkTest(extra_args=[
+          '--additional-expectations',
+          'src\\third_party\\WebKit\\LayoutTests\\OilpanExpectations',
+      ]),
+    ],
+    'testing': {
+      'platform': 'win',
+    },
+    'enable_swarming': True,
+    'use_isolate': True,
+  },
+  'WebKit Win Oilpan (dbg)': {
+    'recipe_config': 'chromium',
+    'gclient_apply_config': ['blink_or_chromium'],
+    'chromium_apply_config': ['oilpan'],
+    'chromium_config_kwargs': {
+      'BUILD_CONFIG': 'Debug',
+      'TARGET_BITS': 32,
+    },
+    'test_generators': [
+      steps.generate_gtest,
+      steps.generate_script,
+    ],
+    'tests': [
+      steps.BlinkTest(extra_args=[
+          '--additional-expectations',
+          'src\\third_party\\WebKit\\LayoutTests\\OilpanExpectations',
+      ]),
+    ],
+    'testing': {
+      'platform': 'win',
+    },
+    'enable_swarming': True,
+    'use_isolate': True,
+  },
+  'WebKit Mac Oilpan': {
+    'recipe_config': 'chromium',
+    'gclient_apply_config': ['blink_or_chromium'],
+    'chromium_apply_config': ['oilpan'],
+    'chromium_config_kwargs': {
+      'BUILD_CONFIG': 'Release',
+      'TARGET_BITS': 64,
+    },
+    'test_generators': [
+      steps.generate_gtest,
+      steps.generate_script,
+    ],
+    'tests': [
+      steps.BlinkTest(extra_args=[
+          '--additional-expectations',
+          'src/third_party/WebKit/LayoutTests/OilpanExpectations',
+      ]),
+    ],
+    'testing': {
+      'platform': 'mac',
+    },
+    'enable_swarming': True,
+    'use_isolate': True,
+  },
+  'WebKit Mac Oilpan (dbg)': {
+    'recipe_config': 'chromium',
+    'gclient_apply_config': ['blink_or_chromium'],
+    'chromium_apply_config': ['oilpan'],
+    'chromium_config_kwargs': {
+      'BUILD_CONFIG': 'Debug',
+      'TARGET_BITS': 64,
+    },
+    'test_generators': [
+      steps.generate_gtest,
+      steps.generate_script,
+    ],
+    'tests': [
+      steps.BlinkTest(extra_args=[
+          '--additional-expectations',
+          'src/third_party/WebKit/LayoutTests/OilpanExpectations',
+      ]),
+    ],
+    'testing': {
+      'platform': 'mac',
+    },
+    'enable_swarming': True,
+    'use_isolate': True,
+  },
+  'WebKit Linux Oilpan': {
+    'recipe_config': 'chromium',
+    'gclient_apply_config': ['blink_or_chromium'],
+    'chromium_apply_config': ['oilpan'],
+    'chromium_config_kwargs': {
+      'BUILD_CONFIG': 'Release',
+      'TARGET_BITS': 64,
+    },
+    'compile_targets': [
+      'blink_tests',
+    ],
+    'test_generators': [
+      steps.generate_gtest,
+      steps.generate_script,
+    ],
+    'tests': [
+      steps.BlinkTest(extra_args=[
+          '--additional-expectations',
+          'src/third_party/WebKit/LayoutTests/OilpanExpectations',
+      ]),
+    ],
+    'testing': {
+      'platform': 'linux',
+    },
+    'enable_swarming': True,
+    'use_isolate': True,
+  },
+  'WebKit Linux Oilpan ASAN': {
+    'recipe_config': 'chromium_clang',
+    'gclient_apply_config': ['blink_or_chromium'],
+    'chromium_apply_config': ['oilpan', 'asan'],
+    'chromium_config_kwargs': {
+      'BUILD_CONFIG': 'Release',
+      'TARGET_BITS': 64,
+    },
+    'compile_targets': [
+      'blink_tests',
+    ],
+    'test_generators': [
+      steps.generate_gtest,
+      steps.generate_script,
+    ],
+    'tests': [
+      steps.BlinkTest(extra_args=[
+          '--additional-expectations',
+          'src/third_party/WebKit/LayoutTests/ASANExpectations',
+          # ASAN is roughly 8x slower than Release.
+          '--time-out-ms', '48000',
+          '--options=--enable-sanitizer',
+      ]),
+    ],
+    'testing': {
+      'platform': 'linux',
+    },
+    'enable_swarming': True,
+    'use_isolate': True,
+  },
+  'WebKit Linux Leak': {
+    'recipe_config': 'chromium',
+    'gclient_apply_config': ['blink_or_chromium'],
+    'chromium_config_kwargs': {
+      'BUILD_CONFIG': 'Release',
+      'TARGET_BITS': 64,
+    },
+    'compile_targets': [
+      'blink_tests',
+    ],
+    'test_generators': [
+      steps.generate_gtest,
+      steps.generate_script,
+    ],
+    'tests': [
+      steps.BlinkTest(extra_args=[
+          '--additional-expectations',
+          'src/third_party/WebKit/LayoutTests/LeakExpectations',
+          '--options=--enable-leak-detection',
+      ]),
+    ],
+    'testing': {
+      'platform': 'linux',
+    },
+    'enable_swarming': True,
+    'use_isolate': True,
+  },
+  'WebKit Linux Oilpan Leak': {
+    'recipe_config': 'chromium',
+    'gclient_apply_config': ['blink_or_chromium'],
+    'chromium_apply_config': ['oilpan'],
+    'chromium_config_kwargs': {
+      'BUILD_CONFIG': 'Release',
+      'TARGET_BITS': 64,
+    },
+    'compile_targets': [
+      'blink_tests',
+    ],
+    'test_generators': [
+      steps.generate_gtest,
+      steps.generate_script,
+    ],
+    'tests': [
+      steps.BlinkTest(extra_args=[
+          '--additional-expectations',
+          'src/third_party/WebKit/LayoutTests/OilpanExpectations',
+          '--additional-expectations',
+          'src/third_party/WebKit/LayoutTests/LeakExpectations',
+          '--additional-expectations',
+          'src/third_party/WebKit/LayoutTests/OilpanLeakExpectations',
+          '--options=--enable-leak-detection',
+      ]),
+    ],
+    'testing': {
+      'platform': 'linux',
+    },
+    'enable_swarming': True,
+    'use_isolate': True,
+  },
+  'WebKit Linux Oilpan (dbg)': {
+    'recipe_config': 'chromium',
+    'gclient_apply_config': ['blink_or_chromium'],
+    'chromium_apply_config': ['oilpan'],
+    'chromium_config_kwargs': {
+      'BUILD_CONFIG': 'Debug',
+      'TARGET_BITS': 64,
+    },
+    'compile_targets': [
+      'blink_tests',
+    ],
+    'test_generators': [
+      steps.generate_gtest,
+      steps.generate_script,
+    ],
+    'tests': [
+      steps.BlinkTest(extra_args=[
+          '--additional-expectations',
+          'src/third_party/WebKit/LayoutTests/OilpanExpectations',
+      ]),
+    ],
+    'testing': {
+      'platform': 'linux',
+    },
+    'enable_swarming': True,
+    'use_isolate': True,
+  },
 })
