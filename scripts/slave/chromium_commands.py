@@ -380,7 +380,6 @@ class GClient(SourceBaseCommand):
     if self.revision and not self.no_gclient_revision:
       command.append('--revision')
       # Ignore non-svn part of compound revisions.
-      # Used for nacl.sdk.mono waterfall.
       if ':' in self.revision:
         command.append(self.revision.split(':')[0])
       elif (not self.branch or

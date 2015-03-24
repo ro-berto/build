@@ -49,13 +49,6 @@
         "revision-properties": "got_revision_cp",
         "track-revisions": true
     },
-    "nacl-sdk-mono": {
-        "masters": [
-            "https://build.chromium.org/p/client.nacl.sdk.mono"
-        ],
-        "revision-properties": "got_revision_cp",
-        "track-revisions": true
-    },
     "nacl-ports": {
         "build-db": "nacl_ports_build_db.json",
         "masters": [

@@ -77,13 +77,6 @@
       "@@@STEP_LOG_LINE@json.output@    \"revision-properties\": \"got_revision_cp\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"track-revisions\": true@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"nacl-sdk-mono\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"masters\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.nacl.sdk.mono\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    ], @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"revision-properties\": \"got_revision_cp\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"track-revisions\": true@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"non-closers\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"masters\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/chromium.fyi\", @@@",
@@ -176,18 +169,6 @@
       "-v",
       "--json",
       "[BUILD]/scripts/slave/gatekeeper.json",
-      "https://build.chromium.org/p/chromium.perf"
-    ],
-    "name": "gatekeeper: chromium.perf"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/gatekeeper_ng.py",
-      "-v",
-      "--json",
-      "[BUILD]/scripts/slave/gatekeeper.json",
       "--track-revisions",
       "--revision-properties",
       "got_revision_cp",
@@ -203,12 +184,20 @@
       "-v",
       "--json",
       "[BUILD]/scripts/slave/gatekeeper.json",
+      "--status-url",
+      "https://nativeclient-status.appspot.com",
+      "--set-status",
+      "--open-tree",
       "--track-revisions",
       "--revision-properties",
       "got_revision_cp",
-      "https://build.chromium.org/p/client.nacl.sdk.mono"
+      "--build-db",
+      "nacl_build_db.json",
+      "--password-file",
+      "/creds/gatekeeper/nacl_status_password",
+      "https://build.chromium.org/p/client.nacl"
     ],
-    "name": "gatekeeper: nacl-sdk-mono"
+    "name": "gatekeeper: nacl"
   },
   {
     "cmd": [
@@ -264,20 +253,9 @@
       "-v",
       "--json",
       "[BUILD]/scripts/slave/gatekeeper.json",
-      "--status-url",
-      "https://nativeclient-status.appspot.com",
-      "--set-status",
-      "--open-tree",
-      "--track-revisions",
-      "--revision-properties",
-      "got_revision_cp",
-      "--build-db",
-      "nacl_build_db.json",
-      "--password-file",
-      "/creds/gatekeeper/nacl_status_password",
-      "https://build.chromium.org/p/client.nacl"
+      "https://build.chromium.org/p/chromium.perf"
     ],
-    "name": "gatekeeper: nacl"
+    "name": "gatekeeper: chromium.perf"
   },
   {
     "cmd": [
