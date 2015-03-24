@@ -82,23 +82,7 @@ F('f_webkit_rel_tests_109', m_annotator.BaseFactory('chromium'))
 
 B('WebKit Mac Oilpan', 'f_webkit_mac_oilpan_rel', scheduler='global_scheduler',
     category='oilpan')
-F('f_webkit_mac_oilpan_rel', mac().ChromiumFactory(
-    tests=chromium_factory.blink_tests,
-    options=['--build-tool=ninja', '--compiler=goma-clang', '--',
-        'blink_tests'],
-    factory_properties={
-        'additional_expectations': [
-            ['third_party', 'WebKit', 'LayoutTests', 'OilpanExpectations'],
-        ],
-        'archive_webkit_results': ActiveMaster.is_production_host,
-        'blink_config': 'blink',
-        'generate_gtest_json': True,
-        'gclient_env': {
-            'GYP_DEFINES':'enable_oilpan=1 fastbuild=1',
-            'GYP_GENERATORS':'ninja',
-        },
-        'test_results_server': 'test-results.appspot.com',
-    }))
+F('f_webkit_mac_oilpan_rel', m_annotator.BaseFactory('chromium'))
 
 
 ################################################################################
@@ -134,24 +118,7 @@ F('f_webkit_dbg_tests', m_annotator.BaseFactory('chromium'))
 
 B('WebKit Mac Oilpan (dbg)', 'f_webkit_mac_oilpan_dbg',
     scheduler='global_scheduler', category='oilpan')
-F('f_webkit_mac_oilpan_dbg', mac().ChromiumFactory(
-    target='Debug',
-    tests=chromium_factory.blink_tests,
-    options=['--build-tool=ninja', '--compiler=goma-clang', '--',
-        'blink_tests'],
-    factory_properties={
-        'additional_expectations': [
-            ['third_party', 'WebKit', 'LayoutTests', 'OilpanExpectations'],
-        ],
-        'archive_webkit_results': ActiveMaster.is_production_host,
-        'blink_config': 'blink',
-        'generate_gtest_json': True,
-        'gclient_env': {
-            'GYP_DEFINES':'enable_oilpan=1',
-            'GYP_GENERATORS':'ninja',
-        },
-        'test_results_server': 'test-results.appspot.com',
-    }))
+F('f_webkit_mac_oilpan_dbg', m_annotator.BaseFactory('chromium'))
 
 
 ################################################################################

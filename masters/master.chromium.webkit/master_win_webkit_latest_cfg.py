@@ -63,22 +63,7 @@ F('f_webkit_win_rel_x64', m_annotator.BaseFactory('chromium'))
 
 B('WebKit Win Oilpan', 'f_webkit_win_oilpan_rel', scheduler='global_scheduler',
     category='oilpan')
-F('f_webkit_win_oilpan_rel', win().ChromiumFactory(
-    tests=chromium_factory.blink_tests,
-    options=['--build-tool=ninja', '--', 'blink_tests'],
-    factory_properties={
-        'additional_expectations': [
-            ['third_party', 'WebKit', 'LayoutTests', 'OilpanExpectations'],
-        ],
-        'archive_webkit_results': ActiveMaster.is_production_host,
-        'blink_config': 'blink',
-        'generate_gtest_json': True,
-        'gclient_env': {
-            'GYP_DEFINES':'enable_oilpan=1',
-            'GYP_GENERATORS':'ninja',
-        },
-        'test_results_server': 'test-results.appspot.com',
-    }))
+F('f_webkit_win_oilpan_rel', m_annotator.BaseFactory('chromium'))
 
 
 ################################################################################
@@ -108,24 +93,7 @@ F('f_webkit_dbg_tests', m_annotator.BaseFactory('chromium'))
 
 B('WebKit Win Oilpan (dbg)', 'f_webkit_win_oilpan_dbg',
   scheduler='global_scheduler', category='oilpan')
-F('f_webkit_win_oilpan_dbg', win().ChromiumFactory(
-    target='Debug',
-    tests=chromium_factory.blink_tests,
-    options=['--build-tool=ninja', '--', 'blink_tests'],
-    factory_properties={
-        'additional_expectations': [
-            ['third_party', 'WebKit', 'LayoutTests', 'OilpanExpectations'],
-        ],
-        'archive_webkit_results': ActiveMaster.is_production_host,
-        'blink_config': 'blink',
-        'generate_gtest_json': True,
-        'gclient_env': {
-            'GYP_DEFINES':'enable_oilpan=1',
-            'GYP_GENERATORS':'ninja',
-        },
-        'test_results_server': 'test-results.appspot.com',
-    }))
-
+F('f_webkit_win_oilpan_dbg', m_annotator.BaseFactory('chromium'))
 
 #
 # Win x64 Dbg Builder (note: currently no x64 testers)
