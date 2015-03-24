@@ -343,7 +343,7 @@ F('linux_tsan_dbg', linux().ChromiumFactory(
 # The build process for MSan is described at
 # http://dev.chromium.org/developers/testing/memorysanitizer
 msan_gyp = ('msan=1 sanitizer_coverage=3 '
-            'use_instrumented_libraries=1 instrumented_libraries_jobs=5 ')
+            'use_prebuilt_instrumented_libraries=1 ')
 
 B('MSAN Release (no origins)', 'linux_msan_rel_no_origins', 'compile',
   'chromium_lkgr')
