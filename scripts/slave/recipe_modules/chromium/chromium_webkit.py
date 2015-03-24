@@ -497,7 +497,7 @@ SPEC['builders'].update({
     'tests': [
       steps.GTestTest('blink_heap_unittests'),
       steps.GTestTest('webkit_unit_tests'),
-      steps.BlinkTest(),
+      steps.BlinkTest(use_runtest=False),
     ],
     'test_generators': [
       steps.generate_gtest,
