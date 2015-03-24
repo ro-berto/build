@@ -11,7 +11,7 @@ SPEC = {
   'builders': {
     'Chromium Linux MSan Builder': {
       'recipe_config': 'chromium_msan',
-      'chromium_apply_config': ['instrumented_libraries'],
+      'chromium_apply_config': ['prebuilt_instrumented_libraries'],
       'GYP_DEFINES': {
         'msan_track_origins': 2,
       },
@@ -41,7 +41,7 @@ SPEC = {
     },
     'Chromium Linux ChromeOS MSan Builder': {
       'recipe_config': 'chromium_msan',
-      'chromium_apply_config': ['instrumented_libraries'],
+      'chromium_apply_config': ['prebuilt_instrumented_libraries'],
       'GYP_DEFINES': {
         'msan_track_origins': 2,
         'chromeos': 1
