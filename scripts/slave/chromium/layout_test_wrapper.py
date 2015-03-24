@@ -133,7 +133,8 @@ def layout_test(options, args):
     command.append('--enable-leak-detection')
 
   # The list of tests is given as arguments.
-  command.extend(options.options.split(' '))
+  if options.options:
+    command.extend(options.options.split(' '))
   command.extend(args)
 
   # Nuke anything that appears to be stale chrome items in the temporary
