@@ -419,7 +419,7 @@ SPEC['builders'].update({
   'WebKit Linux MSAN': {
     'recipe_config': 'chromium_clang',
     'chromium_apply_config': [
-      'instrumented_libraries',
+      'prebuilt_instrumented_libraries',
       'msan',
       'msan_full_origin_tracking',
     ],
