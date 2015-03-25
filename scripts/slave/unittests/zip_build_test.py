@@ -4,6 +4,7 @@
 # found in the LICENSE file.
 
 import os
+import shutil
 import tempfile
 import unittest
 
@@ -17,14 +18,15 @@ class TestWriteRevisionFile(unittest.TestCase):
   def testWriteFile(self):
     tempdir = tempfile.mkdtemp()
     revision = '123'
-    revision_filename = zip_build.WriteRevisionFile(tempdir, revision)
+    try:
+      revision_filename = zip_build.WriteRevisionFile(tempdir, revision)
 
-    self.assertEquals(revision, open(revision_filename).read().strip())
-    self.assertTrue(os.path.exists(revision_filename))
-    self.assertEquals(revision_filename,
-                      os.path.join(tempdir,
-                                   chromium_utils.FULL_BUILD_REVISION_FILENAME))
-
+      self.assertEquals(revision, open(revision_filename).read().strip())
+      self.assertTrue(os.path.exists(revision_filename))
+      self.assertEquals(revision_filename,
+          os.path.join(tempdir, chromium_utils.FULL_BUILD_REVISION_FILENAME))
+    finally:
+      shutil.rmtree(tempdir)
 
 if __name__ == '__main__':
   unittest.main()
