@@ -515,6 +515,11 @@ SPEC['builders'].update({
       'BUILD_CONFIG': 'Release',
       'TARGET_BITS': 32,
     },
+    'compile_targets': [
+      # TODO(phajdan.jr): Find a way to automatically add crash_service
+      # to Windows builds (so that start_crash_service step works).
+      'crash_service',
+    ],
     'test_generators': [
       steps.generate_gtest,
       steps.generate_script,
@@ -539,6 +544,11 @@ SPEC['builders'].update({
       'BUILD_CONFIG': 'Debug',
       'TARGET_BITS': 32,
     },
+    'compile_targets': [
+      # TODO(phajdan.jr): Find a way to automatically add crash_service
+      # to Windows builds (so that start_crash_service step works).
+      'crash_service',
+    ],
     'test_generators': [
       steps.generate_gtest,
       steps.generate_script,
