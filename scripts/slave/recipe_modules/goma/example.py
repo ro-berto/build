@@ -3,12 +3,19 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'goma'
+  'goma',
+  'step'
 ]
 
 def GenSteps(api):
   api.goma.diagnose_goma()
+  # check a step runs after diagnose_goma failed.
+  api.step('hello', ['echo', 'kotori'])
 
 
 def GenTests(api):
   yield api.test('basic')
+  yield (
+    api.test('basic_with_failure') +
+    api.step_data('diagnose_goma', retcode=1)
+  )

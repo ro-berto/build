@@ -15,6 +15,9 @@ class GomaApi(recipe_api.RecipeApi):
 
   def diagnose_goma(self):
     """Returns a step for checking goma log."""
-    self.m.python('diagnose_goma',
-                  self.m.path['build'].join('goma', 'diagnose_goma_log.py'),
-                  ok_ret='any')
+    try:
+      self.m.python('diagnose_goma',
+                    self.m.path['build'].join('goma', 'diagnose_goma_log.py'))
+    except self.m.step.StepFailure:
+      # Ignore diagnose_goma failures.
+      pass
