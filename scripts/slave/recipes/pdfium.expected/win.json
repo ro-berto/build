@@ -37,7 +37,9 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]\\pdfium\\build\\gyp_pdfium"
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\pdfium\\build\\gyp_pdfium.py"
     ],
     "env": {
       "GYP_GENERATORS": "ninja"
@@ -67,6 +69,8 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]\\pdfium\\testing\\tools\\run_javascript_tests.py"
     ],
     "cwd": "[SLAVE_BUILD]\\pdfium",
@@ -74,6 +78,8 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]\\pdfium\\testing\\tools\\run_pixel_tests.py"
     ],
     "cwd": "[SLAVE_BUILD]\\pdfium",
@@ -81,6 +87,8 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]\\pdfium\\testing\\tools\\run_corpus_tests.py"
     ],
     "cwd": "[SLAVE_BUILD]\\pdfium",

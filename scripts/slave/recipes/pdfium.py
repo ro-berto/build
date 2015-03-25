@@ -7,6 +7,7 @@ DEPS = [
   'path',
   'platform',
   'properties',
+  'python',
   'step',
 ]
 
@@ -19,8 +20,8 @@ def _CheckoutSteps(api):
 
 def _BuildSteps(api):
   # Generate build files for Ninja
-  gyp_path = api.path['checkout'].join('build', 'gyp_pdfium')
-  api.step('gyp_pdfium', [gyp_path], env={'GYP_GENERATORS': 'ninja'})
+  gyp_path = api.path['checkout'].join('build', 'gyp_pdfium.py')
+  api.python('gyp_pdfium', gyp_path, env={'GYP_GENERATORS': 'ninja'})
 
   # Build sample file using Ninja
   debug_path = api.path['checkout'].join('out', 'Debug')
@@ -43,15 +44,15 @@ def _RunTests(api):
 
   javascript_path = str(api.path['checkout'].join('testing', 'tools',
                                                   'run_javascript_tests.py'))
-  api.step('javascript tests', [javascript_path], cwd=api.path['checkout'])
+  api.python('javascript tests', javascript_path, cwd=api.path['checkout'])
 
   pixel_tests_path = str(api.path['checkout'].join('testing', 'tools',
                                                    'run_pixel_tests.py'))
-  api.step('pixel tests', [pixel_tests_path], cwd=api.path['checkout'])
+  api.python('pixel tests', pixel_tests_path, cwd=api.path['checkout'])
 
   corpus_tests_path = str(api.path['checkout'].join('testing', 'tools',
                                                     'run_corpus_tests.py'))
-  api.step('corpus tests', [corpus_tests_path], cwd=api.path['checkout'])
+  api.python('corpus tests', corpus_tests_path, cwd=api.path['checkout'])
 
 def GenSteps(api):
   _CheckoutSteps(api)
