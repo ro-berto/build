@@ -1048,10 +1048,9 @@ class AndroidInstrumentationTest(Test):
 class BlinkTest(Test):
   # TODO(dpranke): This should be converted to a PythonBasedTest, although it
   # will need custom behavior because we archive the results as well.
-  def __init__(self, extra_args=None, use_runtest=True):
+  def __init__(self, extra_args=None):
     super(BlinkTest, self).__init__()
     self._extra_args = extra_args
-    self._use_runtest = use_runtest
 
   name = 'webkit_tests'
 
@@ -1081,20 +1080,12 @@ class BlinkTest(Test):
                    '--skipped', 'always'])
 
     try:
-      script = api.path['build'].join(
-          'scripts', 'slave', 'chromium', 'layout_test_wrapper.py')
-      if self._use_runtest:
-        runner = api.chromium.runtest
-        runner_kwargs = {'test': script}
-      else:
-        runner = api.python
-        runner_kwargs = {'script': script}
-      step_result = runner(
-          name=self._step_name(suffix),
-          args=args,
+      step_result = api.chromium.runtest(
+          api.path['build'].join('scripts', 'slave', 'chromium',
+                                 'layout_test_wrapper.py'),
+          args, name=self._step_name(suffix),
           step_test_data=lambda: api.test_utils.test_api.canned_test_output(
-              passing=True, minimal=True),
-          **runner_kwargs)
+              passing=True, minimal=True))
 
       # Mark steps with unexpected flakes as warnings. Do this here instead of
       # "finally" blocks because we only want to do this if step was successful.
