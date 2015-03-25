@@ -172,7 +172,7 @@ B('ASAN Release', 'linux_asan_rel', 'compile', 'chromium_lkgr')
 F('linux_asan_rel', linux().ChromiumASANFactory(
     compile_timeout=2400,  # We started seeing 29 minute links, bug 360158
     clobber=True,
-    options=['--compiler=clang', 'chromium_builder_asan'],
+    options=['--compiler=goma-clang', 'chromium_builder_asan'],
     factory_properties={
        'cf_archive_build': ActiveMaster.is_production_host,
        'cf_archive_name': 'asan',
@@ -187,7 +187,7 @@ B('ASAN Release Proprietary Codecs', 'linux_asan_rel_prop_codecs',
 F('linux_asan_rel_prop_codecs', linux().ChromiumASANFactory(
     compile_timeout=2400,  # We started seeing 29 minute links, bug 360158
     clobber=True,
-    options=['--compiler=clang', 'chromium_builder_asan'],
+    options=['--compiler=goma-clang', 'chromium_builder_asan'],
     factory_properties={
        'cf_archive_build': ActiveMaster.is_production_host,
        'cf_archive_name': 'asan',
@@ -203,7 +203,7 @@ asan_rel_sym_gyp = ('asan=1 lsan=1 sanitizer_coverage=3 '
 B('ASAN Release (symbolized)', 'linux_asan_rel_sym', 'compile', 'chromium_lkgr')
 F('linux_asan_rel_sym', linux().ChromiumASANFactory(
     clobber=True,
-    options=['--compiler=clang', 'chromium_builder_asan'],
+    options=['--compiler=goma-clang', 'chromium_builder_asan'],
     factory_properties={
        'cf_archive_build': ActiveMaster.is_production_host,
        'cf_archive_name': 'asan-symbolized',
@@ -217,7 +217,7 @@ B('ASAN Debug', 'linux_asan_dbg', 'compile', 'chromium_lkgr')
 F('linux_asan_dbg', linux().ChromiumASANFactory(
     clobber=True,
     target='Debug',
-    options=['--compiler=clang', 'chromium_builder_asan'],
+    options=['--compiler=goma-clang', 'chromium_builder_asan'],
     factory_properties={
        'cf_archive_build': ActiveMaster.is_production_host,
        'cf_archive_name': 'asan',
@@ -232,7 +232,7 @@ B('ChromiumOS ASAN Release', 'linux_chromiumos_asan_rel', 'compile',
 F('linux_chromiumos_asan_rel', linux().ChromiumASANFactory(
     compile_timeout=2400,  # We started seeing 29 minute links, bug 360158
     clobber=True,
-    options=['--compiler=clang', 'chromium_builder_asan'],
+    options=['--compiler=goma-clang', 'chromium_builder_asan'],
     factory_properties={
        'cf_archive_build': ActiveMaster.is_production_host,
        'cf_archive_name': 'asan',
