@@ -18,8 +18,11 @@ from infra.libs.infra_types import freeze
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
-# List of files that are known to be non deterministic. This is a temporary
+# List of files that are known to be non deterministic. This is a "temporary"
 # workaround to find regression on the deterministic builders.
+#
+# PNaCl general bug: http://crbug.com/429358
+#
 # TODO(sebmarchand): Remove this once all the files are deterministic.
 WHITELIST = freeze({
   # http://crbug.com/383340
@@ -34,7 +37,10 @@ WHITELIST = freeze({
 
   # http://crbug.com/330263
   'linux': {
-    # Completed.
+    'browser_tests.isolated',
+    'irt_exception_test_pnacl_newlib_x64.nexe',
+    'irt_manifest_file_pnacl_newlib_x64.nexe',
+    'ppapi_tests_extensions_packaged_app_pnacl_newlib_x64.nexe',
   },
 
   # http://crbug.com/330262
