@@ -21,11 +21,14 @@ def GenSteps(api):
   if api.properties.get('use_curl_trace'):
     curl_trace_file = api.path['slave_build'].join('curl_trace.log')
 
+  submodule_update_force = api.properties.get('submodule_update_force', False)
+
   # You can use api.git.checkout to perform all the steps of a safe checkout.
   api.git.checkout(
       url,
       ref=api.properties.get('revision'),
       recursive=True,
+      submodule_update_force=submodule_update_force,
       set_got_revision=api.properties.get('set_got_revision'),
       curl_trace_file=curl_trace_file,
       remote_name=api.properties.get('remote_name'),
@@ -77,6 +80,7 @@ def GenTests(api):
   yield api.test('basic_hash') + api.properties(
       revision='abcdef0123456789abcdef0123456789abcdef01')
   yield api.test('basic_file_name') + api.properties(checkout_file_name='DEPS')
+  yield api.test('basic_submodule_update_force') + api.properties(submodule_update_force=True)
 
   yield api.test('platform_win') + api.platform.name('win')
 

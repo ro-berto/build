@@ -106,7 +106,8 @@ class GitApi(recipe_api.RecipeApi):
       return None
 
   def checkout(self, url, ref=None, dir_path=None, recursive=False,
-               submodules=True, keep_paths=None, step_suffix=None,
+               submodules=True, submodule_update_force=False,
+               keep_paths=None, step_suffix=None,
                curl_trace_file=None, can_fail_build=True,
                set_got_revision=False, remote_name=None,
                display_fetch_size=None, file_name=None):
@@ -117,6 +118,7 @@ class GitApi(recipe_api.RecipeApi):
       dir_path (Path): optional directory to clone into
       recursive (bool): whether to recursively fetch submodules or not
       submodules (bool): whether to sync and update submodules or not
+      submodule_update_force (bool): whether to update submodules with --force
       keep_paths (iterable of strings): paths to ignore during git-clean;
           paths are gitignore-style patterns relative to checkout_path.
       step_suffix (str): suffix to add to a each step name
@@ -263,7 +265,10 @@ class GitApi(recipe_api.RecipeApi):
         name='submodule sync%s' % step_suffix,
         cwd=dir_path,
         can_fail_build=can_fail_build)
-      self('submodule', 'update', '--init', '--recursive',
+      submodule_update = ['submodule', 'update', '--init', '--recursive']
+      if submodule_update_force:
+        submodule_update.append('--force')
+      self(*submodule_update,
         name='submodule update%s' % step_suffix,
         cwd=dir_path,
         can_fail_build=can_fail_build)
