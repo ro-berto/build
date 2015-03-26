@@ -21,26 +21,6 @@ endif
 # include this file.
 SHORT_HOSTNAME := $(shell hostname -s)
 
-# On the Mac, the buildbot is started via the launchd mechanism as a
-# LaunchAgent to give the slave a proper Mac UI environment for tests.  In
-# order for this to work, the plist must be present and loaded by launchd, and
-# the user must be logged in to the UI.  The plist is loaded by launchd at user
-# login (and the job may have been initially started at that time too).  Our
-# Mac build slaves are all set up this way, and have auto-login enabled, so
-# "make start" should just work and do the right thing.
-#
-# When using launchd to start the job, it also needs to be used to stop the
-# job.  Otherwise, launchd might try to restart the job when stopped manually
-# by SIGTERM.  Using SIGHUP for reconfig is safe with launchd.
-#
-# Because it's possible to have more than one slave on a machine (for testing),
-# this tests to make sure that the slave is in the known slave location,
-# /b/slave, which is what the LaunchAgent operates on.
-USE_LAUNCHD := \
-  $(shell [ -f ~/Library/LaunchAgents/org.chromium.buildbot.$(MASTERPATH).plist ] && \
-          [ "$$(pwd -P)" = "/b/build/masters/$(MASTERPATH)" ] && \
-          echo 1)
-
 printstep:
 ifndef NO_REVISION_AUDIT
 	@echo "**  `date`	make $(MAKECMDGOALS)" >> actions.log
@@ -59,36 +39,20 @@ ifndef NO_REVISION_AUDIT
 	$(GCLIENT) revinfo -a >> actions.log || true
 	$(GCLIENT) diff >> actions.log || true
 endif
-ifneq ($(USE_LAUNCHD),1)
 	PYTHONPATH=$(PYTHONPATH) python $(SCRIPTS_DIR)/common/twistd --no_save -y buildbot.tac
-else
-	launchctl start org.chromium.buildbot.$(MASTERPATH)
-endif
 
 ifeq ($(BUILDBOT_PATH),$(BUILDBOT8_PATH))
 start-prof: bootstrap
 else
 start-prof:
 endif
-ifneq ($(USE_LAUNCHD),1)
 	TWISTD_PROFILE=1 PYTHONPATH=$(PYTHONPATH) python $(SCRIPTS_DIR)/common/twistd --no_save -y buildbot.tac
-else
-	launchctl start org.chromium.buildbot.$(MASTERPATH)
-endif
 
 stop: printstep
-ifneq ($(USE_LAUNCHD),1)
 	if `test -f twistd.pid`; then kill -TERM -$$(ps h -o pgid= $$(cat twistd.pid) | awk '{print $$1}'); fi;
-else
-	launchctl stop org.chromium.buildbot.$(MASTERPATH)
-endif
 
 kill: printstep
-ifneq ($(USE_LAUNCHD),1)
 	if `test -f twistd.pid`; then kill -KILL -$$(ps h -o pgid= $$(cat twistd.pid) | awk '{print $$1}'); fi;
-else
-	launchctl stop org.chromium.buildbot.$(MASTERPATH)
-endif
 
 reconfig: printstep
 	kill -HUP `cat twistd.pid`
@@ -100,7 +64,7 @@ log:
 	tail -F twistd.log
 
 exceptions:
-	# Searches for exception in the last 11 log files.
+# Searches for exception in the last 11 log files.
 	grep -A 10 "exception caught here" twistd.log twistd.log.?
 
 last-restart:
