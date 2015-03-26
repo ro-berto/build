@@ -6,8 +6,9 @@
 
 from contextlib import contextmanager
 import ast
-import copy
+import base64
 import cStringIO
+import copy
 import errno
 import fnmatch
 import glob
@@ -22,10 +23,11 @@ import string  # pylint: disable=W0402
 import subprocess
 import sys
 import threading
-import traceback
 import time
+import traceback
 import urllib
 import zipfile
+import zlib
 
 try:
   import json  # pylint: disable=F0401
@@ -1408,6 +1410,20 @@ def RunSlavesCfg(slaves_cfg, fail_hard=False):
 def convert_json(option, _, value, parser):
   """Provide an OptionParser callback to unmarshal a JSON string."""
   setattr(parser.values, option.dest, json.loads(value))
+
+
+def b64_gz_json_encode(obj):
+  """Serialize a python object into base64."""
+  # The |separators| argument is to densify the command line.
+  return base64.b64encode(zlib.compress(
+      json.dumps(obj or {}, sort_keys=True, separators=(',', ':')), 9))
+
+
+def convert_gz_json(option, _, value, parser):
+  """Provide an OptionParser callback to unmarshal a b64 gz JSON string."""
+  setattr(
+      parser.values, option.dest,
+      json.loads(zlib.decompress(base64.b64decode(value))))
 
 
 def SafeTranslate(inputstr):

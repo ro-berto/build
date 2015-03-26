@@ -8,10 +8,12 @@ All the utility functions to add steps to a build factory here are not
 project-specific. See the other *_commands.py for project-specific commands.
 """
 
+import base64
 import json
 import ntpath
 import posixpath
 import re
+import zlib
 
 from buildbot.locks import SlaveLock
 from buildbot.process.properties import WithProperties
@@ -224,6 +226,24 @@ class CompileWithRequiredSwarmTargets(shell.Compile):
     return shell.Compile.start(self)
 
 
+class WithJsonProperties(WithProperties):
+  def __init__(self, fmtstring, transform=None, *args, **kwargs):
+    WithProperties.__init__(self, fmtstring, *args, **kwargs)
+    self.transform = transform
+    if not self.transform:
+      self.transform = lambda x: x
+
+  def getRenderingFor(self, build):
+    ret = build.getProperties().asDict()
+    # asDict returns key -> (value, source), so get the values, and convert
+    # empty values to blank strings.
+    for k in ret:
+      ret[k] = ret[k][0] or ''
+    for k, v in self.lambda_subs.iteritems():
+      ret[k] = v(build)
+    return self.fmtstring % self.transform(ret)
+
+
 class FactoryCommands(object):
   # Use this to prevent steps which cannot be run on the same
   # slave from being done together (in the case where slaves are
@@ -425,23 +445,28 @@ class FactoryCommands(object):
       cmd.extend(arg_list)
     return cmd
 
+  def AddB64GzBuildProperties(self, cmd=None):
+    """Adds a WithProperties() call with build properties to cmd."""
+    # pylint: disable=R0201
+    cmd = cmd or []
+    cmd.append(WithJsonProperties(
+        '--build-properties-gz=%s',
+        transform=chromium_utils.b64_gz_json_encode))
+    return cmd
+
+  def AddB64GzFactoryProperties(self, factory_properties, cmd=None):
+    """Adds factory properties to cmd."""
+    # pylint: disable=R0201
+    cmd = cmd or []
+    cmd.append(
+        '--factory-properties-gz=%s'
+        % chromium_utils.b64_gz_json_encode(factory_properties))
+    return cmd
+
   def AddBuildProperties(self, cmd=None):
     """Adds a WithProperties() call with build properties to cmd."""
     # pylint: disable=R0201
     cmd = cmd or []
-
-    class WithJsonProperties(WithProperties):
-      def getRenderingFor(self, build):
-        ret = build.getProperties().asDict()
-        # asDict returns key -> (value, source), so get the values, and convert
-        # empty values to blank strings.
-        for k in ret:
-          ret[k] = ret[k][0] or ''
-        for k, v in self.lambda_subs.iteritems():
-          ret[k] = v(build)
-        # The |separators| argument is to densify the command line.
-        jstr = json.dumps(ret, sort_keys=True, separators=(',', ':'))
-        return self.fmtstring % jstr
 
     def gen_blamelist_string(build):
       blame = ','.join(build.getProperty('blamelist'))
@@ -451,6 +476,8 @@ class FactoryCommands(object):
     cmd.append(
       WithJsonProperties(
         '--build-properties=%s',
+        transform=lambda x: json.dumps(
+            x, sort_keys=True, separators=(',', ':')),
         blamelist=gen_blamelist_string,
         blamelist_real=lambda b: b.getProperty('blamelist')))
 

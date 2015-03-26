@@ -29,8 +29,8 @@ class AnnotatorCommands(commands.FactoryCommands):
     factory_properties = factory_properties or {}
     runner = self.PathJoin(self._script_dir, 'annotated_run.py')
     cmd = [self._python, '-u', runner]
-    cmd = self.AddBuildProperties(cmd)
-    cmd = self.AddFactoryProperties(factory_properties, cmd)
+    cmd = self.AddB64GzBuildProperties(cmd)
+    cmd = self.AddB64GzFactoryProperties(factory_properties, cmd)
     self._factory.addStep(chromium_step.AnnotatedCommand,
                           name='steps',
                           description='running steps via annotated script',
