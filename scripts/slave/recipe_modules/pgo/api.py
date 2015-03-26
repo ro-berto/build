@@ -45,7 +45,8 @@ class PGOApi(recipe_api.RecipeApi):
     self.m.chromium.runhooks(name='Runhooks: Instrumentation phase.')
     # Remove the profile files from the previous builds.
     self.m.path.rmwildcard('*.pg[cd]', str(self.m.chromium.output_dir))
-    self.m.chromium.compile(name='Compile: Instrumentation phase.')
+    self.m.chromium.compile(name='Compile: Instrumentation phase.',
+                            force_clobber=recipe_config.get('clobber', False))
 
 
   def _run_pgo_benchmarks(self):
