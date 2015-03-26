@@ -97,12 +97,6 @@ GIT_SVN_PROJECT_MAP = {
       (r'trunk/src/native_client', r'refs/heads/master'),
     ],
   },
-  'webrtc': {
-    'svn_url': 'http://webrtc.googlecode.com/svn',
-    'branch_map': [
-      (r'trunk/src', r'refs/heads/master'),
-    ],
-  },
 }
 
 # Key for the 'git-svn' ID metadata commit footer entry.
@@ -288,10 +282,7 @@ HEAD_BUILDERS.update(internal_data.get('HEAD_BUILDERS', {}))
 GIT_MASTERS = [
     'client.v8',
     'client.v8.branches',
-    'client.webrtc',
-    'client.webrtc.fyi',
     'tryserver.v8',
-    'tryserver.webrtc',
 ]
 GIT_MASTERS += internal_data.get('GIT_MASTERS', [])
 
