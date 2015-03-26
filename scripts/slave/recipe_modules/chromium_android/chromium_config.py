@@ -173,3 +173,7 @@ def perf(c):
 def webview_perf(c):
   gyp_defs = c.gyp_env.GYP_DEFINES
   gyp_defs['android_webview_telemetry_build'] = 1
+
+@CONFIG_CTX(includes=['main_builder'])
+def cast_builder(c):
+  c.gyp_env.GYP_DEFINES['chromecast'] = 1

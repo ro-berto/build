@@ -324,7 +324,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'GYP_DEFINES': {
-        'component': 'shared_library',
         'chromecast': 1,
       },
       'compile_targets': [
@@ -345,11 +344,7 @@ SPEC = {
         'TARGET_BITS': 32,
         'TARGET_PLATFORM': 'android',
       },
-      'android_config': 'main_builder',
-      'GYP_DEFINES': {
-        'component': 'shared_library',
-        'chromecast': 1,
-      },
+      'android_config': 'cast_builder',
       'compile_targets': [
         'cast_shell_apk'
       ],
