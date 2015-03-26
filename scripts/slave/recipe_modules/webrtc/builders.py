@@ -765,7 +765,7 @@ BUILDERS = freeze({
       'Linux MSan': {
         'recipe_config': 'webrtc_clang',
         'chromium_apply_config': ['msan', 'msan_full_origin_tracking',
-                                  'instrumented_libraries'],
+                                  'prebuilt_instrumented_libraries'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -1342,7 +1342,7 @@ BUILDERS = freeze({
       'linux_msan': {
         'recipe_config': 'webrtc_clang',
         'chromium_apply_config': ['msan', 'msan_full_origin_tracking',
-                                  'instrumented_libraries'],
+                                  'prebuilt_instrumented_libraries'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,

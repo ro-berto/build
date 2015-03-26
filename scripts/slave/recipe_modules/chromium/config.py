@@ -440,11 +440,6 @@ def msan_full_origin_tracking(c):
   c.gyp_env.GYP_DEFINES['msan_track_origins'] = 2
 
 @config_ctx()
-def instrumented_libraries(c):
-  c.gyp_env.GYP_DEFINES['use_instrumented_libraries'] = 1
-  c.gyp_env.GYP_DEFINES['instrumented_libraries_jobs'] = 10
-
-@config_ctx()
 def prebuilt_instrumented_libraries(c):
   c.gyp_env.GYP_DEFINES['use_prebuilt_instrumented_libraries'] = 1
 
