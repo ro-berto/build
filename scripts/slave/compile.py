@@ -828,22 +828,6 @@ class EnsureUpToDateFilter(chromium_utils.RunCommandFilter):
     return a_line
 
 
-def NeedEnvFileUpdateOnWin(env):
-  """Returns true if environment file need to be updated."""
-  # Following GOMA_* are applied to compiler_proxy not gomacc,
-  # you do not need to update environment files.
-  ignore_envs = (
-      'GOMA_API_KEY_FILE',
-      'GOMA_DEPS_CACHE_DIR',
-      'GOMA_HERMETIC',
-      'GOMA_RPC_EXTRA_PARAMS'
-  )
-  for key in env.keys():
-    if key not in ignore_envs:
-      return True
-  return False
-
-
 def main_ninja(options, args):
   """Interprets options, clobbers object files, and calls ninja."""
 
@@ -863,12 +847,6 @@ def main_ninja(options, args):
     os.chdir(options.src_dir)
 
     command = ['ninja', '-C', options.target_output_dir]
-
-    if chromium_utils.IsWindows() and NeedEnvFileUpdateOnWin(env):
-      # On Windows, we need to update environment.{x86,x64} before running
-      # ninja to reflect overridden environment.
-      print 'Calling runhooks again because of environment override'
-      chromium_utils.RunCommand(['gclient', 'runhooks'], env=env)
 
     if options.clobber:
       print 'Removing %s' % options.target_output_dir
