@@ -126,6 +126,9 @@ def find_xcode(target_version):
 
   xcode_info['previous version'] = get_current_xcode_info()
 
+  if xcode_info['previous version']['version'] == target_version:
+    xcode_info['found'] = True
+
   for app in os.listdir(os.path.join('/', 'Applications')):
     if app.startswith('Xcode'):
       installation_path = os.path.join('/', 'Applications', app)
