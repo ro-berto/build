@@ -71,14 +71,28 @@
       "[SLAVE_BUILD]/skia/platform_tools/chromeos/bin/chromeos_make",
       "-d",
       "link",
-      "most",
+      "dm",
       "BUILDTYPE=Debug"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_arch_width=64 skia_gpu=0 skia_warnings_as_errors=0"
     },
-    "name": "build most"
+    "name": "build dm"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/skia/platform_tools/chromeos/bin/chromeos_make",
+      "-d",
+      "link",
+      "nanobench",
+      "BUILDTYPE=Debug"
+    ],
+    "cwd": "[SLAVE_BUILD]/skia",
+    "env": {
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_arch_width=64 skia_gpu=0 skia_warnings_as_errors=0"
+    },
+    "name": "build nanobench"
   },
   {
     "cmd": [

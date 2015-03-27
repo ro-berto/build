@@ -87,7 +87,7 @@
     "cmd": [
       "python",
       "make.py",
-      "most",
+      "dm",
       "BUILDTYPE=Debug_x64"
     ],
     "cwd": "[SLAVE_BUILD]\\skia",
@@ -95,7 +95,21 @@
       "CHROME_PATH": "/home/chrome-bot/src",
       "GYP_DEFINES": "qt_sdk=C:/Qt/Qt5.1.0/5.1.0/msvc2012_64/ skia_arch_type=x86_64 skia_arch_width=64 skia_gpu=0 skia_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgHelp"
     },
-    "name": "build most"
+    "name": "build dm"
+  },
+  {
+    "cmd": [
+      "python",
+      "make.py",
+      "nanobench",
+      "BUILDTYPE=Debug_x64"
+    ],
+    "cwd": "[SLAVE_BUILD]\\skia",
+    "env": {
+      "CHROME_PATH": "/home/chrome-bot/src",
+      "GYP_DEFINES": "qt_sdk=C:/Qt/Qt5.1.0/5.1.0/msvc2012_64/ skia_arch_type=x86_64 skia_arch_width=64 skia_gpu=0 skia_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgHelp"
+    },
+    "name": "build nanobench"
   },
   {
     "cmd": [

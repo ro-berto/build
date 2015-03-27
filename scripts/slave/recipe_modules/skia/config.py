@@ -49,7 +49,7 @@ VAR_TEST_MAP = {
                    u'Test-Win7-MSVC-ShuttleA-GPU-HD2000-x86-Debug-GDI',
                    u'Test-Win7-MSVC-ShuttleA-GPU-HD2000-x86-Release-ANGLE',
                    u'Test-Win7-MSVC-ShuttleA-CPU-AVX-x86_64-Release',
-                   u'Test-Win8-MSVC-ShuttleA-GPU-GTX660-x86-Release'),
+                   u'Perf-Win8-MSVC-ShuttleA-GPU-GTX660-x86-Release'),
   'MASTER_NAME': (u'client.skia',),
   'SLAVE_NAME': (u'skiabot-shuttle-ubuntu12-003',),
 }
@@ -163,10 +163,10 @@ def gyp_defs_from_builder_dict(builder_dict):
 
 def build_targets_from_builder_dict(builder_dict):
   """Return a list of targets to build, depending on the builder type."""
-  if (builder_dict['role'] == builder_name_schema.BUILDER_ROLE_TEST and
-        (builder_dict.get('extra_config') == 'TSAN' or
-         builder_dict.get('extra_config') == 'ZeroGPUCache')):
-    return ['dm']
+  if builder_dict['role'] == builder_name_schema.BUILDER_ROLE_TEST:
+    return ['dm', 'nanobench']
+  elif builder_dict['role'] == builder_name_schema.BUILDER_ROLE_PERF:
+    return ['nanobench']
   else:
     return ['most']
 

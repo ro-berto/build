@@ -81,7 +81,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_ninja",
-      "most",
+      "dm",
       "-d",
       "xoom"
     ],
@@ -92,7 +92,23 @@
       "GYP_DEFINES": "skia_arch_type=arm skia_arch_width=32 skia_warnings_as_errors=0",
       "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
-    "name": "build most"
+    "name": "build dm"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_ninja",
+      "nanobench",
+      "-d",
+      "xoom"
+    ],
+    "cwd": "[SLAVE_BUILD]/skia",
+    "env": {
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "BUILDTYPE": "Debug",
+      "GYP_DEFINES": "skia_arch_type=arm skia_arch_width=32 skia_warnings_as_errors=0",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1"
+    },
+    "name": "build nanobench"
   },
   {
     "cmd": [
