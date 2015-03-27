@@ -10,6 +10,28 @@ from collections import OrderedDict, namedtuple
 from common.cros_chromite import ChromiteTarget, SlaveType
 
 
+class _AnnotatedCallable(object):
+  """Annotated callable that has a friendly string message for
+  config/expectation dumps."""
+
+  def __init__(self, func, doc):
+    self._func = func
+    self._doc = doc
+
+  def __repr__(self):
+    return self._doc
+
+  def __call__(self, *args, **kwargs):
+    return self._func(*args, **kwargs)
+
+
+# BuildBot builder 'collapseRequests' callable that always returns True.
+# (See http://docs.buildbot.net/latest/manual/customization.html)
+AlwaysCollapseFunc = _AnnotatedCallable(
+    lambda _builder, _req1, _req2: True,
+    '<Always Collapse>')
+
+
 class BuilderConfig(object):
   """Represents the presentation of a Chromite builder on a waterfall.
 
@@ -23,6 +45,7 @@ class BuilderConfig(object):
   CLOSER = False
   FLOATING = None
   UNIQUE = False
+  COLLAPSE = True
   MASTER_BUILDER_NAME = None
   SLAVE_TYPE = SlaveType.BAREMETAL
   SLAVE_CLASS = None
@@ -66,6 +89,16 @@ class BuilderConfig(object):
   def unique(self):
     """Returns (bool): Whether BuildBot should enforce singleton locks."""
     return self.UNIQUE
+
+  @property
+  def unique(self):
+    """Returns (bool): Whether BuildBot should collapse multiple builds.
+
+    This will be passed to the 'collapseRequests' builder property, and can
+    either be True, False, or a lambda function (see
+    http://docs.buildbot.net/latest/manual/customization.html).
+    """
+    return self.COLLAPSE
 
   @property
   def floating(self):
@@ -136,6 +169,7 @@ class IncrementalBuilderConfig(BuilderConfig):
   """BuilderConfig for Incremental launcher targets."""
 
   CLOSER = True
+  COLLAPSE = AlwaysCollapseFunc
 
   def _GetBuilderName(self):
     return '%s incremental' % (self.config.base,)
@@ -176,6 +210,7 @@ class SdkBuilderConfig(BuilderConfig):
   """BuilderConfig for SDK launcher targets."""
 
   SLAVE_TYPE = SlaveType.GCE
+  COLLAPSE = AlwaysCollapseFunc
 
   def _GetBuilderName(self):
     # Return 'major/minor' (end of toolchain name).

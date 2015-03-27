@@ -420,6 +420,7 @@ config = {
       'auto_reboot': False,
       'builddir': 'x86-generic-incremental',
       'category': '1release full|closer',
+      'collapseRequests': <Always Collapse>,
       'factory': BuildFactory {
         steps: [
           (
@@ -479,6 +480,7 @@ config = {
       'auto_reboot': False,
       'builddir': 'amd64-generic-incremental',
       'category': '1release full|closer',
+      'collapseRequests': <Always Collapse>,
       'factory': BuildFactory {
         steps: [
           (
@@ -538,6 +540,7 @@ config = {
       'auto_reboot': False,
       'builddir': 'daisy-incremental',
       'category': '1release full|closer',
+      'collapseRequests': <Always Collapse>,
       'factory': BuildFactory {
         steps: [
           (
@@ -597,6 +600,7 @@ config = {
       'auto_reboot': False,
       'builddir': 'x86-generic-full',
       'category': '1release full|closer',
+      'collapseRequests': <Always Collapse>,
       'factory': BuildFactory {
         steps: [
           (
@@ -656,6 +660,7 @@ config = {
       'auto_reboot': False,
       'builddir': 'amd64-generic-full',
       'category': '1release full|closer',
+      'collapseRequests': <Always Collapse>,
       'factory': BuildFactory {
         steps: [
           (
@@ -715,6 +720,7 @@ config = {
       'auto_reboot': False,
       'builddir': 'daisy-full',
       'category': '1release full|closer',
+      'collapseRequests': <Always Collapse>,
       'factory': BuildFactory {
         steps: [
           (
@@ -774,6 +780,7 @@ config = {
       'auto_reboot': False,
       'builddir': 'arm-generic-full',
       'category': '1release full|closer',
+      'collapseRequests': <Always Collapse>,
       'factory': BuildFactory {
         steps: [
           (
@@ -833,6 +840,7 @@ config = {
       'auto_reboot': False,
       'builddir': 'mipsel-o32-generic-full',
       'category': '1release full|closer',
+      'collapseRequests': <Always Collapse>,
       'factory': BuildFactory {
         steps: [
           (
@@ -892,6 +900,7 @@ config = {
       'auto_reboot': False,
       'builddir': 'chromiumos-sdk',
       'category': '1release full|closer',
+      'collapseRequests': <Always Collapse>,
       'factory': BuildFactory {
         steps: [
           (
@@ -1010,6 +1019,7 @@ config = {
       'auto_reboot': False,
       'builddir': 'x86-generic-ASAN',
       'category': '1release full|closer',
+      'collapseRequests': <Always Collapse>,
       'factory': BuildFactory {
         steps: [
           (
@@ -1069,6 +1079,7 @@ config = {
       'auto_reboot': False,
       'builddir': 'amd64-generic-ASAN',
       'category': '1release full|info',
+      'collapseRequests': <Always Collapse>,
       'factory': BuildFactory {
         steps: [
           (
