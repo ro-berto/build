@@ -23,7 +23,10 @@ _BENCHMARKS_TO_RUN = {
   'dromaeo.jslibstyleprototype',
   'dromaeo.jslibtraversejquery',
   'dromaeo.jslibtraverseprototype',
+  'smoothness.top_25_smooth',
   'sunspider',
+  'speedometer',
+  'tab_switching.top_10',
 }
 
 
