@@ -17,6 +17,9 @@ ifeq ($(MASTERPATH),)
   $(error MASTERPATH not defined.)
 endif
 
+# Only valid on master machines, trying not to be too clever here.
+INFRA_RUNPY = /home/chrome-bot/infra/run.py
+
 # Get the current host's short hostname.  We may use this in Makefiles that
 # include this file.
 SHORT_HOSTNAME := $(shell hostname -s)
@@ -38,7 +41,16 @@ ifndef NO_REVISION_AUDIT
 	fi
 	$(GCLIENT) revinfo -a >> actions.log || true
 	$(GCLIENT) diff >> actions.log || true
+	@($(INFRA_RUNPY) infra.tools.send_monitoring_event \
+                   --service-event-revinfo-from-gclient \
+                   --service-event-type=START \
+                   --event-mon-service-name \
+                   --event-mon-run-type=prod \
+                   buildbot/master/$(MASTERPATH) \
+   || echo 'Running send_monitoring_event failed, skipping sending events.' \
+  ) 2>&1 | tee -a actions.log
 endif
+	@echo 'Now running Buildbot master.'
 	PYTHONPATH=$(PYTHONPATH) python $(SCRIPTS_DIR)/common/twistd --no_save -y buildbot.tac
 
 ifeq ($(BUILDBOT_PATH),$(BUILDBOT8_PATH))
@@ -49,6 +61,16 @@ endif
 	TWISTD_PROFILE=1 PYTHONPATH=$(PYTHONPATH) python $(SCRIPTS_DIR)/common/twistd --no_save -y buildbot.tac
 
 stop: printstep
+ifndef NO_REVISION_AUDIT
+	@($(INFRA_RUNPY) infra.tools.send_monitoring_event \
+                   --service-event-type=STOP \
+                   --event-mon-service-name \
+                   --event-mon-run-type=prod \
+                   buildbot/master/$(MASTERPATH) \
+   || echo 'Running send_monitoring_event failed, skipping sending events' \
+  ) 2>&1 | tee -a actions.log
+endif
+
 	if `test -f twistd.pid`; then kill -TERM -$$(ps h -o pgid= $$(cat twistd.pid) | awk '{print $$1}'); fi;
 
 kill: printstep
