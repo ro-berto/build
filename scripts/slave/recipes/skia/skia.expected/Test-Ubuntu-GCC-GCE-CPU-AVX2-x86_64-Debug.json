@@ -92,7 +92,7 @@
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "CHROME_PATH": "/home/chrome-bot/src",
-      "GYP_DEFINES": "skia_arch_type=x86_64 skia_arch_width=64 skia_warnings_as_errors=0"
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_arch_width=64 skia_gpu=0 skia_warnings_as_errors=0"
     },
     "name": "build most"
   },
@@ -286,7 +286,7 @@
       "-u",
       "[SLAVE_BUILD]/skia/tools/dm_flags.py",
       "/path/to/tmp/json",
-      "Test-Mac10.8-MacMini4.1-GeForce320M-x86_64-Debug"
+      "Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "name": "exec [SLAVE_BUILD]/skia/tools/dm_flags.py",
@@ -319,14 +319,19 @@
       "--key",
       "arch",
       "x86_64",
+      "compiler",
+      "GCC",
       "configuration",
       "Debug",
-      "gpu",
-      "GeForce320M",
+      "cpu_or_gpu",
+      "CPU",
+      "cpu_or_gpu_value",
+      "AVX2",
       "model",
-      "MacMini4.1",
+      "GCE",
       "os",
-      "Mac10.8",
+      "Ubuntu",
+      "--nogpu",
       "--dummy-flags"
     ],
     "name": "dm"
@@ -338,7 +343,7 @@
       "RECIPE_MODULE[skia]/resources/upload_dm_results.py",
       "[SLAVE_BUILD]/dm",
       "164710",
-      "Test-Mac10.8-MacMini4.1-GeForce320M-x86_64-Debug",
+      "Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug",
       "5",
       "",
       "[SLAVE_BUILD]/skia/common/py/utils"
@@ -352,7 +357,7 @@
       "-u",
       "[SLAVE_BUILD]/skia/tools/nanobench_flags.py",
       "/path/to/tmp/json",
-      "Test-Mac10.8-MacMini4.1-GeForce320M-x86_64-Debug"
+      "Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "name": "exec [SLAVE_BUILD]/skia/tools/nanobench_flags.py",
@@ -371,6 +376,7 @@
       "[SLAVE_BUILD]/skia/resources",
       "--skps",
       "[SLAVE_BUILD]/playback/skps",
+      "--nogpu",
       "--dummy-flags"
     ],
     "name": "nanobench"

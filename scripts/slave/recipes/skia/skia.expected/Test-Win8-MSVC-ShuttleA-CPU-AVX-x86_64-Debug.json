@@ -88,12 +88,12 @@
       "python",
       "make.py",
       "most",
-      "BUILDTYPE=Release"
+      "BUILDTYPE=Debug_x64"
     ],
     "cwd": "[SLAVE_BUILD]\\skia",
     "env": {
       "CHROME_PATH": "/home/chrome-bot/src",
-      "GYP_DEFINES": "qt_sdk=C:/Qt/4.8.5/ skia_arch_type=x86 skia_arch_width=32 skia_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgHelp"
+      "GYP_DEFINES": "qt_sdk=C:/Qt/Qt5.1.0/5.1.0/msvc2012_64/ skia_arch_type=x86_64 skia_arch_width=64 skia_gpu=0 skia_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgHelp"
     },
     "name": "build most"
   },
@@ -287,7 +287,7 @@
       "-u",
       "[SLAVE_BUILD]\\skia\\tools/dm_flags.py",
       "/path/to/tmp/json",
-      "Test-Win7-ShuttleA-HD2000-x86-Release"
+      "Test-Win8-MSVC-ShuttleA-CPU-AVX-x86_64-Debug"
     ],
     "cwd": "[SLAVE_BUILD]\\skia",
     "name": "exec [SLAVE_BUILD]\\skia\\tools/dm_flags.py",
@@ -300,7 +300,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]\\skia\\out\\Release\\dm",
+      "[SLAVE_BUILD]\\skia\\out\\Debug_x64\\dm",
       "--verbose",
       "--resourcePath",
       "[SLAVE_BUILD]\\skia\\resources",
@@ -318,15 +318,20 @@
       "5",
       "--key",
       "arch",
-      "x86",
+      "x86_64",
+      "compiler",
+      "MSVC",
       "configuration",
-      "Release",
-      "gpu",
-      "HD2000",
+      "Debug",
+      "cpu_or_gpu",
+      "CPU",
+      "cpu_or_gpu_value",
+      "AVX",
       "model",
       "ShuttleA",
       "os",
-      "Win7",
+      "Win8",
+      "--nogpu",
       "--dummy-flags"
     ],
     "name": "dm"
@@ -338,12 +343,41 @@
       "RECIPE_MODULE[skia]\\resources\\upload_dm_results.py",
       "[SLAVE_BUILD]\\dm",
       "164710",
-      "Test-Win7-ShuttleA-HD2000-x86-Release",
+      "Test-Win8-MSVC-ShuttleA-CPU-AVX-x86_64-Debug",
       "5",
       "",
       "[SLAVE_BUILD]\\skia\\common\\py\\utils"
     ],
     "cwd": "[SLAVE_BUILD]\\skia",
     "name": "Upload DM Results"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\skia\\tools/nanobench_flags.py",
+      "/path/to/tmp/json",
+      "Test-Win8-MSVC-ShuttleA-CPU-AVX-x86_64-Debug"
+    ],
+    "cwd": "[SLAVE_BUILD]\\skia",
+    "name": "exec [SLAVE_BUILD]\\skia\\tools/nanobench_flags.py",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"--dummy-flags\"@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]\\skia\\out\\Debug_x64\\nanobench",
+      "-i",
+      "[SLAVE_BUILD]\\skia\\resources",
+      "--skps",
+      "[SLAVE_BUILD]\\playback\\skps",
+      "--nogpu",
+      "--dummy-flags"
+    ],
+    "name": "nanobench"
   }
 ]

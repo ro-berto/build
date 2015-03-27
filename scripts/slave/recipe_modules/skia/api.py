@@ -294,6 +294,15 @@ class SkiaApi(recipe_api.RecipeApi):
     ]
     args.append('--key')
     args.extend(self._KeyParams())
+
+    skip_flag = None
+    if self.c.builder_cfg.get('cpu_or_gpu') == 'CPU':
+      skip_flag = '--nogpu'
+    elif self.c.builder_cfg.get('cpu_or_gpu') == 'GPU':
+      skip_flag = '--nocpu'
+    if skip_flag:
+      args.append(skip_flag)
+
     args.extend(self.flags_from_file(self.skia_dir.join('tools/dm_flags.py')))
     self.run(self.flavor.step, 'dm', cmd=args, abort_on_failure=False)
 
@@ -316,7 +325,8 @@ class SkiaApi(recipe_api.RecipeApi):
              abort_on_failure=False)
 
     # See skia:2789.
-    if 'Valgrind_GPU' in self.c.BUILDER_NAME:
+    if ('Valgrind' in self.c.BUILDER_NAME and
+        self.c.builder_cfg.get('cpu_or_gpu') == 'GPU'):
       abandonGpuContext = list(args)
       abandonGpuContext.append('--abandonGpuContext')
       self.run(self.flavor.step, 'dm --abandonGpuContext',
@@ -339,8 +349,7 @@ class SkiaApi(recipe_api.RecipeApi):
 
   def perf_steps(self):
     """Run Skia benchmarks."""
-    if self.c.BUILDER_NAME == (
-        'Test-Ubuntu-ShuttleA-GTX550Ti-x86_64-Debug-ZeroGPUCache'):
+    if 'ZeroGPUCache' in self.c.BUILDER_NAME:
       return
 
     self._run_once(self.install)
@@ -352,6 +361,15 @@ class SkiaApi(recipe_api.RecipeApi):
     # Run nanobench.
     args = ['nanobench', '-i', self.device_dirs.resource_dir,
             '--skps', self.device_dirs.skp_dir]
+
+    skip_flag = None
+    if self.c.builder_cfg.get('cpu_or_gpu') == 'CPU':
+      skip_flag = '--nogpu'
+    elif self.c.builder_cfg.get('cpu_or_gpu') == 'GPU':
+      skip_flag = '--nocpu'
+    if skip_flag:
+      args.append(skip_flag)
+
     args.extend(self.flags_from_file(self.skia_dir.join(
         'tools/nanobench_flags.py')))
     if is_perf:

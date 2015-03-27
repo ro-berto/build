@@ -1,37 +1,37 @@
 [
   {
     "cmd": [
-      "git.bat",
+      "git",
       "fetch"
     ],
-    "cwd": "[SLAVE_BUILD]\\skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "name": "git fetch"
   },
   {
     "cmd": [
-      "git.bat",
+      "git",
       "reset",
       "--hard",
       "abc123"
     ],
-    "cwd": "[SLAVE_BUILD]\\skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "name": "git reset"
   },
   {
     "cmd": [
-      "git.bat",
+      "git",
       "clean",
       "-d",
       "-f"
     ],
-    "cwd": "[SLAVE_BUILD]\\skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "name": "git clean"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]\\gclient.py",
+      "[DEPOT_TOOLS]/gclient.py",
       "config",
       "--spec",
       "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]"
@@ -42,17 +42,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\gclient_safe_revert.py",
-      ".",
-      "[DEPOT_TOOLS]\\gclient.bat"
-    ],
-    "name": "gclient revert"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[DEPOT_TOOLS]\\gclient.py",
+      "[DEPOT_TOOLS]/gclient.py",
       "sync",
       "--nohooks",
       "--force",
@@ -80,26 +70,6 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]\\apply_issue.py",
-      "-r",
-      "[SLAVE_BUILD]\\skia",
-      "-i",
-      "500",
-      "-p",
-      "1",
-      "-s",
-      "https://codereview.chromium.org",
-      "--no-auth"
-    ],
-    "name": "apply_issue",
-    "~followup_annotations": [
-      "@@@STEP_LINK@Applied issue 500@https://codereview.chromium.org/500@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "\nimport os\nimport sys\nwith open(sys.argv[1], 'w') as f:\n  f.write(os.path.join(os.path.expanduser('~'), 'src'))\n",
       "/path/to/tmp/"
     ],
@@ -115,24 +85,23 @@
   },
   {
     "cmd": [
-      "python",
-      "make.py",
-      "most",
-      "BUILDTYPE=Release"
+      "make",
+      "dm",
+      "BUILDTYPE=Debug"
     ],
-    "cwd": "[SLAVE_BUILD]\\skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "CHROME_PATH": "/home/chrome-bot/src",
-      "GYP_DEFINES": "qt_sdk=C:/Qt/4.8.5/ skia_arch_type=x86 skia_arch_width=32 skia_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgHelp"
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_arch_width=64 skia_warnings_as_errors=0"
     },
-    "name": "build most"
+    "name": "build dm"
   },
   {
     "cmd": [
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]\\skia\\SKP_VERSION",
+      "[SLAVE_BUILD]/skia/SKP_VERSION",
       "/path/to/tmp/"
     ],
     "name": "read .../skia/SKP_VERSION"
@@ -142,7 +111,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]\\playback\\skps\\SKP_VERSION",
+      "[SLAVE_BUILD]/playback/skps/SKP_VERSION",
       "/path/to/tmp/"
     ],
     "name": "read .../skps/SKP_VERSION"
@@ -152,7 +121,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]\\playback\\skps"
+      "[SLAVE_BUILD]/playback/skps"
     ],
     "name": "rmtree .../playback/skps",
     "~followup_annotations": [
@@ -170,7 +139,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]\\playback\\skps",
+      "[SLAVE_BUILD]/playback/skps",
       "511"
     ],
     "name": "makedirs .../playback/skps",
@@ -191,16 +160,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[gsutil]\\resources\\gsutil_wrapper.py",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
       "--",
-      "[DEPOT_TOOLS]\\gsutil.py",
+      "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "3.25",
       "--",
       "cp",
       "-R",
       "gs://chromium-skia-gm/playback_42/skps",
-      "[SLAVE_BUILD]\\playback"
+      "[SLAVE_BUILD]/playback"
     ],
     "name": "gsutil download skps"
   },
@@ -210,18 +179,18 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "42",
-      "[SLAVE_BUILD]\\playback\\skps\\SKP_VERSION"
+      "[SLAVE_BUILD]/playback/skps/SKP_VERSION"
     ],
-    "name": "write [SLAVE_BUILD]\\playback\\skps\\SKP_VERSION"
+    "name": "write [SLAVE_BUILD]/playback/skps/SKP_VERSION"
   },
   {
     "cmd": [
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]\\perfdata\\Perf-Win7-ShuttleA-HD2000-x86-Release-Trybot\\data"
+      "[SLAVE_BUILD]/images"
     ],
-    "name": "rmtree .../BUILDER/data",
+    "name": "rmtree [SLAVE_BUILD]/images",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -237,10 +206,10 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]\\perfdata\\Perf-Win7-ShuttleA-HD2000-x86-Release-Trybot\\data",
+      "[SLAVE_BUILD]/images",
       "511"
     ],
-    "name": "makedirs .../BUILDER/data",
+    "name": "makedirs [SLAVE_BUILD]/images",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -258,12 +227,69 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\skia\\tools/nanobench_flags.py",
-      "/path/to/tmp/json",
-      "Perf-Win7-ShuttleA-HD2000-x86-Release-Trybot"
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--force-version",
+      "3.25",
+      "--",
+      "cp",
+      "-R",
+      "gs://chromium-skia-gm/skimage/input/*",
+      "[SLAVE_BUILD]/images"
     ],
-    "cwd": "[SLAVE_BUILD]\\skia",
-    "name": "exec [SLAVE_BUILD]\\skia\\tools/nanobench_flags.py",
+    "name": "gsutil Download test images"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[SLAVE_BUILD]/dm"
+    ],
+    "name": "rmtree [SLAVE_BUILD]/dm",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[SLAVE_BUILD]/dm",
+      "511"
+    ],
+    "name": "makedirs [SLAVE_BUILD]/dm",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/skia/tools/dm_flags.py",
+      "/path/to/tmp/json",
+      "Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Debug-ZeroGPUCache"
+    ],
+    "cwd": "[SLAVE_BUILD]/skia",
+    "name": "exec [SLAVE_BUILD]/skia/tools/dm_flags.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
       "@@@STEP_LOG_LINE@json.output@  \"--dummy-flags\"@@@",
@@ -273,26 +299,18 @@
   },
   {
     "cmd": [
-      "[DEPOT_TOOLS]\\git.bat",
-      "show",
-      "HEAD",
-      "--format=%at",
-      "-s"
-    ],
-    "cwd": "[SLAVE_BUILD]\\skia",
-    "name": "git show",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]\\skia\\out\\Release\\nanobench",
-      "-i",
-      "[SLAVE_BUILD]\\skia\\resources",
+      "catchsegv",
+      "[SLAVE_BUILD]/skia/out/Debug/dm",
+      "--verbose",
+      "--resourcePath",
+      "[SLAVE_BUILD]/skia/resources",
       "--skps",
-      "[SLAVE_BUILD]\\playback\\skps",
-      "--dummy-flags",
-      "--outResultsFile",
-      "[SLAVE_BUILD]\\perfdata\\Perf-Win7-ShuttleA-HD2000-x86-Release-Trybot\\data\\nanobench_164710_1408633190.json",
+      "[SLAVE_BUILD]/playback/skps",
+      "--images",
+      "[SLAVE_BUILD]/images",
+      "--writePath",
+      "[SLAVE_BUILD]/dm",
+      "--nameByHash",
       "--properties",
       "gitHash",
       "164710",
@@ -300,29 +318,39 @@
       "5",
       "--key",
       "arch",
-      "x86",
-      "gpu",
-      "HD2000",
+      "x86_64",
+      "compiler",
+      "GCC",
+      "configuration",
+      "Debug",
+      "cpu_or_gpu",
+      "GPU",
+      "cpu_or_gpu_value",
+      "GTX550Ti",
+      "extra_config",
+      "ZeroGPUCache",
       "model",
       "ShuttleA",
       "os",
-      "Win7"
+      "Ubuntu",
+      "--nocpu",
+      "--dummy-flags"
     ],
-    "name": "nanobench"
+    "name": "dm"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[skia]\\resources\\upload_bench_results.py",
-      "Perf-Win7-ShuttleA-HD2000-x86-Release-Trybot",
-      "5",
-      "[SLAVE_BUILD]\\perfdata\\Perf-Win7-ShuttleA-HD2000-x86-Release-Trybot\\data",
+      "RECIPE_MODULE[skia]/resources/upload_dm_results.py",
+      "[SLAVE_BUILD]/dm",
       "164710",
-      "[DEPOT_TOOLS]\\third_party\\gsutil\\gsutil",
-      "500"
+      "Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Debug-ZeroGPUCache",
+      "5",
+      "",
+      "[SLAVE_BUILD]/skia/common/py/utils"
     ],
-    "cwd": "[SLAVE_BUILD]\\skia",
-    "name": "Upload Nanobench Results"
+    "cwd": "[SLAVE_BUILD]/skia",
+    "name": "Upload DM Results"
   }
 ]

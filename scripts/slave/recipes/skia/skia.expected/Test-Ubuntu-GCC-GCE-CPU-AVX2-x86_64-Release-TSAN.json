@@ -68,31 +68,14 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "\nimport os\nimport sys\nwith open(sys.argv[1], 'w') as f:\n  f.write(os.path.join(os.path.expanduser('~'), 'src'))\n",
-      "/path/to/tmp/"
-    ],
-    "name": "get CHROME_PATH",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@with open(sys.argv[1], 'w') as f:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  f.write(os.path.join(os.path.expanduser('~'), 'src'))@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "make",
+      "[SLAVE_BUILD]/skia/tools/xsan_build",
+      "thread",
       "dm",
-      "BUILDTYPE=Debug"
+      "BUILDTYPE=Release"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
-      "CHROME_PATH": "/home/chrome-bot/src",
-      "GYP_DEFINES": "skia_arch_type=x86_64 skia_arch_width=64 skia_warnings_as_errors=0"
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_arch_width=64 skia_gpu=0 skia_warnings_as_errors=0"
     },
     "name": "build dm"
   },
@@ -286,7 +269,7 @@
       "-u",
       "[SLAVE_BUILD]/skia/tools/dm_flags.py",
       "/path/to/tmp/json",
-      "Test-Ubuntu-ShuttleA-GTX550Ti-x86_64-Debug-ZeroGPUCache"
+      "Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-TSAN"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "name": "exec [SLAVE_BUILD]/skia/tools/dm_flags.py",
@@ -299,8 +282,7 @@
   },
   {
     "cmd": [
-      "catchsegv",
-      "[SLAVE_BUILD]/skia/out/Debug/dm",
+      "[SLAVE_BUILD]/skia/out/Release/dm",
       "--verbose",
       "--resourcePath",
       "[SLAVE_BUILD]/skia/resources",
@@ -319,18 +301,28 @@
       "--key",
       "arch",
       "x86_64",
+      "compiler",
+      "GCC",
       "configuration",
-      "Debug",
+      "Release",
+      "cpu_or_gpu",
+      "CPU",
+      "cpu_or_gpu_value",
+      "AVX2",
       "extra_config",
-      "ZeroGPUCache",
-      "gpu",
-      "GTX550Ti",
+      "TSAN",
       "model",
-      "ShuttleA",
+      "GCE",
       "os",
       "Ubuntu",
+      "--nogpu",
       "--dummy-flags"
     ],
+    "env": {
+      "ASAN_OPTIONS": "symbolize=1 detect_leaks=1",
+      "LSAN_OPTIONS": "symbolize=1 print_suppressions=1 suppressions=[SLAVE_BUILD]/skia/tools/lsan.supp",
+      "TSAN_OPTIONS": "suppressions=[SLAVE_BUILD]/skia/tools/tsan.supp"
+    },
     "name": "dm"
   },
   {
@@ -340,7 +332,7 @@
       "RECIPE_MODULE[skia]/resources/upload_dm_results.py",
       "[SLAVE_BUILD]/dm",
       "164710",
-      "Test-Ubuntu-ShuttleA-GTX550Ti-x86_64-Debug-ZeroGPUCache",
+      "Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-TSAN",
       "5",
       "",
       "[SLAVE_BUILD]/skia/common/py/utils"

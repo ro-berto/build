@@ -34,7 +34,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]"
+      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]\ntarget_os = ['chromeos']"
     ],
     "name": "gclient setup"
   },
@@ -68,16 +68,49 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/tools/xsan_build",
-      "thread",
-      "dm",
-      "BUILDTYPE=Release"
+      "[SLAVE_BUILD]/skia/platform_tools/chromeos/bin/chromeos_make",
+      "-d",
+      "link",
+      "most",
+      "BUILDTYPE=Debug"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_arch_width=64 skia_gpu=0 skia_warnings_as_errors=0"
     },
-    "name": "build dm"
+    "name": "build most"
+  },
+  {
+    "cmd": [
+      "ssh",
+      "-p",
+      "22",
+      "root@192.168.1.123",
+      "rm",
+      "-rf",
+      "/usr/local/skiabot/bin"
+    ],
+    "name": "rmdir .../skiabot/bin"
+  },
+  {
+    "cmd": [
+      "ssh",
+      "-p",
+      "22",
+      "root@192.168.1.123",
+      "mkdir",
+      "-p",
+      "/usr/local/skiabot/bin"
+    ],
+    "name": "mkdir .../skiabot/bin"
+  },
+  {
+    "cmd": [
+      "RECIPE_MODULE[skia]/resources/scp_dir_contents.sh",
+      "[SLAVE_BUILD]/skia/resources",
+      "root@192.168.1.123:/usr/local/skiabot/skia_resources"
+    ],
+    "name": "scp [SLAVE_BUILD]/skia/resources"
   },
   {
     "cmd": [
@@ -168,6 +201,38 @@
   },
   {
     "cmd": [
+      "ssh",
+      "-p",
+      "22",
+      "root@192.168.1.123",
+      "rm",
+      "-rf",
+      "/usr/local/skiabot/skia_skp/skps"
+    ],
+    "name": "rmdir .../skia_skp/skps"
+  },
+  {
+    "cmd": [
+      "ssh",
+      "-p",
+      "22",
+      "root@192.168.1.123",
+      "mkdir",
+      "-p",
+      "/usr/local/skiabot/skia_skp/skps"
+    ],
+    "name": "mkdir .../skia_skp/skps"
+  },
+  {
+    "cmd": [
+      "RECIPE_MODULE[skia]/resources/scp_dir_contents.sh",
+      "[SLAVE_BUILD]/playback/skps",
+      "root@192.168.1.123:/usr/local/skiabot/skia_skp/skps"
+    ],
+    "name": "scp [SLAVE_BUILD]/playback/skps"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
@@ -225,6 +290,38 @@
   },
   {
     "cmd": [
+      "ssh",
+      "-p",
+      "22",
+      "root@192.168.1.123",
+      "rm",
+      "-rf",
+      "/usr/local/skiabot/skia_images"
+    ],
+    "name": "rmdir .../skiabot/skia_images"
+  },
+  {
+    "cmd": [
+      "ssh",
+      "-p",
+      "22",
+      "root@192.168.1.123",
+      "mkdir",
+      "-p",
+      "/usr/local/skiabot/skia_images"
+    ],
+    "name": "mkdir .../skiabot/skia_images"
+  },
+  {
+    "cmd": [
+      "RECIPE_MODULE[skia]/resources/scp_dir_contents.sh",
+      "[SLAVE_BUILD]/images",
+      "root@192.168.1.123:/usr/local/skiabot/skia_images"
+    ],
+    "name": "scp [SLAVE_BUILD]/images"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
@@ -269,7 +366,7 @@
       "-u",
       "[SLAVE_BUILD]/skia/tools/dm_flags.py",
       "/path/to/tmp/json",
-      "Test-Ubuntu-GCE-NoGPU-x86_64-Release-TSAN"
+      "Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "name": "exec [SLAVE_BUILD]/skia/tools/dm_flags.py",
@@ -282,16 +379,30 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/out/Release/dm",
+      "scp",
+      "-P",
+      "22",
+      "[SLAVE_BUILD]/skia/out/config/chromeos-link/Debug/dm",
+      "root@192.168.1.123:/usr/local/skiabot/bin/dm"
+    ],
+    "name": "scp [SLAVE_BUILD]/skia/out/config/chromeos-link/Debug/dm"
+  },
+  {
+    "cmd": [
+      "ssh",
+      "-p",
+      "22",
+      "root@192.168.1.123",
+      "/usr/local/skiabot/bin/dm",
       "--verbose",
       "--resourcePath",
-      "[SLAVE_BUILD]/skia/resources",
+      "/usr/local/skiabot/skia_resources",
       "--skps",
-      "[SLAVE_BUILD]/playback/skps",
+      "/usr/local/skiabot/skia_skp/skps",
       "--images",
-      "[SLAVE_BUILD]/images",
+      "/usr/local/skiabot/skia_images",
       "--writePath",
-      "[SLAVE_BUILD]/dm",
+      "/usr/local/skiabot/skia_dm_out",
       "--nameByHash",
       "--properties",
       "gitHash",
@@ -301,24 +412,30 @@
       "--key",
       "arch",
       "x86_64",
+      "compiler",
+      "GCC",
       "configuration",
-      "Release",
-      "extra_config",
-      "TSAN",
-      "gpu",
-      "NoGPU",
+      "Debug",
+      "cpu_or_gpu",
+      "CPU",
+      "cpu_or_gpu_value",
+      "AVX",
       "model",
-      "GCE",
+      "Link",
       "os",
-      "Ubuntu",
+      "ChromeOS",
+      "--nogpu",
       "--dummy-flags"
     ],
-    "env": {
-      "ASAN_OPTIONS": "symbolize=1 detect_leaks=1",
-      "LSAN_OPTIONS": "symbolize=1 print_suppressions=1 suppressions=[SLAVE_BUILD]/skia/tools/lsan.supp",
-      "TSAN_OPTIONS": "suppressions=[SLAVE_BUILD]/skia/tools/tsan.supp"
-    },
     "name": "dm"
+  },
+  {
+    "cmd": [
+      "RECIPE_MODULE[skia]/resources/scp_dir_contents.sh",
+      "root@192.168.1.123:/usr/local/skiabot/skia_dm_out",
+      "[SLAVE_BUILD]/dm"
+    ],
+    "name": "scp /usr/local/skiabot/skia_dm_out"
   },
   {
     "cmd": [
@@ -327,12 +444,55 @@
       "RECIPE_MODULE[skia]/resources/upload_dm_results.py",
       "[SLAVE_BUILD]/dm",
       "164710",
-      "Test-Ubuntu-GCE-NoGPU-x86_64-Release-TSAN",
+      "Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug",
       "5",
       "",
       "[SLAVE_BUILD]/skia/common/py/utils"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "name": "Upload DM Results"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/skia/tools/nanobench_flags.py",
+      "/path/to/tmp/json",
+      "Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
+    ],
+    "cwd": "[SLAVE_BUILD]/skia",
+    "name": "exec [SLAVE_BUILD]/skia/tools/nanobench_flags.py",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"--dummy-flags\"@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "scp",
+      "-P",
+      "22",
+      "[SLAVE_BUILD]/skia/out/config/chromeos-link/Debug/nanobench",
+      "root@192.168.1.123:/usr/local/skiabot/bin/nanobench"
+    ],
+    "name": "scp [SLAVE_BUILD]/skia/out/config/chromeos-link/Debug/nanobench"
+  },
+  {
+    "cmd": [
+      "ssh",
+      "-p",
+      "22",
+      "root@192.168.1.123",
+      "/usr/local/skiabot/bin/nanobench",
+      "-i",
+      "/usr/local/skiabot/skia_resources",
+      "--skps",
+      "/usr/local/skiabot/skia_skp/skps",
+      "--nogpu",
+      "--dummy-flags"
+    ],
+    "name": "nanobench"
   }
 ]

@@ -83,12 +83,12 @@
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_ninja",
       "most",
       "-d",
-      "nexus_5"
+      "nexus_10"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
-      "BUILDTYPE": "Debug",
+      "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=arm skia_arch_width=32 skia_warnings_as_errors=0",
       "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
@@ -98,16 +98,16 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "018dff3520c970f6",
+      "R32CB017X2L",
       "wait-for-device"
     ],
-    "name": "wait for device 018dff3520c970f6 (1)"
+    "name": "wait for device R32CB017X2L (1)"
   },
   {
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "018dff3520c970f6",
+      "R32CB017X2L",
       "shell",
       "echo",
       "$EXTERNAL_STORAGE"
@@ -119,7 +119,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "018dff3520c970f6",
+      "R32CB017X2L",
       "root"
     ],
     "name": "adb root"
@@ -135,16 +135,16 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "018dff3520c970f6",
+      "R32CB017X2L",
       "wait-for-device"
     ],
-    "name": "wait for device 018dff3520c970f6 (2)"
+    "name": "wait for device R32CB017X2L (2)"
   },
   {
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_kill_skia",
       "-s",
-      "018dff3520c970f6"
+      "R32CB017X2L"
     ],
     "env": {
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
@@ -156,7 +156,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "018dff3520c970f6",
+      "R32CB017X2L",
       "shell",
       "stop"
     ],
@@ -166,7 +166,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_push_if_needed",
       "-s",
-      "018dff3520c970f6",
+      "R32CB017X2L",
       "[SLAVE_BUILD]/skia/resources",
       "/storage/emulated/legacy/skiabot/skia_resources"
     ],
@@ -267,7 +267,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "018dff3520c970f6",
+      "R32CB017X2L",
       "shell",
       "rm",
       "-r",
@@ -279,7 +279,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "018dff3520c970f6",
+      "R32CB017X2L",
       "shell",
       "if",
       "[",
@@ -298,7 +298,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "018dff3520c970f6",
+      "R32CB017X2L",
       "shell",
       "mkdir",
       "-p",
@@ -310,7 +310,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_push_if_needed",
       "-s",
-      "018dff3520c970f6",
+      "R32CB017X2L",
       "[SLAVE_BUILD]/playback/skps",
       "/storage/emulated/legacy/skiabot/skia_skp/skps"
     ],
@@ -381,7 +381,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "018dff3520c970f6",
+      "R32CB017X2L",
       "shell",
       "rm",
       "-r",
@@ -393,7 +393,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "018dff3520c970f6",
+      "R32CB017X2L",
       "shell",
       "if",
       "[",
@@ -412,7 +412,7 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "018dff3520c970f6",
+      "R32CB017X2L",
       "shell",
       "mkdir",
       "-p",
@@ -424,7 +424,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_push_if_needed",
       "-s",
-      "018dff3520c970f6",
+      "R32CB017X2L",
       "[SLAVE_BUILD]/images",
       "/storage/emulated/legacy/skiabot/skia_images"
     ],
@@ -480,7 +480,7 @@
       "-u",
       "[SLAVE_BUILD]/skia/tools/dm_flags.py",
       "/path/to/tmp/json",
-      "Test-Android-Nexus5-Adreno330-Arm7-Debug"
+      "Test-Android-GCC-Nexus10-GPU-MaliT604-Arm7-Release"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "name": "exec [SLAVE_BUILD]/skia/tools/dm_flags.py",
@@ -496,9 +496,10 @@
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_run_skia",
       "--logcat",
       "-d",
-      "nexus_5",
+      "nexus_10",
       "-s",
-      "018dff3520c970f6",
+      "R32CB017X2L",
+      "--release",
       "dm",
       "--verbose",
       "--resourcePath",
@@ -518,14 +519,19 @@
       "--key",
       "arch",
       "Arm7",
+      "compiler",
+      "GCC",
       "configuration",
-      "Debug",
-      "gpu",
-      "Adreno330",
+      "Release",
+      "cpu_or_gpu",
+      "GPU",
+      "cpu_or_gpu_value",
+      "MaliT604",
       "model",
-      "Nexus5",
+      "Nexus10",
       "os",
       "Android",
+      "--nocpu",
       "--dummy-flags"
     ],
     "env": {
@@ -538,7 +544,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_pull_if_needed",
       "-s",
-      "018dff3520c970f6",
+      "R32CB017X2L",
       "/storage/emulated/legacy/skiabot/skia_dm",
       "[SLAVE_BUILD]/dm"
     ],
@@ -555,7 +561,7 @@
       "RECIPE_MODULE[skia]/resources/upload_dm_results.py",
       "[SLAVE_BUILD]/dm",
       "164710",
-      "Test-Android-Nexus5-Adreno330-Arm7-Debug",
+      "Test-Android-GCC-Nexus10-GPU-MaliT604-Arm7-Release",
       "5",
       "",
       "[SLAVE_BUILD]/skia/common/py/utils"
@@ -565,47 +571,9 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/skia/tools/nanobench_flags.py",
-      "/path/to/tmp/json",
-      "Test-Android-Nexus5-Adreno330-Arm7-Debug"
-    ],
-    "cwd": "[SLAVE_BUILD]/skia",
-    "name": "exec [SLAVE_BUILD]/skia/tools/nanobench_flags.py",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"--dummy-flags\"@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_run_skia",
-      "--logcat",
-      "-d",
-      "nexus_5",
-      "-s",
-      "018dff3520c970f6",
-      "nanobench",
-      "-i",
-      "/storage/emulated/legacy/skiabot/skia_resources",
-      "--skps",
-      "/storage/emulated/legacy/skiabot/skia_skp/skps",
-      "--dummy-flags"
-    ],
-    "env": {
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
-      "SKIA_ANDROID_VERBOSE_SETUP": "1"
-    },
-    "name": "nanobench"
-  },
-  {
-    "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "018dff3520c970f6",
+      "R32CB017X2L",
       "reboot"
     ],
     "name": "reboot"
@@ -621,9 +589,9 @@
     "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
-      "018dff3520c970f6",
+      "R32CB017X2L",
       "wait-for-device"
     ],
-    "name": "wait for device 018dff3520c970f6 (3)"
+    "name": "wait for device R32CB017X2L (3)"
   }
 ]

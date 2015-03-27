@@ -93,7 +93,7 @@
     "cwd": "[SLAVE_BUILD]\\skia",
     "env": {
       "CHROME_PATH": "/home/chrome-bot/src",
-      "GYP_DEFINES": "qt_sdk=C:/Qt/4.8.5/ skia_arch_type=x86 skia_arch_width=32 skia_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgHelp"
+      "GYP_DEFINES": "qt_sdk=C:/Qt/4.8.5/ skia_angle=1 skia_arch_type=x86 skia_arch_width=32 skia_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgHelp"
     },
     "name": "build most"
   },
@@ -189,9 +189,9 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]\\perfdata\\Perf-Win7-ShuttleA-HD2000-x86-Release\\data"
+      "[SLAVE_BUILD]\\images"
     ],
-    "name": "rmtree .../BUILDER/data",
+    "name": "rmtree [SLAVE_BUILD]/images",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -207,10 +207,10 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]\\perfdata\\Perf-Win7-ShuttleA-HD2000-x86-Release\\data",
+      "[SLAVE_BUILD]\\images",
       "511"
     ],
-    "name": "makedirs .../BUILDER/data",
+    "name": "makedirs [SLAVE_BUILD]/images",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -228,12 +228,69 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\skia\\tools/nanobench_flags.py",
+      "RECIPE_MODULE[gsutil]\\resources\\gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]\\gsutil.py",
+      "--force-version",
+      "3.25",
+      "--",
+      "cp",
+      "-R",
+      "gs://chromium-skia-gm/skimage/input/*",
+      "[SLAVE_BUILD]\\images"
+    ],
+    "name": "gsutil Download test images"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[SLAVE_BUILD]\\dm"
+    ],
+    "name": "rmtree [SLAVE_BUILD]/dm",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[SLAVE_BUILD]\\dm",
+      "511"
+    ],
+    "name": "makedirs [SLAVE_BUILD]/dm",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\skia\\tools/dm_flags.py",
       "/path/to/tmp/json",
-      "Perf-Win7-ShuttleA-HD2000-x86-Release"
+      "Test-Win7-MSVC-ShuttleA-GPU-HD2000-x86-Release-ANGLE"
     ],
     "cwd": "[SLAVE_BUILD]\\skia",
-    "name": "exec [SLAVE_BUILD]\\skia\\tools/nanobench_flags.py",
+    "name": "exec [SLAVE_BUILD]\\skia\\tools/dm_flags.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
       "@@@STEP_LOG_LINE@json.output@  \"--dummy-flags\"@@@",
@@ -243,26 +300,17 @@
   },
   {
     "cmd": [
-      "[DEPOT_TOOLS]\\git.bat",
-      "show",
-      "HEAD",
-      "--format=%at",
-      "-s"
-    ],
-    "cwd": "[SLAVE_BUILD]\\skia",
-    "name": "git show",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]\\skia\\out\\Release\\nanobench",
-      "-i",
+      "[SLAVE_BUILD]\\skia\\out\\Release\\dm",
+      "--verbose",
+      "--resourcePath",
       "[SLAVE_BUILD]\\skia\\resources",
       "--skps",
       "[SLAVE_BUILD]\\playback\\skps",
-      "--dummy-flags",
-      "--outResultsFile",
-      "[SLAVE_BUILD]\\perfdata\\Perf-Win7-ShuttleA-HD2000-x86-Release\\data\\nanobench_164710_1408633190.json",
+      "--images",
+      "[SLAVE_BUILD]\\images",
+      "--writePath",
+      "[SLAVE_BUILD]\\dm",
+      "--nameByHash",
       "--properties",
       "gitHash",
       "164710",
@@ -271,27 +319,38 @@
       "--key",
       "arch",
       "x86",
-      "gpu",
+      "compiler",
+      "MSVC",
+      "configuration",
+      "Release",
+      "cpu_or_gpu",
+      "GPU",
+      "cpu_or_gpu_value",
       "HD2000",
+      "extra_config",
+      "ANGLE",
       "model",
       "ShuttleA",
       "os",
-      "Win7"
+      "Win7",
+      "--nocpu",
+      "--dummy-flags"
     ],
-    "name": "nanobench"
+    "name": "dm"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[skia]\\resources\\upload_bench_results.py",
-      "Perf-Win7-ShuttleA-HD2000-x86-Release",
-      "5",
-      "[SLAVE_BUILD]\\perfdata\\Perf-Win7-ShuttleA-HD2000-x86-Release\\data",
+      "RECIPE_MODULE[skia]\\resources\\upload_dm_results.py",
+      "[SLAVE_BUILD]\\dm",
       "164710",
-      "[DEPOT_TOOLS]\\third_party\\gsutil\\gsutil"
+      "Test-Win7-MSVC-ShuttleA-GPU-HD2000-x86-Release-ANGLE",
+      "5",
+      "",
+      "[SLAVE_BUILD]\\skia\\common\\py\\utils"
     ],
     "cwd": "[SLAVE_BUILD]\\skia",
-    "name": "Upload Nanobench Results"
+    "name": "Upload DM Results"
   }
 ]

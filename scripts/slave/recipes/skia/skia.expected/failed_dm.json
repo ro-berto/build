@@ -246,7 +246,7 @@
       "-u",
       "[SLAVE_BUILD]/skia/tools/dm_flags.py",
       "/path/to/tmp/json",
-      "Test-Ubuntu-ShuttleA-NoGPU-x86_64-Debug-Recipes"
+      "Test-Ubuntu-GCC-ShuttleA-CPU-AVX-x86_64-Debug-Recipes"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "name": "exec [SLAVE_BUILD]/skia/tools/dm_flags.py",
@@ -279,16 +279,21 @@
       "--key",
       "arch",
       "x86_64",
+      "compiler",
+      "GCC",
       "configuration",
       "Debug",
+      "cpu_or_gpu",
+      "CPU",
+      "cpu_or_gpu_value",
+      "AVX",
       "extra_config",
       "Recipes",
-      "gpu",
-      "NoGPU",
       "model",
       "ShuttleA",
       "os",
       "Ubuntu",
+      "--nogpu",
       "--dummy-flags"
     ],
     "name": "dm",
@@ -304,7 +309,7 @@
       "RECIPE_MODULE[skia]/resources/upload_dm_results.py",
       "[SLAVE_BUILD]/dm",
       "164710",
-      "Test-Ubuntu-ShuttleA-NoGPU-x86_64-Debug-Recipes",
+      "Test-Ubuntu-GCC-ShuttleA-CPU-AVX-x86_64-Debug-Recipes",
       "6",
       "",
       "[SLAVE_BUILD]/skia/common/py/utils"
@@ -318,7 +323,7 @@
       "-u",
       "[SLAVE_BUILD]/skia/tools/nanobench_flags.py",
       "/path/to/tmp/json",
-      "Test-Ubuntu-ShuttleA-NoGPU-x86_64-Debug-Recipes"
+      "Test-Ubuntu-GCC-ShuttleA-CPU-AVX-x86_64-Debug-Recipes"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "name": "exec [SLAVE_BUILD]/skia/tools/nanobench_flags.py",
@@ -337,6 +342,7 @@
       "[SLAVE_BUILD]/skia/resources",
       "--skps",
       "[SLAVE_BUILD]/playback/skps",
+      "--nogpu",
       "--dummy-flags"
     ],
     "name": "nanobench"

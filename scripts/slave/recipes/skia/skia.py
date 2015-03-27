@@ -46,26 +46,24 @@ def GenTests(api):
   builders = [
     'Build-Ubuntu-GCC-Arm7-Debug-CrOS_Daisy',
     'Build-Ubuntu-GCC-x86_64-Debug',
-    'Perf-Android-Nexus7-Tegra3-Arm7-Release',
-    'Perf-ChromeOS-Daisy-MaliT604-Arm7-Release',
-    'Perf-Win7-ShuttleA-HD2000-x86-Release',
-    'Perf-Win7-ShuttleA-HD2000-x86-Release-Trybot',
-    'Test-Android-GalaxyS4-SGX544-Arm7-Debug',
-    'Test-Android-Nexus5-Adreno330-Arm7-Debug',
-    'Test-Android-Nexus10-MaliT604-Arm7-Release',
-    'Test-Android-Xoom-Tegra2-Arm7-Debug',
-    'Test-Android-NexusPlayer-PowerVR-x86-Debug',
-    'Test-ChromeOS-Alex-GMA3150-x86-Debug',
-    'Test-ChromeOS-Link-HD4000-x86_64-Debug',
-    'Test-Mac10.8-MacMini4.1-GeForce320M-x86_64-Debug',
-    'Test-Ubuntu-ShuttleA-GTX550Ti-x86_64-Release-Valgrind_GPU',
-    'Test-Ubuntu-ShuttleA-GTX550Ti-x86_64-Debug-ZeroGPUCache',
-    'Test-Ubuntu-GCE-NoGPU-x86_64-Debug',
-    'Test-Ubuntu-GCE-NoGPU-x86_64-Debug-Trybot',
-    'Test-Ubuntu-GCE-NoGPU-x86_64-Release-TSAN',
-    'Test-Win7-ShuttleA-HD2000-x86-Release',
-    'Test-Win7-ShuttleA-HD2000-x86-Release-ANGLE',
-    'Test-Win7-ShuttleA-HD2000-x86_64-Release',
+    'Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release',
+    'Test-ChromeOS-GCC-Daisy-CPU-NEON-Arm7-Release',
+    'Perf-Win7-MSVC-ShuttleA-GPU-HD2000-x86-Release-Trybot',
+    'Test-Android-GCC-GalaxyS4-GPU-SGX544-Arm7-Debug',
+    'Test-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Debug',
+    'Test-Android-GCC-Nexus10-GPU-MaliT604-Arm7-Release',
+    'Test-Android-GCC-Xoom-GPU-Tegra2-Arm7-Debug',
+    'Test-Android-GCC-NexusPlayer-GPU-PowerVR-x86-Debug',
+    'Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug',
+    'Test-Mac10.8-Clang-MacMini4.1-GPU-GeForce320M-x86_64-Debug',
+    'Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind',
+    'Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Debug-ZeroGPUCache',
+    'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug',
+    'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Trybot',
+    'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-TSAN',
+    'Test-Win7-MSVC-ShuttleA-GPU-HD2000-x86-Release',
+    'Test-Win7-MSVC-ShuttleA-GPU-HD2000-x86-Release-ANGLE',
+    'Test-Win8-MSVC-ShuttleA-CPU-AVX-x86_64-Debug',
   ]
 
   def AndroidTestData(builder, slave_cfg):
@@ -115,7 +113,7 @@ def GenTests(api):
       test += api.platform('win', 64)
     yield test
 
-  builder = 'Test-Ubuntu-ShuttleA-NoGPU-x86_64-Debug-Recipes'
+  builder = 'Test-Ubuntu-GCC-ShuttleA-CPU-AVX-x86_64-Debug-Recipes'
   yield (
     api.test('failed_dm') +
     api.properties(buildername=builder,

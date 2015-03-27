@@ -2,8 +2,10 @@
   "builder_name_schema": {
     "Test": [
       "os",
+      "compiler",
       "model",
-      "gpu",
+      "cpu_or_gpu",
+      "cpu_or_gpu_value",
       "arch",
       "configuration"
     ],
@@ -18,8 +20,10 @@
     ],
     "Perf": [
       "os",
+      "compiler",
       "model",
-      "gpu",
+      "cpu_or_gpu",
+      "cpu_or_gpu_value",
       "arch",
       "configuration"
     ],

@@ -34,7 +34,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]\ntarget_os = ['android']"
+      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]"
     ],
     "name": "gclient setup"
   },
@@ -68,113 +68,33 @@
   },
   {
     "cmd": [
-      "which",
-      "ccache"
+      "python",
+      "-u",
+      "\nimport os\nimport sys\nwith open(sys.argv[1], 'w') as f:\n  f.write(os.path.join(os.path.expanduser('~'), 'src'))\n",
+      "/path/to/tmp/"
     ],
-    "name": "has ccache?",
-    "stdout": "/path/to/tmp/",
+    "name": "get CHROME_PATH",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@with open(sys.argv[1], 'w') as f:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  f.write(os.path.join(os.path.expanduser('~'), 'src'))@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
     ]
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_ninja",
+      "make",
       "most",
-      "-d",
-      "nexus_10"
+      "BUILDTYPE=Release"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
-      "BUILDTYPE": "Release",
-      "GYP_DEFINES": "skia_arch_type=arm skia_arch_width=32 skia_warnings_as_errors=0",
-      "SKIA_ANDROID_VERBOSE_SETUP": "1"
+      "CHROME_PATH": "/home/chrome-bot/src",
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_arch_width=64 skia_release_optimization_level=1 skia_warnings_as_errors=0"
     },
     "name": "build most"
-  },
-  {
-    "cmd": [
-      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
-      "-s",
-      "R32CB017X2L",
-      "wait-for-device"
-    ],
-    "name": "wait for device R32CB017X2L (1)"
-  },
-  {
-    "cmd": [
-      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
-      "-s",
-      "R32CB017X2L",
-      "shell",
-      "echo",
-      "$EXTERNAL_STORAGE"
-    ],
-    "name": "get EXTERNAL_STORAGE dir",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [
-      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
-      "-s",
-      "R32CB017X2L",
-      "root"
-    ],
-    "name": "adb root"
-  },
-  {
-    "cmd": [
-      "sleep",
-      "10"
-    ],
-    "name": "wait"
-  },
-  {
-    "cmd": [
-      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
-      "-s",
-      "R32CB017X2L",
-      "wait-for-device"
-    ],
-    "name": "wait for device R32CB017X2L (2)"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_kill_skia",
-      "-s",
-      "R32CB017X2L"
-    ],
-    "env": {
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
-      "SKIA_ANDROID_VERBOSE_SETUP": "1"
-    },
-    "name": "kill skia"
-  },
-  {
-    "cmd": [
-      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
-      "-s",
-      "R32CB017X2L",
-      "shell",
-      "stop"
-    ],
-    "name": "stop shell"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_push_if_needed",
-      "-s",
-      "R32CB017X2L",
-      "[SLAVE_BUILD]/skia/resources",
-      "/storage/emulated/legacy/skiabot/skia_resources"
-    ],
-    "env": {
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
-      "SKIA_ANDROID_VERBOSE_SETUP": "1"
-    },
-    "name": "push [SLAVE_BUILD]/skia/resources"
   },
   {
     "cmd": [
@@ -265,63 +185,6 @@
   },
   {
     "cmd": [
-      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
-      "-s",
-      "R32CB017X2L",
-      "shell",
-      "rm",
-      "-r",
-      "/storage/emulated/legacy/skiabot/skia_skp/skps"
-    ],
-    "name": "rmdir .../skia_skp/skps"
-  },
-  {
-    "cmd": [
-      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
-      "-s",
-      "R32CB017X2L",
-      "shell",
-      "if",
-      "[",
-      "-e",
-      "/storage/emulated/legacy/skiabot/skia_skp/skps",
-      "];",
-      "then",
-      "echo",
-      "FILE_EXISTS;",
-      "fi"
-    ],
-    "name": "exists /storage/emulated/legacy/skiabot/skia_skp/skps",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [
-      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
-      "-s",
-      "R32CB017X2L",
-      "shell",
-      "mkdir",
-      "-p",
-      "/storage/emulated/legacy/skiabot/skia_skp/skps"
-    ],
-    "name": "mkdir .../skia_skp/skps"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_push_if_needed",
-      "-s",
-      "R32CB017X2L",
-      "[SLAVE_BUILD]/playback/skps",
-      "/storage/emulated/legacy/skiabot/skia_skp/skps"
-    ],
-    "env": {
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
-      "SKIA_ANDROID_VERBOSE_SETUP": "1"
-    },
-    "name": "push [SLAVE_BUILD]/playback/skps"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
@@ -379,63 +242,6 @@
   },
   {
     "cmd": [
-      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
-      "-s",
-      "R32CB017X2L",
-      "shell",
-      "rm",
-      "-r",
-      "/storage/emulated/legacy/skiabot/skia_images"
-    ],
-    "name": "rmdir .../skiabot/skia_images"
-  },
-  {
-    "cmd": [
-      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
-      "-s",
-      "R32CB017X2L",
-      "shell",
-      "if",
-      "[",
-      "-e",
-      "/storage/emulated/legacy/skiabot/skia_images",
-      "];",
-      "then",
-      "echo",
-      "FILE_EXISTS;",
-      "fi"
-    ],
-    "name": "exists /storage/emulated/legacy/skiabot/skia_images",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [
-      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
-      "-s",
-      "R32CB017X2L",
-      "shell",
-      "mkdir",
-      "-p",
-      "/storage/emulated/legacy/skiabot/skia_images"
-    ],
-    "name": "mkdir .../skiabot/skia_images"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_push_if_needed",
-      "-s",
-      "R32CB017X2L",
-      "[SLAVE_BUILD]/images",
-      "/storage/emulated/legacy/skiabot/skia_images"
-    ],
-    "env": {
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
-      "SKIA_ANDROID_VERBOSE_SETUP": "1"
-    },
-    "name": "push [SLAVE_BUILD]/images"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
@@ -480,7 +286,7 @@
       "-u",
       "[SLAVE_BUILD]/skia/tools/dm_flags.py",
       "/path/to/tmp/json",
-      "Test-Android-Nexus10-MaliT604-Arm7-Release"
+      "Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "name": "exec [SLAVE_BUILD]/skia/tools/dm_flags.py",
@@ -493,23 +299,23 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_run_skia",
-      "--logcat",
-      "-d",
-      "nexus_10",
-      "-s",
-      "R32CB017X2L",
-      "--release",
-      "dm",
+      "valgrind",
+      "--gen-suppressions=all",
+      "--leak-check=full",
+      "--track-origins=yes",
+      "--error-exitcode=1",
+      "--num-callers=40",
+      "--suppressions=[SLAVE_BUILD]/skia/tools/valgrind.supp",
+      "[SLAVE_BUILD]/skia/out/Release/dm",
       "--verbose",
       "--resourcePath",
-      "/storage/emulated/legacy/skiabot/skia_resources",
+      "[SLAVE_BUILD]/skia/resources",
       "--skps",
-      "/storage/emulated/legacy/skiabot/skia_skp/skps",
+      "[SLAVE_BUILD]/playback/skps",
       "--images",
-      "/storage/emulated/legacy/skiabot/skia_images",
+      "[SLAVE_BUILD]/images",
       "--writePath",
-      "/storage/emulated/legacy/skiabot/skia_dm",
+      "[SLAVE_BUILD]/dm",
       "--nameByHash",
       "--properties",
       "gitHash",
@@ -518,36 +324,25 @@
       "5",
       "--key",
       "arch",
-      "Arm7",
+      "x86_64",
+      "compiler",
+      "GCC",
       "configuration",
       "Release",
-      "gpu",
-      "MaliT604",
+      "cpu_or_gpu",
+      "GPU",
+      "cpu_or_gpu_value",
+      "GTX550Ti",
+      "extra_config",
+      "Valgrind",
       "model",
-      "Nexus10",
+      "ShuttleA",
       "os",
-      "Android",
+      "Ubuntu",
+      "--nocpu",
       "--dummy-flags"
     ],
-    "env": {
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
-      "SKIA_ANDROID_VERBOSE_SETUP": "1"
-    },
     "name": "dm"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_pull_if_needed",
-      "-s",
-      "R32CB017X2L",
-      "/storage/emulated/legacy/skiabot/skia_dm",
-      "[SLAVE_BUILD]/dm"
-    ],
-    "env": {
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
-      "SKIA_ANDROID_VERBOSE_SETUP": "1"
-    },
-    "name": "pull /storage/emulated/legacy/skiabot/skia_dm"
   },
   {
     "cmd": [
@@ -556,7 +351,7 @@
       "RECIPE_MODULE[skia]/resources/upload_dm_results.py",
       "[SLAVE_BUILD]/dm",
       "164710",
-      "Test-Android-Nexus10-MaliT604-Arm7-Release",
+      "Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind",
       "5",
       "",
       "[SLAVE_BUILD]/skia/common/py/utils"
@@ -566,27 +361,153 @@
   },
   {
     "cmd": [
-      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
-      "-s",
-      "R32CB017X2L",
-      "reboot"
+      "valgrind",
+      "--gen-suppressions=all",
+      "--leak-check=full",
+      "--track-origins=yes",
+      "--error-exitcode=1",
+      "--num-callers=40",
+      "--suppressions=[SLAVE_BUILD]/skia/tools/valgrind.supp",
+      "[SLAVE_BUILD]/skia/out/Release/dm",
+      "--verbose",
+      "--resourcePath",
+      "[SLAVE_BUILD]/skia/resources",
+      "--skps",
+      "[SLAVE_BUILD]/playback/skps",
+      "--images",
+      "[SLAVE_BUILD]/images",
+      "--writePath",
+      "[SLAVE_BUILD]/dm",
+      "--nameByHash",
+      "--properties",
+      "gitHash",
+      "164710",
+      "build_number",
+      "5",
+      "--key",
+      "arch",
+      "x86_64",
+      "compiler",
+      "GCC",
+      "configuration",
+      "Release",
+      "cpu_or_gpu",
+      "GPU",
+      "cpu_or_gpu_value",
+      "GTX550Ti",
+      "extra_config",
+      "Valgrind",
+      "model",
+      "ShuttleA",
+      "os",
+      "Ubuntu",
+      "--nocpu",
+      "--dummy-flags",
+      "--abandonGpuContext"
     ],
-    "name": "reboot"
+    "name": "dm --abandonGpuContext"
   },
   {
     "cmd": [
-      "sleep",
-      "10"
+      "valgrind",
+      "--gen-suppressions=all",
+      "--leak-check=full",
+      "--track-origins=yes",
+      "--error-exitcode=1",
+      "--num-callers=40",
+      "--suppressions=[SLAVE_BUILD]/skia/tools/valgrind.supp",
+      "[SLAVE_BUILD]/skia/out/Release/dm",
+      "--verbose",
+      "--resourcePath",
+      "[SLAVE_BUILD]/skia/resources",
+      "--skps",
+      "[SLAVE_BUILD]/playback/skps",
+      "--images",
+      "[SLAVE_BUILD]/images",
+      "--nameByHash",
+      "--properties",
+      "gitHash",
+      "164710",
+      "build_number",
+      "5",
+      "--key",
+      "arch",
+      "x86_64",
+      "compiler",
+      "GCC",
+      "configuration",
+      "Release",
+      "cpu_or_gpu",
+      "GPU",
+      "cpu_or_gpu_value",
+      "GTX550Ti",
+      "extra_config",
+      "Valgrind",
+      "model",
+      "ShuttleA",
+      "os",
+      "Ubuntu",
+      "--nocpu",
+      "--dummy-flags",
+      "--preAbandonGpuContext"
     ],
-    "name": "wait for reboot"
+    "name": "dm --preAbandonGpuContext"
   },
   {
     "cmd": [
-      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
-      "-s",
-      "R32CB017X2L",
-      "wait-for-device"
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/skia/tools/nanobench_flags.py",
+      "/path/to/tmp/json",
+      "Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind"
     ],
-    "name": "wait for device R32CB017X2L (3)"
+    "cwd": "[SLAVE_BUILD]/skia",
+    "name": "exec [SLAVE_BUILD]/skia/tools/nanobench_flags.py",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"--dummy-flags\"@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "valgrind",
+      "--gen-suppressions=all",
+      "--leak-check=full",
+      "--track-origins=yes",
+      "--error-exitcode=1",
+      "--num-callers=40",
+      "--suppressions=[SLAVE_BUILD]/skia/tools/valgrind.supp",
+      "[SLAVE_BUILD]/skia/out/Release/nanobench",
+      "-i",
+      "[SLAVE_BUILD]/skia/resources",
+      "--skps",
+      "[SLAVE_BUILD]/playback/skps",
+      "--nocpu",
+      "--dummy-flags"
+    ],
+    "name": "nanobench"
+  },
+  {
+    "cmd": [
+      "valgrind",
+      "--gen-suppressions=all",
+      "--leak-check=full",
+      "--track-origins=yes",
+      "--error-exitcode=1",
+      "--num-callers=40",
+      "--suppressions=[SLAVE_BUILD]/skia/tools/valgrind.supp",
+      "[SLAVE_BUILD]/skia/out/Release/nanobench",
+      "-i",
+      "[SLAVE_BUILD]/skia/resources",
+      "--skps",
+      "[SLAVE_BUILD]/playback/skps",
+      "--nocpu",
+      "--dummy-flags",
+      "--abandonGpuContext",
+      "--nocpu"
+    ],
+    "name": "nanobench --abandonGpuContext"
   }
 ]

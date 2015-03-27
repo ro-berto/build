@@ -41,16 +41,15 @@ VAR_TEST_MAP = {
                    u'Build-Win-MSVC-x86-Release',
                    u'Build-Win-MSVC-x86-Debug-Exceptions',
                    u'Housekeeper-PerCommit',
-                   u'Test-Mac10.8-MacMini4.1-GeForce320M-x86_64-Release',
-                   u'Test-Ubuntu-ShuttleA-GTX550Ti-x86_64-Debug-ZeroGPUCache',
-                   u'Test-Ubuntu-ShuttleA-GTX550Ti-x86_64-Release-Valgrind_GPU',
-                   u'Test-Ubuntu-GCE-NoGPU-x86_64-Release-Shared',
-                   u'Test-Ubuntu-GCE-NoGPU-x86_64-Release-TSAN',
-                   u'Test-Ubuntu-ShuttleA-NoGPU-x86_64-Debug-Recipes',
-                   u'Test-Win7-ShuttleA-HD2000-x86-Debug-GDI',
-                   u'Test-Win7-ShuttleA-HD2000-x86-Release-ANGLE',
-                   u'Test-Win7-ShuttleA-HD2000-x86_64-Release',
-                   u'Test-Win8-ShuttleA-GTX660-x86-Release'),
+                   u'Test-Mac10.8-Clang-MacMini4.1-GPU-GeForce320M-x86_64-Release',
+                   u'Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Debug-ZeroGPUCache',
+                   u'Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind',
+                   u'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Shared',
+                   u'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-TSAN',
+                   u'Test-Win7-MSVC-ShuttleA-GPU-HD2000-x86-Debug-GDI',
+                   u'Test-Win7-MSVC-ShuttleA-GPU-HD2000-x86-Release-ANGLE',
+                   u'Test-Win7-MSVC-ShuttleA-CPU-AVX-x86_64-Release',
+                   u'Test-Win8-MSVC-ShuttleA-GPU-GTX660-x86-Release'),
   'MASTER_NAME': (u'client.skia',),
   'SLAVE_NAME': (u'skiabot-shuttle-ubuntu12-003',),
 }
@@ -95,8 +94,7 @@ def gyp_defs_from_builder_dict(builder_dict):
     gyp_defs['skia_shared_lib'] = '1'
 
   # skia_gpu.
-  if (builder_dict.get('gpu') == 'NoGPU' or
-      builder_dict.get('model') == 'IntelRHB'):
+  if builder_dict.get('cpu_or_gpu') == 'CPU':
     gyp_defs['skia_gpu'] = '0'
 
   # skia_warnings_as_errors.
