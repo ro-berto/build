@@ -91,7 +91,7 @@ class BuilderConfig(object):
     return self.UNIQUE
 
   @property
-  def unique(self):
+  def collapse(self):
     """Returns (bool): Whether BuildBot should collapse multiple builds.
 
     This will be passed to the 'collapseRequests' builder property, and can
