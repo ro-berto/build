@@ -321,8 +321,11 @@ class WebRTCApi(recipe_api.RecipeApi):
         annotate = None  # The parallel script doesn't output gtest format.
         flakiness_dash = False
 
-      # TODO(kjellander): Remove once webrtc:4106 is fixed.
-      if self.m.chromium.c.gyp_env.GYP_DEFINES.get('tsan') == 1:
+      # TODO(kjellander): Disable deadlock detection for all TSan builders
+      # except the one in the client.webrtc.fyi waterfall. Remove when
+      # webrtc:4106 is fixed.
+      if ('with deadlock detection' not in self.m.properties.get('buildername')
+          and self.m.chromium.c.gyp_env.GYP_DEFINES.get('tsan') == 1):
         env['TSAN_OPTIONS'] = 'detect_deadlocks=0'
 
       self.m.chromium.runtest(

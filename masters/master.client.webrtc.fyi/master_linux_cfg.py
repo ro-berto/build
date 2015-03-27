@@ -15,21 +15,25 @@ def Update(c):
                             treeStableTimer=0,
                             builderNames=[
                                 'Linux Asan (parallel)',
+                                'Linux Tsan v2 (with deadlock detection)',
       ]),
   ])
 
   specs = [
     {
       'name': 'Linux Asan (parallel)',
-      'recipe': 'webrtc/standalone',
       'slavebuilddir': 'linux_asan',
+    },
+    {
+      'name': 'Linux Tsan v2 (with deadlock detection)',
+      'slavebuilddir': 'linux_tsan',
     },
   ]
 
   c['builders'].extend([
       {
         'name': spec['name'],
-        'factory': m_annotator.BaseFactory(spec['recipe']),
+        'factory': m_annotator.BaseFactory('webrtc/standalone'),
         'notify_on_missing': True,
         'category': 'linux',
         'slavebuilddir': spec['slavebuilddir'],
