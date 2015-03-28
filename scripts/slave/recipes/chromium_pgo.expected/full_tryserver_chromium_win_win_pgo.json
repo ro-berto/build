@@ -125,7 +125,6 @@
       "-u",
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
-      "--use-live-sites",
       "--browser=release",
       "dromaeo.domcoretraverse"
     ],
@@ -140,7 +139,6 @@
       "-u",
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
-      "--use-live-sites",
       "--browser=release",
       "dromaeo.jslibtraverseprototype"
     ],
@@ -155,7 +153,6 @@
       "-u",
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
-      "--use-live-sites",
       "--browser=release",
       "dromaeo.domcorequery"
     ],
@@ -170,7 +167,6 @@
       "-u",
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
-      "--use-live-sites",
       "--browser=release",
       "tab_switching.top_10"
     ],
@@ -185,7 +181,6 @@
       "-u",
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
-      "--use-live-sites",
       "--browser=release",
       "dromaeo.jslibeventjquery"
     ],
@@ -200,7 +195,6 @@
       "-u",
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
-      "--use-live-sites",
       "--browser=release",
       "dromaeo.jslibtraversejquery"
     ],
@@ -215,7 +209,6 @@
       "-u",
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
-      "--use-live-sites",
       "--browser=release",
       "dromaeo.jslibmodifyprototype"
     ],
@@ -230,7 +223,6 @@
       "-u",
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
-      "--use-live-sites",
       "--browser=release",
       "dromaeo.jslibattrprototype"
     ],
@@ -245,7 +237,6 @@
       "-u",
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
-      "--use-live-sites",
       "--browser=release",
       "dromaeo.jslibeventprototype"
     ],
@@ -260,7 +251,6 @@
       "-u",
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
-      "--use-live-sites",
       "--browser=release",
       "dromaeo.domcoreattr"
     ],
@@ -275,7 +265,6 @@
       "-u",
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
-      "--use-live-sites",
       "--browser=release",
       "dromaeo.jslibstyleprototype"
     ],
@@ -290,7 +279,6 @@
       "-u",
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
-      "--use-live-sites",
       "--browser=release",
       "dromaeo.jslibstylejquery"
     ],
@@ -305,7 +293,6 @@
       "-u",
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
-      "--use-live-sites",
       "--browser=release",
       "dromaeo.jslibmodifyjquery"
     ],
@@ -320,7 +307,6 @@
       "-u",
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
-      "--use-live-sites",
       "--browser=release",
       "dromaeo.domcoremodify"
     ],
@@ -335,7 +321,6 @@
       "-u",
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
-      "--use-live-sites",
       "--browser=release",
       "sunspider"
     ],
@@ -350,7 +335,6 @@
       "-u",
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
-      "--use-live-sites",
       "--browser=release",
       "dromaeo.jslibattrjquery"
     ],
@@ -365,7 +349,6 @@
       "-u",
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
-      "--use-live-sites",
       "--browser=release",
       "speedometer"
     ],
@@ -380,7 +363,6 @@
       "-u",
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
-      "--use-live-sites",
       "--browser=release",
       "smoothness.top_25_smooth"
     ],
