@@ -171,8 +171,8 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     return (buildername, bot_config)
 
-  def compile(self, targets=None, name=None,
-              force_clobber=False, **kwargs):
+  def compile(self, targets=None, name=None, force_clobber=False, out_dir=None,
+              **kwargs):
     """Return a compile.py invocation."""
     targets = targets or self.c.compile_py.default_targets.as_jsonish()
     assert isinstance(targets, (list, tuple))
@@ -187,6 +187,8 @@ class ChromiumApi(recipe_api.RecipeApi):
       args += ['--crosstool', self.c.compile_py.cross_tool]
     if self.c.compile_py.compiler:
       args += ['--compiler', self.c.compile_py.compiler]
+    if out_dir:
+      args += ['--out-dir', out_dir]
     if self.c.compile_py.mode:
       args += ['--mode', self.c.compile_py.mode]
     if self.c.compile_py.goma_dir:

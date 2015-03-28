@@ -1147,6 +1147,8 @@ def get_target_build_dir(args, options):
       # When building ChromeOS's Simple Chrome workflow, the output directory
       # has a CROS board name suffix.
       outdir = 'out_%s' % (options.cros_board,)
+    elif options.out_dir:
+      outdir = options.out_dir
     else:
       outdir = 'out'
     relpath = os.path.join(outdir, options.target)
@@ -1213,6 +1215,8 @@ def real_main():
     option_parser.add_option('--cros-board', action='store',
                              help='If building for the ChromeOS Simple Chrome '
                                   'workflow, the name of the ChromeOS board.')
+  option_parser.add_option('--out-dir', action='store',
+                           help='Specify a custom output directory.')
   option_parser.add_option('--goma-dir',
                            default=os.path.join(BUILD_DIR, 'goma'),
                            help='specify goma directory')
