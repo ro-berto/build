@@ -277,9 +277,14 @@ def compare_build_artifacts(first_dir, second_dir, target_platform,
       result = 'DIFFERENT (%s): %s' % (expected, result)
     print('%-*s: %s' % (max_filepath_len, f, result))
 
-  print '%d files are equal, %d are different.'  % (
+  out = sys.stderr if unexpected_failures else sys.stdout
+  out.write('%d files are equal, %d are different.\n'  % (
       len(first_list & second_list) - expected_failures - unexpected_failures,
-      expected_failures + unexpected_failures)
+      expected_failures + unexpected_failures))
+  if unexpected_failures:
+    sys.stderr.write('Unexpected files:\n')
+    for u in unexpected_failures:
+      sys.stderr.write('  %s\n' % u)
 
   return 0 if unexpected_failures == 0 else 1
 
