@@ -58,12 +58,11 @@
   {
     "allow_subannotations": true,
     "cmd": [
-      "python",
-      "-u",
       "[SLAVE_BUILD]/chromite/bin/cbuildbot",
-      "--build-dir=/here/there",
       "--clobber",
-      "amd64-generic-release"
+      "--build-dir",
+      "/here/there",
+      "amd64-generic-full"
     ],
     "name": "cbuildbot"
   }

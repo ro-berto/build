@@ -4,7 +4,7 @@
 
 DEPS = [
   'gitiles',
-  'raw_io'
+  'properties',
 ]
 
 
@@ -12,12 +12,16 @@ def GenSteps(api):
   url = 'https://chromium.googlesource.com/chromium/src'
   for ref in api.gitiles.refs(url):
     api.gitiles.log(url, ref)
+  api.gitiles.commit_log(url, api.properties['commit_log_hash'])
   api.gitiles.download_file(url, 'OWNERS')
 
 
 def GenTests(api):
   yield (
     api.test('basic')
+    + api.properties(
+      commit_log_hash=api.gitiles.make_hash('commit'),
+    )
     + api.step_data('refs', api.gitiles.make_refs_test_data(
       'HEAD',
       'refs/heads/A',
@@ -36,7 +40,11 @@ def GenTests(api):
       api.gitiles.make_log_test_data('B')
     )
     + api.step_data(
+      'commit log: %s' % (api.gitiles.make_hash('commit')),
+      api.gitiles.make_commit_test_data('commit', 'C')
+    )
+    + api.step_data(
       'Gitiles fetch OWNERS',
-      api.raw_io.output('Zm9vYmFy')
+      api.gitiles.make_encoded_file('foobar')
     )
   )

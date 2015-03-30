@@ -9,7 +9,7 @@ import base64
 
 class Gitiles(recipe_api.RecipeApi):
   """Module for polling a git repository using the Gitiles web interface."""
-  def _curl(self, url, step_name):
+  def _fetch(self, url, step_name):
     step_result = self.m.python(step_name,
       self.resource('gerrit_client.py'), [
       '--json-file', self.m.json.output(),
@@ -20,7 +20,7 @@ class Gitiles(recipe_api.RecipeApi):
 
   def refs(self, url, step_name='refs'):
     """Returns a list of refs in the remote repository."""
-    step_result = self._curl(
+    step_result = self._fetch(
       self.m.url.join(url, '+refs?format=json'),
       step_name,
     )
@@ -43,7 +43,7 @@ class Gitiles(recipe_api.RecipeApi):
     """
     step_name = step_name or 'log: %s' % ref
 
-    step_result = self._curl(
+    step_result = self._fetch(
       self.m.url.join(url, '+log/%s?format=json&n=%s' % (ref, num)),
       step_name,
     )
@@ -59,12 +59,27 @@ class Gitiles(recipe_api.RecipeApi):
     step_result.presentation.step_text = '<br />%d new commits' % len(commits)
     return commits
 
+  def commit_log(self, url, commit, step_name=None):
+    """Returns: (dict) the Gitiles commit log structure for a given commit.
+
+    Args:
+      url (str): The base repository URL.
+      commit (str): The commit hash.
+      step_name (str): If not None, override the step name.
+    """
+    step_name = step_name or 'commit log: %s' % commit
+
+    commit_url = '%s/+/%s?format=json' % (url, commit)
+    step_result = self._fetch(commit_url, step_name)
+    return step_result.json.output
+
   def download_file(self, repository_url, file_path, branch='master', **kwargs):
     """Downloads raw file content from a Gitiles repository.
 
     Args:
       repository_url: Full URL to the repository.
       file_path: Relative path to the file from the repository root.
+      step_name: (str) If not None, override the step name.
 
     Returns:
       Raw file content.

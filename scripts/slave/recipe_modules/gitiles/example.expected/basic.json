@@ -153,6 +153,40 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[gitiles]/resources/gerrit_client.py",
+      "--json-file",
+      "/path/to/tmp/json",
+      "--url",
+      "https://chromium.googlesource.com/chromium/src/+/4015b57a143aec5156fd1444a017a32137a3fd0f?format=json"
+    ],
+    "name": "commit log: 4015b57a143aec5156fd1444a017a32137a3fd0f",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"author\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"email\": \"testauthor@fake.chromium.org\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"name\": \"Test Author\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"time\": \"Mon Jan 01 00:00:00 2015\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"commit\": \"4015b57a143aec5156fd1444a017a32137a3fd0f\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"committer\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"email\": \"testauthor@fake.chromium.org\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"name\": \"Test Author\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"time\": \"Mon Jan 01 00:00:00 2015\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"message\": \"C\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"parents\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"5931bdd37b0ed913d4e1e109480f071f1911f905\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"tree\": \"3a724c49db6131f9d2b30d29838d50eba7a0b6fd\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"tree_diff\": []@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[BUILD]/scripts/tools/pycurl.py",
       "https://chromium.googlesource.com/chromium/src/+/master/OWNERS?format=text",
       "--outfile",

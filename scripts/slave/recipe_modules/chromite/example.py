@@ -4,22 +4,19 @@
 
 DEPS = [
   'chromite',
-  'properties',
 ]
 
-def GenSteps(api):
-  bits = api.properties['TARGET_BITS']
-  board = 'x86-generic' if bits == 32 else 'amd64-generic'
 
+def GenSteps(api):
+  # Basic checkout exercise.
   api.chromite.checkout()
-  api.chromite.setup_board(board, flags={'cache-dir': '.cache'})
-  api.chromite.build_packages(board)
+  api.chromite.setup_board('amd64-generic', args=['--cache-dir', '.cache'])
+  api.chromite.build_packages('amd64-generic')
   api.chromite.cros_sdk('cros_sdk', ['echo', 'hello'],
                         environ={ 'var1': 'value' })
-  api.chromite.cbuildbot('cbuildbot', board + '-release',
-                         flags={'clobber': None, 'build-dir': '/here/there'})
+  api.chromite.cbuildbot('cbuildbot', 'amd64-generic-full',
+                         args=['--clobber', '--build-dir', '/here/there'])
 
 
 def GenTests(api):
-  for bits in (32, 64):
-    yield api.test('basic_%s' % bits) + api.properties(TARGET_BITS=bits)
+  yield api.test('basic')
