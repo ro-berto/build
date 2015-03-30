@@ -155,11 +155,11 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"All\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gpu_unittests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"angle_unittests\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"status\": \"Found dependency\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"targets\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gpu_unittests_run\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"angle_unittests_run\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -181,7 +181,7 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "gpu_unittests_run"
+      "angle_unittests_run"
     ],
     "name": "compile (with patch)"
   },
@@ -195,15 +195,15 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "[SLAVE_BUILD]/src/out/Release/gpu_unittests.isolated.gen.json"
+      "[SLAVE_BUILD]/src/out/Release/angle_unittests.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"gpu_unittests\": \"[dummy hash for gpu_unittests]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"angle_unittests\": \"[dummy hash for angle_unittests]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"gpu_unittests\": \"[dummy hash for gpu_unittests]\"}@@@"
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"angle_unittests\": \"[dummy hash for angle_unittests]\"}@@@"
     ]
   }
 ]

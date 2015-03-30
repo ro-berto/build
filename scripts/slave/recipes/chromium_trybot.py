@@ -889,19 +889,19 @@ def GenTests(api):
     api.platform.name('win')
   )
 
-  # Tests that we only run the gpu_unittests isolate if that's all
+  # Tests that we only run the angle_unittests isolate if that's all
   # that analyze said to rebuild.
   all_hashes = api.gpu.dummy_swarm_hashes
-  angle_unittests_hash = {x: all_hashes[x] for x in ['gpu_unittests']}
+  angle_unittests_hash = {x: all_hashes[x] for x in ['angle_unittests']}
   yield (
-    api.test('analyze_runs_only_gpu_unittests') +
+    api.test('analyze_runs_only_angle_unittests') +
     api.properties.tryserver(
       mastername='tryserver.chromium.win',
       buildername='win_chromium_rel_ng',
       swarm_hashes=angle_unittests_hash
     ) +
     api.platform.name('win') +
-    api.override_step_data('analyze', api.gpu.analyze_builds_gpu_unittests)
+    api.override_step_data('analyze', api.gpu.analyze_builds_angle_unittests)
   )
 
   # Tests that we run nothing if analyze said we didn't have to run anything.

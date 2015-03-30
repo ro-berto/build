@@ -192,17 +192,17 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"All\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gpu_unittests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"angle_unittests\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"status\": \"Found dependency\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"targets\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gpu_unittests_run\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"angle_unittests_run\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"gpu_unittests_run\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"angle_unittests_run\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"original_compile_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"angle_unittests_run\", @@@",
@@ -225,10 +225,10 @@
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"All\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"gpu_unittests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"angle_unittests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.matching_exes\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"gpu_unittests_run\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"angle_unittests_run\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ]@@@",
       "@@@STEP_LOG_LINE@analyze_details@}@@@",
       "@@@STEP_LOG_END@analyze_details@@@"
@@ -241,6 +241,17 @@
       "[BUILD]\\scripts\\slave\\cleanup_temp.py"
     ],
     "name": "cleanup_temp"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[isolate]\\resources\\find_isolated_tests.py",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
+      "--clean-isolated-files"
+    ],
+    "name": "clean isolated files"
   },
   {
     "cmd": [
@@ -261,8 +272,170 @@
       "error",
       "--ninja-ensure-up-to-date",
       "--",
-      "gpu_unittests_run"
+      "angle_unittests_run"
     ],
     "name": "compile (with patch)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[isolate]\\resources\\remove_build_metadata.py",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
+      "--src-dir",
+      "[SLAVE_BUILD]\\src"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "remove_build_metadata"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\src\\tools\\swarming_client\\isolate.py",
+      "batcharchive",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--isolate-server",
+      "https://isolateserver.appspot.com",
+      "--verbose",
+      "[SLAVE_BUILD]\\src\\out\\Release\\angle_unittests.isolated.gen.json"
+    ],
+    "name": "isolate tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"angle_unittests\": \"[dummy hash for angle_unittests]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\chromium\\run_crash_handler.py",
+      "--target",
+      "Release"
+    ],
+    "name": "start_crash_service"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\src\\tools\\swarming_client\\swarming.py",
+      "trigger",
+      "--swarming",
+      "https://chromium-swarm.appspot.com",
+      "--isolate-server",
+      "https://isolateserver.appspot.com",
+      "--priority",
+      "30",
+      "--shards",
+      "1",
+      "--task-name",
+      "angle_unittests on NVIDIA GPU on Windows (with patch)/Windows/[dummy has/win_chromium_rel_ng/571",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--expiration",
+      "3600",
+      "--io-timeout",
+      "1200",
+      "--hard-timeout",
+      "3600",
+      "--dimension",
+      "cpu",
+      "x86-64",
+      "--dimension",
+      "gpu",
+      "10de:104a",
+      "--dimension",
+      "os",
+      "Windows",
+      "--dimension",
+      "pool",
+      "Chrome",
+      "--tag",
+      "buildername:win_chromium_rel_ng",
+      "--tag",
+      "buildnumber:571",
+      "--tag",
+      "data:[dummy hash for angle_unittests]",
+      "--tag",
+      "gpu_test:1",
+      "--tag",
+      "master:tryserver.chromium.win",
+      "--tag",
+      "name:angle_unittests on NVIDIA GPU on Windows (with patch)",
+      "--tag",
+      "os:Windows",
+      "--tag",
+      "patch_project:chromium",
+      "--tag",
+      "project:chromium",
+      "--tag",
+      "purpose:CQ",
+      "--tag",
+      "purpose:pre-commit",
+      "--tag",
+      "rietveld:https://codereview.chromium.org/12853011/#ps1",
+      "--idempotent",
+      "--user",
+      "commit-bot@chromium.org",
+      "[dummy hash for angle_unittests]",
+      "--",
+      "--use-gpu-in-tests",
+      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
+    ],
+    "name": "[trigger] angle_unittests on NVIDIA GPU on Windows (with patch) on Windows",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"angle_unittests on NVIDIA GPU on Windows (with patch)/Windows/[dummy has/win_chromium_rel_ng/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"angle_unittests on NVIDIA GPU on Windows (with patch)/Windows/[dummy has/win_chromium_rel_ng/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+    ]
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[swarming]\\resources\\collect_gtest_task.py",
+      "--swarming-client-dir",
+      "[SLAVE_BUILD]\\src\\tools\\swarming_client",
+      "--temp-root-dir",
+      "[TMP_BASE]",
+      "--merged-test-output",
+      "/path/to/tmp/json",
+      "--",
+      "collect",
+      "--swarming",
+      "https://chromium-swarm.appspot.com",
+      "--decorate",
+      "--print-status-updates",
+      "--shards",
+      "1",
+      "angle_unittests on NVIDIA GPU on Windows (with patch)/Windows/[dummy has/win_chromium_rel_ng/571"
+    ],
+    "name": "angle_unittests on NVIDIA GPU on Windows (with patch) on Windows"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\process_dumps.py",
+      "--target",
+      "Release"
+    ],
+    "name": "process_dumps"
   }
 ]

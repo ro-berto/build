@@ -26,11 +26,11 @@ class GpuTestApi(recipe_test_api.RecipeTestApi):
         })
 
   @property
-  def analyze_builds_gpu_unittests(self):
+  def analyze_builds_angle_unittests(self):
     return self.m.json.output({
         'status': 'Found dependency',
-        'targets': ['gpu_unittests_run'],
-        'build_targets': ['All', 'gpu_unittests']
+        'targets': ['angle_unittests_run'],
+        'build_targets': ['All', 'angle_unittests']
         })
 
   @property

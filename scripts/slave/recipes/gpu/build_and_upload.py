@@ -98,11 +98,11 @@ def GenTests(api):
   # Tests that we only build a single isolate if that's all that
   # needed to be rebuilt in a patch.
   yield (
-    api.test('analyze_builds_only_gpu_unittests') +
+    api.test('analyze_builds_only_angle_unittests') +
     api.properties.tryserver(
       mastername='tryserver.chromium.win',
       buildername='win_chromium_rel_ng') +
     api.override_step_data(
         'analyze',
-        api.gpu.analyze_builds_gpu_unittests)
+        api.gpu.analyze_builds_angle_unittests)
   )
