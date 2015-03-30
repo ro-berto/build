@@ -10,8 +10,10 @@ class GomaApi(recipe_api.RecipeApi):
 
   def update_goma_canary(self):
     """Returns a step for updating goma canary."""
-    self.m.gclient('update goma canary', ['sync', '--verbose', '--force',
-                                          '--revision', 'build/goma@HEAD'])
+    self.m.gclient('update goma canary',
+                   ['sync', '--verbose', '--force',
+                    '--revision', 'build/goma@HEAD'],
+                   cwd=self.m.path['build'])
 
   def diagnose_goma(self):
     """Returns a step for checking goma log."""

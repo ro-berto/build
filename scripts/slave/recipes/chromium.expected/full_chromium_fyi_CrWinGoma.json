@@ -10,6 +10,7 @@
       "--revision",
       "build/goma@HEAD"
     ],
+    "cwd": "[BUILD]",
     "name": "gclient update goma canary"
   },
   {
