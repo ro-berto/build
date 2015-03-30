@@ -104,6 +104,14 @@
   },
   {
     "cmd": [
+      "echo",
+      "-e",
+      "{\n  \"GYP_DEFINES\": {\n    \"OS\": \"ios\", \n    \"component\": \"static_library\", \n    \"fake gyp define 1\": \"fake value 1\", \n    \"fake gyp define 2\": \"fake value 2\"\n  }, \n  \"compiler\": \"xcodebuild\", \n  \"configuration\": \"Debug\", \n  \"sdk\": \"iphonesimulator8.0\", \n  \"tests\": [\n    {\n      \"app\": \"fake tests\", \n      \"device type\": \"fake device\", \n      \"os\": \"8.1\"\n    }\n  ], \n  \"triggered bots\": {}, \n  \"triggered by\": \"parent\", \n  \"xcode version\": \"fake xcode version\"\n}"
+    ],
+    "name": "finalize build config"
+  },
+  {
+    "cmd": [
       "[BUILD]/scripts/slave/ios/find_xcode.py",
       "--json-file",
       "/path/to/tmp/json",

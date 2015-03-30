@@ -1,28 +1,6 @@
 [
   {
     "cmd": [
-      "[BUILD]/scripts/slave/ios/host_info.py",
-      "--json-file",
-      "/path/to/tmp/json"
-    ],
-    "name": "host and tools info",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br />OS X 1.2.3, Xcode 6.7.8 (5D342509a)@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Mac OS X Version\": \"1.2.3\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Xcode Build Version\": \"5D342509a\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Xcode SDKs\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"fake sdk 1.0\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"fake sdk 1.1\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"fake sdk 2.0\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Xcode Version\": \"6.7.8\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "[BUILD]/scripts/slave/bot_update.py",
@@ -63,46 +41,56 @@
     "name": "read build config",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"GYP_DEFINES\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"fake gyp define 1\": \"fake value 1\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"fake gyp define 2\": \"fake value 2\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"GYP_DEFINES\": {}, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"compiler\": \"xcodebuild\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Debug\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"sdk\": \"iphonesimulator7.1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"sdk\": \"iphonesimulator8.1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"app\": \"fake tests 1\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"device type\": \"fake device\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"app\": \"fake test 1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"device type\": \"fake device 1\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"os\": \"8.1\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"app\": \"fake tests 2\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"device type\": \"fake device\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"device type\": \"fake device 1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"include\": \"fake include.json\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"os\": \"8.1\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"app\": \"fake tests 3\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"device type\": \"fake device\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"os\": \"8.1\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"app\": \"fake test 2\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"device type\": \"fake device 2\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"os\": \"7.1\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"app\": \"fake tests 4\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"device type\": \"fake device\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"os\": \"8.1\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"app\": \"fake tests 5\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"device type\": \"fake device\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"os\": \"8.1\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"app\": \"fake tests 6\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"device type\": \"fake device\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"os\": \"8.1\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"device type\": \"fake device 2\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"include\": \"fake include.json\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"os\": \"7.1\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"xcode version\": \"fake xcode version\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"xcode version\": \"6.1.1\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]/src/ios/build/bots/tests/fake include.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "include fake include.json",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"tests\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"app\": \"fake included test 1\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"app\": \"fake included test 2\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -111,7 +99,7 @@
     "cmd": [
       "echo",
       "-e",
-      "{\n  \"GYP_DEFINES\": {\n    \"OS\": \"ios\", \n    \"component\": \"static_library\", \n    \"fake gyp define 1\": \"fake value 1\", \n    \"fake gyp define 2\": \"fake value 2\"\n  }, \n  \"compiler\": \"xcodebuild\", \n  \"configuration\": \"Debug\", \n  \"sdk\": \"iphonesimulator7.1\", \n  \"tests\": [\n    {\n      \"app\": \"fake tests 1\", \n      \"device type\": \"fake device\", \n      \"os\": \"8.1\"\n    }, \n    {\n      \"app\": \"fake tests 2\", \n      \"device type\": \"fake device\", \n      \"os\": \"8.1\"\n    }, \n    {\n      \"app\": \"fake tests 3\", \n      \"device type\": \"fake device\", \n      \"os\": \"8.1\"\n    }, \n    {\n      \"app\": \"fake tests 4\", \n      \"device type\": \"fake device\", \n      \"os\": \"8.1\"\n    }, \n    {\n      \"app\": \"fake tests 5\", \n      \"device type\": \"fake device\", \n      \"os\": \"8.1\"\n    }, \n    {\n      \"app\": \"fake tests 6\", \n      \"device type\": \"fake device\", \n      \"os\": \"8.1\"\n    }\n  ], \n  \"triggered bots\": {}, \n  \"xcode version\": \"fake xcode version\"\n}"
+      "{\n  \"GYP_DEFINES\": {\n    \"OS\": \"ios\", \n    \"component\": \"static_library\"\n  }, \n  \"compiler\": \"xcodebuild\", \n  \"configuration\": \"Debug\", \n  \"sdk\": \"iphonesimulator8.1\", \n  \"tests\": [\n    {\n      \"app\": \"fake test 1\", \n      \"device type\": \"fake device 1\", \n      \"os\": \"8.1\"\n    }, \n    {\n      \"app\": \"fake included test 1\", \n      \"device type\": \"fake device 1\", \n      \"os\": \"8.1\"\n    }, \n    {\n      \"app\": \"fake included test 2\", \n      \"device type\": \"fake device 1\", \n      \"os\": \"8.1\"\n    }, \n    {\n      \"app\": \"fake test 2\", \n      \"device type\": \"fake device 2\", \n      \"os\": \"7.1\"\n    }, \n    {\n      \"app\": \"fake included test 1\", \n      \"device type\": \"fake device 2\", \n      \"os\": \"7.1\"\n    }, \n    {\n      \"app\": \"fake included test 2\", \n      \"device type\": \"fake device 2\", \n      \"os\": \"7.1\"\n    }\n  ], \n  \"triggered bots\": {}, \n  \"xcode version\": \"6.1.1\"\n}"
     ],
     "name": "finalize build config"
   },
@@ -121,7 +109,7 @@
       "--json-file",
       "/path/to/tmp/json",
       "--version",
-      "fake xcode version"
+      "6.1.1"
     ],
     "name": "find xcode",
     "~followup_annotations": [
@@ -137,14 +125,14 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "fake gyp define 1=fake value 1 fake gyp define 2=fake value 2 component=static_library OS=ios",
+      "GYP_DEFINES": "component=static_library OS=ios",
       "GYP_GENERATORS": "xcode",
       "GYP_GENERATOR_FLAGS": "xcode_project_version=3.2",
       "LANDMINES_VERBOSE": "1"
     },
     "name": "gclient runhooks",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br />GYP_DEFINES:<br />fake gyp define 1=fake value 1<br />fake gyp define 2=fake value 2<br />component=static_library<br />OS=ios@@@"
+      "@@@STEP_TEXT@<br />GYP_DEFINES:<br />component=static_library<br />OS=ios@@@"
     ]
   },
   {
@@ -155,7 +143,7 @@
       "-project",
       "[SLAVE_BUILD]/src/build/all.xcodeproj",
       "-sdk",
-      "iphonesimulator7.1"
+      "iphonesimulator8.1"
     ],
     "cwd": "[SLAVE_BUILD]/src/xcodebuild",
     "name": "compile"
@@ -164,17 +152,17 @@
     "cmd": [
       "[BUILD]/scripts/slave/ios/run.py",
       "--app",
-      "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake tests 1.app",
+      "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake test 1.app",
       "--json_file",
       "/path/to/tmp/json",
       "--iossim",
       "[SLAVE_BUILD]/src/xcodebuild/ninja-iossim/Debug/iossim",
       "--platform",
-      "fake device",
+      "fake device 1",
       "--version",
       "8.1"
     ],
-    "name": "fake tests 1 (fake device iOS 8.1)",
+    "name": "fake test 1 (fake device 1 iOS 8.1)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"links\": {@@@",
@@ -198,89 +186,17 @@
     "cmd": [
       "[BUILD]/scripts/slave/ios/run.py",
       "--app",
-      "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake tests 2.app",
+      "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake included test 1.app",
       "--json_file",
       "/path/to/tmp/json",
       "--iossim",
       "[SLAVE_BUILD]/src/xcodebuild/ninja-iossim/Debug/iossim",
       "--platform",
-      "fake device",
+      "fake device 1",
       "--version",
       "8.1"
     ],
-    "name": "fake tests 2 (fake device iOS 8.1)",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"links\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"fake URL text\": \"fake URL\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"logs\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"fake log\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"fake log line 1\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"fake log line 2\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@fake log@fake log line 1@@@",
-      "@@@STEP_LOG_LINE@fake log@fake log line 2@@@",
-      "@@@STEP_LOG_END@fake log@@@",
-      "@@@STEP_LINK@fake URL text@fake URL@@@",
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[BUILD]/scripts/slave/ios/run.py",
-      "--app",
-      "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake tests 3.app",
-      "--json_file",
-      "/path/to/tmp/json",
-      "--iossim",
-      "[SLAVE_BUILD]/src/xcodebuild/ninja-iossim/Debug/iossim",
-      "--platform",
-      "fake device",
-      "--version",
-      "8.1"
-    ],
-    "name": "fake tests 3 (fake device iOS 8.1)",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"links\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"fake URL text\": \"fake URL\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"logs\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"fake log\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"fake log line 1\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"fake log line 2\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@fake log@fake log line 1@@@",
-      "@@@STEP_LOG_LINE@fake log@fake log line 2@@@",
-      "@@@STEP_LOG_END@fake log@@@",
-      "@@@STEP_LINK@fake URL text@fake URL@@@",
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[BUILD]/scripts/slave/ios/run.py",
-      "--app",
-      "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake tests 4.app",
-      "--json_file",
-      "/path/to/tmp/json",
-      "--iossim",
-      "[SLAVE_BUILD]/src/xcodebuild/ninja-iossim/Debug/iossim",
-      "--platform",
-      "fake device",
-      "--version",
-      "8.1"
-    ],
-    "name": "fake tests 4 (fake device iOS 8.1)",
+    "name": "fake included test 1 (fake device 1 iOS 8.1)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"links\": {@@@",
@@ -304,53 +220,17 @@
     "cmd": [
       "[BUILD]/scripts/slave/ios/run.py",
       "--app",
-      "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake tests 5.app",
+      "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake included test 2.app",
       "--json_file",
       "/path/to/tmp/json",
       "--iossim",
       "[SLAVE_BUILD]/src/xcodebuild/ninja-iossim/Debug/iossim",
       "--platform",
-      "fake device",
+      "fake device 1",
       "--version",
       "8.1"
     ],
-    "name": "fake tests 5 (fake device iOS 8.1)",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 2",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"links\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"fake URL text\": \"fake URL\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"logs\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"fake log\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"fake log line 1\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"fake log line 2\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@fake log@fake log line 1@@@",
-      "@@@STEP_LOG_LINE@fake log@fake log line 2@@@",
-      "@@@STEP_LOG_END@fake log@@@",
-      "@@@STEP_LINK@fake URL text@fake URL@@@",
-      "@@@STEP_EXCEPTION@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[BUILD]/scripts/slave/ios/run.py",
-      "--app",
-      "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake tests 6.app",
-      "--json_file",
-      "/path/to/tmp/json",
-      "--iossim",
-      "[SLAVE_BUILD]/src/xcodebuild/ninja-iossim/Debug/iossim",
-      "--platform",
-      "fake device",
-      "--version",
-      "8.1"
-    ],
-    "name": "fake tests 6 (fake device iOS 8.1)",
+    "name": "fake included test 2 (fake device 1 iOS 8.1)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"links\": {@@@",
@@ -371,8 +251,105 @@
     ]
   },
   {
-    "name": "$final_result",
-    "reason": "Failed fake tests 2 (fake device iOS 8.1), fake tests 3 (fake device iOS 8.1), fake tests 5 (fake device iOS 8.1).",
-    "status_code": 1
+    "cmd": [
+      "[BUILD]/scripts/slave/ios/run.py",
+      "--app",
+      "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake test 2.app",
+      "--json_file",
+      "/path/to/tmp/json",
+      "--iossim",
+      "[SLAVE_BUILD]/src/xcodebuild/ninja-iossim/Debug/iossim",
+      "--platform",
+      "fake device 2",
+      "--version",
+      "7.1"
+    ],
+    "name": "fake test 2 (fake device 2 iOS 7.1)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"links\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"fake URL text\": \"fake URL\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"logs\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"fake log\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"fake log line 1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"fake log line 2\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@fake log@fake log line 1@@@",
+      "@@@STEP_LOG_LINE@fake log@fake log line 2@@@",
+      "@@@STEP_LOG_END@fake log@@@",
+      "@@@STEP_LINK@fake URL text@fake URL@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILD]/scripts/slave/ios/run.py",
+      "--app",
+      "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake included test 1.app",
+      "--json_file",
+      "/path/to/tmp/json",
+      "--iossim",
+      "[SLAVE_BUILD]/src/xcodebuild/ninja-iossim/Debug/iossim",
+      "--platform",
+      "fake device 2",
+      "--version",
+      "7.1"
+    ],
+    "name": "fake included test 1 (fake device 2 iOS 7.1)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"links\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"fake URL text\": \"fake URL\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"logs\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"fake log\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"fake log line 1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"fake log line 2\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@fake log@fake log line 1@@@",
+      "@@@STEP_LOG_LINE@fake log@fake log line 2@@@",
+      "@@@STEP_LOG_END@fake log@@@",
+      "@@@STEP_LINK@fake URL text@fake URL@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILD]/scripts/slave/ios/run.py",
+      "--app",
+      "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake included test 2.app",
+      "--json_file",
+      "/path/to/tmp/json",
+      "--iossim",
+      "[SLAVE_BUILD]/src/xcodebuild/ninja-iossim/Debug/iossim",
+      "--platform",
+      "fake device 2",
+      "--version",
+      "7.1"
+    ],
+    "name": "fake included test 2 (fake device 2 iOS 7.1)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"links\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"fake URL text\": \"fake URL\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"logs\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"fake log\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"fake log line 1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"fake log line 2\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@fake log@fake log line 1@@@",
+      "@@@STEP_LOG_LINE@fake log@fake log line 2@@@",
+      "@@@STEP_LOG_END@fake log@@@",
+      "@@@STEP_LINK@fake URL text@fake URL@@@"
+    ]
   }
 ]

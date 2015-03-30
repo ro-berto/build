@@ -56,18 +56,33 @@ class iOSApi(recipe_api.RecipeApi):
     elif self.__config['sdk'].startswith('iphonesimulator'):
       return 'simulator'
 
-  def read_build_config(self, master_name=None):
+  def read_build_config(
+    self,
+    master_name=None,
+    build_config_dir=None,
+    include_dir=None,
+  ):
     """Reads the iOS build config for this bot.
 
     Args:
       master_name: Name of a master to read the build config from, or None
         to read from buildbot properties at run-time.
+      build_config_dir: Directory to read the build config from, or None
+        to read from the default directory.
+      include_dir: Directory to read includes from, or None to read from
+        the default directory.
     """
-    build_config_dir = self.m.path['checkout'].join(
+    build_config_dir = build_config_dir or self.m.path['checkout'].join(
       'ios',
       'build',
       'bots',
       master_name or self.m.properties['mastername'],
+    )
+    include_dir = include_dir or self.m.path['checkout'].join(
+      'ios',
+      'build',
+      'bots',
+      'tests',
     )
 
     self.__config = self.m.json.read(
@@ -113,6 +128,66 @@ class iOSApi(recipe_api.RecipeApi):
     # them without having to check if they are in the dict at all.
     self.__config['triggered bots'] = self.__config.get('triggered bots', {})
     self.__config['tests'] = self.__config.get('tests', [])
+
+    # Elements of the "tests" list are dicts. There are two types of elements,
+    # determined by the presence of one of these mutually exclusive keys:
+    #   "app": This says to run a particular app.
+    #   "include": This says to include a common set of tests from include_dir.
+    # So now we go through the "tests" list replacing any "include" keys.
+    # The value of an "include" key is the name of a set of tests to include,
+    # which can be found as a .json file in include_dir. Read the contents
+    # lazily as needed into includes.
+    def read_include(includes):
+      """Reads the contents of the given include.
+
+      Args:
+        include: Name of the include.
+      """
+      return self.m.json.read(
+        'include %s' % include,
+        include_dir.join(include),
+        step_test_data=lambda: self.m.json.test_api.output({
+          'tests': [
+            {
+              'app': 'fake included test 1',
+            },
+            {
+              'app': 'fake included test 2',
+            },
+          ],
+        }),
+      ).json.output
+
+    includes = {}
+    expanded_tests_list = []
+
+    # expanded_tests_list will be the list of test dicts, with
+    # any "include" replaced with the tests from that include.
+    for element in self.__config['tests']:
+      if element.get('include'):
+        # This is an include dict.
+        include = str(element.pop('include'))
+
+        # Lazily read the include if we haven't already.
+        if include not in includes:
+          includes[include] = read_include(include)
+
+        # Now take each test dict from the include, update it with the
+        # extra keys (e.g. device, OS), and append to the list of tests.
+        for included_test in includes[include]['tests']:
+          expanded_tests_list.append(copy.deepcopy(included_test))
+          expanded_tests_list[-1].update(element)
+      else:
+        # This is a test dict.
+        expanded_tests_list.append(element)
+
+    self.__config['tests'] = expanded_tests_list
+
+    self.m.step('finalize build config', [
+      'echo',
+      '-e',
+      self.m.json.dumps(self.__config, indent=2),
+    ])
 
     step_result = self.m.step(
       'find xcode', [
