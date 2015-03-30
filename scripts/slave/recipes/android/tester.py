@@ -53,6 +53,11 @@ JAVA_UNIT_TESTS = freeze([
   'junit_unit_tests',
 ])
 
+JAVA_ROBOLECTRIC_UNIT_TESTS = freeze([
+  'chrome_junit_tests',
+  'content_junit_tests',
+])
+
 PYTHON_UNIT_TESTS = freeze([
   'gyp_py_unittests',
   'pylib_py_unittests',
@@ -94,7 +99,7 @@ BUILDERS = freeze({
       'config': 'trybot_builder',
       'instrumentation_tests': INSTRUMENTATION_TESTS,
       'unittests': UNIT_TESTS,
-      'java_unittests': JAVA_UNIT_TESTS,
+      'java_unittests': JAVA_UNIT_TESTS + JAVA_ROBOLECTRIC_UNIT_TESTS,
       'python_unittests': PYTHON_UNIT_TESTS,
       'target': 'Release',
       'try': True,
