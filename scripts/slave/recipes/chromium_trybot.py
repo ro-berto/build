@@ -130,6 +130,11 @@ BUILDERS = freeze({
         'mastername': 'chromium.chromiumos',
         'buildername': 'Linux ChromiumOS Builder',
       },
+      'linux_chromium_chromeos_msan_rel_ng': {
+        'mastername': 'chromium.memory.fyi',
+        'buildername': 'Chromium Linux MSan Builder',
+        'tester': 'Linux MSan Tests',
+      },
       'linux_chromium_chromeos_ozone_rel_ng': {
         'mastername': 'chromium.chromiumos',
         'buildername': 'Linux ChromiumOS Ozone Builder',
@@ -142,6 +147,11 @@ BUILDERS = freeze({
       'linux_chromium_compile_dbg_32_ng': {
         'mastername': 'chromium.linux',
         'buildername': 'Linux Builder (dbg)(32)',
+      },
+      'linux_chromium_msan_rel_ng': {
+        'mastername': 'chromium.memory.fyi',
+        'buildername': 'Chromium Linux ChromeOS MSan Builder',
+        'tester': 'Linux ChromeOS MSan Tests',
       },
       'linux_site_isolation': {
         'mastername': 'chromium.fyi',
