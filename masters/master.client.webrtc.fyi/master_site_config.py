@@ -15,3 +15,5 @@ class WebRTCFYI(Master.Master3):
   project_url = 'http://webrtc.googlecode.com'
   from_address = 'webrtc-cb-fyi-watchlist@google.com'
   buildbot_url = 'http://build.chromium.org/p/client.webrtc.fyi/'
+  service_account_file = 'service-account-webrtc.json'
+  buildbucket_bucket = 'master.client.webrtc.fyi'

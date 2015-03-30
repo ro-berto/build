@@ -22,3 +22,5 @@ class WebRTC(Master.Master3):
   store_revisions_url = base_app_url + '/revisions'
   last_good_url = base_app_url + '/lkgr'
   buildbot_url = 'http://build.chromium.org/p/client.webrtc/'
+  service_account_file = 'service-account-webrtc.json'
+  buildbucket_bucket = 'master.client.webrtc'
