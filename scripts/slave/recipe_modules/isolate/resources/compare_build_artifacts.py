@@ -260,7 +260,7 @@ def compare_build_artifacts(first_dir, second_dir, target_platform,
   missing_files = sorted(first_list.symmetric_difference(second_list))
   if missing_files:
     print >> sys.stderr, 'Different list of files in both directories:'
-    print >> sys.stderr, '\n'.join('  ' + i for i in missing_files))
+    print >> sys.stderr, '\n'.join('  ' + i for i in missing_files)
     unexpected_diffs.extend(missing_files)
 
   max_filepath_len = max(len(n) for n in all_files)
