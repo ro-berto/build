@@ -581,17 +581,22 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.path.rmtree(
         'build directory',
         self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
+
+      # Do not attempt to compose an archive URL if one is given.
+      specified_url = self.m.properties.get('parent_build_archive_url')
+      if specified_url:
+        legacy_build_url = None
+      else:
+        legacy_build_url = self._make_legacy_build_url(master_config,
+                                                       mastername)
+
       self.m.archive.download_and_unzip_build(
-        'extract build',
-        self.m.chromium.c.build_config_fs,
-        self.m.archive.legacy_download_url(
-          master_config.get('build_gs_bucket'),
-          extra_url_components=(None if mastername.startswith('chromium.perf')
-           else self.m.properties['mastername'])),
-        build_revision=self.m.properties.get(
-          'parent_got_revision', got_revision),
-        build_archive_url=self.m.properties.get('parent_build_archive_url'),
-        )
+        step_name='extract build',
+        target=self.m.chromium.c.build_config_fs,
+        build_url=legacy_build_url,
+        build_revision=self.m.properties.get('parent_got_revision',
+                                             got_revision),
+        build_archive_url=specified_url)
 
       if (self.m.chromium.c.TARGET_PLATFORM == 'android' and
           bot_config.get('root_devices')):
@@ -609,6 +614,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self.m.isolate.find_isolated_tests(self.m.chromium.output_dir)
 
     return tests
+
+  def _make_legacy_build_url(self, master_config, mastername):
+    return self.m.archive.legacy_download_url(
+               master_config.get('build_gs_bucket'),
+               extra_url_components=(
+                   None if mastername.startswith('chromium.perf')
+                   else self.m.properties['mastername']))
 
   @contextlib.contextmanager
   def wrap_chromium_tests(self, mastername):
