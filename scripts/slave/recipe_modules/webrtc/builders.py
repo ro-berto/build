@@ -1025,16 +1025,6 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
-      'Linux Tsan v2 (with deadlock detection)': {
-        'recipe_config': 'webrtc_clang',
-        'chromium_apply_config': ['tsan2'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'linux'},
-      },
       'Android Builder (dbg)': {
         'recipe_config': 'webrtc_android',
         'chromium_config_kwargs': {

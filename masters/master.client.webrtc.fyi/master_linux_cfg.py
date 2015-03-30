@@ -15,7 +15,6 @@ def Update(c):
                             treeStableTimer=0,
                             builderNames=[
                                 'Linux Asan (parallel)',
-                                'Linux Tsan v2 (with deadlock detection)',
       ]),
   ])
 
@@ -23,10 +22,6 @@ def Update(c):
     {
       'name': 'Linux Asan (parallel)',
       'slavebuilddir': 'linux_asan',
-    },
-    {
-      'name': 'Linux Tsan v2 (with deadlock detection)',
-      'slavebuilddir': 'linux_tsan',
     },
   ]
 
