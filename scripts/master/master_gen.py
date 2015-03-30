@@ -63,6 +63,7 @@ def _Populate(BuildmasterConfig, builders, master_cls):
   c['builders'] = []
   for builder_name, builder_data in builders['builders'].items():
     c['builders'].append({
+        'auto_reboot': builder_data.get('auto_reboot', True),
         'name': builder_name,
         'factory': m_annotator.BaseFactory(),
         'slavebuilddir': builder_data['slavebuilddir'],

@@ -1,6 +1,7 @@
 {
   "builders": {
-    "chromium_mac_dbg": {
+    "crashpad_mac_dbg": {
+      "auto_reboot": False,
       "properties": {
         "config": "Debug",
       },
@@ -8,7 +9,8 @@
       "slave_pools": ["mac10.9"],
       "slavebuilddir": "chromium_mac_dbg",
     },
-    "chromium_mac_rel": {
+    "crashpad_mac_rel": {
+      "auto_reboot": False,
       "properties": {
         "config": "Release",
       },
@@ -16,7 +18,8 @@
       "slave_pools": ["mac10.9"],
       "slavebuilddir": "chromium_mac_rel",
     },
-    "chromium_win_dbg": {
+    "crashpad_win_dbg": {
+      "auto_reboot": False,
       "properties": {
         "config": "Debug",
       },
@@ -24,7 +27,8 @@
       "slave_pools": ["win7"],
       "slavebuilddir": "chromium_win_dbg",
     },
-    "chromium_win_rel": {
+    "crashpad_win_rel": {
+      "auto_reboot": False,
       "properties": {
         "config": "Release",
       },
