@@ -142,24 +142,10 @@ _AddBotSpec(
     num_shards=4)
 
 _AddBotSpec(
-    name='Win 7 ATI GPU Perf',
-    platform='win',
-    parent_builder='Win x64 FYI Builder',
-    perf_id='chromium-rel-win7-gpu-ati',
-    target_bits=64,
-    num_shards=1)
-_AddBotSpec(
-    name='Win 7 Intel GPU Perf',
+    name='Win 7 Intel GPU Perf (Xeon)',
     platform='win',
     parent_builder='Win x64 FYI Builder',
     perf_id='chromium-rel-win7-gpu-intel',
-    target_bits=64,
-    num_shards=1)
-_AddBotSpec(
-    name='Win 7 Nvidia GPU Perf',
-    platform='win',
-    parent_builder='Win x64 FYI Builder',
-    perf_id='chromium-rel-win7-gpu-nvidia',
     target_bits=64,
     num_shards=1)
 
