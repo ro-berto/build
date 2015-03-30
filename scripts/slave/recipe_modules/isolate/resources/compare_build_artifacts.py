@@ -233,7 +233,7 @@ def compare_files(first_filepath, second_filepath):
 
 def compare_build_artifacts(first_dir, second_dir, target_platform,
                             recursive=False):
-  """Compare the artifacts from two distinct builds."""
+  """Compares the artifacts from two distinct builds."""
   if not os.path.isdir(first_dir):
     print >> sys.stderr, '%s isn\'t a valid directory.' % first_dir
     return 1
@@ -241,52 +241,56 @@ def compare_build_artifacts(first_dir, second_dir, target_platform,
     print >> sys.stderr, '%s isn\'t a valid directory.' % second_dir
     return 1
 
-  with open(os.path.join(BASE_DIR, 'deterministic_build_blacklist.json')) as f:
-    blacklist = frozenset(json.load(f))
-
-  whitelist = WHITELIST[target_platform]
-
-  unexpected_failures = 0
-  expected_failures = 0
-  first_list = get_files_to_compare(first_dir, recursive) - blacklist
-  second_list = get_files_to_compare(second_dir, recursive) - blacklist
-
-  diff = first_list.symmetric_difference(second_list)
-  if diff:
-    print >> sys.stderr, 'Different list of files in both directories'
-    print >> sys.stderr, '\n'.join('  ' + i for i in sorted(diff))
-    unexpected_failures += len(diff)
-
   epoch_hex = struct.pack('<I', int(time.time())).encode('hex')
   print('Epoch: %s' %
       ' '.join(epoch_hex[i:i+2] for i in xrange(0, len(epoch_hex), 2)))
-  max_filepath_len = max(len(n) for n in first_list & second_list)
-  for f in sorted(first_list & second_list):
+
+  with open(os.path.join(BASE_DIR, 'deterministic_build_blacklist.json')) as f:
+    blacklist = frozenset(json.load(f))
+  whitelist = WHITELIST[target_platform]
+
+  # The two directories.
+  first_list = get_files_to_compare(first_dir, recursive) - blacklist
+  second_list = get_files_to_compare(second_dir, recursive) - blacklist
+
+  equals = []
+  expected_diffs = []
+  unexpected_diffs = []
+  all_files = sorted(first_list & second_list)
+  missing_files = sorted(first_list.symmetric_difference(second_list))
+  if missing_files:
+    print >> sys.stderr, 'Different list of files in both directories:'
+    print >> sys.stderr, '\n'.join('  ' + i for i in missing_files))
+    unexpected_diffs.extend(missing_files)
+
+  max_filepath_len = max(len(n) for n in all_files)
+  for f in all_files:
     first_file = os.path.join(first_dir, f)
     second_file = os.path.join(second_dir, f)
     result = compare_files(first_file, second_file)
     if not result:
-      result = 'equal'
+      tag = 'equal'
+      equals.append(f)
     else:
-      expected = 'unexpected'
       if f in whitelist:
-        expected_failures += 1
-        expected = 'expected'
+        expected_diffs.append(f)
+        tag = 'expected'
       else:
-        unexpected_failures += 1
-      result = 'DIFFERENT (%s): %s' % (expected, result)
+        unexpected_diffs.append(f)
+        tag = 'unexpected'
+      result = 'DIFFERENT (%s): %s' % (tag, result)
     print('%-*s: %s' % (max_filepath_len, f, result))
+  unexpected_diffs.sort()
 
-  out = sys.stderr if unexpected_failures else sys.stdout
-  out.write('%d files are equal, %d are different.\n'  % (
-      len(first_list & second_list) - expected_failures - unexpected_failures,
-      expected_failures + unexpected_failures))
-  if unexpected_failures:
+  print('Equals:           %d' % len(equals))
+  print('Expected diffs:   %d' % len(expected_diffs))
+  print('Unexpected diffs: %d' % len(unexpected_diffs))
+  if unexpected_diffs:
     sys.stderr.write('Unexpected files:\n')
-    for u in unexpected_failures:
+    for u in unexpected_diffs:
       sys.stderr.write('  %s\n' % u)
 
-  return 0 if unexpected_failures == 0 else 1
+  return int(bool(unexpected_diffs))
 
 
 def main():
