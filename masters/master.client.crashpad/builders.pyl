@@ -1,0 +1,60 @@
+{
+  "builders": {
+    "chromium_mac_dbg": {
+      "properties": {
+        "config": "Debug",
+      },
+      "recipe": "crashpad/continuous",
+      "slave_pools": ["mac10.9"],
+      "slavebuilddir": "chromium_mac_dbg",
+    },
+    "chromium_mac_rel": {
+      "properties": {
+        "config": "Release",
+      },
+      "recipe": "crashpad/continuous",
+      "slave_pools": ["mac10.9"],
+      "slavebuilddir": "chromium_mac_rel",
+    },
+    "chromium_win_dbg": {
+      "properties": {
+        "config": "Debug",
+      },
+      "recipe": "crashpad/continuous",
+      "slave_pools": ["win7"],
+      "slavebuilddir": "chromium_win_dbg",
+    },
+    "chromium_win_rel": {
+      "properties": {
+        "config": "Release",
+      },
+      "recipe": "crashpad/continuous",
+      "slave_pools": ["win7"],
+      "slavebuilddir": "chromium_win_rel",
+    },
+  },
+  "git_repo_url": "https://chromium.googlesource.com/crashpad/crashpad",
+  "master_base_class": "Master3",
+  "master_port": 20300,
+  "master_port_alt": 40300,
+  "slave_port": 30300,
+  "slave_pools": {
+    "mac10.9": {
+      "slave_data": {
+        "bits": 64,
+        "os":  "mac",
+        "version": "10.9.5",
+      },
+      "slaves": ["vm665-m3"],
+    },
+    "win7": {
+      "slave_data": {
+        "bits": 64,
+        "os":  "win",
+        "version": "win7",
+      },
+      "slaves": ["vm254-m3"],
+    },
+  },
+  "templates": ["templates", "../master.chromium/templates"],
+}
