@@ -104,6 +104,7 @@ WHITELIST = freeze({
     'd8.exe',
     'delegate_execute.exe',
     'delegate_execute_unittests.exe',
+    'ipc_mojo_perftests.exe',
     'ipc_mojo_unittests.exe',
     'interactive_ui_tests.exe',
     'interactive_ui_tests.isolated',
@@ -286,9 +287,9 @@ def compare_build_artifacts(first_dir, second_dir, target_platform,
   print('Expected diffs:   %d' % len(expected_diffs))
   print('Unexpected diffs: %d' % len(unexpected_diffs))
   if unexpected_diffs:
-    sys.stderr.write('Unexpected files:\n')
+    print('Unexpected files:\n')
     for u in unexpected_diffs:
-      sys.stderr.write('  %s\n' % u)
+      print('  %s\n' % u)
 
   return int(bool(unexpected_diffs))
 
