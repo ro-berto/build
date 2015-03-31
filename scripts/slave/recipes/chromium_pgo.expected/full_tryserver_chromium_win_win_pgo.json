@@ -126,12 +126,26 @@
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
       "--browser=release",
-      "dromaeo.domcoretraverse"
+      "page_cycler.tough_layout_cases"
     ],
     "env": {
       "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
     },
-    "name": "Telemetry benchmark: dromaeo.domcoretraverse"
+    "name": "Telemetry benchmark: page_cycler.tough_layout_cases"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
+      "--profiler=win_pgo_profiler",
+      "--browser=release",
+      "smoothness.tough_animation_cases"
+    ],
+    "env": {
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
+    },
+    "name": "Telemetry benchmark: smoothness.tough_animation_cases"
   },
   {
     "cmd": [
@@ -336,40 +350,26 @@
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
       "--browser=release",
+      "dromaeo.domcoretraverse"
+    ],
+    "env": {
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
+    },
+    "name": "Telemetry benchmark: dromaeo.domcoretraverse"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
+      "--profiler=win_pgo_profiler",
+      "--browser=release",
       "dromaeo.jslibattrjquery"
     ],
     "env": {
       "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
     },
     "name": "Telemetry benchmark: dromaeo.jslibattrjquery"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--browser=release",
-      "speedometer"
-    ],
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
-    },
-    "name": "Telemetry benchmark: speedometer"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--browser=release",
-      "smoothness.top_25_smooth"
-    ],
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
-    },
-    "name": "Telemetry benchmark: smoothness.top_25_smooth"
   },
   {
     "cmd": [
