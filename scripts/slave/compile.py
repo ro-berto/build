@@ -230,7 +230,9 @@ def UploadGomaCompilerProxyInfo():
   latest_info = GetLatestGomaCompilerProxyInfo()
   # Since a filename of compiler_proxy.INFO is fairly unique,
   # we might be able to upload it as-is.
-  UploadToGomaLogGS(latest_info, os.path.basename(latest_info))
+  log_path = UploadToGomaLogGS(latest_info, os.path.basename(latest_info))
+  viewer_url = 'http://chromium-build-stats.appspot.com/compiler_proxy_log/' + log_path
+  print "Visualization at %s" % viewer_url
 
 
 def goma_teardown(options, env):
