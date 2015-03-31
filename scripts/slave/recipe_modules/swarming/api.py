@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import datetime
 import functools
 
 from infra.libs.infra_types import freeze
@@ -454,6 +455,20 @@ class SwarmingApi(recipe_api.RecipeApi):
   # To keep compatibility with some build_internal code. To be removed as well.
   collect_each = collect
 
+  @staticmethod
+  def _display_pending(summary_json, step_presentation):
+    """Shows max pending time in seconds across all shards if it exceeds 10s."""
+    def t(d):
+      return datetime.datetime.strptime(d, '%Y-%m-%d %H:%M:%S')
+    pending_times = [
+        (t(shard['started_ts']) - t(shard['created_ts'])).total_seconds()
+        for shard in summary_json.get('shards', []) if shard.get('started_ts')]
+    max_pending = max(pending_times) if pending_times else 0
+
+    # Only display annotation when pending more than 10 seconds to reduce noise.
+    if max_pending > 10:
+      step_presentation.step_text = 'swarming pending %ds' % max_pending
+
   def _default_collect_step(self, task, **kwargs):
     """Produces a step that collects a result of an arbitrary task."""
     args = self._get_collect_cmd_args(task)
@@ -479,6 +494,7 @@ class SwarmingApi(recipe_api.RecipeApi):
           if isolated_out:
             link_name = 'shard #%d isolated out' % index
             links[link_name] = isolated_out['view_url']
+        self._display_pending(json_data, step_result.presentation)
       except (KeyError, AttributeError):  # pragma: no cover
         # No isolated_out data exists (or any JSON at all)
         pass
@@ -528,6 +544,8 @@ class SwarmingApi(recipe_api.RecipeApi):
           p.step_text += self.m.test_utils.format_step_text([
             ['failures:', gtest_results.failures]
           ])
+        self._display_pending(gtest_results.raw.get('swarming_summary', {}),
+                              step_result.presentation)
 
   def _telemetry_gpu_collect_step(self, task, **kwargs):
     step_test_data = kwargs.pop('step_test_data', None)
@@ -560,6 +578,11 @@ class SwarmingApi(recipe_api.RecipeApi):
           step_result.telemetry_results = {'per_page_values': [], 'pages': []}
         else:
           step_result.telemetry_results = self.m.json.loads(results_raw)
+
+        summary_raw = step_result.raw_io.output_dir.get('summary.json')
+        if summary_raw:
+          self._display_pending(self.m.json.loads(summary_raw),
+                                step_result.presentation)
       except (IOError, ValueError):  # pragma: no cover
         step_result.telemetry_results = None
 

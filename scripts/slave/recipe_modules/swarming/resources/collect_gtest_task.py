@@ -59,6 +59,7 @@ def merge_shard_results(output_dir):
     'global_tags': set(),
     'missing_shards': [],
     'per_iteration_data': [],
+    'swarming_summary': summary,
   }
   for index, result in enumerate(summary['shards']):
     if result is not None:

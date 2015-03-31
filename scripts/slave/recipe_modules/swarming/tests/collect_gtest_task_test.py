@@ -324,6 +324,7 @@ class MergeShardResultsTest(auto_stub.TestCase):
       '1/output.json': GOOD_GTEST_JSON_1,
     })
     merged, stdout = self.call()
+    merged.pop('swarming_summary')
     self.assertEqual(GOOD_GTEST_JSON_MERGED, merged)
     self.assertEqual('', stdout)
 
@@ -341,6 +342,7 @@ class MergeShardResultsTest(auto_stub.TestCase):
       '1/output.json': GOOD_GTEST_JSON_1,
     })
     merged, stdout = self.call(1)
+    merged.pop('swarming_summary')
     self.assertEqual(BAD_GTEST_JSON_ONLY_1_SHARD, merged)
     self.assertIn(
         '@@@STEP_WARNINGS@@@\nsome shards did not complete: 0\n', stdout)
