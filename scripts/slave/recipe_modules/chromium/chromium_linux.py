@@ -152,19 +152,16 @@ SPEC = {
         steps.AndroidInstrumentationTest(
             'AndroidWebViewTest', 'android_webview_test_apk',
             isolate_file_path='android_webview/android_webview_test_apk.isolate',
-            test_data='webview:android_webview/test/data/device_files',
             adb_install_apk=(
                 'AndroidWebView.apk', 'org.chromium.android_webview.shell')),
         steps.AndroidInstrumentationTest(
             'ChromeShellTest', 'chrome_shell_test_apk',
             isolate_file_path='chrome/chrome_shell_test_apk.isolate',
-            test_data='chrome:chrome/test/data/android/device_files',
             adb_install_apk=(
                 'ChromeShell.apk', 'org.chromium.chrome.shell')),
         steps.AndroidInstrumentationTest(
             'ContentShellTest', 'content_shell_test_apk',
             isolate_file_path='content/content_shell_test_apk.isolate',
-            test_data='content:content/test/data/android/device_files',
             adb_install_apk=(
                 'ContentShell.apk', 'org.chromium.content_shell_apk')),
         steps.AndroidInstrumentationTest(
@@ -234,19 +231,16 @@ SPEC = {
         steps.AndroidInstrumentationTest(
             'AndroidWebViewTest', 'android_webview_test_apk',
             isolate_file_path='android_webview/android_webview_test_apk.isolate',
-            test_data='webview:android_webview/test/data/device_files',
             adb_install_apk=(
                 'AndroidWebView.apk', 'org.chromium.android_webview.shell')),
         steps.AndroidInstrumentationTest(
             'ChromeShellTest', 'chrome_shell_test_apk',
             isolate_file_path='chrome/chrome_shell_test_apk.isolate',
-            test_data='chrome:chrome/test/data/android/device_files',
             adb_install_apk=(
                 'ChromeShell.apk', 'org.chromium.chrome.shell')),
         steps.AndroidInstrumentationTest(
             'ContentShellTest', 'content_shell_test_apk',
             isolate_file_path='content/content_shell_test_apk.isolate',
-            test_data='content:content/test/data/android/device_files',
             adb_install_apk=(
                 'ContentShell.apk', 'org.chromium.content_shell_apk')),
         steps.AndroidInstrumentationTest(

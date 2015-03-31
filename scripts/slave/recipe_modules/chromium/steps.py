@@ -963,14 +963,13 @@ class SwarmingTelemetryGPUTest(SwarmingTest):
 
 
 class AndroidInstrumentationTest(Test):
-  def __init__(self, name, compile_target, test_data=None,
-               adb_install_apk=None, isolate_file_path=None):
+  def __init__(self, name, compile_target, adb_install_apk=None,
+               isolate_file_path=None):
     super(AndroidInstrumentationTest, self).__init__()
 
     self._name = name
     self.compile_target = compile_target
 
-    self.test_data = test_data
     self.adb_install_apk = adb_install_apk
     self.isolate_file_path = isolate_file_path
 
@@ -1014,7 +1013,7 @@ class AndroidInstrumentationTest(Test):
 
     try:
       api.chromium_android.run_instrumentation_suite(
-          self.name, test_data=self.test_data, suffix=suffix,
+          self.name, suffix=suffix,
           flakiness_dashboard='http://test-results.appspot.com',
           verbose=True, isolate_file_path=self.isolate_file_path,
           json_results_file=api.json.output(add_json_log=False),

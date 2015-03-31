@@ -370,8 +370,6 @@
       "instrumentation",
       "--test-apk",
       "ChromeShellTest",
-      "--test_data",
-      "chrome:chrome/test/data/android/device_files",
       "--isolate-file-path",
       "chrome/chrome_shell_test_apk.isolate",
       "--flakiness-dashboard-server",

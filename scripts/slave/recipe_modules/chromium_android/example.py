@@ -133,7 +133,7 @@ def GenSteps(api):
     if suite:
       api.chromium_android.run_instrumentation_suite(
           test_apk=suite['test'],
-          test_data=suite['kwargs']['test_data'],
+          isolate_file_path=suite['kwargs']['isolate_file_path'],
           flakiness_dashboard='test-results.appspot.com',
           annotation='SmallTest',
           except_annotation='FlakyTest',

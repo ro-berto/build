@@ -14,7 +14,6 @@ INSTRUMENTATION_TESTS = freeze([
     'test': 'AndroidWebViewTest',
     'gyp_target': 'android_webview_test_apk',
     'kwargs': {
-      'test_data': 'webview:android_webview/test/data/device_files',
       'install_apk': {
         'package': 'org.chromium.android_webview.shell',
         'apk': 'AndroidWebView.apk'
@@ -26,7 +25,6 @@ INSTRUMENTATION_TESTS = freeze([
     'test': 'ChromeShellTest',
     'gyp_target': 'chrome_shell_test_apk',
     'kwargs': {
-      'test_data': 'chrome:chrome/test/data/android/device_files',
       'install_apk': {
         'package': 'org.chromium.chrome.shell',
         'apk': 'ChromeShell.apk',
@@ -38,7 +36,6 @@ INSTRUMENTATION_TESTS = freeze([
     'test': 'ContentShellTest',
     'gyp_target': 'content_shell_test_apk',
     'kwargs': {
-      'test_data': 'content:content/test/data/android/device_files',
       'install_apk': {
         'package': 'org.chromium.content_shell_apk',
         'apk': 'ContentShell.apk',
@@ -493,7 +490,7 @@ class AndroidApi(recipe_api.RecipeApi):
         return suite
     return None
 
-  def run_instrumentation_suite(self, test_apk, test_data=None,
+  def run_instrumentation_suite(self, test_apk,
                                 isolate_file_path=None,
                                 flakiness_dashboard=None,
                                 annotation=None, except_annotation=None,
@@ -505,10 +502,6 @@ class AndroidApi(recipe_api.RecipeApi):
       self.adb_install_apk(install_apk['apk'], install_apk['package'])
 
     args = ['--test-apk', test_apk]
-    # TODO(jbudorick): Remove --test_data once tests look for test data in the
-    # correct locations.
-    if test_data:
-      args.extend(['--test_data', test_data])
     if isolate_file_path:
       args.extend(['--isolate-file-path', isolate_file_path])
     if flakiness_dashboard:
