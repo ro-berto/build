@@ -18,7 +18,6 @@ def Update(c):
                               'Win32 Release (parallel)',
                               'Win64 Debug (parallel)',
                               'Win64 Release (parallel)',
-                              'Win SyzyASan',
                             ]),
   ])
 
@@ -38,10 +37,6 @@ def Update(c):
     {
       'name': 'Win64 Release (parallel)',
       'slavebuilddir': 'win',
-    },
-    {
-      'name': 'Win SyzyASan',
-      'slavebuilddir': 'win-syzyasan',
     },
   ]
 
