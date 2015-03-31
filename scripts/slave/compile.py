@@ -216,7 +216,6 @@ def UploadToGomaLogGS(file_path, gs_filename, text_to_append=None):
         with open(file_path) as f_in:
           shutil.copyfileobj(f_in, gzipf_out)
         if text_to_append:
-          gzipf_out.write('\n')
           gzipf_out.write(text_to_append)
     slave_utils.GSUtilCopy(temp.name, gs_path)
     print "Copied log file to %s" % gs_path
