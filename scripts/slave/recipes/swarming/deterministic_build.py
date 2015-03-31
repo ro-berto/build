@@ -12,6 +12,7 @@ from infra.libs.infra_types import freeze
 DEPS = [
   'bot_update',
   'chromium',
+  'chromium_android',
   'gclient',
   'isolate',
   'json',
@@ -25,8 +26,6 @@ DEPS = [
 DETERMINISTIC_BUILDERS = freeze({
   'Android deterministic build': {
     'chromium_config': 'android',
-    'gclient_config': 'chromium',
-    'gclient_apply_config': ['android'],
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
       'TARGET_BITS': 32,
@@ -77,30 +76,53 @@ def MoveBuildDirectory(api, src_dir, dst_dir):
                     args=[src_dir, dst_dir])
 
 
-def GenSteps(api):
-  buildername = api.properties['buildername']
-  recipe_config = DETERMINISTIC_BUILDERS[buildername]
-
-  targets = recipe_config.get('targets', ['chromium_swarm_tests'])
-
+def ConfigureChromiumBuilder(api, recipe_config):
   api.chromium.set_config(recipe_config['chromium_config'],
                           **recipe_config.get('chromium_config_kwargs',
                                               {'BUILD_CONFIG': 'Release'}))
   api.chromium.apply_config('chromium_deterministic_build')
   for c in recipe_config.get('chromium_apply_config', []):
     api.chromium.apply_config(c)
-
   api.gclient.set_config(recipe_config['gclient_config'],
                          **recipe_config.get('gclient_config_kwargs', {}))
-  for c in recipe_config.get('gclient_apply_config', []):
-    api.gclient.apply_config(c)
 
-  # Enable test isolation. Modifies GYP_DEFINES used in 'runhooks' below.
-  api.isolate.set_isolate_environment(api.chromium.c)
   api.chromium.cleanup_temp()
 
   # Checkout chromium.
   api.bot_update.ensure_checkout(force=True)
+
+
+def ConfigureAndroidBuilder(api, recipe_config):
+  api.chromium_android.configure_from_properties(
+      'base_config',
+      REPO_NAME='src',
+      REPO_URL='https://chromium.googlesource.com/chromium/src.git',
+      Internal=False,
+      **recipe_config.get('chromium_config_kwargs',
+                          {'BUILD_CONFIG': 'Release'}))
+  api.chromium.apply_config(recipe_config['chromium_config'])
+
+
+def GenSteps(api):
+  buildername = api.properties['buildername']
+  recipe_config = DETERMINISTIC_BUILDERS[buildername]
+
+  targets = recipe_config.get('targets', ['chromium_swarm_tests'])
+  if recipe_config.get('chromium_config_kwargs'):
+    target_platform = recipe_config['chromium_config_kwargs'].get(
+        'TARGET_PLATFORM')
+  else:
+    target_platform = recipe_config.get('platform')
+
+  # TODO(sebmarchand): iOS should be handled differently, fix this.
+  if target_platform in ('linux', 'mac', 'win', 'ios'):
+    ConfigureChromiumBuilder(api, recipe_config)
+  elif target_platform is 'android':
+    ConfigureAndroidBuilder(api, recipe_config)
+    api.chromium_android.init_and_sync()
+
+  # Enable test isolation. Modifies GYP_DEFINES used in 'runhooks' below.
+  api.isolate.set_isolate_environment(api.chromium.c)
 
   # Do a first build and move the build artifact to the temp directory.
   api.chromium.runhooks()

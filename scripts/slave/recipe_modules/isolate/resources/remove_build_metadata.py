@@ -73,7 +73,7 @@ def remove_pe_metadata(filename, src_dir):
 
 def remove_apk_timestamps(filename):
   """Remove the timestamps embedded in an apk archive."""
-  sys.stdout.write('Processing: %s\n' % os.path.basename(filepath))
+  sys.stdout.write('Processing: %s\n' % os.path.basename(filename))
   with zipfile.ZipFile(filename, 'r') as zf:
     # Creates a temporary file.
     out_file, out_filename = tempfile.mkstemp(prefix='remote_apk_timestamp')
