@@ -90,6 +90,8 @@ def GenSteps(api):
 
   api.chromium.runtest('gn_unittests')
 
+  api.m.step('gn strip', cmd=['strip', path_to_binary])
+
   api.python('upload',
              api.path['depot_tools'].join('upload_to_google_storage.py'),
              ['-b', 'chromium-gn', path_to_binary])
