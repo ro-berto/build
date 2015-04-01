@@ -3,42 +3,43 @@
 # found in the LICENSE file.
 
 from master import master_config
-from master.factory import chromeos_factory
+from master.factory import annotator_factory
 
-defaults = {}
+from buildbot.schedulers.basic import SingleBranchScheduler as Scheduler
 
-helper = master_config.Helper(defaults)
-B = helper.Builder
-F = helper.Factory
-S = helper.Scheduler
-T = helper.Triggerable
+factory_obj = annotator_factory.AnnotatorFactory()
 
-defaults['category'] = '2chromium'
-
-# TODO(petermayo): Make this use chrome CROS Manifest too.
-
-_CHROMIUM_SCHEDULER_NAME = 'chromium_cros'
-S(name=_CHROMIUM_SCHEDULER_NAME, branch='master', treeStableTimer=60)
-
-def Builder(dname, sname, flavor, root, board):
-  fname = '%s-%s' % (sname, flavor)
-  B('%s (%s)' % (dname, flavor),
-    factory=fname,
-    gatekeeper='pfq',
-    builddir='%s-tot-chromeos-%s' % (flavor, sname),
-    scheduler=_CHROMIUM_SCHEDULER_NAME,
-    notify_on_missing=True)
-  F(fname,
-    chromeos_factory.CbuildbotFactory(
-      buildroot='/b/cbuild/%s' % root,
-      pass_revision=True,
-      params='%s-tot-chrome-pfq-informational' % board).get_factory())
+def Builder(active_master, dname, sname, flavor, board):
+  cbb_name = '%s-tot-chrome-pfq-informational' % (board,)
+  builder = {
+      'name': '%s (%s)' % (dname, flavor),
+      'builddir': '%s-tot-chromeos-%s' % (flavor, sname),
+      'category': '2chromium',
+      'factory': factory_obj.BaseFactory('cros/cbuildbot'),
+      'gatekeeper': 'pfq',
+      'scheduler': 'chromium_cros',
+      'notify_on_missing': True,
+      'properties': {
+          'cbb_config': cbb_name,
+      },
+  }
+  if active_master.is_production_host:
+    builder['properties']['cbb_debug'] = True
+  return builder
 
 
-Builder('X86', 'x86', 'chromium', 'shared_external', 'x86-generic')
-Builder('AMD64', 'amd64', 'chromium', 'shared_external', 'amd64-generic')
-Builder('Daisy', 'daisy', 'chromium', 'shared_external', 'daisy')
+def Update(_config, active_master, c):
+  builders = [
+      Builder(active_master, 'X86', 'x86', 'chromium', 'x86-generic'),
+      Builder(active_master, 'AMD64', 'amd64', 'chromium', 'amd64-generic'),
+      Builder(active_master, 'Daisy', 'daisy', 'chromium', 'daisy'),
+  ]
 
-
-def Update(_config, _active_master, c):
-  return helper.Update(c)
+  c['schedulers'] += [
+      Scheduler(name='chromium_cros',
+                branch='master',
+                treeStableTimer=60,
+                builderNames=[b['name'] for b in builders],
+      ),
+  ]
+  c['builders'] += builders
