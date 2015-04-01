@@ -108,8 +108,7 @@
       "--goma-hermetic",
       "fallback",
       "--",
-      "chromium_builder_perf",
-      "crash_service"
+      "chromium_builder_perf"
     ],
     "name": "compile"
   },

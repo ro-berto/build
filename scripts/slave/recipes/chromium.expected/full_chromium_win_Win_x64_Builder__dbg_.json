@@ -153,8 +153,7 @@
       "--goma-dir",
       "[BUILD]\\goma",
       "--",
-      "all",
-      "crash_service"
+      "all"
     ],
     "name": "compile"
   },

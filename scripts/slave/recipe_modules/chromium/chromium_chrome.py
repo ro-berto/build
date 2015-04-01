@@ -56,9 +56,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
       },
-      'compile_targets': [
-        'chrome_official_builder',
-      ],
       'testing': {
         'platform': 'win',
       },

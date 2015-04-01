@@ -176,8 +176,7 @@
       "--",
       "browser_tests",
       "browser_tests_run",
-      "chromium_builder_tests",
-      "crash_service"
+      "chromium_builder_tests"
     ],
     "env": {
       "LLVM_FORCE_HEAD_REVISION": "YES"

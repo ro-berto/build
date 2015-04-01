@@ -140,7 +140,8 @@
       "--goma-dir",
       "[BUILD]\\goma",
       "--",
-      "crash_service"
+      "All",
+      "chromium_builder_tests"
     ],
     "name": "compile"
   }

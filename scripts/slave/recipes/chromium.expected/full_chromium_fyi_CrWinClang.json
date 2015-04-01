@@ -175,8 +175,7 @@
       "--mode",
       "official",
       "--clobber",
-      "--",
-      "crash_service"
+      "--"
     ],
     "name": "compile"
   },

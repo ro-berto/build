@@ -143,8 +143,7 @@
       "[BUILD]\\goma",
       "--clobber",
       "--",
-      "chrome_official_builder",
-      "crash_service"
+      "chrome_official_builder"
     ],
     "name": "compile"
   }
