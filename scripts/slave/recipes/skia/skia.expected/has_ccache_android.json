@@ -49,7 +49,7 @@
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_ninja",
       "most",
       "-d",
-      "arm_v7_thumb"
+      "arm_v7"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {

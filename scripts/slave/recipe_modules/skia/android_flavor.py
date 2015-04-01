@@ -27,11 +27,11 @@ def device_from_builder_dict(builder_dict):
       'Mips': 'mips',
       'Mips64': 'mips64',
       'MipsDSP2': 'mips_dsp2',
-    }.get(builder_dict['target_arch'], 'arm_v7_thumb')
+    }.get(builder_dict['target_arch'], 'arm_v7')
   elif builder_dict['os'] == 'Android':
     return {
-      'GalaxyS3': 'arm_v7_thumb',
-      'GalaxyS4': 'arm_v7_thumb',
+      'GalaxyS3': 'arm_v7',
+      'GalaxyS4': 'arm_v7',
       'Nexus5': 'nexus_5',
       'Nexus7': 'nexus_7',
       'Nexus9': 'arm64',

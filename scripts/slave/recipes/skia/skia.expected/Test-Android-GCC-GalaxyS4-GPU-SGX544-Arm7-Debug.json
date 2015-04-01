@@ -83,7 +83,7 @@
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_ninja",
       "dm",
       "-d",
-      "arm_v7_thumb"
+      "arm_v7"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
@@ -99,7 +99,7 @@
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_ninja",
       "nanobench",
       "-d",
-      "arm_v7_thumb"
+      "arm_v7"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
@@ -477,7 +477,7 @@
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_run_skia",
       "--logcat",
       "-d",
-      "arm_v7_thumb",
+      "arm_v7",
       "-s",
       "4d00353cd8ed61c3",
       "dm",
@@ -571,7 +571,7 @@
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_run_skia",
       "--logcat",
       "-d",
-      "arm_v7_thumb",
+      "arm_v7",
       "-s",
       "4d00353cd8ed61c3",
       "nanobench",
