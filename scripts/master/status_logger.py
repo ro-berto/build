@@ -151,12 +151,11 @@ class StatusEventLogger(StatusReceiverMultiService):
     step_name = step.getName()
     log_name = log.getName()
     log_file = log.filename
-    log_size = log.length
     # Access to protected member __num_chunks. pylint: disable=W0212
     log_chunks = log.__num_chunks
-    self.log('logFinished', '%s, %d, %s, %s, %s, %d, %d',
+    self.log('logFinished', '%s, %d, %s, %s, %s, %d',
              build_name, build_number, step_name,
-             log_name, log_file, log_size, log_chunks)
+             log_name, log_file, log_chunks)
 
   def stepFinished(self, build, step, results):
     build_name = build.getBuilder().name
