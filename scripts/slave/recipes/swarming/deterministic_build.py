@@ -34,18 +34,6 @@ DETERMINISTIC_BUILDERS = freeze({
     'platform': 'linux',
     'targets': ['all'],
   },
-  'IOS deterministic build': {
-    'chromium_apply_config': ['ninja'],
-    'chromium_config': 'chromium_ios_device',
-    'chromium_config_kwargs': {
-      'BUILD_CONFIG': 'Release',
-      'TARGET_PLATFORM': 'ios',
-      'TARGET_BITS': 32,
-    },
-    'gclient_config': 'ios',
-    'platform': 'mac',
-    'targets': ['all'],
-  },
   'Linux deterministic build': {
     'chromium_config': 'chromium',
     'gclient_config': 'chromium',
@@ -81,8 +69,6 @@ def ConfigureChromiumBuilder(api, recipe_config):
                           **recipe_config.get('chromium_config_kwargs',
                                               {'BUILD_CONFIG': 'Release'}))
   api.chromium.apply_config('chromium_deterministic_build')
-  for c in recipe_config.get('chromium_apply_config', []):
-    api.chromium.apply_config(c)
   api.gclient.set_config(recipe_config['gclient_config'],
                          **recipe_config.get('gclient_config_kwargs', {}))
 
@@ -114,8 +100,7 @@ def GenSteps(api):
   else:
     target_platform = recipe_config.get('platform')
 
-  # TODO(sebmarchand): iOS should be handled differently, fix this.
-  if target_platform in ('linux', 'mac', 'win', 'ios'):
+  if target_platform in ('linux', 'mac', 'win'):
     ConfigureChromiumBuilder(api, recipe_config)
   elif target_platform is 'android':
     ConfigureAndroidBuilder(api, recipe_config)
