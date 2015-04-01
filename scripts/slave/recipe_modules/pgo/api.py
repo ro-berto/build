@@ -9,6 +9,8 @@ from slave import recipe_api
 # TODO(sebmarchand): Move this into a BenchmarkSuite in telemetry, this way
 # only have to run one benchmark.
 _BENCHMARKS_TO_RUN = {
+  'blink_perf.css',
+  'blink_perf.svg',
   'dromaeo.domcoreattr',
   'dromaeo.domcoremodify',
   'dromaeo.domcorequery',
@@ -23,7 +25,8 @@ _BENCHMARKS_TO_RUN = {
   'dromaeo.jslibstyleprototype',
   'dromaeo.jslibtraversejquery',
   'dromaeo.jslibtraverseprototype',
-  'page_cycler.tough_layout_cases',
+  'indexeddb_perf',
+  'media.mse_cases ',
   'smoothness.tough_animation_cases',
   'sunspider',
   'tab_switching.top_10',

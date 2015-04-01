@@ -127,12 +127,12 @@
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
       "--browser=release",
-      "page_cycler.tough_layout_cases"
+      "smoothness.tough_animation_cases"
     ],
     "env": {
       "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
     },
-    "name": "Telemetry benchmark: page_cycler.tough_layout_cases"
+    "name": "Telemetry benchmark: smoothness.tough_animation_cases"
   },
   {
     "cmd": [
@@ -141,12 +141,12 @@
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
       "--browser=release",
-      "smoothness.tough_animation_cases"
+      "blink_perf.svg"
     ],
     "env": {
       "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
     },
-    "name": "Telemetry benchmark: smoothness.tough_animation_cases"
+    "name": "Telemetry benchmark: blink_perf.svg"
   },
   {
     "cmd": [
@@ -231,6 +231,20 @@
       "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
     },
     "name": "Telemetry benchmark: dromaeo.jslibmodifyprototype"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
+      "--profiler=win_pgo_profiler",
+      "--browser=release",
+      "indexeddb_perf"
+    ],
+    "env": {
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
+    },
+    "name": "Telemetry benchmark: indexeddb_perf"
   },
   {
     "cmd": [
@@ -355,6 +369,20 @@
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
       "--browser=release",
+      "blink_perf.css"
+    ],
+    "env": {
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
+    },
+    "name": "Telemetry benchmark: blink_perf.css"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
+      "--profiler=win_pgo_profiler",
+      "--browser=release",
       "dromaeo.domcoretraverse"
     ],
     "env": {
@@ -375,6 +403,20 @@
       "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
     },
     "name": "Telemetry benchmark: dromaeo.jslibattrjquery"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
+      "--profiler=win_pgo_profiler",
+      "--browser=release",
+      "media.mse_cases "
+    ],
+    "env": {
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
+    },
+    "name": "Telemetry benchmark: media.mse_cases "
   },
   {
     "cmd": [
