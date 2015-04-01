@@ -319,17 +319,11 @@ SPEC = {
       },
     },
     'Cast Linux': {
-      'recipe_config': 'chromium',
+      'recipe_config': 'cast_linux',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'GYP_DEFINES': {
-        'chromecast': 1,
-      },
-      'compile_targets': [
-        'cast_shell'
-      ],
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
@@ -346,9 +340,6 @@ SPEC = {
         'TARGET_PLATFORM': 'android',
       },
       'android_config': 'cast_builder',
-      'compile_targets': [
-        'cast_shell_apk'
-      ],
       'testing': {
         'platform': 'linux',
       },

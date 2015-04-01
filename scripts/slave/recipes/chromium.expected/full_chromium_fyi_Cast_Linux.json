@@ -68,7 +68,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "chromecast=1 component=static_library gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
+      "GYP_DEFINES": "chromecast=1 clang=1 component=static_library gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
     },
     "name": "gclient runhooks"
   },
@@ -128,11 +128,12 @@
       "--build-tool",
       "ninja",
       "--compiler",
-      "goma",
+      "goma-clang",
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "cast_shell"
+      "cast_shell",
+      "cast_test_lists"
     ],
     "name": "compile"
   }

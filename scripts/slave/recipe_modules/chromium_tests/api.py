@@ -206,6 +206,10 @@ RECIPE_CONFIGS = freeze({
     'gclient_config': 'chromium',
     'gclient_apply_config': ['android'],
   },
+  'cast_linux': {
+    'chromium_config': 'cast_linux',
+    'gclient_config': 'chromium',
+  },
 })
 
 

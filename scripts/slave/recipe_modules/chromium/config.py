@@ -773,3 +773,8 @@ def chromium_perf_fyi(c):
 @config_ctx()
 def chromium_deterministic_build(c):
   c.gyp_env.GYP_DEFINES['dont_embed_build_metadata'] = 1
+
+@config_ctx(includes=['chromium_clang'])
+def cast_linux(c):
+  c.gyp_env.GYP_DEFINES['chromecast'] = 1
+  c.compile_py.default_targets = ['cast_shell', 'cast_test_lists']
