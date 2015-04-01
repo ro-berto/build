@@ -23,7 +23,7 @@ def Builder(active_master, dname, sname, flavor, board):
           'cbb_config': cbb_name,
       },
   }
-  if active_master.is_production_host:
+  if not active_master.is_production_host:
     builder['properties']['cbb_debug'] = True
   return builder
 
