@@ -158,7 +158,8 @@
       "--",
       "base_unittests",
       "chromium_builder_tests",
-      "content_unittests"
+      "content_unittests",
+      "crash_service"
     ],
     "name": "compile"
   },

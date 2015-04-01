@@ -172,7 +172,8 @@
       "ninja",
       "--compiler",
       "clang",
-      "--"
+      "--",
+      "crash_service"
     ],
     "name": "compile"
   },

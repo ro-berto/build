@@ -438,6 +438,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       for t in tests_including_triggered:
         compile_targets.update(t.compile_targets(self.m))
 
+    if self.m.platform.is_win:
+      compile_targets.add('crash_service')
+
     return sorted(compile_targets), tests_including_triggered
 
   def get_build_revision(self, properties, type):
