@@ -6,11 +6,7 @@ set noparent
 # offline.  Only this OWNERS file will be needed to keep ensure bad changes
 # don't get landed, knocking out the bots.
 
-cmp@chromium.org
-cmp@google.com
+agable@chromium.org
 iannucci@chromium.org
-iannucci@google.com
 maruel@chromium.org
-maruel@google.com
-szager@chromium.org
-szager@google.com
+stip@chromium.org
