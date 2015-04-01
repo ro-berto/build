@@ -109,6 +109,7 @@ WHITELIST = freeze({
     'interactive_ui_tests.exe',
     'interactive_ui_tests.isolated',
     'metro_driver.dll',
+    'mksnapshot.exe',
     'mock_nacl_gdb.exe',
     'net_unittests.exe',
     'net_unittests.isolated',
@@ -257,6 +258,7 @@ def compare_build_artifacts(first_dir, second_dir, target_platform,
   equals = []
   expected_diffs = []
   unexpected_diffs = []
+  unexpected_equals = []
   all_files = sorted(first_list & second_list)
   missing_files = sorted(first_list.symmetric_difference(second_list))
   if missing_files:
@@ -272,6 +274,8 @@ def compare_build_artifacts(first_dir, second_dir, target_platform,
     if not result:
       tag = 'equal'
       equals.append(f)
+      if f in whitelist:
+        unexpected_equals.append(f)
     else:
       if f in whitelist:
         expected_diffs.append(f)
@@ -287,8 +291,12 @@ def compare_build_artifacts(first_dir, second_dir, target_platform,
   print('Expected diffs:   %d' % len(expected_diffs))
   print('Unexpected diffs: %d' % len(unexpected_diffs))
   if unexpected_diffs:
-    print('Unexpected files:\n')
+    print('Unexpected files with diffs:\n')
     for u in unexpected_diffs:
+      print('  %s\n' % u)
+  if unexpected_equals:
+    print('Unexpected files with no diffs:\n')
+    for u in unexpected_equals:
       print('  %s\n' % u)
 
   return int(bool(unexpected_diffs))
