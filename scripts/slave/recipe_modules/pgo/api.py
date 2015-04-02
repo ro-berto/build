@@ -4,6 +4,7 @@
 
 from slave import recipe_api
 
+
 # List of the benchmark that we run during the profiling step.
 #
 # TODO(sebmarchand): Move this into a BenchmarkSuite in telemetry, this way
@@ -41,19 +42,17 @@ class PGOApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
     super(PGOApi, self).__init__(**kwargs)
 
-
-  def _compile_instrumented_image(self, recipe_config):
+  def _compile_instrumented_image(self, bot_config):
     """
     Generates the instrumented version of the binaries.
     """
-    self.m.chromium.set_config(recipe_config['chromium_config_instrument'],
-                            **recipe_config.get('chromium_config_kwargs'))
+    self.m.chromium.set_config(bot_config['chromium_config_instrument'],
+                               **bot_config.get('chromium_config_kwargs'))
     self.m.chromium.runhooks(name='Runhooks: Instrumentation phase.')
     # Remove the profile files from the previous builds.
     self.m.path.rmwildcard('*.pg[cd]', str(self.m.chromium.output_dir))
     self.m.chromium.compile(name='Compile: Instrumentation phase.',
-                            force_clobber=recipe_config.get('clobber', False))
-
+                            force_clobber=bot_config.get('clobber', False))
 
   def _run_pgo_benchmarks(self):
     """
@@ -75,13 +74,12 @@ class PGOApi(recipe_api.RecipeApi):
         step_result = self.m.step.active_result
         step_result.presentation.status = self.m.step.WARNING
 
-
-  def _compile_optimized_image(self, recipe_config):
+  def _compile_optimized_image(self, bot_config):
     """
     Generates the optimized version of the binaries.
     """
-    self.m.chromium.set_config(recipe_config['chromium_config_optimize'],
-                            **recipe_config.get('chromium_config_kwargs'))
+    self.m.chromium.set_config(bot_config['chromium_config_optimize'],
+                               **bot_config.get('chromium_config_kwargs'))
     self.m.chromium.runhooks(name='Runhooks: Optimization phase.')
 
     # Increase the stack size of pgomgr.exe.
@@ -95,36 +93,30 @@ class PGOApi(recipe_api.RecipeApi):
 
     self.m.chromium.compile(name='Compile: Optimization phase.')
 
-
-  def compile_pgo(self):
+  def compile_pgo(self, bot_config):
     """
     Do a PGO build. This takes care of building an instrumented image, profiling
     it and then compiling the optimized version of it.
     """
-    buildername = self.m.properties['buildername']
-    mastername = self.m.properties['mastername']
-    master_dict = self.m.chromium.builders.get(mastername, {})
-    recipe_config = master_dict.get('builders', {}).get(buildername)
-
-    self.m.gclient.set_config(recipe_config['gclient_config'])
+    self.m.gclient.set_config(bot_config['gclient_config'])
 
     # Augment the solution if needed.
-    self.m.gclient.c.solutions[0].url += recipe_config.get('url_suffix', '')
+    self.m.gclient.c.solutions[0].url += bot_config.get('url_suffix', '')
 
     if self.m.properties.get('slavename') != 'fake_slave':
       self.m.chromium.taskkill()
 
     self.m.bot_update.ensure_checkout(force=True)
-    if recipe_config.get('patch_root'):
+    if bot_config.get('patch_root'):
       self.m.path['checkout'] = self.m.path['slave_build'].join(
-          recipe_config.get('patch_root'))
+          bot_config.get('patch_root'))
 
     # First step: compilation of the instrumented build.
-    self._compile_instrumented_image(recipe_config)
+    self._compile_instrumented_image(bot_config)
 
     # Second step: profiling of the instrumented build.
     self._run_pgo_benchmarks()
 
     # Third step: Compilation of the optimized build, this will use the profile
     #     data files produced by the previous step.
-    self._compile_optimized_image(recipe_config)
+    self._compile_optimized_image(bot_config)

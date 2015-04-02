@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from infra.libs.infra_types import freeze
+
 DEPS = [
   'archive',
   'chromium',
@@ -12,8 +14,61 @@ DEPS = [
 ]
 
 
+PGO_BUILDERS = freeze({
+  'chromium.fyi': {
+    'Chromium Win PGO Builder': {
+      'recipe_config': 'chromium',
+      'chromium_config_instrument': 'chromium_pgo_instrument',
+      'chromium_config_optimize': 'chromium_pgo_optimize',
+      'gclient_config': 'chromium_lkgr',
+      'clobber': True,
+      # TODO(sebmarchand): This is a hack to get 100% coverage, remove me
+      # and fix this.
+      'patch_root': 'src',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'testing': {
+        'platform': 'win',
+      },
+    },
+    'Chromium Win x64 PGO Builder': {
+      'recipe_config': 'chromium',
+      'chromium_config_instrument': 'chromium_pgo_instrument',
+      'chromium_config_optimize': 'chromium_pgo_optimize',
+      'gclient_config': 'chromium_lkgr',
+      'clobber': True,
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+    },
+  },
+  'tryserver.chromium.win': {
+    'win_pgo': {
+      'recipe_config': 'chromium',
+      'chromium_config_instrument': 'chromium_pgo_instrument',
+      'chromium_config_optimize': 'chromium_pgo_optimize',
+      'gclient_config': 'chromium_lkgr',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'testing': {
+        'platform': 'win',
+      },
+    },
+  },
+})
+
+
 def GenSteps(api):
-  api.pgo.compile_pgo()
+  buildername = api.properties['buildername']
+  mastername = api.properties['mastername']
+  bot_config = PGO_BUILDERS.get(mastername, {}).get(buildername)
+
+  api.pgo.compile_pgo(bot_config)
   api.archive.zip_and_upload_build(
       'package build',
       api.chromium.c.build_config_fs,
@@ -21,18 +76,10 @@ def GenSteps(api):
 
 
 def GenTests(api):
-  pgo_builders = {
-    'chromium.fyi': [
-        'Chromium Win PGO Builder',
-        'Chromium Win x64 PGO Builder',
-    ],
-    'tryserver.chromium.win': ['win_pgo'],
-  }
-
   def _sanitize_nonalpha(text):
     return ''.join(c if c.isalnum() else '_' for c in text)
 
-  for mastername, builders in pgo_builders.iteritems():
+  for mastername, builders in PGO_BUILDERS.iteritems():
     for buildername in builders:
       yield (
         api.test('full_%s_%s' % (_sanitize_nonalpha(mastername),

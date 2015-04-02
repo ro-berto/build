@@ -22,7 +22,6 @@ from . import client_v8_branches
 from . import tryserver_chromium_linux
 from . import tryserver_chromium_mac
 from . import tryserver_chromium_perf
-from . import tryserver_chromium_win
 
 BUILDERS = freeze({
   'chromium.chrome': chromium_chrome.SPEC,
@@ -42,7 +41,6 @@ BUILDERS = freeze({
   'tryserver.chromium.linux': tryserver_chromium_linux.SPEC,
   'tryserver.chromium.mac': tryserver_chromium_mac.SPEC,
   'tryserver.chromium.perf': tryserver_chromium_perf.SPEC,
-  'tryserver.chromium.win': tryserver_chromium_win.SPEC,
 
   # "Master" for testing specs that aren't exercised in the public repository.
   'bot_update.always_on': chromium_recipe_coverage.SPEC,
