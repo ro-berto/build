@@ -177,4 +177,3 @@ def webview_perf(c):
 @CONFIG_CTX(includes=['main_builder'])
 def cast_builder(c):
   c.gyp_env.GYP_DEFINES['chromecast'] = 1
-  c.compile_py.default_targets=['cast_shell_apk']

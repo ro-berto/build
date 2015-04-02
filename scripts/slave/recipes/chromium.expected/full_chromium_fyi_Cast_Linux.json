@@ -132,8 +132,8 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "cast_shell",
-      "cast_test_lists"
+      "All",
+      "chromium_builder_tests"
     ],
     "name": "compile"
   }

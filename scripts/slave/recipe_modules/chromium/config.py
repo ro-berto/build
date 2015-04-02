@@ -777,4 +777,3 @@ def chromium_deterministic_build(c):
 @config_ctx(includes=['chromium_clang'])
 def cast_linux(c):
   c.gyp_env.GYP_DEFINES['chromecast'] = 1
-  c.compile_py.default_targets = ['cast_shell', 'cast_test_lists']

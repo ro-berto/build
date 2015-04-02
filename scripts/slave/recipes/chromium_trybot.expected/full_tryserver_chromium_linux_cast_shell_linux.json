@@ -200,8 +200,8 @@
       "error",
       "--ninja-ensure-up-to-date",
       "--",
-      "cast_shell",
-      "cast_test_lists"
+      "All",
+      "chromium_builder_tests"
     ],
     "name": "compile (with patch)"
   }
