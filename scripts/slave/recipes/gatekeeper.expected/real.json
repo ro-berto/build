@@ -46,6 +46,11 @@
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/chromium.perf\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"infra\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"masters\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/chromium.infra\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"nacl\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"build-db\": \"nacl_build_db.json\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"masters\": [@@@",
@@ -207,20 +212,9 @@
       "-v",
       "--json",
       "[BUILD]/scripts/slave/gatekeeper.json",
-      "--status-url",
-      "https://blink-status.appspot.com",
-      "--set-status",
-      "--open-tree",
-      "--track-revisions",
-      "--revision-properties",
-      "got_revision_cp,got_webkit_revision_cp",
-      "--build-db",
-      "blink_build_db.json",
-      "--password-file",
-      "/creds/gatekeeper/blink_status_password",
-      "https://build.chromium.org/p/chromium.webkit"
+      "https://build.chromium.org/p/chromium.infra"
     ],
-    "name": "gatekeeper: blink"
+    "name": "gatekeeper: infra"
   },
   {
     "cmd": [
@@ -278,6 +272,29 @@
       "https://build.chromium.org/p/client.skia.compile"
     ],
     "name": "gatekeeper: skia"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/gatekeeper_ng.py",
+      "-v",
+      "--json",
+      "[BUILD]/scripts/slave/gatekeeper.json",
+      "--status-url",
+      "https://blink-status.appspot.com",
+      "--set-status",
+      "--open-tree",
+      "--track-revisions",
+      "--revision-properties",
+      "got_revision_cp,got_webkit_revision_cp",
+      "--build-db",
+      "blink_build_db.json",
+      "--password-file",
+      "/creds/gatekeeper/blink_status_password",
+      "https://build.chromium.org/p/chromium.webkit"
+    ],
+    "name": "gatekeeper: blink"
   },
   {
     "cmd": [

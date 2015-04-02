@@ -30,6 +30,11 @@
         "status-url": "https://chromium-status.appspot.com",
         "track-revisions": true
     },
+    "infra": {
+        "masters": [
+            "https://build.chromium.org/p/chromium.infra"
+        ]
+    },
     "nacl": {
         "build-db": "nacl_build_db.json",
         "masters": [

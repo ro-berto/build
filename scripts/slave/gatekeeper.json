@@ -104,6 +104,37 @@
         ]
       }
     ],
+    "http://build.chromium.org/i/chromium.infra": [
+      {
+        "builders": {
+          "infra-continuous-trusty-64": {
+            "categories": [
+              "infra_tree_closer"
+            ]
+          },
+          "infra-continuous-trusty-32": {
+            "categories": [
+              "infra_tree_closer"
+            ]
+          },
+          "infra-continuous-precise-64": {
+            "categories": [
+              "infra_tree_closer"
+            ]
+          },
+          "infra-continuous-precise-32": {
+            "categories": [
+              "infra_tree_closer"
+            ]
+          },
+          "gnumbd": {
+            "categories": [
+              "infra_cron_closer"
+            ]
+          }
+        }
+      }
+    ],
     "https://build.chromium.org/p/chromium.linux": [
       {
         "categories": [
@@ -617,6 +648,30 @@
         "slave_steps"
       ],
       "sheriff_classes": ["sheriff_android"]
+    },
+    "infra_tree_closer": {
+      "closing_optional": [
+        "gclient runhooks",
+        "infra python tests",
+        "infra go tests",
+        "build cipd packages"
+      ],
+      "tree_notify": [
+        "chrome-troopers+infra-continuous@google.com"
+      ]
+    },
+    "infra_cron_closer": {
+      "closing_optional": [
+        "gnumbd"
+      ],
+      "sheriff_classes": [
+        "trooper"
+      ],
+      "tree_notify": [
+        "chrome-troopers+gnumbd@google.com"
+      ],
+      "status_template": "Auto-closed (Cron %(builder_name)s failed)",
+      "subject_template": "Tree-closing infra failure on %(builder_name)s"
     },
     "nacl_all": {
       "closing_optional": [
