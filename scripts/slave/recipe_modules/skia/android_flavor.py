@@ -59,8 +59,7 @@ class _ADBWrapper(object):
   def wait_for_device(self):
     """Run 'adb wait-for-device'."""
     self._wait_count += 1
-    self._adb(name='wait for device %s (%d)' % (self._serial,
-                                                self._wait_count),
+    self._adb(name='wait for device (%d)' % self._wait_count,
               serial=self._serial,
               cmd=['wait-for-device'])
 
@@ -127,7 +126,7 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
     """Like os.path.exists(), but for paths on a connected device."""
     exists_str = 'FILE_EXISTS'
     return exists_str in self._adb(
-        name='exists %s' % path,
+        name='exists %s' % self._skia_api.m.path.basename(path),
         serial=self.serial,
         cmd=['shell', 'if', '[', '-e', path, '];',
              'then', 'echo', exists_str + ';', 'fi'],
@@ -136,7 +135,7 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
 
   def _remove_device_dir(self, path):
     """Remove the directory on the device."""
-    self._adb(name='rmdir %s' % self._skia_api.summarize_path(path),
+    self._adb(name='rmdir %s' % self._skia_api.m.path.basename(path),
               serial=self.serial,
               cmd=['shell', 'rm', '-r', path])
     # Sometimes the removal fails silently. Verify that it worked.
@@ -145,14 +144,14 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
 
   def _create_device_dir(self, path):
     """Create the directory on the device."""
-    self._adb(name='mkdir %s' % self._skia_api.summarize_path(path),
+    self._adb(name='mkdir %s' % self._skia_api.m.path.basename(path),
               serial=self.serial,
               cmd=['shell', 'mkdir', '-p', path])
 
   def copy_directory_contents_to_device(self, host_dir, device_dir):
     """Like shutil.copytree(), but for copying to a connected device."""
     self._skia_api.m.step(
-        name='push %s' % host_dir,
+        name='push %s' % self._skia_api.m.path.basename(host_dir),
         cmd=[self.android_bin.join('adb_push_if_needed'),
              '-s', self.serial, host_dir, device_dir],
         env=self._default_env)
@@ -160,14 +159,14 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
   def copy_directory_contents_to_host(self, device_dir, host_dir):
     """Like shutil.copytree(), but for copying from a connected device."""
     self._skia_api.m.step(
-        name='pull %s' % device_dir,
+        name='pull %s' % self._skia_api.m.path.basename(device_dir),
         cmd=[self.android_bin.join('adb_pull_if_needed'),
              '-s', self.serial, device_dir, host_dir],
         env=self._default_env)
 
   def copy_file_to_device(self, host_path, device_path):
     """Like shutil.copyfile, but for copying to a connected device."""
-    self._adb(name='push %s' % host_path,
+    self._adb(name='push %s' % self._skia_api.m.path.basename(host_path),
               serial=self.serial,
               cmd=['push', host_path, device_path])  # pragma: no cover
 

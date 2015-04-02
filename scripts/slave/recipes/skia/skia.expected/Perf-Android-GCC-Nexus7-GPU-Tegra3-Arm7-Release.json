@@ -101,7 +101,7 @@
       "015d210a13480604",
       "wait-for-device"
     ],
-    "name": "wait for device 015d210a13480604 (1)"
+    "name": "wait for device (1)"
   },
   {
     "cmd": [
@@ -138,7 +138,7 @@
       "015d210a13480604",
       "wait-for-device"
     ],
-    "name": "wait for device 015d210a13480604 (2)"
+    "name": "wait for device (2)"
   },
   {
     "cmd": [
@@ -174,7 +174,7 @@
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
-    "name": "push [SLAVE_BUILD]/skia/resources"
+    "name": "push resources"
   },
   {
     "cmd": [
@@ -184,7 +184,7 @@
       "[SLAVE_BUILD]/skia/SKP_VERSION",
       "/path/to/tmp/"
     ],
-    "name": "read .../skia/SKP_VERSION"
+    "name": "read SKP_VERSION"
   },
   {
     "cmd": [
@@ -194,7 +194,7 @@
       "[SLAVE_BUILD]/playback/skps/SKP_VERSION",
       "/path/to/tmp/"
     ],
-    "name": "read .../skps/SKP_VERSION"
+    "name": "read SKP_VERSION (2)"
   },
   {
     "cmd": [
@@ -203,7 +203,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/playback/skps"
     ],
-    "name": "rmtree .../playback/skps",
+    "name": "rmtree skps",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -222,7 +222,7 @@
       "[SLAVE_BUILD]/playback/skps",
       "511"
     ],
-    "name": "makedirs .../playback/skps",
+    "name": "makedirs skps",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -261,7 +261,7 @@
       "42",
       "[SLAVE_BUILD]/playback/skps/SKP_VERSION"
     ],
-    "name": "write [SLAVE_BUILD]/playback/skps/SKP_VERSION"
+    "name": "write SKP_VERSION"
   },
   {
     "cmd": [
@@ -273,7 +273,7 @@
       "-r",
       "/storage/emulated/legacy/skiabot/skia_skp/skps"
     ],
-    "name": "rmdir .../skia_skp/skps"
+    "name": "rmdir skps"
   },
   {
     "cmd": [
@@ -291,7 +291,7 @@
       "FILE_EXISTS;",
       "fi"
     ],
-    "name": "exists /storage/emulated/legacy/skiabot/skia_skp/skps",
+    "name": "exists skps",
     "stdout": "/path/to/tmp/"
   },
   {
@@ -304,7 +304,7 @@
       "-p",
       "/storage/emulated/legacy/skiabot/skia_skp/skps"
     ],
-    "name": "mkdir .../skia_skp/skps"
+    "name": "mkdir skps"
   },
   {
     "cmd": [
@@ -318,7 +318,7 @@
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
-    "name": "push [SLAVE_BUILD]/playback/skps"
+    "name": "push skps"
   },
   {
     "cmd": [
@@ -330,7 +330,7 @@
       "-r",
       "/storage/emulated/legacy/skiabot/skia_perf"
     ],
-    "name": "rmdir .../skiabot/skia_perf"
+    "name": "rmdir skia_perf"
   },
   {
     "cmd": [
@@ -348,7 +348,7 @@
       "FILE_EXISTS;",
       "fi"
     ],
-    "name": "exists /storage/emulated/legacy/skiabot/skia_perf",
+    "name": "exists skia_perf",
     "stdout": "/path/to/tmp/"
   },
   {
@@ -361,7 +361,7 @@
       "-p",
       "/storage/emulated/legacy/skiabot/skia_perf"
     ],
-    "name": "mkdir .../skiabot/skia_perf"
+    "name": "mkdir skia_perf"
   },
   {
     "cmd": [
@@ -372,7 +372,7 @@
       "Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
-    "name": "exec [SLAVE_BUILD]/skia/tools/nanobench_flags.py",
+    "name": "exec nanobench_flags.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
       "@@@STEP_LOG_LINE@json.output@  \"--dummy-flags\"@@@",
@@ -447,7 +447,7 @@
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
-    "name": "pull /storage/emulated/legacy/skiabot/skia_perf"
+    "name": "pull skia_perf"
   },
   {
     "cmd": [
@@ -486,6 +486,6 @@
       "015d210a13480604",
       "wait-for-device"
     ],
-    "name": "wait for device 015d210a13480604 (3)"
+    "name": "wait for device (3)"
   }
 ]

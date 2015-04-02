@@ -72,18 +72,18 @@ def GenTests(api):
             'get EXTERNAL_STORAGE dir',
             stdout=api.raw_io.output('/storage/emulated/legacy')) +
         api.step_data(
-            'exists /storage/emulated/legacy/skiabot/skia_skp/skps',
+            'exists skps',
             stdout=api.raw_io.output(''))
     )
     if 'Test' in builder:
       test_data += (
         api.step_data(
-            'exists /storage/emulated/legacy/skiabot/skia_images',
+            'exists skia_images',
             stdout=api.raw_io.output('')))
 
     if 'Perf' in builder:
       test_data += api.step_data(
-          'exists /storage/emulated/legacy/skiabot/skia_perf',
+          'exists skia_perf',
           stdout=api.raw_io.output(''))
     return test_data
 

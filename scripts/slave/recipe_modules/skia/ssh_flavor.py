@@ -69,12 +69,12 @@ class SSHFlavorUtils(default_flavor.DefaultFlavorUtils):
 
   def _remove_device_dir(self, path):
     """Remove the directory on the device."""
-    self.ssh(name='rmdir %s' % self._skia_api.summarize_path(path),
+    self.ssh(name='rmdir %s' % self._skia_api.m.path.basename(path),
              cmd=['rm', '-rf', path])
 
   def _create_device_dir(self, path):
     """Create the directory on the device."""
-    self.ssh(name='mkdir %s' % self._skia_api.summarize_path(path),
+    self.ssh(name='mkdir %s' % self._skia_api.m.path.basename(path),
              cmd=['mkdir', '-p', path])
 
   def create_clean_device_dir(self, path):
@@ -102,17 +102,20 @@ class SSHFlavorUtils(default_flavor.DefaultFlavorUtils):
     _, remote_path = self._make_scp_cmd(device_dir)
     cmd = [self._skia_api.resource('scp_dir_contents.sh'),
            host_dir, remote_path]
-    self._skia_api.m.step(name='scp %s' % host_dir, cmd=cmd)
+    self._skia_api.m.step(
+        name='scp %s' % self._skia_api.m.path.basename(host_dir), cmd=cmd)
 
   def copy_directory_contents_to_host(self, device_dir, host_dir):
     """Like shutil.copytree(), but for copying from a remote device."""
     _, remote_path = self._make_scp_cmd(device_dir)
     cmd = [self._skia_api.resource('scp_dir_contents.sh'),
            remote_path, host_dir]
-    self._skia_api.m.step(name='scp %s' % device_dir, cmd=cmd)
+    self._skia_api.m.step(
+        name='scp %s' % self._skia_api.m.path.basename(device_dir), cmd=cmd)
 
   def copy_file_to_device(self, host_path, device_path):
     """Like shutil.copyfile, but for copying to a connected device."""
     cmd, remote_path = self._make_scp_cmd(device_path, recurse=False)
     cmd.extend([host_path, remote_path])
-    self._skia_api.m.step(name='scp %s' % host_path, cmd=cmd)
+    self._skia_api.m.step(
+        name='scp %s' % self._skia_api.m.path.basename(host_path), cmd=cmd)

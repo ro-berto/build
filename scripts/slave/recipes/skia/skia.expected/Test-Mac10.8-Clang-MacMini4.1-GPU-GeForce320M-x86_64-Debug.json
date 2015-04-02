@@ -121,7 +121,7 @@
       "[SLAVE_BUILD]/skia/SKP_VERSION",
       "/path/to/tmp/"
     ],
-    "name": "read .../skia/SKP_VERSION"
+    "name": "read SKP_VERSION"
   },
   {
     "cmd": [
@@ -131,7 +131,7 @@
       "[SLAVE_BUILD]/playback/skps/SKP_VERSION",
       "/path/to/tmp/"
     ],
-    "name": "read .../skps/SKP_VERSION"
+    "name": "read SKP_VERSION (2)"
   },
   {
     "cmd": [
@@ -140,7 +140,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/playback/skps"
     ],
-    "name": "rmtree .../playback/skps",
+    "name": "rmtree skps",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -159,7 +159,7 @@
       "[SLAVE_BUILD]/playback/skps",
       "511"
     ],
-    "name": "makedirs .../playback/skps",
+    "name": "makedirs skps",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -198,7 +198,7 @@
       "42",
       "[SLAVE_BUILD]/playback/skps/SKP_VERSION"
     ],
-    "name": "write [SLAVE_BUILD]/playback/skps/SKP_VERSION"
+    "name": "write SKP_VERSION"
   },
   {
     "cmd": [
@@ -207,7 +207,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/images"
     ],
-    "name": "rmtree [SLAVE_BUILD]/images",
+    "name": "rmtree images",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -226,7 +226,7 @@
       "[SLAVE_BUILD]/images",
       "511"
     ],
-    "name": "makedirs [SLAVE_BUILD]/images",
+    "name": "makedirs images",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -264,7 +264,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/dm"
     ],
-    "name": "rmtree [SLAVE_BUILD]/dm",
+    "name": "rmtree dm",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -283,7 +283,7 @@
       "[SLAVE_BUILD]/dm",
       "511"
     ],
-    "name": "makedirs [SLAVE_BUILD]/dm",
+    "name": "makedirs dm",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -306,7 +306,7 @@
       "Test-Mac10.8-Clang-MacMini4.1-GPU-GeForce320M-x86_64-Debug"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
-    "name": "exec [SLAVE_BUILD]/skia/tools/dm_flags.py",
+    "name": "exec dm_flags.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
       "@@@STEP_LOG_LINE@json.output@  \"--dummy-flags\"@@@",
@@ -381,7 +381,7 @@
       "Test-Mac10.8-Clang-MacMini4.1-GPU-GeForce320M-x86_64-Debug"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
-    "name": "exec [SLAVE_BUILD]/skia/tools/nanobench_flags.py",
+    "name": "exec nanobench_flags.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
       "@@@STEP_LOG_LINE@json.output@  \"--dummy-flags\"@@@",

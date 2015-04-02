@@ -104,7 +104,7 @@
       "-rf",
       "/usr/local/skiabot/bin"
     ],
-    "name": "rmdir .../skiabot/bin"
+    "name": "rmdir bin"
   },
   {
     "cmd": [
@@ -116,7 +116,7 @@
       "-p",
       "/usr/local/skiabot/bin"
     ],
-    "name": "mkdir .../skiabot/bin"
+    "name": "mkdir bin"
   },
   {
     "cmd": [
@@ -124,7 +124,7 @@
       "[SLAVE_BUILD]/skia/resources",
       "root@192.168.1.134:/usr/local/skiabot/skia_resources"
     ],
-    "name": "scp [SLAVE_BUILD]/skia/resources"
+    "name": "scp resources"
   },
   {
     "cmd": [
@@ -134,7 +134,7 @@
       "[SLAVE_BUILD]/skia/SKP_VERSION",
       "/path/to/tmp/"
     ],
-    "name": "read .../skia/SKP_VERSION"
+    "name": "read SKP_VERSION"
   },
   {
     "cmd": [
@@ -144,7 +144,7 @@
       "[SLAVE_BUILD]/playback/skps/SKP_VERSION",
       "/path/to/tmp/"
     ],
-    "name": "read .../skps/SKP_VERSION"
+    "name": "read SKP_VERSION (2)"
   },
   {
     "cmd": [
@@ -153,7 +153,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/playback/skps"
     ],
-    "name": "rmtree .../playback/skps",
+    "name": "rmtree skps",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -172,7 +172,7 @@
       "[SLAVE_BUILD]/playback/skps",
       "511"
     ],
-    "name": "makedirs .../playback/skps",
+    "name": "makedirs skps",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -211,7 +211,7 @@
       "42",
       "[SLAVE_BUILD]/playback/skps/SKP_VERSION"
     ],
-    "name": "write [SLAVE_BUILD]/playback/skps/SKP_VERSION"
+    "name": "write SKP_VERSION"
   },
   {
     "cmd": [
@@ -223,7 +223,7 @@
       "-rf",
       "/usr/local/skiabot/skia_skp/skps"
     ],
-    "name": "rmdir .../skia_skp/skps"
+    "name": "rmdir skps"
   },
   {
     "cmd": [
@@ -235,7 +235,7 @@
       "-p",
       "/usr/local/skiabot/skia_skp/skps"
     ],
-    "name": "mkdir .../skia_skp/skps"
+    "name": "mkdir skps"
   },
   {
     "cmd": [
@@ -243,7 +243,7 @@
       "[SLAVE_BUILD]/playback/skps",
       "root@192.168.1.134:/usr/local/skiabot/skia_skp/skps"
     ],
-    "name": "scp [SLAVE_BUILD]/playback/skps"
+    "name": "scp skps"
   },
   {
     "cmd": [
@@ -252,7 +252,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/images"
     ],
-    "name": "rmtree [SLAVE_BUILD]/images",
+    "name": "rmtree images",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -271,7 +271,7 @@
       "[SLAVE_BUILD]/images",
       "511"
     ],
-    "name": "makedirs [SLAVE_BUILD]/images",
+    "name": "makedirs images",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -312,7 +312,7 @@
       "-rf",
       "/usr/local/skiabot/skia_images"
     ],
-    "name": "rmdir .../skiabot/skia_images"
+    "name": "rmdir skia_images"
   },
   {
     "cmd": [
@@ -324,7 +324,7 @@
       "-p",
       "/usr/local/skiabot/skia_images"
     ],
-    "name": "mkdir .../skiabot/skia_images"
+    "name": "mkdir skia_images"
   },
   {
     "cmd": [
@@ -332,7 +332,7 @@
       "[SLAVE_BUILD]/images",
       "root@192.168.1.134:/usr/local/skiabot/skia_images"
     ],
-    "name": "scp [SLAVE_BUILD]/images"
+    "name": "scp images"
   },
   {
     "cmd": [
@@ -341,7 +341,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/dm"
     ],
-    "name": "rmtree [SLAVE_BUILD]/dm",
+    "name": "rmtree dm",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -360,7 +360,7 @@
       "[SLAVE_BUILD]/dm",
       "511"
     ],
-    "name": "makedirs [SLAVE_BUILD]/dm",
+    "name": "makedirs dm",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -383,7 +383,7 @@
       "Test-ChromeOS-GCC-Daisy-CPU-NEON-Arm7-Release"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
-    "name": "exec [SLAVE_BUILD]/skia/tools/dm_flags.py",
+    "name": "exec dm_flags.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
       "@@@STEP_LOG_LINE@json.output@  \"--dummy-flags\"@@@",
@@ -399,7 +399,7 @@
       "[SLAVE_BUILD]/skia/out/config/chromeos-daisy/Release/dm",
       "root@192.168.1.134:/usr/local/skiabot/bin/dm"
     ],
-    "name": "scp [SLAVE_BUILD]/skia/out/config/chromeos-daisy/Release/dm"
+    "name": "scp dm"
   },
   {
     "cmd": [
@@ -449,7 +449,7 @@
       "root@192.168.1.134:/usr/local/skiabot/skia_dm_out",
       "[SLAVE_BUILD]/dm"
     ],
-    "name": "scp /usr/local/skiabot/skia_dm_out"
+    "name": "scp skia_dm_out"
   },
   {
     "cmd": [

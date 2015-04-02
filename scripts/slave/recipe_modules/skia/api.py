@@ -147,30 +147,15 @@ class SkiaApi(recipe_api.RecipeApi):
     for target in self.c.build_targets:
       self.flavor.compile(target)
 
-  def summarize_path(self, path):
-    """Shorten path to a summary.
-    >>> summarize_path('foo/bar/baz')
-    .../bar/baz
-    >>> summarize_path('foo/bar')
-    foo/bar
-    """
-    path = str(path)
-    parts = re.split('/|\\\\', path)  # Split on / or \.
-    summary = ['...'] if len(parts) > 2 else []
-    for part in parts[-2:]:
-      if part == self.c.BUILDER_NAME:
-        part = 'BUILDER'
-      summary.append(part)
-    return '/'.join(summary)
-
   def _readfile(self, filename, *args, **kwargs):
     """Convenience function for reading files."""
-    return self.m.file.read('read %s' % self.summarize_path(filename),
+    return self.m.file.read('read %s' % self.m.path.basename(filename),
                             filename, *args, **kwargs)
 
   def _writefile(self, filename, contents):
     """Convenience function for writing files."""
-    return self.m.file.write('write %s' % filename, filename, contents)
+    return self.m.file.write('write %s' % self.m.path.basename(filename),
+                             filename, contents)
 
   def run(self, steptype, name, abort_on_failure=True,
           fail_build_on_failure=True, **kwargs):
@@ -266,7 +251,7 @@ class SkiaApi(recipe_api.RecipeApi):
   def flags_from_file(self, filename):
     """Execute the given script to obtain flags to pass to a test."""
     return self.m.python(
-        'exec %s' % filename,
+        'exec %s' % self.m.path.basename(filename),
         filename,
         args=[self.m.json.output(), self.c.BUILDER_NAME],
         step_test_data=lambda: self.m.json.test_api.output(['--dummy-flags']),

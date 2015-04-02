@@ -117,7 +117,7 @@
       "R32CB017X2L",
       "wait-for-device"
     ],
-    "name": "wait for device R32CB017X2L (1)"
+    "name": "wait for device (1)"
   },
   {
     "cmd": [
@@ -154,7 +154,7 @@
       "R32CB017X2L",
       "wait-for-device"
     ],
-    "name": "wait for device R32CB017X2L (2)"
+    "name": "wait for device (2)"
   },
   {
     "cmd": [
@@ -190,7 +190,7 @@
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
-    "name": "push [SLAVE_BUILD]/skia/resources"
+    "name": "push resources"
   },
   {
     "cmd": [
@@ -200,7 +200,7 @@
       "[SLAVE_BUILD]/skia/SKP_VERSION",
       "/path/to/tmp/"
     ],
-    "name": "read .../skia/SKP_VERSION"
+    "name": "read SKP_VERSION"
   },
   {
     "cmd": [
@@ -210,7 +210,7 @@
       "[SLAVE_BUILD]/playback/skps/SKP_VERSION",
       "/path/to/tmp/"
     ],
-    "name": "read .../skps/SKP_VERSION"
+    "name": "read SKP_VERSION (2)"
   },
   {
     "cmd": [
@@ -219,7 +219,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/playback/skps"
     ],
-    "name": "rmtree .../playback/skps",
+    "name": "rmtree skps",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -238,7 +238,7 @@
       "[SLAVE_BUILD]/playback/skps",
       "511"
     ],
-    "name": "makedirs .../playback/skps",
+    "name": "makedirs skps",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -277,7 +277,7 @@
       "42",
       "[SLAVE_BUILD]/playback/skps/SKP_VERSION"
     ],
-    "name": "write [SLAVE_BUILD]/playback/skps/SKP_VERSION"
+    "name": "write SKP_VERSION"
   },
   {
     "cmd": [
@@ -289,7 +289,7 @@
       "-r",
       "/storage/emulated/legacy/skiabot/skia_skp/skps"
     ],
-    "name": "rmdir .../skia_skp/skps"
+    "name": "rmdir skps"
   },
   {
     "cmd": [
@@ -307,7 +307,7 @@
       "FILE_EXISTS;",
       "fi"
     ],
-    "name": "exists /storage/emulated/legacy/skiabot/skia_skp/skps",
+    "name": "exists skps",
     "stdout": "/path/to/tmp/"
   },
   {
@@ -320,7 +320,7 @@
       "-p",
       "/storage/emulated/legacy/skiabot/skia_skp/skps"
     ],
-    "name": "mkdir .../skia_skp/skps"
+    "name": "mkdir skps"
   },
   {
     "cmd": [
@@ -334,7 +334,7 @@
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
-    "name": "push [SLAVE_BUILD]/playback/skps"
+    "name": "push skps"
   },
   {
     "cmd": [
@@ -343,7 +343,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/images"
     ],
-    "name": "rmtree [SLAVE_BUILD]/images",
+    "name": "rmtree images",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -362,7 +362,7 @@
       "[SLAVE_BUILD]/images",
       "511"
     ],
-    "name": "makedirs [SLAVE_BUILD]/images",
+    "name": "makedirs images",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -403,7 +403,7 @@
       "-r",
       "/storage/emulated/legacy/skiabot/skia_images"
     ],
-    "name": "rmdir .../skiabot/skia_images"
+    "name": "rmdir skia_images"
   },
   {
     "cmd": [
@@ -421,7 +421,7 @@
       "FILE_EXISTS;",
       "fi"
     ],
-    "name": "exists /storage/emulated/legacy/skiabot/skia_images",
+    "name": "exists skia_images",
     "stdout": "/path/to/tmp/"
   },
   {
@@ -434,7 +434,7 @@
       "-p",
       "/storage/emulated/legacy/skiabot/skia_images"
     ],
-    "name": "mkdir .../skiabot/skia_images"
+    "name": "mkdir skia_images"
   },
   {
     "cmd": [
@@ -448,7 +448,7 @@
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
-    "name": "push [SLAVE_BUILD]/images"
+    "name": "push images"
   },
   {
     "cmd": [
@@ -457,7 +457,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/dm"
     ],
-    "name": "rmtree [SLAVE_BUILD]/dm",
+    "name": "rmtree dm",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -476,7 +476,7 @@
       "[SLAVE_BUILD]/dm",
       "511"
     ],
-    "name": "makedirs [SLAVE_BUILD]/dm",
+    "name": "makedirs dm",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -499,7 +499,7 @@
       "Test-Android-GCC-Nexus10-GPU-MaliT604-Arm7-Release"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
-    "name": "exec [SLAVE_BUILD]/skia/tools/dm_flags.py",
+    "name": "exec dm_flags.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
       "@@@STEP_LOG_LINE@json.output@  \"--dummy-flags\"@@@",
@@ -568,7 +568,7 @@
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "SKIA_ANDROID_VERBOSE_SETUP": "1"
     },
-    "name": "pull /storage/emulated/legacy/skiabot/skia_dm"
+    "name": "pull skia_dm"
   },
   {
     "cmd": [
@@ -608,6 +608,6 @@
       "R32CB017X2L",
       "wait-for-device"
     ],
-    "name": "wait for device R32CB017X2L (3)"
+    "name": "wait for device (3)"
   }
 ]

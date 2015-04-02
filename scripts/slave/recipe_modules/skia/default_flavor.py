@@ -219,9 +219,9 @@ class DefaultFlavorUtils(base_flavor.BaseFlavorUtils):
   def create_clean_host_dir(self, path):
     """Convenience function for creating a clean directory."""
     self._skia_api.m.path.rmtree(
-        self._skia_api.summarize_path(path), path)
+        self._skia_api.m.path.basename(path), path)
     self._skia_api.m.path.makedirs(
-        self._skia_api.summarize_path(path), path)
+        self._skia_api.m.path.basename(path), path)
 
   def install(self):
     """Run device-specific installation steps."""
