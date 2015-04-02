@@ -44,8 +44,8 @@ ifndef NO_REVISION_AUDIT
 	@($(INFRA_RUNPY) infra.tools.send_monitoring_event \
                    --service-event-revinfo-from-gclient \
                    --service-event-type=START \
-                   --event-mon-service-name \
                    --event-mon-run-type=prod \
+                   --event-mon-service-name \
                    buildbot/master/$(MASTERPATH) \
    || echo 'Running send_monitoring_event failed, skipping sending events.' \
   ) 2>&1 | tee -a actions.log
@@ -64,8 +64,8 @@ stop: printstep
 ifndef NO_REVISION_AUDIT
 	@($(INFRA_RUNPY) infra.tools.send_monitoring_event \
                    --service-event-type=STOP \
-                   --event-mon-service-name \
                    --event-mon-run-type=prod \
+                   --event-mon-service-name \
                    buildbot/master/$(MASTERPATH) \
    || echo 'Running send_monitoring_event failed, skipping sending events' \
   ) 2>&1 | tee -a actions.log
