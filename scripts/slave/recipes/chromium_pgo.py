@@ -22,7 +22,10 @@ def GenSteps(api):
 
 def GenTests(api):
   pgo_builders = {
-    'chromium.fyi': ['Chromium Win PGO Builder'],
+    'chromium.fyi': [
+        'Chromium Win PGO Builder',
+        'Chromium Win x64 PGO Builder',
+    ],
     'tryserver.chromium.win': ['win_pgo'],
   }
 
@@ -35,7 +38,7 @@ def GenTests(api):
         api.test('full_%s_%s' % (_sanitize_nonalpha(mastername),
                                  _sanitize_nonalpha(buildername))) +
         api.properties.generic(mastername=mastername, buildername=buildername) +
-        api.platform('win', 32)
+        api.platform('win', 64)
       )
 
   yield (

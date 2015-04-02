@@ -318,6 +318,20 @@ SPEC = {
         'platform': 'win',
       },
     },
+    'Chromium Win x64 PGO Builder': {
+      'recipe_config': 'chromium',
+      'chromium_config_instrument': 'chromium_pgo_instrument',
+      'chromium_config_optimize': 'chromium_pgo_optimize',
+      'gclient_config': 'chromium_lkgr',
+      'clobber': True,
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'testing': {
+        'platform': 'win',
+      },
+    },
     'Cast Linux': {
       'recipe_config': 'cast_linux',
       'chromium_config_kwargs': {
