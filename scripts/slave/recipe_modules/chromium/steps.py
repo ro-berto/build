@@ -539,15 +539,6 @@ class SwarmingTest(Test):
       api.swarming.collect_task(self._tasks[suffix])
     finally:
       valid, failures = self.validate_task_results(api, api.step.active_result)
-      # It is possible for a step to fail (e.g. return non zero exit code) after
-      # successfully writing JSON with "all green" test result. Mark such test
-      # results as invalid anyway. Note that just adding some synthetic failure
-      # to 'failures' may interfere badly with "rerun test without a patch"
-      # logic, so it's safer just to claim that there's something wrong with
-      # the step (by marking it as invalid).
-      red_step = api.step.active_result.presentation.status != api.step.SUCCESS
-      if red_step and valid and not failures:
-        valid = False
       self._results[suffix] = {'valid': valid, 'failures': failures}
 
   def has_valid_results(self, api, suffix):

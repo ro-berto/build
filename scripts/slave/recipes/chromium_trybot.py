@@ -904,6 +904,18 @@ def GenTests(api):
     api.override_step_data('analyze', api.gpu.analyze_builds_angle_unittests)
   )
 
+  yield (
+    api.test('swarming_time_out_is_handled_correctly') +
+    api.properties.tryserver(
+      mastername='tryserver.chromium.win',
+      buildername='win_chromium_rel_ng'
+    ) +
+    api.platform.name('win') +
+    api.override_step_data('analyze', api.gpu.analyze_builds_pixel_test) +
+    api.override_step_data('pixel_test on NVIDIA GPU on Windows (with patch) '
+                           'on Windows', api.raw_io.output_dir({}))
+  )
+
   # Tests that we run nothing if analyze said we didn't have to run anything.
   yield (
     api.test('analyze_runs_nothing') +
