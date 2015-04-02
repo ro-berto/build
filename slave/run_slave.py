@@ -197,14 +197,6 @@ def HotPatchSlaveBuilder(is_testing):
   Bot.remote_setBuilderList = Bot.new_remote_setBuilderList
 
 
-def FixSubversionConfig():
-  if sys.platform == 'win32':
-    dest = os.path.join(os.environ['APPDATA'], 'Subversion', 'config')
-  else:
-    dest = os.path.join(os.environ['HOME'], '.subversion', 'config')
-  shutil.copyfile('config', dest)
-
-
 def GetActiveMaster(slave_bootstrap, config_bootstrap, active_slavename):
   master_name = os.environ.get(
       'TESTING_MASTER', chromium_utils.GetActiveMaster(active_slavename))
@@ -482,9 +474,6 @@ def main():
 
   # This envrionment is defined only when testing the slave on a dev machine.
   is_testing = 'TESTING_MASTER' in os.environ
-  if not is_testing:
-    # Don't overwrite the ~/.subversion/config file when TESTING_MASTER is set.
-    FixSubversionConfig()
   HotPatchSlaveBuilder(is_testing)
 
   import twisted.scripts.twistd as twistd
