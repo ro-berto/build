@@ -6,14 +6,16 @@ DEPS = [
   'ios',
   'platform',
   'properties',
+  'tryserver',
 ]
 
 def GenSteps(api):
-  api.ios.host_info()
-  api.ios.checkout()
-  api.ios.read_build_config()
-  api.ios.build()
-  api.ios.test()
+  with api.tryserver.set_failure_hash():
+    api.ios.host_info()
+    api.ios.checkout()
+    api.ios.read_build_config()
+    api.ios.build()
+    api.ios.test()
 
 def GenTests(api):
   yield (
