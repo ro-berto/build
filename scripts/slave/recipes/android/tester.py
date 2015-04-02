@@ -98,7 +98,7 @@ BUILDERS = freeze({
     'Android Tests (N5)': {
       'config': 'trybot_builder',
       'instrumentation_tests': INSTRUMENTATION_TESTS,
-      'unittests': UNIT_TESTS,
+      'unittests': UNIT_TESTS + (('device_unittests', None),),
       'java_unittests': JAVA_UNIT_TESTS + JAVA_ROBOLECTRIC_UNIT_TESTS,
       'python_unittests': PYTHON_UNIT_TESTS,
       'target': 'Release',
