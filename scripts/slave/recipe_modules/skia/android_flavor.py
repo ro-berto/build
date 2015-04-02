@@ -14,12 +14,8 @@ import default_flavor
 def device_from_builder_dict(builder_dict):
   """Given a builder name dictionary, return an Android device name."""
   if 'Android' in builder_dict.get('extra_config', ''):
-    if 'NoThumb' in builder_dict['extra_config']:
-      return 'arm_v7'  # pragma: no cover
-    if 'NoNeon' in builder_dict['extra_config']:
-      return 'xoom'  # pragma: no cover
     if 'Neon' in builder_dict['extra_config']:
-      return 'nexus_4'  # pragma: no cover
+      return 'arm_v7_neon'  # pragma: no cover
     return {
       'Arm64': 'arm64',
       'x86': 'x86',
@@ -34,7 +30,7 @@ def device_from_builder_dict(builder_dict):
       'GalaxyS4': 'arm_v7',
       'Nexus5': 'nexus_5',
       'Nexus7': 'nexus_7',
-      'Nexus9': 'arm64',
+      'Nexus9': 'nexus_9',
       'Nexus10': 'nexus_10',
       'NexusPlayer': 'x86',
       'Xoom': 'xoom',
