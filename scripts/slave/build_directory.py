@@ -89,6 +89,7 @@ def RmtreeExceptNinjaOrGomaFiles(build_output_dir):
       if (f.endswith('.ninja') or f.endswith('.manifest') or
           f == 'args.gn' or
           f.startswith('msvc') or  # VS runtime DLLs.
+          f.startswith('pgort') or  # VS PGO runtime DLL.
           f in ('gyp-mac-tool', 'gyp-win-tool',
                 'environment.x86', 'environment.x64')):
         continue
