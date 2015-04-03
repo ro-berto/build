@@ -1165,6 +1165,19 @@ class MiniInstallerTest(PythonBasedTest):  # pylint: disable=W0232
       **kwargs)
 
 
+class DiagnoseGomaTest(Test):
+  name = 'diagnose_goma'
+
+  @property
+  def name(self):
+    return 'diagnose_goma'
+
+  def run(self, api, suffix):
+    diagnose_goma_log_py = api.path['build'].join('goma',
+                                                  'diagnose_goma_log.py')
+    api.python('diagnose_goma', diagnose_goma_log_py, [])
+
+
 IOS_TESTS = [
   GTestTest('ios_chrome_unittests'),
   GTestTest('base_unittests'),

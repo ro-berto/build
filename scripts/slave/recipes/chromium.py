@@ -167,6 +167,13 @@ def GenTests(api):
   )
 
   yield (
+    api.test('goma_with_diagnose_goma_failure') +
+    api.properties.generic(mastername='chromium.fyi',
+                           buildername='CrWinGoma') +
+    api.step_data('diagnose_goma', retcode=1)
+  )
+
+  yield (
     api.test('dynamic_gtest_on_builder') +
     api.properties.generic(mastername='chromium.linux',
                            buildername='Linux Builder') +

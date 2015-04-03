@@ -4,7 +4,6 @@
 
 from slave import recipe_api
 
-
 class GomaApi(recipe_api.RecipeApi):
   """GomaApi contains helper functions for using goma."""
 
@@ -14,12 +13,3 @@ class GomaApi(recipe_api.RecipeApi):
                    ['sync', '--verbose', '--force',
                     '--revision', 'build/goma@HEAD'],
                    cwd=self.m.path['build'])
-
-  def diagnose_goma(self):
-    """Returns a step for checking goma log."""
-    try:
-      self.m.python('diagnose_goma',
-                    self.m.path['build'].join('goma', 'diagnose_goma_log.py'))
-    except self.m.step.StepFailure:
-      # Ignore diagnose_goma failures.
-      pass

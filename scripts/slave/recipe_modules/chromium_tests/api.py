@@ -513,9 +513,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self.m.chromium.compile(compile_targets,
                                 name=transform_name('compile')))
 
-      if bot_config.get('goma_canary'):
-        self.m.goma.diagnose_goma()
-
       if isolated_targets:
         self.m.isolate.remove_build_metadata()
         # 'compile' just prepares all information needed for the isolation,
@@ -606,7 +603,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           bot_config.get('root_devices')):
         self.m.adb.root_devices()
 
-    tests = bot_config.get('tests', [])
+    # TODO(shinyak): bot_config.get('tests', []) sometimes return tuple.
+    tests = list(bot_config.get('tests', []))
+
+    if bot_config.get('goma_canary'):
+      tests.insert(0, self.m.chromium.steps.DiagnoseGomaTest())
 
     # TODO(phajdan.jr): bots should just leave tests empty instead of this.
     if bot_config.get('do_not_run_tests'):

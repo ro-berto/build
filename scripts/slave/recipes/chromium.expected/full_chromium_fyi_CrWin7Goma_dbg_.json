@@ -166,19 +166,19 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\goma\\diagnose_goma_log.py"
-    ],
-    "name": "diagnose_goma"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[BUILD]\\scripts\\slave\\chromium\\run_crash_handler.py",
       "--target",
       "Debug"
     ],
     "name": "start_crash_service"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\goma\\diagnose_goma_log.py"
+    ],
+    "name": "diagnose_goma"
   },
   {
     "allow_subannotations": true,
