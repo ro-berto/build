@@ -10,3 +10,4 @@ per-file gpu.py=kbr@chromium.org
 per-file v8.py=machenbach@chromium.org
 per-file blink_downstream.py=machenbach@chromium.org
 per-file chromium_pgo.py=sebmarchand@chromium.org
+per-file bisect.py=robertocn@chromium.org
