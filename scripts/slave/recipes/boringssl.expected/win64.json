@@ -77,8 +77,8 @@
       "x64",
       "[SLAVE_BUILD]\\boringssl\\util\\bot\\cmake-win32\\bin\\cmake.exe",
       "-GNinja",
-      "-DPERL_EXECUTABLE=[SLAVE_BUILD]\\boringssl\\util\\bot\\perl-win32\\perl\\bin\\perl.exe",
       "-DCMAKE_ASM_NASM_COMPILER=[SLAVE_BUILD]/boringssl/util/bot/yasm-win32.exe",
+      "-DPERL_EXECUTABLE=[SLAVE_BUILD]\\boringssl\\util\\bot\\perl-win32\\perl\\bin\\perl.exe",
       "[SLAVE_BUILD]\\boringssl"
     ],
     "cwd": "[SLAVE_BUILD]\\boringssl\\build",

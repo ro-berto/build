@@ -3,11 +3,11 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\bot_update.py",
+      "[BUILD]/scripts/slave/bot_update.py",
       "--master",
       "client.boringssl",
       "--builder",
-      "win32",
+      "linux_shared",
       "--slave",
       "slavename",
       "--spec",
@@ -40,7 +40,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]\\gclient.py",
+      "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
     "name": "gclient runhooks"
@@ -50,7 +50,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]\\boringssl\\build",
+      "[SLAVE_BUILD]/boringssl/build",
       "511"
     ],
     "name": "makedirs mkdir",
@@ -71,30 +71,23 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\boringssl\\util\\bot\\go\\env.py",
-      "python",
-      "[SLAVE_BUILD]\\boringssl\\util\\bot\\vs_env.py",
-      "x86",
-      "[SLAVE_BUILD]\\boringssl\\util\\bot\\cmake-win32\\bin\\cmake.exe",
+      "[SLAVE_BUILD]/boringssl/util/bot/go/env.py",
+      "[SLAVE_BUILD]/boringssl/util/bot/cmake-linux64/bin/cmake",
       "-GNinja",
-      "-DCMAKE_ASM_NASM_COMPILER=[SLAVE_BUILD]/boringssl/util/bot/yasm-win32.exe",
-      "-DPERL_EXECUTABLE=[SLAVE_BUILD]\\boringssl\\util\\bot\\perl-win32\\perl\\bin\\perl.exe",
-      "[SLAVE_BUILD]\\boringssl"
+      "-DBUILD_SHARED_LIBS=1",
+      "[SLAVE_BUILD]/boringssl"
     ],
-    "cwd": "[SLAVE_BUILD]\\boringssl\\build",
+    "cwd": "[SLAVE_BUILD]/boringssl/build",
     "name": "cmake"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\boringssl\\util\\bot\\go\\env.py",
-      "python",
-      "[SLAVE_BUILD]\\boringssl\\util\\bot\\vs_env.py",
-      "x86",
+      "[SLAVE_BUILD]/boringssl/util/bot/go/env.py",
       "ninja",
       "-C",
-      "[SLAVE_BUILD]\\boringssl\\build"
+      "[SLAVE_BUILD]/boringssl/build"
     ],
     "name": "ninja"
   },
@@ -102,17 +95,14 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\boringssl\\util\\bot\\go\\env.py",
-      "python",
-      "[SLAVE_BUILD]\\boringssl\\util\\bot\\vs_env.py",
-      "x86",
+      "[SLAVE_BUILD]/boringssl/util/bot/go/env.py",
       "go",
       "run",
-      "util\\all_tests.go",
+      "util/all_tests.go",
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]\\boringssl",
+    "cwd": "[SLAVE_BUILD]/boringssl",
     "name": "unit tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@test_utils.test_results@{@@@",
@@ -161,26 +151,23 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\boringssl\\util\\bot\\go\\env.py",
+      "[SLAVE_BUILD]/boringssl/util/bot/go/env.py",
       "go",
       "build",
       "-o",
-      "[SLAVE_BUILD]\\boringssl\\build\\runner.exe"
+      "[SLAVE_BUILD]/boringssl/build/runner"
     ],
-    "cwd": "[SLAVE_BUILD]\\boringssl\\ssl\\test\\runner",
+    "cwd": "[SLAVE_BUILD]/boringssl/ssl/test/runner",
     "name": "build runner.go"
   },
   {
     "cmd": [
-      "python",
-      "[SLAVE_BUILD]\\boringssl\\util\\bot\\vs_env.py",
-      "x86",
-      "[SLAVE_BUILD]\\boringssl\\build\\runner.exe",
+      "[SLAVE_BUILD]/boringssl/build/runner",
       "-pipe",
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]\\boringssl\\ssl\\test\\runner",
+    "cwd": "[SLAVE_BUILD]/boringssl/ssl/test/runner",
     "name": "ssl tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@test_utils.test_results@{@@@",

@@ -50,6 +50,20 @@ def _HasToken(buildername, token):
   return '_' + token + '_' in '_' + buildername + '_'
 
 
+def _GetTargetCMakeArgs(buildername):
+  args = {}
+  if _HasToken(buildername, 'shared'):
+    args['BUILD_SHARED_LIBS'] = '1'
+  if _HasToken(buildername, 'linux32'):
+    # 32-bit Linux is cross-compiled on the 64-bit Linux bot.
+    args['CMAKE_SYSTEM_NAME'] = 'Linux'
+    args['CMAKE_SYSTEM_PROCESSOR'] = 'x86'
+    args['CMAKE_CXX_FLAGS'] = '-m32 -msse2'
+    args['CMAKE_C_FLAGS'] = '-m32 -msse2'
+    args['CMAKE_ASM_FLAGS'] = '-m32 -msse2'
+  return args
+
+
 def _GetTargetMSVCPrefix(buildername, bot_utils):
   if _HasToken(buildername, 'win32'):
     return ['python', bot_utils.join('vs_env.py'), 'x86']
@@ -80,9 +94,10 @@ def GenSteps(api):
   cmake = bot_utils.join('cmake-' + _GetHostToolSuffix(api.platform), 'bin',
                          'cmake' + _GetHostExeSuffix(api.platform))
   cmake_args = _GetHostCMakeArgs(api.platform, bot_utils)
+  cmake_args.update(_GetTargetCMakeArgs(api.properties['buildername']))
   api.python('cmake', go_env,
              msvc_prefix + [cmake, '-GNinja'] +
-             ['-D%s=%s' % (k, v) for (k, v) in cmake_args.items()] +
+             ['-D%s=%s' % (k, v) for (k, v) in sorted(cmake_args.items())] +
              [api.path['checkout']],
              cwd=build_dir)
   api.python('ninja', go_env, msvc_prefix + ['ninja', '-C', build_dir])
@@ -106,6 +121,8 @@ def GenSteps(api):
 def GenTests(api):
   tests = [
     ('linux', api.platform('linux', 64)),
+    ('linux_shared', api.platform('linux', 64)),
+    ('linux32', api.platform('linux', 64)),
     ('mac', api.platform('mac', 64)),
     ('win32', api.platform('win', 64)),
     ('win64', api.platform('win', 64)),
