@@ -149,7 +149,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip",
       "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
     ],
-    "name": "Waiting for any of these revisions:314015 314017"
+    "name": "Waiting for revision 314015 and 1 other revision(s)."
   },
   {
     "cmd": [
@@ -305,7 +305,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "gs://chrome-perf/bisect-results/dcdcdc0ff1122212323134879ddceeb1240b0988-test"
     ],
-    "name": "Waiting for any of these revisions:314015 314017 (2)"
+    "name": "Waiting for revision 314015 and 1 other revision(s). (2)"
   },
   {
     "cmd": [
@@ -390,7 +390,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
     ],
-    "name": "Waiting for any of these revisions:314016"
+    "name": "Waiting for revision 314016"
   },
   {
     "cmd": [
@@ -452,7 +452,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "gs://chrome-perf/bisect-results/a6298e4afedbf2cd461755ea6f45b0ad64222222-test"
     ],
-    "name": "Waiting for any of these revisions:314016 (2)"
+    "name": "Waiting for revision 314016 (2)"
   },
   {
     "cmd": [

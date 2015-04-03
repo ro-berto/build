@@ -398,8 +398,9 @@ class Bisector(object):
     the appropriate bucket, or when buildbot test job is complete.
     """
     gsutil_path = self.api.m.gsutil.get_gsutil_path()
-    name = 'Waiting for any of these revisions:' + ' '.join(
-        [r.revision_string for r in revision_list])
+    name = 'Waiting for revision ' + revision_list[0].revision_string
+    if len(revision_list) > 1:
+      name += ' and %d other revision(s).' % (len(revision_list) - 1)
     script = self.api.resource('wait_for_any.py')
     args_list = [gsutil_path]
     url_list = [r.get_next_url() for r in revision_list]

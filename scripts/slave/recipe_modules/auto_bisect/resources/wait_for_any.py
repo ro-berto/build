@@ -51,7 +51,6 @@ def _is_gs_url(url):
 def _run_gsutil(cmd):
   # Sleep for a short time between gsutil calls
   time.sleep(SHORT_INTERVAL)
-  global gsutil_path
   cmd = [gsutil_path] + cmd
   try:
     out = subprocess.check_output(cmd)
@@ -69,7 +68,7 @@ def _check_buildbot_job(url):
     if build_status_dict['currentStep'] is None:
       print url, " finished."
       return True
-  except:
+  except Exception:
     print "Could not retrieve or parse the buildbot url: ", url
   return False
 
@@ -85,6 +84,8 @@ def main(argv):
     print usage % argv[0]
     return 1
 
+  list_of_urls = ', '.join(['<%s>' % url for url in argv[2:]])
+  print 'Waiting for the following urls: ' + list_of_urls
   global gsutil_path
   start_time  = time.time()
   gsutil_path = argv[1]
@@ -111,7 +112,6 @@ def main(argv):
     if time.time() - start_time > TIMEOUT_INTERVAL:
       print "Timed out waiting for: ", urls
       return 1
-    print "No jobs ready, sleeping."
     time.sleep(LONG_INTERVAL)
   print "No jobs to check."
   return 0
