@@ -12,6 +12,8 @@ DEPS = [
 ]
 
 def GenSteps(api):
+  assert(0 == api.math_utils.relative_change(0, 0))
+  assert(0 == api.math_utils.relative_change(1, 1))
   sample_a = list(range(1, 10))
   sample_b = list(range(11, 21))
   assert(99.9 == api.math_utils.confidence_score(sample_a, sample_b))

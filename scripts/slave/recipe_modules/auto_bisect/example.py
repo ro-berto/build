@@ -52,6 +52,7 @@ def GenSteps(api):
   if revisions_to_check:
     revisions_to_check[0].start_job()
     revisions_to_check[0].read_deps()  # Only added for coverage.
+    api.auto_bisect.query_revision_info(revisions_to_check[0].commit_hash)
   else:
     raise api.step.StepFailure('Expected revisions to check.')
   # TODO(robertocn): Add examples for the following operations
@@ -107,6 +108,10 @@ def _get_basic_test_data():
               '002': 'Dummy .diff contents 001 - 002',
               '003': 'Dummy .diff contents 001 - 003',
           },
+          'cl_info': 'S3P4R4T0R'.join(['DummyAuthor', 'dummy@nowhere.com',
+                                      'Some random CL', '01/01/2015',
+                                      'A long description for a CL.\n'
+                                      'Containing multiple lines'])
       },
       {
           'hash': 'dcdcdc0ff1122212323134879ddceeb1240b0988',
@@ -149,7 +154,11 @@ def _get_reversed_basic_test_data():
                   'std_err': 1,
                   'values': [19, 20, 21],
               }
-          }
+          },
+          'cl_info': 'S3P4R4T0R'.join(['DummyAuthor', 'dummy@nowhere.com',
+                                      'Some random CL', '01/01/2015',
+                                      'A long description for a CL.\n'
+                                      'Containing multiple lines'])
       },
       {
           'hash': 'a6298e4afedbf2cd461755ea6f45b0ad64222222',
@@ -271,4 +280,9 @@ def _get_step_data_for_revision(api, revision_data, include_build_steps=True):
         step_name %= (interval[0], depot_name)
         stdout = api.raw_io.output('\n'.join(interval))
         yield api.step_data(step_name, stdout=stdout)
+
+    if 'cl_info' in revision_data:
+      step_name = 'Reading culprit cl information.'
+      stdout = api.raw_io.output(revision_data['cl_info'])
+      yield api.step_data(step_name, stdout=stdout)
 

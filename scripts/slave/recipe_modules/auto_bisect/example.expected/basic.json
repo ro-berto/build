@@ -666,5 +666,17 @@
       "/tmp/a6298e4afedbf2cd461755ea6f45b0ad64222222-build.diff"
     ],
     "name": "cleaning up patch"
+  },
+  {
+    "cmd": [
+      "git",
+      "log",
+      "--format=%aNS3P4R4T0R%aES3P4R4T0R%sS3P4R4T0R%cDS3P4R4T0R%b",
+      "-1",
+      "a6298e4afedbf2cd461755ea6f45b0ad64222222"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Reading culprit cl information.",
+    "stdout": "/path/to/tmp/"
   }
 ]

@@ -17,10 +17,13 @@ new file mode 100644
 """
 
 
+ZERO_TO_NON_ZERO = 'Zero to non-zero'
+
+
 class Bisector(object):
   """This class abstracts an ongoing bisect (or n-sect) job."""
 
-  def __init__(self, api, bisect_config, revision_class):
+  def __init__(self, api, bisect_config, revision_class, init_revisions=True):
     """Initializes the state of a new bisect job from a dictionary.
 
     Note that the initial good_rev and bad_rev MUST resolve to a commit position
@@ -48,6 +51,8 @@ class Bisector(object):
     self.warnings = []
 
     # Status flags
+    self.initial_regression_confidence = None
+    self.results_confidence = None
     self.failed_confidence = False
     self.failed = False
     self.failed_direction = False
@@ -55,6 +60,7 @@ class Bisector(object):
     self.fkbr = None  # First known bad revision
     self.culprit = None
     self.bisect_over = False
+    self.relative_change = None
 
     # Initial revision range
     self.revisions = []
@@ -62,7 +68,8 @@ class Bisector(object):
     self.bad_rev.bad = True
     self.good_rev = revision_class(bisect_config['good_revision'], self)
     self.good_rev.good = True
-    self._expand_revision_range()
+    if init_revisions:
+      self._expand_revision_range()
 
   @property
   def api(self):
@@ -73,6 +80,17 @@ class Bisector(object):
     """Given 2 commit positions, returns a list with the ones between."""
     a, b = sorted(map(int, [a, b]))
     return xrange(a + 1, b)
+
+  def compute_relative_change(self):
+    old_value = float(self.good_rev.mean_value)
+    new_value = float(self.bad_rev.mean_value)
+
+    if new_value and not old_value:  # pragma: no cover
+      self.relative_change = ZERO_TO_NON_ZERO
+      return
+
+    rel_change = self.api.m.math_utils.relative_change(old_value, new_value)
+    self.relative_change = '%.2f%%' % (100 * rel_change)
 
   def make_deps_sha_file(self, deps_sha):
     """Make a diff patch that creates DEPS.sha.
@@ -313,14 +331,17 @@ class Bisector(object):
       return True  # pragma: no cover
 
     if self.dummy_regression_confidence is not None:
-      regression_confidence = float(self.dummy_regression_confidence)
+      self.initial_regression_confidence = float(
+          self.dummy_regression_confidence)
     else:  # pragma: no cover
-      regression_confidence = self.api.m.math_utils.confidence_score(
-          self.good_rev.values,
-          self.bad_rev.values)
-    if (regression_confidence <
+      self.initial_regression_confidence = (
+          self.api.m.math_utils.confidence_score(
+              self.good_rev.values,
+              self.bad_rev.values))
+    if (self.initial_regression_confidence <
         self.required_regression_confidence):  # pragma: no cover
-      self._set_insufficient_confidence_warning(regression_confidence)
+      self._set_insufficient_confidence_warning(
+          self.initial_regression_confidence)
       return False
     return True
 
@@ -337,12 +358,14 @@ class Bisector(object):
                           ).format(self.required_regression_confidence,
                                    actual_confidence))
 
+  def _compute_results_confidence(self):
+    self.results_confidence = self.api.m.math_utils.confidence_score(
+        self.lkgr.values, self.fkbr.values)
 
   def print_result(self):
-    results_json = bisect_results.BisectResults(self).to_json()
-    self.api.m.python('results', self.api.resource('annotated_results.py'),
-                      stdin=self.api.m.raw_io.input(data=results_json),
-                      allow_subannotations=True)
+    results = bisect_results.BisectResults(self).as_string()
+    self.api.m.step('Results', ['cat'],
+                    stdin=self.api.m.raw_io.input(data=results))
 
   def get_revisions_to_eval(self, max_revisions):
     """Gets N evenly distributed RevisionState objects in the candidate range.
@@ -381,6 +404,7 @@ class Bisector(object):
         more_revisions = self._expand_deps_revisions(revision.next_revision)
         return not more_revisions
       self.culprit = revision.next_revision
+      self._compute_results_confidence()
       return True
     return False
 

@@ -14,35 +14,35 @@ import json
 import os
 import sys
 
-resultset_file = '/tmp/bisect/test_results_cache'
+result_set_file = '/tmp/bisect/test_results_cache'
 
-def make_id(*params):# pragma: no cover
+def make_id(*params):  # pragma: no cover
   id_string = json.dumps(params)
   return hashlib.sha1(id_string).hexdigest()
 
-def has_results(name):# pragma: no cover
+def has_results(name):  # pragma: no cover
   return name in _get_result_set()
 
-def save_results(name, value):# pragma: no cover
+def save_results(name, value):  # pragma: no cover
   rs = _get_result_set()
   rs[name] = value
   _write_result_set(rs)
 
-def _get_result_set():# pragma: no cover
-  if os.path.isfile(resultset_file):
-    contents = open(resultset_file).read()
-    resultset = json.loads(contents)
-    return resultset
+def _get_result_set():  # pragma: no cover
+  if os.path.isfile(result_set_file):
+    contents = open(result_set_file).read()
+    result_set = json.loads(contents)
+    return result_set
   else:
     return {}
 
-def _write_result_set(resultset):  # pragma: no cover
-  _dir = os.path.dirname(resultset_file)
+def _write_result_set(result_set):  # pragma: no cover
+  _dir = os.path.dirname(result_set_file)
   if not os.path.exists(_dir):
     os.mkdir(_dir)
-  with open(resultset_file, 'w') as of:
-    contents = json.dumps(resultset)
-    of.write(json.dumps(resultset))
+  with open(result_set_file, 'w') as of:
+    contents = json.dumps(result_set)
+    of.write(contents)
 
 def main():  # pragma: no cover
   some_id = make_id('dummy_string')

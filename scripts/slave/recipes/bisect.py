@@ -96,7 +96,11 @@ def GenTests(api):
                'mean': 20,
                'std_err': 1,
                'values': [19, 20, 21],
-           }}
+           }},
+          'cl_info': 'S3P4R4T0R'.join(['DummyAuthor', 'dummy@nowhere.com',
+                                      'Some random CL', '01/01/2015',
+                                      'A long description for a CL.\n'
+                                      'Containing multiple lines'])
       },
       {
           'hash': '00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111',
@@ -182,6 +186,11 @@ def _get_step_data_for_revision(api, revision_data, broken_cp=None,
   step_name ='gsutil Get test status url for build ' + commit_hash
   yield api.step_data(step_name, stdout=api.raw_io.output('dummy/url'))
 
+  if 'cl_info' in revision_data:
+    step_name = 'Reading culprit cl information.'
+    stdout = api.raw_io.output(revision_data['cl_info'])
+    yield api.step_data(step_name, stdout=stdout)
+
 
 def _ensure_checkout(api):
   mastername = api.properties.get('mastername')
@@ -193,6 +202,7 @@ def _gather_reference_range(bisector):
   bisector.good_rev.start_job()
   bisector.bad_rev.start_job()
   bisector.wait_for_all([bisector.good_rev, bisector.bad_rev])
+  bisector.compute_relative_change()
 
 
 def _bisect_main_loop(bisector):

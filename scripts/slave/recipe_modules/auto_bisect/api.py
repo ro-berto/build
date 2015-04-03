@@ -34,11 +34,22 @@ class AutoBisectApi(recipe_api.RecipeApi):
     super(AutoBisectApi, self).__init__(*args, **kwargs)
     self.override_poll_interval = None
 
-  def create_bisector(self, bisect_config_dict):
-    """Passes the api and the config dictionary to the Bisector constructor."""
+  def create_bisector(self, bisect_config_dict, dummy_mode=False):
+    """Passes the api and the config dictionary to the Bisector constructor.
+  
+    For details about the keys in the bisect config dictionary go to:
+    http://chromium.org/developers/speed-infra/perf-try-bots-bisect-bots/config
+
+    Args:
+      bisect_config_dict (dict): Contains the configuration for the bisect job.
+      dummy_mode (bool): In dummy mode we prevent the bisector for expanding
+        the revision range at construction, to avoid the need for lots of step
+        data when performing certain tests (such as results output).
+    """
     self.override_poll_interval = bisect_config_dict.get('poll_sleep')
     revision_class = self._get_revision_class(bisect_config_dict['test_type'])
-    return bisector.Bisector(self, bisect_config_dict, revision_class)
+    return bisector.Bisector(self, bisect_config_dict, revision_class,
+                             init_revisions=not dummy_mode)
 
   def _get_revision_class(self, test_type):
     """Gets the particular subclass of Revision needed for the test type."""
@@ -54,3 +65,37 @@ class AutoBisectApi(recipe_api.RecipeApi):
     except self.m.step.StepFailure: #pragma: no cover
       return False
     return True
+
+  def query_revision_info(self, revision, git_checkout_dir=None):
+    """Gathers information on a particular revision, such as author's name,
+    email, subject, and date.
+
+    Args:
+      revision (str): Revision you want to gather information on; a git
+        commit hash.
+      git_checkout_dir (slave.recipe_config_types.Path): A path to run git
+        from.
+
+    Returns:
+      A dict in the following format:
+      {
+        'author': %s,
+        'email': %s,
+        'date': %s,
+        'subject': %s,
+        'body': %s,
+      }
+    """
+    if not git_checkout_dir:
+      git_checkout_dir = self.m.path['slave_build']
+
+    separator = 'S3P4R4T0R'
+    formats = separator.join(['%aN', '%aE', '%s', '%cD', '%b'])
+    targets = ['author', 'email', 'subject', 'date', 'body']
+    command_parts = ['log', '--format=%s' % formats, '-1', revision]
+
+    step_result = self.m.git(*command_parts,
+                             name='Reading culprit cl information.',
+                             cwd=git_checkout_dir,
+                             stdout=self.m.raw_io.output())
+    return dict(zip(targets, step_result.stdout.split(separator)))

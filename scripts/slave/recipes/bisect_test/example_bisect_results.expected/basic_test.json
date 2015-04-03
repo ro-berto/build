@@ -1,0 +1,71 @@
+[
+  {
+    "cmd": [
+      "git",
+      "log",
+      "--format=hash:%H",
+      "--grep",
+      "Cr-Commit-Position: refs/heads/master@{#314017}",
+      "-1",
+      "refs/heads/master"
+    ],
+    "cwd": "[TMP_BASE]/bogus_tmp_1",
+    "name": "resolving commit_pos 314017",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "git",
+      "footers",
+      "--position",
+      "deadbeef"
+    ],
+    "cwd": "[TMP_BASE]/bogus_tmp_1",
+    "name": "resolving hash deadbeef",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "git",
+      "log",
+      "--format=hash:%H",
+      "--grep",
+      "Cr-Commit-Position: refs/heads/master@{#314015}",
+      "-1",
+      "refs/heads/master"
+    ],
+    "cwd": "[TMP_BASE]/bogus_tmp_1",
+    "name": "resolving commit_pos 314015",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "git",
+      "footers",
+      "--position",
+      "c001c0de"
+    ],
+    "cwd": "[TMP_BASE]/bogus_tmp_1",
+    "name": "resolving hash c001c0de",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "git",
+      "log",
+      "--format=%aNS3P4R4T0R%aES3P4R4T0R%sS3P4R4T0R%cDS3P4R4T0R%b",
+      "-1",
+      "deadbeef"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Reading culprit cl information.",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "cat"
+    ],
+    "name": "Results",
+    "stdin": "\n===== BISECT JOB RESULTS =====\nStatus: Complete\n\nTest Command: src/tools/perf/run_benchmark -v --browser=release smoothness.tough_scrolling_cases\nTest Metric: mean_input_event_latency/mean_input_event_latency\nRelative Change: None\nEstimated Confidence: 0.99%\nRetested CL with revert: Not Implemented.\n===== WARNINGS =====\nThe following warnings were raised by the bisect job:\n\n * This is a demo warning\n===== SUSPECTED CL(s) =====\nSubject : Some random CL\nAuthor  : DummyAuthor, dummy@nowhere.com\nCommit description:\n  A long description for a CL.\nContaining multiple lines\nCommit  : deadbeef\nDate    : 01/01/2015\n\ncommit_pos revision_string mean_value std_err good_or_bad? tested? culprit? \n\n==== INSTRUCTIONS TO REPRODUCE ====\nTo run locally:\n - Use the test command given under 'BISECT JOB RESULTS' above.\n - Consider using a profiler. Pass --profiler=list to list available profilers.\n\nTo reproduce on a performance try bot:\nsrc/tools/perf/run_benchmark -v --browser=<bot-name> smoothness.tough_scrolling_cases\n(Where <bot-name> comes from tools/perf/run_benchmark --browser=list)\n\nFor more details please visit\nhttps://sites.google.com/a/chromium.org/dev/developers/performance-try-bots\n\n| O O | Visit http://www.chromium.org/developers/core-principles for Chrome's\n|  X  | policy on perf regressions. Contact chrome-perf-dashboard-team with any\n| / \\ | questions or suggestions about bisecting. THANK YOU."
+  }
+]

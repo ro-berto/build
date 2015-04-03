@@ -23,17 +23,6 @@ class PerfRevisionState(revision_state.RevisionState):
     self.std_err = None
     self._test_config = None
 
-  def test_info(self):
-    """Returns a dictionary with information that describes this test.
-
-    It is meant to be used by the bisector to describe the test being run for
-    each revision evaluated.
-    """
-    return {
-        'command': self._test_config['command'],
-        'metric': self._test_config['metric'],
-    }
-
   def _read_test_results(self):
     """Gets the test results from GS and checks if the rev is good or bad."""
     results = self._get_test_results()
