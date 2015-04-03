@@ -41,6 +41,7 @@
   "master_base_class": "Master3",
   "master_port": 20300,
   "master_port_alt": 40300,
+  "master_type": "waterfall",
   "slave_port": 30300,
   "slave_pools": {
     "mac10.9": {

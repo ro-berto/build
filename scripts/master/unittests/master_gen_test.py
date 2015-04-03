@@ -32,6 +32,7 @@ SAMPLE_BUILDERS_PY = """\
   "master_base_class": "_FakeMaster",
   "master_port": 20999,
   "master_port_alt": 40999,
+  "master_type": "waterfall",
   "slave_port": 30999,
   "slave_pools": {
     "main": {
@@ -61,7 +62,7 @@ class _FakeMaster(object):
 
 
 class PopulateBuildmasterConfigTest(unittest.TestCase):
-  def test_normal(self):
+  def test_waterfall(self):
     try:
       fp = tempfile.NamedTemporaryFile(delete=False)
       fp.write(SAMPLE_BUILDERS_PY)
@@ -78,6 +79,26 @@ class PopulateBuildmasterConfigTest(unittest.TestCase):
       self.assertEqual(len(c['schedulers']), 1)
     finally:
       os.remove(fp.name)
+
+  def test_tryserver(self):
+    try:
+      contents = SAMPLE_BUILDERS_PY.replace('waterfall', 'tryserver')
+      fp = tempfile.NamedTemporaryFile(delete=False)
+      fp.write(contents)
+      fp.close()
+
+      setattr(_FakeMaster, '_FakeMaster', _FakeMaster)
+      c = {}
+      master_gen.PopulateBuildmasterConfig(c, fp.name, _FakeMaster)
+
+      self.assertEqual(len(c['builders']), 1)
+      self.assertEqual(c['builders'][0]['name'], 'Test Linux')
+
+      self.assertEqual(len(c['change_source']), 0)
+      self.assertEqual(len(c['schedulers']), 1)
+    finally:
+      os.remove(fp.name)
+
 
 
 if __name__ == '__main__':

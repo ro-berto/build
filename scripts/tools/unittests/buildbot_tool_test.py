@@ -37,6 +37,7 @@ FAKE_BUILDERS_PYL = """\
   "master_base_class": "Master1",
   "master_port": 10999,
   "master_port_alt": 20999,
+  "master_type": "waterfall",
   "slave_port": 30999,
   "templates": ["templates"],
 }
@@ -72,7 +73,7 @@ def _restore_constants(orig_values):
 class GenTest(unittest.TestCase):
   def _run_gen(self, builders_pyl, master_cfg=FAKE_MASTER_CFG_TEMPLATE):
     files = {
-      '/build/templates/master.cfg': master_cfg,
+      '/build/templates/waterfall/master.cfg': master_cfg,
       '/build/masters/master.test/builders.pyl': builders_pyl,
     }
     fs = fake_filesystem.FakeFilesystem(files=files.copy())
@@ -123,7 +124,7 @@ class GenTest(unittest.TestCase):
 
   def test_bad_template(self):
     files = {
-      '/build/templates/master.cfg': '%(unknown_key)s',
+      '/build/templates/waterfall/master.cfg': '%(unknown_key)s',
       '/build/masters/master.test/builders.pyl': FAKE_BUILDERS_PYL,
     }
     fs = fake_filesystem.FakeFilesystem(files=files.copy())

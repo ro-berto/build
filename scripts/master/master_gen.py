@@ -57,8 +57,14 @@ def _Populate(BuildmasterConfig, builders, master_cls):
       c,
       require_dbconfig=active_master_cls.is_production_host)
 
-  change_source = gitiles_poller.GitilesPoller(builders['git_repo_url'])
-  c['change_source'] = [change_source]
+  if builders['master_type'] == 'waterfall':
+    change_source = gitiles_poller.GitilesPoller(builders['git_repo_url'])
+    c['change_source'] = [change_source]
+    tag_comparator = change_source.comparator
+  else:
+    assert builders['master_type'] == 'tryserver'
+    c['change_source'] = []
+    tag_comparator = None
 
   c['builders'] = []
   for builder_name, builder_data in builders['builders'].items():
@@ -97,7 +103,7 @@ def _Populate(BuildmasterConfig, builders, master_cls):
   master_utils.AutoSetupMaster(c, active_master_cls,
       public_html='../master.chromium/public_html',
       templates=builders['templates'],
-      tagComparator=change_source.comparator,
+      tagComparator=tag_comparator,
       enable_http_status_push=active_master_cls.is_production_host)
 
   # TODO: AutoSetupMaster's settings for the following are too low to be
