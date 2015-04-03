@@ -276,10 +276,6 @@ def goma_canary(c):
   c.compile_py.goma_hermetic = 'error'
 
 @config_ctx()
-def goma_hermetic_error(c):
-  c.compile_py.goma_hermetic = 'error'
-
-@config_ctx()
 def goma_hermetic_fallback(c):
   c.compile_py.goma_hermetic = 'fallback'
 

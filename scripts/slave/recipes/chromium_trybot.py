@@ -325,7 +325,6 @@ def _GenStepsInternal(api):
 
   extra_chromium_configs = [
       'trybot_flavor',
-      'goma_hermetic_error',
       'ninja_confirm_noop'
   ]
   if enable_gpu_tests:

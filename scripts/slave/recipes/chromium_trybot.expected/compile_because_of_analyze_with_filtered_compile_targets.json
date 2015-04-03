@@ -287,8 +287,6 @@
       "goma",
       "--goma-dir",
       "[BUILD]/goma",
-      "--goma-hermetic",
-      "error",
       "--ninja-ensure-up-to-date",
       "--",
       "chrome",

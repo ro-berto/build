@@ -166,9 +166,6 @@ class ChromiumApi(recipe_api.RecipeApi):
       dep = bot_config.get('set_component_rev')
       self.m.gclient.c.revisions[dep['name']] = dep['rev_str'] % component_rev
 
-    if self.m.tryserver.is_tryserver:
-      self.apply_config('goma_hermetic_error')
-
     return (buildername, bot_config)
 
   def compile(self, targets=None, name=None, force_clobber=False, out_dir=None,
