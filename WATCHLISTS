@@ -19,7 +19,6 @@
   },
 
   'WATCHLISTS': {
-    'build': ['cmp-cc@chromium.org'],
     'build_scripts': ['kjellander-cc@chromium.org',
                       'stip+watch@chromium.org'],
   },
