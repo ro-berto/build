@@ -18,7 +18,7 @@ ifeq ($(MASTERPATH),)
 endif
 
 # Only valid on master machines, trying not to be too clever here.
-INFRA_RUNPY = /home/chrome-bot/infra/run.py
+INFRA_RUNPY = /home/chrome-bot/infra/infra/run.py
 
 # Get the current host's short hostname.  We may use this in Makefiles that
 # include this file.
