@@ -1,5 +1,6 @@
 from slave import recipe_test_api
 
+
 class BisectTesterTestApi(recipe_test_api.RecipeTestApi):
   @recipe_test_api.mod_test_data
   @staticmethod
@@ -8,4 +9,3 @@ class BisectTesterTestApi(recipe_test_api.RecipeTestApi):
 
   def __call__(self, tempfile):
     return self.tempfile(tempfile)
-

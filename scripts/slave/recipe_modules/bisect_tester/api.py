@@ -11,6 +11,7 @@ from . import perf_test
 BUCKET = 'chrome-perf'
 RESULTS_GS_DIR = 'bisect-results'
 
+
 class BisectTesterApi(recipe_api.RecipeApi):
   """A module for the bisect tester bot using the chromium recipe."""
 
@@ -21,14 +22,14 @@ class BisectTesterApi(recipe_api.RecipeApi):
     """Copies the required configuration keys to a new dict."""
     if bisect_config['test_type'] == 'perf':
       return {
-        'test_type': 'perf',
-        'command': bisect_config['command'],
-        'metric': bisect_config['metric'],
-        'repeat_count': int(bisect_config['repeat_count']),
-        'timeout_seconds': float(bisect_config['max_time_minutes']) * 60,
-        'truncate_percent': float(bisect_config['truncate_percent']),
+          'test_type': 'perf',
+          'command': bisect_config['command'],
+          'metric': bisect_config['metric'],
+          'repeat_count': int(bisect_config['repeat_count']),
+          'timeout_seconds': float(bisect_config['max_time_minutes']) * 60,
+          'truncate_percent': float(bisect_config['truncate_percent']),
       }
-    else: #pragma: no cover
+    else:  # pragma: no cover
       # TODO(robertocn): Add test to remove this pragma
       raise NotImplementedError('Test type %s not supported.' %
                                 bisect_config['test_type'])
@@ -37,7 +38,7 @@ class BisectTesterApi(recipe_api.RecipeApi):
     """Call the appropriate test function depending on the type of bisect."""
     if test_config['test_type'] == 'perf':
       return perf_test.run_perf_test(self, test_config)
-    else: #pragma: no cover
+    else:  # pragma: no cover
       # TODO(robertocn): Add test to remove this pragma
       raise NotImplementedError('Test type %s not supported.' %
                                 test_config['test_type'])
@@ -47,14 +48,15 @@ class BisectTesterApi(recipe_api.RecipeApi):
     if test_config['test_type'] == 'perf':
       return perf_test.truncate_and_aggregate(self, results,
                                               test_config['truncate_percent'])
-    else: #pragma: no cover
+    else:  # pragma: no cover
       # TODO(robertocn): Add test to remove this pragma
       raise NotImplementedError('Test type %s not supported.' %
                                 test_config['test_type'])
 
   def upload_results(self, output, results):
-    """Puts the results as a json file in a GS bucket."""
-    gs_filename = RESULTS_GS_DIR + '/' + self.m.properties['job_name'] + '.results'
+    """Puts the results as a JSON file in a GS bucket."""
+    gs_filename = (RESULTS_GS_DIR + '/' +
+                   self.m.properties['job_name'] + '.results')
     contents = {'results': results, 'output': output}
     contents_json = json.dumps(contents)
     local_save_results = self.m.python('saving json to temp file',
@@ -70,7 +72,7 @@ class BisectTesterApi(recipe_api.RecipeApi):
   def upload_job_url(self):
     """Puts the URL to the job's status on a GS file."""
     gs_filename = RESULTS_GS_DIR + '/' + self.m.properties['job_name']
-    if 'TESTING_MASTER_HOST' in os.environ:  #pragma: no cover
+    if 'TESTING_MASTER_HOST' in os.environ:  # pragma: no cover
       url = "http://%s:8041/json/builders/%s/builds/%s" % (
           os.environ['TESTING_MASTER_HOST'],
           self.m.properties['buildername'],
@@ -86,4 +88,3 @@ class BisectTesterApi(recipe_api.RecipeApi):
                                        stdin=self.m.raw_io.input(url))
     local_file = local_save_results.stdout.splitlines()[0].strip()
     self.m.gsutil.upload(local_file, BUCKET, gs_filename, name=str(gs_filename))
-

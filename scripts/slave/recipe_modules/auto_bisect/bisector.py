@@ -353,10 +353,10 @@ class Bisector(object):
       self, actual_confidence):  # pragma: no cover
     """Adds a warning about the lack of initial regression confidence."""
     self.failed_confidence = True
-    self.warnings.append(('Bisect failed to reproduce the regression with '
-                          'enough confidence. Needed {:.2f}%, got {:.2f}%.'
-                          ).format(self.required_regression_confidence,
-                                   actual_confidence))
+    self.warnings.append(
+        ('Bisect failed to reproduce the regression with enough confidence. '
+         'Needed {:.2f}%, got {:.2f}%.').format(
+             self.required_regression_confidence, actual_confidence))
 
   def _compute_results_confidence(self):
     self.results_confidence = self.api.m.math_utils.confidence_score(
@@ -487,4 +487,3 @@ class Bisector(object):
   def get_platform_gs_prefix(self):
     # TODO: Actually check the current platform
     return 'gs://chrome-perf/Linux Builder/full-build-linux_'
-

@@ -55,14 +55,14 @@ class AutoBisectApi(recipe_api.RecipeApi):
     """Gets the particular subclass of Revision needed for the test type."""
     if test_type == 'perf':
       return perf_revision_state.PerfRevisionState
-    else: #pragma: no cover
+    else:  # pragma: no cover
       raise NotImplementedError()
 
   def gsutil_file_exists(self, path):
     """Returns True if a file exists at the given GS path."""
     try:
       self.m.gsutil(['ls', path])
-    except self.m.step.StepFailure: #pragma: no cover
+    except self.m.step.StepFailure:  # pragma: no cover
       return False
     return True
 

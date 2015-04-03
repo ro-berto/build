@@ -14,7 +14,8 @@ DEPS = [
     'raw_io',
 ]
 
-AVAILABLE_BOTS = 1 # Change this for n-secting instead of bi-.
+AVAILABLE_BOTS = 1  # Change this for n-secting instead of bi-.
+
 
 def GenSteps(api):
   _ensure_checkout(api)
@@ -34,7 +35,7 @@ def GenSteps(api):
       bisector.check_regression_confidence()):
     if not bisector.check_bisect_finished(bisector.good_rev):
       _bisect_main_loop(bisector)
-  else: #pragma: no cover
+  else:  # pragma: no cover
     bisector.bisect_over = True
   bisector.print_result()
 
@@ -45,10 +46,12 @@ def GenTests(api):
   broken_cp_test = api.test('broken_cp_test')
   broken_hash_test = api.test('broken_hash_test')
   invalid_config_test = api.test('invalid_config_test')
-  basic_test += api.properties.generic(mastername='tryserver.chromium.perf',
-                                       buildername='linux_perf_bisect_builder')
-  broken_cp_test += api.properties.generic(mastername='tryserver.chromium.perf',
-                                       buildername='linux_perf_bisect_builder')
+  basic_test += api.properties.generic(
+      mastername='tryserver.chromium.perf',
+      buildername='linux_perf_bisect_builder')
+  broken_cp_test += api.properties.generic(
+      mastername='tryserver.chromium.perf',
+      buildername='linux_perf_bisect_builder')
   broken_hash_test += api.properties.generic(
       mastername='tryserver.chromium.perf',
       buildername='linux_perf_bisect_builder')
@@ -60,8 +63,8 @@ def GenTests(api):
       buildername='linux_perf_bisect_builder')
   bisect_config = {
       'test_type': 'perf',
-      'command': 'tools/perf/run_benchmark -v '
-                  '--browser=release page_cycler.intl_ar_fa_he',
+      'command': ('tools/perf/run_benchmark -v '
+                  '--browser=release page_cycler.intl_ar_fa_he'),
       'good_revision': '306475',
       'bad_revision': 'src@a6298e4afedbf2cd461755ea6f45b0ad64222222',
       'metric': 'warm_times/page_load_time',
@@ -77,7 +80,7 @@ def GenTests(api):
       'dummy_builds': True,
   }
   invalid_cp_bisect_config = dict(bisect_config)
-  invalid_cp_bisect_config ['good_revision'] = 'XXX'
+  invalid_cp_bisect_config['good_revision'] = 'XXX'
 
   basic_test += api.properties(bisect_config=bisect_config)
   broken_cp_test += api.properties(bisect_config=bisect_config)
@@ -104,34 +107,32 @@ def GenTests(api):
       },
       {
           'hash': '00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111',
-           'commit_pos': '306477',
-           'test_results': {'results':{
-               'mean': 15,
-               'std_err': 1,
-               'values': [14, 15, 16],
-           }}
+          'commit_pos': '306477',
+          'test_results': {'results': {
+              'mean': 15,
+              'std_err': 1,
+              'values': [14, 15, 16],
+          }}
       },
       {
           'hash': 'fc6dfc7ff5b1073408499478969261b826441144',
           'commit_pos': '306476',
-           'test_results': {'results':{
-               'mean': 70,
-               'std_err': 2,
-               'values': [68, 70, 72],
-           }}
+          'test_results': {'results': {
+              'mean': 70,
+              'std_err': 2,
+              'values': [68, 70, 72],
+          }}
       },
       {
           'hash': 'e28dc0d49c331def2a3bbf3ddd0096eb51551155',
           'commit_pos': '306475',
-           'test_results': {'results':{
-               'mean': 80,
-               'std_err': 10,
-               'values': [70, 70, 80, 90, 90],
-           }}
+          'test_results': {'results': {
+              'mean': 80,
+              'std_err': 10,
+              'values': [70, 70, 80, 90, 90],
+          }}
       },
   ]
-
-
 
   for revision_data in test_data:
     for step_data in _get_step_data_for_revision(api, revision_data):
@@ -152,9 +153,6 @@ def GenTests(api):
   yield invalid_config_test
 
 
-
-
-
 def _get_step_data_for_revision(api, revision_data, broken_cp=None,
                                 broken_hash=None):
   """Generator that produces step patches for fake results."""
@@ -162,28 +160,28 @@ def _get_step_data_for_revision(api, revision_data, broken_cp=None,
   commit_hash = revision_data['hash']
   test_results = revision_data['test_results']
 
-  step_name ='resolving commit_pos ' + commit_pos
+  step_name = 'resolving commit_pos ' + commit_pos
   if commit_pos == broken_cp:
     yield api.step_data(step_name, stdout=api.raw_io.output(''))
   else:
     yield api.step_data(step_name, stdout=api.raw_io.output('hash:' +
                                                             commit_hash))
 
-  step_name ='resolving hash ' + commit_hash
+  step_name = 'resolving hash ' + commit_hash
   if commit_hash == broken_hash:
     yield api.step_data(step_name, stdout=api.raw_io.output('UnCastable'))
   else:
     commit_pos_str = 'refs/heads/master@{#%s}' % commit_pos
     yield api.step_data(step_name, stdout=api.raw_io.output(commit_pos_str))
 
-  step_name ='gsutil Get test results for build ' + commit_hash
+  step_name = 'gsutil Get test results for build ' + commit_hash
   yield api.step_data(step_name, stdout=api.raw_io.output(json.dumps(
       test_results)))
 
   step_name = 'Get test status for build ' + commit_hash
   yield api.step_data(step_name, stdout=api.raw_io.output('Complete'))
 
-  step_name ='gsutil Get test status url for build ' + commit_hash
+  step_name = 'gsutil Get test status url for build ' + commit_hash
   yield api.step_data(step_name, stdout=api.raw_io.output('dummy/url'))
 
   if 'cl_info' in revision_data:
@@ -213,8 +211,8 @@ def _bisect_main_loop(bisector):
   """
   while not bisector.bisect_over:
     revisions_to_check = bisector.get_revisions_to_eval(AVAILABLE_BOTS)
-    #TODO: Add a test case to remove this pragma
-    if not revisions_to_check: #pragma: no cover
+    # TODO: Add a test case to remove this pragma
+    if not revisions_to_check:  # pragma: no cover
       bisector.bisect_over = True
       break
     for r in revisions_to_check:

@@ -1,5 +1,6 @@
 import re
 
+
 # The following has largely been copied from bisect_perf_regression.py
 # TODO(robertocn): Look into the possibility of getting structured data from
 # run_benchmark and similar scripts instead of this markup.
@@ -14,12 +15,13 @@ def parse_metric(out, err, metric):  # pragma: no cover
     A list of floating point numbers found.
   """
   text = (out or '') + (err or '')
-  result = _TryParseResultValuesFromOutput(metric, text)
+  result = _parse_result_values_from_output(metric, text)
   if not result:
-    result = _TryParseHistogramValuesFromOutput(metric, text)
+    result = _parse_histogram_values_from_output(metric, text)
   return len(result), result
 
-def _TryParseResultValuesFromOutput(metric, text):  # pragma: no cover
+
+def _parse_result_values_from_output(metric, text):  # pragma: no cover
   """Attempts to parse a metric in the format RESULT <graph>: <trace>= ...
 
   Args:
@@ -96,7 +98,7 @@ def _TryParseResultValuesFromOutput(metric, text):  # pragma: no cover
   return values_list
 
 
-def _TryParseHistogramValuesFromOutput(metric, text):  # pragma: no cover
+def _parse_histogram_values_from_output(metric, text):  # pragma: no cover
   """Attempts to parse a metric in the format HISTOGRAM <graph: <trace>.
 
   Args:

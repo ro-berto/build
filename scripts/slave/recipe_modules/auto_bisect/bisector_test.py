@@ -21,6 +21,7 @@ from auto_bisect.bisector import Bisector
 
 
 class MockRevisionClass(object):  # pragma: no cover
+
   def __init__(self, rev_string, bisector):
     self.commit_pos = int(rev_string)
     self.revision_string = rev_string
@@ -36,11 +37,12 @@ class MockRevisionClass(object):  # pragma: no cover
 
 
 class BisectorTest(unittest.TestCase):  # pragma: no cover
+
   def setUp(self):
     self.bisect_config = {
         'test_type': 'perf',
-        'command': 'tools/perf/run_benchmark -v '
-                    '--browser=release page_cycler.intl_ar_fa_he',
+        'command': ('tools/perf/run_benchmark -v '
+                    '--browser=release page_cycler.intl_ar_fa_he'),
         'good_revision': '306475',
         'bad_revision': '306478',
         'metric': 'warm_times/page_load_time',
@@ -54,8 +56,6 @@ class BisectorTest(unittest.TestCase):  # pragma: no cover
         'dummy_builds': True,
     }
     self.dummy_api = mock.Mock()
-
-
 
   def test_create_bisector(self):
     bisector = Bisector(self.dummy_api, self.bisect_config, MockRevisionClass)

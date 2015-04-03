@@ -16,6 +16,7 @@ import re
 from . import depot_config
 
 
+
 class RevisionState(object):
   """Abstracts the state of a single revision on a bisect job."""
 
@@ -215,7 +216,7 @@ class RevisionState(object):
       if self._is_build_archived():
         self.start_job()
       else:
-        pass # TODO: Check if build has not timed out.
+        pass  # TODO: Check if build has not timed out.
       return
     if not self.build_status_url:
       self.build_status_url = self._get_build_status_url()

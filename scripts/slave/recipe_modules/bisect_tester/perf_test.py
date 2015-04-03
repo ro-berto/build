@@ -16,13 +16,13 @@ def run_perf_test(api, test_config):
   for i in range(test_config['repeat_count']):
     if time.time() < limit:
       command_name = "Performance Test %d/%d" % (i + 1,
-                                                test_config['repeat_count'])
+                                                 test_config['repeat_count'])
       if api.m.platform.is_linux:
         os.environ['CHROME_DEVEL_SANDBOX'] = api.m.path.join(
             '/opt', 'chromium', 'chrome_sandbox')
       out, err = _run_command(api, test_config['command'], command_name)
       if out is None and err is None:
-        #dummy value when running test TODO: replace with a mock
+        # dummy value when running test TODO: replace with a mock
         values.append(0)
       else:  # pragma: no cover
         valid_value, value = parse_metric.parse_metric(out, err, metric)

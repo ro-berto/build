@@ -99,6 +99,7 @@ _DIRECTION_OF_IMPROVEMENT_ABORT_REASON = (
   'expected direction of improvement. Thus, likely represent an improvement '
   'and not a regression.')
 
+
 class BisectResults(object):
   def __init__(self, bisector):
     """Create a new results object from a finished bisect job."""
@@ -240,7 +241,6 @@ def _pretty_table(data):
 
   Returns: A multi-line string containing the data arranged in a tabular manner.
   """
-
   result = ''
   column_widths = [0] * len(data[0])
   for line in data:
