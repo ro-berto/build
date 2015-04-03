@@ -13,7 +13,60 @@ from buildbot.process.properties import Property, WithProperties
 from master import chromium_step
 from master.factory import build_factory
 from master.factory import chromeos_build_factory
+from master.factory import annotator_factory
 from master.master_utils import ConditionalProperty
+
+
+class _ChromiteRecipeFactoryFunc(object):
+  """
+  Factory generation function wrapper that supplies Chromite recipe defaults.
+
+  This class is a callable wrapper to annotator_factory.AnnotatorFactory's
+  BaseFactory method.
+
+  This class painfully avoids subclassing annotator_factory.AnnotatorFactory in
+  order to preserve its status as a terminal factory.
+  """
+
+  # The default Chromite recipe timeout.
+  _CHROMITE_TIMEOUT = 9000
+
+  @classmethod
+  def __call__(cls, factory_obj, recipe, *args, **kwargs):
+    """Returns a factory object to use for Chromite annotator recipes.
+
+    Args:
+      factory_obj (annotator_factory.AnnotatorFactory) The annotator factory.
+      recipe: The name of the recipe to invoke.
+      debug (bool): If True, override default debug logic.
+      args, kwargs: Positional / keyword arguments (see
+          annotator_factory.AnnotatorFactory.BaseFactory).
+    """
+    kwargs.setdefault('timeout', cls._CHROMITE_TIMEOUT)
+
+    factory_properties = kwargs.setdefault('factory_properties', {})
+    # Set the 'cbb_debug' property if we're not running in a production master.
+    debug = kwargs.pop('debug', False)
+    if cls._shouldForceDebug(factory_obj) or debug:
+      factory_properties['cbb_debug'] = True
+    return factory_obj.BaseFactory(recipe, *args, **kwargs)
+
+  @staticmethod
+  def _shouldForceDebug(factory_obj):
+    """Tests whether the debug flag should be forced.
+
+    Requires that AnnotatorFactory's 'active_master' be set.
+
+    Args:
+      factory_obj (annotator_factory.AnnotatorFactory) The annotator factory.
+    Returns (bool): True of debug should be enabled by default, False otherwise.
+    """
+    assert factory_obj.active_master, (
+        "The 'active_master' factory property must be set.")
+    return not factory_obj.active_master.is_production_host
+
+# Callable instance of '_ChromiteFactoryFunc'.
+ChromiteRecipeFactory = _ChromiteRecipeFactoryFunc()
 
 
 class ChromiteFactory(object):
