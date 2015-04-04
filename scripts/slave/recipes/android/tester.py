@@ -33,6 +33,7 @@ UNIT_TESTS = freeze([
   ['components_unittests', None],
   ['content_browsertests', None],
   ['content_unittests', None],
+  ['device_unittests', None],
   ['events_unittests', None],
   ['gl_tests', None],
   ['gpu_unittests', None],
