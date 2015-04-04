@@ -179,13 +179,12 @@ class StatusEventLogger(StatusReceiverMultiService):
     args = [
         self.monitoring_script,
         '--event-mon-run-type=%s' % self.monitoring_type,
-        '--service-event-revinfo-from-gclient',
         '--build-event-type=%s' % build_event_type,
         '--build-event-master-name=%s' % self.master_dir,
-        '--build-event-bot-name=%s' % bot_name,
+        '--build-event-hostname=%s' % bot_name,
         '--build-event-builder-name=%s' % builder_name,
         '--build-event-build-number=%d' % build_number,
-        '--build-event-build-scheduled-ts=%d' % build_scheduled_ts,
+        '--build-event-build-scheduling-time=%d' % build_scheduled_ts,
     ]
     if step_name:
       args.append('--build-event-step-name=%s' % step_name)
