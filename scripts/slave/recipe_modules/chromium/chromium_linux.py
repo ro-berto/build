@@ -178,6 +178,7 @@ SPEC = {
         steps.GTestTest('components_unittests'),
         steps.GTestTest('content_browsertests'),
         steps.GTestTest('content_unittests'),
+        steps.GTestTest('device_unittests'),
         steps.GTestTest('events_unittests'),
         steps.GTestTest('gl_tests'),
         steps.GTestTest('gpu_unittests'),

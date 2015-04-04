@@ -568,6 +568,24 @@
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "gtest",
       "-s",
+      "device_unittests",
+      "--verbose",
+      "--flakiness-dashboard-server=http://test-results.appspot.com",
+      "--json-results-file",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "device_unittests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
       "events_unittests",
       "--verbose",
       "--flakiness-dashboard-server=http://test-results.appspot.com",
