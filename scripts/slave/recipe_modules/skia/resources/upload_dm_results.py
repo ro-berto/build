@@ -43,7 +43,7 @@ def main(dm_dir, git_hash, builder_name, build_number, try_issue, import_path):
   gs.upload_dir_contents(dm_dir,
                          'chromium-skia-gm',
                          'dm-images-v1',
-                         upload_if = gs.UploadIf.IF_NEW,
+                         upload_if = gs.UploadIf.ALWAYS,
                          predefined_acl = ACL,
                          fine_grained_acl_list = FINE_ACLS)
 
