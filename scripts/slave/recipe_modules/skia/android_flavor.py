@@ -164,7 +164,7 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
     """Like shutil.copyfile, but for copying to a connected device."""
     self._adb(name='push %s' % self._skia_api.m.path.basename(host_path),
               serial=self.serial,
-              cmd=['push', host_path, device_path])  # pragma: no cover
+              cmd=['push', host_path, device_path])
 
   def create_clean_device_dir(self, path):
     """Like shutil.rmtree() + os.makedirs(), but on a connected device."""

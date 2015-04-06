@@ -30,6 +30,7 @@ def is_chromeos(builder_cfg):
   return ('CrOS' in builder_cfg.get('extra_config', '') or
           builder_cfg.get('os') == 'ChromeOS')
 
+
 def is_valgrind(builder_cfg):
   return 'Valgrind' in builder_cfg.get('extra_config', '')
 
@@ -82,6 +83,7 @@ class SkiaApi(recipe_api.RecipeApi):
         self.c.BUILDER_NAME, self.m.path.sep)
     self.storage_skp_dirs = default_flavor.SKPDirs(
         'playback', self.c.BUILDER_NAME, '/')
+    self.tmp_dir = self.m.path['slave_build'].join('tmp')
 
     self.device_dirs = None
     self._ccache = None
@@ -265,7 +267,24 @@ class SkiaApi(recipe_api.RecipeApi):
     # or we may end up deleting our output on machines where they're the same.
     host_dm_dir = self.m.path['slave_build'].join('dm')
     self.flavor.create_clean_host_dir(host_dm_dir)
+    if str(host_dm_dir) != str(self.device_dirs.dm_dir):
+      self.flavor.create_clean_device_dir(self.device_dirs.dm_dir)
 
+    # Obtain the list of already-generated hashes.
+    hash_filename = 'uninteresting_hashes.txt'
+    self.m.path.makedirs('tmp_dir', self.tmp_dir)
+    host_hashes_file = self.tmp_dir.join(hash_filename)
+    self.m.python('get uninteresting hashes',
+                  script=self.skia_dir.join('tools', 'get_uploaded_hashes.py'),
+                  args=['chromium-skia-gm', 'dm-images-v1', host_hashes_file],
+                  cwd=self.skia_dir)
+    if isinstance(self.device_dirs.tmp_dir, basestring):
+      hashes_file = self.device_dirs.tmp_dir + '/' + hash_filename
+    else:
+      hashes_file = self.device_dirs.tmp_dir.join(hash_filename)
+    self.flavor.copy_file_to_device(host_hashes_file, hashes_file)
+
+    # Run DM.
     args = [
       'dm',
       '--verbose',
@@ -276,6 +295,7 @@ class SkiaApi(recipe_api.RecipeApi):
       '--nameByHash',
       '--properties',  'gitHash',      self.got_revision,
                        'build_number', self.m.properties['buildnumber'],
+      '--uninterestingHashesFile', hashes_file,
     ]
     args.append('--key')
     args.extend(self._KeyParams())

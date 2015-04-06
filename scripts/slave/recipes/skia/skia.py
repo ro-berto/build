@@ -79,7 +79,11 @@ def GenTests(api):
       test_data += (
         api.step_data(
             'exists skia_images',
-            stdout=api.raw_io.output('')))
+            stdout=api.raw_io.output('')) +
+        api.step_data(
+            'exists skia_dm',
+            stdout=api.raw_io.output(''))
+      )
 
     if 'Perf' in builder:
       test_data += api.step_data(
