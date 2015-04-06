@@ -1,0 +1,52 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/bot_update.py",
+      "--master",
+      "fake_mastername",
+      "--builder",
+      "fake_buildername",
+      "--slave",
+      "TestSlavename",
+      "--spec",
+      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'trunk', 'url': 'https://chromium.googlesource.com/external/gyp.git'}]",
+      "--root",
+      "trunk",
+      "--revision_mapping_file",
+      "{\"trunk\": \"got_revision\"}",
+      "--output_json",
+      "/path/to/tmp/json",
+      "--revision",
+      "trunk@HEAD",
+      "--force"
+    ],
+    "name": "bot_update",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Some step text@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"trunk\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"488784591515bd4cdaa016be4ec9b172dc4e7caf\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision_cp\": \"refs/heads/master@{#40793}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"root\": \"trunk\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision@\"488784591515bd4cdaa016be4ec9b172dc4e7caf\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision_cp@\"refs/heads/master@{#40793}\"@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/trunk/gyp_tests.py"
+    ],
+    "name": "run tests"
+  }
+]
