@@ -274,10 +274,21 @@ class SkiaApi(recipe_api.RecipeApi):
     hash_filename = 'uninteresting_hashes.txt'
     self.m.path.makedirs('tmp_dir', self.tmp_dir)
     host_hashes_file = self.tmp_dir.join(hash_filename)
-    self.m.python('get uninteresting hashes',
-                  script=self.skia_dir.join('tools', 'get_uploaded_hashes.py'),
-                  args=['chromium-skia-gm', 'dm-images-v1', host_hashes_file],
-                  cwd=self.skia_dir)
+    self.m.python.inline(
+        'get uninteresting hashes',
+        """
+        import contextlib
+        import sys
+        import urllib2
+
+        HASHES_URL = 'https://gold.skia.org/2/_/hashes'
+
+        with open(sys.argv[1], 'w') as f:
+          with contextlib.closing(urllib2.urlopen(HASHES_URL)) as w:
+            f.write(w.read())
+        """,
+        args=[host_hashes_file],
+        cwd=self.skia_dir)
     if isinstance(self.device_dirs.tmp_dir, basestring):
       hashes_file = self.device_dirs.tmp_dir + '/' + hash_filename
     else:
