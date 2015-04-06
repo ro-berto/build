@@ -29,15 +29,16 @@ def GenSteps(api):
       api.properties['mastername'],
       variant=api.properties.get('cbb_variant'))
 
+  # If a Chromite branch is supplied, use it to override the default Chromite
+  # checkout revision.
+  if api.properties.get('cbb_branch'):
+    api.chromite.c.chromite_revision = api.properties['cbb_branch']
+
   # Run a debug build if instructed.
   if api.properties.get('cbb_debug'):
     api.chromite.c.cbb.debug = True
 
-  # TODO(dnj): Deprecate master-driven build ID passing.
-  master_build_id = api.properties.get('master_build_id')
-  if master_build_id:
-    api.chromite.c.cbb.build_id = master_build_id
-
+  # Run 'cbuildbot' common recipe.
   api.chromite.run_cbuildbot(
         api.properties['cbb_config'])
 
@@ -54,6 +55,7 @@ def GenTests(api):
           slavename='test',
           buildnumber='12345',
           repository='https://chromium.googlesource.com/chromium/src.git',
+          branch='master',
           revision=api.gitiles.make_hash('test'),
       )
   )
@@ -63,39 +65,25 @@ def GenTests(api):
       api.test('cros_manifest')
       + api.properties(
           cbb_config='x86-generic-full',
+          cbb_branch='testbranch',
           mastername='chromiumos.chromium',
           buildername='Test',
           slavename='test',
           buildnumber='12345',
-          branch='testbranch',
           repository='https://chromium.googlesource.com/chromiumos/'
                      'manifest-versions',
+          branch='master',
           revision=api.gitiles.make_hash('test'),
       )
       + api.step_data(
-          'Fetch build ID',
+          'Fetch manifest config',
           api.gitiles.make_commit_test_data(
               'test',
               '\n'.join([
                   'Commit message!',
+                  'Automatic: Start builder use-this-revision miscdata foo bar',
                   'CrOS-Build-Id: 1337',
               ]),
           ),
-      )
-  )
-
-  # Test a legacy (pre-recipe) CrOS build
-  # TODO(dnj): remove this once updated
-  yield (
-      api.test('legacy_build_id')
-      + api.properties(
-          cbb_config='x86-generic-full',
-          mastername='chromiumos',
-          buildername='Test',
-          slavename='test',
-          buildnumber='12345',
-          master_build_id='1337',
-          repository='https://chromium.googlesource.com/chromiumos/src',
-          revision=api.gitiles.make_hash('test'),
       )
   )

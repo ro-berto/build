@@ -24,11 +24,13 @@ def BaseConfig(**_kwargs):
       builddir = Single(basestring),
 
       # If supplied, forward to cbuildbot as '--master-build-id'.
-      # TODO(dnj): Deprecate master-driven build ID passing.
-      build_id = Single(str),
+      build_id = Single(basestring),
 
       # If supplied, forward to cbuildbot as '--chrome-rev'.
       chrome_rev = Single(basestring),
+
+      # If supplied, forward to cbuildbot as '--chrome_version'.
+      chrome_version = Single(basestring),
 
       # If True, add cbuildbot flag: '--debug'.
       debug = Single(bool),

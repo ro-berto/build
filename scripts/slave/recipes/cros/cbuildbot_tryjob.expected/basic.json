@@ -3,43 +3,6 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/bot_update.py",
-      "--master",
-      "chromiumos.tryserver",
-      "--builder",
-      "x86-generic-full",
-      "--slave",
-      "test",
-      "--spec",
-      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'chromite', 'url': 'https://chromium.googlesource.com/chromiumos/chromite.git'}]",
-      "--root",
-      "chromite",
-      "--revision_mapping_file",
-      "{}",
-      "--output_json",
-      "/path/to/tmp/json",
-      "--revision",
-      "chromite@master",
-      "--force"
-    ],
-    "name": "bot_update",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Some step text@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"chromite\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"properties\": {}, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"root\": \"chromite\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[gitiles]/resources/gerrit_client.py",
       "--json-file",
       "/path/to/tmp/json",
@@ -91,6 +54,43 @@
     "name": "Fetch tryjob descriptor (user/user.12345)",
     "~followup_annotations": [
       "@@@STEP_TEXT@extra_args: [u'--timeout', u'14400', u'--remote-trybot', u'--remote-version=4']<br/>name: 12345<br/>email: testauthor@fake.chromium.org@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/bot_update.py",
+      "--master",
+      "chromiumos.tryserver",
+      "--builder",
+      "x86-generic-full",
+      "--slave",
+      "test",
+      "--spec",
+      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'chromite', 'url': 'https://chromium.googlesource.com/chromiumos/chromite.git'}]",
+      "--root",
+      "chromite",
+      "--revision_mapping_file",
+      "{}",
+      "--output_json",
+      "/path/to/tmp/json",
+      "--revision",
+      "chromite@master",
+      "--force"
+    ],
+    "name": "bot_update",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Some step text@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"chromite\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"properties\": {}, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"root\": \"chromite\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {

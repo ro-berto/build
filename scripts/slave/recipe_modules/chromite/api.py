@@ -14,6 +14,7 @@ class ChromiteApi(recipe_api.RecipeApi):
   repo_url = 'https://chromium.googlesource.com/external/repo.git'
   chromite_subpath = 'chromite'
 
+  _MANIFEST_CMD_RE = re.compile(r'Automatic:\s+Start\s+([^\s]+)\s+([^\s]+)')
   _BUILD_ID_RE = re.compile(r'CrOS-Build-Id: (.+)')
 
   def check_repository(self, repo_type_key, value):
@@ -74,30 +75,40 @@ class ChromiteApi(recipe_api.RecipeApi):
         for k, v in desc.iteritems())
     return desc.get('extra_args', ())
 
-  def get_build_id(self, repository, revision):
-    """Loads the master build ID from the processed commit.
+  def load_manifest_config(self, repository, revision):
+    """Loads manifest-specified parameters from the manifest commit.
 
-    This method parses the commit log for the master build ID tag from the
-    commit message.
+    This method parses the commit log for the following information:
+    - The branch to build (From the "Automatic": tag).
+    - The build ID (from the CrOS-Build-Id: tag).
 
     Args:
       repository (str): The URL of the repository hosting the change.
       revision (str): The revision hash to load the build ID from.
-    Returns: (str) The master build ID, or None if one wasn't present.
     """
     commit_log = self.m.gitiles.commit_log(
-        repository, revision, step_name='Fetch build ID')
+        repository, revision, step_name='Fetch manifest config')
     result = self.m.step.active_result
 
     build_id = None
+    loaded = []
     for line in reversed(commit_log.get('message', '').splitlines()):
+      # Automatic command?
+      match = self._MANIFEST_CMD_RE.match(line)
+      if match:
+        self.c.chromite_revision = match.group(2)
+        loaded.append('Chromite branch: %s' % (self.c.chromite_revision,))
+        continue
+
+      # Build ID?
       match = self._BUILD_ID_RE.match(line)
       if match:
-        build_id = match.group(1)
-        break
-    result.presentation.step_text += '<br/>Build ID: %s' % (
-        build_id or '(None)',)
-    return build_id
+        self.c.cbb.build_id = match.group(1)
+        loaded.append('Build ID: %s' % (self.c.cbb.build_id,))
+        continue
+    if loaded:
+      loaded.insert(0, '')
+      result.presentation.step_text += '<br/>'.join(loaded)
 
   def default_chromite_path(self):
     """Returns: (Path) The default Chromite checkout path."""
@@ -216,19 +227,33 @@ class ChromiteApi(recipe_api.RecipeApi):
           repository and augment the cbuildbot command-line with it.
     Returns: (Step) the 'cbuildbot' execution step.
     """
-    # If a branch is supplied, use it to override the default Chromite checkout
-    # revision.
-    if 'branch' in self.m.properties:
-      self.c.chromite_revision = self.m.properties['branch']
-
-    # Checkout Chromite.
-    self.m.bot_update.ensure_checkout(
-        gclient_config=self.gclient_config(),
-        force=True)
 
     # Assert correct configuration.
     assert config, 'An empty configuration was specified.'
     assert self.c.cbb.builddir, 'A build directory name must be specified.'
+
+    # Load properties from the commit being processed. This requires both a
+    # repository and revision to proceed.
+    repository = self.m.properties.get('repository')
+    revision = self.m.properties.get('revision')
+    tryjob_args = []
+    if repository and revision:
+      if tryjob:
+        assert self.check_repository('tryjob', repository), (
+            "Refusing to probe unknown tryjob repository: %s" % (repository,))
+        # If we are a tryjob, add parameters specified in the description.
+        tryjob_args = self.load_try_job(repository, revision)
+
+      # Pull more information from the commit if it came from certain known
+      # repositories.
+      if self.check_repository('chromium', repository):
+        # If our change comes from a Chromium repository, add the
+        # '--chrome_version' flag.
+        self.c.cbb.chrome_version = self.m.properties['revision']
+      if self.check_repository('cros_manifest', repository):
+        # This change comes from a manifest repository. Load configuration
+        # parameters from the manifest command.
+        self.load_manifest_config(repository, revision)
 
     buildroot = self.m.path['root'].join('cbuild', self.c.cbb.builddir)
     cbb_args = [
@@ -236,7 +261,7 @@ class ChromiteApi(recipe_api.RecipeApi):
     ]
     if not tryjob:
       cbb_args.append('--buildbot')
-    if self.m.properties.get('buildnumber'):
+    if self.m.properties.get('buildnumber') is not None:
       cbb_args.extend(['--buildnumber', self.m.properties['buildnumber']])
     if self.c.cbb.chrome_rev:
       cbb_args.extend(['--chrome_rev', self.c.cbb.chrome_rev])
@@ -244,34 +269,20 @@ class ChromiteApi(recipe_api.RecipeApi):
       cbb_args.extend(['--debug'])
     if self.c.cbb.clobber:
       cbb_args.extend(['--clobber'])
-
-    # Load properties from the commit being processed. This requires both a
-    # repository and revision to proceed.
-    repository = self.m.properties.get('repository')
-    revision = self.m.properties.get('revision')
-    build_id = self.c.cbb.build_id
-    if repository and revision:
-      if tryjob:
-        assert self.check_repository('tryjob', repository), (
-            "Refusing to probe unknown tryjob repository: %s" % (repository,))
-        # If we are a tryjob, add parameters specified in the description.
-        cbb_args.extend(self.load_try_job(repository, revision))
-
-      # Pull more information from the commit if it came from certain known
-      # repositories.
-      if self.check_repository('chromium', repository):
-        # If our change comes from a Chromium repository, add the
-        # '--chrome_version' flag.
-        cbb_args.extend(['--chrome_version', self.m.properties['revision']])
-      if (not build_id and
-          self.check_repository('cros_manifest', repository)):
-        # Add the '--master_build_id' flag, inferred from the manifest commit
-        # message.
-        build_id = self.get_build_id(repository, revision)
+    if self.c.cbb.chrome_version:
+      cbb_args.extend(['--chrome_version', self.c.cbb.chrome_version])
 
     # Set the build ID, if specified.
-    if build_id:
-      cbb_args.extend(['--master-build-id', build_id])
+    if self.c.cbb.build_id:
+      cbb_args.extend(['--master-build-id', self.c.cbb.build_id])
+
+    # Add tryjob args, if there are any.
+    cbb_args.extend(tryjob_args)
+
+    # Checkout Chromite.
+    self.m.bot_update.ensure_checkout(
+        gclient_config=self.gclient_config(),
+        force=True)
 
     # Run cbuildbot.
     return self.cbuildbot(str('cbuildbot [%s]' % (config,)),
