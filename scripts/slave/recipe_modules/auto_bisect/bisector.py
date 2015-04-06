@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import json
 import re
 
 from . import bisect_results
@@ -32,6 +33,7 @@ class Bisector(object):
     super(Bisector, self).__init__()
     self._api = api
     self.bisect_config = bisect_config
+    self.config_step()
     self.revision_class = revision_class
 
     # Test-only properties.
@@ -70,6 +72,24 @@ class Bisector(object):
     self.good_rev.good = True
     if init_revisions:
       self._expand_revision_range()
+
+  def config_step(self):
+    """Yields a simple echo step that outputs the bisect config."""
+    api = self.api
+    # bisect_config may come as a FrozenDict (which is not serializable).
+    bisect_config = dict(self.bisect_config)
+
+    def fix_windows_backslashes(s):
+      backslash_regex = re.compile(r'(?<!\\)\\(?!\\)')
+      return backslash_regex.sub(r'\\', s)
+
+    for k, v in bisect_config.iteritems():
+      if isinstance(v, basestring):
+        bisect_config[k] = fix_windows_backslashes(v)
+    # We sort the keys to prevent problems with orders changing when
+    # recipe_simulation_test compares against expectation files.
+    api.m.step('config', ['echo', json.dumps(bisect_config, indent=2,
+                                             sort_keys=True)])
 
   @property
   def api(self):
