@@ -274,26 +274,44 @@ class SkiaApi(recipe_api.RecipeApi):
     hash_filename = 'uninteresting_hashes.txt'
     self.m.path.makedirs('tmp_dir', self.tmp_dir)
     host_hashes_file = self.tmp_dir.join(hash_filename)
-    self.m.python.inline(
-        'get uninteresting hashes',
-        """
-        import contextlib
-        import sys
-        import urllib2
+    hashes_file = self.flavor.device_path_join(
+        self.device_dirs.tmp_dir, hash_filename)
+    use_hash_file = False
+    try:
+      self.m.python.inline(
+          'get uninteresting hashes',
+          """
+          import contextlib
+          import math
+          import sys
+          import time
+          import urllib2
 
-        HASHES_URL = 'https://gold.skia.org/2/_/hashes'
+          HASHES_URL = 'https://gold.skia.org/2/_/hashes'
+          RETRIES = 5
+          WAIT_BASE = 15
 
-        with open(sys.argv[1], 'w') as f:
-          with contextlib.closing(urllib2.urlopen(HASHES_URL)) as w:
-            f.write(w.read())
-        """,
-        args=[host_hashes_file],
-        cwd=self.skia_dir)
-    if isinstance(self.device_dirs.tmp_dir, basestring):
-      hashes_file = self.device_dirs.tmp_dir + '/' + hash_filename
-    else:
-      hashes_file = self.device_dirs.tmp_dir.join(hash_filename)
-    self.flavor.copy_file_to_device(host_hashes_file, hashes_file)
+          for retry in range(RETRIES):
+            try:
+              with open(sys.argv[1], 'w') as f:
+                with contextlib.closing(urllib2.urlopen(HASHES_URL)) as w:
+                  f.write(w.read())
+                  break
+            except:
+              print 'Failed to get uninteresting hashes from %s' % HASHES_URL
+              if retry == RETRIES:
+                raise
+              waittime = WAIT_BASE * math.pow(2, retry)
+              print 'Retry in %d seconds.' % waittime
+              time.sleep(waittime)
+          """,
+          args=[host_hashes_file],
+          cwd=self.skia_dir)
+    except self.m.step.StepFailure:
+      pass
+    if self.m.path.exists(host_hashes_file):
+      self.flavor.copy_file_to_device(host_hashes_file, hashes_file)
+      use_hash_file = True
 
     # Run DM.
     args = [
@@ -306,10 +324,11 @@ class SkiaApi(recipe_api.RecipeApi):
       '--nameByHash',
       '--properties',  'gitHash',      self.got_revision,
                        'build_number', self.m.properties['buildnumber'],
-      '--uninterestingHashesFile', hashes_file,
     ]
     args.append('--key')
     args.extend(self._KeyParams())
+    if use_hash_file:
+      args.extend(['--uninterestingHashesFile', hashes_file])
 
     skip_flag = None
     if self.c.builder_cfg.get('cpu_or_gpu') == 'CPU':

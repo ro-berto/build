@@ -102,7 +102,8 @@ def GenTests(api):
                      revision='abc123') +
       api.path.exists(
           api.path['slave_build'].join('skia'),
-          api.path['slave_build'].join('playback', 'skps', 'SKP_VERSION')
+          api.path['slave_build'].join('playback', 'skps', 'SKP_VERSION'),
+          api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
       )
     )
     if 'Android' in builder:
@@ -134,4 +135,17 @@ def GenTests(api):
                    slavename='skiabot-linux-compile-000') +
     api.step_data('has ccache?', retcode=0,
                   stdout=api.raw_io.output('/usr/bin/ccache'))
+  )
+
+  builder = 'Test-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Debug'
+  master, slave, slave_cfg = _getMasterAndSlaveForBuilder(builder)
+  yield (
+    api.test('failed_get_hashes') +
+    api.properties(buildername=builder,
+                   mastername=master,
+                   slavename=slave,
+                   buildnumber=6) +
+    api.step_data('get uninteresting hashes', retcode=1) +
+    api.step_data('has ccache?', retcode=1) +
+    AndroidTestData(builder, slave_cfg)
   )
