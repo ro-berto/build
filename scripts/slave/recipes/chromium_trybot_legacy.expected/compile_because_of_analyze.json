@@ -153,7 +153,7 @@
       "/path/to/tmp/json"
     ],
     "env": {
-      "GYP_DEFINES": "asan=1 clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' lsan=1 target_arch=x64 use_allocator=none use_goma=1"
+      "GYP_DEFINES": "asan=1 clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' linux_dump_symbols=1 lsan=1 target_arch=x64 use_allocator=none use_goma=1"
     },
     "name": "analyze",
     "~followup_annotations": [
@@ -181,7 +181,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "asan=1 clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' lsan=1 target_arch=x64 use_allocator=none use_goma=1"
+      "GYP_DEFINES": "asan=1 clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' linux_dump_symbols=1 lsan=1 target_arch=x64 use_allocator=none use_goma=1"
     },
     "name": "gclient runhooks (with patch)"
   },

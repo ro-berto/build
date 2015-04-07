@@ -121,6 +121,7 @@ def _GenStepsInternal(api):
 
   api.chromium_android.configure_from_properties(
       bot_config['config'],
+      TARGET_PLATFORM='android',
       INTERNAL=False,
       BUILD_CONFIG=bot_config['target'],
       REPO_NAME='src',

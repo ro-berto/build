@@ -58,7 +58,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "clang=0 dcheck_always_on=0 fastbuild=1 target_arch=ia32 v8_target_arch=ia32"
+      "GYP_DEFINES": "clang=0 dcheck_always_on=0 fastbuild=1 linux_dump_symbols=1 target_arch=ia32 v8_target_arch=ia32"
     },
     "name": "gclient runhooks"
   },
