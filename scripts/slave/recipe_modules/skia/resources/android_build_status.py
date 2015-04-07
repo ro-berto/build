@@ -148,10 +148,20 @@ def find_completed_build(service, branch, target, git_revision):
 
   # Wait until the build completes or ends in error
   build_id = build['buildId']
+  pending_build_count = 0
   while build['buildAttemptStatus'] not in ['complete', 'error']:
     print ('Current build status is {}. Waiting for'
            ' build to complete...').format(build['buildAttemptStatus'])
     time.sleep(120)
+
+    # wait 40 minutes for the build server to queue the build before exiting
+    if build['buildAttemptStatus'] in ['pending']:
+      pending_build_count += 1
+      if pending_build_count > 20:
+        print ('WARNING: The android build server has yet to queue this build'
+               ' and there is a high likelyhood that it will not complete'
+               ' in a reasonable timeframe.')
+        sys.exit(2)
 
     for i in range(2):
       build = query_for_build(service, target, build_id)
