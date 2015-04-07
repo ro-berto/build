@@ -81,6 +81,14 @@ BUILDERS = freeze({
               api.properties['parent_revision'])),
       'num_device_shards': 1,
     },
+    'Android Nexus9 Perf': {
+      'perf_id': 'android-nexus9',
+      'bucket': 'chrome-perf',
+      'path': lambda api: ('android_perf_fyi_rel_arm64/full-build-linux_'
+                           '%s.zip' % api.properties['parent_revision']),
+      'num_device_shards': 8,
+      'test_spec_file': 'chromium.perf.json',
+    }
   },
   'client.v8': {
     'Android Nexus4 Perf': {
