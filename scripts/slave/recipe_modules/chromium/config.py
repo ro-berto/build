@@ -529,6 +529,11 @@ def clang_tot_linux(c):
   # Use ToT Clang.
   c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
 
+@config_ctx(includes=['ninja', 'clang'])  # No goma.
+def clang_tot_mac(c):
+  # Use ToT Clang.
+  c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
+
 @config_ctx()
 def asan_test_batch(c):
   c.runtests.test_args.append('--test-launcher-batch-limit=1')
@@ -538,6 +543,13 @@ def asan_test_batch(c):
 def clang_tot_linux_asan(c):
   # Like chromium_linux_asan, without goma.
   pass
+
+@config_ctx(includes=['clang_tot_mac', 'asan', 'chromium_sanitizer',
+            'static_library'])
+def clang_tot_mac_asan(c):
+  # Like chromium_mac_asan, without goma.
+  # Clear lsan configuration for mac.
+  del c.gyp_env.GYP_DEFINES['lsan']
 
 @config_ctx(includes=['android_common', 'ninja', 'clang', 'asan'])
 def clang_tot_android_asan(c):

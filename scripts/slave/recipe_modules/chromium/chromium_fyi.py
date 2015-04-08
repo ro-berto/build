@@ -992,6 +992,99 @@ SPEC = {
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
     },
+    'ClangToTMac': {
+      'recipe_config': 'clang_tot_mac',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'GYP_DEFINES': {
+        'component': 'shared_library',
+        'werror': '',
+        # Plugin flags often need to be changed when using a plugin newer than
+        # the latest Clang package, so disable plugins.
+        'clang_use_chrome_plugins': '0',
+      },
+      'bot_type': 'builder',
+      'testing': { 'platform': 'mac', },
+      'use_isolate': True,
+      'enable_swarming': True,
+      # Workaround so that recipes doesn't add random build targets to our
+      # compile line. We want to build everything.
+      'add_tests_as_compile_targets': False,
+    },
+    'ClangToTMac tester': {
+      'recipe_config': 'chromium_no_goma',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+      ],
+      'bot_type': 'tester',
+      'parent_buildername': 'ClangToTMac',
+      'testing': {
+        'platform': 'mac',
+      },
+      'enable_swarming': True,
+    },
+    'ClangToTMac (dbg)': {
+      'recipe_config': 'clang_tot_mac',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 64,
+      },
+      'GYP_DEFINES': {
+        'werror': '',
+        # Plugin flags often need to be changed when using a plugin newer than
+        # the latest Clang package, so disable plugins.
+        'clang_use_chrome_plugins': '0',
+      },
+      'bot_type': 'builder',
+      'testing': { 'platform': 'mac', },
+      'use_isolate': True,
+      'enable_swarming': True,
+      # Workaround so that recipes doesn't add random build targets to our
+      # compile line. We want to build everything.
+      'add_tests_as_compile_targets': False,
+    },
+    'ClangToTMacASan': {
+      'recipe_config': 'clang_tot_mac_asan',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'GYP_DEFINES': {
+        'werror': '',
+        # Plugin flags often need to be changed when using a plugin newer than
+        # the latest Clang package, so disable plugins.
+        'clang_use_chrome_plugins': '0',
+      },
+      'bot_type': 'builder',
+      'testing': { 'platform': 'mac', },
+      'use_isolate': True,
+      'enable_swarming': True,
+      # Workaround so that recipes doesn't add random build targets to our
+      # compile line. We want to build everything.
+      'add_tests_as_compile_targets': False,
+    },
+    'ClangToTMacASan tester': {
+      'recipe_config': 'chromium_mac_asan',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+      ],
+      'bot_type': 'tester',
+      'parent_buildername': 'ClangToTMacASan',
+      'testing': { 'platform': 'mac', },
+      'enable_swarming': True,
+    },
     'Linux Builder (clobber)': {
       'recipe_config': 'chromium',
       'chromium_apply_config': ['clobber'],
