@@ -43,6 +43,8 @@
       "--buildroot",
       "[ROOT]/cbuild/external_master",
       "--buildbot",
+      "--buildnumber",
+      "0",
       "--chrome_rev",
       "stable",
       "--debug",

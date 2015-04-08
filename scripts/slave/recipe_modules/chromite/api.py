@@ -90,9 +90,14 @@ class ChromiteApi(recipe_api.RecipeApi):
         repository, revision, step_name='Fetch manifest config')
     result = self.m.step.active_result
 
+    # Handle missing/invalid response.
+    if not (commit_log and commit_log.get('message')):
+      self.m.python.failing_step('Fetch manifest config failure',
+                                 'Failed to fetch manifest config.')
+
     build_id = None
     loaded = []
-    for line in reversed(commit_log.get('message', '').splitlines()):
+    for line in reversed(commit_log['message'].splitlines()):
       # Automatic command?
       match = self._MANIFEST_CMD_RE.match(line)
       if match:
@@ -264,7 +269,10 @@ class ChromiteApi(recipe_api.RecipeApi):
     if not tryjob:
       cbb_args.append('--buildbot')
     if self.m.properties.get('buildnumber') is not None:
-      cbb_args.extend(['--buildnumber', self.m.properties['buildnumber']])
+      # On a developer system, it's been noted that when the build number is
+      # zero, it's passed as an empty string in the properties JSON blob.
+      buildnumber = self.m.properties['buildnumber'] or 0
+      cbb_args.extend(['--buildnumber', buildnumber])
     if self.c.cbb.chrome_rev:
       cbb_args.extend(['--chrome_rev', self.c.cbb.chrome_rev])
     if self.c.cbb.debug:

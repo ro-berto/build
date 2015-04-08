@@ -102,6 +102,30 @@ def GenTests(api):
       )
   )
 
+  # Test a CrOS build with missing revision/repository properties.
+  yield (
+      api.test('chromiumos_paladin_manifest_failure')
+      + api.properties(
+          mastername='chromiumos',
+          buildername='Test',
+          slavename='test',
+          buildnumber='12345',
+          repository='https://chromium.googlesource.com/chromiumos/'
+                     'manifest-versions',
+          branch='master',
+          revision=api.gitiles.make_hash('test'),
+          cbb_config='x86-generic-paladin',
+          cbb_variant='paladin',
+      )
+      + api.step_data(
+          'Fetch manifest config',
+          api.gitiles.make_commit_test_data(
+              'test',
+              None
+          )
+      )
+  )
+
   #
   # [Coverage]
   #
@@ -113,6 +137,7 @@ def GenTests(api):
           mastername='chromiumos.coverage',
           buildername='Test',
           slavename='test',
+          buildnumber='', # Possibility from BuildBot when buildnumber is '0'.
           repository='https://chromium.googlesource.com/chromiumos/'
                      'chromite.git',
           revision='fdea0dde664e229976ddb2224328da152fba15b1',
