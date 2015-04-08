@@ -296,14 +296,17 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "--release",
       "--apk",
-      "CronetSample.apk"
+      "CronetSample.apk",
+      "--apk_package",
+      "org.chromium.cronet_sample_apk",
+      "--release"
     ],
-    "name": "install CronetSample"
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "install CronetSample.apk"
   },
   {
     "cmd": [
@@ -311,22 +314,26 @@
       "-u",
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "instrumentation",
-      "--release",
       "--test-apk",
-      "CronetSampleTest"
+      "CronetSampleTest",
+      "--verbose",
+      "--release"
     ],
-    "name": "test CronetSample"
+    "name": "Instrumentation test CronetSampleTest"
   },
   {
     "cmd": [
-      "python",
-      "-u",
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "--release",
       "--apk",
-      "CronetTest.apk"
+      "CronetTest.apk",
+      "--apk_package",
+      "org.chromium.net",
+      "--release"
     ],
-    "name": "install CronetTest"
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "install CronetTest.apk"
   },
   {
     "cmd": [
@@ -334,12 +341,12 @@
       "-u",
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "instrumentation",
-      "--release",
       "--test-apk",
       "CronetTestInstrumentation",
-      "-v"
+      "--verbose",
+      "--release"
     ],
-    "name": "test CronetTest"
+    "name": "Instrumentation test CronetTestInstrumentation"
   },
   {
     "cmd": [

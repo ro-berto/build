@@ -4,7 +4,31 @@
 
 """Common steps for recipes that sync/build Cronet sources."""
 
+from infra.libs.infra_types import freeze
 from slave import recipe_api
+
+INSTRUMENTATION_TESTS = freeze([
+  {
+    'test': 'CronetSampleTest',
+    'gyp_target': 'cronet_sample_test_apk',
+    'kwargs': {
+      'install_apk': {
+        'package': 'org.chromium.cronet_sample_apk',
+        'apk': 'CronetSample.apk'
+      },
+    },
+  },
+  {
+    'test': 'CronetTestInstrumentation',
+    'gyp_target': 'cronet_test_instrumentation_apk',
+    'kwargs': {
+      'install_apk': {
+        'package': 'org.chromium.net',
+        'apk': 'CronetTest.apk'
+      },
+    },
+  },
+])
 
 class CronetApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
@@ -60,27 +84,9 @@ class CronetApi(recipe_api.RecipeApi):
     droid = self.m.chromium_android
     checkout_path = self.m.path['checkout']
     droid.common_tests_setup_steps()
-    install_cmd = checkout_path.join('build',
-                                     'android',
-                                     'adb_install_apk.py')
-    test_cmd = checkout_path.join('build',
-                                  'android',
-                                  'test_runner.py')
-    build_arg = []
-    if build_config == "Release":
-        build_arg = ['--release']
-    self.m.python('install CronetSample', install_cmd,
-        args = build_arg + ['--apk', 'CronetSample.apk'])
-    self.m.python('test CronetSample', test_cmd,
-        args = ['instrumentation'] +
-               build_arg +
-               ['--test-apk', 'CronetSampleTest'])
-    self.m.python('install CronetTest', install_cmd,
-        args = build_arg + ['--apk', 'CronetTest.apk'])
-    self.m.python('test CronetTest', test_cmd,
-        args = ['instrumentation'] +
-               build_arg +
-               ['--test-apk','CronetTestInstrumentation'] +
-               ['-v'])
+    for suite in INSTRUMENTATION_TESTS:
+      droid.run_instrumentation_suite(
+          suite['test'], verbose=True,
+          **suite.get('kwargs', {}))
     droid.common_tests_final_steps()
 
