@@ -49,15 +49,12 @@ def get_xcodebuild_path(xcode_app):
   """Returns the path to xcodebuild under the given Xcode app.
 
   Args:
-    xcode_app: The name of an .app folder in /Applications.
-      e.g. Xcode.app
+    xcode_app: The path to an installed Xcode.app. e.g. /Applications/Xcode.app.
 
   Returns:
     The absolute path to the xcodebuild binary under the given Xcode app.
   """
   return os.path.join(
-    '/',
-    'Applications',
     xcode_app,
     'Contents',
     'Developer',
@@ -132,7 +129,7 @@ def find_xcode(target_version):
   for app in os.listdir(os.path.join('/', 'Applications')):
     if app.startswith('Xcode'):
       installation_path = os.path.join('/', 'Applications', app)
-      xcodebuild = get_xcodebuild_path(app)
+      xcodebuild = get_xcodebuild_path(installation_path)
 
       if os.path.exists(xcodebuild):
         version, build_version = get_xcode_version(xcodebuild)
