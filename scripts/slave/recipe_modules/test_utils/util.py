@@ -30,6 +30,8 @@ class TestResults(object):
     self.flakes = {}
     self.unexpected_flakes = {}
 
+    self.num_passes = self.raw.get('num_passes', 'n/a')
+
     # TODO(dpranke): crbug.com/357866 - we should simplify the handling of
     # both the return code and parsing the actual results, below.
 
@@ -60,12 +62,6 @@ class TestResults(object):
       else:
         key += 'failures'
       getattr(self, key)[test] = data
-
-  def __getattr__(self, key):
-    if key in self.raw:
-      return self.raw[key]
-    raise AttributeError("'%s' object has no attribute '%s'" %
-                         (self.__class__, key))  # pragma: no cover
 
   def add_result(self, name, expected, actual=None):
     """Adds a test result to a 'json test results' compatible object.

@@ -388,6 +388,16 @@ def GenTests(api):
   )
 
   yield (
+    api.test('chromium_webkit_crash') +
+    api.properties.generic(mastername='chromium.webkit',
+                           buildername='WebKit Linux') +
+    api.platform('linux', 64) +
+    api.override_step_data(
+        'webkit_tests',
+        api.test_utils.raw_test_output(None, retcode=1))
+  )
+
+  yield (
     api.test('chromium_webkit_warnings') +
     api.properties.generic(mastername='chromium.webkit',
                            buildername='WebKit Linux') +

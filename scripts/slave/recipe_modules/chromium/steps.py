@@ -1090,11 +1090,12 @@ class BlinkTest(Test):
         r = step_result.test_utils.test_results
         p = step_result.presentation
 
-        p.step_text += api.test_utils.format_step_text([
-          ['unexpected_flakes:', r.unexpected_flakes.keys()],
-          ['unexpected_failures:', r.unexpected_failures.keys()],
-          ['Total executed: %s' % r.num_passes],
-        ])
+        if r.valid:
+          p.step_text += api.test_utils.format_step_text([
+            ['unexpected_flakes:', r.unexpected_flakes.keys()],
+            ['unexpected_failures:', r.unexpected_failures.keys()],
+            ['Total executed: %s' % r.num_passes],
+          ])
 
       if suffix in ('', 'with patch'):
         buildername = api.properties['buildername']
