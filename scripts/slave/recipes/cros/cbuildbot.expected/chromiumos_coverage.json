@@ -5,7 +5,7 @@
       "-u",
       "[BUILD]/scripts/slave/bot_update.py",
       "--master",
-      "chromiumos",
+      "chromiumos.coverage",
       "--builder",
       "Test",
       "--slave",
@@ -19,7 +19,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "chromite@master",
+      "chromite@checkout-this-chromite-branch",
       "--force"
     ],
     "name": "bot_update",
@@ -43,14 +43,10 @@
       "--buildroot",
       "[ROOT]/cbuild/external_master",
       "--buildbot",
-      "--buildnumber",
-      "12345",
       "--chrome_rev",
       "stable",
       "--debug",
       "--clobber",
-      "--chrome_version",
-      "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3",
       "x86-generic-full"
     ],
     "name": "cbuildbot [x86-generic-full]"

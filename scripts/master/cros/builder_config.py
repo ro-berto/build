@@ -49,6 +49,7 @@ class BuilderConfig(object):
   MASTER_BUILDER_NAME = None
   SLAVE_TYPE = SlaveType.BAREMETAL
   SLAVE_CLASS = None
+  CBB_VARIANT = None
 
   def __init__(self, config):
     """Initializes a new configuration.
@@ -84,6 +85,15 @@ class BuilderConfig(object):
   def slave_class(self):
     """Returns (str): The slave class for this enumeration, or None."""
     return self.SLAVE_CLASS
+
+  @property
+  def cbb_variant(self):
+    """Returns (str): Cbuildbot recipe variant for this builder type, or None.
+    """
+    variant = self.config.category
+    if variant and self.config.is_master:
+      return '%s-master' % (variant,)
+    return variant
 
   @property
   def unique(self):

@@ -240,17 +240,19 @@ class ChromiteApi(recipe_api.RecipeApi):
     if repository and revision:
       if tryjob:
         assert self.check_repository('tryjob', repository), (
-            "Refusing to probe unknown tryjob repository: %s" % (repository,))
+            "Refusing to query unknown tryjob repository: %s" % (repository,))
         # If we are a tryjob, add parameters specified in the description.
         tryjob_args = self.load_try_job(repository, revision)
 
       # Pull more information from the commit if it came from certain known
       # repositories.
-      if self.check_repository('chromium', repository):
+      if (self.c.use_chrome_version and
+          self.check_repository('chromium', repository)):
         # If our change comes from a Chromium repository, add the
         # '--chrome_version' flag.
         self.c.cbb.chrome_version = self.m.properties['revision']
-      if self.check_repository('cros_manifest', repository):
+      if (self.c.read_cros_manifest and
+          self.check_repository('cros_manifest', repository)):
         # This change comes from a manifest repository. Load configuration
         # parameters from the manifest command.
         self.load_manifest_config(repository, revision)

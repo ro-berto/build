@@ -14,11 +14,19 @@ _MASTER_CONFIG_MAP = {
   'chromiumos': {
     'master_config': 'master_chromiumos',
     'variants': {
-      'test': ['test_variant'],
+      'paladin': ['chromiumos_paladin'],
     },
   },
   'chromiumos.chromium': {
     'master_config': 'master_chromiumos_chromium',
+  },
+
+  # Fake waterfall for Coverage
+  'chromiumos.coverage': {
+    'master_config': 'master_chromiumos',
+    'variants': {
+      'test': ['chromiumos_coverage_test'],
+    },
   },
 }
 
@@ -43,30 +51,34 @@ def GenSteps(api):
         api.properties['cbb_config'])
 
 def GenTests(api):
+  #
+  # master.chromiumos.chromium
+  #
+
   # Test a standard CrOS build triggered by a Chromium commit.
   yield (
-      api.test('basic_chromium_repo')
+      api.test('chromiumos_chromium_builder')
       + api.properties(
-          cbb_config='x86-generic-full',
-          cbb_debug=True,
-          cbb_variant='test',
-          mastername='chromiumos',
+          mastername='chromiumos.chromium',
           buildername='Test',
           slavename='test',
           buildnumber='12345',
-          repository='https://chromium.googlesource.com/chromium/src.git',
+          repository='https://chromium.googlesource.com/chromium/src',
+          revision='b8819267417da248aa4fe829c5fcf0965e17b0c3',
           branch='master',
-          revision=api.gitiles.make_hash('test'),
+          cbb_config='x86-generic-tot-chrome-pfq-informational',
       )
   )
 
+  #
+  # master.chromiumos
+  #
+
   # Test a CrOS build with missing revision/repository properties.
   yield (
-      api.test('cros_manifest')
+      api.test('chromiumos_paladin')
       + api.properties(
-          cbb_config='x86-generic-full',
-          cbb_branch='testbranch',
-          mastername='chromiumos.chromium',
+          mastername='chromiumos',
           buildername='Test',
           slavename='test',
           buildnumber='12345',
@@ -74,6 +86,8 @@ def GenTests(api):
                      'manifest-versions',
           branch='master',
           revision=api.gitiles.make_hash('test'),
+          cbb_config='x86-generic-paladin',
+          cbb_variant='paladin',
       )
       + api.step_data(
           'Fetch manifest config',
@@ -81,9 +95,31 @@ def GenTests(api):
               'test',
               '\n'.join([
                   'Commit message!',
-                  'Automatic: Start builder use-this-revision miscdata foo bar',
+                  'Automatic: Start master-paladin master 6952.0.0-rc4',
                   'CrOS-Build-Id: 1337',
               ]),
           ),
+      )
+  )
+
+  #
+  # [Coverage]
+  #
+
+  # Test a standard CrOS build triggered by a Chromium commit.
+  yield (
+      api.test('chromiumos_coverage')
+      + api.properties(
+          mastername='chromiumos.coverage',
+          buildername='Test',
+          slavename='test',
+          repository='https://chromium.googlesource.com/chromiumos/'
+                     'chromite.git',
+          revision='fdea0dde664e229976ddb2224328da152fba15b1',
+          branch='master',
+          cbb_config='x86-generic-full',
+          cbb_branch='checkout-this-chromite-branch',
+          cbb_variant='test',
+          cbb_debug=True,
       )
   )

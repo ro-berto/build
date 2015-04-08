@@ -19,6 +19,13 @@ def BaseConfig(**_kwargs):
     # Checkout Chromite at this revision.
     chromite_revision = Single(basestring),
 
+    # Should the Chrome version be supplied to cbuildbot?
+    use_chrome_version = Single(bool),
+
+    # Should the CrOS manifest commit message be parsed and added to 'cbuildbot'
+    # flags?
+    read_cros_manifest = Single(bool),
+
     cbb = ConfigGroup(
       # The buildroot directory name to use.
       builddir = Single(basestring),
@@ -63,6 +70,7 @@ def external(c):
 
 @config_ctx(group='master', includes=['external'])
 def master_chromiumos_chromium(c):
+  c.use_chrome_version = True
   c.cbb.builddir = 'shared_external'
 
 
@@ -70,13 +78,17 @@ def master_chromiumos_chromium(c):
 def master_chromiumos(c):
   c.cbb.builddir = 'external_master'
 
+@config_ctx()
+def chromiumos_paladin(c):
+  c.read_cros_manifest = True
 
 @config_ctx()
 def chromeos_tryserver_etc(c):
   c.cbb.clobber = True
 
-
 @config_ctx()
-def test_variant(c):
+def chromiumos_coverage_test(c):
+  c.use_chrome_version = True
+  c.read_cros_manifest = True
   c.cbb.chrome_rev = 'stable'
   c.cbb.clobber = True
