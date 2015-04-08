@@ -1,0 +1,67 @@
+[
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys\nprint 'Some output...'\nprint '@@@BUILD_STEP a build step@@@'\nprint 'Some output inside a build step'\nprint '@@@STEP_TEXT@this is step text@@@'\nprint '@@@BUILD_STEP another build step@@@'\n"
+    ],
+    "name": "subannotator",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Wooot!@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@print 'Some output...'@@@",
+      "@@@STEP_LOG_LINE@python.inline@print '@@@BUILD_STEP a build step@@@'@@@",
+      "@@@STEP_LOG_LINE@python.inline@print 'Some output inside a build step'@@@",
+      "@@@STEP_LOG_LINE@python.inline@print '@@@STEP_TEXT@this is step text@@@'@@@",
+      "@@@STEP_LOG_LINE@python.inline@print '@@@BUILD_STEP another build step@@@'@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys\nprint 'Some output...'\nprint '@@@BUILD_STEP a unique build step@@@'\nprint 'Some output inside a build step'\nprint '@@@STEP_TEXT@this is step text@@@'\nprint '@@@BUILD_STEP another build step@@@'\n"
+    ],
+    "name": "disallowed subannotator",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@print 'Some output...'@@@",
+      "@@@STEP_LOG_LINE@python.inline@print '@@@BUILD_STEP a unique build step@@@'@@@",
+      "@@@STEP_LOG_LINE@python.inline@print 'Some output inside a build step'@@@",
+      "@@@STEP_LOG_LINE@python.inline@print '@@@STEP_TEXT@this is step text@@@'@@@",
+      "@@@STEP_LOG_LINE@python.inline@print '@@@BUILD_STEP another build step@@@'@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys\nprint 'Some output...'\nprint '@@@BUILD_STEP a unique build step@@@'\nprint 'Some output inside a build step'\nprint '@@@STEP_TEXT@this is step text@@@'\nprint '@@@BUILD_STEP another build step@@@'\nsys.exit(1)\n"
+    ],
+    "name": "subannotator (2)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@print 'Some output...'@@@",
+      "@@@STEP_LOG_LINE@python.inline@print '@@@BUILD_STEP a unique build step@@@'@@@",
+      "@@@STEP_LOG_LINE@python.inline@print 'Some output inside a build step'@@@",
+      "@@@STEP_LOG_LINE@python.inline@print '@@@STEP_TEXT@this is step text@@@'@@@",
+      "@@@STEP_LOG_LINE@python.inline@print '@@@BUILD_STEP another build step@@@'@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.exit(1)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "echo",
+      "post_run"
+    ],
+    "name": "post run"
+  }
+]
