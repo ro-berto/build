@@ -1740,12 +1740,7 @@ def _ConfigureSanitizerTools(options, args, extra_env):
 
   # AddressSanitizer
   if options.enable_asan:
-    # Avoid aggressive memcmp checks until http://crbug.com/178677 is
-    # fixed.  Also do not replace memcpy/memmove/memset to suppress a
-    # report in OpenCL, see http://crbug.com/162461.
-    asan_options = symbolization_options + \
-                   ['strict_memcmp=0',
-                    'replace_intrin=0']
+    asan_options = symbolization_options
     if options.enable_lsan:
       asan_options += ['detect_leaks=1']
     AddToExistingEnv(extra_env, 'ASAN_OPTIONS', asan_options)
