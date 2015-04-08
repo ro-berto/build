@@ -92,6 +92,94 @@ def estimate_buildbot_capacity(builds):
   return estimate_capacity(requests)
 
 
+def get_properties(build):
+  return {p[0]: p[1] for p in build.get('properties', [])}
+
+
+def launch_and_collect(iterable, get_process, collect_result):
+  processes = []
+  try:
+    for item in iterable:
+      with tempfile.NamedTemporaryFile(delete=False, prefix='estimate_') as f:
+        process, metadata = get_process(item, f.name)
+        processes.append({
+          'process': process,
+          'metadata': metadata,
+          'file': f.name,
+        })
+    for p in processes:
+      rc = p['process'].wait()
+      if rc != 0:
+        raise Exception('fail')
+      with open(p['file']) as f:
+        data = json.load(f)
+      collect_result(data, p['metadata'])
+  finally:
+    for p in processes:
+      os.remove(p['file'])
+
+
+def estimate_swarming_capacity(swarming_py, builds):
+  """Estimates swarming capacity needs based on a list of builds.
+
+  Returns a dictionary, where keys are swarming pools
+  and values are capacity estimates for corresponding pool,
+  as returned by estimate_capacity function.
+  """
+
+  def get_ids_and_durations():
+    result = []
+    def get_process(build, tmp_filename):
+      properties = get_properties(build)
+      # TODO(phajdan.jr): Handle case where there are more results than limit.
+      return subprocess.Popen([
+          swarming_py, 'query',
+          '-S', 'chromium-swarm.appspot.com',
+          'tasks?tag=master:%s&tag=buildername:%s&tag=buildnumber:%s' % (
+              urllib.quote(properties['mastername']),
+              urllib.quote(properties['buildername']),
+              urllib.quote(str(properties['buildnumber']))),
+          '--json', tmp_filename]), None
+    def collect_result(data, metadata):
+      result.extend({
+          'durations': item['durations'], 'id': item['id']}
+          for item in data['items'] if item)
+    launch_and_collect(builds, get_process, collect_result)
+    return result
+
+  ids_and_durations = get_ids_and_durations()
+
+  def get_pools():
+    result = []
+    def get_process(id_and_durations, tmp_filename):
+      # TODO(phajdan.jr): Handle case where there are more results than limit.
+      return subprocess.Popen([
+          swarming_py, 'query',
+          '-S', 'chromium-swarm.appspot.com',
+          'task/%s/request' % id_and_durations['id'],
+          '--json', tmp_filename]), id_and_durations
+    def collect_result(data, id_and_durations):
+      result.append({
+          'id': id_and_durations['id'],
+          'total_duration': sum(id_and_durations['durations']),
+          'dimensions': data['properties']['dimensions'],
+          'created_ts': datetime.datetime.strptime(
+              data['created_ts'], '%Y-%m-%d %H:%M:%S'),
+      })
+    launch_and_collect(ids_and_durations, get_process, collect_result)
+    pools = {}
+    for r in result:
+      pools.setdefault(frozenset(r['dimensions'].iteritems()), []).append({
+          'build_time_s': r['total_duration'],
+          'timestamp': r['created_ts']})
+    return pools
+
+  pools = get_pools()
+  capacity = {pool : estimate_capacity(requests)
+              for pool, requests in pools.iteritems()}
+  return capacity
+
+
 def main(argv):
   parser = argparse.ArgumentParser()
   parser.add_argument('master')
@@ -100,6 +188,7 @@ def main(argv):
   parser.add_argument('--filter-by-blamelist')
   parser.add_argument('--filter-by-patch-project')
   parser.add_argument('--print-builds', action='store_true')
+  parser.add_argument('--swarming-py', help='Path to swarming.py')
 
   args = parser.parse_args(argv)
 
@@ -128,6 +217,7 @@ def main(argv):
   days = []
   for i in range(args.days):
     days.append(datetime.date.today() - datetime.timedelta(days=(i + 1)))
+  all_builds = []
   for index, pool in enumerate(builder_pools):
     print 'Pool #%d:' % (index + 1)
     pool_capacity = {
@@ -143,7 +233,7 @@ def main(argv):
 
         builds = []
         for build in raw_builds:
-          properties = {p[0]: p[1] for p in build.get('properties', [])}
+          properties = get_properties(build)
           if (args.filter_by_patch_project and
               properties.get('patch_project') != args.filter_by_patch_project):
             continue
@@ -157,6 +247,7 @@ def main(argv):
             continue
 
           builds.append(build)
+          all_builds.append(build)
 
         capacity = estimate_buildbot_capacity(builds)
         for key in ('hourly_bots', 'daily_bots'):
@@ -191,6 +282,17 @@ def main(argv):
         pool_capacity['daily_bots'],
         pool_capacity['hourly_bots'],
         len(pool['slave_set']))
+
+  if args.swarming_py:
+    swarming_capacity = estimate_swarming_capacity(args.swarming_py, all_builds)
+    if swarming_capacity:
+      print 'Swarming pools:'
+      for pool, capacity in swarming_capacity.iteritems():
+        formatted_pool = ', '.join(sorted(':'.join(d) for d in pool))
+        print '  %-86s %5.1f %5.1f' % (
+            formatted_pool,
+            capacity['daily_bots'],
+            capacity['hourly_bots'])
 
   return 0
 
