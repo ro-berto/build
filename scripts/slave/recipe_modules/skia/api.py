@@ -316,6 +316,7 @@ class SkiaApi(recipe_api.RecipeApi):
     # Run DM.
     args = [
       'dm',
+      '--undefok',   # This helps branches that may not know new flags.
       '--verbose',
       '--resourcePath', self.device_dirs.resource_dir,
       '--skps',         self.device_dirs.skp_dir,
@@ -394,8 +395,12 @@ class SkiaApi(recipe_api.RecipeApi):
       self.flavor.create_clean_device_dir(self.device_dirs.perf_data_dir)
 
     # Run nanobench.
-    args = ['nanobench', '-i', self.device_dirs.resource_dir,
-            '--skps', self.device_dirs.skp_dir]
+    args = [
+        'nanobench',
+        '--undefok',   # This helps branches that may not know new flags.
+        '-i', self.device_dirs.resource_dir,
+        '--skps', self.device_dirs.skp_dir
+    ]
 
     skip_flag = None
     if self.c.builder_cfg.get('cpu_or_gpu') == 'CPU':

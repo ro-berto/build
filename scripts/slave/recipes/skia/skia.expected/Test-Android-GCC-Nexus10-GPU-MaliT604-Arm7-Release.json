@@ -630,6 +630,7 @@
       "R32CB017X2L",
       "--release",
       "dm",
+      "--undefok",
       "--verbose",
       "--resourcePath",
       "/storage/emulated/legacy/skiabot/skia_resources",

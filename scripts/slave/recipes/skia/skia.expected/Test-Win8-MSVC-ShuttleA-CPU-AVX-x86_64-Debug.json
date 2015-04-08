@@ -374,6 +374,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]\\skia\\out\\Debug_x64\\dm",
+      "--undefok",
       "--verbose",
       "--resourcePath",
       "[SLAVE_BUILD]\\skia\\resources",
@@ -446,6 +447,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]\\skia\\out\\Debug_x64\\nanobench",
+      "--undefok",
       "-i",
       "[SLAVE_BUILD]\\skia\\resources",
       "--skps",

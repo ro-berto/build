@@ -355,6 +355,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/skia/out/Release/dm",
+      "--undefok",
       "--verbose",
       "--resourcePath",
       "[SLAVE_BUILD]/skia/resources",

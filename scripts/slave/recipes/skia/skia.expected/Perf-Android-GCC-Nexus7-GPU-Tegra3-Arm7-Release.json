@@ -402,6 +402,7 @@
       "015d210a13480604",
       "--release",
       "nanobench",
+      "--undefok",
       "-i",
       "/storage/emulated/legacy/skiabot/skia_resources",
       "--skps",

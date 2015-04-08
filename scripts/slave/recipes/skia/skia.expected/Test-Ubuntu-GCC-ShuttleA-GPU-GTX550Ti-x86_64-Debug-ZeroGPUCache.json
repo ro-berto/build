@@ -373,6 +373,7 @@
     "cmd": [
       "catchsegv",
       "[SLAVE_BUILD]/skia/out/Debug/dm",
+      "--undefok",
       "--verbose",
       "--resourcePath",
       "[SLAVE_BUILD]/skia/resources",

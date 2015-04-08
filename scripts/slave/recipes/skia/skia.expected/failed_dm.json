@@ -333,6 +333,7 @@
     "cmd": [
       "catchsegv",
       "[SLAVE_BUILD]/skia/out/Debug/dm",
+      "--undefok",
       "--verbose",
       "--resourcePath",
       "[SLAVE_BUILD]/skia/resources",
@@ -410,6 +411,7 @@
     "cmd": [
       "catchsegv",
       "[SLAVE_BUILD]/skia/out/Debug/nanobench",
+      "--undefok",
       "-i",
       "[SLAVE_BUILD]/skia/resources",
       "--skps",

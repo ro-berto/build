@@ -286,6 +286,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]\\skia\\out\\Release\\nanobench",
+      "--undefok",
       "-i",
       "[SLAVE_BUILD]\\skia\\resources",
       "--skps",
