@@ -32,7 +32,6 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'tester',
-      'disable_runhooks': True,
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
@@ -54,7 +53,6 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'tester',
-      'disable_runhooks': True,
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
@@ -75,7 +73,6 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'tester',
-      'disable_runhooks': True,
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
@@ -112,7 +109,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'disable_runhooks': True,
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
@@ -167,7 +163,6 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'tester',
-      'disable_runhooks': True,
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
@@ -185,7 +180,6 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'tester',
-      'disable_runhooks': True,
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
