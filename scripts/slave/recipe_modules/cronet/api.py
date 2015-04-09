@@ -84,9 +84,10 @@ class CronetApi(recipe_api.RecipeApi):
     droid = self.m.chromium_android
     checkout_path = self.m.path['checkout']
     droid.common_tests_setup_steps()
-    for suite in INSTRUMENTATION_TESTS:
-      droid.run_instrumentation_suite(
-          suite['test'], verbose=True,
-          **suite.get('kwargs', {}))
-    droid.common_tests_final_steps()
+    with self.m.step.defer_results():
+      for suite in INSTRUMENTATION_TESTS:
+        droid.run_instrumentation_suite(
+            suite['test'], verbose=True,
+            **suite.get('kwargs', {}))
+      droid.common_tests_final_steps()
 
