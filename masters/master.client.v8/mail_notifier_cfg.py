@@ -48,6 +48,7 @@ exclusions = {
   'V8 Mips - builder': [],
   'V8 Mips - big endian - nosnap - 1': [],
   'V8 Mips - big endian - nosnap - 2': [],
+  'V8 Linux - x87 - nosnap - debug builder': [],
   'V8 Linux - x87 - nosnap - debug': [],
   'V8 Linux - predictable': [],
   'V8 Linux64 - custom snapshot - debug': [],
@@ -58,7 +59,7 @@ exclusions = {
 forgiving_steps = ['update_scripts', 'update', 'svnkill', 'taskkill',
                    'gclient_revert']
 
-x87_categories_steps = {'x87': ['runhooks', 'compile', 'Check']}
+x87_categories_steps = {'x87': ['runhooks', 'compile', 'Unittests', 'Check']}
 vtunejit_categories_steps = {'vtunejit': ['runhooks', 'compile']}
 mem_sheriff_categories_steps = {'mem_sheriff': v8_steps}
 predictable_categories_steps = {'predictable': v8_steps}
