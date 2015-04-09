@@ -215,12 +215,14 @@ ENABLED_MASTERS = [
     'chromium.fyi',
     'chromium.gpu',
     'chromium.gpu.fyi',
+    'chromium.infra',
     'chromium.linux',
     'chromium.lkgr',
     'chromium.mac',
     'chromium.memory',
     'chromium.memory.fyi',
     'chromium.perf',
+    'chromium.perf.fyi',
     'chromium.swarm',
     'chromium.webkit',
     'chromium.webrtc',
@@ -246,7 +248,6 @@ ENABLED_MASTERS = [
     'tryserver.nacl',
     'tryserver.v8',
     'tryserver.webrtc',
-    'chromium.perf.fyi',
 ]
 ENABLED_MASTERS += internal_data.get('ENABLED_MASTERS', [])
 
