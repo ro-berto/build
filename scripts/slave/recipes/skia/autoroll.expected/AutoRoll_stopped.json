@@ -87,7 +87,7 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport json\nimport re\nimport sys\nimport urllib2\n\nsys.path.insert(0, sys.argv[4])\nimport rietveld\n\n# Find the active roll, if it exists.\nres = json.load(urllib2.urlopen(\n    '%s/search?closed=3&owner=%s&format=json' % (sys.argv[1], sys.argv[2])\n))['results']\nissue = None\nfor i in res:\n  if re.search('Roll src/third_party/skia .*:.*', i['subject']):\n    issue = i\n    break\n\n# Report back the issue number.\nwith open(sys.argv[3], 'w') as f:\n  json.dump({'issue': issue['issue'] if issue else None}, f)\n\n# Uncheck the 'commit' box.\nif issue and issue['commit']:\n  r = rietveld.Rietveld(sys.argv[1], sys.argv[2], None, None)\n  r.set_flag(issue['issue'], issue['patchsets'][-1], 'commit', False)\n",
+      "\nimport json\nimport re\nimport sys\nimport urllib2\n\nsys.path.insert(0, sys.argv[4])\nimport rietveld\n\n# Find the active roll, if it exists.\nres = json.load(urllib2.urlopen(\n    '%s/search?closed=3&owner=%s&format=json' % (sys.argv[1], sys.argv[2])\n))['results']\nissue = None\nfor i in res:\n  if re.search('Roll src/third_party/skia .*:.*', i['subject']):\n    issue = i\n    break\n\n# Report back the issue number.\nwith open(sys.argv[3], 'w') as f:\n  json.dump({'issue': issue['issue'] if issue else None}, f)\n\n# Uncheck the 'commit' box.\nif issue and issue['commit']:\n  r = rietveld.Rietveld(sys.argv[1], None, sys.argv[2])\n  r.set_flag(issue['issue'], issue['patchsets'][-1], 'commit', False)\n",
       "https://codereview.chromium.org",
       "skia-deps-roller@chromium.org",
       "/path/to/tmp/json",
@@ -124,7 +124,7 @@
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@# Uncheck the 'commit' box.@@@",
       "@@@STEP_LOG_LINE@python.inline@if issue and issue['commit']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  r = rietveld.Rietveld(sys.argv[1], sys.argv[2], None, None)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  r = rietveld.Rietveld(sys.argv[1], None, sys.argv[2])@@@",
       "@@@STEP_LOG_LINE@python.inline@  r.set_flag(issue['issue'], issue['patchsets'][-1], 'commit', False)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]

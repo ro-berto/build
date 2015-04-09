@@ -139,7 +139,7 @@ def GenSteps(api):
 
       # Uncheck the 'commit' box.
       if issue and issue['commit']:
-        r = rietveld.Rietveld(sys.argv[1], sys.argv[2], None, None)
+        r = rietveld.Rietveld(sys.argv[1], None, sys.argv[2])
         r.set_flag(issue['issue'], issue['patchsets'][-1], 'commit', False)
       ''',
       args=[RIETVELD_URL, DEPS_ROLL_AUTHOR, api.json.output(),

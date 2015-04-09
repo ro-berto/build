@@ -36,6 +36,7 @@ sys.path.insert(0, SCRIPTS_DIR)
 # pylint: disable=W0611
 from common import find_depot_tools
 
+import auth
 import rietveld
 import roll_dep
 import scm
@@ -157,12 +158,12 @@ class AutoRoller(object):
     Please email (%(admin)s) if the Rollbot is causing trouble.
     ''' % {'admin': ADMIN_EMAIL, 'stop_nag_timeout': STOP_NAG_TIME_LIMIT})
 
-  def __init__(self, project, author, path_to_chrome):
+  def __init__(self, project, author, path_to_chrome, auth_config=None):
     self._author = author
     self._project = project
     self._path_to_chrome = path_to_chrome
     self._rietveld = rietveld.Rietveld(
-      self.RIETVELD_URL, self._author, None)
+      self.RIETVELD_URL, auth_config, self._author)
     self._cached_last_roll_revision = None
 
     project_config = PROJECT_CONFIGS.get(self._project, {
@@ -393,12 +394,14 @@ def main():
   parser = optparse.OptionParser(usage=usage,
                                  description=sys.modules[__name__].__doc__,
                                  formatter=VanillaHelpFormatter())
-  _, args = parser.parse_args()
+  auth.add_auth_options(parser)
+  options, args = parser.parse_args()
+  auth_config = auth.extract_auth_config_from_options(options)
   if len(args) != 3:
     parser.print_usage()
     return 1
 
-  AutoRoller(*args).main()
+  AutoRoller(*args, auth_config=auth_config).main()
 
 
 if __name__ == '__main__':
