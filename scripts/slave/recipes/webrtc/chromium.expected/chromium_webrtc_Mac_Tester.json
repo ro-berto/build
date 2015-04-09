@@ -207,9 +207,9 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac Tester\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc\", \"parent_buildername\": \"Mac Builder\", \"parent_got_revision\": \"c321321\", \"recipe\": \"webrtc/chromium\", \"revision\": \"c321321\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
-      "--perf-dashboard-id=content_browsertests_new_vie",
+      "--perf-dashboard-id=content_browsertests_old_vie",
       "--perf-id=chromium-webrtc-rel-mac",
-      "--test-type=content_browsertests_new_vie",
+      "--test-type=content_browsertests_old_vie",
       "--builder-name=Mac Tester",
       "--slave-name=TestSlavename",
       "--build-number=571",
@@ -221,9 +221,9 @@
       "--test-launcher-bot-mode",
       "--variations-server-url=https://clients4.google.com/chrome-variations/seed",
       "--fake-variations-channel=canary",
-      "--force-fieldtrials=WebRTC-NewVideoAPI/Enabled/"
+      "--force-fieldtrials=WebRTC-NewVideoAPI/Disabled/"
     ],
-    "name": "content_browsertests_new_vie"
+    "name": "content_browsertests_old_vie"
   },
   {
     "allow_subannotations": true,
@@ -239,9 +239,9 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac Tester\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc\", \"parent_buildername\": \"Mac Builder\", \"parent_got_revision\": \"c321321\", \"recipe\": \"webrtc/chromium\", \"revision\": \"c321321\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
-      "--perf-dashboard-id=browser_tests_new_vie",
+      "--perf-dashboard-id=browser_tests_old_vie",
       "--perf-id=chromium-webrtc-rel-mac",
-      "--test-type=browser_tests_new_vie",
+      "--test-type=browser_tests_old_vie",
       "--builder-name=Mac Tester",
       "--slave-name=TestSlavename",
       "--build-number=571",
@@ -255,9 +255,9 @@
       "--test-launcher-print-test-stdio=always",
       "--variations-server-url=https://clients4.google.com/chrome-variations/seed",
       "--fake-variations-channel=canary",
-      "--force-fieldtrials=WebRTC-NewVideoAPI/Enabled/"
+      "--force-fieldtrials=WebRTC-NewVideoAPI/Disabled/"
     ],
-    "name": "browser_tests_new_vie"
+    "name": "browser_tests_old_vie"
   },
   {
     "allow_subannotations": true,

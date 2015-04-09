@@ -218,11 +218,11 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"WinXP Tester\", \"buildnumber\": 571, \"got_libjingle_revision\": \"1161aa63\", \"got_revision\": \"c321321\", \"got_webrtc_revision\": \"deadbeef\", \"mastername\": \"chromium.webrtc.fyi\", \"parent_buildername\": \"Win Builder\", \"parent_got_libjingle_revision\": \"1161aa63\", \"parent_got_revision\": \"c321321\", \"parent_got_webrtc_revision\": \"deadbeef\", \"recipe\": \"webrtc/chromium\", \"revision\": \"deadbeef\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
-      "--perf-dashboard-id=content_browsertests_new_vie",
+      "--perf-dashboard-id=content_browsertests_old_vie",
       "--perf-id=chromium-webrtc-trunk-tot-rel-winxp",
       "--perf-config",
       "{'a_default_rev': 'r_webrtc_rev'}",
-      "--test-type=content_browsertests_new_vie",
+      "--test-type=content_browsertests_old_vie",
       "--builder-name=WinXP Tester",
       "--slave-name=TestSlavename",
       "--build-number=571",
@@ -234,9 +234,9 @@
       "--test-launcher-bot-mode",
       "--variations-server-url=https://clients4.google.com/chrome-variations/seed",
       "--fake-variations-channel=canary",
-      "--force-fieldtrials=WebRTC-NewVideoAPI/Enabled/"
+      "--force-fieldtrials=WebRTC-NewVideoAPI/Disabled/"
     ],
-    "name": "content_browsertests_new_vie"
+    "name": "content_browsertests_old_vie"
   },
   {
     "allow_subannotations": true,
@@ -267,9 +267,9 @@
       "--test-launcher-print-test-stdio=always",
       "--variations-server-url=https://clients4.google.com/chrome-variations/seed",
       "--fake-variations-channel=canary",
-      "--force-fieldtrials=WebRTC-NewVideoAPI/Enabled/"
+      "--force-fieldtrials=WebRTC-NewVideoAPI/Disabled/"
     ],
-    "name": "browser_tests_new_vie"
+    "name": "browser_tests_old_vie"
   },
   {
     "allow_subannotations": true,

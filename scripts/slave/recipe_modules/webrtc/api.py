@@ -234,12 +234,12 @@ class WebRTCApi(recipe_api.RecipeApi):
         # physical audio/video devices.
         self._add_webrtc_browser_tests()
 
-        # Same tests but running with the new Video Engine API.
+        # Same tests but running with the old Video Engine API.
         variations_server = 'https://clients4.google.com/chrome-variations/seed'
         extra_args=['--variations-server-url=%s' % variations_server,
                     '--fake-variations-channel=canary',
-                    '--force-fieldtrials=WebRTC-NewVideoAPI/Enabled/']
-        self._add_webrtc_browser_tests(extra_args, suffix='_new_vie')
+                    '--force-fieldtrials=WebRTC-NewVideoAPI/Disabled/']
+        self._add_webrtc_browser_tests(extra_args, suffix='_old_vie')
         self.add_test('content_unittests')
       elif self.c.TEST_SUITE == 'android':
         self.m.chromium_android.common_tests_setup_steps()
