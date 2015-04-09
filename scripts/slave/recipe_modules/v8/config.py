@@ -7,8 +7,8 @@ from slave.recipe_config import List, Set, Single, Static
 
 
 # TODO(machenbach): Move this to an external configuration file.
-STABLE_BRANCH = '4.1'
-BETA_BRANCH = '4.2'
+STABLE_BRANCH = '4.2'
+BETA_BRANCH = '4.3'
 
 
 def BaseConfig(**_kwargs):
