@@ -54,6 +54,8 @@ def GenSteps(api):
   api.chromium.run_gn(use_goma=True)
 
   api.chromium.compile(targets=['html_viewer_unittests',
+                                'mojo/services/html_viewer',
+                                'mojo/services/html_viewer:apptests',
                                 'mojo/services/network',
                                 'mojo/services/network:apptests'])
 

@@ -102,6 +102,8 @@
       "[BUILD]/goma",
       "--",
       "html_viewer_unittests",
+      "mojo/services/html_viewer",
+      "mojo/services/html_viewer:apptests",
       "mojo/services/network",
       "mojo/services/network:apptests"
     ],
