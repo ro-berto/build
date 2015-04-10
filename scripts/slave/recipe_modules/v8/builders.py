@@ -1419,6 +1419,24 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
+      'v8_linux_mipsel_compile_rel': {
+        'chromium_apply_config': ['simulate_mipsel', 'v8_goma', 'no_dcheck'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
+      },
+      'v8_linux_mips64el_compile_rel': {
+        'chromium_apply_config': ['simulate_mipsel', 'v8_goma', 'no_dcheck'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
+      },
     },
   },
 ####### Waterfall: client.dynamorio
