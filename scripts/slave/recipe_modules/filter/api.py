@@ -80,6 +80,8 @@ class FilterApi(recipe_api.RecipeApi):
                                  compile_targets=None,
                                  additional_names=None,
                                  config_file_name='trybot_analyze_config.json',
+                                 use_mb=False,
+                                 build_output_dir=None,
                                  **kwargs):
     """Return true if the current patch requires a build (and exes to run).
     Return value can be accessed by call to result().
@@ -137,14 +139,35 @@ class FilterApi(recipe_api.RecipeApi):
     kwargs['env'].update(self.m.chromium.c.gyp_env.as_jsonish())
 
     try:
-      step_result = self.m.python('analyze',
-                          self.m.path['checkout'].join('build', 'gyp_chromium'),
-                          args=['--analyzer',
-                                self.m.json.input(analyze_input),
-                                self.m.json.output()],
-                          step_test_data=lambda: self.m.json.test_api.output(
-                            test_output),
-                          **kwargs)
+      if use_mb:
+        if 'env' in kwargs:
+          # Ensure that mb runs in a clean environment to avoid
+          # picking up any GYP_DEFINES accidentally.
+          del kwargs['env']
+        step_result = self.m.python(
+            'analyze',
+            self.m.path['checkout'].join('tools', 'mb', 'mb.py'),
+            args=['analyze',
+                  '-m',
+                  self.m.properties.get('mastername'),
+                  '-b',
+                  self.m.properties.get('buildername'),
+                  build_output_dir,
+                  self.m.json.input(analyze_input),
+                  self.m.json.output()],
+            step_test_data=lambda: self.m.json.test_api.output(
+              test_output),
+            **kwargs)
+      else:
+        step_result = self.m.python(
+            'analyze',
+            self.m.path['checkout'].join('build', 'gyp_chromium'),
+            args=['--analyzer',
+                  self.m.json.input(analyze_input),
+                  self.m.json.output()],
+            step_test_data=lambda: self.m.json.test_api.output(
+              test_output),
+            **kwargs)
     except self.m.step.StepFailure as f:
       # TODO(sky): Make it fatal everywhere, http://crbug.com/461811 .
       if self.m.platform.is_mac:

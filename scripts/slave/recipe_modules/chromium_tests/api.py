@@ -680,7 +680,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       raise
 
   def analyze(self, affected_files, exes, compile_targets, config_file_name,
-              additional_names=None):
+              additional_names=None, use_mb=False, build_output_dir=None):
     """Runs "analyze" step to determine targets affected by the patch.
 
     Returns a tuple of:
@@ -699,7 +699,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         exes=exes,
         compile_targets=compile_targets,
         additional_names=additional_names,
-        config_file_name=config_file_name)
+        config_file_name=config_file_name,
+        use_mb=use_mb,
+        build_output_dir=build_output_dir)
 
     if not self.m.filter.result:
       # Patch does not require compile.

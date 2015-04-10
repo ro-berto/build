@@ -562,6 +562,15 @@ class ChromiumApi(recipe_api.RecipeApi):
             '--args=%s' % ' '.join(gn_args),
         ])
 
+  def run_mb(self, mastername, buildername):
+    # This runs with no env being passed along, so we get a clean environment
+    # without any GYP_DEFINES being present to cause confusion.
+    self.m.python(
+        name='mb gen',
+        script=self.m.path['checkout'].join('tools', 'mb', 'mb.py'),
+        args=['gen', '-m', mastername, '-b', buildername,
+              "//out/" + self.c.build_config_fs])
+
   def run_gn_check(self):
     # TODO(dpranke): Figure out if we should use the '_x64' thing to
     # consistent w/ GYP, or drop it to be consistent w/ the other platforms.
