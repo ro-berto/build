@@ -8,6 +8,14 @@
       "slave_pools": ["linux_precise"],
       "slavebuilddir": "chromium_mojo",
     },
+    "Chromium Mojo Android": {
+      "properties": {
+        "config": "Release",
+      },
+      "recipe": "chromium_mojo",
+      "slave_pools": ["linux_precise_android"],
+      "slavebuilddir": "chromium_mojo",
+    },
   },
   "git_repo_url": "https://chromium.googlesource.com/chromium/src.git",
   "master_base_class": "Master1",
@@ -23,6 +31,14 @@
         "version": "precise",
       },
       "slaves": ["vm46-m1"],
+    },
+    "linux_precise_android": {
+      "slave_data": {
+        "bits": 64,
+        "os":  "linux",
+        "version": "precise",
+      },
+      "slaves": ["build46-a95"],
     },
   },
   "templates": ["../master.chromium/templates"],

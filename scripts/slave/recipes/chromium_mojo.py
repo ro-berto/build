@@ -9,6 +9,7 @@ DEPS = [
   'bot_update',
   'chromium',
   'path',
+  'properties',
   'python',
   'step',
 ]
@@ -21,6 +22,12 @@ BUILDERS = freeze({
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'linux',
+        },
+      },
+      'Chromium Mojo Android': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'android',
         },
       },
     },
@@ -37,6 +44,7 @@ def _RunApptests(api):
 
 def GenSteps(api):
   _, bot_config = api.chromium.configure_bot(BUILDERS, ['gn'])
+  is_android = 'Android' in api.properties.get('buildername')
 
   api.bot_update.ensure_checkout(force=True,
                                  patch_root=bot_config.get('root_override'))
@@ -51,7 +59,8 @@ def GenSteps(api):
 
   with api.step.defer_results():
     api.chromium.runtest('html_viewer_unittests')
-    _RunApptests(api)
+    if not is_android:
+      _RunApptests(api)
 
 
 def GenTests(api):
