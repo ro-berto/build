@@ -30,6 +30,7 @@ deps_os = {
 
 hooks = [
   {
+    "name": "cros_chromite",
     "pattern": r".*/cros_chromite\.py",
     "action": [
       "python", "build/scripts/tools/runit.py", "python",
