@@ -104,7 +104,7 @@
         ]
       }
     ],
-    "https://build.chromium.org/i/chromium.infra": [
+    "https://build.chromium.org/p/chromium.infra": [
       {
         "builders": {
           "infra-continuous-trusty-64": {
