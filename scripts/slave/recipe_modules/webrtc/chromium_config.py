@@ -11,7 +11,7 @@ from slave.recipe_config_types import Path
 SUPPORTED_TARGET_ARCHS = ('intel', 'arm')
 
 
-@CONFIG_CTX(includes=['chromium'])
+@CONFIG_CTX(includes=['chromium', 'dcheck'])
 def webrtc_standalone(c):
   _compiler_defaults(c)
 
@@ -21,15 +21,15 @@ def webrtc_standalone(c):
                                                       'mac': '.sh',
                                                       'linux': '.sh'})
 
-@CONFIG_CTX(includes=['chromium_clang'])
+@CONFIG_CTX(includes=['chromium_clang', 'dcheck'])
 def webrtc_clang(c):
   _compiler_defaults(c)
 
-@CONFIG_CTX(includes=['chromium', '_webrtc_ios'])
+@CONFIG_CTX(includes=['chromium', 'dcheck', '_webrtc_ios'])
 def webrtc_ios32(c):
   pass
 
-@CONFIG_CTX(includes=['chromium_no_goma', '_webrtc_ios'])
+@CONFIG_CTX(includes=['chromium_no_goma', 'dcheck', '_webrtc_ios'])
 def webrtc_ios64(c):
   pass
 
