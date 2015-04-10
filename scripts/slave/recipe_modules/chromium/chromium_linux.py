@@ -194,9 +194,6 @@ SPEC = {
         steps.GTestTest('ui_base_unittests'),
         steps.GTestTest('ui_touch_selection_unittests'),
         steps.GTestTest('unit_tests'),
-        steps.AndroidJunitTest('junit_unit_tests'),
-        steps.AndroidJunitTest('chrome_junit_tests'),
-        steps.AndroidJunitTest('content_junit_tests'),
       ],
       'test_generators': [
         steps.generate_gtest,
@@ -276,9 +273,6 @@ SPEC = {
         steps.GTestTest('ui_base_unittests'),
         steps.GTestTest('ui_touch_selection_unittests'),
         steps.GTestTest('unit_tests'),
-        steps.AndroidJunitTest('junit_unit_tests'),
-        steps.AndroidJunitTest('chrome_junit_tests'),
-        steps.AndroidJunitTest('content_junit_tests'),
       ],
       'test_generators': [
         steps.generate_gtest,
