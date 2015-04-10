@@ -667,12 +667,15 @@ class AndroidApi(recipe_api.RecipeApi):
         env=self.m.chromium.get_env(),
         **kwargs)
 
-  def run_java_unit_test_suite(self, suite, verbose=True, **kwargs):
+  def run_java_unit_test_suite(self, suite, verbose=True,
+                               json_results_file=None, **kwargs):
     args = []
     if verbose:
       args.append('--verbose')
     if self.c.BUILD_CONFIG == 'Release':
       args.append('--release')
+    if json_results_file:
+      args.extend(['--json-results-file', json_results_file])
 
     self.test_runner(
         str(suite),
