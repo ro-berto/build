@@ -381,6 +381,23 @@
         ]
       }
     ],
+    "https://build.chromium.org/p/client.pdfium": [
+      {
+        "categories": [
+          "pdfium_all"
+        ],
+        "excluded_builders" : [
+        ],
+        "builders": {
+          "*": {}
+        },
+        "tree_notify": [
+            "jam@chromiuim.org",
+            "thestig@chromium.org",
+            "tsepez@chromium.org"
+        ]
+      }
+    ],
     "https://build.chromium.org/p/client.v8": [
       {
         "categories": [
@@ -703,6 +720,15 @@
         "annotate"
       ],
       "subject_template": "buildbot %(result)s in %(project_name)s on %(builder_name)s, revision %(revision)s"
+    },
+    "pdfium_all": {
+      "closing_optional": [
+        "*"
+      ],
+      "forgiving_optional": [
+        "update_scripts",
+        "steps"
+      ]
     },
     "v8_all": {
       "closing_optional": [

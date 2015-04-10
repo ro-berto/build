@@ -90,6 +90,18 @@
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.libvpx\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"pdfium\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"build-db\": \"pdfium_build_db.json\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"masters\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.pdfium\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ], @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"open-tree\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"password-file\": \"/creds/gatekeeper/pdfium_status_password\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"revision-properties\": \"got_revision_cp\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"set-status\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"status-url\": \"https://pdfium-status.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"track-revisions\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"skia\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"build-db\": \"skia_build_db.json\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"masters\": [@@@",
@@ -165,6 +177,29 @@
       "https://build.chromium.org/p/client.libvpx"
     ],
     "name": "gatekeeper: non-closers"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/gatekeeper_ng.py",
+      "-v",
+      "--json",
+      "[BUILD]/scripts/slave/gatekeeper.json",
+      "--status-url",
+      "https://pdfium-status.appspot.com",
+      "--set-status",
+      "--open-tree",
+      "--track-revisions",
+      "--revision-properties",
+      "got_revision_cp",
+      "--build-db",
+      "pdfium_build_db.json",
+      "--password-file",
+      "/creds/gatekeeper/pdfium_status_password",
+      "https://build.chromium.org/p/client.pdfium"
+    ],
+    "name": "gatekeeper: pdfium"
   },
   {
     "cmd": [

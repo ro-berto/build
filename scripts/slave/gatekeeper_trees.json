@@ -66,6 +66,18 @@
         "status-url": "https://naclports-status.appspot.com",
         "track-revisions": false
     },
+    "pdfium": {
+        "build-db": "pdfium_build_db.json",
+        "masters": [
+            "https://build.chromium.org/p/client.pdfium"
+        ],
+        "open-tree": true,
+        "password-file": "/creds/gatekeeper/pdfium_status_password",
+        "revision-properties": "got_revision_cp",
+        "set-status": true,
+        "status-url": "https://pdfium-status.appspot.com",
+        "track-revisions": true
+    },
     "skia": {
         "build-db": "skia_build_db.json",
         "masters": [
