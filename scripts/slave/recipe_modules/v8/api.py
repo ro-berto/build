@@ -628,16 +628,12 @@ class V8Api(recipe_api.RecipeApi):
     if self.c.nacl.NACL_SDK_ROOT:
       env['NACL_SDK_ROOT'] = self.c.nacl.NACL_SDK_ROOT
 
-    # Default callbacks if the show_test_results feature is turned off.
-    step_test_data = None
-
-    if self.c.testing.show_test_results:
-      full_args += ['--json-test-results',
-                    self.m.json.output(add_json_log=False)]
-      def step_test_data():
-        return self.test_api.output_json(
-            self._test_data.get('test_failures', False),
-            self._test_data.get('wrong_results', False))
+    full_args += ['--json-test-results',
+                  self.m.json.output(add_json_log=False)]
+    def step_test_data():
+      return self.test_api.output_json(
+          self._test_data.get('test_failures', False),
+          self._test_data.get('wrong_results', False))
 
     try:
       self.m.python(
@@ -652,27 +648,26 @@ class V8Api(recipe_api.RecipeApi):
     finally:
       # Show test results independent of the step result.
       step_result = self.m.step.active_result
-      if self.c.testing.show_test_results:
-        r = step_result.json.output
-        # The output is expected to be a list of architecture dicts that
-        # each contain a results list. On buildbot, there is only one
-        # architecture.
-        if (r and isinstance(r, list) and isinstance(r[0], dict)):
-          self._update_test_presentation(r[0]['results'],
-                                         step_result.presentation)
+      r = step_result.json.output
+      # The output is expected to be a list of architecture dicts that
+      # each contain a results list. On buildbot, there is only one
+      # architecture.
+      if (r and isinstance(r, list) and isinstance(r[0], dict)):
+        self._update_test_presentation(r[0]['results'],
+                                       step_result.presentation)
 
-        # Check integrity of the last output. The json list is expected to
-        # contain only one element for one (architecture, build config type)
-        # pair on the buildbot.
-        result = step_result.json.output
-        if result and len(result) > 1:
-          self.m.python.inline(
-              name,
-              r"""
-              import sys
-              print 'Unexpected results set present.'
-              sys.exit(1)
-              """)
+      # Check integrity of the last output. The json list is expected to
+      # contain only one element for one (architecture, build config type)
+      # pair on the buildbot.
+      result = step_result.json.output
+      if result and len(result) > 1:
+        self.m.python.inline(
+            name,
+            r"""
+            import sys
+            print 'Unexpected results set present.'
+            sys.exit(1)
+            """)
 
   def runtest(self, test, **kwargs):
     # Get the flaky-step configuration default per test.

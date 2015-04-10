@@ -1449,11 +1449,7 @@ def AddBranchBuilder(branch_config, build_config, arch, bits, presubmit=False,
   if presubmit:
     tests = ['presubmit'] + tests
   return {
-    'chromium_apply_config': ['no_optimized_debug'],
-    # TODO(machenbach): Switch on test results presentation for branch builders
-    # as soon as stable branch passes v8 revision 21358, where the feature was
-    # introduced.
-    'v8_apply_config': [branch_config, 'no_test_results'],
+    'v8_apply_config': [branch_config],
     'v8_config_kwargs': {
       'BUILD_CONFIG': build_config,
       'TARGET_ARCH': arch,
@@ -1480,7 +1476,7 @@ for build_config, name_suffix in (('Release', ''), ('Debug', ' - debug')):
     name = 'V8 arm - sim - %s%s' % (branch_name, name_suffix)
     BRANCH_BUILDERS[name] = AddBranchBuilder(
         branch_config, build_config, 'intel', 32, unittests=unittests)
-    BRANCH_BUILDERS[name]['chromium_apply_config'].append('simulate_arm')
+    BRANCH_BUILDERS[name]['chromium_apply_config'] = ['simulate_arm']
 
 BUILDERS['client.v8.branches'] = {'builders': BRANCH_BUILDERS}
 

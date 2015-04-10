@@ -57,7 +57,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "target_arch=x64 v8_enable_slow_dchecks=1 v8_optimized_debug=0 v8_target_arch=x64"
+      "GYP_DEFINES": "target_arch=x64 v8_enable_slow_dchecks=1 v8_optimized_debug=1 v8_target_arch=x64"
     },
     "name": "gclient runhooks"
   },
@@ -96,7 +96,9 @@
       "--testname",
       "default",
       "--flaky-tests",
-      "skip"
+      "skip",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Check"
@@ -113,7 +115,9 @@
       "--testname",
       "default",
       "--flaky-tests",
-      "run"
+      "run",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Check - flaky"
@@ -130,7 +134,9 @@
       "--testname",
       "webkit",
       "--flaky-tests",
-      "skip"
+      "skip",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Webkit"
@@ -147,7 +153,9 @@
       "--testname",
       "webkit",
       "--flaky-tests",
-      "run"
+      "run",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Webkit - flaky"
@@ -163,7 +171,9 @@
       "x64",
       "--testname",
       "test262",
-      "--no-variants"
+      "--no-variants",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Test262 - no variants"
@@ -178,7 +188,9 @@
       "--arch",
       "x64",
       "--testname",
-      "mozilla"
+      "mozilla",
+      "--json-test-results",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Mozilla"
