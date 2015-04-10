@@ -96,6 +96,8 @@ class SwarmingApi(recipe_api.RecipeApi):
     self._default_tags = set()
     self._default_user = None
     self._pending_tasks = set()
+    self._show_isolated_out_in_collect_step = True
+    self._show_shards_in_collect_step = False
     self._swarming_server = 'https://chromium-swarm.appspot.com'
     self._verbose = False
 
@@ -182,6 +184,24 @@ class SwarmingApi(recipe_api.RecipeApi):
     """Adds a tag to the Swarming tasks triggered."""
     assert ':' in tag, tag
     self._default_tags.add(tag)
+
+  @property
+  def show_isolated_out_in_collect_step(self):
+    """Show the shard's isolated out link in each collect step."""
+    return self._show_isolated_out_in_collect_step
+
+  @show_isolated_out_in_collect_step.setter
+  def show_isolated_out_in_collect_step(self, value):
+    self._show_isolated_out_in_collect_step = value
+
+  @property
+  def show_shards_in_collect_step(self):
+    """Show the shard link in each collect step."""
+    return self._show_shards_in_collect_step
+
+  @show_shards_in_collect_step.setter
+  def show_shards_in_collect_step(self, value):
+    self._show_shards_in_collect_step = value
 
   @staticmethod
   def prefered_os_dimension(platform):
@@ -489,11 +509,17 @@ class SwarmingApi(recipe_api.RecipeApi):
       try:
         json_data = step_result.json.output
         links = step_result.presentation.links
-        for index, shard in enumerate(json_data['shards']):
-          isolated_out = shard.get('isolated_out')
-          if isolated_out:
-            link_name = 'shard #%d isolated out' % index
-            links[link_name] = isolated_out['view_url']
+        if self.show_shards_in_collect_step:
+          for index in xrange(task.shards):
+            url = task.get_shard_view_url(index)
+            if url:
+              links['shard #%d' % index] = url
+        if self.show_isolated_out_in_collect_step:
+          for index, shard in enumerate(json_data['shards']):
+            isolated_out = shard.get('isolated_out')
+            if isolated_out:
+              link_name = 'shard #%d isolated out' % index
+              links[link_name] = isolated_out['view_url']
         self._display_pending(json_data, step_result.presentation)
       except (KeyError, AttributeError):  # pragma: no cover
         # No isolated_out data exists (or any JSON at all)

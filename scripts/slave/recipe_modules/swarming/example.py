@@ -34,6 +34,11 @@ def GenSteps(api):
 
   api.swarming.set_default_dimension('inexistent', None)
 
+  api.swarming.show_shards_in_collect_step = api.properties.get(
+    'show_shards_in_collect_step', False)
+  api.swarming.show_isolated_out_in_collect_step = api.properties.get(
+    'show_isolated_out_in_collect_step', True)
+
   try:
     # Testing ReadOnlyDict.__setattr__() coverage.
     api.swarming.default_dimensions['invalid'] = 'foo'
@@ -129,3 +134,39 @@ def GenTests(api):
           issue="123",
           patchset="1001",
           simulated_version=(0, 5)))
+
+  yield (
+      api.test('basic_0.5_show_shards_in_collect_step') +
+      api.step_data(
+          'archive for win',
+          stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
+      api.step_data(
+          'archive for linux',
+          stdout=api.raw_io.output('hash_for_linux hello_world.isolated')) +
+      api.step_data(
+          'archive for mac',
+          stdout=api.raw_io.output('hash_for_mac hello_world.isolated')) +
+      api.properties(
+          rietveld="https://codereview.chromium.org",
+          issue="123",
+          patchset="1001",
+          simulated_version=(0, 5),
+          show_shards_in_collect_step=True))
+
+  yield (
+      api.test('basic_0.5_show_isolated_out_in_collect_step') +
+      api.step_data(
+          'archive for win',
+          stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
+      api.step_data(
+          'archive for linux',
+          stdout=api.raw_io.output('hash_for_linux hello_world.isolated')) +
+      api.step_data(
+          'archive for mac',
+          stdout=api.raw_io.output('hash_for_mac hello_world.isolated')) +
+      api.properties(
+          rietveld="https://codereview.chromium.org",
+          issue="123",
+          patchset="1001",
+          simulated_version=(0, 5),
+          show_isolated_out_in_collect_step=False))
