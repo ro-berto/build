@@ -54,6 +54,8 @@ hooks = [
     '-v'
 ],
     'pattern':
-         '.*/cros_chromite\\.py'
+         '.*/cros_chromite\\.py',
+    'name':
+         'cros_chromite'
 }
 ]
