@@ -167,6 +167,7 @@
       "tryserver.chromium.mac",
       "-b",
       "mac_chromium_gn_dbg",
+      "-v",
       "//out/Debug",
       "{\"files\": [\"foo.cc\"], \"targets\": [\"base_unittests\", \"all\"]}",
       "/path/to/tmp/json"
