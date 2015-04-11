@@ -568,7 +568,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     args=['gen', '-v', '-m', mastername, '-b', buildername]
     if use_goma:
         args += ['--goma-dir', self.m.path['build'].join('goma') ]
-    args += ['//out' + self.c.build_config_fs]
+    args += ['//out/%s' % self.c.build_config_fs]
     self.m.python(name='mb gen',
                   script=self.m.path['checkout'].join('tools', 'mb', 'mb.py'),
                   args=args)

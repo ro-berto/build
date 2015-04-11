@@ -92,7 +92,7 @@
       "mac_chromium_gn_dbg",
       "--goma-dir",
       "[BUILD]/goma",
-      "//outDebug"
+      "//out/Debug"
     ],
     "name": "mb gen"
   },
