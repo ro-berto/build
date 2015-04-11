@@ -341,7 +341,7 @@ def _GenStepsInternal(api):
     # the runhooks step.
     api.chromium.runhooks()
 
-    api.chromium.run_mb(mastername, buildername)
+    api.chromium.run_mb(mastername, buildername, use_goma=True)
 
     # TODO(dpranke): Unify this with the logic in the chromium_trybot and
     # chromium recipes so that we can actually run the tests as well

@@ -85,11 +85,14 @@
       "-u",
       "[SLAVE_BUILD]/src/tools/mb/mb.py",
       "gen",
+      "-v",
       "-m",
       "tryserver.chromium.mac",
       "-b",
       "mac_chromium_gn_dbg",
-      "//out/Debug"
+      "--goma-dir",
+      "[BUILD]/goma",
+      "//outDebug"
     ],
     "name": "mb gen"
   },
