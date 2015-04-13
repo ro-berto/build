@@ -124,7 +124,7 @@ Build #{{ b.getNumber() }}
                    b.getProperty('mastername') }}/{{ b.getBuilder().getName()
                    }}/{{ '%.7d' % b.getNumber() }}/{{ s.name|replace('/', '_') }}.{{
                    l.name|replace('/', '_') }}"
-             title="Link toward the raw log stored on Google Cloud Storage">cache</a>
+             title="Raw file stored on Google Cloud Storage (available after up to 5 min after end of build)">cache</a>
 </li>
       {% else %}
         <li class="{{ item_class.next() }}">- no logs -</li>
