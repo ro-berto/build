@@ -25,6 +25,14 @@ INSTRUMENTATION_TESTS = freeze([
   'ChromeSyncShellTest',
 ])
 
+FYI_INSTRUMENTATION_TESTS = freeze([
+  'AndroidWebViewTest',
+  'ChromeShellTest',
+  'ContentShellTest',
+  'ChromeSyncShellTest',
+  'ChromotingIntegrationTest',
+])
+
 UNIT_TESTS = freeze([
   ['android_webview_unittests', None],
   ['base_unittests', None],
@@ -98,7 +106,7 @@ BUILDERS = freeze({
   'chromium.fyi': {
     'Android Tests (N5)': {
       'config': 'trybot_builder',
-      'instrumentation_tests': INSTRUMENTATION_TESTS,
+      'instrumentation_tests': FYI_INSTRUMENTATION_TESTS,
       'unittests': UNIT_TESTS + (('device_unittests', None),),
       'java_unittests': JAVA_UNIT_TESTS + JAVA_ROBOLECTRIC_UNIT_TESTS,
       'python_unittests': PYTHON_UNIT_TESTS,
