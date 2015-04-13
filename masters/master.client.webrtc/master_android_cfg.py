@@ -18,7 +18,7 @@ def Update(c):
           'Android Builder',
           'Android Builder (dbg)',
           'Android Clang (dbg)',
-          'Android ARM64 Builder (dbg)',
+          'Android ARM64 Builder',
           'Android GN',
           'Android GN (dbg)',
       ]),
@@ -26,8 +26,8 @@ def Update(c):
           'Android Tests (L Nexus5)(dbg)',
           'Android Tests (L Nexus7.2)(dbg)',
       ]),
-      Triggerable(name='android_trigger_arm64_dbg', builderNames=[
-          'Android Tests (L Nexus9)(dbg)',
+      Triggerable(name='android_trigger_arm64_rel', builderNames=[
+          'Android Tests (L Nexus9)',
       ]),
       Triggerable(name='android_trigger_rel', builderNames=[
           'Android Tests (L Nexus5)',
@@ -51,8 +51,8 @@ def Update(c):
       'slavebuilddir': 'android_clang',
     },
     {
-      'name': 'Android ARM64 Builder (dbg)',
-      'triggers': ['android_trigger_arm64_dbg'],
+      'name': 'Android ARM64 Builder',
+      'triggers': ['android_trigger_arm64_rel'],
       'slavebuilddir': 'android_arm64',
     },
     {
@@ -65,7 +65,7 @@ def Update(c):
     },
     {'name': 'Android Tests (L Nexus5)(dbg)'},
     {'name': 'Android Tests (L Nexus7.2)(dbg)'},
-    {'name': 'Android Tests (L Nexus9)(dbg)'},
+    {'name': 'Android Tests (L Nexus9)'},
     {'name': 'Android Tests (L Nexus5)'},
     {'name': 'Android Tests (L Nexus7.2)'},
   ]

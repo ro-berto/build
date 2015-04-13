@@ -70,7 +70,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     'android_dbg_archive_arm64_fyi': ('gs://chromium-webrtc/'
                                       'android_chromium_trunk_arm64_dbg'),
     'android_apk_dbg_archive': 'gs://chromium-webrtc/android_dbg',
-    'android_apk_arm64_dbg_archive': 'gs://chromium-webrtc/android_arm64_dbg',
+    'android_apk_arm64_rel_archive': 'gs://chromium-webrtc/android_arm64_rel',
     'android_apk_rel_archive': 'gs://chromium-webrtc/android_rel',
     'win_rel_archive': 'gs://chromium-webrtc/Win Builder',
     'win_rel_archive_fyi': 'gs://chromium-webrtc/win_rel-fyi',

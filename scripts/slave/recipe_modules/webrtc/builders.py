@@ -829,16 +829,16 @@ BUILDERS = freeze({
         'build_gs_archive': 'android_apk_dbg_archive',
         'testing': {'platform': 'linux'},
       },
-      'Android ARM64 Builder (dbg)': {
+      'Android ARM64 Builder': {
         'recipe_config': 'webrtc_android',
         'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
+          'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder',
-        'build_gs_archive': 'android_apk_arm64_dbg_archive',
+        'build_gs_archive': 'android_apk_arm64_rel_archive',
         'testing': {'platform': 'linux'},
       },
       'Android Clang (dbg)': {
@@ -934,17 +934,20 @@ BUILDERS = freeze({
         'build_gs_archive': 'android_apk_rel_archive',
         'testing': {'platform': 'linux'},
       },
-      'Android Tests (L Nexus9)(dbg)': {
+      'Android Tests (L Nexus9)': {
         'recipe_config': 'webrtc_android',
         'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
+          'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 64,
         },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'webrtc-android-tests-nexus9',
+        },
         'bot_type': 'tester',
-        'parent_buildername': 'Android ARM64 Builder (dbg)',
-        'build_gs_archive': 'android_apk_arm64_dbg_archive',
+        'parent_buildername': 'Android ARM64 Builder',
+        'build_gs_archive': 'android_apk_arm64_rel_archive',
         'testing': {'platform': 'linux'},
       },
     },
@@ -1412,10 +1415,10 @@ BUILDERS = freeze({
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
       },
-      'android_arm64': {
+      'android_arm64_rel': {
         'recipe_config': 'webrtc_android',
         'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
+          'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 64,
