@@ -19,7 +19,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "chromite@checkout-this-chromite-branch",
+      "chromite@checkout-this-chromite-branch:",
       "--force"
     ],
     "name": "bot_update",

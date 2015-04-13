@@ -19,7 +19,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "chromite@master",
+      "chromite@master:",
       "--force"
     ],
     "name": "bot_update",

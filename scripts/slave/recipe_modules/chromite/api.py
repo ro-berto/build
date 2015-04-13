@@ -101,8 +101,8 @@ class ChromiteApi(recipe_api.RecipeApi):
       # Automatic command?
       match = self._MANIFEST_CMD_RE.match(line)
       if match:
-        self.c.chromite_revision = match.group(2)
-        loaded.append('Chromite branch: %s' % (self.c.chromite_revision,))
+        self.c.chromite_branch = match.group(2)
+        loaded.append('Chromite branch: %s' % (self.c.chromite_branch,))
         continue
 
       # Build ID?
@@ -128,7 +128,9 @@ class ChromiteApi(recipe_api.RecipeApi):
     soln = cfg.solutions.add()
     soln.name = 'chromite'
     soln.url = self.chromite_url
-    soln.revision = self.c.chromite_revision
+    # Set the revision using 'bot_update' remote branch:revision notation.
+    # Omitting the revision uses HEAD.
+    soln.revision = '%s:' % (self.c.chromite_branch,)
     return cfg
 
   def checkout(self, manifest_url=None, repo_url=None):

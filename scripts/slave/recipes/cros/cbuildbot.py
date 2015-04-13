@@ -40,7 +40,7 @@ def GenSteps(api):
   # If a Chromite branch is supplied, use it to override the default Chromite
   # checkout revision.
   if api.properties.get('cbb_branch'):
-    api.chromite.c.chromite_revision = api.properties['cbb_branch']
+    api.chromite.c.chromite_branch = api.properties['cbb_branch']
 
   # Run a debug build if instructed.
   if api.properties.get('cbb_debug'):

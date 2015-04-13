@@ -16,8 +16,8 @@ def BaseConfig(**_kwargs):
     # Base mapping of repository key to repository name.
     repositories = Dict(value_type=Set(basestring)),
 
-    # Checkout Chromite at this revision.
-    chromite_revision = Single(basestring),
+    # Checkout Chromite at this branch. "origin/" will be prepended.
+    chromite_branch = Single(basestring),
 
     # Should the Chrome version be supplied to cbuildbot?
     use_chrome_version = Single(bool),
@@ -55,7 +55,7 @@ def base(c):
   c.repositories['tryjob'] = []
   c.repositories['chromium'] = []
   c.repositories['cros_manifest'] = []
-  c.chromite_revision = 'master'
+  c.chromite_branch = 'master'
 
 
 @config_ctx(includes=['base'])
