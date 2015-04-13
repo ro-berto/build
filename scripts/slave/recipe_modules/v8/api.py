@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import collections
+import datetime
 import math
 import re
 
@@ -477,6 +478,12 @@ class V8Api(recipe_api.RecipeApi):
       cwd=self.m.path['checkout'],
     )
 
+  @staticmethod
+  def format_duration(duration_in_seconds):
+    duration = datetime.timedelta(seconds=duration_in_seconds)
+    time = (datetime.datetime.min + duration).time()
+    return time.strftime('%M:%S:') + '%03i' % int(time.microsecond / 1000)
+
   def _command_results_text(self, results, flaky):
     """Returns log lines for all results of a unique command."""
     assert results
@@ -485,7 +492,7 @@ class V8Api(recipe_api.RecipeApi):
     # Add common description for multiple runs.
     flaky_suffix = ' (flaky in a repeated run)' if flaky else ''
     lines.append('Test: %s%s' % (results[0]['name'], flaky_suffix))
-    lines.append('Flags: %s' % " ".join(results[0]['flags']))
+    lines.append('Flags: %s' % ' '.join(results[0]['flags']))
     lines.append('Command: %s' % results[0]['command'])
     lines.append('')
 
@@ -496,6 +503,7 @@ class V8Api(recipe_api.RecipeApi):
       lines.append('Result: %s' % result['result'])
       if result.get('expected'):
         lines.append('Expected outcomes: %s' % ", ".join(result['expected']))
+      lines.append('Duration: %s' % V8Api.format_duration(result['duration']))
       lines.append('')
       if result['stdout']:
         lines.append('Stdout:')
@@ -507,15 +515,34 @@ class V8Api(recipe_api.RecipeApi):
         lines.append('')
     return lines
 
-  def _update_test_presentation(self, results, presentation):
+  def _duration_results_text(self, test):
+    return [
+      'Test: %s' % test['name'],
+      'Flags: %s' % ' '.join(test['flags']),
+      'Command: %s' % test['command'],
+      'Duration: %s' % V8Api.format_duration(test['duration']),
+    ]
+
+  def _update_test_presentation(self, output, presentation):
     def all_same(items):
       return all(x == items[0] for x in items)
 
-    if not results:
+    # Slowest tests duration summary.
+    lines = []
+    for test in output['slowest_tests']:
+      lines.append(
+          '%s %s' %(V8Api.format_duration(test['duration']), test['name']))
+    # Slowest tests duration details.
+    lines.extend(['', 'Details:', ''])
+    for test in output['slowest_tests']:
+      lines.extend(self._duration_results_text(test))
+    presentation.logs['durations'] = lines
+
+    if not output['results']:
       return
 
     unique_results = {}
-    for result in results:
+    for result in output['results']:
       # Use test base name as UI label (without suite and directory names).
       label = result['name'].split('/')[-1]
       # Truncate the label if it is still too long.
@@ -653,8 +680,7 @@ class V8Api(recipe_api.RecipeApi):
       # each contain a results list. On buildbot, there is only one
       # architecture.
       if (r and isinstance(r, list) and isinstance(r[0], dict)):
-        self._update_test_presentation(r[0]['results'],
-                                       step_result.presentation)
+        self._update_test_presentation(r[0], step_result.presentation)
 
       # Check integrity of the last output. The json list is expected to
       # contain only one element for one (architecture, build config type)

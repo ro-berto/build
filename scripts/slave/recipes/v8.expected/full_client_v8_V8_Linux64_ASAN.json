@@ -107,7 +107,23 @@
     "env": {
       "ASAN_OPTIONS": "external_symbolizer_path=[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
     },
-    "name": "Unittests"
+    "name": "Unittests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@00:00:101 mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@@@@",
+      "@@@STEP_LOG_LINE@durations@Details:@@@",
+      "@@@STEP_LOG_LINE@durations@@@@",
+      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@Flags: -f@@@",
+      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@Duration: 01:01:002@@@",
+      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@Flags: -f -g@@@",
+      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@Duration: 00:00:101@@@",
+      "@@@STEP_LOG_END@durations@@@"
+    ]
   },
   {
     "cmd": [
@@ -130,7 +146,23 @@
     "env": {
       "ASAN_OPTIONS": "external_symbolizer_path=[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
     },
-    "name": "Check"
+    "name": "Check",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@00:00:101 mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@@@@",
+      "@@@STEP_LOG_LINE@durations@Details:@@@",
+      "@@@STEP_LOG_LINE@durations@@@@",
+      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@Flags: -f@@@",
+      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@Duration: 01:01:002@@@",
+      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@Flags: -f -g@@@",
+      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@Duration: 00:00:101@@@",
+      "@@@STEP_LOG_END@durations@@@"
+    ]
   },
   {
     "cmd": [
@@ -153,6 +185,22 @@
     "env": {
       "ASAN_OPTIONS": "external_symbolizer_path=[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
     },
-    "name": "Check - flaky"
+    "name": "Check - flaky",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@00:00:101 mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@@@@",
+      "@@@STEP_LOG_LINE@durations@Details:@@@",
+      "@@@STEP_LOG_LINE@durations@@@@",
+      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@Flags: -f@@@",
+      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@Duration: 01:01:002@@@",
+      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@Flags: -f -g@@@",
+      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@Duration: 00:00:101@@@",
+      "@@@STEP_LOG_END@durations@@@"
+    ]
   }
 ]

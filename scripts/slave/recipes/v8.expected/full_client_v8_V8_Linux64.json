@@ -129,7 +129,23 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Unittests"
+    "name": "Unittests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@00:00:101 mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@@@@",
+      "@@@STEP_LOG_LINE@durations@Details:@@@",
+      "@@@STEP_LOG_LINE@durations@@@@",
+      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@Flags: -f@@@",
+      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@Duration: 01:01:002@@@",
+      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@Flags: -f -g@@@",
+      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@Duration: 00:00:101@@@",
+      "@@@STEP_LOG_END@durations@@@"
+    ]
   },
   {
     "cmd": [
@@ -148,7 +164,23 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Check"
+    "name": "Check",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@00:00:101 mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@@@@",
+      "@@@STEP_LOG_LINE@durations@Details:@@@",
+      "@@@STEP_LOG_LINE@durations@@@@",
+      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@Flags: -f@@@",
+      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@Duration: 01:01:002@@@",
+      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@Flags: -f -g@@@",
+      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@Duration: 00:00:101@@@",
+      "@@@STEP_LOG_END@durations@@@"
+    ]
   },
   {
     "cmd": [
@@ -167,7 +199,23 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Check - flaky"
+    "name": "Check - flaky",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@00:00:101 mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@@@@",
+      "@@@STEP_LOG_LINE@durations@Details:@@@",
+      "@@@STEP_LOG_LINE@durations@@@@",
+      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@Flags: -f@@@",
+      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@Duration: 01:01:002@@@",
+      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@Flags: -f -g@@@",
+      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@Duration: 00:00:101@@@",
+      "@@@STEP_LOG_END@durations@@@"
+    ]
   },
   {
     "cmd": [
@@ -188,7 +236,23 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "OptimizeForSize"
+    "name": "OptimizeForSize",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@00:00:101 mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@@@@",
+      "@@@STEP_LOG_LINE@durations@Details:@@@",
+      "@@@STEP_LOG_LINE@durations@@@@",
+      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@Flags: -f@@@",
+      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@Duration: 01:01:002@@@",
+      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@Flags: -f -g@@@",
+      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@Duration: 00:00:101@@@",
+      "@@@STEP_LOG_END@durations@@@"
+    ]
   },
   {
     "cmd": [
@@ -209,7 +273,23 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "OptimizeForSize - flaky"
+    "name": "OptimizeForSize - flaky",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@00:00:101 mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@@@@",
+      "@@@STEP_LOG_LINE@durations@Details:@@@",
+      "@@@STEP_LOG_LINE@durations@@@@",
+      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@Flags: -f@@@",
+      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@Duration: 01:01:002@@@",
+      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@Flags: -f -g@@@",
+      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@Duration: 00:00:101@@@",
+      "@@@STEP_LOG_END@durations@@@"
+    ]
   },
   {
     "cmd": [
@@ -228,7 +308,23 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Webkit"
+    "name": "Webkit",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@00:00:101 mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@@@@",
+      "@@@STEP_LOG_LINE@durations@Details:@@@",
+      "@@@STEP_LOG_LINE@durations@@@@",
+      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@Flags: -f@@@",
+      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@Duration: 01:01:002@@@",
+      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@Flags: -f -g@@@",
+      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@Duration: 00:00:101@@@",
+      "@@@STEP_LOG_END@durations@@@"
+    ]
   },
   {
     "cmd": [
@@ -247,7 +343,23 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Webkit - flaky"
+    "name": "Webkit - flaky",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@00:00:101 mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@@@@",
+      "@@@STEP_LOG_LINE@durations@Details:@@@",
+      "@@@STEP_LOG_LINE@durations@@@@",
+      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@Flags: -f@@@",
+      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@Duration: 01:01:002@@@",
+      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@Flags: -f -g@@@",
+      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@Duration: 00:00:101@@@",
+      "@@@STEP_LOG_END@durations@@@"
+    ]
   },
   {
     "cmd": [
@@ -265,7 +377,23 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Test262 - no variants"
+    "name": "Test262 - no variants",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@00:00:101 mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@@@@",
+      "@@@STEP_LOG_LINE@durations@Details:@@@",
+      "@@@STEP_LOG_LINE@durations@@@@",
+      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@Flags: -f@@@",
+      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@Duration: 01:01:002@@@",
+      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@Flags: -f -g@@@",
+      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@Duration: 00:00:101@@@",
+      "@@@STEP_LOG_END@durations@@@"
+    ]
   },
   {
     "cmd": [
@@ -283,7 +411,23 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Test262-es6 - no variants"
+    "name": "Test262-es6 - no variants",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@00:00:101 mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@@@@",
+      "@@@STEP_LOG_LINE@durations@Details:@@@",
+      "@@@STEP_LOG_LINE@durations@@@@",
+      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@Flags: -f@@@",
+      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@Duration: 01:01:002@@@",
+      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@Flags: -f -g@@@",
+      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@Duration: 00:00:101@@@",
+      "@@@STEP_LOG_END@durations@@@"
+    ]
   },
   {
     "cmd": [
@@ -300,6 +444,22 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Mozilla"
+    "name": "Mozilla",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@00:00:101 mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@@@@",
+      "@@@STEP_LOG_LINE@durations@Details:@@@",
+      "@@@STEP_LOG_LINE@durations@@@@",
+      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@Flags: -f@@@",
+      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@Duration: 01:01:002@@@",
+      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@Flags: -f -g@@@",
+      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@Duration: 00:00:101@@@",
+      "@@@STEP_LOG_END@durations@@@"
+    ]
   }
 ]

@@ -9,6 +9,20 @@ from slave.recipe_modules.v8 import builders
 
 class V8TestApi(recipe_test_api.RecipeTestApi):
   BUILDERS = builders.BUILDERS
+  SLOWEST_TESTS = [
+    {
+      'name': 'mjsunit/Cool.Test',
+      'flags': ['-f'],
+      'command': 'd8 -f mjsunit/Cool.Test',
+      'duration': 61.0028,
+    },
+    {
+      'name': 'mjsunit/Cool.Test2',
+      'flags': ['-f', '-g'],
+      'command': 'd8 -f mjsunit/Cool.Test2',
+      'duration': 0.1012,
+    },
+  ]
 
   def output_json(self, has_failures=False, wrong_results=False):
     if not has_failures:
@@ -16,17 +30,20 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         'arch': 'theArch',
         'mode': 'theMode',
         'results': [],
+        'slowest_tests': V8TestApi.SLOWEST_TESTS,
       }])
     if wrong_results:
       return self.m.json.output([{
         'arch': 'theArch1',
         'mode': 'theMode1',
         'results': [],
+        'slowest_tests': V8TestApi.SLOWEST_TESTS,
       },
       {
         'arch': 'theArch2',
         'mode': 'theMode2',
         'results': [],
+        'slowest_tests': V8TestApi.SLOWEST_TESTS,
       }])
 
     # Add enough failures to exceed the maximum number of shown failures
@@ -37,6 +54,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         'flags': ['--opt42'],
         'result': 'FAIL',
         'expected': ['PASS', 'SLOW'],
+        'duration': 61.0028,
         'run': 1,
         'stdout': 'Some output.',
         'stderr': 'Some errput.',
@@ -47,6 +65,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       results.append({
         'flags': ['--other'],
         'result': 'FAIL',
+        'duration': 3599.9999,
         'run': 1,
         'stdout': 'Some output.',
         'stderr': 'Some errput.',
@@ -57,6 +76,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       results.append({
         'flags': ['--other'],
         'result': 'CRASH',
+        'duration': 0.1111,
         'run': 1,
         'stdout': 'Some output\nwith\nmore\nlines.',
         'stderr': 'Some errput.',
@@ -70,6 +90,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       'arch': 'theArch',
       'mode': 'theMode',
       'results': results,
+      'slowest_tests': V8TestApi.SLOWEST_TESTS,
     }])
 
   def perf_json(self, has_failures=False):
