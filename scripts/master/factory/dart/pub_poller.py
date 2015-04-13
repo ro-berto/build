@@ -33,14 +33,17 @@ class PubPoller(base.PollingChangeSource):
 
   def make_change(self, package, version):
     repo = 'http://pub.dartlang.org/packages/%s/versions' % package
-
+    # The buildbot console has a hard time showing the correct build links
+    # when there are multiple pub packages with the same version number
+    # We fix this by prefix the revision with the package name
+    revision = '%s-%s' % (package, version)
     self.master.addChange(author='Pub: %s' % package,
                           files=[],
                           repository=repo,
                           revlink=repo,
                           comments='Polled from %s' % package,
                           project=self.project,
-                          revision=version)
+                          revision=revision)
 
   # pub.dartlang.org is returning the versions in non sorted order
   # We simply see if there was any new versions since the last time around.
