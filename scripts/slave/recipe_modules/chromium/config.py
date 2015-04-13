@@ -483,7 +483,6 @@ def _memory_tool(c, tool):
 def trybot_flavor(c):
   fastbuild(c, optional=True)
   dcheck(c, optional=True)
-  linux_dump_symbols(c)
 
 @config_ctx()
 def gn_component_build(c):
@@ -757,11 +756,6 @@ def chromium_pgo_instrument(c):
 @config_ctx(includes=['chromium_pgo_base'])
 def chromium_pgo_optimize(c):
   c.gyp_env.GYP_DEFINES['chrome_pgo_phase'] = 2
-
-@config_ctx()
-def linux_dump_symbols(c):
-  if c.TARGET_PLATFORM == 'linux':
-    c.gyp_env.GYP_DEFINES['linux_dump_symbols'] = 1
 
 @config_ctx()
 def v8_optimize_medium(c):

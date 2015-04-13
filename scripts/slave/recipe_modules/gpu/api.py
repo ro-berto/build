@@ -64,10 +64,6 @@ class GpuApi(recipe_api.RecipeApi):
     self.m.chromium.c.gyp_env.GYP_DEFINES.pop('use_ash', None)
     self.m.chromium.c.gyp_env.GYP_DEFINES.pop('use_aura', None)
 
-    # To print out callstacks on linux bots, we must output symbols as well.
-    if self.m.platform.is_linux:
-      self.m.chromium.c.gyp_env.GYP_DEFINES['linux_dump_symbols'] = 1
-
     # Enable archiving the GPU tests' isolates in chrome_tests.gypi.
     # The non-GPU trybots build the "all" target, and these tests
     # shouldn't be built or run on those bots.
