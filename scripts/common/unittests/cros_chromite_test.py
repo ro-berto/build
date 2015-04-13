@@ -124,6 +124,7 @@ class ChromiteConfigTestCase(unittest.TestCase):
       # marking this board as a canary.
       ('odd-name-paladin', 'canary', 'odd-name-paladin', None, 'CANARY'),
 
+      ('my-board-asan', None, 'my-board', 'asan', 'ASAN'),
       ('my-board-pre-cq', None, 'my-board', 'pre-cq', 'PRE_CQ'),
       ('my-board-chrome-pfq', None, 'my-board', 'chrome-pfq', 'PFQ'),
       ('my-board-chromium-pfq', None, 'my-board', 'chromium-pfq', 'PFQ'),

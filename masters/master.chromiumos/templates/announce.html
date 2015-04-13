@@ -212,10 +212,6 @@
         <table width="100%">
           <script src='./auto-builder.js'></script>,
           <script language="javascript">
-            closer += "&titles=off";
-            arm += "&titles=off";
-            x86 += "&titles=off";
-            commit_queue += "&titles=off";
             var chromiumos_chromium = [
                 "builder=X86+(chromium)",
                 "builder=AMD64+(chromium)",
@@ -237,11 +233,21 @@
             function DisplayBar(waterfall_url, bar_url, content, name) {
               document.write("<tr><td><a href='" + GetUrl(waterfall_url, content) + "'>" + name + "</a></td><td width='99%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar_url, content) + "'></iframe></td></tr>\n");
             }
-            DisplayBar(waterfall, bar, closer, "closers");
-            DisplayBar(waterfall, bar, x86, "x86");
-            DisplayBar(waterfall, bar, arm, "arm");
-            DisplayBar(waterfall, bar, commit_queue, "commit queue");
-            DisplayBar(waterfall_chromiumos_chromium, bar_chromiumos_chromium, chromiumos_chromium, "chromiumos.chromium")
+
+            function AddBuilderSetBar(builders, name) {
+              var link = builders.map(function(e) {
+                  return "builder=" + e;
+              }).join("&") + "&titles=off"
+              DisplayBar(waterfall, bar, link, name);
+            }
+
+            AddBuilderSetBar(buildercfg["closers"], "Closers");
+            AddBuilderSetBar(buildercfg["full"], "Full");
+            AddBuilderSetBar(buildercfg["incremental"], "Incremental");
+            AddBuilderSetBar(buildercfg["asan"], "ASAN");
+            AddBuilderSetBar(buildercfg["paladin"], "Commit Queue");
+            DisplayBar(waterfall_chromiumos_chromium, bar_chromiumos_chromium,
+                chromiumos_chromium, "chromiumos.chromium")
           </script>
         </table>
       </td>

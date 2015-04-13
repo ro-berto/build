@@ -50,6 +50,7 @@ class BuilderConfig(object):
   SLAVE_TYPE = SlaveType.BAREMETAL
   SLAVE_CLASS = None
   CBB_VARIANT = None
+  TIMEOUT = None
 
   def __init__(self, config):
     """Initializes a new configuration.
@@ -94,6 +95,12 @@ class BuilderConfig(object):
     if variant and self.config.is_master:
       return '%s-master' % (variant,)
     return variant
+
+  @property
+  def timeout(self):
+    """Returns (int/None): This builder type's custom build timeout value.
+    """
+    return self.TIMEOUT
 
   @property
   def unique(self):
@@ -142,7 +149,7 @@ class BuilderConfig(object):
   @property
   def is_experimental(self):
     """Returns (bool): If this builder is experimental."""
-    return not (self.config.is_master or self.config.get('important'))
+    return self._IsExperimental()
 
   def _GetBuilderName(self):
     """Returns (str): Returns the generated builder name.
@@ -151,6 +158,14 @@ class BuilderConfig(object):
     name.
     """
     return self.config.name
+
+  def _IsExperimental(self):
+    """Returns (bool): If this builder is experimental.
+
+    Unless overloaded, a builder is experimental if it's not a master builder or
+    important.
+    """
+    return not (self.config.is_master or self.config.get('important'))
 
 
 class PreCqLauncherBuilderConfig(BuilderConfig):
@@ -183,6 +198,35 @@ class IncrementalBuilderConfig(BuilderConfig):
 
   def _GetBuilderName(self):
     return '%s incremental' % (self.config.base,)
+
+  def _IsExperimental(self):
+    return False
+
+
+class FullBuilderConfig(BuilderConfig):
+  """BuilderConfig for Full launcher targets."""
+
+  CLOSER = True
+  COLLAPSE = AlwaysCollapseFunc
+
+  def _GetBuilderName(self):
+    return '%s full' % (self.config.base,)
+
+  def _IsExperimental(self):
+    return False
+
+
+class AsanBuilderConfig(BuilderConfig):
+  """BuilderConfig for ASAN launcher targets."""
+
+  CLOSER = True
+  COLLAPSE = AlwaysCollapseFunc
+
+  def _GetBuilderName(self):
+    return '%s ASAN' % (self.config.base,)
+
+  def _IsExperimental(self):
+    return False
 
 
 class FirmwareBuilderConfig(BuilderConfig):
@@ -221,10 +265,14 @@ class SdkBuilderConfig(BuilderConfig):
 
   SLAVE_TYPE = SlaveType.GCE
   COLLAPSE = AlwaysCollapseFunc
+  TIMEOUT = 22 * 3600 # 22 Hours.
 
   def _GetBuilderName(self):
     # Return 'major/minor' (end of toolchain name).
     return '%s sdk' % (self.config.base,)
+
+  def _IsExperimental(self):
+    return False
 
 
 class ToolchainBuilderConfig(BuilderConfig):
@@ -258,6 +306,8 @@ CONFIG_MAP = OrderedDict((
     (ChromiteTarget.PRE_CQ_LAUNCHER, PreCqLauncherBuilderConfig),
     (ChromiteTarget.PALADIN, PaladinBuilderConfig),
     (ChromiteTarget.INCREMENTAL, IncrementalBuilderConfig),
+    (ChromiteTarget.FULL, FullBuilderConfig),
+    (ChromiteTarget.ASAN, AsanBuilderConfig),
     (ChromiteTarget.FIRMWARE, FirmwareBuilderConfig),
     (ChromiteTarget.PFQ, PfqBuilderConfig),
     (ChromiteTarget.CANARY, CanaryBuilderConfig),

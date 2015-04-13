@@ -120,7 +120,7 @@ class SlaveAllocator(object):
       enforce (bool): If True, raise an IOError if the state file does not
           exist or a ValueError if it could not be loaded.
     """
-    state = None
+    state = {}
     path = path or self.DEFAULT_STATE_PATH
     if not os.path.exists(path):
       if enforce:

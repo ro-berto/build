@@ -1,0 +1,79 @@
+{% extends "announce.html" %}
+{% from "box_macros.html" import box %}
+
+{% block content %}
+
+<table border="0" cellspacing="0">
+
+<tr class="LastBuild">
+  <td align="right" colspan="2" class="Project">
+   <a href="http://www.chromium.org">Chromium</a><br/>
+   last build
+  </td>
+
+{% for b in builders %}  
+  <td align="center" class="{{ b.top_class }}">
+    <span>
+      <a href="{{ b.url }}">{{ b.name }}</a>
+      {%- if cros_builder_experimental and cros_builder_experimental(b.name) -%}
+        &nbsp;(experimental)
+      {%- endif -%}
+      <br/>
+      {%- if cros_builder_doc -%}
+        {% set builder_doc = cros_builder_doc(b.name) %}
+        {%- if builder_doc -%}
+          <a href="{{ builder_doc.url }}" target="_blank">
+            <img src="document-icon.png" width="12px" height="12px"></img>
+          </a>
+        {%- endif -%}
+      {%- endif -%}
+    </span>
+    {{ " ".join(b.top) }}
+  </td>
+{% endfor %}
+</tr>
+
+<tr class="Activity">
+<td align="right" colspan="2">current activity</td>
+
+{% for b in builders %}
+  <td align="center" class="{{ b.status_class }}">
+    {{ "<br/>".join(b.status) }}
+  </td>
+{% endfor %}
+</tr>
+
+<tr>
+<td align="center" class="Time">{{ tz }}</td>
+<td align="center" class="Change"><a href="{{ changes_url }}">changes</a></td>
+
+{% for b in builders %}
+  <td align="center" class="Builder">
+    <a href="{{ b.url }}">{{ b.name }}</a>
+  </td>
+{% endfor %}
+</tr>
+
+{# waterfall contents goes here #}
+{% for i in range(gridlen) -%}
+  <tr>
+  {% for strip in grid -%}
+    {%- if strip[i] -%}{{ box(**strip[i]) }}
+    {%- elif no_bubble -%}{{ box() }}
+    {%- endif -%}
+  {%- endfor -%}
+  </tr>
+{% endfor %}
+
+</table>
+
+{% if nextpage %}
+[ <a href="{{ nextpage }}">next page</a> ]
+{% endif %}
+[ <a href="waterfall/help">help</a> ]
+
+{% if no_reload_page %}
+ <a href="{{ no_reload_page }}">Stop Reloading</a>
+{% endif %}
+
+{% endblock %}

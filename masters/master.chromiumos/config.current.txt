@@ -5,67 +5,9 @@ config = {
   'builders': [
     {
       'auto_reboot': False,
-      'builddir': 'x86-generic-paladin',
+      'builddir': 'amd64-generic-paladin-master',
       'category': '1release full|info',
-      'factory': BuildFactory {
-        steps: [
-          (
-            <class buildbot.steps.shell.ShellCommand>,
-            {
-              'command': [
-                'gclient',
-                'sync',
-                '--verbose',
-                '--force',
-                '--delete_unversioned_trees',
-              ],
-              'description': 'Sync buildbot slave files',
-              'name': 'update_scripts',
-              'timeout': 300,
-              'want_stderr': False,
-              'want_stdout': False,
-              'workdir': '/b',
-            },
-          ),
-          (
-            <class buildbot.steps.shell.ShellCommand>,
-            {
-              'command': 'rm -rf "chromite" && /usr/bin/git retry clone https://chromium.googlesource.com/chromiumos/chromite.git && cd "chromite" && /usr/bin/git checkout master',
-              'description': 'Clear and Clone chromite',
-              'haltOnFailure': True,
-              'name': 'Clear and Clone chromite',
-            },
-          ),
-          (
-            <class master.chromium_step.AnnotatedCommand>,
-            {
-              'command': [
-                'chromite/bin/cbuildbot',
-                <buildbot.process.properties.WithProperties instance>,
-                '--buildroot=/b/cbuild/external_master',
-                <master.master_utils.ConditionalProperty instance>,
-                '--buildbot',
-                '--debug',
-                <master.master_utils.ConditionalProperty instance>,
-                'x86-generic-paladin',
-              ],
-              'description': 'cbuildbot',
-              'maxTime': 57600,
-              'name': 'cbuildbot',
-              'timeout': 9000,
-              'usePTY': False,
-            },
-          ),
-        ],
-        properties: Properties(**{}),
-      },
-      'name': 'x86-generic paladin',
-      'slavenames': ['build174-m2'],
-    },
-    {
-      'auto_reboot': False,
-      'builddir': 'amd64-generic-paladin',
-      'category': '1release full|info',
+      'collapseRequests': <Always Collapse>,
       'factory': BuildFactory {
         steps: [
           (
@@ -123,185 +65,9 @@ config = {
     },
     {
       'auto_reboot': False,
-      'builddir': 'amd64-generic_freon-paladin',
+      'builddir': 'arm-generic-paladin-master',
       'category': '1release full|info',
-      'factory': BuildFactory {
-        steps: [
-          (
-            <class buildbot.steps.shell.ShellCommand>,
-            {
-              'command': [
-                'gclient',
-                'sync',
-                '--verbose',
-                '--force',
-                '--delete_unversioned_trees',
-              ],
-              'description': 'Sync buildbot slave files',
-              'name': 'update_scripts',
-              'timeout': 300,
-              'want_stderr': False,
-              'want_stdout': False,
-              'workdir': '/b',
-            },
-          ),
-          (
-            <class buildbot.steps.shell.ShellCommand>,
-            {
-              'command': 'rm -rf "chromite" && /usr/bin/git retry clone https://chromium.googlesource.com/chromiumos/chromite.git && cd "chromite" && /usr/bin/git checkout master',
-              'description': 'Clear and Clone chromite',
-              'haltOnFailure': True,
-              'name': 'Clear and Clone chromite',
-            },
-          ),
-          (
-            <class master.chromium_step.AnnotatedCommand>,
-            {
-              'command': [
-                'chromite/bin/cbuildbot',
-                <buildbot.process.properties.WithProperties instance>,
-                '--buildroot=/b/cbuild/external_master',
-                <master.master_utils.ConditionalProperty instance>,
-                '--buildbot',
-                '--debug',
-                <master.master_utils.ConditionalProperty instance>,
-                'amd64-generic_freon-paladin',
-              ],
-              'description': 'cbuildbot',
-              'maxTime': 57600,
-              'name': 'cbuildbot',
-              'timeout': 9000,
-              'usePTY': False,
-            },
-          ),
-        ],
-        properties: Properties(**{}),
-      },
-      'name': 'amd64-generic_freon paladin',
-      'slavenames': ['build182-m2'],
-    },
-    {
-      'auto_reboot': False,
-      'builddir': 'gizmo-paladin',
-      'category': '1release full|info',
-      'factory': BuildFactory {
-        steps: [
-          (
-            <class buildbot.steps.shell.ShellCommand>,
-            {
-              'command': [
-                'gclient',
-                'sync',
-                '--verbose',
-                '--force',
-                '--delete_unversioned_trees',
-              ],
-              'description': 'Sync buildbot slave files',
-              'name': 'update_scripts',
-              'timeout': 300,
-              'want_stderr': False,
-              'want_stdout': False,
-              'workdir': '/b',
-            },
-          ),
-          (
-            <class buildbot.steps.shell.ShellCommand>,
-            {
-              'command': 'rm -rf "chromite" && /usr/bin/git retry clone https://chromium.googlesource.com/chromiumos/chromite.git && cd "chromite" && /usr/bin/git checkout master',
-              'description': 'Clear and Clone chromite',
-              'haltOnFailure': True,
-              'name': 'Clear and Clone chromite',
-            },
-          ),
-          (
-            <class master.chromium_step.AnnotatedCommand>,
-            {
-              'command': [
-                'chromite/bin/cbuildbot',
-                <buildbot.process.properties.WithProperties instance>,
-                '--buildroot=/b/cbuild/external_master',
-                <master.master_utils.ConditionalProperty instance>,
-                '--buildbot',
-                '--debug',
-                <master.master_utils.ConditionalProperty instance>,
-                'gizmo-paladin',
-              ],
-              'description': 'cbuildbot',
-              'maxTime': 57600,
-              'name': 'cbuildbot',
-              'timeout': 9000,
-              'usePTY': False,
-            },
-          ),
-        ],
-        properties: Properties(**{}),
-      },
-      'name': 'gizmo paladin',
-      'slavenames': ['build118-m2'],
-    },
-    {
-      'auto_reboot': False,
-      'builddir': 'mipsel-o32-generic-paladin',
-      'category': '1release full|info',
-      'factory': BuildFactory {
-        steps: [
-          (
-            <class buildbot.steps.shell.ShellCommand>,
-            {
-              'command': [
-                'gclient',
-                'sync',
-                '--verbose',
-                '--force',
-                '--delete_unversioned_trees',
-              ],
-              'description': 'Sync buildbot slave files',
-              'name': 'update_scripts',
-              'timeout': 300,
-              'want_stderr': False,
-              'want_stdout': False,
-              'workdir': '/b',
-            },
-          ),
-          (
-            <class buildbot.steps.shell.ShellCommand>,
-            {
-              'command': 'rm -rf "chromite" && /usr/bin/git retry clone https://chromium.googlesource.com/chromiumos/chromite.git && cd "chromite" && /usr/bin/git checkout master',
-              'description': 'Clear and Clone chromite',
-              'haltOnFailure': True,
-              'name': 'Clear and Clone chromite',
-            },
-          ),
-          (
-            <class master.chromium_step.AnnotatedCommand>,
-            {
-              'command': [
-                'chromite/bin/cbuildbot',
-                <buildbot.process.properties.WithProperties instance>,
-                '--buildroot=/b/cbuild/external_master',
-                <master.master_utils.ConditionalProperty instance>,
-                '--buildbot',
-                '--debug',
-                <master.master_utils.ConditionalProperty instance>,
-                'mipsel-o32-generic-paladin',
-              ],
-              'description': 'cbuildbot',
-              'maxTime': 57600,
-              'name': 'cbuildbot',
-              'timeout': 9000,
-              'usePTY': False,
-            },
-          ),
-        ],
-        properties: Properties(**{}),
-      },
-      'name': 'mipsel-o32-generic paladin',
-      'slavenames': ['build112-m2'],
-    },
-    {
-      'auto_reboot': False,
-      'builddir': 'arm-generic-paladin',
-      'category': '1release full|info',
+      'collapseRequests': <Always Collapse>,
       'factory': BuildFactory {
         steps: [
           (
@@ -359,8 +125,129 @@ config = {
     },
     {
       'auto_reboot': False,
-      'builddir': 'panther_embedded-minimal-paladin',
+      'builddir': 'gizmo-paladin-master',
       'category': '1release full|info',
+      'collapseRequests': <Always Collapse>,
+      'factory': BuildFactory {
+        steps: [
+          (
+            <class buildbot.steps.shell.ShellCommand>,
+            {
+              'command': [
+                'gclient',
+                'sync',
+                '--verbose',
+                '--force',
+                '--delete_unversioned_trees',
+              ],
+              'description': 'Sync buildbot slave files',
+              'name': 'update_scripts',
+              'timeout': 300,
+              'want_stderr': False,
+              'want_stdout': False,
+              'workdir': '/b',
+            },
+          ),
+          (
+            <class buildbot.steps.shell.ShellCommand>,
+            {
+              'command': 'rm -rf "chromite" && /usr/bin/git retry clone https://chromium.googlesource.com/chromiumos/chromite.git && cd "chromite" && /usr/bin/git checkout master',
+              'description': 'Clear and Clone chromite',
+              'haltOnFailure': True,
+              'name': 'Clear and Clone chromite',
+            },
+          ),
+          (
+            <class master.chromium_step.AnnotatedCommand>,
+            {
+              'command': [
+                'chromite/bin/cbuildbot',
+                <buildbot.process.properties.WithProperties instance>,
+                '--buildroot=/b/cbuild/external_master',
+                <master.master_utils.ConditionalProperty instance>,
+                '--buildbot',
+                '--debug',
+                <master.master_utils.ConditionalProperty instance>,
+                'gizmo-paladin',
+              ],
+              'description': 'cbuildbot',
+              'maxTime': 57600,
+              'name': 'cbuildbot',
+              'timeout': 9000,
+              'usePTY': False,
+            },
+          ),
+        ],
+        properties: Properties(**{}),
+      },
+      'name': 'gizmo paladin',
+      'slavenames': ['build118-m2'],
+    },
+    {
+      'auto_reboot': False,
+      'builddir': 'mipsel-o32-generic-paladin-master',
+      'category': '1release full|info',
+      'collapseRequests': <Always Collapse>,
+      'factory': BuildFactory {
+        steps: [
+          (
+            <class buildbot.steps.shell.ShellCommand>,
+            {
+              'command': [
+                'gclient',
+                'sync',
+                '--verbose',
+                '--force',
+                '--delete_unversioned_trees',
+              ],
+              'description': 'Sync buildbot slave files',
+              'name': 'update_scripts',
+              'timeout': 300,
+              'want_stderr': False,
+              'want_stdout': False,
+              'workdir': '/b',
+            },
+          ),
+          (
+            <class buildbot.steps.shell.ShellCommand>,
+            {
+              'command': 'rm -rf "chromite" && /usr/bin/git retry clone https://chromium.googlesource.com/chromiumos/chromite.git && cd "chromite" && /usr/bin/git checkout master',
+              'description': 'Clear and Clone chromite',
+              'haltOnFailure': True,
+              'name': 'Clear and Clone chromite',
+            },
+          ),
+          (
+            <class master.chromium_step.AnnotatedCommand>,
+            {
+              'command': [
+                'chromite/bin/cbuildbot',
+                <buildbot.process.properties.WithProperties instance>,
+                '--buildroot=/b/cbuild/external_master',
+                <master.master_utils.ConditionalProperty instance>,
+                '--buildbot',
+                '--debug',
+                <master.master_utils.ConditionalProperty instance>,
+                'mipsel-o32-generic-paladin',
+              ],
+              'description': 'cbuildbot',
+              'maxTime': 57600,
+              'name': 'cbuildbot',
+              'timeout': 9000,
+              'usePTY': False,
+            },
+          ),
+        ],
+        properties: Properties(**{}),
+      },
+      'name': 'mipsel-o32-generic paladin',
+      'slavenames': ['build112-m2'],
+    },
+    {
+      'auto_reboot': False,
+      'builddir': 'panther_embedded-minimal-paladin-master',
+      'category': '1release full|info',
+      'collapseRequests': <Always Collapse>,
       'factory': BuildFactory {
         steps: [
           (
@@ -418,8 +305,8 @@ config = {
     },
     {
       'auto_reboot': False,
-      'builddir': 'x86-generic-incremental',
-      'category': '1release full|closer',
+      'builddir': 'x86-generic-paladin-master',
+      'category': '1release full|info',
       'collapseRequests': <Always Collapse>,
       'factory': BuildFactory {
         steps: [
@@ -461,7 +348,7 @@ config = {
                 '--buildbot',
                 '--debug',
                 <master.master_utils.ConditionalProperty instance>,
-                'x86-generic-incremental',
+                'x86-generic-paladin',
               ],
               'description': 'cbuildbot',
               'maxTime': 57600,
@@ -473,12 +360,72 @@ config = {
         ],
         properties: Properties(**{}),
       },
-      'name': 'x86-generic incremental',
-      'slavenames': ['build85-m2'],
+      'name': 'x86-generic paladin',
+      'slavenames': ['build174-m2'],
     },
     {
       'auto_reboot': False,
-      'builddir': 'amd64-generic-incremental',
+      'builddir': 'amd64-generic_freon-paladin-master',
+      'category': '1release full|info',
+      'collapseRequests': <Always Collapse>,
+      'factory': BuildFactory {
+        steps: [
+          (
+            <class buildbot.steps.shell.ShellCommand>,
+            {
+              'command': [
+                'gclient',
+                'sync',
+                '--verbose',
+                '--force',
+                '--delete_unversioned_trees',
+              ],
+              'description': 'Sync buildbot slave files',
+              'name': 'update_scripts',
+              'timeout': 300,
+              'want_stderr': False,
+              'want_stdout': False,
+              'workdir': '/b',
+            },
+          ),
+          (
+            <class buildbot.steps.shell.ShellCommand>,
+            {
+              'command': 'rm -rf "chromite" && /usr/bin/git retry clone https://chromium.googlesource.com/chromiumos/chromite.git && cd "chromite" && /usr/bin/git checkout master',
+              'description': 'Clear and Clone chromite',
+              'haltOnFailure': True,
+              'name': 'Clear and Clone chromite',
+            },
+          ),
+          (
+            <class master.chromium_step.AnnotatedCommand>,
+            {
+              'command': [
+                'chromite/bin/cbuildbot',
+                <buildbot.process.properties.WithProperties instance>,
+                '--buildroot=/b/cbuild/external_master',
+                <master.master_utils.ConditionalProperty instance>,
+                '--buildbot',
+                '--debug',
+                <master.master_utils.ConditionalProperty instance>,
+                'amd64-generic_freon-paladin',
+              ],
+              'description': 'cbuildbot',
+              'maxTime': 57600,
+              'name': 'cbuildbot',
+              'timeout': 9000,
+              'usePTY': False,
+            },
+          ),
+        ],
+        properties: Properties(**{}),
+      },
+      'name': 'amd64-generic_freon paladin',
+      'slavenames': ['build182-m2'],
+    },
+    {
+      'auto_reboot': False,
+      'builddir': 'amd64-generic-incremental-master',
       'category': '1release full|closer',
       'collapseRequests': <Always Collapse>,
       'factory': BuildFactory {
@@ -538,7 +485,7 @@ config = {
     },
     {
       'auto_reboot': False,
-      'builddir': 'daisy-incremental',
+      'builddir': 'daisy-incremental-master',
       'category': '1release full|closer',
       'collapseRequests': <Always Collapse>,
       'factory': BuildFactory {
@@ -598,7 +545,7 @@ config = {
     },
     {
       'auto_reboot': False,
-      'builddir': 'x86-generic-full',
+      'builddir': 'x86-generic-incremental-master',
       'category': '1release full|closer',
       'collapseRequests': <Always Collapse>,
       'factory': BuildFactory {
@@ -641,7 +588,7 @@ config = {
                 '--buildbot',
                 '--debug',
                 <master.master_utils.ConditionalProperty instance>,
-                'x86-generic-full',
+                'x86-generic-incremental',
               ],
               'description': 'cbuildbot',
               'maxTime': 57600,
@@ -653,12 +600,12 @@ config = {
         ],
         properties: Properties(**{}),
       },
-      'name': 'x86-generic full',
-      'slavenames': ['build89-m2'],
+      'name': 'x86-generic incremental',
+      'slavenames': ['build85-m2'],
     },
     {
       'auto_reboot': False,
-      'builddir': 'amd64-generic-full',
+      'builddir': 'amd64-generic-full-master',
       'category': '1release full|closer',
       'collapseRequests': <Always Collapse>,
       'factory': BuildFactory {
@@ -718,67 +665,7 @@ config = {
     },
     {
       'auto_reboot': False,
-      'builddir': 'daisy-full',
-      'category': '1release full|closer',
-      'collapseRequests': <Always Collapse>,
-      'factory': BuildFactory {
-        steps: [
-          (
-            <class buildbot.steps.shell.ShellCommand>,
-            {
-              'command': [
-                'gclient',
-                'sync',
-                '--verbose',
-                '--force',
-                '--delete_unversioned_trees',
-              ],
-              'description': 'Sync buildbot slave files',
-              'name': 'update_scripts',
-              'timeout': 300,
-              'want_stderr': False,
-              'want_stdout': False,
-              'workdir': '/b',
-            },
-          ),
-          (
-            <class buildbot.steps.shell.ShellCommand>,
-            {
-              'command': 'rm -rf "chromite" && /usr/bin/git retry clone https://chromium.googlesource.com/chromiumos/chromite.git && cd "chromite" && /usr/bin/git checkout master',
-              'description': 'Clear and Clone chromite',
-              'haltOnFailure': True,
-              'name': 'Clear and Clone chromite',
-            },
-          ),
-          (
-            <class master.chromium_step.AnnotatedCommand>,
-            {
-              'command': [
-                'chromite/bin/cbuildbot',
-                <buildbot.process.properties.WithProperties instance>,
-                '--buildroot=/b/cbuild/external_master',
-                <master.master_utils.ConditionalProperty instance>,
-                '--buildbot',
-                '--debug',
-                <master.master_utils.ConditionalProperty instance>,
-                'daisy-full',
-              ],
-              'description': 'cbuildbot',
-              'maxTime': 57600,
-              'name': 'cbuildbot',
-              'timeout': 9000,
-              'usePTY': False,
-            },
-          ),
-        ],
-        properties: Properties(**{}),
-      },
-      'name': 'daisy full',
-      'slavenames': ['build91-m2'],
-    },
-    {
-      'auto_reboot': False,
-      'builddir': 'arm-generic-full',
+      'builddir': 'arm-generic-full-master',
       'category': '1release full|closer',
       'collapseRequests': <Always Collapse>,
       'factory': BuildFactory {
@@ -838,7 +725,67 @@ config = {
     },
     {
       'auto_reboot': False,
-      'builddir': 'mipsel-o32-generic-full',
+      'builddir': 'daisy-full-master',
+      'category': '1release full|closer',
+      'collapseRequests': <Always Collapse>,
+      'factory': BuildFactory {
+        steps: [
+          (
+            <class buildbot.steps.shell.ShellCommand>,
+            {
+              'command': [
+                'gclient',
+                'sync',
+                '--verbose',
+                '--force',
+                '--delete_unversioned_trees',
+              ],
+              'description': 'Sync buildbot slave files',
+              'name': 'update_scripts',
+              'timeout': 300,
+              'want_stderr': False,
+              'want_stdout': False,
+              'workdir': '/b',
+            },
+          ),
+          (
+            <class buildbot.steps.shell.ShellCommand>,
+            {
+              'command': 'rm -rf "chromite" && /usr/bin/git retry clone https://chromium.googlesource.com/chromiumos/chromite.git && cd "chromite" && /usr/bin/git checkout master',
+              'description': 'Clear and Clone chromite',
+              'haltOnFailure': True,
+              'name': 'Clear and Clone chromite',
+            },
+          ),
+          (
+            <class master.chromium_step.AnnotatedCommand>,
+            {
+              'command': [
+                'chromite/bin/cbuildbot',
+                <buildbot.process.properties.WithProperties instance>,
+                '--buildroot=/b/cbuild/external_master',
+                <master.master_utils.ConditionalProperty instance>,
+                '--buildbot',
+                '--debug',
+                <master.master_utils.ConditionalProperty instance>,
+                'daisy-full',
+              ],
+              'description': 'cbuildbot',
+              'maxTime': 57600,
+              'name': 'cbuildbot',
+              'timeout': 9000,
+              'usePTY': False,
+            },
+          ),
+        ],
+        properties: Properties(**{}),
+      },
+      'name': 'daisy full',
+      'slavenames': ['build91-m2'],
+    },
+    {
+      'auto_reboot': False,
+      'builddir': 'mipsel-o32-generic-full-master',
       'category': '1release full|closer',
       'collapseRequests': <Always Collapse>,
       'factory': BuildFactory {
@@ -898,7 +845,7 @@ config = {
     },
     {
       'auto_reboot': False,
-      'builddir': 'chromiumos-sdk',
+      'builddir': 'x86-generic-full-master',
       'category': '1release full|closer',
       'collapseRequests': <Always Collapse>,
       'factory': BuildFactory {
@@ -941,10 +888,10 @@ config = {
                 '--buildbot',
                 '--debug',
                 <master.master_utils.ConditionalProperty instance>,
-                'chromiumos-sdk',
+                'x86-generic-full',
               ],
               'description': 'cbuildbot',
-              'maxTime': 79200,
+              'maxTime': 57600,
               'name': 'cbuildbot',
               'timeout': 9000,
               'usePTY': False,
@@ -953,13 +900,14 @@ config = {
         ],
         properties: Properties(**{}),
       },
-      'name': 'chromiumos sdk',
-      'slavenames': ['build162-m2'],
+      'name': 'x86-generic full',
+      'slavenames': ['build89-m2'],
     },
     {
       'auto_reboot': False,
-      'builddir': 'refresh-packages',
-      'category': '1release full|info',
+      'builddir': 'amd64-generic-asan-master',
+      'category': '1release full|closer',
+      'collapseRequests': <Always Collapse>,
       'factory': BuildFactory {
         steps: [
           (
@@ -1000,7 +948,7 @@ config = {
                 '--buildbot',
                 '--debug',
                 <master.master_utils.ConditionalProperty instance>,
-                'refresh-packages',
+                'amd64-generic-asan',
               ],
               'description': 'cbuildbot',
               'maxTime': 57600,
@@ -1012,12 +960,12 @@ config = {
         ],
         properties: Properties(**{}),
       },
-      'name': 'refresh packages (chromium:412795)',
-      'slavenames': ['build94-m2'],
+      'name': 'amd64-generic ASAN',
+      'slavenames': ['build84-m2'],
     },
     {
       'auto_reboot': False,
-      'builddir': 'x86-generic-ASAN',
+      'builddir': 'x86-generic-asan-master',
       'category': '1release full|closer',
       'collapseRequests': <Always Collapse>,
       'factory': BuildFactory {
@@ -1077,7 +1025,7 @@ config = {
     },
     {
       'auto_reboot': False,
-      'builddir': 'amd64-generic-ASAN',
+      'builddir': 'chromiumos-sdk-master',
       'category': '1release full|info',
       'collapseRequests': <Always Collapse>,
       'factory': BuildFactory {
@@ -1120,7 +1068,67 @@ config = {
                 '--buildbot',
                 '--debug',
                 <master.master_utils.ConditionalProperty instance>,
-                'amd64-generic-asan',
+                'chromiumos-sdk',
+              ],
+              'description': 'cbuildbot',
+              'maxTime': 79200,
+              'name': 'cbuildbot',
+              'timeout': 9000,
+              'usePTY': False,
+            },
+          ),
+        ],
+        properties: Properties(**{}),
+      },
+      'name': 'chromiumos sdk',
+      'slavenames': ['build162-m2'],
+    },
+    {
+      'auto_reboot': False,
+      'builddir': 'refresh-packages-master',
+      'category': '1release full|info',
+      'collapseRequests': <Always Collapse>,
+      'factory': BuildFactory {
+        steps: [
+          (
+            <class buildbot.steps.shell.ShellCommand>,
+            {
+              'command': [
+                'gclient',
+                'sync',
+                '--verbose',
+                '--force',
+                '--delete_unversioned_trees',
+              ],
+              'description': 'Sync buildbot slave files',
+              'name': 'update_scripts',
+              'timeout': 300,
+              'want_stderr': False,
+              'want_stdout': False,
+              'workdir': '/b',
+            },
+          ),
+          (
+            <class buildbot.steps.shell.ShellCommand>,
+            {
+              'command': 'rm -rf "chromite" && /usr/bin/git retry clone https://chromium.googlesource.com/chromiumos/chromite.git && cd "chromite" && /usr/bin/git checkout master',
+              'description': 'Clear and Clone chromite',
+              'haltOnFailure': True,
+              'name': 'Clear and Clone chromite',
+            },
+          ),
+          (
+            <class master.chromium_step.AnnotatedCommand>,
+            {
+              'command': [
+                'chromite/bin/cbuildbot',
+                <buildbot.process.properties.WithProperties instance>,
+                '--buildroot=/b/cbuild/external_master',
+                <master.master_utils.ConditionalProperty instance>,
+                '--buildbot',
+                '--debug',
+                <master.master_utils.ConditionalProperty instance>,
+                'refresh-packages',
               ],
               'description': 'cbuildbot',
               'maxTime': 57600,
@@ -1132,8 +1140,8 @@ config = {
         ],
         properties: Properties(**{}),
       },
-      'name': 'amd64-generic ASAN',
-      'slavenames': ['build84-m2'],
+      'name': 'refresh-packages',
+      'slavenames': ['build94-m2'],
     },
   ],
   'caches': {
@@ -1166,13 +1174,13 @@ config = {
       master: None,
       services: [],
       builderNames: [
-        'x86-generic paladin',
         'amd64-generic paladin',
-        'amd64-generic_freon paladin',
+        'arm-generic paladin',
         'gizmo paladin',
         'mipsel-o32-generic paladin',
-        'arm-generic paladin',
         'panther_embedded-minimal paladin',
+        'x86-generic paladin',
+        'amd64-generic_freon paladin',
       ],
       treeStableTimer: None,
       properties: Properties(**{'scheduler': 'paladin'}),
@@ -1187,17 +1195,14 @@ config = {
       master: None,
       services: [],
       builderNames: [
-        'x86-generic incremental',
         'amd64-generic incremental',
         'daisy incremental',
-        'x86-generic full',
+        'x86-generic incremental',
         'amd64-generic full',
-        'daisy full',
         'arm-generic full',
+        'daisy full',
         'mipsel-o32-generic full',
-        'chromiumos sdk',
-        'x86-generic ASAN',
-        'amd64-generic ASAN',
+        'x86-generic full',
       ],
       treeStableTimer: None,
       properties: Properties(**{'scheduler': 'chromeos'}),
@@ -1216,7 +1221,7 @@ config = {
       master: None,
       branch: None,
       services: [],
-      builderNames: ['refresh packages (chromium:412795)'],
+      builderNames: [],
       properties: Properties(**{'scheduler': 'refresh_pkgs_scheduler'}),
       periodicBuildTimer: 86400,
     },
@@ -1236,10 +1241,10 @@ config = {
     <BuildSlave 'build112-m2', (no builders yet)>,
     <BuildSlave 'build92-m2', (no builders yet)>,
     <BuildSlave 'build90-m2', (no builders yet)>,
-    <BuildSlave 'build182-m2', (no builders yet)>,
+    <BuildSlave 'build263-m2', (no builders yet)>,
     <BuildSlave 'build94-m2', (no builders yet)>,
     <BuildSlave 'build203-m2', (no builders yet)>,
-    <BuildSlave 'build263-m2', (no builders yet)>,
+    <BuildSlave 'build182-m2', (no builders yet)>,
     <BuildSlave 'build87-m2', (no builders yet)>,
   ],
   'status': [

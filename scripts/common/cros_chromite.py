@@ -72,14 +72,17 @@ class ChromiteTarget(object):
   various configuration parameters.
   """
 
-  PRE_CQ_LAUNCHER = 'pre-cq-launcher'
-  PRE_CQ = 'pre-cq'
-  PFQ = 'pfq'
-  PALADIN = 'paladin'
+  ASAN = 'asan'
   CANARY = 'canary'
-  FIRMWARE = 'firmware'
-  INCREMENTAL = 'incremental'
   FACTORY = 'factory'
+  FIRMWARE = 'firmware'
+  FULL = 'full'
+  INCREMENTAL = 'incremental'
+  PALADIN = 'paladin'
+  PFQ = 'pfq'
+  PRE_CQ = 'pre-cq'
+  PRE_CQ_LAUNCHER = 'pre-cq-launcher'
+  REFRESH_PACKAGES = 'refresh-packages'
   SDK = 'sdk'
   TOOLCHAIN = 'toolchain'
 
@@ -96,13 +99,16 @@ class ChromiteTarget(object):
   # Maps configuration name suffixes to target type constants.
   # (see Categorize)
   SUFFIX_MAP = collections.OrderedDict((
-    (PRE_CQ, ('pre-cq',)),
-    (PFQ, ('chrome-pfq', 'chromium-pfq',)),
-    (PALADIN, ('paladin',)),
+    (ASAN, ('asan',)),
     (CANARY, ('release', 'release-group',)),
-    (FIRMWARE, ('firmware',)),
-    (INCREMENTAL, ('incremental',)),
     (FACTORY, ('factory',)),
+    (FIRMWARE, ('firmware',)),
+    (FULL, ('full',)),
+    (INCREMENTAL, ('incremental',)),
+    (PALADIN, ('paladin',)),
+    (PFQ, ('chrome-pfq', 'chromium-pfq',)),
+    (PRE_CQ, ('pre-cq',)),
+    (REFRESH_PACKAGES, ('refresh-packages',)),
     (SDK, ('sdk',)),
     (TOOLCHAIN, ('toolchain-major', 'toolchain-minor',)),
   ))
