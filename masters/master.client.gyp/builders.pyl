@@ -1,0 +1,53 @@
+{
+  "builders": {
+    "gyp_linux": {
+      "recipe": "gyp",
+      "slave_pools": ["linux"],
+      "slavebuilddir": "gyp",
+    },
+    "gyp_mac": {
+      "recipe": "gyp",
+      "slave_pools": ["mac10.9"],
+      "slavebuilddir": "gyp",
+    },
+    "gyp_win": {
+      "recipe": "gyp",
+      "slave_pools": ["win7"],
+      "slavebuilddir": "gyp",
+    },
+  },
+  "git_repo_url": "https://chromium.googlesource.com/external/gyp",
+  "master_base_class": "Master3",
+  "master_classname": "GYP",
+  "master_port": 20301,
+  "master_port_alt": 40301,
+  "master_type": "waterfall",
+  "slave_port": 30301,
+  "slave_pools": {
+    "linux": {
+      "slave_data": {
+        "bits": 64,
+        "os":  "linux",
+        "version": "trusty",
+      },
+      "slaves": ["slave76-c3"],
+    },
+    "mac10.9": {
+      "slave_data": {
+        "bits": 64,
+        "os":  "mac",
+        "version": "10.9",
+      },
+      "slaves": ["vm605-m3"],
+    },
+    "win7": {
+      "slave_data": {
+        "bits": 64,
+        "os":  "win",
+        "version": "win7",
+      },
+      "slaves": ["vm49-m3"],
+    },
+  },
+  "templates": ["templates", "../master.chromium/templates"],
+}

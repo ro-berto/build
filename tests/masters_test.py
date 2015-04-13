@@ -233,6 +233,7 @@ def main(argv):
       'master.client.dart.packages': 'DartPackages',
       'master.client.drmemory': 'DrMemory',
       'master.client.dynamorio': 'DynamoRIO',
+      'master.client.gyp': 'GYP',
       'master.client.libyuv': 'Libyuv',
       'master.client.libvpx': 'Libvpx',
       'master.client.mojo': 'Mojo',

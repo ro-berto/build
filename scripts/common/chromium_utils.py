@@ -1858,12 +1858,10 @@ def ParseBuildersFileContents(path, contents):
   master_name_comps = master_dirname.split('.')[1:]
   buildbot_path =  '.'.join(master_name_comps)
   master_classname =  ''.join(c[0].upper() + c[1:] for c in master_name_comps)
-
-  # TODO: These probably shouldn't be completely hard-coded like this.
-  builders['master'] = master_classname
   builders['master_dirname'] = master_dirname
-  builders['master_classname'] = master_classname
-  builders['buildbot_url'] = 'https://build.chromium.org/p/%s/' % buildbot_path
+  builders.setdefault('master_classname', master_classname)
+  builders.setdefault('buildbot_url',
+                      'https://build.chromium.org/p/%s/' % buildbot_path)
 
   return builders
 
@@ -1901,7 +1899,7 @@ def GetSlavesFromBuilders(builders):
       slaves.append({
           'hostname': slave,
           'builder_name': builder_names,
-          'master': builders['master'],
+          'master': builders['master_classname'],
           'os': slave_data['os'],
           'version': slave_data['version'],
           'bits': slave_data['bits'],

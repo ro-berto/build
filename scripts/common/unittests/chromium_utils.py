@@ -121,7 +121,8 @@ SAMPLE_BUILDERS_PY = """\
     }
   },
   "git_repo_url": "https://chromium.googlesource.com/test/test.git",
-  "master_base_class": "_FakeMaster",
+  "master_base_class": "_FakeBaseMaster",
+  "master_classname": "_FakeMaster",
   "master_port": 20999,
   "master_port_alt": 40999,
   "slave_port": 30999,
@@ -147,10 +148,11 @@ class GetSlavesFromBuilders(unittest.TestCase):
       fp.write(SAMPLE_BUILDERS_PY)
       fp.close()
 
-      slaves = chromium_utils.GetSlavesFromBuilders(fp.name)
+      slaves = chromium_utils.GetSlavesFromBuildersFile(fp.name)
       self.assertEqual(slaves, [{
           'hostname': 'vm9999-m1',
           'builder_name': ['Test Linux'],
+          'master': '_FakeMaster',
           'os': 'linux',
           'version': 'precise',
           'bits': 64,
