@@ -78,6 +78,8 @@
       "--buildroot",
       "[ROOT]/cbuild/external_master",
       "--buildbot",
+      "--branch",
+      "master",
       "--buildnumber",
       "12345",
       "--master-build-id",

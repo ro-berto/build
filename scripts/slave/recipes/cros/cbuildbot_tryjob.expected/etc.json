@@ -99,6 +99,8 @@
       "[SLAVE_BUILD]/chromite/bin/cbuildbot",
       "--buildroot",
       "[ROOT]/cbuild/etc_master",
+      "--branch",
+      "master",
       "--clobber",
       "--timeout",
       "14400",

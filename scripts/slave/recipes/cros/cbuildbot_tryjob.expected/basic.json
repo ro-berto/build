@@ -99,6 +99,8 @@
       "[SLAVE_BUILD]/chromite/bin/cbuildbot",
       "--buildroot",
       "[ROOT]/cbuild/external_master",
+      "--branch",
+      "master",
       "--timeout",
       "14400",
       "--remote-trybot",

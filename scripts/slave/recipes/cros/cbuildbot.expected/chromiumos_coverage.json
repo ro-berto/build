@@ -43,6 +43,8 @@
       "--buildroot",
       "[ROOT]/cbuild/external_master",
       "--buildbot",
+      "--branch",
+      "checkout-this-chromite-branch",
       "--buildnumber",
       "0",
       "--chrome_rev",

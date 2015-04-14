@@ -43,6 +43,8 @@
       "--buildroot",
       "[ROOT]/cbuild/shared_external",
       "--buildbot",
+      "--branch",
+      "master",
       "--buildnumber",
       "12345",
       "--chrome_version",

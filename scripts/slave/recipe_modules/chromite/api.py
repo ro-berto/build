@@ -270,6 +270,8 @@ class ChromiteApi(recipe_api.RecipeApi):
     ]
     if not tryjob:
       cbb_args.append('--buildbot')
+    if self.c.chromite_branch:
+      cbb_args.extend(['--branch', self.c.chromite_branch])
     if self.m.properties.get('buildnumber') is not None:
       # On a developer system, it's been noted that when the build number is
       # zero, it's passed as an empty string in the properties JSON blob.
