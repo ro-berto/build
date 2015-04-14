@@ -49,7 +49,7 @@ class SSHFlavorUtils(default_flavor.DefaultFlavorUtils):
       dest = self.user + '@' + dest
     ssh_cmd.append(dest)
     ssh_cmd.extend(cmd)
-    self._skia_api.m.step(name, ssh_cmd, **kwargs)
+    return self._skia_api.m.step(name, ssh_cmd, **kwargs)
 
   def step(self, *args, **kwargs):
     """Run the given step over SSH."""
@@ -119,3 +119,15 @@ class SSHFlavorUtils(default_flavor.DefaultFlavorUtils):
     cmd.extend([host_path, remote_path])
     self._skia_api.m.step(
         name='scp %s' % self._skia_api.m.path.basename(host_path), cmd=cmd)
+
+  def read_file_on_device(self, path):
+    self.ssh(name='read %s' % self._skia_api.m.path.basename(path),
+             cmd=['cat', path],
+             stdout=self._skia_api.m.raw_io.output()).stdout.rstrip()
+
+  def remove_file_on_device(self, path, *args, **kwargs):
+    """Delete the given file."""
+    return self.ssh(name='rm %s' % self._skia_api.m.path.basename(path),
+                    cmd=['rm', '-f', path],
+                    *args,
+                    **kwargs)

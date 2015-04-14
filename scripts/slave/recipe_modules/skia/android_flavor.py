@@ -201,6 +201,21 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
         cmd=['sleep', '10'])
     self._adb.wait_for_device()
 
+  def read_file_on_device(self, path, *args, **kwargs):
+    """Read the given file."""
+    return self._adb(name='read %s' % self._skia_api.m.path.basename(path),
+                     serial=self.serial,
+                     cmd=['shell', 'cat', path],
+                     stdout=self._skia_api.m.raw_io.output()).stdout.rstrip()
+
+  def remove_file_on_device(self, path, *args, **kwargs):
+    """Delete the given file."""
+    return self._adb(name='rm %s' % self._skia_api.m.path.basename(path),
+                     serial=self.serial,
+                     cmd=['shell', 'rm', '-f', path],
+                     *args,
+                     **kwargs)
+
   def get_device_dirs(self):
     """ Set the directories which will be used by the build steps."""
     device_scratch_dir = self._adb(

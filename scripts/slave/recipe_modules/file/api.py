@@ -84,3 +84,17 @@ class FileApi(recipe_api.RecipeApi):
         **kwargs
     )
     return step_result.raw_io.output.splitlines()
+
+  def remove(self, name, path, **kwargs):
+    """Remove the given file."""
+    return self.m.python.inline(
+        name,
+        """
+        import os
+        import sys
+        os.remove(sys.argv[1])
+        """,
+        args=[path],
+        **kwargs
+    )
+

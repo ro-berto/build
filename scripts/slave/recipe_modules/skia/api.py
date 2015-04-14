@@ -16,7 +16,6 @@ from . import xsan_flavor
 import re
 
 
-TEST_ACTUAL_SKP_VERSION = '43'
 TEST_EXPECTED_SKP_VERSION = '42'
 
 
@@ -151,8 +150,8 @@ class SkiaApi(recipe_api.RecipeApi):
 
   def _readfile(self, filename, *args, **kwargs):
     """Convenience function for reading files."""
-    return self.m.file.read('read %s' % self.m.path.basename(filename),
-                            filename, *args, **kwargs)
+    name = kwargs.pop('name') or 'read %s' % self.m.path.basename(filename)
+    return self.m.file.read(name, filename, *args, **kwargs)
 
   def _writefile(self, filename, contents):
     """Convenience function for writing files."""
@@ -188,21 +187,34 @@ class SkiaApi(recipe_api.RecipeApi):
 
   def download_and_copy_skps(self):
     """Download the SKPs if needed."""
+    # Determine which version we have and which version we want.
     expected_skp_version = None
     actual_skp_version = None
 
     version_file = 'SKP_VERSION'
     expected_version_file = self.m.path['checkout'].join(version_file)
     expected_skp_version = self._readfile(expected_version_file,
+                                          name='Get expected SKP_VERSION',
                                           test_data=TEST_EXPECTED_SKP_VERSION)
 
     local_skp_path = self.local_skp_dirs.skp_dir()
-    actual_version_file = self.m.path.join(local_skp_path, version_file)
-    if self.m.path.exists(actual_version_file):
+    actual_version_file = self.m.path.join(self.tmp_dir, version_file)
+    test_data = TEST_EXPECTED_SKP_VERSION
+    if self.m.properties.get('test_downloaded_skp_version'):
+      test_data = self.m.properties['test_downloaded_skp_version']
+    try:
       actual_skp_version = self._readfile(actual_version_file,
-                                          test_data=TEST_ACTUAL_SKP_VERSION)
+                                          name='Get downloaded SKP_VERSION',
+                                          test_data=test_data)
+    except self.m.step.StepFailure:
+      actual_skp_version = -1
 
+    # If we don't have the desired version, download it.
     if actual_skp_version != expected_skp_version:
+      if actual_skp_version != -1:
+        self.m.file.remove('remove actual SKP_VERSION file',
+                           actual_version_file)
+
       self.flavor.create_clean_host_dir(local_skp_path)
       skp_dest = self.m.path.split(local_skp_path)[0]
       remote_skp_path = self.storage_skp_dirs.skp_dir(expected_skp_version)
@@ -212,10 +224,24 @@ class SkiaApi(recipe_api.RecipeApi):
       self._writefile(actual_version_file, expected_skp_version)
 
     # Copy SKPs to device.
-    if str(self.local_skp_dirs.skp_dir()) != str(self.device_dirs.skp_dir):
-      self.flavor.create_clean_device_dir(self.device_dirs.skp_dir)
-    self.flavor.copy_directory_contents_to_device(self.local_skp_dirs.skp_dir(),
-                                                  self.device_dirs.skp_dir)
+    device_skp_version_file = self.flavor.device_path_join(
+        self.device_dirs.tmp_dir, version_file)
+    if str(actual_version_file) != str(device_skp_version_file):
+      try:
+        device_skp_version = self.flavor.read_file_on_device(
+            device_skp_version_file)
+      except self.m.step.StepFailure:
+        device_skp_version = -1
+      if device_skp_version != expected_skp_version:
+        self.flavor.remove_file_on_device(device_skp_version_file)
+        self.flavor.create_clean_device_dir(self.device_dirs.skp_dir)
+        self.flavor.copy_directory_contents_to_device(
+            self.local_skp_dirs.skp_dir(), self.device_dirs.skp_dir)
+
+        # Copy the new SKP version file.
+        self.flavor.copy_file_to_device(actual_version_file,
+                                        device_skp_version_file)
+
 
   def install(self):
     """Copy the required executables and files to the device."""
