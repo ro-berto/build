@@ -188,7 +188,7 @@
       "browser_tests",
       "--gtest_filter=WebRtc*:Webrtc*:TabCapture*:*MediaStream*",
       "--run-manual",
-      "--ui-test-action-max-timeout=300000",
+      "--ui-test-action-max-timeout=350000",
       "--test-launcher-jobs=1",
       "--test-launcher-bot-mode",
       "--test-launcher-print-test-stdio=always"
@@ -257,7 +257,7 @@
       "browser_tests",
       "--gtest_filter=WebRtc*:Webrtc*:TabCapture*:*MediaStream*",
       "--run-manual",
-      "--ui-test-action-max-timeout=300000",
+      "--ui-test-action-max-timeout=350000",
       "--test-launcher-jobs=1",
       "--test-launcher-bot-mode",
       "--test-launcher-print-test-stdio=always",

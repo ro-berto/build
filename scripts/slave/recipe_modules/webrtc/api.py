@@ -275,8 +275,10 @@ class WebRTCApi(recipe_api.RecipeApi):
         # These tests needs --test-launcher-jobs=1 since some of them are
         # not able to run in parallel (due to the usage of the
         # peerconnection server).
+        # TODO(phoglund): increasing timeout for the HD video quality test.
+        # The original timeout was 300000. See http://crbug.com/476865.
         args = ['--gtest_filter=%s' % self.BROWSER_TESTS_GTEST_FILTER,
-                '--run-manual', '--ui-test-action-max-timeout=300000',
+                '--run-manual', '--ui-test-action-max-timeout=350000',
                 '--test-launcher-jobs=1',
                 '--test-launcher-bot-mode',
                 '--test-launcher-print-test-stdio=always'] + extra_args,
