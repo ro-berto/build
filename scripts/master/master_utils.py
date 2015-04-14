@@ -4,6 +4,7 @@
 
 import os
 import re
+import sys
 
 import buildbot
 from buildbot import interfaces, util
@@ -420,6 +421,8 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
         c,
         active_master,
         buckets=[active_master.buildbucket_bucket],
+        # Set limit absurdly high so all buildbucket builds show up as Pending.
+        max_lease_count=sys.maxint,
     )
 
 def DumpSetup(c, important=None, filename='config.current.txt'):
