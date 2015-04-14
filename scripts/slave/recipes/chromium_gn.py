@@ -24,12 +24,14 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'mac',
         },
+        'should_use_mb': True,
       },
       'Mac GN (dbg)': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'mac',
         },
+        'should_use_mb': True,
       },
     },
   },
@@ -43,6 +45,7 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
         },
         'gclient_apply_config': ['android', 'blink'],
+        'should_use_mb': True,
       },
       'Android GN (dbg)': {
         'chromium_apply_config': ['gn_minimal_symbols'],
@@ -52,6 +55,7 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
         },
         'gclient_apply_config': ['android', 'blink'],
+        'should_use_mb': True,
       },
       'Linux GN': {
         'chromium_config_kwargs': {
@@ -61,6 +65,7 @@ BUILDERS = freeze({
         },
         'gclient_apply_config': ['blink'],
         'should_run_mojo_tests': True,
+        'should_use_mb': True,
       },
       'Linux GN (dbg)': {
         'chromium_apply_config': ['gn_component_build'],
@@ -70,6 +75,7 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'gclient_apply_config': ['blink'],
+        'should_use_mb': True,
       },
     },
   },
@@ -83,6 +89,7 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
         },
         'gclient_apply_config': ['android', 'blink'],
+        'should_use_mb': True,
       },
       'linux_chromium_gn_rel': {
         'chromium_config_kwargs': {
@@ -91,6 +98,7 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'gclient_apply_config': ['blink'],
+        'should_use_mb': True,
       },
     },
   },
@@ -101,6 +109,7 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'chromeos',
         },
+        'should_use_mb': True,
       },
     },
   },
@@ -114,6 +123,7 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
         },
         'gclient_apply_config': ['android'],
+        'should_use_mb': True,
       },
       'Android GN (dbg)': {
         'chromium_apply_config': ['gn_minimal_symbols'],
@@ -123,6 +133,7 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
         },
         'gclient_apply_config': ['android'],
+        'should_use_mb': True,
       },
       'Linux GN': {
         'chromium_config_kwargs': {
@@ -131,6 +142,7 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'should_run_gn_gyp_compare': True,
+        'should_use_mb': True,
       },
       'Linux GN (dbg)': {
         'chromium_apply_config': ['gn_component_build'],
@@ -140,6 +152,7 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'should_run_gn_gyp_compare': True,
+        'should_use_mb': True,
       },
     },
   },
@@ -152,6 +165,7 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'win',
           'TARGET_BITS': 32,
         },
+        'should_use_mb': True,
       },
      'Win8 GN (dbg)': {
         'chromium_apply_config': ['gn_minimal_symbols'],
@@ -160,6 +174,7 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'win',
           'TARGET_BITS': 32,
         },
+        'should_use_mb': True,
       },
     },
   },
@@ -173,6 +188,7 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
         },
         'gclient_apply_config': ['android'],
+        'should_use_mb': True,
       },
       'android_chromium_gn_compile_dbg': {
         'chromium_apply_config': ['gn_minimal_symbols'],
@@ -182,6 +198,7 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
         },
         'gclient_apply_config': ['android'],
+        'should_use_mb': True,
       },
       'linux_chromium_gn_rel': {
         'chromium_config_kwargs': {
@@ -189,6 +206,7 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'linux',
           'TARGET_BITS': 64,
         },
+        'should_use_mb': True,
       },
       'linux_chromium_gn_dbg': {
         'chromium_apply_config': ['gn_component_build'],
@@ -197,12 +215,14 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'linux',
           'TARGET_BITS': 64,
         },
+        'should_use_mb': True,
       },
       'linux_chromium_gn_chromeos_rel': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'chromeos',
         },
+        'should_use_mb': True,
       },
       'linux_chromium_gn_chromeos_dbg': {
         'chromium_apply_config': ['gn_component_build'],
@@ -210,6 +230,7 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'chromeos',
         },
+        'should_use_mb': True,
       },
     },
   },
@@ -437,7 +458,8 @@ def GenTests(api):
     api.properties.tryserver(
         buildername='linux_chromium_gn_rel',
         mastername='tryserver.chromium.linux') +
-    api.step_data('compile', retcode=1)
+    api.step_data('compile', retcode=1) +
+    overrides['tryserver.chromium.linux']['linux_chromium_gn_rel']
   )
 
   yield (
@@ -446,5 +468,6 @@ def GenTests(api):
     api.properties.tryserver(
         buildername='linux_chromium_gn_rel',
         mastername='tryserver.chromium.linux',
-        patch_project='v8')
+        patch_project='v8') +
+    overrides['tryserver.chromium.linux']['linux_chromium_gn_rel']
   )
