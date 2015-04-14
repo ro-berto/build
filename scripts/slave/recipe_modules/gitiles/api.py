@@ -9,27 +9,31 @@ import base64
 
 class Gitiles(recipe_api.RecipeApi):
   """Module for polling a git repository using the Gitiles web interface."""
-  def _fetch(self, url, step_name):
-    step_result = self.m.python(step_name,
-      self.resource('gerrit_client.py'), [
+
+  def _fetch(self, url, step_name, attempts=None):
+    args = [
       '--json-file', self.m.json.output(),
       '--url', url,
-    ])
+    ]
+    if attempts:
+      args.extend(['--attempts', attempts])
+    step_result = self.m.python(step_name,
+      self.resource('gerrit_client.py'), args)
 
     return step_result
 
-  def refs(self, url, step_name='refs'):
+  def refs(self, url, step_name='refs', attempts=None):
     """Returns a list of refs in the remote repository."""
     step_result = self._fetch(
       self.m.url.join(url, '+refs?format=json'),
-      step_name,
+      step_name, attempts=attempts,
     )
 
     refs = sorted(str(ref) for ref in step_result.json.output)
     step_result.presentation.logs['refs'] = refs
     return refs
 
-  def log(self, url, ref, num='all', step_name=None):
+  def log(self, url, ref, num='all', step_name=None, attempts=None):
     """Returns the most recent commits under the given ref.
 
     Args:
@@ -45,7 +49,7 @@ class Gitiles(recipe_api.RecipeApi):
 
     step_result = self._fetch(
       self.m.url.join(url, '+log/%s?format=json&n=%s' % (ref, num)),
-      step_name,
+      step_name, attempts=attempts,
     )
 
     # The output is formatted as a JSON dict with a "log" key. The "log" key
@@ -59,7 +63,7 @@ class Gitiles(recipe_api.RecipeApi):
     step_result.presentation.step_text = '<br />%d new commits' % len(commits)
     return commits
 
-  def commit_log(self, url, commit, step_name=None):
+  def commit_log(self, url, commit, step_name=None, attempts=None):
     """Returns: (dict) the Gitiles commit log structure for a given commit.
 
     Args:
@@ -70,7 +74,7 @@ class Gitiles(recipe_api.RecipeApi):
     step_name = step_name or 'commit log: %s' % commit
 
     commit_url = '%s/+/%s?format=json' % (url, commit)
-    step_result = self._fetch(commit_url, step_name)
+    step_result = self._fetch(commit_url, step_name, attempts=attempts)
     return step_result.json.output
 
   def download_file(self, repository_url, file_path, branch='master', **kwargs):

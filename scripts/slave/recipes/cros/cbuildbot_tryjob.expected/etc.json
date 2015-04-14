@@ -7,7 +7,9 @@
       "--json-file",
       "/path/to/tmp/json",
       "--url",
-      "https://chromium.googlesource.com/chromiumos/tryjobs.git/+/a94a8fe5ccb19ba61c4c0873d391e987982fbbd3?format=json"
+      "https://chromium.googlesource.com/chromiumos/tryjobs.git/+/a94a8fe5ccb19ba61c4c0873d391e987982fbbd3?format=json",
+      "--attempts",
+      "10"
     ],
     "name": "Fetch tryjob commit",
     "~followup_annotations": [
@@ -49,7 +51,9 @@
       "[BUILD]/scripts/tools/pycurl.py",
       "https://chromium.googlesource.com/chromiumos/tryjobs.git/+/a94a8fe5ccb19ba61c4c0873d391e987982fbbd3/user/user.12345?format=text",
       "--outfile",
-      "/path/to/tmp/"
+      "/path/to/tmp/",
+      "--attempts",
+      "10"
     ],
     "name": "Fetch tryjob descriptor (user/user.12345)",
     "~followup_annotations": [

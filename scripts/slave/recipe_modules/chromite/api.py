@@ -14,6 +14,9 @@ class ChromiteApi(recipe_api.RecipeApi):
   repo_url = 'https://chromium.googlesource.com/external/repo.git'
   chromite_subpath = 'chromite'
 
+  # The number of Gitiles attempts to make before giving up.
+  _GITILES_ATTEMPTS = 10
+
   _MANIFEST_CMD_RE = re.compile(r'Automatic:\s+Start\s+([^\s]+)\s+([^\s]+)')
   _BUILD_ID_RE = re.compile(r'CrOS-Build-Id: (.+)')
 
@@ -50,7 +53,8 @@ class ChromiteApi(recipe_api.RecipeApi):
     """
     # Load the job description from Gitiles.
     commit_log = self.m.gitiles.commit_log(
-        repository, revision, step_name='Fetch tryjob commit')
+        repository, revision, step_name='Fetch tryjob commit',
+        attempts=self._GITILES_ATTEMPTS)
 
     # Get the list of different files.
     desc_path = None
@@ -65,7 +69,8 @@ class ChromiteApi(recipe_api.RecipeApi):
     # Load the tryjob description file.
     desc_json = self.m.gitiles.download_file(
         repository, desc_path, branch=revision,
-        step_name=str('Fetch tryjob descriptor (%s)' % (desc_path,)))
+        step_name=str('Fetch tryjob descriptor (%s)' % (desc_path,)),
+        attempts=self._GITILES_ATTEMPTS)
     result = self.m.step.active_result
 
     # Parse the commit description from the file (JSON).
@@ -87,7 +92,8 @@ class ChromiteApi(recipe_api.RecipeApi):
       revision (str): The revision hash to load the build ID from.
     """
     commit_log = self.m.gitiles.commit_log(
-        repository, revision, step_name='Fetch manifest config')
+        repository, revision, step_name='Fetch manifest config',
+        attempts=self._GITILES_ATTEMPTS)
     result = self.m.step.active_result
 
     # Handle missing/invalid response.

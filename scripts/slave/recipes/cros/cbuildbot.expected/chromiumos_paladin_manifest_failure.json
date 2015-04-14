@@ -7,7 +7,9 @@
       "--json-file",
       "/path/to/tmp/json",
       "--url",
-      "https://chromium.googlesource.com/chromiumos/manifest-versions/+/a94a8fe5ccb19ba61c4c0873d391e987982fbbd3?format=json"
+      "https://chromium.googlesource.com/chromiumos/manifest-versions/+/a94a8fe5ccb19ba61c4c0873d391e987982fbbd3?format=json",
+      "--attempts",
+      "10"
     ],
     "name": "Fetch manifest config",
     "~followup_annotations": [
