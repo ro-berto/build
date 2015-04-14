@@ -227,7 +227,6 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'mac',
         },
-        'should_use_mb': True,
       },
     },
   },
@@ -240,7 +239,6 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'win',
           'TARGET_BITS': 32,
         },
-        'should_use_mb': True,
       },
       'win8_chromium_gn_rel': {
         'chromium_apply_config': ['gn_minimal_symbols'],
@@ -249,7 +247,6 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'win',
           'TARGET_BITS': 32,
         },
-        'should_use_mb': True,
       },
     }
   },
