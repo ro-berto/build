@@ -187,6 +187,9 @@ class SkiaApi(recipe_api.RecipeApi):
 
   def download_and_copy_skps(self):
     """Download the SKPs if needed."""
+    # Ensure that the tmp_dir exists.
+    self.m.path.makedirs('tmp_dir', self.tmp_dir)
+
     # Determine which version we have and which version we want.
     expected_skp_version = None
     actual_skp_version = None
@@ -298,7 +301,6 @@ class SkiaApi(recipe_api.RecipeApi):
 
     # Obtain the list of already-generated hashes.
     hash_filename = 'uninteresting_hashes.txt'
-    self.m.path.makedirs('tmp_dir', self.tmp_dir)
     host_hashes_file = self.tmp_dir.join(hash_filename)
     hashes_file = self.flavor.device_path_join(
         self.device_dirs.tmp_dir, hash_filename)
