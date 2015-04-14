@@ -430,7 +430,9 @@ class SkiaApi(recipe_api.RecipeApi):
 
     self.run(self.flavor.step, 'nanobench', cmd=args, abort_on_failure=False)
 
-    if 'Valgrind' in self.c.BUILDER_NAME:  # see skia:2789
+    # See skia:2789.
+    if ('Valgrind' in self.c.BUILDER_NAME and
+        self.c.builder_cfg.get('cpu_or_gpu') == 'GPU'):
       abandonGpuContext = list(args)
       abandonGpuContext.extend(['--abandonGpuContext', '--nocpu'])
       self.run(self.flavor.step, 'nanobench --abandonGpuContext',
