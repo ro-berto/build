@@ -83,127 +83,13 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "[DEPOT_TOOLS]/gn.py",
+      "--root=[SLAVE_BUILD]/src",
       "gen",
-      "-v",
-      "-m",
-      "tryserver.chromium.linux",
-      "-b",
-      "linux_chromium_gn_dbg",
-      "--goma-dir",
-      "[BUILD]/goma",
-      "//out/Debug"
-    ],
-    "name": "mb gen"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/testing/buildbot/tryserver.chromium.linux.json",
-      "/path/to/tmp/json"
-    ],
-    "name": "read test spec",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/tryserver.chromium.linux.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"linux_chromium_gn_dbg\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"base_unittests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "diff",
-      "--cached",
-      "--name-only"
-    ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "git diff to analyze patch",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@files@foo.cc@@@",
-      "@@@STEP_LOG_END@files@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/testing/buildbot/trybot_analyze_config.json",
-      "/path/to/tmp/json"
-    ],
-    "name": "read filter exclusion spec",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@path: 'testing/buildbot/trybot_analyze_config.json'@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"chromium\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"ios\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/tools/mb/mb.py",
-      "analyze",
-      "-m",
-      "tryserver.chromium.linux",
-      "-b",
-      "linux_chromium_gn_dbg",
-      "-v",
       "//out/Debug",
-      "{\"files\": [\"foo.cc\"], \"targets\": [\"base_unittests\", \"all\"]}",
-      "/path/to/tmp/json"
+      "--args=is_component_build=true is_debug=true target_cpu=\"x64\" use_goma=true goma_dir=\"[BUILD]/goma\""
     ],
-    "name": "analyze",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"base_unittests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"status\": \"Found dependency\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"targets\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"base_unittests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@analyze_details@{@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\"@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"original_compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\"@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"original_exes\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"all\"@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\"@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.matching_exes\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\"@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  ]@@@",
-      "@@@STEP_LOG_LINE@analyze_details@}@@@",
-      "@@@STEP_LOG_END@analyze_details@@@"
-    ]
+    "name": "gn"
   },
   {
     "cmd": [
@@ -221,7 +107,7 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "base_unittests"
+      "all"
     ],
     "name": "compile"
   },
@@ -235,5 +121,24 @@
       "//out/Debug"
     ],
     "name": "gn check"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Debug",
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"linux_chromium_gn_dbg\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium.linux\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"chromium_gn\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"linux_chromium_gn_dbg\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium.linux\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"chromium_gn\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--builder-name=linux_chromium_gn_dbg",
+      "--slave-name=TestSlavename",
+      "--build-number=571",
+      "gn_unittests"
+    ],
+    "name": "gn_unittests"
   }
 ]

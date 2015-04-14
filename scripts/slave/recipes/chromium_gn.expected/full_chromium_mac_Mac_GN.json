@@ -77,39 +77,13 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "[DEPOT_TOOLS]/gn.py",
+      "--root=[SLAVE_BUILD]/src",
       "gen",
-      "-v",
-      "-m",
-      "chromium.mac",
-      "-b",
-      "Mac GN",
-      "--goma-dir",
-      "[BUILD]/goma",
-      "//out/Release"
+      "//out/Release",
+      "--args=is_debug=false target_cpu=\"x64\" use_goma=true goma_dir=\"[BUILD]/goma\""
     ],
-    "name": "mb gen"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/testing/buildbot/chromium.mac.json",
-      "/path/to/tmp/json"
-    ],
-    "name": "read test spec",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.mac.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Mac GN\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"base_unittests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
+    "name": "gn"
   },
   {
     "cmd": [
@@ -127,7 +101,6 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "base_unittests",
       "all"
     ],
     "name": "compile"
@@ -142,5 +115,23 @@
       "//out/Release"
     ],
     "name": "gn check"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac GN\", \"buildnumber\": 571, \"mastername\": \"chromium.mac\", \"recipe\": \"chromium_gn\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac GN\", \"buildnumber\": 571, \"mastername\": \"chromium.mac\", \"recipe\": \"chromium_gn\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--builder-name=Mac GN",
+      "--slave-name=TestSlavename",
+      "--build-number=571",
+      "gn_unittests"
+    ],
+    "name": "gn_unittests"
   }
 ]

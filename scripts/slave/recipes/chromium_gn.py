@@ -24,14 +24,12 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'mac',
         },
-        'should_use_mb': True,
       },
       'Mac GN (dbg)': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'mac',
         },
-        'should_use_mb': True,
       },
     },
   },
@@ -45,7 +43,6 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
         },
         'gclient_apply_config': ['android', 'blink'],
-        'should_use_mb': True,
       },
       'Android GN (dbg)': {
         'chromium_apply_config': ['gn_minimal_symbols'],
@@ -55,7 +52,6 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
         },
         'gclient_apply_config': ['android', 'blink'],
-        'should_use_mb': True,
       },
       'Linux GN': {
         'chromium_config_kwargs': {
@@ -65,7 +61,6 @@ BUILDERS = freeze({
         },
         'gclient_apply_config': ['blink'],
         'should_run_mojo_tests': True,
-        'should_use_mb': True,
       },
       'Linux GN (dbg)': {
         'chromium_apply_config': ['gn_component_build'],
@@ -75,7 +70,6 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'gclient_apply_config': ['blink'],
-        'should_use_mb': True,
       },
     },
   },
@@ -89,7 +83,6 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
         },
         'gclient_apply_config': ['android', 'blink'],
-        'should_use_mb': True,
       },
       'linux_chromium_gn_rel': {
         'chromium_config_kwargs': {
@@ -98,7 +91,6 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'gclient_apply_config': ['blink'],
-        'should_use_mb': True,
       },
     },
   },
@@ -109,7 +101,6 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'chromeos',
         },
-        'should_use_mb': True,
       },
     },
   },
@@ -123,7 +114,6 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
         },
         'gclient_apply_config': ['android'],
-        'should_use_mb': True,
       },
       'Android GN (dbg)': {
         'chromium_apply_config': ['gn_minimal_symbols'],
@@ -133,7 +123,6 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
         },
         'gclient_apply_config': ['android'],
-        'should_use_mb': True,
       },
       'Linux GN': {
         'chromium_config_kwargs': {
@@ -142,7 +131,6 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'should_run_gn_gyp_compare': True,
-        'should_use_mb': True,
       },
       'Linux GN (dbg)': {
         'chromium_apply_config': ['gn_component_build'],
@@ -152,7 +140,6 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'should_run_gn_gyp_compare': True,
-        'should_use_mb': True,
       },
     },
   },
@@ -165,7 +152,6 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'win',
           'TARGET_BITS': 32,
         },
-        'should_use_mb': True,
       },
      'Win8 GN (dbg)': {
         'chromium_apply_config': ['gn_minimal_symbols'],
@@ -174,7 +160,6 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'win',
           'TARGET_BITS': 32,
         },
-        'should_use_mb': True,
       },
     },
   },
@@ -188,7 +173,6 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
         },
         'gclient_apply_config': ['android'],
-        'should_use_mb': True,
       },
       'android_chromium_gn_compile_dbg': {
         'chromium_apply_config': ['gn_minimal_symbols'],
@@ -198,7 +182,6 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
         },
         'gclient_apply_config': ['android'],
-        'should_use_mb': True,
       },
       'linux_chromium_gn_rel': {
         'chromium_config_kwargs': {
@@ -206,7 +189,6 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'linux',
           'TARGET_BITS': 64,
         },
-        'should_use_mb': True,
       },
       'linux_chromium_gn_dbg': {
         'chromium_apply_config': ['gn_component_build'],
@@ -215,14 +197,12 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'linux',
           'TARGET_BITS': 64,
         },
-        'should_use_mb': True,
       },
       'linux_chromium_gn_chromeos_rel': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'chromeos',
         },
-        'should_use_mb': True,
       },
       'linux_chromium_gn_chromeos_dbg': {
         'chromium_apply_config': ['gn_component_build'],
@@ -230,7 +210,6 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'chromeos',
         },
-        'should_use_mb': True,
       },
     },
   },
@@ -374,28 +353,25 @@ def _GenStepsInternal(api):
     test_spec = api.chromium_tests.read_test_spec(api, test_spec_file)
     tests = list(api.chromium.steps.generate_gtest(api, mastername,
                                                    buildername, test_spec))
-    additional_compile_targets = test_spec.get(buildername, {}).get(
+    additional_compile_targets = test_spec[buildername].get(
         'additional_compile_targets',
         ['chrome_shell_apk' if is_android else 'all'])
 
-    if api.tryserver.is_tryserver:
-      affected_files = api.tryserver.get_files_affected_by_patch()
+    affected_files = api.tryserver.get_files_affected_by_patch()
 
-      test_compile_targets = all_compile_targets(api, tests)
+    test_compile_targets = all_compile_targets(api, tests)
+    requires_compile, _, compile_targets = \
+        api.chromium_tests.analyze(
+            affected_files,
+            test_compile_targets + additional_compile_targets,
+            test_compile_targets,
+            'trybot_analyze_config.json',
+            use_mb=True,
+            build_output_dir='//out/%s' % api.chromium.c.build_config_fs)
 
-      requires_compile, _, compile_targets = \
-          api.chromium_tests.analyze(
-              affected_files,
-              test_compile_targets + additional_compile_targets,
-              test_compile_targets,
-              'trybot_analyze_config.json',
-              use_mb=True,
-              build_output_dir='//out/%s' % api.chromium.c.build_config_fs)
-      if requires_compile:
-        api.chromium.compile(compile_targets)
-    else:
-      api.chromium.compile(all_compile_targets(api, tests) +
-                           additional_compile_targets)
+    if requires_compile:
+      api.chromium.compile(compile_targets)
+
   else:
     api.chromium.configure_bot(BUILDERS, ['gn'])
     api.bot_update.ensure_checkout(
@@ -442,16 +418,15 @@ def GenTests(api):
                    buildername: {
                      'gtest_tests': ['base_unittests'],
                    },
-               })))
-
-        if 'tryserver' in mastername:
-           overrides[mastername][buildername] += api.override_step_data(
+               })) +
+           api.override_step_data(
               'analyze',
               api.json.output({
                   'status': 'Found dependency',
                   'targets': ['base_unittests'],
                   'build_targets': ['base_unittests'],
               }))
+       )
 
   for test in api.chromium.gen_tests_for_builders(BUILDERS, overrides):
     yield test
@@ -462,8 +437,7 @@ def GenTests(api):
     api.properties.tryserver(
         buildername='linux_chromium_gn_rel',
         mastername='tryserver.chromium.linux') +
-    api.step_data('compile', retcode=1) +
-    overrides['tryserver.chromium.linux']['linux_chromium_gn_rel']
+    api.step_data('compile', retcode=1)
   )
 
   yield (
@@ -472,6 +446,5 @@ def GenTests(api):
     api.properties.tryserver(
         buildername='linux_chromium_gn_rel',
         mastername='tryserver.chromium.linux',
-        patch_project='v8') +
-    overrides['tryserver.chromium.linux']['linux_chromium_gn_rel']
+        patch_project='v8')
   )
