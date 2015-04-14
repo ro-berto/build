@@ -404,8 +404,6 @@
           "v8_all"
         ],
         "excluded_builders" : [
-          "V8 Linux - mipsel - sim - builder",
-          "V8 Linux - mips64el - sim - builder",
           "V8 Linux - mipsel - sim",
           "V8 Linux - ppc - sim",
           "V8 Linux - ppc64 - sim",
@@ -422,7 +420,6 @@
           "V8 Mac GC Stress",
           "V8 Arm GC Stress",
           "V8 Mac64 ASAN",
-          "V8 Mips - builder",
           "V8 Mips - big endian - nosnap - 1",
           "V8 Mips - big endian - nosnap - 2",
           "V8 Random Deopt Fuzzer - debug",

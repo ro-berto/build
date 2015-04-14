@@ -40,12 +40,9 @@ categories_steps = {
 }
 
 exclusions = {
-  'V8 Linux - mipsel - sim - builder': [],
-  'V8 Linux - mips64el - sim - builder': [],
   'V8 Linux - mipsel - sim': [],
   'V8 Linux - ppc - sim': [],
   'V8 Linux - ppc64 - sim': [],
-  'V8 Mips - builder': [],
   'V8 Mips - big endian - nosnap - 1': [],
   'V8 Mips - big endian - nosnap - 2': [],
   'V8 Linux - x87 - nosnap - debug builder': [],
