@@ -7,7 +7,7 @@
       "--master",
       "client.v8.branches",
       "--builder",
-      "V8 Linux64 - trunk",
+      "V8 Linux - roll branch",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -19,10 +19,9 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "v8@candidates:20123",
+      "v8@refs/heads/4.4.42:20123",
       "--no_shallow",
-      "--output_manifest",
-      "--with_branch_heads"
+      "--output_manifest"
     ],
     "name": "bot_update",
     "~followup_annotations": [
@@ -57,7 +56,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "target_arch=x64 v8_target_arch=x64"
+      "GYP_DEFINES": "target_arch=ia32 v8_target_arch=ia32"
     },
     "name": "gclient runhooks"
   },
@@ -88,11 +87,20 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]/v8/tools/presubmit.py"
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "name": "Presubmit"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[v8]/resources/v8testing.py",
       "--target",
       "Release",
       "--arch",
-      "x64",
+      "ia32",
       "--testname",
       "unittests",
       "--no-variants",
@@ -126,7 +134,7 @@
       "--target",
       "Release",
       "--arch",
-      "x64",
+      "ia32",
       "--testname",
       "default",
       "--flaky-tests",
@@ -161,7 +169,7 @@
       "--target",
       "Release",
       "--arch",
-      "x64",
+      "ia32",
       "--testname",
       "default",
       "--flaky-tests",
@@ -196,7 +204,7 @@
       "--target",
       "Release",
       "--arch",
-      "x64",
+      "ia32",
       "--testname",
       "webkit",
       "--flaky-tests",
@@ -231,7 +239,7 @@
       "--target",
       "Release",
       "--arch",
-      "x64",
+      "ia32",
       "--testname",
       "webkit",
       "--flaky-tests",
@@ -266,7 +274,7 @@
       "--target",
       "Release",
       "--arch",
-      "x64",
+      "ia32",
       "--testname",
       "test262",
       "--no-variants",
@@ -300,7 +308,7 @@
       "--target",
       "Release",
       "--arch",
-      "x64",
+      "ia32",
       "--testname",
       "mozilla",
       "--json-test-results",

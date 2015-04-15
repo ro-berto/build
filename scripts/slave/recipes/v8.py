@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import re
+
 DEPS = [
   'archive',
   'chromium',
@@ -56,6 +58,23 @@ def _sanitize_nonalpha(text):
 
 
 def GenTests(api):
+  # Simulated branch names for testing. Optionally upgrade these in branch
+  # period to reflect the real branches used by the gitiles poller.
+  STABLE_BRANCH = '4.2'
+  BETA_BRANCH = '4.3'
+  ROLL_BRANCH = '4.4.42'
+
+  def get_test_branch_name(mastername, buildername):
+    if mastername == 'client.dart.fyi':
+      return STABLE_BRANCH
+    if re.search(r'stable branch', buildername):
+      return STABLE_BRANCH
+    if re.search(r'beta branch', buildername):
+      return BETA_BRANCH
+    if re.search(r'roll branch', buildername):
+      return ROLL_BRANCH
+    return 'master'
+
   for mastername, master_config in api.v8.BUILDERS.iteritems():
     for buildername, bot_config in master_config['builders'].iteritems():
       bot_type = bot_config.get('bot_type', 'builder_tester')
@@ -63,12 +82,14 @@ def GenTests(api):
       if bot_type in ['builder', 'builder_tester']:
         assert bot_config['testing'].get('parent_buildername') is None
 
+      branch = get_test_branch_name(mastername, buildername)
       v8_config_kwargs = bot_config.get('v8_config_kwargs', {})
       test = (
         api.test('full_%s_%s' % (_sanitize_nonalpha(mastername),
                                  _sanitize_nonalpha(buildername))) +
         api.properties.generic(mastername=mastername,
                                buildername=buildername,
+                               branch=branch,
                                parent_buildername=bot_config.get(
                                    'parent_buildername'),
                                revision='20123') +
@@ -89,7 +110,8 @@ def GenTests(api):
   yield (
     api.test('branch_sync_failure') +
     api.properties.tryserver(mastername='client.v8.branches',
-                             buildername='V8 Linux - trunk',
+                             buildername='V8 Linux - roll branch',
+                             branch=ROLL_BRANCH,
                              revision='20123') +
     api.platform('linux', 32) +
     api.step_data('bot_update', retcode=1)
@@ -106,6 +128,7 @@ def GenTests(api):
                                                suffix)) +
       api.properties.generic(mastername=mastername,
                              buildername=buildername,
+                             branch='master',
                              parent_buildername=bot_config.get(
                                  'parent_buildername')) +
       api.platform(bot_config['testing']['platform'],
@@ -122,6 +145,7 @@ def GenTests(api):
         _sanitize_nonalpha(mastername), _sanitize_nonalpha(buildername))) +
     api.properties.generic(mastername=mastername,
                            buildername=buildername,
+                           branch='master',
                            parent_buildername=bot_config.get(
                                'parent_buildername')) +
     api.platform(bot_config['testing']['platform'],

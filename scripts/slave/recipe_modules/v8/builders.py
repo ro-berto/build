@@ -1459,15 +1459,11 @@ BUILDERS = {
 ####### Waterfall: client.v8.branches
 BRANCH_BUILDERS = {}
 
-def AddBranchBuilder(branch_config, build_config, arch, bits, presubmit=False,
-                     unittests=False):
-  tests = ['v8testing', 'webkit', 'test262', 'mozilla']
-  if unittests:
-    tests = ['unittests'] + tests
+def AddBranchBuilder(build_config, arch, bits, presubmit=False):
+  tests = ['unittests', 'v8testing', 'webkit', 'test262', 'mozilla']
   if presubmit:
     tests = ['presubmit'] + tests
   return {
-    'v8_apply_config': [branch_config],
     'v8_config_kwargs': {
       'BUILD_CONFIG': build_config,
       'TARGET_ARCH': arch,
@@ -1479,21 +1475,14 @@ def AddBranchBuilder(branch_config, build_config, arch, bits, presubmit=False,
   }
 
 for build_config, name_suffix in (('Release', ''), ('Debug', ' - debug')):
-  for branch_name, branch_config in (('stable branch', 'stable_branch'),
-                                     ('beta branch', 'beta_branch'),
-                                     ('trunk', 'candidates_branch')):
+  for branch_name in ('stable branch', 'beta branch', 'roll branch'):
     name = 'V8 Linux - %s%s' % (branch_name, name_suffix)
-    # TODO(machenbach): Run unit tests on stable branch after M40.
-    unittests = branch_config != 'stable_branch'
     BRANCH_BUILDERS[name] = AddBranchBuilder(
-        branch_config, build_config, 'intel', 32, presubmit=True,
-        unittests=unittests)
+        build_config, 'intel', 32, presubmit=True)
     name = 'V8 Linux64 - %s%s' % (branch_name, name_suffix)
-    BRANCH_BUILDERS[name] = AddBranchBuilder(
-        branch_config, build_config, 'intel', 64, unittests=unittests)
+    BRANCH_BUILDERS[name] = AddBranchBuilder(build_config, 'intel', 64)
     name = 'V8 arm - sim - %s%s' % (branch_name, name_suffix)
-    BRANCH_BUILDERS[name] = AddBranchBuilder(
-        branch_config, build_config, 'intel', 32, unittests=unittests)
+    BRANCH_BUILDERS[name] = AddBranchBuilder(build_config, 'intel', 32)
     BRANCH_BUILDERS[name]['chromium_apply_config'] = ['simulate_arm']
 
 BUILDERS['client.v8.branches'] = {'builders': BRANCH_BUILDERS}
@@ -1501,7 +1490,6 @@ BUILDERS['client.v8.branches'] = {'builders': BRANCH_BUILDERS}
 BUILDERS['client.dart.fyi'] = {'builders': {
   'v8-%s-release' % platform: {
     'chromium_apply_config': ['disassembler'],
-    'v8_apply_config': ['stable_branch'],
     'v8_config_kwargs': {
       'BUILD_CONFIG': 'Release',
       'TARGET_ARCH': 'intel',

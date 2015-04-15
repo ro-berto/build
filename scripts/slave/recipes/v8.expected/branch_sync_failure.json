@@ -7,7 +7,7 @@
       "--master",
       "client.v8.branches",
       "--builder",
-      "V8 Linux - trunk",
+      "V8 Linux - roll branch",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -25,10 +25,9 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "v8@candidates:20123",
+      "v8@refs/heads/4.4.42:20123",
       "--no_shallow",
-      "--output_manifest",
-      "--with_branch_heads"
+      "--output_manifest"
     ],
     "name": "bot_update",
     "~followup_annotations": [

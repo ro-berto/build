@@ -12,6 +12,10 @@ from slave import recipe_api
 from slave.recipe_modules.v8 import builders
 
 
+# Regular expressions for v8 branch names.
+RELEASE_BRANCH_RE = re.compile(r'^\d+\.\d+$')
+ROLL_BRANCH_RE = re.compile(r'^\d+\.\d+\.\d+$')
+
 # With more than 23 letters, labels are to big for buildbot's popup boxes.
 MAX_LABEL_SIZE = 23
 
@@ -234,17 +238,20 @@ class V8Api(recipe_api.RecipeApi):
     revision = self.m.properties.get(
         'parent_got_revision', self.m.properties.get('revision', 'HEAD'))
     solution = self.m.gclient.c.solutions[0]
-    if self.c.branch:
-      if self.c.branch == 'candidates':
-        revision = 'candidates:%s' % revision
-      else:
-        revision = 'refs/branch-heads/%s:%s' % (self.c.branch, revision)
+    branch = self.m.properties.get('branch', 'master')
+    needs_branch_heads = False
+    if RELEASE_BRANCH_RE.match(branch):
+      revision = 'refs/branch-heads/%s:%s' % (branch, revision)
+      needs_branch_heads = True
+    elif ROLL_BRANCH_RE.match(branch):
+      revision = 'refs/heads/%s:%s' % (branch, revision)
+
     solution.revision = revision
     update_step = self.m.bot_update.ensure_checkout(
         no_shallow=True,
         patch_root=[None, 'v8'][bool(self.m.tryserver.is_tryserver)],
         output_manifest=True,
-        with_branch_heads=bool(self.c.branch),
+        with_branch_heads=needs_branch_heads,
         patch_project_roots={'v8': []})
 
     assert update_step.json.output['did_run']

@@ -6,11 +6,6 @@ from slave.recipe_config import config_item_context, ConfigGroup
 from slave.recipe_config import List, Set, Single, Static
 
 
-# TODO(machenbach): Move this to an external configuration file.
-STABLE_BRANCH = '4.2'
-BETA_BRANCH = '4.3'
-
-
 def BaseConfig(**_kwargs):
   shard_count = _kwargs.get('SHARD_COUNT', 1)
   shard_run = _kwargs.get('SHARD_RUN', 1)
@@ -19,7 +14,6 @@ def BaseConfig(**_kwargs):
   assert shard_run <= shard_count
 
   return ConfigGroup(
-    branch = Single(basestring, required=False),
     compile_py = ConfigGroup(
       compile_extra_args = List(basestring),
     ),
@@ -54,22 +48,6 @@ config_ctx = config_item_context(BaseConfig, {}, 'v8')
 @config_ctx()
 def v8(c):
   pass
-
-
-# Branch configs.
-@config_ctx()
-def stable_branch(c):
-  c.branch = STABLE_BRANCH
-
-
-@config_ctx()
-def beta_branch(c):
-  c.branch = BETA_BRANCH
-
-
-@config_ctx()
-def candidates_branch(c):
-  c.branch = 'candidates'
 
 
 @config_ctx()

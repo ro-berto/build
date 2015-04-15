@@ -7,7 +7,7 @@
       "--master",
       "client.v8.branches",
       "--builder",
-      "V8 Linux64 - trunk - debug",
+      "V8 arm - sim - roll branch - debug",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -19,10 +19,9 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "v8@candidates:20123",
+      "v8@refs/heads/4.4.42:20123",
       "--no_shallow",
-      "--output_manifest",
-      "--with_branch_heads"
+      "--output_manifest"
     ],
     "name": "bot_update",
     "~followup_annotations": [
@@ -57,7 +56,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "target_arch=x64 v8_enable_slow_dchecks=1 v8_optimized_debug=1 v8_target_arch=x64"
+      "GYP_DEFINES": "target_arch=ia32 v8_enable_slow_dchecks=1 v8_optimized_debug=1 v8_target_arch=arm"
     },
     "name": "gclient runhooks"
   },
@@ -92,7 +91,7 @@
       "--target",
       "Debug",
       "--arch",
-      "x64",
+      "arm",
       "--testname",
       "unittests",
       "--no-variants",
@@ -126,7 +125,7 @@
       "--target",
       "Debug",
       "--arch",
-      "x64",
+      "arm",
       "--testname",
       "default",
       "--flaky-tests",
@@ -161,7 +160,7 @@
       "--target",
       "Debug",
       "--arch",
-      "x64",
+      "arm",
       "--testname",
       "default",
       "--flaky-tests",
@@ -196,7 +195,7 @@
       "--target",
       "Debug",
       "--arch",
-      "x64",
+      "arm",
       "--testname",
       "webkit",
       "--flaky-tests",
@@ -231,7 +230,7 @@
       "--target",
       "Debug",
       "--arch",
-      "x64",
+      "arm",
       "--testname",
       "webkit",
       "--flaky-tests",
@@ -266,7 +265,7 @@
       "--target",
       "Debug",
       "--arch",
-      "x64",
+      "arm",
       "--testname",
       "test262",
       "--no-variants",
@@ -300,7 +299,7 @@
       "--target",
       "Debug",
       "--arch",
-      "x64",
+      "arm",
       "--testname",
       "mozilla",
       "--json-test-results",
