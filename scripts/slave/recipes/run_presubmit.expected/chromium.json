@@ -83,6 +83,8 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
       "[DEPOT_TOOLS]/presubmit_support.py",
       "--root",
       "[SLAVE_BUILD]/src",

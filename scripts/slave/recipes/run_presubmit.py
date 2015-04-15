@@ -5,19 +5,16 @@
 DEPS = [
   'bot_update',
   'gclient',
-  'git',
   'json',
-  'path',
+  'presubmit',
   'properties',
   'rietveld',
-  'step',
   'tryserver',
 ]
 
 
 def _GenStepsInternal(api):
-  root = api.rietveld.calculate_issue_root(
-      extra_patch_project_roots={'v8': []})
+  root = api.rietveld.calculate_issue_root(extra_patch_project_roots={'v8': []})
 
   # TODO(iannucci): Pass the build repo info directly via properties
   repo_name = api.properties['repo_name']
@@ -38,28 +35,10 @@ def _GenStepsInternal(api):
     # If got_revision is an svn revision, then use got_revision_git.
     upstream = bot_update_step.json.output['properties'].get(
         '%s_git' % got_revision_property) or ''
-  # TODO(hinoka): Extract email/name from issue?
-  api.git('-c', 'user.email=commit-bot@chromium.org',
-                '-c', 'user.name=The Commit Bot',
-                'commit', '-a', '-m', 'Committed patch',
-                name='commit git patch',
-                cwd=api.path['checkout'].join(root))
 
-  api.step('presubmit', [
-    api.path['depot_tools'].join('presubmit_support.py'),
-    '--root', api.path['checkout'].join(root),
-    '--commit',
-    '--verbose', '--verbose',
-    '--issue', api.properties['issue'],
-    '--patchset', api.properties['patchset'],
-    '--skip_canned', 'CheckRietveldTryJobExecution',
-    '--skip_canned', 'CheckTreeIsOpen',
-    '--skip_canned', 'CheckBuildbotPendingBuilds',
-    '--rietveld_url', api.properties['rietveld'],
-    '--rietveld_email', '',  # activates anonymous mode
-    '--rietveld_fetch',
-    '--upstream', upstream,  # '' if not in bot_update mode.
-    '--trybot-json', api.json.output()])
+  api.presubmit.commit_patch_locally(root)
+  api.presubmit(root=root, upstream=upstream,
+                trybot_json_output=api.json.output())
 
 
 def GenSteps(api):
