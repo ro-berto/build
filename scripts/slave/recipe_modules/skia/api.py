@@ -311,18 +311,22 @@ class SkiaApi(recipe_api.RecipeApi):
           """
           import contextlib
           import math
+          import socket
           import sys
           import time
           import urllib2
 
           HASHES_URL = 'https://gold.skia.org/2/_/hashes'
           RETRIES = 5
+          TIMEOUT = 60
           WAIT_BASE = 15
 
+          socket.setdefaulttimeout(TIMEOUT)
           for retry in range(RETRIES):
             try:
               with open(sys.argv[1], 'w') as f:
-                with contextlib.closing(urllib2.urlopen(HASHES_URL)) as w:
+                with contextlib.closing(
+                    urllib2.urlopen(HASHES_URL, timeout=TIMEOUT)) as w:
                   f.write(w.read())
                   break
             except:
