@@ -106,7 +106,7 @@ class SlaveAllocator(object):
     for class_name, class_name_entry in state_class_map.iteritems():
       for subtype, slave_list in class_name_entry.iteritems():
         cls = SlaveClass(name=class_name, subtype=subtype)
-        class_map.setdefault(cls, []).extend(slave_list)
+        class_map.setdefault(cls, []).extend(str(s) for s in slave_list)
     self._state = SlaveState(
         class_map=class_map,
         unallocated=None)

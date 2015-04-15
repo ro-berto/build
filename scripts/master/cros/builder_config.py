@@ -46,7 +46,7 @@ class BuilderConfig(object):
   FLOATING = None
   UNIQUE = False
   COLLAPSE = True
-  MASTER_BUILDER_NAME = None
+  CONFIG_BUILDERNAME_MAP = {}
   SLAVE_TYPE = SlaveType.BAREMETAL
   SLAVE_CLASS = None
   CBB_VARIANT = None
@@ -60,7 +60,7 @@ class BuilderConfig(object):
     """
     self.config = config
 
-  def __str__(self):
+  def __repr__(self):
     return '%s/%s' % (self.config.name, self.config.category)
 
   def __cmp__(self, other):
@@ -140,11 +140,8 @@ class BuilderConfig(object):
     """Returns (str): The waterfall builder name for this configuration."""
     if self.config.get('buildbot_waterfall_name'):
       return self.config['buildbot_waterfall_name']
-    if self.config.is_master:
-      builder_name = self.MASTER_BUILDER_NAME or self._GetBuilderName()
-    else:
-      builder_name = self._GetBuilderName()
-    return str(builder_name)
+    return str(self.CONFIG_BUILDERNAME_MAP.get(self.config.name) or
+               self._GetBuilderName())
 
   @property
   def is_experimental(self):
@@ -184,7 +181,9 @@ class PaladinBuilderConfig(BuilderConfig):
 
   UNIQUE = True
   FLOATING = 'paladin'
-  MASTER_BUILDER_NAME = 'CQ master'
+  CONFIG_BUILDERNAME_MAP = {
+      'master-paladin': 'CQ master',
+  }
 
   def _GetBuilderName(self):
     return '%s paladin' % (self.config.base,)
@@ -239,7 +238,9 @@ class FirmwareBuilderConfig(BuilderConfig):
 class PfqBuilderConfig(BuilderConfig):
   """BuilderConfig for PFQ launcher targets."""
 
-  MASTER_BUILDER_NAME = 'Chrome PFQ master'
+  CONFIG_BUILDERNAME_MAP = {
+      'master-chromium-pfq': 'Chrome PFQ master',
+  }
 
   def _GetBuilderName(self):
     if self.config.suffix == 'chrome-pfq':
@@ -251,13 +252,24 @@ class PfqBuilderConfig(BuilderConfig):
     return '%s %s PFQ' % (self.config.base, project)
 
 
+class PreFlightBranchBuilderConfig(BuilderConfig):
+  """BuilderConfig for pre-flight branch targets."""
+
+  def _GetBuilderName(self):
+    return '%s pre-flight' % (self.config.base,)
+
+
 class CanaryBuilderConfig(BuilderConfig):
   """BuilderConfig for canary launcher targets."""
 
-  MASTER_BUILDER_NAME = 'Canary master'
+  CONFIG_BUILDERNAME_MAP = {
+      'master-release': 'Canary master',
+  }
 
   def _GetBuilderName(self):
-    return '%s canary' % (self.config.base,)
+    if self.config.get('active_waterfall') == 'chromeos':
+      return '%s canary' % (self.config.base,)
+    return '%s full' % (self.config.base,)
 
 
 class SdkBuilderConfig(BuilderConfig):
@@ -310,6 +322,7 @@ CONFIG_MAP = OrderedDict((
     (ChromiteTarget.ASAN, AsanBuilderConfig),
     (ChromiteTarget.FIRMWARE, FirmwareBuilderConfig),
     (ChromiteTarget.PFQ, PfqBuilderConfig),
+    (ChromiteTarget.PRE_FLIGHT_BRANCH, PreFlightBranchBuilderConfig),
     (ChromiteTarget.CANARY, CanaryBuilderConfig),
     (ChromiteTarget.SDK, SdkBuilderConfig),
     (ChromiteTarget.TOOLCHAIN, ToolchainBuilderConfig),

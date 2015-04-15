@@ -47,9 +47,9 @@ TOT_BRANCH = 'master'
 # - Run "gclient runhooks --force".
 PINS = collections.OrderedDict((
   (TOT_BRANCH, '7ebaeff577a1fb96b855b42b2fc9db943ca05877'),
-  ('release-R41-6680.B', 'c646e387feb48aa2a8a78908798fa40379da6ba1'),
-  ('release-R40-6457.B', '418ae60c87c0299670725b755a87e2d71fadb897'),
-  ('release-R39-6310.B', '45f459eaf5ffcfb34469824e9e751bd1491175df'),
+  ('release-R43-6946.B', 'd3d5f72685c19332c673588556b784341149323e'),
+  ('release-R42-6812.B', '719914944802dede1a0dd1cd93376b76880c63f4'),
+  ('release-R41-6680.B', '925ac2312082511f08e7ae121392ecb1b3d61445'),
 ))
 
 
@@ -82,6 +82,7 @@ class ChromiteTarget(object):
   PFQ = 'pfq'
   PRE_CQ = 'pre-cq'
   PRE_CQ_LAUNCHER = 'pre-cq-launcher'
+  PRE_FLIGHT_BRANCH = 'pre-flight-branch'
   REFRESH_PACKAGES = 'refresh-packages'
   SDK = 'sdk'
   TOOLCHAIN = 'toolchain'
@@ -108,6 +109,7 @@ class ChromiteTarget(object):
     (PALADIN, ('paladin',)),
     (PFQ, ('chrome-pfq', 'chromium-pfq',)),
     (PRE_CQ, ('pre-cq',)),
+    (PRE_FLIGHT_BRANCH, ('pre-flight-branch',)),
     (REFRESH_PACKAGES, ('refresh-packages',)),
     (SDK, ('sdk',)),
     (TOOLCHAIN, ('toolchain-major', 'toolchain-minor',)),
@@ -142,24 +144,24 @@ class ChromiteTarget(object):
   def name(self):
     """Returns: (str) The target's name. This may be None for child targets.
     """
-    return self._name
+    return str(self._name)
 
   @property
   def board(self):
     boards = self.get('boards')
     if not boards or len(boards) != 1:
       return None
-    return boards[0]
+    return str(boards[0])
 
   @property
   def base(self):
     """Returns: (str) The base board name."""
-    return self._base
+    return str(self._base)
 
   @property
   def suffix(self):
     """Returns: (str) The base board name."""
-    return self._suffix
+    return str(self._suffix)
 
   @property
   def category(self):

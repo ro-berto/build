@@ -50,6 +50,8 @@ class UpdateInfo(collections.namedtuple(
 
   _TRANSFORMATIONS = (
       (r'-canary-', r'-release-'),
+      (r'-full', r'-release'),
+      (r'-pre-flight', r'-pre-flight-branch'),
       (r'(x86|amd64)$', r'\1-generic'),
       (r'^chromium-tot-chromeos-(.+)-asan', r'\1-tot-asan-informational'),
       (r'^chromium-tot-chromeos-(.+)', r'\1-tot-chrome-pfq-informational'),
@@ -84,8 +86,7 @@ class UpdateInfo(collections.namedtuple(
     # Replace 'canary' with 'release'.
     for find, replace in cls._TRANSFORMATIONS:
       name = re.sub(find, replace, name)
-      print find, replace, name
-    yield name
+      yield name
 
     # Is 'name' valid if it was a release group?
     if not name.endswith('-group'):
@@ -94,7 +95,7 @@ class UpdateInfo(collections.namedtuple(
       yield name_group
 
   @classmethod
-  def process(cls, config, name, default_branch):
+  def process(cls, config, name, branches=None, blacklist=None):
     """Construct an UpdateInfo to map a source name.
 
     This function works by attempting to transform a source name into a known
@@ -105,7 +106,7 @@ class UpdateInfo(collections.namedtuple(
     Args:
       config (cros_chromite.ChromiteConfig) The Chromite config instance.
       name (str): The source name to process and map.
-      default_branch (str): The default branch to apply if the field is empty.
+      branches (list): A list of valid branches, extracted from 'cros_chromite'.
     Returns (UpdateInfo/None): The constructed UpdateInfo, or None if there was
         no identified mapping.
     """
@@ -120,9 +121,15 @@ class UpdateInfo(collections.namedtuple(
     for orig_name, branch in sliding_split_gen():
       logging.debug("Trying construction: Name(%s), Branch(%s)",
           orig_name, branch)
+      if branches and not branch in branches:
+        logging.debug("Ignoring branch value '%s'.", branch)
+        continue
 
       # See if we can properly permute the original name.
       for permuted_name in cls.permutations(orig_name):
+        if blacklist and any(b in permuted_name for b in blacklist):
+          logging.debug("Ignoring blacklisted config name: %s", permuted_name)
+          continue
         if permuted_name in config:
           candidates.add(permuted_name)
       if not candidates:
@@ -138,7 +145,7 @@ class UpdateInfo(collections.namedtuple(
 
     if not branch:
       # We need to do an update to add the branch. Default to 'master'.
-      branch = default_branch
+      branch = 'master'
 
     candidates = sorted(candidates)
     for candidate in candidates:
@@ -160,10 +167,10 @@ def main(args):
       help='Increase verbosity. Can be specified multiple times.')
   parser.add_argument('-d', '--dry-run', action='store_true',
       help="Print what actions will be taken, but don't modify anything.")
-  parser.add_argument('-B', '--branch', default='master',
-      help="The branch to use, if one is not present (default is %(default)s)")
   parser.add_argument('-n', '--names', action='store_true',
       help="If specified, then regard 'path' as directory names to test.")
+  parser.add_argument('-B', '--blacklist', action='append', default=[],
+      help="Blacklist configs that contain this text.")
   args = parser.parse_args()
 
   # Select verbosity.
@@ -175,16 +182,22 @@ def main(args):
     loglevel = logging.DEBUG
   logging.getLogger().setLevel(loglevel)
 
-  # Load our Chromite config. We're going to load ToT.
-  cbuildbot_config = cros_chromite.Get()
+  # Load all availables Chromite configs. We're going to load ToT.
+  config_names = set()
+  branches = set()
+  for branch in cros_chromite.PINS.iterkeys():
+    branches.add(branch)
+    config_names.update(cros_chromite.Get(branch=branch).iterkeys())
 
   # If we're just testing against names, do that.
   if args.names:
     errors = 0
     for n in args.path:
-      update_info = UpdateInfo.process(cbuildbot_config, n, args.branch)
-      if update_info:
-        logging.warning("[%s] => [%s]", update_info.src, update_info.dst)
+      update_info_list = UpdateInfo.process(config_names, n, branches=branches,
+                                            blacklist=args.blacklist)
+      if update_info_list:
+        for update_info in update_info_list:
+          logging.warning("[%s] => [%s]", update_info.src, update_info.dst)
       else:
         logging.warning("No transformation for name [%s].", n)
         errors += 1
@@ -205,7 +218,8 @@ def main(args):
       if not os.path.isdir(f_path):
         continue
 
-      update_info_list = UpdateInfo.process(cbuildbot_config, f, args.branch)
+      update_info_list = UpdateInfo.process(config_names, f, branches=branches,
+                                            blacklist=args.blacklist)
       if not update_info_list:
         logging.info("No update information for directory [%s]", f)
         unmatched.add(f)
@@ -248,8 +262,9 @@ def main(args):
                     len(unmatched), ', '.join(sorted(unmatched)))
   if multiples:
     for f in sorted(multiples.iterkeys()):
-      logging.warning("Multiple permutations of [%s]: %s",
-                      f, ", ".join(m.dst for m in multiples[f]))
+      logging.warning("Multiple permutations of [%s]: %s\n%s",
+                      f, ", ".join(m.dst for m in multiples[f]),
+                      '\n'.join('mv %s %s' % (f, m.dst) for m in multiples[f]))
   return 0
 
 
