@@ -19,13 +19,17 @@ Example:
 
 import functools
 import os
+import sys
 
 from .common import Error
-from .integration import BuildBucketIntegrator
+from .integration import BuildBucketIntegrator, MAX_MAX_BUILDS
 from .poller import BuildBucketPoller
 from .status import BuildBucketStatus
 from . import client
 from . import trigger
+
+
+NO_LEASE_LIMIT = sys.maxint
 
 
 def setup(

@@ -420,6 +420,7 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
         c,
         active_master,
         buckets=[active_master.buildbucket_bucket],
+        max_lease_count=buildbucket.NO_LEASE_LIMIT,
     )
 
 def DumpSetup(c, important=None, filename='config.current.txt'):

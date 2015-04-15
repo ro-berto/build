@@ -21,6 +21,8 @@ from twisted.internet.defer import inlineCallbacks, returnValue
 LEASE_DURATION = datetime.timedelta(minutes=5)
 MAX_LEASE_DURATION = datetime.timedelta(minutes=10)
 DEFAULT_HEARTBEAT_INTERVAL = datetime.timedelta(minutes=1)
+# Maximum integer that max_builds buildbucket parameter can take.
+MAX_MAX_BUILDS = (1 << 31) - 1
 
 # Buildbot-related constants.
 BUILDSET_REASON = 'buildbucket'
@@ -372,7 +374,7 @@ class BuildBucketIntegrator(object):
     # Assume in the worst case 2 builds out of 3 will not be scheduled.
     # max_builds is computed only once, before the loop, because
     # query parameters must not be changed between pages.
-    max_builds = (max_lease_count - len(self._leases)) * 3
+    max_builds = min(MAX_MAX_BUILDS, (max_lease_count - len(self._leases)) * 3)
 
     self.log('polling builds...')
     while len(self._leases) < self.get_max_lease_count():
