@@ -564,8 +564,11 @@ class SwarmingApi(recipe_api.RecipeApi):
       if gtest_results and gtest_results.raw:
         p = step_result.presentation
         missing_shards = gtest_results.raw.get('missing_shards') or []
-        for index in missing_shards:
-          p.links['missing shard #%d' % index] = task.get_shard_view_url(index)
+        if missing_shards:
+          step_result.presentation.status = self.m.step.EXCEPTION
+          for index in missing_shards:
+            p.links['missing shard #%d' % index] = \
+                task.get_shard_view_url(index)
         if gtest_results.valid:
           p.step_text += self.m.test_utils.format_step_text([
             ['failures:', gtest_results.failures]

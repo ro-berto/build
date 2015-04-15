@@ -395,7 +395,7 @@
       "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
       "@@@STEP_LINK@missing shard #1@https://chromium-swarm-dev.appspot.com/user/task/10100@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_EXCEPTION@@@"
     ]
   },
   {
