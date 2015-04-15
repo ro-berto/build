@@ -52,8 +52,6 @@ linux_asan_env = {'CXX': clang_asan,
                       'handle_segv=0:detect_stack_use_after_return=1'}
 windows_env = {'BUILDBOT_JAVA_HOME': 'third_party\\java\\windows\\j2sdk',
                'LOGONSERVER': '\\\\AD1'}
-dart2dart_backend_env = {'BUILDBOT_JAVA_HOME': 'third_party/java/linux/j2sdk',
-                         'DART_VM_OPTIONS': '-DUSE_NEW_BACKEND=true'}
 
 dart_revision_url = "http://code.google.com/p/dart/source/detail?r=%s"
 

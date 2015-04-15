@@ -172,8 +172,6 @@ class DartCommands(commands.FactoryCommands):
            '--shards=%s --shard=%s %s'
            ) % (options['mode'], options['arch'], shards, shard,
                 self.standard_flags)
-    if 'backend' in name:
-      cmd += ' --builder-tag=new_backend'
     self._factory.addStep(shell.ShellCommand,
                           name='tests',
                           description='tests',
