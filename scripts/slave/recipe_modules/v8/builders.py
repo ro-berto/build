@@ -78,7 +78,8 @@ BUILDERS = {
         'build_gs_archive': 'linux_nosnap_dbg_archive',
         'testing': {'platform': 'linux'},
         'triggers': [
-          'V8 Linux - nosnap - debug',
+          'V8 Linux - nosnap - debug - 1',
+          'V8 Linux - nosnap - debug - 2',
         ],
       },
       'V8 Linux - presubmit': {
@@ -174,11 +175,27 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
       },
-      'V8 Linux - nosnap - debug': {
+      'V8 Linux - nosnap - debug - 1': {
         'v8_apply_config': ['no_snapshot'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
+          'SHARD_COUNT': 2,
+          'SHARD_RUN': 1,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux - nosnap debug builder',
+        'build_gs_archive': 'linux_nosnap_dbg_archive',
+        'tests': ['unittests', 'v8testing', 'mozilla'],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - nosnap - debug - 2': {
+        'v8_apply_config': ['no_snapshot'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+          'SHARD_COUNT': 2,
+          'SHARD_RUN': 2,
         },
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - nosnap debug builder',
