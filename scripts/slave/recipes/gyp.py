@@ -17,7 +17,8 @@ def GenSteps(api):
   api.bot_update.ensure_checkout(force=True)
 
   api.python('run tests',
-             api.path['checkout'].join('gyp_tests.py'))
+             api.path['checkout'].join('gyptest.py'), ['-a'],
+             cwd=api.path['checkout'])
 
 
 def GenTests(api):

@@ -45,8 +45,10 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/trunk/gyp_tests.py"
+      "[SLAVE_BUILD]/trunk/gyptest.py",
+      "-a"
     ],
+    "cwd": "[SLAVE_BUILD]/trunk",
     "name": "run tests"
   }
 ]
