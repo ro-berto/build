@@ -30,11 +30,6 @@ WHITELIST = freeze({
     # Completed.
   },
 
-  # http://crbug.com/383364
-  'ios': {
-    # TODO(maruel): Add files.
-  },
-
   # http://crbug.com/330263
   'linux': {
     'browser_tests.isolated',
@@ -116,8 +111,6 @@ WHITELIST = freeze({
     'np_test_netscape_plugin.dll',
     'npapi_test_plugin.dll',
     'peerconnection_server.exe',
-    'ppapi_nacl_tests_pnacl_newlib_x32.nexe',
-    'ppapi_nacl_tests_pnacl_newlib_x64.nexe',
     'sync_integration_tests.exe',
     'sync_integration_tests.isolated',
     'test_registrar.exe',
