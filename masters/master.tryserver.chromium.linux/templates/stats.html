@@ -42,7 +42,7 @@
     {% endif %}{% endfor %}];
 
   var nameMapping = [
-    {% for val in builderNames %}{v:{{ loop.index0 }}, label:A({href:"./stats/{{ val|quote }}", text:"aaa"}, "{{ val }}")}{% if not loop.last %},
+    {% for val in builderNames %}{v:{{ loop.index0 }}, label:A({href:"./stats/{{ val|quote }}"}, "{{ val }}")}{% if not loop.last %},
     {% endif %}{% endfor %}];
 </script>
 <center>
