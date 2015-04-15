@@ -79,6 +79,7 @@ def Update(_config_arg, _active_master, c):
 
   specs = [
     {'name': 'Android GN', 'recipe': 'chromium_gn'},
+    {'name': 'Cast Android (dbg)'},
   ]
 
   c['schedulers'].extend([

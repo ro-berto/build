@@ -43,6 +43,7 @@ def Update(_config, active_master, c):
     {'name': 'Linux Tests (dbg)(1)'},
     {'name': 'Linux GN', 'recipe': 'chromium_gn'},
     {'name': 'Linux GN (dbg)', 'recipe': 'chromium_gn'},
+    {'name': 'Cast Linux'},
   ]
 
   c['builders'].extend([

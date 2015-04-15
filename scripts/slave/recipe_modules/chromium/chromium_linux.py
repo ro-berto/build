@@ -310,5 +310,32 @@ SPEC = {
         'platform': 'linux',
       },
     },
+
+    'Cast Linux': {
+      'recipe_config': 'cast_linux',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+    'Cast Android (dbg)': {
+      'recipe_config': 'chromium_android',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 32,
+        'TARGET_PLATFORM': 'android',
+      },
+      'android_config': 'cast_builder',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
   },
 }
