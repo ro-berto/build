@@ -77,13 +77,39 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/gn.py",
-      "--root=[SLAVE_BUILD]/src",
+      "[SLAVE_BUILD]/src/tools/mb/mb.py",
       "gen",
-      "//out/Release",
-      "--args=is_debug=false target_os=\"chromeos\" use_goma=true goma_dir=\"[BUILD]/goma\""
+      "-v",
+      "-m",
+      "chromium.chromiumos",
+      "-b",
+      "Linux ChromiumOS GN",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "//out/Release"
     ],
-    "name": "gn"
+    "name": "mb gen"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]/src/testing/buildbot/chromium.chromiumos.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "read test spec",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.chromiumos.json@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Linux ChromiumOS GN\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"base_unittests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "cmd": [
@@ -101,6 +127,7 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
+      "base_unittests",
       "all"
     ],
     "name": "compile"
@@ -115,24 +142,5 @@
       "//out/Release"
     ],
     "name": "gn check"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Release",
-      "--no-xvfb",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux ChromiumOS GN\", \"buildnumber\": 571, \"mastername\": \"chromium.chromiumos\", \"recipe\": \"chromium_gn\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux ChromiumOS GN\", \"buildnumber\": 571, \"mastername\": \"chromium.chromiumos\", \"recipe\": \"chromium_gn\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--builder-name=Linux ChromiumOS GN",
-      "--slave-name=TestSlavename",
-      "--build-number=571",
-      "gn_unittests"
-    ],
-    "name": "gn_unittests"
   }
 ]

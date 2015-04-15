@@ -103,6 +103,7 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'chromeos',
         },
+        'should_use_mb': True,
       },
     },
   },
@@ -133,6 +134,7 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'should_run_gn_gyp_compare': True,
+        'should_use_mb': True,
       },
       'Linux GN (dbg)': {
         'chromium_apply_config': ['gn_component_build'],
@@ -142,6 +144,7 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'should_run_gn_gyp_compare': True,
+        'should_use_mb': True,
       },
     },
   },
