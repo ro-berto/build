@@ -314,6 +314,24 @@
         }
       }
     ],
+    "https://build.chromium.org/p/client.boringssl": [
+      {
+        "tree_notify": [
+          "davidben+boringssl@google.com",
+          "agl+boringssl@google.com"
+        ],
+
+        "forgive_all": "true",
+
+        "builders": {
+          "*": {
+            "closing_optional": [
+              "*"
+            ]
+          }
+        }
+      }
+    ],
     "https://build.chromium.org/p/client.libvpx": [
       {
         "tree_notify": [
