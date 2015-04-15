@@ -223,6 +223,7 @@ def main(argv):
     pool_capacity = {
       'hourly_bots': 0.0,
       'daily_bots': 0.0,
+      'build_times_s': [],
     }
     # TODO(phajdan.jr): use multiprocessing pool to speed this up.
     for builddir, builders in pool['builders'].iteritems():
@@ -250,7 +251,7 @@ def main(argv):
           all_builds.append(build)
 
         capacity = estimate_buildbot_capacity(builds)
-        for key in ('hourly_bots', 'daily_bots'):
+        for key in ('hourly_bots', 'daily_bots', 'build_times_s'):
           pool_capacity[key] += capacity[key]
 
         if capacity['build_times_s']:
@@ -262,26 +263,29 @@ def main(argv):
           avg_build_time = 'n/a'
           median_build_time = 'n/a'
 
-        print '    %-45s %-9s %-9s (%4s/%4s builds) %5.1f %5.1f' % (
+        print ('    %-45s %-9s %-9s (%4s/%4s builds) '
+               '%5.1f %5.1f       <%10.1f>' % (
             builder,
             avg_build_time,
             median_build_time,
             len(builds),
             len(raw_builds),
             capacity['daily_bots'],
-            capacity['hourly_bots'])
+            capacity['hourly_bots'],
+            sum(capacity['build_times_s'])))
         if args.print_builds:
           for build in builds:
             build_time = build['times'][1] - build['times'][0]
             print '        build #%-9s %-9s' % (
                 build['number'],
                 str(datetime.timedelta(seconds=build_time)))
-    print '  %-45s %s %5.1f %5.1f %5.1f' % (
+    print '  %-45s %s %5.1f %5.1f %5.1f <%10.1f>' % (
         'total',
         ' ' * 40,
         pool_capacity['daily_bots'],
         pool_capacity['hourly_bots'],
-        len(pool['slave_set']))
+        len(pool['slave_set']),
+        sum(pool_capacity['build_times_s']))
 
   if args.swarming_py:
     swarming_capacity = estimate_swarming_capacity(args.swarming_py, all_builds)
@@ -289,10 +293,11 @@ def main(argv):
       print 'Swarming pools:'
       for pool, capacity in swarming_capacity.iteritems():
         formatted_pool = ', '.join(sorted(':'.join(d) for d in pool))
-        print '  %-86s %5.1f %5.1f' % (
+        print '  %-86s %5.1f %5.1f       <%10.1f>' % (
             formatted_pool,
             capacity['daily_bots'],
-            capacity['hourly_bots'])
+            capacity['hourly_bots'],
+            sum(capacity['build_times_s']))
 
   return 0
 
