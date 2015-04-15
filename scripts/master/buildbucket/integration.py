@@ -270,7 +270,6 @@ class BuildBucketIntegrator(object):
         'created_ts',
         'id',
         'lease_key',
-        'parameters_json',
         'tags',
     ])
     return {k: v for k, v in build.iteritems() if k in property_whitelist}
