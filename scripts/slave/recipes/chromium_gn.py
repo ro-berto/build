@@ -31,6 +31,7 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'mac',
         },
+        'should_use_mb': True,
       },
     },
   },
@@ -223,6 +224,7 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'mac',
         },
+        'should_use_mb': True,
       },
       'mac_chromium_gn_rel': {
         'chromium_config_kwargs': {
