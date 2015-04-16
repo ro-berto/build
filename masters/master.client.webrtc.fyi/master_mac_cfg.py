@@ -17,6 +17,8 @@ def Update(c):
                                 'Mac64 Debug (parallel)',
                                 'Mac64 Release (parallel)',
                                 'Mac Asan (parallel)',
+                                'iOS32 Simulator Debug',
+                                'iOS64 Simulator Debug',
                             ]),
   ])
 
@@ -32,6 +34,14 @@ def Update(c):
     {
       'name': 'Mac Asan (parallel)',
       'slavebuilddir': 'mac_asan',
+    },
+    {
+      'name': 'iOS32 Simulator Debug',
+      'slavebuilddir': 'mac64',
+    },
+    {
+      'name': 'iOS64 Simulator Debug',
+      'slavebuilddir': 'mac64',
     },
   ]
 

@@ -695,28 +695,6 @@ BUILDERS = freeze({
         'bot_type': 'builder',
         'testing': {'platform': 'mac'},
       },
-      'iOS32 Simulator Debug': {
-        'recipe_config': 'webrtc_ios32',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-          'TARGET_ARCH': 'intel',
-          'TARGET_PLATFORM': 'ios',
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'mac'},
-      },
-      'iOS64 Simulator Release': {
-        'recipe_config': 'webrtc_ios32',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-          'TARGET_ARCH': 'intel',
-          'TARGET_PLATFORM': 'ios',
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'mac'},
-      },
       'Linux32 Debug': {
         'recipe_config': 'webrtc_parallel',
         'chromium_config_kwargs': {
@@ -1049,6 +1027,28 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
+        'testing': {'platform': 'mac'},
+      },
+      'iOS32 Simulator Debug': {
+        'recipe_config': 'webrtc_ios32',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+          'TARGET_ARCH': 'intel',
+          'TARGET_PLATFORM': 'ios',
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'mac'},
+      },
+      'iOS64 Simulator Debug': {
+        'recipe_config': 'webrtc_ios32',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+          'TARGET_ARCH': 'intel',
+          'TARGET_PLATFORM': 'ios',
+        },
+        'bot_type': 'builder',
         'testing': {'platform': 'mac'},
       },
       'Linux Asan (parallel)': {
