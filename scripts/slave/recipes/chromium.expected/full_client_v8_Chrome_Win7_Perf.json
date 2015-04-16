@@ -104,7 +104,8 @@
       "--goma-dir",
       "[BUILD]\\goma",
       "--",
-      "chromium_builder_perf"
+      "chromium_builder_perf",
+      "crash_service"
     ],
     "name": "compile"
   },
