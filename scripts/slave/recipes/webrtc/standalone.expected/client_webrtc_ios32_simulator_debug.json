@@ -7,7 +7,7 @@
       "--master",
       "client.webrtc",
       "--builder",
-      "iOS Release",
+      "iOS32 Simulator Debug",
       "--slave",
       "slavename",
       "--spec",
@@ -66,7 +66,7 @@
     ],
     "env": {
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=ios build_with_libjingle=1 chromium_ios_signing=0 clang=1 component=static_library dcheck_always_on=1 gomadir='[BUILD]/goma' key_id='' mac_sdk=10.9 target_arch=arm use_goma=1",
+      "GYP_DEFINES": "OS=ios build_with_libjingle=1 chromium_ios_signing=0 clang=1 component=static_library dcheck_always_on=1 gomadir='[BUILD]/goma' key_id='' mac_sdk=10.9 target_arch=ia32 use_goma=1",
       "GYP_GENERATORS": "ninja"
     },
     "name": "gclient runhooks"
@@ -77,7 +77,7 @@
       "-u",
       "[BUILD]/scripts/slave/compile.py",
       "--target",
-      "Release-iphoneos",
+      "Debug-iphoneos",
       "--src-dir",
       "[SLAVE_BUILD]/src",
       "--build-tool",

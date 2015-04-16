@@ -22,10 +22,12 @@ def Update(c):
           'Mac64 Debug (GN)',
           'Mac64 Release (GN)',
           'Mac Asan',
-          'iOS Debug',
-          'iOS Release',
-          'iOS ARM64 Debug',
-          'iOS ARM64 Release',
+          'iOS32 Debug',
+          'iOS32 Release',
+          'iOS64 Debug',
+          'iOS64 Release',
+          'iOS32 Simulator Debug',
+          'iOS64 Simulator Debug',
       ]),
   ])
 
@@ -44,10 +46,12 @@ def Update(c):
     {'name': 'Mac64 Debug (GN)', 'slavebuilddir': 'mac64_gn'},
     {'name': 'Mac64 Release (GN)', 'slavebuilddir': 'mac64_gn'},
     {'name': 'Mac Asan', 'slavebuilddir': 'mac_asan'},
-    {'name': 'iOS Debug', 'slavebuilddir': 'mac32'},
-    {'name': 'iOS Release', 'slavebuilddir': 'mac32'},
-    {'name': 'iOS ARM64 Debug', 'slavebuilddir': 'mac64'},
-    {'name': 'iOS ARM64 Release', 'slavebuilddir': 'mac64'},
+    {'name': 'iOS32 Debug', 'slavebuilddir': 'mac32'},
+    {'name': 'iOS32 Release', 'slavebuilddir': 'mac32'},
+    {'name': 'iOS64 Debug', 'slavebuilddir': 'mac64'},
+    {'name': 'iOS64 Release', 'slavebuilddir': 'mac64'},
+    {'name': 'iOS32 Simulator Debug', 'slavebuilddir': 'mac32'},
+    {'name': 'iOS64 Simulator Debug', 'slavebuilddir': 'mac64'},
   ]
 
   c['builders'].extend([

@@ -7,7 +7,7 @@
       "--master",
       "client.webrtc",
       "--builder",
-      "iOS ARM64 Debug",
+      "iOS64 Debug",
       "--slave",
       "slavename",
       "--spec",
