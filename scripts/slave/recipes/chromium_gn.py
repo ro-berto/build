@@ -196,6 +196,7 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'linux',
           'TARGET_BITS': 64,
         },
+        'should_use_mb': True,
       },
       'linux_chromium_gn_dbg': {
         'chromium_apply_config': ['gn_component_build'],
@@ -204,12 +205,14 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'linux',
           'TARGET_BITS': 64,
         },
+        'should_use_mb': True,
       },
       'linux_chromium_gn_chromeos_rel': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'chromeos',
         },
+        'should_use_mb': True,
       },
       'linux_chromium_gn_chromeos_dbg': {
         'chromium_apply_config': ['gn_component_build'],
@@ -217,6 +220,7 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'chromeos',
         },
+        'should_use_mb': True,
       },
     },
   },
@@ -448,7 +452,8 @@ def GenTests(api):
     api.properties.tryserver(
         buildername='linux_chromium_gn_rel',
         mastername='tryserver.chromium.linux') +
-    api.step_data('compile', retcode=1)
+    api.step_data('compile', retcode=1) +
+    overrides['tryserver.chromium.linux']['linux_chromium_gn_rel']
   )
 
   yield (
@@ -457,5 +462,6 @@ def GenTests(api):
     api.properties.tryserver(
         buildername='linux_chromium_gn_rel',
         mastername='tryserver.chromium.linux',
-        patch_project='v8')
+        patch_project='v8') +
+    overrides['tryserver.chromium.linux']['linux_chromium_gn_rel']
   )
