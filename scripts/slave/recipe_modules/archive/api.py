@@ -55,6 +55,7 @@ class ArchiveApi(recipe_api.RecipeApi):
     if revision_dir:
       args.extend(['--revision_dir', revision_dir])
     args.extend(['--gs_acl', 'public-read'])
+    args.extend(self.m.json.property_args())
     self.m.python(
       step_name,
       self.m.path['build'].join(

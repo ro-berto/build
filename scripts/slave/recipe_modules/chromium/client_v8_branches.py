@@ -20,7 +20,7 @@ SPEC = {
       ],
       'gclient_apply_config': [
         'v8_bleeding_edge_git',
-        'chromium_lkcr',
+        'chromium_lkgr',
         'show_v8_revision',
       ],
       'chromium_config_kwargs': {
