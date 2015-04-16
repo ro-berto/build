@@ -30,6 +30,10 @@ INSTRUMENTATION_TESTS = freeze([
   },
 ])
 
+UNIT_TESTS = freeze([
+  'net_unittests',
+])
+
 class CronetApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
     super(CronetApi, self).__init__(**kwargs)
@@ -85,6 +89,8 @@ class CronetApi(recipe_api.RecipeApi):
     checkout_path = self.m.path['checkout']
     droid.common_tests_setup_steps()
     with self.m.step.defer_results():
+      for suite in UNIT_TESTS:
+        droid.run_test_suite(suite)
       for suite in INSTRUMENTATION_TESTS:
         droid.run_instrumentation_suite(
             suite['test'], verbose=True,

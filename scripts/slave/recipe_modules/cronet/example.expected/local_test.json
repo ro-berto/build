@@ -296,6 +296,21 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
+      "net_unittests",
+      "--verbose"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "net_unittests"
+  },
+  {
+    "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
       "--apk",
       "CronetSample.apk",
