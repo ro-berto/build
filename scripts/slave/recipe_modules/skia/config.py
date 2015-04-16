@@ -89,11 +89,6 @@ def gyp_defs_from_builder_dict(builder_dict):
     gyp_defs['skia_arch_width'] = skia_arch_width
     gyp_defs['skia_arch_type']  = skia_arch_type
 
-  # Force iOS to ARMv7 with NEON (by default we build ARMv6 with no NEON).
-  if 'iOS' in builder_dict.get('extra_config', ''):
-    gyp_defs['arm_version'] = '7'
-    gyp_defs['arm_neon']    = '1'
-
   # housekeeper: build shared lib.
   if builder_dict['role'] == builder_name_schema.BUILDER_ROLE_HOUSEKEEPER:
     gyp_defs['skia_shared_lib'] = '1'

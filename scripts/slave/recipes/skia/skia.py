@@ -44,7 +44,6 @@ def _getMasterAndSlaveForBuilder(builder):
 
 def GenTests(api):
   builders = [
-    'Build-Mac10.7-Clang-Arm7-Debug-iOS',
     'Build-Ubuntu-GCC-Arm7-Debug-CrOS_Daisy',
     'Build-Ubuntu-GCC-x86_64-Debug',
     'Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release',
