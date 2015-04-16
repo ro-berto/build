@@ -14,7 +14,7 @@ from config_bootstrap import Master
 
 class GYP(Master.Master3):
   project_name = 'GYP'
-  master_port = 20301
-  slave_port = 30301
-  master_port_alt = 40301
+  master_port = 20302
+  slave_port = 30302
+  master_port_alt = 40302
   buildbot_url = 'https://build.chromium.org/p/client.gyp/'

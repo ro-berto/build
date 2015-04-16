@@ -19,10 +19,10 @@
   "git_repo_url": "https://chromium.googlesource.com/external/gyp",
   "master_base_class": "Master3",
   "master_classname": "GYP",
-  "master_port": 20301,
-  "master_port_alt": 40301,
+  "master_port": 20302,
+  "master_port_alt": 40302,
   "master_type": "waterfall",
-  "slave_port": 30301,
+  "slave_port": 30302,
   "slave_pools": {
     "linux": {
       "slave_data": {
