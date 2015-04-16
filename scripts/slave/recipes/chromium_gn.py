@@ -182,6 +182,7 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
         },
         'gclient_apply_config': ['android'],
+        'should_use_mb': True,
       },
       'android_chromium_gn_compile_dbg': {
         'chromium_apply_config': ['gn_minimal_symbols'],
@@ -191,6 +192,7 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
         },
         'gclient_apply_config': ['android'],
+        'should_use_mb': True,
       },
       'linux_chromium_gn_rel': {
         'chromium_config_kwargs': {
