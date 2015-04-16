@@ -417,7 +417,7 @@ def lsan(c):
 @config_ctx()
 def asan_symbolized(c):
   c.gyp_env.GYP_DEFINES['release_extra_cflags'] = (
-      '-gline-tables-only -O2 -fno-inline-functions -fno-inline')
+      '-fno-inline-functions -fno-inline')
 
 @config_ctx()
 def sanitizer_coverage(c):
