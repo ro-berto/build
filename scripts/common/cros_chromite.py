@@ -46,7 +46,7 @@ TOT_BRANCH = 'master'
 # - Update the value here.
 # - Run "gclient runhooks --force".
 PINS = collections.OrderedDict((
-  (TOT_BRANCH, '7ebaeff577a1fb96b855b42b2fc9db943ca05877'),
+  (TOT_BRANCH, '55d73e8b3b255e89a6967da0603d6f29d492d3d6'),
   ('release-R43-6946.B', 'd3d5f72685c19332c673588556b784341149323e'),
   ('release-R42-6812.B', '719914944802dede1a0dd1cd93376b76880c63f4'),
   ('release-R41-6680.B', '925ac2312082511f08e7ae121392ecb1b3d61445'),
