@@ -359,6 +359,20 @@ BUILDERS = {
           'V8 Linux64 - debug',
         ],
       },
+      'V8 Linux64 - custom snapshot - debug builder': {
+        'chromium_apply_config': ['embed_script_mjsunit', 'v8_goma'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'build_gs_archive': 'linux64_custom_snapshot_dbg_archive',
+        'testing': {'platform': 'linux'},
+        'triggers': [
+          'V8 Linux64 - custom snapshot - debug',
+          'V8 Linux64 GC Stress - custom snapshot',
+        ],
+      },
       'V8 Linux64': {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -395,6 +409,18 @@ BUILDERS = {
           'test262_es6',
           'mozilla',
         ],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux64 - custom snapshot - debug': {
+        'v8_apply_config': ['no_harness'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux64 - custom snapshot - debug builder',
+        'build_gs_archive': 'linux64_custom_snapshot_dbg_archive',
+        'tests': ['mjsunit'],
         'testing': {'platform': 'linux'},
       },
 ####### Category: Windows
@@ -970,6 +996,18 @@ BUILDERS = {
         'tests': ['mjsunit', 'webkit'],
         'testing': {'platform': 'linux'},
       },
+      'V8 Linux64 GC Stress - custom snapshot': {
+        'v8_apply_config': ['gc_stress', 'no_harness'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux64 - custom snapshot - debug builder',
+        'build_gs_archive': 'linux64_custom_snapshot_dbg_archive',
+        'tests': ['mjsunit'],
+        'testing': {'platform': 'linux'},
+      },
       'V8 Linux gcc 4.8': {
         'chromium_apply_config': ['no_clang'],
         'v8_config_kwargs': {
@@ -1079,17 +1117,6 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'tests': ['mjsunit', 'webkit', 'benchmarks', 'mozilla'],
-        'testing': {'platform': 'linux'},
-      },
-      'V8 Linux64 - custom snapshot - debug': {
-        'v8_apply_config': ['gc_stress', 'no_harness'],
-        'chromium_apply_config': ['embed_script_mjsunit', 'v8_goma'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'tests': ['mjsunit'],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - ppc - sim': {

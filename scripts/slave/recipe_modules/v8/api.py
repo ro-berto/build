@@ -182,6 +182,8 @@ class V8Api(recipe_api.RecipeApi):
     'linux_x87_nosnap_dbg_archive': 'gs://chromium-v8/v8-linux-x87-nosnap-dbg',
     'linux64_rel_archive': 'gs://chromium-v8/v8-linux64-rel',
     'linux64_dbg_archive': 'gs://chromium-v8/v8-linux64-dbg',
+    'linux64_custom_snapshot_dbg_archive':
+        'gs://chromium-v8/v8-linux64-custom-snapshot-dbg',
     'mips_rel_archive': 'gs://chromium-v8/v8-mips-rel',
     'mipsel_sim_rel_archive': 'gs://chromium-v8/v8-mipsel-sim-rel',
     'mips64el_sim_rel_archive': 'gs://chromium-v8/v8-mips64el-sim-rel',
