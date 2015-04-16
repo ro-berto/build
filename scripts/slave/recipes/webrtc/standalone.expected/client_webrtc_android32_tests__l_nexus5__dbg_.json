@@ -7,7 +7,7 @@
       "--master",
       "client.webrtc",
       "--builder",
-      "Android Tests (L Nexus5)",
+      "Android32 Tests (L Nexus5)(dbg)",
       "--slave",
       "slavename",
       "--spec",
@@ -54,8 +54,8 @@
       "python",
       "-u",
       "\nimport shutil, sys, os\nshutil.rmtree(sys.argv[1], True)\nshutil.rmtree(sys.argv[2], True)\ntry:\n  os.remove(sys.argv[3])\nexcept OSError:\n  pass\nfor base, _dirs, files in os.walk(sys.argv[4]):\n  for f in files:\n    if f.endswith('.pyc'):\n      os.remove(os.path.join(base, f))\n",
-      "[SLAVE_BUILD]/src/out/Release/debug_info_dumps",
-      "[SLAVE_BUILD]/src/out/Release/test_logs",
+      "[SLAVE_BUILD]/src/out/Debug/debug_info_dumps",
+      "[SLAVE_BUILD]/src/out/Debug/test_logs",
       "[SLAVE_BUILD]/src/out/build_product.zip",
       "[SLAVE_BUILD]/src"
     ],
@@ -95,7 +95,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/src/out/Release"
+      "[SLAVE_BUILD]/src/out/Debug"
     ],
     "name": "rmtree build directory",
     "~followup_annotations": [
@@ -114,15 +114,15 @@
       "-u",
       "[BUILD]/scripts/slave/extract_build.py",
       "--target",
-      "Release",
+      "Debug",
       "--build-url",
-      "gs://chromium-webrtc/android_rel",
+      "gs://chromium-webrtc/android_dbg",
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Android Tests (L Nexus5)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"parent_buildername\": \"Android Builder\", \"parent_got_revision\": \"12345\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Android32 Tests (L Nexus5)(dbg)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"parent_buildername\": \"Android32 Builder (dbg)\", \"parent_got_revision\": \"12345\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Android Tests (L Nexus5)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"parent_buildername\": \"Android Builder\", \"parent_got_revision\": \"12345\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}"
+      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Android32 Tests (L Nexus5)(dbg)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"parent_buildername\": \"Android32 Builder (dbg)\", \"parent_got_revision\": \"12345\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}"
     ],
     "name": "extract build"
   },
@@ -195,7 +195,7 @@
       "-u",
       "[SLAVE_BUILD]/src/build/android/provision_devices.py",
       "-t",
-      "Release"
+      "Debug"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -210,8 +210,7 @@
       "gtest",
       "-s",
       "audio_decoder_unittests",
-      "--verbose",
-      "--release"
+      "--verbose"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -226,8 +225,7 @@
       "gtest",
       "-s",
       "common_audio_unittests",
-      "--verbose",
-      "--release"
+      "--verbose"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -242,8 +240,7 @@
       "gtest",
       "-s",
       "common_video_unittests",
-      "--verbose",
-      "--release"
+      "--verbose"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -258,8 +255,7 @@
       "gtest",
       "-s",
       "modules_tests",
-      "--verbose",
-      "--release"
+      "--verbose"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -274,8 +270,7 @@
       "gtest",
       "-s",
       "modules_unittests",
-      "--verbose",
-      "--release"
+      "--verbose"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -290,8 +285,7 @@
       "gtest",
       "-s",
       "system_wrappers_unittests",
-      "--verbose",
-      "--release"
+      "--verbose"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -306,8 +300,7 @@
       "gtest",
       "-s",
       "test_support_unittests",
-      "--verbose",
-      "--release"
+      "--verbose"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -322,8 +315,7 @@
       "gtest",
       "-s",
       "tools_unittests",
-      "--verbose",
-      "--release"
+      "--verbose"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -338,8 +330,7 @@
       "gtest",
       "-s",
       "video_capture_tests",
-      "--verbose",
-      "--release"
+      "--verbose"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -354,8 +345,7 @@
       "gtest",
       "-s",
       "video_engine_core_unittests",
-      "--verbose",
-      "--release"
+      "--verbose"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -370,8 +360,7 @@
       "gtest",
       "-s",
       "video_engine_tests",
-      "--verbose",
-      "--release"
+      "--verbose"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -386,8 +375,7 @@
       "gtest",
       "-s",
       "voice_engine_unittests",
-      "--verbose",
-      "--release"
+      "--verbose"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -395,44 +383,24 @@
     "name": "voice_engine_unittests"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Release",
-      "--xvfb",
-      "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Android Tests (L Nexus5)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"parent_buildername\": \"Android Builder\", \"parent_got_revision\": \"12345\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Android Tests (L Nexus5)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"parent_buildername\": \"Android Builder\", \"parent_got_revision\": \"12345\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--annotate=graphing",
-      "--results-url=https://chromeperf.appspot.com",
-      "--perf-dashboard-id=webrtc_perf_tests",
-      "--perf-id=webrtc-android-tests-nexus5",
-      "--perf-config",
-      "{'a_default_rev': 'r_webrtc_rev'}",
-      "--test-type=webrtc_perf_tests",
-      "--builder-name=Android Tests (L Nexus5)",
-      "--slave-name=slavename",
-      "--build-number=1337",
-      "--run-python-script",
-      "--revision=170242",
       "[SLAVE_BUILD]/src/webrtc/build/android/test_runner.py",
       "gtest",
       "-s",
       "webrtc_perf_tests",
-      "--verbose",
-      "--release"
+      "--verbose"
     ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
     "name": "webrtc_perf_tests"
   },
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "[SLAVE_BUILD]/src/out/Release/apks/AppRTCDemo.apk",
-      "--release"
+      "[SLAVE_BUILD]/src/out/Debug/apks/AppRTCDemo.apk"
     ],
     "env": {
       "CHECKOUT_SOURCE_ROOT": "[SLAVE_BUILD]/src"
@@ -447,8 +415,7 @@
       "instrumentation",
       "--test-apk",
       "AppRTCDemoTest",
-      "--verbose",
-      "--release"
+      "--verbose"
     ],
     "name": "Instrumentation test AppRTCDemoTest"
   },
@@ -460,8 +427,7 @@
       "instrumentation",
       "--test-apk",
       "libjingle_peerconnection_android_unittest",
-      "--verbose",
-      "--release"
+      "--verbose"
     ],
     "name": "Instrumentation test libjingle_peerconnection_android_unittest"
   },
@@ -470,7 +436,7 @@
       "python",
       "-u",
       "[BUILD]/scripts/slave/tee.py",
-      "[SLAVE_BUILD]/src/out/Release/full_log",
+      "[SLAVE_BUILD]/src/out/Debug/full_log",
       "--",
       "[SLAVE_BUILD]/src/build/android/adb_logcat_printer.py",
       "[SLAVE_BUILD]/src/out/logcat"
@@ -482,7 +448,7 @@
       "python",
       "-u",
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
-      "[SLAVE_BUILD]/src/out/Release/test_logs/*.log"
+      "[SLAVE_BUILD]/src/out/Debug/test_logs/*.log"
     ],
     "name": "test_report",
     "~followup_annotations": [

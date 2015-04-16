@@ -15,23 +15,24 @@ def Update(c):
                             branch='master',
                             treeStableTimer=30,
                             builderNames=[
-          'Android Builder',
-          'Android Builder (dbg)',
-          'Android Clang (dbg)',
-          'Android ARM64 Builder',
-          'Android GN',
-          'Android GN (dbg)',
+          'Android32 Builder',
+          'Android32 Builder (dbg)',
+          'Android32 Clang (dbg)',
+          'Android64 Builder',
+          'Android64 Builder (dbg)',
+          'Android32 GN',
+          'Android32 GN (dbg)',
       ]),
       Triggerable(name='android_trigger_dbg', builderNames=[
-          'Android Tests (L Nexus5)(dbg)',
-          'Android Tests (L Nexus7.2)(dbg)',
+          'Android32 Tests (L Nexus5)(dbg)',
+          'Android32 Tests (L Nexus7.2)(dbg)',
       ]),
       Triggerable(name='android_trigger_arm64_rel', builderNames=[
-          'Android Tests (L Nexus9)',
+          'Android64 Tests (L Nexus9)',
       ]),
       Triggerable(name='android_trigger_rel', builderNames=[
-          'Android Tests (L Nexus5)',
-          'Android Tests (L Nexus7.2)',
+          'Android32 Tests (L Nexus5)',
+          'Android32 Tests (L Nexus7.2)',
       ]),
   ])
 
@@ -39,35 +40,39 @@ def Update(c):
   # of the builders are pooled over multiple slave machines.
   specs = [
     {
-      'name': 'Android Builder',
+      'name': 'Android32 Builder',
       'triggers': ['android_trigger_rel'],
     },
     {
-      'name': 'Android Builder (dbg)',
+      'name': 'Android32 Builder (dbg)',
       'triggers': ['android_trigger_dbg'],
     },
     {
-      'name': 'Android Clang (dbg)',
+      'name': 'Android32 Clang (dbg)',
       'slavebuilddir': 'android_clang',
     },
     {
-      'name': 'Android ARM64 Builder',
+      'name': 'Android64 Builder',
       'triggers': ['android_trigger_arm64_rel'],
       'slavebuilddir': 'android_arm64',
     },
     {
-      'name': 'Android GN',
+      'name': 'Android64 Builder (dbg)',
+      'slavebuilddir': 'android_arm64',
+    },
+    {
+      'name': 'Android32 GN',
       'slavebuilddir': 'android_gn',
     },
     {
-      'name': 'Android GN (dbg)',
+      'name': 'Android32 GN (dbg)',
       'slavebuilddir': 'android_gn',
     },
-    {'name': 'Android Tests (L Nexus5)(dbg)'},
-    {'name': 'Android Tests (L Nexus7.2)(dbg)'},
-    {'name': 'Android Tests (L Nexus9)'},
-    {'name': 'Android Tests (L Nexus5)'},
-    {'name': 'Android Tests (L Nexus7.2)'},
+    {'name': 'Android32 Tests (L Nexus5)(dbg)'},
+    {'name': 'Android32 Tests (L Nexus7.2)(dbg)'},
+    {'name': 'Android64 Tests (L Nexus9)'},
+    {'name': 'Android32 Tests (L Nexus5)'},
+    {'name': 'Android32 Tests (L Nexus7.2)'},
   ]
 
   c['builders'].extend([

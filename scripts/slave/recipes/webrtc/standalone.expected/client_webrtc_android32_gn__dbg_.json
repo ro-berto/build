@@ -7,7 +7,7 @@
       "--master",
       "client.webrtc",
       "--builder",
-      "Android GN (dbg)",
+      "Android32 GN (dbg)",
       "--slave",
       "slavename",
       "--spec",
