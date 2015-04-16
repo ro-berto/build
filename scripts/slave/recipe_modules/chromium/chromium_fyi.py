@@ -93,6 +93,22 @@ SPEC = {
       'do_not_run_tests': True,
       'use_isolate': True,
     },
+    'Linux ARM': {
+      'recipe_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_ARCH': 'arm',
+        'TARGET_BITS': 32,
+      },
+      'bot_type': 'builder',
+      'GYP_DEFINES': {
+        'arm_float_abi': 'hard',
+      },
+      'use_isolate': True,
+      'testing': {
+        'platform': 'linux',
+      },
+    },
     'Linux Trusty': {
       'recipe_config': 'chromium',
       'chromium_config_kwargs': {
