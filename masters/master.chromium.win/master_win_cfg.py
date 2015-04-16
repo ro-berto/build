@@ -55,7 +55,7 @@ def Update(config, active_master, c):
     },
     {'name': 'Win7 Tests (dbg)(1)'},
     {'name': 'Win8 Aura'},
-    {'name': 'Win8 GN', 'recipe': 'chromium_gn'},
+    {'name': 'Win8 GN', 'recipe': 'chromium_gn', 'timeout': 3600},
     {'name': 'Win8 GN (dbg)', 'recipe': 'chromium_gn'},
   ]
 
