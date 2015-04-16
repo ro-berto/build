@@ -93,6 +93,7 @@
       "goma-clang",
       "--goma-dir",
       "[BUILD]/goma",
+      "--clobber",
       "--",
       "chromium_builder_asan"
     ],

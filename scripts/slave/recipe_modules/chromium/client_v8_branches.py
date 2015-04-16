@@ -13,8 +13,9 @@ SPEC = {
       'recipe_config': 'chromium_linux_asan',
       'chromium_apply_config': [
         'asan_symbolized',
-        'sanitizer_coverage',
         'chromium_asan_default_targets',
+        'clobber',
+        'sanitizer_coverage',
         'v8_verify_heap',
       ],
       'gclient_apply_config': [
