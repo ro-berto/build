@@ -74,6 +74,7 @@ SPEC = {
         'TARGET_ARCH': 'arm',
         'TARGET_BITS': 32,
       },
+      'bot_type': 'builder',
       'GYP_DEFINES': {
         'arm_float_abi': 'hard',
         'test_isolation_mode': 'archive',
@@ -90,7 +91,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'do_not_run_tests': True,
       'use_isolate': True,
     },
     'Linux ARM': {

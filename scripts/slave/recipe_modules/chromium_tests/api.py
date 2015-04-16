@@ -623,10 +623,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if bot_config.get('goma_canary'):
       tests.insert(0, self.m.chromium.steps.DiagnoseGomaTest())
 
-    # TODO(phajdan.jr): bots should just leave tests empty instead of this.
-    if bot_config.get('do_not_run_tests'):
-      tests = []
-
     if bot_type in ('tester', 'builder_tester'):
       isolated_targets = [t.isolate_target for t in tests if t.uses_swarming]
       if isolated_targets:
