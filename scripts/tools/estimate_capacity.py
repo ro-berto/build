@@ -96,27 +96,34 @@ def get_properties(build):
   return {p[0]: p[1] for p in build.get('properties', [])}
 
 
+def chunks(iterable, length):
+  for i in range(0, len(iterable), length):
+    yield iterable[i:i + length]
+
+
 def launch_and_collect(iterable, get_process, collect_result):
-  processes = []
-  try:
-    for item in iterable:
-      with tempfile.NamedTemporaryFile(delete=False, prefix='estimate_') as f:
-        process, metadata = get_process(item, f.name)
-        processes.append({
-          'process': process,
-          'metadata': metadata,
-          'file': f.name,
-        })
-    for p in processes:
-      rc = p['process'].wait()
-      if rc != 0:
-        raise Exception('fail')
-      with open(p['file']) as f:
-        data = json.load(f)
-      collect_result(data, p['metadata'])
-  finally:
-    for p in processes:
-      os.remove(p['file'])
+  # Run processes in chunks so that we don't exceed the process limit.
+  for chunk in chunks(iterable, 50):
+    processes = []
+    try:
+      for item in chunk:
+        with tempfile.NamedTemporaryFile(delete=False, prefix='estimate_') as f:
+          process, metadata = get_process(item, f.name)
+          processes.append({
+            'process': process,
+            'metadata': metadata,
+            'file': f.name,
+          })
+      for p in processes:
+        rc = p['process'].wait()
+        if rc != 0:
+          raise Exception('fail')
+        with open(p['file']) as f:
+          data = json.load(f)
+        collect_result(data, p['metadata'])
+    finally:
+      for p in processes:
+        os.remove(p['file'])
 
 
 def estimate_swarming_capacity(swarming_py, builds):
