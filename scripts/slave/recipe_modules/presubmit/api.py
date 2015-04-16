@@ -21,7 +21,8 @@ class PresubmitApi(recipe_api.RecipeApi):
                name='commit git patch',
                cwd=self.m.path['checkout'].join(root))
 
-  def __call__(self, root='', upstream='', trybot_json_output=None):
+  def __call__(self, root='', upstream='', trybot_json_output=None,
+               use_rietveld_credentials=False):
     """Runs presubmit.
 
     Args:
@@ -39,13 +40,22 @@ class PresubmitApi(recipe_api.RecipeApi):
       '--skip_canned', 'CheckTreeIsOpen',
       '--skip_canned', 'CheckBuildbotPendingBuilds',
       '--rietveld_url', self.m.properties['rietveld'],
-      '--rietveld_email', '',  # activates anonymous mode
       '--rietveld_fetch',
       '--upstream', upstream,  # '' if not in bot_update mode.
     ]
 
     if trybot_json_output:
       presubmit_args.extend(['--trybot-json', trybot_json_output])
+
+    if use_rietveld_credentials:
+      presubmit_args.extend([
+          '--rietveld_email_file',
+          self.m.path['build'].join('site_config', '.rietveld_client_email')])
+      presubmit_args.extend([
+          '--rietveld_private_key_file',
+          self.m.path['build'].join('site_config', '.rietveld_secret_key')])
+    else:
+      presubmit_args.extend(['--rietveld_email', ''])  # activate anonymous mode
 
     self.m.python(
         'presubmit', self.m.path['depot_tools'].join('presubmit_support.py'),

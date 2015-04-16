@@ -105,13 +105,13 @@
       "CheckBuildbotPendingBuilds",
       "--rietveld_url",
       "https://codereview.chromium.org",
-      "--rietveld_email",
-      "",
       "--rietveld_fetch",
       "--upstream",
       "5e2293dffc3cd07d37fbedea3b500f0eb650614d",
       "--trybot-json",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--rietveld_email",
+      ""
     ],
     "name": "presubmit",
     "~followup_annotations": [
