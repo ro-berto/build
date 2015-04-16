@@ -395,12 +395,16 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       for t in tests:
         try:
           t.pre_run(api, suffix)
+        except api.step.InfraFailure:  # pragma: no cover
+          raise
         except api.step.StepFailure:  # pragma: no cover
           failed_tests.append(t)
 
       for t in tests:
         try:
           t.run(api, suffix)
+        except api.step.InfraFailure:  # pragma: no cover
+          raise
         except api.step.StepFailure:  # pragma: no cover
           failed_tests.append(t)
           if t.abort_on_failure:
@@ -409,6 +413,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       for t in tests:
         try:
           t.post_run(api, suffix)
+        except api.step.InfraFailure:  # pragma: no cover
+          raise
         except api.step.StepFailure:  # pragma: no cover
           failed_tests.append(t)
           if t.abort_on_failure:
