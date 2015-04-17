@@ -25,13 +25,7 @@ INSTRUMENTATION_TESTS = freeze([
   'ChromeSyncShellTest',
 ])
 
-FYI_INSTRUMENTATION_TESTS = freeze([
-  'AndroidWebViewTest',
-  'ChromeShellTest',
-  'ContentShellTest',
-  'ChromeSyncShellTest',
-  'ChromotingIntegrationTest',
-])
+FYI_INSTRUMENTATION_TESTS = freeze(INSTRUMENTATION_TESTS + ('ChromotingTest',))
 
 UNIT_TESTS = freeze([
   ['android_webview_unittests', None],
