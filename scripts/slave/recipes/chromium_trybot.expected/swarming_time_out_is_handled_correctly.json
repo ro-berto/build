@@ -201,7 +201,8 @@
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"telemetry_gpu_test_run\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"telemetry_gpu_test_run\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"crash_service\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"original_compile_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"angle_unittests_run\", @@@",
@@ -269,7 +270,8 @@
       "[BUILD]\\goma",
       "--ninja-ensure-up-to-date",
       "--",
-      "telemetry_gpu_test_run"
+      "telemetry_gpu_test_run",
+      "crash_service"
     ],
     "name": "compile (with patch)"
   },

@@ -186,7 +186,8 @@
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"crash_service\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"original_compile_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\"@@@",
@@ -221,7 +222,8 @@
       "--goma-dir",
       "[BUILD]\\goma",
       "--",
-      "base_unittests"
+      "base_unittests",
+      "crash_service"
     ],
     "name": "compile"
   },

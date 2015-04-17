@@ -726,6 +726,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # NaclIntegrationTest as it depends upon chrome not chrome_run.
     compile_targets = list(set(self.m.filter.matching_exes + compile_targets))
 
+    # Add crash_service to compile_targets. This is done after filtering compile
+    # targets out because crash_service should always be there on windows.
+    # TODO(akuegel): Need to solve this in a better way. crbug.com/478053
+    if (self.m.platform.is_win and compile_targets and
+        'crash_service' not in compile_targets):
+      compile_targets.extend(['crash_service'])
+
     # Emit more detailed output useful for debugging.
     analyze_details = {
         'original_exes': original_exes,
