@@ -1,0 +1,24 @@
+[
+  {
+    "cmd": [
+      "echo",
+      "testa"
+    ],
+    "env": {
+      "climate": "rainy",
+      "mood": "excellent"
+    },
+    "name": "grandparent.parent.child"
+  },
+  {
+    "cmd": [
+      "echo",
+      "testb"
+    ],
+    "env": {
+      "climate": "sunny",
+      "mood": "excellent"
+    },
+    "name": "grandparent.aunt"
+  }
+]
