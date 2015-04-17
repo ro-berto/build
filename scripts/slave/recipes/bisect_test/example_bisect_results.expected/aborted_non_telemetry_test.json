@@ -58,21 +58,9 @@
   },
   {
     "cmd": [
-      "git",
-      "log",
-      "--format=%aNS3P4R4T0R%aES3P4R4T0R%sS3P4R4T0R%cDS3P4R4T0R%b",
-      "-1",
-      "deadbeef"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Reading culprit cl information.",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [
       "cat"
     ],
     "name": "Results",
-    "stdin": "\n===== BISECTION ABORTED =====\nThe bisect was aborted because The metric values for the initial \"good\" and \"bad\" revisions do not represent a clear regression.\nPlease contact the the team (see below) if you believe this is in error.\n\nBug ID: \n\nTest Command: src/tools/dummy_command\nTest Metric: mean_input_event_latency/mean_input_event_latency\nGood revision: c001c0de\nBad revision: deadbeef \n===== WARNINGS =====\nThe following warnings were raised by the bisect job:\n\n * This is a demo warning\n===== SUSPECTED CL(s) =====\nSubject : Some random CL\nAuthor  : DummyAuthor, dummy@nowhere.com\nCommit description:\n  A long description for a CL.\nContaining multiple lines\nCommit  : deadbeef\nDate    : 01/01/2015\n\ncommit_pos revision_string mean_value std_err good_or_bad? tested? culprit? \n\n==== INSTRUCTIONS TO REPRODUCE ====\nTo run locally:\n - Use the test command given under 'BISECT JOB RESULTS' above.\n - Consider using a profiler. Pass --profiler=list to list available profilers.\n\nTo reproduce on a performance try bot:\n 1. Edit run-perf-test.cfg\n 2. $ git try -b <bot> --svn_repo='svn://svn.chromium.org/chrome-try/try-perf'\n\nNotes:\n a) Follow the in-file instructions in run-perf-test.cfg.\n b) run-perf-test.cfg is under tools/ or under third_party/WebKit/Tools.\n c) Do your edits preferably under a new git branch.\n d) --browser=release and --browser=android-chromium-testshell are supported\n    depending on the platform (desktop|android).\n e) Strip any src/ directories from the head of relative path names.\n f) Make sure to use the appropriate bot on step 3.\n\nFor more details please visit\nhttps://sites.google.com/a/chromium.org/dev/developers/performance-try-bots\n| O O | Visit http://www.chromium.org/developers/core-principles for Chrome's\n|  X  | policy on perf regressions. Contact chrome-perf-dashboard-team with any\n| / \\ | questions or suggestions about bisecting. THANK YOU."
+    "stdin": "\n===== BISECTION ABORTED =====\nThe bisect was aborted because The metric values for the initial \"good\" and \"bad\" revisions do not represent a clear regression.\nPlease contact the the team (see below) if you believe this is in error.\n\nBug ID: \n\nTest Command: src/tools/dummy_command\nTest Metric: mean_input_event_latency/mean_input_event_latency\nGood revision: c001c0de\nBad revision: deadbeef \n===== WARNINGS =====\nThe following warnings were raised by the bisect job:\n\n * This is a demo warningcommit_pos revision_string mean_value std_err good_or_bad? tested? culprit? \n\n==== INSTRUCTIONS TO REPRODUCE ====\nTo run locally:\n - Use the test command given under 'BISECT JOB RESULTS' above.\n - Consider using a profiler. Pass --profiler=list to list available profilers.\n\nTo reproduce on a performance try bot:\n 1. Edit run-perf-test.cfg\n 2. $ git try -b <bot> --svn_repo='svn://svn.chromium.org/chrome-try/try-perf'\n\nNotes:\n a) Follow the in-file instructions in run-perf-test.cfg.\n b) run-perf-test.cfg is under tools/ or under third_party/WebKit/Tools.\n c) Do your edits preferably under a new git branch.\n d) --browser=release and --browser=android-chromium-testshell are supported\n    depending on the platform (desktop|android).\n e) Strip any src/ directories from the head of relative path names.\n f) Make sure to use the appropriate bot on step 3.\n\nFor more details please visit\nhttps://sites.google.com/a/chromium.org/dev/developers/performance-try-bots\n| O O | Visit http://www.chromium.org/developers/core-principles for Chrome's\n|  X  | policy on perf regressions. Contact chrome-perf-dashboard-team with any\n| / \\ | questions or suggestions about bisecting. THANK YOU."
   }
 ]

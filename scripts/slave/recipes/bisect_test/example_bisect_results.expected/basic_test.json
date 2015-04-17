@@ -64,7 +64,7 @@
       "-1",
       "deadbeef"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[SLAVE_BUILD]/src",
     "name": "Reading culprit cl information.",
     "stdout": "/path/to/tmp/"
   },

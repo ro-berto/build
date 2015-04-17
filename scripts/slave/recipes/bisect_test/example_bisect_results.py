@@ -34,6 +34,7 @@ BASIC_ATTRIBUTES = {
     'bisect_over': True,
     'results_confidence': 0.99,
     'warnings': ['This is a demo warning'],
+    'culprit_present': True,
 }
 
 NON_TELEMETRY_TEST_CONFIG = dict(BASIC_CONFIG)
@@ -41,12 +42,15 @@ NON_TELEMETRY_TEST_CONFIG['command'] = 'src/tools/dummy_command'
 
 FAILED_ATTRIBUTES = dict(BASIC_ATTRIBUTES)
 FAILED_ATTRIBUTES['failed'] = True
+FAILED_ATTRIBUTES['culprit_present'] = False
 
 FAILED_DIRECTION_ATTRIBUTES = dict(BASIC_ATTRIBUTES)
 FAILED_DIRECTION_ATTRIBUTES['failed_direction'] = True
+FAILED_DIRECTION_ATTRIBUTES['culprit_present'] = False
 
 ABORTED_BISECT_ATTRIBUTES = dict(BASIC_ATTRIBUTES)
 ABORTED_BISECT_ATTRIBUTES['failed_confidence'] = True
+ABORTED_BISECT_ATTRIBUTES['culprit_present'] = False
 
 
 def GenSteps(api):
@@ -54,11 +58,12 @@ def GenSteps(api):
   bisector = api.auto_bisect.create_bisector(api.properties['bisect_config'],
                                              dummy_mode=True)
   # Load the simulated results of a bisect
-  dummy_bisector_attributes = api.properties['dummy_bisector_attributes']
+  dummy_bisector_attributes = dict(api.properties['dummy_bisector_attributes'])
 
   # Simulate the side-effects of a bisect by setting the bisector attributes
   # directly.
-  bisector.culprit = bisector.bad_rev
+  if dummy_bisector_attributes.pop('culprit_present'):
+    bisector.culprit = bisector.bad_rev
   set_attributes(bisector, dummy_bisector_attributes)
 
   bisector.print_result()
@@ -97,7 +102,6 @@ def GenTests(api):
   failed_test = api.test('failed_test')
   failed_test = add_revision_mapping(api, failed_test, '314015', 'c001c0de')
   failed_test = add_revision_mapping(api, failed_test, '314017', 'deadbeef')
-  failed_test = add_revision_info(api, failed_test)
   failed_test += api.properties(
       bisect_config = BASIC_CONFIG,
       dummy_bisector_attributes = FAILED_ATTRIBUTES)
@@ -108,7 +112,6 @@ def GenTests(api):
                                                '314015', 'c001c0de')
   failed_direction_test = add_revision_mapping(api, failed_direction_test,
                                                '314017', 'deadbeef')
-  failed_direction_test = add_revision_info(api, failed_direction_test)
   failed_direction_test += api.properties(
       bisect_config = BASIC_CONFIG,
       dummy_bisector_attributes = FAILED_DIRECTION_ATTRIBUTES)
@@ -119,7 +122,6 @@ def GenTests(api):
                                              'c001c0de')
   aborted_bisect_test = add_revision_mapping(api, aborted_bisect_test, '314017',
                                              'deadbeef')
-  aborted_bisect_test = add_revision_info(api, aborted_bisect_test)
   aborted_bisect_test += api.properties(
       bisect_config = NON_TELEMETRY_TEST_CONFIG,
       dummy_bisector_attributes = ABORTED_BISECT_ATTRIBUTES)

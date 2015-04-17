@@ -188,6 +188,8 @@ class BisectResults(object):
                              culprit_info['email'])
       self.commit_info = culprit_info['body']
       self.culprit_date = culprit_info['date']
+    else:
+      self.culprit_cl_hash = None
 
     if bisector.failed:
       self.status = 'Failed'

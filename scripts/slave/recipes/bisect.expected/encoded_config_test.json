@@ -1085,7 +1085,7 @@
       "-1",
       "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[SLAVE_BUILD]/src",
     "name": "Reading culprit cl information.",
     "stdout": "/path/to/tmp/"
   },

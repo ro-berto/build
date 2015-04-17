@@ -682,7 +682,7 @@
       "-1",
       "a6298e4afedbf2cd461755ea6f45b0ad64222222"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[SLAVE_BUILD]/src",
     "name": "Reading culprit cl information.",
     "stdout": "/path/to/tmp/"
   }
