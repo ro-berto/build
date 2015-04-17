@@ -53,14 +53,16 @@ def GenSteps(api):
 
   api.chromium.run_gn(use_goma=True)
 
-  api.chromium.compile(targets=['html_viewer_unittests',
-                                'mojo/services/html_viewer',
-                                'mojo/services/html_viewer:apptests',
-                                'mojo/services/network',
-                                'mojo/services/network:apptests'])
+  api.chromium.compile(targets=['mojo',
+                                'mojo/services:apptests',
+                                'mojo/services:tests'])
 
   with api.step.defer_results():
     api.chromium.runtest('html_viewer_unittests')
+    api.chromium.runtest('mojo_common_unittests')
+    api.chromium.runtest('mojo_surfaces_lib_unittests')
+    api.chromium.runtest('view_manager_service_unittests')
+    api.chromium.runtest('window_manager_unittests')
     if not is_android:
       _RunApptests(api)
 
