@@ -12,6 +12,8 @@ DEPS = [
   'path',
   'platform',
   'properties',
+  'step',
+  'test_utils',
   'tryserver',
 ]
 
@@ -138,6 +140,7 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'should_run_gn_gyp_compare': True,
+        'should_run_tests': True,
         'should_use_mb': True,
       },
       'Linux GN (dbg)': {
@@ -202,6 +205,7 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'linux',
           'TARGET_BITS': 64,
         },
+        'should_run_tests': True,
         'should_use_mb': True,
       },
       'linux_chromium_gn_dbg': {
@@ -354,7 +358,7 @@ def _GenStepsInternal(api):
 
   if should_use_mb:
     api.chromium.configure_bot(BUILDERS, ['gn'])
-    api.bot_update.ensure_checkout(
+    bot_update_step = api.bot_update.ensure_checkout(
        force=True, patch_root=bot_config.get('root_override'))
 
     # because the 'gn' config is applied, we skip running gyp in the
@@ -389,6 +393,7 @@ def _GenStepsInternal(api):
               build_output_dir='//out/%s' % api.chromium.c.build_config_fs)
       if requires_compile:
         api.chromium.compile(compile_targets)
+
     else:
       api.chromium.compile(all_compile_targets(api, tests) +
                            additional_compile_targets)
@@ -416,8 +421,20 @@ def _GenStepsInternal(api):
   if bot_config.get('should_run_gn_gyp_compare', False):
     api.chromium.run_gn_compare()
 
-  if not is_android and not should_use_mb:
-    api.chromium.runtest('gn_unittests')
+  if should_use_mb:
+    if tests and bot_config.get('should_run_tests', False):
+      if api.tryserver.is_tryserver:
+        api.chromium_tests.run_tests_and_deapply_as_needed(
+            mastername, api, tests, bot_update_step)
+      else:
+        api.chromium_tests.configure_swarming('chromium', precommit=False,
+                                              mastername=mastername)
+        test_runner = api.chromium_tests.create_test_runner(api, tests)
+        with api.chromium_tests.wrap_chromium_tests(mastername):
+          test_runner()
+  else:
+    if not is_android:
+      api.chromium.runtest('gn_unittests')
 
 
 def GenSteps(api):

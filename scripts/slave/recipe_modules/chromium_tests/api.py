@@ -685,6 +685,33 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.tryserver.set_transient_failure_tryjob_result()
       raise
 
+  def run_tests_and_deapply_as_needed(self, mastername, api, tests,
+                                      bot_update_step):
+    def deapply_patch_fn(failing_tests):
+      self.deapply_patch(bot_update_step)
+      compile_targets = list(self.m.itertools.chain(
+          *[t.compile_targets(api) for t in failing_tests]))
+      if compile_targets:
+        # Remove duplicate targets.
+        compile_targets = sorted(set(compile_targets))
+        has_failing_swarming_tests = [
+            t for t in failing_tests if t.uses_swarming]
+        if has_failing_swarming_tests:
+          self.m.isolate.clean_isolated_files(self.m.chromium.output_dir)
+        try:
+          self.m.chromium.compile(
+              compile_targets, name='compile (without patch)')
+        except self.m.step.StepFailure:
+          self.m.tryserver.set_transient_failure_tryjob_result()
+          raise
+        if has_failing_swarming_tests:
+          self.m.isolate.isolate_tests(self.m.chromium.output_dir,
+                                       verbose=True)
+
+    with self.wrap_chromium_tests(mastername):
+      return self.m.test_utils.determine_new_failures(api, tests,
+                                                      deapply_patch_fn)
+
   def analyze(self, affected_files, exes, compile_targets, config_file_name,
               additional_names=None, use_mb=False, build_output_dir=None):
     """Runs "analyze" step to determine targets affected by the patch.

@@ -9,11 +9,13 @@ DEPS = [
   'gclient',
   'goma',
   'isolate',
+  'itertools',
   'json',
   'path',
   'platform',
   'properties',
   'step',
   'swarming',
+  'test_utils',
   'tryserver',
 ]

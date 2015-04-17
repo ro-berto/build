@@ -401,31 +401,11 @@ def _GenStepsInternal(api):
       tests_including_triggered,
       override_bot_type='builder_tester')
 
-  def deapply_patch_fn(failing_tests):
-    api.chromium_tests.deapply_patch(bot_update_step)
-    compile_targets = list(api.itertools.chain(
-        *[t.compile_targets(api) for t in failing_tests]))
-    if compile_targets:
-      # Remove duplicate targets.
-      compile_targets = sorted(set(compile_targets))
-      has_failing_swarming_tests = [
-          t for t in failing_tests if t.uses_swarming]
-      if has_failing_swarming_tests:
-        api.isolate.clean_isolated_files(api.chromium.output_dir)
-      try:
-        api.chromium.compile(
-            compile_targets, name='compile (without patch)')
-      except api.step.StepFailure:
-        api.tryserver.set_transient_failure_tryjob_result()
-        raise
-      if has_failing_swarming_tests:
-        api.isolate.isolate_tests(api.chromium.output_dir, verbose=True)
-
   if not tests:
     return
 
-  with api.chromium_tests.wrap_chromium_tests(mastername):
-    return api.test_utils.determine_new_failures(api, tests, deapply_patch_fn)
+  api.chromium_tests.run_tests_and_deapply_as_needed(mastername, api, tests,
+                                                     bot_update_step)
 
 
 def GenSteps(api):

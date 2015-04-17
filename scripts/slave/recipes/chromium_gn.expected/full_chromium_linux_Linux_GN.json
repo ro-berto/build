@@ -151,5 +151,32 @@
       "chrome"
     ],
     "name": "gyp_flag_compare"
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--xvfb",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux GN\", \"buildnumber\": 571, \"mastername\": \"chromium.linux\", \"recipe\": \"chromium_gn\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux GN\", \"buildnumber\": 571, \"mastername\": \"chromium.linux\", \"recipe\": \"chromium_gn\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--annotate=gtest",
+      "--test-type=base_unittests",
+      "--test-launcher-summary-output",
+      "/path/to/tmp/json",
+      "--generate-json-file",
+      "-o",
+      "gtest-results/base_unittests",
+      "--builder-name=Linux GN",
+      "--slave-name=TestSlavename",
+      "--build-number=571",
+      "base_unittests"
+    ],
+    "name": "base_unittests"
   }
 ]
