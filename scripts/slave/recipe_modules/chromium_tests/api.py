@@ -730,7 +730,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # targets out because crash_service should always be there on windows.
     # TODO(akuegel): Need to solve this in a better way. crbug.com/478053
     if (self.m.platform.is_win and compile_targets and
-        'crash_service' not in compile_targets):
+        'crash_service' not in compile_targets and not use_mb):
       compile_targets.extend(['crash_service'])
 
     # Emit more detailed output useful for debugging.
