@@ -225,6 +225,7 @@ def main(argv):
   for i in range(args.days):
     days.append(datetime.date.today() - datetime.timedelta(days=(i + 1)))
   all_builds = []
+  cl_ids = set()
   for index, pool in enumerate(builder_pools):
     print 'Pool #%d:' % (index + 1)
     pool_capacity = {
@@ -256,6 +257,7 @@ def main(argv):
 
           builds.append(build)
           all_builds.append(build)
+          cl_ids.add('%s:%s' % (properties['issue'], properties['patchset']))
 
         capacity = estimate_buildbot_capacity(builds)
         for key in ('hourly_bots', 'daily_bots', 'build_times_s'):
@@ -305,6 +307,9 @@ def main(argv):
             capacity['daily_bots'],
             capacity['hourly_bots'],
             sum(capacity['build_times_s']))
+
+  print 'Data generated for %d unique CL IDs (issue/patchset pairs)' % len(
+      cl_ids)
 
   return 0
 
