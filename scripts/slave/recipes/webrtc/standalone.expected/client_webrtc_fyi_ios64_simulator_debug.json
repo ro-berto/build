@@ -77,7 +77,7 @@
       "-u",
       "[BUILD]/scripts/slave/compile.py",
       "--target",
-      "Debug-iphoneos",
+      "Debug-iphonesimulator",
       "--src-dir",
       "[SLAVE_BUILD]/src",
       "--build-tool",
