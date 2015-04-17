@@ -36,8 +36,7 @@ def BaseConfig(BUILDER_NAME, MASTER_NAME, SLAVE_NAME, **_kwargs):
 
 
 VAR_TEST_MAP = {
-  'BUILDER_NAME': (u'Build-Mac10.7-Clang-Arm7-Debug-iOS',
-                   u'Build-Ubuntu-GCC-x86_64-Debug',
+  'BUILDER_NAME': (u'Build-Ubuntu-GCC-x86_64-Debug',
                    u'Build-Win-MSVC-x86-Release',
                    u'Build-Win-MSVC-x86-Debug-Exceptions',
                    u'Housekeeper-PerCommit',
