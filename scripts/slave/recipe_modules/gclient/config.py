@@ -196,6 +196,7 @@ def chromium_lkgr(c):
     safesync_url = 'https://chromium-status.appspot.com/git-lkgr'
     raise BadConf('Git has problems with safesync_url, crbug.com/109191.')
   s.safesync_url = safesync_url
+  s.revision = 'origin/lkgr'
 
 @config_ctx(includes=['chromium_bare'])
 def android_bare(c):
