@@ -46,12 +46,8 @@ RECIPE_CONFIGS = freeze({
     'gclient_config': 'webrtc',
     'gclient_apply_config': ['android'],
   },
-  'webrtc_ios32': {
-    'chromium_config': 'webrtc_ios32',
-    'gclient_config': 'webrtc_ios',
-  },
-  'webrtc_ios64': {
-    'chromium_config': 'webrtc_ios64',
+  'webrtc_ios': {
+    'chromium_config': 'webrtc_ios',
     'gclient_config': 'webrtc_ios',
   },
   'chromium_webrtc': {
@@ -652,7 +648,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'mac'},
       },
       'iOS32 Debug': {
-        'recipe_config': 'webrtc_ios32',
+        'recipe_config': 'webrtc_ios',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -663,7 +659,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'mac'},
       },
       'iOS32 Release': {
-        'recipe_config': 'webrtc_ios32',
+        'recipe_config': 'webrtc_ios',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -674,7 +670,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'mac'},
       },
       'iOS64 Debug': {
-        'recipe_config': 'webrtc_ios64',
+        'recipe_config': 'webrtc_ios',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -685,7 +681,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'mac'},
       },
       'iOS64 Release': {
-        'recipe_config': 'webrtc_ios64',
+        'recipe_config': 'webrtc_ios',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -1030,7 +1026,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'mac'},
       },
       'iOS32 Simulator Debug': {
-        'recipe_config': 'webrtc_ios32',
+        'recipe_config': 'webrtc_ios',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -1041,7 +1037,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'mac'},
       },
       'iOS64 Simulator Debug': {
-        'recipe_config': 'webrtc_ios32',
+        'recipe_config': 'webrtc_ios',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -1283,7 +1279,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'mac'},
       },
       'ios': {
-        'recipe_config': 'webrtc_ios32',
+        'recipe_config': 'webrtc_ios',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -1294,7 +1290,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'mac'},
       },
       'ios_rel': {
-        'recipe_config': 'webrtc_ios32',
+        'recipe_config': 'webrtc_ios',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -1305,7 +1301,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'mac'},
       },
       'ios_arm64': {
-        'recipe_config': 'webrtc_ios64',
+        'recipe_config': 'webrtc_ios',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -1316,7 +1312,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'mac'},
       },
       'ios_arm64_rel': {
-        'recipe_config': 'webrtc_ios64',
+        'recipe_config': 'webrtc_ios',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,

@@ -26,11 +26,7 @@ def webrtc_clang(c):
   _compiler_defaults(c)
 
 @CONFIG_CTX(includes=['chromium', 'dcheck', '_webrtc_ios'])
-def webrtc_ios32(c):
-  pass
-
-@CONFIG_CTX(includes=['chromium_no_goma', 'dcheck', '_webrtc_ios'])
-def webrtc_ios64(c):
+def webrtc_ios(c):
   pass
 
 @CONFIG_CTX(includes=['static_library'])
