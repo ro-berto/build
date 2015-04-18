@@ -413,50 +413,6 @@ class ChromiumApi(recipe_api.RecipeApi):
         env=env,
         **kwargs)
 
-  def run_telemetry_unittests(self, cmd_args=None, **kwargs):
-    return self._run_telemetry_script(
-        'telemetry_unittests',
-        self.m.path['checkout'].join('tools', 'telemetry', 'run_tests'),
-        cmd_args, **kwargs)
-
-  def run_telemetry_perf_unittests(self, cmd_args=None, **kwargs):
-    return self._run_telemetry_script(
-        'telemetry_perf_unittests',
-        self.m.path['checkout'].join('tools', 'perf', 'run_tests'),
-        cmd_args, **kwargs)
-
-  def _run_telemetry_script(self, name, script_path, cmd_args, **kwargs):
-    test_type = name
-    cmd_args = cmd_args or []
-
-    args = ['--browser=android-chrome-shell',
-            '--retry-limit=3']
-
-    if not self.m.tryserver.is_tryserver:
-      chromium_revision = self._commit_position('got_revision_cp')
-      blink_revision = self._commit_position('got_webkit_revision_cp')
-      args += [
-          '--builder-name=%s' % self.m.properties['buildername'],
-          '--master-name=%s' % self.m.properties['mastername'],
-          '--test-results-server=%s' % 'test-results.appspot.com',
-          '--test-type=%s' % test_type,
-          '--metadata', 'chromium_revision=%s' % chromium_revision,
-          '--metadata', 'blink_revision=%s' % blink_revision,
-          '--metadata', 'build_number=%s' % self.m.properties['buildnumber'],
-      ]
-
-    args += cmd_args
-
-    return self.runtest(
-        script_path,
-        args=args,
-        annotate='gtest',
-        name=name,
-        test_type=test_type,
-        python_mode=True,
-        xvfb=True,
-        **kwargs)
-
   def run_telemetry_benchmark(self, benchmark_name, cmd_args=None, env=None):
     cmd_args = cmd_args or []
     args = [
@@ -469,10 +425,6 @@ class ChromiumApi(recipe_api.RecipeApi):
         args=cmd_args + args,
         env=env,
     )
-
-  def _commit_position(self, property_name):
-    return self.m.commit_position.parse_revision(
-        self.m.bot_update.properties[property_name])
 
   def _get_cros_chrome_sdk_wrapper(self, clean=False):
     """Returns: a wrapper command for 'cros chrome-sdk'

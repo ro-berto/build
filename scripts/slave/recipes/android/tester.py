@@ -67,36 +67,9 @@ PYTHON_UNIT_TESTS = freeze([
 ])
 
 BUILDERS = freeze({
-  'tryserver.chromium.linux': {
-    'android_dbg_tests_recipe': {
-      'config': 'trybot_builder',
-      'instrumentation_tests': INSTRUMENTATION_TESTS,
-      'unittests': UNIT_TESTS,
-      'java_unittests': JAVA_UNIT_TESTS,
-      'python_unittests': PYTHON_UNIT_TESTS,
-      'target': 'Debug',
-      'try': True,
-    },
-    'android_rel_tests_recipe': {
-      'config': 'trybot_builder',
-      'instrumentation_tests': INSTRUMENTATION_TESTS,
-      'unittests': UNIT_TESTS,
-      'java_unittests': JAVA_UNIT_TESTS,
-      'python_unittests': PYTHON_UNIT_TESTS,
-      'target': 'Release',
-      'try': True,
-    },
-    'EXAMPLE_android_rel_telemetry_tests_recipe': {
-      'config': 'main_builder',
-      'instrumentation_tests': [],
-      'unittests': [],
-      'telemetry_unittests': True,
-      'telemetry_perf_unittests': True,
-      'java_unittests': [],
-      'python_unittests': [],
-      'target': 'Release',
-    },
-  },
+  # NOTE: Please don't add new builders here. Instead, use the chromium
+  # and chromium_trybot recipes.
+  # TODO(phajdan.jr): Convert 'Android Tests (N5)' to chromium recipe.
   'chromium.fyi': {
     'Android Tests (N5)': {
       'config': 'trybot_builder',
@@ -175,12 +148,6 @@ def _GenStepsInternal(api):
 
   api.chromium.compile(targets=compile_targets)
 
-  run_telemetry_unittests = bot_config.get('telemetry_unittests')
-  run_telemetry_perf_unittests = bot_config.get('telemetry_perf_unittests')
-  if (not instrumentation_tests and not unittests and not java_unittests
-      and not run_telemetry_unittests and not run_telemetry_perf_unittests):
-    return
-
   api.adb.root_devices()
 
   api.chromium_android.spawn_logcat_monitor()
@@ -203,13 +170,6 @@ def _GenStepsInternal(api):
           suite,
           isolate_file_path=isolate_path,
           flakiness_dashboard=FLAKINESS_DASHBOARD)
-
-    if run_telemetry_unittests:
-      args = ['--device=%s' % api.adb.devices.get_result()[0]]
-      api.chromium.run_telemetry_unittests(cmd_args=args)
-    if run_telemetry_perf_unittests:
-      args = ['--device=%s' % api.adb.devices.get_result()[0]]
-      api.chromium.run_telemetry_perf_unittests(cmd_args=args)
 
     for suite in java_unittests:
       api.chromium_android.run_java_unit_test_suite(suite)
@@ -255,39 +215,12 @@ def GenTests(api):
                                                'junit_unit_tests']}))
       yield test_props
 
-  yield (
-      api.test('android_dbg_tests_recipe__content_browsertests_failure') +
-      api.properties.generic(
-          mastername='tryserver.chromium.linux',
-          buildername='android_dbg_tests_recipe',
-          slavename='slavename') +
-      api.override_step_data(
-          'analyze',
-          api.json.output({'status': 'Found dependency',
-                           'targets': ['content_browsertests'],
-                           'build_targets': ['content_browsertests']})) +
-      api.step_data('content_browsertests', retcode=1)
-  )
-
-  yield (
-      api.test('no_provision_devices_when_no_tests') +
-      api.properties.generic(
-          mastername='tryserver.chromium.linux',
-          buildername='android_dbg_tests_recipe',
-          slavename='slavename') +
-      api.override_step_data(
-          'analyze',
-          api.json.output({'status': 'Found dependency',
-                           'targets': [],
-                           'build_targets': ['content_browsertests']}))
-  )
-
   # Tests analyze module early exits if patch can't affect this config.
   yield (
       api.test('no_compile_because_of_analyze') +
       api.properties.generic(
-          mastername='tryserver.chromium.linux',
-          buildername='android_dbg_tests_recipe',
+          mastername='chromium.fyi',
+          buildername='Android Tests (N5)',
           slavename='slavename') +
       api.override_step_data(
           'analyze',

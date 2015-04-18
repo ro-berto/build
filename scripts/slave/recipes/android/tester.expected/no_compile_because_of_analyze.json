@@ -5,9 +5,9 @@
       "-u",
       "[BUILD]/scripts/slave/bot_update.py",
       "--master",
-      "tryserver.chromium.linux",
+      "chromium.fyi",
       "--builder",
-      "android_dbg_tests_recipe",
+      "Android Tests (N5)",
       "--slave",
       "slavename",
       "--spec",
@@ -65,8 +65,8 @@
       "python",
       "-u",
       "\nimport shutil, sys, os\nshutil.rmtree(sys.argv[1], True)\nshutil.rmtree(sys.argv[2], True)\ntry:\n  os.remove(sys.argv[3])\nexcept OSError:\n  pass\nfor base, _dirs, files in os.walk(sys.argv[4]):\n  for f in files:\n    if f.endswith('.pyc'):\n      os.remove(os.path.join(base, f))\n",
-      "[SLAVE_BUILD]/src/out/Debug/debug_info_dumps",
-      "[SLAVE_BUILD]/src/out/Debug/test_logs",
+      "[SLAVE_BUILD]/src/out/Release/debug_info_dumps",
+      "[SLAVE_BUILD]/src/out/Release/test_logs",
       "[SLAVE_BUILD]/src/out/build_product.zip",
       "[SLAVE_BUILD]/src"
     ],
@@ -147,7 +147,7 @@
       "-u",
       "[SLAVE_BUILD]/src/build/gyp_chromium",
       "--analyzer",
-      "{\"files\": [\"foo.cc\"], \"targets\": [\"android_webview_test_apk\", \"chrome_shell_test_apk\", \"content_shell_test_apk\", \"chrome_sync_shell_test_apk\", \"android_webview_unittests\", \"base_unittests\", \"breakpad_unittests\", \"cc_unittests\", \"components_unittests\", \"content_browsertests\", \"content_unittests\", \"device_unittests\", \"events_unittests\", \"gl_tests\", \"gpu_unittests\", \"ipc_tests\", \"media_unittests\", \"net_unittests\", \"sandbox_linux_unittests\", \"skia_unittests\", \"sql_unittests\", \"sync_unit_tests\", \"ui_android_unittests\", \"ui_base_unittests\", \"ui_touch_selection_unittests\", \"unit_tests\", \"junit_unit_tests\"]}",
+      "{\"files\": [\"foo.cc\"], \"targets\": [\"android_webview_test_apk\", \"chrome_shell_test_apk\", \"content_shell_test_apk\", \"chrome_sync_shell_test_apk\", \"remoting_test_apk\", \"android_webview_unittests\", \"base_unittests\", \"breakpad_unittests\", \"cc_unittests\", \"components_unittests\", \"content_browsertests\", \"content_unittests\", \"device_unittests\", \"events_unittests\", \"gl_tests\", \"gpu_unittests\", \"ipc_tests\", \"media_unittests\", \"net_unittests\", \"sandbox_linux_unittests\", \"skia_unittests\", \"sql_unittests\", \"sync_unit_tests\", \"ui_android_unittests\", \"ui_base_unittests\", \"ui_touch_selection_unittests\", \"unit_tests\", \"device_unittests\", \"junit_unit_tests\", \"chrome_junit_tests\", \"content_junit_tests\"]}",
       "/path/to/tmp/json"
     ],
     "env": {
