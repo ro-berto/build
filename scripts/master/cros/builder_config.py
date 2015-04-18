@@ -260,17 +260,19 @@ class PreFlightBranchBuilderConfig(BuilderConfig):
 
 
 class CanaryBuilderConfig(BuilderConfig):
-  """BuilderConfig for canary launcher targets."""
+  """BuilderConfig for canary/release launcher targets."""
 
   CONFIG_BUILDERNAME_MAP = {
       'master-release': 'Canary master',
   }
 
   def _GetBuilderName(self):
-    if self.config.get('active_waterfall') == 'chromeos':
-      return '%s canary' % (self.config.base,)
-    return '%s full' % (self.config.base,)
-
+    parts = [self.config.base]
+    if self.config.children:
+      parts.append('group')
+    parts.append('canary' if self.config.get('active_waterfall') == 'chromeos'
+                 else 'full')
+    return ' '.join(parts)
 
 class SdkBuilderConfig(BuilderConfig):
   """BuilderConfig for SDK launcher targets."""
