@@ -101,11 +101,9 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "html_viewer_unittests",
-      "mojo/services/html_viewer",
-      "mojo/services/html_viewer:apptests",
-      "mojo/services/network",
-      "mojo/services/network:apptests"
+      "mojo",
+      "mojo/services:apptests",
+      "mojo/services:tests"
     ],
     "name": "compile"
   },
@@ -127,5 +125,62 @@
       "html_viewer_unittests"
     ],
     "name": "html_viewer_unittests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Chromium Mojo Android\", \"buildnumber\": 571, \"mastername\": \"chromium.mojo\", \"recipe\": \"chromium_mojo\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Chromium Mojo Android\", \"buildnumber\": 571, \"mastername\": \"chromium.mojo\", \"recipe\": \"chromium_mojo\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--builder-name=Chromium Mojo Android",
+      "--slave-name=TestSlavename",
+      "--build-number=571",
+      "mojo_common_unittests"
+    ],
+    "name": "mojo_common_unittests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Chromium Mojo Android\", \"buildnumber\": 571, \"mastername\": \"chromium.mojo\", \"recipe\": \"chromium_mojo\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Chromium Mojo Android\", \"buildnumber\": 571, \"mastername\": \"chromium.mojo\", \"recipe\": \"chromium_mojo\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--builder-name=Chromium Mojo Android",
+      "--slave-name=TestSlavename",
+      "--build-number=571",
+      "mojo_surfaces_lib_unittests"
+    ],
+    "name": "mojo_surfaces_lib_unittests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Chromium Mojo Android\", \"buildnumber\": 571, \"mastername\": \"chromium.mojo\", \"recipe\": \"chromium_mojo\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Chromium Mojo Android\", \"buildnumber\": 571, \"mastername\": \"chromium.mojo\", \"recipe\": \"chromium_mojo\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--builder-name=Chromium Mojo Android",
+      "--slave-name=TestSlavename",
+      "--build-number=571",
+      "view_manager_service_unittests"
+    ],
+    "name": "view_manager_service_unittests"
   }
 ]
