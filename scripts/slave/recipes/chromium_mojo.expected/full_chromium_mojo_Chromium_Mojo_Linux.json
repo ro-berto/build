@@ -187,6 +187,25 @@
     "cmd": [
       "python",
       "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Chromium Mojo Linux\", \"buildnumber\": 571, \"mastername\": \"chromium.mojo\", \"recipe\": \"chromium_mojo\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Chromium Mojo Linux\", \"buildnumber\": 571, \"mastername\": \"chromium.mojo\", \"recipe\": \"chromium_mojo\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--builder-name=Chromium Mojo Linux",
+      "--slave-name=TestSlavename",
+      "--build-number=571",
+      "window_manager_unittests"
+    ],
+    "name": "window_manager_unittests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/mojo/tools/apptest_runner.py",
       "[SLAVE_BUILD]/src/mojo/tools/data/apptests",
       "[SLAVE_BUILD]/src/out/Release"
