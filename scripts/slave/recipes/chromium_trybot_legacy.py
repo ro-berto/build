@@ -48,21 +48,6 @@ BUILDERS = freeze({
         },
         'use_isolate': True,
       },
-      'linux_arm_compile': {
-        'GYP_DEFINES': {
-          'arm_float_abi': 'hard',
-        },
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'chromium_config': 'chromium',
-        'compile_only': True,
-        'testing': {
-          'platform': 'linux',
-        },
-      },
       'linux_chromium_asan_rel': {
         'add_telemetry_tests': False,
         'chromium_config_kwargs': {
