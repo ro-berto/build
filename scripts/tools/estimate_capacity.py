@@ -302,10 +302,21 @@ def main(argv):
       print 'Swarming pools:'
       for pool, capacity in swarming_capacity.iteritems():
         formatted_pool = ', '.join(sorted(':'.join(d) for d in pool))
-        print '  %-86s %5.1f %5.1f       <%10.1f>' % (
+
+        argv = [
+          args.swarming_py, 'bots',
+          '-S', 'chromium-swarm.appspot.com',
+          '--bare',
+        ]
+        for d in pool:
+          argv.extend(['-d', d[0], d[1]])
+
+        swarming_bots = subprocess.check_output(argv)
+        print '  %-86s %5.1f %5.1f %5.1f  <%10.1f>' % (
             formatted_pool,
             capacity['daily_bots'],
             capacity['hourly_bots'],
+            len(swarming_bots.splitlines()),
             sum(capacity['build_times_s']))
 
   print 'Data generated for %d unique CL IDs (issue/patchset pairs)' % len(
