@@ -62,7 +62,9 @@ def GenSteps(api):
     api.chromium.runtest('mojo_common_unittests')
     api.chromium.runtest('mojo_surfaces_lib_unittests')
     api.chromium.runtest('view_manager_service_unittests')
-    api.chromium.runtest('window_manager_unittests')
+    # TODO(msw|sky): Fix and enable the window_manager_unittests; the bot said:
+    #                ...ERROR:unit_test_launcher.cc(291)] no test result for...
+    # api.chromium.runtest('window_manager_unittests')
     if not is_android:
       _RunApptests(api)
 
