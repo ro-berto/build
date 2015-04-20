@@ -7,7 +7,7 @@
       "--master",
       "tryserver.webrtc",
       "--builder",
-      "ios64_simulator",
+      "ios64_sim",
       "--slave",
       "slavename",
       "--spec",

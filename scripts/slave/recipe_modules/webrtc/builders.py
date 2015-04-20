@@ -1322,7 +1322,7 @@ BUILDERS = freeze({
         'bot_type': 'builder',
         'testing': {'platform': 'mac'},
       },
-      'ios32_simulator': {
+      'ios32_sim': {
         'recipe_config': 'webrtc_ios',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -1333,7 +1333,7 @@ BUILDERS = freeze({
         'bot_type': 'builder',
         'testing': {'platform': 'mac'},
       },
-      'ios64_simulator': {
+      'ios64_sim': {
         'recipe_config': 'webrtc_ios',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
