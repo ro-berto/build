@@ -817,6 +817,66 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "junit",
+      "-s",
+      "junit_unit_tests",
+      "--verbose",
+      "--json-results-file",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "junit_unit_tests",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "junit",
+      "-s",
+      "chrome_junit_tests",
+      "--verbose",
+      "--json-results-file",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "chrome_junit_tests",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "junit",
+      "-s",
+      "content_junit_tests",
+      "--verbose",
+      "--json-results-file",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "content_junit_tests",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/build/android/adb_logcat_printer.py",
       "--output-path",
       "[SLAVE_BUILD]/src/out/Debug/full_log",

@@ -953,10 +953,10 @@ class SwarmingTelemetryGPUTest(SwarmingTest):
     return valid, failures
 
 
-class AndroidInstrumentationTest(Test):
+class AndroidTest(Test):
   def __init__(self, name, compile_target, adb_install_apk=None,
                isolate_file_path=None):
-    super(AndroidInstrumentationTest, self).__init__()
+    super(AndroidTest, self).__init__()
 
     self._name = name
     self.compile_target = compile_target
@@ -991,24 +991,24 @@ class AndroidInstrumentationTest(Test):
             AttributeError):  # pragma: no cover
       return None
 
+  def run_tests(self, api, suffix, json_results_file):
+    """Runs the Android test suite and outputs the json results to a file.
+
+    Args:
+      api: Caller's API.
+      suffix: Suffix added to the test name.
+      json_results_file: File to output the test results.
+    """
+    raise NotImplementedError()  # pragma: no cover
+
   def run(self, api, suffix):
     assert api.chromium.c.TARGET_PLATFORM == 'android'
     if self.adb_install_apk:
       api.chromium_android.adb_install_apk(
           self.adb_install_apk[0], self.adb_install_apk[1])
-
-    mock_test_results = {
-      'per_iteration_data': [{'TestA': [{'status': 'SUCCESS'}]},
-                             {'TestB': [{'status': 'FAILURE'}]}]
-    }
-
     try:
-      api.chromium_android.run_instrumentation_suite(
-          self.name, suffix=suffix,
-          flakiness_dashboard='http://test-results.appspot.com',
-          verbose=True, isolate_file_path=self.isolate_file_path,
-          json_results_file=api.json.output(add_json_log=False),
-          step_test_data=lambda: api.json.test_api.output(mock_test_results))
+      json_results_file = api.json.output(add_json_log=False)
+      self.run_tests(api, suffix, json_results_file)
     finally:
       step_result = api.step.active_result
       failures = self._get_failing_tests(step_result)
@@ -1033,6 +1033,43 @@ class AndroidInstrumentationTest(Test):
   def failures(self, api, suffix):
     assert self.has_valid_results(api, suffix)
     return self._test_runs[suffix]['failures']
+
+
+class AndroidJunitTest(AndroidTest):
+  def __init__(self, name):
+    super(AndroidJunitTest, self).__init__(name, compile_target=name,
+        adb_install_apk=None, isolate_file_path=None)
+
+  #override
+  def run_tests(self, api, suffix, json_results_file):
+    mock_test_results = {
+      'per_iteration_data': [{'TestA': [{'status': 'SUCCESS'}]},
+                             {'TestB': [{'status': 'FAILURE'}]}]
+    }
+    api.chromium_android.run_java_unit_test_suite(
+        self.name, verbose=True, suffix=suffix,
+        json_results_file=json_results_file,
+        step_test_data=lambda: api.json.test_api.output(mock_test_results))
+
+
+class AndroidInstrumentationTest(AndroidTest):
+  def __init__(self, name, compile_target, adb_install_apk=None,
+               isolate_file_path=None):
+    super(AndroidInstrumentationTest, self).__init__(name, compile_target,
+        adb_install_apk, isolate_file_path)
+
+  #override
+  def run_tests(self, api, suffix, json_results_file):
+    mock_test_results = {
+      'per_iteration_data': [{'TestA': [{'status': 'SUCCESS'}]},
+                             {'TestB': [{'status': 'FAILURE'}]}]
+    }
+    api.chromium_android.run_instrumentation_suite(
+        self.name, suffix=suffix,
+        flakiness_dashboard='http://test-results.appspot.com',
+        verbose=True, isolate_file_path=self.isolate_file_path,
+        json_results_file=json_results_file,
+        step_test_data=lambda: api.json.test_api.output(mock_test_results))
 
 
 class BlinkTest(Test):
