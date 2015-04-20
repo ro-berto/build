@@ -50,7 +50,14 @@ def _HasToken(buildername, token):
   return '_' + token + '_' in '_' + buildername + '_'
 
 
-def _GetTargetCMakeArgs(buildername):
+def _AppendFlags(args, key, flags):
+  if key in args:
+    args[key] += ' ' + flags
+  else:
+    args[key] = flags
+
+
+def _GetTargetCMakeArgs(buildername, bot_utils):
   args = {}
   if _HasToken(buildername, 'shared'):
     args['BUILD_SHARED_LIBS'] = '1'
@@ -58,9 +65,17 @@ def _GetTargetCMakeArgs(buildername):
     # 32-bit Linux is cross-compiled on the 64-bit Linux bot.
     args['CMAKE_SYSTEM_NAME'] = 'Linux'
     args['CMAKE_SYSTEM_PROCESSOR'] = 'x86'
-    args['CMAKE_CXX_FLAGS'] = '-m32 -msse2'
-    args['CMAKE_C_FLAGS'] = '-m32 -msse2'
-    args['CMAKE_ASM_FLAGS'] = '-m32 -msse2'
+    _AppendFlags(args, 'CMAKE_CXX_FLAGS', '-m32 -msse2')
+    _AppendFlags(args, 'CMAKE_C_FLAGS', '-m32 -msse2')
+    _AppendFlags(args, 'CMAKE_ASM_FLAGS', '-m32 -msse2')
+  if _HasToken(buildername, 'noasm'):
+    _AppendFlags(args, 'CMAKE_CXX_FLAGS', '-DOPENSSL_NO_ASM')
+    _AppendFlags(args, 'CMAKE_C_FLAGS', '-DOPENSSL_NO_ASM')
+  if _HasToken(buildername, 'asan'):
+    args['CMAKE_C_COMPILER'] = bot_utils.join('llvm-build', 'bin', 'clang')
+    args['CMAKE_CXX_COMPILER'] = bot_utils.join('llvm-build', 'bin', 'clang++')
+    _AppendFlags(args, 'CMAKE_CXX_FLAGS', '-fsanitize=address')
+    _AppendFlags(args, 'CMAKE_C_FLAGS', '-fsanitize=address')
   return args
 
 
@@ -70,6 +85,14 @@ def _GetTargetMSVCPrefix(buildername, bot_utils):
   if _HasToken(buildername, 'win64'):
     return ['python', bot_utils.join('vs_env.py'), 'x64']
   return []
+
+
+def _GetTargetEnv(buildername, bot_utils):
+  env = {}
+  if _HasToken(buildername, 'asan'):
+    env['ASAN_SYMBOLIZER_PATH'] = bot_utils.join('llvm-build', 'bin',
+                                                 'llvm-symbolizer')
+  return env
 
 
 def GenSteps(api):
@@ -94,7 +117,8 @@ def GenSteps(api):
   cmake = bot_utils.join('cmake-' + _GetHostToolSuffix(api.platform), 'bin',
                          'cmake' + _GetHostExeSuffix(api.platform))
   cmake_args = _GetHostCMakeArgs(api.platform, bot_utils)
-  cmake_args.update(_GetTargetCMakeArgs(api.properties['buildername']))
+  cmake_args.update(_GetTargetCMakeArgs(api.properties['buildername'],
+                                        bot_utils))
   api.python('cmake', go_env,
              msvc_prefix + [cmake, '-GNinja'] +
              ['-D%s=%s' % (k, v) for (k, v) in sorted(cmake_args.items())] +
@@ -102,11 +126,13 @@ def GenSteps(api):
              cwd=build_dir)
   api.python('ninja', go_env, msvc_prefix + ['ninja', '-C', build_dir])
 
+  env = _GetTargetEnv(api.properties['buildername'], bot_utils)
+
   # Run the unit tests.
   api.python('unit tests', go_env,
              msvc_prefix + ['go', 'run', api.path.join('util', 'all_tests.go'),
               '-json-output', api.test_utils.test_results()],
-             cwd=api.path['checkout'])
+             cwd=api.path['checkout'], env=env)
 
   # Run the SSL tests.
   runner_dir = api.path['checkout'].join('ssl', 'test', 'runner')
@@ -115,7 +141,7 @@ def GenSteps(api):
              cwd=runner_dir)
   api.step('ssl tests', msvc_prefix + [runner, '-pipe', '-json-output',
                                        api.test_utils.test_results()],
-           cwd=runner_dir)
+           cwd=runner_dir, env=env)
 
 
 def GenTests(api):
@@ -123,6 +149,7 @@ def GenTests(api):
     ('linux', api.platform('linux', 64)),
     ('linux_shared', api.platform('linux', 64)),
     ('linux32', api.platform('linux', 64)),
+    ('linux_noasm_asan', api.platform('linux', 64)),
     ('mac', api.platform('mac', 64)),
     ('win32', api.platform('win', 64)),
     ('win64', api.platform('win', 64)),
