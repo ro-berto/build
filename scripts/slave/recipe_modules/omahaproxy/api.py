@@ -17,8 +17,11 @@ class OmahaproxyApi(recipe_api.RecipeApi):
     assert len(result) == 4
     return result
 
-  def history(self, min_major_version=None):
+  def history(self, min_major_version=None, exclude_platforms=None):
+    exclude_platforms = exclude_platforms or []
     TEST_DATA = """os,channel,version,timestamp
+        mac,canary,44.0.2376.0,2015-04-20 19:42:48.990730
+        ios,stable,42.0.2311.47,2015-04-16 20:59:01.883870
         win,canary,41.0.2270.0,2015-01-08 19:48:09.982040
         linux,dev,41.0.2267.0,2015-01-06 19:58:10.377100
         mac,beta,36.0.1985.49,2014-06-04 17:40:47.808350"""
@@ -32,5 +35,7 @@ class OmahaproxyApi(recipe_api.RecipeApi):
       candidate = {header[i]: row[i] for i in range(len(row))}
       if (min_major_version and
           self.split_version(candidate['version'])[0] < min_major_version):
+        continue
+      if row[0].strip() in exclude_platforms:
         continue
       yield candidate
