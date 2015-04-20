@@ -691,6 +691,28 @@ BUILDERS = freeze({
         'bot_type': 'builder',
         'testing': {'platform': 'mac'},
       },
+      'iOS32 Simulator Debug': {
+        'recipe_config': 'webrtc_ios',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+          'TARGET_ARCH': 'intel',
+          'TARGET_PLATFORM': 'ios',
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'mac'},
+      },
+      'iOS64 Simulator Debug': {
+        'recipe_config': 'webrtc_ios',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+          'TARGET_ARCH': 'intel',
+          'TARGET_PLATFORM': 'ios',
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'mac'},
+      },
       'Linux32 Debug': {
         'recipe_config': 'webrtc_parallel',
         'chromium_config_kwargs': {
@@ -1025,28 +1047,6 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
       },
-      'iOS32 Simulator Debug': {
-        'recipe_config': 'webrtc_ios',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-          'TARGET_ARCH': 'intel',
-          'TARGET_PLATFORM': 'ios',
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'mac'},
-      },
-      'iOS64 Simulator Debug': {
-        'recipe_config': 'webrtc_ios',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-          'TARGET_ARCH': 'intel',
-          'TARGET_PLATFORM': 'ios',
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'mac'},
-      },
       'Linux Asan (parallel)': {
         'recipe_config': 'webrtc_parallel_clang',
         'chromium_apply_config': ['asan', 'lsan'],
@@ -1317,6 +1317,28 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
           'TARGET_ARCH': 'arm',
+          'TARGET_PLATFORM': 'ios',
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'mac'},
+      },
+      'ios32_simulator': {
+        'recipe_config': 'webrtc_ios',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+          'TARGET_ARCH': 'intel',
+          'TARGET_PLATFORM': 'ios',
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'mac'},
+      },
+      'ios64_simulator': {
+        'recipe_config': 'webrtc_ios',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+          'TARGET_ARCH': 'intel',
           'TARGET_PLATFORM': 'ios',
         },
         'bot_type': 'builder',
