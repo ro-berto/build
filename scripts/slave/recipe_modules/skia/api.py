@@ -16,7 +16,12 @@ from . import xsan_flavor
 import re
 
 
+# The gsutil recipe API uses a different gsutil version which does not work
+# on our bots. Force the version using this constant.
+GSUTIL_VERSION = '3.25'
+
 TEST_EXPECTED_SKP_VERSION = '42'
+TEST_EXPECTED_SKIMAGE_VERSION = '42'
 
 
 def is_android(builder_cfg):
@@ -169,82 +174,97 @@ class SkiaApi(recipe_api.RecipeApi):
       if fail_build_on_failure:
         self.failed.append(e)
 
+  def _download_and_copy_dir(self, expected_version, version_file, gs_path,
+                             host_path, device_path, test_actual_version):
+    actual_version_file = self.m.path.join(self.tmp_dir, version_file)
+    try:
+      actual_version = self._readfile(actual_version_file,
+                                      name='Get downloaded %s' % version_file,
+                                      test_data=test_actual_version)
+    except self.m.step.StepFailure:
+      actual_version = -1
+
+    # If we don't have the desired version, download it.
+    if actual_version != expected_version:
+      if actual_version != -1:
+        self.m.file.remove('remove actual %s' % version_file,
+                           actual_version_file)
+
+      self.flavor.create_clean_host_dir(host_path)
+      self.m.gsutil.download(
+          global_constants.GS_GM_BUCKET,
+          gs_path + '/*',
+          host_path,
+          name='download %s' % self.m.path.basename(host_path),
+          args=['-R'],
+          version=GSUTIL_VERSION)
+      self._writefile(actual_version_file, expected_version)
+
+    # Copy to device.
+    device_version_file = self.flavor.device_path_join(
+        self.device_dirs.tmp_dir, version_file)
+    if str(actual_version_file) != str(device_version_file):
+      try:
+        device_version = self.flavor.read_file_on_device(device_version_file)
+      except self.m.step.StepFailure:
+        device_version = -1
+      if device_version != expected_version:
+        self.flavor.remove_file_on_device(device_version_file)
+        self.flavor.create_clean_device_dir(device_path)
+        self.flavor.copy_directory_contents_to_device(host_path, device_path)
+
+        # Copy the new version file.
+        self.flavor.copy_file_to_device(actual_version_file,
+                                        device_version_file)
+
   def download_and_copy_images(self):
     """Download test images if needed."""
-    # TODO(mtklein,borenet): only copy when modified
-    self.flavor.create_clean_host_dir(self.images_dir)
-    self.m.gsutil.download(global_constants.GS_GM_BUCKET,
-                           '/'.join(('skimage', 'input', '*')),
-                           self.images_dir,
-                           name='Download test images',
-                           args=['-R'],
-                           version='3.25')
-    if str(self.images_dir) != str(self.device_dirs.images_dir):
-      self.flavor.create_clean_device_dir(self.device_dirs.images_dir)
-    self.flavor.copy_directory_contents_to_device(
-        self.images_dir,
-        self.device_dirs.images_dir)
+    # Ensure that the tmp_dir exists.
+    self._run_once(self.m.path.makedirs, 'tmp_dir', self.tmp_dir)
+
+    # Determine which version we have and which version we want.
+    timestamp_file = 'TIMESTAMP_LAST_UPLOAD_COMPLETED'
+    url = '/'.join(('gs:/', global_constants.GS_GM_BUCKET, 'skimage', 'input',
+                    timestamp_file))
+    expected_version = self.m.gsutil.cat(
+        url,
+        name='cat %s' % timestamp_file,
+        version=GSUTIL_VERSION,
+        stdout=self.m.raw_io.output()).stdout.rstrip()
+
+    test_data = TEST_EXPECTED_SKIMAGE_VERSION
+    if self.m.properties.get('test_downloaded_skimage_version'):
+      test_data = self.m.properties['test_downloaded_skimage_version']
+
+    self._download_and_copy_dir(expected_version,
+                                'SKIMAGE_VERSION',
+                                '/'.join(('skimage', 'input')),
+                                self.images_dir,
+                                self.device_dirs.images_dir,
+                                test_actual_version=test_data)
 
   def download_and_copy_skps(self):
     """Download the SKPs if needed."""
     # Ensure that the tmp_dir exists.
-    self.m.path.makedirs('tmp_dir', self.tmp_dir)
+    self._run_once(self.m.path.makedirs, 'tmp_dir', self.tmp_dir)
 
     # Determine which version we have and which version we want.
-    expected_skp_version = None
-    actual_skp_version = None
-
     version_file = 'SKP_VERSION'
     expected_version_file = self.m.path['checkout'].join(version_file)
-    expected_skp_version = self._readfile(expected_version_file,
-                                          name='Get expected SKP_VERSION',
-                                          test_data=TEST_EXPECTED_SKP_VERSION)
+    expected_version = self._readfile(expected_version_file,
+                                      name='Get expected SKP_VERSION',
+                                      test_data=TEST_EXPECTED_SKP_VERSION)
 
-    local_skp_path = self.local_skp_dirs.skp_dir()
-    actual_version_file = self.m.path.join(self.tmp_dir, version_file)
     test_data = TEST_EXPECTED_SKP_VERSION
     if self.m.properties.get('test_downloaded_skp_version'):
       test_data = self.m.properties['test_downloaded_skp_version']
-    try:
-      actual_skp_version = self._readfile(actual_version_file,
-                                          name='Get downloaded SKP_VERSION',
-                                          test_data=test_data)
-    except self.m.step.StepFailure:
-      actual_skp_version = -1
 
-    # If we don't have the desired version, download it.
-    if actual_skp_version != expected_skp_version:
-      if actual_skp_version != -1:
-        self.m.file.remove('remove actual SKP_VERSION file',
-                           actual_version_file)
-
-      self.flavor.create_clean_host_dir(local_skp_path)
-      skp_dest = self.m.path.split(local_skp_path)[0]
-      remote_skp_path = self.storage_skp_dirs.skp_dir(expected_skp_version)
-      self.m.gsutil.download(global_constants.GS_GM_BUCKET, remote_skp_path,
-                             skp_dest, args=['-R'], name='download skps',
-                             version='3.25')
-      self._writefile(actual_version_file, expected_skp_version)
-
-    # Copy SKPs to device.
-    device_skp_version_file = self.flavor.device_path_join(
-        self.device_dirs.tmp_dir, version_file)
-    if str(actual_version_file) != str(device_skp_version_file):
-      try:
-        device_skp_version = self.flavor.read_file_on_device(
-            device_skp_version_file)
-      except self.m.step.StepFailure:
-        device_skp_version = -1
-      if device_skp_version != expected_skp_version:
-        self.flavor.remove_file_on_device(device_skp_version_file)
-        self.flavor.create_clean_device_dir(self.device_dirs.skp_dir)
-        self.flavor.copy_directory_contents_to_device(
-            self.local_skp_dirs.skp_dir(), self.device_dirs.skp_dir)
-
-        # Copy the new SKP version file.
-        self.flavor.copy_file_to_device(actual_version_file,
-                                        device_skp_version_file)
-
+    self._download_and_copy_dir(expected_version,
+                                version_file,
+                                self.storage_skp_dirs.skp_dir(expected_version),
+                                self.local_skp_dirs.skp_dir(),
+                                self.device_dirs.skp_dir,
+                                test_actual_version=test_data)
 
   def install(self):
     """Copy the required executables and files to the device."""

@@ -91,10 +91,8 @@
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
-      "CC": "/usr/bin/clang",
       "CHROME_PATH": "/home/chrome-bot/src",
-      "CXX": "/usr/bin/clang++",
-      "GYP_DEFINES": "skia_arch_type=x86_64 skia_arch_width=64 skia_clang_build=1 skia_warnings_as_errors=0"
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_arch_width=64 skia_gpu=0 skia_warnings_as_errors=0"
     },
     "name": "build dm"
   },
@@ -106,10 +104,8 @@
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
-      "CC": "/usr/bin/clang",
       "CHROME_PATH": "/home/chrome-bot/src",
-      "CXX": "/usr/bin/clang++",
-      "GYP_DEFINES": "skia_arch_type=x86_64 skia_arch_width=64 skia_clang_build=1 skia_warnings_as_errors=0"
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_arch_width=64 skia_gpu=0 skia_warnings_as_errors=0"
     },
     "name": "build nanobench"
   },
@@ -179,7 +175,78 @@
       "[SLAVE_BUILD]/tmp/SKIMAGE_VERSION",
       "/path/to/tmp/"
     ],
-    "name": "Get downloaded SKIMAGE_VERSION"
+    "name": "Get downloaded SKIMAGE_VERSION",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[SLAVE_BUILD]/images"
+    ],
+    "name": "rmtree images",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[SLAVE_BUILD]/images",
+      "511"
+    ],
+    "name": "makedirs images",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--force-version",
+      "3.25",
+      "--",
+      "cp",
+      "-R",
+      "gs://chromium-skia-gm/skimage/input/*",
+      "[SLAVE_BUILD]/images"
+    ],
+    "name": "gsutil download images"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "42",
+      "[SLAVE_BUILD]/tmp/SKIMAGE_VERSION"
+    ],
+    "name": "write SKIMAGE_VERSION"
   },
   {
     "cmd": [
@@ -268,7 +335,7 @@
       "-u",
       "[SLAVE_BUILD]/skia/tools/dm_flags.py",
       "/path/to/tmp/json",
-      "Test-Mac10.8-Clang-MacMini4.1-GPU-GeForce320M-x86_64-Debug"
+      "Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "name": "exec dm_flags.py",
@@ -298,31 +365,27 @@
       "gitHash",
       "164710",
       "build_number",
-      "5",
+      "6",
       "--key",
       "arch",
       "x86_64",
       "compiler",
-      "Clang",
+      "GCC",
       "configuration",
       "Debug",
       "cpu_or_gpu",
-      "GPU",
+      "CPU",
       "cpu_or_gpu_value",
-      "GeForce320M",
+      "AVX2",
       "model",
-      "MacMini4.1",
+      "GCE",
       "os",
-      "Mac10.8",
+      "Ubuntu",
       "--uninterestingHashesFile",
       "[SLAVE_BUILD]/tmp/uninteresting_hashes.txt",
-      "--nocpu",
+      "--nogpu",
       "--dummy-flags"
     ],
-    "env": {
-      "CC": "/usr/bin/clang",
-      "CXX": "/usr/bin/clang++"
-    },
     "name": "dm"
   },
   {
@@ -332,8 +395,8 @@
       "RECIPE_MODULE[skia]/resources/upload_dm_results.py",
       "[SLAVE_BUILD]/dm",
       "164710",
-      "Test-Mac10.8-Clang-MacMini4.1-GPU-GeForce320M-x86_64-Debug",
-      "5",
+      "Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug",
+      "6",
       "",
       "[SLAVE_BUILD]/skia/common/py/utils"
     ],
@@ -346,7 +409,7 @@
       "-u",
       "[SLAVE_BUILD]/skia/tools/nanobench_flags.py",
       "/path/to/tmp/json",
-      "Test-Mac10.8-Clang-MacMini4.1-GPU-GeForce320M-x86_64-Debug"
+      "Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "name": "exec nanobench_flags.py",
@@ -366,13 +429,9 @@
       "[SLAVE_BUILD]/skia/resources",
       "--skps",
       "[SLAVE_BUILD]/playback/skps",
-      "--nocpu",
+      "--nogpu",
       "--dummy-flags"
     ],
-    "env": {
-      "CC": "/usr/bin/clang",
-      "CXX": "/usr/bin/clang++"
-    },
     "name": "nanobench"
   }
 ]
