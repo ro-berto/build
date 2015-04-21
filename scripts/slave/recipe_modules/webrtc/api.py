@@ -75,6 +75,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     'win_rel_archive': 'gs://chromium-webrtc/Win Builder',
     'win_rel_archive_fyi': 'gs://chromium-webrtc/win_rel-fyi',
     'mac_rel_archive': 'gs://chromium-webrtc/Mac Builder',
+    'mac_rel_archive_fyi': 'gs://chromium-webrtc/mac_rel-fyi',
     'linux_rel_archive': 'gs://chromium-webrtc/Linux Builder',
     'fyi_android_apk_dbg_archive': 'gs://chromium-webrtc/fyi_android_dbg',
     'fyi_linux_asan_archive': 'gs://chromium-webrtc/Linux ASan Builder',

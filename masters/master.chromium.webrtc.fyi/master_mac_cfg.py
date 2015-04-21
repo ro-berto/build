@@ -11,7 +11,7 @@ m_annotator = annotator_factory.AnnotatorFactory()
 
 def Update(c):
   buildernames_list = [
-      'Mac',
+      'Mac Builder',
       'Mac GN',
       'Mac GN (dbg)',
   ]
@@ -25,7 +25,8 @@ def Update(c):
                builderNames=buildernames_list),
   ])
   specs = [
-    {'name': 'Mac'},
+    {'name': 'Mac Builder'},
+    {'name': 'Mac Tester'},
     {
       'name': 'Mac GN',
       'slavebuilddir': 'mac_gn',
