@@ -107,6 +107,9 @@ def GenSteps(api):
 
   failure = False
   try:
+    # TODO(luqui): remove redundant cruft, need one consistent API.
+    api.chromium_android.detect_and_setup_devices()
+
     api.chromium_android.device_status_check(
       restart_usb=config.get('restart_usb', False))
 

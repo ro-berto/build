@@ -22,10 +22,6 @@ def main_builder(c):
     raise recipe_config.BadConf(
       'Cannot target arm with TARGET_ARCH == %s' % c.TARGET_ARCH)
 
-@CONFIG_CTX(includes=['main_builder', 'trybot_flavor'])
-def trybot_builder(c):
-  pass
-
 @CONFIG_CTX(includes=['base_config', 'clang', 'goma', 'android_findbugs'])
 def clang_builder(c):
   c.gyp_env.GYP_DEFINES['component'] = 'shared_library'

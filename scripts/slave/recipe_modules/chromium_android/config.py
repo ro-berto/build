@@ -64,10 +64,6 @@ def main_builder(c):
   pass
 
 @config_ctx()
-def trybot_builder(c):
-  pass
-
-@config_ctx()
 def clang_builder(c):
   pass
 

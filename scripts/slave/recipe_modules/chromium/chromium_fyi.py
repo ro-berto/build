@@ -1092,5 +1092,25 @@ SPEC = {
         'platform': 'linux',
       },
     },
+    'Android Remoting Tests': {
+      'recipe_config': 'chromium_android',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+        'TARGET_PLATFORM': 'android',
+      },
+      'bot_type': 'builder_tester',
+      'android_config': 'main_builder',
+      'root_devices': True,
+      'tests': [
+        steps.AndroidInstrumentationTest(
+            'ChromotingTest', 'remoting_test_apk',
+            adb_install_apk=(
+              'Chromoting.apk', 'org.chromium.chromoting')),
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+    },
   },
 }
