@@ -422,6 +422,7 @@
           "v8_all"
         ],
         "excluded_builders" : [
+          "V8 Linux - debug - avx2",
           "V8 Linux - mipsel - sim",
           "V8 Linux - ppc - sim",
           "V8 Linux - ppc64 - sim",
@@ -434,6 +435,8 @@
           "V8 Linux - arm64 - sim - nosnap - debug - 1",
           "V8 Linux - arm64 - sim - nosnap - debug - 2",
           "V8 Linux - arm64 - sim - gc stress",
+          "V8 Linux64 - avx2",
+          "V8 Linux64 - debug - avx2",
           "V8 Mac GC Stress",
           "V8 Arm GC Stress",
           "V8 Mac64 ASAN",

@@ -46,6 +46,7 @@ BUILDERS = {
           'V8 GC Stress - 2',
           'V8 GC Stress - 3',
           'V8 Linux - debug',
+          'V8 Linux - debug - avx2',
           'V8 Linux - debug - code serializer',
           'V8 Linux - debug - isolates',
           'V8 Linux - debug - nosse3',
@@ -115,6 +116,17 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - debug': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux - debug builder',
+        'build_gs_archive': 'linux_dbg_archive',
+        'tests': ['unittests', 'v8testing', 'benchmarks', 'mozilla'],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - debug - avx2': {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -343,6 +355,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
         'triggers': [
           'V8 Linux64',
+          'V8 Linux64 - avx2',
         ],
       },
       'V8 Linux64 - debug builder': {
@@ -357,6 +370,7 @@ BUILDERS = {
         'triggers': [
           'V8 Fuzzer',
           'V8 Linux64 - debug',
+          'V8 Linux - debug - avx2',
         ],
       },
       'V8 Linux64 - custom snapshot - debug builder': {
@@ -393,6 +407,23 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
       },
+      'V8 Linux64 - avx2': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux64 - builder',
+        'build_gs_archive': 'linux64_rel_archive',
+        'tests': [
+          'unittests',
+          'v8testing',
+          'webkit',
+          'benchmarks',
+          'mozilla',
+        ],
+        'testing': {'platform': 'linux'},
+      },
       'V8 Linux64 - debug': {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -407,6 +438,23 @@ BUILDERS = {
           'webkit',
           'test262',
           'test262_es6',
+          'mozilla',
+        ],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux64 - debug - avx2': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux64 - debug builder',
+        'build_gs_archive': 'linux64_dbg_archive',
+        'tests': [
+          'unittests',
+          'v8testing',
+          'webkit',
+          'benchmarks',
           'mozilla',
         ],
         'testing': {'platform': 'linux'},
@@ -1206,6 +1254,20 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
       },
+      'v8_linux_avx2_dbg': {
+        'chromium_apply_config': ['v8_goma'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'tests': [
+          'unittests',
+          'v8testing',
+          'webkit',
+        ],
+        'testing': {'platform': 'linux'},
+      },
       'v8_linux_nodcheck_rel': {
         'chromium_apply_config': ['no_dcheck', 'v8_goma'],
         'v8_config_kwargs': {
@@ -1267,6 +1329,34 @@ BUILDERS = {
           'unittests',
           'v8testing',
           'optimize_for_size',
+          'webkit',
+        ],
+        'testing': {'platform': 'linux'},
+      },
+      'v8_linux64_avx2_rel': {
+        'chromium_apply_config': ['v8_goma'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': [
+          'unittests',
+          'v8testing',
+          'webkit',
+        ],
+        'testing': {'platform': 'linux'},
+      },
+      'v8_linux64_avx2_dbg': {
+        'chromium_apply_config': ['v8_goma'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': [
+          'unittests',
+          'v8testing',
           'webkit',
         ],
         'testing': {'platform': 'linux'},

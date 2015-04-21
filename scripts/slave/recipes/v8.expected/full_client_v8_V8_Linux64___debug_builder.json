@@ -125,10 +125,18 @@
           "parent_got_revision_cp": "refs/heads/master@{#50110}",
           "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
         }
+      },
+      {
+        "builder_name": "V8 Linux - debug - avx2",
+        "properties": {
+          "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
+          "parent_got_revision_cp": "refs/heads/master@{#50110}",
+          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
+        }
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@V8 Fuzzer<br />V8 Linux64 - debug@@@"
+      "@@@STEP_TEXT@V8 Fuzzer<br />V8 Linux - debug - avx2<br />V8 Linux64 - debug@@@"
     ]
   }
 ]
