@@ -98,8 +98,20 @@ def GenSteps(api):
       '''
       import urllib2
       import sys
+      import time
+
+      attempts = 5
+      res = None
+      for attempt in range(attempts):
+        try:
+          res = urllib2.urlopen(sys.argv[1]).read()
+          break
+        except urllib2.URLError:
+          if attempt == attempts - 1:
+            raise
+          time.sleep(2 ** attempt)
       with open(sys.argv[2], 'w') as f:
-        f.write(urllib2.urlopen(sys.argv[1]).read())
+        f.write(res)
       ''',
       args=[APPENGINE_IS_STOPPED_URL, api.json.output()],
       step_test_data=lambda: api.json.test_api.output({
