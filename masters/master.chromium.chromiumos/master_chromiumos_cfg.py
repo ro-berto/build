@@ -20,6 +20,7 @@ def Update(config, active_master, c):
           'Linux ChromiumOS Ozone Builder',
           'Linux ChromiumOS Builder (dbg)',
           'Linux ChromiumOS GN',
+          'Linux ChromiumOS GN (dbg)',
       ]),
       Triggerable(name='chromiumos_rel_trigger', builderNames=[
           'Linux ChromiumOS Tests (1)',
@@ -58,9 +59,14 @@ def Update(config, active_master, c):
       ]
   ])
 
-  c['builders'].append({
-      'name': 'Linux ChromiumOS GN',
-      'factory': m_annotator.BaseFactory('chromium_gn'),
-      'notify_on_missing': True,
-      'category': '1linux',
-  })
+  c['builders'].extend([
+      {
+        'name': name,
+        'factory': m_annotator.BaseFactory('chromium_gn'),
+        'notify_on_missing': True,
+        'category': '1linux',
+      } for name in [
+          'Linux ChromiumOS GN',
+          'Linux ChromiumOS GN (dbg)',
+      ]
+  ])

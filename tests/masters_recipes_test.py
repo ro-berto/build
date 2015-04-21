@@ -52,6 +52,7 @@ SUPPRESSIONS = {
     'master.chromium.chromiumos': [
         'Linux ChromiumOS Full',
         'Linux ChromiumOS GN',
+        'Linux ChromiumOS GN (dbg)',
     ],
     'master.chromium.gpu': [
         'Android Debug (Nexus 7)',

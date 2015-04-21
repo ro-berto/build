@@ -109,6 +109,13 @@ BUILDERS = freeze({
         },
         'should_use_mb': True,
       },
+      'Linux ChromiumOS GN (dbg)': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'chromeos',
+        },
+        'should_use_mb': True,
+      },
     },
   },
   'chromium.linux': {
