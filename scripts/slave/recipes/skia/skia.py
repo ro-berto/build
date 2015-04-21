@@ -52,7 +52,6 @@ def GenTests(api):
     'Test-Android-GCC-GalaxyS4-GPU-SGX544-Arm7-Debug',
     'Test-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Debug',
     'Test-Android-GCC-Nexus10-GPU-MaliT604-Arm7-Release',
-    'Test-Android-GCC-Xoom-GPU-Tegra2-Arm7-Debug',
     'Test-Android-GCC-NexusPlayer-GPU-PowerVR-x86-Debug',
     'Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug',
     'Test-Mac10.8-Clang-MacMini4.1-GPU-GeForce320M-x86_64-Debug',

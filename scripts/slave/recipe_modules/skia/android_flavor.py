@@ -14,8 +14,8 @@ import default_flavor
 def device_from_builder_dict(builder_dict):
   """Given a builder name dictionary, return an Android device name."""
   if 'Android' in builder_dict.get('extra_config', ''):
-    if 'Neon' in builder_dict['extra_config']:
-      return 'arm_v7_neon'  # pragma: no cover
+    if 'NoNeon' in builder_dict['extra_config']:
+      return 'arm_v7'  # pragma: no cover
     return {
       'Arm64': 'arm64',
       'x86': 'x86',
@@ -23,17 +23,16 @@ def device_from_builder_dict(builder_dict):
       'Mips': 'mips',
       'Mips64': 'mips64',
       'MipsDSP2': 'mips_dsp2',
-    }.get(builder_dict['target_arch'], 'arm_v7')
+    }.get(builder_dict['target_arch'], 'arm_v7_neon')
   elif builder_dict['os'] == 'Android':
     return {
-      'GalaxyS3': 'arm_v7',
-      'GalaxyS4': 'arm_v7',
+      'GalaxyS3': 'arm_v7_neon',
+      'GalaxyS4': 'arm_v7_neon',
       'Nexus5': 'nexus_5',
       'Nexus7': 'nexus_7',
       'Nexus9': 'nexus_9',
       'Nexus10': 'nexus_10',
       'NexusPlayer': 'x86',
-      'Xoom': 'xoom',
     }[builder_dict['model']]
   raise Exception(
       'No device found for builder: %s' % str(builder_dict))  # pragma: no cover
