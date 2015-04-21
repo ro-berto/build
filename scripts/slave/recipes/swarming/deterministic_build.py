@@ -92,6 +92,7 @@ def ConfigureAndroidBuilder(api, recipe_config):
 def GenSteps(api):
   buildername = api.properties['buildername']
   recipe_config = DETERMINISTIC_BUILDERS[buildername]
+  enable_isolate = True
 
   targets = recipe_config.get('targets', ['chromium_swarm_tests'])
   if recipe_config.get('chromium_config_kwargs'):
@@ -103,18 +104,22 @@ def GenSteps(api):
   if target_platform in ('linux', 'mac', 'win'):
     ConfigureChromiumBuilder(api, recipe_config)
   elif target_platform is 'android':
+    # Disable the tests isolation on Android as it's not supported yet.
+    enable_isolate = False
     ConfigureAndroidBuilder(api, recipe_config)
     api.chromium_android.init_and_sync()
 
-  # Enable test isolation. Modifies GYP_DEFINES used in 'runhooks' below.
-  api.isolate.set_isolate_environment(api.chromium.c)
+  if enable_isolate:
+    # Enable test isolation. Modifies GYP_DEFINES used in 'runhooks' below.
+    api.isolate.set_isolate_environment(api.chromium.c)
 
   # Do a first build and move the build artifact to the temp directory.
   api.chromium.runhooks()
   api.chromium.compile(targets, force_clobber=True, name='First build')
   api.isolate.remove_build_metadata()
-  # This archives the results and regenerate the .isolated files.
-  api.isolate.isolate_tests(api.chromium.output_dir)
+  if enable_isolate:
+    # This archives the results and regenerate the .isolated files.
+    api.isolate.isolate_tests(api.chromium.output_dir)
   MoveBuildDirectory(api, str(api.chromium.output_dir),
                      str(api.chromium.output_dir).rstrip('\\/') + '.1')
 
@@ -122,8 +127,9 @@ def GenSteps(api):
   api.chromium.runhooks()
   api.chromium.compile(targets, force_clobber=True, name='Second build')
   api.isolate.remove_build_metadata()
-  # This should be quick if the build is indeed deterministic.
-  api.isolate.isolate_tests(api.chromium.output_dir)
+  if enable_isolate:
+    # This should be quick if the build is indeed deterministic.
+    api.isolate.isolate_tests(api.chromium.output_dir)
   MoveBuildDirectory(api, str(api.chromium.output_dir),
                      str(api.chromium.output_dir).rstrip('\\/') + '.2')
 

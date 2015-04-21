@@ -94,7 +94,7 @@
     ],
     "env": {
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm test_isolation_mode=prepare use_goma=1",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "gclient runhooks"
@@ -144,39 +144,6 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport glob\nimport sys\nwith open(sys.argv[1], 'w') as f:\n  f.write('\\n'.join(glob.glob(sys.argv[2])))\n",
-      "/path/to/tmp/",
-      "[SLAVE_BUILD]/src/out/Release/*.isolated.gen.json"
-    ],
-    "name": "find isolated targets"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/isolate.py",
-      "batcharchive",
-      "--dump-json",
-      "/path/to/tmp/json",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
-      "[SLAVE_BUILD]/src/out/Release/dummy_target_1.isolated.gen.json",
-      "[SLAVE_BUILD]/src/out/Release/dummy_target_2.isolated.gen.json"
-    ],
-    "name": "isolate tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"dummy_target_1\": \"[dummy hash for dummy_target_1]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"dummy_target_2\": \"[dummy hash for dummy_target_2]\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"dummy_target_1\": \"[dummy hash for dummy_target_1]\", \"dummy_target_2\": \"[dummy hash for dummy_target_2]\"}@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "\nimport os\nimport shutil\nimport sys\nif os.path.exists(sys.argv[2]):\n  shutil.rmtree(sys.argv[2])\nshutil.move(sys.argv[1], sys.argv[2])",
       "[SLAVE_BUILD]/src/out/Release",
       "[SLAVE_BUILD]/src/out/Release.1"
@@ -202,7 +169,7 @@
     ],
     "env": {
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm test_isolation_mode=prepare use_goma=1",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "gclient runhooks (2)"
@@ -243,39 +210,6 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "remove_build_metadata (2)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport glob\nimport sys\nwith open(sys.argv[1], 'w') as f:\n  f.write('\\n'.join(glob.glob(sys.argv[2])))\n",
-      "/path/to/tmp/",
-      "[SLAVE_BUILD]/src/out/Release/*.isolated.gen.json"
-    ],
-    "name": "find isolated targets (2)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/isolate.py",
-      "batcharchive",
-      "--dump-json",
-      "/path/to/tmp/json",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
-      "[SLAVE_BUILD]/src/out/Release/dummy_target_1.isolated.gen.json",
-      "[SLAVE_BUILD]/src/out/Release/dummy_target_2.isolated.gen.json"
-    ],
-    "name": "isolate tests (2)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"dummy_target_1\": \"[dummy hash for dummy_target_1]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"dummy_target_2\": \"[dummy hash for dummy_target_2]\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"dummy_target_1\": \"[dummy hash for dummy_target_1]\", \"dummy_target_2\": \"[dummy hash for dummy_target_2]\"}@@@"
-    ]
   },
   {
     "cmd": [
