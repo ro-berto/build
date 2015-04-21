@@ -78,7 +78,7 @@
       "--src-dir",
       "[SLAVE_BUILD]/v8",
       "--build-tool",
-      "xcode",
+      "ninja",
       "--compiler",
       "clang",
       "--"
