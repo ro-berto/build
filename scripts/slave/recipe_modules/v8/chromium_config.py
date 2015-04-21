@@ -81,6 +81,11 @@ def make(c):
   c.compile_py.build_tool = 'make'
 
 
+@CONFIG_CTX(includes=['ninja'])
+def v8_ninja(c):
+  c.gyp_env.GYP_GENERATORS.add('ninja')
+
+
 @CONFIG_CTX(includes=['v8'])
 def nacl_ia32(c):
   c.gyp_env.GYP_DEFINES['v8_target_arch'] = 'nacl_ia32'  # pragma: no cover
