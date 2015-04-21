@@ -47,6 +47,7 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
         },
         'gclient_apply_config': ['android', 'blink'],
+        'should_use_mb': True,
       },
       'Android GN (dbg)': {
         'chromium_apply_config': ['gn_minimal_symbols'],
@@ -56,6 +57,7 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
         },
         'gclient_apply_config': ['android', 'blink'],
+        'should_use_mb': True,
       },
       'Linux GN': {
         'chromium_config_kwargs': {
@@ -65,6 +67,7 @@ BUILDERS = freeze({
         },
         'gclient_apply_config': ['blink'],
         'should_run_mojo_tests': True,
+        'should_use_mb': True,
       },
       'Linux GN (dbg)': {
         'chromium_apply_config': ['gn_component_build'],
@@ -74,6 +77,7 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'gclient_apply_config': ['blink'],
+        'should_use_mb': True,
       },
     },
   },
