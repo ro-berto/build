@@ -562,7 +562,8 @@ class ChromiumApi(recipe_api.RecipeApi):
         'start_crash_service',
         self.m.path['build'].join('scripts', 'slave', 'chromium',
                                   'run_crash_handler.py'),
-        ['--target', self.c.build_config_fs])
+        ['--target', self.c.build_config_fs],
+        infra_step=True)
 
   def process_dumps(self, **kwargs):
     # Dumps are especially useful when other steps (e.g. tests) are failing.
