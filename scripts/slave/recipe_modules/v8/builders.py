@@ -370,7 +370,7 @@ BUILDERS = {
         'triggers': [
           'V8 Fuzzer',
           'V8 Linux64 - debug',
-          'V8 Linux - debug - avx2',
+          'V8 Linux64 - debug - avx2',
         ],
       },
       'V8 Linux64 - custom snapshot - debug builder': {
