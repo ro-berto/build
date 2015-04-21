@@ -1021,7 +1021,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Mac GC Stress': {
-        'chromium_apply_config': ['v8_ninja', 'clang'],
+        'chromium_apply_config': ['v8_ninja', 'clang', 'goma'],
         'v8_apply_config': ['gc_stress'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
