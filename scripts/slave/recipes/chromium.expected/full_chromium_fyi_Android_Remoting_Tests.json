@@ -170,6 +170,7 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
+      "remoting_apk",
       "remoting_test_apk"
     ],
     "env": {

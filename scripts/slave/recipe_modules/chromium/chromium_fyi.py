@@ -1099,6 +1099,9 @@ SPEC = {
         'TARGET_BITS': 32,
         'TARGET_PLATFORM': 'android',
       },
+      'compile_targets': [
+        'remoting_apk',
+      ],
       'bot_type': 'builder_tester',
       'android_config': 'main_builder',
       'root_devices': True,
