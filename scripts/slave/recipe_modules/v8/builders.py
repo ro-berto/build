@@ -1067,7 +1067,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 ASAN': {
-        'chromium_apply_config': ['clang', 'asan', 'goma'],
+        'chromium_apply_config': ['make', 'clang', 'asan', 'goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -1077,7 +1077,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 TSAN': {
-        'chromium_apply_config': ['clang', 'tsan2', 'goma'],
+        'chromium_apply_config': ['make', 'clang', 'tsan2', 'goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -1089,7 +1089,13 @@ BUILDERS = {
       'V8 Linux - arm64 - sim - MSAN': {
         # 'simulate_arm' is actually implied by 'msan'. We still set it
         # explicitly for the sake of consistency.
-        'chromium_apply_config': ['clang', 'msan', 'simulate_arm', 'goma'],
+        'chromium_apply_config': [
+          'make',
+          'clang',
+          'msan',
+          'simulate_arm',
+          'goma',
+        ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -1373,7 +1379,13 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_asan_rel': {
-        'chromium_apply_config': ['clang', 'asan', 'goma', 'no_dcheck'],
+        'chromium_apply_config': [
+          'make',
+          'clang',
+          'asan',
+          'goma',
+          'no_dcheck',
+        ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -1383,7 +1395,13 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_tsan_rel': {
-        'chromium_apply_config': ['clang', 'tsan2', 'goma', 'no_dcheck'],
+        'chromium_apply_config': [
+          'make',
+          'clang',
+          'tsan2',
+          'goma',
+          'no_dcheck',
+        ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,

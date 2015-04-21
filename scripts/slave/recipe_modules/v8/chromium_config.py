@@ -8,7 +8,7 @@ from slave import recipe_config
 from RECIPE_MODULES.chromium import CONFIG_CTX
 
 
-@CONFIG_CTX(group='builder')
+@CONFIG_CTX()
 def v8(c):
   targ_arch = c.gyp_env.GYP_DEFINES.get('target_arch')
   if not targ_arch:  # pragma: no cover
@@ -73,6 +73,12 @@ def enable_slow_dchecks(c):
 @CONFIG_CTX(includes=['v8'])
 def interpreted_regexp(c):
   c.gyp_env.GYP_DEFINES['v8_interpreted_regexp'] = 1
+
+
+@CONFIG_CTX(group='builder')
+def make(c):
+  c.build_dir = Path('[CHECKOUT]', 'out')
+  c.compile_py.build_tool = 'make'
 
 
 @CONFIG_CTX(includes=['v8'])
@@ -151,7 +157,7 @@ def simulate_ppc(c):
     c.gyp_env.GYP_DEFINES['v8_target_arch'] = 'ppc'
 
 
-@CONFIG_CTX(group='compiler', includes=['v8', 'goma'])
+@CONFIG_CTX(group='compiler', includes=['v8', 'make', 'goma'])
 def v8_goma(c):
   # This configuration connects the compiler group constraint with chromium's
   # goma config.
