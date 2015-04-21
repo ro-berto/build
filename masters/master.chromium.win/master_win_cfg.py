@@ -19,6 +19,8 @@ def Update(config, active_master, c):
           'Win x64 Builder',
           'Win x64 Builder (dbg)',
           'Win Builder (dbg)',
+          'Win x64 GN',
+          'Win x64 GN (dbg)',
           'Win8 GN',
           'Win8 GN (dbg)',
       ]),
@@ -55,6 +57,8 @@ def Update(config, active_master, c):
     },
     {'name': 'Win7 Tests (dbg)(1)'},
     {'name': 'Win8 Aura'},
+    {'name': 'Win x64 GN', 'recipe': 'chromium_gn', 'timeout': 3600},
+    {'name': 'Win x64 GN (dbg)', 'recipe': 'chromium_gn'},
     {'name': 'Win8 GN', 'recipe': 'chromium_gn', 'timeout': 3600},
     {'name': 'Win8 GN (dbg)', 'recipe': 'chromium_gn'},
   ]

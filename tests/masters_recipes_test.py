@@ -95,6 +95,8 @@ SUPPRESSIONS = {
     ],
     'master.chromium.win': [
         'Win x64 Builder (dbg)',
+        'Win x64 GN',
+        'Win x64 GN (dbg)',
         'Win8 GN',
         'Win8 GN (dbg)',
     ],

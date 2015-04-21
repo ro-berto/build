@@ -164,6 +164,24 @@ BUILDERS = freeze({
   },
   'chromium.win': {
     'builders': {
+      'Win x64 GN': {
+        'chromium_apply_config': ['gn_minimal_symbols'],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'win',
+          'TARGET_BITS': 64,
+        },
+        'should_use_mb': True,
+      },
+     'Win x64 GN (dbg)': {
+        'chromium_apply_config': ['gn_minimal_symbols'],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'win',
+          'TARGET_BITS': 64,
+        },
+        'should_use_mb': True,
+      },
       'Win8 GN': {
         'chromium_apply_config': ['gn_minimal_symbols'],
         'chromium_config_kwargs': {
