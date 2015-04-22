@@ -113,6 +113,8 @@
       "Debug",
       "--arch",
       "ia32",
+      "--outdir",
+      "out",
       "--testname",
       "test262",
       "--json-test-results",
