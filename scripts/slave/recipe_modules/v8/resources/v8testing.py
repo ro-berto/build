@@ -20,7 +20,7 @@ def main():
     outdir = 'build'
   elif sys.platform.startswith('darwin'):
     default_platform = 'mac'
-    outdir = 'xcodebuild'
+    outdir = 'out'
   elif sys.platform == 'linux2':
     default_platform = 'linux'
     outdir = 'out'
