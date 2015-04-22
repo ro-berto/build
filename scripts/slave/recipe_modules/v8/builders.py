@@ -599,7 +599,7 @@ BUILDERS = {
       },
 ####### Category: Mac
       'V8 Mac': {
-        'chromium_apply_config': ['v8_ninja', 'clang', 'goma'],
+        'chromium_apply_config': ['clang'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -609,7 +609,7 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'V8 Mac - debug': {
-        'chromium_apply_config': ['v8_ninja', 'clang', 'goma'],
+        'chromium_apply_config': ['clang'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -619,7 +619,7 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'V8 Mac64': {
-        'chromium_apply_config': ['v8_ninja', 'clang', 'goma'],
+        'chromium_apply_config': ['clang'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -629,22 +629,13 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'V8 Mac64 - debug': {
-        'chromium_apply_config': ['v8_ninja', 'clang', 'goma'],
+        'chromium_apply_config': ['clang'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
         'tests': ['unittests', 'v8testing', 'webkit', 'test262', 'mozilla'],
-        'testing': {'platform': 'mac'},
-      },
-      'V8 Mac64 - xcode': {
-        'chromium_apply_config': ['clang'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
       },
 ####### Category: Arm
@@ -1125,7 +1116,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Mac64 ASAN': {
-        'chromium_apply_config': ['v8_ninja', 'clang', 'asan', 'goma'],
+        'chromium_apply_config': ['clang', 'asan'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -1488,7 +1479,7 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'v8_mac_rel': {
-        'chromium_apply_config': ['v8_ninja', 'clang', 'goma'],
+        'chromium_apply_config': ['clang'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -1498,7 +1489,7 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'v8_mac_dbg': {
-        'chromium_apply_config': ['v8_ninja', 'clang', 'goma'],
+        'chromium_apply_config': ['clang'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -1508,7 +1499,7 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'v8_mac64_rel': {
-        'chromium_apply_config': ['v8_ninja', 'clang', 'goma'],
+        'chromium_apply_config': ['clang'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -1518,7 +1509,7 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'v8_mac64_dbg': {
-        'chromium_apply_config': ['v8_ninja', 'clang', 'goma'],
+        'chromium_apply_config': ['clang'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,

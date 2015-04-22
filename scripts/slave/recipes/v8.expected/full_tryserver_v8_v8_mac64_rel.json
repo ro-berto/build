@@ -58,8 +58,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "clang=1 dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 use_goma=1 v8_target_arch=x64",
-      "GYP_GENERATORS": "ninja"
+      "GYP_DEFINES": "clang=1 dcheck_always_on=1 fastbuild=1 target_arch=x64 v8_target_arch=x64"
     },
     "name": "gclient runhooks"
   },
@@ -81,11 +80,9 @@
       "--src-dir",
       "[SLAVE_BUILD]/v8",
       "--build-tool",
-      "ninja",
+      "xcode",
       "--compiler",
-      "goma-clang",
-      "--goma-dir",
-      "[BUILD]/goma",
+      "clang",
       "--"
     ],
     "name": "compile"
