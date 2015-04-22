@@ -111,68 +111,6 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "\n<html>\n<head>\n<meta http-equiv=\"Pragma\" content=\"no-cache\">\n<meta http-equiv=\"Expires\" content=\"-1\">\n<meta http-equiv=\"refresh\" content=\"0; url=https://codereview.chromium.org/1234/\" />\n</head>\n</html>\n",
-      "depsroll.html"
-    ],
-    "name": "write depsroll.html"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "--force-version",
-      "3.25",
-      "--",
-      "cp",
-      "-a",
-      "public-read",
-      "depsroll.html",
-      "gs://chromium-skia-gm/depsroll.html"
-    ],
-    "name": "gsutil upload",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-skia-gm/depsroll.html@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "In progress - <a href=\"https://codereview.chromium.org/1234/\" target=\"_blank\">https://codereview.chromium.org/1234/</a>",
-      "arb_status.html"
-    ],
-    "name": "write arb_status.html"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "--force-version",
-      "3.25",
-      "--",
-      "cp",
-      "-a",
-      "public-read",
-      "arb_status.html",
-      "gs://chromium-skia-gm/arb_status.html"
-    ],
-    "name": "gsutil upload (2)",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-skia-gm/arb_status.html@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "\nimport json\nimport shlex\nimport subprocess\nimport sys\nimport urllib\nimport urllib2\n\ndef full_hash(short):\n  return subprocess.check_output(['git', 'rev-parse', short]).rstrip()\n\npassword = urllib2.urlopen(urllib2.Request(\n    sys.argv[2],\n    headers={'Metadata-Flavor': 'Google'})).read()\nparams = {'status': sys.argv[1],\n          'password': password}\nif sys.argv[3] != '':\n  params['deps_roll_link'] = sys.argv[3]\n  split = sys.argv[3].split('/')\n  split.insert(-2, 'api')\n  api_url = '/'.join(split)\n  issue_details = json.load(urllib2.urlopen(api_url))\n  old, new = shlex.split(issue_details['subject'])[-1].split(':')\n  params['last_roll_rev'] = full_hash(old)\n  params['curr_roll_rev'] = full_hash(new)\n\nurllib2.urlopen(urllib2.Request(\n    sys.argv[4],\n    urllib.urlencode(params)))\n",
       "In progress",
       "http://metadata/computeMetadata/v1/project/attributes/skia_tree_status",

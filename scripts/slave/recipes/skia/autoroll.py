@@ -28,21 +28,8 @@ APPENGINE_SET_STATUS_URL = (
     'https://skia-tree-status.appspot.com/set_arb_status')
 DEPS_ROLL_AUTHOR = 'skia-deps-roller@chromium.org'
 DEPS_ROLL_NAME = 'Skia DEPS Roller'
-HTML_CONTENT = '''
-<html>
-<head>
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="-1">
-<meta http-equiv="refresh" content="0; url=%s" />
-</head>
-</html>
-'''
 RIETVELD_URL = 'https://codereview.chromium.org'
 ISSUE_URL_TEMPLATE = RIETVELD_URL + '/%(issue)s/'
-# TODO(borenet): Find a way to share these filenames (or their full GS URL) with
-# the webstatus which links to them.
-FILENAME_CURRENT_ATTEMPT = 'depsroll.html'
-FILENAME_ROLL_STATUS = 'arb_status.html'
 
 METATADATA_STATUS_PASSWORD_URL = ('http://metadata/computeMetadata/v1/project/'
                                   'attributes/skia_tree_status')
@@ -57,21 +44,13 @@ REGEXP_ROLL_STOPPED = (
 # a different roll (typically a manual roll) has already rolled past it.
 REGEXP_ROLL_TOO_OLD = r'Already at .+ refusing to roll backwards to .+'
 ROLL_STATUS_IN_PROGRESS = 'In progress'
-ROLL_STATUS_IN_PROGRESS_URL = (
-    'In progress - <a href="{0}" target="_blank">{0}</a>'.format(
-        ISSUE_URL_TEMPLATE)
-)
 ROLL_STATUS_STOPPED = 'Stopped'
-ROLL_STATUS_STOPPED_URL = (
-    'Stopped - <a href="{0}" target="_blank">{0}</a>'.format(
-        ISSUE_URL_TEMPLATE)
-)
 ROLL_STATUS_IDLE = 'Idle'
 ROLL_STATUSES = (
-  (REGEXP_ISSUE_CREATED, ROLL_STATUS_IN_PROGRESS, ROLL_STATUS_IN_PROGRESS_URL),
-  (REGEXP_ROLL_ACTIVE,   ROLL_STATUS_IN_PROGRESS, ROLL_STATUS_IN_PROGRESS_URL),
-  (REGEXP_ROLL_STOPPED,  ROLL_STATUS_STOPPED,     ROLL_STATUS_STOPPED_URL),
-  (REGEXP_ROLL_TOO_OLD,  ROLL_STATUS_IDLE,        ROLL_STATUS_IDLE),
+  (REGEXP_ISSUE_CREATED, ROLL_STATUS_IN_PROGRESS),
+  (REGEXP_ROLL_ACTIVE,   ROLL_STATUS_IN_PROGRESS),
+  (REGEXP_ROLL_STOPPED,  ROLL_STATUS_STOPPED),
+  (REGEXP_ROLL_TOO_OLD,  ROLL_STATUS_IDLE),
 )
 
 
@@ -178,39 +157,18 @@ def GenSteps(api):
              re.search(REGEXP_ROLL_STOPPED, output))
     if match:
       issue = match.group('issue')
-      # Upload the issue URL to a file in GS.
-      file_contents = HTML_CONTENT % (ISSUE_URL_TEMPLATE % {'issue': issue})
-      api.file.write('write %s' % FILENAME_CURRENT_ATTEMPT,
-                     FILENAME_CURRENT_ATTEMPT,
-                     file_contents)
-      api.gsutil.upload(FILENAME_CURRENT_ATTEMPT,
-                        global_constants.GS_GM_BUCKET,
-                        FILENAME_CURRENT_ATTEMPT,
-                        args=['-a', 'public-read'])
 
   if is_stopped:
     roll_status = ROLL_STATUS_STOPPED
-    roll_status_detail = ROLL_STATUS_STOPPED
   else:
     roll_status = None
-    roll_status_detail = None
-    for regexp, status_msg, status_detail_msg in ROLL_STATUSES:
+    for regexp, status_msg in ROLL_STATUSES:
       match = re.search(regexp, output)
       if match:
         roll_status = status_msg
-        roll_status_detail = status_detail_msg % match.groupdict()
         break
 
   if roll_status:
-    # Upload status the old way.
-    api.file.write('write %s' % FILENAME_ROLL_STATUS,
-                   FILENAME_ROLL_STATUS,
-                   roll_status_detail)
-    api.gsutil.upload(FILENAME_ROLL_STATUS,
-                      global_constants.GS_GM_BUCKET,
-                      FILENAME_ROLL_STATUS,
-                      args=['-a', 'public-read'])
-
     # POST status to appengine.
     api.python.inline(
       'update_status',
