@@ -49,6 +49,11 @@ DETERMINISTIC_BUILDERS = freeze({
     'gclient_config': 'chromium',
     'platform': 'win',
   },
+  'Windows Clang deterministic build': {
+    'chromium_config': 'chromium_win_clang',
+    'gclient_config': 'chromium',
+    'platform': 'win',
+  },
 })
 
 
