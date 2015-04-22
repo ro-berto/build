@@ -536,7 +536,12 @@ def open_tree_if_possible(build_db, master_jsons, successful_builder_steps,
   closed_tree_key = 'closed_tree-%s' % status_url_root
   last_gatekeeper_closure = build_db.aux.get(closed_tree_key)
   if last_gatekeeper_closure:
-    if last_gatekeeper_closure['message'] != status['message']:
+    # Line 378 of http://goo.gl/ViyxDW limits status messages to 500 chars. The
+    # code replaces the 500th char with a unicode ellipsis, so we effectively
+    # have 499 chars to work with.
+    status_limit = 499
+    if (last_gatekeeper_closure['message'][:status_limit]
+        != status['message'][:status_limit]):
       return
   else:
     # Backwards compatability hack.

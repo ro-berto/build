@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# coding=utf-8
 # Copyright 2013 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -839,6 +840,42 @@ class GatekeeperTest(unittest.TestCase):
     })
     urls = self.call_gatekeeper(build_db=build_db)
     self.assertNotIn(self.set_status_url, urls)
+
+  def testOpenTreeOverflowStatus(self):
+    """Test that we open the tree if the status message has been clipped."""
+    sys.argv.extend([m.url for m in self.masters])
+    sys.argv.extend(['--skip-build-db-update',
+                     '--no-email-app', '--set-status',
+                     '--open-tree',
+                     '--password-file', self.status_secret_file])
+
+    self.masters[0].builders[0].builds[0].finished = False
+    self.add_gatekeeper_section(self.masters[0].url,
+                                self.masters[0].builders[0].name,
+                                {})
+
+    build_db = build_scan_db.gen_db(masters={
+        self.masters[0].url: {
+            'mybuilder': {
+                0: build_scan_db.gen_build(finished=True, succeeded=True)
+            }
+        }
+    })
+
+    # Here we create a message 500 chars long.
+    closed_message = 'a' * 499 + u'…'
+    self.handle_url_json(self.get_status_url, {
+      'message': closed_message,
+      'general_state': 'closed',
+    })
+    closed_tree_key = 'closed_tree-%s' % self.status_url_root
+    # Here we create a message 800 chars long.
+    build_db.aux[closed_tree_key] = {'message': 'a' * 800}
+    self.call_gatekeeper(build_db=build_db)
+    self.assertEquals(self.url_calls[-1]['url'], self.set_status_url)
+    status_data = urlparse.parse_qs(self.url_calls[-1]['params'])
+    self.assertTrue(status_data['message'][0].startswith(
+      "Tree is open (Automatic"))
 
   def testOpenTreeOnUnfinishedBuild(self):
     """Test that the tree opens if builds succeed on previously failed steps."""
