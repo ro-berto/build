@@ -601,7 +601,6 @@ class V8Api(recipe_api.RecipeApi):
     full_args = [
       '--target', target,
       '--arch', self.m.chromium.c.gyp_env.GYP_DEFINES['v8_target_arch'],
-      '--outdir', self.m.path.split(self.m.chromium.c.build_dir)[-1],
       '--testname', test['tests'],
     ]
 
