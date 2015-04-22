@@ -155,12 +155,12 @@ def no_snapshot(c):
 
 @config_ctx()
 def nosse3(c):
-  c.testing.test_args.add('--shell_flags="--noenable-sse3"')
+  c.testing.test_args.add('--shell_flags="--noenable-sse3 --noenable-avx"')
 
 
 @config_ctx()
 def nosse4(c):
-  c.testing.test_args.add('--shell_flags="--noenable-sse4-1"')
+  c.testing.test_args.add('--shell_flags="--noenable-sse4-1 --noenable-avx"')
 
 
 @config_ctx()
