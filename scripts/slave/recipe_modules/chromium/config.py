@@ -96,6 +96,8 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
     TARGET_CROS_BOARD = Static(TARGET_CROS_BOARD),
 
     gn_args = List(basestring),
+
+    lto = Single(bool, empty_val=False, required=False),
   )
 
 TEST_FORMAT = (
@@ -480,6 +482,14 @@ def _memory_tool(c, tool):
   c.runtests.memory_tool = tool
 
 @config_ctx()
+def lto(c):
+  c.lto = True
+
+@config_ctx(includes=['lto'])
+def cfi_vptr(c):
+  c.gyp_env.GYP_DEFINES['cfi_vptr'] = 1
+
+@config_ctx()
 def trybot_flavor(c):
   fastbuild(c, optional=True)
   dcheck(c, optional=True)
@@ -619,6 +629,10 @@ def chromium_chromeos_ozone(c):  # pragma: no cover
 
 @config_ctx(includes=['ninja', 'clang', 'goma'])
 def chromium_clang(c):
+  c.compile_py.default_targets = ['All', 'chromium_builder_tests']
+
+@config_ctx(includes=['ninja', 'clang', 'cfi_vptr'])
+def chromium_cfi(c):
   c.compile_py.default_targets = ['All', 'chromium_builder_tests']
 
 @config_ctx(includes=['xcode', 'static_library'])

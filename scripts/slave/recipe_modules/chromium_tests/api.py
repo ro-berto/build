@@ -218,6 +218,10 @@ RECIPE_CONFIGS = freeze({
     'chromium_config': 'cast_linux',
     'gclient_config': 'chromium',
   },
+  'chromium_cfi': {
+    'chromium_config': 'chromium_cfi',
+    'gclient_config': 'chromium',
+  },
 })
 
 
@@ -349,6 +353,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           self.m, test_spec, builder_dict,
           loop_buildername, mastername, enable_swarming,
           scripts_compile_targets, builder_dict.get('test_generators', []))
+
+    if self.m.chromium.c.lto:
+      self.m.chromium.download_lto_plugin()
 
     return update_step, freeze(master_dict), test_spec
 

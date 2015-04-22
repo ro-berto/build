@@ -707,3 +707,9 @@ class ChromiumApi(recipe_api.RecipeApi):
             '--',
         ] + self.get_common_args_for_scripts(),
         step_test_data=lambda: self.m.json.test_api.output({}))
+
+  def download_lto_plugin(self):
+    return self.m.python(
+        name='download LTO plugin',
+        script=self.m.path['checkout'].join(
+            'build', 'download_gold_plugin.py'))
