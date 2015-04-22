@@ -126,8 +126,9 @@ class BuildBucketIntegrator(object):
       if not info:
         # Not a buildbucket build request.
         continue
-      build_id = info.get('build_id')
-      lease_key = info.get('lease_key')
+      build = info.get('build', {})
+      build_id = build.get('id')
+      lease_key = build.get('lease_key')
       if not (build_id and lease_key):
         self.log(
             'build_id or lease_key are not found in %r' % build_request,
