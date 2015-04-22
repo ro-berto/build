@@ -59,7 +59,9 @@ def GenSteps(api):
 
   with api.step.defer_results():
     api.chromium.runtest('html_viewer_unittests')
+    api.chromium.runtest('mojo_application_manager_unittests')
     api.chromium.runtest('mojo_common_unittests')
+    api.chromium.runtest('mojo_shell_unittests')
     api.chromium.runtest('mojo_surfaces_lib_unittests')
     api.chromium.runtest('view_manager_service_unittests')
     # TODO(msw|sky): Fix and enable the window_manager_unittests; the bot said:
