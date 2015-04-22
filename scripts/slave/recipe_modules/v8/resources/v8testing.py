@@ -15,18 +15,6 @@ import sys
 from common import chromium_utils
 
 def main():
-  if sys.platform in ('win32', 'cygwin'):
-    default_platform = 'win'
-    outdir = 'build'
-  elif sys.platform.startswith('darwin'):
-    default_platform = 'mac'
-    outdir = 'out'
-  elif sys.platform == 'linux2':
-    default_platform = 'linux'
-    outdir = 'out'
-  else:
-    default_platform = None
-
   option_parser = optparse.OptionParser()
 
   option_parser.add_option("--asan",
@@ -44,9 +32,6 @@ def main():
                            default='ia32',
                            help='Architecture (ia32, x64, arm) '
                                 '[default: ia32]')
-  option_parser.add_option('', '--platform',
-                           default=default_platform,
-                           help='specify platform [default: %%default]')
   option_parser.add_option('', '--shard_count',
                            default=1,
                            help='Specify shard count [default: %%default]')
@@ -85,6 +70,8 @@ def main():
   option_parser.add_option("--no-variants",
                            default=False, action='store_true',
                            help='Skip testing variants')
+  option_parser.add_option('--outdir', required=True,
+                           help='Output directory.')
   option_parser.add_option('--flaky-tests',
                            help=('Regard tests marked as flaky '
                                  '(run|skip|dontcare)'))
@@ -112,7 +99,7 @@ def main():
 
   cmd = ['python', 'tools/run-tests.py',
          '--progress=verbose',
-         '--outdir=' + outdir,
+         '--outdir=' + options.outdir,
          '--arch=' + options.arch,
          '--mode=' + options.target,
          '--time']
