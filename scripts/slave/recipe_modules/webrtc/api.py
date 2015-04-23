@@ -43,7 +43,6 @@ class WebRTCApi(recipe_api.RecipeApi):
     'system_wrappers_unittests',
     'test_support_unittests',
     'tools_unittests',
-    'video_capture_tests',
     'video_engine_core_unittests',
     'video_engine_tests',
     'voice_engine_unittests',

@@ -321,21 +321,6 @@
       "[SLAVE_BUILD]/src/webrtc/build/android/test_runner.py",
       "gtest",
       "-s",
-      "video_capture_tests",
-      "--verbose"
-    ],
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "video_capture_tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/webrtc/build/android/test_runner.py",
-      "gtest",
-      "-s",
       "video_engine_core_unittests",
       "--verbose"
     ],
