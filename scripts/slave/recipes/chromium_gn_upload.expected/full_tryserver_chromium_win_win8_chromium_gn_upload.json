@@ -141,13 +141,6 @@
   },
   {
     "cmd": [
-      "strip",
-      "[SLAVE_BUILD]\\src\\out\\Release\\gn.exe"
-    ],
-    "name": "gn strip"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "[DEPOT_TOOLS]\\upload_to_google_storage.py",
