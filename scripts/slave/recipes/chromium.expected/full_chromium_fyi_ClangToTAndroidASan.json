@@ -69,7 +69,7 @@
     ],
     "env": {
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android asan=1 clang=1 clang_use_chrome_plugins=0 component=shared_library fastbuild=1 lsan=1 target_arch=arm use_allocator=none werror=''",
+      "GYP_DEFINES": "OS=android asan=1 clang=1 clang_use_chrome_plugins=0 component=shared_library fastbuild=1 lsan=1 target_arch=arm werror=''",
       "LLVM_FORCE_HEAD_REVISION": "YES",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },

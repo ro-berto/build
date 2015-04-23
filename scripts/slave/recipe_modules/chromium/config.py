@@ -398,8 +398,6 @@ def asan(c):
   if 'clang' not in c.compile_py.compiler:  # pragma: no cover
     raise BadConf('asan requires clang')
   c.runtests.swarming_tags |= {'asan:1'}
-  if c.TARGET_PLATFORM == 'linux':
-    c.gyp_env.GYP_DEFINES['use_allocator'] = 'none'
   if c.TARGET_PLATFORM in ['mac', 'win']:
     # Set fastbuild=0 and prevent other configs from changing it.
     fastbuild(c, invert=True, optional=False)
