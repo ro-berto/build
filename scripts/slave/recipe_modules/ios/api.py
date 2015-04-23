@@ -32,11 +32,13 @@ class iOSApi(recipe_api.RecipeApi):
       )
     return step_result
 
-  def checkout(self):
+  def checkout(self, **kwargs):
     """Checks out Chromium."""
+    kwargs.setdefault('force', True)
     self.m.gclient.set_config('ios')
-    self.m.bot_update.ensure_checkout()
+    update_step = self.m.bot_update.ensure_checkout(**kwargs)
     self.m.path['checkout'] = self.m.path['slave_build'].join('src')
+    return update_step
 
   @property
   def compiler(self):
@@ -206,9 +208,11 @@ class iOSApi(recipe_api.RecipeApi):
     cfg.gyp_env.GYP_DEFINES = copy.deepcopy(self.__config['GYP_DEFINES'])
     self.m.chromium.c = cfg
 
-  def build(self):
+  def build(self, suffix=None):
     """Builds from this bot's build config."""
     assert self.__config is not None
+
+    suffix = ' (%s)' % suffix if suffix else ''
 
     # Add the default GYP_DEFINES.
     gyp_defines = [
@@ -245,12 +249,14 @@ class iOSApi(recipe_api.RecipeApi):
       )
       cmd = ['ninja', '-C', cwd]
 
-    step_result = self.m.gclient.runhooks(env=env)
+    step_result = self.m.gclient.runhooks(name='runhooks' + suffix, env=env)
     step_result.presentation.step_text = (
       '<br />GYP_DEFINES:<br />%s' % '<br />'.join(gyp_defines)
     )
 
-    if self.compiler == 'ninja' and self.m.tryserver.is_tryserver:
+    if (self.compiler == 'ninja' and
+        self.m.tryserver.is_tryserver and
+        'without patch' not in suffix):
       affected_files = self.m.tryserver.get_files_affected_by_patch()
       tests = [test['app'] for test in self.__config['tests']]
 
@@ -275,7 +281,7 @@ class iOSApi(recipe_api.RecipeApi):
       else:
         return
 
-    self.m.step('compile', cmd, cwd=cwd)
+    self.m.step('compile' + suffix, cmd, cwd=cwd)
 
   def test(self, *args):
     """Runs tests as instructed by this bot's build config.
