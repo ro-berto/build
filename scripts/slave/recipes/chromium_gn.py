@@ -26,14 +26,12 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'mac',
         },
-        'should_use_mb': True,
       },
       'Mac GN (dbg)': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'mac',
         },
-        'should_use_mb': True,
       },
     },
   },
@@ -47,7 +45,6 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
         },
         'gclient_apply_config': ['android', 'blink'],
-        'should_use_mb': True,
       },
       'Android GN (dbg)': {
         'chromium_apply_config': ['gn_minimal_symbols'],
@@ -57,7 +54,6 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
         },
         'gclient_apply_config': ['android', 'blink'],
-        'should_use_mb': True,
       },
       'Linux GN': {
         'chromium_config_kwargs': {
@@ -67,7 +63,6 @@ BUILDERS = freeze({
         },
         'gclient_apply_config': ['blink'],
         'should_run_mojo_tests': True,
-        'should_use_mb': True,
       },
       'Linux GN (dbg)': {
         'chromium_apply_config': ['gn_component_build'],
@@ -77,7 +72,6 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'gclient_apply_config': ['blink'],
-        'should_use_mb': True,
       },
     },
   },
@@ -91,7 +85,6 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
         },
         'gclient_apply_config': ['android', 'blink'],
-        'should_use_mb': True,
       },
       'linux_chromium_gn_rel': {
         'chromium_config_kwargs': {
@@ -100,7 +93,6 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'gclient_apply_config': ['blink'],
-        'should_use_mb': True,
       },
     },
   },
@@ -111,14 +103,12 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'chromeos',
         },
-        'should_use_mb': True,
       },
       'Linux ChromiumOS GN (dbg)': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'chromeos',
         },
-        'should_use_mb': True,
       },
     },
   },
@@ -132,7 +122,6 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
         },
         'gclient_apply_config': ['android'],
-        'should_use_mb': True,
       },
       'Android GN (dbg)': {
         'chromium_apply_config': ['gn_minimal_symbols'],
@@ -142,7 +131,6 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
         },
         'gclient_apply_config': ['android'],
-        'should_use_mb': True,
       },
       'Linux GN': {
         'chromium_config_kwargs': {
@@ -152,7 +140,6 @@ BUILDERS = freeze({
         },
         'should_run_gn_gyp_compare': True,
         'should_run_tests': True,
-        'should_use_mb': True,
       },
       'Linux GN (dbg)': {
         'chromium_apply_config': ['gn_component_build'],
@@ -162,7 +149,6 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'should_run_gn_gyp_compare': True,
-        'should_use_mb': True,
       },
     },
   },
@@ -175,7 +161,6 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'win',
           'TARGET_BITS': 64,
         },
-        'should_use_mb': True,
       },
      'Win x64 GN (dbg)': {
         'chromium_apply_config': ['gn_minimal_symbols'],
@@ -184,7 +169,6 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'win',
           'TARGET_BITS': 64,
         },
-        'should_use_mb': True,
       },
       'Win8 GN': {
         'chromium_apply_config': ['gn_minimal_symbols'],
@@ -193,7 +177,6 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'win',
           'TARGET_BITS': 32,
         },
-        'should_use_mb': True,
       },
      'Win8 GN (dbg)': {
         'chromium_apply_config': ['gn_minimal_symbols'],
@@ -202,7 +185,6 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'win',
           'TARGET_BITS': 32,
         },
-        'should_use_mb': True,
       },
     },
   },
@@ -216,7 +198,6 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
         },
         'gclient_apply_config': ['android'],
-        'should_use_mb': True,
       },
       'android_chromium_gn_compile_dbg': {
         'chromium_apply_config': ['gn_minimal_symbols'],
@@ -226,7 +207,6 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
         },
         'gclient_apply_config': ['android'],
-        'should_use_mb': True,
       },
       'linux_chromium_gn_rel': {
         'chromium_config_kwargs': {
@@ -235,7 +215,6 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'should_run_tests': True,
-        'should_use_mb': True,
       },
       'linux_chromium_gn_dbg': {
         'chromium_apply_config': ['gn_component_build'],
@@ -244,14 +223,12 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'linux',
           'TARGET_BITS': 64,
         },
-        'should_use_mb': True,
       },
       'linux_chromium_gn_chromeos_rel': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'chromeos',
         },
-        'should_use_mb': True,
       },
       'linux_chromium_gn_chromeos_dbg': {
         'chromium_apply_config': ['gn_component_build'],
@@ -259,7 +236,6 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'chromeos',
         },
-        'should_use_mb': True,
       },
     },
   },
@@ -270,14 +246,12 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'mac',
         },
-        'should_use_mb': True,
       },
       'mac_chromium_gn_rel': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'mac',
         },
-        'should_use_mb': True,
       },
     },
   },
@@ -290,7 +264,6 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'win',
           'TARGET_BITS': 32,
         },
-        'should_use_mb': True,
       },
       'win8_chromium_gn_rel': {
         'chromium_apply_config': ['gn_minimal_symbols'],
@@ -299,7 +272,6 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'win',
           'TARGET_BITS': 32,
         },
-        'should_use_mb': True,
       },
     }
   },
@@ -382,65 +354,48 @@ def _GenStepsInternal(api):
   mastername = api.properties.get('mastername')
   buildername = api.properties.get('buildername')
   bot_config = BUILDERS[mastername]['builders'][buildername]
-  should_use_mb = bot_config.get('should_use_mb', False)
   is_android = ('Android' in buildername or 'android' in buildername)
 
-  if should_use_mb:
-    api.chromium.configure_bot(BUILDERS, ['gn'])
-    bot_update_step = api.bot_update.ensure_checkout(
-       force=True, patch_root=bot_config.get('root_override'))
+  api.chromium.configure_bot(BUILDERS, ['gn'])
+  bot_update_step = api.bot_update.ensure_checkout(
+      force=True, patch_root=bot_config.get('root_override'))
 
-    # because the 'gn' config is applied, we skip running gyp in the
-    # the runhooks step.
-    api.chromium.runhooks()
+  # because the 'gn' config is applied, we skip running gyp in the
+  # the runhooks step.
+  api.chromium.runhooks()
 
-    api.chromium.run_mb(mastername, buildername, use_goma=True)
+  api.chromium.run_mb(mastername, buildername, use_goma=True)
 
-    # TODO(dpranke): Unify this with the logic in the chromium_trybot and
-    # chromium recipes so that we can actually run the tests as well
-    # and deapply patches and retry as need be.
-    test_spec_file = '%s.json' % mastername
-    test_spec = api.chromium_tests.read_test_spec(api, test_spec_file)
-    tests = list(api.chromium.steps.generate_gtest(api, mastername,
-                                                   buildername, test_spec))
-    additional_compile_targets = test_spec.get(buildername, {}).get(
-        'additional_compile_targets',
-        ['chrome_shell_apk' if is_android else 'all'])
+  # TODO(dpranke): Unify this with the logic in the chromium_trybot and
+  # chromium recipes so that we can actually run the tests as well
+  # and deapply patches and retry as need be.
+  test_spec_file = '%s.json' % mastername
+  test_spec = api.chromium_tests.read_test_spec(api, test_spec_file)
+  tests = list(api.chromium.steps.generate_gtest(api, mastername,
+                                                  buildername, test_spec))
+  additional_compile_targets = test_spec.get(buildername, {}).get(
+      'additional_compile_targets',
+      ['chrome_shell_apk' if is_android else 'all'])
 
-    if api.tryserver.is_tryserver:
-      affected_files = api.tryserver.get_files_affected_by_patch()
+  if api.tryserver.is_tryserver:
+    affected_files = api.tryserver.get_files_affected_by_patch()
 
-      test_compile_targets = all_compile_targets(api, tests)
+    test_compile_targets = all_compile_targets(api, tests)
 
-      requires_compile, _, compile_targets = \
-          api.chromium_tests.analyze(
-              affected_files,
-              test_compile_targets + additional_compile_targets,
-              test_compile_targets,
-              'trybot_analyze_config.json',
-              use_mb=True,
-              build_output_dir='//out/%s' % api.chromium.c.build_config_fs)
-      if requires_compile:
-        api.chromium.compile(compile_targets)
+    requires_compile, _, compile_targets = \
+        api.chromium_tests.analyze(
+            affected_files,
+            test_compile_targets + additional_compile_targets,
+            test_compile_targets,
+            'trybot_analyze_config.json',
+            use_mb=True,
+            build_output_dir='//out/%s' % api.chromium.c.build_config_fs)
+    if requires_compile:
+      api.chromium.compile(compile_targets)
 
-    else:
-      api.chromium.compile(all_compile_targets(api, tests) +
-                           additional_compile_targets)
   else:
-    api.chromium.configure_bot(BUILDERS, ['gn'])
-    api.bot_update.ensure_checkout(
-       force=True, patch_root=bot_config.get('root_override'))
-    api.chromium.runhooks()
-    api.chromium.run_gn(use_goma=True)
-
-    # crbug.com/451227 - building 'all' on android builds too many
-    # things. Really we should be building the 'default' target
-    # on all platforms but that isn't properly defined yet.
-    if is_android:
-      targets = ['chrome_shell_apk']
-    else:
-      targets = ['all']
-    api.chromium.compile(targets)
+    api.chromium.compile(all_compile_targets(api, tests) +
+                          additional_compile_targets)
 
   # TODO(dpranke): Ensure that every bot runs w/ --check, then make
   # it be on by default.
@@ -450,20 +405,16 @@ def _GenStepsInternal(api):
   if bot_config.get('should_run_gn_gyp_compare', False):
     api.chromium.run_gn_compare()
 
-  if should_use_mb:
-    if tests and bot_config.get('should_run_tests', False):
-      if api.tryserver.is_tryserver:
-        api.chromium_tests.run_tests_and_deapply_as_needed(
-            mastername, api, tests, bot_update_step)
-      else:
-        api.chromium_tests.configure_swarming('chromium', precommit=False,
-                                              mastername=mastername)
-        test_runner = api.chromium_tests.create_test_runner(api, tests)
-        with api.chromium_tests.wrap_chromium_tests(mastername):
-          test_runner()
-  else:
-    if not is_android:
-      api.chromium.runtest('gn_unittests')
+  if tests and bot_config.get('should_run_tests', False):
+    if api.tryserver.is_tryserver:
+      api.chromium_tests.run_tests_and_deapply_as_needed(
+          mastername, api, tests, bot_update_step)
+    else:
+      api.chromium_tests.configure_swarming('chromium', precommit=False,
+                                            mastername=mastername)
+      test_runner = api.chromium_tests.create_test_runner(api, tests)
+      with api.chromium_tests.wrap_chromium_tests(mastername):
+        test_runner()
 
 
 def GenSteps(api):
@@ -474,26 +425,25 @@ def GenSteps(api):
 def GenTests(api):
   overrides = {}
   for mastername, master_dict in BUILDERS.items():
-    for buildername, builder_dict in master_dict['builders'].items():
-      if builder_dict.get('should_use_mb', False):
-        overrides.setdefault(mastername, {})
-        overrides[mastername][buildername] = (
-           api.override_step_data(
-               'read test spec',
-               api.json.output({
-                   buildername: {
-                     'gtest_tests': ['base_unittests'],
-                   },
-               })))
-
-        if 'tryserver' in mastername:
-           overrides[mastername][buildername] += api.override_step_data(
-              'analyze',
+    for buildername in master_dict['builders']:
+      overrides.setdefault(mastername, {})
+      overrides[mastername][buildername] = (
+          api.override_step_data(
+              'read test spec',
               api.json.output({
-                  'status': 'Found dependency',
-                  'targets': ['base_unittests'],
-                  'build_targets': ['base_unittests'],
-              }))
+                  buildername: {
+                    'gtest_tests': ['base_unittests'],
+                  },
+              })))
+
+      if 'tryserver' in mastername:
+          overrides[mastername][buildername] += api.override_step_data(
+            'analyze',
+            api.json.output({
+                'status': 'Found dependency',
+                'targets': ['base_unittests'],
+                'build_targets': ['base_unittests'],
+            }))
 
   for test in api.chromium.gen_tests_for_builders(BUILDERS, overrides):
     yield test

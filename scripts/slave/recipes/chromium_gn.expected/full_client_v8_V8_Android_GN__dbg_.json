@@ -75,13 +75,39 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/gn.py",
-      "--root=[SLAVE_BUILD]/src",
+      "[SLAVE_BUILD]/src/tools/mb/mb.py",
       "gen",
-      "//out/Debug",
-      "--args=symbol_level=1 is_debug=true target_os=\"android\" target_cpu=\"arm\" use_goma=true goma_dir=\"[BUILD]/goma\""
+      "-v",
+      "-m",
+      "client.v8",
+      "-b",
+      "V8 Android GN (dbg)",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "//out/Debug"
     ],
-    "name": "gn"
+    "name": "mb gen"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]/src/testing/buildbot/client.v8.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "read test spec",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/client.v8.json@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"V8 Android GN (dbg)\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"base_unittests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "cmd": [
@@ -99,6 +125,7 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
+      "base_unittests_apk",
       "chrome_shell_apk"
     ],
     "name": "compile"
