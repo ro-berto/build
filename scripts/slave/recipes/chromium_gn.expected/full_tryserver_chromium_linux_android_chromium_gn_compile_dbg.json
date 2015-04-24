@@ -90,6 +90,8 @@
       "tryserver.chromium.linux",
       "-b",
       "android_chromium_gn_compile_dbg",
+      "--config-file",
+      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[BUILD]/goma",
       "//out/Debug"

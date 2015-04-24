@@ -90,6 +90,8 @@
       "tryserver.chromium.linux",
       "-b",
       "linux_chromium_gn_chromeos_dbg",
+      "--config-file",
+      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[BUILD]/goma",
       "//out/Debug"

@@ -84,6 +84,8 @@
       "chromium.linux",
       "-b",
       "Linux GN (dbg)",
+      "--config-file",
+      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[BUILD]/goma",
       "//out/Debug"

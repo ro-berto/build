@@ -84,6 +84,8 @@
       "chromium.win",
       "-b",
       "Win x64 GN",
+      "--config-file",
+      "[SLAVE_BUILD]\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
       "[BUILD]\\goma",
       "//out/Release_x64"
