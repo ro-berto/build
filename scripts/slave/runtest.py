@@ -342,7 +342,7 @@ def _GenerateJSONForTestResults(options, log_processor):
     return True
 
   build_dir = os.path.abspath(options.build_dir)
-  slave_name = slave_utils.SlaveBuildName(build_dir)
+  slave_name = options.builder_name or slave_utils.SlaveBuildName(build_dir)
 
   generate_json_options = copy.copy(options)
   generate_json_options.build_name = slave_name
