@@ -91,6 +91,15 @@ class ArchiveBuildStep(Test):
     return []
 
 
+class SizesStep(Test):
+  def run(self, api, suffix):
+    return api.chromium.run_sizes()
+
+  @staticmethod
+  def compile_targets(_):
+    return ['chrome']
+
+
 class ScriptTest(Test):  # pylint: disable=W0232
   """
   Test which uses logic from script inside chromium repo.

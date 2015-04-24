@@ -243,6 +243,17 @@ class ChromiumApi(recipe_api.RecipeApi):
   def test_launcher_filter(self, tests):
     return TestLauncherFilterFileInputPlaceholder(self, tests)
 
+  def run_sizes(self, **kwargs):
+    """Return a sizes.py invocation."""
+    full_args = ['--target', self.c.BUILD_CONFIG,
+                 '--platform', self.c.TARGET_PLATFORM]
+
+    return self.m.python(
+      'sizes',
+      self.m.path['build'].join('scripts', 'slave', 'chromium', 'sizes.py'),
+      full_args,
+      **kwargs)
+
   def runtest(self, test, args=None, xvfb=False, name=None, annotate=None,
               results_url=None, perf_dashboard_id=None, test_type=None,
               generate_json_file=False, results_directory=None,

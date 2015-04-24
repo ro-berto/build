@@ -128,6 +128,9 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'tests': {
+        steps.SizesStep()
+      },
       'chromium_apply_config': ['chromium_perf_fyi']
     },
   },

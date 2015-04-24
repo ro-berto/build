@@ -102,6 +102,7 @@
       "--mode",
       "official",
       "--",
+      "chrome",
       "chromium_builder_perf",
       "crash_service"
     ],
@@ -125,5 +126,37 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Win Clang Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "name": "package build"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\chromium\\run_crash_handler.py",
+      "--target",
+      "Release"
+    ],
+    "name": "start_crash_service"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\chromium\\sizes.py",
+      "--target",
+      "Release",
+      "--platform",
+      "win"
+    ],
+    "name": "sizes"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\process_dumps.py",
+      "--target",
+      "Release"
+    ],
+    "name": "process_dumps"
   }
 ]
