@@ -18,6 +18,7 @@ def GenSteps(api):
       'blink', TARGET_PLATFORM='android', TARGET_ARCH='arm', TARGET_BITS=32)
   api.chromium.apply_config('trybot_flavor')
   api.chromium.apply_config('android')
+  api.chromium.apply_config('mb')  # Turns off gyp in runhooks().
   api.gclient.apply_config('android')
 
   # TODO(dpranke): crbug.com/348435. We need to figure out how to separate
@@ -36,6 +37,10 @@ def GenSteps(api):
     api.tryserver.maybe_apply_issue()
 
   api.chromium.runhooks()
+
+  api.chromium.run_mb(api.properties['mastername'],
+                      api.properties['buildername'])
+
   step_result = None
   try:
     step_result = api.chromium.compile()
@@ -47,6 +52,8 @@ def GenSteps(api):
       api.gclient.checkout(revert=False)
       api.tryserver.maybe_apply_issue()
     api.chromium.runhooks()
+    api.chromium.run_mb(api.properties['mastername'],
+                        api.properties['buildername'])
     api.chromium.compile()
 
 

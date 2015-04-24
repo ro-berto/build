@@ -20,7 +20,7 @@ TARGET_ARCHS = HOST_ARCHS + ('arm', 'mips', 'mipsel')
 TARGET_CROS_BOARDS = (None, 'x86-generic')
 BUILD_CONFIGS = ('Release', 'Debug', 'Coverage')
 MEMORY_TOOLS = ('memcheck', 'drmemory_full', 'drmemory_light')
-PROJECT_GENERATORS = ('gyp', 'gn')
+PROJECT_GENERATORS = ('gyp', 'gn', 'mb')
 
 def check(val, potentials):
   assert val in potentials
@@ -207,6 +207,10 @@ def BASE(c):
 @config_ctx()
 def gn(c):
   c.project_generator.tool = 'gn'
+
+@config_ctx()
+def mb(c):
+  c.project_generator.tool = 'mb'
 
 @config_ctx()
 def gn_for_uploads(c):
