@@ -100,20 +100,6 @@
   {
     "cmd": [
       "python",
-      "make.py",
-      "nanobench",
-      "BUILDTYPE=Release"
-    ],
-    "cwd": "[SLAVE_BUILD]\\skia",
-    "env": {
-      "CHROME_PATH": "/home/chrome-bot/src",
-      "GYP_DEFINES": "qt_sdk=C:/Qt/4.8.5/ skia_arch_type=x86 skia_arch_width=32 skia_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgHelp"
-    },
-    "name": "build nanobench"
-  },
-  {
-    "cmd": [
-      "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
       "[SLAVE_BUILD]\\tmp",

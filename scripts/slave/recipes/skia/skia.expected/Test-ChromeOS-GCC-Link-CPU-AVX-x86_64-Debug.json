@@ -82,20 +82,6 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/chromeos/bin/chromeos_make",
-      "-d",
-      "link",
-      "nanobench",
-      "BUILDTYPE=Debug"
-    ],
-    "cwd": "[SLAVE_BUILD]/skia",
-    "env": {
-      "GYP_DEFINES": "skia_arch_type=x86_64 skia_arch_width=64 skia_gpu=0 skia_warnings_as_errors=0"
-    },
-    "name": "build nanobench"
-  },
-  {
-    "cmd": [
       "ssh",
       "-p",
       "22",
@@ -535,49 +521,5 @@
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "name": "Upload DM Results"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/skia/tools/nanobench_flags.py",
-      "/path/to/tmp/json",
-      "Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
-    ],
-    "cwd": "[SLAVE_BUILD]/skia",
-    "name": "exec nanobench_flags.py",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"--dummy-flags\"@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "scp",
-      "-P",
-      "22",
-      "[SLAVE_BUILD]/skia/out/config/chromeos-link/Debug/nanobench",
-      "root@192.168.1.123:/usr/local/skiabot/bin/nanobench"
-    ],
-    "name": "scp nanobench"
-  },
-  {
-    "cmd": [
-      "ssh",
-      "-p",
-      "22",
-      "root@192.168.1.123",
-      "/usr/local/skiabot/bin/nanobench",
-      "--undefok",
-      "-i",
-      "/usr/local/skiabot/skia_resources",
-      "--skps",
-      "/usr/local/skiabot/skia_skp/skps",
-      "--nogpu",
-      "--dummy-flags"
-    ],
-    "name": "nanobench"
   }
 ]

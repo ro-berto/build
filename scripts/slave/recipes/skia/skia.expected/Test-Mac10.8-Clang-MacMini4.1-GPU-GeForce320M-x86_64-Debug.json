@@ -100,21 +100,6 @@
   },
   {
     "cmd": [
-      "make",
-      "nanobench",
-      "BUILDTYPE=Debug"
-    ],
-    "cwd": "[SLAVE_BUILD]/skia",
-    "env": {
-      "CC": "/usr/bin/clang",
-      "CHROME_PATH": "/home/chrome-bot/src",
-      "CXX": "/usr/bin/clang++",
-      "GYP_DEFINES": "skia_arch_type=x86_64 skia_arch_width=64 skia_clang_build=1 skia_warnings_as_errors=0"
-    },
-    "name": "build nanobench"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
@@ -339,40 +324,5 @@
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "name": "Upload DM Results"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/skia/tools/nanobench_flags.py",
-      "/path/to/tmp/json",
-      "Test-Mac10.8-Clang-MacMini4.1-GPU-GeForce320M-x86_64-Debug"
-    ],
-    "cwd": "[SLAVE_BUILD]/skia",
-    "name": "exec nanobench_flags.py",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"--dummy-flags\"@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "catchsegv",
-      "[SLAVE_BUILD]/skia/out/Debug/nanobench",
-      "--undefok",
-      "-i",
-      "[SLAVE_BUILD]/skia/resources",
-      "--skps",
-      "[SLAVE_BUILD]/playback/skps",
-      "--nocpu",
-      "--dummy-flags"
-    ],
-    "env": {
-      "CC": "/usr/bin/clang",
-      "CXX": "/usr/bin/clang++"
-    },
-    "name": "nanobench"
   }
 ]

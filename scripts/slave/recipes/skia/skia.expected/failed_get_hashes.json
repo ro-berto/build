@@ -96,22 +96,6 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_ninja",
-      "nanobench",
-      "-d",
-      "nexus_7"
-    ],
-    "cwd": "[SLAVE_BUILD]/skia",
-    "env": {
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
-      "BUILDTYPE": "Debug",
-      "GYP_DEFINES": "skia_arch_type=arm skia_arch_width=32 skia_warnings_as_errors=0",
-      "SKIA_ANDROID_VERBOSE_SETUP": "1"
-    },
-    "name": "build nanobench"
-  },
-  {
-    "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "015d210a13480604",
@@ -517,46 +501,6 @@
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "name": "Upload DM Results"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/skia/tools/nanobench_flags.py",
-      "/path/to/tmp/json",
-      "Test-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Debug"
-    ],
-    "cwd": "[SLAVE_BUILD]/skia",
-    "name": "exec nanobench_flags.py",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"--dummy-flags\"@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_run_skia",
-      "--logcat",
-      "-d",
-      "nexus_7",
-      "-s",
-      "015d210a13480604",
-      "nanobench",
-      "--undefok",
-      "-i",
-      "/storage/emulated/legacy/skiabot/skia_resources",
-      "--skps",
-      "/storage/emulated/legacy/skiabot/skia_skp/skps",
-      "--nocpu",
-      "--dummy-flags"
-    ],
-    "env": {
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
-      "SKIA_ANDROID_VERBOSE_SETUP": "1"
-    },
-    "name": "nanobench"
   },
   {
     "cmd": [

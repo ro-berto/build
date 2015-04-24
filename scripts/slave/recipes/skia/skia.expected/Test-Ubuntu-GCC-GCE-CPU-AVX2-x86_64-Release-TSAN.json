@@ -81,19 +81,6 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/tools/xsan_build",
-      "thread",
-      "nanobench",
-      "BUILDTYPE=Release"
-    ],
-    "cwd": "[SLAVE_BUILD]/skia",
-    "env": {
-      "GYP_DEFINES": "skia_arch_type=x86_64 skia_arch_width=64 skia_gpu=0 skia_warnings_as_errors=0"
-    },
-    "name": "build nanobench"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
