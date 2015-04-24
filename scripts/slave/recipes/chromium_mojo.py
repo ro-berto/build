@@ -28,7 +28,9 @@ BUILDERS = freeze({
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
         },
+        'gclient_apply_config': ['android'],
       },
     },
   },
@@ -46,6 +48,7 @@ def GenSteps(api):
   _, bot_config = api.chromium.configure_bot(BUILDERS, ['gn'])
   is_android = 'Android' in api.properties.get('buildername')
 
+  # TODO(msw): We don't use root_override in our BUILDERS, remove this?
   api.bot_update.ensure_checkout(force=True,
                                  patch_root=bot_config.get('root_override'))
 
@@ -64,8 +67,7 @@ def GenSteps(api):
     api.chromium.runtest('mojo_shell_unittests')
     api.chromium.runtest('mojo_surfaces_lib_unittests')
     api.chromium.runtest('view_manager_service_unittests')
-    # TODO(msw|sky): Fix and enable the window_manager_unittests; the bot said:
-    #                ...ERROR:unit_test_launcher.cc(291)] no test result for...
+    # TODO(msw|sky): Fix window_manager_unittests; see http://crbug.com/479031
     # api.chromium.runtest('window_manager_unittests')
     if not is_android:
       _RunApptests(api)
