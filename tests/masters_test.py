@@ -208,6 +208,7 @@ def main(argv):
       'master.chromium.gpu': 'ChromiumGPU',
       'master.chromium.gpu.fyi': 'ChromiumGPUFYI',
       'master.chromium.infra': 'Infra',
+      'master.chromium.infra.cron': 'InfraCron',
       'master.chromium.linux': 'ChromiumLinux',
       'master.chromium.lkgr': 'ChromiumLKGR',
       'master.chromium.mac': 'ChromiumMac',
