@@ -63,6 +63,10 @@ def GenTests(api):
   basic_data = _get_basic_test_data()
   yield _make_test(api, basic_data, 'basic')
 
+  failed_data = _get_basic_test_data()
+  failed_data[1]['test_results']['results'] = 'Failed test'
+  yield _make_test(api, failed_data, 'failed_test')
+
   reversed_basic_data = _get_reversed_basic_test_data()
   yield _make_test(api, reversed_basic_data, 'reversed_basic')
 

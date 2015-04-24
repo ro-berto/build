@@ -69,6 +69,14 @@ class BisectTesterApi(recipe_api.RecipeApi):
     # local_file.
     self.m.gsutil.upload(local_file, BUCKET, gs_filename)
 
+  def upload_failure(self, failure):
+    stdout = failure.result.stdout or ''
+    stderr = failure.result.stderr or ''
+    retcode = failure.result.retcode
+    self.upload_results(stdout + stderr, 'Test failed with error code: '
+                        + str(retcode))
+    raise self.m.step.StepWarning('Test Failed')
+
   def upload_job_url(self):
     """Puts the URL to the job's status on a GS file."""
     gs_filename = RESULTS_GS_DIR + '/' + self.m.properties['job_name']

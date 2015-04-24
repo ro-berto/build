@@ -87,7 +87,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
       }
     """
     if not git_checkout_dir:
-      git_checkout_dir = self.m.path['slave_build'].join('src')
+      git_checkout_dir = self.m.path['checkout']
 
     separator = 'S3P4R4T0R'
     formats = separator.join(['%aN', '%aE', '%s', '%cD', '%b'])

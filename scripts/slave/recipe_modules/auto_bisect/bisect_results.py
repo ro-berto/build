@@ -16,7 +16,9 @@ Test Command: %(command)s
 Test Metric: %(metric)s
 Relative Change: %(change)s
 Estimated Confidence: %(confidence).02f%%
-Retested CL with revert: %(retest)s"""
+Retested CL with revert: %(retest)s
+
+"""
 
 # When the bisect was aborted without a bisect failure the following template
 # is used.
@@ -30,7 +32,9 @@ Bug ID: %(bug_id)s
 Test Command: %(command)s
 Test Metric: %(metric)s
 Good revision: %(good_revision)s
-Bad revision: %(bad_revision)s """
+Bad revision: %(bad_revision)s
+
+"""
 
 # The perf dashboard specifically looks for the string
 # "Author  : " to parse out who to cc on a bug. If you change the
@@ -46,6 +50,12 @@ Date    : %(cl_date)s
 
 """
 
+_REVISION_TABLE_TEMPLATE="""
+===== TESTED REVISIONS =====
+%(table)s
+
+"""
+
 _RESULTS_THANKYOU = """
 | O O | Visit http://www.chromium.org/developers/core-principles for Chrome's
 |  X  | policy on perf regressions. Contact chrome-perf-dashboard-team with any
@@ -56,6 +66,7 @@ _REPRO_STEPS_LOCAL = """
 To run locally:
  - Use the test command given under 'BISECT JOB RESULTS' above.
  - Consider using a profiler. Pass --profiler=list to list available profilers.
+
 """
 
 _REPRO_STEPS_TRYJOB = """
@@ -73,7 +84,9 @@ Notes:
  f) Make sure to use the appropriate bot on step 3.
 
 For more details please visit
-https://sites.google.com/a/chromium.org/dev/developers/performance-try-bots"""
+https://sites.google.com/a/chromium.org/dev/developers/performance-try-bots
+
+"""
 
 _REPRO_STEPS_TRYJOB_TELEMETRY = """
 To reproduce on a performance try bot:
@@ -82,13 +95,16 @@ To reproduce on a performance try bot:
 
 For more details please visit
 https://sites.google.com/a/chromium.org/dev/developers/performance-try-bots
+
 """
 
 _WARNINGS_TEMPLATE = """
 ===== WARNINGS =====
 The following warnings were raised by the bisect job:
 
- * %(warnings)s"""
+ * %(warnings)s
+
+"""
 
 _NO_CONFIDENCE_ABORT_REASON = (
   'The metric values for the initial "good" and "bad" revisions '
@@ -120,7 +136,7 @@ class BisectResults(object):
           'command': self.command,
           'metric': self.metric,
           'change': self.relative_change,
-          'confidence': self.results_confidence,
+          'confidence': self.results_confidence or 0,
           'retest': 'Not Implemented.'})
     else:
       header =  _ABORT_REASON_TEMPLATE % ({
@@ -176,20 +192,14 @@ class BisectResults(object):
     self.results_confidence = bisector.results_confidence
     self.is_telemetry = ('tools/perf/run_' in self.command or
                          'tools\\perf\\run_' in self.command)
+    self.culprit_cl_hash = None
+
     if self.is_telemetry:
       self.telemetry_command = re.sub(r'--browser=[^\s]+',
                                       '--browser=<bot-name>',
                                       self.command)
-    if bisector.culprit:
-      self.culprit_cl_hash = bisector.culprit.commit_hash
-      culprit_info = api.query_revision_info(self.culprit_cl_hash)
-      self.culprit_subject = culprit_info['subject']
-      self.culprit_author = (culprit_info['author'] + ', ' +
-                             culprit_info['email'])
-      self.commit_info = culprit_info['body']
-      self.culprit_date = culprit_info['date']
-    else:
-      self.culprit_cl_hash = None
+
+    self._set_culprit_attributes(bisector.culprit)
 
     if bisector.failed:
       self.status = 'Failed'
@@ -203,6 +213,23 @@ class BisectResults(object):
       self.status = 'Complete'
     else:
       self.status = 'Successful'
+
+  def _set_culprit_attributes(self, culprit):
+    self.culprit_cl_hash = None
+    api = self._bisector.api
+    if culprit:
+      self.culprit_cl_hash = (culprit.deps_revision or
+                              culprit.commit_hash)
+      if culprit.depot != 'chromium':
+        repo_path = api.m.path['slave_build'].join(culprit.depot['src'])
+      else:
+        repo_path = None
+      culprit_info = api.query_revision_info(self.culprit_cl_hash, repo_path)
+      self.culprit_subject = culprit_info['subject']
+      self.culprit_author = (culprit_info['author'] + ', ' +
+                             culprit_info['email'])
+      self.commit_info = culprit_info['body']
+      self.culprit_date = culprit_info['date']
 
   def _compose_revisions_table(self):
     def revision_row(r):
@@ -228,7 +255,7 @@ class BisectResults(object):
     revisions += [revision_row(r)
                   for r in self._bisector.revisions
                   if r.tested or r.aborted]
-    return _pretty_table(revisions)
+    return _REVISION_TABLE_TEMPLATE % ({'table': _pretty_table(revisions)})
 
 
 def _pretty_table(data):

@@ -40,6 +40,9 @@ BASIC_ATTRIBUTES = {
 NON_TELEMETRY_TEST_CONFIG = dict(BASIC_CONFIG)
 NON_TELEMETRY_TEST_CONFIG['command'] = 'src/tools/dummy_command'
 
+DEPS_CULPRIT_ATTRIBUTES = dict(BASIC_ATTRIBUTES)
+DEPS_CULPRIT_ATTRIBUTES['culprit.depot'] = {'src': 'fake_location'}
+
 FAILED_ATTRIBUTES = dict(BASIC_ATTRIBUTES)
 FAILED_ATTRIBUTES['failed'] = True
 FAILED_ATTRIBUTES['culprit_present'] = False
@@ -69,8 +72,18 @@ def GenSteps(api):
   bisector.print_result()
 
 def set_attributes(target, attributes):
+  """Sets values to the attributes of an object based on a dict.
+
+  This goes one extra level deep so as to set an attribute's attribute:
+  e.g.: set_attributes(some_object, {'some_attribute': 1,
+                                     'other_attribute.nested_val': False})
+  """
   for k, v in attributes.iteritems():
-    setattr(target, k, v)
+    if '.' in k:
+      sub_target = getattr(target, k.split('.')[0])
+      setattr(sub_target, k.split('.')[1], v)
+    else:
+      setattr(target, k, v)
 
 def add_revision_mapping(api, test, pos, sha):
   step_name = 'resolving commit_pos ' + pos
@@ -98,6 +111,17 @@ def GenTests(api):
       bisect_config = BASIC_CONFIG,
       dummy_bisector_attributes = BASIC_ATTRIBUTES)
   yield basic_test
+
+  deps_culprit_test = api.test('deps_culprit_test')
+  deps_culprit_test = add_revision_mapping(
+      api, deps_culprit_test, '314015', 'c001c0de')
+  deps_culprit_test = add_revision_mapping(
+      api, deps_culprit_test, '314017', 'deadbeef')
+  deps_culprit_test = add_revision_info(api, deps_culprit_test)
+  deps_culprit_test += api.properties(
+      bisect_config = BASIC_CONFIG,
+      dummy_bisector_attributes = DEPS_CULPRIT_ATTRIBUTES)
+  yield deps_culprit_test
 
   failed_test = api.test('failed_test')
   failed_test = add_revision_mapping(api, failed_test, '314015', 'c001c0de')

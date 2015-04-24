@@ -199,7 +199,11 @@
     ],
     "name": "Performance Test 2/2",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/"
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [
@@ -208,7 +212,7 @@
       "RECIPE_MODULE[bisect_tester]/resources/put_temp.py"
     ],
     "name": "saving json to temp file",
-    "stdin": "{\"output\": \"Test output omitted for now\", \"results\": {\"std_err\": 0.0, \"values\": [0, 0], \"mean\": 0.0}}",
+    "stdin": "{\"output\": \"\", \"results\": \"Test failed with error code: 1\"}",
     "stdout": "/path/to/tmp/"
   },
   {
@@ -229,5 +233,10 @@
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-perf/bisect-results/f7a7b4135624439cbd27fdd5133d74ec.results@@@"
     ]
+  },
+  {
+    "name": "$final_result",
+    "reason": "Test Failed",
+    "status_code": 1
   }
 ]

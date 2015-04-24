@@ -397,8 +397,10 @@ class Bisector(object):
        At most `max_revisions` Revision objects in a list.
     """
     self._update_candidate_range()
-    candidate_range = self.revisions[self.lkgr.list_index + 1:
-                                     self.fkbr.list_index]
+    candidate_range = [revision for revision in
+                       self.revisions[self.lkgr.list_index + 1:
+                                      self.fkbr.list_index]
+                       if not revision.tested]
     if len(candidate_range) <= max_revisions:
       return candidate_range
     step = len(candidate_range)/(max_revisions + 1)

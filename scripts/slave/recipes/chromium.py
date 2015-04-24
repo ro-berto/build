@@ -99,6 +99,8 @@ def GenTests(api):
                               stdout=api.raw_io.output('/tmp/dummy1'))
         test += api.step_data('saving json to temp file',
                               stdout=api.raw_io.output('/tmp/dummy2'))
+        if 'bisector' in buildername:
+          test += api.step_data('Performance Test 2/2', retcode=1)
         test += api.properties(bisect_config=bisect_config)
         test += api.properties(job_name='f7a7b4135624439cbd27fdd5133d74ec')
         test += api.bisect_tester(tempfile='/tmp/dummy')

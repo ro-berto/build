@@ -30,7 +30,6 @@ def GenSteps(api):
   assert isinstance(bisect_config, collections.Mapping)
   bisector = api.auto_bisect.create_bisector(bisect_config)
   _gather_reference_range(bisector)
-  _ensure_checkout(api)
   if (not bisector.failed and bisector.check_improvement_direction() and
       bisector.check_regression_confidence()):
     if not bisector.check_bisect_finished(bisector.good_rev):
@@ -42,11 +41,19 @@ def GenSteps(api):
 
 def GenTests(api):
   basic_test = api.test('basic')
+  broken_bad_rev_test = api.test('broken_bad_revision_test')
+  broken_good_rev_test = api.test('broken_good_revision_test')
   encoded_config_test = api.test('encoded_config_test')
   broken_cp_test = api.test('broken_cp_test')
   broken_hash_test = api.test('broken_hash_test')
   invalid_config_test = api.test('invalid_config_test')
   basic_test += api.properties.generic(
+      mastername='tryserver.chromium.perf',
+      buildername='linux_perf_bisect_builder')
+  broken_bad_rev_test += api.properties.generic(
+      mastername='tryserver.chromium.perf',
+      buildername='linux_perf_bisect_builder')
+  broken_good_rev_test += api.properties.generic(
       mastername='tryserver.chromium.perf',
       buildername='linux_perf_bisect_builder')
   broken_cp_test += api.properties.generic(
@@ -83,15 +90,19 @@ def GenTests(api):
   invalid_cp_bisect_config['good_revision'] = 'XXX'
 
   basic_test += api.properties(bisect_config=bisect_config)
+  broken_bad_rev_test += api.properties(bisect_config=bisect_config)
+  broken_good_rev_test += api.properties(bisect_config=bisect_config)
   broken_cp_test += api.properties(bisect_config=bisect_config)
   broken_hash_test += api.properties(bisect_config=bisect_config)
   invalid_config_test += api.properties(bisect_config=invalid_cp_bisect_config)
   encoded_config_test += api.properties(bcb32=base64.b32encode(json.dumps(
       bisect_config)).replace('=', '0'))
+
   # This data represents fake results for a basic scenario, the items in it are
   # passed to the `_gen_step_data_for_revision` that patches the necessary steps
   # with step_data instances.
-  test_data = [
+  def test_data():
+    return [
       {
           'hash': 'a6298e4afedbf2cd461755ea6f45b0ad64222222',
            'commit_pos': '306478',
@@ -101,9 +112,9 @@ def GenTests(api):
                'values': [19, 20, 21],
            }},
           'cl_info': 'S3P4R4T0R'.join(['DummyAuthor', 'dummy@nowhere.com',
-                                      'Some random CL', '01/01/2015',
-                                      'A long description for a CL.\n'
-                                      'Containing multiple lines'])
+                                       'Some random CL', '01/01/2015',
+                                       'A long description for a CL.\n'
+                                       'Containing multiple lines'])
       },
       {
           'hash': '00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111',
@@ -132,12 +143,16 @@ def GenTests(api):
               'values': [70, 70, 80, 90, 90],
           }}
       },
-  ]
+    ]
 
-  for revision_data in test_data:
+  for revision_data in test_data():
     for step_data in _get_step_data_for_revision(api, revision_data):
       basic_test += step_data
       encoded_config_test += step_data
+  yield basic_test
+  yield encoded_config_test
+
+  for revision_data in test_data():
     for step_data in _get_step_data_for_revision(api, revision_data,
                                                  broken_cp='306475'):
       broken_cp_test += step_data
@@ -145,11 +160,25 @@ def GenTests(api):
         api, revision_data,
         broken_hash='e28dc0d49c331def2a3bbf3ddd0096eb51551155'):
       broken_hash_test += step_data
-
-  yield basic_test
-  yield encoded_config_test
   yield broken_hash_test
   yield broken_cp_test
+
+  doctored_data = test_data()
+  doctored_data[0]['test_results']['results'] = 'Failed test.'
+  for revision_data in doctored_data:
+    revision_data.pop('cl_info', None)
+    for step_data in _get_step_data_for_revision(api, revision_data):
+      broken_bad_rev_test += step_data
+  yield broken_bad_rev_test
+
+  doctored_data = test_data()
+  doctored_data[-1]['test_results']['results'] = 'Failed test.'
+  for revision_data in doctored_data:
+    revision_data.pop('cl_info', None)
+    for step_data in _get_step_data_for_revision(api, revision_data):
+      broken_good_rev_test += step_data
+  yield broken_good_rev_test
+
   yield invalid_config_test
 
 
@@ -200,7 +229,12 @@ def _gather_reference_range(bisector):
   bisector.good_rev.start_job()
   bisector.bad_rev.start_job()
   bisector.wait_for_all([bisector.good_rev, bisector.bad_rev])
-  bisector.compute_relative_change()
+  if bisector.good_rev.failed_test:
+    raise bisector.api.m.step.StepFailure('Testing the "good" revision failed')
+  elif bisector.bad_rev.failed_test:
+    raise bisector.api.m.step.StepFailure('Testing the "bad" revision failed')
+  else:
+    bisector.compute_relative_change()
 
 
 def _bisect_main_loop(bisector):

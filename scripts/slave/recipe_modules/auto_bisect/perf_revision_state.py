@@ -28,8 +28,13 @@ class PerfRevisionState(revision_state.RevisionState):
     results = self._get_test_results()
     # Results will contain the keys 'results' and 'output' where output is the
     # stdout of the command, and 'results' is itself a dict with the keys:
-    # 'mean', 'values', 'std_err'
+    # 'mean', 'values', 'std_err' unless the test failed, in which case
+    # 'results' will be a string.
     results = results['results']
+    self.tested = True
+    if isinstance(results, basestring):
+      self.failed_test = True
+      return
     self.mean_value = results['mean']
     self.values = results['values']
     self.std_err = results['std_err']
@@ -71,7 +76,10 @@ class PerfRevisionState(revision_state.RevisionState):
     ]
     try:
       if not self.bisector.bisect_config.get('skip_gclient_ops'):
-        api.m.bot_update.ensure_checkout()
+        # This is to avoid the detached HEAD state that breaks git try.
+        api.m.git('update-ref', 'refs/heads/master',
+                  'refs/remotes/origin/master')
+        api.m.git('checkout', 'master', cwd=api.m.path['checkout'])
       api.m.git(*try_cmd, name='Requesting build for %s via git try.'
                 % str(self.commit_hash))
     finally:
@@ -162,7 +170,7 @@ class PerfRevisionState(revision_state.RevisionState):
       return url
 
   def get_next_url(self):
-    if not self.in_progress:
+    if not self.in_progress:  # pragma: no cover
       return None
     if not self.built:
       return self.build_url

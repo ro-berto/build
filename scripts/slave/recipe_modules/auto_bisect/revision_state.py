@@ -51,6 +51,7 @@ class RevisionState(object):
     super(RevisionState, self).__init__()
     self.bisector = bisector
     self._good = None
+    self._tested = False
     self.deps = None
     self.build_status_url = None
     self.in_progress = False
@@ -62,6 +63,8 @@ class RevisionState(object):
     self.test_job_name = None
     self.built = False
     self.patch_file = None
+    self.failed_test = False
+    self.deps_revision = None
     if not self.revision_string:
       assert base_revision
       assert base_revision.deps_file_contents
@@ -81,6 +84,7 @@ class RevisionState(object):
       self.deps_sha_patch = self.bisector.make_deps_sha_file(self.deps_sha)
       self.deps = dict(base_revision.deps)
       self.deps[dependency_depot_name] = deps_revision
+      self.deps_revision = deps_revision
     else:
       self.needs_patch = False
       self.depot = depot
@@ -97,7 +101,7 @@ class RevisionState(object):
 
   @property
   def tested(self):
-    return self._good is not None and not self.aborted
+    return self._tested
 
   @good.setter
   def good(self, value):
@@ -108,9 +112,8 @@ class RevisionState(object):
     self._good = not value
 
   @tested.setter
-  def _set_tested(self, _):  # pragma: no cover
-    raise Exception('The tested property cannot be set. '
-                    'Use the .good or .bad properties instead.')
+  def tested(self, value):
+    self._tested = value
 
   def start_job(self):
     """Starts a build, or a test job if the build is available."""

@@ -64,7 +64,7 @@
       "-1",
       "deadbeef"
     ],
-    "cwd": "[TMP_BASE]/bogus_tmp_1",
+    "cwd": "[SLAVE_BUILD]/fake_location",
     "name": "Reading culprit cl information.",
     "stdout": "/path/to/tmp/"
   },
