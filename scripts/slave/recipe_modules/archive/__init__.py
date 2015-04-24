@@ -3,10 +3,14 @@
 # found in the LICENSE file.
 
 DEPS = [
+  'commit_position',
+  'file',
+  'gsutil',
   'json',
   'path',
   'platform',
   'properties',
   'python',
   'step',
+  'zip',
 ]

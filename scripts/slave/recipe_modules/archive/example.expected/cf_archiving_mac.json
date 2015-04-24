@@ -1,0 +1,78 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport json, os, sys\nif os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):\n  with open(sys.argv[2], 'w') as f:\n    json.dump(os.listdir(sys.argv[1]), f)\n",
+      "[SLAVE_BUILD]/src/out/Release",
+      "/path/to/tmp/json"
+    ],
+    "name": "listdir build_dir",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"chrome\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"icu.dat\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"pdfsqueeze\"@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import json, os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  with open(sys.argv[2], 'w') as f:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    json.dump(os.listdir(sys.argv[1]), f)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[zip]/resources/zip.py"
+    ],
+    "name": "zipping",
+    "stdin": "{\"entries\": [{\"path\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"type\": \"file\"}, {\"path\": \"[SLAVE_BUILD]/src/out/Release/icu.dat\", \"type\": \"file\"}], \"output\": \"[SLAVE_BUILD]/chrome_staging/chrome-asan-mac-release-refs_heads_B1-123456.zip\", \"root\": \"[SLAVE_BUILD]/src/out/Release\", \"use_python_zip\": false}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--force-version",
+      "3.25",
+      "--",
+      "cp",
+      "-a",
+      "public-read",
+      "-h",
+      "x-goog-meta-Cr-Commit-Position:refs/heads/B1@{#123456}",
+      "-h",
+      "x-goog-meta-Cr-Commit-Position-Number:123456",
+      "-h",
+      "x-goog-meta-Cr-Git-Commit:5e3250aadda2b170692f8e762d43b7e8deadbeef",
+      "[SLAVE_BUILD]/chrome_staging/chrome-asan-mac-release-refs_heads_B1-123456.zip",
+      "gs://chromium/mac-release-subdir/chrome-asan-mac-release-refs_heads_B1-123456.zip"
+    ],
+    "name": "gsutil upload",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium/mac-release-subdir/chrome-asan-mac-release-refs_heads_B1-123456.zip@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport os\nimport sys\nos.remove(sys.argv[1])\n",
+      "[SLAVE_BUILD]/chrome_staging/chrome-asan-mac-release-refs_heads_B1-123456.zip"
+    ],
+    "name": "chrome-asan-mac-release-refs_heads_B1-123456.zip",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@os.remove(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  }
+]

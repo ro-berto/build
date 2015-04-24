@@ -562,10 +562,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       if bot_config.get('cf_archive_build'):
         self.m.archive.clusterfuzz_archive(
-            'ClusterFuzz Archive ',
-            self.m.chromium.c.build_config_fs,
+            build_dir=self.m.chromium.c.build_dir.join(
+                self.m.chromium.c.build_config_fs),
+            update_properties=update_step.presentation.properties,
             gs_bucket=bot_config.get('cf_gs_bucket'),
-            cf_archive_name=bot_config.get('cf_archive_name'),
+            gs_acl=bot_config.get('cf_gs_acl'),
+            archive_prefix=bot_config.get('cf_archive_name'),
             revision_dir=bot_config.get('cf_revision_dir'),
         )
       else:
