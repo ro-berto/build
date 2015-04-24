@@ -283,10 +283,17 @@ def main(argv):
             capacity['hourly_bots'],
             sum(capacity['build_times_s'])))
         if args.print_builds:
-          for build in builds:
+          def issue_patchset(build):
+            properties = get_properties(build)
+            return (properties.get('issue', -1), properties.get('patchset', -1))
+          for build in sorted(builds, key=issue_patchset):
+            properties = get_properties(build)
             build_time = build['times'][1] - build['times'][0]
-            print '        build #%-9s %-9s' % (
+            print '        build #%-9s %-25s %11s:%-11s %-9s' % (
                 build['number'],
+                properties.get('requester', 'n/a'),
+                properties.get('issue', 'n/a'),
+                properties.get('patchset', 'n/a'),
                 str(datetime.timedelta(seconds=build_time)))
     print '  %-45s %s %5.1f %5.1f %5.1f <%10.1f>' % (
         'total',
