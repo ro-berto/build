@@ -132,6 +132,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
   NEEDED_COMPONENTS_INTERNAL = {
     'memory':
       [('src/data/memory_test', None)],
+    'page_cycler':
+      [('src/data/page_cycler', None)],
     'selenium':
       [('src/data/selenium_core', None)],
     'browser_tests':
@@ -585,9 +587,170 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('device_status'):
       f.AddDeviceStatus(factory_properties=fp)
 
+    def Telemetry(test_name):
+      if R(test_name.replace('.', '_')):
+        f.AddTelemetryTest(test_name, factory_properties=fp)
+
+    # Benchmark tests:
+    # Page cyclers:
+    page_cyclers = [
+        'bloat',
+        'dhtml',
+        'indexeddb',
+        'intl_ar_fa_he',
+        'intl_es_fr_pt-BR',
+        'intl_hi_ru',
+        'intl_ja_zh',
+        'intl_ko_th_vi',
+        'morejs',
+        'moz',
+        'netsim.top_10',
+        'pica',
+        'top_10_mobile',
+        'tough_layout_cases',
+        'typical_25',
+      ]
+    for test_name in page_cyclers:
+      Telemetry('page_cycler.' + test_name)
+
+    # Synthetic benchmarks:
+    synthetic_benchmarks = [
+        'blink_perf',
+        'dom_perf',
+        'image_decoding.tough_decoding_cases',
+        'jetstream',
+        'kraken',
+        'media.android',
+        'media.media_cns_cases',
+        'media.mse_cases',
+        'media.tough_media_cases',
+        'octane',
+        'robohornet_pro',
+        'scheduler.tough_pepper_cases',
+        'scheduler.tough_scheduling_cases',
+        'smoothness.fast_path.key_silk_cases',
+        'smoothness.fast_path.polymer',
+        'smoothness.fast_path_gpu_rasterization.key_silk_cases',
+        'smoothness.fast_path_gpu_rasterization.polymer',
+        'smoothness.gpu_rasterization.key_silk_cases',
+        'smoothness.gpu_rasterization.polymer',
+        'smoothness.key_silk_cases',
+        'smoothness.polymer',
+        'smoothness.tough_animation_cases',
+        'spaceport',
+        'speedometer',
+        'sunspider',
+        'thread_times.fast_path.key_silk_cases',
+        'thread_times.fast_path.polymer',
+        'thread_times.key_silk_cases',
+        'thread_times.polymer',
+        'webrtc',
+      ]
+    for test_name in synthetic_benchmarks:
+      Telemetry(test_name)
+    if R('dromaeo'):
+      dromaeo_benchmarks = [
+          'domcoreattr',
+          'domcoremodify',
+          'domcorequery',
+          'domcoretraverse',
+          'jslibattrjquery',
+          'jslibattrprototype',
+          'jslibeventjquery',
+          'jslibeventprototype',
+          'jslibmodifyjquery',
+          'jslibmodifyprototype',
+          'jslibstylejquery',
+          'jslibstyleprototype',
+          'jslibtraversejquery',
+          'jslibtraverseprototype',
+        ]
+      for test_name in dromaeo_benchmarks:
+        f.AddTelemetryTest('dromaeo.%s' % test_name, factory_properties=fp)
+
+    # Real-world benchmarks:
+    real_world_benchmarks = [
+        'maps',
+        'memory.mobile_memory',
+        'memory.reload.2012Q3',
+        'memory.top_25',
+        'memory.tough_dom_memory_cases',
+        'rasterize_and_record_micro.fast_path_gpu_rasterization.key_silk_cases',
+        'rasterize_and_record_micro.fast_path.polymer',
+        'rasterize_and_record_micro.key_mobile_sites',
+        'rasterize_and_record_micro.key_silk_cases',
+        'rasterize_and_record_micro.polymer',
+        'rasterize_and_record_micro.top_25',
+        'repaint.key_mobile_sites',
+        'repaint.gpu_rasterization.key_mobile_sites',
+        'smoothness.gpu_rasterization.key_mobile_sites',
+        'smoothness.gpu_rasterization.top_25',
+        'smoothness.key_mobile_sites',
+        'smoothness.top_25',
+        'smoothness.tough_canvas_cases',
+        'smoothness.tough_filters_cases',
+        'smoothness.tough_pinch_zoom_cases',
+        'smoothness.tough_webgl_cases',
+        'tab_switching.five_blank_pages',
+        'tab_switching.top_10',
+        'tab_switching.tough_energy_cases',
+        'tab_switching.typical_25',
+        'thread_times.key_mobile_sites',
+        'thread_times.tough_compositor_cases',
+      ]
+    for test_name in real_world_benchmarks:
+      Telemetry(test_name)
+
     # Other benchmarks:
     if R('tab_capture_performance'):
       f.AddTabCapturePerformanceTests(fp)
+    if R('indexeddb_perf'):
+      f.AddTelemetryTest('indexeddb_perf', factory_properties=fp)
+    if R('startup_cold'):
+      f.AddTelemetryTest('startup.cold.blank_page', factory_properties=fp)
+      f.AddTelemetryTest('start_with_url.cold.startup_pages',
+                         factory_properties=fp)
+    if R('startup_warm'):
+      f.AddTelemetryTest('startup.warm.blank_page', factory_properties=fp)
+      f.AddTelemetryTest('start_with_url.warm.startup_pages',
+                         factory_properties=fp)
+    if R('startup_warm_dirty'):
+      startup_fp = fp.copy()
+      # pylint: disable=W0212
+      startup_fp['profile_type'] = 'small_profile'
+      # TODO(jeremy): Disable on ref builds pending fix for crbug.com/327017.
+      startup_fp['run_reference_build'] = False
+      f.AddTelemetryTest('startup.warm.blank_page',
+                         step_name='startup.warm.dirty.blank_page',
+                         factory_properties=startup_fp)
+    if R('startup_cold_dirty'):
+      startup_fp = fp.copy()
+      # pylint: disable=W0212
+      startup_fp['profile_type'] = 'small_profile'
+      # TODO(jeremy): Disable on ref builds pending fix for crbug.com/327017.
+      startup_fp['run_reference_build'] = False
+      f.AddTelemetryTest('startup.cold.blank_page',
+                         step_name='startup.cold.dirty.blank_page',
+                         factory_properties=startup_fp)
+    if R('startup_warm_session_restore'):
+      startup_fp = fp.copy()
+      # pylint: disable=W0212
+      startup_fp['profile_type'] = 'small_profile'
+      # TODO(jeremy): Disable on ref builds pending fix for crbug.com/327017.
+      startup_fp['run_reference_build'] = False
+      f.AddTelemetryTest('session_restore.warm.typical_25',
+                         step_name='session_restore.warm.typical_25',
+                         factory_properties=startup_fp)
+    if R('startup_cold_session_restore'):
+      startup_fp = fp.copy()
+      # pylint: disable=W0212
+      startup_fp['profile_type'] = 'small_profile'
+      #TODO(jeremy): Disable on ref builds pending fix for crbug.com/327017.
+      startup_fp['run_reference_build'] = False
+      f.AddTelemetryTest('session_restore.cold.typical_25',
+                         step_name='session_restore.cold.typical_25',
+                         factory_properties=startup_fp)
+
 
     if R('sizes'):
       f.AddSizesTests(fp)
