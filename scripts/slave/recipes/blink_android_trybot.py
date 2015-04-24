@@ -14,8 +14,12 @@ DEPS = [
 ]
 
 def GenSteps(api):
+  mastername = api.properties['mastername']
+  buildername = api.properties['buildername']
+  config = 'Debug' if '_dbg' in buildername else 'Release'
   api.chromium.set_config(
-      'blink', TARGET_PLATFORM='android', TARGET_ARCH='arm', TARGET_BITS=32)
+      'blink', TARGET_PLATFORM='android', TARGET_ARCH='arm', TARGET_BITS=32,
+      BUILD_CONFIG=config)
   api.chromium.apply_config('trybot_flavor')
   api.chromium.apply_config('android')
   api.chromium.apply_config('mb')  # Turns off gyp in runhooks().
@@ -38,8 +42,7 @@ def GenSteps(api):
 
   api.chromium.runhooks()
 
-  api.chromium.run_mb(api.properties['mastername'],
-                      api.properties['buildername'])
+  api.chromium.run_mb(mastername, buildername)
 
   step_result = None
   try:
@@ -75,6 +78,12 @@ def GenTests(api):
       api.properties.tryserver(buildername='blink_android_compile_rel') +
       api.platform.name('linux')
   )
+  yield (
+      api.test('full_chromium_blink_blink_android_compile_dbg') +
+      api.properties.tryserver(buildername='blink_android_compile_dbg') +
+      api.platform.name('linux')
+  )
+
 
   yield (
       api.test('bot_update_on') +
