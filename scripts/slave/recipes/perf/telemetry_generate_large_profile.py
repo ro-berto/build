@@ -6,6 +6,7 @@ DEPS = [
   'archive',
   'bot_update',
   'chromium',
+  'file',
   'gsutil',
   'path',
   'platform',
@@ -89,8 +90,8 @@ def GenSteps(api):
     cloud_file = _CloudStoragePath(api)
     api.gsutil.upload(str(zipped_profile_path), bucket, cloud_file)
   finally:
-    api.path.rmtree('Remove profile directory.', profile_directory)
-    api.path.rmtree('Remove zipped profile directory.',
+    api.file.rmtree('Remove profile directory.', profile_directory)
+    api.file.rmtree('Remove zipped profile directory.',
                     zipped_profile_directory)
 
 

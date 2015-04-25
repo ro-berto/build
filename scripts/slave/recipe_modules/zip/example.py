@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+  'file',
   'path',
   'platform',
   'step',
@@ -14,7 +15,7 @@ def GenSteps(api):
   temp = api.path.mkdtemp('zip-example')
   api.step('touch a', ['touch', temp.join('a')])
   api.step('touch b', ['touch', temp.join('b')])
-  api.path.makedirs('mkdirs', temp.join('sub', 'dir'))
+  api.file.makedirs('mkdirs', temp.join('sub', 'dir'))
   api.step('touch c', ['touch', temp.join('sub', 'dir', 'c')])
 
   # Build zip using 'zip.directory'.
@@ -35,7 +36,7 @@ def GenSteps(api):
   # List unzipped content.
   api.step('listing', ['find'], cwd=temp.join('output'))
   # Clean up.
-  api.path.rmtree('cleanup', temp)
+  api.file.rmtree('cleanup', temp)
 
 
 def GenTests(api):

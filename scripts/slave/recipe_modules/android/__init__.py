@@ -1,5 +1,6 @@
 DEPS = [
   'bot_update',
+  'file',
   'gclient',
   'json',
   'path',

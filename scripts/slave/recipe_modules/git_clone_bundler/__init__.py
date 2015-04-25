@@ -1,4 +1,5 @@
 DEPS = [
+    'file',
     'git',
     'gsutil',
     'path',

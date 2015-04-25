@@ -4,6 +4,7 @@ DEPS = [
   'chromium',
   'chromium_android',
   'commit_position',
+  'file',
   'gclient',
   'path',
   'platform',

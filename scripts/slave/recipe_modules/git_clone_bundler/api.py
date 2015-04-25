@@ -30,8 +30,8 @@ class GitCloneBundlerApi(recipe_api.RecipeApi):
     return hashlib.md5(base).hexdigest()
 
   def _setup(self):
-    self.m.path.rmtree('old bundles', self.bundle_dir)
-    self.m.path.makedirs('bundles', self.bundle_dir)
+    self.m.file.rmtree('old bundles', self.bundle_dir)
+    self.m.file.makedirs('bundles', self.bundle_dir)
 
   def _bundle(self, git_path, gs_bucket, gs_subpath, refs, name,
               unauthenticated_url):
@@ -127,7 +127,7 @@ class GitCloneBundlerApi(recipe_api.RecipeApi):
         hashlib.md5(repo_manifest_url).hexdigest())
 
     # Initialize the 'repo' checkout.
-    self.m.path.makedirs('repo', checkout_root)
+    self.m.file.makedirs('repo', checkout_root)
     self.m.repo.init(repo_manifest_url, cwd=checkout_root)
     self.m.repo.sync('--no-clone-bundle', cwd=checkout_root)
 

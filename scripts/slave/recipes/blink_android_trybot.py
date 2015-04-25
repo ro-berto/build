@@ -5,6 +5,7 @@
 DEPS = [
   'bot_update',
   'chromium',
+  'file',
   'gclient',
   'path',
   'platform',
@@ -35,7 +36,7 @@ def GenSteps(api):
     try:
       api.gclient.checkout(revert=True)
     except api.step.StepFailure:
-      api.path.rmcontents('slave build directory',
+      api.file.rmcontents('slave build directory',
                                 api.path['slave_build'])
       api.gclient.checkout(revert=False)
     api.tryserver.maybe_apply_issue()
@@ -48,7 +49,7 @@ def GenSteps(api):
   try:
     step_result = api.chromium.compile()
   except api.step.StepFailure:
-    api.path.rmcontents('slave build directory', api.path['slave_build'])
+    api.file.rmcontents('slave build directory', api.path['slave_build'])
     if bot_update_mode:
       api.bot_update.ensure_checkout(suffix='clean')
     else:

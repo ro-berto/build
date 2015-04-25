@@ -209,7 +209,7 @@ class ArchiveApi(recipe_api.RecipeApi):
     staging_dir = self.m.path['slave_build'].join('chrome_staging')
 
     # Build the list of files to archive.
-    zip_file_list = [f for f in self.m.path.listdir('build_dir', build_dir)
+    zip_file_list = [f for f in self.m.file.listdir('build_dir', build_dir)
                      if self._cf_should_package_file(f)]
 
     pieces = [self.m.platform.name, target.lower()]

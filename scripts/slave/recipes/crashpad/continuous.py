@@ -6,6 +6,7 @@
 """
 
 DEPS = [
+  'file',
   'gclient',
   'path',
   'platform',
@@ -21,7 +22,7 @@ def GenSteps(api):
   api.gclient.checkout()
 
   if 'clobber' in api.properties:
-    api.path.rmtree('out', api.path['checkout'].join('out'))
+    api.file.rmtree('out', api.path['checkout'].join('out'))
 
   api.gclient.runhooks()
 

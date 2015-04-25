@@ -606,7 +606,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       #
       # The best way to ensure the old build directory is not used is to
       # remove it.
-      self.m.path.rmtree(
+      self.m.file.rmtree(
         'build directory',
         self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
 

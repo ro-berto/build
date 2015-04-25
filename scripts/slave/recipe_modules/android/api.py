@@ -61,11 +61,11 @@ class AOSPApi(recipe_api.RecipeApi):
     repo_copy_dir = self.m.path['slave_build'].join('repo_copy')
     repo_copy_path = self.m.path['slave_build'].join('repo_copy', 'repo')
     if self.m.path.exists(repo_in_android_path):
-      self.m.path.makedirs('repo copy dir', repo_copy_dir)
+      self.m.file.makedirs('repo copy dir', repo_copy_dir)
       self.m.step('copy repo from Android', [
         'cp', repo_in_android_path, repo_copy_path])
       self.m.repo.repo_path = repo_copy_path
-    self.m.path.makedirs('android source root', self.c.build_path)
+    self.m.file.makedirs('android source root', self.c.build_path)
     self.m.repo.init(self.c.repo.url, '-b', self.c.repo.branch,
                            cwd=self.c.build_path)
     self.m.path.mock_add_paths(repo_in_android_path)

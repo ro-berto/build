@@ -56,3 +56,8 @@ class FileTestApi(recipe_test_api.RecipeTestApi):
     )
     with open(os.path.join(BUILD_INTERNAL, relpath)) as f:
       return f.read()
+
+  def listdir(self, files):
+    def listdir_callback():
+      return self.m.json.output(files)
+    return listdir_callback

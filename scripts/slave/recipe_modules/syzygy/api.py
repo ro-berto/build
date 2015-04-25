@@ -293,7 +293,7 @@ PATCH=1
   def clobber_metrics(self):
     """Returns a step that clobbers an existing metrics file."""
     # TODO(chrisha): Make this whole thing use the JSON output mechanism.
-    return self.m.path.rmwildcard('metrics.csv', self.output_dir)
+    return self.m.file.rmwildcard('metrics.csv', self.output_dir)
 
   def archive_metrics(self):
     """Returns a step that archives any metrics collected by the unittests.

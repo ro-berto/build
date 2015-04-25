@@ -345,7 +345,7 @@ class V8Api(recipe_api.RecipeApi):
   # TODO(machenbach): This should move to a dynamorio module as soon as one
   # exists.
   def dr_compile(self):
-    self.m.path.makedirs(
+    self.m.file.makedirs(
       'Create Build Dir',
       self.m.path['slave_build'].join('dynamorio', 'build'))
     self.m.step(
@@ -371,7 +371,7 @@ class V8Api(recipe_api.RecipeApi):
           src_dir='v8')
 
   def download_build(self):
-    self.m.path.rmtree(
+    self.m.file.rmtree(
           'build directory',
           self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
 

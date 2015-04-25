@@ -220,7 +220,7 @@ class SkiaApi(recipe_api.RecipeApi):
   def download_and_copy_images(self):
     """Download test images if needed."""
     # Ensure that the tmp_dir exists.
-    self._run_once(self.m.path.makedirs, 'tmp_dir', self.tmp_dir)
+    self._run_once(self.m.file.makedirs, 'tmp_dir', self.tmp_dir)
 
     # Determine which version we have and which version we want.
     timestamp_file = 'TIMESTAMP_LAST_UPLOAD_COMPLETED'
@@ -246,7 +246,7 @@ class SkiaApi(recipe_api.RecipeApi):
   def download_and_copy_skps(self):
     """Download the SKPs if needed."""
     # Ensure that the tmp_dir exists.
-    self._run_once(self.m.path.makedirs, 'tmp_dir', self.tmp_dir)
+    self._run_once(self.m.file.makedirs, 'tmp_dir', self.tmp_dir)
 
     # Determine which version we have and which version we want.
     version_file = 'SKP_VERSION'

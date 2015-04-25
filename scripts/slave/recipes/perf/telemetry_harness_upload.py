@@ -5,6 +5,7 @@
 DEPS = [
   'bot_update',
   'chromium',
+  'file',
   'gclient',
   'gsutil',
   'path',
@@ -40,7 +41,7 @@ def GenSteps(api):
                           link_name='Telemetry r%s' % got_revision)
   api.gsutil.copy(bucket, cloud_file, bucket, 'snapshots/telemetry.zip',
                         link_name='Telemetry latest')
-  api.path.rmtree('remove harness temp directory', harness_path)
+  api.file.rmtree('remove harness temp directory', harness_path)
 
 
 def GenTests(api):

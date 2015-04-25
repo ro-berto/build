@@ -421,7 +421,7 @@ class WebRTCApi(recipe_api.RecipeApi):
          'for a Builder instead (will trigger new runs for the testers).')
 
     # Ensure old build directory is not used is by removing it.
-    self.m.path.rmtree(
+    self.m.file.rmtree(
         'build directory',
         self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
 

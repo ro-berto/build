@@ -7,6 +7,7 @@
 
 
 DEPS = [
+  'file',
   'path',
   'platform',
   'properties',
@@ -59,7 +60,7 @@ def git_checkout(api, url, dest, ref=None):
 def GenSteps(api):
   go_dir = api.path['slave_build'].join('go')
   go_src = go_dir.join('src')
-  api.path.makedirs('makedirs go/src', go_src)
+  api.file.makedirs('makedirs go/src', go_src)
   infra_dir = go_src.join(INFRA_GO)
 
   # Check out the infra repo.

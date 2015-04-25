@@ -4,6 +4,7 @@
 
 DEPS = [
   'bot_update',
+  'file',
   'gclient',
   'path',
   'platform',
@@ -105,7 +106,7 @@ def GenSteps(api):
   bot_utils = api.path['checkout'].join('util', 'bot')
   go_env = bot_utils.join('go', 'env.py')
   build_dir = api.path['checkout'].join('build')
-  api.path.makedirs('mkdir', build_dir)
+  api.file.makedirs('mkdir', build_dir)
 
   # If building with MSVC, all commands must run with an environment wrapper.
   # This is necessary both to find the toolchain and the runtime dlls. Rather

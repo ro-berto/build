@@ -8,6 +8,7 @@ DEPS = [
   'file',
   'path',
   'raw_io',
+  'step',
 ]
 
 
@@ -23,6 +24,22 @@ efg
 
 
 def GenSteps(api):
+  # listdir demo.
+  result = api.file.listdir('fake dir', '/fake/dir')
+  for element in result:
+    api.step('manipulate %s' % str(element), ['some', 'command'])
+
+  # mkdtemp demo.
+  for prefix in ('prefix_a', 'prefix_b'):
+    # Create temp dir.
+    temp_dir = api.path.mkdtemp(prefix)
+    assert api.path.exists(temp_dir)
+    # Make |temp_dir| surface in expectation files.
+    api.step('print %s' % prefix, ['echo', temp_dir])
+
+  # rmwildcard demo
+  api.file.rmwildcard('*.o', api.path['slave_build'])
+
   for name, content in TEST_CONTENTS.iteritems():
     api.file.write('write_%s' % name, 'tmp_file.txt', content)
     actual_content = api.file.read(
@@ -36,7 +53,7 @@ def GenSteps(api):
     # copytree
     content = 'some file content'
     tmp_dir = api.path['slave_build'].join('copytree_example_tmp')
-    api.path.makedirs('makedirs', tmp_dir)
+    api.file.makedirs('makedirs', tmp_dir)
     path = tmp_dir.join('dummy_file')
     api.file.write('write %s' % path, path, content)
     new_tmp = api.path['slave_build'].join('copytree_example_tmp2')
@@ -53,8 +70,8 @@ def GenSteps(api):
     assert files == [str(tmp_dir.join('dummy_file'))], files
 
   finally:
-    api.path.rmtree('cleanup', tmp_dir)
-    api.path.rmtree('cleanup2', new_tmp)
+    api.file.rmtree('cleanup', tmp_dir)
+    api.file.rmtree('cleanup2', new_tmp)
 
 
 def GenTests(api):

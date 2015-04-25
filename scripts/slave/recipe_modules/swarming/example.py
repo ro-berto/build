@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+  'file',
   'isolate',
   'path',
   'properties',
@@ -101,7 +102,7 @@ def GenSteps(api):
     assert step_result.swarming_task in tasks
 
   # Cleanup.
-  api.path.rmtree('remove temp dir', temp_dir)
+  api.file.rmtree('remove temp dir', temp_dir)
 
 
 def GenTests(api):

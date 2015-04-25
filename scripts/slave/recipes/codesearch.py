@@ -5,6 +5,7 @@
 DEPS = [
   'bot_update',
   'chromium',
+  'file',
   'gclient',
   'gsutil',
   'path',
@@ -84,7 +85,7 @@ def GenSteps(api):
   # Remove the llvm-build directory, so that gclient runhooks will download
   # the pre-built clang binary and not use the locally compiled binary from
   # the 'compile translation_unit clang tool' step.
-  api.path.rmtree('llvm-build',
+  api.file.rmtree('llvm-build',
                   api.path['checkout'].join('third_party', 'llvm-build'))
 
   # Upload the index pack
