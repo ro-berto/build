@@ -150,7 +150,7 @@ class StatusEventLogger(StatusReceiverMultiService):
       active_before = self._active
       self._active = os.path.isfile(self.configfile)
 
-      if self._active and active_before:
+      if not self._active and active_before:
         twisted_log.msg('Disabling status_logger.')
 
       if self._active:
@@ -159,8 +159,9 @@ class StatusEventLogger(StatusReceiverMultiService):
         try:
           with open(self.configfile) as f:
             data = json.load(f)
-        except ValueError:
-          pass
+        except ValueError as err:
+          twisted_log.msg("status_logger config file parsing failed: %s\n%s"
+                          % (self.configfile, err), logLevel=logging.ERROR)
         self._configure(data)
 
         if not active_before:
@@ -174,11 +175,13 @@ class StatusEventLogger(StatusReceiverMultiService):
     return self._active
 
   def _construct_monitoring_event_args(
-      self, build_event_type, bot_name, builder_name, build_number,
-      build_scheduled_ts, step_name=None, step_number=None):
+      self, timestamp_kind, build_event_type, bot_name,
+      builder_name, build_number, build_scheduled_ts,
+      step_name=None, step_number=None):
     args = [
         self.monitoring_script,
         '--event-mon-run-type=%s' % self.monitoring_type,
+        '--event-mon-timestamp-kind=%s' % timestamp_kind,
         '--build-event-type=%s' % build_event_type,
         '--build-event-master-name=%s' % self.master_dir,
         '--build-event-hostname=%s' % bot_name,
@@ -207,13 +210,15 @@ class StatusEventLogger(StatusReceiverMultiService):
     d.addCallback(handleErrCode)
     return d
 
-  def send_build_event(self, build_event_type, bot_name, builder_name,
-      build_number, build_scheduled_ts, step_name=None, step_number=None):
+  def send_build_event(self, timestamp_kind, build_event_type, bot_name,
+                       builder_name, build_number, build_scheduled_ts,
+                       step_name=None, step_number=None):
     if self.active and self._pipeline:
       return self._subprocess_spawn(
           *self._construct_monitoring_event_args(
-              build_event_type, bot_name, builder_name, build_number,
-              build_scheduled_ts, step_name=step_name, step_number=step_number))
+              timestamp_kind, build_event_type, bot_name, builder_name,
+              build_number, build_scheduled_ts, step_name=step_name,
+              step_number=step_number))
     return None
 
   def startService(self):
@@ -268,7 +273,7 @@ class StatusEventLogger(StatusReceiverMultiService):
     bot = build.getSlavename()
     self.log('buildStarted', '%s, %d, %s', builderName, build_number, bot)
     self.send_build_event(
-        'START', bot, builderName, build_number,
+        'BEGIN', 'BUILD', bot, builderName, build_number,
         self._get_requested_at_millis(build))
     # Must return self in order to subscribe to stepStarted/Finished events.
     return self
@@ -287,7 +292,7 @@ class StatusEventLogger(StatusReceiverMultiService):
     step_name = step.getName()
     self.log('stepStarted', '%s, %d, %s', builder_name, build_number, step_name)
     self.send_build_event(
-        'START', bot, builder_name, build_number,
+        'BEGIN', 'STEP', bot, builder_name, build_number,
         self._get_requested_at_millis(build),
         step_name=step_name, step_number=step.step_number)
     # Must return self in order to subscribe to logStarted/Finished events.
@@ -350,7 +355,7 @@ class StatusEventLogger(StatusReceiverMultiService):
     self.log('stepFinished', '%s, %d, %s, %r',
              builder_name, build_number, step_name, results)
     self.send_build_event(
-        'STOP', bot, builder_name, build_number,
+        'END', 'STEP', bot, builder_name, build_number,
         self._get_requested_at_millis(build),
         step_name=step_name, step_number=step.step_number)
 
@@ -360,7 +365,7 @@ class StatusEventLogger(StatusReceiverMultiService):
     self.log('buildFinished', '%s, %d, %s, %r',
              builderName, build_number, bot, results)
     self.send_build_event(
-        'STOP', bot, builderName, build_number,
+        'END', 'BUILD', bot, builderName, build_number,
         self._get_requested_at_millis(build))
 
   def builderRemoved(self, builderName):
