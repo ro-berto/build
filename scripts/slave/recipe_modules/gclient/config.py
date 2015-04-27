@@ -370,6 +370,15 @@ def tools_build(c):  # pragma: no cover
   s.url = ChromiumGitURL(c, 'chromium', 'tools', 'build.git')
   m = c.got_revision_mapping
   m['build'] = 'got_revision'
+  
+@config_ctx(config_vars={'GIT_MODE': True})
+def build_internal(c):  # pragma: no cover
+  if not c.GIT_MODE:
+    raise BadConf('build_internal only supports git')
+  s = c.solutions.add()
+  s.name = 'build_internal'
+  s.url = 'https://chrome-internal.googlesource.com/chrome/tools/build.git'
+  c.got_revision_mapping['build_internal'] = 'got_revision'
 
 @config_ctx(includes=['chromium', 'chrome_internal'])
 def perf(c):
