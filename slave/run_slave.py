@@ -401,6 +401,8 @@ def main():
         # Use os.sep to make this absolute, not relative.
         os.path.join(os.environ['SYSTEMDRIVE'], os.sep, 'Program Files',
                      '7-Zip'),
+        # TODO(hinoka): Remove this when its no longer needed crbug.com/481695
+        os.path.join(os.environ['SYSTEMDRIVE'], os.sep, 'cmake', 'bin'),
     ]
     # build_internal/tools contains tools we can't redistribute.
     tools = os.path.join(ROOT_DIR, 'build_internal', 'tools')
