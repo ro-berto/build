@@ -1099,7 +1099,7 @@ BUILDERS = {
         # 'simulate_arm' is actually implied by 'msan'. We still set it
         # explicitly for the sake of consistency.
         'chromium_apply_config': [
-          'make',
+          'v8_ninja',
           'clang',
           'msan',
           'no_snapshot',
