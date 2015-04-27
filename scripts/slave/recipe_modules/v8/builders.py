@@ -1292,7 +1292,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['unittests', 'v8testing'],
+        'tests': ['unittests', 'v8testing', 'benchmarks'],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_dbg': {
