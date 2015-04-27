@@ -113,16 +113,10 @@ def goma_setup(options, env):
     options.goma_dir = None
     return False
 
-  hostname = GetShortHostname()
-  # HACK(shinyak, yyanagisawa, goma): Windows NO_NACL_GOMA (crbug.com/390764)
-  # Building NaCl untrusted code using goma brings large performance
-  # improvement but it sometimes cause build failure by race condition.
-  # Let me enable goma build on goma canary buildslaves to confirm the issue
-  # has been fixed by a workaround.
-  # vm*-m4 are trybots. build*-m1 and vm*-m1 are all goma canary bots.
-  if hostname in ['build28-m1', 'build58-m1', 'vm191-m1', 'vm480-m1',
-                  'vm820-m1', 'vm821-m1', 'vm848-m1']:
-    env['NO_NACL_GOMA'] = 'false'
+  # HACK(shinyak, yyanagisawa, goma): Enable goma for all NaCl builds.
+  # When goma works well with this option, we'll change build_nexe.py
+  # to make this config the default.
+  env['NO_NACL_GOMA'] = 'false'
 
   # Enable DepsCache. DepsCache caches the list of files to send goma server.
   # This will greatly improve build speed when cache is warmed.
