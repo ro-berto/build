@@ -90,7 +90,7 @@
       "[BUILD]\\goma",
       "//out/Debug"
     ],
-    "name": "mb gen"
+    "name": "Generate build files"
   },
   {
     "cmd": [

@@ -159,7 +159,7 @@
       "[BUILD]/goma",
       "//out/Release"
     ],
-    "name": "mb gen"
+    "name": "Generate build files"
   },
   {
     "cmd": [
