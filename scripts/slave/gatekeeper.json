@@ -436,6 +436,7 @@
           "V8 Linux64 - debug - avx2",
           "V8 Mac GC Stress",
           "V8 Arm GC Stress",
+          "V8 Linux - arm64 - sim - MSAN",
           "V8 Mac64 ASAN",
           "V8 Mips - big endian - nosnap - 1",
           "V8 Mips - big endian - nosnap - 2",
@@ -456,7 +457,7 @@
               "svenpanne@chromium.org"
             ]
           },
-          "Linux - arm64 - sim - MSAN": {
+          "V8 Linux - arm64 - sim - MSAN": {
             "tree_notify": [
               "svenpanne@chromium.org"
             ]

@@ -1102,9 +1102,11 @@ BUILDERS = {
           'make',
           'clang',
           'msan',
+          'no_snapshot',
           'simulate_arm',
           'goma',
         ],
+        'v8_apply_config': ['no_snapshot'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
