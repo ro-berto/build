@@ -43,7 +43,7 @@ def create_buildbucket_service(
   return DeferredResource.build(
       'buildbucket',
       'v1',
-      http_factory=lambda: auth.create_http(master),
+      credentials=auth.create_credentials_for_master(master),
       discoveryServiceUrl=buildbucket_api_discovery_url(hostname),
       verbose=verbose or False,
       log_prefix=common.LOG_PREFIX,

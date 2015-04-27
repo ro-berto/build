@@ -68,11 +68,11 @@ class DeferredResourceTest(unittest.TestCase):
     super(DeferredResourceTest, self).setUp()
 
   @contextmanager
-  def create_resource(self, http_factory=None):
+  def create_resource(self, credentials=None):
     self.resource = fake_resource()
     self.deferred_resource = DeferredResource(
         resource=self.resource,
-        http_factory=http_factory,
+        credentials=credentials,
         retry_wait_seconds=0.1, # Run tests fast.
     )
     with self.deferred_resource:
@@ -114,34 +114,6 @@ class DeferredResourceTest(unittest.TestCase):
       self.assertEqual(execute.call_count, transient_error_count + 1)
       self.assertEqual(execute.return_value, actual)
 
-  def test_token_expired(self):
-    # Mock expired and fresh http.
-    expired_http = httplib2.Http()
-    fresh_http = httplib2.Http()
-    http_factory = Mock()
-    http_factory.side_effect = [expired_http, fresh_http]
-
-    with self.create_resource(http_factory):
-      execute = self.resource.greet.return_value.execute
-
-      # Mock a FORBIDDEN response when expired_http is passed.
-      def token_expired_error(http):
-        if http is expired_http:
-          resp = Mock(status=httplib.FORBIDDEN)
-          raise apiclient.errors.HttpError(resp, '')
-        return execute.return_value
-      execute.side_effect = token_expired_error
-
-      actual = run_deferred(
-          self.deferred_resource.api.greet(buildKey='abc', url='')
-      )
-      self.assertEqual(2, http_factory.call_count)
-      self.assertEqual(execute.mock_calls, [
-          call(expired_http),
-          call(fresh_http),
-      ])
-      self.assertEqual(execute.return_value, actual)
-
   def test_bad_request(self):
     with self.create_resource():
       # Mock a BAD_REQUEST response.
@@ -151,14 +123,6 @@ class DeferredResourceTest(unittest.TestCase):
       self.resource.greet.return_value.execute.side_effect = bad_request_error
 
       with self.assertRaises(apiclient.errors.HttpError):
-        run_deferred(
-            self.deferred_resource.api.greet(),
-            print_traceback=False
-        )
-
-  def test_bad_http_factory(self):
-    with self.create_resource(http_factory=self.bad_factory):
-      with self.assertRaises(self.BadFactoryError):
         run_deferred(
             self.deferred_resource.api.greet(),
             print_traceback=False

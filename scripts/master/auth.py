@@ -27,11 +27,11 @@ authorized with master's service account:
 
     @defer.inlineCallbacks
     def my_call(active_master)
-      http_factory = lambda: auth.create_http(active_master)
+      creds = auth.create_credentials_for_master(active_master)
       my_service = yield deferred_resource.DeferredResource.build(
           'my_service',
           'v1',
-          http_factory=http_factory,
+          credentials=creds,
           discoveryServiceUrl=MY_SERVICE_DISCOVERY_URL)
 
       res = yield my_service.api.greet('John', body={'message': 'hi'})
@@ -82,7 +82,7 @@ def validate_json_key(key):
     raise Error('Private key not specified')
 
 
-def create_credentials(json_key_filename, scope=None):
+def create_service_account_credentials(json_key_filename, scope=None):
   """Creates SignedJwtAssertionCredentials with values in json_key_filename.
 
   Args:
@@ -109,10 +109,8 @@ def create_credentials(json_key_filename, scope=None):
     raise Error(msg)
 
 
-def create_http(master, scope=None):
-  """Creates an httplib2.Http authenticated with master's service account.
-
-  This call is blocking.
+def create_credentials_for_master(master, scope=None):
+  """Creates service account credentials for the master.
 
   Args:
     master (config.Master): master configuration (what is normally
@@ -121,21 +119,17 @@ def create_http(master, scope=None):
       requested. Defaults to https://www.googleapis.com/auth/userinfo.email.
 
   Returns:
-    httplib2.Http authenticated with master's service account.
+    oauth2client.client.SignedJwtAssertionCredentials.
   """
-  assert master
-
-  http = httplib2.Http()
-
   if master.service_account_path:
-    creds = create_credentials(master.service_account_path, scope)
-    http = creds.authorize(http)
-  elif master.is_production_host:
+    return create_service_account_credentials(
+        master.service_account_path, scope)
+
+  if master.is_production_host:
     # If we're a live master and there is no configured service account,
     # that is an error.
     raise Error(
         'Production instances must have a service account configured. '
         'Set service_account_path or service_account_file in the master site '
         'config.')
-
-  return http
+  return None

@@ -236,7 +236,7 @@ class StatusPush(StatusReceiverMultiService):
     service = yield DeferredResource.build(
         'master_push',
         'v0',
-        http_factory=lambda: auth.create_http(self.activeMaster),
+        credentials=auth.create_credentials_for_master(self.activeMaster),
         discoveryServiceUrl=self.discoveryUrlTemplate,
         verbose=self.verbose,
         log_prefix='CBEStatusPush')
